@@ -1,0 +1,37 @@
+package speiger.src.collections.test
+
+public class List
+{
+	public List()
+	{
+	}
+#if TEST_FLAG
+
+	public void addOne()
+	{
+	}
+#else if TESTING_FLAG
+	
+	public void addTwo()
+	{
+#if DEPEND
+		int i = 0;
+#endif
+#if SUB_TEST
+		i += 100;
+#endif
+	}
+#else if TEST_0 && !TEST_1 || TEST_2
+
+	public void addThree()
+	{
+	
+	}
+#else
+	
+	public void addFour()
+	{
+		
+	}
+#endif
+}
