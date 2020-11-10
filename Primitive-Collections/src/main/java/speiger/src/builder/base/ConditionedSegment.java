@@ -1,4 +1,4 @@
-package speiger.src.collections.builder;
+package speiger.src.builder.base;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -6,8 +6,8 @@ import java.util.Set;
 import java.util.StringJoiner;
 import java.util.regex.Pattern;
 
-import speiger.src.collections.builder.conditions.ICondition;
-import speiger.src.collections.builder.misc.Tuple;
+import speiger.src.builder.conditions.ICondition;
+import speiger.src.builder.misc.Tuple;
 
 public class ConditionedSegment
 {

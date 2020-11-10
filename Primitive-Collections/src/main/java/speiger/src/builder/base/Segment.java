@@ -1,4 +1,4 @@
-package speiger.src.collections.builder;
+package speiger.src.builder.base;
 
 import java.util.ArrayList;
 import java.util.List;

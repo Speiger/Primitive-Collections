@@ -1,37 +1,11 @@
-package speiger.src.collections.test
+package speiger.src.collections.example;
 
-public class List
+import java.util.List;
+
+public interface LISTKEY_GENERIC_TYPE extends List<CLASS_TYPE>
 {
-	public List()
-	{
-	}
-#if TEST_FLAG
-
-	public void addOne()
-	{
-	}
-#else if TESTING_FLAG
-	
-	public void addTwo()
-	{
-#if DEPEND
-		int i = 0;
+#if !OBJECT
+	public void add(KEY_TYPE e);
 #endif
-#if SUB_TEST
-		i += 100;
-#endif
-	}
-#else if TEST_0 && !TEST_1 || TEST_2
-
-	public void addThree()
-	{
-	
-	}
-#else
-	
-	public void addFour()
-	{
-		
-	}
-#endif
+	public default boolean add(CLASS_TYPE e) {return true;}
 }

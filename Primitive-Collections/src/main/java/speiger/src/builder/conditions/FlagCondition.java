@@ -1,4 +1,4 @@
-package speiger.src.collections.builder.conditions;
+package speiger.src.builder.conditions;
 
 import java.util.Set;
 

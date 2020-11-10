@@ -1,4 +1,4 @@
-package speiger.src.collections.builder.misc;
+package speiger.src.builder.misc;
 
 public class Tuple<K, V>
 {
