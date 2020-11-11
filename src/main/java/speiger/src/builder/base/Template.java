@@ -1,12 +1,9 @@
 package speiger.src.builder.base;
 
-import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.StringJoiner;
@@ -46,27 +43,6 @@ public class Template
 		}
 //		String s = "CLASS_TO_OBJ(\\([^)]+\\)|\\S)";
 		return result;
-	}
-	
-	public static void main(String...args)
-	{
-		try
-		{
-			Path path = new File("./src/main/resources/speiger/assets/collections/templates/List.template").toPath();
-			Template template = parse(path);
-			Set<String> parsePool = new HashSet<>();
-			parsePool.add("DEPEND");
-			parsePool.add("SUB_TEST");
-			parsePool.add("TEST_0");
-			parsePool.add("TEST_1");
-			parsePool.add("TEST_2");
-			System.out.println(path.getFileName().toString());
-			System.out.println(template.build(parsePool, Collections.emptyList()));
-		}
-		catch(IOException e)
-		{
-			e.printStackTrace();
-		}
 	}
 	
 	public static Template parse(Path file) throws IOException

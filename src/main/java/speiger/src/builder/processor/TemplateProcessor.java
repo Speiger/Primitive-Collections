@@ -19,13 +19,14 @@ public abstract class TemplateProcessor
 	Path sourceFolder;
 	Path outputFolder;
 	Path dataFolder;
+	boolean init = false;
+	
 	
 	public TemplateProcessor(Path sourceFolder, Path outputFolder, Path dataFolder)
 	{
 		this.sourceFolder = sourceFolder;
 		this.outputFolder = outputFolder;
 		this.dataFolder = dataFolder;
-		init();
 	}
 	
 	protected abstract void init();
@@ -34,8 +35,15 @@ public abstract class TemplateProcessor
 	
 	public abstract void createProcesses(String fileName, Consumer<TemplateProcess> process);
 	
+	protected abstract boolean relativePackages();
+	
 	public boolean process(boolean force) throws IOException, InterruptedException
 	{
+		if(!init)
+		{
+			init = true;
+			init();
+		}
 		Map<String, String> existing = FileUtils.loadMappings(dataFolder);
 		List<Path> pathsLeft = Files.walk(sourceFolder).filter(Files::isRegularFile).filter(T -> isFileValid(T.getFileName())).filter(T -> force || FileUtils.isValid(T, existing)).collect(Collectors.toList());
 		if(pathsLeft.isEmpty() && !force)
@@ -43,6 +51,7 @@ public abstract class TemplateProcessor
 			System.out.println("Nothing has changed");
 			return false;
 		}
+		final boolean relative = relativePackages();
 		ThreadPoolExecutor service = (ThreadPoolExecutor)Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors());
 		service.setKeepAliveTime(10, TimeUnit.MILLISECONDS);
 		service.allowCoreThreadTimeOut(true);
@@ -53,7 +62,7 @@ public abstract class TemplateProcessor
 				try
 				{
 					Template template = Template.parse(path);
-					createProcesses(FileUtils.getFileName(path), T -> service.execute(new BuildTask(outputFolder, template, T)));
+					createProcesses(FileUtils.getFileName(path), T -> service.execute(new BuildTask(relative ? outputFolder.resolve(sourceFolder.relativize(path).getParent()) : outputFolder, template, T)));
 				}
 				catch(Exception e) 
 				{ 

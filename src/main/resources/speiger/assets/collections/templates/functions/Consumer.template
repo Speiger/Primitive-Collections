@@ -1,0 +1,22 @@
+package speiger.src.collections.example.functions;
+
+import java.util.Objects;
+import java.util.function.Consumer;
+
+public interface CONSUMER extends Consumer<CLASS_TYPE>, JAVA_CONSUMER
+{	
+	void accept(KEY_TYPE t);
+	
+	default void accept(CLASS_TYPE t) { accept(OBJ_TO_KEY(t)); }
+	
+	@Override
+	default CONSUMER andThen(Consumer<? super CLASS_TYPE> after) {
+		Objects.requireNonNull(after);
+		return T -> {accept(T); after.accept(T);};
+	}
+	
+	default CONSUMER andThen(CONSUMER after) {
+		Objects.requireNonNull(after);
+		return T -> {accept(T); after.accept(T);};
+	}
+}

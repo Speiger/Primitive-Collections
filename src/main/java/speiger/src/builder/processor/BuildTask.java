@@ -15,7 +15,6 @@ public class BuildTask implements Runnable
 	
 	public BuildTask(Path basePath, Template template, TemplateProcess process)
 	{
-		super();
 		this.basePath = basePath;
 		this.template = template;
 		this.process = process;
@@ -26,6 +25,13 @@ public class BuildTask implements Runnable
 	{
 		String s = template.build(process.parsePool, process.mappers);
 		Path path = basePath.resolve(process.path).resolve(process.fileName);
+		try
+		{
+			Files.createDirectories(path.getParent());			
+		}
+		catch(Exception e)
+		{
+		}
 		try(BufferedWriter writer = Files.newBufferedWriter(path, StandardOpenOption.CREATE, StandardOpenOption.TRUNCATE_EXISTING, StandardOpenOption.WRITE, StandardOpenOption.SYNC))
 		{
 			writer.write(s);
