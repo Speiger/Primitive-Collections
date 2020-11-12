@@ -1,20 +1,45 @@
-package speiger.src.collections.example.functions;
+package speiger.src.collections.PACKAGE.functions;
 
 import java.util.Objects;
 import java.util.function.Consumer;
+#if !TYPE_BOOLEAN
+#if !JDK_CONSUMER
+import speiger.src.collections.utils.SanityChecks;
+
+#endif
 
 public interface CONSUMER extends Consumer<CLASS_TYPE>, JAVA_CONSUMER
-{	
+#else
+
+public interface CONSUMER extends Consumer<CLASS_TYPE>
+#endif
+{
 	void accept(KEY_TYPE t);
-	
-	default void accept(CLASS_TYPE t) { accept(OBJ_TO_KEY(t)); }
+#if !JDK_CONSUMER
 	
 	@Override
+	default void accept(JAVA_TYPE t) { accept(SanityChecks.SANITY_CAST(t)); }
+#endif
+	
+	@Override
+	default void accept(CLASS_TYPE t) { accept(OBJ_TO_KEY(t)); }
+	
+	@Deprecated
+	@Override
 	default CONSUMER andThen(Consumer<? super CLASS_TYPE> after) {
+		Objects.requireNonNull(after);
+		return T -> {accept(T); after.accept(KEY_TO_OBJ(T));};
+	}
+	
+#if !TYPE_BOOLEAN
+	@Deprecated
+	@Override
+	default CONSUMER andThen(JAVA_CONSUMER after) {
 		Objects.requireNonNull(after);
 		return T -> {accept(T); after.accept(T);};
 	}
 	
+#endif
 	default CONSUMER andThen(CONSUMER after) {
 		Objects.requireNonNull(after);
 		return T -> {accept(T); after.accept(T);};

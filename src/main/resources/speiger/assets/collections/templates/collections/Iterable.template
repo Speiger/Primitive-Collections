@@ -1,0 +1,28 @@
+package speiger.src.collections.PACKAGE.collections;
+
+#if !TYPE_OBJECT
+import java.util.Objects;
+import java.util.function.Consumer;
+
+import speiger.src.collections.PACKAGE.functions.CONSUMER;
+#endif
+
+public interface ITERABLE KEY_GENERIC_TYPE extends Iterable<CLASS_TYPE>
+{
+	@Override
+	ITERATOR KEY_GENERIC_TYPE iterator();
+#if !TYPE_OBJECT
+	
+	default void forEach(CONSUMER action) {
+		Objects.requireNonNull(action);
+		iterator().forEachRemaining(action);
+	}
+	
+	@Deprecated
+	@Override
+    default void forEach(Consumer<? super CLASS_TYPE> action) {
+        Objects.requireNonNull(action);
+        iterator().forEachRemaining(action);
+    }
+#endif
+}

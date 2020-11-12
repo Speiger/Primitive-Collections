@@ -24,7 +24,7 @@ public class BuildTask implements Runnable
 	public void run()
 	{
 		String s = template.build(process.parsePool, process.mappers);
-		Path path = basePath.resolve(process.path).resolve(process.fileName);
+		Path path = (process.pathBuilder != null ? process.pathBuilder.apply(basePath) : basePath).resolve(process.fileName);
 		try
 		{
 			Files.createDirectories(path.getParent());			

@@ -27,6 +27,7 @@ public abstract class TemplateProcessor
 		this.sourceFolder = sourceFolder;
 		this.outputFolder = outputFolder;
 		this.dataFolder = dataFolder;
+		System.out.println(outputFolder.toAbsolutePath().toString());
 	}
 	
 	protected abstract void init();

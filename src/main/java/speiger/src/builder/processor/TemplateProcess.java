@@ -1,5 +1,6 @@
 package speiger.src.builder.processor;
 
+import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -10,7 +11,7 @@ import java.util.function.UnaryOperator;
 
 public class TemplateProcess
 {
-	UnaryOperator pathBuilder;
+	UnaryOperator<Path> pathBuilder;
 	String fileName;
 	Set<String> parsePool = new HashSet<>();
 	List<UnaryOperator<String>> mappers = new ArrayList<>();
@@ -20,9 +21,19 @@ public class TemplateProcess
 		this.fileName = fileName;
 	}
 	
+	public void setPathBuilder(UnaryOperator<Path> pathBuilder)
+	{
+		this.pathBuilder = pathBuilder;
+	}
+	
 	public void addFlags(String...flags)
 	{
 		parsePool.addAll(Arrays.asList(flags));
+	}
+	
+	public void addFlags(Collection<String> flags)
+	{
+		parsePool.addAll(flags);
 	}
 	
 	public void addMapper(UnaryOperator<String> mapper)

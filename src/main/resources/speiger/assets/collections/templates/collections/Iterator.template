@@ -1,0 +1,40 @@
+package speiger.src.collections.PACKAGE.collections;
+
+import java.util.Iterator;
+#if !TYPE_OBJECT
+import java.util.Objects;
+import java.util.function.Consumer;
+
+import speiger.src.collections.PACKAGE.functions.CONSUMER;
+
+#endif
+
+public interface ITERATOR KEY_GENERIC_TYPE extends Iterator<CLASS_TYPE>
+{
+#if !TYPE_OBJECT
+	public KEY_TYPE NEXT();
+	
+	@Deprecated
+	@Override
+	public default CLASS_TYPE next() { return KEY_TO_OBJ(next()); }
+	
+	public default void forEachRemaining(CONSUMER action) {
+        Objects.requireNonNull(action);
+        while(hasNext()) { action.accept(NEXT()); }
+	}
+	
+	@Deprecated
+	@Override
+	default void forEachRemaining(Consumer<? super CLASS_TYPE> action) {
+        Objects.requireNonNull(action);
+        forEachRemaining(action::accept);
+	}
+	
+#endif
+	default int skip(int amount) {
+		if(amount < 0) throw new IllegalStateException("Negative Numbers are not allowed");
+		int temp = amount;
+		for(;amount > 0 && hasNext();NEXT(), amount--);
+		return temp - amount;
+	}
+}

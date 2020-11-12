@@ -10,7 +10,7 @@ public class SimpleMapper implements UnaryOperator<String>
 
 	public SimpleMapper(String pattern, String replacement)
 	{
-		this.pattern = Pattern.compile(pattern);
+		this.pattern = Pattern.compile(pattern, Pattern.LITERAL);
 		this.replacement = replacement;
 	}
 	
