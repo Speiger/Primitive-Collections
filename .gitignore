@@ -97,3 +97,12 @@ gradle-app.setting
 # virtual machine crash logs, see http://www.java.com/en/download/help/error_hotspot.xml
 hs_err_pid*
 
+---> Custom
+/src/main/java/speiger/src/collections/booleans/*
+/src/main/java/speiger/src/collections/bytes/*
+/src/main/java/speiger/src/collections/shorts/*
+/src/main/java/speiger/src/collections/ints/*
+/src/main/java/speiger/src/collections/longs/*
+/src/main/java/speiger/src/collections/floats/*
+/src/main/java/speiger/src/collections/doubles/*
+/src/main/java/speiger/src/collections/objects/*
