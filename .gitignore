@@ -98,11 +98,16 @@ gradle-app.setting
 hs_err_pid*
 
 ---> Custom
+#Generated Code
 /src/main/java/speiger/src/collections/booleans/*
 /src/main/java/speiger/src/collections/bytes/*
 /src/main/java/speiger/src/collections/shorts/*
+/src/main/java/speiger/src/collections/chars/*
 /src/main/java/speiger/src/collections/ints/*
 /src/main/java/speiger/src/collections/longs/*
 /src/main/java/speiger/src/collections/floats/*
 /src/main/java/speiger/src/collections/doubles/*
 /src/main/java/speiger/src/collections/objects/*
+
+#Cache result
+/src/main/resources/assets/collections/templates/cache.bin
