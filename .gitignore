@@ -110,4 +110,4 @@ hs_err_pid*
 /src/main/java/speiger/src/collections/objects/*
 
 #Cache result
-/src/main/resources/assets/collections/templates/cache.bin
+/src/main/resources/speiger/assets/collections/cache.bin
