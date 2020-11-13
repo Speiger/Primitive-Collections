@@ -1,0 +1,78 @@
+package speiger.src.collections.PACKAGE.collections;
+
+import java.util.AbstractCollection;
+
+public abstract class ABSTRACT_COLLECTION KEY_GENERIC_TYPE extends AbstractCollection<CLASS_TYPE> implements COLLECTION KEY_GENERIC_TYPE
+{
+	@Override
+	public abstract ITERATOR KEY_GENERIC_TYPE iterator();
+	
+#if !TYPE_OBJECT	
+	@Override
+	@Deprecated
+	public boolean add(CLASS_TYPE e) { return COLLECTION.super.add(e); }
+	
+	@Override
+	public boolean addAll(COLLECTION c) {
+		boolean modified = false;
+		for(KEY_TYPE e : c) {
+			modified |= add(e);
+		}
+		return modified;
+	}
+	
+	@Override
+	@Deprecated
+	public boolean contains(Object e) { return COLLECTION.super.contains(e); }
+	
+	@Override
+	public boolean contains(KEY_TYPE e) {
+		for(KEY_TYPE entry : this) { if(entry == e) return true; }
+		return false;
+	}
+	
+	@Override
+	public boolean containsAll(COLLECTION c) {
+		for(KEY_TYPE e : c)
+			if(!contains(e))
+				return false;
+		return true;
+	}
+	
+	@Override
+	public boolean containsAny(COLLECTION c) {
+		for(KEY_TYPE e : c) 
+			if(contains(e))
+				return true;
+		return false;
+	}
+	
+	@Override
+	@Deprecated
+	public boolean remove(Object e) { return COLLECTION.super.remove(e); }
+	
+	@Override
+	public boolean removeAll(COLLECTION c) {
+		boolean modified = false;
+		for(ITERATOR iter = iterator();iter.hasNext();) {
+			if(c.contains(iter.NEXT())) {
+				iter.remove();
+				modified = true;
+			}
+		}
+		return modified;
+	}
+	
+	@Override
+	public boolean retainAll(COLLECTION c) {
+		boolean modified = false;
+		for(ITERATOR iter = iterator();iter.hasNext();) {
+			if(!c.contains(iter.NEXT())) {
+				iter.remove();
+				modified = true;
+			}
+		}
+		return modified;
+	}
+#endif
+}

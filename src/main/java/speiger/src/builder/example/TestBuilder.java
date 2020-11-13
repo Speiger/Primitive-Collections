@@ -71,7 +71,7 @@ public class TestBuilder extends TemplateProcessor
 	{
 		try
 		{
-			new TestBuilder().process(true);
+			new TestBuilder().process(false);
 		}
 		catch(InterruptedException e)
 		{

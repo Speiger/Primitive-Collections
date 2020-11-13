@@ -31,7 +31,7 @@ public interface CONSUMER extends Consumer<CLASS_TYPE>
 		return T -> {accept(T); after.accept(KEY_TO_OBJ(T));};
 	}
 	
-#if !TYPE_BOOLEAN
+#if PRIMITIVES
 	@Deprecated
 	@Override
 	default CONSUMER andThen(JAVA_CONSUMER after) {

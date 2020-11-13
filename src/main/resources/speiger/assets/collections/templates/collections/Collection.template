@@ -1,0 +1,70 @@
+package speiger.src.collections.PACKAGE.collections;
+
+import java.util.Collection;
+#if PRIMITIVES
+import java.util.Objects;
+import java.util.function.JAVA_PREDICATE;
+#endif
+
+public interface COLLECTION KEY_GENERIC_TYPE extends Collection<CLASS_TYPE>, ITERABLE KEY_GENERIC_TYPE
+{
+#if !TYPE_OBJECT
+	public boolean add(KEY_TYPE o);
+	
+	public boolean addAll(COLLECTION c);
+	
+	public boolean contains(KEY_TYPE o);
+	
+	public boolean containsAll(COLLECTION c);
+	
+	public boolean containsAny(COLLECTION c);
+	
+	public boolean remove(KEY_TYPE o);
+	
+	public boolean removeAll(COLLECTION c);
+	
+	public boolean retainAll(COLLECTION c);
+	
+	public KEY_TYPE[] TO_ARRAY();
+	
+	public KEY_TYPE[] TO_ARRAY(KEY_TYPE[] a);
+	
+#if PRIMITIVES
+	public default boolean remIf(JAVA_PREDICATE filter) {
+    	Objects.requireNonNull(filter);
+    	boolean removed = false;
+    	final ITERATOR each = iterator();
+    	while (each.hasNext()) {
+    		if (filter.test(each.NEXT())) {
+    			each.remove();
+    			removed = true;
+    		}
+    	}
+    	return removed;
+	}
+	
+#endif	
+	@Override
+	@Deprecated
+	public default boolean add(CLASS_TYPE o) { return add(OBJ_TO_KEY(o)); }
+	
+	@Override
+	@Deprecated
+	public default boolean contains(Object o) { return o != null && contains(CLASS_TO_KEY(o)); }
+	
+	@Override
+	@Deprecated
+	public default boolean remove(Object o) { return o != null && remove(CLASS_TO_KEY(o)); }
+	
+	@Override
+	@Deprecated
+	public <K> K[] toArray(K[] a);
+	
+	@Override
+	@Deprecated
+	public Object[] toArray();
+	
+#endif
+	@Override
+	public ITERATOR KEY_GENERIC_TYPE iterator();
+}
