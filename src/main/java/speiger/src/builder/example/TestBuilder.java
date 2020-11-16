@@ -45,6 +45,7 @@ public class TestBuilder extends TemplateProcessor
 		{
 			GlobalVariables type = new GlobalVariables(clzType);
 			type.createFlags();
+			type.createHelperVariables();
 			type.createVariables();
 			type.createClassTypes();
 			type.createFunctions();

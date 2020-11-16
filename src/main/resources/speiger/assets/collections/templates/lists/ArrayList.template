@@ -1,0 +1,147 @@
+package speiger.src.collections.PACKAGE.lists;
+
+import java.util.Collection;
+import java.util.Iterator;
+
+#if !TYPE_OBJECT
+import speiger.src.collections.PACKAGE.collections.COLLECTION;
+import speiger.src.collections.PACKAGE.collections.ITERATOR;
+#endif
+
+public class ARRAY_LIST KEY_GENERIC_TYPE extends ABSTRACT_LIST KEY_GENERIC_TYPE
+{
+	transient KEY_TYPE[] data;
+	private int size = 0;
+	
+	public ARRAY_LIST(int size)
+	{
+#if TYPE_OBJECT
+		data = (KEY_TYPE[])new Object[size];
+#else
+		data = new KEY_TYPE[size];
+#endif
+	}
+	
+	@Override
+	public void add(int index, CLASS_TYPE element)
+	{
+		checkAddRange(index);
+		ensureCapacity(size + 1);
+		if(index != size) System.arraycopy(data, index, data, index+1, size - index);
+		data[index] = OBJ_TO_KEY(element);
+		size++;
+	}
+	
+	@Override
+	public boolean add(KEY_TYPE e)
+	{
+		ensureCapacity(size + 1);
+		data[size++] = e;
+		return true;
+	}
+	
+#if !TYPE_OBJECT
+	@Override
+	public void add(int index, KEY_TYPE e)
+	{
+		checkAddRange(index);
+		ensureCapacity(size + 1);
+		if(index != size) System.arraycopy(data, index, data, index+1, size - index);
+		data[index] = e;
+		size++;
+	}
+	
+#endif	
+	@Override
+	public boolean addAll(int index, Collection<? extends CLASS_TYPE> c)
+	{
+#if !TYPE_OBJECT
+		if(c instanceof COLLECTION) return addAll((COLLECTION)c);
+#endif
+		int add = c.size();
+		if(add <= 0) return false;
+		ensureCapacity(size + add);
+		if(index != size) System.arraycopy(data, index, data, index+add, size - index);
+		size+=add;
+		Iterator<? extends CLASS_TYPE> iter = c.iterator();
+		while(add != 0) data[index++] = OBJ_TO_KEY(iter.next());
+		return true;
+	}
+	
+#if !TYPE_OBJECT	
+	@Override
+	public boolean addAll(int index, COLLECTION KEY_GENERIC_TYPE c)
+	{
+		if(c instanceof LIST) return addAll((LIST)c);
+		int add = c.size();
+		if(add <= 0) return false;
+		ensureCapacity(size + add);
+		if(index != size) System.arraycopy(data, index, data, index+add, size - index);
+		size+=add;
+		ITERATOR KEY_GENERIC_TYPE iter = c.iterator();
+		while(add != 0) data[index++] = iter.NEXT();
+		return true;
+	}
+	
+#endif
+	
+	@Override
+	public boolean addAll(int index, LIST KEY_GENERIC_TYPE c)
+	{
+		return false;
+	}
+
+	@Override
+	public KEY_TYPE GET_KEY(int index)
+	{
+		if (index >= size) throw new IndexOutOfBoundsException("Index (" + index + ") is not in lists size (" + size + ")");
+		return data[index];
+	}
+
+	@Override
+	public KEY_TYPE set(int index, KEY_TYPE e)
+	{
+		if (index >= size) throw new IndexOutOfBoundsException("Index (" + index + ") is not in lists size (" + size + ")");
+		KEY_TYPE old = data[index];
+		data[index] = e;
+		return old;
+	}
+
+	@Override
+	public KEY_TYPE REMOVE(int index)
+	{
+		if (index >= size) throw new IndexOutOfBoundsException("Index (" + index + ") is not in lists size (" + size + ")");
+		KEY_TYPE old = data[index];
+		if(index != size) System.arraycopy(data, index+1, data, index, size - index);
+#if TYPE_OBJECT
+		data[size] = null;
+#endif
+		size--;
+		return old;
+	}
+
+	@Override
+	public int size()
+	{
+		return size;
+	}
+	
+	@Override
+	public void clear()
+	{
+#if TYPE_OBJECT
+		for(int i = 0;i<size;data[i] = null,i++);
+#endif
+		size = 0;
+	}
+	
+	protected void ensureCapacity(int capacity)
+	{
+		
+	}
+	
+	protected void checkAddRange(int index)
+	{
+		
+	}
+}

@@ -1,0 +1,79 @@
+package speiger.src.collections.PACKAGE.utils;
+
+import speiger.src.collections.PACKAGE.collections.ITERATOR;
+
+public class ITERATORS
+{
+	public static GENERIC_BRACES ArrayIterator KEY_GENERIC_TYPE wrap(KEY_TYPE[] a) {
+		return wrap(a, 0, a.length);
+	}
+	
+	public static GENERIC_BRACES ArrayIterator KEY_GENERIC_TYPE wrap(KEY_TYPE[] a, int start, int end) {
+		return new ArrayIteratorBRACES(a, start, end);
+	}
+	
+	public static GENERIC_BRACES int unwrap(KEY_TYPE[] a, ITERATOR KEY_GENERIC_TYPE i) {
+		return unwrap(a, i, 0, a.length);
+	}
+	
+	public static GENERIC_BRACES int unwrap(KEY_TYPE[] a, ITERATOR KEY_GENERIC_TYPE i, int offset) {
+		return unwrap(a, i, offset, a.length);
+	}
+	
+	public static GENERIC_BRACES int unwrap(KEY_TYPE[] a, ITERATOR KEY_GENERIC_TYPE i, int offset, int max) {
+		if(max < 0) throw new IllegalStateException("The max size is smaller then 0");
+		if(offset + max >= a.length) throw new IllegalStateException("largest array index exceeds array size");
+		int index = 0;
+		for(;index<max && i.hasNext();index++) a[index+offset] = i.NEXT();
+		return index;
+	}
+	
+#if !TYPE_OBJECT
+	public static GENERIC_BRACES int unwrap(CLASS_TYPE[] a, ITERATOR KEY_GENERIC_TYPE i) {
+		return unwrap(a, i, 0, a.length);
+	}
+	
+	public static GENERIC_BRACES int unwrap(CLASS_TYPE[] a, ITERATOR KEY_GENERIC_TYPE i, int offset) {
+		return unwrap(a, i, offset, a.length);
+	}
+	
+	public static GENERIC_BRACES int unwrap(CLASS_TYPE[] a, ITERATOR KEY_GENERIC_TYPE i, int offset, int max) {
+		if(max < 0) throw new IllegalStateException("The max size is smaller then 0");
+		if(offset + max >= a.length) throw new IllegalStateException("largest array index exceeds array size");
+		int index = 0;
+		for(;index<max && i.hasNext();index++) a[index+offset] = KEY_TO_OBJ(i.NEXT());
+		return index;
+	}
+	
+#endif	
+	private static class ArrayIterator KEY_GENERIC_TYPE implements ITERATOR KEY_GENERIC_TYPE
+	{
+		KEY_TYPE[] a;
+		int from;
+		int to;
+		
+		ArrayIterator(KEY_TYPE[] a, int from, int to) {
+			this.a = a;
+			this.from = from;
+			this.to = to;
+		}
+		
+		@Override
+		public boolean hasNext() {
+			return from < to;
+		}
+		
+		@Override
+		public KEY_TYPE NEXT() {
+			return a[from++];
+		}
+		
+		@Override
+		public int skip(int amount) {
+			if(amount < 0) throw new IllegalStateException("Negative Numbers are not allowed");
+			int left = Math.min(amount, to - from);
+			from += left;
+			return amount - left;
+		}
+	}
+}

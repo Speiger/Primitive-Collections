@@ -1,0 +1,38 @@
+package speiger.src.collections.PACKAGE.lists;
+
+import java.util.ListIterator;
+
+import speiger.src.collections.PACKAGE.collections.BI_ITERATOR;
+
+public interface LIST_ITERATOR KEY_GENERIC_TYPE extends ListIterator<CLASS_TYPE>, BI_ITERATOR KEY_GENERIC_TYPE
+{
+#if !TYPE_OBJECT
+	public void set(KEY_TYPE e);
+	
+	public void add(KEY_TYPE e);
+	
+	@Override
+	@Deprecated
+	public default CLASS_TYPE previous() {
+		return BI_ITERATOR.super.previous();
+	}
+	
+	@Override
+	@Deprecated
+	public default CLASS_TYPE next() {
+		return BI_ITERATOR.super.next();
+	}	
+	
+	@Override
+	@Deprecated
+	public default void set(CLASS_TYPE e) {
+		set(OBJ_TO_KEY(e));
+	}
+	
+	@Override
+	@Deprecated
+	public default void add(CLASS_TYPE e) {
+		add(OBJ_TO_KEY(e));
+	}
+#endif
+}

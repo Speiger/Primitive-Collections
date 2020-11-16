@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.function.UnaryOperator;
 
+import speiger.src.builder.mappers.ArgumentMapper;
 import speiger.src.builder.mappers.InjectMapper;
 import speiger.src.builder.mappers.SimpleMapper;
 import speiger.src.builder.processor.TemplateProcess;
@@ -28,15 +29,23 @@ public class GlobalVariables
 		addSimpleMapper("CLASS_TYPE", type.getClassType());
 		addSimpleMapper("KEY_TYPE", type.getKeyType());
 		addSimpleMapper(" KEY_GENERIC_TYPE", type == ClassType.OBJECT ? "<"+type.getKeyType()+">" : "");
+		addSimpleMapper(" GENERIC_BRACES", type == ClassType.OBJECT ? " <"+type.getKeyType()+">" : "");
+		addSimpleMapper("BRACES", type == ClassType.OBJECT ? "<>" : "");
 		if(type.needsCustomJDKType())
 		{
 			addSimpleMapper("JAVA_TYPE", type.getCustomJDKType().getKeyType());
 			addSimpleMapper("SANITY_CAST", "castTo"+type.getFileType());
 		}
+		return this;
+	}
+	
+	public GlobalVariables createHelperVariables()
+	{
+		addArgumentMapper("EQUALS_KEY_TYPE", type == ClassType.OBJECT ? "Objects.equals(%1$s, %2$s)" : "Objects.equals(KEY_TO_OBJ(%1$s), %2$s)").removeBraces();
+		addArgumentMapper("EQUALS", type.getEquals()).removeBraces();
 		addSimpleMapper("KEY_TO_OBJ", type.getClassType()+".valueOf");
-		addInjectMapper("OBJ_TO_KEY(\\([^)]+\\)|\\S)", "%s."+type.getKeyType()+"Value()").removeBraces();
-		addInjectMapper("CLASS_TO_KEY(\\([^)]+\\)|\\S)", "(("+type.getClassType()+")%s)."+type.getKeyType()+"Value()").removeBraces();
-		
+		addInjectMapper("OBJ_TO_KEY", type == ClassType.OBJECT ? "%s" : "%s."+type.getKeyType()+"Value()").removeBraces();
+		addInjectMapper("CLASS_TO_KEY", "(("+type.getClassType()+")%s)."+type.getKeyType()+"Value()").removeBraces();
 		return this;
 	}
 	
@@ -44,17 +53,31 @@ public class GlobalVariables
 	{
 		addSimpleMapper("JAVA_PREDICATE", type.isPrimitiveBlocking() ? "" : type.getCustomJDKType().getFileType()+"Predicate");
 		addSimpleMapper("JAVA_CONSUMER", type.isPrimitiveBlocking() ? "" : "java.util.function."+type.getCustomJDKType().getFileType()+"Consumer");
-		addSimpleMapper("CONSUMER", type.getFileType()+"Consumer");
-		addSimpleMapper("ITERATOR", type.getFileType()+"Iterator");
-		addSimpleMapper("ITERABLE", type.getFileType()+"Iterable");
-		addSimpleMapper("ABSTRACT_COLLECTION", type.getFileType()+"AbstractCollection");
-		addSimpleMapper("COLLECTION", type.getFileType()+"Collection");
+		addClassMapper("CONSUMER", "Consumer");
+		addClassMapper("ITERATORS", "Iterators");
+		addClassMapper("BI_ITERATOR", "BidirectionalIterator");
+		addClassMapper("LIST_ITERATOR", "ListIterator");
+		addClassMapper("ITERATOR", "Iterator");
+		addClassMapper("ITERABLE", "Iterable");
+		addClassMapper("ABSTRACT_COLLECTION", "AbstractCollection");
+		addClassMapper("COLLECTION", "Collection");
+		addClassMapper("ARRAYS", "Arrays");
+		addClassMapper("ABSTRACT_LIST", "AbstractList");
+		addClassMapper("LIST_ITER", "ListIter");
+		addClassMapper("SUB_LIST", "SubList");
+		addClassMapper("ARRAY_LIST", "ArrayList");
+		addClassMapper("LIST", "List");
 		return this;
 	}
 	
 	public GlobalVariables createFunctions()
 	{
-		addSimpleMapper("NEXT()", "next"+type.getNonClassType()+"()");
+		addFunctionMapper("NEXT", "next");
+		addSimpleMapper("TO_ARRAY", "to"+type.getNonFileType()+"Array");
+		addFunctionMapper("GET_KEY", "get");
+		addFunctionMapper("REMOVE_KEY", "rem");
+		addFunctionMapper("REMOVE", "remove");
+		addFunctionMapper("PREVIOUS", "previous");
 		return this;
 	}
 	
@@ -86,6 +109,16 @@ public class GlobalVariables
 		return type;
 	}
 	
+	private void addClassMapper(String pattern, String replacement)
+	{
+		operators.add(new SimpleMapper(pattern, type.getFileType()+replacement));		
+	}
+	
+	private void addFunctionMapper(String pattern, String replacement)
+	{
+		operators.add(new SimpleMapper(pattern, replacement+type.getNonFileType()));
+	}
+	
 	private void addSimpleMapper(String pattern, String replacement)
 	{
 		operators.add(new SimpleMapper(pattern, replacement));
@@ -94,6 +127,18 @@ public class GlobalVariables
 	private InjectMapper addInjectMapper(String pattern, String replacement)
 	{
 		InjectMapper mapper = new InjectMapper(pattern, replacement);
+		operators.add(mapper);
+		return mapper;
+	}
+	
+	private ArgumentMapper addArgumentMapper(String pattern, String replacement)
+	{
+		return addArgumentMapper(pattern, replacement, ", ");
+	}
+	
+	private ArgumentMapper addArgumentMapper(String pattern, String replacement, String splitter)
+	{
+		ArgumentMapper mapper = new ArgumentMapper(pattern, replacement, splitter);
 		operators.add(mapper);
 		return mapper;
 	}

@@ -1,13 +1,19 @@
 package speiger.src.collections.PACKAGE.collections;
 
+#if !TYPE_OBJECT
+import java.util.Collection;
+#endif
 import java.util.AbstractCollection;
+#if !TYPE_OBJECT
+import speiger.src.collections.PACKAGE.utils.ITERATORS;
+#endif
 
 public abstract class ABSTRACT_COLLECTION KEY_GENERIC_TYPE extends AbstractCollection<CLASS_TYPE> implements COLLECTION KEY_GENERIC_TYPE
 {
 	@Override
 	public abstract ITERATOR KEY_GENERIC_TYPE iterator();
 	
-#if !TYPE_OBJECT	
+#if !TYPE_OBJECT
 	@Override
 	@Deprecated
 	public boolean add(CLASS_TYPE e) { return COLLECTION.super.add(e); }
@@ -32,6 +38,30 @@ public abstract class ABSTRACT_COLLECTION KEY_GENERIC_TYPE extends AbstractColle
 	}
 	
 	@Override
+	public boolean containsAll(Collection<?> c)
+	{
+		return c instanceof COLLECTION ? containsAll((COLLECTION)c) : super.containsAll(c);
+	}
+
+	@Override
+	public boolean addAll(Collection<? extends CLASS_TYPE> c)
+	{
+		return c instanceof COLLECTION ? addAll((COLLECTION)c) : super.addAll(c);
+	}
+
+	@Override
+	public boolean removeAll(Collection<?> c)
+	{
+		return c instanceof COLLECTION ? removeAll((COLLECTION)c) : super.removeAll(c);
+	}
+
+	@Override
+	public boolean retainAll(Collection<?> c)
+	{
+		return c instanceof COLLECTION ? retainAll((COLLECTION)c) : super.retainAll(c);
+	}
+	
+	@Override
 	public boolean containsAll(COLLECTION c) {
 		for(KEY_TYPE e : c)
 			if(!contains(e))
@@ -50,6 +80,17 @@ public abstract class ABSTRACT_COLLECTION KEY_GENERIC_TYPE extends AbstractColle
 	@Override
 	@Deprecated
 	public boolean remove(Object e) { return COLLECTION.super.remove(e); }
+	
+	@Override
+	public boolean REMOVE_KEY(KEY_TYPE e) {
+		for(ITERATOR iter = iterator();iter.hasNext();) {
+			if(EQUALS(iter.NEXT(), e)) {
+				iter.remove();
+				return true;
+			}
+		}
+		return false;
+	}
 	
 	@Override
 	public boolean removeAll(COLLECTION c) {
@@ -73,6 +114,16 @@ public abstract class ABSTRACT_COLLECTION KEY_GENERIC_TYPE extends AbstractColle
 			}
 		}
 		return modified;
+	}
+	
+	public KEY_TYPE[] TO_ARRAY() {
+		return TO_ARRAY(new KEY_TYPE[size()]);
+	}
+	
+	public KEY_TYPE[] TO_ARRAY(KEY_TYPE[] a) {
+		if(a == null || a.length < size()) a = new KEY_TYPE[size()];
+		ITERATORS.unwrap(a, iterator());
+		return a;
 	}
 #endif
 }

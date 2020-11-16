@@ -1,0 +1,296 @@
+package speiger.src.collections.PACKAGE.lists;
+
+import java.util.Collection;
+import java.util.Objects;
+
+import speiger.src.collections.PACKAGE.collections.ABSTRACT_COLLECTION;
+#if !TYPE_OBJECT
+import speiger.src.collections.PACKAGE.collections.COLLECTION;
+#endif
+import speiger.src.collections.PACKAGE.collections.ITERATOR;
+
+public abstract class ABSTRACT_LIST KEY_GENERIC_TYPE extends ABSTRACT_COLLECTION KEY_GENERIC_TYPE implements LIST KEY_GENERIC_TYPE 
+{
+#if !TYPE_OBJECT
+	@Override
+	public boolean add(KEY_TYPE e) {
+		add(size(), e);
+		return true;
+	}
+	
+	@Override
+	public boolean addAll(COLLECTION c) {
+		boolean modified = false;
+		for(KEY_TYPE e : c)
+			modified |= add(e);
+		return modified;
+	}
+	
+#endif
+	@Override
+	public boolean addAll(LIST KEY_GENERIC_TYPE c) {
+		boolean modified = false;
+		for(KEY_TYPE e : c)
+			modified |= add(e);
+		return modified;
+	}
+	
+	@Override
+	public int indexOf(Object o) {
+		LIST_ITERATOR KEY_GENERIC_TYPE iter = listIterator();
+#if TYPE_OBJECT
+		if(o == null) {
+			while(iter.hasNext()) {
+				if(iter.NEXT() == null)
+					return iter.previousIndex();
+			}
+			return -1;
+		}
+#else
+		if(o == null) return -1;
+#endif
+		while(iter.hasNext()) {
+			if(EQUALS_KEY_TYPE(iter.NEXT(), o))
+				return iter.previousIndex();
+		}
+		return -1;
+	}
+
+	@Override
+	public int lastIndexOf(Object o) {
+		LIST_ITERATOR KEY_GENERIC_TYPE iter = listIterator(size());
+#if TYPE_OBJECT
+		if(o == null) {
+			while(iter.hasPrevious()) {
+				if(iter.PREVIOUS() == null)
+					return iter.nextIndex();
+			}
+			return -1;
+		}
+#else
+		if(o == null) return -1;
+#endif
+		while(iter.hasPrevious()) {
+			if(EQUALS_KEY_TYPE(iter.PREVIOUS(), o))
+				return iter.nextIndex();
+		}
+		return -1;
+	}
+	
+#if !TYPE_OBJECT
+	@Override
+	public int indexOf(KEY_TYPE e) {
+		LIST_ITERATOR KEY_GENERIC_TYPE iter = listIterator();
+		while(iter.hasNext()) {
+			if(EQUALS(iter.NEXT(), e))
+				return iter.previousIndex();
+		}
+		return -1;
+	}
+	
+	@Override
+	public int lastIndexOf(KEY_TYPE e) {
+		LIST_ITERATOR KEY_GENERIC_TYPE iter = listIterator(size());
+		while(iter.hasPrevious()) {
+			if(EQUALS(iter.PREVIOUS(), e))
+				return iter.nextIndex();
+		}
+		return -1;
+	}
+	
+#endif
+	@Override
+	public LIST KEY_GENERIC_TYPE subList(int fromIndex, int toIndex) {
+		return new SUB_LIST(this, fromIndex, toIndex);
+	}
+	
+	@Override
+	public ITERATOR KEY_GENERIC_TYPE iterator() {
+		return listIterator(0);
+	}
+
+	@Override
+	public LIST_ITERATOR KEY_GENERIC_TYPE listIterator() {
+		return listIterator(0);
+	}
+
+	@Override
+	public LIST_ITERATOR KEY_GENERIC_TYPE listIterator(int index) {
+		return new LIST_ITER(index);
+	}
+	
+	private class SUB_LIST extends ABSTRACT_LIST KEY_GENERIC_TYPE {
+		ABSTRACT_LIST KEY_GENERIC_TYPE l;
+		int offset;
+		int size;
+		
+		SUB_LIST(ABSTRACT_LIST KEY_GENERIC_TYPE l, int from, int to) {
+			if (from < 0) throw new IndexOutOfBoundsException("fromIndex = " + from);
+			else if (to > l.size()) throw new IndexOutOfBoundsException("toIndex = " + to);
+			else if (from > to)	throw new IllegalArgumentException("fromIndex(" + from + ") > toIndex(" + to + ")");
+			this.l = l;
+			offset = from;
+			size = to - from;
+		}
+		
+		@Override
+		public void add(int index, KEY_TYPE e) {
+			checkAddRange(index);
+			l.add(index+offset, e);
+			size++;
+		}
+		
+#if !TYPE_OBJECT		
+		@Override
+		public void add(int index, CLASS_TYPE element) {
+			add(index, OBJ_TO_KEY(element));
+		}
+		
+#endif
+		@Override
+		public boolean addAll(int index, Collection<? extends CLASS_TYPE> c) {
+			checkAddRange(index);
+			int size = c.size();
+			if(size == 0) return false;
+			l.addAll(index + offset, l);
+			offset += size;
+			return true;
+		}
+		
+#if !TYPE_OBJECT		
+		@Override
+		public boolean addAll(int index, COLLECTION KEY_GENERIC_TYPE c) {
+			checkAddRange(index);
+			int size = c.size();
+			if(size == 0) return false;
+			l.addAll(index + offset, l);
+			offset += size;
+			return true;
+		}
+		
+#endif
+		@Override
+		public boolean addAll(int index, LIST KEY_GENERIC_TYPE c) {
+			checkAddRange(index);
+			int size = c.size();
+			if(size == 0) return false;
+			l.addAll(index + offset, l);
+			offset += size;
+			return true;
+		}
+		
+		@Override
+		public KEY_TYPE GET_KEY(int index) {
+			checkRange(index);
+			return l.GET_KEY(index + offset);
+		}
+		
+		@Override
+		public KEY_TYPE set(int index, KEY_TYPE e) {
+			checkRange(index);
+			return l.set(index + offset, e);
+		}
+		
+		@Override
+		public KEY_TYPE REMOVE(int index) {
+			checkRange(index);
+			size--;
+			return l.REMOVE(index + offset);
+		}
+		
+		@Override
+		public int size() {
+			return size;
+		}
+		
+		private void checkRange(int index) {
+			if (index < 0 || index >= size)
+				throw new IndexOutOfBoundsException("Index: " + index + ", Size: " + size);
+		}
+		
+		private void checkAddRange(int index) {
+			if (index < 0 || index > size)
+				throw new IndexOutOfBoundsException("Index: " + index + ", Size: " + size);
+		}
+	}
+	
+	private class LIST_ITER implements LIST_ITERATOR KEY_GENERIC_TYPE {
+		int index;
+		int lastReturned = -1;
+		
+		LIST_ITER(int index) {
+			this.index = index;
+		}
+		
+		@Override
+		public boolean hasNext() {
+			return index < size();
+		}
+		
+		@Override
+		public KEY_TYPE NEXT() {
+			return GET_KEY(index++);
+		}
+		
+		@Override
+		public boolean hasPrevious() {
+			return index > 0;
+		}
+		
+		@Override
+		public KEY_TYPE PREVIOUS() {
+			return GET_KEY(index--);
+		}
+		
+		@Override
+		public int nextIndex() {
+			return index;
+		}
+		
+		@Override
+		public int previousIndex() {
+			return index-1;
+		}
+		
+		@Override
+		public void remove() {
+			if(lastReturned == -1)
+				throw new IllegalStateException();
+			ABSTRACT_LIST.this.REMOVE(lastReturned);
+			if(lastReturned < index)
+				index--;
+			lastReturned = -1;
+		}
+		
+		@Override
+		public void set(KEY_TYPE e) {
+			if(lastReturned == -1)
+				throw new IllegalStateException();
+			ABSTRACT_LIST.this.set(lastReturned, e);
+		}
+		
+		@Override
+		public void add(KEY_TYPE e) {
+			if(lastReturned == -1)
+				throw new IllegalStateException();
+			ABSTRACT_LIST.this.add(index++, e);
+			lastReturned = -1;
+		}
+		
+		@Override
+		public int skip(int amount) {
+			if(amount < 0) throw new IllegalStateException("Negative Numbers are not allowed");
+			int steps = Math.min(amount, (size() - 1) - index);
+			index += steps;
+			return steps;
+		}
+		
+		@Override
+		public int back(int amount) {
+			if(amount < 0) throw new IllegalStateException("Negative Numbers are not allowed");
+			int steps = Math.min(amount, index);
+			index -= steps;
+			return steps;
+		}
+	}
+}

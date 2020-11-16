@@ -1,0 +1,28 @@
+package speiger.src.collections.PACKAGE.collections;
+
+#if !TYPE_OBJECT
+import speiger.src.collections.objects.collections.ObjectBidirectionalIterator;
+
+public interface BI_ITERATOR KEY_GENERIC_TYPE extends ITERATOR KEY_GENERIC_TYPE, ObjectBidirectionalIterator<CLASS_TYPE>
+#else
+import speiger.src.collections.utils.BidirectionalIterator;
+
+public interface BI_ITERATOR KEY_GENERIC_TYPE extends ITERATOR KEY_GENERIC_TYPE, BidirectionalIterator<CLASS_TYPE>
+#endif
+{
+	public KEY_TYPE PREVIOUS();
+
+#if !TYPE_OBJECT
+	@Override
+	@Deprecated
+	public default CLASS_TYPE previous() {
+		return KEY_TO_OBJ(PREVIOUS());
+	}
+	
+	@Override
+	default int skip(int amount)
+	{
+		return ITERATOR.super.skip(amount);
+	}
+#endif
+}

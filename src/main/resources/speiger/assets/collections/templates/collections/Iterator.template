@@ -16,7 +16,7 @@ public interface ITERATOR KEY_GENERIC_TYPE extends Iterator<CLASS_TYPE>
 	
 	@Deprecated
 	@Override
-	public default CLASS_TYPE next() { return KEY_TO_OBJ(next()); }
+	public default CLASS_TYPE next() { return KEY_TO_OBJ(NEXT()); }
 	
 	public default void forEachRemaining(CONSUMER action) {
         Objects.requireNonNull(action);
@@ -33,8 +33,8 @@ public interface ITERATOR KEY_GENERIC_TYPE extends Iterator<CLASS_TYPE>
 #endif
 	default int skip(int amount) {
 		if(amount < 0) throw new IllegalStateException("Negative Numbers are not allowed");
-		int temp = amount;
-		for(;amount > 0 && hasNext();NEXT(), amount--);
-		return temp - amount;
+		int i = 0;
+		for(;i<amount && hasNext();NEXT(), i++);
+		return i;
 	}
 }

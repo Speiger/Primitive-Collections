@@ -32,7 +32,7 @@ public class BuildTask implements Runnable
 		catch(Exception e)
 		{
 		}
-		try(BufferedWriter writer = Files.newBufferedWriter(path, StandardOpenOption.CREATE, StandardOpenOption.TRUNCATE_EXISTING, StandardOpenOption.WRITE, StandardOpenOption.SYNC))
+		try(BufferedWriter writer = Files.newBufferedWriter(path, StandardOpenOption.CREATE, StandardOpenOption.TRUNCATE_EXISTING, StandardOpenOption.WRITE))
 		{
 			writer.write(s);
 			writer.flush();

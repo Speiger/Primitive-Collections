@@ -19,7 +19,7 @@ public interface COLLECTION KEY_GENERIC_TYPE extends Collection<CLASS_TYPE>, ITE
 	
 	public boolean containsAny(COLLECTION c);
 	
-	public boolean remove(KEY_TYPE o);
+	public boolean REMOVE_KEY(KEY_TYPE o);
 	
 	public boolean removeAll(COLLECTION c);
 	
@@ -43,7 +43,7 @@ public interface COLLECTION KEY_GENERIC_TYPE extends Collection<CLASS_TYPE>, ITE
     	return removed;
 	}
 	
-#endif	
+#endif
 	@Override
 	@Deprecated
 	public default boolean add(CLASS_TYPE o) { return add(OBJ_TO_KEY(o)); }
@@ -55,14 +55,6 @@ public interface COLLECTION KEY_GENERIC_TYPE extends Collection<CLASS_TYPE>, ITE
 	@Override
 	@Deprecated
 	public default boolean remove(Object o) { return o != null && remove(CLASS_TO_KEY(o)); }
-	
-	@Override
-	@Deprecated
-	public <K> K[] toArray(K[] a);
-	
-	@Override
-	@Deprecated
-	public Object[] toArray();
 	
 #endif
 	@Override

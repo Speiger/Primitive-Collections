@@ -1,0 +1,20 @@
+package speiger.src.collections.PACKAGE.utils;
+
+public class ARRAYS
+{	
+#if !TYPE_OBJECT
+	public static CLASS_TYPE[] wrap(KEY_TYPE[] a) {
+		CLASS_TYPE[] result = new CLASS_TYPE[a.length];
+		for(int i = 0,m=a.length;i<m;i++)
+			result[i] = KEY_TO_OBJ(a[i]);
+		return result;
+	}
+	
+	public static KEY_TYPE[] unwrap(CLASS_TYPE[] a) {
+		KEY_TYPE[] result = new KEY_TYPE[a.length];
+		for(int i = 0,m=a.length;i<m;i++)
+			result[i] = OBJ_TO_KEY(a[i]);
+		return result;
+	}
+#endif
+}

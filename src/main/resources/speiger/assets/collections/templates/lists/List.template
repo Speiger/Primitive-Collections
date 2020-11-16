@@ -1,0 +1,90 @@
+package speiger.src.collections.PACKAGE.lists;
+
+import java.util.List;
+import speiger.src.collections.PACKAGE.collections.COLLECTION;
+
+public interface LIST KEY_GENERIC_TYPE extends COLLECTION KEY_GENERIC_TYPE, List<CLASS_TYPE>
+{
+#if !TYPE_OBJECT
+	public boolean add(KEY_TYPE e);
+	
+	public void add(int index, KEY_TYPE e);
+		
+	public boolean addAll(int index, COLLECTION c);
+
+#endif
+	public boolean addAll(LIST KEY_GENERIC_TYPE c);
+	
+	public boolean addAll(int index, LIST KEY_GENERIC_TYPE c);
+	
+#if !TYPE_OBJECT
+	public KEY_TYPE GET_KEY(int index);
+	
+	public KEY_TYPE set(int index, KEY_TYPE e);
+	
+	public KEY_TYPE REMOVE(int index);
+	
+	public int indexOf(KEY_TYPE e);
+	
+	public int lastIndexOf(KEY_TYPE e);
+
+#endif
+	@Override
+	public LIST_ITERATOR KEY_GENERIC_TYPE listIterator();
+	
+	@Override
+	public LIST_ITERATOR KEY_GENERIC_TYPE listIterator(int index);
+	
+	@Override
+	public LIST KEY_GENERIC_TYPE subList(int from, int to);
+	
+#if !TYPE_OBJECT
+	@Override
+	@Deprecated
+	public default boolean add(CLASS_TYPE e) {
+		return COLLECTION.super.add(e);
+	}
+	
+	@Override
+	@Deprecated
+	public default CLASS_TYPE get(int index) {
+		return KEY_TO_OBJ(GET_KEY(index));
+	}
+	
+	@Override
+	@Deprecated
+	public default CLASS_TYPE set(int index, CLASS_TYPE e) {
+		return KEY_TO_OBJ(set(index, OBJ_TO_KEY(e)));
+	}
+	
+	@Override
+	@Deprecated
+	public default int indexOf(Object o) {
+		return indexOf(CLASS_TO_KEY(o));
+	}
+	
+	@Override
+	@Deprecated
+	public default int lastIndexOf(Object o) {
+		return indexOf(CLASS_TO_KEY(o));
+	}
+	
+	@Override
+	@Deprecated
+	public default boolean contains(Object o) {
+		return COLLECTION.super.contains(o);
+	}
+	
+	@Override
+	@Deprecated
+	public default boolean remove(Object o) {
+		return COLLECTION.super.remove(o);
+	}
+	
+	@Override
+	@Deprecated
+	public default CLASS_TYPE remove(int index) {
+		return KEY_TO_OBJ(REMOVE(index));
+	}
+#endif
+}
