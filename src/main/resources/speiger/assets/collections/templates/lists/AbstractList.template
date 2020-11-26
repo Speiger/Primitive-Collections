@@ -4,9 +4,7 @@ import java.util.Collection;
 import java.util.Objects;
 
 import speiger.src.collections.PACKAGE.collections.ABSTRACT_COLLECTION;
-#if !TYPE_OBJECT
 import speiger.src.collections.PACKAGE.collections.COLLECTION;
-#endif
 import speiger.src.collections.PACKAGE.collections.ITERATOR;
 
 public abstract class ABSTRACT_LIST KEY_GENERIC_TYPE extends ABSTRACT_COLLECTION KEY_GENERIC_TYPE implements LIST KEY_GENERIC_TYPE 
@@ -157,7 +155,6 @@ public abstract class ABSTRACT_LIST KEY_GENERIC_TYPE extends ABSTRACT_COLLECTION
 			return true;
 		}
 		
-#if !TYPE_OBJECT		
 		@Override
 		public boolean addAll(int index, COLLECTION KEY_GENERIC_TYPE c) {
 			checkAddRange(index);
@@ -168,7 +165,6 @@ public abstract class ABSTRACT_LIST KEY_GENERIC_TYPE extends ABSTRACT_COLLECTION
 			return true;
 		}
 		
-#endif
 		@Override
 		public boolean addAll(int index, LIST KEY_GENERIC_TYPE c) {
 			checkAddRange(index);
@@ -179,6 +175,48 @@ public abstract class ABSTRACT_LIST KEY_GENERIC_TYPE extends ABSTRACT_COLLECTION
 			return true;
 		}
 		
+		@Override
+		public void addElements(int from, KEY_TYPE[] a, int offset, int length) {
+			checkRange(from);
+			l.addElements(from + this.offset, a, offset, length);
+			size += length;
+		}
+		
+		@Override
+		public KEY_TYPE[] getElements(int from, KEY_TYPE[] a, int offset, int length) {
+			checkRange(from);
+			return l.getElements(from + this.offset, a, offset, length);
+		}
+		
+		@Override
+		public void removeElements(int from, int to) {
+			checkRange(from);
+			checkRange(to);
+			l.removeElements(from + offset, to + offset);
+			size -= to - from;
+		}
+		
+#if TYPE_OBJECT
+		@Override
+		public KEY_TYPE[] extractElements(int from, int to, Class<KEY_TYPE> clz) {
+			checkRange(from);
+			checkRange(to);
+			KEY_TYPE[] a = l.extractElements(from + offset, to + offset, clz);
+			size -= to - from;
+			return a;
+		}
+		
+#else
+		@Override
+		public KEY_TYPE[] extractElements(int from, int to) {
+			checkRange(from);
+			checkRange(to);
+			KEY_TYPE[] a = l.extractElements(from + offset, to + offset);
+			size -= to - from;
+			return a;
+		}
+		
+#endif
 		@Override
 		public KEY_TYPE GET_KEY(int index) {
 			checkRange(index);

@@ -11,8 +11,10 @@ public interface COLLECTION KEY_GENERIC_TYPE extends Collection<CLASS_TYPE>, ITE
 #if !TYPE_OBJECT
 	public boolean add(KEY_TYPE o);
 	
-	public boolean addAll(COLLECTION c);
+#endif
+	public boolean addAll(COLLECTION KEY_GENERIC_TYPE c);
 	
+#if !TYPE_OBJECT
 	public boolean contains(KEY_TYPE o);
 	
 	public boolean containsAll(COLLECTION c);

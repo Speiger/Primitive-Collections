@@ -1,17 +1,20 @@
 package speiger.src.collections.PACKAGE.lists;
 
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Iterator;
 
-#if !TYPE_OBJECT
 import speiger.src.collections.PACKAGE.collections.COLLECTION;
 import speiger.src.collections.PACKAGE.collections.ITERATOR;
-#endif
+import speiger.src.collections.PACKAGE.utils.ARRAYS;
+import speiger.src.collections.utils.SanityChecks;
 
 public class ARRAY_LIST KEY_GENERIC_TYPE extends ABSTRACT_LIST KEY_GENERIC_TYPE
 {
-	transient KEY_TYPE[] data;
-	private int size = 0;
+	static final int DEFAULT_ARRAY_SIZE = 10;
+	
+	protected transient KEY_TYPE[] data;
+	protected int size = 0;
 	
 	public ARRAY_LIST(int size)
 	{
@@ -23,29 +26,26 @@ public class ARRAY_LIST KEY_GENERIC_TYPE extends ABSTRACT_LIST KEY_GENERIC_TYPE
 	}
 	
 	@Override
-	public void add(int index, CLASS_TYPE element)
-	{
+	public void add(int index, CLASS_TYPE element) {
 		checkAddRange(index);
-		ensureCapacity(size + 1);
+		grow(size + 1);
 		if(index != size) System.arraycopy(data, index, data, index+1, size - index);
 		data[index] = OBJ_TO_KEY(element);
 		size++;
 	}
 	
 	@Override
-	public boolean add(KEY_TYPE e)
-	{
-		ensureCapacity(size + 1);
+	public boolean add(KEY_TYPE e) {
+		grow(size + 1);
 		data[size++] = e;
 		return true;
 	}
 	
 #if !TYPE_OBJECT
 	@Override
-	public void add(int index, KEY_TYPE e)
-	{
+	public void add(int index, KEY_TYPE e) {
 		checkAddRange(index);
-		ensureCapacity(size + 1);
+		grow(size + 1);
 		if(index != size) System.arraycopy(data, index, data, index+1, size - index);
 		data[index] = e;
 		size++;
@@ -53,14 +53,11 @@ public class ARRAY_LIST KEY_GENERIC_TYPE extends ABSTRACT_LIST KEY_GENERIC_TYPE
 	
 #endif	
 	@Override
-	public boolean addAll(int index, Collection<? extends CLASS_TYPE> c)
-	{
-#if !TYPE_OBJECT
-		if(c instanceof COLLECTION) return addAll((COLLECTION)c);
-#endif
+	public boolean addAll(int index, Collection<? extends CLASS_TYPE> c) {
+		if(c instanceof COLLECTION) return addAll(index, (COLLECTION KEY_GENERIC_TYPE)c);
 		int add = c.size();
 		if(add <= 0) return false;
-		ensureCapacity(size + add);
+		grow(size + add);
 		if(index != size) System.arraycopy(data, index, data, index+add, size - index);
 		size+=add;
 		Iterator<? extends CLASS_TYPE> iter = c.iterator();
@@ -68,14 +65,12 @@ public class ARRAY_LIST KEY_GENERIC_TYPE extends ABSTRACT_LIST KEY_GENERIC_TYPE
 		return true;
 	}
 	
-#if !TYPE_OBJECT	
 	@Override
-	public boolean addAll(int index, COLLECTION KEY_GENERIC_TYPE c)
-	{
-		if(c instanceof LIST) return addAll((LIST)c);
+	public boolean addAll(int index, COLLECTION KEY_GENERIC_TYPE c) {
+		if(c instanceof LIST) return addAll(index, (LIST KEY_GENERIC_TYPE)c);
 		int add = c.size();
 		if(add <= 0) return false;
-		ensureCapacity(size + add);
+		grow(size + add);
 		if(index != size) System.arraycopy(data, index, data, index+add, size - index);
 		size+=add;
 		ITERATOR KEY_GENERIC_TYPE iter = c.iterator();
@@ -83,34 +78,95 @@ public class ARRAY_LIST KEY_GENERIC_TYPE extends ABSTRACT_LIST KEY_GENERIC_TYPE
 		return true;
 	}
 	
-#endif
+	@Override
+	public boolean addAll(int index, LIST KEY_GENERIC_TYPE c) {
+		int add = c.size();
+		if(add <= 0) return false;
+		checkAddRange(index);
+		grow(size + add);
+		if(index != size) System.arraycopy(data, index, data, index+add, size - index);
+		size+=add;
+		c.getElements(0, data, index, size);
+		return true;
+	}
 	
 	@Override
-	public boolean addAll(int index, LIST KEY_GENERIC_TYPE c)
-	{
-		return false;
+	public void addElements(int from, KEY_TYPE[] a, int offset, int length) {
+		if(length <= 0) return;
+		checkAddRange(from);
+		grow(size + length);
+		if(from != size) System.arraycopy(data, from, data, from+length, size - length);
+		size+=length;
+		System.arraycopy(a, offset, data, from, length);
 	}
-
+	
 	@Override
-	public KEY_TYPE GET_KEY(int index)
-	{
-		if (index >= size) throw new IndexOutOfBoundsException("Index (" + index + ") is not in lists size (" + size + ")");
+	public KEY_TYPE[] getElements(int from, KEY_TYPE[] a, int offset, int length) {
+		SanityChecks.checkArrayCapacity(size, offset, length);
+		System.arraycopy(data, from, a, offset, length);
+		return a;
+	}
+	
+	@Override
+	public void removeElements(int from, int to) {
+		checkRange(from);
+		checkAddRange(to);
+		int length = to - from;
+		if(length <= 0) return;
+		if(to != size) System.arraycopy(data, to, data, from, size - to);
+#if TYPE_OBJECT
+		for(int i = 0;i<length;i++)
+			data[i+to] = null;
+#endif
+		size -= length;
+	}
+	
+#if TYPE_OBJECT
+	@Override
+	public KEY_TYPE[] extractElements(int from, int to, Class<KEY_TYPE> type) {
+		checkRange(from);
+		checkAddRange(to);
+		int length = to - from;
+		KEY_TYPE[] a = ARRAYS.newArray(type, length);
+		if(length <= 0) return a;
+		System.arraycopy(data, from, a, 0, length);
+		if(to != size) System.arraycopy(data, to, data, from, size - to);
+		for(int i = 0;i<length;i++)
+			data[i+to] = null;
+		size -= length;		
+		return a;
+	}
+	
+#else
+	@Override
+	public KEY_TYPE[] extractElements(int from, int to) {
+		int length = to - from;
+		if(length <= 0) return ARRAYS.EMPTY_ARRAY;
+		KEY_TYPE[] a = new KEY_TYPE[length];
+		System.arraycopy(data, from, a, 0, length);
+		if(to != size) System.arraycopy(data, to, data, from, size - to);
+		size -= length;		
+		return a;
+	}
+	
+#endif
+	@Override
+	public KEY_TYPE GET_KEY(int index) {
+		checkRange(index);
 		return data[index];
 	}
 
 	@Override
-	public KEY_TYPE set(int index, KEY_TYPE e)
-	{
-		if (index >= size) throw new IndexOutOfBoundsException("Index (" + index + ") is not in lists size (" + size + ")");
+	public KEY_TYPE set(int index, KEY_TYPE e) {
+		checkRange(index);
 		KEY_TYPE old = data[index];
 		data[index] = e;
 		return old;
 	}
 
 	@Override
-	public KEY_TYPE REMOVE(int index)
-	{
-		if (index >= size) throw new IndexOutOfBoundsException("Index (" + index + ") is not in lists size (" + size + ")");
+	public KEY_TYPE REMOVE(int index) {
+		checkRange(index);
 		KEY_TYPE old = data[index];
 		if(index != size) System.arraycopy(data, index+1, data, index, size - index);
 #if TYPE_OBJECT
@@ -119,29 +175,33 @@ public class ARRAY_LIST KEY_GENERIC_TYPE extends ABSTRACT_LIST KEY_GENERIC_TYPE
 		size--;
 		return old;
 	}
-
+	
 	@Override
-	public int size()
-	{
+	public int size() {
 		return size;
 	}
 	
 	@Override
-	public void clear()
-	{
+	public void clear() {
 #if TYPE_OBJECT
 		for(int i = 0;i<size;data[i] = null,i++);
 #endif
 		size = 0;
 	}
 	
-	protected void ensureCapacity(int capacity)
+	protected void grow(int capacity)
 	{
-		
+		if(capacity < data.length) return;
+		data = Arrays.copyOf(data, data == ARRAYS.EMPTY_ARRAY ? DEFAULT_ARRAY_SIZE : (int)Math.max(Math.min((long)data.length + (data.length >> 1), SanityChecks.MAX_ARRAY_SIZE), capacity));		
 	}
 	
-	protected void checkAddRange(int index)
-	{
-		
+	protected void checkRange(int index) {
+		if (index < 0 || index >= size)
+			throw new IndexOutOfBoundsException("Index: " + index + ", Size: " + size);
+	}
+	
+	protected void checkAddRange(int index) {
+		if (index < 0 || index > size)
+			throw new IndexOutOfBoundsException("Index: " + index + ", Size: " + size);
 	}
 }

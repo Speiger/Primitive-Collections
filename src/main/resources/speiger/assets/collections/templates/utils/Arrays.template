@@ -1,8 +1,10 @@
 package speiger.src.collections.PACKAGE.utils;
 
 public class ARRAYS
-{	
+{
 #if !TYPE_OBJECT
+	public static final KEY_TYPE[] EMPTY_ARRAY = new KEY_TYPE[0];
+	
 	public static CLASS_TYPE[] wrap(KEY_TYPE[] a) {
 		CLASS_TYPE[] result = new CLASS_TYPE[a.length];
 		for(int i = 0,m=a.length;i<m;i++)
@@ -15,6 +17,14 @@ public class ARRAYS
 		for(int i = 0,m=a.length;i<m;i++)
 			result[i] = OBJ_TO_KEY(a[i]);
 		return result;
+	}
+	
+#else
+	public static final Object[] EMPTY_ARRAY = new Object[0];
+	
+	public static KEY_GENERIC_TYPE KEY_TYPE[] newArray(Class<KEY_TYPE> clz, int length) {
+		if(clz == Object.class) return (KEY_TYPE[])new Object[length];
+		return (KEY_TYPE[]) java.lang.reflect.Array.newInstance(clz, length);
 	}
 #endif
 }

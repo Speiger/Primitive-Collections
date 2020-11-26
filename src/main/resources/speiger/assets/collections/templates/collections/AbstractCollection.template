@@ -4,6 +4,8 @@ package speiger.src.collections.PACKAGE.collections;
 import java.util.Collection;
 #endif
 import java.util.AbstractCollection;
+
+import speiger.src.collections.PACKAGE.collections.COLLECTION;
 #if !TYPE_OBJECT
 import speiger.src.collections.PACKAGE.utils.ITERATORS;
 #endif
@@ -17,9 +19,10 @@ public abstract class ABSTRACT_COLLECTION KEY_GENERIC_TYPE extends AbstractColle
 	@Override
 	@Deprecated
 	public boolean add(CLASS_TYPE e) { return COLLECTION.super.add(e); }
-	
+
+#endif
 	@Override
-	public boolean addAll(COLLECTION c) {
+	public boolean addAll(COLLECTION KEY_GENERIC_TYPE c) {
 		boolean modified = false;
 		for(KEY_TYPE e : c) {
 			modified |= add(e);
@@ -27,6 +30,7 @@ public abstract class ABSTRACT_COLLECTION KEY_GENERIC_TYPE extends AbstractColle
 		return modified;
 	}
 	
+#if !TYPE_OBJECT
 	@Override
 	@Deprecated
 	public boolean contains(Object e) { return COLLECTION.super.contains(e); }

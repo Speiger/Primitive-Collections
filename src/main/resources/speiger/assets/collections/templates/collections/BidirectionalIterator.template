@@ -5,13 +5,13 @@ import speiger.src.collections.objects.collections.ObjectBidirectionalIterator;
 
 public interface BI_ITERATOR KEY_GENERIC_TYPE extends ITERATOR KEY_GENERIC_TYPE, ObjectBidirectionalIterator<CLASS_TYPE>
 #else
-import speiger.src.collections.utils.BidirectionalIterator;
-
-public interface BI_ITERATOR KEY_GENERIC_TYPE extends ITERATOR KEY_GENERIC_TYPE, BidirectionalIterator<CLASS_TYPE>
+public interface BI_ITERATOR KEY_GENERIC_TYPE extends ITERATOR KEY_GENERIC_TYPE
 #endif
 {
+	public boolean hasPrevious();
+	
 	public KEY_TYPE PREVIOUS();
-
+	
 #if !TYPE_OBJECT
 	@Override
 	@Deprecated
@@ -24,5 +24,12 @@ public interface BI_ITERATOR KEY_GENERIC_TYPE extends ITERATOR KEY_GENERIC_TYPE,
 	{
 		return ITERATOR.super.skip(amount);
 	}
+	
 #endif
+	public default int back(int amount) {
+		if(amount < 0) throw new IllegalStateException("Can't go forward");
+		int i = 0;
+		for(;i<amount && hasPrevious();previous(),i++);
+		return i;
+	}
 }

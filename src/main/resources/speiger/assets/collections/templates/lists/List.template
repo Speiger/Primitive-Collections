@@ -9,10 +9,10 @@ public interface LIST KEY_GENERIC_TYPE extends COLLECTION KEY_GENERIC_TYPE, List
 	public boolean add(KEY_TYPE e);
 	
 	public void add(int index, KEY_TYPE e);
-		
-	public boolean addAll(int index, COLLECTION c);
-
+	
 #endif
+	public boolean addAll(int index, COLLECTION KEY_GENERIC_TYPE c);
+	
 	public boolean addAll(LIST KEY_GENERIC_TYPE c);
 	
 	public boolean addAll(int index, LIST KEY_GENERIC_TYPE c);
@@ -27,7 +27,25 @@ public interface LIST KEY_GENERIC_TYPE extends COLLECTION KEY_GENERIC_TYPE, List
 	public int indexOf(KEY_TYPE e);
 	
 	public int lastIndexOf(KEY_TYPE e);
-
+	
+#endif
+	
+	public default void addElements(int from, KEY_TYPE[] a) { addElements(from, a, 0, a.length); }
+	
+	public void addElements(int from, KEY_TYPE[] a, int offset, int length);
+	
+	public default KEY_TYPE[] getElements(int from, KEY_TYPE[] a) { return getElements(from, a, 0, a.length); }
+	
+	public KEY_TYPE[] getElements(int from, KEY_TYPE[] a, int offset, int length);
+	
+	public void removeElements(int from, int to);
+	
+#if TYPE_OBJECT
+	public KEY_TYPE[] extractElements(int from, int to, Class<KEY_TYPE> type);
+	
+#else
+	public KEY_TYPE[] extractElements(int from, int to);
+	
 #endif
 	@Override
 	public LIST_ITERATOR KEY_GENERIC_TYPE listIterator();
