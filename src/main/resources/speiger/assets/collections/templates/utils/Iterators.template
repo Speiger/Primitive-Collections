@@ -1,5 +1,6 @@
 package speiger.src.collections.PACKAGE.utils;
 
+import java.util.Iterator;
 import speiger.src.collections.PACKAGE.collections.ITERATOR;
 
 public class ITERATORS
@@ -10,6 +11,22 @@ public class ITERATORS
 	
 	public static GENERIC_BRACES ArrayIterator KEY_GENERIC_TYPE wrap(KEY_TYPE[] a, int start, int end) {
 		return new ArrayIteratorBRACES(a, start, end);
+	}
+	
+	public static GENERIC_BRACES int unwrap(KEY_TYPE[] a, Iterator<? extends CLASS_TYPE> i) {
+		return unwrap(a, i, 0, a.length);
+	}
+	
+	public static GENERIC_BRACES int unwrap(KEY_TYPE[] a, Iterator<? extends CLASS_TYPE> i, int offset) {
+		return unwrap(a, i, offset, a.length);
+	}
+
+	public static GENERIC_BRACES int unwrap(KEY_TYPE[] a, Iterator<? extends CLASS_TYPE> i, int offset, int max) {
+		if(max < 0) throw new IllegalStateException("The max size is smaller then 0");
+		if(offset + max >= a.length) throw new IllegalStateException("largest array index exceeds array size");
+		int index = 0;
+		for(;index<max && i.hasNext();index++) a[index+offset] = OBJ_TO_KEY(i.next());
+		return index;
 	}
 	
 	public static GENERIC_BRACES int unwrap(KEY_TYPE[] a, ITERATOR KEY_GENERIC_TYPE i) {

@@ -5,24 +5,86 @@ import java.util.Collection;
 import java.util.Iterator;
 
 import speiger.src.collections.PACKAGE.collections.COLLECTION;
+#if !TYPE_OBJECT
+import speiger.src.collections.PACKAGE.collections.STACK;
+#endif
 import speiger.src.collections.PACKAGE.collections.ITERATOR;
 import speiger.src.collections.PACKAGE.utils.ARRAYS;
+import speiger.src.collections.PACKAGE.utils.ITERATORS;
+#if TYPE_OBJECT
+import speiger.src.collections.utils.Stack;
+#endif
+import speiger.src.collections.utils.IArray;
 import speiger.src.collections.utils.SanityChecks;
 
-public class ARRAY_LIST KEY_GENERIC_TYPE extends ABSTRACT_LIST KEY_GENERIC_TYPE
+#if TYPE_OBJECT
+public class ARRAY_LIST KEY_GENERIC_TYPE extends ABSTRACT_LIST KEY_GENERIC_TYPE implements IArray, Stack<KEY_TYPE>
+#else
+public class ARRAY_LIST KEY_GENERIC_TYPE extends ABSTRACT_LIST KEY_GENERIC_TYPE implements IArray, STACK
+#endif
 {
 	static final int DEFAULT_ARRAY_SIZE = 10;
 	
 	protected transient KEY_TYPE[] data;
 	protected int size = 0;
 	
-	public ARRAY_LIST(int size)
-	{
+	public ARRAY_LIST() {
+#if TYPE_OBJECT
+		data = (KEY_TYPE[])ARRAYS.EMPTY_ARRAY;
+#else
+		data = ARRAYS.EMPTY_ARRAY;
+#endif
+	}
+	
+	public ARRAY_LIST(int size) {
 #if TYPE_OBJECT
 		data = (KEY_TYPE[])new Object[size];
 #else
 		data = new KEY_TYPE[size];
 #endif
+	}
+	
+	public ARRAY_LIST(Collection<? extends CLASS_TYPE> c) {
+		this(c.size());
+		size = ITERATORS.unwrap(data, c.iterator());
+	}
+	
+	public ARRAY_LIST(COLLECTION KEY_GENERIC_TYPE c) {
+		this(c.size());
+		size = ITERATORS.unwrap(data, c.iterator());
+	}
+	
+	public ARRAY_LIST(LIST KEY_GENERIC_TYPE l) {
+		this(l.size());
+		size = l.size();
+		l.getElements(0, data, 0, size);
+	}
+	
+	public ARRAY_LIST(KEY_TYPE[] a)	{
+		this(a, 0, a.length);
+	}
+	
+	public ARRAY_LIST(KEY_TYPE[] a, int length) {
+		this(a, 0, length);
+	}
+	
+	public ARRAY_LIST(KEY_TYPE[] a, int offset, int length) {
+		this(length);
+		SanityChecks.checkArrayCapacity(a.length, offset, length);
+		System.arraycopy(a, offset, data, 0, length);
+		size = length;
+	}
+	
+	public static GENERIC_BRACES ARRAY_LIST KEY_GENERIC_TYPE wrap(KEY_TYPE[] a) {
+		return wrap(a, a.length);
+	}
+	
+	public static GENERIC_BRACES ARRAY_LIST KEY_GENERIC_TYPE wrap(KEY_TYPE[] a, int length) {
+		SanityChecks.checkArrayCapacity(a.length, 0, length);
+		ARRAY_LIST KEY_GENERIC_TYPE list = new ARRAY_LISTBRACES();
+		list.data = a;
+		list.size = length;
+		return list;
 	}
 	
 	@Override
@@ -155,7 +217,7 @@ public class ARRAY_LIST KEY_GENERIC_TYPE extends ABSTRACT_LIST KEY_GENERIC_TYPE
 		checkRange(index);
 		return data[index];
 	}
-
+	
 	@Override
 	public KEY_TYPE set(int index, KEY_TYPE e) {
 		checkRange(index);
@@ -163,7 +225,7 @@ public class ARRAY_LIST KEY_GENERIC_TYPE extends ABSTRACT_LIST KEY_GENERIC_TYPE
 		data[index] = e;
 		return old;
 	}
-
+	
 	@Override
 	public KEY_TYPE REMOVE(int index) {
 		checkRange(index);
@@ -182,11 +244,51 @@ public class ARRAY_LIST KEY_GENERIC_TYPE extends ABSTRACT_LIST KEY_GENERIC_TYPE
 	}
 	
 	@Override
+	public void size(int size) {
+		if(size > data.length)
+			data = Arrays.copyOf(data, size);
+		else if(size < size() && size >= 0)
+			Arrays.fill(data, size, size(), EMPTY_VALUE);
+	}
+	
+	@Override
 	public void clear() {
 #if TYPE_OBJECT
 		for(int i = 0;i<size;data[i] = null,i++);
 #endif
 		size = 0;
+	}
+	
+	@Override
+	public void trim(int size) {
+		if(size > size() || size() == data.length) return;
+		int value = Math.min(size, size());
+#if TYPE_OBJECT
+		data = value == 0 ? (KEY_TYPE[])ARRAYS.EMPTY_ARRAY : Arrays.copyOf(data, value);
+#else
+		data = value == 0 ? ARRAYS.EMPTY_ARRAY : Arrays.copyOf(data, value);
+#endif
+	}
+	
+	@Override
+	public void ensureCapacity(int size) {
+		grow(size);
+	}
+	
+	@Override
+	public void PUSH(KEY_TYPE e) {
+		add(e);
+	}
+
+	@Override
+	public KEY_TYPE POP() {
+		return REMOVE(size() - 1);
+	}
+
+	@Override
+	public KEY_TYPE PEEK(int index) {
+		checkRange((size() - 1) - index);
+		return data[(size() - 1) - index];
 	}
 	
 	protected void grow(int capacity)

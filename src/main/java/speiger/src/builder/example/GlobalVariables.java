@@ -28,6 +28,7 @@ public class GlobalVariables
 		addSimpleMapper("PACKAGE", type.getPathType());
 		addSimpleMapper("CLASS_TYPE", type.getClassType());
 		addSimpleMapper("KEY_TYPE", type.getKeyType());
+		addSimpleMapper("EMPTY_VALUE", type.getEmptyValue());
 		addSimpleMapper(" KEY_GENERIC_TYPE", type == ClassType.OBJECT ? "<"+type.getKeyType()+">" : "");
 		addSimpleMapper(" GENERIC_BRACES", type == ClassType.OBJECT ? " <"+type.getKeyType()+">" : "");
 		addSimpleMapper("BRACES", type == ClassType.OBJECT ? "<>" : "");
@@ -67,6 +68,7 @@ public class GlobalVariables
 		addClassMapper("SUB_LIST", "SubList");
 		addClassMapper("ARRAY_LIST", "ArrayList");
 		addClassMapper("LIST", "List");
+		addClassMapper("STACK", "Stack");
 		return this;
 	}
 	
@@ -78,6 +80,10 @@ public class GlobalVariables
 		addFunctionMapper("REMOVE_KEY", "rem");
 		addFunctionMapper("REMOVE", "remove");
 		addFunctionMapper("PREVIOUS", "previous");
+		addFunctionMapper("PEEK", "peek");
+		addFunctionMapper("POP", "pop");
+		addFunctionMapper("PUSH", "push");
+		addFunctionMapper("TOP", "top");
 		return this;
 	}
 	

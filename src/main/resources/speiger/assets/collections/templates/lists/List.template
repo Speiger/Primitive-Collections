@@ -56,6 +56,8 @@ public interface LIST KEY_GENERIC_TYPE extends COLLECTION KEY_GENERIC_TYPE, List
 	@Override
 	public LIST KEY_GENERIC_TYPE subList(int from, int to);
 	
+	public void size(int size);
+	
 #if !TYPE_OBJECT
 	@Override
 	@Deprecated

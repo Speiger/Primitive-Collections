@@ -17,7 +17,6 @@ public class TestBuilder extends TemplateProcessor
 {
 	Map<String, EnumSet<ClassType>> blocked = new HashMap<String, EnumSet<ClassType>>();
 	public static final ClassType[] TYPE = ClassType.values();
-	
 	List<GlobalVariables> varibles = new ArrayList<GlobalVariables>();
 	
 	public TestBuilder()
@@ -52,6 +51,7 @@ public class TestBuilder extends TemplateProcessor
 			varibles.add(type);
 		}
 		blocked.put("Consumer", EnumSet.of(ClassType.OBJECT));
+		blocked.put("Stack", EnumSet.of(ClassType.OBJECT));
 	}
 	
 	@Override

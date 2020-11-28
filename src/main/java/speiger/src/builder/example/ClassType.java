@@ -2,29 +2,31 @@ package speiger.src.builder.example;
 
 public enum ClassType
 {
-	BOOLEAN("boolean", "Boolean", "Boolean", "booleans", "BOOLEAN"),
-	BYTE("byte", "Byte", "Byte", "bytes", "BYTES"),
-	SHORT("short", "Short", "Short", "shorts", "SHORT"),
-	CHAR("char", "Character", "Char", "chars", "CHAR"),
-	INT("int", "Integer", "Int", "ints", "INT"),
-	LONG("long", "Long", "Long", "longs", "LONG"),
-	FLOAT("float", "Float", "Float", "floats", "FLOAT"),
-	DOUBLE("double", "Double", "Double", "doubles", "DOUBLE"),
-	OBJECT("T", "T", "Object", "objects", "OBJECT");
+	BOOLEAN("boolean", "Boolean", "Boolean", "booleans", "BOOLEAN", "false"),
+	BYTE("byte", "Byte", "Byte", "bytes", "BYTES", "(byte)0"),
+	SHORT("short", "Short", "Short", "shorts", "SHORT", "(short)0"),
+	CHAR("char", "Character", "Char", "chars", "CHAR", "(char)0"),
+	INT("int", "Integer", "Int", "ints", "INT", "0"),
+	LONG("long", "Long", "Long", "longs", "LONG", "0L"),
+	FLOAT("float", "Float", "Float", "floats", "FLOAT", "0F"),
+	DOUBLE("double", "Double", "Double", "doubles", "DOUBLE", "0D"),
+	OBJECT("T", "T", "Object", "objects", "OBJECT", "null");
 	
 	String keyType;
 	String classType;
 	String fileType;
 	String pathType;
 	String capType;
+	String emptyValue;
 	
-	private ClassType(String keyType, String classType, String fileType, String pathType, String capType)
+	private ClassType(String keyType, String classType, String fileType, String pathType, String capType, String emptyValue)
 	{
 		this.keyType = keyType;
 		this.classType = classType;
 		this.fileType = fileType;
 		this.pathType = pathType;
 		this.capType = capType;
+		this.emptyValue = emptyValue;
 	}
 	
 	public String getKeyType()
@@ -55,6 +57,11 @@ public enum ClassType
 	public String getCapType()
 	{
 		return capType;
+	}
+	
+	public String getEmptyValue()
+	{
+		return emptyValue;
 	}
 	
 	public boolean isPrimitiveBlocking()
