@@ -3,7 +3,7 @@ package speiger.src.builder.example;
 public enum ClassType
 {
 	BOOLEAN("boolean", "Boolean", "Boolean", "booleans", "BOOLEAN", "false"),
-	BYTE("byte", "Byte", "Byte", "bytes", "BYTES", "(byte)0"),
+	BYTE("byte", "Byte", "Byte", "bytes", "BYTE", "(byte)0"),
 	SHORT("short", "Short", "Short", "shorts", "SHORT", "(short)0"),
 	CHAR("char", "Character", "Char", "chars", "CHAR", "(char)0"),
 	INT("int", "Integer", "Int", "ints", "INT", "0"),
@@ -62,6 +62,11 @@ public enum ClassType
 	public String getEmptyValue()
 	{
 		return emptyValue;
+	}
+	
+	public boolean isObject()
+	{
+		return this == OBJECT;
 	}
 	
 	public boolean isPrimitiveBlocking()

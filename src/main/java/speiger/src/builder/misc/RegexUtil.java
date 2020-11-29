@@ -52,6 +52,15 @@ public class RegexUtil
 		return "";
 	}
 	
+	public static int[] findFullLine(String s, int startIndex)
+	{
+		int offset = s.indexOf("\n", startIndex);
+		if(offset == -1) return null;
+		int start = s.lastIndexOf("\n", startIndex);
+		if(start == -1) return null;
+		return new int[]{start, offset};
+	}
+	
 	static
 	{
 		try

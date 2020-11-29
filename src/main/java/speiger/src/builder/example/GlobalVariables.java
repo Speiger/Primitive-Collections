@@ -9,6 +9,7 @@ import java.util.function.UnaryOperator;
 
 import speiger.src.builder.mappers.ArgumentMapper;
 import speiger.src.builder.mappers.InjectMapper;
+import speiger.src.builder.mappers.LineMapper;
 import speiger.src.builder.mappers.SimpleMapper;
 import speiger.src.builder.processor.TemplateProcess;
 
@@ -26,12 +27,15 @@ public class GlobalVariables
 	public GlobalVariables createVariables()
 	{
 		addSimpleMapper("PACKAGE", type.getPathType());
+		addDeprication("@Primitive");
 		addSimpleMapper("CLASS_TYPE", type.getClassType());
 		addSimpleMapper("KEY_TYPE", type.getKeyType());
 		addSimpleMapper("EMPTY_VALUE", type.getEmptyValue());
-		addSimpleMapper(" KEY_GENERIC_TYPE", type == ClassType.OBJECT ? "<"+type.getKeyType()+">" : "");
-		addSimpleMapper(" GENERIC_BRACES", type == ClassType.OBJECT ? " <"+type.getKeyType()+">" : "");
-		addSimpleMapper("BRACES", type == ClassType.OBJECT ? "<>" : "");
+		addSimpleMapper(" KEY_GENERIC_TYPE", type.isObject() ? "<"+type.getKeyType()+">" : "");
+		addSimpleMapper(" KEY_COMPAREABLE_TYPE", type.isObject() ? "<"+type.getKeyType()+" extends Comparable<T>>" : "");
+		addSimpleMapper(" GENERIC_BRACES", type.isObject() ? " <"+type.getKeyType()+">" : "");
+		addSimpleMapper(" COMPAREABLE_BRACES", type.isObject() ? " <"+type.getKeyType()+" extends Comparable<T>>" : "");
+		addSimpleMapper("BRACES", type.isObject() ? "<>" : "");
 		if(type.needsCustomJDKType())
 		{
 			addSimpleMapper("JAVA_TYPE", type.getCustomJDKType().getKeyType());
@@ -42,11 +46,14 @@ public class GlobalVariables
 	
 	public GlobalVariables createHelperVariables()
 	{
-		addArgumentMapper("EQUALS_KEY_TYPE", type == ClassType.OBJECT ? "Objects.equals(%1$s, %2$s)" : "Objects.equals(KEY_TO_OBJ(%1$s), %2$s)").removeBraces();
+		addArgumentMapper("EQUALS_KEY_TYPE", type.isObject() ? "Objects.equals(%1$s, %2$s)" : "Objects.equals(KEY_TO_OBJ(%1$s), %2$s)").removeBraces();
 		addArgumentMapper("EQUALS", type.getEquals()).removeBraces();
-		addSimpleMapper("KEY_TO_OBJ", type.getClassType()+".valueOf");
-		addInjectMapper("OBJ_TO_KEY", type == ClassType.OBJECT ? "%s" : "%s."+type.getKeyType()+"Value()").removeBraces();
+		addArgumentMapper("COMPARE_TO", type.isObject() ? "%1$s.compareTo(%2$s)" : type.getClassType()+".compare(%1$s, %2$s)").removeBraces();
+		addInjectMapper("KEY_TO_OBJ", type.isObject() ? "%s" : type.getClassType()+".valueOf(%s)").removeBraces();
+		addInjectMapper("OBJ_TO_KEY", type.isObject() ? "%s" : "%s."+type.getKeyType()+"Value()").removeBraces();
 		addInjectMapper("CLASS_TO_KEY", "(("+type.getClassType()+")%s)."+type.getKeyType()+"Value()").removeBraces();
+		addSimpleMapper("APPLY", "applyAs"+type.getCustomJDKType().getNonFileType());
+		addInjectMapper("HASH", type.getClassType()+".hashCode(%s)").removeBraces();
 		return this;
 	}
 	
@@ -54,7 +61,17 @@ public class GlobalVariables
 	{
 		addSimpleMapper("JAVA_PREDICATE", type.isPrimitiveBlocking() ? "" : type.getCustomJDKType().getFileType()+"Predicate");
 		addSimpleMapper("JAVA_CONSUMER", type.isPrimitiveBlocking() ? "" : "java.util.function."+type.getCustomJDKType().getFileType()+"Consumer");
-		addClassMapper("CONSUMER", "Consumer");
+		addSimpleMapper("UNARY_OPERATOR", type.isPrimitiveBlocking() ? "" : type == ClassType.BOOLEAN ? "BinaryOperator" : type.getCustomJDKType().getFileType()+"UnaryOperator");
+		if(type.isObject())
+		{
+			addSimpleMapper("CONSUMER", "Consumer");
+			addSimpleMapper("COMPARATOR", "Comparator");	
+		}
+		else
+		{
+			addClassMapper("CONSUMER", "Consumer");
+			addClassMapper("COMPARATOR", "Comparator");
+		}
 		addClassMapper("ITERATORS", "Iterators");
 		addClassMapper("BI_ITERATOR", "BidirectionalIterator");
 		addClassMapper("LIST_ITERATOR", "ListIterator");
@@ -84,6 +101,7 @@ public class GlobalVariables
 		addFunctionMapper("POP", "pop");
 		addFunctionMapper("PUSH", "push");
 		addFunctionMapper("TOP", "top");
+		addFunctionMappers("REPLACE", "replace%ss");
 		return this;
 	}
 	
@@ -125,9 +143,20 @@ public class GlobalVariables
 		operators.add(new SimpleMapper(pattern, replacement+type.getNonFileType()));
 	}
 	
+	private void addFunctionMappers(String pattern, String replacement)
+	{
+		operators.add(new SimpleMapper(pattern, String.format(replacement, type.getNonFileType())));		
+	}
+	
 	private void addSimpleMapper(String pattern, String replacement)
 	{
 		operators.add(new SimpleMapper(pattern, replacement));
+	}
+	
+	private void addDeprication(String pattern)
+	{
+		if(type == ClassType.OBJECT) operators.add(new LineMapper(pattern));
+		else operators.add(new SimpleMapper(pattern, "@Deprecated"));
 	}
 	
 	private InjectMapper addInjectMapper(String pattern, String replacement)

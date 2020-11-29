@@ -1,6 +1,8 @@
 package speiger.src.collections.PACKAGE.lists;
 
 import java.util.Collection;
+import java.util.List;
+import java.util.ListIterator;
 import java.util.Objects;
 
 import speiger.src.collections.PACKAGE.collections.ABSTRACT_COLLECTION;
@@ -97,6 +99,48 @@ public abstract class ABSTRACT_LIST KEY_GENERIC_TYPE extends ABSTRACT_COLLECTION
 	}
 	
 #endif
+	@Override
+	public boolean equals(Object o) {
+    	if (o == this)
+    		return true;
+    	if (!(o instanceof List))
+    		return false;
+    	List<?> l = (List<?>)o;
+    	if(l.size() != size()) return false;
+#if !TYPE_OBJECT    	
+		if(l instanceof LIST)
+		{
+	    	LIST_ITERATOR e1 = listIterator();
+	    	LIST_ITERATOR e2 = ((LIST)l).listIterator();
+	    	while (e1.hasNext() && e2.hasNext()) {
+	    		if(!(EQUALS(e1.NEXT(), e2.NEXT())))
+	    			return false;
+	    	}
+	    	return !(e1.hasNext() || e2.hasNext());
+		}
+#endif
+    	ListIterator<CLASS_TYPE> e1 = listIterator();
+    	ListIterator<?> e2 = l.listIterator();
+    	while (e1.hasNext() && e2.hasNext()) {
+    		if(!Objects.equals(e1.next(), e2.next()))
+    			return false;
+    	}
+    	return !(e1.hasNext() || e2.hasNext());
+	}
+	
+	@Override
+	public int hashCode() {
+    	int hashCode = 1;
+    	LIST_ITERATOR KEY_GENERIC_TYPE i = listIterator();
+    	while(i.hasNext())
+#if TYPE_OBJECT
+			hashCode = 31 * hashCode + i.next().hashCode();
+#else
+    		hashCode = 31 * hashCode + HASH(i.NEXT());
+#endif
+    	return hashCode;
+	}
+	
 	@Override
 	public LIST KEY_GENERIC_TYPE subList(int fromIndex, int toIndex) {
 		return new SUB_LIST(this, fromIndex, toIndex);

@@ -1,8 +1,6 @@
 package speiger.src.collections.PACKAGE.collections;
 
-#if !TYPE_OBJECT
 import java.util.Collection;
-#endif
 import java.util.AbstractCollection;
 
 import speiger.src.collections.PACKAGE.collections.COLLECTION;
@@ -42,24 +40,28 @@ public abstract class ABSTRACT_COLLECTION KEY_GENERIC_TYPE extends AbstractColle
 	}
 	
 	@Override
+	@Deprecated
 	public boolean containsAll(Collection<?> c)
 	{
 		return c instanceof COLLECTION ? containsAll((COLLECTION)c) : super.containsAll(c);
 	}
 
 	@Override
+	@Deprecated
 	public boolean addAll(Collection<? extends CLASS_TYPE> c)
 	{
 		return c instanceof COLLECTION ? addAll((COLLECTION)c) : super.addAll(c);
 	}
 
 	@Override
+	@Deprecated
 	public boolean removeAll(Collection<?> c)
 	{
 		return c instanceof COLLECTION ? removeAll((COLLECTION)c) : super.removeAll(c);
 	}
 
 	@Override
+	@Deprecated
 	public boolean retainAll(Collection<?> c)
 	{
 		return c instanceof COLLECTION ? retainAll((COLLECTION)c) : super.retainAll(c);
@@ -81,6 +83,17 @@ public abstract class ABSTRACT_COLLECTION KEY_GENERIC_TYPE extends AbstractColle
 		return false;
 	}
 	
+#endif
+	@Override
+	@Primitive
+	public boolean containsAny(Collection<?> c) {
+		for(KEY_TYPE e : this) 
+			if(contains(KEY_TO_OBJ(e)))
+				return true;
+		return false;
+	}
+	
+#if !TYPE_OBJECT
 	@Override
 	@Deprecated
 	public boolean remove(Object e) { return COLLECTION.super.remove(e); }
@@ -120,10 +133,12 @@ public abstract class ABSTRACT_COLLECTION KEY_GENERIC_TYPE extends AbstractColle
 		return modified;
 	}
 	
+	@Override
 	public KEY_TYPE[] TO_ARRAY() {
 		return TO_ARRAY(new KEY_TYPE[size()]);
 	}
 	
+	@Override
 	public KEY_TYPE[] TO_ARRAY(KEY_TYPE[] a) {
 		if(a == null || a.length < size()) a = new KEY_TYPE[size()];
 		ITERATORS.unwrap(a, iterator());

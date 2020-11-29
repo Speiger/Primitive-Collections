@@ -1,0 +1,12 @@
+package speiger.src.collections.PACKAGE.functions;
+
+import java.util.Comparator;
+
+public interface COMPARATOR extends Comparator<CLASS_TYPE> 
+{
+	int compare(KEY_TYPE o1, KEY_TYPE o2);
+	
+	default int compare(CLASS_TYPE o1, CLASS_TYPE o2) {
+		return compare(OBJ_TO_KEY(o1), OBJ_TO_KEY(o2));
+	}
+}

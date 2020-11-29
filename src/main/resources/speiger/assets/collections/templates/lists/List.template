@@ -1,11 +1,18 @@
 package speiger.src.collections.PACKAGE.lists;
 
 import java.util.List;
+#if !TYPE_OBJECT && !TYPE_BOOLEAN
+import java.util.Objects;
+import java.util.function.UNARY_OPERATOR;
+import java.util.function.UnaryOperator;
+#endif
+
 import speiger.src.collections.PACKAGE.collections.COLLECTION;
 
 public interface LIST KEY_GENERIC_TYPE extends COLLECTION KEY_GENERIC_TYPE, List<CLASS_TYPE>
 {
 #if !TYPE_OBJECT
+	@Override
 	public boolean add(KEY_TYPE e);
 	
 	public void add(int index, KEY_TYPE e);
@@ -27,9 +34,21 @@ public interface LIST KEY_GENERIC_TYPE extends COLLECTION KEY_GENERIC_TYPE, List
 	public int indexOf(KEY_TYPE e);
 	
 	public int lastIndexOf(KEY_TYPE e);
+
+#if !TYPE_BOOLEAN
+	public default void REPLACE(UNARY_OPERATOR o) {
+        Objects.requireNonNull(o);
+        LIST_ITERATOR iter = listIterator();
+        while (iter.hasNext())
+#if TYPE_BYTE || TYPE_SHORT || TYPE_CHAR || TYPE_FLOAT
+        	iter.set((KEY_TYPE)o.APPLY(iter.NEXT()));
+#else
+			iter.set(o.APPLY(iter.NEXT()));
+#endif
+	}
 	
 #endif
-	
+#endif
 	public default void addElements(int from, KEY_TYPE[] a) { addElements(from, a, 0, a.length); }
 	
 	public void addElements(int from, KEY_TYPE[] a, int offset, int length);
@@ -106,5 +125,18 @@ public interface LIST KEY_GENERIC_TYPE extends COLLECTION KEY_GENERIC_TYPE, List
 	public default CLASS_TYPE remove(int index) {
 		return KEY_TO_OBJ(REMOVE(index));
 	}
+	
+#if !TYPE_BOOLEAN
+	@Override
+	@Deprecated
+	public default void replaceAll(UnaryOperator<CLASS_TYPE> o) {
+		Objects.requireNonNull(o);
+#if TYPE_BYTE || TYPE_SHORT || TYPE_CHAR || TYPE_FLOAT
+		REPLACE(T -> OBJ_TO_KEY(o.apply(KEY_TO_OBJ((KEY_TYPE)T))));
+#else
+		REPLACE(T -> OBJ_TO_KEY(o.apply(KEY_TO_OBJ(T))));	
+#endif
+	}
+#endif
 #endif
 }

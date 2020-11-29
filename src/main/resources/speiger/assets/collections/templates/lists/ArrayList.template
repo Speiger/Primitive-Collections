@@ -3,6 +3,11 @@ package speiger.src.collections.PACKAGE.lists;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Iterator;
+import java.util.Objects;
+import java.util.function.Predicate;
+#if PRIMITIVES
+import java.util.function.JAVA_PREDICATE;
+#endif
 
 import speiger.src.collections.PACKAGE.collections.COLLECTION;
 #if !TYPE_OBJECT
@@ -13,6 +18,8 @@ import speiger.src.collections.PACKAGE.utils.ARRAYS;
 import speiger.src.collections.PACKAGE.utils.ITERATORS;
 #if TYPE_OBJECT
 import speiger.src.collections.utils.Stack;
+#else
+import speiger.src.collections.objects.utils.ObjectArrays;
 #endif
 import speiger.src.collections.utils.IArray;
 import speiger.src.collections.utils.SanityChecks;
@@ -103,6 +110,11 @@ public class ARRAY_LIST KEY_GENERIC_TYPE extends ABSTRACT_LIST KEY_GENERIC_TYPE 
 		return true;
 	}
 	
+	@Override
+	public void PUSH(KEY_TYPE e) {
+		add(e);
+	}
+	
 #if !TYPE_OBJECT
 	@Override
 	public void add(int index, KEY_TYPE e) {
@@ -115,6 +127,7 @@ public class ARRAY_LIST KEY_GENERIC_TYPE extends ABSTRACT_LIST KEY_GENERIC_TYPE 
 	
 #endif	
 	@Override
+	@Primitive
 	public boolean addAll(int index, Collection<? extends CLASS_TYPE> c) {
 		if(c instanceof COLLECTION) return addAll(index, (COLLECTION KEY_GENERIC_TYPE)c);
 		int add = c.size();
@@ -213,9 +226,70 @@ public class ARRAY_LIST KEY_GENERIC_TYPE extends ABSTRACT_LIST KEY_GENERIC_TYPE 
 	
 #endif
 	@Override
+	@Primitive
+	public boolean containsAll(Collection<?> c) {
+#if !TYPE_OBJECT
+		if(c instanceof COLLECTION) return containsAll((COLLECTION)c);
+#endif
+		Objects.requireNonNull(c);
+		for(int i = 0,m=size;i<m;i++) {
+#if !TYPE_OBJECT
+			if(!c.contains(KEY_TO_OBJ(data[i]))) return false;
+#else
+			if(!c.contains(data[i])) return false;
+#endif
+		}
+		return true;
+	}
+	
+	@Override
+	@Primitive
+	public boolean containsAny(Collection<?> c)
+	{
+#if !TYPE_OBJECT
+		if(c instanceof COLLECTION) return containsAny((COLLECTION)c);
+#endif
+		Objects.requireNonNull(c);
+		for(int i = 0,m=size;i<m;i++) {
+#if !TYPE_OBJECT
+			if(c.contains(KEY_TO_OBJ(data[i]))) return true;
+#else
+			if(c.contains(data[i])) return true;
+#endif
+		}
+		return false;
+	}	
+	
+#if !TYPE_OBJECT
+	@Override
+	public boolean containsAll(COLLECTION c) {
+		Objects.requireNonNull(c);
+		for(int i = 0,m=size;i<m;i++) {
+			if(!c.contains(data[i])) return false;
+		}
+		return true;
+	}	
+	
+	@Override
+	public boolean containsAny(COLLECTION c) {
+		Objects.requireNonNull(c);
+		for(int i = 0,m=size;i<m;i++) {
+			if(c.contains(data[i])) return true;
+		}
+		return false;
+	}
+	
+#endif
+	@Override
 	public KEY_TYPE GET_KEY(int index) {
 		checkRange(index);
 		return data[index];
+	}
+	
+	@Override
+	public KEY_TYPE PEEK(int index) {
+		checkRange((size() - 1) - index);
+		return data[(size() - 1) - index];
 	}
 	
 	@Override
@@ -230,7 +304,7 @@ public class ARRAY_LIST KEY_GENERIC_TYPE extends ABSTRACT_LIST KEY_GENERIC_TYPE 
 	public KEY_TYPE REMOVE(int index) {
 		checkRange(index);
 		KEY_TYPE old = data[index];
-		if(index != size) System.arraycopy(data, index+1, data, index, size - index);
+		if(index != size - 1) System.arraycopy(data, index+1, data, index, size - index);
 #if TYPE_OBJECT
 		data[size] = null;
 #endif
@@ -238,6 +312,141 @@ public class ARRAY_LIST KEY_GENERIC_TYPE extends ABSTRACT_LIST KEY_GENERIC_TYPE 
 		return old;
 	}
 	
+	@Override
+	public KEY_TYPE POP() {
+		return REMOVE(size() - 1);
+	}
+	
+	@Override
+	@Primitive
+	public boolean removeAll(Collection<?> c) {
+		if(c.isEmpty()) return false;
+#if !TYPE_OBJECT
+		if(c instanceof COLLECTION) return removeAll((COLLECTION)c);
+#endif
+		boolean modified = false;
+		for(int i = 0, j = 0;i<size;i++) {
+			if(!c.contains(KEY_TO_OBJ(data[i]))) {
+				data[j++] = data[i];
+				modified = true;
+			}
+		}
+		return modified;
+	}
+	
+	@Override
+	@Primitive
+	public boolean retainAll(Collection<?> c) {
+		if(c.isEmpty()) {
+			boolean modifed = size > 0;
+			Arrays.fill(data, 0, size, EMPTY_VALUE);
+			size = 0;
+			return modifed;
+		}
+#if !TYPE_OBJECT
+		if(c instanceof COLLECTION) return retainAll((COLLECTION)c);
+#endif
+		boolean modified = false;
+		for(int i = 0, j = 0;i<size;i++) {
+			if(c.contains(KEY_TO_OBJ(data[i]))) {
+				data[j++] = data[i];
+				modified = true;
+			}
+		}
+		return modified;
+	}
+	
+	
+	@Override
+	@Primitive
+	public boolean removeIf(Predicate<? super CLASS_TYPE> filter) {
+		Objects.requireNonNull(filter);
+		boolean modified = false;
+		for(int i = 0, j = 0;i<size;i++) {
+			if(!filter.test(KEY_TO_OBJ(data[i]))) {
+				data[j++] = data[i];
+				modified = true;
+			}
+		}
+		return modified;
+	}
+	
+#if !TYPE_OBJECT
+	@Override
+	public boolean removeAll(COLLECTION c) {
+		if(c.isEmpty()) return false;
+		boolean modified = false;
+		for(int i = 0, j = 0;i<size;i++) {
+			if(!c.contains(data[i])) {
+				data[j++] = data[i];
+				modified = true;
+			}
+		}
+		return modified;
+	}
+	
+	@Override
+	public boolean retainAll(COLLECTION c) {
+		if(c.isEmpty()) {
+			boolean modifed = size > 0;
+			Arrays.fill(data, 0, size, EMPTY_VALUE);
+			size = 0;
+			return modifed;
+		}
+		boolean modified = false;
+		for(int i = 0, j = 0;i<size;i++) {
+			if(c.contains(data[i])) {
+				data[j++] = data[i];
+				modified = true;
+			}
+		}
+		return modified;
+	}
+	
+#if PRIMITIVES
+	@Override
+	public boolean remIf(JAVA_PREDICATE filter) {
+		Objects.requireNonNull(filter);
+		boolean modified = false;
+		for(int i = 0, j = 0;i<size;i++) {
+			if(!filter.test(data[i])) {
+				data[j++] = data[i];
+				modified = true;
+			}
+		}
+		return modified;
+	}
+	
+#endif
+#endif
+	@Override
+	@Primitive
+	public Object[] toArray() {
+		Object[] obj = new Object[size];
+		for(int i = 0;i<size;i++)
+			obj[i] = KEY_TO_OBJ(data[i]);
+		return obj;
+	}
+	
+	@Override
+	@Primitive
+	public <E> E[] toArray(E[] a) {
+		if(a == null) a = (E[])new Object[size];
+		else if(a.length < size) a = (E[])ObjectArrays.newArray(a.getClass().getComponentType(), size);
+		for(int i = 0;i<size;i++)
+			a[i] = (E)KEY_TO_OBJ(data[i]);
+		return a;
+	}
+	
+#if !TYPE_OBJECT
+	@Override
+	public KEY_TYPE[] TO_ARRAY(KEY_TYPE[] a) {
+		if(a.length < size) a = new KEY_TYPE[size];
+		System.arraycopy(data, 0, a, 0, size);
+		return a;
+	}
+	
+#endif
 	@Override
 	public int size() {
 		return size;
@@ -275,24 +484,7 @@ public class ARRAY_LIST KEY_GENERIC_TYPE extends ABSTRACT_LIST KEY_GENERIC_TYPE 
 		grow(size);
 	}
 	
-	@Override
-	public void PUSH(KEY_TYPE e) {
-		add(e);
-	}
-
-	@Override
-	public KEY_TYPE POP() {
-		return REMOVE(size() - 1);
-	}
-
-	@Override
-	public KEY_TYPE PEEK(int index) {
-		checkRange((size() - 1) - index);
-		return data[(size() - 1) - index];
-	}
-	
-	protected void grow(int capacity)
-	{
+	protected void grow(int capacity) {
 		if(capacity < data.length) return;
 		data = Arrays.copyOf(data, data == ARRAYS.EMPTY_ARRAY ? DEFAULT_ARRAY_SIZE : (int)Math.max(Math.min((long)data.length + (data.length >> 1), SanityChecks.MAX_ARRAY_SIZE), capacity));		
 	}

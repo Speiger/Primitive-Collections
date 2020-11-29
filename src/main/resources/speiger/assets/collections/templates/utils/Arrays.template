@@ -1,20 +1,48 @@
 package speiger.src.collections.PACKAGE.utils;
 
+import java.util.Arrays;
+import java.util.concurrent.RecursiveAction;
+
+#if !TYPE_OBJECT
+import speiger.src.collections.PACKAGE.functions.COMPARATOR;
+import speiger.src.collections.utils.SanityChecks;
+#else
+import java.util.Comparator;
+#endif
+
 public class ARRAYS
 {
 #if !TYPE_OBJECT
 	public static final KEY_TYPE[] EMPTY_ARRAY = new KEY_TYPE[0];
 	
 	public static CLASS_TYPE[] wrap(KEY_TYPE[] a) {
-		CLASS_TYPE[] result = new CLASS_TYPE[a.length];
-		for(int i = 0,m=a.length;i<m;i++)
+		return wrap(a, 0, a.length);
+	}
+	
+	public static CLASS_TYPE[] wrap(KEY_TYPE[] a, int length) {
+		return wrap(a, 0, length);
+	}
+	
+	public static CLASS_TYPE[] wrap(KEY_TYPE[] a, int offset, int length) {
+		SanityChecks.checkArrayCapacity(a.length, offset, length);
+		CLASS_TYPE[] result = new CLASS_TYPE[length];
+		for(int i = offset;i<length;i++)
 			result[i] = KEY_TO_OBJ(a[i]);
 		return result;
 	}
 	
 	public static KEY_TYPE[] unwrap(CLASS_TYPE[] a) {
-		KEY_TYPE[] result = new KEY_TYPE[a.length];
-		for(int i = 0,m=a.length;i<m;i++)
+		return unwrap(a, 0, a.length);
+	}
+	
+	public static KEY_TYPE[] unwrap(CLASS_TYPE[] a, int length) {
+		return unwrap(a, 0, length);
+	}
+	
+	public static KEY_TYPE[] unwrap(CLASS_TYPE[] a, int offset, int length) {
+		SanityChecks.checkArrayCapacity(a.length, offset, length);
+		KEY_TYPE[] result = new KEY_TYPE[length];
+		for(int i = offset;i<length;i++)
 			result[i] = OBJ_TO_KEY(a[i]);
 		return result;
 	}
@@ -26,5 +54,392 @@ public class ARRAYS
 		if(clz == Object.class) return (KEY_TYPE[])new Object[length];
 		return (KEY_TYPE[]) java.lang.reflect.Array.newInstance(clz, length);
 	}
+	
 #endif
+	public static GENERIC_BRACES void insertionSort(KEY_TYPE[] array, COMPARATOR KEY_GENERIC_TYPE comp) {
+		insertionSort(array, 0, array.length, comp);
+	}
+	
+	public static GENERIC_BRACES void insertionSort(KEY_TYPE[] array, int length, COMPARATOR KEY_GENERIC_TYPE comp) {
+		insertionSort(array, 0, length, comp);
+	}
+	
+	public static GENERIC_BRACES void insertionSort(KEY_TYPE[] array, int from, int to, COMPARATOR KEY_GENERIC_TYPE comp) {
+		for (int i = from+1;i<to; i++) {
+			KEY_TYPE current = array[i];
+    		int j = i - 1;
+    		while(j >= from && comp.compare(current, array[j]) < 0) {
+    			array[j+1] = array[j--];
+    		}
+    		array[j+1] = current;
+		}
+	}
+	
+	public static COMPAREABLE_BRACES void insertionSort(KEY_TYPE[] array) {
+		insertionSort(array, 0, array.length);
+	}
+	
+	public static COMPAREABLE_BRACES void insertionSort(KEY_TYPE[] array, int length) {
+		insertionSort(array, 0, length);
+	}
+	
+	public static COMPAREABLE_BRACES void insertionSort(KEY_TYPE[] array, int from, int to) {
+		for (int i = from+1;i<to; i++) {
+			KEY_TYPE current = array[i];
+    		int j = i - 1;
+    		while(j >= from && COMPARE_TO(current, array[j]) < 0) {
+    			array[j+1] = array[j--];
+    		}
+    		array[j+1] = current;
+		}
+	}
+	
+	public static GENERIC_BRACES void selectionSort(KEY_TYPE[] array, COMPARATOR KEY_GENERIC_TYPE comp) {
+		selectionSort(array, 0, array.length, comp);
+	}
+	
+	public static GENERIC_BRACES void selectionSort(KEY_TYPE[] array, int length, COMPARATOR KEY_GENERIC_TYPE comp) {
+		selectionSort(array, 0, length, comp);
+	}
+	
+	public static GENERIC_BRACES void selectionSort(KEY_TYPE[] array, int from, int to, COMPARATOR KEY_GENERIC_TYPE comp) {
+    	for (int i = from; i < to; i++) {
+    		KEY_TYPE min = array[i];
+        	int minId = i;
+        	for(int j = i+1; j < to; j++) {
+            	if(comp.compare(array[j], min) < 0) {
+                	min = array[j];
+                	minId = j;
+            	}
+        	}
+        	KEY_TYPE temp = array[i];
+        	array[i] = min;
+        	array[minId] = temp;
+    	}
+	}
+	
+	public static COMPAREABLE_BRACES void selectionSort(KEY_TYPE[] array) {
+		selectionSort(array, 0, array.length);
+	}
+	
+	public static COMPAREABLE_BRACES void selectionSort(KEY_TYPE[] array, int length) {
+		selectionSort(array, 0, length);
+	}
+	
+	public static COMPAREABLE_BRACES void selectionSort(KEY_TYPE[] array, int from, int to) {
+    	for (int i = from; i < to; i++) {
+    		KEY_TYPE min = array[i];
+        	int minId = i;
+        	for(int j = i+1; j < to; j++) {
+            	if(COMPARE_TO(array[j], min) < 0) {
+                	min = array[j];
+                	minId = j;
+            	}
+        	}
+        	KEY_TYPE temp = array[i];
+        	array[i] = min;
+        	array[minId] = temp;
+    	}
+	}
+	
+	public static GENERIC_BRACES void mergeSort(KEY_TYPE[] array, COMPARATOR KEY_GENERIC_TYPE comp) {
+		mergeSort(array, null, 0, array.length, comp);
+	}
+	
+	public static GENERIC_BRACES void mergeSort(KEY_TYPE[] array, int length, COMPARATOR KEY_GENERIC_TYPE comp) {
+		mergeSort(array, null, 0, length, comp);
+	}
+	
+	public static GENERIC_BRACES void mergeSort(KEY_TYPE[] array, KEY_TYPE[] supp, int from, int to, COMPARATOR KEY_GENERIC_TYPE comp) {
+		if(to - from < 16) {
+			insertionSort(array, from, to, comp);
+			return;
+		}
+		if(supp == null) supp = Arrays.copyOf(array, to);
+		int mid = (from + to) >>> 1;
+		mergeSort(supp, array, from, mid, comp);
+		mergeSort(supp, array, mid, to, comp);
+		if(comp.compare(supp[mid - 1], supp[mid]) <= 0)
+		{
+			System.arraycopy(supp, from, array, from, to - from);
+			return;
+		}
+		for(int p = from, q = mid;from < to;from++) {
+			if(q >= to || p < mid && comp.compare(supp[p], supp[q]) < 0) array[from] = supp[p++];
+			else array[from] = supp[q++];
+		}
+	}
+	
+	public static COMPAREABLE_BRACES void mergeSort(KEY_TYPE[] array) {
+		mergeSort(array, null, 0, array.length);
+	}
+	
+	public static COMPAREABLE_BRACES void mergeSort(KEY_TYPE[] array, int length) {
+		mergeSort(array, null, 0, length);
+	}
+	
+	public static COMPAREABLE_BRACES void mergeSort(KEY_TYPE[] array, KEY_TYPE[] supp, int from, int to) {
+		if(to - from < 16) {
+			insertionSort(array, from, to);
+			return;
+		}
+		if(supp == null) supp = Arrays.copyOf(array, to);
+		int mid = (from + to) >>> 1;
+		mergeSort(supp, array, from, mid);
+		mergeSort(supp, array, mid, to);
+		if(COMPARE_TO(supp[mid - 1], supp[mid]) <= 0)
+		{
+			System.arraycopy(supp, from, array, from, to - from);
+			return;
+		}
+		for(int p = from, q = mid;from < to;from++) {
+			if(q >= to || p < mid && COMPARE_TO(supp[p], supp[q]) < 0) array[from] = supp[p++];
+			else array[from] = supp[q++];
+		}
+	}
+	
+	public static GENERIC_BRACES void memFreeMergeSort(KEY_TYPE[] array, COMPARATOR KEY_GENERIC_TYPE comp) {
+		memFreeMergeSort(array, 0, array.length, comp);
+	}
+	
+	public static GENERIC_BRACES void memFreeMergeSort(KEY_TYPE[] array, int length, COMPARATOR KEY_GENERIC_TYPE comp) {
+		memFreeMergeSort(array, 0, length, comp);
+	}
+	
+	public static GENERIC_BRACES void memFreeMergeSort(KEY_TYPE[] array, int from, int to, COMPARATOR KEY_GENERIC_TYPE comp) {
+		if(to - from < 16) {
+			insertionSort(array, from, to, comp);
+			return;
+		}
+		int mid = (from + to) >>> 1;
+		memFreeMergeSort(array, from, mid, comp);
+		memFreeMergeSort(array, mid, to, comp);
+		if(comp.compare(array[mid - 1], array[mid]) <= 0)
+			return;
+		for(int i = from, j = mid, compare;i < j && j < to;) {
+			if((compare = comp.compare(array[i], array[j])) < 0)
+				i++;
+			else if(compare == 0) swap(array, ++i, j);
+			else {
+				swap(array, i++, j);
+				int k = j;
+				for(;k < to - 1 && comp.compare(array[j], array[k + 1]) > 0;k++);
+				if(j == k)
+					continue;
+				KEY_TYPE value = array[j];
+				System.arraycopy(array, j + 1, array, j, k - j);
+				array[k] = value;
+			}
+		}
+	}
+	
+	public static COMPAREABLE_BRACES void memFreeMergeSort(KEY_TYPE[] array) {
+		memFreeMergeSort(array, 0, array.length);
+	}
+	
+	public static COMPAREABLE_BRACES void memFreeMergeSort(KEY_TYPE[] array, int length) {
+		memFreeMergeSort(array, 0, length);
+	}
+	
+	public static COMPAREABLE_BRACES void memFreeMergeSort(KEY_TYPE[] array, int from, int to) {
+		if(to - from < 16) {
+			insertionSort(array, from, to);
+			return;
+		}
+		int mid = (from + to) >>> 1;
+		memFreeMergeSort(array, from, mid);
+		memFreeMergeSort(array, mid, to);
+		if(COMPARE_TO(array[mid - 1], array[mid]) <= 0)
+			return;
+		for(int i = from, j = mid, comp;i < j && j < to;) {
+			if((comp = COMPARE_TO(array[i], array[j])) < 0)
+				i++;
+			else if(comp == 0) swap(array, ++i, j);
+			else {
+				swap(array, i++, j);
+				int k = j;
+				for(;k < to - 1 && COMPARE_TO(array[j], array[k + 1]) > 0;k++);
+				if(j == k)
+					continue;
+				KEY_TYPE value = array[j];
+				System.arraycopy(array, j + 1, array, j, k - j);
+				array[k] = value;
+			}
+		}
+	}
+	
+	public static GENERIC_BRACES void quickSort(KEY_TYPE[] array, COMPARATOR KEY_GENERIC_TYPE comp) {
+		quickSort(array, 0, array.length, comp);
+	}
+	
+	public static GENERIC_BRACES void quickSort(KEY_TYPE[] array, int length, COMPARATOR KEY_GENERIC_TYPE comp) {
+		quickSort(array, 0, length, comp);
+	}
+	
+	public static GENERIC_BRACES void quickSort(KEY_TYPE[] array, int from, int to, COMPARATOR KEY_GENERIC_TYPE comp) {
+		int length = to - from;
+		if(length <= 0) return;
+		if(length < 16) {
+			selectionSort(array, from, to, comp);
+			return;			
+		}
+		KEY_TYPE pivot = array[length > 128 ? subMedium(array, from, from + (length / 2), to - 1, length / 8, comp) : medium(array, from, from + (length / 2), to - 1, comp)];
+		int a = from, b = a, c = to - 1, d = c;
+		for(int compare;;swap(array, b++, c--)) {
+			for(;b<=c && (compare = comp.compare(array[b], pivot)) <= 0;b++) {
+				if(compare == 0) swap(array, a++, b);
+			}
+			for(;b>=c && (compare = comp.compare(array[c], pivot)) >= 0;c--) {
+				if(compare == 0) swap(array, c, d--);
+			}
+			if(b>c) break;
+		}
+		swap(array, from, b, Math.min(a - from, b - a)); 
+		swap(array, b, to, Math.min(d - c, to - d - 1));
+		if((length = b - a) > 1) quickSort(array, from, from + length, comp);
+		if((length = d - c) > 1) quickSort(array, to - length, to, comp);
+	}
+	
+	public static COMPAREABLE_BRACES void quickSort(KEY_TYPE[] array) {
+		quickSort(array, 0, array.length);
+	}
+	
+	public static COMPAREABLE_BRACES void quickSort(KEY_TYPE[] array, int length) {
+		quickSort(array, 0, length);
+	}
+	
+	public static COMPAREABLE_BRACES void quickSort(KEY_TYPE[] array, int from, int to) {
+		int length = to - from;
+		if(length <= 0) return;
+		if(length < 16) {
+			selectionSort(array, from, to);
+			return;			
+		}
+		KEY_TYPE pivot = array[length > 128 ? subMedium(array, from, from + (length / 2), to - 1, length / 8) : medium(array, from, from + (length / 2), to - 1)];
+		int a = from, b = a, c = to - 1, d = c;
+		for(int comp = 0;;swap(array, b++, c--)) {
+			for(;b<=c && (comp = COMPARE_TO(array[b], pivot)) <= 0;b++) {
+				if(comp == 0) swap(array, a++, b);
+			}
+			for(;b>=c && (comp = COMPARE_TO(array[c], pivot)) >= 0;c--) {
+				if(comp == 0) swap(array, c, d--);
+			}
+			if(b>c) break;
+		}
+		swap(array, from, b, Math.min(a - from, b - a)); 
+		swap(array, b, to, Math.min(d - c, to - d - 1));
+		if((length = b - a) > 1) quickSort(array, from, from + length);
+		if((length = d - c) > 1) quickSort(array, to - length, to);
+	}
+	
+	public static GENERIC_BRACES void swap(KEY_TYPE[] a, int from, int to) {
+		KEY_TYPE t = a[from];
+		a[from] = a[to];
+		a[to] = t;
+	}
+	
+	static GENERIC_BRACES void swap(KEY_TYPE[] a, int from, int to, int length) {
+		to -= length;
+		for(int i = 0;i<length;i++,swap(a, from++, to++));
+	}
+	
+	static GENERIC_BRACES int subMedium(KEY_TYPE[] data, int a, int b, int c, int length, COMPARATOR KEY_GENERIC_TYPE comp) {
+		return medium(data, medium(data, a, a + length, a + (length * 2), comp), medium(data, b - length, b, b + length, comp), medium(data, c - (length * 2), c - length, c, comp), comp);
+	}
+	
+	static GENERIC_BRACES int medium(KEY_TYPE[] data, int a, int b, int c, COMPARATOR KEY_GENERIC_TYPE comp) {
+		return comp.compare(data[a], data[b]) < 0 ? (comp.compare(data[b], data[c]) < 0 ? b : comp.compare(data[a], data[c]) < 0 ? c : a) : (comp.compare(data[b], data[c]) > 0 ? b : comp.compare(data[a], data[c]) > 0 ? c : a);
+	}
+	
+	static COMPAREABLE_BRACES int subMedium(KEY_TYPE[] data, int a, int b, int c, int length) {
+		return medium(data, medium(data, a, a + length, a + (length * 2)), medium(data, b - length, b, b + length), medium(data, c - (length * 2), c - length, c));
+	}
+	
+	static COMPAREABLE_BRACES int medium(KEY_TYPE[] data, int a, int b, int c) {
+		return COMPARE_TO(data[a], data[b]) < 0 ? (COMPARE_TO(data[b], data[c]) < 0 ? b : COMPARE_TO(data[a], data[c]) < 0 ? c : a) : (COMPARE_TO(data[b], data[c]) > 0 ? b : COMPARE_TO(data[a], data[c]) > 0 ? c : a);
+	}
+	
+	static class QuickSortAction KEY_COMPAREABLE_TYPE extends RecursiveAction {
+		private static final long serialVersionUID = 0L;
+		KEY_TYPE[] array;
+		int from;
+		int to;
+		
+		QuickSortAction(KEY_TYPE[] array, int from, int to)
+		{
+			this.array = array;
+			this.from = from;
+			this.to = to;
+		}
+		
+		@Override
+		protected void compute()
+		{
+			int length = to - from;
+			if(length <= 0) return;
+			if(length < 16) {
+				selectionSort(array, from, to);
+				return;			
+			}
+			KEY_TYPE pivot = array[length > 128 ? subMedium(array, from, from + (length / 2), to - 1, length / 8) : medium(array, from, from + (length / 2), to - 1)];
+			int a = from, b = a, c = to - 1, d = c;
+			for(int comp = 0;;swap(array, b++, c--)) {
+				for(;b<=c && (comp = COMPARE_TO(array[b], pivot)) <= 0;b++) {
+					if(comp == 0) swap(array, a++, b);
+				}
+				for(;b>=c && (comp = COMPARE_TO(array[c], pivot)) >= 0;c--) {
+					if(comp == 0) swap(array, c, d--);
+				}
+				if(b>c) break;
+			}
+			swap(array, from, b, Math.min(a - from, b - a)); 
+			swap(array, b, to, Math.min(d - c, to - d - 1));
+			if(b - a > 1 && d - c > 1) invokeAll(new QuickSortActionBRACES(array, from, from + (b - a)), new QuickSortActionBRACES(array, to - (d - c), to));
+			else if(b - a > 1) new QuickSortActionBRACES(array, from, from + (b - a)).invoke();
+			else if(d - c > 1) new QuickSortActionBRACES(array, to - (d - c), to).invoke();
+		}
+	}
+	
+	static class QuickSortActionComp KEY_GENERIC_TYPE extends RecursiveAction {
+		private static final long serialVersionUID = 0L;
+		KEY_TYPE[] array;
+		int from;
+		int to;
+		COMPARATOR KEY_GENERIC_TYPE comp;
+		
+		QuickSortActionComp(KEY_TYPE[] array, int from, int to, COMPARATOR KEY_GENERIC_TYPE comp)
+		{
+			this.array = array;
+			this.from = from;
+			this.to = to;
+			this.comp = comp;
+		}
+		
+		@Override
+		protected void compute()
+		{
+			int length = to - from;
+			if(length <= 0) return;
+			if(length < 16) {
+				selectionSort(array, from, to, comp);
+				return;			
+			}
+			KEY_TYPE pivot = array[length > 128 ? subMedium(array, from, from + (length / 2), to - 1, length / 8, comp) : medium(array, from, from + (length / 2), to - 1, comp)];
+			int a = from, b = a, c = to - 1, d = c;
+			for(int compare;;swap(array, b++, c--)) {
+				for(;b<=c && (compare = comp.compare(array[b], pivot)) <= 0;b++) {
+					if(compare == 0) swap(array, a++, b);
+				}
+				for(;b>=c && (compare = comp.compare(array[c], pivot)) >= 0;c--) {
+					if(compare == 0) swap(array, c, d--);
+				}
+				if(b>c) break;
+			}
+			swap(array, from, b, Math.min(a - from, b - a)); 
+			swap(array, b, to, Math.min(d - c, to - d - 1));
+			if(b - a > 1 && d - c > 1) invokeAll(new QuickSortActionCompBRACES(array, from, from + (b - a), comp), new QuickSortActionCompBRACES(array, to - (d - c), to, comp));
+			else if(b - a > 1) new QuickSortActionCompBRACES(array, from, from + (b - a), comp).invoke();
+			else if(d - c > 1) new QuickSortActionCompBRACES(array, to - (d - c), to, comp).invoke();
+		}
+	}
 }

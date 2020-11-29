@@ -51,6 +51,7 @@ public class TestBuilder extends TemplateProcessor
 			varibles.add(type);
 		}
 		blocked.put("Consumer", EnumSet.of(ClassType.OBJECT));
+		blocked.put("Comparator", EnumSet.of(ClassType.OBJECT));
 		blocked.put("Stack", EnumSet.of(ClassType.OBJECT));
 	}
 	
