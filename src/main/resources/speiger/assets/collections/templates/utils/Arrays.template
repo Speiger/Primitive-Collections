@@ -2,16 +2,20 @@ package speiger.src.collections.PACKAGE.utils;
 
 import java.util.Arrays;
 import java.util.concurrent.RecursiveAction;
-
 #if !TYPE_OBJECT
+
 import speiger.src.collections.PACKAGE.functions.COMPARATOR;
-import speiger.src.collections.utils.SanityChecks;
 #else
 import java.util.Comparator;
+
 #endif
+import speiger.src.collections.utils.SanityChecks;
 
 public class ARRAYS
 {
+	public static final int BASE_THRESHOLD = 16;
+	public static final int PARALLEL_THRESHOLD = 8192;
+	
 #if !TYPE_OBJECT
 	public static final KEY_TYPE[] EMPTY_ARRAY = new KEY_TYPE[0];
 	
@@ -151,7 +155,7 @@ public class ARRAYS
 	}
 	
 	public static GENERIC_BRACES void mergeSort(KEY_TYPE[] array, KEY_TYPE[] supp, int from, int to, COMPARATOR KEY_GENERIC_TYPE comp) {
-		if(to - from < 16) {
+		if(to - from < BASE_THRESHOLD) {
 			insertionSort(array, from, to, comp);
 			return;
 		}
@@ -179,7 +183,7 @@ public class ARRAYS
 	}
 	
 	public static COMPAREABLE_BRACES void mergeSort(KEY_TYPE[] array, KEY_TYPE[] supp, int from, int to) {
-		if(to - from < 16) {
+		if(to - from < BASE_THRESHOLD) {
 			insertionSort(array, from, to);
 			return;
 		}
@@ -198,6 +202,38 @@ public class ARRAYS
 		}
 	}
 	
+	public static GENERIC_BRACES void parallelMergeSort(KEY_TYPE[] array, COMPARATOR KEY_GENERIC_TYPE comp) {
+		parallelMergeSort(array, null, 0, array.length, comp);
+	}
+	
+	public static GENERIC_BRACES void parallelMergeSort(KEY_TYPE[] array, int length, COMPARATOR KEY_GENERIC_TYPE comp) {
+		parallelMergeSort(array, null, 0, length, comp);
+	}
+	
+	public static GENERIC_BRACES void parallelMergeSort(KEY_TYPE[] array, KEY_TYPE[] supp, int from, int to, COMPARATOR KEY_GENERIC_TYPE comp) {
+		if(SanityChecks.canParallelTask() && to - from >= PARALLEL_THRESHOLD) {
+			SanityChecks.invokeTask(new MergeSortActionCompBRACES(array, supp, from, to, comp));
+			return;
+		}
+		mergeSort(array, supp, from, to, comp);
+	}
+	
+	public static COMPAREABLE_BRACES void parallelMergeSort(KEY_TYPE[] array) {
+		parallelMergeSort(array, null, 0, array.length);
+	}
+	
+	public static COMPAREABLE_BRACES void parallelMergeSort(KEY_TYPE[] array, int length) {
+		parallelMergeSort(array, null, 0, length);
+	}
+	
+	public static COMPAREABLE_BRACES void parallelMergeSort(KEY_TYPE[] array, KEY_TYPE[] supp, int from, int to) {
+		if(SanityChecks.canParallelTask() && to - from >= PARALLEL_THRESHOLD) {
+			SanityChecks.invokeTask(new MergeSortActionBRACES(array, supp, from, to));
+			return;
+		}
+		mergeSort(array, supp, from, to);
+	}
+	
 	public static GENERIC_BRACES void memFreeMergeSort(KEY_TYPE[] array, COMPARATOR KEY_GENERIC_TYPE comp) {
 		memFreeMergeSort(array, 0, array.length, comp);
 	}
@@ -207,7 +243,7 @@ public class ARRAYS
 	}
 	
 	public static GENERIC_BRACES void memFreeMergeSort(KEY_TYPE[] array, int from, int to, COMPARATOR KEY_GENERIC_TYPE comp) {
-		if(to - from < 16) {
+		if(to - from < BASE_THRESHOLD) {
 			insertionSort(array, from, to, comp);
 			return;
 		}
@@ -242,7 +278,7 @@ public class ARRAYS
 	}
 	
 	public static COMPAREABLE_BRACES void memFreeMergeSort(KEY_TYPE[] array, int from, int to) {
-		if(to - from < 16) {
+		if(to - from < BASE_THRESHOLD) {
 			insertionSort(array, from, to);
 			return;
 		}
@@ -268,6 +304,38 @@ public class ARRAYS
 		}
 	}
 	
+	public static GENERIC_BRACES void parallelMemFreeMergeSort(KEY_TYPE[] array, COMPARATOR KEY_GENERIC_TYPE comp) {
+		parallelMemFreeMergeSort(array, 0, array.length, comp);
+	}
+	
+	public static GENERIC_BRACES void parallelMemFreeMergeSort(KEY_TYPE[] array, int length, COMPARATOR KEY_GENERIC_TYPE comp) {
+		parallelMemFreeMergeSort(array, 0, length, comp);
+	}
+	
+	public static GENERIC_BRACES void parallelMemFreeMergeSort(KEY_TYPE[] array, int from, int to, COMPARATOR KEY_GENERIC_TYPE comp) {
+		if(SanityChecks.canParallelTask() && to - from >= PARALLEL_THRESHOLD) {
+			SanityChecks.invokeTask(new MemFreeMergeSortActionCompBRACES(array, from, to, comp));
+			return;
+		}
+		memFreeMergeSort(array, from, to, comp);
+	}
+	
+	public static COMPAREABLE_BRACES void parallelMemFreeMergeSort(KEY_TYPE[] array) {
+		parallelMemFreeMergeSort(array, 0, array.length);
+	}
+	
+	public static COMPAREABLE_BRACES void parallelMemFreeMergeSort(KEY_TYPE[] array, int length) {
+		parallelMemFreeMergeSort(array, 0, length);
+	}
+	
+	public static COMPAREABLE_BRACES void parallelMemFreeMergeSort(KEY_TYPE[] array, int from, int to) {
+		if(SanityChecks.canParallelTask() && to - from >= PARALLEL_THRESHOLD) {
+			SanityChecks.invokeTask(new MemFreeMergeSortActionBRACES(array, from, to));
+			return;
+		}
+		memFreeMergeSort(array, from, to);
+	}
+	
 	public static GENERIC_BRACES void quickSort(KEY_TYPE[] array, COMPARATOR KEY_GENERIC_TYPE comp) {
 		quickSort(array, 0, array.length, comp);
 	}
@@ -279,7 +347,7 @@ public class ARRAYS
 	public static GENERIC_BRACES void quickSort(KEY_TYPE[] array, int from, int to, COMPARATOR KEY_GENERIC_TYPE comp) {
 		int length = to - from;
 		if(length <= 0) return;
-		if(length < 16) {
+		if(length < BASE_THRESHOLD) {
 			selectionSort(array, from, to, comp);
 			return;			
 		}
@@ -311,7 +379,7 @@ public class ARRAYS
 	public static COMPAREABLE_BRACES void quickSort(KEY_TYPE[] array, int from, int to) {
 		int length = to - from;
 		if(length <= 0) return;
-		if(length < 16) {
+		if(length < BASE_THRESHOLD) {
 			selectionSort(array, from, to);
 			return;			
 		}
@@ -330,6 +398,38 @@ public class ARRAYS
 		swap(array, b, to, Math.min(d - c, to - d - 1));
 		if((length = b - a) > 1) quickSort(array, from, from + length);
 		if((length = d - c) > 1) quickSort(array, to - length, to);
+	}
+	
+	public static GENERIC_BRACES void parallelQuickSort(KEY_TYPE[] array, COMPARATOR KEY_GENERIC_TYPE comp) {
+		parallelQuickSort(array, 0, array.length, comp);
+	}
+	
+	public static GENERIC_BRACES void parallelQuickSort(KEY_TYPE[] array, int length, COMPARATOR KEY_GENERIC_TYPE comp) {
+		parallelQuickSort(array, 0, length, comp);
+	}
+	
+	public static GENERIC_BRACES void parallelQuickSort(KEY_TYPE[] array, int from, int to, COMPARATOR KEY_GENERIC_TYPE comp) {
+		if(SanityChecks.canParallelTask() && to - from >= PARALLEL_THRESHOLD) {
+			SanityChecks.invokeTask(new QuickSortActionCompBRACES(array, from, to, comp));
+			return;
+		}
+		quickSort(array, from, to, comp);
+	}
+	
+	public static COMPAREABLE_BRACES void parallelQuickSort(KEY_TYPE[] array) {
+		parallelQuickSort(array, 0, array.length);
+	}
+	
+	public static COMPAREABLE_BRACES void parallelQuickSort(KEY_TYPE[] array, int length) {
+		parallelQuickSort(array, 0, length);
+	}
+	
+	public static COMPAREABLE_BRACES void parallelQuickSort(KEY_TYPE[] array, int from, int to) {
+		if(SanityChecks.canParallelTask() && to - from >= PARALLEL_THRESHOLD) {
+			SanityChecks.invokeTask(new QuickSortActionBRACES(array, from, to));
+			return;
+		}
+		quickSort(array, from, to);
 	}
 	
 	public static GENERIC_BRACES void swap(KEY_TYPE[] a, int from, int to) {
@@ -377,7 +477,7 @@ public class ARRAYS
 		{
 			int length = to - from;
 			if(length <= 0) return;
-			if(length < 16) {
+			if(length < BASE_THRESHOLD) {
 				selectionSort(array, from, to);
 				return;			
 			}
@@ -420,7 +520,7 @@ public class ARRAYS
 		{
 			int length = to - from;
 			if(length <= 0) return;
-			if(length < 16) {
+			if(length < BASE_THRESHOLD) {
 				selectionSort(array, from, to, comp);
 				return;			
 			}
@@ -440,6 +540,169 @@ public class ARRAYS
 			if(b - a > 1 && d - c > 1) invokeAll(new QuickSortActionCompBRACES(array, from, from + (b - a), comp), new QuickSortActionCompBRACES(array, to - (d - c), to, comp));
 			else if(b - a > 1) new QuickSortActionCompBRACES(array, from, from + (b - a), comp).invoke();
 			else if(d - c > 1) new QuickSortActionCompBRACES(array, to - (d - c), to, comp).invoke();
+		}
+	}
+	
+	static class MergeSortAction KEY_COMPAREABLE_TYPE extends RecursiveAction {
+		private static final long serialVersionUID = 0L;
+		KEY_TYPE[] array;
+		KEY_TYPE[] supp;
+		int from;
+		int to;
+		
+		MergeSortAction(KEY_TYPE[] array, KEY_TYPE[] supp, int from, int to)
+		{
+			this.array = array;
+			this.supp = supp;
+			this.from = from;
+			this.to = to;
+		}
+		
+		@Override
+		protected void compute()
+		{
+			if(to - from < BASE_THRESHOLD) {
+				insertionSort(array, from, to);
+				return;
+			}
+			if(supp == null) supp = Arrays.copyOf(array, to);
+			int mid = (from + to) >>> 1;
+            invokeAll(new MergeSortActionBRACES(supp, array, from, mid), new MergeSortActionBRACES(supp, array, mid, to));
+			if(COMPARE_TO(supp[mid - 1], supp[mid]) <= 0)
+			{
+				System.arraycopy(supp, from, array, from, to - from);
+				return;
+			}
+			for(int p = from, q = mid;from < to;from++) {
+				if(q >= to || p < mid && COMPARE_TO(supp[p], supp[q]) < 0) array[from] = supp[p++];
+				else array[from] = supp[q++];
+			}
+		}
+	}
+	
+	static class MergeSortActionComp KEY_GENERIC_TYPE extends RecursiveAction {
+		private static final long serialVersionUID = 0L;
+		KEY_TYPE[] array;
+		KEY_TYPE[] supp;
+		int from;
+		int to;
+		COMPARATOR KEY_GENERIC_TYPE comp;
+		
+		MergeSortActionComp(KEY_TYPE[] array, KEY_TYPE[] supp, int from, int to, COMPARATOR KEY_GENERIC_TYPE comp)
+		{
+			this.array = array;
+			this.supp = supp;
+			this.from = from;
+			this.to = to;
+			this.comp = comp;
+		}
+		
+		@Override
+		protected void compute()
+		{
+			if(to - from < BASE_THRESHOLD) {
+				insertionSort(array, from, to, comp);
+				return;
+			}
+			if(supp == null) supp = Arrays.copyOf(array, to);
+			int mid = (from + to) >>> 1;
+            invokeAll(new MergeSortActionCompBRACES(supp, array, from, mid, comp), new MergeSortActionCompBRACES(supp, array, mid, to, comp));
+			if(comp.compare(supp[mid - 1], supp[mid]) <= 0)
+			{
+				System.arraycopy(supp, from, array, from, to - from);
+				return;
+			}
+			for(int p = from, q = mid;from < to;from++) {
+				if(q >= to || p < mid && comp.compare(supp[p], supp[q]) < 0) array[from] = supp[p++];
+				else array[from] = supp[q++];
+			}
+		}
+	}
+	
+	static class MemFreeMergeSortAction KEY_COMPAREABLE_TYPE extends RecursiveAction {
+		private static final long serialVersionUID = 0L;
+		KEY_TYPE[] array;
+		int from;
+		int to;
+		
+		MemFreeMergeSortAction(KEY_TYPE[] array, int from, int to)
+		{
+			this.array = array;
+			this.from = from;
+			this.to = to;
+		}
+		
+		@Override
+		protected void compute()
+		{
+			if(to - from < BASE_THRESHOLD) {
+				insertionSort(array, from, to);
+				return;
+			}
+			int mid = (from + to) >>> 1;
+			invokeAll(new MemFreeMergeSortActionBRACES(array, from, mid), new MemFreeMergeSortActionBRACES(array, mid, to));
+			if(COMPARE_TO(array[mid - 1], array[mid]) <= 0)
+				return;
+			for(int i = from, j = mid, comp;i < j && j < to;) {
+				if((comp = COMPARE_TO(array[i], array[j])) < 0)
+					i++;
+				else if(comp == 0) swap(array, ++i, j);
+				else {
+					swap(array, i++, j);
+					int k = j;
+					for(;k < to - 1 && COMPARE_TO(array[j], array[k + 1]) > 0;k++);
+					if(j == k)
+						continue;
+					KEY_TYPE value = array[j];
+					System.arraycopy(array, j + 1, array, j, k - j);
+					array[k] = value;
+				}
+			}
+		}
+	}
+	
+	static class MemFreeMergeSortActionComp KEY_GENERIC_TYPE extends RecursiveAction {
+		private static final long serialVersionUID = 0L;
+		KEY_TYPE[] array;
+		int from;
+		int to;
+		COMPARATOR KEY_GENERIC_TYPE comp;
+		
+		MemFreeMergeSortActionComp(KEY_TYPE[] array, int from, int to, COMPARATOR KEY_GENERIC_TYPE comp)
+		{
+			this.array = array;
+			this.from = from;
+			this.to = to;
+			this.comp = comp;
+		}
+		
+		@Override
+		protected void compute()
+		{
+			if(to - from < BASE_THRESHOLD) {
+				insertionSort(array, from, to, comp);
+				return;
+			}
+			int mid = (from + to) >>> 1;
+			invokeAll(new MemFreeMergeSortActionCompBRACES(array, from, mid, comp), new MemFreeMergeSortActionCompBRACES(array, mid, to, comp));
+
+			if(comp.compare(array[mid - 1], array[mid]) <= 0)
+				return;
+			for(int i = from, j = mid, compare;i < j && j < to;) {
+				if((compare = comp.compare(array[i], array[j])) < 0)
+					i++;
+				else if(compare == 0) swap(array, ++i, j);
+				else {
+					swap(array, i++, j);
+					int k = j;
+					for(;k < to - 1 && comp.compare(array[j], array[k + 1]) > 0;k++);
+					if(j == k)
+						continue;
+					KEY_TYPE value = array[j];
+					System.arraycopy(array, j + 1, array, j, k - j);
+					array[k] = value;
+				}
+			}
 		}
 	}
 }
