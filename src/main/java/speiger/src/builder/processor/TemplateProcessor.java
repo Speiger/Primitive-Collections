@@ -21,13 +21,11 @@ public abstract class TemplateProcessor
 	Path dataFolder;
 	boolean init = false;
 	
-	
 	public TemplateProcessor(Path sourceFolder, Path outputFolder, Path dataFolder)
 	{
 		this.sourceFolder = sourceFolder;
 		this.outputFolder = outputFolder;
 		this.dataFolder = dataFolder;
-		System.out.println(outputFolder.toAbsolutePath().toString());
 	}
 	
 	protected abstract void init();
