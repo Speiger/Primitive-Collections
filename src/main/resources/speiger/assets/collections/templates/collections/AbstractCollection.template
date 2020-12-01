@@ -39,51 +39,43 @@ public abstract class ABSTRACT_COLLECTION KEY_GENERIC_TYPE extends AbstractColle
 		return false;
 	}
 	
+#endif
 	@Override
 	@Deprecated
 	public boolean containsAll(Collection<?> c)
 	{
-		return c instanceof COLLECTION ? containsAll((COLLECTION)c) : super.containsAll(c);
+		return c instanceof COLLECTION ? containsAll((COLLECTION KEY_GENERIC_TYPE)c) : super.containsAll(c);
 	}
 
 	@Override
 	@Deprecated
 	public boolean addAll(Collection<? extends CLASS_TYPE> c)
 	{
-		return c instanceof COLLECTION ? addAll((COLLECTION)c) : super.addAll(c);
+		return c instanceof COLLECTION ? addAll((COLLECTION KEY_GENERIC_TYPE)c) : super.addAll(c);
 	}
 
 	@Override
 	@Deprecated
 	public boolean removeAll(Collection<?> c)
 	{
-		return c instanceof COLLECTION ? removeAll((COLLECTION)c) : super.removeAll(c);
+		return c instanceof COLLECTION ? removeAll((COLLECTION KEY_GENERIC_TYPE)c) : super.removeAll(c);
 	}
 
 	@Override
 	@Deprecated
 	public boolean retainAll(Collection<?> c)
 	{
-		return c instanceof COLLECTION ? retainAll((COLLECTION)c) : super.retainAll(c);
+		return c instanceof COLLECTION ? retainAll((COLLECTION KEY_GENERIC_TYPE)c) : super.retainAll(c);
 	}
 	
 	@Override
-	public boolean containsAll(COLLECTION c) {
+	public boolean containsAll(COLLECTION KEY_GENERIC_TYPE c) {
 		for(KEY_TYPE e : c)
 			if(!contains(e))
 				return false;
 		return true;
 	}
 	
-	@Override
-	public boolean containsAny(COLLECTION c) {
-		for(KEY_TYPE e : c) 
-			if(contains(e))
-				return true;
-		return false;
-	}
-	
-#endif
 	@Override
 	@Primitive
 	public boolean containsAny(Collection<?> c) {
@@ -93,6 +85,14 @@ public abstract class ABSTRACT_COLLECTION KEY_GENERIC_TYPE extends AbstractColle
 		return false;
 	}
 	
+	@Override
+	public boolean containsAny(COLLECTION KEY_GENERIC_TYPE c) {
+		for(KEY_TYPE e : c) 
+			if(contains(e))
+				return true;
+		return false;
+	}
+		
 #if !TYPE_OBJECT
 	@Override
 	@Deprecated
@@ -100,7 +100,7 @@ public abstract class ABSTRACT_COLLECTION KEY_GENERIC_TYPE extends AbstractColle
 	
 	@Override
 	public boolean REMOVE_KEY(KEY_TYPE e) {
-		for(ITERATOR iter = iterator();iter.hasNext();) {
+		for(ITERATOR KEY_GENERIC_TYPE iter = iterator();iter.hasNext();) {
 			if(EQUALS(iter.NEXT(), e)) {
 				iter.remove();
 				return true;
@@ -109,10 +109,11 @@ public abstract class ABSTRACT_COLLECTION KEY_GENERIC_TYPE extends AbstractColle
 		return false;
 	}
 	
+#endif
 	@Override
-	public boolean removeAll(COLLECTION c) {
+	public boolean removeAll(COLLECTION KEY_GENERIC_TYPE c) {
 		boolean modified = false;
-		for(ITERATOR iter = iterator();iter.hasNext();) {
+		for(ITERATOR KEY_GENERIC_TYPE iter = iterator();iter.hasNext();) {
 			if(c.contains(iter.NEXT())) {
 				iter.remove();
 				modified = true;
@@ -122,9 +123,9 @@ public abstract class ABSTRACT_COLLECTION KEY_GENERIC_TYPE extends AbstractColle
 	}
 	
 	@Override
-	public boolean retainAll(COLLECTION c) {
+	public boolean retainAll(COLLECTION KEY_GENERIC_TYPE c) {
 		boolean modified = false;
-		for(ITERATOR iter = iterator();iter.hasNext();) {
+		for(ITERATOR KEY_GENERIC_TYPE iter = iterator();iter.hasNext();) {
 			if(!c.contains(iter.NEXT())) {
 				iter.remove();
 				modified = true;
@@ -133,6 +134,7 @@ public abstract class ABSTRACT_COLLECTION KEY_GENERIC_TYPE extends AbstractColle
 		return modified;
 	}
 	
+#if !TYPE_OBJECT
 	@Override
 	public KEY_TYPE[] TO_ARRAY() {
 		return TO_ARRAY(new KEY_TYPE[size()]);

@@ -19,6 +19,11 @@ public abstract class ABSTRACT_LIST KEY_GENERIC_TYPE extends ABSTRACT_COLLECTION
 	}
 	
 	@Override
+	public void add(int index, CLASS_TYPE element) {
+		add(index, OBJ_TO_KEY(element));
+	}
+	
+	@Override
 	public boolean addAll(COLLECTION c) {
 		boolean modified = false;
 		for(KEY_TYPE e : c)
@@ -188,13 +193,6 @@ public abstract class ABSTRACT_LIST KEY_GENERIC_TYPE extends ABSTRACT_COLLECTION
 			size++;
 		}
 		
-#if !TYPE_OBJECT		
-		@Override
-		public void add(int index, CLASS_TYPE element) {
-			add(index, OBJ_TO_KEY(element));
-		}
-		
-#endif
 		@Override
 		public boolean addAll(int index, Collection<? extends CLASS_TYPE> c) {
 			checkAddRange(index);

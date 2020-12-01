@@ -16,8 +16,10 @@ import speiger.src.builder.processor.TemplateProcessor;
 public class TestBuilder extends TemplateProcessor
 {
 	Map<String, EnumSet<ClassType>> blocked = new HashMap<String, EnumSet<ClassType>>();
+	Map<String, String> nameRemapper = new HashMap<String, String>();
 	public static final ClassType[] TYPE = ClassType.values();
 	List<GlobalVariables> varibles = new ArrayList<GlobalVariables>();
+	
 	
 	public TestBuilder()
 	{
@@ -50,6 +52,7 @@ public class TestBuilder extends TemplateProcessor
 			type.createFunctions();
 			varibles.add(type);
 		}
+		nameRemapper.put("IArray", "I%sArray");
 		blocked.put("Consumer", EnumSet.of(ClassType.OBJECT));
 		blocked.put("Comparator", EnumSet.of(ClassType.OBJECT));
 		blocked.put("Stack", EnumSet.of(ClassType.OBJECT));
@@ -64,7 +67,7 @@ public class TestBuilder extends TemplateProcessor
 			GlobalVariables type = varibles.get(i);
 			if(types == null || !types.contains(type.getType()))
 			{
-				acceptor.accept(type.create(name));				
+				acceptor.accept(type.create(nameRemapper.getOrDefault(name, "%s"+name)));
 			}
 		}
 	}

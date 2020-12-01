@@ -1,0 +1,369 @@
+package speiger.src.collections.PACKAGE.utils;
+
+import java.util.Collection;
+import java.util.function.Predicate;
+#if PRIMITIVES
+import java.util.function.JAVA_PREDICATE;
+#endif
+
+import speiger.src.collections.PACKAGE.collections.ABSTRACT_COLLECTION;
+import speiger.src.collections.PACKAGE.collections.COLLECTION;
+import speiger.src.collections.PACKAGE.collections.ITERATOR;
+import speiger.src.collections.objects.utils.ObjectArrays;
+#if !TYPE_OBJECT
+import speiger.src.collections.PACKAGE.utils.ARRAYS;
+#endif
+
+public class COLLECTIONS
+{
+	public static final COLLECTION NO_GENERIC_TYPE EMPTY = new EmptyCollectionBRACES();
+	
+	public static GENERIC_BRACES COLLECTION KEY_GENERIC_TYPE emptyCollection() {
+#if TYPE_OBJECT
+		return (COLLECTION<KEY_TYPE>)EMPTY;
+#else
+		return EMPTY;
+#endif
+	}
+	
+	public static GENERIC_BRACES COLLECTION KEY_GENERIC_TYPE unmodifiableCollection(COLLECTION KEY_GENERIC_TYPE c) {
+		return c instanceof UnmodifiableCollection ? c : new UnmodifiableCollectionBRACES(c);
+	}
+	
+	public static GENERIC_BRACES COLLECTION KEY_GENERIC_TYPE synchronizedCollection(COLLECTION KEY_GENERIC_TYPE c) {
+		return c instanceof SynchronizedCollection ? c : new SynchronizedCollectionBRACES(c);
+	}
+	
+	public static GENERIC_BRACES COLLECTION KEY_GENERIC_TYPE synchronizedCollection(COLLECTION KEY_GENERIC_TYPE c, Object mutex) {
+		return c instanceof SynchronizedCollection ? c : new SynchronizedCollectionBRACES(c, mutex);
+	}
+	
+	public static class SynchronizedCollection KEY_GENERIC_TYPE implements COLLECTION KEY_GENERIC_TYPE {
+		COLLECTION KEY_GENERIC_TYPE c;
+		protected Object mutex;
+		
+		SynchronizedCollection(COLLECTION KEY_GENERIC_TYPE c) {
+			this.c = c;
+			mutex = this;
+		}
+		
+		SynchronizedCollection(COLLECTION KEY_GENERIC_TYPE c, Object mutex) {
+			this.c = c;
+			this.mutex = mutex;
+		}
+		
+		@Override
+		public boolean add(KEY_TYPE o) { synchronized(mutex) { return c.add(o); } }
+		@Override
+		public boolean addAll(Collection<? extends CLASS_TYPE> c) { synchronized(mutex) { return this.c.addAll(c); } }
+		
+		@Override
+		public boolean addAll(COLLECTION KEY_GENERIC_TYPE c) { synchronized(mutex) { return this.c.addAll(c); } }
+		
+#if !TYPE_OBJECT
+		@Override
+		public boolean contains(KEY_TYPE o) { synchronized(mutex) { return c.contains(o); } }
+		
+#else
+		@Override
+		public boolean contains(Object o) { synchronized(mutex) { return c.contains(o); } }
+		
+#endif
+		@Override
+		public boolean containsAll(Collection<?> c) { synchronized(mutex) { return this.c.containsAll(c); } }
+		
+		@Override
+		public boolean containsAny(Collection<?> c) { synchronized(mutex) { return this.c.containsAny(c); } }
+		
+		@Override
+		public boolean containsAll(COLLECTION KEY_GENERIC_TYPE c) { synchronized(mutex) { return this.c.containsAll(c); } }
+		
+		@Override
+		public boolean containsAny(COLLECTION KEY_GENERIC_TYPE c) { synchronized(mutex) { return this.c.containsAny(c); } }
+		
+		@Override
+		public int size() { synchronized(mutex) { return c.size(); } }
+		
+		@Override
+		public boolean isEmpty() { synchronized(mutex) { return c.isEmpty(); } }
+		
+		@Override
+		public ITERATOR KEY_GENERIC_TYPE iterator() {
+			return c.iterator();
+		}
+		
+		@Override
+		@Primitive
+		public boolean remove(Object o) { synchronized(mutex) { return c.remove(o); } }
+		@Override
+		public boolean removeAll(Collection<?> c) { synchronized(mutex) { return this.c.removeAll(c); } }
+		@Override
+		public boolean retainAll(Collection<?> c) { synchronized(mutex) { return this.c.retainAll(c); } }
+#if !TYPE_OBJECT
+		@Override
+		public boolean REMOVE_KEY(KEY_TYPE o) { synchronized(mutex) { return c.REMOVE_KEY(o); } }
+#endif
+		@Override
+		public boolean removeAll(COLLECTION KEY_GENERIC_TYPE c) { synchronized(mutex) { return this.c.removeAll(c); } }
+		@Override
+		public boolean retainAll(COLLECTION KEY_GENERIC_TYPE c) { synchronized(mutex) { return this.c.retainAll(c); } }
+#if PRIMITIVES
+		@Override
+		public boolean remIf(JAVA_PREDICATE filter){ synchronized(mutex) { return c.remIf(filter); } }
+#endif
+		@Override
+		public void clear() { synchronized(mutex) { c.clear(); } }
+		
+		@Override
+		public Object[] toArray() { synchronized(mutex) { return c.toArray(); } }
+		
+#if !TYPE_OBJECT
+		@Override
+		public <T> T[] toArray(T[] a) { synchronized(mutex) { return c.toArray(a); } }
+		
+		@Override
+		public KEY_TYPE[] TO_ARRAY() { synchronized(mutex) { return c.TO_ARRAY(); } }
+		
+		@Override
+		public KEY_TYPE[] TO_ARRAY(KEY_TYPE[] a) { synchronized(mutex) { return c.TO_ARRAY(a); } }
+#else
+		@Override
+		public <E> E[] toArray(E[] a) { synchronized(mutex) { return c.toArray(a); } }
+#endif
+	}
+	
+	public static class UnmodifiableCollection KEY_GENERIC_TYPE implements COLLECTION KEY_GENERIC_TYPE {
+		COLLECTION KEY_GENERIC_TYPE c;
+		
+		UnmodifiableCollection(COLLECTION KEY_GENERIC_TYPE c) {
+			this.c = c;
+		}
+		
+		@Override
+		public boolean add(KEY_TYPE o) { throw new UnsupportedOperationException(); }
+		@Override
+		public boolean addAll(Collection<? extends CLASS_TYPE> c) { throw new UnsupportedOperationException(); }
+		@Override
+		public boolean addAll(COLLECTION KEY_GENERIC_TYPE c) { throw new UnsupportedOperationException(); }
+		
+#if !TYPE_OBJECT
+		@Override
+		public boolean contains(KEY_TYPE o) {
+			return c.contains(o);
+		}
+		
+#else
+		@Override
+		public boolean contains(Object o) {
+			return c.contains(o);
+		}
+		
+#endif
+		@Override
+		public boolean containsAll(COLLECTION KEY_GENERIC_TYPE c) {
+			return this.c.containsAll(c);
+		}
+		
+		@Override
+		public boolean containsAny(COLLECTION KEY_GENERIC_TYPE c) {
+			return this.c.containsAny(c);
+		}
+		
+		@Override
+		public boolean containsAny(Collection<?> c) {
+			return this.c.containsAny(c);
+		}
+		
+		@Override
+		public boolean containsAll(Collection<?> c) {
+			return this.c.containsAll(c);
+		}
+		
+		@Override
+		public int size() {
+			return c.size();
+		}
+		
+		@Override
+		public boolean isEmpty() {
+			return c.isEmpty();
+		}
+		
+		@Override
+		public ITERATOR KEY_GENERIC_TYPE iterator() {
+			return ITERATORS.unmodifiable(c.iterator());
+		}
+		
+		@Override
+		@Deprecated
+		public boolean remove(Object o) { throw new UnsupportedOperationException(); }
+		@Override
+		public boolean removeAll(Collection<?> c) { throw new UnsupportedOperationException(); }
+		@Override
+		public boolean retainAll(Collection<?> c) { throw new UnsupportedOperationException(); }
+		@Override
+		@Primitive
+		public boolean removeIf(Predicate<? super CLASS_TYPE> filter) { throw new UnsupportedOperationException(); }
+#if !TYPE_OBJECT
+		@Override
+		public boolean REMOVE_KEY(KEY_TYPE o) { throw new UnsupportedOperationException(); }
+#endif
+		@Override
+		public boolean removeAll(COLLECTION KEY_GENERIC_TYPE c) { throw new UnsupportedOperationException(); }
+		@Override
+		public boolean retainAll(COLLECTION KEY_GENERIC_TYPE c) { throw new UnsupportedOperationException(); }
+#if PRIMITIVES
+		@Override
+		public boolean remIf(JAVA_PREDICATE filter){ throw new UnsupportedOperationException(); }
+#endif
+		@Override
+		public void clear() { throw new UnsupportedOperationException(); }
+		
+		@Override
+		public Object[] toArray() {
+			return c.toArray();
+		}
+		
+#if !TYPE_OBJECT
+		@Override
+		public <T> T[] toArray(T[] a) {
+			return c.toArray(a);
+		}
+		
+		@Override
+		public KEY_TYPE[] TO_ARRAY() {
+			return c.TO_ARRAY();
+		}
+		
+		@Override
+		public KEY_TYPE[] TO_ARRAY(KEY_TYPE[] a) {
+			return c.TO_ARRAY(a);
+		}
+		
+#else
+		@Override
+		public <E> E[] toArray(E[] a) {
+			return c.toArray(a);
+		}
+		
+#endif
+	}
+	
+	public static class EmptyCollection KEY_GENERIC_TYPE extends ABSTRACT_COLLECTION KEY_GENERIC_TYPE {
+		@Override
+		public boolean add(KEY_TYPE o) { throw new UnsupportedOperationException(); }
+		
+		@Override
+		public boolean addAll(COLLECTION KEY_GENERIC_TYPE c) { throw new UnsupportedOperationException(); }
+		
+#if !TYPE_OBJECT
+		@Override
+		public boolean contains(KEY_TYPE o) {
+			return false;
+		}
+		
+		@Override
+		public boolean containsAll(COLLECTION KEY_GENERIC_TYPE c) {
+			return false;
+		}
+		
+		@Override
+		public boolean containsAny(COLLECTION KEY_GENERIC_TYPE c) {
+			return false;
+		}
+		
+#else
+		@Override
+		public boolean contains(Object o) {
+			return false;
+		}
+		
+#endif
+		@Override
+		public boolean containsAny(Collection<?> c) {
+			return false;
+		}
+		
+		@Override
+		public boolean containsAll(Collection<?> c) {
+			return false;
+		}
+		
+		@Override
+		public int hashCode() {
+			return 0;
+		}
+		
+		@Override
+		public boolean equals(Object o) {
+			if(o == this) return true;
+		  	if(!(o instanceof Collection)) return false;
+		  	return ((Collection<?>)o).isEmpty();
+		}
+		
+		@Override
+		@Deprecated
+		public boolean remove(Object o) { throw new UnsupportedOperationException(); }
+		@Override
+		public boolean removeAll(Collection<?> c) { throw new UnsupportedOperationException(); }
+		@Override
+		public boolean retainAll(Collection<?> c) { throw new UnsupportedOperationException(); }
+		@Override
+		@Primitive
+		public boolean removeIf(Predicate<? super CLASS_TYPE> filter) { throw new UnsupportedOperationException(); }
+#if !TYPE_OBJECT
+		@Override
+		public boolean REMOVE_KEY(KEY_TYPE o) { throw new UnsupportedOperationException(); }
+#endif
+		@Override
+		public boolean removeAll(COLLECTION KEY_GENERIC_TYPE c) { throw new UnsupportedOperationException(); }
+		@Override
+		public boolean retainAll(COLLECTION KEY_GENERIC_TYPE c) { throw new UnsupportedOperationException(); }
+#if PRIMITIVES
+		@Override
+		public boolean remIf(JAVA_PREDICATE filter){ throw new UnsupportedOperationException(); }
+#endif
+		
+		@Override
+		public Object[] toArray() {
+			return ObjectArrays.EMPTY_ARRAY;
+		}
+		
+#if !TYPE_OBJECT
+		@Override
+		public <T> T[] toArray(T[] a) {
+			return a;
+		}
+		
+		@Override
+		public KEY_TYPE[] TO_ARRAY() {
+			return ARRAYS.EMPTY_ARRAY;
+		}
+		
+		@Override
+		public KEY_TYPE[] TO_ARRAY(KEY_TYPE[] a) {
+			return a;
+		}
+		
+#else 
+		@Override
+		public <E> E[] toArray(E[] a) {
+			return a;
+		}
+		
+#endif
+		@Override
+		public ITERATOR KEY_GENERIC_TYPE iterator() {
+			return ITERATORS.emptyIterator();
+		}
+		
+		@Override
+		public void clear() {
+		}
+		
+		@Override
+		public int size() {
+			return 0;
+		}
+	}
+}

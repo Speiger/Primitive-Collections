@@ -32,7 +32,9 @@ public class GlobalVariables
 		addSimpleMapper("KEY_TYPE", type.getKeyType());
 		addSimpleMapper("EMPTY_VALUE", type.getEmptyValue());
 		addSimpleMapper(" KEY_GENERIC_TYPE", type.isObject() ? "<"+type.getKeyType()+">" : "");
+		addSimpleMapper(" NO_GENERIC_TYPE", type.isObject() ? "<?>" : "");
 		addSimpleMapper(" KEY_COMPAREABLE_TYPE", type.isObject() ? "<"+type.getKeyType()+" extends Comparable<T>>" : "");
+		addSimpleMapper(" KEY_SUPER_GENERIC_TYPE", type.isObject() ? "<? super "+type.getKeyType()+">" : "");
 		addSimpleMapper(" GENERIC_BRACES", type.isObject() ? " <"+type.getKeyType()+">" : "");
 		addSimpleMapper(" COMPAREABLE_BRACES", type.isObject() ? " <"+type.getKeyType()+" extends Comparable<T>>" : "");
 		addSimpleMapper("BRACES", type.isObject() ? "<>" : "");
@@ -61,16 +63,18 @@ public class GlobalVariables
 	{
 		addSimpleMapper("JAVA_PREDICATE", type.isPrimitiveBlocking() ? "" : type.getCustomJDKType().getFileType()+"Predicate");
 		addSimpleMapper("JAVA_CONSUMER", type.isPrimitiveBlocking() ? "" : "java.util.function."+type.getCustomJDKType().getFileType()+"Consumer");
-		addSimpleMapper("UNARY_OPERATOR", type.isPrimitiveBlocking() ? "" : type == ClassType.BOOLEAN ? "BinaryOperator" : type.getCustomJDKType().getFileType()+"UnaryOperator");
+		addSimpleMapper("UNARY_OPERATOR", type.isObject() ? "" : type == ClassType.BOOLEAN ? "BinaryOperator" : type.getCustomJDKType().getFileType()+"UnaryOperator");
 		if(type.isObject())
 		{
 			addSimpleMapper("CONSUMER", "Consumer");
 			addSimpleMapper("COMPARATOR", "Comparator");	
+			addSimpleMapper("IARRAY", "IObjectArray");
 		}
 		else
 		{
 			addClassMapper("CONSUMER", "Consumer");
 			addClassMapper("COMPARATOR", "Comparator");
+			addFunctionMappers("IARRAY", "I%sArray");
 		}
 		addClassMapper("ITERATORS", "Iterators");
 		addClassMapper("BI_ITERATOR", "BidirectionalIterator");
@@ -78,10 +82,12 @@ public class GlobalVariables
 		addClassMapper("ITERATOR", "Iterator");
 		addClassMapper("ITERABLE", "Iterable");
 		addClassMapper("ABSTRACT_COLLECTION", "AbstractCollection");
+		addClassMapper("COLLECTIONS", "Collections");
 		addClassMapper("COLLECTION", "Collection");
 		addClassMapper("ARRAYS", "Arrays");
 		addClassMapper("ABSTRACT_LIST", "AbstractList");
 		addClassMapper("LIST_ITER", "ListIter");
+		addClassMapper("LISTS", "Lists");
 		addClassMapper("SUB_LIST", "SubList");
 		addClassMapper("ARRAY_LIST", "ArrayList");
 		addClassMapper("LIST", "List");
@@ -102,6 +108,7 @@ public class GlobalVariables
 		addFunctionMapper("PUSH", "push");
 		addFunctionMapper("TOP", "top");
 		addFunctionMappers("REPLACE", "replace%ss");
+		addFunctionMappers("SORT", "sort%ss");
 		return this;
 	}
 	
@@ -121,7 +128,7 @@ public class GlobalVariables
 	
 	public TemplateProcess create(String fileName)
 	{
-		TemplateProcess process = new TemplateProcess(type.getFileType()+fileName+".java");
+		TemplateProcess process = new TemplateProcess(String.format(fileName+".java", type.getFileType()));
 		process.setPathBuilder(new PathBuilder(type.getPathType()));
 		process.addFlags(flags);
 		process.addMappers(operators);

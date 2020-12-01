@@ -6,8 +6,16 @@ import java.util.Objects;
 import java.util.function.UNARY_OPERATOR;
 import java.util.function.UnaryOperator;
 #endif
+import java.util.Comparator;
 
 import speiger.src.collections.PACKAGE.collections.COLLECTION;
+#if !TYPE_OBJECT
+import speiger.src.collections.PACKAGE.functions.COMPARATOR;
+#endif
+import speiger.src.collections.PACKAGE.utils.ARRAYS;
+#if TYPE_BYTE || TYPE_SHORT || TYPE_CHAR || TYPE_FLOAT
+import speiger.src.collections.utils.SanityChecks;
+#endif
 
 public interface LIST KEY_GENERIC_TYPE extends COLLECTION KEY_GENERIC_TYPE, List<CLASS_TYPE>
 {
@@ -41,7 +49,7 @@ public interface LIST KEY_GENERIC_TYPE extends COLLECTION KEY_GENERIC_TYPE, List
         LIST_ITERATOR iter = listIterator();
         while (iter.hasNext())
 #if TYPE_BYTE || TYPE_SHORT || TYPE_CHAR || TYPE_FLOAT
-        	iter.set((KEY_TYPE)o.APPLY(iter.NEXT()));
+        	iter.set(SanityChecks.SANITY_CAST(o.APPLY(iter.NEXT())));
 #else
 			iter.set(o.APPLY(iter.NEXT()));
 #endif
@@ -62,8 +70,62 @@ public interface LIST KEY_GENERIC_TYPE extends COLLECTION KEY_GENERIC_TYPE, List
 #if TYPE_OBJECT
 	public KEY_TYPE[] extractElements(int from, int to, Class<KEY_TYPE> type);
 	
+	@Override
+	public default void sort(Comparator<? super CLASS_TYPE> c) {
+		KEY_TYPE[] array = (KEY_TYPE[])TO_ARRAY();
+		if(c != null) ARRAYS.stableSort(array, c);
+		else ARRAYS.stableSort((Comparable[])array);
+    	LIST_ITERATOR KEY_GENERIC_TYPE iter = listIterator();
+    	for (int i = 0,m=size();i<m && iter.hasNext();i++) {
+    		iter.NEXT();
+    		iter.set(array[i]);
+    	}
+	}
+	
+	public default void unstableSort(Comparator<? super CLASS_TYPE> c) {
+		KEY_TYPE[] array = (KEY_TYPE[])TO_ARRAY();
+		if(c != null) ARRAYS.unstableSort(array, c);
+		else ARRAYS.unstableSort((Comparable[])array);
+        LIST_ITERATOR KEY_GENERIC_TYPE iter = listIterator();
+        for (int i = 0,m=size();i<m && iter.hasNext();i++) {
+        	iter.NEXT();
+        	iter.set(array[i]);
+        }
+	}
+	
 #else
 	public KEY_TYPE[] extractElements(int from, int to);
+	
+	@Override
+	default void sort(Comparator<? super CLASS_TYPE> c) {
+		sort((K, V) -> c.compare(KEY_TO_OBJ(K), KEY_TO_OBJ(V)));
+	}
+
+	public default void sort(COMPARATOR c) {
+		KEY_TYPE[] array = TO_ARRAY();
+		if(c != null) ARRAYS.stableSort(array, c);
+		else ARRAYS.stableSort(array);
+		LIST_ITERATOR KEY_GENERIC_TYPE iter = listIterator();
+		for (int i = 0,m=size();i<m && iter.hasNext();i++) {
+			iter.NEXT();
+			iter.set(array[i]);
+		}
+	}
+	
+	public default void unstableSort(Comparator<? super CLASS_TYPE> c) {
+		unstableSort((K, V) -> c.compare(KEY_TO_OBJ(K), KEY_TO_OBJ(V)));
+	}
+	
+	public default void unstableSort(COMPARATOR c) {
+		KEY_TYPE[] array = TO_ARRAY();
+		if(c != null) ARRAYS.unstableSort(array, c);
+		else ARRAYS.unstableSort(array);
+        LIST_ITERATOR KEY_GENERIC_TYPE iter = listIterator();
+        for (int i = 0,m=size();i<m && iter.hasNext();i++) {
+        	iter.NEXT();
+        	iter.set(array[i]);
+        }
+	}
 	
 #endif
 	@Override

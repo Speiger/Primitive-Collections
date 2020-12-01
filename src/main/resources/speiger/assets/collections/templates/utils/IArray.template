@@ -1,0 +1,8 @@
+package speiger.src.collections.PACKAGE.utils;
+
+import speiger.src.collections.utils.IArray;
+
+public interface IARRAY KEY_GENERIC_TYPE extends IArray
+{
+	public KEY_TYPE[] elements();
+}

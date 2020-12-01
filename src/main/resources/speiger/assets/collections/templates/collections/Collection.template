@@ -4,8 +4,13 @@ import java.util.Collection;
 #if PRIMITIVES
 import java.util.Objects;
 import java.util.function.JAVA_PREDICATE;
+import java.util.function.Predicate;
 #endif
 
+#if TYPE_BYTE || TYPE_SHORT || TYPE_CHAR || TYPE_FLOAT
+import speiger.src.collections.utils.SanityChecks;
+
+#endif
 public interface COLLECTION KEY_GENERIC_TYPE extends Collection<CLASS_TYPE>, ITERABLE KEY_GENERIC_TYPE
 {
 #if !TYPE_OBJECT
@@ -17,25 +22,37 @@ public interface COLLECTION KEY_GENERIC_TYPE extends Collection<CLASS_TYPE>, ITE
 #if !TYPE_OBJECT
 	public boolean contains(KEY_TYPE o);
 	
-	public boolean containsAll(COLLECTION c);
-		
-	public boolean containsAny(COLLECTION c);
-	
 #endif
+	public boolean containsAll(COLLECTION KEY_GENERIC_TYPE c);
+		
+	public boolean containsAny(COLLECTION KEY_GENERIC_TYPE c);
+	
 	public boolean containsAny(Collection<?> c);
 	
 #if !TYPE_OBJECT
 	public boolean REMOVE_KEY(KEY_TYPE o);
 	
-	public boolean removeAll(COLLECTION c);
+#endif
+	public boolean removeAll(COLLECTION KEY_GENERIC_TYPE c);
 	
-	public boolean retainAll(COLLECTION c);
+	public boolean retainAll(COLLECTION KEY_GENERIC_TYPE c);
 	
+#if !TYPE_OBJECT
 	public KEY_TYPE[] TO_ARRAY();
 	
 	public KEY_TYPE[] TO_ARRAY(KEY_TYPE[] a);
 	
 #if PRIMITIVES
+	@Override
+	public default boolean removeIf(Predicate<? super CLASS_TYPE> filter) {
+		Objects.requireNonNull(filter);
+#if TYPE_BYTE || TYPE_SHORT || TYPE_CHAR || TYPE_FLOAT
+		return remIf(v -> filter.test(KEY_TO_OBJ(SanityChecks.SANITY_CAST(v))));
+#else
+	return remIf(v -> filter.test(KEY_TO_OBJ(v)));
+#endif
+	}
+	
 	public default boolean remIf(JAVA_PREDICATE filter) {
     	Objects.requireNonNull(filter);
     	boolean removed = false;

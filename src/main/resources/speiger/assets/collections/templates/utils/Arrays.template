@@ -60,6 +60,55 @@ public class ARRAYS
 	}
 	
 #endif
+	
+	public static GENERIC_BRACES void stableSort(KEY_TYPE[] array, COMPARATOR KEY_GENERIC_TYPE comp) {
+		stableSort(array, 0, array.length, comp);
+	}
+
+	public static GENERIC_BRACES void stableSort(KEY_TYPE[] array, int length, COMPARATOR KEY_GENERIC_TYPE comp) {
+		stableSort(array, 0, length, comp);
+	}
+
+	public static GENERIC_BRACES void stableSort(KEY_TYPE[] array, int from, int to, COMPARATOR KEY_GENERIC_TYPE comp) {
+		mergeSort(array, null, from, to, comp);
+	}
+	
+	public static COMPAREABLE_BRACES void stableSort(KEY_TYPE[] array) {
+		stableSort(array, 0, array.length);
+	}
+
+	public static COMPAREABLE_BRACES void stableSort(KEY_TYPE[] array, int length) {
+		stableSort(array, 0, length);
+	}
+
+	public static COMPAREABLE_BRACES void stableSort(KEY_TYPE[] array, int from, int to) {
+		mergeSort(array, null, from, to);
+	}
+	
+	public static GENERIC_BRACES void unstableSort(KEY_TYPE[] array, COMPARATOR KEY_GENERIC_TYPE comp) {
+		unstableSort(array, 0, array.length, comp);
+	}
+
+	public static GENERIC_BRACES void unstableSort(KEY_TYPE[] array, int length, COMPARATOR KEY_GENERIC_TYPE comp) {
+		unstableSort(array, 0, length, comp);
+	}
+
+	public static GENERIC_BRACES void unstableSort(KEY_TYPE[] array, int from, int to, COMPARATOR KEY_GENERIC_TYPE comp) {
+		quickSort(array, from, to, comp);
+	}
+	
+	public static COMPAREABLE_BRACES void unstableSort(KEY_TYPE[] array) {
+		unstableSort(array, 0, array.length);
+	}
+
+	public static COMPAREABLE_BRACES void unstableSort(KEY_TYPE[] array, int length) {
+		unstableSort(array, 0, length);
+	}
+
+	public static COMPAREABLE_BRACES void unstableSort(KEY_TYPE[] array, int from, int to) {
+		quickSort(array, from, to);
+	}
+	
 	public static GENERIC_BRACES void insertionSort(KEY_TYPE[] array, COMPARATOR KEY_GENERIC_TYPE comp) {
 		insertionSort(array, 0, array.length, comp);
 	}

@@ -2,9 +2,28 @@ package speiger.src.collections.PACKAGE.utils;
 
 import java.util.Iterator;
 import speiger.src.collections.PACKAGE.collections.ITERATOR;
+import speiger.src.collections.PACKAGE.lists.LIST_ITERATOR;
 
 public class ITERATORS
 {
+	public static final EmptyIterator NO_GENERIC_TYPE EMPTY = new EmptyIteratorBRACES();
+	
+	public static GENERIC_BRACES EmptyIterator KEY_GENERIC_TYPE emptyIterator() {
+#if TYPE_OBJECT
+		return (EmptyIterator<KEY_TYPE>)EMPTY;
+#else
+		return EMPTY;
+#endif
+	}
+	
+	public static GENERIC_BRACES ITERATOR KEY_GENERIC_TYPE unmodifiable(ITERATOR KEY_GENERIC_TYPE iterator) {
+		return new UnmodifiableIteratorBRACES(iterator);
+	}
+	
+	public static GENERIC_BRACES LIST_ITERATOR KEY_GENERIC_TYPE unmodifiable(LIST_ITERATOR KEY_GENERIC_TYPE iterator) {
+		return new UnmodifiableListIteratorBRACES(iterator);
+	}
+	
 	public static GENERIC_BRACES ArrayIterator KEY_GENERIC_TYPE wrap(KEY_TYPE[] a) {
 		return wrap(a, 0, a.length);
 	}
@@ -62,7 +81,116 @@ public class ITERATORS
 		return index;
 	}
 	
-#endif	
+#endif
+	private static class UnmodifiableListIterator KEY_GENERIC_TYPE implements LIST_ITERATOR KEY_GENERIC_TYPE
+	{
+		LIST_ITERATOR KEY_GENERIC_TYPE iter;
+	
+		UnmodifiableListIterator(LIST_ITERATOR KEY_GENERIC_TYPE iter) {
+			this.iter = iter;
+		}
+		
+		@Override
+		public boolean hasNext() {
+			return iter.hasNext();
+		}
+		
+		@Override
+		public boolean hasPrevious() {
+			return iter.hasPrevious();
+		}
+		
+		@Override
+		public int nextIndex() {
+			return iter.nextIndex();
+		}
+		
+		@Override
+		public int previousIndex() {
+			return iter.previousIndex();
+		}
+		
+		@Override
+		public void remove() { throw new UnsupportedOperationException(); }
+		
+		@Override
+		public KEY_TYPE PREVIOUS() {
+			return iter.PREVIOUS();
+		}
+		
+		@Override
+		public KEY_TYPE NEXT() {
+			return iter.NEXT();
+		}
+
+		@Override
+		public void set(KEY_TYPE e) { throw new UnsupportedOperationException(); }
+		
+		@Override
+		public void add(KEY_TYPE e) { throw new UnsupportedOperationException(); }
+}
+	
+	private static class UnmodifiableIterator KEY_GENERIC_TYPE implements ITERATOR KEY_GENERIC_TYPE
+	{
+		ITERATOR KEY_GENERIC_TYPE iterator;
+	
+		UnmodifiableIterator(ITERATOR KEY_GENERIC_TYPE iterator) {
+			this.iterator = iterator;
+		}
+		
+		@Override
+		public boolean hasNext() {
+			return iterator.hasNext();
+		}
+		
+		@Override
+		public KEY_TYPE NEXT() {
+			return iterator.NEXT();
+		}
+	}
+
+	private static class EmptyIterator KEY_GENERIC_TYPE implements LIST_ITERATOR KEY_GENERIC_TYPE
+	{
+		@Override
+		public boolean hasNext() {
+			return false;
+		}
+	
+		@Override
+		public KEY_TYPE NEXT() {
+			return EMPTY_VALUE;
+		}
+
+		@Override
+		public boolean hasPrevious() {
+			return false;
+		}
+		
+		@Override
+		public KEY_TYPE PREVIOUS() {
+			return EMPTY_VALUE;
+		}
+		
+		@Override
+		public int nextIndex() {
+			return 0;
+		}
+		
+		@Override
+		public int previousIndex() {
+			return 0;
+		}
+		
+		@Override
+		public void remove() { throw new UnsupportedOperationException(); }
+
+		@Override
+		public void set(KEY_TYPE e) { throw new UnsupportedOperationException(); }
+
+		@Override
+		public void add(KEY_TYPE e) { throw new UnsupportedOperationException(); }
+	}
+	
 	private static class ArrayIterator KEY_GENERIC_TYPE implements ITERATOR KEY_GENERIC_TYPE
 	{
 		KEY_TYPE[] a;
