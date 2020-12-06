@@ -7,17 +7,42 @@ import java.util.function.Consumer;
 import speiger.src.collections.PACKAGE.functions.CONSUMER;
 #endif
 
+/**
+ * A Type-Specific {@link Iterable} that reduces (un)boxing
+ */
 public interface ITERABLE KEY_GENERIC_TYPE extends Iterable<CLASS_TYPE>
 {
+    /**
+     * Returns an iterator over elements of type {@code T}.
+     *
+     * @return an Iterator.
+     */
 	@Override
 	ITERATOR KEY_GENERIC_TYPE iterator();
 #if !TYPE_OBJECT
 	
+	/**
+	 * A Type Specific foreach method that reduces (un)boxing
+	 * 
+     * @implSpec
+     * <p>The default implementation behaves as if:
+     * <pre>{@code
+     *     iterator().forEachRemaining(action);
+     * }</pre>
+     *
+     * @param action The action to be performed for each element
+     * @throws NullPointerException if the specified action is null
+     * @see Iterable#forEach(Consumer)
+     */
 	default void forEach(CONSUMER action) {
 		Objects.requireNonNull(action);
 		iterator().forEachRemaining(action);
 	}
 	
+	/** {@inheritDoc}
+	* <p>This default implementation delegates to the corresponding type-specific method.
+	* @deprecated Please use the corresponding type-specific method instead. 
+	*/
 	@Deprecated
 	@Override
     default void forEach(Consumer<? super CLASS_TYPE> action) {

@@ -1,6 +1,7 @@
 package speiger.src.collections.PACKAGE.collections;
 
 import java.util.Collection;
+import java.util.Objects;
 import java.util.AbstractCollection;
 
 import speiger.src.collections.PACKAGE.collections.COLLECTION;
@@ -14,6 +15,10 @@ public abstract class ABSTRACT_COLLECTION KEY_GENERIC_TYPE extends AbstractColle
 	public abstract ITERATOR KEY_GENERIC_TYPE iterator();
 	
 #if !TYPE_OBJECT
+	/** {@inheritDoc}
+	 * <p>This default implementation delegates to the corresponding type-specific method.
+	 * @deprecated Please use the corresponding type-specific method instead. 
+	 */
 	@Override
 	@Deprecated
 	public boolean add(CLASS_TYPE e) { return COLLECTION.super.add(e); }
@@ -29,75 +34,132 @@ public abstract class ABSTRACT_COLLECTION KEY_GENERIC_TYPE extends AbstractColle
 	}
 	
 #if !TYPE_OBJECT
+	/** {@inheritDoc}
+	 * <p>This default implementation delegates to the corresponding type-specific method.
+	 * @deprecated Please use the corresponding type-specific method instead. 
+	 */
 	@Override
 	@Deprecated
 	public boolean contains(Object e) { return COLLECTION.super.contains(e); }
 	
+	/**
+	 * A Type-Specific implementation of contains. This implementation iterates over the elements and returns true if the value match.
+	 * @param value that should be searched for.
+	 * @return true if the value was found.
+	 */
 	@Override
 	public boolean contains(KEY_TYPE e) {
-		for(KEY_TYPE entry : this) { if(entry == e) return true; }
+		for(KEY_TYPE entry : this) { if(EQUALS(entry, e)) return true; }
 		return false;
 	}
 	
 #endif
+	/** {@inheritDoc}
+	 * <p>This default implementation delegates to the corresponding type-specific method.
+	 * @deprecated Please use the corresponding type-specific method instead. 
+	 */
 	@Override
 	@Deprecated
 	public boolean containsAll(Collection<?> c)
 	{
 		return c instanceof COLLECTION ? containsAll((COLLECTION KEY_GENERIC_TYPE)c) : super.containsAll(c);
 	}
-
+	
+	/** {@inheritDoc}
+	 * <p>This default implementation delegates to the corresponding type-specific method.
+	 * @deprecated Please use the corresponding type-specific method instead. 
+	 */
 	@Override
 	@Deprecated
 	public boolean addAll(Collection<? extends CLASS_TYPE> c)
 	{
 		return c instanceof COLLECTION ? addAll((COLLECTION KEY_GENERIC_TYPE)c) : super.addAll(c);
 	}
-
+	
+	/** {@inheritDoc}
+	 * <p>This default implementation delegates to the corresponding type-specific method.
+	 * @deprecated Please use the corresponding type-specific method instead. 
+	 */
 	@Override
-	@Deprecated
+	@Primitive
 	public boolean removeAll(Collection<?> c)
 	{
 		return c instanceof COLLECTION ? removeAll((COLLECTION KEY_GENERIC_TYPE)c) : super.removeAll(c);
 	}
-
+	
+	/** {@inheritDoc}
+	 * <p>This default implementation delegates to the corresponding type-specific method.
+	 * @deprecated Please use the corresponding type-specific method instead. 
+	 */
 	@Override
-	@Deprecated
+	@Primitive
 	public boolean retainAll(Collection<?> c)
 	{
 		return c instanceof COLLECTION ? retainAll((COLLECTION KEY_GENERIC_TYPE)c) : super.retainAll(c);
 	}
 	
+	/**
+	 * A Type-Specific implementation of containsAll. This implementation iterates over all elements and checks all elements are present in the other collection.
+	 * @param the collection that should be checked if it contains all elements.
+	 * @return true if all elements were found in the collection
+	 * @throws NullPointerException if the collection is null
+	 */
 	@Override
 	public boolean containsAll(COLLECTION KEY_GENERIC_TYPE c) {
-		for(KEY_TYPE e : c)
-			if(!contains(e))
+		Objects.requireNonNull(c);
+		for(KEY_TYPE e : this)
+			if(!c.contains(e))
 				return false;
 		return true;
 	}
 	
+	/**
+	 * This implementation iterates over the elements of the collection and checks if they are stored in this collection
+	 * @param c the elements that should be checked for
+	 * @return true if any element is in this collection
+	 * @deprecated if this is a primitive collection
+	 * @throws NullPointerException if the collection is null
+	 */
 	@Override
 	@Primitive
 	public boolean containsAny(Collection<?> c) {
+		Objects.requireNonNull(c);
 		for(KEY_TYPE e : this) 
-			if(contains(KEY_TO_OBJ(e)))
+			if(c.contains(KEY_TO_OBJ(e)))
 				return true;
 		return false;
 	}
 	
+	/**
+	 * This implementation iterates over the elements of the collection and checks if they are stored in this collection.
+	 * @param c the elements that should be checked for
+	 * @return true if any element is in this collection
+ 	 * @throws NullPointerException if the collection is null
+	 */
 	@Override
 	public boolean containsAny(COLLECTION KEY_GENERIC_TYPE c) {
-		for(KEY_TYPE e : c) 
-			if(contains(e))
+		Objects.requireNonNull(c);
+		for(KEY_TYPE e : this) 
+			if(c.contains(e))
 				return true;
 		return false;
 	}
 		
 #if !TYPE_OBJECT
+	/** {@inheritDoc}
+	 * <p>This default implementation delegates to the corresponding type-specific method.
+	 * @deprecated Please use the corresponding type-specific method instead. 
+	 */
 	@Override
 	@Deprecated
 	public boolean remove(Object e) { return COLLECTION.super.remove(e); }
 	
+	/**
+	 * A Type-Specific implementation of remove. This implementation iterates over the elements until it finds the element that is searched for or it runs out of elements.
+	 * It stops after finding the first element
+	 * @param e the element that is searched for
+	 * @return true if the element was found and removed.
+	 */
 	@Override
 	public boolean REMOVE_KEY(KEY_TYPE e) {
 		for(ITERATOR KEY_GENERIC_TYPE iter = iterator();iter.hasNext();) {
@@ -110,8 +172,15 @@ public abstract class ABSTRACT_COLLECTION KEY_GENERIC_TYPE extends AbstractColle
 	}
 	
 #endif
+	/**
+	 * A Type-Specific implementation of removeAll. This Implementation iterates over all elements and removes them as they were found in the other collection.
+	 * @param c the elements that should be deleted
+	 * @return true if the collection was modified.
+	 * @throws NullPointerException if the collection is null
+	 */
 	@Override
 	public boolean removeAll(COLLECTION KEY_GENERIC_TYPE c) {
+		Objects.requireNonNull(c);
 		boolean modified = false;
 		for(ITERATOR KEY_GENERIC_TYPE iter = iterator();iter.hasNext();) {
 			if(c.contains(iter.NEXT())) {
@@ -122,8 +191,15 @@ public abstract class ABSTRACT_COLLECTION KEY_GENERIC_TYPE extends AbstractColle
 		return modified;
 	}
 	
+	/**
+	 * A Type-Specific implementation of retainAll. This Implementation iterates over all elements and removes them as they were not found in the other collection.
+	 * @param c the elements that should be kept
+	 * @return true if the collection was modified.
+	 * @throws NullPointerException if the collection is null
+	 */
 	@Override
 	public boolean retainAll(COLLECTION KEY_GENERIC_TYPE c) {
+		Objects.requireNonNull(c);
 		boolean modified = false;
 		for(ITERATOR KEY_GENERIC_TYPE iter = iterator();iter.hasNext();) {
 			if(!c.contains(iter.NEXT())) {
@@ -135,11 +211,20 @@ public abstract class ABSTRACT_COLLECTION KEY_GENERIC_TYPE extends AbstractColle
 	}
 	
 #if !TYPE_OBJECT
+	/**
+	 * A Type-Specific implementation of toArray that links to {@link #TO_ARRAY(KEY_TYPE[])} with a newly created array.
+     * @return an array containing all of the elements in this collection
+	 */
 	@Override
 	public KEY_TYPE[] TO_ARRAY() {
 		return TO_ARRAY(new KEY_TYPE[size()]);
 	}
 	
+	/**
+	 * A Type-Specific implementation of toArray. This implementation iterates over all elements and unwraps them into primitive type.
+	 * @param a array that the elements should be injected to. If null or to small a new array with the right size is created
+     * @return an array containing all of the elements in this collection
+	 */
 	@Override
 	public KEY_TYPE[] TO_ARRAY(KEY_TYPE[] a) {
 		if(a == null || a.length < size()) a = new KEY_TYPE[size()];

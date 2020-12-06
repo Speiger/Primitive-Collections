@@ -7,28 +7,52 @@ import speiger.src.collections.PACKAGE.collections.BI_ITERATOR;
 public interface LIST_ITERATOR KEY_GENERIC_TYPE extends ListIterator<CLASS_TYPE>, BI_ITERATOR KEY_GENERIC_TYPE
 {
 #if !TYPE_OBJECT
+	/**
+	 * A Primitive set function to reduce (un)boxing
+	 * @see ListIterator#set(Object)
+	 */
 	public void set(KEY_TYPE e);
 	
+	/**
+	 * A Primitive set function to reduce (un)boxing
+	 * @see ListIterator#set(Object)
+	 */
 	public void add(KEY_TYPE e);
 	
+	/** {@inheritDoc}
+ 	* <p>This default implementation delegates to the corresponding type-specific method.
+ 	* @deprecated Please use the corresponding type-specific method instead. 
+ 	*/
 	@Override
 	@Deprecated
 	public default CLASS_TYPE previous() {
 		return BI_ITERATOR.super.previous();
 	}
 	
+	/** {@inheritDoc}
+ 	* <p>This default implementation delegates to the corresponding type-specific method.
+ 	* @deprecated Please use the corresponding type-specific method instead. 
+ 	*/
 	@Override
 	@Deprecated
 	public default CLASS_TYPE next() {
 		return BI_ITERATOR.super.next();
 	}	
 	
+	/** {@inheritDoc}
+ 	* <p>This default implementation delegates to the corresponding type-specific method.
+ 	* @deprecated Please use the corresponding type-specific method instead. 
+ 	*/
 	@Override
 	@Deprecated
 	public default void set(CLASS_TYPE e) {
 		set(OBJ_TO_KEY(e));
 	}
 	
+	/** {@inheritDoc}
+ 	* <p>This default implementation delegates to the corresponding type-specific method.
+ 	* @deprecated Please use the corresponding type-specific method instead. 
+ 	*/
 	@Override
 	@Deprecated
 	public default void add(CLASS_TYPE e) {

@@ -14,10 +14,17 @@ import speiger.src.collections.objects.utils.ObjectArrays;
 import speiger.src.collections.PACKAGE.utils.ARRAYS;
 #endif
 
+/**
+ * A Helper class for Collections
+ */
 public class COLLECTIONS
 {
 	public static final COLLECTION NO_GENERIC_TYPE EMPTY = new EmptyCollectionBRACES();
 	
+	/**
+	 * Returns a Immutable EmptyCollection instance that is automatically casted.
+	 * @return an empty collection
+	 */
 	public static GENERIC_BRACES COLLECTION KEY_GENERIC_TYPE emptyCollection() {
 #if TYPE_OBJECT
 		return (COLLECTION<KEY_TYPE>)EMPTY;
@@ -26,14 +33,30 @@ public class COLLECTIONS
 #endif
 	}
 	
+	/**
+	 * Returns a Immutable Collection instance based on the instance given.
+	 * @param l that should be made immutable/unmodifyable
+	 * @return a unmodifiable collection wrapper. If the Collection already a unmodifyable wrapper then it just returns itself.
+	 */
 	public static GENERIC_BRACES COLLECTION KEY_GENERIC_TYPE unmodifiableCollection(COLLECTION KEY_GENERIC_TYPE c) {
 		return c instanceof UnmodifiableCollection ? c : new UnmodifiableCollectionBRACES(c);
 	}
 	
+	/**
+	 * Returns a synchronized Collection instance based on the instance given.
+	 * @param l that should be synchronized
+	 * @return a synchronized collection wrapper. If the Collection already a synchronized wrapper then it just returns itself.
+	 */
 	public static GENERIC_BRACES COLLECTION KEY_GENERIC_TYPE synchronizedCollection(COLLECTION KEY_GENERIC_TYPE c) {
 		return c instanceof SynchronizedCollection ? c : new SynchronizedCollectionBRACES(c);
 	}
 	
+	/**
+	 * Returns a synchronized Collection instance based on the instance given.
+	 * @param l that should be synchronized
+	 * @param mutex is the controller of the synchronization block.
+	 * @return a synchronized collection wrapper. If the Collection already a synchronized wrapper then it just returns itself.
+	 */
 	public static GENERIC_BRACES COLLECTION KEY_GENERIC_TYPE synchronizedCollection(COLLECTION KEY_GENERIC_TYPE c, Object mutex) {
 		return c instanceof SynchronizedCollection ? c : new SynchronizedCollectionBRACES(c, mutex);
 	}
@@ -70,9 +93,11 @@ public class COLLECTIONS
 		
 #endif
 		@Override
+		@Primitive
 		public boolean containsAll(Collection<?> c) { synchronized(mutex) { return this.c.containsAll(c); } }
 		
 		@Override
+		@Primitive
 		public boolean containsAny(Collection<?> c) { synchronized(mutex) { return this.c.containsAny(c); } }
 		
 		@Override
@@ -96,8 +121,10 @@ public class COLLECTIONS
 		@Primitive
 		public boolean remove(Object o) { synchronized(mutex) { return c.remove(o); } }
 		@Override
+		@Primitive
 		public boolean removeAll(Collection<?> c) { synchronized(mutex) { return this.c.removeAll(c); } }
 		@Override
+		@Primitive
 		public boolean retainAll(Collection<?> c) { synchronized(mutex) { return this.c.retainAll(c); } }
 #if !TYPE_OBJECT
 		@Override
@@ -170,11 +197,13 @@ public class COLLECTIONS
 		}
 		
 		@Override
+		@Primitive
 		public boolean containsAny(Collection<?> c) {
 			return this.c.containsAny(c);
 		}
 		
 		@Override
+		@Primitive
 		public boolean containsAll(Collection<?> c) {
 			return this.c.containsAll(c);
 		}
@@ -198,8 +227,10 @@ public class COLLECTIONS
 		@Deprecated
 		public boolean remove(Object o) { throw new UnsupportedOperationException(); }
 		@Override
+		@Primitive
 		public boolean removeAll(Collection<?> c) { throw new UnsupportedOperationException(); }
 		@Override
+		@Primitive
 		public boolean retainAll(Collection<?> c) { throw new UnsupportedOperationException(); }
 		@Override
 		@Primitive
@@ -280,11 +311,13 @@ public class COLLECTIONS
 		
 #endif
 		@Override
+		@Primitive
 		public boolean containsAny(Collection<?> c) {
 			return false;
 		}
 		
 		@Override
+		@Primitive
 		public boolean containsAll(Collection<?> c) {
 			return false;
 		}
@@ -305,8 +338,10 @@ public class COLLECTIONS
 		@Deprecated
 		public boolean remove(Object o) { throw new UnsupportedOperationException(); }
 		@Override
+		@Primitive
 		public boolean removeAll(Collection<?> c) { throw new UnsupportedOperationException(); }
 		@Override
+		@Primitive
 		public boolean retainAll(Collection<?> c) { throw new UnsupportedOperationException(); }
 		@Override
 		@Primitive

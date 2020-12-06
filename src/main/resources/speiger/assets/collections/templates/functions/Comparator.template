@@ -2,10 +2,23 @@ package speiger.src.collections.PACKAGE.functions;
 
 import java.util.Comparator;
 
+/**
+ * Type-Specific Class for Comparator to reduce (un)boxing
+ */
 public interface COMPARATOR extends Comparator<CLASS_TYPE> 
 {
+	/**
+	 * Type-Specific compare function to reduce (un)boxing
+	 * @see Comparator#compare(Object, Object)
+	 */
 	int compare(KEY_TYPE o1, KEY_TYPE o2);
 	
+	/** {@inheritDoc}
+ 	* <p>This default implementation delegates to the corresponding type-specific method.
+ 	* @deprecated Please use the corresponding type-specific method instead. 
+ 	*/
+	@Override
+	@Deprecated
 	default int compare(CLASS_TYPE o1, CLASS_TYPE o2) {
 		return compare(OBJ_TO_KEY(o1), OBJ_TO_KEY(o2));
 	}

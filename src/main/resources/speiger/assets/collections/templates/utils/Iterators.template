@@ -4,10 +4,17 @@ import java.util.Iterator;
 import speiger.src.collections.PACKAGE.collections.ITERATOR;
 import speiger.src.collections.PACKAGE.lists.LIST_ITERATOR;
 
+/**
+ * A Helper class for Iterators
+ */
 public class ITERATORS
 {
 	public static final EmptyIterator NO_GENERIC_TYPE EMPTY = new EmptyIteratorBRACES();
 	
+	/**
+	 * Returns a Immutable EmptyIterator instance that is automatically casted.
+	 * @return an empty iterator
+	 */
 	public static GENERIC_BRACES EmptyIterator KEY_GENERIC_TYPE emptyIterator() {
 #if TYPE_OBJECT
 		return (EmptyIterator<KEY_TYPE>)EMPTY;
@@ -16,30 +23,74 @@ public class ITERATORS
 #endif
 	}
 	
+	/**
+	 * Returns a Immutable Iterator instance based on the instance given.
+	 * @param l that should be made immutable/unmodifyable
+	 * @return a unmodifiable iterator wrapper. If the Iterator already a unmodifyable wrapper then it just returns itself.
+	 */
 	public static GENERIC_BRACES ITERATOR KEY_GENERIC_TYPE unmodifiable(ITERATOR KEY_GENERIC_TYPE iterator) {
-		return new UnmodifiableIteratorBRACES(iterator);
+		return iterator instanceof UnmodifiableIterator ? iterator : new UnmodifiableIteratorBRACES(iterator);
 	}
 	
+	/**
+	 * Returns a Immutable ListIterator instance based on the instance given.
+	 * @param l that should be made immutable/unmodifyable
+	 * @return a unmodifiable listiterator wrapper. If the ListIterator already a unmodifyable wrapper then it just returns itself.
+	 */
 	public static GENERIC_BRACES LIST_ITERATOR KEY_GENERIC_TYPE unmodifiable(LIST_ITERATOR KEY_GENERIC_TYPE iterator) {
-		return new UnmodifiableListIteratorBRACES(iterator);
+		return iterator instanceof UnmodifiableListIterator ? iterator : new UnmodifiableListIteratorBRACES(iterator);
 	}
 	
+	/**
+	 * Returns a Array Wrapping iterator
+	 * @param a the array that should be wrapped
+	 * @return a Iterator that is wrapping a array.
+	 */
 	public static GENERIC_BRACES ArrayIterator KEY_GENERIC_TYPE wrap(KEY_TYPE[] a) {
 		return wrap(a, 0, a.length);
 	}
 	
+	/**
+	 * Returns a Array Wrapping iterator
+	 * @param a the array that should be wrapped.
+	 * @param start the index to be started from.
+	 * @param end the index that should be ended.
+	 * @return a Iterator that is wrapping a array.
+	 */
 	public static GENERIC_BRACES ArrayIterator KEY_GENERIC_TYPE wrap(KEY_TYPE[] a, int start, int end) {
 		return new ArrayIteratorBRACES(a, start, end);
 	}
 	
+	/**
+	 * Iterates over a iterator and inserts the values into the array and returns the amount that was inserted
+	 * @param a where the elements should be inserted
+	 * @param i the source iterator
+	 * @return the amount of elements that were inserted into the array.
+	 */
 	public static GENERIC_BRACES int unwrap(KEY_TYPE[] a, Iterator<? extends CLASS_TYPE> i) {
 		return unwrap(a, i, 0, a.length);
 	}
 	
+	/**
+	 * Iterates over a iterator and inserts the values into the array and returns the amount that was inserted
+	 * @param a where the elements should be inserted
+	 * @param i the source iterator
+	 * @param offset the array offset where the start should be
+	 * @return the amount of elements that were inserted into the array.
+	 */
 	public static GENERIC_BRACES int unwrap(KEY_TYPE[] a, Iterator<? extends CLASS_TYPE> i, int offset) {
-		return unwrap(a, i, offset, a.length);
+		return unwrap(a, i, offset, a.length - offset);
 	}
-
+	
+	/**
+	 * Iterates over a iterator and inserts the values into the array and returns the amount that was inserted
+	 * @param a where the elements should be inserted
+	 * @param i the source iterator
+	 * @param offset the array offset where the start should be
+	 * @param max the maximum values that should be extracted from the source
+	 * @return the amount of elements that were inserted into the array.
+	 * @throws IllegalStateException if max is smaller the 0 or if the maximum index is larger then the array
+	 */
 	public static GENERIC_BRACES int unwrap(KEY_TYPE[] a, Iterator<? extends CLASS_TYPE> i, int offset, int max) {
 		if(max < 0) throw new IllegalStateException("The max size is smaller then 0");
 		if(offset + max >= a.length) throw new IllegalStateException("largest array index exceeds array size");
@@ -48,14 +99,39 @@ public class ITERATORS
 		return index;
 	}
 	
+	/**
+	 * A Primitive iterator variant of the {@link #unwrap(KEY_TYPE[], Iterator)} function
+	 * Iterates over a iterator and inserts the values into the array and returns the amount that was inserted
+	 * @param a where the elements should be inserted
+	 * @param i the source iterator
+	 * @return the amount of elements that were inserted into the array.
+	 */
 	public static GENERIC_BRACES int unwrap(KEY_TYPE[] a, ITERATOR KEY_GENERIC_TYPE i) {
 		return unwrap(a, i, 0, a.length);
 	}
 	
+	/**
+	 * A Primitive iterator variant of the {@link #unwrap(KEY_TYPE[], Iterator, int)} function
+	 * Iterates over a iterator and inserts the values into the array and returns the amount that was inserted
+	 * @param a where the elements should be inserted
+	 * @param i the source iterator
+	 * @param offset the array offset where the start should be
+	 * @return the amount of elements that were inserted into the array.
+	 */
 	public static GENERIC_BRACES int unwrap(KEY_TYPE[] a, ITERATOR KEY_GENERIC_TYPE i, int offset) {
-		return unwrap(a, i, offset, a.length);
+		return unwrap(a, i, offset, a.length - offset);
 	}
 	
+	/**
+	 * A Primitive iterator variant of the {@link #unwrap(KEY_TYPE[], Iterator, int, int)} function
+	 * Iterates over a iterator and inserts the values into the array and returns the amount that was inserted
+	 * @param a where the elements should be inserted
+	 * @param i the source iterator
+	 * @param offset the array offset where the start should be
+	 * @param max the maximum values that should be extracted from the source
+	 * @return the amount of elements that were inserted into the array.
+	 * @throws IllegalStateException if max is smaller the 0 or if the maximum index is larger then the array
+	 */
 	public static GENERIC_BRACES int unwrap(KEY_TYPE[] a, ITERATOR KEY_GENERIC_TYPE i, int offset, int max) {
 		if(max < 0) throw new IllegalStateException("The max size is smaller then 0");
 		if(offset + max >= a.length) throw new IllegalStateException("largest array index exceeds array size");
@@ -65,14 +141,39 @@ public class ITERATORS
 	}
 	
 #if !TYPE_OBJECT
+	/**
+	 * A Function to convert a Primitive Iterator to a Object array.
+	 * Iterates over a iterator and inserts the values into the array and returns the amount that was inserted
+	 * @param a where the elements should be inserted
+	 * @param i the source iterator
+	 * @return the amount of elements that were inserted into the array.
+	 */
 	public static GENERIC_BRACES int unwrap(CLASS_TYPE[] a, ITERATOR KEY_GENERIC_TYPE i) {
 		return unwrap(a, i, 0, a.length);
 	}
 	
+	/**
+	 * A Function to convert a Primitive Iterator to a Object array.
+	 * Iterates over a iterator and inserts the values into the array and returns the amount that was inserted
+	 * @param a where the elements should be inserted
+	 * @param i the source iterator
+	 * @param offset the array offset where the start should be
+	 * @return the amount of elements that were inserted into the array.
+	 */
 	public static GENERIC_BRACES int unwrap(CLASS_TYPE[] a, ITERATOR KEY_GENERIC_TYPE i, int offset) {
-		return unwrap(a, i, offset, a.length);
+		return unwrap(a, i, offset, a.length - offset);
 	}
 	
+	/**
+	 * A Function to convert a Primitive Iterator to a Object array.
+	 * Iterates over a iterator and inserts the values into the array and returns the amount that was inserted
+	 * @param a where the elements should be inserted
+	 * @param i the source iterator
+	 * @param offset the array offset where the start should be
+	 * @param max the maximum values that should be extracted from the source
+	 * @return the amount of elements that were inserted into the array.
+	 * @throws IllegalStateException if max is smaller the 0 or if the maximum index is larger then the array
+	 */
 	public static GENERIC_BRACES int unwrap(CLASS_TYPE[] a, ITERATOR KEY_GENERIC_TYPE i, int offset, int max) {
 		if(max < 0) throw new IllegalStateException("The max size is smaller then 0");
 		if(offset + max >= a.length) throw new IllegalStateException("largest array index exceeds array size");

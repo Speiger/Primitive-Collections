@@ -5,6 +5,9 @@ import java.util.List;
 import java.util.Objects;
 import java.util.function.UNARY_OPERATOR;
 import java.util.function.UnaryOperator;
+#else if TYPE_OBJECT
+import java.util.Objects;
+import java.util.function.UnaryOperator;
 #endif
 import java.util.Comparator;
 
@@ -20,30 +23,98 @@ import speiger.src.collections.utils.SanityChecks;
 public interface LIST KEY_GENERIC_TYPE extends COLLECTION KEY_GENERIC_TYPE, List<CLASS_TYPE>
 {
 #if !TYPE_OBJECT
+	/**
+	 * A Type-Specific add Function to reduce (un)boxing
+	 * @param e the element to add
+	 * @return true if the list was modified
+	 * @see List#add(Object)
+	 */
 	@Override
 	public boolean add(KEY_TYPE e);
 	
+	/**
+	 * A Type-Specific add Function to reduce (un)boxing
+	 * @param e the element to add
+     * @param index index at which the specified element is to be inserted
+	 * @see List#add(int, Object)
+	 */
 	public void add(int index, KEY_TYPE e);
 	
 #endif
+	/**
+	 * A Type-Specific addAll Function to reduce (un)boxing
+	 * @param c the elements that need to be added
+     * @param index index at which the specified elements is to be inserted
+	 * @return true if the list was modified
+	 * @see List#addAll(int, Object)
+	 */
 	public boolean addAll(int index, COLLECTION KEY_GENERIC_TYPE c);
 	
+	/**
+	 * A Type-Specific and optimized addAll function that allows a faster transfer of elements
+	 * @param c the elements that need to be added
+	 * @return true if the list was modified
+	 */
 	public boolean addAll(LIST KEY_GENERIC_TYPE c);
 	
+	/**
+	 * A Type-Specific and optimized addAll function that allows a faster transfer of elements
+	 * @param c the elements that need to be added
+     * @param index index at which the specified elements is to be inserted
+	 * @return true if the list was modified
+	 */
 	public boolean addAll(int index, LIST KEY_GENERIC_TYPE c);
 	
 #if !TYPE_OBJECT
+	/**
+	 * A Type-Specific get function to reduce (un)boxing
+	 * @param index the index of the value that is requested
+	 * @return the value at the given index
+	 * @throws IndexOutOfBoundsException if the index is not within the list range
+	 * @see List#get(int)
+	 */
 	public KEY_TYPE GET_KEY(int index);
 	
+	/**
+	 * A Type-Specific set function to reduce (un)boxing
+     * @param index index of the element to replace
+     * @param element element to be stored at the specified position
+     * @return the element previously at the specified position
+	 * @throws IndexOutOfBoundsException if the index is not within the list range
+     * @see List#set(int, Object)
+	 */
 	public KEY_TYPE set(int index, KEY_TYPE e);
 	
+	/**
+	 * A Type-Specific remove function to reduce (un)boxing
+     * @param index the index of the element to be removed
+     * @return the element previously at the specified position
+     * @see List#remove(int)
+	 */
 	public KEY_TYPE REMOVE(int index);
 	
+	/**
+	 * A Type-Specific indexOf function to reduce (un)boxing
+	 * @param e the element that is searched for
+	 * @return the index of the element if found. (if not found then -1)
+	 * @note does not support null values
+	 */
 	public int indexOf(KEY_TYPE e);
 	
+	/**
+	 * A Type-Specific lastIndexOf function to reduce (un)boxing
+	 * @param e the element that is searched for
+	 * @return the lastIndex of the element if found. (if not found then -1)
+	 * @note does not support null values
+	 */
 	public int lastIndexOf(KEY_TYPE e);
 
 #if !TYPE_BOOLEAN
+	/**
+	 * A Type-Specific replace function to reduce (un)boxing
+	 * @param o the action to replace the values
+	 * @throws NullPointerException if o is null
+	 */
 	public default void REPLACE(UNARY_OPERATOR o) {
         Objects.requireNonNull(o);
         LIST_ITERATOR iter = listIterator();
@@ -56,20 +127,85 @@ public interface LIST KEY_GENERIC_TYPE extends COLLECTION KEY_GENERIC_TYPE, List
 	}
 	
 #endif
+#else
+	/**
+	 * A function to replace all values in the list
+	 * @param o the action to replace the values
+	 * @throws NullPointerException if o is null
+	 */
+	@Override
+	public default void replaceAll(UnaryOperator<CLASS_TYPE> o) {
+    	Objects.requireNonNull(o);
+    	LIST_ITERATOR KEY_GENERIC_TYPE iter = listIterator();
+    	while (iter.hasNext()) iter.set(o.apply(iter.NEXT()));
+	}
+	
 #endif
+	/**
+	 * A method to fast add elements to the list
+	 * @param from the index where the elements should be added into the list
+	 * @param a the elements that should be added
+	 * @throws IndexOutOfBoundsException if from is outside of the lists range
+	 */
 	public default void addElements(int from, KEY_TYPE[] a) { addElements(from, a, 0, a.length); }
 	
+	/**
+	 * A method to fast add elements to the list
+	 * @param from the index where the elements should be added into the list
+	 * @param a the elements that should be added
+	 * @param offset the start index of the array should be read from
+	 * @param length how many elements should be read from
+	 * @throws IndexOutOfBoundsException if from is outside of the lists range
+	 * @throws IllegalStateException if offset or length are smaller then 0 or exceed the array length
+	 */
 	public void addElements(int from, KEY_TYPE[] a, int offset, int length);
 	
+	/**
+	 * A method to fast fetch elements from the list
+	 * @param from index where the list should be fetching elements from
+	 * @param a the array where the values should be inserted to
+	 * @returns the inputArray
+	 * @throws NullPointerException if the array is null
+	 * @throws IndexOutOfBoundsException if from is outside of the lists range
+	 * @throws IllegalStateException if offset or length are smaller then 0 or exceed the array length
+	 */
 	public default KEY_TYPE[] getElements(int from, KEY_TYPE[] a) { return getElements(from, a, 0, a.length); }
 	
+	/**
+	 * A method to fast fetch elements from the list
+	 * @param from index where the list should be fetching elements from
+	 * @param a the array where the values should be inserted to
+	 * @param offset the startIndex of where the array should be written to
+	 * @param length the number of elements the values should be fetched from
+	 * @returns the inputArray
+	 * @throws NullPointerException if the array is null
+	 * @throws IndexOutOfBoundsException if from is outside of the lists range
+	 * @throws IllegalStateException if offset or length are smaller then 0 or exceed the array length
+	 */
 	public KEY_TYPE[] getElements(int from, KEY_TYPE[] a, int offset, int length);
 	
+	/**
+	 * a method to fast remove elements from the list.
+	 * @param from the start index of where the elements should be removed from (inclusive)
+	 * @param to the end index of where the elements should be removed to (exclusive)
+	 */
 	public void removeElements(int from, int to);
 	
 #if TYPE_OBJECT
-	public KEY_TYPE[] extractElements(int from, int to, Class<KEY_TYPE> type);
+	/**
+	 * A method to fast extract elements out of the list, this removes the elements that were fetched.
+	 * @param from the start index of where the elements should be fetched from (inclusive)
+	 * @param to the end index of where the elements should be fetched to (exclusive)
+	 * @param type the type of the OutputArray
+	 * @return a array of the elements that were fetched
+	 */
+	public <K> K[] extractElements(int from, int to, Class<K> type);
 	
+	/**
+	 * Sorts the elements specified by the Natural order either by using the Comparator or the elements
+	 * @see List#sort(Comparator)
+	 * @see ARRAYS#stableSort(KEY_TYPE[], Comparator)
+	 */
 	@Override
 	public default void sort(Comparator<? super CLASS_TYPE> c) {
 		KEY_TYPE[] array = (KEY_TYPE[])TO_ARRAY();
@@ -82,6 +218,11 @@ public interface LIST KEY_GENERIC_TYPE extends COLLECTION KEY_GENERIC_TYPE, List
     	}
 	}
 	
+	/**
+	 * Sorts the elements specified by the Natural order either by using the Comparator or the elements using a unstable sort
+	 * @see List#sort(Comparator)
+	 * @see ARRAYS#unstableSort(KEY_TYPE[], Comparator)
+	 */
 	public default void unstableSort(Comparator<? super CLASS_TYPE> c) {
 		KEY_TYPE[] array = (KEY_TYPE[])TO_ARRAY();
 		if(c != null) ARRAYS.unstableSort(array, c);
@@ -94,13 +235,29 @@ public interface LIST KEY_GENERIC_TYPE extends COLLECTION KEY_GENERIC_TYPE, List
 	}
 	
 #else
+	/**
+	 * A method to fast extract elements out of the list, this removes the elements that were fetched.
+	 * @param from the start index of where the elements should be fetched from (inclusive)
+	 * @param to the end index of where the elements should be fetched to (exclusive)
+	 * @return a array of the elements that were fetched
+	 */
 	public KEY_TYPE[] extractElements(int from, int to);
 	
+	/** {@inheritDoc}
+	 * <p>This default implementation delegates to the corresponding type-specific method.
+	 * @deprecated Please use the corresponding type-specific method instead. 
+	 */
 	@Override
+	@Deprecated
 	default void sort(Comparator<? super CLASS_TYPE> c) {
 		sort((K, V) -> c.compare(KEY_TO_OBJ(K), KEY_TO_OBJ(V)));
 	}
-
+	
+	/**
+	 * Sorts the elements specified by the Natural order either by using the Comparator or the elements
+	 * @see List#sort(Comparator)
+	 * @see ARRAYS#stableSort(KEY_TYPE[], Comparator)
+	 */
 	public default void sort(COMPARATOR c) {
 		KEY_TYPE[] array = TO_ARRAY();
 		if(c != null) ARRAYS.stableSort(array, c);
@@ -112,10 +269,20 @@ public interface LIST KEY_GENERIC_TYPE extends COLLECTION KEY_GENERIC_TYPE, List
 		}
 	}
 	
+	/** {@inheritDoc}
+	 * <p>This default implementation delegates to the corresponding type-specific method.
+	 * @deprecated Please use the corresponding type-specific method instead. 
+	 */
+	@Deprecated
 	public default void unstableSort(Comparator<? super CLASS_TYPE> c) {
 		unstableSort((K, V) -> c.compare(KEY_TO_OBJ(K), KEY_TO_OBJ(V)));
 	}
 	
+	/**
+	 * Sorts the elements specified by the Natural order either by using the Comparator or the elements using a unstable sort
+	 * @see List#sort(Comparator)
+	 * @see ARRAYS#unstableSort(KEY_TYPE[], Comparator)
+	 */
 	public default void unstableSort(COMPARATOR c) {
 		KEY_TYPE[] array = TO_ARRAY();
 		if(c != null) ARRAYS.unstableSort(array, c);
@@ -128,60 +295,111 @@ public interface LIST KEY_GENERIC_TYPE extends COLLECTION KEY_GENERIC_TYPE, List
 	}
 	
 #endif
+	/**
+	 * A Type-Specific Iterator of listIterator
+	 * @see List#listIterator
+	 */
 	@Override
 	public LIST_ITERATOR KEY_GENERIC_TYPE listIterator();
 	
+	/**
+	 * A Type-Specific Iterator of listIterator
+	 * @see List#listIterator(int)
+	 */
 	@Override
 	public LIST_ITERATOR KEY_GENERIC_TYPE listIterator(int index);
 	
+	/**
+	 * A Type-Specific List of subList
+	 * @see List#subList(int, int)
+	 */
 	@Override
 	public LIST KEY_GENERIC_TYPE subList(int from, int to);
 	
+	/**
+	 * A Method to ensure the elements are within the requested size.
+	 * If smaller then the stored elements they get removed as needed.
+	 * If bigger it is ensured that enough room is provided depending on the implementation
+	 * @param size the requested amount of elements/room for elements
+	 */
 	public void size(int size);
 	
 #if !TYPE_OBJECT
+	
+	/** {@inheritDoc}
+	 * <p>This default implementation delegates to the corresponding type-specific method.
+	 * @deprecated Please use the corresponding type-specific method instead. 
+	 */
 	@Override
 	@Deprecated
 	public default boolean add(CLASS_TYPE e) {
 		return COLLECTION.super.add(e);
 	}
 	
+	/** {@inheritDoc}
+	 * <p>This default implementation delegates to the corresponding type-specific method.
+	 * @deprecated Please use the corresponding type-specific method instead. 
+	 */
 	@Override
 	@Deprecated
 	public default CLASS_TYPE get(int index) {
 		return KEY_TO_OBJ(GET_KEY(index));
 	}
 	
+	/** {@inheritDoc}
+	 * <p>This default implementation delegates to the corresponding type-specific method.
+	 * @deprecated Please use the corresponding type-specific method instead. 
+	 */
 	@Override
 	@Deprecated
 	public default CLASS_TYPE set(int index, CLASS_TYPE e) {
 		return KEY_TO_OBJ(set(index, OBJ_TO_KEY(e)));
 	}
 	
+	/** {@inheritDoc}
+	 * <p>This default implementation delegates to the corresponding type-specific method.
+	 * @deprecated Please use the corresponding type-specific method instead. 
+	 */
 	@Override
 	@Deprecated
 	public default int indexOf(Object o) {
 		return indexOf(CLASS_TO_KEY(o));
 	}
 	
+	/** {@inheritDoc}
+	 * <p>This default implementation delegates to the corresponding type-specific method.
+	 * @deprecated Please use the corresponding type-specific method instead. 
+	 */
 	@Override
 	@Deprecated
 	public default int lastIndexOf(Object o) {
-		return indexOf(CLASS_TO_KEY(o));
+		return lastIndexOf(CLASS_TO_KEY(o));
 	}
 	
+	/** {@inheritDoc}
+	 * <p>This default implementation delegates to the corresponding type-specific method.
+	 * @deprecated Please use the corresponding type-specific method instead. 
+	 */
 	@Override
 	@Deprecated
 	public default boolean contains(Object o) {
 		return COLLECTION.super.contains(o);
 	}
 	
+	/** {@inheritDoc}
+	 * <p>This default implementation delegates to the corresponding type-specific method.
+	 * @deprecated Please use the corresponding type-specific method instead. 
+	 */
 	@Override
 	@Deprecated
 	public default boolean remove(Object o) {
 		return COLLECTION.super.remove(o);
 	}
 	
+	/** {@inheritDoc}
+	 * <p>This default implementation delegates to the corresponding type-specific method.
+	 * @deprecated Please use the corresponding type-specific method instead. 
+	 */
 	@Override
 	@Deprecated
 	public default CLASS_TYPE remove(int index) {
@@ -189,6 +407,10 @@ public interface LIST KEY_GENERIC_TYPE extends COLLECTION KEY_GENERIC_TYPE, List
 	}
 	
 #if !TYPE_BOOLEAN
+	/** {@inheritDoc}
+	 * <p>This default implementation delegates to the corresponding type-specific method.
+	 * @deprecated Please use the corresponding type-specific method instead. 
+	 */
 	@Override
 	@Deprecated
 	public default void replaceAll(UnaryOperator<CLASS_TYPE> o) {

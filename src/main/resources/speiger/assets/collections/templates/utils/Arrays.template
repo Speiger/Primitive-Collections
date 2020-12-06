@@ -11,6 +11,9 @@ import java.util.Comparator;
 #endif
 import speiger.src.collections.utils.SanityChecks;
 
+/**
+ * A Helper class for Arrays
+ */
 public class ARRAYS
 {
 	public static final int BASE_THRESHOLD = 16;
@@ -19,14 +22,32 @@ public class ARRAYS
 #if !TYPE_OBJECT
 	public static final KEY_TYPE[] EMPTY_ARRAY = new KEY_TYPE[0];
 	
+	/**
+	 * A Helper function to convert a Primitive Array to a CLASS_TYPE Array.
+	 * @param a the array that should be converted
+	 * @return a CLASS_TYPE Array of the input array.
+	 */
 	public static CLASS_TYPE[] wrap(KEY_TYPE[] a) {
 		return wrap(a, 0, a.length);
 	}
 	
+	/**
+	 * A Helper function to convert a Primitive Array to a CLASS_TYPE Array.
+	 * @param a the array that should be converted
+	 * @param length the maximum length that should be coverted
+	 * @return a CLASS_TYPE Array of the input array.
+	 */
 	public static CLASS_TYPE[] wrap(KEY_TYPE[] a, int length) {
 		return wrap(a, 0, length);
 	}
 	
+	/**
+	 * A Helper function to convert a Primitive Array to a CLASS_TYPE Array.
+	 * @param a the array that should be converted
+	 * @param offset the starting offset of the inputarray
+	 * @param length the maximum length that should be coverted
+	 * @return a CLASS_TYPE Array of the input array.
+	 */
 	public static CLASS_TYPE[] wrap(KEY_TYPE[] a, int offset, int length) {
 		SanityChecks.checkArrayCapacity(a.length, offset, length);
 		CLASS_TYPE[] result = new CLASS_TYPE[length];
@@ -35,14 +56,32 @@ public class ARRAYS
 		return result;
 	}
 	
+	/**
+	 * A Helper function to convert a CLASS_TYPE Array to a KEY_TYPE Array.
+	 * @param a the array that should be converted
+	 * @return a KEY_TYPE Array of the input array.
+	 */
 	public static KEY_TYPE[] unwrap(CLASS_TYPE[] a) {
 		return unwrap(a, 0, a.length);
 	}
 	
+	/**
+	 * A Helper function to convert a CLASS_TYPE Array to a KEY_TYPE Array.
+	 * @param a the array that should be converted
+	 * @param length the maximum length that should be coverted
+	 * @return a KEY_TYPE Array of the input array.
+	 */
 	public static KEY_TYPE[] unwrap(CLASS_TYPE[] a, int length) {
 		return unwrap(a, 0, length);
 	}
 	
+	/**
+	 * A Helper function to convert a CLASS_TYPE Array to a KEY_TYPE Array.
+	 * @param a the array that should be converted
+	 * @param offset the starting offset of the inputarray
+	 * @param length the maximum length that should be coverted
+	 * @return a KEY_TYPE Array of the input array.
+	 */
 	public static KEY_TYPE[] unwrap(CLASS_TYPE[] a, int offset, int length) {
 		SanityChecks.checkArrayCapacity(a.length, offset, length);
 		KEY_TYPE[] result = new KEY_TYPE[length];
@@ -54,69 +93,182 @@ public class ARRAYS
 #else
 	public static final Object[] EMPTY_ARRAY = new Object[0];
 	
+	/**
+	 * Function to create a new Array of a given size
+	 * @param clz the class type of array that is requested
+	 * @param length the lenght the array should be.
+	 * @return a Array with the requested type and length
+	 */
 	public static KEY_GENERIC_TYPE KEY_TYPE[] newArray(Class<KEY_TYPE> clz, int length) {
 		if(clz == Object.class) return (KEY_TYPE[])new Object[length];
 		return (KEY_TYPE[]) java.lang.reflect.Array.newInstance(clz, length);
 	}
 	
 #endif
-	
+	/**
+	 * Sorts the specified range of elements according to the order induced by the specified comparator,
+	 * potentially dynamically choosing an appropriate algorithm given the type and size of the array.
+	 * Stable sort referres to Mergesort or Insertionsort
+	 * @param array the array that needs to be sorted
+	 * @param comp the Comparator that decides the sorting order
+	 */
 	public static GENERIC_BRACES void stableSort(KEY_TYPE[] array, COMPARATOR KEY_GENERIC_TYPE comp) {
 		stableSort(array, 0, array.length, comp);
 	}
-
+	
+	/**
+	 * Sorts the specified range of elements according to the order induced by the specified comparator,
+	 * potentially dynamically choosing an appropriate algorithm given the type and size of the array.
+	 * Stable sort referres to Mergesort or Insertionsort
+	 * @param array the array that needs to be sorted
+	 * @param length the maxmium size of the array to be sorted
+	 * @param comp the Comparator that decides the sorting order
+	 */
 	public static GENERIC_BRACES void stableSort(KEY_TYPE[] array, int length, COMPARATOR KEY_GENERIC_TYPE comp) {
 		stableSort(array, 0, length, comp);
 	}
-
+	
+	/**
+	 * Sorts the specified range of elements according to the order induced by the specified comparator,
+	 * potentially dynamically choosing an appropriate algorithm given the type and size of the array.
+	 * Stable sort referres to Mergesort or Insertionsort
+	 * @param array the array that needs to be sorted
+	 * @param from where the array should be sorted from
+	 * @param to where the array should be sorted to
+	 * @param comp the Comparator that decides the sorting order
+	 */
 	public static GENERIC_BRACES void stableSort(KEY_TYPE[] array, int from, int to, COMPARATOR KEY_GENERIC_TYPE comp) {
 		mergeSort(array, null, from, to, comp);
 	}
 	
+	/**
+	 * Sorts an array according to the natural ascending order, 
+	 * potentially dynamically choosing an appropriate algorithm given the type and size of the array.
+	 * Stable sort referres to Mergesort or Insertionsort
+	 * @param array the array that needs to be sorted
+	 */
 	public static COMPAREABLE_BRACES void stableSort(KEY_TYPE[] array) {
 		stableSort(array, 0, array.length);
 	}
-
+	
+	/**
+	 * Sorts an array according to the natural ascending order, 
+	 * potentially dynamically choosing an appropriate algorithm given the type and size of the array.
+	 * Stable sort referres to Mergesort or Insertionsort
+	 * @param array the array that needs to be sorted
+	 * @param length the maxmium size of the array to be sorted
+	 */
 	public static COMPAREABLE_BRACES void stableSort(KEY_TYPE[] array, int length) {
 		stableSort(array, 0, length);
 	}
-
+	
+	/**
+	 * Sorts an array according to the natural ascending order, 
+	 * potentially dynamically choosing an appropriate algorithm given the type and size of the array.
+	 * Stable sort referres to Mergesort or Insertionsort
+	 * @param array the array that needs to be sorted
+	 * @param from where the array should be sorted from
+	 * @param to where the array should be sorted to
+	 */
 	public static COMPAREABLE_BRACES void stableSort(KEY_TYPE[] array, int from, int to) {
 		mergeSort(array, null, from, to);
 	}
 	
+	/**
+	 * Sorts the specified range of elements according to the order induced by the specified comparator,
+	 * potentially dynamically choosing an appropriate algorithm given the type and size of the array.
+	 * Unstable sort referres to QuickSort or SelectionSort
+	 * @param array the array that needs to be sorted
+	 * @param comp the Comparator that decides the sorting order
+	 */
 	public static GENERIC_BRACES void unstableSort(KEY_TYPE[] array, COMPARATOR KEY_GENERIC_TYPE comp) {
 		unstableSort(array, 0, array.length, comp);
 	}
-
+	
+	/**
+	 * Sorts the specified range of elements according to the order induced by the specified comparator,
+	 * potentially dynamically choosing an appropriate algorithm given the type and size of the array.
+	 * Unstable sort referres to QuickSort or SelectionSort
+	 * @param array the array that needs to be sorted
+	 * @param length the maxmium size of the array to be sorted
+	 * @param comp the Comparator that decides the sorting order
+	 */
 	public static GENERIC_BRACES void unstableSort(KEY_TYPE[] array, int length, COMPARATOR KEY_GENERIC_TYPE comp) {
 		unstableSort(array, 0, length, comp);
 	}
-
+	
+	/**
+	 * Sorts the specified range of elements according to the order induced by the specified comparator,
+	 * potentially dynamically choosing an appropriate algorithm given the type and size of the array.
+	 * Unstable sort referres to QuickSort or SelectionSort
+	 * @param array the array that needs to be sorted
+	 * @param from where the array should be sorted from
+	 * @param to where the array should be sorted to
+	 * @param comp the Comparator that decides the sorting order
+	 */
 	public static GENERIC_BRACES void unstableSort(KEY_TYPE[] array, int from, int to, COMPARATOR KEY_GENERIC_TYPE comp) {
 		quickSort(array, from, to, comp);
 	}
 	
+	/**
+	 * Sorts an array according to the natural ascending order, 
+	 * potentially dynamically choosing an appropriate algorithm given the type and size of the array.
+	 * Unstable sort referres to QuickSort or SelectionSort
+	 * @param array the array that needs to be sorted
+	 */
 	public static COMPAREABLE_BRACES void unstableSort(KEY_TYPE[] array) {
 		unstableSort(array, 0, array.length);
 	}
-
+	
+	/**
+	 * Sorts an array according to the natural ascending order, 
+	 * potentially dynamically choosing an appropriate algorithm given the type and size of the array.
+	 * Unstable sort referres to QuickSort or SelectionSort
+	 * @param array the array that needs to be sorted
+	 * @param length the maxmium size of the array to be sorted
+	 */
 	public static COMPAREABLE_BRACES void unstableSort(KEY_TYPE[] array, int length) {
 		unstableSort(array, 0, length);
 	}
-
+	
+	/**
+	 * Sorts an array according to the natural ascending order, 
+	 * potentially dynamically choosing an appropriate algorithm given the type and size of the array.
+	 * Unstable sort referres to QuickSort or SelectionSort
+	 * @param array the array that needs to be sorted
+	 * @param from where the array should be sorted from
+	 * @param to where the array should be sorted to
+	 */
 	public static COMPAREABLE_BRACES void unstableSort(KEY_TYPE[] array, int from, int to) {
 		quickSort(array, from, to);
 	}
 	
+	/**
+	 * Sorts the specified range of elements according to the order induced by the specified comparator using Insertion Sort,
+	 * @param array the array that needs to be sorted
+	 * @param comp the Comparator that decides the sorting order
+	 */
 	public static GENERIC_BRACES void insertionSort(KEY_TYPE[] array, COMPARATOR KEY_GENERIC_TYPE comp) {
 		insertionSort(array, 0, array.length, comp);
 	}
 	
+	/**
+	 * Sorts the specified range of elements according to the order induced by the specified comparator using Insertion Sort,
+	 * @param array the array that needs to be sorted
+	 * @param length the maxmium size of the array to be sorted
+	 * @param comp the Comparator that decides the sorting order
+	 */
 	public static GENERIC_BRACES void insertionSort(KEY_TYPE[] array, int length, COMPARATOR KEY_GENERIC_TYPE comp) {
 		insertionSort(array, 0, length, comp);
 	}
 	
+	/**
+	 * Sorts the specified range of elements according to the order induced by the specified comparator using Insertion Sort,
+	 * @param array the array that needs to be sorted
+	 * @param from where the array should be sorted from
+	 * @param to where the array should be sorted to
+	 * @param comp the Comparator that decides the sorting order
+	 */
 	public static GENERIC_BRACES void insertionSort(KEY_TYPE[] array, int from, int to, COMPARATOR KEY_GENERIC_TYPE comp) {
 		for (int i = from+1;i<to; i++) {
 			KEY_TYPE current = array[i];
@@ -128,14 +280,28 @@ public class ARRAYS
 		}
 	}
 	
+	/**
+	 * Sorts an array according to the natural ascending order using InsertionSort, 
+	 * @param array the array that needs to be sorted
+	 */
 	public static COMPAREABLE_BRACES void insertionSort(KEY_TYPE[] array) {
 		insertionSort(array, 0, array.length);
 	}
 	
+	/**
+	 * Sorts an array according to the natural ascending order using InsertionSort,
+	 * @param array the array that needs to be sorted
+	 * @param length the maxmium size of the array to be sorted
+	 */
 	public static COMPAREABLE_BRACES void insertionSort(KEY_TYPE[] array, int length) {
 		insertionSort(array, 0, length);
 	}
 	
+	/**
+	 * Sorts an array according to the natural ascending order using InsertionSort,
+	 * @param array the array that needs to be sorted
+	 * @param from where the array should be sorted from
+	 */
 	public static COMPAREABLE_BRACES void insertionSort(KEY_TYPE[] array, int from, int to) {
 		for (int i = from+1;i<to; i++) {
 			KEY_TYPE current = array[i];
@@ -147,14 +313,32 @@ public class ARRAYS
 		}
 	}
 	
+	/**
+	 * Sorts the specified range of elements according to the order induced by the specified comparator using Selection Sort,
+	 * @param array the array that needs to be sorted
+	 * @param comp the Comparator that decides the sorting order
+	 */
 	public static GENERIC_BRACES void selectionSort(KEY_TYPE[] array, COMPARATOR KEY_GENERIC_TYPE comp) {
 		selectionSort(array, 0, array.length, comp);
 	}
 	
+	/**
+	 * Sorts the specified range of elements according to the order induced by the specified comparator using Selection Sort,
+	 * @param array the array that needs to be sorted
+	 * @param length the maxmium size of the array to be sorted
+	 * @param comp the Comparator that decides the sorting order
+	 */
 	public static GENERIC_BRACES void selectionSort(KEY_TYPE[] array, int length, COMPARATOR KEY_GENERIC_TYPE comp) {
 		selectionSort(array, 0, length, comp);
 	}
 	
+	/**
+	 * Sorts the specified range of elements according to the order induced by the specified comparator using Selection Sort,
+	 * @param array the array that needs to be sorted
+	 * @param from where the array should be sorted from
+	 * @param to where the array should be sorted to
+	 * @param comp the Comparator that decides the sorting order
+	 */
 	public static GENERIC_BRACES void selectionSort(KEY_TYPE[] array, int from, int to, COMPARATOR KEY_GENERIC_TYPE comp) {
     	for (int i = from; i < to; i++) {
     		KEY_TYPE min = array[i];
@@ -171,14 +355,28 @@ public class ARRAYS
     	}
 	}
 	
+	/**
+	 * Sorts an array according to the natural ascending order using Selection Sort, 
+	 * @param array the array that needs to be sorted
+	 */
 	public static COMPAREABLE_BRACES void selectionSort(KEY_TYPE[] array) {
 		selectionSort(array, 0, array.length);
 	}
 	
+	/**
+	 * Sorts an array according to the natural ascending order using Selection Sort,
+	 * @param array the array that needs to be sorted
+	 * @param length the maxmium size of the array to be sorted
+	 */
 	public static COMPAREABLE_BRACES void selectionSort(KEY_TYPE[] array, int length) {
 		selectionSort(array, 0, length);
 	}
 	
+	/**
+	 * Sorts an array according to the natural ascending order using Selection Sort,
+	 * @param array the array that needs to be sorted
+	 * @param from where the array should be sorted from
+	 */
 	public static COMPAREABLE_BRACES void selectionSort(KEY_TYPE[] array, int from, int to) {
     	for (int i = from; i < to; i++) {
     		KEY_TYPE min = array[i];
@@ -195,14 +393,35 @@ public class ARRAYS
     	}
 	}
 	
+	/**
+	 * Sorts the specified range of elements according to the order induced by the specified comparator using Merge Sort,
+	 * This implementation was copied from <a href="https://github.com/vigna/fastutil">FastUtil</a> with a couple custom optimizations
+	 * @param array the array that needs to be sorted
+	 * @param comp the Comparator that decides the sorting order
+	 */
 	public static GENERIC_BRACES void mergeSort(KEY_TYPE[] array, COMPARATOR KEY_GENERIC_TYPE comp) {
 		mergeSort(array, null, 0, array.length, comp);
 	}
 	
+	/**
+	 * Sorts the specified range of elements according to the order induced by the specified comparator using Merge Sort,
+	 * This implementation was copied from <a href="https://github.com/vigna/fastutil">FastUtil</a> with a couple custom optimizations
+	 * @param array the array that needs to be sorted
+	 * @param length the maxmium size of the array to be sorted
+	 * @param comp the Comparator that decides the sorting order
+	 */
 	public static GENERIC_BRACES void mergeSort(KEY_TYPE[] array, int length, COMPARATOR KEY_GENERIC_TYPE comp) {
 		mergeSort(array, null, 0, length, comp);
 	}
 	
+	/**
+	 * Sorts the specified range of elements according to the order induced by the specified comparator using Merge Sort,
+	 * This implementation was copied from <a href="https://github.com/vigna/fastutil">FastUtil</a> with a couple custom optimizations
+	 * @param array the array that needs to be sorted
+	 * @param from where the array should be sorted from
+	 * @param to where the array should be sorted to
+	 * @param comp the Comparator that decides the sorting order
+	 */
 	public static GENERIC_BRACES void mergeSort(KEY_TYPE[] array, KEY_TYPE[] supp, int from, int to, COMPARATOR KEY_GENERIC_TYPE comp) {
 		if(to - from < BASE_THRESHOLD) {
 			insertionSort(array, from, to, comp);
@@ -223,14 +442,32 @@ public class ARRAYS
 		}
 	}
 	
+	/**
+	 * Sorts an array according to the natural ascending order using Merge Sort, 
+	 * This implementation was copied from <a href="https://github.com/vigna/fastutil">FastUtil</a> with a couple custom optimizations
+	 * @param array the array that needs to be sorted
+	 */
 	public static COMPAREABLE_BRACES void mergeSort(KEY_TYPE[] array) {
 		mergeSort(array, null, 0, array.length);
 	}
 	
+	/**
+	 * Sorts an array according to the natural ascending order using Merge Sort,
+	 * This implementation was copied from <a href="https://github.com/vigna/fastutil">FastUtil</a> with a couple custom optimizations
+	 * @param array the array that needs to be sorted
+	 * @param length the maxmium size of the array to be sorted
+	 */
 	public static COMPAREABLE_BRACES void mergeSort(KEY_TYPE[] array, int length) {
 		mergeSort(array, null, 0, length);
 	}
 	
+	/**
+	 * Sorts an array according to the natural ascending order using Merge Sort,
+	 * This implementation was copied from <a href="https://github.com/vigna/fastutil">FastUtil</a> with a couple custom optimizations
+	 * @param array the array that needs to be sorted
+	 * @param from where the array should be sorted from
+	 * @param to where the array should be sorted to
+	 */
 	public static COMPAREABLE_BRACES void mergeSort(KEY_TYPE[] array, KEY_TYPE[] supp, int from, int to) {
 		if(to - from < BASE_THRESHOLD) {
 			insertionSort(array, from, to);
@@ -251,14 +488,38 @@ public class ARRAYS
 		}
 	}
 	
+	/**
+	 * Sorts the specified range of elements according to the order induced by the specified comparator using a Parallel Merge Sort,
+	 * This implementation was copied from <a href="https://github.com/vigna/fastutil">FastUtil</a> with a couple custom optimizations
+	 * @param array the array that needs to be sorted
+	 * @param comp the Comparator that decides the sorting order
+	 * @Note This parallelization is invoked through {@link SanityChecks#invokeTask} which the threadpool can be changed as needed
+	 */
 	public static GENERIC_BRACES void parallelMergeSort(KEY_TYPE[] array, COMPARATOR KEY_GENERIC_TYPE comp) {
 		parallelMergeSort(array, null, 0, array.length, comp);
 	}
 	
+	/**
+	 * Sorts the specified range of elements according to the order induced by the specified comparator using Parallel Merge Sort,
+	 * This implementation was copied from <a href="https://github.com/vigna/fastutil">FastUtil</a> with a couple custom optimizations
+	 * @param array the array that needs to be sorted
+	 * @param length the maxmium size of the array to be sorted
+	 * @param comp the Comparator that decides the sorting order
+	 * @Note This parallelization is invoked through {@link SanityChecks#invokeTask} which the threadpool can be changed as needed
+	 */
 	public static GENERIC_BRACES void parallelMergeSort(KEY_TYPE[] array, int length, COMPARATOR KEY_GENERIC_TYPE comp) {
 		parallelMergeSort(array, null, 0, length, comp);
 	}
 	
+	/**
+	 * Sorts the specified range of elements according to the order induced by the specified comparator using Parallel Merge Sort,
+	 * This implementation was copied from <a href="https://github.com/vigna/fastutil">FastUtil</a> with a couple custom optimizations
+	 * @param array the array that needs to be sorted
+	 * @param from where the array should be sorted from
+	 * @param to where the array should be sorted to
+	 * @param comp the Comparator that decides the sorting order
+	 * @Note This parallelization is invoked through {@link SanityChecks#invokeTask} which the threadpool can be changed as needed
+	 */
 	public static GENERIC_BRACES void parallelMergeSort(KEY_TYPE[] array, KEY_TYPE[] supp, int from, int to, COMPARATOR KEY_GENERIC_TYPE comp) {
 		if(SanityChecks.canParallelTask() && to - from >= PARALLEL_THRESHOLD) {
 			SanityChecks.invokeTask(new MergeSortActionCompBRACES(array, supp, from, to, comp));
@@ -267,14 +528,35 @@ public class ARRAYS
 		mergeSort(array, supp, from, to, comp);
 	}
 	
+	/**
+	 * Sorts an array according to the natural ascending order using Parallel Merge Sort, 
+	 * This implementation was copied from <a href="https://github.com/vigna/fastutil">FastUtil</a> with a couple custom optimizations
+	 * @param array the array that needs to be sorted
+	 * @Note This parallelization is invoked through {@link SanityChecks#invokeTask} which the threadpool can be changed as needed
+	 */
 	public static COMPAREABLE_BRACES void parallelMergeSort(KEY_TYPE[] array) {
 		parallelMergeSort(array, null, 0, array.length);
 	}
 	
+	/**
+	 * Sorts an array according to the natural ascending order using Parallel Merge Sort,
+	 * This implementation was copied from <a href="https://github.com/vigna/fastutil">FastUtil</a> with a couple custom optimizations
+	 * @param array the array that needs to be sorted
+	 * @param length the maxmium size of the array to be sorted
+	 * @Note This parallelization is invoked through {@link SanityChecks#invokeTask} which the threadpool can be changed as needed
+	 */
 	public static COMPAREABLE_BRACES void parallelMergeSort(KEY_TYPE[] array, int length) {
 		parallelMergeSort(array, null, 0, length);
 	}
 	
+	/**
+	 * Sorts an array according to the natural ascending order using Parallel Merge Sort,
+	 * This implementation was copied from <a href="https://github.com/vigna/fastutil">FastUtil</a> with a couple custom optimizations
+	 * @param array the array that needs to be sorted
+	 * @param from where the array should be sorted from
+	 * @param to where the array should be sorted to
+	 * @Note This parallelization is invoked through {@link SanityChecks#invokeTask} which the threadpool can be changed as needed
+	 */
 	public static COMPAREABLE_BRACES void parallelMergeSort(KEY_TYPE[] array, KEY_TYPE[] supp, int from, int to) {
 		if(SanityChecks.canParallelTask() && to - from >= PARALLEL_THRESHOLD) {
 			SanityChecks.invokeTask(new MergeSortActionBRACES(array, supp, from, to));
@@ -283,14 +565,35 @@ public class ARRAYS
 		mergeSort(array, supp, from, to);
 	}
 	
+	/**
+	 * Sorts the specified range of elements according to the order induced by the specified comparator using Memory Free Merge Sort,
+	 * This implementation is inspired by <a href="https://github.com/vigna/fastutil">FastUtil</a> original merge sort, but without the need to allocate a copy of the original Array. It is in Very Unsorted Instances 50% slower then Mergesort, otherwise it as fast.
+	 * @param array the array that needs to be sorted
+	 * @param comp the Comparator that decides the sorting order
+	 */
 	public static GENERIC_BRACES void memFreeMergeSort(KEY_TYPE[] array, COMPARATOR KEY_GENERIC_TYPE comp) {
 		memFreeMergeSort(array, 0, array.length, comp);
 	}
 	
+	/**
+	 * Sorts the specified range of elements according to the order induced by the specified comparator using Memory Free Merge Sort,
+	 * This implementation is inspired by <a href="https://github.com/vigna/fastutil">FastUtil</a> original merge sort, but without the need to allocate a copy of the original Array. It is in Very Unsorted Instances 50% slower then Mergesort, otherwise it as fast.
+	 * @param array the array that needs to be sorted
+	 * @param length the maxmium size of the array to be sorted
+	 * @param comp the Comparator that decides the sorting order
+	 */
 	public static GENERIC_BRACES void memFreeMergeSort(KEY_TYPE[] array, int length, COMPARATOR KEY_GENERIC_TYPE comp) {
 		memFreeMergeSort(array, 0, length, comp);
 	}
 	
+	/**
+	 * Sorts the specified range of elements according to the order induced by the specified comparator using Memory Free Merge Sort,
+	 * This implementation is inspired by <a href="https://github.com/vigna/fastutil">FastUtil</a> original merge sort, but without the need to allocate a copy of the original Array. It is in Very Unsorted Instances 50% slower then Mergesort, otherwise it as fast.
+	 * @param array the array that needs to be sorted
+	 * @param from where the array should be sorted from
+	 * @param to where the array should be sorted to
+	 * @param comp the Comparator that decides the sorting order
+	 */
 	public static GENERIC_BRACES void memFreeMergeSort(KEY_TYPE[] array, int from, int to, COMPARATOR KEY_GENERIC_TYPE comp) {
 		if(to - from < BASE_THRESHOLD) {
 			insertionSort(array, from, to, comp);
@@ -318,14 +621,32 @@ public class ARRAYS
 		}
 	}
 	
+	/**
+	 * Sorts an array according to the natural ascending order using Memory Free Merge Sort, 
+	 * This implementation is inspired by <a href="https://github.com/vigna/fastutil">FastUtil</a> original merge sort, but without the need to allocate a copy of the original Array. It is in Very Unsorted Instances 50% slower then Mergesort, otherwise it as fast.
+	 * @param array the array that needs to be sorted
+	 */
 	public static COMPAREABLE_BRACES void memFreeMergeSort(KEY_TYPE[] array) {
 		memFreeMergeSort(array, 0, array.length);
 	}
 	
+	/**
+	 * Sorts an array according to the natural ascending order using Memory Free Merge Sort,
+	 * This implementation is inspired by <a href="https://github.com/vigna/fastutil">FastUtil</a> original merge sort, but without the need to allocate a copy of the original Array. It is in Very Unsorted Instances 50% slower then Mergesort, otherwise it as fast.
+	 * @param array the array that needs to be sorted
+	 * @param length the maxmium size of the array to be sorted
+	 */
 	public static COMPAREABLE_BRACES void memFreeMergeSort(KEY_TYPE[] array, int length) {
 		memFreeMergeSort(array, 0, length);
 	}
 	
+	/**
+	 * Sorts an array according to the natural ascending order using Memory Free Merge Sort,
+	 * This implementation is inspired by <a href="https://github.com/vigna/fastutil">FastUtil</a> original merge sort, but without the need to allocate a copy of the original Array. It is in Very Unsorted Instances 50% slower then Mergesort, otherwise it as fast.
+	 * @param array the array that needs to be sorted
+	 * @param from where the array should be sorted from
+	 * @param to where the array should be sorted to
+	 */
 	public static COMPAREABLE_BRACES void memFreeMergeSort(KEY_TYPE[] array, int from, int to) {
 		if(to - from < BASE_THRESHOLD) {
 			insertionSort(array, from, to);
@@ -353,14 +674,38 @@ public class ARRAYS
 		}
 	}
 	
+	/**
+	 * Sorts the specified range of elements according to the order induced by the specified comparator using Parallel Memory Free Merge Sort,
+	 * This implementation is inspired by <a href="https://github.com/vigna/fastutil">FastUtil</a> original merge sort, but without the need to allocate a copy of the original Array. It is in Very Unsorted Instances 50% slower then Mergesort, otherwise it as fast.
+	 * @param array the array that needs to be sorted
+	 * @param comp the Comparator that decides the sorting order
+	 * @Note This parallelization is invoked through {@link SanityChecks#invokeTask} which the threadpool can be changed as needed
+	 */
 	public static GENERIC_BRACES void parallelMemFreeMergeSort(KEY_TYPE[] array, COMPARATOR KEY_GENERIC_TYPE comp) {
 		parallelMemFreeMergeSort(array, 0, array.length, comp);
 	}
 	
+	/**
+	 * Sorts the specified range of elements according to the order induced by the specified comparator using Parallel Memory Free Merge Sort,
+	 * This implementation is inspired by <a href="https://github.com/vigna/fastutil">FastUtil</a> original merge sort, but without the need to allocate a copy of the original Array. It is in Very Unsorted Instances 50% slower then Mergesort, otherwise it as fast.
+	 * @param array the array that needs to be sorted
+	 * @param length the maxmium size of the array to be sorted
+	 * @param comp the Comparator that decides the sorting order
+	 * @Note This parallelization is invoked through {@link SanityChecks#invokeTask} which the threadpool can be changed as needed
+	 */
 	public static GENERIC_BRACES void parallelMemFreeMergeSort(KEY_TYPE[] array, int length, COMPARATOR KEY_GENERIC_TYPE comp) {
 		parallelMemFreeMergeSort(array, 0, length, comp);
 	}
 	
+	/**
+	 * Sorts the specified range of elements according to the order induced by the specified comparator using Parallel Memory Free Merge Sort,
+	 * This implementation is inspired by <a href="https://github.com/vigna/fastutil">FastUtil</a> original merge sort, but without the need to allocate a copy of the original Array. It is in Very Unsorted Instances 50% slower then Mergesort, otherwise it as fast.
+	 * @param array the array that needs to be sorted
+	 * @param from where the array should be sorted from
+	 * @param to where the array should be sorted to
+	 * @param comp the Comparator that decides the sorting order
+	 * @Note This parallelization is invoked through {@link SanityChecks#invokeTask} which the threadpool can be changed as needed
+	 */
 	public static GENERIC_BRACES void parallelMemFreeMergeSort(KEY_TYPE[] array, int from, int to, COMPARATOR KEY_GENERIC_TYPE comp) {
 		if(SanityChecks.canParallelTask() && to - from >= PARALLEL_THRESHOLD) {
 			SanityChecks.invokeTask(new MemFreeMergeSortActionCompBRACES(array, from, to, comp));
@@ -369,14 +714,35 @@ public class ARRAYS
 		memFreeMergeSort(array, from, to, comp);
 	}
 	
+	/**
+	 * Sorts an array according to the natural ascending order using Parallel Memory Free Merge Sort, 
+	 * This implementation is inspired by <a href="https://github.com/vigna/fastutil">FastUtil</a> original merge sort, but without the need to allocate a copy of the original Array. It is in Very Unsorted Instances 50% slower then Mergesort, otherwise it as fast.
+	 * @param array the array that needs to be sorted
+	 * @Note This parallelization is invoked through {@link SanityChecks#invokeTask} which the threadpool can be changed as needed
+	 */
 	public static COMPAREABLE_BRACES void parallelMemFreeMergeSort(KEY_TYPE[] array) {
 		parallelMemFreeMergeSort(array, 0, array.length);
 	}
 	
+	/**
+	 * Sorts an array according to the natural ascending order using Parallel Memory Free Merge Sort,
+	 * This implementation is inspired by <a href="https://github.com/vigna/fastutil">FastUtil</a> original merge sort, but without the need to allocate a copy of the original Array. It is in Very Unsorted Instances 50% slower then Mergesort, otherwise it as fast.
+	 * @param array the array that needs to be sorted
+	 * @param length the maxmium size of the array to be sorted
+	 * @Note This parallelization is invoked through {@link SanityChecks#invokeTask} which the threadpool can be changed as needed
+	 */
 	public static COMPAREABLE_BRACES void parallelMemFreeMergeSort(KEY_TYPE[] array, int length) {
 		parallelMemFreeMergeSort(array, 0, length);
 	}
 	
+	/**
+	 * Sorts an array according to the natural ascending order using Parallel Memory Free Merge Sort,
+	 * This implementation is inspired by <a href="https://github.com/vigna/fastutil">FastUtil</a> original merge sort, but without the need to allocate a copy of the original Array. It is in Very Unsorted Instances 50% slower then Mergesort, otherwise it as fast.
+	 * @param array the array that needs to be sorted
+	 * @param from where the array should be sorted from
+	 * @param to where the array should be sorted to
+	 * @Note This parallelization is invoked through {@link SanityChecks#invokeTask} which the threadpool can be changed as needed
+	 */
 	public static COMPAREABLE_BRACES void parallelMemFreeMergeSort(KEY_TYPE[] array, int from, int to) {
 		if(SanityChecks.canParallelTask() && to - from >= PARALLEL_THRESHOLD) {
 			SanityChecks.invokeTask(new MemFreeMergeSortActionBRACES(array, from, to));
@@ -385,14 +751,38 @@ public class ARRAYS
 		memFreeMergeSort(array, from, to);
 	}
 	
+	/**
+	 * Sorts the specified range of elements according to the order induced by the specified comparator using Quick Sort,
+	 * This implementation is a custom of <a href="https://github.com/vigna/fastutil">FastUtil</a> quicksort but with a different code structure,
+	 * and that sorting Algorithm is based on the tuned quicksort adapted from Jon L. Bentley and M. DouglasMcIlroy, “Engineering a Sort Function”, Software: Practice and Experience, 23(11), pages1249−1265, 1993. 
+	 * @param array the array that needs to be sorted
+	 * @param comp the Comparator that decides the sorting order
+	 */
 	public static GENERIC_BRACES void quickSort(KEY_TYPE[] array, COMPARATOR KEY_GENERIC_TYPE comp) {
 		quickSort(array, 0, array.length, comp);
 	}
 	
+	/**
+	 * Sorts the specified range of elements according to the order induced by the specified comparator using Quick Sort,
+	 * This implementation is a custom of <a href="https://github.com/vigna/fastutil">FastUtil</a> quicksort but with a different code structure,
+	 * and that sorting Algorithm is based on the tuned quicksort adapted from Jon L. Bentley and M. DouglasMcIlroy, “Engineering a Sort Function”, Software: Practice and Experience, 23(11), pages1249−1265, 1993. 
+	 * @param array the array that needs to be sorted
+	 * @param length the maxmium size of the array to be sorted
+	 * @param comp the Comparator that decides the sorting order
+	 */
 	public static GENERIC_BRACES void quickSort(KEY_TYPE[] array, int length, COMPARATOR KEY_GENERIC_TYPE comp) {
 		quickSort(array, 0, length, comp);
 	}
 	
+	/**
+	 * Sorts the specified range of elements according to the order induced by the specified comparator using Quick Sort,
+	 * This implementation is a custom of <a href="https://github.com/vigna/fastutil">FastUtil</a> quicksort but with a different code structure,
+	 * and that sorting Algorithm is based on the tuned quicksort adapted from Jon L. Bentley and M. DouglasMcIlroy, “Engineering a Sort Function”, Software: Practice and Experience, 23(11), pages1249−1265, 1993. 
+	 * @param array the array that needs to be sorted
+	 * @param from where the array should be sorted from
+	 * @param to where the array should be sorted to
+	 * @param comp the Comparator that decides the sorting order
+	 */
 	public static GENERIC_BRACES void quickSort(KEY_TYPE[] array, int from, int to, COMPARATOR KEY_GENERIC_TYPE comp) {
 		int length = to - from;
 		if(length <= 0) return;
@@ -417,14 +807,35 @@ public class ARRAYS
 		if((length = d - c) > 1) quickSort(array, to - length, to, comp);
 	}
 	
+	/**
+	 * Sorts an array according to the natural ascending order using Quick Sort, 
+	 * This implementation is a custom of <a href="https://github.com/vigna/fastutil">FastUtil</a> quicksort but with a different code structure,
+	 * and that sorting Algorithm is based on the tuned quicksort adapted from Jon L. Bentley and M. DouglasMcIlroy, “Engineering a Sort Function”, Software: Practice and Experience, 23(11), pages1249−1265, 1993. 
+	 * @param array the array that needs to be sorted
+	 */
 	public static COMPAREABLE_BRACES void quickSort(KEY_TYPE[] array) {
 		quickSort(array, 0, array.length);
 	}
 	
+	/**
+	 * Sorts an array according to the natural ascending order using Quick Sort,
+	 * This implementation is a custom of <a href="https://github.com/vigna/fastutil">FastUtil</a> quicksort but with a different code structure,
+	 * and that sorting Algorithm is based on the tuned quicksort adapted from Jon L. Bentley and M. DouglasMcIlroy, “Engineering a Sort Function”, Software: Practice and Experience, 23(11), pages1249−1265, 1993. 
+	 * @param array the array that needs to be sorted
+	 * @param length the maxmium size of the array to be sorted
+	 */
 	public static COMPAREABLE_BRACES void quickSort(KEY_TYPE[] array, int length) {
 		quickSort(array, 0, length);
 	}
 	
+	/**
+	 * Sorts an array according to the natural ascending order using Quick Sort,
+	 * This implementation is a custom of <a href="https://github.com/vigna/fastutil">FastUtil</a> quicksort but with a different code structure,
+	 * and that sorting Algorithm is based on the tuned quicksort adapted from Jon L. Bentley and M. DouglasMcIlroy, “Engineering a Sort Function”, Software: Practice and Experience, 23(11), pages1249−1265, 1993. 
+	 * @param array the array that needs to be sorted
+	 * @param from where the array should be sorted from
+	 * @param to where the array should be sorted to
+	 */
 	public static COMPAREABLE_BRACES void quickSort(KEY_TYPE[] array, int from, int to) {
 		int length = to - from;
 		if(length <= 0) return;
@@ -449,14 +860,41 @@ public class ARRAYS
 		if((length = d - c) > 1) quickSort(array, to - length, to);
 	}
 	
+	/**
+	 * Sorts the specified range of elements according to the order induced by the specified comparator using Parallel Quick Sort,
+	 * This implementation is a custom of <a href="https://github.com/vigna/fastutil">FastUtil</a> quicksort but with a different code structure,
+	 * and that sorting Algorithm is based on the tuned quicksort adapted from Jon L. Bentley and M. DouglasMcIlroy, “Engineering a Sort Function”, Software: Practice and Experience, 23(11), pages1249−1265, 1993. 
+	 * @param array the array that needs to be sorted
+	 * @param comp the Comparator that decides the sorting order
+	 * @Note This parallelization is invoked through {@link SanityChecks#invokeTask} which the threadpool can be changed as needed
+	 */
 	public static GENERIC_BRACES void parallelQuickSort(KEY_TYPE[] array, COMPARATOR KEY_GENERIC_TYPE comp) {
 		parallelQuickSort(array, 0, array.length, comp);
 	}
 	
+	/**
+	 * Sorts the specified range of elements according to the order induced by the specified comparator using Parallel Quick Sort,
+	 * This implementation is a custom of <a href="https://github.com/vigna/fastutil">FastUtil</a> quicksort but with a different code structure,
+	 * and that sorting Algorithm is based on the tuned quicksort adapted from Jon L. Bentley and M. DouglasMcIlroy, “Engineering a Sort Function”, Software: Practice and Experience, 23(11), pages1249−1265, 1993. 
+	 * @param array the array that needs to be sorted
+	 * @param length the maxmium size of the array to be sorted
+	 * @param comp the Comparator that decides the sorting order
+	 * @Note This parallelization is invoked through {@link SanityChecks#invokeTask} which the threadpool can be changed as needed
+	 */
 	public static GENERIC_BRACES void parallelQuickSort(KEY_TYPE[] array, int length, COMPARATOR KEY_GENERIC_TYPE comp) {
 		parallelQuickSort(array, 0, length, comp);
 	}
 	
+	/**
+	 * Sorts the specified range of elements according to the order induced by the specified comparator using Parallel Quick Sort,
+	 * This implementation is a custom of <a href="https://github.com/vigna/fastutil">FastUtil</a> quicksort but with a different code structure,
+	 * and that sorting Algorithm is based on the tuned quicksort adapted from Jon L. Bentley and M. DouglasMcIlroy, “Engineering a Sort Function”, Software: Practice and Experience, 23(11), pages1249−1265, 1993. 
+	 * @param array the array that needs to be sorted
+	 * @param from where the array should be sorted from
+	 * @param to where the array should be sorted to
+	 * @param comp the Comparator that decides the sorting order
+	 * @Note This parallelization is invoked through {@link SanityChecks#invokeTask} which the threadpool can be changed as needed
+	 */
 	public static GENERIC_BRACES void parallelQuickSort(KEY_TYPE[] array, int from, int to, COMPARATOR KEY_GENERIC_TYPE comp) {
 		if(SanityChecks.canParallelTask() && to - from >= PARALLEL_THRESHOLD) {
 			SanityChecks.invokeTask(new QuickSortActionCompBRACES(array, from, to, comp));
@@ -465,14 +903,38 @@ public class ARRAYS
 		quickSort(array, from, to, comp);
 	}
 	
+	/**
+	 * Sorts an array according to the natural ascending order using Parallel Quick Sort, 
+	 * This implementation is a custom of <a href="https://github.com/vigna/fastutil">FastUtil</a> quicksort but with a different code structure,
+	 * and that sorting Algorithm is based on the tuned quicksort adapted from Jon L. Bentley and M. DouglasMcIlroy, “Engineering a Sort Function”, Software: Practice and Experience, 23(11), pages1249−1265, 1993. 
+	 * @param array the array that needs to be sorted
+	 * @Note This parallelization is invoked through {@link SanityChecks#invokeTask} which the threadpool can be changed as needed
+	 */
 	public static COMPAREABLE_BRACES void parallelQuickSort(KEY_TYPE[] array) {
 		parallelQuickSort(array, 0, array.length);
 	}
 	
+	/**
+	 * Sorts an array according to the natural ascending order using Parallel Quick Sort,
+	 * This implementation is a custom of <a href="https://github.com/vigna/fastutil">FastUtil</a> quicksort but with a different code structure,
+	 * and that sorting Algorithm is based on the tuned quicksort adapted from Jon L. Bentley and M. DouglasMcIlroy, “Engineering a Sort Function”, Software: Practice and Experience, 23(11), pages1249−1265, 1993. 
+	 * @param array the array that needs to be sorted
+	 * @param length the maxmium size of the array to be sorted
+	 * @Note This parallelization is invoked through {@link SanityChecks#invokeTask} which the threadpool can be changed as needed
+	 */
 	public static COMPAREABLE_BRACES void parallelQuickSort(KEY_TYPE[] array, int length) {
 		parallelQuickSort(array, 0, length);
 	}
 	
+	/**
+	 * Sorts an array according to the natural ascending order using Parallel Quick Sort,
+	 * This implementation is a custom of <a href="https://github.com/vigna/fastutil">FastUtil</a> quicksort but with a different code structure,
+	 * and that sorting Algorithm is based on the tuned quicksort adapted from Jon L. Bentley and M. DouglasMcIlroy, “Engineering a Sort Function”, Software: Practice and Experience, 23(11), pages1249−1265, 1993. 
+	 * @param array the array that needs to be sorted
+	 * @param from where the array should be sorted from
+	 * @param to where the array should be sorted to
+	 * @Note This parallelization is invoked through {@link SanityChecks#invokeTask} which the threadpool can be changed as needed
+	 */
 	public static COMPAREABLE_BRACES void parallelQuickSort(KEY_TYPE[] array, int from, int to) {
 		if(SanityChecks.canParallelTask() && to - from >= PARALLEL_THRESHOLD) {
 			SanityChecks.invokeTask(new QuickSortActionBRACES(array, from, to));
@@ -481,7 +943,7 @@ public class ARRAYS
 		quickSort(array, from, to);
 	}
 	
-	public static GENERIC_BRACES void swap(KEY_TYPE[] a, int from, int to) {
+	static GENERIC_BRACES void swap(KEY_TYPE[] a, int from, int to) {
 		KEY_TYPE t = a[from];
 		a[from] = a[to];
 		a[to] = t;

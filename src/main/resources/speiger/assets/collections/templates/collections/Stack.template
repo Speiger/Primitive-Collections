@@ -2,35 +2,78 @@ package speiger.src.collections.PACKAGE.collections;
 
 import speiger.src.collections.utils.Stack;
 
+/**
+ * A Type-Specific {@link Stack} that reduces (un)boxing
+ */
 public interface STACK extends Stack<CLASS_TYPE>
 {
+	/**
+	 * Inserts a given Object on top of the stack
+	 * @param e the Object to insert
+	 * @see Stack#push(Object)
+	 */
 	public void PUSH(KEY_TYPE e);
 	
+	/**
+	 * Removes the Object on top of the stack.
+	 * @return the element that is on top of the stack
+	 * @throws ArrayIndexOutOfBoundsException if the stack is empty
+	 * @see Stack#pop()
+	 */
 	public KEY_TYPE POP();
 	
+	/**
+	 * Provides the Object on top of the stack
+	 * @return the element that is on top of the stack
+	 * @throws ArrayIndexOutOfBoundsException if the stack is empty
+ 	 * @see Stack#top()
+	 */
 	public default KEY_TYPE TOP() {
 		return PEEK(0);
 	}
 	
+	/**
+	 * Provides the Selected Object from the stack.
+	 * Top to bottom
+	 * @param index of the element that should be provided
+	 * @return the element that was requested
+ 	 * @throws ArrayIndexOutOfBoundsException if the index is out of bounds
+ 	 * @see Stack#peek(int)
+	 */
 	public KEY_TYPE PEEK(int index);
 	
 #if !OBJECT_TYPE
+	/** {@inheritDoc}
+ 	* <p>This default implementation delegates to the corresponding type-specific method.
+ 	* @deprecated Please use the corresponding type-specific method instead. 
+ 	*/
+	@Override
 	@Deprecated
 	public default void push(CLASS_TYPE e) { PUSH(OBJ_TO_KEY(e)); }
 	
+	/** {@inheritDoc}
+	* <p>This default implementation delegates to the corresponding type-specific method.
+	* @deprecated Please use the corresponding type-specific method instead. 
+	*/
+	@Override
 	@Deprecated
 	public default CLASS_TYPE pop() { return KEY_TO_OBJ(POP()); }
 	
+	/** {@inheritDoc}
+ 	* <p>This default implementation delegates to the corresponding type-specific method.
+ 	* @deprecated Please use the corresponding type-specific method instead. 
+ 	*/
+	@Override
 	@Deprecated
 	public default CLASS_TYPE top() {
 		return peek(size() - 1);
 	}
 	
-	@Deprecated
-	public default CLASS_TYPE bottom() {
-		return peek(0);
-	}
-	
+	/** {@inheritDoc}
+ 	* <p>This default implementation delegates to the corresponding type-specific method.
+ 	* @deprecated Please use the corresponding type-specific method instead. 
+ 	*/
+	@Override
 	@Deprecated
 	public default CLASS_TYPE peek(int index) { return KEY_TO_OBJ(PEEK(index)); }
 #endif

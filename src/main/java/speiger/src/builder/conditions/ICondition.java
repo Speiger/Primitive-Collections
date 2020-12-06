@@ -10,6 +10,7 @@ public interface ICondition
 	
 	public boolean isValid(Set<String> parsePool);
 	
+	public default boolean canContinue() { return false; }
 	
 	public static ICondition parse(String condition)
 	{

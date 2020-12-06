@@ -246,10 +246,10 @@ public abstract class ABSTRACT_LIST KEY_GENERIC_TYPE extends ABSTRACT_COLLECTION
 		
 #if TYPE_OBJECT
 		@Override
-		public KEY_TYPE[] extractElements(int from, int to, Class<KEY_TYPE> clz) {
+		public <K> K[] extractElements(int from, int to, Class<K> clz) {
 			checkRange(from);
 			checkRange(to);
-			KEY_TYPE[] a = l.extractElements(from + offset, to + offset, clz);
+			K[] a = l.extractElements(from + offset, to + offset, clz);
 			size -= to - from;
 			return a;
 		}

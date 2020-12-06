@@ -27,7 +27,6 @@ public class GlobalVariables
 	public GlobalVariables createVariables()
 	{
 		addSimpleMapper("PACKAGE", type.getPathType());
-		addDeprication("@Primitive");
 		addSimpleMapper("CLASS_TYPE", type.getClassType());
 		addSimpleMapper("KEY_TYPE", type.getKeyType());
 		addSimpleMapper("EMPTY_VALUE", type.getEmptyValue());
@@ -43,12 +42,16 @@ public class GlobalVariables
 			addSimpleMapper("JAVA_TYPE", type.getCustomJDKType().getKeyType());
 			addSimpleMapper("SANITY_CAST", "castTo"+type.getFileType());
 		}
+		addSimpleMapper("@PrimitiveDoc", "");
+		addDeprication("@Primitive");
 		return this;
 	}
 	
+	
+	
 	public GlobalVariables createHelperVariables()
 	{
-		addArgumentMapper("EQUALS_KEY_TYPE", type.isObject() ? "Objects.equals(%1$s, %2$s)" : "Objects.equals(KEY_TO_OBJ(%1$s), %2$s)").removeBraces();
+		addArgumentMapper("EQUALS_KEY_TYPE", type.isObject() ? "Objects.equals(%2$s, %1$s)" : "Objects.equals(%2$s, KEY_TO_OBJ(%1$s))").removeBraces();
 		addArgumentMapper("EQUALS", type.getEquals()).removeBraces();
 		addArgumentMapper("COMPARE_TO", type.isObject() ? "%1$s.compareTo(%2$s)" : type.getClassType()+".compare(%1$s, %2$s)").removeBraces();
 		addInjectMapper("KEY_TO_OBJ", type.isObject() ? "%s" : type.getClassType()+".valueOf(%s)").removeBraces();

@@ -9,20 +9,54 @@ import speiger.src.collections.PACKAGE.functions.CONSUMER;
 
 #endif
 
+/**
+ * A Type-Specific {@link Iterator} that reduces (un)boxing
+ */
 public interface ITERATOR KEY_GENERIC_TYPE extends Iterator<CLASS_TYPE>
 {
 #if !TYPE_OBJECT
+	/**
+ 	* Returns the next element in the iteration.
+ 	*
+ 	* @return the next element in the iteration
+ 	* @throws NoSuchElementException if the iteration has no more elements
+ 	* @see Iterator#next()
+ 	*/
 	public KEY_TYPE NEXT();
 	
-	@Deprecated
+	/** {@inheritDoc}
+	* <p>This default implementation delegates to the corresponding type-specific method.
+	* @deprecated Please use the corresponding type-specific method instead. 
+	*/
 	@Override
+	@Deprecated
 	public default CLASS_TYPE next() { return KEY_TO_OBJ(NEXT()); }
 	
+    /**
+     * Performs the given action for each remaining element until all elements
+     * have been processed or the action throws an exception.  Actions are
+     * performed in the order of iteration, if that order is specified.
+     * Exceptions thrown by the action are relayed to the caller.
+     *
+     * @implSpec
+     * <p>The default implementation behaves as if:
+     * <pre>{@code
+     *     while (hasNext()) action.accept(NEXT());
+     * }</pre>
+     *
+     * @param action The action to be performed for each element
+     * @throws NullPointerException if the specified action is null
+     * @see Iterator#forEachRemaining(Consumer)
+     */
 	public default void forEachRemaining(CONSUMER action) {
         Objects.requireNonNull(action);
         while(hasNext()) { action.accept(NEXT()); }
 	}
 	
+	/** {@inheritDoc}
+ 	* <p>This default implementation delegates to the corresponding type-specific method.
+ 	* @deprecated Please use the corresponding type-specific method instead. 
+ 	*/
 	@Deprecated
 	@Override
 	default void forEachRemaining(Consumer<? super CLASS_TYPE> action) {
@@ -31,6 +65,11 @@ public interface ITERATOR KEY_GENERIC_TYPE extends Iterator<CLASS_TYPE>
 	}
 	
 #endif
+	/**
+	 * Skips the Given amount of elements if possible. A Optimization function to skip elements faster if the implementation allows it.
+	 * @param amount the amount of elements that should be skipped
+	 * @return the amount of elements that were skipped
+	 */
 	default int skip(int amount) {
 		if(amount < 0) throw new IllegalStateException("Negative Numbers are not allowed");
 		int i = 0;

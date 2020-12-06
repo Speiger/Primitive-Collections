@@ -1,8 +1,31 @@
 package speiger.src.collections.PACKAGE.utils;
 
+import java.util.Objects;
+import java.util.function.Consumer;
+
 import speiger.src.collections.utils.IArray;
 
+/**
+ * Type-Specific Helper class to get the underlying array of array implementations.
+ * @see speiger.src.collections.PACKAGE.lists.ARRAY_LIST
+ */
 public interface IARRAY KEY_GENERIC_TYPE extends IArray
 {
+	/**
+	 * Provides the Underlying Array in the Implementation
+	 * @return underlying Array
+	 * @throws ClassCastException if the return type does not match the underlying array. (Only for Object Implementations)
+	 */
 	public KEY_TYPE[] elements();
+	
+	/**
+	 * Provides the Underlying Array in the Implementation. This method exists purely because of Synchronization wrappers to help run Synchronized Code
+	 * @param action the action that handles the array
+	 * @throws NullPointerException if action is null
+	 * @throws ClassCastException if the return type does not match the underlying array. (Only for Object Implementations)
+	 */
+	public default void elements(Consumer<KEY_TYPE[]> action) {
+		Objects.requireNonNull(action);
+		action.accept(elements());
+	}
 }

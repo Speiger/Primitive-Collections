@@ -11,39 +11,104 @@ import java.util.function.Predicate;
 import speiger.src.collections.utils.SanityChecks;
 
 #endif
+/**
+ * A Type-Specific {@link Collection} that reduces (un)boxing
+ */
 public interface COLLECTION KEY_GENERIC_TYPE extends Collection<CLASS_TYPE>, ITERABLE KEY_GENERIC_TYPE
 {
 #if !TYPE_OBJECT
+	/**
+	 * A Type-Specific add function to reduce (un)boxing
+	 * @see Collection#add(Object)
+	 * @return true if the element was added to the collection
+	 */
 	public boolean add(KEY_TYPE o);
 	
 #endif
+	/**
+	 * A Type-Specific addAll function to reduce (un)boxing
+	 * @see Collection#addAll(Collection)
+	 * @return true if elements were added into the collection
+	 */
 	public boolean addAll(COLLECTION KEY_GENERIC_TYPE c);
 	
 #if !TYPE_OBJECT
+	/**
+	 * A Type-Specific contains function to reduce (un)boxing
+	 * @see Collection#contains(Object)
+	 * @return true if the element is found in the collection
+	 */
 	public boolean contains(KEY_TYPE o);
 	
 #endif
+	/**
+ 	 * A Type-Specific containsAll function to reduce (un)boxing
+ 	 * @see Collection#containsAll(Object)
+ 	 * @return true if all the element is found in the collection
+ 	 */
 	public boolean containsAll(COLLECTION KEY_GENERIC_TYPE c);
-		
+	
+	/**
+	 * A Type-Specific containsAny function to reduce (un)boxing
+	 * @see #containsAny(Collection)
+	 * @return true if any element was found
+	 */
 	public boolean containsAny(COLLECTION KEY_GENERIC_TYPE c);
 	
+	/**
+	 * Returns true if any element of the Collection is found in the provided collection.
+	 * A Small Optimization method to find out of any element is present when comparing collections and not all of them.
+	 * @return true if any element was found.
+	 */
+	@Primitive
 	public boolean containsAny(Collection<?> c);
 	
 #if !TYPE_OBJECT
+	/**
+	 * A Type-Specific remove function that reduces (un)boxing.
+	 * @return true if the element was removed
+	 * @see Collection#remove(Object)
+	 */
 	public boolean REMOVE_KEY(KEY_TYPE o);
 	
 #endif
+	/**
+	 * A Type-Specific removeAll function that reduces (un)boxing.
+	 * @return true if any element was removed
+	 * @see Collection#removeAll(Collection)
+	 */
 	public boolean removeAll(COLLECTION KEY_GENERIC_TYPE c);
 	
+	/**
+ 	 * A Type-Specific retainAll function that reduces (un)boxing.
+ 	 * @return true if any element was removed
+ 	 * @see Collection#retainAll(Collection)
+ 	 */
 	public boolean retainAll(COLLECTION KEY_GENERIC_TYPE c);
 	
 #if !TYPE_OBJECT
+	/**
+	 * A Type-Specific toArray function that delegates to {@link #TO_ARRAY(KEY_TYPE[])} with a newly created array.
+     * @return an array containing all of the elements in this collection
+	 * @see Collection#toArray()
+	 */
 	public KEY_TYPE[] TO_ARRAY();
 	
+	/**
+	 * A Type-Specific toArray function that reduces (un)boxing.
+	 * @param a array that the elements should be injected to. If null or to small a new array with the right size is created
+     * @return an array containing all of the elements in this collection
+     * @see Collection#toArray(Object[])
+	 */
 	public KEY_TYPE[] TO_ARRAY(KEY_TYPE[] a);
 	
 #if PRIMITIVES
+	/** {@inheritDoc}
+	 * <p>This default implementation delegates to the corresponding type-specific method.
+	 * @deprecated Please use the corresponding type-specific method instead. 
+	 */
 	@Override
+	@Deprecated
 	public default boolean removeIf(Predicate<? super CLASS_TYPE> filter) {
 		Objects.requireNonNull(filter);
 #if TYPE_BYTE || TYPE_SHORT || TYPE_CHAR || TYPE_FLOAT
@@ -53,6 +118,13 @@ public interface COLLECTION KEY_GENERIC_TYPE extends Collection<CLASS_TYPE>, ITE
 #endif
 	}
 	
+	/**
+	 * A Type-Specific removeIf function to reduce (un)boxing.
+	 * <p>Removes elements that were selected by the filter
+	 * @see Collection#removeIf(Predicate)
+	 * @param filter Filters the elements that should be removed
+	 * @throws NullPointerException if filter is null
+	 */
 	public default boolean remIf(JAVA_PREDICATE filter) {
     	Objects.requireNonNull(filter);
     	boolean removed = false;
@@ -67,19 +139,36 @@ public interface COLLECTION KEY_GENERIC_TYPE extends Collection<CLASS_TYPE>, ITE
 	}
 	
 #endif
+	/** {@inheritDoc}
+	 * <p>This default implementation delegates to the corresponding type-specific method.
+	 * @deprecated Please use the corresponding type-specific method instead. 
+	 */
 	@Override
 	@Deprecated
 	public default boolean add(CLASS_TYPE o) { return add(OBJ_TO_KEY(o)); }
 	
+	/** {@inheritDoc}
+	 * <p>This default implementation delegates to the corresponding type-specific method.
+	 * @deprecated Please use the corresponding type-specific method instead. 
+	 */
 	@Override
 	@Deprecated
 	public default boolean contains(Object o) { return o != null && contains(CLASS_TO_KEY(o)); }
 	
+ 	/** {@inheritDoc}
+ 	 * <p>This default implementation delegates to the corresponding type-specific method.
+ 	 * @deprecated Please use the corresponding type-specific method instead. 
+ 	 */
 	@Override
 	@Deprecated
 	public default boolean remove(Object o) { return o != null && REMOVE_KEY(CLASS_TO_KEY(o)); }
 	
 #endif
+	/**
+	 * Returns a Type-Specific Iterator to reduce (un)boxing
+	 * @return a iterator of the collection
+	 * @see Collection#iterator()
+	 */
 	@Override
 	public ITERATOR KEY_GENERIC_TYPE iterator();
 }

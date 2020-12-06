@@ -1,10 +1,9 @@
 package speiger.src.collections.PACKAGE.utils;
 
 import java.util.Collection;
+import java.util.Objects;
 import java.util.RandomAccess;
-#if TYPE_OBJECT
 import java.util.function.Consumer;
-#endif
 
 import speiger.src.collections.PACKAGE.collections.COLLECTION;
 #if !TYPE_OBJECT
@@ -13,10 +12,17 @@ import speiger.src.collections.PACKAGE.functions.CONSUMER;
 import speiger.src.collections.PACKAGE.lists.LIST;
 import speiger.src.collections.PACKAGE.lists.LIST_ITERATOR;
 
+/**
+ * A Helper class for Lists
+ */
 public class LISTS
 {
 	public static final EmptyList NO_GENERIC_TYPE EMPTY = new EmptyListBRACES();
 	
+	/**
+	 * Returns a Immutable EmptyList instance that is automatically casted.
+	 * @return an empty list
+	 */
 	public static GENERIC_BRACES EmptyList KEY_GENERIC_TYPE emptyList() {
 #if TYPE_OBJECT
 		return (EmptyList<KEY_TYPE>)EMPTY;
@@ -25,14 +31,30 @@ public class LISTS
 #endif
 	}
 	
+	/**
+	 * Returns a Immutable List instance based on the instance given.
+	 * @param l that should be made immutable/unmodifyable
+	 * @return a unmodifiable list wrapper. If the list is implementing RandomAccess that is also transferred. If the List already a unmodifyable wrapper then it just returns itself.
+	 */
 	public static GENERIC_BRACES LIST KEY_GENERIC_TYPE unmodifiableList(LIST KEY_GENERIC_TYPE l) {
 		return l instanceof UnmodifiableList ? l : l instanceof RandomAccess ? new UnmodifiableRandomListBRACES(l) : new UnmodifiableListBRACES(l);
 	}
 	
+	/**
+	 * Returns a synchronized List instance based on the instance given.
+	 * @param l that should be synchronized
+	 * @return a synchronized list wrapper. If the list is implementing RandomAccess or IARRAY that is also transferred. If the List already a synchronized wrapper then it just returns itself.
+	 */
 	public static GENERIC_BRACES LIST KEY_GENERIC_TYPE synchronizedList(LIST KEY_GENERIC_TYPE l) {
 		return l instanceof SynchronizedList ? l : (l instanceof IARRAY ? new SynchronizedArrayListBRACES(l) : (l instanceof RandomAccess ? new SynchronizedRandomAccessListBRACES(l) : new SynchronizedListBRACES(l)));
 	}
 	
+	/**
+	 * Returns a synchronized List instance based on the instance given.
+	 * @param l that should be synchronized
+	 * @param mutex is the controller of the synchronization block.
+	 * @return a synchronized list wrapper. If the list is implementing RandomAccess or IARRAY that is also transferred. If the List already a synchronized wrapper then it just returns itself.
+	 */
 	public static GENERIC_BRACES LIST KEY_GENERIC_TYPE synchronizedList(LIST KEY_GENERIC_TYPE l, Object mutex) {
 		return l instanceof SynchronizedList ? l : (l instanceof IARRAY ? new SynchronizedArrayListBRACES(l, mutex) : (l instanceof RandomAccess ? new SynchronizedRandomAccessListBRACES(l, mutex) : new SynchronizedListBRACES(l, mutex)));
 	}
@@ -51,11 +73,22 @@ public class LISTS
 			this.l = (IARRAY KEY_GENERIC_TYPE)l;
 		}
 		
+		@Override
 		public void ensureCapacity(int size) { synchronized(mutex) { l.ensureCapacity(size); } }
 		
+		@Override
 		public void trim(int size) { synchronized(mutex) { l.trim(size); } }
 		
+		@Override
 		public KEY_TYPE[] elements() { synchronized(mutex) { return l.elements(); } }
+		
+		@Override
+		public void elements(Consumer<KEY_TYPE[]> action) { 
+			Objects.requireNonNull(action);
+			synchronized(mutex) {
+				action.accept(elements());
+			}
+		}
 	}
 	
 	public static class SynchronizedRandomAccessList KEY_GENERIC_TYPE extends SynchronizedList KEY_GENERIC_TYPE implements RandomAccess 
@@ -152,7 +185,7 @@ public class LISTS
 		
 #else
 		@Override
-		public KEY_TYPE[] extractElements(int from, int to, Class<T> clz) { synchronized(mutex) { return l.extractElements(from, to, clz); } }
+		public <K> K[] extractElements(int from, int to, Class<K> clz) { synchronized(mutex) { return l.extractElements(from, to, clz); } }
 		
 #endif
 		@Override
@@ -183,7 +216,7 @@ public class LISTS
 	
 	public static class UnmodifiableList KEY_GENERIC_TYPE extends COLLECTIONS.UnmodifiableCollection KEY_GENERIC_TYPE implements LIST KEY_GENERIC_TYPE
 	{
-		LIST KEY_GENERIC_TYPE l;
+		final LIST KEY_GENERIC_TYPE l;
 		
 		UnmodifiableList(LIST KEY_GENERIC_TYPE l) {
 			super(l);
@@ -261,7 +294,7 @@ public class LISTS
 		
 #else
 		@Override
-		public KEY_TYPE[] extractElements(int from, int to, Class<T> clz) { throw new UnsupportedOperationException(); }
+		public <K> K[] extractElements(int from, int to, Class<K> clz) { throw new UnsupportedOperationException(); }
 		
 #endif
 		@Override
@@ -343,7 +376,7 @@ public class LISTS
 		
 #else
 		@Override
-		public KEY_TYPE[] extractElements(int from, int to, Class<T> clz) { throw new UnsupportedOperationException(); }
+		public <K> K[] extractElements(int from, int to, Class<K> clz) { throw new UnsupportedOperationException(); }
 
 #endif
 		@Override

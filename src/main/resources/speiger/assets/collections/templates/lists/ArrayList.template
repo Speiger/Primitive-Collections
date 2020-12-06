@@ -218,11 +218,11 @@ public class ARRAY_LIST KEY_GENERIC_TYPE extends ABSTRACT_LIST KEY_GENERIC_TYPE 
 	
 #if TYPE_OBJECT
 	@Override
-	public KEY_TYPE[] extractElements(int from, int to, Class<KEY_TYPE> type) {
+	public <K> K[] extractElements(int from, int to, Class<K> type) {
 		checkRange(from);
 		checkAddRange(to);
 		int length = to - from;
-		KEY_TYPE[] a = ARRAYS.newArray(type, length);
+		K[] a = ARRAYS.newArray(type, length);
 		if(length <= 0) return a;
 		System.arraycopy(data, from, a, 0, length);
 		if(to != size) System.arraycopy(data, to, data, from, size - to);

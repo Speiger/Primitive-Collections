@@ -31,12 +31,12 @@ public class ConditionedSegment
 	{
 		baseIndex += index;
 		int length = builder.length();
-		for(int i = 0,offset=0,m=segments.size();i<m;i++)
+		for(int i = 0,m=segments.size();i<m;i++)
 		{
 			Tuple<ICondition, Segment> entry = segments.get(i);
 			if(entry.getKey().isValid(parsePool))
 			{
-				offset += entry.getValue().build(parsePool, builder, baseIndex+offset);
+				entry.getValue().build(parsePool, builder, baseIndex);
 				break;
 			}
 		}
@@ -77,7 +77,7 @@ public class ConditionedSegment
 				}
 				else if(trimmed.startsWith("#if"))
 				{
-					i+= parse(trimmed.substring(3).trim(), lines, i, segmentText.length(), childSegments);
+					i += parse(trimmed.substring(3).trim(), lines, i, segmentText.length(), childSegments);
 				}
 				continue;
 			}

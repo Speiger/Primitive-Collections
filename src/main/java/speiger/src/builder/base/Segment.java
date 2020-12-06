@@ -15,14 +15,12 @@ public class Segment
 		this.segments = segments;
 	}
 	
-	public int build(Set<String> parsePool, StringBuilder builder, int index)
+	public void build(Set<String> parsePool, StringBuilder builder, int index)
 	{
-		int length = builder.length();
 		builder.insert(index, text);
 		for(int i = 0,offset=0,m=segments.size();i<m;i++)
 		{
 			offset += segments.get(i).build(parsePool, builder, index+offset);
 		}
-		return builder.length() - length;
 	}
 }

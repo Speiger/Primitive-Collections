@@ -41,7 +41,6 @@ public class Template
 		{
 			result = mappers.get(i).apply(result);
 		}
-//		String s = "CLASS_TO_OBJ(\\([^)]+\\)|\\S)";
 		return result;
 	}
 	
@@ -59,7 +58,7 @@ public class Template
 				if(trimmed.startsWith("#if"))
 				{
 					i += ConditionedSegment.parse(s.trim().substring(3).trim(), lines, i, joiner.length(), segments);
-					continue;					
+					continue;
 				}
 				else if(trimmed.startsWith("#symlink"))
 				{
