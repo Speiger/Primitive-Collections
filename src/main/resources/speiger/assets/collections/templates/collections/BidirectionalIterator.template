@@ -29,8 +29,8 @@ public interface BI_ITERATOR KEY_GENERIC_TYPE extends ITERATOR KEY_GENERIC_TYPE
 	
 #if !TYPE_OBJECT
 	/** {@inheritDoc}
-	 * <p>This default implementation delegates to the corresponding type-specific method.
-	 * @deprecated Please use the corresponding type-specific method instead. 
+	 * <p>This default implementation delegates to the corresponding type-specific function.
+	 * @deprecated Please use the corresponding type-specific function instead. 
 	 */
 	@Override
 	@Deprecated

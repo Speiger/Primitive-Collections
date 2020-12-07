@@ -21,7 +21,7 @@ public interface CONSUMER extends Consumer<CLASS_TYPE>
 #endif
 {
     /**
-     * Type-Specific method to reduce (un)boxing. 
+     * Type-Specific function to reduce (un)boxing. 
      * Performs this operation on the given argument.
      *
      * @param t the input argument
@@ -30,8 +30,8 @@ public interface CONSUMER extends Consumer<CLASS_TYPE>
 	
 #if !JDK_CONSUMER
  	/** {@inheritDoc}
- 	 * <p>This default implementation delegates to the corresponding type-specific method.
- 	 * @deprecated Please use the corresponding type-specific method instead. 
+ 	 * <p>This default implementation delegates to the corresponding type-specific function.
+ 	 * @deprecated Please use the corresponding type-specific function instead. 
  	 */
 	@Override
 	@Deprecated
@@ -44,16 +44,16 @@ public interface CONSUMER extends Consumer<CLASS_TYPE>
 	}
 	
 	/** {@inheritDoc}
-	 * <p>This default implementation delegates to the corresponding type-specific method.
-	 * @deprecated Please use the corresponding type-specific method instead. 
+	 * <p>This default implementation delegates to the corresponding type-specific function.
+	 * @deprecated Please use the corresponding type-specific function instead. 
 	 */
 	@Override
 	@Deprecated
 	default void accept(CLASS_TYPE t) { accept(OBJ_TO_KEY(t)); }
 	
 	/** {@inheritDoc}
-	 * <p>This default implementation delegates to the corresponding type-specific method.
- 	 * @deprecated Please use the corresponding type-specific method instead. 
+	 * <p>This default implementation delegates to the corresponding type-specific function.
+ 	 * @deprecated Please use the corresponding type-specific function instead. 
  	 */
 	@Override
 	@Deprecated
@@ -64,8 +64,8 @@ public interface CONSUMER extends Consumer<CLASS_TYPE>
 	
 #if PRIMITIVES
 	/** {@inheritDoc}
-	  * <p>This default implementation delegates to the corresponding type-specific method.
-	  * @deprecated Please use the corresponding type-specific method instead. 
+	  * <p>This default implementation delegates to the corresponding type-specific function.
+	  * @deprecated Please use the corresponding type-specific function instead. 
 	  */
 	@Override
 	@Deprecated

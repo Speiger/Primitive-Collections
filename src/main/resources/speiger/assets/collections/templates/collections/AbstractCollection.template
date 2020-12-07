@@ -16,8 +16,8 @@ public abstract class ABSTRACT_COLLECTION KEY_GENERIC_TYPE extends AbstractColle
 	
 #if !TYPE_OBJECT
 	/** {@inheritDoc}
-	 * <p>This default implementation delegates to the corresponding type-specific method.
-	 * @deprecated Please use the corresponding type-specific method instead. 
+	 * <p>This default implementation delegates to the corresponding type-specific function.
+	 * @deprecated Please use the corresponding type-specific function instead. 
 	 */
 	@Override
 	@Deprecated
@@ -35,8 +35,8 @@ public abstract class ABSTRACT_COLLECTION KEY_GENERIC_TYPE extends AbstractColle
 	
 #if !TYPE_OBJECT
 	/** {@inheritDoc}
-	 * <p>This default implementation delegates to the corresponding type-specific method.
-	 * @deprecated Please use the corresponding type-specific method instead. 
+	 * <p>This default implementation delegates to the corresponding type-specific function.
+	 * @deprecated Please use the corresponding type-specific function instead. 
 	 */
 	@Override
 	@Deprecated
@@ -55,8 +55,8 @@ public abstract class ABSTRACT_COLLECTION KEY_GENERIC_TYPE extends AbstractColle
 	
 #endif
 	/** {@inheritDoc}
-	 * <p>This default implementation delegates to the corresponding type-specific method.
-	 * @deprecated Please use the corresponding type-specific method instead. 
+	 * <p>This default implementation delegates to the corresponding type-specific function.
+	 * @deprecated Please use the corresponding type-specific function instead. 
 	 */
 	@Override
 	@Deprecated
@@ -66,8 +66,8 @@ public abstract class ABSTRACT_COLLECTION KEY_GENERIC_TYPE extends AbstractColle
 	}
 	
 	/** {@inheritDoc}
-	 * <p>This default implementation delegates to the corresponding type-specific method.
-	 * @deprecated Please use the corresponding type-specific method instead. 
+	 * <p>This default implementation delegates to the corresponding type-specific function.
+	 * @deprecated Please use the corresponding type-specific function instead. 
 	 */
 	@Override
 	@Deprecated
@@ -77,8 +77,8 @@ public abstract class ABSTRACT_COLLECTION KEY_GENERIC_TYPE extends AbstractColle
 	}
 	
 	/** {@inheritDoc}
-	 * <p>This default implementation delegates to the corresponding type-specific method.
-	 * @deprecated Please use the corresponding type-specific method instead. 
+	 * <p>This default implementation delegates to the corresponding type-specific function.
+	 * @deprecated Please use the corresponding type-specific function instead. 
 	 */
 	@Override
 	@Primitive
@@ -88,8 +88,8 @@ public abstract class ABSTRACT_COLLECTION KEY_GENERIC_TYPE extends AbstractColle
 	}
 	
 	/** {@inheritDoc}
-	 * <p>This default implementation delegates to the corresponding type-specific method.
-	 * @deprecated Please use the corresponding type-specific method instead. 
+	 * <p>This default implementation delegates to the corresponding type-specific function.
+	 * @deprecated Please use the corresponding type-specific function instead. 
 	 */
 	@Override
 	@Primitive
@@ -147,8 +147,8 @@ public abstract class ABSTRACT_COLLECTION KEY_GENERIC_TYPE extends AbstractColle
 		
 #if !TYPE_OBJECT
 	/** {@inheritDoc}
-	 * <p>This default implementation delegates to the corresponding type-specific method.
-	 * @deprecated Please use the corresponding type-specific method instead. 
+	 * <p>This default implementation delegates to the corresponding type-specific function.
+	 * @deprecated Please use the corresponding type-specific function instead. 
 	 */
 	@Override
 	@Deprecated

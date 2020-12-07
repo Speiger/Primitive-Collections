@@ -20,8 +20,8 @@ public interface LIST_ITERATOR KEY_GENERIC_TYPE extends ListIterator<CLASS_TYPE>
 	public void add(KEY_TYPE e);
 	
 	/** {@inheritDoc}
- 	* <p>This default implementation delegates to the corresponding type-specific method.
- 	* @deprecated Please use the corresponding type-specific method instead. 
+ 	* <p>This default implementation delegates to the corresponding type-specific function.
+ 	* @deprecated Please use the corresponding type-specific function instead. 
  	*/
 	@Override
 	@Deprecated
@@ -30,8 +30,8 @@ public interface LIST_ITERATOR KEY_GENERIC_TYPE extends ListIterator<CLASS_TYPE>
 	}
 	
 	/** {@inheritDoc}
- 	* <p>This default implementation delegates to the corresponding type-specific method.
- 	* @deprecated Please use the corresponding type-specific method instead. 
+ 	* <p>This default implementation delegates to the corresponding type-specific function.
+ 	* @deprecated Please use the corresponding type-specific function instead. 
  	*/
 	@Override
 	@Deprecated
@@ -40,8 +40,8 @@ public interface LIST_ITERATOR KEY_GENERIC_TYPE extends ListIterator<CLASS_TYPE>
 	}	
 	
 	/** {@inheritDoc}
- 	* <p>This default implementation delegates to the corresponding type-specific method.
- 	* @deprecated Please use the corresponding type-specific method instead. 
+ 	* <p>This default implementation delegates to the corresponding type-specific function.
+ 	* @deprecated Please use the corresponding type-specific function instead. 
  	*/
 	@Override
 	@Deprecated
@@ -50,8 +50,8 @@ public interface LIST_ITERATOR KEY_GENERIC_TYPE extends ListIterator<CLASS_TYPE>
 	}
 	
 	/** {@inheritDoc}
- 	* <p>This default implementation delegates to the corresponding type-specific method.
- 	* @deprecated Please use the corresponding type-specific method instead. 
+ 	* <p>This default implementation delegates to the corresponding type-specific function.
+ 	* @deprecated Please use the corresponding type-specific function instead. 
  	*/
 	@Override
 	@Deprecated

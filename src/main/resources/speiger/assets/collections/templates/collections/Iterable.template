@@ -22,7 +22,7 @@ public interface ITERABLE KEY_GENERIC_TYPE extends Iterable<CLASS_TYPE>
 #if !TYPE_OBJECT
 	
 	/**
-	 * A Type Specific foreach method that reduces (un)boxing
+	 * A Type Specific foreach function that reduces (un)boxing
 	 * 
      * @implSpec
      * <p>The default implementation behaves as if:
@@ -40,8 +40,8 @@ public interface ITERABLE KEY_GENERIC_TYPE extends Iterable<CLASS_TYPE>
 	}
 	
 	/** {@inheritDoc}
-	* <p>This default implementation delegates to the corresponding type-specific method.
-	* @deprecated Please use the corresponding type-specific method instead. 
+	* <p>This default implementation delegates to the corresponding type-specific function.
+	* @deprecated Please use the corresponding type-specific function instead. 
 	*/
 	@Deprecated
 	@Override

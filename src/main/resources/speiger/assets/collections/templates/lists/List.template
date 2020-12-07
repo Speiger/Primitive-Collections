@@ -142,7 +142,7 @@ public interface LIST KEY_GENERIC_TYPE extends COLLECTION KEY_GENERIC_TYPE, List
 	
 #endif
 	/**
-	 * A method to fast add elements to the list
+	 * A function to fast add elements to the list
 	 * @param from the index where the elements should be added into the list
 	 * @param a the elements that should be added
 	 * @throws IndexOutOfBoundsException if from is outside of the lists range
@@ -150,7 +150,7 @@ public interface LIST KEY_GENERIC_TYPE extends COLLECTION KEY_GENERIC_TYPE, List
 	public default void addElements(int from, KEY_TYPE[] a) { addElements(from, a, 0, a.length); }
 	
 	/**
-	 * A method to fast add elements to the list
+	 * A function to fast add elements to the list
 	 * @param from the index where the elements should be added into the list
 	 * @param a the elements that should be added
 	 * @param offset the start index of the array should be read from
@@ -161,7 +161,7 @@ public interface LIST KEY_GENERIC_TYPE extends COLLECTION KEY_GENERIC_TYPE, List
 	public void addElements(int from, KEY_TYPE[] a, int offset, int length);
 	
 	/**
-	 * A method to fast fetch elements from the list
+	 * A function to fast fetch elements from the list
 	 * @param from index where the list should be fetching elements from
 	 * @param a the array where the values should be inserted to
 	 * @returns the inputArray
@@ -172,7 +172,7 @@ public interface LIST KEY_GENERIC_TYPE extends COLLECTION KEY_GENERIC_TYPE, List
 	public default KEY_TYPE[] getElements(int from, KEY_TYPE[] a) { return getElements(from, a, 0, a.length); }
 	
 	/**
-	 * A method to fast fetch elements from the list
+	 * A function to fast fetch elements from the list
 	 * @param from index where the list should be fetching elements from
 	 * @param a the array where the values should be inserted to
 	 * @param offset the startIndex of where the array should be written to
@@ -185,7 +185,7 @@ public interface LIST KEY_GENERIC_TYPE extends COLLECTION KEY_GENERIC_TYPE, List
 	public KEY_TYPE[] getElements(int from, KEY_TYPE[] a, int offset, int length);
 	
 	/**
-	 * a method to fast remove elements from the list.
+	 * a function to fast remove elements from the list.
 	 * @param from the start index of where the elements should be removed from (inclusive)
 	 * @param to the end index of where the elements should be removed to (exclusive)
 	 */
@@ -193,7 +193,7 @@ public interface LIST KEY_GENERIC_TYPE extends COLLECTION KEY_GENERIC_TYPE, List
 	
 #if TYPE_OBJECT
 	/**
-	 * A method to fast extract elements out of the list, this removes the elements that were fetched.
+	 * A function to fast extract elements out of the list, this removes the elements that were fetched.
 	 * @param from the start index of where the elements should be fetched from (inclusive)
 	 * @param to the end index of where the elements should be fetched to (exclusive)
 	 * @param type the type of the OutputArray
@@ -236,7 +236,7 @@ public interface LIST KEY_GENERIC_TYPE extends COLLECTION KEY_GENERIC_TYPE, List
 	
 #else
 	/**
-	 * A method to fast extract elements out of the list, this removes the elements that were fetched.
+	 * A function to fast extract elements out of the list, this removes the elements that were fetched.
 	 * @param from the start index of where the elements should be fetched from (inclusive)
 	 * @param to the end index of where the elements should be fetched to (exclusive)
 	 * @return a array of the elements that were fetched
@@ -244,8 +244,8 @@ public interface LIST KEY_GENERIC_TYPE extends COLLECTION KEY_GENERIC_TYPE, List
 	public KEY_TYPE[] extractElements(int from, int to);
 	
 	/** {@inheritDoc}
-	 * <p>This default implementation delegates to the corresponding type-specific method.
-	 * @deprecated Please use the corresponding type-specific method instead. 
+	 * <p>This default implementation delegates to the corresponding type-specific function.
+	 * @deprecated Please use the corresponding type-specific function instead. 
 	 */
 	@Override
 	@Deprecated
@@ -270,8 +270,8 @@ public interface LIST KEY_GENERIC_TYPE extends COLLECTION KEY_GENERIC_TYPE, List
 	}
 	
 	/** {@inheritDoc}
-	 * <p>This default implementation delegates to the corresponding type-specific method.
-	 * @deprecated Please use the corresponding type-specific method instead. 
+	 * <p>This default implementation delegates to the corresponding type-specific function.
+	 * @deprecated Please use the corresponding type-specific function instead. 
 	 */
 	@Deprecated
 	public default void unstableSort(Comparator<? super CLASS_TYPE> c) {
@@ -317,7 +317,7 @@ public interface LIST KEY_GENERIC_TYPE extends COLLECTION KEY_GENERIC_TYPE, List
 	public LIST KEY_GENERIC_TYPE subList(int from, int to);
 	
 	/**
-	 * A Method to ensure the elements are within the requested size.
+	 * A function to ensure the elements are within the requested size.
 	 * If smaller then the stored elements they get removed as needed.
 	 * If bigger it is ensured that enough room is provided depending on the implementation
 	 * @param size the requested amount of elements/room for elements
@@ -327,8 +327,8 @@ public interface LIST KEY_GENERIC_TYPE extends COLLECTION KEY_GENERIC_TYPE, List
 #if !TYPE_OBJECT
 	
 	/** {@inheritDoc}
-	 * <p>This default implementation delegates to the corresponding type-specific method.
-	 * @deprecated Please use the corresponding type-specific method instead. 
+	 * <p>This default implementation delegates to the corresponding type-specific function.
+	 * @deprecated Please use the corresponding type-specific function instead. 
 	 */
 	@Override
 	@Deprecated
@@ -337,8 +337,8 @@ public interface LIST KEY_GENERIC_TYPE extends COLLECTION KEY_GENERIC_TYPE, List
 	}
 	
 	/** {@inheritDoc}
-	 * <p>This default implementation delegates to the corresponding type-specific method.
-	 * @deprecated Please use the corresponding type-specific method instead. 
+	 * <p>This default implementation delegates to the corresponding type-specific function.
+	 * @deprecated Please use the corresponding type-specific function instead. 
 	 */
 	@Override
 	@Deprecated
@@ -347,8 +347,8 @@ public interface LIST KEY_GENERIC_TYPE extends COLLECTION KEY_GENERIC_TYPE, List
 	}
 	
 	/** {@inheritDoc}
-	 * <p>This default implementation delegates to the corresponding type-specific method.
-	 * @deprecated Please use the corresponding type-specific method instead. 
+	 * <p>This default implementation delegates to the corresponding type-specific function.
+	 * @deprecated Please use the corresponding type-specific function instead. 
 	 */
 	@Override
 	@Deprecated
@@ -357,8 +357,8 @@ public interface LIST KEY_GENERIC_TYPE extends COLLECTION KEY_GENERIC_TYPE, List
 	}
 	
 	/** {@inheritDoc}
-	 * <p>This default implementation delegates to the corresponding type-specific method.
-	 * @deprecated Please use the corresponding type-specific method instead. 
+	 * <p>This default implementation delegates to the corresponding type-specific function.
+	 * @deprecated Please use the corresponding type-specific function instead. 
 	 */
 	@Override
 	@Deprecated
@@ -367,8 +367,8 @@ public interface LIST KEY_GENERIC_TYPE extends COLLECTION KEY_GENERIC_TYPE, List
 	}
 	
 	/** {@inheritDoc}
-	 * <p>This default implementation delegates to the corresponding type-specific method.
-	 * @deprecated Please use the corresponding type-specific method instead. 
+	 * <p>This default implementation delegates to the corresponding type-specific function.
+	 * @deprecated Please use the corresponding type-specific function instead. 
 	 */
 	@Override
 	@Deprecated
@@ -377,8 +377,8 @@ public interface LIST KEY_GENERIC_TYPE extends COLLECTION KEY_GENERIC_TYPE, List
 	}
 	
 	/** {@inheritDoc}
-	 * <p>This default implementation delegates to the corresponding type-specific method.
-	 * @deprecated Please use the corresponding type-specific method instead. 
+	 * <p>This default implementation delegates to the corresponding type-specific function.
+	 * @deprecated Please use the corresponding type-specific function instead. 
 	 */
 	@Override
 	@Deprecated
@@ -387,8 +387,8 @@ public interface LIST KEY_GENERIC_TYPE extends COLLECTION KEY_GENERIC_TYPE, List
 	}
 	
 	/** {@inheritDoc}
-	 * <p>This default implementation delegates to the corresponding type-specific method.
-	 * @deprecated Please use the corresponding type-specific method instead. 
+	 * <p>This default implementation delegates to the corresponding type-specific function.
+	 * @deprecated Please use the corresponding type-specific function instead. 
 	 */
 	@Override
 	@Deprecated
@@ -397,8 +397,8 @@ public interface LIST KEY_GENERIC_TYPE extends COLLECTION KEY_GENERIC_TYPE, List
 	}
 	
 	/** {@inheritDoc}
-	 * <p>This default implementation delegates to the corresponding type-specific method.
-	 * @deprecated Please use the corresponding type-specific method instead. 
+	 * <p>This default implementation delegates to the corresponding type-specific function.
+	 * @deprecated Please use the corresponding type-specific function instead. 
 	 */
 	@Override
 	@Deprecated
@@ -408,8 +408,8 @@ public interface LIST KEY_GENERIC_TYPE extends COLLECTION KEY_GENERIC_TYPE, List
 	
 #if !TYPE_BOOLEAN
 	/** {@inheritDoc}
-	 * <p>This default implementation delegates to the corresponding type-specific method.
-	 * @deprecated Please use the corresponding type-specific method instead. 
+	 * <p>This default implementation delegates to the corresponding type-specific function.
+	 * @deprecated Please use the corresponding type-specific function instead. 
 	 */
 	@Override
 	@Deprecated

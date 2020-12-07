@@ -37,16 +37,33 @@ import speiger.src.collections.PACKAGE.utils.IARRAY;
 import speiger.src.collections.utils.SanityChecks;
 
 #if TYPE_OBJECT
+/**
+ * A Type-Specific Array-based implementation of list that is written to reduce (un)boxing
+ * 
+ * <p>This implementation is optimized to improve how data is processed with interfaces like {@link IARRAY}, {@link Stack}
+ * and with optimized functions that use type-specific implementations for primitives and optimized logic for bulkactions.
+ */
 public class ARRAY_LIST KEY_GENERIC_TYPE extends ABSTRACT_LIST KEY_GENERIC_TYPE implements IARRAY<KEY_TYPE>, Stack<KEY_TYPE>
 #else
+/**
+ * A Type-Specific Array-based implementation of list that is written to reduce (un)boxing
+ * 
+ * <p>This implementation is optimized to improve how data is processed with interfaces like {@link IARRAY}, {@link STACK}
+ * and with optimized functions that use type-specific implementations for primitives and optimized logic for bulkactions.
+ */
 public class ARRAY_LIST KEY_GENERIC_TYPE extends ABSTRACT_LIST KEY_GENERIC_TYPE implements IARRAY, STACK
 #endif
 {
 	static final int DEFAULT_ARRAY_SIZE = 10;
 	
+	/** The backing array */
 	protected transient KEY_TYPE[] data;
+	/** The current size of the elements stored in the backing array */
 	protected int size = 0;
 	
+	/**
+	 * Creates a new ArrayList with a Empty array.
+	 */
 	public ARRAY_LIST() {
 #if TYPE_OBJECT
 		data = (KEY_TYPE[])ARRAYS.EMPTY_ARRAY;
@@ -55,6 +72,9 @@ public class ARRAY_LIST KEY_GENERIC_TYPE extends ABSTRACT_LIST KEY_GENERIC_TYPE 
 #endif
 	}
 	
+	/**
+	 * Creates a new ArrayList with the specific requested size
+	 */
 	public ARRAY_LIST(int size) {
 #if TYPE_OBJECT
 		data = (KEY_TYPE[])new Object[size];
@@ -63,30 +83,48 @@ public class ARRAY_LIST KEY_GENERIC_TYPE extends ABSTRACT_LIST KEY_GENERIC_TYPE 
 #endif
 	}
 	
+	/**
+	 * Creates a new ArrayList a copy with the contents of the Collection.
+	 */
 	public ARRAY_LIST(Collection<? extends CLASS_TYPE> c) {
 		this(c.size());
 		size = ITERATORS.unwrap(data, c.iterator());
 	}
 	
+	/**
+	 * Creates a new ArrayList a copy with the contents of the Collection.
+	 */
 	public ARRAY_LIST(COLLECTION KEY_GENERIC_TYPE c) {
 		this(c.size());
 		size = ITERATORS.unwrap(data, c.iterator());
 	}
 	
+	/**
+	 * Creates a new ArrayList a copy with the contents of the List.
+	 */
 	public ARRAY_LIST(LIST KEY_GENERIC_TYPE l) {
 		this(l.size());
 		size = l.size();
 		l.getElements(0, data, 0, size);
 	}
 	
+	/**
+	 * Creates a new ArrayList with a Copy of the array
+	 */
 	public ARRAY_LIST(KEY_TYPE[] a)	{
 		this(a, 0, a.length);
 	}
 	
+	/**
+	 * Creates a new ArrayList with a Copy of the array with a custom length
+	 */
 	public ARRAY_LIST(KEY_TYPE[] a, int length) {
 		this(a, 0, length);
 	}
 	
+	/**
+	 * Creates a new ArrayList with a Copy of the array with in the custom range.
+	 */
 	public ARRAY_LIST(KEY_TYPE[] a, int offset, int length) {
 		this(length);
 		SanityChecks.checkArrayCapacity(a.length, offset, length);
@@ -94,10 +132,16 @@ public class ARRAY_LIST KEY_GENERIC_TYPE extends ABSTRACT_LIST KEY_GENERIC_TYPE 
 		size = length;
 	}
 	
+	/**
+	 * Creates a wrapped arraylist that uses the array as backing array
+	 */
 	public static GENERIC_BRACES ARRAY_LIST KEY_GENERIC_TYPE wrap(KEY_TYPE[] a) {
 		return wrap(a, a.length);
 	}
 	
+	/**
+	 * Creates a wrapped arraylist that uses the array as backing array and a custom fillsize
+	 */
 	public static GENERIC_BRACES ARRAY_LIST KEY_GENERIC_TYPE wrap(KEY_TYPE[] a, int length) {
 		SanityChecks.checkArrayCapacity(a.length, 0, length);
 		ARRAY_LIST KEY_GENERIC_TYPE list = new ARRAY_LISTBRACES();
@@ -107,6 +151,9 @@ public class ARRAY_LIST KEY_GENERIC_TYPE extends ABSTRACT_LIST KEY_GENERIC_TYPE 
 	}
 	
 #if TYPE_OBJECT
+	/**
+	 * Creates a new ArrayList with a EmptyObject array of the Type requested
+	 */
 	public static GENERIC_BRACES ARRAY_LIST KEY_GENERIC_TYPE of(Class<KEY_TYPE> c) {
 		ARRAY_LIST KEY_GENERIC_TYPE list = new ARRAY_LISTBRACES();
 		list.data = (KEY_TYPE[])ObjectArrays.newArray(c.getClass().getComponentType(), 0);
@@ -114,15 +161,12 @@ public class ARRAY_LIST KEY_GENERIC_TYPE extends ABSTRACT_LIST KEY_GENERIC_TYPE 
 	}
 	
 #endif
-	@Override
-	public void add(int index, CLASS_TYPE element) {
-		checkAddRange(index);
-		grow(size + 1);
-		if(index != size) System.arraycopy(data, index, data, index+1, size - index);
-		data[index] = OBJ_TO_KEY(element);
-		size++;
-	}
-	
+	/**
+	 * Appends the specified element to the end of this list.
+	 *
+	 * @param e element to be appended to this list
+	 * @return <tt>true</tt> (as specified by {@link Collection#add})
+	 */
 	@Override
 	public boolean add(KEY_TYPE e) {
 		grow(size + 1);
@@ -130,12 +174,21 @@ public class ARRAY_LIST KEY_GENERIC_TYPE extends ABSTRACT_LIST KEY_GENERIC_TYPE 
 		return true;
 	}
 	
+	/**
+	 * Appends the specified element to the end of this Stack.
+	 * @param e element to be appended to this Stack
+	 */
 	@Override
 	public void PUSH(KEY_TYPE e) {
 		add(e);
 	}
 	
-#if !TYPE_OBJECT
+	/**
+	 * Appends the specified element to the index of the list
+	 * @param index the index where to append the element to
+	 * @param e the element to append to the list
+	 * @throws IndexOutOfBoundsException if index is outside of the lists range
+	 */
 	@Override
 	public void add(int index, KEY_TYPE e) {
 		checkAddRange(index);
@@ -145,7 +198,14 @@ public class ARRAY_LIST KEY_GENERIC_TYPE extends ABSTRACT_LIST KEY_GENERIC_TYPE 
 		size++;
 	}
 	
-#endif	
+	/**
+	 * Appends the specified elements to the index of the list.
+	 * This function may delegate to more appropiate function if nessesary
+	 * @param index the index where to append the elements to
+	 * @param e the elements to append to the list
+	 * @throws IndexOutOfBoundsException if index is outside of the lists range
+	 * @deprecated if type is primitive
+	 */
 	@Override
 	@Primitive
 	public boolean addAll(int index, Collection<? extends CLASS_TYPE> c) {
@@ -160,6 +220,14 @@ public class ARRAY_LIST KEY_GENERIC_TYPE extends ABSTRACT_LIST KEY_GENERIC_TYPE 
 		return true;
 	}
 	
+	/**
+	 * Appends the specified elements to the index of the list.
+	 * This function may delegate to more appropiate function if nessesary
+	 * @param index the index where to append the elements to
+	 * @param e the elements to append to the list
+	 * @throws IndexOutOfBoundsException if index is outside of the lists range
+	 * @deprecated if type is primitive
+	 */
 	@Override
 	public boolean addAll(int index, COLLECTION KEY_GENERIC_TYPE c) {
 		if(c instanceof LIST) return addAll(index, (LIST KEY_GENERIC_TYPE)c);
@@ -173,6 +241,13 @@ public class ARRAY_LIST KEY_GENERIC_TYPE extends ABSTRACT_LIST KEY_GENERIC_TYPE 
 		return true;
 	}
 	
+	/**
+	 * Appends the specified elements to the index of the list.
+	 * @param index the index where to append the elements to
+	 * @param e the elements to append to the list
+	 * @throws IndexOutOfBoundsException if index is outside of the lists range
+	 * @deprecated if type is primitive
+	 */
 	@Override
 	public boolean addAll(int index, LIST KEY_GENERIC_TYPE c) {
 		int add = c.size();
@@ -185,6 +260,15 @@ public class ARRAY_LIST KEY_GENERIC_TYPE extends ABSTRACT_LIST KEY_GENERIC_TYPE 
 		return true;
 	}
 	
+	/**
+	 * Appends the specified array elements to the index of the list.
+	 * @param from the index where to append the elements to
+	 * @param a the elements to append to the list
+	 * @param offset where to start ino the array
+	 * @param length the amount of elements to insert
+	 * @throws IndexOutOfBoundsException if index is outside of the lists range
+	 * @deprecated if type is primitive
+	 */
 	@Override
 	public void addElements(int from, KEY_TYPE[] a, int offset, int length) {
 		if(length <= 0) return;
@@ -195,6 +279,17 @@ public class ARRAY_LIST KEY_GENERIC_TYPE extends ABSTRACT_LIST KEY_GENERIC_TYPE 
 		System.arraycopy(a, offset, data, from, length);
 	}
 	
+	/**
+	 * A function to fast fetch elements from the list
+	 * @param from index where the list should be fetching elements from
+	 * @param a the array where the values should be inserted to
+	 * @param offset the startIndex of where the array should be written to
+	 * @param length the number of elements the values should be fetched from
+	 * @returns the inputArray
+	 * @throws NullPointerException if the array is null
+	 * @throws IndexOutOfBoundsException if from is outside of the lists range
+	 * @throws IllegalStateException if offset or length are smaller then 0 or exceed the array length
+	 */
 	@Override
 	public KEY_TYPE[] getElements(int from, KEY_TYPE[] a, int offset, int length) {
 		SanityChecks.checkArrayCapacity(size, offset, length);
@@ -202,6 +297,11 @@ public class ARRAY_LIST KEY_GENERIC_TYPE extends ABSTRACT_LIST KEY_GENERIC_TYPE 
 		return a;
 	}
 	
+	/**
+	 * a function to fast remove elements from the list.
+	 * @param from the start index of where the elements should be removed from (inclusive)
+	 * @param to the end index of where the elements should be removed to (exclusive)
+	 */
 	@Override
 	public void removeElements(int from, int to) {
 		checkRange(from);
@@ -217,6 +317,13 @@ public class ARRAY_LIST KEY_GENERIC_TYPE extends ABSTRACT_LIST KEY_GENERIC_TYPE 
 	}
 	
 #if TYPE_OBJECT
+	/**
+	 * A function to fast extract elements out of the list, this removes the elements that were fetched.
+	 * @param from the start index of where the elements should be fetched from (inclusive)
+	 * @param to the end index of where the elements should be fetched to (exclusive)
+	 * @param type the type of the OutputArray
+	 * @return a array of the elements that were fetched
+	 */
 	@Override
 	public <K> K[] extractElements(int from, int to, Class<K> type) {
 		checkRange(from);
@@ -233,6 +340,12 @@ public class ARRAY_LIST KEY_GENERIC_TYPE extends ABSTRACT_LIST KEY_GENERIC_TYPE 
 	}
 	
 #else
+	/**
+	 * A function to fast extract elements out of the list, this removes the elements that were fetched.
+	 * @param from the start index of where the elements should be fetched from (inclusive)
+	 * @param to the end index of where the elements should be fetched to (exclusive)
+	 * @return a array of the elements that were fetched
+	 */
 	@Override
 	public KEY_TYPE[] extractElements(int from, int to) {
 		int length = to - from;
@@ -245,6 +358,14 @@ public class ARRAY_LIST KEY_GENERIC_TYPE extends ABSTRACT_LIST KEY_GENERIC_TYPE 
 	}
 	
 #endif
+	/**
+	 * A function to check if all elements requested are present in the other collection.
+	 * This function might delegate to a more appropiate function if nessesary
+	 * @param c the collection that should be checked
+	 * @return true if the collection contains all elements in this list
+	 * @throws NullPointerException if the collection is null
+	 * @deprecated if the collection is type-specific
+	 */
 	@Override
 	@Primitive
 	public boolean containsAll(Collection<?> c) {
@@ -260,6 +381,14 @@ public class ARRAY_LIST KEY_GENERIC_TYPE extends ABSTRACT_LIST KEY_GENERIC_TYPE 
 		return true;
 	}
 	
+	/**
+	 * A function to check if any element of this list is present in the collection.
+	 * This function might delegate to a more appropiate function if nessesary
+	 * @param c the collection that should be checked
+	 * @return true if the collection contains any elements in this list
+	 * @throws NullPointerException if the collection is null
+	 * @deprecated if the collection is type-specific
+	 */
 	@Override
 	@Primitive
 	public boolean containsAny(Collection<?> c)
@@ -274,22 +403,50 @@ public class ARRAY_LIST KEY_GENERIC_TYPE extends ABSTRACT_LIST KEY_GENERIC_TYPE 
 #endif
 		}
 		return false;
-	}	
+	}
 	
+	/**
+	 * A function to find the index of a given element
+	 * @param e the element that is searched for
+	 * @return the index of the element if found. (if not found then -1)
+	 * @deprecated if type-specific but still supported because of special edgecase Object-Comparason features
+	 */
 	@Override
 	@Primitive
 	public int indexOf(Object o) {
+#if TYPE_OBJECT
+		if(o == null) {
+			for(int i = 0;i<size;i++)
+				if(data[i] == null) return i;
+			return -1;
+		}
+#else
 		if(o == null) return -1;
+#endif
 		for(int i = 0;i<size;i++) {
 			if(EQUALS_KEY_TYPE(data[i], o)) return i;
 		}
 		return -1;
 	}
 	
+	/**
+	 * A function to find the last index of a given element
+	 * @param e the element that is searched for
+	 * @return the last index of the element if found. (if not found then -1)
+	 * @deprecated if type-specific but still supported because of special edgecase Object-Comparason features
+	 */
 	@Override
 	@Primitive
 	public int lastIndexOf(Object o) {
+#if TYPE_OBJECT
+		if(o == null) {
+			for(int i = size - 1;i>=0;i--)
+				if(data[i] == null) return i;
+			return -1;
+		}
+#else
 		if(o == null) return -1;
+#endif
 		for(int i = size - 1;i>=0;i--) {
 			if(EQUALS_KEY_TYPE(data[i], o)) return i;
 		}
@@ -297,12 +454,22 @@ public class ARRAY_LIST KEY_GENERIC_TYPE extends ABSTRACT_LIST KEY_GENERIC_TYPE 
 	}
 	
 #if TYPE_OBJECT
+	/**
+	 * Sorts the elements specified by the Natural order either by using the Comparator or the elements
+	 * @see List#sort(Comparator)
+	 * @see ARRAYS#stableSort(KEY_TYPE[], Comparator)
+	 */
 	@Override
 	public void sort(Comparator<? super CLASS_TYPE> c) {
 		if(c != null) ARRAYS.stableSort(data, size, c);
 		else ARRAYS.stableSort((Comparable[])data, size);
 	}
 	
+	/**
+	 * Sorts the elements specified by the Natural order either by using the Comparator or the elements using a unstable sort
+	 * @see List#sort(Comparator)
+	 * @see ARRAYS#unstableSort(KEY_TYPE[], Comparator)
+	 */
 	@Override
 	public void unstableSort(Comparator<? super CLASS_TYPE> c) {
 		if(c != null) ARRAYS.unstableSort(data, size, c);
@@ -310,6 +477,12 @@ public class ARRAY_LIST KEY_GENERIC_TYPE extends ABSTRACT_LIST KEY_GENERIC_TYPE 
 	}
 	
 #endif
+	/**
+	 * A Type-Specific implementation of containsAll. This implementation iterates over all elements and checks all elements are present in the other collection.
+	 * @param the collection that should be checked if it contains all elements.
+	 * @return true if all elements were found in the collection
+	 * @throws NullPointerException if the collection is null
+	 */
 	@Override
 	public boolean containsAll(COLLECTION KEY_GENERIC_TYPE c) {
 		Objects.requireNonNull(c);
@@ -317,8 +490,14 @@ public class ARRAY_LIST KEY_GENERIC_TYPE extends ABSTRACT_LIST KEY_GENERIC_TYPE 
 			if(!c.contains(data[i])) return false;
 		}
 		return true;
-	}	
+	}
 	
+	/**
+	 * This implementation iterates over the elements of the collection and checks if they are stored in this collection.
+	 * @param c the elements that should be checked for
+	 * @return true if any element is in this collection
+	 * @throws NullPointerException if the collection is null
+	 */
 	@Override
 	public boolean containsAny(COLLECTION KEY_GENERIC_TYPE c) {
 		Objects.requireNonNull(c);
@@ -329,6 +508,11 @@ public class ARRAY_LIST KEY_GENERIC_TYPE extends ABSTRACT_LIST KEY_GENERIC_TYPE 
 	}
 	
 #if !TYPE_OBJECT
+	/**
+	 * A Type-Specific function to find the index of a given element
+	 * @param e the element that is searched for
+	 * @return the index of the element if found. (if not found then -1)
+	 */
 	@Override
 	public int indexOf(KEY_TYPE e) {
 		for(int i = 0;i<size;i++) {
@@ -337,6 +521,11 @@ public class ARRAY_LIST KEY_GENERIC_TYPE extends ABSTRACT_LIST KEY_GENERIC_TYPE 
 		return -1;
 	}
 	
+	/**
+	 * A Type-Specific function to find the last index of a given element
+	 * @param e the element that is searched for
+	 * @return the last index of the element if found. (if not found then -1)
+	 */
 	@Override
 	public int lastIndexOf(KEY_TYPE e) {
 		for(int i = size - 1;i>=0;i--) {
@@ -345,12 +534,22 @@ public class ARRAY_LIST KEY_GENERIC_TYPE extends ABSTRACT_LIST KEY_GENERIC_TYPE 
 		return -1;
 	}
 	
+	/**
+	 * Sorts the elements specified by the Natural order either by using the Comparator or the elements
+	 * @see List#sort(Comparator)
+	 * @see ARRAYS#stableSort(KEY_TYPE[], Comparator)
+	 */
 	@Override
 	public void sort(COMPARATOR c) {
 		if(c != null) ARRAYS.stableSort(data, size, c);
 		else ARRAYS.stableSort(data, size);
 	}
 	
+	/**
+	 * Sorts the elements specified by the Natural order either by using the Comparator or the elements using a unstable sort
+	 * @see List#sort(Comparator)
+	 * @see ARRAYS#unstableSort(KEY_TYPE[], Comparator)
+	 */
 	@Override
 	public void unstableSort(COMPARATOR c) {
 		if(c != null) ARRAYS.unstableSort(data, size, c);
@@ -358,31 +557,70 @@ public class ARRAY_LIST KEY_GENERIC_TYPE extends ABSTRACT_LIST KEY_GENERIC_TYPE 
 	}
 	
 #endif
+	/**
+	 * A Type-Specific get function to reduce (un)boxing
+	 * @param index the index of the element to fetch
+	 * @return the value of the requested index
+	 * @throws IndexOutOfBoundsException if the index is out of range
+	 */
 	@Override
 	public KEY_TYPE GET_KEY(int index) {
 		checkRange(index);
 		return data[index];
 	}
 	
+	/**
+	 * Provides the Selected Object from the stack.
+	 * Top to bottom
+	 * @param index of the element that should be provided
+	 * @return the element that was requested
+	 * @throws ArrayIndexOutOfBoundsException if the index is out of bounds
+	 * @see Stack#peek(int)
+	 */
 	@Override
 	public KEY_TYPE PEEK(int index) {
 		checkRange((size() - 1) - index);
 		return data[(size() - 1) - index];
 	}
 	
+	/**
+	 * Provides the Underlying Array in the Implementation
+	 * @return underlying Array
+	 * @throws ClassCastException if the return type does not match the underlying array. (Only for Object Implementations)
+	 */
 	@Override
 	public KEY_TYPE[] elements() {
 		return data;
 	}
 	
+	/**
+	 * A Type Specific foreach function that reduces (un)boxing
+	 * 
+     * @implSpec
+     * <p>The default implementation behaves as if:
+     * <pre>{@code
+     *     for(int i = 0;i<size;i++)
+     *     		action.accept(data[i]);
+     * }</pre>
+     *
+     * @param action The action to be performed for each element
+     * @throws NullPointerException if the specified action is null
+     * @see Iterable#forEach(Consumer)
+     */
 	@Override
-	@Primitive
 	public void forEach(CONSUMER KEY_SUPER_GENERIC_TYPE action) {
 		Objects.requireNonNull(action);
 		for(int i = 0;i<size;i++)
 			action.accept(data[i]);
 	}
 	
+	/**
+	 * A Type-Specific set function to reduce (un)boxing
+	 * @param index the index of the element to set
+	 * @param e the value that should be set
+	 * @return the previous element
+	 * @throws IndexOutOfBoundsException if the index is out of range
+	 */
 	@Override
 	public KEY_TYPE set(int index, KEY_TYPE e) {
 		checkRange(index);
@@ -391,13 +629,29 @@ public class ARRAY_LIST KEY_GENERIC_TYPE extends ABSTRACT_LIST KEY_GENERIC_TYPE 
 		return old;
 	}
 	
+	/**
+	 * A function to replace all values in the list
+	 * @param o the action to replace the values
+	 * @throws NullPointerException if o is null
+	 */
 	@Override
+	@Primitive
 	public void replaceAll(UnaryOperator<CLASS_TYPE> o) {
-		for(int i = 0;i<size;i++)
-			data[i] = OBJ_TO_KEY(o.apply(KEY_TO_OBJ(data[i])));
+		Objects.requireNonNull(o);
+#if TYPE_OBJECT
+		REPLACE(T -> KEY_TO_OBJ(o.APPLY(OBJ_TO_KEY(T))));
+#else
+	for(int i = 0;i<size;i++)
+		data[i] = OBJ_TO_KEY(o.apply(KEY_TO_OBJ(data[i])));
+#endif
 	}
 	
-#if PRIMITIVES	
+#if PRIMITIVES
+	/**
+	 * A Type-Specific replace function to reduce (un)boxing
+	 * @param o the action to replace the values
+	 * @throws NullPointerException if o is null
+	 */
 	@Override
 	public void REPLACE(UNARY_OPERATOR o) {
 		for(int i = 0;i<size;i++)
@@ -409,6 +663,12 @@ public class ARRAY_LIST KEY_GENERIC_TYPE extends ABSTRACT_LIST KEY_GENERIC_TYPE 
 	}
 	
 #endif
+	/**
+	 * A Type-Specific remove function to reduce (un)boxing
+	 * @param index the index of the element to fetch
+	 * @return the value of the requested index
+	 * @throws IndexOutOfBoundsException if the index is out of range
+	 */
 	@Override
 	public KEY_TYPE REMOVE(int index) {
 		checkRange(index);
@@ -421,26 +681,52 @@ public class ARRAY_LIST KEY_GENERIC_TYPE extends ABSTRACT_LIST KEY_GENERIC_TYPE 
 		return old;
 	}
 	
+	/**
+	 * A Type-Specific pop function to reduce (un)boxing
+	 * @param index the index of the element to fetch
+	 * @return the value of the requested index
+	 * @throws IndexOutOfBoundsException if the index is out of range
+	 */
 	@Override
 	public KEY_TYPE POP() {
 		return REMOVE(size() - 1);
 	}
 	
+	/**
+	 * A function to remove all elements that were provided in the other collection
+	 * This function might delegate to a more appropiate function if nessesary
+	 * @param c the elements that should be removed
+	 * @return true if the collection was modified
+	 * @throws NullPointerException if the collection is null
+	 * @deprecated if the collection is type-specific
+	 */
 	@Override
 	@Primitive
 	public boolean removeAll(Collection<?> c) {
 		if(c.isEmpty()) return false;
 		if(c instanceof COLLECTION) return removeAll((COLLECTION KEY_GENERIC_TYPE)c);
 		boolean modified = false;
-		for(int i = 0, j = 0;i<size;i++) {
+		int j = 0;
+		for(int i = 0;i<size;i++) {
 			if(!c.contains(KEY_TO_OBJ(data[i]))) {
 				data[j++] = data[i];
 				modified = true;
 			}
 		}
+#if TYPE_OBJECT
+		Arrays.fill(data, j, size, null);
+#endif
 		return modified;
 	}
 	
+	/**
+	 * A function to retain all elements that were provided in the other collection
+	 * This function might delegate to a more appropiate function if nessesary
+	 * @param c the elements that should be kept. If empty, ARRAY_LIST#clear is called.
+	 * @return true if the collection was modified
+	 * @throws NullPointerException if the collection is null
+	 * @deprecated if the collection is type-specific
+	 */
 	@Override
 	@Primitive
 	public boolean retainAll(Collection<?> c) {
@@ -451,42 +737,74 @@ public class ARRAY_LIST KEY_GENERIC_TYPE extends ABSTRACT_LIST KEY_GENERIC_TYPE 
 		}
 		if(c instanceof COLLECTION) return retainAll((COLLECTION KEY_GENERIC_TYPE)c);
 		boolean modified = false;
-		for(int i = 0, j = 0;i<size;i++) {
+		int j = 0;
+		for(int i = 0;i<size;i++) {
 			if(c.contains(KEY_TO_OBJ(data[i]))) {
 				data[j++] = data[i];
 				modified = true;
 			}
 		}
+#if TYPE_OBJECT
+		Arrays.fill(data, j, size, null);
+#endif
 		return modified;
 	}
 	
+	/**
+	 * A optimized List#removeIf(Predicate) that more quickly removes elements from the list then the ArrayList implementation
+	 * @param filter the filter to remove elements
+	 * @return true if the list was modified
+	 * @deprecated if Type-Specific, use #remIf instead
+	 */
 	@Override
 	@Primitive
 	public boolean removeIf(Predicate<? super CLASS_TYPE> filter) {
+		
 		Objects.requireNonNull(filter);
 		boolean modified = false;
-		for(int i = 0, j = 0;i<size;i++) {
+		int j = 0;
+		for(int i = 0;i<size;i++) {
 			if(!filter.test(KEY_TO_OBJ(data[i]))) {
 				data[j++] = data[i];
 				modified = true;
 			}
 		}
+#if TYPE_OBJECT
+		Arrays.fill(data, j, size, null);
+#endif
 		return modified;
 	}
 	
+	/**
+	 * A function to remove all elements that were provided in the other collection
+	 * @param c the elements that should be removed
+	 * @return true if the collection was modified
+	 * @throws NullPointerException if the collection is null
+	 */
 	@Override
 	public boolean removeAll(COLLECTION KEY_GENERIC_TYPE c) {
 		if(c.isEmpty()) return false;
 		boolean modified = false;
-		for(int i = 0, j = 0;i<size;i++) {
+		int j = 0;
+		for(int i = 0;i<size;i++) {
 			if(!c.contains(data[i])) {
 				data[j++] = data[i];
 				modified = true;
 			}
 		}
+#if TYPE_OBJECT
+		Arrays.fill(data, j, size, null);
+#endif		
 		return modified;
 	}
 	
+	/**
+	 * A function to retain all elements that were provided in the other collection
+	 * This function might delegate to a more appropiate function if nessesary
+	 * @param c the elements that should be kept. If empty, ARRAY_LIST#clear is called.
+	 * @return true if the collection was modified
+	 * @throws NullPointerException if the collection is null
+	 */
 	@Override
 	public boolean retainAll(COLLECTION KEY_GENERIC_TYPE c) {
 		if(c.isEmpty()) {
@@ -495,16 +813,25 @@ public class ARRAY_LIST KEY_GENERIC_TYPE extends ABSTRACT_LIST KEY_GENERIC_TYPE 
 			return modifed;
 		}
 		boolean modified = false;
-		for(int i = 0, j = 0;i<size;i++) {
+		int j = 0;
+		for(int i = 0;i<size;i++) {
 			if(c.contains(data[i])) {
 				data[j++] = data[i];
 				modified = true;
 			}
 		}
+#if TYPE_OBJECT
+		Arrays.fill(data, j, size, null);
+#endif
 		return modified;
 	}
 	
 #if PRIMITIVES
+	/**
+	 * A optimized List#removeIf(Predicate) that more quickly removes elements from the list then the ArrayList implementation
+	 * @param filter the filter to remove elements
+	 * @return true if the list was modified
+	 */
 	@Override
 	public boolean remIf(JAVA_PREDICATE filter) {
 		Objects.requireNonNull(filter);
@@ -519,6 +846,10 @@ public class ARRAY_LIST KEY_GENERIC_TYPE extends ABSTRACT_LIST KEY_GENERIC_TYPE 
 	}
 	
 #endif
+	/**
+	 * A toArray implementation that ensures the Array itself is a Object.
+	 * @return a Array of the elements in the list
+	 */
 	@Override
 	@Primitive
 	public Object[] toArray() {
@@ -528,6 +859,11 @@ public class ARRAY_LIST KEY_GENERIC_TYPE extends ABSTRACT_LIST KEY_GENERIC_TYPE 
 		return obj;
 	}
 	
+	/**
+	 * A toArray implementation that ensures the Array itself is a Object.
+	 * @param a original array. If null a Object array with the right size is created. If to small the Array of the same type is created with the right size
+	 * @return a Array of the elements in the list
+	 */
 	@Override
 	@Primitive
 	public <E> E[] toArray(E[] a) {
@@ -547,11 +883,21 @@ public class ARRAY_LIST KEY_GENERIC_TYPE extends ABSTRACT_LIST KEY_GENERIC_TYPE 
 	}
 	
 #endif
+	/**
+	 * A function to return the size of the list
+	 * @return the size of elements in the list
+	 */
 	@Override
 	public int size() {
 		return size;
 	}
 	
+	/**
+	 * A function to ensure the elements are within the requested size.
+	 * If smaller then the stored elements they get removed as needed.
+	 * If bigger it is ensured that enough room is provided depending on the implementation
+	 * @param size the requested amount of elements/room for elements
+	 */
 	@Override
 	public void size(int size) {
 		if(size > data.length)
@@ -560,6 +906,9 @@ public class ARRAY_LIST KEY_GENERIC_TYPE extends ABSTRACT_LIST KEY_GENERIC_TYPE 
 			Arrays.fill(data, size, size(), EMPTY_VALUE);
 	}
 	
+	/**
+	 * A function to clear all elements in the list.
+	 */
 	@Override
 	public void clear() {
 #if TYPE_OBJECT
@@ -568,6 +917,10 @@ public class ARRAY_LIST KEY_GENERIC_TYPE extends ABSTRACT_LIST KEY_GENERIC_TYPE 
 		size = 0;
 	}
 	
+	/**
+	 * Trims the original collection down to the size of the current elements or the requested size depending which is bigger
+	 * @param size the requested trim size.
+	 */
 	@Override
 	public void trim(int size) {
 		if(size > size() || size() == data.length) return;
@@ -579,6 +932,13 @@ public class ARRAY_LIST KEY_GENERIC_TYPE extends ABSTRACT_LIST KEY_GENERIC_TYPE 
 #endif
 	}
 	
+	/**
+	 * Increases the capacity of this implementation instance, if necessary,
+	 * to ensure that it can hold at least the number of elements specified by
+	 * the minimum capacity argument.
+	 *
+	 * @param size the desired minimum capacity
+	 */
 	@Override
 	public void ensureCapacity(int size) {
 		grow(size);

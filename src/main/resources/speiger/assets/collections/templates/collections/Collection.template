@@ -57,7 +57,7 @@ public interface COLLECTION KEY_GENERIC_TYPE extends Collection<CLASS_TYPE>, ITE
 	
 	/**
 	 * Returns true if any element of the Collection is found in the provided collection.
-	 * A Small Optimization method to find out of any element is present when comparing collections and not all of them.
+	 * A Small Optimization function to find out of any element is present when comparing collections and not all of them.
 	 * @return true if any element was found.
 	 */
 	@Primitive
@@ -104,8 +104,8 @@ public interface COLLECTION KEY_GENERIC_TYPE extends Collection<CLASS_TYPE>, ITE
 	
 #if PRIMITIVES
 	/** {@inheritDoc}
-	 * <p>This default implementation delegates to the corresponding type-specific method.
-	 * @deprecated Please use the corresponding type-specific method instead. 
+	 * <p>This default implementation delegates to the corresponding type-specific function.
+	 * @deprecated Please use the corresponding type-specific function instead. 
 	 */
 	@Override
 	@Deprecated
@@ -140,24 +140,24 @@ public interface COLLECTION KEY_GENERIC_TYPE extends Collection<CLASS_TYPE>, ITE
 	
 #endif
 	/** {@inheritDoc}
-	 * <p>This default implementation delegates to the corresponding type-specific method.
-	 * @deprecated Please use the corresponding type-specific method instead. 
+	 * <p>This default implementation delegates to the corresponding type-specific function.
+	 * @deprecated Please use the corresponding type-specific function instead. 
 	 */
 	@Override
 	@Deprecated
 	public default boolean add(CLASS_TYPE o) { return add(OBJ_TO_KEY(o)); }
 	
 	/** {@inheritDoc}
-	 * <p>This default implementation delegates to the corresponding type-specific method.
-	 * @deprecated Please use the corresponding type-specific method instead. 
+	 * <p>This default implementation delegates to the corresponding type-specific function.
+	 * @deprecated Please use the corresponding type-specific function instead. 
 	 */
 	@Override
 	@Deprecated
 	public default boolean contains(Object o) { return o != null && contains(CLASS_TO_KEY(o)); }
 	
  	/** {@inheritDoc}
- 	 * <p>This default implementation delegates to the corresponding type-specific method.
- 	 * @deprecated Please use the corresponding type-specific method instead. 
+ 	 * <p>This default implementation delegates to the corresponding type-specific function.
+ 	 * @deprecated Please use the corresponding type-specific function instead. 
  	 */
 	@Override
 	@Deprecated

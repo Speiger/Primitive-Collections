@@ -9,29 +9,50 @@ import speiger.src.collections.PACKAGE.collections.ABSTRACT_COLLECTION;
 import speiger.src.collections.PACKAGE.collections.COLLECTION;
 import speiger.src.collections.PACKAGE.collections.ITERATOR;
 
+/**
+ * Abstract implementation of the {@link LIST} interface.
+ */
 public abstract class ABSTRACT_LIST KEY_GENERIC_TYPE extends ABSTRACT_COLLECTION KEY_GENERIC_TYPE implements LIST KEY_GENERIC_TYPE 
 {
 #if !TYPE_OBJECT
+	/**
+	 * A Type-Specific implementation of add function that delegates to {@link #add(int, KEY_TYPE)}
+	 */
 	@Override
 	public boolean add(KEY_TYPE e) {
 		add(size(), e);
 		return true;
 	}
 	
+	/** {@inheritDoc}
+	 * <p>This default implementation delegates to the corresponding type-specific function.
+	 * @deprecated Please use the corresponding type-specific function instead. 
+	 */
 	@Override
+	@Deprecated
 	public void add(int index, CLASS_TYPE element) {
 		add(index, OBJ_TO_KEY(element));
 	}
 	
+#endif
+	/**
+	 * A Type-Specific implementation that iterates over the elements and adds them.
+	 * @param c the elements that wants to be added
+	 * @return true if the list was modified
+	 */
 	@Override
-	public boolean addAll(COLLECTION c) {
+	public boolean addAll(COLLECTION KEY_GENERIC_TYPE c) {
 		boolean modified = false;
 		for(KEY_TYPE e : c)
 			modified |= add(e);
 		return modified;
 	}
 	
-#endif
+	/**
+	 * A Type-Specific implementation that iterates over the elements and adds them.
+	 * @param c the elements that wants to be added
+	 * @return true if the list was modified
+	 */
 	@Override
 	public boolean addAll(LIST KEY_GENERIC_TYPE c) {
 		boolean modified = false;
@@ -40,7 +61,14 @@ public abstract class ABSTRACT_LIST KEY_GENERIC_TYPE extends ABSTRACT_COLLECTION
 		return modified;
 	}
 	
+	/**
+	 * The IndexOf implementation iterates over all elements and compares them to the search value.
+	 * @param e the value that the index is searched for.
+	 * @return index of the value that was searched for. -1 if not found
+	 * @deprecated it is highly suggested not to use this with Primitives because of boxing. But it is still supported because of ObjectComparason that are custom objects and allow to find the contents.
+	 */
 	@Override
+	@Primitive
 	public int indexOf(Object o) {
 		LIST_ITERATOR KEY_GENERIC_TYPE iter = listIterator();
 #if TYPE_OBJECT
@@ -61,7 +89,14 @@ public abstract class ABSTRACT_LIST KEY_GENERIC_TYPE extends ABSTRACT_COLLECTION
 		return -1;
 	}
 	
+	/**
+	 * The lastIndexOf implementation iterates over all elements and compares them to the search value.
+	 * @param e the value that the index is searched for.
+	 * @return the last index of the value that was searched for. -1 if not found
+	 * @deprecated it is highly suggested not to use this with Primitives because of boxing. But it is still supported because of ObjectComparason that are custom objects and allow to find the contents.
+	 */
 	@Override
+	@Primitive
 	public int lastIndexOf(Object o) {
 		LIST_ITERATOR KEY_GENERIC_TYPE iter = listIterator(size());
 #if TYPE_OBJECT
@@ -83,6 +118,11 @@ public abstract class ABSTRACT_LIST KEY_GENERIC_TYPE extends ABSTRACT_COLLECTION
 	}
 	
 #if !TYPE_OBJECT
+	/**
+	 * The indexOf implementation iterates over all elements and compares them to the search value.
+	 * @param e the value that the index is searched for.
+	 * @return index of the value that was searched for. -1 if not found
+	 */
 	@Override
 	public int indexOf(KEY_TYPE e) {
 		LIST_ITERATOR KEY_GENERIC_TYPE iter = listIterator();
@@ -93,6 +133,11 @@ public abstract class ABSTRACT_LIST KEY_GENERIC_TYPE extends ABSTRACT_COLLECTION
 		return -1;
 	}
 	
+	/**
+	 * The lastIndexOf implementation iterates over all elements and compares them to the search value.
+	 * @param e the value that the index is searched for.
+	 * @return the last index of the value that was searched for. -1 if not found
+	 */
 	@Override
 	public int lastIndexOf(KEY_TYPE e) {
 		LIST_ITERATOR KEY_GENERIC_TYPE iter = listIterator(size());
@@ -104,6 +149,9 @@ public abstract class ABSTRACT_LIST KEY_GENERIC_TYPE extends ABSTRACT_COLLECTION
 	}
 	
 #endif
+	/**
+	 * Compares if the list are the same.
+	 */
 	@Override
 	public boolean equals(Object o) {
     	if (o == this)
@@ -133,6 +181,9 @@ public abstract class ABSTRACT_LIST KEY_GENERIC_TYPE extends ABSTRACT_COLLECTION
     	return !(e1.hasNext() || e2.hasNext());
 	}
 	
+	/**
+	 * Generates the hashcode based on the values stored in the list.
+	 */
 	@Override
 	public int hashCode() {
     	int hashCode = 1;

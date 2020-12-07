@@ -1,6 +1,7 @@
 package speiger.src.collections.PACKAGE.functions;
 
 import java.util.Comparator;
+import java.util.Objects;
 
 /**
  * Type-Specific Class for Comparator to reduce (un)boxing
@@ -14,12 +15,23 @@ public interface COMPARATOR extends Comparator<CLASS_TYPE>
 	int compare(KEY_TYPE o1, KEY_TYPE o2);
 	
 	/** {@inheritDoc}
- 	* <p>This default implementation delegates to the corresponding type-specific method.
- 	* @deprecated Please use the corresponding type-specific method instead. 
+ 	* <p>This default implementation delegates to the corresponding type-specific function.
+ 	* @deprecated Please use the corresponding type-specific function instead. 
  	*/
 	@Override
 	@Deprecated
 	default int compare(CLASS_TYPE o1, CLASS_TYPE o2) {
 		return compare(OBJ_TO_KEY(o1), OBJ_TO_KEY(o2));
+	}
+	
+	/**
+	 * A Wrapper function to convert a Non-Type-Specific Comparator to a Type-Specific-Comparator
+	 * @param c comparator to convert
+	 * @return the wrapper of the comparator
+	 * @throws NullPointerException if the comparator is null
+	 */
+	public static COMPARATOR of(Comparator<CLASS_TYPE> c) {
+		Objects.requireNonNull(c);
+		return (K, V) -> c.compare(KEY_TO_OBJ(K), KEY_TO_OBJ(V))
 	}
 }

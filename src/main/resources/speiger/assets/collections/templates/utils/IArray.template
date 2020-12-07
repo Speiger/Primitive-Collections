@@ -19,7 +19,7 @@ public interface IARRAY KEY_GENERIC_TYPE extends IArray
 	public KEY_TYPE[] elements();
 	
 	/**
-	 * Provides the Underlying Array in the Implementation. This method exists purely because of Synchronization wrappers to help run Synchronized Code
+	 * Provides the Underlying Array in the Implementation. This function exists purely because of Synchronization wrappers to help run Synchronized Code
 	 * @param action the action that handles the array
 	 * @throws NullPointerException if action is null
 	 * @throws ClassCastException if the return type does not match the underlying array. (Only for Object Implementations)
