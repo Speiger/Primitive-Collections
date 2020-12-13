@@ -1,0 +1,8 @@
+package speiger.src.collections.PACKAGE.utils;
+
+public interface STRATEGY KEY_GENERIC_TYPE
+{
+	public int hashCode(KEY_TYPE o);
+	
+	public boolean equals(KEY_TYPE key, KEY_TYPE value);
+}

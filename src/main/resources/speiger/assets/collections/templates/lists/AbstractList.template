@@ -366,6 +366,7 @@ public abstract class ABSTRACT_LIST KEY_GENERIC_TYPE extends ABSTRACT_COLLECTION
 		
 		@Override
 		public KEY_TYPE NEXT() {
+			lastReturned = index;
 			return GET_KEY(index++);
 		}
 		
@@ -376,6 +377,7 @@ public abstract class ABSTRACT_LIST KEY_GENERIC_TYPE extends ABSTRACT_COLLECTION
 		
 		@Override
 		public KEY_TYPE PREVIOUS() {
+			lastReturned = index;
 			return GET_KEY(index--);
 		}
 		

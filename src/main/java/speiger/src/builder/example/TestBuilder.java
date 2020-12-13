@@ -53,6 +53,9 @@ public class TestBuilder extends TemplateProcessor
 			varibles.add(type);
 		}
 		nameRemapper.put("IArray", "I%sArray");
+		nameRemapper.put("AbstractCollection", "Abstract%sCollection");
+		nameRemapper.put("AbstractSet", "Abstract%sSet");
+		nameRemapper.put("AbstractList", "Abstract%sList");
 		blocked.put("Consumer", EnumSet.of(ClassType.OBJECT));
 		blocked.put("Comparator", EnumSet.of(ClassType.OBJECT));
 		blocked.put("Stack", EnumSet.of(ClassType.OBJECT));

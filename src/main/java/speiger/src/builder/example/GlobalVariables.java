@@ -73,13 +73,16 @@ public class GlobalVariables
 		
 		//Final Classes
 		addClassMapper("ARRAY_LIST", "ArrayList");
+		addClassMapper("LINKED_CUSTOM_HASH_SET", "LinkedOpenCustomHashSet");
 		addClassMapper("LINKED_HASH_SET", "LinkedOpenHashSet");
+		addClassMapper("CUSTOM_HASH_SET", "OpenCustomHashSet");
 		addClassMapper("HASH_SET", "OpenHashSet");
+		addClassMapper("ARRAY_SET", "ArraySet");
 		
 		//Abstract Classes
-		addClassMapper("ABSTRACT_COLLECTION", "AbstractCollection");
-		addClassMapper("ABSTRACT_SET", "AbstractSet");
-		addClassMapper("ABSTRACT_LIST", "AbstractList");
+		addAbstractMapper("ABSTRACT_COLLECTION", "Abstract%sCollection");
+		addAbstractMapper("ABSTRACT_SET", "Abstract%sSet");
+		addAbstractMapper("ABSTRACT_LIST", "Abstract%sList");
 		addClassMapper("SUB_LIST", "SubList");
 		
 		//Helper Classes
@@ -94,9 +97,11 @@ public class GlobalVariables
 		addClassMapper("ITERATOR", "Iterator");
 		addClassMapper("ITERABLE", "Iterable");
 		addClassMapper("COLLECTION", "Collection");
+		addClassMapper("LIST_ITER", "ListIter");
 		addClassMapper("LIST", "List");
 		addClassMapper("SORTED_SET", "SortedSet");
 		addClassMapper("SET", "Set");
+		addClassMapper("STRATEGY", "Strategy");
 		addClassMapper("STACK", "Stack");
 		if(type.isObject())
 		{
@@ -111,7 +116,6 @@ public class GlobalVariables
 			addFunctionMappers("IARRAY", "I%sArray");
 		}
 		//Dependency
-		addClassMapper("LIST_ITER", "ListIter");
 		return this;
 	}
 	
@@ -167,6 +171,11 @@ public class GlobalVariables
 	private void addClassMapper(String pattern, String replacement)
 	{
 		operators.add(new SimpleMapper(pattern, type.getFileType()+replacement));		
+	}
+	
+	private void addAbstractMapper(String pattern, String replacement)
+	{
+		operators.add(new SimpleMapper(pattern, String.format(replacement, type.getFileType())));		
 	}
 	
 	private void addFunctionMapper(String pattern, String replacement)

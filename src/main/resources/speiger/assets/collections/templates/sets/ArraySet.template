@@ -1,0 +1,567 @@
+package speiger.src.collections.PACKAGE.sets;
+
+import java.util.Arrays;
+import java.util.Collection;
+#if TYPE_OBJECT
+import java.util.Comparator;
+import java.util.NoSuchElementException;
+import java.util.Objects;
+#else
+import java.util.NoSuchElementException;
+#endif
+import java.util.Set;
+
+import speiger.src.collections.PACKAGE.collections.BI_ITERATOR;
+import speiger.src.collections.PACKAGE.collections.COLLECTION;
+#if !TYPE_OBJECT
+import speiger.src.collections.PACKAGE.functions.COMPARATOR;
+#endif
+import speiger.src.collections.PACKAGE.lists.LIST_ITERATOR;
+import speiger.src.collections.PACKAGE.utils.ARRAYS;
+
+public class ARRAY_SET KEY_GENERIC_TYPE extends ABSTRACT_SET KEY_GENERIC_TYPE implements SORTED_SET KEY_GENERIC_TYPE
+{
+	protected transient KEY_TYPE[] data;
+	protected int size = 0;
+	
+	public ARRAY_SET() {
+#if TYPE_OBJECT
+		data = (KEY_TYPE[])ARRAYS.EMPTY_ARRAY;
+#else
+		data = ARRAYS.EMPTY_ARRAY;
+#endif
+	}
+	
+	public ARRAY_SET(int capacity) {
+#if TYPE_OBJECT
+		data = (KEY_TYPE[])new Object[capacity];
+#else
+		data = new KEY_TYPE[capacity];
+#endif
+	}
+	
+	public ARRAY_SET(KEY_TYPE[] array) {
+		this(array, array.length);
+	}
+	
+	public ARRAY_SET(KEY_TYPE[] array, int length) {
+		data = array;
+		size = length;
+	}
+	
+	@Deprecated
+	public ARRAY_SET(Collection<? extends CLASS_TYPE> c) {
+		this(c.size());
+		addAll(c);
+	}
+	
+	public ARRAY_SET(COLLECTION KEY_GENERIC_TYPE c) {
+		this(c.size());
+		addAll(c);
+	}
+	
+	@Deprecated
+	public ARRAY_SET(Set<? extends CLASS_TYPE> s) {
+		this(s.size());
+		for(CLASS_TYPE e : s)
+			data[size++] = OBJ_TO_KEY(e);
+	}
+	
+	public ARRAY_SET(SET KEY_GENERIC_TYPE s) {
+		this(s.size());
+		for(KEY_TYPE e : s)
+			data[size++] = e;
+	}
+	
+	@Override
+	public boolean add(KEY_TYPE o) {
+		int index = findIndex(o);
+		if(index == -1) {
+			if(data.length == size) data = Arrays.copyOf(data, size == 0 ? 2 : size * 2);
+			data[size++] = o;
+			return true;
+		}
+		return false;
+	}
+	
+	@Override
+	public boolean addAndMoveToFirst(KEY_TYPE o) {
+		int index = findIndex(o);
+		if(index == -1) {
+			if(data.length == size) data = Arrays.copyOf(data, size == 0 ? 2 : size * 2);
+			System.arraycopy(data, 0, data, 1, size++);
+			data[0] = o;
+			return true;
+		}
+		else if(index != 0) {
+			o = data[index];
+			System.arraycopy(data, 0, data, 1, index);
+			data[index] = o;
+		}
+		return false;
+	}
+
+	@Override
+	public boolean addAndMoveToLast(KEY_TYPE o) {
+		int index = findIndex(o);
+		if(index == -1) {
+			if(data.length == size) data = Arrays.copyOf(data, size == 0 ? 2 : size * 2);
+			data[size++] = o;
+			return true;
+		}
+		else if(index != size - 1) {
+			o = data[index];
+			System.arraycopy(data, index+1, data, index, size - index);
+			data[size] = o;
+		}
+		return false;
+	}
+
+	@Override
+	public boolean moveToFirst(KEY_TYPE o) {
+		int index = findIndex(o);
+		if(index > 0) {
+			o = data[index];
+			System.arraycopy(data, 0, data, 1, index);
+			data[index] = o;
+			return true;
+		}
+		return false;
+	}
+
+	@Override
+	public boolean moveToLast(KEY_TYPE o) {
+		int index = findIndex(o);
+		if(index != -1 && index != size - 1) {
+			o = data[index];
+			System.arraycopy(data, index+1, data, index, size - index);
+			data[size] = o;
+			return true;
+		}
+		return false;
+	}
+	
+#if !TYPE_OBJECT
+	@Override
+	public boolean contains(KEY_TYPE e) {
+		return findIndex(e) != -1;
+	}
+	
+#else
+	@Override
+	public boolean contains(Object e) {
+		return findIndex((KEY_TYPE)e) != -1;
+	}
+	
+#endif
+	@Override
+	public KEY_TYPE FIRST_KEY() {
+		if(size == 0) throw new NoSuchElementException();
+		return data[0];
+	}
+	
+	@Override
+	public KEY_TYPE LAST_KEY() {
+		if(size == 0) throw new NoSuchElementException();
+		return data[size - 1];
+	}
+	
+#if !TYPE_OBJECT
+	@Override
+	public boolean remove(KEY_TYPE o) {
+		int index = findIndex(o);
+		if(index != -1) {
+			System.arraycopy(data, index+1, data, index, size - index);
+			return true;
+		}
+		return false;
+	}
+	
+#else
+	@Override
+	public boolean remove(Object o) {
+		int index = findIndex((KEY_TYPE)o);
+		if(index != -1) {
+			System.arraycopy(data, index+1, data, index, size - index);
+			data[size-1] = EMPTY_VALUE;
+			return true;
+		}
+		return false;
+	}
+	
+#endif
+	@Override
+	public KEY_TYPE POLL_FIRST_KEY() {
+		if(size == 0) throw new NoSuchElementException();
+		KEY_TYPE result = data[0];
+		System.arraycopy(data, 1, data, 0, size);
+#if TYPE_OBJECT
+		data[size-1] = EMPTY_VALUE;
+#endif
+		return result;
+	}
+	
+	@Override
+	public KEY_TYPE POLL_LAST_KEY() {
+		if(size == 0) throw new NoSuchElementException();
+#if TYPE_OBJECT
+		KEY_TYPE result = data[size-1];
+		data[size-1] = EMPTY_VALUE;
+		return result;
+#else
+		return data[--size];	
+#endif
+	}
+	
+	protected int findIndex(KEY_TYPE o) {
+		for(int i = size-1;i>=0;i--)
+			if(EQUALS(data[i], o)) return i;
+		return -1;
+	}
+	
+	@Override
+	public BI_ITERATOR KEY_GENERIC_TYPE iterator() {
+		return new SetIterator(0);
+	}
+	
+	@Override
+	public BI_ITERATOR KEY_GENERIC_TYPE iterator(KEY_TYPE fromElement) {
+		int index = findIndex(fromElement);
+		if(index != -1) return new SetIterator(index);
+		throw new NoSuchElementException();
+	}
+	
+	@Override
+	public SORTED_SET KEY_GENERIC_TYPE subSet(KEY_TYPE fromElement, KEY_TYPE toElement) {
+		int fromIndex = findIndex(fromElement);
+		int toIndex = findIndex(toElement);
+		if(fromIndex == -1 || toIndex == -1) throw new NoSuchElementException();
+		return new SubSet(fromIndex, toIndex - fromIndex);
+	}
+
+	@Override
+	public SORTED_SET KEY_GENERIC_TYPE headSet(KEY_TYPE toElement) {
+		int toIndex = findIndex(toElement);
+		if(toIndex == -1) throw new NoSuchElementException();
+		return new SubSet(0, toIndex);
+	}
+
+	@Override
+	public SORTED_SET KEY_GENERIC_TYPE tailSet(KEY_TYPE fromElement) {
+		int fromIndex = findIndex(fromElement);
+		if(fromIndex == -1) throw new NoSuchElementException();
+		return new SubSet(fromIndex, size - fromIndex);
+	}
+	
+	@Override
+	public COMPARATOR KEY_GENERIC_TYPE comparator() {
+		return null;
+	}
+	
+	@Override
+	public void clear() {
+		size = 0;
+	}
+	
+	@Override
+	public int size() {
+		return size;
+	}
+	
+	private class SubSet extends ABSTRACT_SET KEY_GENERIC_TYPE implements SORTED_SET KEY_GENERIC_TYPE {
+		int offset;
+		int length;
+		
+		SubSet(int offset, int length) {
+			this.offset = offset;
+			this.length = length;
+		}
+
+		@Override
+		public boolean add(KEY_TYPE o) {
+			int index = findIndex(o);
+			if(index != -1) {
+				if(data.length == size) data = Arrays.copyOf(data, size == 0 ? 2 : size * 2);
+				System.arraycopy(data, (offset+length), data, (offset+length)+1, size-(offset+length));
+				data[offset+length] = o;
+				size++;
+				length++;
+				return true;
+			}
+			return false;
+		}
+
+		@Override
+		public boolean addAndMoveToFirst(KEY_TYPE o) {
+			int index = findIndex(o);
+			if(index == -1) {
+				if(data.length == size) data = Arrays.copyOf(data, size == 0 ? 2 : size * 2);
+				System.arraycopy(data, offset, data, offset+1, size-offset);
+				data[offset] = o;
+				size++;
+				length++;
+				return true;
+			}
+			else if(index != 0) {
+				o = data[index];
+				System.arraycopy(data, offset, data, offset+1, index-offset);
+				data[offset] = o;
+			}
+			return false;
+		}
+		
+		@Override
+		public boolean addAndMoveToLast(KEY_TYPE o) {
+			int index = findIndex(o);
+			if(index == -1) {
+				if(data.length == size) data = Arrays.copyOf(data, size == 0 ? 2 : size * 2);
+				System.arraycopy(data, (offset+length)+1, data, (offset+length), size-(offset+length));
+				data[offset+length] = o;
+				size++;
+				length++;
+				return true;
+			}
+			else if(index != 0) {
+				o = data[index];
+				System.arraycopy(data, offset+1, data, offset, index-offset);
+				data[offset+length] = o;
+			}
+			return false;
+		}
+		
+		@Override
+		public boolean moveToFirst(KEY_TYPE o) {
+			int index = findIndex(o);
+			if(index != -1 && index != offset) {
+				o = data[index];
+				System.arraycopy(data, offset, data, offset+1, index-offset);
+				data[offset] = o;
+				return true;
+			}
+			return false;
+		}
+		
+		@Override
+		public boolean moveToLast(KEY_TYPE o) {
+			int index = findIndex(o);
+			if(index != -1 && index != (offset+length) - 1) {
+				o = data[index];
+				System.arraycopy(data, offset+1, data, offset, index-offset);
+				data[offset+length] = o;
+				return true;
+			}
+			return false;
+		}
+		
+#if !TYPE_OBJECT
+		@Override
+		public boolean contains(KEY_TYPE e) {
+			return findIndex(e) != -1;
+		}
+		
+#else
+		@Override
+		public boolean contains(Object e) {
+			return findIndex((KEY_TYPE)e) != -1;
+		}
+		
+#endif
+		@Override
+		public KEY_TYPE FIRST_KEY() {
+			if(length == 0) throw new NoSuchElementException();
+			return data[offset];
+		}
+		
+		@Override
+		public KEY_TYPE LAST_KEY() {
+			if(length == 0) throw new NoSuchElementException();
+			return data[(offset + length) - 1];
+		}
+		
+#if !TYPE_OBJECT
+		@Override
+		public boolean remove(KEY_TYPE o) {
+			int index = findIndex(o);
+			if(index != -1) {
+				System.arraycopy(data, index+1, data, index, size - index);
+				size--;
+				length--;
+				return true;
+			}
+			return false;
+		}
+		
+#else
+		@Override
+		public boolean remove(Object o) {
+			int index = findIndex((KEY_TYPE)o);
+			if(index != -1) {
+				System.arraycopy(data, index+1, data, index, size - index);
+				data[size-1] = EMPTY_VALUE;
+				size--;
+				length--;
+				return true;
+			}
+			return false;
+		}
+		
+#endif
+		@Override
+		public KEY_TYPE POLL_FIRST_KEY() {
+			if(length == 0) throw new NoSuchElementException();
+			KEY_TYPE result = data[offset];
+			System.arraycopy(data, offset+1, data, offset, size-offset);
+#if TYPE_OBJECT
+			data[size-1] = EMPTY_VALUE;
+#endif
+			size--;
+			length--;
+			return result;
+		}
+		
+		@Override
+		public KEY_TYPE POLL_LAST_KEY() {
+			if(length == 0) throw new NoSuchElementException();
+			KEY_TYPE result = data[offset+length];
+			System.arraycopy(data, (offset+length)+1, data, (offset+length), size-(offset+length));
+#if TYPE_OBJECT
+			data[size-1] = EMPTY_VALUE;
+#endif
+			size--;
+			length--;
+			return result;
+		}
+		
+		@Override
+		public COMPARATOR KEY_GENERIC_TYPE comparator() {
+			return null;
+		}
+
+		@Override
+		public BI_ITERATOR KEY_GENERIC_TYPE iterator() {
+			return new SetIterator(offset);
+		}
+
+		@Override
+		public BI_ITERATOR KEY_GENERIC_TYPE iterator(KEY_TYPE fromElement) {
+			int index = findIndex(fromElement);
+			if(index != -1) return new SetIterator(index);
+			throw new NoSuchElementException();
+		}
+
+		@Override
+		public SORTED_SET KEY_GENERIC_TYPE subSet(KEY_TYPE fromElement, KEY_TYPE toElement) {
+			int fromIndex = findIndex(fromElement);
+			int toIndex = findIndex(toElement);
+			if(fromIndex == -1 || toIndex == -1) throw new NoSuchElementException();
+			return new SubSet(fromIndex, toIndex - fromIndex);
+		}
+
+		@Override
+		public SORTED_SET KEY_GENERIC_TYPE headSet(KEY_TYPE toElement) {
+			int toIndex = findIndex(toElement);
+			if(toIndex == -1) throw new NoSuchElementException();
+			return new SubSet(0, toIndex);
+		}
+
+		@Override
+		public SORTED_SET KEY_GENERIC_TYPE tailSet(KEY_TYPE fromElement) {
+			int fromIndex = findIndex(fromElement);
+			if(fromIndex == -1) throw new NoSuchElementException();
+			return new SubSet(fromIndex, size - fromIndex);
+		}
+		
+		@Override
+		public int size() {
+			return length;
+		}
+		
+		private int findIndex(KEY_TYPE o) {
+			for(int i = length-1;i>=0;i--)
+				if(data[offset+i] == o) return i + offset;
+			return -1;
+		}
+	}
+	
+	private class SetIterator implements LIST_ITERATOR KEY_GENERIC_TYPE {
+		int index;
+		int lastReturned = -1;
+		
+		public SetIterator(int index) {
+			this.index = index;
+		}
+		
+		@Override
+		public boolean hasNext() {
+			return index < size();
+		}
+		
+		@Override
+		public KEY_TYPE NEXT() {
+			lastReturned = index;
+			return data[index++];
+		}
+		
+		@Override
+		public boolean hasPrevious() {
+			return index > 0;
+		}
+		
+		@Override
+		public KEY_TYPE PREVIOUS() {
+			lastReturned = index;
+			return data[index--];
+		}
+		
+		@Override
+		public int nextIndex() {
+			return index;
+		}
+		
+		@Override
+		public int previousIndex() {
+			return index-1;
+		}
+		
+		@Override
+		public void remove() {
+			if(lastReturned == -1)
+				throw new IllegalStateException();
+			ARRAY_SET.this.remove(data[lastReturned]);
+			if(lastReturned < index)
+				index--;
+			lastReturned = -1;
+		}
+		
+#if TYPE_OBJECT
+		@Override
+		public void set(Object e) { throw new UnsupportedOperationException(); }
+		
+		@Override
+		public void add(Object e) { throw new UnsupportedOperationException(); }
+		
+#else
+		@Override
+		public void set(KEY_TYPE e) { throw new UnsupportedOperationException(); }
+
+		@Override
+		public void add(KEY_TYPE e) { throw new UnsupportedOperationException(); }
+		
+#endif
+		@Override
+		public int skip(int amount) {
+			if(amount < 0) throw new IllegalStateException("Negative Numbers are not allowed");
+			int steps = Math.min(amount, (size() - 1) - index);
+			index += steps;
+			return steps;
+		}
+		
+		@Override
+		public int back(int amount) {
+			if(amount < 0) throw new IllegalStateException("Negative Numbers are not allowed");
+			int steps = Math.min(amount, index);
+			index -= steps;
+			return steps;
+		}
+	}
+}

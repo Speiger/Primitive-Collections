@@ -1,0 +1,384 @@
+package speiger.src.collections.PACKAGE.sets;
+
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Iterator;
+import java.util.NoSuchElementException;
+
+import speiger.src.collections.PACKAGE.collections.COLLECTION;
+import speiger.src.collections.PACKAGE.collections.ITERATOR;
+import speiger.src.collections.PACKAGE.lists.ARRAY_LIST;
+import speiger.src.collections.PACKAGE.lists.LIST;
+#if !TYPE_OBJECT
+import speiger.src.collections.PACKAGE.utils.ITERATORS;
+#endif
+import speiger.src.collections.PACKAGE.utils.STRATEGY;
+
+import speiger.src.collections.utils.HashUtil;
+import speiger.src.collections.utils.ITrimmable;
+import speiger.src.collections.utils.SanityChecks;
+
+public class CUSTOM_HASH_SET KEY_GENERIC_TYPE extends ABSTRACT_SET KEY_GENERIC_TYPE implements ITrimmable
+{
+	protected transient KEY_TYPE[] keys;
+	protected transient boolean containsNull;
+	protected transient int minCapacity;
+	protected transient int nullIndex;
+	protected transient int maxFill;
+	protected transient int mask;
+	
+	protected int size;
+	protected final float loadFactor;
+	protected final STRATEGY KEY_SUPER_GENERIC_TYPE strategy;
+	
+	public CUSTOM_HASH_SET(STRATEGY KEY_SUPER_GENERIC_TYPE strategy) {
+		this(HashUtil.DEFAULT_MIN_CAPACITY, HashUtil.DEFAULT_LOAD_FACTOR, strategy);
+	}
+	
+	public CUSTOM_HASH_SET(int minCapacity, STRATEGY KEY_SUPER_GENERIC_TYPE strategy) {
+		this(minCapacity, HashUtil.DEFAULT_LOAD_FACTOR, strategy);
+	}
+	
+	public CUSTOM_HASH_SET(int minCapacity, float loadFactor, STRATEGY KEY_SUPER_GENERIC_TYPE strategy) {
+		if(minCapacity < 0)	throw new IllegalStateException("Minimum Capacity is negative. This is not allowed");
+		if(loadFactor <= 0 || loadFactor >= 1F) throw new IllegalStateException("Load Factor is not between 0 and 1");
+		this.loadFactor = loadFactor;
+		this.minCapacity = nullIndex = HashUtil.arraySize(minCapacity, loadFactor);
+		mask = nullIndex - 1;
+		maxFill = Math.min((int)Math.ceil(nullIndex * loadFactor), nullIndex - 1);
+#if TYPE_OBJECT
+		keys = (KEY_TYPE[])new Object[nullIndex + 1];
+#else
+		keys = new KEY_TYPE[nullIndex + 1];
+#endif
+		this.strategy = strategy;
+	}
+	
+	public CUSTOM_HASH_SET(KEY_TYPE[] array, STRATEGY KEY_SUPER_GENERIC_TYPE strategy) {
+		this(array, 0, array.length, HashUtil.DEFAULT_LOAD_FACTOR, strategy);
+	}
+	
+	public CUSTOM_HASH_SET(KEY_TYPE[] array, float loadFactor, STRATEGY KEY_SUPER_GENERIC_TYPE strategy) {
+		this(array, 0, array.length, loadFactor, strategy);
+	}
+	
+	public CUSTOM_HASH_SET(KEY_TYPE[] array, int offset, int length, STRATEGY KEY_SUPER_GENERIC_TYPE strategy) {
+		this(array, offset, length, HashUtil.DEFAULT_LOAD_FACTOR, strategy);
+	}
+	
+	public CUSTOM_HASH_SET(KEY_TYPE[] array, int offset, int length, float loadFactor, STRATEGY KEY_SUPER_GENERIC_TYPE strategy) {
+		this(length < 0 ? 0 : length, strategy);
+		SanityChecks.checkArrayCapacity(array.length, offset, length);
+		for(int i = 0;i<length;i++) add(array[offset+i]);
+	}
+	
+	@Deprecated
+	public CUSTOM_HASH_SET(Collection<? extends CLASS_TYPE> collection, STRATEGY KEY_SUPER_GENERIC_TYPE strategy) {
+		this(collection, HashUtil.DEFAULT_LOAD_FACTOR, strategy);
+	}
+	
+	@Deprecated
+	public CUSTOM_HASH_SET(Collection<? extends CLASS_TYPE> collection, float loadFactor, STRATEGY KEY_SUPER_GENERIC_TYPE strategy) {
+		this(collection.size(), loadFactor, strategy);
+		addAll(collection);
+	}
+	
+	public CUSTOM_HASH_SET(COLLECTION KEY_GENERIC_TYPE collection, STRATEGY KEY_SUPER_GENERIC_TYPE strategy) {
+		this(collection, HashUtil.DEFAULT_LOAD_FACTOR, strategy);
+	}
+	
+	public CUSTOM_HASH_SET(COLLECTION KEY_GENERIC_TYPE collection, float loadFactor, STRATEGY KEY_SUPER_GENERIC_TYPE strategy) {
+		this(collection.size(), strategy);
+		addAll(collection);
+	}
+	
+	public CUSTOM_HASH_SET(Iterator<CLASS_TYPE> iterator, STRATEGY KEY_SUPER_GENERIC_TYPE strategy) {
+		this(iterator, HashUtil.DEFAULT_LOAD_FACTOR, strategy);
+	}
+	
+	public CUSTOM_HASH_SET(Iterator<CLASS_TYPE> iterator, float loadFactor, STRATEGY KEY_SUPER_GENERIC_TYPE strategy) {
+#if !TYPE_OBJECT
+		this(ITERATORS.wrap(iterator), loadFactor, strategy);
+#else
+		this(HashUtil.DEFAULT_MIN_CAPACITY, loadFactor, strategy);
+		while(iterator.hasNext()) add(iterator.next());
+#endif
+	}
+	
+#if !TYPE_OBJECT
+	public CUSTOM_HASH_SET(ITERATOR KEY_GENERIC_TYPE iterator, STRATEGY KEY_SUPER_GENERIC_TYPE strategy) {
+		this(iterator, HashUtil.DEFAULT_LOAD_FACTOR, strategy);
+	}
+	
+	public CUSTOM_HASH_SET(ITERATOR KEY_GENERIC_TYPE iterator, float loadFactor, STRATEGY KEY_SUPER_GENERIC_TYPE strategy) {
+		this(HashUtil.DEFAULT_MIN_CAPACITY, loadFactor, strategy);
+		while(iterator.hasNext()) add(iterator.NEXT());
+	}
+	
+#endif
+	public STRATEGY KEY_SUPER_GENERIC_TYPE getStrategy() {
+		return strategy;
+	}
+	
+	@Override
+	public boolean add(KEY_TYPE o) {
+		if(strategy.equals(o, EMPTY_VALUE)) {
+			if(containsNull) return false;
+			containsNull = true;
+			onNodeAdded(nullIndex);
+		}
+		else {
+			int pos = HashUtil.mix(strategy.hashCode(o)) & mask;
+			KEY_TYPE current = keys[pos];
+			if(!strategy.equals(current, EMPTY_VALUE)) {
+				if(strategy.equals(current, o)) return false;
+				while(!strategy.equals((current = keys[++pos & mask]), EMPTY_VALUE))
+					if(strategy.equals(current, o)) return false;
+			}
+			keys[pos] = o;
+			onNodeAdded(pos);
+		}
+		if(size++ >= maxFill) rehash(HashUtil.arraySize(size+1, loadFactor));
+		return true;
+	}
+	
+	@Override
+	@Deprecated
+	public boolean addAll(Collection<? extends CLASS_TYPE> c) {
+		if(loadFactor <= 0.5F) ensureCapacity(c.size());
+		else ensureCapacity(c.size() + size());
+		return super.addAll(c);
+	}
+	
+	@Override
+	public boolean addAll(COLLECTION KEY_GENERIC_TYPE c) {
+		if(loadFactor <= 0.5F) ensureCapacity(c.size());
+		else ensureCapacity(c.size() + size());		
+		return super.addAll(c);
+	}
+	
+#if TYPE_OBJECT
+	@Override
+	public boolean contains(Object o) {
+		if(strategy.equals((KEY_TYPE)o, EMPTY_VALUE)) return containsNull;
+		int pos = HashUtil.mix(strategy.hashCode((KEY_TYPE)o)) & mask;
+		KEY_TYPE current = keys[pos];
+		if(!strategy.equals(current, EMPTY_VALUE)) return false;
+		if(strategy.equals(current, (KEY_TYPE)o)) return true;
+		while(true) {
+			if(strategy.equals((current = keys[++pos & mask]), EMPTY_VALUE)) return false;
+			else if(strategy.equals(current, (KEY_TYPE)o)) return true;
+		}
+	}
+
+	@Override
+	public boolean remove(Object o) {
+		if(strategy.equals((KEY_TYPE)o, EMPTY_VALUE)) return (containsNull ? removeNullIndex() : false);
+		int pos = HashUtil.mix(strategy.hashCode((KEY_TYPE)o)) & mask;
+		KEY_TYPE current = keys[pos];
+		if(!strategy.equals(current, EMPTY_VALUE)) return false;
+		if(strategy.equals(current, (KEY_TYPE)o)) return removeIndex(pos);
+		while(true) {
+			if(strategy.equals((current = keys[++pos & mask]), EMPTY_VALUE)) return false;
+			else if(strategy.equals(current, (KEY_TYPE)o)) return removeIndex(pos);
+		}
+	}
+	
+#else
+	@Override
+	public boolean contains(KEY_TYPE o) {
+		if(strategy.equals(o, EMPTY_VALUE)) return containsNull;
+		int pos = HashUtil.mix(strategy.hashCode(o)) & mask;
+		KEY_TYPE current = keys[pos];
+		if(!strategy.equals(current, EMPTY_VALUE)) return false;
+		if(strategy.equals(current, o)) return true;
+		while(true) {
+			if(strategy.equals((current = keys[++pos & mask]), EMPTY_VALUE)) return false;
+			else if(strategy.equals(current, o)) return true;
+		}
+	}
+	
+	@Override
+	public boolean remove(KEY_TYPE o) {
+		if(strategy.equals(o, EMPTY_VALUE)) return (containsNull ? removeNullIndex() : false);
+		int pos = HashUtil.mix(strategy.hashCode(o)) & mask;
+		KEY_TYPE current = keys[pos];
+		if(!strategy.equals(current, EMPTY_VALUE)) return false;
+		if(strategy.equals(current, o)) return removeIndex(pos);
+		while(true) {
+			if(strategy.equals((current = keys[++pos & mask]), EMPTY_VALUE)) return false;
+			else if(strategy.equals(current, o)) return removeIndex(pos);
+		}
+	}
+	
+#endif
+	@Override
+	public boolean trim(int size) {
+		int newSize = HashUtil.nextPowerOfTwo((int)Math.ceil(size / loadFactor));
+		if(newSize >= nullIndex || size >= Math.min((int)Math.ceil(newSize * loadFactor), newSize - 1)) return false;
+		try {
+			rehash(newSize);
+		}
+		catch(OutOfMemoryError e) { return false; }
+		return true;
+	}
+	
+	private void ensureCapacity(int newCapacity) {
+		int size = HashUtil.arraySize(newCapacity, loadFactor);
+		if(size > nullIndex) rehash(size);
+	}
+	
+	protected boolean removeIndex(int pos) {
+		size--;
+		onNodeRemoved(pos);
+		shiftKeys(pos);
+		if(nullIndex > minCapacity && size < maxFill / 4 && nullIndex > HashUtil.DEFAULT_MIN_CAPACITY) rehash(nullIndex / 2);
+		return true;
+	}
+	
+	protected boolean removeNullIndex() {
+		containsNull = false;
+		keys[nullIndex] = EMPTY_VALUE;
+		size--;
+		onNodeRemoved(nullIndex);
+		if(nullIndex > minCapacity && size < maxFill / 4 && nullIndex > HashUtil.DEFAULT_MIN_CAPACITY) rehash(nullIndex / 2);
+		return true;
+	}
+	
+	protected void onNodeAdded(int pos) {
+		
+	}
+	
+	protected void onNodeRemoved(int pos) {
+		
+	}
+	
+	protected void onNodeMoved(int from, int to) {
+		
+	}
+	
+	protected void shiftKeys(int startPos) {
+		int slot, last;
+		KEY_TYPE current;
+		while(true) {
+			startPos = ((last = startPos) + 1) & mask;
+			while(true){
+				if(strategy.equals((current = keys[startPos]), EMPTY_VALUE)) {
+					keys[last] = EMPTY_VALUE;
+					return;
+				}
+				slot = HashUtil.mix(strategy.hashCode(current)) & mask;
+				if(last <= startPos ? (last >= slot || slot > startPos) : (last >= slot && slot > startPos)) break;
+				startPos = ++startPos & mask;
+			}
+			keys[last] = current;
+			onNodeMoved(startPos, last);
+		}
+	}
+	
+	protected void rehash(int newSize) {
+		int newMask = newSize - 1;
+#if TYPE_OBJECT
+		KEY_TYPE[] newKeys = (KEY_TYPE[])new Object[newSize + 1];
+#else
+		KEY_TYPE[] newKeys = new KEY_TYPE[newSize + 1];
+#endif
+		for(int i = nullIndex, pos = 0, j = (size - (containsNull ? 1 : 0));j-- != 0;) {
+			while(strategy.equals(keys[--i], EMPTY_VALUE));
+			if(!strategy.equals(newKeys[pos = HashUtil.mix(TO_HASH(keys[i])) & newMask], EMPTY_VALUE))
+				while(!strategy.equals(newKeys[++pos & newMask], EMPTY_VALUE));
+			newKeys[pos] = keys[i];
+		}
+		nullIndex = newSize;
+		mask = newMask;
+		maxFill = Math.min((int)Math.ceil(nullIndex * loadFactor), nullIndex - 1);
+		keys = newKeys;
+	}
+	
+	@Override
+	public ITERATOR KEY_GENERIC_TYPE iterator() {
+		return new SetIterator();
+	}
+	
+	@Override
+	public void clear() {
+		if(size == 0) return;
+		size = 0;
+		containsNull = false;
+		Arrays.fill(keys, EMPTY_VALUE);
+	}
+	
+	@Override
+	public int size() {
+		return size;
+	}
+	
+	private class SetIterator implements ITERATOR KEY_GENERIC_TYPE {
+		int pos = nullIndex;
+		int lastReturned = -1;
+		int count = size;
+		boolean returnNull = containsNull;
+		LIST KEY_GENERIC_TYPE wrapped = null;
+		
+		@Override
+		public boolean hasNext() {
+			return count != 0;
+		}
+		
+		@Override
+		public KEY_TYPE NEXT() {
+			if(count != 0) throw new NoSuchElementException();
+			count--;
+			if(returnNull) {
+				returnNull = false;
+				lastReturned = nullIndex;
+				return keys[nullIndex];
+			}
+			while(true) {
+				if(pos-- < 0) {
+					lastReturned = Integer.MAX_VALUE;
+					return wrapped.GET_KEY(-pos - 1);
+				}
+				if(!strategy.equals(keys[pos], EMPTY_VALUE)) return keys[lastReturned = pos];
+			}
+		}
+		
+		@Override
+		public void remove() {
+			if(lastReturned == -1) throw new IllegalStateException();
+			if(lastReturned == nullIndex) {
+				containsNull = false;
+				keys[nullIndex] = EMPTY_VALUE;
+			}
+			else if(pos >= 0) shiftKeys(pos);
+			else {
+				CUSTOM_HASH_SET.this.remove(wrapped.GET_KEY(-pos - 1));
+				return;
+			}
+			size--;
+			lastReturned = -1;
+		}
+		
+		private void shiftKeys(int startPos) {
+			int slot, last;
+			KEY_TYPE current;
+			while(true) {
+				startPos = ((last = startPos) + 1) & mask;
+				while(true){
+					if(strategy.equals((current = keys[startPos]), EMPTY_VALUE)) {
+						keys[last] = EMPTY_VALUE;
+						return;
+					}
+					slot = HashUtil.mix(strategy.hashCode(current)) & mask;
+					if(last <= startPos ? (last >= slot || slot > startPos) : (last >= slot && slot > startPos)) break;
+					startPos = ++startPos & mask;
+				}
+				if(startPos < last) {
+					if(wrapped == null) wrapped = new ARRAY_LISTBRACES(2);
+					wrapped.add(keys[pos]);
+				}
+				keys[last] = current;
+			}
+		}
+	}
+}
