@@ -77,7 +77,7 @@ public class LISTS
 		public void ensureCapacity(int size) { synchronized(mutex) { l.ensureCapacity(size); } }
 		
 		@Override
-		public void trim(int size) { synchronized(mutex) { l.trim(size); } }
+		public boolean trim(int size) { synchronized(mutex) { return l.trim(size); } }
 		
 		@Override
 		public KEY_TYPE[] elements() { synchronized(mutex) { return l.elements(); } }

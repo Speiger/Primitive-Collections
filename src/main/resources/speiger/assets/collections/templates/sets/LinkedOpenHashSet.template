@@ -1,0 +1,562 @@
+package speiger.src.collections.PACKAGE.sets;
+
+#if TYPE_OBJECT
+import java.util.Comparator;
+#endif
+import java.util.Collection;
+import java.util.Iterator;
+import java.util.NoSuchElementException;
+#if TYPE_OBJECT
+import java.util.Objects;
+#endif
+
+import speiger.src.collections.PACKAGE.collections.COLLECTION;
+#if !TYPE_OBJECT
+import speiger.src.collections.PACKAGE.collections.ITERATOR;
+#endif
+import speiger.src.collections.PACKAGE.collections.BI_ITERATOR;
+#if !TYPE_OBJECT
+import speiger.src.collections.PACKAGE.functions.COMPARATOR;
+#endif
+import speiger.src.collections.PACKAGE.lists.LIST_ITERATOR;
+#if !TYPE_OBJECT
+import speiger.src.collections.PACKAGE.utils.ITERATORS;
+#endif
+import speiger.src.collections.utils.HashUtil;
+import speiger.src.collections.utils.SanityChecks;
+
+public class LINKED_HASH_SET KEY_GENERIC_TYPE extends HASH_SET KEY_GENERIC_TYPE implements SORTED_SET KEY_GENERIC_TYPE
+{
+	protected long[] links;
+	protected int firstIndex = -1;
+	protected int lastIndex = -1;
+	
+	public LINKED_HASH_SET() {
+		this(HashUtil.DEFAULT_MIN_CAPACITY, HashUtil.DEFAULT_LOAD_FACTOR);
+	}
+	
+	public LINKED_HASH_SET(int minCapacity) {
+		this(minCapacity, HashUtil.DEFAULT_LOAD_FACTOR);
+	}
+	
+	public LINKED_HASH_SET(int minCapacity, float loadFactor) {
+		super(minCapacity, loadFactor);
+		links = new long[nullIndex + 1];
+	}
+	
+	public LINKED_HASH_SET(KEY_TYPE[] array) {
+		this(array, 0, array.length, HashUtil.DEFAULT_LOAD_FACTOR);
+	}
+	
+	public LINKED_HASH_SET(KEY_TYPE[] array, float loadFactor) {
+		this(array, 0, array.length, loadFactor);
+	}
+	
+	public LINKED_HASH_SET(KEY_TYPE[] array, int offset, int length) {
+		this(array, offset, length, HashUtil.DEFAULT_LOAD_FACTOR);
+	}
+	
+	public LINKED_HASH_SET(KEY_TYPE[] array, int offset, int length, float loadFactor) {
+		this(length < 0 ? 0 : length);
+		SanityChecks.checkArrayCapacity(array.length, offset, length);
+		for(int i = 0;i<length;i++) add(array[offset+i]);
+	}
+	
+	@Deprecated
+	public LINKED_HASH_SET(Collection<? extends CLASS_TYPE> collection) {
+		this(collection, HashUtil.DEFAULT_LOAD_FACTOR);
+	}
+	
+	@Deprecated
+	public LINKED_HASH_SET(Collection<? extends CLASS_TYPE> collection, float loadFactor) {
+		this(collection.size(), loadFactor);
+		addAll(collection);
+	}
+	
+	public LINKED_HASH_SET(COLLECTION KEY_GENERIC_TYPE collection) {
+		this(collection, HashUtil.DEFAULT_LOAD_FACTOR);
+	}
+	
+	public LINKED_HASH_SET(COLLECTION KEY_GENERIC_TYPE collection, float loadFactor) {
+		this(collection.size());
+		addAll(collection);
+	}
+	
+	public LINKED_HASH_SET(Iterator<CLASS_TYPE> iterator) {
+		this(iterator, HashUtil.DEFAULT_LOAD_FACTOR);
+	}
+	
+	public LINKED_HASH_SET(Iterator<CLASS_TYPE> iterator, float loadFactor) {
+#if !TYPE_OBJECT
+		this(ITERATORS.wrap(iterator), loadFactor);
+#else
+		this(HashUtil.DEFAULT_MIN_CAPACITY, loadFactor);
+		while(iterator.hasNext()) add(iterator.next());
+#endif
+	}
+	
+#if !TYPE_OBJECT
+	public LINKED_HASH_SET(ITERATOR KEY_GENERIC_TYPE iterator) {
+		this(iterator, HashUtil.DEFAULT_LOAD_FACTOR);
+	}
+	
+	public LINKED_HASH_SET(ITERATOR KEY_GENERIC_TYPE iterator, float loadFactor) {
+		this(HashUtil.DEFAULT_MIN_CAPACITY, loadFactor);
+		while(iterator.hasNext()) add(iterator.NEXT());
+	}
+	
+#endif
+	@Override
+	public boolean addAndMoveToFirst(KEY_TYPE o) {
+		if(EQUALS_NULL(o)) {
+			if(containsNull) {
+				moveToFirstIndex(nullIndex);
+				return false;
+			}
+			containsNull = true;
+			onNodeAdded(nullIndex);
+		}
+		else {
+			int pos = HashUtil.mix(TO_HASH(o)) & mask;
+			while(EQUALS_NOT_NULL(keys[pos])) {
+				if(EQUALS(keys[pos], o)) {
+					moveToFirstIndex(pos);
+					return false;
+				}
+				pos = ++pos & mask;
+			}
+			keys[pos] = o;
+			onNodeAdded(pos);
+		}
+		if(size++ >= maxFill) rehash(HashUtil.arraySize(size+1, loadFactor));
+		return true;
+	}
+	
+	@Override
+	public boolean addAndMoveToLast(KEY_TYPE o) {
+		if(EQUALS_NULL(o)) {
+			if(containsNull) {
+				moveToLastIndex(nullIndex);
+				return false;
+			}
+			containsNull = true;
+			onNodeAdded(nullIndex);
+		}
+		else {
+			int pos = HashUtil.mix(TO_HASH(o)) & mask;
+			while(EQUALS_NOT_NULL(keys[pos])) {
+				if(EQUALS(keys[pos], o)) {
+					moveToLastIndex(pos);
+					return false;
+				}
+				pos = ++pos & mask;
+			}
+			keys[pos] = o;
+			onNodeAdded(pos);
+		}
+		if(size++ >= maxFill) rehash(HashUtil.arraySize(size+1, loadFactor));
+		return true;
+	}
+	
+	@Override
+	public boolean moveToFirst(KEY_TYPE o) {
+		if(EQUALS_NULL(o)) {
+			if(containsNull) {
+				moveToFirstIndex(nullIndex);
+				return true;
+			}
+		}
+		else {
+			int pos = HashUtil.mix(TO_HASH(o)) & mask;
+			while(EQUALS_NOT_NULL(keys[pos])) {
+				if(EQUALS(keys[pos], o)) {
+					moveToFirstIndex(pos);
+					return true;
+				}
+				pos = ++pos & mask;
+			}
+			keys[pos] = o;
+		}
+		return false;
+	}
+	
+	@Override
+	public boolean moveToLast(KEY_TYPE o) {
+		if(EQUALS_NULL(o)) {
+			if(containsNull) {
+				moveToLastIndex(nullIndex);
+				return true;
+			}
+		}
+		else {
+			int pos = HashUtil.mix(TO_HASH(o)) & mask;
+			while(EQUALS_NOT_NULL(keys[pos])) {
+				if(EQUALS(keys[pos], o)) {
+					moveToLastIndex(pos);
+					return true;
+				}
+				pos = ++pos & mask;
+			}
+			keys[pos] = o;
+		}
+		return false;
+	}
+	
+	protected void moveToFirstIndex(int startPos) {
+		if(size == 1 || firstIndex == startPos) return;
+		if(lastIndex == startPos) {
+			lastIndex = (int)(links[startPos] >>> 32);
+			links[lastIndex] |= 0xFFFFFFFFL;
+		}
+		else {
+			long link = links[startPos];
+			int prev = (int) ( link >>> 32 );
+			int next = (int) link;
+			links[prev] ^= ((links[prev] ^ (link & 0xFFFFFFFFL)) & 0xFFFFFFFFL);
+			links[next] ^= ((links[next] ^ (link & 0xFFFFFFFF00000000L)) & 0xFFFFFFFF00000000L);
+		}
+		links[firstIndex] ^= ((links[firstIndex] ^ ((startPos & 0xFFFFFFFFL) << 32)) & 0xFFFFFFFF00000000L);
+		links[startPos] = ((-1 & 0xFFFFFFFFL) << 32) | (firstIndex & 0xFFFFFFFFL);
+		firstIndex = startPos;
+	}
+	
+	protected void moveToLastIndex(int startPos) {
+		if(size == 1 || lastIndex == startPos) return;
+		if(firstIndex == startPos) {
+			firstIndex = (int)links[startPos];
+			links[lastIndex] |= 0xFFFFFFFF00000000L;
+		}
+		else {
+			long link = links[startPos];
+			int prev = (int)(link >>> 32);
+			int next = (int)link;
+			links[prev] ^= ((links[prev] ^ (link & 0xFFFFFFFFL)) & 0xFFFFFFFFL);
+			links[next] ^= ((links[next] ^ (link & 0xFFFFFFFF00000000L)) & 0xFFFFFFFF00000000L);
+		}
+		links[lastIndex] ^= ((links[lastIndex] ^ (startPos & 0xFFFFFFFFL)) & 0xFFFFFFFFL);
+		links[startPos] = ((lastIndex & 0xFFFFFFFFL) << 32) | (-1 & 0xFFFFFFFFL);
+		lastIndex = startPos;
+	}
+	
+	@Override
+	public KEY_TYPE FIRST_KEY() {
+		if(size == 0) throw new NoSuchElementException();
+		return keys[firstIndex];
+	}
+	
+	@Override
+	public KEY_TYPE POLL_FIRST_KEY() {
+		if(size == 0) throw new NoSuchElementException();
+		int pos = firstIndex;
+		firstIndex = (int)links[pos];
+		if(0 <= firstIndex) links[firstIndex] |= 0xFFFFFFFF00000000L;
+		KEY_TYPE result = keys[pos];
+		size--;
+		if(EQUALS_NULL(result)) {
+			containsNull = false;
+			keys[nullIndex] = EMPTY_VALUE;
+		}
+		else shiftKeys(pos);
+		if(nullIndex > minCapacity && size < maxFill / 4 && nullIndex > HashUtil.DEFAULT_MIN_CAPACITY) rehash(nullIndex / 2);
+		return result;
+	}
+	
+	@Override
+	public KEY_TYPE LAST_KEY() {
+		if(size == 0) throw new NoSuchElementException();
+		return keys[lastIndex];
+	}
+	
+	@Override
+	public KEY_TYPE POLL_LAST_KEY() {
+		if(size == 0) throw new NoSuchElementException();
+		int pos = lastIndex;
+		lastIndex = (int)(links[pos] >>> 32);
+		if(0 <= lastIndex) links[lastIndex] |= 0xFFFFFFFFL;
+		KEY_TYPE result = keys[pos];
+		size--;
+		if(EQUALS_NULL(result)) {
+			containsNull = false;
+			keys[nullIndex] = EMPTY_VALUE;
+		}
+		else shiftKeys(pos);
+		if(nullIndex > minCapacity && size < maxFill / 4 && nullIndex > HashUtil.DEFAULT_MIN_CAPACITY) rehash(nullIndex / 2);
+		return result;
+	}
+	
+	@Override
+	protected void onNodeAdded(int pos) {
+		if(size == 0) {
+			firstIndex = lastIndex = pos;
+			links[pos] = -1L;
+		}
+		else {
+			links[lastIndex] ^= ((links[lastIndex] ^ (pos & 0xFFFFFFFFL)) & 0xFFFFFFFFL);
+			links[pos] = ((lastIndex & 0xFFFFFFFFL) << 32) | (-1 & 0xFFFFFFFFL);
+			lastIndex = pos;
+		}
+	}
+	
+	@Override
+	protected void onNodeRemoved(int pos) {
+		if(size == 0) firstIndex = lastIndex = 0;
+		else if(firstIndex == pos) {
+			firstIndex = (int)links[pos];
+			if(0 <= firstIndex) links[firstIndex] |= 0xFFFFFFFF00000000L;
+		}
+		else if(lastIndex == pos) {
+			lastIndex = (int)(links[pos] >>> 32);
+			if(0 <= lastIndex) links[pos] |= 0xFFFFFFFFL;
+		}
+		else {
+			long link = links[pos];
+			int prev = (int)(link >>> 32);
+			int next = (int)link;
+			links[prev] ^= ((links[prev] ^ (link & 0xFFFFFFFFL)) & 0xFFFFFFFFL);
+			links[next] ^= ((links[next] ^ (link & 0xFFFFFFFF00000000L)) & 0xFFFFFFFF00000000L);
+		}
+	}
+	
+	@Override
+	protected void onNodeMoved(int from, int to) {
+		if(size == 1) {
+			firstIndex = lastIndex = to;
+			links[to] = -1L;
+		}
+		else if(firstIndex == from) {
+			firstIndex = to;
+			links[(int)links[from]] ^= ((links[(int)links[from]] ^ ((to & 0xFFFFFFFFL) << 32)) & 0xFFFFFFFF00000000L);
+			links[to] = links[from];
+		}
+		else if(lastIndex == from) {
+			lastIndex = to;
+			links[(int)(links[from] >>> 32)] ^= ((links[(int)(links[from] >>> 32)] ^ (to & 0xFFFFFFFFL)) & 0xFFFFFFFFL);
+			links[to] = links[from];
+		}
+		else {
+			long link = links[from];
+			int prev = (int)(link >>> 32);
+			int next = (int)link;
+			links[prev] ^= ((links[prev] ^ (to & 0xFFFFFFFFL)) & 0xFFFFFFFFL);
+			links[next] ^= ((links[next] ^ ((to & 0xFFFFFFFFL) << 32)) & 0xFFFFFFFF00000000L);
+			links[to] = link;
+		}
+	}
+	
+	@Override
+	protected void rehash(int newSize) {
+		int newMask = newSize - 1;
+#if TYPE_OBJECT
+		KEY_TYPE[] newKeys = (KEY_TYPE[])new Object[newSize + 1];
+#else
+		KEY_TYPE[] newKeys = new KEY_TYPE[newSize + 1];
+#endif
+		long[] newLinks = new long[newSize + 1];
+		int newPrev = -1;
+		for(int j = size, i = firstIndex, pos = 0, prev = -1;j != 0;) {
+			if(EQUALS_NULL(keys[i])) pos = newSize;
+			else {
+				pos = HashUtil.mix(TO_HASH(keys[i])) & newMask;
+				while(EQUALS_NOT_NULL(newKeys[pos])) pos = ++pos & newMask;
+			}
+			newKeys[pos] = keys[i];
+			if(prev != -1) {
+				newLinks[newPrev] ^= ((newLinks[newPrev] ^ (pos & 0xFFFFFFFFL)) & 0xFFFFFFFFL);
+				newLinks[pos] ^= ((newLinks[pos] ^ ((newPrev & 0xFFFFFFFFL) << 32)) & 0xFFFFFFFF00000000L);
+				newPrev = pos;
+			}
+			else {
+				newPrev = firstIndex = pos;
+				newLinks[pos] = -1L;
+			}
+			i = (int)links[prev = i];
+		}
+		links = newLinks;
+		lastIndex = newPrev;
+		if(newPrev != -1) newLinks[newPrev] |= 0xFFFFFFFFL;
+		nullIndex = newSize;
+		mask = newMask;
+		maxFill = Math.min((int)Math.ceil(nullIndex * loadFactor), nullIndex - 1);
+		keys = newKeys;
+	}
+	
+	@Override
+	public void clear() {
+		super.clear();
+		firstIndex = lastIndex = -1;
+	}
+	
+	@Override
+	public LIST_ITERATOR KEY_GENERIC_TYPE iterator() {
+		return new SetIterator();
+	}
+	
+	@Override
+	public BI_ITERATOR KEY_GENERIC_TYPE iterator(KEY_TYPE fromElement) {
+		return new SetIterator(fromElement);
+	}
+	
+	@Override
+	public COMPARATOR KEY_GENERIC_TYPE comparator() { return null; }
+	
+	@Override
+	public SORTED_SET KEY_GENERIC_TYPE subSet(KEY_TYPE fromElement, KEY_TYPE toElement) { throw new UnsupportedOperationException(); }
+	
+	@Override
+	public SORTED_SET KEY_GENERIC_TYPE headSet(KEY_TYPE toElement) { throw new UnsupportedOperationException(); }
+	
+	@Override
+	public SORTED_SET KEY_GENERIC_TYPE tailSet(KEY_TYPE fromElement) { throw new UnsupportedOperationException(); }
+	
+	private class SetIterator implements LIST_ITERATOR KEY_GENERIC_TYPE {
+		int previous = -1;
+		int next = -1;
+		int current = -1;
+		int index = 0;
+		
+		SetIterator() {
+			next = firstIndex;
+		}
+		
+		SetIterator(KEY_TYPE from) {
+			if(EQUALS_NULL(from)) {
+				if(containsNull) {
+				    next = (int) links[nullIndex];
+				    previous = nullIndex;
+				}
+				else throw new NoSuchElementException("The null element is not in the set");
+			}
+			else if(EQUALS(keys[lastIndex], from)) {
+				previous = lastIndex;
+				index = size;
+			}
+			else {
+				int pos = HashUtil.mix(TO_HASH(from)) & mask;
+				while(EQUALS_NOT_NULL(keys[pos])) {
+					if(EQUALS(keys[pos], from)) {
+						next = (int)links[pos];
+						previous = pos;
+						break;
+					}
+					pos = ++pos & mask;
+				}
+				if(previous == -1 && next == -1)
+					throw new NoSuchElementException("The element was not found");
+			}
+		}
+		
+		@Override
+		public boolean hasNext() {
+			return next != -1;
+		}
+
+		@Override
+		public boolean hasPrevious() {
+			return previous != -1;
+		}
+		
+		@Override
+		public int nextIndex() {
+			ensureIndexKnown();
+			return index;
+		}
+		
+		@Override
+		public int previousIndex() {
+			ensureIndexKnown();
+			return index - 1;
+		}
+		
+		@Override
+		public void remove() {
+			if(current == -1) throw new IllegalStateException();
+			ensureIndexKnown();
+			if(current == previous) {
+				index--;
+				previous = (int)(links[current] >> 32);
+			}
+			else next = (int)links[current];
+			size--;
+			if(previous == -1) firstIndex = next;
+			else links[previous] ^= ((links[previous] ^ (next & 0xFFFFFFFFL)) & 0xFFFFFFFFL);
+			
+			if (next == -1) lastIndex = previous;
+			else links[next] ^= ((links[next] ^ ((previous & 0xFFFFFFFFL) << 32)) & 0xFFFFFFFF00000000L);
+			if(current == nullIndex) {
+				current = -1;
+				containsNull = false;
+				keys[nullIndex] = EMPTY_VALUE;
+			}
+			else {
+				int slot, last, startPos = current;
+				current = -1;
+				KEY_TYPE current;
+				while(true) {
+					last = ((last = startPos) + 1) & mask;
+					while(true){
+						if(EQUALS_NULL((current = keys[startPos]))) {
+							keys[last] = EMPTY_VALUE;
+							return;
+						}
+						slot = HashUtil.mix(TO_HASH(current)) & mask;
+						if(last <= startPos ? (last >= slot || slot > startPos) : (last >= slot && slot > startPos)) break;
+						startPos = ++startPos & mask;
+					}
+					keys[last] = current;
+					if(next == startPos) next = last;
+					if(previous == startPos) previous = last;
+					onNodeMoved(startPos, last);
+				}
+			}
+		}
+		
+		@Override
+		public KEY_TYPE PREVIOUS() {
+			if(!hasPrevious()) throw new NoSuchElementException();
+			current = previous;
+			previous = (int)(links[current] >> 32);
+			next = current;
+			if(index >= 0) index--;
+			return keys[current];
+		}
+
+		@Override
+		public KEY_TYPE NEXT() {
+			if(!hasPrevious()) throw new NoSuchElementException();
+			current = next;
+			next = (int)(links[current]);
+			previous = current;
+			if(index >= 0) index++;
+			return keys[current];
+		}
+		
+		private void ensureIndexKnown() {
+			if(index == -1) {
+				if(previous == -1) {
+					index = 0;
+				}
+				else if(next == -1) {
+					index = size;
+				}
+				else {
+					index = 1;
+					for(int pos = firstIndex;pos != previous;pos = (int)links[pos], index++);
+				}
+			}
+		}
+		
+#if TYPE_OBJECT
+		@Override
+		public void set(Object e) { throw new UnsupportedOperationException(); }
+		
+		@Override
+		public void add(Object e) { throw new UnsupportedOperationException(); }
+#else
+		@Override
+		public void set(KEY_TYPE e) { throw new UnsupportedOperationException(); }
+
+		@Override
+		public void add(KEY_TYPE e) { throw new UnsupportedOperationException(); }
+#endif
+	}
+}

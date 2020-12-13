@@ -32,6 +32,6 @@ public interface COMPARATOR extends Comparator<CLASS_TYPE>
 	 */
 	public static COMPARATOR of(Comparator<CLASS_TYPE> c) {
 		Objects.requireNonNull(c);
-		return (K, V) -> c.compare(KEY_TO_OBJ(K), KEY_TO_OBJ(V))
+		return (K, V) -> c.compare(KEY_TO_OBJ(K), KEY_TO_OBJ(V));
 	}
 }

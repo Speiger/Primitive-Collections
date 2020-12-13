@@ -41,6 +41,12 @@ public class ITERATORS
 		return iterator instanceof UnmodifiableListIterator ? iterator : new UnmodifiableListIteratorBRACES(iterator);
 	}
 	
+#if !TYPE_OBJECT
+	public static ITERATOR wrap(Iterator<CLASS_TYPE> iterator) {
+		return iterator instanceof ITERATOR ? (ITERATOR)iterator : new IteratorWrapper(iterator);
+	}
+	
+#endif
 	/**
 	 * Returns a Array Wrapping iterator
 	 * @param a the array that should be wrapped
@@ -180,6 +186,31 @@ public class ITERATORS
 		int index = 0;
 		for(;index<max && i.hasNext();index++) a[index+offset] = KEY_TO_OBJ(i.NEXT());
 		return index;
+	}
+	
+	private static class IteratorWrapper implements ITERATOR
+	{
+		Iterator<CLASS_TYPE> iter;
+		
+		public IteratorWrapper(Iterator<CLASS_TYPE> iter) {
+			this.iter = iter;
+		}
+		
+		@Override
+		public boolean hasNext() {
+			return iter.hasNext();
+		}
+		
+		@Override
+		public KEY_TYPE NEXT() {
+			return OBJ_TO_KEY(iter.next());
+		}
+		
+		@Override
+		@Deprecated
+		public CLASS_TYPE next() {
+			return iter.next();
+		}
 	}
 	
 #endif

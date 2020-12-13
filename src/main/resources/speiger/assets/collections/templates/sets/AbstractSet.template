@@ -1,0 +1,53 @@
+package speiger.src.collections.PACKAGE.sets;
+
+import java.util.Iterator;
+import java.util.Objects;
+import java.util.Set;
+
+import speiger.src.collections.PACKAGE.collections.ABSTRACT_COLLECTION;
+import speiger.src.collections.PACKAGE.collections.ITERATOR;
+
+public abstract class ABSTRACT_SET KEY_GENERIC_TYPE extends ABSTRACT_COLLECTION KEY_GENERIC_TYPE implements SET KEY_GENERIC_TYPE
+{
+	@Override
+	public int hashCode() {
+    	int hashCode = 1;
+    	ITERATOR KEY_GENERIC_TYPE i = iterator();
+    	while(i.hasNext())
+#if TYPE_OBJECT
+			hashCode = 31 * hashCode + i.next().hashCode();
+#else
+    		hashCode = 31 * hashCode + TO_HASH(i.NEXT());
+#endif
+    	return hashCode;
+	}
+	
+	@Override
+	public boolean equals(Object o) {
+    	if (o == this)
+    		return true;
+    	if (!(o instanceof Set))
+    		return false;
+    	Set<?> l = (Set<?>)o;
+    	if(l.size() != size()) return false;
+#if !TYPE_OBJECT    	
+		if(l instanceof SET)
+		{
+	    	ITERATOR e1 = iterator();
+	    	ITERATOR e2 = ((SET)l).iterator();
+	    	while (e1.hasNext() && e2.hasNext()) {
+	    		if(!(EQUALS(e1.NEXT(), e2.NEXT())))
+	    			return false;
+	    	}
+	    	return !(e1.hasNext() || e2.hasNext());
+		}
+#endif
+		Iterator<CLASS_TYPE> e1 = iterator();
+		Iterator<?> e2 = l.iterator();
+		while (e1.hasNext() && e2.hasNext()) {
+			if(!Objects.equals(e1.next(), e2.next()))
+				return false;
+		}
+		return !(e1.hasNext() || e2.hasNext());
+	}
+}

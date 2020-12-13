@@ -637,12 +637,17 @@ public class ARRAY_LIST KEY_GENERIC_TYPE extends ABSTRACT_LIST KEY_GENERIC_TYPE 
 	@Override
 	@Primitive
 	public void replaceAll(UnaryOperator<CLASS_TYPE> o) {
+#if PRIMITIVES
 		Objects.requireNonNull(o);
-#if TYPE_OBJECT
-		REPLACE(T -> KEY_TO_OBJ(o.APPLY(OBJ_TO_KEY(T))));
+#if TYPE_BYTE || TYPE_SHORT || TYPE_CHAR || TYPE_FLOAT
+		REPLACE(T -> OBJ_TO_KEY(o.apply(KEY_TO_OBJ(SanityChecks.SANITY_CAST(T)))));
 #else
-	for(int i = 0;i<size;i++)
-		data[i] = OBJ_TO_KEY(o.apply(KEY_TO_OBJ(data[i])));
+		REPLACE(T -> OBJ_TO_KEY(o.apply(KEY_TO_OBJ(T))));
+#endif
+#else
+		Objects.requireNonNull(o);
+		for(int i = 0;i<size;i++)
+			data[i] = OBJ_TO_KEY(o.apply(KEY_TO_OBJ(data[i])));
 #endif
 	}
 	
@@ -922,14 +927,15 @@ public class ARRAY_LIST KEY_GENERIC_TYPE extends ABSTRACT_LIST KEY_GENERIC_TYPE 
 	 * @param size the requested trim size.
 	 */
 	@Override
-	public void trim(int size) {
-		if(size > size() || size() == data.length) return;
+	public boolean trim(int size) {
+		if(size > size() || size() == data.length) return false;
 		int value = Math.min(size, size());
 #if TYPE_OBJECT
 		data = value == 0 ? (KEY_TYPE[])ARRAYS.EMPTY_ARRAY : Arrays.copyOf(data, value);
 #else
 		data = value == 0 ? ARRAYS.EMPTY_ARRAY : Arrays.copyOf(data, value);
 #endif
+		return true;
 	}
 	
 	/**

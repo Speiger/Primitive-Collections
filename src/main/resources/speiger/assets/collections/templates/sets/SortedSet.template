@@ -1,0 +1,73 @@
+package speiger.src.collections.PACKAGE.sets;
+
+import java.util.SortedSet;
+
+import speiger.src.collections.PACKAGE.collections.BI_ITERATOR;
+#if TYPE_OBJECT
+import java.util.Comparator;
+#else
+import speiger.src.collections.PACKAGE.functions.COMPARATOR;
+#endif
+
+public interface SORTED_SET KEY_GENERIC_TYPE extends SET KEY_GENERIC_TYPE, SortedSet<CLASS_TYPE>
+{
+	public boolean addAndMoveToFirst(KEY_TYPE o);
+	
+	public boolean addAndMoveToLast(KEY_TYPE o);
+	
+	public boolean moveToFirst(KEY_TYPE o);
+	
+	public boolean moveToLast(KEY_TYPE o);
+	
+	@Override
+	public COMPARATOR KEY_GENERIC_TYPE comparator();
+	
+	@Override
+	public BI_ITERATOR KEY_GENERIC_TYPE iterator();
+
+	public BI_ITERATOR KEY_GENERIC_TYPE iterator(KEY_TYPE fromElement);
+	
+#if !TYPE_OBJECT
+	public SORTED_SET KEY_GENERIC_TYPE subSet(KEY_TYPE fromElement, KEY_TYPE toElement);
+	
+	public SORTED_SET KEY_GENERIC_TYPE headSet(KEY_TYPE toElement);
+	
+	public SORTED_SET KEY_GENERIC_TYPE tailSet(KEY_TYPE fromElement);
+	
+	public KEY_TYPE FIRST_KEY();
+	
+	public KEY_TYPE POLL_FIRST_KEY();
+	
+	public KEY_TYPE LAST_KEY();
+	
+	public KEY_TYPE POLL_LAST_KEY();
+	
+	@Override
+	public default SORTED_SET KEY_GENERIC_TYPE subSet(CLASS_TYPE fromElement, CLASS_TYPE toElement) { return subSet(OBJ_TO_KEY(fromElement), OBJ_TO_KEY(toElement)); }
+	
+	@Override
+	public default SORTED_SET KEY_GENERIC_TYPE headSet(CLASS_TYPE toElement) { return headSet(OBJ_TO_KEY(toElement)); }
+	
+	@Override
+	public default SORTED_SET KEY_GENERIC_TYPE tailSet(CLASS_TYPE fromElement) { return tailSet(OBJ_TO_KEY(fromElement)); }
+	
+	@Override
+	public default CLASS_TYPE first() { return KEY_TO_OBJ(FIRST_KEY()); }
+	
+	@Override
+	default CLASS_TYPE last() { return KEY_TO_OBJ(LAST_KEY()); }
+#else
+	public CLASS_TYPE pollFirst();
+
+	public CLASS_TYPE pollLast();
+	
+	@Override
+	public SORTED_SET KEY_GENERIC_TYPE subSet(CLASS_TYPE fromElement, CLASS_TYPE toElement);
+	
+	@Override
+	public SORTED_SET KEY_GENERIC_TYPE headSet(CLASS_TYPE toElement);
+	
+	@Override
+	public SORTED_SET KEY_GENERIC_TYPE tailSet(CLASS_TYPE fromElement);
+#endif
+}

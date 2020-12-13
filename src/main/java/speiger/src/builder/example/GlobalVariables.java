@@ -52,13 +52,16 @@ public class GlobalVariables
 	public GlobalVariables createHelperVariables()
 	{
 		addArgumentMapper("EQUALS_KEY_TYPE", type.isObject() ? "Objects.equals(%2$s, %1$s)" : "Objects.equals(%2$s, KEY_TO_OBJ(%1$s))").removeBraces();
-		addArgumentMapper("EQUALS", type.getEquals()).removeBraces();
+		addInjectMapper("EQUALS_NOT_NULL", type.getComparableValue()+" != "+(type.isPrimitiveBlocking() ? type.getEmptyValue() : (type.needsCast() ? type.getEmptyValue() : "0"))).removeBraces();
+		addInjectMapper("EQUALS_NULL", type.getComparableValue()+" == "+(type.isPrimitiveBlocking() ? type.getEmptyValue() : (type.needsCast() ? type.getEmptyValue() : "0"))).removeBraces();
+		addArgumentMapper("EQUALS_NOT", type.getEquals(true)).removeBraces();
+		addArgumentMapper("EQUALS", type.getEquals(false)).removeBraces();
 		addArgumentMapper("COMPARE_TO", type.isObject() ? "%1$s.compareTo(%2$s)" : type.getClassType()+".compare(%1$s, %2$s)").removeBraces();
 		addInjectMapper("KEY_TO_OBJ", type.isObject() ? "%s" : type.getClassType()+".valueOf(%s)").removeBraces();
 		addInjectMapper("OBJ_TO_KEY", type.isObject() ? "%s" : "%s."+type.getKeyType()+"Value()").removeBraces();
 		addInjectMapper("CLASS_TO_KEY", "(("+type.getClassType()+")%s)."+type.getKeyType()+"Value()").removeBraces();
 		addSimpleMapper("APPLY", "applyAs"+type.getCustomJDKType().getNonFileType());
-		addInjectMapper("HASH", type.getClassType()+".hashCode(%s)").removeBraces();
+		addInjectMapper("TO_HASH", type.isObject() ? "%s.hashCode()" : type.getClassType()+".hashCode(%s)").removeBraces();
 		return this;
 	}
 	
@@ -67,6 +70,34 @@ public class GlobalVariables
 		addSimpleMapper("JAVA_PREDICATE", type.isPrimitiveBlocking() ? "" : type.getCustomJDKType().getFileType()+"Predicate");
 		addSimpleMapper("JAVA_CONSUMER", type.isPrimitiveBlocking() ? "" : "java.util.function."+type.getCustomJDKType().getFileType()+"Consumer");
 		addSimpleMapper("UNARY_OPERATOR", type.isObject() ? "" : type == ClassType.BOOLEAN ? "BinaryOperator" : type.getCustomJDKType().getFileType()+"UnaryOperator");
+		
+		//Final Classes
+		addClassMapper("ARRAY_LIST", "ArrayList");
+		addClassMapper("LINKED_HASH_SET", "LinkedOpenHashSet");
+		addClassMapper("HASH_SET", "OpenHashSet");
+		
+		//Abstract Classes
+		addClassMapper("ABSTRACT_COLLECTION", "AbstractCollection");
+		addClassMapper("ABSTRACT_SET", "AbstractSet");
+		addClassMapper("ABSTRACT_LIST", "AbstractList");
+		addClassMapper("SUB_LIST", "SubList");
+		
+		//Helper Classes
+		addClassMapper("LISTS", "Lists");
+		addClassMapper("COLLECTIONS", "Collections");
+		addClassMapper("ARRAYS", "Arrays");
+		addClassMapper("ITERATORS", "Iterators");
+		
+		//Interfaces
+		addClassMapper("LIST_ITERATOR", "ListIterator");
+		addClassMapper("BI_ITERATOR", "BidirectionalIterator");
+		addClassMapper("ITERATOR", "Iterator");
+		addClassMapper("ITERABLE", "Iterable");
+		addClassMapper("COLLECTION", "Collection");
+		addClassMapper("LIST", "List");
+		addClassMapper("SORTED_SET", "SortedSet");
+		addClassMapper("SET", "Set");
+		addClassMapper("STACK", "Stack");
 		if(type.isObject())
 		{
 			addSimpleMapper("CONSUMER", "Consumer");
@@ -79,22 +110,8 @@ public class GlobalVariables
 			addClassMapper("COMPARATOR", "Comparator");
 			addFunctionMappers("IARRAY", "I%sArray");
 		}
-		addClassMapper("ITERATORS", "Iterators");
-		addClassMapper("BI_ITERATOR", "BidirectionalIterator");
-		addClassMapper("LIST_ITERATOR", "ListIterator");
-		addClassMapper("ITERATOR", "Iterator");
-		addClassMapper("ITERABLE", "Iterable");
-		addClassMapper("ABSTRACT_COLLECTION", "AbstractCollection");
-		addClassMapper("COLLECTIONS", "Collections");
-		addClassMapper("COLLECTION", "Collection");
-		addClassMapper("ARRAYS", "Arrays");
-		addClassMapper("ABSTRACT_LIST", "AbstractList");
+		//Dependency
 		addClassMapper("LIST_ITER", "ListIter");
-		addClassMapper("LISTS", "Lists");
-		addClassMapper("SUB_LIST", "SubList");
-		addClassMapper("ARRAY_LIST", "ArrayList");
-		addClassMapper("LIST", "List");
-		addClassMapper("STACK", "Stack");
 		return this;
 	}
 	
@@ -112,6 +129,10 @@ public class GlobalVariables
 		addFunctionMapper("TOP", "top");
 		addFunctionMappers("REPLACE", "replace%ss");
 		addFunctionMappers("SORT", "sort%ss");
+		addFunctionMapper("POLL_FIRST_KEY", "pollFirst");
+		addFunctionMapper("FIRST_KEY", "first");
+		addFunctionMapper("POLL_LAST_KEY", "pollLast");
+		addFunctionMapper("LAST_KEY", "last");
 		return this;
 	}
 	

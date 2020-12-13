@@ -1,0 +1,39 @@
+package speiger.src.collections.PACKAGE.sets;
+
+import java.util.Set;
+
+import speiger.src.collections.PACKAGE.collections.COLLECTION;
+import speiger.src.collections.PACKAGE.collections.ITERATOR;
+
+public interface SET KEY_GENERIC_TYPE extends Set<CLASS_TYPE>, COLLECTION KEY_GENERIC_TYPE
+{
+	@Override
+	public ITERATOR KEY_GENERIC_TYPE iterator();
+	
+#if !TYPE_OBJECT
+	public boolean remove(KEY_TYPE o);
+	
+	@Override
+	public default boolean REMOVE_KEY(KEY_TYPE o) {
+		return remove(o);
+	}
+	
+	@Override
+	@Primitive
+	public default boolean add(CLASS_TYPE e) {
+		return COLLECTION.super.add(e);
+	}
+	
+	@Override
+	@Primitive
+	public default boolean contains(Object o) {
+		return COLLECTION.super.contains(o);
+	}
+	
+	@Override
+	@Primitive
+	public default boolean remove(Object o) {
+		return COLLECTION.super.remove(o);
+	}
+#endif
+}

@@ -79,14 +79,30 @@ public enum ClassType
 		return this == BYTE || this == SHORT || this == CHAR || this == FLOAT;
 	}
 	
-	public String getEquals()
+	public boolean needsCast()
+	{
+		return this == BYTE || this == SHORT || this == CHAR;
+	}
+	
+	public String getComparableValue()
 	{
 		switch(this)
 		{
-			case DOUBLE: return "Double.doubleToLongBits(%1$s) == Double.doubleToLongBits(%2$s)";
-			case FLOAT: return "Float.floatToIntBits(%1$s) == Float.floatToIntBits(%2$s)";
-			case OBJECT: return "Objects.equals(%1$s, %2$s)";
-			default: return "%1$s == %2$s";
+			case DOUBLE: return "Double.doubleToLongBits(%1$s)";
+			case FLOAT: return "Float.floatToIntBits(%1$s)";
+			case OBJECT: return "%1$s";
+			default: return "%1$s";
+		}
+	}
+	
+	public String getEquals(boolean not)
+	{
+		switch(this)
+		{
+			case DOUBLE: return "Double.doubleToLongBits(%1$s) "+(not ? "!=" : "==")+" Double.doubleToLongBits(%2$s)";
+			case FLOAT: return "Float.floatToIntBits(%1$s) "+(not ? "!=" : "==")+" Float.floatToIntBits(%2$s)";
+			case OBJECT: return (not ? "!" : "")+"Objects.equals(%1$s, %2$s)";
+			default: return "%1$s "+(not ? "!=" : "==")+" %2$s";
 		}
 	}
 	

@@ -192,7 +192,7 @@ public abstract class ABSTRACT_LIST KEY_GENERIC_TYPE extends ABSTRACT_COLLECTION
 #if TYPE_OBJECT
 			hashCode = 31 * hashCode + i.next().hashCode();
 #else
-    		hashCode = 31 * hashCode + HASH(i.NEXT());
+    		hashCode = 31 * hashCode + TO_HASH(i.NEXT());
 #endif
     	return hashCode;
 	}
