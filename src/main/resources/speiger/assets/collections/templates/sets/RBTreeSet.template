@@ -1,0 +1,1276 @@
+package speiger.src.collections.PACKAGE.sets;
+
+import java.util.NoSuchElementException;
+#if TYPE_OBJECT
+import java.util.Comparator;
+#endif
+import speiger.src.collections.PACKAGE.collections.BI_ITERATOR;
+#if !TYPE_OBJECT
+import speiger.src.collections.PACKAGE.functions.COMPARATOR;
+#endif
+import speiger.src.collections.PACKAGE.lists.LIST_ITERATOR;
+
+public class RB_TREE_SET KEY_GENERIC_TYPE extends ABSTRACT_SET KEY_GENERIC_TYPE implements NAVIGABLE_SET KEY_GENERIC_TYPE
+{
+	protected transient Entry KEY_GENERIC_TYPE tree;
+	protected transient Entry KEY_GENERIC_TYPE first;
+	protected transient Entry KEY_GENERIC_TYPE last;
+	protected int size = 0;
+	protected transient COMPARATOR KEY_GENERIC_TYPE comparator;
+#if !TYPE_OBJECT
+#if TYPE_BOOLEAN
+	protected KEY_TYPE defaultMaxNotFound = CLASS_TYPE.FALSE;
+	protected KEY_TYPE defaultMinNotFound = CLASS_TYPE.TRUE;
+#else
+	protected KEY_TYPE defaultMaxNotFound = CLASS_TYPE.MIN_VALUE;
+	protected KEY_TYPE defaultMinNotFound = CLASS_TYPE.MAX_VALUE;
+#endif
+#endif
+	
+	public RB_TREE_SET()
+	{
+	}
+	
+#if !TYPE_OBJECT
+	@Override
+	public void setDefaultMaxValue(KEY_TYPE value)
+	{
+		defaultMaxNotFound = value;
+	}
+	
+	@Override
+	public KEY_TYPE getDefaultMaxValue()
+	{
+		return defaultMaxNotFound;
+	}
+	
+	@Override
+	public void setDefaultMinValue(KEY_TYPE value)
+	{
+		defaultMinNotFound = value;
+	}
+	
+	@Override
+	public KEY_TYPE getDefaultMinValue()
+	{
+		return defaultMinNotFound;
+	}
+	
+#endif
+	@Override
+	public boolean add(KEY_TYPE o)
+	{
+		if(tree == null)
+		{
+			tree = first = last = new EntryBRACES(o, null);
+			size++;
+			return true;
+		}
+		int compare = 0;
+		Entry KEY_GENERIC_TYPE parent = tree;
+		while(true)
+		{
+			if((compare = compare(o, parent.key)) == 0) return false;
+			if(compare < 0)
+			{
+				if(parent.left == null) break;
+				parent = parent.left;
+			}
+			else if(compare > 0)
+			{
+				if(parent.right == null) break;
+				parent = parent.right;
+			}
+			
+		}
+		Entry KEY_GENERIC_TYPE adding = new EntryBRACES(o, parent);
+		if(compare < 0) 
+		{
+			parent.left = adding;
+			if(parent == first)	first = adding;
+		}
+		else 
+		{
+			parent.right = adding;
+			if(parent == last) last = adding;
+		}
+		fixAfterInsertion(adding);
+		size++;
+		return false;
+	}
+	
+	@Override
+	public boolean addAndMoveToFirst(KEY_TYPE o)
+	{
+		throw new UnsupportedOperationException();
+	}
+	
+	@Override
+	public boolean addAndMoveToLast(KEY_TYPE o)
+	{
+		throw new UnsupportedOperationException();
+	}
+	
+	@Override
+	public boolean moveToFirst(KEY_TYPE o)
+	{
+		throw new UnsupportedOperationException();
+	}
+	
+	@Override
+	public boolean moveToLast(KEY_TYPE o)
+	{
+		throw new UnsupportedOperationException();
+	}
+
+	@Override
+	public KEY_TYPE lower(KEY_TYPE e)
+	{
+		Entry KEY_GENERIC_TYPE node = findLowerNode(e);
+#if TYPE_OBJECT
+		return node != null ? node.key : null;
+#else
+		return node != null ? node.key : defaultMinNotFound;
+#endif
+	}
+
+	@Override
+	public KEY_TYPE floor(KEY_TYPE e)
+	{
+		Entry KEY_GENERIC_TYPE node = findFloorNode(e);
+#if TYPE_OBJECT
+		return node != null ? node.key : null;
+#else
+		return node != null ? node.key : defaultMinNotFound;
+#endif
+	}
+	
+	@Override
+	public KEY_TYPE higher(KEY_TYPE e)
+	{
+		Entry KEY_GENERIC_TYPE node = findHigherNode(e);
+#if TYPE_OBJECT
+		return node != null ? node.key : null;
+#else
+		return node != null ? node.key : defaultMaxNotFound;
+#endif
+	}
+
+	@Override
+	public KEY_TYPE ceiling(KEY_TYPE e)
+	{
+		Entry KEY_GENERIC_TYPE node = findCeilingNode(e);
+#if TYPE_OBJECT
+		return node != null ? node.key : null;
+#else
+		return node != null ? node.key : defaultMaxNotFound;
+#endif
+	}
+	
+	protected Entry KEY_GENERIC_TYPE findNode(KEY_TYPE o)
+	{
+		Entry KEY_GENERIC_TYPE node = tree;
+		int compare;
+		while(node != null)
+		{
+			if((compare = compare(o, node.key)) == 0) return node;
+			if(compare < 0) node = node.left;
+			else node = node.right;
+		}
+		return null;
+	}
+	
+	protected Entry KEY_GENERIC_TYPE findLowerNode(KEY_TYPE e) {
+		Entry KEY_GENERIC_TYPE entry = tree;
+		while(entry != null) {
+			if(compare(e, entry.key) > 0) {
+				if(entry.right != null) entry = entry.right;
+				else return entry;
+			}
+			else {
+				if(entry.left != null) entry = entry.left;
+				else {
+					Entry KEY_GENERIC_TYPE parent = entry.parent;
+					while(parent != null && parent.left == entry) {
+						entry = parent;
+						parent = parent.parent;
+					}
+					return parent;
+				}
+			}
+		}
+		return null;
+	}
+	
+	protected Entry KEY_GENERIC_TYPE findFloorNode(KEY_TYPE e) {
+		Entry KEY_GENERIC_TYPE entry = tree;
+		int compare;
+		while(entry != null) {
+			if((compare = compare(e, entry.key)) > 0) {
+				if(entry.right == null) break;
+				entry = entry.right;
+				continue;
+			}
+			else if(compare < 0) {
+				if(entry.left != null) entry = entry.left;
+				else {
+					Entry KEY_GENERIC_TYPE parent = entry.parent;
+					while(parent != null && parent.left == entry) {
+						entry = parent;
+						parent = parent.parent;
+					}
+					return parent;
+				}
+				continue;
+			}
+			break;
+		}
+		return entry;
+	}
+	
+	protected Entry KEY_GENERIC_TYPE findCeilingNode(KEY_TYPE e) {
+		Entry KEY_GENERIC_TYPE entry = tree;
+		while(entry != null) {
+			if(compare(e, entry.key) < 0) {
+				if(entry.left != null) entry = entry.left;
+				else return entry;
+			}
+			else {
+				if(entry.right != null) entry = entry.right;
+				else {
+					Entry KEY_GENERIC_TYPE parent = entry.parent;
+					while(parent != null && parent.right == entry) {
+						entry = parent;
+						parent = parent.parent;
+					}
+					return parent;
+				}
+			}
+		}
+		return null;
+	}
+	
+	protected Entry KEY_GENERIC_TYPE findHigherNode(KEY_TYPE e)
+	{
+		Entry KEY_GENERIC_TYPE entry = tree;
+		int compare;
+		while(entry != null) {
+			if((compare = compare(e, entry.key)) < 0) {
+				if(entry.left == null) break;
+				entry = entry.left;
+				continue;
+			}
+			else if(compare < 0) {
+				if(entry.right != null) entry = entry.right;
+				else {
+					Entry KEY_GENERIC_TYPE parent = entry.parent;
+					while(parent != null && parent.right == entry) {
+						entry = parent;
+						parent = parent.parent;
+					}
+					return parent;
+				}
+				continue;
+			}
+			break;
+		}
+		return entry;
+	}
+	
+#if !TYPE_OBJECT
+	@Override
+	public boolean contains(KEY_TYPE e)
+	{
+		return findNode(e) != null;
+	}
+	
+#else
+	@Override
+	public boolean contains(Object e)
+	{
+		return findNode((T)e) != null;
+	}
+	
+#endif
+	@Override
+	public KEY_TYPE FIRST_KEY()
+	{
+		if(tree == null) throw new NoSuchElementException();
+		return first.key;
+	}
+	
+	@Override
+	public KEY_TYPE LAST_KEY()
+	{
+		if(tree == null) throw new NoSuchElementException();
+		return last.key;
+	}
+	
+#if !TYPE_OBJECT
+	@Override
+	public boolean remove(KEY_TYPE o)
+	{
+		if(tree == null)
+			return false;
+		Entry KEY_GENERIC_TYPE entry = findNode(o);
+		if(entry != null)
+		{
+			removeNode(entry);
+			return true;
+		}
+		return false;
+	}
+	
+#else
+	@Override
+	public boolean remove(Object o)
+	{
+		if(tree == null)
+			return false;
+		Entry KEY_GENERIC_TYPE entry = findNode((T)o);
+		if(entry != null)
+		{
+			removeNode(entry);
+			return true;
+		}
+		return false;
+	}
+	
+#endif
+	@Override
+	public KEY_TYPE POLL_FIRST_KEY()
+	{
+		if(tree == null) throw new NoSuchElementException();
+		KEY_TYPE value = first.key;
+		removeNode(first);
+		return value;
+	}
+	
+	@Override
+	public KEY_TYPE POLL_LAST_KEY()
+	{
+		if(tree == null) throw new NoSuchElementException();
+		KEY_TYPE value = last.key;
+		removeNode(last);
+		return value;
+	}
+	
+	@Override
+	public int size()
+	{
+		return size;
+	}
+	
+	@Override
+	public COMPARATOR KEY_GENERIC_TYPE comparator()
+	{
+		return comparator;
+	}
+	
+	@Override
+	public BI_ITERATOR KEY_GENERIC_TYPE iterator()
+	{
+		return new SetIterator(false);
+	}
+	
+	@Override
+	public BI_ITERATOR KEY_GENERIC_TYPE iterator(KEY_TYPE fromElement)
+	{
+		Entry KEY_GENERIC_TYPE entry = findNode(fromElement);
+		return entry == null ? null : new SetIterator(entry);
+	}
+	
+	@Override
+	public BI_ITERATOR KEY_GENERIC_TYPE descendingIterator()
+	{
+		return new SetIterator(true);
+	}
+	
+	@Override
+	public NAVIGABLE_SET KEY_GENERIC_TYPE subSet(KEY_TYPE fromElement, boolean fromInclusive, KEY_TYPE toElement, boolean toInclusive)
+	{
+		return new AscendingSubSetBRACES(this, false, fromElement, fromInclusive, false, toElement, toInclusive);
+	}
+
+	@Override
+	public NAVIGABLE_SET KEY_GENERIC_TYPE headSet(KEY_TYPE toElement, boolean inclusive)
+	{
+		return new AscendingSubSetBRACES(this, true, EMPTY_VALUE, true, false, toElement, inclusive);
+	}
+
+	@Override
+	public NAVIGABLE_SET KEY_GENERIC_TYPE tailSet(KEY_TYPE fromElement, boolean inclusive)
+	{
+		return new AscendingSubSetBRACES(this, false, fromElement, inclusive, true, EMPTY_VALUE, true);
+	}
+	
+	@Override
+	public NAVIGABLE_SET KEY_GENERIC_TYPE descendingSet()
+	{
+		return new DescendingSubSetBRACES(this, true, EMPTY_VALUE, true, true, EMPTY_VALUE, true);
+	}
+	
+	protected void removeNode(Entry KEY_GENERIC_TYPE entry)
+	{
+		size--;
+		if(entry.needsSuccessor())
+		{
+			Entry KEY_GENERIC_TYPE successor = entry.next();
+			entry.key = successor.key;
+			entry = successor;
+		}
+		Entry KEY_GENERIC_TYPE replacement = entry.left != null ? entry.left : entry.right;
+		if(replacement != null)
+		{
+			if(entry.replace(replacement))
+				tree = replacement;
+			if(entry == first)
+				first = replacement;
+			if(entry == last)
+				last = entry.right != null ? entry.right : replacement;
+			
+			entry.left = entry.right = entry.parent = null;
+			if(entry.isBlack()) fixAfterDeletion(replacement);
+		}
+		else if(entry.parent == null)
+			tree = first = last = null;
+		else
+		{
+			if(entry.isBlack())
+				fixAfterDeletion(entry);
+			entry.replace(null);
+			if(entry.parent != null)
+			{
+				Entry KEY_GENERIC_TYPE parent = entry.parent;
+				if(entry == first)
+					first = parent.left != null ? parent.left : parent;
+				if(entry == last)
+					last = entry.right != null ? parent.right : parent;
+			}
+			entry.parent = null;
+		}
+	}
+	
+	protected int compare(KEY_TYPE k, KEY_TYPE v) { return comparator != null ? comparator.compare(k, v) : COMPARE_TO_KEY(k, v);}
+	protected static GENERIC_BRACES boolean isBlack(Entry KEY_GENERIC_TYPE p) { return p == null || p.isBlack(); }
+	protected static GENERIC_BRACES Entry KEY_GENERIC_TYPE parentOf(Entry KEY_GENERIC_TYPE p) { return (p == null ? null : p.parent); }
+	protected static GENERIC_BRACES void setBlack(Entry KEY_GENERIC_TYPE p, boolean c) { if(p != null) p.setBlack(c); }
+	protected static GENERIC_BRACES Entry KEY_GENERIC_TYPE leftOf(Entry KEY_GENERIC_TYPE p) { return p == null ? null : p.left; }
+	protected static GENERIC_BRACES Entry KEY_GENERIC_TYPE rightOf(Entry KEY_GENERIC_TYPE p) { return (p == null) ? null : p.right; }
+	
+	/** From CLR */
+	protected void rotateLeft(Entry KEY_GENERIC_TYPE entry) {
+		if(entry != null) {
+			Entry KEY_GENERIC_TYPE right = entry.right;
+			entry.right = right.left;
+			if(right.left != null) right.left.parent = entry;
+			right.parent = entry.parent;
+			if(entry.parent == null) tree = right;
+			else if(entry.parent.left == entry) entry.parent.left = right;
+			else entry.parent.right = right;
+			right.left = entry;
+			entry.parent = right;
+		}
+	}
+	
+	/** From CLR */
+	protected void rotateRight(Entry KEY_GENERIC_TYPE entry) {
+		if(entry != null) {
+			Entry KEY_GENERIC_TYPE left = entry.left;
+			entry.left = left.right;
+			if(left.right != null) left.right.parent = entry;
+			left.parent = entry.parent;
+			if(entry.parent == null) tree = left;
+			else if(entry.parent.right == entry) entry.parent.right = left;
+			else entry.parent.left = left;
+			left.right = entry;
+			entry.parent = left;
+		}
+	}
+	
+	/** From CLR */
+	protected void fixAfterInsertion(Entry KEY_GENERIC_TYPE entry) {
+		entry.setBlack(false);
+		while(entry != null && entry != tree && !entry.parent.isBlack()) {
+			if(parentOf(entry) == leftOf(parentOf(parentOf(entry)))) {
+				Entry KEY_GENERIC_TYPE y = rightOf(parentOf(parentOf(entry)));
+				if(!isBlack(y)) {
+					setBlack(parentOf(entry), true);
+					setBlack(y, true);
+					setBlack(parentOf(parentOf(entry)), false);
+					entry = parentOf(parentOf(entry));
+				}
+				else {
+					if(entry == rightOf(parentOf(entry))) {
+						entry = parentOf(entry);
+						rotateLeft(entry);
+					}
+					setBlack(parentOf(entry), true);
+					setBlack(parentOf(parentOf(entry)), false);
+					rotateRight(parentOf(parentOf(entry)));
+				}
+			}
+			else {
+				Entry KEY_GENERIC_TYPE y = leftOf(parentOf(parentOf(entry)));
+				if(!isBlack(y)) {
+					setBlack(parentOf(entry), true);
+					setBlack(y, true);
+					setBlack(parentOf(parentOf(entry)), false);
+					entry = parentOf(parentOf(entry));
+				}
+				else {
+					if(entry == leftOf(parentOf(entry))) {
+						entry = parentOf(entry);
+						rotateRight(entry);
+					}
+					setBlack(parentOf(entry), true);
+					setBlack(parentOf(parentOf(entry)), false);
+					rotateLeft(parentOf(parentOf(entry)));
+				}
+			}
+		}
+		tree.setBlack(true);
+	}
+	
+	/** From CLR */
+	protected void fixAfterDeletion(Entry KEY_GENERIC_TYPE entry) {
+		while(entry != tree && isBlack(entry)) {
+			if(entry == leftOf(parentOf(entry))) {
+				Entry KEY_GENERIC_TYPE sib = rightOf(parentOf(entry));
+				if(!isBlack(sib)) {
+					setBlack(sib, true);
+					setBlack(parentOf(entry), false);
+					rotateLeft(parentOf(entry));
+					sib = rightOf(parentOf(entry));
+				}
+				if(isBlack(leftOf(sib)) && isBlack(rightOf(sib))) {
+					setBlack(sib, false);
+					entry = parentOf(entry);
+				}
+				else {
+					if(isBlack(rightOf(sib))) {
+						setBlack(leftOf(sib), true);
+						setBlack(sib, false);
+						rotateRight(sib);
+						sib = rightOf(parentOf(entry));
+					}
+					setBlack(sib, isBlack(parentOf(entry)));
+					setBlack(parentOf(entry), true);
+					setBlack(rightOf(sib), true);
+					rotateLeft(parentOf(entry));
+					entry = tree;
+				}
+			}
+			else { // symmetric
+				Entry KEY_GENERIC_TYPE sib = leftOf(parentOf(entry));
+				if(!isBlack(sib)) {
+					setBlack(sib, true);
+					setBlack(parentOf(entry), false);
+					rotateRight(parentOf(entry));
+					sib = leftOf(parentOf(entry));
+				}
+				if(isBlack(rightOf(sib)) && isBlack(leftOf(sib))) {
+					setBlack(sib, false);
+					entry = parentOf(entry);
+				}
+				else {
+					if(isBlack(leftOf(sib))) {
+						setBlack(rightOf(sib), true);
+						setBlack(sib, false);
+						rotateLeft(sib);
+						sib = leftOf(parentOf(entry));
+					}
+					setBlack(sib, isBlack(parentOf(entry)));
+					setBlack(parentOf(entry), true);
+					setBlack(leftOf(sib), true);
+					rotateRight(parentOf(entry));
+					entry = tree;
+				}
+			}
+		}
+		setBlack(entry, true);
+	}
+	
+	private static class AscendingSubSet KEY_GENERIC_TYPE extends SubSet KEY_GENERIC_TYPE
+	{
+		AscendingSubSet(RB_TREE_SET KEY_GENERIC_TYPE set, boolean fromStart, KEY_TYPE start, boolean loInclusive, boolean toEnd, KEY_TYPE end, boolean hiInclusive)
+		{
+			super(set, fromStart, start, loInclusive, toEnd, end, hiInclusive);
+		}
+		
+		@Override
+		public NAVIGABLE_SET KEY_GENERIC_TYPE subSet(KEY_TYPE fromElement, boolean fromInclusive, KEY_TYPE toElement, boolean toInclusive)
+		{
+			if(!inRange(fromElement, fromInclusive)) throw new IllegalArgumentException("fromElement is not in Range");
+			if(!inRange(toElement, toInclusive)) throw new IllegalArgumentException("toElement is not in Range");
+			return new AscendingSubSetBRACES(set, false, fromElement, fromInclusive, false, toElement, toInclusive);
+		}
+
+		@Override
+		public NAVIGABLE_SET KEY_GENERIC_TYPE headSet(KEY_TYPE toElement, boolean inclusive)
+		{
+			if(!inRange(toElement, inclusive)) throw new IllegalArgumentException("toElement is not in Range");
+			return new AscendingSubSetBRACES(set, fromStart, start, loInclusive, false, toElement, inclusive);
+		}
+
+		@Override
+		public NAVIGABLE_SET KEY_GENERIC_TYPE tailSet(KEY_TYPE fromElement, boolean inclusive)
+		{
+			if(!inRange(fromElement, inclusive)) throw new IllegalArgumentException("fromElement is not in Range");
+			return new AscendingSubSetBRACES(set, false, fromElement, inclusive, toEnd, end, hiInclusive);
+		}
+
+		@Override
+		public BI_ITERATOR KEY_GENERIC_TYPE iterator()
+		{
+			return new SubSetIterator(findLowest());
+		}
+		
+		@Override
+		public BI_ITERATOR KEY_GENERIC_TYPE iterator(KEY_TYPE fromElement)
+		{
+			Entry KEY_GENERIC_TYPE entry = set.findNode(fromElement);
+			return entry == null || !inClosedRange(fromElement) ? null : new SubSetIterator(entry);
+		}
+		
+		@Override
+		public BI_ITERATOR KEY_GENERIC_TYPE descendingIterator()
+		{
+			return new SubSetIterator(findHighest());
+		}
+
+		@Override
+		public NAVIGABLE_SET KEY_GENERIC_TYPE descendingSet()
+		{
+			return new DescendingSubSetBRACES(set, fromStart, start, loInclusive, toEnd, end, hiInclusive);
+		}
+	}
+	
+	private static class DescendingSubSet KEY_GENERIC_TYPE extends SubSet KEY_GENERIC_TYPE
+	{
+		COMPARATOR KEY_GENERIC_TYPE comparator;
+		DescendingSubSet(RB_TREE_SET KEY_GENERIC_TYPE set, boolean fromStart, KEY_TYPE start, boolean loInclusive, boolean toEnd, KEY_TYPE end, boolean hiInclusive)
+		{
+			super(set, fromStart, start, loInclusive, toEnd, end, hiInclusive);
+			comparator = set.comparator().reversed();
+		}
+		
+		@Override
+		public COMPARATOR KEY_GENERIC_TYPE comparator()
+		{
+			return comparator;
+		}
+		
+		@Override
+		public NAVIGABLE_SET KEY_GENERIC_TYPE subSet(KEY_TYPE fromElement, boolean fromInclusive, KEY_TYPE toElement, boolean toInclusive)
+		{
+			if(!inRange(fromElement, fromInclusive)) throw new IllegalArgumentException("fromElement is not in Range");
+			if(!inRange(toElement, toInclusive)) throw new IllegalArgumentException("toElement is not in Range");
+			return new DescendingSubSetBRACES(set, false, toElement, toInclusive, false, fromElement, fromInclusive);
+		}
+
+		@Override
+		public NAVIGABLE_SET KEY_GENERIC_TYPE headSet(KEY_TYPE toElement, boolean inclusive)
+		{
+			if(!inRange(toElement, inclusive)) throw new IllegalArgumentException("toElement is not in Range");
+			return new DescendingSubSetBRACES(set, false, toElement, inclusive, toEnd, end, hiInclusive);
+		}
+
+		@Override
+		public NAVIGABLE_SET KEY_GENERIC_TYPE tailSet(KEY_TYPE fromElement, boolean inclusive)
+		{
+			if(!inRange(fromElement, inclusive)) throw new IllegalArgumentException("fromElement is not in Range");
+			return new DescendingSubSetBRACES(set, fromStart, start, loInclusive, false, fromElement, inclusive);
+		}
+		
+		@Override
+		public KEY_TYPE FIRST_KEY()
+		{
+			return super.LAST_KEY();
+		}
+		
+		@Override
+		public KEY_TYPE POLL_FIRST_KEY()
+		{
+			return super.POLL_LAST_KEY();
+		}
+		
+		@Override
+		public KEY_TYPE LAST_KEY()
+		{
+			return super.FIRST_KEY();
+		}
+		
+		@Override
+		public KEY_TYPE POLL_LAST_KEY()
+		{
+			return super.POLL_FIRST_KEY();
+		}
+		
+		@Override
+		public KEY_TYPE lower(KEY_TYPE e)
+		{
+			return super.higher(e);
+		}
+
+		@Override
+		public KEY_TYPE floor(KEY_TYPE e)
+		{
+			return super.ceiling(e);
+		}
+
+		@Override
+		public KEY_TYPE ceiling(KEY_TYPE e)
+		{
+			return super.floor(e);
+		}
+
+		@Override
+		public KEY_TYPE higher(KEY_TYPE e)
+		{
+			return super.lower(e);
+		}
+
+		@Override
+		public BI_ITERATOR KEY_GENERIC_TYPE iterator()
+		{
+			return new DescendingSubIterator(findHighest());
+		}
+		
+		@Override
+		public BI_ITERATOR KEY_GENERIC_TYPE iterator(KEY_TYPE fromElement)
+		{
+			Entry KEY_GENERIC_TYPE entry = set.findNode(fromElement);
+			return entry == null || !inClosedRange(fromElement) ? null : new DescendingSubIterator(entry);
+		}
+		
+		@Override
+		public BI_ITERATOR KEY_GENERIC_TYPE descendingIterator()
+		{
+			return new DescendingSubIterator(findLowest());
+		}
+		
+		@Override
+		public NAVIGABLE_SET KEY_GENERIC_TYPE descendingSet()
+		{
+			return new AscendingSubSetBRACES(set, fromStart, start, loInclusive, toEnd, end, hiInclusive);
+		}
+		
+		private class DescendingSubIterator extends SubSetIterator
+		{
+			public DescendingSubIterator(Entry KEY_GENERIC_TYPE entry)
+			{
+				super(entry);
+			}
+			
+			@Override
+			protected void updateNext()
+			{
+				next = current.previous();
+				if(!toEnd && next != null && bottomReached(next)) next = null;
+			}
+			
+			@Override
+			protected void updatePrevious()
+			{
+				previous = current.next();
+				if(!fromStart && previous != null && topReached(previous)) previous = null;
+			}
+		}
+	}
+	
+	private static abstract class SubSet KEY_GENERIC_TYPE extends ABSTRACT_SET KEY_GENERIC_TYPE implements NAVIGABLE_SET KEY_GENERIC_TYPE
+	{
+		RB_TREE_SET KEY_GENERIC_TYPE set;
+		KEY_TYPE start;
+		KEY_TYPE end;
+        boolean fromStart;
+        boolean toEnd;
+        boolean loInclusive;
+        boolean hiInclusive;
+		
+        SubSet(RB_TREE_SET KEY_GENERIC_TYPE set, boolean fromStart, KEY_TYPE start, boolean loInclusive, boolean toEnd, KEY_TYPE end, boolean hiInclusive)
+		{
+        	this.set = set;
+			this.start = start;
+			this.end = end;
+			this.fromStart = fromStart;
+			this.toEnd = toEnd;
+			this.loInclusive = loInclusive;
+			this.hiInclusive = hiInclusive;
+		}
+        
+#if !TYPE_OBJECT
+		@Override
+		public void setDefaultMaxValue(KEY_TYPE value) { throw new UnsupportedOperationException(); }
+		
+		@Override
+		public KEY_TYPE getDefaultMaxValue() { return set.getDefaultMaxValue(); }
+		
+		@Override
+		public void setDefaultMinValue(KEY_TYPE value) { throw new UnsupportedOperationException(); }
+		
+		@Override
+		public KEY_TYPE getDefaultMinValue() { return set.getDefaultMinValue(); }
+		
+#else
+		public KEY_TYPE getDefaultMaxValue() { return null; }
+		
+		public KEY_TYPE getDefaultMinValue() { return null; }
+		
+#endif
+		boolean tooLow(KEY_TYPE key)
+        {
+        	return !fromStart && (loInclusive ? set.compare(key, start) < 0 : set.compare(key, start) <= 0);
+        }
+        
+        boolean tooHigh(KEY_TYPE key)
+        {
+        	return !toEnd && (hiInclusive ? set.compare(key, end) > 0 : set.compare(key, end) >= 0);
+        }
+		
+        boolean inRange(KEY_TYPE key) 
+        {
+            return !tooLow(key) && !tooHigh(key);
+        }
+
+        boolean inClosedRange(KEY_TYPE key) 
+        {
+            return (fromStart || set.compare(key, start) >= 0) && (toEnd || set.compare(end, key) >= 0);
+        }
+
+        boolean inRange(KEY_TYPE key, boolean inclusive) 
+        {
+            return inclusive ? inRange(key) : inClosedRange(key);
+        }
+        
+		@Override
+		public boolean addAndMoveToFirst(KEY_TYPE o) { throw new UnsupportedOperationException(); }
+		
+		@Override
+		public boolean addAndMoveToLast(KEY_TYPE o) { throw new UnsupportedOperationException(); }
+
+		@Override
+		public boolean moveToFirst(KEY_TYPE o) { throw new UnsupportedOperationException(); }
+
+		@Override
+		public boolean moveToLast(KEY_TYPE o) { throw new UnsupportedOperationException(); }
+
+		@Override
+		public COMPARATOR KEY_GENERIC_TYPE comparator() { return set.comparator(); }
+		
+		@Override
+		public KEY_TYPE FIRST_KEY()
+		{
+			Entry KEY_GENERIC_TYPE entry = findLowest();
+			return entry == null ? getDefaultMaxValue() : entry.key;
+		}
+		
+		protected Entry KEY_GENERIC_TYPE findLowest()
+		{
+			if(fromStart) return set.first;
+			Entry KEY_GENERIC_TYPE entry = loInclusive ? set.findCeilingNode(start) : set.findHigherNode(start);
+			return entry == null || tooHigh(entry.key) ? null : entry;
+		}
+		
+		@Override
+		public KEY_TYPE POLL_FIRST_KEY()
+		{
+			if(fromStart) return set.POLL_FIRST_KEY();
+			Entry KEY_GENERIC_TYPE entry = loInclusive ? set.findCeilingNode(start) : set.findHigherNode(start);
+			if(entry != null && !tooHigh(entry.key))
+			{
+				KEY_TYPE value = entry.key;
+				set.removeNode(entry);
+				return value;
+			}
+			return getDefaultMaxValue();
+		}
+
+		@Override
+		public KEY_TYPE LAST_KEY()
+		{
+			Entry KEY_GENERIC_TYPE entry = findHighest();
+			return entry == null ? getDefaultMinValue() : entry.key;
+		}
+		
+		protected Entry KEY_GENERIC_TYPE findHighest()
+		{
+			if(toEnd) return set.last;
+			Entry KEY_GENERIC_TYPE entry = hiInclusive ? set.findFloorNode(end) : set.findLowerNode(end);
+			return entry == null || tooLow(entry.key) ? null : entry;
+		}
+
+		@Override
+		public KEY_TYPE POLL_LAST_KEY()
+		{
+			if(toEnd) return set.POLL_LAST_KEY();
+			Entry KEY_GENERIC_TYPE entry = hiInclusive ? set.findFloorNode(end) : set.findLowerNode(end);
+			if(entry != null && !tooLow(entry.key))
+			{
+				KEY_TYPE value = entry.key;
+				set.removeNode(entry);
+				return value;
+			}
+			return getDefaultMinValue();
+		}
+		
+		@Override
+		public boolean add(KEY_TYPE o)
+		{
+			if(!inRange(o)) throw new IllegalArgumentException("Key is out of range");
+			return set.add(o);
+		}
+		
+#if !TYPE_OBJECT
+		@Override
+		public boolean contains(KEY_TYPE e)
+		{
+			return inRange(e) && set.contains(e);
+		}
+		
+		@Override
+		public boolean remove(KEY_TYPE o)
+		{
+			return inRange(o) && set.remove(o);
+		}
+		
+#else
+		@Override
+		public boolean contains(Object e)
+		{
+			return inRange((T)e) && set.contains((T)e);
+		}
+	
+		@Override
+		public boolean remove(Object o)
+		{
+			return inRange((T)o) && set.remove((T)o);
+		}
+		
+#endif
+		@Override
+		public KEY_TYPE lower(KEY_TYPE e)
+		{
+			if(tooHigh(e))
+			{
+				Entry KEY_GENERIC_TYPE entry = findHighest();
+				return entry == null ? getDefaultMinValue() : entry.key;
+			}
+			Entry KEY_GENERIC_TYPE entry = set.findLowerNode(e);
+			return entry == null || tooHigh(entry.key) ? getDefaultMaxValue() : entry.key;
+		}
+
+		@Override
+		public KEY_TYPE floor(KEY_TYPE e)
+		{
+			if(tooHigh(e))
+			{
+				Entry KEY_GENERIC_TYPE entry = findHighest();
+				return entry == null ? getDefaultMinValue() : entry.key;
+			}
+			Entry KEY_GENERIC_TYPE entry = set.findFloorNode(e);
+			return entry == null || tooHigh(entry.key) ? getDefaultMaxValue() : entry.key;
+		}
+
+		@Override
+		public KEY_TYPE ceiling(KEY_TYPE e)
+		{
+			if(tooLow(e))
+			{
+				Entry KEY_GENERIC_TYPE entry = findLowest();
+				return entry == null ? getDefaultMaxValue() : entry.key;
+			}
+			Entry KEY_GENERIC_TYPE entry = set.findCeilingNode(e);
+			return entry == null || tooLow(entry.key) ? getDefaultMinValue() : entry.key;
+		}
+
+		@Override
+		public KEY_TYPE higher(KEY_TYPE e)
+		{
+			if(tooLow(e))
+			{
+				Entry KEY_GENERIC_TYPE entry = findLowest();
+				return entry == null ? getDefaultMaxValue() : entry.key;
+			}
+			Entry KEY_GENERIC_TYPE entry = set.findHigherNode(e);
+			return entry == null || tooLow(entry.key) ? getDefaultMinValue() : entry.key;
+		}
+		
+		@Override
+		public int size()
+		{
+			return fromStart && toEnd ? set.size() : iterator().skip(Integer.MAX_VALUE);
+		}
+		
+		class SubSetIterator implements LIST_ITERATOR KEY_GENERIC_TYPE
+		{
+			Entry KEY_GENERIC_TYPE previous;
+			Entry KEY_GENERIC_TYPE next;
+			Entry KEY_GENERIC_TYPE current;
+			int index = 0;
+			
+			public SubSetIterator(Entry KEY_GENERIC_TYPE entry) 
+			{
+				next = entry;
+				previous = entry == null ? null : entry.previous();
+			}
+			
+			@Override
+			public boolean hasNext()
+			{
+				return next != null;
+			}
+			
+			@Override
+			public boolean hasPrevious()
+			{
+				return previous != null;
+			}
+			
+			@Override
+			public int nextIndex()
+			{
+				return index;
+			}
+			
+			@Override
+			public int previousIndex()
+			{
+				return index - 1;
+			}
+			
+			boolean topReached(Entry KEY_GENERIC_TYPE entry)
+			{
+				return hiInclusive ? set.compare(entry.key, end) >= 0 : set.compare(entry.key, end) > 0;
+			}
+			
+			boolean bottomReached(Entry KEY_GENERIC_TYPE entry)
+			{
+				return loInclusive ? set.compare(entry.key, start) <= 0 : set.compare(entry.key, start) < 0;
+			}
+			
+			protected void updateNext()
+			{
+				next = current.next();
+				if(!toEnd && next != null && topReached(next)) next = null;
+			}
+			
+			protected void updatePrevious()
+			{
+				previous = current.previous();
+				if(!fromStart && previous != null && bottomReached(previous)) previous = null;
+			}
+			
+			@Override
+			public KEY_TYPE NEXT()
+			{
+				if(!hasNext()) throw new NoSuchElementException();
+				current = previous = next;
+				updateNext();
+				index++;
+				return current.key;
+			}
+			
+			@Override
+			public KEY_TYPE PREVIOUS()
+			{
+				if(!hasPrevious()) throw new NoSuchElementException();
+				current = next = previous;
+				updatePrevious();
+				index--;
+				return current.key;
+			}
+			
+			@Override
+			public void remove()
+			{
+				if(current == null) throw new IllegalStateException();
+				if(current == previous) index--;
+				updateNext();
+				updatePrevious();
+				set.removeNode(current);
+				current = null;
+			}
+			
+			@Override
+			public void set(KEY_TYPE e){ throw new UnsupportedOperationException(); }
+			
+			@Override
+			public void add(KEY_TYPE e) { throw new UnsupportedOperationException(); }
+		}
+	}
+	
+	private class SetIterator implements LIST_ITERATOR KEY_GENERIC_TYPE
+	{
+		Entry KEY_GENERIC_TYPE previous;
+		Entry KEY_GENERIC_TYPE next;
+		Entry KEY_GENERIC_TYPE current;
+		int index = 0;
+		 
+		public SetIterator(boolean descending)
+		{
+			if(descending) previous = last;
+			else next = first;
+		}
+		
+		public SetIterator(Entry KEY_GENERIC_TYPE entry) 
+		{
+			next = entry;
+			previous = entry.previous();
+		}
+		
+		@Override
+		public boolean hasNext()
+		{
+			return next != null;
+		}
+		
+		@Override
+		public boolean hasPrevious()
+		{
+			return previous != null;
+		}
+		
+		@Override
+		public int nextIndex()
+		{
+			return index;
+		}
+		
+		@Override
+		public int previousIndex()
+		{
+			return index - 1;
+		}
+		
+		protected void updateNext()
+		{
+			next = current.next();
+		}
+		
+		protected void updatePrevious()
+		{
+			previous = current.previous();
+		}
+		
+		@Override
+		public KEY_TYPE NEXT()
+		{
+			if(!hasNext()) throw new NoSuchElementException();
+			current = previous = next;
+			updateNext();
+			index++;
+			return current.key;
+		}
+		
+		@Override
+		public KEY_TYPE PREVIOUS()
+		{
+			if(!hasPrevious()) throw new NoSuchElementException();
+			current = next = previous;
+			updatePrevious();
+			index--;
+			return current.key;
+		}
+		
+		@Override
+		public void remove()
+		{
+			if(current == null) throw new IllegalStateException();
+			if(current == previous) index--;
+			updateNext();
+			updatePrevious();
+			removeNode(current);
+			current = null;
+		}
+				
+		@Override
+		public void set(KEY_TYPE e){ throw new UnsupportedOperationException(); }
+		
+		@Override
+		public void add(KEY_TYPE e) { throw new UnsupportedOperationException(); }
+	}
+	
+	private static final class Entry KEY_GENERIC_TYPE
+	{
+		static final int BLACK = 1;
+		
+		KEY_TYPE key;
+		int state;
+		Entry KEY_GENERIC_TYPE parent;
+		Entry KEY_GENERIC_TYPE left;
+		Entry KEY_GENERIC_TYPE right;
+		
+		Entry(KEY_TYPE key, Entry KEY_GENERIC_TYPE parent)
+		{
+			this.key = key;
+			this.parent = parent;
+		}
+		
+		boolean isBlack()
+		{
+			return (state & BLACK) != 0;
+		}
+		
+		void setBlack(boolean value)
+		{
+			if(value) state |= BLACK;
+			else state &= ~BLACK;
+		}
+		
+		boolean needsSuccessor()
+		{
+			return left != null && right != null;
+		}
+		
+		boolean replace(Entry KEY_GENERIC_TYPE entry)
+		{
+			if(entry != null) entry.parent = parent;
+			if(parent != null)
+			{
+				if(parent.left == this)
+					parent.left = entry;
+				else
+					parent.right = entry;
+			}
+			return parent == null;
+		}
+		
+		Entry KEY_GENERIC_TYPE next()
+		{
+			if(right != null)
+			{
+				Entry KEY_GENERIC_TYPE parent = right;
+				while(parent.left != null) parent = parent.left;
+				return parent;
+			}
+			Entry KEY_GENERIC_TYPE parent = this.parent;
+			Entry KEY_GENERIC_TYPE control = this;
+			while(parent != null && control == parent.right)
+			{
+				control = parent;
+				parent = parent.parent;
+			}
+			return parent;
+		}
+		
+		Entry KEY_GENERIC_TYPE previous()
+		{
+			if(left != null)
+			{
+				Entry KEY_GENERIC_TYPE parent = left;
+				while(parent.right != null) parent = parent.right;
+				return parent;
+			}
+			Entry KEY_GENERIC_TYPE parent = this.parent;
+			Entry KEY_GENERIC_TYPE control = this;
+			while(parent != null && control == parent.left)
+			{
+				control = parent;
+				parent = parent.parent;
+			}
+			return parent;
+		}
+	}
+}

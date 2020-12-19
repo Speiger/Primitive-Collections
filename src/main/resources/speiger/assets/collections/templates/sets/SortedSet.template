@@ -43,18 +43,23 @@ public interface SORTED_SET KEY_GENERIC_TYPE extends SET KEY_GENERIC_TYPE, Sorte
 	public KEY_TYPE POLL_LAST_KEY();
 	
 	@Override
+	@Deprecated
 	public default SORTED_SET KEY_GENERIC_TYPE subSet(CLASS_TYPE fromElement, CLASS_TYPE toElement) { return subSet(OBJ_TO_KEY(fromElement), OBJ_TO_KEY(toElement)); }
 	
 	@Override
+	@Deprecated
 	public default SORTED_SET KEY_GENERIC_TYPE headSet(CLASS_TYPE toElement) { return headSet(OBJ_TO_KEY(toElement)); }
 	
 	@Override
+	@Deprecated
 	public default SORTED_SET KEY_GENERIC_TYPE tailSet(CLASS_TYPE fromElement) { return tailSet(OBJ_TO_KEY(fromElement)); }
 	
 	@Override
+	@Deprecated
 	public default CLASS_TYPE first() { return KEY_TO_OBJ(FIRST_KEY()); }
 	
 	@Override
+	@Deprecated
 	default CLASS_TYPE last() { return KEY_TO_OBJ(LAST_KEY()); }
 #else
 	public CLASS_TYPE pollFirst();

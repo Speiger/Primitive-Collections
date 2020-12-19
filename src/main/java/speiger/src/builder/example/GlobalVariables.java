@@ -56,6 +56,7 @@ public class GlobalVariables
 		addInjectMapper("EQUALS_NULL", type.getComparableValue()+" == "+(type.isPrimitiveBlocking() ? type.getEmptyValue() : (type.needsCast() ? type.getEmptyValue() : "0"))).removeBraces();
 		addArgumentMapper("EQUALS_NOT", type.getEquals(true)).removeBraces();
 		addArgumentMapper("EQUALS", type.getEquals(false)).removeBraces();
+		addArgumentMapper("COMPARE_TO_KEY", type.isObject() ? "((Comparable<T>)%1$s).compareTo((T)%2$s)" : type.getClassType()+".compare(%1$s, %2$s)").removeBraces();
 		addArgumentMapper("COMPARE_TO", type.isObject() ? "%1$s.compareTo(%2$s)" : type.getClassType()+".compare(%1$s, %2$s)").removeBraces();
 		addInjectMapper("KEY_TO_OBJ", type.isObject() ? "%s" : type.getClassType()+".valueOf(%s)").removeBraces();
 		addInjectMapper("OBJ_TO_KEY", type.isObject() ? "%s" : "%s."+type.getKeyType()+"Value()").removeBraces();
@@ -77,6 +78,7 @@ public class GlobalVariables
 		addClassMapper("LINKED_HASH_SET", "LinkedOpenHashSet");
 		addClassMapper("CUSTOM_HASH_SET", "OpenCustomHashSet");
 		addClassMapper("HASH_SET", "OpenHashSet");
+		addClassMapper("RB_TREE_SET", "RBTreeSet");
 		addClassMapper("ARRAY_SET", "ArraySet");
 		
 		//Abstract Classes
@@ -99,6 +101,7 @@ public class GlobalVariables
 		addClassMapper("COLLECTION", "Collection");
 		addClassMapper("LIST_ITER", "ListIter");
 		addClassMapper("LIST", "List");
+		addClassMapper("NAVIGABLE_SET", "NavigableSet");
 		addClassMapper("SORTED_SET", "SortedSet");
 		addClassMapper("SET", "Set");
 		addClassMapper("STRATEGY", "Strategy");
@@ -115,7 +118,6 @@ public class GlobalVariables
 			addClassMapper("COMPARATOR", "Comparator");
 			addFunctionMappers("IARRAY", "I%sArray");
 		}
-		//Dependency
 		return this;
 	}
 	
