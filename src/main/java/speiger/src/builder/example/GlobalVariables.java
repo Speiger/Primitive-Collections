@@ -79,6 +79,7 @@ public class GlobalVariables
 		addClassMapper("CUSTOM_HASH_SET", "OpenCustomHashSet");
 		addClassMapper("HASH_SET", "OpenHashSet");
 		addClassMapper("RB_TREE_SET", "RBTreeSet");
+		addClassMapper("AVL_TREE_SET", "AVLTreeSet");
 		addClassMapper("ARRAY_SET", "ArraySet");
 		
 		//Abstract Classes
@@ -89,6 +90,7 @@ public class GlobalVariables
 		
 		//Helper Classes
 		addClassMapper("LISTS", "Lists");
+		addClassMapper("SETS", "Sets");
 		addClassMapper("COLLECTIONS", "Collections");
 		addClassMapper("ARRAYS", "Arrays");
 		addClassMapper("ITERATORS", "Iterators");

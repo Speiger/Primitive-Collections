@@ -3,6 +3,7 @@ package speiger.src.collections.PACKAGE.utils;
 import java.util.Iterator;
 import speiger.src.collections.PACKAGE.collections.ITERATOR;
 import speiger.src.collections.PACKAGE.lists.LIST_ITERATOR;
+import speiger.src.collections.PACKAGE.collections.BI_ITERATOR;
 
 /**
  * A Helper class for Iterators
@@ -30,6 +31,10 @@ public class ITERATORS
 	 */
 	public static GENERIC_BRACES ITERATOR KEY_GENERIC_TYPE unmodifiable(ITERATOR KEY_GENERIC_TYPE iterator) {
 		return iterator instanceof UnmodifiableIterator ? iterator : new UnmodifiableIteratorBRACES(iterator);
+	}
+	
+	public static GENERIC_BRACES BI_ITERATOR KEY_GENERIC_TYPE unmodifiable(BI_ITERATOR KEY_GENERIC_TYPE iterator) {
+		return iterator instanceof UnmodifiableBiIterator ? iterator : new UnmodifiableBiIteratorBRACES(iterator);
 	}
 	
 	/**
@@ -260,7 +265,36 @@ public class ITERATORS
 		
 		@Override
 		public void add(KEY_TYPE e) { throw new UnsupportedOperationException(); }
-}
+	}
+	
+	private static class UnmodifiableBiIterator KEY_GENERIC_TYPE implements BI_ITERATOR KEY_GENERIC_TYPE
+	{
+		BI_ITERATOR KEY_GENERIC_TYPE iter;
+		
+		UnmodifiableBiIterator(BI_ITERATOR KEY_GENERIC_TYPE iter) {
+			this.iter = iter;
+		}
+		
+		@Override
+		public KEY_TYPE NEXT() {
+			return iter.NEXT();
+		}
+		
+		@Override
+		public boolean hasNext() {
+			return iter.hasNext();
+		}
+		
+		@Override
+		public boolean hasPrevious() {
+			return iter.hasPrevious();
+		}
+		
+		@Override
+		public KEY_TYPE PREVIOUS() {
+			return iter.PREVIOUS();
+		}
+	}
 	
 	private static class UnmodifiableIterator KEY_GENERIC_TYPE implements ITERATOR KEY_GENERIC_TYPE
 	{

@@ -20,7 +20,6 @@ public class TestBuilder extends TemplateProcessor
 	public static final ClassType[] TYPE = ClassType.values();
 	List<GlobalVariables> varibles = new ArrayList<GlobalVariables>();
 	
-	
 	public TestBuilder()
 	{
 		super(Paths.get("src\\main\\resources\\speiger\\assets\\collections\\templates\\"), Paths.get("src\\main\\java\\speiger\\src\\collections\\"), Paths.get("src\\main\\resources\\speiger\\assets\\collections\\"));
@@ -59,6 +58,17 @@ public class TestBuilder extends TemplateProcessor
 		blocked.put("Consumer", EnumSet.of(ClassType.OBJECT));
 		blocked.put("Comparator", EnumSet.of(ClassType.OBJECT));
 		blocked.put("Stack", EnumSet.of(ClassType.OBJECT));
+		blocked.put("Sets", EnumSet.of(ClassType.BOOLEAN));
+		blocked.put("ArraySet", EnumSet.of(ClassType.BOOLEAN));
+		blocked.put("AVLTreeSet", EnumSet.of(ClassType.BOOLEAN));
+		blocked.put("RBTreeSet", EnumSet.of(ClassType.BOOLEAN));
+		blocked.put("RBTreeSet", EnumSet.of(ClassType.BOOLEAN));
+		blocked.put("SortedSet", EnumSet.of(ClassType.BOOLEAN));
+		blocked.put("NavigableSet", EnumSet.of(ClassType.BOOLEAN));
+		blocked.put("OpenHashSet", EnumSet.of(ClassType.BOOLEAN));
+		blocked.put("OpenCustomHashSet", EnumSet.of(ClassType.BOOLEAN));
+		blocked.put("LinkedOpenHashSet", EnumSet.of(ClassType.BOOLEAN));
+		blocked.put("LinkedOpenCustomHashSet", EnumSet.of(ClassType.BOOLEAN));
 	}
 	
 	@Override

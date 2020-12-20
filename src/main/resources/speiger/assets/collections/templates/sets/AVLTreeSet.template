@@ -10,7 +10,7 @@ import speiger.src.collections.PACKAGE.functions.COMPARATOR;
 #endif
 import speiger.src.collections.PACKAGE.lists.LIST_ITERATOR;
 
-public class RB_TREE_SET KEY_GENERIC_TYPE extends ABSTRACT_SET KEY_GENERIC_TYPE implements NAVIGABLE_SET KEY_GENERIC_TYPE
+public class AVL_TREE_SET KEY_GENERIC_TYPE extends ABSTRACT_SET KEY_GENERIC_TYPE implements NAVIGABLE_SET KEY_GENERIC_TYPE
 {
 	protected transient Entry KEY_GENERIC_TYPE tree;
 	protected transient Entry KEY_GENERIC_TYPE first;
@@ -27,7 +27,7 @@ public class RB_TREE_SET KEY_GENERIC_TYPE extends ABSTRACT_SET KEY_GENERIC_TYPE 
 #endif
 #endif
 	
-	public RB_TREE_SET() {
+	public AVL_TREE_SET() {
 	}
 	
 #if !TYPE_OBJECT
@@ -351,12 +351,11 @@ public class RB_TREE_SET KEY_GENERIC_TYPE extends ABSTRACT_SET KEY_GENERIC_TYPE 
 			if(entry == first) first = replacement;
 			if(entry == last) last = entry.right != null ? entry.right : replacement;
 			entry.left = entry.right = entry.parent = null;
-			if(entry.isBlack()) fixAfterDeletion(replacement);
+			fixAfterDeletion(replacement);
 		}
 		else if(entry.parent == null) tree = first = last = null;
 		else {
-			if(entry.isBlack())
-				fixAfterDeletion(entry);
+			fixAfterDeletion(entry);
 			entry.replace(null);
 			if(entry.parent != null) {
 				Entry KEY_GENERIC_TYPE parent = entry.parent;
@@ -368,11 +367,6 @@ public class RB_TREE_SET KEY_GENERIC_TYPE extends ABSTRACT_SET KEY_GENERIC_TYPE 
 	}
 	
 	protected int compare(KEY_TYPE k, KEY_TYPE v) { return comparator != null ? comparator.compare(k, v) : COMPARE_TO_KEY(k, v);}
-	protected static GENERIC_BRACES boolean isBlack(Entry KEY_GENERIC_TYPE p) { return p == null || p.isBlack(); }
-	protected static GENERIC_BRACES Entry KEY_GENERIC_TYPE parentOf(Entry KEY_GENERIC_TYPE p) { return (p == null ? null : p.parent); }
-	protected static GENERIC_BRACES void setBlack(Entry KEY_GENERIC_TYPE p, boolean c) { if(p != null) p.setBlack(c); }
-	protected static GENERIC_BRACES Entry KEY_GENERIC_TYPE leftOf(Entry KEY_GENERIC_TYPE p) { return p == null ? null : p.left; }
-	protected static GENERIC_BRACES Entry KEY_GENERIC_TYPE rightOf(Entry KEY_GENERIC_TYPE p) { return (p == null) ? null : p.right; }
 	
 	/** From CLR */
 	protected void rotateLeft(Entry KEY_GENERIC_TYPE entry) {
@@ -406,110 +400,58 @@ public class RB_TREE_SET KEY_GENERIC_TYPE extends ABSTRACT_SET KEY_GENERIC_TYPE 
 	
 	/** From CLR */
 	protected void fixAfterInsertion(Entry KEY_GENERIC_TYPE entry) {
-		entry.setBlack(false);
-		while(entry != null && entry != tree && !entry.parent.isBlack()) {
-			if(parentOf(entry) == leftOf(parentOf(parentOf(entry)))) {
-				Entry KEY_GENERIC_TYPE y = rightOf(parentOf(parentOf(entry)));
-				if(!isBlack(y)) {
-					setBlack(parentOf(entry), true);
-					setBlack(y, true);
-					setBlack(parentOf(parentOf(entry)), false);
-					entry = parentOf(parentOf(entry));
-				}
-				else {
-					if(entry == rightOf(parentOf(entry))) {
-						entry = parentOf(entry);
-						rotateLeft(entry);
-					}
-					setBlack(parentOf(entry), true);
-					setBlack(parentOf(parentOf(entry)), false);
-					rotateRight(parentOf(parentOf(entry)));
+		while(entry != null) {
+			entry.updateHeight();
+			int balance = entry.getBalance();
+			if(balance > 1) {
+				int compare = entry.left.getBalance();
+				if(compare > 0) rotateRight(entry);
+				else if(compare < 0) {
+					rotateLeft(entry.left);
+					rotateRight(entry);
 				}
 			}
-			else {
-				Entry KEY_GENERIC_TYPE y = leftOf(parentOf(parentOf(entry)));
-				if(!isBlack(y)) {
-					setBlack(parentOf(entry), true);
-					setBlack(y, true);
-					setBlack(parentOf(parentOf(entry)), false);
-					entry = parentOf(parentOf(entry));
-				}
-				else {
-					if(entry == leftOf(parentOf(entry))) {
-						entry = parentOf(entry);
-						rotateRight(entry);
-					}
-					setBlack(parentOf(entry), true);
-					setBlack(parentOf(parentOf(entry)), false);
-					rotateLeft(parentOf(parentOf(entry)));
+			else if(balance < -1) {
+				int compare = entry.right.getBalance();
+				if(compare < 0) rotateLeft(entry);
+				else if(compare > 0) {
+					rotateRight(entry.right);
+					rotateLeft(entry);
 				}
 			}
+			entry = entry.parent;
 		}
-		tree.setBlack(true);
 	}
 	
 	/** From CLR */
 	protected void fixAfterDeletion(Entry KEY_GENERIC_TYPE entry) {
-		while(entry != tree && isBlack(entry)) {
-			if(entry == leftOf(parentOf(entry))) {
-				Entry KEY_GENERIC_TYPE sib = rightOf(parentOf(entry));
-				if(!isBlack(sib)) {
-					setBlack(sib, true);
-					setBlack(parentOf(entry), false);
-					rotateLeft(parentOf(entry));
-					sib = rightOf(parentOf(entry));
-				}
-				if(isBlack(leftOf(sib)) && isBlack(rightOf(sib))) {
-					setBlack(sib, false);
-					entry = parentOf(entry);
-				}
+		if(entry != null) {
+			entry.updateHeight();
+			int balance = entry.getBalance();
+			if(balance > 1) {
+				int subBalance = entry.left.getBalance();
+				if(subBalance >= 0) rotateRight(entry);
 				else {
-					if(isBlack(rightOf(sib))) {
-						setBlack(leftOf(sib), true);
-						setBlack(sib, false);
-						rotateRight(sib);
-						sib = rightOf(parentOf(entry));
-					}
-					setBlack(sib, isBlack(parentOf(entry)));
-					setBlack(parentOf(entry), true);
-					setBlack(rightOf(sib), true);
-					rotateLeft(parentOf(entry));
-					entry = tree;
+					rotateLeft(entry.left);
+					rotateRight(entry);
 				}
 			}
-			else {
-				Entry KEY_GENERIC_TYPE sib = leftOf(parentOf(entry));
-				if(!isBlack(sib)) {
-					setBlack(sib, true);
-					setBlack(parentOf(entry), false);
-					rotateRight(parentOf(entry));
-					sib = leftOf(parentOf(entry));
-				}
-				if(isBlack(rightOf(sib)) && isBlack(leftOf(sib))) {
-					setBlack(sib, false);
-					entry = parentOf(entry);
-				}
+			else if(balance < -1)
+			{
+				int subBalance = entry.right.getBalance();
+				if(subBalance <= 0) rotateLeft(entry);
 				else {
-					if(isBlack(leftOf(sib))) {
-						setBlack(rightOf(sib), true);
-						setBlack(sib, false);
-						rotateLeft(sib);
-						sib = leftOf(parentOf(entry));
-					}
-					setBlack(sib, isBlack(parentOf(entry)));
-					setBlack(parentOf(entry), true);
-					setBlack(leftOf(sib), true);
-					rotateRight(parentOf(entry));
-					entry = tree;
+					rotateRight(entry.right);
+					rotateLeft(entry);
 				}
 			}
+			entry = entry.parent;
 		}
-		setBlack(entry, true);
 	}
 	
 	private static class AscendingSubSet KEY_GENERIC_TYPE extends SubSet KEY_GENERIC_TYPE
 	{
-		AscendingSubSet(RB_TREE_SET KEY_GENERIC_TYPE set, boolean fromStart, KEY_TYPE start, boolean loInclusive, boolean toEnd, KEY_TYPE end, boolean hiInclusive) {
+		AscendingSubSet(AVL_TREE_SET KEY_GENERIC_TYPE set, boolean fromStart, KEY_TYPE start, boolean loInclusive, boolean toEnd, KEY_TYPE end, boolean hiInclusive) {
 			super(set, fromStart, start, loInclusive, toEnd, end, hiInclusive);
 		}
 		
@@ -553,7 +495,7 @@ public class RB_TREE_SET KEY_GENERIC_TYPE extends ABSTRACT_SET KEY_GENERIC_TYPE 
 	private static class DescendingSubSet KEY_GENERIC_TYPE extends SubSet KEY_GENERIC_TYPE
 	{
 		COMPARATOR KEY_GENERIC_TYPE comparator;
-		DescendingSubSet(RB_TREE_SET KEY_GENERIC_TYPE set, boolean fromStart, KEY_TYPE start, boolean loInclusive, boolean toEnd, KEY_TYPE end, boolean hiInclusive) {
+		DescendingSubSet(AVL_TREE_SET KEY_GENERIC_TYPE set, boolean fromStart, KEY_TYPE start, boolean loInclusive, boolean toEnd, KEY_TYPE end, boolean hiInclusive) {
 			super(set, fromStart, start, loInclusive, toEnd, end, hiInclusive);
 			comparator = set.comparator().reversed();
 		}
@@ -643,7 +585,7 @@ public class RB_TREE_SET KEY_GENERIC_TYPE extends ABSTRACT_SET KEY_GENERIC_TYPE 
 	
 	private static abstract class SubSet KEY_GENERIC_TYPE extends ABSTRACT_SET KEY_GENERIC_TYPE implements NAVIGABLE_SET KEY_GENERIC_TYPE
 	{
-		RB_TREE_SET KEY_GENERIC_TYPE set;
+		AVL_TREE_SET KEY_GENERIC_TYPE set;
 		KEY_TYPE start;
 		KEY_TYPE end;
         boolean fromStart;
@@ -651,7 +593,7 @@ public class RB_TREE_SET KEY_GENERIC_TYPE extends ABSTRACT_SET KEY_GENERIC_TYPE 
         boolean loInclusive;
         boolean hiInclusive;
 		
-        SubSet(RB_TREE_SET KEY_GENERIC_TYPE set, boolean fromStart, KEY_TYPE start, boolean loInclusive, boolean toEnd, KEY_TYPE end, boolean hiInclusive) {
+        SubSet(AVL_TREE_SET KEY_GENERIC_TYPE set, boolean fromStart, KEY_TYPE start, boolean loInclusive, boolean toEnd, KEY_TYPE end, boolean hiInclusive) {
         	this.set = set;
 			this.start = start;
 			this.end = end;
@@ -991,8 +933,6 @@ public class RB_TREE_SET KEY_GENERIC_TYPE extends ABSTRACT_SET KEY_GENERIC_TYPE 
 	
 	private static final class Entry KEY_GENERIC_TYPE
 	{
-		static final int BLACK = 1;
-		
 		KEY_TYPE key;
 		int state;
 		Entry KEY_GENERIC_TYPE parent;
@@ -1004,14 +944,11 @@ public class RB_TREE_SET KEY_GENERIC_TYPE extends ABSTRACT_SET KEY_GENERIC_TYPE 
 			this.parent = parent;
 		}
 		
-		boolean isBlack() {
-			return (state & BLACK) != 0;
-		}
+		int getHeight() { return state; }
 		
-		void setBlack(boolean value) {
-			if(value) state |= BLACK;
-			else state &= ~BLACK;
-		}
+		void updateHeight() { state = (1 + Math.max(left == null ? 0 : left.getHeight(), right == null ? 0 : right.getHeight())); }
+		
+		int getBalance() { return (left == null ? 0 : left.getHeight()) - (right == null ? 0 : right.getBalance()); }
 		
 		boolean needsSuccessor() { return left != null && right != null; }
 		
