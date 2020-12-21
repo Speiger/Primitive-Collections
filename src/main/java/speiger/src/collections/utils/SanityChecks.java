@@ -1,5 +1,6 @@
 package speiger.src.collections.utils;
 
+import java.util.Random;
 import java.util.concurrent.ForkJoinPool;
 import java.util.concurrent.ForkJoinTask;
 
@@ -11,6 +12,7 @@ public class SanityChecks
 {
 	public static final int MAX_ARRAY_SIZE = Integer.MAX_VALUE - 8;
 	private static ForkJoinPool WORK_POOL = ForkJoinPool.commonPool();
+	private static ThreadLocal<Random> RANDOM = ThreadLocal.withInitial(Random::new);
 	
 	/**
 	 * Internal function to cast a Integer to a Byte
@@ -68,7 +70,7 @@ public class SanityChecks
 	public static void checkArrayCapacity(int arraySize, int offset, int accessSize) {
 		if(offset < 0) throw new IllegalStateException("Offset is negative ("+offset+")");
 		else if(accessSize < 0) throw new IllegalStateException("Size is negative ("+accessSize+")");
-		else if(arraySize < offset + accessSize) throw new IndexOutOfBoundsException("Index (" + offset + accessSize + ") is not in size (" + arraySize + ")");
+		else if(arraySize < offset + accessSize) throw new IndexOutOfBoundsException("Index (" + (offset + accessSize) + ") is not in size (" + arraySize + ")");
 	}
 	
 	/**
@@ -102,5 +104,9 @@ public class SanityChecks
 	 */
 	public static void setWorkPool(ForkJoinPool pool) {
 		WORK_POOL = pool == null ? ForkJoinPool.commonPool() : pool;
+	}
+	
+	public static Random getRandom() {
+		return RANDOM.get();
 	}
 }

@@ -237,7 +237,7 @@ public class ARRAY_LIST KEY_GENERIC_TYPE extends ABSTRACT_LIST KEY_GENERIC_TYPE 
 		if(index != size) System.arraycopy(data, index, data, index+add, size - index);
 		size+=add;
 		ITERATOR KEY_GENERIC_TYPE iter = c.iterator();
-		while(add != 0) data[index++] = iter.NEXT();
+		while(add-- != 0) data[index++] = iter.NEXT();
 		return true;
 	}
 	
@@ -256,7 +256,7 @@ public class ARRAY_LIST KEY_GENERIC_TYPE extends ABSTRACT_LIST KEY_GENERIC_TYPE 
 		grow(size + add);
 		if(index != size) System.arraycopy(data, index, data, index+add, size - index);
 		size+=add;
-		c.getElements(0, data, index, size);
+		c.getElements(0, data, index, c.size());
 		return true;
 	}
 	
@@ -678,14 +678,30 @@ public class ARRAY_LIST KEY_GENERIC_TYPE extends ABSTRACT_LIST KEY_GENERIC_TYPE 
 	public KEY_TYPE REMOVE(int index) {
 		checkRange(index);
 		KEY_TYPE old = data[index];
-		if(index != size - 1) System.arraycopy(data, index+1, data, index, size - index);
+		size--;
+		if(index != size) System.arraycopy(data, index+1, data, index, size - index);
 #if TYPE_OBJECT
 		data[size] = null;
 #endif
-		size--;
 		return old;
 	}
 	
+#if !TYPE_OBJECT
+	/**
+	 * A Type-Specific implementation of remove. This implementation iterates over the elements until it finds the element that is searched for or it runs out of elements.
+	 * It stops after finding the first element
+	 * @param e the element that is searched for
+	 * @return true if the element was found and removed.
+	 */
+	@Override
+	public boolean REMOVE_KEY(KEY_TYPE type) {
+		int index = indexOf(type);
+		if(index == -1) return false;
+		REMOVE(index);
+		return true;
+	}
+	
+#endif
 	/**
 	 * A Type-Specific pop function to reduce (un)boxing
 	 * @param index the index of the element to fetch
@@ -713,14 +729,13 @@ public class ARRAY_LIST KEY_GENERIC_TYPE extends ABSTRACT_LIST KEY_GENERIC_TYPE 
 		boolean modified = false;
 		int j = 0;
 		for(int i = 0;i<size;i++) {
-			if(!c.contains(KEY_TO_OBJ(data[i]))) {
-				data[j++] = data[i];
-				modified = true;
-			}
+			if(!c.contains(KEY_TO_OBJ(data[i]))) data[j++] = data[i];
+			else modified = true;
 		}
 #if TYPE_OBJECT
 		Arrays.fill(data, j, size, null);
 #endif
+		size = j;
 		return modified;
 	}
 	
@@ -744,14 +759,13 @@ public class ARRAY_LIST KEY_GENERIC_TYPE extends ABSTRACT_LIST KEY_GENERIC_TYPE 
 		boolean modified = false;
 		int j = 0;
 		for(int i = 0;i<size;i++) {
-			if(c.contains(KEY_TO_OBJ(data[i]))) {
-				data[j++] = data[i];
-				modified = true;
-			}
+			if(c.contains(KEY_TO_OBJ(data[i]))) data[j++] = data[i];
+			else modified = true;
 		}
 #if TYPE_OBJECT
 		Arrays.fill(data, j, size, null);
 #endif
+		size = j;
 		return modified;
 	}
 	
@@ -764,19 +778,17 @@ public class ARRAY_LIST KEY_GENERIC_TYPE extends ABSTRACT_LIST KEY_GENERIC_TYPE 
 	@Override
 	@Primitive
 	public boolean removeIf(Predicate<? super CLASS_TYPE> filter) {
-		
 		Objects.requireNonNull(filter);
 		boolean modified = false;
 		int j = 0;
 		for(int i = 0;i<size;i++) {
-			if(!filter.test(KEY_TO_OBJ(data[i]))) {
-				data[j++] = data[i];
-				modified = true;
-			}
+			if(!filter.test(KEY_TO_OBJ(data[i]))) data[j++] = data[i];
+			else modified = true;
 		}
 #if TYPE_OBJECT
 		Arrays.fill(data, j, size, null);
 #endif
+		size = j;
 		return modified;
 	}
 	
@@ -792,14 +804,13 @@ public class ARRAY_LIST KEY_GENERIC_TYPE extends ABSTRACT_LIST KEY_GENERIC_TYPE 
 		boolean modified = false;
 		int j = 0;
 		for(int i = 0;i<size;i++) {
-			if(!c.contains(data[i])) {
-				data[j++] = data[i];
-				modified = true;
-			}
+			if(!c.contains(data[i])) data[j++] = data[i];
+			else modified = true;
 		}
 #if TYPE_OBJECT
 		Arrays.fill(data, j, size, null);
 #endif		
+		size = j;
 		return modified;
 	}
 	
@@ -820,14 +831,13 @@ public class ARRAY_LIST KEY_GENERIC_TYPE extends ABSTRACT_LIST KEY_GENERIC_TYPE 
 		boolean modified = false;
 		int j = 0;
 		for(int i = 0;i<size;i++) {
-			if(c.contains(data[i])) {
-				data[j++] = data[i];
-				modified = true;
-			}
+			if(c.contains(data[i])) data[j++] = data[i];
+			else modified = true;
 		}
 #if TYPE_OBJECT
 		Arrays.fill(data, j, size, null);
 #endif
+		size = j;
 		return modified;
 	}
 	
@@ -841,12 +851,12 @@ public class ARRAY_LIST KEY_GENERIC_TYPE extends ABSTRACT_LIST KEY_GENERIC_TYPE 
 	public boolean remIf(JAVA_PREDICATE filter) {
 		Objects.requireNonNull(filter);
 		boolean modified = false;
-		for(int i = 0, j = 0;i<size;i++) {
-			if(!filter.test(data[i])) {
-				data[j++] = data[i];
-				modified = true;
-			}
+		int j = 0;
+		for(int i = 0;i<size;i++) {
+			if(!filter.test(data[i])) data[j++] = data[i];
+			else modified = true;
 		}
+		size = j;
 		return modified;
 	}
 	
@@ -909,6 +919,7 @@ public class ARRAY_LIST KEY_GENERIC_TYPE extends ABSTRACT_LIST KEY_GENERIC_TYPE 
 			data = Arrays.copyOf(data, size);
 		else if(size < size() && size >= 0)
 			Arrays.fill(data, size, size(), EMPTY_VALUE);
+		this.size = size;
 	}
 	
 	/**
@@ -929,7 +940,7 @@ public class ARRAY_LIST KEY_GENERIC_TYPE extends ABSTRACT_LIST KEY_GENERIC_TYPE 
 	@Override
 	public boolean trim(int size) {
 		if(size > size() || size() == data.length) return false;
-		int value = Math.min(size, size());
+		int value = Math.max(size, size());
 #if TYPE_OBJECT
 		data = value == 0 ? (KEY_TYPE[])ARRAYS.EMPTY_ARRAY : Arrays.copyOf(data, value);
 #else
