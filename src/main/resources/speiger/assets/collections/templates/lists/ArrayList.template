@@ -369,7 +369,6 @@ public class ARRAY_LIST KEY_GENERIC_TYPE extends ABSTRACT_LIST KEY_GENERIC_TYPE 
 	@Override
 	@Primitive
 	public boolean containsAll(Collection<?> c) {
-		if(c instanceof COLLECTION) return containsAll((COLLECTION KEY_GENERIC_TYPE)c);
 		Objects.requireNonNull(c);
 		for(int i = 0,m=size;i<m;i++) {
 #if !TYPE_OBJECT
@@ -391,9 +390,7 @@ public class ARRAY_LIST KEY_GENERIC_TYPE extends ABSTRACT_LIST KEY_GENERIC_TYPE 
 	 */
 	@Override
 	@Primitive
-	public boolean containsAny(Collection<?> c)
-	{
-		if(c instanceof COLLECTION) return containsAny((COLLECTION KEY_GENERIC_TYPE)c);
+	public boolean containsAny(Collection<?> c) {
 		Objects.requireNonNull(c);
 		for(int i = 0,m=size;i<m;i++) {
 #if !TYPE_OBJECT
@@ -403,6 +400,18 @@ public class ARRAY_LIST KEY_GENERIC_TYPE extends ABSTRACT_LIST KEY_GENERIC_TYPE 
 #endif
 		}
 		return false;
+	}
+	
+	/**
+	 * A function to find if the Element is present in this list.
+	 * @param e the element that is searched for
+	 * @return if the element was found.
+	 * @deprecated if type-specific but still supported because of special edgecase Object-Comparason features
+	 */
+	@Override
+	@Primitive
+	public boolean contains(Object o) {
+		return indexOf(o) != -1;
 	}
 	
 	/**
@@ -508,6 +517,16 @@ public class ARRAY_LIST KEY_GENERIC_TYPE extends ABSTRACT_LIST KEY_GENERIC_TYPE 
 	}
 	
 #if !TYPE_OBJECT
+	/**
+	 * A Type Specific implementation of the Collection#contains function.
+	 * @param the element that is searched for.
+	 * @returns if the element was found
+	 */
+	@Override
+	public boolean contains(KEY_TYPE e) {
+		return indexOf(e) != -1;
+	}
+	
 	/**
 	 * A Type-Specific function to find the index of a given element
 	 * @param e the element that is searched for
@@ -725,7 +744,6 @@ public class ARRAY_LIST KEY_GENERIC_TYPE extends ABSTRACT_LIST KEY_GENERIC_TYPE 
 	@Primitive
 	public boolean removeAll(Collection<?> c) {
 		if(c.isEmpty()) return false;
-		if(c instanceof COLLECTION) return removeAll((COLLECTION KEY_GENERIC_TYPE)c);
 		boolean modified = false;
 		int j = 0;
 		for(int i = 0;i<size;i++) {
@@ -755,7 +773,6 @@ public class ARRAY_LIST KEY_GENERIC_TYPE extends ABSTRACT_LIST KEY_GENERIC_TYPE 
 			clear();
 			return modifed;
 		}
-		if(c instanceof COLLECTION) return retainAll((COLLECTION KEY_GENERIC_TYPE)c);
 		boolean modified = false;
 		int j = 0;
 		for(int i = 0;i<size;i++) {

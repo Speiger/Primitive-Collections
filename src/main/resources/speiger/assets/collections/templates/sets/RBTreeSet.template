@@ -240,13 +240,12 @@ public class RB_TREE_SET KEY_GENERIC_TYPE extends ABSTRACT_SET KEY_GENERIC_TYPE 
 		return findNode(e) != null;
 	}
 	
-#else
+#endif
 	@Override
 	public boolean contains(Object e) {
-		return findNode((T)e) != null;
+		return findNode(OBJ_TO_KEY(((CLASS_TYPE)e))) != null;
 	}
 	
-#endif
 	@Override
 	public KEY_TYPE FIRST_KEY() {
 		if(tree == null) throw new NoSuchElementException();
@@ -271,11 +270,11 @@ public class RB_TREE_SET KEY_GENERIC_TYPE extends ABSTRACT_SET KEY_GENERIC_TYPE 
 		return false;
 	}
 	
-#else
+#endif
 	@Override
 	public boolean remove(Object o) {
 		if(tree == null) return false;
-		Entry KEY_GENERIC_TYPE entry = findNode((T)o);
+		Entry KEY_GENERIC_TYPE entry = findNode(OBJ_TO_KEY(((CLASS_TYPE)o)));
 		if(entry != null) {
 			removeNode(entry);
 			return true;
@@ -283,7 +282,6 @@ public class RB_TREE_SET KEY_GENERIC_TYPE extends ABSTRACT_SET KEY_GENERIC_TYPE 
 		return false;
 	}
 	
-#endif
 	@Override
 	public KEY_TYPE POLL_FIRST_KEY() {
 		if(tree == null) throw new NoSuchElementException();
@@ -766,18 +764,19 @@ public class RB_TREE_SET KEY_GENERIC_TYPE extends ABSTRACT_SET KEY_GENERIC_TYPE 
 			return inRange(o) && set.remove(o);
 		}
 		
-#else
+#endif
 		@Override
 		public boolean contains(Object e) {
-			return inRange((T)e) && set.contains((T)e);
+			KEY_TYPE o = OBJ_TO_KEY(((CLASS_TYPE)e));
+			return inRange(o) && set.contains(o);
 		}
 	
 		@Override
-		public boolean remove(Object o) {
-			return inRange((T)o) && set.remove((T)o);
+		public boolean remove(Object e) {
+			KEY_TYPE o = OBJ_TO_KEY(((CLASS_TYPE)e));
+			return inRange(o) && set.remove(o);
 		}
 		
-#endif
 		@Override
 		public KEY_TYPE lower(KEY_TYPE e) {
 			if(tooHigh(e)) {

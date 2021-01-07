@@ -54,16 +54,6 @@ public abstract class ABSTRACT_COLLECTION KEY_GENERIC_TYPE extends AbstractColle
 	}
 	
 #endif
-	/** {@inheritDoc}
-	 * <p>This default implementation delegates to the corresponding type-specific function.
-	 * @deprecated Please use the corresponding type-specific function instead. 
-	 */
-	@Override
-	@Deprecated
-	public boolean containsAll(Collection<?> c)
-	{
-		return c instanceof COLLECTION ? containsAll((COLLECTION KEY_GENERIC_TYPE)c) : super.containsAll(c);
-	}
 	
 	/** {@inheritDoc}
 	 * <p>This default implementation delegates to the corresponding type-specific function.
@@ -74,28 +64,6 @@ public abstract class ABSTRACT_COLLECTION KEY_GENERIC_TYPE extends AbstractColle
 	public boolean addAll(Collection<? extends CLASS_TYPE> c)
 	{
 		return c instanceof COLLECTION ? addAll((COLLECTION KEY_GENERIC_TYPE)c) : super.addAll(c);
-	}
-	
-	/** {@inheritDoc}
-	 * <p>This default implementation delegates to the corresponding type-specific function.
-	 * @deprecated Please use the corresponding type-specific function instead. 
-	 */
-	@Override
-	@Primitive
-	public boolean removeAll(Collection<?> c)
-	{
-		return c instanceof COLLECTION ? removeAll((COLLECTION KEY_GENERIC_TYPE)c) : super.removeAll(c);
-	}
-	
-	/** {@inheritDoc}
-	 * <p>This default implementation delegates to the corresponding type-specific function.
-	 * @deprecated Please use the corresponding type-specific function instead. 
-	 */
-	@Override
-	@Primitive
-	public boolean retainAll(Collection<?> c)
-	{
-		return c instanceof COLLECTION ? retainAll((COLLECTION KEY_GENERIC_TYPE)c) : super.retainAll(c);
 	}
 	
 	/**

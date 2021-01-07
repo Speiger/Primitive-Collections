@@ -4,9 +4,7 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
-#if TYPE_OBJECT
 import java.util.Objects;
-#endif
 
 import speiger.src.collections.PACKAGE.collections.COLLECTION;
 import speiger.src.collections.PACKAGE.collections.ITERATOR;
@@ -152,34 +150,33 @@ public class HASH_SET KEY_GENERIC_TYPE extends ABSTRACT_SET KEY_GENERIC_TYPE imp
 		return super.addAll(c);
 	}
 	
-#if TYPE_OBJECT
 	@Override
 	public boolean contains(Object o) {
-		if(EQUALS_NULL(o)) return containsNull;
-		int pos = HashUtil.mix(TO_HASH(o)) & mask;
+		if(o == null) return containsNull;
+		int pos = HashUtil.mix(o.hashCode()) & mask;
 		KEY_TYPE current = keys[pos];
 		if(EQUALS_NULL(current)) return false;
-		if(EQUALS(current, o)) return true;
+		if(EQUALS_KEY_TYPE(current, o)) return true;
 		while(true) {
 			if(EQUALS_NULL((current = keys[++pos & mask]))) return false;
-			else if(EQUALS(current, o)) return true;
+			else if(EQUALS_KEY_TYPE(current, o)) return true;
 		}
 	}
 
 	@Override
 	public boolean remove(Object o) {
-		if(EQUALS_NULL(o)) return (containsNull ? removeNullIndex() : false);
-		int pos = HashUtil.mix(TO_HASH(o)) & mask;
+		if(o == null) return (containsNull ? removeNullIndex() : false);
+		int pos = HashUtil.mix(o.hashCode()) & mask;
 		KEY_TYPE current = keys[pos];
 		if(EQUALS_NULL(current)) return false;
-		if(EQUALS(current, o)) return removeIndex(pos);
+		if(EQUALS_KEY_TYPE(current, o)) return removeIndex(pos);
 		while(true) {
 			if(EQUALS_NULL((current = keys[++pos & mask]))) return false;
-			else if(EQUALS(current, o)) return removeIndex(pos);
+			else if(EQUALS_KEY_TYPE(current, o)) return removeIndex(pos);
 		}
 	}
 
-#else
+#if !TYPE_OBJECT
 	@Override
 	public boolean contains(KEY_TYPE o) {
 		if(EQUALS_NULL(o)) return containsNull;

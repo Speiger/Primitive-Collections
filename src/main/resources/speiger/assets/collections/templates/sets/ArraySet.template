@@ -4,11 +4,9 @@ import java.util.Arrays;
 import java.util.Collection;
 #if TYPE_OBJECT
 import java.util.Comparator;
+#endif
 import java.util.NoSuchElementException;
 import java.util.Objects;
-#else
-import java.util.NoSuchElementException;
-#endif
 import java.util.Set;
 
 import speiger.src.collections.PACKAGE.collections.BI_ITERATOR;
@@ -150,7 +148,7 @@ public class ARRAY_SET KEY_GENERIC_TYPE extends ABSTRACT_SET KEY_GENERIC_TYPE im
 #else
 	@Override
 	public boolean contains(Object e) {
-		return findIndex((KEY_TYPE)e) != -1;
+		return findIndex(e) != -1;
 	}
 	
 #endif
@@ -180,7 +178,7 @@ public class ARRAY_SET KEY_GENERIC_TYPE extends ABSTRACT_SET KEY_GENERIC_TYPE im
 #else
 	@Override
 	public boolean remove(Object o) {
-		int index = findIndex((KEY_TYPE)o);
+		int index = findIndex(o);
 		if(index != -1) {
 			System.arraycopy(data, index+1, data, index, size - index);
 			data[size-1] = EMPTY_VALUE;
@@ -213,9 +211,17 @@ public class ARRAY_SET KEY_GENERIC_TYPE extends ABSTRACT_SET KEY_GENERIC_TYPE im
 #endif
 	}
 	
+#if !TYPE_OBJECT
 	protected int findIndex(KEY_TYPE o) {
 		for(int i = size-1;i>=0;i--)
 			if(EQUALS(data[i], o)) return i;
+		return -1;
+	}
+	
+#endif
+	protected int findIndex(Object o) {
+		for(int i = size-1;i>=0;i--)
+			if(EQUALS_KEY_TYPE(data[i], o)) return i;
 		return -1;
 	}
 	
@@ -359,13 +365,12 @@ public class ARRAY_SET KEY_GENERIC_TYPE extends ABSTRACT_SET KEY_GENERIC_TYPE im
 			return findIndex(e) != -1;
 		}
 		
-#else
+#endif
 		@Override
 		public boolean contains(Object e) {
-			return findIndex((KEY_TYPE)e) != -1;
+			return findIndex(e) != -1;
 		}
 		
-#endif
 		@Override
 		public KEY_TYPE FIRST_KEY() {
 			if(length == 0) throw new NoSuchElementException();
@@ -391,10 +396,10 @@ public class ARRAY_SET KEY_GENERIC_TYPE extends ABSTRACT_SET KEY_GENERIC_TYPE im
 			return false;
 		}
 		
-#else
+#endif
 		@Override
 		public boolean remove(Object o) {
-			int index = findIndex((KEY_TYPE)o);
+			int index = findIndex(o);
 			if(index != -1) {
 				System.arraycopy(data, index+1, data, index, size - index);
 				data[size-1] = EMPTY_VALUE;
@@ -405,7 +410,6 @@ public class ARRAY_SET KEY_GENERIC_TYPE extends ABSTRACT_SET KEY_GENERIC_TYPE im
 			return false;
 		}
 		
-#endif
 		@Override
 		public KEY_TYPE POLL_FIRST_KEY() {
 			if(length == 0) throw new NoSuchElementException();
@@ -476,9 +480,17 @@ public class ARRAY_SET KEY_GENERIC_TYPE extends ABSTRACT_SET KEY_GENERIC_TYPE im
 			return length;
 		}
 		
-		private int findIndex(KEY_TYPE o) {
-			for(int i = length-1;i>=0;i--)
-				if(data[offset+i] == o) return i + offset;
+#if !TYPE_OBJECT
+		protected int findIndex(KEY_TYPE o) {
+			for(int i = size-1;i>=0;i--)
+				if(EQUALS(data[offset+i], o)) return i + offset;
+			return -1;
+		}
+		
+#endif
+		protected int findIndex(Object o) {
+			for(int i = size-1;i>=0;i--)
+				if(EQUALS_KEY_TYPE(data[offset+i], o)) return i + offset;
 			return -1;
 		}
 	}
