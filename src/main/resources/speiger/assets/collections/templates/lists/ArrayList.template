@@ -76,11 +76,7 @@ public class ARRAY_LIST KEY_GENERIC_TYPE extends ABSTRACT_LIST KEY_GENERIC_TYPE 
 	 * Creates a new ArrayList with the specific requested size
 	 */
 	public ARRAY_LIST(int size) {
-#if TYPE_OBJECT
-		data = (KEY_TYPE[])new Object[size];
-#else
-		data = new KEY_TYPE[size];
-#endif
+		data = NEW_KEY_ARRAY(size);
 	}
 	
 	/**
@@ -358,49 +354,6 @@ public class ARRAY_LIST KEY_GENERIC_TYPE extends ABSTRACT_LIST KEY_GENERIC_TYPE 
 	}
 	
 #endif
-	/**
-	 * A function to check if all elements requested are present in the other collection.
-	 * This function might delegate to a more appropiate function if nessesary
-	 * @param c the collection that should be checked
-	 * @return true if the collection contains all elements in this list
-	 * @throws NullPointerException if the collection is null
-	 * @deprecated if the collection is type-specific
-	 */
-	@Override
-	@Primitive
-	public boolean containsAll(Collection<?> c) {
-		Objects.requireNonNull(c);
-		for(int i = 0,m=size;i<m;i++) {
-#if !TYPE_OBJECT
-			if(!c.contains(KEY_TO_OBJ(data[i]))) return false;
-#else
-			if(!c.contains(data[i])) return false;
-#endif
-		}
-		return true;
-	}
-	
-	/**
-	 * A function to check if any element of this list is present in the collection.
-	 * This function might delegate to a more appropiate function if nessesary
-	 * @param c the collection that should be checked
-	 * @return true if the collection contains any elements in this list
-	 * @throws NullPointerException if the collection is null
-	 * @deprecated if the collection is type-specific
-	 */
-	@Override
-	@Primitive
-	public boolean containsAny(Collection<?> c) {
-		Objects.requireNonNull(c);
-		for(int i = 0,m=size;i<m;i++) {
-#if !TYPE_OBJECT
-			if(c.contains(KEY_TO_OBJ(data[i]))) return true;
-#else
-			if(c.contains(data[i])) return true;
-#endif
-		}
-		return false;
-	}
 	
 	/**
 	 * A function to find if the Element is present in this list.
@@ -485,38 +438,7 @@ public class ARRAY_LIST KEY_GENERIC_TYPE extends ABSTRACT_LIST KEY_GENERIC_TYPE 
 		else ARRAYS.unstableSort((Comparable[])data, size);
 	}
 	
-#endif
-	/**
-	 * A Type-Specific implementation of containsAll. This implementation iterates over all elements and checks all elements are present in the other collection.
-	 * @param the collection that should be checked if it contains all elements.
-	 * @return true if all elements were found in the collection
-	 * @throws NullPointerException if the collection is null
-	 */
-	@Override
-	public boolean containsAll(COLLECTION KEY_GENERIC_TYPE c) {
-		Objects.requireNonNull(c);
-		for(int i = 0,m=size;i<m;i++) {
-			if(!c.contains(data[i])) return false;
-		}
-		return true;
-	}
-	
-	/**
-	 * This implementation iterates over the elements of the collection and checks if they are stored in this collection.
-	 * @param c the elements that should be checked for
-	 * @return true if any element is in this collection
-	 * @throws NullPointerException if the collection is null
-	 */
-	@Override
-	public boolean containsAny(COLLECTION KEY_GENERIC_TYPE c) {
-		Objects.requireNonNull(c);
-		for(int i = 0,m=size;i<m;i++) {
-			if(c.contains(data[i])) return true;
-		}
-		return false;
-	}
-	
-#if !TYPE_OBJECT
+#else
 	/**
 	 * A Type Specific implementation of the Collection#contains function.
 	 * @param the element that is searched for.

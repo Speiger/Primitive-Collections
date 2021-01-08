@@ -63,6 +63,7 @@ public class GlobalVariables
 		addInjectMapper("CLASS_TO_KEY", "(("+type.getClassType()+")%s)."+type.getKeyType()+"Value()").removeBraces();
 		addSimpleMapper("APPLY", "applyAs"+type.getCustomJDKType().getNonFileType());
 		addInjectMapper("TO_HASH", type.isObject() ? "%s.hashCode()" : type.getClassType()+".hashCode(%s)").removeBraces();
+		addInjectMapper("NEW_KEY_ARRAY", type.isObject() ? "(KEY_TYPE[])new Object[%s]" : "new KEY_TYPE[%s]").removeBraces();
 		return this;
 	}
 	

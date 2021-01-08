@@ -1,14 +1,22 @@
 package speiger.src.collections.PACKAGE.sets;
 
-import java.util.NoSuchElementException;
+import java.util.Collection;
 #if TYPE_OBJECT
 import java.util.Comparator;
 #endif
+import java.util.Iterator;
+import java.util.NoSuchElementException;
 import speiger.src.collections.PACKAGE.collections.BI_ITERATOR;
 #if !TYPE_OBJECT
 import speiger.src.collections.PACKAGE.functions.COMPARATOR;
 #endif
+import speiger.src.collections.PACKAGE.collections.COLLECTION;
+import speiger.src.collections.PACKAGE.collections.ITERATOR;
 import speiger.src.collections.PACKAGE.lists.LIST_ITERATOR;
+#if !TYPE_OBJECT
+import speiger.src.collections.PACKAGE.utils.ITERATORS;
+#endif
+import speiger.src.collections.utils.SanityChecks;
 
 public class AVL_TREE_SET KEY_GENERIC_TYPE extends ABSTRACT_SET KEY_GENERIC_TYPE implements NAVIGABLE_SET KEY_GENERIC_TYPE
 {
@@ -28,6 +36,36 @@ public class AVL_TREE_SET KEY_GENERIC_TYPE extends ABSTRACT_SET KEY_GENERIC_TYPE
 #endif
 	
 	public AVL_TREE_SET() {
+	}
+	
+	public AVL_TREE_SET(KEY_TYPE[] array) {
+		this(array, 0, array.length);
+	}
+		
+	public AVL_TREE_SET(KEY_TYPE[] array, int offset, int length) {
+		SanityChecks.checkArrayCapacity(array.length, offset, length);
+		for(int i = 0;i<length;i++) add(array[offset+i]);
+	}
+	
+	@Deprecated
+	public AVL_TREE_SET(Collection<? extends CLASS_TYPE> collection) {
+		addAll(collection);
+	}
+	
+	public AVL_TREE_SET(COLLECTION KEY_GENERIC_TYPE collection) {
+		addAll(collection);
+	}
+	
+	public AVL_TREE_SET(Iterator<CLASS_TYPE> iterator) {
+#if !TYPE_OBJECT
+		this(ITERATORS.wrap(iterator));
+#else
+		while(iterator.hasNext()) add(iterator.next());
+#endif
+	}
+	
+	public AVL_TREE_SET(ITERATOR KEY_GENERIC_TYPE iterator) {
+		while(iterator.hasNext()) add(iterator.NEXT());
 	}
 	
 #if !TYPE_OBJECT

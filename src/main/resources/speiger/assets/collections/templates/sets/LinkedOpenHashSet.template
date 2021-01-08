@@ -160,6 +160,7 @@ public class LINKED_HASH_SET KEY_GENERIC_TYPE extends HASH_SET KEY_GENERIC_TYPE 
 	
 	@Override
 	public boolean moveToFirst(KEY_TYPE o) {
+		if(EQUALS(FIRST_KEY(), o)) return false;
 		if(EQUALS_NULL(o)) {
 			if(containsNull) {
 				moveToFirstIndex(nullIndex);
@@ -182,6 +183,7 @@ public class LINKED_HASH_SET KEY_GENERIC_TYPE extends HASH_SET KEY_GENERIC_TYPE 
 	
 	@Override
 	public boolean moveToLast(KEY_TYPE o) {
+		if(EQUALS(LAST_KEY(), o)) return false;
 		if(EQUALS_NULL(o)) {
 			if(containsNull) {
 				moveToLastIndex(nullIndex);
@@ -292,14 +294,14 @@ public class LINKED_HASH_SET KEY_GENERIC_TYPE extends HASH_SET KEY_GENERIC_TYPE 
 		}
 		else {
 			links[lastIndex] ^= ((links[lastIndex] ^ (pos & 0xFFFFFFFFL)) & 0xFFFFFFFFL);
-			links[pos] = ((lastIndex & 0xFFFFFFFFL) << 32) | (-1 & 0xFFFFFFFFL);
+			links[pos] = ((lastIndex & 0xFFFFFFFFL) << 32) | 0xFFFFFFFFL;
 			lastIndex = pos;
 		}
 	}
 	
 	@Override
 	protected void onNodeRemoved(int pos) {
-		if(size == 0) firstIndex = lastIndex = 0;
+		if(size == 0) firstIndex = lastIndex = -1;
 		else if(firstIndex == pos) {
 			firstIndex = (int)links[pos];
 			if(0 <= firstIndex) links[firstIndex] |= 0xFFFFFFFF00000000L;
@@ -346,11 +348,7 @@ public class LINKED_HASH_SET KEY_GENERIC_TYPE extends HASH_SET KEY_GENERIC_TYPE 
 	@Override
 	protected void rehash(int newSize) {
 		int newMask = newSize - 1;
-#if TYPE_OBJECT
-		KEY_TYPE[] newKeys = (KEY_TYPE[])new Object[newSize + 1];
-#else
-		KEY_TYPE[] newKeys = new KEY_TYPE[newSize + 1];
-#endif
+		KEY_TYPE[] newKeys = NEW_KEY_ARRAY(newSize + 1);
 		long[] newLinks = new long[newSize + 1];
 		int newPrev = -1;
 		for(int j = size, i = firstIndex, pos = 0, prev = -1;j != 0;) {
@@ -473,7 +471,7 @@ public class LINKED_HASH_SET KEY_GENERIC_TYPE extends HASH_SET KEY_GENERIC_TYPE 
 			ensureIndexKnown();
 			if(current == previous) {
 				index--;
-				previous = (int)(links[current] >> 32);
+				previous = (int)(links[current] >>> 32);
 			}
 			else next = (int)links[current];
 			size--;
@@ -492,7 +490,7 @@ public class LINKED_HASH_SET KEY_GENERIC_TYPE extends HASH_SET KEY_GENERIC_TYPE 
 				current = -1;
 				KEY_TYPE current;
 				while(true) {
-					last = ((last = startPos) + 1) & mask;
+					startPos = ((last = startPos) + 1) & mask;
 					while(true){
 						if(EQUALS_NULL((current = keys[startPos]))) {
 							keys[last] = EMPTY_VALUE;
@@ -522,7 +520,7 @@ public class LINKED_HASH_SET KEY_GENERIC_TYPE extends HASH_SET KEY_GENERIC_TYPE 
 
 		@Override
 		public KEY_TYPE NEXT() {
-			if(!hasPrevious()) throw new NoSuchElementException();
+			if(!hasNext()) throw new NoSuchElementException();
 			current = next;
 			next = (int)(links[current]);
 			previous = current;

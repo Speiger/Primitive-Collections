@@ -624,21 +624,36 @@ public class ARRAYS
 				i++;
 			else if(compare == 0) swap(array, ++i, j);
 			else {
-				swap(array, i++, j);
 				int k = j;
-				for(;k < to - 1 && comp.compare(array[j], array[k + 1]) > 0;k++);
-				if(j == k)
+				for(;k < to - 1 && comp.compare(array[i], array[k + 1]) > 0;k++);
+				if(j == k) {
+					swap(array, i++, j);
 					continue;
-				KEY_TYPE value = array[j];
-				System.arraycopy(array, j + 1, array, j, k - j);
-				array[k] = value;
+				}
+				else if(j + 1 == k) {
+					KEY_TYPE value = array[j];
+					System.arraycopy(array, i, array, i+1, j - i);
+					array[i] = value;
+					i++;
+					j++;
+					continue;
+				}
+				KEY_TYPE[] data = NEW_KEY_ARRAY(k - j);
+				System.arraycopy(array, j, data, 0, data.length);
+				System.arraycopy(array, i, array, i+data.length, j - i);
+				System.arraycopy(data, 0, array, i, data.length);
+				i+=data.length;
+				j+=data.length;
 			}
 		}
 	}
 	
 	/**
 	 * Sorts an array according to the natural ascending order using Memory Free Merge Sort, 
-	 * This implementation is inspired by <a href="https://github.com/vigna/fastutil">FastUtil</a> original merge sort, but without the need to allocate a copy of the original Array. It is in Very Unsorted Instances 50% slower then Mergesort, otherwise it as fast.
+	 * This implementation is inspired by <a href="https://github.com/vigna/fastutil">FastUtil</a> original merge sort, but without the need to allocate a copy of the original Array.
+	 * It is depending on the size and the unsorted level of the input array slower or almost as fast as normal merge sort. Depending on the test size i can be 0.5x slower (5000 elements) or 4x slower (50000 elements) under the assumtion that the array is in its worst case scenario.
+	 * It does stack allocate tiny amounts of data for shifting around elements.
+	 * @author Speiger
 	 * @param array the array that needs to be sorted
 	 */
 	public static COMPAREABLE_BRACES void memFreeMergeSort(KEY_TYPE[] array) {
@@ -646,8 +661,11 @@ public class ARRAYS
 	}
 	
 	/**
-	 * Sorts an array according to the natural ascending order using Memory Free Merge Sort,
-	 * This implementation is inspired by <a href="https://github.com/vigna/fastutil">FastUtil</a> original merge sort, but without the need to allocate a copy of the original Array. It is in Very Unsorted Instances 50% slower then Mergesort, otherwise it as fast.
+	 * Sorts an array according to the natural ascending order using Memory Free Merge Sort, 
+	 * This implementation is inspired by <a href="https://github.com/vigna/fastutil">FastUtil</a> original merge sort, but without the need to allocate a copy of the original Array.
+	 * It is depending on the size and the unsorted level of the input array slower or almost as fast as normal merge sort. Depending on the test size i can be 0.5x slower (5000 elements) or 4x slower (50000 elements) under the assumtion that the array is in its worst case scenario.
+	 * It does stack allocate tiny amounts of data for shifting around elements.
+	 * @author Speiger
 	 * @param array the array that needs to be sorted
 	 * @param length the maxmium size of the array to be sorted
 	 */
@@ -656,8 +674,11 @@ public class ARRAYS
 	}
 	
 	/**
-	 * Sorts an array according to the natural ascending order using Memory Free Merge Sort,
-	 * This implementation is inspired by <a href="https://github.com/vigna/fastutil">FastUtil</a> original merge sort, but without the need to allocate a copy of the original Array. It is in Very Unsorted Instances 50% slower then Mergesort, otherwise it as fast.
+	 * Sorts an array according to the natural ascending order using Memory Free Merge Sort, 
+	 * This implementation is inspired by <a href="https://github.com/vigna/fastutil">FastUtil</a> original merge sort, but without the need to allocate a copy of the original Array.
+	 * It is depending on the size and the unsorted level of the input array slower or almost as fast as normal merge sort. Depending on the test size i can be 0.5x slower (5000 elements) or 4x slower (50000 elements) under the assumtion that the array is in its worst case scenario.
+	 * It does stack allocate tiny amounts of data for shifting around elements.
+	 * @author Speiger
 	 * @param array the array that needs to be sorted
 	 * @param from where the array should be sorted from
 	 * @param to where the array should be sorted to
@@ -677,21 +698,36 @@ public class ARRAYS
 				i++;
 			else if(comp == 0) swap(array, ++i, j);
 			else {
-				swap(array, i++, j);
 				int k = j;
-				for(;k < to - 1 && COMPARE_TO(array[j], array[k + 1]) > 0;k++);
-				if(j == k)
+				for(;k < to - 1 && COMPARE_TO(array[i], array[k + 1]) > 0;k++);
+				if(j == k) {
+					swap(array, i++, j);
 					continue;
-				KEY_TYPE value = array[j];
-				System.arraycopy(array, j + 1, array, j, k - j);
-				array[k] = value;
+				}
+				else if(j + 1 == k) {
+					KEY_TYPE value = array[j];
+					System.arraycopy(array, i, array, i+1, j - i);
+					array[i] = value;
+					i++;
+					j++;
+					continue;
+				}
+				KEY_TYPE[] data = NEW_KEY_ARRAY(k - j);
+				System.arraycopy(array, j, data, 0, data.length);
+				System.arraycopy(array, i, array, i+data.length, j - i);
+				System.arraycopy(data, 0, array, i, data.length);
+				i+=data.length;
+				j+=data.length;
 			}
 		}
 	}
 	
 	/**
 	 * Sorts the specified range of elements according to the order induced by the specified comparator using Parallel Memory Free Merge Sort,
-	 * This implementation is inspired by <a href="https://github.com/vigna/fastutil">FastUtil</a> original merge sort, but without the need to allocate a copy of the original Array. It is in Very Unsorted Instances 50% slower then Mergesort, otherwise it as fast.
+	 * This implementation is inspired by <a href="https://github.com/vigna/fastutil">FastUtil</a> original merge sort, but without the need to allocate a copy of the original Array.
+	 * It is depending on the size and the unsorted level of the input array slower or almost as fast as normal merge sort. Depending on the test size i can be 0.5x slower (5000 elements) or 4x slower (50000 elements) under the assumtion that the array is in its worst case scenario.
+	 * It does stack allocate tiny amounts of data for shifting around elements.
+	 * @author Speiger
 	 * @param array the array that needs to be sorted
 	 * @param comp the Comparator that decides the sorting order
 	 * @Note This parallelization is invoked through {@link SanityChecks#invokeTask} which the threadpool can be changed as needed
@@ -702,7 +738,10 @@ public class ARRAYS
 	
 	/**
 	 * Sorts the specified range of elements according to the order induced by the specified comparator using Parallel Memory Free Merge Sort,
-	 * This implementation is inspired by <a href="https://github.com/vigna/fastutil">FastUtil</a> original merge sort, but without the need to allocate a copy of the original Array. It is in Very Unsorted Instances 50% slower then Mergesort, otherwise it as fast.
+	 * This implementation is inspired by <a href="https://github.com/vigna/fastutil">FastUtil</a> original merge sort, but without the need to allocate a copy of the original Array.
+	 * It is depending on the size and the unsorted level of the input array slower or almost as fast as normal merge sort. Depending on the test size i can be 0.5x slower (5000 elements) or 4x slower (50000 elements) under the assumtion that the array is in its worst case scenario.
+	 * It does stack allocate tiny amounts of data for shifting around elements.
+	 * @author Speiger
 	 * @param array the array that needs to be sorted
 	 * @param length the maxmium size of the array to be sorted
 	 * @param comp the Comparator that decides the sorting order
@@ -714,7 +753,10 @@ public class ARRAYS
 	
 	/**
 	 * Sorts the specified range of elements according to the order induced by the specified comparator using Parallel Memory Free Merge Sort,
-	 * This implementation is inspired by <a href="https://github.com/vigna/fastutil">FastUtil</a> original merge sort, but without the need to allocate a copy of the original Array. It is in Very Unsorted Instances 50% slower then Mergesort, otherwise it as fast.
+	 * This implementation is inspired by <a href="https://github.com/vigna/fastutil">FastUtil</a> original merge sort, but without the need to allocate a copy of the original Array.
+	 * It is depending on the size and the unsorted level of the input array slower or almost as fast as normal merge sort. Depending on the test size i can be 0.5x slower (5000 elements) or 4x slower (50000 elements) under the assumtion that the array is in its worst case scenario.
+	 * It does stack allocate tiny amounts of data for shifting around elements.
+	 * @author Speiger
 	 * @param array the array that needs to be sorted
 	 * @param from where the array should be sorted from
 	 * @param to where the array should be sorted to
@@ -731,7 +773,10 @@ public class ARRAYS
 	
 	/**
 	 * Sorts an array according to the natural ascending order using Parallel Memory Free Merge Sort, 
-	 * This implementation is inspired by <a href="https://github.com/vigna/fastutil">FastUtil</a> original merge sort, but without the need to allocate a copy of the original Array. It is in Very Unsorted Instances 50% slower then Mergesort, otherwise it as fast.
+	 * This implementation is inspired by <a href="https://github.com/vigna/fastutil">FastUtil</a> original merge sort, but without the need to allocate a copy of the original Array.
+	 * It is depending on the size and the unsorted level of the input array slower or almost as fast as normal merge sort. Depending on the test size i can be 0.5x slower (5000 elements) or 4x slower (50000 elements) under the assumtion that the array is in its worst case scenario.
+	 * It does stack allocate tiny amounts of data for shifting around elements.
+	 * @author Speiger
 	 * @param array the array that needs to be sorted
 	 * @Note This parallelization is invoked through {@link SanityChecks#invokeTask} which the threadpool can be changed as needed
 	 */
@@ -741,7 +786,10 @@ public class ARRAYS
 	
 	/**
 	 * Sorts an array according to the natural ascending order using Parallel Memory Free Merge Sort,
-	 * This implementation is inspired by <a href="https://github.com/vigna/fastutil">FastUtil</a> original merge sort, but without the need to allocate a copy of the original Array. It is in Very Unsorted Instances 50% slower then Mergesort, otherwise it as fast.
+	 * This implementation is inspired by <a href="https://github.com/vigna/fastutil">FastUtil</a> original merge sort, but without the need to allocate a copy of the original Array.
+	 * It is depending on the size and the unsorted level of the input array slower or almost as fast as normal merge sort. Depending on the test size i can be 0.5x slower (5000 elements) or 4x slower (50000 elements) under the assumtion that the array is in its worst case scenario.
+	 * It does stack allocate tiny amounts of data for shifting around elements.
+	 * @author Speiger
 	 * @param array the array that needs to be sorted
 	 * @param length the maxmium size of the array to be sorted
 	 * @Note This parallelization is invoked through {@link SanityChecks#invokeTask} which the threadpool can be changed as needed
@@ -752,7 +800,10 @@ public class ARRAYS
 	
 	/**
 	 * Sorts an array according to the natural ascending order using Parallel Memory Free Merge Sort,
-	 * This implementation is inspired by <a href="https://github.com/vigna/fastutil">FastUtil</a> original merge sort, but without the need to allocate a copy of the original Array. It is in Very Unsorted Instances 50% slower then Mergesort, otherwise it as fast.
+	 * This implementation is inspired by <a href="https://github.com/vigna/fastutil">FastUtil</a> original merge sort, but without the need to allocate a copy of the original Array.
+	 * It is depending on the size and the unsorted level of the input array slower or almost as fast as normal merge sort. Depending on the test size i can be 0.5x slower (5000 elements) or 4x slower (50000 elements) under the assumtion that the array is in its worst case scenario.
+	 * It does stack allocate tiny amounts of data for shifting around elements.
+	 * @author Speiger
 	 * @param array the array that needs to be sorted
 	 * @param from where the array should be sorted from
 	 * @param to where the array should be sorted to
@@ -1174,14 +1225,26 @@ public class ARRAYS
 					i++;
 				else if(comp == 0) swap(array, ++i, j);
 				else {
-					swap(array, i++, j);
 					int k = j;
-					for(;k < to - 1 && COMPARE_TO(array[j], array[k + 1]) > 0;k++);
-					if(j == k)
+					for(;k < to - 1 && COMPARE_TO(array[i], array[k + 1]) > 0;k++);
+					if(j == k) {
+						swap(array, i++, j);
 						continue;
-					KEY_TYPE value = array[j];
-					System.arraycopy(array, j + 1, array, j, k - j);
-					array[k] = value;
+					}
+					else if(j + 1 == k) {
+						KEY_TYPE value = array[j];
+						System.arraycopy(array, i, array, i+1, j - i);
+						array[i] = value;
+						i++;
+						j++;
+						continue;
+					}
+					KEY_TYPE[] data = NEW_KEY_ARRAY(k - j);
+					System.arraycopy(array, j, data, 0, data.length);
+					System.arraycopy(array, i, array, i+data.length, j - i);
+					System.arraycopy(data, 0, array, i, data.length);
+					i+=data.length;
+					j+=data.length;
 				}
 			}
 		}
@@ -1219,14 +1282,26 @@ public class ARRAYS
 					i++;
 				else if(compare == 0) swap(array, ++i, j);
 				else {
-					swap(array, i++, j);
 					int k = j;
-					for(;k < to - 1 && comp.compare(array[j], array[k + 1]) > 0;k++);
-					if(j == k)
+					for(;k < to - 1 && comp.compare(array[i], array[k + 1]) > 0;k++);
+					if(j == k) {
+						swap(array, i++, j);
 						continue;
-					KEY_TYPE value = array[j];
-					System.arraycopy(array, j + 1, array, j, k - j);
-					array[k] = value;
+					}
+					else if(j + 1 == k) {
+						KEY_TYPE value = array[j];
+						System.arraycopy(array, i, array, i+1, j - i);
+						array[i] = value;
+						i++;
+						j++;
+						continue;
+					}
+					KEY_TYPE[] data = NEW_KEY_ARRAY(k - j);
+					System.arraycopy(array, j, data, 0, data.length);
+					System.arraycopy(array, i, array, i+data.length, j - i);
+					System.arraycopy(data, 0, array, i, data.length);
+					i+=data.length;
+					j+=data.length;
 				}
 			}
 		}

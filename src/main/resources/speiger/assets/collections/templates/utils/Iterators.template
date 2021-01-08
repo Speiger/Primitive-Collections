@@ -104,7 +104,7 @@ public class ITERATORS
 	 */
 	public static GENERIC_BRACES int unwrap(KEY_TYPE[] a, Iterator<? extends CLASS_TYPE> i, int offset, int max) {
 		if(max < 0) throw new IllegalStateException("The max size is smaller then 0");
-		if(offset + max >= a.length) throw new IllegalStateException("largest array index exceeds array size");
+		if(offset + max > a.length) throw new IllegalStateException("largest array index exceeds array size");
 		int index = 0;
 		for(;index<max && i.hasNext();index++) a[index+offset] = OBJ_TO_KEY(i.next());
 		return index;
@@ -145,7 +145,7 @@ public class ITERATORS
 	 */
 	public static GENERIC_BRACES int unwrap(KEY_TYPE[] a, ITERATOR KEY_GENERIC_TYPE i, int offset, int max) {
 		if(max < 0) throw new IllegalStateException("The max size is smaller then 0");
-		if(offset + max >= a.length) throw new IllegalStateException("largest array index exceeds array size");
+		if(offset + max > a.length) throw new IllegalStateException("largest array index exceeds array size");
 		int index = 0;
 		for(;index<max && i.hasNext();index++) a[index+offset] = i.NEXT();
 		return index;
@@ -187,7 +187,7 @@ public class ITERATORS
 	 */
 	public static GENERIC_BRACES int unwrap(CLASS_TYPE[] a, ITERATOR KEY_GENERIC_TYPE i, int offset, int max) {
 		if(max < 0) throw new IllegalStateException("The max size is smaller then 0");
-		if(offset + max >= a.length) throw new IllegalStateException("largest array index exceeds array size");
+		if(offset + max > a.length) throw new IllegalStateException("largest array index exceeds array size");
 		int index = 0;
 		for(;index<max && i.hasNext();index++) a[index+offset] = KEY_TO_OBJ(i.NEXT());
 		return index;

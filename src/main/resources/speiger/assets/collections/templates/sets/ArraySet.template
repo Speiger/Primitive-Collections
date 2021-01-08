@@ -31,11 +31,7 @@ public class ARRAY_SET KEY_GENERIC_TYPE extends ABSTRACT_SET KEY_GENERIC_TYPE im
 	}
 	
 	public ARRAY_SET(int capacity) {
-#if TYPE_OBJECT
-		data = (KEY_TYPE[])new Object[capacity];
-#else
-		data = new KEY_TYPE[capacity];
-#endif
+		data = NEW_KEY_ARRAY(capacity);
 	}
 	
 	public ARRAY_SET(KEY_TYPE[] array) {
@@ -43,7 +39,7 @@ public class ARRAY_SET KEY_GENERIC_TYPE extends ABSTRACT_SET KEY_GENERIC_TYPE im
 	}
 	
 	public ARRAY_SET(KEY_TYPE[] array, int length) {
-		data = array;
+		data = Arrays.copyOf(array, length);
 		size = length;
 	}
 	
@@ -94,7 +90,7 @@ public class ARRAY_SET KEY_GENERIC_TYPE extends ABSTRACT_SET KEY_GENERIC_TYPE im
 		else if(index != 0) {
 			o = data[index];
 			System.arraycopy(data, 0, data, 1, index);
-			data[index] = o;
+			data[0] = o;
 		}
 		return false;
 	}
@@ -110,7 +106,7 @@ public class ARRAY_SET KEY_GENERIC_TYPE extends ABSTRACT_SET KEY_GENERIC_TYPE im
 		else if(index != size - 1) {
 			o = data[index];
 			System.arraycopy(data, index+1, data, index, size - index);
-			data[size] = o;
+			data[size-1] = o;
 		}
 		return false;
 	}
@@ -121,7 +117,7 @@ public class ARRAY_SET KEY_GENERIC_TYPE extends ABSTRACT_SET KEY_GENERIC_TYPE im
 		if(index > 0) {
 			o = data[index];
 			System.arraycopy(data, 0, data, 1, index);
-			data[index] = o;
+			data[0] = o;
 			return true;
 		}
 		return false;
@@ -132,8 +128,8 @@ public class ARRAY_SET KEY_GENERIC_TYPE extends ABSTRACT_SET KEY_GENERIC_TYPE im
 		int index = findIndex(o);
 		if(index != -1 && index != size - 1) {
 			o = data[index];
-			System.arraycopy(data, index+1, data, index, size - index);
-			data[size] = o;
+			System.arraycopy(data, index+1, data, index, size - index - 1);
+			data[size-1] = o;
 			return true;
 		}
 		return false;
@@ -169,7 +165,11 @@ public class ARRAY_SET KEY_GENERIC_TYPE extends ABSTRACT_SET KEY_GENERIC_TYPE im
 	public boolean remove(KEY_TYPE o) {
 		int index = findIndex(o);
 		if(index != -1) {
-			System.arraycopy(data, index+1, data, index, size - index);
+			size--;
+			if(index != size) System.arraycopy(data, index+1, data, index, size - index);
+#if TYPE_OBJECT
+			data[size] = EMPTY_VALUE;
+#endif
 			return true;
 		}
 		return false;
@@ -180,8 +180,11 @@ public class ARRAY_SET KEY_GENERIC_TYPE extends ABSTRACT_SET KEY_GENERIC_TYPE im
 	public boolean remove(Object o) {
 		int index = findIndex(o);
 		if(index != -1) {
-			System.arraycopy(data, index+1, data, index, size - index);
-			data[size-1] = EMPTY_VALUE;
+			size--;
+			if(index != size) System.arraycopy(data, index+1, data, index, size - index);
+#if TYPE_OBJECT
+			data[size] = EMPTY_VALUE;
+#endif
 			return true;
 		}
 		return false;
@@ -192,7 +195,7 @@ public class ARRAY_SET KEY_GENERIC_TYPE extends ABSTRACT_SET KEY_GENERIC_TYPE im
 	public KEY_TYPE POLL_FIRST_KEY() {
 		if(size == 0) throw new NoSuchElementException();
 		KEY_TYPE result = data[0];
-		System.arraycopy(data, 1, data, 0, size);
+		System.arraycopy(data, 1, data, 0, size - 1);
 #if TYPE_OBJECT
 		data[size-1] = EMPTY_VALUE;
 #endif
@@ -202,12 +205,13 @@ public class ARRAY_SET KEY_GENERIC_TYPE extends ABSTRACT_SET KEY_GENERIC_TYPE im
 	@Override
 	public KEY_TYPE POLL_LAST_KEY() {
 		if(size == 0) throw new NoSuchElementException();
+		size--;
 #if TYPE_OBJECT
-		KEY_TYPE result = data[size-1];
-		data[size-1] = EMPTY_VALUE;
+		KEY_TYPE result = data[size];
+		data[size] = EMPTY_VALUE;
 		return result;
 #else
-		return data[--size];	
+		return data[size];
 #endif
 	}
 	
@@ -242,14 +246,14 @@ public class ARRAY_SET KEY_GENERIC_TYPE extends ABSTRACT_SET KEY_GENERIC_TYPE im
 		int fromIndex = findIndex(fromElement);
 		int toIndex = findIndex(toElement);
 		if(fromIndex == -1 || toIndex == -1) throw new NoSuchElementException();
-		return new SubSet(fromIndex, toIndex - fromIndex);
+		return new SubSet(fromIndex, toIndex - fromIndex + 1);
 	}
 
 	@Override
 	public SORTED_SET KEY_GENERIC_TYPE headSet(KEY_TYPE toElement) {
 		int toIndex = findIndex(toElement);
 		if(toIndex == -1) throw new NoSuchElementException();
-		return new SubSet(0, toIndex);
+		return new SubSet(0, toIndex+1);
 	}
 
 	@Override
@@ -282,14 +286,16 @@ public class ARRAY_SET KEY_GENERIC_TYPE extends ABSTRACT_SET KEY_GENERIC_TYPE im
 			this.offset = offset;
 			this.length = length;
 		}
+		
+		int end() { return offset+length; }
 
 		@Override
 		public boolean add(KEY_TYPE o) {
 			int index = findIndex(o);
-			if(index != -1) {
+			if(index == -1) {
 				if(data.length == size) data = Arrays.copyOf(data, size == 0 ? 2 : size * 2);
-				System.arraycopy(data, (offset+length), data, (offset+length)+1, size-(offset+length));
-				data[offset+length] = o;
+				if(end() != size) System.arraycopy(data, end(), data, end()+1, size-(offset+length));
+				data[end()] = o;
 				size++;
 				length++;
 				return true;
@@ -321,8 +327,8 @@ public class ARRAY_SET KEY_GENERIC_TYPE extends ABSTRACT_SET KEY_GENERIC_TYPE im
 			int index = findIndex(o);
 			if(index == -1) {
 				if(data.length == size) data = Arrays.copyOf(data, size == 0 ? 2 : size * 2);
-				System.arraycopy(data, (offset+length)+1, data, (offset+length), size-(offset+length));
-				data[offset+length] = o;
+				System.arraycopy(data, end()+1, data, end(), size-end());
+				data[end()] = o;
 				size++;
 				length++;
 				return true;
@@ -338,7 +344,7 @@ public class ARRAY_SET KEY_GENERIC_TYPE extends ABSTRACT_SET KEY_GENERIC_TYPE im
 		@Override
 		public boolean moveToFirst(KEY_TYPE o) {
 			int index = findIndex(o);
-			if(index != -1 && index != offset) {
+			if(index > offset) {
 				o = data[index];
 				System.arraycopy(data, offset, data, offset+1, index-offset);
 				data[offset] = o;
@@ -350,10 +356,10 @@ public class ARRAY_SET KEY_GENERIC_TYPE extends ABSTRACT_SET KEY_GENERIC_TYPE im
 		@Override
 		public boolean moveToLast(KEY_TYPE o) {
 			int index = findIndex(o);
-			if(index != -1 && index != (offset+length) - 1) {
+			if(index != -1 && index < end()-1) {
 				o = data[index];
-				System.arraycopy(data, offset+1, data, offset, index-offset);
-				data[offset+length] = o;
+				System.arraycopy(data, index+1, data, index, end()-index-1);
+				data[end()-1] = o;
 				return true;
 			}
 			return false;
@@ -380,7 +386,7 @@ public class ARRAY_SET KEY_GENERIC_TYPE extends ABSTRACT_SET KEY_GENERIC_TYPE im
 		@Override
 		public KEY_TYPE LAST_KEY() {
 			if(length == 0) throw new NoSuchElementException();
-			return data[(offset + length) - 1];
+			return data[end()-1];
 		}
 		
 #if !TYPE_OBJECT
@@ -388,9 +394,9 @@ public class ARRAY_SET KEY_GENERIC_TYPE extends ABSTRACT_SET KEY_GENERIC_TYPE im
 		public boolean remove(KEY_TYPE o) {
 			int index = findIndex(o);
 			if(index != -1) {
-				System.arraycopy(data, index+1, data, index, size - index);
 				size--;
 				length--;
+				if(index != size) System.arraycopy(data, index+1, data, index, size - index);
 				return true;
 			}
 			return false;
@@ -401,10 +407,12 @@ public class ARRAY_SET KEY_GENERIC_TYPE extends ABSTRACT_SET KEY_GENERIC_TYPE im
 		public boolean remove(Object o) {
 			int index = findIndex(o);
 			if(index != -1) {
-				System.arraycopy(data, index+1, data, index, size - index);
-				data[size-1] = EMPTY_VALUE;
 				size--;
 				length--;
+				if(index != size) System.arraycopy(data, index+1, data, index, size - index);
+#if TYPE_OBJECT
+				data[size] = EMPTY_VALUE;
+#endif
 				return true;
 			}
 			return false;
@@ -413,13 +421,13 @@ public class ARRAY_SET KEY_GENERIC_TYPE extends ABSTRACT_SET KEY_GENERIC_TYPE im
 		@Override
 		public KEY_TYPE POLL_FIRST_KEY() {
 			if(length == 0) throw new NoSuchElementException();
+			size--;
+			length--;
 			KEY_TYPE result = data[offset];
 			System.arraycopy(data, offset+1, data, offset, size-offset);
 #if TYPE_OBJECT
-			data[size-1] = EMPTY_VALUE;
+			data[size] = EMPTY_VALUE;
 #endif
-			size--;
-			length--;
 			return result;
 		}
 		
@@ -427,12 +435,12 @@ public class ARRAY_SET KEY_GENERIC_TYPE extends ABSTRACT_SET KEY_GENERIC_TYPE im
 		public KEY_TYPE POLL_LAST_KEY() {
 			if(length == 0) throw new NoSuchElementException();
 			KEY_TYPE result = data[offset+length];
-			System.arraycopy(data, (offset+length)+1, data, (offset+length), size-(offset+length));
-#if TYPE_OBJECT
-			data[size-1] = EMPTY_VALUE;
-#endif
 			size--;
 			length--;
+			System.arraycopy(data, end()+1, data, end(), size-end());
+#if TYPE_OBJECT
+			data[size] = EMPTY_VALUE;
+#endif
 			return result;
 		}
 		
@@ -482,16 +490,98 @@ public class ARRAY_SET KEY_GENERIC_TYPE extends ABSTRACT_SET KEY_GENERIC_TYPE im
 		
 #if !TYPE_OBJECT
 		protected int findIndex(KEY_TYPE o) {
-			for(int i = size-1;i>=0;i--)
+			for(int i = length-1;i>=0;i--)
 				if(EQUALS(data[offset+i], o)) return i + offset;
 			return -1;
 		}
 		
 #endif
 		protected int findIndex(Object o) {
-			for(int i = size-1;i>=0;i--)
+			for(int i = length-1;i>=0;i--)
 				if(EQUALS_KEY_TYPE(data[offset+i], o)) return i + offset;
 			return -1;
+		}
+		
+		private class SetIterator implements LIST_ITERATOR KEY_GENERIC_TYPE {
+			int index;
+			int lastReturned = -1;
+			
+			public SetIterator(int index) {
+				this.index = index;
+			}
+			
+			@Override
+			public boolean hasNext() {
+				return index < size();
+			}
+			
+			@Override
+			public KEY_TYPE NEXT() {
+				lastReturned = index;
+				return data[index++];
+			}
+			
+			@Override
+			public boolean hasPrevious() {
+				return index > 0;
+			}
+			
+			@Override
+			public KEY_TYPE PREVIOUS() {
+				lastReturned = index;
+				return data[index--];
+			}
+			
+			@Override
+			public int nextIndex() {
+				return index;
+			}
+			
+			@Override
+			public int previousIndex() {
+				return index-1;
+			}
+			
+			@Override
+			public void remove() {
+				if(lastReturned == -1)
+					throw new IllegalStateException();
+				SubSet.this.remove(data[lastReturned]);
+				if(lastReturned < index)
+					index--;
+				lastReturned = -1;
+			}
+			
+		#if TYPE_OBJECT
+			@Override
+			public void set(Object e) { throw new UnsupportedOperationException(); }
+			
+			@Override
+			public void add(Object e) { throw new UnsupportedOperationException(); }
+			
+		#else
+			@Override
+			public void set(KEY_TYPE e) { throw new UnsupportedOperationException(); }
+		
+			@Override
+			public void add(KEY_TYPE e) { throw new UnsupportedOperationException(); }
+			
+		#endif
+			@Override
+			public int skip(int amount) {
+				if(amount < 0) throw new IllegalStateException("Negative Numbers are not allowed");
+				int steps = Math.min(amount, (size() - 1) - index);
+				index += steps;
+				return steps;
+			}
+			
+			@Override
+			public int back(int amount) {
+				if(amount < 0) throw new IllegalStateException("Negative Numbers are not allowed");
+				int steps = Math.min(amount, index);
+				index -= steps;
+				return steps;
+			}
 		}
 	}
 	

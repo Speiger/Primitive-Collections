@@ -26,7 +26,7 @@ public abstract class BaseIntCollectionTest extends BaseIntIterableTest
 	@Test
 	public void testAdd() {
 		if(!getValidCollectionTests().contains(CollectionTest.ADD)) return;
-		IntCollection collection = create(TEST_EMPTY);
+		IntCollection collection = create(EMPTY_ARRAY);
 		Assert.assertTrue(collection.isEmpty());
 		collection.add(2012);
 		Assert.assertFalse(collection.isEmpty());
@@ -56,9 +56,9 @@ public abstract class BaseIntCollectionTest extends BaseIntIterableTest
 	public void testContainsAll() {
 		if(!getValidCollectionTests().contains(CollectionTest.CONTAINS_ALL)) return;
 		IntCollection collection = create(TEST_ARRAY);
-		Assert.assertTrue(create(CONTAINS_ARRAY).containsAll(collection));
-		Assert.assertFalse(create(ADD_ARRAY).containsAll(collection));
-		Assert.assertTrue(collection.containsAll(Arrays.asList(IntArrays.wrap(TEST_ARRAY))));
+		Assert.assertTrue(collection.containsAll(create(CONTAINS_ARRAY)));
+		Assert.assertFalse(collection.containsAll(create(ADD_ARRAY)));
+		Assert.assertTrue(collection.containsAll(Arrays.asList(IntArrays.wrap(CONTAINS_ARRAY))));
 	}
 	
 	@Test
@@ -129,11 +129,13 @@ public abstract class BaseIntCollectionTest extends BaseIntIterableTest
 		IntCollection collection = create(TEST_ARRAY);
 		int[] array = collection.toIntArray();
 		IntArrays.stableSort(array);
-		Assert.assertTrue(Arrays.equals(TEST_ARRAY, array));
+		Assert.assertArrayEquals(array, TEST_ARRAY);
 		int[] other = collection.toIntArray(new int[collection.size()]);
 		IntArrays.stableSort(other);
-		Assert.assertTrue(Arrays.equals(TEST_ARRAY, other));
-		Assert.assertTrue(Arrays.equals(TEST_ARRAY, IntArrays.unwrap(collection.toArray(new Integer[collection.size()]))));
+		Assert.assertArrayEquals(other, TEST_ARRAY);
+		other = IntArrays.unwrap(collection.toArray(new Integer[collection.size()]));
+		IntArrays.stableSort(other);		
+		Assert.assertArrayEquals(other, TEST_ARRAY);
 	}
 	
 	@Test
@@ -148,7 +150,7 @@ public abstract class BaseIntCollectionTest extends BaseIntIterableTest
 	@Test
 	public void testWrapper() {
 		if(!getValidCollectionTests().contains(CollectionTest.WRAPPER)) return;
-		IntCollection collection = create(TEST_EMPTY);
+		IntCollection collection = create(TEST_ARRAY);
 		collection = IntCollections.synchronizedCollection(collection);
 		Assert.assertTrue(collection instanceof SynchronizedCollection);
 		collection = IntCollections.unmodifiableCollection(collection);

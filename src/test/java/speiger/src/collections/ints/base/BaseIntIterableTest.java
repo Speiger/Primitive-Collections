@@ -12,7 +12,7 @@ import speiger.src.collections.tests.IterableTest;
 
 public abstract class BaseIntIterableTest
 {
-	protected static final int[] TEST_EMPTY = new int[0];
+	protected static final int[] EMPTY_ARRAY = new int[0];
 	protected static final int[] TEST_ARRAY = IntStream.range(0, 100).toArray();
 	
 	protected abstract IntIterable create(int[] data);
