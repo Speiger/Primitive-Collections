@@ -22,7 +22,7 @@ public class TestBuilder extends TemplateProcessor
 	
 	public TestBuilder()
 	{
-		super(Paths.get("src\\main\\resources\\speiger\\assets\\collections\\templates\\"), Paths.get("src\\main\\java\\speiger\\src\\collections\\"), Paths.get("src\\main\\resources\\speiger\\assets\\collections\\"));
+		super(Paths.get("src/main/resources/speiger/assets/collections/templates/"), Paths.get("src/main/java/speiger/src/collections/"), Paths.get("src/main/resources/speiger/assets/collections/"));
 	}
 	
 	@Override

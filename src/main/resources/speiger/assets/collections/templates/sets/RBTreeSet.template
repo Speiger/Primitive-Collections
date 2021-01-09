@@ -226,6 +226,32 @@ public class RB_TREE_SET KEY_GENERIC_TYPE extends ABSTRACT_SET KEY_GENERIC_TYPE 
 	
 	protected Entry KEY_GENERIC_TYPE findCeilingNode(KEY_TYPE e) {
 		Entry KEY_GENERIC_TYPE entry = tree;
+		int compare;
+		while(entry != null) {
+			if((compare = compare(e, entry.key)) < 0) {
+				if(entry.left == null) break;
+				entry = entry.left;
+				continue;
+			}
+			else if(compare > 0) {
+				if(entry.right != null) entry = entry.right;
+				else {
+					Entry KEY_GENERIC_TYPE parent = entry.parent;
+					while(parent != null && parent.right == entry) {
+						entry = parent;
+						parent = parent.parent;
+					}
+					return parent;
+				}
+				continue;
+			}
+			break;
+		}
+		return entry;
+	}
+	
+	protected Entry KEY_GENERIC_TYPE findHigherNode(KEY_TYPE e) {
+		Entry KEY_GENERIC_TYPE entry = tree;
 		while(entry != null) {
 			if(compare(e, entry.key) < 0) {
 				if(entry.left != null) entry = entry.left;
@@ -246,31 +272,7 @@ public class RB_TREE_SET KEY_GENERIC_TYPE extends ABSTRACT_SET KEY_GENERIC_TYPE 
 		return null;
 	}
 	
-	protected Entry KEY_GENERIC_TYPE findHigherNode(KEY_TYPE e) {
-		Entry KEY_GENERIC_TYPE entry = tree;
-		int compare;
-		while(entry != null) {
-			if((compare = compare(e, entry.key)) < 0) {
-				if(entry.left == null) break;
-				entry = entry.left;
-				continue;
-			}
-			else if(compare < 0) {
-				if(entry.right != null) entry = entry.right;
-				else {
-					Entry KEY_GENERIC_TYPE parent = entry.parent;
-					while(parent != null && parent.right == entry) {
-						entry = parent;
-						parent = parent.parent;
-					}
-					return parent;
-				}
-				continue;
-			}
-			break;
-		}
-		return entry;
-	}
+
 	
 #if !TYPE_OBJECT
 	@Override
@@ -934,6 +936,7 @@ public class RB_TREE_SET KEY_GENERIC_TYPE extends ABSTRACT_SET KEY_GENERIC_TYPE 
 				if(current == previous) index--;
 				updateNext();
 				updatePrevious();
+				if(current.needsSuccessor()) next = current;
 				set.removeNode(current);
 				current = null;
 			}
@@ -1015,6 +1018,7 @@ public class RB_TREE_SET KEY_GENERIC_TYPE extends ABSTRACT_SET KEY_GENERIC_TYPE 
 			if(current == previous) index--;
 			updateNext();
 			updatePrevious();
+			if(current.needsSuccessor()) next = current;
 			removeNode(current);
 			current = null;
 		}
