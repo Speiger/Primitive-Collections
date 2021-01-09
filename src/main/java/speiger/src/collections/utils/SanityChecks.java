@@ -13,6 +13,8 @@ public class SanityChecks
 	public static final int MAX_ARRAY_SIZE = Integer.MAX_VALUE - 8;
 	private static ForkJoinPool WORK_POOL = ForkJoinPool.commonPool();
 	private static ThreadLocal<Random> RANDOM = ThreadLocal.withInitial(Random::new);
+	private static ThreadLocal<Boolean> FORCE_ASYNC = ThreadLocal.withInitial(() -> false);
+	private static ThreadLocal<Boolean> FORCE_TASK_POOL = ThreadLocal.withInitial(() -> false);
 	
 	/**
 	 * Internal function to cast a Integer to a Byte
@@ -86,7 +88,8 @@ public class SanityChecks
 	 * @param task the Task to invoke
 	 */
 	public static <T> void invokeTask(ForkJoinTask<T> task) {
-		WORK_POOL.invoke(task);//TODO implement a way to decide if the task should be awaited or not. Maybe even on a per Thread basis.
+		if(FORCE_ASYNC.get().booleanValue()) invokeAsyncTask(task);
+		else getPool().invoke(task);
 	}
 	
 	/**
@@ -94,7 +97,7 @@ public class SanityChecks
 	 * @param task the Task to invoke
 	 */
 	public static <T> void invokeAsyncTask(ForkJoinTask<T> task) {
-		WORK_POOL.execute(task);
+		getPool().execute(task);
 	}
 	
 	/**
@@ -106,6 +109,49 @@ public class SanityChecks
 		WORK_POOL = pool == null ? ForkJoinPool.commonPool() : pool;
 	}
 	
+	private static ForkJoinPool getPool() {
+		if(FORCE_TASK_POOL.get().booleanValue()) {
+			ForkJoinPool pool = ForkJoinTask.getPool();
+			if(pool != null) return pool;
+		}
+		return WORK_POOL;
+	}
+	
+	/**
+	 * Helper method to detect if the Current Thread forces not to await task completion.
+	 * @return if the Current Thread has not to await task completion.
+	 */
+	public static boolean isForcedAsync() {
+		return FORCE_ASYNC.get().booleanValue();
+	}
+	
+	/**
+	 * Helper method to detect if the current thread forces to execute tasks in the current Thread-pool if it is a ForkJoinPool.
+	 * @return if the task checks the current pool to be executed in if it is valid.
+	 */
+	public static boolean isForcedTaskPool() {
+		return FORCE_TASK_POOL.get().booleanValue();
+	}
+	
+	/**
+	 * Helper method to decide if the current thread should forcefully not wait on tasks to be completed.
+	 * @param value it tasks should not be awaited for
+	 */
+	public static void setForcedAsync(boolean value) {
+		FORCE_ASYNC.set(Boolean.valueOf(value));
+	}
+	
+	/**
+	 * Helper method to decide if it should be checked for if the current thread is a ThreadPool Worker (ForkJoinPool Worker to be specific) and if tasks should be delegated into it.
+	 * @param value if the current thread should check if it is a ThreadPoolWorker.
+	 */
+	public static void setForcedTaskPool(boolean value) {
+		FORCE_TASK_POOL.set(Boolean.valueOf(value));
+	}
+	
+	/**
+	 * @return Thread Specific Random needed for internal functions in this library.
+	 */
 	public static Random getRandom() {
 		return RANDOM.get();
 	}
