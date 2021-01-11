@@ -12,6 +12,7 @@ public class SanityChecks
 {
 	public static final int MAX_ARRAY_SIZE = Integer.MAX_VALUE - 8;
 	private static ForkJoinPool WORK_POOL = ForkJoinPool.commonPool();
+	private static boolean FORCE_IGNORE_PARALLELISM = false;
 	private static ThreadLocal<Random> RANDOM = ThreadLocal.withInitial(Random::new);
 	private static ThreadLocal<Boolean> FORCE_ASYNC = ThreadLocal.withInitial(() -> false);
 	private static ThreadLocal<Boolean> FORCE_TASK_POOL = ThreadLocal.withInitial(() -> false);
@@ -80,7 +81,7 @@ public class SanityChecks
 	 * @return true if the threadcount is bigger the 1
 	 */
 	public static boolean canParallelTask() {
-		return WORK_POOL.getParallelism() > 1;
+		return WORK_POOL.getParallelism() > 1 || FORCE_IGNORE_PARALLELISM;
 	}
 	
 	/**
@@ -147,6 +148,14 @@ public class SanityChecks
 	 */
 	public static void setForcedTaskPool(boolean value) {
 		FORCE_TASK_POOL.set(Boolean.valueOf(value));
+	}
+	
+	/**
+	 * Helper method to decide if Parallelism should be checked or not.
+	 * @param value if the Parallelism should be ignored
+	 */
+	public static void setForceIgnoreParallelism(boolean value) {
+		FORCE_IGNORE_PARALLELISM = value;
 	}
 	
 	/**

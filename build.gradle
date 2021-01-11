@@ -6,10 +6,21 @@ tasks.withType(JavaCompile) {
     options.encoding = 'UTF-8'
 }
 
+eclipse {
+	classpath {
+		downloadJavadoc = true
+		downloadSources = true
+	}
+}
+
 repositories {
     jcenter()
+    flatDir {
+        dirs '/libs'
+    }
 }
 
 dependencies {
+	compile 'SimpleCodeGenerator:Simple Code Generator:1.0'
     testImplementation 'junit:junit:4.12'
 }
