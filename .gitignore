@@ -40,7 +40,6 @@ gradle-app.setting
 hs_err_pid*
 
 ---> Custom
-/libs/
 /.settings/
 /bin/
 /storage/
