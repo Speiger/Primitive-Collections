@@ -43,8 +43,7 @@ public abstract class ABSTRACT_LIST KEY_GENERIC_TYPE extends ABSTRACT_COLLECTION
 	@Override
 	public boolean addAll(COLLECTION KEY_GENERIC_TYPE c) {
 		boolean modified = false;
-		for(KEY_TYPE e : c)
-			modified |= add(e);
+		for(ITERATOR KEY_GENERIC_TYPE iter = c.iterator();iter.hasNext();modified |= add(iter.NEXT()));
 		return modified;
 	}
 	
@@ -56,8 +55,7 @@ public abstract class ABSTRACT_LIST KEY_GENERIC_TYPE extends ABSTRACT_COLLECTION
 	@Override
 	public boolean addAll(LIST KEY_GENERIC_TYPE c) {
 		boolean modified = false;
-		for(KEY_TYPE e : c)
-			modified |= add(e);
+		for(ITERATOR KEY_GENERIC_TYPE iter = c.iterator();iter.hasNext();modified |= add(iter.NEXT()));
 		return modified;
 	}
 	

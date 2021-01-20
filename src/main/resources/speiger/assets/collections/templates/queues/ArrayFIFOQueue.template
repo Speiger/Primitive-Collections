@@ -1,0 +1,275 @@
+package speiger.src.collections.PACKAGE.queues;
+
+#if TYPE_OBJECT
+import java.util.Arrays;
+import java.util.Comparator;
+#endif
+import java.util.NoSuchElementException;
+
+import speiger.src.collections.PACKAGE.collections.ITERATOR;
+#if !TYPE_OBJECT
+import speiger.src.collections.PACKAGE.functions.COMPARATOR;
+#endif
+import speiger.src.collections.utils.ITrimmable;
+
+public class ARRAY_FIFO_QUEUE KEY_GENERIC_TYPE implements PRIORITY_DEQUEUE KEY_GENERIC_TYPE, ITrimmable
+{
+    private static final int MAX_ARRAY_SIZE = Integer.MAX_VALUE - 8;
+	public static final int MIN_CAPACITY = 4;
+	protected transient KEY_TYPE[] array;
+	protected int first;
+	protected int last;
+	
+	public ARRAY_FIFO_QUEUE(KEY_TYPE[] values) {
+		this(values, 0, values.length);
+	}
+
+	public ARRAY_FIFO_QUEUE(KEY_TYPE[] values, int size) {
+		this(values, 0, size);
+	}
+
+	public ARRAY_FIFO_QUEUE(KEY_TYPE[] values, int offset, int size) {
+		if (values.length < size) throw new IllegalArgumentException("Initial array (" + values.length + ") is smaller then the expected size (" + size + ")");
+		if(values.length <= 0) values = NEW_KEY_ARRAY(1);
+		array = values;
+		first = offset;
+		last = (offset + size) % array.length;
+		if(array.length == size) expand();
+	}
+	
+	public ARRAY_FIFO_QUEUE(int capacity) {
+		if (capacity < 0) throw new IllegalArgumentException("Initial capacity (" + capacity + ") is negative");
+		array = NEW_KEY_ARRAY(Math.max(1, capacity));
+	}
+
+	public ARRAY_FIFO_QUEUE() {
+		this(MIN_CAPACITY);
+	}
+	
+	@Override
+	public ITERATOR KEY_GENERIC_TYPE iterator() {
+		return new Iter();
+	}
+	
+	@Override
+	public int size() {
+		final int apparentLength = last - first;
+		return apparentLength >= 0 ? apparentLength : array.length + apparentLength;
+	}
+	
+	@Override
+	public void clear() {
+#if TYPE_OBJECT
+		Arrays.fill(array, null);
+#endif
+		first = last = 0;
+	}
+	
+	@Override
+	public void ENQUEUE(KEY_TYPE e) {
+		array[last] = e;
+		last = ++last % array.length;
+		if(last == first) expand();
+	}
+	
+	@Override
+	public void ENQUEUE_FIRST(KEY_TYPE e) {
+		if(first == 0) first = array.length;
+		array[--first] = e;
+		if(first == last) expand();
+	}
+	
+	@Override
+	public KEY_TYPE DEQUEUE() {
+		if(first == last) throw new NoSuchElementException();
+		KEY_TYPE data = array[first];
+#if TYPE_OBJECT
+		array[first] = null;
+#endif
+		first = ++first % array.length;
+		reduce();
+		return data;
+	}
+	
+	@Override
+	public KEY_TYPE DEQUEUE_LAST() {
+		if(first == last) throw new NoSuchElementException();
+		if(last == 0) last = array.length;
+		KEY_TYPE data = array[--last];
+#if TYPE_OBJECT
+		array[last] = null;
+#endif
+		reduce();
+		return data;
+	}
+	
+	@Override
+	public KEY_TYPE PEEK(int index) {
+		if(first == last || index < 0 || index > size()) throw new NoSuchElementException();
+		return array[(first + index) % array.length];
+	}
+	
+	@Override
+	public boolean REMOVE(KEY_TYPE e) {
+		if(first == last) return false;
+		for(int i = 0,m=size();i<m;i++) {
+			int index = (first + i) % array.length;
+			if(e == array[index])
+				return removeIndex(index);
+		}
+		return false;
+	}
+	
+	@Override
+	public boolean REMOVE_LAST(KEY_TYPE e) {
+		if(first == last) return false;
+		if(first == last) return false;
+		for(int i = size()-1;i>=0;i--) {
+			int index = (first + i) % array.length;
+			if(e == array[index])
+				return removeIndex(index);
+		}
+		return false;
+	}
+	
+	protected boolean removeIndex(int index) {
+		if(first >= last ? index < first && index > last : index < first || index > last) return false;
+		if(index == first) {
+#if TYPE_OBJECT
+			array[first] = null;
+#endif
+			first++;
+		}
+		else if(index == last) {
+			last--;
+#if TYPE_OBJECT
+			array[last] = null;
+#endif
+		}
+		else if(index > last) {
+			System.arraycopy(array, first, array, first+1, (index - first));
+#if TYPE_OBJECT
+			array[first] = null;
+#endif
+			first = ++first % array.length;
+		}
+		else if(index < first) {
+			System.arraycopy(array, index+1, array, index, (last - index) - 1);
+#if TYPE_OBJECT
+			array[last] = null;
+#endif
+			if(--last < 0) last += array.length;
+		}
+		else {
+			if(index - first < last - index) {
+				System.arraycopy(array, first, array, first+1, (index - first));
+#if TYPE_OBJECT
+				array[first] = null;
+#endif
+				first = ++first % array.length;
+			}
+			else {
+				System.arraycopy(array, index+1, array, index, (last - index) - 1);
+#if TYPE_OBJECT
+				array[last] = null;
+#endif
+				if(--last < 0) last += array.length;
+			}
+		}
+		reduce();
+		return true;
+	}
+	
+	@Override
+	public void onChanged() {}
+	
+	@Override
+	public COMPARATOR KEY_SUPER_GENERIC_TYPE comparator() { return null; }
+	
+	@Override
+	public boolean trim(int size) {
+		int newSize = Math.max(size, size());
+		if(newSize >= array.length) return false;
+		KEY_TYPE[] newArray = NEW_KEY_ARRAY(newSize);
+		if(first <= last) System.arraycopy(array, first, newArray, 0, last - first);
+		else {
+			System.arraycopy(array, first, newArray, 0, array.length - first);
+			System.arraycopy(array, 0, newArray, array.length - first, last);
+		}
+		first = 0;
+		last = size();
+		array = newArray;
+		return true;
+	}
+	
+	@Override
+	public KEY_TYPE[] TO_ARRAY(KEY_TYPE[] input) {
+		if(input == null || input.length < size()) input = NEW_KEY_ARRAY(size());
+		if (first <= last) System.arraycopy(array, first, input, 0, last - first);
+		else {
+			System.arraycopy(array, first, input, 0, array.length - first);
+			System.arraycopy(array, 0, input, array.length - first, last);
+		}
+		return input;
+	}
+	
+#if !TYPE_OBJECT
+	@Override
+	public CLASS_TYPE[] toArray(CLASS_TYPE[] input) {
+		if(input == null || input.length < size()) input = NEW_CLASS_ARRAY(size());
+		if (first <= last) {
+			for(int i = 0,m=last-first;i<m;i++)
+				input[i] = KEY_TO_OBJ(array[first + i]);
+		}
+		else {
+			int offset = 0;
+			for(int i = 0,m=array.length-first;i<m;i++,offset++)
+				input[i] = KEY_TO_OBJ(array[first + i]);
+			for(int i = 0;i<last;i++)
+				input[offset+i] = KEY_TO_OBJ(array[i]);
+		}
+		return input;
+	}
+	
+#endif
+	protected void reduce() {
+		final int size = size();
+		if (array.length > MIN_CAPACITY && size <= array.length / 4) resize(size, array.length / 2);
+	}
+	
+	protected void expand() {
+		resize(array.length, (int)Math.min(MAX_ARRAY_SIZE, 2L * array.length));
+	}
+	
+	protected final void resize(int oldSize, int newSize) {
+		KEY_TYPE[] newArray = NEW_KEY_ARRAY(newSize);
+		if(first >= last) {
+			if(oldSize != 0)
+			{
+				System.arraycopy(array, first, newArray, 0, array.length - first);
+				System.arraycopy(array, 0, newArray, array.length - first, last);
+			}
+		}
+		else System.arraycopy(array, first, newArray, 0, last-first);
+		first = 0;
+		last = oldSize;
+		array = newArray;
+	}
+	
+	private class Iter implements ITERATOR KEY_GENERIC_TYPE
+	{
+		int index = first;
+		@Override
+		public boolean hasNext()
+		{
+			return index != last;
+		}
+
+		@Override
+		public KEY_TYPE NEXT() {
+			KEY_TYPE value = array[index];
+			removeIndex(index++);
+			return value;
+		}
+	}
+}

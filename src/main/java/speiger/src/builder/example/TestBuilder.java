@@ -38,6 +38,12 @@ public class TestBuilder extends TemplateProcessor
 	}
 	
 	@Override
+	protected boolean debugUnusedMappers()
+	{
+		return false;
+	}
+	
+	@Override
 	protected void init()
 	{
 		varibles.clear();
@@ -55,20 +61,19 @@ public class TestBuilder extends TemplateProcessor
 		nameRemapper.put("AbstractCollection", "Abstract%sCollection");
 		nameRemapper.put("AbstractSet", "Abstract%sSet");
 		nameRemapper.put("AbstractList", "Abstract%sList");
-		blocked.put("Consumer", EnumSet.of(ClassType.OBJECT));
-		blocked.put("Comparator", EnumSet.of(ClassType.OBJECT));
-		blocked.put("Stack", EnumSet.of(ClassType.OBJECT));
-		blocked.put("Sets", EnumSet.of(ClassType.BOOLEAN));
-		blocked.put("ArraySet", EnumSet.of(ClassType.BOOLEAN));
-		blocked.put("AVLTreeSet", EnumSet.of(ClassType.BOOLEAN));
-		blocked.put("RBTreeSet", EnumSet.of(ClassType.BOOLEAN));
-		blocked.put("RBTreeSet", EnumSet.of(ClassType.BOOLEAN));
-		blocked.put("SortedSet", EnumSet.of(ClassType.BOOLEAN));
-		blocked.put("NavigableSet", EnumSet.of(ClassType.BOOLEAN));
-		blocked.put("OpenHashSet", EnumSet.of(ClassType.BOOLEAN));
-		blocked.put("OpenCustomHashSet", EnumSet.of(ClassType.BOOLEAN));
-		blocked.put("LinkedOpenHashSet", EnumSet.of(ClassType.BOOLEAN));
-		blocked.put("LinkedOpenCustomHashSet", EnumSet.of(ClassType.BOOLEAN));
+		addBlockage(ClassType.OBJECT, "Consumer", "Comparator", "Stack");
+		addBlockage(ClassType.BOOLEAN, "Sets", "ArraySet", "AVLTreeSet", "RBTreeSet", "SortedSet", "NavigableSet", "OpenHashSet", "OpenCustomHashSet", "LinkedOpenHashSet", "LinkedOpenCustomHashSet");
+	}
+	
+	protected void addBlockage(ClassType type, String...args) {
+		for(String s : args) {
+			EnumSet<ClassType> set = blocked.get(s);
+			if(set == null) {
+				set = EnumSet.noneOf(ClassType.class);
+				blocked.put(s, set);
+			}
+			set.add(type);
+		}
 	}
 	
 	@Override
@@ -89,7 +94,7 @@ public class TestBuilder extends TemplateProcessor
 	{
 		try
 		{
-			new TestBuilder().process(false);
+            new TestBuilder().process(false);
 		}
 		catch(InterruptedException e)
 		{

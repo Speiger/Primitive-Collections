@@ -27,9 +27,7 @@ public abstract class ABSTRACT_COLLECTION KEY_GENERIC_TYPE extends AbstractColle
 	@Override
 	public boolean addAll(COLLECTION KEY_GENERIC_TYPE c) {
 		boolean modified = false;
-		for(KEY_TYPE e : c) {
-			modified |= add(e);
-		}
+		for(ITERATOR KEY_GENERIC_TYPE iter = c.iterator();iter.hasNext();modified |= add(iter.NEXT()));
 		return modified;
 	}
 	
@@ -49,7 +47,7 @@ public abstract class ABSTRACT_COLLECTION KEY_GENERIC_TYPE extends AbstractColle
 	 */
 	@Override
 	public boolean contains(KEY_TYPE e) {
-		for(KEY_TYPE entry : this) { if(EQUALS(entry, e)) return true; }
+		for(ITERATOR KEY_GENERIC_TYPE iter = iterator();iter.hasNext();) { if(EQUALS(iter.NEXT(), e)) return true; }
 		return false;
 	}
 	
@@ -75,8 +73,8 @@ public abstract class ABSTRACT_COLLECTION KEY_GENERIC_TYPE extends AbstractColle
 	@Override
 	public boolean containsAll(COLLECTION KEY_GENERIC_TYPE c) {
 		Objects.requireNonNull(c);
-		for(KEY_TYPE e : c)
-			if(!contains(e))
+		for(ITERATOR KEY_GENERIC_TYPE iter = c.iterator();iter.hasNext();)
+			if(!contains(iter.NEXT()))
 				return false;
 		return true;
 	}
@@ -107,8 +105,8 @@ public abstract class ABSTRACT_COLLECTION KEY_GENERIC_TYPE extends AbstractColle
 	@Override
 	public boolean containsAny(COLLECTION KEY_GENERIC_TYPE c) {
 		Objects.requireNonNull(c);
-		for(KEY_TYPE e : c) 
-			if(contains(e))
+		for(ITERATOR KEY_GENERIC_TYPE iter = c.iterator();iter.hasNext();) 
+			if(contains(iter.NEXT()))
 				return true;
 		return false;
 	}

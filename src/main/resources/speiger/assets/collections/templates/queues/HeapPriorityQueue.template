@@ -1,0 +1,199 @@
+package speiger.src.collections.PACKAGE.queues;
+
+import java.util.Arrays;
+import java.util.NoSuchElementException;
+#if TYPE_OBJECT
+import java.util.Comparator;
+import java.util.Objects;
+#endif
+
+import speiger.src.collections.PACKAGE.collections.COLLECTION;
+import speiger.src.collections.PACKAGE.collections.ITERATOR;
+#if !TYPE_OBJECT
+import speiger.src.collections.PACKAGE.functions.COMPARATOR;
+#endif
+import speiger.src.collections.PACKAGE.utils.ARRAYS;
+
+public class HEAP_PRIORITY_QUEUE KEY_GENERIC_TYPE implements PRIORITY_QUEUE KEY_GENERIC_TYPE
+{
+	protected transient KEY_TYPE[] array = EMPTY_KEY_ARRAY;
+	protected int size;
+	protected COMPARATOR KEY_SUPER_GENERIC_TYPE comparator;
+	
+	public HEAP_PRIORITY_QUEUE() {
+		this(0, null);
+	}
+	
+	public HEAP_PRIORITY_QUEUE(COMPARATOR KEY_SUPER_GENERIC_TYPE comp) {
+		this(0, comp);
+	}
+	
+	public HEAP_PRIORITY_QUEUE(int size, COMPARATOR KEY_SUPER_GENERIC_TYPE comp) {
+		if(size > 0) array = NEW_KEY_ARRAY(size);
+		this.size = size;
+		comparator = comp;
+	}
+	
+	public HEAP_PRIORITY_QUEUE(KEY_TYPE[] array) {
+		this(array, array.length);
+	}
+	
+	public HEAP_PRIORITY_QUEUE(KEY_TYPE[] array, int size) {
+		this.array = Arrays.copyOf(array, size);
+		this.size = size;
+		ARRAYS.heapify(array, size, null);
+	}
+	
+	public HEAP_PRIORITY_QUEUE(KEY_TYPE[] array, COMPARATOR KEY_SUPER_GENERIC_TYPE comp) {
+		this(array, array.length, comp);
+	}
+	
+	public HEAP_PRIORITY_QUEUE(KEY_TYPE[] array, int size, COMPARATOR KEY_SUPER_GENERIC_TYPE comp) {
+		this.array = Arrays.copyOf(array, size);
+		this.size = size;
+		comparator = comp;
+		ARRAYS.heapify(array, size, comp);
+	}
+	
+	public HEAP_PRIORITY_QUEUE(COLLECTION KEY_GENERIC_TYPE c) {
+		array = CAST_KEY_ARRAY c.TO_ARRAY();
+		size = c.size();
+		ARRAYS.heapify(array, size, null);
+	}
+	
+	public HEAP_PRIORITY_QUEUE(COLLECTION KEY_GENERIC_TYPE c, COMPARATOR KEY_SUPER_GENERIC_TYPE comp) {
+		array = CAST_KEY_ARRAY c.TO_ARRAY();
+		size = c.size();
+		comparator = comp;
+		ARRAYS.heapify(array, size, comp);
+	}
+	
+	public static GENERIC_BRACES HEAP_PRIORITY_QUEUE KEY_GENERIC_TYPE wrap(KEY_TYPE[] array) { 
+		return wrap(array, array.length);
+	}
+	
+	public static GENERIC_BRACES HEAP_PRIORITY_QUEUE KEY_GENERIC_TYPE wrap(KEY_TYPE[] array, int size) {
+		HEAP_PRIORITY_QUEUE KEY_GENERIC_TYPE queue = new HEAP_PRIORITY_QUEUEBRACES();
+		queue.array = array;
+		queue.size = size;
+		ARRAYS.heapify(array, size, null);
+		return queue;
+	}
+	
+	public static GENERIC_BRACES HEAP_PRIORITY_QUEUE KEY_GENERIC_TYPE wrap(KEY_TYPE[] array, COMPARATOR KEY_SUPER_GENERIC_TYPE comp) {
+		return wrap(array, array.length, comp);
+	}
+	
+	public static GENERIC_BRACES HEAP_PRIORITY_QUEUE KEY_GENERIC_TYPE wrap(KEY_TYPE[] array, int size, COMPARATOR KEY_SUPER_GENERIC_TYPE comp) {
+		HEAP_PRIORITY_QUEUE KEY_GENERIC_TYPE queue = new HEAP_PRIORITY_QUEUEBRACES(comp);
+		queue.array = array;
+		queue.size = size;
+		ARRAYS.heapify(array, size, comp);
+		return queue;
+	}
+	
+	@Override
+	public int size() {
+		return size;
+	}
+	
+	@Override
+	public void clear() {
+#if TYPE_OBJECT
+		Arrays.fill(array, null);
+#endif
+		size = 0;
+	}
+	
+	@Override
+	public ITERATOR KEY_GENERIC_TYPE iterator() {
+		return new Iter();
+	}
+	
+	@Override
+	public void ENQUEUE(KEY_TYPE e) {
+		if(size == array.length) array = Arrays.copyOf(array, size + 1);
+		array[size++] = e;
+		ARRAYS.shiftUp(array, size-1, comparator);
+	}
+	
+	@Override
+	public KEY_TYPE DEQUEUE() {
+		if(size <= 0) throw new NoSuchElementException();
+		KEY_TYPE value = array[0];
+		array[0] = array[--size];
+#if TYPE_OBJECT
+		array[size] = null;
+#endif
+		if(size != 0) ARRAYS.shiftDown(array, size, 0, comparator);
+		return value;
+	}
+	
+	@Override
+	public KEY_TYPE PEEK(int index) {
+		if(index < 0 || index >= size) throw new NoSuchElementException();
+		return array[index];
+	}
+	
+	@Override
+	public boolean REMOVE(KEY_TYPE e) {
+		for(int i = 0;i<size;i++)
+			if(EQUALS(e, array[i])) return removeIndex(i);
+		return false;
+	}
+	
+	@Override
+	public boolean REMOVE_LAST(KEY_TYPE e) {
+		for(int i = size-1;i>=0;i--)
+			if(EQUALS(e, array[i])) return removeIndex(i);
+		return false;
+	}
+	
+	protected boolean removeIndex(int index) {
+		array[index] = array[--size];
+#if TYPE_OBJECT
+		array[size] = null;
+#endif
+		if(size != index) ARRAYS.shiftDown(array, size, index, comparator);
+		return true;
+	}
+	
+	@Override
+	public void onChanged() {
+		if(size <= 0) return;
+		ARRAYS.shiftDown(array, size, 0, comparator);
+	}
+	
+	@Override
+	public COMPARATOR KEY_SUPER_GENERIC_TYPE comparator() {
+		return comparator;
+	}
+	
+	@Override
+	public KEY_TYPE[] TO_ARRAY(KEY_TYPE[] input) {
+		if(input == null || input.length < size()) input = NEW_KEY_ARRAY(size());
+		System.arraycopy(array, 0, input, 0, size());
+		return input;
+	}
+	
+#if !TYPE_OBJECT
+	@Override
+	public CLASS_TYPE[] toArray(CLASS_TYPE[] input) {
+		if(input == null || input.length < size()) input = new CLASS_TYPE[size()];
+		for(int i = 0;i<size;i++) input[i] = KEY_TO_OBJ(array[i]);
+		return input;
+	}
+	
+#endif
+	public class Iter implements ITERATOR KEY_GENERIC_TYPE {
+		@Override
+		public boolean hasNext() {
+			return !isEmpty();
+		}
+		
+		@Override
+		public KEY_TYPE NEXT() {
+			return DEQUEUE();
+		}
+	}
+}

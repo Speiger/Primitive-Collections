@@ -1,0 +1,12 @@
+package speiger.src.collections.PACKAGE.queues;
+
+public interface PRIORITY_DEQUEUE KEY_GENERIC_TYPE extends PRIORITY_QUEUE KEY_GENERIC_TYPE
+{
+	public void ENQUEUE_FIRST(KEY_TYPE e);
+	public KEY_TYPE DEQUEUE_LAST();
+	
+#if !TYPE_OBJECT
+	public default void enqueueFirst(CLASS_TYPE e) { ENQUEUE_FIRST(OBJ_TO_KEY(e)); }
+	public default CLASS_TYPE dequeueLast() { return KEY_TO_OBJ(DEQUEUE_LAST()); }
+#endif
+}

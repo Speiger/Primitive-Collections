@@ -23,11 +23,7 @@ public class ARRAY_SET KEY_GENERIC_TYPE extends ABSTRACT_SET KEY_GENERIC_TYPE im
 	protected int size = 0;
 	
 	public ARRAY_SET() {
-#if TYPE_OBJECT
-		data = (KEY_TYPE[])ARRAYS.EMPTY_ARRAY;
-#else
-		data = ARRAYS.EMPTY_ARRAY;
-#endif
+		data = EMPTY_KEY_ARRAY;
 	}
 	
 	public ARRAY_SET(int capacity) {

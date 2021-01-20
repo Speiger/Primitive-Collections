@@ -65,11 +65,7 @@ public class ARRAY_LIST KEY_GENERIC_TYPE extends ABSTRACT_LIST KEY_GENERIC_TYPE 
 	 * Creates a new ArrayList with a Empty array.
 	 */
 	public ARRAY_LIST() {
-#if TYPE_OBJECT
-		data = (KEY_TYPE[])ARRAYS.EMPTY_ARRAY;
-#else
-		data = ARRAYS.EMPTY_ARRAY;
-#endif
+		data = EMPTY_KEY_ARRAY;
 	}
 	
 	/**
@@ -880,11 +876,7 @@ public class ARRAY_LIST KEY_GENERIC_TYPE extends ABSTRACT_LIST KEY_GENERIC_TYPE 
 	public boolean trim(int size) {
 		if(size > size() || size() == data.length) return false;
 		int value = Math.max(size, size());
-#if TYPE_OBJECT
-		data = value == 0 ? (KEY_TYPE[])ARRAYS.EMPTY_ARRAY : Arrays.copyOf(data, value);
-#else
-		data = value == 0 ? ARRAYS.EMPTY_ARRAY : Arrays.copyOf(data, value);
-#endif
+		data = value == 0 ? EMPTY_KEY_ARRAY : Arrays.copyOf(data, value);
 		return true;
 	}
 	

@@ -21,6 +21,10 @@ repositories {
 }
 
 dependencies {
-	compile 'SimpleCodeGenerator:Simple Code Generator:1.0'
+	compile 'SimpleCodeGenerator:Simple Code Generator:1.0.1'
     testImplementation 'junit:junit:4.12'
+}
+
+test {
+    useJUnit()
 }

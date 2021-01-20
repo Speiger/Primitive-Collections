@@ -100,12 +100,70 @@ public class ARRAYS
 	 * @param length the lenght the array should be.
 	 * @return a Array with the requested type and length
 	 */
-	public static KEY_GENERIC_TYPE KEY_TYPE[] newArray(Class<KEY_TYPE> clz, int length) {
+	public static GENERIC_BRACES KEY_TYPE[] newArray(Class<KEY_TYPE> clz, int length) {
 		if(clz == Object.class) return (KEY_TYPE[])new Object[length];
 		return (KEY_TYPE[]) java.lang.reflect.Array.newInstance(clz, length);
 	}
 	
 #endif
+	public static GENERIC_BRACES int shiftDown(KEY_TYPE[] data, int size, int index, COMPARATOR KEY_SUPER_GENERIC_TYPE comp) {
+		int half = size >>> 1;
+		KEY_TYPE value = data[index];
+		if(comp != null) {
+			while(index < half) {
+				int child = (index << 1) + 1;
+				KEY_TYPE childValue = data[child];
+				int right = child+1;
+				if(right < size && comp.compare(data[right], childValue) < 0) childValue = data[child = right];
+				if(comp.compare(value, childValue) <= 0) break;
+				data[index] = childValue;
+				index = child;
+			}
+		}
+		else {
+			while(index < half) {
+				int child = (index << 1) + 1;
+				KEY_TYPE childValue = data[child];
+				int right = child+1;
+				if(right < size && COMPARE_TO_KEY(data[right], childValue) < 0) childValue = data[child = right];
+				if(COMPARE_TO_KEY(value, childValue) <= 0) break;
+				data[index] = childValue;
+				index = child;
+			}
+		}
+		data[index] = value;
+		return index;
+	}
+	
+	public static GENERIC_BRACES int shiftUp(KEY_TYPE[] data, int index, COMPARATOR KEY_SUPER_GENERIC_TYPE comp) {
+		KEY_TYPE value = data[index];
+		if(comp != null) {
+			while(index > 0) {
+				int parent = (index - 1) >>> 1;
+				KEY_TYPE parentValue = data[parent];
+				if(comp.compare(value, parentValue) >= 0) break;
+				data[index] = parentValue;
+				index = parent;
+			}
+		}
+		else {
+			while(index > 0) {
+				int parent = (index - 1) >>> 1;
+				KEY_TYPE parentValue = data[parent];
+				if(COMPARE_TO_KEY(value, parentValue) >= 0) break;
+				data[index] = parentValue;
+				index = parent;
+			}
+		}
+		data[index] = value;
+		return index;
+	}
+	
+	public static GENERIC_BRACES KEY_TYPE[] heapify(KEY_TYPE[] data, int size, COMPARATOR KEY_SUPER_GENERIC_TYPE comp) {
+		for(int i = (size >>> 1) - 1;i>=0;shiftDown(data, size, i--, comp));
+		return data;
+	}
+	
 	public static GENERIC_BRACES KEY_TYPE[] shuffle(KEY_TYPE[] array) {
 		return shuffle(array, SanityChecks.getRandom());
 	}

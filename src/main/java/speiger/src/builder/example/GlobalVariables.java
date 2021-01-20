@@ -8,6 +8,7 @@ import java.util.Set;
 import java.util.function.UnaryOperator;
 
 import speiger.src.builder.mappers.ArgumentMapper;
+import speiger.src.builder.mappers.IMapper;
 import speiger.src.builder.mappers.InjectMapper;
 import speiger.src.builder.mappers.LineMapper;
 import speiger.src.builder.mappers.SimpleMapper;
@@ -15,7 +16,7 @@ import speiger.src.builder.processor.TemplateProcess;
 
 public class GlobalVariables
 {
-	List<UnaryOperator<String>> operators = new ArrayList<>();
+	List<IMapper> operators = new ArrayList<>();
 	Set<String> flags = new LinkedHashSet<>();
 	ClassType type;
 	
@@ -42,12 +43,11 @@ public class GlobalVariables
 			addSimpleMapper("JAVA_TYPE", type.getCustomJDKType().getKeyType());
 			addSimpleMapper("SANITY_CAST", "castTo"+type.getFileType());
 		}
+		addAnnontion("@PrimitiveOverride", "@Override");
 		addSimpleMapper("@PrimitiveDoc", "");
-		addDeprication("@Primitive");
+		addAnnontion("@Primitive", "@Deprecated");
 		return this;
 	}
-	
-	
 	
 	public GlobalVariables createHelperVariables()
 	{
@@ -63,7 +63,10 @@ public class GlobalVariables
 		addInjectMapper("CLASS_TO_KEY", "(("+type.getClassType()+")%s)."+type.getKeyType()+"Value()").removeBraces();
 		addSimpleMapper("APPLY", "applyAs"+type.getCustomJDKType().getNonFileType());
 		addInjectMapper("TO_HASH", type.isObject() ? "%s.hashCode()" : type.getClassType()+".hashCode(%s)").removeBraces();
+		addSimpleMapper("CAST_KEY_ARRAY ", type.isObject() ? "(KEY_TYPE[])" : "");
+		addSimpleMapper("EMPTY_KEY_ARRAY", type.isObject() ? "(KEY_TYPE[])ARRAYS.EMPTY_ARRAY" : "ARRAYS.EMPTY_ARRAY");
 		addInjectMapper("NEW_KEY_ARRAY", type.isObject() ? "(KEY_TYPE[])new Object[%s]" : "new KEY_TYPE[%s]").removeBraces();
+		addInjectMapper("NEW_CLASS_ARRAY", type.isObject() ? "(CLASS_TYPE[])new Object[%s]" : "new CLASS_TYPE[%s]").removeBraces();
 		return this;
 	}
 	
@@ -75,6 +78,9 @@ public class GlobalVariables
 		
 		//Final Classes
 		addClassMapper("ARRAY_LIST", "ArrayList");
+		addClassMapper("ARRAY_FIFO_QUEUE", "ArrayFIFOQueue");
+		addClassMapper("ARRAY_PRIORITY_QUEUE", "ArrayPriorityQueue");
+		addClassMapper("HEAP_PRIORITY_QUEUE", "HeapPriorityQueue");
 		addClassMapper("LINKED_CUSTOM_HASH_SET", "LinkedOpenCustomHashSet");
 		addClassMapper("LINKED_HASH_SET", "LinkedOpenHashSet");
 		addClassMapper("CUSTOM_HASH_SET", "OpenCustomHashSet");
@@ -105,6 +111,8 @@ public class GlobalVariables
 		addClassMapper("LIST_ITER", "ListIter");
 		addClassMapper("LIST", "List");
 		addClassMapper("NAVIGABLE_SET", "NavigableSet");
+		addClassMapper("PRIORITY_QUEUE", "PriorityQueue");
+		addClassMapper("PRIORITY_DEQUEUE", "PriorityDequeue");
 		addClassMapper("SORTED_SET", "SortedSet");
 		addClassMapper("SET", "Set");
 		addClassMapper("STRATEGY", "Strategy");
@@ -129,7 +137,12 @@ public class GlobalVariables
 		addFunctionMapper("NEXT", "next");
 		addSimpleMapper("TO_ARRAY", "to"+type.getNonFileType()+"Array");
 		addFunctionMapper("GET_KEY", "get");
+		addFunctionMapper("ENQUEUE_FIRST", "enqueueFirst");
+		addFunctionMapper("ENQUEUE", "enqueue");
+		addFunctionMapper("DEQUEUE_LAST", "dequeueLast");
+		addFunctionMapper("DEQUEUE", "dequeue");
 		addFunctionMapper("REMOVE_KEY", "rem");
+		addFunctionMapper("REMOVE_LAST", "removeLast");
 		addFunctionMapper("REMOVE", "remove");
 		addFunctionMapper("PREVIOUS", "previous");
 		addFunctionMapper("PEEK", "peek");
@@ -175,38 +188,38 @@ public class GlobalVariables
 	
 	private void addClassMapper(String pattern, String replacement)
 	{
-		operators.add(new SimpleMapper(pattern, type.getFileType()+replacement));		
+		operators.add(new SimpleMapper(type.name()+"["+pattern+"]", pattern, type.getFileType()+replacement));		
 	}
 	
 	private void addAbstractMapper(String pattern, String replacement)
 	{
-		operators.add(new SimpleMapper(pattern, String.format(replacement, type.getFileType())));		
+		operators.add(new SimpleMapper(type.name()+"["+pattern+"]", pattern, String.format(replacement, type.getFileType())));		
 	}
 	
 	private void addFunctionMapper(String pattern, String replacement)
 	{
-		operators.add(new SimpleMapper(pattern, replacement+type.getNonFileType()));
+		operators.add(new SimpleMapper(type.name()+"["+pattern+"]", pattern, replacement+type.getNonFileType()));
 	}
 	
 	private void addFunctionMappers(String pattern, String replacement)
 	{
-		operators.add(new SimpleMapper(pattern, String.format(replacement, type.getNonFileType())));		
+		operators.add(new SimpleMapper(type.name()+"["+pattern+"]", pattern, String.format(replacement, type.getNonFileType())));		
 	}
 	
 	private void addSimpleMapper(String pattern, String replacement)
 	{
-		operators.add(new SimpleMapper(pattern, replacement));
+		operators.add(new SimpleMapper(type.name()+"["+pattern+"]", pattern, replacement));
 	}
 	
-	private void addDeprication(String pattern)
+	private void addAnnontion(String pattern, String value)
 	{
-		if(type == ClassType.OBJECT) operators.add(new LineMapper(pattern));
-		else operators.add(new SimpleMapper(pattern, "@Deprecated"));
+		if(type == ClassType.OBJECT) operators.add(new LineMapper(type.name()+"["+pattern+"]", pattern));
+		else operators.add(new SimpleMapper(type.name()+"["+pattern+"]", pattern, value));
 	}
 	
 	private InjectMapper addInjectMapper(String pattern, String replacement)
 	{
-		InjectMapper mapper = new InjectMapper(pattern, replacement);
+		InjectMapper mapper = new InjectMapper(type.name()+"["+pattern+"]", pattern, replacement);
 		operators.add(mapper);
 		return mapper;
 	}
@@ -218,7 +231,7 @@ public class GlobalVariables
 	
 	private ArgumentMapper addArgumentMapper(String pattern, String replacement, String splitter)
 	{
-		ArgumentMapper mapper = new ArgumentMapper(pattern, replacement, splitter);
+		ArgumentMapper mapper = new ArgumentMapper(type.name()+"["+pattern+"]", pattern, replacement, splitter);
 		operators.add(mapper);
 		return mapper;
 	}
