@@ -100,13 +100,13 @@ public class ARRAYS
 	 * @param length the lenght the array should be.
 	 * @return a Array with the requested type and length
 	 */
-	public static GENERIC_BRACES KEY_TYPE[] newArray(Class<KEY_TYPE> clz, int length) {
+	public static GENERIC_KEY_BRACES KEY_TYPE[] newArray(Class<KEY_TYPE> clz, int length) {
 		if(clz == Object.class) return (KEY_TYPE[])new Object[length];
 		return (KEY_TYPE[]) java.lang.reflect.Array.newInstance(clz, length);
 	}
 	
 #endif
-	public static GENERIC_BRACES int shiftDown(KEY_TYPE[] data, int size, int index, COMPARATOR KEY_SUPER_GENERIC_TYPE comp) {
+	public static GENERIC_KEY_BRACES int shiftDown(KEY_TYPE[] data, int size, int index, COMPARATOR KEY_SUPER_GENERIC_TYPE comp) {
 		int half = size >>> 1;
 		KEY_TYPE value = data[index];
 		if(comp != null) {
@@ -135,7 +135,7 @@ public class ARRAYS
 		return index;
 	}
 	
-	public static GENERIC_BRACES int shiftUp(KEY_TYPE[] data, int index, COMPARATOR KEY_SUPER_GENERIC_TYPE comp) {
+	public static GENERIC_KEY_BRACES int shiftUp(KEY_TYPE[] data, int index, COMPARATOR KEY_SUPER_GENERIC_TYPE comp) {
 		KEY_TYPE value = data[index];
 		if(comp != null) {
 			while(index > 0) {
@@ -159,16 +159,16 @@ public class ARRAYS
 		return index;
 	}
 	
-	public static GENERIC_BRACES KEY_TYPE[] heapify(KEY_TYPE[] data, int size, COMPARATOR KEY_SUPER_GENERIC_TYPE comp) {
+	public static GENERIC_KEY_BRACES KEY_TYPE[] heapify(KEY_TYPE[] data, int size, COMPARATOR KEY_SUPER_GENERIC_TYPE comp) {
 		for(int i = (size >>> 1) - 1;i>=0;shiftDown(data, size, i--, comp));
 		return data;
 	}
 	
-	public static GENERIC_BRACES KEY_TYPE[] shuffle(KEY_TYPE[] array) {
+	public static GENERIC_KEY_BRACES KEY_TYPE[] shuffle(KEY_TYPE[] array) {
 		return shuffle(array, SanityChecks.getRandom());
 	}
 	
-	public static GENERIC_BRACES KEY_TYPE[] shuffle(KEY_TYPE[] array, Random random) {
+	public static GENERIC_KEY_BRACES KEY_TYPE[] shuffle(KEY_TYPE[] array, Random random) {
 		for(int i = array.length-1; i>=0;i--) {
 			int p = random.nextInt(i + 1);
 			KEY_TYPE t = array[i];
@@ -185,7 +185,7 @@ public class ARRAYS
 	 * @param array the array that needs to be sorted
 	 * @param comp the Comparator that decides the sorting order
 	 */
-	public static GENERIC_BRACES void stableSort(KEY_TYPE[] array, COMPARATOR KEY_GENERIC_TYPE comp) {
+	public static GENERIC_KEY_BRACES void stableSort(KEY_TYPE[] array, COMPARATOR KEY_GENERIC_TYPE comp) {
 		stableSort(array, 0, array.length, comp);
 	}
 	
@@ -197,7 +197,7 @@ public class ARRAYS
 	 * @param length the maxmium size of the array to be sorted
 	 * @param comp the Comparator that decides the sorting order
 	 */
-	public static GENERIC_BRACES void stableSort(KEY_TYPE[] array, int length, COMPARATOR KEY_GENERIC_TYPE comp) {
+	public static GENERIC_KEY_BRACES void stableSort(KEY_TYPE[] array, int length, COMPARATOR KEY_GENERIC_TYPE comp) {
 		stableSort(array, 0, length, comp);
 	}
 	
@@ -210,7 +210,7 @@ public class ARRAYS
 	 * @param to where the array should be sorted to
 	 * @param comp the Comparator that decides the sorting order
 	 */
-	public static GENERIC_BRACES void stableSort(KEY_TYPE[] array, int from, int to, COMPARATOR KEY_GENERIC_TYPE comp) {
+	public static GENERIC_KEY_BRACES void stableSort(KEY_TYPE[] array, int from, int to, COMPARATOR KEY_GENERIC_TYPE comp) {
 		mergeSort(array, null, from, to, comp);
 	}
 	
@@ -220,7 +220,7 @@ public class ARRAYS
 	 * Stable sort referres to Mergesort or Insertionsort
 	 * @param array the array that needs to be sorted
 	 */
-	public static COMPAREABLE_BRACES void stableSort(KEY_TYPE[] array) {
+	public static COMPAREABLE_KEY_BRACES void stableSort(KEY_TYPE[] array) {
 		stableSort(array, 0, array.length);
 	}
 	
@@ -231,7 +231,7 @@ public class ARRAYS
 	 * @param array the array that needs to be sorted
 	 * @param length the maxmium size of the array to be sorted
 	 */
-	public static COMPAREABLE_BRACES void stableSort(KEY_TYPE[] array, int length) {
+	public static COMPAREABLE_KEY_BRACES void stableSort(KEY_TYPE[] array, int length) {
 		stableSort(array, 0, length);
 	}
 	
@@ -243,7 +243,7 @@ public class ARRAYS
 	 * @param from where the array should be sorted from
 	 * @param to where the array should be sorted to
 	 */
-	public static COMPAREABLE_BRACES void stableSort(KEY_TYPE[] array, int from, int to) {
+	public static COMPAREABLE_KEY_BRACES void stableSort(KEY_TYPE[] array, int from, int to) {
 		mergeSort(array, null, from, to);
 	}
 	
@@ -254,7 +254,7 @@ public class ARRAYS
 	 * @param array the array that needs to be sorted
 	 * @param comp the Comparator that decides the sorting order
 	 */
-	public static GENERIC_BRACES void unstableSort(KEY_TYPE[] array, COMPARATOR KEY_GENERIC_TYPE comp) {
+	public static GENERIC_KEY_BRACES void unstableSort(KEY_TYPE[] array, COMPARATOR KEY_GENERIC_TYPE comp) {
 		unstableSort(array, 0, array.length, comp);
 	}
 	
@@ -266,7 +266,7 @@ public class ARRAYS
 	 * @param length the maxmium size of the array to be sorted
 	 * @param comp the Comparator that decides the sorting order
 	 */
-	public static GENERIC_BRACES void unstableSort(KEY_TYPE[] array, int length, COMPARATOR KEY_GENERIC_TYPE comp) {
+	public static GENERIC_KEY_BRACES void unstableSort(KEY_TYPE[] array, int length, COMPARATOR KEY_GENERIC_TYPE comp) {
 		unstableSort(array, 0, length, comp);
 	}
 	
@@ -279,7 +279,7 @@ public class ARRAYS
 	 * @param to where the array should be sorted to
 	 * @param comp the Comparator that decides the sorting order
 	 */
-	public static GENERIC_BRACES void unstableSort(KEY_TYPE[] array, int from, int to, COMPARATOR KEY_GENERIC_TYPE comp) {
+	public static GENERIC_KEY_BRACES void unstableSort(KEY_TYPE[] array, int from, int to, COMPARATOR KEY_GENERIC_TYPE comp) {
 		quickSort(array, from, to, comp);
 	}
 	
@@ -289,7 +289,7 @@ public class ARRAYS
 	 * Unstable sort referres to QuickSort or SelectionSort
 	 * @param array the array that needs to be sorted
 	 */
-	public static COMPAREABLE_BRACES void unstableSort(KEY_TYPE[] array) {
+	public static COMPAREABLE_KEY_BRACES void unstableSort(KEY_TYPE[] array) {
 		unstableSort(array, 0, array.length);
 	}
 	
@@ -300,7 +300,7 @@ public class ARRAYS
 	 * @param array the array that needs to be sorted
 	 * @param length the maxmium size of the array to be sorted
 	 */
-	public static COMPAREABLE_BRACES void unstableSort(KEY_TYPE[] array, int length) {
+	public static COMPAREABLE_KEY_BRACES void unstableSort(KEY_TYPE[] array, int length) {
 		unstableSort(array, 0, length);
 	}
 	
@@ -312,7 +312,7 @@ public class ARRAYS
 	 * @param from where the array should be sorted from
 	 * @param to where the array should be sorted to
 	 */
-	public static COMPAREABLE_BRACES void unstableSort(KEY_TYPE[] array, int from, int to) {
+	public static COMPAREABLE_KEY_BRACES void unstableSort(KEY_TYPE[] array, int from, int to) {
 		quickSort(array, from, to);
 	}
 	
@@ -321,7 +321,7 @@ public class ARRAYS
 	 * @param array the array that needs to be sorted
 	 * @param comp the Comparator that decides the sorting order
 	 */
-	public static GENERIC_BRACES void insertionSort(KEY_TYPE[] array, COMPARATOR KEY_GENERIC_TYPE comp) {
+	public static GENERIC_KEY_BRACES void insertionSort(KEY_TYPE[] array, COMPARATOR KEY_GENERIC_TYPE comp) {
 		insertionSort(array, 0, array.length, comp);
 	}
 	
@@ -331,7 +331,7 @@ public class ARRAYS
 	 * @param length the maxmium size of the array to be sorted
 	 * @param comp the Comparator that decides the sorting order
 	 */
-	public static GENERIC_BRACES void insertionSort(KEY_TYPE[] array, int length, COMPARATOR KEY_GENERIC_TYPE comp) {
+	public static GENERIC_KEY_BRACES void insertionSort(KEY_TYPE[] array, int length, COMPARATOR KEY_GENERIC_TYPE comp) {
 		insertionSort(array, 0, length, comp);
 	}
 	
@@ -342,7 +342,7 @@ public class ARRAYS
 	 * @param to where the array should be sorted to
 	 * @param comp the Comparator that decides the sorting order
 	 */
-	public static GENERIC_BRACES void insertionSort(KEY_TYPE[] array, int from, int to, COMPARATOR KEY_GENERIC_TYPE comp) {
+	public static GENERIC_KEY_BRACES void insertionSort(KEY_TYPE[] array, int from, int to, COMPARATOR KEY_GENERIC_TYPE comp) {
 		for (int i = from+1;i<to; i++) {
 			KEY_TYPE current = array[i];
     		int j = i - 1;
@@ -357,7 +357,7 @@ public class ARRAYS
 	 * Sorts an array according to the natural ascending order using InsertionSort, 
 	 * @param array the array that needs to be sorted
 	 */
-	public static COMPAREABLE_BRACES void insertionSort(KEY_TYPE[] array) {
+	public static COMPAREABLE_KEY_BRACES void insertionSort(KEY_TYPE[] array) {
 		insertionSort(array, 0, array.length);
 	}
 	
@@ -366,7 +366,7 @@ public class ARRAYS
 	 * @param array the array that needs to be sorted
 	 * @param length the maxmium size of the array to be sorted
 	 */
-	public static COMPAREABLE_BRACES void insertionSort(KEY_TYPE[] array, int length) {
+	public static COMPAREABLE_KEY_BRACES void insertionSort(KEY_TYPE[] array, int length) {
 		insertionSort(array, 0, length);
 	}
 	
@@ -375,7 +375,7 @@ public class ARRAYS
 	 * @param array the array that needs to be sorted
 	 * @param from where the array should be sorted from
 	 */
-	public static COMPAREABLE_BRACES void insertionSort(KEY_TYPE[] array, int from, int to) {
+	public static COMPAREABLE_KEY_BRACES void insertionSort(KEY_TYPE[] array, int from, int to) {
 		for (int i = from+1;i<to; i++) {
 			KEY_TYPE current = array[i];
     		int j = i - 1;
@@ -391,7 +391,7 @@ public class ARRAYS
 	 * @param array the array that needs to be sorted
 	 * @param comp the Comparator that decides the sorting order
 	 */
-	public static GENERIC_BRACES void selectionSort(KEY_TYPE[] array, COMPARATOR KEY_GENERIC_TYPE comp) {
+	public static GENERIC_KEY_BRACES void selectionSort(KEY_TYPE[] array, COMPARATOR KEY_GENERIC_TYPE comp) {
 		selectionSort(array, 0, array.length, comp);
 	}
 	
@@ -401,7 +401,7 @@ public class ARRAYS
 	 * @param length the maxmium size of the array to be sorted
 	 * @param comp the Comparator that decides the sorting order
 	 */
-	public static GENERIC_BRACES void selectionSort(KEY_TYPE[] array, int length, COMPARATOR KEY_GENERIC_TYPE comp) {
+	public static GENERIC_KEY_BRACES void selectionSort(KEY_TYPE[] array, int length, COMPARATOR KEY_GENERIC_TYPE comp) {
 		selectionSort(array, 0, length, comp);
 	}
 	
@@ -412,7 +412,7 @@ public class ARRAYS
 	 * @param to where the array should be sorted to
 	 * @param comp the Comparator that decides the sorting order
 	 */
-	public static GENERIC_BRACES void selectionSort(KEY_TYPE[] array, int from, int to, COMPARATOR KEY_GENERIC_TYPE comp) {
+	public static GENERIC_KEY_BRACES void selectionSort(KEY_TYPE[] array, int from, int to, COMPARATOR KEY_GENERIC_TYPE comp) {
     	for (int i = from; i < to; i++) {
     		KEY_TYPE min = array[i];
         	int minId = i;
@@ -432,7 +432,7 @@ public class ARRAYS
 	 * Sorts an array according to the natural ascending order using Selection Sort, 
 	 * @param array the array that needs to be sorted
 	 */
-	public static COMPAREABLE_BRACES void selectionSort(KEY_TYPE[] array) {
+	public static COMPAREABLE_KEY_BRACES void selectionSort(KEY_TYPE[] array) {
 		selectionSort(array, 0, array.length);
 	}
 	
@@ -441,7 +441,7 @@ public class ARRAYS
 	 * @param array the array that needs to be sorted
 	 * @param length the maxmium size of the array to be sorted
 	 */
-	public static COMPAREABLE_BRACES void selectionSort(KEY_TYPE[] array, int length) {
+	public static COMPAREABLE_KEY_BRACES void selectionSort(KEY_TYPE[] array, int length) {
 		selectionSort(array, 0, length);
 	}
 	
@@ -450,7 +450,7 @@ public class ARRAYS
 	 * @param array the array that needs to be sorted
 	 * @param from where the array should be sorted from
 	 */
-	public static COMPAREABLE_BRACES void selectionSort(KEY_TYPE[] array, int from, int to) {
+	public static COMPAREABLE_KEY_BRACES void selectionSort(KEY_TYPE[] array, int from, int to) {
     	for (int i = from; i < to; i++) {
     		KEY_TYPE min = array[i];
         	int minId = i;
@@ -472,7 +472,7 @@ public class ARRAYS
 	 * @param array the array that needs to be sorted
 	 * @param comp the Comparator that decides the sorting order
 	 */
-	public static GENERIC_BRACES void mergeSort(KEY_TYPE[] array, COMPARATOR KEY_GENERIC_TYPE comp) {
+	public static GENERIC_KEY_BRACES void mergeSort(KEY_TYPE[] array, COMPARATOR KEY_GENERIC_TYPE comp) {
 		mergeSort(array, null, 0, array.length, comp);
 	}
 	
@@ -483,7 +483,7 @@ public class ARRAYS
 	 * @param length the maxmium size of the array to be sorted
 	 * @param comp the Comparator that decides the sorting order
 	 */
-	public static GENERIC_BRACES void mergeSort(KEY_TYPE[] array, int length, COMPARATOR KEY_GENERIC_TYPE comp) {
+	public static GENERIC_KEY_BRACES void mergeSort(KEY_TYPE[] array, int length, COMPARATOR KEY_GENERIC_TYPE comp) {
 		mergeSort(array, null, 0, length, comp);
 	}
 	
@@ -495,7 +495,7 @@ public class ARRAYS
 	 * @param to where the array should be sorted to
 	 * @param comp the Comparator that decides the sorting order
 	 */
-	public static GENERIC_BRACES void mergeSort(KEY_TYPE[] array, KEY_TYPE[] supp, int from, int to, COMPARATOR KEY_GENERIC_TYPE comp) {
+	public static GENERIC_KEY_BRACES void mergeSort(KEY_TYPE[] array, KEY_TYPE[] supp, int from, int to, COMPARATOR KEY_GENERIC_TYPE comp) {
 		if(to - from < BASE_THRESHOLD) {
 			insertionSort(array, from, to, comp);
 			return;
@@ -520,7 +520,7 @@ public class ARRAYS
 	 * This implementation was copied from <a href="https://github.com/vigna/fastutil">FastUtil</a> with a couple custom optimizations
 	 * @param array the array that needs to be sorted
 	 */
-	public static COMPAREABLE_BRACES void mergeSort(KEY_TYPE[] array) {
+	public static COMPAREABLE_KEY_BRACES void mergeSort(KEY_TYPE[] array) {
 		mergeSort(array, null, 0, array.length);
 	}
 	
@@ -530,7 +530,7 @@ public class ARRAYS
 	 * @param array the array that needs to be sorted
 	 * @param length the maxmium size of the array to be sorted
 	 */
-	public static COMPAREABLE_BRACES void mergeSort(KEY_TYPE[] array, int length) {
+	public static COMPAREABLE_KEY_BRACES void mergeSort(KEY_TYPE[] array, int length) {
 		mergeSort(array, null, 0, length);
 	}
 	
@@ -541,7 +541,7 @@ public class ARRAYS
 	 * @param from where the array should be sorted from
 	 * @param to where the array should be sorted to
 	 */
-	public static COMPAREABLE_BRACES void mergeSort(KEY_TYPE[] array, KEY_TYPE[] supp, int from, int to) {
+	public static COMPAREABLE_KEY_BRACES void mergeSort(KEY_TYPE[] array, KEY_TYPE[] supp, int from, int to) {
 		if(to - from < BASE_THRESHOLD) {
 			insertionSort(array, from, to);
 			return;
@@ -568,7 +568,7 @@ public class ARRAYS
 	 * @param comp the Comparator that decides the sorting order
 	 * @Note This parallelization is invoked through {@link SanityChecks#invokeTask} which the threadpool can be changed as needed
 	 */
-	public static GENERIC_BRACES void parallelMergeSort(KEY_TYPE[] array, COMPARATOR KEY_GENERIC_TYPE comp) {
+	public static GENERIC_KEY_BRACES void parallelMergeSort(KEY_TYPE[] array, COMPARATOR KEY_GENERIC_TYPE comp) {
 		parallelMergeSort(array, null, 0, array.length, comp);
 	}
 	
@@ -580,7 +580,7 @@ public class ARRAYS
 	 * @param comp the Comparator that decides the sorting order
 	 * @Note This parallelization is invoked through {@link SanityChecks#invokeTask} which the threadpool can be changed as needed
 	 */
-	public static GENERIC_BRACES void parallelMergeSort(KEY_TYPE[] array, int length, COMPARATOR KEY_GENERIC_TYPE comp) {
+	public static GENERIC_KEY_BRACES void parallelMergeSort(KEY_TYPE[] array, int length, COMPARATOR KEY_GENERIC_TYPE comp) {
 		parallelMergeSort(array, null, 0, length, comp);
 	}
 	
@@ -593,7 +593,7 @@ public class ARRAYS
 	 * @param comp the Comparator that decides the sorting order
 	 * @Note This parallelization is invoked through {@link SanityChecks#invokeTask} which the threadpool can be changed as needed
 	 */
-	public static GENERIC_BRACES void parallelMergeSort(KEY_TYPE[] array, KEY_TYPE[] supp, int from, int to, COMPARATOR KEY_GENERIC_TYPE comp) {
+	public static GENERIC_KEY_BRACES void parallelMergeSort(KEY_TYPE[] array, KEY_TYPE[] supp, int from, int to, COMPARATOR KEY_GENERIC_TYPE comp) {
 		if(SanityChecks.canParallelTask() && to - from >= PARALLEL_THRESHOLD) {
 			SanityChecks.invokeTask(new MergeSortActionCompBRACES(array, supp, from, to, comp));
 			return;
@@ -607,7 +607,7 @@ public class ARRAYS
 	 * @param array the array that needs to be sorted
 	 * @Note This parallelization is invoked through {@link SanityChecks#invokeTask} which the threadpool can be changed as needed
 	 */
-	public static COMPAREABLE_BRACES void parallelMergeSort(KEY_TYPE[] array) {
+	public static COMPAREABLE_KEY_BRACES void parallelMergeSort(KEY_TYPE[] array) {
 		parallelMergeSort(array, null, 0, array.length);
 	}
 	
@@ -618,7 +618,7 @@ public class ARRAYS
 	 * @param length the maxmium size of the array to be sorted
 	 * @Note This parallelization is invoked through {@link SanityChecks#invokeTask} which the threadpool can be changed as needed
 	 */
-	public static COMPAREABLE_BRACES void parallelMergeSort(KEY_TYPE[] array, int length) {
+	public static COMPAREABLE_KEY_BRACES void parallelMergeSort(KEY_TYPE[] array, int length) {
 		parallelMergeSort(array, null, 0, length);
 	}
 	
@@ -630,7 +630,7 @@ public class ARRAYS
 	 * @param to where the array should be sorted to
 	 * @Note This parallelization is invoked through {@link SanityChecks#invokeTask} which the threadpool can be changed as needed
 	 */
-	public static COMPAREABLE_BRACES void parallelMergeSort(KEY_TYPE[] array, KEY_TYPE[] supp, int from, int to) {
+	public static COMPAREABLE_KEY_BRACES void parallelMergeSort(KEY_TYPE[] array, KEY_TYPE[] supp, int from, int to) {
 		if(SanityChecks.canParallelTask() && to - from >= PARALLEL_THRESHOLD) {
 			SanityChecks.invokeTask(new MergeSortActionBRACES(array, supp, from, to));
 			return;
@@ -644,7 +644,7 @@ public class ARRAYS
 	 * @param array the array that needs to be sorted
 	 * @param comp the Comparator that decides the sorting order
 	 */
-	public static GENERIC_BRACES void memFreeMergeSort(KEY_TYPE[] array, COMPARATOR KEY_GENERIC_TYPE comp) {
+	public static GENERIC_KEY_BRACES void memFreeMergeSort(KEY_TYPE[] array, COMPARATOR KEY_GENERIC_TYPE comp) {
 		memFreeMergeSort(array, 0, array.length, comp);
 	}
 	
@@ -655,7 +655,7 @@ public class ARRAYS
 	 * @param length the maxmium size of the array to be sorted
 	 * @param comp the Comparator that decides the sorting order
 	 */
-	public static GENERIC_BRACES void memFreeMergeSort(KEY_TYPE[] array, int length, COMPARATOR KEY_GENERIC_TYPE comp) {
+	public static GENERIC_KEY_BRACES void memFreeMergeSort(KEY_TYPE[] array, int length, COMPARATOR KEY_GENERIC_TYPE comp) {
 		memFreeMergeSort(array, 0, length, comp);
 	}
 	
@@ -667,7 +667,7 @@ public class ARRAYS
 	 * @param to where the array should be sorted to
 	 * @param comp the Comparator that decides the sorting order
 	 */
-	public static GENERIC_BRACES void memFreeMergeSort(KEY_TYPE[] array, int from, int to, COMPARATOR KEY_GENERIC_TYPE comp) {
+	public static GENERIC_KEY_BRACES void memFreeMergeSort(KEY_TYPE[] array, int from, int to, COMPARATOR KEY_GENERIC_TYPE comp) {
 		if(to - from < BASE_THRESHOLD) {
 			insertionSort(array, from, to, comp);
 			return;
@@ -714,7 +714,7 @@ public class ARRAYS
 	 * @author Speiger
 	 * @param array the array that needs to be sorted
 	 */
-	public static COMPAREABLE_BRACES void memFreeMergeSort(KEY_TYPE[] array) {
+	public static COMPAREABLE_KEY_BRACES void memFreeMergeSort(KEY_TYPE[] array) {
 		memFreeMergeSort(array, 0, array.length);
 	}
 	
@@ -727,7 +727,7 @@ public class ARRAYS
 	 * @param array the array that needs to be sorted
 	 * @param length the maxmium size of the array to be sorted
 	 */
-	public static COMPAREABLE_BRACES void memFreeMergeSort(KEY_TYPE[] array, int length) {
+	public static COMPAREABLE_KEY_BRACES void memFreeMergeSort(KEY_TYPE[] array, int length) {
 		memFreeMergeSort(array, 0, length);
 	}
 	
@@ -741,7 +741,7 @@ public class ARRAYS
 	 * @param from where the array should be sorted from
 	 * @param to where the array should be sorted to
 	 */
-	public static COMPAREABLE_BRACES void memFreeMergeSort(KEY_TYPE[] array, int from, int to) {
+	public static COMPAREABLE_KEY_BRACES void memFreeMergeSort(KEY_TYPE[] array, int from, int to) {
 		if(to - from < BASE_THRESHOLD) {
 			insertionSort(array, from, to);
 			return;
@@ -790,7 +790,7 @@ public class ARRAYS
 	 * @param comp the Comparator that decides the sorting order
 	 * @Note This parallelization is invoked through {@link SanityChecks#invokeTask} which the threadpool can be changed as needed
 	 */
-	public static GENERIC_BRACES void parallelMemFreeMergeSort(KEY_TYPE[] array, COMPARATOR KEY_GENERIC_TYPE comp) {
+	public static GENERIC_KEY_BRACES void parallelMemFreeMergeSort(KEY_TYPE[] array, COMPARATOR KEY_GENERIC_TYPE comp) {
 		parallelMemFreeMergeSort(array, 0, array.length, comp);
 	}
 	
@@ -805,7 +805,7 @@ public class ARRAYS
 	 * @param comp the Comparator that decides the sorting order
 	 * @Note This parallelization is invoked through {@link SanityChecks#invokeTask} which the threadpool can be changed as needed
 	 */
-	public static GENERIC_BRACES void parallelMemFreeMergeSort(KEY_TYPE[] array, int length, COMPARATOR KEY_GENERIC_TYPE comp) {
+	public static GENERIC_KEY_BRACES void parallelMemFreeMergeSort(KEY_TYPE[] array, int length, COMPARATOR KEY_GENERIC_TYPE comp) {
 		parallelMemFreeMergeSort(array, 0, length, comp);
 	}
 	
@@ -821,7 +821,7 @@ public class ARRAYS
 	 * @param comp the Comparator that decides the sorting order
 	 * @Note This parallelization is invoked through {@link SanityChecks#invokeTask} which the threadpool can be changed as needed
 	 */
-	public static GENERIC_BRACES void parallelMemFreeMergeSort(KEY_TYPE[] array, int from, int to, COMPARATOR KEY_GENERIC_TYPE comp) {
+	public static GENERIC_KEY_BRACES void parallelMemFreeMergeSort(KEY_TYPE[] array, int from, int to, COMPARATOR KEY_GENERIC_TYPE comp) {
 		if(SanityChecks.canParallelTask() && to - from >= PARALLEL_THRESHOLD) {
 			SanityChecks.invokeTask(new MemFreeMergeSortActionCompBRACES(array, from, to, comp));
 			return;
@@ -838,7 +838,7 @@ public class ARRAYS
 	 * @param array the array that needs to be sorted
 	 * @Note This parallelization is invoked through {@link SanityChecks#invokeTask} which the threadpool can be changed as needed
 	 */
-	public static COMPAREABLE_BRACES void parallelMemFreeMergeSort(KEY_TYPE[] array) {
+	public static COMPAREABLE_KEY_BRACES void parallelMemFreeMergeSort(KEY_TYPE[] array) {
 		parallelMemFreeMergeSort(array, 0, array.length);
 	}
 	
@@ -852,7 +852,7 @@ public class ARRAYS
 	 * @param length the maxmium size of the array to be sorted
 	 * @Note This parallelization is invoked through {@link SanityChecks#invokeTask} which the threadpool can be changed as needed
 	 */
-	public static COMPAREABLE_BRACES void parallelMemFreeMergeSort(KEY_TYPE[] array, int length) {
+	public static COMPAREABLE_KEY_BRACES void parallelMemFreeMergeSort(KEY_TYPE[] array, int length) {
 		parallelMemFreeMergeSort(array, 0, length);
 	}
 	
@@ -867,7 +867,7 @@ public class ARRAYS
 	 * @param to where the array should be sorted to
 	 * @Note This parallelization is invoked through {@link SanityChecks#invokeTask} which the threadpool can be changed as needed
 	 */
-	public static COMPAREABLE_BRACES void parallelMemFreeMergeSort(KEY_TYPE[] array, int from, int to) {
+	public static COMPAREABLE_KEY_BRACES void parallelMemFreeMergeSort(KEY_TYPE[] array, int from, int to) {
 		if(SanityChecks.canParallelTask() && to - from >= PARALLEL_THRESHOLD) {
 			SanityChecks.invokeTask(new MemFreeMergeSortActionBRACES(array, from, to));
 			return;
@@ -882,7 +882,7 @@ public class ARRAYS
 	 * @param array the array that needs to be sorted
 	 * @param comp the Comparator that decides the sorting order
 	 */
-	public static GENERIC_BRACES void quickSort(KEY_TYPE[] array, COMPARATOR KEY_GENERIC_TYPE comp) {
+	public static GENERIC_KEY_BRACES void quickSort(KEY_TYPE[] array, COMPARATOR KEY_GENERIC_TYPE comp) {
 		quickSort(array, 0, array.length, comp);
 	}
 	
@@ -894,7 +894,7 @@ public class ARRAYS
 	 * @param length the maxmium size of the array to be sorted
 	 * @param comp the Comparator that decides the sorting order
 	 */
-	public static GENERIC_BRACES void quickSort(KEY_TYPE[] array, int length, COMPARATOR KEY_GENERIC_TYPE comp) {
+	public static GENERIC_KEY_BRACES void quickSort(KEY_TYPE[] array, int length, COMPARATOR KEY_GENERIC_TYPE comp) {
 		quickSort(array, 0, length, comp);
 	}
 	
@@ -907,7 +907,7 @@ public class ARRAYS
 	 * @param to where the array should be sorted to
 	 * @param comp the Comparator that decides the sorting order
 	 */
-	public static GENERIC_BRACES void quickSort(KEY_TYPE[] array, int from, int to, COMPARATOR KEY_GENERIC_TYPE comp) {
+	public static GENERIC_KEY_BRACES void quickSort(KEY_TYPE[] array, int from, int to, COMPARATOR KEY_GENERIC_TYPE comp) {
 		int length = to - from;
 		if(length <= 0) return;
 		if(length < BASE_THRESHOLD) {
@@ -937,7 +937,7 @@ public class ARRAYS
 	 * and that sorting Algorithm is based on the tuned quicksort adapted from Jon L. Bentley and M. DouglasMcIlroy, “Engineering a Sort Function”, Software: Practice and Experience, 23(11), pages1249−1265, 1993. 
 	 * @param array the array that needs to be sorted
 	 */
-	public static COMPAREABLE_BRACES void quickSort(KEY_TYPE[] array) {
+	public static COMPAREABLE_KEY_BRACES void quickSort(KEY_TYPE[] array) {
 		quickSort(array, 0, array.length);
 	}
 	
@@ -948,7 +948,7 @@ public class ARRAYS
 	 * @param array the array that needs to be sorted
 	 * @param length the maxmium size of the array to be sorted
 	 */
-	public static COMPAREABLE_BRACES void quickSort(KEY_TYPE[] array, int length) {
+	public static COMPAREABLE_KEY_BRACES void quickSort(KEY_TYPE[] array, int length) {
 		quickSort(array, 0, length);
 	}
 	
@@ -960,7 +960,7 @@ public class ARRAYS
 	 * @param from where the array should be sorted from
 	 * @param to where the array should be sorted to
 	 */
-	public static COMPAREABLE_BRACES void quickSort(KEY_TYPE[] array, int from, int to) {
+	public static COMPAREABLE_KEY_BRACES void quickSort(KEY_TYPE[] array, int from, int to) {
 		int length = to - from;
 		if(length <= 0) return;
 		if(length < BASE_THRESHOLD) {
@@ -992,7 +992,7 @@ public class ARRAYS
 	 * @param comp the Comparator that decides the sorting order
 	 * @Note This parallelization is invoked through {@link SanityChecks#invokeTask} which the threadpool can be changed as needed
 	 */
-	public static GENERIC_BRACES void parallelQuickSort(KEY_TYPE[] array, COMPARATOR KEY_GENERIC_TYPE comp) {
+	public static GENERIC_KEY_BRACES void parallelQuickSort(KEY_TYPE[] array, COMPARATOR KEY_GENERIC_TYPE comp) {
 		parallelQuickSort(array, 0, array.length, comp);
 	}
 	
@@ -1005,7 +1005,7 @@ public class ARRAYS
 	 * @param comp the Comparator that decides the sorting order
 	 * @Note This parallelization is invoked through {@link SanityChecks#invokeTask} which the threadpool can be changed as needed
 	 */
-	public static GENERIC_BRACES void parallelQuickSort(KEY_TYPE[] array, int length, COMPARATOR KEY_GENERIC_TYPE comp) {
+	public static GENERIC_KEY_BRACES void parallelQuickSort(KEY_TYPE[] array, int length, COMPARATOR KEY_GENERIC_TYPE comp) {
 		parallelQuickSort(array, 0, length, comp);
 	}
 	
@@ -1019,7 +1019,7 @@ public class ARRAYS
 	 * @param comp the Comparator that decides the sorting order
 	 * @Note This parallelization is invoked through {@link SanityChecks#invokeTask} which the threadpool can be changed as needed
 	 */
-	public static GENERIC_BRACES void parallelQuickSort(KEY_TYPE[] array, int from, int to, COMPARATOR KEY_GENERIC_TYPE comp) {
+	public static GENERIC_KEY_BRACES void parallelQuickSort(KEY_TYPE[] array, int from, int to, COMPARATOR KEY_GENERIC_TYPE comp) {
 		if(SanityChecks.canParallelTask() && to - from >= PARALLEL_THRESHOLD) {
 			SanityChecks.invokeTask(new QuickSortActionCompBRACES(array, from, to, comp));
 			return;
@@ -1034,7 +1034,7 @@ public class ARRAYS
 	 * @param array the array that needs to be sorted
 	 * @Note This parallelization is invoked through {@link SanityChecks#invokeTask} which the threadpool can be changed as needed
 	 */
-	public static COMPAREABLE_BRACES void parallelQuickSort(KEY_TYPE[] array) {
+	public static COMPAREABLE_KEY_BRACES void parallelQuickSort(KEY_TYPE[] array) {
 		parallelQuickSort(array, 0, array.length);
 	}
 	
@@ -1046,7 +1046,7 @@ public class ARRAYS
 	 * @param length the maxmium size of the array to be sorted
 	 * @Note This parallelization is invoked through {@link SanityChecks#invokeTask} which the threadpool can be changed as needed
 	 */
-	public static COMPAREABLE_BRACES void parallelQuickSort(KEY_TYPE[] array, int length) {
+	public static COMPAREABLE_KEY_BRACES void parallelQuickSort(KEY_TYPE[] array, int length) {
 		parallelQuickSort(array, 0, length);
 	}
 	
@@ -1059,7 +1059,7 @@ public class ARRAYS
 	 * @param to where the array should be sorted to
 	 * @Note This parallelization is invoked through {@link SanityChecks#invokeTask} which the threadpool can be changed as needed
 	 */
-	public static COMPAREABLE_BRACES void parallelQuickSort(KEY_TYPE[] array, int from, int to) {
+	public static COMPAREABLE_KEY_BRACES void parallelQuickSort(KEY_TYPE[] array, int from, int to) {
 		if(SanityChecks.canParallelTask() && to - from >= PARALLEL_THRESHOLD) {
 			SanityChecks.invokeTask(new QuickSortActionBRACES(array, from, to));
 			return;
@@ -1067,30 +1067,30 @@ public class ARRAYS
 		quickSort(array, from, to);
 	}
 	
-	static GENERIC_BRACES void swap(KEY_TYPE[] a, int from, int to) {
+	static GENERIC_KEY_BRACES void swap(KEY_TYPE[] a, int from, int to) {
 		KEY_TYPE t = a[from];
 		a[from] = a[to];
 		a[to] = t;
 	}
 	
-	static GENERIC_BRACES void swap(KEY_TYPE[] a, int from, int to, int length) {
+	static GENERIC_KEY_BRACES void swap(KEY_TYPE[] a, int from, int to, int length) {
 		to -= length;
 		for(int i = 0;i<length;i++,swap(a, from++, to++));
 	}
 	
-	static GENERIC_BRACES int subMedium(KEY_TYPE[] data, int a, int b, int c, int length, COMPARATOR KEY_GENERIC_TYPE comp) {
+	static GENERIC_KEY_BRACES int subMedium(KEY_TYPE[] data, int a, int b, int c, int length, COMPARATOR KEY_GENERIC_TYPE comp) {
 		return medium(data, medium(data, a, a + length, a + (length * 2), comp), medium(data, b - length, b, b + length, comp), medium(data, c - (length * 2), c - length, c, comp), comp);
 	}
 	
-	static GENERIC_BRACES int medium(KEY_TYPE[] data, int a, int b, int c, COMPARATOR KEY_GENERIC_TYPE comp) {
+	static GENERIC_KEY_BRACES int medium(KEY_TYPE[] data, int a, int b, int c, COMPARATOR KEY_GENERIC_TYPE comp) {
 		return comp.compare(data[a], data[b]) < 0 ? (comp.compare(data[b], data[c]) < 0 ? b : comp.compare(data[a], data[c]) < 0 ? c : a) : (comp.compare(data[b], data[c]) > 0 ? b : comp.compare(data[a], data[c]) > 0 ? c : a);
 	}
 	
-	static COMPAREABLE_BRACES int subMedium(KEY_TYPE[] data, int a, int b, int c, int length) {
+	static COMPAREABLE_KEY_BRACES int subMedium(KEY_TYPE[] data, int a, int b, int c, int length) {
 		return medium(data, medium(data, a, a + length, a + (length * 2)), medium(data, b - length, b, b + length), medium(data, c - (length * 2), c - length, c));
 	}
 	
-	static COMPAREABLE_BRACES int medium(KEY_TYPE[] data, int a, int b, int c) {
+	static COMPAREABLE_KEY_BRACES int medium(KEY_TYPE[] data, int a, int b, int c) {
 		return COMPARE_TO(data[a], data[b]) < 0 ? (COMPARE_TO(data[b], data[c]) < 0 ? b : COMPARE_TO(data[a], data[c]) < 0 ? c : a) : (COMPARE_TO(data[b], data[c]) > 0 ? b : COMPARE_TO(data[a], data[c]) > 0 ? c : a);
 	}
 	

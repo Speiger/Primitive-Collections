@@ -361,17 +361,17 @@ public class AVL_TREE_SET KEY_GENERIC_TYPE extends ABSTRACT_SET KEY_GENERIC_TYPE
 
 	@Override
 	public NAVIGABLE_SET KEY_GENERIC_TYPE headSet(KEY_TYPE toElement, boolean inclusive) {
-		return new AscendingSubSetBRACES(this, true, EMPTY_VALUE, true, false, toElement, inclusive);
+		return new AscendingSubSetBRACES(this, true, EMPTY_KEY_VALUE, true, false, toElement, inclusive);
 	}
 
 	@Override
 	public NAVIGABLE_SET KEY_GENERIC_TYPE tailSet(KEY_TYPE fromElement, boolean inclusive) {
-		return new AscendingSubSetBRACES(this, false, fromElement, inclusive, true, EMPTY_VALUE, true);
+		return new AscendingSubSetBRACES(this, false, fromElement, inclusive, true, EMPTY_KEY_VALUE, true);
 	}
 	
 	@Override
 	public NAVIGABLE_SET KEY_GENERIC_TYPE descendingSet() {
-		return new DescendingSubSetBRACES(this, true, EMPTY_VALUE, true, true, EMPTY_VALUE, true);
+		return new DescendingSubSetBRACES(this, true, EMPTY_KEY_VALUE, true, true, EMPTY_KEY_VALUE, true);
 	}
 	
 	protected void removeNode(Entry KEY_GENERIC_TYPE entry) {

@@ -17,8 +17,10 @@ public class TestBuilder extends TemplateProcessor
 {
 	Map<String, EnumSet<ClassType>> blocked = new HashMap<String, EnumSet<ClassType>>();
 	Map<String, String> nameRemapper = new HashMap<String, String>();
+	Map<String, String> biRequired = new HashMap<String, String>();
 	public static final ClassType[] TYPE = ClassType.values();
-	List<GlobalVariables> varibles = new ArrayList<GlobalVariables>();
+	List<GlobalVariables> variables = new ArrayList<GlobalVariables>();
+	List<GlobalVariables> biVariables = new ArrayList<>();
 	
 	public TestBuilder()
 	{
@@ -46,23 +48,36 @@ public class TestBuilder extends TemplateProcessor
 	@Override
 	protected void init()
 	{
-		varibles.clear();
+		variables.clear();
 		for(ClassType clzType : TYPE)
 		{
-			GlobalVariables type = new GlobalVariables(clzType);
-			type.createFlags();
-			type.createHelperVariables();
-			type.createVariables();
-			type.createClassTypes();
-			type.createFunctions();
-			varibles.add(type);
+			for(ClassType subType : TYPE)
+			{
+				create(clzType, subType);
+			}
 		}
+		biRequired.put("BiConsumer", "");
+		biRequired.put("Function", "2");
+		biRequired.put("BiFunction", "2");
+		nameRemapper.put("BiConsumer", "%sConsumer");
 		nameRemapper.put("IArray", "I%sArray");
 		nameRemapper.put("AbstractCollection", "Abstract%sCollection");
 		nameRemapper.put("AbstractSet", "Abstract%sSet");
 		nameRemapper.put("AbstractList", "Abstract%sList");
 		addBlockage(ClassType.OBJECT, "Consumer", "Comparator", "Stack");
 		addBlockage(ClassType.BOOLEAN, "Sets", "ArraySet", "AVLTreeSet", "RBTreeSet", "SortedSet", "NavigableSet", "OpenHashSet", "OpenCustomHashSet", "LinkedOpenHashSet", "LinkedOpenCustomHashSet");
+	}
+	
+	protected void create(ClassType mainType, ClassType subType) 
+	{
+		GlobalVariables type = new GlobalVariables(mainType, subType);
+		type.createFlags();
+		type.createHelperVariables();
+		type.createVariables();
+		type.createClassTypes();
+		type.createFunctions();
+		if(mainType == subType) variables.add(type);
+		biVariables.add(type);
 	}
 	
 	protected void addBlockage(ClassType type, String...args) {
@@ -80,9 +95,22 @@ public class TestBuilder extends TemplateProcessor
 	public void createProcesses(String name, Consumer<TemplateProcess> acceptor)
 	{
 		EnumSet<ClassType> types = blocked.get(name);
-		for(int i = 0,m=varibles.size();i<m;i++)
+		String splitter = biRequired.get(name);
+		if(splitter != null)
 		{
-			GlobalVariables type = varibles.get(i);
+			for(int i = 0,m=biVariables.size();i<m;i++)
+			{
+				GlobalVariables type = biVariables.get(i);
+				if(types == null || !types.contains(type.getType()))
+				{
+					acceptor.accept(type.createBi(nameRemapper.getOrDefault(name, "%s"+name), splitter));
+				}
+			}
+			return;
+		}
+		for(int i = 0,m=variables.size();i<m;i++)
+		{
+			GlobalVariables type = variables.get(i);
 			if(types == null || !types.contains(type.getType()))
 			{
 				acceptor.accept(type.create(nameRemapper.getOrDefault(name, "%s"+name)));

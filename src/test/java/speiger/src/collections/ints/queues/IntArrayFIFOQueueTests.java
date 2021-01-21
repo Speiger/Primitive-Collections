@@ -6,4 +6,7 @@ public class IntArrayFIFOQueueTests extends BaseIntPriorityQueueTest
 {
 	@Override
 	protected IntPriorityQueue create(int[] data){return new IntArrayFIFOQueue(data);}
+	
+	@Override
+	protected boolean isUnsortedRead() { return false; }
 }

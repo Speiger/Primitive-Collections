@@ -23,7 +23,7 @@ public class LISTS
 	 * Returns a Immutable EmptyList instance that is automatically casted.
 	 * @return an empty list
 	 */
-	public static GENERIC_BRACES EmptyList KEY_GENERIC_TYPE emptyList() {
+	public static GENERIC_KEY_BRACES EmptyList KEY_GENERIC_TYPE emptyList() {
 #if TYPE_OBJECT
 		return (EmptyList<KEY_TYPE>)EMPTY;
 #else
@@ -36,7 +36,7 @@ public class LISTS
 	 * @param l that should be made immutable/unmodifyable
 	 * @return a unmodifiable list wrapper. If the list is implementing RandomAccess that is also transferred. If the List already a unmodifyable wrapper then it just returns itself.
 	 */
-	public static GENERIC_BRACES LIST KEY_GENERIC_TYPE unmodifiableList(LIST KEY_GENERIC_TYPE l) {
+	public static GENERIC_KEY_BRACES LIST KEY_GENERIC_TYPE unmodifiableList(LIST KEY_GENERIC_TYPE l) {
 		return l instanceof UnmodifiableList ? l : l instanceof RandomAccess ? new UnmodifiableRandomListBRACES(l) : new UnmodifiableListBRACES(l);
 	}
 	
@@ -45,7 +45,7 @@ public class LISTS
 	 * @param l that should be synchronized
 	 * @return a synchronized list wrapper. If the list is implementing RandomAccess or IARRAY that is also transferred. If the List already a synchronized wrapper then it just returns itself.
 	 */
-	public static GENERIC_BRACES LIST KEY_GENERIC_TYPE synchronizedList(LIST KEY_GENERIC_TYPE l) {
+	public static GENERIC_KEY_BRACES LIST KEY_GENERIC_TYPE synchronizedList(LIST KEY_GENERIC_TYPE l) {
 		return l instanceof SynchronizedList ? l : (l instanceof IARRAY ? new SynchronizedArrayListBRACES(l) : (l instanceof RandomAccess ? new SynchronizedRandomAccessListBRACES(l) : new SynchronizedListBRACES(l)));
 	}
 	
@@ -55,7 +55,7 @@ public class LISTS
 	 * @param mutex is the controller of the synchronization block.
 	 * @return a synchronized list wrapper. If the list is implementing RandomAccess or IARRAY that is also transferred. If the List already a synchronized wrapper then it just returns itself.
 	 */
-	public static GENERIC_BRACES LIST KEY_GENERIC_TYPE synchronizedList(LIST KEY_GENERIC_TYPE l, Object mutex) {
+	public static GENERIC_KEY_BRACES LIST KEY_GENERIC_TYPE synchronizedList(LIST KEY_GENERIC_TYPE l, Object mutex) {
 		return l instanceof SynchronizedList ? l : (l instanceof IARRAY ? new SynchronizedArrayListBRACES(l, mutex) : (l instanceof RandomAccess ? new SynchronizedRandomAccessListBRACES(l, mutex) : new SynchronizedListBRACES(l, mutex)));
 	}
 	

@@ -47,7 +47,7 @@ public abstract class ABSTRACT_COLLECTION KEY_GENERIC_TYPE extends AbstractColle
 	 */
 	@Override
 	public boolean contains(KEY_TYPE e) {
-		for(ITERATOR KEY_GENERIC_TYPE iter = iterator();iter.hasNext();) { if(EQUALS(iter.NEXT(), e)) return true; }
+		for(ITERATOR KEY_GENERIC_TYPE iter = iterator();iter.hasNext();) { if(KEY_EQUALS(iter.NEXT(), e)) return true; }
 		return false;
 	}
 	
@@ -129,7 +129,7 @@ public abstract class ABSTRACT_COLLECTION KEY_GENERIC_TYPE extends AbstractColle
 	@Override
 	public boolean REMOVE_KEY(KEY_TYPE e) {
 		for(ITERATOR KEY_GENERIC_TYPE iter = iterator();iter.hasNext();) {
-			if(EQUALS(iter.NEXT(), e)) {
+			if(KEY_EQUALS(iter.NEXT(), e)) {
 				iter.remove();
 				return true;
 			}

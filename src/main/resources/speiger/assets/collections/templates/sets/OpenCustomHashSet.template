@@ -118,7 +118,7 @@ public class CUSTOM_HASH_SET KEY_GENERIC_TYPE extends ABSTRACT_SET KEY_GENERIC_T
 	
 	@Override
 	public boolean add(KEY_TYPE o) {
-		if(strategy.equals(o, EMPTY_VALUE)) {
+		if(strategy.equals(o, EMPTY_KEY_VALUE)) {
 			if(containsNull) return false;
 			containsNull = true;
 			onNodeAdded(nullIndex);
@@ -126,9 +126,9 @@ public class CUSTOM_HASH_SET KEY_GENERIC_TYPE extends ABSTRACT_SET KEY_GENERIC_T
 		else {
 			int pos = HashUtil.mix(strategy.hashCode(o)) & mask;
 			KEY_TYPE current = keys[pos];
-			if(!strategy.equals(current, EMPTY_VALUE)) {
+			if(!strategy.equals(current, EMPTY_KEY_VALUE)) {
 				if(strategy.equals(current, o)) return false;
-				while(!strategy.equals((current = keys[pos = (++pos & mask)]), EMPTY_VALUE))
+				while(!strategy.equals((current = keys[pos = (++pos & mask)]), EMPTY_KEY_VALUE))
 					if(strategy.equals(current, o)) return false;
 			}
 			keys[pos] = o;
@@ -156,26 +156,26 @@ public class CUSTOM_HASH_SET KEY_GENERIC_TYPE extends ABSTRACT_SET KEY_GENERIC_T
 #if TYPE_OBJECT
 	@Override
 	public boolean contains(Object o) {
-		if(strategy.equals((KEY_TYPE)o, EMPTY_VALUE)) return containsNull;
+		if(strategy.equals((KEY_TYPE)o, EMPTY_KEY_VALUE)) return containsNull;
 		int pos = HashUtil.mix(strategy.hashCode((KEY_TYPE)o)) & mask;
 		KEY_TYPE current = keys[pos];
-		if(strategy.equals(current, EMPTY_VALUE)) return false;
+		if(strategy.equals(current, EMPTY_KEY_VALUE)) return false;
 		if(strategy.equals(current, (KEY_TYPE)o)) return true;
 		while(true) {
-			if(strategy.equals((current = keys[pos = (++pos & mask)]), EMPTY_VALUE)) return false;
+			if(strategy.equals((current = keys[pos = (++pos & mask)]), EMPTY_KEY_VALUE)) return false;
 			else if(strategy.equals(current, (KEY_TYPE)o)) return true;
 		}
 	}
 
 	@Override
 	public boolean remove(Object o) {
-		if(strategy.equals((KEY_TYPE)o, EMPTY_VALUE)) return (containsNull ? removeNullIndex() : false);
+		if(strategy.equals((KEY_TYPE)o, EMPTY_KEY_VALUE)) return (containsNull ? removeNullIndex() : false);
 		int pos = HashUtil.mix(strategy.hashCode((KEY_TYPE)o)) & mask;
 		KEY_TYPE current = keys[pos];
-		if(strategy.equals(current, EMPTY_VALUE)) return false;
+		if(strategy.equals(current, EMPTY_KEY_VALUE)) return false;
 		if(strategy.equals(current, (KEY_TYPE)o)) return removeIndex(pos);
 		while(true) {
-			if(strategy.equals((current = keys[pos = (++pos & mask)]), EMPTY_VALUE)) return false;
+			if(strategy.equals((current = keys[pos = (++pos & mask)]), EMPTY_KEY_VALUE)) return false;
 			else if(strategy.equals(current, (KEY_TYPE)o)) return removeIndex(pos);
 		}
 	}
@@ -183,26 +183,26 @@ public class CUSTOM_HASH_SET KEY_GENERIC_TYPE extends ABSTRACT_SET KEY_GENERIC_T
 #else
 	@Override
 	public boolean contains(KEY_TYPE o) {
-		if(strategy.equals(o, EMPTY_VALUE)) return containsNull;
+		if(strategy.equals(o, EMPTY_KEY_VALUE)) return containsNull;
 		int pos = HashUtil.mix(strategy.hashCode(o)) & mask;
 		KEY_TYPE current = keys[pos];
-		if(strategy.equals(current, EMPTY_VALUE)) return false;
+		if(strategy.equals(current, EMPTY_KEY_VALUE)) return false;
 		if(strategy.equals(current, o)) return true;
 		while(true) {
-			if(strategy.equals((current = keys[pos = (++pos & mask)]), EMPTY_VALUE)) return false;
+			if(strategy.equals((current = keys[pos = (++pos & mask)]), EMPTY_KEY_VALUE)) return false;
 			else if(strategy.equals(current, o)) return true;
 		}
 	}
 	
 	@Override
 	public boolean remove(KEY_TYPE o) {
-		if(strategy.equals(o, EMPTY_VALUE)) return (containsNull ? removeNullIndex() : false);
+		if(strategy.equals(o, EMPTY_KEY_VALUE)) return (containsNull ? removeNullIndex() : false);
 		int pos = HashUtil.mix(strategy.hashCode(o)) & mask;
 		KEY_TYPE current = keys[pos];
-		if(strategy.equals(current, EMPTY_VALUE)) return false;
+		if(strategy.equals(current, EMPTY_KEY_VALUE)) return false;
 		if(strategy.equals(current, o)) return removeIndex(pos);
 		while(true) {
-			if(strategy.equals((current = keys[pos = (++pos & mask)]), EMPTY_VALUE)) return false;
+			if(strategy.equals((current = keys[pos = (++pos & mask)]), EMPTY_KEY_VALUE)) return false;
 			else if(strategy.equals(current, o)) return removeIndex(pos);
 		}
 	}
@@ -234,7 +234,7 @@ public class CUSTOM_HASH_SET KEY_GENERIC_TYPE extends ABSTRACT_SET KEY_GENERIC_T
 	
 	protected boolean removeNullIndex() {
 		containsNull = false;
-		keys[nullIndex] = EMPTY_VALUE;
+		keys[nullIndex] = EMPTY_KEY_VALUE;
 		size--;
 		onNodeRemoved(nullIndex);
 		if(nullIndex > minCapacity && size < maxFill / 4 && nullIndex > HashUtil.DEFAULT_MIN_CAPACITY) rehash(nullIndex / 2);
@@ -259,8 +259,8 @@ public class CUSTOM_HASH_SET KEY_GENERIC_TYPE extends ABSTRACT_SET KEY_GENERIC_T
 		while(true) {
 			startPos = ((last = startPos) + 1) & mask;
 			while(true){
-				if(strategy.equals((current = keys[startPos]), EMPTY_VALUE)) {
-					keys[last] = EMPTY_VALUE;
+				if(strategy.equals((current = keys[startPos]), EMPTY_KEY_VALUE)) {
+					keys[last] = EMPTY_KEY_VALUE;
 					return;
 				}
 				slot = HashUtil.mix(strategy.hashCode(current)) & mask;
@@ -276,9 +276,9 @@ public class CUSTOM_HASH_SET KEY_GENERIC_TYPE extends ABSTRACT_SET KEY_GENERIC_T
 		int newMask = newSize - 1;
 		KEY_TYPE[] newKeys = NEW_KEY_ARRAY(newSize + 1);
 		for(int i = nullIndex, pos = 0, j = (size - (containsNull ? 1 : 0));j-- != 0;) {
-			while(strategy.equals(keys[--i], EMPTY_VALUE));
-			if(!strategy.equals(newKeys[pos = HashUtil.mix(TO_HASH(keys[i])) & newMask], EMPTY_VALUE))
-				while(!strategy.equals(newKeys[pos = (++pos & newMask)], EMPTY_VALUE));
+			while(strategy.equals(keys[--i], EMPTY_KEY_VALUE));
+			if(!strategy.equals(newKeys[pos = HashUtil.mix(KEY_TO_HASH(keys[i])) & newMask], EMPTY_KEY_VALUE))
+				while(!strategy.equals(newKeys[pos = (++pos & newMask)], EMPTY_KEY_VALUE));
 			newKeys[pos] = keys[i];
 		}
 		nullIndex = newSize;
@@ -297,7 +297,7 @@ public class CUSTOM_HASH_SET KEY_GENERIC_TYPE extends ABSTRACT_SET KEY_GENERIC_T
 		if(size == 0) return;
 		size = 0;
 		containsNull = false;
-		Arrays.fill(keys, EMPTY_VALUE);
+		Arrays.fill(keys, EMPTY_KEY_VALUE);
 	}
 	
 	@Override
@@ -326,7 +326,7 @@ public class CUSTOM_HASH_SET KEY_GENERIC_TYPE extends ABSTRACT_SET KEY_GENERIC_T
 							nextIndex = -pos - 1;
 							break;
 						}
-						if(EQUALS_NOT_NULL(keys[pos])){
+						if(KEY_EQUALS_NOT_NULL(keys[pos])){
 							nextIndex = pos;
 							break;
 						}
@@ -355,7 +355,7 @@ public class CUSTOM_HASH_SET KEY_GENERIC_TYPE extends ABSTRACT_SET KEY_GENERIC_T
 			if(lastReturned == -1) throw new IllegalStateException();
 			if(lastReturned == nullIndex) {
 				containsNull = false;
-				keys[nullIndex] = EMPTY_VALUE;
+				keys[nullIndex] = EMPTY_KEY_VALUE;
 			}
 			else if(pos >= 0) shiftKeys(pos);
 			else {
@@ -372,8 +372,8 @@ public class CUSTOM_HASH_SET KEY_GENERIC_TYPE extends ABSTRACT_SET KEY_GENERIC_T
 			while(true) {
 				startPos = ((last = startPos) + 1) & mask;
 				while(true){
-					if(strategy.equals((current = keys[startPos]), EMPTY_VALUE)) {
-						keys[last] = EMPTY_VALUE;
+					if(strategy.equals((current = keys[startPos]), EMPTY_KEY_VALUE)) {
+						keys[last] = EMPTY_KEY_VALUE;
 						return;
 					}
 					slot = HashUtil.mix(strategy.hashCode(current)) & mask;

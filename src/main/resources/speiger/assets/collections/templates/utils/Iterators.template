@@ -16,7 +16,7 @@ public class ITERATORS
 	 * Returns a Immutable EmptyIterator instance that is automatically casted.
 	 * @return an empty iterator
 	 */
-	public static GENERIC_BRACES EmptyIterator KEY_GENERIC_TYPE emptyIterator() {
+	public static GENERIC_KEY_BRACES EmptyIterator KEY_GENERIC_TYPE emptyIterator() {
 #if TYPE_OBJECT
 		return (EmptyIterator<KEY_TYPE>)EMPTY;
 #else
@@ -29,11 +29,11 @@ public class ITERATORS
 	 * @param l that should be made immutable/unmodifyable
 	 * @return a unmodifiable iterator wrapper. If the Iterator already a unmodifyable wrapper then it just returns itself.
 	 */
-	public static GENERIC_BRACES ITERATOR KEY_GENERIC_TYPE unmodifiable(ITERATOR KEY_GENERIC_TYPE iterator) {
+	public static GENERIC_KEY_BRACES ITERATOR KEY_GENERIC_TYPE unmodifiable(ITERATOR KEY_GENERIC_TYPE iterator) {
 		return iterator instanceof UnmodifiableIterator ? iterator : new UnmodifiableIteratorBRACES(iterator);
 	}
 	
-	public static GENERIC_BRACES BI_ITERATOR KEY_GENERIC_TYPE unmodifiable(BI_ITERATOR KEY_GENERIC_TYPE iterator) {
+	public static GENERIC_KEY_BRACES BI_ITERATOR KEY_GENERIC_TYPE unmodifiable(BI_ITERATOR KEY_GENERIC_TYPE iterator) {
 		return iterator instanceof UnmodifiableBiIterator ? iterator : new UnmodifiableBiIteratorBRACES(iterator);
 	}
 	
@@ -42,7 +42,7 @@ public class ITERATORS
 	 * @param l that should be made immutable/unmodifyable
 	 * @return a unmodifiable listiterator wrapper. If the ListIterator already a unmodifyable wrapper then it just returns itself.
 	 */
-	public static GENERIC_BRACES LIST_ITERATOR KEY_GENERIC_TYPE unmodifiable(LIST_ITERATOR KEY_GENERIC_TYPE iterator) {
+	public static GENERIC_KEY_BRACES LIST_ITERATOR KEY_GENERIC_TYPE unmodifiable(LIST_ITERATOR KEY_GENERIC_TYPE iterator) {
 		return iterator instanceof UnmodifiableListIterator ? iterator : new UnmodifiableListIteratorBRACES(iterator);
 	}
 	
@@ -57,7 +57,7 @@ public class ITERATORS
 	 * @param a the array that should be wrapped
 	 * @return a Iterator that is wrapping a array.
 	 */
-	public static GENERIC_BRACES ArrayIterator KEY_GENERIC_TYPE wrap(KEY_TYPE[] a) {
+	public static GENERIC_KEY_BRACES ArrayIterator KEY_GENERIC_TYPE wrap(KEY_TYPE[] a) {
 		return wrap(a, 0, a.length);
 	}
 	
@@ -68,7 +68,7 @@ public class ITERATORS
 	 * @param end the index that should be ended.
 	 * @return a Iterator that is wrapping a array.
 	 */
-	public static GENERIC_BRACES ArrayIterator KEY_GENERIC_TYPE wrap(KEY_TYPE[] a, int start, int end) {
+	public static GENERIC_KEY_BRACES ArrayIterator KEY_GENERIC_TYPE wrap(KEY_TYPE[] a, int start, int end) {
 		return new ArrayIteratorBRACES(a, start, end);
 	}
 	
@@ -78,7 +78,7 @@ public class ITERATORS
 	 * @param i the source iterator
 	 * @return the amount of elements that were inserted into the array.
 	 */
-	public static GENERIC_BRACES int unwrap(KEY_TYPE[] a, Iterator<? extends CLASS_TYPE> i) {
+	public static GENERIC_KEY_BRACES int unwrap(KEY_TYPE[] a, Iterator<? extends CLASS_TYPE> i) {
 		return unwrap(a, i, 0, a.length);
 	}
 	
@@ -89,7 +89,7 @@ public class ITERATORS
 	 * @param offset the array offset where the start should be
 	 * @return the amount of elements that were inserted into the array.
 	 */
-	public static GENERIC_BRACES int unwrap(KEY_TYPE[] a, Iterator<? extends CLASS_TYPE> i, int offset) {
+	public static GENERIC_KEY_BRACES int unwrap(KEY_TYPE[] a, Iterator<? extends CLASS_TYPE> i, int offset) {
 		return unwrap(a, i, offset, a.length - offset);
 	}
 	
@@ -102,7 +102,7 @@ public class ITERATORS
 	 * @return the amount of elements that were inserted into the array.
 	 * @throws IllegalStateException if max is smaller the 0 or if the maximum index is larger then the array
 	 */
-	public static GENERIC_BRACES int unwrap(KEY_TYPE[] a, Iterator<? extends CLASS_TYPE> i, int offset, int max) {
+	public static GENERIC_KEY_BRACES int unwrap(KEY_TYPE[] a, Iterator<? extends CLASS_TYPE> i, int offset, int max) {
 		if(max < 0) throw new IllegalStateException("The max size is smaller then 0");
 		if(offset + max > a.length) throw new IllegalStateException("largest array index exceeds array size");
 		int index = 0;
@@ -117,7 +117,7 @@ public class ITERATORS
 	 * @param i the source iterator
 	 * @return the amount of elements that were inserted into the array.
 	 */
-	public static GENERIC_BRACES int unwrap(KEY_TYPE[] a, ITERATOR KEY_GENERIC_TYPE i) {
+	public static GENERIC_KEY_BRACES int unwrap(KEY_TYPE[] a, ITERATOR KEY_GENERIC_TYPE i) {
 		return unwrap(a, i, 0, a.length);
 	}
 	
@@ -129,7 +129,7 @@ public class ITERATORS
 	 * @param offset the array offset where the start should be
 	 * @return the amount of elements that were inserted into the array.
 	 */
-	public static GENERIC_BRACES int unwrap(KEY_TYPE[] a, ITERATOR KEY_GENERIC_TYPE i, int offset) {
+	public static GENERIC_KEY_BRACES int unwrap(KEY_TYPE[] a, ITERATOR KEY_GENERIC_TYPE i, int offset) {
 		return unwrap(a, i, offset, a.length - offset);
 	}
 	
@@ -143,7 +143,7 @@ public class ITERATORS
 	 * @return the amount of elements that were inserted into the array.
 	 * @throws IllegalStateException if max is smaller the 0 or if the maximum index is larger then the array
 	 */
-	public static GENERIC_BRACES int unwrap(KEY_TYPE[] a, ITERATOR KEY_GENERIC_TYPE i, int offset, int max) {
+	public static GENERIC_KEY_BRACES int unwrap(KEY_TYPE[] a, ITERATOR KEY_GENERIC_TYPE i, int offset, int max) {
 		if(max < 0) throw new IllegalStateException("The max size is smaller then 0");
 		if(offset + max > a.length) throw new IllegalStateException("largest array index exceeds array size");
 		int index = 0;
@@ -159,7 +159,7 @@ public class ITERATORS
 	 * @param i the source iterator
 	 * @return the amount of elements that were inserted into the array.
 	 */
-	public static GENERIC_BRACES int unwrap(CLASS_TYPE[] a, ITERATOR KEY_GENERIC_TYPE i) {
+	public static GENERIC_KEY_BRACES int unwrap(CLASS_TYPE[] a, ITERATOR KEY_GENERIC_TYPE i) {
 		return unwrap(a, i, 0, a.length);
 	}
 	
@@ -171,7 +171,7 @@ public class ITERATORS
 	 * @param offset the array offset where the start should be
 	 * @return the amount of elements that were inserted into the array.
 	 */
-	public static GENERIC_BRACES int unwrap(CLASS_TYPE[] a, ITERATOR KEY_GENERIC_TYPE i, int offset) {
+	public static GENERIC_KEY_BRACES int unwrap(CLASS_TYPE[] a, ITERATOR KEY_GENERIC_TYPE i, int offset) {
 		return unwrap(a, i, offset, a.length - offset);
 	}
 	
@@ -185,7 +185,7 @@ public class ITERATORS
 	 * @return the amount of elements that were inserted into the array.
 	 * @throws IllegalStateException if max is smaller the 0 or if the maximum index is larger then the array
 	 */
-	public static GENERIC_BRACES int unwrap(CLASS_TYPE[] a, ITERATOR KEY_GENERIC_TYPE i, int offset, int max) {
+	public static GENERIC_KEY_BRACES int unwrap(CLASS_TYPE[] a, ITERATOR KEY_GENERIC_TYPE i, int offset, int max) {
 		if(max < 0) throw new IllegalStateException("The max size is smaller then 0");
 		if(offset + max > a.length) throw new IllegalStateException("largest array index exceeds array size");
 		int index = 0;
@@ -324,7 +324,7 @@ public class ITERATORS
 	
 		@Override
 		public KEY_TYPE NEXT() {
-			return EMPTY_VALUE;
+			return EMPTY_KEY_VALUE;
 		}
 
 		@Override
@@ -334,7 +334,7 @@ public class ITERATORS
 		
 		@Override
 		public KEY_TYPE PREVIOUS() {
-			return EMPTY_VALUE;
+			return EMPTY_KEY_VALUE;
 		}
 		
 		@Override

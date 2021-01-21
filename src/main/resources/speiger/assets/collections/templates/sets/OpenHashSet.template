@@ -111,18 +111,18 @@ public class HASH_SET KEY_GENERIC_TYPE extends ABSTRACT_SET KEY_GENERIC_TYPE imp
 #endif
 	@Override
 	public boolean add(KEY_TYPE o) {
-		if(EQUALS_NULL(o)) {
+		if(KEY_EQUALS_NULL(o)) {
 			if(containsNull) return false;
 			containsNull = true;
 			onNodeAdded(nullIndex);
 		}
 		else {
-			int pos = HashUtil.mix(TO_HASH(o)) & mask;
+			int pos = HashUtil.mix(KEY_TO_HASH(o)) & mask;
 			KEY_TYPE current = keys[pos];
-			if(EQUALS_NOT_NULL(current)) {
-				if(EQUALS(current, o)) return false;
-				while(EQUALS_NOT_NULL((current = keys[pos = (++pos & mask)])))
-					if(EQUALS(current, o)) return false;
+			if(KEY_EQUALS_NOT_NULL(current)) {
+				if(KEY_EQUALS(current, o)) return false;
+				while(KEY_EQUALS_NOT_NULL((current = keys[pos = (++pos & mask)])))
+					if(KEY_EQUALS(current, o)) return false;
 			}
 			keys[pos] = o;
 			onNodeAdded(pos);
@@ -151,10 +151,10 @@ public class HASH_SET KEY_GENERIC_TYPE extends ABSTRACT_SET KEY_GENERIC_TYPE imp
 		if(o == null) return containsNull;
 		int pos = HashUtil.mix(o.hashCode()) & mask;
 		KEY_TYPE current = keys[pos];
-		if(EQUALS_NULL(current)) return false;
+		if(KEY_EQUALS_NULL(current)) return false;
 		if(EQUALS_KEY_TYPE(current, o)) return true;
 		while(true) {
-			if(EQUALS_NULL((current = keys[pos = (++pos & mask)]))) return false;
+			if(KEY_EQUALS_NULL((current = keys[pos = (++pos & mask)]))) return false;
 			else if(EQUALS_KEY_TYPE(current, o)) return true;
 		}
 	}
@@ -164,10 +164,10 @@ public class HASH_SET KEY_GENERIC_TYPE extends ABSTRACT_SET KEY_GENERIC_TYPE imp
 		if(o == null) return (containsNull ? removeNullIndex() : false);
 		int pos = HashUtil.mix(o.hashCode()) & mask;
 		KEY_TYPE current = keys[pos];
-		if(EQUALS_NULL(current)) return false;
+		if(KEY_EQUALS_NULL(current)) return false;
 		if(EQUALS_KEY_TYPE(current, o)) return removeIndex(pos);
 		while(true) {
-			if(EQUALS_NULL((current = keys[pos = (++pos & mask)]))) return false;
+			if(KEY_EQUALS_NULL((current = keys[pos = (++pos & mask)]))) return false;
 			else if(EQUALS_KEY_TYPE(current, o)) return removeIndex(pos);
 		}
 	}
@@ -175,27 +175,27 @@ public class HASH_SET KEY_GENERIC_TYPE extends ABSTRACT_SET KEY_GENERIC_TYPE imp
 #if !TYPE_OBJECT
 	@Override
 	public boolean contains(KEY_TYPE o) {
-		if(EQUALS_NULL(o)) return containsNull;
-		int pos = HashUtil.mix(TO_HASH(o)) & mask;
+		if(KEY_EQUALS_NULL(o)) return containsNull;
+		int pos = HashUtil.mix(KEY_TO_HASH(o)) & mask;
 		KEY_TYPE current = keys[pos];
-		if(EQUALS_NULL(current)) return false;
-		if(EQUALS(current, o)) return true;
+		if(KEY_EQUALS_NULL(current)) return false;
+		if(KEY_EQUALS(current, o)) return true;
 		while(true) {
-			if(EQUALS_NULL((current = keys[pos = (++pos & mask)]))) return false;
-			else if(EQUALS(current, o)) return true;
+			if(KEY_EQUALS_NULL((current = keys[pos = (++pos & mask)]))) return false;
+			else if(KEY_EQUALS(current, o)) return true;
 		}
 	}
 	
 	@Override
 	public boolean remove(KEY_TYPE o) {
-		if(EQUALS_NULL(o)) return (containsNull ? removeNullIndex() : false);
-		int pos = HashUtil.mix(TO_HASH(o)) & mask;
+		if(KEY_EQUALS_NULL(o)) return (containsNull ? removeNullIndex() : false);
+		int pos = HashUtil.mix(KEY_TO_HASH(o)) & mask;
 		KEY_TYPE current = keys[pos];
-		if(EQUALS_NULL(current)) return false;
-		if(EQUALS(current, o)) return removeIndex(pos);
+		if(KEY_EQUALS_NULL(current)) return false;
+		if(KEY_EQUALS(current, o)) return removeIndex(pos);
 		while(true) {
-			if(EQUALS_NULL((current = keys[pos = (++pos & mask)]))) return false;
-			else if(EQUALS(current, o)) return removeIndex(pos);
+			if(KEY_EQUALS_NULL((current = keys[pos = (++pos & mask)]))) return false;
+			else if(KEY_EQUALS(current, o)) return removeIndex(pos);
 		}
 	}
 	
@@ -226,7 +226,7 @@ public class HASH_SET KEY_GENERIC_TYPE extends ABSTRACT_SET KEY_GENERIC_TYPE imp
 	
 	protected boolean removeNullIndex() {
 		containsNull = false;
-		keys[nullIndex] = EMPTY_VALUE;
+		keys[nullIndex] = EMPTY_KEY_VALUE;
 		size--;
 		onNodeRemoved(nullIndex);
 		if(nullIndex > minCapacity && size < maxFill / 4 && nullIndex > HashUtil.DEFAULT_MIN_CAPACITY) rehash(nullIndex / 2);
@@ -251,11 +251,11 @@ public class HASH_SET KEY_GENERIC_TYPE extends ABSTRACT_SET KEY_GENERIC_TYPE imp
 		while(true) {
 			startPos = ((last = startPos) + 1) & mask;
 			while(true){
-				if(EQUALS_NULL((current = keys[startPos]))) {
-					keys[last] = EMPTY_VALUE;
+				if(KEY_EQUALS_NULL((current = keys[startPos]))) {
+					keys[last] = EMPTY_KEY_VALUE;
 					return;
 				}
-				slot = HashUtil.mix(TO_HASH(current)) & mask;
+				slot = HashUtil.mix(KEY_TO_HASH(current)) & mask;
 				if(last <= startPos ? (last >= slot || slot > startPos) : (last >= slot && slot > startPos)) break;
 				startPos = ++startPos & mask;
 			}
@@ -268,9 +268,9 @@ public class HASH_SET KEY_GENERIC_TYPE extends ABSTRACT_SET KEY_GENERIC_TYPE imp
 		int newMask = newSize - 1;
 		KEY_TYPE[] newKeys = NEW_KEY_ARRAY(newSize + 1);
 		for(int i = nullIndex, pos = 0, j = (size - (containsNull ? 1 : 0));j-- != 0;) {
-			while(EQUALS_NULL(keys[--i]));
-			if(EQUALS_NOT_NULL(newKeys[pos = HashUtil.mix(TO_HASH(keys[i])) & newMask]))
-				while(EQUALS_NOT_NULL(newKeys[pos = (++pos & newMask)]));
+			while(KEY_EQUALS_NULL(keys[--i]));
+			if(KEY_EQUALS_NOT_NULL(newKeys[pos = HashUtil.mix(KEY_TO_HASH(keys[i])) & newMask]))
+				while(KEY_EQUALS_NOT_NULL(newKeys[pos = (++pos & newMask)]));
 			newKeys[pos] = keys[i];
 		}
 		nullIndex = newSize;
@@ -289,7 +289,7 @@ public class HASH_SET KEY_GENERIC_TYPE extends ABSTRACT_SET KEY_GENERIC_TYPE imp
 		if(size == 0) return;
 		size = 0;
 		containsNull = false;
-		Arrays.fill(keys, EMPTY_VALUE);
+		Arrays.fill(keys, EMPTY_KEY_VALUE);
 	}
 	
 	@Override
@@ -319,7 +319,7 @@ public class HASH_SET KEY_GENERIC_TYPE extends ABSTRACT_SET KEY_GENERIC_TYPE imp
 							nextIndex = -pos - 1;
 							break;
 						}
-						if(EQUALS_NOT_NULL(keys[pos])){
+						if(KEY_EQUALS_NOT_NULL(keys[pos])){
 							nextIndex = pos;
 							break;
 						}
@@ -348,7 +348,7 @@ public class HASH_SET KEY_GENERIC_TYPE extends ABSTRACT_SET KEY_GENERIC_TYPE imp
 			if(lastReturned == -1) throw new IllegalStateException();
 			if(lastReturned == nullIndex) {
 				containsNull = false;
-				keys[nullIndex] = EMPTY_VALUE;
+				keys[nullIndex] = EMPTY_KEY_VALUE;
 			}
 			else if(pos >= 0) shiftKeys(pos);
 			else {
@@ -365,11 +365,11 @@ public class HASH_SET KEY_GENERIC_TYPE extends ABSTRACT_SET KEY_GENERIC_TYPE imp
 			while(true) {
 				startPos = ((last = startPos) + 1) & mask;
 				while(true){
-					if(EQUALS_NULL((current = keys[startPos]))) {
-						keys[last] = EMPTY_VALUE;
+					if(KEY_EQUALS_NULL((current = keys[startPos]))) {
+						keys[last] = EMPTY_KEY_VALUE;
 						return;
 					}
-					slot = HashUtil.mix(TO_HASH(current)) & mask;
+					slot = HashUtil.mix(KEY_TO_HASH(current)) & mask;
 					if(last <= startPos ? (last >= slot || slot > startPos) : (last >= slot && slot > startPos)) break;
 					startPos = ++startPos & mask;
 				}

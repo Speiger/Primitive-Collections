@@ -68,11 +68,11 @@ public class HEAP_PRIORITY_QUEUE KEY_GENERIC_TYPE implements PRIORITY_QUEUE KEY_
 		ARRAYS.heapify(array, size, comp);
 	}
 	
-	public static GENERIC_BRACES HEAP_PRIORITY_QUEUE KEY_GENERIC_TYPE wrap(KEY_TYPE[] array) { 
+	public static GENERIC_KEY_BRACES HEAP_PRIORITY_QUEUE KEY_GENERIC_TYPE wrap(KEY_TYPE[] array) { 
 		return wrap(array, array.length);
 	}
 	
-	public static GENERIC_BRACES HEAP_PRIORITY_QUEUE KEY_GENERIC_TYPE wrap(KEY_TYPE[] array, int size) {
+	public static GENERIC_KEY_BRACES HEAP_PRIORITY_QUEUE KEY_GENERIC_TYPE wrap(KEY_TYPE[] array, int size) {
 		HEAP_PRIORITY_QUEUE KEY_GENERIC_TYPE queue = new HEAP_PRIORITY_QUEUEBRACES();
 		queue.array = array;
 		queue.size = size;
@@ -80,11 +80,11 @@ public class HEAP_PRIORITY_QUEUE KEY_GENERIC_TYPE implements PRIORITY_QUEUE KEY_
 		return queue;
 	}
 	
-	public static GENERIC_BRACES HEAP_PRIORITY_QUEUE KEY_GENERIC_TYPE wrap(KEY_TYPE[] array, COMPARATOR KEY_SUPER_GENERIC_TYPE comp) {
+	public static GENERIC_KEY_BRACES HEAP_PRIORITY_QUEUE KEY_GENERIC_TYPE wrap(KEY_TYPE[] array, COMPARATOR KEY_SUPER_GENERIC_TYPE comp) {
 		return wrap(array, array.length, comp);
 	}
 	
-	public static GENERIC_BRACES HEAP_PRIORITY_QUEUE KEY_GENERIC_TYPE wrap(KEY_TYPE[] array, int size, COMPARATOR KEY_SUPER_GENERIC_TYPE comp) {
+	public static GENERIC_KEY_BRACES HEAP_PRIORITY_QUEUE KEY_GENERIC_TYPE wrap(KEY_TYPE[] array, int size, COMPARATOR KEY_SUPER_GENERIC_TYPE comp) {
 		HEAP_PRIORITY_QUEUE KEY_GENERIC_TYPE queue = new HEAP_PRIORITY_QUEUEBRACES(comp);
 		queue.array = array;
 		queue.size = size;
@@ -138,14 +138,14 @@ public class HEAP_PRIORITY_QUEUE KEY_GENERIC_TYPE implements PRIORITY_QUEUE KEY_
 	@Override
 	public boolean REMOVE(KEY_TYPE e) {
 		for(int i = 0;i<size;i++)
-			if(EQUALS(e, array[i])) return removeIndex(i);
+			if(KEY_EQUALS(e, array[i])) return removeIndex(i);
 		return false;
 	}
 	
 	@Override
 	public boolean REMOVE_LAST(KEY_TYPE e) {
 		for(int i = size-1;i>=0;i--)
-			if(EQUALS(e, array[i])) return removeIndex(i);
+			if(KEY_EQUALS(e, array[i])) return removeIndex(i);
 		return false;
 	}
 	

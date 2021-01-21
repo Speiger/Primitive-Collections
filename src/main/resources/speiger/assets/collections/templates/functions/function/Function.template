@@ -1,0 +1,59 @@
+package speiger.src.collections.PACKAGE.functions.function;
+
+#if JDK_FUNCTION && VALUE_BOOLEAN
+import java.util.Objects;
+#endif
+
+@FunctionalInterface
+#if JDK_FUNCTION
+public interface FUNCTION KEY_VALUE_GENERIC_TYPE extends JAVA_FUNCTION KEY_VALUE_GENERIC_TYPE
+#else
+public interface FUNCTION KEY_VALUE_GENERIC_TYPE
+#endif
+{
+	public VALUE_TYPE GET_VALUE(KEY_TYPE k);
+#if JDK_FUNCTION
+#if VALUE_BOOLEAN
+	
+	@Override
+	public default VALUE_TYPE test(KEY_TYPE k) { return GET_VALUE(k); }
+	
+	public default FUNCTION KEY_VALUE_GENERIC_TYPE andType(FUNCTION KEY_VALUE_GENERIC_TYPE other) {
+        Objects.requireNonNull(other);
+        return T -> GET_VALUE(T) && other.GET_VALUE(T);
+	}
+	
+	@Override
+	@Deprecated
+	public default FUNCTION KEY_VALUE_GENERIC_TYPE and(JAVA_FUNCTION KEY_VALUE_SUPER_GENERIC_TYPE other) {
+        Objects.requireNonNull(other);
+        return T -> GET_VALUE(T) && other.test(T);
+	}
+	
+	@Override
+	public default FUNCTION KEY_VALUE_GENERIC_TYPE negate() {
+		return T -> !GET_VALUE(T);
+	}
+	
+	public default FUNCTION KEY_VALUE_GENERIC_TYPE orType(FUNCTION KEY_VALUE_GENERIC_TYPE other) {
+        Objects.requireNonNull(other);
+        return T -> GET_VALUE(T) || other.GET_VALUE(T);
+	}
+	
+	@Override
+	@Deprecated
+	public default FUNCTION KEY_VALUE_GENERIC_TYPE or(JAVA_FUNCTION KEY_VALUE_SUPER_GENERIC_TYPE other) {
+        Objects.requireNonNull(other);
+        return T -> GET_VALUE(T) || other.test(T);
+	}
+#else if VALUE_OBJECT
+	
+	@Override
+	public default VALUE_TYPE apply(KEY_TYPE k) { return GET_VALUE(k); }
+#else
+	
+	@Override
+	public default VALUE_TYPE APPLY_VALUE(KEY_TYPE k) { return GET_VALUE(k); }
+#endif
+#endif
+}

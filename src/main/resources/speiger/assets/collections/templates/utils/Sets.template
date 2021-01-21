@@ -20,7 +20,7 @@ public class SETS
 {
 	public static final SET NO_GENERIC_TYPE EMPTY = new EmptySetBRACES();
 	
-	public static GENERIC_BRACES SET KEY_GENERIC_TYPE empty() {
+	public static GENERIC_KEY_BRACES SET KEY_GENERIC_TYPE empty() {
 #if TYPE_OBJECT
 		return (SET<KEY_TYPE>)EMPTY;
 #else
@@ -28,39 +28,39 @@ public class SETS
 #endif
 	}
 	
-	public static GENERIC_BRACES SET KEY_GENERIC_TYPE synchronizedSet(SET KEY_GENERIC_TYPE s) {
+	public static GENERIC_KEY_BRACES SET KEY_GENERIC_TYPE synchronizedSet(SET KEY_GENERIC_TYPE s) {
 		return s instanceof SynchronizedSet ? s : (s instanceof ITrimmable ? new SynchronizedTrimSetBRACES(s) : new SynchronizedSetBRACES(s));
 	}
 	
-	public static GENERIC_BRACES SET KEY_GENERIC_TYPE synchronizedSet(SET KEY_GENERIC_TYPE s, Object mutex) {
+	public static GENERIC_KEY_BRACES SET KEY_GENERIC_TYPE synchronizedSet(SET KEY_GENERIC_TYPE s, Object mutex) {
 		return s instanceof SynchronizedSet ? s : (s instanceof ITrimmable ? new SynchronizedTrimSetBRACES(s, mutex) : new SynchronizedSetBRACES(s, mutex));
 	}
 	
-	public static GENERIC_BRACES SORTED_SET KEY_GENERIC_TYPE synchronizedSet(SORTED_SET KEY_GENERIC_TYPE s) {
+	public static GENERIC_KEY_BRACES SORTED_SET KEY_GENERIC_TYPE synchronizedSet(SORTED_SET KEY_GENERIC_TYPE s) {
 		return s instanceof SynchronizedSortedSet ? s : (s instanceof ITrimmable ? new SynchronizedSortedTrimSetBRACES(s) : new SynchronizedSortedSetBRACES(s));
 	}
 	
-	public static GENERIC_BRACES SORTED_SET KEY_GENERIC_TYPE synchronizedSet(SORTED_SET KEY_GENERIC_TYPE s, Object mutex) {
+	public static GENERIC_KEY_BRACES SORTED_SET KEY_GENERIC_TYPE synchronizedSet(SORTED_SET KEY_GENERIC_TYPE s, Object mutex) {
 		return s instanceof SynchronizedSortedSet ? s : (s instanceof ITrimmable ? new SynchronizedSortedTrimSetBRACES(s, mutex) : new SynchronizedSortedSetBRACES(s, mutex));
 	}
 	
-	public static GENERIC_BRACES NAVIGABLE_SET KEY_GENERIC_TYPE synchronizedSet(NAVIGABLE_SET KEY_GENERIC_TYPE s) {
+	public static GENERIC_KEY_BRACES NAVIGABLE_SET KEY_GENERIC_TYPE synchronizedSet(NAVIGABLE_SET KEY_GENERIC_TYPE s) {
 		return s instanceof SynchronizedNavigableSet ? s : (s instanceof ITrimmable ? new SynchronizedNavigableTrimSetBRACES(s) : new SynchronizedNavigableSetBRACES(s));
 	}
 	
-	public static GENERIC_BRACES NAVIGABLE_SET KEY_GENERIC_TYPE synchronizedSet(NAVIGABLE_SET KEY_GENERIC_TYPE s, Object mutex) {
+	public static GENERIC_KEY_BRACES NAVIGABLE_SET KEY_GENERIC_TYPE synchronizedSet(NAVIGABLE_SET KEY_GENERIC_TYPE s, Object mutex) {
 		return s instanceof SynchronizedNavigableSet ? s : (s instanceof ITrimmable ? new SynchronizedNavigableTrimSetBRACES(s, mutex) : new SynchronizedNavigableSetBRACES(s, mutex));
 	}
 	
-	public static GENERIC_BRACES SET KEY_GENERIC_TYPE unmodifiable(SET KEY_GENERIC_TYPE s) {
+	public static GENERIC_KEY_BRACES SET KEY_GENERIC_TYPE unmodifiable(SET KEY_GENERIC_TYPE s) {
 		return s instanceof SynchronizedSet ? s : new SynchronizedSetBRACES(s);
 	}
 	
-	public static GENERIC_BRACES SORTED_SET KEY_GENERIC_TYPE unmodifiable(SORTED_SET KEY_GENERIC_TYPE s) {
+	public static GENERIC_KEY_BRACES SORTED_SET KEY_GENERIC_TYPE unmodifiable(SORTED_SET KEY_GENERIC_TYPE s) {
 		return s instanceof SynchronizedSortedSet ? s : new SynchronizedSortedSetBRACES(s);
 	}
 	
-	public static GENERIC_BRACES NAVIGABLE_SET KEY_GENERIC_TYPE unmodifiable(NAVIGABLE_SET KEY_GENERIC_TYPE s) {
+	public static GENERIC_KEY_BRACES NAVIGABLE_SET KEY_GENERIC_TYPE unmodifiable(NAVIGABLE_SET KEY_GENERIC_TYPE s) {
 		return s instanceof UnmodifiableNavigableSet ? s : new UnmodifiableNavigableSetBRACES(s);
 	}
 	

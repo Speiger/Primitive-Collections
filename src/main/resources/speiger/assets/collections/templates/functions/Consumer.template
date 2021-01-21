@@ -2,21 +2,13 @@ package speiger.src.collections.PACKAGE.functions;
 
 import java.util.Objects;
 import java.util.function.Consumer;
-#if !TYPE_BOOLEAN
-#if !JDK_CONSUMER
-import speiger.src.collections.utils.SanityChecks;
-
-#endif
-
 /**
  * Type-Specific Consumer interface that reduces (un)boxing and allows to merge other consumer types into this interface
  */
+@FunctionalInterface
+#if JDK_TYPE && !TYPE_BOOLEAN
 public interface CONSUMER extends Consumer<CLASS_TYPE>, JAVA_CONSUMER
 #else
-
-/**
- * Type-Specific Consumer interface that reduces (un)boxing and allows to merge other consumer types into this interface
- */
 public interface CONSUMER extends Consumer<CLASS_TYPE>
 #endif
 {
@@ -28,16 +20,6 @@ public interface CONSUMER extends Consumer<CLASS_TYPE>
      */
 	void accept(KEY_TYPE t);
 	
-#if !JDK_CONSUMER
- 	/** {@inheritDoc}
- 	 * <p>This default implementation delegates to the corresponding type-specific function.
- 	 * @deprecated Please use the corresponding type-specific function instead. 
- 	 */
-	@Override
-	@Deprecated
-	default void accept(JAVA_TYPE t) { accept(SanityChecks.SANITY_CAST(t)); }
-	
-#endif
 	public default CONSUMER andThen(CONSUMER after) {
 		Objects.requireNonNull(after);
 		return T -> {accept(T); after.accept(T);};
@@ -61,8 +43,8 @@ public interface CONSUMER extends Consumer<CLASS_TYPE>
 		Objects.requireNonNull(after);
 		return T -> {accept(T); after.accept(KEY_TO_OBJ(T));};
 	}
+#if JDK_TYPE && PRIMITIVES
 	
-#if PRIMITIVES
 	/** {@inheritDoc}
 	  * <p>This default implementation delegates to the corresponding type-specific function.
 	  * @deprecated Please use the corresponding type-specific function instead. 

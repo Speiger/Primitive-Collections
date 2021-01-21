@@ -1,7 +1,5 @@
 package speiger.src.collections.ints.base;
 
-import static org.junit.Assert.assertArrayEquals;
-import static org.junit.Assert.assertEquals;
 
 import java.util.EnumSet;
 
@@ -9,6 +7,7 @@ import org.junit.Assert;
 import org.junit.Test;
 
 import speiger.src.collections.ints.queues.IntPriorityQueue;
+import speiger.src.collections.ints.utils.IntArrays;
 import speiger.src.collections.tests.IterableTest;
 import speiger.src.collections.tests.PriorityQueueTest;
 
@@ -19,6 +18,7 @@ public abstract class BaseIntPriorityQueueTest extends BaseIntIterableTest
 	@Override
 	protected EnumSet<IterableTest> getValidIterableTests() { return EnumSet.of(IterableTest.FOR_EACH, IterableTest.ITERATOR_FOR_EACH, IterableTest.ITERATOR_LOOP, IterableTest.ITERATOR_SKIP); }
 	protected EnumSet<PriorityQueueTest> getValidPriorityQueueTests() { return EnumSet.allOf(PriorityQueueTest.class); }
+	protected boolean isUnsortedRead() { return true; }
 	
 	@Test
 	public void testEnqueue() {
@@ -26,11 +26,12 @@ public abstract class BaseIntPriorityQueueTest extends BaseIntIterableTest
 			IntPriorityQueue queue = create(EMPTY_ARRAY);
 			for(int i = 0;i<100;i++) {
 				queue.enqueueInt(i);
-				Assert.assertEquals(i, queue.lastInt());
 			}
 			for(int i = 0;i<100;i++) {
-				Assert.assertEquals(i, queue.firstInt());
-				Assert.assertEquals(99, queue.lastInt());
+				Assert.assertEquals(i, queue.dequeueInt());
+			}
+			queue = create(TEST_ARRAY);
+			for(int i = 0;i<100;i++) {
 				Assert.assertEquals(i, queue.dequeueInt());
 			}
 		}
@@ -42,10 +43,17 @@ public abstract class BaseIntPriorityQueueTest extends BaseIntIterableTest
 			IntPriorityQueue queue = create(EMPTY_ARRAY);
 			for(int i = 0;i<100;i++) {
 				queue.enqueueInt(i);
-				Assert.assertEquals(i, queue.lastInt());
 			}
-			for(int i = 0;i<100;i++) {
-				assertEquals(i, queue.peekInt(i));
+			if(isUnsortedRead()) {
+				for(int i = 0;i<100;i++) {
+					int value = queue.peekInt(i);
+					Assert.assertTrue(value >= 0 && value < 100);
+				}
+			}
+			else {
+				for(int i = 0;i<100;i++) {
+					Assert.assertEquals(i, queue.peekInt(i));
+				}
 			}
 		}
 	}
@@ -56,21 +64,19 @@ public abstract class BaseIntPriorityQueueTest extends BaseIntIterableTest
 			IntPriorityQueue queue = create(EMPTY_ARRAY);
 			for(int i = 0;i<100;i++) {
 				queue.enqueueInt(i);
-				Assert.assertEquals(i, queue.lastInt());
 			}
 			queue.removeInt(40);
 			for(int i = 0;i<99;i++) {
-				if(i >= 40) assertEquals(i + 1, queue.dequeueInt());
-				else assertEquals(i, queue.dequeueInt());
+				if(i >= 40) Assert.assertEquals(i + 1, queue.dequeueInt());
+				else Assert.assertEquals(i, queue.dequeueInt());
 			}
 			for(int i = 0;i<100;i++) {
 				queue.enqueueInt(i);
-				Assert.assertEquals(i, queue.lastInt());
 			}
 			queue.removeLastInt(40);
 			for(int i = 0;i<99;i++) {
-				if(i >= 40) assertEquals(i + 1, queue.dequeueInt());
-				else assertEquals(i, queue.dequeueInt());
+				if(i >= 40) Assert.assertEquals(i + 1, queue.dequeueInt());
+				else Assert.assertEquals(i, queue.dequeueInt());
 			}
 		}
 	}
@@ -79,36 +85,45 @@ public abstract class BaseIntPriorityQueueTest extends BaseIntIterableTest
 	@SuppressWarnings("deprecation")
 	public void testToArray() {
 		if(getValidPriorityQueueTests().contains(PriorityQueueTest.TO_ARRAY)) {
-			IntPriorityQueue q = create(EMPTY_ARRAY);
-			Integer[] ref = new Integer[100];
-			Integer[] shiftArray = new Integer[100];
-			int[] primRef = new int[100];
-			int[] shiftPrimArray = new int[100];
-			for(int i = 0; i < 100; i++) {
-				q.enqueue(i);
-				assertEquals(i, q.lastInt());
-				ref[i] = Integer.valueOf(i);
-				primRef[i] = i;
-				shiftPrimArray[(i+80) % 100] = i;
-				shiftArray[(i+80) % 100] = Integer.valueOf(i);
+			IntPriorityQueue queue = create(EMPTY_ARRAY);
+			if(isUnsortedRead()) {
+				for(int i = 0;i<100;i++) {
+					queue.enqueueInt(i);
+				}
+				int[] array = queue.toIntArray();
+				IntArrays.stableSort(array);
+				Assert.assertArrayEquals(TEST_ARRAY, array);
+				int[] data = queue.toIntArray(new int[100]);
+				int[] nonData = queue.toIntArray(new int[0]);
+				IntArrays.stableSort(data);
+				IntArrays.stableSort(nonData);				
+				Assert.assertArrayEquals(array, data);
+				Assert.assertArrayEquals(array, nonData);
 			}
-			assertArrayEquals(q.toArray(), ref);
-			assertArrayEquals(q.toArray(new Integer[100]), ref);
-			assertArrayEquals(q.toArray(null), ref);
-			assertArrayEquals(q.toIntArray(), primRef);
-			assertArrayEquals(q.toIntArray(new int[100]), primRef);
-			assertArrayEquals(q.toIntArray(null), primRef);
-			IntPriorityQueue other = create(q.toIntArray());
-			for(int i = 0;i<100;i++) {
-				assertEquals(other.peekInt(i), primRef[i]);
+			else {
+				Integer[] ref = IntArrays.wrap(TEST_ARRAY);
+				Integer[] shiftArray = new Integer[100];
+				int[] shiftPrimArray = new int[100];
+				for(int i = 0; i < 100; i++) {
+					queue.enqueue(i);
+					shiftPrimArray[(i+80) % 100] = i;
+					shiftArray[(i+80) % 100] = Integer.valueOf(i);
+				}
+				Assert.assertArrayEquals(ref, queue.toArray());
+				Assert.assertArrayEquals(ref, queue.toArray(new Integer[100]));
+				Assert.assertArrayEquals(ref, queue.toArray(null));
+				Assert.assertArrayEquals(TEST_ARRAY, queue.toIntArray());
+				Assert.assertArrayEquals(TEST_ARRAY, queue.toIntArray(new int[100]));
+				Assert.assertArrayEquals(TEST_ARRAY, queue.toIntArray(null));
+				IntPriorityQueue other = create(queue.toIntArray());
+				for(int i = 0;i<20;i++) {
+					other.dequeueInt();
+					other.enqueue(i);
+				}
+				Assert.assertArrayEquals(shiftPrimArray, other.toIntArray());
+				Assert.assertArrayEquals(shiftPrimArray, other.toIntArray(new int[100]));
+				Assert.assertArrayEquals(shiftArray, other.toArray());
 			}
-			for(int i = 0;i<20;i++) {
-				other.dequeueInt();
-				other.enqueue(i);
-			}
-			assertArrayEquals(other.toIntArray(), shiftPrimArray);
-			assertArrayEquals(other.toIntArray(new int[100]), shiftPrimArray);
-			assertArrayEquals(other.toArray(), shiftArray);
 		}
 	}
 }

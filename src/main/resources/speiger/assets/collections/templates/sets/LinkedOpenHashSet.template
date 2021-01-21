@@ -108,7 +108,7 @@ public class LINKED_HASH_SET KEY_GENERIC_TYPE extends HASH_SET KEY_GENERIC_TYPE 
 #endif
 	@Override
 	public boolean addAndMoveToFirst(KEY_TYPE o) {
-		if(EQUALS_NULL(o)) {
+		if(KEY_EQUALS_NULL(o)) {
 			if(containsNull) {
 				moveToFirstIndex(nullIndex);
 				return false;
@@ -117,9 +117,9 @@ public class LINKED_HASH_SET KEY_GENERIC_TYPE extends HASH_SET KEY_GENERIC_TYPE 
 			onNodeAdded(nullIndex);
 		}
 		else {
-			int pos = HashUtil.mix(TO_HASH(o)) & mask;
-			while(EQUALS_NOT_NULL(keys[pos])) {
-				if(EQUALS(keys[pos], o)) {
+			int pos = HashUtil.mix(KEY_TO_HASH(o)) & mask;
+			while(KEY_EQUALS_NOT_NULL(keys[pos])) {
+				if(KEY_EQUALS(keys[pos], o)) {
 					moveToFirstIndex(pos);
 					return false;
 				}
@@ -134,7 +134,7 @@ public class LINKED_HASH_SET KEY_GENERIC_TYPE extends HASH_SET KEY_GENERIC_TYPE 
 	
 	@Override
 	public boolean addAndMoveToLast(KEY_TYPE o) {
-		if(EQUALS_NULL(o)) {
+		if(KEY_EQUALS_NULL(o)) {
 			if(containsNull) {
 				moveToLastIndex(nullIndex);
 				return false;
@@ -143,9 +143,9 @@ public class LINKED_HASH_SET KEY_GENERIC_TYPE extends HASH_SET KEY_GENERIC_TYPE 
 			onNodeAdded(nullIndex);
 		}
 		else {
-			int pos = HashUtil.mix(TO_HASH(o)) & mask;
-			while(EQUALS_NOT_NULL(keys[pos])) {
-				if(EQUALS(keys[pos], o)) {
+			int pos = HashUtil.mix(KEY_TO_HASH(o)) & mask;
+			while(KEY_EQUALS_NOT_NULL(keys[pos])) {
+				if(KEY_EQUALS(keys[pos], o)) {
 					moveToLastIndex(pos);
 					return false;
 				}
@@ -160,17 +160,17 @@ public class LINKED_HASH_SET KEY_GENERIC_TYPE extends HASH_SET KEY_GENERIC_TYPE 
 	
 	@Override
 	public boolean moveToFirst(KEY_TYPE o) {
-		if(EQUALS(FIRST_KEY(), o)) return false;
-		if(EQUALS_NULL(o)) {
+		if(KEY_EQUALS(FIRST_KEY(), o)) return false;
+		if(KEY_EQUALS_NULL(o)) {
 			if(containsNull) {
 				moveToFirstIndex(nullIndex);
 				return true;
 			}
 		}
 		else {
-			int pos = HashUtil.mix(TO_HASH(o)) & mask;
-			while(EQUALS_NOT_NULL(keys[pos])) {
-				if(EQUALS(keys[pos], o)) {
+			int pos = HashUtil.mix(KEY_TO_HASH(o)) & mask;
+			while(KEY_EQUALS_NOT_NULL(keys[pos])) {
+				if(KEY_EQUALS(keys[pos], o)) {
 					moveToFirstIndex(pos);
 					return true;
 				}
@@ -183,17 +183,17 @@ public class LINKED_HASH_SET KEY_GENERIC_TYPE extends HASH_SET KEY_GENERIC_TYPE 
 	
 	@Override
 	public boolean moveToLast(KEY_TYPE o) {
-		if(EQUALS(LAST_KEY(), o)) return false;
-		if(EQUALS_NULL(o)) {
+		if(KEY_EQUALS(LAST_KEY(), o)) return false;
+		if(KEY_EQUALS_NULL(o)) {
 			if(containsNull) {
 				moveToLastIndex(nullIndex);
 				return true;
 			}
 		}
 		else {
-			int pos = HashUtil.mix(TO_HASH(o)) & mask;
-			while(EQUALS_NOT_NULL(keys[pos])) {
-				if(EQUALS(keys[pos], o)) {
+			int pos = HashUtil.mix(KEY_TO_HASH(o)) & mask;
+			while(KEY_EQUALS_NOT_NULL(keys[pos])) {
+				if(KEY_EQUALS(keys[pos], o)) {
 					moveToLastIndex(pos);
 					return true;
 				}
@@ -254,9 +254,9 @@ public class LINKED_HASH_SET KEY_GENERIC_TYPE extends HASH_SET KEY_GENERIC_TYPE 
 		if(0 <= firstIndex) links[firstIndex] |= 0xFFFFFFFF00000000L;
 		KEY_TYPE result = keys[pos];
 		size--;
-		if(EQUALS_NULL(result)) {
+		if(KEY_EQUALS_NULL(result)) {
 			containsNull = false;
-			keys[nullIndex] = EMPTY_VALUE;
+			keys[nullIndex] = EMPTY_KEY_VALUE;
 		}
 		else shiftKeys(pos);
 		if(nullIndex > minCapacity && size < maxFill / 4 && nullIndex > HashUtil.DEFAULT_MIN_CAPACITY) rehash(nullIndex / 2);
@@ -277,9 +277,9 @@ public class LINKED_HASH_SET KEY_GENERIC_TYPE extends HASH_SET KEY_GENERIC_TYPE 
 		if(0 <= lastIndex) links[lastIndex] |= 0xFFFFFFFFL;
 		KEY_TYPE result = keys[pos];
 		size--;
-		if(EQUALS_NULL(result)) {
+		if(KEY_EQUALS_NULL(result)) {
 			containsNull = false;
-			keys[nullIndex] = EMPTY_VALUE;
+			keys[nullIndex] = EMPTY_KEY_VALUE;
 		}
 		else shiftKeys(pos);
 		if(nullIndex > minCapacity && size < maxFill / 4 && nullIndex > HashUtil.DEFAULT_MIN_CAPACITY) rehash(nullIndex / 2);
@@ -352,10 +352,10 @@ public class LINKED_HASH_SET KEY_GENERIC_TYPE extends HASH_SET KEY_GENERIC_TYPE 
 		long[] newLinks = new long[newSize + 1];
 		int newPrev = -1;
 		for(int j = size, i = firstIndex, pos = 0, prev = -1;j != 0;) {
-			if(EQUALS_NULL(keys[i])) pos = newSize;
+			if(KEY_EQUALS_NULL(keys[i])) pos = newSize;
 			else {
-				pos = HashUtil.mix(TO_HASH(keys[i])) & newMask;
-				while(EQUALS_NOT_NULL(newKeys[pos])) pos = ++pos & newMask;
+				pos = HashUtil.mix(KEY_TO_HASH(keys[i])) & newMask;
+				while(KEY_EQUALS_NOT_NULL(newKeys[pos])) pos = ++pos & newMask;
 			}
 			newKeys[pos] = keys[i];
 			if(prev != -1) {
@@ -417,21 +417,21 @@ public class LINKED_HASH_SET KEY_GENERIC_TYPE extends HASH_SET KEY_GENERIC_TYPE 
 		}
 		
 		SetIterator(KEY_TYPE from) {
-			if(EQUALS_NULL(from)) {
+			if(KEY_EQUALS_NULL(from)) {
 				if(containsNull) {
 				    next = (int) links[nullIndex];
 				    previous = nullIndex;
 				}
 				else throw new NoSuchElementException("The null element is not in the set");
 			}
-			else if(EQUALS(keys[lastIndex], from)) {
+			else if(KEY_EQUALS(keys[lastIndex], from)) {
 				previous = lastIndex;
 				index = size;
 			}
 			else {
-				int pos = HashUtil.mix(TO_HASH(from)) & mask;
-				while(EQUALS_NOT_NULL(keys[pos])) {
-					if(EQUALS(keys[pos], from)) {
+				int pos = HashUtil.mix(KEY_TO_HASH(from)) & mask;
+				while(KEY_EQUALS_NOT_NULL(keys[pos])) {
+					if(KEY_EQUALS(keys[pos], from)) {
 						next = (int)links[pos];
 						previous = pos;
 						break;
@@ -483,7 +483,7 @@ public class LINKED_HASH_SET KEY_GENERIC_TYPE extends HASH_SET KEY_GENERIC_TYPE 
 			if(current == nullIndex) {
 				current = -1;
 				containsNull = false;
-				keys[nullIndex] = EMPTY_VALUE;
+				keys[nullIndex] = EMPTY_KEY_VALUE;
 			}
 			else {
 				int slot, last, startPos = current;
@@ -492,11 +492,11 @@ public class LINKED_HASH_SET KEY_GENERIC_TYPE extends HASH_SET KEY_GENERIC_TYPE 
 				while(true) {
 					startPos = ((last = startPos) + 1) & mask;
 					while(true){
-						if(EQUALS_NULL((current = keys[startPos]))) {
-							keys[last] = EMPTY_VALUE;
+						if(KEY_EQUALS_NULL((current = keys[startPos]))) {
+							keys[last] = EMPTY_KEY_VALUE;
 							return;
 						}
-						slot = HashUtil.mix(TO_HASH(current)) & mask;
+						slot = HashUtil.mix(KEY_TO_HASH(current)) & mask;
 						if(last <= startPos ? (last >= slot || slot > startPos) : (last >= slot && slot > startPos)) break;
 						startPos = ++startPos & mask;
 					}

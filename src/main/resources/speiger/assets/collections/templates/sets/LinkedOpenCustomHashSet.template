@@ -106,7 +106,7 @@ public class LINKED_CUSTOM_HASH_SET KEY_GENERIC_TYPE extends CUSTOM_HASH_SET KEY
 #endif
 	@Override
 	public boolean addAndMoveToFirst(KEY_TYPE o) {
-		if(strategy.equals(o, EMPTY_VALUE)) {
+		if(strategy.equals(o, EMPTY_KEY_VALUE)) {
 			if(containsNull) {
 				moveToFirstIndex(nullIndex);
 				return false;
@@ -116,7 +116,7 @@ public class LINKED_CUSTOM_HASH_SET KEY_GENERIC_TYPE extends CUSTOM_HASH_SET KEY
 		}
 		else {
 			int pos = HashUtil.mix(strategy.hashCode(o)) & mask;
-			while(!strategy.equals(keys[pos], EMPTY_VALUE)) {
+			while(!strategy.equals(keys[pos], EMPTY_KEY_VALUE)) {
 				if(strategy.equals(keys[pos], o)) {
 					moveToFirstIndex(pos);
 					return false;
@@ -132,7 +132,7 @@ public class LINKED_CUSTOM_HASH_SET KEY_GENERIC_TYPE extends CUSTOM_HASH_SET KEY
 	
 	@Override
 	public boolean addAndMoveToLast(KEY_TYPE o) {
-		if(strategy.equals(o, EMPTY_VALUE)) {
+		if(strategy.equals(o, EMPTY_KEY_VALUE)) {
 			if(containsNull) {
 				moveToLastIndex(nullIndex);
 				return false;
@@ -142,7 +142,7 @@ public class LINKED_CUSTOM_HASH_SET KEY_GENERIC_TYPE extends CUSTOM_HASH_SET KEY
 		}
 		else {
 			int pos = HashUtil.mix(strategy.hashCode(o)) & mask;
-			while(!strategy.equals(keys[pos], EMPTY_VALUE)) {
+			while(!strategy.equals(keys[pos], EMPTY_KEY_VALUE)) {
 				if(strategy.equals(keys[pos], o)) {
 					moveToLastIndex(pos);
 					return false;
@@ -159,7 +159,7 @@ public class LINKED_CUSTOM_HASH_SET KEY_GENERIC_TYPE extends CUSTOM_HASH_SET KEY
 	@Override
 	public boolean moveToFirst(KEY_TYPE o) {
 		if(strategy.equals(FIRST_KEY(), o)) return false;
-		if(strategy.equals(o, EMPTY_VALUE)) {
+		if(strategy.equals(o, EMPTY_KEY_VALUE)) {
 			if(containsNull) {
 				moveToFirstIndex(nullIndex);
 				return true;
@@ -167,7 +167,7 @@ public class LINKED_CUSTOM_HASH_SET KEY_GENERIC_TYPE extends CUSTOM_HASH_SET KEY
 		}
 		else {
 			int pos = HashUtil.mix(strategy.hashCode(o)) & mask;
-			while(!strategy.equals(keys[pos], EMPTY_VALUE)) {
+			while(!strategy.equals(keys[pos], EMPTY_KEY_VALUE)) {
 				if(strategy.equals(keys[pos], o)) {
 					moveToFirstIndex(pos);
 					return true;
@@ -182,7 +182,7 @@ public class LINKED_CUSTOM_HASH_SET KEY_GENERIC_TYPE extends CUSTOM_HASH_SET KEY
 	@Override
 	public boolean moveToLast(KEY_TYPE o) {
 		if(strategy.equals(LAST_KEY(), o)) return false;
-		if(strategy.equals(o, EMPTY_VALUE)) {
+		if(strategy.equals(o, EMPTY_KEY_VALUE)) {
 			if(containsNull) {
 				moveToLastIndex(nullIndex);
 				return true;
@@ -190,7 +190,7 @@ public class LINKED_CUSTOM_HASH_SET KEY_GENERIC_TYPE extends CUSTOM_HASH_SET KEY
 		}
 		else {
 			int pos = HashUtil.mix(strategy.hashCode(o)) & mask;
-			while(!strategy.equals(keys[pos], EMPTY_VALUE)) {
+			while(!strategy.equals(keys[pos], EMPTY_KEY_VALUE)) {
 				if(strategy.equals(keys[pos], o)) {
 					moveToLastIndex(pos);
 					return true;
@@ -252,9 +252,9 @@ public class LINKED_CUSTOM_HASH_SET KEY_GENERIC_TYPE extends CUSTOM_HASH_SET KEY
 		if(0 <= firstIndex) links[firstIndex] |= 0xFFFFFFFF00000000L;
 		KEY_TYPE result = keys[pos];
 		size--;
-		if(strategy.equals(result, EMPTY_VALUE)) {
+		if(strategy.equals(result, EMPTY_KEY_VALUE)) {
 			containsNull = false;
-			keys[nullIndex] = EMPTY_VALUE;
+			keys[nullIndex] = EMPTY_KEY_VALUE;
 		}
 		else shiftKeys(pos);
 		if(nullIndex > minCapacity && size < maxFill / 4 && nullIndex > HashUtil.DEFAULT_MIN_CAPACITY) rehash(nullIndex / 2);
@@ -275,9 +275,9 @@ public class LINKED_CUSTOM_HASH_SET KEY_GENERIC_TYPE extends CUSTOM_HASH_SET KEY
 		if(0 <= lastIndex) links[lastIndex] |= 0xFFFFFFFFL;
 		KEY_TYPE result = keys[pos];
 		size--;
-		if(strategy.equals(result, EMPTY_VALUE)) {
+		if(strategy.equals(result, EMPTY_KEY_VALUE)) {
 			containsNull = false;
-			keys[nullIndex] = EMPTY_VALUE;
+			keys[nullIndex] = EMPTY_KEY_VALUE;
 		}
 		else shiftKeys(pos);
 		if(nullIndex > minCapacity && size < maxFill / 4 && nullIndex > HashUtil.DEFAULT_MIN_CAPACITY) rehash(nullIndex / 2);
@@ -350,10 +350,10 @@ public class LINKED_CUSTOM_HASH_SET KEY_GENERIC_TYPE extends CUSTOM_HASH_SET KEY
 		long[] newLinks = new long[newSize + 1];
 		int newPrev = -1;
 		for(int j = size, i = firstIndex, pos = 0, prev = -1;j != 0;) {
-			if(strategy.equals(keys[i], EMPTY_VALUE)) pos = newSize;
+			if(strategy.equals(keys[i], EMPTY_KEY_VALUE)) pos = newSize;
 			else {
 				pos = HashUtil.mix(strategy.hashCode(keys[i])) & newMask;
-				while(!strategy.equals(newKeys[pos], EMPTY_VALUE)) pos = ++pos & newMask;
+				while(!strategy.equals(newKeys[pos], EMPTY_KEY_VALUE)) pos = ++pos & newMask;
 			}
 			newKeys[pos] = keys[i];
 			if(prev != -1) {
@@ -415,7 +415,7 @@ public class LINKED_CUSTOM_HASH_SET KEY_GENERIC_TYPE extends CUSTOM_HASH_SET KEY
 		}
 		
 		SetIterator(KEY_TYPE from) {
-			if(strategy.equals(from, EMPTY_VALUE)) {
+			if(strategy.equals(from, EMPTY_KEY_VALUE)) {
 				if(containsNull) {
 				    next = (int) links[nullIndex];
 				    previous = nullIndex;
@@ -428,7 +428,7 @@ public class LINKED_CUSTOM_HASH_SET KEY_GENERIC_TYPE extends CUSTOM_HASH_SET KEY
 			}
 			else {
 				int pos = HashUtil.mix(strategy.hashCode(from)) & mask;
-				while(!strategy.equals(keys[pos], EMPTY_VALUE)) {
+				while(!strategy.equals(keys[pos], EMPTY_KEY_VALUE)) {
 					if(strategy.equals(keys[pos], from)) {
 						next = (int)links[pos];
 						previous = pos;
@@ -481,7 +481,7 @@ public class LINKED_CUSTOM_HASH_SET KEY_GENERIC_TYPE extends CUSTOM_HASH_SET KEY
 			if(current == nullIndex) {
 				current = -1;
 				containsNull = false;
-				keys[nullIndex] = EMPTY_VALUE;
+				keys[nullIndex] = EMPTY_KEY_VALUE;
 			}
 			else {
 				int slot, last, startPos = current;
@@ -490,8 +490,8 @@ public class LINKED_CUSTOM_HASH_SET KEY_GENERIC_TYPE extends CUSTOM_HASH_SET KEY
 				while(true) {
 					startPos = ((last = startPos) + 1) & mask;
 					while(true){
-						if(strategy.equals((current = keys[startPos]), EMPTY_VALUE)) {
-							keys[last] = EMPTY_VALUE;
+						if(strategy.equals((current = keys[startPos]), EMPTY_KEY_VALUE)) {
+							keys[last] = EMPTY_KEY_VALUE;
 							return;
 						}
 						slot = HashUtil.mix(strategy.hashCode(current)) & mask;

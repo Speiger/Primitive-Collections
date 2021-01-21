@@ -25,7 +25,7 @@ public class COLLECTIONS
 	 * Returns a Immutable EmptyCollection instance that is automatically casted.
 	 * @return an empty collection
 	 */
-	public static GENERIC_BRACES COLLECTION KEY_GENERIC_TYPE emptyCollection() {
+	public static GENERIC_KEY_BRACES COLLECTION KEY_GENERIC_TYPE emptyCollection() {
 #if TYPE_OBJECT
 		return (COLLECTION<KEY_TYPE>)EMPTY;
 #else
@@ -38,7 +38,7 @@ public class COLLECTIONS
 	 * @param l that should be made immutable/unmodifyable
 	 * @return a unmodifiable collection wrapper. If the Collection already a unmodifyable wrapper then it just returns itself.
 	 */
-	public static GENERIC_BRACES COLLECTION KEY_GENERIC_TYPE unmodifiableCollection(COLLECTION KEY_GENERIC_TYPE c) {
+	public static GENERIC_KEY_BRACES COLLECTION KEY_GENERIC_TYPE unmodifiableCollection(COLLECTION KEY_GENERIC_TYPE c) {
 		return c instanceof UnmodifiableCollection ? c : new UnmodifiableCollectionBRACES(c);
 	}
 	
@@ -47,7 +47,7 @@ public class COLLECTIONS
 	 * @param l that should be synchronized
 	 * @return a synchronized collection wrapper. If the Collection already a synchronized wrapper then it just returns itself.
 	 */
-	public static GENERIC_BRACES COLLECTION KEY_GENERIC_TYPE synchronizedCollection(COLLECTION KEY_GENERIC_TYPE c) {
+	public static GENERIC_KEY_BRACES COLLECTION KEY_GENERIC_TYPE synchronizedCollection(COLLECTION KEY_GENERIC_TYPE c) {
 		return c instanceof SynchronizedCollection ? c : new SynchronizedCollectionBRACES(c);
 	}
 	
@@ -57,7 +57,7 @@ public class COLLECTIONS
 	 * @param mutex is the controller of the synchronization block.
 	 * @return a synchronized collection wrapper. If the Collection already a synchronized wrapper then it just returns itself.
 	 */
-	public static GENERIC_BRACES COLLECTION KEY_GENERIC_TYPE synchronizedCollection(COLLECTION KEY_GENERIC_TYPE c, Object mutex) {
+	public static GENERIC_KEY_BRACES COLLECTION KEY_GENERIC_TYPE synchronizedCollection(COLLECTION KEY_GENERIC_TYPE c, Object mutex) {
 		return c instanceof SynchronizedCollection ? c : new SynchronizedCollectionBRACES(c, mutex);
 	}
 	

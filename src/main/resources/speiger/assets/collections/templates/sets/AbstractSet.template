@@ -14,7 +14,7 @@ public abstract class ABSTRACT_SET KEY_GENERIC_TYPE extends ABSTRACT_COLLECTION 
     	int hashCode = 1;
     	ITERATOR KEY_GENERIC_TYPE i = iterator();
     	while(i.hasNext())
-    		hashCode = 31 * hashCode + TO_HASH(i.NEXT());
+    		hashCode = 31 * hashCode + KEY_TO_HASH(i.NEXT());
     	return hashCode;
 	}
 	
@@ -32,7 +32,7 @@ public abstract class ABSTRACT_SET KEY_GENERIC_TYPE extends ABSTRACT_COLLECTION 
 	    	ITERATOR e1 = iterator();
 	    	ITERATOR e2 = ((SET)l).iterator();
 	    	while (e1.hasNext() && e2.hasNext()) {
-	    		if(!(EQUALS(e1.NEXT(), e2.NEXT())))
+	    		if(!(KEY_EQUALS(e1.NEXT(), e2.NEXT())))
 	    			return false;
 	    	}
 	    	return !(e1.hasNext() || e2.hasNext());

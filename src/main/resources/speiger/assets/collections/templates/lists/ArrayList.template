@@ -127,14 +127,14 @@ public class ARRAY_LIST KEY_GENERIC_TYPE extends ABSTRACT_LIST KEY_GENERIC_TYPE 
 	/**
 	 * Creates a wrapped arraylist that uses the array as backing array
 	 */
-	public static GENERIC_BRACES ARRAY_LIST KEY_GENERIC_TYPE wrap(KEY_TYPE[] a) {
+	public static GENERIC_KEY_BRACES ARRAY_LIST KEY_GENERIC_TYPE wrap(KEY_TYPE[] a) {
 		return wrap(a, a.length);
 	}
 	
 	/**
 	 * Creates a wrapped arraylist that uses the array as backing array and a custom fillsize
 	 */
-	public static GENERIC_BRACES ARRAY_LIST KEY_GENERIC_TYPE wrap(KEY_TYPE[] a, int length) {
+	public static GENERIC_KEY_BRACES ARRAY_LIST KEY_GENERIC_TYPE wrap(KEY_TYPE[] a, int length) {
 		SanityChecks.checkArrayCapacity(a.length, 0, length);
 		ARRAY_LIST KEY_GENERIC_TYPE list = new ARRAY_LISTBRACES();
 		list.data = a;
@@ -146,7 +146,7 @@ public class ARRAY_LIST KEY_GENERIC_TYPE extends ABSTRACT_LIST KEY_GENERIC_TYPE 
 	/**
 	 * Creates a new ArrayList with a EmptyObject array of the Type requested
 	 */
-	public static GENERIC_BRACES ARRAY_LIST KEY_GENERIC_TYPE of(Class<KEY_TYPE> c) {
+	public static GENERIC_KEY_BRACES ARRAY_LIST KEY_GENERIC_TYPE of(Class<KEY_TYPE> c) {
 		ARRAY_LIST KEY_GENERIC_TYPE list = new ARRAY_LISTBRACES();
 		list.data = (KEY_TYPE[])ObjectArrays.newArray(c.getClass().getComponentType(), 0);
 		return list;
@@ -453,7 +453,7 @@ public class ARRAY_LIST KEY_GENERIC_TYPE extends ABSTRACT_LIST KEY_GENERIC_TYPE 
 	@Override
 	public int indexOf(KEY_TYPE e) {
 		for(int i = 0;i<size;i++) {
-			if(EQUALS(data[i], e)) return i;
+			if(KEY_EQUALS(data[i], e)) return i;
 		}
 		return -1;
 	}
@@ -466,7 +466,7 @@ public class ARRAY_LIST KEY_GENERIC_TYPE extends ABSTRACT_LIST KEY_GENERIC_TYPE 
 	@Override
 	public int lastIndexOf(KEY_TYPE e) {
 		for(int i = size - 1;i>=0;i--) {
-			if(EQUALS(data[i], e)) return i;
+			if(KEY_EQUALS(data[i], e)) return i;
 		}
 		return -1;
 	}
@@ -853,7 +853,7 @@ public class ARRAY_LIST KEY_GENERIC_TYPE extends ABSTRACT_LIST KEY_GENERIC_TYPE 
 		if(size > data.length)
 			data = Arrays.copyOf(data, size);
 		else if(size < size() && size >= 0)
-			Arrays.fill(data, size, size(), EMPTY_VALUE);
+			Arrays.fill(data, size, size(), EMPTY_KEY_VALUE);
 		this.size = size;
 	}
 	

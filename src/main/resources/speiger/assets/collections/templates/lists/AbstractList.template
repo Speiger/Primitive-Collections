@@ -125,7 +125,7 @@ public abstract class ABSTRACT_LIST KEY_GENERIC_TYPE extends ABSTRACT_COLLECTION
 	public int indexOf(KEY_TYPE e) {
 		LIST_ITERATOR KEY_GENERIC_TYPE iter = listIterator();
 		while(iter.hasNext()) {
-			if(EQUALS(iter.NEXT(), e))
+			if(KEY_EQUALS(iter.NEXT(), e))
 				return iter.previousIndex();
 		}
 		return -1;
@@ -140,7 +140,7 @@ public abstract class ABSTRACT_LIST KEY_GENERIC_TYPE extends ABSTRACT_COLLECTION
 	public int lastIndexOf(KEY_TYPE e) {
 		LIST_ITERATOR KEY_GENERIC_TYPE iter = listIterator(size());
 		while(iter.hasPrevious()) {
-			if(EQUALS(iter.PREVIOUS(), e))
+			if(KEY_EQUALS(iter.PREVIOUS(), e))
 				return iter.nextIndex();
 		}
 		return -1;
@@ -164,7 +164,7 @@ public abstract class ABSTRACT_LIST KEY_GENERIC_TYPE extends ABSTRACT_COLLECTION
 	    	LIST_ITERATOR e1 = listIterator();
 	    	LIST_ITERATOR e2 = ((LIST)l).listIterator();
 	    	while (e1.hasNext() && e2.hasNext()) {
-	    		if(!(EQUALS(e1.NEXT(), e2.NEXT())))
+	    		if(!(KEY_EQUALS(e1.NEXT(), e2.NEXT())))
 	    			return false;
 	    	}
 	    	return !(e1.hasNext() || e2.hasNext());
@@ -190,7 +190,7 @@ public abstract class ABSTRACT_LIST KEY_GENERIC_TYPE extends ABSTRACT_COLLECTION
 #if TYPE_OBJECT
 			hashCode = 31 * hashCode + i.next().hashCode();
 #else
-    		hashCode = 31 * hashCode + TO_HASH(i.NEXT());
+    		hashCode = 31 * hashCode + KEY_TO_HASH(i.NEXT());
 #endif
     	return hashCode;
 	}
@@ -217,7 +217,7 @@ public abstract class ABSTRACT_LIST KEY_GENERIC_TYPE extends ABSTRACT_COLLECTION
 	
 	@Override
 	public void size(int size) {
-		while(size > size()) add(EMPTY_VALUE);
+		while(size > size()) add(EMPTY_KEY_VALUE);
 		while(size < size()) REMOVE(size() - 1);
 	}
 	

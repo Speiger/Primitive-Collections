@@ -1,0 +1,35 @@
+package speiger.src.collections.PACKAGE.functions.consumer;
+
+import java.util.Objects;
+import java.util.function.BiConsumer;
+
+public interface BI_CONSUMER KEY_VALUE_GENERIC_TYPE extends BiConsumer<CLASS_TYPE, CLASS_VALUE_TYPE>
+{
+	void accept(KEY_TYPE k, VALUE_TYPE v);
+	
+	public default BI_CONSUMER KEY_VALUE_GENERIC_TYPE andThen(BI_CONSUMER KEY_VALUE_GENERIC_TYPE after) {
+		Objects.requireNonNull(after);
+		return (K, V) -> {accept(K, V); after.accept(K, V);};
+	}
+	
+#if !TYPE_OBJECT || !VALUE_OBJECT
+	/** {@inheritDoc}
+	 * <p>This default implementation delegates to the corresponding type-specific function.
+	 * @deprecated Please use the corresponding type-specific function instead. 
+	 */
+	@Override
+	@Deprecated
+	default void accept(CLASS_TYPE k, CLASS_VALUE_TYPE v) { accept(OBJ_TO_KEY(k), OBJ_TO_VALUE(v)); }
+	
+	/** {@inheritDoc}
+	 * <p>This default implementation delegates to the corresponding type-specific function.
+ 	 * @deprecated Please use the corresponding type-specific function instead. 
+ 	 */
+	@Override
+	@Deprecated
+	default BI_CONSUMER KEY_VALUE_GENERIC_TYPE andThen(BiConsumer<? super CLASS_TYPE, ? super CLASS_VALUE_TYPE> after) {
+		Objects.requireNonNull(after);
+		return (K, V) -> {accept(K, V); after.accept(KEY_TO_OBJ(K), VALUE_TO_OBJ(V));};
+	}
+#endif
+}

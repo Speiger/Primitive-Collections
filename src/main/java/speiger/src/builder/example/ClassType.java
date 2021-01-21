@@ -34,9 +34,19 @@ public enum ClassType
 		return keyType;
 	}
 	
+	public String getValueType()
+	{
+		return this == OBJECT ? "V" : keyType;
+	}
+	
 	public String getClassType()
 	{
 		return classType;
+	}
+	
+	public String getClassValueType()
+	{
+		return this == OBJECT ? "V" : classType;
 	}
 	
 	public String getNonFileType()
@@ -47,6 +57,11 @@ public enum ClassType
 	public String getFileType()
 	{
 		return fileType;
+	}
+	
+	public String getJavaFileType()
+	{
+		return this == OBJECT ? "Obj" : fileType;
 	}
 	
 	public String getPathType()
@@ -104,6 +119,43 @@ public enum ClassType
 			case OBJECT: return (not ? "!" : "")+"Objects.equals(%1$s, %2$s)";
 			default: return "%1$s "+(not ? "!=" : "==")+" %2$s";
 		}
+	}
+	
+	public boolean hasFunction(ClassType other)
+	{
+		if(this == other && this != BOOLEAN && !needsCustomJDKType() && !other.needsCustomJDKType()) return true;
+		if(this == BOOLEAN) return false;
+		if(other == BOOLEAN && !needsCustomJDKType()) return true;
+		if(!needsCustomJDKType() && !other.needsCustomJDKType()) return true;
+		return false;
+	}
+	
+	public boolean hasBiFunction(ClassType other)
+	{
+		if(this == other && this != BOOLEAN && !needsCustomJDKType() && !other.needsCustomJDKType()) return true;
+		if(this == BOOLEAN) return false;
+		if(other == BOOLEAN && this == OBJECT) return true;
+		if(!other.needsCustomJDKType() && this == OBJECT) return true;
+		return false;
+	}
+	
+	public String getFunctionClass(ClassType other)
+	{
+		if(!hasFunction(other)) return "";
+		if(this == other && this != BOOLEAN) return this == OBJECT ? "java.util.function.Function" : "java.util.function."+getJavaFileType()+"UnaryOperator";
+		if(other == BOOLEAN) return this == OBJECT ? "java.util.function.Predicate" : "java.util.function."+getJavaFileType()+"Predicate";
+		if(!needsCustomJDKType()) return other == OBJECT ? "java.util.function."+getJavaFileType()+"Function" : (this == OBJECT ? "java.util.function.To"+other.getJavaFileType()+"Function" : "java.util.function."+getJavaFileType()+"To"+other.getJavaFileType()+"Function");
+		if(!other.needsCustomJDKType()) return this == OBJECT ? "java.util.function.To"+other.getJavaFileType()+"Function" : "java.util.function."+getJavaFileType()+"To"+other.getJavaFileType()+"Function";
+		return "";
+	}
+	
+	public String getBiFunctionClass(ClassType other)
+	{
+		if(!hasBiFunction(other)) return "";
+		if(this == other && this != BOOLEAN) return this == OBJECT ? "java.util.function.BiFunction" : "java.util.function."+getJavaFileType()+"BinaryOperator";
+		if(other == BOOLEAN && this == OBJECT) return "java.util.function.BiPredicate";
+		if(!other.needsCustomJDKType() && this == OBJECT) return "java.util.function.To"+other.getJavaFileType()+"BiFunction";
+		return "";
 	}
 	
 	public ClassType getCustomJDKType()

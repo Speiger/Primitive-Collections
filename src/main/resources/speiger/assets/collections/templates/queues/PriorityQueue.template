@@ -24,8 +24,7 @@ public interface PRIORITY_QUEUE KEY_GENERIC_TYPE extends ObjectPriorityQueue<CLA
 	public KEY_TYPE DEQUEUE();
 	
 	public KEY_TYPE PEEK(int index);
-	public default KEY_TYPE FIRST_KEY() { return peek(0); }
-	public default KEY_TYPE LAST_KEY() { return peek(size()-1); }
+	public default KEY_TYPE FIRST_KEY() { return PEEK(0); }
 	
 	public boolean REMOVE(KEY_TYPE e);
 	public boolean REMOVE_LAST(KEY_TYPE e);
@@ -44,7 +43,6 @@ public interface PRIORITY_QUEUE KEY_GENERIC_TYPE extends ObjectPriorityQueue<CLA
 	
 	public default CLASS_TYPE peek(int index) { return KEY_TO_OBJ(PEEK(index)); }
 	public default CLASS_TYPE first() { return peek(0); }
-	public default CLASS_TYPE last() { return peek(size()-1); }
 	
 	public default boolean remove(CLASS_TYPE e) { return REMOVE(OBJ_TO_KEY(e)); }
 	public default boolean removeLast(CLASS_TYPE e) { return REMOVE_LAST(OBJ_TO_KEY(e)); }
