@@ -3,7 +3,7 @@ package speiger.src.collections.PACKAGE.lists;
 import java.util.List;
 #if !TYPE_OBJECT && !TYPE_BOOLEAN
 import java.util.Objects;
-import java.util.function.UNARY_OPERATOR;
+import java.util.function.JAVA_UNARY_OPERATOR;
 import java.util.function.UnaryOperator;
 #else if TYPE_OBJECT
 import java.util.Objects;
@@ -115,12 +115,12 @@ public interface LIST KEY_GENERIC_TYPE extends COLLECTION KEY_GENERIC_TYPE, List
 	 * @param o the action to replace the values
 	 * @throws NullPointerException if o is null
 	 */
-	public default void REPLACE(UNARY_OPERATOR o) {
+	public default void REPLACE(JAVA_UNARY_OPERATOR o) {
         Objects.requireNonNull(o);
         LIST_ITERATOR iter = listIterator();
         while (iter.hasNext())
 #if TYPE_BYTE || TYPE_SHORT || TYPE_CHAR || TYPE_FLOAT
-        	iter.set(SanityChecks.SANITY_CAST(o.APPLY(iter.NEXT())));
+        	iter.set(SanityChecks.SANITY_CAST(o.APPLY_CAST(iter.NEXT())));
 #else
 			iter.set(o.APPLY(iter.NEXT()));
 #endif

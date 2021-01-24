@@ -14,7 +14,7 @@ import java.util.function.Predicate;
 import java.util.function.UnaryOperator;
 #if PRIMITIVES
 import java.util.function.JAVA_PREDICATE;
-import java.util.function.UNARY_OPERATOR;
+import java.util.function.JAVA_UNARY_OPERATOR;
 #endif
 
 import speiger.src.collections.PACKAGE.collections.COLLECTION;
@@ -595,10 +595,10 @@ public class ARRAY_LIST KEY_GENERIC_TYPE extends ABSTRACT_LIST KEY_GENERIC_TYPE 
 	 * @throws NullPointerException if o is null
 	 */
 	@Override
-	public void REPLACE(UNARY_OPERATOR o) {
+	public void REPLACE(JAVA_UNARY_OPERATOR o) {
 		for(int i = 0;i<size;i++)
 #if TYPE_BYTE || TYPE_SHORT || TYPE_CHAR || TYPE_FLOAT
-			data[i] = SanityChecks.SANITY_CAST(o.APPLY(data[i]));
+			data[i] = SanityChecks.SANITY_CAST(o.APPLY_CAST(data[i]));
 #else
 	data[i] = o.APPLY(data[i]);
 #endif

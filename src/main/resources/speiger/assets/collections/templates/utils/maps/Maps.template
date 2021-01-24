@@ -1,0 +1,32 @@
+package speiger.src.collections.PACKAGE.utils.maps;
+
+import java.util.function.Consumer;
+
+import speiger.src.collections.objects.collections.ObjectIterable;
+import speiger.src.collections.objects.collections.ObjectIterator;
+import speiger.src.collections.PACKAGE.maps.interfaces.MAP;
+import speiger.src.collections.objects.sets.ObjectSet;
+
+public class MAPS
+{
+	public static GENERIC_KEY_VALUE_BRACES ObjectIterator<MAP.Entry KEY_VALUE_GENERIC_TYPE> fastIterator(MAP KEY_VALUE_GENERIC_TYPE map) {
+		ObjectSet<MAP.Entry KEY_VALUE_GENERIC_TYPE> entries = map.ENTRY_SET();
+		return entries instanceof MAP.FastEntrySet ? ((MAP.FastEntrySet KEY_VALUE_GENERIC_TYPE)entries).fastIterator() : entries.iterator();
+	}
+	
+	public static GENERIC_KEY_VALUE_BRACES ObjectIterable<MAP.Entry KEY_VALUE_GENERIC_TYPE> fastIterable(MAP KEY_VALUE_GENERIC_TYPE map) {
+		ObjectSet<MAP.Entry KEY_VALUE_GENERIC_TYPE> entries = map.ENTRY_SET();
+		return map instanceof MAP.FastEntrySet ? new ObjectIterable<MAP.Entry KEY_VALUE_GENERIC_TYPE>(){
+			@Override
+			public ObjectIterator<MAP.Entry KEY_VALUE_GENERIC_TYPE> iterator() { return ((MAP.FastEntrySet KEY_VALUE_GENERIC_TYPE)entries).fastIterator(); }
+			@Override
+			public void forEach(Consumer<? super MAP.Entry KEY_VALUE_GENERIC_TYPE> action) { ((MAP.FastEntrySet KEY_VALUE_GENERIC_TYPE)entries).fastForEach(action); }
+		} : entries;
+	}
+	
+	public static GENERIC_KEY_VALUE_BRACES void fastForEach(MAP KEY_VALUE_GENERIC_TYPE map, Consumer<MAP.Entry KEY_VALUE_GENERIC_TYPE> action) {
+		ObjectSet<MAP.Entry KEY_VALUE_GENERIC_TYPE> entries = map.ENTRY_SET();
+		if(entries instanceof MAP.FastEntrySet) ((MAP.FastEntrySet KEY_VALUE_GENERIC_TYPE)entries).fastForEach(action); 
+		else entries.forEach(action);
+	}
+}

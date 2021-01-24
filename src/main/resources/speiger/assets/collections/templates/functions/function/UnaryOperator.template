@@ -1,0 +1,25 @@
+package speiger.src.collections.PACKAGE.functions.function;
+
+import java.util.function.BiFunction;
+
+#if !SAME_TYPE || TYPE_BOOLEAN || !JDK_TYPE
+public interface UNARY_OPERATOR KEY_VALUE_GENERIC_TYPE extends BiFunction<CLASS_TYPE, CLASS_VALUE_TYPE, CLASS_VALUE_TYPE>
+#else
+#if SAME_TYPE && TYPE_OBJECT
+public interface UNARY_OPERATOR KEY_VALUE_GENERIC_TYPE extends BiFunction<CLASS_TYPE, CLASS_VALUE_TYPE, CLASS_VALUE_TYPE>
+#else
+public interface UNARY_OPERATOR KEY_VALUE_GENERIC_TYPE extends BiFunction<CLASS_TYPE, CLASS_VALUE_TYPE, CLASS_VALUE_TYPE>, JAVA_BINARY_OPERATOR
+#endif
+#endif
+{
+#if TYPE_OBJECT && VALUE_OBJECT
+#else if SAME_TYPE && !TYPE_OBJECT && JDK_TYPE && !TYPE_BOOLEAN
+	@Override
+	public default CLASS_VALUE_TYPE apply(CLASS_TYPE k, CLASS_VALUE_TYPE v) { return VALUE_TO_OBJ(APPLY_VALUE(OBJ_TO_KEY(k), OBJ_TO_VALUE(v))); }
+#else
+	public VALUE_TYPE APPLY_VALUE(KEY_TYPE k, VALUE_TYPE v);
+	
+	@Override
+	public default CLASS_VALUE_TYPE apply(CLASS_TYPE k, CLASS_VALUE_TYPE v) { return VALUE_TO_OBJ(APPLY_VALUE(OBJ_TO_KEY(k), OBJ_TO_VALUE(v))); }
+#endif
+}

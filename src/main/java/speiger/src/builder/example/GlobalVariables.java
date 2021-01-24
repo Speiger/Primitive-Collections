@@ -29,6 +29,7 @@ public class GlobalVariables
 	
 	public GlobalVariables createVariables()
 	{
+		addSimpleMapper("VALUE_PACKAGE", valueType.getPathType());
 		addSimpleMapper("PACKAGE", type.getPathType());
 		addSimpleMapper("CLASS_TYPE", type.getClassType());
 		addSimpleMapper("CLASS_VALUE_TYPE", valueType.getClassValueType());
@@ -39,14 +40,17 @@ public class GlobalVariables
 		addSimpleMapper("EMPTY_VALUE", valueType.getEmptyValue());
 
 		addSimpleMapper(" KEY_GENERIC_TYPE", type.isObject() ? "<"+type.getKeyType()+">" : "");
+		addSimpleMapper(" KEY_KEY_GENERIC_TYPE", type.isObject() ? "<"+type.getKeyType()+", "+type.getKeyType()+">" : "");
 		addSimpleMapper(" VALUE_GENERIC_TYPE", valueType.isObject() ? "<"+valueType.getValueType()+">" : "");
+		addSimpleMapper(" VALUE_VALUE_GENERIC_TYPE", valueType.isObject() ? "<"+valueType.getValueType()+", "+valueType.getValueType()+">" : "");
 		addSimpleMapper(" KEY_VALUE_GENERIC_TYPE", type.isObject() ? (valueType.isObject() ? "<"+type.getKeyType()+", "+valueType.getValueType()+">" : "<"+type.getKeyType()+">") : (valueType.isObject() ? "<"+valueType.getValueType()+">" : ""));
-		addSimpleMapper(" KEY_KEY_VALUE_GENERIC_TYPE", type.isObject() ? (valueType.isObject() ? "<"+type.getKeyType()+", "+type.getKeyType()+", "+valueType.getValueType()+">" : "<"+type.getKeyType()+", "+type.getKeyType()+">") : (valueType.isObject() ? "<"+valueType.getValueType()+">" : ""));
+		addSimpleMapper(" KEY_VALUE_VALUE_GENERIC_TYPE", type.isObject() ? (valueType.isObject() ? "<"+type.getKeyType()+", "+valueType.getValueType()+", "+valueType.getValueType()+">" : "<"+type.getKeyType()+">") : (valueType.isObject() ? "<"+valueType.getValueType()+", "+valueType.getValueType()+">" : ""));
 		addSimpleMapper(" NO_GENERIC_TYPE", type.isObject() ? "<?>" : "");
 		addSimpleMapper(" KEY_COMPAREABLE_TYPE", type.isObject() ? "<"+type.getKeyType()+" extends Comparable<T>>" : "");
 		addSimpleMapper(" KEY_SUPER_GENERIC_TYPE", type.isObject() ? "<? super "+type.getKeyType()+">" : "");
 		addSimpleMapper(" VALUE_SUPER_GENERIC_TYPE", valueType.isObject() ? "<? super "+valueType.getKeyType()+">" : "");
 		addSimpleMapper(" KEY_VALUE_SUPER_GENERIC_TYPE", type.isObject() ? (valueType.isObject() ? "<? super "+type.getKeyType()+", ? super "+valueType.getValueType()+">" : "<? super "+type.getKeyType()+">") : (valueType.isObject() ? "<? super "+valueType.getValueType()+">" : ""));
+		
 		
 		addSimpleMapper(" GENERIC_KEY_BRACES", type.isObject() ? " <"+type.getKeyType()+">" : "");
 		addSimpleMapper(" GENERIC_VALUE_BRACES", type.isObject() ? " <"+valueType.getValueType()+">" : "");
@@ -71,6 +75,8 @@ public class GlobalVariables
 		addInjectMapper("KEY_EQUALS_NULL", type.getComparableValue()+" == "+(type.isPrimitiveBlocking() ? type.getEmptyValue() : (type.needsCast() ? type.getEmptyValue() : "0"))).removeBraces();
 		addArgumentMapper("KEY_EQUALS_NOT", type.getEquals(true)).removeBraces();
 		addArgumentMapper("KEY_EQUALS", type.getEquals(false)).removeBraces();
+		addArgumentMapper("VALUE_EQUALS_NOT", valueType.getEquals(true)).removeBraces();
+		addArgumentMapper("VALUE_EQUALS", valueType.getEquals(false)).removeBraces();
 		
 		addArgumentMapper("COMPARE_TO_KEY", type.isObject() ? "((Comparable<T>)%1$s).compareTo((T)%2$s)" : type.getClassType()+".compare(%1$s, %2$s)").removeBraces();
 		addArgumentMapper("COMPARE_TO", type.isObject() ? "%1$s.compareTo(%2$s)" : type.getClassType()+".compare(%1$s, %2$s)").removeBraces();
@@ -81,7 +87,7 @@ public class GlobalVariables
 		
 		addInjectMapper("VALUE_TO_OBJ", valueType.isObject() ? "%s" : valueType.getClassType()+".valueOf(%s)").removeBraces();
 		addInjectMapper("OBJ_TO_VALUE", valueType.isObject() ? "%s" : "%s."+valueType.getKeyType()+"Value()").removeBraces();
-		addInjectMapper("CLASS_TO_VALUE", "(("+valueType.getClassType()+")%s)."+valueType.getKeyType()+"Value()").removeBraces();
+		addInjectMapper("CLASS_TO_VALUE", "(("+valueType.getClassValueType()+")%s)."+valueType.getValueType()+"Value()").removeBraces();
 		
 		addInjectMapper("KEY_TO_HASH", type.isObject() ? "%s.hashCode()" : type.getClassType()+".hashCode(%s)").removeBraces();
 		
@@ -97,13 +103,19 @@ public class GlobalVariables
 		return this;
 	}
 	
+	public GlobalVariables createPreFunctions()
+	{
+		addSimpleMapper("ENTRY_SET", type.getFileType().toLowerCase()+"2"+valueType.getFileType()+"EntrySet");
+		return this;
+	}
+	
 	public GlobalVariables createClassTypes()
 	{
 		addSimpleMapper("JAVA_PREDICATE", type.isPrimitiveBlocking() ? "" : type.getCustomJDKType().getFileType()+"Predicate");
 		addSimpleMapper("JAVA_CONSUMER", type.isPrimitiveBlocking() ? "" : "java.util.function."+type.getCustomJDKType().getFileType()+"Consumer");
 		addSimpleMapper("JAVA_FUNCTION", type.getFunctionClass(valueType));
-		addSimpleMapper("JAVA_BI_FUNCTION", type.getBiFunctionClass(valueType));
-		addSimpleMapper("UNARY_OPERATOR", type.isObject() ? "" : type == ClassType.BOOLEAN ? "BinaryOperator" : type.getCustomJDKType().getFileType()+"UnaryOperator");
+		addSimpleMapper("JAVA_BINARY_OPERATOR", type == ClassType.BOOLEAN ? "" : (type.isObject() ? "java.util.function.BinaryOperator" : "java.util.function."+type.getCustomJDKType().getFileType()+"BinaryOperator"));
+		addSimpleMapper("JAVA_UNARY_OPERATOR", type.isObject() ? "BinaryOperator" : type == ClassType.BOOLEAN ? "" : type.getCustomJDKType().getFileType()+"UnaryOperator");
 		
 		//Final Classes
 		addClassMapper("ARRAY_LIST", "ArrayList");
@@ -130,18 +142,19 @@ public class GlobalVariables
 		addClassMapper("COLLECTIONS", "Collections");
 		addClassMapper("ARRAYS", "Arrays");
 		addClassMapper("ITERATORS", "Iterators");
+		addBiClassMapper("MAPS", "Maps", "2");
 		
 		//Interfaces
 		addClassMapper("LIST_ITERATOR", "ListIterator");
 		addClassMapper("BI_ITERATOR", "BidirectionalIterator");
 		addBiClassMapper("BI_CONSUMER", "Consumer", "");
-		addBiClassMapper("BI_FUNCTION", "BiFunction", "2");
 		addClassMapper("ITERATOR", "Iterator");
 		addClassMapper("ITERABLE", "Iterable");
 		addClassMapper("COLLECTION", "Collection");
 		addBiClassMapper("FUNCTION", "Function", "2");
 		addClassMapper("LIST_ITER", "ListIter");
 		addClassMapper("LIST", "List");
+		addBiClassMapper("MAP", "Map", "2");
 		addClassMapper("NAVIGABLE_SET", "NavigableSet");
 		addClassMapper("PRIORITY_QUEUE", "PriorityQueue");
 		addClassMapper("PRIORITY_DEQUEUE", "PriorityDequeue");
@@ -149,6 +162,7 @@ public class GlobalVariables
 		addClassMapper("SET", "Set");
 		addClassMapper("STRATEGY", "Strategy");
 		addClassMapper("STACK", "Stack");
+		addBiClassMapper("UNARY_OPERATOR", "UnaryOperator", "");
 		if(type.isObject())
 		{
 			addSimpleMapper("CONSUMER", "Consumer");
@@ -166,30 +180,38 @@ public class GlobalVariables
 	
 	public GlobalVariables createFunctions()
 	{
-		addSimpleMapper("APPLY_VALUE", "applyAs"+valueType.getCustomJDKType().getNonFileType());
-		addSimpleMapper("APPLY", "applyAs"+type.getCustomJDKType().getNonFileType());
-		addFunctionMapper("NEXT", "next");
-		addSimpleMapper("TO_ARRAY", "to"+type.getNonFileType()+"Array");
-		addFunctionMapper("GET_KEY", "get");
-		addFunctionValueMapper("GET_VALUE", "get");
+		addSimpleMapper("APPLY_VALUE", "applyAs"+valueType.getNonFileType());
+		addSimpleMapper("APPLY_CAST", "applyAs"+type.getCustomJDKType().getNonFileType());
+		addSimpleMapper("APPLY", "applyAs"+type.getNonFileType());
+		addFunctionValueMappers("COMPUTE_IF_ABSENT", "compute%sIfAbsent");
+		addFunctionValueMappers("COMPUTE_IF_PRESENT", "compute%sIfPresent");
+		addFunctionValueMapper("COMPUTE", "compute");
 		addFunctionMapper("ENQUEUE_FIRST", "enqueueFirst");
 		addFunctionMapper("ENQUEUE", "enqueue");
 		addFunctionMapper("DEQUEUE_LAST", "dequeueLast");
 		addFunctionMapper("DEQUEUE", "dequeue");
-		addFunctionMapper("REMOVE_KEY", "rem");
-		addFunctionMapper("REMOVE_LAST", "removeLast");
-		addFunctionMapper("REMOVE", "remove");
+		addFunctionMappers("ENTRY_KEY", "get%sKey");
+		addFunctionValueMappers("ENTRY_VALUE", "get%sValue");
+		addFunctionMapper("POLL_FIRST_KEY", "pollFirst");
+		addFunctionMapper("POLL_LAST_KEY", "pollLast");
+		addFunctionMapper("FIRST_KEY", "first");
+		addFunctionMapper("GET_KEY", "get");
+		addFunctionValueMapper("GET_VALUE", "get");
+		addFunctionMapper("LAST_KEY", "last");
+		addFunctionValueMapper("MERGE", "merge");
+		addFunctionMapper("NEXT", "next");
 		addFunctionMapper("PREVIOUS", "previous");
 		addFunctionMapper("PEEK", "peek");
 		addFunctionMapper("POP", "pop");
 		addFunctionMapper("PUSH", "push");
-		addFunctionMapper("TOP", "top");
-		addFunctionMappers("REPLACE", "replace%ss");
+		addFunctionMapper("REMOVE_KEY", "rem");
+		addFunctionMapper("REMOVE_LAST", "removeLast");
+		addFunctionMapper("REMOVE", "remove");
+		addFunctionValueMappers("REPLACE_VALUES", valueType.isObject() ? "replaceObjects" : "replace%ss");
+		addFunctionMappers("REPLACE", type.isObject() ? "replaceObjects" : "replace%ss");
 		addFunctionMappers("SORT", "sort%ss");
-		addFunctionMapper("POLL_FIRST_KEY", "pollFirst");
-		addFunctionMapper("FIRST_KEY", "first");
-		addFunctionMapper("POLL_LAST_KEY", "pollLast");
-		addFunctionMapper("LAST_KEY", "last");
+		addSimpleMapper("TO_ARRAY", "to"+type.getNonFileType()+"Array");
+		addFunctionMapper("TOP", "top");
 		return this;
 	}
 	
@@ -199,10 +221,9 @@ public class GlobalVariables
 		flags.add("VALUE_"+valueType.getCapType());
 		if(type == valueType) flags.add("SAME_TYPE");
 		if(type.hasFunction(valueType)) flags.add("JDK_FUNCTION");
-		if(type.hasBiFunction(valueType)) flags.add("JDK_BI_FUNCTION");
 		if(!type.needsCustomJDKType()) flags.add("JDK_TYPE");
 		if(!type.isPrimitiveBlocking()) flags.add("PRIMITIVES");
-		if(valueType.isPrimitiveBlocking()) flags.add("VALUE_PRIMITIVES");
+		if(!valueType.isPrimitiveBlocking()) flags.add("VALUE_PRIMITIVES");
 		if(valueType.needsCustomJDKType()) flags.add("JDK_VALUE");
 		return this;
 	}
@@ -232,14 +253,15 @@ public class GlobalVariables
 	
 	private void addClassMapper(String pattern, String replacement)
 	{
-		operators.add(new SimpleMapper(type.name()+"["+pattern+"]", pattern, type.getFileType()+replacement));
 		operators.add(new SimpleMapper(type.name()+"[VALUE_"+pattern+"]", "VALUE_"+pattern, valueType.getFileType()+replacement));
+		operators.add(new SimpleMapper(type.name()+"["+pattern+"]", pattern, type.getFileType()+replacement));
 	}
 	
 	private void addBiClassMapper(String pattern, String replacement, String splitter)
 	{
+		operators.add(new SimpleMapper(type.name()+"[KEY_"+pattern+"]", "KEY_"+pattern, type.getFileType()+splitter+type.getFileType()+replacement));
+		operators.add(new SimpleMapper(type.name()+"[VALUE_"+pattern+"]", "VALUE_"+pattern, valueType.getFileType()+splitter+valueType.getFileType()+replacement));
 		operators.add(new SimpleMapper(type.name()+"["+pattern+"]", pattern, type.getFileType()+splitter+valueType.getFileType()+replacement));
-		
 	}
 	
 	private void addAbstractMapper(String pattern, String replacement)
@@ -260,6 +282,11 @@ public class GlobalVariables
 	private void addFunctionMappers(String pattern, String replacement)
 	{
 		operators.add(new SimpleMapper(type.name()+"["+pattern+"]", pattern, String.format(replacement, type.getNonFileType())));		
+	}
+	
+	private void addFunctionValueMappers(String pattern, String replacement)
+	{
+		operators.add(new SimpleMapper(type.name()+"["+pattern+"]", pattern, String.format(replacement, valueType.getNonFileType())));		
 	}
 	
 	private void addSimpleMapper(String pattern, String replacement)

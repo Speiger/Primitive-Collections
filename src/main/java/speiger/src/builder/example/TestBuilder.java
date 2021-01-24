@@ -27,6 +27,11 @@ public class TestBuilder extends TemplateProcessor
 		super(Paths.get("src/main/resources/speiger/assets/collections/templates/"), Paths.get("src/main/java/speiger/src/collections/"), Paths.get("src/main/resources/speiger/assets/collections/"));
 	}
 	
+	public TestBuilder(Path sourceFolder, Path outputFolder, Path dataFolder)
+	{
+		super(sourceFolder, outputFolder, dataFolder);
+	}
+	
 	@Override
 	protected boolean isFileValid(Path fileName)
 	{
@@ -58,7 +63,9 @@ public class TestBuilder extends TemplateProcessor
 		}
 		biRequired.put("BiConsumer", "");
 		biRequired.put("Function", "2");
-		biRequired.put("BiFunction", "2");
+		biRequired.put("UnaryOperator", "");
+		biRequired.put("Map", "2");
+		biRequired.put("Maps", "2");
 		nameRemapper.put("BiConsumer", "%sConsumer");
 		nameRemapper.put("IArray", "I%sArray");
 		nameRemapper.put("AbstractCollection", "Abstract%sCollection");
@@ -74,6 +81,7 @@ public class TestBuilder extends TemplateProcessor
 		type.createFlags();
 		type.createHelperVariables();
 		type.createVariables();
+		type.createPreFunctions();
 		type.createClassTypes();
 		type.createFunctions();
 		if(mainType == subType) variables.add(type);
@@ -122,7 +130,14 @@ public class TestBuilder extends TemplateProcessor
 	{
 		try
 		{
-            new TestBuilder().process(false);
+	        if(args.length == 0) {
+	            new TestBuilder().process(false);
+	        } else if(args.length == 3) {
+	            new TestBuilder(Paths.get(args[0]), Paths.get(args[1]), Paths.get(args[2])).process(false);
+	    	} else {
+	            System.out.println("Invalid argument count passed in");
+	            System.exit(1);
+	    	}
 		}
 		catch(InterruptedException e)
 		{

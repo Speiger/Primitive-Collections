@@ -1,0 +1,196 @@
+package speiger.src.collections.PACKAGE.maps.interfaces;
+
+import java.util.Map;
+#if VALUE_OBJECT && !TYPE_OBJECT
+import java.util.Objects;
+#endif
+import java.util.function.BiConsumer;
+import java.util.function.BiFunction;
+import java.util.function.Consumer;
+import java.util.function.Function;
+
+import speiger.src.collections.VALUE_PACKAGE.collections.VALUE_COLLECTION;
+import speiger.src.collections.PACKAGE.functions.consumer.BI_CONSUMER;
+import speiger.src.collections.PACKAGE.functions.function.FUNCTION;
+import speiger.src.collections.PACKAGE.functions.function.UNARY_OPERATOR;
+import speiger.src.collections.PACKAGE.sets.SET;
+#if !SAME_TYPE
+import speiger.src.collections.VALUE_PACKAGE.functions.function.VALUE_UNARY_OPERATOR;
+#endif
+import speiger.src.collections.objects.collections.ObjectIterator;
+#if !TYPE_OBJECT
+import speiger.src.collections.objects.sets.ObjectSet;
+#endif
+
+public interface MAP KEY_VALUE_GENERIC_TYPE extends Map<CLASS_TYPE, CLASS_VALUE_TYPE>, FUNCTION KEY_VALUE_GENERIC_TYPE
+{
+	public VALUE_TYPE getDefaultReturnValue();
+	public MAP KEY_VALUE_GENERIC_TYPE setDefaultReturnValue(VALUE_TYPE v);
+	
+	public VALUE_TYPE put(KEY_TYPE key, VALUE_TYPE value);
+	public VALUE_TYPE putIfAbsent(KEY_TYPE key, VALUE_TYPE value);
+#if VALUE_PRIMITIVES
+	public boolean addTo(KEY_TYPE key, VALUE_TYPE value);
+#endif
+	
+	public void putAll(MAP KEY_VALUE_GENERIC_TYPE m);
+	
+#if !TYPE_OBJECT	
+	public boolean containsKey(KEY_TYPE key);
+	
+	@Override
+	public default boolean containsKey(Object key) {
+		return key instanceof CLASS_TYPE && containsKey(CLASS_TO_KEY(key));
+	}
+	
+#endif
+#if !VALUE_OBJECT
+	public boolean containsValue(VALUE_TYPE value);
+	
+	@Override
+	public default boolean containsValue(Object value) {
+		return value instanceof CLASS_VALUE_TYPE && containsValue(CLASS_TO_VALUE(value));
+	}
+	
+#endif
+#if !TYPE_OBJECT
+	public VALUE_TYPE remove(KEY_TYPE key);
+	
+	@Override
+	public default CLASS_VALUE_TYPE remove(Object key) {
+		return key instanceof CLASS_TYPE ? VALUE_TO_OBJ(remove(CLASS_TO_KEY(key))) : VALUE_TO_OBJ(getDefaultReturnValue());
+	}
+	
+#endif
+#if !TYPE_OBJECT || !VALUE_OBJECT
+	public boolean remove(KEY_TYPE key, VALUE_TYPE value);
+	
+	@Override
+	public default boolean remove(Object key, Object value) {
+#if TYPE_OBJECT
+		return value instanceof CLASS_VALUE_TYPE && remove((KEY_TYPE)key, CLASS_TO_VALUE(value));
+#else if VALUE_OBJECT
+		return key instanceof CLASS_TYPE && remove(CLASS_TO_KEY(key), (VALUE_TYPE)value);
+#else
+		return key instanceof CLASS_TYPE && value instanceof CLASS_VALUE_TYPE && remove(CLASS_TO_KEY(key), CLASS_TO_VALUE(value));
+#endif
+	}
+#endif
+	
+	public boolean replace(KEY_TYPE key, VALUE_TYPE oldValue, VALUE_TYPE newValue);
+	public VALUE_TYPE replace(KEY_TYPE key, VALUE_TYPE value);
+	public void REPLACE_VALUES(UNARY_OPERATOR KEY_VALUE_GENERIC_TYPE mappingFunction);
+	public VALUE_TYPE COMPUTE(KEY_TYPE key, UNARY_OPERATOR KEY_VALUE_GENERIC_TYPE mappingFunction);
+	public VALUE_TYPE COMPUTE_IF_ABSENT(KEY_TYPE key, FUNCTION KEY_VALUE_GENERIC_TYPE mappingFunction);
+	public VALUE_TYPE COMPUTE_IF_PRESENT(KEY_TYPE key, UNARY_OPERATOR KEY_VALUE_GENERIC_TYPE mappingFunction);
+	public VALUE_TYPE MERGE(KEY_TYPE key, VALUE_TYPE value, VALUE_UNARY_OPERATOR VALUE_VALUE_GENERIC_TYPE mappingFunction);
+	
+#if !TYPE_OBJECT || !VALUE_OBJECT
+	@Override
+	public default boolean replace(CLASS_TYPE key, CLASS_VALUE_TYPE oldValue, CLASS_VALUE_TYPE newValue) {
+		return replace(OBJ_TO_KEY(key), OBJ_TO_VALUE(oldValue), OBJ_TO_VALUE(newValue));
+	}
+	
+	@Override
+	public default CLASS_VALUE_TYPE replace(CLASS_TYPE key, CLASS_VALUE_TYPE value) {
+		return VALUE_TO_OBJ(replace(OBJ_TO_KEY(key), OBJ_TO_VALUE(value)));
+	}
+	
+	@Override
+	public VALUE_TYPE GET_VALUE(KEY_TYPE key);
+	public VALUE_TYPE getOrDefault(KEY_TYPE key, VALUE_TYPE defaultValue);
+	
+	@Override
+	public default CLASS_VALUE_TYPE get(Object key) {
+#if TYPE_OBJECT
+		return VALUE_TO_OBJ(GET_VALUE((CLASS_TYPE)key));
+#else
+		return VALUE_TO_OBJ(key instanceof CLASS_TYPE ? GET_VALUE(CLASS_TO_KEY(key)) : getDefaultReturnValue());
+#endif
+	}
+	
+	@Override
+	public default CLASS_VALUE_TYPE getOrDefault(Object key, CLASS_VALUE_TYPE defaultValue) {
+#if TYPE_OBJECT
+		CLASS_VALUE_TYPE value = VALUE_TO_OBJ(GET_VALUE((CLASS_TYPE)key));
+#else
+		CLASS_VALUE_TYPE value = VALUE_TO_OBJ(key instanceof CLASS_TYPE ? GET_VALUE(CLASS_TO_KEY(key)) : getDefaultReturnValue());
+#endif
+		return VALUE_EQUALS_NOT(value, getDefaultReturnValue()) || containsKey(key) ? value : defaultValue;
+	}
+	
+#endif
+	@Override
+	public default void replaceAll(BiFunction<? super CLASS_TYPE, ? super CLASS_VALUE_TYPE, ? extends CLASS_VALUE_TYPE> mappingFunction) {
+		REPLACE_VALUES(mappingFunction instanceof UNARY_OPERATOR ? (UNARY_OPERATOR KEY_VALUE_GENERIC_TYPE)mappingFunction : (K, V) -> OBJ_TO_VALUE(mappingFunction.apply(KEY_TO_OBJ(K), VALUE_TO_OBJ(V))));
+	}
+	
+	@Override
+	public default CLASS_VALUE_TYPE compute(CLASS_TYPE key, BiFunction<? super CLASS_TYPE, ? super CLASS_VALUE_TYPE, ? extends CLASS_VALUE_TYPE> mappingFunction) {
+		return VALUE_TO_OBJ(COMPUTE(OBJ_TO_KEY(key), mappingFunction instanceof UNARY_OPERATOR ? (UNARY_OPERATOR KEY_VALUE_GENERIC_TYPE)mappingFunction : (K, V) -> OBJ_TO_VALUE(mappingFunction.apply(KEY_TO_OBJ(K), VALUE_TO_OBJ(V)))));
+	}
+	
+	@Override
+	public default CLASS_VALUE_TYPE computeIfAbsent(CLASS_TYPE key, Function<? super CLASS_TYPE, ? extends CLASS_VALUE_TYPE> mappingFunction) {
+		return VALUE_TO_OBJ(COMPUTE_IF_ABSENT(OBJ_TO_KEY(key), mappingFunction instanceof FUNCTION ? (FUNCTION KEY_VALUE_GENERIC_TYPE)mappingFunction : K -> OBJ_TO_VALUE(mappingFunction.apply(KEY_TO_OBJ(K)))));
+	}
+	
+	@Override
+	public default CLASS_VALUE_TYPE computeIfPresent(CLASS_TYPE key, BiFunction<? super CLASS_TYPE, ? super CLASS_VALUE_TYPE, ? extends CLASS_VALUE_TYPE> mappingFunction) {
+		return VALUE_TO_OBJ(COMPUTE_IF_PRESENT(OBJ_TO_KEY(key), mappingFunction instanceof UNARY_OPERATOR ? (UNARY_OPERATOR KEY_VALUE_GENERIC_TYPE)mappingFunction : (K, V) -> OBJ_TO_VALUE(mappingFunction.apply(KEY_TO_OBJ(K), VALUE_TO_OBJ(V)))));
+	}
+	
+	@Override
+	public default CLASS_VALUE_TYPE merge(CLASS_TYPE key, CLASS_VALUE_TYPE value, BiFunction<? super CLASS_VALUE_TYPE, ? super CLASS_VALUE_TYPE, ? extends CLASS_VALUE_TYPE> mappingFunction) {
+		return VALUE_TO_OBJ(MERGE(OBJ_TO_KEY(key), OBJ_TO_VALUE(value), mappingFunction instanceof VALUE_UNARY_OPERATOR ? (VALUE_UNARY_OPERATOR VALUE_VALUE_GENERIC_TYPE)mappingFunction : (K, V) -> OBJ_TO_VALUE(mappingFunction.apply(VALUE_TO_OBJ(K), VALUE_TO_OBJ(V)))));
+	}
+	
+	public void forEach(BI_CONSUMER KEY_VALUE_GENERIC_TYPE action);
+	
+	@Override
+	public default void forEach(BiConsumer<? super CLASS_TYPE, ? super CLASS_VALUE_TYPE> action) {
+		forEach(action instanceof BI_CONSUMER ? (BI_CONSUMER KEY_VALUE_GENERIC_TYPE)action : (K, V) -> action.accept(KEY_TO_OBJ(K), VALUE_TO_OBJ(V)));
+	}
+	
+	@Override
+	public SET KEY_GENERIC_TYPE keySet();
+	@Override
+	public VALUE_COLLECTION VALUE_GENERIC_TYPE values();
+	@Override
+	public ObjectSet<Map.Entry<CLASS_TYPE, CLASS_VALUE_TYPE>> entrySet();
+	public ObjectSet<Entry KEY_VALUE_GENERIC_TYPE> ENTRY_SET();
+	
+#if !TYPE_OBJECT || !VALUE_OBJECT
+	@Override
+	public default CLASS_VALUE_TYPE put(CLASS_TYPE key, CLASS_VALUE_TYPE value) {
+		return VALUE_TO_OBJ(put(OBJ_TO_KEY(key), OBJ_TO_VALUE(value)));
+	}
+	
+	@Override
+	public default CLASS_VALUE_TYPE putIfAbsent(CLASS_TYPE key, CLASS_VALUE_TYPE value) {
+		return VALUE_TO_OBJ(put(OBJ_TO_KEY(key), OBJ_TO_VALUE(value)));
+	}
+#endif
+	public interface FastEntrySet KEY_VALUE_GENERIC_TYPE extends ObjectSet<MAP.Entry KEY_VALUE_GENERIC_TYPE>
+	{
+		public ObjectIterator<MAP.Entry KEY_VALUE_GENERIC_TYPE> fastIterator();
+		public default void fastForEach(Consumer<? super MAP.Entry KEY_VALUE_GENERIC_TYPE> action) {
+			forEach(action);
+		}
+	}
+	
+	public interface Entry KEY_VALUE_GENERIC_TYPE extends Map.Entry<CLASS_TYPE, CLASS_VALUE_TYPE>
+	{
+#if !TYPE_OBJECT
+		public KEY_TYPE ENTRY_KEY();
+		public default CLASS_TYPE getKey() { return KEY_TO_OBJ(ENTRY_KEY()); }
+#endif
+		
+#if !VALUE_OBJECT
+		public VALUE_TYPE ENTRY_VALUE();
+		public VALUE_TYPE setValue(VALUE_TYPE value);
+		public default CLASS_VALUE_TYPE getValue() { return VALUE_TO_OBJ(ENTRY_VALUE()); }
+		public default CLASS_VALUE_TYPE setValue(CLASS_VALUE_TYPE value) { return VALUE_TO_OBJ(setValue(OBJ_TO_VALUE(value))); }
+#endif
+	}
+}
