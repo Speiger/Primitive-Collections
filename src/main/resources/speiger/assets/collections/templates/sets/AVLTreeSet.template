@@ -402,7 +402,7 @@ public class AVL_TREE_SET KEY_GENERIC_TYPE extends ABSTRACT_SET KEY_GENERIC_TYPE
 		}
 	}
 	
-	protected int compare(KEY_TYPE k, KEY_TYPE v) { return comparator != null ? comparator.compare(k, v) : COMPARE_TO_KEY(k, v);}
+	protected int compare(KEY_TYPE k, KEY_TYPE v) { return comparator != null ? comparator.compare(k, v) : COMPAREABLE_TO_KEY(k, v);}
 	
 	/** From CLR */
 	protected void rotateLeft(Entry KEY_GENERIC_TYPE entry) {

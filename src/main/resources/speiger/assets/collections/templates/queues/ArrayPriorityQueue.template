@@ -91,7 +91,7 @@ public class ARRAY_PRIORITY_QUEUE KEY_GENERIC_TYPE implements PRIORITY_QUEUE KEY
 	public void ENQUEUE(KEY_TYPE e) {
 		if(size == array.length) array = Arrays.copyOf(array, size+1);
 		if(firstIndex != -1){
-			int compare = comparator == null ? COMPARE_TO_KEY(e, array[firstIndex]) : comparator.compare(e, array[firstIndex]);
+			int compare = comparator == null ? COMPAREABLE_TO_KEY(e, array[firstIndex]) : comparator.compare(e, array[firstIndex]);
 			if(compare < 0) firstIndex = size;
 			else if(compare > 0) firstIndex = -1;
 		}
@@ -191,7 +191,7 @@ public class ARRAY_PRIORITY_QUEUE KEY_GENERIC_TYPE implements PRIORITY_QUEUE KEY
 			KEY_TYPE value = array[index];
 			if(comparator == null) {
 				for(int i = index;i>=0;i--) {
-					if(COMPARE_TO_KEY(array[i], value) < 0) 
+					if(COMPAREABLE_TO_KEY(array[i], value) < 0) 
 						value = array[index = i];
 				}
 			}

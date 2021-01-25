@@ -6,6 +6,8 @@ tasks.withType(JavaCompile) {
     options.encoding = 'UTF-8'
 }
 
+apply plugin: 'eclipse'
+
 eclipse {
 	classpath {
 		downloadJavadoc = true

@@ -62,6 +62,10 @@ public class GlobalVariables
 			addSimpleMapper("JAVA_TYPE", type.getCustomJDKType().getKeyType());
 			addSimpleMapper("SANITY_CAST", "castTo"+type.getFileType());
 		}
+		if(valueType.needsCustomJDKType())
+		{
+			addSimpleMapper("SANITY_CAST_VALUE", "castTo"+valueType.getFileType());
+		}
 		addAnnontion("@PrimitiveOverride", "@Override");
 		addSimpleMapper("@PrimitiveDoc", "");
 		addAnnontion("@Primitive", "@Deprecated");
@@ -70,37 +74,33 @@ public class GlobalVariables
 	
 	public GlobalVariables createHelperVariables()
 	{
-		addArgumentMapper("EQUALS_KEY_TYPE", type.isObject() ? "Objects.equals(%2$s, %1$s)" : "Objects.equals(%2$s, KEY_TO_OBJ(%1$s))").removeBraces();
-		addInjectMapper("KEY_EQUALS_NOT_NULL", type.getComparableValue()+" != "+(type.isPrimitiveBlocking() ? type.getEmptyValue() : (type.needsCast() ? type.getEmptyValue() : "0"))).removeBraces();
-		addInjectMapper("KEY_EQUALS_NULL", type.getComparableValue()+" == "+(type.isPrimitiveBlocking() ? type.getEmptyValue() : (type.needsCast() ? type.getEmptyValue() : "0"))).removeBraces();
-		addArgumentMapper("KEY_EQUALS_NOT", type.getEquals(true)).removeBraces();
-		addArgumentMapper("KEY_EQUALS", type.getEquals(false)).removeBraces();
-		addArgumentMapper("VALUE_EQUALS_NOT", valueType.getEquals(true)).removeBraces();
-		addArgumentMapper("VALUE_EQUALS", valueType.getEquals(false)).removeBraces();
-		
-		addArgumentMapper("COMPARE_TO_KEY", type.isObject() ? "((Comparable<T>)%1$s).compareTo((T)%2$s)" : type.getClassType()+".compare(%1$s, %2$s)").removeBraces();
-		addArgumentMapper("COMPARE_TO", type.isObject() ? "%1$s.compareTo(%2$s)" : type.getClassType()+".compare(%1$s, %2$s)").removeBraces();
-		
-		addInjectMapper("KEY_TO_OBJ", type.isObject() ? "%s" : type.getClassType()+".valueOf(%s)").removeBraces();
-		addInjectMapper("OBJ_TO_KEY", type.isObject() ? "%s" : "%s."+type.getKeyType()+"Value()").removeBraces();
-		addInjectMapper("CLASS_TO_KEY", "(("+type.getClassType()+")%s)."+type.getKeyType()+"Value()").removeBraces();
-		
-		addInjectMapper("VALUE_TO_OBJ", valueType.isObject() ? "%s" : valueType.getClassType()+".valueOf(%s)").removeBraces();
-		addInjectMapper("OBJ_TO_VALUE", valueType.isObject() ? "%s" : "%s."+valueType.getKeyType()+"Value()").removeBraces();
-		addInjectMapper("CLASS_TO_VALUE", "(("+valueType.getClassValueType()+")%s)."+valueType.getValueType()+"Value()").removeBraces();
-		
-		addInjectMapper("KEY_TO_HASH", type.isObject() ? "%s.hashCode()" : type.getClassType()+".hashCode(%s)").removeBraces();
-		
-		addSimpleMapper("CAST_KEY_ARRAY ", type.isObject() ? "(KEY_TYPE[])" : "");
-		addSimpleMapper("EMPTY_KEY_ARRAY", type.isObject() ? "(KEY_TYPE[])ARRAYS.EMPTY_ARRAY" : "ARRAYS.EMPTY_ARRAY");
-		addInjectMapper("NEW_KEY_ARRAY", type.isObject() ? "(KEY_TYPE[])new Object[%s]" : "new KEY_TYPE[%s]").removeBraces();
-		addInjectMapper("NEW_CLASS_ARRAY", type.isObject() ? "(CLASS_TYPE[])new Object[%s]" : "new CLASS_TYPE[%s]").removeBraces();
-		
-		addSimpleMapper("CAST_VALUE_ARRAY ", valueType.isObject() ? "(VALUE_TYPE[])" : "");
-		addSimpleMapper("EMPTY_VALUE_ARRAY", valueType.isObject() ? "(VALUE_TYPE[])VALUE_ARRAYS.EMPTY_ARRAY" : "VALUE_ARRAYS.EMPTY_ARRAY");
-		addInjectMapper("NEW_VALUE_ARRAY", valueType.isObject() ? "(VALUE_TYPE[])new Object[%s]" : "new VALUE_TYPE[%s]").removeBraces();
-		addInjectMapper("NEW_CLASS_VALUE_ARRAY", valueType.isObject() ? "(CLASS_VALUE_TYPE[])new Object[%s]" : "new CLASS_VALUE_TYPE[%s]").removeBraces();
+		createHelperVars(type, false, "KEY");
+		createHelperVars(valueType, true, "VALUE");
 		return this;
+	}
+	
+	private void createHelperVars(ClassType type, boolean value, String fix)
+	{
+		addArgumentMapper("EQUALS_"+fix+"_TYPE", "Objects.equals(%2$s, "+(type.isObject() ? "%1$s" : fix+"_TO_OBJ(%1$s)")+")").removeBraces();
+		addInjectMapper(fix+"_EQUALS_NOT_NULL", type.getComparableValue()+" != "+(type.isPrimitiveBlocking() || type.needsCast() ? type.getEmptyValue() : "0")).removeBraces();
+		addInjectMapper(fix+"_EQUALS_NULL", type.getComparableValue()+" == "+(type.isPrimitiveBlocking() || type.needsCast() ? type.getEmptyValue() : "0")).removeBraces();
+		addArgumentMapper(fix+"_EQUALS_NOT", type.getEquals(true)).removeBraces();
+		addArgumentMapper(fix+"_EQUALS", type.getEquals(false)).removeBraces();
+		
+		addArgumentMapper("COMPAREABLE_TO_"+fix, type.isObject() ? "((Comparable<"+type.getKeyType(value)+">)%1$s).compareTo(("+type.getKeyType(value)+")%2$s)" : type.getClassType(value)+".compare(%1$s, %2$s)").removeBraces();
+		addArgumentMapper("COMPARE_TO_"+fix, type.isObject() ? "%1$s.compareTo(%2$s)" : type.getClassType(value)+".compare(%1$s, %2$s)").removeBraces();
+		
+		addInjectMapper(fix+"_TO_OBJ", type.isObject() ? "%s" : type.getClassType(value)+".valueOf(%s)").removeBraces();
+		addInjectMapper("OBJ_TO_"+fix, type.isObject() ? "%s" : "%s."+type.getKeyType(value)+"Value()").removeBraces();
+		addInjectMapper("CLASS_TO_"+fix, "(("+type.getClassType(value)+")%s)."+type.getKeyType(value)+"Value()").removeBraces();
+		
+		addInjectMapper(fix+"_TO_HASH", type.isObject() ? "%s.hashCode()" : type.getClassType(value)+".hashCode(%s)").removeBraces();
+		addInjectMapper(fix+"_TO_STRING", type.isObject() ? "%s.toString()" : type.getClassType(value)+".toString(%s)").removeBraces();
+		
+		addSimpleMapper("CAST_"+fix+"_ARRAY ", type.isObject() ? "("+fix+"_TYPE[])" : "");
+		addSimpleMapper("EMPTY_"+fix+"_ARRAY", type.isObject() ? "("+fix+"_TYPE[])ARRAYS.EMPTY_ARRAY" : "ARRAYS.EMPTY_ARRAY");
+		addInjectMapper("NEW_"+fix+"_ARRAY", type.isObject() ? "("+fix+"_TYPE[])new Object[%s]" : "new "+fix+"_TYPE[%s]").removeBraces();
+		addInjectMapper("NEW_CLASS"+(value ? "_VALUE" : "")+"_ARRAY", type.isObject() ? "(CLASS_TYPE[])new Object[%s]" : "new CLASS_TYPE[%s]").removeBraces();
 	}
 	
 	public GlobalVariables createPreFunctions()
@@ -134,6 +134,7 @@ public class GlobalVariables
 		addAbstractMapper("ABSTRACT_COLLECTION", "Abstract%sCollection");
 		addAbstractMapper("ABSTRACT_SET", "Abstract%sSet");
 		addAbstractMapper("ABSTRACT_LIST", "Abstract%sList");
+		addAbstractBiMapper("ABSTRACT_MAP", "Abstract%sMap", "2");
 		addClassMapper("SUB_LIST", "SubList");
 		
 		//Helper Classes
@@ -180,9 +181,9 @@ public class GlobalVariables
 	
 	public GlobalVariables createFunctions()
 	{
-		addSimpleMapper("APPLY_VALUE", "applyAs"+valueType.getNonFileType());
+		addSimpleMapper("APPLY_VALUE", valueType.isObject() ? "apply" : "applyAs"+valueType.getNonFileType());
 		addSimpleMapper("APPLY_CAST", "applyAs"+type.getCustomJDKType().getNonFileType());
-		addSimpleMapper("APPLY", "applyAs"+type.getNonFileType());
+		addSimpleMapper("APPLY", type.isObject() ? "apply" : "applyAs"+type.getNonFileType());
 		addFunctionValueMappers("COMPUTE_IF_ABSENT", "compute%sIfAbsent");
 		addFunctionValueMappers("COMPUTE_IF_PRESENT", "compute%sIfPresent");
 		addFunctionValueMapper("COMPUTE", "compute");
@@ -266,11 +267,18 @@ public class GlobalVariables
 	
 	private void addAbstractMapper(String pattern, String replacement)
 	{
+		operators.add(new SimpleMapper(type.name()+"[VALUE_"+pattern+"]", "VALUE_"+pattern, String.format(replacement, valueType.getFileType())));
 		operators.add(new SimpleMapper(type.name()+"["+pattern+"]", pattern, String.format(replacement, type.getFileType())));		
+	}
+	
+	private void addAbstractBiMapper(String pattern, String replacement, String splitter) 
+	{
+		operators.add(new SimpleMapper(type.name()+"["+pattern+"]", pattern, String.format(replacement, type.getFileType()+splitter+valueType.getFileType())));
 	}
 	
 	private void addFunctionMapper(String pattern, String replacement)
 	{
+		operators.add(new SimpleMapper(type.name()+"[VALUE_"+pattern+"]", "VALUE_"+pattern, replacement+valueType.getNonFileType()));
 		operators.add(new SimpleMapper(type.name()+"["+pattern+"]", pattern, replacement+type.getNonFileType()));
 	}
 	
@@ -281,6 +289,7 @@ public class GlobalVariables
 	
 	private void addFunctionMappers(String pattern, String replacement)
 	{
+		operators.add(new SimpleMapper(type.name()+"[VALUE_"+pattern+"]", "VALUE_"+pattern, String.format(replacement, valueType.getNonFileType())));		
 		operators.add(new SimpleMapper(type.name()+"["+pattern+"]", pattern, String.format(replacement, type.getNonFileType())));		
 	}
 	

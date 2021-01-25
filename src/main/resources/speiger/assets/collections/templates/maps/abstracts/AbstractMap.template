@@ -1,0 +1,385 @@
+package speiger.src.collections.PACKAGE.maps.abstracts;
+
+import java.util.AbstractMap;
+import java.util.Map;
+import java.util.Objects;
+
+import speiger.src.collections.PACKAGE.collections.ITERATOR;
+import speiger.src.collections.PACKAGE.functions.consumer.BI_CONSUMER;
+import speiger.src.collections.PACKAGE.functions.function.FUNCTION;
+import speiger.src.collections.PACKAGE.functions.function.UNARY_OPERATOR;
+import speiger.src.collections.PACKAGE.maps.interfaces.MAP;
+import speiger.src.collections.PACKAGE.sets.ABSTRACT_SET;
+import speiger.src.collections.PACKAGE.sets.SET;
+import speiger.src.collections.PACKAGE.utils.maps.MAPS;
+import speiger.src.collections.VALUE_PACKAGE.collections.VALUE_ABSTRACT_COLLECTION;
+import speiger.src.collections.VALUE_PACKAGE.collections.VALUE_COLLECTION;
+#if !SAME_TYPE
+import speiger.src.collections.VALUE_PACKAGE.collections.VALUE_ITERATOR;
+import speiger.src.collections.VALUE_PACKAGE.functions.function.VALUE_UNARY_OPERATOR;
+#endif
+#if !TYPE_OBJECT && !VALUE_OBJECT
+import speiger.src.collections.objects.collections.ObjectIterator;
+#endif
+#if !TYPE_OBJECT
+import speiger.src.collections.objects.sets.ObjectSet;
+#endif
+
+public abstract class ABSTRACT_MAP KEY_VALUE_GENERIC_TYPE extends AbstractMap<CLASS_TYPE, CLASS_VALUE_TYPE> implements MAP KEY_VALUE_GENERIC_TYPE
+{
+	VALUE_TYPE defaultReturnValue = EMPTY_VALUE;
+	
+	@Override
+	public VALUE_TYPE getDefaultReturnValue() {
+		return defaultReturnValue;
+	}
+	
+	@Override
+	public ABSTRACT_MAP KEY_VALUE_GENERIC_TYPE setDefaultReturnValue(VALUE_TYPE v) {
+		defaultReturnValue = v;
+		return this;
+	}
+	
+	@Override
+	public void putAll(MAP KEY_VALUE_GENERIC_TYPE m) {
+		for(ObjectIterator<MAP.Entry KEY_VALUE_GENERIC_TYPE> iter = MAPS.fastIterator(m);iter.hasNext();) {
+			MAP.Entry KEY_VALUE_GENERIC_TYPE entry = iter.next();
+			put(entry.ENTRY_KEY(), entry.ENTRY_VALUE());
+		}
+	}
+	
+	@Override
+	public void putAll(Map<? extends CLASS_TYPE, ? extends CLASS_VALUE_TYPE> m)
+	{
+		if(m instanceof MAP) putAll((MAP KEY_VALUE_GENERIC_TYPE)m);
+		else super.putAll(m);
+	}
+	
+#if TYPE_OBJECT
+	
+	@Override
+	public boolean containsKey(Object key) {
+		for(ITERATOR KEY_GENERIC_TYPE iter = keySet().iterator();iter.hasNext();)
+			if(EQUALS_KEY_TYPE(iter.NEXT(), key)) return true;
+		return false;
+	}
+#else
+	
+	@Override
+	public boolean containsKey(KEY_TYPE key) {
+		for(ITERATOR KEY_GENERIC_TYPE iter = keySet().iterator();iter.hasNext();)
+			if(KEY_EQUALS(iter.NEXT(), key)) return true;
+		return false;
+	}
+#endif
+#if VALUE_OBJECT
+	
+	@Override
+	public boolean containsValue(Object value) {
+		for(VALUE_ITERATOR VALUE_GENERIC_TYPE iter = values().iterator();iter.hasNext();)
+			if(EQUALS_VALUE_TYPE(iter.VALUE_NEXT(), value)) return true;
+		return false;
+	}
+#else
+	
+	@Override
+	public boolean containsValue(VALUE_TYPE value) {
+		for(VALUE_ITERATOR VALUE_GENERIC_TYPE iter = values().iterator();iter.hasNext();)
+			if(VALUE_EQUALS(iter.VALUE_NEXT(), value)) return true;
+		return false;
+	}
+#endif
+	
+	@Override
+	public boolean replace(KEY_TYPE key, VALUE_TYPE oldValue, VALUE_TYPE newValue) {
+		VALUE_TYPE curValue = get(key);
+        if (VALUE_EQUALS_NOT(curValue, oldValue) || (VALUE_EQUALS(curValue, getDefaultReturnValue()) && !containsKey(key))) {
+            return false;
+        }
+        put(key, newValue);
+        return true;
+	}
+
+	@Override
+	public VALUE_TYPE replace(KEY_TYPE key, VALUE_TYPE value) {
+		VALUE_TYPE curValue;
+        if (VALUE_EQUALS_NOT((curValue = get(key)), getDefaultReturnValue()) || containsKey(key)) {
+        	curValue = put(key, value);
+        }
+        return curValue;
+	}
+	
+	@Override
+	public void REPLACE_VALUES(UNARY_OPERATOR KEY_VALUE_GENERIC_TYPE mappingFunction) {
+		Objects.requireNonNull(mappingFunction);
+		for(ObjectIterator<MAP.Entry KEY_VALUE_GENERIC_TYPE> iter = MAPS.fastIterator(this);iter.hasNext();) {
+			MAP.Entry KEY_VALUE_GENERIC_TYPE entry = iter.next();
+			entry.setValue(mappingFunction.APPLY_VALUE(entry.ENTRY_KEY(), entry.ENTRY_VALUE()));
+		}
+	}
+
+	@Override
+	public VALUE_TYPE COMPUTE(KEY_TYPE key, UNARY_OPERATOR KEY_VALUE_GENERIC_TYPE mappingFunction) {
+        Objects.requireNonNull(mappingFunction);
+        VALUE_TYPE value = get(key);
+        VALUE_TYPE newValue = mappingFunction.APPLY_VALUE(key, value);
+        if(VALUE_EQUALS(newValue, getDefaultReturnValue())) {
+        	if(VALUE_EQUALS_NOT(value, getDefaultReturnValue()) || containsKey(key)) {
+        		remove(key);
+        		return getDefaultReturnValue();
+        	}
+        	return getDefaultReturnValue();
+        }
+        put(key, newValue);
+		return newValue;
+	}
+
+	@Override
+	public VALUE_TYPE COMPUTE_IF_ABSENT(KEY_TYPE key, FUNCTION KEY_VALUE_GENERIC_TYPE mappingFunction) {
+        Objects.requireNonNull(mappingFunction);
+        VALUE_TYPE value;
+        if((value = get(key)) == getDefaultReturnValue()) {
+        	VALUE_TYPE newValue = mappingFunction.GET_VALUE(key);
+        	if(VALUE_EQUALS_NOT(newValue, getDefaultReturnValue())) {
+        		put(key, newValue);
+        		return newValue;
+        	}
+        }
+		return value;
+	}
+
+	@Override
+	public VALUE_TYPE COMPUTE_IF_PRESENT(KEY_TYPE key, UNARY_OPERATOR KEY_VALUE_GENERIC_TYPE mappingFunction) {
+        Objects.requireNonNull(mappingFunction);
+        VALUE_TYPE value;
+        if(VALUE_EQUALS_NOT((value = get(key)), getDefaultReturnValue())) {
+        	VALUE_TYPE newValue = mappingFunction.APPLY_VALUE(key, value);
+        	if(VALUE_EQUALS_NOT(newValue, getDefaultReturnValue())) {
+        		put(key, newValue);
+        		return newValue;
+        	}
+        	remove(key);
+        }
+		return getDefaultReturnValue();
+	}
+
+	@Override
+	public VALUE_TYPE MERGE(KEY_TYPE key, VALUE_TYPE value, VALUE_UNARY_OPERATOR VALUE_VALUE_GENERIC_TYPE mappingFunction) {
+        Objects.requireNonNull(mappingFunction);
+        VALUE_TYPE oldValue = get(key);
+        VALUE_TYPE newValue = VALUE_EQUALS(oldValue, getDefaultReturnValue()) ? value : mappingFunction.APPLY_VALUE(oldValue, value);
+        if(VALUE_EQUALS(newValue, getDefaultReturnValue())) remove(key);
+        else put(key, newValue);
+		return newValue;
+	}
+	
+#if TYPE_OBJECT
+	@Override
+	public VALUE_TYPE getOrDefault(Object key, VALUE_TYPE defaultValue) {
+		VALUE_TYPE value = get(key);
+		return VALUE_EQUALS_NOT(value, getDefaultReturnValue()) || containsKey(key) ? value : defaultValue;
+	}
+	
+#else
+	@Override
+	public VALUE_TYPE getOrDefault(KEY_TYPE key, VALUE_TYPE defaultValue) {
+		VALUE_TYPE value = get(key);
+		return VALUE_EQUALS_NOT(value, getDefaultReturnValue()) || containsKey(key) ? value : defaultValue;
+	}
+	
+#endif
+	@Override
+	public void forEach(BI_CONSUMER KEY_VALUE_GENERIC_TYPE action) {
+		Objects.requireNonNull(action);
+		for(ObjectIterator<MAP.Entry KEY_VALUE_GENERIC_TYPE> iter = MAPS.fastIterator(this);iter.hasNext();) {
+			MAP.Entry KEY_VALUE_GENERIC_TYPE entry = iter.next();
+			action.accept(entry.ENTRY_KEY(), entry.ENTRY_VALUE());
+		}
+	}
+
+	@Override
+	public SET KEY_GENERIC_TYPE keySet() {
+		return new ABSTRACT_SET KEY_GENERIC_TYPE() {
+#if !TYPE_OBJECT
+			@Override
+			public boolean remove(KEY_TYPE o) {
+				return VALUE_EQUALS_NOT(ABSTRACT_MAP.this.remove(o), getDefaultReturnValue());
+			}
+			
+#else
+			@Override
+			public boolean remove(Object o) {
+				return VALUE_EQUALS_NOT(ABSTRACT_MAP.this.remove(o), getDefaultReturnValue());
+			}
+			
+#endif
+			@Override
+			public boolean add(KEY_TYPE o) {
+				throw new UnsupportedOperationException();
+			}
+			
+			@Override
+			public ITERATOR KEY_GENERIC_TYPE iterator() {
+				return new ITERATOR KEY_GENERIC_TYPE() {
+					ObjectIterator<MAP.Entry KEY_VALUE_GENERIC_TYPE> iter = MAPS.fastIterator(ABSTRACT_MAP.this);
+					@Override
+					public boolean hasNext() {
+						return iter.hasNext();
+					}
+
+					@Override
+					public KEY_TYPE NEXT() {
+						return iter.next().ENTRY_KEY();
+					}
+					
+					@Override
+					public void remove() {
+						iter.remove();
+					}
+				};
+			}
+			
+			@Override
+			public int size() {
+				return ABSTRACT_MAP.this.size();
+			}
+			
+			@Override
+			public void clear() {
+				ABSTRACT_MAP.this.clear();
+			}
+		};
+	}
+
+	@Override
+	public VALUE_COLLECTION VALUE_GENERIC_TYPE values() {
+		return new VALUE_ABSTRACT_COLLECTION VALUE_GENERIC_TYPE() {
+			@Override
+			public boolean add(VALUE_TYPE o) {
+				throw new UnsupportedOperationException();
+			}
+			
+			@Override
+			public int size() {
+				return ABSTRACT_MAP.this.size();
+			}
+			
+			@Override
+			public void clear() {
+				ABSTRACT_MAP.this.clear();
+			}
+			
+			@Override
+			public VALUE_ITERATOR VALUE_GENERIC_TYPE iterator() {
+				return new VALUE_ITERATOR VALUE_GENERIC_TYPE() {
+					ObjectIterator<MAP.Entry KEY_VALUE_GENERIC_TYPE> iter = MAPS.fastIterator(ABSTRACT_MAP.this);
+					@Override
+					public boolean hasNext() {
+						return iter.hasNext();
+					}
+					
+					@Override
+					public VALUE_TYPE VALUE_NEXT() {
+						return iter.next().ENTRY_VALUE();
+					}
+					
+					@Override
+					public void remove() {
+						iter.remove();
+					}
+				};
+			}
+		};
+	}
+	
+	@Override
+	@SuppressWarnings("rawtypes")
+	public ObjectSet<Map.Entry<CLASS_TYPE, CLASS_VALUE_TYPE>> entrySet() {
+		return (ObjectSet)ENTRY_SET();
+	}
+
+	@Override
+	public boolean equals(Object o) {
+		if(o == this) return true;
+		if(o instanceof Map) {
+			if(size() != ((Map<?, ?>)o).size()) return false;
+			if(o instanceof MAP) return ENTRY_SET().containsAll(((MAP KEY_VALUE_GENERIC_TYPE)o).ENTRY_SET());
+			return ENTRY_SET().containsAll(((Map<?, ?>)o).entrySet());
+		}
+		return false;
+	}
+	
+	@Override
+	public int hashCode() {
+		int hash = 0;
+		ObjectIterator<MAP.Entry KEY_VALUE_GENERIC_TYPE> iter = MAPS.fastIterator(this);
+		while(iter.hasNext()) hash += iter.next().hashCode();
+		return hash;
+	}
+	
+	public static class BasicEntry KEY_VALUE_GENERIC_TYPE implements MAP.Entry KEY_VALUE_GENERIC_TYPE {
+		protected KEY_TYPE key;
+		protected VALUE_TYPE value;
+		
+		public BasicEntry() {}
+#if !TYPE_OBJECT
+		public BasicEntry(CLASS_TYPE key, CLASS_VALUE_TYPE value) {
+			this.key = OBJ_TO_KEY(key);
+			this.value = OBJ_TO_VALUE(value);
+		}
+		
+#endif
+		public BasicEntry(KEY_TYPE key, VALUE_TYPE value) {
+			this.key = key;
+			this.value = value;
+		}
+		
+		@Override
+		public KEY_TYPE ENTRY_KEY() {
+			return key;
+		}
+
+		@Override
+		public VALUE_TYPE ENTRY_VALUE() {
+			return value;
+		}
+
+		@Override
+		public VALUE_TYPE setValue(VALUE_TYPE value) {
+			throw new UnsupportedOperationException();
+		}
+		
+		@Override
+		public boolean equals(Object obj) {
+			if(obj instanceof Map.Entry) {
+				if(obj instanceof MAP.Entry) {
+					MAP.Entry KEY_VALUE_GENERIC_TYPE entry = (MAP.Entry KEY_VALUE_GENERIC_TYPE)obj;
+					return key == entry.ENTRY_KEY() && value == entry.ENTRY_VALUE();
+				}
+				Map.Entry<?, ?> entry = (Map.Entry<?, ?>)obj;
+				Object key = entry.getKey();
+				Object value = entry.getValue();
+#if TYPE_OBJECT && VALUE_OBJECT
+				return KEY_EQUALS(this.key, key) && VALUE_EQUALS(this.value, value);
+#else if TYPE_OBJECT
+				return value instanceof CLASS_VALUE_TYPE && KEY_EQUALS(this.key, key) && VALUE_EQUALS(this.value, CLASS_TO_VALUE(value));
+#else if VALUE_OBJECT
+				return key instanceof CLASS_TYPE && KEY_EQUALS(this.key, CLASS_TO_KEY(key)) && VALUE_EQUALS(this.value, value);
+#else
+				return key instanceof CLASS_TYPE && value instanceof CLASS_VALUE_TYPE && KEY_EQUALS(this.key, CLASS_TO_KEY(key)) && VALUE_EQUALS(this.value, CLASS_TO_VALUE(value));
+#endif
+			}
+			return false;
+		}
+		
+		@Override
+		public int hashCode() {
+			return KEY_TO_HASH(key) ^ VALUE_TO_HASH(value);
+		}
+		
+		@Override
+		public String toString() {
+			return KEY_TO_STRING(key) + "->" + VALUE_TO_STRING(value);
+		}
+	}
+}

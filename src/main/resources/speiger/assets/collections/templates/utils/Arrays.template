@@ -125,8 +125,8 @@ public class ARRAYS
 				int child = (index << 1) + 1;
 				KEY_TYPE childValue = data[child];
 				int right = child+1;
-				if(right < size && COMPARE_TO_KEY(data[right], childValue) < 0) childValue = data[child = right];
-				if(COMPARE_TO_KEY(value, childValue) <= 0) break;
+				if(right < size && COMPAREABLE_TO_KEY(data[right], childValue) < 0) childValue = data[child = right];
+				if(COMPAREABLE_TO_KEY(value, childValue) <= 0) break;
 				data[index] = childValue;
 				index = child;
 			}
@@ -150,7 +150,7 @@ public class ARRAYS
 			while(index > 0) {
 				int parent = (index - 1) >>> 1;
 				KEY_TYPE parentValue = data[parent];
-				if(COMPARE_TO_KEY(value, parentValue) >= 0) break;
+				if(COMPAREABLE_TO_KEY(value, parentValue) >= 0) break;
 				data[index] = parentValue;
 				index = parent;
 			}
@@ -379,7 +379,7 @@ public class ARRAYS
 		for (int i = from+1;i<to; i++) {
 			KEY_TYPE current = array[i];
     		int j = i - 1;
-    		while(j >= from && COMPARE_TO(current, array[j]) < 0) {
+    		while(j >= from && COMPAREABLE_TO_KEY(current, array[j]) < 0) {
     			array[j+1] = array[j--];
     		}
     		array[j+1] = current;
@@ -455,7 +455,7 @@ public class ARRAYS
     		KEY_TYPE min = array[i];
         	int minId = i;
         	for(int j = i+1; j < to; j++) {
-            	if(COMPARE_TO(array[j], min) < 0) {
+            	if(COMPAREABLE_TO_KEY(array[j], min) < 0) {
                 	min = array[j];
                 	minId = j;
             	}
@@ -550,13 +550,13 @@ public class ARRAYS
 		int mid = (from + to) >>> 1;
 		mergeSort(supp, array, from, mid);
 		mergeSort(supp, array, mid, to);
-		if(COMPARE_TO(supp[mid - 1], supp[mid]) <= 0)
+		if(COMPAREABLE_TO_KEY(supp[mid - 1], supp[mid]) <= 0)
 		{
 			System.arraycopy(supp, from, array, from, to - from);
 			return;
 		}
 		for(int p = from, q = mid;from < to;from++) {
-			if(q >= to || p < mid && COMPARE_TO(supp[p], supp[q]) < 0) array[from] = supp[p++];
+			if(q >= to || p < mid && COMPAREABLE_TO_KEY(supp[p], supp[q]) < 0) array[from] = supp[p++];
 			else array[from] = supp[q++];
 		}
 	}
@@ -749,15 +749,15 @@ public class ARRAYS
 		int mid = (from + to) >>> 1;
 		memFreeMergeSort(array, from, mid);
 		memFreeMergeSort(array, mid, to);
-		if(COMPARE_TO(array[mid - 1], array[mid]) <= 0)
+		if(COMPAREABLE_TO_KEY(array[mid - 1], array[mid]) <= 0)
 			return;
 		for(int i = from, j = mid, comp;i < j && j < to;) {
-			if((comp = COMPARE_TO(array[i], array[j])) < 0)
+			if((comp = COMPAREABLE_TO_KEY(array[i], array[j])) < 0)
 				i++;
 			else if(comp == 0) swap(array, ++i, j);
 			else {
 				int k = j;
-				for(;k < to - 1 && COMPARE_TO(array[i], array[k + 1]) > 0;k++);
+				for(;k < to - 1 && COMPAREABLE_TO_KEY(array[i], array[k + 1]) > 0;k++);
 				if(j == k) {
 					swap(array, i++, j);
 					continue;
@@ -970,10 +970,10 @@ public class ARRAYS
 		KEY_TYPE pivot = array[length > 128 ? subMedium(array, from, from + (length / 2), to - 1, length / 8) : medium(array, from, from + (length / 2), to - 1)];
 		int a = from, b = a, c = to - 1, d = c;
 		for(int comp = 0;;swap(array, b++, c--)) {
-			for(;b<=c && (comp = COMPARE_TO(array[b], pivot)) <= 0;b++) {
+			for(;b<=c && (comp = COMPAREABLE_TO_KEY(array[b], pivot)) <= 0;b++) {
 				if(comp == 0) swap(array, a++, b);
 			}
-			for(;c>=b && (comp = COMPARE_TO(array[c], pivot)) >= 0;c--) {
+			for(;c>=b && (comp = COMPAREABLE_TO_KEY(array[c], pivot)) >= 0;c--) {
 				if(comp == 0) swap(array, c, d--);
 			}
 			if(b>c) break;
@@ -1091,7 +1091,7 @@ public class ARRAYS
 	}
 	
 	static COMPAREABLE_KEY_BRACES int medium(KEY_TYPE[] data, int a, int b, int c) {
-		return COMPARE_TO(data[a], data[b]) < 0 ? (COMPARE_TO(data[b], data[c]) < 0 ? b : COMPARE_TO(data[a], data[c]) < 0 ? c : a) : (COMPARE_TO(data[b], data[c]) > 0 ? b : COMPARE_TO(data[a], data[c]) > 0 ? c : a);
+		return COMPAREABLE_TO_KEY(data[a], data[b]) < 0 ? (COMPAREABLE_TO_KEY(data[b], data[c]) < 0 ? b : COMPAREABLE_TO_KEY(data[a], data[c]) < 0 ? c : a) : (COMPAREABLE_TO_KEY(data[b], data[c]) > 0 ? b : COMPAREABLE_TO_KEY(data[a], data[c]) > 0 ? c : a);
 	}
 	
 	static class QuickSortAction KEY_COMPAREABLE_TYPE extends RecursiveAction {
@@ -1119,10 +1119,10 @@ public class ARRAYS
 			KEY_TYPE pivot = array[length > 128 ? subMedium(array, from, from + (length / 2), to - 1, length / 8) : medium(array, from, from + (length / 2), to - 1)];
 			int a = from, b = a, c = to - 1, d = c;
 			for(int comp = 0;;swap(array, b++, c--)) {
-				for(;b<=c && (comp = COMPARE_TO(array[b], pivot)) <= 0;b++) {
+				for(;b<=c && (comp = COMPAREABLE_TO_KEY(array[b], pivot)) <= 0;b++) {
 					if(comp == 0) swap(array, a++, b);
 				}
-				for(;c>=b && (comp = COMPARE_TO(array[c], pivot)) >= 0;c--) {
+				for(;c>=b && (comp = COMPAREABLE_TO_KEY(array[c], pivot)) >= 0;c--) {
 					if(comp == 0) swap(array, c, d--);
 				}
 				if(b>c) break;
@@ -1203,13 +1203,13 @@ public class ARRAYS
 			if(supp == null) supp = Arrays.copyOf(array, to);
 			int mid = (from + to) >>> 1;
             invokeAll(new MergeSortActionBRACES(supp, array, from, mid), new MergeSortActionBRACES(supp, array, mid, to));
-			if(COMPARE_TO(supp[mid - 1], supp[mid]) <= 0)
+			if(COMPAREABLE_TO_KEY(supp[mid - 1], supp[mid]) <= 0)
 			{
 				System.arraycopy(supp, from, array, from, to - from);
 				return;
 			}
 			for(int p = from, q = mid;from < to;from++) {
-				if(q >= to || p < mid && COMPARE_TO(supp[p], supp[q]) < 0) array[from] = supp[p++];
+				if(q >= to || p < mid && COMPAREABLE_TO_KEY(supp[p], supp[q]) < 0) array[from] = supp[p++];
 				else array[from] = supp[q++];
 			}
 		}
@@ -1276,15 +1276,15 @@ public class ARRAYS
 			}
 			int mid = (from + to) >>> 1;
 			invokeAll(new MemFreeMergeSortActionBRACES(array, from, mid), new MemFreeMergeSortActionBRACES(array, mid, to));
-			if(COMPARE_TO(array[mid - 1], array[mid]) <= 0)
+			if(COMPAREABLE_TO_KEY(array[mid - 1], array[mid]) <= 0)
 				return;
 			for(int i = from, j = mid, comp;i < j && j < to;) {
-				if((comp = COMPARE_TO(array[i], array[j])) < 0)
+				if((comp = COMPAREABLE_TO_KEY(array[i], array[j])) < 0)
 					i++;
 				else if(comp == 0) swap(array, ++i, j);
 				else {
 					int k = j;
-					for(;k < to - 1 && COMPARE_TO(array[i], array[k + 1]) > 0;k++);
+					for(;k < to - 1 && COMPAREABLE_TO_KEY(array[i], array[k + 1]) > 0;k++);
 					if(j == k) {
 						swap(array, i++, j);
 						continue;

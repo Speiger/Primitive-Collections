@@ -34,6 +34,11 @@ public enum ClassType
 		return keyType;
 	}
 	
+	public String getKeyType(boolean value)
+	{
+		return value && this == OBJECT ? "V" : keyType;
+	}
+	
 	public String getValueType()
 	{
 		return this == OBJECT ? "V" : keyType;
@@ -42,6 +47,11 @@ public enum ClassType
 	public String getClassType()
 	{
 		return classType;
+	}
+	
+	public String getClassType(boolean value) 
+	{
+		return value && this == OBJECT ? "V" : classType;
 	}
 	
 	public String getClassValueType()

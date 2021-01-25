@@ -61,13 +61,16 @@ public class TestBuilder extends TemplateProcessor
 				create(clzType, subType);
 			}
 		}
+//		blocked.put("AbstractMap", EnumSet.allOf(ClassType.class));
 		biRequired.put("BiConsumer", "");
 		biRequired.put("Function", "2");
 		biRequired.put("UnaryOperator", "");
 		biRequired.put("Map", "2");
 		biRequired.put("Maps", "2");
+		biRequired.put("AbstractMap", "2");
 		nameRemapper.put("BiConsumer", "%sConsumer");
 		nameRemapper.put("IArray", "I%sArray");
+		nameRemapper.put("AbstractMap", "Abstract%sMap");
 		nameRemapper.put("AbstractCollection", "Abstract%sCollection");
 		nameRemapper.put("AbstractSet", "Abstract%sSet");
 		nameRemapper.put("AbstractList", "Abstract%sList");
