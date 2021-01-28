@@ -27,7 +27,7 @@ import speiger.src.collections.objects.sets.ObjectSet;
 
 public abstract class ABSTRACT_MAP KEY_VALUE_GENERIC_TYPE extends AbstractMap<CLASS_TYPE, CLASS_VALUE_TYPE> implements MAP KEY_VALUE_GENERIC_TYPE
 {
-	VALUE_TYPE defaultReturnValue = EMPTY_VALUE;
+	protected VALUE_TYPE defaultReturnValue = EMPTY_VALUE;
 	
 	@Override
 	public VALUE_TYPE getDefaultReturnValue() {
@@ -175,12 +175,22 @@ public abstract class ABSTRACT_MAP KEY_VALUE_GENERIC_TYPE extends AbstractMap<CL
 	
 #if TYPE_OBJECT
 	@Override
+	public CLASS_VALUE_TYPE get(Object key) {
+		return VALUE_TO_OBJ(GET_VALUE((T)key));
+	}
+	
+	@Override
 	public VALUE_TYPE getOrDefault(Object key, VALUE_TYPE defaultValue) {
 		VALUE_TYPE value = get(key);
 		return VALUE_EQUALS_NOT(value, getDefaultReturnValue()) || containsKey(key) ? value : defaultValue;
 	}
 	
 #else
+	@Override
+	public CLASS_VALUE_TYPE get(Object key) {
+		return VALUE_TO_OBJ(key instanceof CLASS_TYPE ? GET_VALUE(CLASS_TO_KEY(key)) : getDefaultReturnValue());
+	}
+	
 	@Override
 	public VALUE_TYPE getOrDefault(KEY_TYPE key, VALUE_TYPE defaultValue) {
 		VALUE_TYPE value = get(key);
@@ -334,6 +344,11 @@ public abstract class ABSTRACT_MAP KEY_VALUE_GENERIC_TYPE extends AbstractMap<CL
 			this.value = value;
 		}
 		
+		public void set(KEY_TYPE key, VALUE_TYPE value) {
+			this.key = key;
+			this.value = value;
+		}
+		
 		@Override
 		public KEY_TYPE ENTRY_KEY() {
 			return key;
@@ -354,7 +369,7 @@ public abstract class ABSTRACT_MAP KEY_VALUE_GENERIC_TYPE extends AbstractMap<CL
 			if(obj instanceof Map.Entry) {
 				if(obj instanceof MAP.Entry) {
 					MAP.Entry KEY_VALUE_GENERIC_TYPE entry = (MAP.Entry KEY_VALUE_GENERIC_TYPE)obj;
-					return key == entry.ENTRY_KEY() && value == entry.ENTRY_VALUE();
+					return KEY_EQUALS(key, entry.ENTRY_KEY()) && VALUE_EQUALS(value, entry.ENTRY_VALUE());
 				}
 				Map.Entry<?, ?> entry = (Map.Entry<?, ?>)obj;
 				Object key = entry.getKey();

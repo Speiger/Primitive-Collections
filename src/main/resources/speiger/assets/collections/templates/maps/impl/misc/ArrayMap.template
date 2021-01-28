@@ -1,0 +1,1653 @@
+package speiger.src.collections.PACKAGE.maps.impl.misc;
+
+import java.util.Arrays;
+import java.util.Comparator;
+import java.util.Map;
+import java.util.NoSuchElementException;
+import java.util.Objects;
+import java.util.function.Consumer;
+
+import speiger.src.collections.PACKAGE.collections.BI_ITERATOR;
+#if !TYPE_OBJECT
+import speiger.src.collections.PACKAGE.functions.COMPARATOR;
+import speiger.src.collections.PACKAGE.functions.CONSUMER;
+#endif
+import speiger.src.collections.PACKAGE.lists.LIST_ITERATOR;
+import speiger.src.collections.PACKAGE.maps.abstracts.ABSTRACT_MAP;
+import speiger.src.collections.PACKAGE.maps.interfaces.MAP;
+import speiger.src.collections.PACKAGE.maps.interfaces.SORTED_MAP;
+import speiger.src.collections.PACKAGE.sets.ABSTRACT_SET;
+import speiger.src.collections.PACKAGE.sets.SORTED_SET;
+import speiger.src.collections.PACKAGE.sets.SET;
+import speiger.src.collections.VALUE_PACKAGE.collections.VALUE_ABSTRACT_COLLECTION;
+import speiger.src.collections.VALUE_PACKAGE.collections.VALUE_COLLECTION;
+import speiger.src.collections.VALUE_PACKAGE.collections.VALUE_ITERATOR;
+#if !SAME_TYPE && !VALUE_OBJECT
+import speiger.src.collections.VALUE_PACKAGE.functions.VALUE_CONSUMER;
+import speiger.src.collections.VALUE_PACKAGE.lists.VALUE_LIST_ITERATOR;
+#endif
+#if !TYPE_OBJECT
+import speiger.src.collections.objects.collections.ObjectBidirectionalIterator;
+import speiger.src.collections.objects.lists.ObjectListIterator;
+import speiger.src.collections.objects.sets.AbstractObjectSet;
+import speiger.src.collections.objects.sets.ObjectSortedSet;
+import speiger.src.collections.objects.sets.ObjectSet;
+#endif
+
+public class ARRAY_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_VALUE_GENERIC_TYPE implements SORTED_MAP KEY_VALUE_GENERIC_TYPE
+{
+	protected transient KEY_TYPE[] keys;
+	protected transient VALUE_TYPE[] values;
+	protected int size = 0;
+	protected SET KEY_GENERIC_TYPE keySet;
+	protected VALUE_COLLECTION VALUE_GENERIC_TYPE valuesC;
+	protected FastSortedSet KEY_VALUE_GENERIC_TYPE entrySet;
+	
+	@Override
+	public VALUE_TYPE put(KEY_TYPE key, VALUE_TYPE value) {
+		int index = findIndex(key);
+		if(index < 0) {
+			insertIndex(size++, key, value);
+			return getDefaultReturnValue();
+		}
+		VALUE_TYPE oldValue = values[index];
+		values[index] = value;
+		return oldValue;
+	}
+	
+	@Override
+	public VALUE_TYPE putIfAbsent(KEY_TYPE key, VALUE_TYPE value) {
+		int index = findIndex(key);
+		if(index >= 0) insertIndex(size++, key, value);
+		return getDefaultReturnValue();
+	}
+	
+#if VALUE_PRIMITIVES
+	@Override
+	public VALUE_TYPE addTo(KEY_TYPE key, VALUE_TYPE value) {
+		int index = findIndex(key);
+		if(index < 0) {
+			insertIndex(size++, key, value);
+			return getDefaultReturnValue();
+		}
+		VALUE_TYPE oldValue = values[index];
+		values[index] += value;
+		return oldValue;
+	}
+	
+#endif
+	@Override
+	public VALUE_TYPE putAndMoveToFirst(KEY_TYPE key, VALUE_TYPE value) {
+		int index = findIndex(key);
+		if(index < 0) {
+			insertIndex(0, key, value);
+			size++;
+			return getDefaultReturnValue();
+		}
+		VALUE_TYPE lastValue = values[index];
+		values[index] = value;
+		moveIndexToFirst(index);
+		return lastValue;
+	}
+	
+	@Override
+	public VALUE_TYPE putAndMoveToLast(KEY_TYPE key, VALUE_TYPE value) {
+		int index = findIndex(key);
+		if(index < 0) {
+			insertIndex(size++, key, value);
+			return getDefaultReturnValue();
+		}
+		VALUE_TYPE lastValue = values[index];
+		values[index] = value;
+		moveIndexToLast(index);
+		return lastValue;
+	}
+	
+	@Override
+	public boolean moveToFirst(KEY_TYPE key) {
+		int index = findIndex(key);
+		if(index >= 0) {
+			moveIndexToFirst(index);
+			return true;
+		}
+		return false;
+	}
+	
+	@Override
+	public boolean moveToLast(KEY_TYPE key) {
+		int index = findIndex(key);
+		if(index >= 0) {
+			moveIndexToLast(index);
+			return true;
+		}
+		return false;
+	}
+	
+#if !TYPE_OBJECT
+	@Override
+	public boolean containsKey(KEY_TYPE key) {
+		return findIndex(key) >= 0;
+	}
+	
+#endif
+#if !VALUE_OBJECT
+	@Override
+	public boolean containsValue(VALUE_TYPE value) {
+		return findValue(value) >= 0;
+	}
+	
+#endif
+	@Override
+	public boolean containsKey(Object key) {
+		return findIndex(key) >= 0;
+	}
+	
+	@Override
+	public boolean containsValue(Object value) {
+		return findValue(value) >= 0;
+	}
+	
+	@Override
+	public VALUE_TYPE GET_VALUE(KEY_TYPE key) {
+		int index = findIndex(key);
+		return index < 0 ? getDefaultReturnValue() : values[index];
+	}
+	
+#if !TYPE_OBJECT
+	@Override
+	public VALUE_TYPE getOrDefault(KEY_TYPE key, VALUE_TYPE defaultValue) {
+		int index = findIndex(key);
+		return index < 0 ? defaultValue : values[index];
+	}
+	
+#endif
+	@Override
+	public CLASS_VALUE_TYPE getOrDefault(Object key, CLASS_VALUE_TYPE defaultValue) {
+		int index = findIndex(key);
+		return index < 0 ? defaultValue : VALUE_TO_OBJ(values[index]);
+	}
+	
+	@Override
+	public VALUE_TYPE getAndMoveToFirst(KEY_TYPE key) {
+		int index = findIndex(key);
+		if(index >= 0) {
+			VALUE_TYPE value = values[index];
+			moveIndexToFirst(index);
+			return value;
+		}
+		return getDefaultReturnValue();
+	}
+	
+	@Override
+	public VALUE_TYPE getAndMoveToLast(KEY_TYPE key) {
+		int index = findIndex(key);
+		if(index >= 0) {
+			VALUE_TYPE value = values[index];
+			moveIndexToLast(index);
+			return value;
+		}
+		return getDefaultReturnValue();
+	}
+	
+	@Override
+	public KEY_TYPE FIRST_ENTRY_KEY() {
+		if(size <= 0) throw new NoSuchElementException();
+		return keys[0];
+	}
+	
+	@Override
+	public KEY_TYPE LAST_ENTRY_KEY() {
+		if(size <= 0) throw new NoSuchElementException();
+		return keys[size-1];
+	}
+	
+	@Override
+	public VALUE_TYPE FIRST_ENTRY_VALUE() {
+		if(size <= 0) throw new NoSuchElementException();
+		return values[size-1];
+	}
+	
+	@Override
+	public VALUE_TYPE LAST_ENTRY_VALUE() {
+		if(size <= 0) throw new NoSuchElementException();
+		return values[0];
+	}
+	
+	@Override
+	public KEY_TYPE POLL_FIRST_ENTRY_KEY() {
+		if(size == 0) throw new NoSuchElementException();
+		KEY_TYPE result = keys[0];
+		removeIndex(0);
+		return result;
+	}
+	
+	@Override
+	public KEY_TYPE POLL_LAST_ENTRY_KEY() {
+		if(size == 0) throw new NoSuchElementException();
+		KEY_TYPE result = keys[size-1];
+		removeIndex(size-1);
+		return result;
+	}
+	
+	@Override
+	public VALUE_TYPE REMOVE_KEY(KEY_TYPE key) {
+		int index = findIndex(key);
+		if(index < 0) return getDefaultReturnValue();
+		VALUE_TYPE value = values[index];
+		removeIndex(index);
+		return value;
+	}
+	
+#if !TYPE_OBJECT || !VALUE_OBJECT
+	@Override
+	public boolean remove(KEY_TYPE key, VALUE_TYPE value) {
+		int index = findIndex(key, value);
+		if(index < 0) return false;
+		removeIndex(index);
+		return true;
+	}
+	
+#endif
+	@Override
+	public CLASS_VALUE_TYPE remove(Object key) {
+		int index = findIndex(key);
+		if(index < 0) return VALUE_TO_OBJ(getDefaultReturnValue());
+		VALUE_TYPE value = values[index];
+		removeIndex(index);
+		return VALUE_TO_OBJ(value);
+	}
+	
+	@Override
+	public boolean remove(Object key, Object value) {
+		int index = findIndex(key, value);
+		if(index < 0) return false;
+		removeIndex(index);
+		return true;
+	}
+	
+	@Override
+	public SET KEY_GENERIC_TYPE keySet() {
+		if(keySet == null) keySet = new KeySet();
+		return keySet;
+	}
+
+	@Override
+	public VALUE_COLLECTION VALUE_GENERIC_TYPE values() {
+		if(valuesC == null) valuesC = new Values();
+		return valuesC;
+	}
+
+	@Override
+	public ObjectSortedSet<MAP.Entry KEY_VALUE_GENERIC_TYPE> ENTRY_SET() {
+		if(entrySet == null) entrySet = new MapEntrySet();
+		return entrySet;
+	}
+	
+	@Override
+	public int size() {
+		return size;
+	}
+	
+	@Override
+	public void clear() {
+		Arrays.fill(keys, 0, size, EMPTY_KEY_VALUE);
+		Arrays.fill(values, 0, size, EMPTY_VALUE);
+		size = 0;
+	}
+	
+	@Override
+	public COMPARATOR KEY_GENERIC_TYPE comparator() {
+		return null;
+	}
+	
+	@Override
+	public SORTED_MAP KEY_VALUE_GENERIC_TYPE subMap(KEY_TYPE fromKey, KEY_TYPE toKey) {
+		int fromIndex = findIndex(fromKey);
+		int toIndex = findIndex(toKey);
+		if(fromIndex == -1 || toIndex == -1) throw new NoSuchElementException();
+		return new SubMap(fromIndex, toIndex - fromIndex + 1);
+	}
+	
+	@Override
+	public SORTED_MAP KEY_VALUE_GENERIC_TYPE headMap(KEY_TYPE toKey) {
+		int toIndex = findIndex(toKey);
+		if(toIndex == -1) throw new NoSuchElementException();
+		return new SubMap(0, toIndex + 1);
+	}
+	
+	@Override
+	public SORTED_MAP KEY_VALUE_GENERIC_TYPE tailMap(KEY_TYPE fromKey) {
+		int fromIndex = findIndex(fromKey);
+		if(fromIndex == -1) throw new NoSuchElementException();
+		return new SubMap(fromIndex, size - fromIndex);
+	}
+	
+	protected void moveIndexToFirst(int index) {
+		if(index == 0) return;
+		KEY_TYPE key = keys[index];
+		VALUE_TYPE value = values[index];
+		System.arraycopy(keys, 0, keys, 1, index);
+		System.arraycopy(values, 0, values, 1, index);
+		keys[0] = key;
+		values[0] = value;
+	}
+	
+	protected void moveIndexToLast(int index) {
+		if(index == size-1) return;
+		KEY_TYPE key = keys[index];
+		VALUE_TYPE value = values[index];
+		System.arraycopy(keys, index+1, keys, index, size-index-1);
+		System.arraycopy(values, index+1, values, index, size-index-1);
+		keys[size-1] = key;
+		values[size-1] = value;
+	}
+	
+	protected void grow(int newSize) {
+		if(newSize < keys.length) return;
+		newSize = Math.min(newSize, keys.length == 0 ? 2 : keys.length * 2);
+		keys = Arrays.copyOf(keys, newSize);
+		values = Arrays.copyOf(values, newSize);
+	}
+	
+	protected void insertIndex(int index, KEY_TYPE key, VALUE_TYPE value) {
+		grow(size+1);
+		if(index != size) {
+			System.arraycopy(keys, index, keys, index+1, size-index);
+			System.arraycopy(values, index, values, index+1, size-index);		
+		}
+		keys[index] = key;
+		values[index] = value;
+	}
+	
+	protected void removeRange(int from, int to) {
+		if(from < 0 || from >= size) throw new IllegalStateException("From Element ");
+		int length = to - from;
+		if(length <= 0) return;
+		if(to != size) {
+			System.arraycopy(keys, to, keys, from, size - to);
+			System.arraycopy(values, to, values, from, size - to);
+		}
+		for(int i = 0;i<length;i++) {
+			keys[i+to] = EMPTY_KEY_VALUE;
+			values[i+to] = EMPTY_VALUE;
+		}
+		size -= length;
+	}
+	
+	protected void removeIndex(int index) {
+		if(index == size-1) {
+			size--;
+			keys[size] = EMPTY_KEY_VALUE;
+			values[size] = EMPTY_VALUE;
+			return;
+		}
+		System.arraycopy(keys, index+1, keys, index, size-index-1);
+		System.arraycopy(values, index+1, values, index, size-index-1);		
+		size--;
+		keys[size] = EMPTY_KEY_VALUE;
+		values[size] = EMPTY_VALUE;
+	}
+	
+#if !TYPE_OBJECT || !VALUE_OBJECT
+	protected int findIndex(KEY_TYPE key, VALUE_TYPE value) {
+		for(int i = size-1;i>=0;i--)
+			if(KEY_EQUALS(keys[i], key) && VALUE_EQUALS(values[i], value)) return i;
+		return -1;		
+	}
+	
+#endif
+#if !TYPE_OBJECT
+	protected int findIndex(KEY_TYPE key) {
+		for(int i = size-1;i>=0;i--)
+			if(KEY_EQUALS(keys[i], key)) return i;
+		return -1;
+	}
+	
+#endif
+#if !VALUE_OBJECT
+	protected int findValue(VALUE_TYPE value) {
+		for(int i = size-1;i>=0;i--)
+			if(VALUE_EQUALS(values[i], value)) return i;
+		return -1;
+	}
+	
+#endif
+	protected int findIndex(Object key, Object value) {
+		if(key == null || value == null) return -1;
+		for(int i = size-1;i>=0;i--)
+			if(EQUALS_KEY_TYPE(keys[i], key) && EQUALS_VALUE_TYPE(values[i], value)) return i;
+		return -1;		
+	}
+	
+	protected int findIndex(Object key) {
+		if(key == null) return -1;
+		for(int i = size-1;i>=0;i--)
+			if(EQUALS_KEY_TYPE(keys[i], key)) return i;
+		return -1;
+	}
+	
+	protected int findValue(Object value) {
+		if(value == null) return -1;
+		for(int i = size-1;i>=0;i--)
+			if(EQUALS_VALUE_TYPE(values[i], value)) return i;
+		return -1;
+	}
+	
+	private class SubMap extends ABSTRACT_MAP KEY_VALUE_GENERIC_TYPE implements SORTED_MAP KEY_VALUE_GENERIC_TYPE {
+		int offset;
+		int length;
+		
+		SET KEY_GENERIC_TYPE keySet;
+		VALUE_COLLECTION VALUE_GENERIC_TYPE valuesC;
+		FastSortedSet KEY_VALUE_GENERIC_TYPE entrySet;
+		
+		public SubMap(int offset, int length) {
+			this.offset = offset;
+			this.length = length;
+		}
+		
+		int end() { return offset+length; }
+		
+		@Override
+		public VALUE_TYPE put(KEY_TYPE key, VALUE_TYPE value) {
+			int index = findIndex(key);
+			if(index < 0) {
+				insertIndex(end(), key, value);
+				length++;
+				return getDefaultReturnValue();
+			}
+			VALUE_TYPE oldValue = values[index];
+			values[index] = value;
+			return oldValue;
+		}
+		
+		@Override
+		public VALUE_TYPE putIfAbsent(KEY_TYPE key, VALUE_TYPE value) {
+			int index = findIndex(key);
+			if(index >= 0) {
+				insertIndex(end(), key, value);
+				length++;
+			}
+			return getDefaultReturnValue();
+		}
+		
+#if VALUE_PRIMITIVES
+		@Override
+		public VALUE_TYPE addTo(KEY_TYPE key, VALUE_TYPE value) {
+			int index = findIndex(key);
+			if(index < 0) {
+				insertIndex(end(), key, value);
+				length++;
+				return getDefaultReturnValue();
+			}
+			VALUE_TYPE oldValue = values[index];
+			values[index] += value;
+			return oldValue;
+		}
+		
+#endif
+		@Override
+		public VALUE_TYPE putAndMoveToFirst(KEY_TYPE key, VALUE_TYPE value) {
+			int index = findIndex(key);
+			if(index < 0) {
+				insertIndex(offset, key, value);
+				length++;
+				return getDefaultReturnValue();
+			}
+			VALUE_TYPE lastValue = values[index];
+			values[index] = value;
+			moveIndexToFirst(index);
+			return lastValue;
+		}
+		
+		@Override
+		public VALUE_TYPE putAndMoveToLast(KEY_TYPE key, VALUE_TYPE value) {
+			int index = findIndex(key);
+			if(index < 0) {
+				insertIndex(end(), key, value);
+				length++;
+				return getDefaultReturnValue();
+			}
+			VALUE_TYPE lastValue = values[index];
+			values[index] = value;
+			moveIndexToLast(index);
+			return lastValue;
+		}
+		
+		@Override
+		public boolean moveToFirst(KEY_TYPE key) {
+			int index = findIndex(key);
+			if(index >= 0) {
+				moveIndexToFirst(index);
+				return true;
+			}
+			return false;
+		}
+		
+		@Override
+		public boolean moveToLast(KEY_TYPE key) {
+			int index = findIndex(key);
+			if(index >= 0) {
+				moveIndexToLast(index);
+				return true;
+			}
+			return false;
+		}
+		
+#if !TYPE_OBJECT
+		@Override
+		public boolean containsKey(KEY_TYPE key) {
+			return findIndex(key) >= 0;
+		}
+		
+#endif
+#if !VALUE_OBJECT
+		@Override
+		public boolean containsValue(VALUE_TYPE value) {
+			return findValue(value) >= 0;
+		}
+		
+#endif
+		@Override
+		public boolean containsKey(Object key) {
+			return findIndex(key) >= 0;
+		}
+		
+		@Override
+		public boolean containsValue(Object value) {
+			return findValue(value) >= 0;
+		}
+		
+		@Override
+		public VALUE_TYPE GET_VALUE(KEY_TYPE key) {
+			int index = findIndex(key);
+			return index < 0 ? getDefaultReturnValue() : values[index];
+		}
+		
+#if !TYPE_OBJECT
+		@Override
+		public VALUE_TYPE getOrDefault(KEY_TYPE key, VALUE_TYPE defaultValue) {
+			int index = findIndex(key);
+			return index < 0 ? defaultValue : values[index];
+		}
+		
+#endif
+		@Override
+		public CLASS_VALUE_TYPE get(Object key) {
+			int index = findIndex(key);
+			return VALUE_TO_OBJ(index < 0 ? getDefaultReturnValue() : values[index]);
+		}
+		
+		@Override
+		public CLASS_VALUE_TYPE getOrDefault(Object key, CLASS_VALUE_TYPE defaultValue) {
+			int index = findIndex(key);
+			return index < 0 ? defaultValue : VALUE_TO_OBJ(values[index]);
+		}
+		
+		@Override
+		public VALUE_TYPE getAndMoveToFirst(KEY_TYPE key) {
+			int index = findIndex(key);
+			if(index >= 0) {
+				VALUE_TYPE value = values[index];
+				moveIndexToFirst(index);
+				return value;
+			}
+			return getDefaultReturnValue();
+		}
+		
+		@Override
+		public VALUE_TYPE getAndMoveToLast(KEY_TYPE key) {
+			int index = findIndex(key);
+			if(index >= 0) {
+				VALUE_TYPE value = values[index];
+				moveIndexToLast(index);
+				return value;
+			}
+			return getDefaultReturnValue();
+		}
+		
+		@Override
+		public KEY_TYPE FIRST_ENTRY_KEY() {
+			if(length <= 0) throw new NoSuchElementException();
+			return keys[offset];
+		}
+		
+		@Override
+		public KEY_TYPE LAST_ENTRY_KEY() {
+			if(length <= 0) throw new NoSuchElementException();
+			return keys[end()-1];
+		}
+		
+		@Override
+		public VALUE_TYPE FIRST_ENTRY_VALUE() {
+			if(length <= 0) throw new NoSuchElementException();
+			return values[end()-1];
+		}
+		
+		@Override
+		public VALUE_TYPE LAST_ENTRY_VALUE() {
+			if(length <= 0) throw new NoSuchElementException();
+			return values[offset];
+		}
+		
+		@Override
+		public KEY_TYPE POLL_FIRST_ENTRY_KEY() {
+			if(length == 0) throw new NoSuchElementException();
+			KEY_TYPE result = keys[offset];
+			removeIndex(offset);
+			length--;
+			return result;
+		}
+		
+		@Override
+		public KEY_TYPE POLL_LAST_ENTRY_KEY() {
+			if(length == 0) throw new NoSuchElementException();
+			KEY_TYPE result = keys[end()-1];
+			removeIndex(end()-1);
+			length--;
+			return result;
+		}
+		
+		@Override
+		public VALUE_TYPE REMOVE_KEY(KEY_TYPE key) {
+			int index = findIndex(key);
+			if(index < 0) return getDefaultReturnValue();
+			VALUE_TYPE value = values[index];
+			removeIndex(index);
+			return value;
+		}
+		
+#if !TYPE_OBJECT || !VALUE_OBJECT
+		@Override
+		public boolean remove(KEY_TYPE key, VALUE_TYPE value) {
+			int index = findIndex(key, value);
+			if(index < 0) return false;
+			removeIndex(index);
+			return true;
+		}
+		
+#endif
+		@Override
+		public CLASS_VALUE_TYPE remove(Object key) {
+			int index = findIndex(key);
+			if(index < 0) return VALUE_TO_OBJ(getDefaultReturnValue());
+			VALUE_TYPE value = values[index];
+			removeIndex(index);
+			return VALUE_TO_OBJ(value);
+		}
+		
+		@Override
+		public boolean remove(Object key, Object value) {
+			int index = findIndex(key, value);
+			if(index < 0) return false;
+			removeIndex(index);
+			return true;
+		}
+		
+		@Override
+		public int size() {
+			return length;
+		}
+		
+		@Override
+		public void clear() {
+			removeRange(offset, offset+length);
+			length = 0;
+		}
+		
+		@Override
+		public SET KEY_GENERIC_TYPE keySet() {
+			if(keySet == null) keySet = new SubKeySet();
+			return keySet;
+		}
+
+		@Override
+		public VALUE_COLLECTION VALUE_GENERIC_TYPE values() {
+			if(valuesC == null) valuesC = new SubValues();
+			return valuesC;
+		}
+
+		@Override
+		public ObjectSet<MAP.Entry KEY_VALUE_GENERIC_TYPE> ENTRY_SET() {
+			if(entrySet == null) entrySet = new SubMapEntrySet();
+			return entrySet;
+		}
+
+		@Override
+		public COMPARATOR KEY_GENERIC_TYPE comparator() {
+			return null;
+		}
+
+		@Override
+		public SORTED_MAP KEY_VALUE_GENERIC_TYPE subMap(KEY_TYPE fromKey, KEY_TYPE toKey) {
+			int fromIndex = findIndex(fromKey);
+			int toIndex = findIndex(toKey);
+			if(fromIndex == -1 || toIndex == -1) throw new NoSuchElementException();
+			return new SubMap(fromIndex, toIndex - fromIndex + 1);
+		}
+		
+		@Override
+		public SORTED_MAP KEY_VALUE_GENERIC_TYPE headMap(KEY_TYPE toKey) {
+			int toIndex = findIndex(toKey);
+			if(toIndex == -1) throw new NoSuchElementException();
+			return new SubMap(offset, toIndex + 1);
+		}
+		
+		@Override
+		public SORTED_MAP KEY_VALUE_GENERIC_TYPE tailMap(KEY_TYPE fromKey) {
+			int fromIndex = findIndex(fromKey);
+			if(fromIndex == -1) throw new NoSuchElementException();
+			return new SubMap(fromIndex, size - fromIndex);
+		}
+		
+		protected void moveIndexToFirst(int index) {
+			if(index == 0) return;
+			KEY_TYPE key = keys[index];
+			VALUE_TYPE value = values[index];
+			System.arraycopy(keys, offset, keys, offset+1, index);
+			System.arraycopy(values, offset, values, offset+1, index);
+			keys[offset] = key;
+			values[offset] = value;
+		}
+		
+		protected void moveIndexToLast(int index) {
+			if(index == length-1) return;
+			KEY_TYPE key = keys[index];
+			VALUE_TYPE value = values[index];
+			System.arraycopy(keys, offset+index+1, keys, offset+index, length-index-1);
+			System.arraycopy(values, offset+index+1, values, offset+index, length-index-1);
+			keys[end()-1] = key;
+			values[end()-1] = value;
+		}
+		
+#if !TYPE_OBJECT || !VALUE_OBJECT
+		protected int findIndex(KEY_TYPE key, VALUE_TYPE value) {
+			for(int i = length-1;i>=0;i--)
+				if(KEY_EQUALS(keys[offset+i], key) && VALUE_EQUALS(values[offset+i], value)) return i;
+			return -1;		
+		}
+		
+#endif
+#if !TYPE_OBJECT
+		protected int findIndex(KEY_TYPE key) {
+			for(int i = length-1;i>=0;i--)
+				if(KEY_EQUALS(keys[offset+i], key)) return i;
+			return -1;
+		}
+		
+#endif
+#if !VALUE_OBJECT
+		protected int findValue(VALUE_TYPE value) {
+			for(int i = length-1;i>=0;i--)
+				if(VALUE_EQUALS(values[offset+i], value)) return i;
+			return -1;
+		}
+		
+#endif
+		protected int findIndex(Object key, Object value) {
+			if(key == null || value == null) return -1;
+			for(int i = length-1;i>=0;i--)
+				if(EQUALS_KEY_TYPE(keys[offset+i], key) && EQUALS_VALUE_TYPE(values[offset+i], value)) return i;
+			return -1;		
+		}
+		
+		protected int findIndex(Object key) {
+			if(key == null) return -1;
+			for(int i = length-1;i>=0;i--)
+				if(EQUALS_KEY_TYPE(keys[offset+i], key)) return i;
+			return -1;
+		}
+		
+		protected int findValue(Object value) {
+			if(value == null) return -1;
+			for(int i = length-1;i>=0;i--)
+				if(EQUALS_VALUE_TYPE(values[offset+i], value)) return i;
+			return -1;
+		}
+		
+		private class SubMapEntrySet extends AbstractObjectSet<MAP.Entry KEY_VALUE_GENERIC_TYPE> implements SORTED_MAP.FastSortedSet KEY_VALUE_GENERIC_TYPE {
+			@Override
+			public boolean addAndMoveToFirst(MAP.Entry KEY_VALUE_GENERIC_TYPE o) { throw new UnsupportedOperationException(); }
+			@Override
+			public boolean addAndMoveToLast(MAP.Entry KEY_VALUE_GENERIC_TYPE o) { throw new UnsupportedOperationException(); }
+			
+			@Override
+			public boolean moveToFirst(MAP.Entry KEY_VALUE_GENERIC_TYPE o) {
+				return SubMap.this.moveToFirst(o.ENTRY_KEY());
+			}
+			
+			@Override
+			public boolean moveToLast(MAP.Entry KEY_VALUE_GENERIC_TYPE o) {
+				return SubMap.this.moveToLast(o.ENTRY_KEY());
+			}
+			
+			@Override
+			public MAP.Entry KEY_VALUE_GENERIC_TYPE first() {
+				return new BasicEntryKV_BRACES(FIRST_ENTRY_KEY(), FIRST_ENTRY_VALUE());
+			}
+			
+			@Override
+			public MAP.Entry KEY_VALUE_GENERIC_TYPE last() {
+				return new BasicEntryKV_BRACES(LAST_ENTRY_KEY(), LAST_ENTRY_VALUE());
+			}
+			
+			@Override
+			public MAP.Entry KEY_VALUE_GENERIC_TYPE pollFirst() {
+				BasicEntry KEY_VALUE_GENERIC_TYPE entry = new BasicEntryKV_BRACES(FIRST_ENTRY_KEY(), FIRST_ENTRY_VALUE());
+				POLL_FIRST_ENTRY_KEY();
+				return entry;
+			}
+			
+			@Override
+			public MAP.Entry KEY_VALUE_GENERIC_TYPE pollLast() {
+				BasicEntry KEY_VALUE_GENERIC_TYPE entry = new BasicEntryKV_BRACES(LAST_ENTRY_KEY(), LAST_ENTRY_VALUE());
+				POLL_LAST_ENTRY_KEY();
+				return entry;
+			}
+			
+			@Override
+			public ObjectBidirectionalIterator<MAP.Entry KEY_VALUE_GENERIC_TYPE> iterator() {
+				return new SubEntryIterator();
+			}
+			
+			@Override
+			public ObjectBidirectionalIterator<MAP.Entry KEY_VALUE_GENERIC_TYPE> iterator(MAP.Entry KEY_VALUE_GENERIC_TYPE fromElement) {
+				return new SubEntryIterator(fromElement.ENTRY_KEY());
+			}
+			
+			@Override
+			public ObjectBidirectionalIterator<MAP.Entry KEY_VALUE_GENERIC_TYPE> fastIterator() {
+				return new SubFastEntryIterator();
+			}
+			
+			@Override
+			public ObjectBidirectionalIterator<MAP.Entry KEY_VALUE_GENERIC_TYPE> fastIterator(KEY_TYPE fromElement) {
+				return new SubFastEntryIterator(fromElement);
+			}
+			
+			@Override
+			public void forEach(Consumer<? super MAP.Entry KEY_VALUE_GENERIC_TYPE> action) {
+				for(int i = 0;i<length;i++)
+					action.accept(new BasicEntryKV_BRACES(keys[offset+i], values[offset+i]));
+			}
+			
+			@Override
+			public void fastForEach(Consumer<? super MAP.Entry KEY_VALUE_GENERIC_TYPE> action) {
+				BasicEntry KEY_VALUE_GENERIC_TYPE entry = new BasicEntryKV_BRACES();
+				for(int i = 0;i<length;i++) {
+					entry.set(keys[offset+i], values[offset+i]);
+					action.accept(entry);
+				}
+			}
+			
+			@Override
+			@Deprecated
+			public boolean contains(Object o) {
+				if(o instanceof Map.Entry) {
+					if(o instanceof MAP.Entry) return SubMap.this.containsKey(((MAP.Entry KEY_VALUE_GENERIC_TYPE)o).ENTRY_KEY());
+					return SubMap.this.containsKey(((Map.Entry<?, ?>)o).getKey());
+				}
+				return false;
+			}
+			
+			@Override
+			@Deprecated
+			public boolean remove(Object o) {
+				if(o instanceof Map.Entry) {
+					if(o instanceof MAP.Entry) {
+						MAP.Entry KEY_VALUE_GENERIC_TYPE entry = (MAP.Entry KEY_VALUE_GENERIC_TYPE)o;
+						return SubMap.this.remove(entry.ENTRY_KEY(), entry.ENTRY_VALUE());
+					}
+					Map.Entry<?, ?> entry = (Map.Entry<?, ?>)o;
+					return SubMap.this.remove(entry.getKey(), entry.getValue());
+				}
+				return false;
+			}
+			
+			@Override
+			public int size() {
+				return SubMap.this.size();
+			}
+			
+			@Override
+			public void clear() {
+				SubMap.this.clear();
+			}
+			
+			@Override
+			public Comparator<MAP.Entry KEY_VALUE_GENERIC_TYPE> comparator() {
+				return null;
+			}
+			@Override
+			public ObjectSortedSet<MAP.Entry KEY_VALUE_GENERIC_TYPE> subSet(MAP.Entry KEY_VALUE_GENERIC_TYPE fromElement, MAP.Entry KEY_VALUE_GENERIC_TYPE toElement) { throw new UnsupportedOperationException(); }
+			@Override
+			public ObjectSortedSet<MAP.Entry KEY_VALUE_GENERIC_TYPE> headSet(MAP.Entry KEY_VALUE_GENERIC_TYPE toElement) { throw new UnsupportedOperationException(); }
+			@Override
+			public ObjectSortedSet<MAP.Entry KEY_VALUE_GENERIC_TYPE> tailSet(MAP.Entry KEY_VALUE_GENERIC_TYPE fromElement) { throw new UnsupportedOperationException(); }
+		}
+		
+		private class SubKeySet extends ABSTRACT_SET KEY_GENERIC_TYPE implements SORTED_SET KEY_GENERIC_TYPE {
+#if TYPE_OBJECT
+			@Override
+			public boolean contains(Object e) { return containsKey(e); }
+			
+			@Override
+			public boolean remove(Object o) {
+				int oldSize = length;
+				remove(o);
+				return length != oldSize;
+			}
+			
+#else
+			@Override
+			public boolean contains(KEY_TYPE e) { return containsKey(e); }
+			
+			@Override
+			public boolean remove(KEY_TYPE o) {
+				int oldSize = length;
+				remove(o);
+				return length != oldSize;
+			}
+			
+#endif
+			@Override
+			public boolean add(KEY_TYPE o) { throw new UnsupportedOperationException(); }
+			@Override
+			public boolean addAndMoveToFirst(KEY_TYPE o) { throw new UnsupportedOperationException(); }
+			@Override
+			public boolean addAndMoveToLast(KEY_TYPE o) { throw new UnsupportedOperationException(); }
+			@Override
+			public boolean moveToFirst(KEY_TYPE o) { return SubMap.this.moveToFirst(o); }
+			@Override
+			public boolean moveToLast(KEY_TYPE o) { return SubMap.this.moveToLast(o); }
+			@Override
+			public LIST_ITERATOR KEY_GENERIC_TYPE iterator() { return new SubKeyIterator(); }
+			@Override
+			public BI_ITERATOR KEY_GENERIC_TYPE iterator(KEY_TYPE fromElement) { return new SubKeyIterator(fromElement); } 
+			@Override
+			public int size() { return SubMap.this.size(); }
+			@Override
+			public void clear() { SubMap.this.clear(); }
+			@Override
+			public KEY_TYPE FIRST_KEY() { return FIRST_ENTRY_KEY(); }
+			@Override
+			public KEY_TYPE POLL_FIRST_KEY() { return POLL_FIRST_ENTRY_KEY(); }
+			@Override
+			public KEY_TYPE LAST_KEY() { return LAST_ENTRY_KEY(); }
+			@Override
+			public KEY_TYPE POLL_LAST_KEY() { return POLL_LAST_ENTRY_KEY(); }
+			
+#if TYPE_OBJECT
+			@Override
+			public void forEach(Consumer<? super CLASS_TYPE> action) { 
+				for(int i = 0;i<length;action.accept(keys[offset+i])); 
+			}
+			
+#else
+			@Override
+			public void forEach(CONSUMER KEY_GENERIC_TYPE action) { 
+				for(int i = 0;i<length;action.accept(keys[offset+i])); 
+			}
+			
+#endif
+			@Override
+			public COMPARATOR KEY_GENERIC_TYPE comparator() { return null; }
+			@Override
+			public SORTED_SET KEY_GENERIC_TYPE subSet(KEY_TYPE fromElement, KEY_TYPE toElement) { throw new UnsupportedOperationException(); }
+			@Override
+			public SORTED_SET KEY_GENERIC_TYPE headSet(KEY_TYPE toElement) { throw new UnsupportedOperationException(); }
+			@Override
+			public SORTED_SET KEY_GENERIC_TYPE tailSet(KEY_TYPE fromElement) { throw new UnsupportedOperationException(); }
+		}
+		
+		private class SubValues extends VALUE_ABSTRACT_COLLECTION VALUE_GENERIC_TYPE {
+#if VALUE_OBJECT
+			@Override
+			public boolean contains(Object e) {
+				return containsValue(e);
+			}
+
+#else
+			@Override
+			public boolean contains(VALUE_TYPE e) {
+				return containsValue(e);
+			}
+			
+#endif
+			@Override
+			public boolean add(VALUE_TYPE o) {
+				throw new UnsupportedOperationException();
+			}
+			
+			@Override
+			public VALUE_ITERATOR VALUE_GENERIC_TYPE iterator() {
+				return new SubValueIterator();
+			}
+			
+			@Override
+			public int size() {
+				return SubMap.this.size();
+			}
+			
+			@Override
+			public void clear() {
+				SubMap.this.clear();
+			}
+			
+#if VALUE_OBJECT
+			@Override
+			public void forEach(Consumer<? super CLASS_VALUE_TYPE> action) {
+				for(int i = 0;i<length;action.accept(values[offset+i]));
+			}
+#else
+			@Override
+			public void forEach(VALUE_CONSUMER VALUE_GENERIC_TYPE action) {
+				for(int i = 0;i<length;action.accept(values[offset+i]));
+			}
+#endif
+		}
+		
+		private class SubFastEntryIterator extends SubMapIterator implements ObjectListIterator<MAP.Entry KEY_VALUE_GENERIC_TYPE> {
+			MapEntry entry = new MapEntry();
+			
+			public SubFastEntryIterator() {}
+			public SubFastEntryIterator(KEY_TYPE from) {
+				index = findIndex(from);
+			}
+			
+			@Override
+			public MAP.Entry KEY_VALUE_GENERIC_TYPE next() {
+				entry.index = nextEntry();
+				return entry;
+			}
+			
+			@Override
+			public MAP.Entry KEY_VALUE_GENERIC_TYPE previous() {
+				entry.index = previousEntry();
+				return entry;
+			}
+			
+			@Override
+			public void set(MAP.Entry KEY_VALUE_GENERIC_TYPE e) { throw new UnsupportedOperationException(); }
+			@Override
+			public void add(MAP.Entry KEY_VALUE_GENERIC_TYPE e) { throw new UnsupportedOperationException(); }
+		}
+		
+		private class SubEntryIterator extends SubMapIterator implements ObjectListIterator<MAP.Entry KEY_VALUE_GENERIC_TYPE> {
+			MapEntry entry = null;
+			
+			public SubEntryIterator() {}
+			public SubEntryIterator(KEY_TYPE from) {
+				index = findIndex(from);
+			}
+			
+			@Override
+			public MAP.Entry KEY_VALUE_GENERIC_TYPE next() {
+				return entry = new MapEntry(nextEntry());
+			}
+			
+			@Override
+			public MAP.Entry KEY_VALUE_GENERIC_TYPE previous() {
+				return entry = new MapEntry(previousEntry());
+			}
+			
+			@Override
+			public void remove() {
+				super.remove();
+				entry.index = -1;
+			}
+			
+			@Override
+			public void set(MAP.Entry KEY_VALUE_GENERIC_TYPE e) { throw new UnsupportedOperationException(); }
+			@Override
+			public void add(MAP.Entry KEY_VALUE_GENERIC_TYPE e) { throw new UnsupportedOperationException(); }
+		}
+		
+		private class SubKeyIterator extends SubMapIterator implements LIST_ITERATOR KEY_GENERIC_TYPE {
+			public SubKeyIterator() {}
+			public SubKeyIterator(KEY_TYPE element) {
+				index = findIndex(element);
+			}
+			@Override
+			public KEY_TYPE PREVIOUS() {
+				return keys[previousEntry()];
+			}
+
+			@Override
+			public KEY_TYPE NEXT() {
+				return keys[nextEntry()];
+			}
+
+			@Override
+			public void set(KEY_TYPE e) { throw new UnsupportedOperationException(); }
+
+			@Override
+			public void add(KEY_TYPE e) { throw new UnsupportedOperationException(); }	
+		}
+		
+		private class SubValueIterator extends SubMapIterator implements VALUE_LIST_ITERATOR VALUE_GENERIC_TYPE {
+			@Override
+			public VALUE_TYPE VALUE_PREVIOUS() {
+				return values[previousEntry()];
+			}
+
+			@Override
+			public VALUE_TYPE VALUE_NEXT() {
+				return values[nextEntry()];
+			}
+
+			@Override
+			public void set(VALUE_TYPE e) { throw new UnsupportedOperationException(); }
+
+			@Override
+			public void add(VALUE_TYPE e) { throw new UnsupportedOperationException(); }	
+		}
+		
+		private class SubMapIterator {
+			int index;
+			int lastReturned = -1;
+
+			public boolean hasNext() {
+				return index < length;
+			}
+			
+			public boolean hasPrevious() {
+				return index > 0;
+			}
+			
+			public int nextIndex() {
+				return index;
+			}
+			
+			public int previousIndex() {
+				return index-1;
+			}
+			
+			public void remove() {
+				if(lastReturned == -1)
+					throw new IllegalStateException();
+				removeIndex(lastReturned);
+				if(lastReturned < index)
+					index--;
+				lastReturned = -1;
+			}
+			
+			public int previousEntry() {
+				int returnIndex = offset+index;
+				lastReturned = index--;
+				return returnIndex;
+			}
+			
+			public int nextEntry() {
+				int returnIndex = offset+index;
+				lastReturned = index++;
+				return returnIndex;
+			}
+			
+			public int skip(int amount) {
+				if(amount < 0) throw new IllegalStateException("Negative Numbers are not allowed");
+				int steps = Math.min(amount, (size() - 1) - index);
+				index += steps;
+				return steps;
+			}
+			
+			public int back(int amount) {
+				if(amount < 0) throw new IllegalStateException("Negative Numbers are not allowed");
+				int steps = Math.min(amount, index);
+				index -= steps;
+				return steps;
+			}
+		}
+	}
+	
+	private class MapEntrySet extends AbstractObjectSet<MAP.Entry KEY_VALUE_GENERIC_TYPE> implements SORTED_MAP.FastSortedSet KEY_VALUE_GENERIC_TYPE {
+		@Override
+		public boolean addAndMoveToFirst(MAP.Entry KEY_VALUE_GENERIC_TYPE o) { throw new UnsupportedOperationException(); }
+		@Override
+		public boolean addAndMoveToLast(MAP.Entry KEY_VALUE_GENERIC_TYPE o) { throw new UnsupportedOperationException(); }
+		
+		@Override
+		public boolean moveToFirst(MAP.Entry KEY_VALUE_GENERIC_TYPE o) {
+			return ARRAY_MAP.this.moveToFirst(o.ENTRY_KEY());
+		}
+		
+		@Override
+		public boolean moveToLast(MAP.Entry KEY_VALUE_GENERIC_TYPE o) {
+			return ARRAY_MAP.this.moveToLast(o.ENTRY_KEY());
+		}
+		
+		@Override
+		public MAP.Entry KEY_VALUE_GENERIC_TYPE first() {
+			return new BasicEntryKV_BRACES(FIRST_ENTRY_KEY(), FIRST_ENTRY_VALUE());
+		}
+		
+		@Override
+		public MAP.Entry KEY_VALUE_GENERIC_TYPE last() {
+			return new BasicEntryKV_BRACES(LAST_ENTRY_KEY(), LAST_ENTRY_VALUE());
+		}
+		
+		@Override
+		public MAP.Entry KEY_VALUE_GENERIC_TYPE pollFirst() {
+			BasicEntry KEY_VALUE_GENERIC_TYPE entry = new BasicEntryKV_BRACES(FIRST_ENTRY_KEY(), FIRST_ENTRY_VALUE());
+			POLL_FIRST_ENTRY_KEY();
+			return entry;
+		}
+		
+		@Override
+		public MAP.Entry KEY_VALUE_GENERIC_TYPE pollLast() {
+			BasicEntry KEY_VALUE_GENERIC_TYPE entry = new BasicEntryKV_BRACES(LAST_ENTRY_KEY(), LAST_ENTRY_VALUE());
+			POLL_LAST_ENTRY_KEY();
+			return entry;
+		}
+		
+		@Override
+		public ObjectBidirectionalIterator<MAP.Entry KEY_VALUE_GENERIC_TYPE> iterator() {
+			return new EntryIterator();
+		}
+		
+		@Override
+		public ObjectBidirectionalIterator<MAP.Entry KEY_VALUE_GENERIC_TYPE> iterator(MAP.Entry KEY_VALUE_GENERIC_TYPE fromElement) {
+			return new EntryIterator(fromElement.ENTRY_KEY());
+		}
+		
+		@Override
+		public ObjectBidirectionalIterator<MAP.Entry KEY_VALUE_GENERIC_TYPE> fastIterator() {
+			return new FastEntryIterator();
+		}
+		
+		@Override
+		public ObjectBidirectionalIterator<MAP.Entry KEY_VALUE_GENERIC_TYPE> fastIterator(KEY_TYPE fromElement) {
+			return new FastEntryIterator(fromElement);
+		}
+		
+		@Override
+		public void forEach(Consumer<? super MAP.Entry KEY_VALUE_GENERIC_TYPE> action) {
+			for(int i = 0;i<size;i++)
+				action.accept(new BasicEntryKV_BRACES(keys[i], values[i]));
+		}
+		
+		@Override
+		public void fastForEach(Consumer<? super MAP.Entry KEY_VALUE_GENERIC_TYPE> action) {
+			BasicEntry KEY_VALUE_GENERIC_TYPE entry = new BasicEntryKV_BRACES();
+			for(int i = 0;i<size;i++) {
+				entry.set(keys[i], values[i]);
+				action.accept(entry);
+			}
+		}
+		
+		@Override
+		@Deprecated
+		public boolean contains(Object o) {
+			if(o instanceof Map.Entry) {
+				if(o instanceof MAP.Entry) return ARRAY_MAP.this.containsKey(((MAP.Entry KEY_VALUE_GENERIC_TYPE)o).ENTRY_KEY());
+				return ARRAY_MAP.this.containsKey(((Map.Entry<?, ?>)o).getKey());
+			}
+			return false;
+		}
+		
+		@Override
+		@Deprecated
+		public boolean remove(Object o) {
+			if(o instanceof Map.Entry) {
+				if(o instanceof MAP.Entry) {
+					MAP.Entry KEY_VALUE_GENERIC_TYPE entry = (MAP.Entry KEY_VALUE_GENERIC_TYPE)o;
+					return ARRAY_MAP.this.remove(entry.ENTRY_KEY(), entry.ENTRY_VALUE());
+				}
+				Map.Entry<?, ?> entry = (Map.Entry<?, ?>)o;
+				return ARRAY_MAP.this.remove(entry.getKey(), entry.getValue());
+			}
+			return false;
+		}
+		
+		@Override
+		public int size() {
+			return ARRAY_MAP.this.size();
+		}
+		
+		@Override
+		public void clear() {
+			ARRAY_MAP.this.clear();
+		}
+		
+		@Override
+		public Comparator<MAP.Entry KEY_VALUE_GENERIC_TYPE> comparator() {
+			return null;
+		}
+		@Override
+		public ObjectSortedSet<MAP.Entry KEY_VALUE_GENERIC_TYPE> subSet(MAP.Entry KEY_VALUE_GENERIC_TYPE fromElement, MAP.Entry KEY_VALUE_GENERIC_TYPE toElement) { throw new UnsupportedOperationException(); }
+		@Override
+		public ObjectSortedSet<MAP.Entry KEY_VALUE_GENERIC_TYPE> headSet(MAP.Entry KEY_VALUE_GENERIC_TYPE toElement) { throw new UnsupportedOperationException(); }
+		@Override
+		public ObjectSortedSet<MAP.Entry KEY_VALUE_GENERIC_TYPE> tailSet(MAP.Entry KEY_VALUE_GENERIC_TYPE fromElement) { throw new UnsupportedOperationException(); }
+	}
+	
+	private class KeySet extends ABSTRACT_SET KEY_GENERIC_TYPE implements SORTED_SET KEY_GENERIC_TYPE {
+#if TYPE_OBJECT
+		@Override
+		public boolean contains(Object e) { return containsKey(e); }
+		
+		@Override
+		public boolean remove(Object o) {
+			int oldSize = size;
+			remove(o);
+			return size != oldSize;
+		}
+		
+#else
+		@Override
+		public boolean contains(KEY_TYPE e) { return containsKey(e); }
+		
+		@Override
+		public boolean remove(KEY_TYPE o) {
+			int oldSize = size;
+			remove(o);
+			return size != oldSize;
+		}
+		
+#endif
+		@Override
+		public boolean add(KEY_TYPE o) { throw new UnsupportedOperationException(); }
+		@Override
+		public boolean addAndMoveToFirst(KEY_TYPE o) { throw new UnsupportedOperationException(); }
+		@Override
+		public boolean addAndMoveToLast(KEY_TYPE o) { throw new UnsupportedOperationException(); }
+		@Override
+		public boolean moveToFirst(KEY_TYPE o) { return ARRAY_MAP.this.moveToFirst(o); }
+		@Override
+		public boolean moveToLast(KEY_TYPE o) { return ARRAY_MAP.this.moveToLast(o); }
+		@Override
+		public LIST_ITERATOR KEY_GENERIC_TYPE iterator() { return new KeyIterator(); }
+		@Override
+		public BI_ITERATOR KEY_GENERIC_TYPE iterator(KEY_TYPE fromElement) { return new KeyIterator(fromElement); } 
+		@Override
+		public int size() { return ARRAY_MAP.this.size(); }
+		@Override
+		public void clear() { ARRAY_MAP.this.clear(); }
+		@Override
+		public KEY_TYPE FIRST_KEY() { return FIRST_ENTRY_KEY(); }
+		@Override
+		public KEY_TYPE POLL_FIRST_KEY() { return POLL_FIRST_ENTRY_KEY(); }
+		@Override
+		public KEY_TYPE LAST_KEY() { return LAST_ENTRY_KEY(); }
+		@Override
+		public KEY_TYPE POLL_LAST_KEY() { return POLL_LAST_ENTRY_KEY(); }
+		
+#if TYPE_OBJECT
+		@Override
+		public void forEach(Consumer<? super CLASS_TYPE> action) { 
+			for(int i = 0;i<size;action.accept(keys[i])); 
+		}
+		
+#else
+		@Override
+		public void forEach(CONSUMER KEY_GENERIC_TYPE action) { 
+			for(int i = 0;i<size;action.accept(keys[i])); 
+		}
+		
+#endif
+		@Override
+		public COMPARATOR KEY_GENERIC_TYPE comparator() { return null; }
+		@Override
+		public SORTED_SET KEY_GENERIC_TYPE subSet(KEY_TYPE fromElement, KEY_TYPE toElement) { throw new UnsupportedOperationException(); }
+		@Override
+		public SORTED_SET KEY_GENERIC_TYPE headSet(KEY_TYPE toElement) { throw new UnsupportedOperationException(); }
+		@Override
+		public SORTED_SET KEY_GENERIC_TYPE tailSet(KEY_TYPE fromElement) { throw new UnsupportedOperationException(); }
+	}
+	
+	private class Values extends VALUE_ABSTRACT_COLLECTION VALUE_GENERIC_TYPE {
+#if VALUE_OBJECT
+		@Override
+		public boolean contains(Object e) {
+			return containsValue(e);
+		}
+		
+#else
+		@Override
+		public boolean contains(VALUE_TYPE e) {
+			return containsValue(e);
+		}
+		
+#endif
+		@Override
+		public boolean add(VALUE_TYPE o) {
+			throw new UnsupportedOperationException();
+		}
+
+		@Override
+		public VALUE_ITERATOR VALUE_GENERIC_TYPE iterator() {
+			return new ValueIterator();
+		}
+		
+		@Override
+		public int size() {
+			return ARRAY_MAP.this.size();
+		}
+		
+		@Override
+		public void clear() {
+			ARRAY_MAP.this.clear();
+		}
+		
+#if VALUE_OBJECT
+		@Override
+		public void forEach(Consumer<? super CLASS_VALUE_TYPE> action) {
+			for(int i = 0;i<size;action.accept(values[i]));
+		}
+#else
+		@Override
+		public void forEach(VALUE_CONSUMER VALUE_GENERIC_TYPE action) {
+			for(int i = 0;i<size;action.accept(values[i]));
+		}
+#endif
+	}
+	
+	private class FastEntryIterator extends MapIterator implements ObjectListIterator<MAP.Entry KEY_VALUE_GENERIC_TYPE> {
+		MapEntry entry = new MapEntry();
+		
+		public FastEntryIterator() {}
+		public FastEntryIterator(KEY_TYPE from) {
+			index = findIndex(from);
+		}
+		
+		@Override
+		public MAP.Entry KEY_VALUE_GENERIC_TYPE next() {
+			entry.index = nextEntry();
+			return entry;
+		}
+		
+		@Override
+		public MAP.Entry KEY_VALUE_GENERIC_TYPE previous() {
+			entry.index = previousEntry();
+			return entry;
+		}
+		
+		@Override
+		public void set(MAP.Entry KEY_VALUE_GENERIC_TYPE e) { throw new UnsupportedOperationException(); }
+		@Override
+		public void add(MAP.Entry KEY_VALUE_GENERIC_TYPE e) { throw new UnsupportedOperationException(); }
+	}
+	
+	private class EntryIterator extends MapIterator implements ObjectListIterator<MAP.Entry KEY_VALUE_GENERIC_TYPE> {
+		MapEntry entry = null;
+		
+		public EntryIterator() {}
+		public EntryIterator(KEY_TYPE from) {
+			index = findIndex(from);
+		}
+		
+		@Override
+		public MAP.Entry KEY_VALUE_GENERIC_TYPE next() {
+			return entry = new MapEntry(nextEntry());
+		}
+		
+		@Override
+		public MAP.Entry KEY_VALUE_GENERIC_TYPE previous() {
+			return entry = new MapEntry(previousEntry());
+		}
+		
+		@Override
+		public void remove() {
+			super.remove();
+			entry.index = -1;
+		}
+		
+		@Override
+		public void set(MAP.Entry KEY_VALUE_GENERIC_TYPE e) { throw new UnsupportedOperationException(); }
+		@Override
+		public void add(MAP.Entry KEY_VALUE_GENERIC_TYPE e) { throw new UnsupportedOperationException(); }
+	}
+	
+	private class KeyIterator extends MapIterator implements LIST_ITERATOR KEY_GENERIC_TYPE {
+		public KeyIterator() {}
+		public KeyIterator(KEY_TYPE element) {
+			index = findIndex(element);
+		}
+		@Override
+		public KEY_TYPE PREVIOUS() {
+			return keys[previousEntry()];
+		}
+
+		@Override
+		public KEY_TYPE NEXT() {
+			return keys[nextEntry()];
+		}
+
+		@Override
+		public void set(KEY_TYPE e) { throw new UnsupportedOperationException(); }
+
+		@Override
+		public void add(KEY_TYPE e) { throw new UnsupportedOperationException(); }	
+	}
+	
+	private class ValueIterator extends MapIterator implements VALUE_LIST_ITERATOR VALUE_GENERIC_TYPE {
+		@Override
+		public VALUE_TYPE VALUE_PREVIOUS() {
+			return values[previousEntry()];
+		}
+
+		@Override
+		public VALUE_TYPE VALUE_NEXT() {
+			return values[nextEntry()];
+		}
+
+		@Override
+		public void set(VALUE_TYPE e) { throw new UnsupportedOperationException(); }
+
+		@Override
+		public void add(VALUE_TYPE e) { throw new UnsupportedOperationException(); }	
+	}
+	
+	private class MapIterator {
+		int index;
+		int lastReturned = -1;
+
+		public boolean hasNext() {
+			return index < size;
+		}
+		
+		public boolean hasPrevious() {
+			return index > 0;
+		}
+		
+		public int nextIndex() {
+			return index;
+		}
+		
+		public int previousIndex() {
+			return index-1;
+		}
+		
+		public void remove() {
+			if(lastReturned == -1)
+				throw new IllegalStateException();
+			removeIndex(lastReturned);
+			if(lastReturned < index)
+				index--;
+			lastReturned = -1;
+		}
+		
+		public int previousEntry() {
+			lastReturned = index;
+			return index--;
+		}
+		
+		public int nextEntry() {
+			lastReturned = index;
+			return index++;
+		}
+		
+		public int skip(int amount) {
+			if(amount < 0) throw new IllegalStateException("Negative Numbers are not allowed");
+			int steps = Math.min(amount, (size() - 1) - index);
+			index += steps;
+			return steps;
+		}
+		
+		public int back(int amount) {
+			if(amount < 0) throw new IllegalStateException("Negative Numbers are not allowed");
+			int steps = Math.min(amount, index);
+			index -= steps;
+			return steps;
+		}
+	}
+	
+	private class MapEntry implements MAP.Entry KEY_VALUE_GENERIC_TYPE, Map.Entry<CLASS_TYPE, CLASS_VALUE_TYPE> {
+		int index = -1;
+		
+		public MapEntry() {}
+		public MapEntry(int index) {
+			this.index = index;
+		}
+
+		@Override
+		public KEY_TYPE ENTRY_KEY() {
+			return keys[index];
+		}
+
+		@Override
+		public VALUE_TYPE ENTRY_VALUE() {
+			return values[index];
+		}
+
+		@Override
+		public VALUE_TYPE setValue(VALUE_TYPE value) {
+			VALUE_TYPE oldValue = values[index];
+			values[index] = value;
+			return oldValue;
+		}
+		
+		@Override
+		public boolean equals(Object obj) {
+			if(obj instanceof Map.Entry) {
+				if(obj instanceof MAP.Entry) {
+					MAP.Entry KEY_VALUE_GENERIC_TYPE entry = (MAP.Entry KEY_VALUE_GENERIC_TYPE)obj;
+					return KEY_EQUALS(keys[index], entry.ENTRY_KEY()) && VALUE_EQUALS(values[index], entry.ENTRY_VALUE());
+				}
+				Map.Entry<?, ?> entry = (Map.Entry<?, ?>)obj;
+				Object key = entry.getKey();
+				Object value = entry.getValue();
+#if TYPE_OBJECT && VALUE_OBJECT
+				return KEY_EQUALS(keys[index], key) && VALUE_EQUALS(values[index], value);
+#else if TYPE_OBJECT
+				return value instanceof CLASS_VALUE_TYPE && KEY_EQUALS(keys[index], key) && VALUE_EQUALS(values[index], CLASS_TO_VALUE(value));
+#else if VALUE_OBJECT
+				return key instanceof CLASS_TYPE && KEY_EQUALS(keys[index], CLASS_TO_KEY(key)) && VALUE_EQUALS(values[index], value);
+#else
+				return key instanceof CLASS_TYPE && value instanceof CLASS_VALUE_TYPE && KEY_EQUALS(keys[index], CLASS_TO_KEY(key)) && VALUE_EQUALS(values[index], CLASS_TO_VALUE(value));
+#endif
+			}
+			return false;
+		}
+		
+		@Override
+		public int hashCode() {
+			return KEY_TO_HASH(keys[index]) ^ VALUE_TO_HASH(values[index]);
+		}
+		
+		@Override
+		public String toString() {
+			return KEY_TO_STRING(keys[index]) + "->" + VALUE_TO_STRING(values[index]);
+		}
+	}
+}

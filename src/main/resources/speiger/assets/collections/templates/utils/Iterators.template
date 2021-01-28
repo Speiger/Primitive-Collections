@@ -24,6 +24,44 @@ public class ITERATORS
 #endif
 	}
 	
+	public static GENERIC_KEY_BRACES BI_ITERATOR KEY_GENERIC_TYPE invert(BI_ITERATOR KEY_GENERIC_TYPE it) {
+		return new BI_ITERATOR KEY_GENERIC_TYPE() {
+			@Override
+			public KEY_TYPE NEXT() { return it.PREVIOUS(); }
+			@Override
+			public boolean hasNext() { return it.hasPrevious(); }
+			@Override
+			public boolean hasPrevious() { return it.hasNext(); }
+			@Override
+			public KEY_TYPE PREVIOUS() { return it.NEXT(); }
+			@Override
+			public void remove() { it.remove(); }
+		};
+	}
+	
+	public static GENERIC_KEY_BRACES LIST_ITERATOR KEY_GENERIC_TYPE invert(LIST_ITERATOR KEY_GENERIC_TYPE it) {
+		return new LIST_ITERATOR KEY_GENERIC_TYPE() {
+			@Override
+			public KEY_TYPE NEXT() { return it.PREVIOUS(); }
+			@Override
+			public boolean hasNext() { return it.hasPrevious(); }
+			@Override
+			public boolean hasPrevious() { return it.hasNext(); }
+			@Override
+			public KEY_TYPE PREVIOUS() { return it.NEXT(); }
+			@Override
+			public void remove() { it.remove(); }
+			@Override
+			public int nextIndex() { return it.previousIndex(); }
+			@Override
+			public int previousIndex() { return it.nextIndex(); }
+			@Override
+			public void set(KEY_TYPE e) { it.set(e); }
+			@Override
+			public void add(KEY_TYPE e) { it.add(e); }
+		};
+	}
+	
 	/**
 	 * Returns a Immutable Iterator instance based on the instance given.
 	 * @param l that should be made immutable/unmodifyable

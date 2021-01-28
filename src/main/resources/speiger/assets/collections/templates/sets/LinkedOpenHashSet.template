@@ -176,7 +176,6 @@ public class LINKED_HASH_SET KEY_GENERIC_TYPE extends HASH_SET KEY_GENERIC_TYPE 
 				}
 				pos = ++pos & mask;
 			}
-			keys[pos] = o;
 		}
 		return false;
 	}
@@ -199,7 +198,6 @@ public class LINKED_HASH_SET KEY_GENERIC_TYPE extends HASH_SET KEY_GENERIC_TYPE 
 				}
 				pos = ++pos & mask;
 			}
-			keys[pos] = o;
 		}
 		return false;
 	}

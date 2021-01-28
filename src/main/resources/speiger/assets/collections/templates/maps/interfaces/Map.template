@@ -30,7 +30,7 @@ public interface MAP KEY_VALUE_GENERIC_TYPE extends Map<CLASS_TYPE, CLASS_VALUE_
 	public VALUE_TYPE put(KEY_TYPE key, VALUE_TYPE value);
 	public VALUE_TYPE putIfAbsent(KEY_TYPE key, VALUE_TYPE value);
 #if VALUE_PRIMITIVES
-	public boolean addTo(KEY_TYPE key, VALUE_TYPE value);
+	public VALUE_TYPE addTo(KEY_TYPE key, VALUE_TYPE value);
 #endif
 	
 	public void putAll(MAP KEY_VALUE_GENERIC_TYPE m);
@@ -53,15 +53,17 @@ public interface MAP KEY_VALUE_GENERIC_TYPE extends Map<CLASS_TYPE, CLASS_VALUE_
 	}
 	
 #endif
-#if !TYPE_OBJECT
-	public VALUE_TYPE remove(KEY_TYPE key);
+	public VALUE_TYPE REMOVE_KEY(KEY_TYPE key);
 	
 	@Override
 	public default CLASS_VALUE_TYPE remove(Object key) {
-		return key instanceof CLASS_TYPE ? VALUE_TO_OBJ(remove(CLASS_TO_KEY(key))) : VALUE_TO_OBJ(getDefaultReturnValue());
+#if TYPE_OBJECT
+		return VALUE_TO_OBJ(REMOVE_KEY((CLASS_TYPE)key));
+#else
+		return key instanceof CLASS_TYPE ? VALUE_TO_OBJ(REMOVE_KEY(CLASS_TO_KEY(key))) : VALUE_TO_OBJ(getDefaultReturnValue());
+#endif
 	}
 	
-#endif
 #if !TYPE_OBJECT || !VALUE_OBJECT
 	public boolean remove(KEY_TYPE key, VALUE_TYPE value);
 	

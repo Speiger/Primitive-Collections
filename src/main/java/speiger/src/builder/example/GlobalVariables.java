@@ -48,14 +48,16 @@ public class GlobalVariables
 		addSimpleMapper(" NO_GENERIC_TYPE", type.isObject() ? "<?>" : "");
 		addSimpleMapper(" KEY_COMPAREABLE_TYPE", type.isObject() ? "<"+type.getKeyType()+" extends Comparable<T>>" : "");
 		addSimpleMapper(" KEY_SUPER_GENERIC_TYPE", type.isObject() ? "<? super "+type.getKeyType()+">" : "");
-		addSimpleMapper(" VALUE_SUPER_GENERIC_TYPE", valueType.isObject() ? "<? super "+valueType.getKeyType()+">" : "");
+		addSimpleMapper(" VALUE_SUPER_GENERIC_TYPE", valueType.isObject() ? "<? super "+valueType.getValueType()+">" : "");
 		addSimpleMapper(" KEY_VALUE_SUPER_GENERIC_TYPE", type.isObject() ? (valueType.isObject() ? "<? super "+type.getKeyType()+", ? super "+valueType.getValueType()+">" : "<? super "+type.getKeyType()+">") : (valueType.isObject() ? "<? super "+valueType.getValueType()+">" : ""));
-		
-		
+		addSimpleMapper(" KEY_ENUM_VALUE_GENERIC_TYPE", type.isObject() ? (valueType.isObject() ? "<"+type.getKeyType()+" extends Enum<"+type.getKeyType()+">, "+valueType.getValueType()+">" : "<"+type.getKeyType()+" extends Enum<"+type.getKeyType()+">>") : (valueType.isObject() ? "<"+valueType.getValueType()+">" : ""));
+		addSimpleMapper(" KEY_VALUE_ENUM_GENERIC_TYPE", type.isObject() ? (valueType.isObject() ? "<"+type.getKeyType()+", "+valueType.getValueType()+" extends Enum<"+valueType.getValueType()+">>" : "<"+type.getKeyType()+">") : (valueType.isObject() ? "<"+valueType.getValueType()+" extends Enum<"+valueType.getValueType()+">>" : ""));
+
 		addSimpleMapper(" GENERIC_KEY_BRACES", type.isObject() ? " <"+type.getKeyType()+">" : "");
 		addSimpleMapper(" GENERIC_VALUE_BRACES", type.isObject() ? " <"+valueType.getValueType()+">" : "");
 		addSimpleMapper(" GENERIC_KEY_VALUE_BRACES", type.isObject() ? (valueType.isObject() ? " <"+type.getKeyType()+", "+valueType.getValueType()+">" : " <"+type.getKeyType()+">") : (valueType.isObject() ? " <"+valueType.getValueType()+">" : ""));
 		addSimpleMapper(" COMPAREABLE_KEY_BRACES", type.isObject() ? " <"+type.getKeyType()+" extends Comparable<T>>" : "");
+		addSimpleMapper("KV_BRACES", type.isObject() || valueType.isObject() ? "<>" : "");
 		addSimpleMapper("BRACES", type.isObject() ? "<>" : "");
 		if(type.needsCustomJDKType())
 		{
@@ -92,7 +94,7 @@ public class GlobalVariables
 		
 		addInjectMapper(fix+"_TO_OBJ", type.isObject() ? "%s" : type.getClassType(value)+".valueOf(%s)").removeBraces();
 		addInjectMapper("OBJ_TO_"+fix, type.isObject() ? "%s" : "%s."+type.getKeyType(value)+"Value()").removeBraces();
-		addInjectMapper("CLASS_TO_"+fix, "(("+type.getClassType(value)+")%s)."+type.getKeyType(value)+"Value()").removeBraces();
+		addInjectMapper("CLASS_TO_"+fix, type.isObject() ? "("+type.getKeyType(value)+")%s" : "(("+type.getClassType(value)+")%s)."+type.getKeyType(value)+"Value()").removeBraces();
 		
 		addInjectMapper(fix+"_TO_HASH", type.isObject() ? "%s.hashCode()" : type.getClassType(value)+".hashCode(%s)").removeBraces();
 		addInjectMapper(fix+"_TO_STRING", type.isObject() ? "%s.toString()" : type.getClassType(value)+".toString(%s)").removeBraces();
@@ -126,6 +128,14 @@ public class GlobalVariables
 		addClassMapper("LINKED_HASH_SET", "LinkedOpenHashSet");
 		addClassMapper("CUSTOM_HASH_SET", "OpenCustomHashSet");
 		addClassMapper("HASH_SET", "OpenHashSet");
+		addBiClassMapper("LINKED_CUSTOM_HASH_MAP", "LinkedOpenCustomHashMap", "2");
+		addBiClassMapper("LINKED_HASH_MAP", "LinkedOpenHashMap", "2");
+		addBiClassMapper("CUSTOM_HASH_MAP", "OpenCustomHashMap", "2");
+		addBiClassMapper("AVL_TREE_MAP", "AVLTreeMap", "2");
+		addBiClassMapper("RB_TREE_MAP", "RBTreeMap", "2");
+		addFunctionValueMappers("ENUM_MAP", valueType.isObject() ? "Enum2ObjectMap" : "Enum2%sMap");
+		addBiClassMapper("HASH_MAP", "OpenHashMap", "2");
+		addBiClassMapper("ARRAY_MAP", "ArrayMap", "2");
 		addClassMapper("RB_TREE_SET", "RBTreeSet");
 		addClassMapper("AVL_TREE_SET", "AVLTreeSet");
 		addClassMapper("ARRAY_SET", "ArraySet");
@@ -155,6 +165,8 @@ public class GlobalVariables
 		addBiClassMapper("FUNCTION", "Function", "2");
 		addClassMapper("LIST_ITER", "ListIter");
 		addClassMapper("LIST", "List");
+		addBiClassMapper("NAVIGABLE_MAP", "NavigableMap", "2");
+		addBiClassMapper("SORTED_MAP", "SortedMap", "2");
 		addBiClassMapper("MAP", "Map", "2");
 		addClassMapper("NAVIGABLE_SET", "NavigableSet");
 		addClassMapper("PRIORITY_QUEUE", "PriorityQueue");
@@ -166,6 +178,10 @@ public class GlobalVariables
 		addBiClassMapper("UNARY_OPERATOR", "UnaryOperator", "");
 		if(type.isObject())
 		{
+			if(!valueType.isObject())
+			{
+				addSimpleMapper("VALUE_CONSUMER", valueType.getFileType()+"Consumer");
+			}
 			addSimpleMapper("CONSUMER", "Consumer");
 			addSimpleMapper("COMPARATOR", "Comparator");	
 			addSimpleMapper("IARRAY", "IObjectArray");
@@ -191,13 +207,19 @@ public class GlobalVariables
 		addFunctionMapper("ENQUEUE", "enqueue");
 		addFunctionMapper("DEQUEUE_LAST", "dequeueLast");
 		addFunctionMapper("DEQUEUE", "dequeue");
-		addFunctionMappers("ENTRY_KEY", "get%sKey");
-		addFunctionValueMappers("ENTRY_VALUE", "get%sValue");
+		addFunctionMappers("POLL_FIRST_ENTRY_KEY", "pollFirst%sKey");
+		addFunctionMappers("POLL_LAST_ENTRY_KEY", "pollLast%sKey");
 		addFunctionMapper("POLL_FIRST_KEY", "pollFirst");
 		addFunctionMapper("POLL_LAST_KEY", "pollLast");
+		addFunctionMappers("FIRST_ENTRY_KEY", "first%sKey");
+		addFunctionValueMappers("FIRST_ENTRY_VALUE", "first%sValue");
 		addFunctionMapper("FIRST_KEY", "first");
+		addFunctionMappers("LAST_ENTRY_KEY", "last%sKey");
+		addFunctionValueMappers("LAST_ENTRY_VALUE", "last%sValue");
+		addFunctionMappers("ENTRY_KEY", "get%sKey");
+		addFunctionValueMappers("ENTRY_VALUE", "get%sValue");
 		addFunctionMapper("GET_KEY", "get");
-		addFunctionValueMapper("GET_VALUE", "get");
+		addFunctionValueMapper("GET_VALUE", valueType.isObject() ? "getObject" : "get");
 		addFunctionMapper("LAST_KEY", "last");
 		addFunctionValueMapper("MERGE", "merge");
 		addFunctionMapper("NEXT", "next");
@@ -229,18 +251,9 @@ public class GlobalVariables
 		return this;
 	}
 	
-	public TemplateProcess create(String fileName)
+	public TemplateProcess create(String fileName, String splitter, boolean valueOnly)
 	{
-		TemplateProcess process = new TemplateProcess(String.format(fileName+".java", type.getFileType()));
-		process.setPathBuilder(new PathBuilder(type.getPathType()));
-		process.addFlags(flags);
-		process.addMappers(operators);
-		return process;
-	}
-	
-	public TemplateProcess createBi(String fileName, String splitter)
-	{
-		TemplateProcess process = new TemplateProcess(String.format(fileName+".java", type.getFileType()+splitter+valueType.getFileType()));
+		TemplateProcess process = new TemplateProcess(String.format(fileName+".java", (splitter != null ? type.getFileType()+splitter+valueType.getFileType() : (valueOnly ? valueType : type).getFileType())));
 		process.setPathBuilder(new PathBuilder(type.getPathType()));
 		process.addFlags(flags);
 		process.addMappers(operators);

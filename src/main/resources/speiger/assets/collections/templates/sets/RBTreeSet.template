@@ -701,13 +701,13 @@ public class RB_TREE_SET KEY_GENERIC_TYPE extends ABSTRACT_SET KEY_GENERIC_TYPE 
         
 #if !TYPE_OBJECT
 		@Override
-		public void setDefaultMaxValue(KEY_TYPE value) { throw new UnsupportedOperationException(); }
+		public void setDefaultMaxValue(KEY_TYPE value) { set.setDefaultMaxValue(value); }
 		
 		@Override
 		public KEY_TYPE getDefaultMaxValue() { return set.getDefaultMaxValue(); }
 		
 		@Override
-		public void setDefaultMinValue(KEY_TYPE value) { throw new UnsupportedOperationException(); }
+		public void setDefaultMinValue(KEY_TYPE value) { set.setDefaultMinValue(value); }
 		
 		@Override
 		public KEY_TYPE getDefaultMinValue() { return set.getDefaultMinValue(); }

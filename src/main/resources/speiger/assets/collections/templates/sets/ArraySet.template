@@ -4,15 +4,20 @@ import java.util.Arrays;
 import java.util.Collection;
 #if TYPE_OBJECT
 import java.util.Comparator;
+import java.util.function.Consumer;
 #endif
 import java.util.NoSuchElementException;
 import java.util.Objects;
 import java.util.Set;
+#if PRIMITIVES
+import java.util.function.JAVA_PREDICATE;
+#endif
 
 import speiger.src.collections.PACKAGE.collections.BI_ITERATOR;
 import speiger.src.collections.PACKAGE.collections.COLLECTION;
 #if !TYPE_OBJECT
 import speiger.src.collections.PACKAGE.functions.COMPARATOR;
+import speiger.src.collections.PACKAGE.functions.CONSUMER;
 #endif
 import speiger.src.collections.PACKAGE.lists.LIST_ITERATOR;
 import speiger.src.collections.PACKAGE.utils.ARRAYS;
@@ -191,9 +196,9 @@ public class ARRAY_SET KEY_GENERIC_TYPE extends ABSTRACT_SET KEY_GENERIC_TYPE im
 	public KEY_TYPE POLL_FIRST_KEY() {
 		if(size == 0) throw new NoSuchElementException();
 		KEY_TYPE result = data[0];
-		System.arraycopy(data, 1, data, 0, size - 1);
+		System.arraycopy(data, 1, data, 0, --size);
 #if TYPE_OBJECT
-		data[size-1] = EMPTY_KEY_VALUE;
+		data[size] = EMPTY_KEY_VALUE;
 #endif
 		return result;
 	}
@@ -210,7 +215,36 @@ public class ARRAY_SET KEY_GENERIC_TYPE extends ABSTRACT_SET KEY_GENERIC_TYPE im
 		return data[size];
 #endif
 	}
+#if PRIMITIVES
+	@Override
+	public boolean remIf(JAVA_PREDICATE KEY_GENERIC_TYPE filter) {
+		Objects.requireNonNull(filter);
+		boolean modified = false;
+		int j = 0;
+		for(int i = 0;i<data.length;i++) {
+			if(!filter.test(data[i])) data[j++] = data[i];
+			else modified = true;
+		}
+		size = j;
+		return modified;
+	}
 	
+#endif
+#if TYPE_OBJECT
+	@Override
+	public void forEach(Consumer KEY_SUPER_GENERIC_TYPE action) {
+		Objects.requireNonNull(action);
+		for(int i = 0;i<size;action.accept(data[i++]));
+	}
+	
+#else
+	@Override
+	public void forEach(CONSUMER KEY_GENERIC_TYPE action) {
+		Objects.requireNonNull(action);
+		for(int i = 0;i<size;action.accept(data[i++]));
+	}
+	
+#endif
 #if !TYPE_OBJECT
 	protected int findIndex(KEY_TYPE o) {
 		for(int i = size-1;i>=0;i--)

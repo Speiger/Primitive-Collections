@@ -1,0 +1,73 @@
+package speiger.src.collections.PACKAGE.maps.interfaces;
+
+#if TYPE_OBJECT
+import java.util.Comparator;
+#endif
+import java.util.SortedMap;
+
+import speiger.src.collections.VALUE_PACKAGE.collections.VALUE_COLLECTION;
+#if !TYPE_OBJECT
+import speiger.src.collections.PACKAGE.functions.COMPARATOR;
+#endif
+import speiger.src.collections.PACKAGE.sets.SET;
+import speiger.src.collections.objects.sets.ObjectSortedSet;
+import speiger.src.collections.objects.collections.ObjectBidirectionalIterator;
+
+public interface SORTED_MAP KEY_VALUE_GENERIC_TYPE extends SortedMap<CLASS_TYPE, CLASS_VALUE_TYPE>, MAP KEY_VALUE_GENERIC_TYPE
+{
+	public VALUE_TYPE putAndMoveToFirst(KEY_TYPE key, VALUE_TYPE value);
+	public VALUE_TYPE putAndMoveToLast(KEY_TYPE key, VALUE_TYPE value);
+	
+	public boolean moveToFirst(KEY_TYPE key);
+	public boolean moveToLast(KEY_TYPE key);
+	
+	public VALUE_TYPE getAndMoveToFirst(KEY_TYPE key);
+	public VALUE_TYPE getAndMoveToLast(KEY_TYPE key);
+	
+	@Override
+	public COMPARATOR KEY_GENERIC_TYPE comparator();
+	
+	@Override
+	public SET KEY_GENERIC_TYPE keySet();
+	@Override
+	public VALUE_COLLECTION VALUE_GENERIC_TYPE values();
+	
+#if !TYPE_OBJECT
+	public SORTED_MAP KEY_VALUE_GENERIC_TYPE subMap(KEY_TYPE fromKey, KEY_TYPE toKey);
+	public SORTED_MAP KEY_VALUE_GENERIC_TYPE headMap(KEY_TYPE toKey);
+	public SORTED_MAP KEY_VALUE_GENERIC_TYPE tailMap(KEY_TYPE fromKey);
+	
+	public KEY_TYPE FIRST_ENTRY_KEY();
+	public KEY_TYPE POLL_FIRST_ENTRY_KEY();
+	public KEY_TYPE LAST_ENTRY_KEY();
+	public KEY_TYPE POLL_LAST_ENTRY_KEY();
+	
+	public VALUE_TYPE FIRST_ENTRY_VALUE();
+	public VALUE_TYPE LAST_ENTRY_VALUE();
+	
+	public default CLASS_TYPE firstKey() { return KEY_TO_OBJ(FIRST_ENTRY_KEY()); }
+	public default CLASS_TYPE lastKey() { return KEY_TO_OBJ(LAST_ENTRY_KEY()); }
+	
+	@Override
+	@Deprecated
+	public default SORTED_MAP KEY_VALUE_GENERIC_TYPE subMap(CLASS_TYPE fromKey, CLASS_TYPE toKey) { return subMap(OBJ_TO_KEY(fromKey), OBJ_TO_KEY(toKey)); }
+	@Override
+	@Deprecated
+	public default SORTED_MAP KEY_VALUE_GENERIC_TYPE headMap(CLASS_TYPE toKey) { return headMap(OBJ_TO_KEY(toKey)); }
+	@Override
+	@Deprecated
+	public default SORTED_MAP KEY_VALUE_GENERIC_TYPE tailMap(CLASS_TYPE fromKey) { return tailMap(OBJ_TO_KEY(fromKey)); }
+#else
+	public KEY_TYPE POLL_FIRST_ENTRY_KEY();
+	public KEY_TYPE POLL_LAST_ENTRY_KEY();
+	
+	public VALUE_TYPE FIRST_ENTRY_VALUE();
+	public VALUE_TYPE LAST_ENTRY_VALUE();	
+#endif
+	
+	interface FastSortedSet KEY_VALUE_GENERIC_TYPE extends MAP.FastEntrySet KEY_VALUE_GENERIC_TYPE, ObjectSortedSet<MAP.Entry KEY_VALUE_GENERIC_TYPE> {
+		@Override
+		public ObjectBidirectionalIterator<MAP.Entry KEY_VALUE_GENERIC_TYPE> fastIterator();
+		public ObjectBidirectionalIterator<MAP.Entry KEY_VALUE_GENERIC_TYPE> fastIterator(KEY_TYPE fromElement);
+	}
+}

@@ -174,7 +174,6 @@ public class LINKED_CUSTOM_HASH_SET KEY_GENERIC_TYPE extends CUSTOM_HASH_SET KEY
 				}
 				pos = ++pos & mask;
 			}
-			keys[pos] = o;
 		}
 		return false;
 	}
@@ -197,7 +196,6 @@ public class LINKED_CUSTOM_HASH_SET KEY_GENERIC_TYPE extends CUSTOM_HASH_SET KEY
 				}
 				pos = ++pos & mask;
 			}
-			keys[pos] = o;
 		}
 		return false;
 	}

@@ -6,20 +6,36 @@ tasks.withType(JavaCompile) {
     options.encoding = 'UTF-8'
 }
 
+apply plugin: 'java'
 apply plugin: 'eclipse'
-
-eclipse {
-	classpath {
-		downloadJavadoc = true
-		downloadSources = true
-	}
-}
 
 repositories {
     jcenter()
     flatDir {
         dirs '/libs'
     }
+}
+
+sourceCompatibility = targetCompatibility = compileJava.sourceCompatibility = compileJava.targetCompatibility = '1.8'
+
+eclipse {
+	classpath {
+		downloadJavadoc = true
+		downloadSources = true
+		file {
+			whenMerged {
+				//Enforce a custom container and allowing access to the sun.misc package which is nessesary for EnumMaps
+				entries.find{ it.kind == 'con' && it.path.startsWith('org.eclipse.jdt')}.path = 'org.eclipse.jdt.launching.JRE_CONTAINER';
+			}
+		}
+	}
+}
+
+task generateSource(type: JavaExec) {
+	group = 'internal'
+	description = 'Builds the sourcecode'
+    classpath = sourceSets.main.runtimeClasspath
+    main = 'speiger.src.builder.example.TestBuilder'
 }
 
 dependencies {

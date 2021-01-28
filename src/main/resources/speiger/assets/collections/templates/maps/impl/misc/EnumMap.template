@@ -1,0 +1,332 @@
+package speiger.src.collections.PACKAGE.maps.impl.misc;
+
+import java.util.Map;
+import java.util.NoSuchElementException;
+#if VALUE_OBJECT
+import java.util.Objects;
+#endif
+
+import speiger.src.collections.VALUE_PACKAGE.collections.VALUE_ABSTRACT_COLLECTION;
+import speiger.src.collections.VALUE_PACKAGE.collections.VALUE_COLLECTION;
+import speiger.src.collections.VALUE_PACKAGE.collections.VALUE_ITERATOR;
+#if !VALUE_OBJECT
+import speiger.src.collections.objects.collections.ObjectIterator;
+#endif
+import speiger.src.collections.objects.maps.abstracts.ABSTRACT_MAP;
+import speiger.src.collections.objects.maps.interfaces.MAP;
+import speiger.src.collections.objects.sets.AbstractObjectSet;
+import speiger.src.collections.objects.sets.ObjectSet;
+import sun.misc.SharedSecrets;
+
+public class ENUM_MAP KEY_ENUM_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_VALUE_GENERIC_TYPE
+{
+    protected final Class<T> keyType;
+    protected transient final T[] keys;
+    protected transient final VALUE_TYPE[] values;
+    protected transient final long[] present;
+    protected int size = 0;
+    protected transient ObjectSet<MAP.Entry KEY_VALUE_GENERIC_TYPE> entrySet;
+    protected transient ObjectSet<T> keySet;
+    protected transient VALUE_COLLECTION VALUE_GENERIC_TYPE valuesC;
+	
+	public ENUM_MAP(Class<T> keyType) {
+		this.keyType = keyType;
+		keys = getKeyUniverse(keyType);
+		values = NEW_VALUE_ARRAY(keys.length);
+		present = new long[((keys.length - 1) >> 6) + 1];
+	}
+	
+	@Override
+	public VALUE_TYPE put(T key, VALUE_TYPE value) {
+		int index = key.ordinal();
+		if(isSet(index)) {
+			VALUE_TYPE result = values[index];
+			values[index] = value;
+			return result;
+		}
+		set(index);
+		values[index] = value;
+		return getDefaultReturnValue();
+	}
+	
+	@Override
+	public VALUE_TYPE putIfAbsent(T key, VALUE_TYPE value) {
+		int index = key.ordinal();
+		if(isSet(index)) return values[index];
+		set(index);
+		values[index] = value;
+		return getDefaultReturnValue();
+	}
+	
+#if VALUE_PRIMITIVES
+	@Override
+	public VALUE_TYPE addTo(T key, VALUE_TYPE value) {
+		int index = key.ordinal();
+		if(isSet(index)) {
+			VALUE_TYPE result = values[index];
+			values[index] += value;
+			return result;
+		}
+		set(index);
+		values[index] = value;
+		return getDefaultReturnValue();
+	}
+	
+#endif
+	@Override
+	public boolean containsKey(Object key) {
+		return isSet(((T)key).ordinal());
+	}
+	
+#if VALUE_OBJECT
+	@Override
+	public boolean containsValue(Object value) {
+		for(int i = 0;i<values.length;i++)
+			if(VALUE_EQUALS(value, values[i])) return true;
+		return false;
+	}
+	
+#else
+	@Override
+	public boolean containsValue(VALUE_TYPE value) {
+		for(int i = 0;i<values.length;i++)
+			if(VALUE_EQUALS(value, values[i])) return true;
+		return false;
+	}
+	
+#endif
+	@Override
+	public VALUE_TYPE rem(T key) {
+		int index = key.ordinal();
+		if(!isSet(index)) return getDefaultReturnValue();
+		clear(index);
+		VALUE_TYPE result = values[index];
+		values[index] = EMPTY_VALUE;
+		return result;
+	}
+	
+#if VALUE_OBJECT
+	@Override
+	public boolean remove(Object key, Object value) {
+		int index = ((T)key).ordinal();
+		if(!isSet(index) || VALUE_EQUALS_NOT(value, values[index])) return false;
+		clear(index);
+		values[index] = EMPTY_VALUE;
+		return true;
+	}
+	
+#else
+	@Override
+	public boolean remove(T key, VALUE_TYPE value) {
+		int index = key.ordinal();
+		if(!isSet(index) || VALUE_EQUALS_NOT(value, values[index])) return false;
+		clear(index);
+		values[index] = EMPTY_VALUE;
+		return true;
+	}
+	
+#endif
+	@Override
+	public VALUE_TYPE GET_VALUE(T key) {
+		int index = key.ordinal();
+		return isSet(index) ? values[index] : getDefaultReturnValue();
+	}
+
+#if VALUE_OBJECT
+	@Override
+	public VALUE_TYPE getOrDefault(Object key, VALUE_TYPE defaultValue) {
+		int index = ((T)key).ordinal();
+		return isSet(index) ? values[index] : defaultValue;
+	}
+	
+#else
+	@Override
+	public VALUE_TYPE getOrDefault(T key, VALUE_TYPE defaultValue) {
+		int index = key.ordinal();
+		return isSet(index) ? values[index] : defaultValue;
+	}
+	
+#endif
+	@Override
+	public ObjectSet<MAP.Entry KEY_VALUE_GENERIC_TYPE> ENTRY_SET() {
+		if(entrySet == null) entrySet = new EntrySet();
+		return entrySet;
+	}
+	
+	@Override
+	public ObjectSet<T> keySet() {
+		if(keySet == null) keySet = new KeySet();
+		return keySet;
+	}
+	
+	@Override
+	public VALUE_COLLECTION VALUE_GENERIC_TYPE values() {
+		if(valuesC == null) valuesC = new Values();
+		return valuesC;
+	}
+	
+	protected void onNodeAdded(int index) {
+		
+	}
+	
+	protected void onNodeRemoved(int index)  {
+		
+	}
+	
+	protected void set(int index) { 
+		present[index >> 6] |= (1L << index); 
+		onNodeAdded(index);
+	}
+	protected void clear(int index) { 
+		present[index >> 6] &= ~(1L << index);
+		onNodeRemoved(index);
+	}
+	protected boolean isSet(int index) { return (present[index >> 6] & (1L << index)) != 0; }
+    private static <K extends Enum<K>> K[] getKeyUniverse(Class<K> keyType) { return SharedSecrets.getJavaLangAccess().getEnumConstantsShared(keyType); }
+    
+    class EntrySet extends AbstractObjectSet<MAP.Entry KEY_VALUE_GENERIC_TYPE> {
+    	
+    	@Override
+    	public boolean contains(Object o) {
+    		if(o instanceof Map.Entry) return containsKey(((Map.Entry<?, ?>)o).getKey());
+    		return false;
+    	}
+    	
+    	@Override
+    	public boolean remove(Object o) {
+    		if(o instanceof Map.Entry) {
+    			if(o instanceof MAP.Entry) {
+    				MAP.Entry KEY_VALUE_GENERIC_TYPE entry = (MAP.Entry KEY_VALUE_GENERIC_TYPE)o;
+    				return ENUM_MAP.this.remove(entry.getKey(), entry.ENTRY_VALUE());
+    			}
+    			Map.Entry<?, ?> entry = (java.util.Map.Entry<?, ?>)o;
+    			return ENUM_MAP.this.remove(entry.getKey(), entry.getValue());
+    		}
+    		return false;
+    	}
+    	
+		@Override
+		public ObjectIterator<MAP.Entry KEY_VALUE_GENERIC_TYPE> iterator() {
+			return new EntryIterator();
+		}
+
+		@Override
+		public int size() {
+			return ENUM_MAP.this.size();
+		}
+		
+		@Override
+		public void clear() {
+			ENUM_MAP.this.clear();
+		}
+    }
+    
+    class KeySet extends AbstractObjectSet<T> {
+    	
+    	@Override
+    	public boolean contains(Object o) {
+    		return containsKey(o);
+    	}
+    	
+    	@Override
+    	public boolean remove(Object o) {
+    		int size = size();
+    		ENUM_MAP.this.remove(o);
+    		return size != size();
+    	}
+    	
+		@Override
+		public ObjectIterator<T> iterator() {
+			return new KeyIterator();
+		}
+		
+		@Override
+		public int size() {
+			return ENUM_MAP.this.size();
+		}
+    	
+		@Override
+		public void clear() {
+			ENUM_MAP.this.clear();
+		}
+    }
+    
+    class Values extends VALUE_ABSTRACT_COLLECTION VALUE_GENERIC_TYPE {
+
+		@Override
+		public boolean add(VALUE_TYPE o) { throw new UnsupportedOperationException(); }
+		
+#if TYPE_OBJECT
+		@Override
+		public boolean contains(Object e) { return containsValue(e); }
+		
+#else
+		@Override
+		public boolean contains(VALUE_TYPE e) { return containsValue(e); }
+		
+#endif
+		@Override
+		public VALUE_ITERATOR VALUE_GENERIC_TYPE iterator() {
+			return new ValueIterator();
+		}
+
+		@Override
+		public int size() {
+			return ENUM_MAP.this.size();
+		}
+    	
+		@Override
+		public void clear() {
+			ENUM_MAP.this.clear();
+		}
+    }
+    
+    class EntryIterator extends MapIterator implements ObjectIterator<MAP.Entry KEY_VALUE_GENERIC_TYPE> {
+		@Override
+		public MAP.Entry KEY_VALUE_GENERIC_TYPE next() {
+			int index = nextEntry();
+			return new BasicEntry<>(keys[index], values[index]);
+		}
+    }
+    
+    class KeyIterator extends MapIterator implements ObjectIterator<T> {
+		@Override
+		public T next() {
+			return keys[nextEntry()];
+		}
+    }
+    
+    class ValueIterator extends MapIterator implements VALUE_ITERATOR VALUE_GENERIC_TYPE {
+		@Override
+		public VALUE_TYPE VALUE_NEXT() {
+			return values[nextEntry()];
+		}
+    }
+    
+    class MapIterator {
+    	int index;
+    	int lastReturnValue = -1;
+    	int nextIndex = -1;
+    	
+		public boolean hasNext() {
+			if(nextIndex == -1 && index < values.length) {
+				while(index < values.length && !isSet(index++));
+				nextIndex = index-1;
+				if(!isSet(nextIndex)) nextIndex = -1;
+			}
+			return nextIndex != -1;
+		}
+		
+		public int nextEntry() {
+			if(!hasNext()) throw new NoSuchElementException();
+			lastReturnValue = nextIndex;
+			return nextIndex;
+		}
+		
+		public void remove() {
+			if(lastReturnValue == -1) throw new IllegalStateException();
+			clear(lastReturnValue);
+			values[lastReturnValue] = EMPTY_VALUE;
+		}
+    }
+}
