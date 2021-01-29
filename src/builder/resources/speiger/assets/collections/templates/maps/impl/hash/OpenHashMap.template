@@ -1,4 +1,4 @@
-package speiger.src.collections.PACKAGE.maps.impl.customHash;
+package speiger.src.collections.PACKAGE.maps.impl.hash;
 
 import java.util.Arrays;
 import java.util.Map;
@@ -19,7 +19,6 @@ import speiger.src.collections.PACKAGE.maps.interfaces.MAP;
 import speiger.src.collections.PACKAGE.sets.ABSTRACT_SET;
 import speiger.src.collections.PACKAGE.sets.SET;
 #endif
-import speiger.src.collections.PACKAGE.utils.STRATEGY;
 import speiger.src.collections.VALUE_PACKAGE.collections.VALUE_ABSTRACT_COLLECTION;
 import speiger.src.collections.VALUE_PACKAGE.collections.VALUE_COLLECTION;
 #if !SAME_TYPE && !VALUE_OBJECT
@@ -31,7 +30,7 @@ import speiger.src.collections.objects.sets.AbstractObjectSet;
 import speiger.src.collections.objects.sets.ObjectSet;
 import speiger.src.collections.utils.HashUtil;
 
-public class CUSTOM_HASH_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_VALUE_GENERIC_TYPE
+public class HASH_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_VALUE_GENERIC_TYPE
 {
 	protected transient KEY_TYPE[] keys;
 	protected transient VALUE_TYPE[] values;
@@ -46,22 +45,20 @@ public class CUSTOM_HASH_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_VAL
 	
 	protected int size;
 	protected final float loadFactor;
-	protected final STRATEGY KEY_SUPER_GENERIC_TYPE strategy;
-
-	public CUSTOM_HASH_MAP(STRATEGY KEY_SUPER_GENERIC_TYPE strategy) {
-		this(HashUtil.DEFAULT_MIN_CAPACITY, HashUtil.DEFAULT_LOAD_FACTOR, strategy);
+	
+	public HASH_MAP() {
+		this(HashUtil.DEFAULT_MIN_CAPACITY, HashUtil.DEFAULT_LOAD_FACTOR);
 	}
 	
-	public CUSTOM_HASH_MAP(int minCapacity, STRATEGY KEY_SUPER_GENERIC_TYPE strategy) {
-		this(minCapacity, HashUtil.DEFAULT_LOAD_FACTOR, strategy);
+	public HASH_MAP(int minCapacity) {
+		this(minCapacity, HashUtil.DEFAULT_LOAD_FACTOR);
 	}
 	
-	public CUSTOM_HASH_MAP(int minCapacity, float loadFactor, STRATEGY KEY_SUPER_GENERIC_TYPE strategy) {
+	public HASH_MAP(int minCapacity, float loadFactor) {
 		if(minCapacity < 0)	throw new IllegalStateException("Minimum Capacity is negative. This is not allowed");
 		if(loadFactor <= 0 || loadFactor >= 1F) throw new IllegalStateException("Load Factor is not between 0 and 1");
 		this.loadFactor = loadFactor;
 		this.minCapacity = nullIndex = HashUtil.arraySize(minCapacity, loadFactor);
-		this.strategy = strategy;
 		mask = nullIndex - 1;
 		maxFill = Math.min((int)Math.ceil(nullIndex * loadFactor), nullIndex - 1);
 		keys = NEW_KEY_ARRAY(nullIndex + 1);
@@ -69,42 +66,42 @@ public class CUSTOM_HASH_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_VAL
 	}
 	
 #if !TYPE_OBJECT || !VALUE_OBJECT
-	public CUSTOM_HASH_MAP(CLASS_TYPE[] keys, CLASS_VALUE_TYPE[] values, STRATEGY KEY_SUPER_GENERIC_TYPE strategy) {
-		this(keys, values, HashUtil.DEFAULT_LOAD_FACTOR, strategy);
+	public HASH_MAP(CLASS_TYPE[] keys, CLASS_VALUE_TYPE[] values) {
+		this(keys, values, HashUtil.DEFAULT_LOAD_FACTOR);
 	}
 	
-	public CUSTOM_HASH_MAP(CLASS_TYPE[] keys, CLASS_VALUE_TYPE[] values, float loadFactor, STRATEGY KEY_SUPER_GENERIC_TYPE strategy) {
-		this(keys.length, loadFactor, strategy);
+	public HASH_MAP(CLASS_TYPE[] keys, CLASS_VALUE_TYPE[] values, float loadFactor) {
+		this(keys.length, loadFactor);
 		if(keys.length != values.length) throw new IllegalStateException("Input Arrays are not equal size");
 		for(int i = 0,m=keys.length;i<m;i++) put(OBJ_TO_KEY(keys[i]), OBJ_TO_VALUE(values[i]));
 	}
 	
 #endif
-	public CUSTOM_HASH_MAP(KEY_TYPE[] keys, VALUE_TYPE[] values, STRATEGY KEY_SUPER_GENERIC_TYPE strategy) {
-		this(keys, values, HashUtil.DEFAULT_LOAD_FACTOR, strategy);
+	public HASH_MAP(KEY_TYPE[] keys, VALUE_TYPE[] values) {
+		this(keys, values, HashUtil.DEFAULT_LOAD_FACTOR);
 	}
 	
-	public CUSTOM_HASH_MAP(KEY_TYPE[] keys, VALUE_TYPE[] values, float loadFactor, STRATEGY KEY_SUPER_GENERIC_TYPE strategy) {
-		this(keys.length, loadFactor, strategy);
+	public HASH_MAP(KEY_TYPE[] keys, VALUE_TYPE[] values, float loadFactor) {
+		this(keys.length, loadFactor);
 		if(keys.length != values.length) throw new IllegalStateException("Input Arrays are not equal size");
 		for(int i = 0,m=keys.length;i<m;i++) put(keys[i], values[i]);
 	}
 	
-	public CUSTOM_HASH_MAP(Map<? extends CLASS_TYPE, ? extends CLASS_VALUE_TYPE> map, STRATEGY KEY_SUPER_GENERIC_TYPE strategy) {
-		this(map, HashUtil.DEFAULT_LOAD_FACTOR, strategy);
+	public HASH_MAP(Map<? extends CLASS_TYPE, ? extends CLASS_VALUE_TYPE> map) {
+		this(map, HashUtil.DEFAULT_LOAD_FACTOR);
 	}
 	
-	public CUSTOM_HASH_MAP(Map<? extends CLASS_TYPE, ? extends CLASS_VALUE_TYPE> map, float loadFactor, STRATEGY KEY_SUPER_GENERIC_TYPE strategy) {
-		this(map.size(), loadFactor, strategy);
+	public HASH_MAP(Map<? extends CLASS_TYPE, ? extends CLASS_VALUE_TYPE> map, float loadFactor) {
+		this(map.size(), loadFactor);
 		putAll(map);
 	}
 	
-	public CUSTOM_HASH_MAP(MAP KEY_VALUE_GENERIC_TYPE map, STRATEGY KEY_SUPER_GENERIC_TYPE strategy) {
-		this(map, HashUtil.DEFAULT_LOAD_FACTOR, strategy);
+	public HASH_MAP(MAP KEY_VALUE_GENERIC_TYPE map) {
+		this(map, HashUtil.DEFAULT_LOAD_FACTOR);
 	}
 	
-	public CUSTOM_HASH_MAP(MAP KEY_VALUE_GENERIC_TYPE map, float loadFactor, STRATEGY KEY_SUPER_GENERIC_TYPE strategy) {
-		this(map.size(), loadFactor, strategy);
+	public HASH_MAP(MAP KEY_VALUE_GENERIC_TYPE map, float loadFactor) {
+		this(map.size(), loadFactor);
 		putAll(map);
 	}
 	
@@ -162,7 +159,7 @@ public class CUSTOM_HASH_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_VAL
 	public boolean containsValue(VALUE_TYPE value) {
 		if(VALUE_EQUALS(value, values[nullIndex])) return true;
 		for(int i = nullIndex-1;i >= 0;i--)
-			if(!strategy.equals(keys[i], EMPTY_KEY_VALUE) && VALUE_EQUALS(values[i], value)) return true;
+			if(KEY_EQUALS_NOT_NULL(keys[i]) && VALUE_EQUALS(values[i], value)) return true;
 		return false;
 	}
 	
@@ -172,7 +169,7 @@ public class CUSTOM_HASH_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_VAL
 	public boolean containsValue(Object value) {
 		if((value == null && VALUE_EQUALS(values[nullIndex], getDefaultReturnValue())) || EQUALS_VALUE_TYPE(values[nullIndex], value)) return true;
 		for(int i = nullIndex-1;i >= 0;i--)
-			if(!strategy.equals(keys[i], EMPTY_KEY_VALUE) && ((value == null && values[i] == getDefaultReturnValue()) || EQUALS_VALUE_TYPE(values[i], value))) return true;
+			if(KEY_EQUALS_NOT_NULL(keys[i]) && ((value == null && values[i] == getDefaultReturnValue()) || EQUALS_VALUE_TYPE(values[i], value))) return true;
 		return false;
 	}
 	
@@ -194,23 +191,23 @@ public class CUSTOM_HASH_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_VAL
 #if !TYPE_OBJECT || !VALUE_OBJECT
 	@Override
 	public boolean remove(KEY_TYPE key, VALUE_TYPE value) {
-		if(strategy.equals(key, EMPTY_KEY_VALUE)) {
+		if(KEY_EQUALS_NULL(key)) {
 			if(containsNull && VALUE_EQUALS(value, values[nullIndex])) {
 				removeNullIndex();
 				return true;
 			}
 			return false;
 		}
-		int pos = HashUtil.mix(strategy.hashCode(key)) & mask;
+		int pos = HashUtil.mix(KEY_TO_HASH(key)) & mask;
 		KEY_TYPE current = keys[pos];
-		if(strategy.equals(current, EMPTY_KEY_VALUE)) return false;
-		if(strategy.equals(current, key) && VALUE_EQUALS(value, values[pos])) {
+		if(KEY_EQUALS_NULL(current)) return false;
+		if(KEY_EQUALS(current, key) && VALUE_EQUALS(value, values[pos])) {
 			removeIndex(pos);
 			return true;
 		}
 		while(true) {
-			if(strategy.equals((current = keys[pos = (++pos & mask)]), EMPTY_KEY_VALUE)) return false;
-			else if(strategy.equals(current, key) && VALUE_EQUALS(value, values[pos])) {
+			if(KEY_EQUALS_NULL((current = keys[pos = (++pos & mask)]))) return false;
+			else if(KEY_EQUALS(current, key) && VALUE_EQUALS(value, values[pos])) {
 				removeIndex(pos);
 				return true;
 			}
@@ -228,17 +225,16 @@ public class CUSTOM_HASH_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_VAL
 			}
 			return false;
 		}
-		KEY_TYPE keyType = CLASS_TO_KEY(key);
-		int pos = HashUtil.mix(strategy.hashCode(keyType)) & mask;
+		int pos = HashUtil.mix(key.hashCode()) & mask;
 		KEY_TYPE current = keys[pos];
-		if(strategy.equals(current, EMPTY_KEY_VALUE)) return false;
-		if(strategy.equals(current, keyType) && EQUALS_VALUE_TYPE(values[pos], value)) {
+		if(KEY_EQUALS_NULL(current)) return false;
+		if(EQUALS_KEY_TYPE(current, key) && EQUALS_VALUE_TYPE(values[pos], value)) {
 			removeIndex(pos);
 			return true;
 		}
 		while(true) {
-			if(strategy.equals((current = keys[pos = (++pos & mask)]), EMPTY_KEY_VALUE)) return false;
-			else if(strategy.equals(current, keyType) && EQUALS_VALUE_TYPE(values[pos], value)){
+			if(KEY_EQUALS_NULL((current = keys[pos = (++pos & mask)]))) return false;
+			else if(EQUALS_KEY_TYPE(current, key) && EQUALS_VALUE_TYPE(values[pos], value)){
 				removeIndex(pos);
 				return true;
 			}
@@ -257,20 +253,21 @@ public class CUSTOM_HASH_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_VAL
 		return VALUE_TO_OBJ(slot < 0 ? getDefaultReturnValue() : values[slot]);
 	}
 	
-#if !TYPE_OBJECT
+#if TYPE_OBJECT && VALUE_OBJECT
+	@Override
+	public VALUE_TYPE getOrDefault(Object key, VALUE_TYPE defaultValue) {
+		int slot = findIndex(key);
+		return slot < 0 ? defaultValue : values[slot];
+	}
+	
+#else
 	@Override
 	public VALUE_TYPE getOrDefault(KEY_TYPE key, VALUE_TYPE defaultValue) {
 		int slot = findIndex(key);
 		return slot < 0 ? defaultValue : values[slot];
 	}
 	
-#endif
-	@Override
-	public CLASS_VALUE_TYPE getOrDefault(Object key, CLASS_VALUE_TYPE defaultValue) {
-		int slot = findIndex(key);
-		return slot < 0 ? defaultValue : VALUE_TO_OBJ(values[slot]);
-	}
-	
+#endif	
 	@Override
 	public ObjectSet<MAP.Entry KEY_VALUE_GENERIC_TYPE> ENTRY_SET() {
 		if(entrySet == null) entrySet = new MapEntrySet();
@@ -294,7 +291,7 @@ public class CUSTOM_HASH_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_VAL
 		if(size() <= 0) return;
 		if(containsNull) action.accept(keys[nullIndex], values[nullIndex]);
 		for(int i = nullIndex-1;i>=0;i--) {
-			if(!strategy.equals(keys[i], EMPTY_KEY_VALUE)) action.accept(keys[i], values[i]);
+			if(KEY_EQUALS_NOT_NULL(keys[i])) action.accept(keys[i], values[i]);
 		}
 	}
 	
@@ -310,12 +307,12 @@ public class CUSTOM_HASH_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_VAL
 #if !TYPE_OBJECT
 	protected int findIndex(KEY_TYPE key) {
 		if(KEY_EQUALS_NULL(key)) return containsNull ? nullIndex : -(nullIndex + 1);
-		int pos = HashUtil.mix(strategy.hashCode(key)) & mask;
+		int pos = HashUtil.mix(KEY_TO_HASH(key)) & mask;
 		KEY_TYPE current = keys[pos];
-		if(!strategy.equals(current, EMPTY_KEY_VALUE)) {
-			if(strategy.equals(current, key)) return pos;
-			while(!strategy.equals((current = keys[pos = (++pos & mask)]), EMPTY_KEY_VALUE))
-				if(strategy.equals(current, key)) return pos;
+		if(KEY_EQUALS_NOT_NULL(current)) {
+			if(KEY_EQUALS(current, key)) return pos;
+			while(KEY_EQUALS_NOT_NULL((current = keys[pos = (++pos & mask)])))
+				if(KEY_EQUALS(current, key)) return pos;
 		}
 		return -(pos + 1);
 	}
@@ -323,13 +320,12 @@ public class CUSTOM_HASH_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_VAL
 #endif
 	protected int findIndex(Object key) {
 		if(key == null) return containsNull ? nullIndex : -(nullIndex + 1);
-		KEY_TYPE keyType = CLASS_TO_KEY(key);
-		int pos = HashUtil.mix(strategy.hashCode(keyType)) & mask;
+		int pos = HashUtil.mix(key.hashCode()) & mask;
 		KEY_TYPE current = keys[pos];
-		if(!strategy.equals(current, EMPTY_KEY_VALUE)) {
-			if(strategy.equals(current, keyType)) return pos;
-			while(!strategy.equals((current = keys[pos = (++pos & mask)]), EMPTY_KEY_VALUE))
-				if(strategy.equals(current, keyType)) return pos;
+		if(KEY_EQUALS_NOT_NULL(current)) {
+			if(EQUALS_KEY_TYPE(current, key)) return pos;
+			while(KEY_EQUALS_NOT_NULL((current = keys[pos = (++pos & mask)])))
+				if(EQUALS_KEY_TYPE(current, key)) return pos;
 		}
 		return -(pos + 1);
 	}
@@ -367,9 +363,9 @@ public class CUSTOM_HASH_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_VAL
 		KEY_TYPE[] newKeys = NEW_KEY_ARRAY(newSize + 1);
 		VALUE_TYPE[] newValues = NEW_VALUE_ARRAY(newSize + 1);
 		for(int i = nullIndex, pos = 0, j = (size - (containsNull ? 1 : 0));j-- != 0;) {
-			while(strategy.equals(keys[--i], EMPTY_KEY_VALUE));
-			if(!strategy.equals(newKeys[pos = HashUtil.mix(strategy.hashCode(keys[i])) & newMask], EMPTY_KEY_VALUE))
-				while(!strategy.equals(newKeys[pos = (++pos & newMask)], EMPTY_KEY_VALUE));
+			while(KEY_EQUALS_NULL(keys[--i]));
+			if(KEY_EQUALS_NOT_NULL(newKeys[pos = HashUtil.mix(KEY_TO_HASH(keys[i])) & newMask]))
+				while(KEY_EQUALS_NOT_NULL(newKeys[pos = (++pos & newMask)]));
 			newKeys[pos] = keys[i];
 			newValues[pos] = values[i];
 		}
@@ -399,12 +395,12 @@ public class CUSTOM_HASH_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_VAL
 		while(true) {
 			startPos = ((last = startPos) + 1) & mask;
 			while(true){
-				if(strategy.equals((current = keys[startPos]), EMPTY_KEY_VALUE)) {
+				if(KEY_EQUALS_NULL((current = keys[startPos]))) {
 					keys[last] = EMPTY_KEY_VALUE;
 					values[last] = EMPTY_VALUE;
 					return;
 				}
-				slot = HashUtil.mix(strategy.hashCode(current)) & mask;
+				slot = HashUtil.mix(KEY_TO_HASH(current)) & mask;
 				if(last <= startPos ? (last >= slot || slot > startPos) : (last >= slot && slot > startPos)) break;
 				startPos = ++startPos & mask;
 			}
@@ -464,7 +460,7 @@ public class CUSTOM_HASH_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_VAL
 		
 		@Override
 		public int hashCode() {
-			return strategy.hashCode(keys[index]) ^ VALUE_TO_HASH(values[index]);
+			return KEY_TO_HASH(keys[index]) ^ VALUE_TO_HASH(values[index]);
 		}
 		
 		@Override
@@ -488,7 +484,7 @@ public class CUSTOM_HASH_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_VAL
 		public void forEach(Consumer<? super MAP.Entry KEY_VALUE_GENERIC_TYPE> action) {
 			if(containsNull) action.accept(new BasicEntryKV_BRACES(keys[nullIndex], values[nullIndex]));
 			for(int i = nullIndex-1;i>=0;i--)
-				if(!strategy.equals(keys[i], EMPTY_KEY_VALUE)) action.accept(new BasicEntryKV_BRACES(keys[i], values[i]));
+				if(KEY_EQUALS_NOT_NULL(keys[i])) action.accept(new BasicEntryKV_BRACES(keys[i], values[i]));
 		}
 		
 		@Override
@@ -499,7 +495,7 @@ public class CUSTOM_HASH_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_VAL
 				action.accept(entry);
 			}
 			for(int i = nullIndex-1;i>=0;i--) {
-				if(strategy.equals(keys[i], EMPTY_KEY_VALUE)) {
+				if(KEY_EQUALS_NOT_NULL(keys[i])) {
 					entry.set(keys[i], values[i]);
 					action.accept(entry);
 				}
@@ -508,19 +504,19 @@ public class CUSTOM_HASH_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_VAL
 		
 		@Override
 		public int size() {
-			return CUSTOM_HASH_MAP.this.size();
+			return HASH_MAP.this.size();
 		}
 		
 		@Override
 		public void clear() {
-			CUSTOM_HASH_MAP.this.clear();
+			HASH_MAP.this.clear();
 		}
 		
 		@Override
 		public boolean contains(Object o) {
 			if(o instanceof Map.Entry) {
-				if(o instanceof MAP.Entry) return CUSTOM_HASH_MAP.this.containsKey(((MAP.Entry KEY_VALUE_GENERIC_TYPE)o).ENTRY_KEY());
-				return CUSTOM_HASH_MAP.this.containsKey(((Map.Entry<?, ?>)o).getKey());
+				if(o instanceof MAP.Entry) return HASH_MAP.this.containsKey(((MAP.Entry KEY_VALUE_GENERIC_TYPE)o).ENTRY_KEY());
+				return HASH_MAP.this.containsKey(((Map.Entry<?, ?>)o).getKey());
 			}
 			return false;
 		}
@@ -530,10 +526,10 @@ public class CUSTOM_HASH_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_VAL
 			if(o instanceof Map.Entry) {
 				if(o instanceof MAP.Entry) {
 					MAP.Entry KEY_VALUE_GENERIC_TYPE entry = (MAP.Entry KEY_VALUE_GENERIC_TYPE)o;
-					return CUSTOM_HASH_MAP.this.remove(entry.ENTRY_KEY(), entry.ENTRY_VALUE());
+					return HASH_MAP.this.remove(entry.ENTRY_KEY(), entry.ENTRY_VALUE());
 				}
 				Map.Entry<?, ?> entry = (Map.Entry<?, ?>)o;
-				return CUSTOM_HASH_MAP.this.remove(entry.getKey(), entry.getValue());
+				return HASH_MAP.this.remove(entry.getKey(), entry.getValue());
 			}
 			return false;
 		}
@@ -579,12 +575,12 @@ public class CUSTOM_HASH_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_VAL
 		
 		@Override
 		public int size() {
-			return CUSTOM_HASH_MAP.this.size();
+			return HASH_MAP.this.size();
 		}
 		
 		@Override
 		public void clear() {
-			CUSTOM_HASH_MAP.this.clear();
+			HASH_MAP.this.clear();
 		}
 		
 #if TYPE_OBJECT
@@ -592,7 +588,7 @@ public class CUSTOM_HASH_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_VAL
 		public void forEach(Consumer KEY_SUPER_GENERIC_TYPE action) {
 			if(containsNull) action.accept(keys[nullIndex]);
 			for(int i = nullIndex-1;i>=0;i--)
-				if(strategy.equals(keys[i], EMPTY_KEY_VALUE)) action.accept(keys[i]);
+				if(KEY_EQUALS_NOT_NULL(keys[i])) action.accept(keys[i]);
 		}
 		
 #else
@@ -600,7 +596,7 @@ public class CUSTOM_HASH_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_VAL
 		public void forEach(CONSUMER KEY_SUPER_GENERIC_TYPE action) {
 			if(containsNull) action.accept(keys[nullIndex]);
 			for(int i = nullIndex-1;i>=0;i--)
-				if(strategy.equals(keys[i], EMPTY_KEY_VALUE)) action.accept(keys[i]);
+				if(KEY_EQUALS_NOT_NULL(keys[i])) action.accept(keys[i]);
 		}
 #endif
 	}
@@ -631,12 +627,12 @@ public class CUSTOM_HASH_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_VAL
 		
 		@Override
 		public int size() {
-			return CUSTOM_HASH_MAP.this.size();
+			return HASH_MAP.this.size();
 		}
 		
 		@Override
 		public void clear() {
-			CUSTOM_HASH_MAP.this.clear();
+			HASH_MAP.this.clear();
 		}
 		
 #if VALUE_OBJECT
@@ -644,14 +640,14 @@ public class CUSTOM_HASH_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_VAL
 		public void forEach(Consumer VALUE_SUPER_GENERIC_TYPE action) {
 			if(containsNull) action.accept(values[nullIndex]);
 			for(int i = nullIndex-1;i>=0;i--)
-				if(strategy.equals(keys[i], EMPTY_KEY_VALUE)) action.accept(values[i]);
+				if(KEY_EQUALS_NOT_NULL(keys[i])) action.accept(values[i]);
 		}
 #else
 		@Override
 		public void forEach(VALUE_CONSUMER VALUE_SUPER_GENERIC_TYPE action) {
 			if(containsNull) action.accept(values[nullIndex]);
 			for(int i = nullIndex-1;i>=0;i--)
-				if(strategy.equals(keys[i], EMPTY_KEY_VALUE)) action.accept(values[i]);
+				if(KEY_EQUALS_NOT_NULL(keys[i])) action.accept(values[i]);
 		}
 #endif
 	}
@@ -714,7 +710,7 @@ public class CUSTOM_HASH_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_VAL
 							nextIndex = -pos - 1;
 							break;
 						}
-						if(!strategy.equals(keys[pos], EMPTY_KEY_VALUE)){
+						if(KEY_EQUALS_NOT_NULL(keys[pos])){
 							nextIndex = pos;
 							break;
 						}
@@ -747,7 +743,7 @@ public class CUSTOM_HASH_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_VAL
 			}
 			else if(pos >= 0) shiftKeys(pos);
 			else {
-				CUSTOM_HASH_MAP.this.remove(wrapped.GET_KEY(-pos - 1));
+				HASH_MAP.this.remove(wrapped.GET_KEY(-pos - 1));
 				return;
 			}
 			size--;
@@ -760,12 +756,12 @@ public class CUSTOM_HASH_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_VAL
 			while(true) {
 				startPos = ((last = startPos) + 1) & mask;
 				while(true){
-					if(strategy.equals((current = keys[startPos]), EMPTY_KEY_VALUE)) {
+					if(KEY_EQUALS_NULL((current = keys[startPos]))) {
 						keys[last] = EMPTY_KEY_VALUE;
 						values[last] = EMPTY_VALUE;
 						return;
 					}
-					slot = HashUtil.mix(strategy.hashCode(current)) & mask;
+					slot = HashUtil.mix(KEY_TO_HASH(current)) & mask;
 					if(last <= startPos ? (last >= slot || slot > startPos) : (last >= slot && slot > startPos)) break;
 					startPos = ++startPos & mask;
 				}

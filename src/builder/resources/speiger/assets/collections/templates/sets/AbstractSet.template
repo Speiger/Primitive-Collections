@@ -10,6 +10,9 @@ import speiger.src.collections.PACKAGE.collections.ITERATOR;
 public abstract class ABSTRACT_SET KEY_GENERIC_TYPE extends ABSTRACT_COLLECTION KEY_GENERIC_TYPE implements SET KEY_GENERIC_TYPE
 {
 	@Override
+	public abstract ITERATOR KEY_GENERIC_TYPE iterator();
+	
+	@Override
 	public int hashCode() {
     	int hashCode = 1;
     	ITERATOR KEY_GENERIC_TYPE i = iterator();

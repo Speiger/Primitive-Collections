@@ -180,8 +180,8 @@ public abstract class ABSTRACT_MAP KEY_VALUE_GENERIC_TYPE extends AbstractMap<CL
 	}
 	
 	@Override
-	public VALUE_TYPE getOrDefault(Object key, VALUE_TYPE defaultValue) {
-		VALUE_TYPE value = get(key);
+	public CLASS_VALUE_TYPE getOrDefault(Object key, CLASS_VALUE_TYPE defaultValue) {
+		CLASS_VALUE_TYPE value = get(key);
 		return VALUE_EQUALS_NOT(value, getDefaultReturnValue()) || containsKey(key) ? value : defaultValue;
 	}
 	
@@ -189,6 +189,11 @@ public abstract class ABSTRACT_MAP KEY_VALUE_GENERIC_TYPE extends AbstractMap<CL
 	@Override
 	public CLASS_VALUE_TYPE get(Object key) {
 		return VALUE_TO_OBJ(key instanceof CLASS_TYPE ? GET_VALUE(CLASS_TO_KEY(key)) : getDefaultReturnValue());
+	}
+	
+	@Override
+	public CLASS_VALUE_TYPE getOrDefault(Object key, CLASS_VALUE_TYPE defaultValue) {
+		return VALUE_TO_OBJ(key instanceof CLASS_TYPE ? getOrDefault(CLASS_TO_KEY(key), OBJ_TO_VALUE(defaultValue)) : getDefaultReturnValue());
 	}
 	
 	@Override

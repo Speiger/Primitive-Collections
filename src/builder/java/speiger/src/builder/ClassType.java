@@ -1,4 +1,4 @@
-package speiger.src.builder.example;
+package speiger.src.builder;
 
 public enum ClassType
 {

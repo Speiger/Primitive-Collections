@@ -16,7 +16,7 @@ import speiger.src.collections.objects.maps.abstracts.ABSTRACT_MAP;
 import speiger.src.collections.objects.maps.interfaces.MAP;
 import speiger.src.collections.objects.sets.AbstractObjectSet;
 import speiger.src.collections.objects.sets.ObjectSet;
-import sun.misc.SharedSecrets;
+//import sun.misc.SharedSecrets;
 
 public class ENUM_MAP KEY_ENUM_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_VALUE_GENERIC_TYPE
 {
@@ -182,7 +182,10 @@ public class ENUM_MAP KEY_ENUM_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_VALUE
 		onNodeRemoved(index);
 	}
 	protected boolean isSet(int index) { return (present[index >> 6] & (1L << index)) != 0; }
-    private static <K extends Enum<K>> K[] getKeyUniverse(Class<K> keyType) { return SharedSecrets.getJavaLangAccess().getEnumConstantsShared(keyType); }
+    private static <K extends Enum<K>> K[] getKeyUniverse(Class<K> keyType) { 
+    	return keyType.getEnumConstants();
+//    	return SharedSecrets.getJavaLangAccess().getEnumConstantsShared(keyType); 
+    }
     
     class EntrySet extends AbstractObjectSet<MAP.Entry KEY_VALUE_GENERIC_TYPE> {
     	

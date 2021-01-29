@@ -213,7 +213,7 @@ public class AVL_TREE_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_VALUE_
 		return node == null ? getDefaultReturnValue() : node.value;
 	}
 	
-#if TYPE_OBJECT
+#if TYPE_OBJECT && VALUE_OBJECT
 	@Override
 	public VALUE_TYPE getOrDefault(Object key, VALUE_TYPE defaultValue) {
 		Entry KEY_VALUE_GENERIC_TYPE node = findNode((CLASS_TYPE)key);
@@ -918,6 +918,19 @@ public class AVL_TREE_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_VALUE_
 			return inRange(key) ? m.GET_VALUE(key) : getDefaultReturnValue();
 		}
 		
+#if TYPE_OBJECT && VALUE_OBJECT
+		@Override
+		public VALUE_TYPE getOrDefault(Object key, VALUE_TYPE defaultValue) {
+			return inRange((KEY_TYPE)key) ? m.getOrDefault(key, defaultValue) : getDefaultReturnValue();
+		}
+		
+#else
+		@Override
+		public VALUE_TYPE getOrDefault(KEY_TYPE key, VALUE_TYPE defaultValue) {
+			return inRange(key) ? m.getOrDefault(key, defaultValue) : getDefaultReturnValue();
+		}
+		
+#endif
 		@Override
 		public VALUE_TYPE REMOVE_KEY(KEY_TYPE key) {
 			return inRange(key) ? m.remove(key) : getDefaultReturnValue();

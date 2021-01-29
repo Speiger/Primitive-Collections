@@ -9,13 +9,14 @@ ArraysList, HashSet/Map (Linked & HashControl), TreeSet/Map (RB & AVL), Priority
 
 # Guide
 
-Project is currently not buildable due to certain design flaws that are being redone,     
-but the SourceCode can be already generated via: /gradlew.bat generateSource     
-which will generate all the files and they shouldn't generate any errors.     
+The SourceCode can be already generated via: 
+/gradlew.bat generateSource      
+to build the jar     
+/gradlew.bat build    
+do not combine the commands because they can not be executed at the same time.    
 
 Current Problem:     
 EnumMaps use sun.misc package.     
-Some methods are ambiguous and need to be adjusted.     
 Some overhauls or missing implementations have to be added. (A couple passes)     
 But technically Lists/Sets/PriorityQueues are fully usable, Maps are untested and just recently added.     
 

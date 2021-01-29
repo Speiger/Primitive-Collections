@@ -12,7 +12,7 @@ apply plugin: 'eclipse'
 repositories {
     jcenter()
     flatDir {
-        dirs '/libs'
+        dirs 'libs'
     }
 }
 
@@ -31,16 +31,41 @@ eclipse {
 	}
 }
 
-task generateSource(type: JavaExec) {
-	group = 'internal'
-	description = 'Builds the sourcecode'
-    classpath = sourceSets.main.runtimeClasspath
-    main = 'speiger.src.builder.example.TestBuilder'
+sourceSets {
+    builder
+}
+
+configurations {
+	builderCompile.extendsFrom compile
 }
 
 dependencies {
 	compile 'SimpleCodeGenerator:Simple Code Generator:1.0.1'
     testImplementation 'junit:junit:4.12'
+}
+
+task generateSource(type: JavaExec) {
+	group = 'internal'
+	description = 'Builds the sourcecode'
+ 	classpath = sourceSets.builder.runtimeClasspath
+ 	main = 'speiger.src.builder.PrimitiveCollectionsBuilder'
+}
+
+task javadocJar(type: Jar) {
+    from javadoc
+    classifier = 'javadoc'
+}
+
+task srcJar(type: Jar) {
+    from sourceSets.main.allSource
+    classifier = 'sources'
+}
+
+javadoc.failOnError = false
+
+artifacts {
+    archives javadocJar
+    archives srcJar
 }
 
 test {

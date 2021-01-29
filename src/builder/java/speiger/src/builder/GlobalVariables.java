@@ -1,4 +1,4 @@
-package speiger.src.builder.example;
+package speiger.src.builder;
 
 import java.nio.file.Path;
 import java.util.ArrayList;

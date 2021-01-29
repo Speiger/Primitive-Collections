@@ -1,4 +1,4 @@
-package speiger.src.builder.example;
+package speiger.src.builder;
 
 import java.io.IOException;
 import java.nio.file.Path;
@@ -15,7 +15,7 @@ import java.util.function.Consumer;
 import speiger.src.builder.processor.TemplateProcess;
 import speiger.src.builder.processor.TemplateProcessor;
 
-public class TestBuilder extends TemplateProcessor
+public class PrimitiveCollectionsBuilder extends TemplateProcessor
 {
 	Map<String, EnumSet<ClassType>> blocked = new HashMap<>();
 	Map<String, String> nameRemapper = new HashMap<>();
@@ -26,12 +26,12 @@ public class TestBuilder extends TemplateProcessor
 	List<GlobalVariables> biVariables = new ArrayList<>();
 	List<GlobalVariables> enumVariables = new ArrayList<>();
 	
-	public TestBuilder()
+	public PrimitiveCollectionsBuilder()
 	{
-		super(Paths.get("src/main/resources/speiger/assets/collections/templates/"), Paths.get("src/main/java/speiger/src/collections/"), Paths.get("src/main/resources/speiger/assets/collections/"));
+		super(Paths.get("src/builder/resources/speiger/assets/collections/templates/"), Paths.get("src/main/java/speiger/src/collections/"), Paths.get("src/builder/resources/speiger/assets/collections/"));
 	}
 	
-	public TestBuilder(Path sourceFolder, Path outputFolder, Path dataFolder)
+	public PrimitiveCollectionsBuilder(Path sourceFolder, Path outputFolder, Path dataFolder)
 	{
 		super(sourceFolder, outputFolder, dataFolder);
 	}
@@ -145,9 +145,9 @@ public class TestBuilder extends TemplateProcessor
 		try
 		{
 	        if(args.length == 0) {
-	            new TestBuilder().process(false);
+	            new PrimitiveCollectionsBuilder().process(false);
 	        } else if(args.length == 3) {
-	            new TestBuilder(Paths.get(args[0]), Paths.get(args[1]), Paths.get(args[2])).process(false);
+	            new PrimitiveCollectionsBuilder(Paths.get(args[0]), Paths.get(args[1]), Paths.get(args[2])).process(false);
 	    	} else {
 	            System.out.println("Invalid argument count passed in");
 	            System.exit(1);
