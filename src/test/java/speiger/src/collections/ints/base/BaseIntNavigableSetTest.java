@@ -16,6 +16,15 @@ public abstract class BaseIntNavigableSetTest extends BaseIntSortedSetTest
 	protected EnumSet<NavigableSetTest> getValidNavigableSetTests() { return EnumSet.allOf(NavigableSetTest.class); }
 	
 	@Test
+	public void desendingTest() {
+		if(getValidNavigableSetTests().contains(NavigableSetTest.DESENDING)) {
+			IntNavigableSet set = create(TEST_ARRAY).descendingSet();
+			Assert.assertEquals(TEST_ARRAY[TEST_ARRAY.length - 1], set.firstInt());
+			Assert.assertEquals(TEST_ARRAY[0], set.lastInt());
+		}
+	}
+	
+	@Test
 	public void lowerTest() {
 		if(getValidNavigableSetTests().contains(NavigableSetTest.LOWER)) {
 			Assert.assertTrue(create(TEST_ARRAY).lower(50) < 50);

@@ -154,7 +154,11 @@ public class CUSTOM_HASH_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_VAL
 	@Override
 	@Deprecated
 	public boolean containsKey(Object key) {
-		return findIndex(key) >= 0;
+#if !TYPE_OBJECT
+		return key instanceof CLASS_TYPE && findIndex(CLASS_TO_KEY(key)) >= 0;
+#else
+		return findIndex(CLASS_TO_KEY(key)) >= 0;
+#endif
 	}
 	
 #if !VALUE_OBJECT
@@ -186,7 +190,10 @@ public class CUSTOM_HASH_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_VAL
 	@Override
 	@Deprecated
 	public CLASS_VALUE_TYPE remove(Object key) {
-		int slot = findIndex(key);
+#if !TYPE_OBJECT
+		if(!(key instanceof CLASS_TYPE)) return getDefaultReturnValue();
+#endif
+		int slot = findIndex(CLASS_TO_KEY(key));
 		if(slot < 0) return VALUE_TO_OBJ(getDefaultReturnValue());
 		return removeIndex(slot);
 	}
@@ -228,6 +235,9 @@ public class CUSTOM_HASH_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_VAL
 			}
 			return false;
 		}
+#if !TYPE_OBJECT
+		if(!(key instanceof CLASS_TYPE)) return false;
+#endif
 		KEY_TYPE keyType = CLASS_TO_KEY(key);
 		int pos = HashUtil.mix(strategy.hashCode(keyType)) & mask;
 		KEY_TYPE current = keys[pos];
@@ -253,14 +263,17 @@ public class CUSTOM_HASH_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_VAL
 	
 	@Override
 	public CLASS_VALUE_TYPE get(Object key) {
-		int slot = findIndex(key);
+#if !TYPE_OBJECT
+		if(!(key instanceof CLASS_TYPE)) return getDefaultReturnValue();
+#endif
+		int slot = findIndex(CLASS_TO_KEY(key));
 		return VALUE_TO_OBJ(slot < 0 ? getDefaultReturnValue() : values[slot]);
 	}
 	
 #if TYPE_OBJECT && VALUE_OBJECT
 	@Override
 	public VALUE_TYPE getOrDefault(Object key, VALUE_TYPE defaultValue) {
-		int slot = findIndex(key);
+		int slot = findIndex(CLASS_TO_KEY(key));
 		return slot < 0 ? defaultValue : values[slot];
 	}
 	
@@ -300,6 +313,9 @@ public class CUSTOM_HASH_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_VAL
 	}
 	
 	@Override
+	public int size() { return size; }
+	
+	@Override
 	public void clear() {
 		if(size == 0) return;
 		size = 0;
@@ -322,7 +338,7 @@ public class CUSTOM_HASH_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_VAL
 	}
 	
 #endif
-	protected int findIndex(Object key) {
+	protected int findIndex(CLASS_TYPE key) {
 		if(key == null) return containsNull ? nullIndex : -(nullIndex + 1);
 		KEY_TYPE keyType = CLASS_TO_KEY(key);
 		int pos = HashUtil.mix(strategy.hashCode(keyType)) & mask;
@@ -645,14 +661,14 @@ public class CUSTOM_HASH_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_VAL
 		public void forEach(Consumer VALUE_SUPER_GENERIC_TYPE action) {
 			if(containsNull) action.accept(values[nullIndex]);
 			for(int i = nullIndex-1;i>=0;i--)
-				if(strategy.equals(keys[i], EMPTY_KEY_VALUE)) action.accept(values[i]);
+				if(!strategy.equals(keys[i], EMPTY_KEY_VALUE)) action.accept(values[i]);
 		}
 #else
 		@Override
 		public void forEach(VALUE_CONSUMER VALUE_SUPER_GENERIC_TYPE action) {
 			if(containsNull) action.accept(values[nullIndex]);
 			for(int i = nullIndex-1;i>=0;i--)
-				if(strategy.equals(keys[i], EMPTY_KEY_VALUE)) action.accept(values[i]);
+				if(!strategy.equals(keys[i], EMPTY_KEY_VALUE)) action.accept(values[i]);
 		}
 #endif
 	}

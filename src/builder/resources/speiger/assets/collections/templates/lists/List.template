@@ -46,7 +46,7 @@ public interface LIST KEY_GENERIC_TYPE extends COLLECTION KEY_GENERIC_TYPE, List
 	 * @param c the elements that need to be added
      * @param index index at which the specified elements is to be inserted
 	 * @return true if the list was modified
-	 * @see List#addAll(int, Object)
+	 * @see java.util.List#addAll(int, Collection)
 	 */
 	public boolean addAll(int index, COLLECTION KEY_GENERIC_TYPE c);
 	
@@ -78,7 +78,7 @@ public interface LIST KEY_GENERIC_TYPE extends COLLECTION KEY_GENERIC_TYPE, List
 	/**
 	 * A Type-Specific set function to reduce (un)boxing
      * @param index index of the element to replace
-     * @param element element to be stored at the specified position
+     * @param e element to be stored at the specified position
      * @return the element previously at the specified position
 	 * @throws IndexOutOfBoundsException if the index is not within the list range
      * @see List#set(int, Object)
@@ -141,13 +141,20 @@ public interface LIST KEY_GENERIC_TYPE extends COLLECTION KEY_GENERIC_TYPE, List
 	}
 	
 #endif
+/**
+ 	* A function to fast add elements to the list
+ 	* @param a the elements that should be added
+ 	* @throws IndexOutOfBoundsException if from is outside of the lists range
+ 	*/
+	public default void addElements(KEY_TYPE... a) { addElements(0, a, 0, a.length); }
+	
 	/**
 	 * A function to fast add elements to the list
 	 * @param from the index where the elements should be added into the list
 	 * @param a the elements that should be added
 	 * @throws IndexOutOfBoundsException if from is outside of the lists range
 	 */
-	public default void addElements(int from, KEY_TYPE[] a) { addElements(from, a, 0, a.length); }
+	public default void addElements(int from, KEY_TYPE... a) { addElements(from, a, 0, a.length); }
 	
 	/**
 	 * A function to fast add elements to the list
@@ -164,7 +171,7 @@ public interface LIST KEY_GENERIC_TYPE extends COLLECTION KEY_GENERIC_TYPE, List
 	 * A function to fast fetch elements from the list
 	 * @param from index where the list should be fetching elements from
 	 * @param a the array where the values should be inserted to
-	 * @returns the inputArray
+	 * @return the inputArray
 	 * @throws NullPointerException if the array is null
 	 * @throws IndexOutOfBoundsException if from is outside of the lists range
 	 * @throws IllegalStateException if offset or length are smaller then 0 or exceed the array length
@@ -177,7 +184,7 @@ public interface LIST KEY_GENERIC_TYPE extends COLLECTION KEY_GENERIC_TYPE, List
 	 * @param a the array where the values should be inserted to
 	 * @param offset the startIndex of where the array should be written to
 	 * @param length the number of elements the values should be fetched from
-	 * @returns the inputArray
+	 * @return the inputArray
 	 * @throws NullPointerException if the array is null
 	 * @throws IndexOutOfBoundsException if from is outside of the lists range
 	 * @throws IllegalStateException if offset or length are smaller then 0 or exceed the array length
@@ -255,8 +262,9 @@ public interface LIST KEY_GENERIC_TYPE extends COLLECTION KEY_GENERIC_TYPE, List
 	
 	/**
 	 * Sorts the elements specified by the Natural order either by using the Comparator or the elements
+	 * @param c the sorter of the elements, can be null
 	 * @see List#sort(Comparator)
-	 * @see ARRAYS#stableSort(KEY_TYPE[], Comparator)
+	 * @see ARRAYS#stableSort(KEY_TYPE[], COMPARATOR)
 	 */
 	public default void sort(COMPARATOR c) {
 		KEY_TYPE[] array = TO_ARRAY();
@@ -280,8 +288,9 @@ public interface LIST KEY_GENERIC_TYPE extends COLLECTION KEY_GENERIC_TYPE, List
 	
 	/**
 	 * Sorts the elements specified by the Natural order either by using the Comparator or the elements using a unstable sort
+	 * @param c the sorter of the elements, can be null
 	 * @see List#sort(Comparator)
-	 * @see ARRAYS#unstableSort(KEY_TYPE[], Comparator)
+	 * @see ARRAYS#unstableSort(KEY_TYPE[], COMPARATOR)
 	 */
 	public default void unstableSort(COMPARATOR c) {
 		KEY_TYPE[] array = TO_ARRAY();

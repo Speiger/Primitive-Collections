@@ -346,8 +346,9 @@ public class LINKED_CUSTOM_HASH_SET KEY_GENERIC_TYPE extends CUSTOM_HASH_SET KEY
 		int newMask = newSize - 1;
 		KEY_TYPE[] newKeys = NEW_KEY_ARRAY(newSize + 1);
 		long[] newLinks = new long[newSize + 1];
-		int newPrev = -1;
-		for(int j = size, i = firstIndex, pos = 0, prev = -1;j != 0;) {
+		int i = firstIndex, prev = -1, newPrev = -1, pos;
+		firstIndex = -1;
+		for(int j = size; j-- != 0;) {
 			if(strategy.equals(keys[i], EMPTY_KEY_VALUE)) pos = newSize;
 			else {
 				pos = HashUtil.mix(strategy.hashCode(keys[i])) & newMask;

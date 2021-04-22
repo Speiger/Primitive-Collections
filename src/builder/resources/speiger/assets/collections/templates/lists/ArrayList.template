@@ -126,13 +126,18 @@ public class ARRAY_LIST KEY_GENERIC_TYPE extends ABSTRACT_LIST KEY_GENERIC_TYPE 
 	
 	/**
 	 * Creates a wrapped arraylist that uses the array as backing array
+	 * @param a elements that should be wrapped
+	 * @return a Wrapped list using the input array
 	 */
-	public static GENERIC_KEY_BRACES ARRAY_LIST KEY_GENERIC_TYPE wrap(KEY_TYPE[] a) {
+	public static GENERIC_KEY_BRACES ARRAY_LIST KEY_GENERIC_TYPE wrap(KEY_TYPE... a) {
 		return wrap(a, a.length);
 	}
 	
 	/**
 	 * Creates a wrapped arraylist that uses the array as backing array and a custom fillsize
+	 * @param a elements that should be wrapped
+	 * @param length the size of the elements within the array
+ 	 * @return a Wrapped list using the input array
 	 */
 	public static GENERIC_KEY_BRACES ARRAY_LIST KEY_GENERIC_TYPE wrap(KEY_TYPE[] a, int length) {
 		SanityChecks.checkArrayCapacity(a.length, 0, length);
@@ -145,6 +150,8 @@ public class ARRAY_LIST KEY_GENERIC_TYPE extends ABSTRACT_LIST KEY_GENERIC_TYPE 
 #if TYPE_OBJECT
 	/**
 	 * Creates a new ArrayList with a EmptyObject array of the Type requested
+	 * @param c the type of the array
+	 * @return a typed List
 	 */
 	public static GENERIC_KEY_BRACES ARRAY_LIST KEY_GENERIC_TYPE of(Class<KEY_TYPE> c) {
 		ARRAY_LIST KEY_GENERIC_TYPE list = new ARRAY_LISTBRACES();
@@ -194,7 +201,7 @@ public class ARRAY_LIST KEY_GENERIC_TYPE extends ABSTRACT_LIST KEY_GENERIC_TYPE 
 	 * Appends the specified elements to the index of the list.
 	 * This function may delegate to more appropiate function if nessesary
 	 * @param index the index where to append the elements to
-	 * @param e the elements to append to the list
+	 * @param c the elements to append to the list
 	 * @throws IndexOutOfBoundsException if index is outside of the lists range
 	 * @deprecated if type is primitive
 	 */
@@ -216,7 +223,7 @@ public class ARRAY_LIST KEY_GENERIC_TYPE extends ABSTRACT_LIST KEY_GENERIC_TYPE 
 	 * Appends the specified elements to the index of the list.
 	 * This function may delegate to more appropiate function if nessesary
 	 * @param index the index where to append the elements to
-	 * @param e the elements to append to the list
+	 * @param c the elements to append to the list
 	 * @throws IndexOutOfBoundsException if index is outside of the lists range
 	 * @deprecated if type is primitive
 	 */
@@ -236,7 +243,7 @@ public class ARRAY_LIST KEY_GENERIC_TYPE extends ABSTRACT_LIST KEY_GENERIC_TYPE 
 	/**
 	 * Appends the specified elements to the index of the list.
 	 * @param index the index where to append the elements to
-	 * @param e the elements to append to the list
+	 * @param c the elements to append to the list
 	 * @throws IndexOutOfBoundsException if index is outside of the lists range
 	 * @deprecated if type is primitive
 	 */
@@ -277,7 +284,7 @@ public class ARRAY_LIST KEY_GENERIC_TYPE extends ABSTRACT_LIST KEY_GENERIC_TYPE 
 	 * @param a the array where the values should be inserted to
 	 * @param offset the startIndex of where the array should be written to
 	 * @param length the number of elements the values should be fetched from
-	 * @returns the inputArray
+	 * @return the inputArray
 	 * @throws NullPointerException if the array is null
 	 * @throws IndexOutOfBoundsException if from is outside of the lists range
 	 * @throws IllegalStateException if offset or length are smaller then 0 or exceed the array length
@@ -353,7 +360,7 @@ public class ARRAY_LIST KEY_GENERIC_TYPE extends ABSTRACT_LIST KEY_GENERIC_TYPE 
 	
 	/**
 	 * A function to find if the Element is present in this list.
-	 * @param e the element that is searched for
+	 * @param o the element that is searched for
 	 * @return if the element was found.
 	 * @deprecated if type-specific but still supported because of special edgecase Object-Comparason features
 	 */
@@ -365,7 +372,7 @@ public class ARRAY_LIST KEY_GENERIC_TYPE extends ABSTRACT_LIST KEY_GENERIC_TYPE 
 	
 	/**
 	 * A function to find the index of a given element
-	 * @param e the element that is searched for
+	 * @param o the element that is searched for
 	 * @return the index of the element if found. (if not found then -1)
 	 * @deprecated if type-specific but still supported because of special edgecase Object-Comparason features
 	 */
@@ -389,7 +396,7 @@ public class ARRAY_LIST KEY_GENERIC_TYPE extends ABSTRACT_LIST KEY_GENERIC_TYPE 
 	
 	/**
 	 * A function to find the last index of a given element
-	 * @param e the element that is searched for
+	 * @param o the element that is searched for
 	 * @return the last index of the element if found. (if not found then -1)
 	 * @deprecated if type-specific but still supported because of special edgecase Object-Comparason features
 	 */
@@ -414,6 +421,7 @@ public class ARRAY_LIST KEY_GENERIC_TYPE extends ABSTRACT_LIST KEY_GENERIC_TYPE 
 #if TYPE_OBJECT
 	/**
 	 * Sorts the elements specified by the Natural order either by using the Comparator or the elements
+	 * @param c the sorter of the elements, can be null
 	 * @see List#sort(Comparator)
 	 * @see ARRAYS#stableSort(KEY_TYPE[], Comparator)
 	 */
@@ -425,6 +433,7 @@ public class ARRAY_LIST KEY_GENERIC_TYPE extends ABSTRACT_LIST KEY_GENERIC_TYPE 
 	
 	/**
 	 * Sorts the elements specified by the Natural order either by using the Comparator or the elements using a unstable sort
+	 * @param c the sorter of the elements, can be null
 	 * @see List#sort(Comparator)
 	 * @see ARRAYS#unstableSort(KEY_TYPE[], Comparator)
 	 */
@@ -437,8 +446,8 @@ public class ARRAY_LIST KEY_GENERIC_TYPE extends ABSTRACT_LIST KEY_GENERIC_TYPE 
 #else
 	/**
 	 * A Type Specific implementation of the Collection#contains function.
-	 * @param the element that is searched for.
-	 * @returns if the element was found
+	 * @param e the element that is searched for.
+	 * @return if the element was found
 	 */
 	@Override
 	public boolean contains(KEY_TYPE e) {
@@ -473,8 +482,9 @@ public class ARRAY_LIST KEY_GENERIC_TYPE extends ABSTRACT_LIST KEY_GENERIC_TYPE 
 	
 	/**
 	 * Sorts the elements specified by the Natural order either by using the Comparator or the elements
+	 * @param c the sorter of the elements, can be null
 	 * @see List#sort(Comparator)
-	 * @see ARRAYS#stableSort(KEY_TYPE[], Comparator)
+	 * @see ARRAYS#stableSort(KEY_TYPE[], COMPARATOR)
 	 */
 	@Override
 	public void sort(COMPARATOR c) {
@@ -484,8 +494,9 @@ public class ARRAY_LIST KEY_GENERIC_TYPE extends ABSTRACT_LIST KEY_GENERIC_TYPE 
 	
 	/**
 	 * Sorts the elements specified by the Natural order either by using the Comparator or the elements using a unstable sort
+	 * @param c the sorter of the elements, can be null
 	 * @see List#sort(Comparator)
-	 * @see ARRAYS#unstableSort(KEY_TYPE[], Comparator)
+	 * @see ARRAYS#unstableSort(KEY_TYPE[], COMPARATOR)
 	 */
 	@Override
 	public void unstableSort(COMPARATOR c) {
@@ -541,7 +552,7 @@ public class ARRAY_LIST KEY_GENERIC_TYPE extends ABSTRACT_LIST KEY_GENERIC_TYPE 
      * }</pre>
      *
      * @param action The action to be performed for each element
-     * @throws NullPointerException if the specified action is null
+     * @throws java.util.NullPointerException if the specified action is null
      * @see Iterable#forEach(Consumer)
      */
 	@Override

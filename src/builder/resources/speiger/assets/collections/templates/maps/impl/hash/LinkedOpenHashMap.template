@@ -107,6 +107,7 @@ public class LINKED_HASH_MAP KEY_VALUE_GENERIC_TYPE extends HASH_MAP KEY_VALUE_G
 			values[nullIndex] = value;
 			containsNull = true;
 			onNodeAdded(nullIndex);
+			moveToFirstIndex(nullIndex);
 		}
 		else {
 			int pos = HashUtil.mix(KEY_TO_HASH(key)) & mask;
@@ -122,6 +123,7 @@ public class LINKED_HASH_MAP KEY_VALUE_GENERIC_TYPE extends HASH_MAP KEY_VALUE_G
 			keys[pos] = key;
 			values[pos] = value;
 			onNodeAdded(pos);
+			moveToFirstIndex(pos);
 		}
 		if(size++ >= maxFill) rehash(HashUtil.arraySize(size+1, loadFactor));
 		return getDefaultReturnValue();
@@ -139,6 +141,7 @@ public class LINKED_HASH_MAP KEY_VALUE_GENERIC_TYPE extends HASH_MAP KEY_VALUE_G
 			values[nullIndex] = value;
 			containsNull = true;
 			onNodeAdded(nullIndex);
+			moveToLastIndex(nullIndex);
 		}
 		else {
 			int pos = HashUtil.mix(KEY_TO_HASH(key)) & mask;
@@ -154,6 +157,7 @@ public class LINKED_HASH_MAP KEY_VALUE_GENERIC_TYPE extends HASH_MAP KEY_VALUE_G
 			keys[pos] = key;
 			values[pos] = value;
 			onNodeAdded(pos);
+			moveToLastIndex(pos);
 		}
 		if(size++ >= maxFill) rehash(HashUtil.arraySize(size+1, loadFactor));
 		return getDefaultReturnValue();
@@ -307,7 +311,7 @@ public class LINKED_HASH_MAP KEY_VALUE_GENERIC_TYPE extends HASH_MAP KEY_VALUE_G
 	
 	@Override
 	public VALUE_COLLECTION VALUE_GENERIC_TYPE values() {
-		if(values == null) valuesC = new Values();
+		if(valuesC == null) valuesC = new Values();
 		return valuesC;
 	}
 	
@@ -427,8 +431,9 @@ public class LINKED_HASH_MAP KEY_VALUE_GENERIC_TYPE extends HASH_MAP KEY_VALUE_G
 		KEY_TYPE[] newKeys = NEW_KEY_ARRAY(newSize + 1);
 		VALUE_TYPE[] newValues = NEW_VALUE_ARRAY(newSize + 1);
 		long[] newLinks = new long[newSize + 1];
-		int newPrev = -1;
-		for(int j = size, i = firstIndex, pos = 0, prev = -1;j != 0;) {
+		int i = firstIndex, prev = -1, newPrev = -1, pos;
+		firstIndex = -1;
+		for(int j = size; j-- != 0;) {
 			if(KEY_EQUALS_NULL(keys[i])) pos = newSize;
 			else {
 				pos = HashUtil.mix(KEY_TO_HASH(keys[i])) & newMask;
@@ -454,6 +459,7 @@ public class LINKED_HASH_MAP KEY_VALUE_GENERIC_TYPE extends HASH_MAP KEY_VALUE_G
 		mask = newMask;
 		maxFill = Math.min((int)Math.ceil(nullIndex * loadFactor), nullIndex - 1);
 		keys = newKeys;
+		values = newValues;
 	}
 	
 	private class MapEntrySet extends AbstractObjectSet<MAP.Entry KEY_VALUE_GENERIC_TYPE> implements SORTED_MAP.FastSortedSet KEY_VALUE_GENERIC_TYPE {
@@ -763,7 +769,7 @@ public class LINKED_HASH_MAP KEY_VALUE_GENERIC_TYPE extends HASH_MAP KEY_VALUE_G
 	}
 	
 	private class FastEntryIterator extends MapIterator implements ObjectListIterator<MAP.Entry KEY_VALUE_GENERIC_TYPE> {
-		MapEntry entry = new MapEntry(nextEntry());
+		MapEntry entry = new MapEntry();
 		
 		public FastEntryIterator() {}
 		public FastEntryIterator(KEY_TYPE from) {

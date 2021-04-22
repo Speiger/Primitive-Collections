@@ -81,7 +81,7 @@ public class SanityChecks
 	 * @return true if the threadcount is bigger the 1
 	 */
 	public static boolean canParallelTask() {
-		return WORK_POOL.getParallelism() > 1 || FORCE_IGNORE_PARALLELISM;
+		return getPool().getParallelism() > 1 || FORCE_IGNORE_PARALLELISM;
 	}
 	
 	/**

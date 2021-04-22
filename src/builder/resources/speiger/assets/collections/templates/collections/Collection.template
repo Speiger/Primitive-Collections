@@ -19,7 +19,7 @@ public interface COLLECTION KEY_GENERIC_TYPE extends Collection<CLASS_TYPE>, ITE
 #if !TYPE_OBJECT
 	/**
 	 * A Type-Specific add function to reduce (un)boxing
-	 * @see Collection#add(Object)
+	 * @param o the element that should be added
 	 * @return true if the element was added to the collection
 	 */
 	public boolean add(KEY_TYPE o);
@@ -27,7 +27,7 @@ public interface COLLECTION KEY_GENERIC_TYPE extends Collection<CLASS_TYPE>, ITE
 #endif
 	/**
 	 * A Type-Specific addAll function to reduce (un)boxing
-	 * @see Collection#addAll(Collection)
+	 * @param c the collection of elements that should be added
 	 * @return true if elements were added into the collection
 	 */
 	public boolean addAll(COLLECTION KEY_GENERIC_TYPE c);
@@ -35,7 +35,7 @@ public interface COLLECTION KEY_GENERIC_TYPE extends Collection<CLASS_TYPE>, ITE
 #if !TYPE_OBJECT
 	/**
 	 * A Type-Specific contains function to reduce (un)boxing
-	 * @see Collection#contains(Object)
+	 * @param o the element that is checked for
 	 * @return true if the element is found in the collection
 	 */
 	public boolean contains(KEY_TYPE o);
@@ -43,14 +43,14 @@ public interface COLLECTION KEY_GENERIC_TYPE extends Collection<CLASS_TYPE>, ITE
 #endif
 	/**
  	 * A Type-Specific containsAll function to reduce (un)boxing
- 	 * @see Collection#containsAll(Object)
+ 	 * @param c the collection of elements that should be tested for
  	 * @return true if all the element is found in the collection
  	 */
 	public boolean containsAll(COLLECTION KEY_GENERIC_TYPE c);
 	
 	/**
 	 * A Type-Specific containsAny function to reduce (un)boxing
-	 * @see #containsAny(Collection)
+ 	 * @param c the collection of elements that should be tested for
 	 * @return true if any element was found
 	 */
 	public boolean containsAny(COLLECTION KEY_GENERIC_TYPE c);
@@ -58,6 +58,7 @@ public interface COLLECTION KEY_GENERIC_TYPE extends Collection<CLASS_TYPE>, ITE
 	/**
 	 * Returns true if any element of the Collection is found in the provided collection.
 	 * A Small Optimization function to find out of any element is present when comparing collections and not all of them.
+ 	 * @param c the collection of elements that should be tested for
 	 * @return true if any element was found.
 	 */
 	@Primitive
@@ -66,6 +67,7 @@ public interface COLLECTION KEY_GENERIC_TYPE extends Collection<CLASS_TYPE>, ITE
 	#if !TYPE_OBJECT
 	/**
 	 * A Type-Specific remove function that reduces (un)boxing.
+	 * @param o the element that should be removed
 	 * @return true if the element was removed
 	 * @see Collection#remove(Object)
 	 */
@@ -74,6 +76,7 @@ public interface COLLECTION KEY_GENERIC_TYPE extends Collection<CLASS_TYPE>, ITE
 #endif
 	/**
 	 * A Type-Specific removeAll function that reduces (un)boxing.
+	 * @param c the collection of elements that should be removed
 	 * @return true if any element was removed
 	 * @see Collection#removeAll(Collection)
 	 */
@@ -81,6 +84,7 @@ public interface COLLECTION KEY_GENERIC_TYPE extends Collection<CLASS_TYPE>, ITE
 	
 	/**
  	 * A Type-Specific retainAll function that reduces (un)boxing.
+	 * @param c the collection of elements that should be kept
  	 * @return true if any element was removed
  	 * @see Collection#retainAll(Collection)
  	 */
@@ -123,7 +127,8 @@ public interface COLLECTION KEY_GENERIC_TYPE extends Collection<CLASS_TYPE>, ITE
 	 * <p>Removes elements that were selected by the filter
 	 * @see Collection#removeIf(Predicate)
 	 * @param filter Filters the elements that should be removed
-	 * @throws NullPointerException if filter is null
+	 * @return true if the collection was modified
+	 * @throws java.lang.NullPointerException if filter is null
 	 */
 	public default boolean remIf(JAVA_PREDICATE filter) {
     	Objects.requireNonNull(filter);

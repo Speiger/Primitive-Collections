@@ -12,6 +12,7 @@ import speiger.src.collections.PACKAGE.collections.BI_ITERATOR;
 import speiger.src.collections.PACKAGE.functions.COMPARATOR;
 import speiger.src.collections.PACKAGE.functions.CONSUMER;
 #endif
+import speiger.src.collections.PACKAGE.functions.consumer.BI_CONSUMER;
 import speiger.src.collections.PACKAGE.lists.LIST_ITERATOR;
 import speiger.src.collections.PACKAGE.maps.abstracts.ABSTRACT_MAP;
 import speiger.src.collections.PACKAGE.maps.interfaces.MAP;
@@ -19,12 +20,16 @@ import speiger.src.collections.PACKAGE.maps.interfaces.SORTED_MAP;
 import speiger.src.collections.PACKAGE.sets.ABSTRACT_SET;
 import speiger.src.collections.PACKAGE.sets.SORTED_SET;
 import speiger.src.collections.PACKAGE.sets.SET;
+import speiger.src.collections.PACKAGE.utils.maps.MAPS;
 import speiger.src.collections.VALUE_PACKAGE.collections.VALUE_ABSTRACT_COLLECTION;
 import speiger.src.collections.VALUE_PACKAGE.collections.VALUE_COLLECTION;
 import speiger.src.collections.VALUE_PACKAGE.collections.VALUE_ITERATOR;
 #if !SAME_TYPE && !VALUE_OBJECT
 import speiger.src.collections.VALUE_PACKAGE.functions.VALUE_CONSUMER;
 import speiger.src.collections.VALUE_PACKAGE.lists.VALUE_LIST_ITERATOR;
+#endif
+#if !VALUE_OBJECT
+import speiger.src.collections.objects.collections.ObjectIterator;
 #endif
 #if !TYPE_OBJECT
 import speiger.src.collections.objects.collections.ObjectBidirectionalIterator;
@@ -33,6 +38,7 @@ import speiger.src.collections.objects.sets.AbstractObjectSet;
 import speiger.src.collections.objects.sets.ObjectSortedSet;
 import speiger.src.collections.objects.sets.ObjectSet;
 #endif
+import speiger.src.collections.utils.HashUtil;
 
 public class ARRAY_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_VALUE_GENERIC_TYPE implements SORTED_MAP KEY_VALUE_GENERIC_TYPE
 {
@@ -42,6 +48,57 @@ public class ARRAY_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_VALUE_GEN
 	protected SET KEY_GENERIC_TYPE keySet;
 	protected VALUE_COLLECTION VALUE_GENERIC_TYPE valuesC;
 	protected FastSortedSet KEY_VALUE_GENERIC_TYPE entrySet;
+	
+	public ARRAY_MAP() {
+		this(HashUtil.DEFAULT_MIN_CAPACITY);
+	}
+	
+	public ARRAY_MAP(int minCapacity) {
+		if(minCapacity < 0)	throw new IllegalStateException("Minimum Capacity is negative. This is not allowed");
+		keys = NEW_KEY_ARRAY(minCapacity);
+		values = NEW_VALUE_ARRAY(minCapacity);
+	}
+	
+#if !TYPE_OBJECT || !VALUE_OBJECT
+	public ARRAY_MAP(CLASS_TYPE[] keys, CLASS_VALUE_TYPE[] values) {
+		this(keys, values, keys.length);
+	}
+	
+	public ARRAY_MAP(CLASS_TYPE[] keys, CLASS_VALUE_TYPE[] values, int length) {
+		this(length);
+		if(keys.length != values.length) throw new IllegalStateException("Input Arrays are not equal size");
+		size = length;
+		for(int i = 0,m=length;i<m;i++) {
+			this.keys[i] = OBJ_TO_KEY(keys[i]);
+			this.values[i] = OBJ_TO_VALUE(values[i]);
+		}
+	}
+	
+#endif
+	public ARRAY_MAP(KEY_TYPE[] keys, VALUE_TYPE[] values) {
+		this(keys, values, keys.length);
+	}
+	
+	public ARRAY_MAP(KEY_TYPE[] keys, VALUE_TYPE[] values, int length) {
+		if(keys.length != values.length) throw new IllegalStateException("Input Arrays are not equal size");
+		this.keys = Arrays.copyOf(keys, length);
+		this.values = Arrays.copyOf(values, length);
+		this.size = length;
+	}
+	
+	public ARRAY_MAP(Map<? extends CLASS_TYPE, ? extends CLASS_VALUE_TYPE> map) {
+		this(map.size());
+		putAll(map);
+	}
+	
+	public ARRAY_MAP(MAP KEY_VALUE_GENERIC_TYPE map) {
+		this(map.size());
+		for(ObjectIterator<MAP.Entry KEY_VALUE_GENERIC_TYPE> iter = MAPS.fastIterator(map);iter.hasNext();size++) {
+			MAP.Entry KEY_VALUE_GENERIC_TYPE entry = iter.next();
+			keys[size] = entry.ENTRY_KEY();
+			values[size] = entry.ENTRY_VALUE();
+		}
+	}
 	
 	@Override
 	public VALUE_TYPE put(KEY_TYPE key, VALUE_TYPE value) {
@@ -106,7 +163,7 @@ public class ARRAY_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_VALUE_GEN
 	@Override
 	public boolean moveToFirst(KEY_TYPE key) {
 		int index = findIndex(key);
-		if(index >= 0) {
+		if(index > 0) {
 			moveIndexToFirst(index);
 			return true;
 		}
@@ -116,7 +173,7 @@ public class ARRAY_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_VALUE_GEN
 	@Override
 	public boolean moveToLast(KEY_TYPE key) {
 		int index = findIndex(key);
-		if(index >= 0) {
+		if(index < size-1) {
 			moveIndexToLast(index);
 			return true;
 		}
@@ -205,13 +262,13 @@ public class ARRAY_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_VALUE_GEN
 	@Override
 	public VALUE_TYPE FIRST_ENTRY_VALUE() {
 		if(size <= 0) throw new NoSuchElementException();
-		return values[size-1];
+		return values[0];
 	}
 	
 	@Override
 	public VALUE_TYPE LAST_ENTRY_VALUE() {
 		if(size <= 0) throw new NoSuchElementException();
-		return values[0];
+		return values[size-1];
 	}
 	
 	@Override
@@ -264,6 +321,13 @@ public class ARRAY_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_VALUE_GEN
 		if(index < 0) return false;
 		removeIndex(index);
 		return true;
+	}
+	
+	@Override
+	public void forEach(BI_CONSUMER KEY_VALUE_GENERIC_TYPE action) {
+		if(size() <= 0) return;
+		for(int i = 0;i<size;i++)
+			action.accept(keys[i], values[i]);
 	}
 	
 	@Override
@@ -518,7 +582,7 @@ public class ARRAY_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_VALUE_GEN
 		@Override
 		public boolean moveToFirst(KEY_TYPE key) {
 			int index = findIndex(key);
-			if(index >= 0) {
+			if(index > 0) {
 				moveIndexToFirst(index);
 				return true;
 			}
@@ -528,7 +592,7 @@ public class ARRAY_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_VALUE_GEN
 		@Override
 		public boolean moveToLast(KEY_TYPE key) {
 			int index = findIndex(key);
-			if(index >= 0) {
+			if(index < size()-1) {
 				moveIndexToLast(index);
 				return true;
 			}
@@ -650,6 +714,7 @@ public class ARRAY_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_VALUE_GEN
 			if(index < 0) return getDefaultReturnValue();
 			VALUE_TYPE value = values[index];
 			removeIndex(index);
+			length--;
 			return value;
 		}
 		
@@ -659,6 +724,7 @@ public class ARRAY_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_VALUE_GEN
 			int index = findIndex(key, value);
 			if(index < 0) return false;
 			removeIndex(index);
+			length--;
 			return true;
 		}
 		
@@ -669,6 +735,7 @@ public class ARRAY_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_VALUE_GEN
 			if(index < 0) return VALUE_TO_OBJ(getDefaultReturnValue());
 			VALUE_TYPE value = values[index];
 			removeIndex(index);
+			length--;
 			return VALUE_TO_OBJ(value);
 		}
 		
@@ -677,6 +744,7 @@ public class ARRAY_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_VALUE_GEN
 			int index = findIndex(key, value);
 			if(index < 0) return false;
 			removeIndex(index);
+			length--;
 			return true;
 		}
 		
@@ -750,8 +818,8 @@ public class ARRAY_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_VALUE_GEN
 			if(index == length-1) return;
 			KEY_TYPE key = keys[index];
 			VALUE_TYPE value = values[index];
-			System.arraycopy(keys, offset+index+1, keys, offset+index, length-index-1);
-			System.arraycopy(values, offset+index+1, values, offset+index, length-index-1);
+			System.arraycopy(keys, index+1, keys, index, end()-index-1);
+			System.arraycopy(values, index+1, values, index, end()-index-1);
 			keys[end()-1] = key;
 			values[end()-1] = value;
 		}
@@ -767,7 +835,7 @@ public class ARRAY_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_VALUE_GEN
 #if !TYPE_OBJECT
 		protected int findIndex(KEY_TYPE key) {
 			for(int i = length-1;i>=0;i--)
-				if(KEY_EQUALS(keys[offset+i], key)) return i;
+				if(KEY_EQUALS(keys[offset+i], key)) return i+offset;
 			return -1;
 		}
 		
@@ -775,7 +843,7 @@ public class ARRAY_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_VALUE_GEN
 #if !VALUE_OBJECT
 		protected int findValue(VALUE_TYPE value) {
 			for(int i = length-1;i>=0;i--)
-				if(VALUE_EQUALS(values[offset+i], value)) return i;
+				if(VALUE_EQUALS(values[offset+i], value)) return i+offset;
 			return -1;
 		}
 		
@@ -783,21 +851,21 @@ public class ARRAY_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_VALUE_GEN
 		protected int findIndex(Object key, Object value) {
 			if(key == null || value == null) return -1;
 			for(int i = length-1;i>=0;i--)
-				if(EQUALS_KEY_TYPE(keys[offset+i], key) && EQUALS_VALUE_TYPE(values[offset+i], value)) return i;
+				if(EQUALS_KEY_TYPE(keys[offset+i], key) && EQUALS_VALUE_TYPE(values[offset+i], value)) return i+offset;
 			return -1;		
 		}
 		
 		protected int findIndex(Object key) {
 			if(key == null) return -1;
 			for(int i = length-1;i>=0;i--)
-				if(EQUALS_KEY_TYPE(keys[offset+i], key)) return i;
+				if(EQUALS_KEY_TYPE(keys[offset+i], key)) return i+offset;
 			return -1;
 		}
 		
 		protected int findValue(Object value) {
 			if(value == null) return -1;
 			for(int i = length-1;i>=0;i--)
-				if(EQUALS_VALUE_TYPE(values[offset+i], value)) return i;
+				if(EQUALS_VALUE_TYPE(values[offset+i], value)) return i+offset;
 			return -1;
 		}
 		
@@ -1371,13 +1439,13 @@ public class ARRAY_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_VALUE_GEN
 #if TYPE_OBJECT
 		@Override
 		public void forEach(Consumer<? super CLASS_TYPE> action) { 
-			for(int i = 0;i<size;action.accept(keys[i])); 
+			for(int i = 0;i<size;action.accept(keys[i++])); 
 		}
 		
 #else
 		@Override
 		public void forEach(CONSUMER KEY_GENERIC_TYPE action) { 
-			for(int i = 0;i<size;action.accept(keys[i])); 
+			for(int i = 0;i<size;action.accept(keys[i++])); 
 		}
 		
 #endif
@@ -1428,12 +1496,12 @@ public class ARRAY_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_VALUE_GEN
 #if VALUE_OBJECT
 		@Override
 		public void forEach(Consumer<? super CLASS_VALUE_TYPE> action) {
-			for(int i = 0;i<size;action.accept(values[i]));
+			for(int i = 0;i<size;action.accept(values[i++]));
 		}
 #else
 		@Override
 		public void forEach(VALUE_CONSUMER VALUE_GENERIC_TYPE action) {
-			for(int i = 0;i<size;action.accept(values[i]));
+			for(int i = 0;i<size;action.accept(values[i++]));
 		}
 #endif
 	}

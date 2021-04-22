@@ -2,6 +2,7 @@ package speiger.src.collections.ints.base;
 
 import java.util.Arrays;
 import java.util.EnumSet;
+import java.util.stream.IntStream;
 
 import org.junit.Assert;
 import org.junit.Test;
@@ -16,6 +17,7 @@ import speiger.src.collections.tests.CollectionTest;
 public abstract class BaseIntCollectionTest extends BaseIntIterableTest
 {
 	protected static final int[] ADD_ARRAY = new int[]{3212, -12, 423, -182, -4912};
+	protected static final int[] BULK_ADD_ARRAY = IntStream.range(200, 500).toArray();
 	protected static final int[] CONTAINS_ARRAY = new int[]{23, 45, 63, 89, 32};
 	
 	@Override
@@ -40,6 +42,10 @@ public abstract class BaseIntCollectionTest extends BaseIntIterableTest
 		Assert.assertEquals(TEST_ARRAY.length, collection.size());
 		collection.addAll(create(ADD_ARRAY));
 		Assert.assertEquals(TEST_ARRAY.length + ADD_ARRAY.length, collection.size());
+		collection = create(TEST_ARRAY);
+		Assert.assertEquals(TEST_ARRAY.length, collection.size());
+		collection.addAll(create(BULK_ADD_ARRAY));
+		Assert.assertEquals(TEST_ARRAY.length + BULK_ADD_ARRAY.length, collection.size());
 	}
 	
 	@Test

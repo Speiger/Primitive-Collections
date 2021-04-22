@@ -61,7 +61,7 @@ public abstract class ABSTRACT_LIST KEY_GENERIC_TYPE extends ABSTRACT_COLLECTION
 	
 	/**
 	 * The IndexOf implementation iterates over all elements and compares them to the search value.
-	 * @param e the value that the index is searched for.
+	 * @param o the value that the index is searched for.
 	 * @return index of the value that was searched for. -1 if not found
 	 * @deprecated it is highly suggested not to use this with Primitives because of boxing. But it is still supported because of ObjectComparason that are custom objects and allow to find the contents.
 	 */
@@ -89,7 +89,7 @@ public abstract class ABSTRACT_LIST KEY_GENERIC_TYPE extends ABSTRACT_COLLECTION
 	
 	/**
 	 * The lastIndexOf implementation iterates over all elements and compares them to the search value.
-	 * @param e the value that the index is searched for.
+	 * @param o the value that the index is searched for.
 	 * @return the last index of the value that was searched for. -1 if not found
 	 * @deprecated it is highly suggested not to use this with Primitives because of boxing. But it is still supported because of ObjectComparason that are custom objects and allow to find the contents.
 	 */

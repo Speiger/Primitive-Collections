@@ -42,7 +42,7 @@ public abstract class ABSTRACT_COLLECTION KEY_GENERIC_TYPE extends AbstractColle
 	
 	/**
 	 * A Type-Specific implementation of contains. This implementation iterates over the elements and returns true if the value match.
-	 * @param value that should be searched for.
+	 * @param e the element that should be searched for.
 	 * @return true if the value was found.
 	 */
 	@Override
@@ -66,9 +66,9 @@ public abstract class ABSTRACT_COLLECTION KEY_GENERIC_TYPE extends AbstractColle
 	
 	/**
 	 * A Type-Specific implementation of containsAll. This implementation iterates over all elements and checks all elements are present in the other collection.
-	 * @param the collection that should be checked if it contains all elements.
+	 * @param c the collection that should be checked if it contains all elements.
 	 * @return true if all elements were found in the collection
-	 * @throws NullPointerException if the collection is null
+	 * @throws java.lang.NullPointerException if the collection is null
 	 */
 	@Override
 	public boolean containsAll(COLLECTION KEY_GENERIC_TYPE c) {
@@ -84,7 +84,7 @@ public abstract class ABSTRACT_COLLECTION KEY_GENERIC_TYPE extends AbstractColle
 	 * @param c the elements that should be checked for
 	 * @return true if any element is in this collection
 	 * @deprecated if this is a primitive collection
-	 * @throws NullPointerException if the collection is null
+	 * @throws java.lang.NullPointerException if the collection is null
 	 */
 	@Override
 	@Primitive
@@ -100,7 +100,7 @@ public abstract class ABSTRACT_COLLECTION KEY_GENERIC_TYPE extends AbstractColle
 	 * This implementation iterates over the elements of the collection and checks if they are stored in this collection.
 	 * @param c the elements that should be checked for
 	 * @return true if any element is in this collection
- 	 * @throws NullPointerException if the collection is null
+ 	 * @throws java.lang.NullPointerException if the collection is null
 	 */
 	@Override
 	public boolean containsAny(COLLECTION KEY_GENERIC_TYPE c) {
@@ -142,7 +142,7 @@ public abstract class ABSTRACT_COLLECTION KEY_GENERIC_TYPE extends AbstractColle
 	 * A Type-Specific implementation of removeAll. This Implementation iterates over all elements and removes them as they were found in the other collection.
 	 * @param c the elements that should be deleted
 	 * @return true if the collection was modified.
-	 * @throws NullPointerException if the collection is null
+	 * @throws java.lang.NullPointerException if the collection is null
 	 */
 	@Override
 	public boolean removeAll(COLLECTION KEY_GENERIC_TYPE c) {
@@ -161,7 +161,7 @@ public abstract class ABSTRACT_COLLECTION KEY_GENERIC_TYPE extends AbstractColle
 	 * A Type-Specific implementation of retainAll. This Implementation iterates over all elements and removes them as they were not found in the other collection.
 	 * @param c the elements that should be kept
 	 * @return true if the collection was modified.
-	 * @throws NullPointerException if the collection is null
+	 * @throws java.lang.NullPointerException if the collection is null
 	 */
 	@Override
 	public boolean retainAll(COLLECTION KEY_GENERIC_TYPE c) {

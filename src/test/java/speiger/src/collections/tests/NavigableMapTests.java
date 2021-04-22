@@ -1,6 +1,6 @@
 package speiger.src.collections.tests;
 
-public enum NavigableSetTest
+public enum NavigableMapTests
 {
 	DESENDING,
 	LOWER,

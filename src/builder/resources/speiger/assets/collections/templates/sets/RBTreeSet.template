@@ -38,6 +38,10 @@ public class RB_TREE_SET KEY_GENERIC_TYPE extends ABSTRACT_SET KEY_GENERIC_TYPE 
 	public RB_TREE_SET() {
 	}
 	
+	public RB_TREE_SET(COMPARATOR KEY_GENERIC_TYPE comp) {
+		comparator = comp;
+	}
+	
 	public RB_TREE_SET(KEY_TYPE[] array) {
 		this(array, 0, array.length);
 	}
@@ -47,12 +51,38 @@ public class RB_TREE_SET KEY_GENERIC_TYPE extends ABSTRACT_SET KEY_GENERIC_TYPE 
 		for(int i = 0;i<length;i++) add(array[offset+i]);
 	}
 	
+	public RB_TREE_SET(KEY_TYPE[] array, COMPARATOR KEY_GENERIC_TYPE comp) {
+		this(array, 0, array.length, comp);
+	}
+	
+	public RB_TREE_SET(KEY_TYPE[] array, int offset, int length, COMPARATOR KEY_GENERIC_TYPE comp) {
+		comparator = comp;
+		SanityChecks.checkArrayCapacity(array.length, offset, length);
+		for(int i = 0;i<length;i++) add(array[offset+i]);
+	}
+	
+	public RB_TREE_SET(SORTED_SET KEY_GENERIC_TYPE sortedSet) {
+		comparator = sortedSet.comparator();
+		addAll(sortedSet);
+	}
+	
 	@Deprecated
 	public RB_TREE_SET(Collection<? extends CLASS_TYPE> collection) {
 		addAll(collection);
 	}
+
+	@Deprecated
+	public RB_TREE_SET(Collection<? extends CLASS_TYPE> collection, COMPARATOR KEY_GENERIC_TYPE comp) {
+		comparator = comp;
+		addAll(collection);
+	}
 	
 	public RB_TREE_SET(COLLECTION KEY_GENERIC_TYPE collection) {
+		addAll(collection);
+	}
+	
+	public RB_TREE_SET(COLLECTION KEY_GENERIC_TYPE collection, COMPARATOR KEY_GENERIC_TYPE comp) {
+		comparator = comp;
 		addAll(collection);
 	}
 
@@ -63,8 +93,22 @@ public class RB_TREE_SET KEY_GENERIC_TYPE extends ABSTRACT_SET KEY_GENERIC_TYPE 
 		while(iterator.hasNext()) add(iterator.next());
 #endif
 	}
+
+	public RB_TREE_SET(Iterator<CLASS_TYPE> iterator, COMPARATOR KEY_GENERIC_TYPE comp) {
+#if !TYPE_OBJECT
+		this(ITERATORS.wrap(iterator), comp);
+#else
+		comparator = comp;
+		while(iterator.hasNext()) add(iterator.next());
+#endif
+	}
 	
 	public RB_TREE_SET(ITERATOR KEY_GENERIC_TYPE iterator) {
+		while(iterator.hasNext()) add(iterator.NEXT());
+	}
+	
+	public RB_TREE_SET(ITERATOR KEY_GENERIC_TYPE iterator, COMPARATOR KEY_GENERIC_TYPE comp) {
+		comparator = comp;
 		while(iterator.hasNext()) add(iterator.NEXT());
 	}
 	
@@ -342,6 +386,14 @@ public class RB_TREE_SET KEY_GENERIC_TYPE extends ABSTRACT_SET KEY_GENERIC_TYPE 
 	public int size() { return size; }
 	
 	@Override
+	public void clear() {
+		size = 0;
+		first = null;
+		last = null;
+		tree = null;
+	}
+	
+	@Override
 	public COMPARATOR KEY_GENERIC_TYPE comparator() { return comparator; }
 	
 	@Override
@@ -593,7 +645,8 @@ public class RB_TREE_SET KEY_GENERIC_TYPE extends ABSTRACT_SET KEY_GENERIC_TYPE 
 		COMPARATOR KEY_GENERIC_TYPE comparator;
 		DescendingSubSet(RB_TREE_SET KEY_GENERIC_TYPE set, boolean fromStart, KEY_TYPE start, boolean loInclusive, boolean toEnd, KEY_TYPE end, boolean hiInclusive) {
 			super(set, fromStart, start, loInclusive, toEnd, end, hiInclusive);
-			comparator = set.comparator().reversed();
+			comparator = set.comparator();
+			if(comparator != null) comparator = comparator.reversed();
 		}
 		
 		@Override

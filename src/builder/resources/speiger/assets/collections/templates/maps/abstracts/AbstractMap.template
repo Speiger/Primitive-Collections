@@ -92,7 +92,7 @@ public abstract class ABSTRACT_MAP KEY_VALUE_GENERIC_TYPE extends AbstractMap<CL
 	
 	@Override
 	public boolean replace(KEY_TYPE key, VALUE_TYPE oldValue, VALUE_TYPE newValue) {
-		VALUE_TYPE curValue = get(key);
+		VALUE_TYPE curValue = GET_VALUE(key);
         if (VALUE_EQUALS_NOT(curValue, oldValue) || (VALUE_EQUALS(curValue, getDefaultReturnValue()) && !containsKey(key))) {
             return false;
         }
@@ -103,7 +103,7 @@ public abstract class ABSTRACT_MAP KEY_VALUE_GENERIC_TYPE extends AbstractMap<CL
 	@Override
 	public VALUE_TYPE replace(KEY_TYPE key, VALUE_TYPE value) {
 		VALUE_TYPE curValue;
-        if (VALUE_EQUALS_NOT((curValue = get(key)), getDefaultReturnValue()) || containsKey(key)) {
+        if (VALUE_EQUALS_NOT((curValue = GET_VALUE(key)), getDefaultReturnValue()) || containsKey(key)) {
         	curValue = put(key, value);
         }
         return curValue;
@@ -121,7 +121,7 @@ public abstract class ABSTRACT_MAP KEY_VALUE_GENERIC_TYPE extends AbstractMap<CL
 	@Override
 	public VALUE_TYPE COMPUTE(KEY_TYPE key, UNARY_OPERATOR KEY_VALUE_GENERIC_TYPE mappingFunction) {
         Objects.requireNonNull(mappingFunction);
-        VALUE_TYPE value = get(key);
+        VALUE_TYPE value = GET_VALUE(key);
         VALUE_TYPE newValue = mappingFunction.APPLY_VALUE(key, value);
         if(VALUE_EQUALS(newValue, getDefaultReturnValue())) {
         	if(VALUE_EQUALS_NOT(value, getDefaultReturnValue()) || containsKey(key)) {
@@ -138,7 +138,7 @@ public abstract class ABSTRACT_MAP KEY_VALUE_GENERIC_TYPE extends AbstractMap<CL
 	public VALUE_TYPE COMPUTE_IF_ABSENT(KEY_TYPE key, FUNCTION KEY_VALUE_GENERIC_TYPE mappingFunction) {
         Objects.requireNonNull(mappingFunction);
         VALUE_TYPE value;
-        if((value = get(key)) == getDefaultReturnValue()) {
+        if((value = GET_VALUE(key)) == getDefaultReturnValue() || !containsKey(key)) {
         	VALUE_TYPE newValue = mappingFunction.GET_VALUE(key);
         	if(VALUE_EQUALS_NOT(newValue, getDefaultReturnValue())) {
         		put(key, newValue);
@@ -152,7 +152,7 @@ public abstract class ABSTRACT_MAP KEY_VALUE_GENERIC_TYPE extends AbstractMap<CL
 	public VALUE_TYPE COMPUTE_IF_PRESENT(KEY_TYPE key, UNARY_OPERATOR KEY_VALUE_GENERIC_TYPE mappingFunction) {
         Objects.requireNonNull(mappingFunction);
         VALUE_TYPE value;
-        if(VALUE_EQUALS_NOT((value = get(key)), getDefaultReturnValue())) {
+        if(VALUE_EQUALS_NOT((value = GET_VALUE(key)), getDefaultReturnValue()) || containsKey(key)) {
         	VALUE_TYPE newValue = mappingFunction.APPLY_VALUE(key, value);
         	if(VALUE_EQUALS_NOT(newValue, getDefaultReturnValue())) {
         		put(key, newValue);
@@ -166,7 +166,7 @@ public abstract class ABSTRACT_MAP KEY_VALUE_GENERIC_TYPE extends AbstractMap<CL
 	@Override
 	public VALUE_TYPE MERGE(KEY_TYPE key, VALUE_TYPE value, VALUE_UNARY_OPERATOR VALUE_VALUE_GENERIC_TYPE mappingFunction) {
         Objects.requireNonNull(mappingFunction);
-        VALUE_TYPE oldValue = get(key);
+        VALUE_TYPE oldValue = GET_VALUE(key);
         VALUE_TYPE newValue = VALUE_EQUALS(oldValue, getDefaultReturnValue()) ? value : mappingFunction.APPLY_VALUE(oldValue, value);
         if(VALUE_EQUALS(newValue, getDefaultReturnValue())) remove(key);
         else put(key, newValue);

@@ -19,7 +19,7 @@ public interface ITERATOR KEY_GENERIC_TYPE extends Iterator<CLASS_TYPE>
  	* Returns the next element in the iteration.
  	*
  	* @return the next element in the iteration
- 	* @throws NoSuchElementException if the iteration has no more elements
+ 	* @throws java.util.NoSuchElementException if the iteration has no more elements
  	* @see Iterator#next()
  	*/
 	public KEY_TYPE NEXT();
@@ -45,7 +45,7 @@ public interface ITERATOR KEY_GENERIC_TYPE extends Iterator<CLASS_TYPE>
      * }</pre>
      *
      * @param action The action to be performed for each element
-     * @throws NullPointerException if the specified action is null
+     * @throws java.lang.NullPointerException if the specified action is null
      * @see Iterator#forEachRemaining(Consumer)
      */
 	public default void forEachRemaining(CONSUMER action) {

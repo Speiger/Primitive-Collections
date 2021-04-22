@@ -26,6 +26,18 @@
 			<attribute name="test" value="true"/>
 		</attributes>
 	</classpathentry>
+	<classpathentry kind="src" output="bin/builder" path="src/builder/java">
+		<attributes>
+			<attribute name="gradle_scope" value="builder"/>
+			<attribute name="gradle_used_by_scope" value="builder"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="src" output="bin/builder" path="src/builder/resources">
+		<attributes>
+			<attribute name="gradle_scope" value="builder"/>
+			<attribute name="gradle_used_by_scope" value="builder"/>
+		</attributes>
+	</classpathentry>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="con" path="org.eclipse.buildship.core.gradleclasspathcontainer"/>
 	<classpathentry kind="output" path="bin/default"/>

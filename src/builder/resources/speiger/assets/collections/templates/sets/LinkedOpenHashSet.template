@@ -348,8 +348,9 @@ public class LINKED_HASH_SET KEY_GENERIC_TYPE extends HASH_SET KEY_GENERIC_TYPE 
 		int newMask = newSize - 1;
 		KEY_TYPE[] newKeys = NEW_KEY_ARRAY(newSize + 1);
 		long[] newLinks = new long[newSize + 1];
-		int newPrev = -1;
-		for(int j = size, i = firstIndex, pos = 0, prev = -1;j != 0;) {
+		int i = firstIndex, prev = -1, newPrev = -1, pos;
+		firstIndex = -1;
+		for(int j = size; j-- != 0;) {
 			if(KEY_EQUALS_NULL(keys[i])) pos = newSize;
 			else {
 				pos = HashUtil.mix(KEY_TO_HASH(keys[i])) & newMask;

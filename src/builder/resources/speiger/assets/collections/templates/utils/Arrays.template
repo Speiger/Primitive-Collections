@@ -566,7 +566,7 @@ public class ARRAYS
 	 * This implementation was copied from <a href="https://github.com/vigna/fastutil">FastUtil</a> with a couple custom optimizations
 	 * @param array the array that needs to be sorted
 	 * @param comp the Comparator that decides the sorting order
-	 * @Note This parallelization is invoked through {@link SanityChecks#invokeTask} which the threadpool can be changed as needed
+	 * @note This parallelization is invoked through {@link SanityChecks#invokeTask} which the threadpool can be changed as needed
 	 */
 	public static GENERIC_KEY_BRACES void parallelMergeSort(KEY_TYPE[] array, COMPARATOR KEY_GENERIC_TYPE comp) {
 		parallelMergeSort(array, null, 0, array.length, comp);
@@ -578,7 +578,7 @@ public class ARRAYS
 	 * @param array the array that needs to be sorted
 	 * @param length the maxmium size of the array to be sorted
 	 * @param comp the Comparator that decides the sorting order
-	 * @Note This parallelization is invoked through {@link SanityChecks#invokeTask} which the threadpool can be changed as needed
+	 * @note This parallelization is invoked through {@link SanityChecks#invokeTask} which the threadpool can be changed as needed
 	 */
 	public static GENERIC_KEY_BRACES void parallelMergeSort(KEY_TYPE[] array, int length, COMPARATOR KEY_GENERIC_TYPE comp) {
 		parallelMergeSort(array, null, 0, length, comp);
@@ -591,7 +591,7 @@ public class ARRAYS
 	 * @param from where the array should be sorted from
 	 * @param to where the array should be sorted to
 	 * @param comp the Comparator that decides the sorting order
-	 * @Note This parallelization is invoked through {@link SanityChecks#invokeTask} which the threadpool can be changed as needed
+	 * @note This parallelization is invoked through {@link SanityChecks#invokeTask} which the threadpool can be changed as needed
 	 */
 	public static GENERIC_KEY_BRACES void parallelMergeSort(KEY_TYPE[] array, KEY_TYPE[] supp, int from, int to, COMPARATOR KEY_GENERIC_TYPE comp) {
 		if(SanityChecks.canParallelTask() && to - from >= PARALLEL_THRESHOLD) {
@@ -605,7 +605,7 @@ public class ARRAYS
 	 * Sorts an array according to the natural ascending order using Parallel Merge Sort, 
 	 * This implementation was copied from <a href="https://github.com/vigna/fastutil">FastUtil</a> with a couple custom optimizations
 	 * @param array the array that needs to be sorted
-	 * @Note This parallelization is invoked through {@link SanityChecks#invokeTask} which the threadpool can be changed as needed
+	 * @note This parallelization is invoked through {@link SanityChecks#invokeTask} which the threadpool can be changed as needed
 	 */
 	public static COMPAREABLE_KEY_BRACES void parallelMergeSort(KEY_TYPE[] array) {
 		parallelMergeSort(array, null, 0, array.length);
@@ -616,7 +616,7 @@ public class ARRAYS
 	 * This implementation was copied from <a href="https://github.com/vigna/fastutil">FastUtil</a> with a couple custom optimizations
 	 * @param array the array that needs to be sorted
 	 * @param length the maxmium size of the array to be sorted
-	 * @Note This parallelization is invoked through {@link SanityChecks#invokeTask} which the threadpool can be changed as needed
+	 * @note This parallelization is invoked through {@link SanityChecks#invokeTask} which the threadpool can be changed as needed
 	 */
 	public static COMPAREABLE_KEY_BRACES void parallelMergeSort(KEY_TYPE[] array, int length) {
 		parallelMergeSort(array, null, 0, length);
@@ -628,7 +628,7 @@ public class ARRAYS
 	 * @param array the array that needs to be sorted
 	 * @param from where the array should be sorted from
 	 * @param to where the array should be sorted to
-	 * @Note This parallelization is invoked through {@link SanityChecks#invokeTask} which the threadpool can be changed as needed
+	 * @note This parallelization is invoked through {@link SanityChecks#invokeTask} which the threadpool can be changed as needed
 	 */
 	public static COMPAREABLE_KEY_BRACES void parallelMergeSort(KEY_TYPE[] array, KEY_TYPE[] supp, int from, int to) {
 		if(SanityChecks.canParallelTask() && to - from >= PARALLEL_THRESHOLD) {
@@ -788,7 +788,7 @@ public class ARRAYS
 	 * @author Speiger
 	 * @param array the array that needs to be sorted
 	 * @param comp the Comparator that decides the sorting order
-	 * @Note This parallelization is invoked through {@link SanityChecks#invokeTask} which the threadpool can be changed as needed
+	 * @note This parallelization is invoked through {@link SanityChecks#invokeTask} which the threadpool can be changed as needed
 	 */
 	public static GENERIC_KEY_BRACES void parallelMemFreeMergeSort(KEY_TYPE[] array, COMPARATOR KEY_GENERIC_TYPE comp) {
 		parallelMemFreeMergeSort(array, 0, array.length, comp);
@@ -803,7 +803,7 @@ public class ARRAYS
 	 * @param array the array that needs to be sorted
 	 * @param length the maxmium size of the array to be sorted
 	 * @param comp the Comparator that decides the sorting order
-	 * @Note This parallelization is invoked through {@link SanityChecks#invokeTask} which the threadpool can be changed as needed
+	 * @note This parallelization is invoked through {@link SanityChecks#invokeTask} which the threadpool can be changed as needed
 	 */
 	public static GENERIC_KEY_BRACES void parallelMemFreeMergeSort(KEY_TYPE[] array, int length, COMPARATOR KEY_GENERIC_TYPE comp) {
 		parallelMemFreeMergeSort(array, 0, length, comp);
@@ -819,7 +819,7 @@ public class ARRAYS
 	 * @param from where the array should be sorted from
 	 * @param to where the array should be sorted to
 	 * @param comp the Comparator that decides the sorting order
-	 * @Note This parallelization is invoked through {@link SanityChecks#invokeTask} which the threadpool can be changed as needed
+	 * @note This parallelization is invoked through {@link SanityChecks#invokeTask} which the threadpool can be changed as needed
 	 */
 	public static GENERIC_KEY_BRACES void parallelMemFreeMergeSort(KEY_TYPE[] array, int from, int to, COMPARATOR KEY_GENERIC_TYPE comp) {
 		if(SanityChecks.canParallelTask() && to - from >= PARALLEL_THRESHOLD) {
@@ -836,7 +836,7 @@ public class ARRAYS
 	 * It does stack allocate tiny amounts of data for shifting around elements.
 	 * @author Speiger
 	 * @param array the array that needs to be sorted
-	 * @Note This parallelization is invoked through {@link SanityChecks#invokeTask} which the threadpool can be changed as needed
+	 * @note This parallelization is invoked through {@link SanityChecks#invokeTask} which the threadpool can be changed as needed
 	 */
 	public static COMPAREABLE_KEY_BRACES void parallelMemFreeMergeSort(KEY_TYPE[] array) {
 		parallelMemFreeMergeSort(array, 0, array.length);
@@ -850,7 +850,7 @@ public class ARRAYS
 	 * @author Speiger
 	 * @param array the array that needs to be sorted
 	 * @param length the maxmium size of the array to be sorted
-	 * @Note This parallelization is invoked through {@link SanityChecks#invokeTask} which the threadpool can be changed as needed
+	 * @note This parallelization is invoked through {@link SanityChecks#invokeTask} which the threadpool can be changed as needed
 	 */
 	public static COMPAREABLE_KEY_BRACES void parallelMemFreeMergeSort(KEY_TYPE[] array, int length) {
 		parallelMemFreeMergeSort(array, 0, length);
@@ -865,7 +865,7 @@ public class ARRAYS
 	 * @param array the array that needs to be sorted
 	 * @param from where the array should be sorted from
 	 * @param to where the array should be sorted to
-	 * @Note This parallelization is invoked through {@link SanityChecks#invokeTask} which the threadpool can be changed as needed
+	 * @note This parallelization is invoked through {@link SanityChecks#invokeTask} which the threadpool can be changed as needed
 	 */
 	public static COMPAREABLE_KEY_BRACES void parallelMemFreeMergeSort(KEY_TYPE[] array, int from, int to) {
 		if(SanityChecks.canParallelTask() && to - from >= PARALLEL_THRESHOLD) {
@@ -878,7 +878,7 @@ public class ARRAYS
 	/**
 	 * Sorts the specified range of elements according to the order induced by the specified comparator using Quick Sort,
 	 * This implementation is a custom of <a href="https://github.com/vigna/fastutil">FastUtil</a> quicksort but with a different code structure,
-	 * and that sorting Algorithm is based on the tuned quicksort adapted from Jon L. Bentley and M. DouglasMcIlroy, “Engineering a Sort Function”, Software: Practice and Experience, 23(11), pages1249−1265, 1993. 
+	 * and that sorting Algorithm is based on the tuned quicksort adapted from Jon L. Bentley and M. DouglasMcIlroy, "Engineering a Sort Function", Software: Practice and Experience, 23(11), pages1249−1265, 1993. 
 	 * @param array the array that needs to be sorted
 	 * @param comp the Comparator that decides the sorting order
 	 */
@@ -889,7 +889,7 @@ public class ARRAYS
 	/**
 	 * Sorts the specified range of elements according to the order induced by the specified comparator using Quick Sort,
 	 * This implementation is a custom of <a href="https://github.com/vigna/fastutil">FastUtil</a> quicksort but with a different code structure,
-	 * and that sorting Algorithm is based on the tuned quicksort adapted from Jon L. Bentley and M. DouglasMcIlroy, “Engineering a Sort Function”, Software: Practice and Experience, 23(11), pages1249−1265, 1993. 
+	 * and that sorting Algorithm is based on the tuned quicksort adapted from Jon L. Bentley and M. DouglasMcIlroy, "Engineering a Sort Function", Software: Practice and Experience, 23(11), pages1249−1265, 1993. 
 	 * @param array the array that needs to be sorted
 	 * @param length the maxmium size of the array to be sorted
 	 * @param comp the Comparator that decides the sorting order
@@ -901,7 +901,7 @@ public class ARRAYS
 	/**
 	 * Sorts the specified range of elements according to the order induced by the specified comparator using Quick Sort,
 	 * This implementation is a custom of <a href="https://github.com/vigna/fastutil">FastUtil</a> quicksort but with a different code structure,
-	 * and that sorting Algorithm is based on the tuned quicksort adapted from Jon L. Bentley and M. DouglasMcIlroy, “Engineering a Sort Function”, Software: Practice and Experience, 23(11), pages1249−1265, 1993. 
+	 * and that sorting Algorithm is based on the tuned quicksort adapted from Jon L. Bentley and M. DouglasMcIlroy, "Engineering a Sort Function", Software: Practice and Experience, 23(11), pages1249−1265, 1993. 
 	 * @param array the array that needs to be sorted
 	 * @param from where the array should be sorted from
 	 * @param to where the array should be sorted to
@@ -934,7 +934,7 @@ public class ARRAYS
 	/**
 	 * Sorts an array according to the natural ascending order using Quick Sort, 
 	 * This implementation is a custom of <a href="https://github.com/vigna/fastutil">FastUtil</a> quicksort but with a different code structure,
-	 * and that sorting Algorithm is based on the tuned quicksort adapted from Jon L. Bentley and M. DouglasMcIlroy, “Engineering a Sort Function”, Software: Practice and Experience, 23(11), pages1249−1265, 1993. 
+	 * and that sorting Algorithm is based on the tuned quicksort adapted from Jon L. Bentley and M. DouglasMcIlroy, "Engineering a Sort Function", Software: Practice and Experience, 23(11), pages1249−1265, 1993. 
 	 * @param array the array that needs to be sorted
 	 */
 	public static COMPAREABLE_KEY_BRACES void quickSort(KEY_TYPE[] array) {
@@ -944,7 +944,7 @@ public class ARRAYS
 	/**
 	 * Sorts an array according to the natural ascending order using Quick Sort,
 	 * This implementation is a custom of <a href="https://github.com/vigna/fastutil">FastUtil</a> quicksort but with a different code structure,
-	 * and that sorting Algorithm is based on the tuned quicksort adapted from Jon L. Bentley and M. DouglasMcIlroy, “Engineering a Sort Function”, Software: Practice and Experience, 23(11), pages1249−1265, 1993. 
+	 * and that sorting Algorithm is based on the tuned quicksort adapted from Jon L. Bentley and M. DouglasMcIlroy, "Engineering a Sort Function", Software: Practice and Experience, 23(11), pages1249−1265, 1993. 
 	 * @param array the array that needs to be sorted
 	 * @param length the maxmium size of the array to be sorted
 	 */
@@ -955,7 +955,7 @@ public class ARRAYS
 	/**
 	 * Sorts an array according to the natural ascending order using Quick Sort,
 	 * This implementation is a custom of <a href="https://github.com/vigna/fastutil">FastUtil</a> quicksort but with a different code structure,
-	 * and that sorting Algorithm is based on the tuned quicksort adapted from Jon L. Bentley and M. DouglasMcIlroy, “Engineering a Sort Function”, Software: Practice and Experience, 23(11), pages1249−1265, 1993. 
+	 * and that sorting Algorithm is based on the tuned quicksort adapted from Jon L. Bentley and M. DouglasMcIlroy, "Engineering a Sort Function", Software: Practice and Experience, 23(11), pages1249−1265, 1993. 
 	 * @param array the array that needs to be sorted
 	 * @param from where the array should be sorted from
 	 * @param to where the array should be sorted to
@@ -987,10 +987,10 @@ public class ARRAYS
 	/**
 	 * Sorts the specified range of elements according to the order induced by the specified comparator using Parallel Quick Sort,
 	 * This implementation is a custom of <a href="https://github.com/vigna/fastutil">FastUtil</a> quicksort but with a different code structure,
-	 * and that sorting Algorithm is based on the tuned quicksort adapted from Jon L. Bentley and M. DouglasMcIlroy, “Engineering a Sort Function”, Software: Practice and Experience, 23(11), pages1249−1265, 1993. 
+	 * and that sorting Algorithm is based on the tuned quicksort adapted from Jon L. Bentley and M. DouglasMcIlroy, "Engineering a Sort Function", Software: Practice and Experience, 23(11), pages1249−1265, 1993. 
 	 * @param array the array that needs to be sorted
 	 * @param comp the Comparator that decides the sorting order
-	 * @Note This parallelization is invoked through {@link SanityChecks#invokeTask} which the threadpool can be changed as needed
+	 * @note This parallelization is invoked through {@link SanityChecks#invokeTask} which the threadpool can be changed as needed
 	 */
 	public static GENERIC_KEY_BRACES void parallelQuickSort(KEY_TYPE[] array, COMPARATOR KEY_GENERIC_TYPE comp) {
 		parallelQuickSort(array, 0, array.length, comp);
@@ -999,11 +999,11 @@ public class ARRAYS
 	/**
 	 * Sorts the specified range of elements according to the order induced by the specified comparator using Parallel Quick Sort,
 	 * This implementation is a custom of <a href="https://github.com/vigna/fastutil">FastUtil</a> quicksort but with a different code structure,
-	 * and that sorting Algorithm is based on the tuned quicksort adapted from Jon L. Bentley and M. DouglasMcIlroy, “Engineering a Sort Function”, Software: Practice and Experience, 23(11), pages1249−1265, 1993. 
+	 * and that sorting Algorithm is based on the tuned quicksort adapted from Jon L. Bentley and M. DouglasMcIlroy, "Engineering a Sort Function", Software: Practice and Experience, 23(11), pages1249−1265, 1993. 
 	 * @param array the array that needs to be sorted
 	 * @param length the maxmium size of the array to be sorted
 	 * @param comp the Comparator that decides the sorting order
-	 * @Note This parallelization is invoked through {@link SanityChecks#invokeTask} which the threadpool can be changed as needed
+	 * @note This parallelization is invoked through {@link SanityChecks#invokeTask} which the threadpool can be changed as needed
 	 */
 	public static GENERIC_KEY_BRACES void parallelQuickSort(KEY_TYPE[] array, int length, COMPARATOR KEY_GENERIC_TYPE comp) {
 		parallelQuickSort(array, 0, length, comp);
@@ -1012,12 +1012,12 @@ public class ARRAYS
 	/**
 	 * Sorts the specified range of elements according to the order induced by the specified comparator using Parallel Quick Sort,
 	 * This implementation is a custom of <a href="https://github.com/vigna/fastutil">FastUtil</a> quicksort but with a different code structure,
-	 * and that sorting Algorithm is based on the tuned quicksort adapted from Jon L. Bentley and M. DouglasMcIlroy, “Engineering a Sort Function”, Software: Practice and Experience, 23(11), pages1249−1265, 1993. 
+	 * and that sorting Algorithm is based on the tuned quicksort adapted from Jon L. Bentley and M. DouglasMcIlroy, "Engineering a Sort Function", Software: Practice and Experience, 23(11), pages1249−1265, 1993. 
 	 * @param array the array that needs to be sorted
 	 * @param from where the array should be sorted from
 	 * @param to where the array should be sorted to
 	 * @param comp the Comparator that decides the sorting order
-	 * @Note This parallelization is invoked through {@link SanityChecks#invokeTask} which the threadpool can be changed as needed
+	 * @note This parallelization is invoked through {@link SanityChecks#invokeTask} which the threadpool can be changed as needed
 	 */
 	public static GENERIC_KEY_BRACES void parallelQuickSort(KEY_TYPE[] array, int from, int to, COMPARATOR KEY_GENERIC_TYPE comp) {
 		if(SanityChecks.canParallelTask() && to - from >= PARALLEL_THRESHOLD) {
@@ -1030,9 +1030,9 @@ public class ARRAYS
 	/**
 	 * Sorts an array according to the natural ascending order using Parallel Quick Sort, 
 	 * This implementation is a custom of <a href="https://github.com/vigna/fastutil">FastUtil</a> quicksort but with a different code structure,
-	 * and that sorting Algorithm is based on the tuned quicksort adapted from Jon L. Bentley and M. DouglasMcIlroy, “Engineering a Sort Function”, Software: Practice and Experience, 23(11), pages1249−1265, 1993. 
+	 * and that sorting Algorithm is based on the tuned quicksort adapted from Jon L. Bentley and M. DouglasMcIlroy, "Engineering a Sort Function", Software: Practice and Experience, 23(11), pages1249−1265, 1993. 
 	 * @param array the array that needs to be sorted
-	 * @Note This parallelization is invoked through {@link SanityChecks#invokeTask} which the threadpool can be changed as needed
+	 * @note This parallelization is invoked through {@link SanityChecks#invokeTask} which the threadpool can be changed as needed
 	 */
 	public static COMPAREABLE_KEY_BRACES void parallelQuickSort(KEY_TYPE[] array) {
 		parallelQuickSort(array, 0, array.length);
@@ -1041,10 +1041,10 @@ public class ARRAYS
 	/**
 	 * Sorts an array according to the natural ascending order using Parallel Quick Sort,
 	 * This implementation is a custom of <a href="https://github.com/vigna/fastutil">FastUtil</a> quicksort but with a different code structure,
-	 * and that sorting Algorithm is based on the tuned quicksort adapted from Jon L. Bentley and M. DouglasMcIlroy, “Engineering a Sort Function”, Software: Practice and Experience, 23(11), pages1249−1265, 1993. 
+	 * and that sorting Algorithm is based on the tuned quicksort adapted from Jon L. Bentley and M. DouglasMcIlroy, "Engineering a Sort Function", Software: Practice and Experience, 23(11), pages1249−1265, 1993. 
 	 * @param array the array that needs to be sorted
 	 * @param length the maxmium size of the array to be sorted
-	 * @Note This parallelization is invoked through {@link SanityChecks#invokeTask} which the threadpool can be changed as needed
+	 * @note This parallelization is invoked through {@link SanityChecks#invokeTask} which the threadpool can be changed as needed
 	 */
 	public static COMPAREABLE_KEY_BRACES void parallelQuickSort(KEY_TYPE[] array, int length) {
 		parallelQuickSort(array, 0, length);
@@ -1053,11 +1053,11 @@ public class ARRAYS
 	/**
 	 * Sorts an array according to the natural ascending order using Parallel Quick Sort,
 	 * This implementation is a custom of <a href="https://github.com/vigna/fastutil">FastUtil</a> quicksort but with a different code structure,
-	 * and that sorting Algorithm is based on the tuned quicksort adapted from Jon L. Bentley and M. DouglasMcIlroy, “Engineering a Sort Function”, Software: Practice and Experience, 23(11), pages1249−1265, 1993. 
+	 * and that sorting Algorithm is based on the tuned quicksort adapted from Jon L. Bentley and M. DouglasMcIlroy, "Engineering a Sort Function", Software: Practice and Experience, 23(11), pages1249−1265, 1993. 
 	 * @param array the array that needs to be sorted
 	 * @param from where the array should be sorted from
 	 * @param to where the array should be sorted to
-	 * @Note This parallelization is invoked through {@link SanityChecks#invokeTask} which the threadpool can be changed as needed
+	 * @note This parallelization is invoked through {@link SanityChecks#invokeTask} which the threadpool can be changed as needed
 	 */
 	public static COMPAREABLE_KEY_BRACES void parallelQuickSort(KEY_TYPE[] array, int from, int to) {
 		if(SanityChecks.canParallelTask() && to - from >= PARALLEL_THRESHOLD) {

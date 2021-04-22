@@ -64,7 +64,7 @@ public class ITERATORS
 	
 	/**
 	 * Returns a Immutable Iterator instance based on the instance given.
-	 * @param l that should be made immutable/unmodifyable
+	 * @param iterator that should be made immutable/unmodifyable
 	 * @return a unmodifiable iterator wrapper. If the Iterator already a unmodifyable wrapper then it just returns itself.
 	 */
 	public static GENERIC_KEY_BRACES ITERATOR KEY_GENERIC_TYPE unmodifiable(ITERATOR KEY_GENERIC_TYPE iterator) {
@@ -77,7 +77,7 @@ public class ITERATORS
 	
 	/**
 	 * Returns a Immutable ListIterator instance based on the instance given.
-	 * @param l that should be made immutable/unmodifyable
+	 * @param iterator that should be made immutable/unmodifyable
 	 * @return a unmodifiable listiterator wrapper. If the ListIterator already a unmodifyable wrapper then it just returns itself.
 	 */
 	public static GENERIC_KEY_BRACES LIST_ITERATOR KEY_GENERIC_TYPE unmodifiable(LIST_ITERATOR KEY_GENERIC_TYPE iterator) {

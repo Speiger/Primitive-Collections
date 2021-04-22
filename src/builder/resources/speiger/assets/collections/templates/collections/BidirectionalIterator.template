@@ -23,7 +23,7 @@ public interface BI_ITERATOR KEY_GENERIC_TYPE extends ITERATOR KEY_GENERIC_TYPE
 	/**
 	 * Returns the Previous element of the iterator.
 	 * @return the Previous element of the iterator.
- 	 * @throws NoSuchElementException if the iteration has no more elements
+ 	 * @throws java.util.NoSuchElementException if the iteration has no more elements
 	 */
 	public KEY_TYPE PREVIOUS();
 	
