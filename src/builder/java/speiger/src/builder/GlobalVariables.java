@@ -69,6 +69,8 @@ public class GlobalVariables
 		{
 			addSimpleMapper("SANITY_CAST_VALUE", "castTo"+valueType.getFileType());
 		}
+		addComment("@ArrayType", "@param <%s> the type of array that the operation should be applied");
+		addComment("@Type", "@param <%s> the type of elements maintained by this Collection");
 		addAnnontion("@PrimitiveOverride", "@Override");
 		addSimpleMapper("@PrimitiveDoc", "");
 		addAnnontion("@Primitive", "@Deprecated");
@@ -321,6 +323,12 @@ public class GlobalVariables
 	{
 		if(type == ClassType.OBJECT) operators.add(new LineMapper(type.name()+"["+pattern+"]", pattern));
 		else operators.add(new SimpleMapper(type.name()+"["+pattern+"]", pattern, value));
+	}
+	
+	private void addComment(String pattern, String value)
+	{
+		if(type == ClassType.OBJECT) operators.add(new InjectMapper(type.name()+"["+pattern+"]", pattern, value).removeBraces());
+		else operators.add(new LineMapper(type.name()+"["+pattern+"]", pattern));
 	}
 	
 	private InjectMapper addInjectMapper(String pattern, String replacement)

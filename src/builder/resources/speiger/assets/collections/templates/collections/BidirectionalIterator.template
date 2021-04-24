@@ -10,8 +10,7 @@ public interface BI_ITERATOR KEY_GENERIC_TYPE extends ITERATOR KEY_GENERIC_TYPE,
 /**
  * This is a basically a {@link java.util.ListIterator} without the index functions.
  * Allowing to have a simple Bidirectional Iterator without having to keep track of the Iteration index.
- *
- * @param <T> the type of elements maintained by this Collection
+ * @Type(T)
  */
 public interface BI_ITERATOR KEY_GENERIC_TYPE extends ITERATOR KEY_GENERIC_TYPE
 #endif

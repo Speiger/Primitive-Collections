@@ -22,6 +22,7 @@ public class LISTS
 	
 	/**
 	 * Returns a Immutable EmptyList instance that is automatically casted.
+	 * @Type(T)
 	 * @return an empty list
 	 */
 	public static GENERIC_KEY_BRACES EmptyList KEY_GENERIC_TYPE emptyList() {
@@ -35,6 +36,7 @@ public class LISTS
 	/**
 	 * Returns a Immutable List instance based on the instance given.
 	 * @param l that should be made immutable/unmodifyable
+	 * @Type(T)
 	 * @return a unmodifiable list wrapper. If the list is implementing RandomAccess that is also transferred. If the List already a unmodifyable wrapper then it just returns itself.
 	 */
 	public static GENERIC_KEY_BRACES LIST KEY_GENERIC_TYPE unmodifiableList(LIST KEY_GENERIC_TYPE l) {
@@ -44,6 +46,7 @@ public class LISTS
 	/**
 	 * Returns a synchronized List instance based on the instance given.
 	 * @param l that should be synchronized
+	 * @Type(T)
 	 * @return a synchronized list wrapper. If the list is implementing RandomAccess or IARRAY that is also transferred. If the List already a synchronized wrapper then it just returns itself.
 	 */
 	public static GENERIC_KEY_BRACES LIST KEY_GENERIC_TYPE synchronizedList(LIST KEY_GENERIC_TYPE l) {
@@ -54,6 +57,7 @@ public class LISTS
 	 * Returns a synchronized List instance based on the instance given.
 	 * @param l that should be synchronized
 	 * @param mutex is the controller of the synchronization block.
+	 * @Type(T)
 	 * @return a synchronized list wrapper. If the list is implementing RandomAccess or IARRAY that is also transferred. If the List already a synchronized wrapper then it just returns itself.
 	 */
 	public static GENERIC_KEY_BRACES LIST KEY_GENERIC_TYPE synchronizedList(LIST KEY_GENERIC_TYPE l, Object mutex) {
@@ -63,6 +67,7 @@ public class LISTS
 	/**
 	 * Creates a Unmodifiable Singleton list
 	 * @param element that should be used in the Singleton
+	 * @Type(T)
 	 * @return a singleton list that is unmodifiable
 	 */
 	public static GENERIC_KEY_BRACES LIST KEY_GENERIC_TYPE singletonList(KEY_TYPE element) {

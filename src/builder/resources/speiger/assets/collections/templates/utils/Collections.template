@@ -23,6 +23,7 @@ public class COLLECTIONS
 	
 	/**
 	 * Returns a Immutable EmptyCollection instance that is automatically casted.
+	 * @Type(T)
 	 * @return an empty collection
 	 */
 	public static GENERIC_KEY_BRACES COLLECTION KEY_GENERIC_TYPE emptyCollection() {
@@ -36,6 +37,7 @@ public class COLLECTIONS
 	/**
 	 * Returns a Immutable Collection instance based on the instance given.
 	 * @param c that should be made immutable/unmodifiable
+	 * @Type(T)
 	 * @return a unmodifiable collection wrapper. If the Collection already a unmodifiable wrapper then it just returns itself.
 	 */
 	public static GENERIC_KEY_BRACES COLLECTION KEY_GENERIC_TYPE unmodifiableCollection(COLLECTION KEY_GENERIC_TYPE c) {
@@ -45,6 +47,7 @@ public class COLLECTIONS
 	/**
 	 * Returns a synchronized Collection instance based on the instance given.
 	 * @param c that should be synchronized
+	 * @Type(T)
 	 * @return a synchronized collection wrapper. If the Collection already a synchronized wrapper then it just returns itself.
 	 */
 	public static GENERIC_KEY_BRACES COLLECTION KEY_GENERIC_TYPE synchronizedCollection(COLLECTION KEY_GENERIC_TYPE c) {
@@ -55,6 +58,7 @@ public class COLLECTIONS
 	 * Returns a synchronized Collection instance based on the instance given.
 	 * @param c that should be synchronized
 	 * @param mutex is the controller of the synchronization block.
+	 * @Type(T)
 	 * @return a synchronized collection wrapper. If the Collection already a synchronized wrapper then it just returns itself.
 	 */
 	public static GENERIC_KEY_BRACES COLLECTION KEY_GENERIC_TYPE synchronizedCollection(COLLECTION KEY_GENERIC_TYPE c, Object mutex) {

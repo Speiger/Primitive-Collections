@@ -205,7 +205,8 @@ public interface LIST KEY_GENERIC_TYPE extends COLLECTION KEY_GENERIC_TYPE, List
 	 * @param to the end index of where the elements should be fetched to (exclusive)
 	 * @param type the type of the OutputArray
 	 * @return a array of the elements that were fetched
-	 */
+	 * @Type(K)
+ 	 */
 	public <K> K[] extractElements(int from, int to, Class<K> type);
 	
 	/**

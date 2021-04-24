@@ -11,10 +11,7 @@ import speiger.src.collections.PACKAGE.collections.ITERATOR;
 
 /**
  * Abstract implementation of the {@link LIST} interface.
-#if TYPE_OBJECT
- *
- * @param <T> the type of elements maintained by this Collection
-#endif
+ * @Type(T)
  */
 public abstract class ABSTRACT_LIST KEY_GENERIC_TYPE extends ABSTRACT_COLLECTION KEY_GENERIC_TYPE implements LIST KEY_GENERIC_TYPE 
 {

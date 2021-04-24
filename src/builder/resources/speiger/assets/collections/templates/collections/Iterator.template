@@ -11,10 +11,7 @@ import speiger.src.collections.PACKAGE.functions.CONSUMER;
 
 /**
  * A Type-Specific {@link Iterator} that reduces (un)boxing
-#if TYPE_OBJECT
- *
- * @param <T> the type of elements maintained by this Collection
-#endif
+ * @Type(T)
  */
 public interface ITERATOR KEY_GENERIC_TYPE extends Iterator<CLASS_TYPE>
 {

@@ -43,7 +43,7 @@ import speiger.src.collections.utils.SanityChecks;
  * <p>This implementation is optimized to improve how data is processed with interfaces like {@link IARRAY}, {@link Stack}
  * and with optimized functions that use type-specific implementations for primitives and optimized logic for bulkactions.
  *
- * @param <T> the type of elements maintained by this Collection
+ * @Type(T)
  */
 public class ARRAY_LIST KEY_GENERIC_TYPE extends ABSTRACT_LIST KEY_GENERIC_TYPE implements IARRAY<KEY_TYPE>, Stack<KEY_TYPE>
 #else
@@ -141,7 +141,8 @@ public class ARRAY_LIST KEY_GENERIC_TYPE extends ABSTRACT_LIST KEY_GENERIC_TYPE 
 	/**
 	 * Creates a wrapped arraylist that uses the array as backing array
 	 * @param a elements that should be wrapped
-	 * @return a Wrapped list using the input array
+	 * @Type(T)
+ 	 * @return a Wrapped list using the input array
 	 */
 	public static GENERIC_KEY_BRACES ARRAY_LIST KEY_GENERIC_TYPE wrap(KEY_TYPE... a) {
 		return wrap(a, a.length);
@@ -151,6 +152,7 @@ public class ARRAY_LIST KEY_GENERIC_TYPE extends ABSTRACT_LIST KEY_GENERIC_TYPE 
 	 * Creates a wrapped arraylist that uses the array as backing array and a custom fill size
 	 * @param a elements that should be wrapped
 	 * @param length the size of the elements within the array
+	 * @Type(T)
  	 * @return a Wrapped list using the input array
 	 */
 	public static GENERIC_KEY_BRACES ARRAY_LIST KEY_GENERIC_TYPE wrap(KEY_TYPE[] a, int length) {
@@ -165,6 +167,7 @@ public class ARRAY_LIST KEY_GENERIC_TYPE extends ABSTRACT_LIST KEY_GENERIC_TYPE 
 	/**
 	 * Creates a new ArrayList with a EmptyObject array of the Type requested
 	 * @param c the type of the array
+	 * @Type(T)
 	 * @return a typed List
 	 */
 	public static GENERIC_KEY_BRACES ARRAY_LIST KEY_GENERIC_TYPE of(Class<KEY_TYPE> c) {

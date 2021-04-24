@@ -14,6 +14,7 @@ public class ITERATORS
 	
 	/**
 	 * Returns a Immutable EmptyIterator instance that is automatically casted.
+	 * @Type(T)
 	 * @return an empty iterator
 	 */
 	public static GENERIC_KEY_BRACES EmptyIterator KEY_GENERIC_TYPE emptyIterator() {
@@ -65,6 +66,7 @@ public class ITERATORS
 	/**
 	 * Returns a Immutable Iterator instance based on the instance given.
 	 * @param iterator that should be made immutable/unmodifyable
+	 * @Type(T)
 	 * @return a unmodifiable iterator wrapper. If the Iterator already a unmodifyable wrapper then it just returns itself.
 	 */
 	public static GENERIC_KEY_BRACES ITERATOR KEY_GENERIC_TYPE unmodifiable(ITERATOR KEY_GENERIC_TYPE iterator) {
@@ -78,6 +80,7 @@ public class ITERATORS
 	/**
 	 * Returns a Immutable ListIterator instance based on the instance given.
 	 * @param iterator that should be made immutable/unmodifyable
+	 * @Type(T)
 	 * @return a unmodifiable listiterator wrapper. If the ListIterator already a unmodifyable wrapper then it just returns itself.
 	 */
 	public static GENERIC_KEY_BRACES LIST_ITERATOR KEY_GENERIC_TYPE unmodifiable(LIST_ITERATOR KEY_GENERIC_TYPE iterator) {
@@ -93,6 +96,7 @@ public class ITERATORS
 	/**
 	 * Returns a Array Wrapping iterator
 	 * @param a the array that should be wrapped
+	 * @ArrayType(T)
 	 * @return a Iterator that is wrapping a array.
 	 */
 	public static GENERIC_KEY_BRACES ArrayIterator KEY_GENERIC_TYPE wrap(KEY_TYPE[] a) {
@@ -104,6 +108,7 @@ public class ITERATORS
 	 * @param a the array that should be wrapped.
 	 * @param start the index to be started from.
 	 * @param end the index that should be ended.
+	 * @ArrayType(T)
 	 * @return a Iterator that is wrapping a array.
 	 */
 	public static GENERIC_KEY_BRACES ArrayIterator KEY_GENERIC_TYPE wrap(KEY_TYPE[] a, int start, int end) {
@@ -114,6 +119,7 @@ public class ITERATORS
 	 * Iterates over a iterator and inserts the values into the array and returns the amount that was inserted
 	 * @param a where the elements should be inserted
 	 * @param i the source iterator
+	 * @ArrayType(T)
 	 * @return the amount of elements that were inserted into the array.
 	 */
 	public static GENERIC_KEY_BRACES int unwrap(KEY_TYPE[] a, Iterator<? extends CLASS_TYPE> i) {
@@ -125,6 +131,7 @@ public class ITERATORS
 	 * @param a where the elements should be inserted
 	 * @param i the source iterator
 	 * @param offset the array offset where the start should be
+	 * @ArrayType(T)
 	 * @return the amount of elements that were inserted into the array.
 	 */
 	public static GENERIC_KEY_BRACES int unwrap(KEY_TYPE[] a, Iterator<? extends CLASS_TYPE> i, int offset) {
@@ -137,6 +144,7 @@ public class ITERATORS
 	 * @param i the source iterator
 	 * @param offset the array offset where the start should be
 	 * @param max the maximum values that should be extracted from the source
+	 * @ArrayType(T)
 	 * @return the amount of elements that were inserted into the array.
 	 * @throws IllegalStateException if max is smaller the 0 or if the maximum index is larger then the array
 	 */
@@ -153,6 +161,7 @@ public class ITERATORS
 	 * Iterates over a iterator and inserts the values into the array and returns the amount that was inserted
 	 * @param a where the elements should be inserted
 	 * @param i the source iterator
+	 * @ArrayType(T)
 	 * @return the amount of elements that were inserted into the array.
 	 */
 	public static GENERIC_KEY_BRACES int unwrap(KEY_TYPE[] a, ITERATOR KEY_GENERIC_TYPE i) {
@@ -165,6 +174,7 @@ public class ITERATORS
 	 * @param a where the elements should be inserted
 	 * @param i the source iterator
 	 * @param offset the array offset where the start should be
+	 * @ArrayType(T)
 	 * @return the amount of elements that were inserted into the array.
 	 */
 	public static GENERIC_KEY_BRACES int unwrap(KEY_TYPE[] a, ITERATOR KEY_GENERIC_TYPE i, int offset) {
@@ -178,6 +188,7 @@ public class ITERATORS
 	 * @param i the source iterator
 	 * @param offset the array offset where the start should be
 	 * @param max the maximum values that should be extracted from the source
+	 * @ArrayType(T)
 	 * @return the amount of elements that were inserted into the array.
 	 * @throws IllegalStateException if max is smaller the 0 or if the maximum index is larger then the array
 	 */
@@ -195,6 +206,7 @@ public class ITERATORS
 	 * Iterates over a iterator and inserts the values into the array and returns the amount that was inserted
 	 * @param a where the elements should be inserted
 	 * @param i the source iterator
+	 * @ArrayType(T)
 	 * @return the amount of elements that were inserted into the array.
 	 */
 	public static GENERIC_KEY_BRACES int unwrap(CLASS_TYPE[] a, ITERATOR KEY_GENERIC_TYPE i) {
@@ -207,6 +219,7 @@ public class ITERATORS
 	 * @param a where the elements should be inserted
 	 * @param i the source iterator
 	 * @param offset the array offset where the start should be
+	 * @ArrayType(T)
 	 * @return the amount of elements that were inserted into the array.
 	 */
 	public static GENERIC_KEY_BRACES int unwrap(CLASS_TYPE[] a, ITERATOR KEY_GENERIC_TYPE i, int offset) {
@@ -220,6 +233,7 @@ public class ITERATORS
 	 * @param i the source iterator
 	 * @param offset the array offset where the start should be
 	 * @param max the maximum values that should be extracted from the source
+	 * @ArrayType(T)
 	 * @return the amount of elements that were inserted into the array.
 	 * @throws IllegalStateException if max is smaller the 0 or if the maximum index is larger then the array
 	 */

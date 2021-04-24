@@ -87,6 +87,7 @@ public class SanityChecks
 	/**
 	 * Helper method to start a ForkJoinTask. This method will await the finalization of said task
 	 * @param task the Task to invoke
+	 * @param <T> the type of the task
 	 */
 	public static <T> void invokeTask(ForkJoinTask<T> task) {
 		if(FORCE_ASYNC.get().booleanValue()) invokeAsyncTask(task);
@@ -96,6 +97,7 @@ public class SanityChecks
 	/**
 	 * Helper method to start a ForkJoinTask. This method will not await the finalization of said task
 	 * @param task the Task to invoke
+	 * @param <T> the type of the task
 	 */
 	public static <T> void invokeAsyncTask(ForkJoinTask<T> task) {
 		getPool().execute(task);
