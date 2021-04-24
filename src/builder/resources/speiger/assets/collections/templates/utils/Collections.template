@@ -35,8 +35,8 @@ public class COLLECTIONS
 	
 	/**
 	 * Returns a Immutable Collection instance based on the instance given.
-	 * @param l that should be made immutable/unmodifyable
-	 * @return a unmodifiable collection wrapper. If the Collection already a unmodifyable wrapper then it just returns itself.
+	 * @param c that should be made immutable/unmodifiable
+	 * @return a unmodifiable collection wrapper. If the Collection already a unmodifiable wrapper then it just returns itself.
 	 */
 	public static GENERIC_KEY_BRACES COLLECTION KEY_GENERIC_TYPE unmodifiableCollection(COLLECTION KEY_GENERIC_TYPE c) {
 		return c instanceof UnmodifiableCollection ? c : new UnmodifiableCollectionBRACES(c);
@@ -44,7 +44,7 @@ public class COLLECTIONS
 	
 	/**
 	 * Returns a synchronized Collection instance based on the instance given.
-	 * @param l that should be synchronized
+	 * @param c that should be synchronized
 	 * @return a synchronized collection wrapper. If the Collection already a synchronized wrapper then it just returns itself.
 	 */
 	public static GENERIC_KEY_BRACES COLLECTION KEY_GENERIC_TYPE synchronizedCollection(COLLECTION KEY_GENERIC_TYPE c) {
@@ -53,7 +53,7 @@ public class COLLECTIONS
 	
 	/**
 	 * Returns a synchronized Collection instance based on the instance given.
-	 * @param l that should be synchronized
+	 * @param c that should be synchronized
 	 * @param mutex is the controller of the synchronization block.
 	 * @return a synchronized collection wrapper. If the Collection already a synchronized wrapper then it just returns itself.
 	 */

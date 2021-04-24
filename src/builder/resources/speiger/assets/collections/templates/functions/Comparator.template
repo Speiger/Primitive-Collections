@@ -10,6 +10,9 @@ public interface COMPARATOR extends Comparator<CLASS_TYPE>
 {
 	/**
 	 * Type-Specific compare function to reduce (un)boxing
+     * @param o1 the first object to be compared.
+     * @param o2 the second object to be compared.
+     * @return a negative integer, zero, or a positive integer as the first argument is less than, equal to, or greater than the second.
 	 * @see Comparator#compare(Object, Object)
 	 */
 	int compare(KEY_TYPE o1, KEY_TYPE o2);

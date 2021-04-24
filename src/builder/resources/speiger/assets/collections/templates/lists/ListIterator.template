@@ -9,12 +9,14 @@ public interface LIST_ITERATOR KEY_GENERIC_TYPE extends ListIterator<CLASS_TYPE>
 #if !TYPE_OBJECT
 	/**
 	 * A Primitive set function to reduce (un)boxing
+	 * @param e the element that should replace the last returned value
 	 * @see ListIterator#set(Object)
 	 */
 	public void set(KEY_TYPE e);
 	
 	/**
 	 * A Primitive set function to reduce (un)boxing
+	 * @param e the element that should be inserted before the last returned value
 	 * @see ListIterator#set(Object)
 	 */
 	public void add(KEY_TYPE e);

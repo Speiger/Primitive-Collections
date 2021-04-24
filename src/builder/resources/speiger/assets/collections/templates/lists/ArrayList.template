@@ -42,6 +42,8 @@ import speiger.src.collections.utils.SanityChecks;
  * 
  * <p>This implementation is optimized to improve how data is processed with interfaces like {@link IARRAY}, {@link Stack}
  * and with optimized functions that use type-specific implementations for primitives and optimized logic for bulkactions.
+ *
+ * @param <T> the type of elements maintained by this Collection
  */
 public class ARRAY_LIST KEY_GENERIC_TYPE extends ABSTRACT_LIST KEY_GENERIC_TYPE implements IARRAY<KEY_TYPE>, Stack<KEY_TYPE>
 #else
@@ -70,6 +72,7 @@ public class ARRAY_LIST KEY_GENERIC_TYPE extends ABSTRACT_LIST KEY_GENERIC_TYPE 
 	
 	/**
 	 * Creates a new ArrayList with the specific requested size
+	 * @param size the minimum initial size of the Backing array
 	 */
 	public ARRAY_LIST(int size) {
 		data = NEW_KEY_ARRAY(size);
@@ -77,6 +80,7 @@ public class ARRAY_LIST KEY_GENERIC_TYPE extends ABSTRACT_LIST KEY_GENERIC_TYPE 
 	
 	/**
 	 * Creates a new ArrayList a copy with the contents of the Collection.
+	 * @param c the elements that should be added into the list
 	 */
 	public ARRAY_LIST(Collection<? extends CLASS_TYPE> c) {
 		this(c.size());
@@ -85,6 +89,7 @@ public class ARRAY_LIST KEY_GENERIC_TYPE extends ABSTRACT_LIST KEY_GENERIC_TYPE 
 	
 	/**
 	 * Creates a new ArrayList a copy with the contents of the Collection.
+	 * @param c the elements that should be added into the list
 	 */
 	public ARRAY_LIST(COLLECTION KEY_GENERIC_TYPE c) {
 		this(c.size());
@@ -93,6 +98,7 @@ public class ARRAY_LIST KEY_GENERIC_TYPE extends ABSTRACT_LIST KEY_GENERIC_TYPE 
 	
 	/**
 	 * Creates a new ArrayList a copy with the contents of the List.
+	 * @param l the elements that should be added into the list
 	 */
 	public ARRAY_LIST(LIST KEY_GENERIC_TYPE l) {
 		this(l.size());
@@ -102,6 +108,7 @@ public class ARRAY_LIST KEY_GENERIC_TYPE extends ABSTRACT_LIST KEY_GENERIC_TYPE 
 	
 	/**
 	 * Creates a new ArrayList with a Copy of the array
+	 * @param a the array that should be copied
 	 */
 	public ARRAY_LIST(KEY_TYPE[] a)	{
 		this(a, 0, a.length);
@@ -109,6 +116,8 @@ public class ARRAY_LIST KEY_GENERIC_TYPE extends ABSTRACT_LIST KEY_GENERIC_TYPE 
 	
 	/**
 	 * Creates a new ArrayList with a Copy of the array with a custom length
+	 * @param a the array that should be copied
+	 * @param length the desired length that should be copied
 	 */
 	public ARRAY_LIST(KEY_TYPE[] a, int length) {
 		this(a, 0, length);
@@ -116,6 +125,11 @@ public class ARRAY_LIST KEY_GENERIC_TYPE extends ABSTRACT_LIST KEY_GENERIC_TYPE 
 	
 	/**
 	 * Creates a new ArrayList with a Copy of the array with in the custom range.
+	 * @param a the array that should be copied
+	 * @param offset the starting offset of where the array should be copied from
+	 * @param length the desired length that should be copied
+	 * @throws IllegalStateException if offset is smaller then 0
+	 * @throws IllegalStateException if the offset + length exceeds the array length
 	 */
 	public ARRAY_LIST(KEY_TYPE[] a, int offset, int length) {
 		this(length);
@@ -134,7 +148,7 @@ public class ARRAY_LIST KEY_GENERIC_TYPE extends ABSTRACT_LIST KEY_GENERIC_TYPE 
 	}
 	
 	/**
-	 * Creates a wrapped arraylist that uses the array as backing array and a custom fillsize
+	 * Creates a wrapped arraylist that uses the array as backing array and a custom fill size
 	 * @param a elements that should be wrapped
 	 * @param length the size of the elements within the array
  	 * @return a Wrapped list using the input array
@@ -199,7 +213,7 @@ public class ARRAY_LIST KEY_GENERIC_TYPE extends ABSTRACT_LIST KEY_GENERIC_TYPE 
 	
 	/**
 	 * Appends the specified elements to the index of the list.
-	 * This function may delegate to more appropiate function if nessesary
+	 * This function may delegate to more appropriate function if necessary
 	 * @param index the index where to append the elements to
 	 * @param c the elements to append to the list
 	 * @throws IndexOutOfBoundsException if index is outside of the lists range
@@ -221,7 +235,7 @@ public class ARRAY_LIST KEY_GENERIC_TYPE extends ABSTRACT_LIST KEY_GENERIC_TYPE 
 	
 	/**
 	 * Appends the specified elements to the index of the list.
-	 * This function may delegate to more appropiate function if nessesary
+	 * This function may delegate to more appropriate function if necessary
 	 * @param index the index where to append the elements to
 	 * @param c the elements to append to the list
 	 * @throws IndexOutOfBoundsException if index is outside of the lists range
@@ -422,7 +436,7 @@ public class ARRAY_LIST KEY_GENERIC_TYPE extends ABSTRACT_LIST KEY_GENERIC_TYPE 
 	/**
 	 * Sorts the elements specified by the Natural order either by using the Comparator or the elements
 	 * @param c the sorter of the elements, can be null
-	 * @see List#sort(Comparator)
+	 * @see java.util.List#sort(Comparator)
 	 * @see ARRAYS#stableSort(KEY_TYPE[], Comparator)
 	 */
 	@Override
@@ -434,7 +448,7 @@ public class ARRAY_LIST KEY_GENERIC_TYPE extends ABSTRACT_LIST KEY_GENERIC_TYPE 
 	/**
 	 * Sorts the elements specified by the Natural order either by using the Comparator or the elements using a unstable sort
 	 * @param c the sorter of the elements, can be null
-	 * @see List#sort(Comparator)
+	 * @see java.util.List#sort(Comparator)
 	 * @see ARRAYS#unstableSort(KEY_TYPE[], Comparator)
 	 */
 	@Override
@@ -483,7 +497,7 @@ public class ARRAY_LIST KEY_GENERIC_TYPE extends ABSTRACT_LIST KEY_GENERIC_TYPE 
 	/**
 	 * Sorts the elements specified by the Natural order either by using the Comparator or the elements
 	 * @param c the sorter of the elements, can be null
-	 * @see List#sort(Comparator)
+	 * @see java.util.List#sort(java.util.Comparator)
 	 * @see ARRAYS#stableSort(KEY_TYPE[], COMPARATOR)
 	 */
 	@Override
@@ -495,7 +509,7 @@ public class ARRAY_LIST KEY_GENERIC_TYPE extends ABSTRACT_LIST KEY_GENERIC_TYPE 
 	/**
 	 * Sorts the elements specified by the Natural order either by using the Comparator or the elements using a unstable sort
 	 * @param c the sorter of the elements, can be null
-	 * @see List#sort(Comparator)
+	 * @see java.util.List#sort(java.util.Comparator)
 	 * @see ARRAYS#unstableSort(KEY_TYPE[], COMPARATOR)
 	 */
 	@Override
@@ -523,7 +537,7 @@ public class ARRAY_LIST KEY_GENERIC_TYPE extends ABSTRACT_LIST KEY_GENERIC_TYPE 
 	 * @param index of the element that should be provided
 	 * @return the element that was requested
 	 * @throws ArrayIndexOutOfBoundsException if the index is out of bounds
-	 * @see Stack#peek(int)
+	 * @see speiger.src.collections.utils.Stack#peek(int)
 	 */
 	@Override
 	public KEY_TYPE PEEK(int index) {
@@ -552,8 +566,8 @@ public class ARRAY_LIST KEY_GENERIC_TYPE extends ABSTRACT_LIST KEY_GENERIC_TYPE 
      * }</pre>
      *
      * @param action The action to be performed for each element
-     * @throws java.util.NullPointerException if the specified action is null
-     * @see Iterable#forEach(Consumer)
+     * @throws NullPointerException if the specified action is null
+     * @see Iterable#forEach(java.util.function.Consumer)
      */
 	@Override
 	public void forEach(CONSUMER KEY_SUPER_GENERIC_TYPE action) {
@@ -638,7 +652,7 @@ public class ARRAY_LIST KEY_GENERIC_TYPE extends ABSTRACT_LIST KEY_GENERIC_TYPE 
 	/**
 	 * A Type-Specific implementation of remove. This implementation iterates over the elements until it finds the element that is searched for or it runs out of elements.
 	 * It stops after finding the first element
-	 * @param e the element that is searched for
+	 * @param type the element that is searched for
 	 * @return true if the element was found and removed.
 	 */
 	@Override
@@ -652,7 +666,6 @@ public class ARRAY_LIST KEY_GENERIC_TYPE extends ABSTRACT_LIST KEY_GENERIC_TYPE 
 #endif
 	/**
 	 * A Type-Specific pop function to reduce (un)boxing
-	 * @param index the index of the element to fetch
 	 * @return the value of the requested index
 	 * @throws IndexOutOfBoundsException if the index is out of range
 	 */
@@ -663,7 +676,7 @@ public class ARRAY_LIST KEY_GENERIC_TYPE extends ABSTRACT_LIST KEY_GENERIC_TYPE 
 	
 	/**
 	 * A function to remove all elements that were provided in the other collection
-	 * This function might delegate to a more appropiate function if nessesary
+	 * This function might delegate to a more appropriate function if necessary
 	 * @param c the elements that should be removed
 	 * @return true if the collection was modified
 	 * @throws NullPointerException if the collection is null
@@ -688,7 +701,7 @@ public class ARRAY_LIST KEY_GENERIC_TYPE extends ABSTRACT_LIST KEY_GENERIC_TYPE 
 	
 	/**
 	 * A function to retain all elements that were provided in the other collection
-	 * This function might delegate to a more appropiate function if nessesary
+	 * This function might delegate to a more appropriate function if necessary
 	 * @param c the elements that should be kept. If empty, ARRAY_LIST#clear is called.
 	 * @return true if the collection was modified
 	 * @throws NullPointerException if the collection is null
@@ -762,7 +775,7 @@ public class ARRAY_LIST KEY_GENERIC_TYPE extends ABSTRACT_LIST KEY_GENERIC_TYPE 
 	
 	/**
 	 * A function to retain all elements that were provided in the other collection
-	 * This function might delegate to a more appropiate function if nessesary
+	 * This function might delegate to a more appropriate function if necessary
 	 * @param c the elements that should be kept. If empty, ARRAY_LIST#clear is called.
 	 * @return true if the collection was modified
 	 * @throws NullPointerException if the collection is null

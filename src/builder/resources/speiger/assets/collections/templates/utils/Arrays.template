@@ -374,6 +374,7 @@ public class ARRAYS
 	 * Sorts an array according to the natural ascending order using InsertionSort,
 	 * @param array the array that needs to be sorted
 	 * @param from where the array should be sorted from
+	 * @param to where the array should be sorted to
 	 */
 	public static COMPAREABLE_KEY_BRACES void insertionSort(KEY_TYPE[] array, int from, int to) {
 		for (int i = from+1;i<to; i++) {
@@ -449,6 +450,7 @@ public class ARRAYS
 	 * Sorts an array according to the natural ascending order using Selection Sort,
 	 * @param array the array that needs to be sorted
 	 * @param from where the array should be sorted from
+	 * @param to where the array should be sorted to
 	 */
 	public static COMPAREABLE_KEY_BRACES void selectionSort(KEY_TYPE[] array, int from, int to) {
     	for (int i = from; i < to; i++) {
@@ -491,6 +493,7 @@ public class ARRAYS
 	 * Sorts the specified range of elements according to the order induced by the specified comparator using Merge Sort,
 	 * This implementation was copied from <a href="https://github.com/vigna/fastutil">FastUtil</a> with a couple custom optimizations
 	 * @param array the array that needs to be sorted
+	 * @param supp the auxillary array that is used to simplify the sorting
 	 * @param from where the array should be sorted from
 	 * @param to where the array should be sorted to
 	 * @param comp the Comparator that decides the sorting order
@@ -538,6 +541,7 @@ public class ARRAYS
 	 * Sorts an array according to the natural ascending order using Merge Sort,
 	 * This implementation was copied from <a href="https://github.com/vigna/fastutil">FastUtil</a> with a couple custom optimizations
 	 * @param array the array that needs to be sorted
+	 * @param supp the auxillary array that is used to simplify the sorting
 	 * @param from where the array should be sorted from
 	 * @param to where the array should be sorted to
 	 */
@@ -588,6 +592,7 @@ public class ARRAYS
 	 * Sorts the specified range of elements according to the order induced by the specified comparator using Parallel Merge Sort,
 	 * This implementation was copied from <a href="https://github.com/vigna/fastutil">FastUtil</a> with a couple custom optimizations
 	 * @param array the array that needs to be sorted
+	 * @param supp the auxillary array that is used to simplify the sorting
 	 * @param from where the array should be sorted from
 	 * @param to where the array should be sorted to
 	 * @param comp the Comparator that decides the sorting order
@@ -626,6 +631,7 @@ public class ARRAYS
 	 * Sorts an array according to the natural ascending order using Parallel Merge Sort,
 	 * This implementation was copied from <a href="https://github.com/vigna/fastutil">FastUtil</a> with a couple custom optimizations
 	 * @param array the array that needs to be sorted
+	 * @param supp the auxillary array that is used to simplify the sorting
 	 * @param from where the array should be sorted from
 	 * @param to where the array should be sorted to
 	 * @note This parallelization is invoked through {@link SanityChecks#invokeTask} which the threadpool can be changed as needed

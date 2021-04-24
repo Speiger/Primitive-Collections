@@ -67,7 +67,7 @@ public class SanityChecks
 	 * Internal function that checks if the given array-size is big enough for the access.
 	 * @param arraySize the size of the Array
 	 * @param offset the offset of the access
-	 * @param accessSize the lenght of the access
+	 * @param accessSize the length of the access
 	 * @throws IllegalStateException if offset or accessSize is negative or the range goes out of the array-size
 	 */
 	public static void checkArrayCapacity(int arraySize, int offset, int accessSize) {
@@ -77,8 +77,8 @@ public class SanityChecks
 	}
 	
 	/**
-	 * Returns if the current thread-pool can handle multi-threading tasks
-	 * @return true if the threadcount is bigger the 1
+	 * Returns if the current thread-pool can handle Multi-threading tasks
+	 * @return true if the thread-count is bigger the 1
 	 */
 	public static boolean canParallelTask() {
 		return getPool().getParallelism() > 1 || FORCE_IGNORE_PARALLELISM;

@@ -46,7 +46,7 @@ public interface LIST KEY_GENERIC_TYPE extends COLLECTION KEY_GENERIC_TYPE, List
 	 * @param c the elements that need to be added
      * @param index index at which the specified elements is to be inserted
 	 * @return true if the list was modified
-	 * @see java.util.List#addAll(int, Collection)
+	 * @see java.util.List#addAll(int, java.util.Collection)
 	 */
 	public boolean addAll(int index, COLLECTION KEY_GENERIC_TYPE c);
 	
@@ -210,7 +210,7 @@ public interface LIST KEY_GENERIC_TYPE extends COLLECTION KEY_GENERIC_TYPE, List
 	
 	/**
 	 * Sorts the elements specified by the Natural order either by using the Comparator or the elements
-	 * @see List#sort(Comparator)
+	 * @see java.util.List#sort(Comparator)
 	 * @see ARRAYS#stableSort(KEY_TYPE[], Comparator)
 	 */
 	@Override
@@ -227,7 +227,8 @@ public interface LIST KEY_GENERIC_TYPE extends COLLECTION KEY_GENERIC_TYPE, List
 	
 	/**
 	 * Sorts the elements specified by the Natural order either by using the Comparator or the elements using a unstable sort
-	 * @see List#sort(Comparator)
+ 	 * @param c the sorter of the elements, can be null
+	 * @see java.util.List#sort(Comparator)
 	 * @see ARRAYS#unstableSort(KEY_TYPE[], Comparator)
 	 */
 	public default void unstableSort(Comparator<? super CLASS_TYPE> c) {
@@ -263,7 +264,7 @@ public interface LIST KEY_GENERIC_TYPE extends COLLECTION KEY_GENERIC_TYPE, List
 	/**
 	 * Sorts the elements specified by the Natural order either by using the Comparator or the elements
 	 * @param c the sorter of the elements, can be null
-	 * @see List#sort(Comparator)
+	 * @see java.util.List#sort(Comparator)
 	 * @see ARRAYS#stableSort(KEY_TYPE[], COMPARATOR)
 	 */
 	public default void sort(COMPARATOR c) {
@@ -277,8 +278,9 @@ public interface LIST KEY_GENERIC_TYPE extends COLLECTION KEY_GENERIC_TYPE, List
 		}
 	}
 	
-	/** {@inheritDoc}
+	/** 
 	 * <p>This default implementation delegates to the corresponding type-specific function.
+	 * @param c the sorter of the elements, can be null
 	 * @deprecated Please use the corresponding type-specific function instead. 
 	 */
 	@Deprecated
@@ -289,7 +291,7 @@ public interface LIST KEY_GENERIC_TYPE extends COLLECTION KEY_GENERIC_TYPE, List
 	/**
 	 * Sorts the elements specified by the Natural order either by using the Comparator or the elements using a unstable sort
 	 * @param c the sorter of the elements, can be null
-	 * @see List#sort(Comparator)
+	 * @see java.util.List#sort(Comparator)
 	 * @see ARRAYS#unstableSort(KEY_TYPE[], COMPARATOR)
 	 */
 	public default void unstableSort(COMPARATOR c) {
@@ -306,21 +308,21 @@ public interface LIST KEY_GENERIC_TYPE extends COLLECTION KEY_GENERIC_TYPE, List
 #endif
 	/**
 	 * A Type-Specific Iterator of listIterator
-	 * @see List#listIterator
+	 * @see java.util.List#listIterator
 	 */
 	@Override
 	public LIST_ITERATOR KEY_GENERIC_TYPE listIterator();
 	
 	/**
 	 * A Type-Specific Iterator of listIterator
-	 * @see List#listIterator(int)
+	 * @see java.util.List#listIterator(int)
 	 */
 	@Override
 	public LIST_ITERATOR KEY_GENERIC_TYPE listIterator(int index);
 	
 	/**
 	 * A Type-Specific List of subList
-	 * @see List#subList(int, int)
+	 * @see java.util.List#subList(int, int)
 	 */
 	@Override
 	public LIST KEY_GENERIC_TYPE subList(int from, int to);

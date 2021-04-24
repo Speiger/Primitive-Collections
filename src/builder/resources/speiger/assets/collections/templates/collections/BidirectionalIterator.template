@@ -8,15 +8,17 @@ import speiger.src.collections.objects.collections.ObjectBidirectionalIterator;
 public interface BI_ITERATOR KEY_GENERIC_TYPE extends ITERATOR KEY_GENERIC_TYPE, ObjectBidirectionalIterator<CLASS_TYPE>
 #else
 /**
- * This is a basically a {@link ListIterator} without the index functions.
+ * This is a basically a {@link java.util.ListIterator} without the index functions.
  * Allowing to have a simple Bidirectional Iterator without having to keep track of the Iteration index.
+ *
+ * @param <T> the type of elements maintained by this Collection
  */
 public interface BI_ITERATOR KEY_GENERIC_TYPE extends ITERATOR KEY_GENERIC_TYPE
 #endif
 {
 	/**
 	 * Returns true if the Iterator has a Previous element
-	 * @return true if the Iterator has a Previouse element
+	 * @return true if the Iterator has a Previous element
 	 */
 	public boolean hasPrevious();
 	

@@ -13,6 +13,10 @@ import speiger.src.collections.utils.SanityChecks;
 #endif
 /**
  * A Type-Specific {@link Collection} that reduces (un)boxing
+#if TYPE_OBJECT
+ *
+ * @param <T> the type of elements maintained by this Collection
+#endif
  */
 public interface COLLECTION KEY_GENERIC_TYPE extends Collection<CLASS_TYPE>, ITERABLE KEY_GENERIC_TYPE
 {
