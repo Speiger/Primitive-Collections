@@ -345,11 +345,11 @@ public class ARRAYS
 	public static GENERIC_KEY_BRACES void insertionSort(KEY_TYPE[] array, int from, int to, COMPARATOR KEY_GENERIC_TYPE comp) {
 		for (int i = from+1;i<to; i++) {
 			KEY_TYPE current = array[i];
-    		int j = i - 1;
-    		while(j >= from && comp.compare(current, array[j]) < 0) {
-    			array[j+1] = array[j--];
-    		}
-    		array[j+1] = current;
+			int j = i - 1;
+			while(j >= from && comp.compare(current, array[j]) < 0) {
+				array[j+1] = array[j--];
+			}
+			array[j+1] = current;
 		}
 	}
 	

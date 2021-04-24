@@ -611,7 +611,7 @@ public class ARRAY_LIST KEY_GENERIC_TYPE extends ABSTRACT_LIST KEY_GENERIC_TYPE 
 #if TYPE_BYTE || TYPE_SHORT || TYPE_CHAR || TYPE_FLOAT
 			data[i] = SanityChecks.SANITY_CAST(o.APPLY_CAST(data[i]));
 #else
-	data[i] = o.APPLY(data[i]);
+			data[i] = o.APPLY(data[i]);
 #endif
 	}
 	

@@ -80,6 +80,15 @@ public interface NAVIGABLE_MAP KEY_VALUE_GENERIC_TYPE extends SORTED_MAP KEY_VAL
 	default NAVIGABLE_MAP KEY_VALUE_GENERIC_TYPE tailMap(CLASS_TYPE fromKey) { return tailMap(OBJ_TO_KEY(fromKey), true); }
 #else
 	@Override
+	default MAP.Entry KEY_VALUE_GENERIC_TYPE lowerEntry(CLASS_TYPE key) { return lowerEntry(OBJ_TO_KEY(key)); }
+	@Override
+	default MAP.Entry KEY_VALUE_GENERIC_TYPE floorEntry(CLASS_TYPE key) { return floorEntry(OBJ_TO_KEY(key)); }
+	@Override
+	default MAP.Entry KEY_VALUE_GENERIC_TYPE ceilingEntry(CLASS_TYPE key) { return ceilingEntry(OBJ_TO_KEY(key)); }
+	@Override
+	default MAP.Entry KEY_VALUE_GENERIC_TYPE higherEntry(CLASS_TYPE key) { return higherEntry(OBJ_TO_KEY(key)); }
+	
+	@Override
 	public NAVIGABLE_MAP KEY_VALUE_GENERIC_TYPE subMap(CLASS_TYPE fromKey, boolean fromInclusive, CLASS_TYPE toKey, boolean toInclusive);
 	@Override
 	public NAVIGABLE_MAP KEY_VALUE_GENERIC_TYPE headMap(CLASS_TYPE toKey, boolean inclusive);

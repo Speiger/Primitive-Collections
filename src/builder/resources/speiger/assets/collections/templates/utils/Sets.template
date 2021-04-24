@@ -1,5 +1,11 @@
 package speiger.src.collections.PACKAGE.utils;
 
+#if TYPE_BOOLEAN
+import speiger.src.collections.booleans.collections.BooleanIterator;
+import speiger.src.collections.booleans.sets.AbstractBooleanSet;
+import speiger.src.collections.booleans.sets.BooleanSet;
+import speiger.src.collections.booleans.utils.BooleanCollections.EmptyCollection;
+#else
 #if TYPE_OBJECT
 import java.util.Comparator;
 
@@ -8,13 +14,16 @@ import speiger.src.collections.PACKAGE.collections.BI_ITERATOR;
 #if !TYPE_OBJECT
 import speiger.src.collections.PACKAGE.functions.COMPARATOR;
 #endif
+import speiger.src.collections.PACKAGE.collections.ITERATOR;
 import speiger.src.collections.PACKAGE.sets.NAVIGABLE_SET;
+import speiger.src.collections.PACKAGE.sets.ABSTRACT_SET;
 import speiger.src.collections.PACKAGE.sets.SET;
 import speiger.src.collections.PACKAGE.sets.SORTED_SET;
 import speiger.src.collections.PACKAGE.utils.COLLECTIONS.EmptyCollection;
 import speiger.src.collections.PACKAGE.utils.COLLECTIONS.SynchronizedCollection;
 import speiger.src.collections.PACKAGE.utils.COLLECTIONS.UnmodifiableCollection;
 import speiger.src.collections.utils.ITrimmable;
+#endif
 
 public class SETS
 {
@@ -28,6 +37,7 @@ public class SETS
 #endif
 	}
 	
+#if !TYPE_BOOLEAN
 	public static GENERIC_KEY_BRACES SET KEY_GENERIC_TYPE synchronizedSet(SET KEY_GENERIC_TYPE s) {
 		return s instanceof SynchronizedSet ? s : (s instanceof ITrimmable ? new SynchronizedTrimSetBRACES(s) : new SynchronizedSetBRACES(s));
 	}
@@ -64,6 +74,44 @@ public class SETS
 		return s instanceof UnmodifiableNavigableSet ? s : new UnmodifiableNavigableSetBRACES(s);
 	}
 	
+#endif
+	public static GENERIC_KEY_BRACES SET KEY_GENERIC_TYPE singletonSet(KEY_TYPE element) {
+		return new SingletonSetBRACES(element);
+	}
+	
+	public static class SingletonSet KEY_GENERIC_TYPE extends ABSTRACT_SET KEY_GENERIC_TYPE
+	{
+		KEY_TYPE element;
+		
+		public SingletonSet(KEY_TYPE element) {
+			this.element = element;
+		}
+		
+#if !TYPE_OBJECT
+		@Override
+		public boolean remove(KEY_TYPE o) { throw new UnsupportedOperationException(); }
+#endif
+		@Override
+		public boolean add(KEY_TYPE o) { throw new UnsupportedOperationException(); }
+		@Override
+		public ITERATOR KEY_GENERIC_TYPE iterator()
+		{
+			return new ITERATOR KEY_GENERIC_TYPE() {
+				boolean next = true;
+				@Override
+				public boolean hasNext() { return next = false; }
+				@Override
+				public KEY_TYPE NEXT() {
+					if(!next) throw new IllegalStateException();
+					next = false;
+					return element;
+				}
+			};
+		}
+		@Override
+		public int size() { return 1; }
+	}
+	
 	public static class EmptySet KEY_GENERIC_TYPE extends EmptyCollection KEY_GENERIC_TYPE implements SET KEY_GENERIC_TYPE
 	{
 #if !TYPE_OBJECT
@@ -72,6 +120,7 @@ public class SETS
 #endif
 	}
 	
+#if !TYPE_BOOLEAN
 	public static class UnmodifiableNavigableSet KEY_GENERIC_TYPE extends UnmodifiableSortedSet KEY_GENERIC_TYPE implements NAVIGABLE_SET KEY_GENERIC_TYPE
 	{
 		NAVIGABLE_SET KEY_GENERIC_TYPE n;
@@ -139,7 +188,6 @@ public class SETS
 		
 		@Override
 		public NAVIGABLE_SET KEY_GENERIC_TYPE tailSet(KEY_TYPE fromElement) { return unmodifiable(n.tailSet(fromElement)); }
-		
 	}
 	
 	public static class UnmodifiableSortedSet KEY_GENERIC_TYPE extends UnmodifiableSet KEY_GENERIC_TYPE implements SORTED_SET KEY_GENERIC_TYPE
@@ -414,4 +462,5 @@ public class SETS
 		public boolean remove(KEY_TYPE o) { synchronized(mutex) { return s.remove(o); } }
 #endif
 	}
+#endif
 }

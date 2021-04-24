@@ -1,14 +1,59 @@
 package speiger.src.collections.PACKAGE.utils.maps;
 
+#if !TYPE_BOOLEAN
+import java.util.Map;
+import java.util.Objects;
+#if TYPE_OBJECT
+import java.util.Comparator;
+#else
+import java.util.function.BiConsumer;
+import java.util.function.BiFunction;
+#endif
+#endif
 import java.util.function.Consumer;
+#if !TYPE_OBJECT && !TYPE_BOOLEAN
+import java.util.function.Function;
+#endif
 
 import speiger.src.collections.objects.collections.ObjectIterable;
 import speiger.src.collections.objects.collections.ObjectIterator;
-import speiger.src.collections.PACKAGE.maps.interfaces.MAP;
 import speiger.src.collections.objects.sets.ObjectSet;
+#if !TYPE_BOOLEAN
+import speiger.src.collections.objects.utils.ObjectSets;
+#if !TYPE_OBJECT
+import speiger.src.collections.PACKAGE.functions.COMPARATOR;
+#endif
+import speiger.src.collections.PACKAGE.functions.consumer.BI_CONSUMER;
+import speiger.src.collections.PACKAGE.functions.function.FUNCTION;
+import speiger.src.collections.PACKAGE.functions.function.UNARY_OPERATOR;
+import speiger.src.collections.PACKAGE.maps.abstracts.ABSTRACT_MAP;
+#endif
+import speiger.src.collections.PACKAGE.maps.interfaces.MAP;
+#if !TYPE_BOOLEAN
+import speiger.src.collections.PACKAGE.maps.interfaces.NAVIGABLE_MAP;
+import speiger.src.collections.PACKAGE.maps.interfaces.SORTED_MAP;
+import speiger.src.collections.PACKAGE.sets.NAVIGABLE_SET;
+#if !TYPE_OBJECT
+import speiger.src.collections.PACKAGE.sets.SET;
+import speiger.src.collections.PACKAGE.utils.SETS;
+#endif
+import speiger.src.collections.VALUE_PACKAGE.collections.VALUE_COLLECTION;
+#if !SAME_TYPE
+import speiger.src.collections.VALUE_PACKAGE.functions.function.VALUE_UNARY_OPERATOR;
+#endif
+import speiger.src.collections.VALUE_PACKAGE.utils.VALUE_COLLECTIONS;
+#if !SAME_TYPE && !VALUE_OBJECT
+import speiger.src.collections.VALUE_PACKAGE.utils.VALUE_SETS;
+#endif
+
+#endif
 
 public class MAPS
 {
+#if !TYPE_BOOLEAN
+	public static final MAP NO_KV_GENERIC_TYPE EMPTY = new EmptyMapKV_BRACES();
+	
+#endif	
 	public static GENERIC_KEY_VALUE_BRACES ObjectIterator<MAP.Entry KEY_VALUE_GENERIC_TYPE> fastIterator(MAP KEY_VALUE_GENERIC_TYPE map) {
 		ObjectSet<MAP.Entry KEY_VALUE_GENERIC_TYPE> entries = map.ENTRY_SET();
 		return entries instanceof MAP.FastEntrySet ? ((MAP.FastEntrySet KEY_VALUE_GENERIC_TYPE)entries).fastIterator() : entries.iterator();
@@ -29,4 +74,626 @@ public class MAPS
 		if(entries instanceof MAP.FastEntrySet) ((MAP.FastEntrySet KEY_VALUE_GENERIC_TYPE)entries).fastForEach(action); 
 		else entries.forEach(action);
 	}
+	
+#if !TYPE_BOOLEAN
+	public static GENERIC_KEY_VALUE_BRACES MAP KEY_VALUE_GENERIC_TYPE emptyMap() { 
+#if TYPE_OBJECT || VALUE_OBJECT
+		return (MAP KEY_VALUE_GENERIC_TYPE)EMPTY;
+#else
+		return EMPTY;
+#endif
+	}
+	
+	public static GENERIC_KEY_VALUE_BRACES MAP KEY_VALUE_GENERIC_TYPE synchronizeMap(MAP KEY_VALUE_GENERIC_TYPE map) { return map instanceof SynchronizedMap ? map : new SynchronizedMapKV_BRACES(map); }
+	public static GENERIC_KEY_VALUE_BRACES MAP KEY_VALUE_GENERIC_TYPE synchronizeMap(MAP KEY_VALUE_GENERIC_TYPE map, Object mutex) { return map instanceof SynchronizedMap ? map : new SynchronizedMapKV_BRACES(map, mutex); }
+	
+	public static GENERIC_KEY_VALUE_BRACES SORTED_MAP KEY_VALUE_GENERIC_TYPE synchronizeMap(SORTED_MAP KEY_VALUE_GENERIC_TYPE map) { return map instanceof SynchronizedSortedMap ? map : new SynchronizedSortedMapKV_BRACES(map); }
+	public static GENERIC_KEY_VALUE_BRACES SORTED_MAP KEY_VALUE_GENERIC_TYPE synchronizeMap(SORTED_MAP KEY_VALUE_GENERIC_TYPE map, Object mutex) { return map instanceof SynchronizedSortedMap ? map : new SynchronizedSortedMapKV_BRACES(map, mutex); }
+	
+	public static GENERIC_KEY_VALUE_BRACES NAVIGABLE_MAP KEY_VALUE_GENERIC_TYPE synchronizeMap(NAVIGABLE_MAP KEY_VALUE_GENERIC_TYPE map) { return map instanceof SynchronizedNavigableMap ? map : new SynchronizedNavigableMapKV_BRACES(map); }
+	public static GENERIC_KEY_VALUE_BRACES NAVIGABLE_MAP KEY_VALUE_GENERIC_TYPE synchronizeMap(NAVIGABLE_MAP KEY_VALUE_GENERIC_TYPE map, Object mutex) { return map instanceof SynchronizedNavigableMap ? map : new SynchronizedNavigableMapKV_BRACES(map, mutex); }
+	
+	public static GENERIC_KEY_VALUE_BRACES MAP KEY_VALUE_GENERIC_TYPE unmodifyableMap(MAP KEY_VALUE_GENERIC_TYPE map) { return map instanceof UnmodifyableMap ? map : new UnmodifyableMapKV_BRACES(map); }
+	public static GENERIC_KEY_VALUE_BRACES SORTED_MAP KEY_VALUE_GENERIC_TYPE unmodifyableMap(SORTED_MAP KEY_VALUE_GENERIC_TYPE map) { return map instanceof UnmodifyableSortedMap ? map : new UnmodifyableSortedMapKV_BRACES(map); }
+	public static GENERIC_KEY_VALUE_BRACES NAVIGABLE_MAP KEY_VALUE_GENERIC_TYPE unmodifyableMap(NAVIGABLE_MAP KEY_VALUE_GENERIC_TYPE map) { return map instanceof UnmodifyableNavigableMap ? map : new UnmodifyableNavigableMapKV_BRACES(map); }
+	public static GENERIC_KEY_VALUE_BRACES MAP.Entry KEY_VALUE_GENERIC_TYPE unmodifyableEntry(MAP.Entry KEY_VALUE_GENERIC_TYPE map) { return map instanceof UnmodifyableEntry ? map : new UnmodifyableEntryKV_BRACES(map); }
+	public static GENERIC_KEY_VALUE_BRACES MAP.Entry KEY_VALUE_GENERIC_TYPE unmodifyableEntry(Map.Entry<CLASS_TYPE, CLASS_VALUE_TYPE> map) { return map instanceof UnmodifyableEntry ? (UnmodifyableEntry KEY_VALUE_GENERIC_TYPE)map : new UnmodifyableEntryKV_BRACES(map); }
+	
+	public static GENERIC_KEY_VALUE_BRACES MAP KEY_VALUE_GENERIC_TYPE singletonMap(KEY_TYPE key, VALUE_TYPE value) { return new SingletonMapKV_BRACES(key, value); }
+	
+	public static class SingletonMap KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_VALUE_GENERIC_TYPE {
+		final KEY_TYPE key;
+		final VALUE_TYPE value;
+		SET KEY_GENERIC_TYPE keySet;
+		VALUE_COLLECTION VALUE_GENERIC_TYPE values;
+		ObjectSet<MAP.Entry KEY_VALUE_GENERIC_TYPE> entrySet;
+		
+		public SingletonMap(KEY_TYPE key, VALUE_TYPE value) {
+			this.key = key;
+			this.value = value;
+		}
+		
+		@Override
+		public VALUE_TYPE put(KEY_TYPE key, VALUE_TYPE value) { throw new UnsupportedOperationException(); }
+		@Override
+		public VALUE_TYPE putIfAbsent(KEY_TYPE key, VALUE_TYPE value) { throw new UnsupportedOperationException(); }
+#if VALUE_PRIMITIVES
+		@Override
+		public VALUE_TYPE addTo(KEY_TYPE key, VALUE_TYPE value) { throw new UnsupportedOperationException(); }
+#endif
+		@Override
+		public VALUE_TYPE REMOVE_KEY(KEY_TYPE key) { throw new UnsupportedOperationException(); }
+#if !TYPE_OBJECT || !VALUE_OBJECT
+		@Override
+		public boolean remove(KEY_TYPE key, VALUE_TYPE value) { throw new UnsupportedOperationException(); }
+#endif
+		@Override
+		public VALUE_TYPE GET_VALUE(KEY_TYPE key) { return EQUALS_KEY_TYPE(key, this.key) ? value : getDefaultReturnValue(); }
+#if !TYPE_OBJECT || !VALUE_OBJECT
+		@Override
+		public VALUE_TYPE getOrDefault(KEY_TYPE key, VALUE_TYPE defaultValue) { return EQUALS_KEY_TYPE(key, this.key) ? value : defaultValue; }
+#endif
+		@Override
+		public SET KEY_GENERIC_TYPE keySet() { 
+			if(keySet == null) keySet = SETS.singletonSet(key);
+			return keySet;
+		}
+		
+		@Override
+		public VALUE_COLLECTION VALUE_GENERIC_TYPE values() { 
+			if(values == null) values = VALUE_SETS.singletonSet(value);
+			return values;
+		}
+		@Override
+		public ObjectSet<MAP.Entry KEY_VALUE_GENERIC_TYPE> ENTRY_SET() { 
+			if(entrySet == null) entrySet = ObjectSets.singletonSet(new ABSTRACT_MAP.BasicEntryKV_BRACES(key, value));
+			return entrySet;
+		}
+	}
+	
+	public static class EmptyMap KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_VALUE_GENERIC_TYPE {
+		@Override
+		public VALUE_TYPE put(KEY_TYPE key, VALUE_TYPE value) { throw new UnsupportedOperationException(); }
+		@Override
+		public VALUE_TYPE putIfAbsent(KEY_TYPE key, VALUE_TYPE value) { throw new UnsupportedOperationException(); }
+#if VALUE_PRIMITIVES
+		@Override
+		public VALUE_TYPE addTo(KEY_TYPE key, VALUE_TYPE value) { throw new UnsupportedOperationException(); }
+#endif
+		@Override
+		public VALUE_TYPE REMOVE_KEY(KEY_TYPE key) { throw new UnsupportedOperationException(); }
+#if !TYPE_OBJECT || !VALUE_OBJECT
+		@Override
+		public boolean remove(KEY_TYPE key, VALUE_TYPE value) { throw new UnsupportedOperationException(); }
+#endif
+		@Override
+		public VALUE_TYPE GET_VALUE(KEY_TYPE key) { return getDefaultReturnValue(); }
+#if !TYPE_OBJECT || !VALUE_OBJECT
+		@Override
+		public VALUE_TYPE getOrDefault(KEY_TYPE key, VALUE_TYPE defaultValue) { return EMPTY_VALUE; }
+#endif
+		@Override
+		public SET KEY_GENERIC_TYPE keySet() { return SETS.empty(); }
+		@Override
+		public VALUE_COLLECTION VALUE_GENERIC_TYPE values() { return VALUE_COLLECTIONS.emptyCollection(); }
+		@Override
+		public ObjectSet<MAP.Entry KEY_VALUE_GENERIC_TYPE> ENTRY_SET() { return ObjectSets.empty(); }
+	}
+	
+	public static class UnmodifyableEntry KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP.BasicEntry KEY_VALUE_GENERIC_TYPE {
+		
+		public UnmodifyableEntry(Map.Entry<CLASS_TYPE, CLASS_VALUE_TYPE> entry) {
+			super(entry.getKey(), entry.getValue());
+		}
+		
+		public UnmodifyableEntry(MAP.Entry KEY_VALUE_GENERIC_TYPE entry) {
+			super(entry.ENTRY_KEY(), entry.ENTRY_VALUE());
+		}
+	}
+	
+	public static class UnmodifyableNavigableMap KEY_VALUE_GENERIC_TYPE extends UnmodifyableSortedMap KEY_VALUE_GENERIC_TYPE implements NAVIGABLE_MAP KEY_VALUE_GENERIC_TYPE {
+		NAVIGABLE_MAP KEY_VALUE_GENERIC_TYPE map;
+		
+		public UnmodifyableNavigableMap(NAVIGABLE_MAP KEY_VALUE_GENERIC_TYPE map) {
+			super(map);
+			this.map = map;
+		}
+		
+		@Override
+		public NAVIGABLE_MAP KEY_VALUE_GENERIC_TYPE descendingMap() { return unmodifyableMap(map.descendingMap()); }
+		@Override
+		public NAVIGABLE_SET KEY_GENERIC_TYPE navigableKeySet() { return SETS.unmodifiable(map.navigableKeySet()); }
+		@Override
+		public NAVIGABLE_SET KEY_GENERIC_TYPE descendingKeySet() { return SETS.unmodifiable(map.descendingKeySet()); }
+		@Override
+		public MAP.Entry KEY_VALUE_GENERIC_TYPE firstEntry() { return unmodifyableEntry(map.firstEntry()); }
+		@Override
+		public MAP.Entry KEY_VALUE_GENERIC_TYPE lastEntry() { return unmodifyableEntry(map.lastEntry()); }
+		@Override
+		public MAP.Entry KEY_VALUE_GENERIC_TYPE pollFirstEntry() { throw new UnsupportedOperationException(); }
+		@Override
+		public MAP.Entry KEY_VALUE_GENERIC_TYPE pollLastEntry() { throw new UnsupportedOperationException(); }
+		@Override
+		public NAVIGABLE_MAP KEY_VALUE_GENERIC_TYPE subMap(KEY_TYPE fromKey, boolean fromInclusive, KEY_TYPE toKey, boolean toInclusive) { return unmodifyableMap(map.subMap(fromKey, fromInclusive, toKey, toInclusive)); }
+		@Override
+		public NAVIGABLE_MAP KEY_VALUE_GENERIC_TYPE headMap(KEY_TYPE toKey, boolean inclusive) { return unmodifyableMap(map.headMap(toKey, inclusive)); }
+		@Override
+		public NAVIGABLE_MAP KEY_VALUE_GENERIC_TYPE tailMap(KEY_TYPE fromKey, boolean inclusive) { return unmodifyableMap(map.tailMap(fromKey, inclusive)); }
+		@Override
+		public NAVIGABLE_MAP KEY_VALUE_GENERIC_TYPE subMap(KEY_TYPE fromKey, KEY_TYPE toKey) { return unmodifyableMap(map.subMap(fromKey, toKey)); }
+		@Override
+		public NAVIGABLE_MAP KEY_VALUE_GENERIC_TYPE headMap(KEY_TYPE toKey) { return unmodifyableMap(map.headMap(toKey)); }
+		@Override
+		public NAVIGABLE_MAP KEY_VALUE_GENERIC_TYPE tailMap(KEY_TYPE fromKey) { return unmodifyableMap(map.tailMap(fromKey)); }
+#if !TYPE_OBJECT
+		@Override
+		public void setDefaultMaxValue(KEY_TYPE e) { throw new UnsupportedOperationException(); }
+		@Override
+		public KEY_TYPE getDefaultMaxValue() { return map.getDefaultMaxValue(); }
+		@Override
+		public void setDefaultMinValue(KEY_TYPE e) { throw new UnsupportedOperationException(); }
+		@Override
+		public KEY_TYPE getDefaultMinValue() { return map.getDefaultMinValue(); }
+#endif
+		@Override
+		public KEY_TYPE lowerKey(KEY_TYPE key) { return map.lowerKey(key); }
+		@Override
+		public KEY_TYPE higherKey(KEY_TYPE key) { return map.higherKey(key); }
+		@Override
+		public KEY_TYPE floorKey(KEY_TYPE key) { return map.floorKey(key); }
+		@Override
+		public KEY_TYPE ceilingKey(KEY_TYPE key) { return map.ceilingKey(key); }
+		@Override
+		public MAP.Entry KEY_VALUE_GENERIC_TYPE lowerEntry(KEY_TYPE key) { return unmodifyableEntry(map.lowerEntry(key)); }
+		@Override
+		public MAP.Entry KEY_VALUE_GENERIC_TYPE higherEntry(KEY_TYPE key) { return unmodifyableEntry(map.higherEntry(key)); }
+		@Override
+		public MAP.Entry KEY_VALUE_GENERIC_TYPE floorEntry(KEY_TYPE key) { return unmodifyableEntry(map.floorEntry(key)); }
+		@Override
+		public MAP.Entry KEY_VALUE_GENERIC_TYPE ceilingEntry(KEY_TYPE key) { return unmodifyableEntry(map.ceilingEntry(key)); }
+	}
+	
+	public static class UnmodifyableSortedMap KEY_VALUE_GENERIC_TYPE extends UnmodifyableMap KEY_VALUE_GENERIC_TYPE implements SORTED_MAP KEY_VALUE_GENERIC_TYPE {
+		SORTED_MAP KEY_VALUE_GENERIC_TYPE map;
+		
+		public UnmodifyableSortedMap(SORTED_MAP KEY_VALUE_GENERIC_TYPE map) {
+			super(map);
+			this.map = map;
+		}
+		
+		@Override
+		public VALUE_TYPE putAndMoveToFirst(KEY_TYPE key, VALUE_TYPE value) { throw new UnsupportedOperationException(); }
+		@Override
+		public VALUE_TYPE putAndMoveToLast(KEY_TYPE key, VALUE_TYPE value) { throw new UnsupportedOperationException(); }
+		@Override
+		public boolean moveToFirst(KEY_TYPE key) { throw new UnsupportedOperationException(); }
+		@Override
+		public boolean moveToLast(KEY_TYPE key) { throw new UnsupportedOperationException(); }
+		@Override
+		public VALUE_TYPE getAndMoveToFirst(KEY_TYPE key) { throw new UnsupportedOperationException(); }
+		@Override
+		public VALUE_TYPE getAndMoveToLast(KEY_TYPE key) { throw new UnsupportedOperationException(); }
+		@Override
+		public COMPARATOR KEY_GENERIC_TYPE comparator() { return map.comparator(); }
+		@Override
+		public SORTED_MAP KEY_VALUE_GENERIC_TYPE subMap(KEY_TYPE fromKey, KEY_TYPE toKey) { return unmodifyableMap(map.subMap(fromKey, toKey)); }
+		@Override
+		public SORTED_MAP KEY_VALUE_GENERIC_TYPE headMap(KEY_TYPE toKey) { return unmodifyableMap(map.headMap(toKey)); }
+		@Override
+		public SORTED_MAP KEY_VALUE_GENERIC_TYPE tailMap(KEY_TYPE fromKey) { return unmodifyableMap(map.tailMap(fromKey)); }
+		@Override
+		public KEY_TYPE FIRST_ENTRY_KEY() { return map.FIRST_ENTRY_KEY(); }
+		@Override
+		public KEY_TYPE POLL_FIRST_ENTRY_KEY() { return map.POLL_FIRST_ENTRY_KEY(); }
+		@Override
+		public KEY_TYPE LAST_ENTRY_KEY() { return map.LAST_ENTRY_KEY(); }
+		@Override
+		public KEY_TYPE POLL_LAST_ENTRY_KEY() { return map.POLL_LAST_ENTRY_KEY(); }
+		@Override
+		public VALUE_TYPE FIRST_ENTRY_VALUE() { return map.FIRST_ENTRY_VALUE(); }
+		@Override
+		public VALUE_TYPE LAST_ENTRY_VALUE() { return map.LAST_ENTRY_VALUE(); }
+	}
+	
+	public static class UnmodifyableMap KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_VALUE_GENERIC_TYPE implements MAP KEY_VALUE_GENERIC_TYPE {
+		MAP KEY_VALUE_GENERIC_TYPE map;
+		VALUE_COLLECTION VALUE_GENERIC_TYPE values;
+		SET KEY_GENERIC_TYPE keys;
+		ObjectSet<MAP.Entry KEY_VALUE_GENERIC_TYPE> entrySet;
+		
+		public UnmodifyableMap(MAP KEY_VALUE_GENERIC_TYPE map) {
+			this.map = map;
+		}
+		
+		@Override
+		public VALUE_TYPE put(KEY_TYPE key, VALUE_TYPE value) { throw new UnsupportedOperationException(); }
+		@Override
+		public VALUE_TYPE putIfAbsent(KEY_TYPE key, VALUE_TYPE value){ throw new UnsupportedOperationException(); }
+#if VALUE_PRIMITIVES
+		@Override
+		public VALUE_TYPE addTo(KEY_TYPE key, VALUE_TYPE value) { throw new UnsupportedOperationException(); }
+#endif
+		@Override
+		public VALUE_TYPE REMOVE_KEY(KEY_TYPE key) { throw new UnsupportedOperationException(); }
+#if !TYPE_OBJECT || !VALUE_OBJECT
+		@Override
+		public boolean remove(KEY_TYPE key, VALUE_TYPE value) { throw new UnsupportedOperationException(); }
+#endif
+		@Override
+		public VALUE_TYPE GET_VALUE(KEY_TYPE key) { return map.GET_VALUE(key); }
+#if !TYPE_OBJECT || !VALUE_OBJECT
+		@Override
+		public VALUE_TYPE getOrDefault(KEY_TYPE key, VALUE_TYPE defaultValue) { return map.getOrDefault(key, defaultValue); }
+#endif
+		
+		@Override
+		public SET KEY_GENERIC_TYPE keySet() { 
+			if(keys == null) keys = SETS.unmodifiable(map.keySet()); 
+			return keys;
+		}
+		
+		@Override
+		public VALUE_COLLECTION VALUE_GENERIC_TYPE values() {
+			if(values == null) values = VALUE_COLLECTIONS.unmodifiableCollection(map.values());
+			return values;
+		}
+		
+		@Override
+		public ObjectSet<MAP.Entry KEY_VALUE_GENERIC_TYPE> ENTRY_SET() {
+			if(entrySet == null) entrySet = new UnmodifyableEntrySetKV_BRACES(map.ENTRY_SET());
+			return entrySet;
+		}
+	}
+	
+	public static class UnmodifyableEntrySet KEY_VALUE_GENERIC_TYPE extends ObjectSets.UnmodifiableSet<MAP.Entry KEY_VALUE_GENERIC_TYPE>
+	{
+		ObjectSet<MAP.Entry KEY_VALUE_GENERIC_TYPE> s;
+
+		public UnmodifyableEntrySet(ObjectSet<MAP.Entry KEY_VALUE_GENERIC_TYPE> c)
+		{
+			super(c);
+			s = c;
+		}
+		
+		@Override
+		public void forEach(Consumer<? super MAP.Entry KEY_VALUE_GENERIC_TYPE> action) {
+			s.forEach(T -> action.accept(unmodifyableEntry(T)));
+		}
+		
+		@Override
+		public ObjectIterator<MAP.Entry KEY_VALUE_GENERIC_TYPE> iterator() {
+			return new ObjectIterator<MAP.Entry KEY_VALUE_GENERIC_TYPE>() {
+				ObjectIterator<MAP.Entry KEY_VALUE_GENERIC_TYPE> iter = s.iterator();
+				@Override
+				public boolean hasNext() { return iter.hasNext(); }
+				@Override
+				public MAP.Entry KEY_VALUE_GENERIC_TYPE next() { return unmodifyableEntry(iter.next()); }
+			};
+		}
+		
+	}
+	
+	public static class SynchronizedNavigableMap KEY_VALUE_GENERIC_TYPE extends SynchronizedSortedMap KEY_VALUE_GENERIC_TYPE implements NAVIGABLE_MAP KEY_VALUE_GENERIC_TYPE {
+		NAVIGABLE_MAP KEY_VALUE_GENERIC_TYPE map;
+		
+		public SynchronizedNavigableMap(NAVIGABLE_MAP KEY_VALUE_GENERIC_TYPE map) {
+			super(map);
+			this.map = map;
+		}
+		
+		public SynchronizedNavigableMap(NAVIGABLE_MAP KEY_VALUE_GENERIC_TYPE map, Object mutex) {
+			super(map, mutex);
+			this.map = map;
+		}
+		
+		@Override
+		public NAVIGABLE_MAP KEY_VALUE_GENERIC_TYPE descendingMap() { synchronized(mutex) { return synchronizeMap(map.descendingMap(), mutex); } }
+		@Override
+		public NAVIGABLE_SET KEY_GENERIC_TYPE navigableKeySet() { synchronized(mutex) { return SETS.synchronizedSet(map.navigableKeySet(), mutex); } }
+		@Override
+		public NAVIGABLE_SET KEY_GENERIC_TYPE descendingKeySet() { synchronized(mutex) { return SETS.synchronizedSet(map.descendingKeySet(), mutex); } }
+		@Override
+		public MAP.Entry KEY_VALUE_GENERIC_TYPE firstEntry() { synchronized(mutex) { return map.firstEntry(); } }
+		@Override
+		public MAP.Entry KEY_VALUE_GENERIC_TYPE lastEntry() { synchronized(mutex) { return map.firstEntry(); } }
+		@Override
+		public MAP.Entry KEY_VALUE_GENERIC_TYPE pollFirstEntry() { synchronized(mutex) { return map.pollFirstEntry(); } }
+		@Override
+		public MAP.Entry KEY_VALUE_GENERIC_TYPE pollLastEntry() { synchronized(mutex) { return map.pollLastEntry(); } }
+		@Override
+		public NAVIGABLE_MAP KEY_VALUE_GENERIC_TYPE subMap(KEY_TYPE fromKey, boolean fromInclusive, KEY_TYPE toKey, boolean toInclusive) { synchronized(mutex) { return synchronizeMap(map.subMap(fromKey, fromInclusive, toKey, toInclusive), mutex); } }
+		@Override
+		public NAVIGABLE_MAP KEY_VALUE_GENERIC_TYPE headMap(KEY_TYPE toKey, boolean inclusive) { synchronized(mutex) { return synchronizeMap(map.headMap(toKey, inclusive), mutex); } }
+		@Override
+		public NAVIGABLE_MAP KEY_VALUE_GENERIC_TYPE tailMap(KEY_TYPE fromKey, boolean inclusive) { synchronized(mutex) { return synchronizeMap(map.tailMap(fromKey, inclusive), mutex); } }
+		@Override
+		public NAVIGABLE_MAP KEY_VALUE_GENERIC_TYPE subMap(KEY_TYPE fromKey, KEY_TYPE toKey) { synchronized(mutex) { return synchronizeMap(map.subMap(fromKey, toKey), mutex); } }
+		@Override
+		public NAVIGABLE_MAP KEY_VALUE_GENERIC_TYPE headMap(KEY_TYPE toKey) { synchronized(mutex) { return synchronizeMap(map.headMap(toKey), mutex); } }
+		@Override
+		public NAVIGABLE_MAP KEY_VALUE_GENERIC_TYPE tailMap(KEY_TYPE fromKey) { synchronized(mutex) { return synchronizeMap(map.tailMap(fromKey), mutex); } }
+		@Override
+		public KEY_TYPE lowerKey(KEY_TYPE key) { synchronized(mutex) { return map.lowerKey(key); } }
+		@Override
+		public KEY_TYPE higherKey(KEY_TYPE key) { synchronized(mutex) { return map.higherKey(key); } }
+		@Override
+		public KEY_TYPE floorKey(KEY_TYPE key) { synchronized(mutex) { return map.floorKey(key); } }
+		@Override
+		public KEY_TYPE ceilingKey(KEY_TYPE key) { synchronized(mutex) { return map.ceilingKey(key); } }
+		@Override
+		public MAP.Entry KEY_VALUE_GENERIC_TYPE lowerEntry(KEY_TYPE key) { synchronized(mutex) { return map.lowerEntry(key); } }
+		@Override
+		public MAP.Entry KEY_VALUE_GENERIC_TYPE higherEntry(KEY_TYPE key) { synchronized(mutex) { return map.higherEntry(key); } }
+		@Override
+		public MAP.Entry KEY_VALUE_GENERIC_TYPE floorEntry(KEY_TYPE key) { synchronized(mutex) { return map.floorEntry(key); } }
+		@Override
+		public MAP.Entry KEY_VALUE_GENERIC_TYPE ceilingEntry(KEY_TYPE key) { synchronized(mutex) { return map.ceilingEntry(key); } }
+#if !TYPE_OBJECT
+		@Override
+		@Deprecated
+		public NAVIGABLE_MAP KEY_VALUE_GENERIC_TYPE subMap(CLASS_TYPE fromKey, boolean fromInclusive, CLASS_TYPE toKey, boolean toInclusive) { synchronized(mutex) { return synchronizeMap(map.subMap(fromKey, fromInclusive, toKey, toInclusive), mutex); } }
+		@Override
+		@Deprecated
+		public NAVIGABLE_MAP KEY_VALUE_GENERIC_TYPE headMap(CLASS_TYPE toKey, boolean inclusive) { synchronized(mutex) { return synchronizeMap(map.headMap(toKey, inclusive), mutex); } }
+		@Override
+		@Deprecated
+		public NAVIGABLE_MAP KEY_VALUE_GENERIC_TYPE tailMap(CLASS_TYPE fromKey, boolean inclusive) { synchronized(mutex) { return synchronizeMap(map.tailMap(fromKey, inclusive), mutex); } }
+		@Override
+		@Deprecated
+		public NAVIGABLE_MAP KEY_VALUE_GENERIC_TYPE subMap(CLASS_TYPE fromKey, CLASS_TYPE toKey) { synchronized(mutex) { return synchronizeMap(map.subMap(fromKey, toKey), mutex); } }
+		@Override
+		@Deprecated
+		public NAVIGABLE_MAP KEY_VALUE_GENERIC_TYPE headMap(CLASS_TYPE toKey) { synchronized(mutex) { return synchronizeMap(map.headMap(toKey), mutex); } }
+		@Override
+		@Deprecated
+		public NAVIGABLE_MAP KEY_VALUE_GENERIC_TYPE tailMap(CLASS_TYPE fromKey) { synchronized(mutex) { return synchronizeMap(map.tailMap(fromKey), mutex); } }
+		@Override
+		public void setDefaultMaxValue(KEY_TYPE e) { synchronized(mutex) { map.setDefaultMaxValue(e); } }
+		@Override
+		public KEY_TYPE getDefaultMaxValue() { synchronized(mutex) { return map.getDefaultMaxValue(); } }
+		@Override
+		public void setDefaultMinValue(KEY_TYPE e) { synchronized(mutex) { map.setDefaultMinValue(e); } }
+		@Override
+		public KEY_TYPE getDefaultMinValue() { synchronized(mutex) { return map.getDefaultMinValue(); } }
+		@Override
+		@Deprecated
+		public CLASS_TYPE lowerKey(CLASS_TYPE key) { synchronized(mutex) { return map.lowerKey(key); } }
+		@Override
+		@Deprecated
+		public CLASS_TYPE floorKey(CLASS_TYPE key) { synchronized(mutex) { return map.floorKey(key); } }
+		@Override
+		@Deprecated
+		public CLASS_TYPE ceilingKey(CLASS_TYPE key) { synchronized(mutex) { return map.ceilingKey(key); } }
+		@Override
+		@Deprecated
+		public CLASS_TYPE higherKey(CLASS_TYPE key) { synchronized(mutex) { return map.higherKey(key); } }
+		@Override
+		@Deprecated
+		public MAP.Entry KEY_VALUE_GENERIC_TYPE lowerEntry(CLASS_TYPE key) { synchronized(mutex) { return map.lowerEntry(key); } }
+		@Override
+		@Deprecated
+		public MAP.Entry KEY_VALUE_GENERIC_TYPE floorEntry(CLASS_TYPE key) { synchronized(mutex) { return map.floorEntry(key); } }
+		@Override
+		@Deprecated
+		public MAP.Entry KEY_VALUE_GENERIC_TYPE ceilingEntry(CLASS_TYPE key) { synchronized(mutex) { return map.ceilingEntry(key); } }
+		@Override
+		@Deprecated
+		public MAP.Entry KEY_VALUE_GENERIC_TYPE higherEntry(CLASS_TYPE key) { synchronized(mutex) { return map.higherEntry(key); } }
+#endif
+	}
+	
+	public static class SynchronizedSortedMap KEY_VALUE_GENERIC_TYPE extends SynchronizedMap KEY_VALUE_GENERIC_TYPE implements SORTED_MAP KEY_VALUE_GENERIC_TYPE {
+		SORTED_MAP KEY_VALUE_GENERIC_TYPE map;
+		
+		public SynchronizedSortedMap(SORTED_MAP KEY_VALUE_GENERIC_TYPE map) {
+			super(map);
+			this.map = map;
+		}
+		
+		public SynchronizedSortedMap(SORTED_MAP KEY_VALUE_GENERIC_TYPE map, Object mutex) {
+			super(map, mutex);
+			this.map = map;
+		}
+		
+		@Override
+		public VALUE_TYPE putAndMoveToFirst(KEY_TYPE key, VALUE_TYPE value) { synchronized(mutex) { return map.putAndMoveToFirst(key, value); } }
+		@Override
+		public VALUE_TYPE putAndMoveToLast(KEY_TYPE key, VALUE_TYPE value) { synchronized(mutex) { return map.putAndMoveToLast(key, value); } }
+		@Override
+		public boolean moveToFirst(KEY_TYPE key) { synchronized(mutex) { return map.moveToFirst(key); } }
+		@Override
+		public boolean moveToLast(KEY_TYPE key) { synchronized(mutex) { return map.moveToLast(key); } }
+		@Override
+		public VALUE_TYPE getAndMoveToFirst(KEY_TYPE key) { synchronized(mutex) { return map.getAndMoveToFirst(key); } }
+		@Override
+		public VALUE_TYPE getAndMoveToLast(KEY_TYPE key) { synchronized(mutex) { return map.getAndMoveToLast(key); } }
+		@Override
+		public COMPARATOR KEY_GENERIC_TYPE comparator() { synchronized(mutex) { return map.comparator(); } }
+		@Override
+		public SORTED_MAP KEY_VALUE_GENERIC_TYPE subMap(KEY_TYPE fromKey, KEY_TYPE toKey) { synchronized(mutex) { return synchronizeMap(map.subMap(fromKey, toKey), mutex); } }
+		@Override
+		public SORTED_MAP KEY_VALUE_GENERIC_TYPE headMap(KEY_TYPE toKey)  { synchronized(mutex) { return synchronizeMap(map.headMap(toKey), mutex); } }
+		@Override
+		public SORTED_MAP KEY_VALUE_GENERIC_TYPE tailMap(KEY_TYPE fromKey) { synchronized(mutex) { return synchronizeMap(map.tailMap(fromKey), mutex); } }
+		@Override
+		public KEY_TYPE FIRST_ENTRY_KEY() { synchronized(mutex) { return map.FIRST_ENTRY_KEY(); } }
+		@Override
+		public KEY_TYPE POLL_FIRST_ENTRY_KEY() { synchronized(mutex) { return map.POLL_FIRST_ENTRY_KEY(); } }
+		@Override
+		public KEY_TYPE LAST_ENTRY_KEY() { synchronized(mutex) { return map.LAST_ENTRY_KEY(); } }
+		@Override
+		public KEY_TYPE POLL_LAST_ENTRY_KEY() { synchronized(mutex) { return map.POLL_LAST_ENTRY_KEY(); } }
+		@Override
+		public VALUE_TYPE FIRST_ENTRY_VALUE() { synchronized(mutex) { return map.FIRST_ENTRY_VALUE(); } }
+		@Override
+		public VALUE_TYPE LAST_ENTRY_VALUE() { synchronized(mutex) { return map.LAST_ENTRY_VALUE(); } }
+#if !TYPE_OBJECT
+		@Override
+		@Deprecated
+		public CLASS_TYPE firstKey() { synchronized(mutex) { return map.firstKey(); } }
+		@Override
+		@Deprecated
+		public CLASS_TYPE lastKey() { synchronized(mutex) { return map.lastKey(); } }
+		@Override
+		@Deprecated
+		public SORTED_MAP KEY_VALUE_GENERIC_TYPE subMap(CLASS_TYPE fromKey, CLASS_TYPE toKey) { synchronized(mutex) { return synchronizeMap(map.subMap(fromKey, toKey), mutex); } }
+		@Override
+		@Deprecated
+		public SORTED_MAP KEY_VALUE_GENERIC_TYPE headMap(CLASS_TYPE toKey) { synchronized(mutex) { return synchronizeMap(map.headMap(toKey), mutex); } }
+		@Override
+		@Deprecated
+		public SORTED_MAP KEY_VALUE_GENERIC_TYPE tailMap(CLASS_TYPE fromKey) { synchronized(mutex) { return synchronizeMap(map.tailMap(fromKey), mutex); } }
+#endif
+	}
+	
+	public static class SynchronizedMap KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_VALUE_GENERIC_TYPE implements MAP KEY_VALUE_GENERIC_TYPE {
+		MAP KEY_VALUE_GENERIC_TYPE map;
+		VALUE_COLLECTION VALUE_GENERIC_TYPE values;
+		SET KEY_GENERIC_TYPE keys;
+		ObjectSet<MAP.Entry KEY_VALUE_GENERIC_TYPE> entrySet;
+		
+		protected Object mutex;
+		
+		public SynchronizedMap(MAP KEY_VALUE_GENERIC_TYPE map) {
+			this.map = map;
+			mutex = this;
+		}
+		
+		public SynchronizedMap(MAP KEY_VALUE_GENERIC_TYPE map, Object mutex) {
+			this.map = map;
+			this.mutex = mutex;
+		}
+		
+		@Override
+		public VALUE_TYPE getDefaultReturnValue() { synchronized(mutex) { return map.getDefaultReturnValue(); } }
+		@Override
+		public ABSTRACT_MAP KEY_VALUE_GENERIC_TYPE setDefaultReturnValue(VALUE_TYPE v) {
+			synchronized(mutex) {
+				map.setDefaultReturnValue(v);
+				return this;
+			}
+		}
+		@Override
+		public VALUE_TYPE put(KEY_TYPE key, VALUE_TYPE value) { synchronized(mutex) { return map.put(key, value); } }
+		@Override
+		public VALUE_TYPE putIfAbsent(KEY_TYPE key, VALUE_TYPE value) { synchronized(mutex) { return map.putIfAbsent(key, value); } }
+#if VALUE_PRIMITIVES
+		@Override
+		public VALUE_TYPE addTo(KEY_TYPE key, VALUE_TYPE value) { synchronized(mutex) { return map.addTo(key, value); } }
+#endif
+		@Override
+		public void putAll(MAP KEY_VALUE_GENERIC_TYPE m) { synchronized(mutex) { map.putAll(m); } }
+		@Override
+		public void putAll(Map<? extends CLASS_TYPE, ? extends CLASS_VALUE_TYPE> m) { synchronized(mutex) { map.putAll(m); } }
+#if !TYPE_OBJECT
+		@Override
+		public boolean containsKey(KEY_TYPE key) { synchronized(mutex) { return map.containsKey(key); } }
+#endif
+#if !VALUE_OBJECT
+		@Override
+		public boolean containsValue(VALUE_TYPE value) { synchronized(mutex) { return map.containsValue(value); } }
+#endif
+		@Override
+		public VALUE_TYPE GET_VALUE(KEY_TYPE key) { synchronized(mutex) { return map.GET_VALUE(key); } }
+		@Override
+		public VALUE_TYPE REMOVE_KEY(KEY_TYPE key) { synchronized(mutex) { return map.REMOVE_KEY(key); } }
+#if !TYPE_OBJECT || !VALUE_OBJECT
+		@Override
+		public boolean remove(KEY_TYPE key, VALUE_TYPE value) { synchronized(mutex) { return map.remove(key, value); } }
+#endif
+		@Override
+		public boolean replace(KEY_TYPE key, VALUE_TYPE oldValue, VALUE_TYPE newValue) { synchronized(mutex) { return map.replace(key, oldValue, newValue); } }
+		@Override
+		public VALUE_TYPE replace(KEY_TYPE key, VALUE_TYPE value) { synchronized(mutex) { return map.replace(key, value); } }
+		@Override
+		public void REPLACE_VALUES(UNARY_OPERATOR KEY_VALUE_GENERIC_TYPE mappingFunction) { synchronized(mutex) { map.REPLACE_VALUES(mappingFunction); } }
+		@Override
+		public VALUE_TYPE COMPUTE(KEY_TYPE key, UNARY_OPERATOR KEY_VALUE_GENERIC_TYPE mappingFunction) { synchronized(mutex) { return map.COMPUTE(key, mappingFunction); } }
+		@Override
+		public VALUE_TYPE COMPUTE_IF_ABSENT(KEY_TYPE key, FUNCTION KEY_VALUE_GENERIC_TYPE mappingFunction) { synchronized(mutex) { return map.COMPUTE_IF_ABSENT(key, mappingFunction); } }
+		@Override
+		public VALUE_TYPE COMPUTE_IF_PRESENT(KEY_TYPE key, UNARY_OPERATOR KEY_VALUE_GENERIC_TYPE mappingFunction) { synchronized(mutex) { return map.COMPUTE_IF_PRESENT(key, mappingFunction); } }
+		@Override
+		public VALUE_TYPE MERGE(KEY_TYPE key, VALUE_TYPE value, VALUE_UNARY_OPERATOR VALUE_VALUE_GENERIC_TYPE mappingFunction) { synchronized(mutex) { return map.MERGE(key, value, mappingFunction); } }
+#if !TYPE_OBJECT || !VALUE_OBJECT
+		@Override
+		public VALUE_TYPE getOrDefault(KEY_TYPE key, VALUE_TYPE defaultValue) { synchronized(mutex) { return map.getOrDefault(key, defaultValue); } }
+#endif
+		@Override
+		public void forEach(BI_CONSUMER KEY_VALUE_GENERIC_TYPE action) { synchronized(mutex) { map.forEach(action); } }
+		@Override
+		public int size() { synchronized(mutex) { return super.size(); } }
+		@Override
+		public SET KEY_GENERIC_TYPE keySet() {
+			if(keys == null) keys = SETS.synchronizedSet(map.keySet(), mutex);
+			return keys;
+		}
+		
+		@Override
+		public VALUE_COLLECTION VALUE_GENERIC_TYPE values() {
+			if(values == null) values = VALUE_COLLECTIONS.synchronizedCollection(map.values(), mutex);
+			return values;
+		}
+
+		@Override
+		public ObjectSet<MAP.Entry KEY_VALUE_GENERIC_TYPE> ENTRY_SET() {
+			if(entrySet == null) entrySet = ObjectSets.synchronizedSet(map.ENTRY_SET(), mutex);
+			return entrySet;
+		}
+		
+#if !TYPE_OBJECT
+		@Override
+		@Deprecated
+		public CLASS_VALUE_TYPE get(Object key) { synchronized(mutex) { return map.get(key); } }
+		@Override
+		@Deprecated
+		public CLASS_VALUE_TYPE getOrDefault(Object key, CLASS_VALUE_TYPE defaultValue) { synchronized(mutex) { return map.getOrDefault(key, defaultValue); } }
+		@Override
+		@Deprecated
+		public boolean containsValue(Object value) { synchronized(mutex) { return map.containsValue(value); } }
+		@Override
+		@Deprecated
+		public boolean containsKey(Object key) { synchronized(mutex) { return map.containsKey(key); } }
+		@Override
+		@Deprecated
+		public CLASS_VALUE_TYPE put(CLASS_TYPE key, CLASS_VALUE_TYPE value) { synchronized(mutex) { return map.put(key, value); } }
+		@Override
+		@Deprecated
+		public CLASS_VALUE_TYPE remove(Object key) { synchronized(mutex) { return map.remove(key); } }
+		@Override
+		@Deprecated
+		public void clear() { synchronized(mutex) { map.clear(); } }
+		@Override
+		@Deprecated
+		public CLASS_VALUE_TYPE putIfAbsent(CLASS_TYPE key, CLASS_VALUE_TYPE value) { synchronized(mutex) { return map.putIfAbsent(key, value); } }
+		@Override
+		@Deprecated
+		public boolean remove(Object key, Object value) { synchronized(mutex) { return map.remove(key, value); } }
+		@Override
+		@Deprecated
+		public boolean replace(CLASS_TYPE key, CLASS_VALUE_TYPE oldValue, CLASS_VALUE_TYPE newValue) { synchronized(mutex) { return map.replace(key, oldValue, newValue); } }
+		@Override
+		@Deprecated
+		public CLASS_VALUE_TYPE replace(CLASS_TYPE key, CLASS_VALUE_TYPE value) { synchronized(mutex) { return map.replace(key, value); } }
+		@Override
+		@Deprecated
+		public void replaceAll(BiFunction<? super CLASS_TYPE, ? super CLASS_VALUE_TYPE, ? extends CLASS_VALUE_TYPE> mappingFunction) { synchronized(mutex) { map.replaceAll(mappingFunction); } }
+		@Override
+		@Deprecated
+		public CLASS_VALUE_TYPE compute(CLASS_TYPE key, BiFunction<? super CLASS_TYPE, ? super CLASS_VALUE_TYPE, ? extends CLASS_VALUE_TYPE> mappingFunction) { synchronized(mutex) { return map.compute(key, mappingFunction); } }
+		@Override
+		@Deprecated
+		public CLASS_VALUE_TYPE computeIfAbsent(CLASS_TYPE key, Function<? super CLASS_TYPE, ? extends CLASS_VALUE_TYPE> mappingFunction) { synchronized(mutex) { return map.computeIfAbsent(key, mappingFunction); } }
+		@Override
+		@Deprecated
+		public CLASS_VALUE_TYPE computeIfPresent(CLASS_TYPE key, BiFunction<? super CLASS_TYPE, ? super CLASS_VALUE_TYPE, ? extends CLASS_VALUE_TYPE> mappingFunction) { synchronized(mutex) { return computeIfPresent(key, mappingFunction); } }
+		@Override
+		@Deprecated
+		public CLASS_VALUE_TYPE merge(CLASS_TYPE key, CLASS_VALUE_TYPE value, BiFunction<? super CLASS_VALUE_TYPE, ? super CLASS_VALUE_TYPE, ? extends CLASS_VALUE_TYPE> mappingFunction) { synchronized(mutex) { return map.merge(key, value, mappingFunction); } }
+		@Override
+		@Deprecated
+		public void forEach(BiConsumer<? super CLASS_TYPE, ? super CLASS_VALUE_TYPE> action) { synchronized(mutex) { map.forEach(action); } }
+#endif
+	}
+#endif
 }

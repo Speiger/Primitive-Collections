@@ -62,7 +62,14 @@ public interface SORTED_MAP KEY_VALUE_GENERIC_TYPE extends SortedMap<CLASS_TYPE,
 	public KEY_TYPE POLL_LAST_ENTRY_KEY();
 	
 	public VALUE_TYPE FIRST_ENTRY_VALUE();
-	public VALUE_TYPE LAST_ENTRY_VALUE();	
+	public VALUE_TYPE LAST_ENTRY_VALUE();
+	
+	@Override
+	public default SORTED_MAP KEY_VALUE_GENERIC_TYPE subMap(CLASS_TYPE fromKey, CLASS_TYPE toKey) { return subMap(OBJ_TO_KEY(fromKey), OBJ_TO_KEY(toKey)); }
+	@Override
+	public default SORTED_MAP KEY_VALUE_GENERIC_TYPE headMap(CLASS_TYPE toKey) { return headMap(OBJ_TO_KEY(toKey)); }
+	@Override
+	public default SORTED_MAP KEY_VALUE_GENERIC_TYPE tailMap(CLASS_TYPE fromKey) { return tailMap(OBJ_TO_KEY(fromKey)); }
 #endif
 	
 	interface FastSortedSet KEY_VALUE_GENERIC_TYPE extends MAP.FastEntrySet KEY_VALUE_GENERIC_TYPE, ObjectSortedSet<MAP.Entry KEY_VALUE_GENERIC_TYPE> {

@@ -9,6 +9,7 @@ import speiger.src.collections.PACKAGE.collections.COLLECTION;
 #if !TYPE_OBJECT
 import speiger.src.collections.PACKAGE.functions.CONSUMER;
 #endif
+import speiger.src.collections.PACKAGE.lists.ABSTRACT_LIST;
 import speiger.src.collections.PACKAGE.lists.LIST;
 import speiger.src.collections.PACKAGE.lists.LIST_ITERATOR;
 
@@ -57,6 +58,64 @@ public class LISTS
 	 */
 	public static GENERIC_KEY_BRACES LIST KEY_GENERIC_TYPE synchronizedList(LIST KEY_GENERIC_TYPE l, Object mutex) {
 		return l instanceof SynchronizedList ? l : (l instanceof IARRAY ? new SynchronizedArrayListBRACES(l, mutex) : (l instanceof RandomAccess ? new SynchronizedRandomAccessListBRACES(l, mutex) : new SynchronizedListBRACES(l, mutex)));
+	}
+	
+	/**
+	 * Creates a Unmodifiable Singleton list
+	 * @param element that should be used in the Singleton
+	 * @return a singleton list that is unmodifiable
+	 */
+	public static GENERIC_KEY_BRACES LIST KEY_GENERIC_TYPE singletonList(KEY_TYPE element) {
+		return new SingletonListBRACES(element);
+	}
+	
+	public static class SingletonList KEY_GENERIC_TYPE extends ABSTRACT_LIST KEY_GENERIC_TYPE
+	{
+		KEY_TYPE element;
+		
+		public SingletonList(KEY_TYPE element)
+		{
+			this.element = element;
+		}
+		@Override
+		public void add(int index, KEY_TYPE e) { throw new UnsupportedOperationException(); }
+		@Override
+		public boolean addAll(int index, Collection<? extends CLASS_TYPE> c) { throw new UnsupportedOperationException(); }
+		@Override
+		public boolean addAll(int index, COLLECTION KEY_GENERIC_TYPE c) { throw new UnsupportedOperationException(); }
+		@Override
+		public boolean addAll(int index, LIST KEY_GENERIC_TYPE c) { throw new UnsupportedOperationException(); }
+
+		@Override
+		public KEY_TYPE GET_KEY(int index) {
+			if(index == 0) return element;
+			throw new IndexOutOfBoundsException();
+		}
+		
+		@Override
+		public KEY_TYPE set(int index, KEY_TYPE e) { throw new UnsupportedOperationException(); }
+		@Override
+		public KEY_TYPE REMOVE(int index) { throw new UnsupportedOperationException(); }
+		@Override
+		public void addElements(int from, KEY_TYPE[] a, int offset, int length) { throw new UnsupportedOperationException(); }
+		@Override
+		public KEY_TYPE[] getElements(int from, KEY_TYPE[] a, int offset, int length) {
+			if(from != 0 || length != 1) throw new IndexOutOfBoundsException();
+			a[offset] = element;
+			return a;
+		}
+
+		@Override
+		public void removeElements(int from, int to) { throw new UnsupportedOperationException(); }
+#if TYPE_OBJECT
+		@Override
+		public <K> K[] extractElements(int from, int to, Class<K> type) { throw new UnsupportedOperationException(); }
+#else
+		@Override
+		public KEY_TYPE[] extractElements(int from, int to) { throw new UnsupportedOperationException(); }
+#endif
+		@Override
+		public int size() { return 1; }
 	}
 	
 	public static class SynchronizedArrayList KEY_GENERIC_TYPE extends SynchronizedList KEY_GENERIC_TYPE implements IARRAY KEY_GENERIC_TYPE

@@ -268,7 +268,8 @@ public class ARRAY_FIFO_QUEUE KEY_GENERIC_TYPE implements PRIORITY_DEQUEUE KEY_G
 		@Override
 		public KEY_TYPE NEXT() {
 			KEY_TYPE value = array[index];
-			removeIndex(index++);
+			removeIndex(index);
+			index = ++index % array.length;
 			return value;
 		}
 	}
