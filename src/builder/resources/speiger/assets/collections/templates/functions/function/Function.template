@@ -4,6 +4,11 @@ package speiger.src.collections.PACKAGE.functions.function;
 import java.util.Objects;
 #endif
 
+/**
+ * A Type Specific Function interface that reduces boxing/unboxing and fills the gaps of interfaces that are missing.
+ * @Type(T)
+ * @ValueType(V)
+ */
 @FunctionalInterface
 #if JDK_FUNCTION
 public interface FUNCTION KEY_VALUE_GENERIC_TYPE extends JAVA_FUNCTION KEY_VALUE_GENERIC_TYPE
@@ -11,13 +16,23 @@ public interface FUNCTION KEY_VALUE_GENERIC_TYPE extends JAVA_FUNCTION KEY_VALUE
 public interface FUNCTION KEY_VALUE_GENERIC_TYPE
 #endif
 {
+	/**
+	 * Type Specific get function to reduce boxing/unboxing
+	 * @param k the value that should be processed
+	 * @return the result of the function
+	 */
 	public VALUE_TYPE GET_VALUE(KEY_TYPE k);
+	
 #if JDK_FUNCTION
 #if VALUE_BOOLEAN
-	
 	@Override
 	public default VALUE_TYPE test(KEY_TYPE k) { return GET_VALUE(k); }
 	
+	/**
+	 * A Type specific and-function helper function that reduces boxing/unboxing
+	 * @param other the other function that should be merged with.
+	 * @return a function that compares values in a and comparason
+	 */
 	public default FUNCTION KEY_VALUE_GENERIC_TYPE andType(FUNCTION KEY_VALUE_GENERIC_TYPE other) {
         Objects.requireNonNull(other);
         return T -> GET_VALUE(T) && other.GET_VALUE(T);
@@ -35,6 +50,11 @@ public interface FUNCTION KEY_VALUE_GENERIC_TYPE
 		return T -> !GET_VALUE(T);
 	}
 	
+	/**
+	 * A Type specific or-function helper function that reduces boxing/unboxing
+	 * @param other the other function that should be merged with.
+	 * @return a function that compares values in a or comparason
+	 */
 	public default FUNCTION KEY_VALUE_GENERIC_TYPE orType(FUNCTION KEY_VALUE_GENERIC_TYPE other) {
         Objects.requireNonNull(other);
         return T -> GET_VALUE(T) || other.GET_VALUE(T);

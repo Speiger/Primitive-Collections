@@ -12,6 +12,7 @@ import speiger.src.collections.ints.lists.IntListIterator;
 import speiger.src.collections.ints.utils.IntCollections;
 import speiger.src.collections.tests.ListTest;
 
+@SuppressWarnings("javadoc")
 public abstract class BaseIntListTest extends BaseIntCollectionTest
 {
 	@Override

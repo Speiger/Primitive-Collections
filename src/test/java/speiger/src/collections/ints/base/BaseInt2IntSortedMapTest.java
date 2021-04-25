@@ -8,6 +8,7 @@ import org.junit.Test;
 import speiger.src.collections.ints.maps.interfaces.Int2IntSortedMap;
 import speiger.src.collections.tests.SortedMapTests;
 
+@SuppressWarnings("javadoc")
 public abstract class BaseInt2IntSortedMapTest extends BaseInt2IntMapTest
 {
 	@Override

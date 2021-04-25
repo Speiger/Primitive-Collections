@@ -25,6 +25,11 @@ import speiger.src.collections.objects.collections.ObjectIterator;
 import speiger.src.collections.objects.sets.ObjectSet;
 #endif
 
+/**
+ * A Base Implementation of a Type Specific Map to reduce boxing/unboxing
+ * @Type(T)
+ * @ValueType(V)
+ */
 public abstract class ABSTRACT_MAP KEY_VALUE_GENERIC_TYPE extends AbstractMap<CLASS_TYPE, CLASS_VALUE_TYPE> implements MAP KEY_VALUE_GENERIC_TYPE
 {
 	protected VALUE_TYPE defaultReturnValue = EMPTY_VALUE;
@@ -332,23 +337,46 @@ public abstract class ABSTRACT_MAP KEY_VALUE_GENERIC_TYPE extends AbstractMap<CL
 		return hash;
 	}
 	
+	/**
+	 * A Simple Type Specific Entry class to reduce boxing/unboxing
+	 * @Type(T)
+	 * @ValueType(V)
+	 */
 	public static class BasicEntry KEY_VALUE_GENERIC_TYPE implements MAP.Entry KEY_VALUE_GENERIC_TYPE {
 		protected KEY_TYPE key;
 		protected VALUE_TYPE value;
 		
+		/**
+		 * A basic Empty constructor
+		 */
 		public BasicEntry() {}
 #if !TYPE_OBJECT
+		/**
+		 * A Boxed Constructor for supporting java variants
+		 * @param key the key of a entry
+		 * @param value the value of a entry
+		 */
 		public BasicEntry(CLASS_TYPE key, CLASS_VALUE_TYPE value) {
 			this.key = OBJ_TO_KEY(key);
 			this.value = OBJ_TO_VALUE(value);
 		}
 		
 #endif
+		/**
+		 * A Type Specific Constructor
+		 * @param key the key of a entry
+		 * @param value the value of a entry 
+		 */
 		public BasicEntry(KEY_TYPE key, VALUE_TYPE value) {
 			this.key = key;
 			this.value = value;
 		}
 		
+		/**
+		 * A Helper method for fast replacing values
+		 * @param key the key that should be replaced
+		 * @param value the value that should be replaced
+		 */
 		public void set(KEY_TYPE key, VALUE_TYPE value) {
 			this.key = key;
 			this.value = value;

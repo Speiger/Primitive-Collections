@@ -8,6 +8,7 @@ import org.junit.Test;
 import speiger.src.collections.ints.sets.IntSortedSet;
 import speiger.src.collections.tests.SortedSetTest;
 
+@SuppressWarnings("javadoc")
 public abstract class BaseIntSortedSetTest extends BaseIntCollectionTest
 {
 	@Override

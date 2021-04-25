@@ -9,6 +9,10 @@ import speiger.src.collections.PACKAGE.collections.COLLECTION;
 import speiger.src.collections.PACKAGE.utils.ITERATORS;
 #endif
 
+/**
+ * Abstract Type Specific Collection that reduces boxing/unboxing
+ * @Type(T)
+ */
 public abstract class ABSTRACT_COLLECTION KEY_GENERIC_TYPE extends AbstractCollection<CLASS_TYPE> implements COLLECTION KEY_GENERIC_TYPE
 {
 	@Override

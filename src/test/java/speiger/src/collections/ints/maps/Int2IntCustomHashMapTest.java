@@ -4,6 +4,7 @@ import speiger.src.collections.ints.base.BaseInt2IntMapTest;
 import speiger.src.collections.ints.maps.impl.customHash.Int2IntOpenCustomHashMap;
 import speiger.src.collections.ints.maps.interfaces.Int2IntMap;
 
+@SuppressWarnings("javadoc")
 public class Int2IntCustomHashMapTest extends BaseInt2IntMapTest
 {
 	@Override

@@ -1,5 +1,6 @@
 package speiger.src.builder;
 
+@SuppressWarnings("javadoc")
 public enum ClassType
 {
 	BOOLEAN("boolean", "Boolean", "Boolean", "booleans", "BOOLEAN", "false"),

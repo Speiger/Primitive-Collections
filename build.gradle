@@ -76,7 +76,7 @@ javadoc.failOnError = false
 javadoc.options.quiet()
 
 artifacts {
-//    archives javadocJar
+    archives javadocJar
     archives srcJar
 }
 

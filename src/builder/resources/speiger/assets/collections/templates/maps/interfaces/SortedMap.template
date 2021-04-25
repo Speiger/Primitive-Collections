@@ -13,15 +13,63 @@ import speiger.src.collections.PACKAGE.sets.SET;
 import speiger.src.collections.objects.sets.ObjectSortedSet;
 import speiger.src.collections.objects.collections.ObjectBidirectionalIterator;
 
+/**
+ * A Type Specific {@link SortedMap} interface to reduce boxing/unboxing, with a couple extra methods that allow greater control over maps.
+ * 
+ * @Type(T)
+ * @ValueType(V)
+ */
 public interface SORTED_MAP KEY_VALUE_GENERIC_TYPE extends SortedMap<CLASS_TYPE, CLASS_VALUE_TYPE>, MAP KEY_VALUE_GENERIC_TYPE
 {
+	/**
+	 * A customized put method that allows you to insert into the first index.
+	 * @param key the key that should be inserted
+	 * @param value the value that should be inserted
+	 * @return the previous present or default return value
+	 * @see java.util.Map#put(Object, Object)
+	 * @note some implementations do not support this method
+	 */
 	public VALUE_TYPE putAndMoveToFirst(KEY_TYPE key, VALUE_TYPE value);
+	/**
+	 * A customized put method that allows you to insert into the last index. (This may be nessesary depending on the implementation)
+	 * @param key the key that should be inserted
+	 * @param value the value that should be inserted
+	 * @return the previous present or default return value
+	 * @see java.util.Map#put(Object, Object)
+	 * @note some implementations do not support this method
+	 */
 	public VALUE_TYPE putAndMoveToLast(KEY_TYPE key, VALUE_TYPE value);
 	
+	/**
+	 * A specific move method to move a given key/value to the first index.
+	 * @param key that should be moved to the first index
+	 * @return true if the value was moved.
+	 * @note returns false if the value was not present in the first place
+	 * @note some implementations do not support this method
+	 */
 	public boolean moveToFirst(KEY_TYPE key);
+	/**
+	 * A specific move method to move a given key/value to the last index.
+	 * @param key that should be moved to the first last
+	 * @return true if the value was moved.
+	 * @note returns false if the value was not present in the first place
+	 * @note some implementations do not support this method
+	 */
 	public boolean moveToLast(KEY_TYPE key);
 	
+	/**
+	 * A Specific get method that allows to move teh given key/value int the first index.
+	 * @param key that is searched for
+	 * @return the given value for the requested key or default return value
+	 * @note some implementations do not support this method
+	 */
 	public VALUE_TYPE getAndMoveToFirst(KEY_TYPE key);
+	/**
+	 * A Specific get method that allows to move teh given key/value int the last index.
+	 * @param key that is searched for
+	 * @return the given value for the requested key or default return value
+	 * @note some implementations do not support this method
+	 */
 	public VALUE_TYPE getAndMoveToLast(KEY_TYPE key);
 	
 	@Override
@@ -33,19 +81,69 @@ public interface SORTED_MAP KEY_VALUE_GENERIC_TYPE extends SortedMap<CLASS_TYPE,
 	public VALUE_COLLECTION VALUE_GENERIC_TYPE values();
 	
 #if !TYPE_OBJECT
+	/**
+	 * A Type Specific SubMap method to reduce boxing/unboxing
+	 * @param fromKey where the submap should start
+	 * @param toKey where the subMap should end
+	 * @return a SubMap that is within the range of the desired range
+	 * @note Some implementations may not support this method.
+	 * @note Some implementations may not keep the desired range when the original is changed.
+	 */
 	public SORTED_MAP KEY_VALUE_GENERIC_TYPE subMap(KEY_TYPE fromKey, KEY_TYPE toKey);
+	/**
+	 * A Type Specific HeadMap method to reduce boxing/unboxing
+	 * @param toKey where the headMap should end
+	 * @return a HeadMap that is within the range of the desired range
+	 * @note Some implementations may not support this method.
+	 * @note Some implementations may not keep the desired range when the original is changed.
+	 */
 	public SORTED_MAP KEY_VALUE_GENERIC_TYPE headMap(KEY_TYPE toKey);
+	/**
+	 * A Type Specific TailMap method to reduce boxing/unboxing
+	 * @param fromKey where the TailMap should start
+	 * @return a TailMap that is within the range of the desired range
+	 * @note Some implementations may not support this method.
+	 * @note Some implementations may not keep the desired range when the original is changed.
+	 */
 	public SORTED_MAP KEY_VALUE_GENERIC_TYPE tailMap(KEY_TYPE fromKey);
 	
+	/**
+	 * A method to get the first Key of a Map.
+	 * @return the first key in the map
+	 */
 	public KEY_TYPE FIRST_ENTRY_KEY();
+	/**
+	 * A method to get and remove the first Key of a Map.
+	 * @return the first key in the map
+	 */
 	public KEY_TYPE POLL_FIRST_ENTRY_KEY();
+	/**
+	 * A method to get the last Key of a Map.
+	 * @return the last key in the map
+	 */
 	public KEY_TYPE LAST_ENTRY_KEY();
+	/**
+	 * A method to get and remove the last Key of a Map.
+	 * @return the last key in the map
+	 */
 	public KEY_TYPE POLL_LAST_ENTRY_KEY();
 	
+	/**
+	 * A method to get the first Value of a Map.
+	 * @return the first key in the map
+	 */
 	public VALUE_TYPE FIRST_ENTRY_VALUE();
+	/**
+	 * A method to get the last Value of a Map.
+	 * @return the last key in the map
+	 */
 	public VALUE_TYPE LAST_ENTRY_VALUE();
 	
+	@Override
+	@Deprecated
 	public default CLASS_TYPE firstKey() { return KEY_TO_OBJ(FIRST_ENTRY_KEY()); }
+	@Override
+	@Deprecated
 	public default CLASS_TYPE lastKey() { return KEY_TO_OBJ(LAST_ENTRY_KEY()); }
 	
 	@Override
@@ -58,10 +156,25 @@ public interface SORTED_MAP KEY_VALUE_GENERIC_TYPE extends SortedMap<CLASS_TYPE,
 	@Deprecated
 	public default SORTED_MAP KEY_VALUE_GENERIC_TYPE tailMap(CLASS_TYPE fromKey) { return tailMap(OBJ_TO_KEY(fromKey)); }
 #else
+	/**
+	 * A method to get and remove the first Key of a Map.
+	 * @return the first key in the map
+	 */
 	public KEY_TYPE POLL_FIRST_ENTRY_KEY();
+	/**
+	 * A method to get and remove the last Key of a Map.
+	 * @return the last key in the map
+	 */
 	public KEY_TYPE POLL_LAST_ENTRY_KEY();
-	
+	/**
+	 * A method to get the first Value of a Map.
+	 * @return the first key in the map
+	 */
 	public VALUE_TYPE FIRST_ENTRY_VALUE();
+	/**
+	 * A method to get the last Value of a Map.
+	 * @return the last key in the map
+	 */
 	public VALUE_TYPE LAST_ENTRY_VALUE();
 	
 	@Override
@@ -72,6 +185,11 @@ public interface SORTED_MAP KEY_VALUE_GENERIC_TYPE extends SortedMap<CLASS_TYPE,
 	public default SORTED_MAP KEY_VALUE_GENERIC_TYPE tailMap(CLASS_TYPE fromKey) { return tailMap(OBJ_TO_KEY(fromKey)); }
 #endif
 	
+	/**
+	 * Fast Sorted Entry Set that allows for a faster Entry Iterator by recycling the Entry Object and just exchanging 1 internal value
+	 * @Type(T)
+	 * @ValueType(V)
+	 */
 	interface FastSortedSet KEY_VALUE_GENERIC_TYPE extends MAP.FastEntrySet KEY_VALUE_GENERIC_TYPE, ObjectSortedSet<MAP.Entry KEY_VALUE_GENERIC_TYPE> {
 		@Override
 		public ObjectBidirectionalIterator<MAP.Entry KEY_VALUE_GENERIC_TYPE> fastIterator();

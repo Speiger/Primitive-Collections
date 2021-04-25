@@ -7,6 +7,7 @@ import speiger.src.collections.ints.maps.impl.customHash.Int2IntLinkedOpenCustom
 import speiger.src.collections.ints.maps.interfaces.Int2IntSortedMap;
 import speiger.src.collections.tests.SortedMapTests;
 
+@SuppressWarnings("javadoc")
 public class Int2IntLinkedOpenCustomHashMapTest extends BaseInt2IntSortedMapTest
 {
 	@Override

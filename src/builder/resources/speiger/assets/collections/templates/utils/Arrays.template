@@ -17,10 +17,13 @@ import speiger.src.collections.utils.SanityChecks;
  */
 public class ARRAYS
 {
+	/** Default Limit for Insertion/Selection Sort */
 	public static final int BASE_THRESHOLD = 16;
+	/** Default Threshold for Multithreaded Sorting Algorythm options*/
 	public static final int PARALLEL_THRESHOLD = 8192;
 	
 #if !TYPE_OBJECT
+	/** Empty Array Reference used for Uninitialized Collections */
 	public static final KEY_TYPE[] EMPTY_ARRAY = new KEY_TYPE[0];
 	
 	/**
@@ -92,6 +95,7 @@ public class ARRAYS
 	}
 	
 #else
+	/** Empty Array Reference used for Uninitialized Collections */
 	public static final Object[] EMPTY_ARRAY = new Object[0];
 	
 	/**
@@ -107,6 +111,15 @@ public class ARRAYS
 	}
 	
 #endif
+	/**
+	 * Method to validate if the current value is the lowest value in the heap
+	 * @param data the current heap.
+	 * @param size the size of the heap
+	 * @param index the index that should be validated
+	 * @param comp the comparator to sort the heap. Can be null
+	 * @ArrayType(T)
+	 * @return the index the element was shifted to
+	 */
 	public static GENERIC_KEY_BRACES int shiftDown(KEY_TYPE[] data, int size, int index, COMPARATOR KEY_SUPER_GENERIC_TYPE comp) {
 		int half = size >>> 1;
 		KEY_TYPE value = data[index];
@@ -136,6 +149,14 @@ public class ARRAYS
 		return index;
 	}
 	
+	/**
+	 * Method to sort a specific value into the heap.
+	 * @param data the heap itself.
+	 * @param index that should be heapified.
+	 * @param comp the comparator to sort the heap. Can be null
+	 * @ArrayType(T)
+	 * @return the index the element was shifted to
+	 */
 	public static GENERIC_KEY_BRACES int shiftUp(KEY_TYPE[] data, int index, COMPARATOR KEY_SUPER_GENERIC_TYPE comp) {
 		KEY_TYPE value = data[index];
 		if(comp != null) {
@@ -160,15 +181,37 @@ public class ARRAYS
 		return index;
 	}
 	
+	/**
+	 * Helper function to create a Heap out of an array.
+	 * @param data the array to heapify
+	 * @param size the current size of elements within the array.
+	 * @param comp the Comparator to sort the array. Can be null
+	 * @ArrayType(T)
+	 * @return the input array
+	 */
 	public static GENERIC_KEY_BRACES KEY_TYPE[] heapify(KEY_TYPE[] data, int size, COMPARATOR KEY_SUPER_GENERIC_TYPE comp) {
 		for(int i = (size >>> 1) - 1;i>=0;shiftDown(data, size, i--, comp));
 		return data;
 	}
 	
+	/**
+	 * Simple Shuffle method for Arrays.
+	 * @param array the elements that should be shuffled
+	 * @ArrayType(T)
+	 * @note This uses the SanityChecks#getRandom
+	 * @return the provided sorted array
+	 */
 	public static GENERIC_KEY_BRACES KEY_TYPE[] shuffle(KEY_TYPE[] array) {
 		return shuffle(array, SanityChecks.getRandom());
 	}
 	
+	/**
+	 * Simple Shuffle method for Arrays.
+	 * @param array the elements that should be shuffled
+	 * @param random the Random Number Generator that should be used for the shuffling
+	 * @ArrayType(T)
+	 * @return the provided sorted array
+	 */
 	public static GENERIC_KEY_BRACES KEY_TYPE[] shuffle(KEY_TYPE[] array, Random random) {
 		for(int i = array.length-1; i>=0;i--) {
 			int p = random.nextInt(i + 1);

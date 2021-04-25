@@ -3,26 +3,58 @@ package speiger.src.collections.PACKAGE.maps.interfaces;
 import java.util.NavigableMap;
 import speiger.src.collections.PACKAGE.sets.NAVIGABLE_SET;
 
+/**
+ * A Type Specific Navigable Map interface with a couple helper methods
+ * @Type(T)
+ * @ValueType(V)
+ */
 public interface NAVIGABLE_MAP KEY_VALUE_GENERIC_TYPE extends SORTED_MAP KEY_VALUE_GENERIC_TYPE, NavigableMap<CLASS_TYPE, CLASS_VALUE_TYPE>
 {
+	/** @return a Type Specific desendingMap */
 	@Override
 	public NAVIGABLE_MAP KEY_VALUE_GENERIC_TYPE descendingMap();
+	/** @return a Type Specific Navigable Key Set */
 	@Override
 	public NAVIGABLE_SET KEY_GENERIC_TYPE navigableKeySet();
+	/** @return a Type Specific Desending Key Set */
 	@Override
 	public NAVIGABLE_SET KEY_GENERIC_TYPE descendingKeySet();
+	/** @return a Type Specific firstEntry */
 	@Override
 	public MAP.Entry KEY_VALUE_GENERIC_TYPE firstEntry();
+	/** @return a Type Specific lastEntry */
 	@Override
 	public MAP.Entry KEY_VALUE_GENERIC_TYPE lastEntry();
+	/** @return a Type Specific pollFirstEntry */
 	@Override
 	public MAP.Entry KEY_VALUE_GENERIC_TYPE pollFirstEntry();
+	/** @return a Type Specific pollLastEntry */
 	@Override
 	public MAP.Entry KEY_VALUE_GENERIC_TYPE pollLastEntry();
 	
 #if !TYPE_OBJECT
+	/**
+	 * A Type Specific SubMap method to reduce boxing/unboxing
+	 * @param fromKey where the submap should start
+	 * @param fromInclusive if the fromKey is inclusive or not
+	 * @param toKey where the subMap should end
+	 * @param toInclusive if the toKey is inclusive or not
+	 * @return a SubMap that is within the range of the desired range
+	 */
 	public NAVIGABLE_MAP KEY_VALUE_GENERIC_TYPE subMap(KEY_TYPE fromKey, boolean fromInclusive, KEY_TYPE toKey, boolean toInclusive);
+	/**
+	 * A Type Specific HeadMap method to reduce boxing/unboxing
+	 * @param toKey where the HeadMap should end
+	 * @param inclusive if the toKey is inclusive or not
+	 * @return a HeadMap that is within the range of the desired range
+	 */
 	public NAVIGABLE_MAP KEY_VALUE_GENERIC_TYPE headMap(KEY_TYPE toKey, boolean inclusive);
+	/**
+	 * A Type Specific TailMap method to reduce boxing/unboxing
+	 * @param fromKey where the TailMap should start
+	 * @param inclusive if the fromKey is inclusive or not
+	 * @return a TailMap that is within the range of the desired range
+	 */
 	public NAVIGABLE_MAP KEY_VALUE_GENERIC_TYPE tailMap(KEY_TYPE fromKey, boolean inclusive);
 	
 	@Override
@@ -32,51 +64,121 @@ public interface NAVIGABLE_MAP KEY_VALUE_GENERIC_TYPE extends SORTED_MAP KEY_VAL
 	@Override
 	public default NAVIGABLE_MAP KEY_VALUE_GENERIC_TYPE tailMap(KEY_TYPE fromKey) { return tailMap(fromKey, true); }
 	
+	/**
+	 * A Helper method to set the max value for SubMaps. (Default: KEY_TYPE.MIN_VALUE)
+	 * @param e the new max value
+	 */
 	public void setDefaultMaxValue(KEY_TYPE e);
+	/**
+	 * A Helper method to get the max value for SubMaps.
+	 * @return the default max value.
+	 */
 	public KEY_TYPE getDefaultMaxValue();
 	
+	/**
+	 * A Helper method to set the min value for SubMaps. (Default: KEY_TYPE.MAX_VALUE)
+	 * @param e the new min value
+	 */
 	public void setDefaultMinValue(KEY_TYPE e);
+	/**
+	 * A Helper method to get the min value for SubMaps.
+	 * @return the default min value.
+	 */
 	public KEY_TYPE getDefaultMinValue();
 	
+	/**
+	 * A Type Specific lowerKey method to reduce boxing/unboxing.
+	 * @param key that should be compared with.
+	 * @return the greatest lower key that can be found
+	 */
 	public KEY_TYPE lowerKey(KEY_TYPE key);
+	/**
+	 * A Type Specific higherKey method to reduce boxing/unboxing.
+	 * @param key that should be compared with.
+	 * @return the lowest higher key that can be found
+	 */
 	public KEY_TYPE higherKey(KEY_TYPE key);
+	/**
+	 * A Type Specific floorKey method to reduce boxing/unboxing.
+	 * @param key that should be compared with.
+	 * @return the greatest lower or equal key that can be found
+	 */
 	public KEY_TYPE floorKey(KEY_TYPE key);
+	/**
+	 * A Type Specific ceilingKey method to reduce boxing/unboxing.
+	 * @param key that should be compared with.
+	 * @return the lowest higher or equal key that can be found
+	 */
 	public KEY_TYPE ceilingKey(KEY_TYPE key);
 	
+	/**
+	 * A Type Specific lowerEntry method to reduce boxing/unboxing.
+	 * @param key that should be compared with.
+	 * @return the greatest lower entry that can be found, or null
+	 */
 	public MAP.Entry KEY_VALUE_GENERIC_TYPE lowerEntry(KEY_TYPE key);
+	/**
+	 * A Type Specific higherEntry method to reduce boxing/unboxing.
+	 * @param key that should be compared with.
+	 * @return the lowest higher entry that can be found, or null
+	 */
 	public MAP.Entry KEY_VALUE_GENERIC_TYPE higherEntry(KEY_TYPE key);
+	/**
+	 * A Type Specific floorEntry method to reduce boxing/unboxing.
+	 * @param key that should be compared with.
+	 * @return the greatest lower or equal entry that can be found, or null
+	 */
 	public MAP.Entry KEY_VALUE_GENERIC_TYPE floorEntry(KEY_TYPE key);
+	/**
+	 * A Type Specific ceilingEntry method to reduce boxing/unboxing.
+	 * @param key that should be compared with.
+	 * @return the lowest higher or equal entry that can be found, or null
+	 */
 	public MAP.Entry KEY_VALUE_GENERIC_TYPE ceilingEntry(KEY_TYPE key);
 	
 	@Override
+	@Deprecated
 	public default CLASS_TYPE lowerKey(CLASS_TYPE key) { return KEY_TO_OBJ(lowerKey(OBJ_TO_KEY(key)));}
 	@Override
+	@Deprecated
 	public default CLASS_TYPE floorKey(CLASS_TYPE key) { return KEY_TO_OBJ(floorKey(OBJ_TO_KEY(key)));}
 	@Override
+	@Deprecated
 	public default CLASS_TYPE ceilingKey(CLASS_TYPE key) { return KEY_TO_OBJ(ceilingKey(OBJ_TO_KEY(key)));}
 	@Override
+	@Deprecated
 	public default CLASS_TYPE higherKey(CLASS_TYPE key) { return KEY_TO_OBJ(higherKey(OBJ_TO_KEY(key)));}
 	
 	@Override
+	@Deprecated
 	default MAP.Entry KEY_VALUE_GENERIC_TYPE lowerEntry(CLASS_TYPE key) { return lowerEntry(OBJ_TO_KEY(key)); }
 	@Override
+	@Deprecated
 	default MAP.Entry KEY_VALUE_GENERIC_TYPE floorEntry(CLASS_TYPE key) { return floorEntry(OBJ_TO_KEY(key)); }
 	@Override
+	@Deprecated
 	default MAP.Entry KEY_VALUE_GENERIC_TYPE ceilingEntry(CLASS_TYPE key) { return ceilingEntry(OBJ_TO_KEY(key)); }
 	@Override
+	@Deprecated
 	default MAP.Entry KEY_VALUE_GENERIC_TYPE higherEntry(CLASS_TYPE key) { return higherEntry(OBJ_TO_KEY(key)); }
 	
 	@Override
+	@Deprecated
 	default NAVIGABLE_MAP KEY_VALUE_GENERIC_TYPE subMap(CLASS_TYPE fromKey, boolean fromInclusive, CLASS_TYPE toKey, boolean toInclusive) { return subMap(OBJ_TO_KEY(fromKey), fromInclusive, OBJ_TO_KEY(toKey), toInclusive); }
 	@Override
+	@Deprecated
 	default NAVIGABLE_MAP KEY_VALUE_GENERIC_TYPE headMap(CLASS_TYPE toKey, boolean inclusive) { return headMap(OBJ_TO_KEY(toKey), inclusive); }
 	@Override
+	@Deprecated
 	default NAVIGABLE_MAP KEY_VALUE_GENERIC_TYPE tailMap(CLASS_TYPE fromKey, boolean inclusive) { return tailMap(OBJ_TO_KEY(fromKey), inclusive); }
 	@Override
+	@Deprecated
 	default NAVIGABLE_MAP KEY_VALUE_GENERIC_TYPE subMap(CLASS_TYPE fromKey, CLASS_TYPE toKey) { return subMap(OBJ_TO_KEY(fromKey), true, OBJ_TO_KEY(toKey), false); }
 	@Override
+	@Deprecated
 	default NAVIGABLE_MAP KEY_VALUE_GENERIC_TYPE headMap(CLASS_TYPE toKey) { return headMap(OBJ_TO_KEY(toKey), false); }
 	@Override
+	@Deprecated
 	default NAVIGABLE_MAP KEY_VALUE_GENERIC_TYPE tailMap(CLASS_TYPE fromKey) { return tailMap(OBJ_TO_KEY(fromKey), true); }
 #else
 	@Override

@@ -5,6 +5,7 @@ import java.util.EnumSet;
 import speiger.src.collections.ints.base.BaseIntNavigableSetTest;
 import speiger.src.collections.tests.SortedSetTest;
 
+@SuppressWarnings("javadoc")
 public class IntAVLTreeSetTests extends BaseIntNavigableSetTest
 {
 	@Override

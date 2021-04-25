@@ -22,22 +22,73 @@ import speiger.src.collections.objects.collections.ObjectIterator;
 import speiger.src.collections.objects.sets.ObjectSet;
 #endif
 
+/**
+ * A Type Specific Map that reduces memory overhead due to boxing/unboxing of Primitives
+ * and some extra helper functions.
+ * @Type(T)
+ * @ValueType(V)
+ */
 public interface MAP KEY_VALUE_GENERIC_TYPE extends Map<CLASS_TYPE, CLASS_VALUE_TYPE>, FUNCTION KEY_VALUE_GENERIC_TYPE
 {
+	/**
+	 * Method to see what the default return value is.
+	 * @return default return value
+	 */
 	public VALUE_TYPE getDefaultReturnValue();
+	/**
+	 * Method to define the default return value if a requested key isn't present
+	 * @param v value that should be the default return value
+	 * @return itself
+	 */
 	public MAP KEY_VALUE_GENERIC_TYPE setDefaultReturnValue(VALUE_TYPE v);
 	
+	/**
+	 * Type Specific method to reduce boxing/unboxing of values
+	 * @param key the key that should be inserted,
+	 * @param value the value that should be inserted
+	 * @return the last present value or default return value.
+	 * @see Map#put(Object, Object)
+	 */
 	public VALUE_TYPE put(KEY_TYPE key, VALUE_TYPE value);
+	/**
+	 * Type Specific method to reduce boxing/unboxing of values
+	 * @param key the key that should be inserted,
+	 * @param value the value that should be inserted
+	 * @return the last present value or default return value.
+	 * @see Map#putIfAbsent(Object, Object)
+	 */
 	public VALUE_TYPE putIfAbsent(KEY_TYPE key, VALUE_TYPE value);
-#if VALUE_PRIMITIVES
-	public VALUE_TYPE addTo(KEY_TYPE key, VALUE_TYPE value);
-#endif
 	
+#if VALUE_PRIMITIVES
+	/**
+	 * A Helper method to add a primitives together. If key is not present then this functions as a put.
+	 * @param key the key that should be inserted,
+	 * @param value the value that should be inserted / added
+	 * @return the last present value or default return value.
+	 */
+	public VALUE_TYPE addTo(KEY_TYPE key, VALUE_TYPE value);
+	
+#endif
+	/**
+	 * Type Specific function for the bull putting of values
+	 * @param m the elements that should be inserted
+	 */
 	public void putAll(MAP KEY_VALUE_GENERIC_TYPE m);
 	
-#if !TYPE_OBJECT	
+#if !TYPE_OBJECT
+	/**
+	 * Type Specific method to reduce boxing/unboxing of values
+	 * @param key element that is searched for
+	 * @return if the key is present
+	 */
 	public boolean containsKey(KEY_TYPE key);
 	
+	/**
+	 * @see Map#containsKey(Object)
+	 * @param key that is searched for.
+	 * @return true if found
+	 * @note in some implementations key does not have to be CLASS_TYPE but just have to support equals with CLASS_TYPE.
+	 */
 	@Override
 	public default boolean containsKey(Object key) {
 		return key instanceof CLASS_TYPE && containsKey(CLASS_TO_KEY(key));
@@ -45,16 +96,38 @@ public interface MAP KEY_VALUE_GENERIC_TYPE extends Map<CLASS_TYPE, CLASS_VALUE_
 	
 #endif
 #if !VALUE_OBJECT
+	/**
+	 * Type Specific method to reduce boxing/unboxing of values
+	 * @param value element that is searched for
+	 * @return if the value is present
+	 */
 	public boolean containsValue(VALUE_TYPE value);
 	
+	/**
+ 	* @see Map#containsValue(Object)
+ 	* @param value that is searched for.
+ 	* @return true if found
+ 	* @note in some implementations key does not have to be CLASS_VALUE but just have to support equals with CLASS_VALUE.
+ 	*/
 	@Override
 	public default boolean containsValue(Object value) {
 		return value instanceof CLASS_VALUE_TYPE && containsValue(CLASS_TO_VALUE(value));
 	}
 	
 #endif
+	/**
+	 * Type Specific remove function to reduce boxing/unboxing
+	 * @param key the element that should be removed
+	 * @return the value that was removed or default return value
+	 */
 	public VALUE_TYPE REMOVE_KEY(KEY_TYPE key);
 	
+	/**
+	 * @see Map#remove(Object)
+	 * @param key the element that should be removed
+	 * @return the value that was removed or default return value
+	 * @note in some implementations key does not have to be CLASS_TYPE but just have to support equals with CLASS_TYPE.
+	 */
 	@Override
 	public default CLASS_VALUE_TYPE remove(Object key) {
 #if TYPE_OBJECT
@@ -65,8 +138,21 @@ public interface MAP KEY_VALUE_GENERIC_TYPE extends Map<CLASS_TYPE, CLASS_VALUE_
 	}
 	
 #if !TYPE_OBJECT || !VALUE_OBJECT
+	/**
+	 * Type Specific remove function to reduce boxing/unboxing
+ 	 * @param key the element that should be removed
+ 	 * @param value the expected value that should be found
+ 	 * @return true if the key & value was found and removed
+	 * @see Map#remove(Object, Object)
+	 */
 	public boolean remove(KEY_TYPE key, VALUE_TYPE value);
 	
+	/**
+ 	 * @see Map#remove(Object, Object)
+ 	 * @param key the element that should be removed
+ 	 * @param value the expected value that should be found
+ 	 * @return true if the key & value was found and removed
+ 	 */
 	@Override
 	public default boolean remove(Object key, Object value) {
 #if TYPE_OBJECT
@@ -79,30 +165,90 @@ public interface MAP KEY_VALUE_GENERIC_TYPE extends Map<CLASS_TYPE, CLASS_VALUE_
 	}
 #endif
 	
+	/**
+	 * A Type Specific replace method to replace an existing value
+	 * @param key the element that should be searched for
+	 * @param oldValue the expected value to be replaced
+	 * @param newValue the value to replace the oldValue with.
+	 * @return true if the value got replaced
+	 * @note this fails if the value is not present even if it matches the oldValue
+	 */
 	public boolean replace(KEY_TYPE key, VALUE_TYPE oldValue, VALUE_TYPE newValue);
+	/**
+	 * A Type Specific replace method to reduce boxing/unboxing replace an existing value
+	 * @param key the element that should be searched for
+	 * @param value the value to replace with.
+	 * @return the present value or default return value
+	 * @note this fails if the value is not present
+	 */
 	public VALUE_TYPE replace(KEY_TYPE key, VALUE_TYPE value);
+	/**
+	 * A Type Specific mass replace method to reduce boxing/unboxing
+	 * @param mappingFunction operation to replace all values
+	 */
 	public void REPLACE_VALUES(UNARY_OPERATOR KEY_VALUE_GENERIC_TYPE mappingFunction);
+	/**
+	 * A Type Specific compute method to reduce boxing/unboxing
+	 * @param key the key that should be computed
+	 * @param mappingFunction the operator that should generate the value
+	 * @return the result of the computation
+	 */
 	public VALUE_TYPE COMPUTE(KEY_TYPE key, UNARY_OPERATOR KEY_VALUE_GENERIC_TYPE mappingFunction);
+	/**
+	 * A Type Specific compute method to reduce boxing/unboxing
+	 * @param key the key that should be computed
+	 * @param mappingFunction the operator that should generate the value if not present
+	 * @return the result of the computed value or present value
+	 */
 	public VALUE_TYPE COMPUTE_IF_ABSENT(KEY_TYPE key, FUNCTION KEY_VALUE_GENERIC_TYPE mappingFunction);
+	/**
+	 * A Type Specific compute method to reduce boxing/unboxing
+	 * @param key the key that should be computed
+	 * @param mappingFunction the operator that should generate the value if present
+	 * @return the result of the default return value or present value
+	 * @note if not present then compute is not executed
+	 */
 	public VALUE_TYPE COMPUTE_IF_PRESENT(KEY_TYPE key, UNARY_OPERATOR KEY_VALUE_GENERIC_TYPE mappingFunction);
+	/**
+	 * A Type Specific merge method to reduce boxing/unboxing
+	 * @param key the key that should be be searched for
+	 * @param value the value that should be merged with
+	 * @param mappingFunction the operator that should generate the new Value
+	 * @return the result of the merge
+	 * @note if the result matches the default return value then the key is removed from the map
+	 */
 	public VALUE_TYPE MERGE(KEY_TYPE key, VALUE_TYPE value, VALUE_UNARY_OPERATOR VALUE_VALUE_GENERIC_TYPE mappingFunction);
 	
 #if !TYPE_OBJECT || !VALUE_OBJECT
 	@Override
+	@Primitive
 	public default boolean replace(CLASS_TYPE key, CLASS_VALUE_TYPE oldValue, CLASS_VALUE_TYPE newValue) {
 		return replace(OBJ_TO_KEY(key), OBJ_TO_VALUE(oldValue), OBJ_TO_VALUE(newValue));
 	}
 	
 	@Override
+	@Primitive
 	public default CLASS_VALUE_TYPE replace(CLASS_TYPE key, CLASS_VALUE_TYPE value) {
 		return VALUE_TO_OBJ(replace(OBJ_TO_KEY(key), OBJ_TO_VALUE(value)));
 	}
 	
+	/**
+	 * A Type Specific get method to reduce boxing/unboxing
+	 * @param key the key that is searched for
+	 * @return the searched value or default return value
+	 */
 	@Override
 	public VALUE_TYPE GET_VALUE(KEY_TYPE key);
+	/**
+	 * A Type Specific getOrDefault method to reduce boxing/unboxing
+	 * @param key the key that is searched for
+	 * @param defaultValue the value that should be returned if the key is not present
+	 * @return the searched value or defaultValue value
+	 */
 	public VALUE_TYPE getOrDefault(KEY_TYPE key, VALUE_TYPE defaultValue);
 	
 	@Override
+	@Primitive
 	public default CLASS_VALUE_TYPE get(Object key) {
 #if TYPE_OBJECT
 		return VALUE_TO_OBJ(GET_VALUE((CLASS_TYPE)key));
@@ -112,6 +258,7 @@ public interface MAP KEY_VALUE_GENERIC_TYPE extends Map<CLASS_TYPE, CLASS_VALUE_
 	}
 	
 	@Override
+	@Primitive
 	public default CLASS_VALUE_TYPE getOrDefault(Object key, CLASS_VALUE_TYPE defaultValue) {
 #if TYPE_OBJECT
 		CLASS_VALUE_TYPE value = VALUE_TO_OBJ(GET_VALUE((CLASS_TYPE)key));
@@ -123,33 +270,43 @@ public interface MAP KEY_VALUE_GENERIC_TYPE extends Map<CLASS_TYPE, CLASS_VALUE_
 	
 #endif
 	@Override
+	@Primitive
 	public default void replaceAll(BiFunction<? super CLASS_TYPE, ? super CLASS_VALUE_TYPE, ? extends CLASS_VALUE_TYPE> mappingFunction) {
 		REPLACE_VALUES(mappingFunction instanceof UNARY_OPERATOR ? (UNARY_OPERATOR KEY_VALUE_GENERIC_TYPE)mappingFunction : (K, V) -> OBJ_TO_VALUE(mappingFunction.apply(KEY_TO_OBJ(K), VALUE_TO_OBJ(V))));
 	}
 	
 	@Override
+	@Primitive
 	public default CLASS_VALUE_TYPE compute(CLASS_TYPE key, BiFunction<? super CLASS_TYPE, ? super CLASS_VALUE_TYPE, ? extends CLASS_VALUE_TYPE> mappingFunction) {
 		return VALUE_TO_OBJ(COMPUTE(OBJ_TO_KEY(key), mappingFunction instanceof UNARY_OPERATOR ? (UNARY_OPERATOR KEY_VALUE_GENERIC_TYPE)mappingFunction : (K, V) -> OBJ_TO_VALUE(mappingFunction.apply(KEY_TO_OBJ(K), VALUE_TO_OBJ(V)))));
 	}
 	
 	@Override
+	@Primitive
 	public default CLASS_VALUE_TYPE computeIfAbsent(CLASS_TYPE key, Function<? super CLASS_TYPE, ? extends CLASS_VALUE_TYPE> mappingFunction) {
 		return VALUE_TO_OBJ(COMPUTE_IF_ABSENT(OBJ_TO_KEY(key), mappingFunction instanceof FUNCTION ? (FUNCTION KEY_VALUE_GENERIC_TYPE)mappingFunction : K -> OBJ_TO_VALUE(mappingFunction.apply(KEY_TO_OBJ(K)))));
 	}
 	
 	@Override
+	@Primitive
 	public default CLASS_VALUE_TYPE computeIfPresent(CLASS_TYPE key, BiFunction<? super CLASS_TYPE, ? super CLASS_VALUE_TYPE, ? extends CLASS_VALUE_TYPE> mappingFunction) {
 		return VALUE_TO_OBJ(COMPUTE_IF_PRESENT(OBJ_TO_KEY(key), mappingFunction instanceof UNARY_OPERATOR ? (UNARY_OPERATOR KEY_VALUE_GENERIC_TYPE)mappingFunction : (K, V) -> OBJ_TO_VALUE(mappingFunction.apply(KEY_TO_OBJ(K), VALUE_TO_OBJ(V)))));
 	}
 	
 	@Override
+	@Primitive
 	public default CLASS_VALUE_TYPE merge(CLASS_TYPE key, CLASS_VALUE_TYPE value, BiFunction<? super CLASS_VALUE_TYPE, ? super CLASS_VALUE_TYPE, ? extends CLASS_VALUE_TYPE> mappingFunction) {
 		return VALUE_TO_OBJ(MERGE(OBJ_TO_KEY(key), OBJ_TO_VALUE(value), mappingFunction instanceof VALUE_UNARY_OPERATOR ? (VALUE_UNARY_OPERATOR VALUE_VALUE_GENERIC_TYPE)mappingFunction : (K, V) -> OBJ_TO_VALUE(mappingFunction.apply(VALUE_TO_OBJ(K), VALUE_TO_OBJ(V)))));
 	}
 	
+	/**
+	 * Type Specific forEach method to reduce boxing/unboxing
+	 * @param action processor of the values that are iterator over
+	 */
 	public void forEach(BI_CONSUMER KEY_VALUE_GENERIC_TYPE action);
 	
 	@Override
+	@Primitive
 	public default void forEach(BiConsumer<? super CLASS_TYPE, ? super CLASS_VALUE_TYPE> action) {
 		forEach(action instanceof BI_CONSUMER ? (BI_CONSUMER KEY_VALUE_GENERIC_TYPE)action : (K, V) -> action.accept(KEY_TO_OBJ(K), VALUE_TO_OBJ(V)));
 	}
@@ -159,37 +316,76 @@ public interface MAP KEY_VALUE_GENERIC_TYPE extends Map<CLASS_TYPE, CLASS_VALUE_
 	@Override
 	public VALUE_COLLECTION VALUE_GENERIC_TYPE values();
 	@Override
+	@Primitive
 	public ObjectSet<Map.Entry<CLASS_TYPE, CLASS_VALUE_TYPE>> entrySet();
+	/**
+	 * Type Sensitive EntrySet to reduce boxing/unboxing and optionally Temp Object Allocation.
+	 * @return a EntrySet of the collection
+	 */
 	public ObjectSet<Entry KEY_VALUE_GENERIC_TYPE> ENTRY_SET();
 	
 #if !TYPE_OBJECT || !VALUE_OBJECT
 	@Override
+	@Primitive
 	public default CLASS_VALUE_TYPE put(CLASS_TYPE key, CLASS_VALUE_TYPE value) {
 		return VALUE_TO_OBJ(put(OBJ_TO_KEY(key), OBJ_TO_VALUE(value)));
 	}
 	
 	@Override
+	@Primitive
 	public default CLASS_VALUE_TYPE putIfAbsent(CLASS_TYPE key, CLASS_VALUE_TYPE value) {
 		return VALUE_TO_OBJ(put(OBJ_TO_KEY(key), OBJ_TO_VALUE(value)));
 	}
 #endif
+	/**
+	 * Fast Entry set that allows for a faster Entry Iterator by recycling the Entry Object and just exchanging 1 internal value
+	 * @Type(T)
+	 * @ValueType(V)
+	 */
 	public interface FastEntrySet KEY_VALUE_GENERIC_TYPE extends ObjectSet<MAP.Entry KEY_VALUE_GENERIC_TYPE>
 	{
+		/**
+		 * Fast iterator that recycles the given Entry object to improve speed and reduce object allocation
+		 * @return a Recycling ObjectIterator of the given set
+		 */
 		public ObjectIterator<MAP.Entry KEY_VALUE_GENERIC_TYPE> fastIterator();
+		/**
+		 * Fast for each that recycles the given Entry object to improve speed and reduce object allocation
+		 * @param action the action that should be applied to each given entry
+		 */
 		public default void fastForEach(Consumer<? super MAP.Entry KEY_VALUE_GENERIC_TYPE> action) {
 			forEach(action);
 		}
 	}
 	
+	/**
+	 * Type Specific Map Entry that reduces boxing/unboxing
+	 * @Type(T)
+	 * @ValueType(V)
+	 */
 	public interface Entry KEY_VALUE_GENERIC_TYPE extends Map.Entry<CLASS_TYPE, CLASS_VALUE_TYPE>
 	{
 #if !TYPE_OBJECT
+		/**
+		 * Type Specific getKey method that reduces boxing/unboxing
+		 * @return the key of a given Entry
+		 */
 		public KEY_TYPE ENTRY_KEY();
 		public default CLASS_TYPE getKey() { return KEY_TO_OBJ(ENTRY_KEY()); }
 #endif
 		
 #if !VALUE_OBJECT
+		/**
+		 * Type Specific getValue method that reduces boxing/unboxing
+		 * @return the value of a given Entry
+		 */
 		public VALUE_TYPE ENTRY_VALUE();
+		/**
+		 * Type Specific setValue method that reduces boxing/unboxing
+		 * @param value the new Value that should be placed in the given entry
+		 * @return the old value of a given entry
+		 * @throws UnsupportedOperationException if the Entry is immutable or not supported
+		 */
 		public VALUE_TYPE setValue(VALUE_TYPE value);
 		public default CLASS_VALUE_TYPE getValue() { return VALUE_TO_OBJ(ENTRY_VALUE()); }
 		public default CLASS_VALUE_TYPE setValue(CLASS_VALUE_TYPE value) { return VALUE_TO_OBJ(setValue(OBJ_TO_VALUE(value))); }

@@ -7,6 +7,7 @@ import speiger.src.collections.ints.maps.impl.tree.Int2IntAVLTreeMap;
 import speiger.src.collections.ints.maps.interfaces.Int2IntNavigableMap;
 import speiger.src.collections.tests.SortedMapTests;
 
+@SuppressWarnings("javadoc")
 public class Int2IntAVLTreeMapTest extends BaseInt2IntNavigableMapTest
 {
 	@Override

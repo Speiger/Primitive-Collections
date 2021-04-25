@@ -14,6 +14,7 @@ import speiger.src.builder.mappers.LineMapper;
 import speiger.src.builder.mappers.SimpleMapper;
 import speiger.src.builder.processor.TemplateProcess;
 
+@SuppressWarnings("javadoc")
 public class GlobalVariables
 {
 	List<IMapper> operators = new ArrayList<>();
@@ -71,6 +72,8 @@ public class GlobalVariables
 		}
 		addComment("@ArrayType", "@param <%s> the type of array that the operation should be applied");
 		addComment("@Type", "@param <%s> the type of elements maintained by this Collection");
+		addValueComment("@ValueArrayType", "@param <%s> the type of array that the operation should be applied");
+		addValueComment("@ValueType", "@param <%s> the type of elements maintained by this Collection");
 		addAnnontion("@PrimitiveOverride", "@Override");
 		addSimpleMapper("@PrimitiveDoc", "");
 		addAnnontion("@Primitive", "@Deprecated");
@@ -329,6 +332,12 @@ public class GlobalVariables
 	{
 		if(type == ClassType.OBJECT) operators.add(new InjectMapper(type.name()+"["+pattern+"]", pattern, value).removeBraces());
 		else operators.add(new LineMapper(type.name()+"["+pattern+"]", pattern));
+	}
+	
+	private void addValueComment(String pattern, String value)
+	{
+		if(valueType == ClassType.OBJECT) operators.add(new InjectMapper(valueType.name()+"["+pattern+"]", pattern, value).removeBraces());
+		else operators.add(new LineMapper(valueType.name()+"["+pattern+"]", pattern));
 	}
 	
 	private InjectMapper addInjectMapper(String pattern, String replacement)

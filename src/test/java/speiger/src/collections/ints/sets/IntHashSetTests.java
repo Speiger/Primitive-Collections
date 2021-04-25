@@ -8,6 +8,7 @@ import speiger.src.collections.ints.collections.IntCollection;
 import speiger.src.collections.ints.utils.IntStrategy;
 import speiger.src.collections.tests.SortedSetTest;
 
+@SuppressWarnings("javadoc")
 public class IntHashSetTests
 {
 	public static abstract class BaseIntOpenHashSetTests extends BaseIntSortedSetTest

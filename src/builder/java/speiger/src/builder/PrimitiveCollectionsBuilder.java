@@ -15,6 +15,7 @@ import java.util.function.Consumer;
 import speiger.src.builder.processor.TemplateProcess;
 import speiger.src.builder.processor.TemplateProcessor;
 
+@SuppressWarnings("javadoc")
 public class PrimitiveCollectionsBuilder extends TemplateProcessor
 {
 	Map<String, EnumSet<ClassType>> blocked = new HashMap<>();

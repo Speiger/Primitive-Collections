@@ -10,6 +10,7 @@ import speiger.src.collections.ints.maps.interfaces.Int2IntMap;
 import speiger.src.collections.ints.utils.IntStrategy;
 import speiger.src.collections.tests.MapTests;
 
+@SuppressWarnings("javadoc")
 public abstract class BaseInt2IntMapTest
 {
 	protected static final IntStrategy STRATEGY = new Strategy();

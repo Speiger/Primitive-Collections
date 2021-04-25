@@ -6,6 +6,7 @@ import speiger.src.collections.ints.base.BaseIntListTest;
 import speiger.src.collections.ints.base.IIntArrayTest;
 import speiger.src.collections.ints.base.IIntStackTests;
 
+@SuppressWarnings("javadoc")
 public class IntArrayListTest extends BaseIntListTest implements IIntStackTests, IIntArrayTest
 {   
 	@Override

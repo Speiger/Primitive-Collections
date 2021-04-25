@@ -7,6 +7,7 @@ import org.junit.Test;
 
 import speiger.src.collections.ints.utils.IIntArray;
 
+@SuppressWarnings("javadoc")
 public interface IIntArrayTest
 {
 	static final int[] TEST_ARRAY = IntStream.range(0, 100).toArray();

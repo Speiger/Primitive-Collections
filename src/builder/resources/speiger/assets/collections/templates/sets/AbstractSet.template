@@ -7,6 +7,10 @@ import java.util.Set;
 import speiger.src.collections.PACKAGE.collections.ABSTRACT_COLLECTION;
 import speiger.src.collections.PACKAGE.collections.ITERATOR;
 
+/**
+ * Abstract Type Specific Set that reduces boxing/unboxing
+ * @Type(T)
+ */
 public abstract class ABSTRACT_SET KEY_GENERIC_TYPE extends ABSTRACT_COLLECTION KEY_GENERIC_TYPE implements SET KEY_GENERIC_TYPE
 {
 	@Override

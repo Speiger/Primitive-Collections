@@ -1,5 +1,6 @@
 package speiger.src.collections.tests;
 
+@SuppressWarnings("javadoc")
 public enum SortedMapTests
 {
 	PUT_MOVE,

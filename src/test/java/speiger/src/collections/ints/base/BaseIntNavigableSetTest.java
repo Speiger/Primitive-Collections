@@ -8,6 +8,7 @@ import org.junit.Test;
 import speiger.src.collections.ints.sets.IntNavigableSet;
 import speiger.src.collections.tests.NavigableSetTest;
 
+@SuppressWarnings("javadoc")
 public abstract class BaseIntNavigableSetTest extends BaseIntSortedSetTest
 {
 	@Override

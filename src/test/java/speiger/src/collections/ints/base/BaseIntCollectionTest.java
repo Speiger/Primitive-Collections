@@ -14,6 +14,7 @@ import speiger.src.collections.ints.utils.IntCollections.SynchronizedCollection;
 import speiger.src.collections.ints.utils.IntCollections.UnmodifiableCollection;
 import speiger.src.collections.tests.CollectionTest;
 
+@SuppressWarnings("javadoc")
 public abstract class BaseIntCollectionTest extends BaseIntIterableTest
 {
 	protected static final int[] ADD_ARRAY = new int[]{3212, -12, 423, -182, -4912};

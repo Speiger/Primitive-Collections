@@ -4,6 +4,7 @@ import speiger.src.collections.ints.base.BaseInt2IntSortedMapTest;
 import speiger.src.collections.ints.maps.impl.misc.Int2IntArrayMap;
 import speiger.src.collections.ints.maps.interfaces.Int2IntSortedMap;
 
+@SuppressWarnings("javadoc")
 public class Int2IntArrayMapTest extends BaseInt2IntSortedMapTest
 {
 	@Override

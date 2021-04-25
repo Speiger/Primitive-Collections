@@ -11,6 +11,7 @@ import speiger.src.collections.ints.utils.IntArrays;
 import speiger.src.collections.tests.IterableTest;
 import speiger.src.collections.tests.PriorityQueueTest;
 
+@SuppressWarnings("javadoc")
 public abstract class BaseIntPriorityQueueTest extends BaseIntIterableTest
 {
 	@Override

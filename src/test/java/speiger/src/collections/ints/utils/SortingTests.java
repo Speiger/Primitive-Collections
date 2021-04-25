@@ -6,6 +6,7 @@ import java.util.stream.IntStream;
 import org.junit.Assert;
 import org.junit.Test;
 
+@SuppressWarnings("javadoc")
 public class SortingTests
 {
 	public static final int[] SMALL_TEST = IntStream.range(0, 5000).toArray();

@@ -10,6 +10,7 @@ import speiger.src.collections.ints.collections.IntIterable;
 import speiger.src.collections.ints.collections.IntIterator;
 import speiger.src.collections.tests.IterableTest;
 
+@SuppressWarnings("javadoc")
 public abstract class BaseIntIterableTest
 {
 	protected static final int[] EMPTY_ARRAY = new int[0];

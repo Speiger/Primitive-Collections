@@ -8,6 +8,7 @@ import org.junit.Test;
 import speiger.src.collections.ints.maps.interfaces.Int2IntNavigableMap;
 import speiger.src.collections.tests.NavigableSetTest;
 
+@SuppressWarnings("javadoc")
 public abstract class BaseInt2IntNavigableMapTest extends BaseInt2IntSortedMapTest
 {
 	@Override
