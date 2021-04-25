@@ -20,6 +20,12 @@ public interface CONSUMER extends Consumer<CLASS_TYPE>
      */
 	void accept(KEY_TYPE t);
 	
+	/**
+	 * Type Specific sequencing method to reduce boxing/unboxing.
+	 * @param after a operation that should be performed afterwards
+	 * @return a sequenced consumer that does 2 operations
+	 * @throws NullPointerException if after is null
+	 */
 	public default CONSUMER andThen(CONSUMER after) {
 		Objects.requireNonNull(after);
 		return T -> {accept(T); after.accept(T);};

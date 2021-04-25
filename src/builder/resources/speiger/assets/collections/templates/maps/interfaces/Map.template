@@ -142,7 +142,7 @@ public interface MAP KEY_VALUE_GENERIC_TYPE extends Map<CLASS_TYPE, CLASS_VALUE_
 	 * Type Specific remove function to reduce boxing/unboxing
  	 * @param key the element that should be removed
  	 * @param value the expected value that should be found
- 	 * @return true if the key & value was found and removed
+ 	 * @return true if the key and value was found and removed
 	 * @see Map#remove(Object, Object)
 	 */
 	public boolean remove(KEY_TYPE key, VALUE_TYPE value);
@@ -151,7 +151,7 @@ public interface MAP KEY_VALUE_GENERIC_TYPE extends Map<CLASS_TYPE, CLASS_VALUE_
  	 * @see Map#remove(Object, Object)
  	 * @param key the element that should be removed
  	 * @param value the expected value that should be found
- 	 * @return true if the key & value was found and removed
+ 	 * @return true if the key and value was found and removed
  	 */
 	@Override
 	public default boolean remove(Object key, Object value) {

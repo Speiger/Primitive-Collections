@@ -20,6 +20,10 @@ import speiger.src.collections.PACKAGE.utils.ARRAYS;
 import speiger.src.collections.utils.SanityChecks;
 #endif
 
+/**
+ * A Type Specific List interface that reduces boxing/unboxing and adds a couple extra quality of life features
+ * @Type(T)
+ */
 public interface LIST KEY_GENERIC_TYPE extends COLLECTION KEY_GENERIC_TYPE, List<CLASS_TYPE>
 {
 #if !TYPE_OBJECT
@@ -212,7 +216,6 @@ public interface LIST KEY_GENERIC_TYPE extends COLLECTION KEY_GENERIC_TYPE, List
 	/**
 	 * Sorts the elements specified by the Natural order either by using the Comparator or the elements
 	 * @see java.util.List#sort(Comparator)
-	 * @see ARRAYS#stableSort(KEY_TYPE[], Comparator)
 	 */
 	@Override
 	public default void sort(Comparator<? super CLASS_TYPE> c) {
@@ -230,7 +233,6 @@ public interface LIST KEY_GENERIC_TYPE extends COLLECTION KEY_GENERIC_TYPE, List
 	 * Sorts the elements specified by the Natural order either by using the Comparator or the elements using a unstable sort
  	 * @param c the sorter of the elements, can be null
 	 * @see java.util.List#sort(Comparator)
-	 * @see ARRAYS#unstableSort(KEY_TYPE[], Comparator)
 	 */
 	public default void unstableSort(Comparator<? super CLASS_TYPE> c) {
 		KEY_TYPE[] array = (KEY_TYPE[])TO_ARRAY();

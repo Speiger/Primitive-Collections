@@ -157,7 +157,7 @@ public class ITERATORS
 	}
 	
 	/**
-	 * A Primitive iterator variant of the {@link #unwrap(KEY_TYPE[], Iterator)} function
+	 * A Primitive iterator variant of the ITERATORS unwrap function
 	 * Iterates over a iterator and inserts the values into the array and returns the amount that was inserted
 	 * @param a where the elements should be inserted
 	 * @param i the source iterator
@@ -169,7 +169,7 @@ public class ITERATORS
 	}
 	
 	/**
-	 * A Primitive iterator variant of the {@link #unwrap(KEY_TYPE[], Iterator, int)} function
+	 * A Primitive iterator variant of the ITERATORS unwrap function
 	 * Iterates over a iterator and inserts the values into the array and returns the amount that was inserted
 	 * @param a where the elements should be inserted
 	 * @param i the source iterator
@@ -182,7 +182,7 @@ public class ITERATORS
 	}
 	
 	/**
-	 * A Primitive iterator variant of the {@link #unwrap(KEY_TYPE[], Iterator, int, int)} function
+	 * A Primitive iterator variant of the ITERATORS unwrap function
 	 * Iterates over a iterator and inserts the values into the array and returns the amount that was inserted
 	 * @param a where the elements should be inserted
 	 * @param i the source iterator

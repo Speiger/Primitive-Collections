@@ -2,7 +2,7 @@ package speiger.src.collections.utils;
 
 
 /**
- * The <pop>Stack</pop> Interface represents the Last-In-First-Out layout (LIFO).
+ * The Stack Interface represents the Last-In-First-Out layout (LIFO).
  * It provides a simple {@link #push(Object)}, {@link #pop()} function,
  * with a fast {@link #clear()} function.
  * The {@link #peek(int)} function allows to view the contents of the stack (top to bottom).

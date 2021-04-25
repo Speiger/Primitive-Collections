@@ -39,38 +39,73 @@ import speiger.src.collections.objects.sets.AbstractObjectSet;
 import speiger.src.collections.objects.sets.ObjectSet;
 #endif
 
+/**
+ * A Simple Type Specific AVL TreeMap implementation that reduces boxing/unboxing.
+ * It is using a bit more memory then <a href="https://github.com/vigna/fastutil">FastUtil</a>,
+ * but it saves a lot of Performance on the Optimized removal and iteration logic.
+ * Which makes the implementation actually useable and does not force to use Javas default implementation.
+ * @Type(T)
+ * @ValueType(V)
+ */
 public class AVL_TREE_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_VALUE_GENERIC_TYPE implements NAVIGABLE_MAP KEY_VALUE_GENERIC_TYPE
 {
+	/** The center of the Tree */
 	protected transient Entry KEY_VALUE_GENERIC_TYPE tree;
+	/** The Lowest possible Node */
 	protected transient Entry KEY_VALUE_GENERIC_TYPE first;
+	/** The Highest possible Node */
 	protected transient Entry KEY_VALUE_GENERIC_TYPE last;
+	/** The amount of elements stored in the Map */
 	protected int size = 0;
+	/** The Sorter of the Tree */
 	protected transient COMPARATOR KEY_GENERIC_TYPE comparator;
 	
-#if TYPE_OBJECT
-	protected KEY_TYPE defaultMaxNotFound = null;
-	protected KEY_TYPE defaultMinNotFound = null;
-#else
+#if !TYPE_OBJECT
+	/** the default return value for max searches */
 	protected KEY_TYPE defaultMaxNotFound = CLASS_TYPE.MIN_VALUE;
+	/** the default return value for min searches */
 	protected KEY_TYPE defaultMinNotFound = CLASS_TYPE.MAX_VALUE;
 #endif
 	
+	/** KeySet Cache */
 	protected NAVIGABLE_SET KEY_GENERIC_TYPE keySet;
+	/** Values Cache */
 	protected VALUE_COLLECTION VALUE_GENERIC_TYPE values;
+	/** EntrySet Cache */
 	protected ObjectSet<MAP.Entry KEY_VALUE_GENERIC_TYPE> entrySet;
 	
+	/**
+	 * Default Constructor
+	 */
 	public AVL_TREE_MAP() {
 	}
 	
+	/**
+	 * Constructor that allows to define the sorter
+	 * @param comp the function that decides how the tree is sorted, can be null
+	 */
 	public AVL_TREE_MAP(COMPARATOR KEY_GENERIC_TYPE comp) {
 		comparator = comp;
 	}
 	
 #if !TYPE_OBJECT || !VALUE_OBJECT
+	/**
+	 * Helper constructor that allow to create a map from boxed values (it will unbox them)
+	 * @param keys the keys that should be put into the map
+	 * @param values the values that should be put into the map.
+	 * @throws IllegalStateException if the keys and values do not match in lenght
+	 */
 	public AVL_TREE_MAP(CLASS_TYPE[] keys, CLASS_VALUE_TYPE[] values) {
 		this(keys, values, null);
 	}
 	
+	/**
+	 * Helper constructor that has a custom sorter and allow to create a map from boxed values (it will unbox them)
+	 * @param keys the keys that should be put into the map
+	 * @param values the values that should be put into the map.
+	 * @param comp the function that decides how the tree is sorted, can be null
+	 * @throws IllegalStateException if the keys and values do not match in lenght
+	 */
 	public AVL_TREE_MAP(CLASS_TYPE[] keys, CLASS_VALUE_TYPE[] values, COMPARATOR KEY_GENERIC_TYPE comp) {
 		comparator = comp;
 		if(keys.length != values.length) throw new IllegalStateException("Input Arrays are not equal size");
@@ -78,37 +113,74 @@ public class AVL_TREE_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_VALUE_
 	}
 	
 #endif
+	/**
+	 * Helper constructor that allow to create a map from unboxed values
+	 * @param keys the keys that should be put into the map
+	 * @param values the values that should be put into the map.
+	 * @throws IllegalStateException if the keys and values do not match in lenght
+	 */
 	public AVL_TREE_MAP(KEY_TYPE[] keys, VALUE_TYPE[] values) {
 		this(keys, values, null);
 	}
 	
+	/**
+	 * Helper constructor that has a custom sorter and allow to create a map from unboxed values
+	 * @param keys the keys that should be put into the map
+	 * @param values the values that should be put into the map.
+	 * @param comp the function that decides how the tree is sorted, can be null
+	 * @throws IllegalStateException if the keys and values do not match in lenght
+	 */
 	public AVL_TREE_MAP(KEY_TYPE[] keys, VALUE_TYPE[] values, COMPARATOR KEY_GENERIC_TYPE comp) {
 		comparator = comp;
 		if(keys.length != values.length) throw new IllegalStateException("Input Arrays are not equal size");
 		for(int i = 0,m=keys.length;i<m;i++) put(keys[i], values[i]);
 	}
 	
+	/**
+	 * A Helper constructor that allows to create a Map with exactly the same values as the provided map.
+	 * @param map the values that should be present in the map
+	 */
 	public AVL_TREE_MAP(Map<? extends CLASS_TYPE, ? extends CLASS_VALUE_TYPE> map) {
 		this(map, null);
 	}
 	
+	/**
+	 * A Helper constructor that has a custom sorter and allows to create a Map with exactly the same values as the provided map.
+	 * @param map the values that should be present in the map
+	 * @param comp the function that decides how the tree is sorted, can be null
+	 */
 	public AVL_TREE_MAP(Map<? extends CLASS_TYPE, ? extends CLASS_VALUE_TYPE> map, COMPARATOR KEY_GENERIC_TYPE comp) {
 		comparator = comp;
 		putAll(map);
 	}
 	
+	/**
+	 * A Type Specific Helper function that allows to create a new Map with exactly the same values as the provided map.
+	 * @param map the values that should be present in the map
+ 	 */
 	public AVL_TREE_MAP(MAP KEY_VALUE_GENERIC_TYPE map) {
 		this(map, null);
 	}
 	
+	/**
+	 * A Type Specific Helper function that has a custom sorter and allows to create a new Map with exactly the same values as the provided map.
+	 * @param map the values that should be present in the map
+	 * @param comp the function that decides how the tree is sorted, can be null
+ 	 */
 	public AVL_TREE_MAP(MAP KEY_VALUE_GENERIC_TYPE map, COMPARATOR KEY_GENERIC_TYPE comp) {
 		comparator = comp;
 		putAll(map);
 	}
 	
 #if TYPE_OBJECT
-	public KEY_TYPE getDefaultMaxValue() { return defaultMaxNotFound; }
-	public KEY_TYPE getDefaultMinValue() { return defaultMinNotFound; }
+	/** only used for primitives 
+	 * @return null 
+	 */
+	public KEY_TYPE getDefaultMaxValue() { return null; }
+	/** only used for primitives 
+	 * @return null 
+	 */
+	public KEY_TYPE getDefaultMinValue() { return null; }
 	
 #else
 	@Override
@@ -443,25 +515,25 @@ public class AVL_TREE_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_VALUE_
 	@Override
 	public KEY_TYPE lowerKey(KEY_TYPE e) {
 		Entry KEY_VALUE_GENERIC_TYPE node = findLowerNode(e);
-		return node != null ? node.key : defaultMinNotFound;
+		return node != null ? node.key : getDefaultMinValue();
 	}
 
 	@Override
 	public KEY_TYPE floorKey(KEY_TYPE e) {
 		Entry KEY_VALUE_GENERIC_TYPE node = findFloorNode(e);
-		return node != null ? node.key : defaultMinNotFound;
+		return node != null ? node.key : getDefaultMinValue();
 	}
 	
 	@Override
 	public KEY_TYPE higherKey(KEY_TYPE e) {
 		Entry KEY_VALUE_GENERIC_TYPE node = findHigherNode(e);
-		return node != null ? node.key : defaultMaxNotFound;
+		return node != null ? node.key : getDefaultMaxValue();
 	}
 
 	@Override
 	public KEY_TYPE ceilingKey(KEY_TYPE e) {
 		Entry KEY_VALUE_GENERIC_TYPE node = findCeilingNode(e);
-		return node != null ? node.key : defaultMaxNotFound;
+		return node != null ? node.key : getDefaultMaxValue();
 	}
 	
 	@Override

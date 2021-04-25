@@ -18,17 +18,36 @@ import speiger.src.collections.objects.sets.AbstractObjectSet;
 import speiger.src.collections.objects.sets.ObjectSet;
 import sun.misc.SharedSecrets;
 
+/**
+ * A Type Specific EnumMap implementation that allows for Primitive Values.
+ * Unlike javas implementation this one does not jump around between a single long or long array implementation based around the enum size
+ * This will cause a bit more memory usage but allows for a simpler implementation.
+ * @Type(T)
+ * @ValueType(V)
+ */
 public class ENUM_MAP KEY_ENUM_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_VALUE_GENERIC_TYPE
 {
+	/** Enum Type that is being used */
     protected final Class<T> keyType;
+	/** The Backing keys array. */
     protected transient final T[] keys;
+	/** The Backing values array */
     protected transient final VALUE_TYPE[] values;
+	/** The Backing array that indicates which index is present or not */
     protected transient final long[] present;
+	/** Amount of Elements stored in the ArrayMap */
     protected int size = 0;
+	/** EntrySet cache */
     protected transient ObjectSet<MAP.Entry KEY_VALUE_GENERIC_TYPE> entrySet;
+	/** KeySet cache */
     protected transient ObjectSet<T> keySet;
+	/** Values cache */
     protected transient VALUE_COLLECTION VALUE_GENERIC_TYPE valuesC;
 	
+    /**
+     * Default Constructor
+     * @param keyType the type of Enum that should be used
+     */
 	public ENUM_MAP(Class<T> keyType) {
 		this.keyType = keyType;
 		keys = getKeyUniverse(keyType);

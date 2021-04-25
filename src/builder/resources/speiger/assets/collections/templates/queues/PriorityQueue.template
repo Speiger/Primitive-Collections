@@ -38,13 +38,19 @@ public interface PRIORITY_QUEUE KEY_GENERIC_TYPE extends ObjectPriorityQueue<CLA
 	public KEY_TYPE[] TO_ARRAY(KEY_TYPE[] input);
 	
 #if !TYPE_OBJECT
+	@Deprecated
 	public default void enqueue(CLASS_TYPE e) { ENQUEUE(OBJ_TO_KEY(e)); }
+	@Deprecated
 	public default CLASS_TYPE dequeue() { return KEY_TO_OBJ(DEQUEUE()); }
 	
+	@Deprecated
 	public default CLASS_TYPE peek(int index) { return KEY_TO_OBJ(PEEK(index)); }
+	@Deprecated
 	public default CLASS_TYPE first() { return peek(0); }
 	
+	@Deprecated
 	public default boolean remove(CLASS_TYPE e) { return REMOVE(OBJ_TO_KEY(e)); }
+	@Deprecated
 	public default boolean removeLast(CLASS_TYPE e) { return REMOVE_LAST(OBJ_TO_KEY(e)); }
 	
 	@Deprecated

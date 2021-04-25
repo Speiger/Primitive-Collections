@@ -34,30 +34,79 @@ import speiger.src.collections.objects.sets.ObjectSet;
 #endif
 import speiger.src.collections.utils.HashUtil;
 
+/**
+ * A Type Specific LinkedHashMap that allows for custom HashControl. That uses arrays to create links between nodes.
+ * For cases where Objects/primitive do not allow hashcoding this can be really useful and provide a lot of control.
+ * This implementation of SortedMap does not support SubMaps of any kind. It implements the interface due to sortability and first/last access
+ * @Type(T)
+ * @ValueType(V) 
+ */
 public class LINKED_CUSTOM_HASH_MAP KEY_VALUE_GENERIC_TYPE extends CUSTOM_HASH_MAP KEY_VALUE_GENERIC_TYPE implements SORTED_MAP KEY_VALUE_GENERIC_TYPE
 {
+	/** The Backing array for links between nodes. Left 32 Bits => Previous Entry, Right 32 Bits => Next Entry */
 	protected transient long[] links;
+	/** The First Index in the Map */
 	protected int firstIndex = -1;
+	/** The Last Index in the Map */
 	protected int lastIndex = -1;
 	
+	/**
+	 * Default Constructor
+	 * @param strategy the strategy that allows hash control.
+	 * @throws NullPointerException if Strategy is null
+	 */
 	public LINKED_CUSTOM_HASH_MAP(STRATEGY KEY_SUPER_GENERIC_TYPE strategy) {
 		this(HashUtil.DEFAULT_MIN_CAPACITY, HashUtil.DEFAULT_LOAD_FACTOR, strategy);
 	}
 	
+	/**
+	 * Constructor that defines the minimum capacity
+	 * @param minCapacity the minimum capacity the HashMap is allowed to be.
+	 * @param strategy the strategy that allows hash control.
+	 * @throws NullPointerException if Strategy is null
+	 * @throws IllegalStateException if the minimum capacity is negative
+	 */
 	public LINKED_CUSTOM_HASH_MAP(int minCapacity, STRATEGY KEY_SUPER_GENERIC_TYPE strategy) {
 		this(minCapacity, HashUtil.DEFAULT_LOAD_FACTOR, strategy);
 	}
 	
+	/**
+	 * Constructor that defines the minimum capacity and load factor
+	 * @param minCapacity the minimum capacity the HashMap is allowed to be.
+	 * @param loadFactor the percentage of how full the backing array can be before they resize
+	 * @param strategy the strategy that allows hash control.
+	 * @throws NullPointerException if Strategy is null
+	 * @throws IllegalStateException if the minimum capacity is negative
+	 * @throws IllegalStateException if the loadfactor is either below/equal to 0 or above/equal to 1
+	 */
 	public LINKED_CUSTOM_HASH_MAP(int minCapacity, float loadFactor, STRATEGY KEY_SUPER_GENERIC_TYPE strategy) {
 		super(minCapacity, loadFactor, strategy);
 		links = new long[nullIndex + 1];
 	}
 	
 #if !TYPE_OBJECT || !VALUE_OBJECT
+	/**
+	 * Helper constructor that allow to create a map from boxed values (it will unbox them)
+	 * @param keys the keys that should be put into the map
+	 * @param values the values that should be put into the map.
+	 * @param strategy the strategy that allows hash control.
+	 * @throws NullPointerException if Strategy is null
+	 * @throws IllegalStateException if the keys and values do not match in lenght
+	 */
 	public LINKED_CUSTOM_HASH_MAP(CLASS_TYPE[] keys, CLASS_VALUE_TYPE[] values, STRATEGY KEY_SUPER_GENERIC_TYPE strategy) {
 		this(keys, values, HashUtil.DEFAULT_LOAD_FACTOR, strategy);
 	}
 	
+	/**
+	 * Helper constructor that allow to create a map from boxed values (it will unbox them)
+	 * @param keys the keys that should be put into the map
+	 * @param values the values that should be put into the map.
+	 * @param loadFactor the percentage of how full the backing array can be before they resize
+	 * @param strategy the strategy that allows hash control.
+	 * @throws NullPointerException if Strategy is null
+	 * @throws IllegalStateException if the keys and values do not match in lenght
+	 * @throws IllegalStateException if the loadfactor is either below/equal to 0 or above/equal to 1
+	 */
 	public LINKED_CUSTOM_HASH_MAP(CLASS_TYPE[] keys, CLASS_VALUE_TYPE[] values, float loadFactor, STRATEGY KEY_SUPER_GENERIC_TYPE strategy) {
 		this(keys.length, loadFactor, strategy);
 		if(keys.length != values.length) throw new IllegalStateException("Input Arrays are not equal size");
@@ -65,29 +114,75 @@ public class LINKED_CUSTOM_HASH_MAP KEY_VALUE_GENERIC_TYPE extends CUSTOM_HASH_M
 	}
 	
 #endif
+	/**
+	 * Helper constructor that allow to create a map from unboxed values
+	 * @param keys the keys that should be put into the map
+	 * @param values the values that should be put into the map.
+	 * @param strategy the strategy that allows hash control.
+	 * @throws NullPointerException if Strategy is null
+	 * @throws IllegalStateException if the keys and values do not match in lenght
+	 */
 	public LINKED_CUSTOM_HASH_MAP(KEY_TYPE[] keys, VALUE_TYPE[] values, STRATEGY KEY_SUPER_GENERIC_TYPE strategy) {
 		this(keys, values, HashUtil.DEFAULT_LOAD_FACTOR, strategy);
 	}
 	
+	/**
+	 * Helper constructor that allow to create a map from unboxed values
+	 * @param keys the keys that should be put into the map
+	 * @param values the values that should be put into the map.
+	 * @param loadFactor the percentage of how full the backing array can be before they resize
+	 * @param strategy the strategy that allows hash control.
+	 * @throws NullPointerException if Strategy is null
+	 * @throws IllegalStateException if the keys and values do not match in lenght
+	 * @throws IllegalStateException if the loadfactor is either below/equal to 0 or above/equal to 1
+	 */
 	public LINKED_CUSTOM_HASH_MAP(KEY_TYPE[] keys, VALUE_TYPE[] values, float loadFactor, STRATEGY KEY_SUPER_GENERIC_TYPE strategy) {
 		this(keys.length, loadFactor, strategy);
 		if(keys.length != values.length) throw new IllegalStateException("Input Arrays are not equal size");
 		for(int i = 0,m=keys.length;i<m;i++) put(keys[i], values[i]);
 	}
 	
+	/**
+	 * A Helper constructor that allows to create a Map with exactly the same values as the provided map.
+	 * @param map the values that should be present in the map
+	 * @param strategy the strategy that allows hash control.
+	 * @throws NullPointerException if Strategy is null
+	 */
 	public LINKED_CUSTOM_HASH_MAP(Map<? extends CLASS_TYPE, ? extends CLASS_VALUE_TYPE> map, STRATEGY KEY_SUPER_GENERIC_TYPE strategy) {
 		this(map, HashUtil.DEFAULT_LOAD_FACTOR, strategy);
 	}
 	
+	/**
+	 * A Helper constructor that allows to create a Map with exactly the same values as the provided map.
+	 * @param map the values that should be present in the map
+	 * @param loadFactor the percentage of how full the backing array can be before they resize
+	 * @param strategy the strategy that allows hash control.
+	 * @throws NullPointerException if Strategy is null
+	 * @throws IllegalStateException if the loadfactor is either below/equal to 0 or above/equal to 1
+	 */
 	public LINKED_CUSTOM_HASH_MAP(Map<? extends CLASS_TYPE, ? extends CLASS_VALUE_TYPE> map, float loadFactor, STRATEGY KEY_SUPER_GENERIC_TYPE strategy) {
 		this(map.size(), loadFactor, strategy);
 		putAll(map);
 	}
 	
+	/**
+	 * A Type Specific Helper function that allows to create a new Map with exactly the same values as the provided map.
+	 * @param map the values that should be present in the map
+	 * @param strategy the strategy that allows hash control.
+	 * @throws NullPointerException if Strategy is null
+ 	 */
 	public LINKED_CUSTOM_HASH_MAP(MAP KEY_VALUE_GENERIC_TYPE map, STRATEGY KEY_SUPER_GENERIC_TYPE strategy) {
 		this(map, HashUtil.DEFAULT_LOAD_FACTOR, strategy);
 	}
 	
+	/**
+	 * A Type Specific Helper function that allows to create a new Map with exactly the same values as the provided map.
+	 * @param map the values that should be present in the map
+	 * @param loadFactor the percentage of how full the backing array can be before they resize
+	 * @param strategy the strategy that allows hash control.
+	 * @throws NullPointerException if Strategy is null
+	 * @throws IllegalStateException if the loadfactor is either below/equal to 0 or above/equal to 1
+ 	 */
 	public LINKED_CUSTOM_HASH_MAP(MAP KEY_VALUE_GENERIC_TYPE map, float loadFactor, STRATEGY KEY_SUPER_GENERIC_TYPE strategy) {
 		this(map.size(), loadFactor, strategy);
 		putAll(map);

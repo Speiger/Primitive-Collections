@@ -105,7 +105,7 @@ public class SanityChecks
 	
 	/**
 	 * Helper method to control what ForkJoinPool is being used for any given task.
-	 * @Note this method is not thread-save. It is only there to provide control over how Library specific Threaded tasks are handled.
+	 * @note this method is not thread-save. It is only there to provide control over how Library specific Threaded tasks are handled.
 	 * @param pool The ForkJoinPool that should receive the tasks. If null {@link ForkJoinPool#commonPool()} is set instead
 	 */
 	public static void setWorkPool(ForkJoinPool pool) {

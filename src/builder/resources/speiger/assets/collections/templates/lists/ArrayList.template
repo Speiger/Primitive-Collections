@@ -440,7 +440,6 @@ public class ARRAY_LIST KEY_GENERIC_TYPE extends ABSTRACT_LIST KEY_GENERIC_TYPE 
 	 * Sorts the elements specified by the Natural order either by using the Comparator or the elements
 	 * @param c the sorter of the elements, can be null
 	 * @see java.util.List#sort(Comparator)
-	 * @see ARRAYS#stableSort(KEY_TYPE[], Comparator)
 	 */
 	@Override
 	public void sort(Comparator<? super CLASS_TYPE> c) {
@@ -452,7 +451,6 @@ public class ARRAY_LIST KEY_GENERIC_TYPE extends ABSTRACT_LIST KEY_GENERIC_TYPE 
 	 * Sorts the elements specified by the Natural order either by using the Comparator or the elements using a unstable sort
 	 * @param c the sorter of the elements, can be null
 	 * @see java.util.List#sort(Comparator)
-	 * @see ARRAYS#unstableSort(KEY_TYPE[], Comparator)
 	 */
 	@Override
 	public void unstableSort(Comparator<? super CLASS_TYPE> c) {

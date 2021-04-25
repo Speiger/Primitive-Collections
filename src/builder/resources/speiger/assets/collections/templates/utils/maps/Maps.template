@@ -48,17 +48,33 @@ import speiger.src.collections.VALUE_PACKAGE.utils.VALUE_SETS;
 
 #endif
 
+/**
+ * A Helper class that provides you with Singleton/Empty/Synchronized/Unmodifyable Maps
+ */
 public class MAPS
 {
 #if !TYPE_BOOLEAN
+	/**
+	 * Empty Map Variable
+	 */
 	public static final MAP NO_KV_GENERIC_TYPE EMPTY = new EmptyMapKV_BRACES();
 	
 #endif	
+	/**
+	 * Helper method that provides the fastIterator that recycles a single Entry to increase throughput.
+	 * @param map the map the fastiterator should be accessed from
+	 * @return either a normal iterator if it does not support this feature ot a fastiterator
+	 */
 	public static GENERIC_KEY_VALUE_BRACES ObjectIterator<MAP.Entry KEY_VALUE_GENERIC_TYPE> fastIterator(MAP KEY_VALUE_GENERIC_TYPE map) {
 		ObjectSet<MAP.Entry KEY_VALUE_GENERIC_TYPE> entries = map.ENTRY_SET();
 		return entries instanceof MAP.FastEntrySet ? ((MAP.FastEntrySet KEY_VALUE_GENERIC_TYPE)entries).fastIterator() : entries.iterator();
 	}
 	
+	/**
+	 * Helper method that provides the fastIterable that recycles a single Entry to increase throughput.
+	 * @param map the map the fastIterable should be accessed from
+	 * @return either a normal iterable if it does not support this feature ot a fastIterable
+	 */
 	public static GENERIC_KEY_VALUE_BRACES ObjectIterable<MAP.Entry KEY_VALUE_GENERIC_TYPE> fastIterable(MAP KEY_VALUE_GENERIC_TYPE map) {
 		ObjectSet<MAP.Entry KEY_VALUE_GENERIC_TYPE> entries = map.ENTRY_SET();
 		return map instanceof MAP.FastEntrySet ? new ObjectIterable<MAP.Entry KEY_VALUE_GENERIC_TYPE>(){
@@ -69,6 +85,11 @@ public class MAPS
 		} : entries;
 	}
 	
+	/**
+	 * A Helper function that provides a faster forEach iterator implementation that recycles the entry to increase throughput
+	 * @param map the map the fast forEach should be accessed from
+	 * @note if the fast forEach is not supported will default to a normal forEach
+	 */
 	public static GENERIC_KEY_VALUE_BRACES void fastForEach(MAP KEY_VALUE_GENERIC_TYPE map, Consumer<MAP.Entry KEY_VALUE_GENERIC_TYPE> action) {
 		ObjectSet<MAP.Entry KEY_VALUE_GENERIC_TYPE> entries = map.ENTRY_SET();
 		if(entries instanceof MAP.FastEntrySet) ((MAP.FastEntrySet KEY_VALUE_GENERIC_TYPE)entries).fastForEach(action); 
@@ -76,6 +97,10 @@ public class MAPS
 	}
 	
 #if !TYPE_BOOLEAN
+	/**
+	 * Empty Map getter function that autocasts to the desired Key and Value
+	 * @return empty map of desired type
+	 */
 	public static GENERIC_KEY_VALUE_BRACES MAP KEY_VALUE_GENERIC_TYPE emptyMap() { 
 #if TYPE_OBJECT || VALUE_OBJECT
 		return (MAP KEY_VALUE_GENERIC_TYPE)EMPTY;
@@ -84,23 +109,108 @@ public class MAPS
 #endif
 	}
 	
+	/**
+	 * Helper function that creates a Helper wrapper to synchronize access into the map.
+	 * @param map the map that should be synchronized
+	 * @return a synchronized Map
+	 * @note if the inputted map is already synchronized then it will just return it instead
+	 * @note iterators do not support synchronization
+	 */
 	public static GENERIC_KEY_VALUE_BRACES MAP KEY_VALUE_GENERIC_TYPE synchronizeMap(MAP KEY_VALUE_GENERIC_TYPE map) { return map instanceof SynchronizedMap ? map : new SynchronizedMapKV_BRACES(map); }
+	/**
+	 * Helper function that creates a Helper wrapper to synchronize access with custom access control into the map.
+	 * @param map the map that should be synchronized
+	 * @param mutex the object that controls access
+	 * @return a synchronized Map
+	 * @note if the inputted map is already synchronized then it will just return it instead
+	 * @note iterators do not support synchronization
+	 */
 	public static GENERIC_KEY_VALUE_BRACES MAP KEY_VALUE_GENERIC_TYPE synchronizeMap(MAP KEY_VALUE_GENERIC_TYPE map, Object mutex) { return map instanceof SynchronizedMap ? map : new SynchronizedMapKV_BRACES(map, mutex); }
 	
+	/**
+	 * Helper function that creates a Helper wrapper to synchronize access into the SortedMap.
+	 * @param map the SortedMap that should be synchronized
+	 * @return a synchronized SortedMap
+	 * @note if the inputted map is already synchronized then it will just return it instead
+	 * @note iterators do not support synchronization
+	 */
 	public static GENERIC_KEY_VALUE_BRACES SORTED_MAP KEY_VALUE_GENERIC_TYPE synchronizeMap(SORTED_MAP KEY_VALUE_GENERIC_TYPE map) { return map instanceof SynchronizedSortedMap ? map : new SynchronizedSortedMapKV_BRACES(map); }
+	/**
+	 * Helper function that creates a Helper wrapper to synchronize access with custom access control into the SortedMap.
+	 * @param map the SortedMap that should be synchronized
+	 * @param mutex the object that controls access
+	 * @return a synchronized SortedMap
+	 * @note if the inputted map is already synchronized then it will just return it instead
+	 * @note iterators do not support synchronization
+	 */
 	public static GENERIC_KEY_VALUE_BRACES SORTED_MAP KEY_VALUE_GENERIC_TYPE synchronizeMap(SORTED_MAP KEY_VALUE_GENERIC_TYPE map, Object mutex) { return map instanceof SynchronizedSortedMap ? map : new SynchronizedSortedMapKV_BRACES(map, mutex); }
 	
+	/**
+	 * Helper function that creates a Helper wrapper to synchronize access into the NavigableMap.
+	 * @param map the NavigableMap that should be synchronized
+	 * @return a synchronized NavigableMap
+	 * @note if the inputted map is already synchronized then it will just return it instead
+	 * @note iterators do not support synchronization
+	 */
 	public static GENERIC_KEY_VALUE_BRACES NAVIGABLE_MAP KEY_VALUE_GENERIC_TYPE synchronizeMap(NAVIGABLE_MAP KEY_VALUE_GENERIC_TYPE map) { return map instanceof SynchronizedNavigableMap ? map : new SynchronizedNavigableMapKV_BRACES(map); }
+	/**
+	 * Helper function that creates a Helper wrapper to synchronize access with custom access control into the NavigableMap.
+	 * @param map the NavigableMap that should be synchronized
+	 * @param mutex the object that controls access
+	 * @return a synchronized NavigableMap
+	 * @note if the inputted map is already synchronized then it will just return it instead
+	 * @note iterators do not support synchronization
+	 */
 	public static GENERIC_KEY_VALUE_BRACES NAVIGABLE_MAP KEY_VALUE_GENERIC_TYPE synchronizeMap(NAVIGABLE_MAP KEY_VALUE_GENERIC_TYPE map, Object mutex) { return map instanceof SynchronizedNavigableMap ? map : new SynchronizedNavigableMapKV_BRACES(map, mutex); }
 	
+	/**
+	 * A Helper function that creates a Helper wrapper to only allow Read Access into the Map
+	 * @param map the map that should be made Unmodifiable
+	 * @return a unmodifiable Map
+	 * @note if the inputted map is already unmodifiable then it will just return it instead
+	 */
 	public static GENERIC_KEY_VALUE_BRACES MAP KEY_VALUE_GENERIC_TYPE unmodifyableMap(MAP KEY_VALUE_GENERIC_TYPE map) { return map instanceof UnmodifyableMap ? map : new UnmodifyableMapKV_BRACES(map); }
+	/**
+	 * A Helper function that creates a Helper wrapper to only allow Read Access into the SortedMap
+	 * @param map the SortedMap that should be made Unmodifiable
+	 * @return a unmodifiable SortedMap
+	 * @note if the inputted SortedMap is already unmodifiable then it will just return it instead
+	 */
 	public static GENERIC_KEY_VALUE_BRACES SORTED_MAP KEY_VALUE_GENERIC_TYPE unmodifyableMap(SORTED_MAP KEY_VALUE_GENERIC_TYPE map) { return map instanceof UnmodifyableSortedMap ? map : new UnmodifyableSortedMapKV_BRACES(map); }
+	/**
+	 * A Helper function that creates a Helper wrapper to only allow Read Access into NavigableMap Map
+	 * @param map the NavigableMap that should be made Unmodifiable
+	 * @return a unmodifiable NavigableMap
+	 * @note if the inputted NavigableMap is already unmodifiable then it will just return it instead
+	 */
 	public static GENERIC_KEY_VALUE_BRACES NAVIGABLE_MAP KEY_VALUE_GENERIC_TYPE unmodifyableMap(NAVIGABLE_MAP KEY_VALUE_GENERIC_TYPE map) { return map instanceof UnmodifyableNavigableMap ? map : new UnmodifyableNavigableMapKV_BRACES(map); }
-	public static GENERIC_KEY_VALUE_BRACES MAP.Entry KEY_VALUE_GENERIC_TYPE unmodifyableEntry(MAP.Entry KEY_VALUE_GENERIC_TYPE map) { return map instanceof UnmodifyableEntry ? map : new UnmodifyableEntryKV_BRACES(map); }
-	public static GENERIC_KEY_VALUE_BRACES MAP.Entry KEY_VALUE_GENERIC_TYPE unmodifyableEntry(Map.Entry<CLASS_TYPE, CLASS_VALUE_TYPE> map) { return map instanceof UnmodifyableEntry ? (UnmodifyableEntry KEY_VALUE_GENERIC_TYPE)map : new UnmodifyableEntryKV_BRACES(map); }
+	/**
+	 * A Helper function that creates a Unmodifyable Entry
+	 * @param entry the Entry that should be made unmodifyable
+	 * @return a Unmodifyable Entry
+	 */
+	public static GENERIC_KEY_VALUE_BRACES MAP.Entry KEY_VALUE_GENERIC_TYPE unmodifyableEntry(MAP.Entry KEY_VALUE_GENERIC_TYPE entry) { return entry instanceof UnmodifyableEntry ? entry : new UnmodifyableEntryKV_BRACES(entry); }
+	/**
+	 * A Helper function that creates a Unmodifyable Entry
+	 * @param entry the Entry that should be made unmodifyable
+	 * @return a Unmodifyable Entry
+	 */
+	public static GENERIC_KEY_VALUE_BRACES MAP.Entry KEY_VALUE_GENERIC_TYPE unmodifyableEntry(Map.Entry<CLASS_TYPE, CLASS_VALUE_TYPE> entry) { return entry instanceof UnmodifyableEntry ? (UnmodifyableEntry KEY_VALUE_GENERIC_TYPE)entry : new UnmodifyableEntryKV_BRACES(entry); }
 	
+	/**
+	 * Creates a Singleton map from the provided values.
+	 * This reduces overhead that normal Map implementations have.
+	 * @param key the key that should be turned into a singleton
+	 * @param value the value that should be turned into a singleton
+	 * @return a unmodifyable Singleton map.
+	 */
 	public static GENERIC_KEY_VALUE_BRACES MAP KEY_VALUE_GENERIC_TYPE singletonMap(KEY_TYPE key, VALUE_TYPE value) { return new SingletonMapKV_BRACES(key, value); }
 	
+	/**
+	 * Singleton Map instance that is used in the helper method
+	 * @Type(T)
+	 * @ValueType(V)
+	 */
 	public static class SingletonMap KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_VALUE_GENERIC_TYPE {
 		final KEY_TYPE key;
 		final VALUE_TYPE value;
@@ -108,6 +218,11 @@ public class MAPS
 		VALUE_COLLECTION VALUE_GENERIC_TYPE values;
 		ObjectSet<MAP.Entry KEY_VALUE_GENERIC_TYPE> entrySet;
 		
+		/**
+		 * Default constructor
+		 * @param key the key that should be used
+		 * @param value the value that should be used
+		 */
 		public SingletonMap(KEY_TYPE key, VALUE_TYPE value) {
 			this.key = key;
 			this.value = value;
@@ -151,6 +266,11 @@ public class MAPS
 		}
 	}
 	
+	/**
+	 * Empty Map impementation that is used for the emptyMap() function
+	 * @Type(T)
+	 * @ValueType(V)
+	 */
 	public static class EmptyMap KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_VALUE_GENERIC_TYPE {
 		@Override
 		public VALUE_TYPE put(KEY_TYPE key, VALUE_TYPE value) { throw new UnsupportedOperationException(); }
@@ -180,20 +300,45 @@ public class MAPS
 		public ObjectSet<MAP.Entry KEY_VALUE_GENERIC_TYPE> ENTRY_SET() { return ObjectSets.empty(); }
 	}
 	
+	/**
+	 * The Unmodifyable Entry implementation for the helper function unmodifiableEntry()
+	 * @Type(T)
+	 * @ValueType(V)
+	 */
 	public static class UnmodifyableEntry KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP.BasicEntry KEY_VALUE_GENERIC_TYPE {
 		
+		/**
+		 * The boxed constructor that will automatically unbox the values
+		 * @param entry the entry that should be used
+		 */
 		public UnmodifyableEntry(Map.Entry<CLASS_TYPE, CLASS_VALUE_TYPE> entry) {
 			super(entry.getKey(), entry.getValue());
 		}
 		
+		/**
+		 * The Unboxed constructor that should be copied from
+		 * @param entry the entry that should be used
+		 */
 		public UnmodifyableEntry(MAP.Entry KEY_VALUE_GENERIC_TYPE entry) {
 			super(entry.ENTRY_KEY(), entry.ENTRY_VALUE());
 		}
+		
+		@Override
+		public void set(KEY_TYPE key, VALUE_TYPE value) { throw new UnsupportedOperationException(); }
 	}
 	
+	/**
+	 * The Unmodifyable Navigable Map implementation that is sued for the unmodifyableMap function
+	 * @Type(T)
+	 * @ValueType(V)
+	 */
 	public static class UnmodifyableNavigableMap KEY_VALUE_GENERIC_TYPE extends UnmodifyableSortedMap KEY_VALUE_GENERIC_TYPE implements NAVIGABLE_MAP KEY_VALUE_GENERIC_TYPE {
 		NAVIGABLE_MAP KEY_VALUE_GENERIC_TYPE map;
 		
+		/**
+		 * Default constructor
+		 * @param map the NavigableMap that should be made unmodifyable
+		 */
 		public UnmodifyableNavigableMap(NAVIGABLE_MAP KEY_VALUE_GENERIC_TYPE map) {
 			super(map);
 			this.map = map;
@@ -253,9 +398,18 @@ public class MAPS
 		public MAP.Entry KEY_VALUE_GENERIC_TYPE ceilingEntry(KEY_TYPE key) { return unmodifyableEntry(map.ceilingEntry(key)); }
 	}
 	
+	/**
+	 * The Unmodifyable Sorted Map implementation that is sued for the unmodifyableMap function
+	 * @Type(T)
+	 * @ValueType(V)
+	 */
 	public static class UnmodifyableSortedMap KEY_VALUE_GENERIC_TYPE extends UnmodifyableMap KEY_VALUE_GENERIC_TYPE implements SORTED_MAP KEY_VALUE_GENERIC_TYPE {
 		SORTED_MAP KEY_VALUE_GENERIC_TYPE map;
 		
+		/**
+		 * Default constructor
+		 * @param map the SortedMap that should be made unmodifyable
+		 */
 		public UnmodifyableSortedMap(SORTED_MAP KEY_VALUE_GENERIC_TYPE map) {
 			super(map);
 			this.map = map;
@@ -295,12 +449,21 @@ public class MAPS
 		public VALUE_TYPE LAST_ENTRY_VALUE() { return map.LAST_ENTRY_VALUE(); }
 	}
 	
+	/**
+	 * The Unmodifyable Map implementation that is sued for the unmodifyableMap function
+	 * @Type(T)
+	 * @ValueType(V)
+	 */
 	public static class UnmodifyableMap KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_VALUE_GENERIC_TYPE implements MAP KEY_VALUE_GENERIC_TYPE {
 		MAP KEY_VALUE_GENERIC_TYPE map;
 		VALUE_COLLECTION VALUE_GENERIC_TYPE values;
 		SET KEY_GENERIC_TYPE keys;
 		ObjectSet<MAP.Entry KEY_VALUE_GENERIC_TYPE> entrySet;
 		
+		/**
+		 * Default constructor
+		 * @param map the Map that should be made unmodifyable
+		 */
 		public UnmodifyableMap(MAP KEY_VALUE_GENERIC_TYPE map) {
 			this.map = map;
 		}
@@ -345,10 +508,19 @@ public class MAPS
 		}
 	}
 	
+	/**
+	 * The Unmodifyable Set implementation for the Unmodifyable Map implementation
+	 * @Type(T)
+	 * @ValueType(V)
+	 */
 	public static class UnmodifyableEntrySet KEY_VALUE_GENERIC_TYPE extends ObjectSets.UnmodifiableSet<MAP.Entry KEY_VALUE_GENERIC_TYPE>
 	{
 		ObjectSet<MAP.Entry KEY_VALUE_GENERIC_TYPE> s;
-
+		
+		/**
+		 * Default constructor
+		 * @param c the EntrySet that should be made unmodifyable
+		 */
 		public UnmodifyableEntrySet(ObjectSet<MAP.Entry KEY_VALUE_GENERIC_TYPE> c)
 		{
 			super(c);
@@ -373,14 +545,28 @@ public class MAPS
 		
 	}
 	
+	/**
+	 * The Synchronized Navigable Map implementation used by the synchronizedMap helper function
+	 * @Type(T)
+	 * @ValueType(V)
+	 */
 	public static class SynchronizedNavigableMap KEY_VALUE_GENERIC_TYPE extends SynchronizedSortedMap KEY_VALUE_GENERIC_TYPE implements NAVIGABLE_MAP KEY_VALUE_GENERIC_TYPE {
 		NAVIGABLE_MAP KEY_VALUE_GENERIC_TYPE map;
 		
+		/**
+		 * Default constructor
+		 * @param map the map that should be synchronized
+		 */
 		public SynchronizedNavigableMap(NAVIGABLE_MAP KEY_VALUE_GENERIC_TYPE map) {
 			super(map);
 			this.map = map;
 		}
 		
+		/**
+		 * Constructor with Access Control
+		 * @param map the map that should be synchronized
+		 * @param mutex the access controller
+		 */
 		public SynchronizedNavigableMap(NAVIGABLE_MAP KEY_VALUE_GENERIC_TYPE map, Object mutex) {
 			super(map, mutex);
 			this.map = map;
@@ -482,14 +668,28 @@ public class MAPS
 #endif
 	}
 	
+	/**
+	 * The Synchronized Sorted Map implementation used by the synchronizedMap helper function
+	 * @Type(T)
+	 * @ValueType(V)
+	 */
 	public static class SynchronizedSortedMap KEY_VALUE_GENERIC_TYPE extends SynchronizedMap KEY_VALUE_GENERIC_TYPE implements SORTED_MAP KEY_VALUE_GENERIC_TYPE {
 		SORTED_MAP KEY_VALUE_GENERIC_TYPE map;
 		
+		/**
+		 * Default constructor
+		 * @param map the map that should be synchronized
+		 */
 		public SynchronizedSortedMap(SORTED_MAP KEY_VALUE_GENERIC_TYPE map) {
 			super(map);
 			this.map = map;
 		}
 		
+		/**
+		 * Constructor with Access Control
+		 * @param map the map that should be synchronized
+		 * @param mutex the access controller
+		 */
 		public SynchronizedSortedMap(SORTED_MAP KEY_VALUE_GENERIC_TYPE map, Object mutex) {
 			super(map, mutex);
 			this.map = map;
@@ -546,6 +746,11 @@ public class MAPS
 #endif
 	}
 	
+	/**
+	 * The Synchronized Map implementation used by the synchronizedMap helper function
+	 * @Type(T)
+	 * @ValueType(V)
+	 */
 	public static class SynchronizedMap KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_VALUE_GENERIC_TYPE implements MAP KEY_VALUE_GENERIC_TYPE {
 		MAP KEY_VALUE_GENERIC_TYPE map;
 		VALUE_COLLECTION VALUE_GENERIC_TYPE values;
@@ -554,11 +759,20 @@ public class MAPS
 		
 		protected Object mutex;
 		
+		/**
+		 * Default constructor
+		 * @param map the map that should be synchronized
+		 */
 		public SynchronizedMap(MAP KEY_VALUE_GENERIC_TYPE map) {
 			this.map = map;
 			mutex = this;
 		}
 		
+		/**
+		 * Constructor with Access Control
+		 * @param map the map that should be synchronized
+		 * @param mutex the access controller
+		 */
 		public SynchronizedMap(MAP KEY_VALUE_GENERIC_TYPE map, Object mutex) {
 			this.map = map;
 			this.mutex = mutex;

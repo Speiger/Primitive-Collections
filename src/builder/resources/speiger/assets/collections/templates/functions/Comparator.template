@@ -38,10 +38,14 @@ public interface COMPARATOR extends Comparator<CLASS_TYPE>
 		return (K, V) -> c.compare(KEY_TO_OBJ(K), KEY_TO_OBJ(V));
 	}
 	
+	@Override
 	public default COMPARATOR reversed() {
 		return new Reversed(this);
 	}
 	
+	/**
+	 * A Type Specific Reversed Comparator to reduce boxing/unboxing
+	 */
 	static class Reversed implements COMPARATOR
 	{
 		COMPARATOR original;

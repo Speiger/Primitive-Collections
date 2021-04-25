@@ -3,10 +3,28 @@ package speiger.src.collections.PACKAGE.functions.consumer;
 import java.util.Objects;
 import java.util.function.BiConsumer;
 
+/**
+ * A Type Specific BiConsumer class to reduce boxing/unboxing and that fills the gaps that java has.
+ * @Type(T)
+ * @ValueType(V)
+ */
 public interface BI_CONSUMER KEY_VALUE_GENERIC_TYPE extends BiConsumer<CLASS_TYPE, CLASS_VALUE_TYPE>
 {
+    /**
+     * A Type Specific operation method to reduce boxing/unboxing
+     * Performs this operation on the given arguments.
+     *
+     * @param k the first input argument
+     * @param v the second input argument
+     */
 	void accept(KEY_TYPE k, VALUE_TYPE v);
 	
+	/**
+	 * Type Specific sequencing method to reduce boxing/unboxing.
+	 * @param after a operation that should be performed afterwards
+	 * @return a sequenced biconsumer that does 2 operations
+	 * @throws NullPointerException if after is null
+	 */
 	public default BI_CONSUMER KEY_VALUE_GENERIC_TYPE andThen(BI_CONSUMER KEY_VALUE_GENERIC_TYPE after) {
 		Objects.requireNonNull(after);
 		return (K, V) -> {accept(K, V); after.accept(K, V);};

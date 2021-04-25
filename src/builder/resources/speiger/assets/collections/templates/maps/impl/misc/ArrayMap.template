@@ -40,19 +40,44 @@ import speiger.src.collections.objects.sets.ObjectSet;
 #endif
 import speiger.src.collections.utils.HashUtil;
 
+/**
+ * A Very Specific Type Specific implementation of a ArrayMap.
+ * This type of map is for very specific use cases that usaully would have lead to Tupled Lists otherwise.
+ * It also does not allow duplication (except for array constructors) and checks from last to first.
+ * It is not designed to be used as a HashMap replacement due to the poor performance it would cause.
+ * @note in this implementation SubMaps do NOT keep track of parent changes fully. For performance reasons it will just have a start/end index and not values
+ * Anything within that range will be updated appropiatly a shrink/growth of elements will break SubMaps in some ways. This can be useful but be careful
+ * @note this implementation does not shrink and only grows.
+ * @Type(T)
+ * @ValueType(V)
+ */
 public class ARRAY_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_VALUE_GENERIC_TYPE implements SORTED_MAP KEY_VALUE_GENERIC_TYPE
 {
+	/** The Backing keys array */
 	protected transient KEY_TYPE[] keys;
+	/** The Backing values array */
 	protected transient VALUE_TYPE[] values;
+	/** Amount of Elements stored in the ArrayMap */
 	protected int size = 0;
+	/** KeySet cache */
 	protected SET KEY_GENERIC_TYPE keySet;
+	/** Values cache */
 	protected VALUE_COLLECTION VALUE_GENERIC_TYPE valuesC;
+	/** EntrySet cache */
 	protected FastSortedSet KEY_VALUE_GENERIC_TYPE entrySet;
 	
+	/**
+	 * Default Constructor
+	 */
 	public ARRAY_MAP() {
 		this(HashUtil.DEFAULT_MIN_CAPACITY);
 	}
 	
+	/**
+	 * Constructor that defines the minimum capacity
+	 * @param minCapacity the minimum capacity the HashMap is allowed to be.
+	 * @throws IllegalStateException if the minimum capacity is negative
+	 */
 	public ARRAY_MAP(int minCapacity) {
 		if(minCapacity < 0)	throw new IllegalStateException("Minimum Capacity is negative. This is not allowed");
 		keys = NEW_KEY_ARRAY(minCapacity);
@@ -60,10 +85,23 @@ public class ARRAY_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_VALUE_GEN
 	}
 	
 #if !TYPE_OBJECT || !VALUE_OBJECT
+	/**
+	 * Helper constructor that allow to create a map from boxed values (it will unbox them)
+	 * @param keys the keys that should be put into the map
+	 * @param values the values that should be put into the map.
+	 * @throws IllegalStateException if the keys and values do not match in length
+	 */
 	public ARRAY_MAP(CLASS_TYPE[] keys, CLASS_VALUE_TYPE[] values) {
 		this(keys, values, keys.length);
 	}
 	
+	/**
+	 * Helper constructor that allow to create a map from boxed values (it will unbox them) with a custom length
+	 * @param keys the keys that should be put into the map
+	 * @param values the values that should be put into the map.
+	 * @param length the amount of values that should be pulled from the array
+	 * @throws IllegalStateException if the keys and values do not match in length
+	 */
 	public ARRAY_MAP(CLASS_TYPE[] keys, CLASS_VALUE_TYPE[] values, int length) {
 		this(length);
 		if(keys.length != values.length) throw new IllegalStateException("Input Arrays are not equal size");
@@ -75,10 +113,23 @@ public class ARRAY_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_VALUE_GEN
 	}
 	
 #endif
+	/**
+	 * Helper constructor that allow to create a map from unboxed values
+	 * @param keys the keys that should be put into the map
+	 * @param values the values that should be put into the map.
+	 * @throws IllegalStateException if the keys and values do not match in lenght
+	 */
 	public ARRAY_MAP(KEY_TYPE[] keys, VALUE_TYPE[] values) {
 		this(keys, values, keys.length);
 	}
 	
+	/**
+	 * Helper constructor that allow to create a map from unboxed values
+	 * @param keys the keys that should be put into the map
+	 * @param values the values that should be put into the map.
+	 * @param length the amount of values that should be pulled from the array
+	 * @throws IllegalStateException if the keys and values do not match in lenght
+	 */
 	public ARRAY_MAP(KEY_TYPE[] keys, VALUE_TYPE[] values, int length) {
 		if(keys.length != values.length) throw new IllegalStateException("Input Arrays are not equal size");
 		this.keys = Arrays.copyOf(keys, length);
@@ -86,11 +137,19 @@ public class ARRAY_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_VALUE_GEN
 		this.size = length;
 	}
 	
+	/**
+	 * A Helper constructor that allows to create a Map with exactly the same values as the provided map.
+	 * @param map the values that should be present in the map
+	 */
 	public ARRAY_MAP(Map<? extends CLASS_TYPE, ? extends CLASS_VALUE_TYPE> map) {
 		this(map.size());
 		putAll(map);
 	}
 	
+	/**
+	 * A Type Specific Helper function that allows to create a new Map with exactly the same values as the provided map.
+	 * @param map the values that should be present in the map
+ 	 */
 	public ARRAY_MAP(MAP KEY_VALUE_GENERIC_TYPE map) {
 		this(map.size());
 		for(ObjectIterator<MAP.Entry KEY_VALUE_GENERIC_TYPE> iter = MAPS.fastIterator(map);iter.hasNext();size++) {
