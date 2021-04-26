@@ -19,6 +19,9 @@ import speiger.src.collections.PACKAGE.utils.ARRAYS;
  */
 public class COLLECTIONS
 {
+	/**
+	 * Empty Collection Reference
+	 */
 	public static final COLLECTION NO_GENERIC_TYPE EMPTY = new EmptyCollectionBRACES();
 	
 	/**
@@ -65,6 +68,10 @@ public class COLLECTIONS
 		return c instanceof SynchronizedCollection ? c : new SynchronizedCollectionBRACES(c, mutex);
 	}
 	
+	/**
+	 * Synchronized Collection Wrapper for the synchronizedCollection function
+	 * @Type(T)
+	 */
 	public static class SynchronizedCollection KEY_GENERIC_TYPE implements COLLECTION KEY_GENERIC_TYPE {
 		COLLECTION KEY_GENERIC_TYPE c;
 		protected Object mutex;
@@ -163,6 +170,10 @@ public class COLLECTIONS
 #endif
 	}
 	
+	/**
+	 * Unmodifyable Collection Wrapper for the unmodifyableCollection method
+	 * @Type(T)
+	 */
 	public static class UnmodifiableCollection KEY_GENERIC_TYPE implements COLLECTION KEY_GENERIC_TYPE {
 		COLLECTION KEY_GENERIC_TYPE c;
 		
@@ -284,6 +295,10 @@ public class COLLECTIONS
 #endif
 	}
 	
+	/**
+	 * Empty Collection implementation for the empty collection function
+	 * @Type(T)
+	 */
 	public static class EmptyCollection KEY_GENERIC_TYPE extends ABSTRACT_COLLECTION KEY_GENERIC_TYPE {
 		@Override
 		public boolean add(KEY_TYPE o) { throw new UnsupportedOperationException(); }

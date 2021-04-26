@@ -15,6 +15,7 @@ import java.util.function.JAVA_PREDICATE;
 
 import speiger.src.collections.PACKAGE.collections.BI_ITERATOR;
 import speiger.src.collections.PACKAGE.collections.COLLECTION;
+import speiger.src.collections.PACKAGE.collections.ITERATOR;
 #if !TYPE_OBJECT
 import speiger.src.collections.PACKAGE.functions.COMPARATOR;
 import speiger.src.collections.PACKAGE.functions.CONSUMER;
@@ -22,39 +23,81 @@ import speiger.src.collections.PACKAGE.functions.CONSUMER;
 import speiger.src.collections.PACKAGE.lists.LIST_ITERATOR;
 import speiger.src.collections.PACKAGE.utils.ARRAYS;
 
+/**
+ * A Type Specific ArraySet implementation.
+ * That is based around the idea of {@link java.util.List#indexOf(Object)} for no duplication.
+ * Unless a array constructor is used the ArraySet does not allow for duplication.
+ * This implementation does not shrink the backing array
+ * @Type(T)
+ */
 public class ARRAY_SET KEY_GENERIC_TYPE extends ABSTRACT_SET KEY_GENERIC_TYPE implements SORTED_SET KEY_GENERIC_TYPE
 {
+	/** The Backing Array */
 	protected transient KEY_TYPE[] data;
+	/** The amount of elements stored in the array*/
 	protected int size = 0;
 	
+	/**
+	 * Default Constructor
+	 */
 	public ARRAY_SET() {
 		data = EMPTY_KEY_ARRAY;
 	}
 	
+	/**
+	 * Minimum Capacity Constructor
+	 * @param capacity the minimum capacity of the internal array
+	 * @throws NegativeArraySizeException if the capacity is negative
+	 */
 	public ARRAY_SET(int capacity) {
 		data = NEW_KEY_ARRAY(capacity);
 	}
 	
+	/**
+	 * Constructur using initial Array
+	 * @param array the array that should be used for set.
+	 */
 	public ARRAY_SET(KEY_TYPE[] array) {
 		this(array, array.length);
 	}
 	
+	/**
+	 * Constructur using initial Array
+	 * @param array the array that should be used for set.
+	 * @param length the amount of elements present within the array
+	 * @throws NegativeArraySizeException if the length is negative
+	 */
 	public ARRAY_SET(KEY_TYPE[] array, int length) {
 		data = Arrays.copyOf(array, length);
 		size = length;
 	}
 	
+	/**
+	 * A Helper constructor that allows to create a Set with exactly the same values as the provided collection.
+	 * @param c the elements that should be added to the set.
+	 * @note this slowly checks every element to remove duplicates
+	 */
 	@Deprecated
 	public ARRAY_SET(Collection<? extends CLASS_TYPE> c) {
 		this(c.size());
 		addAll(c);
 	}
 	
+	/**
+	 * A Helper constructor that allows to create a Set with exactly the same values as the provided collection.
+	 * @param c the elements that should be added to the set.
+	 * @note this slowly checks every element to remove duplicates
+	 */
 	public ARRAY_SET(COLLECTION KEY_GENERIC_TYPE c) {
 		this(c.size());
 		addAll(c);
 	}
 	
+	/**
+	 * A Helper constructor that fast copies the element out of a set into the ArraySet.
+	 * Since it is assumed that there is no duplication in the first place
+	 * @param s the set the element should be taken from
+	 */
 	@Deprecated
 	public ARRAY_SET(Set<? extends CLASS_TYPE> s) {
 		this(s.size());
@@ -62,10 +105,14 @@ public class ARRAY_SET KEY_GENERIC_TYPE extends ABSTRACT_SET KEY_GENERIC_TYPE im
 			data[size++] = OBJ_TO_KEY(e);
 	}
 	
+	/**
+	 * A Helper constructor that fast copies the element out of a set into the ArraySet.
+	 * Since it is assumed that there is no duplication in the first place
+	 * @param s the set the element should be taken from
+	 */
 	public ARRAY_SET(SET KEY_GENERIC_TYPE s) {
 		this(s.size());
-		for(KEY_TYPE e : s)
-			data[size++] = e;
+		for(ITERATOR KEY_GENERIC_TYPE iter = s.iterator();iter.hasNext();data[size++] = iter.NEXT());
 	}
 	
 	@Override

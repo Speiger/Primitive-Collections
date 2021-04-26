@@ -9,29 +9,111 @@ import java.util.Comparator;
 import speiger.src.collections.PACKAGE.functions.COMPARATOR;
 #endif
 
+/**
+ * A Type Specific SortedSet implementation to reduce boxing/unboxing
+ * with a couple extra methods that allow greater control over sets.
+ * @Type(T)
+ */
 public interface SORTED_SET KEY_GENERIC_TYPE extends SET KEY_GENERIC_TYPE, SortedSet<CLASS_TYPE>
 {
+	
+	/**
+	 * A customized add method that allows you to insert into the first index.
+	 * @param o the element that should be inserted
+	 * @return true if it was added
+	 * @see java.util.Set#add(Object)
+	 * @note some implementations do not support this method
+	 */
 	public boolean addAndMoveToFirst(KEY_TYPE o);
+	/**
+	 * A customized add method that allows you to insert into the last index.
+	 * @param o the element that should be inserted
+	 * @return true if it was added
+	 * @see java.util.Set#add(Object)
+	 * @note some implementations do not support this method
+	 */
 	public boolean addAndMoveToLast(KEY_TYPE o);
 	
+	/**
+	 * A specific move method to move a given key to the first index.
+	 * @param o that should be moved to the first index
+	 * @return true if the value was moved.
+	 * @note returns false if the value was not present in the first place
+	 * @note some implementations do not support this method
+	 */
 	public boolean moveToFirst(KEY_TYPE o);
+	/**
+	 * A specific move method to move a given key to the last index.
+	 * @param o that should be moved to the first last
+	 * @return true if the value was moved.
+	 * @note returns false if the value was not present in the first place
+	 * @note some implementations do not support this method
+	 */
 	public boolean moveToLast(KEY_TYPE o);
 	
+	/**
+	 * A Type Specific Comparator method
+	 * @return the type specific comparator
+	 */
 	@Override
 	public COMPARATOR KEY_GENERIC_TYPE comparator();
 	
 	@Override
 	public BI_ITERATOR KEY_GENERIC_TYPE iterator();
+	/**
+	 * A type Specific Iterator starting from a given key
+	 * @param fromElement the element the iterator should start from
+	 * @return a iterator starting from the given element
+	 * @throws java.util.NoSuchElementException if fromElement isn't found
+	 */
 	public BI_ITERATOR KEY_GENERIC_TYPE iterator(KEY_TYPE fromElement);
 	
 #if !TYPE_OBJECT
+	/**
+	 * A Type Specific SubSet method to reduce boxing/unboxing
+	 * @param fromElement where the SubSet should start
+	 * @param toElement where the SubSet should end
+	 * @return a SubSet that is within the range of the desired range
+	 * @note Some implementations may not support this method.
+	 * @note Some implementations may not keep the desired range when the original is changed.
+	 */
 	public SORTED_SET KEY_GENERIC_TYPE subSet(KEY_TYPE fromElement, KEY_TYPE toElement);
+	/**
+	 * A Type Specific HeadSet method to reduce boxing/unboxing
+	 * @param toElement where the HeadSet should end
+	 * @return a HeadSet that is within the range of the desired range
+	 * @note Some implementations may not support this method.
+	 * @note Some implementations may not keep the desired range when the original is changed.
+	 */
 	public SORTED_SET KEY_GENERIC_TYPE headSet(KEY_TYPE toElement);
+	/**
+	 * A Type Specific TailSet method to reduce boxing/unboxing
+	 * @param fromElement where the TailSet should start
+	 * @return a TailSet that is within the range of the desired range
+	 * @note Some implementations may not support this method.
+	 * @note Some implementations may not keep the desired range when the original is changed.
+	 */
 	public SORTED_SET KEY_GENERIC_TYPE tailSet(KEY_TYPE fromElement);
 	
+	/**
+	 * A method to get the first element in the set
+	 * @return first element in the set
+	 */
 	public KEY_TYPE FIRST_KEY();
+	/**
+	 * A method to get and remove the first element in the set
+	 * @return first element in the set
+	 */
 	public KEY_TYPE POLL_FIRST_KEY();
+	/**
+	 * A method to get the last element in the set
+	 * @return last element in the set
+	 */
 	public KEY_TYPE LAST_KEY();
+	/**
+	 * A method to get and remove the last element in the set
+	 * @return last element in the set
+	 */
 	public KEY_TYPE POLL_LAST_KEY();
 	
 	@Override
@@ -51,7 +133,15 @@ public interface SORTED_SET KEY_GENERIC_TYPE extends SET KEY_GENERIC_TYPE, Sorte
 	@Deprecated
 	default CLASS_TYPE last() { return KEY_TO_OBJ(LAST_KEY()); }
 #else
+	/**
+	 * A method to get and remove the first element in the set
+	 * @return first element in the set
+	 */
 	public CLASS_TYPE pollFirst();
+	/**
+	 * A method to get and remove the last element in the set
+	 * @return last element in the set
+	 */
 	public CLASS_TYPE pollLast();
 	
 	@Override

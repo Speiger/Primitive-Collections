@@ -5,12 +5,21 @@ import java.util.Set;
 import speiger.src.collections.PACKAGE.collections.COLLECTION;
 import speiger.src.collections.PACKAGE.collections.ITERATOR;
 
+/**
+ * A Type Specific Set class to reduce boxing/unboxing
+ * @Type(T)
+ */
 public interface SET KEY_GENERIC_TYPE extends Set<CLASS_TYPE>, COLLECTION KEY_GENERIC_TYPE
 {
 	@Override
 	public ITERATOR KEY_GENERIC_TYPE iterator();
 	
 #if !TYPE_OBJECT
+	/**
+	 * A Type Specific remove function to reduce boxing/unboxing
+	 * @param o the element that should be removed
+	 * @return true if the element was removed
+	 */
 	public boolean remove(KEY_TYPE o);
 	
 	@Override

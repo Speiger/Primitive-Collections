@@ -10,6 +10,7 @@ import java.util.concurrent.ForkJoinTask;
  */
 public class SanityChecks
 {
+	/** Max Possible ArraySize without the JVM Crashing */
 	public static final int MAX_ARRAY_SIZE = Integer.MAX_VALUE - 8;
 	private static ForkJoinPool WORK_POOL = ForkJoinPool.commonPool();
 	private static boolean FORCE_IGNORE_PARALLELISM = false;

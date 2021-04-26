@@ -18,6 +18,9 @@ import speiger.src.collections.PACKAGE.lists.LIST_ITERATOR;
  */
 public class LISTS
 {
+	/**
+	 * Empty List reference
+	 */
 	public static final EmptyList NO_GENERIC_TYPE EMPTY = new EmptyListBRACES();
 	
 	/**
@@ -74,11 +77,11 @@ public class LISTS
 		return new SingletonListBRACES(element);
 	}
 	
-	public static class SingletonList KEY_GENERIC_TYPE extends ABSTRACT_LIST KEY_GENERIC_TYPE
+	private static class SingletonList KEY_GENERIC_TYPE extends ABSTRACT_LIST KEY_GENERIC_TYPE
 	{
 		KEY_TYPE element;
 		
-		public SingletonList(KEY_TYPE element)
+		SingletonList(KEY_TYPE element)
 		{
 			this.element = element;
 		}
@@ -123,7 +126,7 @@ public class LISTS
 		public int size() { return 1; }
 	}
 	
-	public static class SynchronizedArrayList KEY_GENERIC_TYPE extends SynchronizedList KEY_GENERIC_TYPE implements IARRAY KEY_GENERIC_TYPE
+	private static class SynchronizedArrayList KEY_GENERIC_TYPE extends SynchronizedList KEY_GENERIC_TYPE implements IARRAY KEY_GENERIC_TYPE
 	{
 		IARRAY KEY_GENERIC_TYPE l;
 		
@@ -155,7 +158,7 @@ public class LISTS
 		}
 	}
 	
-	public static class SynchronizedRandomAccessList KEY_GENERIC_TYPE extends SynchronizedList KEY_GENERIC_TYPE implements RandomAccess 
+	private static class SynchronizedRandomAccessList KEY_GENERIC_TYPE extends SynchronizedList KEY_GENERIC_TYPE implements RandomAccess 
 	{
 		SynchronizedRandomAccessList(LIST KEY_GENERIC_TYPE l) {
 			super(l);
@@ -166,7 +169,7 @@ public class LISTS
 		}
 	}
 	
-	public static class SynchronizedList KEY_GENERIC_TYPE extends COLLECTIONS.SynchronizedCollection KEY_GENERIC_TYPE implements LIST KEY_GENERIC_TYPE
+	private static class SynchronizedList KEY_GENERIC_TYPE extends COLLECTIONS.SynchronizedCollection KEY_GENERIC_TYPE implements LIST KEY_GENERIC_TYPE
 	{
 		LIST KEY_GENERIC_TYPE l;
 		
@@ -271,14 +274,14 @@ public class LISTS
 		public void size(int size) { synchronized(mutex) { l.size(size); } }
 	}
 	
-	public static class UnmodifiableRandomList KEY_GENERIC_TYPE extends UnmodifiableList KEY_GENERIC_TYPE implements RandomAccess 
+	private static class UnmodifiableRandomList KEY_GENERIC_TYPE extends UnmodifiableList KEY_GENERIC_TYPE implements RandomAccess 
 	{
 		UnmodifiableRandomList(LIST KEY_GENERIC_TYPE l) {
 			super(l);
 		}
 	}
 	
-	public static class UnmodifiableList KEY_GENERIC_TYPE extends COLLECTIONS.UnmodifiableCollection KEY_GENERIC_TYPE implements LIST KEY_GENERIC_TYPE
+	private static class UnmodifiableList KEY_GENERIC_TYPE extends COLLECTIONS.UnmodifiableCollection KEY_GENERIC_TYPE implements LIST KEY_GENERIC_TYPE
 	{
 		final LIST KEY_GENERIC_TYPE l;
 		
@@ -380,7 +383,7 @@ public class LISTS
 		public void size(int size) { throw new UnsupportedOperationException(); }
 	}
 	
-	public static class EmptyList KEY_GENERIC_TYPE extends COLLECTIONS.EmptyCollection KEY_GENERIC_TYPE implements LIST KEY_GENERIC_TYPE
+	private static class EmptyList KEY_GENERIC_TYPE extends COLLECTIONS.EmptyCollection KEY_GENERIC_TYPE implements LIST KEY_GENERIC_TYPE
 	{
 		@Override
 		public boolean addAll(int index, Collection<? extends CLASS_TYPE> c) { throw new UnsupportedOperationException(); }

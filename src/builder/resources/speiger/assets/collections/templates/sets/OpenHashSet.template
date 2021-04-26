@@ -17,26 +17,55 @@ import speiger.src.collections.utils.HashUtil;
 import speiger.src.collections.utils.ITrimmable;
 import speiger.src.collections.utils.SanityChecks;
 
+/**
+ * A Type Specific Custom implementation of the HashSet
+ * Instead of using Wrapper Object Arrays for storing keys and values there is dedicated arrays for storing keys.
+ * Extra to that there is a couple quality of life functions provided
+ * @Type(T)
+ */
 public class HASH_SET KEY_GENERIC_TYPE extends ABSTRACT_SET KEY_GENERIC_TYPE implements ITrimmable
 {
+	/** The Backing keys array */
 	protected transient KEY_TYPE[] keys;
+	/** If a null value is present */
 	protected transient boolean containsNull;
+	/** Minimum array size the HashSet will be */
 	protected transient int minCapacity;
+	/** Index of the Null Value */
 	protected transient int nullIndex;
+	/** Maximum amount of Values that can be stored before the array gets expanded usually 75% */
 	protected transient int maxFill;
+	/** Max Index that is allowed to be searched through nullIndex - 1 */
 	protected transient int mask;
 	
+	/** Amount of Elements stored in the HashSet */
 	protected int size;
+	/** How full the Array is allowed to get before resize */
 	protected final float loadFactor;
 	
+	/**
+	 * Default Constructor
+	 */
 	public HASH_SET() {
 		this(HashUtil.DEFAULT_MIN_CAPACITY, HashUtil.DEFAULT_LOAD_FACTOR);
 	}
 	
+	/**
+	 * Constructor that defines the minimum capacity
+	 * @param minCapacity the minimum capacity the HashSet is allowed to be.
+	 * @throws IllegalStateException if the minimum capacity is negative
+	 */
 	public HASH_SET(int minCapacity) {
 		this(minCapacity, HashUtil.DEFAULT_LOAD_FACTOR);
 	}
 	
+	/**
+	 * Constructor that defines the minimum capacity and load factor
+	 * @param minCapacity the minimum capacity the HashSet is allowed to be.
+	 * @param loadFactor the percentage of how full the backing array can be before they resize
+	 * @throws IllegalStateException if the minimum capacity is negative
+	 * @throws IllegalStateException if the loadfactor is either below/equal to 0 or above/equal to 1
+	 */
 	public HASH_SET(int minCapacity, float loadFactor) {
 		if(minCapacity < 0)	throw new IllegalStateException("Minimum Capacity is negative. This is not allowed");
 		if(loadFactor <= 0 || loadFactor >= 1F) throw new IllegalStateException("Load Factor is not between 0 and 1");
@@ -47,48 +76,104 @@ public class HASH_SET KEY_GENERIC_TYPE extends ABSTRACT_SET KEY_GENERIC_TYPE imp
 		keys = NEW_KEY_ARRAY(nullIndex + 1);
 	}
 	
+	/**
+	 * Helper constructor that allow to create a set from unboxed values
+	 * @param array the elements that should be put into the set
+	 */
 	public HASH_SET(KEY_TYPE[] array) {
 		this(array, 0, array.length, HashUtil.DEFAULT_LOAD_FACTOR);
 	}
 	
+	/**
+	 * Helper constructor that allow to create a set from unboxed values
+	 * @param array the elements that should be put into the set
+	 * @param loadFactor the percentage of how full the backing array can be before they resize
+	 * @throws IllegalStateException if the loadfactor is either below/equal to 0 or above/equal to 1
+	 */
 	public HASH_SET(KEY_TYPE[] array, float loadFactor) {
 		this(array, 0, array.length, loadFactor);
 	}
 	
+	/**
+	 * Helper constructor that allow to create a set from unboxed values
+	 * @param array the elements that should be put into the set
+	 * @param offset the starting index within the array that should be used
+	 * @param length the amount of elements used from the array
+	 * @throws IllegalStateException if offset and length causes to step outside of the arrays range
+	 */
 	public HASH_SET(KEY_TYPE[] array, int offset, int length) {
 		this(array, offset, length, HashUtil.DEFAULT_LOAD_FACTOR);
 	}
 	
+	/**
+	 * Helper constructor that allow to create a set from unboxed values
+	 * @param array the elements that should be put into the set
+	 * @param offset the starting index within the array that should be used
+	 * @param length the amount of elements used from the array
+	 * @param loadFactor the percentage of how full the backing array can be before they resize
+	 * @throws IllegalStateException if the loadfactor is either below/equal to 0 or above/equal to 1
+	 * @throws IllegalStateException if offset and length causes to step outside of the arrays range
+	 */
 	public HASH_SET(KEY_TYPE[] array, int offset, int length, float loadFactor) {
 		this(length < 0 ? 0 : length);
 		SanityChecks.checkArrayCapacity(array.length, offset, length);
 		for(int i = 0;i<length;i++) add(array[offset+i]);
 	}
 	
+	/**
+	 * A Helper constructor that allows to create a Set with exactly the same values as the provided collection.
+	 * @param collection the set the elements should be added to the Set
+	 */
 	@Deprecated
 	public HASH_SET(Collection<? extends CLASS_TYPE> collection) {
 		this(collection, HashUtil.DEFAULT_LOAD_FACTOR);
 	}
 	
+	/**
+	 * A Helper constructor that allows to create a Set with exactly the same values as the provided collection.
+	 * @param collection the set the elements should be added to the Set
+	 * @param loadFactor the percentage of how full the backing array can be before they resize
+	 * @throws IllegalStateException if the loadfactor is either below/equal to 0 or above/equal to 1
+	 */
 	@Deprecated
 	public HASH_SET(Collection<? extends CLASS_TYPE> collection, float loadFactor) {
 		this(collection.size(), loadFactor);
 		addAll(collection);
 	}
 	
+	/**
+	 * A Helper constructor that allows to create a Set with exactly the same values as the provided collection.
+	 * @param collection the set the elements should be added to the Set
+	 */
 	public HASH_SET(COLLECTION KEY_GENERIC_TYPE collection) {
 		this(collection, HashUtil.DEFAULT_LOAD_FACTOR);
 	}
 	
+	/**
+	 * A Helper constructor that allows to create a Set with exactly the same values as the provided collection.
+	 * @param collection the set the elements should be added to the Set
+	 * @param loadFactor the percentage of how full the backing array can be before they resize
+	 * @throws IllegalStateException if the loadfactor is either below/equal to 0 or above/equal to 1
+	 */
 	public HASH_SET(COLLECTION KEY_GENERIC_TYPE collection, float loadFactor) {
 		this(collection.size());
 		addAll(collection);
 	}
 	
+	/**
+	 * A Helper constructor that allows to create a set from a iterator of an unknown size
+	 * @param iterator the elements that should be added to the set
+	 */
 	public HASH_SET(Iterator<CLASS_TYPE> iterator) {
 		this(iterator, HashUtil.DEFAULT_LOAD_FACTOR);
 	}
 	
+	/**
+	 * A Helper constructor that allows to create a set from a iterator of an unknown size
+	 * @param iterator the elements that should be added to the set
+	 * @param loadFactor the percentage of how full the backing array can be before they resize
+	 * @throws IllegalStateException if the loadfactor is either below/equal to 0 or above/equal to 1
+	 */
 	public HASH_SET(Iterator<CLASS_TYPE> iterator, float loadFactor) {
 #if !TYPE_OBJECT
 		this(ITERATORS.wrap(iterator), loadFactor);
@@ -99,10 +184,20 @@ public class HASH_SET KEY_GENERIC_TYPE extends ABSTRACT_SET KEY_GENERIC_TYPE imp
 	}
 	
 #if !TYPE_OBJECT
+	/**
+	 * A Helper constructor that allows to create a set from a iterator of an unknown size
+	 * @param iterator the elements that should be added to the set
+	 */
 	public HASH_SET(ITERATOR KEY_GENERIC_TYPE iterator) {
 		this(iterator, HashUtil.DEFAULT_LOAD_FACTOR);
 	}
 	
+	/**
+	 * A Helper constructor that allows to create a set from a iterator of an unknown size
+	 * @param iterator the elements that should be added to the set
+	 * @param loadFactor the percentage of how full the backing array can be before they resize
+	 * @throws IllegalStateException if the loadfactor is either below/equal to 0 or above/equal to 1
+	 */
 	public HASH_SET(ITERATOR KEY_GENERIC_TYPE iterator, float loadFactor) {
 		this(HashUtil.DEFAULT_MIN_CAPACITY, loadFactor);
 		while(iterator.hasNext()) add(iterator.NEXT());

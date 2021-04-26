@@ -10,6 +10,9 @@ import speiger.src.collections.PACKAGE.collections.BI_ITERATOR;
  */
 public class ITERATORS
 {
+	/**
+	 * Empty Iterator Reference
+	 */
 	public static final EmptyIterator NO_GENERIC_TYPE EMPTY = new EmptyIteratorBRACES();
 	
 	/**
@@ -25,42 +28,24 @@ public class ITERATORS
 #endif
 	}
 	
+	/**
+	 * Inverter function for Bidirectional Iterators
+	 * @param it the iterator that should be inverted
+	 * @Type(T)
+	 * @return a Inverted Bidirectional Iterator. If it was inverted then it just gives back the original reference
+	 */
 	public static GENERIC_KEY_BRACES BI_ITERATOR KEY_GENERIC_TYPE invert(BI_ITERATOR KEY_GENERIC_TYPE it) {
-		return new BI_ITERATOR KEY_GENERIC_TYPE() {
-			@Override
-			public KEY_TYPE NEXT() { return it.PREVIOUS(); }
-			@Override
-			public boolean hasNext() { return it.hasPrevious(); }
-			@Override
-			public boolean hasPrevious() { return it.hasNext(); }
-			@Override
-			public KEY_TYPE PREVIOUS() { return it.NEXT(); }
-			@Override
-			public void remove() { it.remove(); }
-		};
+		return it instanceof ReverseBiIterator ? ((ReverseBiIterator KEY_GENERIC_TYPE)it).it : new ReverseBiIteratorBRACES(it);
 	}
 	
+	/**
+	 * Inverter function for List Iterators
+	 * @param it the iterator that should be inverted
+	 * @Type(T)
+	 * @return a Inverted List Iterator. If it was inverted then it just gives back the original reference
+	 */
 	public static GENERIC_KEY_BRACES LIST_ITERATOR KEY_GENERIC_TYPE invert(LIST_ITERATOR KEY_GENERIC_TYPE it) {
-		return new LIST_ITERATOR KEY_GENERIC_TYPE() {
-			@Override
-			public KEY_TYPE NEXT() { return it.PREVIOUS(); }
-			@Override
-			public boolean hasNext() { return it.hasPrevious(); }
-			@Override
-			public boolean hasPrevious() { return it.hasNext(); }
-			@Override
-			public KEY_TYPE PREVIOUS() { return it.NEXT(); }
-			@Override
-			public void remove() { it.remove(); }
-			@Override
-			public int nextIndex() { return it.previousIndex(); }
-			@Override
-			public int previousIndex() { return it.nextIndex(); }
-			@Override
-			public void set(KEY_TYPE e) { it.set(e); }
-			@Override
-			public void add(KEY_TYPE e) { it.add(e); }
-		};
+		return it instanceof ReverseListIterator ? ((ReverseListIterator KEY_GENERIC_TYPE)it).it : new ReverseListIteratorBRACES(it);
 	}
 	
 	/**
@@ -73,6 +58,12 @@ public class ITERATORS
 		return iterator instanceof UnmodifiableIterator ? iterator : new UnmodifiableIteratorBRACES(iterator);
 	}
 	
+	/**
+	 * Returns a Immutable Iterator instance based on the instance given.
+	 * @param iterator that should be made immutable/unmodifyable
+	 * @Type(T)
+	 * @return a unmodifiable iterator wrapper. If the Iterator already a unmodifyable wrapper then it just returns itself.
+	 */
 	public static GENERIC_KEY_BRACES BI_ITERATOR KEY_GENERIC_TYPE unmodifiable(BI_ITERATOR KEY_GENERIC_TYPE iterator) {
 		return iterator instanceof UnmodifiableBiIterator ? iterator : new UnmodifiableBiIteratorBRACES(iterator);
 	}
@@ -88,6 +79,11 @@ public class ITERATORS
 	}
 	
 #if !TYPE_OBJECT
+	/**
+	 * Helper function to convert a Object Iterator into a Primitive Iterator
+	 * @param iterator that should be converted to a unboxing iterator
+	 * @return a primitive iterator
+	 */
 	public static ITERATOR wrap(Iterator<CLASS_TYPE> iterator) {
 		return iterator instanceof ITERATOR ? (ITERATOR)iterator : new IteratorWrapper(iterator);
 	}
@@ -271,6 +267,52 @@ public class ITERATORS
 	}
 	
 #endif
+	private static class ReverseBiIterator KEY_GENERIC_TYPE implements BI_ITERATOR KEY_GENERIC_TYPE {
+		BI_ITERATOR KEY_GENERIC_TYPE it;
+		
+		ReverseBiIterator(BI_ITERATOR KEY_GENERIC_TYPE it) {
+			this.it = it;
+		}
+		
+		@Override
+		public KEY_TYPE NEXT() { return it.PREVIOUS(); }
+		@Override
+		public boolean hasNext() { return it.hasPrevious(); }
+		@Override
+		public boolean hasPrevious() { return it.hasNext(); }
+		@Override
+		public KEY_TYPE PREVIOUS() { return it.NEXT(); }
+		@Override
+		public void remove() { it.remove(); }
+	}
+
+	private static class ReverseListIterator KEY_GENERIC_TYPE implements LIST_ITERATOR KEY_GENERIC_TYPE {
+		LIST_ITERATOR KEY_GENERIC_TYPE it;
+		
+		ReverseListIterator(LIST_ITERATOR KEY_GENERIC_TYPE it) {
+			this.it = it;
+		}
+	
+		@Override
+		public KEY_TYPE NEXT() { return it.PREVIOUS(); }
+		@Override
+		public boolean hasNext() { return it.hasPrevious(); }
+		@Override
+		public boolean hasPrevious() { return it.hasNext(); }
+		@Override
+		public KEY_TYPE PREVIOUS() { return it.NEXT(); }
+		@Override
+		public void remove() { it.remove(); }
+		@Override
+		public int nextIndex() { return it.previousIndex(); }
+		@Override
+		public int previousIndex() { return it.nextIndex(); }
+		@Override
+		public void set(KEY_TYPE e) { it.set(e); }
+		@Override
+		public void add(KEY_TYPE e) { it.add(e); }
+	}
+	
 	private static class UnmodifiableListIterator KEY_GENERIC_TYPE implements LIST_ITERATOR KEY_GENERIC_TYPE
 	{
 		LIST_ITERATOR KEY_GENERIC_TYPE iter;

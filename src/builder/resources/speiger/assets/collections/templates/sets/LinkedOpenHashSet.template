@@ -25,67 +25,147 @@ import speiger.src.collections.PACKAGE.utils.ITERATORS;
 import speiger.src.collections.utils.HashUtil;
 import speiger.src.collections.utils.SanityChecks;
 
+/**
+ * A Type Specific LinkedHashMap implementation that uses specific arrays to create links between nodes to remove the wrapping of elements
+ * to greatly reduce memory usage. In Addition adding some helper methods to move around elements.
+ * This implementation of SortedSet does not support SubSet of any kind. It implements the interface due to sortability and first/last access
+ * @Type(T)
+ */
 public class LINKED_HASH_SET KEY_GENERIC_TYPE extends HASH_SET KEY_GENERIC_TYPE implements SORTED_SET KEY_GENERIC_TYPE
 {
-	protected long[] links;
+	/** The Backing array for links between nodes. Left 32 Bits => Previous Entry, Right 32 Bits => Next Entry */
+	protected transient long[] links;
+	/** The First Index in the Map */
 	protected int firstIndex = -1;
+	/** The Last Index in the Map */
 	protected int lastIndex = -1;
 	
+	/**
+	 * Default Constructor
+	 */
 	public LINKED_HASH_SET() {
 		this(HashUtil.DEFAULT_MIN_CAPACITY, HashUtil.DEFAULT_LOAD_FACTOR);
 	}
 	
+	/**
+	 * Constructor that defines the minimum capacity
+	 * @param minCapacity the minimum capacity the HashSet is allowed to be.
+	 * @throws IllegalStateException if the minimum capacity is negative
+	 */
 	public LINKED_HASH_SET(int minCapacity) {
 		this(minCapacity, HashUtil.DEFAULT_LOAD_FACTOR);
 	}
 	
+	/**
+	 * Constructor that defines the minimum capacity and load factor
+	 * @param minCapacity the minimum capacity the HashSet is allowed to be.
+	 * @param loadFactor the percentage of how full the backing array can be before they resize
+	 * @throws IllegalStateException if the minimum capacity is negative
+	 * @throws IllegalStateException if the loadfactor is either below/equal to 0 or above/equal to 1
+	 */
 	public LINKED_HASH_SET(int minCapacity, float loadFactor) {
 		super(minCapacity, loadFactor);
 		links = new long[nullIndex + 1];
 	}
 	
+	/**
+	 * Helper constructor that allow to create a set from unboxed values
+	 * @param array the elements that should be put into the set
+	 */
 	public LINKED_HASH_SET(KEY_TYPE[] array) {
 		this(array, 0, array.length, HashUtil.DEFAULT_LOAD_FACTOR);
 	}
 	
+	/**
+	 * Helper constructor that allow to create a set from unboxed values
+	 * @param array the elements that should be put into the set
+	 * @param loadFactor the percentage of how full the backing array can be before they resize
+	 * @throws IllegalStateException if the loadfactor is either below/equal to 0 or above/equal to 1
+	 */
 	public LINKED_HASH_SET(KEY_TYPE[] array, float loadFactor) {
 		this(array, 0, array.length, loadFactor);
 	}
 	
+	/**
+	 * Helper constructor that allow to create a set from unboxed values
+	 * @param array the elements that should be put into the set
+	 * @param offset the starting index within the array that should be used
+	 * @param length the amount of elements used from the array
+	 * @throws IllegalStateException if offset and length causes to step outside of the arrays range
+	 */
 	public LINKED_HASH_SET(KEY_TYPE[] array, int offset, int length) {
 		this(array, offset, length, HashUtil.DEFAULT_LOAD_FACTOR);
 	}
 	
+	/**
+	 * Helper constructor that allow to create a set from unboxed values
+	 * @param array the elements that should be put into the set
+	 * @param offset the starting index within the array that should be used
+	 * @param length the amount of elements used from the array
+	 * @param loadFactor the percentage of how full the backing array can be before they resize
+	 * @throws IllegalStateException if the loadfactor is either below/equal to 0 or above/equal to 1
+	 * @throws IllegalStateException if offset and length causes to step outside of the arrays range
+	 */
 	public LINKED_HASH_SET(KEY_TYPE[] array, int offset, int length, float loadFactor) {
 		this(length < 0 ? 0 : length);
 		SanityChecks.checkArrayCapacity(array.length, offset, length);
 		for(int i = 0;i<length;i++) add(array[offset+i]);
 	}
 	
+	/**
+	 * A Helper constructor that allows to create a Set with exactly the same values as the provided collection.
+	 * @param collection the set the elements should be added to the Set
+	 */
 	@Deprecated
 	public LINKED_HASH_SET(Collection<? extends CLASS_TYPE> collection) {
 		this(collection, HashUtil.DEFAULT_LOAD_FACTOR);
 	}
 	
+	/**
+	 * A Helper constructor that allows to create a Set with exactly the same values as the provided collection.
+	 * @param collection the set the elements should be added to the Set
+	 * @param loadFactor the percentage of how full the backing array can be before they resize
+	 * @throws IllegalStateException if the loadfactor is either below/equal to 0 or above/equal to 1
+	 */
 	@Deprecated
 	public LINKED_HASH_SET(Collection<? extends CLASS_TYPE> collection, float loadFactor) {
 		this(collection.size(), loadFactor);
 		addAll(collection);
 	}
 	
+	/**
+	 * A Helper constructor that allows to create a Set with exactly the same values as the provided collection.
+	 * @param collection the set the elements should be added to the Set
+	 */
 	public LINKED_HASH_SET(COLLECTION KEY_GENERIC_TYPE collection) {
 		this(collection, HashUtil.DEFAULT_LOAD_FACTOR);
 	}
 	
+	/**
+	 * A Helper constructor that allows to create a Set with exactly the same values as the provided collection.
+	 * @param collection the set the elements should be added to the Set
+	 * @param loadFactor the percentage of how full the backing array can be before they resize
+	 * @throws IllegalStateException if the loadfactor is either below/equal to 0 or above/equal to 1
+	 */
 	public LINKED_HASH_SET(COLLECTION KEY_GENERIC_TYPE collection, float loadFactor) {
 		this(collection.size());
 		addAll(collection);
 	}
 	
+	/**
+	 * A Helper constructor that allows to create a set from a iterator of an unknown size
+	 * @param iterator the elements that should be added to the set
+	 */
 	public LINKED_HASH_SET(Iterator<CLASS_TYPE> iterator) {
 		this(iterator, HashUtil.DEFAULT_LOAD_FACTOR);
 	}
 	
+	/**
+	 * A Helper constructor that allows to create a set from a iterator of an unknown size
+	 * @param iterator the elements that should be added to the set
+	 * @param loadFactor the percentage of how full the backing array can be before they resize
+	 * @throws IllegalStateException if the loadfactor is either below/equal to 0 or above/equal to 1
+	 */
 	public LINKED_HASH_SET(Iterator<CLASS_TYPE> iterator, float loadFactor) {
 #if !TYPE_OBJECT
 		this(ITERATORS.wrap(iterator), loadFactor);
@@ -96,10 +176,20 @@ public class LINKED_HASH_SET KEY_GENERIC_TYPE extends HASH_SET KEY_GENERIC_TYPE 
 	}
 	
 #if !TYPE_OBJECT
+	/**
+	 * A Helper constructor that allows to create a set from a iterator of an unknown size
+	 * @param iterator the elements that should be added to the set
+	 */
 	public LINKED_HASH_SET(ITERATOR KEY_GENERIC_TYPE iterator) {
 		this(iterator, HashUtil.DEFAULT_LOAD_FACTOR);
 	}
 	
+	/**
+	 * A Helper constructor that allows to create a set from a iterator of an unknown size
+	 * @param iterator the elements that should be added to the set
+	 * @param loadFactor the percentage of how full the backing array can be before they resize
+	 * @throws IllegalStateException if the loadfactor is either below/equal to 0 or above/equal to 1
+	 */
 	public LINKED_HASH_SET(ITERATOR KEY_GENERIC_TYPE iterator, float loadFactor) {
 		this(HashUtil.DEFAULT_MIN_CAPACITY, loadFactor);
 		while(iterator.hasNext()) add(iterator.NEXT());

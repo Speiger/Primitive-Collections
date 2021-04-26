@@ -18,74 +18,141 @@ import speiger.src.collections.PACKAGE.utils.ITERATORS;
 #endif
 import speiger.src.collections.utils.SanityChecks;
 
+/**
+ * A Simple Type Specific RB TreeSet implementation that reduces boxing/unboxing.
+ * It is using a bit more memory then <a href="https://github.com/vigna/fastutil">FastUtil</a>,
+ * but it saves a lot of Performance on the Optimized removal and iteration logic.
+ * Which makes the implementation actually useable and does not get outperformed by Javas default implementation.
+ * @Type(T)
+ */
 public class RB_TREE_SET KEY_GENERIC_TYPE extends ABSTRACT_SET KEY_GENERIC_TYPE implements NAVIGABLE_SET KEY_GENERIC_TYPE
 {
+	/** The center of the Tree */
 	protected transient Entry KEY_GENERIC_TYPE tree;
+	/** The Lowest possible Node */
 	protected transient Entry KEY_GENERIC_TYPE first;
+	/** The Highest possible Node */
 	protected transient Entry KEY_GENERIC_TYPE last;
+	/** The amount of elements stored in the Set */
 	protected int size = 0;
+	/** The Sorter of the Tree */
 	protected transient COMPARATOR KEY_GENERIC_TYPE comparator;
 #if !TYPE_OBJECT
-#if TYPE_BOOLEAN
-	protected KEY_TYPE defaultMaxNotFound = CLASS_TYPE.FALSE;
-	protected KEY_TYPE defaultMinNotFound = CLASS_TYPE.TRUE;
-#else
+	/** the default return value for max searches */
 	protected KEY_TYPE defaultMaxNotFound = CLASS_TYPE.MIN_VALUE;
+	/** the default return value for min searches */
 	protected KEY_TYPE defaultMinNotFound = CLASS_TYPE.MAX_VALUE;
 #endif
-#endif
 	
+	/**
+	 * Default Constructor
+	 */
 	public RB_TREE_SET() {
 	}
 	
+	/**
+	 * Constructor that allows to define the sorter
+	 * @param comp the function that decides how the tree is sorted, can be null
+	 */
 	public RB_TREE_SET(COMPARATOR KEY_GENERIC_TYPE comp) {
 		comparator = comp;
 	}
 	
+	/**
+	 * Helper constructor that allow to create a set from an array
+	 * @param array the elements that should be used
+	 */
 	public RB_TREE_SET(KEY_TYPE[] array) {
 		this(array, 0, array.length);
 	}
 	
+	/**
+	 * Helper constructor that allow to create a set from an array
+	 * @param array the elements that should be used
+	 * @param offset the starting index within the array
+	 * @param length the amount of elements that are within the array
+	 * @throws IllegalStateException if offset and length causes to step outside of the arrays range
+	 */
 	public RB_TREE_SET(KEY_TYPE[] array, int offset, int length) {
 		SanityChecks.checkArrayCapacity(array.length, offset, length);
 		for(int i = 0;i<length;i++) add(array[offset+i]);
 	}
 	
+	/**
+	 * Helper constructor that allow to create a set from an array
+	 * @param array the elements that should be used
+	 * @param comp the sorter of the tree, can be null
+	 */
 	public RB_TREE_SET(KEY_TYPE[] array, COMPARATOR KEY_GENERIC_TYPE comp) {
 		this(array, 0, array.length, comp);
 	}
 	
+	/**
+	 * Helper constructor that allow to create a set from an array
+	 * @param array the elements that should be used
+	 * @param offset the starting index within the array
+	 * @param length the amount of elements that are within the array
+	 * @param comp the sorter of the tree, can be null
+	 * @throws IllegalStateException if offset and length causes to step outside of the arrays range
+	 */
 	public RB_TREE_SET(KEY_TYPE[] array, int offset, int length, COMPARATOR KEY_GENERIC_TYPE comp) {
 		comparator = comp;
 		SanityChecks.checkArrayCapacity(array.length, offset, length);
 		for(int i = 0;i<length;i++) add(array[offset+i]);
 	}
 	
+	/**
+	 * A Helper constructor that allows to create a Set with exactly the same values as the provided SortedSet.
+	 * @param sortedSet the set the elements should be added to the TreeSet
+	 * @note this also includes the Comparator if present
+	 */
 	public RB_TREE_SET(SORTED_SET KEY_GENERIC_TYPE sortedSet) {
 		comparator = sortedSet.comparator();
 		addAll(sortedSet);
 	}
 	
+	/**
+	 * A Helper constructor that allows to create a Set with exactly the same values as the provided collection.
+	 * @param collection the set the elements should be added to the TreeSet
+	 */
 	@Deprecated
 	public RB_TREE_SET(Collection<? extends CLASS_TYPE> collection) {
 		addAll(collection);
 	}
-
+	
+	/**
+	 * A Helper constructor that allows to create a Set with exactly the same values as the provided collection.
+	 * @param collection the set the elements should be added to the TreeSet
+	 * @param comp the sorter of the tree, can be null
+	 */
 	@Deprecated
 	public RB_TREE_SET(Collection<? extends CLASS_TYPE> collection, COMPARATOR KEY_GENERIC_TYPE comp) {
 		comparator = comp;
 		addAll(collection);
 	}
 	
+	/**
+	 * A Helper constructor that allows to create a Set with exactly the same values as the provided collection.
+	 * @param collection the set the elements should be added to the TreeSet
+	 */
 	public RB_TREE_SET(COLLECTION KEY_GENERIC_TYPE collection) {
 		addAll(collection);
 	}
 	
+	/**
+	 * A Helper constructor that allows to create a Set with exactly the same values as the provided collection.
+	 * @param collection the set the elements should be added to the TreeSet
+	 * @param comp the sorter of the tree, can be null
+	 */
 	public RB_TREE_SET(COLLECTION KEY_GENERIC_TYPE collection, COMPARATOR KEY_GENERIC_TYPE comp) {
 		comparator = comp;
 		addAll(collection);
 	}
-
+	
+	/**
+	 * A Helper constructor that allows to create a set from a iterator of an unknown size
+	 * @param iterator the elements that should be added to the set
+	 */
 	public RB_TREE_SET(Iterator<CLASS_TYPE> iterator) {
 #if !TYPE_OBJECT
 		this(ITERATORS.wrap(iterator));
@@ -93,7 +160,12 @@ public class RB_TREE_SET KEY_GENERIC_TYPE extends ABSTRACT_SET KEY_GENERIC_TYPE 
 		while(iterator.hasNext()) add(iterator.next());
 #endif
 	}
-
+	
+	/**
+	 * A Helper constructor that allows to create a set from a iterator of an unknown size
+	 * @param iterator the elements that should be added to the set
+	 * @param comp the sorter of the tree, can be null
+	 */
 	public RB_TREE_SET(Iterator<CLASS_TYPE> iterator, COMPARATOR KEY_GENERIC_TYPE comp) {
 #if !TYPE_OBJECT
 		this(ITERATORS.wrap(iterator), comp);
@@ -103,10 +175,19 @@ public class RB_TREE_SET KEY_GENERIC_TYPE extends ABSTRACT_SET KEY_GENERIC_TYPE 
 #endif
 	}
 	
+	/**
+	 * A Helper constructor that allows to create a set from a iterator of an unknown size
+	 * @param iterator the elements that should be added to the set
+	 */
 	public RB_TREE_SET(ITERATOR KEY_GENERIC_TYPE iterator) {
 		while(iterator.hasNext()) add(iterator.NEXT());
 	}
 	
+	/**
+	 * A Helper constructor that allows to create a set from a iterator of an unknown size
+	 * @param iterator the elements that should be added to the set
+	 * @param comp the sorter of the tree, can be null
+	 */
 	public RB_TREE_SET(ITERATOR KEY_GENERIC_TYPE iterator, COMPARATOR KEY_GENERIC_TYPE comp) {
 		comparator = comp;
 		while(iterator.hasNext()) add(iterator.NEXT());

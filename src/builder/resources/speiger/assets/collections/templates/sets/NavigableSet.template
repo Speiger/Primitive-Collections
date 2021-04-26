@@ -4,66 +4,113 @@ import java.util.NavigableSet;
 
 import speiger.src.collections.PACKAGE.collections.BI_ITERATOR;
 
+/**
+ * A Type Specific Navigable Set interface with a couple helper methods
+ * @Type(T)
+ */
 public interface NAVIGABLE_SET KEY_GENERIC_TYPE extends NavigableSet<CLASS_TYPE>, SORTED_SET KEY_GENERIC_TYPE
 {
 #if !TYPE_OBJECT
-	public KEY_TYPE lower(KEY_TYPE e);
+	/**
+	 * A Type Specific lower method to reduce boxing/unboxing.
+	 * @param key that should be compared with.
+	 * @return the greatest lower key that can be found
+	 */
+	public KEY_TYPE lower(KEY_TYPE key);
+	/**
+	 * A Type Specific higher method to reduce boxing/unboxing.
+	 * @param key that should be compared with.
+	 * @return the lowest higher key that can be found
+	 */
+	public KEY_TYPE higher(KEY_TYPE key);
+	/**
+	 * A Type Specific floor method to reduce boxing/unboxing.
+	 * @param key that should be compared with.
+	 * @return the greatest lower or equal key that can be found
+	 */
+	public KEY_TYPE floor(KEY_TYPE key);
+	/**
+	 * A Type Specific ceiling method to reduce boxing/unboxing.
+	 * @param key that should be compared with.
+	 * @return the lowest higher or equal key that can be found
+	 */
+	public KEY_TYPE ceiling(KEY_TYPE key);
 	
-	public KEY_TYPE floor(KEY_TYPE e);
-	
-	public KEY_TYPE ceiling(KEY_TYPE e);
-	
-	public KEY_TYPE higher(KEY_TYPE e);
-	
+	/**
+	 * A Helper method to set the max value for SubSets. (Default: KEY_TYPE.MIN_VALUE)
+	 * @param e the new max value
+	 */
 	public void setDefaultMaxValue(KEY_TYPE e);
-	
+	/**
+	 * A Helper method to get the max value for SubSets.
+	 * @return the default max value.
+	 */
 	public KEY_TYPE getDefaultMaxValue();
 	
+	/**
+	 * A Helper method to set the min value for SubSets. (Default: KEY_TYPE.MAX_VALUE)
+	 * @param e the new min value
+	 */
 	public void setDefaultMinValue(KEY_TYPE e);
-	
+	/**
+	 * A Helper method to get the min value for SubSets.
+	 * @return the default min value.
+	 */
 	public KEY_TYPE getDefaultMinValue();
 	
 	@Override
 	public default NAVIGABLE_SET KEY_GENERIC_TYPE subSet(KEY_TYPE fromElement, KEY_TYPE toElement) { return subSet(fromElement, true, toElement, false); }
-	
 	@Override
 	public default NAVIGABLE_SET KEY_GENERIC_TYPE headSet(KEY_TYPE toElement) { return headSet(toElement, false); }
-	
 	@Override
 	public default NAVIGABLE_SET KEY_GENERIC_TYPE tailSet(KEY_TYPE fromElement) { return tailSet(fromElement, true); }
 	
+	/**
+	 * A Type Specific SubSet method to reduce boxing/unboxing
+	 * @param fromElement where the SubSet should start
+	 * @param fromInclusive if the fromElement is inclusive or not
+	 * @param toElement where the SubSet should end
+	 * @param toInclusive if the toElement is inclusive or not
+	 * @return a SubSet that is within the range of the desired range
+	 */
 	public NAVIGABLE_SET KEY_GENERIC_TYPE subSet(KEY_TYPE fromElement, boolean fromInclusive, KEY_TYPE toElement, boolean toInclusive);
-	
+	/**
+	 * A Type Specific HeadSet method to reduce boxing/unboxing
+	 * @param toElement where the HeadSet should end
+	 * @param inclusive if the toElement is inclusive or not
+	 * @return a HeadSet that is within the range of the desired range
+	 */
 	public NAVIGABLE_SET KEY_GENERIC_TYPE headSet(KEY_TYPE toElement, boolean inclusive);
-	
+	/**
+	 * A Type Specific TailSet method to reduce boxing/unboxing
+	 * @param fromElement where the TailSet should start
+	 * @param inclusive if the fromElement is inclusive or not
+	 * @return a TailSet that is within the range of the desired range
+	 */
 	public NAVIGABLE_SET KEY_GENERIC_TYPE tailSet(KEY_TYPE fromElement, boolean inclusive);
 	
 #else
 	@Override
 	public default NAVIGABLE_SET KEY_GENERIC_TYPE subSet(KEY_TYPE fromElement, KEY_TYPE toElement) { return subSet(fromElement, true, toElement, false); }
-	
 	@Override
 	public default NAVIGABLE_SET KEY_GENERIC_TYPE headSet(KEY_TYPE toElement) { return headSet(toElement, false); }
-	
 	@Override
 	public default NAVIGABLE_SET KEY_GENERIC_TYPE tailSet(KEY_TYPE fromElement) { return tailSet(fromElement, true); }
-	
 	@Override
 	public NAVIGABLE_SET KEY_GENERIC_TYPE subSet(KEY_TYPE fromElement, boolean fromInclusive, KEY_TYPE toElement, boolean toInclusive);
-	
 	@Override
 	public NAVIGABLE_SET KEY_GENERIC_TYPE headSet(KEY_TYPE toElement, boolean inclusive);
-	
 	@Override
 	public NAVIGABLE_SET KEY_GENERIC_TYPE tailSet(KEY_TYPE fromElement, boolean inclusive);
 	
 #endif
+	/** @return a Type Specific iterator */
 	@Override
 	public BI_ITERATOR KEY_GENERIC_TYPE iterator();
-	
+	/** @return a Type Specific desendingIterator */
 	@Override
 	public BI_ITERATOR KEY_GENERIC_TYPE descendingIterator();
-	
+	/** @return a Type Specific desendingSet */
 	@Override
 	public NAVIGABLE_SET KEY_GENERIC_TYPE descendingSet();
 	
@@ -71,31 +118,24 @@ public interface NAVIGABLE_SET KEY_GENERIC_TYPE extends NavigableSet<CLASS_TYPE>
 	@Override
 	@Deprecated
 	public default CLASS_TYPE lower(CLASS_TYPE e) { return KEY_TO_OBJ(lower(OBJ_TO_KEY(e))); }
-	
 	@Override
 	@Deprecated
 	public default CLASS_TYPE floor(CLASS_TYPE e) { return KEY_TO_OBJ(floor(OBJ_TO_KEY(e))); }
-	
 	@Override
 	@Deprecated
 	public default CLASS_TYPE ceiling(CLASS_TYPE e) { return KEY_TO_OBJ(ceiling(OBJ_TO_KEY(e))); }
-	
 	@Override
 	@Deprecated
 	public default CLASS_TYPE higher(CLASS_TYPE e) { return KEY_TO_OBJ(higher(OBJ_TO_KEY(e))); }
-	
 	@Override
 	@Deprecated
 	default CLASS_TYPE first() { return SORTED_SET.super.first(); }
-	
 	@Override
 	@Deprecated
 	default CLASS_TYPE last() { return SORTED_SET.super.last(); }
-	
 	@Override
 	@Deprecated
 	public default CLASS_TYPE pollFirst() { return KEY_TO_OBJ(POLL_FIRST_KEY()); }
-	
 	@Override
 	@Deprecated
 	public default CLASS_TYPE pollLast() { return KEY_TO_OBJ(POLL_LAST_KEY()); }
@@ -103,23 +143,18 @@ public interface NAVIGABLE_SET KEY_GENERIC_TYPE extends NavigableSet<CLASS_TYPE>
 	@Override
 	@Deprecated
 	public default NAVIGABLE_SET KEY_GENERIC_TYPE subSet(CLASS_TYPE fromElement, boolean fromInclusive, CLASS_TYPE toElement, boolean toInclusive) { return subSet(OBJ_TO_KEY(fromElement), fromInclusive, OBJ_TO_KEY(toElement), toInclusive); }
-	
 	@Override
 	@Deprecated
 	public default NAVIGABLE_SET KEY_GENERIC_TYPE headSet(CLASS_TYPE toElement, boolean inclusive) { return headSet(OBJ_TO_KEY(toElement), inclusive); }
-	
 	@Override
 	@Deprecated
 	public default NAVIGABLE_SET KEY_GENERIC_TYPE tailSet(CLASS_TYPE fromElement, boolean inclusive) { return tailSet(OBJ_TO_KEY(fromElement), inclusive); }
-	
 	@Override
 	@Deprecated
 	public default SORTED_SET KEY_GENERIC_TYPE subSet(CLASS_TYPE fromElement, CLASS_TYPE toElement) { return SORTED_SET.super.subSet(fromElement, toElement); }
-	
 	@Override
 	@Deprecated
 	public default SORTED_SET KEY_GENERIC_TYPE headSet(CLASS_TYPE toElement) { return SORTED_SET.super.headSet(toElement); }
-	
 	@Override
 	@Deprecated
 	public default SORTED_SET KEY_GENERIC_TYPE tailSet(CLASS_TYPE fromElement) { return SORTED_SET.super.tailSet(fromElement); }

@@ -43,7 +43,7 @@ import speiger.src.collections.objects.sets.ObjectSet;
  * A Simple Type Specific AVL TreeMap implementation that reduces boxing/unboxing.
  * It is using a bit more memory then <a href="https://github.com/vigna/fastutil">FastUtil</a>,
  * but it saves a lot of Performance on the Optimized removal and iteration logic.
- * Which makes the implementation actually useable and does not force to use Javas default implementation.
+ * Which makes the implementation actually useable and does not get outperformed by Javas default implementation.
  * @Type(T)
  * @ValueType(V)
  */

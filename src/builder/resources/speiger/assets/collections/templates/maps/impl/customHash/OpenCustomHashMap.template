@@ -430,7 +430,7 @@ public class CUSTOM_HASH_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_VAL
 	
 #if !TYPE_OBJECT
 	protected int findIndex(KEY_TYPE key) {
-		if(KEY_EQUALS_NULL(key)) return containsNull ? nullIndex : -(nullIndex + 1);
+		if(strategy.equals(key, EMPTY_KEY_VALUE)) return containsNull ? nullIndex : -(nullIndex + 1);
 		int pos = HashUtil.mix(strategy.hashCode(key)) & mask;
 		KEY_TYPE current = keys[pos];
 		if(!strategy.equals(current, EMPTY_KEY_VALUE)) {

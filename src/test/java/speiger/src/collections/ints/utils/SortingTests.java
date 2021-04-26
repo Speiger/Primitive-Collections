@@ -1,10 +1,7 @@
 package speiger.src.collections.ints.utils;
 
 import java.util.Arrays;
-import java.util.Spliterators;
 import java.util.stream.IntStream;
-import java.util.stream.Stream;
-import java.util.stream.StreamSupport;
 
 import org.junit.Assert;
 import org.junit.Test;

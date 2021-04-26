@@ -23,67 +23,173 @@ import speiger.src.collections.PACKAGE.utils.STRATEGY;
 import speiger.src.collections.utils.HashUtil;
 import speiger.src.collections.utils.SanityChecks;
 
+/**
+ * A Type Specific LinkedHashSet that allows for custom HashControl. That uses arrays to create links between nodes.
+ * For cases where Objects/primitive do not allow hashcoding this can be really useful and provide a lot of control.
+ * This implementation of SortedSet does not support SubSet of any kind. It implements the interface due to sortability and first/last access
+ * @Type(T)
+ */
 public class LINKED_CUSTOM_HASH_SET KEY_GENERIC_TYPE extends CUSTOM_HASH_SET KEY_GENERIC_TYPE implements SORTED_SET KEY_GENERIC_TYPE
 {
-	protected long[] links;
+	/** The Backing array for links between nodes. Left 32 Bits => Previous Entry, Right 32 Bits => Next Entry */
+	protected transient long[] links;
+	/** The First Index in the Map */
 	protected int firstIndex = -1;
+	/** The Last Index in the Map */
 	protected int lastIndex = -1;
 	
+	/**
+	 * Default Contstructor
+	 * @param strategy the strategy that allows hash control.
+	 * @throws NullPointerException if Strategy is null
+	 */
 	public LINKED_CUSTOM_HASH_SET(STRATEGY KEY_SUPER_GENERIC_TYPE strategy) {
 		this(HashUtil.DEFAULT_MIN_CAPACITY, HashUtil.DEFAULT_LOAD_FACTOR, strategy);
 	}
 	
+	/**
+	 * Constructor that defines the minimum capacity
+	 * @param minCapacity the minimum capacity the HashSet is allowed to be.
+	 * @param strategy the strategy that allows hash control.
+	 * @throws NullPointerException if Strategy is null
+	 * @throws IllegalStateException if the minimum capacity is negative
+	 */
 	public LINKED_CUSTOM_HASH_SET(int minCapacity, STRATEGY KEY_SUPER_GENERIC_TYPE strategy) {
 		this(minCapacity, HashUtil.DEFAULT_LOAD_FACTOR, strategy);
 	}
 	
+	/**
+	 * Constructor that defines the minimum capacity and load factor
+	 * @param minCapacity the minimum capacity the HashSet is allowed to be.
+	 * @param loadFactor the percentage of how full the backing array can be before they resize
+	 * @param strategy the strategy that allows hash control.
+	 * @throws NullPointerException if Strategy is null
+	 * @throws IllegalStateException if the minimum capacity is negative
+	 * @throws IllegalStateException if the loadfactor is either below/equal to 0 or above/equal to 1
+	 */
 	public LINKED_CUSTOM_HASH_SET(int minCapacity, float loadFactor, STRATEGY KEY_SUPER_GENERIC_TYPE strategy) {
 		super(minCapacity, loadFactor, strategy);
 		links = new long[nullIndex + 1];
 	}
 	
+	/**
+	 * Helper constructor that allow to create a set from unboxed values
+	 * @param array the elements that should be put into the set
+	 * @param strategy the strategy that allows hash control.
+	 * @throws NullPointerException if Strategy is null
+	 */
 	public LINKED_CUSTOM_HASH_SET(KEY_TYPE[] array, STRATEGY KEY_SUPER_GENERIC_TYPE strategy) {
 		this(array, 0, array.length, HashUtil.DEFAULT_LOAD_FACTOR, strategy);
 	}
 	
+	/**
+	 * Helper constructor that allow to create a set from unboxed values
+	 * @param array the elements that should be put into the set
+	 * @param loadFactor the percentage of how full the backing array can be before they resize
+	 * @param strategy the strategy that allows hash control.
+	 * @throws NullPointerException if Strategy is null
+	 * @throws IllegalStateException if the loadfactor is either below/equal to 0 or above/equal to 1
+	 */
 	public LINKED_CUSTOM_HASH_SET(KEY_TYPE[] array, float loadFactor, STRATEGY KEY_SUPER_GENERIC_TYPE strategy) {
 		this(array, 0, array.length, loadFactor, strategy);
 	}
 	
+	/**
+	 * Helper constructor that allow to create a set from unboxed values
+	 * @param array the elements that should be put into the set
+	 * @param offset the starting index within the array that should be used
+	 * @param length the amount of elements used from the array
+	 * @param strategy the strategy that allows hash control.
+	 * @throws NullPointerException if Strategy is null
+	 * @throws IllegalStateException if offset and length causes to step outside of the arrays range
+	 */
 	public LINKED_CUSTOM_HASH_SET(KEY_TYPE[] array, int offset, int length, STRATEGY KEY_SUPER_GENERIC_TYPE strategy) {
 		this(array, offset, length, HashUtil.DEFAULT_LOAD_FACTOR, strategy);
 	}
 	
+	/**
+	 * Helper constructor that allow to create a set from unboxed values
+	 * @param array the elements that should be put into the set
+	 * @param offset the starting index within the array that should be used
+	 * @param length the amount of elements used from the array
+	 * @param loadFactor the percentage of how full the backing array can be before they resize
+	 * @param strategy the strategy that allows hash control.
+	 * @throws NullPointerException if Strategy is null
+	 * @throws IllegalStateException if the loadfactor is either below/equal to 0 or above/equal to 1
+	 * @throws IllegalStateException if offset and length causes to step outside of the arrays range
+	 */
 	public LINKED_CUSTOM_HASH_SET(KEY_TYPE[] array, int offset, int length, float loadFactor, STRATEGY KEY_SUPER_GENERIC_TYPE strategy) {
 		this(length < 0 ? 0 : length, strategy);
 		SanityChecks.checkArrayCapacity(array.length, offset, length);
 		for(int i = 0;i<length;i++) add(array[offset+i]);
 	}
 	
+	/**
+	 * A Helper constructor that allows to create a Set with exactly the same values as the provided collection.
+	 * @param collection the set the elements should be added to the Set
+	 * @param strategy the strategy that allows hash control.
+	 * @throws NullPointerException if Strategy is null
+	 */
 	@Deprecated
 	public LINKED_CUSTOM_HASH_SET(Collection<? extends CLASS_TYPE> collection, STRATEGY KEY_SUPER_GENERIC_TYPE strategy) {
 		this(collection, HashUtil.DEFAULT_LOAD_FACTOR, strategy);
 	}
 	
+	/**
+	 * A Helper constructor that allows to create a Set with exactly the same values as the provided collection.
+	 * @param collection the set the elements should be added to the Set
+	 * @param loadFactor the percentage of how full the backing array can be before they resize
+	 * @param strategy the strategy that allows hash control.
+	 * @throws NullPointerException if Strategy is null
+	 * @throws IllegalStateException if the loadfactor is either below/equal to 0 or above/equal to 1
+	 */
 	@Deprecated
 	public LINKED_CUSTOM_HASH_SET(Collection<? extends CLASS_TYPE> collection, float loadFactor, STRATEGY KEY_SUPER_GENERIC_TYPE strategy) {
 		this(collection.size(), loadFactor, strategy);
 		addAll(collection);
 	}
 	
+	/**
+	 * A Helper constructor that allows to create a Set with exactly the same values as the provided collection.
+	 * @param collection the set the elements should be added to the Set
+	 * @param strategy the strategy that allows hash control.
+	 * @throws NullPointerException if Strategy is null
+	 */
 	public LINKED_CUSTOM_HASH_SET(COLLECTION KEY_GENERIC_TYPE collection, STRATEGY KEY_SUPER_GENERIC_TYPE strategy) {
 		this(collection, HashUtil.DEFAULT_LOAD_FACTOR, strategy);
 	}
 	
+	/**
+	 * A Helper constructor that allows to create a Set with exactly the same values as the provided collection.
+	 * @param collection the set the elements should be added to the Set
+	 * @param loadFactor the percentage of how full the backing array can be before they resize
+	 * @param strategy the strategy that allows hash control.
+	 * @throws NullPointerException if Strategy is null
+	 * @throws IllegalStateException if the loadfactor is either below/equal to 0 or above/equal to 1
+	 */
 	public LINKED_CUSTOM_HASH_SET(COLLECTION KEY_GENERIC_TYPE collection, float loadFactor, STRATEGY KEY_SUPER_GENERIC_TYPE strategy) {
 		this(collection.size(), strategy);
 		addAll(collection);
 	}
 	
+	/**
+	 * A Helper constructor that allows to create a set from a iterator of an unknown size
+	 * @param iterator the elements that should be added to the set
+	 * @param strategy the strategy that allows hash control.
+	 * @throws NullPointerException if Strategy is null
+	 */
 	public LINKED_CUSTOM_HASH_SET(Iterator<CLASS_TYPE> iterator, STRATEGY KEY_SUPER_GENERIC_TYPE strategy) {
 		this(iterator, HashUtil.DEFAULT_LOAD_FACTOR, strategy);
 	}
 	
+	/**
+	 * A Helper constructor that allows to create a set from a iterator of an unknown size
+	 * @param iterator the elements that should be added to the set
+	 * @param loadFactor the percentage of how full the backing array can be before they resize
+	 * @param strategy the strategy that allows hash control.
+	 * @throws NullPointerException if Strategy is null
+	 * @throws IllegalStateException if the loadfactor is either below/equal to 0 or above/equal to 1
+	 */
 	public LINKED_CUSTOM_HASH_SET(Iterator<CLASS_TYPE> iterator, float loadFactor, STRATEGY KEY_SUPER_GENERIC_TYPE strategy) {
 #if !TYPE_OBJECT
 		this(ITERATORS.wrap(iterator), loadFactor, strategy);
@@ -94,10 +200,24 @@ public class LINKED_CUSTOM_HASH_SET KEY_GENERIC_TYPE extends CUSTOM_HASH_SET KEY
 	}
 	
 #if !TYPE_OBJECT
+	/**
+	 * A Helper constructor that allows to create a set from a iterator of an unknown size
+	 * @param iterator the elements that should be added to the set
+	 * @param strategy the strategy that allows hash control.
+	 * @throws NullPointerException if Strategy is null
+	 */
 	public LINKED_CUSTOM_HASH_SET(ITERATOR KEY_GENERIC_TYPE iterator, STRATEGY KEY_SUPER_GENERIC_TYPE strategy) {
 		this(iterator, HashUtil.DEFAULT_LOAD_FACTOR, strategy);
 	}
 	
+	/**	
+	 * A Helper constructor that allows to create a set from a iterator of an unknown size
+	 * @param iterator the elements that should be added to the set
+	 * @param loadFactor the percentage of how full the backing array can be before they resize
+	 * @param strategy the strategy that allows hash control.
+	 * @throws NullPointerException if Strategy is null
+	 * @throws IllegalStateException if the loadfactor is either below/equal to 0 or above/equal to 1
+	 */
 	public LINKED_CUSTOM_HASH_SET(ITERATOR KEY_GENERIC_TYPE iterator, float loadFactor, STRATEGY KEY_SUPER_GENERIC_TYPE strategy) {
 		this(HashUtil.DEFAULT_MIN_CAPACITY, loadFactor, strategy);
 		while(iterator.hasNext()) add(iterator.NEXT());
