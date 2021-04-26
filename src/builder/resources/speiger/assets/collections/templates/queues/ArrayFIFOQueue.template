@@ -12,22 +12,49 @@ import speiger.src.collections.PACKAGE.functions.COMPARATOR;
 #endif
 import speiger.src.collections.utils.ITrimmable;
 
+/**
+ * A Simple First In First Out Priority Queue that is a Good Replacement for a linked list (or ArrayDequeue)
+ * Its specific implementation uses a backing array that grows and shrinks as it is needed.
+ * @Type(T)
+ */
 public class ARRAY_FIFO_QUEUE KEY_GENERIC_TYPE implements PRIORITY_DEQUEUE KEY_GENERIC_TYPE, ITrimmable
 {
+	/** Max Possible ArraySize without the JVM Crashing */
     private static final int MAX_ARRAY_SIZE = Integer.MAX_VALUE - 8;
+    /** The Minimum Capacity that is allowed */
 	public static final int MIN_CAPACITY = 4;
+	/** The Backing array */
 	protected transient KEY_TYPE[] array;
+	/** The First Index pointer */
 	protected int first;
+	/** The Last Index pointer */
 	protected int last;
 	
+	/**
+	 * Constructor using a initial array
+	 * @param values the Array that should be used
+	 */
 	public ARRAY_FIFO_QUEUE(KEY_TYPE[] values) {
 		this(values, 0, values.length);
 	}
-
+	
+	/**
+	 * Constructor using a initial array
+	 * @param values the Array that should be used
+	 * @param size the amount of elements that are in the initial array
+	 * @throws IllegalStateException if values is smaller then size
+	 */
 	public ARRAY_FIFO_QUEUE(KEY_TYPE[] values, int size) {
 		this(values, 0, size);
 	}
-
+	
+	/**
+	 * Constructor using a initial array
+	 * @param values the Array that should be used
+	 * @param offset where to begin in the initial array
+	 * @param size the amount of elements that are in the initial array
+	 * @throws IllegalStateException if values is smaller then size
+	 */
 	public ARRAY_FIFO_QUEUE(KEY_TYPE[] values, int offset, int size) {
 		if (values.length < size) throw new IllegalArgumentException("Initial array (" + values.length + ") is smaller then the expected size (" + size + ")");
 		if(values.length <= 0) values = NEW_KEY_ARRAY(1);
@@ -37,11 +64,19 @@ public class ARRAY_FIFO_QUEUE KEY_GENERIC_TYPE implements PRIORITY_DEQUEUE KEY_G
 		if(array.length == size) expand();
 	}
 	
+	/**
+	 * Constructor with a Min Capacity
+	 * @param capacity the initial capacity of the backing array
+	 * @throws IllegalStateException if the initial size is smaller 0
+	 */
 	public ARRAY_FIFO_QUEUE(int capacity) {
 		if (capacity < 0) throw new IllegalArgumentException("Initial capacity (" + capacity + ") is negative");
 		array = NEW_KEY_ARRAY(Math.max(1, capacity));
 	}
-
+	
+	/**
+	 * Default Construtor
+	 */
 	public ARRAY_FIFO_QUEUE() {
 		this(MIN_CAPACITY);
 	}

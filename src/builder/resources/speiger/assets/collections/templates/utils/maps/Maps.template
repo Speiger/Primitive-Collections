@@ -88,6 +88,7 @@ public class MAPS
 	/**
 	 * A Helper function that provides a faster forEach iterator implementation that recycles the entry to increase throughput
 	 * @param map the map the fast forEach should be accessed from
+	 * @param action the action that should be performed on each entry
 	 * @note if the fast forEach is not supported will default to a normal forEach
 	 */
 	public static GENERIC_KEY_VALUE_BRACES void fastForEach(MAP KEY_VALUE_GENERIC_TYPE map, Consumer<MAP.Entry KEY_VALUE_GENERIC_TYPE> action) {

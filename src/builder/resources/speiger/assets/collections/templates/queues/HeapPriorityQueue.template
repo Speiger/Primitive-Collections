@@ -14,40 +14,92 @@ import speiger.src.collections.PACKAGE.functions.COMPARATOR;
 #endif
 import speiger.src.collections.PACKAGE.utils.ARRAYS;
 
+/**
+ * A Simple Heap base Priority Queue implementation
+ * It is a ArrayBased Alternative to TreeSets that has less object allocations
+ * @Type(T)
+ */
 public class HEAP_PRIORITY_QUEUE KEY_GENERIC_TYPE implements PRIORITY_QUEUE KEY_GENERIC_TYPE
 {
+	/** The Backing Array */
 	protected transient KEY_TYPE[] array = EMPTY_KEY_ARRAY;
+	/** The Amount of elements stored within the array */
 	protected int size;
+	/** The Sorter of the Array */
 	protected COMPARATOR KEY_SUPER_GENERIC_TYPE comparator;
 	
+	/**
+	 * Default Constructor
+	 */
 	public HEAP_PRIORITY_QUEUE() {
 		this(0, null);
 	}
 	
+	/**
+	 * Constructor using custom sorter
+	 * @param comp Comparator to sort the Array. Can be null
+	 */
 	public HEAP_PRIORITY_QUEUE(COMPARATOR KEY_SUPER_GENERIC_TYPE comp) {
 		this(0, comp);
 	}
 	
+	/**
+	 * Constructor with a Min Capacity
+	 * @param size the initial capacity of the backing array
+	 * @throws IllegalStateException if the initial size is smaller 0
+	 */
+	public HEAP_PRIORITY_QUEUE(int size) {
+		this(size, null);
+	}
+	
+	/**
+	 * Constructor with a Min Capacity and custom Sorter
+	 * @param size the initial capacity of the backing array
+	 * @param comp Comparator to sort the Array. Can be null
+	 * @throws IllegalStateException if the initial size is smaller 0
+	 */
 	public HEAP_PRIORITY_QUEUE(int size, COMPARATOR KEY_SUPER_GENERIC_TYPE comp) {
 		if(size > 0) array = NEW_KEY_ARRAY(size);
 		this.size = size;
 		comparator = comp;
 	}
 	
+	/**
+	 * Constructor using a initial array
+	 * @param array the Array that should be used
+	 */
 	public HEAP_PRIORITY_QUEUE(KEY_TYPE[] array) {
 		this(array, array.length);
 	}
 	
+	/**
+	 * Constructor using a initial array
+	 * @param array the Array that should be used
+	 * @param size the amount of elements found within the array
+	 * @throws NegativeArraySizeException if size is smaller then 0
+	 */
 	public HEAP_PRIORITY_QUEUE(KEY_TYPE[] array, int size) {
 		this.array = Arrays.copyOf(array, size);
 		this.size = size;
 		ARRAYS.heapify(array, size, null);
 	}
 	
+	/**
+	 * Constructor using a initial array and a custom sorter
+	 * @param array the Array that should be used
+	 * @param comp Comparator to sort the Array. Can be null
+	 */
 	public HEAP_PRIORITY_QUEUE(KEY_TYPE[] array, COMPARATOR KEY_SUPER_GENERIC_TYPE comp) {
 		this(array, array.length, comp);
 	}
 	
+	/**
+	 * Constructor using a initial array and a custom sorter
+	 * @param array the Array that should be used
+	 * @param size the amount of elements found within the array
+	 * @param comp Comparator to sort the Array. Can be null
+	 * @throws NegativeArraySizeException if size is smaller then 0
+	 */
 	public HEAP_PRIORITY_QUEUE(KEY_TYPE[] array, int size, COMPARATOR KEY_SUPER_GENERIC_TYPE comp) {
 		this.array = Arrays.copyOf(array, size);
 		this.size = size;
@@ -55,12 +107,21 @@ public class HEAP_PRIORITY_QUEUE KEY_GENERIC_TYPE implements PRIORITY_QUEUE KEY_
 		ARRAYS.heapify(array, size, comp);
 	}
 	
+	/**
+	 * Constructor using a Collection
+	 * @param c the Collection that should be used
+	 */
 	public HEAP_PRIORITY_QUEUE(COLLECTION KEY_GENERIC_TYPE c) {
 		array = CAST_KEY_ARRAY c.TO_ARRAY();
 		size = c.size();
 		ARRAYS.heapify(array, size, null);
 	}
 	
+	/**
+	 * Constructor using a Collection and a custom sorter
+	 * @param c the Collection that should be used
+	 * @param comp Comparator to sort the Array. Can be null
+	 */
 	public HEAP_PRIORITY_QUEUE(COLLECTION KEY_GENERIC_TYPE c, COMPARATOR KEY_SUPER_GENERIC_TYPE comp) {
 		array = CAST_KEY_ARRAY c.TO_ARRAY();
 		size = c.size();
@@ -68,10 +129,23 @@ public class HEAP_PRIORITY_QUEUE KEY_GENERIC_TYPE implements PRIORITY_QUEUE KEY_
 		ARRAYS.heapify(array, size, comp);
 	}
 	
+	/**
+	 * Wrapping method to help serialization
+	 * @param array the array that should be used
+	 * @Type(T)
+	 * @return a HeapPriorityQueue containing the original input array
+	 */
 	public static GENERIC_KEY_BRACES HEAP_PRIORITY_QUEUE KEY_GENERIC_TYPE wrap(KEY_TYPE[] array) { 
 		return wrap(array, array.length);
 	}
 	
+	/**
+	 * Wrapping method to help serialization
+	 * @param array the array that should be used
+	 * @param size the amount of elements within the array
+	 * @Type(T)
+	 * @return a HeapPriorityQueue containing the original input array
+	 */
 	public static GENERIC_KEY_BRACES HEAP_PRIORITY_QUEUE KEY_GENERIC_TYPE wrap(KEY_TYPE[] array, int size) {
 		HEAP_PRIORITY_QUEUE KEY_GENERIC_TYPE queue = new HEAP_PRIORITY_QUEUEBRACES();
 		queue.array = array;
@@ -80,10 +154,25 @@ public class HEAP_PRIORITY_QUEUE KEY_GENERIC_TYPE implements PRIORITY_QUEUE KEY_
 		return queue;
 	}
 	
+	/**
+	 * Wrapping method to help serialization, using a custom sorter
+	 * @param array the array that should be used
+	 * @param comp Comparator to sort the Array. Can be null
+	 * @Type(T)
+	 * @return a HeapPriorityQueue containing the original input array
+	 */
 	public static GENERIC_KEY_BRACES HEAP_PRIORITY_QUEUE KEY_GENERIC_TYPE wrap(KEY_TYPE[] array, COMPARATOR KEY_SUPER_GENERIC_TYPE comp) {
 		return wrap(array, array.length, comp);
 	}
 	
+	/**
+	 * Wrapping method to help serialization, using a custom sorter
+	 * @param array the array that should be used
+	 * @param size the amount of elements within the array
+	 * @param comp Comparator to sort the Array. Can be null
+	 * @Type(T)
+	 * @return a HeapPriorityQueue containing the original input array
+	 */
 	public static GENERIC_KEY_BRACES HEAP_PRIORITY_QUEUE KEY_GENERIC_TYPE wrap(KEY_TYPE[] array, int size, COMPARATOR KEY_SUPER_GENERIC_TYPE comp) {
 		HEAP_PRIORITY_QUEUE KEY_GENERIC_TYPE queue = new HEAP_PRIORITY_QUEUEBRACES(comp);
 		queue.array = array;
@@ -185,7 +274,7 @@ public class HEAP_PRIORITY_QUEUE KEY_GENERIC_TYPE implements PRIORITY_QUEUE KEY_
 	}
 	
 #endif
-	public class Iter implements ITERATOR KEY_GENERIC_TYPE {
+	private class Iter implements ITERATOR KEY_GENERIC_TYPE {
 		@Override
 		public boolean hasNext() {
 			return !isEmpty();

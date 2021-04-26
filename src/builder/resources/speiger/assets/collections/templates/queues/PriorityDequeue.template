@@ -1,14 +1,48 @@
 package speiger.src.collections.PACKAGE.queues;
 
+/**
+ * A Type Speciifc PriorityDeque or Dequeue interface to allow implementations like FIFO queues.
+ * @Type(T)
+ */
 public interface PRIORITY_DEQUEUE KEY_GENERIC_TYPE extends PRIORITY_QUEUE KEY_GENERIC_TYPE
 {
+	/**
+	 * Method to insert a element into the first Index instead of the last.
+	 * @param e the element that should be inserted into the first place
+	 */
 	public void ENQUEUE_FIRST(KEY_TYPE e);
+	/**
+	 * A Method to remove a element from the last place instead of the first
+	 * @return the last element inserted
+	 * @throws java.util.NoSuchElementException if no element is in the deque
+	 */
 	public KEY_TYPE DEQUEUE_LAST();
+	/**
+	 * Peeking function for the last element
+	 * @return the Last Element within the dequeue without deleting it
+	 */
 	public default KEY_TYPE LAST_KEY() { return PEEK(size()-1); }
 	
 #if !TYPE_OBJECT
+	/**
+	 * Boxed Method for the enqueue first method
+	 * @param e the boxed element that should be inserted
+	 */
+	@Deprecated
 	public default void enqueueFirst(CLASS_TYPE e) { ENQUEUE_FIRST(OBJ_TO_KEY(e)); }
+	/**
+	 * Boxed Method for the dequeue last method
+	 * @return the last element of the Dequeue
+	 * @throws java.util.NoSuchElementException if no element is in the dequeue
+	 * 
+	 */
+	@Deprecated
 	public default CLASS_TYPE dequeueLast() { return KEY_TO_OBJ(DEQUEUE_LAST()); }
+	/**
+	 * Peeking function for the last element
+	 * @return the Last Element within the dequeue without deleting it as boxed element
+	 */
+	@Deprecated
 	public default CLASS_TYPE last() { return peek(size()-1); }
 #endif
 }
