@@ -149,11 +149,16 @@ public class LISTS
 		@Override
 		public KEY_TYPE[] elements() { synchronized(mutex) { return l.elements(); } }
 		
+#if TYPE_OBJECT
+		@Override
+		public boolean isCastable() { synchronized(mutex) { return l.isCastable(); } }
+		
+#endif		
 		@Override
 		public void elements(Consumer<KEY_TYPE[]> action) { 
 			Objects.requireNonNull(action);
 			synchronized(mutex) {
-				action.accept(elements());
+				l.elements(action);
 			}
 		}
 	}

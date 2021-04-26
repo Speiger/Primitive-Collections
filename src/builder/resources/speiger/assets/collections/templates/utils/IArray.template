@@ -19,13 +19,22 @@ public interface IARRAY KEY_GENERIC_TYPE extends IArray
 	 */
 	public KEY_TYPE[] elements();
 	
+#if TYPE_OBJECT
+	/**
+	 * Method to indicate if the function is save to use
+	 * @return true if the object is castable to the type that is requested
+	 */
+	public boolean isCastable();
+#endif
 	/**
 	 * Provides the Underlying Array in the Implementation. This function exists purely because of Synchronization wrappers to help run Synchronized Code
 	 * @param action the action that handles the array
 	 * @throws NullPointerException if action is null
-	 * @throws ClassCastException if the return type does not match the underlying array. (Only for Object Implementations)
 	 */
 	public default void elements(Consumer<KEY_TYPE[]> action) {
+#if TYPE_OBJECT
+		if(!isCastable()) return;
+#endif
 		Objects.requireNonNull(action);
 		action.accept(elements());
 	}

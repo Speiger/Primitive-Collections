@@ -556,6 +556,16 @@ public class ARRAY_LIST KEY_GENERIC_TYPE extends ABSTRACT_LIST KEY_GENERIC_TYPE 
 		return data;
 	}
 	
+#if TYPE_OBJECT
+	/**
+	 * @return if the array is castable
+	 */
+	@Override
+	public boolean isCastable() {
+		return data.getClass() != Object[].class;
+	}
+	
+#endif
 	/**
 	 * A Type Specific foreach function that reduces (un)boxing
 	 * 
