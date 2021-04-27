@@ -16,6 +16,9 @@ repositories {
     }
 }
 
+archivesBaseName = 'Primitive Collections'
+version = 'Beta';
+
 sourceCompatibility = targetCompatibility = compileJava.sourceCompatibility = compileJava.targetCompatibility = '1.8'
 
 javadoc {
