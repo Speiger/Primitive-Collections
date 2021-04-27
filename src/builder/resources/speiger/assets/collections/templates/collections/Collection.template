@@ -6,16 +6,10 @@ import java.util.Objects;
 import java.util.function.JAVA_PREDICATE;
 import java.util.function.Predicate;
 import java.util.stream.JAVA_STREAM;
-
-#endif
-#if !TYPE_BOOLEAN
-#if !PRIMITIVES
-import java.util.stream.Stream;
-#endif
 import java.util.stream.StreamSupport;
+#endif
 import speiger.src.collections.PACKAGE.utils.SPLIT_ITERATORS;
 
-#endif
 #if TYPE_BYTE || TYPE_SHORT || TYPE_CHAR || TYPE_FLOAT
 import speiger.src.collections.utils.SanityChecks;
 
@@ -187,21 +181,18 @@ public interface COLLECTION KEY_GENERIC_TYPE extends Collection<CLASS_TYPE>, ITE
 	@Override
 	public ITERATOR KEY_GENERIC_TYPE iterator();
 	
-#if !TYPE_BOOLEAN
-#if !TYPE_OBJECT
+#if PRIMITIVES
 	/**
 	 * Returns a Java-Type-Specific Stream to reduce boxing/unboxing.
 	 * @return a Stream of the closest java type
 	 */
-	default JAVA_STREAM primitiveStream() { return StreamSupport.NEW_STREAM(SPLIT_ITERATORS.createCollectionSplit(this, 0), false); }
+	default JAVA_STREAM primitiveStream() { return StreamSupport.NEW_STREAM(SPLIT_ITERATORS.createJavaSplititerator(this, 0), false); }
 	
-#else
+#endif
 	/**
-	 * Returns a Boxed Stream
-	 * @return Stream of the type of collection
+	 * A Type Specific Type Splititerator to reduce boxing/unboxing
+	 * @return type specific splititerator
 	 */
 	@Override
-	default Stream<T> stream() { return StreamSupport.stream(ObjectSplitIterators.createCollectionSplit(this, 0), false); }
-#endif
-#endif
+	default SPLIT_ITERATOR KEY_GENERIC_TYPE spliterator() { return SPLIT_ITERATORS.createSplititerator(this, 0); }
 }

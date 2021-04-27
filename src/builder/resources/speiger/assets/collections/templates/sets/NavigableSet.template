@@ -3,6 +3,8 @@ package speiger.src.collections.PACKAGE.sets;
 import java.util.NavigableSet;
 
 import speiger.src.collections.PACKAGE.collections.BI_ITERATOR;
+import speiger.src.collections.PACKAGE.collections.SPLIT_ITERATOR;
+import speiger.src.collections.PACKAGE.utils.SPLIT_ITERATORS;
 
 /**
  * A Type Specific Navigable Set interface with a couple helper methods
@@ -114,6 +116,13 @@ public interface NAVIGABLE_SET KEY_GENERIC_TYPE extends NavigableSet<CLASS_TYPE>
 	@Override
 	public NAVIGABLE_SET KEY_GENERIC_TYPE descendingSet();
 	
+	/**
+	 * A Type Specific Type Splititerator to reduce boxing/unboxing
+	 * @return type specific splititerator
+	 */
+	@Override
+	default SPLIT_ITERATOR KEY_GENERIC_TYPE spliterator() { return SPLIT_ITERATORS.createSplititerator(this, 0); }
+	
 #if !TYPE_OBJECT
 	@Override
 	@Deprecated
@@ -158,5 +167,6 @@ public interface NAVIGABLE_SET KEY_GENERIC_TYPE extends NavigableSet<CLASS_TYPE>
 	@Override
 	@Deprecated
 	public default SORTED_SET KEY_GENERIC_TYPE tailSet(CLASS_TYPE fromElement) { return SORTED_SET.super.tailSet(fromElement); }
+
 #endif
 }

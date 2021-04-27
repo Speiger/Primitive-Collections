@@ -1,0 +1,32 @@
+package speiger.src.collections.PACKAGE.collections;
+
+#if !TYPE_OBJECT
+import java.util.Spliterator.OfPrimitive;
+#else
+import java.util.Spliterator;
+#endif
+import java.util.function.Consumer;
+
+#if !TYPE_OBJECT
+import speiger.src.collections.PACKAGE.functions.CONSUMER;
+
+#endif
+/**
+ * A Type Specific Split-Iterator that reduces boxing/unboxing
+ * It fills the gaps of the java and uses this collection interfaces
+ * @Type(T)
+ */
+#if TYPE_OBJECT
+public interface SPLIT_ITERATOR KEY_GENERIC_TYPE extends Spliterator KEY_GENERIC_TYPE, ITERATOR KEY_GENERIC_TYPE
+#else
+public interface SPLIT_ITERATOR KEY_GENERIC_TYPE extends OfPrimitive<CLASS_TYPE, CONSUMER KEY_GENERIC_TYPE, SPLIT_ITERATOR KEY_GENERIC_TYPE>, ITERATOR KEY_GENERIC_TYPE
+#endif
+{
+#if !TYPE_OBJECT
+	@Override
+	default void forEachRemaining(CONSUMER KEY_GENERIC_TYPE action) { ITERATOR.super.forEachRemaining(action); }
+#endif
+	@Override
+	@Primitive
+	default void forEachRemaining(Consumer<? super CLASS_TYPE> action) { ITERATOR.super.forEachRemaining(action); }
+}

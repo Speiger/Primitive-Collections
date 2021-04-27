@@ -161,7 +161,7 @@ public class GlobalVariables
 		addClassMapper("SETS", "Sets");
 		addClassMapper("COLLECTIONS", "Collections");
 		addClassMapper("ARRAYS", "Arrays");
-		addClassMapper("SPLIT_ITERATORS", "SplitIterators");
+		addClassMapper("SPLIT_ITERATORS", "Splititerators");
 		addClassMapper("ITERATORS", "Iterators");
 		addBiClassMapper("MAPS", "Maps", "2");
 		
@@ -169,6 +169,7 @@ public class GlobalVariables
 		addClassMapper("LIST_ITERATOR", "ListIterator");
 		addClassMapper("BI_ITERATOR", "BidirectionalIterator");
 		addBiClassMapper("BI_CONSUMER", "Consumer", "");
+		addClassMapper("SPLIT_ITERATOR", "Splititerator");
 		addClassMapper("ITERATOR", "Iterator");
 		addClassMapper("ITERABLE", "Iterable");
 		addClassMapper("COLLECTION", "Collection");

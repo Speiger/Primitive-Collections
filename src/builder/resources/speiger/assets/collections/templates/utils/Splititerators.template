@@ -1,0 +1,480 @@
+package speiger.src.collections.PACKAGE.utils;
+
+import java.util.Comparator;
+import java.util.Spliterator;
+#if PRIMITIVES
+import java.util.Spliterator.JAVA_SPLIT_ITERATOR;
+#endif
+import java.util.function.Consumer;
+
+import speiger.src.collections.PACKAGE.collections.COLLECTION;
+import speiger.src.collections.PACKAGE.collections.ITERATOR;
+import speiger.src.collections.PACKAGE.collections.SPLIT_ITERATOR;
+#if !TYPE_OBJECT
+import speiger.src.collections.PACKAGE.functions.CONSUMER;
+#endif
+import speiger.src.collections.utils.SanityChecks;
+
+/**
+ * Helper class that provides SplitIterators for normal and stream usage
+ */
+public class SPLIT_ITERATORS
+{
+#if PRIMITIVES
+	/**
+	 * Creates A stream compatible split iterator without copying the original array or boxing
+	 * @param array that should be wrapped into a split iterator
+	 * @param characteristics characteristics properties of this spliterator's  source or elements.
+	 * @Type(T)
+	 * @return a split iterator of a Stream compatible type
+	 */
+	public static GENERIC_KEY_BRACES JAVA_SPLIT_ITERATOR KEY_GENERIC_TYPE createArrayJavaSplititerator(KEY_TYPE[] array, int characteristics) { return createArrayJavaSplititerator(array, 0, array.length, characteristics);}
+	/**
+	 * Creates A stream compatible split iterator without copying the original array or boxing
+	 * @param array that should be wrapped into a split iterator
+	 * @param size the maximum index within the array
+	 * @param characteristics characteristics properties of this spliterator's  source or elements.
+	 * @Type(T)
+	 * @return a split iterator of a Stream compatible type
+	 * @throws IllegalStateException if the size is outside of the array size
+	 */
+	public static GENERIC_KEY_BRACES JAVA_SPLIT_ITERATOR KEY_GENERIC_TYPE createArrayJavaSplititerator(KEY_TYPE[] array, int size, int characteristics) { return createArrayJavaSplititerator(array, 0, size, characteristics);}
+	/**
+	 * Creates A stream compatible split iterator without copying the original array or boxing
+	 * @param array that should be wrapped into a split iterator
+	 * @param offset the starting index of the array
+	 * @param size the maximum index within the array
+	 * @param characteristics characteristics properties of this spliterator's  source or elements.
+	 * @Type(T)
+	 * @return a split iterator of a Stream compatible type
+	 * @throws IllegalStateException the offset and size are outside of the arrays range
+	 */
+	public static GENERIC_KEY_BRACES JAVA_SPLIT_ITERATOR KEY_GENERIC_TYPE createArrayJavaSplititerator(KEY_TYPE[] array, int offset, int size, int characteristics) {
+		SanityChecks.checkArrayCapacity(array.length, offset, size);
+		return new ArraySplitIteratorBRACES(array, offset, size, characteristics);
+	}
+	
+	/**
+	 * Creates a stream compatible split iterator without copying it or boxing it
+	 * @param collection the collection that should be wrapped in a split iterator
+	 * @param characteristics characteristics properties of this spliterator's  source or elements.
+	 * @Type(T)
+	 * @return a split iterator of a Stream compatible type
+	 */
+	public static GENERIC_KEY_BRACES JAVA_SPLIT_ITERATOR KEY_GENERIC_TYPE createJavaSplititerator(COLLECTION KEY_GENERIC_TYPE collection, int characteristics) {
+		return new IteratorSpliteratorBRACES(collection, characteristics);
+	}
+	
+	/**
+	 * Creates a stream compatible split iterator without copying it or boxing it
+	 * @param iterator the Iterator that should be wrapped in a split iterator
+	 * @param characteristics characteristics properties of this spliterator's source or elements.
+	 * @Type(T)
+	 * @return a split iterator of a Stream compatible type
+	 */
+	public static GENERIC_KEY_BRACES JAVA_SPLIT_ITERATOR KEY_GENERIC_TYPE createUnknownJavaSplititerator(ITERATOR KEY_GENERIC_TYPE iterator, int characteristics) {
+		return new IteratorSpliteratorBRACES(iterator, characteristics);
+	}
+	
+	/**
+	 * Creates a stream compatible split iterator without copying it or boxing it
+	 * @param iterator the collection that should be wrapped in a split iterator
+	 * @param size the amount of elements in the iterator
+	 * @param characteristics characteristics properties of this spliterator's  source or elements.
+	 * @Type(T)
+	 * @return a split iterator of a Stream compatible type
+	 */
+	public static GENERIC_KEY_BRACES JAVA_SPLIT_ITERATOR KEY_GENERIC_TYPE createSizedJavaSplititerator(ITERATOR KEY_GENERIC_TYPE iterator, long size, int characteristics) {
+		return new IteratorSpliteratorBRACES(iterator, size, characteristics);
+	}
+	
+#endif
+	/**
+	* Creates a Type Specific SplitIterator to reduce boxing/unboxing
+	* @param array that should be wrapped into a split iterator
+	* @param characteristics characteristics properties of this spliterator's  source or elements.
+	* @Type(T)
+	* @return a Type Specific SplitIterator
+	*/
+	public static GENERIC_KEY_BRACES SPLIT_ITERATOR KEY_GENERIC_TYPE createArraySplititerator(KEY_TYPE[] array, int characteristics) { return createArraySplititerator(array, 0, array.length, characteristics);}
+	/**
+	* Creates a Type Specific SplitIterator to reduce boxing/unboxing
+	* @param array that should be wrapped into a split iterator
+	* @param size the maximum index within the array
+	* @param characteristics characteristics properties of this spliterator's  source or elements.
+	* @Type(T)
+	* @return a Type Specific SplitIterator
+	* @throws IllegalStateException if the size is outside of the array size
+	*/
+	public static GENERIC_KEY_BRACES SPLIT_ITERATOR KEY_GENERIC_TYPE createArraySplititerator(KEY_TYPE[] array, int size, int characteristics) { return createArraySplititerator(array, 0, size, characteristics);}
+	/**
+	* Creates a Type Specific SplitIterator to reduce boxing/unboxing
+	* @param array that should be wrapped into a split iterator
+	* @param offset the starting index of the array
+	* @param size the maximum index within the array
+	* @param characteristics characteristics properties of this spliterator's  source or elements.
+	* @Type(T)
+	* @return a Type Specific SplitIterator
+	* @throws IllegalStateException the offset and size are outside of the arrays range
+	*/
+	public static GENERIC_KEY_BRACES SPLIT_ITERATOR KEY_GENERIC_TYPE createArraySplititerator(KEY_TYPE[] array, int offset, int size, int characteristics) {
+		SanityChecks.checkArrayCapacity(array.length, offset, size);
+		return new TypeArraySplitIteratorBRACES(array, offset, size, characteristics);
+	}
+	
+	/**
+	* Creates a Type Specific SplitIterator to reduce boxing/unboxing
+	* @param collection the collection that should be wrapped in a split iterator
+	* @param characteristics characteristics properties of this spliterator's  source or elements.
+	* @Type(T)
+	* @return a Type Specific SplitIterator
+	*/
+	public static GENERIC_KEY_BRACES SPLIT_ITERATOR KEY_GENERIC_TYPE createSplititerator(COLLECTION KEY_GENERIC_TYPE collection, int characteristics) {
+		return new TypeIteratorSpliteratorBRACES(collection, characteristics);
+	}
+	
+	/**
+	* Creates a Type Specific SplitIterator to reduce boxing/unboxing
+	* @param iterator the Iterator that should be wrapped in a split iterator
+	* @param characteristics characteristics properties of this spliterator's source or elements.
+	* @Type(T)
+	* @return a Type Specific SplitIterator
+	*/
+	public static GENERIC_KEY_BRACES SPLIT_ITERATOR KEY_GENERIC_TYPE createUnknownSplititerator(ITERATOR KEY_GENERIC_TYPE iterator, int characteristics) {
+		return new TypeIteratorSpliteratorBRACES(iterator, characteristics);
+	}
+	
+	/**
+	* Creates a Type Specific SplitIterator to reduce boxing/unboxing
+	* @param iterator the collection that should be wrapped in a split iterator
+	* @param size the amount of elements in the iterator
+	* @param characteristics characteristics properties of this spliterator's  source or elements.
+	* @Type(T)
+	* @return a Type Specific SplitIterator
+	*/
+	public static GENERIC_KEY_BRACES SPLIT_ITERATOR KEY_GENERIC_TYPE createSizedSplititerator(ITERATOR KEY_GENERIC_TYPE iterator, long size, int characteristics) {
+		return new TypeIteratorSpliteratorBRACES(iterator, size, characteristics);
+	}
+	
+	static class TypeIteratorSpliterator KEY_GENERIC_TYPE implements SPLIT_ITERATOR KEY_GENERIC_TYPE {
+		static final int BATCH_UNIT = 1 << 10;
+		static final int MAX_BATCH = 1 << 25;
+		private final COLLECTION KEY_GENERIC_TYPE collection;
+		private ITERATOR KEY_GENERIC_TYPE it;
+		private final int characteristics;
+		private long est;
+		private int batch;
+	
+		TypeIteratorSpliterator(COLLECTION KEY_GENERIC_TYPE collection, int characteristics) {
+			this.collection = collection;
+			it = null;
+			this.characteristics = (characteristics & Spliterator.CONCURRENT) == 0
+								? characteristics | Spliterator.SIZED | Spliterator.SUBSIZED
+								: characteristics;
+		}
+	
+		TypeIteratorSpliterator(ITERATOR KEY_GENERIC_TYPE iterator, long size, int characteristics) {
+			collection = null;
+			it = iterator;
+			est = size;
+			this.characteristics = (characteristics & Spliterator.CONCURRENT) == 0
+								? characteristics | Spliterator.SIZED | Spliterator.SUBSIZED
+								: characteristics;
+		}
+		
+		TypeIteratorSpliterator(ITERATOR KEY_GENERIC_TYPE iterator, int characteristics) {
+			collection = null;
+			it = iterator;
+			est = Long.MAX_VALUE;
+			this.characteristics = characteristics & ~(Spliterator.SIZED | Spliterator.SUBSIZED);
+		}
+		
+		private ITERATOR KEY_GENERIC_TYPE iterator()
+		{
+			if (it == null) {
+				it = collection.iterator();
+				est = collection.size();
+			}
+			return it;
+		}
+		
+		@Override
+		public SPLIT_ITERATOR KEY_GENERIC_TYPE trySplit() {
+			ITERATOR KEY_GENERIC_TYPE i = iterator();
+			if (est > 1 && i.hasNext()) {
+				int n = Math.min(batch + BATCH_UNIT, Math.min((int)est, MAX_BATCH));
+				KEY_TYPE[] a = NEW_KEY_ARRAY(n);
+				int j = 0;
+				do { a[j] = i.NEXT(); } while (++j < n && i.hasNext());
+				batch = j;
+				if (est != Long.MAX_VALUE)
+					est -= j;
+				return new TypeArraySplitIteratorBRACES(a, 0, j, characteristics);
+			}
+			return null;
+		}
+		
+		@Override
+		public void forEachRemaining(CONSUMER KEY_SUPER_GENERIC_TYPE action) {
+			if (action == null) throw new NullPointerException();
+			iterator().forEachRemaining(action);
+		}
+		
+#if !TYPE_OBJECT
+		@Override
+		public boolean tryAdvance(CONSUMER KEY_GENERIC_TYPE action) {
+			if (action == null) throw new NullPointerException();
+			ITERATOR KEY_GENERIC_TYPE iter = iterator();
+			if (iter.hasNext()) {
+				action.accept(iter.NEXT());
+				return true;
+			}
+			return false;
+		}
+		
+#endif
+		@Override
+		public boolean tryAdvance(Consumer<? super CLASS_TYPE> action) {
+			if (action == null) throw new NullPointerException();
+			ITERATOR KEY_GENERIC_TYPE iter = iterator();
+			if (iter.hasNext()) {
+				action.accept(KEY_TO_OBJ(iter.NEXT()));
+				return true;
+			}
+			return false;
+		}
+		
+		@Override
+		public long estimateSize() {
+			iterator();
+			return est;
+		}
+	
+		@Override
+		public int characteristics() { return characteristics; }
+		
+		@Override
+		public Comparator<? super CLASS_TYPE> getComparator() {
+			if (hasCharacteristics(4)) //Sorted
+				return null;
+			throw new IllegalStateException();
+		}
+	
+		@Override
+		public KEY_TYPE NEXT() { return iterator().NEXT(); }
+	
+		@Override
+		public boolean hasNext() { return iterator().hasNext(); }
+	}
+	
+	static final class TypeArraySplitIterator KEY_GENERIC_TYPE implements SPLIT_ITERATOR KEY_GENERIC_TYPE {
+		private final KEY_TYPE[] array;
+		private int index;
+		private final int fence; 
+		private final int characteristics;
+		
+		public TypeArraySplitIterator(KEY_TYPE[] array, int origin, int fence, int additionalCharacteristics) {
+			this.array = array;
+			index = origin;
+			this.fence = fence;
+			characteristics = additionalCharacteristics | Spliterator.SIZED | Spliterator.SUBSIZED;
+		}
+		
+		@Override
+		public SPLIT_ITERATOR KEY_GENERIC_TYPE trySplit() {
+			int lo = index, mid = (lo + fence) >>> 1;
+			return (lo >= mid) ? null : new TypeArraySplitIteratorBRACES(array, lo, index = mid, characteristics);
+		}
+		
+		@Override
+		public void forEachRemaining(CONSUMER KEY_SUPER_GENERIC_TYPE action) {
+			if (action == null) throw new NullPointerException();
+			KEY_TYPE[] a; int i, hi;
+			if ((a = array).length >= (hi = fence) && (i = index) >= 0 && i < (index = hi)) {
+				do { action.accept(a[i]); } while (++i < hi);
+			}
+		}
+		
+#if !TYPE_OBJECT
+		@Override
+		public boolean tryAdvance(CONSUMER KEY_GENERIC_TYPE action) {
+			if (action == null) throw new NullPointerException();
+			if (index >= 0 && index < fence) {
+				action.accept(array[index++]);
+				return true;
+			}
+			return false;
+		}
+		
+#endif
+		@Override
+		public boolean tryAdvance(Consumer<? super CLASS_TYPE> action) {
+			if (action == null) throw new NullPointerException();
+			if (index >= 0 && index < fence) {
+				action.accept(KEY_TO_OBJ(array[index++]));
+				return true;
+			}
+			return false;
+		}
+		
+		@Override
+		public long estimateSize() { return fence - index; }
+		@Override
+		public int characteristics() { return characteristics; }
+		@Override
+		public Comparator<? super CLASS_TYPE> getComparator() {
+			if (hasCharacteristics(4)) //Sorted
+				return null;
+			throw new IllegalStateException();
+		}
+		
+		@Override
+		public KEY_TYPE NEXT() { return array[index++]; }
+		@Override
+		public boolean hasNext() { return index < fence; }
+	}
+	
+#if PRIMITIVES
+    static class IteratorSpliterator KEY_GENERIC_TYPE implements JAVA_SPLIT_ITERATOR KEY_GENERIC_TYPE {
+        static final int BATCH_UNIT = 1 << 10;
+        static final int MAX_BATCH = 1 << 25;
+        private final COLLECTION KEY_GENERIC_TYPE collection;
+        private ITERATOR KEY_GENERIC_TYPE it;
+        private final int characteristics;
+        private long est;
+        private int batch;
+
+        IteratorSpliterator(COLLECTION KEY_GENERIC_TYPE collection, int characteristics) {
+            this.collection = collection;
+            it = null;
+            this.characteristics = (characteristics & Spliterator.CONCURRENT) == 0
+                                   ? characteristics | Spliterator.SIZED | Spliterator.SUBSIZED
+                                   : characteristics;
+        }
+
+        IteratorSpliterator(ITERATOR KEY_GENERIC_TYPE iterator, long size, int characteristics) {
+            collection = null;
+            it = iterator;
+            est = size;
+            this.characteristics = (characteristics & Spliterator.CONCURRENT) == 0
+                                   ? characteristics | Spliterator.SIZED | Spliterator.SUBSIZED
+                                   : characteristics;
+        }
+        
+        IteratorSpliterator(ITERATOR KEY_GENERIC_TYPE iterator, int characteristics) {
+            collection = null;
+            it = iterator;
+            est = Long.MAX_VALUE;
+            this.characteristics = characteristics & ~(Spliterator.SIZED | Spliterator.SUBSIZED);
+        }
+        
+        private ITERATOR KEY_GENERIC_TYPE iterator()
+        {
+            if (it == null) {
+                it = collection.iterator();
+                est = collection.size();
+            }
+            return it;
+        }
+        
+        @Override
+        public JAVA_SPLIT_ITERATOR KEY_GENERIC_TYPE trySplit() {
+        	ITERATOR KEY_GENERIC_TYPE i = iterator();
+            if (est > 1 && i.hasNext()) {
+                int n = Math.min(batch + BATCH_UNIT, Math.min((int)est, MAX_BATCH));
+                KEY_TYPE[] a = NEW_KEY_ARRAY(n);
+                int j = 0;
+                do { a[j] = i.NEXT(); } while (++j < n && i.hasNext());
+                batch = j;
+                if (est != Long.MAX_VALUE)
+                    est -= j;
+                return new ArraySplitIteratorBRACES(a, 0, j, characteristics);
+            }
+            return null;
+        }
+        
+        @Override
+        public void forEachRemaining(JAVA_CONSUMER action) {
+            if (action == null) throw new NullPointerException();
+            iterator().forEachRemaining(T -> action.accept(T));
+        }
+
+        @Override
+        public boolean tryAdvance(JAVA_CONSUMER action) {
+            if (action == null) throw new NullPointerException();
+            ITERATOR KEY_GENERIC_TYPE iter = iterator();
+            if (iter.hasNext()) {
+                action.accept(iter.NEXT());
+                return true;
+            }
+            return false;
+        }
+        
+        @Override
+        public long estimateSize() {
+        	iterator();
+            return est;
+        }
+
+        @Override
+        public int characteristics() { return characteristics; }
+        
+        @Override
+        public Comparator<? super JAVA_CLASS> getComparator() {
+			if (hasCharacteristics(4)) //Sorted
+                return null;
+            throw new IllegalStateException();
+        }
+    }
+	
+	static final class ArraySplitIterator KEY_GENERIC_TYPE implements JAVA_SPLIT_ITERATOR KEY_GENERIC_TYPE {
+        private final KEY_TYPE[] array;
+        private int index;
+        private final int fence; 
+        private final int characteristics;
+        
+        public ArraySplitIterator(KEY_TYPE[] array, int origin, int fence, int additionalCharacteristics) {
+            this.array = array;
+            index = origin;
+            this.fence = fence;
+            characteristics = additionalCharacteristics | Spliterator.SIZED | Spliterator.SUBSIZED;
+        }
+        
+        @Override
+        public JAVA_SPLIT_ITERATOR KEY_GENERIC_TYPE trySplit() {
+            int lo = index, mid = (lo + fence) >>> 1;
+            return (lo >= mid) ? null : new ArraySplitIteratorBRACES(array, lo, index = mid, characteristics);
+        }
+        
+        @Override
+        public void forEachRemaining(JAVA_CONSUMER action) {
+            if (action == null) throw new NullPointerException();
+        	KEY_TYPE[] a; int i, hi;
+            if ((a = array).length >= (hi = fence) && (i = index) >= 0 && i < (index = hi)) {
+                do { action.accept(a[i]); } while (++i < hi);
+            }
+        }
+
+        @Override
+        public boolean tryAdvance(JAVA_CONSUMER action) {
+            if (action == null) throw new NullPointerException();
+            if (index >= 0 && index < fence) {
+                action.accept(array[index++]);
+                return true;
+            }
+            return false;
+        }
+        
+        @Override
+        public long estimateSize() { return fence - index; }
+        @Override
+        public int characteristics() { return characteristics; }
+        @Override
+        public Comparator<? super JAVA_CLASS> getComparator() {
+			if (hasCharacteristics(4)) //Sorted
+				return null;
+			throw new IllegalStateException();
+        }
+	}
+#endif
+}

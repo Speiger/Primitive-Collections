@@ -33,7 +33,13 @@ import speiger.src.collections.utils.Stack;
 #else
 import speiger.src.collections.objects.utils.ObjectArrays;
 #endif
+#if PRIMITIVES
+import java.util.stream.JAVA_STREAM;
+import java.util.stream.StreamSupport;
+#endif
 import speiger.src.collections.PACKAGE.utils.IARRAY;
+import speiger.src.collections.PACKAGE.collections.SPLIT_ITERATOR;
+import speiger.src.collections.PACKAGE.utils.SPLIT_ITERATORS;
 import speiger.src.collections.utils.SanityChecks;
 
 #if TYPE_OBJECT
@@ -941,4 +947,22 @@ public class ARRAY_LIST KEY_GENERIC_TYPE extends ABSTRACT_LIST KEY_GENERIC_TYPE 
 		if (index < 0 || index > size)
 			throw new IndexOutOfBoundsException("Index: " + index + ", Size: " + size);
 	}
+	
+#if PRIMITIVES
+	/**
+	 * Returns a Java-Type-Specific Stream to reduce boxing/unboxing.
+	 * @return a Stream of the closest java type
+	 * @note characteristics are ordered, sized, subsized
+	 */
+	@Override
+	public JAVA_STREAM primitiveStream() { return StreamSupport.NEW_STREAM(SPLIT_ITERATORS.createArrayJavaSplititerator(data, size, 16464), false); }
+	
+#endif
+	/**
+	 * A Type Specific Type Splititerator to reduce boxing/unboxing
+	 * @return type specific splititerator
+	 * @note characteristics are ordered, sized, subsized
+	 */
+	@Override
+	public SPLIT_ITERATOR KEY_GENERIC_TYPE spliterator() { return SPLIT_ITERATORS.createArraySplititerator(data, size, 16464); }
 }
