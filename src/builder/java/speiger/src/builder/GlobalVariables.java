@@ -66,6 +66,7 @@ public class GlobalVariables
 			addSimpleMapper("JAVA_TYPE", type.getCustomJDKType().getKeyType());
 			addSimpleMapper("SANITY_CAST", "castTo"+type.getFileType());
 		}
+		addSimpleMapper("JAVA_CLASS", type.getCustomJDKType().getClassType());
 		if(valueType.needsCustomJDKType())
 		{
 			addSimpleMapper("SANITY_CAST_VALUE", "castTo"+valueType.getFileType());
@@ -124,6 +125,8 @@ public class GlobalVariables
 		addSimpleMapper("JAVA_FUNCTION", type.getFunctionClass(valueType));
 		addSimpleMapper("JAVA_BINARY_OPERATOR", type == ClassType.BOOLEAN ? "" : (type.isObject() ? "java.util.function.BinaryOperator" : "java.util.function."+type.getCustomJDKType().getFileType()+"BinaryOperator"));
 		addSimpleMapper("JAVA_UNARY_OPERATOR", type.isObject() ? "BinaryOperator" : type == ClassType.BOOLEAN ? "" : type.getCustomJDKType().getFileType()+"UnaryOperator");
+		addSimpleMapper("JAVA_SPLIT_ITERATOR", type.isPrimitiveBlocking() ? "Spliterator" : "Of"+type.getCustomJDKType().getFileType());
+		addSimpleMapper("JAVA_STREAM", type.isPrimitiveBlocking() ? "" : type.getCustomJDKType().getFileType()+"Stream");
 		
 		//Final Classes
 		addClassMapper("ARRAY_LIST", "ArrayList");
@@ -158,6 +161,7 @@ public class GlobalVariables
 		addClassMapper("SETS", "Sets");
 		addClassMapper("COLLECTIONS", "Collections");
 		addClassMapper("ARRAYS", "Arrays");
+		addClassMapper("SPLIT_ITERATORS", "SplitIterators");
 		addClassMapper("ITERATORS", "Iterators");
 		addBiClassMapper("MAPS", "Maps", "2");
 		
@@ -239,6 +243,7 @@ public class GlobalVariables
 		addFunctionValueMappers("REPLACE_VALUES", valueType.isObject() ? "replaceObjects" : "replace%ss");
 		addFunctionMappers("REPLACE", type.isObject() ? "replaceObjects" : "replace%ss");
 		addFunctionMappers("SORT", "sort%ss");
+		addSimpleMapper("NEW_STREAM", type.isPrimitiveBlocking() ? "" : type.getCustomJDKType().getKeyType()+"Stream");
 		addSimpleMapper("TO_ARRAY", "to"+type.getNonFileType()+"Array");
 		addFunctionMapper("TOP", "top");
 		return this;
