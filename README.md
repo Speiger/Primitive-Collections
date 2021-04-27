@@ -17,7 +17,6 @@ to build the jar
 do not combine the commands because they can not be executed at the same time.    
 
 ## Current Down Sides (Random order)
-- SplitIterators & Stream support is not implemented yet
 - EnumMaps are only normal maps no Linked Support yet
 - Testing for Sub Maps/Sets/Lists are only in a very basic way tested
 - Documentation is only present at the lowest level for most cases and needs a typo fixing.
