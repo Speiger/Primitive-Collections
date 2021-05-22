@@ -50,6 +50,30 @@ public interface MAP KEY_VALUE_GENERIC_TYPE extends Map<CLASS_TYPE, CLASS_VALUE_
 	 * @see Map#put(Object, Object)
 	 */
 	public VALUE_TYPE put(KEY_TYPE key, VALUE_TYPE value);
+	
+	/**
+	 * Type Specific array method to bulk add elements into a map without creating a wrapper and increasing performances
+	 * @param keys the keys that should be added
+	 * @param values the values that should be added
+	 * @see Map#putAll(Map)
+	 * @throws IllegalStateException if the arrays are not the same size
+	 */
+	public default void putAll(KEY_TYPE[] keys, VALUE_TYPE[] values) {
+		if(keys.length != values.length) throw new IllegalStateException("Array sizes do not match");
+		putAll(keys, values, 0, keys.length);
+	}
+	
+	/**
+	 * Type Specific array method to bulk add elements into a map without creating a wrapper and increasing performances
+	 * @param keys the keys that should be added
+	 * @param values the values that should be added
+	 * @param offset where the to start in the array
+	 * @param size how many elements should be added
+	 * @see Map#putAll(Map)
+	 * @throws IllegalStateException if the arrays are not within the range
+	 */
+	public void putAll(KEY_TYPE[] keys, VALUE_TYPE[] values, int offset, int size);
+	
 	/**
 	 * Type Specific method to reduce boxing/unboxing of values
 	 * @param key the key that should be inserted,
@@ -59,6 +83,12 @@ public interface MAP KEY_VALUE_GENERIC_TYPE extends Map<CLASS_TYPE, CLASS_VALUE_
 	 */
 	public VALUE_TYPE putIfAbsent(KEY_TYPE key, VALUE_TYPE value);
 	
+	/**
+	 * Type-Specific bulk put method put elements into the map if not present.
+	 * @param m elements that should be added if not present.
+	 */
+	public void putAllIfAbsent(MAP KEY_VALUE_GENERIC_TYPE m);
+	
 #if VALUE_PRIMITIVES
 	/**
 	 * A Helper method to add a primitives together. If key is not present then this functions as a put.
@@ -67,6 +97,12 @@ public interface MAP KEY_VALUE_GENERIC_TYPE extends Map<CLASS_TYPE, CLASS_VALUE_
 	 * @return the last present value or default return value.
 	 */
 	public VALUE_TYPE addTo(KEY_TYPE key, VALUE_TYPE value);
+	
+	/**
+	 * A Helper method to bulk add primitives together.
+	 * @param m the values that should be added/inserted
+	 */
+	public void addToAll(MAP KEY_VALUE_GENERIC_TYPE m);
 	
 #endif
 	/**
@@ -182,6 +218,12 @@ public interface MAP KEY_VALUE_GENERIC_TYPE extends Map<CLASS_TYPE, CLASS_VALUE_
 	 * @note this fails if the value is not present
 	 */
 	public VALUE_TYPE replace(KEY_TYPE key, VALUE_TYPE value);
+	
+	/**
+	 * Type-Specific bulk replace method. Could be seen as putAllIfPresent
+	 * @param m elements that should be replaced.
+	 */
+	public void REPLACE_VALUES(MAP KEY_VALUE_GENERIC_TYPE m);
 	/**
 	 * A Type Specific mass replace method to reduce boxing/unboxing
 	 * @param mappingFunction operation to replace all values
@@ -218,6 +260,13 @@ public interface MAP KEY_VALUE_GENERIC_TYPE extends Map<CLASS_TYPE, CLASS_VALUE_
 	 * @note if the result matches the default return value then the key is removed from the map
 	 */
 	public VALUE_TYPE MERGE(KEY_TYPE key, VALUE_TYPE value, VALUE_UNARY_OPERATOR VALUE_VALUE_GENERIC_TYPE mappingFunction);
+	/**
+	 * A Bulk method for merging Maps.
+	 * @param m the entries that should be bulk added
+	 * @param mappingFunction the operator that should generate the new Value
+	 * @note if the result matches the default return value then the key is removed from the map
+	 */
+	public void BULK_MERGE(MAP KEY_VALUE_GENERIC_TYPE m, VALUE_UNARY_OPERATOR VALUE_VALUE_GENERIC_TYPE mappingFunction);
 	
 #if !TYPE_OBJECT || !VALUE_OBJECT
 	@Override

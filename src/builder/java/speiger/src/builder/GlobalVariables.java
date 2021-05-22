@@ -211,6 +211,7 @@ public class GlobalVariables
 		addSimpleMapper("APPLY_VALUE", valueType.isObject() ? "apply" : "applyAs"+valueType.getNonFileType());
 		addSimpleMapper("APPLY_CAST", "applyAs"+type.getCustomJDKType().getNonFileType());
 		addSimpleMapper("APPLY", type.isObject() ? "apply" : "applyAs"+type.getNonFileType());
+		addFunctionValueMapper("BULK_MERGE", "mergeAll");
 		addFunctionValueMappers("COMPUTE_IF_ABSENT", "compute%sIfAbsent");
 		addFunctionValueMappers("COMPUTE_IF_PRESENT", "compute%sIfPresent");
 		addFunctionValueMapper("COMPUTE", "compute");

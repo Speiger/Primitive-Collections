@@ -24,6 +24,7 @@ import speiger.src.collections.objects.collections.ObjectIterator;
 #if !TYPE_OBJECT
 import speiger.src.collections.objects.sets.ObjectSet;
 #endif
+import speiger.src.collections.utils.SanityChecks;
 
 /**
  * A Base Implementation of a Type Specific Map to reduce boxing/unboxing
@@ -45,6 +46,14 @@ public abstract class ABSTRACT_MAP KEY_VALUE_GENERIC_TYPE extends AbstractMap<CL
 		return this;
 	}
 	
+#if VALUE_PRIMITIVES
+	@Override
+	public void addToAll(MAP KEY_VALUE_GENERIC_TYPE m) {
+		for(MAP.Entry KEY_VALUE_GENERIC_TYPE entry : MAPS.fastIterable(m))
+			addTo(entry.ENTRY_KEY(), entry.ENTRY_VALUE());
+	}
+	
+#endif
 	@Override
 	public void putAll(MAP KEY_VALUE_GENERIC_TYPE m) {
 		for(ObjectIterator<MAP.Entry KEY_VALUE_GENERIC_TYPE> iter = MAPS.fastIterator(m);iter.hasNext();) {
@@ -58,6 +67,19 @@ public abstract class ABSTRACT_MAP KEY_VALUE_GENERIC_TYPE extends AbstractMap<CL
 	{
 		if(m instanceof MAP) putAll((MAP KEY_VALUE_GENERIC_TYPE)m);
 		else super.putAll(m);
+	}
+	
+	@Override
+	public void putAll(KEY_TYPE[] keys, VALUE_TYPE[] values, int offset, int size) {
+		SanityChecks.checkArrayCapacity(keys.length, offset, size);
+		SanityChecks.checkArrayCapacity(values.length, offset, size);
+		for(int i = 0;i<size;i++) put(keys[i], values[i]);
+	}
+	
+	@Override
+	public void putAllIfAbsent(MAP KEY_VALUE_GENERIC_TYPE m) {
+		for(MAP.Entry KEY_VALUE_GENERIC_TYPE entry : MAPS.fastIterable(m))
+			putIfAbsent(entry.ENTRY_KEY(), entry.ENTRY_VALUE());
 	}
 	
 #if TYPE_OBJECT
@@ -112,6 +134,12 @@ public abstract class ABSTRACT_MAP KEY_VALUE_GENERIC_TYPE extends AbstractMap<CL
         	curValue = put(key, value);
         }
         return curValue;
+	}
+	
+	@Override
+	public void REPLACE_VALUES(MAP KEY_VALUE_GENERIC_TYPE m) {
+		for(MAP.Entry KEY_VALUE_GENERIC_TYPE entry : MAPS.fastIterable(m))
+			replace(entry.ENTRY_KEY(), entry.ENTRY_VALUE());
 	}
 	
 	@Override
@@ -176,6 +204,18 @@ public abstract class ABSTRACT_MAP KEY_VALUE_GENERIC_TYPE extends AbstractMap<CL
         if(VALUE_EQUALS(newValue, getDefaultReturnValue())) remove(key);
         else put(key, newValue);
 		return newValue;
+	}
+	
+	@Override
+	public void BULK_MERGE(MAP KEY_VALUE_GENERIC_TYPE m, VALUE_UNARY_OPERATOR VALUE_VALUE_GENERIC_TYPE mappingFunction) {
+	    Objects.requireNonNull(mappingFunction);
+		for(MAP.Entry KEY_VALUE_GENERIC_TYPE entry : MAPS.fastIterable(m)) {
+			KEY_TYPE key = entry.ENTRY_KEY();
+	        VALUE_TYPE oldValue = GET_VALUE(key);
+	        VALUE_TYPE newValue = VALUE_EQUALS(oldValue, getDefaultReturnValue()) ? entry.ENTRY_VALUE() : mappingFunction.APPLY_VALUE(oldValue, entry.ENTRY_VALUE());
+	        if(VALUE_EQUALS(newValue, getDefaultReturnValue())) remove(key);
+	        else put(key, newValue);
+		}
 	}
 	
 #if TYPE_OBJECT
