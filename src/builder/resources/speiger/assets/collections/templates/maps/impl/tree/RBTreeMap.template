@@ -424,6 +424,15 @@ public class RB_TREE_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_VALUE_G
 		return value;
 	}
 	
+	@Override
+	public VALUE_TYPE REMOVE_KEYOrDefault(KEY_TYPE key, VALUE_TYPE defaultValue) {
+		Entry KEY_VALUE_GENERIC_TYPE entry = findNode(key);
+		if(entry == null) return defaultValue;
+		VALUE_TYPE value = entry.value;
+		removeNode(entry);
+		return value;
+	}
+	
 #if TYPE_OBJECT && VALUE_OBJECT
 	@Override
 	public boolean remove(Object key, Object value) {
@@ -1172,6 +1181,11 @@ public class RB_TREE_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_VALUE_G
 		@Override
 		public VALUE_TYPE REMOVE_KEY(KEY_TYPE key) {
 			return inRange(key) ? m.REMOVE_KEY(key) : getDefaultReturnValue();
+		}
+		
+		@Override
+		public VALUE_TYPE REMOVE_KEYOrDefault(KEY_TYPE key, VALUE_TYPE defaultValue) {
+			return inRange(key) ? m.REMOVE_KEY(key) : defaultValue;
 		}
 		
 #if TYPE_OBJECT && VALUE_OBJECT

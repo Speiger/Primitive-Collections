@@ -199,8 +199,16 @@ public interface MAP KEY_VALUE_GENERIC_TYPE extends Map<CLASS_TYPE, CLASS_VALUE_
 		return key instanceof CLASS_TYPE && value instanceof CLASS_VALUE_TYPE && remove(CLASS_TO_KEY(key), CLASS_TO_VALUE(value));
 #endif
 	}
-#endif
 	
+#endif
+	/**
+	 * Type-Specific Remove function with a default return value if wanted.
+	 * @see Map#remove(Object, Object)
+ 	 * @param key the element that should be removed
+ 	 * @param defaultValue the value that should be returned if the entry doesn't exist
+	 * @return the value that was removed or default value
+	 */
+	public VALUE_TYPE REMOVE_KEYOrDefault(KEY_TYPE key, VALUE_TYPE defaultValue);
 	/**
 	 * A Type Specific replace method to replace an existing value
 	 * @param key the element that should be searched for

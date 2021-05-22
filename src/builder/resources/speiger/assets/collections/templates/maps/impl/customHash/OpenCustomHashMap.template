@@ -292,6 +292,13 @@ public class CUSTOM_HASH_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_VAL
 	}
 	
 	@Override
+	public VALUE_TYPE REMOVE_KEYOrDefault(KEY_TYPE key, VALUE_TYPE defaultValue) {
+		int slot = findIndex(key);
+		if(slot < 0) return defaultValue;
+		return removeIndex(slot);
+	}
+	
+	@Override
 	@Deprecated
 	public CLASS_VALUE_TYPE remove(Object key) {
 #if !TYPE_OBJECT

@@ -266,6 +266,8 @@ public class MAPS
 #endif
 		@Override
 		public VALUE_TYPE REMOVE_KEY(KEY_TYPE key) { throw new UnsupportedOperationException(); }
+		@Override
+		public VALUE_TYPE REMOVE_KEYOrDefault(KEY_TYPE key, VALUE_TYPE defaultValue) { throw new UnsupportedOperationException(); }
 #if !TYPE_OBJECT || !VALUE_OBJECT
 		@Override
 		public boolean remove(KEY_TYPE key, VALUE_TYPE value) { throw new UnsupportedOperationException(); }
@@ -310,6 +312,8 @@ public class MAPS
 #endif
 		@Override
 		public VALUE_TYPE REMOVE_KEY(KEY_TYPE key) { throw new UnsupportedOperationException(); }
+		@Override
+		public VALUE_TYPE REMOVE_KEYOrDefault(KEY_TYPE key, VALUE_TYPE defaultValue) { throw new UnsupportedOperationException(); }
 #if !TYPE_OBJECT || !VALUE_OBJECT
 		@Override
 		public boolean remove(KEY_TYPE key, VALUE_TYPE value) { throw new UnsupportedOperationException(); }
@@ -486,6 +490,8 @@ public class MAPS
 #endif
 		@Override
 		public VALUE_TYPE REMOVE_KEY(KEY_TYPE key) { throw new UnsupportedOperationException(); }
+		@Override
+		public VALUE_TYPE REMOVE_KEYOrDefault(KEY_TYPE key, VALUE_TYPE defaultValue) { throw new UnsupportedOperationException(); }
 #if !TYPE_OBJECT || !VALUE_OBJECT
 		@Override
 		public boolean remove(KEY_TYPE key, VALUE_TYPE value) { throw new UnsupportedOperationException(); }
@@ -768,14 +774,19 @@ public class MAPS
 		public VALUE_TYPE put(KEY_TYPE key, VALUE_TYPE value) { synchronized(mutex) { return map.put(key, value); } }
 		@Override
 		public VALUE_TYPE putIfAbsent(KEY_TYPE key, VALUE_TYPE value) { synchronized(mutex) { return map.putIfAbsent(key, value); } }
+		public void putAllIfAbsent(MAP KEY_VALUE_GENERIC_TYPE m) { synchronized(mutex) { map.putAllIfAbsent(m); } }
 #if VALUE_PRIMITIVES
 		@Override
 		public VALUE_TYPE addTo(KEY_TYPE key, VALUE_TYPE value) { synchronized(mutex) { return map.addTo(key, value); } }
+		public void addToAll(MAP KEY_VALUE_GENERIC_TYPE m) { synchronized(mutex) { map.addToAll(m); } }
 #endif
 		@Override
 		public void putAll(MAP KEY_VALUE_GENERIC_TYPE m) { synchronized(mutex) { map.putAll(m); } }
 		@Override
 		public void putAll(Map<? extends CLASS_TYPE, ? extends CLASS_VALUE_TYPE> m) { synchronized(mutex) { map.putAll(m); } }
+		@Override
+		public void putAll(KEY_TYPE[] keys, VALUE_TYPE[] values, int offset, int size) { synchronized(mutex) { map.putAll(keys, values, offset, size); } }
+		
 #if !TYPE_OBJECT
 		@Override
 		public boolean containsKey(KEY_TYPE key) { synchronized(mutex) { return map.containsKey(key); } }
@@ -788,6 +799,8 @@ public class MAPS
 		public VALUE_TYPE GET_VALUE(KEY_TYPE key) { synchronized(mutex) { return map.GET_VALUE(key); } }
 		@Override
 		public VALUE_TYPE REMOVE_KEY(KEY_TYPE key) { synchronized(mutex) { return map.REMOVE_KEY(key); } }
+		@Override
+		public VALUE_TYPE REMOVE_KEYOrDefault(KEY_TYPE key, VALUE_TYPE defaultValue) { synchronized(mutex) { return map.REMOVE_KEYOrDefault(key, defaultValue); } }
 #if !TYPE_OBJECT || !VALUE_OBJECT
 		@Override
 		public boolean remove(KEY_TYPE key, VALUE_TYPE value) { synchronized(mutex) { return map.remove(key, value); } }
@@ -796,6 +809,8 @@ public class MAPS
 		public boolean replace(KEY_TYPE key, VALUE_TYPE oldValue, VALUE_TYPE newValue) { synchronized(mutex) { return map.replace(key, oldValue, newValue); } }
 		@Override
 		public VALUE_TYPE replace(KEY_TYPE key, VALUE_TYPE value) { synchronized(mutex) { return map.replace(key, value); } }
+		@Override
+		public void REPLACE_VALUES(MAP KEY_VALUE_GENERIC_TYPE m) { synchronized(mutex) { map.REPLACE_VALUES(m); } }
 		@Override
 		public void REPLACE_VALUES(UNARY_OPERATOR KEY_VALUE_GENERIC_TYPE mappingFunction) { synchronized(mutex) { map.REPLACE_VALUES(mappingFunction); } }
 		@Override
@@ -806,6 +821,8 @@ public class MAPS
 		public VALUE_TYPE COMPUTE_IF_PRESENT(KEY_TYPE key, UNARY_OPERATOR KEY_VALUE_GENERIC_TYPE mappingFunction) { synchronized(mutex) { return map.COMPUTE_IF_PRESENT(key, mappingFunction); } }
 		@Override
 		public VALUE_TYPE MERGE(KEY_TYPE key, VALUE_TYPE value, VALUE_UNARY_OPERATOR VALUE_VALUE_GENERIC_TYPE mappingFunction) { synchronized(mutex) { return map.MERGE(key, value, mappingFunction); } }
+		@Override
+		public void BULK_MERGE(MAP KEY_VALUE_GENERIC_TYPE m, VALUE_UNARY_OPERATOR VALUE_VALUE_GENERIC_TYPE mappingFunction) { synchronized(mutex) { map.BULK_MERGE(m, mappingFunction); } }
 #if !TYPE_OBJECT || !VALUE_OBJECT
 		@Override
 		public VALUE_TYPE getOrDefault(KEY_TYPE key, VALUE_TYPE defaultValue) { synchronized(mutex) { return map.getOrDefault(key, defaultValue); } }

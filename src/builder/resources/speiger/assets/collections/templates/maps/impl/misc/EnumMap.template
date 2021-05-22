@@ -123,6 +123,16 @@ public class ENUM_MAP KEY_ENUM_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_VALUE
 		values[index] = EMPTY_VALUE;
 		return result;
 	}
+
+	@Override
+	public VALUE_TYPE remOrDefault(T key, VALUE_TYPE defaultValue) {
+		int index = key.ordinal();
+		if(!isSet(index)) return defaultValue;
+		clear(index);
+		VALUE_TYPE result = values[index];
+		values[index] = EMPTY_VALUE;
+		return result;
+	}
 	
 #if VALUE_OBJECT
 	@Override

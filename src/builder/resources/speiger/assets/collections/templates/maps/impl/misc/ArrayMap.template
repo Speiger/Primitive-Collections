@@ -355,6 +355,15 @@ public class ARRAY_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_VALUE_GEN
 		return value;
 	}
 	
+	@Override
+	public VALUE_TYPE REMOVE_KEYOrDefault(KEY_TYPE key, VALUE_TYPE defaultValue) {
+		int index = findIndex(key);
+		if(index < 0) return defaultValue;
+		VALUE_TYPE value = values[index];
+		removeIndex(index);
+		return value;
+	}
+	
 #if !TYPE_OBJECT || !VALUE_OBJECT
 	@Override
 	public boolean remove(KEY_TYPE key, VALUE_TYPE value) {
@@ -771,6 +780,16 @@ public class ARRAY_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_VALUE_GEN
 		public VALUE_TYPE REMOVE_KEY(KEY_TYPE key) {
 			int index = findIndex(key);
 			if(index < 0) return getDefaultReturnValue();
+			VALUE_TYPE value = values[index];
+			removeIndex(index);
+			length--;
+			return value;
+		}
+		
+		@Override
+		public VALUE_TYPE REMOVE_KEYOrDefault(KEY_TYPE key, VALUE_TYPE defaultValue) {
+			int index = findIndex(key);
+			if(index < 0) return defaultValue;
 			VALUE_TYPE value = values[index];
 			removeIndex(index);
 			length--;
