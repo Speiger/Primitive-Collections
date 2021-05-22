@@ -6,6 +6,19 @@ package speiger.src.collections.PACKAGE.utils;
  */
 public interface STRATEGY KEY_GENERIC_TYPE
 {
+#if TYPE_OBJECT
+	/**
+	 * Identity Strategy
+	 */
+	public static final STRATEGY NO_GENERIC_TYPE IDENTITY = new IdentityStrategyBRACES();
+	
+	/**
+	 * @Type(T)
+	 * @return a IdentityStrategy that allows to emulate a IdentityHashMap
+	 */
+	public static GENERIC_KEY_BRACES STRATEGY KEY_GENERIC_TYPE identityStrategy() { return (STRATEGY<KEY_TYPE>)IDENTITY; }
+	
+#endif
 	/**
 	 * Type Specific HashCode function
 	 * @param o the element that the hashcode is requested for (if object may be null)
@@ -20,4 +33,19 @@ public interface STRATEGY KEY_GENERIC_TYPE
 	 * @return if the elements match
 	 */
 	public boolean equals(KEY_TYPE key, KEY_TYPE value);
+	
+#if TYPE_OBJECT
+	/**
+	 * A Strategy that uses Identity HashCode instead of the normal hashing function.
+	 * This simulates a IdentityHashMap without having the need to actually implement it.
+	 * @Type(T)
+	 */
+	public static class IdentityStrategy KEY_GENERIC_TYPE implements STRATEGY KEY_GENERIC_TYPE
+	{
+		@Override
+		public int hashCode(KEY_TYPE o) { return System.identityHashCode(o); }
+		@Override
+		public boolean equals(KEY_TYPE key, KEY_TYPE value) { return key == value; }
+	}
+#endif
 }
