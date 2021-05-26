@@ -358,6 +358,9 @@ public class SETS
 		
 		@Override
 		public boolean trim(int size) { synchronized(mutex) { return trim.trim(size); } }
+		
+		@Override
+		public void clearAndTrim(int size) { synchronized(mutex) { trim.clearAndTrim(size); } }
 	}
 	
 	private static class SynchronizedNavigableSet KEY_GENERIC_TYPE extends SynchronizedSortedSet KEY_GENERIC_TYPE implements NAVIGABLE_SET KEY_GENERIC_TYPE
@@ -450,6 +453,9 @@ public class SETS
 		
 		@Override
 		public boolean trim(int size) { synchronized(mutex) { return trim.trim(size); } }
+		
+		@Override
+		public void clearAndTrim(int size) { synchronized(mutex) { trim.clearAndTrim(size); } }
 	}
 	
 	private static class SynchronizedSortedSet KEY_GENERIC_TYPE extends SynchronizedSet KEY_GENERIC_TYPE implements SORTED_SET KEY_GENERIC_TYPE
@@ -525,6 +531,9 @@ public class SETS
 		
 		@Override
 		public boolean trim(int size) { synchronized(mutex) { return trim.trim(size); } }
+		
+		@Override
+		public void clearAndTrim(int size) { synchronized(mutex) { trim.clearAndTrim(size); } }
 	}
 	
 	private static class SynchronizedSet KEY_GENERIC_TYPE extends SynchronizedCollection KEY_GENERIC_TYPE implements SET KEY_GENERIC_TYPE

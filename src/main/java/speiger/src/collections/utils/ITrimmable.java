@@ -20,4 +20,18 @@ public interface ITrimmable
 	 * @return if the internal array has been trimmed.
 	 */
 	public boolean trim(int size);
+	
+	/**
+	 * Trims the collection down to the original size and clears all present elements with it.
+	 */
+	public default void clearAndTrim() {
+		clearAndTrim(0);
+	}
+	
+	/**
+	 * Trims the collection down to the requested size and clears all elements while doing so
+	 * @param size the amount of elements that should be allowed
+	 * @note this will enforce minimum size of the collection itself
+	 */
+	public void clearAndTrim(int size);
 }

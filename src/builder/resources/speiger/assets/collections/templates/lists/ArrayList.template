@@ -922,6 +922,20 @@ public class ARRAY_LIST KEY_GENERIC_TYPE extends ABSTRACT_LIST KEY_GENERIC_TYPE 
 	}
 	
 	/**
+	 * Trims the collection down to the requested size and clears all elements while doing so
+	 * @param size the amount of elements that should be allowed
+	 * @note this will enforce minimum size of the collection itself
+	 */
+	@Override
+	public void clearAndTrim(int size) {
+		if(data.length <= size) {
+			clear();
+			return;
+		}
+		data = size == 0 ? EMPTY_KEY_ARRAY : NEW_KEY_ARRAY(size);
+	}
+	
+	/**
 	 * Increases the capacity of this implementation instance, if necessary,
 	 * to ensure that it can hold at least the number of elements specified by
 	 * the minimum capacity argument.

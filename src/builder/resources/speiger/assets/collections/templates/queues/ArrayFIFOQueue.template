@@ -237,6 +237,22 @@ public class ARRAY_FIFO_QUEUE KEY_GENERIC_TYPE implements PRIORITY_DEQUEUE KEY_G
 		return true;
 	}
 	
+	/**
+	 * Trims the collection down to the requested size and clears all elements while doing so
+	 * @param size the amount of elements that should be allowed
+	 * @note this will enforce minimum size of the collection itself
+	 */
+	@Override
+	public void clearAndTrim(int size) {
+		int newSize = Math.max(MIN_CAPACITY, size);
+		if(array.length <= newSize) {
+			clear();
+			return;
+		}
+		first = last = 0;
+		array = NEW_KEY_ARRAY(newSize);
+	}
+	
 	@Override
 	public KEY_TYPE[] TO_ARRAY(KEY_TYPE[] input) {
 		if(input == null || input.length < size()) input = NEW_KEY_ARRAY(size());

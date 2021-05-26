@@ -474,6 +474,21 @@ public class LINKED_HASH_SET KEY_GENERIC_TYPE extends HASH_SET KEY_GENERIC_TYPE 
 	}
 	
 	@Override
+	public void clearAndTrim(int size) {
+		if(nullIndex <= size) {
+			clear();
+			return;
+		}
+		nullIndex = size;
+		mask = nullIndex - 1;
+		maxFill = Math.min((int)Math.ceil(nullIndex * loadFactor), nullIndex - 1);
+		keys = NEW_KEY_ARRAY(nullIndex + 1);
+		links = new long[nullIndex + 1];
+		firstIndex = -1;
+		lastIndex = -1;
+	}
+	
+	@Override
 	public LIST_ITERATOR KEY_GENERIC_TYPE iterator() {
 		return new SetIterator();
 	}

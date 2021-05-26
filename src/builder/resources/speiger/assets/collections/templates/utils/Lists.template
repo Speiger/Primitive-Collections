@@ -147,6 +147,9 @@ public class LISTS
 		public boolean trim(int size) { synchronized(mutex) { return l.trim(size); } }
 		
 		@Override
+		public void clearAndTrim(int size) { synchronized(mutex) { l.clearAndTrim(size); } }
+		
+		@Override
 		public KEY_TYPE[] elements() { synchronized(mutex) { return l.elements(); } }
 		
 #if TYPE_OBJECT
