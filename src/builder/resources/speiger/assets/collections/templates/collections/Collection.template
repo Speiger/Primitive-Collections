@@ -188,6 +188,11 @@ public interface COLLECTION KEY_GENERIC_TYPE extends Collection<CLASS_TYPE>, ITE
 	 */
 	default JAVA_STREAM primitiveStream() { return StreamSupport.NEW_STREAM(SPLIT_ITERATORS.createJavaSplititerator(this, 0), false); }
 	
+	/**
+	 * Returns a Java-Type-Specific Parallel Stream to reduce boxing/unboxing.
+	 * @return a Stream of the closest java type
+	 */
+	default JAVA_STREAM parallelPrimitiveStream() { return StreamSupport.NEW_STREAM(SPLIT_ITERATORS.createJavaSplititerator(this, 0), true); }
 #endif
 	/**
 	 * A Type Specific Type Splititerator to reduce boxing/unboxing

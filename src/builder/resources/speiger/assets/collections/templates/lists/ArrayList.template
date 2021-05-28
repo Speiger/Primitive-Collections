@@ -226,7 +226,6 @@ public class ARRAY_LIST KEY_GENERIC_TYPE extends ABSTRACT_LIST KEY_GENERIC_TYPE 
 	 * @param index the index where to append the elements to
 	 * @param c the elements to append to the list
 	 * @throws IndexOutOfBoundsException if index is outside of the lists range
-	 * @deprecated if type is primitive
 	 */
 	@Override
 	@Primitive
@@ -248,7 +247,6 @@ public class ARRAY_LIST KEY_GENERIC_TYPE extends ABSTRACT_LIST KEY_GENERIC_TYPE 
 	 * @param index the index where to append the elements to
 	 * @param c the elements to append to the list
 	 * @throws IndexOutOfBoundsException if index is outside of the lists range
-	 * @deprecated if type is primitive
 	 */
 	@Override
 	public boolean addAll(int index, COLLECTION KEY_GENERIC_TYPE c) {
@@ -268,7 +266,6 @@ public class ARRAY_LIST KEY_GENERIC_TYPE extends ABSTRACT_LIST KEY_GENERIC_TYPE 
 	 * @param index the index where to append the elements to
 	 * @param c the elements to append to the list
 	 * @throws IndexOutOfBoundsException if index is outside of the lists range
-	 * @deprecated if type is primitive
 	 */
 	@Override
 	public boolean addAll(int index, LIST KEY_GENERIC_TYPE c) {
@@ -289,7 +286,6 @@ public class ARRAY_LIST KEY_GENERIC_TYPE extends ABSTRACT_LIST KEY_GENERIC_TYPE 
 	 * @param offset where to start ino the array
 	 * @param length the amount of elements to insert
 	 * @throws IndexOutOfBoundsException if index is outside of the lists range
-	 * @deprecated if type is primitive
 	 */
 	@Override
 	public void addElements(int from, KEY_TYPE[] a, int offset, int length) {
