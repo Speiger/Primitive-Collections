@@ -19,9 +19,11 @@ import speiger.src.collections.PACKAGE.collections.ITERATOR;
 #if !TYPE_OBJECT
 import speiger.src.collections.PACKAGE.functions.COMPARATOR;
 import speiger.src.collections.PACKAGE.functions.CONSUMER;
+import speiger.src.collections.objects.utils.ObjectArrays;
 #endif
 import speiger.src.collections.PACKAGE.lists.LIST_ITERATOR;
 import speiger.src.collections.PACKAGE.utils.ARRAYS;
+
 
 /**
  * A Type Specific ArraySet implementation.
@@ -355,6 +357,34 @@ public class ARRAY_SET KEY_GENERIC_TYPE extends ABSTRACT_SET KEY_GENERIC_TYPE im
 		return size;
 	}
 	
+#if !TYPE_OBJECT
+	@Override
+	public KEY_TYPE[] TO_ARRAY(KEY_TYPE[] a) {
+		if(a == null || a.length < size()) return Arrays.copyOf(data, size());
+		System.arraycopy(data, 0, a, 0, size());
+		return a;
+	}
+	
+#endif
+	@Override
+	@Deprecated
+	public Object[] toArray() {
+		Object[] obj = new Object[size()];
+		for(int i = 0;i<size();i++)
+			obj[i] = KEY_TO_OBJ(data[i]);
+		return obj;
+	}
+	
+	@Override
+	@Primitive
+	public <E> E[] toArray(E[] a) {
+		if(a == null) a = (E[])new Object[size()];
+		else if(a.length < size()) a = (E[])ObjectArrays.newArray(a.getClass().getComponentType(), size());
+		for(int i = 0;i<size();i++)
+			a[i] = (E)KEY_TO_OBJ(data[i]);
+		return a;
+	}
+	
 	private class SubSet extends ABSTRACT_SET KEY_GENERIC_TYPE implements SORTED_SET KEY_GENERIC_TYPE {
 		int offset;
 		int length;
@@ -543,14 +573,14 @@ public class ARRAY_SET KEY_GENERIC_TYPE extends ABSTRACT_SET KEY_GENERIC_TYPE im
 			int fromIndex = findIndex(fromElement);
 			int toIndex = findIndex(toElement);
 			if(fromIndex == -1 || toIndex == -1) throw new NoSuchElementException();
-			return new SubSet(fromIndex, toIndex - fromIndex);
+			return new SubSet(fromIndex, toIndex - fromIndex + 1);
 		}
 
 		@Override
 		public SORTED_SET KEY_GENERIC_TYPE headSet(KEY_TYPE toElement) {
 			int toIndex = findIndex(toElement);
 			if(toIndex == -1) throw new NoSuchElementException();
-			return new SubSet(0, toIndex);
+			return new SubSet(0, toIndex+1);
 		}
 
 		@Override
@@ -563,6 +593,34 @@ public class ARRAY_SET KEY_GENERIC_TYPE extends ABSTRACT_SET KEY_GENERIC_TYPE im
 		@Override
 		public int size() {
 			return length;
+		}
+		
+#if !TYPE_OBJECT
+		@Override
+		public KEY_TYPE[] TO_ARRAY(KEY_TYPE[] a) {
+			if(a == null || a.length < size()) return Arrays.copyOfRange(data, offset, end());
+			System.arraycopy(data, offset, a, 0, size());
+			return a;
+		}
+		
+#endif
+		@Override
+		@Deprecated
+		public Object[] toArray() {
+			Object[] obj = new Object[size()];
+			for(int i = 0;i<size();i++)
+				obj[i] = KEY_TO_OBJ(data[offset+i]);
+			return obj;
+		}
+		
+		@Override
+		@Primitive
+		public <E> E[] toArray(E[] a) {
+			if(a == null) a = (E[])new Object[size()];
+			else if(a.length < size()) a = (E[])ObjectArrays.newArray(a.getClass().getComponentType(), size());
+			for(int i = 0;i<size();i++)
+				a[i] = (E)KEY_TO_OBJ(data[offset+i]);
+			return a;
 		}
 		
 #if !TYPE_OBJECT
