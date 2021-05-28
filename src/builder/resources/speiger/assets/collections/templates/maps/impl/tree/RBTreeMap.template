@@ -3,14 +3,16 @@ package speiger.src.collections.PACKAGE.maps.impl.tree;
 import java.util.Map;
 #if TYPE_OBJECT
 import java.util.Comparator;
-import java.util.Objects;
 #endif
+import java.util.Objects;
 import java.util.NoSuchElementException;
 
 import speiger.src.collections.PACKAGE.collections.BI_ITERATOR;
 #if !TYPE_OBJECT
 import speiger.src.collections.PACKAGE.functions.COMPARATOR;
 #endif
+import speiger.src.collections.PACKAGE.functions.function.FUNCTION;
+import speiger.src.collections.PACKAGE.functions.function.UNARY_OPERATOR;
 import speiger.src.collections.PACKAGE.lists.LIST_ITERATOR;
 import speiger.src.collections.PACKAGE.maps.abstracts.ABSTRACT_MAP;
 import speiger.src.collections.PACKAGE.maps.interfaces.MAP;
@@ -20,10 +22,12 @@ import speiger.src.collections.PACKAGE.sets.NAVIGABLE_SET;
 import speiger.src.collections.PACKAGE.sets.SET;
 import speiger.src.collections.PACKAGE.sets.SORTED_SET;
 import speiger.src.collections.PACKAGE.utils.ITERATORS;
+import speiger.src.collections.PACKAGE.utils.maps.MAPS;
 import speiger.src.collections.VALUE_PACKAGE.collections.VALUE_ABSTRACT_COLLECTION;
 import speiger.src.collections.VALUE_PACKAGE.collections.VALUE_COLLECTION;
 import speiger.src.collections.VALUE_PACKAGE.collections.VALUE_ITERATOR;
 #if !SAME_TYPE
+import speiger.src.collections.VALUE_PACKAGE.functions.function.VALUE_UNARY_OPERATOR;
 import speiger.src.collections.VALUE_PACKAGE.lists.VALUE_LIST_ITERATOR;
 import speiger.src.collections.VALUE_PACKAGE.utils.VALUE_ITERATORS;
 #endif
@@ -452,6 +456,85 @@ public class RB_TREE_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_VALUE_G
 	}
 	
 #endif
+	@Override
+	public boolean replace(KEY_TYPE key, VALUE_TYPE oldValue, VALUE_TYPE newValue) {
+		Entry KEY_VALUE_GENERIC_TYPE entry = findNode(key);
+		if(entry == null || entry.value != oldValue) return false;
+		entry.value = newValue;
+		return true;
+	}
+	
+	@Override
+	public VALUE_TYPE replace(KEY_TYPE key, VALUE_TYPE value) {
+		Entry KEY_VALUE_GENERIC_TYPE entry = findNode(key);
+		if(entry == null) return getDefaultReturnValue();
+		VALUE_TYPE oldValue = entry.value;
+		entry.value = value;
+		return oldValue;
+	}
+	
+	@Override
+	public VALUE_TYPE COMPUTE(KEY_TYPE key, UNARY_OPERATOR KEY_VALUE_GENERIC_TYPE mappingFunction) {
+		Entry KEY_VALUE_GENERIC_TYPE entry = findNode(key);
+		if(entry == null) {
+			VALUE_TYPE newValue = mappingFunction.APPLY_VALUE(key, getDefaultReturnValue());
+			put(key, newValue);
+			return newValue;
+		}
+		VALUE_TYPE newValue = mappingFunction.APPLY_VALUE(key, entry.value);
+		entry.value = newValue;
+		return newValue;
+	}
+	
+	@Override
+	public VALUE_TYPE COMPUTE_IF_ABSENT(KEY_TYPE key, FUNCTION KEY_VALUE_GENERIC_TYPE mappingFunction) {
+		Entry KEY_VALUE_GENERIC_TYPE entry = findNode(key);
+		if(entry == null) {
+			VALUE_TYPE newValue = mappingFunction.GET_VALUE(key);
+			put(key, newValue);
+			return newValue;
+		}
+		return entry.value;
+	}
+	
+	@Override
+	public VALUE_TYPE COMPUTE_IF_PRESENT(KEY_TYPE key, UNARY_OPERATOR KEY_VALUE_GENERIC_TYPE mappingFunction) {
+		Entry KEY_VALUE_GENERIC_TYPE entry = findNode(key);
+		if(entry == null) return getDefaultReturnValue();
+		VALUE_TYPE newValue = mappingFunction.APPLY_VALUE(key, entry.value);
+		entry.value = newValue;
+		return newValue;
+	}
+	
+	@Override
+	public VALUE_TYPE MERGE(KEY_TYPE key, VALUE_TYPE value, VALUE_UNARY_OPERATOR VALUE_VALUE_GENERIC_TYPE mappingFunction) {
+		Entry KEY_VALUE_GENERIC_TYPE entry = findNode(key);
+		VALUE_TYPE newValue = entry == null ? value : mappingFunction.APPLY_VALUE(entry.value, value);
+		if(newValue == getDefaultReturnValue()) {
+			if(entry != null)
+				removeNode(entry);
+		}
+		else if(entry == null) put(key, newValue);
+		else entry.value = newValue;
+		return newValue;
+	}
+	
+	@Override
+	public void BULK_MERGE(MAP KEY_VALUE_GENERIC_TYPE m, VALUE_UNARY_OPERATOR VALUE_VALUE_GENERIC_TYPE mappingFunction) {
+    	Objects.requireNonNull(mappingFunction);
+    	for(MAP.Entry KEY_VALUE_GENERIC_TYPE entry : MAPS.fastIterable(m)) {
+			KEY_TYPE key = entry.ENTRY_KEY();
+			Entry KEY_VALUE_GENERIC_TYPE subEntry = findNode(key);
+			VALUE_TYPE newValue = subEntry == null ? entry.ENTRY_VALUE() : mappingFunction.APPLY_VALUE(subEntry.value, entry.ENTRY_VALUE());
+			if(newValue == getDefaultReturnValue()) {
+				if(subEntry != null)
+					removeNode(subEntry);
+			}
+			else if(subEntry == null) put(key, newValue);
+			else subEntry.value = newValue;
+		}
+	}
+	
 	@Override
 	public int size() { return size; }
 	

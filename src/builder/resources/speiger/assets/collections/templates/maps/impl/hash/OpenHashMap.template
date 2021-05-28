@@ -11,19 +11,25 @@ import speiger.src.collections.PACKAGE.collections.ITERATOR;
 import speiger.src.collections.PACKAGE.functions.CONSUMER;
 #endif
 import speiger.src.collections.PACKAGE.functions.consumer.BI_CONSUMER;
+import speiger.src.collections.PACKAGE.functions.function.FUNCTION;
+import speiger.src.collections.PACKAGE.functions.function.UNARY_OPERATOR;
 import speiger.src.collections.PACKAGE.lists.ARRAY_LIST;
 import speiger.src.collections.PACKAGE.lists.LIST;
 import speiger.src.collections.PACKAGE.maps.abstracts.ABSTRACT_MAP;
 import speiger.src.collections.PACKAGE.maps.interfaces.MAP;
+import speiger.src.collections.PACKAGE.utils.maps.MAPS;
 #if !TYPE_OBJECT
 import speiger.src.collections.PACKAGE.sets.ABSTRACT_SET;
 import speiger.src.collections.PACKAGE.sets.SET;
 #endif
 import speiger.src.collections.VALUE_PACKAGE.collections.VALUE_ABSTRACT_COLLECTION;
 import speiger.src.collections.VALUE_PACKAGE.collections.VALUE_COLLECTION;
-#if !SAME_TYPE && !VALUE_OBJECT
+#if !SAME_TYPE
+import speiger.src.collections.VALUE_PACKAGE.functions.function.VALUE_UNARY_OPERATOR;
+#if !VALUE_OBJECT
 import speiger.src.collections.VALUE_PACKAGE.collections.VALUE_ITERATOR;
 import speiger.src.collections.VALUE_PACKAGE.functions.VALUE_CONSUMER;
+#endif
 #endif
 import speiger.src.collections.objects.collections.ObjectIterator;
 import speiger.src.collections.objects.sets.AbstractObjectSet;
@@ -381,6 +387,85 @@ public class HASH_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_VALUE_GENE
 		if(containsNull) action.accept(keys[nullIndex], values[nullIndex]);
 		for(int i = nullIndex-1;i>=0;i--) {
 			if(KEY_EQUALS_NOT_NULL(keys[i])) action.accept(keys[i], values[i]);
+		}
+	}
+	
+	@Override
+	public boolean replace(KEY_TYPE key, VALUE_TYPE oldValue, VALUE_TYPE newValue) {
+		int index = findIndex(key);
+		if(index < 0 || values[index] != oldValue) return false;
+		values[index] = newValue;
+		return true;
+	}
+	
+	@Override
+	public VALUE_TYPE replace(KEY_TYPE key, VALUE_TYPE value) {
+		int index = findIndex(key);
+		if(index < 0) return getDefaultReturnValue();
+		VALUE_TYPE oldValue = values[index];
+		values[index] = value;
+		return oldValue;
+	}
+	
+	@Override
+	public VALUE_TYPE COMPUTE(KEY_TYPE key, UNARY_OPERATOR KEY_VALUE_GENERIC_TYPE mappingFunction) {
+		int index = findIndex(key);
+		if(index < 0) {
+			VALUE_TYPE newValue = mappingFunction.APPLY_VALUE(key, getDefaultReturnValue());
+			insert(-index-1, key, newValue);
+			return newValue;
+		}
+		VALUE_TYPE newValue = mappingFunction.APPLY_VALUE(key, values[index]);
+		values[index] = newValue;
+		return newValue;
+	}
+	
+	@Override
+	public VALUE_TYPE COMPUTE_IF_ABSENT(KEY_TYPE key, FUNCTION KEY_VALUE_GENERIC_TYPE mappingFunction) {
+		int index = findIndex(key);
+		if(index < 0) {
+			VALUE_TYPE newValue = mappingFunction.GET_VALUE(key);
+			insert(-index-1, key, newValue);
+			return newValue;
+		}
+		return values[index];
+	}
+
+	@Override
+	public VALUE_TYPE COMPUTE_IF_PRESENT(KEY_TYPE key, UNARY_OPERATOR KEY_VALUE_GENERIC_TYPE mappingFunction) {
+		int index = findIndex(key);
+		if(index < 0) return getDefaultReturnValue();
+		VALUE_TYPE newValue = mappingFunction.APPLY_VALUE(key, values[index]);
+		values[index] = newValue;
+		return newValue;
+	}
+	
+	@Override
+	public VALUE_TYPE MERGE(KEY_TYPE key, VALUE_TYPE value, VALUE_UNARY_OPERATOR VALUE_VALUE_GENERIC_TYPE mappingFunction) {
+		int index = findIndex(key);
+		VALUE_TYPE newValue = index < 0 ? value : mappingFunction.APPLY_VALUE(values[index], value);
+		if(newValue == getDefaultReturnValue()) {
+			if(index >= 0)
+				removeIndex(index);
+		}
+		else if(index < 0) insert(-index-1, key, newValue);
+		else values[index] = newValue;
+		return newValue;
+	}
+	
+	@Override
+	public void BULK_MERGE(MAP KEY_VALUE_GENERIC_TYPE m, VALUE_UNARY_OPERATOR VALUE_VALUE_GENERIC_TYPE mappingFunction) {
+	    Objects.requireNonNull(mappingFunction);
+		for(MAP.Entry KEY_VALUE_GENERIC_TYPE entry : MAPS.fastIterable(m)) {
+			KEY_TYPE key = entry.ENTRY_KEY();
+			int index = findIndex(key);
+			VALUE_TYPE newValue = index < 0 ? entry.ENTRY_VALUE() : mappingFunction.APPLY_VALUE(values[index], entry.ENTRY_VALUE());
+			if(newValue == getDefaultReturnValue()) {
+				if(index >= 0)
+					removeIndex(index);
+			}
+			else if(index < 0) insert(-index-1, key, newValue);
+			else values[index] = newValue;
 		}
 	}
 	

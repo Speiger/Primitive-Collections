@@ -210,6 +210,68 @@ public class ARRAY_SET KEY_GENERIC_TYPE extends ABSTRACT_SET KEY_GENERIC_TYPE im
 		return data[size - 1];
 	}
 	
+	@Override
+	public boolean removeAll(COLLECTION KEY_GENERIC_TYPE c) {
+		int j = 0;
+		for(int i = 0;i<size;i++) {
+			if(!c.contains(data[i])) 
+				data[j++] = data[i];
+		}
+		boolean result = j != size;
+#if TYPE_OBJECT
+		Arrays.fill(data, j, size, null);
+#endif
+		size = j;
+		return result;
+	}
+	
+	@Override
+	public boolean retainAll(COLLECTION KEY_GENERIC_TYPE c) {
+		int j = 0;
+		for(int i = 0;i<size;i++) {
+			if(c.contains(data[i])) 
+				data[j++] = data[i];
+		}
+		boolean result = j != size;
+#if TYPE_OBJECT
+		Arrays.fill(data, j, size, null);
+#endif
+		size = j;
+		return result;
+	}
+	
+	@Override
+	@Primitive
+	public boolean removeAll(Collection<?> c) {
+		int j = 0;
+		for(int i = 0;i<size;i++) {
+			if(!c.contains(KEY_TO_OBJ(data[i])))
+				data[j++] = data[i];
+		}
+		boolean result = j != size;
+#if TYPE_OBJECT
+		Arrays.fill(data, j, size, null);
+#endif
+		size = j;
+		return result;
+	}
+	
+	@Override
+	@Primitive
+	public boolean retainAll(Collection<?> c) {
+		int j = 0;
+		for(int i = 0;i<size;i++) {
+			if(c.contains(KEY_TO_OBJ(data[i])))
+				data[j++] = data[i];
+		}
+		boolean result = j != size;
+#if TYPE_OBJECT
+		Arrays.fill(data, j, size, null);
+#endif
+		size = j;
+		return result;
+	}
+	
 #if !TYPE_OBJECT
 	@Override
 	public boolean remove(KEY_TYPE o) {
