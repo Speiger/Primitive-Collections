@@ -67,6 +67,7 @@ public class PrimitiveCollectionsBuilder extends TemplateProcessor
 			}
 		}
 		enumRequired.add("EnumMap");
+		enumRequired.add("LinkedEnumMap");
 		biRequired.put("BiConsumer", "");
 		biRequired.put("UnaryOperator", "");
 		addBiClass("Function", "Maps", "Map", "SortedMap", "NavigableMap", "AbstractMap", "OpenHashMap", "LinkedOpenHashMap", "OpenCustomHashMap", "LinkedOpenCustomHashMap", "ArrayMap", "RBTreeMap", "AVLTreeMap");
@@ -77,6 +78,7 @@ public class PrimitiveCollectionsBuilder extends TemplateProcessor
 		nameRemapper.put("AbstractSet", "Abstract%sSet");
 		nameRemapper.put("AbstractList", "Abstract%sList");
 		nameRemapper.put("EnumMap", "Enum2%sMap");
+		nameRemapper.put("LinkedEnumMap", "LinkedEnum2%sMap");
 		addBlockage(ClassType.OBJECT, "Consumer", "Comparator", "Stack");
 		addBlockage(ClassType.BOOLEAN, "ArraySet", "AVLTreeSet", "RBTreeSet", "SortedSet", "NavigableSet", "OpenHashSet", "OpenCustomHashSet", "LinkedOpenHashSet", "LinkedOpenCustomHashSet");
 		addBlockage(ClassType.BOOLEAN, "SortedMap", "NavigableMap", "OpenHashMap", "LinkedOpenHashMap", "OpenCustomHashMap", "LinkedOpenCustomHashMap", "ArrayMap", "RBTreeMap", "AVLTreeMap");
