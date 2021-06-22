@@ -8,16 +8,17 @@ tasks.withType(JavaCompile) {
 
 apply plugin: 'java'
 apply plugin: 'eclipse'
+apply plugin: 'maven'
 
 repositories {
-    jcenter()
-    flatDir {
-        dirs 'libs'
+    mavenCentral()
+    maven {
+        url = "https://maven.speiger.com/repository/main"
     }
 }
 
 archivesBaseName = 'Primitive Collections'
-version = 'Beta';
+version = '0.2.0';
 
 sourceCompatibility = targetCompatibility = compileJava.sourceCompatibility = compileJava.targetCompatibility = '1.8'
 
@@ -53,7 +54,7 @@ configurations {
 }
 
 dependencies {
-	compile 'SimpleCodeGenerator:Simple Code Generator:1.0.1'
+	compile 'de.speiger:Simple-Code-Generator:1.0.2'
     testImplementation 'junit:junit:4.12'
 }
 
@@ -76,7 +77,6 @@ task srcJar(type: Jar) {
 
 javadoc.failOnError = false
 javadoc.options.memberLevel = JavadocMemberLevel.PUBLIC
-//javadoc.options.showAll()
 javadoc.options.quiet()
 
 artifacts {
@@ -86,4 +86,35 @@ artifacts {
 
 test {
     useJUnit()
+}
+
+uploadArchives {
+	repositories.mavenDeployer {
+		repository(url: 'https://maven.speiger.com/repository/main') {
+			authentication(userName: project.properties.mavenUser, password: project.properties.mavenPassword)
+		}
+		snapshotRepository(url: 'https://maven.speiger.com/repository/main') {
+			authentication(userName: project.properties.mavenUser, password: project.properties.mavenPassword)
+		}
+		pom {
+			version = project.version
+			artifactId = project.archivesBaseName.replace(" ", "-")
+			groupId = 'de.speiger'
+			project {
+				licenses {
+					license {
+						name = 'The Apache License, Version 2.0'
+						url = 'http://www.apache.org/licenses/LICENSE-2.0.txt'
+					}
+				}
+				developers {
+					developer {
+						id = 'speiger'
+						name = 'Speiger'
+						email = 'speiger@gmx.net'
+					}
+				}
+			}
+		}
+	}
 }
