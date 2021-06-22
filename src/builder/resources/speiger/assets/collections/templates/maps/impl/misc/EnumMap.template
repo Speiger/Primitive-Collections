@@ -213,11 +213,12 @@ public class ENUM_MAP KEY_ENUM_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_VALUE
 		onNodeRemoved(index);
 	}
 	protected boolean isSet(int index) { return (present[index >> 6] & (1L << index)) != 0; }
-    private static <K extends Enum<K>> K[] getKeyUniverse(Class<K> keyType) {
+    
+	private static <K extends Enum<K>> K[] getKeyUniverse(Class<K> keyType) {
 #if UNSAVE_ENUM
-    	return keyType.getEnumConstants();
+	return SharedSecrets.getJavaLangAccess().getEnumConstantsShared(keyType); 
 #else
-    	return SharedSecrets.getJavaLangAccess().getEnumConstantsShared(keyType); 
+		return keyType.getEnumConstants();
 #endif
     }
     
