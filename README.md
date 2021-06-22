@@ -8,7 +8,20 @@ But its focus is a different one.
 ArraysList, HashSet/Map (Linked & HashControl), TreeSet/Map (RB & AVL), Priority Queue.     
 
 
-# Guide
+# How to install
+Using Gradle:
+```gradle
+repositories {
+    maven {
+        url = "https://maven.speiger.com/repository/main"
+    }
+}
+dependencies {
+	compile 'de.speiger:Primitive-Collections:0.2.0'
+}
+```
+
+# How to Build
 
 The SourceCode can be already generated via: 
 /gradlew.bat generateSource      
