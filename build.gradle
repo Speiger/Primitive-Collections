@@ -54,7 +54,7 @@ configurations {
 }
 
 dependencies {
-	compile 'de.speiger:Simple-Code-Generator:1.0.2'
+	compile 'de.speiger:Simple-Code-Generator:1.0.4'
     testImplementation 'junit:junit:4.12'
 }
 
