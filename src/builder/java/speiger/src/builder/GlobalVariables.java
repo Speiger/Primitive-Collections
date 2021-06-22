@@ -256,6 +256,7 @@ public class GlobalVariables
 	{
 		flags.add("TYPE_"+type.getCapType());
 		flags.add("VALUE_"+valueType.getCapType());
+//		flags.add("UNSAVE_ENUM"); //if we want to use shared constants... Not compile save
 		if(type == valueType) flags.add("SAME_TYPE");
 		if(type.hasFunction(valueType)) flags.add("JDK_FUNCTION");
 		if(!type.needsCustomJDKType()) flags.add("JDK_TYPE");
