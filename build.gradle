@@ -41,7 +41,7 @@ eclipse {
 
 compileJava {
     options.compilerArgs << '-XDignore.symbol.file'
-    options.fork = true // may not needed on 1.8
+    options.fork = true
     options.forkOptions.executable = 'javac' // may not needed on 1.8
 }
 
