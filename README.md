@@ -1,4 +1,4 @@
-# Primitive-Collections (To be Renamed)
+# Primitive-Collections
 
 This is a Simple Primitive Collections Library i started as a hobby Project.     
 It is based on Java's Collection Library and FastUtil.     
