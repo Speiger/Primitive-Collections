@@ -235,9 +235,6 @@ public class GlobalVariables
 		addFunctionValueMapper("MERGE", "merge");
 		addFunctionMapper("NEXT", "next");
 		addFunctionMapper("PREVIOUS", "previous");
-		addFunctionMapper("PEEK", "peek");
-		addFunctionMapper("POP", "pop");
-		addFunctionMapper("PUSH", "push");
 		addFunctionMapper("REMOVE_KEY", "rem");
 		addFunctionMapper("REMOVE_LAST", "removeLast");
 		addFunctionMapper("REMOVE", "remove");
@@ -246,7 +243,6 @@ public class GlobalVariables
 		addFunctionMappers("SORT", "sort%ss");
 		addSimpleMapper("NEW_STREAM", type.isPrimitiveBlocking() ? "" : type.getCustomJDKType().getKeyType()+"Stream");
 		addSimpleMapper("TO_ARRAY", "to"+type.getNonFileType()+"Array");
-		addFunctionMapper("TOP", "top");
 		return this;
 	}
 	

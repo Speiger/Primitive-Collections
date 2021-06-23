@@ -5,14 +5,14 @@ import speiger.src.collections.utils.Stack;
 /**
  * A Type-Specific {@link Stack} that reduces (un)boxing
  */
-public interface STACK extends Stack<CLASS_TYPE>
+public interface STACK
 {
 	/**
 	 * Inserts a given Object on top of the stack
 	 * @param e the Object to insert
 	 * @see Stack#push(Object)
 	 */
-	public void PUSH(KEY_TYPE e);
+	public void push(KEY_TYPE e);
 	
 	/**
 	 * Removes the Object on top of the stack.
@@ -20,7 +20,7 @@ public interface STACK extends Stack<CLASS_TYPE>
 	 * @throws ArrayIndexOutOfBoundsException if the stack is empty
 	 * @see Stack#pop()
 	 */
-	public KEY_TYPE POP();
+	public KEY_TYPE pop();
 	
 	/**
 	 * Provides the Object on top of the stack
@@ -28,8 +28,8 @@ public interface STACK extends Stack<CLASS_TYPE>
 	 * @throws ArrayIndexOutOfBoundsException if the stack is empty
  	 * @see Stack#top()
 	 */
-	public default KEY_TYPE TOP() {
-		return PEEK(0);
+	public default KEY_TYPE top() {
+		return peek(0);
 	}
 	
 	/**
@@ -40,41 +40,23 @@ public interface STACK extends Stack<CLASS_TYPE>
  	 * @throws ArrayIndexOutOfBoundsException if the index is out of bounds
  	 * @see Stack#peek(int)
 	 */
-	public KEY_TYPE PEEK(int index);
+	public KEY_TYPE peek(int index);
 	
-#if !OBJECT_TYPE
-	/** {@inheritDoc}
- 	* <p>This default implementation delegates to the corresponding type-specific function.
- 	* @deprecated Please use the corresponding type-specific function instead. 
- 	*/
-	@Override
-	@Deprecated
-	public default void push(CLASS_TYPE e) { PUSH(OBJ_TO_KEY(e)); }
+	/**
+	 * Clears the stack
+	 */
+	public void clear();
 	
-	/** {@inheritDoc}
-	* <p>This default implementation delegates to the corresponding type-specific function.
-	* @deprecated Please use the corresponding type-specific function instead. 
-	*/
-	@Override
-	@Deprecated
-	public default CLASS_TYPE pop() { return KEY_TO_OBJ(POP()); }
+	/**
+	 * Provides the amount of elements currently in the stack
+	 * @return amount of elements in the list
+	 */
+	public int size();
 	
-	/** {@inheritDoc}
- 	* <p>This default implementation delegates to the corresponding type-specific function.
- 	* @deprecated Please use the corresponding type-specific function instead. 
- 	*/
-	@Override
-	@Deprecated
-	public default CLASS_TYPE top() {
-		return peek(size() - 1);
+	/**
+	 * @return if the stack is empty
+	 */
+	public default boolean isEmpty() {
+		return size() == 0;
 	}
-	
-	/** {@inheritDoc}
- 	* <p>This default implementation delegates to the corresponding type-specific function.
- 	* @deprecated Please use the corresponding type-specific function instead. 
- 	*/
-	@Override
-	@Deprecated
-	public default CLASS_TYPE peek(int index) { return KEY_TO_OBJ(PEEK(index)); }
-#endif
 }

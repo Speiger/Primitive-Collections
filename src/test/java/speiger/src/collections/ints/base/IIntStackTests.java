@@ -18,13 +18,13 @@ public interface IIntStackTests
 	public default void testPush()
 	{
 		IntStack stacks = create(TEST_ARRAY);
-		stacks.pushInt(500);
-		Assert.assertEquals(500, stacks.topInt());
+		stacks.push(500);
+		Assert.assertEquals(500, stacks.top());
 	}
 	
 	@Test
 	public default void testPop()
 	{
-		Assert.assertEquals(99, create(TEST_ARRAY).topInt());
+		Assert.assertEquals(99, create(TEST_ARRAY).top());
 	}
 }

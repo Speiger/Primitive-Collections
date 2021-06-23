@@ -201,7 +201,7 @@ public class ARRAY_LIST KEY_GENERIC_TYPE extends ABSTRACT_LIST KEY_GENERIC_TYPE 
 	 * @param e element to be appended to this Stack
 	 */
 	@Override
-	public void PUSH(KEY_TYPE e) {
+	public void push(KEY_TYPE e) {
 		add(e);
 	}
 	
@@ -543,7 +543,7 @@ public class ARRAY_LIST KEY_GENERIC_TYPE extends ABSTRACT_LIST KEY_GENERIC_TYPE 
 	 * @see speiger.src.collections.utils.Stack#peek(int)
 	 */
 	@Override
-	public KEY_TYPE PEEK(int index) {
+	public KEY_TYPE peek(int index) {
 		checkRange((size() - 1) - index);
 		return data[(size() - 1) - index];
 	}
@@ -683,7 +683,7 @@ public class ARRAY_LIST KEY_GENERIC_TYPE extends ABSTRACT_LIST KEY_GENERIC_TYPE 
 	 * @throws IndexOutOfBoundsException if the index is out of range
 	 */
 	@Override
-	public KEY_TYPE POP() {
+	public KEY_TYPE pop() {
 		return REMOVE(size() - 1);
 	}
 	
