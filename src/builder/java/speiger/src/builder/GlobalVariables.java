@@ -230,7 +230,8 @@ public class GlobalVariables
 		addFunctionMappers("ENTRY_KEY", "get%sKey");
 		addFunctionValueMappers("ENTRY_VALUE", "get%sValue");
 		addFunctionMapper("GET_KEY", "get");
-		addFunctionValueMapper("GET_VALUE", valueType.isObject() ? "getObject" : "get");
+		if(type.isObject()) addFunctionValueMapper("GET_VALUE", valueType.isObject() ? "getObject" : "get");
+		else addSimpleMapper("GET_VALUE", "get");
 		addFunctionMapper("LAST_KEY", "last");
 		addFunctionValueMapper("MERGE", "merge");
 		addFunctionMapper("NEXT", "next");

@@ -7,3 +7,4 @@
 - Removed: Suffixes for unmodifiable & synchronize functions.
 - Changed: Primitive Stacks no longer depend on the base Stack class. Because seriously not needed.
 - Changed: PriorityQueues no longer extends Object Variant.
+- Changed: Maps.get function is no longer using Suffixes unless its absolutely necessary.

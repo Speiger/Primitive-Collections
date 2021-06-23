@@ -14,9 +14,9 @@ But its focus is a different one.
 - Iterators
 
 # Notes about Versions
-Any 0.x.0 version (Minor) can be reason for massive changes including API.
-To ensure that problems can be dealt with even if it is breaking the current API.
-Any breaking changes will be Documented (once 1.0 is released)
+Any 0.x.0 version (Minor) can be reason for massive changes including API.     
+To ensure that problems can be dealt with even if it is breaking the current API.     
+Any breaking changes will be Documented (once 1.0 is released)     
 
 # How to install
 Using Gradle:

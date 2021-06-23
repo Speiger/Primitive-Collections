@@ -33,7 +33,7 @@ public abstract class BaseInt2IntMapTest
 		Assert.assertEquals(1, putMap.put(513, 2));
 		Assert.assertEquals(PUT_ARRAY.length + 1, putMap.size());
 		Assert.assertEquals(512, putMap.addTo(0, 1));
-		Assert.assertEquals(513, putMap.getInt(0));
+		Assert.assertEquals(513, putMap.get(0));
 	}
 	
 	@Test
@@ -70,13 +70,13 @@ public abstract class BaseInt2IntMapTest
 		if(!getValidMapTests().contains(MapTests.REPLACE)) return;
 		Int2IntMap map = createMap(TEST_ARRAY, TEST_ARRAY);
 		Assert.assertEquals(0, map.replace(0, 512));
-		Assert.assertEquals(512, map.getInt(0));
+		Assert.assertEquals(512, map.get(0));
 		Assert.assertTrue(map.replace(0, 512, 0));
 		Assert.assertFalse(map.replace(0, 512, 0));
 		map = createMap(TEST_ARRAY, TEST_ARRAY);
 		map.replaceInts((K, V) -> 99 - V);
-		Assert.assertEquals(99, map.getInt(0));
-		Assert.assertEquals(0, map.getInt(99));
+		Assert.assertEquals(99, map.get(0));
+		Assert.assertEquals(0, map.get(99));
 	}
 	
 	@Test
@@ -85,7 +85,7 @@ public abstract class BaseInt2IntMapTest
 		if(!getValidMapTests().contains(MapTests.COMPUTE)) return;
 		Int2IntMap map = createMap(TEST_ARRAY, TEST_ARRAY);
 		Assert.assertEquals(512, map.computeInt(0, (K, V) -> 512));
-		Assert.assertEquals(512, map.getInt(0));
+		Assert.assertEquals(512, map.get(0));
 		Assert.assertEquals(512, map.computeIntIfAbsent(0, T -> 0));
 		Assert.assertEquals(0, map.computeIntIfPresent(0, (T, V) -> 0));
 		Assert.assertEquals(0, map.computeIntIfAbsent(-10, T -> 0));
@@ -107,7 +107,7 @@ public abstract class BaseInt2IntMapTest
 		Int2IntMap map = createMap(TEST_ARRAY, TEST_ARRAY);
 		for(int i = 0;i<TEST_ARRAY.length;i++)
 		{
-			Assert.assertEquals(i, map.getInt(i));
+			Assert.assertEquals(i, map.get(i));
 		}
 	}
 	
