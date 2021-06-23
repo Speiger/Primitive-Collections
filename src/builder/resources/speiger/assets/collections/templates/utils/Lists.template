@@ -2,6 +2,7 @@ package speiger.src.collections.PACKAGE.utils;
 
 import java.util.Collection;
 import java.util.Objects;
+import java.util.Random;
 import java.util.RandomAccess;
 import java.util.function.Consumer;
 
@@ -12,6 +13,8 @@ import speiger.src.collections.PACKAGE.functions.CONSUMER;
 import speiger.src.collections.PACKAGE.lists.ABSTRACT_LIST;
 import speiger.src.collections.PACKAGE.lists.LIST;
 import speiger.src.collections.PACKAGE.lists.LIST_ITERATOR;
+import speiger.src.collections.PACKAGE.utils.ARRAYS;
+import speiger.src.collections.utils.SanityChecks;
 
 /**
  * A Helper class for Lists
@@ -75,6 +78,95 @@ public class LISTS
 	 */
 	public static GENERIC_KEY_BRACES LIST KEY_GENERIC_TYPE singleton(KEY_TYPE element) {
 		return new SingletonListBRACES(element);
+	}
+	
+	/**
+	 * Reverses the list
+	 * @param list that should be reversed.
+	 * @Type(T)
+	 * @return the input list
+	 */
+	public static GENERIC_KEY_BRACES LIST KEY_GENERIC_TYPE reverse(LIST KEY_GENERIC_TYPE list) {
+		int size = list.size();
+		if(list instanceof IARRAY) {
+			IARRAY KEY_GENERIC_TYPE array = (IARRAY KEY_GENERIC_TYPE)list;
+#if TYPE_OBJECT
+			if(array.isCastable()) {
+				if(list instanceof SynchronizedArrayList) array.elements(T -> ARRAYS.reverse(T, size));
+				else ARRAYS.reverse(array.elements(), size);
+				return list;
+			}
+#else
+			if(list instanceof SynchronizedArrayList) array.elements(T -> ARRAYS.reverse(T, size));
+			else ARRAYS.reverse(array.elements(), size);
+			return list;
+#endif
+		}
+		if(list instanceof RandomAccess) {
+			for (int i = 0, mid = size >> 1, j = size - 1; i < mid; i++, j--) {
+				KEY_TYPE t = list.GET_KEY(i);
+				list.set(i, list.GET_KEY(j));
+				list.set(j, t);
+			}
+			return list;
+		}
+		LIST_ITERATOR KEY_GENERIC_TYPE fwd = list.listIterator();
+		LIST_ITERATOR KEY_GENERIC_TYPE rev = list.listIterator(size);
+		for(int i = 0, mid = size >> 1; i < mid; i++) {
+			KEY_TYPE tmp = fwd.NEXT();
+			fwd.set(rev.PREVIOUS());
+			rev.set(tmp);
+		}
+		return list;
+	}
+	
+	/**
+	 * Shuffles the list
+	 * @param list that should be Shuffled.
+	 * @Type(T)
+	 * @return the input list
+	 */
+	public static GENERIC_KEY_BRACES LIST KEY_GENERIC_TYPE shuffle(LIST KEY_GENERIC_TYPE list) {
+		return shuffle(list, SanityChecks.getRandom());
+	}
+	
+	/**
+	 * Shuffles the list
+	 * @param list that should be Shuffled.
+	 * @param random the random that should be used
+	 * @Type(T)
+	 * @return the input list
+	 */
+	public static GENERIC_KEY_BRACES LIST KEY_GENERIC_TYPE shuffle(LIST KEY_GENERIC_TYPE list, Random random) {
+		int size = list.size();
+		if(list instanceof IARRAY) {
+			IARRAY KEY_GENERIC_TYPE array = (IARRAY KEY_GENERIC_TYPE)list;
+#if TYPE_OBJECT
+			if(array.isCastable()) {
+				if(list instanceof SynchronizedArrayList) array.elements(T -> ARRAYS.shuffle(T, size, random));
+				else ARRAYS.shuffle(array.elements(), size, random);
+			}
+			else {
+				for(int i = list.size(); i-- != 0;) {
+					int p = random.nextInt(i + 1);
+					KEY_TYPE t = list.GET_KEY(i);
+					list.set(i, list.GET_KEY(p));
+					list.set(p, t);
+				}
+			}
+#else
+			if(list instanceof SynchronizedArrayList)  array.elements(T -> ARRAYS.shuffle(T, size, random));
+			else ARRAYS.shuffle(array.elements(), size, random);
+#endif
+			return list;
+		}
+		for(int i = list.size(); i-- != 0;) {
+			int p = random.nextInt(i + 1);
+			KEY_TYPE t = list.GET_KEY(i);
+			list.set(i, list.GET_KEY(p));
+			list.set(p, t);
+		}
+		return list;
 	}
 	
 	private static class SingletonList KEY_GENERIC_TYPE extends ABSTRACT_LIST KEY_GENERIC_TYPE

@@ -1,6 +1,7 @@
 package speiger.src.collections.PACKAGE.utils;
 
 import java.util.Iterator;
+import java.util.NoSuchElementException;
 import speiger.src.collections.PACKAGE.collections.ITERATOR;
 import speiger.src.collections.PACKAGE.lists.LIST_ITERATOR;
 import speiger.src.collections.PACKAGE.collections.BI_ITERATOR;
@@ -196,6 +197,28 @@ public class ITERATORS
 		return index;
 	}
 	
+	/**
+	 * Helper Iterator that concats other iterators together
+	 * @param array the Iterators that should be concatenated
+	 * @ArrayType(T)
+	 * @return iterator of the inputted iterators
+	 */
+	public static GENERIC_KEY_BRACES ITERATOR KEY_GENERIC_TYPE concat(ITERATOR KEY_GENERIC_TYPE... array) {
+		return concat(array, 0, array.length);
+	}
+	
+	/**
+	 * Helper Iterator that concats other iterators together
+	 * @param array the Iterators that should be concatenated
+	 * @param offset where to start within the array
+	 * @param length the length of the array
+	 * @ArrayType(T)
+	 * @return iterator of the inputted iterators
+	 */
+	public static GENERIC_KEY_BRACES ITERATOR KEY_GENERIC_TYPE concat(ITERATOR KEY_GENERIC_TYPE[] array, int offset, int length) {
+		return new ConcatIteratorBRACES(array, offset, length);
+	}
+	
 #if !TYPE_OBJECT
 	/**
 	 * A Function to convert a Primitive Iterator to a Object array.
@@ -267,6 +290,45 @@ public class ITERATORS
 	}
 	
 #endif
+	private static class ConcatIterator KEY_GENERIC_TYPE implements ITERATOR KEY_GENERIC_TYPE
+	{
+		ITERATOR KEY_GENERIC_TYPE[] iters;
+		int offset;
+		int lastOffset = -1;
+		int length;
+		
+		public ConcatIterator(ITERATOR KEY_GENERIC_TYPE[] iters, int offset, int length) {
+			this.iters = iters;
+			this.offset = offset;
+			this.length = length;
+			find();
+		}
+		
+		private void find() {
+			for(;length != 0 && !iters[offset].hasNext();length--, offset++);
+		}
+		
+		@Override
+		public boolean hasNext() {
+			return length > 0;
+		}
+		
+		@Override
+		public KEY_TYPE NEXT() {
+			if(!hasNext()) throw new NoSuchElementException();
+			KEY_TYPE result = iters[lastOffset = offset].NEXT();
+			find();
+			return result;
+		}
+		
+		@Override
+		public void remove() {
+			if(lastOffset == -1) throw new IllegalStateException();
+			iters[lastOffset].remove();
+			lastOffset = -1;
+		}
+	}
+	
 	private static class ReverseBiIterator KEY_GENERIC_TYPE implements BI_ITERATOR KEY_GENERIC_TYPE {
 		BI_ITERATOR KEY_GENERIC_TYPE it;
 		

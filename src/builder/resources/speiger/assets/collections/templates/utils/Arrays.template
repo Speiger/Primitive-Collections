@@ -208,6 +208,31 @@ public class ARRAYS
 	/**
 	 * Simple Shuffle method for Arrays.
 	 * @param array the elements that should be shuffled
+	 * @param length the length of the array
+	 * @ArrayType(T)
+	 * @note This uses the SanityChecks#getRandom
+	 * @return the provided sorted array
+	 */
+	public static GENERIC_KEY_BRACES KEY_TYPE[] shuffle(KEY_TYPE[] array, int length) {
+		return shuffle(array, 0, length, SanityChecks.getRandom());
+	}
+	
+	/**
+	 * Simple Shuffle method for Arrays.
+	 * @param array the elements that should be shuffled
+	 * @param offset the start array
+	 * @param length the length of the array
+	 * @ArrayType(T)
+	 * @note This uses the SanityChecks#getRandom
+	 * @return the provided sorted array
+	 */
+	public static GENERIC_KEY_BRACES KEY_TYPE[] shuffle(KEY_TYPE[] array, int offset, int length) {
+		return shuffle(array, offset, length, SanityChecks.getRandom());
+	}
+	
+	/**
+	 * Simple Shuffle method for Arrays.
+	 * @param array the elements that should be shuffled
 	 * @param random the Random Number Generator that should be used for the shuffling
 	 * @ArrayType(T)
 	 * @return the provided sorted array
@@ -220,6 +245,75 @@ public class ARRAYS
 			array[p] = t;
 		}
 		return array;
+	}
+	
+	/**
+	 * Simple Shuffle method for Arrays.
+	 * @param array the elements that should be shuffled
+	 * @param length the length of the array
+	 * @param random the Random Number Generator that should be used for the shuffling
+	 * @ArrayType(T)
+	 * @return the provided sorted array
+	 */
+	public static GENERIC_KEY_BRACES KEY_TYPE[] shuffle(KEY_TYPE[] array, int length, Random random) {
+		return shuffle(array, 0, length, random);
+	}
+	
+	/**
+	 * Simple Shuffle method for Arrays.
+	 * @param array the elements that should be shuffled
+	 * @param offset the start array
+	 * @param length the length of the array
+	 * @param random the Random Number Generator that should be used for the shuffling
+	 * @ArrayType(T)
+	 * @return the provided sorted array
+	 */
+	public static GENERIC_KEY_BRACES KEY_TYPE[] shuffle(KEY_TYPE[] array, int offset, int length, Random random) {
+		for(int i = length-1; i>=0;i--) {
+			int p = offset + random.nextInt(i + 1);
+			KEY_TYPE t = array[offset+i];
+			array[offset+i] = array[p];
+			array[p] = t;
+		}
+		return array;
+	}
+	
+	/**
+	 * Simple Array Reversal method
+	 * @param array the Array that should flip
+	 * @ArrayType(T)
+	 * @return the provided array
+	 */
+	public static GENERIC_KEY_BRACES KEY_TYPE[] reverse(KEY_TYPE[] array) {
+		return reverse(array, 0, array.length);
+	}
+	
+	/**
+	 * Simple Array Reversal method
+	 * @param array the Array that should flip
+	 * @param length the length of the array
+	 * @ArrayType(T)
+	 * @return the provided array
+	 */
+	public static GENERIC_KEY_BRACES KEY_TYPE[] reverse(KEY_TYPE[] array, int length) {
+		return reverse(array, 0, length);
+	}
+	
+	/**
+	 * Simple Array Reversal method
+	 * @param array the Array that should flip
+	 * @param length the length of the array
+	 * @param offset the start of the array
+	 * @ArrayType(T)
+	 * @return the provided array
+	 */
+	public static GENERIC_KEY_BRACES KEY_TYPE[] reverse(KEY_TYPE[] array, int offset, int length) {
+		  for (int i = offset, mid = offset + length >> 1, j = offset + length - 1; i < mid; i++, j--) {
+			  KEY_TYPE temp = array[i];
+			  array[i] = array[j];
+			  array[j] = temp;
+		  }
+		  return array;
 	}
 	
 	/**

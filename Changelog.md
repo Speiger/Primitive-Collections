@@ -10,3 +10,5 @@
 - Changed: Maps.get function is no longer using Suffixes unless its absolutely necessary.
 - Changed: Maps.remove function is no longer using Suffixes unless its absolutely necessary.
 - Changed: ObjectList methods are no longer marked Deprecated even so it was for primitive ones.
+- Added: Shuffle & Reverse Methods.
+- Added: Concat Iterators.
