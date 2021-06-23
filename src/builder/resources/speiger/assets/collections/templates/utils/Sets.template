@@ -56,7 +56,7 @@ public class SETS
 	 * @return a set that is synchronized
 	 * @note if the set is already synchronized then it will just self return it
 	 */
-	public static GENERIC_KEY_BRACES SET KEY_GENERIC_TYPE synchronizedSet(SET KEY_GENERIC_TYPE s) {
+	public static GENERIC_KEY_BRACES SET KEY_GENERIC_TYPE synchronize(SET KEY_GENERIC_TYPE s) {
 		return s instanceof SynchronizedSet ? s : (s instanceof ITrimmable ? new SynchronizedTrimSetBRACES(s) : new SynchronizedSetBRACES(s));
 	}
 	
@@ -68,7 +68,7 @@ public class SETS
 	 * @return a set that is synchronized
 	 * @note if the set is already synchronized then it will just self return it
 	 */
-	public static GENERIC_KEY_BRACES SET KEY_GENERIC_TYPE synchronizedSet(SET KEY_GENERIC_TYPE s, Object mutex) {
+	public static GENERIC_KEY_BRACES SET KEY_GENERIC_TYPE synchronize(SET KEY_GENERIC_TYPE s, Object mutex) {
 		return s instanceof SynchronizedSet ? s : (s instanceof ITrimmable ? new SynchronizedTrimSetBRACES(s, mutex) : new SynchronizedSetBRACES(s, mutex));
 	}
 	
@@ -79,7 +79,7 @@ public class SETS
 	 * @return a SortedSet that is synchronized
 	 * @note if the set is already synchronized then it will just self return it
 	 */
-	public static GENERIC_KEY_BRACES SORTED_SET KEY_GENERIC_TYPE synchronizedSet(SORTED_SET KEY_GENERIC_TYPE s) {
+	public static GENERIC_KEY_BRACES SORTED_SET KEY_GENERIC_TYPE synchronize(SORTED_SET KEY_GENERIC_TYPE s) {
 		return s instanceof SynchronizedSortedSet ? s : (s instanceof ITrimmable ? new SynchronizedSortedTrimSetBRACES(s) : new SynchronizedSortedSetBRACES(s));
 	}
 	
@@ -91,7 +91,7 @@ public class SETS
 	 * @return a SortedSet that is synchronized
 	 * @note if the set is already synchronized then it will just self return it
 	 */
-	public static GENERIC_KEY_BRACES SORTED_SET KEY_GENERIC_TYPE synchronizedSet(SORTED_SET KEY_GENERIC_TYPE s, Object mutex) {
+	public static GENERIC_KEY_BRACES SORTED_SET KEY_GENERIC_TYPE synchronize(SORTED_SET KEY_GENERIC_TYPE s, Object mutex) {
 		return s instanceof SynchronizedSortedSet ? s : (s instanceof ITrimmable ? new SynchronizedSortedTrimSetBRACES(s, mutex) : new SynchronizedSortedSetBRACES(s, mutex));
 	}
 	
@@ -102,7 +102,7 @@ public class SETS
 	 * @return a NavigableSet that is synchronized
 	 * @note if the set is already synchronized then it will just self return it
 	 */
-	public static GENERIC_KEY_BRACES NAVIGABLE_SET KEY_GENERIC_TYPE synchronizedSet(NAVIGABLE_SET KEY_GENERIC_TYPE s) {
+	public static GENERIC_KEY_BRACES NAVIGABLE_SET KEY_GENERIC_TYPE synchronize(NAVIGABLE_SET KEY_GENERIC_TYPE s) {
 		return s instanceof SynchronizedNavigableSet ? s : (s instanceof ITrimmable ? new SynchronizedNavigableTrimSetBRACES(s) : new SynchronizedNavigableSetBRACES(s));
 	}
 	
@@ -114,15 +114,15 @@ public class SETS
 	 * @return a NavigableSet that is synchronized
 	 * @note if the set is already synchronized then it will just self return it
 	 */
-	public static GENERIC_KEY_BRACES NAVIGABLE_SET KEY_GENERIC_TYPE synchronizedSet(NAVIGABLE_SET KEY_GENERIC_TYPE s, Object mutex) {
+	public static GENERIC_KEY_BRACES NAVIGABLE_SET KEY_GENERIC_TYPE synchronize(NAVIGABLE_SET KEY_GENERIC_TYPE s, Object mutex) {
 		return s instanceof SynchronizedNavigableSet ? s : (s instanceof ITrimmable ? new SynchronizedNavigableTrimSetBRACES(s, mutex) : new SynchronizedNavigableSetBRACES(s, mutex));
 	}
 	
 	/**
 	 * Creates Unmodifyable Set wrapper
-	 * @param s set that should be made unmodifyable
+	 * @param s set that should be made unmodifiable
 	 * @Type(T)
-	 * @return a UnmodifyableSet, if the set is already unmodifyable then it returns itself
+	 * @return a UnmodifyableSet, if the set is already unmodifiable then it returns itself
 	 */
 	public static GENERIC_KEY_BRACES SET KEY_GENERIC_TYPE unmodifiable(SET KEY_GENERIC_TYPE s) {
 		return s instanceof UnmodifiableSet ? s : new UnmodifiableSetBRACES(s);
@@ -130,9 +130,9 @@ public class SETS
 	
 	/**
 	 * Creates Unmodifyable SortedSet wrapper
-	 * @param s sortedSet that should be made unmodifyable
+	 * @param s sortedSet that should be made unmodifiable
 	 * @Type(T)
-	 * @return a UnmodifyableSortedSet, if the set is already unmodifyable then it returns itself
+	 * @return a UnmodifyableSortedSet, if the set is already unmodifiable then it returns itself
 	 */
 	public static GENERIC_KEY_BRACES SORTED_SET KEY_GENERIC_TYPE unmodifiable(SORTED_SET KEY_GENERIC_TYPE s) {
 		return s instanceof UnmodifiableSortedSet ? s : new UnmodifiableSortedSetBRACES(s);
@@ -140,9 +140,9 @@ public class SETS
 	
 	/**
 	 * Creates Unmodifyable NavigableSet wrapper
-	 * @param s navigableSet that should be made unmodifyable
+	 * @param s navigableSet that should be made unmodifiable
 	 * @Type(T)
-	 * @return a UnmodifyableNavigableSet, if the set is already unmodifyable then it returns itself
+	 * @return a UnmodifyableNavigableSet, if the set is already unmodifiable then it returns itself
 	 */
 	public static GENERIC_KEY_BRACES NAVIGABLE_SET KEY_GENERIC_TYPE unmodifiable(NAVIGABLE_SET KEY_GENERIC_TYPE s) {
 		return s instanceof UnmodifiableNavigableSet ? s : new UnmodifiableNavigableSetBRACES(s);
@@ -155,7 +155,7 @@ public class SETS
 	 * @Type(T)
 	 * @return a singletonset of the given element
 	 */
-	public static GENERIC_KEY_BRACES SET KEY_GENERIC_TYPE singletonSet(KEY_TYPE element) {
+	public static GENERIC_KEY_BRACES SET KEY_GENERIC_TYPE singleton(KEY_TYPE element) {
 		return new SingletonSetBRACES(element);
 	}
 	
@@ -413,28 +413,28 @@ public class SETS
 		
 #endif
 		@Override
-		public NAVIGABLE_SET KEY_GENERIC_TYPE subSet(KEY_TYPE fromElement, boolean fromInclusive, KEY_TYPE toElement, boolean toInclusive) { synchronized(mutex) { return synchronizedSet(n.subSet(fromElement, fromInclusive, toElement, toInclusive), mutex); } }
+		public NAVIGABLE_SET KEY_GENERIC_TYPE subSet(KEY_TYPE fromElement, boolean fromInclusive, KEY_TYPE toElement, boolean toInclusive) { synchronized(mutex) { return synchronize(n.subSet(fromElement, fromInclusive, toElement, toInclusive), mutex); } }
 
 		@Override
-		public NAVIGABLE_SET KEY_GENERIC_TYPE headSet(KEY_TYPE toElement, boolean inclusive) { synchronized(mutex) { return synchronizedSet(n.headSet(toElement, inclusive), mutex); } }
+		public NAVIGABLE_SET KEY_GENERIC_TYPE headSet(KEY_TYPE toElement, boolean inclusive) { synchronized(mutex) { return synchronize(n.headSet(toElement, inclusive), mutex); } }
 
 		@Override
-		public NAVIGABLE_SET KEY_GENERIC_TYPE tailSet(KEY_TYPE fromElement, boolean inclusive) { synchronized(mutex) { return synchronizedSet(n.tailSet(fromElement, inclusive), mutex); } }
+		public NAVIGABLE_SET KEY_GENERIC_TYPE tailSet(KEY_TYPE fromElement, boolean inclusive) { synchronized(mutex) { return synchronize(n.tailSet(fromElement, inclusive), mutex); } }
 
 		@Override
 		public BI_ITERATOR KEY_GENERIC_TYPE descendingIterator() { synchronized(mutex) { return n.descendingIterator(); } }
 
 		@Override
-		public NAVIGABLE_SET KEY_GENERIC_TYPE descendingSet() { synchronized(mutex) { return synchronizedSet(n.descendingSet(), mutex); } }
+		public NAVIGABLE_SET KEY_GENERIC_TYPE descendingSet() { synchronized(mutex) { return synchronize(n.descendingSet(), mutex); } }
 		
 		@Override
-		public NAVIGABLE_SET KEY_GENERIC_TYPE subSet(KEY_TYPE fromElement, KEY_TYPE toElement) { synchronized(mutex) { return synchronizedSet(n.subSet(fromElement, toElement), mutex); } }
+		public NAVIGABLE_SET KEY_GENERIC_TYPE subSet(KEY_TYPE fromElement, KEY_TYPE toElement) { synchronized(mutex) { return synchronize(n.subSet(fromElement, toElement), mutex); } }
 
 		@Override
-		public NAVIGABLE_SET KEY_GENERIC_TYPE headSet(KEY_TYPE toElement) { synchronized(mutex) { return synchronizedSet(n.headSet(toElement), mutex); } }
+		public NAVIGABLE_SET KEY_GENERIC_TYPE headSet(KEY_TYPE toElement) { synchronized(mutex) { return synchronize(n.headSet(toElement), mutex); } }
 
 		@Override
-		public NAVIGABLE_SET KEY_GENERIC_TYPE tailSet(KEY_TYPE fromElement) { synchronized(mutex) { return synchronizedSet(n.tailSet(fromElement), mutex); } }
+		public NAVIGABLE_SET KEY_GENERIC_TYPE tailSet(KEY_TYPE fromElement) { synchronized(mutex) { return synchronize(n.tailSet(fromElement), mutex); } }
 	}
 	
 	private static class SynchronizedSortedTrimSet KEY_GENERIC_TYPE extends SynchronizedSortedSet KEY_GENERIC_TYPE implements ITrimmable
@@ -494,13 +494,13 @@ public class SETS
 		public BI_ITERATOR KEY_GENERIC_TYPE iterator(KEY_TYPE fromElement) { synchronized(mutex) { return s.iterator(fromElement); } }
 
 		@Override
-		public SORTED_SET KEY_GENERIC_TYPE subSet(KEY_TYPE fromElement, KEY_TYPE toElement) { synchronized(mutex) { return synchronizedSet(s.subSet(fromElement, toElement), mutex); } }
+		public SORTED_SET KEY_GENERIC_TYPE subSet(KEY_TYPE fromElement, KEY_TYPE toElement) { synchronized(mutex) { return synchronize(s.subSet(fromElement, toElement), mutex); } }
 
 		@Override
-		public SORTED_SET KEY_GENERIC_TYPE headSet(KEY_TYPE toElement) { synchronized(mutex) { return synchronizedSet(s.headSet(toElement), mutex); } }
+		public SORTED_SET KEY_GENERIC_TYPE headSet(KEY_TYPE toElement) { synchronized(mutex) { return synchronize(s.headSet(toElement), mutex); } }
 
 		@Override
-		public SORTED_SET KEY_GENERIC_TYPE tailSet(KEY_TYPE fromElement) { synchronized(mutex) { return synchronizedSet(s.tailSet(fromElement), mutex); } }
+		public SORTED_SET KEY_GENERIC_TYPE tailSet(KEY_TYPE fromElement) { synchronized(mutex) { return synchronize(s.tailSet(fromElement), mutex); } }
 
 		@Override
 		public KEY_TYPE FIRST_KEY() { synchronized(mutex) { return s.FIRST_KEY(); } }

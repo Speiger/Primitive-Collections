@@ -42,7 +42,7 @@ public abstract class BaseIntListTest extends BaseIntCollectionTest
 		if(getValidListTests().contains(ListTest.ADD_INDEX_COLLECTION)) return;
 		IntList list = create(TEST_ARRAY);
 		IntList adding = create(ADD_ARRAY);
-		list.addAll(0, IntCollections.unmodifiableCollection(adding));
+		list.addAll(0, IntCollections.unmodifiable(adding));
 		for(int i = 0;i<ADD_ARRAY.length;i++) Assert.assertEquals(ADD_ARRAY[i], list.getInt(i));
 	}
 	

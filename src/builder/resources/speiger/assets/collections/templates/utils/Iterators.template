@@ -20,7 +20,7 @@ public class ITERATORS
 	 * @Type(T)
 	 * @return an empty iterator
 	 */
-	public static GENERIC_KEY_BRACES EmptyIterator KEY_GENERIC_TYPE emptyIterator() {
+	public static GENERIC_KEY_BRACES EmptyIterator KEY_GENERIC_TYPE empty() {
 #if TYPE_OBJECT
 		return (EmptyIterator<KEY_TYPE>)EMPTY;
 #else
@@ -50,9 +50,9 @@ public class ITERATORS
 	
 	/**
 	 * Returns a Immutable Iterator instance based on the instance given.
-	 * @param iterator that should be made immutable/unmodifyable
+	 * @param iterator that should be made immutable/unmodifiable
 	 * @Type(T)
-	 * @return a unmodifiable iterator wrapper. If the Iterator already a unmodifyable wrapper then it just returns itself.
+	 * @return a unmodifiable iterator wrapper. If the Iterator already a unmodifiable wrapper then it just returns itself.
 	 */
 	public static GENERIC_KEY_BRACES ITERATOR KEY_GENERIC_TYPE unmodifiable(ITERATOR KEY_GENERIC_TYPE iterator) {
 		return iterator instanceof UnmodifiableIterator ? iterator : new UnmodifiableIteratorBRACES(iterator);
@@ -60,9 +60,9 @@ public class ITERATORS
 	
 	/**
 	 * Returns a Immutable Iterator instance based on the instance given.
-	 * @param iterator that should be made immutable/unmodifyable
+	 * @param iterator that should be made immutable/unmodifiable
 	 * @Type(T)
-	 * @return a unmodifiable iterator wrapper. If the Iterator already a unmodifyable wrapper then it just returns itself.
+	 * @return a unmodifiable iterator wrapper. If the Iterator already a unmodifiable wrapper then it just returns itself.
 	 */
 	public static GENERIC_KEY_BRACES BI_ITERATOR KEY_GENERIC_TYPE unmodifiable(BI_ITERATOR KEY_GENERIC_TYPE iterator) {
 		return iterator instanceof UnmodifiableBiIterator ? iterator : new UnmodifiableBiIteratorBRACES(iterator);
@@ -70,9 +70,9 @@ public class ITERATORS
 	
 	/**
 	 * Returns a Immutable ListIterator instance based on the instance given.
-	 * @param iterator that should be made immutable/unmodifyable
+	 * @param iterator that should be made immutable/unmodifiable
 	 * @Type(T)
-	 * @return a unmodifiable listiterator wrapper. If the ListIterator already a unmodifyable wrapper then it just returns itself.
+	 * @return a unmodifiable listiterator wrapper. If the ListIterator already a unmodifiable wrapper then it just returns itself.
 	 */
 	public static GENERIC_KEY_BRACES LIST_ITERATOR KEY_GENERIC_TYPE unmodifiable(LIST_ITERATOR KEY_GENERIC_TYPE iterator) {
 		return iterator instanceof UnmodifiableListIterator ? iterator : new UnmodifiableListIteratorBRACES(iterator);

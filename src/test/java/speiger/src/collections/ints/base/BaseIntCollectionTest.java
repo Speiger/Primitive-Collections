@@ -158,9 +158,9 @@ public abstract class BaseIntCollectionTest extends BaseIntIterableTest
 	public void testWrapper() {
 		if(!getValidCollectionTests().contains(CollectionTest.WRAPPER)) return;
 		IntCollection collection = create(TEST_ARRAY);
-		collection = IntCollections.synchronizedCollection(collection);
+		collection = IntCollections.synchronize(collection);
 		Assert.assertTrue(collection instanceof SynchronizedCollection);
-		collection = IntCollections.unmodifiableCollection(collection);
+		collection = IntCollections.unmodifiable(collection);
 		Assert.assertTrue(collection instanceof UnmodifiableCollection);
 	}
 }

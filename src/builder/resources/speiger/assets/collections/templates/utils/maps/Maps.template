@@ -110,7 +110,7 @@ public class MAPS
 	 * @ValueType(V)
 	 * @return empty map of desired type
 	 */
-	public static GENERIC_KEY_VALUE_BRACES MAP KEY_VALUE_GENERIC_TYPE emptyMap() { 
+	public static GENERIC_KEY_VALUE_BRACES MAP KEY_VALUE_GENERIC_TYPE empty() { 
 #if TYPE_OBJECT || VALUE_OBJECT
 		return (MAP KEY_VALUE_GENERIC_TYPE)EMPTY;
 #else
@@ -127,7 +127,7 @@ public class MAPS
 	 * @note if the inputted map is already synchronized then it will just return it instead
 	 * @note iterators do not support synchronization
 	 */
-	public static GENERIC_KEY_VALUE_BRACES MAP KEY_VALUE_GENERIC_TYPE synchronizeMap(MAP KEY_VALUE_GENERIC_TYPE map) { return map instanceof SynchronizedMap ? map : new SynchronizedMapKV_BRACES(map); }
+	public static GENERIC_KEY_VALUE_BRACES MAP KEY_VALUE_GENERIC_TYPE synchronize(MAP KEY_VALUE_GENERIC_TYPE map) { return map instanceof SynchronizedMap ? map : new SynchronizedMapKV_BRACES(map); }
 	/**
 	 * Helper function that creates a Helper wrapper to synchronize access with custom access control into the map.
 	 * @param map the map that should be synchronized
@@ -138,7 +138,7 @@ public class MAPS
 	 * @note if the inputted map is already synchronized then it will just return it instead
 	 * @note iterators do not support synchronization
 	 */
-	public static GENERIC_KEY_VALUE_BRACES MAP KEY_VALUE_GENERIC_TYPE synchronizeMap(MAP KEY_VALUE_GENERIC_TYPE map, Object mutex) { return map instanceof SynchronizedMap ? map : new SynchronizedMapKV_BRACES(map, mutex); }
+	public static GENERIC_KEY_VALUE_BRACES MAP KEY_VALUE_GENERIC_TYPE synchronize(MAP KEY_VALUE_GENERIC_TYPE map, Object mutex) { return map instanceof SynchronizedMap ? map : new SynchronizedMapKV_BRACES(map, mutex); }
 	
 	/**
 	 * Helper function that creates a Helper wrapper to synchronize access into the SortedMap.
@@ -149,7 +149,7 @@ public class MAPS
 	 * @note if the inputted map is already synchronized then it will just return it instead
 	 * @note iterators do not support synchronization
 	 */
-	public static GENERIC_KEY_VALUE_BRACES SORTED_MAP KEY_VALUE_GENERIC_TYPE synchronizeMap(SORTED_MAP KEY_VALUE_GENERIC_TYPE map) { return map instanceof SynchronizedSortedMap ? map : new SynchronizedSortedMapKV_BRACES(map); }
+	public static GENERIC_KEY_VALUE_BRACES SORTED_MAP KEY_VALUE_GENERIC_TYPE synchronize(SORTED_MAP KEY_VALUE_GENERIC_TYPE map) { return map instanceof SynchronizedSortedMap ? map : new SynchronizedSortedMapKV_BRACES(map); }
 	/**
 	 * Helper function that creates a Helper wrapper to synchronize access with custom access control into the SortedMap.
 	 * @param map the SortedMap that should be synchronized
@@ -160,7 +160,7 @@ public class MAPS
 	 * @note if the inputted map is already synchronized then it will just return it instead
 	 * @note iterators do not support synchronization
 	 */
-	public static GENERIC_KEY_VALUE_BRACES SORTED_MAP KEY_VALUE_GENERIC_TYPE synchronizeMap(SORTED_MAP KEY_VALUE_GENERIC_TYPE map, Object mutex) { return map instanceof SynchronizedSortedMap ? map : new SynchronizedSortedMapKV_BRACES(map, mutex); }
+	public static GENERIC_KEY_VALUE_BRACES SORTED_MAP KEY_VALUE_GENERIC_TYPE synchronize(SORTED_MAP KEY_VALUE_GENERIC_TYPE map, Object mutex) { return map instanceof SynchronizedSortedMap ? map : new SynchronizedSortedMapKV_BRACES(map, mutex); }
 	
 	/**
 	 * Helper function that creates a Helper wrapper to synchronize access into the NavigableMap.
@@ -171,7 +171,7 @@ public class MAPS
 	 * @note if the inputted map is already synchronized then it will just return it instead
 	 * @note iterators do not support synchronization
 	 */
-	public static GENERIC_KEY_VALUE_BRACES NAVIGABLE_MAP KEY_VALUE_GENERIC_TYPE synchronizeMap(NAVIGABLE_MAP KEY_VALUE_GENERIC_TYPE map) { return map instanceof SynchronizedNavigableMap ? map : new SynchronizedNavigableMapKV_BRACES(map); }
+	public static GENERIC_KEY_VALUE_BRACES NAVIGABLE_MAP KEY_VALUE_GENERIC_TYPE synchronize(NAVIGABLE_MAP KEY_VALUE_GENERIC_TYPE map) { return map instanceof SynchronizedNavigableMap ? map : new SynchronizedNavigableMapKV_BRACES(map); }
 	/**
 	 * Helper function that creates a Helper wrapper to synchronize access with custom access control into the NavigableMap.
 	 * @param map the NavigableMap that should be synchronized
@@ -182,7 +182,7 @@ public class MAPS
 	 * @note if the inputted map is already synchronized then it will just return it instead
 	 * @note iterators do not support synchronization
 	 */
-	public static GENERIC_KEY_VALUE_BRACES NAVIGABLE_MAP KEY_VALUE_GENERIC_TYPE synchronizeMap(NAVIGABLE_MAP KEY_VALUE_GENERIC_TYPE map, Object mutex) { return map instanceof SynchronizedNavigableMap ? map : new SynchronizedNavigableMapKV_BRACES(map, mutex); }
+	public static GENERIC_KEY_VALUE_BRACES NAVIGABLE_MAP KEY_VALUE_GENERIC_TYPE synchronize(NAVIGABLE_MAP KEY_VALUE_GENERIC_TYPE map, Object mutex) { return map instanceof SynchronizedNavigableMap ? map : new SynchronizedNavigableMapKV_BRACES(map, mutex); }
 	
 	/**
 	 * A Helper function that creates a Helper wrapper to only allow Read Access into the Map
@@ -192,7 +192,7 @@ public class MAPS
 	 * @return a unmodifiable Map
 	 * @note if the inputted map is already unmodifiable then it will just return it instead
 	 */
-	public static GENERIC_KEY_VALUE_BRACES MAP KEY_VALUE_GENERIC_TYPE unmodifyableMap(MAP KEY_VALUE_GENERIC_TYPE map) { return map instanceof UnmodifyableMap ? map : new UnmodifyableMapKV_BRACES(map); }
+	public static GENERIC_KEY_VALUE_BRACES MAP KEY_VALUE_GENERIC_TYPE unmodifiable(MAP KEY_VALUE_GENERIC_TYPE map) { return map instanceof UnmodifyableMap ? map : new UnmodifyableMapKV_BRACES(map); }
 	/**
 	 * A Helper function that creates a Helper wrapper to only allow Read Access into the SortedMap
 	 * @param map the SortedMap that should be made Unmodifiable
@@ -201,7 +201,7 @@ public class MAPS
 	 * @return a unmodifiable SortedMap
 	 * @note if the inputted SortedMap is already unmodifiable then it will just return it instead
 	 */
-	public static GENERIC_KEY_VALUE_BRACES SORTED_MAP KEY_VALUE_GENERIC_TYPE unmodifyableMap(SORTED_MAP KEY_VALUE_GENERIC_TYPE map) { return map instanceof UnmodifyableSortedMap ? map : new UnmodifyableSortedMapKV_BRACES(map); }
+	public static GENERIC_KEY_VALUE_BRACES SORTED_MAP KEY_VALUE_GENERIC_TYPE unmodifiable(SORTED_MAP KEY_VALUE_GENERIC_TYPE map) { return map instanceof UnmodifyableSortedMap ? map : new UnmodifyableSortedMapKV_BRACES(map); }
 	/**
 	 * A Helper function that creates a Helper wrapper to only allow Read Access into NavigableMap Map
 	 * @param map the NavigableMap that should be made Unmodifiable
@@ -210,23 +210,23 @@ public class MAPS
 	 * @return a unmodifiable NavigableMap
 	 * @note if the inputted NavigableMap is already unmodifiable then it will just return it instead
 	 */
-	public static GENERIC_KEY_VALUE_BRACES NAVIGABLE_MAP KEY_VALUE_GENERIC_TYPE unmodifyableMap(NAVIGABLE_MAP KEY_VALUE_GENERIC_TYPE map) { return map instanceof UnmodifyableNavigableMap ? map : new UnmodifyableNavigableMapKV_BRACES(map); }
+	public static GENERIC_KEY_VALUE_BRACES NAVIGABLE_MAP KEY_VALUE_GENERIC_TYPE unmodifiable(NAVIGABLE_MAP KEY_VALUE_GENERIC_TYPE map) { return map instanceof UnmodifyableNavigableMap ? map : new UnmodifyableNavigableMapKV_BRACES(map); }
 	/**
 	 * A Helper function that creates a Unmodifyable Entry
-	 * @param entry the Entry that should be made unmodifyable
+	 * @param entry the Entry that should be made unmodifiable
 	 * @Type(T)
 	 * @ValueType(V)
 	 * @return a Unmodifyable Entry
 	 */
-	public static GENERIC_KEY_VALUE_BRACES MAP.Entry KEY_VALUE_GENERIC_TYPE unmodifyableEntry(MAP.Entry KEY_VALUE_GENERIC_TYPE entry) { return entry instanceof UnmodifyableEntry ? entry : new UnmodifyableEntryKV_BRACES(entry); }
+	public static GENERIC_KEY_VALUE_BRACES MAP.Entry KEY_VALUE_GENERIC_TYPE unmodifiable(MAP.Entry KEY_VALUE_GENERIC_TYPE entry) { return entry instanceof UnmodifyableEntry ? entry : new UnmodifyableEntryKV_BRACES(entry); }
 	/**
 	 * A Helper function that creates a Unmodifyable Entry
-	 * @param entry the Entry that should be made unmodifyable
+	 * @param entry the Entry that should be made unmodifiable
 	 * @Type(T)
 	 * @ValueType(V)
 	 * @return a Unmodifyable Entry
 	 */
-	public static GENERIC_KEY_VALUE_BRACES MAP.Entry KEY_VALUE_GENERIC_TYPE unmodifyableEntry(Map.Entry<CLASS_TYPE, CLASS_VALUE_TYPE> entry) { return entry instanceof UnmodifyableEntry ? (UnmodifyableEntry KEY_VALUE_GENERIC_TYPE)entry : new UnmodifyableEntryKV_BRACES(entry); }
+	public static GENERIC_KEY_VALUE_BRACES MAP.Entry KEY_VALUE_GENERIC_TYPE unmodifiable(Map.Entry<CLASS_TYPE, CLASS_VALUE_TYPE> entry) { return entry instanceof UnmodifyableEntry ? (UnmodifyableEntry KEY_VALUE_GENERIC_TYPE)entry : new UnmodifyableEntryKV_BRACES(entry); }
 	
 	/**
 	 * Creates a Singleton map from the provided values.
@@ -235,9 +235,9 @@ public class MAPS
 	 * @param value the value that should be turned into a singleton
 	 * @Type(T)
 	 * @ValueType(V)
-	 * @return a unmodifyable Singleton map.
+	 * @return a unmodifiable Singleton map.
 	 */
-	public static GENERIC_KEY_VALUE_BRACES MAP KEY_VALUE_GENERIC_TYPE singletonMap(KEY_TYPE key, VALUE_TYPE value) { return new SingletonMapKV_BRACES(key, value); }
+	public static GENERIC_KEY_VALUE_BRACES MAP KEY_VALUE_GENERIC_TYPE singleton(KEY_TYPE key, VALUE_TYPE value) { return new SingletonMapKV_BRACES(key, value); }
 	
 	/**
 	 * Singleton Map instance that is used in the helper method
@@ -280,18 +280,18 @@ public class MAPS
 #endif
 		@Override
 		public SET KEY_GENERIC_TYPE keySet() { 
-			if(keySet == null) keySet = SETS.singletonSet(key);
+			if(keySet == null) keySet = SETS.singleton(key);
 			return keySet;
 		}
 		
 		@Override
 		public VALUE_COLLECTION VALUE_GENERIC_TYPE values() { 
-			if(values == null) values = VALUE_SETS.singletonSet(value);
+			if(values == null) values = VALUE_SETS.singleton(value);
 			return values;
 		}
 		@Override
 		public ObjectSet<MAP.Entry KEY_VALUE_GENERIC_TYPE> ENTRY_SET() { 
-			if(entrySet == null) entrySet = ObjectSets.singletonSet(new ABSTRACT_MAP.BasicEntryKV_BRACES(key, value));
+			if(entrySet == null) entrySet = ObjectSets.singleton(new ABSTRACT_MAP.BasicEntryKV_BRACES(key, value));
 			return entrySet;
 		}
 	}
@@ -327,7 +327,7 @@ public class MAPS
 		@Override
 		public SET KEY_GENERIC_TYPE keySet() { return SETS.empty(); }
 		@Override
-		public VALUE_COLLECTION VALUE_GENERIC_TYPE values() { return VALUE_COLLECTIONS.emptyCollection(); }
+		public VALUE_COLLECTION VALUE_GENERIC_TYPE values() { return VALUE_COLLECTIONS.empty(); }
 		@Override
 		public ObjectSet<MAP.Entry KEY_VALUE_GENERIC_TYPE> ENTRY_SET() { return ObjectSets.empty(); }
 	}
@@ -365,31 +365,31 @@ public class MAPS
 		}
 		
 		@Override
-		public NAVIGABLE_MAP KEY_VALUE_GENERIC_TYPE descendingMap() { return unmodifyableMap(map.descendingMap()); }
+		public NAVIGABLE_MAP KEY_VALUE_GENERIC_TYPE descendingMap() { return synchronize(map.descendingMap()); }
 		@Override
 		public NAVIGABLE_SET KEY_GENERIC_TYPE navigableKeySet() { return SETS.unmodifiable(map.navigableKeySet()); }
 		@Override
 		public NAVIGABLE_SET KEY_GENERIC_TYPE descendingKeySet() { return SETS.unmodifiable(map.descendingKeySet()); }
 		@Override
-		public MAP.Entry KEY_VALUE_GENERIC_TYPE firstEntry() { return unmodifyableEntry(map.firstEntry()); }
+		public MAP.Entry KEY_VALUE_GENERIC_TYPE firstEntry() { return unmodifiable(map.firstEntry()); }
 		@Override
-		public MAP.Entry KEY_VALUE_GENERIC_TYPE lastEntry() { return unmodifyableEntry(map.lastEntry()); }
+		public MAP.Entry KEY_VALUE_GENERIC_TYPE lastEntry() { return unmodifiable(map.lastEntry()); }
 		@Override
 		public MAP.Entry KEY_VALUE_GENERIC_TYPE pollFirstEntry() { throw new UnsupportedOperationException(); }
 		@Override
 		public MAP.Entry KEY_VALUE_GENERIC_TYPE pollLastEntry() { throw new UnsupportedOperationException(); }
 		@Override
-		public NAVIGABLE_MAP KEY_VALUE_GENERIC_TYPE subMap(KEY_TYPE fromKey, boolean fromInclusive, KEY_TYPE toKey, boolean toInclusive) { return unmodifyableMap(map.subMap(fromKey, fromInclusive, toKey, toInclusive)); }
+		public NAVIGABLE_MAP KEY_VALUE_GENERIC_TYPE subMap(KEY_TYPE fromKey, boolean fromInclusive, KEY_TYPE toKey, boolean toInclusive) { return unmodifiable(map.subMap(fromKey, fromInclusive, toKey, toInclusive)); }
 		@Override
-		public NAVIGABLE_MAP KEY_VALUE_GENERIC_TYPE headMap(KEY_TYPE toKey, boolean inclusive) { return unmodifyableMap(map.headMap(toKey, inclusive)); }
+		public NAVIGABLE_MAP KEY_VALUE_GENERIC_TYPE headMap(KEY_TYPE toKey, boolean inclusive) { return unmodifiable(map.headMap(toKey, inclusive)); }
 		@Override
-		public NAVIGABLE_MAP KEY_VALUE_GENERIC_TYPE tailMap(KEY_TYPE fromKey, boolean inclusive) { return unmodifyableMap(map.tailMap(fromKey, inclusive)); }
+		public NAVIGABLE_MAP KEY_VALUE_GENERIC_TYPE tailMap(KEY_TYPE fromKey, boolean inclusive) { return unmodifiable(map.tailMap(fromKey, inclusive)); }
 		@Override
-		public NAVIGABLE_MAP KEY_VALUE_GENERIC_TYPE subMap(KEY_TYPE fromKey, KEY_TYPE toKey) { return unmodifyableMap(map.subMap(fromKey, toKey)); }
+		public NAVIGABLE_MAP KEY_VALUE_GENERIC_TYPE subMap(KEY_TYPE fromKey, KEY_TYPE toKey) { return unmodifiable(map.subMap(fromKey, toKey)); }
 		@Override
-		public NAVIGABLE_MAP KEY_VALUE_GENERIC_TYPE headMap(KEY_TYPE toKey) { return unmodifyableMap(map.headMap(toKey)); }
+		public NAVIGABLE_MAP KEY_VALUE_GENERIC_TYPE headMap(KEY_TYPE toKey) { return unmodifiable(map.headMap(toKey)); }
 		@Override
-		public NAVIGABLE_MAP KEY_VALUE_GENERIC_TYPE tailMap(KEY_TYPE fromKey) { return unmodifyableMap(map.tailMap(fromKey)); }
+		public NAVIGABLE_MAP KEY_VALUE_GENERIC_TYPE tailMap(KEY_TYPE fromKey) { return unmodifiable(map.tailMap(fromKey)); }
 #if !TYPE_OBJECT
 		@Override
 		public void setDefaultMaxValue(KEY_TYPE e) { throw new UnsupportedOperationException(); }
@@ -409,13 +409,13 @@ public class MAPS
 		@Override
 		public KEY_TYPE ceilingKey(KEY_TYPE key) { return map.ceilingKey(key); }
 		@Override
-		public MAP.Entry KEY_VALUE_GENERIC_TYPE lowerEntry(KEY_TYPE key) { return unmodifyableEntry(map.lowerEntry(key)); }
+		public MAP.Entry KEY_VALUE_GENERIC_TYPE lowerEntry(KEY_TYPE key) { return unmodifiable(map.lowerEntry(key)); }
 		@Override
-		public MAP.Entry KEY_VALUE_GENERIC_TYPE higherEntry(KEY_TYPE key) { return unmodifyableEntry(map.higherEntry(key)); }
+		public MAP.Entry KEY_VALUE_GENERIC_TYPE higherEntry(KEY_TYPE key) { return unmodifiable(map.higherEntry(key)); }
 		@Override
-		public MAP.Entry KEY_VALUE_GENERIC_TYPE floorEntry(KEY_TYPE key) { return unmodifyableEntry(map.floorEntry(key)); }
+		public MAP.Entry KEY_VALUE_GENERIC_TYPE floorEntry(KEY_TYPE key) { return unmodifiable(map.floorEntry(key)); }
 		@Override
-		public MAP.Entry KEY_VALUE_GENERIC_TYPE ceilingEntry(KEY_TYPE key) { return unmodifyableEntry(map.ceilingEntry(key)); }
+		public MAP.Entry KEY_VALUE_GENERIC_TYPE ceilingEntry(KEY_TYPE key) { return unmodifiable(map.ceilingEntry(key)); }
 	}
 	
 	/**
@@ -446,11 +446,11 @@ public class MAPS
 		@Override
 		public COMPARATOR KEY_GENERIC_TYPE comparator() { return map.comparator(); }
 		@Override
-		public SORTED_MAP KEY_VALUE_GENERIC_TYPE subMap(KEY_TYPE fromKey, KEY_TYPE toKey) { return unmodifyableMap(map.subMap(fromKey, toKey)); }
+		public SORTED_MAP KEY_VALUE_GENERIC_TYPE subMap(KEY_TYPE fromKey, KEY_TYPE toKey) { return unmodifiable(map.subMap(fromKey, toKey)); }
 		@Override
-		public SORTED_MAP KEY_VALUE_GENERIC_TYPE headMap(KEY_TYPE toKey) { return unmodifyableMap(map.headMap(toKey)); }
+		public SORTED_MAP KEY_VALUE_GENERIC_TYPE headMap(KEY_TYPE toKey) { return unmodifiable(map.headMap(toKey)); }
 		@Override
-		public SORTED_MAP KEY_VALUE_GENERIC_TYPE tailMap(KEY_TYPE fromKey) { return unmodifyableMap(map.tailMap(fromKey)); }
+		public SORTED_MAP KEY_VALUE_GENERIC_TYPE tailMap(KEY_TYPE fromKey) { return unmodifiable(map.tailMap(fromKey)); }
 		@Override
 		public KEY_TYPE FIRST_ENTRY_KEY() { return map.FIRST_ENTRY_KEY(); }
 		@Override
@@ -511,7 +511,7 @@ public class MAPS
 		
 		@Override
 		public VALUE_COLLECTION VALUE_GENERIC_TYPE values() {
-			if(values == null) values = VALUE_COLLECTIONS.unmodifiableCollection(map.values());
+			if(values == null) values = VALUE_COLLECTIONS.unmodifiable(map.values());
 			return values;
 		}
 		
@@ -539,7 +539,7 @@ public class MAPS
 		
 		@Override
 		public void forEach(Consumer<? super MAP.Entry KEY_VALUE_GENERIC_TYPE> action) {
-			s.forEach(T -> action.accept(unmodifyableEntry(T)));
+			s.forEach(T -> action.accept(unmodifiable(T)));
 		}
 		
 		@Override
@@ -549,7 +549,7 @@ public class MAPS
 				@Override
 				public boolean hasNext() { return iter.hasNext(); }
 				@Override
-				public MAP.Entry KEY_VALUE_GENERIC_TYPE next() { return unmodifyableEntry(iter.next()); }
+				public MAP.Entry KEY_VALUE_GENERIC_TYPE next() { return unmodifiable(iter.next()); }
 			};
 		}
 		
@@ -574,11 +574,11 @@ public class MAPS
 		}
 		
 		@Override
-		public NAVIGABLE_MAP KEY_VALUE_GENERIC_TYPE descendingMap() { synchronized(mutex) { return synchronizeMap(map.descendingMap(), mutex); } }
+		public NAVIGABLE_MAP KEY_VALUE_GENERIC_TYPE descendingMap() { synchronized(mutex) { return synchronize(map.descendingMap(), mutex); } }
 		@Override
-		public NAVIGABLE_SET KEY_GENERIC_TYPE navigableKeySet() { synchronized(mutex) { return SETS.synchronizedSet(map.navigableKeySet(), mutex); } }
+		public NAVIGABLE_SET KEY_GENERIC_TYPE navigableKeySet() { synchronized(mutex) { return SETS.synchronize(map.navigableKeySet(), mutex); } }
 		@Override
-		public NAVIGABLE_SET KEY_GENERIC_TYPE descendingKeySet() { synchronized(mutex) { return SETS.synchronizedSet(map.descendingKeySet(), mutex); } }
+		public NAVIGABLE_SET KEY_GENERIC_TYPE descendingKeySet() { synchronized(mutex) { return SETS.synchronize(map.descendingKeySet(), mutex); } }
 		@Override
 		public MAP.Entry KEY_VALUE_GENERIC_TYPE firstEntry() { synchronized(mutex) { return map.firstEntry(); } }
 		@Override
@@ -588,17 +588,17 @@ public class MAPS
 		@Override
 		public MAP.Entry KEY_VALUE_GENERIC_TYPE pollLastEntry() { synchronized(mutex) { return map.pollLastEntry(); } }
 		@Override
-		public NAVIGABLE_MAP KEY_VALUE_GENERIC_TYPE subMap(KEY_TYPE fromKey, boolean fromInclusive, KEY_TYPE toKey, boolean toInclusive) { synchronized(mutex) { return synchronizeMap(map.subMap(fromKey, fromInclusive, toKey, toInclusive), mutex); } }
+		public NAVIGABLE_MAP KEY_VALUE_GENERIC_TYPE subMap(KEY_TYPE fromKey, boolean fromInclusive, KEY_TYPE toKey, boolean toInclusive) { synchronized(mutex) { return synchronize(map.subMap(fromKey, fromInclusive, toKey, toInclusive), mutex); } }
 		@Override
-		public NAVIGABLE_MAP KEY_VALUE_GENERIC_TYPE headMap(KEY_TYPE toKey, boolean inclusive) { synchronized(mutex) { return synchronizeMap(map.headMap(toKey, inclusive), mutex); } }
+		public NAVIGABLE_MAP KEY_VALUE_GENERIC_TYPE headMap(KEY_TYPE toKey, boolean inclusive) { synchronized(mutex) { return synchronize(map.headMap(toKey, inclusive), mutex); } }
 		@Override
-		public NAVIGABLE_MAP KEY_VALUE_GENERIC_TYPE tailMap(KEY_TYPE fromKey, boolean inclusive) { synchronized(mutex) { return synchronizeMap(map.tailMap(fromKey, inclusive), mutex); } }
+		public NAVIGABLE_MAP KEY_VALUE_GENERIC_TYPE tailMap(KEY_TYPE fromKey, boolean inclusive) { synchronized(mutex) { return synchronize(map.tailMap(fromKey, inclusive), mutex); } }
 		@Override
-		public NAVIGABLE_MAP KEY_VALUE_GENERIC_TYPE subMap(KEY_TYPE fromKey, KEY_TYPE toKey) { synchronized(mutex) { return synchronizeMap(map.subMap(fromKey, toKey), mutex); } }
+		public NAVIGABLE_MAP KEY_VALUE_GENERIC_TYPE subMap(KEY_TYPE fromKey, KEY_TYPE toKey) { synchronized(mutex) { return synchronize(map.subMap(fromKey, toKey), mutex); } }
 		@Override
-		public NAVIGABLE_MAP KEY_VALUE_GENERIC_TYPE headMap(KEY_TYPE toKey) { synchronized(mutex) { return synchronizeMap(map.headMap(toKey), mutex); } }
+		public NAVIGABLE_MAP KEY_VALUE_GENERIC_TYPE headMap(KEY_TYPE toKey) { synchronized(mutex) { return synchronize(map.headMap(toKey), mutex); } }
 		@Override
-		public NAVIGABLE_MAP KEY_VALUE_GENERIC_TYPE tailMap(KEY_TYPE fromKey) { synchronized(mutex) { return synchronizeMap(map.tailMap(fromKey), mutex); } }
+		public NAVIGABLE_MAP KEY_VALUE_GENERIC_TYPE tailMap(KEY_TYPE fromKey) { synchronized(mutex) { return synchronize(map.tailMap(fromKey), mutex); } }
 		@Override
 		public KEY_TYPE lowerKey(KEY_TYPE key) { synchronized(mutex) { return map.lowerKey(key); } }
 		@Override
@@ -618,22 +618,22 @@ public class MAPS
 #if !TYPE_OBJECT
 		@Override
 		@Deprecated
-		public NAVIGABLE_MAP KEY_VALUE_GENERIC_TYPE subMap(CLASS_TYPE fromKey, boolean fromInclusive, CLASS_TYPE toKey, boolean toInclusive) { synchronized(mutex) { return synchronizeMap(map.subMap(fromKey, fromInclusive, toKey, toInclusive), mutex); } }
+		public NAVIGABLE_MAP KEY_VALUE_GENERIC_TYPE subMap(CLASS_TYPE fromKey, boolean fromInclusive, CLASS_TYPE toKey, boolean toInclusive) { synchronized(mutex) { return synchronize(map.subMap(fromKey, fromInclusive, toKey, toInclusive), mutex); } }
 		@Override
 		@Deprecated
-		public NAVIGABLE_MAP KEY_VALUE_GENERIC_TYPE headMap(CLASS_TYPE toKey, boolean inclusive) { synchronized(mutex) { return synchronizeMap(map.headMap(toKey, inclusive), mutex); } }
+		public NAVIGABLE_MAP KEY_VALUE_GENERIC_TYPE headMap(CLASS_TYPE toKey, boolean inclusive) { synchronized(mutex) { return synchronize(map.headMap(toKey, inclusive), mutex); } }
 		@Override
 		@Deprecated
-		public NAVIGABLE_MAP KEY_VALUE_GENERIC_TYPE tailMap(CLASS_TYPE fromKey, boolean inclusive) { synchronized(mutex) { return synchronizeMap(map.tailMap(fromKey, inclusive), mutex); } }
+		public NAVIGABLE_MAP KEY_VALUE_GENERIC_TYPE tailMap(CLASS_TYPE fromKey, boolean inclusive) { synchronized(mutex) { return synchronize(map.tailMap(fromKey, inclusive), mutex); } }
 		@Override
 		@Deprecated
-		public NAVIGABLE_MAP KEY_VALUE_GENERIC_TYPE subMap(CLASS_TYPE fromKey, CLASS_TYPE toKey) { synchronized(mutex) { return synchronizeMap(map.subMap(fromKey, toKey), mutex); } }
+		public NAVIGABLE_MAP KEY_VALUE_GENERIC_TYPE subMap(CLASS_TYPE fromKey, CLASS_TYPE toKey) { synchronized(mutex) { return synchronize(map.subMap(fromKey, toKey), mutex); } }
 		@Override
 		@Deprecated
-		public NAVIGABLE_MAP KEY_VALUE_GENERIC_TYPE headMap(CLASS_TYPE toKey) { synchronized(mutex) { return synchronizeMap(map.headMap(toKey), mutex); } }
+		public NAVIGABLE_MAP KEY_VALUE_GENERIC_TYPE headMap(CLASS_TYPE toKey) { synchronized(mutex) { return synchronize(map.headMap(toKey), mutex); } }
 		@Override
 		@Deprecated
-		public NAVIGABLE_MAP KEY_VALUE_GENERIC_TYPE tailMap(CLASS_TYPE fromKey) { synchronized(mutex) { return synchronizeMap(map.tailMap(fromKey), mutex); } }
+		public NAVIGABLE_MAP KEY_VALUE_GENERIC_TYPE tailMap(CLASS_TYPE fromKey) { synchronized(mutex) { return synchronize(map.tailMap(fromKey), mutex); } }
 		@Override
 		public void setDefaultMaxValue(KEY_TYPE e) { synchronized(mutex) { map.setDefaultMaxValue(e); } }
 		@Override
@@ -702,11 +702,11 @@ public class MAPS
 		@Override
 		public COMPARATOR KEY_GENERIC_TYPE comparator() { synchronized(mutex) { return map.comparator(); } }
 		@Override
-		public SORTED_MAP KEY_VALUE_GENERIC_TYPE subMap(KEY_TYPE fromKey, KEY_TYPE toKey) { synchronized(mutex) { return synchronizeMap(map.subMap(fromKey, toKey), mutex); } }
+		public SORTED_MAP KEY_VALUE_GENERIC_TYPE subMap(KEY_TYPE fromKey, KEY_TYPE toKey) { synchronized(mutex) { return synchronize(map.subMap(fromKey, toKey), mutex); } }
 		@Override
-		public SORTED_MAP KEY_VALUE_GENERIC_TYPE headMap(KEY_TYPE toKey)  { synchronized(mutex) { return synchronizeMap(map.headMap(toKey), mutex); } }
+		public SORTED_MAP KEY_VALUE_GENERIC_TYPE headMap(KEY_TYPE toKey)  { synchronized(mutex) { return synchronize(map.headMap(toKey), mutex); } }
 		@Override
-		public SORTED_MAP KEY_VALUE_GENERIC_TYPE tailMap(KEY_TYPE fromKey) { synchronized(mutex) { return synchronizeMap(map.tailMap(fromKey), mutex); } }
+		public SORTED_MAP KEY_VALUE_GENERIC_TYPE tailMap(KEY_TYPE fromKey) { synchronized(mutex) { return synchronize(map.tailMap(fromKey), mutex); } }
 		@Override
 		public KEY_TYPE FIRST_ENTRY_KEY() { synchronized(mutex) { return map.FIRST_ENTRY_KEY(); } }
 		@Override
@@ -728,13 +728,13 @@ public class MAPS
 		public CLASS_TYPE lastKey() { synchronized(mutex) { return map.lastKey(); } }
 		@Override
 		@Deprecated
-		public SORTED_MAP KEY_VALUE_GENERIC_TYPE subMap(CLASS_TYPE fromKey, CLASS_TYPE toKey) { synchronized(mutex) { return synchronizeMap(map.subMap(fromKey, toKey), mutex); } }
+		public SORTED_MAP KEY_VALUE_GENERIC_TYPE subMap(CLASS_TYPE fromKey, CLASS_TYPE toKey) { synchronized(mutex) { return synchronize(map.subMap(fromKey, toKey), mutex); } }
 		@Override
 		@Deprecated
-		public SORTED_MAP KEY_VALUE_GENERIC_TYPE headMap(CLASS_TYPE toKey) { synchronized(mutex) { return synchronizeMap(map.headMap(toKey), mutex); } }
+		public SORTED_MAP KEY_VALUE_GENERIC_TYPE headMap(CLASS_TYPE toKey) { synchronized(mutex) { return synchronize(map.headMap(toKey), mutex); } }
 		@Override
 		@Deprecated
-		public SORTED_MAP KEY_VALUE_GENERIC_TYPE tailMap(CLASS_TYPE fromKey) { synchronized(mutex) { return synchronizeMap(map.tailMap(fromKey), mutex); } }
+		public SORTED_MAP KEY_VALUE_GENERIC_TYPE tailMap(CLASS_TYPE fromKey) { synchronized(mutex) { return synchronize(map.tailMap(fromKey), mutex); } }
 #endif
 	}
 	
@@ -833,19 +833,19 @@ public class MAPS
 		public int size() { synchronized(mutex) { return super.size(); } }
 		@Override
 		public SET KEY_GENERIC_TYPE keySet() {
-			if(keys == null) keys = SETS.synchronizedSet(map.keySet(), mutex);
+			if(keys == null) keys = SETS.synchronize(map.keySet(), mutex);
 			return keys;
 		}
 		
 		@Override
 		public VALUE_COLLECTION VALUE_GENERIC_TYPE values() {
-			if(values == null) values = VALUE_COLLECTIONS.synchronizedCollection(map.values(), mutex);
+			if(values == null) values = VALUE_COLLECTIONS.synchronize(map.values(), mutex);
 			return values;
 		}
 
 		@Override
 		public ObjectSet<MAP.Entry KEY_VALUE_GENERIC_TYPE> ENTRY_SET() {
-			if(entrySet == null) entrySet = ObjectSets.synchronizedSet(map.ENTRY_SET(), mutex);
+			if(entrySet == null) entrySet = ObjectSets.synchronize(map.ENTRY_SET(), mutex);
 			return entrySet;
 		}
 		

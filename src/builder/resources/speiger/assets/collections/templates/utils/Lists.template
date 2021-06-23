@@ -28,7 +28,7 @@ public class LISTS
 	 * @Type(T)
 	 * @return an empty list
 	 */
-	public static GENERIC_KEY_BRACES EmptyList KEY_GENERIC_TYPE emptyList() {
+	public static GENERIC_KEY_BRACES EmptyList KEY_GENERIC_TYPE empty() {
 #if TYPE_OBJECT
 		return (EmptyList<KEY_TYPE>)EMPTY;
 #else
@@ -38,11 +38,11 @@ public class LISTS
 	
 	/**
 	 * Returns a Immutable List instance based on the instance given.
-	 * @param l that should be made immutable/unmodifyable
+	 * @param l that should be made immutable/unmodifiable
 	 * @Type(T)
-	 * @return a unmodifiable list wrapper. If the list is implementing RandomAccess that is also transferred. If the List already a unmodifyable wrapper then it just returns itself.
+	 * @return a unmodifiable list wrapper. If the list is implementing RandomAccess that is also transferred. If the List already a unmodifiable wrapper then it just returns itself.
 	 */
-	public static GENERIC_KEY_BRACES LIST KEY_GENERIC_TYPE unmodifiableList(LIST KEY_GENERIC_TYPE l) {
+	public static GENERIC_KEY_BRACES LIST KEY_GENERIC_TYPE unmodifiable(LIST KEY_GENERIC_TYPE l) {
 		return l instanceof UnmodifiableList ? l : l instanceof RandomAccess ? new UnmodifiableRandomListBRACES(l) : new UnmodifiableListBRACES(l);
 	}
 	
@@ -52,7 +52,7 @@ public class LISTS
 	 * @Type(T)
 	 * @return a synchronized list wrapper. If the list is implementing RandomAccess or IARRAY that is also transferred. If the List already a synchronized wrapper then it just returns itself.
 	 */
-	public static GENERIC_KEY_BRACES LIST KEY_GENERIC_TYPE synchronizedList(LIST KEY_GENERIC_TYPE l) {
+	public static GENERIC_KEY_BRACES LIST KEY_GENERIC_TYPE synchronize(LIST KEY_GENERIC_TYPE l) {
 		return l instanceof SynchronizedList ? l : (l instanceof IARRAY ? new SynchronizedArrayListBRACES(l) : (l instanceof RandomAccess ? new SynchronizedRandomAccessListBRACES(l) : new SynchronizedListBRACES(l)));
 	}
 	
@@ -63,7 +63,7 @@ public class LISTS
 	 * @Type(T)
 	 * @return a synchronized list wrapper. If the list is implementing RandomAccess or IARRAY that is also transferred. If the List already a synchronized wrapper then it just returns itself.
 	 */
-	public static GENERIC_KEY_BRACES LIST KEY_GENERIC_TYPE synchronizedList(LIST KEY_GENERIC_TYPE l, Object mutex) {
+	public static GENERIC_KEY_BRACES LIST KEY_GENERIC_TYPE synchronize(LIST KEY_GENERIC_TYPE l, Object mutex) {
 		return l instanceof SynchronizedList ? l : (l instanceof IARRAY ? new SynchronizedArrayListBRACES(l, mutex) : (l instanceof RandomAccess ? new SynchronizedRandomAccessListBRACES(l, mutex) : new SynchronizedListBRACES(l, mutex)));
 	}
 	
@@ -73,7 +73,7 @@ public class LISTS
 	 * @Type(T)
 	 * @return a singleton list that is unmodifiable
 	 */
-	public static GENERIC_KEY_BRACES LIST KEY_GENERIC_TYPE singletonList(KEY_TYPE element) {
+	public static GENERIC_KEY_BRACES LIST KEY_GENERIC_TYPE singleton(KEY_TYPE element) {
 		return new SingletonListBRACES(element);
 	}
 	
@@ -275,7 +275,7 @@ public class LISTS
 		
 		@Override
 		public LIST KEY_GENERIC_TYPE subList(int from, int to) {
-			return synchronizedList(l.subList(from, to));
+			return synchronize(l.subList(from, to));
 		}
 		
 		@Override
@@ -384,7 +384,7 @@ public class LISTS
 		
 		@Override
 		public LIST KEY_GENERIC_TYPE subList(int from, int to) {
-			return unmodifiableList(l.subList(from, to));
+			return unmodifiable(l.subList(from, to));
 		}
 		
 		@Override
@@ -456,14 +456,14 @@ public class LISTS
 #endif
 		@Override
 		public LIST_ITERATOR KEY_GENERIC_TYPE listIterator() {
-			return ITERATORS.emptyIterator();
+			return ITERATORS.empty();
 		}
 		
 		@Override
 		public LIST_ITERATOR KEY_GENERIC_TYPE listIterator(int index) {
 			if(index != 0)
 				throw new IndexOutOfBoundsException();
-			return ITERATORS.emptyIterator();
+			return ITERATORS.empty();
 		}
 		
 		@Override
