@@ -207,7 +207,7 @@ public class HEAP_PRIORITY_QUEUE KEY_GENERIC_TYPE implements PRIORITY_QUEUE KEY_
 	}
 	
 	@Override
-	public KEY_TYPE DEQUEUE() {
+	public KEY_TYPE dequeue() {
 		if(size <= 0) throw new NoSuchElementException();
 		KEY_TYPE value = array[0];
 		array[0] = array[--size];
@@ -219,7 +219,7 @@ public class HEAP_PRIORITY_QUEUE KEY_GENERIC_TYPE implements PRIORITY_QUEUE KEY_
 	}
 	
 	@Override
-	public KEY_TYPE PEEK(int index) {
+	public KEY_TYPE peek(int index) {
 		if(index < 0 || index >= size) throw new NoSuchElementException();
 		return array[index];
 	}
@@ -265,15 +265,6 @@ public class HEAP_PRIORITY_QUEUE KEY_GENERIC_TYPE implements PRIORITY_QUEUE KEY_
 		return input;
 	}
 	
-#if !TYPE_OBJECT
-	@Override
-	public CLASS_TYPE[] toArray(CLASS_TYPE[] input) {
-		if(input == null || input.length < size()) input = new CLASS_TYPE[size()];
-		for(int i = 0;i<size;i++) input[i] = KEY_TO_OBJ(array[i]);
-		return input;
-	}
-	
-#endif
 	private class Iter implements ITERATOR KEY_GENERIC_TYPE {
 		@Override
 		public boolean hasNext() {
@@ -282,7 +273,7 @@ public class HEAP_PRIORITY_QUEUE KEY_GENERIC_TYPE implements PRIORITY_QUEUE KEY_
 		
 		@Override
 		public KEY_TYPE NEXT() {
-			return DEQUEUE();
+			return dequeue();
 		}
 	}
 }

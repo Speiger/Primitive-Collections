@@ -115,7 +115,7 @@ public class ARRAY_FIFO_QUEUE KEY_GENERIC_TYPE implements PRIORITY_DEQUEUE KEY_G
 	}
 	
 	@Override
-	public KEY_TYPE DEQUEUE() {
+	public KEY_TYPE dequeue() {
 		if(first == last) throw new NoSuchElementException();
 		KEY_TYPE data = array[first];
 #if TYPE_OBJECT
@@ -127,7 +127,7 @@ public class ARRAY_FIFO_QUEUE KEY_GENERIC_TYPE implements PRIORITY_DEQUEUE KEY_G
 	}
 	
 	@Override
-	public KEY_TYPE DEQUEUE_LAST() {
+	public KEY_TYPE dequeueLast() {
 		if(first == last) throw new NoSuchElementException();
 		if(last == 0) last = array.length;
 		KEY_TYPE data = array[--last];
@@ -139,7 +139,7 @@ public class ARRAY_FIFO_QUEUE KEY_GENERIC_TYPE implements PRIORITY_DEQUEUE KEY_G
 	}
 	
 	@Override
-	public KEY_TYPE PEEK(int index) {
+	public KEY_TYPE peek(int index) {
 		if(first == last || index < 0 || index > size()) throw new NoSuchElementException();
 		return array[(first + index) % array.length];
 	}
@@ -264,25 +264,6 @@ public class ARRAY_FIFO_QUEUE KEY_GENERIC_TYPE implements PRIORITY_DEQUEUE KEY_G
 		return input;
 	}
 	
-#if !TYPE_OBJECT
-	@Override
-	public CLASS_TYPE[] toArray(CLASS_TYPE[] input) {
-		if(input == null || input.length < size()) input = NEW_CLASS_ARRAY(size());
-		if (first <= last) {
-			for(int i = 0,m=last-first;i<m;i++)
-				input[i] = KEY_TO_OBJ(array[first + i]);
-		}
-		else {
-			int offset = 0;
-			for(int i = 0,m=array.length-first;i<m;i++,offset++)
-				input[i] = KEY_TO_OBJ(array[first + i]);
-			for(int i = 0;i<last;i++)
-				input[offset+i] = KEY_TO_OBJ(array[i]);
-		}
-		return input;
-	}
-	
-#endif
 	protected void reduce() {
 		final int size = size();
 		if (array.length > MIN_CAPACITY && size <= array.length / 4) resize(size, array.length / 2);

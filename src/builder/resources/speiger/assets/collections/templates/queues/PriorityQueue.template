@@ -5,7 +5,6 @@ import java.util.Comparator;
 #else
 import speiger.src.collections.PACKAGE.collections.ITERABLE;
 import speiger.src.collections.PACKAGE.functions.COMPARATOR;
-import speiger.src.collections.objects.queues.ObjectPriorityQueue;
 #endif
 
 /**
@@ -15,10 +14,9 @@ import speiger.src.collections.objects.queues.ObjectPriorityQueue;
 #if TYPE_OBJECT
 public interface PRIORITY_QUEUE KEY_GENERIC_TYPE extends Iterable<KEY_TYPE>
 #else
-public interface PRIORITY_QUEUE KEY_GENERIC_TYPE extends ObjectPriorityQueue<CLASS_TYPE>, ITERABLE KEY_GENERIC_TYPE
+public interface PRIORITY_QUEUE KEY_GENERIC_TYPE extends ITERABLE KEY_GENERIC_TYPE
 #endif
 {
-#if TYPE_OBJECT
 	/**
 	 * @return true if the PriorityQueue is empty
 	 */
@@ -33,7 +31,6 @@ public interface PRIORITY_QUEUE KEY_GENERIC_TYPE extends ObjectPriorityQueue<CLA
 	 */
 	public void clear();
 	
-#endif
 	/**
 	 * Method to insert a element into the PriorityQueue
 	 * @param e the element that should be inserted
@@ -44,19 +41,19 @@ public interface PRIORITY_QUEUE KEY_GENERIC_TYPE extends ObjectPriorityQueue<CLA
 	 * @return a element from the Queue
 	 * @throws java.util.NoSuchElementException if no element is present
 	 */
-	public KEY_TYPE DEQUEUE();
+	public KEY_TYPE dequeue();
 	
 	/**
 	 * Peeking function to see whats inside the queue.
 	 * @param index of the element that is requested to be viewed.
 	 * @return the element that is requested
 	 */
-	public KEY_TYPE PEEK(int index);
+	public KEY_TYPE peek(int index);
 	/**
 	 * Shows the element that is to be returned next
 	 * @return the first element in the Queue
 	 */
-	public default KEY_TYPE FIRST_KEY() { return PEEK(0); }
+	public default KEY_TYPE first() { return peek(0); }
 	
 	/**
 	 * Removes the first found element in the queue
@@ -79,7 +76,6 @@ public interface PRIORITY_QUEUE KEY_GENERIC_TYPE extends ObjectPriorityQueue<CLA
 	/**
 	 * @return the sorter of the Queue, can be null
 	 */
-	@PrimitiveOverride
 	public COMPARATOR KEY_SUPER_GENERIC_TYPE comparator();
 	
 	/**
@@ -94,27 +90,4 @@ public interface PRIORITY_QUEUE KEY_GENERIC_TYPE extends ObjectPriorityQueue<CLA
 	 * @note if the Type is generic then a Object Array is created instead of a Type Array
 	 */
 	public KEY_TYPE[] TO_ARRAY(KEY_TYPE[] input);
-	
-#if !TYPE_OBJECT
-	@Deprecated
-	public default void enqueue(CLASS_TYPE e) { enqueue(OBJ_TO_KEY(e)); }
-	@Deprecated
-	public default CLASS_TYPE dequeue() { return KEY_TO_OBJ(DEQUEUE()); }
-	
-	@Deprecated
-	public default CLASS_TYPE peek(int index) { return KEY_TO_OBJ(PEEK(index)); }
-	@Deprecated
-	public default CLASS_TYPE first() { return peek(0); }
-	
-	@Deprecated
-	public default boolean remove(CLASS_TYPE e) { return remove(OBJ_TO_KEY(e)); }
-	@Deprecated
-	public default boolean removeLast(CLASS_TYPE e) { return removeLast(OBJ_TO_KEY(e)); }
-	
-	@Deprecated
-	public default CLASS_TYPE[] toArray() { return toArray(new CLASS_TYPE[size()]); }
-	@Deprecated
-	public CLASS_TYPE[] toArray(CLASS_TYPE[] input);
-	
-#endif
 }

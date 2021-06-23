@@ -29,11 +29,11 @@ public abstract class BaseIntPriorityQueueTest extends BaseIntIterableTest
 				queue.enqueue(i);
 			}
 			for(int i = 0;i<100;i++) {
-				Assert.assertEquals(i, queue.dequeueInt());
+				Assert.assertEquals(i, queue.dequeue());
 			}
 			queue = create(TEST_ARRAY);
 			for(int i = 0;i<100;i++) {
-				Assert.assertEquals(i, queue.dequeueInt());
+				Assert.assertEquals(i, queue.dequeue());
 			}
 		}
 	}
@@ -47,13 +47,13 @@ public abstract class BaseIntPriorityQueueTest extends BaseIntIterableTest
 			}
 			if(isUnsortedRead()) {
 				for(int i = 0;i<100;i++) {
-					int value = queue.peekInt(i);
+					int value = queue.peek(i);
 					Assert.assertTrue(value >= 0 && value < 100);
 				}
 			}
 			else {
 				for(int i = 0;i<100;i++) {
-					Assert.assertEquals(i, queue.peekInt(i));
+					Assert.assertEquals(i, queue.peek(i));
 				}
 			}
 		}
@@ -68,16 +68,16 @@ public abstract class BaseIntPriorityQueueTest extends BaseIntIterableTest
 			}
 			queue.remove(40);
 			for(int i = 0;i<99;i++) {
-				if(i >= 40) Assert.assertEquals(i + 1, queue.dequeueInt());
-				else Assert.assertEquals(i, queue.dequeueInt());
+				if(i >= 40) Assert.assertEquals(i + 1, queue.dequeue());
+				else Assert.assertEquals(i, queue.dequeue());
 			}
 			for(int i = 0;i<100;i++) {
 				queue.enqueue(i);
 			}
 			queue.removeLast(40);
 			for(int i = 0;i<99;i++) {
-				if(i >= 40) Assert.assertEquals(i + 1, queue.dequeueInt());
-				else Assert.assertEquals(i, queue.dequeueInt());
+				if(i >= 40) Assert.assertEquals(i + 1, queue.dequeue());
+				else Assert.assertEquals(i, queue.dequeue());
 			}
 		}
 	}
@@ -102,28 +102,21 @@ public abstract class BaseIntPriorityQueueTest extends BaseIntIterableTest
 				Assert.assertArrayEquals(array, nonData);
 			}
 			else {
-				Integer[] ref = IntArrays.wrap(TEST_ARRAY);
-				Integer[] shiftArray = new Integer[100];
 				int[] shiftPrimArray = new int[100];
 				for(int i = 0; i < 100; i++) {
 					queue.enqueue(i);
 					shiftPrimArray[(i+80) % 100] = i;
-					shiftArray[(i+80) % 100] = Integer.valueOf(i);
 				}
-				Assert.assertArrayEquals(ref, queue.toArray());
-				Assert.assertArrayEquals(ref, queue.toArray(new Integer[100]));
-				Assert.assertArrayEquals(ref, queue.toArray(null));
 				Assert.assertArrayEquals(TEST_ARRAY, queue.toIntArray());
 				Assert.assertArrayEquals(TEST_ARRAY, queue.toIntArray(new int[100]));
 				Assert.assertArrayEquals(TEST_ARRAY, queue.toIntArray(null));
 				IntPriorityQueue other = create(queue.toIntArray());
 				for(int i = 0;i<20;i++) {
-					other.dequeueInt();
+					other.dequeue();
 					other.enqueue(i);
 				}
 				Assert.assertArrayEquals(shiftPrimArray, other.toIntArray());
 				Assert.assertArrayEquals(shiftPrimArray, other.toIntArray(new int[100]));
-				Assert.assertArrayEquals(shiftArray, other.toArray());
 			}
 		}
 	}
