@@ -291,14 +291,14 @@ public class CUSTOM_HASH_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_VAL
 	}
 	
 	@Override
-	public VALUE_TYPE REMOVE_KEY(KEY_TYPE key) {
+	public VALUE_TYPE REMOVE_VALUE(KEY_TYPE key) {
 		int slot = findIndex(key);
 		if(slot < 0) return getDefaultReturnValue();
 		return removeIndex(slot);
 	}
 	
 	@Override
-	public VALUE_TYPE REMOVE_KEYOrDefault(KEY_TYPE key, VALUE_TYPE defaultValue) {
+	public VALUE_TYPE REMOVE_VALUEOrDefault(KEY_TYPE key, VALUE_TYPE defaultValue) {
 		int slot = findIndex(key);
 		if(slot < 0) return defaultValue;
 		return removeIndex(slot);

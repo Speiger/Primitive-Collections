@@ -149,9 +149,13 @@ public class PrimitiveCollectionsBuilder extends TemplateProcessor
 		{
 	        if(args.length == 0) {
 	            new PrimitiveCollectionsBuilder().process(false);
+	        } else if(args.length == 1) {
+	            new PrimitiveCollectionsBuilder().process(Boolean.parseBoolean(args[0]));
 	        } else if(args.length == 3) {
 	            new PrimitiveCollectionsBuilder(Paths.get(args[0]), Paths.get(args[1]), Paths.get(args[2])).process(false);
-	    	} else {
+	        } else if(args.length == 4) {
+	            new PrimitiveCollectionsBuilder(Paths.get(args[0]), Paths.get(args[1]), Paths.get(args[2])).process(Boolean.parseBoolean(args[3]));
+	        } else {
 	            System.out.println("Invalid argument count passed in");
 	            System.exit(1);
 	    	}

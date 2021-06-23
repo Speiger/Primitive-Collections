@@ -352,7 +352,7 @@ public class ARRAY_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_VALUE_GEN
 	}
 	
 	@Override
-	public VALUE_TYPE REMOVE_KEY(KEY_TYPE key) {
+	public VALUE_TYPE REMOVE_VALUE(KEY_TYPE key) {
 		int index = findIndex(key);
 		if(index < 0) return getDefaultReturnValue();
 		VALUE_TYPE value = values[index];
@@ -361,7 +361,7 @@ public class ARRAY_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_VALUE_GEN
 	}
 	
 	@Override
-	public VALUE_TYPE REMOVE_KEYOrDefault(KEY_TYPE key, VALUE_TYPE defaultValue) {
+	public VALUE_TYPE REMOVE_VALUEOrDefault(KEY_TYPE key, VALUE_TYPE defaultValue) {
 		int index = findIndex(key);
 		if(index < 0) return defaultValue;
 		VALUE_TYPE value = values[index];
@@ -861,7 +861,7 @@ public class ARRAY_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_VALUE_GEN
 		}
 		
 		@Override
-		public VALUE_TYPE REMOVE_KEY(KEY_TYPE key) {
+		public VALUE_TYPE REMOVE_VALUE(KEY_TYPE key) {
 			int index = findIndex(key);
 			if(index < 0) return getDefaultReturnValue();
 			VALUE_TYPE value = values[index];
@@ -871,7 +871,7 @@ public class ARRAY_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_VALUE_GEN
 		}
 		
 		@Override
-		public VALUE_TYPE REMOVE_KEYOrDefault(KEY_TYPE key, VALUE_TYPE defaultValue) {
+		public VALUE_TYPE REMOVE_VALUEOrDefault(KEY_TYPE key, VALUE_TYPE defaultValue) {
 			int index = findIndex(key);
 			if(index < 0) return defaultValue;
 			VALUE_TYPE value = values[index];

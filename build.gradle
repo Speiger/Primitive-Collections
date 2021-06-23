@@ -65,6 +65,14 @@ task generateSource(type: JavaExec) {
  	main = 'speiger.src.builder.PrimitiveCollectionsBuilder'
 }
 
+task forceGenerateSource(type: JavaExec) {
+	group = 'internal'
+	description = 'Builds the sourcecode forceful'
+ 	classpath = sourceSets.builder.runtimeClasspath
+ 	main = 'speiger.src.builder.PrimitiveCollectionsBuilder'
+ 	args = ['true']
+}
+
 task javadocJar(type: Jar) {
     from javadoc
     classifier = 'javadoc'

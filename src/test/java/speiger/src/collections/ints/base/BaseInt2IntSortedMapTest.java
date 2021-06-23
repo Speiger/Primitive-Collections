@@ -87,8 +87,8 @@ public abstract class BaseInt2IntSortedMapTest extends BaseInt2IntMapTest
 		if(!getValidSortedMapTests().contains(SortedMapTests.SUB_MAP)) return;
 		Int2IntSortedMap map = createMap(TEST_ARRAY, TEST_ARRAY);
 		Int2IntSortedMap subMap = map.subMap(25, 75);
-		Assert.assertEquals(50, subMap.remInt(50));
-		Assert.assertNotEquals(50, subMap.remInt(50));
+		Assert.assertEquals(50, subMap.remove(50));
+		Assert.assertNotEquals(50, subMap.remove(50));
 		Assert.assertFalse(subMap.containsKey(20));
 		Assert.assertFalse(subMap.containsKey(80));
 	}
@@ -99,8 +99,8 @@ public abstract class BaseInt2IntSortedMapTest extends BaseInt2IntMapTest
 		if(!getValidSortedMapTests().contains(SortedMapTests.HEAD_MAP)) return;
 		Int2IntSortedMap map = createMap(TEST_ARRAY, TEST_ARRAY);
 		Int2IntSortedMap subMap = map.headMap(75);
-		Assert.assertEquals(50, subMap.remInt(50));
-		Assert.assertNotEquals(50, subMap.remInt(50));
+		Assert.assertEquals(50, subMap.remove(50));
+		Assert.assertNotEquals(50, subMap.remove(50));
 		Assert.assertFalse(subMap.containsKey(80));
 	}
 	
@@ -110,8 +110,8 @@ public abstract class BaseInt2IntSortedMapTest extends BaseInt2IntMapTest
 		if(!getValidSortedMapTests().contains(SortedMapTests.TAIL_MAP)) return;
 		Int2IntSortedMap map = createMap(TEST_ARRAY, TEST_ARRAY);
 		Int2IntSortedMap subMap = map.tailMap(25);
-		Assert.assertEquals(50, subMap.remInt(50));
-		Assert.assertNotEquals(50, subMap.remInt(50));
+		Assert.assertEquals(50, subMap.remove(50));
+		Assert.assertNotEquals(50, subMap.remove(50));
 		Assert.assertFalse(subMap.containsKey(20));
 	}
 }

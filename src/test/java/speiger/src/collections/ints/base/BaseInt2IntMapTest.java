@@ -131,7 +131,7 @@ public abstract class BaseInt2IntMapTest
 	{
 		if(!getValidMapTests().contains(MapTests.REMOVE)) return;
 		Int2IntMap map = createMap(PUT_VALUE_ARRAY, PUT_ARRAY);
-		Assert.assertEquals(PUT_ARRAY[50], map.remInt(PUT_VALUE_ARRAY[50]));
+		Assert.assertEquals(PUT_ARRAY[50], map.remove(PUT_VALUE_ARRAY[50]));
 		Assert.assertTrue(map.remove(PUT_VALUE_ARRAY[51], PUT_ARRAY[51]));
 	}
 	

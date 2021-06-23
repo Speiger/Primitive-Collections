@@ -421,7 +421,7 @@ public class AVL_TREE_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_VALUE_
 	}
 	
 	@Override
-	public VALUE_TYPE REMOVE_KEY(KEY_TYPE key) {
+	public VALUE_TYPE REMOVE_VALUE(KEY_TYPE key) {
 		Entry KEY_VALUE_GENERIC_TYPE entry = findNode(key);
 		if(entry == null) return getDefaultReturnValue();
 		VALUE_TYPE value = entry.value;
@@ -430,7 +430,7 @@ public class AVL_TREE_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_VALUE_
 	}
 	
 	@Override
-	public VALUE_TYPE REMOVE_KEYOrDefault(KEY_TYPE key, VALUE_TYPE defaultValue) {
+	public VALUE_TYPE REMOVE_VALUEOrDefault(KEY_TYPE key, VALUE_TYPE defaultValue) {
 		Entry KEY_VALUE_GENERIC_TYPE entry = findNode(key);
 		if(entry == null) return defaultValue;
 		VALUE_TYPE value = entry.value;
@@ -1205,13 +1205,13 @@ public class AVL_TREE_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_VALUE_
 		
 #endif
 		@Override
-		public VALUE_TYPE REMOVE_KEY(KEY_TYPE key) {
-			return inRange(key) ? m.REMOVE_KEY(key) : getDefaultReturnValue();
+		public VALUE_TYPE REMOVE_VALUE(KEY_TYPE key) {
+			return inRange(key) ? m.REMOVE_VALUE(key) : getDefaultReturnValue();
 		}
 		
 		@Override
-		public VALUE_TYPE REMOVE_KEYOrDefault(KEY_TYPE key, VALUE_TYPE defaultValue) {
-			return inRange(key) ? m.REMOVE_KEY(key) : defaultValue;
+		public VALUE_TYPE REMOVE_VALUEOrDefault(KEY_TYPE key, VALUE_TYPE defaultValue) {
+			return inRange(key) ? m.REMOVE_VALUE(key) : defaultValue;
 		}
 		
 #if TYPE_OBJECT && VALUE_OBJECT

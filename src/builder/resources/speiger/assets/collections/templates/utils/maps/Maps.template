@@ -265,9 +265,9 @@ public class MAPS
 		public VALUE_TYPE addTo(KEY_TYPE key, VALUE_TYPE value) { throw new UnsupportedOperationException(); }
 #endif
 		@Override
-		public VALUE_TYPE REMOVE_KEY(KEY_TYPE key) { throw new UnsupportedOperationException(); }
+		public VALUE_TYPE REMOVE_VALUE(KEY_TYPE key) { throw new UnsupportedOperationException(); }
 		@Override
-		public VALUE_TYPE REMOVE_KEYOrDefault(KEY_TYPE key, VALUE_TYPE defaultValue) { throw new UnsupportedOperationException(); }
+		public VALUE_TYPE REMOVE_VALUEOrDefault(KEY_TYPE key, VALUE_TYPE defaultValue) { throw new UnsupportedOperationException(); }
 #if !TYPE_OBJECT || !VALUE_OBJECT
 		@Override
 		public boolean remove(KEY_TYPE key, VALUE_TYPE value) { throw new UnsupportedOperationException(); }
@@ -311,9 +311,9 @@ public class MAPS
 		public VALUE_TYPE addTo(KEY_TYPE key, VALUE_TYPE value) { throw new UnsupportedOperationException(); }
 #endif
 		@Override
-		public VALUE_TYPE REMOVE_KEY(KEY_TYPE key) { throw new UnsupportedOperationException(); }
+		public VALUE_TYPE REMOVE_VALUE(KEY_TYPE key) { throw new UnsupportedOperationException(); }
 		@Override
-		public VALUE_TYPE REMOVE_KEYOrDefault(KEY_TYPE key, VALUE_TYPE defaultValue) { throw new UnsupportedOperationException(); }
+		public VALUE_TYPE REMOVE_VALUEOrDefault(KEY_TYPE key, VALUE_TYPE defaultValue) { throw new UnsupportedOperationException(); }
 #if !TYPE_OBJECT || !VALUE_OBJECT
 		@Override
 		public boolean remove(KEY_TYPE key, VALUE_TYPE value) { throw new UnsupportedOperationException(); }
@@ -489,9 +489,9 @@ public class MAPS
 		public VALUE_TYPE addTo(KEY_TYPE key, VALUE_TYPE value) { throw new UnsupportedOperationException(); }
 #endif
 		@Override
-		public VALUE_TYPE REMOVE_KEY(KEY_TYPE key) { throw new UnsupportedOperationException(); }
+		public VALUE_TYPE REMOVE_VALUE(KEY_TYPE key) { throw new UnsupportedOperationException(); }
 		@Override
-		public VALUE_TYPE REMOVE_KEYOrDefault(KEY_TYPE key, VALUE_TYPE defaultValue) { throw new UnsupportedOperationException(); }
+		public VALUE_TYPE REMOVE_VALUEOrDefault(KEY_TYPE key, VALUE_TYPE defaultValue) { throw new UnsupportedOperationException(); }
 #if !TYPE_OBJECT || !VALUE_OBJECT
 		@Override
 		public boolean remove(KEY_TYPE key, VALUE_TYPE value) { throw new UnsupportedOperationException(); }
@@ -798,9 +798,9 @@ public class MAPS
 		@Override
 		public VALUE_TYPE GET_VALUE(KEY_TYPE key) { synchronized(mutex) { return map.GET_VALUE(key); } }
 		@Override
-		public VALUE_TYPE REMOVE_KEY(KEY_TYPE key) { synchronized(mutex) { return map.REMOVE_KEY(key); } }
+		public VALUE_TYPE REMOVE_VALUE(KEY_TYPE key) { synchronized(mutex) { return map.REMOVE_VALUE(key); } }
 		@Override
-		public VALUE_TYPE REMOVE_KEYOrDefault(KEY_TYPE key, VALUE_TYPE defaultValue) { synchronized(mutex) { return map.REMOVE_KEYOrDefault(key, defaultValue); } }
+		public VALUE_TYPE REMOVE_VALUEOrDefault(KEY_TYPE key, VALUE_TYPE defaultValue) { synchronized(mutex) { return map.REMOVE_VALUEOrDefault(key, defaultValue); } }
 #if !TYPE_OBJECT || !VALUE_OBJECT
 		@Override
 		public boolean remove(KEY_TYPE key, VALUE_TYPE value) { synchronized(mutex) { return map.remove(key, value); } }

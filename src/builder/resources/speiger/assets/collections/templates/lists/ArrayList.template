@@ -381,7 +381,6 @@ public class ARRAY_LIST KEY_GENERIC_TYPE extends ABSTRACT_LIST KEY_GENERIC_TYPE 
 	 * A function to find if the Element is present in this list.
 	 * @param o the element that is searched for
 	 * @return if the element was found.
-	 * @deprecated if type-specific but still supported because of special edgecase Object-Comparason features
 	 */
 	@Override
 	@Primitive
@@ -393,7 +392,6 @@ public class ARRAY_LIST KEY_GENERIC_TYPE extends ABSTRACT_LIST KEY_GENERIC_TYPE 
 	 * A function to find the index of a given element
 	 * @param o the element that is searched for
 	 * @return the index of the element if found. (if not found then -1)
-	 * @deprecated if type-specific but still supported because of special edgecase Object-Comparason features
 	 */
 	@Override
 	@Primitive
@@ -417,7 +415,6 @@ public class ARRAY_LIST KEY_GENERIC_TYPE extends ABSTRACT_LIST KEY_GENERIC_TYPE 
 	 * A function to find the last index of a given element
 	 * @param o the element that is searched for
 	 * @return the last index of the element if found. (if not found then -1)
-	 * @deprecated if type-specific but still supported because of special edgecase Object-Comparason features
 	 */
 	@Override
 	@Primitive
@@ -693,7 +690,6 @@ public class ARRAY_LIST KEY_GENERIC_TYPE extends ABSTRACT_LIST KEY_GENERIC_TYPE 
 	 * @param c the elements that should be removed
 	 * @return true if the collection was modified
 	 * @throws NullPointerException if the collection is null
-	 * @deprecated if the collection is type-specific
 	 */
 	@Override
 	@Primitive
@@ -718,7 +714,6 @@ public class ARRAY_LIST KEY_GENERIC_TYPE extends ABSTRACT_LIST KEY_GENERIC_TYPE 
 	 * @param c the elements that should be kept. If empty, ARRAY_LIST#clear is called.
 	 * @return true if the collection was modified
 	 * @throws NullPointerException if the collection is null
-	 * @deprecated if the collection is type-specific
 	 */
 	@Override
 	@Primitive
@@ -745,7 +740,6 @@ public class ARRAY_LIST KEY_GENERIC_TYPE extends ABSTRACT_LIST KEY_GENERIC_TYPE 
 	 * A optimized List#removeIf(Predicate) that more quickly removes elements from the list then the ArrayList implementation
 	 * @param filter the filter to remove elements
 	 * @return true if the list was modified
-	 * @deprecated if Type-Specific, use #remIf instead
 	 */
 	@Override
 	@Primitive

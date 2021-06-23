@@ -236,6 +236,8 @@ public class GlobalVariables
 		addFunctionValueMapper("MERGE", "merge");
 		addFunctionMapper("NEXT", "next");
 		addFunctionMapper("PREVIOUS", "previous");
+		if(type.isObject()) addFunctionMapper("REMOVE_VALUE", "rem");
+		else addSimpleMapper("REMOVE_VALUE", "remove");
 		addFunctionMapper("REMOVE_KEY", "rem");
 		addFunctionMapper("REMOVE_LAST", "removeLast");
 		addFunctionMapper("REMOVE", "remove");

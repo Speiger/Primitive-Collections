@@ -156,7 +156,7 @@ public interface MAP KEY_VALUE_GENERIC_TYPE extends Map<CLASS_TYPE, CLASS_VALUE_
 	 * @param key the element that should be removed
 	 * @return the value that was removed or default return value
 	 */
-	public VALUE_TYPE REMOVE_KEY(KEY_TYPE key);
+	public VALUE_TYPE REMOVE_VALUE(KEY_TYPE key);
 	
 	/**
 	 * @see Map#remove(Object)
@@ -167,9 +167,9 @@ public interface MAP KEY_VALUE_GENERIC_TYPE extends Map<CLASS_TYPE, CLASS_VALUE_
 	@Override
 	public default CLASS_VALUE_TYPE remove(Object key) {
 #if TYPE_OBJECT
-		return VALUE_TO_OBJ(REMOVE_KEY((CLASS_TYPE)key));
+		return VALUE_TO_OBJ(REMOVE_VALUE((CLASS_TYPE)key));
 #else
-		return key instanceof CLASS_TYPE ? VALUE_TO_OBJ(REMOVE_KEY(CLASS_TO_KEY(key))) : VALUE_TO_OBJ(getDefaultReturnValue());
+		return key instanceof CLASS_TYPE ? VALUE_TO_OBJ(REMOVE_VALUE(CLASS_TO_KEY(key))) : VALUE_TO_OBJ(getDefaultReturnValue());
 #endif
 	}
 	
@@ -208,7 +208,7 @@ public interface MAP KEY_VALUE_GENERIC_TYPE extends Map<CLASS_TYPE, CLASS_VALUE_
  	 * @param defaultValue the value that should be returned if the entry doesn't exist
 	 * @return the value that was removed or default value
 	 */
-	public VALUE_TYPE REMOVE_KEYOrDefault(KEY_TYPE key, VALUE_TYPE defaultValue);
+	public VALUE_TYPE REMOVE_VALUEOrDefault(KEY_TYPE key, VALUE_TYPE defaultValue);
 	/**
 	 * A Type Specific replace method to replace an existing value
 	 * @param key the element that should be searched for
