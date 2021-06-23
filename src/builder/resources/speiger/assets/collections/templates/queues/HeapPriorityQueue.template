@@ -200,7 +200,7 @@ public class HEAP_PRIORITY_QUEUE KEY_GENERIC_TYPE implements PRIORITY_QUEUE KEY_
 	}
 	
 	@Override
-	public void ENQUEUE(KEY_TYPE e) {
+	public void enqueue(KEY_TYPE e) {
 		if(size == array.length) array = Arrays.copyOf(array, size + 1);
 		array[size++] = e;
 		ARRAYS.shiftUp(array, size-1, comparator);
@@ -225,14 +225,14 @@ public class HEAP_PRIORITY_QUEUE KEY_GENERIC_TYPE implements PRIORITY_QUEUE KEY_
 	}
 	
 	@Override
-	public boolean REMOVE(KEY_TYPE e) {
+	public boolean remove(KEY_TYPE e) {
 		for(int i = 0;i<size;i++)
 			if(KEY_EQUALS(e, array[i])) return removeIndex(i);
 		return false;
 	}
 	
 	@Override
-	public boolean REMOVE_LAST(KEY_TYPE e) {
+	public boolean removeLast(KEY_TYPE e) {
 		for(int i = size-1;i>=0;i--)
 			if(KEY_EQUALS(e, array[i])) return removeIndex(i);
 		return false;

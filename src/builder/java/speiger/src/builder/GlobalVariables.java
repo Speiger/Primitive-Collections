@@ -216,8 +216,6 @@ public class GlobalVariables
 		addFunctionValueMappers("COMPUTE_IF_ABSENT", "compute%sIfAbsent");
 		addFunctionValueMappers("COMPUTE_IF_PRESENT", "compute%sIfPresent");
 		addFunctionValueMapper("COMPUTE", "compute");
-		addFunctionMapper("ENQUEUE_FIRST", "enqueueFirst");
-		addFunctionMapper("ENQUEUE", "enqueue");
 		addFunctionMapper("DEQUEUE_LAST", "dequeueLast");
 		addFunctionMapper("DEQUEUE", "dequeue");
 		addFunctionMappers("POLL_FIRST_ENTRY_KEY", "pollFirst%sKey");

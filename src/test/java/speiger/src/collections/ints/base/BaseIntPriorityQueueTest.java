@@ -26,7 +26,7 @@ public abstract class BaseIntPriorityQueueTest extends BaseIntIterableTest
 		if(getValidPriorityQueueTests().contains(PriorityQueueTest.IN_OUT)) {
 			IntPriorityQueue queue = create(EMPTY_ARRAY);
 			for(int i = 0;i<100;i++) {
-				queue.enqueueInt(i);
+				queue.enqueue(i);
 			}
 			for(int i = 0;i<100;i++) {
 				Assert.assertEquals(i, queue.dequeueInt());
@@ -43,7 +43,7 @@ public abstract class BaseIntPriorityQueueTest extends BaseIntIterableTest
 		if(getValidPriorityQueueTests().contains(PriorityQueueTest.PEEK)) {
 			IntPriorityQueue queue = create(EMPTY_ARRAY);
 			for(int i = 0;i<100;i++) {
-				queue.enqueueInt(i);
+				queue.enqueue(i);
 			}
 			if(isUnsortedRead()) {
 				for(int i = 0;i<100;i++) {
@@ -64,17 +64,17 @@ public abstract class BaseIntPriorityQueueTest extends BaseIntIterableTest
 		if(getValidPriorityQueueTests().contains(PriorityQueueTest.REMOVE)) {
 			IntPriorityQueue queue = create(EMPTY_ARRAY);
 			for(int i = 0;i<100;i++) {
-				queue.enqueueInt(i);
+				queue.enqueue(i);
 			}
-			queue.removeInt(40);
+			queue.remove(40);
 			for(int i = 0;i<99;i++) {
 				if(i >= 40) Assert.assertEquals(i + 1, queue.dequeueInt());
 				else Assert.assertEquals(i, queue.dequeueInt());
 			}
 			for(int i = 0;i<100;i++) {
-				queue.enqueueInt(i);
+				queue.enqueue(i);
 			}
-			queue.removeLastInt(40);
+			queue.removeLast(40);
 			for(int i = 0;i<99;i++) {
 				if(i >= 40) Assert.assertEquals(i + 1, queue.dequeueInt());
 				else Assert.assertEquals(i, queue.dequeueInt());
@@ -89,7 +89,7 @@ public abstract class BaseIntPriorityQueueTest extends BaseIntIterableTest
 			IntPriorityQueue queue = create(EMPTY_ARRAY);
 			if(isUnsortedRead()) {
 				for(int i = 0;i<100;i++) {
-					queue.enqueueInt(i);
+					queue.enqueue(i);
 				}
 				int[] array = queue.toIntArray();
 				IntArrays.stableSort(array);

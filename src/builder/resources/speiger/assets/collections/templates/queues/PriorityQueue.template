@@ -38,7 +38,7 @@ public interface PRIORITY_QUEUE KEY_GENERIC_TYPE extends ObjectPriorityQueue<CLA
 	 * Method to insert a element into the PriorityQueue
 	 * @param e the element that should be inserted
 	 */
-	public void ENQUEUE(KEY_TYPE e);
+	public void enqueue(KEY_TYPE e);
 	/**
 	 * Method to extract a element from the PriorityQueue
 	 * @return a element from the Queue
@@ -63,13 +63,13 @@ public interface PRIORITY_QUEUE KEY_GENERIC_TYPE extends ObjectPriorityQueue<CLA
 	 * @param e the element that should be removed
 	 * @return if a searched element was removed
 	 */
-	public boolean REMOVE(KEY_TYPE e);
+	public boolean remove(KEY_TYPE e);
 	/**
 	 * Removes the last found element in the queue
 	 * @param e the element that should be removed
 	 * @return if a searched element was removed
 	 */
-	public boolean REMOVE_LAST(KEY_TYPE e);
+	public boolean removeLast(KEY_TYPE e);
 	
 	/**
 	 * Allows to notify the Queue to be revalidate its data
@@ -97,7 +97,7 @@ public interface PRIORITY_QUEUE KEY_GENERIC_TYPE extends ObjectPriorityQueue<CLA
 	
 #if !TYPE_OBJECT
 	@Deprecated
-	public default void enqueue(CLASS_TYPE e) { ENQUEUE(OBJ_TO_KEY(e)); }
+	public default void enqueue(CLASS_TYPE e) { enqueue(OBJ_TO_KEY(e)); }
 	@Deprecated
 	public default CLASS_TYPE dequeue() { return KEY_TO_OBJ(DEQUEUE()); }
 	
@@ -107,9 +107,9 @@ public interface PRIORITY_QUEUE KEY_GENERIC_TYPE extends ObjectPriorityQueue<CLA
 	public default CLASS_TYPE first() { return peek(0); }
 	
 	@Deprecated
-	public default boolean remove(CLASS_TYPE e) { return REMOVE(OBJ_TO_KEY(e)); }
+	public default boolean remove(CLASS_TYPE e) { return remove(OBJ_TO_KEY(e)); }
 	@Deprecated
-	public default boolean removeLast(CLASS_TYPE e) { return REMOVE_LAST(OBJ_TO_KEY(e)); }
+	public default boolean removeLast(CLASS_TYPE e) { return removeLast(OBJ_TO_KEY(e)); }
 	
 	@Deprecated
 	public default CLASS_TYPE[] toArray() { return toArray(new CLASS_TYPE[size()]); }

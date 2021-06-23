@@ -29,6 +29,14 @@ public interface Stack<T>
 	 */
 	public int size();
 	
+	
+	/**
+	 * @return if the stack is empty
+	 */
+	public default boolean isEmpty() {
+		return size() == 0;
+	}
+	
 	/**
 	 * Clears the stack
 	 */
