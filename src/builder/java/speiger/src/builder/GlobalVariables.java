@@ -162,6 +162,7 @@ public class GlobalVariables
 		addClassMapper("SETS", "Sets");
 		addClassMapper("COLLECTIONS", "Collections");
 		addClassMapper("ARRAYS", "Arrays");
+		addClassMapper("PRIORITY_QUEUES", "PriorityQueues");
 		addClassMapper("SPLIT_ITERATORS", "Splititerators");
 		addClassMapper("ITERATORS", "Iterators");
 		addBiClassMapper("MAPS", "Maps", "2");

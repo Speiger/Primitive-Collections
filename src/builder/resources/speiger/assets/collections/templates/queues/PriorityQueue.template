@@ -78,6 +78,12 @@ public interface PRIORITY_QUEUE KEY_GENERIC_TYPE extends ITERABLE KEY_GENERIC_TY
 	 */
 	public COMPARATOR KEY_SUPER_GENERIC_TYPE comparator();
 	
+#if TYPE_OBJECT
+	/**
+	 * @return draining iterator of the PriorityQueue
+	 */
+	public ITERATOR KEY_GENERIC_TYPE iterator();
+#endif
 	/**
 	 * A method to drop the contents of the Queue without clearing the queue
 	 * @return the contents of the queue into a seperate array.

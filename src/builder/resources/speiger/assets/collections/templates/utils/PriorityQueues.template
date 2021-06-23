@@ -1,0 +1,127 @@
+package speiger.src.collections.PACKAGE.utils;
+
+#if TYPE_OBJECT
+import java.util.Comparator;
+#endif
+
+import speiger.src.collections.PACKAGE.collections.ITERATOR;
+#if !TYPE_OBJECT
+import speiger.src.collections.PACKAGE.functions.COMPARATOR;
+#endif
+import speiger.src.collections.PACKAGE.queues.PRIORITY_DEQUEUE;
+import speiger.src.collections.PACKAGE.queues.PRIORITY_QUEUE;
+
+/**
+ * A Helper class for PriorityQueues
+ */
+public class PRIORITY_QUEUES
+{
+	
+	/**
+	 * Returns a synchronized PriorityQueue instance based on the instance given.
+	 * @param queue that should be synchronized
+	 * @Type(T)
+	 * @return a synchronized PriorityQueue wrapper.
+	 */
+	public static GENERIC_KEY_BRACES PRIORITY_QUEUE KEY_GENERIC_TYPE synchronize(PRIORITY_QUEUE KEY_GENERIC_TYPE queue) {
+		return queue instanceof SynchronizedPriorityQueue ? (SynchronizedPriorityQueue KEY_GENERIC_TYPE)queue : new SynchronizedPriorityQueueBRACES(queue);
+	}
+	
+	/**
+	 * Returns a synchronized PriorityQueue instance based on the instance given.
+	 * @param queue that should be synchronized
+	 * @param mutex is the controller of the synchronization block.
+	 * @Type(T)
+	 * @return a synchronized PriorityQueue wrapper.
+	 */
+	public static GENERIC_KEY_BRACES PRIORITY_QUEUE KEY_GENERIC_TYPE synchronize(PRIORITY_QUEUE KEY_GENERIC_TYPE queue, Object mutex) {
+		return queue instanceof SynchronizedPriorityQueue ? (SynchronizedPriorityQueue KEY_GENERIC_TYPE)queue : new SynchronizedPriorityQueueBRACES(queue, mutex);
+	}
+	
+	/**
+	 * Returns a synchronized PriorityDequeue instance based on the instance given.
+	 * @param dequeue that should be synchronized
+	 * @Type(T)
+	 * @return a synchronized PriorityDequeue wrapper.
+	 */
+	public static GENERIC_KEY_BRACES PRIORITY_DEQUEUE KEY_GENERIC_TYPE synchronize(PRIORITY_DEQUEUE KEY_GENERIC_TYPE dequeue) {
+		return dequeue instanceof SynchronizedPriorityDequeue ? (SynchronizedPriorityDequeue KEY_GENERIC_TYPE)dequeue : new SynchronizedPriorityDequeueBRACES(dequeue);
+	}
+	
+	/**
+	 * Returns a synchronized PriorityDequeue instance based on the instance given.
+	 * @param dequeue that should be synchronized
+	 * @param mutex is the controller of the synchronization block.
+	 * @Type(T)
+	 * @return a synchronized PriorityDequeue wrapper.
+	 */
+	public static GENERIC_KEY_BRACES PRIORITY_DEQUEUE KEY_GENERIC_TYPE synchronize(PRIORITY_DEQUEUE KEY_GENERIC_TYPE dequeue, Object mutex) {
+		return dequeue instanceof SynchronizedPriorityDequeue ? (SynchronizedPriorityDequeue KEY_GENERIC_TYPE)dequeue : new SynchronizedPriorityDequeueBRACES(dequeue, mutex);
+	}
+	
+	/**
+	 * Wrapper class for synchronization
+	 * @Type(T)
+	 */
+	public static class SynchronizedPriorityQueue KEY_GENERIC_TYPE implements PRIORITY_QUEUE KEY_GENERIC_TYPE
+	{
+		PRIORITY_QUEUE KEY_GENERIC_TYPE queue;
+		protected Object mutex;
+		
+		protected SynchronizedPriorityQueue(PRIORITY_QUEUE KEY_GENERIC_TYPE queue) {
+				this.queue = queue;
+				mutex = this;
+		}
+		
+		protected SynchronizedPriorityQueue(PRIORITY_QUEUE KEY_GENERIC_TYPE queue, Object mutex) {
+			this.queue = queue;
+			this.mutex = mutex;
+		}
+		
+		@Override
+		public ITERATOR KEY_GENERIC_TYPE iterator() { return queue.iterator(); }
+		@Override
+		public int size() { synchronized(mutex) { return queue.size(); } }
+		@Override
+		public void clear() { synchronized(mutex) { queue.clear(); } }
+		@Override
+		public void enqueue(KEY_TYPE e) { synchronized(mutex) { queue.enqueue(e); } }
+		@Override
+		public KEY_TYPE dequeue() { synchronized(mutex) { return queue.dequeue(); } }
+		@Override
+		public KEY_TYPE peek(int index) { synchronized(mutex) { return queue.peek(index); } }
+		@Override
+		public boolean remove(KEY_TYPE e) { synchronized(mutex) { return queue.remove(e); } }
+		@Override
+		public boolean removeLast(KEY_TYPE e) { synchronized(mutex) { return queue.removeLast(e); } }
+		@Override
+		public void onChanged() { synchronized(mutex) { queue.onChanged(); } }
+		@Override
+		public COMPARATOR KEY_SUPER_GENERIC_TYPE comparator() { synchronized(mutex) { return queue.comparator(); } }
+		@Override
+		public KEY_TYPE[] TO_ARRAY(KEY_TYPE[] input) { synchronized(mutex) { return queue.TO_ARRAY(input); } }
+	}
+	
+	/**
+	 * Wrapper class for synchronization
+	 * @Type(T)
+	 */
+	public static class SynchronizedPriorityDequeue KEY_GENERIC_TYPE extends SynchronizedPriorityQueue KEY_GENERIC_TYPE implements PRIORITY_DEQUEUE KEY_GENERIC_TYPE
+	{
+		PRIORITY_DEQUEUE KEY_GENERIC_TYPE dequeue;
+		protected SynchronizedPriorityDequeue(PRIORITY_DEQUEUE KEY_GENERIC_TYPE queue) {
+			super(queue);
+			dequeue = queue;
+		}
+	
+		protected SynchronizedPriorityDequeue(PRIORITY_DEQUEUE KEY_GENERIC_TYPE queue, Object mutex) {
+			super(queue, mutex);
+			dequeue = queue;
+		}
+		
+		@Override
+		public void enqueueFirst(KEY_TYPE e) { synchronized(mutex) { dequeue.enqueueFirst(e); } }
+		@Override
+		public KEY_TYPE dequeueLast() { synchronized(mutex) { return dequeue.dequeueLast(); } }
+	}
+}

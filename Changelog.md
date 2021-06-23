@@ -12,3 +12,4 @@
 - Changed: ObjectList methods are no longer marked Deprecated even so it was for primitive ones.
 - Added: Shuffle & Reverse Methods.
 - Added: Concat Iterators.
+- Added: PriorityQueues
