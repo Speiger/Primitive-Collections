@@ -2,6 +2,7 @@ package speiger.src.collections.PACKAGE.queues;
 
 #if TYPE_OBJECT
 import java.util.Comparator;
+import speiger.src.collections.objects.collections.ObjectIterator;
 #else
 import speiger.src.collections.PACKAGE.collections.ITERABLE;
 import speiger.src.collections.PACKAGE.functions.COMPARATOR;
