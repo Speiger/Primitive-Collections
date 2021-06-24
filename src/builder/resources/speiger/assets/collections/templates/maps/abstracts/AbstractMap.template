@@ -46,6 +46,14 @@ public abstract class ABSTRACT_MAP KEY_VALUE_GENERIC_TYPE extends AbstractMap<CL
 		return this;
 	}
 	
+#if !TYPE_OBJECT || !VALUE_OBJECT
+	@Override
+	@Deprecated
+	public CLASS_VALUE_TYPE put(CLASS_TYPE key, CLASS_VALUE_TYPE value) {
+		return VALUE_TO_OBJ(put(OBJ_TO_KEY(key), OBJ_TO_VALUE(value)));
+	}
+	
+#endif
 #if VALUE_PRIMITIVES
 	@Override
 	public void addToAll(MAP KEY_VALUE_GENERIC_TYPE m) {

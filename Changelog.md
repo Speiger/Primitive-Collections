@@ -1,6 +1,9 @@
 # Changelog of versions
 
 
+### Version 0.3.2
+- Fixed: Map.put wasn't referring to primitive variants.
+
 ### Version 0.3.1
 - Fixed: containsKey & containsValue in HashMaps were deprecated for Object Variants.
 - Fixed: HashMap wasn't deleting Keys & Values references when removing a Object
