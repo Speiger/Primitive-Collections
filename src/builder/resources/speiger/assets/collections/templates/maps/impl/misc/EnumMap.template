@@ -16,9 +16,6 @@ import speiger.src.collections.objects.maps.abstracts.ABSTRACT_MAP;
 import speiger.src.collections.objects.maps.interfaces.MAP;
 import speiger.src.collections.objects.sets.AbstractObjectSet;
 import speiger.src.collections.objects.sets.ObjectSet;
-#if UNSAVE_ENUM
-import sun.misc.SharedSecrets;
-#endif
 
 /**
  * A Type Specific EnumMap implementation that allows for Primitive Values.
@@ -215,11 +212,7 @@ public class ENUM_MAP KEY_ENUM_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_VALUE
 	protected boolean isSet(int index) { return (present[index >> 6] & (1L << index)) != 0; }
     
 	private static <K extends Enum<K>> K[] getKeyUniverse(Class<K> keyType) {
-#if UNSAVE_ENUM
-	return SharedSecrets.getJavaLangAccess().getEnumConstantsShared(keyType); 
-#else
 		return keyType.getEnumConstants();
-#endif
     }
     
     class EntrySet extends AbstractObjectSet<MAP.Entry KEY_VALUE_GENERIC_TYPE> {

@@ -1,7 +1,13 @@
 # Changelog of versions
 
 
-## Version 0.3.0 (Breaking 0.2.0)
+### Version 0.3.1
+- Fixed: containsKey & containsValue in HashMaps were deprecated for Object Variants.
+- Fixed: HashMap wasn't deleting Keys & Values references when removing a Object
+- Fixed: AVLTreeSet didn't balance properly.
+- Changed: EnumMap no longer tries to access SharedSecrets since its gone in java11
+
+### Version 0.3.0 (Breaking 0.2.0)
 - Added: Stack.isEmpty was missing
 - Changed: remove/removeLast/enqueue/enqueueFirst no longer use Type Suffixes
 - Removed: Suffixes for unmodifiable & synchronize functions.

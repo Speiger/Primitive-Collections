@@ -78,6 +78,8 @@ public class GlobalVariables
 		addAnnontion("@PrimitiveOverride", "@Override");
 		addSimpleMapper("@PrimitiveDoc", "");
 		addAnnontion("@Primitive", "@Deprecated");
+		addValueAnnontion("@ValuePrimitiveOverride", "@Override");
+		addValueAnnontion("@ValuePrimitive", "@Deprecated");
 		return this;
 	}
 	
@@ -254,7 +256,6 @@ public class GlobalVariables
 	{
 		flags.add("TYPE_"+type.getCapType());
 		flags.add("VALUE_"+valueType.getCapType());
-//		flags.add("UNSAVE_ENUM"); //if we want to use shared constants... Not compile save
 		if(type == valueType) flags.add("SAME_TYPE");
 		if(type.hasFunction(valueType)) flags.add("JDK_FUNCTION");
 		if(!type.needsCustomJDKType()) flags.add("JDK_TYPE");
@@ -333,6 +334,12 @@ public class GlobalVariables
 	{
 		if(type == ClassType.OBJECT) operators.add(new LineMapper(type.name()+"["+pattern+"]", pattern));
 		else operators.add(new SimpleMapper(type.name()+"["+pattern+"]", pattern, value));
+	}
+	
+	private void addValueAnnontion(String pattern, String value)
+	{
+		if(valueType == ClassType.OBJECT) operators.add(new LineMapper(valueType.name()+"["+pattern+"]", pattern));
+		else operators.add(new SimpleMapper(valueType.name()+"["+pattern+"]", pattern, value));
 	}
 	
 	private void addComment(String pattern, String value)

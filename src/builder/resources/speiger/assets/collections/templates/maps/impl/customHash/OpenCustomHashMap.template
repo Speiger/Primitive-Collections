@@ -36,6 +36,7 @@ import speiger.src.collections.objects.collections.ObjectIterator;
 import speiger.src.collections.objects.sets.AbstractObjectSet;
 import speiger.src.collections.objects.sets.ObjectSet;
 import speiger.src.collections.utils.HashUtil;
+import speiger.src.collections.utils.ITrimmable;
 
 /**
  * A Type Specific HashMap that allows for custom HashControl.
@@ -43,7 +44,7 @@ import speiger.src.collections.utils.HashUtil;
  * @Type(T)
  * @ValueType(V) 
  */
-public class CUSTOM_HASH_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_VALUE_GENERIC_TYPE
+public class CUSTOM_HASH_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_VALUE_GENERIC_TYPE implements ITrimmable
 {
 	/** The Backing keys array */
 	protected transient KEY_TYPE[] keys;
@@ -262,7 +263,7 @@ public class CUSTOM_HASH_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_VAL
 	
 #endif
 	@Override
-	@Deprecated
+	@Primitive
 	public boolean containsKey(Object key) {
 #if !TYPE_OBJECT
 		return key instanceof CLASS_TYPE && findIndex(CLASS_TO_KEY(key)) >= 0;
@@ -282,7 +283,7 @@ public class CUSTOM_HASH_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_VAL
 	
 #endif
 	@Override
-	@Deprecated
+	@ValuePrimitive
 	public boolean containsValue(Object value) {
 		if((value == null && VALUE_EQUALS(values[nullIndex], getDefaultReturnValue())) || EQUALS_VALUE_TYPE(values[nullIndex], value)) return true;
 		for(int i = nullIndex-1;i >= 0;i--)
@@ -520,6 +521,23 @@ public class CUSTOM_HASH_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_VAL
 		Arrays.fill(values, EMPTY_VALUE);
 	}
 	
+	@Override
+	public boolean trim(int size) {
+		int request = Math.max(minCapacity, HashUtil.nextPowerOfTwo((int)Math.ceil(size / loadFactor)));
+		if(request >= size || this.size > Math.min((int)Math.ceil(request * loadFactor), request - 1)) return false;
+		try {
+			rehash(request);
+		}
+		catch(OutOfMemoryError noMemory) { return false; }
+		return true;
+	}
+	
+	@Override
+	public void clearAndTrim(int size) {
+		 clear();
+		 trim(size);
+	}
+	
 #if !TYPE_OBJECT
 	protected int findIndex(KEY_TYPE key) {
 		if(strategy.equals(key, EMPTY_KEY_VALUE)) return containsNull ? nullIndex : -(nullIndex + 1);
@@ -549,6 +567,8 @@ public class CUSTOM_HASH_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_VAL
 	
 	protected VALUE_TYPE removeIndex(int pos) {
 		VALUE_TYPE value = values[pos];
+		keys[pos] = EMPTY_KEY_VALUE;
+		values[pos] = EMPTY_VALUE;
 		size--;
 		onNodeRemoved(pos);
 		shiftKeys(pos);

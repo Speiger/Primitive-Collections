@@ -1931,9 +1931,9 @@ public class AVL_TREE_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_VALUE_
 #endif
 		int getHeight() { return state; }
 		
-		void updateHeight() { state = (1 + Math.max(left == null ? 0 : left.getHeight(), right == null ? 0 : right.getHeight())); }
+		void updateHeight() { state = (1 + Math.max(left == null ? -1 : left.getHeight(), right == null ? -1 : right.getHeight())); }
 		
-		int getBalance() { return (left == null ? 0 : left.getHeight()) - (right == null ? 0 : right.getBalance()); }
+		int getBalance() { return (left == null ? -1 : left.getHeight()) - (right == null ? -1 : right.getBalance()); }
 		
 		boolean needsSuccessor() { return left != null && right != null; }
 		

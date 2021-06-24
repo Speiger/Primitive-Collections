@@ -35,6 +35,7 @@ import speiger.src.collections.objects.collections.ObjectIterator;
 import speiger.src.collections.objects.sets.AbstractObjectSet;
 import speiger.src.collections.objects.sets.ObjectSet;
 import speiger.src.collections.utils.HashUtil;
+import speiger.src.collections.utils.ITrimmable;
 
 /**
  * A Type Specific Custom implementation of the HashMap
@@ -43,7 +44,7 @@ import speiger.src.collections.utils.HashUtil;
  * @Type(T)
  * @ValueType(V)
  */
-public class HASH_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_VALUE_GENERIC_TYPE
+public class HASH_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_VALUE_GENERIC_TYPE implements ITrimmable
 {
 	/** The Backing keys array */
 	protected transient KEY_TYPE[] keys;
@@ -237,7 +238,7 @@ public class HASH_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_VALUE_GENE
 	
 #endif
 	@Override
-	@Deprecated
+	@Primitive
 	public boolean containsKey(Object key) {
 		return findIndex(key) >= 0;
 	}
@@ -253,7 +254,7 @@ public class HASH_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_VALUE_GENE
 	
 #endif
 	@Override
-	@Deprecated
+	@ValuePrimitive
 	public boolean containsValue(Object value) {
 		if((value == null && VALUE_EQUALS(values[nullIndex], getDefaultReturnValue())) || EQUALS_VALUE_TYPE(values[nullIndex], value)) return true;
 		for(int i = nullIndex-1;i >= 0;i--)
@@ -481,6 +482,23 @@ public class HASH_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_VALUE_GENE
 		Arrays.fill(values, EMPTY_VALUE);
 	}
 	
+	@Override
+	public boolean trim(int size) {
+		int request = Math.max(minCapacity, HashUtil.nextPowerOfTwo((int)Math.ceil(size / loadFactor)));
+		if(request >= size || this.size > Math.min((int)Math.ceil(request * loadFactor), request - 1)) return false;
+		try {
+			rehash(request);
+		}
+		catch(OutOfMemoryError noMemory) { return false; }
+		return true;
+	}
+	
+	@Override
+	public void clearAndTrim(int size) {
+		 clear();
+		 trim(size);
+	}
+	
 #if !TYPE_OBJECT
 	protected int findIndex(KEY_TYPE key) {
 		if(KEY_EQUALS_NULL(key)) return containsNull ? nullIndex : -(nullIndex + 1);
@@ -509,6 +527,8 @@ public class HASH_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_VALUE_GENE
 	
 	protected VALUE_TYPE removeIndex(int pos) {
 		VALUE_TYPE value = values[pos];
+		keys[pos] = EMPTY_KEY_VALUE;
+		values[pos] = EMPTY_VALUE;
 		size--;
 		onNodeRemoved(pos);
 		shiftKeys(pos);
