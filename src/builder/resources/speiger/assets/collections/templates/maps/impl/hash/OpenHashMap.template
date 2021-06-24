@@ -526,6 +526,7 @@ public class HASH_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_VALUE_GENE
 	}
 	
 	protected VALUE_TYPE removeIndex(int pos) {
+		if(pos == nullIndex) return containsNull ? removeNullIndex() : getDefaultReturnValue();
 		VALUE_TYPE value = values[pos];
 		keys[pos] = EMPTY_KEY_VALUE;
 		values[pos] = EMPTY_VALUE;

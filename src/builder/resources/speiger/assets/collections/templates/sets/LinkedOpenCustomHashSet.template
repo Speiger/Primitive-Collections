@@ -424,7 +424,7 @@ public class LINKED_CUSTOM_HASH_SET KEY_GENERIC_TYPE extends CUSTOM_HASH_SET KEY
 		}
 		else if(lastIndex == pos) {
 			lastIndex = (int)(links[pos] >>> 32);
-			if(0 <= lastIndex) links[pos] |= 0xFFFFFFFFL;
+			if(0 <= lastIndex) links[lastIndex] |= 0xFFFFFFFFL;
 		}
 		else {
 			long link = links[pos];

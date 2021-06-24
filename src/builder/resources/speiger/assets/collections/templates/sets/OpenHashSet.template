@@ -283,7 +283,7 @@ public class HASH_SET KEY_GENERIC_TYPE extends ABSTRACT_SET KEY_GENERIC_TYPE imp
 	
 	@Override
 	public boolean remove(KEY_TYPE o) {
-		if(KEY_EQUALS_NULL(o)) return (containsNull ? removeNullIndex() : false);
+		if(KEY_EQUALS_NULL(o)) return containsNull ? removeNullIndex() : false;
 		int pos = HashUtil.mix(KEY_TO_HASH(o)) & mask;
 		KEY_TYPE current = keys[pos];
 		if(KEY_EQUALS_NULL(current)) return false;
@@ -324,6 +324,8 @@ public class HASH_SET KEY_GENERIC_TYPE extends ABSTRACT_SET KEY_GENERIC_TYPE imp
 	}
 	
 	protected boolean removeIndex(int pos) {
+		if(pos == nullIndex) return containsNull ? removeNullIndex() : false;
+		keys[pos] = EMPTY_KEY_VALUE;
 		size--;
 		onNodeRemoved(pos);
 		shiftKeys(pos);

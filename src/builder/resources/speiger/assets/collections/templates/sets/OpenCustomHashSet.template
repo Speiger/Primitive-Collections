@@ -366,6 +366,8 @@ public class CUSTOM_HASH_SET KEY_GENERIC_TYPE extends ABSTRACT_SET KEY_GENERIC_T
 	}
 	
 	protected boolean removeIndex(int pos) {
+		if(pos == nullIndex) return containsNull ? removeNullIndex() : false;
+		keys[pos] = EMPTY_KEY_VALUE;
 		size--;
 		onNodeRemoved(pos);
 		shiftKeys(pos);

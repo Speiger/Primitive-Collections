@@ -801,6 +801,8 @@ public class AVL_TREE_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_VALUE_
 			else entry.parent.right = right;
 			right.left = entry;
 			entry.parent = right;
+			entry.updateHeight();
+			right.updateHeight();
 		}
 	}
 	
@@ -815,6 +817,8 @@ public class AVL_TREE_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_VALUE_
 			else entry.parent.left = left;
 			left.right = entry;
 			entry.parent = left;
+			entry.updateHeight();
+			left.updateHeight();
 		}
 	}
 	
@@ -1933,7 +1937,7 @@ public class AVL_TREE_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_VALUE_
 		
 		void updateHeight() { state = (1 + Math.max(left == null ? -1 : left.getHeight(), right == null ? -1 : right.getHeight())); }
 		
-		int getBalance() { return (left == null ? -1 : left.getHeight()) - (right == null ? -1 : right.getBalance()); }
+		int getBalance() { return (left == null ? -1 : left.getHeight()) - (right == null ? -1 : right.getHeight()); }
 		
 		boolean needsSuccessor() { return left != null && right != null; }
 		

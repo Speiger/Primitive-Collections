@@ -4,8 +4,11 @@
 ### Version 0.3.1
 - Fixed: containsKey & containsValue in HashMaps were deprecated for Object Variants.
 - Fixed: HashMap wasn't deleting Keys & Values references when removing a Object
-- Fixed: AVLTreeSet didn't balance properly.
+- Fixed: AVLTreeMap didn't balance properly.
 - Changed: EnumMap no longer tries to access SharedSecrets since its gone in java11
+- Added: HashMaps now implement ITrimmable
+- Added: AVLTreeSet didn't balance properly
+- Fixed: HashMaps & LinkedMaps weren't clearing references properly.
 
 ### Version 0.3.0 (Breaking 0.2.0)
 - Added: Stack.isEmpty was missing
