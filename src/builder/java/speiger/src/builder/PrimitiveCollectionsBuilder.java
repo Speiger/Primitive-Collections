@@ -79,6 +79,7 @@ public class PrimitiveCollectionsBuilder extends TemplateProcessor
 		nameRemapper.put("AbstractList", "Abstract%sList");
 		nameRemapper.put("EnumMap", "Enum2%sMap");
 		nameRemapper.put("LinkedEnumMap", "LinkedEnum2%sMap");
+		nameRemapper.put("ImmutableList", "Immutable%sList");
 		addBlockage(ClassType.OBJECT, "Consumer", "Comparator", "Stack");
 		addBlockage(ClassType.BOOLEAN, "ArraySet", "AVLTreeSet", "RBTreeSet", "SortedSet", "NavigableSet", "OpenHashSet", "OpenCustomHashSet", "LinkedOpenHashSet", "LinkedOpenCustomHashSet");
 		addBlockage(ClassType.BOOLEAN, "SortedMap", "NavigableMap", "OpenHashMap", "LinkedOpenHashMap", "OpenCustomHashMap", "LinkedOpenCustomHashMap", "ArrayMap", "RBTreeMap", "AVLTreeMap");

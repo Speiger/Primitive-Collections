@@ -132,6 +132,7 @@ public class GlobalVariables
 		
 		//Final Classes
 		addClassMapper("ARRAY_LIST", "ArrayList");
+		addAbstractMapper("IMMUTABLE_LIST", "Immutable%sList");
 		addClassMapper("ARRAY_FIFO_QUEUE", "ArrayFIFOQueue");
 		addClassMapper("ARRAY_PRIORITY_QUEUE", "ArrayPriorityQueue");
 		addClassMapper("HEAP_PRIORITY_QUEUE", "HeapPriorityQueue");

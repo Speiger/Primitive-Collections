@@ -3,8 +3,11 @@ package speiger.src.collections.PACKAGE.utils;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 import speiger.src.collections.PACKAGE.collections.ITERATOR;
+import speiger.src.collections.PACKAGE.lists.ARRAY_LIST;
+import speiger.src.collections.PACKAGE.lists.LIST;
 import speiger.src.collections.PACKAGE.lists.LIST_ITERATOR;
 import speiger.src.collections.PACKAGE.collections.BI_ITERATOR;
+import speiger.src.collections.PACKAGE.collections.COLLECTION;
 
 /**
  * A Helper class for Iterators
@@ -78,18 +81,16 @@ public class ITERATORS
 	public static GENERIC_KEY_BRACES LIST_ITERATOR KEY_GENERIC_TYPE unmodifiable(LIST_ITERATOR KEY_GENERIC_TYPE iterator) {
 		return iterator instanceof UnmodifiableListIterator ? iterator : new UnmodifiableListIteratorBRACES(iterator);
 	}
-	
-#if !TYPE_OBJECT
-	/**
+		/**
 	 * Helper function to convert a Object Iterator into a Primitive Iterator
 	 * @param iterator that should be converted to a unboxing iterator
+	 * @ArrayType(T)
 	 * @return a primitive iterator
 	 */
-	public static ITERATOR wrap(Iterator<CLASS_TYPE> iterator) {
-		return iterator instanceof ITERATOR ? (ITERATOR)iterator : new IteratorWrapper(iterator);
+	public static GENERIC_KEY_BRACES ITERATOR KEY_GENERIC_TYPE wrap(Iterator<? extends CLASS_TYPE> iterator) {
+		return iterator instanceof ITERATOR ? (ITERATOR KEY_GENERIC_TYPE)iterator : new IteratorWrapperBRACES(iterator);
 	}
 	
-#endif
 	/**
 	 * Returns a Array Wrapping iterator
 	 * @param a the array that should be wrapped
@@ -197,28 +198,6 @@ public class ITERATORS
 		return index;
 	}
 	
-	/**
-	 * Helper Iterator that concats other iterators together
-	 * @param array the Iterators that should be concatenated
-	 * @ArrayType(T)
-	 * @return iterator of the inputted iterators
-	 */
-	public static GENERIC_KEY_BRACES ITERATOR KEY_GENERIC_TYPE concat(ITERATOR KEY_GENERIC_TYPE... array) {
-		return concat(array, 0, array.length);
-	}
-	
-	/**
-	 * Helper Iterator that concats other iterators together
-	 * @param array the Iterators that should be concatenated
-	 * @param offset where to start within the array
-	 * @param length the length of the array
-	 * @ArrayType(T)
-	 * @return iterator of the inputted iterators
-	 */
-	public static GENERIC_KEY_BRACES ITERATOR KEY_GENERIC_TYPE concat(ITERATOR KEY_GENERIC_TYPE[] array, int offset, int length) {
-		return new ConcatIteratorBRACES(array, offset, length);
-	}
-	
 #if !TYPE_OBJECT
 	/**
 	 * A Function to convert a Primitive Iterator to a Object array.
@@ -264,11 +243,84 @@ public class ITERATORS
 		return index;
 	}
 	
-	private static class IteratorWrapper implements ITERATOR
+#endif
+	/**
+	 * A Helper function to pours all elements of a Iterator into a List
+	 * @param iter the elements that should be poured into list.
+	 * @ArrayType(T)
+	 * @return A list of all elements of the Iterator
+	 */
+	public static GENERIC_KEY_BRACES LIST KEY_GENERIC_TYPE pour(ITERATOR KEY_GENERIC_TYPE iter) {
+		return pour(iter, Integer.MAX_VALUE);
+	}
+	
+	/**
+	 * A Helper function to pours all elements of a Iterator into a List
+	 * @param iter the elements that should be poured into list.
+	 * @param max the maximum amount of elements that should be collected
+	 * @ArrayType(T)
+	 * @return A list of all requested elements of the Iterator
+	 */
+	public static GENERIC_KEY_BRACES LIST KEY_GENERIC_TYPE pour(ITERATOR KEY_GENERIC_TYPE iter, int max) {
+		ARRAY_LIST KEY_GENERIC_TYPE list = new ARRAY_LISTBRACES();
+		pour(iter, list, max);
+		list.trim();
+		return list;
+	}
+	
+	/**
+	 * A Helper function to pours all elements of a Iterator into a Collection
+	 * @param iter the elements that should be poured into list.
+	 * @param c the collection where the elements should be poured into
+	 * @ArrayType(T)
+	 * @return the amount of elements that were added
+	 */
+	public static GENERIC_KEY_BRACES int pour(ITERATOR KEY_GENERIC_TYPE iter, COLLECTION KEY_GENERIC_TYPE c) {
+		return pour(iter, c, Integer.MAX_VALUE);
+	}
+	
+	/**
+	 * A Helper function to pours all elements of a Iterator into a Collection
+	 * @param iter the elements that should be poured into list.
+	 * @param c the collection where the elements should be poured into
+	 * @param max the maximum amount of elements that should be collected
+	 * @ArrayType(T)
+	 * @return the amount of elements that were added
+	 */
+	public static GENERIC_KEY_BRACES int pour(ITERATOR KEY_GENERIC_TYPE iter, COLLECTION KEY_GENERIC_TYPE c, int max) {
+		if(max < 0) throw new IllegalStateException("Max is negative");
+		int done = 0;
+		for(;done<max && iter.hasNext();done++, c.add(iter.NEXT()));
+		return done;
+	}
+	
+	/**
+	 * Helper Iterator that concats other iterators together
+	 * @param array the Iterators that should be concatenated
+	 * @ArrayType(T)
+	 * @return iterator of the inputted iterators
+	 */
+	public static GENERIC_KEY_BRACES ITERATOR KEY_GENERIC_TYPE concat(ITERATOR KEY_GENERIC_TYPE... array) {
+		return concat(array, 0, array.length);
+	}
+	
+	/**
+	 * Helper Iterator that concats other iterators together
+	 * @param array the Iterators that should be concatenated
+	 * @param offset where to start within the array
+	 * @param length the length of the array
+	 * @ArrayType(T)
+	 * @return iterator of the inputted iterators
+	 */
+	public static GENERIC_KEY_BRACES ITERATOR KEY_GENERIC_TYPE concat(ITERATOR KEY_GENERIC_TYPE[] array, int offset, int length) {
+		return new ConcatIteratorBRACES(array, offset, length);
+	}
+	
+	private static class IteratorWrapper KEY_GENERIC_TYPE implements ITERATOR KEY_GENERIC_TYPE
 	{
-		Iterator<CLASS_TYPE> iter;
+		Iterator<? extends CLASS_TYPE> iter;
 		
-		public IteratorWrapper(Iterator<CLASS_TYPE> iter) {
+		public IteratorWrapper(Iterator<? extends CLASS_TYPE> iter) {
 			this.iter = iter;
 		}
 		
@@ -282,14 +334,15 @@ public class ITERATORS
 			return OBJ_TO_KEY(iter.next());
 		}
 		
+#if !TYPE_OBJECT
 		@Override
 		@Deprecated
 		public CLASS_TYPE next() {
 			return iter.next();
 		}
+#endif
 	}
 	
-#endif
 	private static class ConcatIterator KEY_GENERIC_TYPE implements ITERATOR KEY_GENERIC_TYPE
 	{
 		ITERATOR KEY_GENERIC_TYPE[] iters;

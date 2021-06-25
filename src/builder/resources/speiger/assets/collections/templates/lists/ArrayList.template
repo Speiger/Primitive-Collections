@@ -116,7 +116,7 @@ public class ARRAY_LIST KEY_GENERIC_TYPE extends ABSTRACT_LIST KEY_GENERIC_TYPE 
 	 * Creates a new ArrayList with a Copy of the array
 	 * @param a the array that should be copied
 	 */
-	public ARRAY_LIST(KEY_TYPE[] a)	{
+	public ARRAY_LIST(KEY_TYPE... a)	{
 		this(a, 0, a.length);
 	}
 	

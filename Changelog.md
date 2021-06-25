@@ -3,6 +3,9 @@
 
 ### Version 0.3.2
 - Fixed: Map.put wasn't referring to primitive variants.
+- Added: ImmutableList.
+- Added: Iterator pour function into a List or Array
+- Changed: Arrays Wrap is now accessible to Objects and now is ? extends TYPE instead of TYPE.
 
 ### Version 0.3.1
 - Fixed: containsKey & containsValue in HashMaps were deprecated for Object Variants.

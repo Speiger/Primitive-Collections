@@ -1,0 +1,389 @@
+package speiger.src.collections.PACKAGE.lists;
+
+import java.util.Arrays;
+#if TYPE_OBJECT
+import java.util.Comparator;
+#endif
+import java.util.Collection;
+import java.util.Objects;
+#if TYPE_OBJECT
+import java.util.function.Consumer;
+#endif
+import java.util.function.Predicate;
+import java.util.function.UnaryOperator;
+#if PRIMITIVES
+import java.util.function.JAVA_PREDICATE;
+import java.util.function.JAVA_UNARY_OPERATOR;
+#endif
+
+import speiger.src.collections.PACKAGE.collections.COLLECTION;
+#if !TYPE_OBJECT
+import speiger.src.collections.PACKAGE.functions.COMPARATOR;
+import speiger.src.collections.PACKAGE.functions.CONSUMER;
+import speiger.src.collections.PACKAGE.utils.ARRAYS;
+#endif
+import speiger.src.collections.objects.utils.ObjectArrays;
+import speiger.src.collections.PACKAGE.utils.ITERATORS;
+#if PRIMITIVES
+import java.util.stream.JAVA_STREAM;
+import java.util.stream.StreamSupport;
+#endif
+import speiger.src.collections.PACKAGE.collections.SPLIT_ITERATOR;
+import speiger.src.collections.PACKAGE.utils.SPLIT_ITERATORS;
+import speiger.src.collections.utils.SanityChecks;
+
+#if TYPE_OBJECT
+/**
+ * A Type-Specific Immutable implementation of list that is written to reduce (un)boxing
+ *
+ * @Type(T)
+ */
+public class IMMUTABLE_LIST KEY_GENERIC_TYPE extends ABSTRACT_LIST KEY_GENERIC_TYPE
+#else
+/**
+ * A Type-Specific Immutable implementation of list that is written to reduce (un)boxing
+ */
+public class IMMUTABLE_LIST KEY_GENERIC_TYPE extends ABSTRACT_LIST KEY_GENERIC_TYPE
+#endif
+{	
+	/** The backing array */
+	protected transient KEY_TYPE[] data;
+	
+	/**
+	 * Creates a new Immutable copy of the contents of the Collection.
+	 * @param c the elements that should be added into the list
+	 */
+	public IMMUTABLE_LIST(Collection<? extends CLASS_TYPE> c) {
+		data = ARRAYS.pour(ITERATORS.wrap(c.iterator()));
+	}
+	
+	/**
+	 * Creates a new Immutable copy of the contents of the Collection.
+	 * @param c the elements that should be added into the list
+	 */
+	public IMMUTABLE_LIST(COLLECTION KEY_GENERIC_TYPE c) {
+		data = ARRAYS.pour(c.iterator());
+	}
+	
+	/**
+	 * Creates a new Immutable copy of the contents of the List.
+	 * @param l the elements that should be added into the list
+	 */
+	public IMMUTABLE_LIST(LIST KEY_GENERIC_TYPE l) {
+		KEY_TYPE[] temp = NEW_KEY_ARRAY(l.size());
+		l.getElements(0, temp, 0, l.size());
+		data = temp;
+	}
+	
+	/**
+	 * Creates a new Immutable copy of the contents of the Array.
+	 * @param a the array that should be copied
+	 */
+	public IMMUTABLE_LIST(KEY_TYPE... a) {
+		this(a, 0, a.length);
+	}
+	
+	/**
+	 * Creates a new ImmutableList copy of the array with a custom length
+	 * @param a the array that should be copied
+	 * @param length the desired length that should be copied
+	 */
+	public IMMUTABLE_LIST(KEY_TYPE[] a, int length) {
+		this(a, 0, length);
+	}
+	
+	/**
+	 * Creates a new ImmutableList copy of the array with in the custom range.
+	 * @param a the array that should be copied
+	 * @param offset the starting offset of where the array should be copied from
+	 * @param length the desired length that should be copied
+	 * @throws IllegalStateException if offset is smaller then 0
+	 * @throws IllegalStateException if the offset + length exceeds the array length
+	 */
+	public IMMUTABLE_LIST(KEY_TYPE[] a, int offset, int length) {
+		SanityChecks.checkArrayCapacity(a.length, offset, length);
+		data = Arrays.copyOfRange(a, offset, offset+length);
+	}
+	
+	@Override
+	public boolean add(KEY_TYPE e) { throw new UnsupportedOperationException(); }
+	@Override
+	public void add(int index, KEY_TYPE e) { throw new UnsupportedOperationException(); }
+	@Override
+	@Primitive
+	public boolean addAll(int index, Collection<? extends CLASS_TYPE> c) { throw new UnsupportedOperationException(); }
+	@Override
+	public boolean addAll(int index, COLLECTION KEY_GENERIC_TYPE c) { throw new UnsupportedOperationException(); }
+	@Override
+	public boolean addAll(int index, LIST KEY_GENERIC_TYPE c) { throw new UnsupportedOperationException(); }
+	@Override
+	public void addElements(int from, KEY_TYPE[] a, int offset, int length) { throw new UnsupportedOperationException(); }
+	
+	@Override
+	public KEY_TYPE[] getElements(int from, KEY_TYPE[] a, int offset, int length) {
+		SanityChecks.checkArrayCapacity(data.length, offset, length);
+		System.arraycopy(data, from, a, offset, length);
+		return a;
+	}
+	
+	@Override
+	public void removeElements(int from, int to) { throw new UnsupportedOperationException(); }
+#if TYPE_OBJECT
+	@Override
+	public <K> K[] extractElements(int from, int to, Class<K> type) { throw new UnsupportedOperationException(); }
+	
+#else
+	@Override
+	public KEY_TYPE[] extractElements(int from, int to) { throw new UnsupportedOperationException(); }
+	
+#endif
+	
+	/**
+	 * A function to find if the Element is present in this list.
+	 * @param o the element that is searched for
+	 * @return if the element was found.
+	 */
+	@Override
+	@Primitive
+	public boolean contains(Object o) {
+		return indexOf(o) != -1;
+	}
+	
+	/**
+	 * A function to find the index of a given element
+	 * @param o the element that is searched for
+	 * @return the index of the element if found. (if not found then -1)
+	 */
+	@Override
+	@Primitive
+	public int indexOf(Object o) {
+#if TYPE_OBJECT
+		if(o == null) {
+			for(int i = 0,m=data.length;i<m;i++)
+				if(data[i] == null) return i;
+			return -1;
+		}
+#else
+		if(o == null) return -1;
+#endif
+		for(int i = 0,m=data.length;i<m;i++) {
+			if(EQUALS_KEY_TYPE(data[i], o)) return i;
+		}
+		return -1;
+	}
+	
+	/**
+	 * A function to find the last index of a given element
+	 * @param o the element that is searched for
+	 * @return the last index of the element if found. (if not found then -1)
+	 */
+	@Override
+	@Primitive
+	public int lastIndexOf(Object o) {
+#if TYPE_OBJECT
+		if(o == null) {
+			for(int i = data.length - 1;i>=0;i--)
+				if(data[i] == null) return i;
+			return -1;
+		}
+#else
+		if(o == null) return -1;
+#endif
+		for(int i = data.length - 1;i>=0;i--) {
+			if(EQUALS_KEY_TYPE(data[i], o)) return i;
+		}
+		return -1;
+	}
+	
+#if TYPE_OBJECT
+	@Override
+	public void sort(Comparator<? super CLASS_TYPE> c) { throw new UnsupportedOperationException(); }
+	@Override
+	public void unstableSort(Comparator<? super CLASS_TYPE> c) { throw new UnsupportedOperationException(); }
+	
+#else
+	/**
+	 * A Type Specific implementation of the Collection#contains function.
+	 * @param e the element that is searched for.
+	 * @return if the element was found
+	 */
+	@Override
+	public boolean contains(KEY_TYPE e) {
+		return indexOf(e) != -1;
+	}
+	
+	/**
+	 * A Type-Specific function to find the index of a given element
+	 * @param e the element that is searched for
+	 * @return the index of the element if found. (if not found then -1)
+	 */
+	@Override
+	public int indexOf(KEY_TYPE e) {
+		for(int i = 0,m=data.length;i<m;i++) {
+			if(KEY_EQUALS(data[i], e)) return i;
+		}
+		return -1;
+	}
+	
+	/**
+	 * A Type-Specific function to find the last index of a given element
+	 * @param e the element that is searched for
+	 * @return the last index of the element if found. (if not found then -1)
+	 */
+	@Override
+	public int lastIndexOf(KEY_TYPE e) {
+		for(int i = data.length - 1;i>=0;i--) {
+			if(KEY_EQUALS(data[i], e)) return i;
+		}
+		return -1;
+	}
+	
+	@Override
+	public void sort(COMPARATOR c) { throw new UnsupportedOperationException(); }
+	@Override
+	public void unstableSort(COMPARATOR c) { throw new UnsupportedOperationException(); }
+	
+#endif
+	/**
+	 * A Type-Specific get function to reduce (un)boxing
+	 * @param index the index of the element to fetch
+	 * @return the value of the requested index
+	 * @throws IndexOutOfBoundsException if the index is out of range
+	 */
+	@Override
+	public KEY_TYPE GET_KEY(int index) {
+		checkRange(index);
+		return data[index];
+	}
+	
+	/**
+	 * A Type Specific foreach function that reduces (un)boxing
+	 * 
+     * @implSpec
+     * <p>The default implementation behaves as if:
+     * <pre>{@code
+     *     for(int i = 0;i<size;i++)
+     *     		action.accept(data[i]);
+     * }</pre>
+     *
+     * @param action The action to be performed for each element
+     * @throws NullPointerException if the specified action is null
+     * @see Iterable#forEach(java.util.function.Consumer)
+     */
+	@Override
+	public void forEach(CONSUMER KEY_SUPER_GENERIC_TYPE action) {
+		Objects.requireNonNull(action);
+		for(int i = 0,m=data.length;i<m;i++)
+			action.accept(data[i]);
+	}
+	
+	@Override
+	public KEY_TYPE set(int index, KEY_TYPE e) { throw new UnsupportedOperationException(); }
+	@Override
+	@Primitive
+	public void replaceAll(UnaryOperator<CLASS_TYPE> o) { throw new UnsupportedOperationException(); }
+#if PRIMITIVES
+	@Override
+	public void REPLACE(JAVA_UNARY_OPERATOR o) { throw new UnsupportedOperationException(); }
+#endif
+	@Override
+	public KEY_TYPE REMOVE(int index) { throw new UnsupportedOperationException(); }
+
+#if !TYPE_OBJECT
+	@Override
+	public boolean REMOVE_KEY(KEY_TYPE type) { throw new UnsupportedOperationException(); }
+
+#endif
+	@Override
+	@Primitive
+	public boolean removeAll(Collection<?> c) { throw new UnsupportedOperationException(); }
+	@Override
+	@Primitive
+	public boolean retainAll(Collection<?> c) { throw new UnsupportedOperationException(); }
+	@Override
+	@Primitive
+	public boolean removeIf(Predicate<? super CLASS_TYPE> filter) { throw new UnsupportedOperationException(); }
+	@Override
+	public boolean removeAll(COLLECTION KEY_GENERIC_TYPE c) { throw new UnsupportedOperationException(); }
+	@Override
+	public boolean retainAll(COLLECTION KEY_GENERIC_TYPE c) { throw new UnsupportedOperationException(); }
+	
+#if PRIMITIVES
+	@Override
+	public boolean remIf(JAVA_PREDICATE filter) { throw new UnsupportedOperationException(); }
+	
+#endif
+	/**
+	 * A toArray implementation that ensures the Array itself is a Object.
+	 * @return a Array of the elements in the list
+	 */
+	@Override
+	@Primitive
+	public Object[] toArray() {
+		Object[] obj = new Object[data.length];
+		for(int i = 0,m=data.length;i<m;i++)
+			obj[i] = KEY_TO_OBJ(data[i]);
+		return obj;
+	}
+	
+	/**
+	 * A toArray implementation that ensures the Array itself is a Object.
+	 * @param a original array. If null a Object array with the right size is created. If to small the Array of the same type is created with the right size
+	 * @return a Array of the elements in the list
+	 */
+	@Override
+	@Primitive
+	public <E> E[] toArray(E[] a) {
+		if(a == null) a = (E[])new Object[data.length];
+		else if(a.length < data.length) a = (E[])ObjectArrays.newArray(a.getClass().getComponentType(), data.length);
+		for(int i = 0,m=data.length;i<m;i++)
+			a[i] = (E)KEY_TO_OBJ(data[i]);
+		return a;
+	}
+	
+#if !TYPE_OBJECT
+	@Override
+	public KEY_TYPE[] TO_ARRAY(KEY_TYPE[] a) {
+		if(a.length < data.length) a = new KEY_TYPE[data.length];
+		System.arraycopy(data, 0, a, 0, data.length);
+		return a;
+	}
+	
+#endif
+	/**
+	 * A function to return the size of the list
+	 * @return the size of elements in the list
+	 */
+	@Override
+	public int size() {
+		return data.length;
+	}
+	
+	@Override
+	public void size(int size) { throw new UnsupportedOperationException(); }
+	@Override
+	public void clear() { throw new UnsupportedOperationException(); }
+	
+	protected void checkRange(int index) {
+		if (index < 0 || index >= data.length)
+			throw new IndexOutOfBoundsException("Index: " + index + ", Size: " + data.length);
+	}
+	
+#if PRIMITIVES
+	/**
+	 * Returns a Java-Type-Specific Stream to reduce boxing/unboxing.
+	 * @return a Stream of the closest java type
+	 * @note characteristics are ordered, sized, subsized
+	 */
+	@Override
+	public JAVA_STREAM primitiveStream() { return StreamSupport.NEW_STREAM(SPLIT_ITERATORS.createArrayJavaSplititerator(data, data.length, 16464), false); }
+	
+#endif
+	/**
+	 * A Type Specific Type Splititerator to reduce boxing/unboxing
+	 * @return type specific splititerator
+	 * @note characteristics are ordered, sized, subsized
+	 */
+	@Override
+	public SPLIT_ITERATOR KEY_GENERIC_TYPE spliterator() { return SPLIT_ITERATORS.createArraySplititerator(data, data.length, 16464); }
+}
