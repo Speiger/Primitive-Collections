@@ -141,6 +141,7 @@ public class GlobalVariables
 		addAbstractMapper("IMMUTABLE_HASH_SET", "Immutable%sOpenHashSet");
 		addClassMapper("CUSTOM_HASH_SET", "OpenCustomHashSet");
 		addClassMapper("HASH_SET", "OpenHashSet");
+		addAbstractBiMapper("IMMUTABLE_HASH_MAP", "Immutable%sOpenHashMap", "2");
 		addBiClassMapper("LINKED_CUSTOM_HASH_MAP", "LinkedOpenCustomHashMap", "2");
 		addBiClassMapper("LINKED_HASH_MAP", "LinkedOpenHashMap", "2");
 		addBiClassMapper("CUSTOM_HASH_MAP", "OpenCustomHashMap", "2");

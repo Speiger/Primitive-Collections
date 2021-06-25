@@ -1,84 +1,90 @@
-package speiger.src.collections.PACKAGE.maps.impl.hash;
+package speiger.src.collections.PACKAGE.maps.impl.immutable;
 
-import java.util.Comparator;
 import java.util.Map;
+import java.util.Comparator;
 import java.util.NoSuchElementException;
-import java.util.function.Consumer;
-#if TYPE_OBJECT
 import java.util.Objects;
-#endif
+import java.util.function.Consumer;
 
-import speiger.src.collections.PACKAGE.collections.BI_ITERATOR;
 #if !TYPE_OBJECT
-import speiger.src.collections.PACKAGE.functions.COMPARATOR;
+import speiger.src.collections.PACKAGE.collections.BI_ITERATOR;
 import speiger.src.collections.PACKAGE.functions.CONSUMER;
+import speiger.src.collections.PACKAGE.functions.COMPARATOR;
 #endif
 import speiger.src.collections.PACKAGE.functions.consumer.BI_CONSUMER;
+import speiger.src.collections.PACKAGE.functions.function.FUNCTION;
+import speiger.src.collections.PACKAGE.functions.function.UNARY_OPERATOR;
 import speiger.src.collections.PACKAGE.lists.LIST_ITERATOR;
-import speiger.src.collections.PACKAGE.maps.interfaces.MAP;
 import speiger.src.collections.PACKAGE.maps.interfaces.SORTED_MAP;
-import speiger.src.collections.PACKAGE.sets.ABSTRACT_SET;
+import speiger.src.collections.PACKAGE.maps.abstracts.ABSTRACT_MAP;
+import speiger.src.collections.PACKAGE.maps.interfaces.MAP;
 import speiger.src.collections.PACKAGE.sets.SORTED_SET;
+import speiger.src.collections.PACKAGE.utils.maps.MAPS;
+#if !TYPE_OBJECT
+import speiger.src.collections.PACKAGE.utils.ARRAYS;
+#endif
+
+
+#if !TYPE_OBJECT
+import speiger.src.collections.PACKAGE.sets.ABSTRACT_SET;
 import speiger.src.collections.PACKAGE.sets.SET;
+#endif
 import speiger.src.collections.VALUE_PACKAGE.collections.VALUE_ABSTRACT_COLLECTION;
 import speiger.src.collections.VALUE_PACKAGE.collections.VALUE_COLLECTION;
 import speiger.src.collections.VALUE_PACKAGE.collections.VALUE_ITERATOR;
-#if !VALUE_OBJECT && !SAME_TYPE
+#if !SAME_TYPE
+import speiger.src.collections.VALUE_PACKAGE.functions.function.VALUE_UNARY_OPERATOR;
+#if !VALUE_OBJECT
 import speiger.src.collections.VALUE_PACKAGE.functions.VALUE_CONSUMER;
 import speiger.src.collections.VALUE_PACKAGE.lists.VALUE_LIST_ITERATOR;
+import speiger.src.collections.VALUE_PACKAGE.utils.VALUE_ARRAYS;
 #endif
-#if !TYPE_OBJECT
+#endif
 import speiger.src.collections.objects.collections.ObjectBidirectionalIterator;
+#if !TYPE_OBJECT
 import speiger.src.collections.objects.lists.ObjectListIterator;
-import speiger.src.collections.objects.sets.AbstractObjectSet;
 import speiger.src.collections.objects.sets.ObjectSortedSet;
-import speiger.src.collections.objects.sets.ObjectSet;
 #endif
+import speiger.src.collections.objects.sets.AbstractObjectSet;
+import speiger.src.collections.objects.sets.ObjectSet;
 import speiger.src.collections.utils.HashUtil;
+import speiger.src.collections.utils.SanityChecks;
 
 /**
- * A Type Specific LinkedHashMap implementation that uses specific arrays to create links between nodes to remove the wrapping of elements
- * to greatly reduce memory usage. In Addition adding some helper methods to move around elements.
- * This implementation of SortedMap does not support SubMaps of any kind. It implements the interface due to sortability and first/last access
+ * A Type Specific Custom implementation of the HashMap
+ * Instead of using Wrapper Object Arrays for storing keys and values there is dedicated arrays for storing keys and values.
+ * Extra to that there is a couple quality of life functions provided
  * @Type(T)
  * @ValueType(V)
  */
-public class LINKED_HASH_MAP KEY_VALUE_GENERIC_TYPE extends HASH_MAP KEY_VALUE_GENERIC_TYPE implements SORTED_MAP KEY_VALUE_GENERIC_TYPE
+public class IMMUTABLE_HASH_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_VALUE_GENERIC_TYPE implements SORTED_MAP KEY_VALUE_GENERIC_TYPE
 {
+	/** The Backing keys array */
+	protected transient KEY_TYPE[] keys;
+	/** The Backing values array */
+	protected transient VALUE_TYPE[] values;
 	/** The Backing array for links between nodes. Left 32 Bits => Previous Entry, Right 32 Bits => Next Entry */
 	protected transient long[] links;
+	/** If a null value is present */
+	protected transient boolean containsNull;
+	/** Index of the Null Value */
+	protected transient int nullIndex;
+	/** Max Index that is allowed to be searched through nullIndex - 1 */
+	protected transient int mask;
 	/** The First Index in the Map */
 	protected int firstIndex = -1;
 	/** The Last Index in the Map */
 	protected int lastIndex = -1;
+	/** EntrySet cache */
+	protected transient FastEntrySet KEY_VALUE_GENERIC_TYPE entrySet;
+	/** KeySet cache */
+	protected transient SET KEY_GENERIC_TYPE keySet;
+	/** Values cache */
+	protected transient VALUE_COLLECTION VALUE_GENERIC_TYPE valuesC;
 	
-	/**
-	 * Default Constructor
-	 */
-	public LINKED_HASH_MAP() {
-		this(HashUtil.DEFAULT_MIN_CAPACITY, HashUtil.DEFAULT_LOAD_FACTOR);
-	}
+	/** Amount of Elements stored in the HashMap */
+	protected int size;
 	
-	/**
-	 * Constructor that defines the minimum capacity
-	 * @param minCapacity the minimum capacity the HashMap is allowed to be.
-	 * @throws IllegalStateException if the minimum capacity is negative
-	 */
-	public LINKED_HASH_MAP(int minCapacity) {
-		this(minCapacity, HashUtil.DEFAULT_LOAD_FACTOR);
-	}
-	
-	/**
-	 * Constructor that defines the minimum capacity and load factor
-	 * @param minCapacity the minimum capacity the HashMap is allowed to be.
-	 * @param loadFactor the percentage of how full the backing array can be before they resize
-	 * @throws IllegalStateException if the minimum capacity is negative
-	 * @throws IllegalStateException if the loadfactor is either below/equal to 0 or above/equal to 1
-	 */
-	public LINKED_HASH_MAP(int minCapacity, float loadFactor) {
-		super(minCapacity, loadFactor);
-		links = new long[nullIndex + 1];
-	}
 	
 #if !TYPE_OBJECT || !VALUE_OBJECT
 	/**
@@ -87,7 +93,7 @@ public class LINKED_HASH_MAP KEY_VALUE_GENERIC_TYPE extends HASH_MAP KEY_VALUE_G
 	 * @param values the values that should be put into the map.
 	 * @throws IllegalStateException if the keys and values do not match in lenght
 	 */
-	public LINKED_HASH_MAP(CLASS_TYPE[] keys, CLASS_VALUE_TYPE[] values) {
+	public IMMUTABLE_HASH_MAP(CLASS_TYPE[] keys, CLASS_VALUE_TYPE[] values) {
 		this(keys, values, HashUtil.DEFAULT_LOAD_FACTOR);
 	}
 	
@@ -99,10 +105,17 @@ public class LINKED_HASH_MAP KEY_VALUE_GENERIC_TYPE extends HASH_MAP KEY_VALUE_G
 	 * @throws IllegalStateException if the keys and values do not match in lenght
 	 * @throws IllegalStateException if the loadfactor is either below/equal to 0 or above/equal to 1
 	 */
-	public LINKED_HASH_MAP(CLASS_TYPE[] keys, CLASS_VALUE_TYPE[] values, float loadFactor) {
-		this(keys.length, loadFactor);
+	public IMMUTABLE_HASH_MAP(CLASS_TYPE[] keys, CLASS_VALUE_TYPE[] values, float loadFactor) {
 		if(keys.length != values.length) throw new IllegalStateException("Input Arrays are not equal size");
-		for(int i = 0,m=keys.length;i<m;i++) put(OBJ_TO_KEY(keys[i]), OBJ_TO_VALUE(values[i]));
+#if TYPE_OBJECT && VALUE_OBJECT
+		init(keys, values, 0, keys.length, loadFactor);
+#else if TYPE_OBJECT
+		init(keys, VALUE_ARRAYS.unwrap(values), 0, keys.length, loadFactor);
+#else if VALUE_OBJECT
+		init(ARRAYS.unwrap(keys), values, 0, keys.length, loadFactor);
+#else
+		init(ARRAYS.unwrap(keys), VALUE_ARRAYS.unwrap(values), 0, keys.length, loadFactor);
+#endif
 	}
 	
 #endif
@@ -112,7 +125,7 @@ public class LINKED_HASH_MAP KEY_VALUE_GENERIC_TYPE extends HASH_MAP KEY_VALUE_G
 	 * @param values the values that should be put into the map.
 	 * @throws IllegalStateException if the keys and values do not match in lenght
 	 */
-	public LINKED_HASH_MAP(KEY_TYPE[] keys, VALUE_TYPE[] values) {
+	public IMMUTABLE_HASH_MAP(KEY_TYPE[] keys, VALUE_TYPE[] values) {
 		this(keys, values, HashUtil.DEFAULT_LOAD_FACTOR);
 	}
 	
@@ -124,17 +137,16 @@ public class LINKED_HASH_MAP KEY_VALUE_GENERIC_TYPE extends HASH_MAP KEY_VALUE_G
 	 * @throws IllegalStateException if the keys and values do not match in lenght
 	 * @throws IllegalStateException if the loadfactor is either below/equal to 0 or above/equal to 1
 	 */
-	public LINKED_HASH_MAP(KEY_TYPE[] keys, VALUE_TYPE[] values, float loadFactor) {
-		this(keys.length, loadFactor);
+	public IMMUTABLE_HASH_MAP(KEY_TYPE[] keys, VALUE_TYPE[] values, float loadFactor) {
 		if(keys.length != values.length) throw new IllegalStateException("Input Arrays are not equal size");
-		for(int i = 0,m=keys.length;i<m;i++) put(keys[i], values[i]);
+		init(keys, values, 0, keys.length, loadFactor);
 	}
 	
 	/**
 	 * A Helper constructor that allows to create a Map with exactly the same values as the provided map.
 	 * @param map the values that should be present in the map
 	 */
-	public LINKED_HASH_MAP(Map<? extends CLASS_TYPE, ? extends CLASS_VALUE_TYPE> map) {
+	public IMMUTABLE_HASH_MAP(Map<? extends CLASS_TYPE, ? extends CLASS_VALUE_TYPE> map) {
 		this(map, HashUtil.DEFAULT_LOAD_FACTOR);
 	}
 	
@@ -144,16 +156,23 @@ public class LINKED_HASH_MAP KEY_VALUE_GENERIC_TYPE extends HASH_MAP KEY_VALUE_G
 	 * @param loadFactor the percentage of how full the backing array can be before they resize
 	 * @throws IllegalStateException if the loadfactor is either below/equal to 0 or above/equal to 1
 	 */
-	public LINKED_HASH_MAP(Map<? extends CLASS_TYPE, ? extends CLASS_VALUE_TYPE> map, float loadFactor) {
-		this(map.size(), loadFactor);
-		putAll(map);
+	public IMMUTABLE_HASH_MAP(Map<? extends CLASS_TYPE, ? extends CLASS_VALUE_TYPE> map, float loadFactor) {
+		KEY_TYPE[] keys = NEW_KEY_ARRAY(map.size());
+		VALUE_TYPE[] values = NEW_VALUE_ARRAY(keys.length);
+		int index = 0;
+		for(Map.Entry<? extends CLASS_TYPE, ? extends CLASS_VALUE_TYPE> entry : map.entrySet()) {
+			keys[index] = OBJ_TO_KEY(entry.getKey());
+			values[index] = OBJ_TO_VALUE(entry.getValue());
+			index++;
+		}
+		init(keys, values, 0, index, loadFactor);
 	}
 	
 	/**
 	 * A Type Specific Helper function that allows to create a new Map with exactly the same values as the provided map.
 	 * @param map the values that should be present in the map
  	 */
-	public LINKED_HASH_MAP(MAP KEY_VALUE_GENERIC_TYPE map) {
+	public IMMUTABLE_HASH_MAP(MAP KEY_VALUE_GENERIC_TYPE map) {
 		this(map, HashUtil.DEFAULT_LOAD_FACTOR);
 	}
 	
@@ -163,153 +182,173 @@ public class LINKED_HASH_MAP KEY_VALUE_GENERIC_TYPE extends HASH_MAP KEY_VALUE_G
 	 * @param loadFactor the percentage of how full the backing array can be before they resize
 	 * @throws IllegalStateException if the loadfactor is either below/equal to 0 or above/equal to 1
  	 */
-	public LINKED_HASH_MAP(MAP KEY_VALUE_GENERIC_TYPE map, float loadFactor) {
-		this(map.size(), loadFactor);
-		putAll(map);
+	public IMMUTABLE_HASH_MAP(MAP KEY_VALUE_GENERIC_TYPE map, float loadFactor) {
+		KEY_TYPE[] keys = NEW_KEY_ARRAY(map.size());
+		VALUE_TYPE[] values = NEW_VALUE_ARRAY(keys.length);
+		int index = 0;
+		for(MAP.Entry KEY_VALUE_GENERIC_TYPE entry : MAPS.fastIterable(map)) {
+			keys[index] = entry.ENTRY_KEY();
+			values[index] = entry.ENTRY_VALUE();
+			index++;
+		}
+		init(keys, values, 0, index, loadFactor);
+	}
+	
+	protected void init(KEY_TYPE[] a, VALUE_TYPE[] b, int offset, int length, float loadFactor) {
+		SanityChecks.checkArrayCapacity(a.length, offset, length);
+		int newSize = HashUtil.arraySize(length+1, loadFactor);
+		int newMask = newSize - 1;
+		KEY_TYPE[] newKeys = NEW_KEY_ARRAY(newSize + 1);
+		VALUE_TYPE[] newValues = NEW_VALUE_ARRAY(newSize + 1);
+		long[] newLinks = new long[newSize + 1];
+		int prev = -1;
+		for(int i = offset,m=offset+length;i<m;i++)
+		{
+			KEY_TYPE o = a[i];
+			if(KEY_EQUALS_NULL(o)) {
+				if(!containsNull) size++;
+				containsNull = true;
+				continue;
+			}
+			boolean found = true;
+			int pos = HashUtil.mix(KEY_TO_HASH(o)) & newMask;
+			KEY_TYPE current = newKeys[pos];
+			if(KEY_EQUALS_NOT_NULL(current)) {
+				if(KEY_EQUALS(current, o)) {
+					found = false;
+					break;
+				}
+				while(KEY_EQUALS_NOT_NULL((current = newKeys[pos = (++pos & mask)]))) {
+					if(KEY_EQUALS(current, o)) {
+						found = false;
+						break;
+					}
+				}
+			}
+			if(found) {
+				size++;
+				newKeys[pos] = o;
+				values[pos] = b[i];
+				if(prev != -1) {
+					newLinks[prev] ^= ((newLinks[prev] ^ (pos & 0xFFFFFFFFL)) & 0xFFFFFFFFL);
+					newLinks[pos] ^= ((newLinks[pos] ^ ((prev & 0xFFFFFFFFL) << 32)) & 0xFFFFFFFF00000000L);
+					prev = pos;
+				}
+				else {
+					prev = firstIndex = pos;
+					newLinks[pos] = -1L;
+				}
+			}
+		}
+		nullIndex = size;
+		mask = newMask;
+		keys = newKeys;
+		values = newValues;
+		links = newLinks;
+		lastIndex = prev;
+		if(prev != -1) newLinks[prev] |= 0xFFFFFFFFL;
 	}
 	
 	@Override
-	public VALUE_TYPE putAndMoveToFirst(KEY_TYPE key, VALUE_TYPE value) {
-		if(KEY_EQUALS_NULL(key)) {
-			if(containsNull) {
-				VALUE_TYPE lastValue = values[nullIndex];
-				values[nullIndex] = value;
-				moveToFirstIndex(nullIndex);
-				return lastValue;
-			}
-			values[nullIndex] = value;
-			containsNull = true;
-			onNodeAdded(nullIndex);
-			moveToFirstIndex(nullIndex);
-		}
-		else {
-			int pos = HashUtil.mix(KEY_TO_HASH(key)) & mask;
-			while(KEY_EQUALS_NOT_NULL(keys[pos])) {
-				if(KEY_EQUALS(keys[pos], key)) {
-					VALUE_TYPE lastValue = values[pos];
-					values[pos] = value;
-					moveToFirstIndex(pos);
-					return lastValue;
-				}
-				pos = ++pos & mask;
-			}
-			keys[pos] = key;
-			values[pos] = value;
-			onNodeAdded(pos);
-			moveToFirstIndex(pos);
-		}
-		if(size++ >= maxFill) rehash(HashUtil.arraySize(size+1, loadFactor));
-		return getDefaultReturnValue();
+	public VALUE_TYPE put(KEY_TYPE key, VALUE_TYPE value) { throw new UnsupportedOperationException(); }
+	@Override
+	public VALUE_TYPE putIfAbsent(KEY_TYPE key, VALUE_TYPE value) { throw new UnsupportedOperationException(); }
+	
+#if VALUE_PRIMITIVES
+	@Override
+	public VALUE_TYPE addTo(KEY_TYPE key, VALUE_TYPE value) { throw new UnsupportedOperationException(); }
+	
+#endif
+	@Override
+	public VALUE_TYPE putAndMoveToFirst(KEY_TYPE key, VALUE_TYPE value) { throw new UnsupportedOperationException(); }
+	@Override
+	public VALUE_TYPE putAndMoveToLast(KEY_TYPE key, VALUE_TYPE value) { throw new UnsupportedOperationException(); }
+	@Override
+	public boolean moveToFirst(KEY_TYPE key) { throw new UnsupportedOperationException(); }
+	@Override
+	public boolean moveToLast(KEY_TYPE key) { throw new UnsupportedOperationException(); }
+	@Override
+	public VALUE_TYPE getAndMoveToFirst(KEY_TYPE key) { throw new UnsupportedOperationException(); }
+	@Override
+	public VALUE_TYPE getAndMoveToLast(KEY_TYPE key) { throw new UnsupportedOperationException(); }
+	
+#if !TYPE_OBJECT
+	@Override
+	public boolean containsKey(KEY_TYPE key) {
+		return findIndex(key) >= 0;
 	}
 	
+#endif
 	@Override
-	public VALUE_TYPE putAndMoveToLast(KEY_TYPE key, VALUE_TYPE value) {
-		if(KEY_EQUALS_NULL(key)) {
-			if(containsNull) {
-				VALUE_TYPE lastValue = values[nullIndex];
-				values[nullIndex] = value;
-				moveToLastIndex(nullIndex);
-				return lastValue;
-			}
-			values[nullIndex] = value;
-			containsNull = true;
-			onNodeAdded(nullIndex);
-			moveToLastIndex(nullIndex);
-		}
-		else {
-			int pos = HashUtil.mix(KEY_TO_HASH(key)) & mask;
-			while(KEY_EQUALS_NOT_NULL(keys[pos])) {
-				if(KEY_EQUALS(keys[pos], key)) {
-					VALUE_TYPE lastValue = values[pos];
-					values[pos] = value;
-					moveToLastIndex(pos);
-					return lastValue;
-				}
-				pos = ++pos & mask;
-			}
-			keys[pos] = key;
-			values[pos] = value;
-			onNodeAdded(pos);
-			moveToLastIndex(pos);
-		}
-		if(size++ >= maxFill) rehash(HashUtil.arraySize(size+1, loadFactor));
-		return getDefaultReturnValue();
+	@Primitive
+	public boolean containsKey(Object key) {
+		return findIndex(key) >= 0;
 	}
 	
+#if !VALUE_OBJECT
 	@Override
-	public boolean moveToFirst(KEY_TYPE key) {
-		if(KEY_EQUALS(FIRST_ENTRY_KEY(), key)) return false;
-		if(KEY_EQUALS_NULL(key)) {
-			if(containsNull) {
-				moveToFirstIndex(nullIndex);
-				return true;
-			}
-		}
-		else {
-			int pos = HashUtil.mix(KEY_TO_HASH(key)) & mask;
-			while(KEY_EQUALS_NOT_NULL(keys[pos])) {
-				if(KEY_EQUALS(keys[pos], key)) {
-					moveToFirstIndex(pos);
-					return true;
-				}
-				pos = ++pos & mask;
-			}
-		}
+	public boolean containsValue(VALUE_TYPE value) {
+		if(VALUE_EQUALS(value, values[nullIndex])) return true;
+		for(int i = nullIndex-1;i >= 0;i--)
+			if(KEY_EQUALS_NOT_NULL(keys[i]) && VALUE_EQUALS(values[i], value)) return true;
+		return false;
+	}
+	
+#endif
+	@Override
+	@ValuePrimitive
+	public boolean containsValue(Object value) {
+		if((value == null && VALUE_EQUALS(values[nullIndex], getDefaultReturnValue())) || EQUALS_VALUE_TYPE(values[nullIndex], value)) return true;
+		for(int i = nullIndex-1;i >= 0;i--)
+			if(KEY_EQUALS_NOT_NULL(keys[i]) && ((value == null && values[i] == getDefaultReturnValue()) || EQUALS_VALUE_TYPE(values[i], value))) return true;
 		return false;
 	}
 	
 	@Override
-	public boolean moveToLast(KEY_TYPE key) {
-		if(KEY_EQUALS(LAST_ENTRY_KEY(), key)) return false;
-		if(KEY_EQUALS_NULL(key)) {
-			if(containsNull) {
-				moveToLastIndex(nullIndex);
-				return true;
-			}
-		}
-		else {
-			int pos = HashUtil.mix(KEY_TO_HASH(key)) & mask;
-			while(KEY_EQUALS_NOT_NULL(keys[pos])) {
-				if(KEY_EQUALS(keys[pos], key)) {
-					moveToLastIndex(pos);
-					return true;
-				}
-				pos = ++pos & mask;
-			}
-		}
-		return false;
+	public VALUE_TYPE REMOVE_VALUE(KEY_TYPE key) { throw new UnsupportedOperationException(); }
+	
+	@Override
+	public VALUE_TYPE REMOVE_VALUEOrDefault(KEY_TYPE key, VALUE_TYPE defaultValue) { throw new UnsupportedOperationException(); }
+	
+	@Override
+	@Deprecated
+	public CLASS_VALUE_TYPE remove(Object key) { throw new UnsupportedOperationException(); }
+	
+#if !TYPE_OBJECT || !VALUE_OBJECT
+	@Override
+	public boolean remove(KEY_TYPE key, VALUE_TYPE value) { throw new UnsupportedOperationException(); }
+	
+#endif
+	@Override
+	public boolean remove(Object key, Object value) { throw new UnsupportedOperationException(); }
+	
+	@Override
+	public VALUE_TYPE GET_VALUE(KEY_TYPE key) {
+		int slot = findIndex(key);
+		return slot < 0 ? getDefaultReturnValue() : values[slot];
 	}
 	
 	@Override
-	public VALUE_TYPE getAndMoveToFirst(KEY_TYPE key) {
-		int index = findIndex(key);
-		if(index < 0) return getDefaultReturnValue();
-		moveToFirstIndex(index);
-		return values[index];
+	public CLASS_VALUE_TYPE get(Object key) {
+		int slot = findIndex(key);
+		return VALUE_TO_OBJ(slot < 0 ? getDefaultReturnValue() : values[slot]);
 	}
 	
+#if TYPE_OBJECT && VALUE_OBJECT
 	@Override
-	public VALUE_TYPE getAndMoveToLast(KEY_TYPE key) {
-		int index = findIndex(key);
-		if(index < 0) return getDefaultReturnValue();
-		moveToLastIndex(index);
-		return values[index];
+	public VALUE_TYPE getOrDefault(Object key, VALUE_TYPE defaultValue) {
+		int slot = findIndex(key);
+		return slot < 0 ? defaultValue : values[slot];
 	}
 	
+#else
 	@Override
-	public COMPARATOR KEY_GENERIC_TYPE comparator() {
-		return null;
+	public VALUE_TYPE getOrDefault(KEY_TYPE key, VALUE_TYPE defaultValue) {
+		int slot = findIndex(key);
+		return slot < 0 ? defaultValue : values[slot];
 	}
 	
-	@Override
-	public SORTED_MAP KEY_VALUE_GENERIC_TYPE subMap(KEY_TYPE fromKey, KEY_TYPE toKey) { throw new UnsupportedOperationException(); }
-	
-	@Override
-	public SORTED_MAP KEY_VALUE_GENERIC_TYPE headMap(KEY_TYPE toKey) { throw new UnsupportedOperationException(); }
-	
-	@Override
-	public SORTED_MAP KEY_VALUE_GENERIC_TYPE tailMap(KEY_TYPE fromKey) { throw new UnsupportedOperationException(); }
-	
+#endif
 	@Override
 	public KEY_TYPE FIRST_ENTRY_KEY() {
 		if(size == 0) throw new NoSuchElementException();
@@ -317,22 +356,7 @@ public class LINKED_HASH_MAP KEY_VALUE_GENERIC_TYPE extends HASH_MAP KEY_VALUE_G
 	}
 	
 	@Override
-	public KEY_TYPE POLL_FIRST_ENTRY_KEY() {
-		if(size == 0) throw new NoSuchElementException();
-		int pos = firstIndex;
-		firstIndex = (int)links[pos];
-		if(0 <= firstIndex) links[firstIndex] |= 0xFFFFFFFF00000000L;
-		KEY_TYPE result = keys[pos];
-		size--;
-		if(KEY_EQUALS_NULL(result)) {
-			containsNull = false;
-			keys[nullIndex] = EMPTY_KEY_VALUE;
-			values[nullIndex] = EMPTY_VALUE;
-		}
-		else shiftKeys(pos);
-		if(nullIndex > minCapacity && size < maxFill / 4 && nullIndex > HashUtil.DEFAULT_MIN_CAPACITY) rehash(nullIndex / 2);
-		return result;
-	}
+	public KEY_TYPE POLL_FIRST_ENTRY_KEY() { throw new UnsupportedOperationException(); }
 	
 	@Override
 	public KEY_TYPE LAST_ENTRY_KEY() {
@@ -341,22 +365,7 @@ public class LINKED_HASH_MAP KEY_VALUE_GENERIC_TYPE extends HASH_MAP KEY_VALUE_G
 	}
 	
 	@Override
-	public KEY_TYPE POLL_LAST_ENTRY_KEY() {
-		if(size == 0) throw new NoSuchElementException();
-		int pos = lastIndex;
-		lastIndex = (int)(links[pos] >>> 32);
-		if(0 <= lastIndex) links[lastIndex] |= 0xFFFFFFFFL;
-		KEY_TYPE result = keys[pos];
-		size--;
-		if(KEY_EQUALS_NULL(result)) {
-			containsNull = false;
-			keys[nullIndex] = EMPTY_KEY_VALUE;
-			values[nullIndex] = EMPTY_VALUE;
-		}
-		else shiftKeys(pos);
-		if(nullIndex > minCapacity && size < maxFill / 4 && nullIndex > HashUtil.DEFAULT_MIN_CAPACITY) rehash(nullIndex / 2);
-		return result;
-	}
+	public KEY_TYPE POLL_LAST_ENTRY_KEY() { throw new UnsupportedOperationException(); }
 	
 	@Override
 	public VALUE_TYPE FIRST_ENTRY_VALUE() {
@@ -368,8 +377,8 @@ public class LINKED_HASH_MAP KEY_VALUE_GENERIC_TYPE extends HASH_MAP KEY_VALUE_G
 	public VALUE_TYPE LAST_ENTRY_VALUE() {
 		if(size == 0) throw new NoSuchElementException();
 		return values[lastIndex];
-	}
-	
+	}	
+
 	@Override
 	public ObjectSet<MAP.Entry KEY_VALUE_GENERIC_TYPE> ENTRY_SET() {
 		if(entrySet == null) entrySet = new MapEntrySet();
@@ -389,6 +398,15 @@ public class LINKED_HASH_MAP KEY_VALUE_GENERIC_TYPE extends HASH_MAP KEY_VALUE_G
 	}
 	
 	@Override
+	public COMPARATOR KEY_GENERIC_TYPE comparator() { return null; }
+	@Override
+	public SORTED_MAP KEY_VALUE_GENERIC_TYPE subMap(KEY_TYPE fromKey, KEY_TYPE toKey) { throw new UnsupportedOperationException(); }
+	@Override
+	public SORTED_MAP KEY_VALUE_GENERIC_TYPE headMap(KEY_TYPE toKey) { throw new UnsupportedOperationException(); }
+	@Override
+	public SORTED_MAP KEY_VALUE_GENERIC_TYPE tailMap(KEY_TYPE fromKey) { throw new UnsupportedOperationException(); }
+	
+	@Override
 	public void forEach(BI_CONSUMER KEY_VALUE_GENERIC_TYPE action) {
 		int index = firstIndex;
 		while(index != -1){
@@ -398,141 +416,111 @@ public class LINKED_HASH_MAP KEY_VALUE_GENERIC_TYPE extends HASH_MAP KEY_VALUE_G
 	}
 	
 	@Override
-	public void clear() {
-		super.clear();
-		firstIndex = lastIndex = -1;
-	}
-	
-	protected void moveToFirstIndex(int startPos) {
-		if(size == 1 || firstIndex == startPos) return;
-		if(lastIndex == startPos) {
-			lastIndex = (int)(links[startPos] >>> 32);
-			links[lastIndex] |= 0xFFFFFFFFL;
-		}
-		else {
-			long link = links[startPos];
-			int prev = (int)(link >>> 32);
-			int next = (int)link;
-			links[prev] ^= ((links[prev] ^ (link & 0xFFFFFFFFL)) & 0xFFFFFFFFL);
-			links[next] ^= ((links[next] ^ (link & 0xFFFFFFFF00000000L)) & 0xFFFFFFFF00000000L);
-		}
-		links[firstIndex] ^= ((links[firstIndex] ^ ((startPos & 0xFFFFFFFFL) << 32)) & 0xFFFFFFFF00000000L);
-		links[startPos] = 0xFFFFFFFF00000000L | (firstIndex & 0xFFFFFFFFL);
-		firstIndex = startPos;
-	}
-	
-	protected void moveToLastIndex(int startPos) {
-		if(size == 1 || lastIndex == startPos) return;
-		if(firstIndex == startPos) {
-			firstIndex = (int)links[startPos];
-			links[lastIndex] |= 0xFFFFFFFF00000000L;
-		}
-		else {
-			long link = links[startPos];
-			int prev = (int)(link >>> 32);
-			int next = (int)link;
-			links[prev] ^= ((links[prev] ^ (link & 0xFFFFFFFFL)) & 0xFFFFFFFFL);
-			links[next] ^= ((links[next] ^ (link & 0xFFFFFFFF00000000L)) & 0xFFFFFFFF00000000L);
-		}
-		links[lastIndex] ^= ((links[lastIndex] ^ (startPos & 0xFFFFFFFFL)) & 0xFFFFFFFFL);
-		links[startPos] = ((lastIndex & 0xFFFFFFFFL) << 32) | 0xFFFFFFFFL;
-		lastIndex = startPos;
-	}
+	public boolean replace(KEY_TYPE key, VALUE_TYPE oldValue, VALUE_TYPE newValue) { throw new UnsupportedOperationException(); }
 	
 	@Override
-	protected void onNodeAdded(int pos) {
-		if(size == 0) {
-			firstIndex = lastIndex = pos;
-			links[pos] = -1L;
-		}
-		else {
-			links[lastIndex] ^= ((links[lastIndex] ^ (pos & 0xFFFFFFFFL)) & 0xFFFFFFFFL);
-			links[pos] = ((lastIndex & 0xFFFFFFFFL) << 32) | 0xFFFFFFFFL;
-			lastIndex = pos;
-		}
-	}
+	public VALUE_TYPE replace(KEY_TYPE key, VALUE_TYPE value) { throw new UnsupportedOperationException(); }
 	
 	@Override
-	protected void onNodeRemoved(int pos) {
-		if(size == 0) firstIndex = lastIndex = -1;
-		else if(firstIndex == pos) {
-			firstIndex = (int)links[pos];
-			if(0 <= firstIndex) links[firstIndex] |= 0xFFFFFFFF00000000L;
-		}
-		else if(lastIndex == pos) {
-			lastIndex = (int)(links[pos] >>> 32);
-			if(0 <= lastIndex) links[lastIndex] |= 0xFFFFFFFFL;
-		}
-		else {
-			long link = links[pos];
-			int prev = (int)(link >>> 32);
-			int next = (int)link;
-			links[prev] ^= ((links[prev] ^ (link & 0xFFFFFFFFL)) & 0xFFFFFFFFL);
-			links[next] ^= ((links[next] ^ (link & 0xFFFFFFFF00000000L)) & 0xFFFFFFFF00000000L);
-		}
-	}
+	public VALUE_TYPE COMPUTE(KEY_TYPE key, UNARY_OPERATOR KEY_VALUE_GENERIC_TYPE mappingFunction) { throw new UnsupportedOperationException(); }
 	
 	@Override
-	protected void onNodeMoved(int from, int to) {
-		if(size == 1) {
-			firstIndex = lastIndex = to;
-			links[to] = -1L;
-		}
-		else if(firstIndex == from) {
-			firstIndex = to;
-			links[(int)links[from]] ^= ((links[(int)links[from]] ^ ((to & 0xFFFFFFFFL) << 32)) & 0xFFFFFFFF00000000L);
-			links[to] = links[from];
-		}
-		else if(lastIndex == from) {
-			lastIndex = to;
-			links[(int)(links[from] >>> 32)] ^= ((links[(int)(links[from] >>> 32)] ^ (to & 0xFFFFFFFFL)) & 0xFFFFFFFFL);
-			links[to] = links[from];
-		}
-		else {
-			long link = links[from];
-			int prev = (int)(link >>> 32);
-			int next = (int)link;
-			links[prev] ^= ((links[prev] ^ (to & 0xFFFFFFFFL)) & 0xFFFFFFFFL);
-			links[next] ^= ((links[next] ^ ((to & 0xFFFFFFFFL) << 32)) & 0xFFFFFFFF00000000L);
-			links[to] = link;
-		}
-	}
+	public VALUE_TYPE COMPUTE_IF_ABSENT(KEY_TYPE key, FUNCTION KEY_VALUE_GENERIC_TYPE mappingFunction) { throw new UnsupportedOperationException(); }
+
+	@Override
+	public VALUE_TYPE COMPUTE_IF_PRESENT(KEY_TYPE key, UNARY_OPERATOR KEY_VALUE_GENERIC_TYPE mappingFunction) { throw new UnsupportedOperationException(); }
 	
 	@Override
-	protected void rehash(int newSize) {
-		int newMask = newSize - 1;
-		KEY_TYPE[] newKeys = NEW_KEY_ARRAY(newSize + 1);
-		VALUE_TYPE[] newValues = NEW_VALUE_ARRAY(newSize + 1);
-		long[] newLinks = new long[newSize + 1];
-		int i = firstIndex, prev = -1, newPrev = -1, pos;
-		firstIndex = -1;
-		for(int j = size; j-- != 0;) {
-			if(KEY_EQUALS_NULL(keys[i])) pos = newSize;
-			else {
-				pos = HashUtil.mix(KEY_TO_HASH(keys[i])) & newMask;
-				while(KEY_EQUALS_NOT_NULL(newKeys[pos])) pos = ++pos & newMask;
+	public VALUE_TYPE MERGE(KEY_TYPE key, VALUE_TYPE value, VALUE_UNARY_OPERATOR VALUE_VALUE_GENERIC_TYPE mappingFunction) { throw new UnsupportedOperationException(); }
+	
+	@Override
+	public void BULK_MERGE(MAP KEY_VALUE_GENERIC_TYPE m, VALUE_UNARY_OPERATOR VALUE_VALUE_GENERIC_TYPE mappingFunction) { throw new UnsupportedOperationException(); }
+	
+	@Override
+	public int size() { return size; }
+	
+	@Override
+	public void clear() { throw new UnsupportedOperationException(); }
+	
+#if !TYPE_OBJECT
+	protected int findIndex(KEY_TYPE key) {
+		if(KEY_EQUALS_NULL(key)) return containsNull ? nullIndex : -(nullIndex + 1);
+		int pos = HashUtil.mix(KEY_TO_HASH(key)) & mask;
+		KEY_TYPE current = keys[pos];
+		if(KEY_EQUALS_NOT_NULL(current)) {
+			if(KEY_EQUALS(current, key)) return pos;
+			while(KEY_EQUALS_NOT_NULL((current = keys[pos = (++pos & mask)])))
+				if(KEY_EQUALS(current, key)) return pos;
+		}
+		return -(pos + 1);
+	}
+	
+#endif
+	protected int findIndex(Object key) {
+		if(key == null) return containsNull ? nullIndex : -(nullIndex + 1);
+		int pos = HashUtil.mix(key.hashCode()) & mask;
+		KEY_TYPE current = keys[pos];
+		if(KEY_EQUALS_NOT_NULL(current)) {
+			if(EQUALS_KEY_TYPE(current, key)) return pos;
+			while(KEY_EQUALS_NOT_NULL((current = keys[pos = (++pos & mask)])))
+				if(EQUALS_KEY_TYPE(current, key)) return pos;
+		}
+		return -(pos + 1);
+	}
+	
+	protected class MapEntry implements MAP.Entry KEY_VALUE_GENERIC_TYPE, Map.Entry<CLASS_TYPE, CLASS_VALUE_TYPE> {
+		public int index = -1;
+		
+		public MapEntry() {}
+		public MapEntry(int index) {
+			this.index = index;
+		}
+
+		@Override
+		public KEY_TYPE ENTRY_KEY() {
+			return keys[index];
+		}
+
+		@Override
+		public VALUE_TYPE ENTRY_VALUE() {
+			return values[index];
+		}
+
+		@Override
+		public VALUE_TYPE setValue(VALUE_TYPE value) { throw new UnsupportedOperationException(); }
+		
+		@Override
+		public boolean equals(Object obj) {
+			if(obj instanceof Map.Entry) {
+				if(obj instanceof MAP.Entry) {
+					MAP.Entry KEY_VALUE_GENERIC_TYPE entry = (MAP.Entry KEY_VALUE_GENERIC_TYPE)obj;
+					return KEY_EQUALS(keys[index], entry.ENTRY_KEY()) && VALUE_EQUALS(values[index], entry.ENTRY_VALUE());
+				}
+				Map.Entry<?, ?> entry = (Map.Entry<?, ?>)obj;
+				Object key = entry.getKey();
+				Object value = entry.getValue();
+#if TYPE_OBJECT && VALUE_OBJECT
+				return KEY_EQUALS(keys[index], key) && VALUE_EQUALS(values[index], value);
+#else if TYPE_OBJECT
+				return value instanceof CLASS_VALUE_TYPE && KEY_EQUALS(keys[index], key) && VALUE_EQUALS(values[index], CLASS_TO_VALUE(value));
+#else if VALUE_OBJECT
+				return key instanceof CLASS_TYPE && KEY_EQUALS(keys[index], CLASS_TO_KEY(key)) && VALUE_EQUALS(values[index], value);
+#else
+				return key instanceof CLASS_TYPE && value instanceof CLASS_VALUE_TYPE && KEY_EQUALS(keys[index], CLASS_TO_KEY(key)) && VALUE_EQUALS(values[index], CLASS_TO_VALUE(value));
+#endif
 			}
-			newKeys[pos] = keys[i];
-			newValues[pos] = values[i];
-			if(prev != -1) {
-				newLinks[newPrev] ^= ((newLinks[newPrev] ^ (pos & 0xFFFFFFFFL)) & 0xFFFFFFFFL);
-				newLinks[pos] ^= ((newLinks[pos] ^ ((newPrev & 0xFFFFFFFFL) << 32)) & 0xFFFFFFFF00000000L);
-				newPrev = pos;
-			}
-			else {
-				newPrev = firstIndex = pos;
-				newLinks[pos] = -1L;
-			}
-			i = (int)links[prev = i];
+			return false;
 		}
-		links = newLinks;
-		lastIndex = newPrev;
-		if(newPrev != -1) newLinks[newPrev] |= 0xFFFFFFFFL;
-		nullIndex = newSize;
-		mask = newMask;
-		maxFill = Math.min((int)Math.ceil(nullIndex * loadFactor), nullIndex - 1);
-		keys = newKeys;
-		values = newValues;
+		
+		@Override
+		public int hashCode() {
+			return KEY_TO_HASH(keys[index]) ^ VALUE_TO_HASH(values[index]);
+		}
+		
+		@Override
+		public String toString() {
+			return KEY_TO_STRING(keys[index]) + "->" + VALUE_TO_STRING(values[index]);
+		}
 	}
 	
 	private class MapEntrySet extends AbstractObjectSet<MAP.Entry KEY_VALUE_GENERIC_TYPE> implements SORTED_MAP.FastSortedSet KEY_VALUE_GENERIC_TYPE {
@@ -542,14 +530,10 @@ public class LINKED_HASH_MAP KEY_VALUE_GENERIC_TYPE extends HASH_MAP KEY_VALUE_G
 		public boolean addAndMoveToLast(MAP.Entry KEY_VALUE_GENERIC_TYPE o) { throw new UnsupportedOperationException(); }
 		
 		@Override
-		public boolean moveToFirst(MAP.Entry KEY_VALUE_GENERIC_TYPE o) {
-			return LINKED_HASH_MAP.this.moveToFirst(o.ENTRY_KEY());
-		}
+		public boolean moveToFirst(MAP.Entry KEY_VALUE_GENERIC_TYPE o) { throw new UnsupportedOperationException(); }
 		
 		@Override
-		public boolean moveToLast(MAP.Entry KEY_VALUE_GENERIC_TYPE o) {
-			return LINKED_HASH_MAP.this.moveToLast(o.ENTRY_KEY());
-		}
+		public boolean moveToLast(MAP.Entry KEY_VALUE_GENERIC_TYPE o) { throw new UnsupportedOperationException(); }
 		
 		@Override
 		public MAP.Entry KEY_VALUE_GENERIC_TYPE first() {
@@ -562,18 +546,10 @@ public class LINKED_HASH_MAP KEY_VALUE_GENERIC_TYPE extends HASH_MAP KEY_VALUE_G
 		}
 		
 		@Override
-		public MAP.Entry KEY_VALUE_GENERIC_TYPE pollFirst() {
-			BasicEntry KEY_VALUE_GENERIC_TYPE entry = new BasicEntryKV_BRACES(FIRST_ENTRY_KEY(), FIRST_ENTRY_VALUE());
-			POLL_FIRST_ENTRY_KEY();
-			return entry;
-		}
+		public MAP.Entry KEY_VALUE_GENERIC_TYPE pollFirst() { throw new UnsupportedOperationException(); }
 		
 		@Override
-		public MAP.Entry KEY_VALUE_GENERIC_TYPE pollLast() {
-			BasicEntry KEY_VALUE_GENERIC_TYPE entry = new BasicEntryKV_BRACES(LAST_ENTRY_KEY(), LAST_ENTRY_VALUE());
-			POLL_LAST_ENTRY_KEY();
-			return entry;
-		}
+		public MAP.Entry KEY_VALUE_GENERIC_TYPE pollLast() { throw new UnsupportedOperationException(); }
 		
 		@Override
 		public ObjectBidirectionalIterator<MAP.Entry KEY_VALUE_GENERIC_TYPE> iterator() {
@@ -619,35 +595,23 @@ public class LINKED_HASH_MAP KEY_VALUE_GENERIC_TYPE extends HASH_MAP KEY_VALUE_G
 		@Deprecated
 		public boolean contains(Object o) {
 			if(o instanceof Map.Entry) {
-				if(o instanceof MAP.Entry) return LINKED_HASH_MAP.this.containsKey(((MAP.Entry KEY_VALUE_GENERIC_TYPE)o).ENTRY_KEY());
-				return LINKED_HASH_MAP.this.containsKey(((Map.Entry<?, ?>)o).getKey());
+				if(o instanceof MAP.Entry) return IMMUTABLE_HASH_MAP.this.containsKey(((MAP.Entry KEY_VALUE_GENERIC_TYPE)o).ENTRY_KEY());
+				return IMMUTABLE_HASH_MAP.this.containsKey(((Map.Entry<?, ?>)o).getKey());
 			}
 			return false;
 		}
 		
 		@Override
 		@Deprecated
-		public boolean remove(Object o) {
-			if(o instanceof Map.Entry) {
-				if(o instanceof MAP.Entry) {
-					MAP.Entry KEY_VALUE_GENERIC_TYPE entry = (MAP.Entry KEY_VALUE_GENERIC_TYPE)o;
-					return LINKED_HASH_MAP.this.remove(entry.ENTRY_KEY(), entry.ENTRY_VALUE());
-				}
-				Map.Entry<?, ?> entry = (Map.Entry<?, ?>)o;
-				return LINKED_HASH_MAP.this.remove(entry.getKey(), entry.getValue());
-			}
-			return false;
-		}
+		public boolean remove(Object o) { throw new UnsupportedOperationException(); }
 		
 		@Override
 		public int size() {
-			return LINKED_HASH_MAP.this.size();
+			return IMMUTABLE_HASH_MAP.this.size();
 		}
 		
 		@Override
-		public void clear() {
-			LINKED_HASH_MAP.this.clear();
-		}
+		public void clear() { throw new UnsupportedOperationException(); }
 		
 		@Override
 		public Comparator<MAP.Entry KEY_VALUE_GENERIC_TYPE> comparator() {
@@ -670,11 +634,7 @@ public class LINKED_HASH_MAP KEY_VALUE_GENERIC_TYPE extends HASH_MAP KEY_VALUE_G
 		}
 		
 		@Override
-		public boolean remove(Object o) {
-			int oldSize = size;
-			remove(o);
-			return size != oldSize;
-		}
+		public boolean remove(Object o) { throw new UnsupportedOperationException(); }
 		
 #else
 		@Override
@@ -683,11 +643,7 @@ public class LINKED_HASH_MAP KEY_VALUE_GENERIC_TYPE extends HASH_MAP KEY_VALUE_G
 		}
 		
 		@Override
-		public boolean remove(KEY_TYPE o) {
-			int oldSize = size;
-			remove(o);
-			return size != oldSize;
-		}
+		public boolean remove(KEY_TYPE o) { throw new UnsupportedOperationException(); }
 		
 #endif
 		@Override
@@ -702,14 +658,10 @@ public class LINKED_HASH_MAP KEY_VALUE_GENERIC_TYPE extends HASH_MAP KEY_VALUE_G
 		public boolean addAndMoveToLast(KEY_TYPE o) { throw new UnsupportedOperationException(); }
 
 		@Override
-		public boolean moveToFirst(KEY_TYPE o) {
-			return LINKED_HASH_MAP.this.moveToFirst(o);
-		}
+		public boolean moveToFirst(KEY_TYPE o) { throw new UnsupportedOperationException(); }
 
 		@Override
-		public boolean moveToLast(KEY_TYPE o) {
-			return LINKED_HASH_MAP.this.moveToLast(o);
-		}
+		public boolean moveToLast(KEY_TYPE o) { throw new UnsupportedOperationException(); }
 		
 		@Override
 		public LIST_ITERATOR KEY_GENERIC_TYPE iterator() {
@@ -723,13 +675,11 @@ public class LINKED_HASH_MAP KEY_VALUE_GENERIC_TYPE extends HASH_MAP KEY_VALUE_G
 		
 		@Override
 		public int size() {
-			return LINKED_HASH_MAP.this.size();
+			return IMMUTABLE_HASH_MAP.this.size();
 		}
 		
 		@Override
-		public void clear() {
-			LINKED_HASH_MAP.this.clear();
-		}
+		public void clear() { throw new UnsupportedOperationException(); }
 		
 		@Override
 		public KEY_TYPE FIRST_KEY() {
@@ -737,9 +687,7 @@ public class LINKED_HASH_MAP KEY_VALUE_GENERIC_TYPE extends HASH_MAP KEY_VALUE_G
 		}
 		
 		@Override
-		public KEY_TYPE POLL_FIRST_KEY() {
-			return POLL_FIRST_ENTRY_KEY();
-		}
+		public KEY_TYPE POLL_FIRST_KEY() { throw new UnsupportedOperationException(); }
 
 		@Override
 		public KEY_TYPE LAST_KEY() {
@@ -747,9 +695,7 @@ public class LINKED_HASH_MAP KEY_VALUE_GENERIC_TYPE extends HASH_MAP KEY_VALUE_G
 		}
 
 		@Override
-		public KEY_TYPE POLL_LAST_KEY() {
-			return POLL_LAST_ENTRY_KEY();
-		}
+		public KEY_TYPE POLL_LAST_KEY() { throw new UnsupportedOperationException(); }
 		
 #if TYPE_OBJECT
 		@Override
@@ -812,13 +758,11 @@ public class LINKED_HASH_MAP KEY_VALUE_GENERIC_TYPE extends HASH_MAP KEY_VALUE_G
 		
 		@Override
 		public int size() {
-			return LINKED_HASH_MAP.this.size();
+			return IMMUTABLE_HASH_MAP.this.size();
 		}
 		
 		@Override
-		public void clear() {
-			LINKED_HASH_MAP.this.clear();
-		}
+		public void clear() { throw new UnsupportedOperationException(); }
 		
 #if VALUE_OBJECT
 		@Override
@@ -869,7 +813,6 @@ public class LINKED_HASH_MAP KEY_VALUE_GENERIC_TYPE extends HASH_MAP KEY_VALUE_G
 	}
 	
 	private class EntryIterator extends MapIterator implements ObjectListIterator<MAP.Entry KEY_VALUE_GENERIC_TYPE> {
-		MapEntry entry;
 		
 		public EntryIterator() {}
 		public EntryIterator(KEY_TYPE from) {
@@ -878,19 +821,16 @@ public class LINKED_HASH_MAP KEY_VALUE_GENERIC_TYPE extends HASH_MAP KEY_VALUE_G
 		
 		@Override
 		public MAP.Entry KEY_VALUE_GENERIC_TYPE next() {
-			return entry = new MapEntry(nextEntry());
+			return new MapEntry(nextEntry());
 		}
 		
 		@Override
 		public MAP.Entry KEY_VALUE_GENERIC_TYPE previous() {
-			return entry = new MapEntry(previousEntry());
+			return new MapEntry(previousEntry());
 		}
 		
 		@Override
-		public void remove() {
-			super.remove();
-			entry.index = -1;
-		}
+		public void remove() { throw new UnsupportedOperationException(); }
 
 		@Override
 		public void set(MAP.Entry KEY_VALUE_GENERIC_TYPE entry) { throw new UnsupportedOperationException(); }
@@ -998,50 +938,7 @@ public class LINKED_HASH_MAP KEY_VALUE_GENERIC_TYPE extends HASH_MAP KEY_VALUE_G
 			return index - 1;
 		}
 		
-		public void remove() {
-			if(current == -1) throw new IllegalStateException();
-			ensureIndexKnown();
-			if(current == previous) {
-				index--;
-				previous = (int)(links[current] >>> 32);
-			}
-			else next = (int)links[current];
-			size--;
-			if(previous == -1) firstIndex = next;
-			else links[previous] ^= ((links[previous] ^ (next & 0xFFFFFFFFL)) & 0xFFFFFFFFL);
-			
-			if (next == -1) lastIndex = previous;
-			else links[next] ^= ((links[next] ^ ((previous & 0xFFFFFFFFL) << 32)) & 0xFFFFFFFF00000000L);
-			if(current == nullIndex) {
-				current = -1;
-				containsNull = false;
-				keys[nullIndex] = EMPTY_KEY_VALUE;
-				values[nullIndex] = EMPTY_VALUE;
-			}
-			else {
-				int slot, last, startPos = current;
-				current = -1;
-				KEY_TYPE current;
-				while(true) {
-					startPos = ((last = startPos) + 1) & mask;
-					while(true){
-						if(KEY_EQUALS_NULL((current = keys[startPos]))) {
-							keys[last] = EMPTY_KEY_VALUE;
-							values[last] = EMPTY_VALUE;
-							return;
-						}
-						slot = HashUtil.mix(KEY_TO_HASH(current)) & mask;
-						if(last <= startPos ? (last >= slot || slot > startPos) : (last >= slot && slot > startPos)) break;
-						startPos = ++startPos & mask;
-					}
-					keys[last] = current;
-					values[last] = values[startPos];
-					if(next == startPos) next = last;
-					if(previous == startPos) previous = last;
-					onNodeMoved(startPos, last);
-				}
-			}
-		}
+		public void remove() { throw new UnsupportedOperationException(); }
 		
 		public int previousEntry() {
 			if(!hasPrevious()) throw new NoSuchElementException();
@@ -1075,6 +972,5 @@ public class LINKED_HASH_MAP KEY_VALUE_GENERIC_TYPE extends HASH_MAP KEY_VALUE_G
 				}
 			}
 		}
-
 	}
 }
