@@ -138,6 +138,7 @@ public class GlobalVariables
 		addClassMapper("HEAP_PRIORITY_QUEUE", "HeapPriorityQueue");
 		addClassMapper("LINKED_CUSTOM_HASH_SET", "LinkedOpenCustomHashSet");
 		addClassMapper("LINKED_HASH_SET", "LinkedOpenHashSet");
+		addAbstractMapper("IMMUTABLE_HASH_SET", "Immutable%sOpenHashSet");
 		addClassMapper("CUSTOM_HASH_SET", "OpenCustomHashSet");
 		addClassMapper("HASH_SET", "OpenHashSet");
 		addBiClassMapper("LINKED_CUSTOM_HASH_MAP", "LinkedOpenCustomHashMap", "2");

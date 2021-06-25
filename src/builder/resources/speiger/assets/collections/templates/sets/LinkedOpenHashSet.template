@@ -8,6 +8,7 @@ import java.util.Iterator;
 import java.util.NoSuchElementException;
 #if TYPE_OBJECT
 import java.util.Objects;
+import java.util.function.Consumer;
 #endif
 
 import speiger.src.collections.PACKAGE.collections.COLLECTION;
@@ -17,6 +18,7 @@ import speiger.src.collections.PACKAGE.collections.ITERATOR;
 import speiger.src.collections.PACKAGE.collections.BI_ITERATOR;
 #if !TYPE_OBJECT
 import speiger.src.collections.PACKAGE.functions.COMPARATOR;
+import speiger.src.collections.PACKAGE.functions.CONSUMER;
 #endif
 import speiger.src.collections.PACKAGE.lists.LIST_ITERATOR;
 #if !TYPE_OBJECT
@@ -372,6 +374,15 @@ public class LINKED_HASH_SET KEY_GENERIC_TYPE extends HASH_SET KEY_GENERIC_TYPE 
 		else shiftKeys(pos);
 		if(nullIndex > minCapacity && size < maxFill / 4 && nullIndex > HashUtil.DEFAULT_MIN_CAPACITY) rehash(nullIndex / 2);
 		return result;
+	}
+	
+	@Override
+	public void forEach(CONSUMER KEY_SUPER_GENERIC_TYPE action) {
+		int index = firstIndex;
+		while(index != -1){
+			action.accept(keys[index]);
+			index = (int)links[index];
+		}
 	}
 	
 	@Override

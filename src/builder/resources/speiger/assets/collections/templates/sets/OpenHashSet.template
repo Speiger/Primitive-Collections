@@ -5,6 +5,9 @@ import java.util.Collection;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 import java.util.Objects;
+#if TYPE_OBJECT
+import java.util.function.Consumer;
+#endif
 
 import speiger.src.collections.PACKAGE.collections.COLLECTION;
 import speiger.src.collections.PACKAGE.collections.ITERATOR;
@@ -12,6 +15,7 @@ import speiger.src.collections.PACKAGE.lists.ARRAY_LIST;
 import speiger.src.collections.PACKAGE.lists.LIST;
 #if !TYPE_OBJECT
 import speiger.src.collections.PACKAGE.utils.ITERATORS;
+import speiger.src.collections.PACKAGE.functions.CONSUMER;
 #endif
 import speiger.src.collections.utils.HashUtil;
 import speiger.src.collections.utils.ITrimmable;
@@ -316,6 +320,15 @@ public class HASH_SET KEY_GENERIC_TYPE extends ABSTRACT_SET KEY_GENERIC_TYPE imp
 		mask = nullIndex - 1;
 		maxFill = Math.min((int)Math.ceil(nullIndex * loadFactor), nullIndex - 1);
 		keys = NEW_KEY_ARRAY(nullIndex + 1);
+	}
+	
+	@Override
+	public void forEach(CONSUMER KEY_SUPER_GENERIC_TYPE action) {
+		if(size() <= 0) return;
+		if(containsNull) action.accept(keys[nullIndex]);
+		for(int i = nullIndex-1;i>=0;i--) {
+			if(KEY_EQUALS_NOT_NULL(keys[i])) action.accept(keys[i]);
+		}
 	}
 	
 	private void ensureCapacity(int newCapacity) {

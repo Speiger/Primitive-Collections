@@ -1,0 +1,440 @@
+package speiger.src.collections.PACKAGE.sets;
+
+#if TYPE_OBJECT
+import java.util.Comparator;
+import java.util.function.Consumer;
+#endif
+import java.util.Collection;
+import java.util.Iterator;
+import java.util.NoSuchElementException;
+import java.util.Objects;
+
+import speiger.src.collections.PACKAGE.collections.BI_ITERATOR;
+import speiger.src.collections.PACKAGE.collections.COLLECTION;
+import speiger.src.collections.PACKAGE.collections.ITERATOR;
+#if !TYPE_OBJECT
+import speiger.src.collections.PACKAGE.functions.COMPARATOR;
+import speiger.src.collections.PACKAGE.functions.CONSUMER;
+#endif
+import speiger.src.collections.PACKAGE.lists.LIST_ITERATOR;
+import speiger.src.collections.PACKAGE.utils.ARRAYS;
+import speiger.src.collections.PACKAGE.utils.ITERATORS;
+
+import speiger.src.collections.utils.HashUtil;
+import speiger.src.collections.utils.SanityChecks;
+
+/**
+ * A Type Specific Custom implementation of the HashSet
+ * Instead of using Wrapper Object Arrays for storing keys and values there is dedicated arrays for storing keys.
+ * Extra to that there is a couple quality of life functions provided
+ * @Type(T)
+ */
+public class IMMUTABLE_HASH_SET KEY_GENERIC_TYPE extends ABSTRACT_SET KEY_GENERIC_TYPE implements SORTED_SET KEY_GENERIC_TYPE
+{
+	/** The Backing keys array */
+	protected transient KEY_TYPE[] keys;
+	/** The Backing array for links between nodes. Left 32 Bits => Previous Entry, Right 32 Bits => Next Entry */
+	protected transient long[] links;
+	/** If a null value is present */
+	protected transient boolean containsNull;
+	/** Index of the Null Value */
+	protected transient int nullIndex;
+	/** Max Index that is allowed to be searched through nullIndex - 1 */
+	protected transient int mask;
+	/** Amount of Elements stored in the HashSet */
+	protected int size;
+	/** The First Index in the Map */
+	protected int firstIndex = -1;
+	/** The Last Index in the Map */
+	protected int lastIndex = -1;
+	
+	/**
+	 * Helper constructor that allow to create a set from unboxed values
+	 * @param array the elements that should be put into the set
+	 */
+	public IMMUTABLE_HASH_SET(KEY_TYPE[] array) {
+		this(array, 0, array.length, HashUtil.DEFAULT_LOAD_FACTOR);
+	}
+	
+	/**
+	 * Helper constructor that allow to create a set from unboxed values
+	 * @param array the elements that should be put into the set
+	 * @param loadFactor the percentage of how full the backing array can be before they resize
+	 * @throws IllegalStateException if the loadfactor is either below/equal to 0 or above/equal to 1
+	 */
+	public IMMUTABLE_HASH_SET(KEY_TYPE[] array, float loadFactor) {
+		this(array, 0, array.length, loadFactor);
+	}
+	
+	/**
+	 * Helper constructor that allow to create a set from unboxed values
+	 * @param array the elements that should be put into the set
+	 * @param offset the starting index within the array that should be used
+	 * @param length the amount of elements used from the array
+	 * @throws IllegalStateException if offset and length causes to step outside of the arrays range
+	 */
+	public IMMUTABLE_HASH_SET(KEY_TYPE[] array, int offset, int length) {
+		this(array, offset, length, HashUtil.DEFAULT_LOAD_FACTOR);
+	}
+	
+	/**
+	 * Helper constructor that allow to create a set from unboxed values
+	 * @param array the elements that should be put into the set
+	 * @param offset the starting index within the array that should be used
+	 * @param length the amount of elements used from the array
+	 * @param loadFactor the percentage of how full the backing array can be before they resize
+	 * @throws IllegalStateException if the loadfactor is either below/equal to 0 or above/equal to 1
+	 * @throws IllegalStateException if offset and length causes to step outside of the arrays range
+	 */
+	public IMMUTABLE_HASH_SET(KEY_TYPE[] array, int offset, int length, float loadFactor) {
+		init(array, offset, length, loadFactor);
+	}
+	
+	/**
+	 * A Helper constructor that allows to create a Set with exactly the same values as the provided collection.
+	 * @param collection the set the elements should be added to the Set
+	 */
+	@Deprecated
+	public IMMUTABLE_HASH_SET(Collection<? extends CLASS_TYPE> collection) {
+		this(collection, HashUtil.DEFAULT_LOAD_FACTOR);
+	}
+	
+	/**
+	 * A Helper constructor that allows to create a Set with exactly the same values as the provided collection.
+	 * @param collection the set the elements should be added to the Set
+	 * @param loadFactor the percentage of how full the backing array can be before they resize
+	 * @throws IllegalStateException if the loadfactor is either below/equal to 0 or above/equal to 1
+	 */
+	@Deprecated
+	public IMMUTABLE_HASH_SET(Collection<? extends CLASS_TYPE> collection, float loadFactor) {
+#if !TYPE_OBJECT
+		init(ARRAYS.unwrap(collection.toArray(NEW_CLASS_ARRAY(collection.size()))), 0, collection.size(), loadFactor);
+#else
+		init(collection.toArray(NEW_CLASS_ARRAY(collection.size())), 0, collection.size(), loadFactor);
+#endif
+	}
+	
+	/**
+	 * A Helper constructor that allows to create a Set with exactly the same values as the provided collection.
+	 * @param collection the set the elements should be added to the Set
+	 */
+	public IMMUTABLE_HASH_SET(COLLECTION KEY_GENERIC_TYPE collection) {
+		this(collection, HashUtil.DEFAULT_LOAD_FACTOR);
+	}
+	
+	/**
+	 * A Helper constructor that allows to create a Set with exactly the same values as the provided collection.
+	 * @param collection the set the elements should be added to the Set
+	 * @param loadFactor the percentage of how full the backing array can be before they resize
+	 * @throws IllegalStateException if the loadfactor is either below/equal to 0 or above/equal to 1
+	 */
+	public IMMUTABLE_HASH_SET(COLLECTION KEY_GENERIC_TYPE collection, float loadFactor) {
+		init(collection.TO_ARRAY(NEW_KEY_ARRAY(collection.size())), 0, collection.size(), loadFactor);
+	}
+	
+	/**
+	 * A Helper constructor that allows to create a set from a iterator of an unknown size
+	 * @param iterator the elements that should be added to the set
+	 */
+	public IMMUTABLE_HASH_SET(Iterator<CLASS_TYPE> iterator) {
+		this(iterator, HashUtil.DEFAULT_LOAD_FACTOR);
+	}
+	
+	/**
+	 * A Helper constructor that allows to create a set from a iterator of an unknown size
+	 * @param iterator the elements that should be added to the set
+	 * @param loadFactor the percentage of how full the backing array can be before they resize
+	 * @throws IllegalStateException if the loadfactor is either below/equal to 0 or above/equal to 1
+	 */
+	public IMMUTABLE_HASH_SET(Iterator<CLASS_TYPE> iterator, float loadFactor) {
+		this(ITERATORS.wrap(iterator), loadFactor);
+	}
+	/**
+	 * A Helper constructor that allows to create a set from a iterator of an unknown size
+	 * @param iterator the elements that should be added to the set
+	 */
+	public IMMUTABLE_HASH_SET(ITERATOR KEY_GENERIC_TYPE iterator) {
+		this(iterator, HashUtil.DEFAULT_LOAD_FACTOR);
+	}
+	
+	/**
+	 * A Helper constructor that allows to create a set from a iterator of an unknown size
+	 * @param iterator the elements that should be added to the set
+	 * @param loadFactor the percentage of how full the backing array can be before they resize
+	 * @throws IllegalStateException if the loadfactor is either below/equal to 0 or above/equal to 1
+	 */
+	public IMMUTABLE_HASH_SET(ITERATOR KEY_GENERIC_TYPE iterator, float loadFactor) {
+		KEY_TYPE[] array = ARRAYS.pour(iterator);
+		init(array, 0, array.length, loadFactor);
+	}
+	
+	protected void init(KEY_TYPE[] a, int offset, int length, float loadFactor) {
+		SanityChecks.checkArrayCapacity(a.length, offset, length);
+		int newSize = HashUtil.arraySize(length+1, loadFactor);
+		int newMask = newSize - 1;
+		KEY_TYPE[] newKeys = NEW_KEY_ARRAY(newSize + 1);
+		long[] newLinks = new long[newSize + 1];
+		int prev = -1;
+		for(int i = offset,m=offset+length;i<m;i++)
+		{
+			KEY_TYPE o = a[i];
+			if(KEY_EQUALS_NULL(o)) {
+				if(!containsNull) size++;
+				containsNull = true;
+				continue;
+			}
+			boolean found = true;
+			int pos = HashUtil.mix(KEY_TO_HASH(o)) & newMask;
+			KEY_TYPE current = newKeys[pos];
+			if(KEY_EQUALS_NOT_NULL(current)) {
+				if(KEY_EQUALS(current, o)) {
+					found = false;
+					break;
+				}
+				while(KEY_EQUALS_NOT_NULL((current = newKeys[pos = (++pos & mask)]))) {
+					if(KEY_EQUALS(current, o)) {
+						found = false;
+						break;
+					}
+				}
+			}
+			if(found) {
+				size++;
+				newKeys[pos] = o;
+				if(prev != -1) {
+					newLinks[prev] ^= ((newLinks[prev] ^ (pos & 0xFFFFFFFFL)) & 0xFFFFFFFFL);
+					newLinks[pos] ^= ((newLinks[pos] ^ ((prev & 0xFFFFFFFFL) << 32)) & 0xFFFFFFFF00000000L);
+					prev = pos;
+				}
+				else {
+					prev = firstIndex = pos;
+					newLinks[pos] = -1L;
+				}
+			}
+		}
+		nullIndex = size;
+		mask = newMask;
+		keys = newKeys;
+		links = newLinks;
+		lastIndex = prev;
+		if(prev != -1) newLinks[prev] |= 0xFFFFFFFFL;
+	}
+	
+	@Override
+	public boolean add(KEY_TYPE o) { throw new UnsupportedOperationException(); }
+	@Override
+	@Primitive
+	public boolean addAll(Collection<? extends CLASS_TYPE> c) { throw new UnsupportedOperationException(); }
+	@Override
+	public boolean addAll(COLLECTION KEY_GENERIC_TYPE c) { throw new UnsupportedOperationException(); }
+	@Override
+	public boolean addAndMoveToFirst(KEY_TYPE o) { throw new UnsupportedOperationException(); }
+	@Override
+	public boolean addAndMoveToLast(KEY_TYPE o) { throw new UnsupportedOperationException(); }
+	@Override
+	public boolean moveToFirst(KEY_TYPE o) { throw new UnsupportedOperationException(); }
+	@Override
+	public boolean moveToLast(KEY_TYPE o) { throw new UnsupportedOperationException(); }
+	
+	@Override
+	public boolean contains(Object o) {
+		if(o == null) return containsNull;
+		int pos = HashUtil.mix(o.hashCode()) & mask;
+		KEY_TYPE current = keys[pos];
+		if(KEY_EQUALS_NULL(current)) return false;
+		if(EQUALS_KEY_TYPE(current, o)) return true;
+		while(true) {
+			if(KEY_EQUALS_NULL((current = keys[pos = (++pos & mask)]))) return false;
+			else if(EQUALS_KEY_TYPE(current, o)) return true;
+		}
+	}
+	
+	@Override
+	public KEY_TYPE FIRST_KEY() {
+		if(size == 0) throw new NoSuchElementException();
+		return keys[firstIndex];
+	}
+	
+	@Override
+	public KEY_TYPE POLL_FIRST_KEY() { throw new UnsupportedOperationException(); }
+	
+	@Override
+	public KEY_TYPE LAST_KEY() {
+		if(size == 0) throw new NoSuchElementException();
+		return keys[lastIndex];
+	}
+	
+	@Override
+	public KEY_TYPE POLL_LAST_KEY() { throw new UnsupportedOperationException(); }
+	@Override
+	public boolean remove(Object o) { throw new UnsupportedOperationException(); }
+
+#if !TYPE_OBJECT
+	@Override
+	public boolean contains(KEY_TYPE o) {
+		if(KEY_EQUALS_NULL(o)) return containsNull;
+		int pos = HashUtil.mix(KEY_TO_HASH(o)) & mask;
+		KEY_TYPE current = keys[pos];
+		if(KEY_EQUALS_NULL(current)) return false;
+		if(KEY_EQUALS(current, o)) return true;
+		while(true) {
+			if(KEY_EQUALS_NULL((current = keys[pos = (++pos & mask)]))) return false;
+			else if(KEY_EQUALS(current, o)) return true;
+		}
+	}
+	
+	@Override
+	public boolean remove(KEY_TYPE o) { throw new UnsupportedOperationException(); }
+	
+#endif
+	@Override
+	public void forEach(CONSUMER KEY_SUPER_GENERIC_TYPE action) {
+		int index = firstIndex;
+		while(index != -1){
+			action.accept(keys[index]);
+			index = (int)links[index];
+		}
+	}
+	
+	@Override
+	public LIST_ITERATOR KEY_GENERIC_TYPE iterator() {
+		return new SetIterator();
+	}
+	
+	@Override
+	public BI_ITERATOR KEY_GENERIC_TYPE iterator(KEY_TYPE fromElement) {
+		return new SetIterator(fromElement);
+	}
+	
+	@Override
+	public COMPARATOR KEY_GENERIC_TYPE comparator() { return null; }
+	
+	@Override
+	public SORTED_SET KEY_GENERIC_TYPE subSet(KEY_TYPE fromElement, KEY_TYPE toElement) { throw new UnsupportedOperationException(); }
+	
+	@Override
+	public SORTED_SET KEY_GENERIC_TYPE headSet(KEY_TYPE toElement) { throw new UnsupportedOperationException(); }
+	
+	@Override
+	public SORTED_SET KEY_GENERIC_TYPE tailSet(KEY_TYPE fromElement) { throw new UnsupportedOperationException(); }
+	
+	@Override
+	public void clear() { throw new UnsupportedOperationException(); }
+	
+	@Override
+	public int size() {
+		return size;
+	}
+
+	private class SetIterator implements LIST_ITERATOR KEY_GENERIC_TYPE {
+		int previous = -1;
+		int next = -1;
+		int current = -1;
+		int index = 0;
+		
+		SetIterator() {
+			next = firstIndex;
+		}
+		
+		SetIterator(KEY_TYPE from) {
+			if(KEY_EQUALS_NULL(from)) {
+				if(containsNull) {
+				    next = (int) links[nullIndex];
+				    previous = nullIndex;
+				}
+				else throw new NoSuchElementException("The null element is not in the set");
+			}
+			else if(KEY_EQUALS(keys[lastIndex], from)) {
+				previous = lastIndex;
+				index = size;
+			}
+			else {
+				int pos = HashUtil.mix(KEY_TO_HASH(from)) & mask;
+				while(KEY_EQUALS_NOT_NULL(keys[pos])) {
+					if(KEY_EQUALS(keys[pos], from)) {
+						next = (int)links[pos];
+						previous = pos;
+						break;
+					}
+					pos = ++pos & mask;
+				}
+				if(previous == -1 && next == -1)
+					throw new NoSuchElementException("The element was not found");
+			}
+		}
+		
+		@Override
+		public boolean hasNext() {
+			return next != -1;
+		}
+
+		@Override
+		public boolean hasPrevious() {
+			return previous != -1;
+		}
+		
+		@Override
+		public int nextIndex() {
+			ensureIndexKnown();
+			return index;
+		}
+		
+		@Override
+		public int previousIndex() {
+			ensureIndexKnown();
+			return index - 1;
+		}
+		
+		@Override
+		public void remove() { throw new UnsupportedOperationException(); }
+		
+		@Override
+		public KEY_TYPE PREVIOUS() {
+			if(!hasPrevious()) throw new NoSuchElementException();
+			current = previous;
+			previous = (int)(links[current] >> 32);
+			next = current;
+			if(index >= 0) index--;
+			return keys[current];
+		}
+
+		@Override
+		public KEY_TYPE NEXT() {
+			if(!hasNext()) throw new NoSuchElementException();
+			current = next;
+			next = (int)(links[current]);
+			previous = current;
+			if(index >= 0) index++;
+			return keys[current];
+		}
+		
+		private void ensureIndexKnown() {
+			if(index == -1) {
+				if(previous == -1) {
+					index = 0;
+				}
+				else if(next == -1) {
+					index = size;
+				}
+				else {
+					index = 1;
+					for(int pos = firstIndex;pos != previous;pos = (int)links[pos], index++);
+				}
+			}
+		}
+		
+#if TYPE_OBJECT
+		@Override
+		public void set(Object e) { throw new UnsupportedOperationException(); }
+		
+		@Override
+		public void add(Object e) { throw new UnsupportedOperationException(); }
+#else
+		@Override
+		public void set(KEY_TYPE e) { throw new UnsupportedOperationException(); }
+
+		@Override
+		public void add(KEY_TYPE e) { throw new UnsupportedOperationException(); }
+#endif
+	}
+}
