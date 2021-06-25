@@ -4,6 +4,9 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
+#if TYPE_OBJECT
+import java.util.function.Consumer;
+#endif
 
 import speiger.src.collections.PACKAGE.collections.COLLECTION;
 import speiger.src.collections.PACKAGE.collections.ITERATOR;
@@ -11,6 +14,7 @@ import speiger.src.collections.PACKAGE.lists.ARRAY_LIST;
 import speiger.src.collections.PACKAGE.lists.LIST;
 #if !TYPE_OBJECT
 import speiger.src.collections.PACKAGE.utils.ITERATORS;
+import speiger.src.collections.PACKAGE.functions.CONSUMER;
 #endif
 import speiger.src.collections.PACKAGE.utils.STRATEGY;
 
@@ -446,6 +450,15 @@ public class CUSTOM_HASH_SET KEY_GENERIC_TYPE extends ABSTRACT_SET KEY_GENERIC_T
 	@Override
 	public int size() {
 		return size;
+	}
+	
+	@Override
+	public void forEach(CONSUMER KEY_SUPER_GENERIC_TYPE action) {
+		if(size() <= 0) return;
+		if(containsNull) action.accept(keys[nullIndex]);
+		for(int i = nullIndex-1;i>=0;i--) {
+			if(KEY_EQUALS_NOT_NULL(keys[i])) action.accept(keys[i]);
+		}
 	}
 	
 	private class SetIterator implements ITERATOR KEY_GENERIC_TYPE {

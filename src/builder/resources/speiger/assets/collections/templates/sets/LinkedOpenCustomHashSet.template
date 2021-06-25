@@ -2,6 +2,7 @@ package speiger.src.collections.PACKAGE.sets;
 
 #if TYPE_OBJECT
 import java.util.Comparator;
+import java.util.function.Consumer;
 #endif
 import java.util.Collection;
 import java.util.Iterator;
@@ -18,6 +19,7 @@ import speiger.src.collections.PACKAGE.functions.COMPARATOR;
 import speiger.src.collections.PACKAGE.lists.LIST_ITERATOR;
 #if !TYPE_OBJECT
 import speiger.src.collections.PACKAGE.utils.ITERATORS;
+import speiger.src.collections.PACKAGE.functions.CONSUMER;
 #endif
 import speiger.src.collections.PACKAGE.utils.STRATEGY;
 import speiger.src.collections.utils.HashUtil;
@@ -514,6 +516,15 @@ public class LINKED_CUSTOM_HASH_SET KEY_GENERIC_TYPE extends CUSTOM_HASH_SET KEY
 		links = new long[nullIndex + 1];
 		firstIndex = -1;
 		lastIndex = -1;
+	}
+	
+	@Override
+	public void forEach(CONSUMER KEY_SUPER_GENERIC_TYPE action) {
+		int index = firstIndex;
+		while(index != -1){
+			action.accept(keys[index]);
+			index = (int)links[index];
+		}
 	}
 	
 	@Override

@@ -8,6 +8,7 @@
 - Changed: Arrays Wrap is now accessible to Objects and now is ? extends TYPE instead of TYPE.
 - Added: OpenHashSets now implement foreach and have less overhead.
 - Added: ImmutableOpenHashSet that is not editable (is linked by default for fast iteration)
+- Added: CustomOpenHashSets now implement foreach and have less overhead.
 
 ### Version 0.3.1
 - Fixed: containsKey & containsValue in HashMaps were deprecated for Object Variants.
