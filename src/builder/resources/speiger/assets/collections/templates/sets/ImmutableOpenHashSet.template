@@ -187,10 +187,7 @@ public class IMMUTABLE_HASH_SET KEY_GENERIC_TYPE extends ABSTRACT_SET KEY_GENERI
 			int pos = HashUtil.mix(KEY_TO_HASH(o)) & newMask;
 			KEY_TYPE current = newKeys[pos];
 			if(KEY_EQUALS_NOT_NULL(current)) {
-				if(KEY_EQUALS(current, o)) {
-					found = false;
-					break;
-				}
+				if(KEY_EQUALS(current, o)) continue;
 				while(KEY_EQUALS_NOT_NULL((current = newKeys[pos = (++pos & mask)]))) {
 					if(KEY_EQUALS(current, o)) {
 						found = false;
