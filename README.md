@@ -29,7 +29,7 @@ repositories {
     }
 }
 dependencies {
-	compile 'de.speiger:Primitive-Collections:0.3.1'
+	compile 'de.speiger:Primitive-Collections:0.3.2'
 }
 ```
 
