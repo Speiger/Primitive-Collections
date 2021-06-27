@@ -5,10 +5,12 @@ It is based on Java's Collection Library and FastUtil.
 But its focus is a different one.     
 
 ## Main Features:     
-- ArraysList 
+- ArrayLists
 - HashSet/Map (Linked & HashControl)
 - TreeSet/Map (RB & AVL)
-- Priority Queue.     
+- EnumMap
+- Immutable Maps/Lists/Sets
+- Priority Queue
 - Streams
 - SplitIterators
 - Iterators
