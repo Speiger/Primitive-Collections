@@ -152,7 +152,7 @@ public interface LIST KEY_GENERIC_TYPE extends COLLECTION KEY_GENERIC_TYPE, List
  	* @param a the elements that should be added
  	* @throws IndexOutOfBoundsException if from is outside of the lists range
  	*/
-	public default void addElements(KEY_TYPE... a) { addElements(0, a, 0, a.length); }
+	public default void addElements(KEY_TYPE... a) { addElements(size(), a, 0, a.length); }
 	
 	/**
 	 * A function to fast add elements to the list
