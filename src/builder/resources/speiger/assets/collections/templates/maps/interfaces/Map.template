@@ -509,7 +509,7 @@ public interface MAP KEY_VALUE_GENERIC_TYPE extends Map<CLASS_TYPE, CLASS_VALUE_
 	* @ValueType(V)
 	* @throws IllegalStateException if the keys and values do not match in length
 	* @return a OpenHashMap thats contains the injected values
-	* @note the keys & values will be unboxed
+	* @note the keys and values will be unboxed
 	*/
 	public static GENERIC_KEY_VALUE_BRACES HASH_MAP KEY_VALUE_GENERIC_TYPE createMap(CLASS_TYPE[] keys, CLASS_VALUE_TYPE[] values) {
 		return new HASH_MAPKV_BRACES(keys, values);
@@ -582,7 +582,7 @@ public interface MAP KEY_VALUE_GENERIC_TYPE extends Map<CLASS_TYPE, CLASS_VALUE_
 	* @ValueType(V)
 	* @throws IllegalStateException if the keys and values do not match in length
 	* @return a LinkedOpenHashMap thats contains the injected values
-	* @note the keys & values will be unboxed
+	* @note the keys and values will be unboxed
 	*/
 	public static GENERIC_KEY_VALUE_BRACES LINKED_HASH_MAP KEY_VALUE_GENERIC_TYPE createLinkedMap(CLASS_TYPE[] keys, CLASS_VALUE_TYPE[] values) {
 		return new LINKED_HASH_MAPKV_BRACES(keys, values);
@@ -634,7 +634,7 @@ public interface MAP KEY_VALUE_GENERIC_TYPE extends Map<CLASS_TYPE, CLASS_VALUE_
 	* @ValueType(V)
 	* @throws IllegalStateException if the keys and values do not match in length
 	* @return a ImmutableOpenHashMap thats contains the injected values
-	* @note the keys & values will be unboxed
+	* @note the keys and values will be unboxed
 	*/
 	public static GENERIC_KEY_VALUE_BRACES IMMUTABLE_HASH_MAP KEY_VALUE_GENERIC_TYPE createImmutable(CLASS_TYPE[] keys, CLASS_VALUE_TYPE[] values) {
 		return new IMMUTABLE_HASH_MAPKV_BRACES(keys, values);
@@ -711,7 +711,7 @@ public interface MAP KEY_VALUE_GENERIC_TYPE extends Map<CLASS_TYPE, CLASS_VALUE_
 	* @ValueType(V)
 	* @throws IllegalStateException if the keys and values do not match in length
 	* @return a CustomOpenHashMap thats contains the injected values
-	* @note the keys & values will be unboxed
+	* @note the keys and values will be unboxed
 	*/
 	public static GENERIC_KEY_VALUE_BRACES CUSTOM_HASH_MAP KEY_VALUE_GENERIC_TYPE createCustomMap(CLASS_TYPE[] keys, CLASS_VALUE_TYPE[] values, STRATEGY KEY_GENERIC_TYPE strategy) {
 		return new CUSTOM_HASH_MAPKV_BRACES(keys, values, strategy);
@@ -790,7 +790,7 @@ public interface MAP KEY_VALUE_GENERIC_TYPE extends Map<CLASS_TYPE, CLASS_VALUE_
 	* @ValueType(V)
 	* @throws IllegalStateException if the keys and values do not match in length
 	* @return a CustomLinkedOpenHashMap thats contains the injected values
-	* @note the keys & values will be unboxed
+	* @note the keys and values will be unboxed
 	*/
 	public static GENERIC_KEY_VALUE_BRACES LINKED_CUSTOM_HASH_MAP KEY_VALUE_GENERIC_TYPE createCustomLinkedMap(CLASS_TYPE[] keys, CLASS_VALUE_TYPE[] values, STRATEGY KEY_GENERIC_TYPE strategy) {
 		return new LINKED_CUSTOM_HASH_MAPKV_BRACES(keys, values, strategy);
@@ -867,7 +867,7 @@ public interface MAP KEY_VALUE_GENERIC_TYPE extends Map<CLASS_TYPE, CLASS_VALUE_
 	* @ValueType(V)
 	* @throws IllegalStateException if the keys and values do not match in length
 	* @return a RBTreeMap thats contains the injected values
-	* @note the keys & values will be unboxed
+	* @note the keys and values will be unboxed
 	*/
 	public static GENERIC_KEY_VALUE_BRACES RB_TREE_MAP KEY_VALUE_GENERIC_TYPE createRBTreeMap(CLASS_TYPE[] keys, CLASS_VALUE_TYPE[] values, COMPARATOR KEY_GENERIC_TYPE comp) {
 		return new RB_TREE_MAPKV_BRACES(keys, values, comp);
@@ -944,7 +944,7 @@ public interface MAP KEY_VALUE_GENERIC_TYPE extends Map<CLASS_TYPE, CLASS_VALUE_
 	* @ValueType(V)
 	* @throws IllegalStateException if the keys and values do not match in length
 	* @return a AVLTreeMap thats contains the injected values
-	* @note the keys & values will be unboxed
+	* @note the keys and values will be unboxed
 	*/
 	public static GENERIC_KEY_VALUE_BRACES AVL_TREE_MAP KEY_VALUE_GENERIC_TYPE createAVLTreeMap(CLASS_TYPE[] keys, CLASS_VALUE_TYPE[] values, COMPARATOR KEY_GENERIC_TYPE comp) {
 		return new AVL_TREE_MAPKV_BRACES(keys, values, comp);

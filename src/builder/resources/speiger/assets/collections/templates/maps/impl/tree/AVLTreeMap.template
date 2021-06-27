@@ -790,6 +790,7 @@ public class AVL_TREE_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_VALUE_
 	
 	protected int compare(KEY_TYPE k, KEY_TYPE v) { return comparator != null ? comparator.compare(k, v) : COMPAREABLE_TO_KEY(k, v);}
 	
+	/** From CLR */
 	protected void rotateLeft(Entry KEY_VALUE_GENERIC_TYPE entry) {
 		if(entry != null) {
 			Entry KEY_VALUE_GENERIC_TYPE right = entry.right;
@@ -806,6 +807,7 @@ public class AVL_TREE_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_VALUE_
 		}
 	}
 	
+	/** From CLR */
 	protected void rotateRight(Entry KEY_VALUE_GENERIC_TYPE entry) {
 		if(entry != null) {
 			Entry KEY_VALUE_GENERIC_TYPE left = entry.left;
@@ -822,6 +824,7 @@ public class AVL_TREE_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_VALUE_
 		}
 	}
 	
+	/** From CLR */
 	protected void fixAfterInsertion(Entry KEY_VALUE_GENERIC_TYPE entry) {
 		while(entry != null) {
 			entry.updateHeight();
@@ -846,6 +849,7 @@ public class AVL_TREE_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_VALUE_
 		}
 	}
 	
+	/** From CLR */
 	protected void fixAfterDeletion(Entry KEY_VALUE_GENERIC_TYPE entry) {
 		if(entry != null) {
 			entry.updateHeight();

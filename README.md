@@ -58,3 +58,4 @@ do not combine the commands because they can not be executed at the same time.
 ## Current Down Sides (Random order)
 - Testing for Sub Maps/Sets/Lists are only in a very basic way tested
 - Documentation is only present at the lowest level for most cases and needs a typo fixing.
+- AVLTreeSet/Map Polling (pollFirst/LastKey) is not working properly. It does not crash just the order is not maintained for whatever reason. Will be fixed very soon.

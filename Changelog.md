@@ -12,6 +12,7 @@
 - Added: ImmutableOpenHashMap that is not editable (is linked by default for fast iteration)
 - Added: Maps can now be created through the interface.
 - Fixed: Lists.addElements(T...elements) was adding elements at the beginning of a list instead of the end.
+- Fixed: Bugs with the AVLTreeSet. And marked bugs with AVLTreeX that are still present.
 
 ### Version 0.3.1
 - Fixed: containsKey & containsValue in HashMaps were deprecated for Object Variants.
