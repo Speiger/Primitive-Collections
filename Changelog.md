@@ -10,6 +10,7 @@
 - Added: ImmutableOpenHashSet that is not editable (is linked by default for fast iteration)
 - Added: CustomOpenHashSets now implement foreach and have less overhead.
 - Added: ImmutableOpenHashMap that is not editable (is linked by default for fast iteration)
+- Added: Maps can now be created through the interface.
 
 ### Version 0.3.1
 - Fixed: containsKey & containsValue in HashMaps were deprecated for Object Variants.

@@ -45,7 +45,6 @@ import speiger.src.collections.VALUE_PACKAGE.utils.VALUE_COLLECTIONS;
 #if !SAME_TYPE && !VALUE_OBJECT
 import speiger.src.collections.VALUE_PACKAGE.utils.VALUE_SETS;
 #endif
-
 #endif
 
 /**

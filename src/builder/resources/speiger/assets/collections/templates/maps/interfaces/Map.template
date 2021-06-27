@@ -8,11 +8,27 @@ import java.util.function.BiConsumer;
 import java.util.function.BiFunction;
 import java.util.function.Consumer;
 import java.util.function.Function;
+#if TYPE_OBJECT
+import java.util.Comparator;
+#endif
 
 import speiger.src.collections.VALUE_PACKAGE.collections.VALUE_COLLECTION;
 import speiger.src.collections.PACKAGE.functions.consumer.BI_CONSUMER;
 import speiger.src.collections.PACKAGE.functions.function.FUNCTION;
 import speiger.src.collections.PACKAGE.functions.function.UNARY_OPERATOR;
+#if !TYPE_OBJECT && !TYPE_BOOLEAN
+import speiger.src.collections.PACKAGE.functions.COMPARATOR;
+#endif
+#if !TYPE_BOOLEAN
+import speiger.src.collections.PACKAGE.maps.impl.customHash.LINKED_CUSTOM_HASH_MAP;
+import speiger.src.collections.PACKAGE.maps.impl.customHash.CUSTOM_HASH_MAP;
+import speiger.src.collections.PACKAGE.maps.impl.hash.LINKED_HASH_MAP;
+import speiger.src.collections.PACKAGE.maps.impl.hash.HASH_MAP;
+import speiger.src.collections.PACKAGE.maps.impl.immutable.IMMUTABLE_HASH_MAP;
+import speiger.src.collections.PACKAGE.maps.impl.tree.AVL_TREE_MAP;
+import speiger.src.collections.PACKAGE.maps.impl.tree.RB_TREE_MAP;
+import speiger.src.collections.PACKAGE.utils.STRATEGY;
+#endif
 import speiger.src.collections.PACKAGE.sets.SET;
 #if !SAME_TYPE
 import speiger.src.collections.VALUE_PACKAGE.functions.function.VALUE_UNARY_OPERATOR;
@@ -448,4 +464,517 @@ public interface MAP KEY_VALUE_GENERIC_TYPE extends Map<CLASS_TYPE, CLASS_VALUE_
 		public default CLASS_VALUE_TYPE setValue(CLASS_VALUE_TYPE value) { return VALUE_TO_OBJ(setValue(OBJ_TO_VALUE(value))); }
 #endif
 	}
+	
+#if !TYPE_BOOLEAN
+	/**
+	* Helper function to unify code
+	* @Type(T)
+	* @ValueType(V)
+	* @return a OpenHashMap
+	*/
+	public static GENERIC_KEY_VALUE_BRACES HASH_MAP KEY_VALUE_GENERIC_TYPE createMap() {
+		return new HASH_MAPKV_BRACES();
+	}
+	
+	/**
+	* Helper function to unify code
+	* @param size the minimum capacity of the Map
+	* @Type(T)
+	* @ValueType(V)
+	* @return a OpenHashMap with a mimimum capacity
+	*/
+	public static GENERIC_KEY_VALUE_BRACES HASH_MAP KEY_VALUE_GENERIC_TYPE createMap(int size) {
+		return new HASH_MAPKV_BRACES(size);
+	}
+	
+	/**
+	* Helper function to unify code
+	* @param keys the keys that should be inserted
+	* @param values the values that should be inserted
+	* @Type(T)
+	* @ValueType(V)
+	* @throws IllegalStateException if the keys and values do not match in length
+	* @return a OpenHashMap thats contains the injected values
+	*/
+	public static GENERIC_KEY_VALUE_BRACES HASH_MAP KEY_VALUE_GENERIC_TYPE createMap(KEY_TYPE[] keys, VALUE_TYPE[] values) {
+		return new HASH_MAPKV_BRACES(keys, values);
+	}
+	
+	#if !TYPE_OBJECT || !VALUE_OBJECT
+	/**
+	* Helper function to unify code
+	* @param keys the keys that should be inserted
+	* @param values the values that should be inserted
+	* @Type(T)
+	* @ValueType(V)
+	* @throws IllegalStateException if the keys and values do not match in length
+	* @return a OpenHashMap thats contains the injected values
+	* @note the keys & values will be unboxed
+	*/
+	public static GENERIC_KEY_VALUE_BRACES HASH_MAP KEY_VALUE_GENERIC_TYPE createMap(CLASS_TYPE[] keys, CLASS_VALUE_TYPE[] values) {
+		return new HASH_MAPKV_BRACES(keys, values);
+	}
+	
+	#endif
+	/**
+	* Helper function to unify code
+	* @param map that should be cloned
+	* @Type(T)
+	* @ValueType(V)
+	* @return a OpenHashMap thats copies the contents of the provided map
+	*/
+	public static GENERIC_KEY_VALUE_BRACES HASH_MAP KEY_VALUE_GENERIC_TYPE createMap(MAP KEY_VALUE_GENERIC_TYPE map) {
+		return new HASH_MAPKV_BRACES(map);
+	}
+	
+	/**
+	* Helper function to unify code
+	* @param map that should be cloned
+	* @Type(T)
+	* @ValueType(V)
+	* @return a OpenHashMap thats copies the contents of the provided map
+	* @note the map will be unboxed
+	*/
+	public static GENERIC_KEY_VALUE_BRACES HASH_MAP KEY_VALUE_GENERIC_TYPE createMap(Map<? extends CLASS_TYPE, ? extends CLASS_VALUE_TYPE> map) {
+		return new HASH_MAPKV_BRACES(map);
+	}
+	
+	/**
+	* Helper function to unify code
+	* @Type(T)
+	* @ValueType(V)
+	* @return a LinkedOpenHashMap
+	*/
+	public static GENERIC_KEY_VALUE_BRACES LINKED_HASH_MAP KEY_VALUE_GENERIC_TYPE createLinkedMap() {
+		return new LINKED_HASH_MAPKV_BRACES();
+	}
+	
+	/**
+	* Helper function to unify code
+	* @param size the minimum capacity of the Map
+	* @Type(T)
+	* @ValueType(V)
+	* @return a LinkedOpenHashMap with a mimimum capacity
+	*/
+	public static GENERIC_KEY_VALUE_BRACES LINKED_HASH_MAP KEY_VALUE_GENERIC_TYPE createLinkedMap(int size) {
+		return new LINKED_HASH_MAPKV_BRACES(size);
+	}
+	
+	/**
+	* Helper function to unify code
+	* @param keys the keys that should be inserted
+	* @param values the values that should be inserted
+	* @Type(T)
+	* @ValueType(V)
+	* @throws IllegalStateException if the keys and values do not match in length
+	* @return a LinkedOpenHashMap thats contains the injected values
+	*/
+	public static GENERIC_KEY_VALUE_BRACES LINKED_HASH_MAP KEY_VALUE_GENERIC_TYPE createLinkedMap(KEY_TYPE[] keys, VALUE_TYPE[] values) {
+		return new LINKED_HASH_MAPKV_BRACES(keys, values);
+	}
+	
+	#if !TYPE_OBJECT || !VALUE_OBJECT
+	/**
+	* Helper function to unify code
+	* @param keys the keys that should be inserted
+	* @param values the values that should be inserted
+	* @Type(T)
+	* @ValueType(V)
+	* @throws IllegalStateException if the keys and values do not match in length
+	* @return a LinkedOpenHashMap thats contains the injected values
+	* @note the keys & values will be unboxed
+	*/
+	public static GENERIC_KEY_VALUE_BRACES LINKED_HASH_MAP KEY_VALUE_GENERIC_TYPE createLinkedMap(CLASS_TYPE[] keys, CLASS_VALUE_TYPE[] values) {
+		return new LINKED_HASH_MAPKV_BRACES(keys, values);
+	}
+	
+	#endif
+	/**
+	* Helper function to unify code
+	* @param map that should be cloned
+	* @Type(T)
+	* @ValueType(V)
+	* @return a LinkedOpenHashMap thats copies the contents of the provided map
+	*/
+	public static GENERIC_KEY_VALUE_BRACES LINKED_HASH_MAP KEY_VALUE_GENERIC_TYPE createLinkedMap(MAP KEY_VALUE_GENERIC_TYPE map) {
+		return new LINKED_HASH_MAPKV_BRACES(map);
+	}
+	
+	/**
+	* Helper function to unify code
+	* @param map that should be cloned
+	* @Type(T)
+	* @ValueType(V)
+	* @return a LinkedOpenHashMap thats copies the contents of the provided map
+	* @note the map will be unboxed
+	*/
+	public static GENERIC_KEY_VALUE_BRACES IMMUTABLE_HASH_MAP KEY_VALUE_GENERIC_TYPE createLinkedMap(Map<? extends CLASS_TYPE, ? extends CLASS_VALUE_TYPE> map) {
+		return new IMMUTABLE_HASH_MAPKV_BRACES(map);
+	}
+	
+	/**
+	* Helper function to unify code
+	* @param keys the keys that should be inserted
+	* @param values the values that should be inserted
+	* @Type(T)
+	* @ValueType(V)
+	* @throws IllegalStateException if the keys and values do not match in length
+	* @return a ImmutableOpenHashMap thats contains the injected values
+	*/
+	public static GENERIC_KEY_VALUE_BRACES IMMUTABLE_HASH_MAP KEY_VALUE_GENERIC_TYPE createImmutable(KEY_TYPE[] keys, VALUE_TYPE[] values) {
+		return new IMMUTABLE_HASH_MAPKV_BRACES(keys, values);
+	}
+	
+	#if !TYPE_OBJECT || !VALUE_OBJECT
+	/**
+	* Helper function to unify code
+	* @param keys the keys that should be inserted
+	* @param values the values that should be inserted
+	* @Type(T)
+	* @ValueType(V)
+	* @throws IllegalStateException if the keys and values do not match in length
+	* @return a ImmutableOpenHashMap thats contains the injected values
+	* @note the keys & values will be unboxed
+	*/
+	public static GENERIC_KEY_VALUE_BRACES IMMUTABLE_HASH_MAP KEY_VALUE_GENERIC_TYPE createImmutable(CLASS_TYPE[] keys, CLASS_VALUE_TYPE[] values) {
+		return new IMMUTABLE_HASH_MAPKV_BRACES(keys, values);
+	}
+	
+	#endif
+	/**
+	* Helper function to unify code
+	* @param map that should be cloned
+	* @Type(T)
+	* @ValueType(V)
+	* @return a ImmutableOpenHashMap thats copies the contents of the provided map
+	*/
+	public static GENERIC_KEY_VALUE_BRACES IMMUTABLE_HASH_MAP KEY_VALUE_GENERIC_TYPE createImmutable(MAP KEY_VALUE_GENERIC_TYPE map) {
+		return new IMMUTABLE_HASH_MAPKV_BRACES(map);
+	}
+	
+	/**
+	* Helper function to unify code
+	* @param map that should be cloned
+	* @Type(T)
+	* @ValueType(V)
+	* @return a ImmutableOpenHashMap thats copies the contents of the provided map
+	* @note the map will be unboxed
+	*/
+	public static GENERIC_KEY_VALUE_BRACES IMMUTABLE_HASH_MAP KEY_VALUE_GENERIC_TYPE createImmutable(Map<? extends CLASS_TYPE, ? extends CLASS_VALUE_TYPE> map) {
+		return new IMMUTABLE_HASH_MAPKV_BRACES(map);
+	}
+	
+	/**
+	* Helper function to unify code
+	* @param strategy the Hash Controller
+	* @Type(T)
+	* @ValueType(V)
+	* @return a CustomOpenHashMap
+	*/
+	public static GENERIC_KEY_VALUE_BRACES CUSTOM_HASH_MAP KEY_VALUE_GENERIC_TYPE createCustomMap(STRATEGY KEY_GENERIC_TYPE strategy) {
+		return new CUSTOM_HASH_MAPKV_BRACES(strategy);
+	}
+	
+	/**
+	* Helper function to unify code
+	* @param size the minimum capacity of the Map
+	* @param strategy the Hash Controller
+	* @Type(T)
+	* @ValueType(V)
+	* @return a CustomOpenHashMap with a mimimum capacity
+	*/
+	public static GENERIC_KEY_VALUE_BRACES CUSTOM_HASH_MAP KEY_VALUE_GENERIC_TYPE createCustomMap(int size, STRATEGY KEY_GENERIC_TYPE strategy) {
+		return new CUSTOM_HASH_MAPKV_BRACES(size, strategy);
+	}
+	
+	/**
+	* Helper function to unify code
+	* @param keys the keys that should be inserted
+	* @param values the values that should be inserted
+	* @param strategy the Hash Controller
+	* @Type(T)
+	* @ValueType(V)
+	* @throws IllegalStateException if the keys and values do not match in length
+	* @return a CustomOpenHashMap thats contains the injected values
+	*/
+	public static GENERIC_KEY_VALUE_BRACES CUSTOM_HASH_MAP KEY_VALUE_GENERIC_TYPE createCustomMap(KEY_TYPE[] keys, VALUE_TYPE[] values, STRATEGY KEY_GENERIC_TYPE strategy) {
+		return new CUSTOM_HASH_MAPKV_BRACES(keys, values, strategy);
+	}
+	
+	#if !TYPE_OBJECT || !VALUE_OBJECT
+	/**
+	* Helper function to unify code
+	* @param keys the keys that should be inserted
+	* @param values the values that should be inserted
+	* @param strategy the Hash Controller
+	* @Type(T)
+	* @ValueType(V)
+	* @throws IllegalStateException if the keys and values do not match in length
+	* @return a CustomOpenHashMap thats contains the injected values
+	* @note the keys & values will be unboxed
+	*/
+	public static GENERIC_KEY_VALUE_BRACES CUSTOM_HASH_MAP KEY_VALUE_GENERIC_TYPE createCustomMap(CLASS_TYPE[] keys, CLASS_VALUE_TYPE[] values, STRATEGY KEY_GENERIC_TYPE strategy) {
+		return new CUSTOM_HASH_MAPKV_BRACES(keys, values, strategy);
+	}
+	
+	#endif
+	/**
+	* Helper function to unify code
+	* @param map that should be cloned
+	* @param strategy the Hash Controller
+	* @Type(T)
+	* @ValueType(V)
+	* @return a CustomOpenHashMap thats copies the contents of the provided map
+	*/
+	public static GENERIC_KEY_VALUE_BRACES CUSTOM_HASH_MAP KEY_VALUE_GENERIC_TYPE createCustomMap(MAP KEY_VALUE_GENERIC_TYPE map, STRATEGY KEY_GENERIC_TYPE strategy) {
+		return new CUSTOM_HASH_MAPKV_BRACES(map, strategy);
+	}
+	
+	/**
+	* Helper function to unify code
+	* @param map that should be cloned
+	* @param strategy the Hash Controller
+	* @Type(T)
+	* @ValueType(V)
+	* @return a CustomOpenHashMap thats copies the contents of the provided map
+	* @note the map will be unboxed
+	*/
+	public static GENERIC_KEY_VALUE_BRACES CUSTOM_HASH_MAP KEY_VALUE_GENERIC_TYPE createCustomMap(Map<? extends CLASS_TYPE, ? extends CLASS_VALUE_TYPE> map, STRATEGY KEY_GENERIC_TYPE strategy) {
+		return new CUSTOM_HASH_MAPKV_BRACES(map, strategy);
+	}
+	
+	/**
+	* Helper function to unify code
+	* @param strategy the Hash Controller
+	* @Type(T)
+	* @ValueType(V)
+	* @return a CustomLinkedOpenHashMap
+	*/
+	public static GENERIC_KEY_VALUE_BRACES LINKED_CUSTOM_HASH_MAP KEY_VALUE_GENERIC_TYPE createCustomLinkedMap(STRATEGY KEY_GENERIC_TYPE strategy) {
+		return new LINKED_CUSTOM_HASH_MAPKV_BRACES(strategy);
+	}
+	
+	/**
+	* Helper function to unify code
+	* @param size the minimum capacity of the Map
+	* @param strategy the Hash Controller
+	* @Type(T)
+	* @ValueType(V)
+	* @return a CustomLinkedOpenHashMap with a mimimum capacity
+	*/
+	public static GENERIC_KEY_VALUE_BRACES LINKED_CUSTOM_HASH_MAP KEY_VALUE_GENERIC_TYPE createCustomLinkedMap(int size, STRATEGY KEY_GENERIC_TYPE strategy) {
+		return new LINKED_CUSTOM_HASH_MAPKV_BRACES(size, strategy);
+	}
+	
+	/**
+	* Helper function to unify code
+	* @param keys the keys that should be inserted
+	* @param values the values that should be inserted
+	* @param strategy the Hash Controller
+	* @Type(T)
+	* @ValueType(V)
+	* @throws IllegalStateException if the keys and values do not match in length
+	* @return a CustomLinkedOpenHashMap thats contains the injected values
+	*/
+	public static GENERIC_KEY_VALUE_BRACES LINKED_CUSTOM_HASH_MAP KEY_VALUE_GENERIC_TYPE createCustomLinkedMap(KEY_TYPE[] keys, VALUE_TYPE[] values, STRATEGY KEY_GENERIC_TYPE strategy) {
+		return new LINKED_CUSTOM_HASH_MAPKV_BRACES(keys, values, strategy);
+	}
+	
+	#if !TYPE_OBJECT || !VALUE_OBJECT
+	/**
+	* Helper function to unify code
+	* @param keys the keys that should be inserted
+	* @param values the values that should be inserted
+	* @param strategy the Hash Controller
+	* @Type(T)
+	* @ValueType(V)
+	* @throws IllegalStateException if the keys and values do not match in length
+	* @return a CustomLinkedOpenHashMap thats contains the injected values
+	* @note the keys & values will be unboxed
+	*/
+	public static GENERIC_KEY_VALUE_BRACES LINKED_CUSTOM_HASH_MAP KEY_VALUE_GENERIC_TYPE createCustomLinkedMap(CLASS_TYPE[] keys, CLASS_VALUE_TYPE[] values, STRATEGY KEY_GENERIC_TYPE strategy) {
+		return new LINKED_CUSTOM_HASH_MAPKV_BRACES(keys, values, strategy);
+	}
+	
+	#endif
+	/**
+	* Helper function to unify code
+	* @param map that should be cloned
+	* @param strategy the Hash Controller
+	* @Type(T)
+	* @ValueType(V)
+	* @return a CustomLinkedOpenHashMap thats copies the contents of the provided map
+	*/
+	public static GENERIC_KEY_VALUE_BRACES LINKED_CUSTOM_HASH_MAP KEY_VALUE_GENERIC_TYPE createCustomLinkedMap(MAP KEY_VALUE_GENERIC_TYPE map, STRATEGY KEY_GENERIC_TYPE strategy) {
+		return new LINKED_CUSTOM_HASH_MAPKV_BRACES(map, strategy);
+	}
+	
+	/**
+	* Helper function to unify code
+	* @param map that should be cloned
+	* @param strategy the Hash Controller
+	* @Type(T)
+	* @ValueType(V)
+	* @return a CustomLinkedOpenHashMap thats copies the contents of the provided map
+	* @note the map will be unboxed
+	*/
+	public static GENERIC_KEY_VALUE_BRACES LINKED_CUSTOM_HASH_MAP KEY_VALUE_GENERIC_TYPE createCustomLinkedMap(Map<? extends CLASS_TYPE, ? extends CLASS_VALUE_TYPE> map, STRATEGY KEY_GENERIC_TYPE strategy) {
+		return new LINKED_CUSTOM_HASH_MAPKV_BRACES(map, strategy);
+	}
+	
+	/**
+	* Helper function to unify code
+	* @Type(T)
+	* @ValueType(V)
+	* @return a RBTreeMap
+	*/
+	public static GENERIC_KEY_VALUE_BRACES RB_TREE_MAP KEY_VALUE_GENERIC_TYPE createRBTreeMap() {
+		return new RB_TREE_MAPKV_BRACES();
+	}
+	
+	/**
+	* Helper function to unify code
+	* @param comp the Sorter of the TreeMap
+	* @Type(T)
+	* @ValueType(V)
+	* @return a RBTreeMap
+	*/
+	public static GENERIC_KEY_VALUE_BRACES RB_TREE_MAP KEY_VALUE_GENERIC_TYPE createRBTreeMap(COMPARATOR KEY_GENERIC_TYPE comp) {
+		return new RB_TREE_MAPKV_BRACES(comp);
+	}
+	
+	/**
+	* Helper function to unify code
+	* @param keys the keys that should be inserted
+	* @param values the values that should be inserted
+	* @param comp the Sorter of the TreeMap
+	* @Type(T)
+	* @ValueType(V)
+	* @throws IllegalStateException if the keys and values do not match in length
+	* @return a RBTreeMap thats contains the injected values
+	*/
+	public static GENERIC_KEY_VALUE_BRACES RB_TREE_MAP KEY_VALUE_GENERIC_TYPE createRBTreeMap(KEY_TYPE[] keys, VALUE_TYPE[] values, COMPARATOR KEY_GENERIC_TYPE comp) {
+		return new RB_TREE_MAPKV_BRACES(keys, values, comp);
+	}
+	
+	#if !TYPE_OBJECT || !VALUE_OBJECT
+	/**
+	* Helper function to unify code
+	* @param keys the keys that should be inserted
+	* @param values the values that should be inserted
+	* @param comp the Sorter of the TreeMap
+	* @Type(T)
+	* @ValueType(V)
+	* @throws IllegalStateException if the keys and values do not match in length
+	* @return a RBTreeMap thats contains the injected values
+	* @note the keys & values will be unboxed
+	*/
+	public static GENERIC_KEY_VALUE_BRACES RB_TREE_MAP KEY_VALUE_GENERIC_TYPE createRBTreeMap(CLASS_TYPE[] keys, CLASS_VALUE_TYPE[] values, COMPARATOR KEY_GENERIC_TYPE comp) {
+		return new RB_TREE_MAPKV_BRACES(keys, values, comp);
+	}
+	
+	#endif
+	/**
+	* Helper function to unify code
+	* @param map that should be cloned
+	* @param comp the Sorter of the TreeMap
+	* @Type(T)
+	* @ValueType(V)
+	* @return a RBTreeMap thats copies the contents of the provided map
+	*/
+	public static GENERIC_KEY_VALUE_BRACES RB_TREE_MAP KEY_VALUE_GENERIC_TYPE createRBTreeMap(MAP KEY_VALUE_GENERIC_TYPE map, COMPARATOR KEY_GENERIC_TYPE comp) {
+		return new RB_TREE_MAPKV_BRACES(map, comp);
+	}
+	
+	/**
+	* Helper function to unify code
+	* @param map that should be cloned
+	* @param comp the Sorter of the TreeMap
+	* @Type(T)
+	* @ValueType(V)
+	* @return a RBTreeMap thats copies the contents of the provided map
+	* @note the map will be unboxed
+	*/
+	public static GENERIC_KEY_VALUE_BRACES RB_TREE_MAP KEY_VALUE_GENERIC_TYPE createRBTreeMap(Map<? extends CLASS_TYPE, ? extends CLASS_VALUE_TYPE> map, COMPARATOR KEY_GENERIC_TYPE comp) {
+		return new RB_TREE_MAPKV_BRACES(map, comp);
+	}
+	
+	/**
+	* Helper function to unify code
+	* @Type(T)
+	* @ValueType(V)
+	* @return a AVLTreeMap
+	*/
+	public static GENERIC_KEY_VALUE_BRACES AVL_TREE_MAP KEY_VALUE_GENERIC_TYPE createAVLTreeMap() {
+		return new AVL_TREE_MAPKV_BRACES();
+	}
+	
+	/**
+	* Helper function to unify code
+	* @param comp the Sorter of the TreeMap
+	* @Type(T)
+	* @ValueType(V)
+	* @return a AVLTreeMap
+	*/
+	public static GENERIC_KEY_VALUE_BRACES AVL_TREE_MAP KEY_VALUE_GENERIC_TYPE createAVLTreeMap(COMPARATOR KEY_GENERIC_TYPE comp) {
+		return new AVL_TREE_MAPKV_BRACES(comp);
+	}
+	
+	/**
+	* Helper function to unify code
+	* @param keys the keys that should be inserted
+	* @param values the values that should be inserted
+	* @param comp the Sorter of the TreeMap
+	* @Type(T)
+	* @ValueType(V)
+	* @throws IllegalStateException if the keys and values do not match in length
+	* @return a AVLTreeMap thats contains the injected values
+	*/
+	public static GENERIC_KEY_VALUE_BRACES AVL_TREE_MAP KEY_VALUE_GENERIC_TYPE createAVLTreeMap(KEY_TYPE[] keys, VALUE_TYPE[] values, COMPARATOR KEY_GENERIC_TYPE comp) {
+		return new AVL_TREE_MAPKV_BRACES(keys, values, comp);
+	}
+	
+	#if !TYPE_OBJECT || !VALUE_OBJECT
+	/**
+	* Helper function to unify code
+	* @param keys the keys that should be inserted
+	* @param values the values that should be inserted
+	* @param comp the Sorter of the TreeMap
+	* @Type(T)
+	* @ValueType(V)
+	* @throws IllegalStateException if the keys and values do not match in length
+	* @return a AVLTreeMap thats contains the injected values
+	* @note the keys & values will be unboxed
+	*/
+	public static GENERIC_KEY_VALUE_BRACES AVL_TREE_MAP KEY_VALUE_GENERIC_TYPE createAVLTreeMap(CLASS_TYPE[] keys, CLASS_VALUE_TYPE[] values, COMPARATOR KEY_GENERIC_TYPE comp) {
+		return new AVL_TREE_MAPKV_BRACES(keys, values, comp);
+	}
+	
+	#endif
+	/**
+	* Helper function to unify code
+	* @param map that should be cloned
+	* @param comp the Sorter of the TreeMap
+	* @Type(T)
+	* @ValueType(V)
+	* @return a AVLTreeMap thats copies the contents of the provided map
+	*/
+	public static GENERIC_KEY_VALUE_BRACES AVL_TREE_MAP KEY_VALUE_GENERIC_TYPE createAVLTreeMap(MAP KEY_VALUE_GENERIC_TYPE map, COMPARATOR KEY_GENERIC_TYPE comp) {
+		return new AVL_TREE_MAPKV_BRACES(map, comp);
+	}
+	
+	/**
+	* Helper function to unify code
+	* @param map that should be cloned
+	* @param comp the Sorter of the TreeMap
+	* @Type(T)
+	* @ValueType(V)
+	* @return a AVLTreeMap thats copies the contents of the provided map
+	* @note the map will be unboxed
+	*/
+	public static GENERIC_KEY_VALUE_BRACES AVL_TREE_MAP KEY_VALUE_GENERIC_TYPE createAVLTreeMap(Map<? extends CLASS_TYPE, ? extends CLASS_VALUE_TYPE> map, COMPARATOR KEY_GENERIC_TYPE comp) {
+		return new AVL_TREE_MAPKV_BRACES(map, comp);
+	}
+	
+#endif
 }
