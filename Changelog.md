@@ -1,6 +1,9 @@
 # Changelog of versions
 
 
+### Version 0.3.3
+- Added: Flat/Mapping function for Iterables/Iterators to help avoid streams for cleaner looking code
+
 ### Version 0.3.2
 - Fixed: Map.put wasn't referring to primitive variants.
 - Added: ImmutableList.

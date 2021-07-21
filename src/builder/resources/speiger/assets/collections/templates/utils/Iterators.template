@@ -2,12 +2,17 @@ package speiger.src.collections.PACKAGE.utils;
 
 import java.util.Iterator;
 import java.util.NoSuchElementException;
+import java.util.function.Function;
+
 import speiger.src.collections.PACKAGE.collections.ITERATOR;
 import speiger.src.collections.PACKAGE.lists.ARRAY_LIST;
 import speiger.src.collections.PACKAGE.lists.LIST;
 import speiger.src.collections.PACKAGE.lists.LIST_ITERATOR;
 import speiger.src.collections.PACKAGE.collections.BI_ITERATOR;
 import speiger.src.collections.PACKAGE.collections.COLLECTION;
+#if TYPE_OBJECT
+import speiger.src.collections.PACKAGE.collections.ITERABLE;
+#endif
 
 /**
  * A Helper class for Iterators
@@ -81,7 +86,84 @@ public class ITERATORS
 	public static GENERIC_KEY_BRACES LIST_ITERATOR KEY_GENERIC_TYPE unmodifiable(LIST_ITERATOR KEY_GENERIC_TYPE iterator) {
 		return iterator instanceof UnmodifiableListIterator ? iterator : new UnmodifiableListIteratorBRACES(iterator);
 	}
-		/**
+	
+#if TYPE_OBJECT
+	/**
+	 * A Helper function that maps a Iterable into a new Type.
+	 * @param iterable the iterable that should be mapped
+	 * @param mapper the function that decides what the result turns into.
+	 * @Type(T)
+	 * @Type(E)
+	 * @return a iterable that is mapped to a new result
+	 */
+	public static <T, E> ITERABLE<T> map(ITERABLE<E> iterable, Function<E, T> mapper) {
+		return new MappedIterableBRACES(iterable, mapper);
+	}
+	
+	/**
+	 * A Helper function that maps a Iterator into a new Type.
+	 * @param iterator that should be mapped
+	 * @param mapper the function that decides what the result turns into.
+	 * @Type(T)
+	 * @Type(E)
+	 * @return a iterator that is mapped to a new result
+	 */
+	public static <T, E> ITERATOR<T> map(ITERATOR<E> iterator, Function<E, T> mapper) {
+		return new MappedIteratorBRACES(iterator, mapper);
+	}
+	
+	/**
+	 * A Helper function that flatMaps a Iterable into a new Type.
+	 * @param iterable the iterable that should be flatMapped
+	 * @param mapper the function that decides what the result turns into.
+	 * @Type(T)
+	 * @Type(V)
+	 * @Type(E)
+	 * @return a iterable that is flatMapped to a new result
+	 */
+	public static <T, E, V extends Iterable<T>> ITERABLE<T> flatMap(ITERABLE<E> iterable, Function<E, V> mapper) {
+		return new FlatMappedIterableBRACES(iterable, mapper);
+	}
+	
+	/**
+	 * A Helper function that flatMaps a Iterable into a new Type.
+	 * @param iterable the iterable that should be flatMapped
+	 * @param mapper the function that decides what the result turns into.
+	 * @Type(T)
+	 * @Type(E)
+	 * @return a iterable that is flatMapped to a new result
+	 */
+	public static <T, E> ITERABLE<T> arrayFlatMap(ITERABLE<E> iterable, Function<E, T[]> mapper) {
+		return new FlatMappedArrayIterableBRACES(iterable, mapper);
+	}
+	
+	/**
+	 * A Helper function that flatMaps a Iterator into a new Type.
+	 * @param iterator that should be flatMapped
+	 * @param mapper the function that decides what the result turns into.
+	 * @Type(T)
+	 * @Type(V)
+	 * @Type(E)
+	 * @return a iterator that is flatMapped to a new result
+	 */
+	public static <T, E, V extends Iterable<T>> ITERATOR<T> flatMap(ITERATOR<E> iterator, Function<E, V> mapper) {
+		return new FlatMappedIteratorBRACES(iterator, mapper);
+	}
+	
+	/**
+	 * A Helper function that flatMaps a Iterator into a new Type.
+	 * @param iterator that should be flatMapped
+	 * @param mapper the function that decides what the result turns into.
+	 * @Type(T)
+	 * @Type(E)
+	 * @return a iterator that is flatMapped to a new result
+	 */
+	public static <T, E> ITERATOR<T> arrayFlatMap(ITERATOR<E> iterator, Function<E, T[]> mapper) {
+		return new FlatMappedArrayIteratorBRACES(iterator, mapper);
+	}
+	
+#endif
+	/**
 	 * Helper function to convert a Object Iterator into a Primitive Iterator
 	 * @param iterator that should be converted to a unboxing iterator
 	 * @ArrayType(T)
@@ -596,4 +678,154 @@ public class ITERATORS
 			return amount - left;
 		}
 	}
+	
+#if TYPE_OBJECT
+	private static class MappedIterable<E, T> implements ITERABLE<T>
+	{
+		ITERABLE<E> iterable;
+		Function<E, T> mapper;
+		
+		MappedIterable(ITERABLE<E> iterable, Function<E, T> mapper) {
+			this.iterable = iterable;
+			this.mapper = mapper;
+		}
+		
+		public ITERATOR<T> iterator() {
+			return new MappedIterator<>(iterable.iterator(), mapper);
+		}
+	}
+	
+	private static class MappedIterator<E, T> implements ITERATOR<T>
+	{
+		ITERATOR<E> iterator;
+		Function<E, T> mapper;
+		
+		MappedIterator(ITERATOR<E> iterator, Function<E, T> mapper) {
+			this.iterator = iterator;
+			this.mapper = mapper;
+		}
+		
+		@Override
+		public boolean hasNext() {
+			return iterator.hasNext();
+		}
+		
+		@Override
+		public KEY_TYPE NEXT() {
+			return mapper.apply(iterator.NEXT());
+		}
+		
+		@Override
+		public int skip(int amount) {
+			return iterator.skip(amount);
+		}
+	}
+	
+	private static class FlatMappedIterable<E, T, V extends Iterable<T>> implements ITERABLE<T>
+	{
+		ITERABLE<E> iterable;
+		Function<E, V> mapper;
+		
+		FlatMappedIterable(ITERABLE<E> iterable, Function<E, V> mapper) {
+			this.iterable = iterable;
+			this.mapper = mapper;
+		}
+		
+		@Override
+		public ITERATOR<T> iterator() {
+			return new FlatMappedIterator<>(iterable.iterator(), mapper);
+		}
+	}
+	
+	private static class FlatMappedArrayIterable<E, T> implements ITERABLE<T>
+	{
+		ITERABLE<E> iterable;
+		Function<E, T[]> mapper;
+		
+		FlatMappedArrayIterable(ITERABLE<E> iterable, Function<E, T[]> mapper) {
+			this.iterable = iterable;
+			this.mapper = mapper;
+		}
+		
+		@Override
+		public ITERATOR<T> iterator() {
+			return new FlatMappedArrayIterator<>(iterable.iterator(), mapper);
+		}
+	}
+	
+	private static class FlatMappedIterator<E, T, V extends Iterable<T>> implements ITERATOR<T>
+	{
+		ITERATOR<E> iterator;
+		Iterator<T> last = null;
+		Function<E, V> mapper;
+		boolean foundNext = false;
+		
+		FlatMappedIterator(ITERATOR<E> iterator, Function<E, V> mapper) {
+			this.iterator = iterator;
+			this.mapper = mapper;
+		}
+		
+		void compute() {
+			if(foundNext) return;
+			foundNext = true;
+			while(iterator.hasNext())
+			{
+				if(last != null && last.hasNext()) return;
+				last = mapper.apply(iterator.next()).iterator();
+			}
+		}
+		
+		@Override
+		public boolean hasNext() {
+			compute();
+			return last != null && last.hasNext();
+		}
+		
+		@Override
+		public KEY_TYPE NEXT() {
+			if(!hasNext()) throw new IllegalStateException("End of Iterator");
+			KEY_TYPE result = last.next();
+			foundNext = false;
+			return result;
+		}
+	}
+	
+	private static class FlatMappedArrayIterator<E, T> implements ITERATOR<T>
+	{
+		ITERATOR<E> iterator;
+		Iterator<T> last = null;
+		Function<E, T[]> mapper;
+		boolean foundNext = false;
+		
+		FlatMappedArrayIterator(ITERATOR<E> iterator, Function<E, T[]> mapper) {
+			this.iterator = iterator;
+			this.mapper = mapper;
+		}
+		
+		void compute() {
+			if(foundNext) return;
+			foundNext = true;
+			while(iterator.hasNext())
+			{
+				if(last != null && last.hasNext()) return;
+				last = wrap(mapper.apply(iterator.next()));
+			}
+		}
+		
+		@Override
+		public boolean hasNext() {
+			compute();
+			return last != null && last.hasNext();
+		}
+		
+		@Override
+		public T next() {
+			if(!hasNext()) throw new IllegalStateException("End of Iterator");
+			KEY_TYPE result = last.next();
+			foundNext = false;
+			return result;
+		}
+	}
+	
+#endif
 }

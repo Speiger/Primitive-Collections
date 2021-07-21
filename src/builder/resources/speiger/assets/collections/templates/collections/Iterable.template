@@ -5,6 +5,9 @@ import java.util.Objects;
 import java.util.function.Consumer;
 
 import speiger.src.collections.PACKAGE.functions.CONSUMER;
+#else 
+import java.util.function.Function;
+import speiger.src.collections.PACKAGE.utils.ITERATORS;
 #endif
 import speiger.src.collections.PACKAGE.collections.SPLIT_ITERATOR;
 import speiger.src.collections.PACKAGE.utils.SPLIT_ITERATORS;
@@ -60,4 +63,38 @@ public interface ITERABLE KEY_GENERIC_TYPE extends Iterable<CLASS_TYPE>
 	 */
 	@Override
 	default SPLIT_ITERATOR KEY_GENERIC_TYPE spliterator() { return SPLIT_ITERATORS.createUnknownSplititerator(iterator(), 0); }
+
+#if TYPE_OBJECT
+	/**
+	 * A Helper function to reduce the usage of Streams and allows to convert a Iterable to something else.
+	 * @param map the mapping function
+	 * @Type(E)
+	 * @return a new Iterable that returns the desired result
+	 */
+	public default <E> ObjectIterable<E> map(Function<T, E> map) {
+		return ObjectIterators.map(this, map);
+	}
+	
+	/**
+	 * A Helper function to reduce the usage of Streams and allows to convert a Iterable to something else.
+	 * @param map the flatMapping function
+	 * @Type(E)
+	 * @Type(V)
+	 * @return a new Iterable that returns the desired result
+	 */
+	public default <E, V extends Iterable<E>> ObjectIterable<E> flatMap(Function<T, V> map) {
+		return ObjectIterators.flatMap(this, map);
+	}
+	
+	/**
+	 * A Helper function to reduce the usage of Streams and allows to convert a Iterable to something else.
+	 * @param map the flatMapping function
+	 * @Type(E)
+	 * @return a new Iterable that returns the desired result
+	 */
+	public default <E> ObjectIterable<E> arrayflatMap(Function<T, E[]> map) {
+		return ObjectIterators.arrayFlatMap(this, map);
+	}
+	
+#endif
 }

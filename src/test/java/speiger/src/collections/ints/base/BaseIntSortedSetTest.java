@@ -51,7 +51,6 @@ public abstract class BaseIntSortedSetTest extends BaseIntCollectionTest
 			IntSortedSet set = create(TEST_ARRAY);
 			Assert.assertEquals(set.pollFirstInt(), 0);
 			Assert.assertEquals(set.pollLastInt(), 99);
-			
 		}
 	}
 	
