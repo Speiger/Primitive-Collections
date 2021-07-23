@@ -49,8 +49,15 @@ public abstract class BaseIntSortedSetTest extends BaseIntCollectionTest
 	public void pollTest() {
 		if(getValidSortedSetTests().contains(SortedSetTest.POLL)) {
 			IntSortedSet set = create(TEST_ARRAY);
-			Assert.assertEquals(set.pollFirstInt(), 0);
-			Assert.assertEquals(set.pollLastInt(), 99);
+			for(int i = 0;i<100;i++)
+			{
+				Assert.assertEquals(i, set.pollFirstInt());
+			}
+			set = create(TEST_ARRAY);
+			for(int i = 99;i>=0;i--)
+			{
+				Assert.assertEquals(i, set.pollLastInt());
+			}
 		}
 	}
 	

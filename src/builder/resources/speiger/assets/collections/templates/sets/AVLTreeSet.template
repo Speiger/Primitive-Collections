@@ -514,11 +514,11 @@ public class AVL_TREE_SET KEY_GENERIC_TYPE extends ABSTRACT_SET KEY_GENERIC_TYPE
 			entry.key = successor.key;
 			entry = successor;
 		}
+		if(entry.previous() == null) first = entry.next();
+		if(entry.next() == null) last = entry.previous();
 		Entry KEY_GENERIC_TYPE replacement = entry.left != null ? entry.left : entry.right;
 		if(replacement != null) {
 			if(entry.replace(replacement)) tree = replacement;
-			if(entry == first) first = replacement;
-			if(entry == last) last = entry.right != null ? entry.right : replacement;
 			entry.left = entry.right = entry.parent = null;
 			fixAfterDeletion(replacement);
 		}
@@ -526,11 +526,6 @@ public class AVL_TREE_SET KEY_GENERIC_TYPE extends ABSTRACT_SET KEY_GENERIC_TYPE
 		else {
 			fixAfterDeletion(entry);
 			entry.replace(null);
-			if(entry.parent != null) {
-				Entry KEY_GENERIC_TYPE parent = entry.parent;
-				if(entry == first) first = parent.left != null ? parent.left : parent;
-				if(entry == last) last = entry.right != null ? parent.right : parent;
-			}
 			entry.parent = null;
 		}
 	}
