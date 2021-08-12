@@ -4,6 +4,11 @@
 ### Version 0.3.3
 - Added: Flat/Mapping function for Iterables/Iterators to help avoid streams for cleaner looking code
 - Fixed: AVLTrees pollFirst/Last is now keeping orders and is fixed
+- Fixed: AbstractCollection bulk adding methods now link to the specialized implementations.
+- Fixed: A bug with getElements in ArrayList.
+- Fixed: PriorityQueue remove/toArray function were renamed so they fit better with other interfaces. (remove => removeFirst and toArray uses a different genericType)
+- Added: LinkedList which is a List/PriorityDequeue/Stack which allows for more optimized use-cases and reduced boxing/unboxing.
+- Added: Tests for LinkedList
 
 ### Version 0.3.2
 - Fixed: Map.put wasn't referring to primitive variants.

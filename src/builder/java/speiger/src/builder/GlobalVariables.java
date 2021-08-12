@@ -35,14 +35,18 @@ public class GlobalVariables
 		addSimpleMapper("CLASS_TYPE", type.getClassType());
 		addSimpleMapper("CLASS_VALUE_TYPE", valueType.getClassValueType());
 		addSimpleMapper("KEY_TYPE", type.getKeyType());
+		addSimpleMapper("KEY_SPECIAL_TYPE", type.isObject() ? "E" : type.getKeyType());
 		addSimpleMapper("VALUE_TYPE", valueType.getValueType());
+		addSimpleMapper("VALUE_SPECIAL_TYPE", valueType.isObject() ? "E" : valueType.getKeyType());
 		
 		addSimpleMapper("EMPTY_KEY_VALUE", type.getEmptyValue());
 		addSimpleMapper("EMPTY_VALUE", valueType.getEmptyValue());
-
+		
 		addSimpleMapper(" KEY_GENERIC_TYPE", type.isObject() ? "<"+type.getKeyType()+">" : "");
+		addSimpleMapper(" KEY_GENERIC_SPECIAL_TYPE", type.isObject() ? " <E>" : "");
 		addSimpleMapper(" KEY_KEY_GENERIC_TYPE", type.isObject() ? "<"+type.getKeyType()+", "+type.getKeyType()+">" : "");
 		addSimpleMapper(" VALUE_GENERIC_TYPE", valueType.isObject() ? "<"+valueType.getValueType()+">" : "");
+		addSimpleMapper(" VALUE_GENERIC_SPECIAL_TYPE", valueType.isObject() ? " <E>" : "");
 		addSimpleMapper(" VALUE_VALUE_GENERIC_TYPE", valueType.isObject() ? "<"+valueType.getValueType()+", "+valueType.getValueType()+">" : "");
 		addSimpleMapper(" KEY_VALUE_GENERIC_TYPE", type.isObject() ? (valueType.isObject() ? "<"+type.getKeyType()+", "+valueType.getValueType()+">" : "<"+type.getKeyType()+">") : (valueType.isObject() ? "<"+valueType.getValueType()+">" : ""));
 		addSimpleMapper(" KEY_VALUE_VALUE_GENERIC_TYPE", type.isObject() ? (valueType.isObject() ? "<"+type.getKeyType()+", "+valueType.getValueType()+", "+valueType.getValueType()+">" : "<"+type.getKeyType()+">") : (valueType.isObject() ? "<"+valueType.getValueType()+", "+valueType.getValueType()+">" : ""));
@@ -111,6 +115,7 @@ public class GlobalVariables
 		addSimpleMapper("CAST_"+fix+"_ARRAY ", type.isObject() ? "("+fix+"_TYPE[])" : "");
 		addSimpleMapper("EMPTY_"+fix+"_ARRAY", type.isObject() ? "("+fix+"_TYPE[])ARRAYS.EMPTY_ARRAY" : "ARRAYS.EMPTY_ARRAY");
 		addInjectMapper("NEW_"+fix+"_ARRAY", type.isObject() ? "("+fix+"_TYPE[])new Object[%s]" : "new "+fix+"_TYPE[%s]").removeBraces();
+		addInjectMapper("NEW_SPECIAL_"+fix+"_ARRAY", type.isObject() ? "(E[])new Object[%s]" : "new "+fix+"_TYPE[%s]").removeBraces();
 		addInjectMapper("NEW_CLASS"+(value ? "_VALUE" : "")+"_ARRAY", type.isObject() ? "(CLASS_TYPE[])new Object[%s]" : "new CLASS_TYPE[%s]").removeBraces();
 	}
 	
@@ -132,6 +137,7 @@ public class GlobalVariables
 		
 		//Final Classes
 		addClassMapper("ARRAY_LIST", "ArrayList");
+		addClassMapper("LINKED_LIST", "LinkedList");
 		addAbstractMapper("IMMUTABLE_LIST", "Immutable%sList");
 		addClassMapper("ARRAY_FIFO_QUEUE", "ArrayFIFOQueue");
 		addClassMapper("ARRAY_PRIORITY_QUEUE", "ArrayPriorityQueue");

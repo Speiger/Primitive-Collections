@@ -66,7 +66,7 @@ public abstract class BaseIntPriorityQueueTest extends BaseIntIterableTest
 			for(int i = 0;i<100;i++) {
 				queue.enqueue(i);
 			}
-			queue.remove(40);
+			queue.removeFirst(40);
 			for(int i = 0;i<99;i++) {
 				if(i >= 40) Assert.assertEquals(i + 1, queue.dequeue());
 				else Assert.assertEquals(i, queue.dequeue());

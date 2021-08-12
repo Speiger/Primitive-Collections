@@ -43,9 +43,7 @@ public abstract class ABSTRACT_LIST KEY_GENERIC_TYPE extends ABSTRACT_COLLECTION
 	 */
 	@Override
 	public boolean addAll(COLLECTION KEY_GENERIC_TYPE c) {
-		boolean modified = false;
-		for(ITERATOR KEY_GENERIC_TYPE iter = c.iterator();iter.hasNext();modified |= add(iter.NEXT()));
-		return modified;
+		return addAll(size(), c);
 	}
 	
 	/**
@@ -55,9 +53,18 @@ public abstract class ABSTRACT_LIST KEY_GENERIC_TYPE extends ABSTRACT_COLLECTION
 	 */
 	@Override
 	public boolean addAll(LIST KEY_GENERIC_TYPE c) {
-		boolean modified = false;
-		for(ITERATOR KEY_GENERIC_TYPE iter = c.iterator();iter.hasNext();modified |= add(iter.NEXT()));
-		return modified;
+		return addAll(size(), c);
+	}
+	
+	/** {@inheritDoc}
+	 * <p>This default implementation delegates to the corresponding type-specific function.
+	 * @deprecated Please use the corresponding type-specific function instead. 
+	 */
+	@Override
+	@Deprecated
+	public boolean addAll(Collection<? extends CLASS_TYPE> c)
+	{
+		return c instanceof COLLECTION ? addAll((COLLECTION KEY_GENERIC_TYPE)c) : addAll(size(), c);
 	}
 	
 	/**

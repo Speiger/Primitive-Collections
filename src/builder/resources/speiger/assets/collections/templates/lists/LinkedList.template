@@ -1,0 +1,1082 @@
+package speiger.src.collections.PACKAGE.lists;
+
+#if TYPE_OBJECT
+import java.util.Comparator;
+#endif
+import java.util.Collection;
+import java.util.Iterator;
+import java.util.Objects;
+import java.util.Spliterator;
+#if PRIMITIVES
+import java.util.Spliterator.JAVA_SPLIT_ITERATOR;
+#endif
+import java.util.function.Consumer;
+import java.util.function.Predicate;
+import java.util.function.UnaryOperator;
+#if PRIMITIVES
+import java.util.function.JAVA_PREDICATE;
+import java.util.function.JAVA_UNARY_OPERATOR;
+#endif
+
+import speiger.src.collections.PACKAGE.collections.COLLECTION;
+#if !TYPE_OBJECT
+import speiger.src.collections.PACKAGE.collections.STACK;
+#endif
+import speiger.src.collections.PACKAGE.collections.ITERATOR;
+import speiger.src.collections.PACKAGE.queues.PRIORITY_DEQUEUE;
+#if !TYPE_OBJECT
+import speiger.src.collections.PACKAGE.functions.COMPARATOR;
+import speiger.src.collections.PACKAGE.functions.CONSUMER;
+#endif
+import speiger.src.collections.PACKAGE.utils.ARRAYS;
+#if TYPE_OBJECT
+import speiger.src.collections.utils.Stack;
+#else
+import speiger.src.collections.objects.utils.ObjectArrays;
+#endif
+#if PRIMITIVES
+import java.util.stream.JAVA_STREAM;
+import java.util.stream.StreamSupport;
+#endif
+import speiger.src.collections.PACKAGE.collections.SPLIT_ITERATOR;
+import speiger.src.collections.PACKAGE.utils.SPLIT_ITERATORS;
+import speiger.src.collections.utils.SanityChecks;
+
+/**
+ * A Type-Specific LinkedList implementation of list that is written to reduce (un)boxing
+ * 
+#if TYPE_OBJECT
+ * <p>This implementation is optimized to improve how data is processed with interfaces like {@link Stack}
+#else
+ * <p>This implementation is optimized to improve how data is processed with interfaces like {@link STACK} 
+#endif
+ * and with optimized functions that use type-specific implementations for primitives and optimized logic for bulk actions.
+ * 
+ * @Type(T)
+ */
+#if TYPE_OBJECT
+public class LINKED_LIST KEY_GENERIC_TYPE extends ABSTRACT_LIST KEY_GENERIC_TYPE implements PRIORITY_DEQUEUE KEY_GENERIC_TYPE, Stack KEY_GENERIC_TYPE
+#else
+public class LINKED_LIST KEY_GENERIC_TYPE extends ABSTRACT_LIST KEY_GENERIC_TYPE implements PRIORITY_DEQUEUE KEY_GENERIC_TYPE, STACK KEY_GENERIC_TYPE
+#endif
+{
+	Entry KEY_GENERIC_TYPE first;
+	Entry KEY_GENERIC_TYPE last;
+	int size = 0;
+	
+	/**
+	 * Creates a new LinkedList.
+	 */
+	public LINKED_LIST() {
+	}
+	
+	/**
+	 * Creates a new LinkedList a copy with the contents of the Collection.
+	 * @param c the elements that should be added into the list
+	 */
+	@Deprecated
+	public LINKED_LIST(Collection<? extends CLASS_TYPE> c) {
+		addAll(c);
+	}
+	
+	/**
+	 * Creates a new LinkedList a copy with the contents of the Collection.
+	 * @param c the elements that should be added into the list
+	 */
+	public LINKED_LIST(COLLECTION KEY_GENERIC_TYPE c) {
+		addAll(c);
+	}
+	
+	/**
+	 * Creates a new LinkedList a copy with the contents of the List.
+	 * @param l the elements that should be added into the list
+	 */
+	public LINKED_LIST(LIST KEY_GENERIC_TYPE l) {
+		addAll(l);
+	}
+	
+	/**
+	 * Creates a new LinkedList with a Copy of the array
+	 * @param a the array that should be copied
+	 */
+	public LINKED_LIST(KEY_TYPE... a) {
+		for(int i = 0,m=a.length;i<m;add(a[i++]));
+	}
+	
+	/**
+	 * Creates a new LinkedList with a Copy of the array with a custom length
+	 * @param a the array that should be copied
+	 * @param length the desired length that should be copied
+	 */
+	public LINKED_LIST(KEY_TYPE[] a, int length) {
+		for(int i = 0,m=length;i<m;add(a[i++]));
+	}
+	
+	/**
+	 * Creates a new LinkedList with a Copy of the array with in the custom range.
+	 * @param a the array that should be copied
+	 * @param offset the starting offset of where the array should be copied from
+	 * @param length the desired length that should be copied
+	 * @throws IllegalStateException if offset is smaller then 0
+	 * @throws IllegalStateException if the offset + length exceeds the array length
+	 */
+	public LINKED_LIST(KEY_TYPE[] a, int offset, int length) {
+		SanityChecks.checkArrayCapacity(a.length, offset, length);
+		for(int i = offset,m=offset+length;i<m;add(a[i++]));
+	}
+	
+	@Override
+	public void add(int index, KEY_TYPE e) {
+		checkAddRange(index);
+		if(index == size) linkLast(e);
+		else if(index == 0) linkFirst(e);
+		else linkBefore(e, getNode(index));
+	}
+	
+	@Override
+	public boolean addAll(int index, COLLECTION KEY_GENERIC_TYPE c) {
+		int length = c.size();
+		if(length == 0) return false;
+		checkAddRange(index);
+		Entry KEY_GENERIC_TYPE next = null;
+		Entry KEY_GENERIC_TYPE prev = null;
+		if(index == size) prev = last;
+		else if(index == 0) next = first;
+		else {
+			next = getNode(index);
+			prev = next.prev;
+		}
+		for(ITERATOR KEY_GENERIC_TYPE iter = c.iterator();iter.hasNext();) {
+			Entry KEY_GENERIC_TYPE entry = new EntryBRACES(iter.NEXT(), prev, null);
+			if(prev == null) first = entry;
+			else prev.next = entry;
+			prev = entry;
+		}
+		if(next == null) last = prev;
+		else {
+			prev.next = next;
+			next.prev = prev;
+		}
+		size += length;
+		return true;
+	}
+	
+	@Override
+	public boolean addAll(int index, LIST KEY_GENERIC_TYPE c) {
+		int length = c.size();
+		if(length == 0) return false;
+		checkAddRange(index);
+		Entry KEY_GENERIC_TYPE next = null;
+		Entry KEY_GENERIC_TYPE prev = null;
+		if(index == size) prev = last;
+		else if(index == 0) next = first;
+		else {
+			next = getNode(index);
+			prev = next.prev;
+		}
+		for(ITERATOR KEY_GENERIC_TYPE iter = c.iterator();iter.hasNext();) {
+			Entry KEY_GENERIC_TYPE entry = new EntryBRACES(iter.NEXT(), prev, null);
+			if(prev == null) first = entry;
+			else prev.next = entry;
+			prev = entry;
+		}
+		if(next == null) last = prev;
+		else {
+			prev.next = next;
+			next.prev = prev;
+		}
+		size += length;
+		return true;
+	}
+	
+	@Override
+	@Primitive
+	public boolean addAll(int index, Collection<? extends CLASS_TYPE> c) {
+		if(c instanceof COLLECTION) return addAll(index, (COLLECTION KEY_GENERIC_TYPE)c);
+		int length = c.size();
+		if(length == 0) return false;
+		checkAddRange(index);
+		Entry KEY_GENERIC_TYPE next = null;
+		Entry KEY_GENERIC_TYPE prev = null;
+		if(index == size) prev = last;
+		else if(index == 0) next = first;
+		else {
+			next = getNode(index);
+			prev = next.prev;
+		}
+		for(Iterator<? extends CLASS_TYPE> iter = c.iterator();iter.hasNext();) {
+			Entry KEY_GENERIC_TYPE entry = new EntryBRACES(OBJ_TO_KEY(iter.next()), prev, null);
+			if(prev == null) first = entry;
+			else prev.next = entry;
+			prev = entry;
+		}
+		if(next == null) last = prev;
+		else {
+			prev.next = next;
+			next.prev = prev;
+		}
+		size += length;
+		return true;
+	}
+	
+	@Override
+	public void enqueue(KEY_TYPE e) {
+		add(e);
+	}
+	
+	@Override
+	public void enqueueFirst(KEY_TYPE e) {
+		add(0, e);
+	}
+	
+	@Override
+	public void push(KEY_TYPE e) {
+		add(e);
+	}
+	
+	@Override
+	public void addElements(int from, KEY_TYPE[] a, int offset, int length) {
+		SanityChecks.checkArrayCapacity(a.length, offset, length);
+		checkAddRange(from);
+		Entry KEY_GENERIC_TYPE next = null;
+		Entry KEY_GENERIC_TYPE prev = null;
+		if(from == size) prev = last;
+		else if(from == 0) next = first;
+		else {
+			next = getNode(from);
+			prev = next.prev;
+		}
+		for(int i = offset,m=offset+length;i<m;i++) {
+			Entry KEY_GENERIC_TYPE entry = new EntryBRACES(a[i], prev, null);
+			if(prev == null) first = entry;
+			else prev.next = entry;
+			prev = entry;
+		}
+		if(next == null) last = prev;
+		else {
+			prev.next = next;
+			next.prev = prev;
+		}
+		size += length;
+	}
+	
+	@Override
+	public KEY_TYPE[] getElements(int from, KEY_TYPE[] a, int offset, int length) {
+		SanityChecks.checkArrayCapacity(size, from, length);
+		SanityChecks.checkArrayCapacity(a.length, offset, length);
+		Entry KEY_GENERIC_TYPE entry = getNode(from);
+		while(length > 0) {
+			a[offset++] = entry.value;
+			length--;
+			entry = entry.next;
+		}
+		return a;
+	}
+	
+	@Override
+	public KEY_TYPE first() {
+		if(first == null) throw new IllegalStateException();
+		return first.value;
+	}
+	
+	@Override
+	public KEY_TYPE last() {
+		if(last == null) throw new IllegalStateException();
+		return last.value;
+	}
+	
+	@Override
+	public KEY_TYPE peek(int index) {
+		return GET_KEY((size() - 1) - index);
+	}
+	
+	@Override
+	public KEY_TYPE GET_KEY(int index) {
+		checkRange(index);
+		return getNode(index).value;
+	}
+	
+	@Override
+	@Primitive
+	public boolean contains(Object e) {
+		return indexOf(e) != -1;
+	}
+	
+	@Override
+	@Primitive
+	public int indexOf(Object o) {
+		if(o == null) return -1;
+		Entry KEY_GENERIC_TYPE entry = first;
+		for(int i = 0;entry != null;entry = entry.next) {
+			if(Objects.equals(KEY_TO_OBJ(entry.value), o)) return i;
+		}
+		return -1;
+	}
+
+	@Override
+	@Primitive
+	public int lastIndexOf(Object o) {
+		if(o == null) return -1;
+		Entry KEY_GENERIC_TYPE entry = last;
+		for(int i = size-1;entry != null;entry = entry.prev) {
+			if(Objects.equals(KEY_TO_OBJ(entry.value), o)) return i;
+		}
+		return -1;
+	}
+	
+#if !TYPE_OBJECT
+	@Override
+	public boolean contains(KEY_TYPE e) {
+		return indexOf(e) != -1;
+	}
+	
+	@Override
+	public int indexOf(KEY_TYPE e) {
+		Entry entry = first;
+		for(int i = 0;entry != null;entry = entry.next) {
+			if(KEY_EQUALS(entry.value, e)) return i;
+		}
+		return -1;
+	}
+
+	@Override
+	public int lastIndexOf(KEY_TYPE e) {
+		Entry entry = last;
+		for(int i = size-1;entry != null;entry = entry.prev) {
+			if(KEY_EQUALS(entry.value, e)) return i;
+		}
+		return -1;	
+	}
+	
+#endif
+	@Override
+	public ITERATOR KEY_GENERIC_TYPE iterator() {
+		return new ListIter(first, 0);
+	}
+	
+	@Override
+	public LIST_ITERATOR KEY_GENERIC_TYPE listIterator() {
+		return new ListIter(first, 0);
+	}
+	
+	@Override
+	public LIST_ITERATOR KEY_GENERIC_TYPE listIterator(int index) {
+		if(index == size-1) return new ListIter(last, index);
+		if(index == 0) return new ListIter(first, index);
+		return new ListIter(getNode(index), index);
+	}
+	
+#if PRIMITIVES
+	/**
+	 * Returns a Java-Type-Specific Stream to reduce boxing/unboxing.
+	 * @return a Stream of the closest java type
+	 */
+	public JAVA_STREAM primitiveStream() { return StreamSupport.NEW_STREAM(new SplitIterator(this, first, 0), false); }
+	
+	/**
+	 * Returns a Java-Type-Specific Parallel Stream to reduce boxing/unboxing.
+	 * @return a Stream of the closest java type
+	 */
+	public JAVA_STREAM parallelPrimitiveStream() { return StreamSupport.NEW_STREAM(new SplitIterator(this, first, 0), true); }
+#endif
+	/**
+	 * A Type Specific Type Splititerator to reduce boxing/unboxing
+	 * @return type specific splititerator
+	 */
+	@Override
+	public SPLIT_ITERATOR KEY_GENERIC_TYPE spliterator() { return new TypeSplitIteratorBRACES(this, first, 0); }
+	
+	@Override
+	public void forEach(CONSUMER KEY_SUPER_GENERIC_TYPE action) {
+		for(Entry KEY_GENERIC_TYPE entry = first;entry != null;entry = entry.next) {
+			action.accept(entry.value);
+		}
+	}
+	
+	@Override
+	public KEY_TYPE set(int index, KEY_TYPE e) {
+		checkRange(index);
+		Entry KEY_GENERIC_TYPE node = getNode(index);
+		KEY_TYPE prev = node.value;
+		node.value = e;
+		return prev;
+	}
+	
+	@Override
+	@Primitive
+	public void replaceAll(UnaryOperator<CLASS_TYPE> o) {
+		Objects.requireNonNull(o);
+		for(Entry KEY_GENERIC_TYPE entry = first;entry != null;entry = entry.next) {
+			entry.value = OBJ_TO_KEY(o.apply(KEY_TO_OBJ(entry.value)));
+		}
+	}
+	
+#if PRIMITIVES
+	@Override
+	public void REPLACE(JAVA_UNARY_OPERATOR o) {
+		Objects.requireNonNull(o);
+		for(Entry KEY_GENERIC_TYPE entry = first;entry != null;entry = entry.next) {
+#if TYPE_BYTE || TYPE_SHORT || TYPE_CHAR || TYPE_FLOAT
+			entry.value = SanityChecks.SANITY_CAST(o.APPLY_CAST(entry.value));
+#else
+			entry.value = o.APPLY(entry.value);
+#endif
+		}
+	}
+	
+#endif
+	@Override
+	public void onChanged() {}
+	@Override
+	public COMPARATOR KEY_GENERIC_TYPE comparator() { return null; }
+	
+	@Override
+	public KEY_TYPE dequeue() {
+		if(first == null) throw new IllegalStateException();
+		return unlinkFirst(first);
+	}
+	
+	@Override
+	public KEY_TYPE dequeueLast() {
+		if(last == null) throw new IllegalStateException();
+		return unlinkLast(last);
+	}
+	
+	@Override
+	public KEY_TYPE pop() {
+		return dequeueLast();
+	}
+	
+	@Override
+	public boolean removeFirst(KEY_TYPE e) {
+		if(size == 0) return false;
+		for(Entry KEY_GENERIC_TYPE entry = first;entry.next != null;entry = entry.next) {
+			if(KEY_EQUALS(entry.value, e)) {
+				unlink(entry);
+				return true;
+			}
+		}
+		return false;
+	}
+	
+	@Override
+	public boolean removeLast(KEY_TYPE e) {
+		if(size == 0) return false;
+		for(Entry KEY_GENERIC_TYPE entry = last;entry.prev != null;entry = entry.prev) {
+			if(KEY_EQUALS(entry.value, e)) {
+				unlink(entry);
+				return true;
+			}
+		}
+		return false;
+	}
+	
+#if TYPE_OBJECT
+	@Override
+	public boolean remove(Object e) {
+		if(size <= 0) return false;
+		for(Entry KEY_GENERIC_TYPE entry = first;entry.next != null;entry = entry.next) {
+			if(KEY_EQUALS(entry.value, e)) {
+				unlink(entry);
+				return true;
+			}
+		}
+		return false;
+	}
+	
+#else
+	@Override
+	public boolean REMOVE_KEY(KEY_TYPE e) {
+		return removeFirst(e);
+	}
+	
+#endif
+	@Override
+	public KEY_TYPE REMOVE(int index) {
+		checkRange(index);
+		return unlink(getNode(index));
+	}
+	
+	@Override
+	public void removeElements(int from, int to) {
+		checkRange(from);
+		checkAddRange(to);
+		int length = to - from;
+		if(length <= 0) return;
+		if(from < size - to) {
+			Entry KEY_GENERIC_TYPE entry = getNode(from);
+			while(length > 0) {
+				entry = entry.next;
+				unlink(entry.prev);
+				length--;
+			}
+			return;
+		}
+		Entry KEY_GENERIC_TYPE entry = getNode(to);
+		while(length > 0) {
+			entry = entry.prev;
+			unlink(entry.next);
+			length--;
+		}
+	}
+	
+#if TYPE_OBJECT
+	@Override
+	public <K> K[] extractElements(int from, int to, Class<K> type) {
+		checkRange(from);
+		checkAddRange(to);
+		int length = to - from;
+		K[] a = ARRAYS.newArray(type, length);
+		if(length <= 0) return a;
+		if(from < size - to) {
+			Entry KEY_GENERIC_TYPE entry = getNode(from);
+			for(int i = 0;length > 0;i++, length--) {
+				entry = entry.next;
+				a[i] = (K)unlink(entry.prev);
+			}
+			return a;
+		}
+		Entry KEY_GENERIC_TYPE entry = getNode(to);
+		for(int i = length-1;length > 0;i--) {
+			entry = entry.prev;
+			a[i] = (K)unlink(entry.next);
+		}
+		return a;
+	}
+	
+#else
+	@Override
+	public KEY_TYPE[] extractElements(int from, int to) {
+		checkRange(from);
+		checkAddRange(to);
+		int length = to - from;
+		if(length <= 0) return ARRAYS.EMPTY_ARRAY;
+		KEY_TYPE[] d = new KEY_TYPE[length];
+		if(from < size - to) {
+			Entry KEY_GENERIC_TYPE entry = getNode(from);
+			for(int i = 0;length > 0;i++, length--) {
+				entry = entry.next;
+				d[i] = unlink(entry.prev);
+			}
+			return d;
+		}
+		Entry KEY_GENERIC_TYPE entry = getNode(to);
+		for(int i = length-1;length > 0;i--) {
+			entry = entry.prev;
+			d[i] = unlink(entry.next);
+		}
+		return d;
+	}
+	
+#endif
+	@Override
+	@Primitive
+	public boolean removeAll(Collection<?> c) {
+		if(c.isEmpty()) return false;
+		boolean modified = false;
+		int j = 0;
+		for(Entry KEY_GENERIC_TYPE entry = first;entry != null;) {
+			if(c.contains(KEY_TO_OBJ(entry.value))) {
+				Entry KEY_GENERIC_TYPE next = entry.next;
+				unlink(entry);
+				entry = next;
+				modified = true;
+				continue;
+			}
+			else j++;
+			entry = entry.next;
+		}
+		size = j;
+		return modified;
+	}
+
+	@Override
+	@Primitive
+	public boolean retainAll(Collection<?> c) {
+		if(c.isEmpty()) {
+			boolean changed = size > 0;
+			clear();
+			return changed;
+		}
+		boolean modified = false;
+		int j = 0;
+		for(Entry KEY_GENERIC_TYPE entry = first;entry != null;) {
+			if(!c.contains(KEY_TO_OBJ(entry.value))) {
+				Entry KEY_GENERIC_TYPE next = entry.next;
+				unlink(entry);
+				entry = next;
+				modified = true;
+				continue;
+			}
+			else j++;
+			entry = entry.next;
+		}
+		size = j;
+		return modified;
+	}
+
+	@Override
+	public boolean removeAll(COLLECTION KEY_GENERIC_TYPE c) {
+		if(c.isEmpty()) return false;
+		boolean modified = false;
+		int j = 0;
+		for(Entry KEY_GENERIC_TYPE entry = first;entry != null;) {
+			if(c.contains(entry.value)) {
+				Entry KEY_GENERIC_TYPE next = entry.next;
+				unlink(entry);
+				entry = next;
+				modified = true;
+				continue;
+			}
+			else j++;
+			entry = entry.next;
+		}
+		size = j;
+		return modified;
+	}
+
+	@Override
+	public boolean retainAll(COLLECTION KEY_GENERIC_TYPE c) {
+		if(c.isEmpty()) {
+			boolean changed = size > 0;
+			clear();
+			return changed;
+		}
+		boolean modified = false;
+		int j = 0;
+		for(Entry KEY_GENERIC_TYPE entry = first;entry != null;) {
+			if(!c.contains(entry.value)) {
+				Entry KEY_GENERIC_TYPE next = entry.next;
+				unlink(entry);
+				entry = next;
+				modified = true;
+				continue;
+			}
+			else j++;
+			entry = entry.next;
+		}
+		size = j;
+		return modified;
+	}
+	
+	@Override
+	@Primitive
+	public boolean removeIf(Predicate<? super CLASS_TYPE> filter) {
+		Objects.requireNonNull(filter);
+		boolean modified = false;
+		int j = 0;
+		for(Entry KEY_GENERIC_TYPE entry = first;entry != null;) {
+			if(filter.test(KEY_TO_OBJ(entry.value))) {
+				Entry KEY_GENERIC_TYPE next = entry.next;
+				unlink(entry);
+				entry = next;
+				modified = true;
+				continue;
+			}
+			else j++;
+			entry = entry.next;
+		}
+		size = j;
+		return modified;
+	}
+	
+#if PRIMITIVES
+	@Override
+	public boolean remIf(JAVA_PREDICATE filter) {
+		boolean modified = false;
+		int j = 0;
+		for(Entry KEY_GENERIC_TYPE entry = first;entry != null;) {
+			if(filter.test(entry.value)) {
+				Entry KEY_GENERIC_TYPE next = entry.next;
+				unlink(entry);
+				entry = next;
+				modified = true;
+				continue;
+			}
+			else j++;
+			entry = entry.next;
+		}
+		size = j;
+		return modified;
+	}
+	
+#endif
+	@Override
+	public Object[] toArray() {
+		Object[] obj = new Object[size];
+		int i = 0;
+		for(Entry KEY_GENERIC_TYPE entry = first;entry != null;entry = entry.next) {
+			obj[i++] = KEY_TO_OBJ(entry.value);
+		}
+		return obj;
+	}
+	
+	@Override
+	public <E> E[] toArray(E[] a) {
+		if(a == null) a = (E[])new Object[size];
+		else if(a.length < size) a = (E[])ObjectArrays.newArray(a.getClass().getComponentType(), size);
+		int i = 0;
+		for(Entry KEY_GENERIC_TYPE entry = first;entry != null;entry = entry.next) {
+			a[i++] = (E)KEY_TO_OBJ(entry.value);
+		}
+		return a;
+	}
+	
+#if !TYPE_OBJECT
+	@Override
+	public KEY_TYPE[] TO_ARRAY(KEY_TYPE[] a) {
+		if(a.length < size) a = new KEY_TYPE[size];
+		int i = 0;
+		for(Entry KEY_GENERIC_TYPE entry = first;entry != null;entry = entry.next) {
+			a[i++] = KEY_TO_OBJ(entry.value);
+		}
+		return a;
+	}
+	
+#endif
+	@Override
+	public int size() {
+		return size;
+	}
+	
+	@Override
+	public void clear() {
+		for(Entry KEY_GENERIC_TYPE entry = first;entry != null;) {
+			Entry KEY_GENERIC_TYPE next = entry.next;
+			entry.next = entry.prev = null;
+			entry = next;
+		}
+		first = null;
+		last = null;
+		size = 0;
+	}
+	
+	protected Entry KEY_GENERIC_TYPE getNode(int index) {
+		if(index < size >> 2) {
+			Entry KEY_GENERIC_TYPE x = first;
+			for (int i = 0; i < index; i++)
+				x = x.next;
+			return x;
+		}
+		Entry KEY_GENERIC_TYPE x = last;
+		for (int i = size - 1; i > index; i--)
+			x = x.prev;
+		return x;
+	}
+	
+	protected void linkFirst(KEY_TYPE e) {
+		Entry KEY_GENERIC_TYPE f = first;
+		Entry KEY_GENERIC_TYPE newNode = new EntryBRACES(e, null, f);
+		first = newNode;
+		if (f == null) last = newNode;
+		else f.prev = newNode;
+		size++;
+	}
+	
+	protected void linkLast(KEY_TYPE e) {
+		Entry KEY_GENERIC_TYPE l = last;
+		Entry KEY_GENERIC_TYPE newNode = new EntryBRACES(e, l, null);
+		last = newNode;
+		if (l == null) first = newNode;
+		else l.next = newNode;
+		size++;
+	}
+	
+	protected void linkBefore(KEY_TYPE e, Entry KEY_GENERIC_TYPE succ) {
+		Entry KEY_GENERIC_TYPE prev = succ.prev;
+		Entry KEY_GENERIC_TYPE newNode = new EntryBRACES(e, prev, succ);
+		succ.prev = newNode;
+		if (prev == null) first = newNode;
+		else prev.next = newNode;
+		size++;
+	}
+	
+	protected KEY_TYPE unlinkFirst(Entry KEY_GENERIC_TYPE f) {
+		KEY_TYPE element = f.value;
+		Entry KEY_GENERIC_TYPE next = f.next;
+		f.next = null;
+#if TYPE_OBJECT
+		f.value = null;
+#endif
+		first = next;
+		if (next == null) last = null;
+		else next.prev = null;
+		size--;
+		return element;
+	}
+	
+	protected KEY_TYPE unlinkLast(Entry KEY_GENERIC_TYPE l) {
+		KEY_TYPE element = l.value;
+		Entry KEY_GENERIC_TYPE prev = l.prev;
+		l.prev = null;
+#if TYPE_OBJECT
+		l.value = null;
+#endif
+		last = prev;
+		if (prev == null) first = null;
+		else prev.next = null;
+		size--;
+		return element;
+	}
+	
+	protected KEY_TYPE unlink(Entry KEY_GENERIC_TYPE x) {
+		KEY_TYPE element = x.value;
+		Entry KEY_GENERIC_TYPE next = x.next;
+		Entry KEY_GENERIC_TYPE prev = x.prev;
+#if TYPE_OBJECT
+		x.value = null;
+#endif
+
+		if (prev == null) first = next;
+		else {
+			prev.next = next;
+			x.prev = null;
+		}
+		if (next == null) last = prev;
+		else {
+			next.prev = prev;
+			x.next = null;
+		}
+		size--;
+		return element;
+	}
+	
+	protected void checkRange(int index) {
+		if (index < 0 || index >= size)
+			throw new IndexOutOfBoundsException("Index: " + index + ", Size: " + size);
+	}
+	
+	protected void checkAddRange(int index) {
+		if (index < 0 || index > size)
+			throw new IndexOutOfBoundsException("Index: " + index + ", Size: " + size);
+	}
+	
+	protected static class Entry KEY_GENERIC_TYPE {
+		KEY_TYPE value;
+		Entry KEY_GENERIC_TYPE prev;
+		Entry KEY_GENERIC_TYPE next;
+		
+		public Entry(KEY_TYPE value, Entry KEY_GENERIC_TYPE prev, Entry KEY_GENERIC_TYPE next)
+		{
+			this.value = value;
+			this.prev = prev;
+			this.next = next;
+		}
+	}
+	
+	private class ListIter implements LIST_ITERATOR KEY_GENERIC_TYPE 
+	{
+		Entry KEY_GENERIC_TYPE node;
+		Entry KEY_GENERIC_TYPE lastReturned;
+		int index;
+		
+		ListIter(Entry KEY_GENERIC_TYPE node, int index) {
+			this.node = node;
+			this.index = index;
+		}
+		
+		@Override
+		public boolean hasNext() {
+			return node != null;
+		}
+
+		@Override
+		public boolean hasPrevious() {
+			return node != null;
+		}
+
+		@Override
+		public int nextIndex() {
+			return index;
+		}
+
+		@Override
+		public int previousIndex() {
+			return index-1;
+		}
+
+		@Override
+		public void remove() {
+			if(lastReturned == null) throw new IllegalStateException();
+			if(lastReturned.next == node) index--;
+			unlink(lastReturned);
+			lastReturned = null;
+		}
+
+		@Override
+		public KEY_TYPE PREVIOUS() {
+			lastReturned = node;
+			node = node.prev;
+			index--;
+			return lastReturned.value;
+		}
+
+		@Override
+		public KEY_TYPE NEXT() {
+			lastReturned = node;
+			node = node.next;
+			index++;
+			return lastReturned.value;
+		}
+
+		@Override
+		public void set(KEY_TYPE e) {
+			if(lastReturned == null) throw new IllegalStateException();
+			lastReturned.value = e;
+		}
+
+		@Override
+		public void add(KEY_TYPE e) {
+			if(lastReturned == null) throw new IllegalStateException();
+			if(node.next == null) linkLast(e);
+			else linkBefore(e, node);
+			lastReturned = null;
+			index++;
+		}
+	}
+	
+	private static class TypeSplitIterator KEY_GENERIC_TYPE implements SPLIT_ITERATOR KEY_GENERIC_TYPE 
+	{
+        static final int BATCH_UNIT = 1 << 10;
+        static final int MAX_BATCH = 1 << 25;
+		LINKED_LIST KEY_GENERIC_TYPE list;
+		Entry KEY_GENERIC_TYPE entry;
+		int index;
+		
+		TypeSplitIterator(LINKED_LIST KEY_GENERIC_TYPE list, Entry KEY_GENERIC_TYPE entry, int index)
+		{
+			this.list = list;
+			this.entry = entry;
+			this.index = index;
+		}
+		
+		@Override
+		public SPLIT_ITERATOR KEY_GENERIC_TYPE trySplit() {
+			if(entry == null && estimateSize() > 0) {
+				int size = Math.min(Math.min(index + BATCH_UNIT, MAX_BATCH), list.size) - index;
+				if(size <= 0) return null;
+				KEY_TYPE[] data = NEW_KEY_ARRAY(size);
+				int subSize = 0;
+				for(;subSize<size && entry != null;subSize++) {
+#if TYPE_OBJECT
+					data[subSize] = (KEY_TYPE)entry.value;
+#else
+					data[subSize] = entry.value;
+#endif
+					entry = entry.next;
+					index++;
+				}
+				return SPLIT_ITERATORS.createArraySplititerator(data, subSize, characteristics());
+			}
+			return null;
+		}
+		
+#if !TYPE_OBJECT
+		@Override
+		public boolean tryAdvance(CONSUMER KEY_GENERIC_TYPE action) {
+			if(hasNext()) {
+				action.accept(NEXT());
+				return true;
+			}
+			return false;
+		}
+		
+#endif
+		@Override
+		public boolean tryAdvance(Consumer<? super CLASS_TYPE> action) {
+			if(hasNext()) {
+				action.accept(KEY_TO_OBJ(NEXT()));
+				return true;
+			}
+			return false;
+		}
+		
+		@Override
+		public long estimateSize() {
+			return list.size - index;
+		}
+		
+		@Override
+		public int characteristics() {
+            return Spliterator.ORDERED | Spliterator.SIZED | Spliterator.SUBSIZED;
+		}
+		
+		@Override
+		public KEY_TYPE NEXT() {
+			KEY_TYPE value = entry.value;
+			entry = entry.next;
+			index++;
+			return value;
+		}
+		
+		@Override
+		public boolean hasNext() {
+			return entry != null;
+		}
+	}
+	
+#if PRIMITIVES
+	private static class SplitIterator KEY_GENERIC_TYPE implements JAVA_SPLIT_ITERATOR KEY_GENERIC_TYPE
+	{
+        static final int BATCH_UNIT = 1 << 10;
+        static final int MAX_BATCH = 1 << 25;
+        LINKED_LIST KEY_GENERIC_TYPE list;
+		Entry entry;
+		int index;
+		
+		SplitIterator(LINKED_LIST KEY_GENERIC_TYPE list, Entry entry, int index)
+		{
+			this.list = list;
+			this.entry = entry;
+			this.index = index;
+		}
+		
+		@Override
+		public JAVA_SPLIT_ITERATOR KEY_GENERIC_TYPE trySplit() {
+			if(entry == null && estimateSize() > 0) {
+				int size = Math.min(Math.min(index + BATCH_UNIT, MAX_BATCH), list.size) - index;
+				if(size <= 0) return null;
+				KEY_TYPE[] data = new KEY_TYPE[size];
+				int subSize = 0;
+				for(;subSize<size && entry != null;subSize++) {
+					data[subSize] = entry.value;
+					entry = entry.next;
+					index++;
+				}
+				return SPLIT_ITERATORS.createArrayJavaSplititerator(data, subSize, characteristics());
+			}
+			return null;
+		}
+		
+		@Override
+		public boolean tryAdvance(JAVA_CONSUMER action) {
+			if(hasNext()) {
+				action.accept(next());
+				return true;
+			}
+			return false;
+		}
+		
+		@Override
+		public long estimateSize() {
+			return list.size - index;
+		}
+		
+		@Override
+		public int characteristics() {
+            return Spliterator.ORDERED | Spliterator.SIZED | Spliterator.SUBSIZED;
+		}
+		
+		public KEY_TYPE next() {
+			KEY_TYPE value = entry.value;
+			entry = entry.next;
+			index++;
+			return value;
+		}
+		
+		public boolean hasNext() {
+			return entry != null;
+		}
+	}
+#endif
+}

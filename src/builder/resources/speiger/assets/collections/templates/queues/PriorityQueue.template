@@ -61,7 +61,7 @@ public interface PRIORITY_QUEUE KEY_GENERIC_TYPE extends ITERABLE KEY_GENERIC_TY
 	 * @param e the element that should be removed
 	 * @return if a searched element was removed
 	 */
-	public boolean remove(KEY_TYPE e);
+	public boolean removeFirst(KEY_TYPE e);
 	/**
 	 * Removes the last found element in the queue
 	 * @param e the element that should be removed
@@ -87,14 +87,16 @@ public interface PRIORITY_QUEUE KEY_GENERIC_TYPE extends ITERABLE KEY_GENERIC_TY
 #endif
 	/**
 	 * A method to drop the contents of the Queue without clearing the queue
+	 * @Type(E)
 	 * @return the contents of the queue into a seperate array.
 	 */
-	public default KEY_TYPE[] TO_ARRAY() { return TO_ARRAY(NEW_KEY_ARRAY(size())); }
+	public default KEY_GENERIC_SPECIAL_TYPE KEY_SPECIAL_TYPE[] TO_ARRAY() { return TO_ARRAY(NEW_SPECIAL_KEY_ARRAY(size())); }
 	/**
 	 * A method to drop the contents of the Queue without clearing the queue
 	 * @param input where the elements should be inserted to. If it does not fit then it creates a new appropiatly created array
+	 * @Type(E)
 	 * @return the contents of the queue into a seperate array.
 	 * @note if the Type is generic then a Object Array is created instead of a Type Array
 	 */
-	public KEY_TYPE[] TO_ARRAY(KEY_TYPE[] input);
+	public KEY_GENERIC_SPECIAL_TYPE KEY_SPECIAL_TYPE[] TO_ARRAY(KEY_SPECIAL_TYPE[] input);
 }
