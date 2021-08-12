@@ -29,8 +29,14 @@ repositories {
     }
 }
 dependencies {
-	compile 'de.speiger:Primitive-Collections:0.3.2'
+	compile 'de.speiger:Primitive-Collections:0.3.3'
 }
+
+Direct:
+
+| Version 	| Jar                                                                                                                          	| Sources                                                                                                                              	| Java Doc                                                                                                                             	|
+|---------	|------------------------------------------------------------------------------------------------------------------------------	|--------------------------------------------------------------------------------------------------------------------------------------	|--------------------------------------------------------------------------------------------------------------------------------------	|
+| 0.3.3   	| [Download](https://maven.speiger.com/repository/main/de/speiger/Primitive-Collections/0.3.3/Primitive-Collections-0.3.3.jar) 	| [Download](https://maven.speiger.com/repository/main/de/speiger/Primitive-Collections/0.3.3/Primitive-Collections-0.3.3-sources.jar) 	| [Download](https://maven.speiger.com/repository/main/de/speiger/Primitive-Collections/0.3.3/Primitive-Collections-0.3.3-javadoc.jar) 	|
 ```
 
 # Contributing
