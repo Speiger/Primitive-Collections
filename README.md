@@ -5,7 +5,7 @@ It is based on Java's Collection Library and FastUtil.
 But its focus is a different one.     
 
 ## Main Features:     
-- ArrayLists
+- ArrayLists / LinkedLists
 - HashSet/Map (Linked & HashControl)
 - TreeSet/Map (RB & AVL)
 - EnumMap
