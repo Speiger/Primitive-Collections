@@ -1,6 +1,11 @@
 # Changelog of versions
 
 
+
+### Version 0.3.4
+- Fixed: ArrayLists didn't resize properly if they were empty.
+
+
 ### Version 0.3.3
 - Added: Flat/Mapping function for Iterables/Iterators to help avoid streams for cleaner looking code
 - Fixed: AVLTrees pollFirst/Last is now keeping orders and is fixed
