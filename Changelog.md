@@ -2,6 +2,9 @@
 
 
 
+### Version 0.3.5
+- Fixed: Simple Code Generator dependency was declared wrong. Its only needed for runtime. Not for Compilation.
+
 ### Version 0.3.4
 - Fixed: ArrayLists didn't resize properly if they were empty.
 
