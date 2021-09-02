@@ -9,6 +9,7 @@
 - Fixed: Object Collections did have the JavaCollections deprecated as the Constructor. This should only be deprecated for Primitives
 - Added: Tests with 5k Random names for Object sorting.
 - Changed: Object Arrays no longer require a Comparable[] it just assumes now that the elements in the Array are Comparable
+- Fixed: Dependency to SimpleCodeGenerator should be no longer a thing. Because the resulting library doesn't need it only the builder does.
 
 ### Version 0.3.4
 - Fixed: ArrayLists didn't resize properly if they were empty.
