@@ -223,7 +223,7 @@ public interface LIST KEY_GENERIC_TYPE extends COLLECTION KEY_GENERIC_TYPE, List
 	public default void sort(Comparator<? super CLASS_TYPE> c) {
 		KEY_TYPE[] array = (KEY_TYPE[])TO_ARRAY();
 		if(c != null) ARRAYS.stableSort(array, c);
-		else ARRAYS.stableSort((Comparable[])array);
+		else ARRAYS.stableSort(array);
     	LIST_ITERATOR KEY_GENERIC_TYPE iter = listIterator();
     	for (int i = 0,m=size();i<m && iter.hasNext();i++) {
     		iter.NEXT();
@@ -239,7 +239,7 @@ public interface LIST KEY_GENERIC_TYPE extends COLLECTION KEY_GENERIC_TYPE, List
 	public default void unstableSort(Comparator<? super CLASS_TYPE> c) {
 		KEY_TYPE[] array = (KEY_TYPE[])TO_ARRAY();
 		if(c != null) ARRAYS.unstableSort(array, c);
-		else ARRAYS.unstableSort((Comparable[])array);
+		else ARRAYS.unstableSort(array);
         LIST_ITERATOR KEY_GENERIC_TYPE iter = listIterator();
         for (int i = 0,m=size();i<m && iter.hasNext();i++) {
         	iter.NEXT();

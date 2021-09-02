@@ -126,6 +126,12 @@ public class LINKED_LIST KEY_GENERIC_TYPE extends ABSTRACT_LIST KEY_GENERIC_TYPE
 	}
 	
 	@Override
+	public boolean add(KEY_TYPE e) {
+		add(size(), e);
+		return true;
+	}
+	
+	@Override
 	public void add(int index, KEY_TYPE e) {
 		checkAddRange(index);
 		if(index == size) linkLast(e);

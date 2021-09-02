@@ -4,6 +4,11 @@
 
 ### Version 0.3.5
 - Fixed: Simple Code Generator dependency was declared wrong. Its only needed for runtime. Not for Compilation.
+- Fixed: ObjectLists Crashed when a null was provided as a Comparator. (Unless the List was Initialized with the ClassType)
+- Fixed: LinkedLists didn't implement add(Object)
+- Fixed: Object Collections did have the JavaCollections deprecated as the Constructor. This should only be deprecated for Primitives
+- Added: Tests with 5k Random names for Object sorting.
+- Changed: Object Arrays no longer require a Comparable[] it just assumes now that the elements in the Array are Comparable
 
 ### Version 0.3.4
 - Fixed: ArrayLists didn't resize properly if they were empty.

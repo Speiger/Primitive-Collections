@@ -147,7 +147,7 @@ public class CUSTOM_HASH_SET KEY_GENERIC_TYPE extends ABSTRACT_SET KEY_GENERIC_T
 	 * @param strategy the strategy that allows hash control.
 	 * @throws NullPointerException if Strategy is null
 	 */
-	@Deprecated
+	@Primitive
 	public CUSTOM_HASH_SET(Collection<? extends CLASS_TYPE> collection, STRATEGY KEY_SUPER_GENERIC_TYPE strategy) {
 		this(collection, HashUtil.DEFAULT_LOAD_FACTOR, strategy);
 	}
@@ -160,7 +160,7 @@ public class CUSTOM_HASH_SET KEY_GENERIC_TYPE extends ABSTRACT_SET KEY_GENERIC_T
 	 * @throws NullPointerException if Strategy is null
 	 * @throws IllegalStateException if the loadfactor is either below/equal to 0 or above/equal to 1
 	 */
-	@Deprecated
+	@Primitive
 	public CUSTOM_HASH_SET(Collection<? extends CLASS_TYPE> collection, float loadFactor, STRATEGY KEY_SUPER_GENERIC_TYPE strategy) {
 		this(collection.size(), loadFactor, strategy);
 		addAll(collection);
@@ -272,7 +272,7 @@ public class CUSTOM_HASH_SET KEY_GENERIC_TYPE extends ABSTRACT_SET KEY_GENERIC_T
 	}
 	
 	@Override
-	@Deprecated
+	@Primitive
 	public boolean addAll(Collection<? extends CLASS_TYPE> c) {
 		if(loadFactor <= 0.5F) ensureCapacity(c.size());
 		else ensureCapacity(c.size() + size());

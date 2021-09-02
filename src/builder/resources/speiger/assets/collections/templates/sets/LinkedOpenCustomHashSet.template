@@ -132,7 +132,7 @@ public class LINKED_CUSTOM_HASH_SET KEY_GENERIC_TYPE extends CUSTOM_HASH_SET KEY
 	 * @param strategy the strategy that allows hash control.
 	 * @throws NullPointerException if Strategy is null
 	 */
-	@Deprecated
+	@Primitive
 	public LINKED_CUSTOM_HASH_SET(Collection<? extends CLASS_TYPE> collection, STRATEGY KEY_SUPER_GENERIC_TYPE strategy) {
 		this(collection, HashUtil.DEFAULT_LOAD_FACTOR, strategy);
 	}
@@ -145,7 +145,7 @@ public class LINKED_CUSTOM_HASH_SET KEY_GENERIC_TYPE extends CUSTOM_HASH_SET KEY
 	 * @throws NullPointerException if Strategy is null
 	 * @throws IllegalStateException if the loadfactor is either below/equal to 0 or above/equal to 1
 	 */
-	@Deprecated
+	@Primitive
 	public LINKED_CUSTOM_HASH_SET(Collection<? extends CLASS_TYPE> collection, float loadFactor, STRATEGY KEY_SUPER_GENERIC_TYPE strategy) {
 		this(collection.size(), loadFactor, strategy);
 		addAll(collection);

@@ -53,6 +53,7 @@ public class IMMUTABLE_LIST KEY_GENERIC_TYPE extends ABSTRACT_LIST KEY_GENERIC_T
 	 * Creates a new Immutable copy of the contents of the Collection.
 	 * @param c the elements that should be added into the list
 	 */
+	@Primitive
 	public IMMUTABLE_LIST(Collection<? extends CLASS_TYPE> c) {
 		data = ARRAYS.pour(ITERATORS.wrap(c.iterator()));
 	}

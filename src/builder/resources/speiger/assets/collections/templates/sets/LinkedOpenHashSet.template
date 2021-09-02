@@ -118,7 +118,7 @@ public class LINKED_HASH_SET KEY_GENERIC_TYPE extends HASH_SET KEY_GENERIC_TYPE 
 	 * A Helper constructor that allows to create a Set with exactly the same values as the provided collection.
 	 * @param collection the set the elements should be added to the Set
 	 */
-	@Deprecated
+	@Primitive
 	public LINKED_HASH_SET(Collection<? extends CLASS_TYPE> collection) {
 		this(collection, HashUtil.DEFAULT_LOAD_FACTOR);
 	}
@@ -129,7 +129,7 @@ public class LINKED_HASH_SET KEY_GENERIC_TYPE extends HASH_SET KEY_GENERIC_TYPE 
 	 * @param loadFactor the percentage of how full the backing array can be before they resize
 	 * @throws IllegalStateException if the loadfactor is either below/equal to 0 or above/equal to 1
 	 */
-	@Deprecated
+	@Primitive
 	public LINKED_HASH_SET(Collection<? extends CLASS_TYPE> collection, float loadFactor) {
 		this(collection.size(), loadFactor);
 		addAll(collection);

@@ -79,7 +79,7 @@ public class ARRAY_SET KEY_GENERIC_TYPE extends ABSTRACT_SET KEY_GENERIC_TYPE im
 	 * @param c the elements that should be added to the set.
 	 * @note this slowly checks every element to remove duplicates
 	 */
-	@Deprecated
+	@Primitive
 	public ARRAY_SET(Collection<? extends CLASS_TYPE> c) {
 		this(c.size());
 		addAll(c);
@@ -100,7 +100,7 @@ public class ARRAY_SET KEY_GENERIC_TYPE extends ABSTRACT_SET KEY_GENERIC_TYPE im
 	 * Since it is assumed that there is no duplication in the first place
 	 * @param s the set the element should be taken from
 	 */
-	@Deprecated
+	@Primitive
 	public ARRAY_SET(Set<? extends CLASS_TYPE> s) {
 		this(s.size());
 		for(CLASS_TYPE e : s)

@@ -88,6 +88,7 @@ public class ARRAY_LIST KEY_GENERIC_TYPE extends ABSTRACT_LIST KEY_GENERIC_TYPE 
 	 * Creates a new ArrayList a copy with the contents of the Collection.
 	 * @param c the elements that should be added into the list
 	 */
+	@Primitive
 	public ARRAY_LIST(Collection<? extends CLASS_TYPE> c) {
 		this(c.size());
 		size = ITERATORS.unwrap(data, c.iterator());
@@ -444,7 +445,7 @@ public class ARRAY_LIST KEY_GENERIC_TYPE extends ABSTRACT_LIST KEY_GENERIC_TYPE 
 	@Override
 	public void sort(Comparator<? super CLASS_TYPE> c) {
 		if(c != null) ARRAYS.stableSort(data, size, c);
-		else ARRAYS.stableSort((Comparable[])data, size);
+		else ARRAYS.stableSort(data, size);
 	}
 	
 	/**
@@ -455,7 +456,7 @@ public class ARRAY_LIST KEY_GENERIC_TYPE extends ABSTRACT_LIST KEY_GENERIC_TYPE 
 	@Override
 	public void unstableSort(Comparator<? super CLASS_TYPE> c) {
 		if(c != null) ARRAYS.unstableSort(data, size, c);
-		else ARRAYS.unstableSort((Comparable[])data, size);
+		else ARRAYS.unstableSort(data, size);
 	}
 	
 #else

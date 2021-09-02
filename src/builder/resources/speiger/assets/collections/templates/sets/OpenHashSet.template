@@ -128,7 +128,7 @@ public class HASH_SET KEY_GENERIC_TYPE extends ABSTRACT_SET KEY_GENERIC_TYPE imp
 	 * A Helper constructor that allows to create a Set with exactly the same values as the provided collection.
 	 * @param collection the set the elements should be added to the Set
 	 */
-	@Deprecated
+	@Primitive
 	public HASH_SET(Collection<? extends CLASS_TYPE> collection) {
 		this(collection, HashUtil.DEFAULT_LOAD_FACTOR);
 	}
@@ -139,7 +139,7 @@ public class HASH_SET KEY_GENERIC_TYPE extends ABSTRACT_SET KEY_GENERIC_TYPE imp
 	 * @param loadFactor the percentage of how full the backing array can be before they resize
 	 * @throws IllegalStateException if the loadfactor is either below/equal to 0 or above/equal to 1
 	 */
-	@Deprecated
+	@Primitive
 	public HASH_SET(Collection<? extends CLASS_TYPE> collection, float loadFactor) {
 		this(collection.size(), loadFactor);
 		addAll(collection);
@@ -231,7 +231,7 @@ public class HASH_SET KEY_GENERIC_TYPE extends ABSTRACT_SET KEY_GENERIC_TYPE imp
 	}
 	
 	@Override
-	@Deprecated
+	@Primitive
 	public boolean addAll(Collection<? extends CLASS_TYPE> c) {
 		if(loadFactor <= 0.5F) ensureCapacity(c.size());
 		else ensureCapacity(c.size() + size());
