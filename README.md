@@ -65,3 +65,4 @@ do not combine the commands because they can not be executed at the same time.
 ## Current Down Sides (Random order)
 - Testing for Sub Maps/Sets/Lists are only in a very basic way tested
 - Documentation is only present at the lowest level for most cases and needs a typo fixing.
+- ToString method in Wrapper Classes do not work correctly. (Synchronized/Unmodifiable wrappers)
