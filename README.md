@@ -66,3 +66,5 @@ do not combine the commands because they can not be executed at the same time.
 - Testing for Sub Maps/Sets/Lists are only in a very basic way tested
 - Documentation is only present at the lowest level for most cases and needs a typo fixing.
 - ToString method in Wrapper Classes do not work correctly. (Synchronized/Unmodifiable wrappers)
+- addAll for NonMatching TypeLists (using JavaLists on Primitive CollectionLists as example) crashes right now.
+- clearAndTrim do not work correct right now
