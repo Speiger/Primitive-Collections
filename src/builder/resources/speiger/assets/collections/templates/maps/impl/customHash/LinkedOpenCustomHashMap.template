@@ -426,7 +426,7 @@ public class LINKED_CUSTOM_HASH_MAP KEY_VALUE_GENERIC_TYPE extends CUSTOM_HASH_M
 	@Override
 	public void clearAndTrim(int size) {
 		int request = Math.max(minCapacity, HashUtil.nextPowerOfTwo((int)Math.ceil(size / loadFactor)));
-		if(size >= request) {
+		if(request >= size) {
 			clear();
 			return;
 		}
