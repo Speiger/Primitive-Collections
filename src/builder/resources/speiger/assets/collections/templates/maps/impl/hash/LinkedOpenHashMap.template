@@ -403,6 +403,24 @@ public class LINKED_HASH_MAP KEY_VALUE_GENERIC_TYPE extends HASH_MAP KEY_VALUE_G
 		firstIndex = lastIndex = -1;
 	}
 	
+	@Override
+	public void clearAndTrim(int size) {
+		int request = Math.max(minCapacity, HashUtil.nextPowerOfTwo((int)Math.ceil(size / loadFactor)));
+		if(size >= request) {
+			clear();
+			return;
+		}
+		nullIndex = request;
+		mask = request-1;
+		maxFill = Math.min((int)Math.ceil(nullIndex * loadFactor), nullIndex - 1);
+		keys = NEW_KEY_ARRAY(request + 1);
+		values = NEW_VALUE_ARRAY(request + 1);
+		links = new long[request + 1];
+		firstIndex = lastIndex = -1;
+		this.size = 0;
+		containsNull = false;
+	}
+	
 	protected void moveToFirstIndex(int startPos) {
 		if(size == 1 || firstIndex == startPos) return;
 		if(lastIndex == startPos) {

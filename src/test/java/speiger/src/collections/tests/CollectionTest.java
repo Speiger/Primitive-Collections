@@ -14,5 +14,6 @@ public enum CollectionTest
 	RETAIN_ALL,
 	TO_ARRAY,
 	CLEAR,
-	WRAPPER;
+	WRAPPER,
+	TO_STRING;
 }

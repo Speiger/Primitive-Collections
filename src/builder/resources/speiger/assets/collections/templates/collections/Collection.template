@@ -68,7 +68,7 @@ public interface COLLECTION KEY_GENERIC_TYPE extends Collection<CLASS_TYPE>, ITE
 	@Primitive
 	public boolean containsAny(Collection<?> c);
 	
-	#if !TYPE_OBJECT
+#if !TYPE_OBJECT
 	/**
 	 * A Type-Specific remove function that reduces (un)boxing.
 	 * @param o the element that should be removed

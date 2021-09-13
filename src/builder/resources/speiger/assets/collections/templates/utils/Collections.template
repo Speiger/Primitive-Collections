@@ -5,12 +5,14 @@ import java.util.function.Predicate;
 #if PRIMITIVES
 import java.util.function.JAVA_PREDICATE;
 #endif
+import java.util.function.Consumer;
 
 import speiger.src.collections.PACKAGE.collections.ABSTRACT_COLLECTION;
 import speiger.src.collections.PACKAGE.collections.COLLECTION;
 import speiger.src.collections.PACKAGE.collections.ITERATOR;
 import speiger.src.collections.objects.utils.ObjectArrays;
 #if !TYPE_OBJECT
+import speiger.src.collections.PACKAGE.functions.CONSUMER;
 import speiger.src.collections.PACKAGE.utils.ARRAYS;
 #endif
 
@@ -151,23 +153,32 @@ public class COLLECTIONS
 #endif
 		@Override
 		public void clear() { synchronized(mutex) { c.clear(); } }
-		
 		@Override
 		public Object[] toArray() { synchronized(mutex) { return c.toArray(); } }
-		
 #if !TYPE_OBJECT
 		@Override
 		public <T> T[] toArray(T[] a) { synchronized(mutex) { return c.toArray(a); } }
-		
 		@Override
 		public KEY_TYPE[] TO_ARRAY() { synchronized(mutex) { return c.TO_ARRAY(); } }
-		
 		@Override
 		public KEY_TYPE[] TO_ARRAY(KEY_TYPE[] a) { synchronized(mutex) { return c.TO_ARRAY(a); } }
+		@Override
+		public void forEach(CONSUMER action) { synchronized(mutex) { c.forEach(action); } }
+		@Override
+		@Deprecated
+		public void forEach(Consumer<? super CLASS_TYPE> action) { synchronized(mutex) { c.forEach(action); } }
 #else
 		@Override
 		public <E> E[] toArray(E[] a) { synchronized(mutex) { return c.toArray(a); } }
+		@Override
+		public void forEach(Consumer<? super CLASS_TYPE> action) { synchronized(mutex) { c.forEach(action); } }
 #endif
+		@Override
+		public int hashCode() { synchronized(mutex) { return c.hashCode(); } }
+		@Override
+		public boolean equals(Object obj) { synchronized(mutex) { return c.equals(obj); } }
+		@Override
+		public String toString() { synchronized(mutex) { return c.toString(); } }
 	}
 	
 	/**
@@ -187,57 +198,29 @@ public class COLLECTIONS
 		public boolean addAll(Collection<? extends CLASS_TYPE> c) { throw new UnsupportedOperationException(); }
 		@Override
 		public boolean addAll(COLLECTION KEY_GENERIC_TYPE c) { throw new UnsupportedOperationException(); }
-		
 #if !TYPE_OBJECT
 		@Override
-		public boolean contains(KEY_TYPE o) {
-			return c.contains(o);
-		}
-		
+		public boolean contains(KEY_TYPE o) { return c.contains(o); }
 #else
 		@Override
-		public boolean contains(Object o) {
-			return c.contains(o);
-		}
-		
+		public boolean contains(Object o) { return c.contains(o); }
 #endif
 		@Override
-		public boolean containsAll(COLLECTION KEY_GENERIC_TYPE c) {
-			return this.c.containsAll(c);
-		}
-		
+		public boolean containsAll(COLLECTION KEY_GENERIC_TYPE c) { return this.c.containsAll(c); }
 		@Override
-		public boolean containsAny(COLLECTION KEY_GENERIC_TYPE c) {
-			return this.c.containsAny(c);
-		}
-		
+		public boolean containsAny(COLLECTION KEY_GENERIC_TYPE c) { return this.c.containsAny(c); }
 		@Override
 		@Primitive
-		public boolean containsAny(Collection<?> c) {
-			return this.c.containsAny(c);
-		}
-		
+		public boolean containsAny(Collection<?> c) { return this.c.containsAny(c); }
 		@Override
 		@Primitive
-		public boolean containsAll(Collection<?> c) {
-			return this.c.containsAll(c);
-		}
-		
+		public boolean containsAll(Collection<?> c) { return this.c.containsAll(c); }
 		@Override
-		public int size() {
-			return c.size();
-		}
-		
+		public int size() { return c.size(); }
 		@Override
-		public boolean isEmpty() {
-			return c.isEmpty();
-		}
-		
+		public boolean isEmpty() { return c.isEmpty(); }
 		@Override
-		public ITERATOR KEY_GENERIC_TYPE iterator() {
-			return ITERATORS.unmodifiable(c.iterator());
-		}
-		
+		public ITERATOR KEY_GENERIC_TYPE iterator() { return ITERATORS.unmodifiable(c.iterator()); }
 		@Override
 		@Deprecated
 		public boolean remove(Object o) { throw new UnsupportedOperationException(); }
@@ -264,35 +247,32 @@ public class COLLECTIONS
 #endif
 		@Override
 		public void clear() { throw new UnsupportedOperationException(); }
-		
 		@Override
-		public Object[] toArray() {
-			return c.toArray();
-		}
-		
+		public Object[] toArray() { return c.toArray(); }
 #if !TYPE_OBJECT
 		@Override
-		public <T> T[] toArray(T[] a) {
-			return c.toArray(a);
-		}
-		
+		public <T> T[] toArray(T[] a) { return c.toArray(a); }
 		@Override
-		public KEY_TYPE[] TO_ARRAY() {
-			return c.TO_ARRAY();
-		}
-		
+		public KEY_TYPE[] TO_ARRAY() { return c.TO_ARRAY(); }
 		@Override
-		public KEY_TYPE[] TO_ARRAY(KEY_TYPE[] a) {
-			return c.TO_ARRAY(a);
-		}
-		
+		public KEY_TYPE[] TO_ARRAY(KEY_TYPE[] a) { return c.TO_ARRAY(a); }
+		@Override
+		public void forEach(CONSUMER action) { c.forEach(action); }
+		@Override
+		@Deprecated
+		public void forEach(Consumer<? super CLASS_TYPE> action) { c.forEach(action); }
 #else
 		@Override
-		public <E> E[] toArray(E[] a) {
-			return c.toArray(a);
-		}
-		
+		public <E> E[] toArray(E[] a) { return c.toArray(a); }
+		@Override
+		public void forEach(Consumer<? super CLASS_TYPE> action) { c.forEach(action); }
 #endif
+		@Override
+		public int hashCode() { return c.hashCode(); }
+		@Override
+		public boolean equals(Object obj) { return c.equals(obj); }
+		@Override
+		public String toString() { return c.toString(); }
 	}
 	
 	/**
@@ -308,43 +288,23 @@ public class COLLECTIONS
 		
 #if !TYPE_OBJECT
 		@Override
-		public boolean contains(KEY_TYPE o) {
-			return false;
-		}
-		
+		public boolean contains(KEY_TYPE o) { return false; }
 		@Override
-		public boolean containsAll(COLLECTION KEY_GENERIC_TYPE c) {
-			return false;
-		}
-		
+		public boolean containsAll(COLLECTION KEY_GENERIC_TYPE c) { return false; }
 		@Override
-		public boolean containsAny(COLLECTION KEY_GENERIC_TYPE c) {
-			return false;
-		}
-		
+		public boolean containsAny(COLLECTION KEY_GENERIC_TYPE c) { return false; }
 #else
 		@Override
-		public boolean contains(Object o) {
-			return false;
-		}
-		
+		public boolean contains(Object o) { return false; }
 #endif
 		@Override
 		@Primitive
-		public boolean containsAny(Collection<?> c) {
-			return false;
-		}
-		
+		public boolean containsAny(Collection<?> c) { return false; }
 		@Override
 		@Primitive
-		public boolean containsAll(Collection<?> c) {
-			return false;
-		}
-		
+		public boolean containsAll(Collection<?> c) { return false; }
 		@Override
-		public int hashCode() {
-			return 0;
-		}
+		public int hashCode() { return 0; }
 		
 		@Override
 		public boolean equals(Object o) {
@@ -377,47 +337,24 @@ public class COLLECTIONS
 		@Override
 		public boolean remIf(JAVA_PREDICATE filter){ throw new UnsupportedOperationException(); }
 #endif
-		
 		@Override
-		public Object[] toArray() {
-			return ObjectArrays.EMPTY_ARRAY;
-		}
-		
+		public Object[] toArray() { return ObjectArrays.EMPTY_ARRAY; }
 #if !TYPE_OBJECT
 		@Override
-		public <T> T[] toArray(T[] a) {
-			return a;
-		}
-		
+		public <T> T[] toArray(T[] a) { return a; }
 		@Override
-		public KEY_TYPE[] TO_ARRAY() {
-			return ARRAYS.EMPTY_ARRAY;
-		}
-		
+		public KEY_TYPE[] TO_ARRAY() { return ARRAYS.EMPTY_ARRAY; }
 		@Override
-		public KEY_TYPE[] TO_ARRAY(KEY_TYPE[] a) {
-			return a;
-		}
-		
-#else 
+		public KEY_TYPE[] TO_ARRAY(KEY_TYPE[] a) { return a; }
+#else
 		@Override
-		public <E> E[] toArray(E[] a) {
-			return a;
-		}
-		
+		public <E> E[] toArray(E[] a) { return a; }
 #endif
 		@Override
-		public ITERATOR KEY_GENERIC_TYPE iterator() {
-			return ITERATORS.empty();
-		}
-		
+		public ITERATOR KEY_GENERIC_TYPE iterator() { return ITERATORS.empty(); }
 		@Override
-		public void clear() {
-		}
-		
+		public void clear() {}
 		@Override
-		public int size() {
-			return 0;
-		}
+		public int size() { return 0; }
 	}
 }

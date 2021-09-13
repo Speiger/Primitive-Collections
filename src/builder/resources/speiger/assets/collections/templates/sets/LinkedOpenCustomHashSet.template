@@ -505,17 +505,19 @@ public class LINKED_CUSTOM_HASH_SET KEY_GENERIC_TYPE extends CUSTOM_HASH_SET KEY
 	
 	@Override
 	public void clearAndTrim(int size) {
-		if(nullIndex <= size) {
+		int request = Math.max(minCapacity, HashUtil.nextPowerOfTwo((int)Math.ceil(size / loadFactor)));
+		if(size >= request) {
 			clear();
 			return;
 		}
-		nullIndex = size;
-		mask = nullIndex - 1;
+		nullIndex = request;
+		mask = request-1;
 		maxFill = Math.min((int)Math.ceil(nullIndex * loadFactor), nullIndex - 1);
-		keys = NEW_KEY_ARRAY(nullIndex + 1);
-		links = new long[nullIndex + 1];
-		firstIndex = -1;
-		lastIndex = -1;
+		keys = NEW_KEY_ARRAY(request + 1);
+		links = new long[request + 1];
+		firstIndex = lastIndex = -1;
+		this.size = 0;
+		containsNull = false;
 	}
 	
 	@Override

@@ -2,6 +2,7 @@ package speiger.src.collections.ints.base;
 
 import java.util.Arrays;
 import java.util.EnumSet;
+import java.util.List;
 import java.util.stream.IntStream;
 
 import org.junit.Assert;
@@ -12,6 +13,7 @@ import speiger.src.collections.ints.utils.IntArrays;
 import speiger.src.collections.ints.utils.IntCollections;
 import speiger.src.collections.ints.utils.IntCollections.SynchronizedCollection;
 import speiger.src.collections.ints.utils.IntCollections.UnmodifiableCollection;
+import speiger.src.collections.objects.lists.ObjectArrayList;
 import speiger.src.collections.tests.CollectionTest;
 
 @SuppressWarnings("javadoc")
@@ -47,6 +49,9 @@ public abstract class BaseIntCollectionTest extends BaseIntIterableTest
 		Assert.assertEquals(TEST_ARRAY.length, collection.size());
 		collection.addAll(create(BULK_ADD_ARRAY));
 		Assert.assertEquals(TEST_ARRAY.length + BULK_ADD_ARRAY.length, collection.size());
+		// Testing if adding via non Type Specific work like they should
+		List<Integer> wrapper = new ObjectArrayList<>(create(ADD_ARRAY));
+		Assert.assertNotNull(create(ADD_ARRAY).addAll(wrapper));
 	}
 	
 	@Test
@@ -162,5 +167,15 @@ public abstract class BaseIntCollectionTest extends BaseIntIterableTest
 		Assert.assertTrue(collection instanceof SynchronizedCollection);
 		collection = IntCollections.unmodifiable(collection);
 		Assert.assertTrue(collection instanceof UnmodifiableCollection);
+	}
+	
+	@Test
+	public void testToString() {
+		if(!getValidCollectionTests().contains(CollectionTest.TO_STRING)) return;
+		String base = Arrays.toString(BULK_ADD_ARRAY);
+		IntCollection collection = create(BULK_ADD_ARRAY);
+		Assert.assertEquals(base, collection.toString());
+		Assert.assertEquals(base, IntCollections.synchronize(collection).toString());
+		Assert.assertEquals(base, IntCollections.unmodifiable(collection).toString());
 	}
 }

@@ -6,6 +6,7 @@ import speiger.src.collections.ints.base.BaseIntCollectionTest;
 import speiger.src.collections.ints.base.BaseIntSortedSetTest;
 import speiger.src.collections.ints.collections.IntCollection;
 import speiger.src.collections.ints.utils.IntStrategy;
+import speiger.src.collections.tests.CollectionTest;
 import speiger.src.collections.tests.SortedSetTest;
 
 @SuppressWarnings("javadoc")
@@ -21,6 +22,14 @@ public class IntHashSetTests
 	{
 		@Override
 		protected IntCollection create(int[] data) { return new IntOpenHashSet(data); }
+		
+		@Override
+		protected EnumSet<CollectionTest> getValidCollectionTests()
+		{
+			EnumSet<CollectionTest> tests = super.getValidCollectionTests();
+			tests.remove(CollectionTest.TO_STRING);
+			return tests;
+		}
 	}
 	
 	public static class IntLinkedOpenHashSetTests extends BaseIntOpenHashSetTests
@@ -33,6 +42,14 @@ public class IntHashSetTests
 	{
 		@Override
 		protected IntCollection create(int[] data) { return new IntOpenCustomHashSet(data, new DefaultStrategy()); }
+		
+		@Override
+		protected EnumSet<CollectionTest> getValidCollectionTests()
+		{
+			EnumSet<CollectionTest> tests = super.getValidCollectionTests();
+			tests.remove(CollectionTest.TO_STRING);
+			return tests;
+		}
 	}
 	
 	public static class IntLinkedOpenCustomHashSetTests extends BaseIntOpenHashSetTests

@@ -238,7 +238,7 @@ public class ARRAY_LIST KEY_GENERIC_TYPE extends ABSTRACT_LIST KEY_GENERIC_TYPE 
 		if(index != size) System.arraycopy(data, index, data, index+add, size - index);
 		size+=add;
 		Iterator<? extends CLASS_TYPE> iter = c.iterator();
-		while(add != 0) data[index++] = OBJ_TO_KEY(iter.next());
+		while(add-- != 0) data[index++] = OBJ_TO_KEY(iter.next());
 		return true;
 	}
 	
@@ -935,6 +935,7 @@ public class ARRAY_LIST KEY_GENERIC_TYPE extends ABSTRACT_LIST KEY_GENERIC_TYPE 
 			return;
 		}
 		data = size == 0 ? EMPTY_KEY_ARRAY : NEW_KEY_ARRAY(size);
+		this.size = size;
 	}
 	
 	/**

@@ -1,5 +1,6 @@
 package speiger.src.collections.PACKAGE.maps.impl.misc;
 
+import java.util.Arrays;
 import java.util.Map;
 import java.util.NoSuchElementException;
 #if VALUE_OBJECT
@@ -191,6 +192,14 @@ public class ENUM_MAP KEY_ENUM_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_VALUE
 	public VALUE_COLLECTION VALUE_GENERIC_TYPE values() {
 		if(valuesC == null) valuesC = new Values();
 		return valuesC;
+	}
+	
+	@Override
+	public void clear() {
+		if(size == 0) return;
+		size = 0;
+		Arrays.fill(present, 0L);
+		Arrays.fill(values, EMPTY_VALUE);
 	}
 	
 	protected void onNodeAdded(int index) {
