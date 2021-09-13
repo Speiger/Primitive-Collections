@@ -1,6 +1,12 @@
 # Changelog of versions
 
 
+### Version 0.3.6
+- Fixed: addAll non Type Specific Lists was causing crashes.
+- Fixed/Changed: clearAndTrim's implementation was all over the place. In some cases causing crash scenarios.
+- Fixed: Wrappers didn't implement toString/equals/hashCode
+- Added: Tests for addAll Bug
+- Changed: Cleaned up CodeStyle as bugs were fixed.
 
 ### Version 0.3.5
 - Fixed: Simple Code Generator dependency was declared wrong. Its only needed for runtime. Not for Compilation.
