@@ -15,6 +15,37 @@ But its focus is a different one.
 - SplitIterators
 - Iterators
 
+## Specialized Functions
+New Specialized functions that were added to increase performance or reduce allocations or Quality Of life.
+To highlight things that may be wanted.
+- Iterable:
+	- map/flatMap/arrayFlatMap (Object Only): A Light weight version of Stream.map()
+- Collection:
+	- containsAny: Allows to test if another collection contains an of the elements of the tested collection.
+	- primitiveStream: Provides access to the closest Java Stream Type.
+- List:
+	- add/get/removeElements (From FastUtil): Allows to add/get/remove an Array into/from a list. Just with less overhead
+	- extractElements: Allows to remove a Range of elements from the List and get what was removed.
+	- Unstable Sort(From FastUtil): Uses a faster but not stable sort (Quick-Sort as example) to sort the list.
+- SortedSet:
+	- addAndMoveToFirst/Last (From FastUtil but moved to Interface): Allows to add a element to the first/last position of a sorted set.
+	- moveToFirst/Last: Moves the desired element at the first/last position of the SortedSet.
+	- pollFirst/Last: Allows to poll the first/last element of the set.
+- Map:
+	- putAll: putAll but in Array form.
+	- putAllIfAbsent: Puts only the elements that are absent.
+	- addTo (Only Primitives Values) (From FastUtil but moved to Interface): allows to add to the value of a given key. If not present it will be added. (Accumulator)
+	- addToAll: Same as addTo but bulkVersion.
+	- removeOrDefault: removes a Element and if not present returns the default value instead of the present value.
+	- mergeAll: BulkVersion of Merge function.
+- Sorted Map:
+	- addAndMoveToFirst/Last (From FastUtil but moved to Interface): Allows to add a element to the first/last position of a sorted Map.
+	- moveToFirst/Last: Moves the desired element at the first/last position of the Map.
+	- getAndMoveToFirst/Last: gets the element and moves it to the first/last position. Replicating a Optional LinkedHashMap feature.
+	- pollFirst/LastKey: Allows to poll the first/last element.
+	- first/LastValue: Allows to get the first/last value from the Map.
+	
+	
 # Notes about Versions
 Any 0.x.0 version (Minor) can be reason for massive changes including API.     
 To ensure that problems can be dealt with even if it is breaking the current API.     
