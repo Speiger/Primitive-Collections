@@ -479,10 +479,15 @@ public class AVL_TREE_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_VALUE_
 		Entry KEY_VALUE_GENERIC_TYPE entry = findNode(key);
 		if(entry == null) {
 			VALUE_TYPE newValue = mappingFunction.APPLY_VALUE(key, getDefaultReturnValue());
+			if(KEY_EQUALS(newValue, getDefaultReturnValue())) return newValue;
 			put(key, newValue);
 			return newValue;
 		}
 		VALUE_TYPE newValue = mappingFunction.APPLY_VALUE(key, entry.value);
+		if(KEY_EQUALS(newValue, getDefaultReturnValue())) {
+			removeNode(entry);
+			return newValue;
+		}
 		entry.value = newValue;
 		return newValue;
 	}
@@ -492,6 +497,7 @@ public class AVL_TREE_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_VALUE_
 		Entry KEY_VALUE_GENERIC_TYPE entry = findNode(key);
 		if(entry == null) {
 			VALUE_TYPE newValue = mappingFunction.GET_VALUE(key);
+			if(KEY_EQUALS(newValue, getDefaultReturnValue())) return newValue;
 			put(key, newValue);
 			return newValue;
 		}
@@ -503,6 +509,10 @@ public class AVL_TREE_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_VALUE_
 		Entry KEY_VALUE_GENERIC_TYPE entry = findNode(key);
 		if(entry == null) return getDefaultReturnValue();
 		VALUE_TYPE newValue = mappingFunction.APPLY_VALUE(key, entry.value);
+		if(KEY_EQUALS(newValue, getDefaultReturnValue())) {
+			removeNode(entry);
+			return newValue;
+		}
 		entry.value = newValue;
 		return newValue;
 	}
@@ -511,7 +521,7 @@ public class AVL_TREE_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_VALUE_
 	public VALUE_TYPE MERGE(KEY_TYPE key, VALUE_TYPE value, VALUE_UNARY_OPERATOR VALUE_VALUE_GENERIC_TYPE mappingFunction) {
 		Entry KEY_VALUE_GENERIC_TYPE entry = findNode(key);
 		VALUE_TYPE newValue = entry == null ? value : mappingFunction.APPLY_VALUE(entry.value, value);
-		if(newValue == getDefaultReturnValue()) {
+		if(KEY_EQUALS(newValue, getDefaultReturnValue())) {
 			if(entry != null)
 				removeNode(entry);
 		}
@@ -527,7 +537,7 @@ public class AVL_TREE_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_VALUE_
 			KEY_TYPE key = entry.ENTRY_KEY();
 			Entry KEY_VALUE_GENERIC_TYPE subEntry = findNode(key);
 			VALUE_TYPE newValue = subEntry == null ? entry.ENTRY_VALUE() : mappingFunction.APPLY_VALUE(subEntry.value, entry.ENTRY_VALUE());
-			if(newValue == getDefaultReturnValue()) {
+			if(KEY_EQUALS(newValue, getDefaultReturnValue())) {
 				if(subEntry != null)
 					removeNode(subEntry);
 			}

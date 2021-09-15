@@ -443,10 +443,15 @@ public class ARRAY_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_VALUE_GEN
 		int index = findIndex(key);
 		if(index == -1) {
 			VALUE_TYPE newValue = mappingFunction.APPLY_VALUE(key, getDefaultReturnValue());
+			if(KEY_EQUALS(newValue, getDefaultReturnValue())) return newValue;
 			insertIndex(size++, key, newValue);
 			return newValue;
 		}
 		VALUE_TYPE newValue = mappingFunction.APPLY_VALUE(key, values[index]);
+		if(KEY_EQUALS(newValue, getDefaultReturnValue())) {
+			removeIndex(index);
+			return newValue;
+		}
 		values[index] = newValue;
 		return newValue;
 	}
@@ -456,6 +461,7 @@ public class ARRAY_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_VALUE_GEN
 		int index = findIndex(key);
 		if(index == -1) {
 			VALUE_TYPE newValue = mappingFunction.GET_VALUE(key);
+			if(KEY_EQUALS(newValue, getDefaultReturnValue())) return newValue;
 			insertIndex(size++, key, newValue);
 			return newValue;
 		}
@@ -467,6 +473,10 @@ public class ARRAY_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_VALUE_GEN
 		int index = findIndex(key);
 		if(index == -1) return getDefaultReturnValue();
 		VALUE_TYPE newValue = mappingFunction.APPLY_VALUE(key, values[index]);
+		if(KEY_EQUALS(newValue, getDefaultReturnValue())) {
+			removeIndex(index);
+			return newValue;
+		}
 		values[index] = newValue;
 		return newValue;
 	}
@@ -475,7 +485,7 @@ public class ARRAY_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_VALUE_GEN
 	public VALUE_TYPE MERGE(KEY_TYPE key, VALUE_TYPE value, VALUE_UNARY_OPERATOR VALUE_VALUE_GENERIC_TYPE mappingFunction) {
 		int index = findIndex(key);
 		VALUE_TYPE newValue = index == -1 ? value : mappingFunction.APPLY_VALUE(values[index], value);
-		if(newValue == getDefaultReturnValue()) {
+		if(KEY_EQUALS(newValue, getDefaultReturnValue())) {
 			if(index >= 0)
 				removeIndex(index);
 		}
@@ -491,7 +501,7 @@ public class ARRAY_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_VALUE_GEN
 			KEY_TYPE key = entry.ENTRY_KEY();
 			int index = findIndex(key);
 			VALUE_TYPE newValue = index == -1 ? entry.ENTRY_VALUE() : mappingFunction.APPLY_VALUE(values[index], entry.ENTRY_VALUE());
-			if(newValue == getDefaultReturnValue()) {
+			if(KEY_EQUALS(newValue, getDefaultReturnValue())) {
 				if(index >= 0)
 					removeIndex(index);
 			}
