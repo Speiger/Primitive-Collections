@@ -1,6 +1,10 @@
 # Changelog of versions
 
 
+### Version 0.3.7/0.4.0
+- Changed: Iterable specific helper functions were moved out of Iterators and moved into Iterables
+- Added: New Stream replacing functions: findFirst, matchesAny/All/None
+
 ### Version 0.3.6
 - Fixed: addAll non Type Specific Lists was causing crashes.
 - Fixed/Changed: clearAndTrim's implementation was all over the place. In some cases causing crash scenarios.

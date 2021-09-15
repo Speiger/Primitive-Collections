@@ -176,6 +176,7 @@ public class GlobalVariables
 		addClassMapper("PRIORITY_QUEUES", "PriorityQueues");
 		addClassMapper("SPLIT_ITERATORS", "Splititerators");
 		addClassMapper("ITERATORS", "Iterators");
+		addClassMapper("ITERABLES", "Iterables");
 		addBiClassMapper("MAPS", "Maps", "2");
 		
 		//Interfaces
@@ -195,6 +196,7 @@ public class GlobalVariables
 		addClassMapper("NAVIGABLE_SET", "NavigableSet");
 		addClassMapper("PRIORITY_QUEUE", "PriorityQueue");
 		addClassMapper("PRIORITY_DEQUEUE", "PriorityDequeue");
+		addClassMapper("PREDICATE", "2BooleanFunction");
 		addClassMapper("SORTED_SET", "SortedSet");
 		addClassMapper("SET", "Set");
 		addClassMapper("STRATEGY", "Strategy");

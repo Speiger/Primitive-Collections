@@ -1,0 +1,100 @@
+package speiger.src.collections.PACKAGE.utils;
+
+#if TYPE_OBJECT
+import java.util.function.Function;
+import speiger.src.collections.PACKAGE.collections.ITERABLE;
+import speiger.src.collections.PACKAGE.collections.ITERATOR;
+#endif
+
+/**
+ * A Helper class for Iterables
+ */
+public class ITERABLES
+{
+#if TYPE_OBJECT
+	/**
+	 * A Helper function that maps a Iterable into a new Type.
+	 * @param iterable the iterable that should be mapped
+	 * @param mapper the function that decides what the result turns into.
+	 * @Type(T)
+	 * @Type(E)
+	 * @return a iterable that is mapped to a new result
+	 */
+	public static <T, E> ITERABLE<T> map(ITERABLE<E> iterable, Function<E, T> mapper) {
+		return new MappedIterableBRACES(iterable, mapper);
+	}
+	
+
+	/**
+	 * A Helper function that flatMaps a Iterable into a new Type.
+	 * @param iterable the iterable that should be flatMapped
+	 * @param mapper the function that decides what the result turns into.
+	 * @Type(T)
+	 * @Type(V)
+	 * @Type(E)
+	 * @return a iterable that is flatMapped to a new result
+	 */
+	public static <T, E, V extends Iterable<T>> ITERABLE<T> flatMap(ITERABLE<E> iterable, Function<E, V> mapper) {
+		return new FlatMappedIterableBRACES(iterable, mapper);
+	}
+	
+	/**
+	 * A Helper function that flatMaps a Iterable into a new Type.
+	 * @param iterable the iterable that should be flatMapped
+	 * @param mapper the function that decides what the result turns into.
+	 * @Type(T)
+	 * @Type(E)
+	 * @return a iterable that is flatMapped to a new result
+	 */
+	public static <T, E> ITERABLE<T> arrayFlatMap(ITERABLE<E> iterable, Function<E, T[]> mapper) {
+		return new FlatMappedArrayIterableBRACES(iterable, mapper);
+	}
+	
+	private static class MappedIterable<E, T> implements ITERABLE<T>
+	{
+		ITERABLE<E> iterable;
+		Function<E, T> mapper;
+		
+		MappedIterable(ITERABLE<E> iterable, Function<E, T> mapper) {
+			this.iterable = iterable;
+			this.mapper = mapper;
+		}
+		
+		public ITERATOR<T> iterator() {
+			return ITERATORS.map(iterable.iterator(), mapper);
+		}
+	}
+	
+	private static class FlatMappedIterable<E, T, V extends Iterable<T>> implements ITERABLE<T>
+	{
+		ITERABLE<E> iterable;
+		Function<E, V> mapper;
+		
+		FlatMappedIterable(ITERABLE<E> iterable, Function<E, V> mapper) {
+			this.iterable = iterable;
+			this.mapper = mapper;
+		}
+		
+		@Override
+		public ITERATOR<T> iterator() {
+			return ITERATORS.flatMap(iterable.iterator(), mapper);
+		}
+	}
+	
+	private static class FlatMappedArrayIterable<E, T> implements ITERABLE<T>
+	{
+		ITERABLE<E> iterable;
+		Function<E, T[]> mapper;
+		
+		FlatMappedArrayIterable(ITERABLE<E> iterable, Function<E, T[]> mapper) {
+			this.iterable = iterable;
+			this.mapper = mapper;
+		}
+		
+		@Override
+		public ITERATOR<T> iterator() {
+			return ITERATORS.arrayFlatMap(iterable.iterator(), mapper);
+		}
+	}
+#endif
+}

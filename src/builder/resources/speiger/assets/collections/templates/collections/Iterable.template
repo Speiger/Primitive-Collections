@@ -7,8 +7,9 @@ import java.util.function.Consumer;
 import speiger.src.collections.PACKAGE.functions.CONSUMER;
 #else 
 import java.util.function.Function;
-import speiger.src.collections.PACKAGE.utils.ITERATORS;
+import speiger.src.collections.PACKAGE.utils.ITERABLES;
 #endif
+import speiger.src.collections.PACKAGE.functions.function.PREDICATE;
 import speiger.src.collections.PACKAGE.collections.SPLIT_ITERATOR;
 import speiger.src.collections.PACKAGE.utils.SPLIT_ITERATORS;
 
@@ -72,7 +73,7 @@ public interface ITERABLE KEY_GENERIC_TYPE extends Iterable<CLASS_TYPE>
 	 * @return a new Iterable that returns the desired result
 	 */
 	public default <E> ObjectIterable<E> map(Function<T, E> map) {
-		return ObjectIterators.map(this, map);
+		return ObjectIterables.map(this, map);
 	}
 	
 	/**
@@ -83,7 +84,7 @@ public interface ITERABLE KEY_GENERIC_TYPE extends Iterable<CLASS_TYPE>
 	 * @return a new Iterable that returns the desired result
 	 */
 	public default <E, V extends Iterable<E>> ObjectIterable<E> flatMap(Function<T, V> map) {
-		return ObjectIterators.flatMap(this, map);
+		return ObjectIterables.flatMap(this, map);
 	}
 	
 	/**
@@ -93,8 +94,72 @@ public interface ITERABLE KEY_GENERIC_TYPE extends Iterable<CLASS_TYPE>
 	 * @return a new Iterable that returns the desired result
 	 */
 	public default <E> ObjectIterable<E> arrayflatMap(Function<T, E[]> map) {
-		return ObjectIterators.arrayFlatMap(this, map);
+		return ObjectIterables.arrayFlatMap(this, map);
 	}
 	
 #endif
+	/**
+	 * Helper function to reduce stream usage that allows to filter for any matches.
+	 * @param filter that should be applied
+	 * @return true if any matches were found
+	 */
+	public default boolean matchesAny(PREDICATE KEY_GENERIC_TYPE filter) {
+		for(ITERATOR KEY_GENERIC_TYPE iter = iterator();iter.hasNext();) {
+#if TYPE_OBJECT
+			if(filter.getBoolean(iter.NEXT())) return true;
+#else
+			if(filter.GET_VALUE(iter.NEXT())) return true;
+#endif
+		}
+		return false;
+	}
+	
+	/**
+	 * Helper function to reduce stream usage that allows to filter for no matches.
+	 * @param filter that should be applied
+	 * @return true if no matches were found
+	 */
+	public default boolean matchesNone(PREDICATE KEY_GENERIC_TYPE filter) {
+		for(ITERATOR KEY_GENERIC_TYPE iter = iterator();iter.hasNext();) {
+#if TYPE_OBJECT
+			if(filter.getBoolean(iter.NEXT())) return false;
+#else
+			if(filter.GET_VALUE(iter.NEXT())) return false;
+#endif
+		}
+		return true;
+	}
+	
+	/**
+	 * Helper function to reduce stream usage that allows to filter for all matches.
+	 * @param filter that should be applied
+	 * @return true if all matches.
+	 */
+	public default boolean matchesAll(PREDICATE KEY_GENERIC_TYPE filter) {
+		for(ITERATOR KEY_GENERIC_TYPE iter = iterator();iter.hasNext();) {
+#if TYPE_OBJECT
+			if(!filter.getBoolean(iter.NEXT())) return false;
+#else
+			if(!filter.GET_VALUE(iter.NEXT())) return false;
+#endif
+		}
+		return true;
+	}
+	
+	/**
+	 * Helper function to reduce stream usage that allows to filter for the first match.
+	 * @param filter that should be applied
+	 * @return the found value or the null equivalent variant.
+	 */
+	public default KEY_TYPE findFirst(PREDICATE KEY_GENERIC_TYPE filter) {
+		for(ITERATOR KEY_GENERIC_TYPE iter = iterator();iter.hasNext();) {
+			KEY_TYPE entry = iter.NEXT();
+#if TYPE_OBJECT
+			if(filter.getBoolean(entry)) return entry;
+#else
+			if(filter.GET_VALUE(entry)) return entry;
+#endif
+		}
+		return EMPTY_VALUE;
+	}
 }
