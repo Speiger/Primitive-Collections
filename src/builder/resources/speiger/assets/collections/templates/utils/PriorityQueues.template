@@ -99,7 +99,7 @@ public class PRIORITY_QUEUES
 		@Override
 		public COMPARATOR KEY_SUPER_GENERIC_TYPE comparator() { synchronized(mutex) { return queue.comparator(); } }
 		@Override
-		public KEY_GENERIC_SPECIAL_TYPE KEY_SPECIAL_TYPE[] TO_ARRAY(KEY_SPECIAL_TYPE[] input) { synchronized(mutex) { return queue.TO_ARRAY(input); } }
+		public GENERIC_SPECIAL_KEY_BRACES<E> KEY_SPECIAL_TYPE[] TO_ARRAY(KEY_SPECIAL_TYPE[] input) { synchronized(mutex) { return queue.TO_ARRAY(input); } }
 	}
 	
 	/**

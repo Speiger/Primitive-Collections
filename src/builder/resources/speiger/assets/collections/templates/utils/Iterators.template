@@ -2,11 +2,14 @@ package speiger.src.collections.PACKAGE.utils;
 
 import java.util.Iterator;
 import java.util.NoSuchElementException;
-#if TYPE_OBJECT
-import java.util.function.Function;
-#endif
 
 import speiger.src.collections.PACKAGE.collections.ITERATOR;
+#if !TYPE_OBJECT
+import speiger.src.collections.objects.collections.ObjectIterator;
+import speiger.src.collections.objects.utils.ObjectIterators;
+#endif
+import speiger.src.collections.PACKAGE.functions.function.TO_OBJECT_FUNCTION;
+import speiger.src.collections.PACKAGE.functions.function.PREDICATE;
 import speiger.src.collections.PACKAGE.lists.ARRAY_LIST;
 import speiger.src.collections.PACKAGE.lists.LIST;
 import speiger.src.collections.PACKAGE.lists.LIST_ITERATOR;
@@ -86,17 +89,16 @@ public class ITERATORS
 		return iterator instanceof UnmodifiableListIterator ? iterator : new UnmodifiableListIteratorBRACES(iterator);
 	}
 	
-#if TYPE_OBJECT
 	/**
 	 * A Helper function that maps a Iterator into a new Type.
 	 * @param iterator that should be mapped
 	 * @param mapper the function that decides what the result turns into.
 	 * @Type(T)
-	 * @Type(E)
+	 * @param <E> The return type.
 	 * @return a iterator that is mapped to a new result
 	 */
-	public static <T, E> ITERATOR<T> map(ITERATOR<E> iterator, Function<E, T> mapper) {
-		return new MappedIteratorBRACES(iterator, mapper);
+	public static GENERIC_KEY_SPECIAL_BRACES<E> ObjectIterator<E> map(ITERATOR KEY_GENERIC_TYPE iterator, TO_OBJECT_FUNCTION KKS_GENERIC_TYPE<E> mapper) {
+		return new MappedIterator<>(iterator, mapper);
 	}
 	
 	/**
@@ -104,12 +106,12 @@ public class ITERATORS
 	 * @param iterator that should be flatMapped
 	 * @param mapper the function that decides what the result turns into.
 	 * @Type(T)
-	 * @Type(V)
-	 * @Type(E)
+	 * @param <V> The return type supplier.
+	 * @param <E> The return type.
 	 * @return a iterator that is flatMapped to a new result
 	 */
-	public static <T, E, V extends Iterable<T>> ITERATOR<T> flatMap(ITERATOR<E> iterator, Function<E, V> mapper) {
-		return new FlatMappedIteratorBRACES(iterator, mapper);
+	public static GENERIC_KEY_SPECIAL_BRACES<E, V extends Iterable<E>> ObjectIterator<E> flatMap(ITERATOR KEY_GENERIC_TYPE iterator, TO_OBJECT_FUNCTION KKS_GENERIC_TYPE<V> mapper) {
+		return new FlatMappedIterator<>(iterator, mapper);
 	}
 	
 	/**
@@ -117,14 +119,24 @@ public class ITERATORS
 	 * @param iterator that should be flatMapped
 	 * @param mapper the function that decides what the result turns into.
 	 * @Type(T)
-	 * @Type(E)
+	 * @param <E> The return type.
 	 * @return a iterator that is flatMapped to a new result
 	 */
-	public static <T, E> ITERATOR<T> arrayFlatMap(ITERATOR<E> iterator, Function<E, T[]> mapper) {
-		return new FlatMappedArrayIteratorBRACES(iterator, mapper);
+	public static GENERIC_KEY_SPECIAL_BRACES<E> ObjectIterator<E> arrayFlatMap(ITERATOR KEY_GENERIC_TYPE iterator, TO_OBJECT_FUNCTION KKS_GENERIC_TYPE<E[]> mapper) {
+		return new FlatMappedArrayIterator<>(iterator, mapper);
 	}
 	
-#endif
+	/**
+	 * A Helper function that filters out all desired elements
+	 * @param iterator that should be filtered.
+	 * @param filter the filter that decides that should be let through
+	 * @Type(T)
+	 * @return a filtered iterator
+	 */
+	public static GENERIC_KEY_BRACES ITERATOR KEY_GENERIC_TYPE filter(ITERATOR KEY_GENERIC_TYPE iterator, PREDICATE KEY_GENERIC_TYPE filter) {
+		return new FilteredIteratorBRACES(iterator, filter);
+	}
+	
 	/**
 	 * Helper function to convert a Object Iterator into a Primitive Iterator
 	 * @param iterator that should be converted to a unboxing iterator
@@ -641,13 +653,12 @@ public class ITERATORS
 		}
 	}
 	
-#if TYPE_OBJECT
-	private static class MappedIterator<E, T> implements ITERATOR<T>
+	private static class MappedIterator KSS_GENERIC_TYPE<E, T> implements ObjectIterator<T>
 	{
-		ITERATOR<E> iterator;
-		Function<E, T> mapper;
+		ITERATOR KEY_SPECIAL_GENERIC_TYPE<E> iterator;
+		TO_OBJECT_FUNCTION KSS_GENERIC_TYPE<E, T> mapper;
 		
-		MappedIterator(ITERATOR<E> iterator, Function<E, T> mapper) {
+		MappedIterator(ITERATOR KEY_SPECIAL_GENERIC_TYPE<E> iterator, TO_OBJECT_FUNCTION KSS_GENERIC_TYPE<E, T> mapper) {
 			this.iterator = iterator;
 			this.mapper = mapper;
 		}
@@ -658,8 +669,8 @@ public class ITERATORS
 		}
 		
 		@Override
-		public KEY_TYPE NEXT() {
-			return mapper.apply(iterator.NEXT());
+		public T next() {
+			return mapper.GET_VALUE(iterator.NEXT());
 		}
 		
 		@Override
@@ -668,14 +679,14 @@ public class ITERATORS
 		}
 	}
 	
-	private static class FlatMappedIterator<E, T, V extends Iterable<T>> implements ITERATOR<T>
+	private static class FlatMappedIterator KSS_GENERIC_TYPE<E, T,[SPACE]V extends Iterable<T>> implements ObjectIterator<T>
 	{
-		ITERATOR<E> iterator;
+		ITERATOR KEY_SPECIAL_GENERIC_TYPE<E> iterator;
 		Iterator<T> last = null;
-		Function<E, V> mapper;
+		TO_OBJECT_FUNCTION KSS_GENERIC_TYPE<E, V> mapper;
 		boolean foundNext = false;
 		
-		FlatMappedIterator(ITERATOR<E> iterator, Function<E, V> mapper) {
+		FlatMappedIterator(ITERATOR KEY_SPECIAL_GENERIC_TYPE<E> iterator, TO_OBJECT_FUNCTION KSS_GENERIC_TYPE<E, V> mapper) {
 			this.iterator = iterator;
 			this.mapper = mapper;
 		}
@@ -683,47 +694,9 @@ public class ITERATORS
 		void compute() {
 			if(foundNext) return;
 			foundNext = true;
-			while(iterator.hasNext())
-			{
+			while(iterator.hasNext()) {
 				if(last != null && last.hasNext()) return;
-				last = mapper.apply(iterator.next()).iterator();
-			}
-		}
-		
-		@Override
-		public boolean hasNext() {
-			compute();
-			return last != null && last.hasNext();
-		}
-		
-		@Override
-		public KEY_TYPE NEXT() {
-			if(!hasNext()) throw new IllegalStateException("End of Iterator");
-			KEY_TYPE result = last.next();
-			foundNext = false;
-			return result;
-		}
-	}
-	
-	private static class FlatMappedArrayIterator<E, T> implements ITERATOR<T>
-	{
-		ITERATOR<E> iterator;
-		Iterator<T> last = null;
-		Function<E, T[]> mapper;
-		boolean foundNext = false;
-		
-		FlatMappedArrayIterator(ITERATOR<E> iterator, Function<E, T[]> mapper) {
-			this.iterator = iterator;
-			this.mapper = mapper;
-		}
-		
-		void compute() {
-			if(foundNext) return;
-			foundNext = true;
-			while(iterator.hasNext())
-			{
-				if(last != null && last.hasNext()) return;
-				last = wrap(mapper.apply(iterator.next()));
+				last = mapper.GET_VALUE(iterator.NEXT()).iterator();
 			}
 		}
 		
@@ -736,11 +709,82 @@ public class ITERATORS
 		@Override
 		public T next() {
 			if(!hasNext()) throw new IllegalStateException("End of Iterator");
-			KEY_TYPE result = last.next();
+			T result = last.next();
 			foundNext = false;
 			return result;
 		}
 	}
 	
-#endif
+	private static class FlatMappedArrayIterator KSS_GENERIC_TYPE<E, T> implements ObjectIterator<T>
+	{
+		ITERATOR KEY_SPECIAL_GENERIC_TYPE<E> iterator;
+		Iterator<T> last = null;
+		TO_OBJECT_FUNCTION KSS_GENERIC_TYPE<E, T[]> mapper;
+		boolean foundNext = false;
+		
+		FlatMappedArrayIterator(ITERATOR KEY_SPECIAL_GENERIC_TYPE<E> iterator, TO_OBJECT_FUNCTION KSS_GENERIC_TYPE<E, T[]> mapper) {
+			this.iterator = iterator;
+			this.mapper = mapper;
+		}
+		
+		void compute() {
+			if(foundNext) return;
+			foundNext = true;
+			while(iterator.hasNext()) {
+				if(last != null && last.hasNext()) return;
+				last = ObjectIterators.wrap(mapper.GET_VALUE(iterator.NEXT()));
+			}
+		}
+		
+		@Override
+		public boolean hasNext() {
+			compute();
+			return last != null && last.hasNext();
+		}
+		
+		@Override
+		public T next() {
+			if(!hasNext()) throw new IllegalStateException("End of Iterator");
+			T result = last.next();
+			foundNext = false;
+			return result;
+		}
+	}
+	
+	private static class FilteredIterator KEY_GENERIC_TYPE implements ITERATOR KEY_GENERIC_TYPE
+	{
+		ITERATOR KEY_GENERIC_TYPE iterator;
+		PREDICATE KEY_GENERIC_TYPE filter;
+		KEY_TYPE lastFound;
+		boolean foundNext = false;
+		
+		public FilteredIterator(ITERATOR KEY_GENERIC_TYPE iterator, PREDICATE KEY_GENERIC_TYPE filter) {
+			this.iterator = iterator;
+			this.filter = filter;
+		}
+		
+		void compute() {
+			if(foundNext) return;
+			while(iterator.hasNext()) {
+				lastFound = iterator.NEXT();
+				if(filter.TEST_VALUE(lastFound)) {
+					foundNext = true;
+					break;
+				}
+			}
+		}
+		
+		@Override
+		public boolean hasNext() {
+			compute();
+			return foundNext;
+		}
+		
+		@Override
+		public KEY_TYPE NEXT() {
+			if(!hasNext()) throw new IllegalStateException("End of Iterator");
+			foundNext = false;
+			return lastFound;
+		}
+	}
 }

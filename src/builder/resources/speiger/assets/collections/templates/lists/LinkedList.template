@@ -402,7 +402,7 @@ public class LINKED_LIST KEY_GENERIC_TYPE extends ABSTRACT_LIST KEY_GENERIC_TYPE
 	}
 	
 	@Override
-	public <E> void forEach(E input, BI_OBJECT_CONSUMER KEY_VALUE_SPECIAL_GENERIC_TYPE action) {
+	public <E> void forEach(E input, BI_OBJECT_CONSUMER KKS_GENERIC_TYPE<E> action) {
 		Objects.requireNonNull(action);
 		for(Entry KEY_GENERIC_TYPE entry = first;entry != null;entry = entry.next)
 			action.accept(entry.value, input);		

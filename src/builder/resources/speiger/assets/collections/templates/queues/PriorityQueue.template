@@ -86,7 +86,7 @@ public interface PRIORITY_QUEUE KEY_GENERIC_TYPE extends ITERABLE KEY_GENERIC_TY
 	 * @Type(E)
 	 * @return the contents of the queue into a seperate array.
 	 */
-	public default KEY_GENERIC_SPECIAL_TYPE KEY_SPECIAL_TYPE[] TO_ARRAY() { return TO_ARRAY(NEW_SPECIAL_KEY_ARRAY(size())); }
+	public default GENERIC_SPECIAL_KEY_BRACES<E> KEY_SPECIAL_TYPE[] TO_ARRAY() { return TO_ARRAY(NEW_SPECIAL_KEY_ARRAY(size())); }
 	/**
 	 * A method to drop the contents of the Queue without clearing the queue
 	 * @param input where the elements should be inserted to. If it does not fit then it creates a new appropiatly created array
@@ -94,5 +94,5 @@ public interface PRIORITY_QUEUE KEY_GENERIC_TYPE extends ITERABLE KEY_GENERIC_TY
 	 * @return the contents of the queue into a seperate array.
 	 * @note if the Type is generic then a Object Array is created instead of a Type Array
 	 */
-	public KEY_GENERIC_SPECIAL_TYPE KEY_SPECIAL_TYPE[] TO_ARRAY(KEY_SPECIAL_TYPE[] input);
+	public GENERIC_SPECIAL_KEY_BRACES<E> KEY_SPECIAL_TYPE[] TO_ARRAY(KEY_SPECIAL_TYPE[] input);
 }

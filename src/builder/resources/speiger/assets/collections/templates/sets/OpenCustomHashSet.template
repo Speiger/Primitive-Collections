@@ -468,7 +468,7 @@ public class CUSTOM_HASH_SET KEY_GENERIC_TYPE extends ABSTRACT_SET KEY_GENERIC_T
 	}
 	
 	@Override
-	public <E> void forEach(E input, BI_OBJECT_CONSUMER KEY_VALUE_SPECIAL_GENERIC_TYPE action) {
+	public <E> void forEach(E input, BI_OBJECT_CONSUMER KKS_GENERIC_TYPE<E> action) {
 		Objects.requireNonNull(action);
 		if(size() <= 0) return;
 		if(containsNull) action.accept(keys[nullIndex], input);

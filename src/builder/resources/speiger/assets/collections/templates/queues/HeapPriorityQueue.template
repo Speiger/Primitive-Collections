@@ -249,7 +249,7 @@ public class HEAP_PRIORITY_QUEUE KEY_GENERIC_TYPE implements PRIORITY_QUEUE KEY_
 	}
 	
 	@Override
-	public <E> void forEach(E input, BI_OBJECT_CONSUMER KEY_VALUE_SPECIAL_GENERIC_TYPE action) {
+	public <E> void forEach(E input, BI_OBJECT_CONSUMER KKS_GENERIC_TYPE<E> action) {
 		Objects.requireNonNull(action);
 		for(int i = 0,m=size;i<m;i++) action.accept(dequeue(), input);
 	}
@@ -315,7 +315,7 @@ public class HEAP_PRIORITY_QUEUE KEY_GENERIC_TYPE implements PRIORITY_QUEUE KEY_
 	}
 	
 	@Override
-	public KEY_GENERIC_SPECIAL_TYPE KEY_SPECIAL_TYPE[] TO_ARRAY(KEY_SPECIAL_TYPE[] input) {
+	public GENERIC_SPECIAL_KEY_BRACES<E> KEY_SPECIAL_TYPE[] TO_ARRAY(KEY_SPECIAL_TYPE[] input) {
 		if(input == null || input.length < size()) input = NEW_SPECIAL_KEY_ARRAY(size());
 		System.arraycopy(array, 0, input, 0, size());
 		return input;

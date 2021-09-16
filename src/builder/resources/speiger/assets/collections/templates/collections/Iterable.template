@@ -5,14 +5,14 @@ import java.util.Objects;
 import java.util.function.Consumer;
 
 import speiger.src.collections.PACKAGE.functions.CONSUMER;
-#else 
-import java.util.function.Function;
-import speiger.src.collections.PACKAGE.utils.ITERABLES;
+import speiger.src.collections.objects.collections.ObjectIterable;
 #endif
+import speiger.src.collections.PACKAGE.functions.function.TO_OBJECT_FUNCTION;
 import speiger.src.collections.PACKAGE.functions.consumer.BI_OBJECT_CONSUMER;
 import speiger.src.collections.PACKAGE.functions.function.PREDICATE;
 import speiger.src.collections.PACKAGE.collections.SPLIT_ITERATOR;
 import speiger.src.collections.PACKAGE.utils.SPLIT_ITERATORS;
+import speiger.src.collections.PACKAGE.utils.ITERABLES;
 
 /**
  * A Type-Specific {@link Iterable} that reduces (un)boxing
@@ -20,11 +20,11 @@ import speiger.src.collections.PACKAGE.utils.SPLIT_ITERATORS;
  */
 public interface ITERABLE KEY_GENERIC_TYPE extends Iterable<CLASS_TYPE>
 {
-    /**
-     * Returns an iterator over elements of type {@code T}.
-     *
-     * @return an Iterator.
-     */
+	/**
+	 * Returns an iterator over elements of type {@code T}.
+	 *
+	 * @return an Iterator.
+	 */
 	@Override
 	ITERATOR KEY_GENERIC_TYPE iterator();
 	
@@ -32,16 +32,16 @@ public interface ITERABLE KEY_GENERIC_TYPE extends Iterable<CLASS_TYPE>
 	/**
 	 * A Type Specific foreach function that reduces (un)boxing
 	 * 
-     * @implSpec
-     * <p>The default implementation behaves as if:
-     * <pre>{@code
-     *     iterator().forEachRemaining(action);
-     * }</pre>
-     *
-     * @param action The action to be performed for each element
-     * @throws NullPointerException if the specified action is null
-     * @see Iterable#forEach(Consumer)
-     */
+	 * @implSpec
+	 * <p>The default implementation behaves as if:
+	 * <pre>{@code
+	 *	iterator().forEachRemaining(action);
+	 * }</pre>
+	 *
+	 * @param action The action to be performed for each element
+	 * @throws NullPointerException if the specified action is null
+	 * @see Iterable#forEach(Consumer)
+	 */
 	default void forEach(CONSUMER action) {
 		Objects.requireNonNull(action);
 		iterator().forEachRemaining(action);
@@ -53,10 +53,10 @@ public interface ITERABLE KEY_GENERIC_TYPE extends Iterable<CLASS_TYPE>
 	*/
 	@Deprecated
 	@Override
-    default void forEach(Consumer<? super CLASS_TYPE> action) {
-        Objects.requireNonNull(action);
-        iterator().forEachRemaining(action);
-    }
+	default void forEach(Consumer<? super CLASS_TYPE> action) {
+		Objects.requireNonNull(action);
+		iterator().forEachRemaining(action);
+	}
 	
 #endif
 	/**
@@ -66,7 +66,7 @@ public interface ITERABLE KEY_GENERIC_TYPE extends Iterable<CLASS_TYPE>
 	 * @param <E> the generic type of the Object
 	 * @throws java.lang.NullPointerException if the specified action is null
 	 */
-	default <E> void forEach(E input, BI_OBJECT_CONSUMER KEY_VALUE_SPECIAL_GENERIC_TYPE action) {
+	default <E> void forEach(E input, BI_OBJECT_CONSUMER KKS_GENERIC_TYPE<E> action) {
 		Objects.requireNonNull(action);
 		iterator().forEachRemaining(input, action);
 	}
@@ -78,39 +78,46 @@ public interface ITERABLE KEY_GENERIC_TYPE extends Iterable<CLASS_TYPE>
 	@Override
 	default SPLIT_ITERATOR KEY_GENERIC_TYPE spliterator() { return SPLIT_ITERATORS.createUnknownSplititerator(iterator(), 0); }
 
-#if TYPE_OBJECT
 	/**
 	 * A Helper function to reduce the usage of Streams and allows to convert a Iterable to something else.
-	 * @param map the mapping function
-	 * @Type(E)
+	 * @param mapper the mapping function
+	 * @param <E> The return type.
 	 * @return a new Iterable that returns the desired result
 	 */
-	default <E> ObjectIterable<E> map(Function<T, E> map) {
-		return ObjectIterables.map(this, map);
+	default <E> ObjectIterable<E> map(TO_OBJECT_FUNCTION KKS_GENERIC_TYPE<E> mapper) {
+		return ITERABLES.map(this, mapper);
 	}
 	
 	/**
 	 * A Helper function to reduce the usage of Streams and allows to convert a Iterable to something else.
-	 * @param map the flatMapping function
-	 * @Type(E)
-	 * @Type(V)
+	 * @param mapper the flatMapping function
+	 * @param <V> The return type supplier.
+	 * @param <E> The return type.
 	 * @return a new Iterable that returns the desired result
 	 */
-	default <E, V extends Iterable<E>> ObjectIterable<E> flatMap(Function<T, V> map) {
-		return ObjectIterables.flatMap(this, map);
+	default <E, V extends Iterable<E>> ObjectIterable<E> flatMap(TO_OBJECT_FUNCTION KKS_GENERIC_TYPE<V> mapper) {
+		return ITERABLES.flatMap(this, mapper);
 	}
 	
 	/**
 	 * A Helper function to reduce the usage of Streams and allows to convert a Iterable to something else.
-	 * @param map the flatMapping function
-	 * @Type(E)
+	 * @param mapper the flatMapping function
+	 * @param <E> The return type.
 	 * @return a new Iterable that returns the desired result
 	 */
-	default <E> ObjectIterable<E> arrayflatMap(Function<T, E[]> map) {
-		return ObjectIterables.arrayFlatMap(this, map);
+	default <E> ObjectIterable<E> arrayflatMap(TO_OBJECT_FUNCTION KKS_GENERIC_TYPE<E[]> mapper) {
+		return ITERABLES.arrayFlatMap(this, mapper);
 	}
 	
-#endif
+	/**
+	 * A Helper function to reduce the usage of Streams and allows to filter out unwanted elements
+	 * @param filter the elements that should be kept.
+	 * @return a Iterable that filtered out all unwanted elements
+	 */
+	default ITERABLE KEY_GENERIC_TYPE filter(PREDICATE KEY_GENERIC_TYPE filter) {
+		return ITERABLES.filter(this, filter);
+	}
+	
 	/**
 	 * Helper function to reduce stream usage that allows to filter for any matches.
 	 * @param filter that should be applied

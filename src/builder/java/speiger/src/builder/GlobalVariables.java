@@ -43,27 +43,42 @@ public class GlobalVariables
 		addSimpleMapper("EMPTY_VALUE", valueType.getEmptyValue());
 		
 		addSimpleMapper(" KEY_GENERIC_TYPE", type.isObject() ? "<"+type.getKeyType()+">" : "");
-		addSimpleMapper(" KEY_GENERIC_SPECIAL_TYPE", type.isObject() ? " <E>" : "");
 		addSimpleMapper(" KEY_KEY_GENERIC_TYPE", type.isObject() ? "<"+type.getKeyType()+", "+type.getKeyType()+">" : "");
+		
 		addSimpleMapper(" VALUE_GENERIC_TYPE", valueType.isObject() ? "<"+valueType.getValueType()+">" : "");
-		addSimpleMapper(" VALUE_GENERIC_SPECIAL_TYPE", valueType.isObject() ? " <E>" : "");
 		addSimpleMapper(" VALUE_VALUE_GENERIC_TYPE", valueType.isObject() ? "<"+valueType.getValueType()+", "+valueType.getValueType()+">" : "");
-		addSimpleMapper(" VALUE_VALUE_SPECIAL_GENERIC_TYPE", valueType.isObject() ? "<"+valueType.getValueType()+", E>" : "<E>");
+		
 		addSimpleMapper(" KEY_VALUE_GENERIC_TYPE", type.isObject() ? (valueType.isObject() ? "<"+type.getKeyType()+", "+valueType.getValueType()+">" : "<"+type.getKeyType()+">") : (valueType.isObject() ? "<"+valueType.getValueType()+">" : ""));
-		addSimpleMapper(" KEY_SPECIAL_VALUE_GENERIC_TYPE", valueType.isObject() ? "<E, "+valueType.getKeyType()+">" : "<E>");
-		addSimpleMapper(" KEY_VALUE_SPECIAL_GENERIC_TYPE", type.isObject() ? "<"+type.getKeyType()+", E>" : "<E>");
 		addSimpleMapper(" KEY_VALUE_VALUE_GENERIC_TYPE", type.isObject() ? (valueType.isObject() ? "<"+type.getKeyType()+", "+valueType.getValueType()+", "+valueType.getValueType()+">" : "<"+type.getKeyType()+">") : (valueType.isObject() ? "<"+valueType.getValueType()+", "+valueType.getValueType()+">" : ""));
+		
 		addSimpleMapper(" NO_GENERIC_TYPE", type.isObject() ? "<?>" : "");
 		addSimpleMapper(" NO_KV_GENERIC_TYPE", type.isObject() ? (valueType.isObject() ? "<?, ?>" : "<?>") : valueType.isObject() ? "<?>" : "");
 		addSimpleMapper(" KEY_COMPAREABLE_TYPE", type.isObject() ? "<"+type.getKeyType()+" extends Comparable<T>>" : "");
+		
 		addSimpleMapper(" KEY_SUPER_GENERIC_TYPE", type.isObject() ? "<? super "+type.getKeyType()+">" : "");
 		addSimpleMapper(" VALUE_SUPER_GENERIC_TYPE", valueType.isObject() ? "<? super "+valueType.getValueType()+">" : "");
 		addSimpleMapper(" KEY_VALUE_SUPER_GENERIC_TYPE", type.isObject() ? (valueType.isObject() ? "<? super "+type.getKeyType()+", ? super "+valueType.getValueType()+">" : "<? super "+type.getKeyType()+">") : (valueType.isObject() ? "<? super "+valueType.getValueType()+">" : ""));
+		
 		addSimpleMapper(" KEY_ENUM_VALUE_GENERIC_TYPE", type.isObject() ? (valueType.isObject() ? "<"+type.getKeyType()+" extends Enum<"+type.getKeyType()+">, "+valueType.getValueType()+">" : "<"+type.getKeyType()+" extends Enum<"+type.getKeyType()+">>") : (valueType.isObject() ? "<"+valueType.getValueType()+">" : ""));
 		addSimpleMapper(" KEY_VALUE_ENUM_GENERIC_TYPE", type.isObject() ? (valueType.isObject() ? "<"+type.getKeyType()+", "+valueType.getValueType()+" extends Enum<"+valueType.getValueType()+">>" : "<"+type.getKeyType()+">") : (valueType.isObject() ? "<"+valueType.getValueType()+" extends Enum<"+valueType.getValueType()+">>" : ""));
+		
+		addInjectMapper(" KEY_SPECIAL_GENERIC_TYPE", type.isObject() ? "<%s>" : "").removeBraces().setBraceType("<>");
+		addInjectMapper(" VALUE_SPECIAL_GENERIC_TYPE", valueType.isObject() ? "<%s>" : "").removeBraces().setBraceType("<>");
+		addInjectMapper(" KSK_GENERIC_TYPE", type.isObject() ? "<%s, "+type.getKeyType()+">" : "<%s>").removeBraces().setBraceType("<>");
+		addInjectMapper(" KKS_GENERIC_TYPE", type.isObject() ? "<"+type.getKeyType()+", %s>" : "<%s>").removeBraces().setBraceType("<>");
+		addArgumentMapper(" KSS_GENERIC_TYPE", type.isObject() ? "<%1$s, %2$s>" : "<%2$s>").removeBraces().setBraceType("<>");		
+		addInjectMapper(" VSV_GENERIC_TYPE", valueType.isObject() ? "<%s, "+valueType.getValueType()+">" : "<%s>").removeBraces().setBraceType("<>");
+		addInjectMapper(" VVS_GENERIC_TYPE", valueType.isObject() ? "<"+valueType.getValueType()+", %s>" : "<%s>").removeBraces().setBraceType("<>");
+		addArgumentMapper(" VSS_GENERIC_TYPE", valueType.isObject() ? "<%1$s, %2$s>" : "<%2$s>").removeBraces().setBraceType("<>");		
 
 		addSimpleMapper(" GENERIC_KEY_BRACES", type.isObject() ? " <"+type.getKeyType()+">" : "");
-		addSimpleMapper(" GENERIC_VALUE_BRACES", type.isObject() ? " <"+valueType.getValueType()+">" : "");
+		addSimpleMapper(" GENERIC_VALUE_BRACES", valueType.isObject() ? " <"+valueType.getValueType()+">" : "");
+		addInjectMapper(" GENERIC_SPECIAL_KEY_BRACES", type.isObject() ? " <%s>" : "").removeBraces().setBraceType("<>");
+		addInjectMapper(" GENERIC_SPECIAL_VALUE_BRACES", valueType.isObject() ? " <%s>" : "").removeBraces().setBraceType("<>");
+		
+		addInjectMapper(" GENERIC_KEY_SPECIAL_BRACES", type.isObject() ? " <"+type.getKeyType()+", %s>" : " <%s>").removeBraces().setBraceType("<>");
+		addInjectMapper(" GENERIC_VALUE_SPECIAL_BRACES", valueType.isObject() ? " <"+valueType.getKeyType()+", %s>" : " <%s>").removeBraces().setBraceType("<>");
+		
 		addSimpleMapper(" GENERIC_KEY_VALUE_BRACES", type.isObject() ? (valueType.isObject() ? " <"+type.getKeyType()+", "+valueType.getValueType()+">" : " <"+type.getKeyType()+">") : (valueType.isObject() ? " <"+valueType.getValueType()+">" : ""));
 		addSimpleMapper(" COMPAREABLE_KEY_BRACES", type.isObject() ? " <"+type.getKeyType()+" extends Comparable<T>>" : "");
 		addSimpleMapper("KV_BRACES", type.isObject() || valueType.isObject() ? "<>" : "");
@@ -191,6 +206,7 @@ public class GlobalVariables
 		addClassMapper("ITERATOR", "Iterator");
 		addClassMapper("ITERABLE", "Iterable");
 		addClassMapper("COLLECTION", "Collection");
+		addClassMapper("TO_OBJECT_FUNCTION", "2ObjectFunction");
 		addBiClassMapper("FUNCTION", "Function", "2");
 		addClassMapper("LIST_ITER", "ListIter");
 		addClassMapper("LIST", "List");
@@ -269,6 +285,7 @@ public class GlobalVariables
 		addSimpleMapper("TEST_VALUE", type.isObject() ? "getBoolean" : "get");
 		addSimpleMapper("NEW_STREAM", type.isPrimitiveBlocking() ? "" : type.getCustomJDKType().getKeyType()+"Stream");
 		addSimpleMapper("TO_ARRAY", "to"+type.getNonFileType()+"Array");
+		addSimpleMapper("[SPACE]", " ");
 		return this;
 	}
 	

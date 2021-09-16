@@ -885,7 +885,7 @@ public class LINKED_CUSTOM_HASH_MAP KEY_VALUE_GENERIC_TYPE extends CUSTOM_HASH_M
 		}
 		
 		@Override
-		public <E> void forEach(E input, BI_OBJECT_CONSUMER KEY_VALUE_SPECIAL_GENERIC_TYPE action) {
+		public <E> void forEach(E input, BI_OBJECT_CONSUMER KKS_GENERIC_TYPE<E> action) {
 			Objects.requireNonNull(action);
 			if(size() <= 0) return;
 			int index = firstIndex;
@@ -1001,7 +1001,7 @@ public class LINKED_CUSTOM_HASH_MAP KEY_VALUE_GENERIC_TYPE extends CUSTOM_HASH_M
 		}
 		
 		@Override
-		public <E> void forEach(E input, VALUE_BI_OBJECT_CONSUMER VALUE_VALUE_SPECIAL_GENERIC_TYPE action) {
+		public <E> void forEach(E input, VALUE_BI_OBJECT_CONSUMER VVS_GENERIC_TYPE<E> action) {
 			Objects.requireNonNull(action);
 			if(size() <= 0) return;
 			int index = firstIndex;
