@@ -7,6 +7,9 @@
 - Fixed: Compute/ComputeIfAbsent/ComputeIfPresent/Merge/BulkMerge in maps now behave like they should.
 - Added: Implementations for New Stream replacing functions.
 - Changed: Removed a lot of duplicated forEach implementations
+- Added: Flat/Mapping functions (to object) are now accessible to primitive maps.
+- Added: Filter function to Iterators/Iterables (Iterable implements it by default)
+- Changed: Cleanup of some variables/mappers
 
 ### Version 0.3.6
 - Fixed: addAll non Type Specific Lists was causing crashes.
