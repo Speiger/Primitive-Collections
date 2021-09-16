@@ -48,7 +48,10 @@ public class GlobalVariables
 		addSimpleMapper(" VALUE_GENERIC_TYPE", valueType.isObject() ? "<"+valueType.getValueType()+">" : "");
 		addSimpleMapper(" VALUE_GENERIC_SPECIAL_TYPE", valueType.isObject() ? " <E>" : "");
 		addSimpleMapper(" VALUE_VALUE_GENERIC_TYPE", valueType.isObject() ? "<"+valueType.getValueType()+", "+valueType.getValueType()+">" : "");
+		addSimpleMapper(" VALUE_VALUE_SPECIAL_GENERIC_TYPE", valueType.isObject() ? "<"+valueType.getValueType()+", E>" : "<E>");
 		addSimpleMapper(" KEY_VALUE_GENERIC_TYPE", type.isObject() ? (valueType.isObject() ? "<"+type.getKeyType()+", "+valueType.getValueType()+">" : "<"+type.getKeyType()+">") : (valueType.isObject() ? "<"+valueType.getValueType()+">" : ""));
+		addSimpleMapper(" KEY_SPECIAL_VALUE_GENERIC_TYPE", valueType.isObject() ? "<E, "+valueType.getKeyType()+">" : "<E>");
+		addSimpleMapper(" KEY_VALUE_SPECIAL_GENERIC_TYPE", type.isObject() ? "<"+type.getKeyType()+", E>" : "<E>");
 		addSimpleMapper(" KEY_VALUE_VALUE_GENERIC_TYPE", type.isObject() ? (valueType.isObject() ? "<"+type.getKeyType()+", "+valueType.getValueType()+", "+valueType.getValueType()+">" : "<"+type.getKeyType()+">") : (valueType.isObject() ? "<"+valueType.getValueType()+", "+valueType.getValueType()+">" : ""));
 		addSimpleMapper(" NO_GENERIC_TYPE", type.isObject() ? "<?>" : "");
 		addSimpleMapper(" NO_KV_GENERIC_TYPE", type.isObject() ? (valueType.isObject() ? "<?, ?>" : "<?>") : valueType.isObject() ? "<?>" : "");
@@ -183,6 +186,7 @@ public class GlobalVariables
 		addClassMapper("LIST_ITERATOR", "ListIterator");
 		addClassMapper("BI_ITERATOR", "BidirectionalIterator");
 		addBiClassMapper("BI_CONSUMER", "Consumer", "");
+		addClassMapper("BI_OBJECT_CONSUMER", "ObjectConsumer");
 		addClassMapper("SPLIT_ITERATOR", "Splititerator");
 		addClassMapper("ITERATOR", "Iterator");
 		addClassMapper("ITERABLE", "Iterable");
@@ -204,17 +208,20 @@ public class GlobalVariables
 		addBiClassMapper("UNARY_OPERATOR", "UnaryOperator", "");
 		if(type.isObject())
 		{
-			if(!valueType.isObject())
-			{
-				addSimpleMapper("VALUE_CONSUMER", valueType.getFileType()+"Consumer");
-			}
+			if(!valueType.isObject()) addSimpleMapper("VALUE_CONSUMER", valueType.getFileType()+"Consumer");
+			else addSimpleMapper("VALUE_CONSUMER", "Consumer");
 			addSimpleMapper("CONSUMER", "Consumer");
 			addSimpleMapper("COMPARATOR", "Comparator");	
 			addSimpleMapper("IARRAY", "IObjectArray");
 		}
 		else
 		{
-			addClassMapper("CONSUMER", "Consumer");
+			if(valueType.isObject()) 
+			{
+				addSimpleMapper("VALUE_CONSUMER", "Consumer");
+				addSimpleMapper("CONSUMER", type.getFileType()+"Consumer");
+			}
+			else addClassMapper("CONSUMER", "Consumer");
 			addClassMapper("COMPARATOR", "Comparator");
 			addFunctionMappers("IARRAY", "I%sArray");
 		}
@@ -258,6 +265,8 @@ public class GlobalVariables
 		addFunctionValueMappers("REPLACE_VALUES", valueType.isObject() ? "replaceObjects" : "replace%ss");
 		addFunctionMappers("REPLACE", type.isObject() ? "replaceObjects" : "replace%ss");
 		addFunctionMappers("SORT", "sort%ss");
+		addSimpleMapper("VALUE_TEST_VALUE", valueType.isObject() ? "getBoolean" : "get");
+		addSimpleMapper("TEST_VALUE", type.isObject() ? "getBoolean" : "get");
 		addSimpleMapper("NEW_STREAM", type.isPrimitiveBlocking() ? "" : type.getCustomJDKType().getKeyType()+"Stream");
 		addSimpleMapper("TO_ARRAY", "to"+type.getNonFileType()+"Array");
 		return this;

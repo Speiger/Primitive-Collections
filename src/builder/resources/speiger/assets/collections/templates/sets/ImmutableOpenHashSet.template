@@ -16,6 +16,8 @@ import speiger.src.collections.PACKAGE.collections.ITERATOR;
 import speiger.src.collections.PACKAGE.functions.COMPARATOR;
 import speiger.src.collections.PACKAGE.functions.CONSUMER;
 #endif
+import speiger.src.collections.PACKAGE.functions.consumer.BI_OBJECT_CONSUMER;
+import speiger.src.collections.PACKAGE.functions.function.PREDICATE;
 import speiger.src.collections.PACKAGE.lists.LIST_ITERATOR;
 import speiger.src.collections.PACKAGE.utils.ARRAYS;
 import speiger.src.collections.PACKAGE.utils.ITERATORS;
@@ -286,11 +288,62 @@ public class IMMUTABLE_HASH_SET KEY_GENERIC_TYPE extends ABSTRACT_SET KEY_GENERI
 #endif
 	@Override
 	public void forEach(CONSUMER KEY_SUPER_GENERIC_TYPE action) {
+		Objects.requireNonNull(action);
 		int index = firstIndex;
-		while(index != -1){
+		while(index != -1) {
 			action.accept(keys[index]);
 			index = (int)links[index];
 		}
+	}
+	
+	@Override
+	public <E> void forEach(E input, BI_OBJECT_CONSUMER KEY_VALUE_SPECIAL_GENERIC_TYPE action) {
+		Objects.requireNonNull(action);
+		int index = firstIndex;
+		while(index != -1) {
+			action.accept(keys[index], input);
+			index = (int)links[index];
+		}
+	}
+	
+	@Override
+	public boolean matchesAny(PREDICATE KEY_GENERIC_TYPE filter) {
+		Objects.requireNonNull(filter);
+		int index = firstIndex;
+		while(index != -1) {
+			if(filter.TEST_VALUE(keys[index])) return true;
+		}
+		return false;
+	}
+	
+	@Override
+	public boolean matchesNone(PREDICATE KEY_GENERIC_TYPE filter) {
+		Objects.requireNonNull(filter);
+		int index = firstIndex;
+		while(index != -1) {
+			if(filter.TEST_VALUE(keys[index])) return false;
+		}
+		return true;
+	}
+	
+	@Override
+	public boolean matchesAll(PREDICATE KEY_GENERIC_TYPE filter) {
+		Objects.requireNonNull(filter);
+		int index = firstIndex;
+		while(index != -1) {
+			if(!filter.TEST_VALUE(keys[index])) return false;
+		}
+		return true;
+	}
+	
+	@Override
+	public KEY_TYPE findFirst(PREDICATE KEY_GENERIC_TYPE filter) {
+		Objects.requireNonNull(filter);
+		int index = firstIndex;
+		while(index != -1) {
+			if(filter.TEST_VALUE(keys[index])) return keys[index];
+		}
+		return EMPTY_VALUE;
 	}
 	
 	@Override

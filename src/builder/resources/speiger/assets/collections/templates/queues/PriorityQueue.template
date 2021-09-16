@@ -4,19 +4,15 @@ package speiger.src.collections.PACKAGE.queues;
 import java.util.Comparator;
 import speiger.src.collections.objects.collections.ObjectIterator;
 #else
-import speiger.src.collections.PACKAGE.collections.ITERABLE;
 import speiger.src.collections.PACKAGE.functions.COMPARATOR;
 #endif
+import speiger.src.collections.PACKAGE.collections.ITERABLE;
 
 /**
  * A Simple PriorityQueue (or Queue) interface that provides with the nessesary functions to interact with it, without cluttering with the Collection interface.
  * @Type(T)
  */
-#if TYPE_OBJECT
-public interface PRIORITY_QUEUE KEY_GENERIC_TYPE extends Iterable<KEY_TYPE>
-#else
 public interface PRIORITY_QUEUE KEY_GENERIC_TYPE extends ITERABLE KEY_GENERIC_TYPE
-#endif
 {
 	/**
 	 * @return true if the PriorityQueue is empty

@@ -13,6 +13,12 @@ import speiger.src.collections.PACKAGE.functions.CONSUMER;
 import speiger.src.collections.PACKAGE.functions.consumer.BI_CONSUMER;
 import speiger.src.collections.PACKAGE.functions.function.FUNCTION;
 import speiger.src.collections.PACKAGE.functions.function.UNARY_OPERATOR;
+#if !TYPE_OBJECT && !VALUE_OBJECT
+import speiger.src.collections.PACKAGE.functions.consumer.BI_OBJECT_CONSUMER;
+#endif
+#if !TYPE_OBJECT && !VALUE_BOOLEAN
+import speiger.src.collections.PACKAGE.functions.function.PREDICATE;
+#endif
 import speiger.src.collections.PACKAGE.lists.ARRAY_LIST;
 import speiger.src.collections.PACKAGE.lists.LIST;
 import speiger.src.collections.PACKAGE.maps.abstracts.ABSTRACT_MAP;
@@ -30,6 +36,18 @@ import speiger.src.collections.VALUE_PACKAGE.functions.function.VALUE_UNARY_OPER
 import speiger.src.collections.VALUE_PACKAGE.collections.VALUE_ITERATOR;
 import speiger.src.collections.VALUE_PACKAGE.functions.VALUE_CONSUMER;
 #endif
+#endif
+#if !TYPE_OBJECT && !VALUE_OBJECT || !VALUE_OBJECT
+import speiger.src.collections.objects.functions.consumer.ObjectObjectConsumer;
+#endif
+#if !TYPE_OBJECT || !VALUE_BOOLEAN
+#if !VALUE_OBJECT || SAME_TYPE
+import speiger.src.collections.objects.functions.function.Object2BooleanFunction;
+#endif
+#endif
+#if !SAME_TYPE
+import speiger.src.collections.VALUE_PACKAGE.functions.consumer.VALUE_BI_OBJECT_CONSUMER;
+import speiger.src.collections.VALUE_PACKAGE.functions.function.VALUE_PREDICATE;
 #endif
 import speiger.src.collections.objects.collections.ObjectIterator;
 import speiger.src.collections.objects.sets.AbstractObjectSet;
@@ -413,12 +431,12 @@ public class HASH_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_VALUE_GENE
 		int index = findIndex(key);
 		if(index < 0) {
 			VALUE_TYPE newValue = mappingFunction.APPLY_VALUE(key, getDefaultReturnValue());
-			if(KEY_EQUALS(newValue, getDefaultReturnValue())) return newValue;
+			if(VALUE_EQUALS(newValue, getDefaultReturnValue())) return newValue;
 			insert(-index-1, key, newValue);
 			return newValue;
 		}
 		VALUE_TYPE newValue = mappingFunction.APPLY_VALUE(key, values[index]);
-		if(KEY_EQUALS(newValue, getDefaultReturnValue())) {
+		if(VALUE_EQUALS(newValue, getDefaultReturnValue())) {
 			removeIndex(index);
 			return newValue;
 		}
@@ -431,7 +449,7 @@ public class HASH_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_VALUE_GENE
 		int index = findIndex(key);
 		if(index < 0) {
 			VALUE_TYPE newValue = mappingFunction.GET_VALUE(key);
-			if(KEY_EQUALS(newValue, getDefaultReturnValue())) return newValue;
+			if(VALUE_EQUALS(newValue, getDefaultReturnValue())) return newValue;
 			insert(-index-1, key, newValue);
 			return newValue;
 		}
@@ -443,7 +461,7 @@ public class HASH_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_VALUE_GENE
 		int index = findIndex(key);
 		if(index < 0) return getDefaultReturnValue();
 		VALUE_TYPE newValue = mappingFunction.APPLY_VALUE(key, values[index]);
-		if(KEY_EQUALS(newValue, getDefaultReturnValue())) {
+		if(VALUE_EQUALS(newValue, getDefaultReturnValue())) {
 			removeIndex(index);
 			return newValue;
 		}
@@ -455,7 +473,7 @@ public class HASH_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_VALUE_GENE
 	public VALUE_TYPE MERGE(KEY_TYPE key, VALUE_TYPE value, VALUE_UNARY_OPERATOR VALUE_VALUE_GENERIC_TYPE mappingFunction) {
 		int index = findIndex(key);
 		VALUE_TYPE newValue = index < 0 ? value : mappingFunction.APPLY_VALUE(values[index], value);
-		if(KEY_EQUALS(newValue, getDefaultReturnValue())) {
+		if(VALUE_EQUALS(newValue, getDefaultReturnValue())) {
 			if(index >= 0)
 				removeIndex(index);
 		}
@@ -471,7 +489,7 @@ public class HASH_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_VALUE_GENE
 			KEY_TYPE key = entry.ENTRY_KEY();
 			int index = findIndex(key);
 			VALUE_TYPE newValue = index < 0 ? entry.ENTRY_VALUE() : mappingFunction.APPLY_VALUE(values[index], entry.ENTRY_VALUE());
-			if(KEY_EQUALS(newValue, getDefaultReturnValue())) {
+			if(VALUE_EQUALS(newValue, getDefaultReturnValue())) {
 				if(index >= 0)
 					removeIndex(index);
 			}
@@ -721,6 +739,88 @@ public class HASH_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_VALUE_GENE
 		}
 		
 		@Override
+		public <E> void forEach(E input, ObjectObjectConsumer<MAP.Entry KEY_VALUE_GENERIC_TYPE, E> action) {
+			Objects.requireNonNull(action);
+			if(size() <= 0) return;
+			if(containsNull) action.accept(new BasicEntryKV_BRACES(keys[nullIndex], values[nullIndex]), input);
+			for(int i = nullIndex-1;i>=0;i--) {
+				if(KEY_EQUALS_NOT_NULL(keys[i])) action.accept(new BasicEntryKV_BRACES(keys[i], values[i]), input);
+			}
+		}
+		
+		@Override
+		public boolean matchesAny(Object2BooleanFunction<MAP.Entry KEY_VALUE_GENERIC_TYPE> filter) {
+			Objects.requireNonNull(filter);
+			if(size() <= 0) return false;
+			BasicEntry KEY_VALUE_GENERIC_TYPE entry = new BasicEntryKV_BRACES();
+			if(containsNull) {
+				entry.set(keys[nullIndex], values[nullIndex]);
+				if(filter.getBoolean(entry)) return true;
+			}
+			for(int i = nullIndex-1;i>=0;i--) {
+				if(KEY_EQUALS_NOT_NULL(keys[i])) {
+					entry.set(keys[i], values[i]);
+					if(filter.getBoolean(entry)) return true;
+				}
+			}
+			return false;
+		}
+		
+		@Override
+		public boolean matchesNone(Object2BooleanFunction<MAP.Entry KEY_VALUE_GENERIC_TYPE> filter) {
+			Objects.requireNonNull(filter);
+			if(size() <= 0) return true;
+			BasicEntry KEY_VALUE_GENERIC_TYPE entry = new BasicEntryKV_BRACES();
+			if(containsNull) {
+				entry.set(keys[nullIndex], values[nullIndex]);
+				if(filter.getBoolean(entry)) return false;
+			}
+			for(int i = nullIndex-1;i>=0;i--) {
+				if(KEY_EQUALS_NOT_NULL(keys[i])) {
+					entry.set(keys[i], values[i]);
+					if(filter.getBoolean(entry)) return false;
+				}
+			}
+			return true;
+		}
+		
+		@Override
+		public boolean matchesAll(Object2BooleanFunction<MAP.Entry KEY_VALUE_GENERIC_TYPE> filter) {
+			Objects.requireNonNull(filter);
+			if(size() <= 0) return true;
+			BasicEntry KEY_VALUE_GENERIC_TYPE entry = new BasicEntryKV_BRACES();
+			if(containsNull) {
+				entry.set(keys[nullIndex], values[nullIndex]);
+				if(!filter.getBoolean(entry)) return false;
+			}
+			for(int i = nullIndex-1;i>=0;i--) {
+				if(KEY_EQUALS_NOT_NULL(keys[i])) {
+					entry.set(keys[i], values[i]);
+					if(!filter.getBoolean(entry)) return false;
+				}
+			}
+			return true;
+		}
+		
+		@Override
+		public MAP.Entry KEY_VALUE_GENERIC_TYPE findFirst(Object2BooleanFunction<MAP.Entry KEY_VALUE_GENERIC_TYPE> filter) {
+			Objects.requireNonNull(filter);
+			if(size() <= 0) return null;
+			BasicEntry KEY_VALUE_GENERIC_TYPE entry = new BasicEntryKV_BRACES();
+			if(containsNull) {
+				entry.set(keys[nullIndex], values[nullIndex]);
+				if(filter.getBoolean(entry)) return entry;
+			}
+			for(int i = nullIndex-1;i>=0;i--) {
+				if(KEY_EQUALS_NOT_NULL(keys[i])) {
+					entry.set(keys[i], values[i]);
+					if(filter.getBoolean(entry)) return entry;
+				}
+			}
+			return null;
+		}
+		
+		@Override
 		public int size() {
 			return HASH_MAP.this.size();
 		}
@@ -801,22 +901,66 @@ public class HASH_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_VALUE_GENE
 			HASH_MAP.this.clear();
 		}
 		
-#if TYPE_OBJECT
-		@Override
-		public void forEach(Consumer KEY_SUPER_GENERIC_TYPE action) {
-			if(containsNull) action.accept(keys[nullIndex]);
-			for(int i = nullIndex-1;i>=0;i--)
-				if(KEY_EQUALS_NOT_NULL(keys[i])) action.accept(keys[i]);
-		}
-		
-#else
 		@Override
 		public void forEach(CONSUMER KEY_SUPER_GENERIC_TYPE action) {
 			if(containsNull) action.accept(keys[nullIndex]);
 			for(int i = nullIndex-1;i>=0;i--)
 				if(KEY_EQUALS_NOT_NULL(keys[i])) action.accept(keys[i]);
 		}
-#endif
+		
+		@Override
+		public <E> void forEach(E input, BI_OBJECT_CONSUMER KEY_VALUE_SPECIAL_GENERIC_TYPE action) {
+			Objects.requireNonNull(action);
+			if(size() <= 0) return;
+			if(containsNull) action.accept(keys[nullIndex], input);
+			for(int i = nullIndex-1;i>=0;i--) {
+				if(KEY_EQUALS_NOT_NULL(keys[i])) action.accept(keys[i], input);
+			}
+		}
+		
+		@Override
+		public boolean matchesAny(PREDICATE KEY_GENERIC_TYPE filter) {
+			Objects.requireNonNull(filter);
+			if(size() <= 0) return false;
+			if(containsNull && filter.TEST_VALUE(keys[nullIndex])) return true;
+			for(int i = nullIndex-1;i>=0;i--) {
+				if(KEY_EQUALS_NOT_NULL(keys[i]) && filter.TEST_VALUE(keys[i])) return true;
+			}
+			return false;
+		}
+		
+		@Override
+		public boolean matchesNone(PREDICATE KEY_GENERIC_TYPE filter) {
+			Objects.requireNonNull(filter);
+			if(size() <= 0) return true;
+			if(containsNull && filter.TEST_VALUE(keys[nullIndex])) return false;
+			for(int i = nullIndex-1;i>=0;i--) {
+				if(KEY_EQUALS_NOT_NULL(keys[i]) && filter.TEST_VALUE(keys[i])) return false;
+			}
+			return true;
+		}
+		
+		@Override
+		public boolean matchesAll(PREDICATE KEY_GENERIC_TYPE filter) {
+			Objects.requireNonNull(filter);
+			if(size() <= 0) return true;
+			if(containsNull && !filter.TEST_VALUE(keys[nullIndex])) return false;
+			for(int i = nullIndex-1;i>=0;i--) {
+				if(KEY_EQUALS_NOT_NULL(keys[i]) && !filter.TEST_VALUE(keys[i])) return false;
+			}
+			return true;
+		}
+		
+		@Override
+		public KEY_TYPE findFirst(PREDICATE KEY_GENERIC_TYPE filter) {
+			Objects.requireNonNull(filter);
+			if(size() <= 0) return EMPTY_KEY_VALUE;
+			if(containsNull && filter.TEST_VALUE(keys[nullIndex])) return keys[nullIndex];
+			for(int i = nullIndex-1;i>=0;i--) {
+				if(KEY_EQUALS_NOT_NULL(keys[i]) && filter.TEST_VALUE(keys[i])) return keys[i];
+			}
+			return EMPTY_KEY_VALUE;
+		}
 	}
 	
 	private class Values extends VALUE_ABSTRACT_COLLECTION VALUE_GENERIC_TYPE {
@@ -853,21 +997,66 @@ public class HASH_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_VALUE_GENE
 			HASH_MAP.this.clear();
 		}
 		
-#if VALUE_OBJECT
-		@Override
-		public void forEach(Consumer VALUE_SUPER_GENERIC_TYPE action) {
-			if(containsNull) action.accept(values[nullIndex]);
-			for(int i = nullIndex-1;i>=0;i--)
-				if(KEY_EQUALS_NOT_NULL(keys[i])) action.accept(values[i]);
-		}
-#else
 		@Override
 		public void forEach(VALUE_CONSUMER VALUE_SUPER_GENERIC_TYPE action) {
 			if(containsNull) action.accept(values[nullIndex]);
 			for(int i = nullIndex-1;i>=0;i--)
 				if(KEY_EQUALS_NOT_NULL(keys[i])) action.accept(values[i]);
 		}
-#endif
+		
+		@Override
+		public <E> void forEach(E input, VALUE_BI_OBJECT_CONSUMER VALUE_VALUE_SPECIAL_GENERIC_TYPE action) {
+			Objects.requireNonNull(action);
+			if(size() <= 0) return;
+			if(containsNull) action.accept(values[nullIndex], input);
+			for(int i = nullIndex-1;i>=0;i--) {
+				if(KEY_EQUALS_NOT_NULL(keys[i])) action.accept(values[i], input);
+			}
+		}
+		
+		@Override
+		public boolean matchesAny(VALUE_PREDICATE VALUE_GENERIC_TYPE filter) {
+			Objects.requireNonNull(filter);
+			if(size() <= 0) return false;
+			if(containsNull && filter.VALUE_TEST_VALUE(values[nullIndex])) return true;
+			for(int i = nullIndex-1;i>=0;i--) {
+				if(KEY_EQUALS_NOT_NULL(keys[i]) && filter.VALUE_TEST_VALUE(values[i])) return true;
+			}
+			return false;
+		}
+		
+		@Override
+		public boolean matchesNone(VALUE_PREDICATE VALUE_GENERIC_TYPE filter) {
+			Objects.requireNonNull(filter);
+			if(size() <= 0) return true;
+			if(containsNull && filter.VALUE_TEST_VALUE(values[nullIndex])) return false;
+			for(int i = nullIndex-1;i>=0;i--) {
+				if(KEY_EQUALS_NOT_NULL(keys[i]) && filter.VALUE_TEST_VALUE(values[i])) return false;
+			}
+			return true;
+		}
+		
+		@Override
+		public boolean matchesAll(VALUE_PREDICATE VALUE_GENERIC_TYPE filter) {
+			Objects.requireNonNull(filter);
+			if(size() <= 0) return true;
+			if(containsNull && !filter.VALUE_TEST_VALUE(values[nullIndex])) return false;
+			for(int i = nullIndex-1;i>=0;i--) {
+				if(KEY_EQUALS_NOT_NULL(keys[i]) && !filter.VALUE_TEST_VALUE(values[i])) return false;
+			}
+			return true;
+		}
+		
+		@Override
+		public VALUE_TYPE findFirst(VALUE_PREDICATE VALUE_GENERIC_TYPE filter) {
+			Objects.requireNonNull(filter);
+			if(size() <= 0) return EMPTY_VALUE;
+			if(containsNull && filter.VALUE_TEST_VALUE(values[nullIndex])) return values[nullIndex];
+			for(int i = nullIndex-1;i>=0;i--) {
+				if(KEY_EQUALS_NOT_NULL(keys[i]) && filter.VALUE_TEST_VALUE(values[i])) return values[i];
+			}
+			return EMPTY_VALUE;
+		}
 	}
 	
 	private class FastEntryIterator extends MapIterator implements ObjectIterator<MAP.Entry KEY_VALUE_GENERIC_TYPE> {

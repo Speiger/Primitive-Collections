@@ -12,10 +12,12 @@ import java.util.Set;
 #if PRIMITIVES
 import java.util.function.JAVA_PREDICATE;
 #endif
-
 import speiger.src.collections.PACKAGE.collections.BI_ITERATOR;
 import speiger.src.collections.PACKAGE.collections.COLLECTION;
 import speiger.src.collections.PACKAGE.collections.ITERATOR;
+
+import speiger.src.collections.PACKAGE.functions.consumer.BI_OBJECT_CONSUMER;
+import speiger.src.collections.PACKAGE.functions.function.PREDICATE;
 #if !TYPE_OBJECT
 import speiger.src.collections.PACKAGE.functions.COMPARATOR;
 import speiger.src.collections.PACKAGE.functions.CONSUMER;
@@ -341,21 +343,55 @@ public class ARRAY_SET KEY_GENERIC_TYPE extends ABSTRACT_SET KEY_GENERIC_TYPE im
 	}
 	
 #endif
-#if TYPE_OBJECT
 	@Override
-	public void forEach(Consumer KEY_SUPER_GENERIC_TYPE action) {
+	public void forEach(CONSUMER KEY_SUPER_GENERIC_TYPE action) {
 		Objects.requireNonNull(action);
 		for(int i = 0;i<size;action.accept(data[i++]));
 	}
 	
-#else
 	@Override
-	public void forEach(CONSUMER KEY_GENERIC_TYPE action) {
+	public <E> void forEach(E input, BI_OBJECT_CONSUMER KEY_VALUE_SPECIAL_GENERIC_TYPE action) {
 		Objects.requireNonNull(action);
-		for(int i = 0;i<size;action.accept(data[i++]));
+		for(int i = 0;i<size;i++)
+			action.accept(data[i], input);		
 	}
 	
-#endif
+	@Override
+	public boolean matchesAny(PREDICATE KEY_GENERIC_TYPE filter) {
+		Objects.requireNonNull(filter);
+		for(int i = 0;i<size;i++) {
+			if(filter.TEST_VALUE(data[i])) return true;
+		}
+		return false;
+	}
+	
+	@Override
+	public boolean matchesNone(PREDICATE KEY_GENERIC_TYPE filter) {
+		Objects.requireNonNull(filter);
+		for(int i = 0;i<size;i++) {
+			if(filter.TEST_VALUE(data[i])) return false;
+		}
+		return true;
+	}
+	
+	@Override
+	public boolean matchesAll(PREDICATE KEY_GENERIC_TYPE filter) {
+		Objects.requireNonNull(filter);
+		for(int i = 0;i<size;i++) {
+			if(!filter.TEST_VALUE(data[i])) return false;
+		}
+		return true;
+	}
+	
+	@Override
+	public KEY_TYPE findFirst(PREDICATE KEY_GENERIC_TYPE filter) {
+		Objects.requireNonNull(filter);
+		for(int i = 0;i<size;i++) {
+			if(filter.TEST_VALUE(data[i])) return data[i];
+		}
+		return EMPTY_VALUE;
+	}
+	
 #if !TYPE_OBJECT
 	protected int findIndex(KEY_TYPE o) {
 		for(int i = size-1;i>=0;i--)

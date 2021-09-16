@@ -12,6 +12,12 @@ import speiger.src.collections.PACKAGE.collections.BI_ITERATOR;
 import speiger.src.collections.PACKAGE.functions.COMPARATOR;
 import speiger.src.collections.PACKAGE.functions.CONSUMER;
 #endif
+#if !TYPE_OBJECT && !VALUE_OBJECT
+import speiger.src.collections.PACKAGE.functions.consumer.BI_OBJECT_CONSUMER;
+#endif
+#if !TYPE_OBJECT && !VALUE_BOOLEAN
+import speiger.src.collections.PACKAGE.functions.function.PREDICATE;
+#endif
 import speiger.src.collections.PACKAGE.functions.consumer.BI_CONSUMER;
 import speiger.src.collections.PACKAGE.functions.function.FUNCTION;
 import speiger.src.collections.PACKAGE.functions.function.UNARY_OPERATOR;
@@ -32,6 +38,18 @@ import speiger.src.collections.VALUE_PACKAGE.functions.function.VALUE_UNARY_OPER
 import speiger.src.collections.VALUE_PACKAGE.functions.VALUE_CONSUMER;
 import speiger.src.collections.VALUE_PACKAGE.lists.VALUE_LIST_ITERATOR;
 #endif
+#endif
+#if !TYPE_OBJECT && !VALUE_OBJECT || !VALUE_OBJECT
+import speiger.src.collections.objects.functions.consumer.ObjectObjectConsumer;
+#endif
+#if !TYPE_OBJECT || !VALUE_BOOLEAN
+#if !VALUE_OBJECT || SAME_TYPE
+import speiger.src.collections.objects.functions.function.Object2BooleanFunction;
+#endif
+#endif
+#if !SAME_TYPE
+import speiger.src.collections.VALUE_PACKAGE.functions.consumer.VALUE_BI_OBJECT_CONSUMER;
+import speiger.src.collections.VALUE_PACKAGE.functions.function.VALUE_PREDICATE;
 #endif
 #if !VALUE_OBJECT
 import speiger.src.collections.objects.collections.ObjectIterator;
@@ -443,12 +461,12 @@ public class ARRAY_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_VALUE_GEN
 		int index = findIndex(key);
 		if(index == -1) {
 			VALUE_TYPE newValue = mappingFunction.APPLY_VALUE(key, getDefaultReturnValue());
-			if(KEY_EQUALS(newValue, getDefaultReturnValue())) return newValue;
+			if(VALUE_EQUALS(newValue, getDefaultReturnValue())) return newValue;
 			insertIndex(size++, key, newValue);
 			return newValue;
 		}
 		VALUE_TYPE newValue = mappingFunction.APPLY_VALUE(key, values[index]);
-		if(KEY_EQUALS(newValue, getDefaultReturnValue())) {
+		if(VALUE_EQUALS(newValue, getDefaultReturnValue())) {
 			removeIndex(index);
 			return newValue;
 		}
@@ -461,7 +479,7 @@ public class ARRAY_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_VALUE_GEN
 		int index = findIndex(key);
 		if(index == -1) {
 			VALUE_TYPE newValue = mappingFunction.GET_VALUE(key);
-			if(KEY_EQUALS(newValue, getDefaultReturnValue())) return newValue;
+			if(VALUE_EQUALS(newValue, getDefaultReturnValue())) return newValue;
 			insertIndex(size++, key, newValue);
 			return newValue;
 		}
@@ -473,7 +491,7 @@ public class ARRAY_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_VALUE_GEN
 		int index = findIndex(key);
 		if(index == -1) return getDefaultReturnValue();
 		VALUE_TYPE newValue = mappingFunction.APPLY_VALUE(key, values[index]);
-		if(KEY_EQUALS(newValue, getDefaultReturnValue())) {
+		if(VALUE_EQUALS(newValue, getDefaultReturnValue())) {
 			removeIndex(index);
 			return newValue;
 		}
@@ -485,7 +503,7 @@ public class ARRAY_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_VALUE_GEN
 	public VALUE_TYPE MERGE(KEY_TYPE key, VALUE_TYPE value, VALUE_UNARY_OPERATOR VALUE_VALUE_GENERIC_TYPE mappingFunction) {
 		int index = findIndex(key);
 		VALUE_TYPE newValue = index == -1 ? value : mappingFunction.APPLY_VALUE(values[index], value);
-		if(KEY_EQUALS(newValue, getDefaultReturnValue())) {
+		if(VALUE_EQUALS(newValue, getDefaultReturnValue())) {
 			if(index >= 0)
 				removeIndex(index);
 		}
@@ -501,7 +519,7 @@ public class ARRAY_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_VALUE_GEN
 			KEY_TYPE key = entry.ENTRY_KEY();
 			int index = findIndex(key);
 			VALUE_TYPE newValue = index == -1 ? entry.ENTRY_VALUE() : mappingFunction.APPLY_VALUE(values[index], entry.ENTRY_VALUE());
-			if(KEY_EQUALS(newValue, getDefaultReturnValue())) {
+			if(VALUE_EQUALS(newValue, getDefaultReturnValue())) {
 				if(index >= 0)
 					removeIndex(index);
 			}
@@ -1103,17 +1121,75 @@ public class ARRAY_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_VALUE_GEN
 			
 			@Override
 			public void forEach(Consumer<? super MAP.Entry KEY_VALUE_GENERIC_TYPE> action) {
+				Objects.requireNonNull(action);
 				for(int i = 0;i<length;i++)
 					action.accept(new BasicEntryKV_BRACES(keys[offset+i], values[offset+i]));
 			}
 			
 			@Override
 			public void fastForEach(Consumer<? super MAP.Entry KEY_VALUE_GENERIC_TYPE> action) {
+				Objects.requireNonNull(action);
+				if(size() <= 0) return;
 				BasicEntry KEY_VALUE_GENERIC_TYPE entry = new BasicEntryKV_BRACES();
 				for(int i = 0;i<length;i++) {
 					entry.set(keys[offset+i], values[offset+i]);
 					action.accept(entry);
 				}
+			}
+			
+			@Override
+			public <E> void forEach(E input, ObjectObjectConsumer<MAP.Entry KEY_VALUE_GENERIC_TYPE, E> action) {
+				Objects.requireNonNull(action);
+				for(int i = 0;i<length;i++)
+					action.accept(new BasicEntryKV_BRACES(keys[offset+i], values[offset+i]), input);
+			}
+			
+			@Override
+			public boolean matchesAny(Object2BooleanFunction<MAP.Entry KEY_VALUE_GENERIC_TYPE> filter) {
+				Objects.requireNonNull(filter);
+				if(size() <= 0) return false;
+				BasicEntry KEY_VALUE_GENERIC_TYPE entry = new BasicEntryKV_BRACES();
+				for(int i = 0;i<length;i++) {
+					entry.set(keys[offset+i], values[offset+i]);
+					if(filter.getBoolean(entry)) return true;
+				}
+				return false;
+			}
+			
+			@Override
+			public boolean matchesNone(Object2BooleanFunction<MAP.Entry KEY_VALUE_GENERIC_TYPE> filter) {
+				Objects.requireNonNull(filter);
+				if(size() <= 0) return true;
+				BasicEntry KEY_VALUE_GENERIC_TYPE entry = new BasicEntryKV_BRACES();
+				for(int i = 0;i<length;i++) {
+					entry.set(keys[offset+i], values[offset+i]);
+					if(filter.getBoolean(entry)) return false;
+				}
+				return true;
+			}
+			
+			@Override
+			public boolean matchesAll(Object2BooleanFunction<MAP.Entry KEY_VALUE_GENERIC_TYPE> filter) {
+				Objects.requireNonNull(filter);
+				if(size() <= 0) return true;
+				BasicEntry KEY_VALUE_GENERIC_TYPE entry = new BasicEntryKV_BRACES();
+				for(int i = 0;i<length;i++) {
+					entry.set(keys[offset+i], values[offset+i]);
+					if(!filter.getBoolean(entry)) return false;
+				}
+				return true;
+			}
+			
+			@Override
+			public MAP.Entry KEY_VALUE_GENERIC_TYPE findFirst(Object2BooleanFunction<MAP.Entry KEY_VALUE_GENERIC_TYPE> filter) {
+				Objects.requireNonNull(filter);
+				if(size() <= 0) return null;
+				BasicEntry KEY_VALUE_GENERIC_TYPE entry = new BasicEntryKV_BRACES();
+				for(int i = 0;i<length;i++) {
+					entry.set(keys[offset+i], values[offset+i]);
+					if(filter.getBoolean(entry)) return entry;
+				}
+				return null;
 			}
 			
 			@Override
@@ -1213,19 +1289,60 @@ public class ARRAY_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_VALUE_GEN
 			@Override
 			public KEY_TYPE POLL_LAST_KEY() { return POLL_LAST_ENTRY_KEY(); }
 			
-#if TYPE_OBJECT
 			@Override
-			public void forEach(Consumer<? super CLASS_TYPE> action) { 
+			public void forEach(CONSUMER KEY_SUPER_GENERIC_TYPE action) { 
+				Objects.requireNonNull(action);
 				for(int i = 0;i<length;action.accept(keys[offset+i])); 
 			}
 			
-#else
 			@Override
-			public void forEach(CONSUMER KEY_GENERIC_TYPE action) { 
-				for(int i = 0;i<length;action.accept(keys[offset+i])); 
+			public <E> void forEach(E input, BI_OBJECT_CONSUMER KEY_VALUE_SPECIAL_GENERIC_TYPE action) {
+				Objects.requireNonNull(action);
+				if(size() <= 0) return;
+				for(int i = 0;i<length;action.accept(keys[offset+i], input)); 
+
 			}
 			
-#endif
+			@Override
+			public boolean matchesAny(PREDICATE KEY_GENERIC_TYPE filter) {
+				Objects.requireNonNull(filter);
+				if(size() <= 0) return false;
+				for(int i = 0;i<length;i++) {
+					if(filter.TEST_VALUE(keys[i+offset])) return true;					
+				}
+				return false;
+			}
+			
+			@Override
+			public boolean matchesNone(PREDICATE KEY_GENERIC_TYPE filter) {
+				Objects.requireNonNull(filter);
+				if(size() <= 0) return true;
+				for(int i = 0;i<length;i++) {
+					if(filter.TEST_VALUE(keys[i+offset])) return false;					
+				}
+				return true;
+			}
+			
+			@Override
+			public boolean matchesAll(PREDICATE KEY_GENERIC_TYPE filter) {
+				Objects.requireNonNull(filter);
+				if(size() <= 0) return true;
+				for(int i = 0;i<length;i++) {
+					if(!filter.TEST_VALUE(keys[i+offset])) return false;					
+				}
+				return true;
+			}
+			
+			@Override
+			public KEY_TYPE findFirst(PREDICATE KEY_GENERIC_TYPE filter) {
+				Objects.requireNonNull(filter);
+				if(size() <= 0) return EMPTY_KEY_VALUE;
+				for(int i = 0;i<length;i++) {
+					if(filter.TEST_VALUE(keys[i+offset])) return keys[i+offset];					
+				}
+				return EMPTY_KEY_VALUE;
+			}
+			
 			@Override
 			public COMPARATOR KEY_GENERIC_TYPE comparator() { return null; }
 			@Override
@@ -1270,17 +1387,54 @@ public class ARRAY_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_VALUE_GEN
 				SubMap.this.clear();
 			}
 			
-#if VALUE_OBJECT
 			@Override
-			public void forEach(Consumer<? super CLASS_VALUE_TYPE> action) {
+			public void forEach(VALUE_CONSUMER VALUE_SUPER_GENERIC_TYPE action) {
+				Objects.requireNonNull(action);
 				for(int i = 0;i<length;action.accept(values[offset+i]));
 			}
-#else
+			
 			@Override
-			public void forEach(VALUE_CONSUMER VALUE_GENERIC_TYPE action) {
-				for(int i = 0;i<length;action.accept(values[offset+i]));
+			public <E> void forEach(E input, VALUE_BI_OBJECT_CONSUMER VALUE_VALUE_SPECIAL_GENERIC_TYPE action) {
+				Objects.requireNonNull(action);
+				for(int i = 0;i<length;action.accept(values[offset+i], input));
+
 			}
-#endif
+			
+			@Override
+			public boolean matchesAny(VALUE_PREDICATE VALUE_GENERIC_TYPE filter) {
+				Objects.requireNonNull(filter);
+				for(int i = 0;i<length;i++) {
+					if(filter.VALUE_TEST_VALUE(values[offset+i])) return true;
+				}
+				return false;
+			}
+			
+			@Override
+			public boolean matchesNone(VALUE_PREDICATE VALUE_GENERIC_TYPE filter) {
+				Objects.requireNonNull(filter);
+				for(int i = 0;i<length;i++) {
+					if(filter.VALUE_TEST_VALUE(values[offset+i])) return false;
+				}
+				return true;
+			}
+			
+			@Override
+			public boolean matchesAll(VALUE_PREDICATE VALUE_GENERIC_TYPE filter) {
+				Objects.requireNonNull(filter);
+				for(int i = 0;i<length;i++) {
+					if(!filter.VALUE_TEST_VALUE(values[offset+i])) return false;
+				}
+				return true;
+			}
+			
+			@Override
+			public VALUE_TYPE findFirst(VALUE_PREDICATE VALUE_GENERIC_TYPE filter) {
+				Objects.requireNonNull(filter);
+				for(int i = 0;i<length;i++) {
+					if(filter.VALUE_TEST_VALUE(values[offset+i])) return values[offset+i];
+				}
+				return EMPTY_VALUE;
+			}
 		}
 		
 		private class SubFastEntryIterator extends SubMapIterator implements ObjectListIterator<MAP.Entry KEY_VALUE_GENERIC_TYPE> {
@@ -1498,17 +1652,76 @@ public class ARRAY_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_VALUE_GEN
 		
 		@Override
 		public void forEach(Consumer<? super MAP.Entry KEY_VALUE_GENERIC_TYPE> action) {
+			Objects.requireNonNull(action);
 			for(int i = 0;i<size;i++)
 				action.accept(new BasicEntryKV_BRACES(keys[i], values[i]));
 		}
 		
 		@Override
 		public void fastForEach(Consumer<? super MAP.Entry KEY_VALUE_GENERIC_TYPE> action) {
+			Objects.requireNonNull(action);
+			if(size() <= 0) return;
 			BasicEntry KEY_VALUE_GENERIC_TYPE entry = new BasicEntryKV_BRACES();
 			for(int i = 0;i<size;i++) {
 				entry.set(keys[i], values[i]);
 				action.accept(entry);
 			}
+		}
+		
+		@Override
+		public <E> void forEach(E input, ObjectObjectConsumer<MAP.Entry KEY_VALUE_GENERIC_TYPE, E> action) {
+			Objects.requireNonNull(action);
+			for(int i = 0;i<size;i++) {
+				action.accept(new BasicEntryKV_BRACES(keys[i], values[i]), input);
+			}
+		}
+		
+		@Override
+		public boolean matchesAny(Object2BooleanFunction<MAP.Entry KEY_VALUE_GENERIC_TYPE> filter) {
+			Objects.requireNonNull(filter);
+			if(size() <= 0) return false;
+			BasicEntry KEY_VALUE_GENERIC_TYPE entry = new BasicEntryKV_BRACES();
+			for(int i = 0;i<size;i++) {
+				entry.set(keys[i], values[i]);
+				if(filter.getBoolean(entry)) return true;
+			}
+			return false;
+		}
+		
+		@Override
+		public boolean matchesNone(Object2BooleanFunction<MAP.Entry KEY_VALUE_GENERIC_TYPE> filter) {
+			Objects.requireNonNull(filter);
+			if(size() <= 0) return true;
+			BasicEntry KEY_VALUE_GENERIC_TYPE entry = new BasicEntryKV_BRACES();
+			for(int i = 0;i<size;i++) {
+				entry.set(keys[i], values[i]);
+				if(filter.getBoolean(entry)) return false;
+			}
+			return true;
+		}
+		
+		@Override
+		public boolean matchesAll(Object2BooleanFunction<MAP.Entry KEY_VALUE_GENERIC_TYPE> filter) {
+			Objects.requireNonNull(filter);
+			if(size() <= 0) return true;
+			BasicEntry KEY_VALUE_GENERIC_TYPE entry = new BasicEntryKV_BRACES();
+			for(int i = 0;i<size;i++) {
+				entry.set(keys[i], values[i]);
+				if(!filter.getBoolean(entry)) return false;
+			}
+			return true;
+		}
+		
+		@Override
+		public MAP.Entry KEY_VALUE_GENERIC_TYPE findFirst(Object2BooleanFunction<MAP.Entry KEY_VALUE_GENERIC_TYPE> filter) {
+			Objects.requireNonNull(filter);
+			if(size() <= 0) return null;
+			BasicEntry KEY_VALUE_GENERIC_TYPE entry = new BasicEntryKV_BRACES();
+			for(int i = 0;i<size;i++) {
+				entry.set(keys[i], values[i]);
+				if(filter.getBoolean(entry)) return entry;
+			}
+			return null;
 		}
 		
 		@Override
@@ -1608,19 +1821,56 @@ public class ARRAY_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_VALUE_GEN
 		@Override
 		public KEY_TYPE POLL_LAST_KEY() { return POLL_LAST_ENTRY_KEY(); }
 		
-#if TYPE_OBJECT
 		@Override
-		public void forEach(Consumer<? super CLASS_TYPE> action) { 
+		public void forEach(CONSUMER KEY_SUPER_GENERIC_TYPE action) { 
+			Objects.requireNonNull(action);
 			for(int i = 0;i<size;action.accept(keys[i++])); 
 		}
 		
-#else
 		@Override
-		public void forEach(CONSUMER KEY_GENERIC_TYPE action) { 
-			for(int i = 0;i<size;action.accept(keys[i++])); 
+		public <E> void forEach(E input, BI_OBJECT_CONSUMER KEY_VALUE_SPECIAL_GENERIC_TYPE action) {
+			Objects.requireNonNull(action);
+			for(int i = 0;i<size;action.accept(keys[i++], input)); 
+
 		}
 		
-#endif
+		@Override
+		public boolean matchesAny(PREDICATE KEY_GENERIC_TYPE filter) {
+			Objects.requireNonNull(filter);
+			if(size() <= 0) return false;
+			for(int i = 0;i<size;i++) {
+				if(filter.TEST_VALUE(keys[i])) return true;
+			}
+			return false;
+		}
+		
+		@Override
+		public boolean matchesNone(PREDICATE KEY_GENERIC_TYPE filter) {
+			Objects.requireNonNull(filter);
+			for(int i = 0;i<size;i++) {
+				if(filter.TEST_VALUE(keys[i])) return false;
+			}
+			return true;
+		}
+		
+		@Override
+		public boolean matchesAll(PREDICATE KEY_GENERIC_TYPE filter) {
+			Objects.requireNonNull(filter);
+			for(int i = 0;i<size;i++) {
+				if(!filter.TEST_VALUE(keys[i])) return false;
+			}
+			return true;
+		}
+		
+		@Override
+		public KEY_TYPE findFirst(PREDICATE KEY_GENERIC_TYPE filter) {
+			Objects.requireNonNull(filter);
+			for(int i = 0;i<size;i++) {
+				if(filter.TEST_VALUE(keys[i])) return keys[i];
+			}
+			return EMPTY_KEY_VALUE;
+		}
+		
 		@Override
 		public COMPARATOR KEY_GENERIC_TYPE comparator() { return null; }
 		@Override
@@ -1665,17 +1915,47 @@ public class ARRAY_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_VALUE_GEN
 			ARRAY_MAP.this.clear();
 		}
 		
-#if VALUE_OBJECT
 		@Override
-		public void forEach(Consumer<? super CLASS_VALUE_TYPE> action) {
+		public void forEach(VALUE_CONSUMER VALUE_SUPER_GENERIC_TYPE action) {
+			Objects.requireNonNull(action);
 			for(int i = 0;i<size;action.accept(values[i++]));
 		}
-#else
+		
 		@Override
-		public void forEach(VALUE_CONSUMER VALUE_GENERIC_TYPE action) {
-			for(int i = 0;i<size;action.accept(values[i++]));
+		public boolean matchesAny(VALUE_PREDICATE VALUE_GENERIC_TYPE filter) {
+			Objects.requireNonNull(filter);
+			for(int i = 0;i<size;i++) {
+				if(filter.VALUE_TEST_VALUE(values[i])) return true;
+			}
+			return false;
 		}
-#endif
+		
+		@Override
+		public boolean matchesNone(VALUE_PREDICATE VALUE_GENERIC_TYPE filter) {
+			Objects.requireNonNull(filter);
+			for(int i = 0;i<size;i++) {
+				if(filter.VALUE_TEST_VALUE(values[i])) return false;
+			}
+			return true;
+		}
+		
+		@Override
+		public boolean matchesAll(VALUE_PREDICATE VALUE_GENERIC_TYPE filter) {
+			Objects.requireNonNull(filter);
+			for(int i = 0;i<size;i++) {
+				if(!filter.VALUE_TEST_VALUE(values[i])) return false;
+			}
+			return true;
+		}
+		
+		@Override
+		public VALUE_TYPE findFirst(VALUE_PREDICATE VALUE_GENERIC_TYPE filter) {
+			Objects.requireNonNull(filter);
+			for(int i = 0;i<size;i++) {
+				if(filter.VALUE_TEST_VALUE(values[i])) return values[i];
+			}
+			return EMPTY_VALUE;
+		}
 	}
 	
 	private class FastEntryIterator extends MapIterator implements ObjectListIterator<MAP.Entry KEY_VALUE_GENERIC_TYPE> {

@@ -1,13 +1,14 @@
 package speiger.src.collections.PACKAGE.collections;
 
 import java.util.Iterator;
-#if !TYPE_OBJECT
 import java.util.Objects;
+#if !TYPE_OBJECT
 import java.util.function.Consumer;
 
 import speiger.src.collections.PACKAGE.functions.CONSUMER;
 
 #endif
+import speiger.src.collections.PACKAGE.functions.consumer.BI_OBJECT_CONSUMER;
 
 /**
  * A Type-Specific {@link Iterator} that reduces (un)boxing
@@ -66,6 +67,18 @@ public interface ITERATOR KEY_GENERIC_TYPE extends Iterator<CLASS_TYPE>
 	}
 	
 #endif
+	/**
+	 * Helper function to reduce Lambda usage and allow for more method references, since these are faster/cleaner.
+	 * @param input the object that should be included
+     * @param action The action to be performed for each element
+     * @param <E> the generic type of the Object
+     * @throws java.lang.NullPointerException if the specified action is null
+	 */
+	default <E> void forEachRemaining(E input, BI_OBJECT_CONSUMER KEY_VALUE_SPECIAL_GENERIC_TYPE action) {
+    	Objects.requireNonNull(action);
+    	while(hasNext()) { action.accept(NEXT(), input); }
+	}
+	
 	/**
 	 * Skips the Given amount of elements if possible. A Optimization function to skip elements faster if the implementation allows it.
 	 * @param amount the amount of elements that should be skipped

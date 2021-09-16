@@ -22,6 +22,8 @@ import speiger.src.collections.PACKAGE.functions.COMPARATOR;
 import speiger.src.collections.PACKAGE.functions.CONSUMER;
 import speiger.src.collections.PACKAGE.utils.ARRAYS;
 #endif
+import speiger.src.collections.PACKAGE.functions.consumer.BI_OBJECT_CONSUMER;
+import speiger.src.collections.PACKAGE.functions.function.PREDICATE;
 import speiger.src.collections.objects.utils.ObjectArrays;
 import speiger.src.collections.PACKAGE.utils.ITERATORS;
 #if PRIMITIVES
@@ -276,6 +278,49 @@ public class IMMUTABLE_LIST KEY_GENERIC_TYPE extends ABSTRACT_LIST KEY_GENERIC_T
 		Objects.requireNonNull(action);
 		for(int i = 0,m=data.length;i<m;i++)
 			action.accept(data[i]);
+	}
+	
+	@Override
+	public <E> void forEach(E input, BI_OBJECT_CONSUMER KEY_VALUE_SPECIAL_GENERIC_TYPE action) {
+		Objects.requireNonNull(action);
+		for(int i = 0,m=data.length;i<m;i++)
+			action.accept(data[i], input);		
+	}
+	
+	@Override
+	public boolean matchesAny(PREDICATE KEY_GENERIC_TYPE filter) {
+		Objects.requireNonNull(filter);
+		for(int i = 0,m=data.length;i<m;i++) {
+			if(filter.TEST_VALUE(data[i])) return true;
+		}
+		return false;
+	}
+	
+	@Override
+	public boolean matchesNone(PREDICATE KEY_GENERIC_TYPE filter) {
+		Objects.requireNonNull(filter);
+		for(int i = 0,m=data.length;i<m;i++) {
+			if(filter.TEST_VALUE(data[i])) return false;
+		}
+		return true;
+	}
+	
+	@Override
+	public boolean matchesAll(PREDICATE KEY_GENERIC_TYPE filter) {
+		Objects.requireNonNull(filter);
+		for(int i = 0,m=data.length;i<m;i++) {
+			if(!filter.TEST_VALUE(data[i])) return false;
+		}
+		return true;
+	}
+	
+	@Override
+	public KEY_TYPE findFirst(PREDICATE KEY_GENERIC_TYPE filter) {
+		Objects.requireNonNull(filter);
+		for(int i = 0,m=data.length;i<m;i++) {
+			if(filter.TEST_VALUE(data[i])) return data[i];
+		}
+		return EMPTY_VALUE;
 	}
 	
 	@Override

@@ -1,7 +1,7 @@
 package speiger.src.collections.PACKAGE.collections;
 
-#if !TYPE_OBJECT
 import java.util.Objects;
+#if !TYPE_OBJECT
 import java.util.function.Consumer;
 
 import speiger.src.collections.PACKAGE.functions.CONSUMER;
@@ -9,6 +9,7 @@ import speiger.src.collections.PACKAGE.functions.CONSUMER;
 import java.util.function.Function;
 import speiger.src.collections.PACKAGE.utils.ITERABLES;
 #endif
+import speiger.src.collections.PACKAGE.functions.consumer.BI_OBJECT_CONSUMER;
 import speiger.src.collections.PACKAGE.functions.function.PREDICATE;
 import speiger.src.collections.PACKAGE.collections.SPLIT_ITERATOR;
 import speiger.src.collections.PACKAGE.utils.SPLIT_ITERATORS;
@@ -26,8 +27,8 @@ public interface ITERABLE KEY_GENERIC_TYPE extends Iterable<CLASS_TYPE>
      */
 	@Override
 	ITERATOR KEY_GENERIC_TYPE iterator();
-#if !TYPE_OBJECT
 	
+#if !TYPE_OBJECT
 	/**
 	 * A Type Specific foreach function that reduces (un)boxing
 	 * 
@@ -56,7 +57,19 @@ public interface ITERABLE KEY_GENERIC_TYPE extends Iterable<CLASS_TYPE>
         Objects.requireNonNull(action);
         iterator().forEachRemaining(action);
     }
+	
 #endif
+	/**
+	 * Helper function to reduce Lambda usage and allow for more method references, since these are faster/cleaner.
+	 * @param input the object that should be included
+	 * @param action The action to be performed for each element
+	 * @param <E> the generic type of the Object
+	 * @throws java.lang.NullPointerException if the specified action is null
+	 */
+	default <E> void forEach(E input, BI_OBJECT_CONSUMER KEY_VALUE_SPECIAL_GENERIC_TYPE action) {
+		Objects.requireNonNull(action);
+		iterator().forEachRemaining(input, action);
+	}
 	
 	/**
 	 * A Type Specific Type Splititerator to reduce boxing/unboxing
@@ -72,7 +85,7 @@ public interface ITERABLE KEY_GENERIC_TYPE extends Iterable<CLASS_TYPE>
 	 * @Type(E)
 	 * @return a new Iterable that returns the desired result
 	 */
-	public default <E> ObjectIterable<E> map(Function<T, E> map) {
+	default <E> ObjectIterable<E> map(Function<T, E> map) {
 		return ObjectIterables.map(this, map);
 	}
 	
@@ -83,7 +96,7 @@ public interface ITERABLE KEY_GENERIC_TYPE extends Iterable<CLASS_TYPE>
 	 * @Type(V)
 	 * @return a new Iterable that returns the desired result
 	 */
-	public default <E, V extends Iterable<E>> ObjectIterable<E> flatMap(Function<T, V> map) {
+	default <E, V extends Iterable<E>> ObjectIterable<E> flatMap(Function<T, V> map) {
 		return ObjectIterables.flatMap(this, map);
 	}
 	
@@ -93,7 +106,7 @@ public interface ITERABLE KEY_GENERIC_TYPE extends Iterable<CLASS_TYPE>
 	 * @Type(E)
 	 * @return a new Iterable that returns the desired result
 	 */
-	public default <E> ObjectIterable<E> arrayflatMap(Function<T, E[]> map) {
+	default <E> ObjectIterable<E> arrayflatMap(Function<T, E[]> map) {
 		return ObjectIterables.arrayFlatMap(this, map);
 	}
 	
@@ -103,13 +116,10 @@ public interface ITERABLE KEY_GENERIC_TYPE extends Iterable<CLASS_TYPE>
 	 * @param filter that should be applied
 	 * @return true if any matches were found
 	 */
-	public default boolean matchesAny(PREDICATE KEY_GENERIC_TYPE filter) {
+	default boolean matchesAny(PREDICATE KEY_GENERIC_TYPE filter) {
+		Objects.requireNonNull(filter);
 		for(ITERATOR KEY_GENERIC_TYPE iter = iterator();iter.hasNext();) {
-#if TYPE_OBJECT
-			if(filter.getBoolean(iter.NEXT())) return true;
-#else
-			if(filter.GET_VALUE(iter.NEXT())) return true;
-#endif
+			if(filter.TEST_VALUE(iter.NEXT())) return true;
 		}
 		return false;
 	}
@@ -119,13 +129,10 @@ public interface ITERABLE KEY_GENERIC_TYPE extends Iterable<CLASS_TYPE>
 	 * @param filter that should be applied
 	 * @return true if no matches were found
 	 */
-	public default boolean matchesNone(PREDICATE KEY_GENERIC_TYPE filter) {
+	default boolean matchesNone(PREDICATE KEY_GENERIC_TYPE filter) {
+		Objects.requireNonNull(filter);
 		for(ITERATOR KEY_GENERIC_TYPE iter = iterator();iter.hasNext();) {
-#if TYPE_OBJECT
-			if(filter.getBoolean(iter.NEXT())) return false;
-#else
-			if(filter.GET_VALUE(iter.NEXT())) return false;
-#endif
+			if(filter.TEST_VALUE(iter.NEXT())) return false;
 		}
 		return true;
 	}
@@ -135,13 +142,10 @@ public interface ITERABLE KEY_GENERIC_TYPE extends Iterable<CLASS_TYPE>
 	 * @param filter that should be applied
 	 * @return true if all matches.
 	 */
-	public default boolean matchesAll(PREDICATE KEY_GENERIC_TYPE filter) {
+	default boolean matchesAll(PREDICATE KEY_GENERIC_TYPE filter) {
+		Objects.requireNonNull(filter);
 		for(ITERATOR KEY_GENERIC_TYPE iter = iterator();iter.hasNext();) {
-#if TYPE_OBJECT
-			if(!filter.getBoolean(iter.NEXT())) return false;
-#else
-			if(!filter.GET_VALUE(iter.NEXT())) return false;
-#endif
+			if(!filter.TEST_VALUE(iter.NEXT())) return false;
 		}
 		return true;
 	}
@@ -151,14 +155,11 @@ public interface ITERABLE KEY_GENERIC_TYPE extends Iterable<CLASS_TYPE>
 	 * @param filter that should be applied
 	 * @return the found value or the null equivalent variant.
 	 */
-	public default KEY_TYPE findFirst(PREDICATE KEY_GENERIC_TYPE filter) {
+	default KEY_TYPE findFirst(PREDICATE KEY_GENERIC_TYPE filter) {
+		Objects.requireNonNull(filter);
 		for(ITERATOR KEY_GENERIC_TYPE iter = iterator();iter.hasNext();) {
 			KEY_TYPE entry = iter.NEXT();
-#if TYPE_OBJECT
-			if(filter.getBoolean(entry)) return entry;
-#else
-			if(filter.GET_VALUE(entry)) return entry;
-#endif
+			if(filter.TEST_VALUE(entry)) return entry;
 		}
 		return EMPTY_VALUE;
 	}

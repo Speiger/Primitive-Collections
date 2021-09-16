@@ -3,13 +3,18 @@ package speiger.src.collections.PACKAGE.sets;
 import java.util.Collection;
 #if TYPE_OBJECT
 import java.util.Comparator;
+import java.util.function.Consumer;
 #endif
 import java.util.Iterator;
 import java.util.NoSuchElementException;
+import java.util.Objects;
 import speiger.src.collections.PACKAGE.collections.BI_ITERATOR;
 #if !TYPE_OBJECT
 import speiger.src.collections.PACKAGE.functions.COMPARATOR;
+import speiger.src.collections.PACKAGE.functions.CONSUMER;
 #endif
+import speiger.src.collections.PACKAGE.functions.consumer.BI_OBJECT_CONSUMER;
+import speiger.src.collections.PACKAGE.functions.function.PREDICATE;
 import speiger.src.collections.PACKAGE.collections.COLLECTION;
 import speiger.src.collections.PACKAGE.collections.ITERATOR;
 import speiger.src.collections.PACKAGE.lists.LIST_ITERATOR;
@@ -288,6 +293,57 @@ public class AVL_TREE_SET KEY_GENERIC_TYPE extends ABSTRACT_SET KEY_GENERIC_TYPE
 #else
 		return node != null ? node.key : defaultMaxNotFound;
 #endif
+	}
+	
+	@Override
+	public void forEach(CONSUMER KEY_SUPER_GENERIC_TYPE action) {
+		Objects.requireNonNull(action);
+		for(Entry KEY_GENERIC_TYPE entry = first;entry != null;entry = entry.next()) {
+			action.accept(entry.key);
+		}
+	}
+	
+	@Override
+	public <E> void forEach(E input, BI_OBJECT_CONSUMER KEY_VALUE_SPECIAL_GENERIC_TYPE action) {
+		Objects.requireNonNull(action);
+		for(Entry KEY_GENERIC_TYPE entry = first;entry != null;entry = entry.next())
+			action.accept(entry.key, input);		
+	}
+	
+	@Override
+	public boolean matchesAny(PREDICATE KEY_GENERIC_TYPE filter) {
+		Objects.requireNonNull(filter);
+		for(Entry KEY_GENERIC_TYPE entry = first;entry != null;entry = entry.next()) {
+			if(filter.TEST_VALUE(entry.key)) return true;
+		}
+		return false;
+	}
+	
+	@Override
+	public boolean matchesNone(PREDICATE KEY_GENERIC_TYPE filter) {
+		Objects.requireNonNull(filter);
+		for(Entry KEY_GENERIC_TYPE entry = first;entry != null;entry = entry.next()) {
+			if(filter.TEST_VALUE(entry.key)) return false;
+		}
+		return true;
+	}
+	
+	@Override
+	public boolean matchesAll(PREDICATE KEY_GENERIC_TYPE filter) {
+		Objects.requireNonNull(filter);
+		for(Entry KEY_GENERIC_TYPE entry = first;entry != null;entry = entry.next()) {
+			if(!filter.TEST_VALUE(entry.key)) return false;
+		}
+		return true;
+	}
+	
+	@Override
+	public KEY_TYPE findFirst(PREDICATE KEY_GENERIC_TYPE filter) {
+		Objects.requireNonNull(filter);
+		for(Entry KEY_GENERIC_TYPE entry = first;entry != null;entry = entry.next()) {
+			if(filter.TEST_VALUE(entry.key)) return entry.key;
+		}
+		return EMPTY_VALUE;
 	}
 	
 	protected Entry KEY_GENERIC_TYPE findNode(KEY_TYPE o) {

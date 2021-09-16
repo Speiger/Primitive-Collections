@@ -3,13 +3,18 @@ package speiger.src.collections.PACKAGE.queues;
 #if TYPE_OBJECT
 import java.util.Arrays;
 import java.util.Comparator;
+import java.util.function.Consumer;
 #endif
+import java.util.Objects;
 import java.util.NoSuchElementException;
 
 import speiger.src.collections.PACKAGE.collections.ITERATOR;
 #if !TYPE_OBJECT
 import speiger.src.collections.PACKAGE.functions.COMPARATOR;
+import speiger.src.collections.PACKAGE.functions.CONSUMER;
 #endif
+import speiger.src.collections.PACKAGE.functions.consumer.BI_OBJECT_CONSUMER;
+import speiger.src.collections.PACKAGE.functions.function.PREDICATE;
 import speiger.src.collections.utils.ITrimmable;
 
 /**
@@ -158,7 +163,6 @@ public class ARRAY_FIFO_QUEUE KEY_GENERIC_TYPE implements PRIORITY_DEQUEUE KEY_G
 	@Override
 	public boolean removeLast(KEY_TYPE e) {
 		if(first == last) return false;
-		if(first == last) return false;
 		for(int i = size()-1;i>=0;i--) {
 			int index = (first + i) % array.length;
 			if(e == array[index])
@@ -220,6 +224,65 @@ public class ARRAY_FIFO_QUEUE KEY_GENERIC_TYPE implements PRIORITY_DEQUEUE KEY_G
 	
 	@Override
 	public COMPARATOR KEY_SUPER_GENERIC_TYPE comparator() { return null; }
+	
+	@Override
+	public void forEach(CONSUMER KEY_SUPER_GENERIC_TYPE action) {
+		Objects.requireNonNull(action);
+		if(first == last) return;
+		for(int i = 0,m=size();i<m;i++)
+			action.accept(array[(first + i) % array.length]);
+		clearAndTrim(0);
+	}
+	
+	@Override
+	public <E> void forEach(E input, BI_OBJECT_CONSUMER KEY_VALUE_SPECIAL_GENERIC_TYPE action) {
+		Objects.requireNonNull(action);
+		if(first == last) return;
+		for(int i = 0,m=size();i<m;i++)
+			action.accept(array[(first + i) % array.length], input);
+		clearAndTrim(0);	
+	}
+	
+	@Override
+	public boolean matchesAny(PREDICATE KEY_GENERIC_TYPE filter) {
+		Objects.requireNonNull(filter);
+		for(int i = 0,m=size();i<m;i++) {
+			if(filter.TEST_VALUE(array[(first + i) % array.length])) return true;
+		}
+		return false;
+	}
+	
+	@Override
+	public boolean matchesNone(PREDICATE KEY_GENERIC_TYPE filter) {
+		Objects.requireNonNull(filter);
+		for(int i = 0,m=size();i<m;i++) {
+			if(filter.TEST_VALUE(array[(first + i) % array.length])) return false;
+		}
+		return true;
+	}
+	
+	@Override
+	public boolean matchesAll(PREDICATE KEY_GENERIC_TYPE filter) {
+		Objects.requireNonNull(filter);
+		for(int i = 0,m=size();i<m;i++) {
+			if(!filter.TEST_VALUE(array[(first + i) % array.length])) return false;
+		}
+		return true;
+	}
+	
+	@Override
+	public KEY_TYPE findFirst(PREDICATE KEY_GENERIC_TYPE filter) {
+		Objects.requireNonNull(filter);
+		for(int i = 0,m=size();i<m;i++) {
+			int index = (first + i) % array.length;
+			if(filter.TEST_VALUE(array[index])) {
+				KEY_TYPE data = array[index];
+				removeIndex(index);
+				return data;
+			}
+		}
+		return EMPTY_VALUE;
+	}
 	
 	@Override
 	public boolean trim(int size) {
