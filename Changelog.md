@@ -10,6 +10,7 @@
 - Added: Flat/Mapping functions (to object) are now accessible to primitive maps.
 - Added: Filter function to Iterators/Iterables (Iterable implements it by default)
 - Changed: Cleanup of some variables/mappers
+- Added/Fixed: AVLTreeMap got reworked and SubMaps work more properly now. Also forEach support got improved a lot
 
 ### Version 0.3.6
 - Fixed: addAll non Type Specific Lists was causing crashes.
