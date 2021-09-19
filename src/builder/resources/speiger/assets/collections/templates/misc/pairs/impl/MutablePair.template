@@ -60,4 +60,23 @@ public class MUTABLE_PAIR KEY_VALUE_GENERIC_TYPE implements PAIR KEY_VALUE_GENER
 	public PAIR KEY_VALUE_GENERIC_TYPE shallowCopy() {
 		return PAIR.mutable(key, value);
 	}
+	
+	@Override
+	public boolean equals(Object obj) {
+		if(obj instanceof PAIR) {
+			PAIR KEY_VALUE_GENERIC_TYPE entry = (PAIR KEY_VALUE_GENERIC_TYPE)obj;
+			return KEY_EQUALS(key, entry.ENTRY_KEY()) && VALUE_EQUALS(value, entry.ENTRY_VALUE());
+		}
+		return false;
+	}
+	
+	@Override
+	public int hashCode() {
+		return KEY_TO_HASH(key) ^ VALUE_TO_HASH(value);
+	}
+	
+	@Override
+	public String toString() {
+		return KEY_TO_STRING(key) + "->" + VALUE_TO_STRING(value);
+	}
 }
