@@ -4,7 +4,7 @@ This is a Simple Primitive Collections Library i started as a hobby Project.
 It is based on Java's Collection Library and FastUtil.     
 But its focus is a different one.     
 
-## Main Features:     
+## Main Features:      
 - ArrayLists / LinkedLists
 - HashSet/Map (Linked & HashControl)
 - TreeSet/Map (RB & AVL)
@@ -20,7 +20,11 @@ But its focus is a different one.
 New Specialized functions that were added to increase performance or reduce allocations or Quality Of life.
 To highlight things that may be wanted.
 - Iterable:
-	- map/flatMap/arrayFlatMap (Object Only): A Light weight version of Stream.map()
+	- map/flatMap/arrayFlatMap: A Light weight version of Stream.map()
+	- findFirst: Allows to find the first element of a Predicated Iterable.
+	- filter: Allows to filter unwanted elements for wrapped Iterable
+	- matchAny/matchNone/matchAll: Allows to find elements in a collection.
+	- forEach: Allows to input a second element into a forEach move allowing for more flexibility for Method References
 - Collection:
 	- containsAny: Allows to test if another collection contains an of the elements of the tested collection.
 	- primitiveStream: Provides access to the closest Java Stream Type.
@@ -61,13 +65,14 @@ repositories {
     }
 }
 dependencies {
-	compile 'de.speiger:Primitive-Collections:0.3.6'
+	compile 'de.speiger:Primitive-Collections:0.4.0'
 }
 ```
 Direct:
 
 | Version 	| Jar                                                                                                                          	| Sources                                                                                                                              	| Java Doc                                                                                                                             	|
 |---------	|------------------------------------------------------------------------------------------------------------------------------	|--------------------------------------------------------------------------------------------------------------------------------------	|--------------------------------------------------------------------------------------------------------------------------------------	|
+| 0.4.0   	| [Download](https://maven.speiger.com/repository/main/de/speiger/Primitive-Collections/0.4.0/Primitive-Collections-0.4.0.jar) 	| [Download](https://maven.speiger.com/repository/main/de/speiger/Primitive-Collections/0.4.0/Primitive-Collections-0.4.0-sources.jar) 	| [Download](https://maven.speiger.com/repository/main/de/speiger/Primitive-Collections/0.4.0/Primitive-Collections-0.4.0-javadoc.jar) 	|
 | 0.3.6   	| [Download](https://maven.speiger.com/repository/main/de/speiger/Primitive-Collections/0.3.6/Primitive-Collections-0.3.6.jar) 	| [Download](https://maven.speiger.com/repository/main/de/speiger/Primitive-Collections/0.3.6/Primitive-Collections-0.3.6-sources.jar) 	| [Download](https://maven.speiger.com/repository/main/de/speiger/Primitive-Collections/0.3.6/Primitive-Collections-0.3.6-javadoc.jar) 	|
 | 0.3.5   	| [Download](https://maven.speiger.com/repository/main/de/speiger/Primitive-Collections/0.3.5/Primitive-Collections-0.3.5.jar) 	| [Download](https://maven.speiger.com/repository/main/de/speiger/Primitive-Collections/0.3.5/Primitive-Collections-0.3.5-sources.jar) 	| [Download](https://maven.speiger.com/repository/main/de/speiger/Primitive-Collections/0.3.5/Primitive-Collections-0.3.5-javadoc.jar) 	|
 | 0.3.4   	| [Download](https://maven.speiger.com/repository/main/de/speiger/Primitive-Collections/0.3.4/Primitive-Collections-0.3.4.jar) 	| [Download](https://maven.speiger.com/repository/main/de/speiger/Primitive-Collections/0.3.4/Primitive-Collections-0.3.4-sources.jar) 	| [Download](https://maven.speiger.com/repository/main/de/speiger/Primitive-Collections/0.3.4/Primitive-Collections-0.3.4-javadoc.jar) 	|
@@ -79,11 +84,11 @@ This project is created using gradle and java and my Template Library only. Noth
 If you setup gradle the library will be downloaded automatically.      
 
 Where is everything stored?
-- Variables and ClassNames are define [here](https://github.com/Speiger/Primitive-Collections/blob/master/src/builder/java/speiger/src/builder/GlobalVariables.java)
-- Templates are stored [here](https://github.com/Speiger/Primitive-Collections/tree/master/src/builder/resources/speiger/assets/collections/templates)
-- Tests can be found [here](https://github.com/Speiger/Primitive-Collections/tree/master/src/test/java/speiger/src/collections)
+- Variables and ClassNames are define [here](src/builder/java/speiger/src/builder/GlobalVariables.java)
+- Templates are stored [here](src/builder/resources/speiger/assets/collections/templates)
+- Tests can be found [here](src/test/java/speiger/src/collections)
 
-Please if you want to contribute follow the [Rule-Sheet](https://github.com/Speiger/Primitive-Collections/blob/master/RuleSheet.md). It keeps everything in line.
+Please if you want to contribute follow the [Rule-Sheet](RuleSheet.md). It keeps everything in line.
 
 
 # How to Build
