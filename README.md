@@ -14,6 +14,7 @@ But its focus is a different one.
 - Streams
 - SplitIterators
 - Iterators
+- Pairs
 
 ## Specialized Functions
 New Specialized functions that were added to increase performance or reduce allocations or Quality Of life.

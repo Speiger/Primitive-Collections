@@ -12,6 +12,7 @@
 - Changed: Cleanup of some variables/mappers
 - Added/Fixed: AVL/RBTreeMap got reworked and SubMaps work more properly now. Also forEach support got improved a lot
 - Added/Fixed: TreeSubSets (RB/AVL) got their functional implementations improved too.
+- Added: Pairs are now a thing. In Mutable/Immutable Form
 
 ### Version 0.3.6
 - Fixed: addAll non Type Specific Lists was causing crashes.

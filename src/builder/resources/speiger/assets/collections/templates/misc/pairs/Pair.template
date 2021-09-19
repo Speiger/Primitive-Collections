@@ -121,7 +121,7 @@ public interface PAIR KEY_VALUE_GENERIC_TYPE
 	/**
 	 * Sets the Key of the Pair.
 	 * @param key the key that should be set.
-	 * @return self or a new Pair instance with the new key. (Map.Entry may throw error)
+	 * @return self or a new Pair instance with the new key.
 	 */
 	public PAIR KEY_VALUE_GENERIC_TYPE KEY_ENTRY(KEY_TYPE key);
 	/**
@@ -132,7 +132,7 @@ public interface PAIR KEY_VALUE_GENERIC_TYPE
 	/**
 	 * Sets the Value of the Pair.
 	 * @param value the value that should be set.
-	 * @return self or a new Pair instance with the new value. (Map.Entry may throw error)
+	 * @return self or a new Pair instance with the new value.
 	 */	
 	public PAIR KEY_VALUE_GENERIC_TYPE VALUE_ENTRY(VALUE_TYPE value);
 	
@@ -145,7 +145,7 @@ public interface PAIR KEY_VALUE_GENERIC_TYPE
 	 * Sets key and value of the Pair
 	 * @param key the key that should be set.
 	 * @param value the value that should be set.
-	 * @return self or a new Pair instance with the new key and value. (Map.Entry may throw error)
+	 * @return self or a new Pair instance with the new key and value.
 	 */
 	public PAIR KEY_VALUE_GENERIC_TYPE set(KEY_TYPE key, VALUE_TYPE value);
 	
