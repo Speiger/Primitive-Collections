@@ -128,20 +128,20 @@ public abstract class ABSTRACT_MAP KEY_VALUE_GENERIC_TYPE extends AbstractMap<CL
 	@Override
 	public boolean replace(KEY_TYPE key, VALUE_TYPE oldValue, VALUE_TYPE newValue) {
 		VALUE_TYPE curValue = GET_VALUE(key);
-        if (VALUE_EQUALS_NOT(curValue, oldValue) || (VALUE_EQUALS(curValue, getDefaultReturnValue()) && !containsKey(key))) {
-            return false;
-        }
-        put(key, newValue);
-        return true;
+		if (VALUE_EQUALS_NOT(curValue, oldValue) || (VALUE_EQUALS(curValue, getDefaultReturnValue()) && !containsKey(key))) {
+			return false;
+		}
+		put(key, newValue);
+		return true;
 	}
 
 	@Override
 	public VALUE_TYPE replace(KEY_TYPE key, VALUE_TYPE value) {
 		VALUE_TYPE curValue;
-        if (VALUE_EQUALS_NOT((curValue = GET_VALUE(key)), getDefaultReturnValue()) || containsKey(key)) {
-        	curValue = put(key, value);
-        }
-        return curValue;
+		if (VALUE_EQUALS_NOT((curValue = GET_VALUE(key)), getDefaultReturnValue()) || containsKey(key)) {
+			curValue = put(key, value);
+		}
+		return curValue;
 	}
 	
 	@Override
@@ -161,68 +161,68 @@ public abstract class ABSTRACT_MAP KEY_VALUE_GENERIC_TYPE extends AbstractMap<CL
 
 	@Override
 	public VALUE_TYPE COMPUTE(KEY_TYPE key, UNARY_OPERATOR KEY_VALUE_GENERIC_TYPE mappingFunction) {
-        Objects.requireNonNull(mappingFunction);
-        VALUE_TYPE value = GET_VALUE(key);
-        VALUE_TYPE newValue = mappingFunction.APPLY_VALUE(key, value);
-        if(VALUE_EQUALS(newValue, getDefaultReturnValue())) {
-        	if(VALUE_EQUALS_NOT(value, getDefaultReturnValue()) || containsKey(key)) {
-        		remove(key);
-        		return getDefaultReturnValue();
-        	}
-        	return getDefaultReturnValue();
-        }
-        put(key, newValue);
+		Objects.requireNonNull(mappingFunction);
+		VALUE_TYPE value = GET_VALUE(key);
+		VALUE_TYPE newValue = mappingFunction.APPLY_VALUE(key, value);
+		if(VALUE_EQUALS(newValue, getDefaultReturnValue())) {
+			if(VALUE_EQUALS_NOT(value, getDefaultReturnValue()) || containsKey(key)) {
+				remove(key);
+				return getDefaultReturnValue();
+			}
+			return getDefaultReturnValue();
+		}
+		put(key, newValue);
 		return newValue;
 	}
-
+	
 	@Override
 	public VALUE_TYPE COMPUTE_IF_ABSENT(KEY_TYPE key, FUNCTION KEY_VALUE_GENERIC_TYPE mappingFunction) {
-        Objects.requireNonNull(mappingFunction);
-        VALUE_TYPE value;
-        if((value = GET_VALUE(key)) == getDefaultReturnValue() || !containsKey(key)) {
-        	VALUE_TYPE newValue = mappingFunction.GET_VALUE(key);
-        	if(VALUE_EQUALS_NOT(newValue, getDefaultReturnValue())) {
-        		put(key, newValue);
-        		return newValue;
-        	}
-        }
+		Objects.requireNonNull(mappingFunction);
+		VALUE_TYPE value;
+		if((value = GET_VALUE(key)) == getDefaultReturnValue() || !containsKey(key)) {
+			VALUE_TYPE newValue = mappingFunction.GET_VALUE(key);
+			if(VALUE_EQUALS_NOT(newValue, getDefaultReturnValue())) {
+				put(key, newValue);
+				return newValue;
+			}
+		}
 		return value;
 	}
 	
 	@Override
 	public VALUE_TYPE COMPUTE_IF_PRESENT(KEY_TYPE key, UNARY_OPERATOR KEY_VALUE_GENERIC_TYPE mappingFunction) {
-        Objects.requireNonNull(mappingFunction);
-        VALUE_TYPE value;
-        if(VALUE_EQUALS_NOT((value = GET_VALUE(key)), getDefaultReturnValue()) || containsKey(key)) {
-        	VALUE_TYPE newValue = mappingFunction.APPLY_VALUE(key, value);
-        	if(VALUE_EQUALS_NOT(newValue, getDefaultReturnValue())) {
-        		put(key, newValue);
-        		return newValue;
-        	}
-        	remove(key);
-        }
+		Objects.requireNonNull(mappingFunction);
+		VALUE_TYPE value;
+		if(VALUE_EQUALS_NOT((value = GET_VALUE(key)), getDefaultReturnValue()) || containsKey(key)) {
+			VALUE_TYPE newValue = mappingFunction.APPLY_VALUE(key, value);
+			if(VALUE_EQUALS_NOT(newValue, getDefaultReturnValue())) {
+				put(key, newValue);
+				return newValue;
+			}
+			remove(key);
+		}
 		return getDefaultReturnValue();
 	}
 
 	@Override
 	public VALUE_TYPE MERGE(KEY_TYPE key, VALUE_TYPE value, VALUE_UNARY_OPERATOR VALUE_VALUE_GENERIC_TYPE mappingFunction) {
-        Objects.requireNonNull(mappingFunction);
-        VALUE_TYPE oldValue = GET_VALUE(key);
-        VALUE_TYPE newValue = VALUE_EQUALS(oldValue, getDefaultReturnValue()) ? value : mappingFunction.APPLY_VALUE(oldValue, value);
-        if(VALUE_EQUALS(newValue, getDefaultReturnValue())) remove(key);
-        else put(key, newValue);
+		Objects.requireNonNull(mappingFunction);
+		VALUE_TYPE oldValue = GET_VALUE(key);
+		VALUE_TYPE newValue = VALUE_EQUALS(oldValue, getDefaultReturnValue()) ? value : mappingFunction.APPLY_VALUE(oldValue, value);
+		if(VALUE_EQUALS(newValue, getDefaultReturnValue())) remove(key);
+		else put(key, newValue);
 		return newValue;
 	}
 	
 	@Override
 	public void BULK_MERGE(MAP KEY_VALUE_GENERIC_TYPE m, VALUE_UNARY_OPERATOR VALUE_VALUE_GENERIC_TYPE mappingFunction) {
-	    Objects.requireNonNull(mappingFunction);
+		Objects.requireNonNull(mappingFunction);
 		for(MAP.Entry KEY_VALUE_GENERIC_TYPE entry : MAPS.fastIterable(m)) {
 			KEY_TYPE key = entry.ENTRY_KEY();
-	        VALUE_TYPE oldValue = GET_VALUE(key);
-	        VALUE_TYPE newValue = VALUE_EQUALS(oldValue, getDefaultReturnValue()) ? entry.ENTRY_VALUE() : mappingFunction.APPLY_VALUE(oldValue, entry.ENTRY_VALUE());
-	        if(VALUE_EQUALS(newValue, getDefaultReturnValue())) remove(key);
-	        else put(key, newValue);
+			VALUE_TYPE oldValue = GET_VALUE(key);
+			VALUE_TYPE newValue = VALUE_EQUALS(oldValue, getDefaultReturnValue()) ? entry.ENTRY_VALUE() : mappingFunction.APPLY_VALUE(oldValue, entry.ENTRY_VALUE());
+			if(VALUE_EQUALS(newValue, getDefaultReturnValue())) remove(key);
+			else put(key, newValue);
 		}
 	}
 	

@@ -555,8 +555,8 @@ public class RB_TREE_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_VALUE_G
 	
 	@Override
 	public void BULK_MERGE(MAP KEY_VALUE_GENERIC_TYPE m, VALUE_UNARY_OPERATOR VALUE_VALUE_GENERIC_TYPE mappingFunction) {
-    	Objects.requireNonNull(mappingFunction);
-    	for(MAP.Entry KEY_VALUE_GENERIC_TYPE entry : MAPS.fastIterable(m)) {
+		Objects.requireNonNull(mappingFunction);
+		for(MAP.Entry KEY_VALUE_GENERIC_TYPE entry : MAPS.fastIterable(m)) {
 			KEY_TYPE key = entry.ENTRY_KEY();
 			Entry KEY_VALUE_GENERIC_TYPE subEntry = findNode(key);
 			VALUE_TYPE newValue = subEntry == null ? entry.ENTRY_VALUE() : mappingFunction.APPLY_VALUE(subEntry.value, entry.ENTRY_VALUE());
@@ -998,21 +998,21 @@ public class RB_TREE_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_VALUE_G
 		
 		@Override
 		public NAVIGABLE_MAP KEY_VALUE_GENERIC_TYPE subMap(KEY_TYPE fromKey, boolean fromInclusive, KEY_TYPE toKey, boolean toInclusive) {
-            if (!inRange(fromKey, fromInclusive)) throw new IllegalArgumentException("fromKey out of range");
-            if (!inRange(toKey, toInclusive)) throw new IllegalArgumentException("toKey out of range");
-            return new AscendingSubMapKV_BRACES(m, false, fromKey, fromInclusive, false, toKey, toInclusive);
+			if (!inRange(fromKey, fromInclusive)) throw new IllegalArgumentException("fromKey out of range");
+			if (!inRange(toKey, toInclusive)) throw new IllegalArgumentException("toKey out of range");
+			return new AscendingSubMapKV_BRACES(m, false, fromKey, fromInclusive, false, toKey, toInclusive);
 		}
 		
 		@Override
 		public NAVIGABLE_MAP KEY_VALUE_GENERIC_TYPE headMap(KEY_TYPE toKey, boolean inclusive) {
-            if (!inRange(toKey, inclusive)) throw new IllegalArgumentException("toKey out of range");
-            return new AscendingSubMapKV_BRACES(m, fromStart, low, loInclusive, false, toKey, inclusive);
+			if (!inRange(toKey, inclusive)) throw new IllegalArgumentException("toKey out of range");
+			return new AscendingSubMapKV_BRACES(m, fromStart, low, loInclusive, false, toKey, inclusive);
 		}
 		
 		@Override
 		public NAVIGABLE_MAP KEY_VALUE_GENERIC_TYPE tailMap(KEY_TYPE fromKey, boolean inclusive) {
-            if (!inRange(fromKey, inclusive)) throw new IllegalArgumentException("fromKey out of range");
-            return new AscendingSubMapKV_BRACES(m, false, fromKey, inclusive, toEnd, high, hiInclusive);
+			if (!inRange(fromKey, inclusive)) throw new IllegalArgumentException("fromKey out of range");
+			return new AscendingSubMapKV_BRACES(m, false, fromKey, inclusive, toEnd, high, hiInclusive);
 		}
 	}
 	
@@ -1125,21 +1125,21 @@ public class RB_TREE_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_VALUE_G
 
 		@Override
 		public NAVIGABLE_MAP KEY_VALUE_GENERIC_TYPE subMap(KEY_TYPE fromKey, boolean fromInclusive, KEY_TYPE toKey, boolean toInclusive) {
-            if (!inRange(fromKey, fromInclusive)) throw new IllegalArgumentException("fromKey out of range");
-            if (!inRange(toKey, toInclusive)) throw new IllegalArgumentException("toKey out of range");
-            return new DescendingSubMapKV_BRACES(m, false, fromKey, fromInclusive, false, toKey, toInclusive);
+			if (!inRange(fromKey, fromInclusive)) throw new IllegalArgumentException("fromKey out of range");
+			if (!inRange(toKey, toInclusive)) throw new IllegalArgumentException("toKey out of range");
+			return new DescendingSubMapKV_BRACES(m, false, fromKey, fromInclusive, false, toKey, toInclusive);
 		}
 		
 		@Override
 		public NAVIGABLE_MAP KEY_VALUE_GENERIC_TYPE headMap(KEY_TYPE toKey, boolean inclusive) {
-            if (!inRange(toKey, inclusive)) throw new IllegalArgumentException("toKey out of range");
-            return new DescendingSubMapKV_BRACES(m, fromStart, low, loInclusive, false, toKey, inclusive);
+			if (!inRange(toKey, inclusive)) throw new IllegalArgumentException("toKey out of range");
+			return new DescendingSubMapKV_BRACES(m, fromStart, low, loInclusive, false, toKey, inclusive);
 		}
 		
 		@Override
 		public NAVIGABLE_MAP KEY_VALUE_GENERIC_TYPE tailMap(KEY_TYPE fromKey, boolean inclusive) {
-            if (!inRange(fromKey, inclusive)) throw new IllegalArgumentException("fromKey out of range");
-            return new DescendingSubMapKV_BRACES(m, false, fromKey, inclusive, toEnd, high, hiInclusive);
+			if (!inRange(fromKey, inclusive)) throw new IllegalArgumentException("fromKey out of range");
+			return new DescendingSubMapKV_BRACES(m, false, fromKey, inclusive, toEnd, high, hiInclusive);
 		}
 	}
 	
@@ -1147,17 +1147,17 @@ public class RB_TREE_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_VALUE_G
 		final RB_TREE_MAP KEY_VALUE_GENERIC_TYPE m;
 		final KEY_TYPE low;
 		final KEY_TYPE high;
-        final boolean fromStart;
-        final boolean toEnd;
-        final boolean loInclusive;
-        final boolean hiInclusive;
-        transient NAVIGABLE_MAP KEY_VALUE_GENERIC_TYPE descendingMap;
-        transient SubMapEntrySet entrySet;
-        transient KeySet KEY_VALUE_GENERIC_TYPE keySet;
-        transient SubMapValues values;
-        
-        NavigableSubMap(RB_TREE_MAP KEY_VALUE_GENERIC_TYPE m, boolean fromStart, KEY_TYPE low, boolean loInclusive, boolean toEnd, KEY_TYPE high, boolean hiInclusive) {
-        	this.m = m;
+		final boolean fromStart;
+		final boolean toEnd;
+		final boolean loInclusive;
+		final boolean hiInclusive;
+		transient NAVIGABLE_MAP KEY_VALUE_GENERIC_TYPE descendingMap;
+		transient SubMapEntrySet entrySet;
+		transient KeySet KEY_VALUE_GENERIC_TYPE keySet;
+		transient SubMapValues values;
+		
+		NavigableSubMap(RB_TREE_MAP KEY_VALUE_GENERIC_TYPE m, boolean fromStart, KEY_TYPE low, boolean loInclusive, boolean toEnd, KEY_TYPE high, boolean hiInclusive) {
+			this.m = m;
 			this.low = low;
 			this.high = high;
 			this.fromStart = fromStart;
@@ -1165,14 +1165,14 @@ public class RB_TREE_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_VALUE_G
 			this.loInclusive = loInclusive;
 			this.hiInclusive = hiInclusive;
 		}
-        
-    	abstract LIST_ITERATOR KEY_GENERIC_TYPE keyIterator(boolean descending);
-    	abstract LIST_ITERATOR KEY_GENERIC_TYPE keyIterator(KEY_TYPE key);
-    	abstract VALUE_LIST_ITERATOR VALUE_GENERIC_TYPE valueIterator();
-        abstract ObjectListIterator<MAP.Entry KEY_VALUE_GENERIC_TYPE> entryIterator();
-    	abstract RB_TREE_MAP.Entry KEY_VALUE_GENERIC_TYPE next(RB_TREE_MAP.Entry KEY_VALUE_GENERIC_TYPE entry);
-    	abstract RB_TREE_MAP.Entry KEY_VALUE_GENERIC_TYPE previous(RB_TREE_MAP.Entry KEY_VALUE_GENERIC_TYPE entry);
-        
+		
+		abstract LIST_ITERATOR KEY_GENERIC_TYPE keyIterator(boolean descending);
+		abstract LIST_ITERATOR KEY_GENERIC_TYPE keyIterator(KEY_TYPE key);
+		abstract VALUE_LIST_ITERATOR VALUE_GENERIC_TYPE valueIterator();
+		abstract ObjectListIterator<MAP.Entry KEY_VALUE_GENERIC_TYPE> entryIterator();
+		abstract RB_TREE_MAP.Entry KEY_VALUE_GENERIC_TYPE next(RB_TREE_MAP.Entry KEY_VALUE_GENERIC_TYPE entry);
+		abstract RB_TREE_MAP.Entry KEY_VALUE_GENERIC_TYPE previous(RB_TREE_MAP.Entry KEY_VALUE_GENERIC_TYPE entry);
+		
 		@Override
 		public abstract NAVIGABLE_MAP KEY_VALUE_GENERIC_TYPE descendingMap();
 		@Override
@@ -1181,13 +1181,13 @@ public class RB_TREE_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_VALUE_G
 		public abstract NAVIGABLE_MAP KEY_VALUE_GENERIC_TYPE headMap(KEY_TYPE toKey, boolean inclusive);
 		@Override
 		public abstract NAVIGABLE_MAP KEY_VALUE_GENERIC_TYPE tailMap(KEY_TYPE fromKey, boolean inclusive);
-        
+		
 		boolean tooLow(KEY_TYPE key) { return !fromStart && (loInclusive ? m.compare(key, low) < 0 : m.compare(key, low) <= 0); }
-        boolean tooHigh(KEY_TYPE key) { return !toEnd && (hiInclusive ? m.compare(key, high) > 0 : m.compare(key, high) >= 0); }
-        boolean inRange(KEY_TYPE key) { return !tooLow(key) && !tooHigh(key); }
-        boolean inClosedRange(KEY_TYPE key) { return (fromStart || m.compare(key, low) >= 0) && (toEnd || m.compare(high, key) >= 0); }
-        boolean inRange(KEY_TYPE key, boolean inclusive) { return inclusive ? inRange(key) : inClosedRange(key); }
-        
+		boolean tooHigh(KEY_TYPE key) { return !toEnd && (hiInclusive ? m.compare(key, high) > 0 : m.compare(key, high) >= 0); }
+		boolean inRange(KEY_TYPE key) { return !tooLow(key) && !tooHigh(key); }
+		boolean inClosedRange(KEY_TYPE key) { return (fromStart || m.compare(key, low) >= 0) && (toEnd || m.compare(high, key) >= 0); }
+		boolean inRange(KEY_TYPE key, boolean inclusive) { return inclusive ? inRange(key) : inClosedRange(key); }
+		
 #if TYPE_OBJECT
 		public KEY_TYPE getDefaultMaxValue() { return m.getDefaultMaxValue(); }
 		public KEY_TYPE getDefaultMinValue() { return m.getDefaultMinValue(); }
@@ -1211,18 +1211,18 @@ public class RB_TREE_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_VALUE_G
 		@Override
 		public VALUE_TYPE getDefaultReturnValue() { return m.getDefaultReturnValue(); }
 		
-    	@Override
-    	public VALUE_TYPE putAndMoveToFirst(KEY_TYPE key, VALUE_TYPE value) { throw new UnsupportedOperationException(); }
-    	@Override
-    	public VALUE_TYPE putAndMoveToLast(KEY_TYPE key, VALUE_TYPE value) { throw new UnsupportedOperationException(); }
-    	@Override
-    	public boolean moveToFirst(KEY_TYPE key) { throw new UnsupportedOperationException(); }
-    	@Override
-    	public boolean moveToLast(KEY_TYPE key) { throw new UnsupportedOperationException(); }
-    	@Override
-    	public VALUE_TYPE getAndMoveToFirst(KEY_TYPE key) { throw new UnsupportedOperationException(); }
-    	@Override
-    	public VALUE_TYPE getAndMoveToLast(KEY_TYPE key) { throw new UnsupportedOperationException(); }
+		@Override
+		public VALUE_TYPE putAndMoveToFirst(KEY_TYPE key, VALUE_TYPE value) { throw new UnsupportedOperationException(); }
+		@Override
+		public VALUE_TYPE putAndMoveToLast(KEY_TYPE key, VALUE_TYPE value) { throw new UnsupportedOperationException(); }
+		@Override
+		public boolean moveToFirst(KEY_TYPE key) { throw new UnsupportedOperationException(); }
+		@Override
+		public boolean moveToLast(KEY_TYPE key) { throw new UnsupportedOperationException(); }
+		@Override
+		public VALUE_TYPE getAndMoveToFirst(KEY_TYPE key) { throw new UnsupportedOperationException(); }
+		@Override
+		public VALUE_TYPE getAndMoveToLast(KEY_TYPE key) { throw new UnsupportedOperationException(); }
 		@Override
 		public COMPARATOR KEY_GENERIC_TYPE comparator() { return m.comparator(); }
 #if TYPE_OBJECT
@@ -1673,9 +1673,9 @@ public class RB_TREE_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_VALUE_G
 		}
 		
 		final class SubMapEntrySetIterator extends SubMapEntryIterator implements ObjectListIterator<MAP.Entry KEY_VALUE_GENERIC_TYPE> {
-	        public SubMapEntrySetIterator(boolean descending) {
-	        	super(descending);
-	        }
+			public SubMapEntrySetIterator(boolean descending) {
+				super(descending);
+			}
 			
 			public SubMapEntrySetIterator(RB_TREE_MAP.Entry KEY_VALUE_GENERIC_TYPE entry, RB_TREE_MAP.Entry KEY_VALUE_GENERIC_TYPE lowerFence, RB_TREE_MAP.Entry KEY_VALUE_GENERIC_TYPE upperFence) {
 				super(entry, lowerFence, upperFence);
@@ -1693,9 +1693,9 @@ public class RB_TREE_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_VALUE_G
 		}
 		
 		final class SubMapKeyIterator extends SubMapEntryIterator implements LIST_ITERATOR KEY_GENERIC_TYPE {
-	        public SubMapKeyIterator(boolean descending) {
-	        	super(descending);
-	        }
+			public SubMapKeyIterator(boolean descending) {
+				super(descending);
+			}
 			
 			public SubMapKeyIterator(RB_TREE_MAP.Entry KEY_VALUE_GENERIC_TYPE entry, RB_TREE_MAP.Entry KEY_VALUE_GENERIC_TYPE lowerFence, RB_TREE_MAP.Entry KEY_VALUE_GENERIC_TYPE upperFence) {
 				super(entry, lowerFence, upperFence);
@@ -1713,9 +1713,9 @@ public class RB_TREE_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_VALUE_G
 		}
 		
 		final class SubMapValueIterator extends SubMapEntryIterator implements VALUE_LIST_ITERATOR VALUE_GENERIC_TYPE {
-	        public SubMapValueIterator(boolean descending) {
-	        	super(descending);
-	        }
+			public SubMapValueIterator(boolean descending) {
+				super(descending);
+			}
 			
 			public SubMapValueIterator(RB_TREE_MAP.Entry KEY_VALUE_GENERIC_TYPE entry, RB_TREE_MAP.Entry KEY_VALUE_GENERIC_TYPE lowerFence, RB_TREE_MAP.Entry KEY_VALUE_GENERIC_TYPE upperFence) {
 				super(entry, lowerFence, upperFence);
@@ -1738,11 +1738,11 @@ public class RB_TREE_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_VALUE_G
 			RB_TREE_MAP.Entry KEY_VALUE_GENERIC_TYPE next;
 			RB_TREE_MAP.Entry KEY_VALUE_GENERIC_TYPE previous;
 			RB_TREE_MAP.Entry KEY_VALUE_GENERIC_TYPE current;
-	        int index = 0;
-	        
-	        public SubMapEntryIterator(boolean descending) {
-	        	this(descending ? findHighest() : findLowest(), fromStart ? null : findLowest(), toEnd ? null : findHighest());
-	        }
+			int index = 0;
+			
+			public SubMapEntryIterator(boolean descending) {
+				this(descending ? findHighest() : findLowest(), fromStart ? null : findLowest(), toEnd ? null : findHighest());
+			}
 			
 			public SubMapEntryIterator(RB_TREE_MAP.Entry KEY_VALUE_GENERIC_TYPE entry, RB_TREE_MAP.Entry KEY_VALUE_GENERIC_TYPE lowerFence, RB_TREE_MAP.Entry KEY_VALUE_GENERIC_TYPE upperFence) {
 				next = entry;
@@ -1750,7 +1750,7 @@ public class RB_TREE_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_VALUE_G
 				this.lowerFence = lowerFence != null ? KEY_TO_OBJ(lowerFence.key) : null;
 				this.upperFence = upperFence != null ? KEY_TO_OBJ(upperFence.key) : null;
 			}
-	        
+			
 			public boolean hasNext() {
 				return next != null && (upperFence == null || KEY_EQUALS(next.key, OBJ_TO_KEY(upperFence)));
 			}
@@ -1766,7 +1766,7 @@ public class RB_TREE_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_VALUE_G
 			public int previousIndex() {
 				return index - 1;
 			}
-	        
+			
 			protected void updateNext() {
 				next = current.next();
 			}
@@ -2027,15 +2027,15 @@ public class RB_TREE_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_VALUE_G
 			return ((NavigableSubMap KEY_VALUE_GENERIC_TYPE)m).findLowest();
 		}
 		
-    	protected RB_TREE_MAP.Entry KEY_VALUE_GENERIC_TYPE next(RB_TREE_MAP.Entry KEY_VALUE_GENERIC_TYPE entry) {
+		protected RB_TREE_MAP.Entry KEY_VALUE_GENERIC_TYPE next(RB_TREE_MAP.Entry KEY_VALUE_GENERIC_TYPE entry) {
 			if(m instanceof RB_TREE_MAP) return entry.next();
 			return ((NavigableSubMap KEY_VALUE_GENERIC_TYPE)m).next(entry);
-    	}
-    	
-    	protected RB_TREE_MAP.Entry KEY_VALUE_GENERIC_TYPE previous(RB_TREE_MAP.Entry KEY_VALUE_GENERIC_TYPE entry) {
+		}
+		
+		protected RB_TREE_MAP.Entry KEY_VALUE_GENERIC_TYPE previous(RB_TREE_MAP.Entry KEY_VALUE_GENERIC_TYPE entry) {
 			if(m instanceof RB_TREE_MAP) return entry.previous();
 			return ((NavigableSubMap KEY_VALUE_GENERIC_TYPE)m).previous(entry);
-    	}
+		}
 		
 		@Override
 		public void forEach(CONSUMER KEY_SUPER_GENERIC_TYPE action) {
@@ -2238,11 +2238,11 @@ public class RB_TREE_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_VALUE_G
 	}
 	
 	abstract class MapEntryIterator {
-        Entry KEY_VALUE_GENERIC_TYPE next;
-        Entry KEY_VALUE_GENERIC_TYPE previous;
-        Entry KEY_VALUE_GENERIC_TYPE current;
-        int index = 0;
-        
+		Entry KEY_VALUE_GENERIC_TYPE next;
+		Entry KEY_VALUE_GENERIC_TYPE previous;
+		Entry KEY_VALUE_GENERIC_TYPE current;
+		int index = 0;
+		
 		public MapEntryIterator(boolean descending) {
 			if(descending) previous = last;
 			else next = first;
@@ -2252,7 +2252,7 @@ public class RB_TREE_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_VALUE_G
 			next = entry;
 			previous = entry.previous();
 		}
-        
+		
 		public boolean hasNext() {
 			return next != null;
 		}
@@ -2268,7 +2268,7 @@ public class RB_TREE_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_VALUE_G
 		public int previousIndex() {
 			return index - 1;
 		}
-        
+		
 		protected void updateNext() {
 			next = current.next();
 		}

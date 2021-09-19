@@ -26,9 +26,9 @@ public interface LIST_ITERATOR KEY_GENERIC_TYPE extends ListIterator<CLASS_TYPE>
 	public void add(KEY_TYPE e);
 	
 	/** {@inheritDoc}
- 	* <p>This default implementation delegates to the corresponding type-specific function.
- 	* @deprecated Please use the corresponding type-specific function instead. 
- 	*/
+	 * <p>This default implementation delegates to the corresponding type-specific function.
+	 * @deprecated Please use the corresponding type-specific function instead. 
+	 */
 	@Override
 	@Deprecated
 	public default CLASS_TYPE previous() {
@@ -36,9 +36,9 @@ public interface LIST_ITERATOR KEY_GENERIC_TYPE extends ListIterator<CLASS_TYPE>
 	}
 	
 	/** {@inheritDoc}
- 	* <p>This default implementation delegates to the corresponding type-specific function.
- 	* @deprecated Please use the corresponding type-specific function instead. 
- 	*/
+	 * <p>This default implementation delegates to the corresponding type-specific function.
+	 * @deprecated Please use the corresponding type-specific function instead. 
+	 */
 	@Override
 	@Deprecated
 	public default CLASS_TYPE next() {
@@ -46,9 +46,9 @@ public interface LIST_ITERATOR KEY_GENERIC_TYPE extends ListIterator<CLASS_TYPE>
 	}	
 	
 	/** {@inheritDoc}
- 	* <p>This default implementation delegates to the corresponding type-specific function.
- 	* @deprecated Please use the corresponding type-specific function instead. 
- 	*/
+	 * <p>This default implementation delegates to the corresponding type-specific function.
+	 * @deprecated Please use the corresponding type-specific function instead. 
+	 */
 	@Override
 	@Deprecated
 	public default void set(CLASS_TYPE e) {
@@ -56,9 +56,9 @@ public interface LIST_ITERATOR KEY_GENERIC_TYPE extends ListIterator<CLASS_TYPE>
 	}
 	
 	/** {@inheritDoc}
- 	* <p>This default implementation delegates to the corresponding type-specific function.
- 	* @deprecated Please use the corresponding type-specific function instead. 
- 	*/
+	 * <p>This default implementation delegates to the corresponding type-specific function.
+	 * @deprecated Please use the corresponding type-specific function instead. 
+	 */
 	@Override
 	@Deprecated
 	public default void add(CLASS_TYPE e) {

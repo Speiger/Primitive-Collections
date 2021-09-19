@@ -352,7 +352,7 @@ public class LINKED_LIST KEY_GENERIC_TYPE extends ABSTRACT_LIST KEY_GENERIC_TYPE
 		for(int i = size-1;entry != null;entry = entry.prev) {
 			if(KEY_EQUALS(entry.value, e)) return i;
 		}
-		return -1;	
+		return -1;
 	}
 	
 #endif
@@ -640,7 +640,7 @@ public class LINKED_LIST KEY_GENERIC_TYPE extends ABSTRACT_LIST KEY_GENERIC_TYPE
 		size = j;
 		return modified;
 	}
-
+	
 	@Override
 	@Primitive
 	public boolean retainAll(Collection<?> c) {
@@ -665,7 +665,7 @@ public class LINKED_LIST KEY_GENERIC_TYPE extends ABSTRACT_LIST KEY_GENERIC_TYPE
 		size = j;
 		return modified;
 	}
-
+	
 	@Override
 	public boolean removeAll(COLLECTION KEY_GENERIC_TYPE c) {
 		if(c.isEmpty()) return false;
@@ -685,7 +685,7 @@ public class LINKED_LIST KEY_GENERIC_TYPE extends ABSTRACT_LIST KEY_GENERIC_TYPE
 		size = j;
 		return modified;
 	}
-
+	
 	@Override
 	public boolean retainAll(COLLECTION KEY_GENERIC_TYPE c) {
 		if(c.isEmpty()) {
@@ -877,7 +877,6 @@ public class LINKED_LIST KEY_GENERIC_TYPE extends ABSTRACT_LIST KEY_GENERIC_TYPE
 #if TYPE_OBJECT
 		x.value = null;
 #endif
-
 		if (prev == null) first = next;
 		else {
 			prev.next = next;
@@ -930,22 +929,22 @@ public class LINKED_LIST KEY_GENERIC_TYPE extends ABSTRACT_LIST KEY_GENERIC_TYPE
 		public boolean hasNext() {
 			return node != null;
 		}
-
+		
 		@Override
 		public boolean hasPrevious() {
 			return node != null;
 		}
-
+		
 		@Override
 		public int nextIndex() {
 			return index;
 		}
-
+		
 		@Override
 		public int previousIndex() {
 			return index-1;
 		}
-
+		
 		@Override
 		public void remove() {
 			if(lastReturned == null) throw new IllegalStateException();
@@ -953,7 +952,7 @@ public class LINKED_LIST KEY_GENERIC_TYPE extends ABSTRACT_LIST KEY_GENERIC_TYPE
 			unlink(lastReturned);
 			lastReturned = null;
 		}
-
+		
 		@Override
 		public KEY_TYPE PREVIOUS() {
 			lastReturned = node;
@@ -961,7 +960,7 @@ public class LINKED_LIST KEY_GENERIC_TYPE extends ABSTRACT_LIST KEY_GENERIC_TYPE
 			index--;
 			return lastReturned.value;
 		}
-
+		
 		@Override
 		public KEY_TYPE NEXT() {
 			lastReturned = node;
@@ -969,13 +968,13 @@ public class LINKED_LIST KEY_GENERIC_TYPE extends ABSTRACT_LIST KEY_GENERIC_TYPE
 			index++;
 			return lastReturned.value;
 		}
-
+		
 		@Override
 		public void set(KEY_TYPE e) {
 			if(lastReturned == null) throw new IllegalStateException();
 			lastReturned.value = e;
 		}
-
+		
 		@Override
 		public void add(KEY_TYPE e) {
 			if(lastReturned == null) throw new IllegalStateException();
@@ -988,8 +987,8 @@ public class LINKED_LIST KEY_GENERIC_TYPE extends ABSTRACT_LIST KEY_GENERIC_TYPE
 	
 	private static class TypeSplitIterator KEY_GENERIC_TYPE implements SPLIT_ITERATOR KEY_GENERIC_TYPE 
 	{
-        static final int BATCH_UNIT = 1 << 10;
-        static final int MAX_BATCH = 1 << 25;
+		static final int BATCH_UNIT = 1 << 10;
+		static final int MAX_BATCH = 1 << 25;
 		LINKED_LIST KEY_GENERIC_TYPE list;
 		Entry KEY_GENERIC_TYPE entry;
 		int index;
@@ -1049,7 +1048,7 @@ public class LINKED_LIST KEY_GENERIC_TYPE extends ABSTRACT_LIST KEY_GENERIC_TYPE
 		
 		@Override
 		public int characteristics() {
-            return Spliterator.ORDERED | Spliterator.SIZED | Spliterator.SUBSIZED;
+			return Spliterator.ORDERED | Spliterator.SIZED | Spliterator.SUBSIZED;
 		}
 		
 		@Override
@@ -1069,9 +1068,9 @@ public class LINKED_LIST KEY_GENERIC_TYPE extends ABSTRACT_LIST KEY_GENERIC_TYPE
 #if PRIMITIVES
 	private static class SplitIterator KEY_GENERIC_TYPE implements JAVA_SPLIT_ITERATOR KEY_GENERIC_TYPE
 	{
-        static final int BATCH_UNIT = 1 << 10;
-        static final int MAX_BATCH = 1 << 25;
-        LINKED_LIST KEY_GENERIC_TYPE list;
+		static final int BATCH_UNIT = 1 << 10;
+		static final int MAX_BATCH = 1 << 25;
+		LINKED_LIST KEY_GENERIC_TYPE list;
 		Entry entry;
 		int index;
 		
@@ -1115,7 +1114,7 @@ public class LINKED_LIST KEY_GENERIC_TYPE extends ABSTRACT_LIST KEY_GENERIC_TYPE
 		
 		@Override
 		public int characteristics() {
-            return Spliterator.ORDERED | Spliterator.SIZED | Spliterator.SUBSIZED;
+			return Spliterator.ORDERED | Spliterator.SIZED | Spliterator.SUBSIZED;
 		}
 		
 		public KEY_TYPE next() {

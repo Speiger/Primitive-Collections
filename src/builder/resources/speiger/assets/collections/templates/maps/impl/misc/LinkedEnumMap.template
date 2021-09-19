@@ -50,10 +50,10 @@ public class LINKED_ENUM_MAP KEY_ENUM_VALUE_GENERIC_TYPE extends ENUM_MAP KEY_VA
 	protected int firstIndex = -1;
 	/** The Last Index in the Map */
 	protected int lastIndex = -1;
-    /**
-     * Default Constructor
-     * @param keyType the type of Enum that should be used
-     */
+	/**
+	 * Default Constructor
+	 * @param keyType the type of Enum that should be used
+	 */
 	public LINKED_ENUM_MAP(Class<T> keyType) {
 		super(keyType);
 		links = new long[keys.length];

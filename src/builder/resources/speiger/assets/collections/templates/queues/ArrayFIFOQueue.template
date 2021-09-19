@@ -25,8 +25,8 @@ import speiger.src.collections.utils.ITrimmable;
 public class ARRAY_FIFO_QUEUE KEY_GENERIC_TYPE implements PRIORITY_DEQUEUE KEY_GENERIC_TYPE, ITrimmable
 {
 	/** Max Possible ArraySize without the JVM Crashing */
-    private static final int MAX_ARRAY_SIZE = Integer.MAX_VALUE - 8;
-    /** The Minimum Capacity that is allowed */
+	private static final int MAX_ARRAY_SIZE = Integer.MAX_VALUE - 8;
+	/** The Minimum Capacity that is allowed */
 	public static final int MIN_CAPACITY = 4;
 	/** The Backing array */
 	protected transient KEY_TYPE[] array;

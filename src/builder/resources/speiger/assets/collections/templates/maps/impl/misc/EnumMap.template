@@ -28,26 +28,26 @@ import speiger.src.collections.objects.sets.ObjectSet;
 public class ENUM_MAP KEY_ENUM_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_VALUE_GENERIC_TYPE
 {
 	/** Enum Type that is being used */
-    protected final Class<T> keyType;
+	protected final Class<T> keyType;
 	/** The Backing keys array. */
-    protected transient final T[] keys;
+	protected transient final T[] keys;
 	/** The Backing values array */
-    protected transient final VALUE_TYPE[] values;
+	protected transient final VALUE_TYPE[] values;
 	/** The Backing array that indicates which index is present or not */
-    protected transient final long[] present;
+	protected transient final long[] present;
 	/** Amount of Elements stored in the ArrayMap */
-    protected int size = 0;
+	protected int size = 0;
 	/** EntrySet cache */
-    protected transient ObjectSet<MAP.Entry KEY_VALUE_GENERIC_TYPE> entrySet;
+	protected transient ObjectSet<MAP.Entry KEY_VALUE_GENERIC_TYPE> entrySet;
 	/** KeySet cache */
-    protected transient ObjectSet<T> keySet;
+	protected transient ObjectSet<T> keySet;
 	/** Values cache */
-    protected transient VALUE_COLLECTION VALUE_GENERIC_TYPE valuesC;
+	protected transient VALUE_COLLECTION VALUE_GENERIC_TYPE valuesC;
 	
-    /**
-     * Default Constructor
-     * @param keyType the type of Enum that should be used
-     */
+	/**
+	 * Default Constructor
+	 * @param keyType the type of Enum that should be used
+	 */
 	public ENUM_MAP(Class<T> keyType) {
 		this.keyType = keyType;
 		keys = getKeyUniverse(keyType);
@@ -219,32 +219,32 @@ public class ENUM_MAP KEY_ENUM_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_VALUE
 		onNodeRemoved(index);
 	}
 	protected boolean isSet(int index) { return (present[index >> 6] & (1L << index)) != 0; }
-    
+	
 	private static <K extends Enum<K>> K[] getKeyUniverse(Class<K> keyType) {
 		return keyType.getEnumConstants();
-    }
-    
-    class EntrySet extends AbstractObjectSet<MAP.Entry KEY_VALUE_GENERIC_TYPE> {
-    	
-    	@Override
-    	public boolean contains(Object o) {
-    		if(o instanceof Map.Entry) return containsKey(((Map.Entry<?, ?>)o).getKey());
-    		return false;
-    	}
-    	
-    	@Override
-    	public boolean remove(Object o) {
-    		if(o instanceof Map.Entry) {
-    			if(o instanceof MAP.Entry) {
-    				MAP.Entry KEY_VALUE_GENERIC_TYPE entry = (MAP.Entry KEY_VALUE_GENERIC_TYPE)o;
-    				return ENUM_MAP.this.remove(entry.getKey(), entry.ENTRY_VALUE());
-    			}
-    			Map.Entry<?, ?> entry = (java.util.Map.Entry<?, ?>)o;
-    			return ENUM_MAP.this.remove(entry.getKey(), entry.getValue());
-    		}
-    		return false;
-    	}
-    	
+	}
+	
+	class EntrySet extends AbstractObjectSet<MAP.Entry KEY_VALUE_GENERIC_TYPE> {
+		
+		@Override
+		public boolean contains(Object o) {
+			if(o instanceof Map.Entry) return containsKey(((Map.Entry<?, ?>)o).getKey());
+			return false;
+		}
+		
+		@Override
+		public boolean remove(Object o) {
+			if(o instanceof Map.Entry) {
+				if(o instanceof MAP.Entry) {
+					MAP.Entry KEY_VALUE_GENERIC_TYPE entry = (MAP.Entry KEY_VALUE_GENERIC_TYPE)o;
+					return ENUM_MAP.this.remove(entry.getKey(), entry.ENTRY_VALUE());
+				}
+				Map.Entry<?, ?> entry = (java.util.Map.Entry<?, ?>)o;
+				return ENUM_MAP.this.remove(entry.getKey(), entry.getValue());
+			}
+			return false;
+		}
+		
 		@Override
 		public ObjectIterator<MAP.Entry KEY_VALUE_GENERIC_TYPE> iterator() {
 			return new EntryIterator();
@@ -259,22 +259,22 @@ public class ENUM_MAP KEY_ENUM_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_VALUE
 		public void clear() {
 			ENUM_MAP.this.clear();
 		}
-    }
-    
-    class KeySet extends AbstractObjectSet<T> {
-    	
-    	@Override
-    	public boolean contains(Object o) {
-    		return containsKey(o);
-    	}
-    	
-    	@Override
-    	public boolean remove(Object o) {
-    		int size = size();
-    		ENUM_MAP.this.remove(o);
-    		return size != size();
-    	}
-    	
+	}
+	
+	class KeySet extends AbstractObjectSet<T> {
+		
+		@Override
+		public boolean contains(Object o) {
+			return containsKey(o);
+		}
+		
+		@Override
+		public boolean remove(Object o) {
+			int size = size();
+			ENUM_MAP.this.remove(o);
+			return size != size();
+		}
+		
 		@Override
 		public ObjectIterator<T> iterator() {
 			return new KeyIterator();
@@ -284,14 +284,14 @@ public class ENUM_MAP KEY_ENUM_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_VALUE
 		public int size() {
 			return ENUM_MAP.this.size();
 		}
-    	
+		
 		@Override
 		public void clear() {
 			ENUM_MAP.this.clear();
 		}
-    }
-    
-    class Values extends VALUE_ABSTRACT_COLLECTION VALUE_GENERIC_TYPE {
+	}
+	
+	class Values extends VALUE_ABSTRACT_COLLECTION VALUE_GENERIC_TYPE {
 
 		@Override
 		public boolean add(VALUE_TYPE o) { throw new UnsupportedOperationException(); }
@@ -314,40 +314,40 @@ public class ENUM_MAP KEY_ENUM_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_VALUE
 		public int size() {
 			return ENUM_MAP.this.size();
 		}
-    	
+		
 		@Override
 		public void clear() {
 			ENUM_MAP.this.clear();
 		}
-    }
-    
-    class EntryIterator extends MapIterator implements ObjectIterator<MAP.Entry KEY_VALUE_GENERIC_TYPE> {
+	}
+	
+	class EntryIterator extends MapIterator implements ObjectIterator<MAP.Entry KEY_VALUE_GENERIC_TYPE> {
 		@Override
 		public MAP.Entry KEY_VALUE_GENERIC_TYPE next() {
 			int index = nextEntry();
 			return new BasicEntry<>(keys[index], values[index]);
 		}
-    }
-    
-    class KeyIterator extends MapIterator implements ObjectIterator<T> {
+	}
+	
+	class KeyIterator extends MapIterator implements ObjectIterator<T> {
 		@Override
 		public T next() {
 			return keys[nextEntry()];
 		}
-    }
-    
-    class ValueIterator extends MapIterator implements VALUE_ITERATOR VALUE_GENERIC_TYPE {
+	}
+	
+	class ValueIterator extends MapIterator implements VALUE_ITERATOR VALUE_GENERIC_TYPE {
 		@Override
 		public VALUE_TYPE VALUE_NEXT() {
 			return values[nextEntry()];
 		}
-    }
-    
-    class MapIterator {
-    	int index;
-    	int lastReturnValue = -1;
-    	int nextIndex = -1;
-    	
+	}
+	
+	class MapIterator {
+		int index;
+		int lastReturnValue = -1;
+		int nextIndex = -1;
+		
 		public boolean hasNext() {
 			if(nextIndex == -1 && index < values.length) {
 				while(index < values.length && !isSet(index++));
@@ -368,5 +368,5 @@ public class ENUM_MAP KEY_ENUM_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_VALUE
 			clear(lastReturnValue);
 			values[lastReturnValue] = EMPTY_VALUE;
 		}
-    }
+	}
 }

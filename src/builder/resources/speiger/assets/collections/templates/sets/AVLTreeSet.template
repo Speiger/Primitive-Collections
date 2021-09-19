@@ -748,7 +748,7 @@ public class AVL_TREE_SET KEY_GENERIC_TYPE extends ABSTRACT_SET KEY_GENERIC_TYPE
 		}
 		
 		protected Entry KEY_GENERIC_TYPE next(Entry KEY_GENERIC_TYPE entry) { return entry.previous(); }
-        protected Entry KEY_GENERIC_TYPE start() { return findHighest(); }
+		protected Entry KEY_GENERIC_TYPE start() { return findHighest(); }
 		
 		@Override
 		public KEY_TYPE FIRST_KEY() { return super.LAST_KEY(); }
@@ -816,13 +816,13 @@ public class AVL_TREE_SET KEY_GENERIC_TYPE extends ABSTRACT_SET KEY_GENERIC_TYPE
 		AVL_TREE_SET KEY_GENERIC_TYPE set;
 		KEY_TYPE start;
 		KEY_TYPE end;
-        boolean fromStart;
-        boolean toEnd;
-        boolean loInclusive;
-        boolean hiInclusive;
+		boolean fromStart;
+		boolean toEnd;
+		boolean loInclusive;
+		boolean hiInclusive;
 		
-        SubSet(AVL_TREE_SET KEY_GENERIC_TYPE set, boolean fromStart, KEY_TYPE start, boolean loInclusive, boolean toEnd, KEY_TYPE end, boolean hiInclusive) {
-        	this.set = set;
+		SubSet(AVL_TREE_SET KEY_GENERIC_TYPE set, boolean fromStart, KEY_TYPE start, boolean loInclusive, boolean toEnd, KEY_TYPE end, boolean hiInclusive) {
+			this.set = set;
 			this.start = start;
 			this.end = end;
 			this.fromStart = fromStart;
@@ -830,7 +830,7 @@ public class AVL_TREE_SET KEY_GENERIC_TYPE extends ABSTRACT_SET KEY_GENERIC_TYPE
 			this.loInclusive = loInclusive;
 			this.hiInclusive = hiInclusive;
 		}
-        
+		
 #if !TYPE_OBJECT
 		@Override
 		public void setDefaultMaxValue(KEY_TYPE value) { throw new UnsupportedOperationException(); }
@@ -851,13 +851,13 @@ public class AVL_TREE_SET KEY_GENERIC_TYPE extends ABSTRACT_SET KEY_GENERIC_TYPE
 		
 #endif
 		boolean tooLow(KEY_TYPE key) { return !fromStart && (loInclusive ? set.compare(key, start) < 0 : set.compare(key, start) <= 0); }
-        boolean tooHigh(KEY_TYPE key) { return !toEnd && (hiInclusive ? set.compare(key, end) > 0 : set.compare(key, end) >= 0); }
-        boolean inRange(KEY_TYPE key) { return !tooLow(key) && !tooHigh(key); }
-        boolean inClosedRange(KEY_TYPE key) { return (fromStart || set.compare(key, start) >= 0) && (toEnd || set.compare(end, key) >= 0); }
-        boolean inRange(KEY_TYPE key, boolean inclusive) { return inclusive ? inRange(key) : inClosedRange(key); }
-        protected Entry KEY_GENERIC_TYPE next(Entry KEY_GENERIC_TYPE entry) { return entry.next(); }
-        protected Entry KEY_GENERIC_TYPE start() { return findLowest(); }
-        
+		boolean tooHigh(KEY_TYPE key) { return !toEnd && (hiInclusive ? set.compare(key, end) > 0 : set.compare(key, end) >= 0); }
+		boolean inRange(KEY_TYPE key) { return !tooLow(key) && !tooHigh(key); }
+		boolean inClosedRange(KEY_TYPE key) { return (fromStart || set.compare(key, start) >= 0) && (toEnd || set.compare(end, key) >= 0); }
+		boolean inRange(KEY_TYPE key, boolean inclusive) { return inclusive ? inRange(key) : inClosedRange(key); }
+		protected Entry KEY_GENERIC_TYPE next(Entry KEY_GENERIC_TYPE entry) { return entry.next(); }
+		protected Entry KEY_GENERIC_TYPE start() { return findLowest(); }
+		
 		@Override
 		public boolean addAndMoveToFirst(KEY_TYPE o) { throw new UnsupportedOperationException(); }
 		

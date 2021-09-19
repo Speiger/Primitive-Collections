@@ -97,7 +97,7 @@ public interface COLLECTION KEY_GENERIC_TYPE extends Collection<CLASS_TYPE>, ITE
 #if !TYPE_OBJECT
 	/**
 	 * A Type-Specific toArray function that delegates to {@link #TO_ARRAY(KEY_TYPE[])} with a newly created array.
-     * @return an array containing all of the elements in this collection
+	 * @return an array containing all of the elements in this collection
 	 * @see Collection#toArray()
 	 */
 	public KEY_TYPE[] TO_ARRAY();
@@ -105,8 +105,8 @@ public interface COLLECTION KEY_GENERIC_TYPE extends Collection<CLASS_TYPE>, ITE
 	/**
 	 * A Type-Specific toArray function that reduces (un)boxing.
 	 * @param a array that the elements should be injected to. If null or to small a new array with the right size is created
-     * @return an array containing all of the elements in this collection
-     * @see Collection#toArray(Object[])
+	 * @return an array containing all of the elements in this collection
+	 * @see Collection#toArray(Object[])
 	 */
 	public KEY_TYPE[] TO_ARRAY(KEY_TYPE[] a);
 	
@@ -135,16 +135,16 @@ public interface COLLECTION KEY_GENERIC_TYPE extends Collection<CLASS_TYPE>, ITE
 	 * @throws java.lang.NullPointerException if filter is null
 	 */
 	public default boolean remIf(JAVA_PREDICATE filter) {
-    	Objects.requireNonNull(filter);
-    	boolean removed = false;
-    	final ITERATOR each = iterator();
-    	while (each.hasNext()) {
-    		if (filter.test(each.NEXT())) {
-    			each.remove();
-    			removed = true;
-    		}
-    	}
-    	return removed;
+		Objects.requireNonNull(filter);
+		boolean removed = false;
+		final ITERATOR each = iterator();
+		while (each.hasNext()) {
+			if (filter.test(each.NEXT())) {
+				each.remove();
+				removed = true;
+			}
+		}
+		return removed;
 	}
 	
 #endif
@@ -164,7 +164,7 @@ public interface COLLECTION KEY_GENERIC_TYPE extends Collection<CLASS_TYPE>, ITE
 	@Deprecated
 	public default boolean contains(Object o) { return o != null && contains(CLASS_TO_KEY(o)); }
 	
- 	/** {@inheritDoc}
+	/** {@inheritDoc}
  	 * <p>This default implementation delegates to the corresponding type-specific function.
  	 * @deprecated Please use the corresponding type-specific function instead. 
  	 */

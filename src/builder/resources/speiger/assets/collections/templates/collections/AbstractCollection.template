@@ -187,7 +187,7 @@ public abstract class ABSTRACT_COLLECTION KEY_GENERIC_TYPE extends AbstractColle
 #if !TYPE_OBJECT
 	/**
 	 * A Type-Specific implementation of toArray that links to {@link #TO_ARRAY(KEY_TYPE[])} with a newly created array.
-     * @return an array containing all of the elements in this collection
+	 * @return an array containing all of the elements in this collection
 	 */
 	@Override
 	public KEY_TYPE[] TO_ARRAY() {
@@ -197,7 +197,7 @@ public abstract class ABSTRACT_COLLECTION KEY_GENERIC_TYPE extends AbstractColle
 	/**
 	 * A Type-Specific implementation of toArray. This implementation iterates over all elements and unwraps them into primitive type.
 	 * @param a array that the elements should be injected to. If null or to small a new array with the right size is created
-     * @return an array containing all of the elements in this collection
+	 * @return an array containing all of the elements in this collection
 	 */
 	@Override
 	public KEY_TYPE[] TO_ARRAY(KEY_TYPE[] a) {

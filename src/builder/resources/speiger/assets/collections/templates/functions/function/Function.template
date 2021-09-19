@@ -34,15 +34,15 @@ public interface FUNCTION KEY_VALUE_GENERIC_TYPE
 	 * @return a function that compares values in a and comparason
 	 */
 	public default FUNCTION KEY_VALUE_GENERIC_TYPE andType(FUNCTION KEY_VALUE_GENERIC_TYPE other) {
-        Objects.requireNonNull(other);
-        return T -> GET_VALUE(T) && other.GET_VALUE(T);
+		Objects.requireNonNull(other);
+		return T -> GET_VALUE(T) && other.GET_VALUE(T);
 	}
 	
 	@Override
 	@Deprecated
 	public default FUNCTION KEY_VALUE_GENERIC_TYPE and(JAVA_FUNCTION KEY_VALUE_SUPER_GENERIC_TYPE other) {
-        Objects.requireNonNull(other);
-        return T -> GET_VALUE(T) && other.test(T);
+		Objects.requireNonNull(other);
+		return T -> GET_VALUE(T) && other.test(T);
 	}
 	
 	@Override
@@ -56,15 +56,15 @@ public interface FUNCTION KEY_VALUE_GENERIC_TYPE
 	 * @return a function that compares values in a or comparason
 	 */
 	public default FUNCTION KEY_VALUE_GENERIC_TYPE orType(FUNCTION KEY_VALUE_GENERIC_TYPE other) {
-        Objects.requireNonNull(other);
-        return T -> GET_VALUE(T) || other.GET_VALUE(T);
+		Objects.requireNonNull(other);
+		return T -> GET_VALUE(T) || other.GET_VALUE(T);
 	}
 	
 	@Override
 	@Deprecated
 	public default FUNCTION KEY_VALUE_GENERIC_TYPE or(JAVA_FUNCTION KEY_VALUE_SUPER_GENERIC_TYPE other) {
-        Objects.requireNonNull(other);
-        return T -> GET_VALUE(T) || other.test(T);
+		Objects.requireNonNull(other);
+		return T -> GET_VALUE(T) || other.test(T);
 	}
 #else if VALUE_OBJECT
 	

@@ -560,11 +560,11 @@ public class ARRAYS
 	public static GENERIC_KEY_BRACES void insertionSort(KEY_TYPE[] array, int from, int to) {
 		for (int i = from+1;i<to; i++) {
 			KEY_TYPE current = array[i];
-    		int j = i - 1;
-    		while(j >= from && COMPAREABLE_TO_KEY(current, array[j]) < 0) {
-    			array[j+1] = array[j--];
-    		}
-    		array[j+1] = current;
+			int j = i - 1;
+			while(j >= from && COMPAREABLE_TO_KEY(current, array[j]) < 0) {
+				array[j+1] = array[j--];
+			}
+			array[j+1] = current;
 		}
 	}
 	
@@ -598,19 +598,19 @@ public class ARRAYS
 	 * @ArrayType(T)
 	 */
 	public static GENERIC_KEY_BRACES void selectionSort(KEY_TYPE[] array, int from, int to, COMPARATOR KEY_GENERIC_TYPE comp) {
-    	for (int i = from; i < to; i++) {
-    		KEY_TYPE min = array[i];
-        	int minId = i;
-        	for(int j = i+1; j < to; j++) {
-            	if(comp.compare(array[j], min) < 0) {
-                	min = array[j];
-                	minId = j;
-            	}
-        	}
-        	KEY_TYPE temp = array[i];
-        	array[i] = min;
-        	array[minId] = temp;
-    	}
+		for (int i = from; i < to; i++) {
+			KEY_TYPE min = array[i];
+			int minId = i;
+			for(int j = i+1; j < to; j++) {
+				if(comp.compare(array[j], min) < 0) {
+					min = array[j];
+					minId = j;
+				}
+			}
+			KEY_TYPE temp = array[i];
+			array[i] = min;
+			array[minId] = temp;
+		}
 	}
 	
 	/**
@@ -640,19 +640,19 @@ public class ARRAYS
 	 * @ArrayType(T)
 	 */
 	public static GENERIC_KEY_BRACES void selectionSort(KEY_TYPE[] array, int from, int to) {
-    	for (int i = from; i < to; i++) {
-    		KEY_TYPE min = array[i];
-        	int minId = i;
-        	for(int j = i+1; j < to; j++) {
-            	if(COMPAREABLE_TO_KEY(array[j], min) < 0) {
-                	min = array[j];
-                	minId = j;
-            	}
-        	}
-        	KEY_TYPE temp = array[i];
-        	array[i] = min;
-        	array[minId] = temp;
-    	}
+		for (int i = from; i < to; i++) {
+			KEY_TYPE min = array[i];
+			int minId = i;
+			for(int j = i+1; j < to; j++) {
+				if(COMPAREABLE_TO_KEY(array[j], min) < 0) {
+					min = array[j];
+					minId = j;
+				}
+			}
+			KEY_TYPE temp = array[i];
+			array[i] = min;
+			array[minId] = temp;
+		}
 	}
 	
 	/**
@@ -1431,7 +1431,7 @@ public class ARRAYS
 			}
 			if(supp == null) supp = Arrays.copyOf(array, to);
 			int mid = (from + to) >>> 1;
-            invokeAll(new MergeSortActionBRACES(supp, array, from, mid), new MergeSortActionBRACES(supp, array, mid, to));
+			invokeAll(new MergeSortActionBRACES(supp, array, from, mid), new MergeSortActionBRACES(supp, array, mid, to));
 			if(COMPAREABLE_TO_KEY(supp[mid - 1], supp[mid]) <= 0)
 			{
 				System.arraycopy(supp, from, array, from, to - from);
@@ -1470,7 +1470,7 @@ public class ARRAYS
 			}
 			if(supp == null) supp = Arrays.copyOf(array, to);
 			int mid = (from + to) >>> 1;
-            invokeAll(new MergeSortActionCompBRACES(supp, array, from, mid, comp), new MergeSortActionCompBRACES(supp, array, mid, to, comp));
+			invokeAll(new MergeSortActionCompBRACES(supp, array, from, mid, comp), new MergeSortActionCompBRACES(supp, array, mid, to, comp));
 			if(comp.compare(supp[mid - 1], supp[mid]) <= 0)
 			{
 				System.arraycopy(supp, from, array, from, to - from);

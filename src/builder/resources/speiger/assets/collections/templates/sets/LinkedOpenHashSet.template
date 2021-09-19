@@ -589,8 +589,8 @@ public class LINKED_HASH_SET KEY_GENERIC_TYPE extends HASH_SET KEY_GENERIC_TYPE 
 		SetIterator(KEY_TYPE from) {
 			if(KEY_EQUALS_NULL(from)) {
 				if(containsNull) {
-				    next = (int) links[nullIndex];
-				    previous = nullIndex;
+					next = (int) links[nullIndex];
+					previous = nullIndex;
 				}
 				else throw new NoSuchElementException("The null element is not in the set");
 			}

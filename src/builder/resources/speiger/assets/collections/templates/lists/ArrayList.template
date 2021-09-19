@@ -572,17 +572,17 @@ public class ARRAY_LIST KEY_GENERIC_TYPE extends ABSTRACT_LIST KEY_GENERIC_TYPE 
 	/**
 	 * A Type Specific foreach function that reduces (un)boxing
 	 * 
-     * @implSpec
-     * <p>The default implementation behaves as if:
-     * <pre>{@code
-     *     for(int i = 0;i<size;i++)
-     *     		action.accept(data[i]);
-     * }</pre>
-     *
-     * @param action The action to be performed for each element
-     * @throws NullPointerException if the specified action is null
-     * @see Iterable#forEach(java.util.function.Consumer)
-     */
+	 * @implSpec
+	 * <p>The default implementation behaves as if:
+	 * <pre>{@code
+	 * 	for(int i = 0;i<size;i++)
+	 *		action.accept(data[i]);
+	 * }</pre>
+	 *
+	 * @param action The action to be performed for each element
+	 * @throws NullPointerException if the specified action is null
+	 * @see Iterable#forEach(java.util.function.Consumer)
+	 */
 	@Override
 	public void forEach(CONSUMER KEY_SUPER_GENERIC_TYPE action) {
 		Objects.requireNonNull(action);

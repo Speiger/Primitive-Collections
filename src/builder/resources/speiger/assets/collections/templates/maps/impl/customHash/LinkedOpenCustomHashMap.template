@@ -1175,8 +1175,8 @@ public class LINKED_CUSTOM_HASH_MAP KEY_VALUE_GENERIC_TYPE extends CUSTOM_HASH_M
 		MapIterator(KEY_TYPE from) {
 			if(strategy.equals(from, EMPTY_KEY_VALUE)) {
 				if(containsNull) {
-				    next = (int) links[nullIndex];
-				    previous = nullIndex;
+					next = (int) links[nullIndex];
+					previous = nullIndex;
 				}
 				else throw new NoSuchElementException("The null element is not in the set");
 			}

@@ -514,7 +514,7 @@ public class ARRAY_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_VALUE_GEN
 	
 	@Override
 	public void BULK_MERGE(MAP KEY_VALUE_GENERIC_TYPE m, VALUE_UNARY_OPERATOR VALUE_VALUE_GENERIC_TYPE mappingFunction) {
-	    Objects.requireNonNull(mappingFunction);
+		Objects.requireNonNull(mappingFunction);
 		for(MAP.Entry KEY_VALUE_GENERIC_TYPE entry : MAPS.fastIterable(m)) {
 			KEY_TYPE key = entry.ENTRY_KEY();
 			int index = findIndex(key);
@@ -954,7 +954,7 @@ public class ARRAY_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_VALUE_GEN
 			if(keySet == null) keySet = new SubKeySet();
 			return keySet;
 		}
-
+		
 		@Override
 		public VALUE_COLLECTION VALUE_GENERIC_TYPE values() {
 			if(valuesC == null) valuesC = new SubValues();
@@ -966,12 +966,12 @@ public class ARRAY_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_VALUE_GEN
 			if(entrySet == null) entrySet = new SubMapEntrySet();
 			return entrySet;
 		}
-
+		
 		@Override
 		public COMPARATOR KEY_GENERIC_TYPE comparator() {
 			return null;
 		}
-
+		
 		@Override
 		public SORTED_MAP KEY_VALUE_GENERIC_TYPE subMap(KEY_TYPE fromKey, KEY_TYPE toKey) {
 			int fromIndex = findIndex(fromKey);

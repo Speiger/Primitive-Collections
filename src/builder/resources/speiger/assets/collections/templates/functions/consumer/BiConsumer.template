@@ -10,13 +10,13 @@ import java.util.function.BiConsumer;
  */
 public interface BI_CONSUMER KEY_VALUE_GENERIC_TYPE extends BiConsumer<CLASS_TYPE, CLASS_VALUE_TYPE>
 {
-    /**
-     * A Type Specific operation method to reduce boxing/unboxing
-     * Performs this operation on the given arguments.
-     *
-     * @param k the first input argument
-     * @param v the second input argument
-     */
+	/**
+	 * A Type Specific operation method to reduce boxing/unboxing
+	 * Performs this operation on the given arguments.
+	 *
+	 * @param k the first input argument
+	 * @param v the second input argument
+	 */
 	void accept(KEY_TYPE k, VALUE_TYPE v);
 	
 	/**
