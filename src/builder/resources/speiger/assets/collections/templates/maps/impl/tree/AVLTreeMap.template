@@ -1023,13 +1023,13 @@ public class AVL_TREE_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_VALUE_
 		public MAP.Entry KEY_VALUE_GENERIC_TYPE higherEntry(KEY_TYPE e) { return super.lowerEntry(e); }
 		
 		protected AVL_TREE_MAP.Entry KEY_VALUE_GENERIC_TYPE findLowest() {
-			if(fromStart) return m.last;
+			if(fromStart) return m.first;
 			AVL_TREE_MAP.Entry KEY_VALUE_GENERIC_TYPE entry = loInclusive ? m.findFloorNode(high) : m.findLowerNode(high);
 			return entry == null || tooHigh(entry.key) ? null : entry;
 		}
 		
 		protected AVL_TREE_MAP.Entry KEY_VALUE_GENERIC_TYPE findHighest() {
-			if(toEnd) return m.first;
+			if(toEnd) return m.last;
 			AVL_TREE_MAP.Entry KEY_VALUE_GENERIC_TYPE entry = hiInclusive ? m.findCeilingNode(low) : m.findHigherNode(low);
 			return entry == null || tooLow(entry.key) ? null : entry;
 		}

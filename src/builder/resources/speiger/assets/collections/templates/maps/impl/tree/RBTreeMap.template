@@ -1077,14 +1077,14 @@ public class RB_TREE_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_VALUE_G
 		public MAP.Entry KEY_VALUE_GENERIC_TYPE higherEntry(KEY_TYPE e) { return super.lowerEntry(e); }
 		
 		protected RB_TREE_MAP.Entry KEY_VALUE_GENERIC_TYPE findLowest() {
-			if(fromStart) return m.last;
-			RB_TREE_MAP.Entry KEY_VALUE_GENERIC_TYPE entry = loInclusive ? m.findFloorNode(high) : m.findLowerNode(high);
+			if(fromStart) return m.first;
+			RB_TREE_MAP.Entry KEY_VALUE_GENERIC_TYPE entry = loInclusive ? m.findCeilingNode(low) : m.findHigherNode(low);
 			return entry == null || tooHigh(entry.key) ? null : entry;
 		}
 
 		protected RB_TREE_MAP.Entry KEY_VALUE_GENERIC_TYPE findHighest() {
-			if(toEnd) return m.first;
-			RB_TREE_MAP.Entry KEY_VALUE_GENERIC_TYPE entry = hiInclusive ? m.findCeilingNode(low) : m.findHigherNode(low);
+			if(toEnd) return m.last;
+			RB_TREE_MAP.Entry KEY_VALUE_GENERIC_TYPE entry = hiInclusive ? m.findFloorNode(high) : m.findLowerNode(high);
 			return entry == null || tooLow(entry.key) ? null : entry;
 		}
 		

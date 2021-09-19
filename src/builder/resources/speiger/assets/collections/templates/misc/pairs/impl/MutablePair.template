@@ -1,6 +1,12 @@
 package speiger.src.collections.PACKAGE.misc.pairs.impl;
 
+#if TYPE_OBJECT || VALUE_OBJECT
+import java.util.Objects;
+#endif
+
 import speiger.src.collections.PACKAGE.misc.pairs.PAIR;
+
+
 
 /**
  * Mutable Pair Implementation that
