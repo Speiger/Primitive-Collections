@@ -1,0 +1,61 @@
+package speiger.src.collections.PACKAGE.misc.pairs.impl;
+
+import speiger.src.collections.PACKAGE.misc.pairs.PAIR;
+
+/**
+ * Mutable Pair Implementation that
+ * @Type(T)
+ * @ValueType(V)
+ */
+public class IMMUTABLE_PAIR KEY_VALUE_GENERIC_TYPE implements PAIR KEY_VALUE_GENERIC_TYPE
+{
+	protected final KEY_TYPE key;
+	protected final VALUE_TYPE value;
+	
+	/**
+	 * Default Constructor
+	 */
+	public IMMUTABLE_PAIR() {
+		this(EMPTY_KEY_VALUE, EMPTY_VALUE);
+	}
+	
+	/**
+	 * Key/Value Constructur
+	 * @param key the key of the Pair
+	 * @param value the value of the Pair
+	 */
+	public IMMUTABLE_PAIR(KEY_TYPE key, VALUE_TYPE value) {
+		this.key = key;
+		this.value = value;
+	}
+	
+	@Override
+	public PAIR KEY_VALUE_GENERIC_TYPE KEY_ENTRY(KEY_TYPE key) {
+		return new IMMUTABLE_PAIRKV_BRACES(key, value);
+	}
+	
+	@Override
+	public KEY_TYPE ENTRY_KEY() {
+		return key;
+	}
+	
+	@Override
+	public PAIR KEY_VALUE_GENERIC_TYPE VALUE_ENTRY(VALUE_TYPE value) {
+		return new IMMUTABLE_PAIRKV_BRACES(key, value);
+	}
+	
+	@Override
+	public VALUE_TYPE ENTRY_VALUE() {
+		return value;
+	}
+	
+	@Override
+	public PAIR KEY_VALUE_GENERIC_TYPE set(KEY_TYPE key, VALUE_TYPE value) {
+		return new IMMUTABLE_PAIRKV_BRACES(key, value);
+	}
+	
+	@Override
+	public PAIR KEY_VALUE_GENERIC_TYPE shallowCopy() {
+		return this;
+	}
+}

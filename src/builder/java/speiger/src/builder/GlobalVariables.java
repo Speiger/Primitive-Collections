@@ -175,6 +175,8 @@ public class GlobalVariables
 		addFunctionValueMappers("ENUM_MAP", valueType.isObject() ? "Enum2ObjectMap" : "Enum2%sMap");
 		addBiClassMapper("HASH_MAP", "OpenHashMap", "2");
 		addBiClassMapper("ARRAY_MAP", "ArrayMap", "2");
+		addBiClassMapper("IMMUTABLE_PAIR", "ImmutablePair", "");
+		addBiClassMapper("MUTABLE_PAIR", "MutablePair", "");
 		addClassMapper("RB_TREE_SET", "RBTreeSet");
 		addClassMapper("AVL_TREE_SET", "AVLTreeSet");
 		addClassMapper("ARRAY_SET", "ArraySet");
@@ -214,6 +216,7 @@ public class GlobalVariables
 		addBiClassMapper("SORTED_MAP", "SortedMap", "2");
 		addBiClassMapper("MAP", "Map", "2");
 		addClassMapper("NAVIGABLE_SET", "NavigableSet");
+		addBiClassMapper("PAIR", "Pair", "");
 		addClassMapper("PRIORITY_QUEUE", "PriorityQueue");
 		addClassMapper("PRIORITY_DEQUEUE", "PriorityDequeue");
 		addClassMapper("PREDICATE", "2BooleanFunction");
@@ -266,6 +269,8 @@ public class GlobalVariables
 		addFunctionValueMappers("LAST_ENTRY_VALUE", "last%sValue");
 		addFunctionMappers("ENTRY_KEY", "get%sKey");
 		addFunctionValueMappers("ENTRY_VALUE", "get%sValue");
+		addFunctionMappers("KEY_ENTRY", "set%sKey");
+		addFunctionValueMappers("VALUE_ENTRY", "set%sValue");
 		addFunctionMapper("GET_KEY", "get");
 		if(type.isObject()) addFunctionValueMapper("GET_VALUE", valueType.isObject() ? "getObject" : "get");
 		else addSimpleMapper("GET_VALUE", "get");

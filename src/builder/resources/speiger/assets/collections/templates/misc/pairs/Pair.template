@@ -1,0 +1,157 @@
+package speiger.src.collections.PACKAGE.misc.pairs;
+
+import speiger.src.collections.PACKAGE.misc.pairs.impl.IMMUTABLE_PAIR;
+import speiger.src.collections.PACKAGE.misc.pairs.impl.MUTABLE_PAIR;
+/**
+ * Key Value Pair Interface that allows to reduce boxing/unboxing.
+ * @Type(T)
+ * @ValueType(V)
+ */
+public interface PAIR KEY_VALUE_GENERIC_TYPE
+{
+	/**
+	 * Empty Reference for Immutable Pairs
+	 */
+	public static final PAIR NO_KV_GENERIC_TYPE EMPTY = new IMMUTABLE_PAIRKV_BRACES();
+	
+	/**
+	 * @Type(T)
+	 * @ValueType(V)
+	 * @return empty Immutable Pair
+	 */
+	public static GENERIC_KEY_VALUE_BRACES PAIR KEY_VALUE_GENERIC_TYPE of() {
+#if TYPE_OBJECT || VALUE_OBJECT
+		return (PAIR KEY_VALUE_GENERIC_TYPE)EMPTY;
+#else
+		return EMPTY;
+#endif
+	}
+	
+	/**
+	 * @param key the key that should be in the pair
+	 * @Type(T)
+	 * @ValueType(V)
+	 * @return Immutable Pair of Key
+	 */	
+	public static GENERIC_KEY_VALUE_BRACES PAIR KEY_VALUE_GENERIC_TYPE ofKey(KEY_TYPE key) {
+		return new IMMUTABLE_PAIRKV_BRACES(key, EMPTY_VALUE);
+	}
+	
+	/**
+	 * @param value the value that should be in the pair
+	 * @Type(T)
+	 * @ValueType(V)
+	 * @return Immutable Pair of Value
+	 */	
+	public static GENERIC_KEY_VALUE_BRACES PAIR KEY_VALUE_GENERIC_TYPE ofValue(VALUE_TYPE value) {
+		return new IMMUTABLE_PAIRKV_BRACES(EMPTY_KEY_VALUE, value);
+	}
+	
+	/**
+	 * @param key the key that should be in the pair
+	 * @param value the value that should be in the pair
+	 * @Type(T)
+	 * @ValueType(V)
+	 * @return Immutable Pair of key and value
+	 */
+	public static GENERIC_KEY_VALUE_BRACES PAIR KEY_VALUE_GENERIC_TYPE of(KEY_TYPE key, VALUE_TYPE value) {
+		return new IMMUTABLE_PAIRKV_BRACES(key, value);
+	}
+	
+	/**
+	 * @param pair the Pair that should be immutably copied
+	 * @Type(T)
+	 * @ValueType(V)
+	 * @return a Immutable Copy of the Provided Pair
+	 */
+	public static GENERIC_KEY_VALUE_BRACES PAIR KEY_VALUE_GENERIC_TYPE of(PAIR KEY_VALUE_GENERIC_TYPE pair) {
+		return new IMMUTABLE_PAIRKV_BRACES(pair.ENTRY_KEY(), pair.ENTRY_VALUE());
+	}
+	
+	/**
+	 * @Type(T)
+	 * @ValueType(V)
+	 * @return empty Mutable Pair
+	 */
+	public static GENERIC_KEY_VALUE_BRACES PAIR KEY_VALUE_GENERIC_TYPE mutable() {
+		return new MUTABLE_PAIRKV_BRACES();
+	}
+	
+	/**
+	 * @param key the key that should be in the pair
+	 * @Type(T)
+	 * @ValueType(V)
+	 * @return Mutable Pair of key
+	 */
+	public static GENERIC_KEY_VALUE_BRACES PAIR KEY_VALUE_GENERIC_TYPE mutableKey(KEY_TYPE key) {
+		return new MUTABLE_PAIRKV_BRACES(key, EMPTY_VALUE);
+	}
+	
+	/**
+	 * @param value the value that should be in the pair
+	 * @Type(T)
+	 * @ValueType(V)
+	 * @return Mutable Pair of value
+	 */
+	public static GENERIC_KEY_VALUE_BRACES PAIR KEY_VALUE_GENERIC_TYPE mutableValue(VALUE_TYPE value) {
+		return new MUTABLE_PAIRKV_BRACES(EMPTY_KEY_VALUE, value);
+	}
+	
+	/**
+	 * @param key the key that should be in the pair
+	 * @param value the value that should be in the pair
+	 * @Type(T)
+	 * @ValueType(V)
+	 * @return Mutable Pair of key and value
+	 */
+	public static GENERIC_KEY_VALUE_BRACES PAIR KEY_VALUE_GENERIC_TYPE mutable(KEY_TYPE key, VALUE_TYPE value) {
+		return new MUTABLE_PAIRKV_BRACES(key, value);
+	}
+	
+	/**
+	 * @param pair the Pair that should be copied
+	 * @Type(T)
+	 * @ValueType(V)
+	 * @return a Mutable Copy of the Provided Pair
+	 */
+	public static GENERIC_KEY_VALUE_BRACES PAIR KEY_VALUE_GENERIC_TYPE mutable(PAIR KEY_VALUE_GENERIC_TYPE pair) {
+		return new MUTABLE_PAIRKV_BRACES(pair.ENTRY_KEY(), pair.ENTRY_VALUE());
+	}
+	
+	/**
+	 * Sets the Key of the Pair.
+	 * @param key the key that should be set.
+	 * @return self or a new Pair instance with the new key. (Map.Entry may throw error)
+	 */
+	public PAIR KEY_VALUE_GENERIC_TYPE KEY_ENTRY(KEY_TYPE key);
+	/**
+	 * @return the Key of the Pair
+	 */
+	public KEY_TYPE ENTRY_KEY();
+	
+	/**
+	 * Sets the Value of the Pair.
+	 * @param value the value that should be set.
+	 * @return self or a new Pair instance with the new value. (Map.Entry may throw error)
+	 */	
+	public PAIR KEY_VALUE_GENERIC_TYPE VALUE_ENTRY(VALUE_TYPE value);
+	
+	/**
+	 * @return the Value of the Pair
+	 */
+	public VALUE_TYPE ENTRY_VALUE();
+	
+	/**
+	 * Sets key and value of the Pair
+	 * @param key the key that should be set.
+	 * @param value the value that should be set.
+	 * @return self or a new Pair instance with the new key and value. (Map.Entry may throw error)
+	 */
+	public PAIR KEY_VALUE_GENERIC_TYPE set(KEY_TYPE key, VALUE_TYPE value);
+	
+	/**
+	 * Clones the Pair if it is mutable.
+	 * @return a New Mutable Instance if it is mutable
+	 */
+	public PAIR KEY_VALUE_GENERIC_TYPE shallowCopy();
+}

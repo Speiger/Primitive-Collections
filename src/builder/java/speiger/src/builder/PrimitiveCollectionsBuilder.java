@@ -70,6 +70,9 @@ public class PrimitiveCollectionsBuilder extends TemplateProcessor
 		enumRequired.add("LinkedEnumMap");
 		biRequired.put("BiConsumer", "");
 		biRequired.put("UnaryOperator", "");
+		biRequired.put("Pair", "");
+		biRequired.put("MutablePair", "");
+		biRequired.put("ImmutablePair", "");
 		addBiClass("Function", "Maps", "Map", "SortedMap", "NavigableMap", "AbstractMap", "ImmutableOpenHashMap", "OpenHashMap", "LinkedOpenHashMap", "OpenCustomHashMap", "LinkedOpenCustomHashMap", "ArrayMap", "RBTreeMap", "AVLTreeMap");
 		nameRemapper.put("BiConsumer", "%sConsumer");
 		nameRemapper.put("IArray", "I%sArray");

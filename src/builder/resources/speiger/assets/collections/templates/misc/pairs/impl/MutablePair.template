@@ -1,0 +1,63 @@
+package speiger.src.collections.PACKAGE.misc.pairs.impl;
+
+import speiger.src.collections.PACKAGE.misc.pairs.PAIR;
+
+/**
+ * Mutable Pair Implementation that
+ * @Type(T)
+ * @ValueType(V)
+ */
+public class MUTABLE_PAIR KEY_VALUE_GENERIC_TYPE implements PAIR KEY_VALUE_GENERIC_TYPE
+{
+	protected KEY_TYPE key;
+	protected VALUE_TYPE value;
+	
+	/**
+	 * Default Constructor
+	 */
+	public MUTABLE_PAIR() {}
+	
+	/**
+	 * Key/Value Constructur
+	 * @param key the key of the Pair
+	 * @param value the value of the Pair
+	 */
+	public MUTABLE_PAIR(KEY_TYPE key, VALUE_TYPE value) {
+		this.key = key;
+		this.value = value;
+	}
+	
+	@Override
+	public PAIR KEY_VALUE_GENERIC_TYPE KEY_ENTRY(KEY_TYPE key) {
+		this.key = key;
+		return this;
+	}
+	
+	@Override
+	public KEY_TYPE ENTRY_KEY() {
+		return key;
+	}
+	
+	@Override
+	public PAIR KEY_VALUE_GENERIC_TYPE VALUE_ENTRY(VALUE_TYPE value) {
+		this.value = value;
+		return this;
+	}
+	
+	@Override
+	public VALUE_TYPE ENTRY_VALUE() {
+		return value;
+	}
+	
+	@Override
+	public PAIR KEY_VALUE_GENERIC_TYPE set(KEY_TYPE key, VALUE_TYPE value) {
+		this.key = key;
+		this.value = value;
+		return this;
+	}
+	
+	@Override
+	public PAIR KEY_VALUE_GENERIC_TYPE shallowCopy() {
+		return PAIR.mutable(key, value);
+	}
+}
