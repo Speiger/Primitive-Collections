@@ -275,7 +275,7 @@ public interface MAP KEY_VALUE_GENERIC_TYPE extends Map<CLASS_TYPE, CLASS_VALUE_
 	 * @param valueProvider the value if not present
 	 * @return the result of the computed value or present value
 	 */	
-	public VALUE_TYPE COMPUTE_IF_ABSENT(KEY_TYPE key, VALUE_SUPPLIER VALUE_GENERIC_TYPE valueProvider);
+	public VALUE_TYPE SUPPLY_IF_ABSENT(KEY_TYPE key, VALUE_SUPPLIER VALUE_GENERIC_TYPE valueProvider);
 	/**
 	 * A Type Specific compute method to reduce boxing/unboxing
 	 * @param key the key that should be computed

@@ -290,6 +290,7 @@ public class GlobalVariables
 		addFunctionValueMappers("REPLACE_VALUES", valueType.isObject() ? "replaceObjects" : "replace%ss");
 		addFunctionMappers("REPLACE", type.isObject() ? "replaceObjects" : "replace%ss");
 		addFunctionMappers("SORT", "sort%ss");
+		addFunctionValueMappers("SUPPLY_IF_ABSENT", "supply%sIfAbsent");
 		addSimpleMapper("VALUE_TEST_VALUE", valueType.isObject() ? "getBoolean" : "get");
 		addSimpleMapper("TEST_VALUE", type.isObject() ? "getBoolean" : "get");
 		addSimpleMapper("NEW_STREAM", type.isPrimitiveBlocking() ? "" : type.getCustomJDKType().getKeyType()+"Stream");
