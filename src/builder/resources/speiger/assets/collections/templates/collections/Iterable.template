@@ -170,4 +170,18 @@ public interface ITERABLE KEY_GENERIC_TYPE extends Iterable<CLASS_TYPE>
 		}
 		return EMPTY_VALUE;
 	}
+	
+	/**
+	 * Helper function to reduce stream usage that allows to count the valid elements.
+	 * @param filter that should be applied
+	 * @return the amount of Valid Elements
+	 */
+	default int count(PREDICATE KEY_GENERIC_TYPE filter) {
+		Objects.requireNonNull(filter);
+		int result = 0;
+		for(ITERATOR KEY_GENERIC_TYPE iter = iterator();iter.hasNext();) {
+			if(filter.TEST_VALUE(iter.NEXT())) result++;
+		}
+		return result;
+	}
 }

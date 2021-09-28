@@ -285,6 +285,16 @@ public class ARRAY_FIFO_QUEUE KEY_GENERIC_TYPE implements PRIORITY_DEQUEUE KEY_G
 	}
 	
 	@Override
+	public int count(PREDICATE KEY_GENERIC_TYPE filter) {
+		Objects.requireNonNull(filter);
+		int result = 0;
+		for(int i = 0,m=size();i<m;i++) {
+			if(filter.TEST_VALUE(array[(first + i) % array.length])) result++;
+		}
+		return result;
+	}
+	
+	@Override
 	public boolean trim(int size) {
 		int newSize = Math.max(size, size());
 		if(newSize >= array.length) return false;

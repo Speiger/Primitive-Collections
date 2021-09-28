@@ -308,6 +308,16 @@ public class ARRAY_PRIORITY_QUEUE KEY_GENERIC_TYPE implements PRIORITY_QUEUE KEY
 	}
 	
 	@Override
+	public int count(PREDICATE KEY_GENERIC_TYPE filter) {
+		Objects.requireNonNull(filter);
+		int result = 0;
+		for(int i = 0;i<size;i++) {
+			if(filter.TEST_VALUE(array[i])) result++;
+		}
+		return result;
+	}
+	
+	@Override
 	public ITERATOR KEY_GENERIC_TYPE iterator() {
 		return new Iter();
 	}

@@ -1607,6 +1607,19 @@ public class RB_TREE_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_VALUE_G
 				}
 				return null;
 			}
+			
+			@Override
+			public int count(Object2BooleanFunction<MAP.Entry KEY_VALUE_GENERIC_TYPE> filter) {
+				Objects.requireNonNull(filter);
+				if(size() <= 0) return 0;
+				int result = 0;
+				BasicEntry KEY_VALUE_GENERIC_TYPE subEntry = new BasicEntryKV_BRACES();
+				for(RB_TREE_MAP.Entry KEY_VALUE_GENERIC_TYPE entry = findLowest(), last = findHighest();entry != null && (last == null || last != previous(entry));entry = next(entry)) {
+					subEntry.set(entry.key, entry.value);
+					if(filter.getBoolean(subEntry)) result++;
+				}
+				return result;
+			}
 		}
 		
 		final class SubMapValues extends VALUE_ABSTRACT_COLLECTION VALUE_GENERIC_TYPE {
@@ -1683,6 +1696,15 @@ public class RB_TREE_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_VALUE_G
 				for(RB_TREE_MAP.Entry KEY_VALUE_GENERIC_TYPE entry = findLowest(), last = findHighest();entry != null && (last == null || last != previous(entry));entry = next(entry))
 					if(filter.VALUE_TEST_VALUE(entry.value)) return entry.value;
 				return EMPTY_VALUE;
+			}
+			
+			@Override
+			public int count(VALUE_PREDICATE VALUE_GENERIC_TYPE filter) {
+				Objects.requireNonNull(filter);
+				int result = 0;
+				for(RB_TREE_MAP.Entry KEY_VALUE_GENERIC_TYPE entry = findLowest(), last = findHighest();entry != null && (last == null || last != previous(entry));entry = next(entry))
+					if(filter.VALUE_TEST_VALUE(entry.value)) result++;
+				return result;
 			}
 		}
 		
@@ -1919,6 +1941,19 @@ public class RB_TREE_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_VALUE_G
 			}
 			return null;
 		}
+		
+		@Override
+		public int count(Object2BooleanFunction<MAP.Entry KEY_VALUE_GENERIC_TYPE> filter) {
+			Objects.requireNonNull(filter);
+			if(size() <= 0) return 0;
+			int result = 0;
+			BasicEntry KEY_VALUE_GENERIC_TYPE subEntry = new BasicEntryKV_BRACES();
+			for(RB_TREE_MAP.Entry KEY_VALUE_GENERIC_TYPE entry = first;entry != null;entry = entry.next()) {
+				subEntry.set(entry.key, entry.value);
+				if(filter.getBoolean(subEntry)) result++;
+			}
+			return result;
+		}
 	}
 	
 	static final class KeySet KEY_VALUE_GENERIC_TYPE extends ABSTRACT_SET KEY_GENERIC_TYPE implements NAVIGABLE_SET KEY_GENERIC_TYPE {
@@ -2096,6 +2131,15 @@ public class RB_TREE_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_VALUE_G
 				if(filter.TEST_VALUE(entry.key)) return entry.key;
 			return EMPTY_KEY_VALUE;
 		}
+		
+		@Override
+		public int count(PREDICATE KEY_GENERIC_TYPE filter) {
+			Objects.requireNonNull(filter);
+			int result = 0;
+			for(RB_TREE_MAP.Entry KEY_VALUE_GENERIC_TYPE entry = start(), end = end();entry != null && (end == null || (end != previous(entry)));entry = next(entry))
+				if(filter.TEST_VALUE(entry.key)) result++;
+			return result;
+		}
 	}
 	
 	final class Values extends VALUE_ABSTRACT_COLLECTION VALUE_GENERIC_TYPE {
@@ -2173,6 +2217,15 @@ public class RB_TREE_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_VALUE_G
 			for(RB_TREE_MAP.Entry KEY_VALUE_GENERIC_TYPE entry = first;entry != null;entry = entry.next())
 				if(filter.VALUE_TEST_VALUE(entry.value)) return entry.value;
 			return EMPTY_VALUE;
+		}
+		
+		@Override
+		public int count(VALUE_PREDICATE VALUE_GENERIC_TYPE filter) {
+			Objects.requireNonNull(filter);
+			int result = 0;
+			for(RB_TREE_MAP.Entry KEY_VALUE_GENERIC_TYPE entry = first;entry != null;entry = entry.next())
+				if(filter.VALUE_TEST_VALUE(entry.value)) result++;
+			return result;
 		}
 	}
 	

@@ -6,6 +6,7 @@
 - Added: Java Iterator/Iterable support for Stream replacing methods
 - Added: Suppliers.
 - Added: SupplyIfAbsent but value generator is a supplier
+- Added: Count feature into Iterable
 
 ### Version 0.4.0
 - Changed: Iterable specific helper functions were moved out of Iterators and moved into Iterables

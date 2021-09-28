@@ -1207,6 +1207,19 @@ public class ARRAY_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_VALUE_GEN
 			}
 			
 			@Override
+			public int count(Object2BooleanFunction<MAP.Entry KEY_VALUE_GENERIC_TYPE> filter) {
+				Objects.requireNonNull(filter);
+				if(size() <= 0) return 0;
+				int result = 0;
+				BasicEntry KEY_VALUE_GENERIC_TYPE entry = new BasicEntryKV_BRACES();
+				for(int i = 0;i<length;i++) {
+					entry.set(keys[offset+i], values[offset+i]);
+					if(filter.getBoolean(entry)) result++;
+				}
+				return result;
+			}
+			
+			@Override
 			@Deprecated
 			public boolean contains(Object o) {
 				if(o instanceof Map.Entry) {
@@ -1358,6 +1371,17 @@ public class ARRAY_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_VALUE_GEN
 			}
 			
 			@Override
+			public int count(PREDICATE KEY_GENERIC_TYPE filter) {
+				Objects.requireNonNull(filter);
+				if(size() <= 0) return 0;
+				int result = 0;
+				for(int i = 0;i<length;i++) {
+					if(filter.TEST_VALUE(keys[i+offset])) result++;					
+				}
+				return result;
+			}
+			
+			@Override
 			public COMPARATOR KEY_GENERIC_TYPE comparator() { return null; }
 			@Override
 			public SORTED_SET KEY_GENERIC_TYPE subSet(KEY_TYPE fromElement, KEY_TYPE toElement) { throw new UnsupportedOperationException(); }
@@ -1448,6 +1472,16 @@ public class ARRAY_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_VALUE_GEN
 					if(filter.VALUE_TEST_VALUE(values[offset+i])) return values[offset+i];
 				}
 				return EMPTY_VALUE;
+			}
+			
+			@Override
+			public int count(VALUE_PREDICATE VALUE_GENERIC_TYPE filter) {
+				Objects.requireNonNull(filter);
+				int result = 0;
+				for(int i = 0;i<length;i++) {
+					if(filter.VALUE_TEST_VALUE(values[offset+i])) result++;
+				}
+				return result;
 			}
 		}
 		
@@ -1739,6 +1773,19 @@ public class ARRAY_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_VALUE_GEN
 		}
 		
 		@Override
+		public int count(Object2BooleanFunction<MAP.Entry KEY_VALUE_GENERIC_TYPE> filter) {
+			Objects.requireNonNull(filter);
+			if(size() <= 0) return 0;
+			int result = 0;
+			BasicEntry KEY_VALUE_GENERIC_TYPE entry = new BasicEntryKV_BRACES();
+			for(int i = 0;i<size;i++) {
+				entry.set(keys[i], values[i]);
+				if(filter.getBoolean(entry)) result++;
+			}
+			return result;
+		}
+		
+		@Override
 		@Deprecated
 		public boolean contains(Object o) {
 			if(o instanceof Map.Entry) {
@@ -1886,6 +1933,16 @@ public class ARRAY_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_VALUE_GEN
 		}
 		
 		@Override
+		public int count(PREDICATE KEY_GENERIC_TYPE filter) {
+			Objects.requireNonNull(filter);
+			int result = 0;
+			for(int i = 0;i<size;i++) {
+				if(filter.TEST_VALUE(keys[i])) result++;
+			}
+			return result;
+		}
+		
+		@Override
 		public COMPARATOR KEY_GENERIC_TYPE comparator() { return null; }
 		@Override
 		public SORTED_SET KEY_GENERIC_TYPE subSet(KEY_TYPE fromElement, KEY_TYPE toElement) { throw new UnsupportedOperationException(); }
@@ -1969,6 +2026,16 @@ public class ARRAY_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_VALUE_GEN
 				if(filter.VALUE_TEST_VALUE(values[i])) return values[i];
 			}
 			return EMPTY_VALUE;
+		}
+		
+		@Override
+		public int count(VALUE_PREDICATE VALUE_GENERIC_TYPE filter) {
+			Objects.requireNonNull(filter);
+			int result = 0;
+			for(int i = 0;i<size;i++) {
+				if(filter.VALUE_TEST_VALUE(values[i])) result++;
+			}
+			return result;
 		}
 	}
 	

@@ -326,6 +326,16 @@ public class IMMUTABLE_LIST KEY_GENERIC_TYPE extends ABSTRACT_LIST KEY_GENERIC_T
 	}
 	
 	@Override
+	public int count(PREDICATE KEY_GENERIC_TYPE filter) {
+		Objects.requireNonNull(filter);
+		int result = 0;
+		for(int i = 0,m=data.length;i<m;i++) {
+			if(filter.TEST_VALUE(data[i])) result++;
+		}
+		return result;
+	}
+	
+	@Override
 	public KEY_TYPE set(int index, KEY_TYPE e) { throw new UnsupportedOperationException(); }
 	@Override
 	@Primitive

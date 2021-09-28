@@ -629,6 +629,7 @@ public class IMMUTABLE_HASH_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_
 			while(index != -1) {
 				entry.set(keys[index], values[index]);
 				if(filter.getBoolean(entry)) return true;
+				index = (int)links[index];
 			}
 			return false;
 		}
@@ -642,6 +643,7 @@ public class IMMUTABLE_HASH_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_
 			while(index != -1) {
 				entry.set(keys[index], values[index]);
 				if(filter.getBoolean(entry)) return false;
+				index = (int)links[index];
 			}
 			return true;
 		}
@@ -655,6 +657,7 @@ public class IMMUTABLE_HASH_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_
 			while(index != -1) {
 				entry.set(keys[index], values[index]);
 				if(!filter.getBoolean(entry)) return false;
+				index = (int)links[index];
 			}
 			return true;
 		}
@@ -668,8 +671,24 @@ public class IMMUTABLE_HASH_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_
 			while(index != -1) {
 				entry.set(keys[index], values[index]);
 				if(filter.getBoolean(entry)) return entry;
+				index = (int)links[index];
 			}
 			return null;
+		}
+		
+		@Override
+		public int count(Object2BooleanFunction<MAP.Entry KEY_VALUE_GENERIC_TYPE> filter) {
+			Objects.requireNonNull(filter);
+			if(size() <= 0) return 0;
+			BasicEntry KEY_VALUE_GENERIC_TYPE entry = new BasicEntryKV_BRACES();
+			int result = 0;
+			int index = firstIndex;
+			while(index != -1) {
+				entry.set(keys[index], values[index]);
+				if(filter.getBoolean(entry)) result++;
+				index = (int)links[index];
+			}
+			return result;
 		}
 		
 		@Override
@@ -847,6 +866,19 @@ public class IMMUTABLE_HASH_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_
 		}
 		
 		@Override
+		public int count(PREDICATE KEY_GENERIC_TYPE filter) {
+			Objects.requireNonNull(filter);
+			if(size() <= 0) return 0;
+			int index = firstIndex;
+			int result = 0;
+			while(index != -1){
+				if(filter.TEST_VALUE(keys[index])) result++;
+				index = (int)links[index];
+			}
+			return result;
+		}
+		
+		@Override
 		public COMPARATOR KEY_GENERIC_TYPE comparator() { return null; }
 		
 		@Override
@@ -958,6 +990,19 @@ public class IMMUTABLE_HASH_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_
 				index = (int)links[index];
 			}
 			return EMPTY_VALUE;
+		}
+		
+		@Override
+		public int count(VALUE_PREDICATE VALUE_GENERIC_TYPE filter) {
+			Objects.requireNonNull(filter);
+			if(size() <= 0) return 0;
+			int result = 0;
+			int index = firstIndex;
+			while(index != -1){
+				if(filter.VALUE_TEST_VALUE(values[index])) result++;
+				index = (int)links[index];
+			}
+			return result;
 		}
 	}
 	

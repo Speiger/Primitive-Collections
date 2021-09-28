@@ -453,6 +453,16 @@ public class LINKED_LIST KEY_GENERIC_TYPE extends ABSTRACT_LIST KEY_GENERIC_TYPE
 	}
 	
 	@Override
+	public int count(PREDICATE KEY_GENERIC_TYPE filter) {
+		Objects.requireNonNull(filter);
+		int result = 0;
+		for(Entry KEY_GENERIC_TYPE entry = first;entry != null;entry = entry.next) {
+			if(filter.TEST_VALUE(entry.value)) result++;
+		}
+		return result;
+	}
+	
+	@Override
 	public KEY_TYPE set(int index, KEY_TYPE e) {
 		checkRange(index);
 		Entry KEY_GENERIC_TYPE node = getNode(index);

@@ -27,6 +27,7 @@ To highlight things that may be wanted.
 	- findFirst: Allows to find the first element of a Predicated Iterable.
 	- filter: Allows to filter unwanted elements for wrapped Iterable
 	- matchAny/matchNone/matchAll: Allows to find elements in a collection.
+	- count: counts all valid elements in a collection
 	- forEach: Allows to input a second element into a forEach move allowing for more flexibility for Method References
 - Collection:
 	- containsAny: Allows to test if another collection contains an of the elements of the tested collection.
@@ -46,7 +47,7 @@ To highlight things that may be wanted.
 	- addToAll: Same as addTo but bulkVersion.
 	- removeOrDefault: removes a Element and if not present returns the default value instead of the present value.
 	- mergeAll: BulkVersion of Merge function.
-	- computeIfAbsent: A Supplier based generator that covers a lot more reference method cases
+	- supplyIfAbsent: A Supplier based computeIfAbsent
 - Sorted Map:
 	- addAndMoveToFirst/Last (From FastUtil but moved to Interface): Allows to add a element to the first/last position of a sorted Map.
 	- moveToFirst/Last: Moves the desired element at the first/last position of the Map.

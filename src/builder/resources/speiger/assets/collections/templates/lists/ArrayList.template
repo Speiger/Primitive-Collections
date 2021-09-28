@@ -643,6 +643,16 @@ public class ARRAY_LIST KEY_GENERIC_TYPE extends ABSTRACT_LIST KEY_GENERIC_TYPE 
 		return EMPTY_VALUE;
 	}
 	
+	@Override
+	public int count(PREDICATE KEY_GENERIC_TYPE filter) {
+		Objects.requireNonNull(filter);
+		int result = 0;
+		for(int i = 0;i<size;i++) {
+			if(filter.TEST_VALUE(data[i])) result++;
+		}
+		return result;
+	}
+	
 	/**
 	 * A Type-Specific set function to reduce (un)boxing
 	 * @param index the index of the element to set

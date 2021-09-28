@@ -875,6 +875,25 @@ public class CUSTOM_HASH_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_VAL
 		}
 		
 		@Override
+		public int count(Object2BooleanFunction<MAP.Entry KEY_VALUE_GENERIC_TYPE> filter) {
+			Objects.requireNonNull(filter);
+			if(size() <= 0) return 0;
+			BasicEntry KEY_VALUE_GENERIC_TYPE entry = new BasicEntryKV_BRACES();
+			int result = 0;
+			if(containsNull) {
+				entry.set(keys[nullIndex], values[nullIndex]);
+				if(filter.getBoolean(entry)) result++;
+			}
+			for(int i = nullIndex-1;i>=0;i--) {
+				if(!strategy.equals(keys[i], EMPTY_KEY_VALUE)) {
+					entry.set(keys[i], values[i]);
+					if(filter.getBoolean(entry)) result++;
+				}
+			}
+			return result;
+		}
+		
+		@Override
 		public int size() {
 			return CUSTOM_HASH_MAP.this.size();
 		}
@@ -1015,6 +1034,18 @@ public class CUSTOM_HASH_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_VAL
 			}
 			return EMPTY_KEY_VALUE;
 		}
+		
+		@Override
+		public int count(PREDICATE KEY_GENERIC_TYPE filter) {
+			Objects.requireNonNull(filter);
+			if(size() <= 0) return 0;
+			int result = 0;
+			if(containsNull && filter.TEST_VALUE(keys[nullIndex])) result++;
+			for(int i = nullIndex-1;i>=0;i--) {
+				if(!strategy.equals(keys[i], EMPTY_KEY_VALUE) && filter.TEST_VALUE(keys[i])) result++;
+			}
+			return result;
+		}
 	}
 	
 	private class Values extends VALUE_ABSTRACT_COLLECTION VALUE_GENERIC_TYPE {
@@ -1110,6 +1141,18 @@ public class CUSTOM_HASH_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_VAL
 				if(!strategy.equals(keys[i], EMPTY_KEY_VALUE) && filter.VALUE_TEST_VALUE(values[i])) return values[i];
 			}
 			return EMPTY_VALUE;
+		}
+		
+		@Override
+		public int count(VALUE_PREDICATE VALUE_GENERIC_TYPE filter) {
+			Objects.requireNonNull(filter);
+			if(size() <= 0) return 0;
+			int result = 0;
+			if(containsNull && filter.VALUE_TEST_VALUE(values[nullIndex])) result++;
+			for(int i = nullIndex-1;i>=0;i--) {
+				if(!strategy.equals(keys[i], EMPTY_KEY_VALUE) && filter.VALUE_TEST_VALUE(values[i])) result++;
+			}
+			return result;
 		}
 	}
 	

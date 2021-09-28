@@ -390,6 +390,18 @@ public class HASH_SET KEY_GENERIC_TYPE extends ABSTRACT_SET KEY_GENERIC_TYPE imp
 		return EMPTY_VALUE;
 	}
 	
+	@Override
+	public int count(PREDICATE KEY_GENERIC_TYPE filter) {
+		Objects.requireNonNull(filter);
+		if(size() <= 0) return 0;
+		int result = 0;
+		if(containsNull && filter.TEST_VALUE(keys[nullIndex])) result++;
+		for(int i = nullIndex-1;i>=0;i--) {
+			if(KEY_EQUALS_NOT_NULL(keys[i]) && filter.TEST_VALUE(keys[i])) result++;
+		}
+		return result;
+	}
+	
 	private void ensureCapacity(int newCapacity) {
 		int size = HashUtil.arraySize(newCapacity, loadFactor);
 		if(size > nullIndex) rehash(size);

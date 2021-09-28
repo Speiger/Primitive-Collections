@@ -718,6 +718,21 @@ public class LINKED_HASH_MAP KEY_VALUE_GENERIC_TYPE extends HASH_MAP KEY_VALUE_G
 		}
 		
 		@Override
+		public int count(Object2BooleanFunction<MAP.Entry KEY_VALUE_GENERIC_TYPE> filter) {
+			Objects.requireNonNull(filter);
+			if(size() <= 0) return 0;
+			int result = 0;
+			BasicEntry KEY_VALUE_GENERIC_TYPE entry = new BasicEntryKV_BRACES();
+			int index = firstIndex;
+			while(index != -1) {
+				entry.set(keys[index], values[index]);
+				if(filter.getBoolean(entry)) result++;
+				index = (int)links[index];
+			}
+			return result;
+		}
+		
+		@Override
 		@Deprecated
 		public boolean contains(Object o) {
 			if(o instanceof Map.Entry) {
@@ -922,6 +937,19 @@ public class LINKED_HASH_MAP KEY_VALUE_GENERIC_TYPE extends HASH_MAP KEY_VALUE_G
 		}
 		
 		@Override
+		public int count(PREDICATE KEY_GENERIC_TYPE filter) {
+			Objects.requireNonNull(filter);
+			if(size() <= 0) return 0;
+			int result = 0;
+			int index = firstIndex;
+			while(index != -1){
+				if(filter.TEST_VALUE(keys[index])) return result++;
+				index = (int)links[index];
+			}
+			return result;
+		}
+		
+		@Override
 		public COMPARATOR KEY_GENERIC_TYPE comparator() { return null; }
 		
 		@Override
@@ -1036,6 +1064,19 @@ public class LINKED_HASH_MAP KEY_VALUE_GENERIC_TYPE extends HASH_MAP KEY_VALUE_G
 				index = (int)links[index];
 			}
 			return EMPTY_VALUE;
+		}
+		
+		@Override
+		public int count(VALUE_PREDICATE VALUE_GENERIC_TYPE filter) {
+			Objects.requireNonNull(filter);
+			if(size() <= 0) return 0;
+			int result = 0;
+			int index = firstIndex;
+			while(index != -1){
+				if(filter.VALUE_TEST_VALUE(values[index])) result++;
+				index = (int)links[index];
+			}
+			return result;
 		}
 	}
 	
