@@ -113,6 +113,7 @@ public class ITERABLES
 	/**
 	 * A Wrapper function that wraps a Java-Iterable into a Type Specific Iterable
 	 * @param iterable that should be wrapped
+	 * @Type(T)
 	 * @return a type specific iterable
 	 */
 	public static GENERIC_KEY_BRACES ITERABLE KEY_GENERIC_TYPE wrap(Iterable<? extends CLASS_TYPE> iterable) {

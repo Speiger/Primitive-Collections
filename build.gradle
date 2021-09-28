@@ -30,19 +30,7 @@ eclipse {
 	classpath {
 		downloadJavadoc = true
 		downloadSources = true
-		file {
-			whenMerged {
-				//Enforce a custom container and allowing access to the sun.misc package which is nessesary for EnumMaps
-				entries.find{ it.kind == 'con' && it.path.startsWith('org.eclipse.jdt')}.path = 'org.eclipse.jdt.launching.JRE_CONTAINER';
-			}
-		}
 	}
-}
-
-compileJava {
-    options.compilerArgs << '-XDignore.symbol.file'
-    options.fork = true
-    options.forkOptions.executable = 'javac' // may not needed on 1.8
 }
 
 sourceSets {
@@ -54,8 +42,8 @@ configurations {
 }
 
 dependencies {
-	builderCompile 'de.speiger:Simple-Code-Generator:1.0.4'
-	runtimeOnly 'de.speiger:Simple-Code-Generator:1.0.4'
+	builderCompile 'de.speiger:Simple-Code-Generator:1.0.5'
+	runtimeOnly 'de.speiger:Simple-Code-Generator:1.0.5'
     testImplementation 'junit:junit:4.12'
 }
 
