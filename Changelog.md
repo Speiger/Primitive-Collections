@@ -1,9 +1,11 @@
 # Changelog of versions
 
-###Version 0.4.1
+### Version 0.4.1
 - Changed: ForEach with input now provides input, value instead of value, input, this improves the usage of method references greatly
 - Added: addAll with Array-types in collections.
 - Added: Java Iterator/Iterable support for Stream replacing methods
+- Added: Suppliers.
+- Added: ComputeIfAbsent but value generator is a supplier
 
 ### Version 0.4.0
 - Changed: Iterable specific helper functions were moved out of Iterators and moved into Iterables

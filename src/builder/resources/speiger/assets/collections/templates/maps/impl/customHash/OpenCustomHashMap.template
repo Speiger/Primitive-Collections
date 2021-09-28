@@ -29,6 +29,7 @@ import speiger.src.collections.PACKAGE.sets.SET;
 import speiger.src.collections.PACKAGE.utils.STRATEGY;
 import speiger.src.collections.VALUE_PACKAGE.collections.VALUE_ABSTRACT_COLLECTION;
 import speiger.src.collections.VALUE_PACKAGE.collections.VALUE_COLLECTION;
+import speiger.src.collections.VALUE_PACKAGE.functions.VALUE_SUPPLIER;
 #if !SAME_TYPE
 import speiger.src.collections.VALUE_PACKAGE.functions.function.VALUE_UNARY_OPERATOR;
 #if !VALUE_OBJECT
@@ -489,6 +490,18 @@ public class CUSTOM_HASH_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_VAL
 		int index = findIndex(key);
 		if(index < 0) {
 			VALUE_TYPE newValue = mappingFunction.GET_VALUE(key);
+			if(VALUE_EQUALS(newValue, getDefaultReturnValue())) return newValue;
+			insert(-index-1, key, newValue);
+			return newValue;
+		}
+		return values[index];
+	}
+	
+	@Override
+	public VALUE_TYPE COMPUTE_IF_ABSENT(KEY_TYPE key, VALUE_SUPPLIER VALUE_GENERIC_TYPE valueProvider) {
+		int index = findIndex(key);
+		if(index < 0) {
+			VALUE_TYPE newValue = valueProvider.VALUE_GET_KEY();
 			if(VALUE_EQUALS(newValue, getDefaultReturnValue())) return newValue;
 			insert(-index-1, key, newValue);
 			return newValue;

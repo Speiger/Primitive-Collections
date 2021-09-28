@@ -15,6 +15,9 @@ But its focus is a different one.
 - SplitIterators
 - Iterators
 - Pairs
+- Unary/Functions
+- Suppliers
+- Bi/Consumers
 
 ## Specialized Functions
 New Specialized functions that were added to increase performance or reduce allocations or Quality Of life.
@@ -43,6 +46,7 @@ To highlight things that may be wanted.
 	- addToAll: Same as addTo but bulkVersion.
 	- removeOrDefault: removes a Element and if not present returns the default value instead of the present value.
 	- mergeAll: BulkVersion of Merge function.
+	- computeIfAbsent: A Supplier based generator that covers a lot more reference method cases
 - Sorted Map:
 	- addAndMoveToFirst/Last (From FastUtil but moved to Interface): Allows to add a element to the first/last position of a sorted Map.
 	- moveToFirst/Last: Moves the desired element at the first/last position of the Map.

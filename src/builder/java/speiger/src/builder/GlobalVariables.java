@@ -147,6 +147,7 @@ public class GlobalVariables
 	{
 		addSimpleMapper("JAVA_PREDICATE", type.isPrimitiveBlocking() ? "" : type.getCustomJDKType().getFileType()+"Predicate");
 		addSimpleMapper("JAVA_CONSUMER", type.isPrimitiveBlocking() ? "" : "java.util.function."+type.getCustomJDKType().getFileType()+"Consumer");
+		addSimpleMapper("JAVA_SUPPLIER", type.isPrimitiveBlocking() ? "" : "java.util.function."+type.getCustomJDKType().getFileType()+"Supplier");
 		addSimpleMapper("JAVA_FUNCTION", type.getFunctionClass(valueType));
 		addSimpleMapper("JAVA_BINARY_OPERATOR", type == ClassType.BOOLEAN ? "" : (type.isObject() ? "java.util.function.BinaryOperator" : "java.util.function."+type.getCustomJDKType().getFileType()+"BinaryOperator"));
 		addSimpleMapper("JAVA_UNARY_OPERATOR", type.isObject() ? "BinaryOperator" : type == ClassType.BOOLEAN ? "" : type.getCustomJDKType().getFileType()+"UnaryOperator");
@@ -225,6 +226,7 @@ public class GlobalVariables
 		addClassMapper("SET", "Set");
 		addClassMapper("STRATEGY", "Strategy");
 		addClassMapper("STACK", "Stack");
+		addClassMapper("SUPPLIER", "Supplier");
 		addBiClassMapper("UNARY_OPERATOR", "UnaryOperator", "");
 		if(type.isObject())
 		{
@@ -275,6 +277,7 @@ public class GlobalVariables
 		addFunctionMapper("GET_KEY", "get");
 		if(type.isObject()) addFunctionValueMapper("GET_VALUE", valueType.isObject() ? "getObject" : "get");
 		else addSimpleMapper("GET_VALUE", "get");
+		addSimpleMapper("GET_JAVA", type.isObject() ? "get" : "getAs"+type.getCustomJDKType().getNonFileType());
 		addFunctionMapper("LAST_KEY", "last");
 		addFunctionValueMapper("MERGE", "merge");
 		addFunctionMapper("NEXT", "next");

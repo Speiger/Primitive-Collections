@@ -1,0 +1,26 @@
+package speiger.src.collections.PACKAGE.functions;
+
+/**
+ * Type-Specific Supplier interface that reduces (un)boxing and allows to merge other consumer types into this interface
+ * @Type(T)
+ */
+#if TYPE_OBJECT
+public interface SUPPLIER KEY_GENERIC_TYPE extends java.util.function.Supplier<KEY_TYPE>
+#else if JDK_TYPE && !TYPE_BOOLEAN
+public interface SUPPLIER KEY_GENERIC_TYPE extends JAVA_SUPPLIER
+#else
+public interface SUPPLIER KEY_GENERIC_TYPE
+#endif
+{
+	/**
+	 * @return the supplied value
+	 */
+	public KEY_TYPE GET_KEY();
+#if JDK_TYPE && PRIMITIVE
+	
+	@Override
+	public default KEY_TYPE GET_JAVA() {
+		return GET_KEY();
+	}
+#endif
+}
