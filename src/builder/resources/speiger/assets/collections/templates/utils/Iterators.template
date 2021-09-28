@@ -90,6 +90,18 @@ public class ITERATORS
 	}
 	
 	/**
+	 * A Helper function that maps a Java-Iterator into a new Type.
+	 * @param iterator that should be mapped
+	 * @param mapper the function that decides what the result turns into.
+	 * @Type(T)
+	 * @param <E> The return type.
+	 * @return a iterator that is mapped to a new result
+	 */
+	public static GENERIC_KEY_SPECIAL_BRACES<E> ObjectIterator<E> map(Iterator<? extends CLASS_TYPE> iterator, TO_OBJECT_FUNCTION KKS_GENERIC_TYPE<E> mapper) {
+		return new MappedIterator<>(wrap(iterator), mapper);
+	}
+	
+	/**
 	 * A Helper function that maps a Iterator into a new Type.
 	 * @param iterator that should be mapped
 	 * @param mapper the function that decides what the result turns into.
@@ -99,6 +111,19 @@ public class ITERATORS
 	 */
 	public static GENERIC_KEY_SPECIAL_BRACES<E> ObjectIterator<E> map(ITERATOR KEY_GENERIC_TYPE iterator, TO_OBJECT_FUNCTION KKS_GENERIC_TYPE<E> mapper) {
 		return new MappedIterator<>(iterator, mapper);
+	}
+	
+	/**
+	 * A Helper function that flatMaps a Java-Iterator into a new Type.
+	 * @param iterator that should be flatMapped
+	 * @param mapper the function that decides what the result turns into.
+	 * @Type(T)
+	 * @param <V> The return type supplier.
+	 * @param <E> The return type.
+	 * @return a iterator that is flatMapped to a new result
+	 */
+	public static GENERIC_KEY_SPECIAL_BRACES<E, V extends Iterable<E>> ObjectIterator<E> flatMap(Iterator<? extends CLASS_TYPE> iterator, TO_OBJECT_FUNCTION KKS_GENERIC_TYPE<V> mapper) {
+		return new FlatMappedIterator<>(wrap(iterator), mapper);
 	}
 	
 	/**
@@ -115,6 +140,18 @@ public class ITERATORS
 	}
 	
 	/**
+	 * A Helper function that flatMaps a Java-Iterator into a new Type.
+	 * @param iterator that should be flatMapped
+	 * @param mapper the function that decides what the result turns into.
+	 * @Type(T)
+	 * @param <E> The return type.
+	 * @return a iterator that is flatMapped to a new result
+	 */
+	public static GENERIC_KEY_SPECIAL_BRACES<E> ObjectIterator<E> arrayFlatMap(Iterator<? extends CLASS_TYPE> iterator, TO_OBJECT_FUNCTION KKS_GENERIC_TYPE<E[]> mapper) {
+		return new FlatMappedArrayIterator<>(wrap(iterator), mapper);
+	}
+	
+	/**
 	 * A Helper function that flatMaps a Iterator into a new Type.
 	 * @param iterator that should be flatMapped
 	 * @param mapper the function that decides what the result turns into.
@@ -124,6 +161,17 @@ public class ITERATORS
 	 */
 	public static GENERIC_KEY_SPECIAL_BRACES<E> ObjectIterator<E> arrayFlatMap(ITERATOR KEY_GENERIC_TYPE iterator, TO_OBJECT_FUNCTION KKS_GENERIC_TYPE<E[]> mapper) {
 		return new FlatMappedArrayIterator<>(iterator, mapper);
+	}
+	
+	/**
+	 * A Helper function that filters out all desired elements from a Java-Iterator
+	 * @param iterator that should be filtered.
+	 * @param filter the filter that decides that should be let through
+	 * @Type(T)
+	 * @return a filtered iterator
+	 */
+	public static GENERIC_KEY_BRACES ITERATOR KEY_GENERIC_TYPE filter(Iterator<? extends CLASS_TYPE> iterator, PREDICATE KEY_GENERIC_TYPE filter) {
+		return new FilteredIteratorBRACES(wrap(iterator), filter);
 	}
 	
 	/**

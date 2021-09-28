@@ -15,6 +15,18 @@ import speiger.src.collections.PACKAGE.functions.function.PREDICATE;
 public class ITERABLES
 {
 	/**
+	 * A Helper function that maps a Java-Iterable into a new Type.
+	 * @param iterable the iterable that should be mapped
+	 * @param mapper the function that decides what the result turns into.
+	 * @Type(T)
+	 * @param <E> The return type.
+	 * @return a iterable that is mapped to a new result
+	 */
+	public static GENERIC_KEY_SPECIAL_BRACES<E> ObjectIterable<E> map(Iterable<? extends CLASS_TYPE> iterable, TO_OBJECT_FUNCTION KKS_GENERIC_TYPE<E> mapper) {
+		return new MappedIterable<>(wrap(iterable), mapper);
+	}
+	
+	/**
 	 * A Helper function that maps a Iterable into a new Type.
 	 * @param iterable the iterable that should be mapped
 	 * @param mapper the function that decides what the result turns into.
@@ -24,6 +36,19 @@ public class ITERABLES
 	 */
 	public static GENERIC_KEY_SPECIAL_BRACES<E> ObjectIterable<E> map(ITERABLE KEY_GENERIC_TYPE iterable, TO_OBJECT_FUNCTION KKS_GENERIC_TYPE<E> mapper) {
 		return new MappedIterable<>(iterable, mapper);
+	}
+	
+	/**
+	 * A Helper function that flatMaps a Java-Iterable into a new Type.
+	 * @param iterable the iterable that should be flatMapped
+	 * @param mapper the function that decides what the result turns into.
+	 * @Type(T)
+	 * @param <V> The return type supplier.
+	 * @param <E> The return type.
+	 * @return a iterable that is flatMapped to a new result
+	 */
+	public static GENERIC_KEY_SPECIAL_BRACES<E, V extends Iterable<E>> ObjectIterable<E> flatMap(Iterable<? extends CLASS_TYPE> iterable, TO_OBJECT_FUNCTION KKS_GENERIC_TYPE<V> mapper) {
+		return new FlatMappedIterable<>(wrap(iterable), mapper);
 	}
 	
 	/**
@@ -40,6 +65,18 @@ public class ITERABLES
 	}
 	
 	/**
+	 * A Helper function that flatMaps a Java-Iterable into a new Type.
+	 * @param iterable the iterable that should be flatMapped
+	 * @param mapper the function that decides what the result turns into.
+	 * @Type(T)
+	 * @param <E> The return type.
+	 * @return a iterable that is flatMapped to a new result
+	 */
+	public static GENERIC_KEY_SPECIAL_BRACES<E> ObjectIterable<E> arrayFlatMap(Iterable<? extends CLASS_TYPE> iterable, TO_OBJECT_FUNCTION KKS_GENERIC_TYPE<E[]> mapper) {
+		return new FlatMappedArrayIterable<>(wrap(iterable), mapper);
+	}
+	
+	/**
 	 * A Helper function that flatMaps a Iterable into a new Type.
 	 * @param iterable the iterable that should be flatMapped
 	 * @param mapper the function that decides what the result turns into.
@@ -52,6 +89,17 @@ public class ITERABLES
 	}
 	
 	/**
+	 * A Helper function that filters out all desired elements from a Java-Iterable
+	 * @param iterable that should be filtered.
+	 * @param filter the filter that decides that should be let through
+	 * @Type(T)
+	 * @return a filtered iterable
+	 */
+	public static GENERIC_KEY_BRACES ITERABLE KEY_GENERIC_TYPE filter(Iterable<? extends CLASS_TYPE> iterable, PREDICATE KEY_GENERIC_TYPE filter) {
+		return new FilteredIterableBRACES(wrap(iterable), filter);
+	}
+	
+	/**
 	 * A Helper function that filters out all desired elements
 	 * @param iterable that should be filtered.
 	 * @param filter the filter that decides that should be let through
@@ -60,6 +108,28 @@ public class ITERABLES
 	 */
 	public static GENERIC_KEY_BRACES ITERABLE KEY_GENERIC_TYPE filter(ITERABLE KEY_GENERIC_TYPE iterable, PREDICATE KEY_GENERIC_TYPE filter) {
 		return new FilteredIterableBRACES(iterable, filter);
+	}
+	
+	/**
+	 * A Wrapper function that wraps a Java-Iterable into a Type Specific Iterable
+	 * @param iterable that should be wrapped
+	 * @return a type specific iterable
+	 */
+	public static GENERIC_KEY_BRACES ITERABLE KEY_GENERIC_TYPE wrap(Iterable<? extends CLASS_TYPE> iterable) {
+		return new WrappedIterableBRACES(iterable);
+	}
+	
+	private static class WrappedIterable KEY_GENERIC_TYPE implements ITERABLE KEY_GENERIC_TYPE
+	{
+		Iterable<? extends CLASS_TYPE> iterable;
+		
+		public WrappedIterable(Iterable<? extends CLASS_TYPE> iterable) {
+			this.iterable = iterable;
+		}
+		
+		public ITERATOR KEY_GENERIC_TYPE iterator() {
+			return ITERATORS.wrap(iterable.iterator());
+		}
 	}
 	
 	private static class MappedIterable KSS_GENERIC_TYPE<E, T> implements ObjectIterable<T>
