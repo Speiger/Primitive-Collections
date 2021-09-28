@@ -8,7 +8,7 @@ import java.util.function.Consumer;
 import speiger.src.collections.PACKAGE.functions.CONSUMER;
 
 #endif
-import speiger.src.collections.PACKAGE.functions.consumer.BI_OBJECT_CONSUMER;
+import speiger.src.collections.objects.functions.consumer.BI_FROM_OBJECT_CONSUMER;
 
 /**
  * A Type-Specific {@link Iterator} that reduces (un)boxing
@@ -74,9 +74,9 @@ public interface ITERATOR KEY_GENERIC_TYPE extends Iterator<CLASS_TYPE>
 	 * @param <E> the generic type of the Object
 	 * @throws java.lang.NullPointerException if the specified action is null
 	 */
-	default <E> void forEachRemaining(E input, BI_OBJECT_CONSUMER KKS_GENERIC_TYPE<E> action) {
+	default <E> void forEachRemaining(E input, BI_FROM_OBJECT_CONSUMER KSK_GENERIC_TYPE<E> action) {
 		Objects.requireNonNull(action);
-		while(hasNext()) { action.accept(NEXT(), input); }
+		while(hasNext()) { action.accept(input, NEXT()); }
 	}
 	
 	/**

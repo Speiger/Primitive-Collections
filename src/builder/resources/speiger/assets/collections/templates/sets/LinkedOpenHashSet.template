@@ -20,7 +20,7 @@ import speiger.src.collections.PACKAGE.collections.BI_ITERATOR;
 import speiger.src.collections.PACKAGE.functions.COMPARATOR;
 import speiger.src.collections.PACKAGE.functions.CONSUMER;
 #endif
-import speiger.src.collections.PACKAGE.functions.consumer.BI_OBJECT_CONSUMER;
+import speiger.src.collections.objects.functions.consumer.BI_FROM_OBJECT_CONSUMER;
 import speiger.src.collections.PACKAGE.functions.function.PREDICATE;
 import speiger.src.collections.PACKAGE.lists.LIST_ITERATOR;
 #if !TYPE_OBJECT
@@ -389,11 +389,11 @@ public class LINKED_HASH_SET KEY_GENERIC_TYPE extends HASH_SET KEY_GENERIC_TYPE 
 	}
 	
 	@Override
-	public <E> void forEach(E input, BI_OBJECT_CONSUMER KKS_GENERIC_TYPE<E> action) {
+	public <E> void forEach(E input, BI_FROM_OBJECT_CONSUMER KSK_GENERIC_TYPE<E> action) {
 		Objects.requireNonNull(action);
 		int index = firstIndex;
 		while(index != -1) {
-			action.accept(keys[index], input);
+			action.accept(input, keys[index]);
 			index = (int)links[index];
 		}
 	}

@@ -22,7 +22,7 @@ import speiger.src.collections.PACKAGE.functions.COMPARATOR;
 import speiger.src.collections.PACKAGE.functions.CONSUMER;
 import speiger.src.collections.PACKAGE.utils.ARRAYS;
 #endif
-import speiger.src.collections.PACKAGE.functions.consumer.BI_OBJECT_CONSUMER;
+import speiger.src.collections.objects.functions.consumer.BI_FROM_OBJECT_CONSUMER;
 import speiger.src.collections.PACKAGE.functions.function.PREDICATE;
 import speiger.src.collections.objects.utils.ObjectArrays;
 import speiger.src.collections.PACKAGE.utils.ITERATORS;
@@ -119,6 +119,8 @@ public class IMMUTABLE_LIST KEY_GENERIC_TYPE extends ABSTRACT_LIST KEY_GENERIC_T
 	public boolean addAll(int index, COLLECTION KEY_GENERIC_TYPE c) { throw new UnsupportedOperationException(); }
 	@Override
 	public boolean addAll(int index, LIST KEY_GENERIC_TYPE c) { throw new UnsupportedOperationException(); }
+	@Override
+	public boolean addAll(KEY_TYPE[] e, int offset, int length) { throw new UnsupportedOperationException(); }
 	@Override
 	public void addElements(int from, KEY_TYPE[] a, int offset, int length) { throw new UnsupportedOperationException(); }
 	
@@ -281,10 +283,10 @@ public class IMMUTABLE_LIST KEY_GENERIC_TYPE extends ABSTRACT_LIST KEY_GENERIC_T
 	}
 	
 	@Override
-	public <E> void forEach(E input, BI_OBJECT_CONSUMER KKS_GENERIC_TYPE<E> action) {
+	public <E> void forEach(E input, BI_FROM_OBJECT_CONSUMER KSK_GENERIC_TYPE<E> action) {
 		Objects.requireNonNull(action);
 		for(int i = 0,m=data.length;i<m;i++)
-			action.accept(data[i], input);		
+			action.accept(input, data[i]);		
 	}
 	
 	@Override

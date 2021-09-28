@@ -12,7 +12,7 @@ import speiger.src.collections.PACKAGE.utils.SPLIT_ITERATORS;
  * @Type(T)
  */
 public interface SET KEY_GENERIC_TYPE extends Set<CLASS_TYPE>, COLLECTION KEY_GENERIC_TYPE
-{
+{	
 	@Override
 	public ITERATOR KEY_GENERIC_TYPE iterator();
 	

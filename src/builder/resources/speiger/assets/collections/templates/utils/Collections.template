@@ -92,18 +92,16 @@ public class COLLECTIONS
 		public boolean add(KEY_TYPE o) { synchronized(mutex) { return c.add(o); } }
 		@Override
 		public boolean addAll(Collection<? extends CLASS_TYPE> c) { synchronized(mutex) { return this.c.addAll(c); } }
-		
 		@Override
 		public boolean addAll(COLLECTION KEY_GENERIC_TYPE c) { synchronized(mutex) { return this.c.addAll(c); } }
-		
+		@Override
+		public boolean addAll(KEY_TYPE[] e, int offset, int length) { synchronized(mutex) { return c.addAll(e, offset, length); } }
 #if !TYPE_OBJECT
 		@Override
 		public boolean contains(KEY_TYPE o) { synchronized(mutex) { return c.contains(o); } }
-		
 #else
 		@Override
 		public boolean contains(Object o) { synchronized(mutex) { return c.contains(o); } }
-		
 #endif
 		@Override
 		@Primitive
@@ -198,6 +196,8 @@ public class COLLECTIONS
 		public boolean addAll(Collection<? extends CLASS_TYPE> c) { throw new UnsupportedOperationException(); }
 		@Override
 		public boolean addAll(COLLECTION KEY_GENERIC_TYPE c) { throw new UnsupportedOperationException(); }
+		@Override
+		public boolean addAll(KEY_TYPE[] e, int offset, int length) { throw new UnsupportedOperationException(); }
 #if !TYPE_OBJECT
 		@Override
 		public boolean contains(KEY_TYPE o) { return c.contains(o); }
@@ -285,6 +285,8 @@ public class COLLECTIONS
 		
 		@Override
 		public boolean addAll(COLLECTION KEY_GENERIC_TYPE c) { throw new UnsupportedOperationException(); }
+		@Override
+		public boolean addAll(KEY_TYPE[] e, int offset, int length) { throw new UnsupportedOperationException(); }
 		
 #if !TYPE_OBJECT
 		@Override

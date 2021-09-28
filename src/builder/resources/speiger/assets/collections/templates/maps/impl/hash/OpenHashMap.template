@@ -9,13 +9,11 @@ import java.util.function.Consumer;
 #if !TYPE_OBJECT
 import speiger.src.collections.PACKAGE.collections.ITERATOR;
 import speiger.src.collections.PACKAGE.functions.CONSUMER;
+import speiger.src.collections.objects.functions.consumer.BI_FROM_OBJECT_CONSUMER;
 #endif
 import speiger.src.collections.PACKAGE.functions.consumer.BI_CONSUMER;
 import speiger.src.collections.PACKAGE.functions.function.FUNCTION;
 import speiger.src.collections.PACKAGE.functions.function.UNARY_OPERATOR;
-#if !TYPE_OBJECT && !VALUE_OBJECT
-import speiger.src.collections.PACKAGE.functions.consumer.BI_OBJECT_CONSUMER;
-#endif
 #if !TYPE_OBJECT && !VALUE_BOOLEAN
 import speiger.src.collections.PACKAGE.functions.function.PREDICATE;
 #endif
@@ -32,6 +30,7 @@ import speiger.src.collections.VALUE_PACKAGE.collections.VALUE_ABSTRACT_COLLECTI
 import speiger.src.collections.VALUE_PACKAGE.collections.VALUE_COLLECTION;
 #if !SAME_TYPE
 import speiger.src.collections.VALUE_PACKAGE.functions.function.VALUE_UNARY_OPERATOR;
+
 #if !VALUE_OBJECT
 import speiger.src.collections.VALUE_PACKAGE.collections.VALUE_ITERATOR;
 import speiger.src.collections.VALUE_PACKAGE.functions.VALUE_CONSUMER;
@@ -46,7 +45,9 @@ import speiger.src.collections.objects.functions.function.Object2BooleanFunction
 #endif
 #endif
 #if !SAME_TYPE
-import speiger.src.collections.VALUE_PACKAGE.functions.consumer.VALUE_BI_OBJECT_CONSUMER;
+#if !TYPE_OBJECT
+import speiger.src.collections.objects.functions.consumer.VALUE_BI_FROM_OBJECT_CONSUMER;
+#endif
 import speiger.src.collections.VALUE_PACKAGE.functions.function.VALUE_PREDICATE;
 #endif
 import speiger.src.collections.objects.collections.ObjectIterator;
@@ -739,12 +740,12 @@ public class HASH_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_VALUE_GENE
 		}
 		
 		@Override
-		public <E> void forEach(E input, ObjectObjectConsumer<MAP.Entry KEY_VALUE_GENERIC_TYPE, E> action) {
+		public <E> void forEach(E input, ObjectObjectConsumer<E, MAP.Entry KEY_VALUE_GENERIC_TYPE> action) {
 			Objects.requireNonNull(action);
 			if(size() <= 0) return;
-			if(containsNull) action.accept(new BasicEntryKV_BRACES(keys[nullIndex], values[nullIndex]), input);
+			if(containsNull) action.accept(input, new BasicEntryKV_BRACES(keys[nullIndex], values[nullIndex]));
 			for(int i = nullIndex-1;i>=0;i--) {
-				if(KEY_EQUALS_NOT_NULL(keys[i])) action.accept(new BasicEntryKV_BRACES(keys[i], values[i]), input);
+				if(KEY_EQUALS_NOT_NULL(keys[i])) action.accept(input, new BasicEntryKV_BRACES(keys[i], values[i]));
 			}
 		}
 		
@@ -909,12 +910,12 @@ public class HASH_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_VALUE_GENE
 		}
 		
 		@Override
-		public <E> void forEach(E input, BI_OBJECT_CONSUMER KKS_GENERIC_TYPE<E> action) {
+		public <E> void forEach(E input, BI_FROM_OBJECT_CONSUMER KSK_GENERIC_TYPE<E> action) {
 			Objects.requireNonNull(action);
 			if(size() <= 0) return;
-			if(containsNull) action.accept(keys[nullIndex], input);
+			if(containsNull) action.accept(input, keys[nullIndex]);
 			for(int i = nullIndex-1;i>=0;i--) {
-				if(KEY_EQUALS_NOT_NULL(keys[i])) action.accept(keys[i], input);
+				if(KEY_EQUALS_NOT_NULL(keys[i])) action.accept(input, keys[i]);
 			}
 		}
 		
@@ -1005,12 +1006,12 @@ public class HASH_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_VALUE_GENE
 		}
 		
 		@Override
-		public <E> void forEach(E input, VALUE_BI_OBJECT_CONSUMER VVS_GENERIC_TYPE<E> action) {
+		public <E> void forEach(E input, VALUE_BI_FROM_OBJECT_CONSUMER VSV_GENERIC_TYPE<E> action) {
 			Objects.requireNonNull(action);
 			if(size() <= 0) return;
-			if(containsNull) action.accept(values[nullIndex], input);
+			if(containsNull) action.accept(input, values[nullIndex]);
 			for(int i = nullIndex-1;i>=0;i--) {
-				if(KEY_EQUALS_NOT_NULL(keys[i])) action.accept(values[i], input);
+				if(KEY_EQUALS_NOT_NULL(keys[i])) action.accept(input, values[i]);
 			}
 		}
 		

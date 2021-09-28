@@ -16,7 +16,7 @@ import speiger.src.collections.PACKAGE.collections.BI_ITERATOR;
 import speiger.src.collections.PACKAGE.collections.COLLECTION;
 import speiger.src.collections.PACKAGE.collections.ITERATOR;
 
-import speiger.src.collections.PACKAGE.functions.consumer.BI_OBJECT_CONSUMER;
+import speiger.src.collections.objects.functions.consumer.BI_FROM_OBJECT_CONSUMER;
 import speiger.src.collections.PACKAGE.functions.function.PREDICATE;
 #if !TYPE_OBJECT
 import speiger.src.collections.PACKAGE.functions.COMPARATOR;
@@ -350,10 +350,10 @@ public class ARRAY_SET KEY_GENERIC_TYPE extends ABSTRACT_SET KEY_GENERIC_TYPE im
 	}
 	
 	@Override
-	public <E> void forEach(E input, BI_OBJECT_CONSUMER KKS_GENERIC_TYPE<E> action) {
+	public <E> void forEach(E input, BI_FROM_OBJECT_CONSUMER KSK_GENERIC_TYPE<E> action) {
 		Objects.requireNonNull(action);
 		for(int i = 0;i<size;i++)
-			action.accept(data[i], input);		
+			action.accept(input, data[i]);		
 	}
 	
 	@Override

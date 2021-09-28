@@ -14,7 +14,7 @@ import speiger.src.collections.PACKAGE.collections.ITERATOR;
 import speiger.src.collections.PACKAGE.functions.COMPARATOR;
 import speiger.src.collections.PACKAGE.functions.CONSUMER;
 #endif
-import speiger.src.collections.PACKAGE.functions.consumer.BI_OBJECT_CONSUMER;
+import speiger.src.collections.objects.functions.consumer.BI_FROM_OBJECT_CONSUMER;
 import speiger.src.collections.PACKAGE.functions.function.PREDICATE;
 import speiger.src.collections.PACKAGE.utils.ARRAYS;
 
@@ -262,9 +262,9 @@ public class ARRAY_PRIORITY_QUEUE KEY_GENERIC_TYPE implements PRIORITY_QUEUE KEY
 	}
 	
 	@Override
-	public <E> void forEach(E input, BI_OBJECT_CONSUMER KKS_GENERIC_TYPE<E> action) {
+	public <E> void forEach(E input, BI_FROM_OBJECT_CONSUMER KSK_GENERIC_TYPE<E> action) {
 		Objects.requireNonNull(action);
-		for(int i = 0,m=size;i<m;i++) action.accept(dequeue(), input);
+		for(int i = 0,m=size;i<m;i++) action.accept(input, dequeue());
 	}
 	
 	@Override

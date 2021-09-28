@@ -203,7 +203,8 @@ public class GlobalVariables
 		addClassMapper("LIST_ITERATOR", "ListIterator");
 		addClassMapper("BI_ITERATOR", "BidirectionalIterator");
 		addBiClassMapper("BI_CONSUMER", "Consumer", "");
-		addClassMapper("BI_OBJECT_CONSUMER", "ObjectConsumer");
+		addClassMapper("BI_TO_OBJECT_CONSUMER", "ObjectConsumer");
+		addAbstractMapper("BI_FROM_OBJECT_CONSUMER", "Object%sConsumer");
 		addClassMapper("SPLIT_ITERATOR", "Splititerator");
 		addClassMapper("ITERATOR", "Iterator");
 		addClassMapper("ITERABLE", "Iterable");

@@ -281,6 +281,14 @@ public abstract class ABSTRACT_LIST KEY_GENERIC_TYPE extends ABSTRACT_COLLECTION
 		}
 		
 		@Override
+		public boolean addAll(KEY_TYPE[] e, int offset, int length) {
+			if(length <= 0) return false;
+			l.addElements(this.offset, e, offset, length);
+			offset += length;
+			return true;
+		}
+		
+		@Override
 		public void addElements(int from, KEY_TYPE[] a, int offset, int length) {
 			checkRange(from);
 			l.addElements(from + this.offset, a, offset, length);

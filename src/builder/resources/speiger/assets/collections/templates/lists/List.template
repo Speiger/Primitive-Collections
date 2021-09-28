@@ -169,7 +169,6 @@ public interface LIST KEY_GENERIC_TYPE extends COLLECTION KEY_GENERIC_TYPE, List
 	 * @param offset the start index of the array should be read from
 	 * @param length how many elements should be read from
 	 * @throws IndexOutOfBoundsException if from is outside of the lists range
-	 * @throws IllegalStateException if offset or length are smaller then 0 or exceed the array length
 	 */
 	public void addElements(int from, KEY_TYPE[] a, int offset, int length);
 	

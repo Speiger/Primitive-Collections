@@ -8,7 +8,7 @@ import speiger.src.collections.PACKAGE.functions.CONSUMER;
 import speiger.src.collections.objects.collections.ObjectIterable;
 #endif
 import speiger.src.collections.PACKAGE.functions.function.TO_OBJECT_FUNCTION;
-import speiger.src.collections.PACKAGE.functions.consumer.BI_OBJECT_CONSUMER;
+import speiger.src.collections.objects.functions.consumer.BI_FROM_OBJECT_CONSUMER;
 import speiger.src.collections.PACKAGE.functions.function.PREDICATE;
 import speiger.src.collections.PACKAGE.collections.SPLIT_ITERATOR;
 import speiger.src.collections.PACKAGE.utils.SPLIT_ITERATORS;
@@ -66,7 +66,7 @@ public interface ITERABLE KEY_GENERIC_TYPE extends Iterable<CLASS_TYPE>
 	 * @param <E> the generic type of the Object
 	 * @throws java.lang.NullPointerException if the specified action is null
 	 */
-	default <E> void forEach(E input, BI_OBJECT_CONSUMER KKS_GENERIC_TYPE<E> action) {
+	default <E> void forEach(E input, BI_FROM_OBJECT_CONSUMER KSK_GENERIC_TYPE<E> action) {
 		Objects.requireNonNull(action);
 		iterator().forEachRemaining(input, action);
 	}
