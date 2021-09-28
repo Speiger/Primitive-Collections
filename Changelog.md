@@ -5,8 +5,9 @@
 - Added: addAll with Array-types in collections.
 - Added: Java Iterator/Iterable support for Stream replacing methods
 - Added: Suppliers.
-- Added: SupplyIfAbsent but value generator is a supplier
+- Added: SupplyIfAbsent. It is ComputeIfAbsent but using suppliers
 - Added: Count feature into Iterable
+- Fixed: A couple bugs with the new StreamReplacing functions in LinkedCollections Iterating to Infinity
 
 ### Version 0.4.0
 - Changed: Iterable specific helper functions were moved out of Iterators and moved into Iterables
