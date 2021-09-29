@@ -18,7 +18,7 @@ repositories {
 }
 
 archivesBaseName = 'Primitive Collections'
-version = '0.4.0';
+version = '0.4.1';
 
 sourceCompatibility = targetCompatibility = compileJava.sourceCompatibility = compileJava.targetCompatibility = '1.8'
 
