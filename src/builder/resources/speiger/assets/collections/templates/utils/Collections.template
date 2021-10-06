@@ -129,6 +129,9 @@ public class COLLECTIONS
 		}
 		
 		@Override
+		public COLLECTION KEY_GENERIC_TYPE copy() { throw new UnsupportedOperationException(); }
+		
+		@Override
 		@Primitive
 		public boolean remove(Object o) { synchronized(mutex) { return c.remove(o); } }
 		@Override
@@ -221,6 +224,8 @@ public class COLLECTIONS
 		public boolean isEmpty() { return c.isEmpty(); }
 		@Override
 		public ITERATOR KEY_GENERIC_TYPE iterator() { return ITERATORS.unmodifiable(c.iterator()); }
+		@Override
+		public COLLECTION KEY_GENERIC_TYPE copy() { throw new UnsupportedOperationException(); }
 		@Override
 		@Deprecated
 		public boolean remove(Object o) { throw new UnsupportedOperationException(); }
@@ -358,5 +363,7 @@ public class COLLECTIONS
 		public void clear() {}
 		@Override
 		public int size() { return 0; }
+		@Override
+		public EmptyCollection KEY_GENERIC_TYPE copy() { return this; }
 	}
 }
