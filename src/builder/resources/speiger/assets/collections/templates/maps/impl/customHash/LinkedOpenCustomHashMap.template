@@ -654,6 +654,9 @@ public class LINKED_CUSTOM_HASH_MAP KEY_VALUE_GENERIC_TYPE extends CUSTOM_HASH_M
 		}
 		
 		@Override
+		public MapEntrySet copy() { throw new UnsupportedOperationException(); }
+		
+		@Override
 		public void forEach(Consumer<? super MAP.Entry KEY_VALUE_GENERIC_TYPE> action) {
 			int index = firstIndex;
 			while(index != -1) {
@@ -860,6 +863,9 @@ public class LINKED_CUSTOM_HASH_MAP KEY_VALUE_GENERIC_TYPE extends CUSTOM_HASH_M
 		public BI_ITERATOR KEY_GENERIC_TYPE iterator(KEY_TYPE fromElement) {
 			return new KeyIterator(fromElement);
 		}
+		
+		@Override
+		public KeySet copy() { throw new UnsupportedOperationException(); }
 		
 		@Override
 		public int size() {

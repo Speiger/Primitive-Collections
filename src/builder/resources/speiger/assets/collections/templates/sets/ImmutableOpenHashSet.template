@@ -4,6 +4,7 @@ package speiger.src.collections.PACKAGE.sets;
 import java.util.Comparator;
 import java.util.function.Consumer;
 #endif
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
@@ -49,6 +50,12 @@ public class IMMUTABLE_HASH_SET KEY_GENERIC_TYPE extends ABSTRACT_SET KEY_GENERI
 	protected int firstIndex = -1;
 	/** The Last Index in the Map */
 	protected int lastIndex = -1;
+	
+	/**
+	 * Helper constructor to optimize the copying
+	 * Only accessible through implementations
+	 */
+	protected IMMUTABLE_HASH_SET() {}
 	
 	/**
 	 * Helper constructor that allow to create a set from unboxed values
@@ -370,6 +377,20 @@ public class IMMUTABLE_HASH_SET KEY_GENERIC_TYPE extends ABSTRACT_SET KEY_GENERI
 	@Override
 	public BI_ITERATOR KEY_GENERIC_TYPE iterator(KEY_TYPE fromElement) {
 		return new SetIterator(fromElement);
+	}
+	
+	@Override
+	public IMMUTABLE_HASH_SET KEY_GENERIC_TYPE copy() {
+		IMMUTABLE_HASH_SET KEY_GENERIC_TYPE set = new IMMUTABLE_HASH_SETBRACES();
+		set.containsNull = containsNull;
+		set.firstIndex = firstIndex;
+		set.lastIndex = lastIndex;
+		set.size = size;
+		set.mask = mask;
+		set.nullIndex = nullIndex;
+		set.keys = Arrays.copyOf(keys, keys.length);
+		set.links = Arrays.copyOf(links, links.length);
+		return set;
 	}
 	
 	@Override

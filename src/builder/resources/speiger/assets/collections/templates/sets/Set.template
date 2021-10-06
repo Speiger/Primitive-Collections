@@ -16,6 +16,9 @@ public interface SET KEY_GENERIC_TYPE extends Set<CLASS_TYPE>, COLLECTION KEY_GE
 	@Override
 	public ITERATOR KEY_GENERIC_TYPE iterator();
 	
+	@Override
+	public SET KEY_GENERIC_TYPE copy();
+	
 #if !TYPE_OBJECT
 	/**
 	 * A Type Specific remove function to reduce boxing/unboxing

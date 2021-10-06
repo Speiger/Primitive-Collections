@@ -540,6 +540,21 @@ public class RB_TREE_SET KEY_GENERIC_TYPE extends ABSTRACT_SET KEY_GENERIC_TYPE 
 		tree = null;
 	}
 	
+	public RB_TREE_SET KEY_GENERIC_TYPE copy() {
+		RB_TREE_SET KEY_GENERIC_TYPE set = new RB_TREE_SETBRACES();
+		set.size = size;
+		if(tree != null) {
+			set.tree = tree.copy();
+			Entry KEY_GENERIC_TYPE lastFound = null;
+			for(Entry KEY_GENERIC_TYPE entry = tree;entry != null;entry = entry.left) lastFound = entry;
+			set.first = lastFound;
+			lastFound = null;
+			for(Entry KEY_GENERIC_TYPE entry = tree;entry != null;entry = entry.right) lastFound = entry;
+			set.last = lastFound;
+		}
+		return set;
+	}
+	
 	@Override
 	public COMPARATOR KEY_GENERIC_TYPE comparator() { return comparator; }
 	
@@ -1071,6 +1086,9 @@ public class RB_TREE_SET KEY_GENERIC_TYPE extends ABSTRACT_SET KEY_GENERIC_TYPE 
 		}
 		
 		@Override
+		public SubSet KEY_GENERIC_TYPE copy() { throw new UnsupportedOperationException(); }
+		
+		@Override
 		public void forEach(CONSUMER KEY_SUPER_GENERIC_TYPE action) {
 			Objects.requireNonNull(action);
 			for(Entry KEY_GENERIC_TYPE entry = start();entry != null && inRange(entry.key);entry = next(entry)) {
@@ -1312,6 +1330,22 @@ public class RB_TREE_SET KEY_GENERIC_TYPE extends ABSTRACT_SET KEY_GENERIC_TYPE 
 		Entry(KEY_TYPE key, Entry KEY_GENERIC_TYPE parent) {
 			this.key = key;
 			this.parent = parent;
+		}
+		
+		Entry KEY_GENERIC_TYPE copy() {
+			Entry KEY_GENERIC_TYPE entry = new EntryBRACES(key, null);
+			entry.state = state;
+			if(left != null) {
+				Entry KEY_GENERIC_TYPE newLeft = left.copy();
+				entry.left = newLeft;
+				newLeft.parent = entry;
+			}
+			if(right != null) {
+				Entry KEY_GENERIC_TYPE newRight = right.copy();
+				entry.right = newRight;
+				newRight.parent = entry;
+			}
+			return entry;
 		}
 		
 		boolean isBlack() {

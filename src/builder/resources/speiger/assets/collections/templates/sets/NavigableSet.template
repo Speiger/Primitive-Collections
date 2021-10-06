@@ -115,6 +115,8 @@ public interface NAVIGABLE_SET KEY_GENERIC_TYPE extends NavigableSet<CLASS_TYPE>
 	/** @return a Type Specific desendingSet */
 	@Override
 	public NAVIGABLE_SET KEY_GENERIC_TYPE descendingSet();
+	@Override
+	public NAVIGABLE_SET KEY_GENERIC_TYPE copy();
 	
 	/**
 	 * A Type Specific Type Splititerator to reduce boxing/unboxing

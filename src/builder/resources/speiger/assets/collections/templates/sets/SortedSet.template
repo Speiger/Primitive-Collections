@@ -61,6 +61,9 @@ public interface SORTED_SET KEY_GENERIC_TYPE extends SET KEY_GENERIC_TYPE, Sorte
 	public COMPARATOR KEY_GENERIC_TYPE comparator();
 	
 	@Override
+	public SORTED_SET KEY_GENERIC_TYPE copy();
+	
+	@Override
 	public BI_ITERATOR KEY_GENERIC_TYPE iterator();
 	/**
 	 * A type Specific Iterator starting from a given key

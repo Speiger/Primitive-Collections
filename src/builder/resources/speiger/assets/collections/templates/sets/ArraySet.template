@@ -450,6 +450,13 @@ public class ARRAY_SET KEY_GENERIC_TYPE extends ABSTRACT_SET KEY_GENERIC_TYPE im
 		return new SubSet(fromIndex, size - fromIndex);
 	}
 	
+	public ARRAY_SET KEY_GENERIC_TYPE copy() {
+		ARRAY_SET KEY_GENERIC_TYPE set = new ARRAY_SETBRACES();
+		set.data = Arrays.copyOf(data, data.length);
+		set.size = size;
+		return set;
+	}
+	
 	@Override
 	public COMPARATOR KEY_GENERIC_TYPE comparator() {
 		return null;
@@ -675,7 +682,10 @@ public class ARRAY_SET KEY_GENERIC_TYPE extends ABSTRACT_SET KEY_GENERIC_TYPE im
 			if(index != -1) return new SetIterator(index);
 			throw new NoSuchElementException();
 		}
-
+		
+		@Override
+		public SubSet copy() { throw new UnsupportedOperationException(); }
+		
 		@Override
 		public SORTED_SET KEY_GENERIC_TYPE subSet(KEY_TYPE fromElement, KEY_TYPE toElement) {
 			int fromIndex = findIndex(fromElement);

@@ -590,6 +590,9 @@ public class IMMUTABLE_HASH_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_
 		}
 		
 		@Override
+		public MapEntrySet copy() { throw new UnsupportedOperationException(); }
+		
+		@Override
 		public void forEach(Consumer<? super MAP.Entry KEY_VALUE_GENERIC_TYPE> action) {
 			int index = firstIndex;
 			while(index != -1){
@@ -772,6 +775,9 @@ public class IMMUTABLE_HASH_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_
 		public BI_ITERATOR KEY_GENERIC_TYPE iterator(KEY_TYPE fromElement) {
 			return new KeyIterator(fromElement);
 		}
+		
+		@Override
+		public KeySet copy() { throw new UnsupportedOperationException(); }
 		
 		@Override
 		public int size() {

@@ -478,6 +478,19 @@ public class HASH_SET KEY_GENERIC_TYPE extends ABSTRACT_SET KEY_GENERIC_TYPE imp
 	}
 	
 	@Override
+	public HASH_SET KEY_GENERIC_TYPE copy() {
+		HASH_SET KEY_GENERIC_TYPE set = new HASH_SETBRACES(0, loadFactor);
+		set.minCapacity = minCapacity;
+		set.mask = mask;
+		set.maxFill = maxFill;
+		set.nullIndex = nullIndex;
+		set.containsNull = containsNull;
+		set.size = size;
+		set.keys = Arrays.copyOf(keys, keys.length);
+		return set;
+	}
+	
+	@Override
 	public void clear() {
 		if(size == 0) return;
 		size = 0;

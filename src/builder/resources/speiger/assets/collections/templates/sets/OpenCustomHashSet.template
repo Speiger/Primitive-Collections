@@ -446,6 +446,19 @@ public class CUSTOM_HASH_SET KEY_GENERIC_TYPE extends ABSTRACT_SET KEY_GENERIC_T
 	}
 	
 	@Override
+	public CUSTOM_HASH_SET KEY_GENERIC_TYPE copy() {
+		CUSTOM_HASH_SET KEY_GENERIC_TYPE set = new CUSTOM_HASH_SETBRACES(0, loadFactor, strategy);
+		set.minCapacity = minCapacity;
+		set.mask = mask;
+		set.maxFill = maxFill;
+		set.nullIndex = nullIndex;
+		set.containsNull = containsNull;
+		set.size = size;
+		set.keys = Arrays.copyOf(keys, keys.length);
+		return set;
+	}
+	
+	@Override
 	public void clear() {
 		if(size == 0) return;
 		size = 0;

@@ -351,6 +351,8 @@ public class LINKED_ENUM_MAP KEY_ENUM_VALUE_GENERIC_TYPE extends ENUM_MAP KEY_VA
 			return new FastEntryIterator(fromElement);
 		}
 		
+		public MapEntrySet copy() { throw new UnsupportedOperationException(); }
+		
 		@Override
 		public void forEach(Consumer<? super MAP.Entry KEY_VALUE_GENERIC_TYPE> action) {
 			int index = firstIndex;
@@ -476,6 +478,8 @@ public class LINKED_ENUM_MAP KEY_ENUM_VALUE_GENERIC_TYPE extends ENUM_MAP KEY_VA
 		public BI_ITERATOR KEY_GENERIC_TYPE iterator(T fromElement) {
 			return new KeyIterator(fromElement);
 		}
+		
+		public KeySet copy() { throw new UnsupportedOperationException(); }
 		
 		@Override
 		public int size() {

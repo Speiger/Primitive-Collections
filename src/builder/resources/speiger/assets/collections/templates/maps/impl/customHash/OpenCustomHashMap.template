@@ -965,6 +965,9 @@ public class CUSTOM_HASH_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_VAL
 		}
 		
 		@Override
+		public KeySet copy() { throw new UnsupportedOperationException(); }
+		
+		@Override
 		public int size() {
 			return CUSTOM_HASH_MAP.this.size();
 		}

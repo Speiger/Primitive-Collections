@@ -190,6 +190,9 @@ public class SETS
 		}
 		@Override
 		public int size() { return 1; }
+		
+		@Override
+		public SingletonSet KEY_GENERIC_TYPE copy() { return new SingletonSetBRACES(element); }
 	}
 	
 	private static class EmptySet KEY_GENERIC_TYPE extends EmptyCollection KEY_GENERIC_TYPE implements SET KEY_GENERIC_TYPE
@@ -198,6 +201,8 @@ public class SETS
 		@Override
 		public boolean remove(KEY_TYPE o) { throw new UnsupportedOperationException(); }
 #endif
+		@Override
+		public EmptySet KEY_GENERIC_TYPE copy() { return this; }
 	}
 	
 #if !TYPE_BOOLEAN
@@ -245,6 +250,9 @@ public class SETS
 		public KEY_TYPE getDefaultMinValue() { return n.getDefaultMinValue(); }
 		
 #endif
+		@Override
+		public NAVIGABLE_SET KEY_GENERIC_TYPE copy() { throw new UnsupportedOperationException(); }
+		
 		@Override
 		public NAVIGABLE_SET KEY_GENERIC_TYPE subSet(KEY_TYPE fromElement, boolean fromInclusive, KEY_TYPE toElement, boolean toInclusive) { return unmodifiable(n.subSet(fromElement, fromInclusive, toElement, toInclusive)); }
 		
@@ -301,6 +309,9 @@ public class SETS
 		public BI_ITERATOR KEY_GENERIC_TYPE iterator(KEY_TYPE fromElement) { return ITERATORS.unmodifiable(s.iterator(fromElement)); }
 		
 		@Override
+		public SORTED_SET KEY_GENERIC_TYPE copy() { throw new UnsupportedOperationException(); }
+		
+		@Override
 		public SORTED_SET KEY_GENERIC_TYPE subSet(KEY_TYPE fromElement, KEY_TYPE toElement) { return unmodifiable(s.subSet(fromElement, toElement)); }
 		
 		@Override
@@ -335,6 +346,9 @@ public class SETS
 			super(c);
 			s = c;
 		}
+		
+		@Override
+		public SET KEY_GENERIC_TYPE copy() { throw new UnsupportedOperationException(); }
 		
 #if !TYPE_OBJECT
 		@Override
@@ -412,6 +426,9 @@ public class SETS
 		public KEY_TYPE getDefaultMinValue() { synchronized(mutex) { return n.getDefaultMinValue(); } }
 		
 #endif
+		@Override
+		public NAVIGABLE_SET KEY_GENERIC_TYPE copy() { throw new UnsupportedOperationException(); }
+		
 		@Override
 		public NAVIGABLE_SET KEY_GENERIC_TYPE subSet(KEY_TYPE fromElement, boolean fromInclusive, KEY_TYPE toElement, boolean toInclusive) { synchronized(mutex) { return synchronize(n.subSet(fromElement, fromInclusive, toElement, toInclusive), mutex); } }
 
@@ -492,7 +509,10 @@ public class SETS
 
 		@Override
 		public BI_ITERATOR KEY_GENERIC_TYPE iterator(KEY_TYPE fromElement) { synchronized(mutex) { return s.iterator(fromElement); } }
-
+		
+		@Override
+		public SORTED_SET KEY_GENERIC_TYPE copy() { throw new UnsupportedOperationException(); }
+		
 		@Override
 		public SORTED_SET KEY_GENERIC_TYPE subSet(KEY_TYPE fromElement, KEY_TYPE toElement) { synchronized(mutex) { return synchronize(s.subSet(fromElement, toElement), mutex); } }
 
@@ -555,6 +575,9 @@ public class SETS
 			s = c;
 #endif
 		}
+		
+		@Override
+		public SET KEY_GENERIC_TYPE copy() { throw new UnsupportedOperationException(); }
 		
 #if !TYPE_OBJECT
 		@Override
