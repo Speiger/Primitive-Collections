@@ -10,6 +10,8 @@ import speiger.src.collections.PACKAGE.sets.NAVIGABLE_SET;
  */
 public interface NAVIGABLE_MAP KEY_VALUE_GENERIC_TYPE extends SORTED_MAP KEY_VALUE_GENERIC_TYPE, NavigableMap<CLASS_TYPE, CLASS_VALUE_TYPE>
 {
+	@Override
+	public NAVIGABLE_MAP KEY_VALUE_GENERIC_TYPE copy();
 	/** @return a Type Specific desendingMap */
 	@Override
 	public NAVIGABLE_MAP KEY_VALUE_GENERIC_TYPE descendingMap();

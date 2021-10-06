@@ -128,6 +128,7 @@ public interface COLLECTION KEY_GENERIC_TYPE extends Collection<CLASS_TYPE>, ITE
 	 * This function is more optimized then a copy constructor since the Collection does not have to be unsorted/resorted.
 	 * It can be compared to Cloneable but with less exception risk
 	 * @return a Shallow Copy of the collection
+	 * @note Wrappers and view collections will not support this feature
 	 */
 	public COLLECTION KEY_GENERIC_TYPE copy();
 	

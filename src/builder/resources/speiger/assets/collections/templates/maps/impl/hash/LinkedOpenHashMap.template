@@ -1,5 +1,6 @@
 package speiger.src.collections.PACKAGE.maps.impl.hash;
 
+import java.util.Arrays;
 import java.util.Comparator;
 import java.util.Map;
 import java.util.NoSuchElementException;
@@ -311,6 +312,23 @@ public class LINKED_HASH_MAP KEY_VALUE_GENERIC_TYPE extends HASH_MAP KEY_VALUE_G
 		if(index < 0) return getDefaultReturnValue();
 		moveToLastIndex(index);
 		return values[index];
+	}
+	
+	@Override
+	public LINKED_HASH_MAP KEY_VALUE_GENERIC_TYPE copy() {
+		LINKED_HASH_MAP KEY_VALUE_GENERIC_TYPE map = new LINKED_HASH_MAPKV_BRACES(0, loadFactor);
+		map.minCapacity = minCapacity;
+		map.mask = mask;
+		map.maxFill = maxFill;
+		map.nullIndex = nullIndex;
+		map.containsNull = containsNull;
+		map.size = size;
+		map.keys = Arrays.copyOf(keys, keys.length);
+		map.values = Arrays.copyOf(values, values.length);
+		map.links = Arrays.copyOf(links, links.length);
+		map.firstIndex = firstIndex;
+		map.lastIndex = lastIndex;
+		return map;
 	}
 	
 	@Override

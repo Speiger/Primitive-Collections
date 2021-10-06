@@ -76,6 +76,9 @@ public interface SORTED_MAP KEY_VALUE_GENERIC_TYPE extends SortedMap<CLASS_TYPE,
 	public COMPARATOR KEY_GENERIC_TYPE comparator();
 	
 	@Override
+	public SORTED_MAP KEY_VALUE_GENERIC_TYPE copy();
+	
+	@Override
 	public SET KEY_GENERIC_TYPE keySet();
 	@Override
 	public VALUE_COLLECTION VALUE_GENERIC_TYPE values();

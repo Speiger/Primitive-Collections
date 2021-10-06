@@ -60,6 +60,15 @@ public interface MAP KEY_VALUE_GENERIC_TYPE extends Map<CLASS_TYPE, CLASS_VALUE_
 	public MAP KEY_VALUE_GENERIC_TYPE setDefaultReturnValue(VALUE_TYPE v);
 	
 	/**
+	 * A Function that does a shallow clone of the Map itself.
+	 * This function is more optimized then a copy constructor since the Map does not have to be unsorted/resorted.
+	 * It can be compared to Cloneable but with less exception risk
+	 * @return a Shallow Copy of the Map
+	 * @note Wrappers and view Maps will not support this feature
+	 */
+	public MAP KEY_VALUE_GENERIC_TYPE copy();
+	
+	/**
 	 * Type Specific method to reduce boxing/unboxing of values
 	 * @param key the key that should be inserted,
 	 * @param value the value that should be inserted

@@ -1,7 +1,8 @@
 package speiger.src.collections.PACKAGE.maps.impl.immutable;
 
-import java.util.Map;
+import java.util.Arrays;
 import java.util.Comparator;
+import java.util.Map;
 import java.util.NoSuchElementException;
 import java.util.Objects;
 import java.util.function.Consumer;
@@ -103,6 +104,10 @@ public class IMMUTABLE_HASH_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_
 	/** Amount of Elements stored in the HashMap */
 	protected int size;
 	
+	/**
+	 * Helper constructor for copying the Map
+	 */
+	protected IMMUTABLE_HASH_MAP() {}
 	
 #if !TYPE_OBJECT || !VALUE_OBJECT
 	/**
@@ -410,6 +415,21 @@ public class IMMUTABLE_HASH_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_
 	public VALUE_COLLECTION VALUE_GENERIC_TYPE values() {
 		if(valuesC == null) valuesC = new Values();
 		return valuesC;
+	}
+	
+	@Override
+	public IMMUTABLE_HASH_MAP KEY_VALUE_GENERIC_TYPE copy() {
+		IMMUTABLE_HASH_MAP KEY_VALUE_GENERIC_TYPE map = new IMMUTABLE_HASH_MAPKV_BRACES();
+		map.mask = mask;
+		map.nullIndex = nullIndex;
+		map.containsNull = containsNull;
+		map.size = size;
+		map.keys = Arrays.copyOf(keys, keys.length);
+		map.values = Arrays.copyOf(values, values.length);
+		map.links = Arrays.copyOf(links, links.length);
+		map.firstIndex = firstIndex;
+		map.lastIndex = lastIndex;
+		return map;
 	}
 	
 	@Override

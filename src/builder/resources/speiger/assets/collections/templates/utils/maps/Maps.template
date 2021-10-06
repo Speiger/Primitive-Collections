@@ -278,6 +278,8 @@ public class MAPS
 		public VALUE_TYPE getOrDefault(KEY_TYPE key, VALUE_TYPE defaultValue) { return EQUALS_KEY_TYPE(key, this.key) ? value : defaultValue; }
 #endif
 		@Override
+		public SingletonMap KEY_VALUE_GENERIC_TYPE copy() { return new SingletonMapKV_BRACES(key, value); }
+		@Override
 		public SET KEY_GENERIC_TYPE keySet() { 
 			if(keySet == null) keySet = SETS.singleton(key);
 			return keySet;
@@ -329,6 +331,8 @@ public class MAPS
 		public VALUE_COLLECTION VALUE_GENERIC_TYPE values() { return VALUE_COLLECTIONS.empty(); }
 		@Override
 		public ObjectSet<MAP.Entry KEY_VALUE_GENERIC_TYPE> ENTRY_SET() { return ObjectSets.empty(); }
+		@Override
+		public EmptyMap KEY_VALUE_GENERIC_TYPE copy() { return this; }
 	}
 	
 	/**
@@ -415,6 +419,8 @@ public class MAPS
 		public MAP.Entry KEY_VALUE_GENERIC_TYPE floorEntry(KEY_TYPE key) { return unmodifiable(map.floorEntry(key)); }
 		@Override
 		public MAP.Entry KEY_VALUE_GENERIC_TYPE ceilingEntry(KEY_TYPE key) { return unmodifiable(map.ceilingEntry(key)); }
+		@Override
+		public NAVIGABLE_MAP KEY_VALUE_GENERIC_TYPE copy() { throw new UnsupportedOperationException(); }
 	}
 	
 	/**
@@ -462,6 +468,8 @@ public class MAPS
 		public VALUE_TYPE FIRST_ENTRY_VALUE() { return map.FIRST_ENTRY_VALUE(); }
 		@Override
 		public VALUE_TYPE LAST_ENTRY_VALUE() { return map.LAST_ENTRY_VALUE(); }
+		@Override
+		public SORTED_MAP KEY_VALUE_GENERIC_TYPE copy() { throw new UnsupportedOperationException(); }
 	}
 	
 	/**
@@ -501,6 +509,8 @@ public class MAPS
 		@Override
 		public VALUE_TYPE getOrDefault(KEY_TYPE key, VALUE_TYPE defaultValue) { return map.getOrDefault(key, defaultValue); }
 #endif
+		@Override
+		public MAP KEY_VALUE_GENERIC_TYPE copy() { throw new UnsupportedOperationException(); }
 		
 		@Override
 		public SET KEY_GENERIC_TYPE keySet() { 
@@ -614,7 +624,9 @@ public class MAPS
 		public MAP.Entry KEY_VALUE_GENERIC_TYPE floorEntry(KEY_TYPE key) { synchronized(mutex) { return map.floorEntry(key); } }
 		@Override
 		public MAP.Entry KEY_VALUE_GENERIC_TYPE ceilingEntry(KEY_TYPE key) { synchronized(mutex) { return map.ceilingEntry(key); } }
-#if !TYPE_OBJECT
+		@Override
+		public NAVIGABLE_MAP KEY_VALUE_GENERIC_TYPE copy() { throw new UnsupportedOperationException(); }
+		#if !TYPE_OBJECT
 		@Override
 		@Deprecated
 		public NAVIGABLE_MAP KEY_VALUE_GENERIC_TYPE subMap(CLASS_TYPE fromKey, boolean fromInclusive, CLASS_TYPE toKey, boolean toInclusive) { synchronized(mutex) { return synchronize(map.subMap(fromKey, fromInclusive, toKey, toInclusive), mutex); } }
@@ -718,6 +730,8 @@ public class MAPS
 		public VALUE_TYPE FIRST_ENTRY_VALUE() { synchronized(mutex) { return map.FIRST_ENTRY_VALUE(); } }
 		@Override
 		public VALUE_TYPE LAST_ENTRY_VALUE() { synchronized(mutex) { return map.LAST_ENTRY_VALUE(); } }
+		@Override
+		public SORTED_MAP KEY_VALUE_GENERIC_TYPE copy() { throw new UnsupportedOperationException(); }
 #if !TYPE_OBJECT
 		@Override
 		@Deprecated
@@ -830,6 +844,8 @@ public class MAPS
 		public void forEach(BI_CONSUMER KEY_VALUE_GENERIC_TYPE action) { synchronized(mutex) { map.forEach(action); } }
 		@Override
 		public int size() { synchronized(mutex) { return super.size(); } }
+		@Override
+		public MAP KEY_VALUE_GENERIC_TYPE copy() { throw new UnsupportedOperationException(); }
 		@Override
 		public SET KEY_GENERIC_TYPE keySet() {
 			if(keys == null) keys = SETS.synchronize(map.keySet(), mutex);

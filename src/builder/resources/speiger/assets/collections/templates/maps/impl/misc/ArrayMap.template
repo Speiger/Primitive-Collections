@@ -554,6 +554,14 @@ public class ARRAY_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_VALUE_GEN
 		size = 0;
 	}
 	
+	public ARRAY_MAP KEY_VALUE_GENERIC_TYPE copy() {
+		ARRAY_MAP KEY_VALUE_GENERIC_TYPE map = new ARRAY_MAPKV_BRACES();
+		map.size = size;
+		map.keys = Arrays.copyOf(keys, keys.length);
+		map.values = Arrays.copyOf(values, keys.length);
+		return map;
+	}
+	
 	@Override
 	public COMPARATOR KEY_GENERIC_TYPE comparator() {
 		return null;
@@ -979,6 +987,11 @@ public class ARRAY_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_VALUE_GEN
 		public ObjectSet<MAP.Entry KEY_VALUE_GENERIC_TYPE> ENTRY_SET() {
 			if(entrySet == null) entrySet = new SubMapEntrySet();
 			return entrySet;
+		}
+		
+		@Override
+		public SubMap copy() { 
+			throw new UnsupportedOperationException(); 
 		}
 		
 		@Override

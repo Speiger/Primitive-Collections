@@ -424,6 +424,20 @@ public class CUSTOM_HASH_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_VAL
 	
 #endif
 	@Override
+	public CUSTOM_HASH_MAP KEY_VALUE_GENERIC_TYPE copy() {
+		CUSTOM_HASH_MAP KEY_VALUE_GENERIC_TYPE map = new CUSTOM_HASH_MAPKV_BRACES(0, loadFactor, strategy);
+		map.minCapacity = minCapacity;
+		map.mask = mask;
+		map.maxFill = maxFill;
+		map.nullIndex = nullIndex;
+		map.containsNull = containsNull;
+		map.size = size;
+		map.keys = Arrays.copyOf(keys, keys.length);
+		map.values = Arrays.copyOf(values, values.length);
+		return map;
+	}
+	
+	@Override
 	public ObjectSet<MAP.Entry KEY_VALUE_GENERIC_TYPE> ENTRY_SET() {
 		if(entrySet == null) entrySet = new MapEntrySet();
 		return entrySet;

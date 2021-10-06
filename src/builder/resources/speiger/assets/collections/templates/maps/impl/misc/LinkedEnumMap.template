@@ -128,6 +128,18 @@ public class LINKED_ENUM_MAP KEY_ENUM_VALUE_GENERIC_TYPE extends ENUM_MAP KEY_VA
 	}
 	
 	@Override
+	public LINKED_ENUM_MAP KEY_VALUE_GENERIC_TYPE copy() {
+		LINKED_ENUM_MAP KEY_VALUE_GENERIC_TYPE map = new LINKED_ENUM_MAPKV_BRACES(keyType);
+		map.size = size;
+		System.arraycopy(present, 0, map.present, 0, Math.min(present.length, map.present.length));
+		System.arraycopy(values, 0, map.values, 0, Math.min(values.length, map.values.length));
+		System.arraycopy(links, 0, map.links, 0, Math.min(links.length, map.links.length));
+		map.firstIndex = firstIndex;
+		map.lastIndex = lastIndex;
+		return map;
+	}
+	
+	@Override
 	public COMPARATOR KEY_GENERIC_TYPE comparator() {
 		return null;
 	}

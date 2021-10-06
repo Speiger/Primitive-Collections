@@ -177,6 +177,15 @@ public class ENUM_MAP KEY_ENUM_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_VALUE
 	
 #endif
 	@Override
+	public ENUM_MAP KEY_VALUE_GENERIC_TYPE copy() {
+		ENUM_MAP KEY_VALUE_GENERIC_TYPE map = new ENUM_MAPKV_BRACES(keyType);
+		map.size = size;
+		System.arraycopy(present, 0, map.present, 0, Math.min(present.length, map.present.length));
+		System.arraycopy(values, 0, map.values, 0, Math.min(values.length, map.values.length));
+		return map;
+	}
+	
+	@Override
 	public ObjectSet<MAP.Entry KEY_VALUE_GENERIC_TYPE> ENTRY_SET() {
 		if(entrySet == null) entrySet = new EntrySet();
 		return entrySet;
