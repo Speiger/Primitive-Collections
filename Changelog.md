@@ -1,5 +1,10 @@
 # Changelog of versions
 
+### Version 0.4.2
+- Added: Lists/Sets/Maps/PriorityQueues are now copy-able. with the new copy() function.
+	Note: subLists/subMaps/subSets or synchronize/unmodifyable wrappers do not support that function.
+- Fixed: PriorityQueues didn't implement: hashCode/equals/toString
+
 ### Version 0.4.1
 - Changed: ForEach with input now provides input, value instead of value, input, this improves the usage of method references greatly
 - Added: addAll with Array-types in collections.

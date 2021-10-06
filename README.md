@@ -23,15 +23,17 @@ But its focus is a different one.
 New Specialized functions that were added to increase performance or reduce allocations or Quality Of life.
 To highlight things that may be wanted.
 - Iterable:
-	- map/flatMap/arrayFlatMap: A Light weight version of Stream.map()
+	- map/flatMap/arrayFlatMap: A Light weight version of Stream.map().
 	- findFirst: Allows to find the first element of a Predicated Iterable.
 	- filter: Allows to filter unwanted elements for wrapped Iterable
 	- matchAny/matchNone/matchAll: Allows to find elements in a collection.
-	- count: counts all valid elements in a collection
+	- count: counts all valid elements in a collection.
 	- forEach: Allows to input a second element into a forEach move allowing for more flexibility for Method References
 - Collection:
 	- containsAny: Allows to test if another collection contains an of the elements of the tested collection.
 	- primitiveStream: Provides access to the closest Java Stream Type.
+	- copy: shallowCopies the collection, used instead of clone because this is better to use.
+		(subCollections/synchronized/unmodifiable not supported for obvious reasons)
 - List:
 	- add/get/removeElements (From FastUtil): Allows to add/get/remove an Array into/from a list. Just with less overhead
 	- extractElements: Allows to remove a Range of elements from the List and get what was removed.
