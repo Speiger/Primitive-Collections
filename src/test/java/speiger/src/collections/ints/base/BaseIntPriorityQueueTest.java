@@ -120,4 +120,13 @@ public abstract class BaseIntPriorityQueueTest extends BaseIntIterableTest
 			}
 		}
 	}
+	
+	@Test
+	public void testCopy() {
+		if(!getValidPriorityQueueTests().contains(PriorityQueueTest.COPY)) return;
+		IntPriorityQueue queue = create(TEST_ARRAY);
+		IntPriorityQueue copy = queue.copy();
+		Assert.assertFalse(queue == copy);
+		Assert.assertEquals(queue, copy);
+	}
 }

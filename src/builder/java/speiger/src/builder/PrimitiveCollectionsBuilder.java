@@ -78,6 +78,7 @@ public class PrimitiveCollectionsBuilder extends TemplateProcessor
 		nameRemapper.put("IArray", "I%sArray");
 		nameRemapper.put("AbstractMap", "Abstract%sMap");
 		nameRemapper.put("AbstractCollection", "Abstract%sCollection");
+		nameRemapper.put("AbstractPriorityQueue", "Abstract%sPriorityQueue");
 		nameRemapper.put("AbstractSet", "Abstract%sSet");
 		nameRemapper.put("AbstractList", "Abstract%sList");
 		nameRemapper.put("EnumMap", "Enum2%sMap");

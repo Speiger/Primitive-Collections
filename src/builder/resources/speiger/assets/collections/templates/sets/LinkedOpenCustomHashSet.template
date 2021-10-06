@@ -620,6 +620,7 @@ public class LINKED_CUSTOM_HASH_SET KEY_GENERIC_TYPE extends CUSTOM_HASH_SET KEY
 		set.containsNull = containsNull;
 		set.size = size;
 		set.keys = Arrays.copyOf(keys, keys.length);
+		set.links = Arrays.copyOf(links, links.length);
 		set.firstIndex = firstIndex;
 		set.lastIndex = lastIndex;
 		return set;

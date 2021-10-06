@@ -24,7 +24,7 @@ import speiger.src.collections.PACKAGE.utils.ARRAYS;
  * It is highly suggested to use HeapPriorityQueue otherwise, unless you know why you need this specific implementation
  * @Type(T)
  */
-public class ARRAY_PRIORITY_QUEUE KEY_GENERIC_TYPE implements PRIORITY_QUEUE KEY_GENERIC_TYPE
+public class ARRAY_PRIORITY_QUEUE KEY_GENERIC_TYPE extends ABSTRACT_PRIORITY_QUEUE KEY_GENERIC_TYPE
 {
 	/** The Backing Array */
 	protected transient KEY_TYPE[] array = EMPTY_KEY_ARRAY;

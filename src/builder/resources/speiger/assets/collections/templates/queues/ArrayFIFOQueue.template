@@ -22,7 +22,7 @@ import speiger.src.collections.utils.ITrimmable;
  * Its specific implementation uses a backing array that grows and shrinks as it is needed.
  * @Type(T)
  */
-public class ARRAY_FIFO_QUEUE KEY_GENERIC_TYPE implements PRIORITY_DEQUEUE KEY_GENERIC_TYPE, ITrimmable
+public class ARRAY_FIFO_QUEUE KEY_GENERIC_TYPE extends ABSTRACT_PRIORITY_QUEUE KEY_GENERIC_TYPE implements PRIORITY_DEQUEUE KEY_GENERIC_TYPE, ITrimmable
 {
 	/** Max Possible ArraySize without the JVM Crashing */
 	private static final int MAX_ARRAY_SIZE = Integer.MAX_VALUE - 8;

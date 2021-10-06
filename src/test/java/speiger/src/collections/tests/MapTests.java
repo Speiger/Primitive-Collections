@@ -11,5 +11,6 @@ public enum MapTests
 	MERGE,
 	GET,
 	ITERATORS,
-	REMOVE;
+	REMOVE,
+	COPY;
 }

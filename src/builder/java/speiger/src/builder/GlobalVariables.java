@@ -184,6 +184,7 @@ public class GlobalVariables
 		
 		//Abstract Classes
 		addAbstractMapper("ABSTRACT_COLLECTION", "Abstract%sCollection");
+		addAbstractMapper("ABSTRACT_PRIORITY_QUEUE", "Abstract%sPriorityQueue");
 		addAbstractMapper("ABSTRACT_SET", "Abstract%sSet");
 		addAbstractMapper("ABSTRACT_LIST", "Abstract%sList");
 		addAbstractBiMapper("ABSTRACT_MAP", "Abstract%sMap", "2");

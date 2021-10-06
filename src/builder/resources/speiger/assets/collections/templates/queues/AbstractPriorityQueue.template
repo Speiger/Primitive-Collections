@@ -1,0 +1,46 @@
+package speiger.src.collections.PACKAGE.queues;
+
+#if TYPE_OBJECT
+import java.util.Objects;
+#endif
+import java.util.StringJoiner;
+
+/**
+ * Helper class that implements all the essential methods for the PriorityQueues
+ * @Type(T)
+ */
+public abstract class ABSTRACT_PRIORITY_QUEUE KEY_GENERIC_TYPE implements PRIORITY_QUEUE KEY_GENERIC_TYPE
+{
+	@Override
+	public boolean equals(Object obj) {
+		if(obj instanceof PRIORITY_QUEUE) {
+			PRIORITY_QUEUE KEY_GENERIC_TYPE queue = (PRIORITY_QUEUE KEY_GENERIC_TYPE)obj;
+			if(queue.size() != size()) return false;
+			for(int i = 0,m=size();i<m;i++) {
+				if(KEY_EQUALS_NOT(queue.peek(i), peek(i))) return false;
+			}
+			return true;
+		}
+		return false;
+	}
+	
+	@Override
+	public int hashCode() {
+        int result = 1;
+        for (int i = 0,m=size();i<m;i++) {
+            result = 31 * result + KEY_TO_HASH(peek(i));
+        }
+		return result;
+	}
+	
+	@Override
+	public String toString()
+	{
+		if(isEmpty()) return "[]";
+		StringJoiner joiner = new StringJoiner(", ", "[", "]");
+        for (int i = 0,m=size();i<m;i++) {
+        	joiner.add(KEY_TO_STRING(peek(i)));
+        }
+        return joiner.toString();
+	}
+}

@@ -7,4 +7,5 @@ public enum PriorityQueueTest
 	PEEK,
 	REMOVE,
 	TO_ARRAY,
+	COPY;
 }

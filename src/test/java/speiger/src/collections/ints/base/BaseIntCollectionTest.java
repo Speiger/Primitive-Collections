@@ -178,4 +178,13 @@ public abstract class BaseIntCollectionTest extends BaseIntIterableTest
 		Assert.assertEquals(base, IntCollections.synchronize(collection).toString());
 		Assert.assertEquals(base, IntCollections.unmodifiable(collection).toString());
 	}
+	
+	@Test
+	public void testCopy() {
+		if(!getValidCollectionTests().contains(CollectionTest.COPY)) return;
+		IntCollection collection = create(BULK_ADD_ARRAY);
+		IntCollection copy = collection.copy();
+		Assert.assertFalse(collection == copy);
+		Assert.assertEquals(collection, copy);
+	}
 }

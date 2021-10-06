@@ -135,6 +135,16 @@ public abstract class BaseInt2IntMapTest
 		Assert.assertTrue(map.remove(PUT_VALUE_ARRAY[51], PUT_ARRAY[51]));
 	}
 	
+	@Test
+	public void testSort()
+	{
+		if(!getValidMapTests().contains(MapTests.COPY)) return;
+		Int2IntMap map = createMap(TEST_ARRAY, TEST_ARRAY);
+		Int2IntMap copy = map.copy();
+		Assert.assertFalse(map == copy);
+		Assert.assertEquals(map, copy);
+	}
+	
 	public static class Strategy implements IntStrategy
 	{
 		@Override
