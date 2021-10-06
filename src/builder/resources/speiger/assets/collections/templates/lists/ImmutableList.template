@@ -261,6 +261,11 @@ public class IMMUTABLE_LIST KEY_GENERIC_TYPE extends ABSTRACT_LIST KEY_GENERIC_T
 		return data[index];
 	}
 	
+	@Override
+	public IMMUTABLE_LIST KEY_GENERIC_TYPE copy() {
+		return new IMMUTABLE_LISTBRACES(Arrays.copyOf(data, data.length));
+	}
+	
 	/**
 	 * A Type Specific foreach function that reduces (un)boxing
 	 * 

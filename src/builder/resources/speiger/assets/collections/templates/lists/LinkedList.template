@@ -820,6 +820,23 @@ public class LINKED_LIST KEY_GENERIC_TYPE extends ABSTRACT_LIST KEY_GENERIC_TYPE
 		size = 0;
 	}
 	
+	@Override
+	public LINKED_LIST KEY_GENERIC_TYPE copy() {
+		LINKED_LIST KEY_GENERIC_TYPE list = new LINKED_LISTBRACES();
+		list.size = size;
+		if(first != null) {
+			list.first = new EntryBRACES(first.value, null, null);
+			Entry KEY_GENERIC_TYPE lastReturned = list.first;
+			for(Entry KEY_GENERIC_TYPE entry = first.next;entry != null;entry = entry.next) {
+				Entry KEY_GENERIC_TYPE next = new EntryBRACES(entry.value, lastReturned, null);
+				lastReturned.next = next;
+				lastReturned = next;
+			}
+			list.last = lastReturned;
+		}
+		return list;
+	}
+	
 	protected Entry KEY_GENERIC_TYPE getNode(int index) {
 		if(index < size >> 2) {
 			Entry KEY_GENERIC_TYPE x = first;

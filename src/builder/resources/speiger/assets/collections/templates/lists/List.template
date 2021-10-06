@@ -339,6 +339,8 @@ public interface LIST KEY_GENERIC_TYPE extends COLLECTION KEY_GENERIC_TYPE, List
 	 */
 	public void size(int size);
 	
+	@Override
+	public LIST KEY_GENERIC_TYPE copy();
 #if !TYPE_OBJECT
 	
 	/** {@inheritDoc}

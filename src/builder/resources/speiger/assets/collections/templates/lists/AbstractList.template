@@ -229,6 +229,8 @@ public abstract class ABSTRACT_LIST KEY_GENERIC_TYPE extends ABSTRACT_COLLECTION
 		while(size < size()) REMOVE(size() - 1);
 	}
 	
+	public ABSTRACT_LIST KEY_GENERIC_TYPE copy() { throw new UnsupportedOperationException(); }
+	
 	private class SUB_LIST extends ABSTRACT_LIST KEY_GENERIC_TYPE {
 		ABSTRACT_LIST KEY_GENERIC_TYPE l;
 		int offset;

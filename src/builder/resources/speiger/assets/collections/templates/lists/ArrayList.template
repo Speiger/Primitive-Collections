@@ -1015,6 +1015,14 @@ public class ARRAY_LIST KEY_GENERIC_TYPE extends ABSTRACT_LIST KEY_GENERIC_TYPE 
 		grow(size);
 	}
 	
+	@Override
+	public ARRAY_LIST KEY_GENERIC_TYPE copy() {
+		ARRAY_LIST KEY_GENERIC_TYPE list = new ARRAY_LISTBRACES();
+		list.data = Arrays.copyOf(data, data.length);
+		list.size = size;
+		return list;
+	}
+	
 	protected void grow(int capacity) {
 		if(capacity < data.length) return;
 		data = Arrays.copyOf(data, data == ARRAYS.EMPTY_ARRAY ? Math.max(DEFAULT_ARRAY_SIZE, capacity) : (int)Math.max(Math.min((long)data.length + (data.length >> 1), SanityChecks.MAX_ARRAY_SIZE), capacity));		
