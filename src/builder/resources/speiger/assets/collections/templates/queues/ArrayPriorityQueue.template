@@ -323,6 +323,16 @@ public class ARRAY_PRIORITY_QUEUE KEY_GENERIC_TYPE implements PRIORITY_QUEUE KEY
 	}
 	
 	@Override
+	public ARRAY_PRIORITY_QUEUE KEY_GENERIC_TYPE copy() {
+		ARRAY_PRIORITY_QUEUE KEY_GENERIC_TYPE queue = new ARRAY_PRIORITY_QUEUEBRACES();
+		queue.firstIndex = firstIndex;
+		queue.size = size;
+		queue.comparator = comparator;
+		queue.array = Arrays.copyOf(array, array.length);
+		return queue;
+	}
+	
+	@Override
 	public COMPARATOR KEY_SUPER_GENERIC_TYPE comparator() {
 		return comparator;
 	}

@@ -22,4 +22,7 @@ public interface PRIORITY_DEQUEUE KEY_GENERIC_TYPE extends PRIORITY_QUEUE KEY_GE
 	 * @return the Last Element within the dequeue without deleting it
 	 */
 	public default KEY_TYPE last() { return peek(size()-1); }
+	
+	@Override
+	public PRIORITY_DEQUEUE KEY_GENERIC_TYPE copy();
 }

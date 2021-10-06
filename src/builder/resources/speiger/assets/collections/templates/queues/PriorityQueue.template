@@ -71,6 +71,15 @@ public interface PRIORITY_QUEUE KEY_GENERIC_TYPE extends ITERABLE KEY_GENERIC_TY
 	public void onChanged();
 	
 	/**
+	 * A Function that does a shallow clone of the PriorityQueue itself.
+	 * This function is more optimized then a copy constructor since the PriorityQueue does not have to be unsorted/resorted.
+	 * It can be compared to Cloneable but with less exception risk
+	 * @return a Shallow Copy of the PriorityQueue
+	 * @note Wrappers and view PriorityQueues will not support this feature
+	 */
+	public PRIORITY_QUEUE KEY_GENERIC_TYPE copy();
+	
+	/**
 	 * @return the sorter of the Queue, can be null
 	 */
 	public COMPARATOR KEY_SUPER_GENERIC_TYPE comparator();
