@@ -15,7 +15,8 @@ import speiger.src.collections.objects.utils.ObjectArrays;
 import speiger.src.collections.PACKAGE.functions.CONSUMER;
 import speiger.src.collections.PACKAGE.utils.ARRAYS;
 #endif
-
+import speiger.src.collections.PACKAGE.functions.function.PREDICATE;
+import speiger.src.collections.objects.functions.consumer.BI_FROM_OBJECT_CONSUMER;
 /**
  * A Helper class for Collections
  */
@@ -180,6 +181,18 @@ public class COLLECTIONS
 		public boolean equals(Object obj) { synchronized(mutex) { return c.equals(obj); } }
 		@Override
 		public String toString() { synchronized(mutex) { return c.toString(); } }
+		@Override
+		public <E> void forEach(E input, BI_FROM_OBJECT_CONSUMER KSK_GENERIC_TYPE<E> action) { synchronized(mutex) { c.forEach(input, action); } }
+		@Override
+		public boolean matchesAny(PREDICATE KEY_GENERIC_TYPE filter) { synchronized(mutex) { return c.matchesAny(filter); } }
+		@Override
+		public boolean matchesNone(PREDICATE KEY_GENERIC_TYPE filter) { synchronized(mutex) { return c.matchesNone(filter); } }
+		@Override
+		public boolean matchesAll(PREDICATE KEY_GENERIC_TYPE filter) { synchronized(mutex) { return c.matchesAll(filter); } }
+		@Override
+		public KEY_TYPE findFirst(PREDICATE KEY_GENERIC_TYPE filter) { synchronized(mutex) { return c.findFirst(filter); } }
+		@Override
+		public int count(PREDICATE KEY_GENERIC_TYPE filter) { synchronized(mutex) { return c.count(filter); } }
 	}
 	
 	/**
@@ -278,6 +291,18 @@ public class COLLECTIONS
 		public boolean equals(Object obj) { return c.equals(obj); }
 		@Override
 		public String toString() { return c.toString(); }
+		@Override
+		public <E> void forEach(E input, BI_FROM_OBJECT_CONSUMER KSK_GENERIC_TYPE<E> action) { c.forEach(input, action); }
+		@Override
+		public boolean matchesAny(PREDICATE KEY_GENERIC_TYPE filter) { return c.matchesAny(filter); }
+		@Override
+		public boolean matchesNone(PREDICATE KEY_GENERIC_TYPE filter) { return c.matchesNone(filter); }
+		@Override
+		public boolean matchesAll(PREDICATE KEY_GENERIC_TYPE filter) { return c.matchesAll(filter); }
+		@Override
+		public KEY_TYPE findFirst(PREDICATE KEY_GENERIC_TYPE filter) { return c.findFirst(filter); }
+		@Override
+		public int count(PREDICATE KEY_GENERIC_TYPE filter) { return c.count(filter); }
 	}
 	
 	/**

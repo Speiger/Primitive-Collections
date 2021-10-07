@@ -34,6 +34,8 @@ public class ARRAY_FIFO_QUEUE KEY_GENERIC_TYPE extends ABSTRACT_PRIORITY_QUEUE K
 	protected int first;
 	/** The Last Index pointer */
 	protected int last;
+	/** The Minimum Capacity of the Queue **/
+	protected int minCapacity;
 	
 	/**
 	 * Constructor using a initial array
@@ -62,7 +64,9 @@ public class ARRAY_FIFO_QUEUE KEY_GENERIC_TYPE extends ABSTRACT_PRIORITY_QUEUE K
 	 */
 	public ARRAY_FIFO_QUEUE(KEY_TYPE[] values, int offset, int size) {
 		if (values.length < size) throw new IllegalArgumentException("Initial array (" + values.length + ") is smaller then the expected size (" + size + ")");
-		if(values.length <= 0) values = NEW_KEY_ARRAY(1);
+		if(values.length <= 0) values = NEW_KEY_ARRAY(MIN_CAPACITY);
+		else if(values.length < MIN_CAPACITY) values = Arrays.copyOf(values, MIN_CAPACITY);
+		minCapacity = MIN_CAPACITY;
 		array = values;
 		first = offset;
 		last = (offset + size) % array.length;
@@ -76,7 +80,8 @@ public class ARRAY_FIFO_QUEUE KEY_GENERIC_TYPE extends ABSTRACT_PRIORITY_QUEUE K
 	 */
 	public ARRAY_FIFO_QUEUE(int capacity) {
 		if (capacity < 0) throw new IllegalArgumentException("Initial capacity (" + capacity + ") is negative");
-		array = NEW_KEY_ARRAY(Math.max(1, capacity));
+		array = NEW_KEY_ARRAY(Math.max(MIN_CAPACITY, capacity));
+		minCapacity = array.length;
 	}
 	
 	/**
@@ -227,6 +232,7 @@ public class ARRAY_FIFO_QUEUE KEY_GENERIC_TYPE extends ABSTRACT_PRIORITY_QUEUE K
 		ARRAY_FIFO_QUEUE KEY_GENERIC_TYPE queue = new ARRAY_FIFO_QUEUEBRACES();
 		queue.first = first;
 		queue.last = last;
+		queue.minCapacity = minCapacity;
 		queue.array = Arrays.copyOf(array, array.length);
 		return queue;
 	}
@@ -305,7 +311,7 @@ public class ARRAY_FIFO_QUEUE KEY_GENERIC_TYPE extends ABSTRACT_PRIORITY_QUEUE K
 	
 	@Override
 	public boolean trim(int size) {
-		int newSize = Math.max(size, size());
+		int newSize = Math.max(Math.max(size, size()), minCapacity);
 		if(newSize >= array.length) return false;
 		KEY_TYPE[] newArray = NEW_KEY_ARRAY(newSize);
 		if(first <= last) System.arraycopy(array, first, newArray, 0, last - first);
@@ -326,7 +332,7 @@ public class ARRAY_FIFO_QUEUE KEY_GENERIC_TYPE extends ABSTRACT_PRIORITY_QUEUE K
 	 */
 	@Override
 	public void clearAndTrim(int size) {
-		int newSize = Math.max(MIN_CAPACITY, size);
+		int newSize = Math.max(minCapacity, size);
 		if(array.length <= newSize) {
 			clear();
 			return;
@@ -348,7 +354,7 @@ public class ARRAY_FIFO_QUEUE KEY_GENERIC_TYPE extends ABSTRACT_PRIORITY_QUEUE K
 	
 	protected void reduce() {
 		final int size = size();
-		if (array.length > MIN_CAPACITY && size <= array.length / 4) resize(size, array.length / 2);
+		if (array.length > minCapacity && size <= array.length / 4) resize(size, Math.max(array.length / 2, minCapacity));
 	}
 	
 	protected void expand() {

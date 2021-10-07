@@ -2,6 +2,7 @@ package speiger.src.collections.PACKAGE.utils;
 
 #if TYPE_OBJECT
 import java.util.Comparator;
+import java.util.function.Consumer;
 #endif
 
 import speiger.src.collections.PACKAGE.collections.ITERATOR;
@@ -10,6 +11,11 @@ import speiger.src.collections.PACKAGE.functions.COMPARATOR;
 #endif
 import speiger.src.collections.PACKAGE.queues.PRIORITY_DEQUEUE;
 import speiger.src.collections.PACKAGE.queues.PRIORITY_QUEUE;
+#if !TYPE_OBJECT
+import speiger.src.collections.PACKAGE.functions.CONSUMER;
+#endif
+import speiger.src.collections.PACKAGE.functions.function.PREDICATE;
+import speiger.src.collections.objects.functions.consumer.BI_FROM_OBJECT_CONSUMER;
 
 /**
  * A Helper class for PriorityQueues
@@ -102,6 +108,20 @@ public class PRIORITY_QUEUES
 		public GENERIC_SPECIAL_KEY_BRACES<E> KEY_SPECIAL_TYPE[] TO_ARRAY(KEY_SPECIAL_TYPE[] input) { synchronized(mutex) { return queue.TO_ARRAY(input); } }
 		@Override
 		public PRIORITY_QUEUE KEY_GENERIC_TYPE copy() { throw new UnsupportedOperationException(); }
+		@Override
+		public void forEach(CONSUMER KEY_SUPER_GENERIC_TYPE action) { synchronized(mutex) { queue.forEach(action); } }
+		@Override
+		public <E> void forEach(E input, BI_FROM_OBJECT_CONSUMER KSK_GENERIC_TYPE<E> action) { synchronized(mutex) { queue.forEach(input, action); } }
+		@Override
+		public boolean matchesAny(PREDICATE KEY_GENERIC_TYPE filter) { synchronized(mutex) { return queue.matchesAny(filter); } }
+		@Override
+		public boolean matchesNone(PREDICATE KEY_GENERIC_TYPE filter) { synchronized(mutex) { return queue.matchesNone(filter); } }
+		@Override
+		public boolean matchesAll(PREDICATE KEY_GENERIC_TYPE filter) { synchronized(mutex) { return queue.matchesAll(filter); } }
+		@Override
+		public KEY_TYPE findFirst(PREDICATE KEY_GENERIC_TYPE filter) { synchronized(mutex) { return queue.findFirst(filter); } }
+		@Override
+		public int count(PREDICATE KEY_GENERIC_TYPE filter) { synchronized(mutex) { return queue.count(filter); } }
 	}
 	
 	/**

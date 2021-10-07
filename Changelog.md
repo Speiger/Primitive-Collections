@@ -1,5 +1,9 @@
 # Changelog of versions
 
+### Version 0.4.3
+- Added: Wrapper now support the Optimized Lambda replacer functions to improve performance.
+- Added: FIFO Queue has now a minimum capacity and that is now checked more consistently.
+
 ### Version 0.4.2
 - Added: Lists/Sets/Maps/PriorityQueues are now copy-able. with the new copy() function.
 	Note: subLists/subMaps/subSets or synchronize/unmodifyable wrappers do not support that function.
