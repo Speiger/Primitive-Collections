@@ -63,6 +63,9 @@ Any 0.x.0 version (Minor) can be reason for massive changes including API.
 To ensure that problems can be dealt with even if it is breaking the current API.     
 Any breaking changes will be Documented (once 1.0 is released)     
 
+Also to save space every 0.0.x (Patch) that is 2 Minor Versions behind will be removed. 
+So if 0.5.0 is released every 0.3.x patch will be deleted, except for the last patch for that minor version.
+
 # How to install
 Using Gradle:
 ```gradle
