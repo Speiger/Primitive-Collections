@@ -2,6 +2,8 @@ package speiger.src.collections.PACKAGE.lists;
 
 #if TYPE_OBJECT
 import java.util.Comparator;
+#else if PRIMITIVES
+import java.nio.JAVA_BUFFER;
 #endif
 import java.util.Collection;
 import java.util.Iterator;
@@ -635,6 +637,14 @@ public class LINKED_LIST KEY_GENERIC_TYPE extends ABSTRACT_LIST KEY_GENERIC_TYPE
 			d[i] = unlink(entry.next);
 		}
 		return d;
+	}
+	
+#endif
+#if PRIMITIVES
+	@Override
+	public void fillBuffer(JAVA_BUFFER buffer) {
+		for(Entry KEY_GENERIC_TYPE entry = first;entry != null;entry = entry.next)
+			buffer.put(entry.value);
 	}
 	
 #endif

@@ -72,13 +72,14 @@ repositories {
     }
 }
 dependencies {
-	compile 'de.speiger:Primitive-Collections:0.4.3'
+	compile 'de.speiger:Primitive-Collections:0.4.4'
 }
 ```
 Direct:
 
 | Version 	| Jar                                                                                                                          	| Sources                                                                                                                              	| Java Doc                                                                                                                             	|
 |---------	|------------------------------------------------------------------------------------------------------------------------------	|--------------------------------------------------------------------------------------------------------------------------------------	|--------------------------------------------------------------------------------------------------------------------------------------	|
+| 0.4.4   	| [Download](https://maven.speiger.com/repository/main/de/speiger/Primitive-Collections/0.4.4/Primitive-Collections-0.4.4.jar) 	| [Download](https://maven.speiger.com/repository/main/de/speiger/Primitive-Collections/0.4.4/Primitive-Collections-0.4.4-sources.jar) 	| [Download](https://maven.speiger.com/repository/main/de/speiger/Primitive-Collections/0.4.4/Primitive-Collections-0.4.4-javadoc.jar) 	|
 | 0.4.3   	| [Download](https://maven.speiger.com/repository/main/de/speiger/Primitive-Collections/0.4.3/Primitive-Collections-0.4.3.jar) 	| [Download](https://maven.speiger.com/repository/main/de/speiger/Primitive-Collections/0.4.3/Primitive-Collections-0.4.3-sources.jar) 	| [Download](https://maven.speiger.com/repository/main/de/speiger/Primitive-Collections/0.4.3/Primitive-Collections-0.4.3-javadoc.jar) 	|
 | 0.4.2   	| [Download](https://maven.speiger.com/repository/main/de/speiger/Primitive-Collections/0.4.2/Primitive-Collections-0.4.2.jar) 	| [Download](https://maven.speiger.com/repository/main/de/speiger/Primitive-Collections/0.4.2/Primitive-Collections-0.4.2-sources.jar) 	| [Download](https://maven.speiger.com/repository/main/de/speiger/Primitive-Collections/0.4.2/Primitive-Collections-0.4.2-javadoc.jar) 	|
 | 0.4.1   	| [Download](https://maven.speiger.com/repository/main/de/speiger/Primitive-Collections/0.4.1/Primitive-Collections-0.4.1.jar) 	| [Download](https://maven.speiger.com/repository/main/de/speiger/Primitive-Collections/0.4.1/Primitive-Collections-0.4.1-sources.jar) 	| [Download](https://maven.speiger.com/repository/main/de/speiger/Primitive-Collections/0.4.1/Primitive-Collections-0.4.1-javadoc.jar) 	|

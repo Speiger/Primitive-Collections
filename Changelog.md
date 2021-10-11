@@ -1,5 +1,11 @@
 # Changelog of versions
 
+### Version 0.4.4
+- Fixed: ObjectArrayList.of was causing crashes because of a Poor implementation.
+- Added: Unsorted HashMaps/Sets now throw Concurrent exceptions if they were modified during a rehash.
+- Added: Array/Collection version of enqueue and enqueueFirst to PriorityQueues.
+- Added: fillBuffer function into PrimitiveLists which allow to optimize JavaNio buffers if needed.
+
 ### Version 0.4.3
 - Added: Wrapper now support the Optimized Lambda replacer functions to improve performance.
 - Added: FIFO Queue has now a minimum capacity and that is now checked more consistently.

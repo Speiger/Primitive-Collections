@@ -1,11 +1,13 @@
 package speiger.src.collections.PACKAGE.utils;
 
 #if TYPE_OBJECT
+import java.util.Collection;
 import java.util.Comparator;
 import java.util.function.Consumer;
 #endif
 
 import speiger.src.collections.PACKAGE.collections.ITERATOR;
+import speiger.src.collections.PACKAGE.collections.COLLECTION;
 #if !TYPE_OBJECT
 import speiger.src.collections.PACKAGE.functions.COMPARATOR;
 #endif
@@ -93,6 +95,14 @@ public class PRIORITY_QUEUES
 		@Override
 		public void enqueue(KEY_TYPE e) { synchronized(mutex) { queue.enqueue(e); } }
 		@Override
+		public void enqueueAll(KEY_TYPE[] e, int offset, int length) { synchronized(mutex) { queue.enqueueAll(e, offset, length); } }
+		@Override
+		public void enqueueAll(COLLECTION KEY_GENERIC_TYPE c) { synchronized(mutex) { queue.enqueueAll(c); } }
+#if TYPE_OBJECT
+		@Override
+		public void enqueueAll(Collection<? extends CLASS_TYPE> c) { synchronized(mutex) { queue.enqueueAll(c); } }
+#endif
+		@Override
 		public KEY_TYPE dequeue() { synchronized(mutex) { return queue.dequeue(); } }
 		@Override
 		public KEY_TYPE peek(int index) { synchronized(mutex) { return queue.peek(index); } }
@@ -143,6 +153,14 @@ public class PRIORITY_QUEUES
 		
 		@Override
 		public void enqueueFirst(KEY_TYPE e) { synchronized(mutex) { dequeue.enqueueFirst(e); } }
+		@Override
+		public void enqueueAllFirst(KEY_TYPE[] e, int offset, int length) { synchronized(mutex) { dequeue.enqueueAllFirst(e, offset, length); } }
+		@Override
+		public void enqueueAllFirst(COLLECTION KEY_GENERIC_TYPE c) { synchronized(mutex) { dequeue.enqueueAllFirst(c); } }
+#if TYPE_OBJECT
+		@Override
+		public void enqueueAllFirst(Collection<? extends CLASS_TYPE> c) { synchronized(mutex) { dequeue.enqueueAllFirst(c); } }
+#endif
 		@Override
 		public KEY_TYPE dequeueLast() { synchronized(mutex) { return dequeue.dequeueLast(); } }
 		@Override

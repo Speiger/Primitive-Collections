@@ -22,6 +22,13 @@ public class ObjectArrayListTest
 		testCastable(ObjectArrayList.wrap("Test", "Testing", "Testing stuff"), true);
 	}
 	
+	@Test
+	public void testEmptyCreation()
+	{
+		ObjectArrayList<String> test = ObjectArrayList.of(String.class);
+		Assert.assertTrue(test.isCastable());
+	}
+	
 	public <T> void testCastable(IObjectArray<T> castable, boolean result)
 	{
 		Assert.assertTrue(castable.isCastable() == result);

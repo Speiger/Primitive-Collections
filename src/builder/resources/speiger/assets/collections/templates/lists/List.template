@@ -1,5 +1,8 @@
 package speiger.src.collections.PACKAGE.lists;
 
+#if PRIMITIVES
+import java.nio.JAVA_BUFFER;
+#endif
 import java.util.List;
 #if !TYPE_OBJECT && !TYPE_BOOLEAN
 import java.util.Objects;
@@ -255,6 +258,14 @@ public interface LIST KEY_GENERIC_TYPE extends COLLECTION KEY_GENERIC_TYPE, List
 	 */
 	public KEY_TYPE[] extractElements(int from, int to);
 	
+#if PRIMITIVES
+	/**
+	 * Helper function that allows to fastFill a buffer reducing the duplication requirement
+	 * @param buffer where the data should be stored in.
+	 */
+	public default void fillBuffer(JAVA_BUFFER buffer) { buffer.put(TO_ARRAY()); }
+	
+#endif
 	/** {@inheritDoc}
 	 * <p>This default implementation delegates to the corresponding type-specific function.
 	 * @deprecated Please use the corresponding type-specific function instead. 

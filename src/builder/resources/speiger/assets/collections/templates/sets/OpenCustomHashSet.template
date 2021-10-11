@@ -2,6 +2,7 @@ package speiger.src.collections.PACKAGE.sets;
 
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.ConcurrentModificationException;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 import java.util.Objects;
@@ -429,7 +430,10 @@ public class CUSTOM_HASH_SET KEY_GENERIC_TYPE extends ABSTRACT_SET KEY_GENERIC_T
 		int newMask = newSize - 1;
 		KEY_TYPE[] newKeys = NEW_KEY_ARRAY(newSize + 1);
 		for(int i = nullIndex, pos = 0, j = (size - (containsNull ? 1 : 0));j-- != 0;) {
-			while(strategy.equals(keys[--i], EMPTY_KEY_VALUE));
+			while(true) {
+				if(--i < 0) throw new ConcurrentModificationException("Set was modified during rehash");
+				if(!strategy.equals(keys[i], EMPTY_KEY_VALUE)) break;
+			}
 			if(!strategy.equals(newKeys[pos = HashUtil.mix(KEY_TO_HASH(keys[i])) & newMask], EMPTY_KEY_VALUE))
 				while(!strategy.equals(newKeys[pos = (++pos & newMask)], EMPTY_KEY_VALUE));
 			newKeys[pos] = keys[i];

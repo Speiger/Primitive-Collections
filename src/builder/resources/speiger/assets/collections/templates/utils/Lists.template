@@ -5,6 +5,9 @@ import java.util.Objects;
 import java.util.Random;
 import java.util.RandomAccess;
 import java.util.function.Consumer;
+#if PRIMITIVES
+import java.nio.JAVA_BUFFER;
+#endif
 
 import speiger.src.collections.PACKAGE.collections.COLLECTION;
 #if !TYPE_OBJECT
@@ -204,7 +207,11 @@ public class LISTS
 			a[offset] = element;
 			return a;
 		}
-
+#if PRIMITIVES
+		@Override
+		public void fillBuffer(JAVA_BUFFER buffer) { buffer.put(element); }
+#endif
+		
 		@Override
 		public void removeElements(int from, int to) { throw new UnsupportedOperationException(); }
 #if TYPE_OBJECT
@@ -358,6 +365,9 @@ public class LISTS
 		public <K> K[] extractElements(int from, int to, Class<K> clz) { synchronized(mutex) { return l.extractElements(from, to, clz); } }
 		
 #endif
+#if PRIMITIVES
+		public void fillBuffer(JAVA_BUFFER buffer) { synchronized(mutex) { l.fillBuffer(buffer); } }
+#endif
 		@Override
 		public LIST_ITERATOR KEY_GENERIC_TYPE listIterator() {
 			return l.listIterator();
@@ -468,6 +478,10 @@ public class LISTS
 #else
 		@Override
 		public <K> K[] extractElements(int from, int to, Class<K> clz) { throw new UnsupportedOperationException(); }
+		
+#endif
+#if PRIMITIVES
+		public void fillBuffer(JAVA_BUFFER buffer) { l.fillBuffer(buffer); }
 		
 #endif
 		@Override

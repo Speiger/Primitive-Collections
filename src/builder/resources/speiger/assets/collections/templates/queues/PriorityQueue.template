@@ -2,11 +2,14 @@ package speiger.src.collections.PACKAGE.queues;
 
 #if TYPE_OBJECT
 import java.util.Comparator;
-import speiger.src.collections.objects.collections.ObjectIterator;
+import java.util.Collection;
+import java.util.Iterator;
 #else
 import speiger.src.collections.PACKAGE.functions.COMPARATOR;
 #endif
+import speiger.src.collections.PACKAGE.collections.COLLECTION;
 import speiger.src.collections.PACKAGE.collections.ITERABLE;
+import speiger.src.collections.PACKAGE.collections.ITERATOR;
 
 /**
  * A Simple PriorityQueue (or Queue) interface that provides with the nessesary functions to interact with it, without cluttering with the Collection interface.
@@ -33,6 +36,57 @@ public interface PRIORITY_QUEUE KEY_GENERIC_TYPE extends ITERABLE KEY_GENERIC_TY
 	 * @param e the element that should be inserted
 	 */
 	public void enqueue(KEY_TYPE e);
+	
+	/**
+	 * Method to mass insert elements into the PriorityQueue
+	 * @param e the elements that should be inserted
+	 */
+	public default void enqueueAll(KEY_TYPE... e) {
+		enqueueAll(e, 0, e.length);
+	}
+	
+	/**
+	 * Method to mass insert elements into the PriorityQueue
+	 * @param e the elements that should be inserted
+	 * @param length the amount of elements that should be inserted
+	 */
+	public default void enqueueAll(KEY_TYPE[] e, int length) {
+		enqueueAll(e, 0, length);
+	}
+	
+	/**
+	 * Method to mass insert elements into the PriorityQueue
+	 * @param e the elements that should be inserted
+	 * @param offset the offset where in the array should be started
+	 * @param length the amount of elements that should be inserted
+	 */
+	public default void enqueueAll(KEY_TYPE[] e, int offset, int length) {
+		for(int i = 0;i<length;i++) 
+			enqueue(e[i+offset]);
+	}
+	
+	/**
+	 * Method to mass insert elements into the PriorityQueue
+	 * @param c the elements that should be inserted from the Collection
+	 */
+	public default void enqueueAll(COLLECTION KEY_GENERIC_TYPE c) {
+		for(ITERATOR KEY_GENERIC_TYPE iter = c.iterator();iter.hasNext();)
+			enqueue(iter.NEXT());
+	}
+	
+#if TYPE_OBJECT
+	/**
+	 * Method to mass insert elements into the PriorityQueue
+	 * This method exists to add support for Java Collections to make it more useable
+	 * @param c the elements that should be inserted from the Collection
+	 */
+	public default void enqueueAll(Collection<? extends CLASS_TYPE> c) {
+		for(Iterator<? extends CLASS_TYPE> iter = c.iterator();iter.hasNext();)
+			enqueue(iter.next());
+	}
+	
+#endif
+	
 	/**
 	 * Method to extract a element from the PriorityQueue
 	 * @return a element from the Queue

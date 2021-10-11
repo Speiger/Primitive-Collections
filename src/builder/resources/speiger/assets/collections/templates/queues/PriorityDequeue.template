@@ -1,5 +1,12 @@
 package speiger.src.collections.PACKAGE.queues;
 
+#if TYPE_OBJECT
+import java.util.Collection;
+import java.util.Iterator;
+#endif
+import speiger.src.collections.PACKAGE.collections.COLLECTION;
+import speiger.src.collections.PACKAGE.collections.ITERATOR;
+
 /**
  * A Type Speciifc PriorityDeque or Dequeue interface to allow implementations like FIFO queues.
  * @Type(T)
@@ -11,6 +18,56 @@ public interface PRIORITY_DEQUEUE KEY_GENERIC_TYPE extends PRIORITY_QUEUE KEY_GE
 	 * @param e the element that should be inserted into the first place
 	 */
 	public void enqueueFirst(KEY_TYPE e);
+	
+	/**
+	 * Method to mass insert a elements into the first Index of the PriorityDequeue.
+	 * @param e the elements that should be inserted
+	 */
+	public default void enqueueAllFirst(KEY_TYPE... e) {
+		enqueueAllFirst(e, 0, e.length);
+	}
+	
+	/**
+	 * Method to mass insert a elements into the first Index of the PriorityDequeue.
+	 * @param e the elements that should be inserted
+	 * @param length the amount of elements that should be inserted
+	 */
+	public default void enqueueAllFirst(KEY_TYPE[] e, int length) {
+		enqueueAllFirst(e, 0, length);
+	}
+	
+	/**
+	 * Method to mass insert a elements into the first Index of the PriorityDequeue.
+	 * @param e the elements that should be inserted
+	 * @param offset the offset where in the array should be started
+	 * @param length the amount of elements that should be inserted
+	 */	
+	public default void enqueueAllFirst(KEY_TYPE[] e, int offset, int length) {
+		for(int i = 0;i<length;i++)
+			enqueueFirst(e[i+offset]);
+	}
+	
+	/**
+	 * Method to mass insert elements into first Index of the PriorityDequeue.
+	 * @param c the elements that should be inserted from the Collection
+	 */
+	public default void enqueueAllFirst(COLLECTION KEY_GENERIC_TYPE c) {
+		for(ITERATOR KEY_GENERIC_TYPE iter = c.iterator();iter.hasNext();)
+			enqueueFirst(iter.NEXT());
+	}
+	
+#if TYPE_OBJECT
+	/**
+	 * Method to mass insert elements into first Index of the PriorityDequeue.
+	 * This method exists to add support for Java Collections to make it more useable
+	 * @param c the elements that should be inserted from the Collection
+	 */
+	public default void enqueueAllFirst(Collection<? extends CLASS_TYPE> c) {
+		for(Iterator<? extends CLASS_TYPE> iter = c.iterator();iter.hasNext();)
+			enqueueFirst(iter.next());
+	}
+	
+#endif
 	/**
 	 * A Method to remove a element from the last place instead of the first
 	 * @return the last element inserted

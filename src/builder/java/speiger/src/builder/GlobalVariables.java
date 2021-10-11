@@ -153,6 +153,7 @@ public class GlobalVariables
 		addSimpleMapper("JAVA_UNARY_OPERATOR", type.isObject() ? "BinaryOperator" : type == ClassType.BOOLEAN ? "" : type.getCustomJDKType().getFileType()+"UnaryOperator");
 		addSimpleMapper("JAVA_SPLIT_ITERATOR", type.isPrimitiveBlocking() ? "Spliterator" : "Of"+type.getCustomJDKType().getFileType());
 		addSimpleMapper("JAVA_STREAM", type.isPrimitiveBlocking() ? "" : type.getCustomJDKType().getFileType()+"Stream");
+		addSimpleMapper("JAVA_BUFFER", type.getFileType()+"Buffer");
 		
 		//Final Classes
 		addClassMapper("ARRAY_LIST", "ArrayList");

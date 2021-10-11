@@ -15,6 +15,7 @@ import java.util.function.UnaryOperator;
 #if PRIMITIVES
 import java.util.function.JAVA_PREDICATE;
 import java.util.function.JAVA_UNARY_OPERATOR;
+import java.nio.JAVA_BUFFER;
 #endif
 
 import speiger.src.collections.PACKAGE.collections.COLLECTION;
@@ -181,7 +182,7 @@ public class ARRAY_LIST KEY_GENERIC_TYPE extends ABSTRACT_LIST KEY_GENERIC_TYPE 
 	 */
 	public static GENERIC_KEY_BRACES ARRAY_LIST KEY_GENERIC_TYPE of(Class<KEY_TYPE> c) {
 		ARRAY_LIST KEY_GENERIC_TYPE list = new ARRAY_LISTBRACES();
-		list.data = (KEY_TYPE[])ObjectArrays.newArray(c.getClass().getComponentType(), 0);
+		list.data = (KEY_TYPE[])ObjectArrays.newArray(c, 0);
 		return list;
 	}
 	
@@ -388,9 +389,15 @@ public class ARRAY_LIST KEY_GENERIC_TYPE extends ABSTRACT_LIST KEY_GENERIC_TYPE 
 		size -= length;		
 		return a;
 	}
+
+#endif
+#if PRIMITIVES
+	@Override
+	public void fillBuffer(JAVA_BUFFER buffer) {
+		buffer.put(data, 0, size);
+	}
 	
 #endif
-	
 	/**
 	 * A function to find if the Element is present in this list.
 	 * @param o the element that is searched for
