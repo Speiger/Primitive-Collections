@@ -228,11 +228,41 @@ public class ARRAY_SET KEY_GENERIC_TYPE extends ABSTRACT_SET KEY_GENERIC_TYPE im
 	}
 	
 	@Override
+	public boolean removeAll(COLLECTION KEY_GENERIC_TYPE c, CONSUMER KEY_GENERIC_TYPE r) {
+		int j = 0;
+		for(int i = 0;i<size;i++) {
+			if(!c.contains(data[i])) data[j++] = data[i];
+			else r.accept(data[i]);
+		}
+		boolean result = j != size;
+#if TYPE_OBJECT
+		Arrays.fill(data, j, size, null);
+#endif
+		size = j;
+		return result;
+	}
+	
+	@Override
 	public boolean retainAll(COLLECTION KEY_GENERIC_TYPE c) {
 		int j = 0;
 		for(int i = 0;i<size;i++) {
 			if(c.contains(data[i])) 
 				data[j++] = data[i];
+		}
+		boolean result = j != size;
+#if TYPE_OBJECT
+		Arrays.fill(data, j, size, null);
+#endif
+		size = j;
+		return result;
+	}
+	
+	@Override
+	public boolean retainAll(COLLECTION KEY_GENERIC_TYPE c, CONSUMER KEY_GENERIC_TYPE r) {
+		int j = 0;
+		for(int i = 0;i<size;i++) {
+			if(c.contains(data[i])) data[j++] = data[i];
+			else r.accept(data[i]);
 		}
 		boolean result = j != size;
 #if TYPE_OBJECT

@@ -370,6 +370,10 @@ public class IMMUTABLE_LIST KEY_GENERIC_TYPE extends ABSTRACT_LIST KEY_GENERIC_T
 	public boolean removeAll(COLLECTION KEY_GENERIC_TYPE c) { throw new UnsupportedOperationException(); }
 	@Override
 	public boolean retainAll(COLLECTION KEY_GENERIC_TYPE c) { throw new UnsupportedOperationException(); }
+	@Override
+	public boolean removeAll(COLLECTION KEY_GENERIC_TYPE c, CONSUMER KEY_GENERIC_TYPE r) { throw new UnsupportedOperationException(); }
+	@Override
+	public boolean retainAll(COLLECTION KEY_GENERIC_TYPE c, CONSUMER KEY_GENERIC_TYPE r) { throw new UnsupportedOperationException(); }
 	
 #if PRIMITIVES
 	@Override

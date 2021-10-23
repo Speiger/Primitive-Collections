@@ -715,6 +715,27 @@ public class LINKED_LIST KEY_GENERIC_TYPE extends ABSTRACT_LIST KEY_GENERIC_TYPE
 	}
 	
 	@Override
+	public boolean removeAll(COLLECTION KEY_GENERIC_TYPE c, CONSUMER KEY_GENERIC_TYPE r) {
+		if(c.isEmpty()) return false;
+		boolean modified = false;
+		int j = 0;
+		for(Entry KEY_GENERIC_TYPE entry = first;entry != null;) {
+			if(c.contains(entry.value)) {
+				r.accept(entry.value);
+				Entry KEY_GENERIC_TYPE next = entry.next;
+				unlink(entry);
+				entry = next;
+				modified = true;
+				continue;
+			}
+			else j++;
+			entry = entry.next;
+		}
+		size = j;
+		return modified;
+	}
+	
+	@Override
 	public boolean retainAll(COLLECTION KEY_GENERIC_TYPE c) {
 		if(c.isEmpty()) {
 			boolean changed = size > 0;
@@ -725,6 +746,32 @@ public class LINKED_LIST KEY_GENERIC_TYPE extends ABSTRACT_LIST KEY_GENERIC_TYPE
 		int j = 0;
 		for(Entry KEY_GENERIC_TYPE entry = first;entry != null;) {
 			if(!c.contains(entry.value)) {
+				Entry KEY_GENERIC_TYPE next = entry.next;
+				unlink(entry);
+				entry = next;
+				modified = true;
+				continue;
+			}
+			else j++;
+			entry = entry.next;
+		}
+		size = j;
+		return modified;
+	}
+	
+	@Override
+	public boolean retainAll(COLLECTION KEY_GENERIC_TYPE c, CONSUMER KEY_GENERIC_TYPE r) {
+		if(c.isEmpty()) {
+			boolean changed = size > 0;
+			forEach(r);
+			clear();
+			return changed;
+		}
+		boolean modified = false;
+		int j = 0;
+		for(Entry KEY_GENERIC_TYPE entry = first;entry != null;) {
+			if(!c.contains(entry.value)) {
+				r.accept(entry.value);
 				Entry KEY_GENERIC_TYPE next = entry.next;
 				unlink(entry);
 				entry = next;

@@ -1,5 +1,8 @@
 # Changelog of versions
 
+### Version 0.4.5
+- Added: removeAll/retainAll(Collection c, Consumer r) which receives all the elements that got deleted from the collection
+
 ### Version 0.4.4
 - Fixed: ObjectArrayList.of was causing crashes because of a Poor implementation.
 - Added: Unsorted HashMaps/Sets now throw Concurrent exceptions if they were modified during a rehash.

@@ -864,6 +864,22 @@ public class ARRAY_LIST KEY_GENERIC_TYPE extends ABSTRACT_LIST KEY_GENERIC_TYPE 
 		return modified;
 	}
 	
+	@Override
+	public boolean removeAll(COLLECTION KEY_GENERIC_TYPE c, CONSUMER KEY_GENERIC_TYPE r) {
+		if(c.isEmpty()) return false;
+		int j = 0;
+		for(int i = 0;i<size;i++) {
+			if(!c.contains(data[i])) data[j++] = data[i];
+			else r.accept(data[i]);
+		}
+		boolean modified = j != size;
+#if TYPE_OBJECT
+		Arrays.fill(data, j, size, null);
+#endif		
+		size = j;
+		return modified;
+	}
+	
 	/**
 	 * A function to retain all elements that were provided in the other collection
 	 * This function might delegate to a more appropriate function if necessary
@@ -884,6 +900,27 @@ public class ARRAY_LIST KEY_GENERIC_TYPE extends ABSTRACT_LIST KEY_GENERIC_TYPE 
 			if(c.contains(data[i])) data[j++] = data[i];
 			else modified = true;
 		}
+#if TYPE_OBJECT
+		Arrays.fill(data, j, size, null);
+#endif
+		size = j;
+		return modified;
+	}
+	
+	@Override
+	public boolean retainAll(COLLECTION KEY_GENERIC_TYPE c, CONSUMER KEY_GENERIC_TYPE r) {
+		if(c.isEmpty()) {
+			boolean modifed = size > 0;
+			forEach(r);
+			clear();
+			return modifed;
+		}
+		int j = 0;
+		for(int i = 0;i<size;i++) {
+			if(c.contains(data[i])) data[j++] = data[i];
+			else r.accept(data[i]);
+		}
+		boolean modified = j != size;
 #if TYPE_OBJECT
 		Arrays.fill(data, j, size, null);
 #endif

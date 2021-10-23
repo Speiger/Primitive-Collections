@@ -3,9 +3,13 @@ package speiger.src.collections.PACKAGE.collections;
 import java.util.Collection;
 import java.util.Objects;
 import java.util.AbstractCollection;
+#if TYPE_OBJECT
+import java.util.function.Consumer;
+#endif
 
 import speiger.src.collections.PACKAGE.collections.COLLECTION;
 #if !TYPE_OBJECT
+import speiger.src.collections.PACKAGE.functions.CONSUMER;
 import speiger.src.collections.PACKAGE.utils.ITERATORS;
 #endif
 
@@ -79,6 +83,7 @@ public abstract class ABSTRACT_COLLECTION KEY_GENERIC_TYPE extends AbstractColle
 	@Override
 	public boolean containsAll(COLLECTION KEY_GENERIC_TYPE c) {
 		Objects.requireNonNull(c);
+		if(c.isEmpty()) return true;
 		for(ITERATOR KEY_GENERIC_TYPE iter = c.iterator();iter.hasNext();)
 			if(!contains(iter.NEXT()))
 				return false;
@@ -96,6 +101,7 @@ public abstract class ABSTRACT_COLLECTION KEY_GENERIC_TYPE extends AbstractColle
 	@Primitive
 	public boolean containsAny(Collection<?> c) {
 		Objects.requireNonNull(c);
+		if(c.isEmpty()) return false;
 		for(Object e : c) 
 			if(contains(e))
 				return true;
@@ -111,6 +117,7 @@ public abstract class ABSTRACT_COLLECTION KEY_GENERIC_TYPE extends AbstractColle
 	@Override
 	public boolean containsAny(COLLECTION KEY_GENERIC_TYPE c) {
 		Objects.requireNonNull(c);
+		if(c.isEmpty()) return false;
 		for(ITERATOR KEY_GENERIC_TYPE iter = c.iterator();iter.hasNext();) 
 			if(contains(iter.NEXT()))
 				return true;
@@ -153,9 +160,27 @@ public abstract class ABSTRACT_COLLECTION KEY_GENERIC_TYPE extends AbstractColle
 	@Override
 	public boolean removeAll(COLLECTION KEY_GENERIC_TYPE c) {
 		Objects.requireNonNull(c);
+		if(c.isEmpty()) return false;
 		boolean modified = false;
 		for(ITERATOR KEY_GENERIC_TYPE iter = iterator();iter.hasNext();) {
 			if(c.contains(iter.NEXT())) {
+				iter.remove();
+				modified = true;
+			}
+		}
+		return modified;
+	}
+
+	@Override
+	public boolean removeAll(COLLECTION KEY_GENERIC_TYPE c, CONSUMER KEY_GENERIC_TYPE r) {
+		Objects.requireNonNull(c);
+		if(c.isEmpty()) return false;
+		Objects.requireNonNull(r);
+		boolean modified = false;
+		for(ITERATOR KEY_GENERIC_TYPE iter = iterator();iter.hasNext();) {
+			KEY_TYPE e = iter.NEXT();
+			if(c.contains(e)) {
+				r.accept(e);
 				iter.remove();
 				modified = true;
 			}
@@ -180,6 +205,27 @@ public abstract class ABSTRACT_COLLECTION KEY_GENERIC_TYPE extends AbstractColle
 		boolean modified = false;
 		for(ITERATOR KEY_GENERIC_TYPE iter = iterator();iter.hasNext();) {
 			if(!c.contains(iter.NEXT())) {
+				iter.remove();
+				modified = true;
+			}
+		}
+		return modified;
+	}
+	
+	@Override
+	public boolean retainAll(COLLECTION KEY_GENERIC_TYPE c, CONSUMER KEY_GENERIC_TYPE r) {
+		Objects.requireNonNull(c);
+		Objects.requireNonNull(r);
+		if(c.isEmpty()) {
+			boolean modified = !isEmpty();
+			forEach(r);
+			clear();
+			return modified;
+		}
+		boolean modified = false;
+		for(ITERATOR KEY_GENERIC_TYPE iter = iterator();iter.hasNext();) {
+			KEY_TYPE e = iter.NEXT();
+			if(!c.contains(e)) {
 				iter.remove();
 				modified = true;
 			}

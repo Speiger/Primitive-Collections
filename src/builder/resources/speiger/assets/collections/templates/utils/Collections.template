@@ -148,7 +148,11 @@ public class COLLECTIONS
 		@Override
 		public boolean removeAll(COLLECTION KEY_GENERIC_TYPE c) { synchronized(mutex) { return this.c.removeAll(c); } }
 		@Override
+		public boolean removeAll(COLLECTION KEY_GENERIC_TYPE c, CONSUMER KEY_GENERIC_TYPE r) { synchronized(mutex) { return this.c.removeAll(c, r); } }
+		@Override
 		public boolean retainAll(COLLECTION KEY_GENERIC_TYPE c) { synchronized(mutex) { return this.c.retainAll(c); } }
+		@Override
+		public boolean retainAll(COLLECTION KEY_GENERIC_TYPE c, CONSUMER KEY_GENERIC_TYPE r) { synchronized(mutex) { return this.c.retainAll(c, r); } }
 #if PRIMITIVES
 		@Override
 		public boolean remIf(JAVA_PREDICATE filter){ synchronized(mutex) { return c.remIf(filter); } }
@@ -258,7 +262,11 @@ public class COLLECTIONS
 		@Override
 		public boolean removeAll(COLLECTION KEY_GENERIC_TYPE c) { throw new UnsupportedOperationException(); }
 		@Override
+		public boolean removeAll(COLLECTION KEY_GENERIC_TYPE c, CONSUMER KEY_GENERIC_TYPE r) { throw new UnsupportedOperationException(); }
+		@Override
 		public boolean retainAll(COLLECTION KEY_GENERIC_TYPE c) { throw new UnsupportedOperationException(); }
+		@Override
+		public boolean retainAll(COLLECTION KEY_GENERIC_TYPE c, CONSUMER KEY_GENERIC_TYPE r) { throw new UnsupportedOperationException(); }
 #if PRIMITIVES
 		@Override
 		public boolean remIf(JAVA_PREDICATE filter){ throw new UnsupportedOperationException(); }

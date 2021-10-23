@@ -8,6 +8,11 @@ import java.util.function.Predicate;
 import java.util.stream.JAVA_STREAM;
 import java.util.stream.StreamSupport;
 #endif
+#if TYPE_OBJECT
+import java.util.function.Consumer;
+#else
+import speiger.src.collections.PACKAGE.functions.CONSUMER;
+#endif
 import speiger.src.collections.PACKAGE.utils.SPLIT_ITERATORS;
 import speiger.src.collections.utils.SanityChecks;
 
@@ -116,12 +121,32 @@ public interface COLLECTION KEY_GENERIC_TYPE extends Collection<CLASS_TYPE>, ITE
 	public boolean removeAll(COLLECTION KEY_GENERIC_TYPE c);
 	
 	/**
+	 * A Type-Specific removeAll function that reduces (un)boxing.
+	 * It also notifies the remover of which exact element is going to be removed.
+	 * @param c the collection of elements that should be removed
+	 * @param r elements that got removed
+	 * @return true if any element was removed
+	 * @see Collection#removeAll(Collection)
+	 */
+	public boolean removeAll(COLLECTION KEY_GENERIC_TYPE c, CONSUMER KEY_GENERIC_TYPE r);
+	
+	/**
  	 * A Type-Specific retainAll function that reduces (un)boxing.
 	 * @param c the collection of elements that should be kept
  	 * @return true if any element was removed
  	 * @see Collection#retainAll(Collection)
  	 */
 	public boolean retainAll(COLLECTION KEY_GENERIC_TYPE c);
+	
+	/**
+ 	 * A Type-Specific retainAll function that reduces (un)boxing.
+	 * It also notifies the remover of which exact element is going to be removed.
+	 * @param c the collection of elements that should be kept
+	 * @param r elements that got removed
+ 	 * @return true if any element was removed
+ 	 * @see Collection#retainAll(Collection)
+ 	 */
+	public boolean retainAll(COLLECTION KEY_GENERIC_TYPE c, CONSUMER KEY_GENERIC_TYPE r);
 	
 	/**
 	 * A Function that does a shallow clone of the Collection itself.
