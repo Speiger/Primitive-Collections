@@ -2,6 +2,10 @@
 
 ### Version 0.4.5
 - Added: removeAll/retainAll(Collection c, Consumer r) which receives all the elements that got deleted from the collection
+- Fixed: Supplier get function wasn't referencing original function.
+- Added: addIfPresent/Absent to lists
+- Added: distinct, limit and peek iterators
+- Added: Iterable's can now reduce its contents
 
 ### Version 0.4.4
 - Fixed: ObjectArrayList.of was causing crashes because of a Poor implementation.

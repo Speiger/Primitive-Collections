@@ -51,6 +51,26 @@ public interface LIST KEY_GENERIC_TYPE extends COLLECTION KEY_GENERIC_TYPE, List
 	
 #endif
 	/**
+	 * A Helper function that will only add elements if it is not present.
+	 * @param e the element to add
+	 * @return true if the list was modified
+	 */
+	public default boolean addIfAbsent(KEY_TYPE e) {
+		if(indexOf(e) == -1) return add(e);
+		return false;
+	}
+	
+	/**
+	 * A Helper function that will only add elements if it is present.
+	 * @param e the element to add
+	 * @return true if the list was modified
+	 */
+	public default boolean addIfPresent(KEY_TYPE e) {
+		if(indexOf(e) != -1) return add(e);
+		return false;
+	}
+	
+	/**
 	 * A Type-Specific addAll Function to reduce (un)boxing
 	 * @param c the elements that need to be added
 	 * @param index index at which the specified elements is to be inserted

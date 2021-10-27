@@ -16,6 +16,7 @@ import speiger.src.collections.PACKAGE.functions.CONSUMER;
 import speiger.src.collections.PACKAGE.utils.ARRAYS;
 #endif
 import speiger.src.collections.PACKAGE.functions.function.PREDICATE;
+import speiger.src.collections.PACKAGE.functions.function.UNARY_OPERATOR;
 import speiger.src.collections.objects.functions.consumer.BI_FROM_OBJECT_CONSUMER;
 /**
  * A Helper class for Collections
@@ -196,6 +197,10 @@ public class COLLECTIONS
 		@Override
 		public KEY_TYPE findFirst(PREDICATE KEY_GENERIC_TYPE filter) { synchronized(mutex) { return c.findFirst(filter); } }
 		@Override
+		public KEY_TYPE reduce(KEY_TYPE identity, UNARY_OPERATOR KEY_KEY_GENERIC_TYPE operator) { synchronized(mutex) { return c.reduce(identity, operator); } }
+		@Override
+		public KEY_TYPE reduce(UNARY_OPERATOR KEY_KEY_GENERIC_TYPE operator) { synchronized(mutex) { return c.reduce(operator); } }
+		@Override
 		public int count(PREDICATE KEY_GENERIC_TYPE filter) { synchronized(mutex) { return c.count(filter); } }
 	}
 	
@@ -309,6 +314,10 @@ public class COLLECTIONS
 		public boolean matchesAll(PREDICATE KEY_GENERIC_TYPE filter) { return c.matchesAll(filter); }
 		@Override
 		public KEY_TYPE findFirst(PREDICATE KEY_GENERIC_TYPE filter) { return c.findFirst(filter); }
+		@Override
+		public KEY_TYPE reduce(KEY_TYPE identity, UNARY_OPERATOR KEY_KEY_GENERIC_TYPE operator) { return c.reduce(identity, operator); }
+		@Override
+		public KEY_TYPE reduce(UNARY_OPERATOR KEY_KEY_GENERIC_TYPE operator) { return c.reduce(operator); }
 		@Override
 		public int count(PREDICATE KEY_GENERIC_TYPE filter) { return c.count(filter); }
 	}

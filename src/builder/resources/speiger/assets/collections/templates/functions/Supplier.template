@@ -16,7 +16,7 @@ public interface SUPPLIER KEY_GENERIC_TYPE
 	 * @return the supplied value
 	 */
 	public KEY_TYPE GET_KEY();
-#if JDK_TYPE && PRIMITIVE
+#if JDK_TYPE && PRIMITIVES
 	
 	@Override
 	public default KEY_TYPE GET_JAVA() {

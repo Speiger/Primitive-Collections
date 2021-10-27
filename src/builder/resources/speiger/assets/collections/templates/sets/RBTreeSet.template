@@ -15,6 +15,7 @@ import speiger.src.collections.PACKAGE.functions.CONSUMER;
 #endif
 import speiger.src.collections.objects.functions.consumer.BI_FROM_OBJECT_CONSUMER;
 import speiger.src.collections.PACKAGE.functions.function.PREDICATE;
+import speiger.src.collections.PACKAGE.functions.function.UNARY_OPERATOR;
 import speiger.src.collections.PACKAGE.collections.COLLECTION;
 import speiger.src.collections.PACKAGE.collections.ITERATOR;
 import speiger.src.collections.PACKAGE.lists.LIST_ITERATOR;
@@ -344,6 +345,32 @@ public class RB_TREE_SET KEY_GENERIC_TYPE extends ABSTRACT_SET KEY_GENERIC_TYPE 
 			if(filter.TEST_VALUE(entry.key)) return entry.key;
 		}
 		return EMPTY_VALUE;
+	}
+	
+	@Override
+	public KEY_TYPE reduce(KEY_TYPE identity, UNARY_OPERATOR KEY_KEY_GENERIC_TYPE operator) {
+		Objects.requireNonNull(operator);
+		KEY_TYPE state = identity;
+		for(Entry KEY_GENERIC_TYPE entry = first;entry != null;entry = entry.next()) {
+			state = operator.APPLY_VALUE(state, entry.key);
+		}
+		return state;
+	}
+	
+	@Override
+	public KEY_TYPE reduce(UNARY_OPERATOR KEY_KEY_GENERIC_TYPE operator) {
+		Objects.requireNonNull(operator);
+		KEY_TYPE state = EMPTY_VALUE;
+		boolean empty = true;
+		for(Entry KEY_GENERIC_TYPE entry = first;entry != null;entry = entry.next()) {
+			if(empty) {
+				empty = false;
+				state = entry.key;
+				continue;
+			}
+			state = operator.APPLY_VALUE(state, entry.key);
+		}
+		return state;
 	}
 	
 	@Override

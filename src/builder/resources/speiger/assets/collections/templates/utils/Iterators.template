@@ -2,11 +2,15 @@ package speiger.src.collections.PACKAGE.utils;
 
 import java.util.Iterator;
 import java.util.NoSuchElementException;
+#if TYPE_OBJECT
+import java.util.function.CONSUMER;
+#endif
 
 import speiger.src.collections.PACKAGE.collections.ITERATOR;
 #if !TYPE_OBJECT
 import speiger.src.collections.objects.collections.ObjectIterator;
 import speiger.src.collections.objects.utils.ObjectIterators;
+import speiger.src.collections.PACKAGE.functions.CONSUMER;
 #endif
 import speiger.src.collections.PACKAGE.functions.function.TO_OBJECT_FUNCTION;
 import speiger.src.collections.PACKAGE.functions.function.PREDICATE;
@@ -15,6 +19,10 @@ import speiger.src.collections.PACKAGE.lists.LIST;
 import speiger.src.collections.PACKAGE.lists.LIST_ITERATOR;
 import speiger.src.collections.PACKAGE.collections.BI_ITERATOR;
 import speiger.src.collections.PACKAGE.collections.COLLECTION;
+#if !TYPE_BOOLEAN
+import speiger.src.collections.PACKAGE.sets.HASH_SET;
+import speiger.src.collections.PACKAGE.sets.SET;
+#endif
 
 /**
  * A Helper class for Iterators
@@ -183,6 +191,70 @@ public class ITERATORS
 	 */
 	public static GENERIC_KEY_BRACES ITERATOR KEY_GENERIC_TYPE filter(ITERATOR KEY_GENERIC_TYPE iterator, PREDICATE KEY_GENERIC_TYPE filter) {
 		return new FilteredIteratorBRACES(iterator, filter);
+	}
+	
+	/**
+	 * A Helper function that filters out all duplicated elements.
+	 * @param iterator that should be distinct
+	 * @Type(T)
+	 * @return a distinct iterator
+	 */
+	public static GENERIC_KEY_BRACES ITERATOR KEY_GENERIC_TYPE distinct(ITERATOR KEY_GENERIC_TYPE iterator) {
+		return new DistinctIteratorBRACES(iterator);
+	}
+	
+	/**
+	 * A Helper function that filters out all duplicated elements from a Java Iterator.
+	 * @param iterator that should be distinct
+	 * @Type(T)
+	 * @return a distinct iterator
+	 */
+	public static GENERIC_KEY_BRACES ITERATOR KEY_GENERIC_TYPE distinct(Iterator<? extends CLASS_TYPE> iterator) {
+		return new DistinctIteratorBRACES(wrap(iterator));
+	}
+	
+	/**
+	 * A Helper function that hard limits the Iterator to a specific size
+	 * @param iterator that should be limited
+	 * @param limit the amount of elements it should be limited to
+	 * @Type(T)
+	 * @return a limited iterator
+	 */
+	public static GENERIC_KEY_BRACES ITERATOR KEY_GENERIC_TYPE limit(ITERATOR KEY_GENERIC_TYPE iterator, long limit) {
+		return new LimitedIteratorBRACES(iterator, limit);
+	}
+	
+	/**
+	 * A Helper function that hard limits the Iterator to a specific size from a Java Iterator
+	 * @param iterator that should be limited
+	 * @param limit the amount of elements it should be limited to
+	 * @Type(T)
+	 * @return a limited iterator
+	 */
+	public static GENERIC_KEY_BRACES ITERATOR KEY_GENERIC_TYPE limit(Iterator<? extends CLASS_TYPE> iterator, long limit) {
+		return new LimitedIteratorBRACES(wrap(iterator), limit);
+	}
+	
+	/**
+	 * A Helper function that allows to preview the result of a Iterator.
+	 * @param iterator that should be peeked at
+	 * @param action callback that receives the value before the iterator returns it
+	 * @Type(T)
+	 * @return a peeked iterator
+	 */
+	public static GENERIC_KEY_BRACES ITERATOR KEY_GENERIC_TYPE peek(ITERATOR KEY_GENERIC_TYPE iterator, CONSUMER KEY_GENERIC_TYPE action) {
+		return new PeekIteratorBRACES(iterator, action);
+	}
+	
+	/**
+	 * A Helper function that allows to preview the result of a Iterator  from a Java Iterator
+	 * @param iterator that should be peeked at
+	 * @param action callback that receives the value before the iterator returns it
+	 * @Type(T)
+	 * @return a peeked iterator
+	 */
+	public static GENERIC_KEY_BRACES ITERATOR KEY_GENERIC_TYPE peek(Iterator<? extends CLASS_TYPE> iterator, CONSUMER KEY_GENERIC_TYPE action) {
+		return new PeekIteratorBRACES(wrap(iterator), action);
 	}
 	
 	/**
@@ -799,6 +871,57 @@ public class ITERATORS
 		}
 	}
 	
+	private static class DistinctIterator KEY_GENERIC_TYPE implements ITERATOR KEY_GENERIC_TYPE
+	{
+		ITERATOR KEY_GENERIC_TYPE iterator;
+#if TYPE_BOOLEAN
+		int filtered;
+#else
+		SET KEY_GENERIC_TYPE filtered = new HASH_SETBRACES();
+#endif
+		KEY_TYPE lastFound;
+		boolean foundNext = false;
+		
+		public DistinctIterator(ITERATOR KEY_GENERIC_TYPE iterator) {
+			this.iterator = iterator;
+		}
+		
+		void compute() {
+			if(foundNext) return;
+#if TYPE_BOOLEAN
+			if(filtered == 3) return;
+#endif
+			while(iterator.hasNext()) {
+				lastFound = iterator.NEXT();
+#if TYPE_BOOLEAN
+				if((filtered & (lastFound ? 1 : 2)) == 0) {
+					filtered |= (lastFound ? 1 : 2);
+					foundNext = true;
+					break;
+				}
+#else
+				if(filtered.add(lastFound)) {
+					foundNext = true;
+					break;
+				}
+#endif
+			}
+		}
+		
+		@Override
+		public boolean hasNext() {
+			compute();
+			return foundNext;
+		}
+		
+		@Override
+		public KEY_TYPE NEXT() {
+			if(!hasNext()) throw new IllegalStateException("End of Iterator");
+			foundNext = false;
+			return lastFound;
+		}
+	}
+	
 	private static class FilteredIterator KEY_GENERIC_TYPE implements ITERATOR KEY_GENERIC_TYPE
 	{
 		ITERATOR KEY_GENERIC_TYPE iterator;
@@ -833,6 +956,53 @@ public class ITERATORS
 			if(!hasNext()) throw new IllegalStateException("End of Iterator");
 			foundNext = false;
 			return lastFound;
+		}
+	}
+	
+	private static class LimitedIterator KEY_GENERIC_TYPE implements ITERATOR KEY_GENERIC_TYPE
+	{
+		ITERATOR KEY_GENERIC_TYPE iterator;
+		long limit;
+		
+		public LimitedIterator(ITERATOR KEY_GENERIC_TYPE iterator, long limit) {
+			this.iterator = iterator;
+			this.limit = limit;
+		}
+		
+		@Override
+		public boolean hasNext() {
+			return limit > 0 && iterator.hasNext();
+		}
+		
+		@Override
+		public KEY_TYPE NEXT() {
+			if(!hasNext()) throw new IllegalStateException("End of Iterator");
+			limit--;
+			return iterator.NEXT();
+		}
+	}
+	
+	private static class PeekIterator KEY_GENERIC_TYPE implements ITERATOR KEY_GENERIC_TYPE
+	{
+		ITERATOR KEY_GENERIC_TYPE iterator;
+		CONSUMER KEY_GENERIC_TYPE action;
+		
+		public PeekIterator(ITERATOR KEY_GENERIC_TYPE iterator, CONSUMER KEY_GENERIC_TYPE action) {
+			this.iterator = iterator;
+			this.action = action;
+		}
+		
+		@Override
+		public boolean hasNext() {
+			return iterator.hasNext();
+		}
+		
+		@Override
+		public KEY_TYPE NEXT() {
+			if(!hasNext()) throw new IllegalStateException("End of Iterator");
+			KEY_TYPE result = iterator.NEXT();
+			action.accept(result);
+			return result;
 		}
 	}
 }
