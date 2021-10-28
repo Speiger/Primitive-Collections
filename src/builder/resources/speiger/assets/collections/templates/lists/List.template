@@ -226,6 +226,22 @@ public interface LIST KEY_GENERIC_TYPE extends COLLECTION KEY_GENERIC_TYPE, List
 	 */
 	public void removeElements(int from, int to);
 	
+	/**
+	 * A Highly Optimized remove function that removes the desired element.
+	 * But instead of shifting the elements to the left it moves the last element to the removed space.
+	 * @param index the index of the element to be removed
+	 * @return the element previously at the specified position
+	 */
+	public KEY_TYPE swapRemove(int index);
+	
+	/**
+	 * A Highly Optimized remove function that removes the desired element.
+	 * But instead of shifting the elements to the left it moves the last element to the removed space.
+	 * @param e the element that should be removed
+	 * @return true if the element was removed
+	 */
+	public boolean REMOVE_SWAP(KEY_TYPE e);
+	
 #if TYPE_OBJECT
 	/**
 	 * A function to fast extract elements out of the list, this removes the elements that were fetched.

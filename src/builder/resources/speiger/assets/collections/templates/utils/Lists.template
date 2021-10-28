@@ -200,6 +200,8 @@ public class LISTS
 		@Override
 		public KEY_TYPE REMOVE(int index) { throw new UnsupportedOperationException(); }
 		@Override
+		public KEY_TYPE swapRemove(int index) { throw new UnsupportedOperationException(); }
+		@Override
 		public void addElements(int from, KEY_TYPE[] a, int offset, int length) { throw new UnsupportedOperationException(); }
 		@Override
 		public KEY_TYPE[] getElements(int from, KEY_TYPE[] a, int offset, int length) {
@@ -332,6 +334,12 @@ public class LISTS
 		public KEY_TYPE REMOVE(int index) { synchronized(mutex) { return l.REMOVE(index); } }
 		
 		@Override
+		public KEY_TYPE swapRemove(int index) { synchronized(mutex) { return l.swapRemove(index); } }
+		
+		@Override
+		public boolean REMOVE_SWAP(KEY_TYPE e) { synchronized(mutex) { return l.REMOVE_SWAP(e); } }
+		
+		@Override
 		@Primitive
 		public int indexOf(Object e) { synchronized(mutex) { return l.indexOf(e); } }
 		
@@ -445,6 +453,12 @@ public class LISTS
 		public KEY_TYPE REMOVE(int index) { throw new UnsupportedOperationException(); }
 		
 		@Override
+		public KEY_TYPE swapRemove(int index) { throw new UnsupportedOperationException(); }
+		
+		@Override
+		public boolean REMOVE_SWAP(KEY_TYPE e) { throw new UnsupportedOperationException(); }
+		
+		@Override
 		@Primitive
 		public int indexOf(Object e) { return l.indexOf(e); }
 		
@@ -536,6 +550,12 @@ public class LISTS
 		
 		@Override
 		public KEY_TYPE REMOVE(int index) { throw new UnsupportedOperationException(); }
+		
+		@Override
+		public KEY_TYPE swapRemove(int index) { throw new UnsupportedOperationException(); }
+		
+		@Override
+		public boolean REMOVE_SWAP(KEY_TYPE e) { throw new UnsupportedOperationException(); }
 		
 		@Override
 		public int indexOf(Object e) { return -1; }

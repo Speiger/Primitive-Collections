@@ -155,6 +155,14 @@ public abstract class ABSTRACT_LIST KEY_GENERIC_TYPE extends ABSTRACT_COLLECTION
 	}
 	
 #endif
+	@Override
+	public boolean REMOVE_SWAP(KEY_TYPE e) {
+		int index = indexOf(e);
+		if(index == -1) return false;
+		swapRemove(index);
+		return true;
+	}
+	
 	/**
 	 * Compares if the list are the same.
 	 */
@@ -347,8 +355,18 @@ public abstract class ABSTRACT_LIST KEY_GENERIC_TYPE extends ABSTRACT_COLLECTION
 		@Override
 		public KEY_TYPE REMOVE(int index) {
 			checkRange(index);
-			size--;
-			return l.REMOVE(index + offset);
+			int temp = l.size();
+			KEY_TYPE type = l.REMOVE(index + offset);
+			if(l.size() != temp) size--;
+			return type;
+		}
+		
+		public KEY_TYPE swapRemove(int index) {
+			checkRange(index);
+			int temp = l.size();
+			KEY_TYPE type = l.swapRemove(index + offset);
+			if(l.size() != temp) size--;
+			return type;
 		}
 		
 		@Override

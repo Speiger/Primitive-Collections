@@ -284,6 +284,7 @@ public class GlobalVariables
 		addFunctionValueMapper("MERGE", "merge");
 		addFunctionMapper("NEXT", "next");
 		addFunctionMapper("PREVIOUS", "previous");
+		addFunctionMapper("REMOVE_SWAP", "swapRemove");
 		if(type.isObject()) addFunctionMapper("REMOVE_VALUE", "rem");
 		else addSimpleMapper("REMOVE_VALUE", "remove");
 		addFunctionMapper("REMOVE_KEY", "rem");

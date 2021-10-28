@@ -760,6 +760,17 @@ public class ARRAY_LIST KEY_GENERIC_TYPE extends ABSTRACT_LIST KEY_GENERIC_TYPE 
 		return old;
 	}
 	
+	public KEY_TYPE swapRemove(int index) {
+		checkRange(index);
+		KEY_TYPE old = data[index];
+		size--;
+		data[index] = data[size];
+#if TYPE_OBJECT
+		data[size] = null;
+#endif
+		return old;
+	}
+	
 #if !TYPE_OBJECT
 	/**
 	 * A Type-Specific implementation of remove. This implementation iterates over the elements until it finds the element that is searched for or it runs out of elements.

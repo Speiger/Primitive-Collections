@@ -569,6 +569,66 @@ public class LINKED_LIST KEY_GENERIC_TYPE extends ABSTRACT_LIST KEY_GENERIC_TYPE
 		return false;
 	}
 	
+	@Override
+	public KEY_TYPE swapRemove(int index) {
+		checkRange(index);
+		Entry KEY_GENERIC_TYPE entry = getNode(index);
+		if(entry == null) return EMPTY_KEY_VALUE;
+		if(entry.next == null) return unlinkLast(entry);
+		Entry KEY_GENERIC_TYPE before = entry.prev;
+		KEY_TYPE result = unlink(entry);
+		if(before == null) {
+			Entry KEY_GENERIC_TYPE temp = last;
+			last = temp.prev;
+			last.next = null;
+			temp.next = first;
+			temp.prev = null;
+			first.prev = temp;
+			first = temp;
+			return result;
+		}
+		Entry KEY_GENERIC_TYPE temp = last;
+		last = temp.prev;
+		last.next = null;
+		temp.next = before.next;
+		temp.prev = before;
+		before.next = temp;
+		return result;
+	}
+	
+	@Override
+	public boolean REMOVE_SWAP(KEY_TYPE e) {
+		if(size == 0) return false;
+		for(Entry KEY_GENERIC_TYPE entry = last;entry.prev != null;entry = entry.prev) {
+			if(KEY_EQUALS(entry.value, e)) {
+				if(entry.next == null) {
+					unlinkLast(entry);
+					return true;
+				}
+				Entry KEY_GENERIC_TYPE before = entry.prev;
+				unlink(entry);
+				if(before == null) {
+					Entry KEY_GENERIC_TYPE temp = last;
+					last = temp.prev;
+					last.next = null;
+					temp.next = first;
+					temp.prev = null;
+					first.prev = temp;
+					first = temp;
+					return true;
+				}
+				Entry KEY_GENERIC_TYPE temp = last;
+				last = temp.prev;
+				last.next = null;
+				temp.next = before.next;
+				temp.prev = before;
+				before.next = temp;
+				return true;
+			}
+		}
+		return false;
+	}
+	
 #if TYPE_OBJECT
 	@Override
 	public boolean remove(Object e) {
@@ -592,7 +652,8 @@ public class LINKED_LIST KEY_GENERIC_TYPE extends ABSTRACT_LIST KEY_GENERIC_TYPE
 	@Override
 	public KEY_TYPE REMOVE(int index) {
 		checkRange(index);
-		return unlink(getNode(index));
+		Entry KEY_GENERIC_TYPE entry = getNode(index);
+		return entry == null ? EMPTY_KEY_VALUE : unlink(entry);
 	}
 	
 	@Override
