@@ -1,13 +1,25 @@
 package speiger.src.collections.PACKAGE.utils;
 
+import java.util.Objects;
+#if TYPE_BOOLEAN
+import java.util.concurrent.atomic.AtomicInteger;
+#endif
+import java.util.concurrent.atomic.AtomicLong;
+import java.util.function.Consumer;
+
 import speiger.src.collections.PACKAGE.collections.ITERABLE;
 #if !TYPE_OBJECT
 import speiger.src.collections.objects.collections.ObjectIterable;
 import speiger.src.collections.objects.collections.ObjectIterator;
+import speiger.src.collections.PACKAGE.functions.CONSUMER;
 #endif
 import speiger.src.collections.PACKAGE.collections.ITERATOR;
 import speiger.src.collections.PACKAGE.functions.function.TO_OBJECT_FUNCTION;
 import speiger.src.collections.PACKAGE.functions.function.PREDICATE;
+#if !TYPE_BOOLEAN
+import speiger.src.collections.PACKAGE.sets.HASH_SET;
+import speiger.src.collections.PACKAGE.sets.SET;
+#endif
 
 /**
  * A Helper class for Iterables
@@ -111,6 +123,70 @@ public class ITERABLES
 	}
 	
 	/**
+	 * A Helper function that filters out all duplicated elements.
+	 * @param iterable that should be distinct
+	 * @Type(T)
+	 * @return a distinct iterable
+	 */
+	public static GENERIC_KEY_BRACES ITERABLE KEY_GENERIC_TYPE distinct(ITERABLE KEY_GENERIC_TYPE iterable) {
+		return new DistinctIterableBRACES(iterable);
+	}
+	
+	/**
+	 * A Helper function that filters out all duplicated elements from a Java Iterable.
+	 * @param iterable that should be distinct
+	 * @Type(T)
+	 * @return a distinct iterable
+	 */
+	public static GENERIC_KEY_BRACES ITERABLE KEY_GENERIC_TYPE distinct(Iterable<? extends CLASS_TYPE> iterable) {
+		return new DistinctIterableBRACES(wrap(iterable));
+	}
+	
+	/**
+	 * A Helper function that hard limits the Iterable to a specific size
+	 * @param iterable that should be limited
+	 * @param limit the amount of elements it should be limited to
+	 * @Type(T)
+	 * @return a limited iterable
+	 */
+	public static GENERIC_KEY_BRACES ITERABLE KEY_GENERIC_TYPE limit(ITERABLE KEY_GENERIC_TYPE iterable, long limit) {
+		return new LimitedIterableBRACES(iterable, limit);
+	}
+	
+	/**
+	 * A Helper function that hard limits the Iterable to a specific size from a Java Iterable
+	 * @param iterable that should be limited
+	 * @param limit the amount of elements it should be limited to
+	 * @Type(T)
+	 * @return a limited iterable
+	 */
+	public static GENERIC_KEY_BRACES ITERABLE KEY_GENERIC_TYPE limit(Iterable<? extends CLASS_TYPE> iterable, long limit) {
+		return new LimitedIterableBRACES(wrap(iterable), limit);
+	}
+	
+	/**
+	 * A Helper function that allows to preview the result of a Iterable.
+	 * @param iterable that should be peeked at
+	 * @param action callback that receives the value before the iterable returns it
+	 * @Type(T)
+	 * @return a peeked iterable
+	 */
+	public static GENERIC_KEY_BRACES ITERABLE KEY_GENERIC_TYPE peek(ITERABLE KEY_GENERIC_TYPE iterable, CONSUMER KEY_GENERIC_TYPE action) {
+		return new PeekIterableBRACES(iterable, action);
+	}
+	
+	/**
+	 * A Helper function that allows to preview the result of a Iterable from a Java Iterable
+	 * @param iterable that should be peeked at
+	 * @param action callback that receives the value before the iterable returns it
+	 * @Type(T)
+	 * @return a peeked iterable
+	 */
+	public static GENERIC_KEY_BRACES ITERABLE KEY_GENERIC_TYPE peek(Iterable<? extends CLASS_TYPE> iterable, CONSUMER KEY_GENERIC_TYPE action) {
+		return new PeekIterableBRACES(wrap(iterable), action);
+	}
+	
+	/**
 	 * A Wrapper function that wraps a Java-Iterable into a Type Specific Iterable
 	 * @param iterable that should be wrapped
 	 * @Type(T)
@@ -131,6 +207,19 @@ public class ITERABLES
 		public ITERATOR KEY_GENERIC_TYPE iterator() {
 			return ITERATORS.wrap(iterable.iterator());
 		}
+		
+#if !TYPE_OBJECT
+		@Override
+		public void forEach(CONSUMER action) {
+			Objects.requireNonNull(action);
+			iterable.forEach(action);
+		}
+#else
+		public void forEach(Consumer<? super CLASS_TYPE> action) {
+			Objects.requireNonNull(action);
+			iterable.forEach(action);
+		}
+#endif
 	}
 	
 	private static class MappedIterable KSS_GENERIC_TYPE<E, T> implements ObjectIterable<T>
@@ -145,6 +234,12 @@ public class ITERABLES
 		
 		public ObjectIterator<T> iterator() {
 			return ITERATORS.map(iterable.iterator(), mapper);
+		}
+		
+		@Override
+		public void forEach(Consumer<? super T> action) {
+			Objects.requireNonNull(action);
+			iterable.forEach(E -> action.accept(mapper.GET_VALUE(E)));
 		}
 	}
 	
@@ -162,6 +257,13 @@ public class ITERABLES
 		public ObjectIterator<T> iterator() {
 			return ITERATORS.flatMap(iterable.iterator(), mapper);
 		}
+		
+		@Override
+		public void forEach(Consumer<? super T> action) {
+			Objects.requireNonNull(action);
+			iterable.forEach(E -> mapper.GET_VALUE(E).forEach(action));
+		}
+		
 	}
 	
 	private static class FlatMappedArrayIterable KSS_GENERIC_TYPE<E, T> implements ObjectIterable<T>
@@ -177,6 +279,15 @@ public class ITERABLES
 		@Override
 		public ObjectIterator<T> iterator() {
 			return ITERATORS.arrayFlatMap(iterable.iterator(), mapper);
+		}
+		
+		@Override
+		public void forEach(Consumer<? super T> action) {
+			Objects.requireNonNull(action);
+			iterable.forEach(E -> {
+				T[] array = mapper.GET_VALUE(E);
+				for(int i = 0,m=array.length;i<m;action.accept(array[i++]));
+			});
 		}
 	}
 	
@@ -194,5 +305,124 @@ public class ITERABLES
 		public ITERATOR KEY_GENERIC_TYPE iterator() {
 			return ITERATORS.filter(iterable.iterator(), filter);
 		}
+		
+#if !TYPE_OBJECT
+		@Override
+		public void forEach(CONSUMER action) {
+			Objects.requireNonNull(action);
+			iterable.forEach(T -> { if(!filter.TEST_VALUE(T)) action.accept(T); } );
+		}
+#else
+		public void forEach(Consumer<? super CLASS_TYPE> action) {
+			Objects.requireNonNull(action);
+			iterable.forEach(T -> { if(!filter.TEST_VALUE(T)) action.accept(T); } );
+		}
+#endif
+	}
+	
+	private static class LimitedIterable KEY_GENERIC_TYPE implements ITERABLE KEY_GENERIC_TYPE
+	{
+		ITERABLE KEY_GENERIC_TYPE iterable;
+		long limit;
+		
+		public LimitedIterable(ITERABLE KEY_GENERIC_TYPE iterable, long limit) {
+			this.iterable = iterable;
+			this.limit = limit;
+		}
+		
+		@Override
+		public ITERATOR KEY_GENERIC_TYPE iterator() {
+			return ITERATORS.limit(iterable.iterator(), limit);
+		}
+		
+#if !TYPE_OBJECT
+		@Override
+		public void forEach(CONSUMER action) {
+			Objects.requireNonNull(action);
+			AtomicLong counter = new AtomicLong();
+			iterable.forEach(T -> {
+				if(counter.get() >= limit) return;
+				counter.incrementAndGet();
+				action.accept(T);
+			});
+		}
+#else
+		public void forEach(Consumer<? super CLASS_TYPE> action) {
+			Objects.requireNonNull(action);
+			AtomicLong counter = new AtomicLong();
+			iterable.forEach(T -> {
+				if(counter.get() >= limit) return;
+				counter.incrementAndGet();
+				action.accept(T);
+			});
+		}
+#endif
+	}
+	
+	private static class DistinctIterable KEY_GENERIC_TYPE implements ITERABLE KEY_GENERIC_TYPE
+	{
+		ITERABLE KEY_GENERIC_TYPE iterable;
+		
+		public DistinctIterable(ITERABLE KEY_GENERIC_TYPE iterable) {
+			this.iterable = iterable;
+		}
+		
+		@Override
+		public ITERATOR KEY_GENERIC_TYPE iterator() {
+			return ITERATORS.distinct(iterable.iterator());
+		}
+		
+#if !TYPE_OBJECT
+		@Override
+		public void forEach(CONSUMER action) {
+			Objects.requireNonNull(action);
+#if TYPE_BOOLEAN
+			AtomicInteger result = new AtomicInteger();
+			iterable.forEach(T -> {
+				if(((result.get() & (T ? 2 : 1)) != 0)) return;
+				result.getAndAdd(T ? 2 : 1);
+				action.accept(T);
+			});
+#else
+			SET KEY_GENERIC_TYPE filtered = new HASH_SETBRACES();
+			iterable.forEach(T -> { if(filtered.add(T)) action.accept(T); });
+#endif
+		}
+#else
+		public void forEach(Consumer<? super CLASS_TYPE> action) {
+			Objects.requireNonNull(action);
+			SET KEY_GENERIC_TYPE filtered = new HASH_SETBRACES();
+			iterable.forEach(T -> { if(filtered.add(T)) action.accept(T); });
+		}
+#endif
+	}
+	
+	private static class PeekIterable KEY_GENERIC_TYPE implements ITERABLE KEY_GENERIC_TYPE
+	{
+		ITERABLE KEY_GENERIC_TYPE iterable;
+		CONSUMER KEY_GENERIC_TYPE action;
+		
+		public PeekIterable(ITERABLE KEY_GENERIC_TYPE iterable, CONSUMER KEY_GENERIC_TYPE action) {
+			this.iterable = iterable;
+			this.action = action;
+		}
+		
+		@Override
+		public ITERATOR KEY_GENERIC_TYPE iterator() {
+			return ITERATORS.peek(iterable.iterator(), action);
+		}
+		
+#if !TYPE_OBJECT
+		@Override
+		public void forEach(CONSUMER action) {
+			Objects.requireNonNull(action);
+			iterable.forEach(this.action.andThen(action));
+		}
+#else
+		public void forEach(Consumer<? super CLASS_TYPE> action) {
+			Objects.requireNonNull(action);
+			iterable.forEach(this.action.andThen(action));
+		}
+#endif
 	}
 }

@@ -1,8 +1,8 @@
 package speiger.src.collections.PACKAGE.collections;
 
 import java.util.Objects;
-#if !TYPE_OBJECT
 import java.util.function.Consumer;
+#if !TYPE_OBJECT
 
 import speiger.src.collections.PACKAGE.functions.CONSUMER;
 import speiger.src.collections.objects.collections.ObjectIterable;
@@ -120,6 +120,32 @@ public interface ITERABLE KEY_GENERIC_TYPE extends Iterable<CLASS_TYPE>
 	 */
 	default ITERABLE KEY_GENERIC_TYPE filter(PREDICATE KEY_GENERIC_TYPE filter) {
 		return ITERABLES.filter(this, filter);
+	}
+	
+	/**
+	 * A Helper function to reduce the usage of Streams and allows to filter out duplicated elements
+	 * @return a Iterable that filtered out all duplicated elements
+	 */
+	default ITERABLE KEY_GENERIC_TYPE distinct() {
+		return ITERABLES.distinct(this);
+	}
+	
+	/**
+	 * A Helper function to reduce the usage of Streams and allows to limit the amount of elements
+	 * @param limit the amount of elements it should be limited to
+	 * @return a Iterable that is limited in length
+	 */
+	default ITERABLE KEY_GENERIC_TYPE limit(long limit) {
+		return ITERABLES.limit(this, limit);
+	}
+	
+	/**
+	 * A Helper function to reduce the usage of Streams and allows to preview elements before they are iterated through
+	 * @param action the action that should be applied
+	 * @return a Peeked Iterable
+	 */
+	default ITERABLE KEY_GENERIC_TYPE peek(CONSUMER KEY_GENERIC_TYPE action) {
+		return ITERABLES.peek(this, action);
 	}
 	
 	/**
