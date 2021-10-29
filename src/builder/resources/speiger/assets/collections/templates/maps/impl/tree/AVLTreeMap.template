@@ -5,6 +5,7 @@ import java.util.Map;
 import java.util.Comparator;
 #endif
 import java.util.function.Consumer;
+import java.util.function.BiFunction;
 import java.util.Objects;
 import java.util.NoSuchElementException;
 
@@ -20,6 +21,9 @@ import speiger.src.collections.PACKAGE.functions.function.PREDICATE;
 import speiger.src.collections.PACKAGE.functions.consumer.BI_CONSUMER;
 import speiger.src.collections.PACKAGE.functions.function.FUNCTION;
 import speiger.src.collections.PACKAGE.functions.function.UNARY_OPERATOR;
+#if !SAME_TYPE
+import speiger.src.collections.PACKAGE.functions.function.SINGLE_UNARY_OPERATOR;
+#endif
 import speiger.src.collections.PACKAGE.lists.LIST_ITERATOR;
 import speiger.src.collections.PACKAGE.maps.abstracts.ABSTRACT_MAP;
 import speiger.src.collections.PACKAGE.maps.interfaces.MAP;
@@ -65,6 +69,10 @@ import speiger.src.collections.objects.utils.ObjectIterators;
 import speiger.src.collections.objects.collections.ObjectIterator;
 #endif
 #if !TYPE_OBJECT
+#if !VALUE_OBJECT
+import speiger.src.collections.objects.functions.function.ObjectObjectUnaryOperator;
+
+#endif
 import speiger.src.collections.objects.sets.AbstractObjectSet;
 import speiger.src.collections.objects.sets.ObjectSet;
 #endif
@@ -1560,6 +1568,32 @@ public class AVL_TREE_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_VALUE_
 			}
 			
 			@Override
+			public <E> E reduce(E identity, BiFunction<E, MAP.Entry KEY_VALUE_GENERIC_TYPE, E> operator) {
+				Objects.requireNonNull(operator);
+				E state = identity;
+				for(AVL_TREE_MAP.Entry KEY_VALUE_GENERIC_TYPE entry = findLowest(), last = findHighest();entry != null && (last == null || last != previous(entry));entry = next(entry)) {
+					state = operator.apply(state, new BasicEntryKV_BRACES(entry.key, entry.value));
+				}
+				return state;
+			}
+			
+			@Override
+			public MAP.Entry KEY_VALUE_GENERIC_TYPE reduce(ObjectObjectUnaryOperator<MAP.Entry KEY_VALUE_GENERIC_TYPE, MAP.Entry KEY_VALUE_GENERIC_TYPE> operator) {
+				Objects.requireNonNull(operator);
+				MAP.Entry KEY_VALUE_GENERIC_TYPE state = null;
+				boolean empty = true;
+				for(AVL_TREE_MAP.Entry KEY_VALUE_GENERIC_TYPE entry = findLowest(), last = findHighest();entry != null && (last == null || last != previous(entry));entry = next(entry)) {
+					if(empty) {
+						empty = false;
+						state = new BasicEntryKV_BRACES(entry.key, entry.value);
+						continue;
+					}
+					state = operator.apply(state, new BasicEntryKV_BRACES(entry.key, entry.value));
+				}
+				return state;
+			}
+			
+			@Override
 			public MAP.Entry KEY_VALUE_GENERIC_TYPE findFirst(Object2BooleanFunction<MAP.Entry KEY_VALUE_GENERIC_TYPE> filter) {
 				Objects.requireNonNull(filter);
 				if(size() <= 0) return null;
@@ -1651,6 +1685,43 @@ public class AVL_TREE_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_VALUE_
 				for(AVL_TREE_MAP.Entry KEY_VALUE_GENERIC_TYPE entry = findLowest(), last = findHighest();entry != null && (last == null || last != previous(entry));entry = next(entry))
 					if(!filter.VALUE_TEST_VALUE(entry.value)) return false;
 				return true;
+			}
+			
+#if !VALUE_OBJECT
+			@Override
+			public VALUE_TYPE reduce(VALUE_TYPE identity, VALUE_SINGLE_UNARY_OPERATOR VALUE_VALUE_GENERIC_TYPE operator) {
+				Objects.requireNonNull(operator);
+				VALUE_TYPE state = identity;
+				for(AVL_TREE_MAP.Entry KEY_VALUE_GENERIC_TYPE entry = findLowest(), last = findHighest();entry != null && (last == null || last != previous(entry));entry = next(entry))
+					state = operator.APPLY_VALUE(state, entry.value);
+				return state;
+			}
+			
+#else
+			@Override
+			public <VALUE_SPECIAL_TYPE> VALUE_SPECIAL_TYPE reduce(VALUE_SPECIAL_TYPE identity, BiFunction<VALUE_SPECIAL_TYPE, VALUE_TYPE, VALUE_SPECIAL_TYPE> operator) {
+				Objects.requireNonNull(operator);
+				VALUE_SPECIAL_TYPE state = identity;
+				for(AVL_TREE_MAP.Entry KEY_VALUE_GENERIC_TYPE entry = findLowest(), last = findHighest();entry != null && (last == null || last != previous(entry));entry = next(entry))
+					state = operator.apply(state, entry.value);
+				return state;
+			}
+			
+#endif
+			@Override
+			public VALUE_TYPE reduce(VALUE_SINGLE_UNARY_OPERATOR VALUE_VALUE_GENERIC_TYPE operator) {
+				Objects.requireNonNull(operator);
+				VALUE_TYPE state = EMPTY_VALUE;
+				boolean empty = true;
+				for(AVL_TREE_MAP.Entry KEY_VALUE_GENERIC_TYPE entry = findLowest(), last = findHighest();entry != null && (last == null || last != previous(entry));entry = next(entry)) {
+					if(empty) {
+						empty = false;
+						state = entry.value;
+						continue;
+					}
+					state = operator.APPLY_VALUE(state, entry.value);
+				}
+				return state;
 			}
 			
 			@Override
@@ -1894,6 +1965,32 @@ public class AVL_TREE_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_VALUE_
 		}
 		
 		@Override
+		public <E> E reduce(E identity, BiFunction<E, MAP.Entry KEY_VALUE_GENERIC_TYPE, E> operator) {
+			Objects.requireNonNull(operator);
+			E state = identity;
+			for(AVL_TREE_MAP.Entry KEY_VALUE_GENERIC_TYPE entry = first;entry != null;entry = entry.next()) {
+				state = operator.apply(state, new BasicEntryKV_BRACES(entry.key, entry.value));
+			}
+			return state;
+		}
+		
+		@Override
+		public MAP.Entry KEY_VALUE_GENERIC_TYPE reduce(ObjectObjectUnaryOperator<MAP.Entry KEY_VALUE_GENERIC_TYPE, MAP.Entry KEY_VALUE_GENERIC_TYPE> operator) {
+			Objects.requireNonNull(operator);
+			MAP.Entry KEY_VALUE_GENERIC_TYPE state = null;
+			boolean empty = true;
+			for(AVL_TREE_MAP.Entry KEY_VALUE_GENERIC_TYPE entry = first;entry != null;entry = entry.next()) {
+				if(empty) {
+					empty = false;
+					state = new BasicEntryKV_BRACES(entry.key, entry.value);
+					continue;
+				}
+				state = operator.apply(state, new BasicEntryKV_BRACES(entry.key, entry.value));
+			}
+			return state;
+		}
+		
+		@Override
 		public MAP.Entry KEY_VALUE_GENERIC_TYPE findFirst(Object2BooleanFunction<MAP.Entry KEY_VALUE_GENERIC_TYPE> filter) {
 			Objects.requireNonNull(filter);
 			if(size() <= 0) return null;
@@ -2077,6 +2174,43 @@ public class AVL_TREE_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_VALUE_
 			return true;
 		}
 		
+#if !TYPE_OBJECT
+		@Override
+		public KEY_TYPE reduce(KEY_TYPE identity, SINGLE_UNARY_OPERATOR KEY_KEY_GENERIC_TYPE operator) {
+			Objects.requireNonNull(operator);
+			KEY_TYPE state = identity;
+			for(AVL_TREE_MAP.Entry KEY_VALUE_GENERIC_TYPE entry = start(), end = end();entry != null && (end == null || (end != previous(entry)));entry = next(entry))
+				state = operator.APPLY_KEY_VALUE(state, entry.key);
+			return state;
+		}
+		
+#else
+		@Override
+		public <KEY_SPECIAL_TYPE> KEY_SPECIAL_TYPE reduce(KEY_SPECIAL_TYPE identity, BiFunction<KEY_SPECIAL_TYPE, KEY_TYPE, KEY_SPECIAL_TYPE> operator) {
+			Objects.requireNonNull(operator);
+			KEY_SPECIAL_TYPE state = identity;
+			for(AVL_TREE_MAP.Entry KEY_VALUE_GENERIC_TYPE entry = start(), end = end();entry != null && (end == null || (end != previous(entry)));entry = next(entry))
+				state = operator.apply(state, entry.key);
+			return state;
+		}
+		
+#endif
+		@Override
+		public KEY_TYPE reduce(SINGLE_UNARY_OPERATOR KEY_KEY_GENERIC_TYPE operator) {
+			Objects.requireNonNull(operator);
+			KEY_TYPE state = EMPTY_KEY_VALUE;
+			boolean empty = true;
+			for(AVL_TREE_MAP.Entry KEY_VALUE_GENERIC_TYPE entry = start(), end = end();entry != null && (end == null || (end != previous(entry)));entry = next(entry)) {
+				if(empty) {
+					empty = false;
+					state = entry.key;
+					continue;
+				}
+				state = operator.APPLY_KEY_VALUE(state, entry.key);
+			}
+			return state;
+		}
+		
 		@Override
 		public KEY_TYPE findFirst(PREDICATE KEY_GENERIC_TYPE filter) {
 			Objects.requireNonNull(filter);
@@ -2162,6 +2296,43 @@ public class AVL_TREE_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_VALUE_
 			for(AVL_TREE_MAP.Entry KEY_VALUE_GENERIC_TYPE entry = first;entry != null;entry = entry.next())
 				if(!filter.VALUE_TEST_VALUE(entry.value)) return false;
 			return true;
+		}
+		
+#if !VALUE_OBJECT
+		@Override
+		public VALUE_TYPE reduce(VALUE_TYPE identity, VALUE_SINGLE_UNARY_OPERATOR VALUE_VALUE_GENERIC_TYPE operator) {
+			Objects.requireNonNull(operator);
+			VALUE_TYPE state = identity;
+			for(AVL_TREE_MAP.Entry KEY_VALUE_GENERIC_TYPE entry = first;entry != null;entry = entry.next())
+				state = operator.APPLY_VALUE(state, entry.value);
+			return state;
+		}
+		
+#else
+		@Override
+		public <VALUE_SPECIAL_TYPE> VALUE_SPECIAL_TYPE reduce(VALUE_SPECIAL_TYPE identity, BiFunction<VALUE_SPECIAL_TYPE, VALUE_TYPE, VALUE_SPECIAL_TYPE> operator) {
+			Objects.requireNonNull(operator);
+			VALUE_SPECIAL_TYPE state = identity;
+			for(AVL_TREE_MAP.Entry KEY_VALUE_GENERIC_TYPE entry = first;entry != null;entry = entry.next())
+				state = operator.apply(state, entry.value);
+			return state;
+		}
+		
+#endif
+		@Override
+		public VALUE_TYPE reduce(VALUE_SINGLE_UNARY_OPERATOR VALUE_VALUE_GENERIC_TYPE operator) {
+			Objects.requireNonNull(operator);
+			VALUE_TYPE state = EMPTY_VALUE;
+			boolean empty = true;
+			for(AVL_TREE_MAP.Entry KEY_VALUE_GENERIC_TYPE entry = first;entry != null;entry = entry.next()) {
+				if(empty) {
+					empty = false;
+					state = entry.value;
+					continue;
+				}
+				state = operator.APPLY_VALUE(state, entry.value);
+			}
+			return state;
 		}
 		
 		@Override

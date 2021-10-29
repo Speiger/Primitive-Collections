@@ -229,6 +229,7 @@ public class GlobalVariables
 		addClassMapper("STRATEGY", "Strategy");
 		addClassMapper("STACK", "Stack");
 		addClassMapper("SUPPLIER", "Supplier");
+		addAbstractMapper("SINGLE_UNARY_OPERATOR", "%1$s%1$sUnaryOperator");
 		addBiClassMapper("UNARY_OPERATOR", "UnaryOperator", "");
 		if(type.isObject())
 		{
@@ -254,6 +255,7 @@ public class GlobalVariables
 	
 	public GlobalVariables createFunctions()
 	{
+		addSimpleMapper("APPLY_KEY_VALUE", type.isObject() ? "apply" : "applyAs"+type.getNonFileType());
 		addSimpleMapper("APPLY_VALUE", valueType.isObject() ? "apply" : "applyAs"+valueType.getNonFileType());
 		addSimpleMapper("APPLY_CAST", "applyAs"+type.getCustomJDKType().getNonFileType());
 		addSimpleMapper("APPLY", type.isObject() ? "apply" : "applyAs"+type.getNonFileType());

@@ -6,6 +6,7 @@ import java.util.Map;
 import java.util.NoSuchElementException;
 import java.util.Objects;
 import java.util.function.Consumer;
+import java.util.function.BiFunction;
 
 #if !TYPE_OBJECT
 import speiger.src.collections.PACKAGE.collections.BI_ITERATOR;
@@ -19,6 +20,9 @@ import speiger.src.collections.PACKAGE.functions.function.PREDICATE;
 import speiger.src.collections.PACKAGE.functions.consumer.BI_CONSUMER;
 import speiger.src.collections.PACKAGE.functions.function.FUNCTION;
 import speiger.src.collections.PACKAGE.functions.function.UNARY_OPERATOR;
+#if !SAME_TYPE
+import speiger.src.collections.PACKAGE.functions.function.SINGLE_UNARY_OPERATOR;
+#endif
 import speiger.src.collections.PACKAGE.lists.LIST_ITERATOR;
 import speiger.src.collections.PACKAGE.maps.interfaces.SORTED_MAP;
 import speiger.src.collections.PACKAGE.maps.abstracts.ABSTRACT_MAP;
@@ -61,6 +65,10 @@ import speiger.src.collections.VALUE_PACKAGE.utils.VALUE_ARRAYS;
 #endif
 import speiger.src.collections.objects.collections.ObjectBidirectionalIterator;
 #if !TYPE_OBJECT
+#if !VALUE_OBJECT
+import speiger.src.collections.objects.functions.function.ObjectObjectUnaryOperator;
+
+#endif
 import speiger.src.collections.objects.lists.ObjectListIterator;
 import speiger.src.collections.objects.sets.ObjectSortedSet;
 #endif
@@ -686,6 +694,37 @@ public class IMMUTABLE_HASH_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_
 		}
 		
 		@Override
+		public <E> E reduce(E identity, BiFunction<E, MAP.Entry KEY_VALUE_GENERIC_TYPE, E> operator) {
+			Objects.requireNonNull(operator);
+			E state = identity;
+			int index = firstIndex;
+			while(index != -1) {
+				state = operator.apply(state, new BasicEntryKV_BRACES(keys[index], values[index]));
+				index = (int)links[index];
+			}
+			return state;
+		}
+		
+		@Override
+		public MAP.Entry KEY_VALUE_GENERIC_TYPE reduce(ObjectObjectUnaryOperator<MAP.Entry KEY_VALUE_GENERIC_TYPE, MAP.Entry KEY_VALUE_GENERIC_TYPE> operator) {
+			Objects.requireNonNull(operator);
+			MAP.Entry KEY_VALUE_GENERIC_TYPE state = null;
+			boolean empty = true;
+			int index = firstIndex;
+			while(index != -1) {
+				if(empty) {
+					empty = false;
+					state = new BasicEntryKV_BRACES(keys[index], values[index]);
+					index = (int)links[index];
+					continue;
+				}
+				state = operator.apply(state, new BasicEntryKV_BRACES(keys[index], values[index]));
+				index = (int)links[index];
+			}
+			return state;
+		}
+		
+		@Override
 		public MAP.Entry KEY_VALUE_GENERIC_TYPE findFirst(Object2BooleanFunction<MAP.Entry KEY_VALUE_GENERIC_TYPE> filter) {
 			Objects.requireNonNull(filter);
 			if(size() <= 0) return null;
@@ -879,6 +918,52 @@ public class IMMUTABLE_HASH_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_
 			return true;
 		}
 		
+#if !TYPE_OBJECT
+		@Override
+		public KEY_TYPE reduce(KEY_TYPE identity, SINGLE_UNARY_OPERATOR KEY_KEY_GENERIC_TYPE operator) {
+			Objects.requireNonNull(operator);
+			KEY_TYPE state = identity;
+			int index = firstIndex;
+			while(index != -1) {
+				state = operator.APPLY_KEY_VALUE(state, keys[index]);
+				index = (int)links[index];
+			}
+			return state;
+		}
+		
+#else
+		@Override
+		public <KEY_SPECIAL_TYPE> KEY_SPECIAL_TYPE reduce(KEY_SPECIAL_TYPE identity, BiFunction<KEY_SPECIAL_TYPE, KEY_TYPE, KEY_SPECIAL_TYPE> operator) {
+			Objects.requireNonNull(operator);
+			KEY_SPECIAL_TYPE state = identity;
+			int index = firstIndex;
+			while(index != -1) {
+				state = operator.apply(state, keys[index]);
+				index = (int)links[index];
+			}
+			return state;
+		}
+		
+#endif
+		@Override
+		public KEY_TYPE reduce(SINGLE_UNARY_OPERATOR KEY_KEY_GENERIC_TYPE operator) {
+			Objects.requireNonNull(operator);
+			KEY_TYPE state = EMPTY_KEY_VALUE;
+			boolean empty = true;
+			int index = firstIndex;
+			while(index != -1) {
+				if(empty) {
+					empty = false;
+					state = keys[index];
+					index = (int)links[index];
+					continue;
+				}
+				state = operator.APPLY_KEY_VALUE(state, keys[index]);
+				index = (int)links[index];
+			}
+			return state;
+		}
+		
 		@Override
 		public KEY_TYPE findFirst(PREDICATE KEY_GENERIC_TYPE filter) {
 			Objects.requireNonNull(filter);
@@ -1004,6 +1089,52 @@ public class IMMUTABLE_HASH_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_
 				index = (int)links[index];
 			}
 			return true;
+		}
+		
+#if !VALUE_OBJECT
+		@Override
+		public VALUE_TYPE reduce(VALUE_TYPE identity, VALUE_SINGLE_UNARY_OPERATOR VALUE_VALUE_GENERIC_TYPE operator) {
+			Objects.requireNonNull(operator);
+			VALUE_TYPE state = identity;
+			int index = firstIndex;
+			while(index != -1) {
+				state = operator.APPLY_VALUE(state, values[index]);
+				index = (int)links[index];
+			}
+			return state;
+		}
+		
+#else
+		@Override
+		public <VALUE_SPECIAL_TYPE> VALUE_SPECIAL_TYPE reduce(VALUE_SPECIAL_TYPE identity, BiFunction<VALUE_SPECIAL_TYPE, VALUE_TYPE, VALUE_SPECIAL_TYPE> operator) {
+			Objects.requireNonNull(operator);
+			VALUE_SPECIAL_TYPE state = identity;
+			int index = firstIndex;
+			while(index != -1) {
+				state = operator.apply(state, values[index]);
+				index = (int)links[index];
+			}
+			return state;
+		}
+		
+#endif
+		@Override
+		public VALUE_TYPE reduce(VALUE_SINGLE_UNARY_OPERATOR VALUE_VALUE_GENERIC_TYPE operator) {
+			Objects.requireNonNull(operator);
+			VALUE_TYPE state = EMPTY_VALUE;
+			boolean empty = true;
+			int index = firstIndex;
+			while(index != -1) {
+				if(empty) {
+					empty = false;
+					state = values[index];
+					index = (int)links[index];
+					continue;
+				}
+				state = operator.APPLY_VALUE(state, values[index]);
+				index = (int)links[index];
+			}
+			return state;
 		}
 		
 		@Override

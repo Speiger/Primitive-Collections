@@ -1,6 +1,9 @@
 package speiger.src.collections.PACKAGE.utils;
 
 import java.util.Collection;
+#if TYPE_OBJECT
+import java.util.function.BiFunction;
+#endif
 import java.util.function.Predicate;
 #if PRIMITIVES
 import java.util.function.JAVA_PREDICATE;
@@ -194,12 +197,16 @@ public class COLLECTIONS
 		public boolean matchesNone(PREDICATE KEY_GENERIC_TYPE filter) { synchronized(mutex) { return c.matchesNone(filter); } }
 		@Override
 		public boolean matchesAll(PREDICATE KEY_GENERIC_TYPE filter) { synchronized(mutex) { return c.matchesAll(filter); } }
-		@Override
-		public KEY_TYPE findFirst(PREDICATE KEY_GENERIC_TYPE filter) { synchronized(mutex) { return c.findFirst(filter); } }
+#if TYPE_OBJECT
+		public <KEY_SPECIAL_TYPE> KEY_SPECIAL_TYPE reduce(KEY_SPECIAL_TYPE identity, BiFunction<KEY_SPECIAL_TYPE, KEY_TYPE, KEY_SPECIAL_TYPE> operator) { synchronized(mutex) { return c.reduce(identity, operator); } }
+#else
 		@Override
 		public KEY_TYPE reduce(KEY_TYPE identity, UNARY_OPERATOR KEY_KEY_GENERIC_TYPE operator) { synchronized(mutex) { return c.reduce(identity, operator); } }
+#endif
 		@Override
 		public KEY_TYPE reduce(UNARY_OPERATOR KEY_KEY_GENERIC_TYPE operator) { synchronized(mutex) { return c.reduce(operator); } }
+		@Override
+		public KEY_TYPE findFirst(PREDICATE KEY_GENERIC_TYPE filter) { synchronized(mutex) { return c.findFirst(filter); } }
 		@Override
 		public int count(PREDICATE KEY_GENERIC_TYPE filter) { synchronized(mutex) { return c.count(filter); } }
 	}
@@ -312,12 +319,16 @@ public class COLLECTIONS
 		public boolean matchesNone(PREDICATE KEY_GENERIC_TYPE filter) { return c.matchesNone(filter); }
 		@Override
 		public boolean matchesAll(PREDICATE KEY_GENERIC_TYPE filter) { return c.matchesAll(filter); }
-		@Override
-		public KEY_TYPE findFirst(PREDICATE KEY_GENERIC_TYPE filter) { return c.findFirst(filter); }
+#if TYPE_OBJECT
+		public <KEY_SPECIAL_TYPE> KEY_SPECIAL_TYPE reduce(KEY_SPECIAL_TYPE identity, BiFunction<KEY_SPECIAL_TYPE, KEY_TYPE, KEY_SPECIAL_TYPE> operator) { return c.reduce(identity, operator); }
+#else
 		@Override
 		public KEY_TYPE reduce(KEY_TYPE identity, UNARY_OPERATOR KEY_KEY_GENERIC_TYPE operator) { return c.reduce(identity, operator); }
+#endif
 		@Override
 		public KEY_TYPE reduce(UNARY_OPERATOR KEY_KEY_GENERIC_TYPE operator) { return c.reduce(operator); }
+		@Override
+		public KEY_TYPE findFirst(PREDICATE KEY_GENERIC_TYPE filter) { return c.findFirst(filter); }
 		@Override
 		public int count(PREDICATE KEY_GENERIC_TYPE filter) { return c.count(filter); }
 	}

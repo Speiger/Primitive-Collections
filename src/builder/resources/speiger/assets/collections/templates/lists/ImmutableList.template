@@ -7,6 +7,7 @@ import java.util.Comparator;
 import java.util.Collection;
 import java.util.Objects;
 #if TYPE_OBJECT
+import java.util.function.BiFunction;
 import java.util.function.Consumer;
 #endif
 import java.util.function.Predicate;
@@ -331,6 +332,7 @@ public class IMMUTABLE_LIST KEY_GENERIC_TYPE extends ABSTRACT_LIST KEY_GENERIC_T
 		return EMPTY_VALUE;
 	}
 	
+#if !TYPE_OBJECT
 	@Override
 	public KEY_TYPE reduce(KEY_TYPE identity, UNARY_OPERATOR KEY_KEY_GENERIC_TYPE operator) {
 		Objects.requireNonNull(operator);
@@ -341,6 +343,18 @@ public class IMMUTABLE_LIST KEY_GENERIC_TYPE extends ABSTRACT_LIST KEY_GENERIC_T
 		return state;
 	}
 	
+#else
+	@Override
+	public <KEY_SPECIAL_TYPE> KEY_SPECIAL_TYPE reduce(KEY_SPECIAL_TYPE identity, BiFunction<KEY_SPECIAL_TYPE, KEY_TYPE, KEY_SPECIAL_TYPE> operator) {
+		Objects.requireNonNull(operator);
+		KEY_SPECIAL_TYPE state = identity;
+		for(int i = 0,m=data.length;i<m;i++) {
+			state = operator.APPLY_VALUE(state, data[i]);
+		}
+		return state;
+	}
+
+#endif
 	@Override
 	public KEY_TYPE reduce(UNARY_OPERATOR KEY_KEY_GENERIC_TYPE operator) {
 		Objects.requireNonNull(operator);

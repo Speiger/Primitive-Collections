@@ -6,6 +6,7 @@ import java.util.Map;
 import java.util.NoSuchElementException;
 import java.util.Objects;
 import java.util.function.Consumer;
+import java.util.function.BiFunction;
 
 #if !TYPE_OBJECT
 import speiger.src.collections.PACKAGE.collections.ITERATOR;
@@ -15,6 +16,9 @@ import speiger.src.collections.objects.functions.consumer.BI_FROM_OBJECT_CONSUME
 import speiger.src.collections.PACKAGE.functions.consumer.BI_CONSUMER;
 import speiger.src.collections.PACKAGE.functions.function.FUNCTION;
 import speiger.src.collections.PACKAGE.functions.function.UNARY_OPERATOR;
+#if !SAME_TYPE
+import speiger.src.collections.PACKAGE.functions.function.SINGLE_UNARY_OPERATOR;
+#endif
 #if !TYPE_OBJECT && !VALUE_BOOLEAN
 import speiger.src.collections.PACKAGE.functions.function.PREDICATE;
 #endif
@@ -33,10 +37,17 @@ import speiger.src.collections.VALUE_PACKAGE.collections.VALUE_COLLECTION;
 import speiger.src.collections.VALUE_PACKAGE.functions.VALUE_SUPPLIER;
 #if !SAME_TYPE
 import speiger.src.collections.VALUE_PACKAGE.functions.function.VALUE_UNARY_OPERATOR;
+
 #if !VALUE_OBJECT
+#if !TYPE_OBJECT
+import speiger.src.collections.objects.functions.function.ObjectObjectUnaryOperator;
+#endif
 import speiger.src.collections.VALUE_PACKAGE.collections.VALUE_ITERATOR;
 import speiger.src.collections.VALUE_PACKAGE.functions.VALUE_CONSUMER;
 #endif
+#else if !VALUE_OBJECT
+import speiger.src.collections.objects.functions.function.ObjectObjectUnaryOperator;
+
 #endif
 #if !TYPE_OBJECT && !VALUE_OBJECT || !VALUE_OBJECT
 import speiger.src.collections.objects.functions.consumer.ObjectObjectConsumer;
@@ -875,6 +886,39 @@ public class CUSTOM_HASH_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_VAL
 		}
 		
 		@Override
+		public <E> E reduce(E identity, BiFunction<E, MAP.Entry KEY_VALUE_GENERIC_TYPE, E> operator) {
+			Objects.requireNonNull(operator);
+			E state = identity;
+			if(containsNull) state = operator.apply(state, new BasicEntryKV_BRACES(keys[nullIndex], values[nullIndex]));
+			for(int i = nullIndex-1;i>=0;i--) {
+				if(strategy.equals(keys[i], EMPTY_KEY_VALUE)) continue;
+				state = operator.apply(state, new BasicEntryKV_BRACES(keys[i], values[i]));
+			}
+			return state;
+		}
+		
+		@Override
+		public MAP.Entry KEY_VALUE_GENERIC_TYPE reduce(ObjectObjectUnaryOperator<MAP.Entry KEY_VALUE_GENERIC_TYPE, MAP.Entry KEY_VALUE_GENERIC_TYPE> operator) {
+			Objects.requireNonNull(operator);
+			MAP.Entry KEY_VALUE_GENERIC_TYPE state = null;
+			boolean empty = true;
+			if(containsNull) {
+				state = new BasicEntryKV_BRACES(keys[nullIndex], values[nullIndex]);
+				empty = false;
+			}
+			for(int i = 0;i<size;i++) {
+				if(strategy.equals(keys[i], EMPTY_KEY_VALUE)) continue;
+				if(empty) {
+					empty = false;
+					state = new BasicEntryKV_BRACES(keys[i], values[i]);
+					continue;
+				}
+				state = operator.apply(state, new BasicEntryKV_BRACES(keys[i], values[i]));
+			}
+			return state;
+		}
+		
+		@Override
 		public MAP.Entry KEY_VALUE_GENERIC_TYPE findFirst(Object2BooleanFunction<MAP.Entry KEY_VALUE_GENERIC_TYPE> filter) {
 			Objects.requireNonNull(filter);
 			if(size() <= 0) return null;
@@ -1045,6 +1089,54 @@ public class CUSTOM_HASH_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_VAL
 			return true;
 		}
 		
+#if !TYPE_OBJECT
+		@Override
+		public KEY_TYPE reduce(KEY_TYPE identity, SINGLE_UNARY_OPERATOR KEY_KEY_GENERIC_TYPE operator) {
+			Objects.requireNonNull(operator);
+			KEY_TYPE state = identity;
+			if(containsNull) state = operator.APPLY_KEY_VALUE(state, keys[nullIndex]);
+			for(int i = nullIndex-1;i>=0;i--) {
+				if(strategy.equals(keys[i], EMPTY_KEY_VALUE)) continue;
+				state = operator.APPLY_KEY_VALUE(state, keys[i]);
+			}
+			return state;
+		}
+		
+#else
+		@Override
+		public <KEY_SPECIAL_TYPE> KEY_SPECIAL_TYPE reduce(KEY_SPECIAL_TYPE identity, BiFunction<KEY_SPECIAL_TYPE, KEY_TYPE, KEY_SPECIAL_TYPE> operator) {
+			Objects.requireNonNull(operator);
+			KEY_SPECIAL_TYPE state = identity;
+			if(containsNull) state = operator.apply(state, keys[nullIndex]);
+			for(int i = nullIndex-1;i>=0;i--) {
+				if(strategy.equals(keys[i], EMPTY_KEY_VALUE)) continue;
+				state = operator.apply(state, keys[i]);
+			}
+			return state;
+		}
+		
+#endif
+		@Override
+		public KEY_TYPE reduce(SINGLE_UNARY_OPERATOR KEY_KEY_GENERIC_TYPE operator) {
+			Objects.requireNonNull(operator);
+			KEY_TYPE state = EMPTY_KEY_VALUE;
+			boolean empty = true;
+			if(containsNull) {
+				state = keys[nullIndex];
+				empty = false;
+			}
+			for(int i = 0;i<size;i++) {
+				if(strategy.equals(keys[i], EMPTY_KEY_VALUE)) continue;
+				if(empty) {
+					empty = false;
+					state = keys[i];
+					continue;
+				}
+				state = operator.APPLY_KEY_VALUE(state, keys[i]);
+			}
+			return state;
+		}
+		
 		@Override
 		public KEY_TYPE findFirst(PREDICATE KEY_GENERIC_TYPE filter) {
 			Objects.requireNonNull(filter);
@@ -1151,6 +1243,54 @@ public class CUSTOM_HASH_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_VAL
 				if(!strategy.equals(keys[i], EMPTY_KEY_VALUE) && !filter.VALUE_TEST_VALUE(values[i])) return false;
 			}
 			return true;
+		}
+		
+#if !VALUE_OBJECT
+		@Override
+		public VALUE_TYPE reduce(VALUE_TYPE identity, VALUE_SINGLE_UNARY_OPERATOR VALUE_VALUE_GENERIC_TYPE operator) {
+			Objects.requireNonNull(operator);
+			VALUE_TYPE state = identity;
+			if(containsNull) state = operator.APPLY_VALUE(state, values[nullIndex]);
+			for(int i = nullIndex-1;i>=0;i--) {
+				if(strategy.equals(keys[i], EMPTY_KEY_VALUE)) continue;
+				state = operator.APPLY_VALUE(state, values[i]);
+			}
+			return state;
+		}
+		
+#else
+		@Override
+		public <VALUE_SPECIAL_TYPE> VALUE_SPECIAL_TYPE reduce(VALUE_SPECIAL_TYPE identity, BiFunction<VALUE_SPECIAL_TYPE, VALUE_TYPE, VALUE_SPECIAL_TYPE> operator) {
+			Objects.requireNonNull(operator);
+			VALUE_SPECIAL_TYPE state = identity;
+			if(containsNull) state = operator.APPLY_VALUE(state, values[nullIndex]);
+			for(int i = nullIndex-1;i>=0;i--) {
+				if(strategy.equals(keys[i], EMPTY_KEY_VALUE)) continue;
+				state = operator.APPLY_VALUE(state, values[i]);
+			}
+			return state;
+		}
+		
+#endif
+		@Override
+		public VALUE_TYPE reduce(VALUE_SINGLE_UNARY_OPERATOR VALUE_VALUE_GENERIC_TYPE operator) {
+			Objects.requireNonNull(operator);
+			VALUE_TYPE state = EMPTY_VALUE;
+			boolean empty = true;
+			if(containsNull) {
+				state = values[nullIndex];
+				empty = false;
+			}
+			for(int i = 0;i<size;i++) {
+				if(strategy.equals(keys[i], EMPTY_KEY_VALUE)) continue;
+				if(empty) {
+					empty = false;
+					state = values[i];
+					continue;
+				}
+				state = operator.APPLY_VALUE(state, values[i]);
+			}
+			return state;
 		}
 		
 		@Override

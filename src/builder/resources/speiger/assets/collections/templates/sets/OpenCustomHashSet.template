@@ -8,6 +8,7 @@ import java.util.NoSuchElementException;
 import java.util.Objects;
 #if TYPE_OBJECT
 import java.util.function.Consumer;
+import java.util.function.BiFunction;
 #endif
 
 import speiger.src.collections.PACKAGE.collections.COLLECTION;
@@ -20,6 +21,7 @@ import speiger.src.collections.PACKAGE.functions.CONSUMER;
 #endif
 import speiger.src.collections.objects.functions.consumer.BI_FROM_OBJECT_CONSUMER;
 import speiger.src.collections.PACKAGE.functions.function.PREDICATE;
+import speiger.src.collections.PACKAGE.functions.function.UNARY_OPERATOR;
 import speiger.src.collections.PACKAGE.utils.STRATEGY;
 
 import speiger.src.collections.utils.HashUtil;
@@ -525,6 +527,54 @@ public class CUSTOM_HASH_SET KEY_GENERIC_TYPE extends ABSTRACT_SET KEY_GENERIC_T
 			if(!strategy.equals(keys[i], EMPTY_KEY_VALUE) && !filter.TEST_VALUE(keys[i])) return false;
 		}
 		return true;
+	}
+	
+#if !TYPE_OBJECT
+	@Override
+	public KEY_TYPE reduce(KEY_TYPE identity, UNARY_OPERATOR KEY_KEY_GENERIC_TYPE operator) {
+		Objects.requireNonNull(operator);
+		KEY_TYPE state = identity;
+		if(containsNull) state = operator.APPLY_VALUE(state, keys[nullIndex]);
+		for(int i = nullIndex-1;i>=0;i--) {
+			if(!strategy.equals(keys[i], EMPTY_KEY_VALUE)) continue;
+			state = operator.APPLY_VALUE(state, keys[i]);
+		}
+		return state;
+	}
+	
+#else
+	@Override
+	public <KEY_SPECIAL_TYPE> KEY_SPECIAL_TYPE reduce(KEY_SPECIAL_TYPE identity, BiFunction<KEY_SPECIAL_TYPE, KEY_TYPE, KEY_SPECIAL_TYPE> operator) {
+		Objects.requireNonNull(operator);
+		KEY_SPECIAL_TYPE state = identity;
+		if(containsNull) state = operator.APPLY_VALUE(state, keys[nullIndex]);
+		for(int i = nullIndex-1;i>=0;i--) {
+			if(strategy.equals(keys[i], EMPTY_KEY_VALUE)) continue;
+			state = operator.APPLY_VALUE(state, keys[i]);
+		}
+		return state;
+	}
+	
+#endif
+	@Override
+	public KEY_TYPE reduce(UNARY_OPERATOR KEY_KEY_GENERIC_TYPE operator) {
+		Objects.requireNonNull(operator);
+		KEY_TYPE state = EMPTY_VALUE;
+		boolean empty = true;
+		if(containsNull) {
+			state = keys[nullIndex];
+			empty = false;
+		}
+		for(int i = 0;i<size;i++) {
+			if(strategy.equals(keys[i], EMPTY_KEY_VALUE)) continue;
+			if(empty) {
+				empty = false;
+				state = keys[i];
+				continue;
+			}
+			state = operator.APPLY_VALUE(state, keys[i]);
+		}
+		return state;
 	}
 	
 	@Override

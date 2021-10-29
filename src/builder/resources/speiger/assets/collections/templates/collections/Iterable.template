@@ -6,6 +6,9 @@ import java.util.function.Consumer;
 
 import speiger.src.collections.PACKAGE.functions.CONSUMER;
 import speiger.src.collections.objects.collections.ObjectIterable;
+#else
+import java.util.function.BiFunction;
+
 #endif
 import speiger.src.collections.PACKAGE.functions.function.TO_OBJECT_FUNCTION;
 import speiger.src.collections.objects.functions.consumer.BI_FROM_OBJECT_CONSUMER;
@@ -172,6 +175,7 @@ public interface ITERABLE KEY_GENERIC_TYPE extends Iterable<CLASS_TYPE>
 		return EMPTY_VALUE;
 	}
 	
+#if !TYPE_OBJECT
 	/**
 	 * Performs a <a href="package-summary.html#Reduction">reduction</a> on the
      * elements of this Iterable
@@ -188,9 +192,28 @@ public interface ITERABLE KEY_GENERIC_TYPE extends Iterable<CLASS_TYPE>
 		return state;
 	}
 	
+#else
 	/**
 	 * Performs a <a href="package-summary.html#Reduction">reduction</a> on the
      * elements of this Iterable
+	 * @param operator the operation that should be applied
+	 * @param identity the start value
+	 * @Type(E)
+	 * @return the reduction result, returns identity if nothing was found
+	 */
+	default <KEY_SPECIAL_TYPE> KEY_SPECIAL_TYPE reduce(KEY_SPECIAL_TYPE identity, BiFunction<KEY_SPECIAL_TYPE, KEY_TYPE, KEY_SPECIAL_TYPE> operator) {
+		Objects.requireNonNull(operator);
+		KEY_SPECIAL_TYPE state = identity;
+		for(ITERATOR KEY_GENERIC_TYPE iter = iterator();iter.hasNext();) {
+			state = operator.APPLY_VALUE(state, iter.NEXT());
+		}
+		return state;
+	}
+	
+#endif
+	/**
+	 * Performs a <a href="package-summary.html#Reduction">reduction</a> on the
+	 * elements of this Iterable
 	 * @param operator the operation that should be applied
 	 * @return the reduction result, returns null value if nothing was found
 	 */
@@ -207,7 +230,7 @@ public interface ITERABLE KEY_GENERIC_TYPE extends Iterable<CLASS_TYPE>
 			state = operator.APPLY_VALUE(state, iter.NEXT());
 		}
 		return state;
-	}
+	}	
 	
 	/**
 	 * Helper function to reduce stream usage that allows to count the valid elements.

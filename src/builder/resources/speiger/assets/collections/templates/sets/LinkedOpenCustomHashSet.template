@@ -3,6 +3,7 @@ package speiger.src.collections.PACKAGE.sets;
 #if TYPE_OBJECT
 import java.util.Comparator;
 import java.util.function.Consumer;
+import java.util.function.BiFunction;
 #endif
 import java.util.Arrays;
 import java.util.Objects;
@@ -25,6 +26,7 @@ import speiger.src.collections.PACKAGE.functions.CONSUMER;
 #endif
 import speiger.src.collections.objects.functions.consumer.BI_FROM_OBJECT_CONSUMER;
 import speiger.src.collections.PACKAGE.functions.function.PREDICATE;
+import speiger.src.collections.PACKAGE.functions.function.UNARY_OPERATOR;
 import speiger.src.collections.PACKAGE.utils.STRATEGY;
 import speiger.src.collections.utils.HashUtil;
 import speiger.src.collections.utils.SanityChecks;
@@ -575,6 +577,50 @@ public class LINKED_CUSTOM_HASH_SET KEY_GENERIC_TYPE extends CUSTOM_HASH_SET KEY
 			index = (int)links[index];
 		}
 		return true;
+	}
+	
+#if !TYPE_OBJECT
+	@Override
+	public KEY_TYPE reduce(KEY_TYPE identity, UNARY_OPERATOR KEY_KEY_GENERIC_TYPE operator) {
+		Objects.requireNonNull(operator);
+		KEY_TYPE state = identity;
+		int index = firstIndex;
+		while(index != -1) {
+			state = operator.APPLY_VALUE(state, keys[index]);
+			index = (int)links[index];
+		}
+		return state;
+	}
+	
+#else
+	@Override
+	public <KEY_SPECIAL_TYPE> KEY_SPECIAL_TYPE reduce(KEY_SPECIAL_TYPE identity, BiFunction<KEY_SPECIAL_TYPE, KEY_TYPE, KEY_SPECIAL_TYPE> operator) {
+		Objects.requireNonNull(operator);
+		KEY_SPECIAL_TYPE state = identity;
+		int index = firstIndex;
+		while(index != -1) {
+			state = operator.APPLY_VALUE(state, keys[index]);
+			index = (int)links[index];
+		}
+		return state;
+	}
+	
+#endif
+	@Override
+	public KEY_TYPE reduce(UNARY_OPERATOR KEY_KEY_GENERIC_TYPE operator) {
+		Objects.requireNonNull(operator);
+		KEY_TYPE state = EMPTY_VALUE;
+		boolean empty = true;
+		int index = firstIndex;
+		while(index != -1) {
+			if(empty) {
+				state = keys[index];
+				empty = false;
+			}
+			else state = operator.APPLY_VALUE(state, keys[index]);
+			index = (int)links[index];
+		}
+		return state;
 	}
 	
 	@Override

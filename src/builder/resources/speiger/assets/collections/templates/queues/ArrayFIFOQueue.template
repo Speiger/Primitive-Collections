@@ -4,6 +4,7 @@ import java.util.Arrays;
 #if TYPE_OBJECT
 import java.util.Comparator;
 import java.util.function.Consumer;
+import java.util.function.BiFunction;
 #endif
 import java.util.Objects;
 import java.util.NoSuchElementException;
@@ -300,6 +301,7 @@ public class ARRAY_FIFO_QUEUE KEY_GENERIC_TYPE extends ABSTRACT_PRIORITY_QUEUE K
 		return EMPTY_VALUE;
 	}
 	
+#if !TYPE_OBJECT
 	@Override
 	public KEY_TYPE reduce(KEY_TYPE identity, UNARY_OPERATOR KEY_KEY_GENERIC_TYPE operator) {
 		Objects.requireNonNull(operator);
@@ -310,6 +312,18 @@ public class ARRAY_FIFO_QUEUE KEY_GENERIC_TYPE extends ABSTRACT_PRIORITY_QUEUE K
 		return state;
 	}
 	
+#else
+	@Override
+	public <KEY_SPECIAL_TYPE> KEY_SPECIAL_TYPE reduce(KEY_SPECIAL_TYPE identity, BiFunction<KEY_SPECIAL_TYPE, KEY_TYPE, KEY_SPECIAL_TYPE> operator) {
+		Objects.requireNonNull(operator);
+		KEY_SPECIAL_TYPE state = identity;
+		for(int i = 0,m=size();i<m;i++) {
+			state = operator.APPLY_VALUE(state, array[(first + i) % array.length]);
+		}
+		return state;
+	}
+	
+#endif
 	@Override
 	public KEY_TYPE reduce(UNARY_OPERATOR KEY_KEY_GENERIC_TYPE operator) {
 		Objects.requireNonNull(operator);

@@ -5,6 +5,7 @@ import java.util.Collection;
 #if TYPE_OBJECT
 import java.util.Comparator;
 import java.util.function.Consumer;
+import java.util.function.BiFunction;
 #endif
 import java.util.NoSuchElementException;
 import java.util.Objects;
@@ -423,6 +424,7 @@ public class ARRAY_SET KEY_GENERIC_TYPE extends ABSTRACT_SET KEY_GENERIC_TYPE im
 		return EMPTY_VALUE;
 	}
 	
+#if !TYPE_OBJECT
 	@Override
 	public KEY_TYPE reduce(KEY_TYPE identity, UNARY_OPERATOR KEY_KEY_GENERIC_TYPE operator) {
 		Objects.requireNonNull(operator);
@@ -433,6 +435,18 @@ public class ARRAY_SET KEY_GENERIC_TYPE extends ABSTRACT_SET KEY_GENERIC_TYPE im
 		return state;
 	}
 	
+#else
+	@Override
+	public <KEY_SPECIAL_TYPE> KEY_SPECIAL_TYPE reduce(KEY_SPECIAL_TYPE identity, BiFunction<KEY_SPECIAL_TYPE, KEY_TYPE, KEY_SPECIAL_TYPE> operator) {
+		Objects.requireNonNull(operator);
+		KEY_SPECIAL_TYPE state = identity;
+		for(int i = 0;i<size;i++) {
+			state = operator.APPLY_VALUE(state, data[i]);
+		}
+		return state;
+	}
+	
+#endif
 	@Override
 	public KEY_TYPE reduce(UNARY_OPERATOR KEY_KEY_GENERIC_TYPE operator) {
 		Objects.requireNonNull(operator);

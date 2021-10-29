@@ -5,6 +5,7 @@ import java.util.NoSuchElementException;
 #if TYPE_OBJECT
 import java.util.Comparator;
 import java.util.function.Consumer;
+import java.util.function.BiFunction;
 #endif
 import java.util.Objects;
 
@@ -282,19 +283,7 @@ public class HEAP_PRIORITY_QUEUE KEY_GENERIC_TYPE extends ABSTRACT_PRIORITY_QUEU
 		return true;
 	}
 	
-	@Override
-	public KEY_TYPE findFirst(PREDICATE KEY_GENERIC_TYPE filter) {
-		Objects.requireNonNull(filter);
-		for(int i = 0;i<size;i++) {
-			if(filter.TEST_VALUE(array[i])) {
-				KEY_TYPE data = array[i];
-				removeIndex(i);
-				return data;
-			}
-		}
-		return EMPTY_VALUE;
-	}
-	
+#if !TYPE_OBJECT
 	@Override
 	public KEY_TYPE reduce(KEY_TYPE identity, UNARY_OPERATOR KEY_KEY_GENERIC_TYPE operator) {
 		Objects.requireNonNull(operator);
@@ -305,6 +294,18 @@ public class HEAP_PRIORITY_QUEUE KEY_GENERIC_TYPE extends ABSTRACT_PRIORITY_QUEU
 		return state;
 	}
 	
+#else
+	@Override
+	public <KEY_SPECIAL_TYPE> KEY_SPECIAL_TYPE reduce(KEY_SPECIAL_TYPE identity, BiFunction<KEY_SPECIAL_TYPE, KEY_TYPE, KEY_SPECIAL_TYPE> operator) {
+		Objects.requireNonNull(operator);
+		KEY_SPECIAL_TYPE state = identity;
+		for(int i = 0;i<size;i++) {
+			state = operator.APPLY_VALUE(state, array[i]);
+		}
+		return state;
+	}
+	
+#endif
 	@Override
 	public KEY_TYPE reduce(UNARY_OPERATOR KEY_KEY_GENERIC_TYPE operator) {
 		Objects.requireNonNull(operator);
@@ -319,6 +320,19 @@ public class HEAP_PRIORITY_QUEUE KEY_GENERIC_TYPE extends ABSTRACT_PRIORITY_QUEU
 			state = operator.APPLY_VALUE(state, array[i]);
 		}
 		return state;
+	}
+	
+	@Override
+	public KEY_TYPE findFirst(PREDICATE KEY_GENERIC_TYPE filter) {
+		Objects.requireNonNull(filter);
+		for(int i = 0;i<size;i++) {
+			if(filter.TEST_VALUE(array[i])) {
+				KEY_TYPE data = array[i];
+				removeIndex(i);
+				return data;
+			}
+		}
+		return EMPTY_VALUE;
 	}
 	
 	@Override

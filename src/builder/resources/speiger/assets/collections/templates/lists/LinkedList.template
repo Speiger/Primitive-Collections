@@ -2,6 +2,7 @@ package speiger.src.collections.PACKAGE.lists;
 
 #if TYPE_OBJECT
 import java.util.Comparator;
+import java.util.function.BiFunction;
 #else if PRIMITIVES
 import java.nio.JAVA_BUFFER;
 #endif
@@ -455,6 +456,7 @@ public class LINKED_LIST KEY_GENERIC_TYPE extends ABSTRACT_LIST KEY_GENERIC_TYPE
 		return EMPTY_VALUE;
 	}
 	
+#if !TYPE_OBJECT
 	@Override
 	public KEY_TYPE reduce(KEY_TYPE identity, UNARY_OPERATOR KEY_KEY_GENERIC_TYPE operator) {
 		Objects.requireNonNull(operator);
@@ -465,6 +467,18 @@ public class LINKED_LIST KEY_GENERIC_TYPE extends ABSTRACT_LIST KEY_GENERIC_TYPE
 		return state;
 	}
 	
+#else
+	@Override
+	public <KEY_SPECIAL_TYPE> KEY_SPECIAL_TYPE reduce(KEY_SPECIAL_TYPE identity, BiFunction<KEY_SPECIAL_TYPE, KEY_TYPE, KEY_SPECIAL_TYPE> operator) {
+		Objects.requireNonNull(operator);
+		KEY_SPECIAL_TYPE state = identity;
+		for(Entry KEY_GENERIC_TYPE entry = first;entry != null;entry = entry.next) {
+			state = operator.APPLY_VALUE(state, entry.value);
+		}
+		return state;
+	}
+	
+#endif
 	@Override
 	public KEY_TYPE reduce(UNARY_OPERATOR KEY_KEY_GENERIC_TYPE operator) {
 		Objects.requireNonNull(operator);
