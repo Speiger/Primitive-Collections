@@ -78,7 +78,7 @@ repositories {
     }
 }
 dependencies {
-	compile 'de.speiger:Primitive-Collections:0.4.4'
+	compile 'de.speiger:Primitive-Collections:0.4.5'
 }
 ```
 Direct:
