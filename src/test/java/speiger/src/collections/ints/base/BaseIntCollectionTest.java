@@ -119,6 +119,14 @@ public abstract class BaseIntCollectionTest extends BaseIntIterableTest
 	}
 	
 	@Test
+	public void testRemoveAllListener() {
+		if(!getValidCollectionTests().contains(CollectionTest.REMOVE_ALL_LISTENER)) return;
+		IntCollection collection = create(TEST_ARRAY);
+		Assert.assertTrue(collection.removeAll(create(CONTAINS_ARRAY), T -> {}));
+		Assert.assertFalse(collection.removeAll(create(CONTAINS_ARRAY), T -> Assert.assertTrue(false)));
+	}
+	
+	@Test
 	public void testRetainAll() {
 		if(!getValidCollectionTests().contains(CollectionTest.RETAIN_ALL)) return;
 		IntCollection collection = create(TEST_ARRAY);
@@ -132,6 +140,23 @@ public abstract class BaseIntCollectionTest extends BaseIntIterableTest
 		IntArrays.stableSort(collectionArray);
 		Assert.assertArrayEquals(retainedArray, collectionArray);
 		collection.retainAll(IntCollections.EMPTY);
+		Assert.assertTrue(collection.isEmpty());
+	}
+	
+	@Test
+	public void testRetainAllListener() {
+		if(!getValidCollectionTests().contains(CollectionTest.RETAIN_ALL_LISTENER)) return;
+		IntCollection collection = create(TEST_ARRAY);
+		IntCollection retained = create(CONTAINS_ARRAY);
+		Assert.assertTrue(collection.retainAll(retained, T -> {}));
+		Assert.assertFalse(collection.retainAll(retained, T -> Assert.assertTrue(false)));
+		Assert.assertEquals(CONTAINS_ARRAY.length, collection.size());
+		int[] retainedArray = retained.toIntArray();
+		int[] collectionArray = collection.toIntArray();
+		IntArrays.stableSort(retainedArray);
+		IntArrays.stableSort(collectionArray);
+		Assert.assertArrayEquals(retainedArray, collectionArray);
+		collection.retainAll(IntCollections.EMPTY, T -> {});
 		Assert.assertTrue(collection.isEmpty());
 	}
 	

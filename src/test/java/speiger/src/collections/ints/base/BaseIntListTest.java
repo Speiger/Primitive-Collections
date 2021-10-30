@@ -65,6 +65,16 @@ public abstract class BaseIntListTest extends BaseIntCollectionTest
 	}
 	
 	@Test
+	public void testSpecialAdd() {
+		if(getValidListTests().contains(ListTest.ADD_SPECIAL)) return;
+		IntList list = create(TEST_ARRAY);
+		Assert.assertFalse(list.addIfAbsent(50));
+		Assert.assertTrue(list.addIfPresent(50));
+		Assert.assertTrue(list.addIfAbsent(150));
+		Assert.assertFalse(list.addIfAbsent(150));
+	}
+	
+	@Test
 	@SuppressWarnings("deprecation")	
 	public void testIndex() {
 		if(getValidListTests().contains(ListTest.INDEX)) return;
@@ -171,6 +181,17 @@ public abstract class BaseIntListTest extends BaseIntCollectionTest
 			Assert.assertEquals(TEST_ARRAY[i + 25], elements[i]);
 			Assert.assertEquals(TEST_ARRAY[i + (i < 25 ? 0 : 50)], list.getInt(i));
 		}
+	}
+	
+	@Test
+	public void testSwapRemove() {
+		if(getValidListTests().contains(ListTest.REMOVE_SWAP)) return;
+		IntList list = create(TEST_ARRAY);
+		Assert.assertEquals(TEST_ARRAY[50], list.swapRemove(50));
+		Assert.assertEquals(TEST_ARRAY[TEST_ARRAY.length-1], list.getInt(50));
+		list = create(TEST_ARRAY);
+		Assert.assertTrue(list.swapRemoveInt(50));
+		Assert.assertFalse(list.swapRemoveInt(50));
 	}
 	
 	@Test
