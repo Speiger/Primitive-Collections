@@ -29,6 +29,7 @@ To highlight things that may be wanted.
 	- matchAny/matchNone/matchAll: Allows to find elements in a collection.
 	- count: counts all valid elements in a collection.
 	- forEach: Allows to input a second element into a forEach move allowing for more flexibility for Method References
+	- reduce/limit/peek/distinct: Light Versions of the Stream variant, to reduce Stream usage.
 - Collection:
 	- containsAny: Allows to test if another collection contains an of the elements of the tested collection.
 	- primitiveStream: Provides access to the closest Java Stream Type.
@@ -38,6 +39,8 @@ To highlight things that may be wanted.
 	- add/get/removeElements (From FastUtil): Allows to add/get/remove an Array into/from a list. Just with less overhead
 	- extractElements: Allows to remove a Range of elements from the List and get what was removed.
 	- Unstable Sort(From FastUtil): Uses a faster but not stable sort (Quick-Sort as example) to sort the list.
+	- addIfAbsent/Present: adds a element only if absent/present in the list
+	- swapRemove: deletes a desired element and inserts the last element in its place instead of leftshifting elements.
 - SortedSet:
 	- addAndMoveToFirst/Last (From FastUtil but moved to Interface): Allows to add a element to the first/last position of a sorted set.
 	- moveToFirst/Last: Moves the desired element at the first/last position of the SortedSet.
@@ -82,6 +85,7 @@ Direct:
 
 | Version 	| Jar                                                                                                                          	| Sources                                                                                                                              	| Java Doc                                                                                                                             	|
 |---------	|------------------------------------------------------------------------------------------------------------------------------	|--------------------------------------------------------------------------------------------------------------------------------------	|--------------------------------------------------------------------------------------------------------------------------------------	|
+| 0.4.5   	| [Download](https://maven.speiger.com/repository/main/de/speiger/Primitive-Collections/0.4.5/Primitive-Collections-0.4.5.jar) 	| [Download](https://maven.speiger.com/repository/main/de/speiger/Primitive-Collections/0.4.5/Primitive-Collections-0.4.5-sources.jar) 	| [Download](https://maven.speiger.com/repository/main/de/speiger/Primitive-Collections/0.4.5/Primitive-Collections-0.4.5-javadoc.jar) 	|
 | 0.4.4   	| [Download](https://maven.speiger.com/repository/main/de/speiger/Primitive-Collections/0.4.4/Primitive-Collections-0.4.4.jar) 	| [Download](https://maven.speiger.com/repository/main/de/speiger/Primitive-Collections/0.4.4/Primitive-Collections-0.4.4-sources.jar) 	| [Download](https://maven.speiger.com/repository/main/de/speiger/Primitive-Collections/0.4.4/Primitive-Collections-0.4.4-javadoc.jar) 	|
 | 0.4.3   	| [Download](https://maven.speiger.com/repository/main/de/speiger/Primitive-Collections/0.4.3/Primitive-Collections-0.4.3.jar) 	| [Download](https://maven.speiger.com/repository/main/de/speiger/Primitive-Collections/0.4.3/Primitive-Collections-0.4.3-sources.jar) 	| [Download](https://maven.speiger.com/repository/main/de/speiger/Primitive-Collections/0.4.3/Primitive-Collections-0.4.3-javadoc.jar) 	|
 | 0.4.2   	| [Download](https://maven.speiger.com/repository/main/de/speiger/Primitive-Collections/0.4.2/Primitive-Collections-0.4.2.jar) 	| [Download](https://maven.speiger.com/repository/main/de/speiger/Primitive-Collections/0.4.2/Primitive-Collections-0.4.2-sources.jar) 	| [Download](https://maven.speiger.com/repository/main/de/speiger/Primitive-Collections/0.4.2/Primitive-Collections-0.4.2-javadoc.jar) 	|

@@ -6,6 +6,9 @@
 - Added: addIfPresent/Absent to lists
 - Added: distinct, limit and peek iterators
 - Added: Iterable's can now reduce its contents
+- Added: Better ForEach support for IterableWrappers so a Iterator chain is not created
+- Added: SwapRemove to Lists which moves the last element into the desired space to be deleted
+- Added: More Test cases
 
 ### Version 0.4.4
 - Fixed: ObjectArrayList.of was causing crashes because of a Poor implementation.
