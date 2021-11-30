@@ -1,5 +1,8 @@
 # Changelog of versions
 
+### Version 0.4.6
+- Added: 2 Helper functions to find out how many bits are required to store a Number.
+
 ### Version 0.4.5
 - Added: removeAll/retainAll(Collection c, Consumer r) which receives all the elements that got deleted from the collection
 - Fixed: Supplier get function wasn't referencing original function.

@@ -80,6 +80,26 @@ public class HashUtil
 	}
 	
 	/**
+	 * Function that finds out how many bits are required to store the number Provided
+	 * @param value to get the required bits to store.
+	 * @return the required bits to store that number
+	 * @note Really useful for compression. Reducing data that is inserted into a GZIP algorithm.
+	 */
+	public static int getRequiredBits(int value) {
+		return Integer.bitCount(nextPowerOfTwo(value+1)-1);
+	}
+	
+	/**
+	 * Function that finds out how many bits are required to store the number Provided
+	 * @param value to get the required bits to store.
+	 * @return the required bits to store that number
+	 * @note Really useful for compression. Reducing data that is inserted into a GZIP algorithm.
+	 */
+	public static int getRequiredBits(long value) {
+		return Long.bitCount(nextPowerOfTwo(value+1L)-1L);
+	}
+	
+	/**
 	 * Helper function that creates the ideal array size for HashMap
 	 * @param size the original array size
 	 * @param loadFactor the load factor
