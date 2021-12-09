@@ -4,6 +4,7 @@ import java.util.NavigableSet;
 
 import speiger.src.collections.PACKAGE.collections.BI_ITERATOR;
 import speiger.src.collections.PACKAGE.collections.SPLIT_ITERATOR;
+import speiger.src.collections.PACKAGE.utils.SETS;
 import speiger.src.collections.PACKAGE.utils.SPLIT_ITERATORS;
 
 /**
@@ -118,6 +119,30 @@ public interface NAVIGABLE_SET KEY_GENERIC_TYPE extends NavigableSet<CLASS_TYPE>
 	@Override
 	public NAVIGABLE_SET KEY_GENERIC_TYPE copy();
 	
+#if !TYPE_BOOLEAN
+	/**
+	 * Creates a Wrapped NavigableSet that is Synchronized
+	 * @return a new NavigableSet that is synchronized
+	 * @see SETS#synchronize
+	 */
+	public default NAVIGABLE_SET KEY_GENERIC_TYPE synchronize() { return SETS.synchronize(this); }
+	
+	/**
+	 * Creates a Wrapped NavigableSet that is Synchronized
+	 * @param mutex is the controller of the synchronization block
+	 * @return a new NavigableSet Wrapper that is synchronized
+	 * @see SETS#synchronize
+	 */
+	public default NAVIGABLE_SET KEY_GENERIC_TYPE synchronize(Object mutex) { return SETS.synchronize(this, mutex); }
+	
+	/**
+	 * Creates a Wrapped NavigableSet that is unmodifiable
+	 * @return a new NavigableSet Wrapper that is unmodifiable
+	 * @see SETS#unmodifiable
+	 */
+	public default NAVIGABLE_SET KEY_GENERIC_TYPE unmodifiable() { return SETS.unmodifiable(this); }
+	
+#endif
 	/**
 	 * A Type Specific Type Splititerator to reduce boxing/unboxing
 	 * @return type specific splititerator

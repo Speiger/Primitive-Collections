@@ -10,6 +10,7 @@ import speiger.src.collections.VALUE_PACKAGE.collections.VALUE_COLLECTION;
 import speiger.src.collections.PACKAGE.functions.COMPARATOR;
 #endif
 import speiger.src.collections.PACKAGE.sets.SET;
+import speiger.src.collections.PACKAGE.utils.maps.MAPS;
 import speiger.src.collections.objects.sets.ObjectSortedSet;
 import speiger.src.collections.objects.collections.ObjectBidirectionalIterator;
 
@@ -82,6 +83,28 @@ public interface SORTED_MAP KEY_VALUE_GENERIC_TYPE extends SortedMap<CLASS_TYPE,
 	public SET KEY_GENERIC_TYPE keySet();
 	@Override
 	public VALUE_COLLECTION VALUE_GENERIC_TYPE values();
+	
+	/**
+	 * Creates a Wrapped SortedMap that is Synchronized
+	 * @return a new SortedMap that is synchronized
+	 * @see MAPS#synchronize
+	 */
+	public default SORTED_MAP KEY_VALUE_GENERIC_TYPE synchronize() { return MAPS.synchronize(this); }
+	
+	/**
+	 * Creates a Wrapped SortedMap that is Synchronized
+	 * @param mutex is the controller of the synchronization block
+	 * @return a new SortedMap Wrapper that is synchronized
+	 * @see MAPS#synchronize
+	 */
+	public default SORTED_MAP KEY_VALUE_GENERIC_TYPE synchronize(Object mutex) { return MAPS.synchronize(this, mutex); }
+	
+	/**
+	 * Creates a Wrapped SortedMap that is unmodifiable
+	 * @return a new SortedMap Wrapper that is unmodifiable
+	 * @see MAPS#unmodifiable
+	 */
+	public default SORTED_MAP KEY_VALUE_GENERIC_TYPE unmodifiable() { return MAPS.unmodifiable(this); }
 	
 #if !TYPE_OBJECT
 	/**

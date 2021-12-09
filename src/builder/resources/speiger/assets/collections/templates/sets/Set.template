@@ -5,7 +5,11 @@ import java.util.Set;
 import speiger.src.collections.PACKAGE.collections.COLLECTION;
 import speiger.src.collections.PACKAGE.collections.ITERATOR;
 import speiger.src.collections.PACKAGE.collections.SPLIT_ITERATOR;
+#if !TYPE_BOOLEAN
+import speiger.src.collections.PACKAGE.utils.SETS;
+#endif
 import speiger.src.collections.PACKAGE.utils.SPLIT_ITERATORS;
+
 
 /**
  * A Type Specific Set class to reduce boxing/unboxing
@@ -49,6 +53,31 @@ public interface SET KEY_GENERIC_TYPE extends Set<CLASS_TYPE>, COLLECTION KEY_GE
 	public default boolean remove(Object o) {
 		return COLLECTION.super.remove(o);
 	}
+	
+#endif
+#if !TYPE_BOOLEAN
+	/**
+	 * Creates a Wrapped Set that is Synchronized
+	 * @return a new Set that is synchronized
+	 * @see SETS#synchronize
+	 */
+	public default SET KEY_GENERIC_TYPE synchronize() { return SETS.synchronize(this); }
+	
+	/**
+	 * Creates a Wrapped Set that is Synchronized
+	 * @param mutex is the controller of the synchronization block
+	 * @return a new Set Wrapper that is synchronized
+	 * @see SETS#synchronize
+	 */
+	public default SET KEY_GENERIC_TYPE synchronize(Object mutex) { return SETS.synchronize(this, mutex); }
+	
+	/**
+	 * Creates a Wrapped Set that is unmodifiable
+	 * @return a new Set Wrapper that is unmodifiable
+	 * @see SETS#unmodifiable
+	 */
+	public default SET KEY_GENERIC_TYPE unmodifiable() { return SETS.unmodifiable(this); }
+	
 #endif
 	/**
 	 * A Type Specific Type Splititerator to reduce boxing/unboxing

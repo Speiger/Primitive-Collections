@@ -138,11 +138,7 @@ public class ARRAY_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_VALUE_GEN
 	public ARRAY_MAP(CLASS_TYPE[] keys, CLASS_VALUE_TYPE[] values, int length) {
 		this(length);
 		if(keys.length != values.length) throw new IllegalStateException("Input Arrays are not equal size");
-		size = length;
-		for(int i = 0,m=length;i<m;i++) {
-			this.keys[i] = OBJ_TO_KEY(keys[i]);
-			this.values[i] = OBJ_TO_VALUE(values[i]);
-		}
+		putAll(keys, values, 0, length);
 	}
 	
 #endif
@@ -165,9 +161,7 @@ public class ARRAY_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_VALUE_GEN
 	 */
 	public ARRAY_MAP(KEY_TYPE[] keys, VALUE_TYPE[] values, int length) {
 		if(keys.length != values.length) throw new IllegalStateException("Input Arrays are not equal size");
-		this.keys = Arrays.copyOf(keys, length);
-		this.values = Arrays.copyOf(values, length);
-		this.size = length;
+		putAll(keys, values, 0, length);
 	}
 	
 	/**

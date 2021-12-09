@@ -2,6 +2,7 @@ package speiger.src.collections.PACKAGE.maps.interfaces;
 
 import java.util.NavigableMap;
 import speiger.src.collections.PACKAGE.sets.NAVIGABLE_SET;
+import speiger.src.collections.PACKAGE.utils.maps.MAPS;
 
 /**
  * A Type Specific Navigable Map interface with a couple helper methods
@@ -33,6 +34,28 @@ public interface NAVIGABLE_MAP KEY_VALUE_GENERIC_TYPE extends SORTED_MAP KEY_VAL
 	/** @return a Type Specific pollLastEntry */
 	@Override
 	public MAP.Entry KEY_VALUE_GENERIC_TYPE pollLastEntry();
+	
+	/**
+	 * Creates a Wrapped NavigableMap that is Synchronized
+	 * @return a new NavigableMap that is synchronized
+	 * @see MAPS#synchronize
+	 */
+	public default NAVIGABLE_MAP KEY_VALUE_GENERIC_TYPE synchronize() { return MAPS.synchronize(this); }
+	
+	/**
+	 * Creates a Wrapped NavigableMap that is Synchronized
+	 * @param mutex is the controller of the synchronization block
+	 * @return a new NavigableMap Wrapper that is synchronized
+	 * @see MAPS#synchronize
+	 */
+	public default NAVIGABLE_MAP KEY_VALUE_GENERIC_TYPE synchronize(Object mutex) { return MAPS.synchronize(this, mutex); }
+	
+	/**
+	 * Creates a Wrapped NavigableMap that is unmodifiable
+	 * @return a new NavigableMap Wrapper that is unmodifiable
+	 * @see MAPS#unmodifiable
+	 */
+	public default NAVIGABLE_MAP KEY_VALUE_GENERIC_TYPE unmodifiable() { return MAPS.unmodifiable(this); }
 	
 #if !TYPE_OBJECT
 	/**

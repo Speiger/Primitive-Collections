@@ -30,11 +30,13 @@ To highlight things that may be wanted.
 	- count: counts all valid elements in a collection.
 	- forEach: Allows to input a second element into a forEach move allowing for more flexibility for Method References
 	- reduce/limit/peek/distinct: Light Versions of the Stream variant, to reduce Stream usage.
+	- pour: a function that allows to collect all elements within the Collection
 - Collection:
 	- containsAny: Allows to test if another collection contains an of the elements of the tested collection.
 	- primitiveStream: Provides access to the closest Java Stream Type.
 	- copy: shallowCopies the collection, used instead of clone because this is better to use.
 		(subCollections/synchronized/unmodifiable not supported for obvious reasons)
+	- toArray: the ToArray function from Java9 and newer that uses a Functional interface and can use a method reference
 - List:
 	- add/get/removeElements (From FastUtil): Allows to add/get/remove an Array into/from a list. Just with less overhead
 	- extractElements: Allows to remove a Range of elements from the List and get what was removed.

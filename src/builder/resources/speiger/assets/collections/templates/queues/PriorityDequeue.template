@@ -6,6 +6,7 @@ import java.util.Iterator;
 #endif
 import speiger.src.collections.PACKAGE.collections.COLLECTION;
 import speiger.src.collections.PACKAGE.collections.ITERATOR;
+import speiger.src.collections.PACKAGE.utils.PRIORITY_QUEUES;
 
 /**
  * A Type Speciifc PriorityDeque or Dequeue interface to allow implementations like FIFO queues.
@@ -79,6 +80,21 @@ public interface PRIORITY_DEQUEUE KEY_GENERIC_TYPE extends PRIORITY_QUEUE KEY_GE
 	 * @return the Last Element within the dequeue without deleting it
 	 */
 	public default KEY_TYPE last() { return peek(size()-1); }
+	
+	/**
+	 * Creates a Wrapped PriorityDequeue that is Synchronized
+	 * @return a new PriorityDequeue that is synchronized
+	 * @see PRIORITY_QUEUES#synchronize
+	 */
+	public default PRIORITY_DEQUEUE KEY_GENERIC_TYPE synchronizeQueue() { return PRIORITY_QUEUES.synchronize(this); }
+	
+	/**
+	 * Creates a Wrapped PriorityDequeue that is Synchronized
+	 * @param mutex is the controller of the synchronization block
+	 * @return a new PriorityDequeue Wrapper that is synchronized
+	 * @see PRIORITY_QUEUES#synchronize
+	 */
+	public default PRIORITY_DEQUEUE KEY_GENERIC_TYPE synchronizeQueue(Object mutex) { return PRIORITY_QUEUES.synchronize(this, mutex); }
 	
 	@Override
 	public PRIORITY_DEQUEUE KEY_GENERIC_TYPE copy();

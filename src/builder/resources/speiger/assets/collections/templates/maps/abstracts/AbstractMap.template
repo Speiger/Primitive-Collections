@@ -90,6 +90,15 @@ public abstract class ABSTRACT_MAP KEY_VALUE_GENERIC_TYPE extends AbstractMap<CL
 		for(int i = 0;i<size;i++) put(keys[i], values[i]);
 	}
 	
+#if !TYPE_OBJECT || !VALUE_OBJECT
+	@Override
+	public void putAll(CLASS_TYPE[] keys, CLASS_VALUE_TYPE[] values, int offset, int size) {
+		SanityChecks.checkArrayCapacity(keys.length, offset, size);
+		SanityChecks.checkArrayCapacity(values.length, offset, size);
+		for(int i = 0;i<size;i++) put(keys[i], values[i]);		
+	}
+	
+#endif
 	@Override
 	public void putAllIfAbsent(MAP KEY_VALUE_GENERIC_TYPE m) {
 		for(MAP.Entry KEY_VALUE_GENERIC_TYPE entry : MAPS.fastIterable(m))

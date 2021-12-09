@@ -9,6 +9,7 @@ import java.util.Comparator;
 #else
 import speiger.src.collections.PACKAGE.functions.COMPARATOR;
 #endif
+import speiger.src.collections.PACKAGE.utils.SETS;
 import speiger.src.collections.PACKAGE.utils.SPLIT_ITERATORS;
 
 /**
@@ -73,6 +74,30 @@ public interface SORTED_SET KEY_GENERIC_TYPE extends SET KEY_GENERIC_TYPE, Sorte
 	 */
 	public BI_ITERATOR KEY_GENERIC_TYPE iterator(KEY_TYPE fromElement);
 	
+#if !TYPE_BOOLEAN
+	/**
+	 * Creates a Wrapped SortedSet that is Synchronized
+	 * @return a new SortedSet that is synchronized
+	 * @see SETS#synchronize
+	 */
+	public default SORTED_SET KEY_GENERIC_TYPE synchronize() { return SETS.synchronize(this); }
+	
+	/**
+	 * Creates a Wrapped SortedSet that is Synchronized
+	 * @param mutex is the controller of the synchronization block
+	 * @return a new SortedSet Wrapper that is synchronized
+	 * @see SETS#synchronize
+	 */
+	public default SORTED_SET KEY_GENERIC_TYPE synchronize(Object mutex) { return SETS.synchronize(this, mutex); }
+	
+	/**
+	 * Creates a Wrapped SortedSet that is unmodifiable
+	 * @return a new SortedSet Wrapper that is unmodifiable
+	 * @see SETS#unmodifiable
+	 */
+	public default SORTED_SET KEY_GENERIC_TYPE unmodifiable() { return SETS.unmodifiable(this); }
+	
+#endif
 	/**
 	 * A Type Specific Type Splititerator to reduce boxing/unboxing
 	 * @return type specific splititerator

@@ -4,12 +4,16 @@ package speiger.src.collections.PACKAGE.queues;
 import java.util.Comparator;
 import java.util.Collection;
 import java.util.Iterator;
+
+import speiger.src.collections.ints.functions.function.Int2ObjectFunction;
 #else
 import speiger.src.collections.PACKAGE.functions.COMPARATOR;
 #endif
 import speiger.src.collections.PACKAGE.collections.COLLECTION;
 import speiger.src.collections.PACKAGE.collections.ITERABLE;
 import speiger.src.collections.PACKAGE.collections.ITERATOR;
+import speiger.src.collections.PACKAGE.utils.PRIORITY_QUEUES;
+
 
 /**
  * A Simple PriorityQueue (or Queue) interface that provides with the nessesary functions to interact with it, without cluttering with the Collection interface.
@@ -144,6 +148,22 @@ public interface PRIORITY_QUEUE KEY_GENERIC_TYPE extends ITERABLE KEY_GENERIC_TY
 	 */
 	public ITERATOR KEY_GENERIC_TYPE iterator();
 #endif
+	
+	/**
+	 * Creates a Wrapped PriorityQueue that is Synchronized
+	 * @return a new PriorityQueue that is synchronized
+	 * @see PRIORITY_QUEUES#synchronize
+	 */
+	public default PRIORITY_QUEUE KEY_GENERIC_TYPE synchronizeQueue() { return PRIORITY_QUEUES.synchronize(this); }
+	
+	/**
+	 * Creates a Wrapped PriorityQueue that is Synchronized
+	 * @param mutex is the controller of the synchronization block
+	 * @return a new PriorityQueue Wrapper that is synchronized
+	 * @see PRIORITY_QUEUES#synchronize
+	 */
+	public default PRIORITY_QUEUE KEY_GENERIC_TYPE synchronizeQueue(Object mutex) { return PRIORITY_QUEUES.synchronize(this, mutex); }
+	
 	/**
 	 * A method to drop the contents of the Queue without clearing the queue
 	 * @Type(E)
@@ -158,4 +178,15 @@ public interface PRIORITY_QUEUE KEY_GENERIC_TYPE extends ITERABLE KEY_GENERIC_TY
 	 * @note if the Type is generic then a Object Array is created instead of a Type Array
 	 */
 	public GENERIC_SPECIAL_KEY_BRACES<E> KEY_SPECIAL_TYPE[] TO_ARRAY(KEY_SPECIAL_TYPE[] input);
+#if TYPE_OBJECT
+	/**
+	 * A Helper function that simplifies the process of creating a new Array.
+	 * @param action the array creation function
+	 * @return an array containing all of the elements in this collection
+	 * @see Collection#toArray(Object[])
+	 */
+	default KEY_TYPE[] TO_ARRAY(Int2ObjectFunction<KEY_TYPE[]> action) {
+		return TO_ARRAY(action.get(size()));
+	}
+#endif
 }

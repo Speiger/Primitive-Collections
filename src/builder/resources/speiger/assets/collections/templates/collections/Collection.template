@@ -10,10 +10,12 @@ import java.util.stream.StreamSupport;
 #endif
 #if TYPE_OBJECT
 import java.util.function.Consumer;
+import speiger.src.collections.ints.functions.function.Int2ObjectFunction;
 #else
 import speiger.src.collections.PACKAGE.functions.CONSUMER;
 #endif
 import speiger.src.collections.PACKAGE.utils.SPLIT_ITERATORS;
+import speiger.src.collections.PACKAGE.utils.COLLECTIONS;
 import speiger.src.collections.utils.SanityChecks;
 
 /**
@@ -149,6 +151,17 @@ public interface COLLECTION KEY_GENERIC_TYPE extends Collection<CLASS_TYPE>, ITE
 	public boolean retainAll(COLLECTION KEY_GENERIC_TYPE c, CONSUMER KEY_GENERIC_TYPE r);
 	
 	/**
+	 * A Helper function to reduce the usage of Streams and allows to collect all elements
+	 * @param collection that the elements should be inserted to
+	 * @param <E> the collection type
+	 * @return the input with the desired elements
+	 */
+	default <E extends COLLECTION KEY_GENERIC_TYPE> E pour(E collection) {
+		collection.addAll(this);
+		return collection;
+	}
+	
+	/**
 	 * A Function that does a shallow clone of the Collection itself.
 	 * This function is more optimized then a copy constructor since the Collection does not have to be unsorted/resorted.
 	 * It can be compared to Cloneable but with less exception risk
@@ -157,7 +170,18 @@ public interface COLLECTION KEY_GENERIC_TYPE extends Collection<CLASS_TYPE>, ITE
 	 */
 	public COLLECTION KEY_GENERIC_TYPE copy();
 	
-#if !TYPE_OBJECT
+#if TYPE_OBJECT
+	/**
+	 * A Helper function that simplifies the process of creating a new Array.
+	 * @param action the array creation function
+	 * @return an array containing all of the elements in this collection
+	 * @see Collection#toArray(Object[])
+	 */
+	default KEY_TYPE[] TO_ARRAY(Int2ObjectFunction<KEY_TYPE[]> action) {
+		return TO_ARRAY(action.get(size()));
+	}
+	
+#else
 	/**
 	 * A Type-Specific toArray function that delegates to {@link #TO_ARRAY(KEY_TYPE[])} with a newly created array.
 	 * @return an array containing all of the elements in this collection
@@ -243,6 +267,28 @@ public interface COLLECTION KEY_GENERIC_TYPE extends Collection<CLASS_TYPE>, ITE
 	 */
 	@Override
 	public ITERATOR KEY_GENERIC_TYPE iterator();
+	
+	/**
+	 * Creates a Wrapped Collection that is Synchronized
+	 * @return a new Collection that is synchronized
+	 * @see COLLECTIONS#synchronize
+	 */
+	public default COLLECTION KEY_GENERIC_TYPE synchronize() { return COLLECTIONS.synchronize(this); }
+	
+	/**
+	 * Creates a Wrapped Collection that is Synchronized
+	 * @param mutex is the controller of the synchronization block
+	 * @return a new Collection Wrapper that is synchronized
+	 * @see COLLECTIONS#synchronize
+	 */
+	public default COLLECTION KEY_GENERIC_TYPE synchronize(Object mutex) { return COLLECTIONS.synchronize(this, mutex); }
+	
+	/**
+	 * Creates a Wrapped Collection that is unmodifiable
+	 * @return a new Collection Wrapper that is unmodifiable
+	 * @see COLLECTIONS#unmodifiable
+	 */
+	public default COLLECTION KEY_GENERIC_TYPE unmodifiable() { return COLLECTIONS.unmodifiable(this); }
 	
 #if PRIMITIVES
 	/**

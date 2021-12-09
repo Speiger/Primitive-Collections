@@ -254,28 +254,28 @@ public class SETS
 		public NAVIGABLE_SET KEY_GENERIC_TYPE copy() { throw new UnsupportedOperationException(); }
 		
 		@Override
-		public NAVIGABLE_SET KEY_GENERIC_TYPE subSet(KEY_TYPE fromElement, boolean fromInclusive, KEY_TYPE toElement, boolean toInclusive) { return unmodifiable(n.subSet(fromElement, fromInclusive, toElement, toInclusive)); }
+		public NAVIGABLE_SET KEY_GENERIC_TYPE subSet(KEY_TYPE fromElement, boolean fromInclusive, KEY_TYPE toElement, boolean toInclusive) { return SETS.unmodifiable(n.subSet(fromElement, fromInclusive, toElement, toInclusive)); }
 		
 		@Override
-		public NAVIGABLE_SET KEY_GENERIC_TYPE headSet(KEY_TYPE toElement, boolean inclusive) { return unmodifiable(n.headSet(toElement, inclusive)); }
+		public NAVIGABLE_SET KEY_GENERIC_TYPE headSet(KEY_TYPE toElement, boolean inclusive) { return SETS.unmodifiable(n.headSet(toElement, inclusive)); }
 
 		@Override
-		public NAVIGABLE_SET KEY_GENERIC_TYPE tailSet(KEY_TYPE fromElement, boolean inclusive) { return unmodifiable(n.tailSet(fromElement, inclusive)); }
+		public NAVIGABLE_SET KEY_GENERIC_TYPE tailSet(KEY_TYPE fromElement, boolean inclusive) { return SETS.unmodifiable(n.tailSet(fromElement, inclusive)); }
 
 		@Override
 		public BI_ITERATOR KEY_GENERIC_TYPE descendingIterator() { return ITERATORS.unmodifiable(n.descendingIterator()); }
 
 		@Override
-		public NAVIGABLE_SET KEY_GENERIC_TYPE descendingSet() { return unmodifiable(n.descendingSet()); }
+		public NAVIGABLE_SET KEY_GENERIC_TYPE descendingSet() { return SETS.unmodifiable(n.descendingSet()); }
 		
 		@Override
-		public NAVIGABLE_SET KEY_GENERIC_TYPE subSet(KEY_TYPE fromElement, KEY_TYPE toElement) { return unmodifiable(n.subSet(fromElement, toElement)); }
+		public NAVIGABLE_SET KEY_GENERIC_TYPE subSet(KEY_TYPE fromElement, KEY_TYPE toElement) { return SETS.unmodifiable(n.subSet(fromElement, toElement)); }
 		
 		@Override
-		public NAVIGABLE_SET KEY_GENERIC_TYPE headSet(KEY_TYPE toElement) { return unmodifiable(n.headSet(toElement)); }
+		public NAVIGABLE_SET KEY_GENERIC_TYPE headSet(KEY_TYPE toElement) { return SETS.unmodifiable(n.headSet(toElement)); }
 		
 		@Override
-		public NAVIGABLE_SET KEY_GENERIC_TYPE tailSet(KEY_TYPE fromElement) { return unmodifiable(n.tailSet(fromElement)); }
+		public NAVIGABLE_SET KEY_GENERIC_TYPE tailSet(KEY_TYPE fromElement) { return SETS.unmodifiable(n.tailSet(fromElement)); }
 	}
 	
 	private static class UnmodifiableSortedSet KEY_GENERIC_TYPE extends UnmodifiableSet KEY_GENERIC_TYPE implements SORTED_SET KEY_GENERIC_TYPE
@@ -309,16 +309,16 @@ public class SETS
 		public BI_ITERATOR KEY_GENERIC_TYPE iterator(KEY_TYPE fromElement) { return ITERATORS.unmodifiable(s.iterator(fromElement)); }
 		
 		@Override
-		public SORTED_SET KEY_GENERIC_TYPE copy() { throw new UnsupportedOperationException(); }
+		public SORTED_SET KEY_GENERIC_TYPE copy() { return s.copy(); }
 		
 		@Override
-		public SORTED_SET KEY_GENERIC_TYPE subSet(KEY_TYPE fromElement, KEY_TYPE toElement) { return unmodifiable(s.subSet(fromElement, toElement)); }
+		public SORTED_SET KEY_GENERIC_TYPE subSet(KEY_TYPE fromElement, KEY_TYPE toElement) { return SETS.unmodifiable(s.subSet(fromElement, toElement)); }
 		
 		@Override
-		public SORTED_SET KEY_GENERIC_TYPE headSet(KEY_TYPE toElement) { return unmodifiable(s.headSet(toElement)); }
+		public SORTED_SET KEY_GENERIC_TYPE headSet(KEY_TYPE toElement) { return SETS.unmodifiable(s.headSet(toElement)); }
 		
 		@Override
-		public SORTED_SET KEY_GENERIC_TYPE tailSet(KEY_TYPE fromElement) { return unmodifiable(s.tailSet(fromElement)); }
+		public SORTED_SET KEY_GENERIC_TYPE tailSet(KEY_TYPE fromElement) { return SETS.unmodifiable(s.tailSet(fromElement)); }
 		
 		@Override
 		public KEY_TYPE FIRST_KEY() { return s.FIRST_KEY(); }
@@ -348,7 +348,7 @@ public class SETS
 		}
 		
 		@Override
-		public SET KEY_GENERIC_TYPE copy() { throw new UnsupportedOperationException(); }
+		public SET KEY_GENERIC_TYPE copy() { return s.copy(); }
 		
 #if !TYPE_OBJECT
 		@Override
@@ -427,31 +427,31 @@ public class SETS
 		
 #endif
 		@Override
-		public NAVIGABLE_SET KEY_GENERIC_TYPE copy() { throw new UnsupportedOperationException(); }
+		public NAVIGABLE_SET KEY_GENERIC_TYPE copy() { synchronized(mutex) { return n.copy(); } }
 		
 		@Override
-		public NAVIGABLE_SET KEY_GENERIC_TYPE subSet(KEY_TYPE fromElement, boolean fromInclusive, KEY_TYPE toElement, boolean toInclusive) { synchronized(mutex) { return synchronize(n.subSet(fromElement, fromInclusive, toElement, toInclusive), mutex); } }
+		public NAVIGABLE_SET KEY_GENERIC_TYPE subSet(KEY_TYPE fromElement, boolean fromInclusive, KEY_TYPE toElement, boolean toInclusive) { synchronized(mutex) { return SETS.synchronize(n.subSet(fromElement, fromInclusive, toElement, toInclusive), mutex); } }
 
 		@Override
-		public NAVIGABLE_SET KEY_GENERIC_TYPE headSet(KEY_TYPE toElement, boolean inclusive) { synchronized(mutex) { return synchronize(n.headSet(toElement, inclusive), mutex); } }
+		public NAVIGABLE_SET KEY_GENERIC_TYPE headSet(KEY_TYPE toElement, boolean inclusive) { synchronized(mutex) { return SETS.synchronize(n.headSet(toElement, inclusive), mutex); } }
 
 		@Override
-		public NAVIGABLE_SET KEY_GENERIC_TYPE tailSet(KEY_TYPE fromElement, boolean inclusive) { synchronized(mutex) { return synchronize(n.tailSet(fromElement, inclusive), mutex); } }
+		public NAVIGABLE_SET KEY_GENERIC_TYPE tailSet(KEY_TYPE fromElement, boolean inclusive) { synchronized(mutex) { return SETS.synchronize(n.tailSet(fromElement, inclusive), mutex); } }
 
 		@Override
 		public BI_ITERATOR KEY_GENERIC_TYPE descendingIterator() { synchronized(mutex) { return n.descendingIterator(); } }
 
 		@Override
-		public NAVIGABLE_SET KEY_GENERIC_TYPE descendingSet() { synchronized(mutex) { return synchronize(n.descendingSet(), mutex); } }
+		public NAVIGABLE_SET KEY_GENERIC_TYPE descendingSet() { synchronized(mutex) { return SETS.synchronize(n.descendingSet(), mutex); } }
 		
 		@Override
-		public NAVIGABLE_SET KEY_GENERIC_TYPE subSet(KEY_TYPE fromElement, KEY_TYPE toElement) { synchronized(mutex) { return synchronize(n.subSet(fromElement, toElement), mutex); } }
+		public NAVIGABLE_SET KEY_GENERIC_TYPE subSet(KEY_TYPE fromElement, KEY_TYPE toElement) { synchronized(mutex) { return SETS.synchronize(n.subSet(fromElement, toElement), mutex); } }
 
 		@Override
-		public NAVIGABLE_SET KEY_GENERIC_TYPE headSet(KEY_TYPE toElement) { synchronized(mutex) { return synchronize(n.headSet(toElement), mutex); } }
+		public NAVIGABLE_SET KEY_GENERIC_TYPE headSet(KEY_TYPE toElement) { synchronized(mutex) { return SETS.synchronize(n.headSet(toElement), mutex); } }
 
 		@Override
-		public NAVIGABLE_SET KEY_GENERIC_TYPE tailSet(KEY_TYPE fromElement) { synchronized(mutex) { return synchronize(n.tailSet(fromElement), mutex); } }
+		public NAVIGABLE_SET KEY_GENERIC_TYPE tailSet(KEY_TYPE fromElement) { synchronized(mutex) { return SETS.synchronize(n.tailSet(fromElement), mutex); } }
 	}
 	
 	private static class SynchronizedSortedTrimSet KEY_GENERIC_TYPE extends SynchronizedSortedSet KEY_GENERIC_TYPE implements ITrimmable
@@ -511,16 +511,16 @@ public class SETS
 		public BI_ITERATOR KEY_GENERIC_TYPE iterator(KEY_TYPE fromElement) { synchronized(mutex) { return s.iterator(fromElement); } }
 		
 		@Override
-		public SORTED_SET KEY_GENERIC_TYPE copy() { throw new UnsupportedOperationException(); }
+		public SORTED_SET KEY_GENERIC_TYPE copy() { synchronized(mutex) { return s.copy(); } }
 		
 		@Override
-		public SORTED_SET KEY_GENERIC_TYPE subSet(KEY_TYPE fromElement, KEY_TYPE toElement) { synchronized(mutex) { return synchronize(s.subSet(fromElement, toElement), mutex); } }
+		public SORTED_SET KEY_GENERIC_TYPE subSet(KEY_TYPE fromElement, KEY_TYPE toElement) { synchronized(mutex) { return SETS.synchronize(s.subSet(fromElement, toElement), mutex); } }
 
 		@Override
-		public SORTED_SET KEY_GENERIC_TYPE headSet(KEY_TYPE toElement) { synchronized(mutex) { return synchronize(s.headSet(toElement), mutex); } }
+		public SORTED_SET KEY_GENERIC_TYPE headSet(KEY_TYPE toElement) { synchronized(mutex) { return SETS.synchronize(s.headSet(toElement), mutex); } }
 
 		@Override
-		public SORTED_SET KEY_GENERIC_TYPE tailSet(KEY_TYPE fromElement) { synchronized(mutex) { return synchronize(s.tailSet(fromElement), mutex); } }
+		public SORTED_SET KEY_GENERIC_TYPE tailSet(KEY_TYPE fromElement) { synchronized(mutex) { return SETS.synchronize(s.tailSet(fromElement), mutex); } }
 
 		@Override
 		public KEY_TYPE FIRST_KEY() { synchronized(mutex) { return s.FIRST_KEY(); } }
@@ -558,26 +558,20 @@ public class SETS
 	
 	private static class SynchronizedSet KEY_GENERIC_TYPE extends SynchronizedCollection KEY_GENERIC_TYPE implements SET KEY_GENERIC_TYPE
 	{
-#if !TYPE_OBJECT
 		SET KEY_GENERIC_TYPE s;
-#endif
 		
 		SynchronizedSet(SET KEY_GENERIC_TYPE c) {
 			super(c);
-#if !TYPE_OBJECT
 			s = c;
-#endif
 		}
 		
 		SynchronizedSet(SET KEY_GENERIC_TYPE c, Object mutex) {
 			super(c, mutex);
-#if !TYPE_OBJECT
 			s = c;
-#endif
 		}
 		
 		@Override
-		public SET KEY_GENERIC_TYPE copy() { throw new UnsupportedOperationException(); }
+		public SET KEY_GENERIC_TYPE copy() { synchronized(mutex) { return s.copy(); } }
 		
 #if !TYPE_OBJECT
 		@Override

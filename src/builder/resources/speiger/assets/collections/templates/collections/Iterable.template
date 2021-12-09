@@ -17,6 +17,7 @@ import speiger.src.collections.PACKAGE.functions.function.UNARY_OPERATOR;
 import speiger.src.collections.PACKAGE.collections.SPLIT_ITERATOR;
 import speiger.src.collections.PACKAGE.utils.SPLIT_ITERATORS;
 import speiger.src.collections.PACKAGE.utils.ITERABLES;
+import speiger.src.collections.PACKAGE.utils.ITERATORS;
 
 /**
  * A Type-Specific {@link Iterable} that reduces (un)boxing
@@ -146,6 +147,17 @@ public interface ITERABLE KEY_GENERIC_TYPE extends Iterable<CLASS_TYPE>
 	 */
 	default ITERABLE KEY_GENERIC_TYPE peek(CONSUMER KEY_GENERIC_TYPE action) {
 		return ITERABLES.peek(this, action);
+	}
+	
+	/**
+	 * A Helper function to reduce the usage of Streams and allows to collect all elements
+	 * @param collection that the elements should be inserted to
+	 * @param <E> the collection type
+	 * @return the input with the desired elements
+	 */
+	default <E extends COLLECTION KEY_GENERIC_TYPE> E pour(E collection) {
+		ITERATORS.pour(iterator(), collection);
+		return collection;
 	}
 	
 	/**

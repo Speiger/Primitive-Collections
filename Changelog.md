@@ -1,7 +1,15 @@
 # Changelog of versions
 
-### Version 0.4.6
+### Version 0.5.0
 - Added: 2 Helper functions to find out how many bits are required to store a Number.
+- Added: pour function directly into Iterable which allows to collect all elements in the Iterable directly.
+- Added: The new ToArray method from Java9 and newer into the library. Using a functional interface. (Just a backport)
+- Changed: Reworked how the Map Builder functions are created. They are now in a SubClass that moves them out of the way. Less Clutter. (This might break things if that was used before)
+- Added: Map Builder that allows now to Build Maps like Guava ImmutableMaps can be build. Note: This has a slight performance overhead.
+- Added: Unmodifiable and Synchronize wrapper functions direclty into Collection Interfaces. This is mostly a quality of life thing.
+- Added: Unmodifiable and Synchronized Wrapper Collections can now be cloned. They clone the underlying map which doesn't break functionality. (Had a usecase for it)
+- Added: A boxed putAll array variant.
+- Fixed: EnumMaps didn't keep track of their size and now got proper care and implementations as needed. There might be more work required but at least the core functionality is now up to date.
 
 ### Version 0.4.5
 - Added: removeAll/retainAll(Collection c, Consumer r) which receives all the elements that got deleted from the collection

@@ -3,9 +3,7 @@ package speiger.src.collections.PACKAGE.maps.impl.misc;
 import java.util.Arrays;
 import java.util.Map;
 import java.util.NoSuchElementException;
-#if VALUE_OBJECT
 import java.util.Objects;
-#endif
 
 import speiger.src.collections.VALUE_PACKAGE.collections.VALUE_ABSTRACT_COLLECTION;
 import speiger.src.collections.VALUE_PACKAGE.collections.VALUE_COLLECTION;
@@ -13,6 +11,14 @@ import speiger.src.collections.VALUE_PACKAGE.collections.VALUE_ITERATOR;
 #if !VALUE_OBJECT
 import speiger.src.collections.objects.collections.ObjectIterator;
 #endif
+import speiger.src.collections.VALUE_PACKAGE.functions.VALUE_SUPPLIER;
+import speiger.src.collections.VALUE_PACKAGE.functions.function.VALUE_UNARY_OPERATOR;
+import speiger.src.collections.PACKAGE.functions.consumer.BI_CONSUMER;
+#if !VALUE_OBJECT
+import speiger.src.collections.PACKAGE.functions.function.UNARY_OPERATOR;
+#endif
+import speiger.src.collections.PACKAGE.functions.function.FUNCTION;
+import speiger.src.collections.PACKAGE.utils.maps.MAPS;
 import speiger.src.collections.objects.maps.abstracts.ABSTRACT_MAP;
 import speiger.src.collections.objects.maps.interfaces.MAP;
 import speiger.src.collections.objects.sets.AbstractObjectSet;
@@ -28,13 +34,13 @@ import speiger.src.collections.objects.sets.ObjectSet;
 public class ENUM_MAP KEY_ENUM_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_VALUE_GENERIC_TYPE
 {
 	/** Enum Type that is being used */
-	protected final Class<T> keyType;
+	protected Class<T> keyType;
 	/** The Backing keys array. */
-	protected transient final T[] keys;
+	protected transient T[] keys;
 	/** The Backing values array */
-	protected transient final VALUE_TYPE[] values;
+	protected transient VALUE_TYPE[] values;
 	/** The Backing array that indicates which index is present or not */
-	protected transient final long[] present;
+	protected transient long[] present;
 	/** Amount of Elements stored in the ArrayMap */
 	protected int size = 0;
 	/** EntrySet cache */
@@ -44,6 +50,9 @@ public class ENUM_MAP KEY_ENUM_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_VALUE
 	/** Values cache */
 	protected transient VALUE_COLLECTION VALUE_GENERIC_TYPE valuesC;
 	
+	protected ENUM_MAP() {
+		
+	}
 	/**
 	 * Default Constructor
 	 * @param keyType the type of Enum that should be used
@@ -53,6 +62,86 @@ public class ENUM_MAP KEY_ENUM_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_VALUE
 		keys = getKeyUniverse(keyType);
 		values = NEW_VALUE_ARRAY(keys.length);
 		present = new long[((keys.length - 1) >> 6) + 1];
+	}
+	
+#if !VALUE_OBJECT
+	/**
+	 * Helper constructor that allow to create a EnumMap from boxed values (it will unbox them)
+	 * @param keys the keys that should be put into the EnumMap
+	 * @param values the values that should be put into the EnumMap.
+	 * @throws IllegalStateException if the keys and values do not match in lenght
+	 */
+	public ENUM_MAP(T[] keys, CLASS_VALUE_TYPE[] values) {
+		if(keys.length <= 0) throw new IllegalArgumentException("Empty Array are not allowed");
+		if(keys.length != values.length) throw new IllegalArgumentException("Keys and Values have to be the same size");
+		keyType = keys[0].getDeclaringClass();
+		this.keys = getKeyUniverse(keyType);
+		this.values = NEW_VALUE_ARRAY(keys.length);
+		present = new long[((keys.length - 1) >> 6) + 1];
+		putAll(keys, values);
+	}
+	
+#endif
+	/**
+	 * Helper constructor that allow to create a EnumMap from unboxed values
+	 * @param keys the keys that should be put into the map
+	 * @param values the values that should be put into the map.
+	 * @throws IllegalStateException if the keys and values do not match in lenght
+	 */
+	public ENUM_MAP(T[] keys, VALUE_TYPE[] values) {
+		if(keys.length <= 0) throw new IllegalArgumentException("Empty Array are not allowed");
+		if(keys.length != values.length) throw new IllegalArgumentException("Keys and Values have to be the same size");
+		keyType = keys[0].getDeclaringClass();
+		this.keys = getKeyUniverse(keyType);
+		this.values = NEW_VALUE_ARRAY(keys.length);
+		present = new long[((keys.length - 1) >> 6) + 1];
+		putAll(keys, values);		
+	}
+	
+	/**
+	 * A Helper constructor that allows to create a EnumMap with exactly the same values as the provided map.
+	 * @param map the values that should be present in the map
+	 */
+	public ENUM_MAP(Map<? extends CLASS_TYPE, ? extends CLASS_VALUE_TYPE> map) {
+		if(map instanceof ENUM_MAP) {
+			ENUM_MAP KEY_VALUE_GENERIC_TYPE enumMap = (ENUM_MAP KEY_VALUE_GENERIC_TYPE)map;
+			keyType = enumMap.keyType;
+			keys = enumMap.keys;
+			values = enumMap.values.clone();
+			present = enumMap.present.clone();
+			size = enumMap.size;
+		}
+		else if(map.isEmpty()) throw new IllegalArgumentException("Empty Maps are not allowed");
+		else {
+			keyType = map.keySet().iterator().next().getDeclaringClass();
+			this.keys = getKeyUniverse(keyType);
+			this.values = NEW_VALUE_ARRAY(keys.length);
+			present = new long[((keys.length - 1) >> 6) + 1];
+			putAll(map);
+		}
+	}
+	
+	/**
+	 * A Type Specific Helper function that allows to create a new EnumMap with exactly the same values as the provided map.
+	 * @param map the values that should be present in the map
+ 	 */
+	public ENUM_MAP(MAP KEY_VALUE_GENERIC_TYPE map) {
+		if(map instanceof ENUM_MAP) {
+			ENUM_MAP KEY_VALUE_GENERIC_TYPE enumMap = (ENUM_MAP KEY_VALUE_GENERIC_TYPE)map;
+			keyType = enumMap.keyType;
+			keys = enumMap.keys;
+			values = enumMap.values.clone();
+			present = enumMap.present.clone();
+			size = enumMap.size;
+		}
+		else if(map.isEmpty()) throw new IllegalArgumentException("Empty Maps are not allowed");
+		else {
+			keyType = map.keySet().iterator().next().getDeclaringClass();
+			this.keys = getKeyUniverse(keyType);
+			this.values = NEW_VALUE_ARRAY(keys.length);
+			present = new long[((keys.length - 1) >> 6) + 1];
+			putAll(map);
+		}
 	}
 	
 	@Override
@@ -204,6 +293,130 @@ public class ENUM_MAP KEY_ENUM_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_VALUE
 	}
 	
 	@Override
+	public void forEach(BI_CONSUMER KEY_VALUE_GENERIC_TYPE action) {
+		if(size() <= 0) return;
+		for(int i = 0,m=keys.length;i<m;i++) {
+			if(isSet(i)) action.accept(keys[i], values[i]);
+		}
+	}
+	
+	@Override
+	public boolean replace(T key, VALUE_TYPE oldValue, VALUE_TYPE newValue) {
+		int index = key.ordinal();
+		if(!isSet(index) || values[index] != oldValue) return false;
+		values[index] = newValue;
+		return true;
+	}
+	
+	@Override
+	public VALUE_TYPE replace(T key, VALUE_TYPE value) {
+		int index = key.ordinal();
+		if(!isSet(index)) return getDefaultReturnValue();
+		VALUE_TYPE oldValue = values[index];
+		values[index] = value;
+		return oldValue;
+	}
+	
+	@Override
+	public VALUE_TYPE COMPUTE(T key, UNARY_OPERATOR KEY_VALUE_GENERIC_TYPE mappingFunction) {
+		int index = key.ordinal();
+		if(!isSet(index)) {
+			VALUE_TYPE newValue = mappingFunction.APPLY_VALUE(key, getDefaultReturnValue());
+			if(VALUE_EQUALS(newValue, getDefaultReturnValue())) return newValue;
+			set(index);
+			values[index] = newValue;
+			return newValue;
+		}
+		VALUE_TYPE newValue = mappingFunction.APPLY_VALUE(key, values[index]);
+		if(VALUE_EQUALS(newValue, getDefaultReturnValue())) {
+			clear(index);
+			values[index] = EMPTY_VALUE;
+			return newValue;
+		}
+		values[index] = newValue;
+		return newValue;
+	}
+	
+	@Override
+	public VALUE_TYPE COMPUTE_IF_ABSENT(T key, FUNCTION KEY_VALUE_GENERIC_TYPE mappingFunction) {
+		int index = key.ordinal();
+		if(!isSet(index)) {
+			VALUE_TYPE newValue = mappingFunction.GET_VALUE(key);
+			if(VALUE_EQUALS(newValue, getDefaultReturnValue())) return newValue;
+			set(index);
+			values[index] = newValue;			
+			return newValue;
+		}
+		return values[index];
+	}
+	
+	@Override
+	public VALUE_TYPE SUPPLY_IF_ABSENT(T key, VALUE_SUPPLIER VALUE_GENERIC_TYPE valueProvider) {
+		int index = key.ordinal();
+		if(!isSet(index)) {
+			VALUE_TYPE newValue = valueProvider.VALUE_GET_KEY();
+			if(VALUE_EQUALS(newValue, getDefaultReturnValue())) return newValue;
+			set(index);
+			values[index] = newValue;			
+			return newValue;
+		}
+		return values[index];
+	}
+	
+	@Override
+	public VALUE_TYPE COMPUTE_IF_PRESENT(T key, UNARY_OPERATOR KEY_VALUE_GENERIC_TYPE mappingFunction) {
+		int index = key.ordinal();
+		if(!isSet(index)) return getDefaultReturnValue();
+		VALUE_TYPE newValue = mappingFunction.APPLY_VALUE(key, values[index]);
+		if(VALUE_EQUALS(newValue, getDefaultReturnValue())) {
+			clear(index);
+			values[index] = EMPTY_VALUE;
+			return newValue;
+		}
+		values[index] = newValue;
+		return newValue;
+	}
+	
+	@Override
+	public VALUE_TYPE MERGE(T key, VALUE_TYPE value, VALUE_UNARY_OPERATOR VALUE_VALUE_GENERIC_TYPE mappingFunction) {
+		int index = key.ordinal();
+		VALUE_TYPE newValue = !isSet(index) ? value : mappingFunction.APPLY_VALUE(values[index], value);
+		if(VALUE_EQUALS(newValue, getDefaultReturnValue())) {
+			if(isSet(index)) {
+				clear(index);
+				values[index] = EMPTY_VALUE;
+			}
+		}
+		else if(!isSet(index)) {
+			set(index);
+			values[index] = newValue;
+		}
+		else values[index] = newValue;
+		return newValue;
+	}
+	
+	@Override
+	public void BULK_MERGE(MAP KEY_VALUE_GENERIC_TYPE m, VALUE_UNARY_OPERATOR VALUE_VALUE_GENERIC_TYPE mappingFunction) {
+		Objects.requireNonNull(mappingFunction);
+		for(MAP.Entry KEY_VALUE_GENERIC_TYPE entry : MAPS.fastIterable(m)) {
+			T key = entry.ENTRY_KEY();
+			int index = key.ordinal();
+			VALUE_TYPE newValue = !isSet(index) ? entry.ENTRY_VALUE() : mappingFunction.APPLY_VALUE(values[index], entry.ENTRY_VALUE());
+			if(VALUE_EQUALS(newValue, getDefaultReturnValue())) {
+				if(isSet(index)) {
+					clear(index);
+					values[index] = EMPTY_VALUE;
+				}
+			}
+			else if(!isSet(index)) {
+				set(index);
+				values[index] = newValue;
+			}
+			else values[index] = newValue;
+		}
+	}
+	
+	@Override
 	public void clear() {
 		if(size == 0) return;
 		size = 0;
@@ -219,17 +432,19 @@ public class ENUM_MAP KEY_ENUM_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_VALUE
 		
 	}
 	
-	protected void set(int index) { 
+	protected void set(int index) {
+		size++;
 		present[index >> 6] |= (1L << index); 
 		onNodeAdded(index);
 	}
 	protected void clear(int index) { 
+		size--;
 		present[index >> 6] &= ~(1L << index);
 		onNodeRemoved(index);
 	}
 	protected boolean isSet(int index) { return (present[index >> 6] & (1L << index)) != 0; }
 	
-	private static <K extends Enum<K>> K[] getKeyUniverse(Class<K> keyType) {
+	protected static <K extends Enum<K>> K[] getKeyUniverse(Class<K> keyType) {
 		return keyType.getEnumConstants();
 	}
 	

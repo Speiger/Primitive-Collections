@@ -75,6 +75,7 @@ public class GlobalVariables
 		addSimpleMapper(" GENERIC_VALUE_BRACES", valueType.isObject() ? " <"+valueType.getValueType()+">" : "");
 		addInjectMapper(" GENERIC_SPECIAL_KEY_BRACES", type.isObject() ? " <%s>" : "").removeBraces().setBraceType("<>");
 		addInjectMapper(" GENERIC_SPECIAL_VALUE_BRACES", valueType.isObject() ? " <%s>" : "").removeBraces().setBraceType("<>");
+		addSimpleMapper(" GENERIC_KEY_ENUM_VALUE_BRACES", type.isObject() ? (valueType.isObject() ? " <"+type.getKeyType()+" extends Enum<"+type.getKeyType()+">, "+valueType.getValueType()+">" : " <"+type.getKeyType()+" extends Enum<"+type.getKeyType()+">>") : (valueType.isObject() ? " <"+valueType.getValueType()+">" : ""));
 		
 		addInjectMapper(" GENERIC_KEY_SPECIAL_BRACES", type.isObject() ? " <"+type.getKeyType()+", %s>" : " <%s>").removeBraces().setBraceType("<>");
 		addInjectMapper(" GENERIC_VALUE_SPECIAL_BRACES", valueType.isObject() ? " <"+valueType.getKeyType()+", %s>" : " <%s>").removeBraces().setBraceType("<>");

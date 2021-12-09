@@ -388,14 +388,14 @@ public class LISTS
 		
 		@Override
 		public LIST KEY_GENERIC_TYPE subList(int from, int to) {
-			return synchronize(l.subList(from, to));
+			return LISTS.synchronize(l.subList(from, to));
 		}
 		
 		@Override
 		public void size(int size) { synchronized(mutex) { l.size(size); } }
 		
 		@Override
-		public LIST KEY_GENERIC_TYPE copy() { throw new UnsupportedOperationException(); }
+		public LIST KEY_GENERIC_TYPE copy() { synchronized(mutex) { return l.copy(); } }
 	}
 	
 	private static class UnmodifiableRandomList KEY_GENERIC_TYPE extends UnmodifiableList KEY_GENERIC_TYPE implements RandomAccess 
@@ -510,14 +510,14 @@ public class LISTS
 		
 		@Override
 		public LIST KEY_GENERIC_TYPE subList(int from, int to) {
-			return unmodifiable(l.subList(from, to));
+			return LISTS.unmodifiable(l.subList(from, to));
 		}
 		
 		@Override
 		public void size(int size) { throw new UnsupportedOperationException(); }
 		
 		@Override
-		public LIST KEY_GENERIC_TYPE copy() { throw new UnsupportedOperationException(); }
+		public LIST KEY_GENERIC_TYPE copy() { return l.copy(); }
 	}
 	
 	private static class EmptyList KEY_GENERIC_TYPE extends COLLECTIONS.EmptyCollection KEY_GENERIC_TYPE implements LIST KEY_GENERIC_TYPE

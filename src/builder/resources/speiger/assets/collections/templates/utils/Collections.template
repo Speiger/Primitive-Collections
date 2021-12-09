@@ -134,7 +134,7 @@ public class COLLECTIONS
 		}
 		
 		@Override
-		public COLLECTION KEY_GENERIC_TYPE copy() { throw new UnsupportedOperationException(); }
+		public COLLECTION KEY_GENERIC_TYPE copy() { synchronized(mutex) { return c.copy(); } }
 		
 		@Override
 		@Primitive
@@ -254,7 +254,7 @@ public class COLLECTIONS
 		@Override
 		public ITERATOR KEY_GENERIC_TYPE iterator() { return ITERATORS.unmodifiable(c.iterator()); }
 		@Override
-		public COLLECTION KEY_GENERIC_TYPE copy() { throw new UnsupportedOperationException(); }
+		public COLLECTION KEY_GENERIC_TYPE copy() { return c.copy(); }
 		@Override
 		@Deprecated
 		public boolean remove(Object o) { throw new UnsupportedOperationException(); }

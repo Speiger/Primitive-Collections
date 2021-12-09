@@ -59,6 +59,136 @@ public class LINKED_ENUM_MAP KEY_ENUM_VALUE_GENERIC_TYPE extends ENUM_MAP KEY_VA
 		links = new long[keys.length];
 	}
 	
+#if !VALUE_OBJECT
+	/**
+	 * Helper constructor that allow to create a EnumMap from boxed values (it will unbox them)
+	 * @param keys the keys that should be put into the EnumMap
+	 * @param values the values that should be put into the EnumMap.
+	 * @throws IllegalStateException if the keys and values do not match in lenght
+	 */
+	public LINKED_ENUM_MAP(T[] keys, CLASS_VALUE_TYPE[] values) {
+		if(keys.length <= 0) throw new IllegalArgumentException("Empty Array are not allowed");
+		if(keys.length != values.length) throw new IllegalArgumentException("Keys and Values have to be the same size");
+		keyType = keys[0].getDeclaringClass();
+		this.keys = getKeyUniverse(keyType);
+		this.values = NEW_VALUE_ARRAY(keys.length);
+		present = new long[((keys.length - 1) >> 6) + 1];
+		links = new long[keys.length];
+		putAll(keys, values);
+	}
+	
+#endif
+	/**
+	 * Helper constructor that allow to create a EnumMap from unboxed values
+	 * @param keys the keys that should be put into the map
+	 * @param values the values that should be put into the map.
+	 * @throws IllegalStateException if the keys and values do not match in lenght
+	 */
+	public LINKED_ENUM_MAP(T[] keys, VALUE_TYPE[] values) {
+		if(keys.length <= 0) throw new IllegalArgumentException("Empty Array are not allowed");
+		if(keys.length != values.length) throw new IllegalArgumentException("Keys and Values have to be the same size");
+		keyType = keys[0].getDeclaringClass();
+		this.keys = getKeyUniverse(keyType);
+		this.values = NEW_VALUE_ARRAY(keys.length);
+		present = new long[((keys.length - 1) >> 6) + 1];
+		links = new long[keys.length];
+		putAll(keys, values);		
+	}
+	
+	/**
+	 * A Helper constructor that allows to create a EnumMap with exactly the same values as the provided map.
+	 * @param map the values that should be present in the map
+	 */
+	public LINKED_ENUM_MAP(Map<? extends CLASS_TYPE, ? extends CLASS_VALUE_TYPE> map) {
+		if(map instanceof LINKED_ENUM_MAP) {
+			LINKED_ENUM_MAP KEY_VALUE_GENERIC_TYPE enumMap = (LINKED_ENUM_MAP KEY_VALUE_GENERIC_TYPE)map;
+			keyType = enumMap.keyType;
+			keys = enumMap.keys;
+			values = enumMap.values.clone();
+			present = enumMap.present.clone();
+			links = enumMap.links.clone();
+			size = enumMap.size;
+		}
+		if(map instanceof ENUM_MAP) {
+			ENUM_MAP KEY_VALUE_GENERIC_TYPE enumMap = (ENUM_MAP KEY_VALUE_GENERIC_TYPE)map;
+			keyType = enumMap.keyType;
+			keys = enumMap.keys;
+			values = enumMap.values.clone();
+			present = enumMap.present.clone();
+			links = new long[keys.length];
+			for(int i = 0,m=keys.length;i<m;i++) {
+				if(isSet(i)) {
+					if(size == 0) {
+						firstIndex = lastIndex = i;
+						links[i] = -1L;
+					}
+					else {
+						links[lastIndex] ^= ((links[lastIndex] ^ (i & 0xFFFFFFFFL)) & 0xFFFFFFFFL);
+						links[i] = ((lastIndex & 0xFFFFFFFFL) << 32) | 0xFFFFFFFFL;
+						lastIndex = i;
+					}
+					size++;
+				}
+			}
+		}
+		else if(map.isEmpty()) throw new IllegalArgumentException("Empty Maps are not allowed");
+		else {
+			keyType = map.keySet().iterator().next().getDeclaringClass();
+			this.keys = getKeyUniverse(keyType);
+			this.values = NEW_VALUE_ARRAY(keys.length);
+			present = new long[((keys.length - 1) >> 6) + 1];
+			links = new long[keys.length];
+			putAll(map);
+		}
+	}
+	
+	/**
+	 * A Type Specific Helper function that allows to create a new EnumMap with exactly the same values as the provided map.
+	 * @param map the values that should be present in the map
+ 	 */
+	public LINKED_ENUM_MAP(MAP KEY_VALUE_GENERIC_TYPE map) {
+		if(map instanceof LINKED_ENUM_MAP) {
+			LINKED_ENUM_MAP KEY_VALUE_GENERIC_TYPE enumMap = (LINKED_ENUM_MAP KEY_VALUE_GENERIC_TYPE)map;
+			keyType = enumMap.keyType;
+			keys = enumMap.keys;
+			values = enumMap.values.clone();
+			present = enumMap.present.clone();
+			links = enumMap.links.clone();
+			size = enumMap.size;
+		}
+		if(map instanceof ENUM_MAP) {
+			ENUM_MAP KEY_VALUE_GENERIC_TYPE enumMap = (ENUM_MAP KEY_VALUE_GENERIC_TYPE)map;
+			keyType = enumMap.keyType;
+			keys = enumMap.keys;
+			values = enumMap.values.clone();
+			present = enumMap.present.clone();
+			links = new long[keys.length];
+			for(int i = 0,m=keys.length;i<m;i++) {
+				if(isSet(i)) {
+					if(size == 0) {
+						firstIndex = lastIndex = i;
+						links[i] = -1L;
+					}
+					else {
+						links[lastIndex] ^= ((links[lastIndex] ^ (i & 0xFFFFFFFFL)) & 0xFFFFFFFFL);
+						links[i] = ((lastIndex & 0xFFFFFFFFL) << 32) | 0xFFFFFFFFL;
+						lastIndex = i;
+					}
+					size++;
+				}
+			}
+		}
+		else if(map.isEmpty()) throw new IllegalArgumentException("Empty Maps are not allowed");
+		else {
+			keyType = map.keySet().iterator().next().getDeclaringClass();
+			this.keys = getKeyUniverse(keyType);
+			this.values = NEW_VALUE_ARRAY(keys.length);
+			present = new long[((keys.length - 1) >> 6) + 1];
+			links = new long[keys.length];
+			putAll(map);
+		}
+	}
+	
 	@Override
 	public VALUE_TYPE putAndMoveToFirst(T key, VALUE_TYPE value) {
 		int index = key.ordinal();
