@@ -11,7 +11,7 @@ But its focus is a different one.
 - EnumMap
 - Immutable Maps/Lists/Sets
 - Priority Queue
-- Streams
+- Streams & Functional Queries
 - SplitIterators
 - Iterators
 - Pairs
