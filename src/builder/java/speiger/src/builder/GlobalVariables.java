@@ -128,8 +128,8 @@ public class GlobalVariables
 		addInjectMapper("OBJ_TO_"+fix, type.isObject() ? "%s" : "%s."+type.getKeyType(value)+"Value()").removeBraces();
 		addInjectMapper("CLASS_TO_"+fix, type.isObject() ? "("+type.getKeyType(value)+")%s" : "(("+type.getClassType(value)+")%s)."+type.getKeyType(value)+"Value()").removeBraces();
 		
-		addInjectMapper(fix+"_TO_HASH", type.isObject() ? "%s.hashCode()" : type.getClassType(value)+".hashCode(%s)").removeBraces();
-		addInjectMapper(fix+"_TO_STRING", type.isObject() ? "%s.toString()" : type.getClassType(value)+".toString(%s)").removeBraces();
+		addInjectMapper(fix+"_TO_HASH", type.isObject() ? "Objects.hashCode(%s)" : type.getClassType(value)+".hashCode(%s)").removeBraces();
+		addInjectMapper(fix+"_TO_STRING", type.isObject() ? "Objects.toString(%s)" : type.getClassType(value)+".toString(%s)").removeBraces();
 		
 		addSimpleMapper("CAST_"+fix+"_ARRAY ", type.isObject() ? "("+fix+"_TYPE[])" : "");
 		addSimpleMapper("EMPTY_"+fix+"_ARRAY", type.isObject() ? "("+fix+"_TYPE[])ARRAYS.EMPTY_ARRAY" : "ARRAYS.EMPTY_ARRAY");

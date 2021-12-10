@@ -1,9 +1,7 @@
 package speiger.src.collections.PACKAGE.maps.interfaces;
 
 import java.util.Map;
-#if VALUE_OBJECT && !TYPE_OBJECT
 import java.util.Objects;
-#endif
 #if !TYPE_BOOLEAN
 import java.util.Collection;
 import java.util.Arrays;
@@ -414,30 +412,38 @@ public interface MAP KEY_VALUE_GENERIC_TYPE extends Map<CLASS_TYPE, CLASS_VALUE_
 	@Override
 	@Primitive
 	public default void replaceAll(BiFunction<? super CLASS_TYPE, ? super CLASS_VALUE_TYPE, ? extends CLASS_VALUE_TYPE> mappingFunction) {
+		Objects.requireNonNull(mappingFunction);
 		REPLACE_VALUES(mappingFunction instanceof UNARY_OPERATOR ? (UNARY_OPERATOR KEY_VALUE_GENERIC_TYPE)mappingFunction : (K, V) -> OBJ_TO_VALUE(mappingFunction.apply(KEY_TO_OBJ(K), VALUE_TO_OBJ(V))));
 	}
 	
 	@Override
 	@Primitive
 	public default CLASS_VALUE_TYPE compute(CLASS_TYPE key, BiFunction<? super CLASS_TYPE, ? super CLASS_VALUE_TYPE, ? extends CLASS_VALUE_TYPE> mappingFunction) {
+		Objects.requireNonNull(mappingFunction);
 		return VALUE_TO_OBJ(COMPUTE(OBJ_TO_KEY(key), mappingFunction instanceof UNARY_OPERATOR ? (UNARY_OPERATOR KEY_VALUE_GENERIC_TYPE)mappingFunction : (K, V) -> OBJ_TO_VALUE(mappingFunction.apply(KEY_TO_OBJ(K), VALUE_TO_OBJ(V)))));
 	}
 	
 	@Override
 	@Primitive
 	public default CLASS_VALUE_TYPE computeIfAbsent(CLASS_TYPE key, Function<? super CLASS_TYPE, ? extends CLASS_VALUE_TYPE> mappingFunction) {
+		Objects.requireNonNull(mappingFunction);
 		return VALUE_TO_OBJ(COMPUTE_IF_ABSENT(OBJ_TO_KEY(key), mappingFunction instanceof FUNCTION ? (FUNCTION KEY_VALUE_GENERIC_TYPE)mappingFunction : K -> OBJ_TO_VALUE(mappingFunction.apply(KEY_TO_OBJ(K)))));
 	}
 	
 	@Override
 	@Primitive
 	public default CLASS_VALUE_TYPE computeIfPresent(CLASS_TYPE key, BiFunction<? super CLASS_TYPE, ? super CLASS_VALUE_TYPE, ? extends CLASS_VALUE_TYPE> mappingFunction) {
+		Objects.requireNonNull(mappingFunction);
 		return VALUE_TO_OBJ(COMPUTE_IF_PRESENT(OBJ_TO_KEY(key), mappingFunction instanceof UNARY_OPERATOR ? (UNARY_OPERATOR KEY_VALUE_GENERIC_TYPE)mappingFunction : (K, V) -> OBJ_TO_VALUE(mappingFunction.apply(KEY_TO_OBJ(K), VALUE_TO_OBJ(V)))));
 	}
 	
 	@Override
 	@Primitive
 	public default CLASS_VALUE_TYPE merge(CLASS_TYPE key, CLASS_VALUE_TYPE value, BiFunction<? super CLASS_VALUE_TYPE, ? super CLASS_VALUE_TYPE, ? extends CLASS_VALUE_TYPE> mappingFunction) {
+		Objects.requireNonNull(mappingFunction);
+#if VALUE_OBJECT
+		Objects.requireNonNull(value);
+#endif
 		return VALUE_TO_OBJ(MERGE(OBJ_TO_KEY(key), OBJ_TO_VALUE(value), mappingFunction instanceof VALUE_UNARY_OPERATOR ? (VALUE_UNARY_OPERATOR VALUE_VALUE_GENERIC_TYPE)mappingFunction : (K, V) -> OBJ_TO_VALUE(mappingFunction.apply(VALUE_TO_OBJ(K), VALUE_TO_OBJ(V)))));
 	}
 	
@@ -450,6 +456,7 @@ public interface MAP KEY_VALUE_GENERIC_TYPE extends Map<CLASS_TYPE, CLASS_VALUE_
 	@Override
 	@Primitive
 	public default void forEach(BiConsumer<? super CLASS_TYPE, ? super CLASS_VALUE_TYPE> action) {
+		Objects.requireNonNull(action);
 		forEach(action instanceof BI_CONSUMER ? (BI_CONSUMER KEY_VALUE_GENERIC_TYPE)action : (K, V) -> action.accept(KEY_TO_OBJ(K), VALUE_TO_OBJ(V)));
 	}
 	

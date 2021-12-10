@@ -1,7 +1,8 @@
 package speiger.src.collections.PACKAGE.sets;
 
-import java.util.Iterator;
+#if TYPE_OBJECT
 import java.util.Objects;
+#endif
 import java.util.Set;
 
 import speiger.src.collections.PACKAGE.collections.ABSTRACT_COLLECTION;
@@ -20,10 +21,10 @@ public abstract class ABSTRACT_SET KEY_GENERIC_TYPE extends ABSTRACT_COLLECTION 
 	
 	@Override
 	public int hashCode() {
-		int hashCode = 1;
+		int hashCode = 0;
 		ITERATOR KEY_GENERIC_TYPE i = iterator();
 		while(i.hasNext())
-			hashCode = 31 * hashCode + KEY_TO_HASH(i.NEXT());
+			hashCode += KEY_TO_HASH(i.NEXT());
 		return hashCode;
 	}
 	
@@ -35,24 +36,10 @@ public abstract class ABSTRACT_SET KEY_GENERIC_TYPE extends ABSTRACT_COLLECTION 
 			return false;
 		Set<?> l = (Set<?>)o;
 		if(l.size() != size()) return false;
-#if !TYPE_OBJECT		
-		if(l instanceof SET)
-		{
-			ITERATOR e1 = iterator();
-			ITERATOR e2 = ((SET)l).iterator();
-			while (e1.hasNext() && e2.hasNext()) {
-				if(!(KEY_EQUALS(e1.NEXT(), e2.NEXT())))
-					return false;
-			}
-			return !(e1.hasNext() || e2.hasNext());
+		try {
+			return containsAll(l);
+		} catch (ClassCastException | NullPointerException unused) {
+			return false;
 		}
-#endif
-		Iterator<CLASS_TYPE> e1 = iterator();
-		Iterator<?> e2 = l.iterator();
-		while (e1.hasNext() && e2.hasNext()) {
-			if(!Objects.equals(e1.next(), e2.next()))
-				return false;
-		}
-		return !(e1.hasNext() || e2.hasNext());
 	}
 }

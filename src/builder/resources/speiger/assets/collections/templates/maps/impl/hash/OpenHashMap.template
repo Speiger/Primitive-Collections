@@ -278,8 +278,7 @@ public class HASH_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_VALUE_GENE
 #if !VALUE_OBJECT
 	@Override
 	public boolean containsValue(VALUE_TYPE value) {
-		if(VALUE_EQUALS(value, values[nullIndex])) return true;
-		for(int i = nullIndex-1;i >= 0;i--)
+		for(int i = nullIndex;i >= 0;i--)
 			if(KEY_EQUALS_NOT_NULL(keys[i]) && VALUE_EQUALS(values[i], value)) return true;
 		return false;
 	}
@@ -288,9 +287,12 @@ public class HASH_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_VALUE_GENE
 	@Override
 	@ValuePrimitive
 	public boolean containsValue(Object value) {
-		if((value == null && VALUE_EQUALS(values[nullIndex], getDefaultReturnValue())) || EQUALS_VALUE_TYPE(values[nullIndex], value)) return true;
-		for(int i = nullIndex-1;i >= 0;i--)
+		for(int i = nullIndex;i >= 0;i--)
+#if TYPE_OBJECT
+			if(KEY_EQUALS_NOT_NULL(keys[i]) && EQUALS_VALUE_TYPE(values[i], value)) return true;
+#else
 			if(KEY_EQUALS_NOT_NULL(keys[i]) && ((value == null && values[i] == getDefaultReturnValue()) || EQUALS_VALUE_TYPE(values[i], value))) return true;
+#endif
 		return false;
 	}
 	
@@ -481,7 +483,13 @@ public class HASH_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_VALUE_GENE
 			insert(-index-1, key, newValue);
 			return newValue;
 		}
-		return values[index];
+		VALUE_TYPE newValue = values[index];
+		if(VALUE_EQUALS(newValue, getDefaultReturnValue())) {
+			newValue = mappingFunction.GET_VALUE(key);
+			if(VALUE_EQUALS(newValue, getDefaultReturnValue())) return newValue;
+			values[index] = newValue;
+		}
+		return newValue;
 	}
 	
 	@Override
@@ -499,7 +507,7 @@ public class HASH_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_VALUE_GENE
 	@Override
 	public VALUE_TYPE COMPUTE_IF_PRESENT(KEY_TYPE key, UNARY_OPERATOR KEY_VALUE_GENERIC_TYPE mappingFunction) {
 		int index = findIndex(key);
-		if(index < 0) return getDefaultReturnValue();
+		if(index < 0 || VALUE_EQUALS(values[index], getDefaultReturnValue())) return getDefaultReturnValue();
 		VALUE_TYPE newValue = mappingFunction.APPLY_VALUE(key, values[index]);
 		if(VALUE_EQUALS(newValue, getDefaultReturnValue())) {
 			removeIndex(index);
@@ -511,8 +519,12 @@ public class HASH_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_VALUE_GENE
 	
 	@Override
 	public VALUE_TYPE MERGE(KEY_TYPE key, VALUE_TYPE value, VALUE_UNARY_OPERATOR VALUE_VALUE_GENERIC_TYPE mappingFunction) {
+		Objects.requireNonNull(mappingFunction);
+#if VALUE_OBJECT
+		Objects.requireNonNull(value);
+#endif
 		int index = findIndex(key);
-		VALUE_TYPE newValue = index < 0 ? value : mappingFunction.APPLY_VALUE(values[index], value);
+		VALUE_TYPE newValue = index < 0 || VALUE_EQUALS(values[index], getDefaultReturnValue()) ? value : mappingFunction.APPLY_VALUE(values[index], value);
 		if(VALUE_EQUALS(newValue, getDefaultReturnValue())) {
 			if(index >= 0)
 				removeIndex(index);
@@ -528,7 +540,7 @@ public class HASH_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_VALUE_GENE
 		for(MAP.Entry KEY_VALUE_GENERIC_TYPE entry : MAPS.fastIterable(m)) {
 			KEY_TYPE key = entry.ENTRY_KEY();
 			int index = findIndex(key);
-			VALUE_TYPE newValue = index < 0 ? entry.ENTRY_VALUE() : mappingFunction.APPLY_VALUE(values[index], entry.ENTRY_VALUE());
+			VALUE_TYPE newValue = index < 0 || VALUE_EQUALS(values[index], getDefaultReturnValue()) ? entry.ENTRY_VALUE() : mappingFunction.APPLY_VALUE(values[index], entry.ENTRY_VALUE());
 			if(VALUE_EQUALS(newValue, getDefaultReturnValue())) {
 				if(index >= 0)
 					removeIndex(index);
@@ -744,7 +756,7 @@ public class HASH_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_VALUE_GENE
 		
 		@Override
 		public String toString() {
-			return KEY_TO_STRING(keys[index]) + "->" + VALUE_TO_STRING(values[index]);
+			return KEY_TO_STRING(keys[index]) + "=" + VALUE_TO_STRING(values[index]);
 		}
 	}
 	
@@ -928,8 +940,16 @@ public class HASH_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_VALUE_GENE
 		@Override
 		public boolean contains(Object o) {
 			if(o instanceof Map.Entry) {
-				if(o instanceof MAP.Entry) return HASH_MAP.this.containsKey(((MAP.Entry KEY_VALUE_GENERIC_TYPE)o).ENTRY_KEY());
-				return HASH_MAP.this.containsKey(((Map.Entry<?, ?>)o).getKey());
+				if(o instanceof MAP.Entry) {
+					MAP.Entry KEY_VALUE_GENERIC_TYPE entry = (MAP.Entry KEY_VALUE_GENERIC_TYPE)o;
+					int index = HASH_MAP.this.findIndex(entry.ENTRY_KEY());
+					if(index >= 0) return VALUE_EQUALS(entry.ENTRY_VALUE(), HASH_MAP.this.values[index]);
+				}
+				else {
+					Map.Entry<?, ?> entry = (Map.Entry<?, ?>)o;
+					int index = HASH_MAP.this.findIndex(entry.getKey());
+					if(index >= 0) return Objects.equals(entry.getValue(), VALUE_TO_OBJ(HASH_MAP.this.values[index]));
+				}
 			}
 			return false;
 		}
@@ -958,7 +978,7 @@ public class HASH_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_VALUE_GENE
 		@Override
 		public boolean remove(Object o) {
 			int oldSize = size;
-			remove(o);
+			HASH_MAP.this.remove(o);
 			return size != oldSize;
 		}
 		
@@ -971,7 +991,7 @@ public class HASH_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_VALUE_GENE
 		@Override
 		public boolean remove(KEY_TYPE o) {
 			int oldSize = size;
-			remove(o);
+			HASH_MAP.this.remove(o);
 			return size != oldSize;
 		}
 		
@@ -1366,9 +1386,9 @@ public class HASH_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_VALUE_GENE
 				keys[nullIndex] = EMPTY_KEY_VALUE;
 				values[nullIndex] = EMPTY_VALUE;
 			}
-			else if(pos >= 0) shiftKeys(pos);
+			else if(lastReturned >= 0) shiftKeys(lastReturned);
 			else {
-				HASH_MAP.this.remove(wrapped.GET_KEY(-pos - 1));
+				HASH_MAP.this.remove(wrapped.GET_KEY(-lastReturned - 1));
 				return;
 			}
 			size--;

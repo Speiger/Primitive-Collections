@@ -90,6 +90,12 @@ public abstract class ABSTRACT_COLLECTION KEY_GENERIC_TYPE extends AbstractColle
 		return true;
 	}
 	
+	@Override
+	public boolean containsAll(Collection<?> c) {
+		Objects.requireNonNull(c);
+		return c instanceof COLLECTION ? containsAll((COLLECTION KEY_GENERIC_TYPE)c) : super.containsAll(c);
+	}
+	
 	/**
 	 * This implementation iterates over the elements of the collection and checks if they are stored in this collection
 	 * @param c the elements that should be checked for

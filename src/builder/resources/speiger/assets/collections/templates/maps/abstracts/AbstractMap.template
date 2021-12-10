@@ -504,7 +504,7 @@ public abstract class ABSTRACT_MAP KEY_VALUE_GENERIC_TYPE extends AbstractMap<CL
 		
 		@Override
 		public String toString() {
-			return KEY_TO_STRING(key) + "->" + VALUE_TO_STRING(value);
+			return KEY_TO_STRING(key) + "=" + VALUE_TO_STRING(value);
 		}
 	}
 }

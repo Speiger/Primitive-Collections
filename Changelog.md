@@ -12,6 +12,17 @@
 - Fixed: EnumMaps didn't keep track of their size and now got proper care and implementations as needed. There might be more work required but at least the core functionality is now up to date.
 - Added: Tests for the new Stream replace functions to ensure no bugs are left.
 - Fixed: Custom HashSet reduce function with a default value was checking incorrectly for present keys.
+- Added: Guava TestSuit
+- Fixed: HashCode and toString method would crash if the Object Key/Value was null
+- Added: AbstractTypeCollection now delegates the contains check to type-specific Collections if it detects it.
+- Fixed: Map.Entry toString wasn't writing values not like it should do.
+- Fixed: Set.hashCode now is the sum of the elements instead of a Unique HashCode based on the elements.
+- Fixed: Added missing NonNull Checks.
+- Fixed: OpenHashMap.containsValue implementation was wrong.
+- Fixed: OpenHashMap.compute/present/absent now works how it is specified in the Java Documentation
+- Fixed: OpenHashMap.merge/BulkMerge now works how it is specified in the Java Documentation
+- Fixed: OpenHashMap.keySet.remove was causing a infinite loop.
+- Fixed: OpenHashMap.mapIterator now no longer crashes in certain cases.
 
 ### Version 0.4.5
 - Added: removeAll/retainAll(Collection c, Consumer r) which receives all the elements that got deleted from the collection
