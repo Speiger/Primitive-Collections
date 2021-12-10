@@ -233,6 +233,9 @@ public class AVL_TREE_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_VALUE_
 #endif
 	@Override
 	public VALUE_TYPE put(KEY_TYPE key, VALUE_TYPE value) {
+#if TYPE_OBJECT
+		Objects.requireNonNull(key);
+#endif
 		if(tree == null) {
 			tree = first = last = new EntryKV_BRACES(key, value, null);
 			size++;
@@ -267,6 +270,9 @@ public class AVL_TREE_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_VALUE_
 	
 	@Override
 	public VALUE_TYPE putIfAbsent(KEY_TYPE key, VALUE_TYPE value) {
+#if TYPE_OBJECT
+		Objects.requireNonNull(key);
+#endif
 		if(tree == null) {
 			tree = first = last = new EntryKV_BRACES(key, value, null);
 			size++;
@@ -302,6 +308,9 @@ public class AVL_TREE_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_VALUE_
 #if VALUE_PRIMITIVES
 	@Override
 	public VALUE_TYPE addTo(KEY_TYPE key, VALUE_TYPE value) {
+#if TYPE_OBJECT
+		Objects.requireNonNull(key);
+#endif
 		if(tree == null) {
 			tree = first = last = new EntryKV_BRACES(key, value, null);
 			size++;
@@ -510,6 +519,10 @@ public class AVL_TREE_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_VALUE_
 	
 	@Override
 	public VALUE_TYPE COMPUTE(KEY_TYPE key, UNARY_OPERATOR KEY_VALUE_GENERIC_TYPE mappingFunction) {
+		Objects.requireNonNull(mappingFunction);
+#if TYPE_OBJECT
+		Objects.requireNonNull(key);
+#endif
 		Entry KEY_VALUE_GENERIC_TYPE entry = findNode(key);
 		if(entry == null) {
 			VALUE_TYPE newValue = mappingFunction.APPLY_VALUE(key, getDefaultReturnValue());
@@ -528,6 +541,10 @@ public class AVL_TREE_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_VALUE_
 	
 	@Override
 	public VALUE_TYPE COMPUTE_IF_ABSENT(KEY_TYPE key, FUNCTION KEY_VALUE_GENERIC_TYPE mappingFunction) {
+		Objects.requireNonNull(mappingFunction);
+#if TYPE_OBJECT
+		Objects.requireNonNull(key);
+#endif
 		Entry KEY_VALUE_GENERIC_TYPE entry = findNode(key);
 		if(entry == null) {
 			VALUE_TYPE newValue = mappingFunction.GET_VALUE(key);
@@ -535,11 +552,20 @@ public class AVL_TREE_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_VALUE_
 			put(key, newValue);
 			return newValue;
 		}
+		if(VALUE_EQUALS(entry.value, getDefaultReturnValue())) {
+			VALUE_TYPE newValue = mappingFunction.GET_VALUE(key);
+			if(VALUE_EQUALS(newValue, getDefaultReturnValue())) return newValue;
+			entry.value = newValue;
+		}
 		return entry.value;
 	}
 	
 	@Override
 	public VALUE_TYPE SUPPLY_IF_ABSENT(KEY_TYPE key, VALUE_SUPPLIER VALUE_GENERIC_TYPE valueProvider) {
+		Objects.requireNonNull(valueProvider);
+#if TYPE_OBJECT
+		Objects.requireNonNull(key);
+#endif
 		Entry KEY_VALUE_GENERIC_TYPE entry = findNode(key);
 		if(entry == null) {
 			VALUE_TYPE newValue = valueProvider.VALUE_GET_KEY();
@@ -547,13 +573,22 @@ public class AVL_TREE_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_VALUE_
 			put(key, newValue);
 			return newValue;
 		}
+		if(VALUE_EQUALS(entry.value, getDefaultReturnValue())) {
+			VALUE_TYPE newValue = valueProvider.VALUE_GET_KEY();
+			if(VALUE_EQUALS(newValue, getDefaultReturnValue())) return newValue;
+			entry.value = newValue;
+		}
 		return entry.value;
 	}
 	
 	@Override
 	public VALUE_TYPE COMPUTE_IF_PRESENT(KEY_TYPE key, UNARY_OPERATOR KEY_VALUE_GENERIC_TYPE mappingFunction) {
+		Objects.requireNonNull(mappingFunction);
+#if TYPE_OBJECT
+		Objects.requireNonNull(key);
+#endif
 		Entry KEY_VALUE_GENERIC_TYPE entry = findNode(key);
-		if(entry == null) return getDefaultReturnValue();
+		if(entry == null || VALUE_EQUALS(entry.value, getDefaultReturnValue())) return getDefaultReturnValue();
 		VALUE_TYPE newValue = mappingFunction.APPLY_VALUE(key, entry.value);
 		if(VALUE_EQUALS(newValue, getDefaultReturnValue())) {
 			removeNode(entry);
@@ -565,8 +600,12 @@ public class AVL_TREE_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_VALUE_
 	
 	@Override
 	public VALUE_TYPE MERGE(KEY_TYPE key, VALUE_TYPE value, VALUE_UNARY_OPERATOR VALUE_VALUE_GENERIC_TYPE mappingFunction) {
+		Objects.requireNonNull(mappingFunction);
+#if TYPE_OBJECT
+		Objects.requireNonNull(key);
+#endif
 		Entry KEY_VALUE_GENERIC_TYPE entry = findNode(key);
-		VALUE_TYPE newValue = entry == null ? value : mappingFunction.APPLY_VALUE(entry.value, value);
+		VALUE_TYPE newValue = entry == null || VALUE_EQUALS(entry.value, getDefaultReturnValue()) ? value : mappingFunction.APPLY_VALUE(entry.value, value);
 		if(VALUE_EQUALS(newValue, getDefaultReturnValue())) {
 			if(entry != null)
 				removeNode(entry);
@@ -582,7 +621,7 @@ public class AVL_TREE_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_VALUE_
 		for(MAP.Entry KEY_VALUE_GENERIC_TYPE entry : MAPS.fastIterable(m)) {
 			KEY_TYPE key = entry.ENTRY_KEY();
 			Entry KEY_VALUE_GENERIC_TYPE subEntry = findNode(key);
-			VALUE_TYPE newValue = subEntry == null ? entry.ENTRY_VALUE() : mappingFunction.APPLY_VALUE(subEntry.value, entry.ENTRY_VALUE());
+			VALUE_TYPE newValue = subEntry == null || VALUE_EQUALS(subEntry.value, getDefaultReturnValue()) ? entry.ENTRY_VALUE() : mappingFunction.APPLY_VALUE(subEntry.value, entry.ENTRY_VALUE());
 			if(VALUE_EQUALS(newValue, getDefaultReturnValue())) {
 				if(subEntry != null)
 					removeNode(subEntry);
@@ -1491,8 +1530,21 @@ public class AVL_TREE_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_VALUE_
 			@Deprecated
 			public boolean contains(Object o) {
 				if(o instanceof Map.Entry) {
-					if(o instanceof MAP.Entry) return NavigableSubMap.this.containsKey(((MAP.Entry KEY_VALUE_GENERIC_TYPE)o).ENTRY_KEY());
-					return NavigableSubMap.this.containsKey(((Map.Entry<?, ?>)o).getKey());
+					if(o instanceof MAP.Entry) {
+						MAP.Entry KEY_VALUE_GENERIC_TYPE entry = (MAP.Entry KEY_VALUE_GENERIC_TYPE)o;
+						if(entry.getKey() == null) return false;
+						AVL_TREE_MAP.Entry KEY_VALUE_GENERIC_TYPE subEntry = m.findNode(entry.ENTRY_KEY());
+						if(subEntry != null) return VALUE_EQUALS(entry.ENTRY_VALUE(), subEntry.value);
+					}
+					else {
+						Map.Entry<?, ?> entry = (Map.Entry<?, ?>)o;
+						if(entry.getKey() == null) return false;
+#if !TYPE_OBJECT
+						if(!(entry.getKey() instanceof CLASS_TYPE)) return false;
+#endif
+						AVL_TREE_MAP.Entry KEY_VALUE_GENERIC_TYPE subEntry = m.findNode((CLASS_TYPE)entry.getKey());
+						if(subEntry != null) return Objects.equals(entry.getValue(), VALUE_TO_OBJ(subEntry.value));
+					}
 				}
 				return false;
 			}
@@ -1884,8 +1936,21 @@ public class AVL_TREE_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_VALUE_
 		@Deprecated
 		public boolean contains(Object o) {
 			if(o instanceof Map.Entry) {
-				if(o instanceof MAP.Entry) return AVL_TREE_MAP.this.containsKey(((MAP.Entry KEY_VALUE_GENERIC_TYPE)o).ENTRY_KEY());
-				return AVL_TREE_MAP.this.containsKey(((Map.Entry<?, ?>)o).getKey());
+				if(o instanceof MAP.Entry) {
+					MAP.Entry KEY_VALUE_GENERIC_TYPE entry = (MAP.Entry KEY_VALUE_GENERIC_TYPE)o;
+					if(entry.getKey() == null) return false;
+					AVL_TREE_MAP.Entry KEY_VALUE_GENERIC_TYPE subEntry = AVL_TREE_MAP.this.findNode(entry.ENTRY_KEY());
+					if(subEntry != null) return VALUE_EQUALS(entry.ENTRY_VALUE(), subEntry.value);
+				}
+				else {
+					Map.Entry<?, ?> entry = (Map.Entry<?, ?>)o;
+					if(entry.getKey() == null) return false;
+#if !TYPE_OBJECT
+					if(!(entry.getKey() instanceof CLASS_TYPE)) return false;
+#endif
+					AVL_TREE_MAP.Entry KEY_VALUE_GENERIC_TYPE subEntry = AVL_TREE_MAP.this.findNode((CLASS_TYPE)entry.getKey());
+					if(subEntry != null) return Objects.equals(entry.getValue(), VALUE_TO_OBJ(subEntry.value));
+				}
 			}
 			return false;
 		}
@@ -2551,6 +2616,43 @@ public class AVL_TREE_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_VALUE_
 		}
 		
 #endif
+		@Override
+		public boolean equals(Object obj) {
+			if(obj instanceof Map.Entry) {
+				if(obj instanceof MAP.Entry) {
+					MAP.Entry KEY_VALUE_GENERIC_TYPE entry = (MAP.Entry KEY_VALUE_GENERIC_TYPE)obj;
+#if TYPE_OBJECT
+					if(entry.ENTRY_KEY() == null) return false;
+#endif
+					return KEY_EQUALS(key, entry.ENTRY_KEY()) && VALUE_EQUALS(value, entry.ENTRY_VALUE());
+				}
+				Map.Entry<?, ?> entry = (Map.Entry<?, ?>)obj;
+				Object otherKey = entry.getKey();
+				if(otherKey == null) return false;
+				Object otherValue = entry.getValue();
+#if TYPE_OBJECT && VALUE_OBJECT
+				return KEY_EQUALS(key, otherKey) && VALUE_EQUALS(value, otherValue);
+#else if TYPE_OBJECT
+				return otherValue instanceof CLASS_VALUE_TYPE && KEY_EQUALS(key, otherKey) && VALUE_EQUALS(value, CLASS_TO_VALUE(otherValue));
+#else if VALUE_OBJECT
+				return otherKey instanceof CLASS_TYPE && KEY_EQUALS(key, CLASS_TO_KEY(otherKey)) && VALUE_EQUALS(value, otherValue);
+#else
+				return otherKey instanceof CLASS_TYPE && otherValue instanceof CLASS_VALUE_TYPE && KEY_EQUALS(key, CLASS_TO_KEY(otherKey)) && VALUE_EQUALS(value, CLASS_TO_VALUE(otherValue));
+#endif
+			}
+			return false;
+		}
+		
+		@Override
+		public int hashCode() {
+			return KEY_TO_HASH(key) ^ VALUE_TO_HASH(value);
+		}
+		
+		@Override
+		public String toString() {
+			return KEY_TO_STRING(key) + "=" + VALUE_TO_STRING(value);
+		}
+		
 		int getHeight() { return state; }
 		
 		void updateHeight() { state = (1 + Math.max(left == null ? -1 : left.getHeight(), right == null ? -1 : right.getHeight())); }

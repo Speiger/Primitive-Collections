@@ -820,8 +820,19 @@ public class LINKED_CUSTOM_HASH_MAP KEY_VALUE_GENERIC_TYPE extends CUSTOM_HASH_M
 		@Deprecated
 		public boolean contains(Object o) {
 			if(o instanceof Map.Entry) {
-				if(o instanceof MAP.Entry) return LINKED_CUSTOM_HASH_MAP.this.containsKey(((MAP.Entry KEY_VALUE_GENERIC_TYPE)o).ENTRY_KEY());
-				return LINKED_CUSTOM_HASH_MAP.this.containsKey(((Map.Entry<?, ?>)o).getKey());
+				if(o instanceof MAP.Entry) {
+					MAP.Entry KEY_VALUE_GENERIC_TYPE entry = (MAP.Entry KEY_VALUE_GENERIC_TYPE)o;
+					int index = LINKED_CUSTOM_HASH_MAP.this.findIndex(entry.ENTRY_KEY());
+					if(index >= 0) return VALUE_EQUALS(entry.ENTRY_VALUE(), LINKED_CUSTOM_HASH_MAP.this.values[index]);
+				}
+				else {
+					Map.Entry<?, ?> entry = (Map.Entry<?, ?>)o;
+#if !TYPE_OBJECT
+					if(!(entry.getKey() instanceof CLASS_TYPE)) return false;
+#endif
+					int index = LINKED_CUSTOM_HASH_MAP.this.findIndex((CLASS_TYPE)entry.getKey());
+					if(index >= 0) return Objects.equals(entry.getValue(), VALUE_TO_OBJ(LINKED_CUSTOM_HASH_MAP.this.values[index]));
+				}
 			}
 			return false;
 		}
@@ -873,7 +884,7 @@ public class LINKED_CUSTOM_HASH_MAP KEY_VALUE_GENERIC_TYPE extends CUSTOM_HASH_M
 		@Override
 		public boolean remove(Object o) {
 			int oldSize = size;
-			remove(o);
+			LINKED_CUSTOM_HASH_MAP.this.remove(o);
 			return size != oldSize;
 		}
 		
@@ -886,7 +897,7 @@ public class LINKED_CUSTOM_HASH_MAP KEY_VALUE_GENERIC_TYPE extends CUSTOM_HASH_M
 		@Override
 		public boolean remove(KEY_TYPE o) {
 			int oldSize = size;
-			remove(o);
+			LINKED_CUSTOM_HASH_MAP.this.remove(o);
 			return size != oldSize;
 		}
 		

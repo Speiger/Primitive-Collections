@@ -288,7 +288,7 @@ public class HASH_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_VALUE_GENE
 	@ValuePrimitive
 	public boolean containsValue(Object value) {
 		for(int i = nullIndex;i >= 0;i--)
-#if TYPE_OBJECT
+#if VALUE_OBJECT
 			if(KEY_EQUALS_NOT_NULL(keys[i]) && EQUALS_VALUE_TYPE(values[i], value)) return true;
 #else
 			if(KEY_EQUALS_NOT_NULL(keys[i]) && ((value == null && values[i] == getDefaultReturnValue()) || EQUALS_VALUE_TYPE(values[i], value))) return true;
@@ -311,7 +311,6 @@ public class HASH_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_VALUE_GENE
 	}
 	
 	@Override
-	@Deprecated
 	public CLASS_VALUE_TYPE remove(Object key) {
 		int slot = findIndex(key);
 		if(slot < 0) return VALUE_TO_OBJ(getDefaultReturnValue());
@@ -458,6 +457,7 @@ public class HASH_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_VALUE_GENE
 	
 	@Override
 	public VALUE_TYPE COMPUTE(KEY_TYPE key, UNARY_OPERATOR KEY_VALUE_GENERIC_TYPE mappingFunction) {
+		Objects.requireNonNull(mappingFunction);
 		int index = findIndex(key);
 		if(index < 0) {
 			VALUE_TYPE newValue = mappingFunction.APPLY_VALUE(key, getDefaultReturnValue());
@@ -476,6 +476,7 @@ public class HASH_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_VALUE_GENE
 	
 	@Override
 	public VALUE_TYPE COMPUTE_IF_ABSENT(KEY_TYPE key, FUNCTION KEY_VALUE_GENERIC_TYPE mappingFunction) {
+		Objects.requireNonNull(mappingFunction);
 		int index = findIndex(key);
 		if(index < 0) {
 			VALUE_TYPE newValue = mappingFunction.GET_VALUE(key);
@@ -494,6 +495,7 @@ public class HASH_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_VALUE_GENE
 	
 	@Override
 	public VALUE_TYPE SUPPLY_IF_ABSENT(KEY_TYPE key, VALUE_SUPPLIER VALUE_GENERIC_TYPE valueProvider) {
+		Objects.requireNonNull(valueProvider);
 		int index = findIndex(key);
 		if(index < 0) {
 			VALUE_TYPE newValue = valueProvider.VALUE_GET_KEY();
@@ -501,11 +503,18 @@ public class HASH_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_VALUE_GENE
 			insert(-index-1, key, newValue);
 			return newValue;
 		}
-		return values[index];
+		VALUE_TYPE newValue = values[index];
+		if(VALUE_EQUALS(newValue, getDefaultReturnValue())) {
+			newValue = valueProvider.VALUE_GET_KEY();
+			if(VALUE_EQUALS(newValue, getDefaultReturnValue())) return newValue;
+			values[index] = newValue;
+		}
+		return newValue;
 	}
 	
 	@Override
 	public VALUE_TYPE COMPUTE_IF_PRESENT(KEY_TYPE key, UNARY_OPERATOR KEY_VALUE_GENERIC_TYPE mappingFunction) {
+		Objects.requireNonNull(mappingFunction);
 		int index = findIndex(key);
 		if(index < 0 || VALUE_EQUALS(values[index], getDefaultReturnValue())) return getDefaultReturnValue();
 		VALUE_TYPE newValue = mappingFunction.APPLY_VALUE(key, values[index]);

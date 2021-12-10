@@ -18,11 +18,16 @@
 - Fixed: Map.Entry toString wasn't writing values not like it should do.
 - Fixed: Set.hashCode now is the sum of the elements instead of a Unique HashCode based on the elements.
 - Fixed: Added missing NonNull Checks.
-- Fixed: OpenHashMap.containsValue implementation was wrong.
-- Fixed: OpenHashMap.compute/present/absent now works how it is specified in the Java Documentation
-- Fixed: OpenHashMap.merge/BulkMerge now works how it is specified in the Java Documentation
-- Fixed: OpenHashMap.keySet.remove was causing a infinite loop.
-- Fixed: OpenHashMap.mapIterator now no longer crashes in certain cases.
+- Fixed: Custom/OpenHashMap.containsValue implementation was wrong.
+- Fixed: Custom/OpenHashMap.compute/present/absent now works how it is specified in the Java Documentation
+- Fixed: Custom/OpenHashMap.merge/BulkMerge now works how it is specified in the Java Documentation
+- Fixed: Custom/Linked/OpenHashMap.keySet.remove was causing a infinite loop.
+- Fixed: Custom/Linked/OpenHashMap.entrySet.contains was not correctly comparing the entry.
+- Fixed: Custom/OpenHashMap.mapIterator now no longer crashes in certain cases.
+- Added: Custom/LinkedOpenHashMap now takes use of the improved Iterator it has for containsValue
+- Fixed: CustomOpenHashMap.keySet.forEach was basically putting out keys even if they were present
+- Fixed: ImmutableMaps issues thanks to the tests. Roughly the same as the rest of the maps
+- Fixed: RB/AVLTreeMaps issues. Roughly the same as the rest of the maps
 
 ### Version 0.4.5
 - Added: removeAll/retainAll(Collection c, Consumer r) which receives all the elements that got deleted from the collection

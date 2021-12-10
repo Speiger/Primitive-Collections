@@ -323,6 +323,33 @@ public class LINKED_HASH_MAP KEY_VALUE_GENERIC_TYPE extends HASH_MAP KEY_VALUE_G
 		return values[index];
 	}
 	
+#if !VALUE_OBJECT
+	@Override
+	public boolean containsValue(VALUE_TYPE value) {
+		int index = firstIndex;
+		while(index != -1) {
+			if(VALUE_EQUALS(values[index], value)) return true;
+			index = (int)links[index];
+		}
+		return false;
+	}
+	
+#endif
+	@Override
+	@ValuePrimitive
+	public boolean containsValue(Object value) {
+		int index = firstIndex;
+		while(index != -1) {
+#if VALUE_OBJECT
+			if(VALUE_EQUALS(values[index], value)) return true;
+#else
+			if((value == null && values[index] == getDefaultReturnValue()) || EQUALS_VALUE_TYPE(values[index], value)) return true;
+#endif
+			index = (int)links[index];
+		}
+		return false;
+	}
+	
 	@Override
 	public LINKED_HASH_MAP KEY_VALUE_GENERIC_TYPE copy() {
 		LINKED_HASH_MAP KEY_VALUE_GENERIC_TYPE map = new LINKED_HASH_MAPKV_BRACES(0, loadFactor);
@@ -797,8 +824,16 @@ public class LINKED_HASH_MAP KEY_VALUE_GENERIC_TYPE extends HASH_MAP KEY_VALUE_G
 		@Deprecated
 		public boolean contains(Object o) {
 			if(o instanceof Map.Entry) {
-				if(o instanceof MAP.Entry) return LINKED_HASH_MAP.this.containsKey(((MAP.Entry KEY_VALUE_GENERIC_TYPE)o).ENTRY_KEY());
-				return LINKED_HASH_MAP.this.containsKey(((Map.Entry<?, ?>)o).getKey());
+				if(o instanceof MAP.Entry) {
+					MAP.Entry KEY_VALUE_GENERIC_TYPE entry = (MAP.Entry KEY_VALUE_GENERIC_TYPE)o;
+					int index = LINKED_HASH_MAP.this.findIndex(entry.ENTRY_KEY());
+					if(index >= 0) return VALUE_EQUALS(entry.ENTRY_VALUE(), LINKED_HASH_MAP.this.values[index]);
+				}
+				else {
+					Map.Entry<?, ?> entry = (Map.Entry<?, ?>)o;
+					int index = LINKED_HASH_MAP.this.findIndex(entry.getKey());
+					if(index >= 0) return Objects.equals(entry.getValue(), VALUE_TO_OBJ(LINKED_HASH_MAP.this.values[index]));
+				}
 			}
 			return false;
 		}
@@ -850,7 +885,7 @@ public class LINKED_HASH_MAP KEY_VALUE_GENERIC_TYPE extends HASH_MAP KEY_VALUE_G
 		@Override
 		public boolean remove(Object o) {
 			int oldSize = size;
-			remove(o);
+			LINKED_HASH_MAP.this.remove(o);
 			return size != oldSize;
 		}
 		
@@ -863,7 +898,7 @@ public class LINKED_HASH_MAP KEY_VALUE_GENERIC_TYPE extends HASH_MAP KEY_VALUE_G
 		@Override
 		public boolean remove(KEY_TYPE o) {
 			int oldSize = size;
-			remove(o);
+			LINKED_HASH_MAP.this.remove(o);
 			return size != oldSize;
 		}
 		

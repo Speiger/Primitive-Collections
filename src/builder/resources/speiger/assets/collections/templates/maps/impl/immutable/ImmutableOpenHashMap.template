@@ -237,18 +237,34 @@ public class IMMUTABLE_HASH_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_
 		{
 			KEY_TYPE o = a[i];
 			if(KEY_EQUALS_NULL(o)) {
-				if(!containsNull) size++;
+				if(!containsNull) {
+					size++;
+					if(prev != -1) {
+						newLinks[prev] ^= ((newLinks[prev] ^ (newSize & 0xFFFFFFFFL)) & 0xFFFFFFFFL);
+						newLinks[newSize] ^= ((newLinks[newSize] ^ ((prev & 0xFFFFFFFFL) << 32)) & 0xFFFFFFFF00000000L);
+						prev = newSize;
+					}
+					else {
+						prev = firstIndex = newSize;
+						newLinks[newSize] = -1L;
+					}
+				}
 				containsNull = true;
+				newValues[newSize] = b[i];
 				continue;
 			}
 			boolean found = true;
 			int pos = HashUtil.mix(KEY_TO_HASH(o)) & newMask;
 			KEY_TYPE current = newKeys[pos];
 			if(KEY_EQUALS_NOT_NULL(current)) {
-				if(KEY_EQUALS(current, o)) continue;
+				if(KEY_EQUALS(current, o)) {
+					newValues[pos] = b[i];
+					continue;
+				}
 				while(KEY_EQUALS_NOT_NULL((current = newKeys[pos = (++pos & mask)]))) {
 					if(KEY_EQUALS(current, o)) {
 						found = false;
+						newValues[pos] = b[i];
 						break;
 					}
 				}
@@ -256,7 +272,7 @@ public class IMMUTABLE_HASH_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_
 			if(found) {
 				size++;
 				newKeys[pos] = o;
-				values[pos] = b[i];
+				newValues[pos] = b[i];
 				if(prev != -1) {
 					newLinks[prev] ^= ((newLinks[prev] ^ (pos & 0xFFFFFFFFL)) & 0xFFFFFFFFL);
 					newLinks[pos] ^= ((newLinks[pos] ^ ((prev & 0xFFFFFFFFL) << 32)) & 0xFFFFFFFF00000000L);
@@ -268,7 +284,7 @@ public class IMMUTABLE_HASH_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_
 				}
 			}
 		}
-		nullIndex = size;
+		nullIndex = newSize;
 		mask = newMask;
 		keys = newKeys;
 		values = newValues;
@@ -316,9 +332,11 @@ public class IMMUTABLE_HASH_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_
 #if !VALUE_OBJECT
 	@Override
 	public boolean containsValue(VALUE_TYPE value) {
-		if(VALUE_EQUALS(value, values[nullIndex])) return true;
-		for(int i = nullIndex-1;i >= 0;i--)
-			if(KEY_EQUALS_NOT_NULL(keys[i]) && VALUE_EQUALS(values[i], value)) return true;
+		int index = firstIndex;
+		while(index != -1) {
+			if(VALUE_EQUALS(values[index], value)) return true;
+			index = (int)links[index];
+		}
 		return false;
 	}
 	
@@ -326,9 +344,15 @@ public class IMMUTABLE_HASH_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_
 	@Override
 	@ValuePrimitive
 	public boolean containsValue(Object value) {
-		if((value == null && VALUE_EQUALS(values[nullIndex], getDefaultReturnValue())) || EQUALS_VALUE_TYPE(values[nullIndex], value)) return true;
-		for(int i = nullIndex-1;i >= 0;i--)
-			if(KEY_EQUALS_NOT_NULL(keys[i]) && ((value == null && values[i] == getDefaultReturnValue()) || EQUALS_VALUE_TYPE(values[i], value))) return true;
+		int index = firstIndex;
+		while(index != -1) {
+#if VALUE_OBJECT
+			if(VALUE_EQUALS(values[index], value)) return true;
+#else
+			if((value == null && values[index] == getDefaultReturnValue()) || EQUALS_VALUE_TYPE(values[index], value)) return true;
+#endif
+			index = (int)links[index];
+		}
 		return false;
 	}
 	
@@ -544,6 +568,9 @@ public class IMMUTABLE_HASH_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_
 				}
 				Map.Entry<?, ?> entry = (Map.Entry<?, ?>)obj;
 				Object key = entry.getKey();
+#if !TYPE_OBJECT
+				if(!(key instanceof CLASS_TYPE)) return false;
+#endif
 				Object value = entry.getValue();
 #if TYPE_OBJECT && VALUE_OBJECT
 				return KEY_EQUALS(keys[index], key) && VALUE_EQUALS(values[index], value);
@@ -565,7 +592,7 @@ public class IMMUTABLE_HASH_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_
 		
 		@Override
 		public String toString() {
-			return KEY_TO_STRING(keys[index]) + "->" + VALUE_TO_STRING(values[index]);
+			return KEY_TO_STRING(keys[index]) + "=" + VALUE_TO_STRING(values[index]);
 		}
 	}
 	
@@ -757,8 +784,16 @@ public class IMMUTABLE_HASH_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_
 		@Deprecated
 		public boolean contains(Object o) {
 			if(o instanceof Map.Entry) {
-				if(o instanceof MAP.Entry) return IMMUTABLE_HASH_MAP.this.containsKey(((MAP.Entry KEY_VALUE_GENERIC_TYPE)o).ENTRY_KEY());
-				return IMMUTABLE_HASH_MAP.this.containsKey(((Map.Entry<?, ?>)o).getKey());
+				if(o instanceof MAP.Entry) {
+					MAP.Entry KEY_VALUE_GENERIC_TYPE entry = (MAP.Entry KEY_VALUE_GENERIC_TYPE)o;
+					int index = IMMUTABLE_HASH_MAP.this.findIndex(entry.ENTRY_KEY());
+					if(index >= 0) return VALUE_EQUALS(entry.ENTRY_VALUE(), IMMUTABLE_HASH_MAP.this.values[index]);
+				}
+				else {
+					Map.Entry<?, ?> entry = (Map.Entry<?, ?>)o;
+					int index = IMMUTABLE_HASH_MAP.this.findIndex(entry.getKey());
+					if(index >= 0) return Objects.equals(entry.getValue(), VALUE_TO_OBJ(IMMUTABLE_HASH_MAP.this.values[index]));
+				}
 			}
 			return false;
 		}
