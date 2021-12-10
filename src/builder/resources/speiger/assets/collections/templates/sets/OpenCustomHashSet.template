@@ -536,7 +536,7 @@ public class CUSTOM_HASH_SET KEY_GENERIC_TYPE extends ABSTRACT_SET KEY_GENERIC_T
 		KEY_TYPE state = identity;
 		if(containsNull) state = operator.APPLY_VALUE(state, keys[nullIndex]);
 		for(int i = nullIndex-1;i>=0;i--) {
-			if(!strategy.equals(keys[i], EMPTY_KEY_VALUE)) continue;
+			if(strategy.equals(keys[i], EMPTY_KEY_VALUE)) continue;
 			state = operator.APPLY_VALUE(state, keys[i]);
 		}
 		return state;

@@ -1023,7 +1023,12 @@ public class ARRAY_LIST KEY_GENERIC_TYPE extends ABSTRACT_LIST KEY_GENERIC_TYPE 
 	public <E> E[] toArray(E[] a) {
 		if(a == null) a = (E[])new Object[size];
 		else if(a.length < size) a = (E[])ObjectArrays.newArray(a.getClass().getComponentType(), size);
+#if TYPE_OBJECT
         System.arraycopy(data, 0, a, 0, size);
+#else
+		for(int i = 0;i<size;i++)
+			a[i] = (E)KEY_TO_OBJ(data[i]);
+#endif
 		return a;
 	}
 	

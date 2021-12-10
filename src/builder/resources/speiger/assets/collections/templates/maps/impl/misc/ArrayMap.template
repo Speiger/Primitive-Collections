@@ -160,6 +160,7 @@ public class ARRAY_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_VALUE_GEN
 	 * @throws IllegalStateException if the keys and values do not match in lenght
 	 */
 	public ARRAY_MAP(KEY_TYPE[] keys, VALUE_TYPE[] values, int length) {
+		this(length);
 		if(keys.length != values.length) throw new IllegalStateException("Input Arrays are not equal size");
 		putAll(keys, values, 0, length);
 	}

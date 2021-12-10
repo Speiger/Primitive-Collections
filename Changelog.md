@@ -10,6 +10,8 @@
 - Added: Unmodifiable and Synchronized Wrapper Collections can now be cloned. They clone the underlying map which doesn't break functionality. (Had a usecase for it)
 - Added: A boxed putAll array variant.
 - Fixed: EnumMaps didn't keep track of their size and now got proper care and implementations as needed. There might be more work required but at least the core functionality is now up to date.
+- Added: Tests for the new Stream replace functions to ensure no bugs are left.
+- Fixed: Custom HashSet reduce function with a default value was checking incorrectly for present keys.
 
 ### Version 0.4.5
 - Added: removeAll/retainAll(Collection c, Consumer r) which receives all the elements that got deleted from the collection

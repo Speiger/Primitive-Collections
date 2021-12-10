@@ -570,7 +570,7 @@ public interface MAP KEY_VALUE_GENERIC_TYPE extends Map<CLASS_TYPE, CLASS_VALUE_
 		
 		/**
 		 * Starts a Map Builder that allows you to create maps as Constants a lot easier
-		 * Keys & Values are stored as Array and then inserted using the putAllMethod when the mapType is choosen
+		 * Keys and Values are stored as Array and then inserted using the putAllMethod when the mapType is choosen
 		 * @Type(T)
 		 * @ValueType(V)
 		 * @return a MapBuilder
@@ -581,7 +581,7 @@ public interface MAP KEY_VALUE_GENERIC_TYPE extends Map<CLASS_TYPE, CLASS_VALUE_
 		
 		/**
 		 * Starts a Map Builder that allows you to create maps as Constants a lot easier
-		 * Keys & Values are stored as Array and then inserted using the putAllMethod when the mapType is choosen
+		 * Keys and Values are stored as Array and then inserted using the putAllMethod when the mapType is choosen
 		 * @param size the expected minimum size of Elements in the Map, default is 16
 		 * @Type(T)
 		 * @ValueType(V)
@@ -592,13 +592,13 @@ public interface MAP KEY_VALUE_GENERIC_TYPE extends Map<CLASS_TYPE, CLASS_VALUE_
 		}
 		
 		/**
-		 * Starts a Map builder and puts in the Key & Value into it
-		 * Keys & Values are stored as Array and then inserted using the putAllMethod when the mapType is choosen
+		 * Starts a Map builder and puts in the Key and Value into it
+		 * Keys and Values are stored as Array and then inserted using the putAllMethod when the mapType is choosen
 		 * @param key the key that should be added
 		 * @param value the value that should be added
 		 * @Type(T)
 		 * @ValueType(V)
-		 * @return a MapBuilder with the key & value stored in it.
+		 * @return a MapBuilder with the key and value stored in it.
 		 */
 		public GENERIC_KEY_VALUE_BRACES BuilderCache KEY_VALUE_GENERIC_TYPE put(KEY_TYPE key, VALUE_TYPE value) {
 			return new BuilderCache KEY_VALUE_GENERIC_TYPE().put(key, value);
@@ -606,13 +606,13 @@ public interface MAP KEY_VALUE_GENERIC_TYPE extends Map<CLASS_TYPE, CLASS_VALUE_
 		
 #if !TYPE_OBJECT || !VALUE_OBJECT
 		/**
-		 * Starts a Map builder and puts in the Key & Value into it
-		 * Keys & Values are stored as Array and then inserted using the putAllMethod when the mapType is choosen
+		 * Starts a Map builder and puts in the Key and Value into it
+		 * Keys and Values are stored as Array and then inserted using the putAllMethod when the mapType is choosen
 		 * @param key the key that should be added
 		 * @param value the value that should be added
 		 * @Type(T)
 		 * @ValueType(V)
-		 * @return a MapBuilder with the key & value stored in it.
+		 * @return a MapBuilder with the key and value stored in it.
 		 */
 		public GENERIC_KEY_VALUE_BRACES BuilderCache KEY_VALUE_GENERIC_TYPE put(CLASS_TYPE key, CLASS_VALUE_TYPE value) {
 			return new BuilderCache KEY_VALUE_GENERIC_TYPE().put(key, value);
@@ -1449,7 +1449,7 @@ public interface MAP KEY_VALUE_GENERIC_TYPE extends Map<CLASS_TYPE, CLASS_VALUE_
 		}
 		
 		/**
-		 * Builds the Keys & Values into a Hash Map
+		 * Builds the Keys and Values into a Hash Map
 		 * @return a HASH_MAP
 		 */
 		public HASH_MAP KEY_VALUE_GENERIC_TYPE map() {
@@ -1457,7 +1457,7 @@ public interface MAP KEY_VALUE_GENERIC_TYPE extends Map<CLASS_TYPE, CLASS_VALUE_
 		}
 		
 		/**
-		 * Builds the Keys & Values into a Linked Hash Map
+		 * Builds the Keys and Values into a Linked Hash Map
 		 * @return a LINKED_HASH_MAP
 		 */
 		public LINKED_HASH_MAP KEY_VALUE_GENERIC_TYPE linkedMap() {
@@ -1465,7 +1465,7 @@ public interface MAP KEY_VALUE_GENERIC_TYPE extends Map<CLASS_TYPE, CLASS_VALUE_
 		}
 		
 		/**
-		 * Builds the Keys & Values into a Immutable Hash Map
+		 * Builds the Keys and Values into a Immutable Hash Map
 		 * @return a IMMUTABLE_HASH_MAP
 		 */
 		public IMMUTABLE_HASH_MAP KEY_VALUE_GENERIC_TYPE immutable() {
@@ -1473,8 +1473,8 @@ public interface MAP KEY_VALUE_GENERIC_TYPE extends Map<CLASS_TYPE, CLASS_VALUE_
 		}
 		
 		/**
-		 * Builds the Keys & Values into a Custom Hash Map
-		 * @param strategy the that controls the keys & values
+		 * Builds the Keys and Values into a Custom Hash Map
+		 * @param strategy the that controls the keys and values
 		 * @return a CUSTOM_HASH_MAP
 		 */
 		public CUSTOM_HASH_MAP KEY_VALUE_GENERIC_TYPE customMap(STRATEGY KEY_GENERIC_TYPE strategy) {
@@ -1482,8 +1482,8 @@ public interface MAP KEY_VALUE_GENERIC_TYPE extends Map<CLASS_TYPE, CLASS_VALUE_
 		}
 		
 		/**
-		 * Builds the Keys & Values into a Linked Custom Hash Map
-		 * @param strategy the that controls the keys & values
+		 * Builds the Keys and Values into a Linked Custom Hash Map
+		 * @param strategy the that controls the keys and values
 		 * @return a LINKED_CUSTOM_HASH_MAP
 		 */
 		public LINKED_CUSTOM_HASH_MAP KEY_VALUE_GENERIC_TYPE customLinkedMap(STRATEGY KEY_GENERIC_TYPE strategy) {
@@ -1491,7 +1491,7 @@ public interface MAP KEY_VALUE_GENERIC_TYPE extends Map<CLASS_TYPE, CLASS_VALUE_
 		}
 		
 		/**
-		 * Builds the Keys & Values into a Array Map
+		 * Builds the Keys and Values into a Array Map
 		 * @return a ARRAY_MAP
 		 */
 		public ARRAY_MAP KEY_VALUE_GENERIC_TYPE arrayMap() {
@@ -1499,7 +1499,7 @@ public interface MAP KEY_VALUE_GENERIC_TYPE extends Map<CLASS_TYPE, CLASS_VALUE_
 		}
 		
 		/**
-		 * Builds the Keys & Values into a RedBlack TreeMap
+		 * Builds the Keys and Values into a RedBlack TreeMap
 		 * @return a RB_TREE_MAP
 		 */
 		public RB_TREE_MAP KEY_VALUE_GENERIC_TYPE rbTreeMap() {
@@ -1507,7 +1507,7 @@ public interface MAP KEY_VALUE_GENERIC_TYPE extends Map<CLASS_TYPE, CLASS_VALUE_
 		}
 		
 		/**
-		 * Builds the Keys & Values into a RedBlack TreeMap
+		 * Builds the Keys and Values into a RedBlack TreeMap
 		 * @param comp the Comparator that sorts the Tree
 		 * @return a RB_TREE_MAP
 		 */
@@ -1516,7 +1516,7 @@ public interface MAP KEY_VALUE_GENERIC_TYPE extends Map<CLASS_TYPE, CLASS_VALUE_
 		}
 		
 		/**
-		 * Builds the Keys & Values into a AVL TreeMap
+		 * Builds the Keys and Values into a AVL TreeMap
 		 * @return a AVL_TREE_MAP
 		 */
 		public AVL_TREE_MAP KEY_VALUE_GENERIC_TYPE avlTreeMap() {
@@ -1524,7 +1524,7 @@ public interface MAP KEY_VALUE_GENERIC_TYPE extends Map<CLASS_TYPE, CLASS_VALUE_
 		}
 		
 		/**
-		 * Builds the Keys & Values into a AVL TreeMap
+		 * Builds the Keys and Values into a AVL TreeMap
 		 * @param comp the Comparator that sorts the Tree
 		 * @return a AVL_TREE_MAP
 		 */
