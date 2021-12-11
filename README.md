@@ -30,7 +30,7 @@ These will be expanded on as time goes on.
 One know aspect of Instability is SubSets and SubMaps. They require full rewrites to be fully stable.     
 So it is not advised to use them until these issues are addressed.     
 PriorityQueues are tested separately and ensure basic functionality though GuavaTests are planned.     
-They just require a custom implementation to run.     
+They just require a custom test implementation.     
 
 As a summary: Stability is good/excellent, unless you need SubSets/SubMaps     
 
