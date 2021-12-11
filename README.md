@@ -22,7 +22,7 @@ But its focus is a different one.
 
 ## Current Level of Stability
 Since this is a relatively new Library, stability was not perfect and some areas are not perfect yet.     
-Thanks to @ben-manes we now have Roughly 16000 test covering Maps/Sets/Lists.     
+Thanks to [ben-manes](https://github.com/ben-manes) we now have Roughly 16000 test covering Maps/Sets/Lists.     
 These tests cover Javas Collection API completely and ensuring a Stable implementation.     
 These freshly added tests allowed me to squash thousands of issues according to Googles Test Library (Guava-Tests).     
 These will be expanded on as time goes on.     
