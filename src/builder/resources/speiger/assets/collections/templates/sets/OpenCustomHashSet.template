@@ -602,6 +602,7 @@ public class CUSTOM_HASH_SET KEY_GENERIC_TYPE extends ABSTRACT_SET KEY_GENERIC_T
 	
 	private class SetIterator implements ITERATOR KEY_GENERIC_TYPE {
 		int pos = nullIndex;
+		int returnedPos = -1;
 		int lastReturned = -1;
 		int nextIndex = Integer.MIN_VALUE;
 		boolean returnNull = containsNull;
@@ -634,6 +635,7 @@ public class CUSTOM_HASH_SET KEY_GENERIC_TYPE extends ABSTRACT_SET KEY_GENERIC_T
 		@Override
 		public KEY_TYPE NEXT() {
 			if(!hasNext()) throw new NoSuchElementException();
+			returnedPos = pos;
 			if(nextIndex < 0){
 				lastReturned = Integer.MAX_VALUE;
 				KEY_TYPE value = wrapped.GET_KEY(nextIndex);
@@ -652,9 +654,10 @@ public class CUSTOM_HASH_SET KEY_GENERIC_TYPE extends ABSTRACT_SET KEY_GENERIC_T
 				containsNull = false;
 				keys[nullIndex] = EMPTY_KEY_VALUE;
 			}
-			else if(pos >= 0) shiftKeys(pos);
+			else if(returnedPos >= 0) shiftKeys(returnedPos);
 			else {
-				CUSTOM_HASH_SET.this.remove(wrapped.GET_KEY(-pos - 1));
+				CUSTOM_HASH_SET.this.remove(wrapped.GET_KEY(-returnedPos - 1));
+				lastReturned = -1;
 				return;
 			}
 			size--;

@@ -1389,6 +1389,7 @@ public class CUSTOM_HASH_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_VAL
 	
 	private class MapIterator {
 		int pos = nullIndex;
+		int returnedPos = -1;
 		int lastReturned = -1;
 		int nextIndex = Integer.MIN_VALUE;
 		boolean returnNull = containsNull;
@@ -1420,6 +1421,7 @@ public class CUSTOM_HASH_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_VAL
 		
 		public int nextEntry() {
 			if(!hasNext()) throw new NoSuchElementException();
+			returnedPos = pos;
 			if(nextIndex < 0){
 				lastReturned = Integer.MAX_VALUE;
 				int value = findIndex(wrapped.GET_KEY(nextIndex));
@@ -1439,9 +1441,10 @@ public class CUSTOM_HASH_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_VAL
 				keys[nullIndex] = EMPTY_KEY_VALUE;
 				values[nullIndex] = EMPTY_VALUE;
 			}
-			else if(lastReturned >= 0) shiftKeys(lastReturned);
+			else if(returnedPos >= 0) shiftKeys(returnedPos);
 			else {
-				CUSTOM_HASH_MAP.this.remove(wrapped.GET_KEY(-lastReturned - 1));
+				CUSTOM_HASH_MAP.this.remove(wrapped.GET_KEY(-returnedPos - 1));
+				lastReturned = -1;
 				return;
 			}
 			size--;

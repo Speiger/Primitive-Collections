@@ -74,8 +74,8 @@ public class ARRAY_SET KEY_GENERIC_TYPE extends ABSTRACT_SET KEY_GENERIC_TYPE im
 	 * @throws NegativeArraySizeException if the length is negative
 	 */
 	public ARRAY_SET(KEY_TYPE[] array, int length) {
-		data = Arrays.copyOf(array, length);
-		size = length;
+		this(length);
+		addAll(array, length);
 	}
 	
 	/**
@@ -548,6 +548,7 @@ public class ARRAY_SET KEY_GENERIC_TYPE extends ABSTRACT_SET KEY_GENERIC_TYPE im
 	public KEY_TYPE[] TO_ARRAY(KEY_TYPE[] a) {
 		if(a == null || a.length < size()) return Arrays.copyOf(data, size());
 		System.arraycopy(data, 0, a, 0, size());
+		if (a.length > size) a[size] = EMPTY_KEY_VALUE;
 		return a;
 	}
 	
@@ -568,6 +569,7 @@ public class ARRAY_SET KEY_GENERIC_TYPE extends ABSTRACT_SET KEY_GENERIC_TYPE im
 		else if(a.length < size()) a = (E[])ObjectArrays.newArray(a.getClass().getComponentType(), size());
 		for(int i = 0;i<size();i++)
 			a[i] = (E)KEY_TO_OBJ(data[i]);
+		if (a.length > size) a[size] = null;
 		return a;
 	}
 	
@@ -841,6 +843,7 @@ public class ARRAY_SET KEY_GENERIC_TYPE extends ABSTRACT_SET KEY_GENERIC_TYPE im
 			
 			@Override
 			public KEY_TYPE NEXT() {
+				if(!hasNext()) throw new NoSuchElementException();
 				lastReturned = index;
 				return data[index++];
 			}
@@ -852,6 +855,7 @@ public class ARRAY_SET KEY_GENERIC_TYPE extends ABSTRACT_SET KEY_GENERIC_TYPE im
 			
 			@Override
 			public KEY_TYPE PREVIOUS() {
+				if(!hasPrevious()) throw new NoSuchElementException();
 				lastReturned = index;
 				return data[index--];
 			}
@@ -924,6 +928,7 @@ public class ARRAY_SET KEY_GENERIC_TYPE extends ABSTRACT_SET KEY_GENERIC_TYPE im
 		
 		@Override
 		public KEY_TYPE NEXT() {
+			if(!hasNext()) throw new NoSuchElementException();
 			lastReturned = index;
 			return data[index++];
 		}
@@ -935,6 +940,7 @@ public class ARRAY_SET KEY_GENERIC_TYPE extends ABSTRACT_SET KEY_GENERIC_TYPE im
 		
 		@Override
 		public KEY_TYPE PREVIOUS() {
+			if(!hasPrevious()) throw new NoSuchElementException();
 			lastReturned = index;
 			return data[index--];
 		}
@@ -951,11 +957,9 @@ public class ARRAY_SET KEY_GENERIC_TYPE extends ABSTRACT_SET KEY_GENERIC_TYPE im
 		
 		@Override
 		public void remove() {
-			if(lastReturned == -1)
-				throw new IllegalStateException();
+			if(lastReturned == -1) throw new IllegalStateException();
 			ARRAY_SET.this.remove(data[lastReturned]);
-			if(lastReturned < index)
-				index--;
+			if(lastReturned < index) index--;
 			lastReturned = -1;
 		}
 		

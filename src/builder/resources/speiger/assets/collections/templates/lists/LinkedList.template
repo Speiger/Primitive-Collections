@@ -9,6 +9,7 @@ import java.nio.JAVA_BUFFER;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.Objects;
+import java.util.NoSuchElementException;
 import java.util.Spliterator;
 #if PRIMITIVES
 import java.util.Spliterator.JAVA_SPLIT_ITERATOR;
@@ -326,9 +327,8 @@ public class LINKED_LIST KEY_GENERIC_TYPE extends ABSTRACT_LIST KEY_GENERIC_TYPE
 	@Override
 	@Primitive
 	public int indexOf(Object o) {
-		if(o == null) return -1;
 		Entry KEY_GENERIC_TYPE entry = first;
-		for(int i = 0;entry != null;entry = entry.next) {
+		for(int i = 0;entry != null;entry = entry.next,i++) {
 			if(Objects.equals(KEY_TO_OBJ(entry.value), o)) return i;
 		}
 		return -1;
@@ -337,9 +337,8 @@ public class LINKED_LIST KEY_GENERIC_TYPE extends ABSTRACT_LIST KEY_GENERIC_TYPE
 	@Override
 	@Primitive
 	public int lastIndexOf(Object o) {
-		if(o == null) return -1;
 		Entry KEY_GENERIC_TYPE entry = last;
-		for(int i = size-1;entry != null;entry = entry.prev) {
+		for(int i = size-1;entry != null;entry = entry.prev,i--) {
 			if(Objects.equals(KEY_TO_OBJ(entry.value), o)) return i;
 		}
 		return -1;
@@ -354,7 +353,7 @@ public class LINKED_LIST KEY_GENERIC_TYPE extends ABSTRACT_LIST KEY_GENERIC_TYPE
 	@Override
 	public int indexOf(KEY_TYPE e) {
 		Entry entry = first;
-		for(int i = 0;entry != null;entry = entry.next) {
+		for(int i = 0;entry != null;entry = entry.next,i++) {
 			if(KEY_EQUALS(entry.value, e)) return i;
 		}
 		return -1;
@@ -363,7 +362,7 @@ public class LINKED_LIST KEY_GENERIC_TYPE extends ABSTRACT_LIST KEY_GENERIC_TYPE
 	@Override
 	public int lastIndexOf(KEY_TYPE e) {
 		Entry entry = last;
-		for(int i = size-1;entry != null;entry = entry.prev) {
+		for(int i = size-1;entry != null;entry = entry.prev,i--) {
 			if(KEY_EQUALS(entry.value, e)) return i;
 		}
 		return -1;
@@ -371,18 +370,9 @@ public class LINKED_LIST KEY_GENERIC_TYPE extends ABSTRACT_LIST KEY_GENERIC_TYPE
 	
 #endif
 	@Override
-	public ITERATOR KEY_GENERIC_TYPE iterator() {
-		return new ListIter(first, 0);
-	}
-	
-	@Override
-	public LIST_ITERATOR KEY_GENERIC_TYPE listIterator() {
-		return new ListIter(first, 0);
-	}
-	
-	@Override
 	public LIST_ITERATOR KEY_GENERIC_TYPE listIterator(int index) {
-		if(index == size-1) return new ListIter(last, index);
+		if(index < 0 || index > size()) throw new IndexOutOfBoundsException();
+		if(index == size) return new ListIter(null, index);
 		if(index == 0) return new ListIter(first, index);
 		return new ListIter(getNode(index), index);
 	}
@@ -564,7 +554,7 @@ public class LINKED_LIST KEY_GENERIC_TYPE extends ABSTRACT_LIST KEY_GENERIC_TYPE
 	@Override
 	public boolean removeFirst(KEY_TYPE e) {
 		if(size == 0) return false;
-		for(Entry KEY_GENERIC_TYPE entry = first;entry.next != null;entry = entry.next) {
+		for(Entry KEY_GENERIC_TYPE entry = first;entry != null;entry = entry.next) {
 			if(KEY_EQUALS(entry.value, e)) {
 				unlink(entry);
 				return true;
@@ -576,7 +566,7 @@ public class LINKED_LIST KEY_GENERIC_TYPE extends ABSTRACT_LIST KEY_GENERIC_TYPE
 	@Override
 	public boolean removeLast(KEY_TYPE e) {
 		if(size == 0) return false;
-		for(Entry KEY_GENERIC_TYPE entry = last;entry.prev != null;entry = entry.prev) {
+		for(Entry KEY_GENERIC_TYPE entry = last;entry != null;entry = entry.prev) {
 			if(KEY_EQUALS(entry.value, e)) {
 				unlink(entry);
 				return true;
@@ -615,7 +605,7 @@ public class LINKED_LIST KEY_GENERIC_TYPE extends ABSTRACT_LIST KEY_GENERIC_TYPE
 	@Override
 	public boolean REMOVE_SWAP(KEY_TYPE e) {
 		if(size == 0) return false;
-		for(Entry KEY_GENERIC_TYPE entry = last;entry.prev != null;entry = entry.prev) {
+		for(Entry KEY_GENERIC_TYPE entry = last;entry != null;entry = entry.prev) {
 			if(KEY_EQUALS(entry.value, e)) {
 				if(entry.next == null) {
 					unlinkLast(entry);
@@ -649,7 +639,7 @@ public class LINKED_LIST KEY_GENERIC_TYPE extends ABSTRACT_LIST KEY_GENERIC_TYPE
 	@Override
 	public boolean remove(Object e) {
 		if(size <= 0) return false;
-		for(Entry KEY_GENERIC_TYPE entry = first;entry.next != null;entry = entry.next) {
+		for(Entry KEY_GENERIC_TYPE entry = first;entry != null;entry = entry.next) {
 			if(KEY_EQUALS(entry.value, e)) {
 				unlink(entry);
 				return true;
@@ -949,6 +939,7 @@ public class LINKED_LIST KEY_GENERIC_TYPE extends ABSTRACT_LIST KEY_GENERIC_TYPE
 		for(Entry KEY_GENERIC_TYPE entry = first;entry != null;entry = entry.next) {
 			a[i++] = (E)KEY_TO_OBJ(entry.value);
 		}
+		if (a.length > size) a[size] = null;
 		return a;
 	}
 	
@@ -958,8 +949,9 @@ public class LINKED_LIST KEY_GENERIC_TYPE extends ABSTRACT_LIST KEY_GENERIC_TYPE
 		if(a.length < size) a = new KEY_TYPE[size];
 		int i = 0;
 		for(Entry KEY_GENERIC_TYPE entry = first;entry != null;entry = entry.next) {
-			a[i++] = KEY_TO_OBJ(entry.value);
+			a[i++] = entry.value;
 		}
+		if (a.length > size) a[size] = EMPTY_KEY_VALUE;
 		return a;
 	}
 	
@@ -1118,23 +1110,23 @@ public class LINKED_LIST KEY_GENERIC_TYPE extends ABSTRACT_LIST KEY_GENERIC_TYPE
 	
 	private class ListIter implements LIST_ITERATOR KEY_GENERIC_TYPE 
 	{
-		Entry KEY_GENERIC_TYPE node;
+		Entry KEY_GENERIC_TYPE next;
 		Entry KEY_GENERIC_TYPE lastReturned;
 		int index;
 		
-		ListIter(Entry KEY_GENERIC_TYPE node, int index) {
-			this.node = node;
+		ListIter(Entry KEY_GENERIC_TYPE next, int index) {
+			this.next = next;
 			this.index = index;
 		}
 		
 		@Override
 		public boolean hasNext() {
-			return node != null;
+			return index < size;
 		}
 		
 		@Override
 		public boolean hasPrevious() {
-			return node != null;
+			return index > 0;
 		}
 		
 		@Override
@@ -1150,23 +1142,26 @@ public class LINKED_LIST KEY_GENERIC_TYPE extends ABSTRACT_LIST KEY_GENERIC_TYPE
 		@Override
 		public void remove() {
 			if(lastReturned == null) throw new IllegalStateException();
-			if(lastReturned.next == node) index--;
+			Entry KEY_GENERIC_TYPE lastNext = lastReturned.next;
 			unlink(lastReturned);
+			if (next == lastReturned) next = lastNext;
+			else index--;
 			lastReturned = null;
 		}
 		
 		@Override
 		public KEY_TYPE PREVIOUS() {
-			lastReturned = node;
-			node = node.prev;
+			if(!hasPrevious()) throw new NoSuchElementException();
+            lastReturned = next = (next == null) ? last : next.prev;
 			index--;
 			return lastReturned.value;
 		}
 		
 		@Override
 		public KEY_TYPE NEXT() {
-			lastReturned = node;
-			node = node.next;
+			if(!hasNext()) throw new NoSuchElementException();
+			lastReturned = next;
+			next = next.next;
 			index++;
 			return lastReturned.value;
 		}
@@ -1179,11 +1174,10 @@ public class LINKED_LIST KEY_GENERIC_TYPE extends ABSTRACT_LIST KEY_GENERIC_TYPE
 		
 		@Override
 		public void add(KEY_TYPE e) {
-			if(lastReturned == null) throw new IllegalStateException();
-			if(node.next == null) linkLast(e);
-			else linkBefore(e, node);
-			lastReturned = null;
-			index++;
+            lastReturned = null;
+            if (next == null) linkLast(e);
+            else linkBefore(e, next);
+            index++;
 		}
 	}
 	

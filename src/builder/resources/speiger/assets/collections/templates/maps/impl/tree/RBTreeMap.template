@@ -234,7 +234,7 @@ public class RB_TREE_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_VALUE_G
 	@Override
 	public VALUE_TYPE put(KEY_TYPE key, VALUE_TYPE value) {
 #if TYPE_OBJECT
-		Objects.requireNonNull(key);
+		validate(key);
 #endif
 		if(tree == null) {
 			tree = first = last = new EntryKV_BRACES(key, value, null);
@@ -271,7 +271,7 @@ public class RB_TREE_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_VALUE_G
 	@Override
 	public VALUE_TYPE putIfAbsent(KEY_TYPE key, VALUE_TYPE value) {
 #if TYPE_OBJECT
-		Objects.requireNonNull(key);
+		validate(key);
 #endif
 
 		if(tree == null) {
@@ -310,7 +310,7 @@ public class RB_TREE_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_VALUE_G
 	@Override
 	public VALUE_TYPE addTo(KEY_TYPE key, VALUE_TYPE value) {
 #if TYPE_OBJECT
-		Objects.requireNonNull(key);
+		validate(key);
 #endif
 		if(tree == null) {
 			tree = first = last = new EntryKV_BRACES(key, value, null);
@@ -521,7 +521,7 @@ public class RB_TREE_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_VALUE_G
 	public VALUE_TYPE COMPUTE(KEY_TYPE key, UNARY_OPERATOR KEY_VALUE_GENERIC_TYPE mappingFunction) {
 		Objects.requireNonNull(mappingFunction);
 #if TYPE_OBJECT
-		Objects.requireNonNull(key);
+		validate(key);
 #endif
 		Entry KEY_VALUE_GENERIC_TYPE entry = findNode(key);
 		if(entry == null) {
@@ -543,7 +543,7 @@ public class RB_TREE_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_VALUE_G
 	public VALUE_TYPE COMPUTE_IF_ABSENT(KEY_TYPE key, FUNCTION KEY_VALUE_GENERIC_TYPE mappingFunction) {
 		Objects.requireNonNull(mappingFunction);
 #if TYPE_OBJECT
-		Objects.requireNonNull(key);
+		validate(key);
 #endif
 		Entry KEY_VALUE_GENERIC_TYPE entry = findNode(key);
 		if(entry == null) {
@@ -564,7 +564,7 @@ public class RB_TREE_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_VALUE_G
 	public VALUE_TYPE SUPPLY_IF_ABSENT(KEY_TYPE key, VALUE_SUPPLIER VALUE_GENERIC_TYPE valueProvider) {
 		Objects.requireNonNull(valueProvider);
 #if TYPE_OBJECT
-		Objects.requireNonNull(key);
+		validate(key);
 #endif
 		Entry KEY_VALUE_GENERIC_TYPE entry = findNode(key);
 		if(entry == null) {
@@ -585,7 +585,7 @@ public class RB_TREE_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_VALUE_G
 	public VALUE_TYPE COMPUTE_IF_PRESENT(KEY_TYPE key, UNARY_OPERATOR KEY_VALUE_GENERIC_TYPE mappingFunction) {
 		Objects.requireNonNull(mappingFunction);
 #if TYPE_OBJECT
-		Objects.requireNonNull(key);
+		validate(key);
 #endif
 		Entry KEY_VALUE_GENERIC_TYPE entry = findNode(key);
 		if(entry == null || VALUE_EQUALS(entry.value, getDefaultReturnValue())) return getDefaultReturnValue();
@@ -602,7 +602,7 @@ public class RB_TREE_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_VALUE_G
 	public VALUE_TYPE MERGE(KEY_TYPE key, VALUE_TYPE value, VALUE_UNARY_OPERATOR VALUE_VALUE_GENERIC_TYPE mappingFunction) {
 		Objects.requireNonNull(mappingFunction);
 #if TYPE_OBJECT
-		Objects.requireNonNull(key);
+		validate(key);
 #endif
 		Entry KEY_VALUE_GENERIC_TYPE entry = findNode(key);
 		VALUE_TYPE newValue = entry == null || VALUE_EQUALS(entry.value, getDefaultReturnValue()) ? value : mappingFunction.APPLY_VALUE(entry.value, value);
@@ -905,6 +905,7 @@ public class RB_TREE_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_VALUE_G
 		}
 	}
 	
+	protected void validate(KEY_TYPE k) { compare(k, k); }
 	protected int compare(KEY_TYPE k, KEY_TYPE v) { return comparator != null ? comparator.compare(k, v) : COMPAREABLE_TO_KEY(k, v);}
 	protected static GENERIC_KEY_VALUE_BRACES boolean isBlack(Entry KEY_VALUE_GENERIC_TYPE p) { return p == null || p.isBlack(); }
 	protected static GENERIC_KEY_VALUE_BRACES Entry KEY_VALUE_GENERIC_TYPE parentOf(Entry KEY_VALUE_GENERIC_TYPE p) { return (p == null ? null : p.parent); }
@@ -1587,13 +1588,13 @@ public class RB_TREE_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_VALUE_G
 				if(o instanceof Map.Entry) {
 					if(o instanceof MAP.Entry) {
 						MAP.Entry KEY_VALUE_GENERIC_TYPE entry = (MAP.Entry KEY_VALUE_GENERIC_TYPE)o;
-						if(entry.getKey() == null) return false;
+						if(entry.getKey() == null && comparator() == null) return false;
 						RB_TREE_MAP.Entry KEY_VALUE_GENERIC_TYPE subEntry = m.findNode(entry.ENTRY_KEY());
 						if(subEntry != null) return VALUE_EQUALS(entry.ENTRY_VALUE(), subEntry.value);
 					}
 					else {
 						Map.Entry<?, ?> entry = (Map.Entry<?, ?>)o;
-						if(entry.getKey() == null) return false;
+						if(entry.getKey() == null && comparator() == null) return false;
 #if !TYPE_OBJECT
 						if(!(entry.getKey() instanceof CLASS_TYPE)) return false;
 #endif
@@ -1993,13 +1994,13 @@ public class RB_TREE_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_VALUE_G
 			if(o instanceof Map.Entry) {
 				if(o instanceof MAP.Entry) {
 					MAP.Entry KEY_VALUE_GENERIC_TYPE entry = (MAP.Entry KEY_VALUE_GENERIC_TYPE)o;
-					if(entry.getKey() == null) return false;
+					if(entry.getKey() == null && comparator() == null) return false;
 					RB_TREE_MAP.Entry KEY_VALUE_GENERIC_TYPE subEntry = RB_TREE_MAP.this.findNode(entry.ENTRY_KEY());
 					if(subEntry != null) return VALUE_EQUALS(entry.ENTRY_VALUE(), subEntry.value);
 				}
 				else {
 					Map.Entry<?, ?> entry = (Map.Entry<?, ?>)o;
-					if(entry.getKey() == null) return false;
+					if(entry.getKey() == null && comparator() == null) return false;
 #if !TYPE_OBJECT
 					if(!(entry.getKey() instanceof CLASS_TYPE)) return false;
 #endif

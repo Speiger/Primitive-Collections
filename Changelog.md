@@ -28,6 +28,9 @@
 - Fixed: CustomOpenHashMap.keySet.forEach was basically putting out keys even if they were present
 - Fixed: ImmutableMaps issues thanks to the tests. Roughly the same as the rest of the maps
 - Fixed: RB/AVLTreeMaps issues. Roughly the same as the rest of the maps
+- Fixed: SubLists are now properly implemented.
+- Fixed: HashSet Iterator bugs now fixed... That was Painful.
+- Added: Tests for Lists and Sets
 
 ### Version 0.4.5
 - Added: removeAll/retainAll(Collection c, Consumer r) which receives all the elements that got deleted from the collection

@@ -1029,6 +1029,7 @@ public class ARRAY_LIST KEY_GENERIC_TYPE extends ABSTRACT_LIST KEY_GENERIC_TYPE 
 		for(int i = 0;i<size;i++)
 			a[i] = (E)KEY_TO_OBJ(data[i]);
 #endif
+		if (a.length > size) a[size] = null;
 		return a;
 	}
 	
@@ -1037,6 +1038,7 @@ public class ARRAY_LIST KEY_GENERIC_TYPE extends ABSTRACT_LIST KEY_GENERIC_TYPE 
 	public KEY_TYPE[] TO_ARRAY(KEY_TYPE[] a) {
 		if(a.length < size) a = new KEY_TYPE[size];
 		System.arraycopy(data, 0, a, 0, size);
+		if (a.length > size) a[size] = EMPTY_KEY_VALUE;
 		return a;
 	}
 	
@@ -1137,6 +1139,7 @@ public class ARRAY_LIST KEY_GENERIC_TYPE extends ABSTRACT_LIST KEY_GENERIC_TYPE 
 		if (index < 0 || index > size)
 			throw new IndexOutOfBoundsException("Index: " + index + ", Size: " + size);
 	}
+	
 	
 #if PRIMITIVES
 	/**

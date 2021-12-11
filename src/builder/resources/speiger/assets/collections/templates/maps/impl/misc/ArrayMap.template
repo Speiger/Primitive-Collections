@@ -202,8 +202,11 @@ public class ARRAY_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_VALUE_GEN
 	@Override
 	public VALUE_TYPE putIfAbsent(KEY_TYPE key, VALUE_TYPE value) {
 		int index = findIndex(key);
-		if(index >= 0) insertIndex(size++, key, value);
-		return getDefaultReturnValue();
+		if(index < 0) {
+			insertIndex(size++, key, value);
+			return getDefaultReturnValue();
+		}
+		return values[index];
 	}
 	
 #if VALUE_PRIMITIVES
@@ -463,6 +466,7 @@ public class ARRAY_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_VALUE_GEN
 	
 	@Override
 	public VALUE_TYPE COMPUTE(KEY_TYPE key, UNARY_OPERATOR KEY_VALUE_GENERIC_TYPE mappingFunction) {
+		Objects.requireNonNull(mappingFunction);
 		int index = findIndex(key);
 		if(index == -1) {
 			VALUE_TYPE newValue = mappingFunction.APPLY_VALUE(key, getDefaultReturnValue());
@@ -481,6 +485,7 @@ public class ARRAY_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_VALUE_GEN
 	
 	@Override
 	public VALUE_TYPE COMPUTE_IF_ABSENT(KEY_TYPE key, FUNCTION KEY_VALUE_GENERIC_TYPE mappingFunction) {
+		Objects.requireNonNull(mappingFunction);
 		int index = findIndex(key);
 		if(index == -1) {
 			VALUE_TYPE newValue = mappingFunction.GET_VALUE(key);
@@ -488,11 +493,18 @@ public class ARRAY_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_VALUE_GEN
 			insertIndex(size++, key, newValue);
 			return newValue;
 		}
-		return values[index];
+		VALUE_TYPE newValue = values[index];
+		if(VALUE_EQUALS(newValue, getDefaultReturnValue())) {
+			newValue = mappingFunction.GET_VALUE(key);
+			if(VALUE_EQUALS(newValue, getDefaultReturnValue())) return newValue;
+			values[index] = newValue;
+		}
+		return newValue;
 	}
 	
 	@Override
 	public VALUE_TYPE SUPPLY_IF_ABSENT(KEY_TYPE key, VALUE_SUPPLIER VALUE_GENERIC_TYPE valueProvider) {
+		Objects.requireNonNull(valueProvider);
 		int index = findIndex(key);
 		if(index == -1) {
 			VALUE_TYPE newValue = valueProvider.VALUE_GET_KEY();
@@ -500,13 +512,20 @@ public class ARRAY_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_VALUE_GEN
 			insertIndex(size++, key, newValue);
 			return newValue;
 		}
-		return values[index];
+		VALUE_TYPE newValue = values[index];
+		if(VALUE_EQUALS(newValue, getDefaultReturnValue())) {
+			newValue = valueProvider.VALUE_GET_KEY();
+			if(VALUE_EQUALS(newValue, getDefaultReturnValue())) return newValue;
+			values[index] = newValue;
+		}
+		return newValue;
 	}
 	
 	@Override
 	public VALUE_TYPE COMPUTE_IF_PRESENT(KEY_TYPE key, UNARY_OPERATOR KEY_VALUE_GENERIC_TYPE mappingFunction) {
+		Objects.requireNonNull(mappingFunction);
 		int index = findIndex(key);
-		if(index == -1) return getDefaultReturnValue();
+		if(index == -1 || VALUE_EQUALS(values[index], getDefaultReturnValue())) return getDefaultReturnValue();
 		VALUE_TYPE newValue = mappingFunction.APPLY_VALUE(key, values[index]);
 		if(VALUE_EQUALS(newValue, getDefaultReturnValue())) {
 			removeIndex(index);
@@ -518,8 +537,12 @@ public class ARRAY_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_VALUE_GEN
 	
 	@Override
 	public VALUE_TYPE MERGE(KEY_TYPE key, VALUE_TYPE value, VALUE_UNARY_OPERATOR VALUE_VALUE_GENERIC_TYPE mappingFunction) {
+		Objects.requireNonNull(mappingFunction);
+#if VALUE_OBJECT
+		Objects.requireNonNull(value);
+#endif
 		int index = findIndex(key);
-		VALUE_TYPE newValue = index == -1 ? value : mappingFunction.APPLY_VALUE(values[index], value);
+		VALUE_TYPE newValue = index == -1 || VALUE_EQUALS(values[index], getDefaultReturnValue()) ? value : mappingFunction.APPLY_VALUE(values[index], value);
 		if(VALUE_EQUALS(newValue, getDefaultReturnValue())) {
 			if(index >= 0)
 				removeIndex(index);
@@ -535,7 +558,7 @@ public class ARRAY_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_VALUE_GEN
 		for(MAP.Entry KEY_VALUE_GENERIC_TYPE entry : MAPS.fastIterable(m)) {
 			KEY_TYPE key = entry.ENTRY_KEY();
 			int index = findIndex(key);
-			VALUE_TYPE newValue = index == -1 ? entry.ENTRY_VALUE() : mappingFunction.APPLY_VALUE(values[index], entry.ENTRY_VALUE());
+			VALUE_TYPE newValue = index == -1 || VALUE_EQUALS(values[index], getDefaultReturnValue()) ? entry.ENTRY_VALUE() : mappingFunction.APPLY_VALUE(values[index], entry.ENTRY_VALUE());
 			if(VALUE_EQUALS(newValue, getDefaultReturnValue())) {
 				if(index >= 0)
 					removeIndex(index);
@@ -683,21 +706,18 @@ public class ARRAY_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_VALUE_GEN
 	
 #endif
 	protected int findIndex(Object key, Object value) {
-		if(key == null || value == null) return -1;
 		for(int i = size-1;i>=0;i--)
 			if(EQUALS_KEY_TYPE(keys[i], key) && EQUALS_VALUE_TYPE(values[i], value)) return i;
 		return -1;		
 	}
 	
 	protected int findIndex(Object key) {
-		if(key == null) return -1;
 		for(int i = size-1;i>=0;i--)
 			if(EQUALS_KEY_TYPE(keys[i], key)) return i;
 		return -1;
 	}
 	
 	protected int findValue(Object value) {
-		if(value == null) return -1;
 		for(int i = size-1;i>=0;i--)
 			if(EQUALS_VALUE_TYPE(values[i], value)) return i;
 		return -1;
@@ -1069,21 +1089,18 @@ public class ARRAY_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_VALUE_GEN
 		
 #endif
 		protected int findIndex(Object key, Object value) {
-			if(key == null || value == null) return -1;
 			for(int i = length-1;i>=0;i--)
 				if(EQUALS_KEY_TYPE(keys[offset+i], key) && EQUALS_VALUE_TYPE(values[offset+i], value)) return i+offset;
 			return -1;		
 		}
 		
 		protected int findIndex(Object key) {
-			if(key == null) return -1;
 			for(int i = length-1;i>=0;i--)
 				if(EQUALS_KEY_TYPE(keys[offset+i], key)) return i+offset;
 			return -1;
 		}
 		
 		protected int findValue(Object value) {
-			if(value == null) return -1;
 			for(int i = length-1;i>=0;i--)
 				if(EQUALS_VALUE_TYPE(values[offset+i], value)) return i+offset;
 			return -1;
@@ -1268,8 +1285,14 @@ public class ARRAY_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_VALUE_GEN
 			@Deprecated
 			public boolean contains(Object o) {
 				if(o instanceof Map.Entry) {
-					if(o instanceof MAP.Entry) return SubMap.this.containsKey(((MAP.Entry KEY_VALUE_GENERIC_TYPE)o).ENTRY_KEY());
-					return SubMap.this.containsKey(((Map.Entry<?, ?>)o).getKey());
+					if(o instanceof MAP.Entry) {
+						MAP.Entry KEY_VALUE_GENERIC_TYPE entry = (MAP.Entry KEY_VALUE_GENERIC_TYPE)o;
+						return SubMap.this.findIndex(entry.ENTRY_KEY(), entry.ENTRY_VALUE()) >= 0;
+					}
+					else {
+						Map.Entry<?, ?> entry = (Map.Entry<?, ?>)o;
+						return ARRAY_MAP.this.findIndex(entry.getKey(), entry.getValue()) >= 0;
+					}
 				}
 				return false;
 			}
@@ -1318,7 +1341,7 @@ public class ARRAY_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_VALUE_GEN
 			@Override
 			public boolean remove(Object o) {
 				int oldSize = length;
-				remove(o);
+				SubMap.this.remove(o);
 				return length != oldSize;
 			}
 			
@@ -1329,7 +1352,7 @@ public class ARRAY_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_VALUE_GEN
 			@Override
 			public boolean remove(KEY_TYPE o) {
 				int oldSize = length;
-				remove(o);
+				SubMap.this.remove(o);
 				return length != oldSize;
 			}
 			
@@ -1737,12 +1760,14 @@ public class ARRAY_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_VALUE_GEN
 			}
 			
 			public int previousEntry() {
+				if(!hasPrevious()) throw new NoSuchElementException();
 				int returnIndex = offset+index;
 				lastReturned = index--;
 				return returnIndex;
 			}
 			
 			public int nextEntry() {
+				if(!hasNext()) throw new NoSuchElementException();
 				int returnIndex = offset+index;
 				lastReturned = index++;
 				return returnIndex;
@@ -1944,8 +1969,16 @@ public class ARRAY_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_VALUE_GEN
 		@Deprecated
 		public boolean contains(Object o) {
 			if(o instanceof Map.Entry) {
-				if(o instanceof MAP.Entry) return ARRAY_MAP.this.containsKey(((MAP.Entry KEY_VALUE_GENERIC_TYPE)o).ENTRY_KEY());
-				return ARRAY_MAP.this.containsKey(((Map.Entry<?, ?>)o).getKey());
+				if(o instanceof MAP.Entry) {
+					MAP.Entry KEY_VALUE_GENERIC_TYPE entry = (MAP.Entry KEY_VALUE_GENERIC_TYPE)o;
+					int index = ARRAY_MAP.this.findIndex(entry.ENTRY_KEY());
+					if(index >= 0) return VALUE_EQUALS(entry.ENTRY_VALUE(), ARRAY_MAP.this.values[index]);
+				}
+				else {
+					Map.Entry<?, ?> entry = (Map.Entry<?, ?>)o;
+					int index = ARRAY_MAP.this.findIndex(entry.getKey());
+					if(index >= 0) return Objects.equals(entry.getValue(), VALUE_TO_OBJ(ARRAY_MAP.this.values[index]));
+				}
 			}
 			return false;
 		}
@@ -1994,7 +2027,7 @@ public class ARRAY_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_VALUE_GEN
 		@Override
 		public boolean remove(Object o) {
 			int oldSize = size;
-			remove(o);
+			ARRAY_MAP.this.remove(o);
 			return size != oldSize;
 		}
 		
@@ -2005,7 +2038,7 @@ public class ARRAY_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_VALUE_GEN
 		@Override
 		public boolean remove(KEY_TYPE o) {
 			int oldSize = size;
-			remove(o);
+			ARRAY_MAP.this.remove(o);
 			return size != oldSize;
 		}
 		
@@ -2401,11 +2434,13 @@ public class ARRAY_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_VALUE_GEN
 		}
 		
 		public int previousEntry() {
+			if(!hasPrevious()) throw new NoSuchElementException();
 			lastReturned = index;
 			return index--;
 		}
 		
 		public int nextEntry() {
+			if(!hasNext()) throw new NoSuchElementException();
 			lastReturned = index;
 			return index++;
 		}
@@ -2480,7 +2515,7 @@ public class ARRAY_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_VALUE_GEN
 		
 		@Override
 		public String toString() {
-			return KEY_TO_STRING(keys[index]) + "->" + VALUE_TO_STRING(values[index]);
+			return KEY_TO_STRING(keys[index]) + "=" + VALUE_TO_STRING(values[index]);
 		}
 	}
 }

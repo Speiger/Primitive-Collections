@@ -3,11 +3,15 @@ package speiger.src.collections.PACKAGE.lists;
 import java.util.Collection;
 import java.util.List;
 import java.util.ListIterator;
+import java.util.NoSuchElementException;
 import java.util.Objects;
 
 import speiger.src.collections.PACKAGE.collections.ABSTRACT_COLLECTION;
 import speiger.src.collections.PACKAGE.collections.COLLECTION;
 import speiger.src.collections.PACKAGE.collections.ITERATOR;
+import speiger.src.collections.PACKAGE.collections.SPLIT_ITERATOR;
+import speiger.src.collections.PACKAGE.utils.SPLIT_ITERATORS;
+import speiger.src.collections.utils.SanityChecks;
 
 /**
  * Abstract implementation of the {@link LIST} interface.
@@ -15,9 +19,8 @@ import speiger.src.collections.PACKAGE.collections.ITERATOR;
  */
 public abstract class ABSTRACT_LIST KEY_GENERIC_TYPE extends ABSTRACT_COLLECTION KEY_GENERIC_TYPE implements LIST KEY_GENERIC_TYPE 
 {
-#if !TYPE_OBJECT
 	/**
-	 * A Type-Specific implementation of add function that delegates to {@link #add(int, KEY_TYPE)}
+	 * A Type-Specific implementation of add function that delegates to {@link List#add(int, Object)}
 	 */
 	@Override
 	public boolean add(KEY_TYPE e) {
@@ -25,6 +28,7 @@ public abstract class ABSTRACT_LIST KEY_GENERIC_TYPE extends ABSTRACT_COLLECTION
 		return true;
 	}
 	
+#if !TYPE_OBJECT
 	/** {@inheritDoc}
 	 * <p>This default implementation delegates to the corresponding type-specific function.
 	 * @deprecated Please use the corresponding type-specific function instead. 
@@ -213,7 +217,8 @@ public abstract class ABSTRACT_LIST KEY_GENERIC_TYPE extends ABSTRACT_COLLECTION
 	
 	@Override
 	public LIST KEY_GENERIC_TYPE subList(int fromIndex, int toIndex) {
-		return new SUB_LIST(this, fromIndex, toIndex);
+		SanityChecks.checkArrayCapacity(size(), fromIndex, toIndex-fromIndex);
+		return new SubList(this, 0, fromIndex, toIndex);
 	}
 	
 	@Override
@@ -228,6 +233,7 @@ public abstract class ABSTRACT_LIST KEY_GENERIC_TYPE extends ABSTRACT_COLLECTION
 
 	@Override
 	public LIST_ITERATOR KEY_GENERIC_TYPE listIterator(int index) {
+		if(index < 0 || index > size()) throw new IndexOutOfBoundsException();
 		return new LIST_ITER(index);
 	}
 	
@@ -239,134 +245,128 @@ public abstract class ABSTRACT_LIST KEY_GENERIC_TYPE extends ABSTRACT_COLLECTION
 	
 	public ABSTRACT_LIST KEY_GENERIC_TYPE copy() { throw new UnsupportedOperationException(); }
 	
-	private class SUB_LIST extends ABSTRACT_LIST KEY_GENERIC_TYPE {
-		ABSTRACT_LIST KEY_GENERIC_TYPE l;
-		int offset;
+	private class SubList extends ABSTRACT_LIST KEY_GENERIC_TYPE
+	{
+		final ABSTRACT_LIST KEY_GENERIC_TYPE list;
+		final int parentOffset;
+		final int offset;
 		int size;
 		
-		SUB_LIST(ABSTRACT_LIST KEY_GENERIC_TYPE l, int from, int to) {
-			if (from < 0) throw new IndexOutOfBoundsException("fromIndex = " + from);
-			else if (to > l.size()) throw new IndexOutOfBoundsException("toIndex = " + to);
-			else if (from > to)	throw new IllegalArgumentException("fromIndex(" + from + ") > toIndex(" + to + ")");
-			this.l = l;
-			offset = from;
-			size = to - from;
+		public SubList(ABSTRACT_LIST KEY_GENERIC_TYPE list, int offset, int from, int to) {
+			this.list = list;
+			this.parentOffset = from;
+			this.offset = offset + from;
+			this.size = to - from;
 		}
 		
 		@Override
-		public void add(int index, KEY_TYPE e) {
-			checkAddRange(index);
-			l.add(index+offset, e);
+		public void add(int index, KEY_TYPE element) {
+			checkAddSubRange(index);
+			list.add(parentOffset+index, element);
 			size++;
 		}
 		
 		@Override
 		public boolean addAll(int index, Collection<? extends CLASS_TYPE> c) {
-			checkAddRange(index);
-			int size = c.size();
-			if(size == 0) return false;
-			l.addAll(index + offset, l);
-			offset += size;
+			checkAddSubRange(index);
+			int add = c.size();
+			if(add <= 0) return false;
+			list.addAll(parentOffset+index, c);
+			this.size += add;
 			return true;
 		}
 		
 		@Override
 		public boolean addAll(int index, COLLECTION KEY_GENERIC_TYPE c) {
-			checkAddRange(index);
-			int size = c.size();
-			if(size == 0) return false;
-			l.addAll(index + offset, l);
-			offset += size;
+			checkAddSubRange(index);
+			int add = c.size();
+			if(add <= 0) return false;
+			list.addAll(parentOffset+index, c);
+			this.size += add;
 			return true;
 		}
-		
+
 		@Override
 		public boolean addAll(int index, LIST KEY_GENERIC_TYPE c) {
-			checkAddRange(index);
-			int size = c.size();
-			if(size == 0) return false;
-			l.addAll(index + offset, l);
-			offset += size;
-			return true;
-		}
-		
-		@Override
-		public boolean addAll(KEY_TYPE[] e, int offset, int length) {
-			if(length <= 0) return false;
-			l.addElements(this.offset, e, offset, length);
-			offset += length;
+			checkAddSubRange(index);
+			int add = c.size();
+			if(add <= 0) return false;
+			list.addAll(parentOffset+index, c);
+			this.size += add;
 			return true;
 		}
 		
 		@Override
 		public void addElements(int from, KEY_TYPE[] a, int offset, int length) {
-			checkRange(from);
-			l.addElements(from + this.offset, a, offset, length);
-			size += length;
+			checkAddSubRange(from);
+			if(length <= 0) return;
+			list.addElements(parentOffset+from, a, offset, length);
+			this.size += length;
 		}
 		
 		@Override
 		public KEY_TYPE[] getElements(int from, KEY_TYPE[] a, int offset, int length) {
-			checkRange(from);
-			return l.getElements(from + this.offset, a, offset, length);
+			SanityChecks.checkArrayCapacity(size, from, length);
+			SanityChecks.checkArrayCapacity(a.length, offset, length);
+			return list.getElements(from+this.offset, a, offset, length);
 		}
 		
 		@Override
 		public void removeElements(int from, int to) {
-			checkRange(from);
-			checkRange(to);
-			l.removeElements(from + offset, to + offset);
+			if(to-from <= 0) return;
+			checkSubRange(from);
+			checkSubRange(to);
+			list.removeElements(from+parentOffset, to+parentOffset);
 			size -= to - from;
 		}
 		
 #if TYPE_OBJECT
 		@Override
-		public <K> K[] extractElements(int from, int to, Class<K> clz) {
-			checkRange(from);
-			checkRange(to);
-			K[] a = l.extractElements(from + offset, to + offset, clz);
+		public <K> K[] extractElements(int from, int to, Class<K> type) {
+			checkSubRange(from);
+			checkSubRange(to);
+			K[] result = list.extractElements(from+parentOffset, to+parentOffset, type);
 			size -= to - from;
-			return a;
+			return result;
 		}
-		
+
 #else
 		@Override
 		public KEY_TYPE[] extractElements(int from, int to) {
-			checkRange(from);
-			checkRange(to);
-			KEY_TYPE[] a = l.extractElements(from + offset, to + offset);
+			checkSubRange(from);
+			checkSubRange(to);
+			KEY_TYPE[] result = list.extractElements(from+parentOffset, to+parentOffset);
 			size -= to - from;
-			return a;
+			return result;
 		}
 		
 #endif
 		@Override
 		public KEY_TYPE GET_KEY(int index) {
-			checkRange(index);
-			return l.GET_KEY(index + offset);
+			checkSubRange(index);
+			return list.GET_KEY(offset+index);
+		}
+
+		@Override
+		public KEY_TYPE set(int index, KEY_TYPE element) {
+			checkSubRange(index);
+			return list.set(offset+index, element);
 		}
 		
 		@Override
-		public KEY_TYPE set(int index, KEY_TYPE e) {
-			checkRange(index);
-			return l.set(index + offset, e);
+		public KEY_TYPE swapRemove(int index) {
+			checkSubRange(index);
+			KEY_TYPE result = list.swapRemove(index+parentOffset);
+			size--;
+			return result;
 		}
 		
 		@Override
 		public KEY_TYPE REMOVE(int index) {
-			checkRange(index);
-			int temp = l.size();
-			KEY_TYPE type = l.REMOVE(index + offset);
-			if(l.size() != temp) size--;
-			return type;
-		}
-		
-		public KEY_TYPE swapRemove(int index) {
-			checkRange(index);
-			int temp = l.size();
-			KEY_TYPE type = l.swapRemove(index + offset);
-			if(l.size() != temp) size--;
-			return type;
+			checkSubRange(index);
+			KEY_TYPE result = list.REMOVE(index+parentOffset);
+			size--;
+			return result;
 		}
 		
 		@Override
@@ -374,17 +374,114 @@ public abstract class ABSTRACT_LIST KEY_GENERIC_TYPE extends ABSTRACT_COLLECTION
 			return size;
 		}
 		
-		private void checkRange(int index) {
+		@Override
+		public SPLIT_ITERATOR KEY_GENERIC_TYPE spliterator() { return SPLIT_ITERATORS.createSplititerator(this, 16464); }
+		
+		@Override
+		public LIST_ITERATOR KEY_GENERIC_TYPE listIterator(int index) {
+			if(index < 0 || index > size()) throw new IndexOutOfBoundsException();
+			return new SubListIterator(this, index);
+		}
+		
+		@Override
+		public LIST KEY_GENERIC_TYPE subList(int fromIndex, int toIndex) {
+			SanityChecks.checkArrayCapacity(size, fromIndex, toIndex-fromIndex);
+			return new SubList(list, offset, fromIndex, toIndex);
+		}
+		
+		protected void checkSubRange(int index) {
 			if (index < 0 || index >= size)
 				throw new IndexOutOfBoundsException("Index: " + index + ", Size: " + size);
 		}
 		
-		private void checkAddRange(int index) {
+		protected void checkAddSubRange(int index) {
 			if (index < 0 || index > size)
 				throw new IndexOutOfBoundsException("Index: " + index + ", Size: " + size);
 		}
+		
+		private class SubListIterator implements LIST_ITERATOR KEY_GENERIC_TYPE
+		{
+			ABSTRACT_LIST KEY_GENERIC_TYPE list;
+			int index;
+			int lastReturned = -1;
+			
+			SubListIterator(ABSTRACT_LIST KEY_GENERIC_TYPE list, int index) {
+				this.list = list;
+				this.index = index;
+			}
+			
+			@Override
+			public boolean hasNext() {
+				return index < list.size();
+			}
+			
+			@Override
+			public KEY_TYPE NEXT() {
+				if(!hasNext()) throw new NoSuchElementException();
+				int i = index++;
+				return list.GET_KEY((lastReturned = i));
+			}
+			
+			@Override
+			public boolean hasPrevious() {
+				return index > 0;
+			}
+			
+			@Override
+			public KEY_TYPE PREVIOUS() {
+				if(!hasPrevious()) throw new NoSuchElementException();
+				index--;
+				return list.GET_KEY((lastReturned = index));
+			}
+			
+			@Override
+			public int nextIndex() {
+				return index;
+			}
+			
+			@Override
+			public int previousIndex() {
+				return index-1;
+			}
+			
+			@Override
+			public void remove() {
+				if(lastReturned == -1) throw new IllegalStateException();
+				list.REMOVE(lastReturned);
+				index = lastReturned;
+				lastReturned = -1;
+			}
+			
+			@Override
+			public void set(KEY_TYPE e) {
+				if(lastReturned == -1) throw new IllegalStateException();
+				list.set(lastReturned, e);
+			}
+			
+			@Override
+			public void add(KEY_TYPE e) {
+				list.add(index++, e);
+				lastReturned = -1;
+			}
+			
+			@Override
+			public int skip(int amount) {
+				if(amount < 0) throw new IllegalStateException("Negative Numbers are not allowed");
+				int steps = Math.min(amount, (list.size() - 1) - index);
+				index += steps;
+				return steps;
+			}
+			
+			@Override
+			public int back(int amount) {
+				if(amount < 0) throw new IllegalStateException("Negative Numbers are not allowed");
+				int steps = Math.min(amount, index);
+				index -= steps;
+				return steps;
+			}
+		}
 	}
-	
+		
 	private class LIST_ITER implements LIST_ITERATOR KEY_GENERIC_TYPE {
 		int index;
 		int lastReturned = -1;
@@ -400,8 +497,9 @@ public abstract class ABSTRACT_LIST KEY_GENERIC_TYPE extends ABSTRACT_COLLECTION
 		
 		@Override
 		public KEY_TYPE NEXT() {
-			lastReturned = index;
-			return GET_KEY(index++);
+			if(!hasNext()) throw new NoSuchElementException();
+			int i = index++;
+			return GET_KEY((lastReturned = i));
 		}
 		
 		@Override
@@ -411,8 +509,9 @@ public abstract class ABSTRACT_LIST KEY_GENERIC_TYPE extends ABSTRACT_COLLECTION
 		
 		@Override
 		public KEY_TYPE PREVIOUS() {
-			lastReturned = index;
-			return GET_KEY(index--);
+			if(!hasPrevious()) throw new NoSuchElementException();
+			index--;
+			return GET_KEY((lastReturned = index));
 		}
 		
 		@Override
@@ -427,25 +526,20 @@ public abstract class ABSTRACT_LIST KEY_GENERIC_TYPE extends ABSTRACT_COLLECTION
 		
 		@Override
 		public void remove() {
-			if(lastReturned == -1)
-				throw new IllegalStateException();
+			if(lastReturned == -1) throw new IllegalStateException();
 			ABSTRACT_LIST.this.REMOVE(lastReturned);
-			if(lastReturned < index)
-				index--;
+			index = lastReturned;
 			lastReturned = -1;
 		}
 		
 		@Override
 		public void set(KEY_TYPE e) {
-			if(lastReturned == -1)
-				throw new IllegalStateException();
+			if(lastReturned == -1) throw new IllegalStateException();
 			ABSTRACT_LIST.this.set(lastReturned, e);
 		}
 		
 		@Override
 		public void add(KEY_TYPE e) {
-			if(lastReturned == -1)
-				throw new IllegalStateException();
 			ABSTRACT_LIST.this.add(index++, e);
 			lastReturned = -1;
 		}

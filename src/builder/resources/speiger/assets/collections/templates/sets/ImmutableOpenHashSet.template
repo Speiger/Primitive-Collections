@@ -190,7 +190,18 @@ public class IMMUTABLE_HASH_SET KEY_GENERIC_TYPE extends ABSTRACT_SET KEY_GENERI
 		{
 			KEY_TYPE o = a[i];
 			if(KEY_EQUALS_NULL(o)) {
-				if(!containsNull) size++;
+				if(!containsNull) {
+					size++;
+					if(prev != -1) {
+						newLinks[prev] ^= ((newLinks[prev] ^ (newSize & 0xFFFFFFFFL)) & 0xFFFFFFFFL);
+						newLinks[newSize] ^= ((newLinks[newSize] ^ ((prev & 0xFFFFFFFFL) << 32)) & 0xFFFFFFFF00000000L);
+						prev = newSize;
+					}
+					else {
+						prev = firstIndex = newSize;
+						newLinks[newSize] = -1L;
+					}
+				}
 				containsNull = true;
 				continue;
 			}
@@ -199,7 +210,7 @@ public class IMMUTABLE_HASH_SET KEY_GENERIC_TYPE extends ABSTRACT_SET KEY_GENERI
 			KEY_TYPE current = newKeys[pos];
 			if(KEY_EQUALS_NOT_NULL(current)) {
 				if(KEY_EQUALS(current, o)) continue;
-				while(KEY_EQUALS_NOT_NULL((current = newKeys[pos = (++pos & mask)]))) {
+				while(KEY_EQUALS_NOT_NULL((current = newKeys[pos = (++pos & newMask)]))) {
 					if(KEY_EQUALS(current, o)) {
 						found = false;
 						break;
@@ -220,7 +231,7 @@ public class IMMUTABLE_HASH_SET KEY_GENERIC_TYPE extends ABSTRACT_SET KEY_GENERI
 				}
 			}
 		}
-		nullIndex = size;
+		nullIndex = newSize;
 		mask = newMask;
 		keys = newKeys;
 		links = newLinks;

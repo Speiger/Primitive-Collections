@@ -19,6 +19,21 @@ But its focus is a different one.
 - Suppliers
 - Bi/Consumers
 
+
+## Current Level of Stability
+Since this is a relatively new Library, stability was not perfect and some areas are not perfect yet.
+Thanks to @ben-manes we now have Roughly 16000 test covering Maps/Sets/Lists.
+These tests cover Javas Collection API completely and ensuring a Stable implementation.
+These freshly added tests allowed me to squash thousands of issues according to Googles Test Library (Guava-Tests).
+These will be expanded on as time goes on.
+
+One know aspect of Instability is SubSets and SubMaps. They require full rewrites to be fully stable.
+So it is not advised to use them until these issues are addressed.
+PriorityQueues are tested separately and ensure basic functionality though GuavaTests are planned.
+They just require a custom implementation to run.
+
+As a summary: Stability is good/excellent, unless you need SubSets/SubMaps
+
 ## Specialized Functions
 New Specialized functions that were added to increase performance or reduce allocations or Quality Of life.
 To highlight things that may be wanted.
@@ -121,5 +136,5 @@ to build the jar:
 do not combine the commands because they can not be executed at the same time.      
 
 ## Current Down Sides (Random order)
-- Testing for Sub Maps/Sets/Lists are only in a very basic way tested
+- SubMaps/Set implementation isn't perfect right now. This will be addressed slowly due to rewrites required.
 - Documentation is only present at the lowest level for most cases and needs a typo fixing.

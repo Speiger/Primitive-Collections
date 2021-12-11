@@ -183,6 +183,7 @@ public class ENUM_MAP KEY_ENUM_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_VALUE
 #endif
 	@Override
 	public boolean containsKey(Object key) {
+		if(!keyType.isInstance(key)) return false;
 		return isSet(((T)key).ordinal());
 	}
 	
@@ -190,7 +191,7 @@ public class ENUM_MAP KEY_ENUM_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_VALUE
 	@Override
 	public boolean containsValue(Object value) {
 		for(int i = 0;i<values.length;i++)
-			if(VALUE_EQUALS(value, values[i])) return true;
+			if(isSet(i) && VALUE_EQUALS(value, values[i])) return true;
 		return false;
 	}
 	
@@ -198,13 +199,25 @@ public class ENUM_MAP KEY_ENUM_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_VALUE
 	@Override
 	public boolean containsValue(VALUE_TYPE value) {
 		for(int i = 0;i<values.length;i++)
-			if(VALUE_EQUALS(value, values[i])) return true;
+			if(isSet(i) && VALUE_EQUALS(value, values[i])) return true;
 		return false;
 	}
 	
 #endif
 	@Override
+	public CLASS_VALUE_TYPE remove(Object key) {
+		if(!keyType.isInstance(key)) return getDefaultReturnValue();
+		int index = ((T)key).ordinal();
+		if(!isSet(index)) return getDefaultReturnValue();
+		clear(index);
+		VALUE_TYPE result = values[index];
+		values[index] = EMPTY_VALUE;
+		return result;
+	}
+	
+	@Override
 	public VALUE_TYPE rem(T key) {
+		if(!keyType.isInstance(key)) return getDefaultReturnValue();
 		int index = key.ordinal();
 		if(!isSet(index)) return getDefaultReturnValue();
 		clear(index);
@@ -246,6 +259,7 @@ public class ENUM_MAP KEY_ENUM_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_VALUE
 #endif
 	@Override
 	public VALUE_TYPE GET_VALUE(T key) {
+		if(!keyType.isInstance(key)) return getDefaultReturnValue();
 		int index = key.ordinal();
 		return isSet(index) ? values[index] : getDefaultReturnValue();
 	}
@@ -253,6 +267,7 @@ public class ENUM_MAP KEY_ENUM_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_VALUE
 #if VALUE_OBJECT
 	@Override
 	public VALUE_TYPE getOrDefault(Object key, VALUE_TYPE defaultValue) {
+		if(!keyType.isInstance(key)) return defaultValue;
 		int index = ((T)key).ordinal();
 		return isSet(index) ? values[index] : defaultValue;
 	}
@@ -260,6 +275,7 @@ public class ENUM_MAP KEY_ENUM_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_VALUE
 #else
 	@Override
 	public VALUE_TYPE getOrDefault(T key, VALUE_TYPE defaultValue) {
+		if(!keyType.isInstance(key)) return defaultValue;
 		int index = key.ordinal();
 		return isSet(index) ? values[index] : defaultValue;
 	}
@@ -347,7 +363,13 @@ public class ENUM_MAP KEY_ENUM_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_VALUE
 			values[index] = newValue;			
 			return newValue;
 		}
-		return values[index];
+		VALUE_TYPE newValue = values[index];
+		if(VALUE_EQUALS(newValue, getDefaultReturnValue())) {
+			newValue = mappingFunction.GET_VALUE(key);
+			if(VALUE_EQUALS(newValue, getDefaultReturnValue())) return newValue;
+			values[index] = newValue;
+		}
+		return newValue;
 	}
 	
 	@Override
@@ -360,13 +382,19 @@ public class ENUM_MAP KEY_ENUM_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_VALUE
 			values[index] = newValue;			
 			return newValue;
 		}
-		return values[index];
+		VALUE_TYPE newValue = values[index];
+		if(VALUE_EQUALS(newValue, getDefaultReturnValue())) {
+			newValue = valueProvider.VALUE_GET_KEY();
+			if(VALUE_EQUALS(newValue, getDefaultReturnValue())) return newValue;
+			values[index] = newValue;
+		}
+		return newValue;
 	}
 	
 	@Override
 	public VALUE_TYPE COMPUTE_IF_PRESENT(T key, UNARY_OPERATOR KEY_VALUE_GENERIC_TYPE mappingFunction) {
 		int index = key.ordinal();
-		if(!isSet(index)) return getDefaultReturnValue();
+		if(!isSet(index) || VALUE_EQUALS(values[index], getDefaultReturnValue())) return getDefaultReturnValue();
 		VALUE_TYPE newValue = mappingFunction.APPLY_VALUE(key, values[index]);
 		if(VALUE_EQUALS(newValue, getDefaultReturnValue())) {
 			clear(index);
@@ -380,7 +408,10 @@ public class ENUM_MAP KEY_ENUM_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_VALUE
 	@Override
 	public VALUE_TYPE MERGE(T key, VALUE_TYPE value, VALUE_UNARY_OPERATOR VALUE_VALUE_GENERIC_TYPE mappingFunction) {
 		int index = key.ordinal();
-		VALUE_TYPE newValue = !isSet(index) ? value : mappingFunction.APPLY_VALUE(values[index], value);
+#if VALUE_OBJECT
+		Objects.requireNonNull(value);
+#endif
+		VALUE_TYPE newValue = !isSet(index) || VALUE_EQUALS(values[index], getDefaultReturnValue()) ? value : mappingFunction.APPLY_VALUE(values[index], value);
 		if(VALUE_EQUALS(newValue, getDefaultReturnValue())) {
 			if(isSet(index)) {
 				clear(index);
@@ -401,7 +432,7 @@ public class ENUM_MAP KEY_ENUM_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_VALUE
 		for(MAP.Entry KEY_VALUE_GENERIC_TYPE entry : MAPS.fastIterable(m)) {
 			T key = entry.ENTRY_KEY();
 			int index = key.ordinal();
-			VALUE_TYPE newValue = !isSet(index) ? entry.ENTRY_VALUE() : mappingFunction.APPLY_VALUE(values[index], entry.ENTRY_VALUE());
+			VALUE_TYPE newValue = !isSet(index) || VALUE_EQUALS(values[index], getDefaultReturnValue()) ? entry.ENTRY_VALUE() : mappingFunction.APPLY_VALUE(values[index], entry.ENTRY_VALUE());
 			if(VALUE_EQUALS(newValue, getDefaultReturnValue())) {
 				if(isSet(index)) {
 					clear(index);
@@ -424,6 +455,11 @@ public class ENUM_MAP KEY_ENUM_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_VALUE
 		Arrays.fill(values, EMPTY_VALUE);
 	}
 	
+	@Override
+	public int size() {
+		return size;
+	}
+	
 	protected void onNodeAdded(int index) {
 		
 	}
@@ -433,9 +469,9 @@ public class ENUM_MAP KEY_ENUM_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_VALUE
 	}
 	
 	protected void set(int index) {
-		size++;
-		present[index >> 6] |= (1L << index); 
 		onNodeAdded(index);
+		present[index >> 6] |= (1L << index); 
+		size++;
 	}
 	protected void clear(int index) { 
 		size--;
@@ -452,7 +488,20 @@ public class ENUM_MAP KEY_ENUM_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_VALUE
 		
 		@Override
 		public boolean contains(Object o) {
-			if(o instanceof Map.Entry) return containsKey(((Map.Entry<?, ?>)o).getKey());
+			if(o instanceof Map.Entry) {
+				if(o instanceof MAP.Entry) {
+					MAP.Entry KEY_VALUE_GENERIC_TYPE entry = (MAP.Entry KEY_VALUE_GENERIC_TYPE)o;
+					if(!keyType.isInstance(entry.ENTRY_KEY())) return false;
+					int index = ((T)entry.ENTRY_KEY()).ordinal();
+					if(index >= 0 && ENUM_MAP.this.isSet(index)) return VALUE_EQUALS(entry.ENTRY_VALUE(), ENUM_MAP.this.values[index]);
+				}
+				else {
+					Map.Entry<?, ?> entry = (Map.Entry<?, ?>)o;
+					if(!keyType.isInstance(entry.getKey())) return false;
+					int index = ((T)entry.getKey()).ordinal();
+					if(index >= 0 && ENUM_MAP.this.isSet(index)) return Objects.equals(entry.getValue(), VALUE_TO_OBJ(ENUM_MAP.this.values[index]));
+				}
+			}
 			return false;
 		}
 		
@@ -548,8 +597,7 @@ public class ENUM_MAP KEY_ENUM_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_VALUE
 	class EntryIterator extends MapIterator implements ObjectIterator<MAP.Entry KEY_VALUE_GENERIC_TYPE> {
 		@Override
 		public MAP.Entry KEY_VALUE_GENERIC_TYPE next() {
-			int index = nextEntry();
-			return new BasicEntry<>(keys[index], values[index]);
+			return new MapEntry(nextEntry());
 		}
 	}
 	
@@ -584,13 +632,74 @@ public class ENUM_MAP KEY_ENUM_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_VALUE
 		public int nextEntry() {
 			if(!hasNext()) throw new NoSuchElementException();
 			lastReturnValue = nextIndex;
-			return nextIndex;
+			nextIndex = -1;
+			return lastReturnValue;
 		}
 		
 		public void remove() {
 			if(lastReturnValue == -1) throw new IllegalStateException();
 			clear(lastReturnValue);
 			values[lastReturnValue] = EMPTY_VALUE;
+			lastReturnValue = -1;
+		}
+	}
+	
+	protected class MapEntry implements MAP.Entry KEY_VALUE_GENERIC_TYPE, Map.Entry<CLASS_TYPE, CLASS_VALUE_TYPE> {
+		public int index = -1;
+		
+		public MapEntry() {}
+		public MapEntry(int index) {
+			this.index = index;
+		}
+
+		@Override
+		public KEY_TYPE ENTRY_KEY() {
+			return keys[index];
+		}
+
+		@Override
+		public VALUE_TYPE ENTRY_VALUE() {
+			return values[index];
+		}
+
+		@Override
+		public VALUE_TYPE setValue(VALUE_TYPE value) {
+			VALUE_TYPE oldValue = values[index];
+			values[index] = value;
+			return oldValue;
+		}
+		
+		@Override
+		public boolean equals(Object obj) {
+			if(obj instanceof Map.Entry) {
+				if(obj instanceof MAP.Entry) {
+					MAP.Entry KEY_VALUE_GENERIC_TYPE entry = (MAP.Entry KEY_VALUE_GENERIC_TYPE)obj;
+					return KEY_EQUALS(keys[index], entry.ENTRY_KEY()) && VALUE_EQUALS(values[index], entry.ENTRY_VALUE());
+				}
+				Map.Entry<?, ?> entry = (Map.Entry<?, ?>)obj;
+				Object key = entry.getKey();
+				Object value = entry.getValue();
+#if TYPE_OBJECT && VALUE_OBJECT
+				return KEY_EQUALS(keys[index], key) && VALUE_EQUALS(values[index], value);
+#else if TYPE_OBJECT
+				return value instanceof CLASS_VALUE_TYPE && KEY_EQUALS(keys[index], key) && VALUE_EQUALS(values[index], CLASS_TO_VALUE(value));
+#else if VALUE_OBJECT
+				return key instanceof CLASS_TYPE && KEY_EQUALS(keys[index], CLASS_TO_KEY(key)) && VALUE_EQUALS(values[index], value);
+#else
+				return key instanceof CLASS_TYPE && value instanceof CLASS_VALUE_TYPE && KEY_EQUALS(keys[index], CLASS_TO_KEY(key)) && VALUE_EQUALS(values[index], CLASS_TO_VALUE(value));
+#endif
+			}
+			return false;
+		}
+		
+		@Override
+		public int hashCode() {
+			return KEY_TO_HASH(keys[index]) ^ VALUE_TO_HASH(values[index]);
+		}
+		
+		@Override
+		public String toString() {
+			return KEY_TO_STRING(keys[index]) + "=" + VALUE_TO_STRING(values[index]);
 		}
 	}
 }

@@ -109,7 +109,7 @@ public class LINKED_ENUM_MAP KEY_ENUM_VALUE_GENERIC_TYPE extends ENUM_MAP KEY_VA
 			links = enumMap.links.clone();
 			size = enumMap.size;
 		}
-		if(map instanceof ENUM_MAP) {
+		else if(map instanceof ENUM_MAP) {
 			ENUM_MAP KEY_VALUE_GENERIC_TYPE enumMap = (ENUM_MAP KEY_VALUE_GENERIC_TYPE)map;
 			keyType = enumMap.keyType;
 			keys = enumMap.keys;
@@ -156,7 +156,7 @@ public class LINKED_ENUM_MAP KEY_ENUM_VALUE_GENERIC_TYPE extends ENUM_MAP KEY_VA
 			links = enumMap.links.clone();
 			size = enumMap.size;
 		}
-		if(map instanceof ENUM_MAP) {
+		else if(map instanceof ENUM_MAP) {
 			ENUM_MAP KEY_VALUE_GENERIC_TYPE enumMap = (ENUM_MAP KEY_VALUE_GENERIC_TYPE)map;
 			keyType = enumMap.keyType;
 			keys = enumMap.keys;
@@ -519,8 +519,18 @@ public class LINKED_ENUM_MAP KEY_ENUM_VALUE_GENERIC_TYPE extends ENUM_MAP KEY_VA
 		@Deprecated
 		public boolean contains(Object o) {
 			if(o instanceof Map.Entry) {
-				if(o instanceof MAP.Entry) return LINKED_ENUM_MAP.this.containsKey(((MAP.Entry KEY_VALUE_GENERIC_TYPE)o).ENTRY_KEY());
-				return LINKED_ENUM_MAP.this.containsKey(((Map.Entry<?, ?>)o).getKey());
+				if(o instanceof MAP.Entry) {
+					MAP.Entry KEY_VALUE_GENERIC_TYPE entry = (MAP.Entry KEY_VALUE_GENERIC_TYPE)o;
+					if(!keyType.isInstance(entry.ENTRY_KEY())) return false;
+					int index = ((T)entry.ENTRY_KEY()).ordinal();
+					if(index >= 0 && LINKED_ENUM_MAP.this.isSet(index)) return VALUE_EQUALS(entry.ENTRY_VALUE(), LINKED_ENUM_MAP.this.values[index]);
+				}
+				else {
+					Map.Entry<?, ?> entry = (Map.Entry<?, ?>)o;
+					if(!keyType.isInstance(entry.getKey())) return false;
+					int index = ((T)entry.getKey()).ordinal();
+					if(index >= 0 && LINKED_ENUM_MAP.this.isSet(index)) return Objects.equals(entry.getValue(), VALUE_TO_OBJ(LINKED_ENUM_MAP.this.values[index]));
+				}
 			}
 			return false;
 		}
@@ -572,7 +582,7 @@ public class LINKED_ENUM_MAP KEY_ENUM_VALUE_GENERIC_TYPE extends ENUM_MAP KEY_VA
 		@Override
 		public boolean remove(Object o) {
 			int oldSize = size;
-			remove(o);
+			LINKED_ENUM_MAP.this.remove(o);
 			return size != oldSize;
 		}
 		
@@ -585,7 +595,7 @@ public class LINKED_ENUM_MAP KEY_ENUM_VALUE_GENERIC_TYPE extends ENUM_MAP KEY_VA
 		@Override
 		public boolean remove(T o) {
 			int oldSize = size;
-			remove(o);
+			LINKED_ENUM_MAP.this.remove(o);
 			return size != oldSize;
 		}
 		
@@ -887,6 +897,7 @@ public class LINKED_ENUM_MAP KEY_ENUM_VALUE_GENERIC_TYPE extends ENUM_MAP KEY_VA
 				previous = (int)(links[current] >>> 32);
 			}
 			else next = (int)links[current];
+			
 			size--;
 			if(previous == -1) firstIndex = next;
 			else links[previous] ^= ((links[previous] ^ (next & 0xFFFFFFFFL)) & 0xFFFFFFFFL);
@@ -894,6 +905,8 @@ public class LINKED_ENUM_MAP KEY_ENUM_VALUE_GENERIC_TYPE extends ENUM_MAP KEY_VA
 			if (next == -1) lastIndex = previous;
 			else links[next] ^= ((links[next] ^ ((previous & 0xFFFFFFFFL) << 32)) & 0xFFFFFFFF00000000L);
 			values[current] = EMPTY_VALUE;
+			present[current >> 6] &= ~(1L << current);
+			current = -1;
 		}
 		
 		public int previousEntry() {
@@ -985,7 +998,7 @@ public class LINKED_ENUM_MAP KEY_ENUM_VALUE_GENERIC_TYPE extends ENUM_MAP KEY_VA
 		
 		@Override
 		public String toString() {
-			return KEY_TO_STRING(keys[index]) + "->" + VALUE_TO_STRING(values[index]);
+			return KEY_TO_STRING(keys[index]) + "=" + VALUE_TO_STRING(values[index]);
 		}
 	}
 }

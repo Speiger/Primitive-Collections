@@ -6,7 +6,9 @@ import java.util.Objects;
 import java.util.function.BiFunction;
 import java.util.function.Supplier;
 
+import com.google.common.collect.testing.AnEnum;
 import com.google.common.collect.testing.MapTestSuiteBuilder;
+import com.google.common.collect.testing.TestEnumMapGenerator;
 import com.google.common.collect.testing.TestStringMapGenerator;
 import com.google.common.collect.testing.features.CollectionFeature;
 import com.google.common.collect.testing.features.CollectionSize;
@@ -20,6 +22,9 @@ import speiger.src.collections.objects.maps.impl.customHash.Object2ObjectOpenCus
 import speiger.src.collections.objects.maps.impl.hash.Object2ObjectLinkedOpenHashMap;
 import speiger.src.collections.objects.maps.impl.hash.Object2ObjectOpenHashMap;
 import speiger.src.collections.objects.maps.impl.immutable.ImmutableObject2ObjectOpenHashMap;
+import speiger.src.collections.objects.maps.impl.misc.Enum2ObjectMap;
+import speiger.src.collections.objects.maps.impl.misc.LinkedEnum2ObjectMap;
+import speiger.src.collections.objects.maps.impl.misc.Object2ObjectArrayMap;
 import speiger.src.collections.objects.maps.impl.tree.Object2ObjectAVLTreeMap;
 import speiger.src.collections.objects.maps.impl.tree.Object2ObjectRBTreeMap;
 import speiger.src.collections.objects.utils.ObjectStrategy;
@@ -34,9 +39,14 @@ public class ObjectMapTests extends TestCase
 		suite.addTest(suite("LinkedHashMap", Object2ObjectLinkedOpenHashMap::new, true));
 		suite.addTest(suite("CustomHashMap", () -> new Object2ObjectOpenCustomHashMap<>(Strategy.INSTANCE), true));
 		suite.addTest(suite("LinkedCustomHashMap", () -> new Object2ObjectLinkedOpenCustomHashMap<>(Strategy.INSTANCE), true));
-		suite.addTest(suite("RBTreeMap", () -> new Object2ObjectRBTreeMap<String, String>(Comparator.naturalOrder()), false));
-		suite.addTest(suite("AVLTreeMap", () -> new Object2ObjectAVLTreeMap<String, String>(Comparator.naturalOrder()), false));
+		suite.addTest(suite("RBTreeMap_NonNull", Object2ObjectRBTreeMap::new, false));
+		suite.addTest(suite("AVLTreeMap_NonNull", Object2ObjectAVLTreeMap::new, false));
+		suite.addTest(suite("RBTreeMap_Null", () -> new Object2ObjectRBTreeMap<>(Comparator.nullsFirst(Comparator.naturalOrder())), true));
+		suite.addTest(suite("AVLTreeMap_Null", () -> new Object2ObjectAVLTreeMap<>(Comparator.nullsFirst(Comparator.naturalOrder())), true));
 		suite.addTest(immutableSuit("ImmutableMap", ImmutableObject2ObjectOpenHashMap::new));
+		suite.addTest(suite("ArrayMap", Object2ObjectArrayMap::new, true));
+		suite.addTest(enumSuite("EnumMap", () -> new Enum2ObjectMap<>(AnEnum.class)));
+		suite.addTest(enumSuite("LinkedEnumMap", () -> new LinkedEnum2ObjectMap<>(AnEnum.class)));
 		return suite;
 	}
 	
@@ -69,6 +79,21 @@ public class ObjectMapTests extends TestCase
 				return factory.apply(keys, values);
 			}
 		}).named(name).withFeatures(CollectionSize.ANY, MapFeature.ALLOWS_NULL_KEYS, MapFeature.ALLOWS_NULL_VALUES, MapFeature.ALLOWS_ANY_NULL_QUERIES);
+		return builder.createTestSuite();
+	}
+	
+	public static Test enumSuite(String name, Supplier<Map<AnEnum, String>> factory)
+	{
+		MapTestSuiteBuilder<AnEnum, String> builder = MapTestSuiteBuilder.using(new TestEnumMapGenerator() {
+			@Override
+			protected Map<AnEnum, String> create(Map.Entry<AnEnum, String>[] entries) {
+				Map<AnEnum, String> map = factory.get();
+				for(Map.Entry<AnEnum, String> entry : entries) {
+					map.put(entry.getKey(), entry.getValue());
+				}
+				return map;
+			}
+		}).named(name).withFeatures(CollectionSize.ANY, MapFeature.GENERAL_PURPOSE, MapFeature.ALLOWS_NULL_VALUES, CollectionFeature.SUPPORTS_ITERATOR_REMOVE);
 		return builder.createTestSuite();
 	}
 	

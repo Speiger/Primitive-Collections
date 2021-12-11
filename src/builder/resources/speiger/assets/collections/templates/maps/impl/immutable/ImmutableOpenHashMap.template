@@ -261,7 +261,7 @@ public class IMMUTABLE_HASH_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_
 					newValues[pos] = b[i];
 					continue;
 				}
-				while(KEY_EQUALS_NOT_NULL((current = newKeys[pos = (++pos & mask)]))) {
+				while(KEY_EQUALS_NOT_NULL((current = newKeys[pos = (++pos & newMask)]))) {
 					if(KEY_EQUALS(current, o)) {
 						found = false;
 						newValues[pos] = b[i];

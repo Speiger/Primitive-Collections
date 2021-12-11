@@ -72,8 +72,8 @@ public class SanityChecks
 	 * @throws IllegalStateException if offset or accessSize is negative or the range goes out of the array-size
 	 */
 	public static void checkArrayCapacity(int arraySize, int offset, int accessSize) {
-		if(offset < 0) throw new IllegalStateException("Offset is negative ("+offset+")");
-		else if(accessSize < 0) throw new IllegalStateException("Size is negative ("+accessSize+")");
+		if(offset < 0) throw new IndexOutOfBoundsException("Offset is negative ("+offset+")");
+		else if(accessSize < 0) throw new IllegalArgumentException("Size is negative ("+accessSize+")");
 		else if(arraySize < offset + accessSize) throw new IndexOutOfBoundsException("Index (" + (offset + accessSize) + ") is not in size (" + arraySize + ")");
 	}
 	
