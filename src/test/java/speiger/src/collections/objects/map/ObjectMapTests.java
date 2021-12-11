@@ -41,8 +41,8 @@ public class ObjectMapTests extends TestCase
 		suite.addTest(suite("LinkedCustomHashMap", () -> new Object2ObjectLinkedOpenCustomHashMap<>(Strategy.INSTANCE), true));
 		suite.addTest(suite("RBTreeMap_NonNull", Object2ObjectRBTreeMap::new, false));
 		suite.addTest(suite("AVLTreeMap_NonNull", Object2ObjectAVLTreeMap::new, false));
-		suite.addTest(suite("RBTreeMap_Null", () -> new Object2ObjectRBTreeMap<>(Comparator.nullsFirst(Comparator.naturalOrder())), true));
-		suite.addTest(suite("AVLTreeMap_Null", () -> new Object2ObjectAVLTreeMap<>(Comparator.nullsFirst(Comparator.naturalOrder())), true));
+		suite.addTest(suite("RBTreeMap_Null", () -> new Object2ObjectRBTreeMap<String, String>(Comparator.nullsFirst(Comparator.naturalOrder())), true));
+		suite.addTest(suite("AVLTreeMap_Null", () -> new Object2ObjectAVLTreeMap<String, String>(Comparator.nullsFirst(Comparator.naturalOrder())), true));
 		suite.addTest(immutableSuit("ImmutableMap", ImmutableObject2ObjectOpenHashMap::new));
 		suite.addTest(suite("ArrayMap", Object2ObjectArrayMap::new, true));
 		suite.addTest(enumSuite("EnumMap", () -> new Enum2ObjectMap<>(AnEnum.class)));
