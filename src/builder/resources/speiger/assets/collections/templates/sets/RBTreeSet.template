@@ -1341,6 +1341,7 @@ public class RB_TREE_SET KEY_GENERIC_TYPE extends ABSTRACT_SET KEY_GENERIC_TYPE 
 		{
 			Entry KEY_GENERIC_TYPE lastReturned;
 			Entry KEY_GENERIC_TYPE next;
+			boolean forwards = false;
 			boolean unboundForwardFence;
 			boolean unboundBackwardFence;
 			KEY_TYPE forwardFence;
@@ -1366,6 +1367,7 @@ public class RB_TREE_SET KEY_GENERIC_TYPE extends ABSTRACT_SET KEY_GENERIC_TYPE 
 				lastReturned = next;
 				KEY_TYPE result = next.key;
 				next = next.next();
+				forwards = true;
 				return result;
 			}
 			
@@ -1380,13 +1382,14 @@ public class RB_TREE_SET KEY_GENERIC_TYPE extends ABSTRACT_SET KEY_GENERIC_TYPE 
 				lastReturned = next;
 				KEY_TYPE result = next.key;
 				next = next.previous();
+				forwards = false;
 				return result;
 			}
 			
 			@Override
 			public void remove() {
 				if(lastReturned == null) throw new IllegalStateException();
-				if(lastReturned.needsSuccessor()) next = lastReturned;
+				if(forwards && lastReturned.needsSuccessor()) next = lastReturned;
 				set.removeNode(lastReturned);
 				lastReturned = null;
 			}
@@ -1396,6 +1399,7 @@ public class RB_TREE_SET KEY_GENERIC_TYPE extends ABSTRACT_SET KEY_GENERIC_TYPE 
 		{
 			Entry KEY_GENERIC_TYPE lastReturned;
 			Entry KEY_GENERIC_TYPE next;
+			boolean forwards = false;
 			boolean unboundForwardFence;
 			boolean unboundBackwardFence;
 			KEY_TYPE forwardFence;
@@ -1421,6 +1425,7 @@ public class RB_TREE_SET KEY_GENERIC_TYPE extends ABSTRACT_SET KEY_GENERIC_TYPE 
 				lastReturned = next;
 				KEY_TYPE result = next.key;
 				next = next.previous();
+				forwards = false;
 				return result;
 			}
 			
@@ -1435,12 +1440,14 @@ public class RB_TREE_SET KEY_GENERIC_TYPE extends ABSTRACT_SET KEY_GENERIC_TYPE 
 				lastReturned = next;
 				KEY_TYPE result = next.key;
 				next = next.next();
+				forwards = true;
 				return result;
 			}
 			
 			@Override
 			public void remove() {
 				if(lastReturned == null) throw new IllegalStateException();
+				if(forwards && lastReturned.needsSuccessor()) next = lastReturned;
 				set.removeNode(lastReturned);
 				lastReturned = null;
 			}
@@ -1451,6 +1458,7 @@ public class RB_TREE_SET KEY_GENERIC_TYPE extends ABSTRACT_SET KEY_GENERIC_TYPE 
 	{
 		Entry KEY_GENERIC_TYPE lastReturned;
 		Entry KEY_GENERIC_TYPE next;
+		boolean forwards = false;
 		
 		public AscendingSetIterator(Entry KEY_GENERIC_TYPE first)
 		{
@@ -1468,6 +1476,7 @@ public class RB_TREE_SET KEY_GENERIC_TYPE extends ABSTRACT_SET KEY_GENERIC_TYPE 
 			lastReturned = next;
 			KEY_TYPE result = next.key;
 			next = next.next();
+			forwards = true;
 			return result;
 		}
 		
@@ -1482,13 +1491,14 @@ public class RB_TREE_SET KEY_GENERIC_TYPE extends ABSTRACT_SET KEY_GENERIC_TYPE 
 			lastReturned = next;
 			KEY_TYPE result = next.key;
 			next = next.previous();
+			forwards = false;
 			return result;
 		}
 		
 		@Override
 		public void remove() {
 			if(lastReturned == null) throw new IllegalStateException();
-			if(lastReturned.needsSuccessor()) next = lastReturned;
+			if(forwards && lastReturned.needsSuccessor()) next = lastReturned;
 			removeNode(lastReturned);
 			lastReturned = null;
 		}
@@ -1498,7 +1508,8 @@ public class RB_TREE_SET KEY_GENERIC_TYPE extends ABSTRACT_SET KEY_GENERIC_TYPE 
 	{
 		Entry KEY_GENERIC_TYPE lastReturned;
 		Entry KEY_GENERIC_TYPE next;
-		
+		boolean forwards = false;
+
 		public DescendingSetIterator(Entry KEY_GENERIC_TYPE first)
 		{
 			next = first;
@@ -1515,6 +1526,7 @@ public class RB_TREE_SET KEY_GENERIC_TYPE extends ABSTRACT_SET KEY_GENERIC_TYPE 
 			lastReturned = next;
 			KEY_TYPE result = next.key;
 			next = next.previous();
+			forwards = false;
 			return result;
 		}
 		
@@ -1529,12 +1541,14 @@ public class RB_TREE_SET KEY_GENERIC_TYPE extends ABSTRACT_SET KEY_GENERIC_TYPE 
 			lastReturned = next;
 			KEY_TYPE result = next.key;
 			next = next.next();
+			forwards = true;
 			return result;
 		}
 		
 		@Override
 		public void remove() {
 			if(lastReturned == null) throw new IllegalStateException();
+			if(forwards && lastReturned.needsSuccessor()) next = lastReturned;
 			removeNode(lastReturned);
 			lastReturned = null;
 		}

@@ -650,7 +650,7 @@ public class AVL_TREE_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_VALUE_
 	}
 	
 	protected BI_ITERATOR KEY_GENERIC_TYPE keyIterator(KEY_TYPE element) {
-		return null;
+		return new AscendingKeyIterator(findNode(element));
 	}
 	
 	protected BI_ITERATOR KEY_GENERIC_TYPE descendingKeyIterator() {
