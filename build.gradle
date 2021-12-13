@@ -46,7 +46,6 @@ dependencies {
 	runtimeOnly 'de.speiger:Simple-Code-Generator:1.0.5'
     testImplementation 'junit:junit:4.12'
     testImplementation 'com.google.guava:guava-testlib:31.0.1-jre'
-    
 }
 
 task generateSource(type: JavaExec) {

@@ -1,6 +1,7 @@
 package speiger.src.collections.PACKAGE.sets;
 
 import java.util.Collection;
+import java.util.Collections;
 #if TYPE_OBJECT
 import java.util.Comparator;
 import java.util.function.Consumer;
@@ -19,7 +20,6 @@ import speiger.src.collections.PACKAGE.functions.function.PREDICATE;
 import speiger.src.collections.PACKAGE.functions.function.UNARY_OPERATOR;
 import speiger.src.collections.PACKAGE.collections.COLLECTION;
 import speiger.src.collections.PACKAGE.collections.ITERATOR;
-import speiger.src.collections.PACKAGE.lists.LIST_ITERATOR;
 #if !TYPE_OBJECT
 import speiger.src.collections.PACKAGE.utils.ITERATORS;
 #endif
@@ -557,7 +557,11 @@ public class AVL_TREE_SET KEY_GENERIC_TYPE extends ABSTRACT_SET KEY_GENERIC_TYPE
 	
 	@Override
 	public KEY_TYPE POLL_FIRST_KEY() {
-		if(tree == null) throw new NoSuchElementException();
+#if TYPE_OBJECT
+		if(tree == null) return null;
+#else
+		if(tree == null) return getDefaultMinValue();
+#endif
 		KEY_TYPE value = first.key;
 		removeNode(first);
 		return value;
@@ -565,7 +569,11 @@ public class AVL_TREE_SET KEY_GENERIC_TYPE extends ABSTRACT_SET KEY_GENERIC_TYPE
 	
 	@Override
 	public KEY_TYPE POLL_LAST_KEY() {
-		if(tree == null) throw new NoSuchElementException();
+#if TYPE_OBJECT
+		if(tree == null) return null;
+#else
+		if(tree == null) return getDefaultMaxValue();
+#endif
 		KEY_TYPE value = last.key;
 		removeNode(last);
 		return value;
@@ -601,16 +609,16 @@ public class AVL_TREE_SET KEY_GENERIC_TYPE extends ABSTRACT_SET KEY_GENERIC_TYPE
 	public COMPARATOR KEY_GENERIC_TYPE comparator() { return comparator; }
 	
 	@Override
-	public BI_ITERATOR KEY_GENERIC_TYPE iterator() { return new SetIterator(false); }
+	public BI_ITERATOR KEY_GENERIC_TYPE iterator() { return new AscendingSetIterator(first); }
 	
 	@Override
 	public BI_ITERATOR KEY_GENERIC_TYPE iterator(KEY_TYPE fromElement) {
 		Entry KEY_GENERIC_TYPE entry = findNode(fromElement);
-		return entry == null ? null : new SetIterator(entry);
+		return entry == null ? null : new AscendingSetIterator(entry);
 	}
 	
 	@Override
-	public BI_ITERATOR KEY_GENERIC_TYPE descendingIterator() { return new SetIterator(true); }
+	public BI_ITERATOR KEY_GENERIC_TYPE descendingIterator() { return new DescendingSetIterator(last); }
 	
 	@Override
 	public NAVIGABLE_SET KEY_GENERIC_TYPE subSet(KEY_TYPE fromElement, boolean fromInclusive, KEY_TYPE toElement, boolean toInclusive) {
@@ -743,158 +751,174 @@ public class AVL_TREE_SET KEY_GENERIC_TYPE extends ABSTRACT_SET KEY_GENERIC_TYPE
 		}
 	}
 	
-	private static class AscendingSubSet KEY_GENERIC_TYPE extends SubSet KEY_GENERIC_TYPE
+	static class AscendingSubSet KEY_GENERIC_TYPE extends SubSet KEY_GENERIC_TYPE
 	{
-		AscendingSubSet(AVL_TREE_SET KEY_GENERIC_TYPE set, boolean fromStart, KEY_TYPE start, boolean loInclusive, boolean toEnd, KEY_TYPE end, boolean hiInclusive) {
-			super(set, fromStart, start, loInclusive, toEnd, end, hiInclusive);
+		public AscendingSubSet(AVL_TREE_SET KEY_GENERIC_TYPE set, boolean fromStart, KEY_TYPE lo, boolean loInclusive, boolean toEnd, KEY_TYPE hi, boolean hiInclusive)
+		{
+			super(set, fromStart, lo, loInclusive, toEnd, hi, hiInclusive);
 		}
 		
 		@Override
-		public NAVIGABLE_SET KEY_GENERIC_TYPE subSet(KEY_TYPE fromElement, boolean fromInclusive, KEY_TYPE toElement, boolean toInclusive) {
-			if(!inRange(fromElement, fromInclusive)) throw new IllegalArgumentException("fromElement is not in Range");
-			if(!inRange(toElement, toInclusive)) throw new IllegalArgumentException("toElement is not in Range");
+		public COMPARATOR KEY_GENERIC_TYPE comparator() { return set.comparator(); }
+		
+		@Override
+		public NAVIGABLE_SET KEY_GENERIC_TYPE subSet(KEY_TYPE fromElement, boolean fromInclusive, KEY_TYPE toElement, boolean toInclusive)
+		{
+			if(!inRange(fromElement, fromInclusive)) throw new IllegalArgumentException("fromElement out of range");
+			if(!inRange(toElement, toInclusive)) throw new IllegalArgumentException("toElement out of range");
 			return new AscendingSubSetBRACES(set, false, fromElement, fromInclusive, false, toElement, toInclusive);
 		}
-
-		@Override
-		public NAVIGABLE_SET KEY_GENERIC_TYPE headSet(KEY_TYPE toElement, boolean inclusive) {
-			if(!inRange(toElement, inclusive)) throw new IllegalArgumentException("toElement is not in Range");
-			return new AscendingSubSetBRACES(set, fromStart, start, loInclusive, false, toElement, inclusive);
-		}
-
-		@Override
-		public NAVIGABLE_SET KEY_GENERIC_TYPE tailSet(KEY_TYPE fromElement, boolean inclusive) {
-			if(!inRange(fromElement, inclusive)) throw new IllegalArgumentException("fromElement is not in Range");
-			return new AscendingSubSetBRACES(set, false, fromElement, inclusive, toEnd, end, hiInclusive);
-		}
-
-		@Override
-		public BI_ITERATOR KEY_GENERIC_TYPE iterator() { return new SubSetIterator(findLowest()); }
 		
 		@Override
-		public BI_ITERATOR KEY_GENERIC_TYPE iterator(KEY_TYPE fromElement) {
-			Entry KEY_GENERIC_TYPE entry = set.findNode(fromElement);
-			return entry == null || !inClosedRange(fromElement) ? null : new SubSetIterator(entry);
+		public NAVIGABLE_SET KEY_GENERIC_TYPE headSet(KEY_TYPE toElement, boolean inclusive)
+		{
+			if(!inRange(toElement, inclusive)) throw new IllegalArgumentException("toElement out of range");
+			return new AscendingSubSetBRACES(set, fromStart, lo, loInclusive, false, toElement, inclusive);
+		}
+
+		@Override
+		public NAVIGABLE_SET KEY_GENERIC_TYPE tailSet(KEY_TYPE fromElement, boolean inclusive)
+		{
+			if(!inRange(fromElement, inclusive)) throw new IllegalArgumentException("fromElement out of range");
+			return new AscendingSubSetBRACES(set, false, fromElement, inclusive, toEnd, hi, hiInclusive);
 		}
 		
 		@Override
-		public BI_ITERATOR KEY_GENERIC_TYPE descendingIterator() { return new SubSetIterator(findHighest()); }
+		public BI_ITERATOR KEY_GENERIC_TYPE iterator()
+		{
+			return new AscendingSubSetIterator(absLowest(), absHighFence(), absLowFence());
+		}
+		
+		@Override
+		public BI_ITERATOR KEY_GENERIC_TYPE iterator(KEY_TYPE fromElement)
+		{
+			return new AscendingSubSetIterator(absLower(fromElement), absHighFence(), absLowFence());
+		}
+		
+		@Override
+		public BI_ITERATOR KEY_GENERIC_TYPE descendingIterator()
+		{
+			return new DescendingSubSetIterator(absHighest(), absLowFence(), absHighFence());
+		}
 
 		@Override
-		public NAVIGABLE_SET KEY_GENERIC_TYPE descendingSet() {
-			return new DescendingSubSetBRACES(set, fromStart, start, loInclusive, toEnd, end, hiInclusive);
+		public NAVIGABLE_SET KEY_GENERIC_TYPE descendingSet()
+		{
+			if(inverse == null) inverse = new DescendingSubSetBRACES(set, fromStart, lo, loInclusive, toEnd, hi, hiInclusive);
+			return inverse;
 		}
+		
+		@Override
+		protected Entry KEY_GENERIC_TYPE subLowest() { return absLowest(); }
+		@Override
+		protected Entry KEY_GENERIC_TYPE subHighest() { return absHighest(); }
+		@Override
+		protected Entry KEY_GENERIC_TYPE subCeiling(KEY_TYPE key) { return absCeiling(key); }
+		@Override
+		protected Entry KEY_GENERIC_TYPE subHigher(KEY_TYPE key) { return absHigher(key); }
+		@Override
+		protected Entry KEY_GENERIC_TYPE subFloor(KEY_TYPE key) { return absFloor(key); }
+		@Override
+		protected Entry KEY_GENERIC_TYPE subLower(KEY_TYPE key) { return absLower(key); }
+		@Override
+		protected Entry KEY_GENERIC_TYPE start() { return absLowest(); }
+		@Override
+		protected Entry KEY_GENERIC_TYPE next(Entry KEY_GENERIC_TYPE entry) { return entry.next(); }
 	}
 	
-	private static class DescendingSubSet KEY_GENERIC_TYPE extends SubSet KEY_GENERIC_TYPE
+	static class DescendingSubSet KEY_GENERIC_TYPE extends SubSet KEY_GENERIC_TYPE
 	{
 		COMPARATOR KEY_GENERIC_TYPE comparator;
-		DescendingSubSet(AVL_TREE_SET KEY_GENERIC_TYPE set, boolean fromStart, KEY_TYPE start, boolean loInclusive, boolean toEnd, KEY_TYPE end, boolean hiInclusive) {
-			super(set, fromStart, start, loInclusive, toEnd, end, hiInclusive);
-			comparator = set.comparator();
-			if(comparator != null) comparator = comparator.reversed();
+		
+		public DescendingSubSet(AVL_TREE_SET KEY_GENERIC_TYPE set, boolean fromStart, KEY_TYPE lo, boolean loInclusive, boolean toEnd, KEY_TYPE hi, boolean hiInclusive)
+		{
+			super(set, fromStart, lo, loInclusive, toEnd, hi, hiInclusive);
+#if TYPE_OBJECT
+			comparator = Collections.reverseOrder(set.comparator());
+#else
+			comparator = set.comparator() == null ? COMPARATOR.of(Collections.reverseOrder()) : set.comparator().reversed();
+#endif
 		}
 		
 		@Override
 		public COMPARATOR KEY_GENERIC_TYPE comparator() { return comparator; }
 		
+		public KEY_TYPE getDefaultMaxValue() { return super.getDefaultMinValue(); }
+		
+		public KEY_TYPE getDefaultMinValue() { return super.getDefaultMaxValue(); }
+		
 		@Override
 		public NAVIGABLE_SET KEY_GENERIC_TYPE subSet(KEY_TYPE fromElement, boolean fromInclusive, KEY_TYPE toElement, boolean toInclusive) {
-			if(!inRange(fromElement, fromInclusive)) throw new IllegalArgumentException("fromElement is not in Range");
-			if(!inRange(toElement, toInclusive)) throw new IllegalArgumentException("toElement is not in Range");
-			return new DescendingSubSetBRACES(set, false, toElement, toInclusive, false, fromElement, fromInclusive);
+			if(!inRange(fromElement, fromInclusive)) throw new IllegalArgumentException("fromElement out of range");
+			if(!inRange(toElement, toInclusive)) throw new IllegalArgumentException("toElement out of range");
+			return new DescendingSubSetBRACES(set, false, fromElement, fromInclusive, false, toElement, toInclusive);
 		}
-
+		
 		@Override
-		public NAVIGABLE_SET KEY_GENERIC_TYPE headSet(KEY_TYPE toElement, boolean inclusive) {
-			if(!inRange(toElement, inclusive)) throw new IllegalArgumentException("toElement is not in Range");
-			return new DescendingSubSetBRACES(set, false, toElement, inclusive, toEnd, end, hiInclusive);
+		public NAVIGABLE_SET KEY_GENERIC_TYPE headSet(KEY_TYPE toElement, boolean inclusive)
+		{
+			if(!inRange(toElement, inclusive)) throw new IllegalArgumentException("toElement out of range");
+			return new DescendingSubSetBRACES(set, false, toElement, inclusive, toEnd, hi, hiInclusive);
 		}
 
 		@Override
 		public NAVIGABLE_SET KEY_GENERIC_TYPE tailSet(KEY_TYPE fromElement, boolean inclusive) {
-			if(!inRange(fromElement, inclusive)) throw new IllegalArgumentException("fromElement is not in Range");
-			return new DescendingSubSetBRACES(set, fromStart, start, loInclusive, false, fromElement, inclusive);
+			if(!inRange(fromElement, inclusive)) throw new IllegalArgumentException("fromElement out of range");
+			return new DescendingSubSetBRACES(set, fromStart, lo, loInclusive, false, fromElement, inclusive);
 		}
-		
-		protected Entry KEY_GENERIC_TYPE next(Entry KEY_GENERIC_TYPE entry) { return entry.previous(); }
-		protected Entry KEY_GENERIC_TYPE start() { return findHighest(); }
-		
-		@Override
-		public KEY_TYPE FIRST_KEY() { return super.LAST_KEY(); }
-		
-		@Override
-		public KEY_TYPE POLL_FIRST_KEY() { return super.POLL_LAST_KEY(); }
-		
-		@Override
-		public KEY_TYPE LAST_KEY() { return super.FIRST_KEY(); }
-		
-		@Override
-		public KEY_TYPE POLL_LAST_KEY() { return super.POLL_FIRST_KEY(); }
-		
-		@Override
-		public KEY_TYPE lower(KEY_TYPE e) { return super.higher(e); }
 
 		@Override
-		public KEY_TYPE floor(KEY_TYPE e) { return super.ceiling(e); }
-
-		@Override
-		public KEY_TYPE ceiling(KEY_TYPE e) { return super.floor(e); }
-
-		@Override
-		public KEY_TYPE higher(KEY_TYPE e) { return super.lower(e); }
-
-		@Override
-		public BI_ITERATOR KEY_GENERIC_TYPE iterator() { return new DescendingSubIterator(findHighest()); }
-		
-		@Override
-		public BI_ITERATOR KEY_GENERIC_TYPE iterator(KEY_TYPE fromElement) { 
-			Entry KEY_GENERIC_TYPE entry = set.findNode(fromElement);
-			return entry == null || !inClosedRange(fromElement) ? null : new DescendingSubIterator(entry);
+		public BI_ITERATOR KEY_GENERIC_TYPE iterator() {
+			return new DescendingSubSetIterator(absHighest(), absLowFence(), absHighFence());
 		}
-		
+
 		@Override
-		public BI_ITERATOR KEY_GENERIC_TYPE descendingIterator() { return new DescendingSubIterator(findLowest()); }
-		
+		public BI_ITERATOR KEY_GENERIC_TYPE descendingIterator() {
+			return new AscendingSubSetIterator(absLowest(), absHighFence(), absLowFence());
+		}
+
 		@Override
 		public NAVIGABLE_SET KEY_GENERIC_TYPE descendingSet() {
-			return new AscendingSubSetBRACES(set, fromStart, start, loInclusive, toEnd, end, hiInclusive);
+			if(inverse == null) inverse = new AscendingSubSetBRACES(set, fromStart, lo, loInclusive, toEnd, hi, hiInclusive);
+			return inverse;
 		}
 		
-		private class DescendingSubIterator extends SubSetIterator
-		{
-			public DescendingSubIterator(Entry KEY_GENERIC_TYPE entry) {
-				super(entry);
-			}
-			
-			@Override
-			protected void updateNext() {
-				next = current.previous();
-				if(!toEnd && next != null && bottomReached(next)) next = null;
-			}
-			
-			@Override
-			protected void updatePrevious() {
-				previous = current.next();
-				if(!fromStart && previous != null && topReached(previous)) previous = null;
-			}
+		@Override
+		public BI_ITERATOR KEY_GENERIC_TYPE iterator(KEY_TYPE fromElement) {
+			return new DescendingSubSetIterator(absHigher(fromElement), absLowFence(), absHighFence());
 		}
+		
+		@Override
+		protected Entry KEY_GENERIC_TYPE subLowest() { return absHighest(); }
+		@Override
+		protected Entry KEY_GENERIC_TYPE subHighest() { return absLowest(); }
+		@Override
+		protected Entry KEY_GENERIC_TYPE subCeiling(KEY_TYPE key) { return absFloor(key); }
+		@Override
+		protected Entry KEY_GENERIC_TYPE subHigher(KEY_TYPE key) { return absLower(key); }
+		@Override
+		protected Entry KEY_GENERIC_TYPE subFloor(KEY_TYPE key) { return absCeiling(key); }
+		@Override
+		protected Entry KEY_GENERIC_TYPE subLower(KEY_TYPE key) { return absHigher(key); }
+		@Override
+		protected Entry KEY_GENERIC_TYPE start() { return absHighest(); }
+		@Override
+		protected Entry KEY_GENERIC_TYPE next(Entry KEY_GENERIC_TYPE entry) { return entry.previous(); }
 	}
 	
-	private static abstract class SubSet KEY_GENERIC_TYPE extends ABSTRACT_SET KEY_GENERIC_TYPE implements NAVIGABLE_SET KEY_GENERIC_TYPE
+	static abstract class SubSet KEY_GENERIC_TYPE extends ABSTRACT_SET KEY_GENERIC_TYPE implements NAVIGABLE_SET KEY_GENERIC_TYPE
 	{
-		AVL_TREE_SET KEY_GENERIC_TYPE set;
-		KEY_TYPE start;
-		KEY_TYPE end;
-		boolean fromStart;
-		boolean toEnd;
-		boolean loInclusive;
-		boolean hiInclusive;
+		final AVL_TREE_SET KEY_GENERIC_TYPE set;
+		final KEY_TYPE lo, hi;
+		final boolean fromStart, toEnd;
+		final boolean loInclusive, hiInclusive;
+		NAVIGABLE_SET KEY_GENERIC_TYPE inverse;
 		
-		SubSet(AVL_TREE_SET KEY_GENERIC_TYPE set, boolean fromStart, KEY_TYPE start, boolean loInclusive, boolean toEnd, KEY_TYPE end, boolean hiInclusive) {
+		public SubSet(AVL_TREE_SET KEY_GENERIC_TYPE set, boolean fromStart, KEY_TYPE lo, boolean loInclusive, boolean toEnd, KEY_TYPE hi, boolean hiInclusive)
+		{
 			this.set = set;
-			this.start = start;
-			this.end = end;
+			this.lo = lo;
+			this.hi = hi;
 			this.fromStart = fromStart;
 			this.toEnd = toEnd;
 			this.loInclusive = loInclusive;
@@ -903,13 +927,13 @@ public class AVL_TREE_SET KEY_GENERIC_TYPE extends ABSTRACT_SET KEY_GENERIC_TYPE
 		
 #if !TYPE_OBJECT
 		@Override
-		public void setDefaultMaxValue(KEY_TYPE value) { throw new UnsupportedOperationException(); }
+		public void setDefaultMaxValue(KEY_TYPE value) { set.setDefaultMaxValue(value); }
 		
 		@Override
 		public KEY_TYPE getDefaultMaxValue() { return set.getDefaultMaxValue(); }
 		
 		@Override
-		public void setDefaultMinValue(KEY_TYPE value) { throw new UnsupportedOperationException(); }
+		public void setDefaultMinValue(KEY_TYPE value) { set.setDefaultMinValue(value); }
 		
 		@Override
 		public KEY_TYPE getDefaultMinValue() { return set.getDefaultMinValue(); }
@@ -920,79 +944,74 @@ public class AVL_TREE_SET KEY_GENERIC_TYPE extends ABSTRACT_SET KEY_GENERIC_TYPE
 		public KEY_TYPE getDefaultMinValue() { return null; }
 		
 #endif
-		boolean tooLow(KEY_TYPE key) { return !fromStart && (loInclusive ? set.compare(key, start) < 0 : set.compare(key, start) <= 0); }
-		boolean tooHigh(KEY_TYPE key) { return !toEnd && (hiInclusive ? set.compare(key, end) > 0 : set.compare(key, end) >= 0); }
+		
+		boolean tooLow(KEY_TYPE key) {
+			if (!fromStart) {
+				int c = set.compare(key, lo);
+				if (c < 0 || (c == 0 && !loInclusive)) return true;
+			}
+			return false;
+		}
+		
+		boolean tooHigh(KEY_TYPE key) {
+			if (!toEnd) {
+				int c = set.compare(key, hi);
+				if (c > 0 || (c == 0 && !hiInclusive)) return true;
+			}
+			return false;
+		}
+		
 		boolean inRange(KEY_TYPE key) { return !tooLow(key) && !tooHigh(key); }
-		boolean inClosedRange(KEY_TYPE key) { return (fromStart || set.compare(key, start) >= 0) && (toEnd || set.compare(end, key) >= 0); }
+		boolean inClosedRange(KEY_TYPE key) { return (fromStart || set.compare(key, lo) >= 0) && (toEnd || set.compare(hi, key) >= 0); }
 		boolean inRange(KEY_TYPE key, boolean inclusive) { return inclusive ? inRange(key) : inClosedRange(key); }
-		protected Entry KEY_GENERIC_TYPE next(Entry KEY_GENERIC_TYPE entry) { return entry.next(); }
-		protected Entry KEY_GENERIC_TYPE start() { return findLowest(); }
 		
-		@Override
-		public boolean addAndMoveToFirst(KEY_TYPE o) { throw new UnsupportedOperationException(); }
+		protected abstract Entry KEY_GENERIC_TYPE subLowest();
+		protected abstract Entry KEY_GENERIC_TYPE subHighest();
+		protected abstract Entry KEY_GENERIC_TYPE subCeiling(KEY_TYPE key);
+		protected abstract Entry KEY_GENERIC_TYPE subHigher(KEY_TYPE key);
+		protected abstract Entry KEY_GENERIC_TYPE subFloor(KEY_TYPE key);
+		protected abstract Entry KEY_GENERIC_TYPE subLower(KEY_TYPE key);
+		protected KEY_TYPE lowKeyOrNull(Entry KEY_GENERIC_TYPE entry) { return entry == null ? getDefaultMinValue() : entry.key; }
+		protected KEY_TYPE highKeyOrNull(Entry KEY_GENERIC_TYPE entry) { return entry == null ? getDefaultMaxValue() : entry.key; }
+		protected abstract Entry KEY_GENERIC_TYPE start();
+		protected abstract Entry KEY_GENERIC_TYPE next(Entry KEY_GENERIC_TYPE entry);
 		
-		@Override
-		public boolean addAndMoveToLast(KEY_TYPE o) { throw new UnsupportedOperationException(); }
-
-		@Override
-		public boolean moveToFirst(KEY_TYPE o) { throw new UnsupportedOperationException(); }
-
-		@Override
-		public boolean moveToLast(KEY_TYPE o) { throw new UnsupportedOperationException(); }
-
-		@Override
-		public COMPARATOR KEY_GENERIC_TYPE comparator() { return set.comparator(); }
-		
-		@Override
-		public abstract BI_ITERATOR KEY_GENERIC_TYPE iterator();
-		
-		@Override
-		public KEY_TYPE FIRST_KEY() {
-			Entry KEY_GENERIC_TYPE entry = findLowest();
-			return entry == null ? getDefaultMaxValue() : entry.key;
+		final Entry KEY_GENERIC_TYPE absLowest() {
+			Entry KEY_GENERIC_TYPE e = (fromStart ? set.first : (loInclusive ? set.findCeilingNode(lo) : set.findHigherNode(lo)));
+			return (e == null || tooHigh(e.key)) ? null : e;
 		}
 		
-		protected Entry KEY_GENERIC_TYPE findLowest() {
-			if(fromStart) return set.first;
-			Entry KEY_GENERIC_TYPE entry = loInclusive ? set.findCeilingNode(start) : set.findHigherNode(start);
-			return entry == null || tooHigh(entry.key) ? null : entry;
+		final Entry KEY_GENERIC_TYPE absHighest() {
+			Entry KEY_GENERIC_TYPE e = (toEnd ? set.last : (hiInclusive ? set.findFloorNode(hi) : set.findLowerNode(hi)));
+			return (e == null || tooLow(e.key)) ? null : e;
 		}
 		
-		@Override
-		public KEY_TYPE POLL_FIRST_KEY() {
-			if(fromStart) return set.POLL_FIRST_KEY();
-			Entry KEY_GENERIC_TYPE entry = loInclusive ? set.findCeilingNode(start) : set.findHigherNode(start);
-			if(entry != null && !tooHigh(entry.key)) {
-				KEY_TYPE value = entry.key;
-				set.removeNode(entry);
-				return value;
-			}
-			return getDefaultMaxValue();
-		}
-
-		@Override
-		public KEY_TYPE LAST_KEY() {
-			Entry KEY_GENERIC_TYPE entry = findHighest();
-			return entry == null ? getDefaultMinValue() : entry.key;
+		final Entry KEY_GENERIC_TYPE absCeiling(KEY_TYPE key) {
+			if (tooLow(key)) return absLowest();
+			Entry KEY_GENERIC_TYPE e = set.findCeilingNode(key);
+			return (e == null || tooHigh(e.key)) ? null : e;
 		}
 		
-		protected Entry KEY_GENERIC_TYPE findHighest() {
-			if(toEnd) return set.last;
-			Entry KEY_GENERIC_TYPE entry = hiInclusive ? set.findFloorNode(end) : set.findLowerNode(end);
-			return entry == null || tooLow(entry.key) ? null : entry;
+		final Entry KEY_GENERIC_TYPE absHigher(KEY_TYPE key) {
+			if (tooLow(key)) return absLowest();
+			Entry KEY_GENERIC_TYPE e = set.findHigherNode(key);
+			return (e == null || tooHigh(e.key)) ? null : e;
 		}
-
-		@Override
-		public KEY_TYPE POLL_LAST_KEY() {
-			if(toEnd) return set.POLL_LAST_KEY();
-			Entry KEY_GENERIC_TYPE entry = hiInclusive ? set.findFloorNode(end) : set.findLowerNode(end);
-			if(entry != null && !tooLow(entry.key)) {
-				KEY_TYPE value = entry.key;
-				set.removeNode(entry);
-				return value;
-			}
-			return getDefaultMinValue();
+		
+		final Entry KEY_GENERIC_TYPE absFloor(KEY_TYPE key) {
+			if (tooHigh(key)) return absHighest();
+			Entry KEY_GENERIC_TYPE e = set.findFloorNode(key);
+			return (e == null || tooLow(e.key)) ? null : e;
 		}
+		
+		final Entry KEY_GENERIC_TYPE absLower(KEY_TYPE key) {
+			if (tooHigh(key)) return absHighest();
+			Entry KEY_GENERIC_TYPE e = set.findLowerNode(key);
+			return (e == null || tooLow(e.key)) ? null : e;
+		}
+		
+		final Entry KEY_GENERIC_TYPE absHighFence() { return (toEnd ? null : (hiInclusive ? set.findHigherNode(hi) : set.findCeilingNode(hi))); }
+		final Entry KEY_GENERIC_TYPE absLowFence() { return (fromStart ? null : (loInclusive ? set.findLowerNode(lo) : set.findFloorNode(lo))); }
 		
 		@Override
 		public boolean add(KEY_TYPE o) {
@@ -1017,7 +1036,7 @@ public class AVL_TREE_SET KEY_GENERIC_TYPE extends ABSTRACT_SET KEY_GENERIC_TYPE
 			KEY_TYPE o = OBJ_TO_KEY(((CLASS_TYPE)e));
 			return inRange(o) && set.contains(o);
 		}
-
+	
 		@Override
 		public boolean remove(Object e) {
 			KEY_TYPE o = OBJ_TO_KEY(((CLASS_TYPE)e));
@@ -1025,49 +1044,84 @@ public class AVL_TREE_SET KEY_GENERIC_TYPE extends ABSTRACT_SET KEY_GENERIC_TYPE
 		}
 		
 		@Override
-		public KEY_TYPE lower(KEY_TYPE e) {
-			if(tooHigh(e)) {
-				Entry KEY_GENERIC_TYPE entry = findHighest();
-				return entry == null ? getDefaultMinValue() : entry.key;
-			}
-			Entry KEY_GENERIC_TYPE entry = set.findLowerNode(e);
-			return entry == null || tooHigh(entry.key) ? getDefaultMaxValue() : entry.key;
-		}
-
-		@Override
-		public KEY_TYPE floor(KEY_TYPE e) {
-			if(tooHigh(e)) {
-				Entry KEY_GENERIC_TYPE entry = findHighest();
-				return entry == null ? getDefaultMinValue() : entry.key;
-			}
-			Entry KEY_GENERIC_TYPE entry = set.findFloorNode(e);
-			return entry == null || tooHigh(entry.key) ? getDefaultMaxValue() : entry.key;
-		}
-
-		@Override
-		public KEY_TYPE ceiling(KEY_TYPE e) {
-			if(tooLow(e)) {
-				Entry KEY_GENERIC_TYPE entry = findLowest();
-				return entry == null ? getDefaultMaxValue() : entry.key;
-			}
-			Entry KEY_GENERIC_TYPE entry = set.findCeilingNode(e);
-			return entry == null || tooLow(entry.key) ? getDefaultMinValue() : entry.key;
-		}
-
-		@Override
-		public KEY_TYPE higher(KEY_TYPE e) {
-			if(tooLow(e)) {
-				Entry KEY_GENERIC_TYPE entry = findLowest();
-				return entry == null ? getDefaultMaxValue() : entry.key;
-			}
-			Entry KEY_GENERIC_TYPE entry = set.findHigherNode(e);
-			return entry == null || tooLow(entry.key) ? getDefaultMinValue() : entry.key;
+		public boolean isEmpty() {
+			if(fromStart && toEnd) return set.isEmpty();
+            Entry KEY_GENERIC_TYPE n = absLowest();
+            return n == null || tooHigh(n.key);
 		}
 		
 		@Override
 		public int size() {
-			return fromStart && toEnd ? set.size() : iterator().skip(Integer.MAX_VALUE);
+			if(fromStart && toEnd) return set.size();
+			int i = 0;
+			for(ITERATOR KEY_GENERIC_TYPE iter = iterator();iter.hasNext();iter.NEXT(),i++);
+			return i;
 		}
+		
+		@Override
+		public KEY_TYPE lower(KEY_TYPE e) {
+			return lowKeyOrNull(subLower(e));
+		}
+		
+		@Override
+		public KEY_TYPE floor(KEY_TYPE e) {
+			return lowKeyOrNull(subFloor(e));
+		}
+		
+		@Override
+		public KEY_TYPE ceiling(KEY_TYPE e) {
+			return highKeyOrNull(subCeiling(e));
+		}
+		
+		@Override
+		public KEY_TYPE higher(KEY_TYPE e) {
+			return highKeyOrNull(subHigher(e));
+		}
+		
+		@Override
+		public KEY_TYPE POLL_FIRST_KEY() {
+			Entry KEY_GENERIC_TYPE entry = subLowest();
+			if(entry != null) {
+				KEY_TYPE result = entry.key;
+				set.removeNode(entry);
+				return result;
+			}
+			return getDefaultMinValue();
+		}
+		
+		@Override
+		public KEY_TYPE POLL_LAST_KEY() {
+			Entry KEY_GENERIC_TYPE entry = subHighest();
+			if(entry != null) {
+				KEY_TYPE result = entry.key;
+				set.removeNode(entry);
+				return result;
+			}
+			return getDefaultMaxValue();
+		}
+		
+		@Override
+		public KEY_TYPE FIRST_KEY() {
+			Entry KEY_GENERIC_TYPE entry = subLowest();
+			if(entry == null) throw new NoSuchElementException();
+			return entry.key;
+		}
+		
+		@Override
+		public KEY_TYPE LAST_KEY() {
+			Entry KEY_GENERIC_TYPE entry = subHighest();
+			if(entry == null) throw new NoSuchElementException();
+			return entry.key;
+		}
+		
+		@Override
+		public boolean addAndMoveToFirst(KEY_TYPE o) { throw new UnsupportedOperationException(); }
+		@Override
+		public boolean addAndMoveToLast(KEY_TYPE o) { throw new UnsupportedOperationException(); }
+		@Override
+		public boolean moveToFirst(KEY_TYPE o) { throw new UnsupportedOperationException(); }
+		@Override
+		public boolean moveToLast(KEY_TYPE o) { throw new UnsupportedOperationException(); }
 		
 		@Override
 		public SubSet KEY_GENERIC_TYPE copy() { throw new UnsupportedOperationException(); }
@@ -1172,171 +1226,207 @@ public class AVL_TREE_SET KEY_GENERIC_TYPE extends ABSTRACT_SET KEY_GENERIC_TYPE
 			return result;
 		}
 		
-		class SubSetIterator implements LIST_ITERATOR KEY_GENERIC_TYPE
+		class AscendingSubSetIterator implements BI_ITERATOR KEY_GENERIC_TYPE
 		{
-			Entry KEY_GENERIC_TYPE previous;
+			Entry KEY_GENERIC_TYPE lastReturned;
 			Entry KEY_GENERIC_TYPE next;
-			Entry KEY_GENERIC_TYPE current;
-			int index = 0;
+			boolean unboundForwardFence;
+			boolean unboundBackwardFence;
+			KEY_TYPE forwardFence;
+			KEY_TYPE backwardFence;
 			
-			public SubSetIterator(Entry KEY_GENERIC_TYPE entry) {
-				next = entry;
-				previous = entry == null ? null : entry.previous();
+			public AscendingSubSetIterator(Entry KEY_GENERIC_TYPE first, Entry KEY_GENERIC_TYPE forwardFence, Entry KEY_GENERIC_TYPE backwardFence)
+			{
+				next = first;
+				this.forwardFence = forwardFence == null ? EMPTY_KEY_VALUE : forwardFence.key;
+				this.backwardFence = backwardFence == null ? EMPTY_KEY_VALUE : backwardFence.key;
+				unboundForwardFence = forwardFence == null;
+				unboundBackwardFence = backwardFence == null;
 			}
 			
 			@Override
 			public boolean hasNext() {
-				return next != null;
-			}
-			
-			@Override
-			public boolean hasPrevious() {
-				return previous != null;
-			}
-			
-			@Override
-			public int nextIndex() {
-				return index;
-			}
-			
-			@Override
-			public int previousIndex() {
-				return index - 1;
-			}
-			
-			boolean topReached(Entry KEY_GENERIC_TYPE entry) {
-				return hiInclusive ? set.compare(entry.key, end) >= 0 : set.compare(entry.key, end) > 0;
-			}
-			
-			boolean bottomReached(Entry KEY_GENERIC_TYPE entry) {
-				return loInclusive ? set.compare(entry.key, start) <= 0 : set.compare(entry.key, start) < 0;
-			}
-			
-			protected void updateNext() {
-				next = current.next();
-				if(!toEnd && next != null && topReached(next)) next = null;
-			}
-			
-			protected void updatePrevious() {
-				previous = current.previous();
-				if(!fromStart && previous != null && bottomReached(previous)) previous = null;
+                return next != null && (unboundForwardFence || next.key != forwardFence);
 			}
 			
 			@Override
 			public KEY_TYPE NEXT() {
 				if(!hasNext()) throw new NoSuchElementException();
-				current = previous = next;
-				updateNext();
-				index++;
-				return current.key;
+				lastReturned = next;
+				KEY_TYPE result = next.key;
+				next = next.next();
+				return result;
+			}
+			
+			@Override
+			public boolean hasPrevious() {
+                return next != null && (unboundBackwardFence || next.key != backwardFence);
 			}
 			
 			@Override
 			public KEY_TYPE PREVIOUS() {
 				if(!hasPrevious()) throw new NoSuchElementException();
-				current = next = previous;
-				updatePrevious();
-				index--;
-				return current.key;
+				lastReturned = next;
+				KEY_TYPE result = next.key;
+				next = next.previous();
+				return result;
 			}
 			
 			@Override
 			public void remove() {
-				if(current == null) throw new IllegalStateException();
-				if(current == previous) index--;
-				updateNext();
-				updatePrevious();
-				set.removeNode(current);
-				current = null;
+				if(lastReturned == null) throw new IllegalStateException();
+				if(lastReturned.needsSuccessor()) next = lastReturned;
+				set.removeNode(lastReturned);
+				lastReturned = null;
+			}
+		}
+		
+		class DescendingSubSetIterator implements BI_ITERATOR KEY_GENERIC_TYPE
+		{
+			Entry KEY_GENERIC_TYPE lastReturned;
+			Entry KEY_GENERIC_TYPE next;
+			boolean unboundForwardFence;
+			boolean unboundBackwardFence;
+			KEY_TYPE forwardFence;
+			KEY_TYPE backwardFence;
+			
+			public DescendingSubSetIterator(Entry KEY_GENERIC_TYPE first, Entry KEY_GENERIC_TYPE forwardFence, Entry KEY_GENERIC_TYPE backwardFence)
+			{
+				next = first;
+				this.forwardFence = forwardFence == null ? EMPTY_KEY_VALUE : forwardFence.key;
+				this.backwardFence = backwardFence == null ? EMPTY_KEY_VALUE : backwardFence.key;
+				unboundForwardFence = forwardFence == null;
+				unboundBackwardFence = backwardFence == null;
 			}
 			
 			@Override
-			public void set(KEY_TYPE e){ throw new UnsupportedOperationException(); }
+			public boolean hasNext() {
+                return next != null && (unboundForwardFence || next.key != forwardFence);
+			}
 			
 			@Override
-			public void add(KEY_TYPE e) { throw new UnsupportedOperationException(); }
+			public KEY_TYPE NEXT() {
+				if(!hasNext()) throw new NoSuchElementException();
+				lastReturned = next;
+				KEY_TYPE result = next.key;
+				next = next.previous();
+				return result;
+			}
+			
+			@Override
+			public boolean hasPrevious() {
+                return next != null && (unboundBackwardFence || next.key != backwardFence);
+			}
+			
+			@Override
+			public KEY_TYPE PREVIOUS() {
+				if(!hasPrevious()) throw new NoSuchElementException();
+				lastReturned = next;
+				KEY_TYPE result = next.key;
+				next = next.next();
+				return result;
+			}
+			
+			@Override
+			public void remove() {
+				if(lastReturned == null) throw new IllegalStateException();
+				set.removeNode(lastReturned);
+				lastReturned = null;
+			}
 		}
 	}
 	
-	private class SetIterator implements LIST_ITERATOR KEY_GENERIC_TYPE
+	class AscendingSetIterator implements BI_ITERATOR KEY_GENERIC_TYPE
 	{
-		Entry KEY_GENERIC_TYPE previous;
+		Entry KEY_GENERIC_TYPE lastReturned;
 		Entry KEY_GENERIC_TYPE next;
-		Entry KEY_GENERIC_TYPE current;
-		int index = 0;
-		 
-		public SetIterator(boolean descending) {
-			if(descending) previous = last;
-			else next = first;
-		}
 		
-		public SetIterator(Entry KEY_GENERIC_TYPE entry) {
-			next = entry;
-			previous = entry.previous();
+		public AscendingSetIterator(Entry KEY_GENERIC_TYPE first)
+		{
+			next = first;
 		}
 		
 		@Override
 		public boolean hasNext() {
-			return next != null;
-		}
-		
-		@Override
-		public boolean hasPrevious() {
-			return previous != null;
-		}
-		
-		@Override
-		public int nextIndex() {
-			return index;
-		}
-		
-		@Override
-		public int previousIndex() {
-			return index - 1;
-		}
-		
-		protected void updateNext() {
-			next = current.next();
-		}
-		
-		protected void updatePrevious() {
-			previous = current.previous();
+            return next != null;
 		}
 		
 		@Override
 		public KEY_TYPE NEXT() {
 			if(!hasNext()) throw new NoSuchElementException();
-			current = previous = next;
-			updateNext();
-			index++;
-			return current.key;
+			lastReturned = next;
+			KEY_TYPE result = next.key;
+			next = next.next();
+			return result;
+		}
+		
+		@Override
+		public boolean hasPrevious() {
+            return next != null;
 		}
 		
 		@Override
 		public KEY_TYPE PREVIOUS() {
 			if(!hasPrevious()) throw new NoSuchElementException();
-			current = next = previous;
-			updatePrevious();
-			index--;
-			return current.key;
+			lastReturned = next;
+			KEY_TYPE result = next.key;
+			next = next.previous();
+			return result;
 		}
 		
 		@Override
 		public void remove() {
-			if(current == null) throw new IllegalStateException();
-			if(current == previous) index--;
-			updateNext();
-			updatePrevious();
-			if(current.needsSuccessor()) next = current;
-			removeNode(current);
-			current = null;
+			if(lastReturned == null) throw new IllegalStateException();
+			if(lastReturned.needsSuccessor()) next = lastReturned;
+			removeNode(lastReturned);
+			lastReturned = null;
 		}
-				
-		@Override
-		public void set(KEY_TYPE e){ throw new UnsupportedOperationException(); }
+	}
+	
+	class DescendingSetIterator implements BI_ITERATOR KEY_GENERIC_TYPE
+	{
+		Entry KEY_GENERIC_TYPE lastReturned;
+		Entry KEY_GENERIC_TYPE next;
+		
+		public DescendingSetIterator(Entry KEY_GENERIC_TYPE first)
+		{
+			next = first;
+		}
 		
 		@Override
-		public void add(KEY_TYPE e) { throw new UnsupportedOperationException(); }
+		public boolean hasNext() {
+            return next != null;
+		}
+		
+		@Override
+		public KEY_TYPE NEXT() {
+			if(!hasNext()) throw new NoSuchElementException();
+			lastReturned = next;
+			KEY_TYPE result = next.key;
+			next = next.previous();
+			return result;
+		}
+		
+		@Override
+		public boolean hasPrevious() {
+            return next != null;
+		}
+		
+		@Override
+		public KEY_TYPE PREVIOUS() {
+			if(!hasPrevious()) throw new NoSuchElementException();
+			lastReturned = next;
+			KEY_TYPE result = next.key;
+			next = next.next();
+			return result;
+		}
+		
+		@Override
+		public void remove() {
+			if(lastReturned == null) throw new IllegalStateException();
+			removeNode(lastReturned);
+			lastReturned = null;
+		}
 	}
 	
 	private static final class Entry KEY_GENERIC_TYPE

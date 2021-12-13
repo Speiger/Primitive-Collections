@@ -1,5 +1,9 @@
 # Changelog of versions
 
+### Version 0.5.1
+- Fixed: Reworked the NavigableSet/Map implementations of RBTree/AVLTree/Array Sets/Maps so they are now deemed stable.
+- Added: Another 150k Unit tests.
+
 ### Version 0.5.0
 - Added: 2 Helper functions to find out how many bits are required to store a Number.
 - Added: pour function directly into Iterable which allows to collect all elements in the Iterable directly.

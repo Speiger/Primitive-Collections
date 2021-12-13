@@ -2,14 +2,17 @@ package speiger.src.collections.objects.map;
 
 import java.util.Comparator;
 import java.util.Map;
+import java.util.NavigableMap;
 import java.util.Objects;
 import java.util.function.BiFunction;
 import java.util.function.Supplier;
 
 import com.google.common.collect.testing.AnEnum;
 import com.google.common.collect.testing.MapTestSuiteBuilder;
+import com.google.common.collect.testing.NavigableMapTestSuiteBuilder;
 import com.google.common.collect.testing.TestEnumMapGenerator;
 import com.google.common.collect.testing.TestStringMapGenerator;
+import com.google.common.collect.testing.TestStringSortedMapGenerator;
 import com.google.common.collect.testing.features.CollectionFeature;
 import com.google.common.collect.testing.features.CollectionSize;
 import com.google.common.collect.testing.features.MapFeature;
@@ -39,10 +42,10 @@ public class ObjectMapTests extends TestCase
 		suite.addTest(suite("LinkedHashMap", Object2ObjectLinkedOpenHashMap::new, true));
 		suite.addTest(suite("CustomHashMap", () -> new Object2ObjectOpenCustomHashMap<>(Strategy.INSTANCE), true));
 		suite.addTest(suite("LinkedCustomHashMap", () -> new Object2ObjectLinkedOpenCustomHashMap<>(Strategy.INSTANCE), true));
-		suite.addTest(suite("RBTreeMap_NonNull", Object2ObjectRBTreeMap::new, false));
-		suite.addTest(suite("AVLTreeMap_NonNull", Object2ObjectAVLTreeMap::new, false));
-		suite.addTest(suite("RBTreeMap_Null", () -> new Object2ObjectRBTreeMap<String, String>(Comparator.nullsFirst(Comparator.naturalOrder())), true));
-		suite.addTest(suite("AVLTreeMap_Null", () -> new Object2ObjectAVLTreeMap<String, String>(Comparator.nullsFirst(Comparator.naturalOrder())), true));
+		suite.addTest(navigableSuite("RBTreeMap_NonNull", Object2ObjectRBTreeMap::new, false));
+		suite.addTest(navigableSuite("AVLTreeMap_NonNull", Object2ObjectAVLTreeMap::new, false));
+		suite.addTest(navigableSuite("RBTreeMap_Null", () -> new Object2ObjectRBTreeMap<>(new NullFriendlyComparator()), true));
+		suite.addTest(navigableSuite("AVLTreeMap_Null", () -> new Object2ObjectAVLTreeMap<>(new NullFriendlyComparator()), true));
 		suite.addTest(immutableSuit("ImmutableMap", ImmutableObject2ObjectOpenHashMap::new));
 		suite.addTest(suite("ArrayMap", Object2ObjectArrayMap::new, true));
 		suite.addTest(enumSuite("EnumMap", () -> new Enum2ObjectMap<>(AnEnum.class)));
@@ -56,6 +59,22 @@ public class ObjectMapTests extends TestCase
 			@Override
 			protected Map<String, String> create(Map.Entry<String, String>[] entries) {
 				Map<String, String> map = factory.get();
+				for(Map.Entry<String, String> entry : entries) {
+					map.put(entry.getKey(), entry.getValue());
+				}
+				return map;
+			}
+		}).named(name).withFeatures(CollectionSize.ANY, MapFeature.GENERAL_PURPOSE, MapFeature.ALLOWS_NULL_VALUES, CollectionFeature.SUPPORTS_ITERATOR_REMOVE);
+		if(allowNull) builder.withFeatures(MapFeature.ALLOWS_NULL_KEYS, MapFeature.ALLOWS_ANY_NULL_QUERIES);
+		return builder.createTestSuite();
+	}
+	
+	public static Test navigableSuite(String name, Supplier<NavigableMap<String, String>> factory, boolean allowNull)
+	{
+		MapTestSuiteBuilder<String, String> builder = NavigableMapTestSuiteBuilder.using(new TestStringSortedMapGenerator() {
+			@Override
+			protected NavigableMap<String, String> create(Map.Entry<String, String>[] entries) {
+				NavigableMap<String, String> map = factory.get();
 				for(Map.Entry<String, String> entry : entries) {
 					map.put(entry.getKey(), entry.getValue());
 				}
@@ -95,6 +114,14 @@ public class ObjectMapTests extends TestCase
 			}
 		}).named(name).withFeatures(CollectionSize.ANY, MapFeature.GENERAL_PURPOSE, MapFeature.ALLOWS_NULL_VALUES, CollectionFeature.SUPPORTS_ITERATOR_REMOVE);
 		return builder.createTestSuite();
+	}
+	
+	private static final class NullFriendlyComparator implements Comparator<String>
+	{
+		@Override
+		public int compare(String left, String right) {
+			return String.valueOf(left).compareTo(String.valueOf(right));
+		}
 	}
 	
 	private static class Strategy implements ObjectStrategy<String>

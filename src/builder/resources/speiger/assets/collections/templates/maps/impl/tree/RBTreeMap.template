@@ -1,5 +1,6 @@
 package speiger.src.collections.PACKAGE.maps.impl.tree;
 
+import java.util.Collections;
 import java.util.Map;
 #if TYPE_OBJECT
 import java.util.Comparator;
@@ -24,7 +25,6 @@ import speiger.src.collections.PACKAGE.functions.function.UNARY_OPERATOR;
 #if !SAME_TYPE
 import speiger.src.collections.PACKAGE.functions.function.SINGLE_UNARY_OPERATOR;
 #endif
-import speiger.src.collections.PACKAGE.lists.LIST_ITERATOR;
 import speiger.src.collections.PACKAGE.maps.abstracts.ABSTRACT_MAP;
 import speiger.src.collections.PACKAGE.maps.interfaces.MAP;
 import speiger.src.collections.PACKAGE.maps.interfaces.NAVIGABLE_MAP;
@@ -32,16 +32,14 @@ import speiger.src.collections.PACKAGE.sets.ABSTRACT_SET;
 import speiger.src.collections.PACKAGE.sets.NAVIGABLE_SET;
 import speiger.src.collections.PACKAGE.sets.SET;
 import speiger.src.collections.PACKAGE.sets.SORTED_SET;
-import speiger.src.collections.PACKAGE.utils.ITERATORS;
 import speiger.src.collections.PACKAGE.utils.maps.MAPS;
 import speiger.src.collections.VALUE_PACKAGE.collections.VALUE_ABSTRACT_COLLECTION;
 import speiger.src.collections.VALUE_PACKAGE.collections.VALUE_COLLECTION;
 import speiger.src.collections.VALUE_PACKAGE.collections.VALUE_ITERATOR;
 import speiger.src.collections.VALUE_PACKAGE.functions.VALUE_SUPPLIER;
 #if !SAME_TYPE
+import speiger.src.collections.VALUE_PACKAGE.collections.VALUE_BI_ITERATOR;
 import speiger.src.collections.VALUE_PACKAGE.functions.function.VALUE_UNARY_OPERATOR;
-import speiger.src.collections.VALUE_PACKAGE.lists.VALUE_LIST_ITERATOR;
-import speiger.src.collections.VALUE_PACKAGE.utils.VALUE_ITERATORS;
 #endif
 #if !VALUE_OBJECT && !SAME_TYPE
 import speiger.src.collections.VALUE_PACKAGE.functions.VALUE_CONSUMER;
@@ -62,8 +60,7 @@ import speiger.src.collections.objects.functions.consumer.VALUE_BI_FROM_OBJECT_C
 import speiger.src.collections.VALUE_PACKAGE.functions.function.VALUE_PREDICATE;
 #endif
 #if !TYPE_OBJECT && !VALUE_OBJECT
-import speiger.src.collections.objects.lists.ObjectListIterator;
-import speiger.src.collections.objects.utils.ObjectIterators;
+import speiger.src.collections.objects.collections.ObjectBidirectionalIterator;
 #endif
 #if !VALUE_OBJECT
 import speiger.src.collections.objects.collections.ObjectIterator;
@@ -88,11 +85,11 @@ import speiger.src.collections.objects.sets.ObjectSet;
 public class RB_TREE_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_VALUE_GENERIC_TYPE implements NAVIGABLE_MAP KEY_VALUE_GENERIC_TYPE
 {
 	/** The center of the Tree */
-	protected transient Entry KEY_VALUE_GENERIC_TYPE tree;
+	protected transient Node KEY_VALUE_GENERIC_TYPE tree;
 	/** The Lowest possible Node */
-	protected transient Entry KEY_VALUE_GENERIC_TYPE first;
+	protected transient Node KEY_VALUE_GENERIC_TYPE first;
 	/** The Highest possible Node */
-	protected transient Entry KEY_VALUE_GENERIC_TYPE last;
+	protected transient Node KEY_VALUE_GENERIC_TYPE last;
 	/** The amount of elements stored in the Map */
 	protected int size = 0;
 	/** The Sorter of the Tree */
@@ -209,7 +206,7 @@ public class RB_TREE_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_VALUE_G
 		comparator = comp;
 		putAll(map);
 	}
-	
+
 #if TYPE_OBJECT
 	/** only used for primitives 
 	 * @return null 
@@ -231,18 +228,19 @@ public class RB_TREE_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_VALUE_G
 	public KEY_TYPE getDefaultMinValue() { return defaultMinNotFound; }
 	
 #endif
+	
 	@Override
 	public VALUE_TYPE put(KEY_TYPE key, VALUE_TYPE value) {
 #if TYPE_OBJECT
 		validate(key);
 #endif
 		if(tree == null) {
-			tree = first = last = new EntryKV_BRACES(key, value, null);
+			tree = first = last = new NodeKV_BRACES(key, value, null);
 			size++;
 			return getDefaultReturnValue();
 		}
 		int compare = 0;
-		Entry KEY_VALUE_GENERIC_TYPE parent = tree;
+		Node KEY_VALUE_GENERIC_TYPE parent = tree;
 		while(true) {
 			if((compare = compare(key, parent.key)) == 0) return parent.setValue(value);
 			if(compare < 0) {
@@ -254,7 +252,7 @@ public class RB_TREE_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_VALUE_G
 				parent = parent.right;
 			}
 		}
-		Entry KEY_VALUE_GENERIC_TYPE adding = new EntryKV_BRACES(key, value, parent);
+		Node KEY_VALUE_GENERIC_TYPE adding = new NodeKV_BRACES(key, value, parent);
 		if(compare < 0)  {
 			parent.left = adding;
 			if(parent == first)	first = adding;
@@ -273,14 +271,13 @@ public class RB_TREE_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_VALUE_G
 #if TYPE_OBJECT
 		validate(key);
 #endif
-
 		if(tree == null) {
-			tree = first = last = new EntryKV_BRACES(key, value, null);
+			tree = first = last = new NodeKV_BRACES(key, value, null);
 			size++;
 			return getDefaultReturnValue();
 		}
 		int compare = 0;
-		Entry KEY_VALUE_GENERIC_TYPE parent = tree;
+		Node KEY_VALUE_GENERIC_TYPE parent = tree;
 		while(true) {
 			if((compare = compare(key, parent.key)) == 0) return parent.value;
 			if(compare < 0) {
@@ -292,7 +289,7 @@ public class RB_TREE_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_VALUE_G
 				parent = parent.right;
 			}
 		}
-		Entry KEY_VALUE_GENERIC_TYPE adding = new EntryKV_BRACES(key, value, parent);
+		Node KEY_VALUE_GENERIC_TYPE adding = new NodeKV_BRACES(key, value, parent);
 		if(compare < 0)  {
 			parent.left = adding;
 			if(parent == first)	first = adding;
@@ -313,12 +310,12 @@ public class RB_TREE_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_VALUE_G
 		validate(key);
 #endif
 		if(tree == null) {
-			tree = first = last = new EntryKV_BRACES(key, value, null);
+			tree = first = last = new NodeKV_BRACES(key, value, null);
 			size++;
 			return getDefaultReturnValue();
 		}
 		int compare = 0;
-		Entry KEY_VALUE_GENERIC_TYPE parent = tree;
+		Node KEY_VALUE_GENERIC_TYPE parent = tree;
 		while(true) {
 			if((compare = compare(key, parent.key)) == 0) return parent.addTo(value);
 			if(compare < 0) {
@@ -330,7 +327,7 @@ public class RB_TREE_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_VALUE_G
 				parent = parent.right;
 			}
 		}
-		Entry KEY_VALUE_GENERIC_TYPE adding = new EntryKV_BRACES(key, value, parent);
+		Node KEY_VALUE_GENERIC_TYPE adding = new NodeKV_BRACES(key, value, parent);
 		if(compare < 0)  {
 			parent.left = adding;
 			if(parent == first)	first = adding;
@@ -360,7 +357,7 @@ public class RB_TREE_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_VALUE_G
 	
 	@Override
 	public COMPARATOR KEY_GENERIC_TYPE comparator() { return comparator; }
-	
+
 #if TYPE_OBJECT
 	@Override
 	public boolean containsKey(Object key) {
@@ -376,21 +373,21 @@ public class RB_TREE_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_VALUE_G
 #endif
 	@Override
 	public VALUE_TYPE GET_VALUE(KEY_TYPE key) {
-		Entry KEY_VALUE_GENERIC_TYPE node = findNode(key);
+		Node KEY_VALUE_GENERIC_TYPE node = findNode(key);
 		return node == null ? getDefaultReturnValue() : node.value;
 	}
 	
 #if TYPE_OBJECT && VALUE_OBJECT
 	@Override
 	public VALUE_TYPE getOrDefault(Object key, VALUE_TYPE defaultValue) {
-		Entry KEY_VALUE_GENERIC_TYPE node = findNode((CLASS_TYPE)key);
+		Node KEY_VALUE_GENERIC_TYPE node = findNode((CLASS_TYPE)key);
 		return node == null ? defaultValue : node.value;
 	}
 	
 #else
 	@Override
 	public VALUE_TYPE getOrDefault(KEY_TYPE key, VALUE_TYPE defaultValue) {
-		Entry KEY_VALUE_GENERIC_TYPE node = findNode(key);
+		Node KEY_VALUE_GENERIC_TYPE node = findNode(key);
 		return node == null ? defaultValue : node.value;
 	}
 	
@@ -403,7 +400,7 @@ public class RB_TREE_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_VALUE_G
 	
 	@Override
 	public KEY_TYPE POLL_FIRST_ENTRY_KEY() {
-		if(tree == null) throw new NoSuchElementException();
+		if(tree == null) return EMPTY_KEY_VALUE;
 		KEY_TYPE result = first.key;
 		removeNode(first);
 		return result;
@@ -417,7 +414,7 @@ public class RB_TREE_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_VALUE_G
 	
 	@Override
 	public KEY_TYPE POLL_LAST_ENTRY_KEY() {
-		if(tree == null) throw new NoSuchElementException();
+		if(tree == null) return EMPTY_KEY_VALUE;
 		KEY_TYPE result = last.key;
 		removeNode(last);
 		return result;
@@ -425,28 +422,28 @@ public class RB_TREE_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_VALUE_G
 	
 	@Override
 	public MAP.Entry KEY_VALUE_GENERIC_TYPE firstEntry() {
-		if(tree == null) throw new NoSuchElementException();
-		return new BasicEntryKV_BRACES(first.key, first.value);
+		if(tree == null) return null;
+		return first.export();
 	}
 	
 	@Override
 	public MAP.Entry KEY_VALUE_GENERIC_TYPE lastEntry() {
-		if(tree == null) throw new NoSuchElementException();
-		return new BasicEntryKV_BRACES(last.key, last.value);
+		if(tree == null) return null;
+		return last.export();
 	}
 	
 	@Override
 	public MAP.Entry KEY_VALUE_GENERIC_TYPE pollFirstEntry() {
-		if(tree == null) throw new NoSuchElementException();
-		BasicEntry KEY_VALUE_GENERIC_TYPE entry = new BasicEntryKV_BRACES(first.key, first.value);
+		if(tree == null) return null;
+		BasicEntry KEY_VALUE_GENERIC_TYPE entry = first.export();
 		removeNode(first);
 		return entry;
 	}
 	
 	@Override
 	public MAP.Entry KEY_VALUE_GENERIC_TYPE pollLastEntry() {
-		if(tree == null) throw new NoSuchElementException();
-		BasicEntry KEY_VALUE_GENERIC_TYPE entry = new BasicEntryKV_BRACES(last.key, last.value);
+		if(tree == null) return null;
+		BasicEntry KEY_VALUE_GENERIC_TYPE entry = last.export();
 		removeNode(last);
 		return entry;
 	}
@@ -465,7 +462,7 @@ public class RB_TREE_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_VALUE_G
 	
 	@Override
 	public VALUE_TYPE REMOVE_VALUE(KEY_TYPE key) {
-		Entry KEY_VALUE_GENERIC_TYPE entry = findNode(key);
+		Node KEY_VALUE_GENERIC_TYPE entry = findNode(key);
 		if(entry == null) return getDefaultReturnValue();
 		VALUE_TYPE value = entry.value;
 		removeNode(entry);
@@ -474,7 +471,7 @@ public class RB_TREE_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_VALUE_G
 	
 	@Override
 	public VALUE_TYPE REMOVE_VALUEOrDefault(KEY_TYPE key, VALUE_TYPE defaultValue) {
-		Entry KEY_VALUE_GENERIC_TYPE entry = findNode(key);
+		Node KEY_VALUE_GENERIC_TYPE entry = findNode(key);
 		if(entry == null) return defaultValue;
 		VALUE_TYPE value = entry.value;
 		removeNode(entry);
@@ -484,7 +481,7 @@ public class RB_TREE_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_VALUE_G
 #if TYPE_OBJECT && VALUE_OBJECT
 	@Override
 	public boolean remove(Object key, Object value) {
-		Entry KEY_VALUE_GENERIC_TYPE entry = findNode((CLASS_TYPE)key);
+		Node KEY_VALUE_GENERIC_TYPE entry = findNode((CLASS_TYPE)key);
 		if(entry == null || !Objects.equals(value, entry.value)) return false;
 		removeNode(entry);
 		return true;
@@ -493,7 +490,7 @@ public class RB_TREE_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_VALUE_G
 #else
 	@Override
 	public boolean remove(KEY_TYPE key, VALUE_TYPE value) {
-		Entry KEY_VALUE_GENERIC_TYPE entry = findNode(key);
+		Node KEY_VALUE_GENERIC_TYPE entry = findNode(key);
 		if(entry == null || entry.value != value) return false;
 		removeNode(entry);
 		return true;
@@ -502,7 +499,7 @@ public class RB_TREE_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_VALUE_G
 #endif
 	@Override
 	public boolean replace(KEY_TYPE key, VALUE_TYPE oldValue, VALUE_TYPE newValue) {
-		Entry KEY_VALUE_GENERIC_TYPE entry = findNode(key);
+		Node KEY_VALUE_GENERIC_TYPE entry = findNode(key);
 		if(entry == null || entry.value != oldValue) return false;
 		entry.value = newValue;
 		return true;
@@ -510,7 +507,7 @@ public class RB_TREE_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_VALUE_G
 	
 	@Override
 	public VALUE_TYPE replace(KEY_TYPE key, VALUE_TYPE value) {
-		Entry KEY_VALUE_GENERIC_TYPE entry = findNode(key);
+		Node KEY_VALUE_GENERIC_TYPE entry = findNode(key);
 		if(entry == null) return getDefaultReturnValue();
 		VALUE_TYPE oldValue = entry.value;
 		entry.value = value;
@@ -523,7 +520,7 @@ public class RB_TREE_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_VALUE_G
 #if TYPE_OBJECT
 		validate(key);
 #endif
-		Entry KEY_VALUE_GENERIC_TYPE entry = findNode(key);
+		Node KEY_VALUE_GENERIC_TYPE entry = findNode(key);
 		if(entry == null) {
 			VALUE_TYPE newValue = mappingFunction.APPLY_VALUE(key, getDefaultReturnValue());
 			if(VALUE_EQUALS(newValue, getDefaultReturnValue())) return newValue;
@@ -545,14 +542,14 @@ public class RB_TREE_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_VALUE_G
 #if TYPE_OBJECT
 		validate(key);
 #endif
-		Entry KEY_VALUE_GENERIC_TYPE entry = findNode(key);
+		Node KEY_VALUE_GENERIC_TYPE entry = findNode(key);
 		if(entry == null) {
 			VALUE_TYPE newValue = mappingFunction.GET_VALUE(key);
 			if(VALUE_EQUALS(newValue, getDefaultReturnValue())) return newValue;
 			put(key, newValue);
 			return newValue;
 		}
-		if(VALUE_EQUALS(entry.value, getDefaultReturnValue())) {
+		if(Objects.equals(entry.value, getDefaultReturnValue())) {
 			VALUE_TYPE newValue = mappingFunction.GET_VALUE(key);
 			if(VALUE_EQUALS(newValue, getDefaultReturnValue())) return newValue;
 			entry.value = newValue;
@@ -566,7 +563,7 @@ public class RB_TREE_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_VALUE_G
 #if TYPE_OBJECT
 		validate(key);
 #endif
-		Entry KEY_VALUE_GENERIC_TYPE entry = findNode(key);
+		Node KEY_VALUE_GENERIC_TYPE entry = findNode(key);
 		if(entry == null) {
 			VALUE_TYPE newValue = valueProvider.VALUE_GET_KEY();
 			if(VALUE_EQUALS(newValue, getDefaultReturnValue())) return newValue;
@@ -587,7 +584,7 @@ public class RB_TREE_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_VALUE_G
 #if TYPE_OBJECT
 		validate(key);
 #endif
-		Entry KEY_VALUE_GENERIC_TYPE entry = findNode(key);
+		Node KEY_VALUE_GENERIC_TYPE entry = findNode(key);
 		if(entry == null || VALUE_EQUALS(entry.value, getDefaultReturnValue())) return getDefaultReturnValue();
 		VALUE_TYPE newValue = mappingFunction.APPLY_VALUE(key, entry.value);
 		if(VALUE_EQUALS(newValue, getDefaultReturnValue())) {
@@ -604,7 +601,7 @@ public class RB_TREE_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_VALUE_G
 #if TYPE_OBJECT
 		validate(key);
 #endif
-		Entry KEY_VALUE_GENERIC_TYPE entry = findNode(key);
+		Node KEY_VALUE_GENERIC_TYPE entry = findNode(key);
 		VALUE_TYPE newValue = entry == null || VALUE_EQUALS(entry.value, getDefaultReturnValue()) ? value : mappingFunction.APPLY_VALUE(entry.value, value);
 		if(VALUE_EQUALS(newValue, getDefaultReturnValue())) {
 			if(entry != null)
@@ -620,7 +617,7 @@ public class RB_TREE_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_VALUE_G
 		Objects.requireNonNull(mappingFunction);
 		for(MAP.Entry KEY_VALUE_GENERIC_TYPE entry : MAPS.fastIterable(m)) {
 			KEY_TYPE key = entry.ENTRY_KEY();
-			Entry KEY_VALUE_GENERIC_TYPE subEntry = findNode(key);
+			Node KEY_VALUE_GENERIC_TYPE subEntry = findNode(key);
 			VALUE_TYPE newValue = subEntry == null || VALUE_EQUALS(subEntry.value, getDefaultReturnValue()) ? entry.ENTRY_VALUE() : mappingFunction.APPLY_VALUE(subEntry.value, entry.ENTRY_VALUE());
 			if(VALUE_EQUALS(newValue, getDefaultReturnValue())) {
 				if(subEntry != null)
@@ -633,7 +630,7 @@ public class RB_TREE_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_VALUE_G
 	
 	@Override
 	public void forEach(BI_CONSUMER KEY_VALUE_GENERIC_TYPE action) {
-		for(Entry KEY_VALUE_GENERIC_TYPE entry = first;entry != null;entry = entry.next())
+		for(Node KEY_VALUE_GENERIC_TYPE entry = first;entry != null;entry = entry.next())
 			action.accept(entry.key, entry.value);
 	}
 	
@@ -648,25 +645,29 @@ public class RB_TREE_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_VALUE_G
 		tree = null;
 	}
 	
-	LIST_ITERATOR KEY_GENERIC_TYPE keyIterator(boolean descending) {
-		LIST_ITERATOR KEY_GENERIC_TYPE iter = new KeyIterator(descending);
-		return descending ? ITERATORS.invert(iter) : iter;
+	protected BI_ITERATOR KEY_GENERIC_TYPE keyIterator() {
+		return new AscendingKeyIterator(first);
 	}
 	
-	LIST_ITERATOR KEY_GENERIC_TYPE keyIterator(KEY_TYPE key) {
-		return new KeyIterator(findNode(key));
+	protected BI_ITERATOR KEY_GENERIC_TYPE keyIterator(KEY_TYPE element) {
+		return null;
 	}
 	
+	protected BI_ITERATOR KEY_GENERIC_TYPE descendingKeyIterator() {
+		return new DescendingKeyIterator(last);
+	}
+		
+	@Override
 	public RB_TREE_MAP KEY_VALUE_GENERIC_TYPE copy() {
 		RB_TREE_MAP KEY_VALUE_GENERIC_TYPE set = new RB_TREE_MAPKV_BRACES();
 		set.size = size;
 		if(tree != null) {
 			set.tree = tree.copy();
-			Entry KEY_VALUE_GENERIC_TYPE lastFound = null;
-			for(Entry KEY_VALUE_GENERIC_TYPE entry = tree;entry != null;entry = entry.left) lastFound = entry;
+			Node KEY_VALUE_GENERIC_TYPE lastFound = null;
+			for(Node KEY_VALUE_GENERIC_TYPE entry = tree;entry != null;entry = entry.left) lastFound = entry;
 			set.first = lastFound;
 			lastFound = null;
-			for(Entry KEY_VALUE_GENERIC_TYPE entry = tree;entry != null;entry = entry.right) lastFound = entry;
+			for(Node KEY_VALUE_GENERIC_TYPE entry = tree;entry != null;entry = entry.right) lastFound = entry;
 			set.last = lastFound;
 		}
 		return set;
@@ -697,7 +698,7 @@ public class RB_TREE_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_VALUE_G
 	
 	@Override
 	public NAVIGABLE_MAP KEY_VALUE_GENERIC_TYPE descendingMap() {
-		return new DescendingSubMapKV_BRACES(this, true, EMPTY_KEY_VALUE, true, true, EMPTY_KEY_VALUE, true);
+		return new DescendingNaivgableSubMapKV_BRACES(this, true, EMPTY_KEY_VALUE, true, true, EMPTY_KEY_VALUE, true);
 	}
 	
 	@Override
@@ -707,69 +708,69 @@ public class RB_TREE_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_VALUE_G
 	
 	@Override
 	public NAVIGABLE_MAP KEY_VALUE_GENERIC_TYPE subMap(KEY_TYPE fromKey, boolean fromInclusive, KEY_TYPE toKey, boolean toInclusive) {
-		return new AscendingSubMapKV_BRACES(this, false, fromKey, fromInclusive, false, toKey, toInclusive);
+		return new AscendingNaivgableSubMapKV_BRACES(this, false, fromKey, fromInclusive, false, toKey, toInclusive);
 	}
 	
 	@Override
 	public NAVIGABLE_MAP KEY_VALUE_GENERIC_TYPE headMap(KEY_TYPE toKey, boolean inclusive) {
-		return new AscendingSubMapKV_BRACES(this, true, EMPTY_KEY_VALUE, true, false, toKey, inclusive);
+		return new AscendingNaivgableSubMapKV_BRACES(this, true, EMPTY_KEY_VALUE, true, false, toKey, inclusive);
 	}
 	
 	@Override
 	public NAVIGABLE_MAP KEY_VALUE_GENERIC_TYPE tailMap(KEY_TYPE fromKey, boolean inclusive) {
-		return new AscendingSubMapKV_BRACES(this, false, fromKey, inclusive, true, EMPTY_KEY_VALUE, true);
+		return new AscendingNaivgableSubMapKV_BRACES(this, false, fromKey, inclusive, true, EMPTY_KEY_VALUE, true);
 	}
 	
 	@Override
 	public KEY_TYPE lowerKey(KEY_TYPE e) {
-		Entry KEY_VALUE_GENERIC_TYPE node = findLowerNode(e);
+		Node KEY_VALUE_GENERIC_TYPE node = findLowerNode(e);
 		return node != null ? node.key : getDefaultMinValue();
 	}
 
 	@Override
 	public KEY_TYPE floorKey(KEY_TYPE e) {
-		Entry KEY_VALUE_GENERIC_TYPE node = findFloorNode(e);
+		Node KEY_VALUE_GENERIC_TYPE node = findFloorNode(e);
 		return node != null ? node.key : getDefaultMinValue();
 	}
 	
 	@Override
 	public KEY_TYPE higherKey(KEY_TYPE e) {
-		Entry KEY_VALUE_GENERIC_TYPE node = findHigherNode(e);
+		Node KEY_VALUE_GENERIC_TYPE node = findHigherNode(e);
 		return node != null ? node.key : getDefaultMaxValue();
 	}
 
 	@Override
 	public KEY_TYPE ceilingKey(KEY_TYPE e) {
-		Entry KEY_VALUE_GENERIC_TYPE node = findCeilingNode(e);
+		Node KEY_VALUE_GENERIC_TYPE node = findCeilingNode(e);
 		return node != null ? node.key : getDefaultMaxValue();
 	}
 	
 	@Override
 	public MAP.Entry KEY_VALUE_GENERIC_TYPE lowerEntry(KEY_TYPE key) {
-		Entry KEY_VALUE_GENERIC_TYPE node = findLowerNode(key);
-		return node != null ? new BasicEntryKV_BRACES(node.key, node.value) : null;
+		Node KEY_VALUE_GENERIC_TYPE node = findLowerNode(key);
+		return node != null ? node.export() : null;
 	}
 	
 	@Override
 	public MAP.Entry KEY_VALUE_GENERIC_TYPE higherEntry(KEY_TYPE key) {
-		Entry KEY_VALUE_GENERIC_TYPE node = findHigherNode(key);
-		return node != null ? new BasicEntryKV_BRACES(node.key, node.value) : null;
+		Node KEY_VALUE_GENERIC_TYPE node = findHigherNode(key);
+		return node != null ? node.export() : null;
 	}
 	
 	@Override
 	public MAP.Entry KEY_VALUE_GENERIC_TYPE floorEntry(KEY_TYPE key) {
-		Entry KEY_VALUE_GENERIC_TYPE node = findFloorNode(key);
-		return node != null ? new BasicEntryKV_BRACES(node.key, node.value) : null;
+		Node KEY_VALUE_GENERIC_TYPE node = findFloorNode(key);
+		return node != null ? node.export() : null;
 	}
 	
 	@Override
 	public MAP.Entry KEY_VALUE_GENERIC_TYPE ceilingEntry(KEY_TYPE key) {
-		Entry KEY_VALUE_GENERIC_TYPE node = findCeilingNode(key);
-		return node != null ? new BasicEntryKV_BRACES(node.key, node.value) : null;
+		Node KEY_VALUE_GENERIC_TYPE node = findCeilingNode(key);
+		return node != null ? node.export() : null;
 	}
 	
-	protected Entry KEY_VALUE_GENERIC_TYPE findLowerNode(KEY_TYPE key) {
-		Entry KEY_VALUE_GENERIC_TYPE entry = tree;
+	protected Node KEY_VALUE_GENERIC_TYPE findLowerNode(KEY_TYPE key) {
+		Node KEY_VALUE_GENERIC_TYPE entry = tree;
 		while(entry != null) {
 			if(compare(key, entry.key) > 0) {
 				if(entry.right != null) entry = entry.right;
@@ -778,7 +779,7 @@ public class RB_TREE_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_VALUE_G
 			else {
 				if(entry.left != null) entry = entry.left;
 				else {
-					Entry KEY_VALUE_GENERIC_TYPE parent = entry.parent;
+					Node KEY_VALUE_GENERIC_TYPE parent = entry.parent;
 					while(parent != null && parent.left == entry) {
 						entry = parent;
 						parent = parent.parent;
@@ -790,8 +791,8 @@ public class RB_TREE_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_VALUE_G
 		return null;
 	}
 	
-	protected Entry KEY_VALUE_GENERIC_TYPE findFloorNode(KEY_TYPE key) {
-		Entry KEY_VALUE_GENERIC_TYPE entry = tree;
+	protected Node KEY_VALUE_GENERIC_TYPE findFloorNode(KEY_TYPE key) {
+		Node KEY_VALUE_GENERIC_TYPE entry = tree;
 		int compare;
 		while(entry != null) {
 			if((compare = compare(key, entry.key)) > 0) {
@@ -802,7 +803,7 @@ public class RB_TREE_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_VALUE_G
 			else if(compare < 0) {
 				if(entry.left != null) entry = entry.left;
 				else {
-					Entry KEY_VALUE_GENERIC_TYPE parent = entry.parent;
+					Node KEY_VALUE_GENERIC_TYPE parent = entry.parent;
 					while(parent != null && parent.left == entry) {
 						entry = parent;
 						parent = parent.parent;
@@ -816,8 +817,8 @@ public class RB_TREE_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_VALUE_G
 		return entry;
 	}
 	
-	protected Entry KEY_VALUE_GENERIC_TYPE findCeilingNode(KEY_TYPE key) {
-		Entry KEY_VALUE_GENERIC_TYPE entry = tree;
+	protected Node KEY_VALUE_GENERIC_TYPE findCeilingNode(KEY_TYPE key) {
+		Node KEY_VALUE_GENERIC_TYPE entry = tree;
 		int compare;
 		while(entry != null) {
 			if((compare = compare(key, entry.key)) < 0) {
@@ -828,7 +829,7 @@ public class RB_TREE_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_VALUE_G
 			else if(compare > 0) {
 				if(entry.right != null) entry = entry.right;
 				else {
-					Entry KEY_VALUE_GENERIC_TYPE parent = entry.parent;
+					Node KEY_VALUE_GENERIC_TYPE parent = entry.parent;
 					while(parent != null && parent.right == entry) {
 						entry = parent;
 						parent = parent.parent;
@@ -842,8 +843,8 @@ public class RB_TREE_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_VALUE_G
 		return entry;
 	}
 	
-	protected Entry KEY_VALUE_GENERIC_TYPE findHigherNode(KEY_TYPE key) {
-		Entry KEY_VALUE_GENERIC_TYPE entry = tree;
+	protected Node KEY_VALUE_GENERIC_TYPE findHigherNode(KEY_TYPE key) {
+		Node KEY_VALUE_GENERIC_TYPE entry = tree;
 		while(entry != null) {
 			if(compare(key, entry.key) < 0) {
 				if(entry.left != null) entry = entry.left;
@@ -852,7 +853,7 @@ public class RB_TREE_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_VALUE_G
 			else {
 				if(entry.right != null) entry = entry.right;
 				else {
-					Entry KEY_VALUE_GENERIC_TYPE parent = entry.parent;
+					Node KEY_VALUE_GENERIC_TYPE parent = entry.parent;
 					while(parent != null && parent.right == entry) {
 						entry = parent;
 						parent = parent.parent;
@@ -864,8 +865,8 @@ public class RB_TREE_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_VALUE_G
 		return null;
 	}
 	
-	protected Entry KEY_VALUE_GENERIC_TYPE findNode(KEY_TYPE key) {
-		Entry KEY_VALUE_GENERIC_TYPE node = tree;
+	protected Node KEY_VALUE_GENERIC_TYPE findNode(KEY_TYPE key) {
+		Node KEY_VALUE_GENERIC_TYPE node = tree;
 		int compare;
 		while(node != null) {
 			if((compare = compare(key, node.key)) == 0) return node;
@@ -875,15 +876,15 @@ public class RB_TREE_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_VALUE_G
 		return null;
 	}
 	
-	protected void removeNode(Entry KEY_VALUE_GENERIC_TYPE entry) {
+	protected void removeNode(Node KEY_VALUE_GENERIC_TYPE entry) {
 		size--;
 		if(entry.needsSuccessor()) {
-			Entry KEY_VALUE_GENERIC_TYPE successor = entry.next();
+			Node KEY_VALUE_GENERIC_TYPE successor = entry.next();
 			entry.key = successor.key;
 			entry.value = successor.value;
 			entry = successor;
 		}
-		Entry KEY_VALUE_GENERIC_TYPE replacement = entry.left != null ? entry.left : entry.right;
+		Node KEY_VALUE_GENERIC_TYPE replacement = entry.left != null ? entry.left : entry.right;
 		if(replacement != null) {
 			if(entry.replace(replacement)) tree = replacement;
 			if(entry == first) first = replacement;
@@ -897,7 +898,7 @@ public class RB_TREE_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_VALUE_G
 				fixAfterDeletion(entry);
 			entry.replace(null);
 			if(entry.parent != null) {
-				Entry KEY_VALUE_GENERIC_TYPE parent = entry.parent;
+				Node KEY_VALUE_GENERIC_TYPE parent = entry.parent;
 				if(entry == first) first = parent.left != null ? parent.left : parent;
 				if(entry == last) last = entry.right != null ? parent.right : parent;
 			}
@@ -907,15 +908,15 @@ public class RB_TREE_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_VALUE_G
 	
 	protected void validate(KEY_TYPE k) { compare(k, k); }
 	protected int compare(KEY_TYPE k, KEY_TYPE v) { return comparator != null ? comparator.compare(k, v) : COMPAREABLE_TO_KEY(k, v);}
-	protected static GENERIC_KEY_VALUE_BRACES boolean isBlack(Entry KEY_VALUE_GENERIC_TYPE p) { return p == null || p.isBlack(); }
-	protected static GENERIC_KEY_VALUE_BRACES Entry KEY_VALUE_GENERIC_TYPE parentOf(Entry KEY_VALUE_GENERIC_TYPE p) { return (p == null ? null : p.parent); }
-	protected static GENERIC_KEY_VALUE_BRACES void setBlack(Entry KEY_VALUE_GENERIC_TYPE p, boolean c) { if(p != null) p.setBlack(c); }
-	protected static GENERIC_KEY_VALUE_BRACES Entry KEY_VALUE_GENERIC_TYPE leftOf(Entry KEY_VALUE_GENERIC_TYPE p) { return p == null ? null : p.left; }
-	protected static GENERIC_KEY_VALUE_BRACES Entry KEY_VALUE_GENERIC_TYPE rightOf(Entry KEY_VALUE_GENERIC_TYPE p) { return (p == null) ? null : p.right; }
+	protected static GENERIC_KEY_VALUE_BRACES boolean isBlack(Node KEY_VALUE_GENERIC_TYPE p) { return p == null || p.isBlack(); }
+	protected static GENERIC_KEY_VALUE_BRACES Node KEY_VALUE_GENERIC_TYPE parentOf(Node KEY_VALUE_GENERIC_TYPE p) { return (p == null ? null : p.parent); }
+	protected static GENERIC_KEY_VALUE_BRACES void setBlack(Node KEY_VALUE_GENERIC_TYPE p, boolean c) { if(p != null) p.setBlack(c); }
+	protected static GENERIC_KEY_VALUE_BRACES Node KEY_VALUE_GENERIC_TYPE leftOf(Node KEY_VALUE_GENERIC_TYPE p) { return p == null ? null : p.left; }
+	protected static GENERIC_KEY_VALUE_BRACES Node KEY_VALUE_GENERIC_TYPE rightOf(Node KEY_VALUE_GENERIC_TYPE p) { return (p == null) ? null : p.right; }
 	
-	protected void rotateLeft(Entry KEY_VALUE_GENERIC_TYPE entry) {
+	protected void rotateLeft(Node KEY_VALUE_GENERIC_TYPE entry) {
 		if(entry != null) {
-			Entry KEY_VALUE_GENERIC_TYPE right = entry.right;
+			Node KEY_VALUE_GENERIC_TYPE right = entry.right;
 			entry.right = right.left;
 			if(right.left != null) right.left.parent = entry;
 			right.parent = entry.parent;
@@ -927,9 +928,9 @@ public class RB_TREE_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_VALUE_G
 		}
 	}
 	
-	protected void rotateRight(Entry KEY_VALUE_GENERIC_TYPE entry) {
+	protected void rotateRight(Node KEY_VALUE_GENERIC_TYPE entry) {
 		if(entry != null) {
-			Entry KEY_VALUE_GENERIC_TYPE left = entry.left;
+			Node KEY_VALUE_GENERIC_TYPE left = entry.left;
 			entry.left = left.right;
 			if(left.right != null) left.right.parent = entry;
 			left.parent = entry.parent;
@@ -941,11 +942,11 @@ public class RB_TREE_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_VALUE_G
 		}
 	}
 	
-	protected void fixAfterInsertion(Entry KEY_VALUE_GENERIC_TYPE entry) {
+	protected void fixAfterInsertion(Node KEY_VALUE_GENERIC_TYPE entry) {
 		entry.setBlack(false);
 		while(entry != null && entry != tree && !entry.parent.isBlack()) {
 			if(parentOf(entry) == leftOf(parentOf(parentOf(entry)))) {
-				Entry KEY_VALUE_GENERIC_TYPE y = rightOf(parentOf(parentOf(entry)));
+				Node KEY_VALUE_GENERIC_TYPE y = rightOf(parentOf(parentOf(entry)));
 				if(!isBlack(y)) {
 					setBlack(parentOf(entry), true);
 					setBlack(y, true);
@@ -963,7 +964,7 @@ public class RB_TREE_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_VALUE_G
 				}
 			}
 			else {
-				Entry KEY_VALUE_GENERIC_TYPE y = leftOf(parentOf(parentOf(entry)));
+				Node KEY_VALUE_GENERIC_TYPE y = leftOf(parentOf(parentOf(entry)));
 				if(!isBlack(y)) {
 					setBlack(parentOf(entry), true);
 					setBlack(y, true);
@@ -984,10 +985,10 @@ public class RB_TREE_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_VALUE_G
 		tree.setBlack(true);
 	}
 	
-	protected void fixAfterDeletion(Entry KEY_VALUE_GENERIC_TYPE entry) {
+	protected void fixAfterDeletion(Node KEY_VALUE_GENERIC_TYPE entry) {
 		while(entry != tree && isBlack(entry)) {
 			if(entry == leftOf(parentOf(entry))) {
-				Entry KEY_VALUE_GENERIC_TYPE sib = rightOf(parentOf(entry));
+				Node KEY_VALUE_GENERIC_TYPE sib = rightOf(parentOf(entry));
 				if(!isBlack(sib)) {
 					setBlack(sib, true);
 					setBlack(parentOf(entry), false);
@@ -1013,7 +1014,7 @@ public class RB_TREE_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_VALUE_G
 				}
 			}
 			else {
-				Entry KEY_VALUE_GENERIC_TYPE sib = leftOf(parentOf(entry));
+				Node KEY_VALUE_GENERIC_TYPE sib = leftOf(parentOf(entry));
 				if(!isBlack(sib)) {
 					setBlack(sib, true);
 					setBlack(parentOf(entry), false);
@@ -1042,254 +1043,539 @@ public class RB_TREE_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_VALUE_G
 		setBlack(entry, true);
 	}
 	
-	static final class AscendingSubMap KEY_VALUE_GENERIC_TYPE extends NavigableSubMap KEY_VALUE_GENERIC_TYPE {
+	static class KeySet KEY_VALUE_GENERIC_TYPE extends ABSTRACT_SET KEY_GENERIC_TYPE implements NAVIGABLE_SET KEY_GENERIC_TYPE
+	{
+		NAVIGABLE_MAP KEY_VALUE_GENERIC_TYPE map;
 
-		public AscendingSubMap(RB_TREE_MAP KEY_VALUE_GENERIC_TYPE m, boolean fromStart, KEY_TYPE low, boolean loInclusive, boolean toEnd, KEY_TYPE high, boolean hiInclusive) {
-			super(m, fromStart, low, loInclusive, toEnd, high, hiInclusive);
+		public KeySet(NAVIGABLE_MAP KEY_VALUE_GENERIC_TYPE map) {
+			this.map = map;
 		}
 		
+#if !TYPE_OBJECT
 		@Override
-		LIST_ITERATOR KEY_GENERIC_TYPE keyIterator(boolean descending) { return new SubMapKeyIterator(descending); }
+		public void setDefaultMaxValue(KEY_TYPE e) { map.setDefaultMaxValue(e); }
 		@Override
-		LIST_ITERATOR KEY_GENERIC_TYPE keyIterator(KEY_TYPE key) {
-			RB_TREE_MAP.Entry KEY_VALUE_GENERIC_TYPE entry = m.findNode(key);
-			return entry == null || !inClosedRange(key) ? null : new SubMapKeyIterator(entry, fromStart ? null : findLowest(), toEnd ? null : findHighest());
-		}
+		public KEY_TYPE getDefaultMaxValue() { return map.getDefaultMaxValue(); }
 		@Override
-		VALUE_LIST_ITERATOR VALUE_GENERIC_TYPE valueIterator() { return new SubMapValueIterator(false); }
+		public void setDefaultMinValue(KEY_TYPE e) { map.setDefaultMinValue(e); }
 		@Override
-		ObjectListIterator<MAP.Entry KEY_VALUE_GENERIC_TYPE> entryIterator() { return new SubMapEntrySetIterator(false); }
-		
+		public KEY_TYPE getDefaultMinValue() { return map.getDefaultMinValue(); }
+#endif
 		@Override
-		public NAVIGABLE_MAP KEY_VALUE_GENERIC_TYPE descendingMap() {
-			if(descendingMap == null) descendingMap = new DescendingSubMapKV_BRACES(m, fromStart, low, loInclusive, toEnd, high, hiInclusive);
-			return descendingMap;
-		}
-		
-		RB_TREE_MAP.Entry KEY_VALUE_GENERIC_TYPE next(RB_TREE_MAP.Entry KEY_VALUE_GENERIC_TYPE entry) {
-			return entry.next();
-		}
-		
-		RB_TREE_MAP.Entry KEY_VALUE_GENERIC_TYPE previous(RB_TREE_MAP.Entry KEY_VALUE_GENERIC_TYPE entry) {
-			return entry.previous();
-		}
-		
+		public KEY_TYPE lower(KEY_TYPE e) { return map.lowerKey(e); }
 		@Override
-		public NAVIGABLE_MAP KEY_VALUE_GENERIC_TYPE subMap(KEY_TYPE fromKey, boolean fromInclusive, KEY_TYPE toKey, boolean toInclusive) {
-			if (!inRange(fromKey, fromInclusive)) throw new IllegalArgumentException("fromKey out of range");
-			if (!inRange(toKey, toInclusive)) throw new IllegalArgumentException("toKey out of range");
-			return new AscendingSubMapKV_BRACES(m, false, fromKey, fromInclusive, false, toKey, toInclusive);
-		}
-		
+		public KEY_TYPE floor(KEY_TYPE e) { return map.floorKey(e); }
 		@Override
-		public NAVIGABLE_MAP KEY_VALUE_GENERIC_TYPE headMap(KEY_TYPE toKey, boolean inclusive) {
-			if (!inRange(toKey, inclusive)) throw new IllegalArgumentException("toKey out of range");
-			return new AscendingSubMapKV_BRACES(m, fromStart, low, loInclusive, false, toKey, inclusive);
-		}
-		
+		public KEY_TYPE ceiling(KEY_TYPE e) { return map.ceilingKey(e); }
 		@Override
-		public NAVIGABLE_MAP KEY_VALUE_GENERIC_TYPE tailMap(KEY_TYPE fromKey, boolean inclusive) {
-			if (!inRange(fromKey, inclusive)) throw new IllegalArgumentException("fromKey out of range");
-			return new AscendingSubMapKV_BRACES(m, false, fromKey, inclusive, toEnd, high, hiInclusive);
-		}
-	}
-	
-	static final class DescendingSubMap KEY_VALUE_GENERIC_TYPE extends NavigableSubMap KEY_VALUE_GENERIC_TYPE {
-
-		public DescendingSubMap(RB_TREE_MAP KEY_VALUE_GENERIC_TYPE m, boolean fromStart, KEY_TYPE low, boolean loInclusive, boolean toEnd, KEY_TYPE high, boolean hiInclusive) {
-			super(m, fromStart, low, loInclusive, toEnd, high, hiInclusive);
-		}
-		
+		public KEY_TYPE higher(KEY_TYPE e) { return map.higherKey(e); }
 		@Override
-		public KEY_TYPE FIRST_ENTRY_KEY() { return super.LAST_ENTRY_KEY(); }
-		
+		public KEY_TYPE POLL_FIRST_KEY() { return map.POLL_FIRST_ENTRY_KEY(); }
 		@Override
-		public KEY_TYPE POLL_FIRST_ENTRY_KEY() { return super.POLL_LAST_ENTRY_KEY(); }
-		
+		public KEY_TYPE POLL_LAST_KEY() { return map.POLL_LAST_ENTRY_KEY(); }
 		@Override
-		public KEY_TYPE LAST_ENTRY_KEY() { return super.FIRST_ENTRY_KEY(); }
-		
+		public COMPARATOR KEY_GENERIC_TYPE comparator() { return map.comparator(); }
 		@Override
-		public KEY_TYPE POLL_LAST_ENTRY_KEY() { return super.POLL_FIRST_ENTRY_KEY(); }
-		
+		public KEY_TYPE FIRST_KEY() { return map.FIRST_ENTRY_KEY(); } 
 		@Override
-		public VALUE_TYPE FIRST_ENTRY_VALUE() { return super.LAST_ENTRY_VALUE(); }
-		
+		public KEY_TYPE LAST_KEY() { return map.LAST_ENTRY_KEY(); }
 		@Override
-		public VALUE_TYPE LAST_ENTRY_VALUE() { return super.FIRST_ENTRY_VALUE(); }
-		
-		@Override
-		public MAP.Entry KEY_VALUE_GENERIC_TYPE firstEntry() { return super.lastEntry(); }
-		
-		@Override
-		public MAP.Entry KEY_VALUE_GENERIC_TYPE lastEntry() { return super.firstEntry(); }
-		
-		@Override
-		public MAP.Entry KEY_VALUE_GENERIC_TYPE pollFirstEntry() { return super.pollLastEntry(); }
-		
-		@Override
-		public MAP.Entry KEY_VALUE_GENERIC_TYPE pollLastEntry() { return super.pollFirstEntry(); }
-		
-		@Override
-		public KEY_TYPE lowerKey(KEY_TYPE e) { return super.higherKey(e); }
-		
-		@Override
-		public KEY_TYPE floorKey(KEY_TYPE e) { return super.ceilingKey(e); }
-		
-		@Override
-		public KEY_TYPE ceilingKey(KEY_TYPE e) { return super.floorKey(e); }
-		
-		@Override
-		public KEY_TYPE higherKey(KEY_TYPE e) { return super.lowerKey(e); }
-		
-		@Override
-		public MAP.Entry KEY_VALUE_GENERIC_TYPE lowerEntry(KEY_TYPE e) { return super.higherEntry(e); }
-		
-		@Override
-		public MAP.Entry KEY_VALUE_GENERIC_TYPE floorEntry(KEY_TYPE e) { return super.ceilingEntry(e); }
-		
-		@Override
-		public MAP.Entry KEY_VALUE_GENERIC_TYPE ceilingEntry(KEY_TYPE e) { return super.floorEntry(e); }
-		
-		@Override
-		public MAP.Entry KEY_VALUE_GENERIC_TYPE higherEntry(KEY_TYPE e) { return super.lowerEntry(e); }
-		
-		protected RB_TREE_MAP.Entry KEY_VALUE_GENERIC_TYPE findLowest() {
-			if(fromStart) return m.first;
-			RB_TREE_MAP.Entry KEY_VALUE_GENERIC_TYPE entry = loInclusive ? m.findCeilingNode(low) : m.findHigherNode(low);
-			return entry == null || tooHigh(entry.key) ? null : entry;
-		}
-
-		protected RB_TREE_MAP.Entry KEY_VALUE_GENERIC_TYPE findHighest() {
-			if(toEnd) return m.last;
-			RB_TREE_MAP.Entry KEY_VALUE_GENERIC_TYPE entry = hiInclusive ? m.findFloorNode(high) : m.findLowerNode(high);
-			return entry == null || tooLow(entry.key) ? null : entry;
-		}
-		
-		@Override
-		LIST_ITERATOR KEY_GENERIC_TYPE keyIterator(boolean descending) {
-			LIST_ITERATOR KEY_GENERIC_TYPE iter = new SubMapKeyIterator(!descending);
-			return descending ? iter : ITERATORS.invert(iter);
-		}
-		
-		@Override
-		LIST_ITERATOR KEY_GENERIC_TYPE keyIterator(KEY_TYPE key) {
-			RB_TREE_MAP.Entry KEY_VALUE_GENERIC_TYPE entry = m.findNode(key);
-			return entry == null || !inClosedRange(key) ? null : ITERATORS.invert(new SubMapKeyIterator(entry, fromStart ? null : findLowest(), toEnd ? null : findHighest()));
-		}
-		
-		RB_TREE_MAP.Entry KEY_VALUE_GENERIC_TYPE next(RB_TREE_MAP.Entry KEY_VALUE_GENERIC_TYPE entry) {
-			return entry.previous();
-		}
-		
-		RB_TREE_MAP.Entry KEY_VALUE_GENERIC_TYPE previous(RB_TREE_MAP.Entry KEY_VALUE_GENERIC_TYPE entry) {
-			return entry.next();
-		}
-		
-		@Override
-		public COMPARATOR KEY_GENERIC_TYPE comparator() { return m.comparator() == null ? null : m.comparator().reversed(); }
-		
-		@Override
-		VALUE_LIST_ITERATOR VALUE_GENERIC_TYPE valueIterator() { return VALUE_ITERATORS.invert(new SubMapValueIterator(true)); }
-		
-		@Override
-		ObjectListIterator<MAP.Entry KEY_VALUE_GENERIC_TYPE> entryIterator() { return ObjectIterators.invert(new SubMapEntrySetIterator(true)); }
-		
-		@Override
-		public NAVIGABLE_MAP KEY_VALUE_GENERIC_TYPE descendingMap() {
-			if(descendingMap == null) descendingMap = new AscendingSubMapKV_BRACES(m, fromStart, low, loInclusive, toEnd, high, hiInclusive);
-			return descendingMap;
-		}
-
-		@Override
-		public NAVIGABLE_MAP KEY_VALUE_GENERIC_TYPE subMap(KEY_TYPE fromKey, boolean fromInclusive, KEY_TYPE toKey, boolean toInclusive) {
-			if (!inRange(fromKey, fromInclusive)) throw new IllegalArgumentException("fromKey out of range");
-			if (!inRange(toKey, toInclusive)) throw new IllegalArgumentException("toKey out of range");
-			return new DescendingSubMapKV_BRACES(m, false, fromKey, fromInclusive, false, toKey, toInclusive);
-		}
-		
-		@Override
-		public NAVIGABLE_MAP KEY_VALUE_GENERIC_TYPE headMap(KEY_TYPE toKey, boolean inclusive) {
-			if (!inRange(toKey, inclusive)) throw new IllegalArgumentException("toKey out of range");
-			return new DescendingSubMapKV_BRACES(m, fromStart, low, loInclusive, false, toKey, inclusive);
-		}
-		
-		@Override
-		public NAVIGABLE_MAP KEY_VALUE_GENERIC_TYPE tailMap(KEY_TYPE fromKey, boolean inclusive) {
-			if (!inRange(fromKey, inclusive)) throw new IllegalArgumentException("fromKey out of range");
-			return new DescendingSubMapKV_BRACES(m, false, fromKey, inclusive, toEnd, high, hiInclusive);
-		}
-	}
-	
-	static abstract class NavigableSubMap KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_VALUE_GENERIC_TYPE implements NAVIGABLE_MAP KEY_VALUE_GENERIC_TYPE {
-		final RB_TREE_MAP KEY_VALUE_GENERIC_TYPE m;
-		final KEY_TYPE low;
-		final KEY_TYPE high;
-		final boolean fromStart;
-		final boolean toEnd;
-		final boolean loInclusive;
-		final boolean hiInclusive;
-		transient NAVIGABLE_MAP KEY_VALUE_GENERIC_TYPE descendingMap;
-		transient SubMapEntrySet entrySet;
-		transient KeySet KEY_VALUE_GENERIC_TYPE keySet;
-		transient SubMapValues values;
-		
-		NavigableSubMap(RB_TREE_MAP KEY_VALUE_GENERIC_TYPE m, boolean fromStart, KEY_TYPE low, boolean loInclusive, boolean toEnd, KEY_TYPE high, boolean hiInclusive) {
-			this.m = m;
-			this.low = low;
-			this.high = high;
-			this.fromStart = fromStart;
-			this.toEnd = toEnd;
-			this.loInclusive = loInclusive;
-			this.hiInclusive = hiInclusive;
-		}
-		
-		abstract LIST_ITERATOR KEY_GENERIC_TYPE keyIterator(boolean descending);
-		abstract LIST_ITERATOR KEY_GENERIC_TYPE keyIterator(KEY_TYPE key);
-		abstract VALUE_LIST_ITERATOR VALUE_GENERIC_TYPE valueIterator();
-		abstract ObjectListIterator<MAP.Entry KEY_VALUE_GENERIC_TYPE> entryIterator();
-		abstract RB_TREE_MAP.Entry KEY_VALUE_GENERIC_TYPE next(RB_TREE_MAP.Entry KEY_VALUE_GENERIC_TYPE entry);
-		abstract RB_TREE_MAP.Entry KEY_VALUE_GENERIC_TYPE previous(RB_TREE_MAP.Entry KEY_VALUE_GENERIC_TYPE entry);
-		
-		@Override
-		public NavigableSubMap KEY_VALUE_GENERIC_TYPE copy() { throw new UnsupportedOperationException(); }
-		@Override
-		public abstract NAVIGABLE_MAP KEY_VALUE_GENERIC_TYPE descendingMap();
-		@Override
-		public abstract NAVIGABLE_MAP KEY_VALUE_GENERIC_TYPE subMap(KEY_TYPE fromKey, boolean fromInclusive, KEY_TYPE toKey, boolean toInclusive);
-		@Override
-		public abstract NAVIGABLE_MAP KEY_VALUE_GENERIC_TYPE headMap(KEY_TYPE toKey, boolean inclusive);
-		@Override
-		public abstract NAVIGABLE_MAP KEY_VALUE_GENERIC_TYPE tailMap(KEY_TYPE fromKey, boolean inclusive);
-		
-		boolean tooLow(KEY_TYPE key) { return !fromStart && (loInclusive ? m.compare(key, low) < 0 : m.compare(key, low) <= 0); }
-		boolean tooHigh(KEY_TYPE key) { return !toEnd && (hiInclusive ? m.compare(key, high) > 0 : m.compare(key, high) >= 0); }
-		boolean inRange(KEY_TYPE key) { return !tooLow(key) && !tooHigh(key); }
-		boolean inClosedRange(KEY_TYPE key) { return (fromStart || m.compare(key, low) >= 0) && (toEnd || m.compare(high, key) >= 0); }
-		boolean inRange(KEY_TYPE key, boolean inclusive) { return inclusive ? inRange(key) : inClosedRange(key); }
+		public void clear() { map.clear(); }
 		
 #if TYPE_OBJECT
-		public KEY_TYPE getDefaultMaxValue() { return m.getDefaultMaxValue(); }
-		public KEY_TYPE getDefaultMinValue() { return m.getDefaultMinValue(); }
+		@Override
+		public boolean remove(Object o) { 
+			int oldSize = map.size();
+			map.remove(o); 
+			return oldSize != map.size();
+		}
+		
 #else
 		@Override
-		public void setDefaultMaxValue(KEY_TYPE e) { m.setDefaultMaxValue(e); }
+		public boolean remove(KEY_TYPE o) { 
+			int oldSize = map.size();
+			map.remove(o); 
+			return oldSize != map.size();
+		}
+		
+#endif		
 		@Override
-		public KEY_TYPE getDefaultMaxValue() { return m.getDefaultMaxValue(); }
+		public boolean add(KEY_TYPE e) { throw new UnsupportedOperationException(); }
 		@Override
-		public void setDefaultMinValue(KEY_TYPE e) { m.setDefaultMinValue(e); }
+		public boolean addAndMoveToFirst(KEY_TYPE o) { throw new UnsupportedOperationException(); }
 		@Override
-		public KEY_TYPE getDefaultMinValue() { return m.getDefaultMinValue(); }
+		public boolean addAndMoveToLast(KEY_TYPE o) { throw new UnsupportedOperationException(); }
+		@Override
+		public boolean moveToFirst(KEY_TYPE o) { throw new UnsupportedOperationException(); }
+		@Override
+		public boolean moveToLast(KEY_TYPE o) { throw new UnsupportedOperationException(); }
+		
+		@Override
+		public BI_ITERATOR KEY_GENERIC_TYPE iterator(KEY_TYPE fromElement) {
+			if(map instanceof RB_TREE_MAP) return ((RB_TREE_MAP KEY_VALUE_GENERIC_TYPE)map).keyIterator(fromElement);
+			return ((NavigableSubMap KEY_VALUE_GENERIC_TYPE)map).keyIterator(fromElement);
+		}
+		
+		@Override
+		public NAVIGABLE_SET KEY_GENERIC_TYPE subSet(KEY_TYPE fromElement, boolean fromInclusive, KEY_TYPE toElement, boolean toInclusive) { return new KeySetKV_BRACES(map.subMap(fromElement, fromInclusive, toElement, toInclusive)); }
+		@Override
+		public NAVIGABLE_SET KEY_GENERIC_TYPE headSet(KEY_TYPE toElement, boolean inclusive) { return new KeySetKV_BRACES(map.headMap(toElement, inclusive)); }
+		@Override
+		public NAVIGABLE_SET KEY_GENERIC_TYPE tailSet(KEY_TYPE fromElement, boolean inclusive) { return new KeySetKV_BRACES(map.tailMap(fromElement, inclusive)); }
+		
+		@Override
+		public BI_ITERATOR KEY_GENERIC_TYPE iterator() {
+			if(map instanceof RB_TREE_MAP) return ((RB_TREE_MAP KEY_VALUE_GENERIC_TYPE)map).keyIterator();
+			return ((NavigableSubMap KEY_VALUE_GENERIC_TYPE)map).keyIterator();
+		}
+		
+		@Override
+		public BI_ITERATOR KEY_GENERIC_TYPE descendingIterator() {
+			if(map instanceof RB_TREE_MAP) return ((RB_TREE_MAP KEY_VALUE_GENERIC_TYPE)map).descendingKeyIterator();
+			return ((NavigableSubMap KEY_VALUE_GENERIC_TYPE)map).descendingKeyIterator();
+		}
+		
+		protected Node KEY_VALUE_GENERIC_TYPE start() {
+			if(map instanceof RB_TREE_MAP) return ((RB_TREE_MAP KEY_VALUE_GENERIC_TYPE)map).first;
+			return ((NavigableSubMap KEY_VALUE_GENERIC_TYPE)map).subLowest();
+		}
+		
+		protected Node KEY_VALUE_GENERIC_TYPE end() {
+			if(map instanceof RB_TREE_MAP) return null;
+			return ((NavigableSubMap KEY_VALUE_GENERIC_TYPE)map).subHighest();
+		}
+		
+		protected Node KEY_VALUE_GENERIC_TYPE next(Node KEY_VALUE_GENERIC_TYPE entry) {
+			if(map instanceof RB_TREE_MAP) return entry.next();
+			return ((NavigableSubMap KEY_VALUE_GENERIC_TYPE)map).next(entry);
+		}
+		
+		protected Node KEY_VALUE_GENERIC_TYPE previous(Node KEY_VALUE_GENERIC_TYPE entry) {
+			if(map instanceof RB_TREE_MAP) return entry.previous();
+			return ((NavigableSubMap KEY_VALUE_GENERIC_TYPE)map).previous(entry);
+		}
+		
+		@Override
+		public NAVIGABLE_SET KEY_GENERIC_TYPE descendingSet() { return new KeySetKV_BRACES(map.descendingMap()); }
+		@Override
+		public KeySet KEY_VALUE_GENERIC_TYPE copy() { throw new UnsupportedOperationException(); }
+		@Override
+		public boolean isEmpty() { return map.isEmpty(); }
+		@Override
+		public int size() { return map.size(); }
+		
+		@Override
+		public void forEach(CONSUMER KEY_SUPER_GENERIC_TYPE action) {
+			Objects.requireNonNull(action);
+			for(Node KEY_VALUE_GENERIC_TYPE entry = start(), end = end();entry != null && (end == null || (end != previous(entry)));entry = next(entry))
+				action.accept(entry.key);
+		}
+		
+		@Override
+		public <E> void forEach(E input, BI_FROM_OBJECT_CONSUMER KSK_GENERIC_TYPE<E> action) {
+			Objects.requireNonNull(action);
+			for(Node KEY_VALUE_GENERIC_TYPE entry = start(), end = end();entry != null && (end == null || (end != previous(entry)));entry = next(entry))
+				action.accept(input, entry.key);
+		}
+		
+		@Override
+		public boolean matchesAny(PREDICATE KEY_GENERIC_TYPE filter) {
+			Objects.requireNonNull(filter);
+			for(Node KEY_VALUE_GENERIC_TYPE entry = start(), end = end();entry != null && (end == null || (end != previous(entry)));entry = next(entry))
+				if(filter.TEST_VALUE(entry.key)) return true;
+			return false;
+		}
+		
+		@Override
+		public boolean matchesNone(PREDICATE KEY_GENERIC_TYPE filter) {
+			Objects.requireNonNull(filter);
+			for(Node KEY_VALUE_GENERIC_TYPE entry = start(), end = end();entry != null && (end == null || (end != previous(entry)));entry = next(entry))
+				if(filter.TEST_VALUE(entry.key)) return false;
+			return true;
+		}
+		
+		@Override
+		public boolean matchesAll(PREDICATE KEY_GENERIC_TYPE filter) {
+			Objects.requireNonNull(filter);
+			for(Node KEY_VALUE_GENERIC_TYPE entry = start(), end = end();entry != null && (end == null || (end != previous(entry)));entry = next(entry))
+				if(!filter.TEST_VALUE(entry.key)) return false;
+			return true;
+		}
+		
+#if !TYPE_OBJECT
+		@Override
+		public KEY_TYPE reduce(KEY_TYPE identity, SINGLE_UNARY_OPERATOR KEY_KEY_GENERIC_TYPE operator) {
+			Objects.requireNonNull(operator);
+			KEY_TYPE state = identity;
+			for(Node KEY_VALUE_GENERIC_TYPE entry = start(), end = end();entry != null && (end == null || (end != previous(entry)));entry = next(entry))
+				state = operator.APPLY_KEY_VALUE(state, entry.key);
+			return state;
+		}
+		
+#else
+		@Override
+		public <KEY_SPECIAL_TYPE> KEY_SPECIAL_TYPE reduce(KEY_SPECIAL_TYPE identity, BiFunction<KEY_SPECIAL_TYPE, KEY_TYPE, KEY_SPECIAL_TYPE> operator) {
+			Objects.requireNonNull(operator);
+			KEY_SPECIAL_TYPE state = identity;
+			for(Node KEY_VALUE_GENERIC_TYPE entry = start(), end = end();entry != null && (end == null || (end != previous(entry)));entry = next(entry))
+				state = operator.apply(state, entry.key);
+			return state;
+		}
 		
 #endif
 		@Override
+		public KEY_TYPE reduce(SINGLE_UNARY_OPERATOR KEY_KEY_GENERIC_TYPE operator) {
+			Objects.requireNonNull(operator);
+			KEY_TYPE state = EMPTY_KEY_VALUE;
+			boolean empty = true;
+			for(Node KEY_VALUE_GENERIC_TYPE entry = start(), end = end();entry != null && (end == null || (end != previous(entry)));entry = next(entry)) {
+				if(empty) {
+					empty = false;
+					state = entry.key;
+					continue;
+				}
+				state = operator.APPLY_KEY_VALUE(state, entry.key);
+			}
+			return state;
+		}
+		
+		@Override
+		public KEY_TYPE findFirst(PREDICATE KEY_GENERIC_TYPE filter) {
+			Objects.requireNonNull(filter);
+			for(Node KEY_VALUE_GENERIC_TYPE entry = start(), end = end();entry != null && (end == null || (end != previous(entry)));entry = next(entry))
+				if(filter.TEST_VALUE(entry.key)) return entry.key;
+			return EMPTY_KEY_VALUE;
+		}
+		
+		@Override
+		public int count(PREDICATE KEY_GENERIC_TYPE filter) {
+			Objects.requireNonNull(filter);
+			int result = 0;
+			for(Node KEY_VALUE_GENERIC_TYPE entry = start(), end = end();entry != null && (end == null || (end != previous(entry)));entry = next(entry))
+				if(filter.TEST_VALUE(entry.key)) result++;
+			return result;
+		}
+	}
+	
+	static class AscendingNaivgableSubMap KEY_VALUE_GENERIC_TYPE extends NavigableSubMap KEY_VALUE_GENERIC_TYPE
+	{
+		AscendingNaivgableSubMap(RB_TREE_MAP KEY_VALUE_GENERIC_TYPE map, boolean fromStart, KEY_TYPE lo, boolean loInclusive, boolean toEnd, KEY_TYPE hi, boolean hiInclusive) {
+			super(map, fromStart, lo, loInclusive, toEnd, hi, hiInclusive);
+		}
+		
+		@Override
+		public NAVIGABLE_MAP KEY_VALUE_GENERIC_TYPE descendingMap() {
+			if(inverse == null) inverse = new DescendingNaivgableSubMapKV_BRACES(map, fromStart, lo, loInclusive, toEnd, hi, hiInclusive);
+			return inverse;
+		}
+		
+		@Override
+		public ObjectSet<MAP.Entry KEY_VALUE_GENERIC_TYPE> ENTRY_SET() {
+			if(entrySet == null) entrySet = new AscendingSubEntrySet();
+			return entrySet;
+		}
+		
+		@Override
+		public NAVIGABLE_SET KEY_GENERIC_TYPE navigableKeySet() {
+			if(keySet == null) keySet = new KeySetKV_BRACES(this);
+			return keySet;
+		}
+		
+		@Override
+		public NAVIGABLE_MAP KEY_VALUE_GENERIC_TYPE subMap(KEY_TYPE fromKey, boolean fromInclusive, KEY_TYPE toKey, boolean toInclusive) {
+			if (!inRange(fromKey, fromInclusive)) throw new IllegalArgumentException("fromKey out of range");
+			if (!inRange(toKey, toInclusive)) throw new IllegalArgumentException("toKey out of range");
+			return new AscendingNaivgableSubMapKV_BRACES(map, false, fromKey, fromInclusive, false, toKey, toInclusive);
+		}
+		
+		@Override
+		public NAVIGABLE_MAP KEY_VALUE_GENERIC_TYPE headMap(KEY_TYPE toKey, boolean inclusive) {
+			if (!inRange(toKey, inclusive)) throw new IllegalArgumentException("toKey out of range");
+			return new AscendingNaivgableSubMapKV_BRACES(map, fromStart, lo, loInclusive, false, toKey, inclusive);
+		}
+		
+		@Override
+		public NAVIGABLE_MAP KEY_VALUE_GENERIC_TYPE tailMap(KEY_TYPE fromKey, boolean inclusive) {
+			if (!inRange(fromKey, inclusive)) throw new IllegalArgumentException("fromKey out of range");
+			return new AscendingNaivgableSubMapKV_BRACES(map, false, fromKey, inclusive, toEnd, hi, hiInclusive);
+		}
+		
+		@Override
+		protected Node KEY_VALUE_GENERIC_TYPE subLowest() { return absLowest(); }
+		@Override
+		protected Node KEY_VALUE_GENERIC_TYPE subHighest() { return absHighest(); }
+		@Override
+		protected Node KEY_VALUE_GENERIC_TYPE subCeiling(KEY_TYPE key) { return absCeiling(key); }
+		@Override
+		protected Node KEY_VALUE_GENERIC_TYPE subHigher(KEY_TYPE key) { return absHigher(key); }
+		@Override
+		protected Node KEY_VALUE_GENERIC_TYPE subFloor(KEY_TYPE key) { return absFloor(key); }
+		@Override
+		protected Node KEY_VALUE_GENERIC_TYPE subLower(KEY_TYPE key) { return absLower(key); }
+		
+		@Override
+		protected BI_ITERATOR KEY_GENERIC_TYPE keyIterator() {
+			return new AcsendingSubKeyIterator(absLowest(), absHighFence(), absLowFence()); 
+		}
+		@Override
+		protected BI_ITERATOR KEY_GENERIC_TYPE keyIterator(KEY_TYPE element) {
+			return new AcsendingSubKeyIterator(absLower(element), absHighFence(), absLowFence()); 
+		}
+		
+		@Override
+		protected VALUE_BI_ITERATOR VALUE_GENERIC_TYPE valueIterator() {
+			return new AcsendingSubValueIterator(absLowest(), absHighFence(), absLowFence()); 
+		}
+		
+		@Override
+		protected BI_ITERATOR KEY_GENERIC_TYPE descendingKeyIterator() {
+			return new DecsendingSubKeyIterator(absHighest(), absLowFence(), absHighFence()); 
+		}
+		
+		class AscendingSubEntrySet extends SubEntrySet {
+			@Override
+			public ObjectIterator<MAP.Entry KEY_VALUE_GENERIC_TYPE> iterator() {
+				return new AcsendingSubEntryIterator(absLowest(), absHighFence(), absLowFence());
+			}
+		}
+	}
+	
+	static class DescendingNaivgableSubMap KEY_VALUE_GENERIC_TYPE extends NavigableSubMap KEY_VALUE_GENERIC_TYPE
+	{
+		COMPARATOR KEY_GENERIC_TYPE comparator;
+		DescendingNaivgableSubMap(RB_TREE_MAP KEY_VALUE_GENERIC_TYPE map, boolean fromStart, KEY_TYPE lo, boolean loInclusive, boolean toEnd, KEY_TYPE hi, boolean hiInclusive) {
+			super(map, fromStart, lo, loInclusive, toEnd, hi, hiInclusive);
+#if TYPE_OBJECT
+			comparator = Collections.reverseOrder(map.comparator());
+#else
+			comparator = map.comparator() == null ? COMPARATOR.of(Collections.reverseOrder()) : map.comparator().reversed();
+#endif
+		}
+		
+		@Override
+		public COMPARATOR KEY_GENERIC_TYPE comparator() { return comparator; }
+		
+		@Override
+		public NAVIGABLE_MAP KEY_VALUE_GENERIC_TYPE descendingMap() {
+			if(inverse == null) inverse = new AscendingNaivgableSubMapKV_BRACES(map, fromStart, lo, loInclusive, toEnd, hi, hiInclusive);
+			return inverse;
+		}
+
+		@Override
+		public NAVIGABLE_SET KEY_GENERIC_TYPE navigableKeySet() {
+			if(keySet == null) keySet = new KeySetKV_BRACES(this);
+			return keySet;
+		}
+		
+		@Override
+		public NAVIGABLE_MAP KEY_VALUE_GENERIC_TYPE subMap(KEY_TYPE fromKey, boolean fromInclusive, KEY_TYPE toKey, boolean toInclusive) {
+			if (!inRange(fromKey, fromInclusive)) throw new IllegalArgumentException("fromKey out of range");
+			if (!inRange(toKey, toInclusive)) throw new IllegalArgumentException("toKey out of range");
+			return new DescendingNaivgableSubMapKV_BRACES(map, false, toKey, toInclusive, false, fromKey, fromInclusive);
+		}
+		
+		@Override
+		public NAVIGABLE_MAP KEY_VALUE_GENERIC_TYPE headMap(KEY_TYPE toKey, boolean inclusive) {
+			if (!inRange(toKey, inclusive)) throw new IllegalArgumentException("toKey out of range");
+			return new DescendingNaivgableSubMapKV_BRACES(map, false, toKey, inclusive, toEnd, hi, hiInclusive);
+		}
+		
+		@Override
+		public NAVIGABLE_MAP KEY_VALUE_GENERIC_TYPE tailMap(KEY_TYPE fromKey, boolean inclusive) {
+			if (!inRange(fromKey, inclusive)) throw new IllegalArgumentException("fromKey out of range");
+			return new DescendingNaivgableSubMapKV_BRACES(map, fromStart, lo, loInclusive, false, fromKey, inclusive);
+		}
+		
+		@Override
+		public ObjectSet<MAP.Entry KEY_VALUE_GENERIC_TYPE> ENTRY_SET() {
+			if(entrySet == null) entrySet = new DescendingSubEntrySet();
+			return entrySet;
+		}
+		
+		@Override
+		protected Node KEY_VALUE_GENERIC_TYPE subLowest() { return absHighest(); }
+		@Override
+		protected Node KEY_VALUE_GENERIC_TYPE subHighest() { return absLowest(); }
+		@Override
+		protected Node KEY_VALUE_GENERIC_TYPE subCeiling(KEY_TYPE key) { return absFloor(key); }
+		@Override
+		protected Node KEY_VALUE_GENERIC_TYPE subHigher(KEY_TYPE key) { return absLower(key); }
+		@Override
+		protected Node KEY_VALUE_GENERIC_TYPE subFloor(KEY_TYPE key) { return absCeiling(key); }
+		@Override
+		protected Node KEY_VALUE_GENERIC_TYPE subLower(KEY_TYPE key) { return absHigher(key); }
+		@Override
+		protected Node KEY_VALUE_GENERIC_TYPE next(Node KEY_VALUE_GENERIC_TYPE entry) { return entry.previous(); }
+		@Override
+		protected Node KEY_VALUE_GENERIC_TYPE previous(Node KEY_VALUE_GENERIC_TYPE entry) { return entry.next(); }
+		
+		@Override
+		protected BI_ITERATOR KEY_GENERIC_TYPE keyIterator() {
+			return new DecsendingSubKeyIterator(absHighest(), absLowFence(), absHighFence()); 
+		}
+		
+		@Override
+		protected BI_ITERATOR KEY_GENERIC_TYPE keyIterator(KEY_TYPE element) {
+			return new DecsendingSubKeyIterator(absHigher(element), absLowFence(), absHighFence()); 
+		}
+		
+		@Override
+		protected VALUE_BI_ITERATOR VALUE_GENERIC_TYPE valueIterator() {
+			return new DecsendingSubValueIterator(absHighest(), absLowFence(), absHighFence()); 
+		}
+		
+		@Override
+		protected BI_ITERATOR KEY_GENERIC_TYPE descendingKeyIterator() {
+			return new AcsendingSubKeyIterator(absLowest(), absHighFence(), absLowFence()); 
+		}
+		
+		class DescendingSubEntrySet extends SubEntrySet {
+			@Override
+			public ObjectIterator<MAP.Entry KEY_VALUE_GENERIC_TYPE> iterator() {
+				return new DecsendingSubEntryIterator(absHighest(), absLowFence(), absHighFence());
+			}
+		}
+	}
+	
+	static abstract class NavigableSubMap KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_VALUE_GENERIC_TYPE implements NAVIGABLE_MAP KEY_VALUE_GENERIC_TYPE
+	{
+		final RB_TREE_MAP KEY_VALUE_GENERIC_TYPE map;
+		final KEY_TYPE lo, hi;
+		final boolean fromStart, toEnd;
+		final boolean loInclusive, hiInclusive;
+		
+		NAVIGABLE_MAP KEY_VALUE_GENERIC_TYPE inverse;
+		NAVIGABLE_SET KEY_GENERIC_TYPE keySet;
+		ObjectSet<MAP.Entry KEY_VALUE_GENERIC_TYPE> entrySet;
+		VALUE_COLLECTION VALUE_GENERIC_TYPE values;
+		
+		NavigableSubMap(RB_TREE_MAP KEY_VALUE_GENERIC_TYPE map, boolean fromStart, KEY_TYPE lo, boolean loInclusive, boolean toEnd, KEY_TYPE hi, boolean hiInclusive) {
+			if (!fromStart && !toEnd) {
+				if (map.compare(lo, hi) > 0) throw new IllegalArgumentException("fromKey > toKey");
+			} 
+			else {
+				if (!fromStart) map.validate(lo);
+				if (!toEnd) map.validate(hi);
+			}
+			this.map = map;
+			this.fromStart = fromStart;
+			this.lo = lo;
+			this.loInclusive = loInclusive;
+			this.toEnd = toEnd;
+			this.hi = hi;
+			this.hiInclusive = hiInclusive;
+		}
+		
+#if TYPE_OBJECT
+		public KEY_TYPE getDefaultMaxValue() { return map.getDefaultMaxValue(); }
+		public KEY_TYPE getDefaultMinValue() { return map.getDefaultMinValue(); }
+#else
+		@Override
+		public void setDefaultMaxValue(KEY_TYPE e) { map.setDefaultMaxValue(e); }
+		@Override
+		public KEY_TYPE getDefaultMaxValue() { return map.getDefaultMaxValue(); }
+		@Override
+		public void setDefaultMinValue(KEY_TYPE e) { map.setDefaultMinValue(e); }
+		@Override
+		public KEY_TYPE getDefaultMinValue() { return map.getDefaultMinValue(); }
+#endif
+		protected boolean isNullComparator() { return map.comparator() == null; }
+		
+		@Override
 		public ABSTRACT_MAP KEY_VALUE_GENERIC_TYPE setDefaultReturnValue(VALUE_TYPE v) { 
-			m.setDefaultReturnValue(v);
+			map.setDefaultReturnValue(v);
 			return this;
 		}
 		
 		@Override
-		public VALUE_TYPE getDefaultReturnValue() { return m.getDefaultReturnValue(); }
+		public VALUE_TYPE getDefaultReturnValue() { return map.getDefaultReturnValue(); }
+		
+		@Override
+		public VALUE_COLLECTION VALUE_GENERIC_TYPE values() {
+			if(values == null) values = new SubMapValues();
+			return values;
+		}
+		
+		@Override
+		public NAVIGABLE_SET KEY_GENERIC_TYPE descendingKeySet() {
+			return descendingMap().navigableKeySet();
+		}
+		
+		@Override
+		public SET KEY_GENERIC_TYPE keySet() {
+			return navigableKeySet();
+		}
+		
+		protected abstract Node KEY_VALUE_GENERIC_TYPE subLowest();
+		protected abstract Node KEY_VALUE_GENERIC_TYPE subHighest();
+		protected abstract Node KEY_VALUE_GENERIC_TYPE subCeiling(KEY_TYPE key);
+		protected abstract Node KEY_VALUE_GENERIC_TYPE subHigher(KEY_TYPE key);
+		protected abstract Node KEY_VALUE_GENERIC_TYPE subFloor(KEY_TYPE key);
+		protected abstract Node KEY_VALUE_GENERIC_TYPE subLower(KEY_TYPE key);
+		protected abstract BI_ITERATOR KEY_GENERIC_TYPE keyIterator();
+		protected abstract BI_ITERATOR KEY_GENERIC_TYPE keyIterator(KEY_TYPE element);
+		protected abstract VALUE_BI_ITERATOR VALUE_GENERIC_TYPE valueIterator();
+		protected abstract BI_ITERATOR KEY_GENERIC_TYPE descendingKeyIterator();
+		protected KEY_TYPE lowKeyOrNull(Node KEY_VALUE_GENERIC_TYPE entry) { return entry == null ? EMPTY_KEY_VALUE : entry.key; }
+		protected KEY_TYPE highKeyOrNull(Node KEY_VALUE_GENERIC_TYPE entry) { return entry == null ? EMPTY_KEY_VALUE : entry.key; }
+		protected Node KEY_VALUE_GENERIC_TYPE next(Node KEY_VALUE_GENERIC_TYPE entry) { return entry.next(); }
+		protected Node KEY_VALUE_GENERIC_TYPE previous(Node KEY_VALUE_GENERIC_TYPE entry) { return entry.previous(); }
+		
+		protected boolean tooLow(KEY_TYPE key) {
+			if (!fromStart) {
+				int c = map.compare(key, lo);
+				if (c < 0 || (c == 0 && !loInclusive)) return true;
+			}
+			return false;
+		}
+		
+		protected boolean tooHigh(KEY_TYPE key) {
+			if (!toEnd) {
+				int c = map.compare(key, hi);
+				if (c > 0 || (c == 0 && !hiInclusive)) return true;
+			}
+			return false;
+		}
+		protected boolean inRange(KEY_TYPE key) { return !tooLow(key) && !tooHigh(key); }
+		protected boolean inClosedRange(KEY_TYPE key) { return (fromStart || map.compare(key, lo) >= 0) && (toEnd || map.compare(hi, key) >= 0); }
+		protected boolean inRange(KEY_TYPE key, boolean inclusive) { return inclusive ? inRange(key) : inClosedRange(key); }
+		
+		protected Node KEY_VALUE_GENERIC_TYPE absLowest() {
+			Node KEY_VALUE_GENERIC_TYPE e = (fromStart ?  map.first : (loInclusive ? map.findCeilingNode(lo) : map.findHigherNode(lo)));
+			return (e == null || tooHigh(e.key)) ? null : e;
+		}
+		
+		protected Node KEY_VALUE_GENERIC_TYPE absHighest() {
+			Node KEY_VALUE_GENERIC_TYPE e = (toEnd ?  map.last : (hiInclusive ?  map.findFloorNode(hi) : map.findLowerNode(hi)));
+			return (e == null || tooLow(e.key)) ? null : e;
+		}
+		
+		protected Node KEY_VALUE_GENERIC_TYPE absCeiling(KEY_TYPE key) {
+			if (tooLow(key)) return absLowest();
+			Node KEY_VALUE_GENERIC_TYPE e = map.findCeilingNode(key);
+			return (e == null || tooHigh(e.key)) ? null : e;
+		}
+		
+		protected Node KEY_VALUE_GENERIC_TYPE absHigher(KEY_TYPE key) {
+			if (tooLow(key)) return absLowest();
+			Node KEY_VALUE_GENERIC_TYPE e = map.findHigherNode(key);
+			return (e == null || tooHigh(e.key)) ? null : e;
+		}
+		
+		protected Node KEY_VALUE_GENERIC_TYPE absFloor(KEY_TYPE key) {
+			if (tooHigh(key)) return absHighest();
+			Node KEY_VALUE_GENERIC_TYPE e = map.findFloorNode(key);
+			return (e == null || tooLow(e.key)) ? null : e;
+		}
+		
+		protected Node KEY_VALUE_GENERIC_TYPE absLower(KEY_TYPE key) {
+			if (tooHigh(key)) return absHighest();
+			Node KEY_VALUE_GENERIC_TYPE e = map.findLowerNode(key);
+			return (e == null || tooLow(e.key)) ? null : e;
+		}
+		
+		protected Node KEY_VALUE_GENERIC_TYPE absHighFence() { return (toEnd ? null : (hiInclusive ? map.findHigherNode(hi) : map.findCeilingNode(hi))); }
+		protected Node KEY_VALUE_GENERIC_TYPE absLowFence() { return (fromStart ? null : (loInclusive ?  map.findLowerNode(lo) : map.findFloorNode(lo))); }
 		
 		@Override
 		public VALUE_TYPE putAndMoveToFirst(KEY_TYPE key, VALUE_TYPE value) { throw new UnsupportedOperationException(); }
@@ -1304,338 +1590,283 @@ public class RB_TREE_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_VALUE_G
 		@Override
 		public VALUE_TYPE getAndMoveToLast(KEY_TYPE key) { throw new UnsupportedOperationException(); }
 		@Override
-		public COMPARATOR KEY_GENERIC_TYPE comparator() { return m.comparator(); }
-#if TYPE_OBJECT
-		@Override
-		public boolean containsKey(Object key) { return inRange((CLASS_TYPE)key) && m.containsKey(key); }
-#else
-		@Override
-		public boolean containsKey(KEY_TYPE key) { return inRange(key) && m.containsKey(key); }
-		
-#endif
-		@Override
-		public KEY_TYPE FIRST_ENTRY_KEY() { 
-			RB_TREE_MAP.Entry KEY_VALUE_GENERIC_TYPE entry = findLowest();
-			return entry == null ? getDefaultMaxValue() : entry.key;
-		}
+		public COMPARATOR KEY_GENERIC_TYPE comparator() { return map.comparator(); }
 		
 		@Override
 		public KEY_TYPE POLL_FIRST_ENTRY_KEY() {
-			if(fromStart) return m.POLL_FIRST_ENTRY_KEY();
-			RB_TREE_MAP.Entry KEY_VALUE_GENERIC_TYPE entry = loInclusive ? m.findCeilingNode(low) : m.findHigherNode(low);
-			if(entry != null && !tooHigh(entry.key)) {
-				KEY_TYPE value = entry.key;
-				m.removeNode(entry);
-				return value;
+			Node KEY_VALUE_GENERIC_TYPE entry = subLowest();
+			if(entry != null) {
+				KEY_TYPE result = entry.key;
+				map.removeNode(entry);
+				return result;
 			}
-			return getDefaultMaxValue();
-		}
-		
-		@Override
-		public KEY_TYPE LAST_ENTRY_KEY() {
-			RB_TREE_MAP.Entry KEY_VALUE_GENERIC_TYPE entry = findHighest();
-			return entry == null ? getDefaultMinValue() : entry.key;	
+			return EMPTY_KEY_VALUE;
 		}
 		
 		@Override
 		public KEY_TYPE POLL_LAST_ENTRY_KEY() {
-			if(toEnd) return m.POLL_LAST_ENTRY_KEY();
-			RB_TREE_MAP.Entry KEY_VALUE_GENERIC_TYPE entry = hiInclusive ? m.findFloorNode(high) : m.findLowerNode(high);
-			if(entry != null && !tooLow(entry.key)) {
-				KEY_TYPE value = entry.key;
-				m.removeNode(entry);
-				return value;
+			Node KEY_VALUE_GENERIC_TYPE entry = subHighest();
+			if(entry != null) {
+				KEY_TYPE result = entry.key;
+				map.removeNode(entry);
+				return result;
 			}
-			return getDefaultMinValue();
+			return EMPTY_KEY_VALUE;
 		}
 		
 		@Override
 		public VALUE_TYPE FIRST_ENTRY_VALUE() {
-			RB_TREE_MAP.Entry KEY_VALUE_GENERIC_TYPE entry = findLowest();
-			return entry == null ? getDefaultReturnValue() : entry.value;
+			Node KEY_VALUE_GENERIC_TYPE entry = subLowest();
+			return entry == null ? map.getDefaultReturnValue() : entry.value;
 		}
 		
 		@Override
 		public VALUE_TYPE LAST_ENTRY_VALUE() {
-			RB_TREE_MAP.Entry KEY_VALUE_GENERIC_TYPE entry = findHighest();
-			return entry == null ? getDefaultReturnValue() : entry.value;
+			Node KEY_VALUE_GENERIC_TYPE entry = subHighest();
+			return entry == null ? map.getDefaultReturnValue() : entry.value;
 		}
 		
-		protected RB_TREE_MAP.Entry KEY_VALUE_GENERIC_TYPE findLowest() {
-			if(fromStart) return m.first;
-			RB_TREE_MAP.Entry KEY_VALUE_GENERIC_TYPE entry = loInclusive ? m.findCeilingNode(low) : m.findHigherNode(low);
-			return entry == null || tooHigh(entry.key) ? null : entry;
+		@Override
+		public KEY_TYPE FIRST_ENTRY_KEY() {
+			Node KEY_VALUE_GENERIC_TYPE entry = subLowest();
+			if(entry == null) throw new NoSuchElementException();
+			return entry.key;
 		}
 		
-		protected RB_TREE_MAP.Entry KEY_VALUE_GENERIC_TYPE findHighest() {
-			if(toEnd) return m.last;
-			RB_TREE_MAP.Entry KEY_VALUE_GENERIC_TYPE entry = hiInclusive ? m.findFloorNode(high) : m.findLowerNode(high);
-			return entry == null || tooLow(entry.key) ? null : entry;
+		@Override
+		public KEY_TYPE LAST_ENTRY_KEY() {
+			Node KEY_VALUE_GENERIC_TYPE entry = subHighest();
+			if(entry == null) throw new NoSuchElementException();
+			return entry.key;
 		}
 		
 		@Override
 		public VALUE_TYPE put(KEY_TYPE key, VALUE_TYPE value) {
-			if(!inRange(key)) throw new IllegalArgumentException("key out of range");
-			return m.put(key, value);
+			if (!inRange(key)) throw new IllegalArgumentException("key out of range");
+			return map.put(key, value);
 		}
 		
 		@Override
 		public VALUE_TYPE putIfAbsent(KEY_TYPE key, VALUE_TYPE value) {
-			if(!inRange(key)) throw new IllegalArgumentException("key out of range");
-			return m.putIfAbsent(key, value);
+			if (!inRange(key)) throw new IllegalArgumentException("key out of range");
+			return map.putIfAbsent(key, value);
 		}
 		
 #if VALUE_PRIMITIVES
 		@Override
 		public VALUE_TYPE addTo(KEY_TYPE key, VALUE_TYPE value) {
 			if(!inRange(key)) throw new IllegalArgumentException("key out of range");
-			return m.addTo(key, value);
+			return map.addTo(key, value);
 		}
 		
 #endif
+#if TYPE_OBJECT
 		@Override
-		public VALUE_TYPE GET_VALUE(KEY_TYPE key) {
-			return inRange(key) ? m.GET_VALUE(key) : getDefaultReturnValue();
-		}
-		
-#if TYPE_OBJECT && VALUE_OBJECT
-		@Override
-		public VALUE_TYPE getOrDefault(Object key, VALUE_TYPE defaultValue) {
-			return inRange((KEY_TYPE)key) ? m.getOrDefault(key, defaultValue) : getDefaultReturnValue();
-		}
-		
+		public boolean containsKey(Object key) { return inRange((CLASS_TYPE)key) && map.containsKey(key); }
 #else
 		@Override
-		public VALUE_TYPE getOrDefault(KEY_TYPE key, VALUE_TYPE defaultValue) {
-			return inRange(key) ? m.getOrDefault(key, defaultValue) : getDefaultReturnValue();
-		}
+		public boolean containsKey(KEY_TYPE key) { return inRange(key) && map.containsKey(key); }
 		
 #endif
 		@Override
+		public VALUE_TYPE COMPUTE_IF_PRESENT(KEY_TYPE key, UNARY_OPERATOR KEY_VALUE_GENERIC_TYPE mappingFunction) {
+			Objects.requireNonNull(mappingFunction);
+#if TYPE_OBJECT
+			map.validate(key);
+#endif
+			if(!inRange(key)) return getDefaultReturnValue();
+			Node KEY_VALUE_GENERIC_TYPE entry = map.findNode(key);
+			if(entry == null || VALUE_EQUALS(entry.value, getDefaultReturnValue())) return getDefaultReturnValue();
+			VALUE_TYPE newValue = mappingFunction.apply(key, entry.value);
+			if(VALUE_EQUALS(newValue, getDefaultReturnValue())) {
+				map.removeNode(entry);
+				return newValue;
+			}
+			entry.value = newValue;
+			return newValue;
+		}
+		
+		@Override
 		public VALUE_TYPE REMOVE_VALUE(KEY_TYPE key) {
-			return inRange(key) ? m.REMOVE_VALUE(key) : getDefaultReturnValue();
+			return inRange(key) ? map.REMOVE_VALUE(key) : getDefaultReturnValue();
 		}
 		
 		@Override
 		public VALUE_TYPE REMOVE_VALUEOrDefault(KEY_TYPE key, VALUE_TYPE defaultValue) {
-			return inRange(key) ? m.REMOVE_VALUE(key) : defaultValue;
+			return inRange(key) ? map.REMOVE_VALUE(key) : defaultValue;
 		}
 		
 #if TYPE_OBJECT && VALUE_OBJECT
 		@Override
 		public boolean remove(Object key, Object value) {
-			return inRange((CLASS_TYPE)key) && m.remove(key, value);
+			return inRange((CLASS_TYPE)key) && map.remove(key, value);
 		}
 		
 #else
 		@Override
 		public boolean remove(KEY_TYPE key, VALUE_TYPE value) {
-			return inRange(key) && m.remove(key, value);
+			return inRange(key) && map.remove(key, value);
 		}
 		
 #endif
+		
 		@Override
-		public ObjectSet<MAP.Entry KEY_VALUE_GENERIC_TYPE> ENTRY_SET() {
-			if(entrySet == null) entrySet = new SubMapEntrySet();
-			return entrySet;
+		public VALUE_TYPE GET_VALUE(KEY_TYPE key) {
+			return inRange(key) ? map.GET_VALUE(key) : getDefaultReturnValue();
+		}
+		
+#if TYPE_OBJECT && VALUE_OBJECT
+		@Override
+		public VALUE_TYPE getOrDefault(Object key, VALUE_TYPE defaultValue) {
+			return inRange((CLASS_TYPE)key) ? map.getOrDefault(key, defaultValue) : getDefaultReturnValue();
+		}
+		
+#else
+		@Override
+		public VALUE_TYPE getOrDefault(KEY_TYPE key, VALUE_TYPE defaultValue) {
+			return inRange(key) ? map.getOrDefault(key, defaultValue) : getDefaultReturnValue();
+		}
+		
+#endif
+		
+		@Override
+		public KEY_TYPE lowerKey(KEY_TYPE key) { return lowKeyOrNull(subLower(key)); }
+		@Override
+		public KEY_TYPE floorKey(KEY_TYPE key) { return lowKeyOrNull(subFloor(key)); }
+		@Override
+		public KEY_TYPE ceilingKey(KEY_TYPE key) { return highKeyOrNull(subCeiling(key)); }
+		@Override
+		public KEY_TYPE higherKey(KEY_TYPE key) { return highKeyOrNull(subHigher(key)); }
+		@Override
+		public MAP.Entry KEY_VALUE_GENERIC_TYPE lowerEntry(KEY_TYPE key) { return subLower(key); }
+		@Override
+		public MAP.Entry KEY_VALUE_GENERIC_TYPE floorEntry(KEY_TYPE key) { return subFloor(key); }
+		@Override
+		public MAP.Entry KEY_VALUE_GENERIC_TYPE ceilingEntry(KEY_TYPE key) { return subCeiling(key); }
+		@Override
+		public MAP.Entry KEY_VALUE_GENERIC_TYPE higherEntry(KEY_TYPE key) { return subHigher(key); }
+		
+		@Override
+		public boolean isEmpty() {
+			if(fromStart && toEnd) return map.isEmpty();
+			Node KEY_VALUE_GENERIC_TYPE n = absLowest();
+			return n == null || tooHigh(n.key);
 		}
 		
 		@Override
-		public SET KEY_GENERIC_TYPE keySet() { return navigableKeySet(); }
+		public int size() { return fromStart && toEnd ? map.size() : entrySet().size(); }
 		
 		@Override
-		public NAVIGABLE_SET KEY_GENERIC_TYPE navigableKeySet() {
-			if(keySet == null) keySet = new KeySetKV_BRACES(this);
-			return keySet;
-		}
-		
-		@Override
-		public NAVIGABLE_SET KEY_GENERIC_TYPE descendingKeySet() {
-			return descendingMap().navigableKeySet();
-		}
-		
-		@Override
-		public VALUE_COLLECTION VALUE_GENERIC_TYPE values() {
-			if(values == null) values = new SubMapValues();
-			return values;
-		}
-		
-		@Override
-		public void forEach(BI_CONSUMER KEY_VALUE_GENERIC_TYPE action) {
-			for(RB_TREE_MAP.Entry KEY_VALUE_GENERIC_TYPE entry = findLowest(), last = findHighest();entry != null && (last == null || last != previous(entry));entry = next(entry))
-				action.accept(entry.key, entry.value);
-		}
-		
-		@Override
-		public int size() {
-			return (fromStart && toEnd) ? m.size() : entrySet().size();
-		}
+		public NAVIGABLE_MAP KEY_VALUE_GENERIC_TYPE copy() { throw new UnsupportedOperationException(); }
 		
 		@Override
 		public MAP.Entry KEY_VALUE_GENERIC_TYPE firstEntry() {
-			RB_TREE_MAP.Entry KEY_VALUE_GENERIC_TYPE entry = findLowest();
-			return entry == null ? null : new BasicEntryKV_BRACES(entry.key, entry.value);
+			Node KEY_VALUE_GENERIC_TYPE entry = subLowest();
+			return entry == null ? null : entry.export();
 		}
-		
+
 		@Override
 		public MAP.Entry KEY_VALUE_GENERIC_TYPE lastEntry() {
-			RB_TREE_MAP.Entry KEY_VALUE_GENERIC_TYPE entry = findHighest();
-			return entry == null ? null : new BasicEntryKV_BRACES(entry.key, entry.value);
+			Node KEY_VALUE_GENERIC_TYPE entry = subHighest();
+			return entry == null ? null : entry.export();
 		}
-		
+
 		@Override
 		public MAP.Entry KEY_VALUE_GENERIC_TYPE pollFirstEntry() {
-			RB_TREE_MAP.Entry KEY_VALUE_GENERIC_TYPE entry = findLowest();
-			if(entry == null) return null;
-			BasicEntry KEY_VALUE_GENERIC_TYPE result = new BasicEntryKV_BRACES(entry.key, entry.value);
-			m.removeNode(entry);
-			return result;
+			Node KEY_VALUE_GENERIC_TYPE entry = subLowest();
+			if(entry != null) {
+				MAP.Entry KEY_VALUE_GENERIC_TYPE result = entry.export();
+				map.removeNode(entry);
+				return result;
+			}
+			return null;
 		}
-		
+
 		@Override
 		public MAP.Entry KEY_VALUE_GENERIC_TYPE pollLastEntry() {
-			RB_TREE_MAP.Entry KEY_VALUE_GENERIC_TYPE entry = findHighest();
-			if(entry == null) return null;
-			BasicEntry KEY_VALUE_GENERIC_TYPE result = new BasicEntryKV_BRACES(entry.key, entry.value);
-			m.removeNode(entry);
-			return result;
-		}
-		
-		@Override
-		public KEY_TYPE lowerKey(KEY_TYPE e) {
-			if(tooHigh(e)) {
-				RB_TREE_MAP.Entry KEY_VALUE_GENERIC_TYPE entry = findHighest();
-				return entry == null ? getDefaultMinValue() : entry.key;
+			Node KEY_VALUE_GENERIC_TYPE entry = subHighest();
+			if(entry != null) {
+				MAP.Entry KEY_VALUE_GENERIC_TYPE result = entry.export();
+				map.removeNode(entry);
+				return result;
 			}
-			RB_TREE_MAP.Entry KEY_VALUE_GENERIC_TYPE entry = m.findLowerNode(e);
-			return entry == null || tooHigh(entry.key) ? getDefaultMaxValue() : entry.key;
+			return null;
 		}
 		
-		@Override
-		public KEY_TYPE floorKey(KEY_TYPE e) {
-			if(tooHigh(e)) {
-				RB_TREE_MAP.Entry KEY_VALUE_GENERIC_TYPE entry = findHighest();
-				return entry == null ? getDefaultMinValue() : entry.key;
-			}
-			RB_TREE_MAP.Entry KEY_VALUE_GENERIC_TYPE entry = m.findFloorNode(e);
-			return entry == null || tooHigh(entry.key) ? getDefaultMaxValue() : entry.key;
-		}
-		
-		@Override
-		public KEY_TYPE ceilingKey(KEY_TYPE e) {
-			if(tooLow(e)) {
-				RB_TREE_MAP.Entry KEY_VALUE_GENERIC_TYPE entry = findLowest();
-				return entry == null ? getDefaultMaxValue() : entry.key;
-			}
-			RB_TREE_MAP.Entry KEY_VALUE_GENERIC_TYPE entry = m.findCeilingNode(e);
-			return entry == null || tooLow(entry.key) ? getDefaultMinValue() : entry.key;
-		}
-		
-		@Override
-		public KEY_TYPE higherKey(KEY_TYPE e) {
-			if(tooLow(e)) {
-				RB_TREE_MAP.Entry KEY_VALUE_GENERIC_TYPE entry = findLowest();
-				return entry == null ? getDefaultMaxValue() : entry.key;
-			}
-			RB_TREE_MAP.Entry KEY_VALUE_GENERIC_TYPE entry = m.findHigherNode(e);
-			return entry == null || tooLow(entry.key) ? getDefaultMinValue() : entry.key;
-		}
-		
-		@Override
-		public MAP.Entry KEY_VALUE_GENERIC_TYPE lowerEntry(KEY_TYPE e) {
-			if(tooHigh(e)) {
-				RB_TREE_MAP.Entry KEY_VALUE_GENERIC_TYPE entry = findHighest();
-				return entry == null ? null : new BasicEntryKV_BRACES(entry.key, entry.value);
-			}
-			RB_TREE_MAP.Entry KEY_VALUE_GENERIC_TYPE entry = m.findLowerNode(e);
-			return entry == null || tooHigh(entry.key) ? null : new BasicEntryKV_BRACES(entry.key, entry.value);
-		}
-		
-		@Override
-		public MAP.Entry KEY_VALUE_GENERIC_TYPE floorEntry(KEY_TYPE e) {
-			if(tooHigh(e)) {
-				RB_TREE_MAP.Entry KEY_VALUE_GENERIC_TYPE entry = findHighest();
-				return entry == null ? null : new BasicEntryKV_BRACES(entry.key, entry.value);
-			}
-			RB_TREE_MAP.Entry KEY_VALUE_GENERIC_TYPE entry = m.findFloorNode(e);
-			return entry == null || tooHigh(entry.key) ? null : new BasicEntryKV_BRACES(entry.key, entry.value);
-		}
-		
-		@Override
-		public MAP.Entry KEY_VALUE_GENERIC_TYPE ceilingEntry(KEY_TYPE e) {
-			if(tooLow(e)) {
-				RB_TREE_MAP.Entry KEY_VALUE_GENERIC_TYPE entry = findLowest();
-				return entry == null ? null : new BasicEntryKV_BRACES(entry.key, entry.value);
-			}
-			RB_TREE_MAP.Entry KEY_VALUE_GENERIC_TYPE entry = m.findCeilingNode(e);
-			return entry == null || tooLow(entry.key) ? null : new BasicEntryKV_BRACES(entry.key, entry.value);
-		}
-		
-		@Override
-		public MAP.Entry KEY_VALUE_GENERIC_TYPE higherEntry(KEY_TYPE e) {
-			if(tooLow(e)) {
-				RB_TREE_MAP.Entry KEY_VALUE_GENERIC_TYPE entry = findLowest();
-				return entry == null ? null : new BasicEntryKV_BRACES(entry.key, entry.value);
-			}
-			RB_TREE_MAP.Entry KEY_VALUE_GENERIC_TYPE entry = m.findHigherNode(e);
-			return entry == null || tooLow(entry.key) ? null : new BasicEntryKV_BRACES(entry.key, entry.value);
-		}
-		
-		class SubMapEntrySet extends AbstractObjectSet<MAP.Entry KEY_VALUE_GENERIC_TYPE> implements ObjectSet<MAP.Entry KEY_VALUE_GENERIC_TYPE> {
+		abstract class SubEntrySet extends AbstractObjectSet<MAP.Entry KEY_VALUE_GENERIC_TYPE> {
 			@Override
-			@Deprecated
-			public boolean contains(Object o) {
-				if(o instanceof Map.Entry) {
-					if(o instanceof MAP.Entry) {
-						MAP.Entry KEY_VALUE_GENERIC_TYPE entry = (MAP.Entry KEY_VALUE_GENERIC_TYPE)o;
-						if(entry.getKey() == null && comparator() == null) return false;
-						RB_TREE_MAP.Entry KEY_VALUE_GENERIC_TYPE subEntry = m.findNode(entry.ENTRY_KEY());
-						if(subEntry != null) return VALUE_EQUALS(entry.ENTRY_VALUE(), subEntry.value);
-					}
-					else {
-						Map.Entry<?, ?> entry = (Map.Entry<?, ?>)o;
-						if(entry.getKey() == null && comparator() == null) return false;
-#if !TYPE_OBJECT
-						if(!(entry.getKey() instanceof CLASS_TYPE)) return false;
-#endif
-						RB_TREE_MAP.Entry KEY_VALUE_GENERIC_TYPE subEntry = m.findNode((CLASS_TYPE)entry.getKey());
-						if(subEntry != null) return Objects.equals(entry.getValue(), VALUE_TO_OBJ(subEntry.value));
-					}
-				}
-				return false;
+			public int size() {
+				if (fromStart && toEnd) return map.size();
+				int size = 0;
+				for(ObjectIterator<MAP.Entry KEY_VALUE_GENERIC_TYPE> iter = iterator();iter.hasNext();iter.next(),size++);
+				return size;
 			}
 			
 			@Override
-			@Deprecated
+			public boolean isEmpty() {
+				Node KEY_VALUE_GENERIC_TYPE n = absLowest();
+				return n == null || tooHigh(n.key);
+			}
+			
+			@Override
+			public boolean contains(Object o) {
+				if (!(o instanceof Map.Entry)) return false;
+				if(o instanceof MAP.Entry)
+				{
+					MAP.Entry KEY_VALUE_GENERIC_TYPE entry = (MAP.Entry KEY_VALUE_GENERIC_TYPE) o;
+#if TYPE_OBJECT
+					if(entry.ENTRY_KEY() == null && isNullComparator()) return false;
+#endif
+					KEY_TYPE key = entry.ENTRY_KEY();
+					if (!inRange(key)) return false;
+					Node KEY_VALUE_GENERIC_TYPE node = map.findNode(key);
+					return node != null && VALUE_EQUALS(entry.ENTRY_VALUE(), node.ENTRY_VALUE());
+				}
+				Map.Entry<?,?> entry = (Map.Entry<?,?>) o;
+				if(entry.getKey() == null && isNullComparator()) return false;
+				CLASS_TYPE key = (CLASS_TYPE)entry.getKey();
+				if (!inRange(key)) return false;
+				Node KEY_VALUE_GENERIC_TYPE node = map.findNode(key);
+				return node != null && Objects.equals(entry.getValue(), VALUE_TO_OBJ(node.ENTRY_VALUE()));
+			}
+			
+			@Override
 			public boolean remove(Object o) {
-				if(o instanceof Map.Entry) {
-					if(o instanceof MAP.Entry) {
-						MAP.Entry KEY_VALUE_GENERIC_TYPE entry = (MAP.Entry KEY_VALUE_GENERIC_TYPE)o;
-						return NavigableSubMap.this.remove(entry.ENTRY_KEY(), entry.ENTRY_VALUE());
+				if (!(o instanceof Map.Entry)) return false;
+				if(o instanceof MAP.Entry)
+				{
+					MAP.Entry KEY_VALUE_GENERIC_TYPE entry = (MAP.Entry KEY_VALUE_GENERIC_TYPE) o;
+					KEY_TYPE key = entry.ENTRY_KEY();
+					if (!inRange(key)) return false;
+					Node KEY_VALUE_GENERIC_TYPE node = map.findNode(key);
+					if (node != null && VALUE_EQUALS(node.getValue(), entry.getValue())) {
+						map.removeNode(node);
+						return true;
 					}
-					Map.Entry<?, ?> entry = (Map.Entry<?, ?>)o;
-					return NavigableSubMap.this.remove(entry.getKey(), entry.getValue());
+					return false;
+				}
+				Map.Entry<?,?> entry = (Map.Entry<?,?>) o;
+				CLASS_TYPE key = (CLASS_TYPE)entry.getKey();
+				if (!inRange(key)) return false;
+				Node KEY_VALUE_GENERIC_TYPE node = map.findNode(key);
+				if (node != null && Objects.equals(node.getValue(), entry.getValue())) {
+					map.removeNode(node);
+					return true;
 				}
 				return false;
 			}
-			@Override
-			public ObjectIterator<MAP.Entry KEY_VALUE_GENERIC_TYPE> iterator() { return entryIterator(); }
-			@Override
-			public int size() { return NavigableSubMap.this.size(); }
-			@Override
-			public void clear() { NavigableSubMap.this.clear(); }
 			
 			@Override
 			public void forEach(Consumer<? super MAP.Entry KEY_VALUE_GENERIC_TYPE> action) {
 				Objects.requireNonNull(action);
-				for(RB_TREE_MAP.Entry KEY_VALUE_GENERIC_TYPE entry = findLowest(), last = findHighest();entry != null && (last == null || last != previous(entry));entry = next(entry))
+				for(Node KEY_VALUE_GENERIC_TYPE entry = subLowest(), last = subHighest();entry != null && (last == null || last != previous(entry));entry = next(entry))
 					action.accept(new BasicEntryKV_BRACES(entry.key, entry.value));
 			}
 			
 			@Override
 			public <E> void forEach(E input, ObjectObjectConsumer<E, MAP.Entry KEY_VALUE_GENERIC_TYPE> action) {
 				Objects.requireNonNull(action);
-				for(RB_TREE_MAP.Entry KEY_VALUE_GENERIC_TYPE entry = findLowest(), last = findHighest();entry != null && (last == null || last != previous(entry));entry = next(entry))
+				for(Node KEY_VALUE_GENERIC_TYPE entry = subLowest(), last = subHighest();entry != null && (last == null || last != previous(entry));entry = next(entry))
 					action.accept(input, new BasicEntryKV_BRACES(entry.key, entry.value));
 			}
 			
@@ -1644,7 +1875,7 @@ public class RB_TREE_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_VALUE_G
 				Objects.requireNonNull(filter);
 				if(size() <= 0) return false;
 				BasicEntry KEY_VALUE_GENERIC_TYPE subEntry = new BasicEntryKV_BRACES();
-				for(RB_TREE_MAP.Entry KEY_VALUE_GENERIC_TYPE entry = findLowest(), last = findHighest();entry != null && (last == null || last != previous(entry));entry = next(entry)) {
+				for(Node KEY_VALUE_GENERIC_TYPE entry = subLowest(), last = subHighest();entry != null && (last == null || last != previous(entry));entry = next(entry)) {
 					subEntry.set(entry.key, entry.value);
 					if(filter.getBoolean(subEntry)) return true;
 				}
@@ -1656,7 +1887,7 @@ public class RB_TREE_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_VALUE_G
 				Objects.requireNonNull(filter);
 				if(size() <= 0) return true;
 				BasicEntry KEY_VALUE_GENERIC_TYPE subEntry = new BasicEntryKV_BRACES();
-				for(RB_TREE_MAP.Entry KEY_VALUE_GENERIC_TYPE entry = findLowest(), last = findHighest();entry != null && (last == null || last != previous(entry));entry = next(entry)) {
+				for(Node KEY_VALUE_GENERIC_TYPE entry = subLowest(), last = subHighest();entry != null && (last == null || last != previous(entry));entry = next(entry)) {
 					subEntry.set(entry.key, entry.value);
 					if(filter.getBoolean(subEntry)) return false;
 				}
@@ -1668,7 +1899,7 @@ public class RB_TREE_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_VALUE_G
 				Objects.requireNonNull(filter);
 				if(size() <= 0) return true;
 				BasicEntry KEY_VALUE_GENERIC_TYPE subEntry = new BasicEntryKV_BRACES();
-				for(RB_TREE_MAP.Entry KEY_VALUE_GENERIC_TYPE entry = findLowest(), last = findHighest();entry != null && (last == null || last != previous(entry));entry = next(entry)) {
+				for(Node KEY_VALUE_GENERIC_TYPE entry = subLowest(), last = subHighest();entry != null && (last == null || last != previous(entry));entry = next(entry)) {
 					subEntry.set(entry.key, entry.value);
 					if(!filter.getBoolean(subEntry)) return false;
 				}
@@ -1679,7 +1910,7 @@ public class RB_TREE_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_VALUE_G
 			public <E> E reduce(E identity, BiFunction<E, MAP.Entry KEY_VALUE_GENERIC_TYPE, E> operator) {
 				Objects.requireNonNull(operator);
 				E state = identity;
-				for(RB_TREE_MAP.Entry KEY_VALUE_GENERIC_TYPE entry = findLowest(), last = findHighest();entry != null && (last == null || last != previous(entry));entry = next(entry)) {
+				for(Node KEY_VALUE_GENERIC_TYPE entry = subLowest(), last = subHighest();entry != null && (last == null || last != previous(entry));entry = next(entry)) {
 					state = operator.apply(state, new BasicEntryKV_BRACES(entry.key, entry.value));
 				}
 				return state;
@@ -1690,7 +1921,7 @@ public class RB_TREE_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_VALUE_G
 				Objects.requireNonNull(operator);
 				MAP.Entry KEY_VALUE_GENERIC_TYPE state = null;
 				boolean empty = true;
-				for(RB_TREE_MAP.Entry KEY_VALUE_GENERIC_TYPE entry = findLowest(), last = findHighest();entry != null && (last == null || last != previous(entry));entry = next(entry)) {
+				for(Node KEY_VALUE_GENERIC_TYPE entry = subLowest(), last = subHighest();entry != null && (last == null || last != previous(entry));entry = next(entry)) {
 					if(empty) {
 						empty = false;
 						state = new BasicEntryKV_BRACES(entry.key, entry.value);
@@ -1706,7 +1937,7 @@ public class RB_TREE_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_VALUE_G
 				Objects.requireNonNull(filter);
 				if(size() <= 0) return null;
 				BasicEntry KEY_VALUE_GENERIC_TYPE subEntry = new BasicEntryKV_BRACES();
-				for(RB_TREE_MAP.Entry KEY_VALUE_GENERIC_TYPE entry = findLowest(), last = findHighest();entry != null && (last == null || last != previous(entry));entry = next(entry)) {
+				for(Node KEY_VALUE_GENERIC_TYPE entry = subLowest(), last = subHighest();entry != null && (last == null || last != previous(entry));entry = next(entry)) {
 					subEntry.set(entry.key, entry.value);
 					if(filter.getBoolean(subEntry)) return subEntry;
 				}
@@ -1719,7 +1950,7 @@ public class RB_TREE_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_VALUE_G
 				if(size() <= 0) return 0;
 				int result = 0;
 				BasicEntry KEY_VALUE_GENERIC_TYPE subEntry = new BasicEntryKV_BRACES();
-				for(RB_TREE_MAP.Entry KEY_VALUE_GENERIC_TYPE entry = findLowest(), last = findHighest();entry != null && (last == null || last != previous(entry));entry = next(entry)) {
+				for(Node KEY_VALUE_GENERIC_TYPE entry = subLowest(), last = subHighest();entry != null && (last == null || last != previous(entry));entry = next(entry)) {
 					subEntry.set(entry.key, entry.value);
 					if(filter.getBoolean(subEntry)) result++;
 				}
@@ -1760,21 +1991,21 @@ public class RB_TREE_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_VALUE_G
 			@Override
 			public void forEach(VALUE_CONSUMER VALUE_SUPER_GENERIC_TYPE action) {
 				Objects.requireNonNull(action);
-				for(RB_TREE_MAP.Entry KEY_VALUE_GENERIC_TYPE entry = findLowest(), last = findHighest();entry != null && (last == null || last != previous(entry));entry = next(entry))
+				for(Node KEY_VALUE_GENERIC_TYPE entry = subLowest(), last = subHighest();entry != null && (last == null || last != previous(entry));entry = next(entry))
 					action.accept(entry.value);
 			}
 			
 			@Override
 			public <E> void forEach(E input, VALUE_BI_FROM_OBJECT_CONSUMER VSV_GENERIC_TYPE<E> action) {
 				Objects.requireNonNull(action);
-				for(RB_TREE_MAP.Entry KEY_VALUE_GENERIC_TYPE entry = findLowest(), last = findHighest();entry != null && (last == null || last != previous(entry));entry = next(entry))
+				for(Node KEY_VALUE_GENERIC_TYPE entry = subLowest(), last = subHighest();entry != null && (last == null || last != previous(entry));entry = next(entry))
 					action.accept(input, entry.value);
 			}
 			
 			@Override
 			public boolean matchesAny(VALUE_PREDICATE VALUE_GENERIC_TYPE filter) {
 				Objects.requireNonNull(filter);
-				for(RB_TREE_MAP.Entry KEY_VALUE_GENERIC_TYPE entry = findLowest(), last = findHighest();entry != null && (last == null || last != previous(entry));entry = next(entry))
+				for(Node KEY_VALUE_GENERIC_TYPE entry = subLowest(), last = subHighest();entry != null && (last == null || last != previous(entry));entry = next(entry))
 					if(filter.VALUE_TEST_VALUE(entry.value)) return true;
 				return false;
 			}
@@ -1782,7 +2013,7 @@ public class RB_TREE_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_VALUE_G
 			@Override
 			public boolean matchesNone(VALUE_PREDICATE VALUE_GENERIC_TYPE filter) {
 				Objects.requireNonNull(filter);
-				for(RB_TREE_MAP.Entry KEY_VALUE_GENERIC_TYPE entry = findLowest(), last = findHighest();entry != null && (last == null || last != previous(entry));entry = next(entry))
+				for(Node KEY_VALUE_GENERIC_TYPE entry = subLowest(), last = subHighest();entry != null && (last == null || last != previous(entry));entry = next(entry))
 					if(filter.VALUE_TEST_VALUE(entry.value)) return false;
 				return true;
 			}
@@ -1790,7 +2021,7 @@ public class RB_TREE_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_VALUE_G
 			@Override
 			public boolean matchesAll(VALUE_PREDICATE VALUE_GENERIC_TYPE filter) {
 				Objects.requireNonNull(filter);
-				for(RB_TREE_MAP.Entry KEY_VALUE_GENERIC_TYPE entry = findLowest(), last = findHighest();entry != null && (last == null || last != previous(entry));entry = next(entry))
+				for(Node KEY_VALUE_GENERIC_TYPE entry = subLowest(), last = subHighest();entry != null && (last == null || last != previous(entry));entry = next(entry))
 					if(!filter.VALUE_TEST_VALUE(entry.value)) return false;
 				return true;
 			}
@@ -1800,7 +2031,7 @@ public class RB_TREE_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_VALUE_G
 			public VALUE_TYPE reduce(VALUE_TYPE identity, VALUE_SINGLE_UNARY_OPERATOR VALUE_VALUE_GENERIC_TYPE operator) {
 				Objects.requireNonNull(operator);
 				VALUE_TYPE state = identity;
-				for(RB_TREE_MAP.Entry KEY_VALUE_GENERIC_TYPE entry = findLowest(), last = findHighest();entry != null && (last == null || last != previous(entry));entry = next(entry))
+				for(Node KEY_VALUE_GENERIC_TYPE entry = subLowest(), last = subHighest();entry != null && (last == null || last != previous(entry));entry = next(entry))
 					state = operator.APPLY_VALUE(state, entry.value);
 				return state;
 			}
@@ -1810,7 +2041,7 @@ public class RB_TREE_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_VALUE_G
 			public <VALUE_SPECIAL_TYPE> VALUE_SPECIAL_TYPE reduce(VALUE_SPECIAL_TYPE identity, BiFunction<VALUE_SPECIAL_TYPE, VALUE_TYPE, VALUE_SPECIAL_TYPE> operator) {
 				Objects.requireNonNull(operator);
 				VALUE_SPECIAL_TYPE state = identity;
-				for(RB_TREE_MAP.Entry KEY_VALUE_GENERIC_TYPE entry = findLowest(), last = findHighest();entry != null && (last == null || last != previous(entry));entry = next(entry))
+				for(Node KEY_VALUE_GENERIC_TYPE entry = subLowest(), last = subHighest();entry != null && (last == null || last != previous(entry));entry = next(entry))
 					state = operator.apply(state, entry.value);
 				return state;
 			}
@@ -1821,7 +2052,7 @@ public class RB_TREE_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_VALUE_G
 				Objects.requireNonNull(operator);
 				VALUE_TYPE state = EMPTY_VALUE;
 				boolean empty = true;
-				for(RB_TREE_MAP.Entry KEY_VALUE_GENERIC_TYPE entry = findLowest(), last = findHighest();entry != null && (last == null || last != previous(entry));entry = next(entry)) {
+				for(Node KEY_VALUE_GENERIC_TYPE entry = subLowest(), last = subHighest();entry != null && (last == null || last != previous(entry));entry = next(entry)) {
 					if(empty) {
 						empty = false;
 						state = entry.value;
@@ -1835,7 +2066,7 @@ public class RB_TREE_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_VALUE_G
 			@Override
 			public VALUE_TYPE findFirst(VALUE_PREDICATE VALUE_GENERIC_TYPE filter) {
 				Objects.requireNonNull(filter);
-				for(RB_TREE_MAP.Entry KEY_VALUE_GENERIC_TYPE entry = findLowest(), last = findHighest();entry != null && (last == null || last != previous(entry));entry = next(entry))
+				for(Node KEY_VALUE_GENERIC_TYPE entry = subLowest(), last = subHighest();entry != null && (last == null || last != previous(entry));entry = next(entry))
 					if(filter.VALUE_TEST_VALUE(entry.value)) return entry.value;
 				return EMPTY_VALUE;
 			}
@@ -1844,191 +2075,187 @@ public class RB_TREE_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_VALUE_G
 			public int count(VALUE_PREDICATE VALUE_GENERIC_TYPE filter) {
 				Objects.requireNonNull(filter);
 				int result = 0;
-				for(RB_TREE_MAP.Entry KEY_VALUE_GENERIC_TYPE entry = findLowest(), last = findHighest();entry != null && (last == null || last != previous(entry));entry = next(entry))
+				for(Node KEY_VALUE_GENERIC_TYPE entry = subLowest(), last = subHighest();entry != null && (last == null || last != previous(entry));entry = next(entry))
 					if(filter.VALUE_TEST_VALUE(entry.value)) result++;
 				return result;
 			}
 		}
 		
-		final class SubMapEntrySetIterator extends SubMapEntryIterator implements ObjectListIterator<MAP.Entry KEY_VALUE_GENERIC_TYPE> {
-			public SubMapEntrySetIterator(boolean descending) {
-				super(descending);
-			}
-			
-			public SubMapEntrySetIterator(RB_TREE_MAP.Entry KEY_VALUE_GENERIC_TYPE entry, RB_TREE_MAP.Entry KEY_VALUE_GENERIC_TYPE lowerFence, RB_TREE_MAP.Entry KEY_VALUE_GENERIC_TYPE upperFence) {
-				super(entry, lowerFence, upperFence);
+		class DecsendingSubEntryIterator extends SubMapEntryIterator implements ObjectBidirectionalIterator<MAP.Entry KEY_VALUE_GENERIC_TYPE>
+		{
+			public DecsendingSubEntryIterator(Node KEY_VALUE_GENERIC_TYPE first, Node KEY_VALUE_GENERIC_TYPE forwardFence, Node KEY_VALUE_GENERIC_TYPE backwardFence) {
+				super(first, forwardFence, backwardFence);
 			}
 			
 			@Override
-			public MAP.Entry KEY_VALUE_GENERIC_TYPE next() { return nextEntry(); }
+			public MAP.Entry KEY_VALUE_GENERIC_TYPE previous() {
+				if(!hasPrevious()) throw new NoSuchElementException();
+				return nextEntry();
+			}
+
 			@Override
-			public MAP.Entry KEY_VALUE_GENERIC_TYPE previous() { return previousEntry(); }
-			
-			@Override
-			public void set(MAP.Entry KEY_VALUE_GENERIC_TYPE e) { throw new UnsupportedOperationException(); }
-			@Override
-			public void add(MAP.Entry KEY_VALUE_GENERIC_TYPE e) { throw new UnsupportedOperationException(); }
+			public MAP.Entry KEY_VALUE_GENERIC_TYPE next() {
+				if(!hasNext()) throw new NoSuchElementException();
+				return previousEntry();
+			}
 		}
 		
-		final class SubMapKeyIterator extends SubMapEntryIterator implements LIST_ITERATOR KEY_GENERIC_TYPE {
-			public SubMapKeyIterator(boolean descending) {
-				super(descending);
+		class AcsendingSubEntryIterator extends SubMapEntryIterator implements ObjectBidirectionalIterator<MAP.Entry KEY_VALUE_GENERIC_TYPE>
+		{
+			public AcsendingSubEntryIterator(Node KEY_VALUE_GENERIC_TYPE first, Node KEY_VALUE_GENERIC_TYPE forwardFence, Node KEY_VALUE_GENERIC_TYPE backwardFence) {
+				super(first, forwardFence, backwardFence);
 			}
-			
-			public SubMapKeyIterator(RB_TREE_MAP.Entry KEY_VALUE_GENERIC_TYPE entry, RB_TREE_MAP.Entry KEY_VALUE_GENERIC_TYPE lowerFence, RB_TREE_MAP.Entry KEY_VALUE_GENERIC_TYPE upperFence) {
-				super(entry, lowerFence, upperFence);
+
+			@Override
+			public MAP.Entry KEY_VALUE_GENERIC_TYPE previous() {
+				if(!hasPrevious()) throw new NoSuchElementException();
+				return previousEntry();
 			}
-			
+
 			@Override
-			public KEY_TYPE NEXT() { return nextEntry().key; }
-			@Override
-			public KEY_TYPE PREVIOUS() { return previousEntry().key; }
-			
-			@Override
-			public void set(KEY_TYPE e) { throw new UnsupportedOperationException(); }
-			@Override
-			public void add(KEY_TYPE e) { throw new UnsupportedOperationException(); }
+			public MAP.Entry KEY_VALUE_GENERIC_TYPE next() {
+				if(!hasNext()) throw new NoSuchElementException();
+				return nextEntry();
+			}
 		}
 		
-		final class SubMapValueIterator extends SubMapEntryIterator implements VALUE_LIST_ITERATOR VALUE_GENERIC_TYPE {
-			public SubMapValueIterator(boolean descending) {
-				super(descending);
-			}
-			
-			public SubMapValueIterator(RB_TREE_MAP.Entry KEY_VALUE_GENERIC_TYPE entry, RB_TREE_MAP.Entry KEY_VALUE_GENERIC_TYPE lowerFence, RB_TREE_MAP.Entry KEY_VALUE_GENERIC_TYPE upperFence) {
-				super(entry, lowerFence, upperFence);
+		class DecsendingSubKeyIterator extends SubMapEntryIterator implements BI_ITERATOR KEY_GENERIC_TYPE
+		{
+			public DecsendingSubKeyIterator(Node KEY_VALUE_GENERIC_TYPE first, Node KEY_VALUE_GENERIC_TYPE forwardFence, Node KEY_VALUE_GENERIC_TYPE backwardFence) {
+				super(first, forwardFence, backwardFence);
 			}
 			
 			@Override
-			public VALUE_TYPE VALUE_NEXT() { return nextEntry().value; }
+			public KEY_TYPE PREVIOUS() {
+				if(!hasPrevious()) throw new NoSuchElementException();
+				return nextEntry().key;
+			}
+
 			@Override
-			public VALUE_TYPE VALUE_PREVIOUS() { return previousEntry().value; }
-			
-			@Override
-			public void set(VALUE_TYPE e) { throw new UnsupportedOperationException(); }
-			@Override
-			public void add(VALUE_TYPE e) { throw new UnsupportedOperationException(); }
+			public KEY_TYPE NEXT() {
+				if(!hasNext()) throw new NoSuchElementException();
+				return previousEntry().key;
+			}
 		}
 		
-		abstract class SubMapEntryIterator {
-			CLASS_TYPE lowerFence;
-			CLASS_TYPE upperFence;
-			RB_TREE_MAP.Entry KEY_VALUE_GENERIC_TYPE next;
-			RB_TREE_MAP.Entry KEY_VALUE_GENERIC_TYPE previous;
-			RB_TREE_MAP.Entry KEY_VALUE_GENERIC_TYPE current;
-			int index = 0;
-			
-			public SubMapEntryIterator(boolean descending) {
-				this(descending ? findHighest() : findLowest(), fromStart ? null : findLowest(), toEnd ? null : findHighest());
+		class AcsendingSubKeyIterator extends SubMapEntryIterator implements BI_ITERATOR KEY_GENERIC_TYPE
+		{
+			public AcsendingSubKeyIterator(Node KEY_VALUE_GENERIC_TYPE first, Node KEY_VALUE_GENERIC_TYPE forwardFence, Node KEY_VALUE_GENERIC_TYPE backwardFence) {
+				super(first, forwardFence, backwardFence);
+			}
+
+			@Override
+			public KEY_TYPE PREVIOUS() {
+				if(!hasPrevious()) throw new NoSuchElementException();
+				return previousEntry().key;
+			}
+
+			@Override
+			public KEY_TYPE NEXT() {
+				if(!hasNext()) throw new NoSuchElementException();
+				return nextEntry().key;
+			}
+		}
+		
+		class AcsendingSubValueIterator extends SubMapEntryIterator implements VALUE_BI_ITERATOR VALUE_GENERIC_TYPE
+		{
+			public AcsendingSubValueIterator(Node KEY_VALUE_GENERIC_TYPE first, Node KEY_VALUE_GENERIC_TYPE forwardFence, Node KEY_VALUE_GENERIC_TYPE backwardFence) {
+				super(first, forwardFence, backwardFence);
+			}
+
+			@Override
+			public VALUE_TYPE VALUE_PREVIOUS() {
+				if(!hasPrevious()) throw new NoSuchElementException();
+				return previousEntry().value;
+			}
+
+			@Override
+			public VALUE_TYPE VALUE_NEXT() {
+				if(!hasNext()) throw new NoSuchElementException();
+				return nextEntry().value;
+			}
+		}
+		
+		class DecsendingSubValueIterator extends SubMapEntryIterator implements VALUE_BI_ITERATOR VALUE_GENERIC_TYPE
+		{
+			public DecsendingSubValueIterator(Node KEY_VALUE_GENERIC_TYPE first, Node KEY_VALUE_GENERIC_TYPE forwardFence, Node KEY_VALUE_GENERIC_TYPE backwardFence) {
+				super(first, forwardFence, backwardFence);
 			}
 			
-			public SubMapEntryIterator(RB_TREE_MAP.Entry KEY_VALUE_GENERIC_TYPE entry, RB_TREE_MAP.Entry KEY_VALUE_GENERIC_TYPE lowerFence, RB_TREE_MAP.Entry KEY_VALUE_GENERIC_TYPE upperFence) {
-				next = entry;
-				previous = entry.previous();
-				this.lowerFence = lowerFence != null ? KEY_TO_OBJ(lowerFence.key) : null;
-				this.upperFence = upperFence != null ? KEY_TO_OBJ(upperFence.key) : null;
+			@Override
+			public VALUE_TYPE VALUE_PREVIOUS() {
+				if(!hasPrevious()) throw new NoSuchElementException();
+				return nextEntry().value;
+			}
+
+			@Override
+			public VALUE_TYPE VALUE_NEXT() {
+				if(!hasNext()) throw new NoSuchElementException();
+				return previousEntry().value;
+			}
+		}
+		
+		abstract class SubMapEntryIterator
+		{
+			boolean wasForward;
+			Node KEY_VALUE_GENERIC_TYPE lastReturned;
+			Node KEY_VALUE_GENERIC_TYPE next;
+			boolean unboundForwardFence;
+			boolean unboundBackwardFence;
+			KEY_TYPE forwardFence;
+			KEY_TYPE backwardFence;
+			
+			public SubMapEntryIterator(Node KEY_VALUE_GENERIC_TYPE first, Node KEY_VALUE_GENERIC_TYPE forwardFence, Node KEY_VALUE_GENERIC_TYPE backwardFence)
+			{
+				next = first;
+				this.forwardFence = forwardFence == null ? null : forwardFence.key;
+				this.backwardFence = backwardFence == null ? null : backwardFence.key;
+				unboundForwardFence = forwardFence == null;
+				unboundBackwardFence = backwardFence == null;
 			}
 			
 			public boolean hasNext() {
-				return next != null && (upperFence == null || KEY_EQUALS(next.key, OBJ_TO_KEY(upperFence)));
+                return next != null && (unboundForwardFence || next.key != forwardFence);
+			}
+			
+			protected Node KEY_VALUE_GENERIC_TYPE nextEntry() {
+				lastReturned = next;
+				Node KEY_VALUE_GENERIC_TYPE result = next;
+				next = next.next();
+				wasForward = true;
+				return result;
 			}
 			
 			public boolean hasPrevious() {
-				return previous != null && (lowerFence == null || KEY_EQUALS(next.key, OBJ_TO_KEY(lowerFence)));
+                return next != null && (unboundBackwardFence || next.key != backwardFence);
 			}
 			
-			public int nextIndex() {
-				return index;
-			}
-			
-			public int previousIndex() {
-				return index - 1;
-			}
-			
-			protected void updateNext() {
-				next = current.next();
-			}
-			
-			protected void updatePrevious() {
-				previous = current.previous();
-			}
-			
-			public RB_TREE_MAP.Entry KEY_VALUE_GENERIC_TYPE nextEntry() {
-				if(!hasNext()) throw new NoSuchElementException();
-				current = previous = next;
-				updateNext();
-				index++;
-				return current;
-			}
-			
-			public RB_TREE_MAP.Entry KEY_VALUE_GENERIC_TYPE previousEntry() {
-				if(!hasPrevious()) throw new NoSuchElementException();
-				current = next = previous;
-				updatePrevious();
-				index--;
-				return current;
+			protected Node KEY_VALUE_GENERIC_TYPE previousEntry() {
+				lastReturned = next;
+				Node KEY_VALUE_GENERIC_TYPE result = next;
+				next = next.previous();
+				wasForward = false;
+				return result;
 			}
 			
 			public void remove() {
-				if(current == null) throw new IllegalStateException();
-				if(current == previous) index--;
-				updateNext();
-				updatePrevious();
-				if(current.needsSuccessor()) next = current;
-				m.removeNode(current);
-				current = null;
+				if(lastReturned == null) throw new IllegalStateException();
+				if(wasForward && lastReturned.needsSuccessor()) next = lastReturned;
+				map.removeNode(lastReturned);
+				lastReturned = null;
 			}
 		}
 	}
 	
-	private class EntrySet extends AbstractObjectSet<MAP.Entry KEY_VALUE_GENERIC_TYPE> {
-		
+	class Values extends VALUE_ABSTRACT_COLLECTION VALUE_GENERIC_TYPE
+	{
 		@Override
-		public ObjectIterator<MAP.Entry KEY_VALUE_GENERIC_TYPE> iterator() {
-			return new EntryIterator(false);
+		public VALUE_ITERATOR VALUE_GENERIC_TYPE iterator() {
+			return new AscendingValueIterator(first);
 		}
 		
 		@Override
-		@Deprecated
-		public boolean contains(Object o) {
-			if(o instanceof Map.Entry) {
-				if(o instanceof MAP.Entry) {
-					MAP.Entry KEY_VALUE_GENERIC_TYPE entry = (MAP.Entry KEY_VALUE_GENERIC_TYPE)o;
-					if(entry.getKey() == null && comparator() == null) return false;
-					RB_TREE_MAP.Entry KEY_VALUE_GENERIC_TYPE subEntry = RB_TREE_MAP.this.findNode(entry.ENTRY_KEY());
-					if(subEntry != null) return VALUE_EQUALS(entry.ENTRY_VALUE(), subEntry.value);
-				}
-				else {
-					Map.Entry<?, ?> entry = (Map.Entry<?, ?>)o;
-					if(entry.getKey() == null && comparator() == null) return false;
-#if !TYPE_OBJECT
-					if(!(entry.getKey() instanceof CLASS_TYPE)) return false;
-#endif
-					RB_TREE_MAP.Entry KEY_VALUE_GENERIC_TYPE subEntry = RB_TREE_MAP.this.findNode((CLASS_TYPE)entry.getKey());
-					if(subEntry != null) return Objects.equals(entry.getValue(), VALUE_TO_OBJ(subEntry.value));
-				}
-			}
-			return false;
-		}
-		
-		@Override
-		@Deprecated
-		public boolean remove(Object o) {
-			if(o instanceof Map.Entry) {
-				if(o instanceof MAP.Entry) {
-					MAP.Entry KEY_VALUE_GENERIC_TYPE entry = (MAP.Entry KEY_VALUE_GENERIC_TYPE)o;
-					return RB_TREE_MAP.this.remove(entry.ENTRY_KEY(), entry.ENTRY_VALUE());
-				}
-				Map.Entry<?, ?> entry = (Map.Entry<?, ?>)o;
-				return RB_TREE_MAP.this.remove(entry.getKey(), entry.getValue());
-			}
-			return false;
-		}
-		
-		@Override
-		public int size() {
-			return RB_TREE_MAP.this.size();
-		}
+		public boolean add(VALUE_TYPE e) { throw new UnsupportedOperationException(); }
 		
 		@Override
 		public void clear() {
@@ -2036,337 +2263,9 @@ public class RB_TREE_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_VALUE_G
 		}
 		
 		@Override
-		public void forEach(Consumer<? super MAP.Entry KEY_VALUE_GENERIC_TYPE> action) {
-			Objects.requireNonNull(action);
-			for(RB_TREE_MAP.Entry KEY_VALUE_GENERIC_TYPE entry = first;entry != null;entry = entry.next())
-				action.accept(new BasicEntryKV_BRACES(entry.key, entry.value));
-		}
-		
-		@Override
-		public <E> void forEach(E input, ObjectObjectConsumer<E, MAP.Entry KEY_VALUE_GENERIC_TYPE> action) {
-			Objects.requireNonNull(action);
-			for(RB_TREE_MAP.Entry KEY_VALUE_GENERIC_TYPE entry = first;entry != null;entry = entry.next())
-				action.accept(input, new BasicEntryKV_BRACES(entry.key, entry.value));
-		}
-		
-		@Override
-		public boolean matchesAny(Object2BooleanFunction<MAP.Entry KEY_VALUE_GENERIC_TYPE> filter) {
-			Objects.requireNonNull(filter);
-			if(size() <= 0) return false;
-			BasicEntry KEY_VALUE_GENERIC_TYPE subEntry = new BasicEntryKV_BRACES();
-			for(RB_TREE_MAP.Entry KEY_VALUE_GENERIC_TYPE entry = first;entry != null;entry = entry.next()) {
-				subEntry.set(entry.key, entry.value);
-				if(filter.getBoolean(subEntry)) return true;
-			}
-			return false;
-		}
-		
-		@Override
-		public boolean matchesNone(Object2BooleanFunction<MAP.Entry KEY_VALUE_GENERIC_TYPE> filter) {
-			Objects.requireNonNull(filter);
-			if(size() <= 0) return true;
-			BasicEntry KEY_VALUE_GENERIC_TYPE subEntry = new BasicEntryKV_BRACES();
-			for(RB_TREE_MAP.Entry KEY_VALUE_GENERIC_TYPE entry = first;entry != null;entry = entry.next()) {
-				subEntry.set(entry.key, entry.value);
-				if(filter.getBoolean(subEntry)) return false;
-			}
-			return true;
-		}
-		
-		@Override
-		public boolean matchesAll(Object2BooleanFunction<MAP.Entry KEY_VALUE_GENERIC_TYPE> filter) {
-			Objects.requireNonNull(filter);
-			if(size() <= 0) return true;
-			BasicEntry KEY_VALUE_GENERIC_TYPE subEntry = new BasicEntryKV_BRACES();
-			for(RB_TREE_MAP.Entry KEY_VALUE_GENERIC_TYPE entry = first;entry != null;entry = entry.next()) {
-				subEntry.set(entry.key, entry.value);
-				if(!filter.getBoolean(subEntry)) return false;
-			}
-			return true;
-		}
-		
-		@Override
-		public <E> E reduce(E identity, BiFunction<E, MAP.Entry KEY_VALUE_GENERIC_TYPE, E> operator) {
-			Objects.requireNonNull(operator);
-			E state = identity;
-			for(RB_TREE_MAP.Entry KEY_VALUE_GENERIC_TYPE entry = first;entry != null;entry = entry.next()) {
-				state = operator.apply(state, new BasicEntryKV_BRACES(entry.key, entry.value));
-			}
-			return state;
-		}
-		
-		@Override
-		public MAP.Entry KEY_VALUE_GENERIC_TYPE reduce(ObjectObjectUnaryOperator<MAP.Entry KEY_VALUE_GENERIC_TYPE, MAP.Entry KEY_VALUE_GENERIC_TYPE> operator) {
-			Objects.requireNonNull(operator);
-			MAP.Entry KEY_VALUE_GENERIC_TYPE state = null;
-			boolean empty = true;
-			for(RB_TREE_MAP.Entry KEY_VALUE_GENERIC_TYPE entry = first;entry != null;entry = entry.next()) {
-				if(empty) {
-					empty = false;
-					state = new BasicEntryKV_BRACES(entry.key, entry.value);
-					continue;
-				}
-				state = operator.apply(state, new BasicEntryKV_BRACES(entry.key, entry.value));
-			}
-			return state;
-		}
-		
-		@Override
-		public MAP.Entry KEY_VALUE_GENERIC_TYPE findFirst(Object2BooleanFunction<MAP.Entry KEY_VALUE_GENERIC_TYPE> filter) {
-			Objects.requireNonNull(filter);
-			if(size() <= 0) return null;
-			BasicEntry KEY_VALUE_GENERIC_TYPE subEntry = new BasicEntryKV_BRACES();
-			for(RB_TREE_MAP.Entry KEY_VALUE_GENERIC_TYPE entry = first;entry != null;entry = entry.next()) {
-				subEntry.set(entry.key, entry.value);
-				if(filter.getBoolean(subEntry)) return subEntry;
-			}
-			return null;
-		}
-		
-		@Override
-		public int count(Object2BooleanFunction<MAP.Entry KEY_VALUE_GENERIC_TYPE> filter) {
-			Objects.requireNonNull(filter);
-			if(size() <= 0) return 0;
-			int result = 0;
-			BasicEntry KEY_VALUE_GENERIC_TYPE subEntry = new BasicEntryKV_BRACES();
-			for(RB_TREE_MAP.Entry KEY_VALUE_GENERIC_TYPE entry = first;entry != null;entry = entry.next()) {
-				subEntry.set(entry.key, entry.value);
-				if(filter.getBoolean(subEntry)) result++;
-			}
-			return result;
-		}
-	}
-	
-	static final class KeySet KEY_VALUE_GENERIC_TYPE extends ABSTRACT_SET KEY_GENERIC_TYPE implements NAVIGABLE_SET KEY_GENERIC_TYPE {
-		NAVIGABLE_MAP KEY_VALUE_GENERIC_TYPE m;
-		
-		KeySet(NAVIGABLE_MAP KEY_VALUE_GENERIC_TYPE m) {
-			this.m = m;
-		}
-		
-#if !TYPE_OBJECT
-		@Override
-		public void setDefaultMaxValue(KEY_TYPE e) { m.setDefaultMaxValue(e); }
-		@Override
-		public KEY_TYPE getDefaultMaxValue() { return m.getDefaultMaxValue(); }
-		@Override
-		public void setDefaultMinValue(KEY_TYPE e) { m.setDefaultMinValue(e); }
-		@Override
-		public KEY_TYPE getDefaultMinValue() { return m.getDefaultMinValue(); }
-#endif
-		@Override
-		public boolean add(KEY_TYPE o) { throw new UnsupportedOperationException(); }
-		@Override
-		public boolean addAndMoveToFirst(KEY_TYPE o) { throw new UnsupportedOperationException(); }
-		@Override
-		public boolean addAndMoveToLast(KEY_TYPE o) { throw new UnsupportedOperationException(); }
-		@Override
-		public boolean moveToFirst(KEY_TYPE o) { throw new UnsupportedOperationException(); }
-		@Override
-		public boolean moveToLast(KEY_TYPE o) { throw new UnsupportedOperationException(); }
-		@Override
-		public COMPARATOR KEY_GENERIC_TYPE comparator() { return m.comparator(); }
-		@Override
-		public KEY_TYPE lower(KEY_TYPE e) { return m.lowerKey(e); }
-		@Override
-		public KEY_TYPE floor(KEY_TYPE e) { return m.floorKey(e); }
-		@Override
-		public KEY_TYPE ceiling(KEY_TYPE e) { return m.ceilingKey(e); }
-		@Override
-		public KEY_TYPE higher(KEY_TYPE e) { return m.higherKey(e); }
-		@Override
-		public KEY_TYPE FIRST_KEY() { return m.FIRST_ENTRY_KEY(); }
-		@Override
-		public KEY_TYPE POLL_FIRST_KEY() { return m.POLL_FIRST_ENTRY_KEY(); }
-		@Override
-		public KEY_TYPE LAST_KEY() { return m.LAST_ENTRY_KEY(); }
-		@Override
-		public KEY_TYPE POLL_LAST_KEY() { return m.POLL_LAST_ENTRY_KEY(); }		
-#if TYPE_OBJECT
-		@Override
-		public boolean remove(Object o) { 
-			int oldSize = m.size();
-			m.remove(o); 
-			return oldSize != m.size();
-		}
-		
-#else
-		@Override
-		public boolean remove(KEY_TYPE o) { 
-			int oldSize = m.size();
-			m.remove(o); 
-			return oldSize != m.size();
-		}
-		
-#endif
-		@Override
-		public KeySet KEY_VALUE_GENERIC_TYPE copy() { throw new UnsupportedOperationException(); }
-		
-		@Override
-		public NAVIGABLE_SET KEY_GENERIC_TYPE subSet(KEY_TYPE fromElement, boolean fromInclusive, KEY_TYPE toElement, boolean toInclusive) {
-			return new KeySetKV_BRACES(m.subMap(fromElement, fromInclusive, toElement, toInclusive));
-		}
-		
-		@Override
-		public NAVIGABLE_SET KEY_GENERIC_TYPE headSet(KEY_TYPE toElement, boolean inclusive) {
-			return new KeySetKV_BRACES(m.headMap(toElement, inclusive));
-		}
-		
-		@Override
-		public NAVIGABLE_SET KEY_GENERIC_TYPE tailSet(KEY_TYPE fromElement, boolean inclusive) {
-			return new KeySetKV_BRACES(m.tailMap(fromElement, inclusive));
-		}
-		
-		@Override
-		public NAVIGABLE_SET KEY_GENERIC_TYPE descendingSet() {
-			return new KeySetKV_BRACES(m.descendingMap());
-		}
-		
-		@Override
-		public BI_ITERATOR KEY_GENERIC_TYPE iterator() {
-			if(m instanceof RB_TREE_MAP) return ((RB_TREE_MAP KEY_VALUE_GENERIC_TYPE)m).keyIterator(false);
-			return ((NavigableSubMap KEY_VALUE_GENERIC_TYPE)m).keyIterator(false);
-		}
-		
-		@Override
-		public BI_ITERATOR KEY_GENERIC_TYPE iterator(KEY_TYPE fromElement) {
-			if(m instanceof RB_TREE_MAP) return ((RB_TREE_MAP KEY_VALUE_GENERIC_TYPE)m).keyIterator(fromElement);
-			return ((NavigableSubMap KEY_VALUE_GENERIC_TYPE)m).keyIterator(fromElement);
-		}
-		
-		@Override
-		public BI_ITERATOR KEY_GENERIC_TYPE descendingIterator() {
-			if(m instanceof RB_TREE_MAP) return ((RB_TREE_MAP KEY_VALUE_GENERIC_TYPE)m).keyIterator(true);
-			return ((NavigableSubMap KEY_VALUE_GENERIC_TYPE)m).keyIterator(true);
-		}
-		
-		@Override
 		public int size() {
-			return m.size();
+			return RB_TREE_MAP.this.size;
 		}
-		
-		@Override
-		public void clear() {
-			m.clear();
-		}
-		
-		protected RB_TREE_MAP.Entry KEY_VALUE_GENERIC_TYPE start() {
-			if(m instanceof RB_TREE_MAP) return ((RB_TREE_MAP KEY_VALUE_GENERIC_TYPE)m).first;
-			return ((NavigableSubMap KEY_VALUE_GENERIC_TYPE)m).findLowest();
-		}
-		
-		protected RB_TREE_MAP.Entry KEY_VALUE_GENERIC_TYPE end() {
-			if(m instanceof RB_TREE_MAP) return null;
-			return ((NavigableSubMap KEY_VALUE_GENERIC_TYPE)m).findLowest();
-		}
-		
-		protected RB_TREE_MAP.Entry KEY_VALUE_GENERIC_TYPE next(RB_TREE_MAP.Entry KEY_VALUE_GENERIC_TYPE entry) {
-			if(m instanceof RB_TREE_MAP) return entry.next();
-			return ((NavigableSubMap KEY_VALUE_GENERIC_TYPE)m).next(entry);
-		}
-		
-		protected RB_TREE_MAP.Entry KEY_VALUE_GENERIC_TYPE previous(RB_TREE_MAP.Entry KEY_VALUE_GENERIC_TYPE entry) {
-			if(m instanceof RB_TREE_MAP) return entry.previous();
-			return ((NavigableSubMap KEY_VALUE_GENERIC_TYPE)m).previous(entry);
-		}
-		
-		@Override
-		public void forEach(CONSUMER KEY_SUPER_GENERIC_TYPE action) {
-			Objects.requireNonNull(action);
-			for(RB_TREE_MAP.Entry KEY_VALUE_GENERIC_TYPE entry = start(), end = end();entry != null && (end == null || (end != previous(entry)));entry = next(entry))
-				action.accept(entry.key);
-		}
-		
-		@Override
-		public <E> void forEach(E input, BI_FROM_OBJECT_CONSUMER KSK_GENERIC_TYPE<E> action) {
-			Objects.requireNonNull(action);
-			for(RB_TREE_MAP.Entry KEY_VALUE_GENERIC_TYPE entry = start(), end = end();entry != null && (end == null || (end != previous(entry)));entry = next(entry))
-				action.accept(input, entry.key);
-		}
-		
-		@Override
-		public boolean matchesAny(PREDICATE KEY_GENERIC_TYPE filter) {
-			Objects.requireNonNull(filter);
-			for(RB_TREE_MAP.Entry KEY_VALUE_GENERIC_TYPE entry = start(), end = end();entry != null && (end == null || (end != previous(entry)));entry = next(entry))
-				if(filter.TEST_VALUE(entry.key)) return true;
-			return false;
-		}
-		
-		@Override
-		public boolean matchesNone(PREDICATE KEY_GENERIC_TYPE filter) {
-			Objects.requireNonNull(filter);
-			for(RB_TREE_MAP.Entry KEY_VALUE_GENERIC_TYPE entry = start(), end = end();entry != null && (end == null || (end != previous(entry)));entry = next(entry))
-				if(filter.TEST_VALUE(entry.key)) return false;
-			return true;
-		}
-		
-		@Override
-		public boolean matchesAll(PREDICATE KEY_GENERIC_TYPE filter) {
-			Objects.requireNonNull(filter);
-			for(RB_TREE_MAP.Entry KEY_VALUE_GENERIC_TYPE entry = start(), end = end();entry != null && (end == null || (end != previous(entry)));entry = next(entry))
-				if(!filter.TEST_VALUE(entry.key)) return false;
-			return true;
-		}
-		
-#if !TYPE_OBJECT
-		@Override
-		public KEY_TYPE reduce(KEY_TYPE identity, SINGLE_UNARY_OPERATOR KEY_KEY_GENERIC_TYPE operator) {
-			Objects.requireNonNull(operator);
-			KEY_TYPE state = identity;
-			for(RB_TREE_MAP.Entry KEY_VALUE_GENERIC_TYPE entry = start(), end = end();entry != null && (end == null || (end != previous(entry)));entry = next(entry))
-				state = operator.APPLY_KEY_VALUE(state, entry.key);
-			return state;
-		}
-		
-#else
-		@Override
-		public <KEY_SPECIAL_TYPE> KEY_SPECIAL_TYPE reduce(KEY_SPECIAL_TYPE identity, BiFunction<KEY_SPECIAL_TYPE, KEY_TYPE, KEY_SPECIAL_TYPE> operator) {
-			Objects.requireNonNull(operator);
-			KEY_SPECIAL_TYPE state = identity;
-			for(RB_TREE_MAP.Entry KEY_VALUE_GENERIC_TYPE entry = start(), end = end();entry != null && (end == null || (end != previous(entry)));entry = next(entry))
-				state = operator.apply(state, entry.key);
-			return state;
-		}
-		
-#endif
-		@Override
-		public KEY_TYPE reduce(SINGLE_UNARY_OPERATOR KEY_KEY_GENERIC_TYPE operator) {
-			Objects.requireNonNull(operator);
-			KEY_TYPE state = EMPTY_KEY_VALUE;
-			boolean empty = true;
-			for(RB_TREE_MAP.Entry KEY_VALUE_GENERIC_TYPE entry = start(), end = end();entry != null && (end == null || (end != previous(entry)));entry = next(entry)) {
-				if(empty) {
-					empty = false;
-					state = entry.key;
-					continue;
-				}
-				state = operator.APPLY_KEY_VALUE(state, entry.key);
-			}
-			return state;
-		}
-		
-		@Override
-		public KEY_TYPE findFirst(PREDICATE KEY_GENERIC_TYPE filter) {
-			Objects.requireNonNull(filter);
-			for(RB_TREE_MAP.Entry KEY_VALUE_GENERIC_TYPE entry = start(), end = end();entry != null && (end == null || (end != previous(entry)));entry = next(entry))
-				if(filter.TEST_VALUE(entry.key)) return entry.key;
-			return EMPTY_KEY_VALUE;
-		}
-		
-		@Override
-		public int count(PREDICATE KEY_GENERIC_TYPE filter) {
-			Objects.requireNonNull(filter);
-			int result = 0;
-			for(RB_TREE_MAP.Entry KEY_VALUE_GENERIC_TYPE entry = start(), end = end();entry != null && (end == null || (end != previous(entry)));entry = next(entry))
-				if(filter.TEST_VALUE(entry.key)) result++;
-			return result;
-		}
-	}
-	
-	final class Values extends VALUE_ABSTRACT_COLLECTION VALUE_GENERIC_TYPE {
-
-		@Override
-		public boolean add(VALUE_TYPE o) { throw new UnsupportedOperationException(); }
 		
 #if VALUE_OBJECT
 		@Override
@@ -2382,36 +2281,34 @@ public class RB_TREE_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_VALUE_G
 		
 #endif
 		@Override
-		public VALUE_ITERATOR VALUE_GENERIC_TYPE iterator() { return new ValueIterator(false); }
-		
-		@Override
-		public int size() {
-			return RB_TREE_MAP.this.size();
-		}
-		
-		@Override
-		public void clear() {
-			RB_TREE_MAP.this.clear();
+		public boolean remove(Object o) {
+			for(Node KEY_VALUE_GENERIC_TYPE entry = first; entry != null; entry = entry.next()) {
+				if(Objects.equals(entry.getValue(), o)) {
+					removeNode(entry);
+					return true;
+				}
+			}
+			return false;
 		}
 		
 		@Override
 		public void forEach(VALUE_CONSUMER VALUE_SUPER_GENERIC_TYPE action) {
 			Objects.requireNonNull(action);
-			for(RB_TREE_MAP.Entry KEY_VALUE_GENERIC_TYPE entry = first;entry != null;entry = entry.next())
+			for(Node KEY_VALUE_GENERIC_TYPE entry = first;entry != null;entry = entry.next())
 				action.accept(entry.value);
 		}
 		
 		@Override
 		public <E> void forEach(E input, VALUE_BI_FROM_OBJECT_CONSUMER VSV_GENERIC_TYPE<E> action) {
 			Objects.requireNonNull(action);
-			for(RB_TREE_MAP.Entry KEY_VALUE_GENERIC_TYPE entry = first;entry != null;entry = entry.next())
+			for(Node KEY_VALUE_GENERIC_TYPE entry = first;entry != null;entry = entry.next())
 				action.accept(input, entry.value);
 		}
 		
 		@Override
 		public boolean matchesAny(VALUE_PREDICATE VALUE_GENERIC_TYPE filter) {
 			Objects.requireNonNull(filter);
-			for(RB_TREE_MAP.Entry KEY_VALUE_GENERIC_TYPE entry = first;entry != null;entry = entry.next())
+			for(Node KEY_VALUE_GENERIC_TYPE entry = first;entry != null;entry = entry.next())
 				if(filter.VALUE_TEST_VALUE(entry.value)) return true;
 			return false;
 		}
@@ -2419,7 +2316,7 @@ public class RB_TREE_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_VALUE_G
 		@Override
 		public boolean matchesNone(VALUE_PREDICATE VALUE_GENERIC_TYPE filter) {
 			Objects.requireNonNull(filter);
-			for(RB_TREE_MAP.Entry KEY_VALUE_GENERIC_TYPE entry = first;entry != null;entry = entry.next())
+			for(Node KEY_VALUE_GENERIC_TYPE entry = first;entry != null;entry = entry.next())
 				if(filter.VALUE_TEST_VALUE(entry.value)) return false;
 			return true;
 		}
@@ -2427,38 +2324,38 @@ public class RB_TREE_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_VALUE_G
 		@Override
 		public boolean matchesAll(VALUE_PREDICATE VALUE_GENERIC_TYPE filter) {
 			Objects.requireNonNull(filter);
-			for(RB_TREE_MAP.Entry KEY_VALUE_GENERIC_TYPE entry = first;entry != null;entry = entry.next())
+			for(Node KEY_VALUE_GENERIC_TYPE entry = first;entry != null;entry = entry.next())
 				if(!filter.VALUE_TEST_VALUE(entry.value)) return false;
 			return true;
 		}
 		
-#if !VALUE_OBJECT
+		#if !VALUE_OBJECT
 		@Override
 		public VALUE_TYPE reduce(VALUE_TYPE identity, VALUE_SINGLE_UNARY_OPERATOR VALUE_VALUE_GENERIC_TYPE operator) {
 			Objects.requireNonNull(operator);
 			VALUE_TYPE state = identity;
-			for(RB_TREE_MAP.Entry KEY_VALUE_GENERIC_TYPE entry = first;entry != null;entry = entry.next())
+			for(Node KEY_VALUE_GENERIC_TYPE entry = first;entry != null;entry = entry.next())
 				state = operator.APPLY_VALUE(state, entry.value);
 			return state;
 		}
 		
-#else
+		#else
 		@Override
 		public <VALUE_SPECIAL_TYPE> VALUE_SPECIAL_TYPE reduce(VALUE_SPECIAL_TYPE identity, BiFunction<VALUE_SPECIAL_TYPE, VALUE_TYPE, VALUE_SPECIAL_TYPE> operator) {
 			Objects.requireNonNull(operator);
 			VALUE_SPECIAL_TYPE state = identity;
-			for(RB_TREE_MAP.Entry KEY_VALUE_GENERIC_TYPE entry = first;entry != null;entry = entry.next())
+			for(Node KEY_VALUE_GENERIC_TYPE entry = first;entry != null;entry = entry.next())
 				state = operator.apply(state, entry.value);
 			return state;
 		}
 		
-#endif
+		#endif
 		@Override
 		public VALUE_TYPE reduce(VALUE_SINGLE_UNARY_OPERATOR VALUE_VALUE_GENERIC_TYPE operator) {
 			Objects.requireNonNull(operator);
 			VALUE_TYPE state = EMPTY_VALUE;
 			boolean empty = true;
-			for(RB_TREE_MAP.Entry KEY_VALUE_GENERIC_TYPE entry = first;entry != null;entry = entry.next()) {
+			for(Node KEY_VALUE_GENERIC_TYPE entry = first;entry != null;entry = entry.next()) {
 				if(empty) {
 					empty = false;
 					state = entry.value;
@@ -2472,7 +2369,7 @@ public class RB_TREE_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_VALUE_G
 		@Override
 		public VALUE_TYPE findFirst(VALUE_PREDICATE VALUE_GENERIC_TYPE filter) {
 			Objects.requireNonNull(filter);
-			for(RB_TREE_MAP.Entry KEY_VALUE_GENERIC_TYPE entry = first;entry != null;entry = entry.next())
+			for(Node KEY_VALUE_GENERIC_TYPE entry = first;entry != null;entry = entry.next())
 				if(filter.VALUE_TEST_VALUE(entry.value)) return entry.value;
 			return EMPTY_VALUE;
 		}
@@ -2481,185 +2378,333 @@ public class RB_TREE_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_VALUE_G
 		public int count(VALUE_PREDICATE VALUE_GENERIC_TYPE filter) {
 			Objects.requireNonNull(filter);
 			int result = 0;
-			for(RB_TREE_MAP.Entry KEY_VALUE_GENERIC_TYPE entry = first;entry != null;entry = entry.next())
+			for(Node KEY_VALUE_GENERIC_TYPE entry = first;entry != null;entry = entry.next())
 				if(filter.VALUE_TEST_VALUE(entry.value)) result++;
 			return result;
 		}
 	}
 	
-	final class EntryIterator extends MapEntryIterator implements ObjectListIterator<MAP.Entry KEY_VALUE_GENERIC_TYPE> {
+	class EntrySet extends AbstractObjectSet<MAP.Entry KEY_VALUE_GENERIC_TYPE> {
 		
-		public EntryIterator(boolean descending) {
-			super(descending);
-		}
-		
-		public EntryIterator(Entry KEY_VALUE_GENERIC_TYPE entry) {
-			super(entry);
+		@Override
+		public ObjectIterator<MAP.Entry KEY_VALUE_GENERIC_TYPE> iterator() {
+			return new AscendingMapEntryIterator(first);
 		}
 		
 		@Override
-		public MAP.Entry KEY_VALUE_GENERIC_TYPE next() {
-			return nextEntry();
+		public void clear() {
+			RB_TREE_MAP.this.clear();
 		}
 		
+		@Override
+		public int size() {
+			return RB_TREE_MAP.this.size;
+		}
+		
+		@Override
+		public boolean contains(Object o) {
+			if (!(o instanceof Map.Entry)) return false;
+			if(o instanceof MAP.Entry)
+			{
+				MAP.Entry KEY_VALUE_GENERIC_TYPE entry = (MAP.Entry KEY_VALUE_GENERIC_TYPE) o;
+#if TYPE_OBJECT
+				if(entry.getKey() == null && comparator() == null) return false;
+#endif
+				KEY_TYPE key = entry.ENTRY_KEY();
+				Node KEY_VALUE_GENERIC_TYPE node = findNode(key);
+				return node != null && VALUE_EQUALS(entry.ENTRY_VALUE(), node.ENTRY_VALUE());
+			}
+			Map.Entry<?,?> entry = (Map.Entry<?,?>) o;
+			if(entry.getKey() == null && comparator() == null) return false;
+#if !TYPE_OBJECT
+			if(!(entry.getKey() instanceof CLASS_TYPE)) return false;
+#endif
+			CLASS_TYPE key = (CLASS_TYPE)entry.getKey();
+			Node KEY_VALUE_GENERIC_TYPE node = findNode(key);
+			return node != null && Objects.equals(entry.getValue(), VALUE_TO_OBJ(node.ENTRY_VALUE()));
+		}
+		
+		@Override
+		public boolean remove(Object o) {
+			if (!(o instanceof Map.Entry)) return false;
+			if(o instanceof MAP.Entry)
+			{
+				MAP.Entry KEY_VALUE_GENERIC_TYPE entry = (MAP.Entry KEY_VALUE_GENERIC_TYPE) o;
+				KEY_TYPE key = entry.ENTRY_KEY();
+				Node KEY_VALUE_GENERIC_TYPE node = findNode(key);
+				if (node != null && VALUE_EQUALS(entry.ENTRY_VALUE(), node.ENTRY_VALUE())) {
+					removeNode(node);
+					return true;
+				}
+				return false;
+			}
+			Map.Entry<?,?> entry = (Map.Entry<?,?>) o;
+			CLASS_TYPE key = (CLASS_TYPE)entry.getKey();
+			Node KEY_VALUE_GENERIC_TYPE node = findNode(key);
+			if (node != null && Objects.equals(entry.getValue(), VALUE_TO_OBJ(node.ENTRY_VALUE()))) {
+				removeNode(node);
+				return true;
+			}
+			return false;
+		}
+		
+		@Override
+		public void forEach(Consumer<? super MAP.Entry KEY_VALUE_GENERIC_TYPE> action) {
+			Objects.requireNonNull(action);
+			for(Node KEY_VALUE_GENERIC_TYPE entry = first;entry != null;entry = entry.next())
+				action.accept(new BasicEntryKV_BRACES(entry.key, entry.value));
+		}
+		
+		@Override
+		public <E> void forEach(E input, ObjectObjectConsumer<E, MAP.Entry KEY_VALUE_GENERIC_TYPE> action) {
+			Objects.requireNonNull(action);
+			for(Node KEY_VALUE_GENERIC_TYPE entry = first;entry != null;entry = entry.next())
+				action.accept(input, new BasicEntryKV_BRACES(entry.key, entry.value));
+		}
+		
+		@Override
+		public boolean matchesAny(Object2BooleanFunction<MAP.Entry KEY_VALUE_GENERIC_TYPE> filter) {
+			Objects.requireNonNull(filter);
+			if(size() <= 0) return false;
+			BasicEntry KEY_VALUE_GENERIC_TYPE subEntry = new BasicEntryKV_BRACES();
+			for(Node KEY_VALUE_GENERIC_TYPE entry = first;entry != null;entry = entry.next()) {
+				subEntry.set(entry.key, entry.value);
+				if(filter.getBoolean(subEntry)) return true;
+			}
+			return false;
+		}
+		
+		@Override
+		public boolean matchesNone(Object2BooleanFunction<MAP.Entry KEY_VALUE_GENERIC_TYPE> filter) {
+			Objects.requireNonNull(filter);
+			if(size() <= 0) return true;
+			BasicEntry KEY_VALUE_GENERIC_TYPE subEntry = new BasicEntryKV_BRACES();
+			for(Node KEY_VALUE_GENERIC_TYPE entry = first;entry != null;entry = entry.next()) {
+				subEntry.set(entry.key, entry.value);
+				if(filter.getBoolean(subEntry)) return false;
+			}
+			return true;
+		}
+		
+		@Override
+		public boolean matchesAll(Object2BooleanFunction<MAP.Entry KEY_VALUE_GENERIC_TYPE> filter) {
+			Objects.requireNonNull(filter);
+			if(size() <= 0) return true;
+			BasicEntry KEY_VALUE_GENERIC_TYPE subEntry = new BasicEntryKV_BRACES();
+			for(Node KEY_VALUE_GENERIC_TYPE entry = first;entry != null;entry = entry.next()) {
+				subEntry.set(entry.key, entry.value);
+				if(!filter.getBoolean(subEntry)) return false;
+			}
+			return true;
+		}
+		
+		@Override
+		public <E> E reduce(E identity, BiFunction<E, MAP.Entry KEY_VALUE_GENERIC_TYPE, E> operator) {
+			Objects.requireNonNull(operator);
+			E state = identity;
+			for(Node KEY_VALUE_GENERIC_TYPE entry = first;entry != null;entry = entry.next()) {
+				state = operator.apply(state, new BasicEntryKV_BRACES(entry.key, entry.value));
+			}
+			return state;
+		}
+		
+		@Override
+		public MAP.Entry KEY_VALUE_GENERIC_TYPE reduce(ObjectObjectUnaryOperator<MAP.Entry KEY_VALUE_GENERIC_TYPE, MAP.Entry KEY_VALUE_GENERIC_TYPE> operator) {
+			Objects.requireNonNull(operator);
+			MAP.Entry KEY_VALUE_GENERIC_TYPE state = null;
+			boolean empty = true;
+			for(Node KEY_VALUE_GENERIC_TYPE entry = first;entry != null;entry = entry.next()) {
+				if(empty) {
+					empty = false;
+					state = new BasicEntryKV_BRACES(entry.key, entry.value);
+					continue;
+				}
+				state = operator.apply(state, new BasicEntryKV_BRACES(entry.key, entry.value));
+			}
+			return state;
+		}
+		
+		@Override
+		public MAP.Entry KEY_VALUE_GENERIC_TYPE findFirst(Object2BooleanFunction<MAP.Entry KEY_VALUE_GENERIC_TYPE> filter) {
+			Objects.requireNonNull(filter);
+			if(size() <= 0) return null;
+			BasicEntry KEY_VALUE_GENERIC_TYPE subEntry = new BasicEntryKV_BRACES();
+			for(Node KEY_VALUE_GENERIC_TYPE entry = first;entry != null;entry = entry.next()) {
+				subEntry.set(entry.key, entry.value);
+				if(filter.getBoolean(subEntry)) return subEntry;
+			}
+			return null;
+		}
+		
+		@Override
+		public int count(Object2BooleanFunction<MAP.Entry KEY_VALUE_GENERIC_TYPE> filter) {
+			Objects.requireNonNull(filter);
+			if(size() <= 0) return 0;
+			int result = 0;
+			BasicEntry KEY_VALUE_GENERIC_TYPE subEntry = new BasicEntryKV_BRACES();
+			for(Node KEY_VALUE_GENERIC_TYPE entry = first;entry != null;entry = entry.next()) {
+				subEntry.set(entry.key, entry.value);
+				if(filter.getBoolean(subEntry)) result++;
+			}
+			return result;
+		}
+	}
+	
+	class DescendingKeyIterator extends MapEntryIterator implements BI_ITERATOR KEY_GENERIC_TYPE
+	{
+		public DescendingKeyIterator(Node KEY_VALUE_GENERIC_TYPE first) {
+			super(first);
+		}
+
+		@Override
+		public KEY_TYPE PREVIOUS() {
+			if(!hasPrevious()) throw new NoSuchElementException();
+			return nextEntry().key;
+		}
+		
+		@Override
+		public KEY_TYPE NEXT() {
+			if(!hasNext()) throw new NoSuchElementException();
+			return previousEntry().key;
+		}
+	}
+	
+	class AscendingMapEntryIterator extends MapEntryIterator implements ObjectBidirectionalIterator<MAP.Entry KEY_VALUE_GENERIC_TYPE>
+	{
+		public AscendingMapEntryIterator(Node KEY_VALUE_GENERIC_TYPE first)
+		{
+			super(first);
+		}
+
 		@Override
 		public MAP.Entry KEY_VALUE_GENERIC_TYPE previous() {
+			if(!hasPrevious()) throw new NoSuchElementException();
 			return previousEntry();
 		}
-		
+
 		@Override
-		public void set(MAP.Entry KEY_VALUE_GENERIC_TYPE e) { throw new UnsupportedOperationException(); }
-		
-		@Override
-		public void add(MAP.Entry KEY_VALUE_GENERIC_TYPE e) { throw new UnsupportedOperationException(); }
+		public MAP.Entry KEY_VALUE_GENERIC_TYPE next() {
+			if(!hasNext()) throw new NoSuchElementException();
+			return nextEntry();
+		}
 	}
 	
-	final class KeyIterator extends MapEntryIterator implements LIST_ITERATOR KEY_GENERIC_TYPE {
-		
-		public KeyIterator(boolean descending) {
-			super(descending);
+	class AscendingValueIterator extends MapEntryIterator implements VALUE_BI_ITERATOR VALUE_GENERIC_TYPE
+	{
+		public AscendingValueIterator(Node KEY_VALUE_GENERIC_TYPE first) {
+			super(first);
 		}
-		
-		public KeyIterator(Entry KEY_VALUE_GENERIC_TYPE entry) {
-			super(entry);
-		}
-		
-		@Override
-		public KEY_TYPE PREVIOUS() { return previousEntry().key; }
-		@Override
-		public KEY_TYPE NEXT() { return nextEntry().key; }
-		
-		@Override
-		public void set(KEY_TYPE e) { throw new UnsupportedOperationException(); }
-		@Override
-		public void add(KEY_TYPE e) { throw new UnsupportedOperationException(); }
-	}
-	
-	final class ValueIterator extends MapEntryIterator implements VALUE_LIST_ITERATOR VALUE_GENERIC_TYPE {
-		
-		public ValueIterator(boolean descending) {
-			super(descending);
-		}
-		
-		public ValueIterator(Entry KEY_VALUE_GENERIC_TYPE entry) {
-			super(entry);
-		}
-		
+
 		@Override
 		public VALUE_TYPE VALUE_PREVIOUS() {
+			if(!hasPrevious()) throw new NoSuchElementException();
 			return previousEntry().value;
 		}
-		
+
 		@Override
 		public VALUE_TYPE VALUE_NEXT() {
+			if(!hasNext()) throw new NoSuchElementException();
 			return nextEntry().value;
 		}
-		
-		@Override
-		public void set(VALUE_TYPE e) { throw new UnsupportedOperationException(); }
-		
-		@Override
-		public void add(VALUE_TYPE e) { throw new UnsupportedOperationException(); }
 	}
 	
-	abstract class MapEntryIterator {
-		Entry KEY_VALUE_GENERIC_TYPE next;
-		Entry KEY_VALUE_GENERIC_TYPE previous;
-		Entry KEY_VALUE_GENERIC_TYPE current;
-		int index = 0;
-		
-		public MapEntryIterator(boolean descending) {
-			if(descending) previous = last;
-			else next = first;
+	class AscendingKeyIterator extends MapEntryIterator implements BI_ITERATOR KEY_GENERIC_TYPE
+	{
+		public AscendingKeyIterator(Node KEY_VALUE_GENERIC_TYPE first) {
+			super(first);
 		}
+
+		@Override
+		public KEY_TYPE PREVIOUS() {
+			if(!hasPrevious()) throw new NoSuchElementException();
+			return previousEntry().key;
+		}
+
+		@Override
+		public KEY_TYPE NEXT() {
+			if(!hasNext()) throw new NoSuchElementException();
+			return nextEntry().key;
+		}
+	}
+	
+	abstract class MapEntryIterator
+	{
+		boolean wasMoved = false;
+		Node KEY_VALUE_GENERIC_TYPE lastReturned;
+		Node KEY_VALUE_GENERIC_TYPE next;
 		
-		public MapEntryIterator(Entry KEY_VALUE_GENERIC_TYPE entry) {
-			next = entry;
-			previous = entry.previous();
+		public MapEntryIterator(Node KEY_VALUE_GENERIC_TYPE first)
+		{
+			next = first;
 		}
 		
 		public boolean hasNext() {
-			return next != null;
+            return next != null;
+		}
+		
+		protected Node KEY_VALUE_GENERIC_TYPE nextEntry() {
+			lastReturned = next;
+			Node KEY_VALUE_GENERIC_TYPE result = next;
+			next = next.next();
+			wasMoved = true;
+			return result;
 		}
 		
 		public boolean hasPrevious() {
-			return previous != null;
+            return next != null;
 		}
 		
-		public int nextIndex() {
-			return index;
-		}
-		
-		public int previousIndex() {
-			return index - 1;
-		}
-		
-		protected void updateNext() {
-			next = current.next();
-		}
-		
-		protected void updatePrevious() {
-			previous = current.previous();
-		}
-		
-		public Entry KEY_VALUE_GENERIC_TYPE nextEntry() {
-			if(!hasNext()) throw new NoSuchElementException();
-			current = previous = next;
-			updateNext();
-			index++;
-			return current;
-		}
-		
-		public Entry KEY_VALUE_GENERIC_TYPE previousEntry() {
-			if(!hasPrevious()) throw new NoSuchElementException();
-			current = next = previous;
-			updatePrevious();
-			index--;
-			return current;
+		protected Node KEY_VALUE_GENERIC_TYPE previousEntry() {
+			lastReturned = next;
+			Node KEY_VALUE_GENERIC_TYPE result = next;
+			next = next.previous();
+			wasMoved = false;
+			return result;
 		}
 		
 		public void remove() {
-			if(current == null) throw new IllegalStateException();
-			if(current == previous) index--;
-			updateNext();
-			updatePrevious();
-			if(current.needsSuccessor()) next = current;
-			removeNode(current);
-			current = null;
+			if(lastReturned == null) throw new IllegalStateException();
+			if(wasMoved && lastReturned.needsSuccessor()) next = lastReturned;
+			removeNode(lastReturned);
+			lastReturned = null;
 		}
 	}
 	
-	private static final class Entry KEY_VALUE_GENERIC_TYPE implements MAP.Entry KEY_VALUE_GENERIC_TYPE
+	private static final class Node KEY_VALUE_GENERIC_TYPE implements MAP.Entry KEY_VALUE_GENERIC_TYPE
 	{
 		static final int BLACK = 1;
 		
 		KEY_TYPE key;
 		VALUE_TYPE value;
 		int state;
-		Entry KEY_VALUE_GENERIC_TYPE parent;
-		Entry KEY_VALUE_GENERIC_TYPE left;
-		Entry KEY_VALUE_GENERIC_TYPE right;
+		Node KEY_VALUE_GENERIC_TYPE parent;
+		Node KEY_VALUE_GENERIC_TYPE left;
+		Node KEY_VALUE_GENERIC_TYPE right;
 		
-		Entry(KEY_TYPE key, VALUE_TYPE value, Entry KEY_VALUE_GENERIC_TYPE parent) {
+		Node(KEY_TYPE key, VALUE_TYPE value, Node KEY_VALUE_GENERIC_TYPE parent) {
 			this.key = key;
 			this.value = value;
 			this.parent = parent;
 		}
 		
-		Entry KEY_VALUE_GENERIC_TYPE copy() {
-			Entry KEY_VALUE_GENERIC_TYPE entry = new EntryKV_BRACES(key, value, null);
+		Node KEY_VALUE_GENERIC_TYPE copy() {
+			Node KEY_VALUE_GENERIC_TYPE entry = new NodeKV_BRACES(key, value, null);
 			entry.state = state;
 			if(left != null) {
-				Entry KEY_VALUE_GENERIC_TYPE newLeft = left.copy();
+				Node KEY_VALUE_GENERIC_TYPE newLeft = left.copy();
 				entry.left = newLeft;
 				newLeft.parent = entry;
 			}
 			if(right != null) {
-				Entry KEY_VALUE_GENERIC_TYPE newRight = right.copy();
+				Node KEY_VALUE_GENERIC_TYPE newRight = right.copy();
 				entry.right = newRight;
 				newRight.parent = entry;
 			}
 			return entry;
+		}
+		
+		public BasicEntry KEY_VALUE_GENERIC_TYPE export() {
+			return new BasicEntryKV_BRACES(key, value);
 		}
 		
 		@Override
@@ -2735,7 +2780,7 @@ public class RB_TREE_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_VALUE_G
 		
 		boolean needsSuccessor() { return left != null && right != null; }
 		
-		boolean replace(Entry KEY_VALUE_GENERIC_TYPE entry) {
+		boolean replace(Node KEY_VALUE_GENERIC_TYPE entry) {
 			if(entry != null) entry.parent = parent;
 			if(parent != null) {
 				if(parent.left == this) parent.left = entry;
@@ -2744,14 +2789,14 @@ public class RB_TREE_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_VALUE_G
 			return parent == null;
 		}
 		
-		Entry KEY_VALUE_GENERIC_TYPE next() {
+		Node KEY_VALUE_GENERIC_TYPE next() {
 			if(right != null) {
-				Entry KEY_VALUE_GENERIC_TYPE parent = right;
+				Node KEY_VALUE_GENERIC_TYPE parent = right;
 				while(parent.left != null) parent = parent.left;
 				return parent;
 			}
-			Entry KEY_VALUE_GENERIC_TYPE parent = this.parent;
-			Entry KEY_VALUE_GENERIC_TYPE control = this;
+			Node KEY_VALUE_GENERIC_TYPE parent = this.parent;
+			Node KEY_VALUE_GENERIC_TYPE control = this;
 			while(parent != null && control == parent.right) {
 				control = parent;
 				parent = parent.parent;
@@ -2759,14 +2804,14 @@ public class RB_TREE_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_VALUE_G
 			return parent;
 		}
 		
-		Entry KEY_VALUE_GENERIC_TYPE previous() {
+		Node KEY_VALUE_GENERIC_TYPE previous() {
 			if(left != null) {
-				Entry KEY_VALUE_GENERIC_TYPE parent = left;
+				Node KEY_VALUE_GENERIC_TYPE parent = left;
 				while(parent.right != null) parent = parent.right;
 				return parent;
 			}
-			Entry KEY_VALUE_GENERIC_TYPE parent = this.parent;
-			Entry KEY_VALUE_GENERIC_TYPE control = this;
+			Node KEY_VALUE_GENERIC_TYPE parent = this.parent;
+			Node KEY_VALUE_GENERIC_TYPE control = this;
 			while(parent != null && control == parent.left) {
 				control = parent;
 				parent = parent.parent;
