@@ -210,6 +210,16 @@ public class AVL_TREE_SET KEY_GENERIC_TYPE extends ABSTRACT_SET KEY_GENERIC_TYPE
 	@Override
 	public KEY_TYPE getDefaultMinValue() { return defaultMinNotFound; }
 	
+#else
+	/** only used for primitives 
+	 * @return null 
+	 */
+	public CLASS_TYPE getDefaultMaxValue() { return null; }
+	/** only used for primitives 
+	 * @return null 
+	 */
+	public CLASS_TYPE getDefaultMinValue() { return null; }
+	
 #endif
 	@Override
 	public boolean add(KEY_TYPE o) {
@@ -263,43 +273,53 @@ public class AVL_TREE_SET KEY_GENERIC_TYPE extends ABSTRACT_SET KEY_GENERIC_TYPE
 	@Override
 	public KEY_TYPE lower(KEY_TYPE e) {
 		Entry KEY_GENERIC_TYPE node = findLowerNode(e);
-#if TYPE_OBJECT
-		return node != null ? node.key : null;
-#else
-		return node != null ? node.key : defaultMinNotFound;
-#endif
+		return node != null ? node.key : getDefaultMinValue();
 	}
 
 	@Override
 	public KEY_TYPE floor(KEY_TYPE e) {
 		Entry KEY_GENERIC_TYPE node = findFloorNode(e);
-#if TYPE_OBJECT
-		return node != null ? node.key : null;
-#else
-		return node != null ? node.key : defaultMinNotFound;
-#endif
+		return node != null ? node.key : getDefaultMinValue();
 	}
 	
 	@Override
 	public KEY_TYPE higher(KEY_TYPE e) {
 		Entry KEY_GENERIC_TYPE node = findHigherNode(e);
-#if TYPE_OBJECT
-		return node != null ? node.key : null;
-#else
-		return node != null ? node.key : defaultMaxNotFound;
-#endif
+		return node != null ? node.key : getDefaultMaxValue();
 	}
 
 	@Override
 	public KEY_TYPE ceiling(KEY_TYPE e) {
 		Entry KEY_GENERIC_TYPE node = findCeilingNode(e);
-#if TYPE_OBJECT
-		return node != null ? node.key : null;
-#else
-		return node != null ? node.key : defaultMaxNotFound;
-#endif
+		return node != null ? node.key : getDefaultMaxValue();
 	}
 	
+	#if !TYPE_OBJECT
+	@Override
+	public CLASS_TYPE lower(CLASS_TYPE e) {
+		Entry KEY_GENERIC_TYPE node = findLowerNode(e);
+		return node != null ? node.key : null;
+	}
+	
+	@Override
+	public CLASS_TYPE floor(CLASS_TYPE e) {
+		Entry KEY_GENERIC_TYPE node = findFloorNode(e);
+		return node != null ? node.key : null;
+	}
+	
+	@Override
+	public CLASS_TYPE higher(CLASS_TYPE e) {
+		Entry KEY_GENERIC_TYPE node = findHigherNode(e);
+		return node != null ? node.key : null;
+	}
+	
+	@Override
+	public CLASS_TYPE ceiling(CLASS_TYPE e) {
+		Entry KEY_GENERIC_TYPE node = findCeilingNode(e);
+		return node != null ? node.key : null;
+	}
+	
+#endif
 	@Override
 	public void forEach(CONSUMER KEY_SUPER_GENERIC_TYPE action) {
 		Objects.requireNonNull(action);
@@ -1078,6 +1098,36 @@ public class AVL_TREE_SET KEY_GENERIC_TYPE extends ABSTRACT_SET KEY_GENERIC_TYPE
 			return highKeyOrNull(subHigher(e));
 		}
 		
+#if !TYPE_OBJECT
+		@Override
+		@Deprecated
+		public CLASS_TYPE lower(CLASS_TYPE e) {
+			Entry KEY_GENERIC_TYPE entry = subLower(e);
+			return entry == null ? null : KEY_TO_OBJ(entry.key);
+		}
+		
+		@Override
+		@Deprecated
+		public CLASS_TYPE floor(CLASS_TYPE e) {
+			Entry KEY_GENERIC_TYPE entry = subFloor(e);
+			return entry == null ? null : KEY_TO_OBJ(entry.key);
+		}
+		
+		@Override
+		@Deprecated
+		public CLASS_TYPE ceiling(CLASS_TYPE e) {
+			Entry KEY_GENERIC_TYPE entry = subCeiling(e);
+			return entry == null ? null : KEY_TO_OBJ(entry.key);
+		}
+		
+		@Override
+		@Deprecated
+		public CLASS_TYPE higher(CLASS_TYPE e) {
+			Entry KEY_GENERIC_TYPE entry = subHigher(e);
+			return entry == null ? null : KEY_TO_OBJ(entry.key);
+		}
+		
+#endif
 		@Override
 		public KEY_TYPE POLL_FIRST_KEY() {
 			Entry KEY_GENERIC_TYPE entry = subLowest();

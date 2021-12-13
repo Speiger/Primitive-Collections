@@ -171,10 +171,10 @@ public interface NAVIGABLE_SET KEY_GENERIC_TYPE extends NavigableSet<CLASS_TYPE>
 	default CLASS_TYPE last() { return SORTED_SET.super.last(); }
 	@Override
 	@Deprecated
-	public default CLASS_TYPE pollFirst() { return KEY_TO_OBJ(POLL_FIRST_KEY()); }
+	public default CLASS_TYPE pollFirst() { return isEmpty() ? null : KEY_TO_OBJ(POLL_FIRST_KEY()); }
 	@Override
 	@Deprecated
-	public default CLASS_TYPE pollLast() { return KEY_TO_OBJ(POLL_LAST_KEY()); }
+	public default CLASS_TYPE pollLast() { return isEmpty() ? null : KEY_TO_OBJ(POLL_LAST_KEY()); }
 	
 	@Override
 	@Deprecated

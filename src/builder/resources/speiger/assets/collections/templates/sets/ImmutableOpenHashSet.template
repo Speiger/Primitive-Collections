@@ -257,7 +257,12 @@ public class IMMUTABLE_HASH_SET KEY_GENERIC_TYPE extends ABSTRACT_SET KEY_GENERI
 	
 	@Override
 	public boolean contains(Object o) {
+#if TYPE_OBJECT
 		if(o == null) return containsNull;
+#else
+		if(o == null) return false;
+		if(o instanceof CLASS_TYPE && KEY_EQUALS(CLASS_TO_KEY(o), EMPTY_KEY_VALUE)) return containsNull;
+#endif
 		int pos = HashUtil.mix(o.hashCode()) & mask;
 		KEY_TYPE current = keys[pos];
 		if(KEY_EQUALS_NULL(current)) return false;

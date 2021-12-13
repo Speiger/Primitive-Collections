@@ -232,6 +232,7 @@ public class ARRAY_LIST KEY_GENERIC_TYPE extends ABSTRACT_LIST KEY_GENERIC_TYPE 
 	 * @param index the index where to append the elements to
 	 * @param c the elements to append to the list
 	 * @throws IndexOutOfBoundsException if index is outside of the lists range
+	 * @throws NullPointerException if collection contains a null element
 	 */
 	@Override
 	@Primitive
@@ -239,6 +240,9 @@ public class ARRAY_LIST KEY_GENERIC_TYPE extends ABSTRACT_LIST KEY_GENERIC_TYPE 
 		if(c instanceof COLLECTION) return addAll(index, (COLLECTION KEY_GENERIC_TYPE)c);
 		int add = c.size();
 		if(add <= 0) return false;
+#if !TYPE_OBJECT
+		if(c.contains(null)) throw new NullPointerException();
+#endif
 		grow(size + add);
 		if(index != size) System.arraycopy(data, index, data, index+add, size - index);
 		size+=add;

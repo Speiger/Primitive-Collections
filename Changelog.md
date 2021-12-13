@@ -3,6 +3,8 @@
 ### Version 0.5.1
 - Fixed: Reworked the NavigableSet/Map implementations of RBTree/AVLTree/Array Sets/Maps so they are now deemed stable.
 - Added: Another 150k Unit tests.
+- Added: List and Set Unit tests for Integer (or Primitives in this case) to ensure basic stability there. (Now covering all sets and lists)
+- Fixed: Bugs with null values for primitive collections.
 
 ### Version 0.5.0
 - Added: 2 Helper functions to find out how many bits are required to store a Number.
