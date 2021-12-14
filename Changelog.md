@@ -5,6 +5,7 @@
 - Added: Another 150k Unit tests.
 - Added: List and Set Unit tests for Integer (or Primitives in this case) to ensure basic stability there. (Now covering all sets and lists)
 - Fixed: Bugs with null values for primitive collections.
+- Removed: ArraySet/Map subSet/subMap implementation was removed.
 
 ### Version 0.5.0
 - Added: 2 Helper functions to find out how many bits are required to store a Number.

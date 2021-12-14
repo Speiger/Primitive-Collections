@@ -6,11 +6,11 @@ But its focus is a different one.
 
 ## Main Features:      
 - ArrayLists / LinkedLists
-- HashSet/Map (Linked & HashControl)
-- TreeSet/Map (RB & AVL)
-- EnumMap
+- HashSets/Maps (Linked & HashControl)
+- TreeSets/Maps (RB & AVL)
+- EnumMaps
 - Immutable Maps/Lists/Sets
-- Priority Queue
+- Priority Queues
 - Streams & Functional Queries
 - SplitIterators
 - Iterators
@@ -22,17 +22,10 @@ But its focus is a different one.
 
 ## Current Level of Stability
 Since this is a relatively new Library, stability was not perfect and some areas are not perfect yet.     
-Thanks to [ben-manes](https://github.com/ben-manes) we now have Roughly 16000 test covering Maps/Sets/Lists.     
+Thanks to [ben-manes](https://github.com/ben-manes) we now have Roughly 160k unit test covering Maps/Sets/Lists.     
 These tests cover Javas Collection API completely and ensuring a Stable implementation.     
 These freshly added tests allowed me to squash thousands of issues according to Googles Test Library (Guava-Tests).     
 These will be expanded on as time goes on.     
-
-One know aspect of Instability is SubSets and SubMaps. They require full rewrites to be fully stable.     
-So it is not advised to use them until these issues are addressed.     
-PriorityQueues are tested separately and ensure basic functionality though GuavaTests are planned.     
-They just require a custom test implementation.     
-
-As a summary: Stability is good/excellent, unless you need SubSets/SubMaps     
 
 ## Specialized Functions
 New Specialized functions that were added to increase performance or reduce allocations or Quality Of life.
@@ -47,6 +40,7 @@ To highlight things that may be wanted.
 	- reduce/limit/peek/distinct: Light Versions of the Stream variant, to reduce Stream usage.
 	- pour: a function that allows to collect all elements within the Collection
 - Collection:
+	- addAll: addAll array version
 	- containsAny: Allows to test if another collection contains an of the elements of the tested collection.
 	- primitiveStream: Provides access to the closest Java Stream Type.
 	- copy: shallowCopies the collection, used instead of clone because this is better to use.
@@ -95,13 +89,14 @@ repositories {
     }
 }
 dependencies {
-	compile 'de.speiger:Primitive-Collections:0.5.0'
+	compile 'de.speiger:Primitive-Collections:0.5.1'
 }
 ```
 Direct:
 
 | Version 	| Jar                                                                                                                          	| Sources                                                                                                                              	| Java Doc                                                                                                                             	|
 |---------	|------------------------------------------------------------------------------------------------------------------------------	|--------------------------------------------------------------------------------------------------------------------------------------	|--------------------------------------------------------------------------------------------------------------------------------------	|
+| 0.5.1   	| [Download](https://maven.speiger.com/repository/main/de/speiger/Primitive-Collections/0.5.1/Primitive-Collections-0.5.1.jar) 	| [Download](https://maven.speiger.com/repository/main/de/speiger/Primitive-Collections/0.5.1/Primitive-Collections-0.5.1-sources.jar) 	| [Download](https://maven.speiger.com/repository/main/de/speiger/Primitive-Collections/0.5.1/Primitive-Collections-0.5.1-javadoc.jar) 	|
 | 0.5.0   	| [Download](https://maven.speiger.com/repository/main/de/speiger/Primitive-Collections/0.5.0/Primitive-Collections-0.5.0.jar) 	| [Download](https://maven.speiger.com/repository/main/de/speiger/Primitive-Collections/0.5.0/Primitive-Collections-0.5.0-sources.jar) 	| [Download](https://maven.speiger.com/repository/main/de/speiger/Primitive-Collections/0.5.0/Primitive-Collections-0.5.0-javadoc.jar) 	|
 | 0.4.5   	| [Download](https://maven.speiger.com/repository/main/de/speiger/Primitive-Collections/0.4.5/Primitive-Collections-0.4.5.jar) 	| [Download](https://maven.speiger.com/repository/main/de/speiger/Primitive-Collections/0.4.5/Primitive-Collections-0.4.5-sources.jar) 	| [Download](https://maven.speiger.com/repository/main/de/speiger/Primitive-Collections/0.4.5/Primitive-Collections-0.4.5-javadoc.jar) 	|
 | 0.4.4   	| [Download](https://maven.speiger.com/repository/main/de/speiger/Primitive-Collections/0.4.4/Primitive-Collections-0.4.4.jar) 	| [Download](https://maven.speiger.com/repository/main/de/speiger/Primitive-Collections/0.4.4/Primitive-Collections-0.4.4-sources.jar) 	| [Download](https://maven.speiger.com/repository/main/de/speiger/Primitive-Collections/0.4.4/Primitive-Collections-0.4.4-javadoc.jar) 	|
@@ -134,5 +129,4 @@ to build the jar:
 do not combine the commands because they can not be executed at the same time.      
 
 ## Current Down Sides (Random order)
-- SubMaps/Set implementation isn't perfect right now. This will be addressed slowly due to rewrites required.     
 - Documentation is only present at the lowest level for most cases and needs a typo fixing.

@@ -596,7 +596,7 @@ public class ARRAY_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_VALUE_GEN
 	 * Unsupported for now. Implementation is buggy and does not support the Java Standard with these functions.
 	 * It is a Unsorted Sorted Map. Thats why the SubMap implementation will be disabled until a better solution is found.
 	 * To give a simple reason: LinkedHashMaps are also not SortedSets even so they could be.
-	 * @throws UnsupportedOperationException
+	 * @throws UnsupportedOperationException because it is not supported
 	 */
 	@Override
 	public SORTED_MAP KEY_VALUE_GENERIC_TYPE subMap(KEY_TYPE fromKey, KEY_TYPE toKey) { throw new UnsupportedOperationException(); }
@@ -605,7 +605,7 @@ public class ARRAY_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_VALUE_GEN
 	 * Unsupported for now. Implementation is buggy and does not support the Java Standard with these functions.
 	 * It is a Unsorted Sorted Map. Thats why the SubMap implementation will be disabled until a better solution is found.
 	 * To give a simple reason: LinkedHashMaps are also not SortedSets even so they could be.
-	 * @throws UnsupportedOperationException
+	 * @throws UnsupportedOperationException because it is not supported
 	 */
 	@Override
 	public SORTED_MAP KEY_VALUE_GENERIC_TYPE headMap(KEY_TYPE toKey) { throw new UnsupportedOperationException(); }
@@ -614,7 +614,7 @@ public class ARRAY_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_VALUE_GEN
 	 * Unsupported for now. Implementation is buggy and does not support the Java Standard with these functions.
 	 * It is a Unsorted Sorted Map. Thats why the SubMap implementation will be disabled until a better solution is found.
 	 * To give a simple reason: LinkedHashMaps are also not SortedSets even so they could be.
-	 * @throws UnsupportedOperationException
+	 * @throws UnsupportedOperationException because it is not supported
 	 */
 	@Override
 	public SORTED_MAP KEY_VALUE_GENERIC_TYPE tailMap(KEY_TYPE fromKey) { throw new UnsupportedOperationException(); }

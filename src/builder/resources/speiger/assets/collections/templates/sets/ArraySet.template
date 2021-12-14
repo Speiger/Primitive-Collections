@@ -503,7 +503,7 @@ public class ARRAY_SET KEY_GENERIC_TYPE extends ABSTRACT_SET KEY_GENERIC_TYPE im
 	 * Unsupported for now. Implementation is buggy and does not support the Java Standard with these functions.
 	 * It is a Unsorted Sorted Set. Thats why the SubSet implementation will be disabled until a better solution is found.
 	 * To give a simple reason: LinkedHashSets are also not SortedSets even so they could be.
-	 * @throws UnsupportedOperationException
+	 * @throws UnsupportedOperationException because it is not supported
 	 */
 	@Override
 	public SORTED_SET KEY_GENERIC_TYPE subSet(KEY_TYPE fromElement, KEY_TYPE toElement) { throw new UnsupportedOperationException(); }
@@ -511,7 +511,7 @@ public class ARRAY_SET KEY_GENERIC_TYPE extends ABSTRACT_SET KEY_GENERIC_TYPE im
 	 * Unsupported for now. Implementation is buggy and does not support the Java Standard with these functions.
 	 * It is a Unsorted Sorted Set. Thats why the SubSet implementation will be disabled until a better solution is found.
 	 * To give a simple reason: LinkedHashSets are also not SortedSets even so they could be.
-	 * @throws UnsupportedOperationException
+	 * @throws UnsupportedOperationException because it is not supported
 	 */
 	@Override
 	public SORTED_SET KEY_GENERIC_TYPE headSet(KEY_TYPE toElement) { throw new UnsupportedOperationException(); }
@@ -519,7 +519,7 @@ public class ARRAY_SET KEY_GENERIC_TYPE extends ABSTRACT_SET KEY_GENERIC_TYPE im
 	 * Unsupported for now. Implementation is buggy and does not support the Java Standard with these functions.
 	 * It is a Unsorted Sorted Set. Thats why the SubSet implementation will be disabled until a better solution is found.
 	 * To give a simple reason: LinkedHashSets are also not SortedSets even so they could be.
-	 * @throws UnsupportedOperationException
+	 * @throws UnsupportedOperationException because it is not supported
 	 */
 	@Override
 	public SORTED_SET KEY_GENERIC_TYPE tailSet(KEY_TYPE fromElement) { throw new UnsupportedOperationException(); }
