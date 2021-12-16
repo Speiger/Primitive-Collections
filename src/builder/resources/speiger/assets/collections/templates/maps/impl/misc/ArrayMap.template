@@ -641,7 +641,7 @@ public class ARRAY_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_VALUE_GEN
 	
 	protected void grow(int newSize) {
 		if(newSize < keys.length) return;
-		newSize = Math.min(newSize, keys.length == 0 ? 2 : keys.length * 2);
+		newSize = Math.max(newSize, keys.length == 0 ? 2 : keys.length * 2);
 		keys = Arrays.copyOf(keys, newSize);
 		values = Arrays.copyOf(values, newSize);
 	}

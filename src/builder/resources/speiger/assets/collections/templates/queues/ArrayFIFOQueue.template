@@ -114,8 +114,8 @@ public class ARRAY_FIFO_QUEUE KEY_GENERIC_TYPE extends ABSTRACT_PRIORITY_QUEUE K
 	
 	@Override
 	public void enqueue(KEY_TYPE e) {
-		array[last] = e;
-		last = ++last % array.length;
+		array[last++] = e;
+		if(last == array.length) last = 0;
 		if(last == first) expand();
 	}
 	

@@ -1,5 +1,10 @@
 # Changelog of versions
 
+### Version 0.5.2
+- Fixed: Bugs with Queues starting with the wrong size
+- Fixed: ArrayGrowth for Queues was +1 instead of +50%
+- Added: Benchmarks with java and FastUtil
+
 ### Version 0.5.1
 - Fixed: Reworked the NavigableSet/Map implementations of RBTree/AVLTree/Array Sets/Maps so they are now deemed stable.
 - Added: Another 150k Unit tests.

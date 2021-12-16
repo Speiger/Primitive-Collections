@@ -19,6 +19,7 @@ import speiger.src.collections.objects.functions.consumer.BI_FROM_OBJECT_CONSUME
 import speiger.src.collections.PACKAGE.functions.function.PREDICATE;
 import speiger.src.collections.PACKAGE.functions.function.UNARY_OPERATOR;
 import speiger.src.collections.PACKAGE.utils.ARRAYS;
+import speiger.src.collections.utils.SanityChecks;
 
 /**
  * A Array Priority Queue, this is a very unoptimized implementation of the PriorityQueue for very specific usecases.
@@ -70,7 +71,6 @@ public class ARRAY_PRIORITY_QUEUE KEY_GENERIC_TYPE extends ABSTRACT_PRIORITY_QUE
 	public ARRAY_PRIORITY_QUEUE(int size, COMPARATOR KEY_SUPER_GENERIC_TYPE comp) {
 		if(size < 0) throw new IllegalAccessError("Size has to be 0 or positive");
 		if(size > 0) array = NEW_KEY_ARRAY(size);
-		this.size = size;
 		comparator = comp;
 	}
 	
@@ -187,7 +187,7 @@ public class ARRAY_PRIORITY_QUEUE KEY_GENERIC_TYPE extends ABSTRACT_PRIORITY_QUE
 	
 	@Override
 	public void enqueue(KEY_TYPE e) {
-		if(size == array.length) array = Arrays.copyOf(array, size+1);
+		if(size == array.length) array = Arrays.copyOf(array, (int)Math.max(Math.min((long)array.length + (array.length >> 1), SanityChecks.MAX_ARRAY_SIZE), size+1));
 		if(firstIndex != -1){
 			int compare = comparator == null ? COMPAREABLE_TO_KEY(e, array[firstIndex]) : comparator.compare(e, array[firstIndex]);
 			if(compare < 0) firstIndex = size;
