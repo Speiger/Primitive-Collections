@@ -27,6 +27,9 @@ These tests cover Javas Collection API completely and ensuring a Stable implemen
 These freshly added tests allowed me to squash thousands of issues according to Googles Test Library (Guava-Tests).     
 These will be expanded on as time goes on.     
 
+### Benchmarks
+Benchmarks can be found here: [Click Me](https://github.com/Speiger/Primitive-Collections-Benchmarks/tree/master)
+
 ## Specialized Functions
 New Specialized functions that were added to increase performance or reduce allocations or Quality Of life.
 To highlight things that may be wanted.
@@ -89,13 +92,14 @@ repositories {
     }
 }
 dependencies {
-	compile 'de.speiger:Primitive-Collections:0.5.1'
+	compile 'de.speiger:Primitive-Collections:0.5.2'
 }
 ```
 Direct:
 
 | Version 	| Jar                                                                                                                          	| Sources                                                                                                                              	| Java Doc                                                                                                                             	|
 |---------	|------------------------------------------------------------------------------------------------------------------------------	|--------------------------------------------------------------------------------------------------------------------------------------	|--------------------------------------------------------------------------------------------------------------------------------------	|
+| 0.5.2   	| [Download](https://maven.speiger.com/repository/main/de/speiger/Primitive-Collections/0.5.2/Primitive-Collections-0.5.2.jar) 	| [Download](https://maven.speiger.com/repository/main/de/speiger/Primitive-Collections/0.5.2/Primitive-Collections-0.5.2-sources.jar) 	| [Download](https://maven.speiger.com/repository/main/de/speiger/Primitive-Collections/0.5.2/Primitive-Collections-0.5.2-javadoc.jar) 	|
 | 0.5.1   	| [Download](https://maven.speiger.com/repository/main/de/speiger/Primitive-Collections/0.5.1/Primitive-Collections-0.5.1.jar) 	| [Download](https://maven.speiger.com/repository/main/de/speiger/Primitive-Collections/0.5.1/Primitive-Collections-0.5.1-sources.jar) 	| [Download](https://maven.speiger.com/repository/main/de/speiger/Primitive-Collections/0.5.1/Primitive-Collections-0.5.1-javadoc.jar) 	|
 | 0.5.0   	| [Download](https://maven.speiger.com/repository/main/de/speiger/Primitive-Collections/0.5.0/Primitive-Collections-0.5.0.jar) 	| [Download](https://maven.speiger.com/repository/main/de/speiger/Primitive-Collections/0.5.0/Primitive-Collections-0.5.0-sources.jar) 	| [Download](https://maven.speiger.com/repository/main/de/speiger/Primitive-Collections/0.5.0/Primitive-Collections-0.5.0-javadoc.jar) 	|
 | 0.4.5   	| [Download](https://maven.speiger.com/repository/main/de/speiger/Primitive-Collections/0.4.5/Primitive-Collections-0.4.5.jar) 	| [Download](https://maven.speiger.com/repository/main/de/speiger/Primitive-Collections/0.4.5/Primitive-Collections-0.4.5-sources.jar) 	| [Download](https://maven.speiger.com/repository/main/de/speiger/Primitive-Collections/0.4.5/Primitive-Collections-0.4.5-javadoc.jar) 	|
