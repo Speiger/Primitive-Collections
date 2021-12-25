@@ -83,6 +83,24 @@ public abstract class BaseIntPriorityQueueTest extends BaseIntIterableTest
 	}
 	
 	@Test
+	public void testUnorderedPeek() {
+		EnumSet<PriorityQueueTest> valid = getValidPriorityQueueTests();
+		if(valid.contains(PriorityQueueTest.IN_OUT) && valid.contains(PriorityQueueTest.PEEK) && !isUnsortedRead()) {
+			IntPriorityQueue queue = create(EMPTY_ARRAY);
+			for(int i = 0;i<100;i++) {
+				queue.enqueue(i);
+			}
+			for(int i = 0;i<25;i++) {
+				queue.dequeue();
+				queue.enqueue(i);
+			}
+			for(int i = 0;i<100;i++) {
+				Assert.assertEquals((i+25) % 100, queue.peek(i));
+			}
+		}
+	}
+	
+	@Test
 	@SuppressWarnings("deprecation")
 	public void testToArray() {
 		if(getValidPriorityQueueTests().contains(PriorityQueueTest.TO_ARRAY)) {

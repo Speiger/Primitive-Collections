@@ -82,7 +82,7 @@ public class ARRAY_FIFO_QUEUE KEY_GENERIC_TYPE extends ABSTRACT_PRIORITY_QUEUE K
 	 */
 	public ARRAY_FIFO_QUEUE(int capacity) {
 		if (capacity < 0) throw new IllegalArgumentException("Initial capacity (" + capacity + ") is negative");
-		array = NEW_KEY_ARRAY(Math.max(MIN_CAPACITY, capacity));
+		array = NEW_KEY_ARRAY(Math.max(MIN_CAPACITY, capacity+1));
 		minCapacity = array.length;
 	}
 	
@@ -133,7 +133,7 @@ public class ARRAY_FIFO_QUEUE KEY_GENERIC_TYPE extends ABSTRACT_PRIORITY_QUEUE K
 #if TYPE_OBJECT
 		array[first] = null;
 #endif
-		first = ++first % array.length;
+		if(++first == array.length) first = 0;
 		reduce();
 		return data;
 	}
@@ -153,7 +153,8 @@ public class ARRAY_FIFO_QUEUE KEY_GENERIC_TYPE extends ABSTRACT_PRIORITY_QUEUE K
 	@Override
 	public KEY_TYPE peek(int index) {
 		if(first == last || index < 0 || index > size()) throw new NoSuchElementException();
-		return array[(first + index) % array.length];
+		index += first;
+		return index > array.length ? array[index-array.length] : array[index];
 	}
 	
 	@Override
