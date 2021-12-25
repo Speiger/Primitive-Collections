@@ -261,6 +261,15 @@ public class HASH_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_VALUE_GENE
 		return oldValue;
 	}
 	
+	@Override
+	public VALUE_TYPE subFrom(KEY_TYPE key, VALUE_TYPE value) {
+		int slot = findIndex(key);
+		if(slot < 0) return getDefaultReturnValue();
+		VALUE_TYPE oldValue = values[slot];
+		values[slot] -= value;
+		if(value < 0 ? (values[slot] >= getDefaultReturnValue()) : (values[slot] <= getDefaultReturnValue())) removeIndex(slot);
+		return oldValue;
+	}
 #endif
 #if !TYPE_OBJECT
 	@Override

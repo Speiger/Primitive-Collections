@@ -179,6 +179,17 @@ public interface MAP KEY_VALUE_GENERIC_TYPE extends Map<CLASS_TYPE, CLASS_VALUE_
 	 */
 	public void addToAll(MAP KEY_VALUE_GENERIC_TYPE m);
 	
+	/**
+	 * A Helper method to subtract from primitive from each other. If the key is not present it will just return the defaultValue
+	 * How the implementation works is that it will subtract from the current value (if not present it will do nothing) and fence it to the {@link #getDefaultReturnValue()}
+	 * If the fence is reached the element will be automaticall removed
+	 * 
+	 * @param key that should be subtract from
+	 * @param value that should be subtract
+	 * @return the last present or default return value
+	 */
+	public VALUE_TYPE subFrom(KEY_TYPE key, VALUE_TYPE value);
+	
 #endif
 	/**
 	 * Type Specific function for the bull putting of values

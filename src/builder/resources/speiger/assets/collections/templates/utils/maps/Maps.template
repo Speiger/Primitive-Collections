@@ -298,6 +298,8 @@ public class MAPS
 #if VALUE_PRIMITIVES
 		@Override
 		public VALUE_TYPE addTo(KEY_TYPE key, VALUE_TYPE value) { throw new UnsupportedOperationException(); }
+		@Override
+		public VALUE_TYPE subFrom(KEY_TYPE key, VALUE_TYPE value) { throw new UnsupportedOperationException(); }
 #endif
 		@Override
 		public VALUE_TYPE REMOVE_VALUE(KEY_TYPE key) { throw new UnsupportedOperationException(); }
@@ -346,6 +348,8 @@ public class MAPS
 #if VALUE_PRIMITIVES
 		@Override
 		public VALUE_TYPE addTo(KEY_TYPE key, VALUE_TYPE value) { throw new UnsupportedOperationException(); }
+		@Override
+		public VALUE_TYPE subFrom(KEY_TYPE key, VALUE_TYPE value) { throw new UnsupportedOperationException(); }
 #endif
 		@Override
 		public VALUE_TYPE REMOVE_VALUE(KEY_TYPE key) { throw new UnsupportedOperationException(); }
@@ -577,6 +581,8 @@ public class MAPS
 #if VALUE_PRIMITIVES
 		@Override
 		public VALUE_TYPE addTo(KEY_TYPE key, VALUE_TYPE value) { throw new UnsupportedOperationException(); }
+		@Override
+		public VALUE_TYPE subFrom(KEY_TYPE key, VALUE_TYPE value) { throw new UnsupportedOperationException(); }
 #endif
 		@Override
 		public VALUE_TYPE REMOVE_VALUE(KEY_TYPE key) { throw new UnsupportedOperationException(); }
@@ -926,6 +932,8 @@ public class MAPS
 #if VALUE_PRIMITIVES
 		@Override
 		public VALUE_TYPE addTo(KEY_TYPE key, VALUE_TYPE value) { synchronized(mutex) { return map.addTo(key, value); } }
+		@Override
+		public VALUE_TYPE subFrom(KEY_TYPE key, VALUE_TYPE value) { synchronized(mutex) { return map.subFrom(key, value); } }
 		public void addToAll(MAP KEY_VALUE_GENERIC_TYPE m) { synchronized(mutex) { map.addToAll(m); } }
 #endif
 		@Override

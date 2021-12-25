@@ -180,6 +180,18 @@ public class ENUM_MAP KEY_ENUM_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_VALUE
 		return getDefaultReturnValue();
 	}
 	
+	@Override
+	public VALUE_TYPE subFrom(T key, VALUE_TYPE value) {
+		int index = key.ordinal();
+		if(!isSet(index)) return getDefaultReturnValue();
+		VALUE_TYPE oldValue = values[index];
+		values[index] -= value;
+		if(value < 0 ? (values[index] >= getDefaultReturnValue()) : (values[index] <= getDefaultReturnValue())) {
+			clear(index);
+			values[index] = EMPTY_VALUE;
+		}
+		return oldValue;
+	}
 #endif
 	@Override
 	public boolean containsKey(Object key) {

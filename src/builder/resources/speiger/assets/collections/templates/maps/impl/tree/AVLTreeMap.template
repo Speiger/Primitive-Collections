@@ -306,9 +306,6 @@ public class AVL_TREE_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_VALUE_
 #if VALUE_PRIMITIVES
 	@Override
 	public VALUE_TYPE addTo(KEY_TYPE key, VALUE_TYPE value) {
-#if TYPE_OBJECT
-		validate(key);
-#endif
 		if(tree == null) {
 			tree = first = last = new NodeKV_BRACES(key, value, null);
 			size++;
@@ -338,6 +335,30 @@ public class AVL_TREE_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_VALUE_
 		}
 		fixAfterInsertion(adding);
 		size++;
+		return getDefaultReturnValue();
+	}
+	
+	@Override
+	public VALUE_TYPE subFrom(KEY_TYPE key, VALUE_TYPE value) {
+		if(tree == null) return getDefaultReturnValue();
+		int compare = 0;
+		Node KEY_VALUE_GENERIC_TYPE parent = tree;
+		while(true) {
+			if((compare = compare(key, parent.key)) == 0)
+			{
+				VALUE_TYPE oldValue = parent.subFrom(value);
+				if(value < 0 ? (parent.value >= getDefaultReturnValue()) : (parent.value <= getDefaultReturnValue())) removeNode(parent);
+				return oldValue;
+			}
+			if(compare < 0) {
+				if(parent.left == null) break;
+				parent = parent.left;
+			}
+			else if(compare > 0) {
+				if(parent.right == null) break;
+				parent = parent.right;
+			}
+		}
 		return getDefaultReturnValue();
 	}
 	
@@ -1604,6 +1625,12 @@ public class AVL_TREE_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_VALUE_
 			return map.addTo(key, value);
 		}
 		
+		@Override
+		public VALUE_TYPE subFrom(KEY_TYPE key, VALUE_TYPE value) {
+			if(!inRange(key)) throw new IllegalArgumentException("key out of range");
+			return map.subFrom(key, value);
+		}
+		
 #endif
 #if TYPE_OBJECT
 		@Override
@@ -2674,6 +2701,11 @@ public class AVL_TREE_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_VALUE_
 			return oldValue;
 		}
 		
+		VALUE_TYPE subFrom(VALUE_TYPE value) {
+			VALUE_TYPE oldValue = this.value;
+			this.value -= value;
+			return oldValue;
+		}
 #endif
 		@Override
 		public boolean equals(Object obj) {

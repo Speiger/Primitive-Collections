@@ -25,6 +25,7 @@ import speiger.src.collections.PACKAGE.functions.function.SINGLE_UNARY_OPERATOR;
 #endif
 import speiger.src.collections.PACKAGE.lists.LIST_ITERATOR;
 import speiger.src.collections.PACKAGE.maps.interfaces.SORTED_MAP;
+import speiger.src.collections.PACKAGE.maps.interfaces.ORDERED_MAP;
 import speiger.src.collections.PACKAGE.maps.abstracts.ABSTRACT_MAP;
 import speiger.src.collections.PACKAGE.maps.interfaces.MAP;
 import speiger.src.collections.PACKAGE.sets.SORTED_SET;
@@ -84,7 +85,7 @@ import speiger.src.collections.utils.SanityChecks;
  * @Type(T)
  * @ValueType(V)
  */
-public class IMMUTABLE_HASH_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_VALUE_GENERIC_TYPE implements SORTED_MAP KEY_VALUE_GENERIC_TYPE
+public class IMMUTABLE_HASH_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_VALUE_GENERIC_TYPE implements SORTED_MAP KEY_VALUE_GENERIC_TYPE, ORDERED_MAP KEY_VALUE_GENERIC_TYPE
 {
 	/** The Backing keys array */
 	protected transient KEY_TYPE[] keys;
@@ -296,12 +297,12 @@ public class IMMUTABLE_HASH_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_
 	@Override
 	public VALUE_TYPE put(KEY_TYPE key, VALUE_TYPE value) { throw new UnsupportedOperationException(); }
 	@Override
-	public VALUE_TYPE putIfAbsent(KEY_TYPE key, VALUE_TYPE value) { throw new UnsupportedOperationException(); }
-	
+	public VALUE_TYPE putIfAbsent(KEY_TYPE key, VALUE_TYPE value) { throw new UnsupportedOperationException(); }	
 #if VALUE_PRIMITIVES
 	@Override
 	public VALUE_TYPE addTo(KEY_TYPE key, VALUE_TYPE value) { throw new UnsupportedOperationException(); }
-	
+	@Override
+	public VALUE_TYPE subFrom(KEY_TYPE key, VALUE_TYPE value) { throw new UnsupportedOperationException(); }	
 #endif
 	@Override
 	public VALUE_TYPE putAndMoveToFirst(KEY_TYPE key, VALUE_TYPE value) { throw new UnsupportedOperationException(); }

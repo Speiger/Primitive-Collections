@@ -1,5 +1,10 @@
 # Changelog of versions
 
+### Version 0.5.3
+- Added: OrderedMap/Set
+- Added: Deprecation to Functions that are specific to Ordered interfaces in the SortedMap/Set
+- Added: subFrom to Maps which is the counterpart of the addTo method
+
 ### Version 0.5.2
 - Fixed: Bugs with Queues starting with the wrong size
 - Fixed: ArrayGrowth for Queues was +1 instead of +50%
