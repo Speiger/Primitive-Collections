@@ -22,6 +22,7 @@ import speiger.src.collections.PACKAGE.functions.function.SINGLE_UNARY_OPERATOR;
 import speiger.src.collections.PACKAGE.lists.LIST_ITERATOR;
 import speiger.src.collections.PACKAGE.maps.interfaces.MAP;
 import speiger.src.collections.PACKAGE.maps.interfaces.SORTED_MAP;
+import speiger.src.collections.PACKAGE.maps.interfaces.ORDERED_MAP;
 import speiger.src.collections.PACKAGE.sets.ABSTRACT_SET;
 import speiger.src.collections.PACKAGE.sets.SORTED_SET;
 import speiger.src.collections.PACKAGE.sets.SET;
@@ -70,7 +71,7 @@ import speiger.src.collections.utils.HashUtil;
  * @Type(T)
  * @ValueType(V)
  */
-public class LINKED_HASH_MAP KEY_VALUE_GENERIC_TYPE extends HASH_MAP KEY_VALUE_GENERIC_TYPE implements SORTED_MAP KEY_VALUE_GENERIC_TYPE
+public class LINKED_HASH_MAP KEY_VALUE_GENERIC_TYPE extends HASH_MAP KEY_VALUE_GENERIC_TYPE implements SORTED_MAP KEY_VALUE_GENERIC_TYPE, ORDERED_MAP KEY_VALUE_GENERIC_TYPE
 {
 	/** The Backing array for links between nodes. Left 32 Bits => Previous Entry, Right 32 Bits => Next Entry */
 	protected transient long[] links;

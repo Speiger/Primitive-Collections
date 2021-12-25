@@ -16,8 +16,10 @@ import speiger.src.collections.PACKAGE.utils.SPLIT_ITERATORS;
  * A Type Specific SortedSet implementation to reduce boxing/unboxing
  * with a couple extra methods that allow greater control over sets.
  * @Type(T)
+ * @note ORDERED_SET is only extended until 0.6.0 for Compat reasons.
+ * The supported classes already implement ORDERED_SET directly and will remove SORTED_SET implementations in favor of ORDERED_SET instead
  */
-public interface SORTED_SET KEY_GENERIC_TYPE extends SET KEY_GENERIC_TYPE, SortedSet<CLASS_TYPE>
+public interface SORTED_SET KEY_GENERIC_TYPE extends ORDERED_SET KEY_GENERIC_TYPE, SortedSet<CLASS_TYPE>
 {
 	
 	/**
@@ -26,6 +28,7 @@ public interface SORTED_SET KEY_GENERIC_TYPE extends SET KEY_GENERIC_TYPE, Sorte
 	 * @return true if it was added
 	 * @see java.util.Set#add(Object)
 	 * @note some implementations do not support this method
+	 * @deprecated use ORDERED_SET#addAndMoveToFirst instead (removed in 0.6.0)
 	 */
 	public boolean addAndMoveToFirst(KEY_TYPE o);
 	/**
@@ -34,6 +37,7 @@ public interface SORTED_SET KEY_GENERIC_TYPE extends SET KEY_GENERIC_TYPE, Sorte
 	 * @return true if it was added
 	 * @see java.util.Set#add(Object)
 	 * @note some implementations do not support this method
+	 * @deprecated use ORDERED_SET#addAndMoveToLast instead (removed in 0.6.0)
 	 */
 	public boolean addAndMoveToLast(KEY_TYPE o);
 	
@@ -43,6 +47,7 @@ public interface SORTED_SET KEY_GENERIC_TYPE extends SET KEY_GENERIC_TYPE, Sorte
 	 * @return true if the value was moved.
 	 * @note returns false if the value was not present in the first place
 	 * @note some implementations do not support this method
+	 * @deprecated use ORDERED_SET#moveToFirst instead (removed in 0.6.0)
 	 */
 	public boolean moveToFirst(KEY_TYPE o);
 	/**
@@ -51,6 +56,7 @@ public interface SORTED_SET KEY_GENERIC_TYPE extends SET KEY_GENERIC_TYPE, Sorte
 	 * @return true if the value was moved.
 	 * @note returns false if the value was not present in the first place
 	 * @note some implementations do not support this method
+	 * @deprecated use ORDERED_SET#moveToLast instead (removed in 0.6.0)
 	 */
 	public boolean moveToLast(KEY_TYPE o);
 	

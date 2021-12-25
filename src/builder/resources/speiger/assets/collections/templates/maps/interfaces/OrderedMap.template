@@ -1,0 +1,117 @@
+package speiger.src.collections.PACKAGE.maps.interfaces;
+
+import speiger.src.collections.PACKAGE.utils.maps.MAPS;
+/**
+ * A Special Map Interface giving Access to some really usefull functions
+ * The Idea behind this interface is to allow access to functions that give control to the Order of elements.
+ * Since Linked implementations as examples can be reordered outside of the Insertion Order.
+ * This interface provides basic access to such functions while also providing some Sorted/NaivgableMap implementations that still fit into here.
+ * 
+ * @Type(T)
+ * @ValueType(V)
+ */
+public interface ORDERED_MAP KEY_VALUE_GENERIC_TYPE extends MAP KEY_VALUE_GENERIC_TYPE
+{
+	/**
+	 * A customized put method that allows you to insert into the first index.
+	 * @param key the key that should be inserted
+	 * @param value the value that should be inserted
+	 * @return the previous present or default return value
+	 * @see java.util.Map#put(Object, Object)
+	 */
+	public VALUE_TYPE putAndMoveToFirst(KEY_TYPE key, VALUE_TYPE value);
+	
+	/**
+	 * A customized put method that allows you to insert into the last index. (This may be nessesary depending on the implementation)
+	 * @param key the key that should be inserted
+	 * @param value the value that should be inserted
+	 * @return the previous present or default return value
+	 * @see java.util.Map#put(Object, Object)
+	 */
+	public VALUE_TYPE putAndMoveToLast(KEY_TYPE key, VALUE_TYPE value);
+	
+	/**
+	 * A specific move method to move a given key/value to the first index.
+	 * @param key that should be moved to the first index
+	 * @return true if the value was moved.
+	 * @note returns false if the value was not present in the first place
+	 */
+	public boolean moveToFirst(KEY_TYPE key);
+	/**
+	 * A specific move method to move a given key/value to the last index.
+	 * @param key that should be moved to the first last
+	 * @return true if the value was moved.
+	 * @note returns false if the value was not present in the first place
+	 */
+	public boolean moveToLast(KEY_TYPE key);
+	
+	/**
+	 * A Specific get method that allows to move teh given key/value int the first index.
+	 * @param key that is searched for
+	 * @return the given value for the requested key or default return value
+	 */
+	public VALUE_TYPE getAndMoveToFirst(KEY_TYPE key);
+	/**
+	 * A Specific get method that allows to move teh given key/value int the last index.
+	 * @param key that is searched for
+	 * @return the given value for the requested key or default return value
+	 */
+	public VALUE_TYPE getAndMoveToLast(KEY_TYPE key);
+	
+	/**
+	 * A method to get the first Key of a Map.
+	 * @return the first key in the map
+	 */
+	public KEY_TYPE FIRST_ENTRY_KEY();
+	/**
+	 * A method to get and remove the first Key of a Map.
+	 * @return the first key in the map
+	 */
+	public KEY_TYPE POLL_FIRST_ENTRY_KEY();
+	/**
+	 * A method to get the last Key of a Map.
+	 * @return the last key in the map
+	 */
+	public KEY_TYPE LAST_ENTRY_KEY();
+	/**
+	 * A method to get and remove the last Key of a Map.
+	 * @return the last key in the map
+	 */
+	public KEY_TYPE POLL_LAST_ENTRY_KEY();
+	
+	/**
+	 * A method to get the first Value of a Map.
+	 * @return the first key in the map
+	 */
+	public VALUE_TYPE FIRST_ENTRY_VALUE();
+	/**
+	 * A method to get the last Value of a Map.
+	 * @return the last key in the map
+	 */
+	public VALUE_TYPE LAST_ENTRY_VALUE();
+	
+	@Override
+	public ORDERED_MAP KEY_VALUE_GENERIC_TYPE copy();
+	
+	/**
+	 * Creates a Wrapped SortedMap that is Synchronized
+	 * @return a new SortedMap that is synchronized
+	 * @see MAPS#synchronize
+	 */
+	public default ORDERED_MAP KEY_VALUE_GENERIC_TYPE synchronize() { return MAPS.synchronize(this); }
+	
+	/**
+	 * Creates a Wrapped SortedMap that is Synchronized
+	 * @param mutex is the controller of the synchronization block
+	 * @return a new SortedMap Wrapper that is synchronized
+	 * @see MAPS#synchronize
+	 */
+	public default ORDERED_MAP KEY_VALUE_GENERIC_TYPE synchronize(Object mutex) { return MAPS.synchronize(this, mutex); }
+	
+	/**
+	 * Creates a Wrapped SortedMap that is unmodifiable
+	 * @return a new SortedMap Wrapper that is unmodifiable
+	 * @see MAPS#unmodifiable
+	 */
+	public default ORDERED_MAP KEY_VALUE_GENERIC_TYPE unmodifiable() { return MAPS.unmodifiable(this); }
+}

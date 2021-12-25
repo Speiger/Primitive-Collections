@@ -32,6 +32,7 @@ import speiger.src.collections.PACKAGE.maps.interfaces.MAP;
 #if !TYPE_BOOLEAN
 import speiger.src.collections.PACKAGE.maps.interfaces.NAVIGABLE_MAP;
 import speiger.src.collections.PACKAGE.maps.interfaces.SORTED_MAP;
+import speiger.src.collections.PACKAGE.maps.interfaces.ORDERED_MAP;
 import speiger.src.collections.PACKAGE.sets.NAVIGABLE_SET;
 #if !TYPE_OBJECT
 import speiger.src.collections.PACKAGE.sets.SET;
@@ -162,6 +163,28 @@ public class MAPS
 	public static GENERIC_KEY_VALUE_BRACES SORTED_MAP KEY_VALUE_GENERIC_TYPE synchronize(SORTED_MAP KEY_VALUE_GENERIC_TYPE map, Object mutex) { return map instanceof SynchronizedSortedMap ? map : new SynchronizedSortedMapKV_BRACES(map, mutex); }
 	
 	/**
+	 * Helper function that creates a Helper wrapper to synchronize access into the OrderedMap.
+	 * @param map the OrderedMap that should be synchronized
+	 * @Type(T)
+	 * @ValueType(V)
+	 * @return a synchronized OrderedMap
+	 * @note if the inputted map is already synchronized then it will just return it instead
+	 * @note iterators do not support synchronization
+	 */
+	public static GENERIC_KEY_VALUE_BRACES ORDERED_MAP KEY_VALUE_GENERIC_TYPE synchronize(ORDERED_MAP KEY_VALUE_GENERIC_TYPE map) { return map instanceof SynchronizedOrderedMap ? map : new SynchronizedOrderedMapKV_BRACES(map); }
+	/**
+	 * Helper function that creates a Helper wrapper to synchronize access with custom access control into the OrderedMap.
+	 * @param map the OrderedMap that should be synchronized
+	 * @param mutex the object that controls access
+	 * @Type(T)
+	 * @ValueType(V)
+	 * @return a synchronized OrderedMap
+	 * @note if the inputted map is already synchronized then it will just return it instead
+	 * @note iterators do not support synchronization
+	 */
+	public static GENERIC_KEY_VALUE_BRACES ORDERED_MAP KEY_VALUE_GENERIC_TYPE synchronize(ORDERED_MAP KEY_VALUE_GENERIC_TYPE map, Object mutex) { return map instanceof SynchronizedOrderedMap ? map : new SynchronizedOrderedMapKV_BRACES(map, mutex); }
+	
+	/**
 	 * Helper function that creates a Helper wrapper to synchronize access into the NavigableMap.
 	 * @param map the NavigableMap that should be synchronized
 	 * @Type(T)
@@ -192,6 +215,17 @@ public class MAPS
 	 * @note if the inputted map is already unmodifiable then it will just return it instead
 	 */
 	public static GENERIC_KEY_VALUE_BRACES MAP KEY_VALUE_GENERIC_TYPE unmodifiable(MAP KEY_VALUE_GENERIC_TYPE map) { return map instanceof UnmodifyableMap ? map : new UnmodifyableMapKV_BRACES(map); }
+	
+	/**
+	 * A Helper function that creates a Helper wrapper to only allow Read Access into the OrderedMap
+	 * @param map the OrderedMap that should be made Unmodifiable
+	 * @Type(T)
+	 * @ValueType(V)
+	 * @return a unmodifiable OrderedMap
+	 * @note if the inputted OrderedMap is already unmodifiable then it will just return it instead
+	 */
+	public static GENERIC_KEY_VALUE_BRACES ORDERED_MAP KEY_VALUE_GENERIC_TYPE unmodifiable(ORDERED_MAP KEY_VALUE_GENERIC_TYPE map) { return map instanceof UnmodifyableOrderedMap ? map : new UnmodifyableOrderedMapKV_BRACES(map); }
+	
 	/**
 	 * A Helper function that creates a Helper wrapper to only allow Read Access into the SortedMap
 	 * @param map the SortedMap that should be made Unmodifiable
@@ -201,6 +235,7 @@ public class MAPS
 	 * @note if the inputted SortedMap is already unmodifiable then it will just return it instead
 	 */
 	public static GENERIC_KEY_VALUE_BRACES SORTED_MAP KEY_VALUE_GENERIC_TYPE unmodifiable(SORTED_MAP KEY_VALUE_GENERIC_TYPE map) { return map instanceof UnmodifyableSortedMap ? map : new UnmodifyableSortedMapKV_BRACES(map); }
+	
 	/**
 	 * A Helper function that creates a Helper wrapper to only allow Read Access into NavigableMap Map
 	 * @param map the NavigableMap that should be made Unmodifiable
@@ -210,6 +245,7 @@ public class MAPS
 	 * @note if the inputted NavigableMap is already unmodifiable then it will just return it instead
 	 */
 	public static GENERIC_KEY_VALUE_BRACES NAVIGABLE_MAP KEY_VALUE_GENERIC_TYPE unmodifiable(NAVIGABLE_MAP KEY_VALUE_GENERIC_TYPE map) { return map instanceof UnmodifyableNavigableMap ? map : new UnmodifyableNavigableMapKV_BRACES(map); }
+	
 	/**
 	 * A Helper function that creates a Unmodifyable Entry
 	 * @param entry the Entry that should be made unmodifiable
@@ -424,14 +460,14 @@ public class MAPS
 	}
 	
 	/**
-	 * The Unmodifyable Sorted Map implementation that is sued for the unmodifyableMap function
+	 * The Unmodifyable Ordered Map implementation that is sued for the unmodifyableMap function
 	 * @Type(T)
 	 * @ValueType(V)
 	 */
-	public static class UnmodifyableSortedMap KEY_VALUE_GENERIC_TYPE extends UnmodifyableMap KEY_VALUE_GENERIC_TYPE implements SORTED_MAP KEY_VALUE_GENERIC_TYPE {
-		SORTED_MAP KEY_VALUE_GENERIC_TYPE map;
+	public static class UnmodifyableOrderedMap KEY_VALUE_GENERIC_TYPE extends UnmodifyableMap KEY_VALUE_GENERIC_TYPE implements ORDERED_MAP KEY_VALUE_GENERIC_TYPE {
+		ORDERED_MAP KEY_VALUE_GENERIC_TYPE map;
 		
-		UnmodifyableSortedMap(SORTED_MAP KEY_VALUE_GENERIC_TYPE map) {
+		UnmodifyableOrderedMap(ORDERED_MAP KEY_VALUE_GENERIC_TYPE map) {
 			super(map);
 			this.map = map;
 		}
@@ -447,6 +483,53 @@ public class MAPS
 		@Override
 		public VALUE_TYPE getAndMoveToFirst(KEY_TYPE key) { throw new UnsupportedOperationException(); }
 		@Override
+		public VALUE_TYPE getAndMoveToLast(KEY_TYPE key) { throw new UnsupportedOperationException(); }
+		@Override
+		public KEY_TYPE FIRST_ENTRY_KEY() { return map.FIRST_ENTRY_KEY(); }
+		@Override
+		public KEY_TYPE POLL_FIRST_ENTRY_KEY() { return map.POLL_FIRST_ENTRY_KEY(); }
+		@Override
+		public KEY_TYPE LAST_ENTRY_KEY() { return map.LAST_ENTRY_KEY(); }
+		@Override
+		public KEY_TYPE POLL_LAST_ENTRY_KEY() { return map.POLL_LAST_ENTRY_KEY(); }
+		@Override
+		public VALUE_TYPE FIRST_ENTRY_VALUE() { return map.FIRST_ENTRY_VALUE(); }
+		@Override
+		public VALUE_TYPE LAST_ENTRY_VALUE() { return map.LAST_ENTRY_VALUE(); }
+		@Override
+		public ORDERED_MAP KEY_VALUE_GENERIC_TYPE copy() { throw new UnsupportedOperationException(); }
+	}
+	
+	/**
+	 * The Unmodifyable Sorted Map implementation that is sued for the unmodifyableMap function
+	 * @Type(T)
+	 * @ValueType(V)
+	 */
+	public static class UnmodifyableSortedMap KEY_VALUE_GENERIC_TYPE extends UnmodifyableMap KEY_VALUE_GENERIC_TYPE implements SORTED_MAP KEY_VALUE_GENERIC_TYPE {
+		SORTED_MAP KEY_VALUE_GENERIC_TYPE map;
+		
+		UnmodifyableSortedMap(SORTED_MAP KEY_VALUE_GENERIC_TYPE map) {
+			super(map);
+			this.map = map;
+		}
+		
+		@Override
+		@Deprecated
+		public VALUE_TYPE putAndMoveToFirst(KEY_TYPE key, VALUE_TYPE value) { throw new UnsupportedOperationException(); }
+		@Override
+		@Deprecated
+		public VALUE_TYPE putAndMoveToLast(KEY_TYPE key, VALUE_TYPE value) { throw new UnsupportedOperationException(); }
+		@Override
+		@Deprecated
+		public boolean moveToFirst(KEY_TYPE key) { throw new UnsupportedOperationException(); }
+		@Override
+		@Deprecated
+		public boolean moveToLast(KEY_TYPE key) { throw new UnsupportedOperationException(); }
+		@Override
+		@Deprecated
+		public VALUE_TYPE getAndMoveToFirst(KEY_TYPE key) { throw new UnsupportedOperationException(); }
+		@Override
+		@Deprecated
 		public VALUE_TYPE getAndMoveToLast(KEY_TYPE key) { throw new UnsupportedOperationException(); }
 		@Override
 		public COMPARATOR KEY_GENERIC_TYPE comparator() { return map.comparator(); }
@@ -681,6 +764,52 @@ public class MAPS
 	}
 	
 	/**
+	 * The Synchronized Ordered Map implementation used by the synchronizedMap helper function
+	 * @Type(T)
+	 * @ValueType(V)
+	 */
+	public static class SynchronizedOrderedMap KEY_VALUE_GENERIC_TYPE extends SynchronizedMap KEY_VALUE_GENERIC_TYPE implements ORDERED_MAP KEY_VALUE_GENERIC_TYPE {
+		ORDERED_MAP KEY_VALUE_GENERIC_TYPE map;
+		
+		SynchronizedOrderedMap(ORDERED_MAP KEY_VALUE_GENERIC_TYPE map) {
+			super(map);
+			this.map = map;
+		}
+		
+		SynchronizedOrderedMap(ORDERED_MAP KEY_VALUE_GENERIC_TYPE map, Object mutex) {
+			super(map, mutex);
+			this.map = map;
+		}
+		
+		@Override
+		public VALUE_TYPE putAndMoveToFirst(KEY_TYPE key, VALUE_TYPE value) { synchronized(mutex) { return map.putAndMoveToFirst(key, value); } }
+		@Override
+		public VALUE_TYPE putAndMoveToLast(KEY_TYPE key, VALUE_TYPE value) { synchronized(mutex) { return map.putAndMoveToLast(key, value); } }
+		@Override
+		public boolean moveToFirst(KEY_TYPE key) { synchronized(mutex) { return map.moveToFirst(key); } }
+		@Override
+		public boolean moveToLast(KEY_TYPE key) { synchronized(mutex) { return map.moveToLast(key); } }
+		@Override
+		public VALUE_TYPE getAndMoveToFirst(KEY_TYPE key) { synchronized(mutex) { return map.getAndMoveToFirst(key); } }
+		@Override
+		public VALUE_TYPE getAndMoveToLast(KEY_TYPE key) { synchronized(mutex) { return map.getAndMoveToLast(key); } }
+		@Override
+		public KEY_TYPE FIRST_ENTRY_KEY() { synchronized(mutex) { return map.FIRST_ENTRY_KEY(); } }
+		@Override
+		public KEY_TYPE POLL_FIRST_ENTRY_KEY() { synchronized(mutex) { return map.POLL_FIRST_ENTRY_KEY(); } }
+		@Override
+		public KEY_TYPE LAST_ENTRY_KEY() { synchronized(mutex) { return map.LAST_ENTRY_KEY(); } }
+		@Override
+		public KEY_TYPE POLL_LAST_ENTRY_KEY() { synchronized(mutex) { return map.POLL_LAST_ENTRY_KEY(); } }
+		@Override
+		public VALUE_TYPE FIRST_ENTRY_VALUE() { synchronized(mutex) { return map.FIRST_ENTRY_VALUE(); } }
+		@Override
+		public VALUE_TYPE LAST_ENTRY_VALUE() { synchronized(mutex) { return map.LAST_ENTRY_VALUE(); } }
+		@Override
+		public ORDERED_MAP KEY_VALUE_GENERIC_TYPE copy() { throw new UnsupportedOperationException(); }
+	}
+	
+	/**
 	 * The Synchronized Sorted Map implementation used by the synchronizedMap helper function
 	 * @Type(T)
 	 * @ValueType(V)
@@ -699,16 +828,22 @@ public class MAPS
 		}
 		
 		@Override
+		@Deprecated
 		public VALUE_TYPE putAndMoveToFirst(KEY_TYPE key, VALUE_TYPE value) { synchronized(mutex) { return map.putAndMoveToFirst(key, value); } }
 		@Override
+		@Deprecated
 		public VALUE_TYPE putAndMoveToLast(KEY_TYPE key, VALUE_TYPE value) { synchronized(mutex) { return map.putAndMoveToLast(key, value); } }
 		@Override
+		@Deprecated
 		public boolean moveToFirst(KEY_TYPE key) { synchronized(mutex) { return map.moveToFirst(key); } }
 		@Override
+		@Deprecated
 		public boolean moveToLast(KEY_TYPE key) { synchronized(mutex) { return map.moveToLast(key); } }
 		@Override
+		@Deprecated
 		public VALUE_TYPE getAndMoveToFirst(KEY_TYPE key) { synchronized(mutex) { return map.getAndMoveToFirst(key); } }
 		@Override
+		@Deprecated
 		public VALUE_TYPE getAndMoveToLast(KEY_TYPE key) { synchronized(mutex) { return map.getAndMoveToLast(key); } }
 		@Override
 		public COMPARATOR KEY_GENERIC_TYPE comparator() { synchronized(mutex) { return map.comparator(); } }

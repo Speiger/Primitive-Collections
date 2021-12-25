@@ -1,11 +1,11 @@
 package speiger.src.collections.tests;
 
 @SuppressWarnings("javadoc")
-public enum SortedSetTest
+public enum OrderedMapTests
 {
-	PEEK,
-	POLL,
-	SUB_SET,
-	HEAD_SET,
-	TAIL_SET;
+	PUT_MOVE,
+	MOVE,
+	GET_MOVE,
+	FIRST,
+	LAST;
 }

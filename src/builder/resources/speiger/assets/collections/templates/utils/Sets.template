@@ -18,6 +18,7 @@ import speiger.src.collections.PACKAGE.collections.ITERATOR;
 import speiger.src.collections.PACKAGE.sets.NAVIGABLE_SET;
 import speiger.src.collections.PACKAGE.sets.ABSTRACT_SET;
 import speiger.src.collections.PACKAGE.sets.SET;
+import speiger.src.collections.PACKAGE.sets.ORDERED_SET;
 import speiger.src.collections.PACKAGE.sets.SORTED_SET;
 import speiger.src.collections.PACKAGE.utils.COLLECTIONS.EmptyCollection;
 import speiger.src.collections.PACKAGE.utils.COLLECTIONS.SynchronizedCollection;
@@ -96,6 +97,29 @@ public class SETS
 	}
 	
 	/**
+	 * Creates a Synchronized OrderedSet while preserving the ITrimmable interface
+	 * @param s the set that should be synchronized
+	 * @Type(T)
+	 * @return a OrderedSet that is synchronized
+	 * @note if the set is already synchronized then it will just self return it
+	 */
+	public static GENERIC_KEY_BRACES ORDERED_SET KEY_GENERIC_TYPE synchronize(ORDERED_SET KEY_GENERIC_TYPE s) {
+		return s instanceof SynchronizedOrderedSet ? s : (s instanceof ITrimmable ? new SynchronizedOrderedTrimSetBRACES(s) : new SynchronizedOrderedSetBRACES(s));
+	}
+	
+	/**
+	 * Creates a Synchronized OrderedSet while preserving the ITrimmable interface
+	 * @param s the set that should be synchronized
+	 * @param mutex controller for access
+	 * @Type(T)
+	 * @return a OrderedSet that is synchronized
+	 * @note if the set is already synchronized then it will just self return it
+	 */
+	public static GENERIC_KEY_BRACES ORDERED_SET KEY_GENERIC_TYPE synchronize(ORDERED_SET KEY_GENERIC_TYPE s, Object mutex) {
+		return s instanceof SynchronizedOrderedSet ? s : (s instanceof ITrimmable ? new SynchronizedOrderedTrimSetBRACES(s, mutex) : new SynchronizedOrderedSetBRACES(s, mutex));
+	}
+	
+	/**
 	 * Creates a Synchronized NavigableSet while preserving the ITrimmable interface
 	 * @param s the set that should be synchronized
 	 * @Type(T)
@@ -136,6 +160,16 @@ public class SETS
 	 */
 	public static GENERIC_KEY_BRACES SORTED_SET KEY_GENERIC_TYPE unmodifiable(SORTED_SET KEY_GENERIC_TYPE s) {
 		return s instanceof UnmodifiableSortedSet ? s : new UnmodifiableSortedSetBRACES(s);
+	}
+	
+	/**
+	 * Creates Unmodifyable OrderedSet wrapper
+	 * @param s OrderedSet that should be made unmodifiable
+	 * @Type(T)
+	 * @return a UnmodifyableOrderedSet, if the set is already unmodifiable then it returns itself
+	 */
+	public static GENERIC_KEY_BRACES ORDERED_SET KEY_GENERIC_TYPE unmodifiable(ORDERED_SET KEY_GENERIC_TYPE s) {
+		return s instanceof UnmodifiableOrderedSet ? s : new UnmodifiableOrderedSetBRACES(s);
 	}
 	
 	/**
@@ -278,6 +312,39 @@ public class SETS
 		public NAVIGABLE_SET KEY_GENERIC_TYPE tailSet(KEY_TYPE fromElement) { return SETS.unmodifiable(n.tailSet(fromElement)); }
 	}
 	
+	private static class UnmodifiableOrderedSet KEY_GENERIC_TYPE extends UnmodifiableSet KEY_GENERIC_TYPE implements ORDERED_SET KEY_GENERIC_TYPE
+	{
+		ORDERED_SET KEY_GENERIC_TYPE s;
+		UnmodifiableOrderedSet(ORDERED_SET KEY_GENERIC_TYPE c)
+		{
+			super(c);
+			s = c;
+		}
+		
+		@Override
+		public boolean addAndMoveToFirst(KEY_TYPE o) { throw new UnsupportedOperationException(); }
+		@Override
+		public boolean addAndMoveToLast(KEY_TYPE o) { throw new UnsupportedOperationException(); }
+		@Override
+		public boolean moveToFirst(KEY_TYPE o) { throw new UnsupportedOperationException(); }
+		@Override
+		public boolean moveToLast(KEY_TYPE o) { throw new UnsupportedOperationException(); }
+		@Override
+		public BI_ITERATOR KEY_GENERIC_TYPE iterator() { return ITERATORS.unmodifiable(s.iterator()); }
+		@Override
+		public BI_ITERATOR KEY_GENERIC_TYPE iterator(KEY_TYPE fromElement) { return ITERATORS.unmodifiable(s.iterator(fromElement)); }
+		@Override
+		public ORDERED_SET KEY_GENERIC_TYPE copy() { return s.copy(); }
+		@Override
+		public KEY_TYPE FIRST_KEY() { return s.FIRST_KEY(); }
+		@Override
+		public KEY_TYPE POLL_FIRST_KEY() { throw new UnsupportedOperationException(); }
+		@Override
+		public KEY_TYPE LAST_KEY() { return s.LAST_KEY(); }
+		@Override
+		public KEY_TYPE POLL_LAST_KEY() { throw new UnsupportedOperationException(); }
+	}
+	
 	private static class UnmodifiableSortedSet KEY_GENERIC_TYPE extends UnmodifiableSet KEY_GENERIC_TYPE implements SORTED_SET KEY_GENERIC_TYPE
 	{
 		SORTED_SET KEY_GENERIC_TYPE s;
@@ -288,47 +355,37 @@ public class SETS
 		}
 		
 		@Override
+		@Deprecated
 		public boolean addAndMoveToFirst(KEY_TYPE o) { throw new UnsupportedOperationException(); }
-		
 		@Override
+		@Deprecated
 		public boolean addAndMoveToLast(KEY_TYPE o) { throw new UnsupportedOperationException(); }
-		
 		@Override
+		@Deprecated
 		public boolean moveToFirst(KEY_TYPE o) { throw new UnsupportedOperationException(); }
-		
 		@Override
+		@Deprecated
 		public boolean moveToLast(KEY_TYPE o) { throw new UnsupportedOperationException(); }
-		
 		@Override
 		public COMPARATOR KEY_GENERIC_TYPE comparator() { return s.comparator(); }
-		
 		@Override
 		public BI_ITERATOR KEY_GENERIC_TYPE iterator() { return ITERATORS.unmodifiable(s.iterator()); }
-		
 		@Override
 		public BI_ITERATOR KEY_GENERIC_TYPE iterator(KEY_TYPE fromElement) { return ITERATORS.unmodifiable(s.iterator(fromElement)); }
-		
 		@Override
 		public SORTED_SET KEY_GENERIC_TYPE copy() { return s.copy(); }
-		
 		@Override
 		public SORTED_SET KEY_GENERIC_TYPE subSet(KEY_TYPE fromElement, KEY_TYPE toElement) { return SETS.unmodifiable(s.subSet(fromElement, toElement)); }
-		
 		@Override
 		public SORTED_SET KEY_GENERIC_TYPE headSet(KEY_TYPE toElement) { return SETS.unmodifiable(s.headSet(toElement)); }
-		
 		@Override
 		public SORTED_SET KEY_GENERIC_TYPE tailSet(KEY_TYPE fromElement) { return SETS.unmodifiable(s.tailSet(fromElement)); }
-		
 		@Override
 		public KEY_TYPE FIRST_KEY() { return s.FIRST_KEY(); }
-		
 		@Override
 		public KEY_TYPE POLL_FIRST_KEY() { throw new UnsupportedOperationException(); }
-		
 		@Override
 		public KEY_TYPE LAST_KEY() { return s.LAST_KEY(); }
-		
 		@Override
 		public KEY_TYPE POLL_LAST_KEY() { throw new UnsupportedOperationException(); }
 	}
@@ -490,47 +547,96 @@ public class SETS
 		}
 
 		@Override
+		@Deprecated
 		public boolean addAndMoveToFirst(KEY_TYPE o) { synchronized(mutex) { return s.addAndMoveToFirst(o); } }
-
 		@Override
+		@Deprecated
 		public boolean addAndMoveToLast(KEY_TYPE o) { synchronized(mutex) { return s.addAndMoveToLast(o); } }
-
 		@Override
+		@Deprecated
 		public boolean moveToFirst(KEY_TYPE o) { synchronized(mutex) { return s.moveToFirst(o); } }
-
 		@Override
+		@Deprecated
 		public boolean moveToLast(KEY_TYPE o) { synchronized(mutex) { return s.moveToLast(o); } }
-
 		@Override
 		public COMPARATOR KEY_GENERIC_TYPE comparator(){ synchronized(mutex) { return s.comparator(); } }
-
 		@Override
 		public BI_ITERATOR KEY_GENERIC_TYPE iterator() { synchronized(mutex) { return s.iterator(); } }
-
 		@Override
 		public BI_ITERATOR KEY_GENERIC_TYPE iterator(KEY_TYPE fromElement) { synchronized(mutex) { return s.iterator(fromElement); } }
-		
 		@Override
 		public SORTED_SET KEY_GENERIC_TYPE copy() { synchronized(mutex) { return s.copy(); } }
-		
 		@Override
 		public SORTED_SET KEY_GENERIC_TYPE subSet(KEY_TYPE fromElement, KEY_TYPE toElement) { synchronized(mutex) { return SETS.synchronize(s.subSet(fromElement, toElement), mutex); } }
-
 		@Override
 		public SORTED_SET KEY_GENERIC_TYPE headSet(KEY_TYPE toElement) { synchronized(mutex) { return SETS.synchronize(s.headSet(toElement), mutex); } }
-
 		@Override
 		public SORTED_SET KEY_GENERIC_TYPE tailSet(KEY_TYPE fromElement) { synchronized(mutex) { return SETS.synchronize(s.tailSet(fromElement), mutex); } }
-
 		@Override
 		public KEY_TYPE FIRST_KEY() { synchronized(mutex) { return s.FIRST_KEY(); } }
-
 		@Override
 		public KEY_TYPE POLL_FIRST_KEY() { synchronized(mutex) { return s.POLL_FIRST_KEY(); } }
-
 		@Override
 		public KEY_TYPE LAST_KEY() { synchronized(mutex) { return s.LAST_KEY(); } }
+		@Override
+		public KEY_TYPE POLL_LAST_KEY() { synchronized(mutex) { return s.POLL_LAST_KEY(); } }
+	}
+	
+	private static class SynchronizedOrderedTrimSet KEY_GENERIC_TYPE extends SynchronizedOrderedSet KEY_GENERIC_TYPE implements ITrimmable
+	{
+		ITrimmable trim;
+		
+		SynchronizedOrderedTrimSet(ORDERED_SET KEY_GENERIC_TYPE c) {
+			super(c);
+			trim = (ITrimmable)c;
+		}
+		
+		SynchronizedOrderedTrimSet(ORDERED_SET KEY_GENERIC_TYPE c, Object mutex) {
+			super(c, mutex);
+			trim = (ITrimmable)c;
+		}
+		
+		@Override
+		public boolean trim(int size) { synchronized(mutex) { return trim.trim(size); } }
+		
+		@Override
+		public void clearAndTrim(int size) { synchronized(mutex) { trim.clearAndTrim(size); } }
+	}
+	
+	private static class SynchronizedOrderedSet KEY_GENERIC_TYPE extends SynchronizedSet KEY_GENERIC_TYPE implements ORDERED_SET KEY_GENERIC_TYPE
+	{
+		ORDERED_SET KEY_GENERIC_TYPE s;
+		
+		SynchronizedOrderedSet(ORDERED_SET KEY_GENERIC_TYPE c) {
+			super(c);
+			s = c;
+		}
+		
+		SynchronizedOrderedSet(ORDERED_SET KEY_GENERIC_TYPE c, Object mutex) {
+			super(c, mutex);
+			s = c;
+		}
 
+		@Override
+		public boolean addAndMoveToFirst(KEY_TYPE o) { synchronized(mutex) { return s.addAndMoveToFirst(o); } }
+		@Override
+		public boolean addAndMoveToLast(KEY_TYPE o) { synchronized(mutex) { return s.addAndMoveToLast(o); } }
+		@Override
+		public boolean moveToFirst(KEY_TYPE o) { synchronized(mutex) { return s.moveToFirst(o); } }
+		@Override
+		public boolean moveToLast(KEY_TYPE o) { synchronized(mutex) { return s.moveToLast(o); } }
+		@Override
+		public BI_ITERATOR KEY_GENERIC_TYPE iterator() { synchronized(mutex) { return s.iterator(); } }
+		@Override
+		public BI_ITERATOR KEY_GENERIC_TYPE iterator(KEY_TYPE fromElement) { synchronized(mutex) { return s.iterator(fromElement); } }
+		@Override
+		public ORDERED_SET KEY_GENERIC_TYPE copy() { synchronized(mutex) { return s.copy(); } }
+		@Override
+		public KEY_TYPE FIRST_KEY() { synchronized(mutex) { return s.FIRST_KEY(); } }
+		@Override
+		public KEY_TYPE POLL_FIRST_KEY() { synchronized(mutex) { return s.POLL_FIRST_KEY(); } }
+		@Override
+		public KEY_TYPE LAST_KEY() { synchronized(mutex) { return s.LAST_KEY(); } }
 		@Override
 		public KEY_TYPE POLL_LAST_KEY() { synchronized(mutex) { return s.POLL_LAST_KEY(); } }
 	}

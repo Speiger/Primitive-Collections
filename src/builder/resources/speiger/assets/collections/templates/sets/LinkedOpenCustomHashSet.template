@@ -37,7 +37,7 @@ import speiger.src.collections.utils.SanityChecks;
  * This implementation of SortedSet does not support SubSet of any kind. It implements the interface due to sortability and first/last access
  * @Type(T)
  */
-public class LINKED_CUSTOM_HASH_SET KEY_GENERIC_TYPE extends CUSTOM_HASH_SET KEY_GENERIC_TYPE implements SORTED_SET KEY_GENERIC_TYPE
+public class LINKED_CUSTOM_HASH_SET KEY_GENERIC_TYPE extends CUSTOM_HASH_SET KEY_GENERIC_TYPE implements SORTED_SET KEY_GENERIC_TYPE, ORDERED_SET KEY_GENERIC_TYPE
 {
 	/** The Backing array for links between nodes. Left 32 Bits => Previous Entry, Right 32 Bits => Next Entry */
 	protected transient long[] links;

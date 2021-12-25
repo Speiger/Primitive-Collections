@@ -218,6 +218,7 @@ public class GlobalVariables
 		addClassMapper("LIST_ITER", "ListIter");
 		addClassMapper("LIST", "List");
 		addBiClassMapper("NAVIGABLE_MAP", "NavigableMap", "2");
+		addBiClassMapper("ORDERED_MAP", "OrderedMap", "2");
 		addBiClassMapper("SORTED_MAP", "SortedMap", "2");
 		addBiClassMapper("MAP", "Map", "2");
 		addClassMapper("NAVIGABLE_SET", "NavigableSet");
@@ -226,6 +227,7 @@ public class GlobalVariables
 		addClassMapper("PRIORITY_DEQUEUE", "PriorityDequeue");
 		addClassMapper("PREDICATE", "2BooleanFunction");
 		addClassMapper("SORTED_SET", "SortedSet");
+		addClassMapper("ORDERED_SET", "OrderedSet");
 		addClassMapper("SET", "Set");
 		addClassMapper("STRATEGY", "Strategy");
 		addClassMapper("STACK", "Stack");

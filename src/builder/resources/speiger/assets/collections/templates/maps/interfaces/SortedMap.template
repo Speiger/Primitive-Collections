@@ -19,8 +19,10 @@ import speiger.src.collections.objects.collections.ObjectBidirectionalIterator;
  * 
  * @Type(T)
  * @ValueType(V)
+ * @note ORDERED_MAP is only extended until 0.6.0 for Compat reasons.
+ * The supported classes already implement ORDERED_MAP directly and will remove SORTED_MAP implementations in favor of ORDERED_MAP instead
  */
-public interface SORTED_MAP KEY_VALUE_GENERIC_TYPE extends SortedMap<CLASS_TYPE, CLASS_VALUE_TYPE>, MAP KEY_VALUE_GENERIC_TYPE
+public interface SORTED_MAP KEY_VALUE_GENERIC_TYPE extends SortedMap<CLASS_TYPE, CLASS_VALUE_TYPE>, ORDERED_MAP KEY_VALUE_GENERIC_TYPE
 {
 	/**
 	 * A customized put method that allows you to insert into the first index.
@@ -29,6 +31,7 @@ public interface SORTED_MAP KEY_VALUE_GENERIC_TYPE extends SortedMap<CLASS_TYPE,
 	 * @return the previous present or default return value
 	 * @see java.util.Map#put(Object, Object)
 	 * @note some implementations do not support this method
+	 * @deprecated use ORDERED_MAP#putAndMoveToFirst instead (removed in 0.6.0)
 	 */
 	public VALUE_TYPE putAndMoveToFirst(KEY_TYPE key, VALUE_TYPE value);
 	/**
@@ -38,6 +41,7 @@ public interface SORTED_MAP KEY_VALUE_GENERIC_TYPE extends SortedMap<CLASS_TYPE,
 	 * @return the previous present or default return value
 	 * @see java.util.Map#put(Object, Object)
 	 * @note some implementations do not support this method
+	 * @deprecated use ORDERED_MAP#putAndMoveToLast instead (removed in 0.6.0)
 	 */
 	public VALUE_TYPE putAndMoveToLast(KEY_TYPE key, VALUE_TYPE value);
 	
@@ -47,6 +51,7 @@ public interface SORTED_MAP KEY_VALUE_GENERIC_TYPE extends SortedMap<CLASS_TYPE,
 	 * @return true if the value was moved.
 	 * @note returns false if the value was not present in the first place
 	 * @note some implementations do not support this method
+	 * @deprecated use ORDERED_MAP#moveToFirst instead (removed in 0.6.0)
 	 */
 	public boolean moveToFirst(KEY_TYPE key);
 	/**
@@ -55,6 +60,7 @@ public interface SORTED_MAP KEY_VALUE_GENERIC_TYPE extends SortedMap<CLASS_TYPE,
 	 * @return true if the value was moved.
 	 * @note returns false if the value was not present in the first place
 	 * @note some implementations do not support this method
+	 * @deprecated use ORDERED_MAP#moveToLast instead (removed in 0.6.0)
 	 */
 	public boolean moveToLast(KEY_TYPE key);
 	
@@ -63,6 +69,7 @@ public interface SORTED_MAP KEY_VALUE_GENERIC_TYPE extends SortedMap<CLASS_TYPE,
 	 * @param key that is searched for
 	 * @return the given value for the requested key or default return value
 	 * @note some implementations do not support this method
+	 * @deprecated use ORDERED_MAP#getAndMoveToFirst instead (removed in 0.6.0)
 	 */
 	public VALUE_TYPE getAndMoveToFirst(KEY_TYPE key);
 	/**
@@ -70,6 +77,7 @@ public interface SORTED_MAP KEY_VALUE_GENERIC_TYPE extends SortedMap<CLASS_TYPE,
 	 * @param key that is searched for
 	 * @return the given value for the requested key or default return value
 	 * @note some implementations do not support this method
+	 * @deprecated use ORDERED_MAP#getAndMoveToLast instead (removed in 0.6.0)
 	 */
 	public VALUE_TYPE getAndMoveToLast(KEY_TYPE key);
 	

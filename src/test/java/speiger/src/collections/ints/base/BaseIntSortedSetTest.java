@@ -17,26 +17,6 @@ public abstract class BaseIntSortedSetTest extends BaseIntCollectionTest
 	protected EnumSet<SortedSetTest> getValidSortedSetTests() { return EnumSet.allOf(SortedSetTest.class); }
 	
 	@Test
-	public void addMoveTest() {
-		if(getValidSortedSetTests().contains(SortedSetTest.ADD_MOVE)) {
-			IntSortedSet set = create(TEST_ARRAY);
-			Assert.assertTrue(set.addAndMoveToFirst(1050));
-			Assert.assertFalse(set.addAndMoveToLast(5));
-		}
-	}
-	
-	@Test
-	public void moveTest() {
-		if(getValidSortedSetTests().contains(SortedSetTest.MOVE)) {
-			IntSortedSet set = create(TEST_ARRAY);
-			Assert.assertTrue(set.moveToFirst(5));
-			Assert.assertFalse(set.moveToFirst(5));
-			Assert.assertTrue(set.moveToLast(5));
-			Assert.assertFalse(set.moveToLast(5));
-		}
-	}
-	
-	@Test
 	public void peekTest() {
 		if(getValidSortedSetTests().contains(SortedSetTest.PEEK)) {
 			IntSortedSet set = create(TEST_ARRAY);

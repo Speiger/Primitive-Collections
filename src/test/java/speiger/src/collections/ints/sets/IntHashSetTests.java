@@ -3,21 +3,14 @@ package speiger.src.collections.ints.sets;
 import java.util.EnumSet;
 
 import speiger.src.collections.ints.base.BaseIntCollectionTest;
-import speiger.src.collections.ints.base.BaseIntSortedSetTest;
+import speiger.src.collections.ints.base.BaseIntOrderedSetTest;
 import speiger.src.collections.ints.collections.IntCollection;
 import speiger.src.collections.ints.utils.IntStrategy;
 import speiger.src.collections.tests.CollectionTest;
-import speiger.src.collections.tests.SortedSetTest;
 
 @SuppressWarnings("javadoc")
 public class IntHashSetTests
 {
-	public static abstract class BaseIntOpenHashSetTests extends BaseIntSortedSetTest
-	{
-		@Override
-		protected EnumSet<SortedSetTest> getValidSortedSetTests() { return EnumSet.of(SortedSetTest.ADD_MOVE, SortedSetTest.MOVE, SortedSetTest.PEEK, SortedSetTest.POLL); }
-	}
-	
 	public static class IntOpenHashSetTests extends BaseIntCollectionTest
 	{
 		@Override
@@ -32,10 +25,10 @@ public class IntHashSetTests
 		}
 	}
 	
-	public static class IntLinkedOpenHashSetTests extends BaseIntOpenHashSetTests
+	public static class IntLinkedOpenHashSetTests extends BaseIntOrderedSetTest
 	{
 		@Override
-		protected IntSortedSet create(int[] data) { return new IntLinkedOpenHashSet(data); }
+		protected IntOrderedSet create(int[] data) { return new IntLinkedOpenHashSet(data); }
 	}
 	
 	public static class IntOpenCustomHashSetTests extends BaseIntCollectionTest
@@ -52,10 +45,10 @@ public class IntHashSetTests
 		}
 	}
 	
-	public static class IntLinkedOpenCustomHashSetTests extends BaseIntOpenHashSetTests
+	public static class IntLinkedOpenCustomHashSetTests extends BaseIntOrderedSetTest
 	{
 		@Override
-		protected IntSortedSet create(int[] data) { return new IntLinkedOpenCustomHashSet(data, new DefaultStrategy()); }
+		protected IntOrderedSet create(int[] data) { return new IntLinkedOpenCustomHashSet(data, new DefaultStrategy()); }
 	}
 	
 	public static class DefaultStrategy implements IntStrategy

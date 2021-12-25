@@ -73,7 +73,7 @@ public class PrimitiveCollectionsBuilder extends TemplateProcessor
 		biRequired.put("Pair", "");
 		biRequired.put("MutablePair", "");
 		biRequired.put("ImmutablePair", "");
-		addBiClass("Function", "Maps", "Map", "SortedMap", "NavigableMap", "AbstractMap", "ImmutableOpenHashMap", "OpenHashMap", "LinkedOpenHashMap", "OpenCustomHashMap", "LinkedOpenCustomHashMap", "ArrayMap", "RBTreeMap", "AVLTreeMap");
+		addBiClass("Function", "Maps", "Map", "SortedMap", "OrderedMap", "NavigableMap", "AbstractMap", "ImmutableOpenHashMap", "OpenHashMap", "LinkedOpenHashMap", "OpenCustomHashMap", "LinkedOpenCustomHashMap", "ArrayMap", "RBTreeMap", "AVLTreeMap");
 		nameRemapper.put("BiConsumer", "%sConsumer");
 		nameRemapper.put("IArray", "I%sArray");
 		nameRemapper.put("AbstractMap", "Abstract%sMap");
@@ -88,8 +88,8 @@ public class PrimitiveCollectionsBuilder extends TemplateProcessor
 		nameRemapper.put("ImmutableOpenHashMap", "Immutable%sOpenHashMap");
 		
 		addBlockage(ClassType.OBJECT, "Consumer", "Comparator", "Stack");
-		addBlockage(ClassType.BOOLEAN, "ArraySet", "AVLTreeSet", "RBTreeSet", "SortedSet", "NavigableSet", "OpenHashSet", "OpenCustomHashSet", "LinkedOpenHashSet", "LinkedOpenCustomHashSet");
-		addBlockage(ClassType.BOOLEAN, "ImmutableOpenHashMap", "ImmutableOpenHashSet", "SortedMap", "NavigableMap", "OpenHashMap", "LinkedOpenHashMap", "OpenCustomHashMap", "LinkedOpenCustomHashMap", "ArrayMap", "RBTreeMap", "AVLTreeMap");
+		addBlockage(ClassType.BOOLEAN, "ArraySet", "AVLTreeSet", "RBTreeSet", "SortedSet", "OrderedSet", "NavigableSet", "OpenHashSet", "OpenCustomHashSet", "LinkedOpenHashSet", "LinkedOpenCustomHashSet");
+		addBlockage(ClassType.BOOLEAN, "ImmutableOpenHashMap", "ImmutableOpenHashSet", "SortedMap", "OrderedMap", "NavigableMap", "OpenHashMap", "LinkedOpenHashMap", "OpenCustomHashMap", "LinkedOpenCustomHashMap", "ArrayMap", "RBTreeMap", "AVLTreeMap");
 	}
 	
 	protected void create(ClassType mainType, ClassType subType) 
