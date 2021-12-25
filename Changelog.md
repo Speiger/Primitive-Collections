@@ -4,6 +4,7 @@
 - Added: OrderedMap/Set
 - Added: Deprecation to Functions that are specific to Ordered interfaces in the SortedMap/Set
 - Added: subFrom to Maps which is the counterpart of the addTo method
+- Added: pourAsList and pourAsSet (booleans excluded for sets) to Iterable
 
 ### Version 0.5.2
 - Fixed: Bugs with Queues starting with the wrong size

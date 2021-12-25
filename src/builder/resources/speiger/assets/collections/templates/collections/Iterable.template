@@ -15,6 +15,12 @@ import speiger.src.collections.objects.functions.consumer.BI_FROM_OBJECT_CONSUME
 import speiger.src.collections.PACKAGE.functions.function.PREDICATE;
 import speiger.src.collections.PACKAGE.functions.function.UNARY_OPERATOR;
 import speiger.src.collections.PACKAGE.collections.SPLIT_ITERATOR;
+import speiger.src.collections.PACKAGE.lists.LIST;
+import speiger.src.collections.PACKAGE.lists.ARRAY_LIST;
+#if !TYPE_BOOLEAN
+import speiger.src.collections.PACKAGE.sets.SET;
+import speiger.src.collections.PACKAGE.sets.LINKED_HASH_SET;
+#endif
 import speiger.src.collections.PACKAGE.utils.SPLIT_ITERATORS;
 import speiger.src.collections.PACKAGE.utils.ITERABLES;
 import speiger.src.collections.PACKAGE.utils.ITERATORS;
@@ -160,6 +166,24 @@ public interface ITERABLE KEY_GENERIC_TYPE extends Iterable<CLASS_TYPE>
 		return collection;
 	}
 	
+	/**
+	 * A Helper function that reduces the usage of streams and allows to collect all elements as a ArrayList
+	 * @return a new ArrayList of all elements
+	 */
+	default LIST KEY_GENERIC_TYPE pourAsList() {
+		return pour(new ARRAY_LISTBRACES()); 
+	}
+	
+#if !TYPE_BOOLEAN
+	/**
+	 * A Helper function that reduces the usage of streams and allows to collect all elements as a LinkedHashSet
+	 * @return a new LinkedHashSet of all elements
+	 */
+	default SET KEY_GENERIC_TYPE pourAsSet() { 
+		return pour(new LINKED_HASH_SETBRACES()); 		
+	}
+	
+#endif
 	/**
 	 * Helper function to reduce stream usage that allows to filter for any matches.
 	 * @param filter that should be applied
