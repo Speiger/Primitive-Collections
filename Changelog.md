@@ -5,6 +5,8 @@
 - Added: Deprecation to Functions that are specific to Ordered interfaces in the SortedMap/Set
 - Added: subFrom to Maps which is the counterpart of the addTo method
 - Added: pourAsList and pourAsSet (booleans excluded for sets) to Iterable
+- Fixed: ArrayList.grow had a small bug where it would trigger to early causing performance problems with exact sized collections.
+- Fixed: FIFOQueue size constructor had a small bug where it would trigger a array enlargement when all elements were inserted.
 
 ### Version 0.5.2
 - Fixed: Bugs with Queues starting with the wrong size

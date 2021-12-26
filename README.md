@@ -63,6 +63,7 @@ To highlight things that may be wanted.
 	- putAll: putAll but in Array form.
 	- putAllIfAbsent: Puts only the elements that are absent.
 	- addTo (Only Primitives Values) (From FastUtil but moved to Interface): allows to add to the value of a given key. If not present it will be added. (Accumulator)
+	- subFrom (Only Primitive Values): allows to subtract from the value of a given key. If value reached getDefaultReturnValue() element will be removed.
 	- addToAll: Same as addTo but bulkVersion.
 	- removeOrDefault: removes a Element and if not present returns the default value instead of the present value.
 	- mergeAll: BulkVersion of Merge function.
@@ -92,13 +93,14 @@ repositories {
     }
 }
 dependencies {
-	compile 'de.speiger:Primitive-Collections:0.5.2'
+	compile 'de.speiger:Primitive-Collections:0.5.3'
 }
 ```
 Direct:
 
 | Version 	| Jar                                                                                                                          	| Sources                                                                                                                              	| Java Doc                                                                                                                             	|
 |---------	|------------------------------------------------------------------------------------------------------------------------------	|--------------------------------------------------------------------------------------------------------------------------------------	|--------------------------------------------------------------------------------------------------------------------------------------	|
+| 0.5.3   	| [Download](https://maven.speiger.com/repository/main/de/speiger/Primitive-Collections/0.5.3/Primitive-Collections-0.5.3.jar) 	| [Download](https://maven.speiger.com/repository/main/de/speiger/Primitive-Collections/0.5.3/Primitive-Collections-0.5.3-sources.jar) 	| [Download](https://maven.speiger.com/repository/main/de/speiger/Primitive-Collections/0.5.3/Primitive-Collections-0.5.3-javadoc.jar) 	|
 | 0.5.2   	| [Download](https://maven.speiger.com/repository/main/de/speiger/Primitive-Collections/0.5.2/Primitive-Collections-0.5.2.jar) 	| [Download](https://maven.speiger.com/repository/main/de/speiger/Primitive-Collections/0.5.2/Primitive-Collections-0.5.2-sources.jar) 	| [Download](https://maven.speiger.com/repository/main/de/speiger/Primitive-Collections/0.5.2/Primitive-Collections-0.5.2-javadoc.jar) 	|
 | 0.5.1   	| [Download](https://maven.speiger.com/repository/main/de/speiger/Primitive-Collections/0.5.1/Primitive-Collections-0.5.1.jar) 	| [Download](https://maven.speiger.com/repository/main/de/speiger/Primitive-Collections/0.5.1/Primitive-Collections-0.5.1-sources.jar) 	| [Download](https://maven.speiger.com/repository/main/de/speiger/Primitive-Collections/0.5.1/Primitive-Collections-0.5.1-javadoc.jar) 	|
 | 0.5.0   	| [Download](https://maven.speiger.com/repository/main/de/speiger/Primitive-Collections/0.5.0/Primitive-Collections-0.5.0.jar) 	| [Download](https://maven.speiger.com/repository/main/de/speiger/Primitive-Collections/0.5.0/Primitive-Collections-0.5.0-sources.jar) 	| [Download](https://maven.speiger.com/repository/main/de/speiger/Primitive-Collections/0.5.0/Primitive-Collections-0.5.0-javadoc.jar) 	|
