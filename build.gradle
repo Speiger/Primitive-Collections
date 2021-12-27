@@ -87,8 +87,11 @@ test {
 }
 
 uploadArchives {
-	Properties props = new Properties() 
-	props.load(new FileInputStream("$buildDir/credentials.properties"))
+	Properties props = new Properties()
+	if(file("$buildDir/credentials.properties").exists())
+	{
+		props.load(new FileInputStream("$buildDir/credentials.properties"))
+	}
 	repositories.mavenDeployer {
 		repository(url: 'https://maven.speiger.com/repository/main') {
 			authentication(userName: props.mavenUser, password: props.mavenPassword)
