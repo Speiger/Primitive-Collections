@@ -29,12 +29,22 @@ public class PrimitiveCollectionsBuilder extends TemplateProcessor
 	
 	public PrimitiveCollectionsBuilder()
 	{
-		super(Paths.get("src/builder/resources/speiger/assets/collections/templates/"), Paths.get("src/main/java/speiger/src/collections/"), Paths.get("src/builder/resources/speiger/assets/collections/"));
+		this(false);
+	}
+	
+	public PrimitiveCollectionsBuilder(boolean silencedSuccess)
+	{
+		super(silencedSuccess, Paths.get("src/builder/resources/speiger/assets/collections/templates/"), Paths.get("src/main/java/speiger/src/collections/"), Paths.get("src/builder/resources/speiger/assets/collections/"));
 	}
 	
 	public PrimitiveCollectionsBuilder(Path sourceFolder, Path outputFolder, Path dataFolder)
 	{
-		super(sourceFolder, outputFolder, dataFolder);
+		this(false, sourceFolder, outputFolder, dataFolder);
+	}
+	
+	public PrimitiveCollectionsBuilder(boolean silencedSuccess, Path sourceFolder, Path outputFolder, Path dataFolder)
+	{
+		super(silencedSuccess, sourceFolder, outputFolder, dataFolder);
 	}
 	
 	@Override
@@ -159,10 +169,14 @@ public class PrimitiveCollectionsBuilder extends TemplateProcessor
 	            new PrimitiveCollectionsBuilder().process(false);
 	        } else if(args.length == 1) {
 	            new PrimitiveCollectionsBuilder().process(Boolean.parseBoolean(args[0]));
+	        } else if(args.length == 2) {
+	            new PrimitiveCollectionsBuilder(Boolean.parseBoolean(args[1])).process(Boolean.parseBoolean(args[0]));
 	        } else if(args.length == 3) {
 	            new PrimitiveCollectionsBuilder(Paths.get(args[0]), Paths.get(args[1]), Paths.get(args[2])).process(false);
 	        } else if(args.length == 4) {
-	            new PrimitiveCollectionsBuilder(Paths.get(args[0]), Paths.get(args[1]), Paths.get(args[2])).process(Boolean.parseBoolean(args[3]));
+	            new PrimitiveCollectionsBuilder(false, Paths.get(args[0]), Paths.get(args[1]), Paths.get(args[2])).process(Boolean.parseBoolean(args[3]));
+	        } else if(args.length == 4) {
+	            new PrimitiveCollectionsBuilder(Boolean.parseBoolean(args[4]), Paths.get(args[0]), Paths.get(args[1]), Paths.get(args[2])).process(Boolean.parseBoolean(args[3]));
 	        } else {
 	            System.out.println("Invalid argument count passed in");
 	            System.exit(1);

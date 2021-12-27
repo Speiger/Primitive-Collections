@@ -42,8 +42,8 @@ configurations {
 }
 
 dependencies {
-	builderCompile 'de.speiger:Simple-Code-Generator:1.0.5'
-	runtimeOnly 'de.speiger:Simple-Code-Generator:1.0.5'
+	builderCompile 'de.speiger:Simple-Code-Generator:1.0.6'
+	runtimeOnly 'de.speiger:Simple-Code-Generator:1.0.6'
     testImplementation 'junit:junit:4.12'
     testImplementation 'com.google.guava:guava-testlib:31.0.1-jre'
 }
@@ -53,6 +53,14 @@ task generateSource(type: JavaExec) {
 	description = 'Builds the sourcecode'
  	classpath = sourceSets.builder.runtimeClasspath
  	main = 'speiger.src.builder.PrimitiveCollectionsBuilder'
+}
+
+task generateGithubSource(type: JavaExec) {
+	group = 'internal'
+	description = 'Builds the sourcecode for Github Actions'
+ 	classpath = sourceSets.builder.runtimeClasspath
+ 	main = 'speiger.src.builder.PrimitiveCollectionsBuilder'
+ 	args = ['false', 'true']
 }
 
 task forceGenerateSource(type: JavaExec) {
