@@ -87,12 +87,14 @@ test {
 }
 
 uploadArchives {
+	Properties props = new Properties() 
+	props.load(new FileInputStream("$buildDir/credentials.properties"))
 	repositories.mavenDeployer {
 		repository(url: 'https://maven.speiger.com/repository/main') {
-			authentication(userName: project.properties.mavenUser, password: project.properties.mavenPassword)
+			authentication(userName: props.mavenUser, password: props.mavenPassword)
 		}
 		snapshotRepository(url: 'https://maven.speiger.com/repository/main') {
-			authentication(userName: project.properties.mavenUser, password: project.properties.mavenPassword)
+			authentication(userName: props.mavenUser, password: props.mavenPassword)
 		}
 		pom {
 			version = project.version
