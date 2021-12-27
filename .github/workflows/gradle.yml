@@ -25,11 +25,9 @@ jobs:
       with:
         java-version: '8'
         distribution: 'adopt'
+    - name: Validate Gradle wrapper
+      uses: gradle/wrapper-validation-action@e6e38bacfdf1a337459f332974bb2327a31aaf4b
     - name: Generate Sourcecode
-      uses: gradle/gradle-build-action@4137be6a8bf7d7133955359dbd952c0ca73b1021
-      with:
-        arguments: generateSource
+      run: ./gradlew generateSource
     - name: Creating a Build
-      uses: gradle/gradle-build-action@4137be6a8bf7d7133955359dbd952c0ca73b1021
-      with:
-        arguments: build
+      run: ./gradlew build
