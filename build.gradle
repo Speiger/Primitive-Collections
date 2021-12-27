@@ -42,8 +42,8 @@ configurations {
 }
 
 dependencies {
-	builderCompile 'de.speiger:Simple-Code-Generator:1.0.5'
-	runtimeOnly 'de.speiger:Simple-Code-Generator:1.0.5'
+	builderCompile 'de.speiger:Simple-Code-Generator:1.0.6'
+	runtimeOnly 'de.speiger:Simple-Code-Generator:1.0.6'
     testImplementation 'junit:junit:4.12'
     testImplementation 'com.google.guava:guava-testlib:31.0.1-jre'
 }
@@ -53,6 +53,14 @@ task generateSource(type: JavaExec) {
 	description = 'Builds the sourcecode'
  	classpath = sourceSets.builder.runtimeClasspath
  	main = 'speiger.src.builder.PrimitiveCollectionsBuilder'
+}
+
+task generateGithubSource(type: JavaExec) {
+	group = 'internal'
+	description = 'Builds the sourcecode for Github Actions'
+ 	classpath = sourceSets.builder.runtimeClasspath
+ 	main = 'speiger.src.builder.PrimitiveCollectionsBuilder'
+ 	args = ['false', 'true']
 }
 
 task forceGenerateSource(type: JavaExec) {
@@ -87,8 +95,11 @@ test {
 }
 
 uploadArchives {
-	Properties props = new Properties() 
-	props.load(new FileInputStream("$buildDir/credentials.properties"))
+	Properties props = new Properties()
+	if(file("$buildDir/credentials.properties").exists())
+	{
+		props.load(new FileInputStream("$buildDir/credentials.properties"))
+	}
 	repositories.mavenDeployer {
 		repository(url: 'https://maven.speiger.com/repository/main') {
 			authentication(userName: props.mavenUser, password: props.mavenPassword)
