@@ -1,5 +1,3 @@
-![Build](https://github.com/Speiger/Primitive-Collections/actions/workflows/build_validator.yml/badge.svg)
-
 # Primitive-Collections
 
 This is a Simple Primitive Collections Library i started as a hobby Project.     
