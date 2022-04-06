@@ -21,6 +21,7 @@ import speiger.src.collections.PACKAGE.lists.ARRAY_LIST;
 import speiger.src.collections.PACKAGE.sets.SET;
 import speiger.src.collections.PACKAGE.sets.LINKED_HASH_SET;
 #endif
+import speiger.src.collections.PACKAGE.utils.ASYNC_BUILDER;
 import speiger.src.collections.PACKAGE.utils.SPLIT_ITERATORS;
 import speiger.src.collections.PACKAGE.utils.ITERABLES;
 import speiger.src.collections.PACKAGE.utils.ITERATORS;
@@ -88,6 +89,16 @@ public interface ITERABLE KEY_GENERIC_TYPE extends Iterable<CLASS_TYPE>
 	 */
 	@Override
 	default SPLIT_ITERATOR KEY_GENERIC_TYPE spliterator() { return SPLIT_ITERATORS.createUnknownSplititerator(iterator(), 0); }
+	
+	/**
+	 * Creates a Async Builder for moving work of the thread.
+	 * It is not designed to split the work to multithreaded work, so using this keep it singlethreaded, but it allows to be moved to another thread.
+	 * @see ASYNC_BUILDER
+	 * @return a AsyncBuilder
+	 */
+	default ASYNC_BUILDER KEY_GENERIC_TYPE asAsync() {
+		return new ASYNC_BUILDERBRACES(this);
+	}
 
 	/**
 	 * A Helper function to reduce the usage of Streams and allows to convert a Iterable to something else.

@@ -207,6 +207,9 @@ public class SETS
 #endif
 		@Override
 		public boolean add(KEY_TYPE o) { throw new UnsupportedOperationException(); }
+#if TYPE_OBJECT
+		public KEY_TYPE addOrGet(KEY_TYPE o) { throw new UnsupportedOperationException(); }
+#endif
 		@Override
 		public ITERATOR KEY_GENERIC_TYPE iterator()
 		{
@@ -234,6 +237,9 @@ public class SETS
 #if !TYPE_OBJECT
 		@Override
 		public boolean remove(KEY_TYPE o) { throw new UnsupportedOperationException(); }
+#else
+		@Override
+		public KEY_TYPE addOrGet(KEY_TYPE o) { throw new UnsupportedOperationException(); }
 #endif
 		@Override
 		public EmptySet KEY_GENERIC_TYPE copy() { return this; }
@@ -404,6 +410,11 @@ public class SETS
 			s = c;
 		}
 		
+#if TYPE_OBJECT
+		@Override
+		public KEY_TYPE addOrGet(KEY_TYPE o) { throw new UnsupportedOperationException(); }
+		
+#endif
 		@Override
 		public SET KEY_GENERIC_TYPE copy() { return s.copy(); }
 		
@@ -447,7 +458,7 @@ public class SETS
 			super(c, mutex);
 			n = c;
 		}
-
+		
 		@Override
 		@Deprecated
 		public boolean contains(Object o) { synchronized(mutex) { return n.contains(o); } }
@@ -676,6 +687,11 @@ public class SETS
 			s = c;
 		}
 		
+#if TYPE_OBJECT
+		@Override
+		public KEY_TYPE addOrGet(KEY_TYPE o) { synchronized(mutex) { return s.addOrGet(o); } }
+		
+#endif
 		@Override
 		public SET KEY_GENERIC_TYPE copy() { synchronized(mutex) { return s.copy(); } }
 		

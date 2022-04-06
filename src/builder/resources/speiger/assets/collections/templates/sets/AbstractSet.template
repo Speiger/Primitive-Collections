@@ -14,6 +14,11 @@ import speiger.src.collections.PACKAGE.collections.ITERATOR;
  */
 public abstract class ABSTRACT_SET KEY_GENERIC_TYPE extends ABSTRACT_COLLECTION KEY_GENERIC_TYPE implements SET KEY_GENERIC_TYPE
 {
+#if TYPE_OBJECT
+	@Override
+	public KEY_TYPE addOrGet(KEY_TYPE o) { throw new UnsupportedOperationException(); }
+	
+#endif
 	@Override
 	public abstract ITERATOR KEY_GENERIC_TYPE iterator();
 	@Override

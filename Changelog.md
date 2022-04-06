@@ -1,5 +1,9 @@
 # Changelog of versions
 
+### Version 0.6.0
+- Added: addOrGet for sets.
+- Added: Async API which allows to easily execute Iterables/Collections offthread without the complexity.
+
 ### Version 0.5.3
 - Added: OrderedMap/Set
 - Added: Deprecation to Functions that are specific to Ordered interfaces in the SortedMap/Set

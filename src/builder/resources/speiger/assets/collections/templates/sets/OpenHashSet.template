@@ -235,6 +235,30 @@ public class HASH_SET KEY_GENERIC_TYPE extends ABSTRACT_SET KEY_GENERIC_TYPE imp
 		return true;
 	}
 	
+#if TYPE_OBJECT
+	@Override
+	public KEY_TYPE addOrGet(KEY_TYPE o) {
+		if(KEY_EQUALS_NULL(o)) {
+			if(containsNull) return null;
+			containsNull = true;
+			onNodeAdded(nullIndex);
+		}
+		else {
+			int pos = HashUtil.mix(KEY_TO_HASH(o)) & mask;
+			KEY_TYPE current = keys[pos];
+			if(KEY_EQUALS_NOT_NULL(current)) {
+				if(KEY_EQUALS(current, o)) return current;
+				while(KEY_EQUALS_NOT_NULL((current = keys[pos = (++pos & mask)])))
+					if(KEY_EQUALS(current, o)) return current;
+			}
+			keys[pos] = o;
+			onNodeAdded(pos);
+		}
+		if(size++ >= maxFill) rehash(HashUtil.arraySize(size+1, loadFactor));
+		return o;
+	}
+	
+#endif
 	@Override
 	@Primitive
 	public boolean addAll(Collection<? extends CLASS_TYPE> c) {

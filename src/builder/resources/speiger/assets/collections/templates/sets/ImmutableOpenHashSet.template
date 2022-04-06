@@ -241,6 +241,10 @@ public class IMMUTABLE_HASH_SET KEY_GENERIC_TYPE extends ABSTRACT_SET KEY_GENERI
 	
 	@Override
 	public boolean add(KEY_TYPE o) { throw new UnsupportedOperationException(); }
+#if TYPE_OBJECT
+	@Override
+	public KEY_TYPE addOrGet(KEY_TYPE o) { throw new UnsupportedOperationException(); }
+#endif
 	@Override
 	@Primitive
 	public boolean addAll(Collection<? extends CLASS_TYPE> c) { throw new UnsupportedOperationException(); }

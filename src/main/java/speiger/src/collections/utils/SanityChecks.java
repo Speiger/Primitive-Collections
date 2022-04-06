@@ -105,6 +105,14 @@ public class SanityChecks
 	}
 	
 	/**
+	 * A Helper method to start a Async Task. This method will not await the finalization of said task
+	 * @param task the Task to invoke
+	 */
+	public static void invokeAsyncTask(Runnable task) {
+		getPool().execute(task);
+	}
+	
+	/**
 	 * Helper method to control what ForkJoinPool is being used for any given task.
 	 * @note this method is not thread-save. It is only there to provide control over how Library specific Threaded tasks are handled.
 	 * @param pool The ForkJoinPool that should receive the tasks. If null {@link ForkJoinPool#commonPool()} is set instead

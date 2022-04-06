@@ -258,6 +258,43 @@ public class AVL_TREE_SET KEY_GENERIC_TYPE extends ABSTRACT_SET KEY_GENERIC_TYPE
 		return true;
 	}
 	
+#if TYPE_OBJECT
+	@Override
+	public KEY_TYPE addOrGet(KEY_TYPE o) {
+		validate(o);
+		if(tree == null) {
+			tree = first = last = new EntryBRACES(o, null);
+			size++;
+			return o;
+		}
+		int compare = 0;
+		Entry KEY_GENERIC_TYPE parent = tree;
+		while(true) {
+			if((compare = compare(o, parent.key)) == 0) return parent.key;
+			if(compare < 0) {
+				if(parent.left == null) break;
+				parent = parent.left;
+			}
+			else if(compare > 0) {
+				if(parent.right == null) break;
+				parent = parent.right;
+			}
+		}
+		Entry KEY_GENERIC_TYPE adding = new EntryBRACES(o, parent);
+		if(compare < 0)  {
+			parent.left = adding;
+			if(parent == first)	first = adding;
+		}
+		else  {
+			parent.right = adding;
+			if(parent == last) last = adding;
+		}
+		fixAfterInsertion(adding);
+		size++;
+		return o;
+	}
+	
+#endif
 	@Override
 	public boolean addAndMoveToFirst(KEY_TYPE o) { throw new UnsupportedOperationException(); }
 	
