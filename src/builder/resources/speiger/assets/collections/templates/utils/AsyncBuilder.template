@@ -8,9 +8,6 @@ import java.util.concurrent.TimeoutException;
 import java.util.concurrent.locks.LockSupport;
 import java.util.function.Consumer;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-
 #if !TYPE_OBJECT
 
 import speiger.src.collections.PACKAGE.functions.CONSUMER;
@@ -298,8 +295,9 @@ public class ASYNC_BUILDER KEY_GENERIC_TYPE
 	 * Can only be set after the action was decided on.
 	 * @param executor that executes the task, defaults to {@link SanityChecks#invokeAsyncTask(Runnable) }
 	 * @return self with the executor set
+	 * @note has to be NonNull
 	 */
-	public ASYNC_BUILDER KEY_GENERIC_TYPE executor(@Nonnull Executor executor) {
+	public ASYNC_BUILDER KEY_GENERIC_TYPE executor(Executor executor) {
 		if(task == null) throw new IllegalStateException("Action is missing");
 		task.withExecutor(executor);
 		return this;
@@ -310,8 +308,9 @@ public class ASYNC_BUILDER KEY_GENERIC_TYPE
 	 * The state of the task has to be validated by the callback.
 	 * @param callback that should be notified after completion of the task
 	 * @return self with the callback set
+	 * @note can be null
 	 */
-	public ASYNC_BUILDER KEY_GENERIC_TYPE callback(@Nullable Consumer<TASK KEY_GENERIC_TYPE> callback) {
+	public ASYNC_BUILDER KEY_GENERIC_TYPE callback(Consumer<TASK KEY_GENERIC_TYPE> callback) {
 		if(task == null) throw new IllegalStateException("Action is missing");
 		task.withCallback(callback);
 		return this;
