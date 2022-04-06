@@ -54,6 +54,15 @@ public interface SET KEY_GENERIC_TYPE extends Set<CLASS_TYPE>, COLLECTION KEY_GE
 		return COLLECTION.super.remove(o);
 	}
 	
+#else
+	/**
+	 * A Helper method that allows to add a element or getting the already present implement.
+	 * Allowing to make unique references reuseable.
+	 * @param o the element to add
+	 * @return either the inserted element or the present element.
+	 */
+	public KEY_TYPE addOrGet(KEY_TYPE o);
+	
 #endif
 #if !TYPE_BOOLEAN
 	/**

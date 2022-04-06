@@ -132,6 +132,17 @@ public class ARRAY_SET KEY_GENERIC_TYPE extends ABSTRACT_SET KEY_GENERIC_TYPE im
 		return false;
 	}
 	
+#if TYPE_OBJECT
+	@Override
+	public KEY_TYPE addOrGet(KEY_TYPE o) {
+		int index = findIndex(o);
+		if(index != -1) return data[index];
+		if(data.length == size) data = Arrays.copyOf(data, size == 0 ? 2 : size * 2);
+		data[size++] = o;
+		return o;
+	}
+	
+#endif
 	@Override
 	public boolean addAndMoveToFirst(KEY_TYPE o) {
 		int index = findIndex(o);

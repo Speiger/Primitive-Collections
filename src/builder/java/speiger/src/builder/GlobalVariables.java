@@ -158,6 +158,7 @@ public class GlobalVariables
 		
 		//Final Classes
 		addClassMapper("ARRAY_LIST", "ArrayList");
+		addClassMapper("ASYNC_BUILDER", "AsyncBuilder");
 		addClassMapper("LINKED_LIST", "LinkedList");
 		addAbstractMapper("IMMUTABLE_LIST", "Immutable%sList");
 		addClassMapper("ARRAY_FIFO_QUEUE", "ArrayFIFOQueue");
@@ -191,6 +192,7 @@ public class GlobalVariables
 		addAbstractMapper("ABSTRACT_LIST", "Abstract%sList");
 		addAbstractBiMapper("ABSTRACT_MAP", "Abstract%sMap", "2");
 		addClassMapper("SUB_LIST", "SubList");
+		addAbstractMapper("BASE_TASK", "Base%sTask");
 		
 		//Helper Classes
 		addClassMapper("LISTS", "Lists");
@@ -233,6 +235,7 @@ public class GlobalVariables
 		addClassMapper("STACK", "Stack");
 		addClassMapper("SUPPLIER", "Supplier");
 		addAbstractMapper("SINGLE_UNARY_OPERATOR", "%1$s%1$sUnaryOperator");
+		addClassMapper("TASK", "Task");
 		addBiClassMapper("UNARY_OPERATOR", "UnaryOperator", "");
 		if(type.isObject())
 		{
