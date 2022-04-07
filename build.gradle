@@ -20,9 +20,9 @@ repositories {
 archivesBaseName = 'Primitive Collections'
 version = '0.5.4';
 
-sourceCompatibility = targetCompatibility = compileJava.sourceCompatibility = compileJava.targetCompatibility = JavaLanguageVersion.of(pcJavaVersion)
+sourceCompatibility = targetCompatibility = compileJava.sourceCompatibility = compileJava.targetCompatibility = JavaVersion.current();
 
-System.out.println("Java Version: "+pcJavaVersion)
+System.out.println("Java Version: "+compileJava.sourceCompatibility)
 
 javadoc {
     options.tags = [ "implSpec", "note" ] 
