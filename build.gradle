@@ -8,7 +8,7 @@ tasks.withType(JavaCompile) {
 
 apply plugin: 'java'
 apply plugin: 'eclipse'
-apply plugin: 'maven'
+apply plugin: 'maven-publish'
 
 repositories {
     mavenCentral()
@@ -18,7 +18,7 @@ repositories {
 }
 
 archivesBaseName = 'Primitive Collections'
-version = '0.5.3';
+version = '0.5.4';
 
 sourceCompatibility = targetCompatibility = compileJava.sourceCompatibility = compileJava.targetCompatibility = '1.8'
 
@@ -33,6 +33,10 @@ eclipse {
 	}
 }
 
+jar {
+	classifier = "jar"
+}
+
 sourceSets {
     builder
 }
@@ -42,8 +46,7 @@ configurations {
 }
 
 dependencies {
-	builderCompile 'de.speiger:Simple-Code-Generator:1.0.6'
-	runtimeOnly 'de.speiger:Simple-Code-Generator:1.0.6'
+	builderImplementation 'de.speiger:Simple-Code-Generator:1.0.6'
     testImplementation 'junit:junit:4.12'
     testImplementation 'com.google.guava:guava-testlib:31.0.1-jre'
 }
@@ -94,24 +97,23 @@ test {
     useJUnit()
 }
 
-uploadArchives {
+publishing {
 	Properties props = new Properties()
-	if(file("$buildDir/credentials.properties").exists())
-	{
+	if(file("$buildDir/credentials.properties").exists()) {
 		props.load(new FileInputStream("$buildDir/credentials.properties"))
 	}
-	repositories.mavenDeployer {
-		repository(url: 'https://maven.speiger.com/repository/main') {
-			authentication(userName: props.mavenUser, password: props.mavenPassword)
-		}
-		snapshotRepository(url: 'https://maven.speiger.com/repository/main') {
-			authentication(userName: props.mavenUser, password: props.mavenPassword)
-		}
-		pom {
-			version = project.version
-			artifactId = project.archivesBaseName.replace(" ", "-")
-			groupId = 'de.speiger'
-			project {
+	publications {
+		mavenJava(MavenPublication) {
+			pom {
+				name = 'Primitive Collections'
+				description = 'A Primitive Collection library that reduces memory usage and improves performance'
+				url = 'https://github.com/Speiger/Primitive-Collections'
+				version = project.version
+				artifactId = project.archivesBaseName.replace(" ", "-")
+				groupId = 'de.speiger'
+				from components.java
+				artifact tasks.srcJar
+				artifact tasks.javadocJar
 				licenses {
 					license {
 						name = 'The Apache License, Version 2.0'
@@ -122,9 +124,24 @@ uploadArchives {
 					developer {
 						id = 'speiger'
 						name = 'Speiger'
-						email = 'speiger@gmx.net'
 					}
 				}
+				scm {
+					url = 'https://github.com/Speiger/Primitive-Collections'
+				}
+				issueManagement {
+					system = 'github'
+					url = 'https://github.com/Speiger/Primitive-Collections/issues'
+				}
+			}
+		}
+	}
+	repositories {
+		maven {
+			url version.endsWith('SNAPSHOT') ? "https://maven.speiger.com/repository/debug" : "https://maven.speiger.com/repository/main"
+			credentials(PasswordCredentials) {
+				username props.mavenUser
+				password props.mavenPassword
 			}
 		}
 	}
