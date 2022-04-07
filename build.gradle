@@ -20,7 +20,7 @@ repositories {
 archivesBaseName = 'Primitive Collections'
 version = '0.5.4';
 
-sourceCompatibility = targetCompatibility = compileJava.sourceCompatibility = compileJava.targetCompatibility = '1.8'
+sourceCompatibility = targetCompatibility = compileJava.sourceCompatibility = compileJava.targetCompatibility = JavaLanguageVersion.of(pcJavaVersion)
 
 javadoc {
     options.tags = [ "implSpec", "note" ] 
