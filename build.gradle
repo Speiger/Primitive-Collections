@@ -22,6 +22,8 @@ version = '0.5.4';
 
 sourceCompatibility = targetCompatibility = compileJava.sourceCompatibility = compileJava.targetCompatibility = JavaLanguageVersion.of(pcJavaVersion)
 
+System.out.println("Java Version: "+pcJavaVersion)
+
 javadoc {
     options.tags = [ "implSpec", "note" ] 
 }
