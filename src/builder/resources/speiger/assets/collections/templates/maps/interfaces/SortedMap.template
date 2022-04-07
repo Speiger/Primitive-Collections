@@ -33,6 +33,7 @@ public interface SORTED_MAP KEY_VALUE_GENERIC_TYPE extends SortedMap<CLASS_TYPE,
 	 * @note some implementations do not support this method
 	 * @deprecated use ORDERED_MAP#putAndMoveToFirst instead (removed in 0.6.0)
 	 */
+	@Deprecated
 	public VALUE_TYPE putAndMoveToFirst(KEY_TYPE key, VALUE_TYPE value);
 	/**
 	 * A customized put method that allows you to insert into the last index. (This may be nessesary depending on the implementation)
@@ -43,6 +44,7 @@ public interface SORTED_MAP KEY_VALUE_GENERIC_TYPE extends SortedMap<CLASS_TYPE,
 	 * @note some implementations do not support this method
 	 * @deprecated use ORDERED_MAP#putAndMoveToLast instead (removed in 0.6.0)
 	 */
+	@Deprecated
 	public VALUE_TYPE putAndMoveToLast(KEY_TYPE key, VALUE_TYPE value);
 	
 	/**
@@ -53,6 +55,7 @@ public interface SORTED_MAP KEY_VALUE_GENERIC_TYPE extends SortedMap<CLASS_TYPE,
 	 * @note some implementations do not support this method
 	 * @deprecated use ORDERED_MAP#moveToFirst instead (removed in 0.6.0)
 	 */
+	@Deprecated
 	public boolean moveToFirst(KEY_TYPE key);
 	/**
 	 * A specific move method to move a given key/value to the last index.
@@ -62,6 +65,7 @@ public interface SORTED_MAP KEY_VALUE_GENERIC_TYPE extends SortedMap<CLASS_TYPE,
 	 * @note some implementations do not support this method
 	 * @deprecated use ORDERED_MAP#moveToLast instead (removed in 0.6.0)
 	 */
+	@Deprecated
 	public boolean moveToLast(KEY_TYPE key);
 	
 	/**
@@ -71,6 +75,7 @@ public interface SORTED_MAP KEY_VALUE_GENERIC_TYPE extends SortedMap<CLASS_TYPE,
 	 * @note some implementations do not support this method
 	 * @deprecated use ORDERED_MAP#getAndMoveToFirst instead (removed in 0.6.0)
 	 */
+	@Deprecated
 	public VALUE_TYPE getAndMoveToFirst(KEY_TYPE key);
 	/**
 	 * A Specific get method that allows to move teh given key/value int the last index.
@@ -79,6 +84,7 @@ public interface SORTED_MAP KEY_VALUE_GENERIC_TYPE extends SortedMap<CLASS_TYPE,
 	 * @note some implementations do not support this method
 	 * @deprecated use ORDERED_MAP#getAndMoveToLast instead (removed in 0.6.0)
 	 */
+	@Deprecated
 	public VALUE_TYPE getAndMoveToLast(KEY_TYPE key);
 	
 	@Override

@@ -30,6 +30,7 @@ public interface SORTED_SET KEY_GENERIC_TYPE extends ORDERED_SET KEY_GENERIC_TYP
 	 * @note some implementations do not support this method
 	 * @deprecated use ORDERED_SET#addAndMoveToFirst instead (removed in 0.6.0)
 	 */
+	@Deprecated
 	public boolean addAndMoveToFirst(KEY_TYPE o);
 	/**
 	 * A customized add method that allows you to insert into the last index.
@@ -39,6 +40,7 @@ public interface SORTED_SET KEY_GENERIC_TYPE extends ORDERED_SET KEY_GENERIC_TYP
 	 * @note some implementations do not support this method
 	 * @deprecated use ORDERED_SET#addAndMoveToLast instead (removed in 0.6.0)
 	 */
+	@Deprecated
 	public boolean addAndMoveToLast(KEY_TYPE o);
 	
 	/**
@@ -49,6 +51,7 @@ public interface SORTED_SET KEY_GENERIC_TYPE extends ORDERED_SET KEY_GENERIC_TYP
 	 * @note some implementations do not support this method
 	 * @deprecated use ORDERED_SET#moveToFirst instead (removed in 0.6.0)
 	 */
+	@Deprecated
 	public boolean moveToFirst(KEY_TYPE o);
 	/**
 	 * A specific move method to move a given key to the last index.
@@ -58,6 +61,7 @@ public interface SORTED_SET KEY_GENERIC_TYPE extends ORDERED_SET KEY_GENERIC_TYP
 	 * @note some implementations do not support this method
 	 * @deprecated use ORDERED_SET#moveToLast instead (removed in 0.6.0)
 	 */
+	@Deprecated
 	public boolean moveToLast(KEY_TYPE o);
 	
 	/**
