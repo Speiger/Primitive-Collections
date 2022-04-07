@@ -68,15 +68,15 @@ import speiger.src.collections.utils.SanityChecks;
  * The Task Object is also pause-able/Interruptable at any moment during the Processing. <br>
  * 
  * A small example
- * <pre>
- * public void processFiles(ObjectCollection<String> potentialFiles) {
+ * <pre><code>
+ * public void processFiles(ObjectCollection&#60;String&#62; potentialFiles) {
  * 	potentialFiles.asAsync()
  * 		.map(Paths::get).filter(Files::exists) //Modifies the collection (Optional)
  * 		.forEach(Files::delete) //Creates the action (Required)
- * 		.callback(T -> {}} //Callback on completion (Optional)
+ * 		.onCompletion(T -&#62; {}} //Callback on completion (Optional)
  * 		.execute() //Starts the task. (Required)
  * }
- * </pre>
+ * </code></pre>
  * @author Speiger
  * 
  * @Type(T)
@@ -88,7 +88,7 @@ public class ASYNC_BUILDER KEY_GENERIC_TYPE
 	
 	/**
 	 * Main Constructor that uses a Iterable to build a Offthread Task.
-	 * @param iterable
+	 * @param iterable that should be processed
 	 */
 	public ASYNC_BUILDER(ITERABLE KEY_GENERIC_TYPE iterable) {
 		this.iterable = iterable;
@@ -96,7 +96,7 @@ public class ASYNC_BUILDER KEY_GENERIC_TYPE
 	
 	/**
 	 * Helper constructor.
-	 * @param task
+	 * @param task that had been build
 	 */
 	public ASYNC_BUILDER(BASE_TASK KEY_GENERIC_TYPE task) {
 		this.task = task;
@@ -310,7 +310,7 @@ public class ASYNC_BUILDER KEY_GENERIC_TYPE
 	 * @return self with the callback set
 	 * @note can be null
 	 */
-	public ASYNC_BUILDER KEY_GENERIC_TYPE callback(Consumer<TASK KEY_GENERIC_TYPE> callback) {
+	public ASYNC_BUILDER KEY_GENERIC_TYPE onCompletion(Consumer<TASK KEY_GENERIC_TYPE> callback) {
 		if(task == null) throw new IllegalStateException("Action is missing");
 		task.withCallback(callback);
 		return this;
