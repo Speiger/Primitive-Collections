@@ -123,8 +123,8 @@ public abstract class BaseIntIterableTest
 	@Test
 	public void testStreamMap() {
 		if(getValidIterableTests().contains(IterableTest.STREAM_MAP)) {
-			Integer[] expected = IntStream.of(TEST_ARRAY).mapToObj(Integer::new).toArray(Integer[]::new);
-			Integer[] actual = ObjectIterators.pour(create(TEST_ARRAY).map(Integer::new).iterator()).toArray(Integer[]::new);
+			Integer[] expected = IntStream.of(TEST_ARRAY).mapToObj(Integer::valueOf).toArray(Integer[]::new);
+			Integer[] actual = ObjectIterators.pour(create(TEST_ARRAY).map(Integer::valueOf).iterator()).toArray(Integer[]::new);
 			ObjectArrays.stableSort(actual);
 			Assert.assertArrayEquals(expected, actual);
 		}

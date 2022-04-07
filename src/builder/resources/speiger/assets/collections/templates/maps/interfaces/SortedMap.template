@@ -227,6 +227,11 @@ public interface SORTED_MAP KEY_VALUE_GENERIC_TYPE extends SortedMap<CLASS_TYPE,
 	interface FastSortedSet KEY_VALUE_GENERIC_TYPE extends MAP.FastEntrySet KEY_VALUE_GENERIC_TYPE, ObjectSortedSet<MAP.Entry KEY_VALUE_GENERIC_TYPE> {
 		@Override
 		public ObjectBidirectionalIterator<MAP.Entry KEY_VALUE_GENERIC_TYPE> fastIterator();
+		/**
+		 * Fast iterator that recycles the given Entry object to improve speed and reduce object allocation
+		 * @param fromElement that is going to be started from.
+		 * @return a improved iterator that starts from the desired element
+		 */
 		public ObjectBidirectionalIterator<MAP.Entry KEY_VALUE_GENERIC_TYPE> fastIterator(KEY_TYPE fromElement);
 	}
 }

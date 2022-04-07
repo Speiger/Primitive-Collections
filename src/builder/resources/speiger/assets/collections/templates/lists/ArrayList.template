@@ -193,7 +193,7 @@ public class ARRAY_LIST KEY_GENERIC_TYPE extends ABSTRACT_LIST KEY_GENERIC_TYPE 
 	 * Appends the specified element to the end of this list.
 	 *
 	 * @param e element to be appended to this list
-	 * @return <tt>true</tt> (as specified by {@link Collection#add})
+	 * @return true (as specified by {@link Collection#add})
 	 */
 	@Override
 	public boolean add(KEY_TYPE e) {

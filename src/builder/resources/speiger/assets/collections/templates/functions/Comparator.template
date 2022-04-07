@@ -50,6 +50,10 @@ public interface COMPARATOR extends Comparator<CLASS_TYPE>
 	{
 		COMPARATOR original;
 		
+		/**
+		 * default constructor
+		 * @param original that is going to be reversed
+		 */
 		public Reversed(COMPARATOR original) {
 			this.original = original;
 		}
