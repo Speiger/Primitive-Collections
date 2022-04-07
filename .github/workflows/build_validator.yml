@@ -36,6 +36,6 @@ jobs:
     - name: Generate SourceCode with Gradle
       run: ./gradlew generateGithubSource
     - name: Setting Java Version
-      run: echo pcJavaVersion=${{matrix.jdk}} > ./gradle.properties
+      run: echo pcJavaVersion=${{matrix.jdk}} > ./local.properties
     - name: Build with Gradle
       run: ./gradlew build
