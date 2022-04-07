@@ -16,6 +16,7 @@ on:
 jobs:
   build:
     strategy:
+      fail-fast: false
       matrix:
         jdk: [8, 11, 14, 16, 17]
 
