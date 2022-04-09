@@ -3,6 +3,7 @@
 ### Version 0.6.0
 - Added: addOrGet for sets.
 - Added: Async API which allows to easily execute Iterables/Collections offthread without the complexity.
+- Added: ConcurrentArrayLists and tests for it
 
 ### Version 0.5.3
 - Added: OrderedMap/Set
