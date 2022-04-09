@@ -158,6 +158,7 @@ public class GlobalVariables
 		
 		//Final Classes
 		addClassMapper("ARRAY_LIST", "ArrayList");
+		addAbstractMapper("COPY_ON_WRITE_LIST", "CopyOnWrite%sArrayList");
 		addClassMapper("ASYNC_BUILDER", "AsyncBuilder");
 		addClassMapper("LINKED_LIST", "LinkedList");
 		addAbstractMapper("IMMUTABLE_LIST", "Immutable%sList");

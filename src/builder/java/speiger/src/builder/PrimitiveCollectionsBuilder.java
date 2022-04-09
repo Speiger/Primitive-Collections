@@ -94,6 +94,7 @@ public class PrimitiveCollectionsBuilder extends TemplateProcessor
 		nameRemapper.put("EnumMap", "Enum2%sMap");
 		nameRemapper.put("LinkedEnumMap", "LinkedEnum2%sMap");
 		nameRemapper.put("ImmutableList", "Immutable%sList");
+		nameRemapper.put("CopyOnWriteList", "CopyOnWrite%sArrayList");
 		nameRemapper.put("ImmutableOpenHashSet", "Immutable%sOpenHashSet");
 		nameRemapper.put("ImmutableOpenHashMap", "Immutable%sOpenHashMap");
 		

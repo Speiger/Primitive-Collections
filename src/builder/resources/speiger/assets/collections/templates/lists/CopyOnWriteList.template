@@ -1,0 +1,1788 @@
+package speiger.src.collections.PACKAGE.lists;
+
+import java.util.Arrays;
+#if TYPE_OBJECT
+import java.util.Comparator;
+#endif
+import java.util.Collection;
+import java.util.Iterator;
+import java.util.NoSuchElementException;
+import java.util.Objects;
+import java.util.concurrent.locks.ReentrantLock;
+#if TYPE_OBJECT
+import java.util.function.Consumer;
+import java.util.function.BiFunction;
+#endif
+import java.util.function.Predicate;
+import java.util.function.UnaryOperator;
+#if PRIMITIVES
+import java.util.function.JAVA_PREDICATE;
+import java.util.function.JAVA_UNARY_OPERATOR;
+import java.nio.JAVA_BUFFER;
+#endif
+
+import speiger.src.collections.PACKAGE.collections.COLLECTION;
+#if !TYPE_OBJECT
+import speiger.src.collections.PACKAGE.collections.STACK;
+#endif
+import speiger.src.collections.PACKAGE.collections.ITERATOR;
+#if !TYPE_OBJECT
+import speiger.src.collections.PACKAGE.functions.COMPARATOR;
+import speiger.src.collections.PACKAGE.functions.CONSUMER;
+#endif
+import speiger.src.collections.objects.functions.consumer.BI_FROM_OBJECT_CONSUMER;
+import speiger.src.collections.PACKAGE.functions.function.PREDICATE;
+import speiger.src.collections.PACKAGE.functions.function.UNARY_OPERATOR;
+import speiger.src.collections.PACKAGE.utils.ARRAYS;
+import speiger.src.collections.PACKAGE.utils.ITERATORS;
+#if TYPE_OBJECT
+import speiger.src.collections.utils.Stack;
+#else
+import speiger.src.collections.objects.utils.ObjectArrays;
+#endif
+#if PRIMITIVES
+import java.util.stream.JAVA_STREAM;
+import java.util.stream.StreamSupport;
+#endif
+import speiger.src.collections.PACKAGE.collections.SPLIT_ITERATOR;
+import speiger.src.collections.PACKAGE.utils.SPLIT_ITERATORS;
+import speiger.src.collections.utils.ITrimmable;
+import speiger.src.collections.utils.SanityChecks;
+
+#if TYPE_OBJECT
+/**
+ * A Type-Specific Array-based implementation of list that is written to reduce (un)boxing
+ * 
+ * <p>This implementation is optimized to improve how data is processed with interfaces like {@link ITrimmable}, {@link Stack}
+ * and with optimized functions that use type-specific implementations for primitives and optimized logic for bulkactions.
+ *
+ * @Type(T)
+ */
+public class COPY_ON_WRITE_LIST KEY_GENERIC_TYPE extends ABSTRACT_LIST KEY_GENERIC_TYPE implements ITrimmable, Stack<KEY_TYPE>
+#else
+/**
+ * A Type-Specific Array-based implementation of list that is written to reduce (un)boxing
+ * 
+ * <p>This implementation is optimized to improve how data is processed with interfaces like {@link ITrimmable}, {@link STACK}
+ * and with optimized functions that use type-specific implementations for primitives and optimized logic for bulkactions.
+ */
+public class COPY_ON_WRITE_LIST KEY_GENERIC_TYPE extends ABSTRACT_LIST KEY_GENERIC_TYPE implements ITrimmable, STACK
+#endif
+{
+	/** Access lock */
+    transient ReentrantLock lock = new ReentrantLock();
+	/** The backing array */
+	protected transient KEY_TYPE[] data;
+	
+	/**
+	 * Creates a new ArrayList with a Empty array.
+	 */
+	public COPY_ON_WRITE_LIST() {
+		data = EMPTY_KEY_ARRAY;
+	}
+	
+	/**
+	 * Creates a new ArrayList a copy with the contents of the Collection.
+	 * @param c the elements that should be added into the list
+	 */
+	@Deprecated
+	public COPY_ON_WRITE_LIST(Collection<? extends CLASS_TYPE> c) {
+		data = NEW_KEY_ARRAY(c.size());
+		ITERATORS.unwrap(data, c.iterator());
+	}
+	
+	/**
+	 * Creates a new ArrayList a copy with the contents of the Collection.
+	 * @param c the elements that should be added into the list
+	 */
+	public COPY_ON_WRITE_LIST(COLLECTION KEY_GENERIC_TYPE c) {
+		data = NEW_KEY_ARRAY(c.size());
+		ITERATORS.unwrap(data, c.iterator());
+	}
+	
+	/**
+	 * Creates a new ArrayList a copy with the contents of the List.
+	 * @param l the elements that should be added into the list
+	 */
+	public COPY_ON_WRITE_LIST(LIST KEY_GENERIC_TYPE l) {
+		data = NEW_KEY_ARRAY(l.size());
+		l.getElements(0, data, 0, data.length);
+	}
+	
+	/**
+	 * Creates a new ArrayList with a Copy of the array
+	 * @param a the array that should be copied
+	 */
+	public COPY_ON_WRITE_LIST(KEY_TYPE... a) {
+		this(a, 0, a.length);
+	}
+	
+	/**
+	 * Creates a new ArrayList with a Copy of the array with a custom length
+	 * @param a the array that should be copied
+	 * @param length the desired length that should be copied
+	 */
+	public COPY_ON_WRITE_LIST(KEY_TYPE[] a, int length) {
+		this(a, 0, length);
+	}
+	
+	/**
+	 * Creates a new ArrayList with a Copy of the array with in the custom range.
+	 * @param a the array that should be copied
+	 * @param offset the starting offset of where the array should be copied from
+	 * @param length the desired length that should be copied
+	 * @throws IllegalStateException if offset is smaller then 0
+	 * @throws IllegalStateException if the offset + length exceeds the array length
+	 */
+	public COPY_ON_WRITE_LIST(KEY_TYPE[] a, int offset, int length) {
+		data = NEW_KEY_ARRAY(length);
+		SanityChecks.checkArrayCapacity(a.length, offset, length);
+		System.arraycopy(a, offset, data, 0, length);
+	}
+	
+#if TYPE_OBJECT
+	/**
+	 * Creates a new ArrayList with a EmptyObject array of the Type requested
+	 * @param c the type of the array
+	 * @Type(T)
+	 * @return a typed List
+	 */
+	public static GENERIC_KEY_BRACES ARRAY_LIST KEY_GENERIC_TYPE of(Class<KEY_TYPE> c) {
+		ARRAY_LIST KEY_GENERIC_TYPE list = new ARRAY_LISTBRACES();
+		list.data = (KEY_TYPE[])ObjectArrays.newArray(c, 0);
+		return list;
+	}
+	
+#endif
+	
+	/**
+	 * Appends the specified element to the end of this list.
+	 *
+	 * @param e element to be appended to this list
+	 * @return true (as specified by {@link Collection#add})
+	 */
+	@Override
+	public boolean add(KEY_TYPE e) {
+		ReentrantLock lock = this.lock;
+		lock.lock();
+		try {
+			KEY_TYPE[] newElements = Arrays.copyOf(data, data.length+1);
+			newElements[newElements.length-1] = e;
+			data = newElements;
+		}
+		finally { 
+			lock.unlock(); 
+		}
+		return true;
+	}
+	
+	/**
+	 * Appends the specified element to the end of this Stack.
+	 * @param e element to be appended to this Stack
+	 */
+	@Override
+	public void push(KEY_TYPE e) {
+		add(e);
+	}
+	
+	/**
+	 * Appends the specified element to the index of the list
+	 * @param index the index where to append the element to
+	 * @param e the element to append to the list
+	 * @throws IndexOutOfBoundsException if index is outside of the lists range
+	 */
+	@Override
+	public void add(int index, KEY_TYPE e) {
+		ReentrantLock lock = this.lock;
+		lock.lock();
+		try {
+			KEY_TYPE[] data = this.data;
+			int size = data.length;
+			if(index < 0 || index > size) throw new IndexOutOfBoundsException("Index: " + index + ", Size: " + size);
+			KEY_TYPE[] newElements;
+			
+			if(index == size) {
+				newElements = Arrays.copyOf(data, size+1);
+			}
+			else {
+				newElements = NEW_KEY_ARRAY(size+1);
+				System.arraycopy(data, 0, newElements, 0, index);
+				System.arraycopy(data, index, newElements, index + 1, size - index);
+			}
+			newElements[index] = e;
+			this.data = newElements;
+		}
+		finally { 
+			lock.unlock(); 
+		}
+	}
+	
+	/**
+	 * Appends the specified elements to the index of the list.
+	 * This function may delegate to more appropriate function if necessary
+	 * @param index the index where to append the elements to
+	 * @param c the elements to append to the list
+	 * @throws IndexOutOfBoundsException if index is outside of the lists range
+	 * @throws NullPointerException if collection contains a null element
+	 */
+	@Override
+	@Deprecated
+	public boolean addAll(int index, Collection<? extends CLASS_TYPE> c) {
+		if(c instanceof COLLECTION) return addAll(index, (COLLECTION KEY_GENERIC_TYPE)c);
+		int add = c.size();
+		if(add <= 0) return false;
+#if !TYPE_OBJECT
+		if(c.contains(null)) throw new NullPointerException();
+#endif
+		ReentrantLock lock = this.lock;
+		lock.lock();
+		try {
+			KEY_TYPE[] data = this.data;
+			int size = data.length;
+			if(index < 0 || index > size) throw new IndexOutOfBoundsException("Index: " + index + ", Size: " + size);
+			KEY_TYPE[] newElements;
+			if(index == size) {
+				newElements = Arrays.copyOf(data, size+add);
+			}
+			else {
+				newElements = NEW_KEY_ARRAY(size+add);
+				System.arraycopy(data, 0, newElements, 0, index);
+				System.arraycopy(data, index, newElements, index + add, size - index);
+			}
+			Iterator<? extends CLASS_TYPE> iter = c.iterator();
+			while(add-- != 0) newElements[index++] = OBJ_TO_KEY(iter.next());
+			this.data = newElements;
+		}
+		finally { 
+			lock.unlock(); 
+		}
+		return true;
+	}
+	
+	/**
+	 * Appends the specified elements to the index of the list.
+	 * This function may delegate to more appropriate function if necessary
+	 * @param index the index where to append the elements to
+	 * @param c the elements to append to the list
+	 * @throws IndexOutOfBoundsException if index is outside of the lists range
+	 */
+	@Override
+	public boolean addAll(int index, COLLECTION KEY_GENERIC_TYPE c) {
+		if(c instanceof LIST) return addAll(index, (LIST KEY_GENERIC_TYPE)c);
+		int add = c.size();
+		if(add <= 0) return false;
+		ReentrantLock lock = this.lock;
+		lock.lock();
+		try {
+			KEY_TYPE[] data = this.data;
+			int size = data.length;
+			if(index < 0 || index > size) throw new IndexOutOfBoundsException("Index: " + index + ", Size: " + size);
+			KEY_TYPE[] newElements;
+			if(index == size) {
+				newElements = Arrays.copyOf(data, size+add);
+			}
+			else {
+				newElements = NEW_KEY_ARRAY(size+add);
+				System.arraycopy(data, 0, newElements, 0, index);
+				System.arraycopy(data, index, newElements, index + add, size - index);
+			}
+			ITERATOR KEY_GENERIC_TYPE iter = c.iterator();
+			while(add-- != 0) newElements[index++] = iter.NEXT();
+			this.data = newElements;
+		}
+		finally { 
+			lock.unlock(); 
+		}
+		return true;
+	}
+	
+	/**
+	 * Appends the specified elements to the index of the list.
+	 * @param index the index where to append the elements to
+	 * @param c the elements to append to the list
+	 * @throws IndexOutOfBoundsException if index is outside of the lists range
+	 */
+	@Override
+	public boolean addAll(int index, LIST KEY_GENERIC_TYPE c) {
+		int add = c.size();
+		if(add <= 0) return false;
+		ReentrantLock lock = this.lock;
+		lock.lock();
+		try {
+			KEY_TYPE[] data = this.data;
+			int size = data.length;
+			if(index < 0 || index > size) throw new IndexOutOfBoundsException("Index: " + index + ", Size: " + size);
+			KEY_TYPE[] newElements;
+			if(index == size) {
+				newElements = Arrays.copyOf(data, size+add);
+			}
+			else {
+				newElements = NEW_KEY_ARRAY(size+add);
+				System.arraycopy(data, 0, newElements, 0, index);
+				System.arraycopy(data, index, newElements, index + add, size - index);
+			}
+			c.getElements(0, newElements, index, c.size());
+			this.data = newElements;
+		}
+		finally { 
+			lock.unlock(); 
+		}
+		return true;
+	}
+	
+	@Override
+	public boolean addAll(KEY_TYPE[] e, int offset, int length) {
+		if(length <= 0) return false;
+		SanityChecks.checkArrayCapacity(e.length, offset, length);
+		ReentrantLock lock = this.lock;
+		lock.lock();
+		try {
+			int size = data.length;
+			KEY_TYPE[] newElements = Arrays.copyOf(data, size+length);
+			System.arraycopy(e, offset, newElements, size, length);
+			data = newElements;
+		}
+		finally { 
+			lock.unlock(); 
+		}
+		return true;
+	}
+	
+	/**
+	 * Appends the specified array elements to the index of the list.
+	 * @param from the index where to append the elements to
+	 * @param a the elements to append to the list
+	 * @param offset where to start ino the array
+	 * @param length the amount of elements to insert
+	 * @throws IndexOutOfBoundsException if index is outside of the lists range
+	 */
+	@Override
+	public void addElements(int from, KEY_TYPE[] a, int offset, int length) {
+		if(length <= 0) return;
+		ReentrantLock lock = this.lock;
+		lock.lock();
+		try {
+			KEY_TYPE[] data = this.data;
+			int size = data.length;
+			if(from < 0 || from > size) throw new IndexOutOfBoundsException("Index: " + from + ", Size: " + size);
+			KEY_TYPE[] newElements;
+			if(from == size) {
+				newElements = Arrays.copyOf(data, size+length);
+			}
+			else {
+				newElements = NEW_KEY_ARRAY(size+length);
+				System.arraycopy(data, 0, newElements, 0, from);
+				System.arraycopy(data, from, newElements, from + length, size - from);
+			}
+			System.arraycopy(a, offset, newElements, from, length);
+			this.data = newElements;
+		}
+		finally { 
+			lock.unlock(); 
+		}
+	}
+	
+	/**
+	 * A function to fast fetch elements from the list
+	 * @param from index where the list should be fetching elements from
+	 * @param a the array where the values should be inserted to
+	 * @param offset the startIndex of where the array should be written to
+	 * @param length the number of elements the values should be fetched from
+	 * @return the inputArray
+	 * @throws NullPointerException if the array is null
+	 * @throws IndexOutOfBoundsException if from is outside of the lists range
+	 * @throws IllegalStateException if offset or length are smaller then 0 or exceed the array length
+	 */
+	@Override
+	public KEY_TYPE[] getElements(int from, KEY_TYPE[] a, int offset, int length) {
+		KEY_TYPE[] data = this.data;
+		SanityChecks.checkArrayCapacity(data.length, from, length);
+		SanityChecks.checkArrayCapacity(a.length, offset, length);
+		System.arraycopy(data, from, a, offset, length);
+		return a;
+	}
+	
+	/**
+	 * a function to fast remove elements from the list.
+	 * @param from the start index of where the elements should be removed from (inclusive)
+	 * @param to the end index of where the elements should be removed to (exclusive)
+	 */
+	@Override
+	public void removeElements(int from, int to) {
+		int length = to - from;
+		if(length <= 0) return;
+		ReentrantLock lock = this.lock;
+		lock.lock();
+		try {
+			KEY_TYPE[] data = this.data;
+			if(to == data.length) this.data = Arrays.copyOf(data, data.length - length);
+			else {
+				int size = data.length-length;
+				KEY_TYPE[] newElements = NEW_KEY_ARRAY(size);
+				System.arraycopy(data, 0, newElements, 0, from);
+				System.arraycopy(data, to, newElements, from, data.length - to);
+				this.data = newElements;
+			}
+		}
+		finally {
+			lock.unlock();
+		}
+	}
+	
+#if TYPE_OBJECT
+	/**
+	 * A function to fast extract elements out of the list, this removes the elements that were fetched.
+	 * @param from the start index of where the elements should be fetched from (inclusive)
+	 * @param to the end index of where the elements should be fetched to (exclusive)
+	 * @param type the type of the OutputArray
+	 * @return a array of the elements that were fetched
+	 */
+	@Override
+	public <K> K[] extractElements(int from, int to, Class<K> type) {
+		int length = to - from;
+		K[] a = ARRAYS.newArray(type, length);
+		if(length <= 0) return a;
+		ReentrantLock lock = this.lock;
+		lock.lock();
+		try {
+			KEY_TYPE[] data = this.data;
+			System.arraycopy(data, from, a, 0, length);
+			if(to == data.length) this.data = Arrays.copyOf(data, data.length - length);
+			else {
+				int size = data.length-1;
+				KEY_TYPE[] newElements = NEW_KEY_ARRAY(size);
+				System.arraycopy(data, 0, newElements, 0, from);
+				System.arraycopy(data, to, newElements, from, size - to);
+				this.data = newElements;
+			}
+			return a;
+		}
+		finally {
+			lock.unlock();
+		}
+	}
+	
+#else
+	/**
+	 * A function to fast extract elements out of the list, this removes the elements that were fetched.
+	 * @param from the start index of where the elements should be fetched from (inclusive)
+	 * @param to the end index of where the elements should be fetched to (exclusive)
+	 * @return a array of the elements that were fetched
+	 */
+	@Override
+	public KEY_TYPE[] extractElements(int from, int to) {
+		int length = to - from;
+		if(length <= 0) return EMPTY_KEY_ARRAY;
+		ReentrantLock lock = this.lock;
+		lock.lock();
+		try {
+			KEY_TYPE[] data = this.data;
+			KEY_TYPE[] a = NEW_KEY_ARRAY(length);
+			System.arraycopy(data, from, a, 0, length);
+			if(to == data.length) this.data = Arrays.copyOf(data, data.length - length);
+			else {
+				int size = data.length-1;
+				KEY_TYPE[] newElements = NEW_KEY_ARRAY(size);
+				System.arraycopy(data, 0, newElements, 0, from);
+				System.arraycopy(data, to, newElements, from, size - to);
+				this.data = newElements;
+			}
+			return a;
+		}
+		finally {
+			lock.unlock();
+		}
+	}
+	
+#endif
+#if PRIMITIVES
+	@Override
+	public void fillBuffer(JAVA_BUFFER buffer) {
+		buffer.put(data, 0, data.length);
+	}
+	
+#endif
+	/**
+	 * A function to find if the Element is present in this list.
+	 * @param o the element that is searched for
+	 * @return if the element was found.
+	 */
+	@Override
+	@Deprecated
+	public boolean contains(Object o) {
+		return indexOf(o) != -1;
+	}
+	
+	/**
+	 * A function to find the index of a given element
+	 * @param o the element that is searched for
+	 * @return the index of the element if found. (if not found then -1)
+	 */
+	@Override
+	@Deprecated
+	public int indexOf(Object o) {
+		KEY_TYPE[] data = this.data;
+#if TYPE_OBJECT
+		if(o == null) {
+			for(int i = 0,m=data.length;i<m;i++)
+				if(data[i] == null) return i;
+			return -1;
+		}
+#else
+		if(o == null) return -1;
+#endif
+		for(int i = 0,m=data.length;i<m;i++) {
+			if(Objects.equals(o, KEY_TO_OBJ(data[i]))) return i;
+		}
+		return -1;
+	}
+	
+	/**
+	 * A function to find the last index of a given element
+	 * @param o the element that is searched for
+	 * @return the last index of the element if found. (if not found then -1)
+	 */
+	@Override
+	@Deprecated
+	public int lastIndexOf(Object o) {
+		KEY_TYPE[] data = this.data;
+#if TYPE_OBJECT
+		if(o == null) {
+			for(int i = data.length - 1;i>=0;i--)
+				if(data[i] == null) return i;
+			return -1;
+		}
+#else
+		if(o == null) return -1;
+#endif
+		for(int i = data.length - 1;i>=0;i--) {
+			if(Objects.equals(o, KEY_TO_OBJ(data[i]))) return i;
+		}
+		return -1;
+	}
+	
+#if TYPE_OBJECT
+	/**
+	 * Sorts the elements specified by the Natural order either by using the Comparator or the elements
+	 * @param c the sorter of the elements, can be null
+	 * @see java.util.List#sort(Comparator)
+	 */
+	@Override
+	public void sort(Comparator<? super CLASS_TYPE> c) {
+		ReentrantLock lock = this.lock;
+		lock.lock();
+		try {
+			KEY_TYPE[] newData = Arrays.copyOf(data, data.length);
+			if(c != null) ARRAYS.stableSort(newData, newData.length, c);
+			else ARRAYS.stableSort(newData, newData.length);
+			data = newData;
+		}
+		finally {
+			lock.unlock();
+		}
+	}
+	
+	/**
+	 * Sorts the elements specified by the Natural order either by using the Comparator or the elements using a unstable sort
+	 * @param c the sorter of the elements, can be null
+	 * @see java.util.List#sort(Comparator)
+	 */
+	@Override
+	public void unstableSort(Comparator<? super CLASS_TYPE> c) {
+		ReentrantLock lock = this.lock;
+		lock.lock();
+		try {
+			KEY_TYPE[] newData = Arrays.copyOf(data, data.length);
+			if(c != null) ARRAYS.unstableSort(newData, newData.length, c);
+			else ARRAYS.unstableSort(newData, newData.length);
+			data = newData;
+		}
+		finally {
+			lock.unlock();
+		}
+	}
+	
+#else
+	/**
+	 * A Type Specific implementation of the Collection#contains function.
+	 * @param e the element that is searched for.
+	 * @return if the element was found
+	 */
+	@Override
+	public boolean contains(KEY_TYPE e) {
+		return indexOf(e) != -1;
+	}
+	
+	/**
+	 * A Type-Specific function to find the index of a given element
+	 * @param e the element that is searched for
+	 * @return the index of the element if found. (if not found then -1)
+	 */
+	@Override
+	public int indexOf(KEY_TYPE e) {
+		KEY_TYPE[] data = this.data;
+		for(int i = 0,m=data.length;i<m;i++) {
+			if(KEY_EQUALS(data[i], e)) return i;
+		}
+		return -1;
+	}
+	
+	/**
+	 * A Type-Specific function to find the last index of a given element
+	 * @param e the element that is searched for
+	 * @return the last index of the element if found. (if not found then -1)
+	 */
+	@Override
+	public int lastIndexOf(KEY_TYPE e) {
+		KEY_TYPE[] data = this.data;
+		for(int i = data.length - 1;i>=0;i--) {
+			if(KEY_EQUALS(data[i], e)) return i;
+		}
+		return -1;
+	}
+	
+	/**
+	 * Sorts the elements specified by the Natural order either by using the Comparator or the elements
+	 * @param c the sorter of the elements, can be null
+	 * @see java.util.List#sort(java.util.Comparator)
+	 * @see ARRAYS#stableSort(KEY_TYPE[], COMPARATOR)
+	 */
+	@Override
+	public void sort(COMPARATOR c) {
+		ReentrantLock lock = this.lock;
+		lock.lock();
+		try {
+			KEY_TYPE[] newData = Arrays.copyOf(data, data.length);
+			if(c != null) ARRAYS.stableSort(newData, newData.length, c);
+			else ARRAYS.stableSort(newData, newData.length);
+			data = newData;
+		}
+		finally {
+			lock.unlock();
+		}
+	}
+	
+	/**
+	 * Sorts the elements specified by the Natural order either by using the Comparator or the elements using a unstable sort
+	 * @param c the sorter of the elements, can be null
+	 * @see java.util.List#sort(java.util.Comparator)
+	 * @see ARRAYS#unstableSort(KEY_TYPE[], COMPARATOR)
+	 */
+	@Override
+	public void unstableSort(COMPARATOR c) {
+		ReentrantLock lock = this.lock;
+		lock.lock();
+		try {
+			KEY_TYPE[] newData = Arrays.copyOf(data, data.length);
+			if(c != null) ARRAYS.unstableSort(newData, newData.length, c);
+			else ARRAYS.unstableSort(newData, newData.length);
+			data = newData;
+		}
+		finally {
+			lock.unlock();
+		}	
+	}
+	
+#endif
+	/**
+	 * A Type-Specific get function to reduce (un)boxing
+	 * @param index the index of the element to fetch
+	 * @return the value of the requested index
+	 * @throws IndexOutOfBoundsException if the index is out of range
+	 */
+	@Override
+	public KEY_TYPE GET_KEY(int index) {
+		checkRange(index);
+		return data[index];
+	}
+	
+	/**
+	 * Provides the Selected Object from the stack.
+	 * Top to bottom
+	 * @param index of the element that should be provided
+	 * @return the element that was requested
+	 * @throws ArrayIndexOutOfBoundsException if the index is out of bounds
+	 * @see speiger.src.collections.utils.Stack#peek(int)
+	 */
+	@Override
+	public KEY_TYPE peek(int index) {
+		checkRange((size() - 1) - index);
+		return data[(size() - 1) - index];
+	}
+	
+	@Override
+	public LIST_ITERATOR KEY_GENERIC_TYPE listIterator(int index) {
+		if(index < 0 || index > size()) throw new IndexOutOfBoundsException();
+		return new COWIteratorBRACES(data, index);
+	}
+	
+	@Override
+	public LIST KEY_GENERIC_TYPE subList(int fromIndex, int toIndex) {
+		SanityChecks.checkArrayCapacity(data.length, fromIndex, toIndex-fromIndex);
+		return new COWSubListBRACES(this, 0, fromIndex, toIndex);
+	}
+	
+	/**
+	 * A Type Specific foreach function that reduces (un)boxing
+	 * 
+	 * @implSpec
+	 * <p>The default implementation behaves as if:
+	 * <pre>{@code
+	 * 	for(int i = 0,m=data.length;i<m;i++)
+	 *		action.accept(data[i]);
+	 * }</pre>
+	 *
+	 * @param action The action to be performed for each element
+	 * @throws NullPointerException if the specified action is null
+	 * @see Iterable#forEach(java.util.function.Consumer)
+	 */
+	@Override
+	public void forEach(CONSUMER KEY_SUPER_GENERIC_TYPE action) {
+		Objects.requireNonNull(action);
+		KEY_TYPE[] data = this.data;
+		for(int i = 0,m=data.length;i<m;i++)
+			action.accept(data[i]);
+	}
+	
+	@Override
+	public <E> void forEach(E input, BI_FROM_OBJECT_CONSUMER KSK_GENERIC_TYPE<E> action) {
+		Objects.requireNonNull(action);
+		KEY_TYPE[] data = this.data;
+		for(int i = 0,m=data.length;i<m;i++)
+			action.accept(input, data[i]);		
+	}
+	
+	@Override
+	public boolean matchesAny(PREDICATE KEY_GENERIC_TYPE filter) {
+		Objects.requireNonNull(filter);
+		KEY_TYPE[] data = this.data;
+		for(int i = 0,m=data.length;i<m;i++) {
+			if(filter.TEST_VALUE(data[i])) return true;
+		}
+		return false;
+	}
+	
+	@Override
+	public boolean matchesNone(PREDICATE KEY_GENERIC_TYPE filter) {
+		Objects.requireNonNull(filter);
+		KEY_TYPE[] data = this.data;
+		for(int i = 0,m=data.length;i<m;i++) {
+			if(filter.TEST_VALUE(data[i])) return false;
+		}
+		return true;
+	}
+	
+	@Override
+	public boolean matchesAll(PREDICATE KEY_GENERIC_TYPE filter) {
+		Objects.requireNonNull(filter);
+		KEY_TYPE[] data = this.data;
+		for(int i = 0,m=data.length;i<m;i++) {
+			if(!filter.TEST_VALUE(data[i])) return false;
+		}
+		return true;
+	}
+	
+	@Override
+	public KEY_TYPE findFirst(PREDICATE KEY_GENERIC_TYPE filter) {
+		Objects.requireNonNull(filter);
+		KEY_TYPE[] data = this.data;
+		for(int i = 0,m=data.length;i<m;i++) {
+			if(filter.TEST_VALUE(data[i])) return data[i];
+		}
+		return EMPTY_VALUE;
+	}
+	
+#if !TYPE_OBJECT
+	@Override
+	public KEY_TYPE reduce(KEY_TYPE identity, UNARY_OPERATOR KEY_KEY_GENERIC_TYPE operator) {
+		Objects.requireNonNull(operator);
+		KEY_TYPE[] data = this.data;
+		KEY_TYPE state = identity;
+		for(int i = 0,m=data.length;i<m;i++) {
+			state = operator.APPLY_VALUE(state, data[i]);
+		}
+		return state;
+	}
+	
+#else
+	@Override
+	public <KEY_SPECIAL_TYPE> KEY_SPECIAL_TYPE reduce(KEY_SPECIAL_TYPE identity, BiFunction<KEY_SPECIAL_TYPE, KEY_TYPE, KEY_SPECIAL_TYPE> operator) {
+		Objects.requireNonNull(operator);
+		KEY_TYPE[] data = this.data;
+		KEY_SPECIAL_TYPE state = identity;
+		for(int i = 0,m=data.length;i<m;i++) {
+			state = operator.APPLY_VALUE(state, data[i]);
+		}
+		return state;
+	}
+	
+#endif
+	@Override
+	public KEY_TYPE reduce(UNARY_OPERATOR KEY_KEY_GENERIC_TYPE operator) {
+		Objects.requireNonNull(operator);
+		KEY_TYPE[] data = this.data;
+		KEY_TYPE state = EMPTY_VALUE;
+		boolean empty = true;
+		for(int i = 0,m=data.length;i<m;i++) {
+			if(empty) {
+				empty = false;
+				state = data[i];
+				continue;
+			}
+			state = operator.APPLY_VALUE(state, data[i]);
+		}
+		return state;
+	}
+	
+	@Override
+	public int count(PREDICATE KEY_GENERIC_TYPE filter) {
+		Objects.requireNonNull(filter);
+		KEY_TYPE[] data = this.data;
+		int result = 0;
+		for(int i = 0,m=data.length;i<m;i++) {
+			if(filter.TEST_VALUE(data[i])) result++;
+		}
+		return result;
+	}
+	
+	/**
+	 * A Type-Specific set function to reduce (un)boxing
+	 * @param index the index of the element to set
+	 * @param e the value that should be set
+	 * @return the previous element
+	 * @throws IndexOutOfBoundsException if the index is out of range
+	 */
+	@Override
+	public KEY_TYPE set(int index, KEY_TYPE e) {
+		checkRange(index);
+		ReentrantLock lock = this.lock;
+		lock.lock();
+		try {
+			KEY_TYPE old = data[index];
+			if(KEY_EQUALS_NOT(old, e)) {
+				KEY_TYPE[] newElements = Arrays.copyOf(data, data.length);
+				newElements[index] = e;
+				data = newElements;
+			}
+			return old;
+		}
+		finally {
+			lock.unlock();
+		}
+	}
+	
+	/**
+	 * A function to replace all values in the list
+	 * @param o the action to replace the values
+	 * @throws NullPointerException if o is null
+	 */
+	@Override
+	@Primitive
+	public void replaceAll(UnaryOperator<CLASS_TYPE> o) {
+#if PRIMITIVES
+		Objects.requireNonNull(o);
+#if TYPE_BYTE || TYPE_SHORT || TYPE_CHAR || TYPE_FLOAT
+		REPLACE(T -> OBJ_TO_KEY(o.apply(KEY_TO_OBJ(SanityChecks.SANITY_CAST(T)))));
+#else
+		REPLACE(T -> OBJ_TO_KEY(o.apply(KEY_TO_OBJ(T))));
+#endif
+#else
+		Objects.requireNonNull(o);
+		ReentrantLock lock = this.lock;
+		lock.lock();
+		try {
+			KEY_TYPE[] newData = Arrays.copyOf(data, data.length);
+			for(int i = 0,m=newData.length;i<m;i++)
+				newData[i] = OBJ_TO_KEY(o.apply(KEY_TO_OBJ(newData[i])));
+			data = newData;
+		}
+		finally {
+			lock.unlock();
+		}
+#endif
+	}
+	
+#if PRIMITIVES
+	/**
+	 * A Type-Specific replace function to reduce (un)boxing
+	 * @param o the action to replace the values
+	 * @throws NullPointerException if o is null
+	 */
+	@Override
+	public void REPLACE(JAVA_UNARY_OPERATOR o) {
+		Objects.requireNonNull(o);
+		ReentrantLock lock = this.lock;
+		lock.lock();
+		try {
+			KEY_TYPE[] newData = Arrays.copyOf(data, data.length);
+			for(int i = 0,m=newData.length;i<m;i++)
+#if TYPE_BYTE || TYPE_SHORT || TYPE_CHAR || TYPE_FLOAT
+				newData[i] = SanityChecks.SANITY_CAST(o.APPLY_CAST(newData[i]));
+#else
+				newData[i] = o.APPLY(newData[i]);
+#endif
+			data = newData;
+		}
+		finally {
+			lock.unlock();
+		}
+	}
+	
+#endif
+	
+	/**
+	 * A Type-Specific remove function to reduce (un)boxing
+	 * @param index the index of the element to fetch
+	 * @return the value of the requested index
+	 * @throws IndexOutOfBoundsException if the index is out of range
+	 */
+	@Override
+	public KEY_TYPE REMOVE(int index) {
+		ReentrantLock lock = this.lock;
+		lock.lock();
+		try {
+			KEY_TYPE[] data = this.data;
+			KEY_TYPE result = data[index];
+			if(index == data.length-1) this.data = Arrays.copyOf(data, data.length-1);
+			else {
+				int size = data.length-1;
+				KEY_TYPE[] newElements = NEW_KEY_ARRAY(size);
+				System.arraycopy(data, 0, newElements, 0, index);
+				System.arraycopy(data, index + 1, newElements, index, size - index);
+				this.data = newElements;
+			}
+			return result;
+		}
+		finally {
+			lock.unlock();
+		}
+	}
+	
+	@Override
+	public KEY_TYPE swapRemove(int index) {
+		ReentrantLock lock = this.lock;
+		lock.lock();
+		try {
+			KEY_TYPE[] data = this.data;
+			KEY_TYPE result = data[index];
+			KEY_TYPE[] newElements = Arrays.copyOf(data, data.length-1);
+			if(index != newElements.length) newElements[index] = data[data.length-1];
+			this.data = newElements;
+			return result;
+		}
+		finally {
+			lock.unlock();
+		}
+	}
+	
+#if !TYPE_OBJECT
+	/**
+	 * A Type-Specific implementation of remove. This implementation iterates over the elements until it finds the element that is searched for or it runs out of elements.
+	 * It stops after finding the first element
+	 * @param type the element that is searched for
+	 * @return true if the element was found and removed.
+	 */
+	@Override
+	public boolean REMOVE_KEY(KEY_TYPE type) {
+		int index = indexOf(type);
+		if(index == -1) return false;
+		REMOVE(index);
+		return true;
+	}
+	
+#else
+	@Override
+	public boolean remove(Object type) {
+		int index = indexOf(type);
+		if(index == -1) return false;
+		REMOVE(index);
+		return true;
+	}
+	
+#endif
+	/**
+	 * A Type-Specific pop function to reduce (un)boxing
+	 * @return the value of the requested index
+	 * @throws IndexOutOfBoundsException if the index is out of range
+	 */
+	@Override
+	public KEY_TYPE pop() {
+		return REMOVE(size() - 1);
+	}
+	
+	/**
+	 * A function to remove all elements that were provided in the other collection
+	 * This function might delegate to a more appropriate function if necessary
+	 * @param c the elements that should be removed
+	 * @return true if the collection was modified
+	 * @throws NullPointerException if the collection is null
+	 */
+	@Override
+	@Deprecated
+	public boolean removeAll(Collection<?> c) {
+		if(c.isEmpty()) return false;
+		ReentrantLock lock = this.lock;
+		lock.lock();
+		try {
+			KEY_TYPE[] data = this.data;
+			KEY_TYPE[] newElements = NEW_KEY_ARRAY(data.length);
+			int j = 0;
+			for(int i= 0,m=data.length;i<m;i++) {
+				if(!c.contains(KEY_TO_OBJ(data[i]))) newElements[j++] = data[i];
+			}
+			if(data.length != j) {
+				this.data = Arrays.copyOf(newElements, j);
+				return true;
+			}
+			return false;
+		}
+		finally {
+			lock.unlock();
+		}
+	}
+	
+	/**
+	 * A function to retain all elements that were provided in the other collection
+	 * This function might delegate to a more appropriate function if necessary
+	 * @param c the elements that should be kept. If empty, LongArrayList#clear is called.
+	 * @return true if the collection was modified
+	 * @throws NullPointerException if the collection is null
+	 */
+	@Override
+	@Deprecated
+	public boolean retainAll(Collection<?> c) {
+		ReentrantLock lock = this.lock;
+		lock.lock();
+		try {
+			KEY_TYPE[] data = this.data;
+			if(c.isEmpty()) {
+				if(data.length > 0) {
+					this.data = EMPTY_KEY_ARRAY;
+					return true;
+				}
+				return false;
+			}
+			KEY_TYPE[] newElements = NEW_KEY_ARRAY(data.length);
+			int j = 0;
+			for(int i= 0,m=data.length;i<m;i++) {
+				if(c.contains(KEY_TO_OBJ(data[i]))) newElements[j++] = data[i];
+			}
+			if(data.length != j) {
+				this.data = Arrays.copyOf(newElements, j);
+				return true;
+			}
+			return false;
+		}
+		finally {
+			lock.unlock();
+		}
+	}
+	
+	/**
+	 * A optimized List#removeIf(Predicate) that more quickly removes elements from the list then the ArrayList implementation
+	 * @param filter the filter to remove elements
+	 * @return true if the list was modified
+	 */
+	@Override
+	@Deprecated
+	public boolean removeIf(Predicate<? super CLASS_TYPE> filter) {
+		Objects.requireNonNull(filter);
+		ReentrantLock lock = this.lock;
+		lock.lock();
+		try {
+			KEY_TYPE[] data = this.data;
+			KEY_TYPE[] newElements = NEW_KEY_ARRAY(data.length);
+			int j = 0;
+			for(int i= 0,m=data.length;i<m;i++) {
+				if(!filter.test(KEY_TO_OBJ(data[i]))) newElements[j++] = data[i];
+			}
+			if(data.length != j) {
+				this.data = Arrays.copyOf(newElements, j);
+				return true;
+			}
+			return false;
+		}
+		finally {
+			lock.unlock();
+		}
+	}
+	
+	/**
+	 * A function to remove all elements that were provided in the other collection
+	 * @param c the elements that should be removed
+	 * @return true if the collection was modified
+	 * @throws NullPointerException if the collection is null
+	 */
+	@Override
+	public boolean removeAll(COLLECTION KEY_GENERIC_TYPE c) {
+		if(c.isEmpty()) return false;
+		ReentrantLock lock = this.lock;
+		lock.lock();
+		try {
+			KEY_TYPE[] data = this.data;
+			KEY_TYPE[] newElements = NEW_KEY_ARRAY(data.length);
+			int j = 0;
+			for(int i= 0,m=data.length;i<m;i++) {
+				if(!c.contains(data[i])) newElements[j++] = data[i];
+			}
+			if(data.length != j) {
+				this.data = Arrays.copyOf(newElements, j);
+				return true;
+			}
+			return false;
+		}
+		finally {
+			lock.unlock();
+		}
+	}
+	
+	@Override
+	public boolean removeAll(COLLECTION KEY_GENERIC_TYPE c, CONSUMER KEY_GENERIC_TYPE r) {
+		if(c.isEmpty()) return false;
+		ReentrantLock lock = this.lock;
+		lock.lock();
+		try {
+			KEY_TYPE[] data = this.data;
+			KEY_TYPE[] newElements = NEW_KEY_ARRAY(data.length);
+			int j = 0;
+			for(int i= 0,m=data.length;i<m;i++) {
+				if(!c.contains(data[i])) newElements[j++] = data[i];
+				else r.accept(data[i]);
+			}
+			if(data.length != j) {
+				this.data = Arrays.copyOf(newElements, j);
+				return true;
+			}
+			return false;
+		}
+		finally {
+			lock.unlock();
+		}
+	}
+	
+	/**
+	 * A function to retain all elements that were provided in the other collection
+	 * This function might delegate to a more appropriate function if necessary
+	 * @param c the elements that should be kept. If empty, LongArrayList#clear is called.
+	 * @return true if the collection was modified
+	 * @throws NullPointerException if the collection is null
+	 */
+	@Override
+	public boolean retainAll(COLLECTION KEY_GENERIC_TYPE c) {
+		ReentrantLock lock = this.lock;
+		lock.lock();
+		try {
+			KEY_TYPE[] data = this.data;
+			if(c.isEmpty()) {
+				if(data.length > 0) {
+					this.data = EMPTY_KEY_ARRAY;
+					return true;
+				}
+				return false;
+			}
+			KEY_TYPE[] newElements = NEW_KEY_ARRAY(data.length);
+			int j = 0;
+			for(int i= 0,m=data.length;i<m;i++) {
+				if(c.contains(data[i])) newElements[j++] = data[i];
+			}
+			if(data.length != j) {
+				this.data = Arrays.copyOf(newElements, j);
+				return true;
+			}
+			return false;
+		}
+		finally {
+			lock.unlock();
+		}
+	}
+	
+	@Override
+	public boolean retainAll(COLLECTION KEY_GENERIC_TYPE c, CONSUMER KEY_GENERIC_TYPE r) {
+		ReentrantLock lock = this.lock;
+		lock.lock();
+		try {
+			KEY_TYPE[] data = this.data;
+			if(c.isEmpty()) {
+				if(data.length > 0) {
+					forEach(r);
+					this.data = EMPTY_KEY_ARRAY;
+					return true;
+				}
+				return false;
+			}
+			KEY_TYPE[] newElements = NEW_KEY_ARRAY(data.length);
+			int j = 0;
+			for(int i= 0,m=data.length;i<m;i++) {
+				if(c.contains(data[i])) newElements[j++] = data[i];
+				else r.accept(data[i]);
+			}
+			if(data.length != j) {
+				this.data = Arrays.copyOf(newElements, j);
+				return true;
+			}
+			return false;
+		}
+		finally {
+			lock.unlock();
+		}
+	}
+	
+#if PRIMITIVES
+	/**
+	 * A optimized List#removeIf(Predicate) that more quickly removes elements from the list then the ArrayList implementation
+	 * @param filter the filter to remove elements
+	 * @return true if the list was modified
+	 */
+	@Override
+	public boolean remIf(JAVA_PREDICATE filter) {
+		Objects.requireNonNull(filter);
+		ReentrantLock lock = this.lock;
+		lock.lock();
+		try {
+			KEY_TYPE[] data = this.data;
+			KEY_TYPE[] newElements = NEW_KEY_ARRAY(data.length);
+			int j = 0;
+			for(int i= 0,m=data.length;i<m;i++) {
+				if(!filter.test(data[i])) newElements[j++] = data[i];
+			}
+			if(data.length != j) {
+				this.data = Arrays.copyOf(newElements, j);
+				return true;
+			}
+			return false;
+		}
+		finally {
+			lock.unlock();
+		}
+	}
+	
+#endif
+	/**
+	 * A toArray implementation that ensures the Array itself is a Object.
+	 * @return a Array of the elements in the list
+	 */
+	@Override
+	@Primitive
+	public Object[] toArray() {
+		KEY_TYPE[] data = this.data;
+		int size = data.length;
+		Object[] obj = new Object[size];
+		for(int i = 0;i<size;i++)
+			obj[i] = KEY_TO_OBJ(data[i]);
+		return obj;
+	}
+	
+	/**
+	 * A toArray implementation that ensures the Array itself is a Object.
+	 * @param a original array. If null a Object array with the right size is created. If to small the Array of the same type is created with the right size
+	 * @return a Array of the elements in the list
+	 */
+	@Override
+	@Primitive
+	public <E> E[] toArray(E[] a) {
+		KEY_TYPE[] data = this.data;
+		int size = data.length;
+		if(a == null) a = (E[])new Object[size];
+		else if(a.length < size) a = (E[])ObjectArrays.newArray(a.getClass().getComponentType(), size);
+#if TYPE_OBJECT
+        System.arraycopy(data, 0, a, 0, size);
+#else
+		for(int i = 0;i<size;i++)
+			a[i] = (E)KEY_TO_OBJ(data[i]);
+#endif
+		if (a.length > size) a[size] = null;
+		return a;
+	}
+	
+#if !TYPE_OBJECT
+	@Override
+	public KEY_TYPE[] TO_ARRAY(KEY_TYPE[] a) {
+		KEY_TYPE[] data = this.data;
+		int size = data.length;
+		if(a.length < size) a = new KEY_TYPE[size];
+		System.arraycopy(data, 0, a, 0, size);
+		if (a.length > size) a[size] = EMPTY_KEY_VALUE;
+		return a;
+	}
+	
+#endif
+	
+	/**
+	 * A function to return the size of the list
+	 * @return the size of elements in the list
+	 */
+	@Override
+	public int size() {
+		return data.length;
+	}
+	
+	/**
+	 * A function to ensure the elements are within the requested size.
+	 * If smaller then the stored elements they get removed as needed.
+	 * If bigger it is ensured that enough room is provided depending on the implementation
+	 * @param size the requested amount of elements/room for elements
+	 */
+	@Override
+	public void size(int size) {
+		if(size == data.length || size < 0) return;
+		ReentrantLock lock = this.lock;
+		lock.lock();
+		try {
+			data = Arrays.copyOf(data, size);
+		}
+		finally {
+			lock.unlock();
+		}
+	}
+	
+	/**
+	 * A function to clear all elements in the list.
+	 */
+	@Override
+	public void clear() {
+		ReentrantLock lock = this.lock;
+		lock.lock();
+		try {
+			data = EMPTY_KEY_ARRAY;
+		}
+		finally {
+			lock.unlock();
+		}
+	}
+	
+	/**
+	 * Trims the original collection down to the size of the current elements or the requested size depending which is bigger
+	 * @param size the requested trim size.
+	 */
+	@Override
+	public boolean trim(int size) {
+		return false;
+	}
+	
+	/**
+	 * Trims the collection down to the requested size and clears all elements while doing so
+	 * @param size the amount of elements that should be allowed
+	 * @note this will enforce minimum size of the collection itself
+	 */
+	@Override
+	public void clearAndTrim(int size) {
+		ReentrantLock lock = this.lock;
+		lock.lock();
+		try {
+			data = EMPTY_KEY_ARRAY;
+		}
+		finally {
+			lock.unlock();
+		}
+	}
+	
+	@Override
+	public COPY_ON_WRITE_LIST KEY_GENERIC_TYPE copy() {
+		COPY_ON_WRITE_LIST KEY_GENERIC_TYPE list = new COPY_ON_WRITE_LISTBRACES();
+		list.data = Arrays.copyOf(data, data.length);
+		return list;
+	}
+	
+	protected void checkRange(int index) {
+		if (index < 0 || index >= data.length)
+			throw new IndexOutOfBoundsException("Index: " + index + ", Size: " + data.length);
+	}
+	
+	#if PRIMITIVES
+	/**
+	 * Returns a Java-Type-Specific Stream to reduce boxing/unboxing.
+	 * @return a Stream of the closest java type
+	 * @note characteristics are ordered, sized, subsized
+	 */
+	@Override
+	public JAVA_STREAM primitiveStream() { return StreamSupport.NEW_STREAM(SPLIT_ITERATORS.createArrayJavaSplititerator(data, data.length, 16464), false); }
+	
+#endif
+	/**
+	 * A Type Specific Type Splititerator to reduce boxing/unboxing
+	 * @return type specific splititerator
+	 * @note characteristics are ordered, sized, subsized
+	 */
+	@Override
+	public SPLIT_ITERATOR KEY_GENERIC_TYPE spliterator() { return SPLIT_ITERATORS.createArraySplititerator(data, data.length, 16464); }
+	
+	static final class COWIterator KEY_GENERIC_TYPE implements LIST_ITERATOR KEY_GENERIC_TYPE
+	{
+		KEY_TYPE[] data;
+		int index;
+		
+		public COWIterator(KEY_TYPE[] data, int index) {
+			this.data = data;
+			this.index = index;
+		}
+		
+		@Override
+		public boolean hasNext() {
+			return index < data.length;
+		}
+		
+		@Override
+		public KEY_TYPE NEXT() {
+			if(!hasNext()) throw new NoSuchElementException();
+			return data[index++];
+		}
+		
+		@Override
+		public boolean hasPrevious() {
+			return index > 0;
+		}
+		
+		@Override
+		public KEY_TYPE PREVIOUS() {
+			if(!hasPrevious()) throw new NoSuchElementException();
+			return data[index--];
+		}
+		
+		@Override
+		public int nextIndex() {
+			return index;
+		}
+		
+		@Override
+		public int previousIndex() {
+			return index-1;
+		}
+		
+		@Override
+		public void remove() { throw new UnsupportedOperationException(); }
+		@Override
+		public void set(KEY_TYPE e) { throw new UnsupportedOperationException(); }
+		@Override
+		public void add(KEY_TYPE e) { throw new UnsupportedOperationException(); }
+		
+		@Override
+		public int skip(int amount) {
+			if(amount < 0) throw new IllegalStateException("Negative Numbers are not allowed");
+			int steps = Math.min(amount, (data.length - 1) - index);
+			index += steps;
+			return steps;
+		}
+		
+		@Override
+		public int back(int amount) {
+			if(amount < 0) throw new IllegalStateException("Negative Numbers are not allowed");
+			int steps = Math.min(amount, index);
+			index -= steps;
+			return steps;
+		}
+	}
+	
+	private static class COWSubList KEY_GENERIC_TYPE extends ABSTRACT_LIST KEY_GENERIC_TYPE
+	{
+		final COPY_ON_WRITE_LIST KEY_GENERIC_TYPE list;
+		final int parentOffset;
+		final int offset;
+		int size;
+		
+		public COWSubList(COPY_ON_WRITE_LIST KEY_GENERIC_TYPE list, int offset, int from, int to) {
+			this.list = list;
+			this.parentOffset = from;
+			this.offset = offset + from;
+			this.size = to - from;
+		}
+		
+		@Override
+		public void add(int index, KEY_TYPE element) {
+			ReentrantLock lock = list.lock;
+			lock.lock();
+			try {
+				checkAddSubRange(index);
+				list.add(parentOffset+index, element);
+				size++;				
+			}
+			finally {
+				lock.unlock();
+			}
+		}
+		
+		@Override
+		public boolean addAll(int index, Collection<? extends CLASS_TYPE> c) {
+			int add = c.size();
+			if(add <= 0) return false;
+			ReentrantLock lock = list.lock;
+			lock.lock();
+			try {
+				checkAddSubRange(index);
+				list.addAll(parentOffset+index, c);
+				this.size += add;
+			}
+			finally {
+				lock.unlock();
+			}
+			return true;
+		}
+		
+		@Override
+		public boolean addAll(int index, COLLECTION KEY_GENERIC_TYPE c) {
+			int add = c.size();
+			if(add <= 0) return false;
+			ReentrantLock lock = list.lock;
+			lock.lock();
+			try {
+				checkAddSubRange(index);
+				list.addAll(parentOffset+index, c);
+				this.size += add;
+			}
+			finally {
+				lock.unlock();
+			}
+			return true;
+		}
+
+		@Override
+		public boolean addAll(int index, LIST KEY_GENERIC_TYPE c) {
+			int add = c.size();
+			if(add <= 0) return false;
+			ReentrantLock lock = list.lock;
+			lock.lock();
+			try {
+				checkAddSubRange(index);
+				list.addAll(parentOffset+index, c);
+				this.size += add;
+			}
+			finally {
+				lock.unlock();
+			}
+			return true;
+		}
+		
+		@Override
+		public void addElements(int from, KEY_TYPE[] a, int offset, int length) {
+			if(length <= 0) return;
+			ReentrantLock lock = list.lock;
+			lock.lock();
+			try {
+				checkAddSubRange(from);
+				list.addElements(parentOffset+from, a, offset, length);
+				this.size += length;
+			}
+			finally {
+				lock.unlock();
+			}
+		}
+		
+		@Override
+		public KEY_TYPE[] getElements(int from, KEY_TYPE[] a, int offset, int length) {
+			SanityChecks.checkArrayCapacity(size, from, length);
+			SanityChecks.checkArrayCapacity(a.length, offset, length);
+			return list.getElements(from+this.offset, a, offset, length);
+		}
+		
+		@Override
+		public void removeElements(int from, int to) {
+			if(to-from <= 0) return;
+			ReentrantLock lock = list.lock;
+			lock.lock();
+			try {
+				checkSubRange(from);
+				checkSubRange(to);
+				list.removeElements(from+parentOffset, to+parentOffset);
+				size -= to - from;
+			}
+			finally {
+				lock.unlock();
+			}
+		}
+		
+#if TYPE_OBJECT
+		@Override
+		public <K> K[] extractElements(int from, int to, Class<K> type) {
+			ReentrantLock lock = list.lock;
+			lock.lock();
+			try {
+				checkSubRange(from);
+				checkSubRange(to);
+				K[] result = list.extractElements(from+parentOffset, to+parentOffset, type);
+				size -= to - from;
+				return result;
+			}
+			finally {
+				lock.unlock();
+			}
+		}
+
+#else
+		@Override
+		public KEY_TYPE[] extractElements(int from, int to) {
+			ReentrantLock lock = list.lock;
+			lock.lock();
+			try {
+				checkSubRange(from);
+				checkSubRange(to);
+				KEY_TYPE[] result = list.extractElements(from+parentOffset, to+parentOffset);
+				size -= to - from;
+				return result;
+			}
+			finally {
+				lock.unlock();
+			}
+		}
+		
+#endif
+		@Override
+		public KEY_TYPE GET_KEY(int index) {
+			checkSubRange(index);
+			return list.GET_KEY(offset+index);
+		}
+
+		@Override
+		public KEY_TYPE set(int index, KEY_TYPE element) {
+			ReentrantLock lock = list.lock;
+			lock.lock();
+			try {
+				checkSubRange(index);
+				return list.set(offset+index, element);
+			}
+			finally {
+				lock.unlock();
+			}
+		}
+		
+		@Override
+		public KEY_TYPE swapRemove(int index) {
+			ReentrantLock lock = list.lock;
+			lock.lock();
+			try {
+				checkSubRange(index);
+				KEY_TYPE result = list.swapRemove(index+parentOffset);
+				size--;
+				return result;
+			}
+			finally {
+				lock.unlock();
+			}
+		}
+		
+		@Override
+		public KEY_TYPE REMOVE(int index) {
+			ReentrantLock lock = list.lock;
+			lock.lock();
+			try {
+				checkSubRange(index);
+				KEY_TYPE result = list.REMOVE(index+parentOffset);
+				size--;
+				return result;
+			}
+			finally {
+				lock.unlock();
+			}
+		}
+		
+		@Override
+		public int size() {
+			return size;
+		}
+		
+		@Override
+		public void clear() {
+			if(size == 0) return;
+			ReentrantLock lock = list.lock;
+			lock.lock();
+			try {
+				list.removeElements(offset, offset+size);
+				size = 0;
+			}
+			finally {
+				lock.unlock();
+			}
+		}
+		
+		@Override
+		public SPLIT_ITERATOR KEY_GENERIC_TYPE spliterator() { return SPLIT_ITERATORS.createSplititerator(this, 16464); }
+		
+		@Override
+		public LIST_ITERATOR KEY_GENERIC_TYPE listIterator(int index) {
+			if(index < 0 || index > size()) throw new IndexOutOfBoundsException();
+			return new COWSubListIteratorBRACES(this, index);
+		}
+		
+		@Override
+		public LIST KEY_GENERIC_TYPE subList(int fromIndex, int toIndex) {
+			SanityChecks.checkArrayCapacity(size, fromIndex, toIndex-fromIndex);
+			return new COWSubListBRACES(list, offset, fromIndex, toIndex);
+		}
+		
+		protected void checkSubRange(int index) {
+			if (index < 0 || index >= size)
+				throw new IndexOutOfBoundsException("Index: " + index + ", Size: " + size);
+		}
+		
+		protected void checkAddSubRange(int index) {
+			if (index < 0 || index > size)
+				throw new IndexOutOfBoundsException("Index: " + index + ", Size: " + size);
+		}
+	}
+	
+	private static class COWSubListIterator KEY_GENERIC_TYPE implements LIST_ITERATOR KEY_GENERIC_TYPE
+	{
+		ABSTRACT_LIST KEY_GENERIC_TYPE list;
+		int index;
+		
+		COWSubListIterator(ABSTRACT_LIST KEY_GENERIC_TYPE list, int index) {
+			this.list = list;
+			this.index = index;
+		}
+		
+		@Override
+		public boolean hasNext() {
+			return index < list.size();
+		}
+		
+		@Override
+		public KEY_TYPE NEXT() {
+			if(!hasNext()) throw new NoSuchElementException();
+			return list.GET_KEY(index++);
+		}
+		
+		@Override
+		public boolean hasPrevious() {
+			return index > 0;
+		}
+		
+		@Override
+		public KEY_TYPE PREVIOUS() {
+			if(!hasPrevious()) throw new NoSuchElementException();
+			return list.GET_KEY(--index);
+		}
+		
+		@Override
+		public int nextIndex() {
+			return index;
+		}
+		
+		@Override
+		public int previousIndex() {
+			return index-1;
+		}
+		
+		@Override
+		public void remove() { throw new UnsupportedOperationException(); }
+		
+		@Override
+		public void set(KEY_TYPE e) { throw new UnsupportedOperationException(); }
+		
+		@Override
+		public void add(KEY_TYPE e) { throw new UnsupportedOperationException(); }
+		
+		@Override
+		public int skip(int amount) {
+			if(amount < 0) throw new IllegalStateException("Negative Numbers are not allowed");
+			int steps = Math.min(amount, (list.size() - 1) - index);
+			index += steps;
+			return steps;
+		}
+		
+		@Override
+		public int back(int amount) {
+			if(amount < 0) throw new IllegalStateException("Negative Numbers are not allowed");
+			int steps = Math.min(amount, index);
+			index -= steps;
+			return steps;
+		}
+	}
+}
