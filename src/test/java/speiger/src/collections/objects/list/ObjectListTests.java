@@ -11,7 +11,6 @@ import com.google.common.collect.testing.TestStringListGenerator;
 import com.google.common.collect.testing.features.CollectionFeature;
 import com.google.common.collect.testing.features.CollectionSize;
 import com.google.common.collect.testing.features.ListFeature;
-import com.google.common.collect.testing.testers.CollectionSpliteratorTester;
 import com.google.common.collect.testing.testers.ListListIteratorTester;
 import com.google.common.collect.testing.testers.ListSubListTester;
 
@@ -78,8 +77,7 @@ public class ObjectListTests extends TestCase
 		}).named(name).withFeatures(CollectionFeature.ALLOWS_NULL_VALUES, CollectionSize.ANY).createTestSuite();
 	}
 	
-	public static Collection<Method> suppressForCopyOnWriteArrayList()
-	{
-		return Arrays.asList(ListSubListTester.getSubListOriginalListSetAffectsSubListMethod(), ListSubListTester.getSubListOriginalListSetAffectsSubListLargeListMethod(), ListSubListTester.getSubListSubListRemoveAffectsOriginalLargeListMethod(), ListListIteratorTester.getListIteratorFullyModifiableMethod(), CollectionSpliteratorTester.getSpliteratorNotImmutableCollectionAllowsAddMethod(), CollectionSpliteratorTester.getSpliteratorNotImmutableCollectionAllowsRemoveMethod());
+	public static Collection<Method> suppressForCopyOnWriteArrayList() {
+		return Arrays.asList(ListSubListTester.getSubListSubListRemoveAffectsOriginalLargeListMethod(), ListListIteratorTester.getListIteratorFullyModifiableMethod());
 	}
 }

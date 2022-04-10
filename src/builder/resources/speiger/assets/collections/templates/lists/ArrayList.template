@@ -187,6 +187,19 @@ public class ARRAY_LIST KEY_GENERIC_TYPE extends ABSTRACT_LIST KEY_GENERIC_TYPE 
 		list.data = (KEY_TYPE[])ObjectArrays.newArray(c, 0);
 		return list;
 	}
+
+	/**
+	 * Creates a new ArrayList with a EmptyObject array of the Type requested
+	 * @param c the type of the array
+	 * @param size the initial size of the backing array
+	 * @Type(T)
+	 * @return a typed List
+	 */
+	public static GENERIC_KEY_BRACES ARRAY_LIST KEY_GENERIC_TYPE of(Class<KEY_TYPE> c, int size) {
+		ARRAY_LIST KEY_GENERIC_TYPE list = new ARRAY_LISTBRACES();
+		list.data = (KEY_TYPE[])ObjectArrays.newArray(c, size);
+		return list;
+	}
 	
 #endif
 	/**

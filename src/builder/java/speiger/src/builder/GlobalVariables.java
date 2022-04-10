@@ -174,6 +174,7 @@ public class GlobalVariables
 		addBiClassMapper("LINKED_CUSTOM_HASH_MAP", "LinkedOpenCustomHashMap", "2");
 		addBiClassMapper("LINKED_HASH_MAP", "LinkedOpenHashMap", "2");
 		addBiClassMapper("CUSTOM_HASH_MAP", "OpenCustomHashMap", "2");
+		addBiClassMapper("CONCURRENT_MAP", "ConcurrentOpenHashMap", "2");
 		addBiClassMapper("AVL_TREE_MAP", "AVLTreeMap", "2");
 		addBiClassMapper("RB_TREE_MAP", "RBTreeMap", "2");
 		addFunctionValueMappers("LINKED_ENUM_MAP", valueType.isObject() ? "LinkedEnum2ObjectMap" : "LinkedEnum2%sMap");
