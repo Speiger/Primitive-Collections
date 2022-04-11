@@ -1,18 +1,74 @@
 package speiger.src.collections.PACKAGE.maps.impl.concurrent;
 
 import java.util.Arrays;
+import java.util.Map;
+import java.util.NoSuchElementException;
 import java.util.Objects;
 import java.util.concurrent.locks.ReentrantLock;
+import java.util.function.Consumer;
+import java.util.function.BiFunction;
 
-import speiger.src.collections.VALUE_PACKAGE.functions.VALUE_SUPPLIER;
-import speiger.src.collections.VALUE_PACKAGE.functions.function.VALUE_UNARY_OPERATOR;
+#if !TYPE_OBJECT
+import speiger.src.collections.PACKAGE.collections.BI_ITERATOR;
+#if SAME_TYPE
+import speiger.src.collections.PACKAGE.collections.ITERATOR;
+#endif
+import speiger.src.collections.PACKAGE.functions.CONSUMER;
+import speiger.src.collections.objects.functions.consumer.BI_FROM_OBJECT_CONSUMER;
+#endif
 import speiger.src.collections.PACKAGE.functions.consumer.BI_CONSUMER;
 import speiger.src.collections.PACKAGE.functions.function.FUNCTION;
-#if !SAME_TYPE
 import speiger.src.collections.PACKAGE.functions.function.UNARY_OPERATOR;
+#if !SAME_TYPE
+import speiger.src.collections.PACKAGE.functions.function.SINGLE_UNARY_OPERATOR;
+#endif
+#if !TYPE_OBJECT && !VALUE_BOOLEAN
+import speiger.src.collections.PACKAGE.functions.function.PREDICATE;
 #endif
 import speiger.src.collections.PACKAGE.maps.abstracts.ABSTRACT_MAP;
 import speiger.src.collections.PACKAGE.maps.interfaces.MAP;
+#if !TYPE_OBJECT
+import speiger.src.collections.PACKAGE.sets.ABSTRACT_SET;
+import speiger.src.collections.PACKAGE.sets.SET;
+#endif
+import speiger.src.collections.VALUE_PACKAGE.collections.VALUE_ABSTRACT_COLLECTION;
+import speiger.src.collections.VALUE_PACKAGE.collections.VALUE_COLLECTION;
+import speiger.src.collections.VALUE_PACKAGE.functions.VALUE_SUPPLIER;
+#if !SAME_TYPE
+import speiger.src.collections.VALUE_PACKAGE.functions.function.VALUE_UNARY_OPERATOR;
+
+#if !VALUE_OBJECT
+#if !TYPE_OBJECT
+import speiger.src.collections.objects.functions.function.ObjectObjectUnaryOperator;
+#endif
+import speiger.src.collections.VALUE_PACKAGE.collections.VALUE_ITERATOR;
+import speiger.src.collections.VALUE_PACKAGE.collections.VALUE_BI_ITERATOR;
+import speiger.src.collections.VALUE_PACKAGE.functions.VALUE_CONSUMER;
+#endif
+#else if !VALUE_OBJECT
+import speiger.src.collections.objects.functions.function.ObjectObjectUnaryOperator;
+
+#endif
+#if !TYPE_OBJECT && !VALUE_OBJECT || !VALUE_OBJECT
+import speiger.src.collections.objects.functions.consumer.ObjectObjectConsumer;
+#endif
+#if !TYPE_OBJECT || !VALUE_BOOLEAN
+#if !VALUE_OBJECT || SAME_TYPE
+import speiger.src.collections.objects.functions.function.Object2BooleanFunction;
+#endif
+#endif
+#if !SAME_TYPE
+#if !TYPE_OBJECT
+import speiger.src.collections.objects.functions.consumer.VALUE_BI_FROM_OBJECT_CONSUMER;
+#endif
+
+import speiger.src.collections.VALUE_PACKAGE.functions.function.VALUE_PREDICATE;
+#endif
+#if VALUE_OBJECT
+import speiger.src.collections.objects.collections.ObjectIterator;
+#endif
+import speiger.src.collections.objects.collections.ObjectBidirectionalIterator;
+import speiger.src.collections.objects.sets.AbstractObjectSet;
 import speiger.src.collections.objects.sets.ObjectSet;
 import speiger.src.collections.utils.HashUtil;
 
@@ -24,6 +80,14 @@ public class CONCURRENT_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_VALU
 	protected transient Segment KEY_VALUE_GENERIC_TYPE[] segments;
 	protected transient int segmentShift;
 	protected transient int segmentMask;
+	/** EntrySet cache */
+	protected transient FastEntrySet KEY_VALUE_GENERIC_TYPE entrySet;
+	/** KeySet cache */
+	protected transient SET KEY_GENERIC_TYPE keySet;
+	/** Values cache */
+	protected transient VALUE_COLLECTION VALUE_GENERIC_TYPE values;
+	
+	protected CONCURRENT_MAP(boolean unused) {}
 	
 	public CONCURRENT_MAP(int minCapacity, float loadFactor, int concurrencyLevel) {
 		if(minCapacity < 0)	throw new IllegalStateException("Minimum Capacity is negative. This is not allowed");
@@ -130,10 +194,16 @@ public class CONCURRENT_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_VALU
 			segments[i].forEach(action);
 		}
 	}
-
+	
 	@Override
 	public CONCURRENT_MAP KEY_VALUE_GENERIC_TYPE copy() {
-		return null;//TODO implement
+		CONCURRENT_MAP KEY_VALUE_GENERIC_TYPE copy = new CONCURRENT_MAPKV_BRACES(false);
+		copy.segmentShift = segmentShift;
+		copy.segmentMask = segmentMask;
+		copy.segments = new Segment[segments.length];
+		for(int i = 0,m=segments.length;i<m;i++)
+			copy.segments[i] = segments[i].copy(copy);
+		return copy;
 	}
 	
 #if !TYPE_OBJECT
@@ -209,6 +279,14 @@ public class CONCURRENT_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_VALU
 	}
 	
 	@Override
+	public boolean isEmpty() {
+		for(int i = 0,m=segments.length;i<m;i++) {
+			if(segments[i].size > 0) return false;
+		}
+		return true;
+	}
+	
+	@Override
 	public int size() {
 		long size = 0L;
 		for(int i = 0,m=segments.length;i<m;i++) {
@@ -219,7 +297,24 @@ public class CONCURRENT_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_VALU
 	
 	@Override
 	public ObjectSet<MAP.Entry KEY_VALUE_GENERIC_TYPE> ENTRY_SET() {
-		return null;
+		if(entrySet == null) entrySet = new MapEntrySet();
+		return entrySet;
+	}
+	
+	@Override
+	public SET KEY_GENERIC_TYPE keySet() {
+		if(keySet == null) keySet = new KeySet();
+		return keySet;
+	}
+	
+	@Override
+	public VALUE_COLLECTION VALUE_GENERIC_TYPE values() {
+		if(values == null) values = new Values();
+		return values;
+	}
+	
+	protected int getSegmentIndex(int hash) {
+		return (hash >>> segmentShift) & segmentMask;
 	}
 	
 	protected Segment KEY_VALUE_GENERIC_TYPE getSegment(int hash) {
@@ -234,6 +329,939 @@ public class CONCURRENT_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_VALU
 #endif
 	protected int getHashCode(Object obj) {
 		return HashUtil.mix(Objects.hashCode(obj));
+	}
+	
+	public void test() {
+		
+	}
+	
+	private class MapEntrySet extends AbstractObjectSet<MAP.Entry KEY_VALUE_GENERIC_TYPE> implements MAP.FastEntrySet KEY_VALUE_GENERIC_TYPE {
+		@Override
+		public ObjectBidirectionalIterator<MAP.Entry KEY_VALUE_GENERIC_TYPE> iterator() {
+			return new EntryIterator();
+		}
+		
+		//TODO implement?
+		public ObjectBidirectionalIterator<MAP.Entry KEY_VALUE_GENERIC_TYPE> iterator(MAP.Entry KEY_VALUE_GENERIC_TYPE fromElement) {
+			return new EntryIterator(fromElement.ENTRY_KEY());
+		}
+		
+		@Override
+		public ObjectBidirectionalIterator<MAP.Entry KEY_VALUE_GENERIC_TYPE> fastIterator() {
+			return new FastEntryIterator();
+		}
+		
+		//TODO implement?
+		public ObjectBidirectionalIterator<MAP.Entry KEY_VALUE_GENERIC_TYPE> fastIterator(KEY_TYPE fromElement) {
+			return new FastEntryIterator(fromElement);
+		}
+		
+		@Override
+		public MapEntrySet copy() { throw new UnsupportedOperationException(); }
+		
+		@Override
+		public void forEach(Consumer<? super MAP.Entry KEY_VALUE_GENERIC_TYPE> action) {
+			for(int i = 0,m=segments.length;i<m;i++) {
+				Segment KEY_VALUE_GENERIC_TYPE seg = segments[i];
+				int index = seg.firstIndex;
+				while(index != -1){
+					action.accept(new BasicEntryKV_BRACES(seg.keys[index], seg.values[index]));
+					index = (int)seg.links[index];
+				}
+			}
+		}
+		
+		@Override
+		public void fastForEach(Consumer<? super MAP.Entry KEY_VALUE_GENERIC_TYPE> action) {
+			BasicEntry KEY_VALUE_GENERIC_TYPE entry = new BasicEntryKV_BRACES();
+			for(int i = 0,m=segments.length;i<m;i++) {
+				Segment KEY_VALUE_GENERIC_TYPE seg = segments[i];
+				int index = seg.firstIndex;
+				while(index != -1){
+					entry.set(seg.keys[index], seg.values[index]);
+					action.accept(entry);
+					index = (int)seg.links[index];
+				}
+			}
+		}
+		
+		@Override
+		public <E> void forEach(E input, ObjectObjectConsumer<E, MAP.Entry KEY_VALUE_GENERIC_TYPE> action) {
+			Objects.requireNonNull(action);
+			for(int i = 0,m=segments.length;i<m;i++) {
+				Segment KEY_VALUE_GENERIC_TYPE seg = segments[i];
+				int index = seg.firstIndex;
+				while(index != -1) {
+					action.accept(input, new BasicEntryKV_BRACES(seg.keys[index], seg.values[index]));
+					index = (int)seg.links[index];
+				}
+			}
+		}
+		
+		@Override
+		public boolean matchesAny(Object2BooleanFunction<MAP.Entry KEY_VALUE_GENERIC_TYPE> filter) {
+			Objects.requireNonNull(filter);
+			BasicEntry KEY_VALUE_GENERIC_TYPE entry = new BasicEntryKV_BRACES();
+			for(int i = 0,m=segments.length;i<m;i++) {
+				Segment KEY_VALUE_GENERIC_TYPE seg = segments[i];
+				int index = seg.firstIndex;
+				while(index != -1) {
+					entry.set(seg.keys[index], seg.values[index]);
+					if(filter.getBoolean(entry)) return true;
+					index = (int)seg.links[index];
+				}
+			}
+			return false;
+		}
+		
+		@Override
+		public boolean matchesNone(Object2BooleanFunction<MAP.Entry KEY_VALUE_GENERIC_TYPE> filter) {
+			Objects.requireNonNull(filter);
+			BasicEntry KEY_VALUE_GENERIC_TYPE entry = new BasicEntryKV_BRACES();
+			for(int i = 0,m=segments.length;i<m;i++) {
+				Segment KEY_VALUE_GENERIC_TYPE seg = segments[i];
+				int index = seg.firstIndex;
+				while(index != -1) {
+					entry.set(seg.keys[index], seg.values[index]);
+					if(filter.getBoolean(entry)) return false;
+					index = (int)seg.links[index];
+				}
+			}
+			return true;
+		}
+		
+		@Override
+		public boolean matchesAll(Object2BooleanFunction<MAP.Entry KEY_VALUE_GENERIC_TYPE> filter) {
+			Objects.requireNonNull(filter);
+			BasicEntry KEY_VALUE_GENERIC_TYPE entry = new BasicEntryKV_BRACES();
+			for(int i = 0,m=segments.length;i<m;i++) {
+				Segment KEY_VALUE_GENERIC_TYPE seg = segments[i];
+				int index = seg.firstIndex;
+				while(index != -1) {
+					entry.set(seg.keys[index], seg.values[index]);
+					if(!filter.getBoolean(entry)) return false;
+					index = (int)seg.links[index];
+				}
+			}
+			return true;
+		}
+		
+		@Override
+		public <E> E reduce(E identity, BiFunction<E, MAP.Entry KEY_VALUE_GENERIC_TYPE, E> operator) {
+			Objects.requireNonNull(operator);
+			E state = identity;
+			for(int i = 0,m=segments.length;i<m;i++) {
+				Segment KEY_VALUE_GENERIC_TYPE seg = segments[i];
+				int index = seg.firstIndex;
+				while(index != -1) {
+					state = operator.apply(state, new BasicEntryKV_BRACES(seg.keys[index], seg.values[index]));
+					index = (int)seg.links[index];
+				}
+			}
+
+			return state;
+		}
+		
+		@Override
+		public MAP.Entry KEY_VALUE_GENERIC_TYPE reduce(ObjectObjectUnaryOperator<MAP.Entry KEY_VALUE_GENERIC_TYPE, MAP.Entry KEY_VALUE_GENERIC_TYPE> operator) {
+			Objects.requireNonNull(operator);
+			MAP.Entry KEY_VALUE_GENERIC_TYPE state = null;
+			boolean empty = true;
+			for(int i = 0,m=segments.length;i<m;i++) {
+				Segment KEY_VALUE_GENERIC_TYPE seg = segments[i];
+				int index = seg.firstIndex;
+				while(index != -1) {
+					if(empty) {
+						empty = false;
+						state = new BasicEntryKV_BRACES(seg.keys[index], seg.values[index]);
+						index = (int)seg.links[index];
+						continue;
+					}
+					state = operator.apply(state, new BasicEntryKV_BRACES(seg.keys[index], seg.values[index]));
+					index = (int)seg.links[index];
+				}
+			}
+			return state;
+		}
+		
+		@Override
+		public MAP.Entry KEY_VALUE_GENERIC_TYPE findFirst(Object2BooleanFunction<MAP.Entry KEY_VALUE_GENERIC_TYPE> filter) {
+			Objects.requireNonNull(filter);
+			BasicEntry KEY_VALUE_GENERIC_TYPE entry = new BasicEntryKV_BRACES();
+			for(int i = 0,m=segments.length;i<m;i++) {
+				Segment KEY_VALUE_GENERIC_TYPE seg = segments[i];
+				int index = seg.firstIndex;
+				while(index != -1) {
+					entry.set(seg.keys[index], seg.values[index]);
+					if(filter.getBoolean(entry)) return entry;
+					index = (int)seg.links[index];
+				}
+			}
+			return null;
+		}
+		
+		@Override
+		public int count(Object2BooleanFunction<MAP.Entry KEY_VALUE_GENERIC_TYPE> filter) {
+			Objects.requireNonNull(filter);
+			int result = 0;
+			BasicEntry KEY_VALUE_GENERIC_TYPE entry = new BasicEntryKV_BRACES();
+			for(int i = 0,m=segments.length;i<m;i++) {
+				Segment KEY_VALUE_GENERIC_TYPE seg = segments[i];
+				int index = seg.firstIndex;
+				while(index != -1) {
+					entry.set(seg.keys[index], seg.values[index]);
+					if(filter.getBoolean(entry)) result++;
+					index = (int)seg.links[index];
+				}
+			}
+			return result;
+		}
+		
+		@Override
+		@Deprecated
+		public boolean contains(Object o) {
+			if(o instanceof Map.Entry) {
+				if(o instanceof MAP.Entry) {
+					MAP.Entry KEY_VALUE_GENERIC_TYPE entry = (MAP.Entry KEY_VALUE_GENERIC_TYPE)o;
+					KEY_TYPE key = entry.ENTRY_KEY();
+					int hash = getHashCode(key);
+					Segment KEY_VALUE_GENERIC_TYPE seg = getSegment(hash);
+					int index = seg.findIndex(hash, key);
+					if(index >= 0) return VALUE_EQUALS(entry.ENTRY_VALUE(), seg.values[index]);
+				}
+				else {
+					Map.Entry<?, ?> entry = (Map.Entry<?, ?>)o;
+					int hash = getHashCode(entry.getKey());
+					Segment KEY_VALUE_GENERIC_TYPE seg = getSegment(hash);
+					int index = seg.findIndex(hash, entry.getKey());
+					if(index >= 0) return Objects.equals(entry.getValue(), VALUE_TO_OBJ(seg.values[index]));
+				}
+			}
+			return false;
+		}
+		
+		@Override
+		@Deprecated
+		public boolean remove(Object o) {
+			if(o instanceof Map.Entry) {
+				if(o instanceof MAP.Entry) {
+					MAP.Entry KEY_VALUE_GENERIC_TYPE entry = (MAP.Entry KEY_VALUE_GENERIC_TYPE)o;
+					return CONCURRENT_MAP.this.remove(entry.ENTRY_KEY(), entry.ENTRY_VALUE());
+				}
+				Map.Entry<?, ?> entry = (Map.Entry<?, ?>)o;
+				return CONCURRENT_MAP.this.remove(entry.getKey(), entry.getValue());
+			}
+			return false;
+		}
+		
+		@Override
+		public int size() {
+			return CONCURRENT_MAP.this.size();
+		}
+		
+		@Override
+		public void clear() {
+			CONCURRENT_MAP.this.clear();
+		}
+	}
+	
+	private final class KeySet extends ABSTRACT_SET KEY_GENERIC_TYPE implements SET KEY_GENERIC_TYPE {
+		
+		@Override
+		public boolean add(KEY_TYPE key) { throw new UnsupportedOperationException(); }
+		
+#if TYPE_OBJECT
+		@Override
+		@Deprecated
+		public boolean contains(Object e) {
+			return containsKey(e);
+		}
+		
+		@Override
+		public boolean remove(Object o) {
+			int oldSize = size();
+			CONCURRENT_MAP.this.remove(o);
+			return size() != oldSize;
+		}
+		
+#else
+		@Override
+		public boolean contains(KEY_TYPE e) {
+			return containsKey(e);
+		}
+		
+		@Override
+		public boolean remove(KEY_TYPE o) {
+			int oldSize = size();
+			CONCURRENT_MAP.this.remove(o);
+			return size() != oldSize;
+		}
+		
+#endif
+		@Override
+		public BI_ITERATOR KEY_GENERIC_TYPE iterator() {
+			return new KeyIterator();
+		}
+		
+		//TODO implement into interface?
+		public BI_ITERATOR KEY_GENERIC_TYPE iterator(KEY_TYPE fromElement) {
+			return new KeyIterator(fromElement);
+		}
+		
+		@Override
+		public KeySet copy() { throw new UnsupportedOperationException(); }
+		
+		@Override
+		public int size() {
+			return CONCURRENT_MAP.this.size();
+		}
+		
+		@Override
+		public void clear() {
+			CONCURRENT_MAP.this.clear();
+		}
+		
+		@Override
+		public void forEach(CONSUMER KEY_SUPER_GENERIC_TYPE action) {
+			Objects.requireNonNull(action);
+			for(int i = 0,m=segments.length;i<m;i++) {
+				Segment KEY_VALUE_GENERIC_TYPE seg = segments[i];
+				int index = seg.firstIndex;
+				while(index != -1){
+					action.accept(seg.keys[index]);
+					index = (int)seg.links[index];
+				}
+			}
+		}
+		
+		@Override
+		public <E> void forEach(E input, BI_FROM_OBJECT_CONSUMER KSK_GENERIC_TYPE<E> action) {
+			Objects.requireNonNull(action);
+			for(int i = 0,m=segments.length;i<m;i++) {
+				Segment KEY_VALUE_GENERIC_TYPE seg = segments[i];
+				int index = seg.firstIndex;
+				while(index != -1){
+					action.accept(input, seg.keys[index]);
+					index = (int)seg.links[index];
+				}
+			}
+		}
+		
+		@Override
+		public boolean matchesAny(PREDICATE KEY_GENERIC_TYPE filter) {
+			Objects.requireNonNull(filter);
+			for(int i = 0,m=segments.length;i<m;i++) {
+				Segment KEY_VALUE_GENERIC_TYPE seg = segments[i];
+				int index = seg.firstIndex;
+				while(index != -1){
+					if(filter.TEST_VALUE(seg.keys[index])) return true;
+					index = (int)seg.links[index];
+				}
+			}
+			return false;
+		}
+		
+		@Override
+		public boolean matchesNone(PREDICATE KEY_GENERIC_TYPE filter) {
+			Objects.requireNonNull(filter);
+			for(int i = 0,m=segments.length;i<m;i++) {
+				Segment KEY_VALUE_GENERIC_TYPE seg = segments[i];
+				int index = seg.firstIndex;
+				while(index != -1){
+					if(filter.TEST_VALUE(seg.keys[index])) return false;
+					index = (int)seg.links[index];
+				}
+			}
+			return true;
+		}
+		
+		@Override
+		public boolean matchesAll(PREDICATE KEY_GENERIC_TYPE filter) {
+			Objects.requireNonNull(filter);
+			for(int i = 0,m=segments.length;i<m;i++) {
+				Segment KEY_VALUE_GENERIC_TYPE seg = segments[i];
+				int index = seg.firstIndex;
+				while(index != -1){
+					if(!filter.TEST_VALUE(seg.keys[index])) return false;
+					index = (int)seg.links[index];
+				}
+			}
+			return true;
+		}
+		
+#if !TYPE_OBJECT
+		@Override
+		public KEY_TYPE reduce(KEY_TYPE identity, SINGLE_UNARY_OPERATOR KEY_KEY_GENERIC_TYPE operator) {
+			Objects.requireNonNull(operator);
+			KEY_TYPE state = identity;
+			for(int i = 0,m=segments.length;i<m;i++) {
+				Segment KEY_VALUE_GENERIC_TYPE seg = segments[i];
+				int index = seg.firstIndex;
+				while(index != -1){
+					state = operator.APPLY_KEY_VALUE(state, seg.keys[index]);
+					index = (int)seg.links[index];
+				}
+			}
+			return state;
+		}
+		
+#else
+		@Override
+		public <KEY_SPECIAL_TYPE> KEY_SPECIAL_TYPE reduce(KEY_SPECIAL_TYPE identity, BiFunction<KEY_SPECIAL_TYPE, KEY_TYPE, KEY_SPECIAL_TYPE> operator) {
+			Objects.requireNonNull(operator);
+			KEY_SPECIAL_TYPE state = identity;
+			for(int i = 0,m=segments.length;i<m;i++) {
+				Segment KEY_VALUE_GENERIC_TYPE seg = segments[i];
+				int index = seg.firstIndex;
+				while(index != -1){
+					state = operator.apply(state, seg.keys[index]);
+					index = (int)seg.links[index];
+				}
+			}
+			return state;
+		}
+		
+#endif
+		@Override
+		public KEY_TYPE reduce(SINGLE_UNARY_OPERATOR KEY_KEY_GENERIC_TYPE operator) {
+			Objects.requireNonNull(operator);
+			KEY_TYPE state = EMPTY_KEY_VALUE;
+			boolean empty = true;
+			for(int i = 0,m=segments.length;i<m;i++) {
+				Segment KEY_VALUE_GENERIC_TYPE seg = segments[i];
+				int index = seg.firstIndex;
+				while(index != -1){
+					if(empty) {
+						empty = false;
+						state = seg.keys[index];
+						index = (int)seg.links[index];
+						continue;
+					}
+					state = operator.APPLY_KEY_VALUE(state, seg.keys[index]);
+					index = (int)seg.links[index];
+				}
+			}
+			return state;
+		}
+		
+		@Override
+		public KEY_TYPE findFirst(PREDICATE KEY_GENERIC_TYPE filter) {
+			Objects.requireNonNull(filter);
+			for(int i = 0,m=segments.length;i<m;i++) {
+				Segment KEY_VALUE_GENERIC_TYPE seg = segments[i];
+				int index = seg.firstIndex;
+				while(index != -1){
+					if(filter.TEST_VALUE(seg.keys[index])) return seg.keys[index];
+					index = (int)seg.links[index];
+				}
+			}
+			return EMPTY_KEY_VALUE;
+		}
+		
+		@Override
+		public int count(PREDICATE KEY_GENERIC_TYPE filter) {
+			Objects.requireNonNull(filter);
+			int result = 0;
+			for(int i = 0,m=segments.length;i<m;i++) {
+				Segment KEY_VALUE_GENERIC_TYPE seg = segments[i];
+				int index = seg.firstIndex;
+				while(index != -1){
+					if(filter.TEST_VALUE(seg.keys[index])) result++;
+					index = (int)seg.links[index];
+				}
+			}
+			return result;
+		}
+	}
+	
+	private class Values extends VALUE_ABSTRACT_COLLECTION VALUE_GENERIC_TYPE {
+#if VALUE_OBJECT
+		@Override
+		@Deprecated
+		public boolean contains(Object e) {
+			return containsValue(e);
+		}
+		
+#else
+		@Override
+		public boolean contains(VALUE_TYPE e) {
+			return containsValue(e);
+		}
+		
+#endif
+		@Override
+		public boolean add(VALUE_TYPE o) {
+			throw new UnsupportedOperationException();
+		}
+
+		@Override
+		public VALUE_ITERATOR VALUE_GENERIC_TYPE iterator() {
+			return new ValueIterator();
+		}
+		
+		@Override
+		public int size() {
+			return CONCURRENT_MAP.this.size();
+		}
+		
+		@Override
+		public void clear() {
+			CONCURRENT_MAP.this.clear();
+		}
+		
+		@Override
+		public void forEach(VALUE_CONSUMER VALUE_SUPER_GENERIC_TYPE action) {
+			Objects.requireNonNull(action);
+			for(int i = 0,m=segments.length;i<m;i++) {
+				Segment KEY_VALUE_GENERIC_TYPE seg = segments[i];
+				int index = seg.firstIndex;
+				while(index != -1){
+					action.accept(seg.values[index]);
+					index = (int)seg.links[index];
+				}
+			}
+		}
+		
+		@Override
+		public <E> void forEach(E input, VALUE_BI_FROM_OBJECT_CONSUMER VSV_GENERIC_TYPE<E> action) {
+			Objects.requireNonNull(action);
+			for(int i = 0,m=segments.length;i<m;i++) {
+				Segment KEY_VALUE_GENERIC_TYPE seg = segments[i];
+				int index = seg.firstIndex;
+				while(index != -1){
+					action.accept(input, seg.values[index]);
+					index = (int)seg.links[index];
+				}
+			}
+		}
+		
+		@Override
+		public boolean matchesAny(VALUE_PREDICATE VALUE_GENERIC_TYPE filter) {
+			Objects.requireNonNull(filter);
+			for(int i = 0,m=segments.length;i<m;i++) {
+				Segment KEY_VALUE_GENERIC_TYPE seg = segments[i];
+				int index = seg.firstIndex;
+				while(index != -1){
+					if(filter.VALUE_TEST_VALUE(seg.values[index])) return true;
+					index = (int)seg.links[index];
+				}
+			}
+			return false;
+		}
+		
+		@Override
+		public boolean matchesNone(VALUE_PREDICATE VALUE_GENERIC_TYPE filter) {
+			Objects.requireNonNull(filter);
+			for(int i = 0,m=segments.length;i<m;i++) {
+				Segment KEY_VALUE_GENERIC_TYPE seg = segments[i];
+				int index = seg.firstIndex;
+				while(index != -1) {
+					if(filter.VALUE_TEST_VALUE(seg.values[index])) return false;
+					index = (int)seg.links[index];
+				}
+			}
+			return true;
+		}
+		
+		@Override
+		public boolean matchesAll(VALUE_PREDICATE VALUE_GENERIC_TYPE filter) {
+			Objects.requireNonNull(filter);
+			for(int i = 0,m=segments.length;i<m;i++) {
+				Segment KEY_VALUE_GENERIC_TYPE seg = segments[i];
+				int index = seg.firstIndex;
+				while(index != -1) {
+					if(!filter.VALUE_TEST_VALUE(seg.values[index])) return false;
+					index = (int)seg.links[index];
+				}
+			}
+			return true;
+		}
+		
+#if !VALUE_OBJECT
+		@Override
+		public VALUE_TYPE reduce(VALUE_TYPE identity, VALUE_SINGLE_UNARY_OPERATOR VALUE_VALUE_GENERIC_TYPE operator) {
+			Objects.requireNonNull(operator);
+			VALUE_TYPE state = identity;
+			for(int i = 0,m=segments.length;i<m;i++) {
+				Segment KEY_VALUE_GENERIC_TYPE seg = segments[i];
+				int index = seg.firstIndex;
+				while(index != -1) {
+					state = operator.APPLY_VALUE(state, seg.values[index]);
+					index = (int)seg.links[index];
+				}
+			}
+			return state;
+		}
+		
+#else
+		@Override
+		public <VALUE_SPECIAL_TYPE> VALUE_SPECIAL_TYPE reduce(VALUE_SPECIAL_TYPE identity, BiFunction<VALUE_SPECIAL_TYPE, VALUE_TYPE, VALUE_SPECIAL_TYPE> operator) {
+			Objects.requireNonNull(operator);
+			VALUE_SPECIAL_TYPE state = identity;
+			for(int i = 0,m=segments.length;i<m;i++) {
+				Segment KEY_VALUE_GENERIC_TYPE seg = segments[i];
+				int index = seg.firstIndex;
+				while(index != -1) {
+					state = operator.apply(state, seg.values[index]);
+					index = (int)seg.links[index];
+				}
+			}
+			return state;
+		}
+		
+#endif
+		@Override
+		public VALUE_TYPE reduce(VALUE_SINGLE_UNARY_OPERATOR VALUE_VALUE_GENERIC_TYPE operator) {
+			Objects.requireNonNull(operator);
+			VALUE_TYPE state = EMPTY_VALUE;
+			boolean empty = true;
+			for(int i = 0,m=segments.length;i<m;i++) {
+				Segment KEY_VALUE_GENERIC_TYPE seg = segments[i];
+				int index = seg.firstIndex;
+				while(index != -1) {
+					if(empty) {
+						empty = false;
+						state = seg.values[index];
+						index = (int)seg.links[index];
+						continue;
+					}
+					state = operator.APPLY_VALUE(state, seg.values[index]);
+					index = (int)seg.links[index];
+				}
+			}
+			return state;
+		}
+		
+		@Override
+		public VALUE_TYPE findFirst(VALUE_PREDICATE VALUE_GENERIC_TYPE filter) {
+			Objects.requireNonNull(filter);
+			if(size() <= 0) return EMPTY_VALUE;
+			for(int i = 0,m=segments.length;i<m;i++) {
+				Segment KEY_VALUE_GENERIC_TYPE seg = segments[i];
+				int index = seg.firstIndex;
+				while(index != -1){
+					if(filter.VALUE_TEST_VALUE(seg.values[index])) return seg.values[index];
+					index = (int)seg.links[index];
+				}
+			}
+			return EMPTY_VALUE;
+		}
+		
+		@Override
+		public int count(VALUE_PREDICATE VALUE_GENERIC_TYPE filter) {
+			Objects.requireNonNull(filter);
+			int result = 0;
+			for(int i = 0,m=segments.length;i<m;i++) {
+				Segment KEY_VALUE_GENERIC_TYPE seg = segments[i];
+				int index = seg.firstIndex;
+				while(index != -1){
+					if(filter.VALUE_TEST_VALUE(seg.values[index])) result++;
+					index = (int)seg.links[index];
+				}
+			}
+			return result;
+		}
+	}
+	
+	private class FastEntryIterator extends MapIterator implements ObjectBidirectionalIterator<MAP.Entry KEY_VALUE_GENERIC_TYPE> {
+		MapEntry entry = new MapEntry();
+		
+		public FastEntryIterator() {}
+		public FastEntryIterator(KEY_TYPE from) {
+			super(from);
+		}
+		
+		@Override
+		public MAP.Entry KEY_VALUE_GENERIC_TYPE next() {
+			entry.set(nextEntry(), currentSegment());
+			return entry;
+		}
+		
+		@Override
+		public MAP.Entry KEY_VALUE_GENERIC_TYPE previous() {
+			entry.set(previousEntry(), currentSegment());
+			return entry;
+		}
+	}
+	
+	private class EntryIterator extends MapIterator implements ObjectBidirectionalIterator<MAP.Entry KEY_VALUE_GENERIC_TYPE> {
+		MapEntry entry;
+		
+		public EntryIterator() {}
+		public EntryIterator(KEY_TYPE from) {
+			super(from);
+		}
+		
+		@Override
+		public MAP.Entry KEY_VALUE_GENERIC_TYPE next() {
+			return entry = new MapEntry(nextEntry(), currentSegment());
+		}
+	
+		@Override
+		public MAP.Entry KEY_VALUE_GENERIC_TYPE previous() {
+			return entry = new MapEntry(previousEntry(), currentSegment());
+		}
+	
+		@Override
+		public void remove() {
+			super.remove();
+			entry.clear();
+		}
+	}
+	
+	private class ValueIterator extends MapIterator implements VALUE_BI_ITERATOR VALUE_GENERIC_TYPE {
+		public ValueIterator() {}
+		
+		@Override
+		public VALUE_TYPE VALUE_PREVIOUS() {
+			return entry(previousEntry(), currentSegment());
+		}
+		
+		@Override
+		public VALUE_TYPE VALUE_NEXT() {
+			return entry(nextEntry(), currentSegment());
+		}
+		
+		protected VALUE_TYPE entry(int entry, int segment) {
+			return segments[segment].values[entry];
+		}
+	}
+	
+	private class KeyIterator extends MapIterator implements BI_ITERATOR KEY_GENERIC_TYPE {
+		
+		public KeyIterator() {}
+		public KeyIterator(KEY_TYPE from) {
+			super(from);
+		}
+		
+		@Override
+		public KEY_TYPE PREVIOUS() {
+			return entry(previousEntry(), currentSegment());
+		}
+		
+		@Override
+		public KEY_TYPE NEXT() {
+			return entry(nextEntry(), currentSegment());
+		}
+		
+		protected KEY_TYPE entry(int entry, int segment) {
+			return segments[segment].keys[entry];
+		}
+	}
+	
+	private class MapIterator {
+		int previous = -1;
+		int next = -1;
+		int current = -1;
+		int previousSegment = -1;
+		int nextSegment = -1;
+		int currentSegment = -1;
+		
+		MapIterator() {
+			nextSegment = getFirstSegment();
+			if(nextSegment != -1) next = segments[nextSegment].firstIndex;
+		}
+		
+		MapIterator(KEY_TYPE from) {
+			int hash = getHashCode(from);
+			previousSegment = currentSegment = nextSegment = getSegmentIndex(hash);
+			Segment KEY_VALUE_GENERIC_TYPE seg = segments[currentSegment];
+			current = previous = seg.findIndex(hash, from);
+			if(current == -1) throw new NoSuchElementException("The element was not found");
+			findNextIndex();
+			current = -1;
+			currentSegment = -1;
+		}
+		
+		public boolean hasNext() {
+			return next != -1;
+		}
+		
+		public boolean hasPrevious() {
+			return previous != -1;
+		}
+		
+		public int currentSegment() {
+			return currentSegment;
+		}
+		
+		public int previousEntry() {
+			if(!hasPrevious()) throw new NoSuchElementException();
+			next = current = previous;
+			nextSegment = currentSegment = previousSegment;
+			findPreviousIndex();
+			return current;
+		}
+		
+		public int nextEntry() {
+			if(!hasNext()) throw new NoSuchElementException();
+			previous = current = next;
+			previousSegment = currentSegment = nextSegment;
+			findNextIndex();
+			return current;
+		}
+		
+		public void remove() {
+			if(current == -1) throw new IllegalStateException();
+			Segment KEY_VALUE_GENERIC_TYPE seg = segments[currentSegment];
+			seg.lock();
+			try {
+				if(current == previous) findPreviousIndex();
+				else findNextIndex();
+				seg.size--;
+				if(previousSegment != currentSegment) seg.firstIndex = next;
+				else seg.links[previous] ^= ((seg.links[previous] ^ (next & 0xFFFFFFFFL)) & 0xFFFFFFFFL);
+				
+				if(nextSegment != currentSegment) seg.lastIndex = previous;
+				else seg.links[next] ^= ((seg.links[next] ^ ((previous & 0xFFFFFFFFL) << 32)) & 0xFFFFFFFF00000000L);
+				
+				if(current == seg.nullIndex) {
+					current = -1;
+					currentSegment = -1;
+					seg.containsNull = false;
+					seg.keys[seg.nullIndex] = EMPTY_KEY_VALUE;
+					seg.values[seg.nullIndex] = EMPTY_VALUE;
+				}
+				else {
+					int slot, last, startPos = current;
+					current = -1;
+					currentSegment = -1;
+					KEY_TYPE current;
+					while(true) {
+						startPos = ((last = startPos) + 1) & seg.mask;
+						while(true){
+							if(KEY_EQUALS_NULL((current = seg.keys[startPos]))) {
+								seg.keys[last] = EMPTY_KEY_VALUE;
+								seg.values[last] = EMPTY_VALUE;
+								return;
+							}
+							slot = HashUtil.mix(KEY_TO_HASH(current)) & seg.mask;
+							if(last <= startPos ? (last >= slot || slot > startPos) : (last >= slot && slot > startPos)) break;
+							startPos = ++startPos & seg.mask;
+						}
+						seg.keys[last] = current;
+						seg.values[last] = seg.values[startPos];
+						if(next == startPos) next = last;
+						if(previous == startPos) previous = last;
+						seg.onNodeMoved(startPos, last);
+					}
+				}
+			}
+			finally {
+				seg.unlock();
+			}
+		}
+		
+		protected void findPreviousIndex() {
+			previous = (int)(segments[currentSegment].links[current] >> 32);
+			if(previous == -1) {
+				previousSegment = findPreviousSegment(currentSegment-1);
+				if(previousSegment != -1) previous = segments[previousSegment].lastIndex;
+			}
+		}
+		
+		protected void findNextIndex() {
+			next = (int)(segments[currentSegment].links[current]);
+			if(next == -1) {
+				nextSegment = findNextSegment(currentSegment+1);
+				if(nextSegment != -1) next = segments[nextSegment].firstIndex;
+			}
+		}
+		
+		private int getFirstSegment() {
+			for(int i = 0,m=segments.length;i<m;i++) {
+				if(segments[i].firstIndex != -1) return i;
+			}
+			return -1;
+		}
+		
+		private int findNextSegment(int index) {
+			for(;index < segments.length && segments[index].firstIndex == -1;index++);
+			return index >= segments.length ? -1 : index;
+		}
+		
+		private int findPreviousSegment(int index) {
+			for(;index >= 0 && segments[index].lastIndex == -1;index--);
+			return index >= 0 ? index : -1;
+		}
+	}
+	
+	protected class MapEntry implements MAP.Entry KEY_VALUE_GENERIC_TYPE, Map.Entry<CLASS_TYPE, CLASS_VALUE_TYPE> {
+		int index = -1;
+		int segmentIndex = -1;
+		
+		public MapEntry() {}
+		public MapEntry(int index, int segmentIndex) {
+			set(index, segmentIndex);
+		}
+		
+		public void set(int index, int segmentIndex) {
+			this.index = index;
+			this.segmentIndex = segmentIndex;
+		}
+		
+		public void clear() {
+			index = -1;
+			segmentIndex = -1;
+		}
+		
+		@Override
+		public KEY_TYPE ENTRY_KEY() {
+			return segments[segmentIndex].keys[index];
+		}
+		
+		@Override
+		public VALUE_TYPE ENTRY_VALUE() {
+			return segments[segmentIndex].values[index];
+		}
+		
+		@Override
+		public VALUE_TYPE setValue(VALUE_TYPE value) {
+			Segment KEY_VALUE_GENERIC_TYPE seg = segments[segmentIndex];
+			seg.lock();
+			try
+			{
+				VALUE_TYPE oldValue = ENTRY_VALUE();
+				seg.values[index] = value;
+				return oldValue;
+			}
+			finally {
+				seg.unlock();
+			}
+		}
+		
+		@Override
+		public boolean equals(Object obj) {
+			if(obj instanceof Map.Entry) {
+				if(obj instanceof MAP.Entry) {
+					MAP.Entry KEY_VALUE_GENERIC_TYPE entry = (MAP.Entry KEY_VALUE_GENERIC_TYPE)obj;
+					return KEY_EQUALS(ENTRY_KEY(), entry.ENTRY_KEY()) && VALUE_EQUALS(ENTRY_VALUE(), entry.ENTRY_VALUE());
+				}
+				Map.Entry<?, ?> entry = (Map.Entry<?, ?>)obj;
+				Object key = entry.getKey();
+				Object value = entry.getValue();
+#if TYPE_OBJECT && VALUE_OBJECT
+				return KEY_EQUALS(ENTRY_KEY(), key) && VALUE_EQUALS(ENTRY_VALUE(), value);
+#else if TYPE_OBJECT
+				return value instanceof CLASS_VALUE_TYPE && KEY_EQUALS(ENTRY_KEY(), key) && VALUE_EQUALS(ENTRY_VALUE(), CLASS_TO_VALUE(value));
+#else if VALUE_OBJECT
+				return key instanceof CLASS_TYPE && KEY_EQUALS(ENTRY_KEY(), CLASS_TO_KEY(key)) && VALUE_EQUALS(ENTRY_VALUE(), value);
+#else
+				return key instanceof CLASS_TYPE && value instanceof CLASS_VALUE_TYPE && KEY_EQUALS(ENTRY_KEY(), CLASS_TO_KEY(key)) && VALUE_EQUALS(ENTRY_VALUE(), CLASS_TO_VALUE(value));
+#endif
+			}
+			return false;
+		}
+		
+		@Override
+		public int hashCode() {
+			return KEY_TO_HASH(ENTRY_KEY()) ^ VALUE_TO_HASH(ENTRY_VALUE());
+		}
+		
+		@Override
+		public String toString() {
+			return KEY_TO_STRING(ENTRY_KEY()) + "=" + VALUE_TO_STRING(ENTRY_VALUE());
+		}
 	}
 	
 	protected static class Segment KEY_VALUE_GENERIC_TYPE extends ReentrantLock
@@ -265,6 +1293,10 @@ public class CONCURRENT_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_VALU
 		/** How full the Arrays are allowed to get before resize */
 		protected float loadFactor;
 		
+		protected Segment(CONCURRENT_MAP KEY_VALUE_GENERIC_TYPE map) {
+			this.map = map;
+		}
+		
 		protected Segment(CONCURRENT_MAP KEY_VALUE_GENERIC_TYPE map, int minCapacity, float loadFactor, boolean isNullContainer) {
 			this.map = map;
 			this.minCapacity = minCapacity;
@@ -276,6 +1308,23 @@ public class CONCURRENT_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_VALU
 			keys = NEW_KEY_ARRAY(arraySize);
 			values = NEW_VALUE_ARRAY(arraySize);
 			links = new long[arraySize];
+		}
+		
+		protected Segment KEY_VALUE_GENERIC_TYPE copy(CONCURRENT_MAP KEY_VALUE_GENERIC_TYPE newMap) {
+			Segment KEY_VALUE_GENERIC_TYPE copy = new SegmentKV_BRACES(newMap);
+			copy.keys = Arrays.copyOf(keys, keys.length);
+			copy.values = Arrays.copyOf(values, values.length);
+			copy.links = Arrays.copyOf(links, links.length);
+			copy.firstIndex = firstIndex;
+			copy.lastIndex = lastIndex;
+			copy.containsNull = containsNull;
+			copy.nullIndex = nullIndex;
+			copy.maxFill = maxFill;
+			copy.mask = mask;
+			copy.size = size;
+			copy.minCapacity = minCapacity;
+			copy.loadFactor = loadFactor;
+			return copy;
 		}
 		
 		protected VALUE_TYPE getDefaultReturnValue() {
@@ -397,7 +1446,7 @@ public class CONCURRENT_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_VALU
 		}
 		
 #if TYPE_OBJECT && VALUE_OBJECT
-		public VALUE_TYPE getOrDefault(int hash, Object key, VALUE_TYPE defaultValue) {
+		protected VALUE_TYPE getOrDefault(int hash, Object key, VALUE_TYPE defaultValue) {
 			int slot = findIndex(hash, key);
 			return slot < 0 ? defaultValue : values[slot];
 		}

@@ -905,9 +905,7 @@ public class LINKED_HASH_MAP KEY_VALUE_GENERIC_TYPE extends HASH_MAP KEY_VALUE_G
 		
 #endif
 		@Override
-		public boolean add(KEY_TYPE o) {
-			throw new UnsupportedOperationException();
-		}
+		public boolean add(KEY_TYPE o) { throw new UnsupportedOperationException(); }
 		
 		@Override
 		public boolean addAndMoveToFirst(KEY_TYPE o) { throw new UnsupportedOperationException(); }
@@ -1089,7 +1087,7 @@ public class LINKED_HASH_MAP KEY_VALUE_GENERIC_TYPE extends HASH_MAP KEY_VALUE_G
 			int result = 0;
 			int index = firstIndex;
 			while(index != -1){
-				if(filter.TEST_VALUE(keys[index])) return result++;
+				if(filter.TEST_VALUE(keys[index])) result++;
 				index = (int)links[index];
 			}
 			return result;
@@ -1371,7 +1369,6 @@ public class LINKED_HASH_MAP KEY_VALUE_GENERIC_TYPE extends HASH_MAP KEY_VALUE_G
 
 		@Override
 		public void add(VALUE_TYPE e) { throw new UnsupportedOperationException(); }
-		
 	}
 	
 	private class MapIterator {
