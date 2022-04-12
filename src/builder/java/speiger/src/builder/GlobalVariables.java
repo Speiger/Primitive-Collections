@@ -174,7 +174,7 @@ public class GlobalVariables
 		addBiClassMapper("LINKED_CUSTOM_HASH_MAP", "LinkedOpenCustomHashMap", "2");
 		addBiClassMapper("LINKED_HASH_MAP", "LinkedOpenHashMap", "2");
 		addBiClassMapper("CUSTOM_HASH_MAP", "OpenCustomHashMap", "2");
-		addBiClassMapper("CONCURRENT_MAP", "ConcurrentOpenHashMap", "2");
+		addBiClassMapper("CONCURRENT_HASH_MAP", "ConcurrentOpenHashMap", "2");
 		addBiClassMapper("AVL_TREE_MAP", "AVLTreeMap", "2");
 		addBiClassMapper("RB_TREE_MAP", "RBTreeMap", "2");
 		addFunctionValueMappers("LINKED_ENUM_MAP", valueType.isObject() ? "LinkedEnum2ObjectMap" : "LinkedEnum2%sMap");
@@ -224,6 +224,7 @@ public class GlobalVariables
 		addBiClassMapper("NAVIGABLE_MAP", "NavigableMap", "2");
 		addBiClassMapper("ORDERED_MAP", "OrderedMap", "2");
 		addBiClassMapper("SORTED_MAP", "SortedMap", "2");
+		addBiClassMapper("CONCURRENT_MAP", "ConcurrentMap", "2");
 		addBiClassMapper("MAP", "Map", "2");
 		addClassMapper("NAVIGABLE_SET", "NavigableSet");
 		addBiClassMapper("PAIR", "Pair", "");

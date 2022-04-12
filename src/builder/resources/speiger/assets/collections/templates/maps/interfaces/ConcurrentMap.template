@@ -1,0 +1,95 @@
+package speiger.src.collections.PACKAGE.maps.interfaces;
+
+import java.util.concurrent.ConcurrentMap;
+import java.util.function.BiConsumer;
+import java.util.function.BiFunction;
+import java.util.function.Function;
+
+/**
+ * A type specific ConcurrentMap interface that reduces boxing/unboxing.
+ * Since the interface adds nothing new. It is there just for completion sake.
+ * @Type(T)
+ * @ValueType(V)
+ */
+public interface CONCURRENT_MAP KEY_VALUE_GENERIC_TYPE extends ConcurrentMap<CLASS_TYPE, CLASS_VALUE_TYPE>, MAP KEY_VALUE_GENERIC_TYPE
+{
+	@Override
+	@Primitive
+	public default CLASS_VALUE_TYPE compute(CLASS_TYPE key, BiFunction<? super CLASS_TYPE, ? super CLASS_VALUE_TYPE, ? extends CLASS_VALUE_TYPE> mappingFunction) {
+		return MAP.super.compute(key, mappingFunction);
+	}
+
+	@Override
+	@Primitive
+	public default CLASS_VALUE_TYPE computeIfAbsent(CLASS_TYPE key, Function<? super CLASS_TYPE, ? extends CLASS_VALUE_TYPE> mappingFunction) {
+		return MAP.super.computeIfAbsent(key, mappingFunction);
+	}
+
+	@Override
+	@Primitive
+	public default CLASS_VALUE_TYPE computeIfPresent(CLASS_TYPE key, BiFunction<? super CLASS_TYPE, ? super CLASS_VALUE_TYPE, ? extends CLASS_VALUE_TYPE> mappingFunction) {
+		return MAP.super.computeIfPresent(key, mappingFunction);
+	}
+
+	@Override
+	@Primitive
+	public default void forEach(BiConsumer<? super CLASS_TYPE, ? super CLASS_VALUE_TYPE> action) {
+		MAP.super.forEach(action);
+	}
+
+	@Override
+	@Primitive
+	public default CLASS_VALUE_TYPE merge(CLASS_TYPE key, CLASS_VALUE_TYPE value, BiFunction<? super CLASS_VALUE_TYPE, ? super CLASS_VALUE_TYPE, ? extends CLASS_VALUE_TYPE> mappingFunction) {
+		return MAP.super.merge(key, value, mappingFunction);
+	}
+	
+#if TYPE_OBJECT && VALUE_OBJECT
+	@Override
+	public CLASS_VALUE_TYPE getOrDefault(Object key, CLASS_VALUE_TYPE defaultValue);
+	@Override
+	public CLASS_VALUE_TYPE putIfAbsent(CLASS_TYPE key, CLASS_VALUE_TYPE value);
+	@Override
+	public boolean remove(Object key, Object value);
+	@Override
+	public boolean replace(CLASS_TYPE key, CLASS_VALUE_TYPE oldValue, CLASS_VALUE_TYPE newValue);
+	@Override
+	public CLASS_VALUE_TYPE replace(CLASS_TYPE key, CLASS_VALUE_TYPE value);
+	
+#else
+	@Primitive
+	@Override
+	public default CLASS_VALUE_TYPE getOrDefault(Object key, CLASS_VALUE_TYPE defaultValue) {
+		return MAP.super.getOrDefault(key, defaultValue);
+	}
+	
+	@Override
+	@Primitive
+	public default CLASS_VALUE_TYPE putIfAbsent(CLASS_TYPE key, CLASS_VALUE_TYPE value) {
+		return MAP.super.putIfAbsent(key, value);
+	}
+	
+	@Override
+	@Deprecated
+	public default boolean remove(Object key, Object value) {
+		return MAP.super.remove(key, value);
+	}
+	
+	@Override
+	@Deprecated
+	public default boolean replace(CLASS_TYPE key, CLASS_VALUE_TYPE oldValue, CLASS_VALUE_TYPE newValue) {
+		return MAP.super.replace(key, oldValue, newValue);
+	}
+	
+	@Override
+	@Deprecated
+	public default CLASS_VALUE_TYPE replace(CLASS_TYPE key, CLASS_VALUE_TYPE value) {
+		return MAP.super.replace(key, value);
+	}
+	
+#endif
+	@Override
+	@Deprecated
+	public default void replaceAll(BiFunction<? super CLASS_TYPE, ? super CLASS_VALUE_TYPE, ? extends CLASS_VALUE_TYPE> mappingFunction) {
+		MAP.super.replaceAll(mappingFunction);
+	}
+}

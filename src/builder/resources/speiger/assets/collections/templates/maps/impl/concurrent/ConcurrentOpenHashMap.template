@@ -6,6 +6,7 @@ import java.util.NoSuchElementException;
 import java.util.Objects;
 import java.util.concurrent.locks.ReentrantLock;
 import java.util.function.Consumer;
+
 import java.util.function.BiFunction;
 
 #if !TYPE_OBJECT
@@ -27,6 +28,7 @@ import speiger.src.collections.PACKAGE.functions.function.PREDICATE;
 #endif
 import speiger.src.collections.PACKAGE.maps.abstracts.ABSTRACT_MAP;
 import speiger.src.collections.PACKAGE.maps.interfaces.MAP;
+import speiger.src.collections.PACKAGE.maps.interfaces.CONCURRENT_MAP;
 #if !TYPE_OBJECT
 import speiger.src.collections.PACKAGE.sets.ABSTRACT_SET;
 import speiger.src.collections.PACKAGE.sets.SET;
@@ -72,13 +74,23 @@ import speiger.src.collections.objects.sets.AbstractObjectSet;
 import speiger.src.collections.objects.sets.ObjectSet;
 import speiger.src.collections.utils.HashUtil;
 
-@SuppressWarnings("javadoc")
-public class CONCURRENT_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_VALUE_GENERIC_TYPE
+/**
+ * A TypeSpecific ConcurrentHashMap implementation that is based on <a href="https://github.com/google/guava">Guavas</a> approach and backing array implementations.
+ * Like <a href="https://github.com/google/guava">Guavas</a> implementation this solution can be accessed by multiple threads, but it is not as flexible as Javas implementation.
+ * The concurrencyLevel decides how many pools exist, and each pool can be accessed by 1 thread for writing and as many threads for reading.
+ * 
+ * @Type(T)
+ * @ValueType(V)
+ */
+public class CONCURRENT_HASH_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_VALUE_GENERIC_TYPE implements CONCURRENT_MAP KEY_VALUE_GENERIC_TYPE
 {
+	/** Segment Limit */
 	private static final int MAX_SEGMENTS = 1 << 16;
-	
+	/** Buckets of the ConcurrentMap */
 	protected transient Segment KEY_VALUE_GENERIC_TYPE[] segments;
+	/** Bitshift of the HashCode */
 	protected transient int segmentShift;
+	/** Max Bits thats used in the segments */
 	protected transient int segmentMask;
 	/** EntrySet cache */
 	protected transient FastEntrySet KEY_VALUE_GENERIC_TYPE entrySet;
@@ -87,12 +99,74 @@ public class CONCURRENT_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_VALU
 	/** Values cache */
 	protected transient VALUE_COLLECTION VALUE_GENERIC_TYPE values;
 	
-	protected CONCURRENT_MAP(boolean unused) {}
+	/**
+	 * Copy constructor that doesn't trigger the building of segments and allows to copy it faster.
+	 * @param unused not used, Just to keep all constructors accessible.
+	 */
+	protected CONCURRENT_HASH_MAP(boolean unused) {}
 	
-	public CONCURRENT_MAP(int minCapacity, float loadFactor, int concurrencyLevel) {
+	/**
+	 * Default Constructor
+	 */
+	public CONCURRENT_HASH_MAP() {
+		this(HashUtil.DEFAULT_MIN_CAPACITY, HashUtil.DEFAULT_LOAD_FACTOR, HashUtil.DEFAULT_MIN_CONCURRENCY);
+	}
+	
+	/**
+	 * Constructor that defines the minimum capacity
+	 * @param minCapacity the minimum capacity the HashMap is allowed to be.
+	 * @throws IllegalStateException if the minimum capacity is negative
+	 */
+	public CONCURRENT_HASH_MAP(int minCapacity) {
+		this(minCapacity, HashUtil.DEFAULT_LOAD_FACTOR, HashUtil.DEFAULT_MIN_CONCURRENCY);		
+	}
+	
+	/**
+	 * Constructor that defines the minimum capacity and load factor
+	 * @param minCapacity the minimum capacity the HashMap is allowed to be.
+	 * @param loadFactor the percentage of how full the backing array can be before they resize
+	 * @throws IllegalStateException if the minimum capacity is negative
+	 * @throws IllegalStateException if the loadfactor is either below/equal to 0 or above/equal to 1
+	 */
+	public CONCURRENT_HASH_MAP(int minCapacity, float loadFactor) {
+		this(minCapacity, loadFactor, HashUtil.DEFAULT_MIN_CONCURRENCY);
+	}
+	
+	/**
+	 * Constructor that defines the minimum capacity and concurrencyLevel
+	 * @param minCapacity the minimum capacity the HashMap is allowed to be.
+	 * @param concurrencyLevel decides how many operations can be performed at once.
+	 * @throws IllegalStateException if the minimum capacity is negative
+	 * @throws IllegalStateException if the concurrencyLevel is either below/equal to 0 or above/equal to 65535
+	 */
+	public CONCURRENT_HASH_MAP(int minCapacity, int concurrencyLevel) {
+		this(minCapacity, HashUtil.DEFAULT_LOAD_FACTOR, concurrencyLevel);
+	}
+	
+	/**
+	 * Constructor that defines the load factor and concurrencyLevel
+	 * @param loadFactor the percentage of how full the backing array can be before they resize
+	 * @param concurrencyLevel decides how many operations can be performed at once.
+	 * @throws IllegalStateException if the loadfactor is either below/equal to 0 or above/equal to 1
+	 * @throws IllegalStateException if the concurrencyLevel is either below/equal to 0 or above/equal to 65535
+	 */
+	public CONCURRENT_HASH_MAP(float loadFactor, int concurrencyLevel) {
+		this(HashUtil.DEFAULT_MIN_CAPACITY, loadFactor, concurrencyLevel);
+	}
+	
+	/**
+	 * Constructor that defines the minimum capacity, load factor and concurrencyLevel
+	 * @param minCapacity the minimum capacity the HashMap is allowed to be.
+	 * @param loadFactor the percentage of how full the backing array can be before they resize
+	 * @param concurrencyLevel decides how many operations can be performed at once.
+	 * @throws IllegalStateException if the minimum capacity is negative
+	 * @throws IllegalStateException if the loadfactor is either below/equal to 0 or above/equal to 1
+	 * @throws IllegalStateException if the concurrencyLevel is either below/equal to 0 or above/equal to 65535
+	 */
+	public CONCURRENT_HASH_MAP(int minCapacity, float loadFactor, int concurrencyLevel) {
 		if(minCapacity < 0)	throw new IllegalStateException("Minimum Capacity is negative. This is not allowed");
 		if(loadFactor <= 0 || loadFactor >= 1F) throw new IllegalStateException("Load Factor is not between 0 and 1");
-		if(concurrencyLevel < 0 || concurrencyLevel >= MAX_SEGMENTS) throw new IllegalStateException("concurrencyLevel has to be between 0 and 65536");
+		if(concurrencyLevel <= 0 || concurrencyLevel >= MAX_SEGMENTS) throw new IllegalStateException("concurrencyLevel has to be between 0 and 65536");
 		int segmentCount = HashUtil.nextPowerOfTwo(concurrencyLevel);
 		int shift = Integer.numberOfTrailingZeros(segmentCount);
 		segments = new Segment[segmentCount];
@@ -106,6 +180,190 @@ public class CONCURRENT_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_VALU
 		for(int i = 0;i<segmentCount;i++) {
 			segments[i] = new SegmentKV_BRACES(this, segmentCapacity, loadFactor, i == 0);
 		}
+	}
+	
+#if !TYPE_OBJECT || !VALUE_OBJECT
+	/**
+	 * Helper constructor that allow to create a map from boxed values (it will unbox them)
+	 * @param keys the keys that should be put into the map
+	 * @param values the values that should be put into the map.
+	 * @throws IllegalStateException if the keys and values do not match in lenght
+	 */
+	public CONCURRENT_HASH_MAP(CLASS_TYPE[] keys, CLASS_VALUE_TYPE[] values) {
+		this(keys, values, HashUtil.DEFAULT_LOAD_FACTOR, HashUtil.DEFAULT_MIN_CONCURRENCY);
+	}
+	
+	/**
+	 * Helper constructor that allow to create a map from boxed values (it will unbox them)
+	 * @param keys the keys that should be put into the map
+	 * @param values the values that should be put into the map.
+	 * @param loadFactor the percentage of how full the backing array can be before they resize
+	 * @throws IllegalStateException if the keys and values do not match in lenght
+	 * @throws IllegalStateException if the loadfactor is either below/equal to 0 or above/equal to 1
+	 */
+	public CONCURRENT_HASH_MAP(CLASS_TYPE[] keys, CLASS_VALUE_TYPE[] values, float loadFactor) {
+		this(keys, values, loadFactor, HashUtil.DEFAULT_MIN_CONCURRENCY);
+	}
+	
+	/**
+	 * Helper constructor that allow to create a map from boxed values (it will unbox them)
+	 * @param keys the keys that should be put into the map
+	 * @param values the values that should be put into the map.
+	 * @param concurrencyLevel decides how many operations can be performed at once.
+	 * @throws IllegalStateException if the keys and values do not match in lenght
+	 * @throws IllegalStateException if the concurrencyLevel is either below/equal to 0 or above/equal to 65535
+	 */
+	public CONCURRENT_HASH_MAP(CLASS_TYPE[] keys, CLASS_VALUE_TYPE[] values, int concurrencyLevel) {
+		this(keys, values, HashUtil.DEFAULT_LOAD_FACTOR, concurrencyLevel);
+	}
+	
+	/**
+	 * Helper constructor that allow to create a map from boxed values (it will unbox them)
+	 * @param keys the keys that should be put into the map
+	 * @param values the values that should be put into the map.
+	 * @param loadFactor the percentage of how full the backing array can be before they resize
+	 * @param concurrencyLevel decides how many operations can be performed at once.
+	 * @throws IllegalStateException if the keys and values do not match in lenght
+	 * @throws IllegalStateException if the loadfactor is either below/equal to 0 or above/equal to 1
+	 * @throws IllegalStateException if the concurrencyLevel is either below/equal to 0 or above/equal to 65535
+	 */
+	public CONCURRENT_HASH_MAP(CLASS_TYPE[] keys, CLASS_VALUE_TYPE[] values, float loadFactor, int concurrencyLevel) {
+		this(keys.length, loadFactor, concurrencyLevel);
+		if(keys.length != values.length) throw new IllegalStateException("Input Arrays are not equal size");
+		for(int i = 0,m=keys.length;i<m;i++) put(OBJ_TO_KEY(keys[i]), OBJ_TO_VALUE(values[i]));
+	}
+	
+#endif
+	/**
+	 * Helper constructor that allow to create a map from unboxed values
+	 * @param keys the keys that should be put into the map
+	 * @param values the values that should be put into the map.
+	 * @throws IllegalStateException if the keys and values do not match in lenght
+	 */
+	public CONCURRENT_HASH_MAP(KEY_TYPE[] keys, VALUE_TYPE[] values) {
+		this(keys, values, HashUtil.DEFAULT_LOAD_FACTOR, HashUtil.DEFAULT_MIN_CONCURRENCY);
+	}
+	
+	/**
+	 * Helper constructor that allow to create a map from unboxed values
+	 * @param keys the keys that should be put into the map
+	 * @param values the values that should be put into the map.
+	 * @param loadFactor the percentage of how full the backing array can be before they resize
+	 * @throws IllegalStateException if the keys and values do not match in lenght
+	 * @throws IllegalStateException if the loadfactor is either below/equal to 0 or above/equal to 1
+	 */
+	public CONCURRENT_HASH_MAP(KEY_TYPE[] keys, VALUE_TYPE[] values, float loadFactor) {
+		this(keys, values, loadFactor, HashUtil.DEFAULT_MIN_CONCURRENCY);
+	}
+	
+	/**
+	 * Helper constructor that allow to create a map from unboxed values
+	 * @param keys the keys that should be put into the map
+	 * @param values the values that should be put into the map.
+	 * @param concurrencyLevel decides how many operations can be performed at once.
+	 * @throws IllegalStateException if the keys and values do not match in lenght
+	 * @throws IllegalStateException if the concurrencyLevel is either below/equal to 0 or above/equal to 65535
+	 */
+	public CONCURRENT_HASH_MAP(KEY_TYPE[] keys, VALUE_TYPE[] values, int concurrencyLevel) {
+		this(keys, values, HashUtil.DEFAULT_LOAD_FACTOR, concurrencyLevel);
+	}
+	
+	/**
+	 * Helper constructor that allow to create a map from unboxed values
+	 * @param keys the keys that should be put into the map
+	 * @param values the values that should be put into the map.
+	 * @param loadFactor the percentage of how full the backing array can be before they resize
+	 * @param concurrencyLevel decides how many operations can be performed at once.
+	 * @throws IllegalStateException if the keys and values do not match in lenght
+	 * @throws IllegalStateException if the loadfactor is either below/equal to 0 or above/equal to 1
+	 * @throws IllegalStateException if the concurrencyLevel is either below/equal to 0 or above/equal to 65535
+	 */
+	public CONCURRENT_HASH_MAP(KEY_TYPE[] keys, VALUE_TYPE[] values, float loadFactor, int concurrencyLevel) {
+		this(keys.length, loadFactor, concurrencyLevel);
+		if(keys.length != values.length) throw new IllegalStateException("Input Arrays are not equal size");
+		for(int i = 0,m=keys.length;i<m;i++) put(keys[i], values[i]);
+	}
+	
+	/**
+	 * A Helper constructor that allows to create a Map with exactly the same values as the provided map.
+	 * @param map the values that should be present in the map
+	 */
+	public CONCURRENT_HASH_MAP(Map<? extends CLASS_TYPE, ? extends CLASS_VALUE_TYPE> map) {
+		this(map, HashUtil.DEFAULT_LOAD_FACTOR, HashUtil.DEFAULT_MIN_CONCURRENCY);
+	}
+	
+	/**
+	 * A Helper constructor that allows to create a Map with exactly the same values as the provided map.
+	 * @param map the values that should be present in the map
+	 * @param loadFactor the percentage of how full the backing array can be before they resize
+	 * @throws IllegalStateException if the loadfactor is either below/equal to 0 or above/equal to 1
+	 */
+	public CONCURRENT_HASH_MAP(Map<? extends CLASS_TYPE, ? extends CLASS_VALUE_TYPE> map, float loadFactor) {
+		this(map, loadFactor, HashUtil.DEFAULT_MIN_CONCURRENCY);
+	}
+	
+	/**
+	 * A Helper constructor that allows to create a Map with exactly the same values as the provided map.
+	 * @param map the values that should be present in the map
+	 * @param concurrencyLevel decides how many operations can be performed at once.
+	 * @throws IllegalStateException if the concurrencyLevel is either below/equal to 0 or above/equal to 65535
+	 */
+	public CONCURRENT_HASH_MAP(Map<? extends CLASS_TYPE, ? extends CLASS_VALUE_TYPE> map, int concurrencyLevel) {
+		this(map, HashUtil.DEFAULT_LOAD_FACTOR, concurrencyLevel);
+	}
+	
+	/**
+	 * A Helper constructor that allows to create a Map with exactly the same values as the provided map.
+	 * @param map the values that should be present in the map
+	 * @param loadFactor the percentage of how full the backing array can be before they resize
+	 * @param concurrencyLevel decides how many operations can be performed at once.
+	 * @throws IllegalStateException if the loadfactor is either below/equal to 0 or above/equal to 1
+	 * @throws IllegalStateException if the concurrencyLevel is either below/equal to 0 or above/equal to 65535
+	 */
+	public CONCURRENT_HASH_MAP(Map<? extends CLASS_TYPE, ? extends CLASS_VALUE_TYPE> map, float loadFactor, int concurrencyLevel) {
+		this(map.size(), loadFactor, concurrencyLevel);
+		putAll(map);
+	}
+	
+	/**
+	 * A Type Specific Helper function that allows to create a new Map with exactly the same values as the provided map.
+	 * @param map the values that should be present in the map
+ 	 */
+	public CONCURRENT_HASH_MAP(MAP KEY_VALUE_GENERIC_TYPE map) {
+		this(map, HashUtil.DEFAULT_LOAD_FACTOR, HashUtil.DEFAULT_MIN_CONCURRENCY);
+	}
+	
+	/**
+	 * A Type Specific Helper function that allows to create a new Map with exactly the same values as the provided map.
+	 * @param map the values that should be present in the map
+	 * @param loadFactor the percentage of how full the backing array can be before they resize
+	 * @throws IllegalStateException if the loadfactor is either below/equal to 0 or above/equal to 1
+ 	 */
+	public CONCURRENT_HASH_MAP(MAP KEY_VALUE_GENERIC_TYPE map, float loadFactor) {
+		this(map, loadFactor, HashUtil.DEFAULT_MIN_CONCURRENCY);
+	}
+	
+	/**
+	 * A Type Specific Helper function that allows to create a new Map with exactly the same values as the provided map.
+	 * @param map the values that should be present in the map
+	 * @param concurrencyLevel decides how many operations can be performed at once.
+	 * @throws IllegalStateException if the concurrencyLevel is either below/equal to 0 or above/equal to 65535
+ 	 */
+	public CONCURRENT_HASH_MAP(MAP KEY_VALUE_GENERIC_TYPE map, int concurrencyLevel) {
+		this(map, HashUtil.DEFAULT_LOAD_FACTOR, concurrencyLevel);
+	}
+	
+	/**
+	 * A Type Specific Helper function that allows to create a new Map with exactly the same values as the provided map.
+	 * @param map the values that should be present in the map
+	 * @param loadFactor the percentage of how full the backing array can be before they resize
+	 * @param concurrencyLevel decides how many operations can be performed at once.
+	 * @throws IllegalStateException if the loadfactor is either below/equal to 0 or above/equal to 1
+	 * @throws IllegalStateException if the concurrencyLevel is either below/equal to 0 or above/equal to 65535
+ 	 */
+	public CONCURRENT_HASH_MAP(MAP KEY_VALUE_GENERIC_TYPE map, float loadFactor, int concurrencyLevel) {
+		this(map.size(), loadFactor, concurrencyLevel);
+		putAll(map);
 	}
 	
 	@Override
@@ -196,8 +454,8 @@ public class CONCURRENT_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_VALU
 	}
 	
 	@Override
-	public CONCURRENT_MAP KEY_VALUE_GENERIC_TYPE copy() {
-		CONCURRENT_MAP KEY_VALUE_GENERIC_TYPE copy = new CONCURRENT_MAPKV_BRACES(false);
+	public CONCURRENT_HASH_MAP KEY_VALUE_GENERIC_TYPE copy() {
+		CONCURRENT_HASH_MAP KEY_VALUE_GENERIC_TYPE copy = new CONCURRENT_HASH_MAPKV_BRACES(false);
 		copy.segmentShift = segmentShift;
 		copy.segmentMask = segmentMask;
 		copy.segments = new Segment[segments.length];
@@ -331,29 +589,15 @@ public class CONCURRENT_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_VALU
 		return HashUtil.mix(Objects.hashCode(obj));
 	}
 	
-	public void test() {
-		
-	}
-	
 	private class MapEntrySet extends AbstractObjectSet<MAP.Entry KEY_VALUE_GENERIC_TYPE> implements MAP.FastEntrySet KEY_VALUE_GENERIC_TYPE {
 		@Override
 		public ObjectBidirectionalIterator<MAP.Entry KEY_VALUE_GENERIC_TYPE> iterator() {
 			return new EntryIterator();
 		}
 		
-		//TODO implement?
-		public ObjectBidirectionalIterator<MAP.Entry KEY_VALUE_GENERIC_TYPE> iterator(MAP.Entry KEY_VALUE_GENERIC_TYPE fromElement) {
-			return new EntryIterator(fromElement.ENTRY_KEY());
-		}
-		
 		@Override
 		public ObjectBidirectionalIterator<MAP.Entry KEY_VALUE_GENERIC_TYPE> fastIterator() {
 			return new FastEntryIterator();
-		}
-		
-		//TODO implement?
-		public ObjectBidirectionalIterator<MAP.Entry KEY_VALUE_GENERIC_TYPE> fastIterator(KEY_TYPE fromElement) {
-			return new FastEntryIterator(fromElement);
 		}
 		
 		@Override
@@ -546,22 +790,22 @@ public class CONCURRENT_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_VALU
 			if(o instanceof Map.Entry) {
 				if(o instanceof MAP.Entry) {
 					MAP.Entry KEY_VALUE_GENERIC_TYPE entry = (MAP.Entry KEY_VALUE_GENERIC_TYPE)o;
-					return CONCURRENT_MAP.this.remove(entry.ENTRY_KEY(), entry.ENTRY_VALUE());
+					return CONCURRENT_HASH_MAP.this.remove(entry.ENTRY_KEY(), entry.ENTRY_VALUE());
 				}
 				Map.Entry<?, ?> entry = (Map.Entry<?, ?>)o;
-				return CONCURRENT_MAP.this.remove(entry.getKey(), entry.getValue());
+				return CONCURRENT_HASH_MAP.this.remove(entry.getKey(), entry.getValue());
 			}
 			return false;
 		}
 		
 		@Override
 		public int size() {
-			return CONCURRENT_MAP.this.size();
+			return CONCURRENT_HASH_MAP.this.size();
 		}
 		
 		@Override
 		public void clear() {
-			CONCURRENT_MAP.this.clear();
+			CONCURRENT_HASH_MAP.this.clear();
 		}
 	}
 	
@@ -580,7 +824,7 @@ public class CONCURRENT_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_VALU
 		@Override
 		public boolean remove(Object o) {
 			int oldSize = size();
-			CONCURRENT_MAP.this.remove(o);
+			CONCURRENT_HASH_MAP.this.remove(o);
 			return size() != oldSize;
 		}
 		
@@ -593,7 +837,7 @@ public class CONCURRENT_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_VALU
 		@Override
 		public boolean remove(KEY_TYPE o) {
 			int oldSize = size();
-			CONCURRENT_MAP.this.remove(o);
+			CONCURRENT_HASH_MAP.this.remove(o);
 			return size() != oldSize;
 		}
 		
@@ -603,22 +847,17 @@ public class CONCURRENT_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_VALU
 			return new KeyIterator();
 		}
 		
-		//TODO implement into interface?
-		public BI_ITERATOR KEY_GENERIC_TYPE iterator(KEY_TYPE fromElement) {
-			return new KeyIterator(fromElement);
-		}
-		
 		@Override
 		public KeySet copy() { throw new UnsupportedOperationException(); }
 		
 		@Override
 		public int size() {
-			return CONCURRENT_MAP.this.size();
+			return CONCURRENT_HASH_MAP.this.size();
 		}
 		
 		@Override
 		public void clear() {
-			CONCURRENT_MAP.this.clear();
+			CONCURRENT_HASH_MAP.this.clear();
 		}
 		
 		@Override
@@ -801,12 +1040,12 @@ public class CONCURRENT_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_VALU
 		
 		@Override
 		public int size() {
-			return CONCURRENT_MAP.this.size();
+			return CONCURRENT_HASH_MAP.this.size();
 		}
 		
 		@Override
 		public void clear() {
-			CONCURRENT_MAP.this.clear();
+			CONCURRENT_HASH_MAP.this.clear();
 		}
 		
 		@Override
@@ -967,9 +1206,6 @@ public class CONCURRENT_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_VALU
 		MapEntry entry = new MapEntry();
 		
 		public FastEntryIterator() {}
-		public FastEntryIterator(KEY_TYPE from) {
-			super(from);
-		}
 		
 		@Override
 		public MAP.Entry KEY_VALUE_GENERIC_TYPE next() {
@@ -988,9 +1224,6 @@ public class CONCURRENT_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_VALU
 		MapEntry entry;
 		
 		public EntryIterator() {}
-		public EntryIterator(KEY_TYPE from) {
-			super(from);
-		}
 		
 		@Override
 		public MAP.Entry KEY_VALUE_GENERIC_TYPE next() {
@@ -1030,9 +1263,6 @@ public class CONCURRENT_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_VALU
 	private class KeyIterator extends MapIterator implements BI_ITERATOR KEY_GENERIC_TYPE {
 		
 		public KeyIterator() {}
-		public KeyIterator(KEY_TYPE from) {
-			super(from);
-		}
 		
 		@Override
 		public KEY_TYPE PREVIOUS() {
@@ -1060,17 +1290,6 @@ public class CONCURRENT_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_VALU
 		MapIterator() {
 			nextSegment = getFirstSegment();
 			if(nextSegment != -1) next = segments[nextSegment].firstIndex;
-		}
-		
-		MapIterator(KEY_TYPE from) {
-			int hash = getHashCode(from);
-			previousSegment = currentSegment = nextSegment = getSegmentIndex(hash);
-			Segment KEY_VALUE_GENERIC_TYPE seg = segments[currentSegment];
-			current = previous = seg.findIndex(hash, from);
-			if(current == -1) throw new NoSuchElementException("The element was not found");
-			findNextIndex();
-			current = -1;
-			currentSegment = -1;
 		}
 		
 		public boolean hasNext() {
@@ -1267,7 +1486,7 @@ public class CONCURRENT_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_VALU
 	protected static class Segment KEY_VALUE_GENERIC_TYPE extends ReentrantLock
 	{
 		private static final long serialVersionUID = -446894977795760975L;
-		protected final CONCURRENT_MAP KEY_VALUE_GENERIC_TYPE map;
+		protected final CONCURRENT_HASH_MAP KEY_VALUE_GENERIC_TYPE map;
 		/** The Backing keys array */
 		protected transient KEY_TYPE[] keys;
 		/** The Backing values array */
@@ -1293,11 +1512,11 @@ public class CONCURRENT_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_VALU
 		/** How full the Arrays are allowed to get before resize */
 		protected float loadFactor;
 		
-		protected Segment(CONCURRENT_MAP KEY_VALUE_GENERIC_TYPE map) {
+		protected Segment(CONCURRENT_HASH_MAP KEY_VALUE_GENERIC_TYPE map) {
 			this.map = map;
 		}
 		
-		protected Segment(CONCURRENT_MAP KEY_VALUE_GENERIC_TYPE map, int minCapacity, float loadFactor, boolean isNullContainer) {
+		protected Segment(CONCURRENT_HASH_MAP KEY_VALUE_GENERIC_TYPE map, int minCapacity, float loadFactor, boolean isNullContainer) {
 			this.map = map;
 			this.minCapacity = minCapacity;
 			this.loadFactor = loadFactor;
@@ -1310,21 +1529,28 @@ public class CONCURRENT_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_VALU
 			links = new long[arraySize];
 		}
 		
-		protected Segment KEY_VALUE_GENERIC_TYPE copy(CONCURRENT_MAP KEY_VALUE_GENERIC_TYPE newMap) {
-			Segment KEY_VALUE_GENERIC_TYPE copy = new SegmentKV_BRACES(newMap);
-			copy.keys = Arrays.copyOf(keys, keys.length);
-			copy.values = Arrays.copyOf(values, values.length);
-			copy.links = Arrays.copyOf(links, links.length);
-			copy.firstIndex = firstIndex;
-			copy.lastIndex = lastIndex;
-			copy.containsNull = containsNull;
-			copy.nullIndex = nullIndex;
-			copy.maxFill = maxFill;
-			copy.mask = mask;
-			copy.size = size;
-			copy.minCapacity = minCapacity;
-			copy.loadFactor = loadFactor;
-			return copy;
+		protected Segment KEY_VALUE_GENERIC_TYPE copy(CONCURRENT_HASH_MAP KEY_VALUE_GENERIC_TYPE newMap) {
+			lock();
+			try
+			{
+				Segment KEY_VALUE_GENERIC_TYPE copy = new SegmentKV_BRACES(newMap);
+				copy.keys = Arrays.copyOf(keys, keys.length);
+				copy.values = Arrays.copyOf(values, values.length);
+				copy.links = Arrays.copyOf(links, links.length);
+				copy.firstIndex = firstIndex;
+				copy.lastIndex = lastIndex;
+				copy.containsNull = containsNull;
+				copy.nullIndex = nullIndex;
+				copy.maxFill = maxFill;
+				copy.mask = mask;
+				copy.size = size;
+				copy.minCapacity = minCapacity;
+				copy.loadFactor = loadFactor;
+				return copy;				
+			}
+			finally {
+				unlock();
+			}
 		}
 		
 		protected VALUE_TYPE getDefaultReturnValue() {

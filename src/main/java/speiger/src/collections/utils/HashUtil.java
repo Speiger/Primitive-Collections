@@ -7,6 +7,8 @@ public class HashUtil
 {
 	/** Minimum HashMap Capacity */
 	public static final int DEFAULT_MIN_CAPACITY = 16;
+	/** Minimum ConcurrentHashMap Concurrency */
+	public static final int DEFAULT_MIN_CONCURRENCY = 4;
 	/** Default HashMap Load Factor */
 	public static final float DEFAULT_LOAD_FACTOR = 0.75F;
 	/** HashMap Load Factor with reduced hash collisions but more memory usage */

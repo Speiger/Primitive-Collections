@@ -31,6 +31,7 @@ import speiger.src.collections.PACKAGE.maps.impl.immutable.IMMUTABLE_HASH_MAP;
 import speiger.src.collections.PACKAGE.maps.impl.tree.AVL_TREE_MAP;
 import speiger.src.collections.PACKAGE.maps.impl.tree.RB_TREE_MAP;
 import speiger.src.collections.PACKAGE.maps.impl.misc.ARRAY_MAP;
+import speiger.src.collections.PACKAGE.maps.impl.concurrent.CONCURRENT_HASH_MAP;
 #if TYPE_OBJECT
 import speiger.src.collections.PACKAGE.maps.impl.misc.ENUM_MAP;
 import speiger.src.collections.PACKAGE.maps.impl.misc.LINKED_ENUM_MAP;
@@ -1506,6 +1507,14 @@ public interface MAP KEY_VALUE_GENERIC_TYPE extends Map<CLASS_TYPE, CLASS_VALUE_
 		 */
 		public LINKED_CUSTOM_HASH_MAP KEY_VALUE_GENERIC_TYPE customLinkedMap(STRATEGY KEY_GENERIC_TYPE strategy) {
 			return putElements(new LINKED_CUSTOM_HASH_MAPKV_BRACES(size, strategy));
+		}
+		
+		/**
+		 * Builds the Keys and Values into a Concurrent Hash Map
+		 * @return a CONCURRENT_HASH_MAP
+		 */
+		public CONCURRENT_HASH_MAP KEY_VALUE_GENERIC_TYPE concurrentMap() {
+			return putElements(new CONCURRENT_HASH_MAPKV_BRACES(size));
 		}
 		
 		/**
