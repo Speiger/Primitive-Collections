@@ -1438,7 +1438,7 @@ public class LINKED_HASH_MAP KEY_VALUE_GENERIC_TYPE extends HASH_MAP KEY_VALUE_G
 			if(previous == -1) firstIndex = next;
 			else links[previous] ^= ((links[previous] ^ (next & 0xFFFFFFFFL)) & 0xFFFFFFFFL);
 			
-			if (next == -1) lastIndex = previous;
+			if(next == -1) lastIndex = previous;
 			else links[next] ^= ((links[next] ^ ((previous & 0xFFFFFFFFL) << 32)) & 0xFFFFFFFF00000000L);
 			if(current == nullIndex) {
 				current = -1;

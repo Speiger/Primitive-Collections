@@ -20,6 +20,7 @@ import com.google.common.collect.testing.features.MapFeature;
 import junit.framework.Test;
 import junit.framework.TestCase;
 import junit.framework.TestSuite;
+import speiger.src.collections.objects.maps.impl.concurrent.Object2ObjectConcurrentOpenHashMap;
 import speiger.src.collections.objects.maps.impl.customHash.Object2ObjectLinkedOpenCustomHashMap;
 import speiger.src.collections.objects.maps.impl.customHash.Object2ObjectOpenCustomHashMap;
 import speiger.src.collections.objects.maps.impl.hash.Object2ObjectLinkedOpenHashMap;
@@ -42,6 +43,7 @@ public class ObjectMapTests extends TestCase
 		suite.addTest(suite("LinkedHashMap", Object2ObjectLinkedOpenHashMap::new, true));
 		suite.addTest(suite("CustomHashMap", () -> new Object2ObjectOpenCustomHashMap<>(Strategy.INSTANCE), true));
 		suite.addTest(suite("LinkedCustomHashMap", () -> new Object2ObjectLinkedOpenCustomHashMap<>(Strategy.INSTANCE), true));
+		suite.addTest(suite("ConcurrentHashMap", Object2ObjectConcurrentOpenHashMap::new, true));
 		suite.addTest(navigableSuite("RBTreeMap_NonNull", Object2ObjectRBTreeMap::new, false));
 		suite.addTest(navigableSuite("AVLTreeMap_NonNull", Object2ObjectAVLTreeMap::new, false));
 		suite.addTest(navigableSuite("RBTreeMap_Null", () -> new Object2ObjectRBTreeMap<>(new NullFriendlyComparator()), true));

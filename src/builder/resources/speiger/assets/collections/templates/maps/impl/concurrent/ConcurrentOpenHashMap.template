@@ -550,7 +550,7 @@ public class CONCURRENT_HASH_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY
 		for(int i = 0,m=segments.length;i<m;i++) {
 			size += segments[i].size;
 		}
-		return size > Integer.MAX_VALUE ? Integer.MAX_VALUE : 0;
+		return size > Integer.MAX_VALUE ? Integer.MAX_VALUE : (int)size;
 	}
 	
 	@Override
@@ -1288,16 +1288,16 @@ public class CONCURRENT_HASH_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY
 		int currentSegment = -1;
 		
 		MapIterator() {
-			nextSegment = getFirstSegment();
-			if(nextSegment != -1) next = segments[nextSegment].firstIndex;
+			currentSegment = getFirstSegment();
+			if(currentSegment != -1) next = segments[currentSegment].firstIndex;
 		}
 		
 		public boolean hasNext() {
-			return next != -1;
+			return next != -1 || nextSegment != -1;
 		}
 		
 		public boolean hasPrevious() {
-			return previous != -1;
+			return previous != -1 || previousSegment != -1;
 		}
 		
 		public int currentSegment() {
@@ -1306,16 +1306,30 @@ public class CONCURRENT_HASH_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY
 		
 		public int previousEntry() {
 			if(!hasPrevious()) throw new NoSuchElementException();
-			next = current = previous;
-			nextSegment = currentSegment = previousSegment;
+			if(previousSegment != -1) {
+				nextSegment = currentSegment;
+				currentSegment = previousSegment;
+				previousSegment = -1;
+				next = current = segments[currentSegment].lastIndex;
+			}
+			else {
+				next = current = previous;
+			}
 			findPreviousIndex();
 			return current;
 		}
 		
 		public int nextEntry() {
 			if(!hasNext()) throw new NoSuchElementException();
-			previous = current = next;
-			previousSegment = currentSegment = nextSegment;
+			if(nextSegment != -1) {
+				previousSegment = currentSegment;
+				currentSegment = nextSegment;
+				nextSegment = -1;
+				previous = current = segments[currentSegment].firstIndex;
+			}
+			else {
+				previous = current = next;
+			}
 			findNextIndex();
 			return current;
 		}
@@ -1328,15 +1342,14 @@ public class CONCURRENT_HASH_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY
 				if(current == previous) findPreviousIndex();
 				else findNextIndex();
 				seg.size--;
-				if(previousSegment != currentSegment) seg.firstIndex = next;
+				if(previous == -1) seg.firstIndex = next;
 				else seg.links[previous] ^= ((seg.links[previous] ^ (next & 0xFFFFFFFFL)) & 0xFFFFFFFFL);
 				
-				if(nextSegment != currentSegment) seg.lastIndex = previous;
+				if(next == -1) seg.lastIndex = previous;
 				else seg.links[next] ^= ((seg.links[next] ^ ((previous & 0xFFFFFFFFL) << 32)) & 0xFFFFFFFF00000000L);
 				
 				if(current == seg.nullIndex) {
 					current = -1;
-					currentSegment = -1;
 					seg.containsNull = false;
 					seg.keys[seg.nullIndex] = EMPTY_KEY_VALUE;
 					seg.values[seg.nullIndex] = EMPTY_VALUE;
@@ -1344,7 +1357,6 @@ public class CONCURRENT_HASH_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY
 				else {
 					int slot, last, startPos = current;
 					current = -1;
-					currentSegment = -1;
 					KEY_TYPE current;
 					while(true) {
 						startPos = ((last = startPos) + 1) & seg.mask;
@@ -1372,10 +1384,9 @@ public class CONCURRENT_HASH_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY
 		}
 		
 		protected void findPreviousIndex() {
-			previous = (int)(segments[currentSegment].links[current] >> 32);
+			previous = (int)(segments[currentSegment].links[current] >>> 32);
 			if(previous == -1) {
 				previousSegment = findPreviousSegment(currentSegment-1);
-				if(previousSegment != -1) previous = segments[previousSegment].lastIndex;
 			}
 		}
 		
@@ -1383,7 +1394,6 @@ public class CONCURRENT_HASH_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY
 			next = (int)(segments[currentSegment].links[current]);
 			if(next == -1) {
 				nextSegment = findNextSegment(currentSegment+1);
-				if(nextSegment != -1) next = segments[nextSegment].firstIndex;
 			}
 		}
 		
@@ -1926,6 +1936,8 @@ public class CONCURRENT_HASH_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY
 				containsNull = false;
 				Arrays.fill(keys, EMPTY_KEY_VALUE);
 				Arrays.fill(values, EMPTY_VALUE);
+				firstIndex = -1;
+				lastIndex = -1;
 			}
 			finally {
 				unlock();
@@ -1966,6 +1978,8 @@ public class CONCURRENT_HASH_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY
 				values = NEW_VALUE_ARRAY(arraySize);
 				links = new long[arraySize];
 				this.size = 0;
+				firstIndex = -1;
+				lastIndex = -1;
 				containsNull = false;
 			}
 			finally {
