@@ -1,6 +1,8 @@
 package speiger.src.builder;
 
+import java.io.BufferedWriter;
 import java.io.IOException;
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
@@ -10,7 +12,9 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.StringJoiner;
 import java.util.function.Consumer;
+import java.util.stream.Stream;
 
 import speiger.src.builder.processor.TemplateProcess;
 import speiger.src.builder.processor.TemplateProcessor;
@@ -63,6 +67,23 @@ public class PrimitiveCollectionsBuilder extends TemplateProcessor
 	protected boolean debugUnusedMappers()
 	{
 		return false;
+	}
+	
+	@Override
+	protected void afterFinish()
+	{
+		if(getVersion() > 8) 
+		{
+			Path basePath = Paths.get("src/main/java");
+			try(BufferedWriter writer = Files.newBufferedWriter(basePath.resolve("module-info.java")))
+			{
+				writer.write(getModuleInfo(basePath));
+			}
+			catch(Exception e)
+			{
+				e.printStackTrace();
+			}
+		}
 	}
 	
 	@Override
@@ -160,6 +181,50 @@ public class PrimitiveCollectionsBuilder extends TemplateProcessor
 		if(enumRequired.contains(name)) return enumVariables;
 		if(bi) return biVariables;
 		return variables;
+	}
+	
+	private String getModuleInfo(Path basePath) {
+		StringJoiner joiner = new StringJoiner("\n", "", "\n");
+		try(Stream<Path> stream = Files.walk(getOutputFolder()))
+		{
+			stream.filter(Files::isDirectory)
+					.filter(this::containsFiles)
+					.map(basePath::relativize)
+					.map(Path::toString)
+					.map(T -> T.replace("\\", "."))
+					.forEach(T -> joiner.add("\texports "+T+";"));
+		}
+		catch(Exception e)
+		{
+			e.printStackTrace();
+			throw new RuntimeException(e);
+		}
+		StringBuilder builder = new StringBuilder();
+		builder.append("module ").append(basePath.relativize(getOutputFolder()).toString().replace("\\", ".")).append(" {\n");
+		builder.append(joiner.toString()).append("}");	
+		return builder.toString();
+	}
+	
+	private boolean containsFiles(Path path) {
+		try(Stream<Path> stream = Files.walk(path, 1))
+		{
+			return stream.filter(Files::isRegularFile).findFirst().isPresent();
+		}
+		catch(Exception e)
+		{
+			e.printStackTrace();
+		}
+		return false;
+	}
+	
+	private int getVersion() {
+	    String version = System.getProperty("java.version");
+	    if(version.startsWith("1.")) {
+	        version = version.substring(2, 3);
+	    } else {
+	        int dot = version.indexOf(".");
+	        if(dot != -1) { version = version.substring(0, dot); }
+	    } return Integer.parseInt(version);
 	}
 	
 	public static void main(String...args)
