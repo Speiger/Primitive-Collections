@@ -4,7 +4,7 @@ import java.util.Arrays;
 import java.util.Map;
 import java.util.NoSuchElementException;
 import java.util.Objects;
-import java.util.concurrent.locks.ReentrantLock;
+import java.util.concurrent.locks.StampedLock;
 import java.util.function.Consumer;
 
 import java.util.function.BiFunction;
@@ -78,6 +78,8 @@ import speiger.src.collections.utils.HashUtil;
  * A TypeSpecific ConcurrentHashMap implementation that is based on <a href="https://github.com/google/guava">Guavas</a> approach and backing array implementations.
  * Like <a href="https://github.com/google/guava">Guavas</a> implementation this solution can be accessed by multiple threads, but it is not as flexible as Javas implementation.
  * The concurrencyLevel decides how many pools exist, and each pool can be accessed by 1 thread for writing and as many threads for reading.
+ * Though it is ill adviced to iterate over the collection using the Iterator if the Map is written to. Keep that in mind.
+ * 
  * 
  * @Type(T)
  * @ValueType(V)
@@ -607,10 +609,16 @@ public class CONCURRENT_HASH_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY
 		public void forEach(Consumer<? super MAP.Entry KEY_VALUE_GENERIC_TYPE> action) {
 			for(int i = 0,m=segments.length;i<m;i++) {
 				Segment KEY_VALUE_GENERIC_TYPE seg = segments[i];
-				int index = seg.firstIndex;
-				while(index != -1){
-					action.accept(new BasicEntryKV_BRACES(seg.keys[index], seg.values[index]));
-					index = (int)seg.links[index];
+				long stamp = seg.readLock();
+				try {
+					int index = seg.firstIndex;
+					while(index != -1){
+						action.accept(new BasicEntryKV_BRACES(seg.keys[index], seg.values[index]));
+						index = (int)seg.links[index];
+					}					
+				}
+				finally {
+					seg.unlockRead(stamp);
 				}
 			}
 		}
@@ -620,11 +628,17 @@ public class CONCURRENT_HASH_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY
 			BasicEntry KEY_VALUE_GENERIC_TYPE entry = new BasicEntryKV_BRACES();
 			for(int i = 0,m=segments.length;i<m;i++) {
 				Segment KEY_VALUE_GENERIC_TYPE seg = segments[i];
-				int index = seg.firstIndex;
-				while(index != -1){
-					entry.set(seg.keys[index], seg.values[index]);
-					action.accept(entry);
-					index = (int)seg.links[index];
+				long stamp = seg.readLock();
+				try {
+					int index = seg.firstIndex;
+					while(index != -1){
+						entry.set(seg.keys[index], seg.values[index]);
+						action.accept(entry);
+						index = (int)seg.links[index];
+					}					
+				}
+				finally {
+					seg.unlockRead(stamp);
 				}
 			}
 		}
@@ -634,10 +648,16 @@ public class CONCURRENT_HASH_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY
 			Objects.requireNonNull(action);
 			for(int i = 0,m=segments.length;i<m;i++) {
 				Segment KEY_VALUE_GENERIC_TYPE seg = segments[i];
-				int index = seg.firstIndex;
-				while(index != -1) {
-					action.accept(input, new BasicEntryKV_BRACES(seg.keys[index], seg.values[index]));
-					index = (int)seg.links[index];
+				long stamp = seg.readLock();
+				try {
+					int index = seg.firstIndex;
+					while(index != -1) {
+						action.accept(input, new BasicEntryKV_BRACES(seg.keys[index], seg.values[index]));
+						index = (int)seg.links[index];
+					}					
+				}
+				finally {
+					seg.unlockRead(stamp);
 				}
 			}
 		}
@@ -648,11 +668,17 @@ public class CONCURRENT_HASH_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY
 			BasicEntry KEY_VALUE_GENERIC_TYPE entry = new BasicEntryKV_BRACES();
 			for(int i = 0,m=segments.length;i<m;i++) {
 				Segment KEY_VALUE_GENERIC_TYPE seg = segments[i];
-				int index = seg.firstIndex;
-				while(index != -1) {
-					entry.set(seg.keys[index], seg.values[index]);
-					if(filter.getBoolean(entry)) return true;
-					index = (int)seg.links[index];
+				long stamp = seg.readLock();
+				try {
+					int index = seg.firstIndex;
+					while(index != -1) {
+						entry.set(seg.keys[index], seg.values[index]);
+						if(filter.getBoolean(entry)) return true;
+						index = (int)seg.links[index];
+					}					
+				}
+				finally {
+					seg.unlockRead(stamp);
 				}
 			}
 			return false;
@@ -664,11 +690,17 @@ public class CONCURRENT_HASH_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY
 			BasicEntry KEY_VALUE_GENERIC_TYPE entry = new BasicEntryKV_BRACES();
 			for(int i = 0,m=segments.length;i<m;i++) {
 				Segment KEY_VALUE_GENERIC_TYPE seg = segments[i];
-				int index = seg.firstIndex;
-				while(index != -1) {
-					entry.set(seg.keys[index], seg.values[index]);
-					if(filter.getBoolean(entry)) return false;
-					index = (int)seg.links[index];
+				long stamp = seg.readLock();
+				try {
+					int index = seg.firstIndex;
+					while(index != -1) {
+						entry.set(seg.keys[index], seg.values[index]);
+						if(filter.getBoolean(entry)) return false;
+						index = (int)seg.links[index];
+					}					
+				}
+				finally {
+					seg.unlockRead(stamp);
 				}
 			}
 			return true;
@@ -680,11 +712,17 @@ public class CONCURRENT_HASH_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY
 			BasicEntry KEY_VALUE_GENERIC_TYPE entry = new BasicEntryKV_BRACES();
 			for(int i = 0,m=segments.length;i<m;i++) {
 				Segment KEY_VALUE_GENERIC_TYPE seg = segments[i];
-				int index = seg.firstIndex;
-				while(index != -1) {
-					entry.set(seg.keys[index], seg.values[index]);
-					if(!filter.getBoolean(entry)) return false;
-					index = (int)seg.links[index];
+				long stamp = seg.readLock();
+				try {
+					int index = seg.firstIndex;
+					while(index != -1) {
+						entry.set(seg.keys[index], seg.values[index]);
+						if(!filter.getBoolean(entry)) return false;
+						index = (int)seg.links[index];
+					}
+				}
+				finally {
+					seg.unlockRead(stamp);
 				}
 			}
 			return true;
@@ -696,13 +734,18 @@ public class CONCURRENT_HASH_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY
 			E state = identity;
 			for(int i = 0,m=segments.length;i<m;i++) {
 				Segment KEY_VALUE_GENERIC_TYPE seg = segments[i];
-				int index = seg.firstIndex;
-				while(index != -1) {
-					state = operator.apply(state, new BasicEntryKV_BRACES(seg.keys[index], seg.values[index]));
-					index = (int)seg.links[index];
+				long stamp = seg.readLock();
+				try {
+					int index = seg.firstIndex;
+					while(index != -1) {
+						state = operator.apply(state, new BasicEntryKV_BRACES(seg.keys[index], seg.values[index]));
+						index = (int)seg.links[index];
+					}
+				}
+				finally {
+					seg.unlockRead(stamp);
 				}
 			}
-
 			return state;
 		}
 		
@@ -713,16 +756,22 @@ public class CONCURRENT_HASH_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY
 			boolean empty = true;
 			for(int i = 0,m=segments.length;i<m;i++) {
 				Segment KEY_VALUE_GENERIC_TYPE seg = segments[i];
-				int index = seg.firstIndex;
-				while(index != -1) {
-					if(empty) {
-						empty = false;
-						state = new BasicEntryKV_BRACES(seg.keys[index], seg.values[index]);
+				long stamp = seg.readLock();
+				try {
+					int index = seg.firstIndex;
+					while(index != -1) {
+						if(empty) {
+							empty = false;
+							state = new BasicEntryKV_BRACES(seg.keys[index], seg.values[index]);
+							index = (int)seg.links[index];
+							continue;
+						}
+						state = operator.apply(state, new BasicEntryKV_BRACES(seg.keys[index], seg.values[index]));
 						index = (int)seg.links[index];
-						continue;
-					}
-					state = operator.apply(state, new BasicEntryKV_BRACES(seg.keys[index], seg.values[index]));
-					index = (int)seg.links[index];
+					}					
+				}
+				finally {
+					seg.unlockRead(stamp);
 				}
 			}
 			return state;
@@ -735,10 +784,16 @@ public class CONCURRENT_HASH_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY
 			for(int i = 0,m=segments.length;i<m;i++) {
 				Segment KEY_VALUE_GENERIC_TYPE seg = segments[i];
 				int index = seg.firstIndex;
-				while(index != -1) {
-					entry.set(seg.keys[index], seg.values[index]);
-					if(filter.getBoolean(entry)) return entry;
-					index = (int)seg.links[index];
+				long stamp = seg.readLock();
+				try {
+					while(index != -1) {
+						entry.set(seg.keys[index], seg.values[index]);
+						if(filter.getBoolean(entry)) return entry;
+						index = (int)seg.links[index];
+					}
+				}
+				finally {
+					seg.unlockRead(stamp);
 				}
 			}
 			return null;
@@ -751,11 +806,17 @@ public class CONCURRENT_HASH_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY
 			BasicEntry KEY_VALUE_GENERIC_TYPE entry = new BasicEntryKV_BRACES();
 			for(int i = 0,m=segments.length;i<m;i++) {
 				Segment KEY_VALUE_GENERIC_TYPE seg = segments[i];
-				int index = seg.firstIndex;
-				while(index != -1) {
-					entry.set(seg.keys[index], seg.values[index]);
-					if(filter.getBoolean(entry)) result++;
-					index = (int)seg.links[index];
+				long stamp = seg.readLock();
+				try {
+					int index = seg.firstIndex;
+					while(index != -1) {
+						entry.set(seg.keys[index], seg.values[index]);
+						if(filter.getBoolean(entry)) result++;
+						index = (int)seg.links[index];
+					}
+				}
+				finally {
+					seg.unlockRead(stamp);
 				}
 			}
 			return result;
@@ -770,15 +831,27 @@ public class CONCURRENT_HASH_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY
 					KEY_TYPE key = entry.ENTRY_KEY();
 					int hash = getHashCode(key);
 					Segment KEY_VALUE_GENERIC_TYPE seg = getSegment(hash);
-					int index = seg.findIndex(hash, key);
-					if(index >= 0) return VALUE_EQUALS(entry.ENTRY_VALUE(), seg.values[index]);
+					long stamp = seg.readLock();
+					try {
+						int index = seg.findIndex(hash, key);
+						if(index >= 0) return VALUE_EQUALS(entry.ENTRY_VALUE(), seg.values[index]);
+					}
+					finally {
+						seg.unlockRead(stamp);
+					}
 				}
 				else {
 					Map.Entry<?, ?> entry = (Map.Entry<?, ?>)o;
 					int hash = getHashCode(entry.getKey());
 					Segment KEY_VALUE_GENERIC_TYPE seg = getSegment(hash);
-					int index = seg.findIndex(hash, entry.getKey());
-					if(index >= 0) return Objects.equals(entry.getValue(), VALUE_TO_OBJ(seg.values[index]));
+					long stamp = seg.readLock();
+					try {
+						int index = seg.findIndex(hash, entry.getKey());
+						if(index >= 0) return Objects.equals(entry.getValue(), VALUE_TO_OBJ(seg.values[index]));						
+					}
+					finally {
+						seg.unlockRead(stamp);
+					}
 				}
 			}
 			return false;
@@ -865,10 +938,16 @@ public class CONCURRENT_HASH_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY
 			Objects.requireNonNull(action);
 			for(int i = 0,m=segments.length;i<m;i++) {
 				Segment KEY_VALUE_GENERIC_TYPE seg = segments[i];
-				int index = seg.firstIndex;
-				while(index != -1){
-					action.accept(seg.keys[index]);
-					index = (int)seg.links[index];
+				long stamp = seg.readLock();
+				try {
+					int index = seg.firstIndex;
+					while(index != -1){
+						action.accept(seg.keys[index]);
+						index = (int)seg.links[index];
+					}
+				}
+				finally {
+					seg.unlockRead(stamp);
 				}
 			}
 		}
@@ -878,10 +957,16 @@ public class CONCURRENT_HASH_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY
 			Objects.requireNonNull(action);
 			for(int i = 0,m=segments.length;i<m;i++) {
 				Segment KEY_VALUE_GENERIC_TYPE seg = segments[i];
-				int index = seg.firstIndex;
-				while(index != -1){
-					action.accept(input, seg.keys[index]);
-					index = (int)seg.links[index];
+				long stamp = seg.readLock();
+				try {
+					int index = seg.firstIndex;
+					while(index != -1){
+						action.accept(input, seg.keys[index]);
+						index = (int)seg.links[index];
+					}
+				}
+				finally {
+					seg.unlockRead(stamp);
 				}
 			}
 		}
@@ -891,10 +976,16 @@ public class CONCURRENT_HASH_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY
 			Objects.requireNonNull(filter);
 			for(int i = 0,m=segments.length;i<m;i++) {
 				Segment KEY_VALUE_GENERIC_TYPE seg = segments[i];
-				int index = seg.firstIndex;
-				while(index != -1){
-					if(filter.TEST_VALUE(seg.keys[index])) return true;
-					index = (int)seg.links[index];
+				long stamp = seg.readLock();
+				try {
+					int index = seg.firstIndex;
+					while(index != -1){
+						if(filter.TEST_VALUE(seg.keys[index])) return true;
+						index = (int)seg.links[index];
+					}					
+				}
+				finally {
+					seg.unlockRead(stamp);
 				}
 			}
 			return false;
@@ -905,10 +996,16 @@ public class CONCURRENT_HASH_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY
 			Objects.requireNonNull(filter);
 			for(int i = 0,m=segments.length;i<m;i++) {
 				Segment KEY_VALUE_GENERIC_TYPE seg = segments[i];
-				int index = seg.firstIndex;
-				while(index != -1){
-					if(filter.TEST_VALUE(seg.keys[index])) return false;
-					index = (int)seg.links[index];
+				long stamp = seg.readLock();
+				try {
+					int index = seg.firstIndex;
+					while(index != -1){
+						if(filter.TEST_VALUE(seg.keys[index])) return false;
+						index = (int)seg.links[index];
+					}
+				}
+				finally {
+					seg.unlockRead(stamp);
 				}
 			}
 			return true;
@@ -919,10 +1016,16 @@ public class CONCURRENT_HASH_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY
 			Objects.requireNonNull(filter);
 			for(int i = 0,m=segments.length;i<m;i++) {
 				Segment KEY_VALUE_GENERIC_TYPE seg = segments[i];
-				int index = seg.firstIndex;
-				while(index != -1){
-					if(!filter.TEST_VALUE(seg.keys[index])) return false;
-					index = (int)seg.links[index];
+				long stamp = seg.readLock();
+				try {
+					int index = seg.firstIndex;
+					while(index != -1){
+						if(!filter.TEST_VALUE(seg.keys[index])) return false;
+						index = (int)seg.links[index];
+					}
+				}
+				finally {
+					seg.unlockRead(stamp);
 				}
 			}
 			return true;
@@ -935,10 +1038,16 @@ public class CONCURRENT_HASH_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY
 			KEY_TYPE state = identity;
 			for(int i = 0,m=segments.length;i<m;i++) {
 				Segment KEY_VALUE_GENERIC_TYPE seg = segments[i];
-				int index = seg.firstIndex;
-				while(index != -1){
-					state = operator.APPLY_KEY_VALUE(state, seg.keys[index]);
-					index = (int)seg.links[index];
+				long stamp = seg.readLock();
+				try {
+					int index = seg.firstIndex;
+					while(index != -1){
+						state = operator.APPLY_KEY_VALUE(state, seg.keys[index]);
+						index = (int)seg.links[index];
+					}
+				}
+				finally {
+					seg.unlockRead(stamp);
 				}
 			}
 			return state;
@@ -951,10 +1060,16 @@ public class CONCURRENT_HASH_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY
 			KEY_SPECIAL_TYPE state = identity;
 			for(int i = 0,m=segments.length;i<m;i++) {
 				Segment KEY_VALUE_GENERIC_TYPE seg = segments[i];
-				int index = seg.firstIndex;
-				while(index != -1){
-					state = operator.apply(state, seg.keys[index]);
-					index = (int)seg.links[index];
+				long stamp = seg.readLock();
+				try {
+					int index = seg.firstIndex;
+					while(index != -1){
+						state = operator.apply(state, seg.keys[index]);
+						index = (int)seg.links[index];
+					}
+				}
+				finally {
+					seg.unlockRead(stamp);
 				}
 			}
 			return state;
@@ -968,16 +1083,22 @@ public class CONCURRENT_HASH_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY
 			boolean empty = true;
 			for(int i = 0,m=segments.length;i<m;i++) {
 				Segment KEY_VALUE_GENERIC_TYPE seg = segments[i];
-				int index = seg.firstIndex;
-				while(index != -1){
-					if(empty) {
-						empty = false;
-						state = seg.keys[index];
+				long stamp = seg.readLock();
+				try {
+					int index = seg.firstIndex;
+					while(index != -1){
+						if(empty) {
+							empty = false;
+							state = seg.keys[index];
+							index = (int)seg.links[index];
+							continue;
+						}
+						state = operator.APPLY_KEY_VALUE(state, seg.keys[index]);
 						index = (int)seg.links[index];
-						continue;
 					}
-					state = operator.APPLY_KEY_VALUE(state, seg.keys[index]);
-					index = (int)seg.links[index];
+				}
+				finally {
+					seg.unlockRead(stamp);
 				}
 			}
 			return state;
@@ -988,10 +1109,16 @@ public class CONCURRENT_HASH_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY
 			Objects.requireNonNull(filter);
 			for(int i = 0,m=segments.length;i<m;i++) {
 				Segment KEY_VALUE_GENERIC_TYPE seg = segments[i];
-				int index = seg.firstIndex;
-				while(index != -1){
-					if(filter.TEST_VALUE(seg.keys[index])) return seg.keys[index];
-					index = (int)seg.links[index];
+				long stamp = seg.readLock();
+				try {
+					int index = seg.firstIndex;
+					while(index != -1){
+						if(filter.TEST_VALUE(seg.keys[index])) return seg.keys[index];
+						index = (int)seg.links[index];
+					}
+				}
+				finally {
+					seg.unlockRead(stamp);
 				}
 			}
 			return EMPTY_KEY_VALUE;
@@ -1003,10 +1130,16 @@ public class CONCURRENT_HASH_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY
 			int result = 0;
 			for(int i = 0,m=segments.length;i<m;i++) {
 				Segment KEY_VALUE_GENERIC_TYPE seg = segments[i];
-				int index = seg.firstIndex;
-				while(index != -1){
-					if(filter.TEST_VALUE(seg.keys[index])) result++;
-					index = (int)seg.links[index];
+				long stamp = seg.readLock();
+				try {
+					int index = seg.firstIndex;
+					while(index != -1){
+						if(filter.TEST_VALUE(seg.keys[index])) result++;
+						index = (int)seg.links[index];
+					}
+				}
+				finally {
+					seg.unlockRead(stamp);
 				}
 			}
 			return result;
@@ -1053,10 +1186,16 @@ public class CONCURRENT_HASH_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY
 			Objects.requireNonNull(action);
 			for(int i = 0,m=segments.length;i<m;i++) {
 				Segment KEY_VALUE_GENERIC_TYPE seg = segments[i];
-				int index = seg.firstIndex;
-				while(index != -1){
-					action.accept(seg.values[index]);
-					index = (int)seg.links[index];
+				long stamp = seg.readLock();
+				try {
+					int index = seg.firstIndex;
+					while(index != -1){
+						action.accept(seg.values[index]);
+						index = (int)seg.links[index];
+					}
+				}
+				finally {
+					seg.unlockRead(stamp);
 				}
 			}
 		}
@@ -1066,10 +1205,16 @@ public class CONCURRENT_HASH_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY
 			Objects.requireNonNull(action);
 			for(int i = 0,m=segments.length;i<m;i++) {
 				Segment KEY_VALUE_GENERIC_TYPE seg = segments[i];
-				int index = seg.firstIndex;
-				while(index != -1){
-					action.accept(input, seg.values[index]);
-					index = (int)seg.links[index];
+				long stamp = seg.readLock();
+				try {
+					int index = seg.firstIndex;
+					while(index != -1){
+						action.accept(input, seg.values[index]);
+						index = (int)seg.links[index];
+					}
+				}
+				finally {
+					seg.unlockRead(stamp);
 				}
 			}
 		}
@@ -1079,10 +1224,16 @@ public class CONCURRENT_HASH_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY
 			Objects.requireNonNull(filter);
 			for(int i = 0,m=segments.length;i<m;i++) {
 				Segment KEY_VALUE_GENERIC_TYPE seg = segments[i];
-				int index = seg.firstIndex;
-				while(index != -1){
-					if(filter.VALUE_TEST_VALUE(seg.values[index])) return true;
-					index = (int)seg.links[index];
+				long stamp = seg.readLock();
+				try {
+					int index = seg.firstIndex;
+					while(index != -1){
+						if(filter.VALUE_TEST_VALUE(seg.values[index])) return true;
+						index = (int)seg.links[index];
+					}
+				}
+				finally {
+					seg.unlockRead(stamp);
 				}
 			}
 			return false;
@@ -1093,10 +1244,16 @@ public class CONCURRENT_HASH_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY
 			Objects.requireNonNull(filter);
 			for(int i = 0,m=segments.length;i<m;i++) {
 				Segment KEY_VALUE_GENERIC_TYPE seg = segments[i];
-				int index = seg.firstIndex;
-				while(index != -1) {
-					if(filter.VALUE_TEST_VALUE(seg.values[index])) return false;
-					index = (int)seg.links[index];
+				long stamp = seg.readLock();
+				try {
+					int index = seg.firstIndex;
+					while(index != -1) {
+						if(filter.VALUE_TEST_VALUE(seg.values[index])) return false;
+						index = (int)seg.links[index];
+					}
+				}
+				finally {
+					seg.unlockRead(stamp);
 				}
 			}
 			return true;
@@ -1107,10 +1264,16 @@ public class CONCURRENT_HASH_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY
 			Objects.requireNonNull(filter);
 			for(int i = 0,m=segments.length;i<m;i++) {
 				Segment KEY_VALUE_GENERIC_TYPE seg = segments[i];
-				int index = seg.firstIndex;
-				while(index != -1) {
-					if(!filter.VALUE_TEST_VALUE(seg.values[index])) return false;
-					index = (int)seg.links[index];
+				long stamp = seg.readLock();
+				try {
+					int index = seg.firstIndex;
+					while(index != -1) {
+						if(!filter.VALUE_TEST_VALUE(seg.values[index])) return false;
+						index = (int)seg.links[index];
+					}
+				}
+				finally {
+					seg.unlockRead(stamp);
 				}
 			}
 			return true;
@@ -1123,10 +1286,16 @@ public class CONCURRENT_HASH_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY
 			VALUE_TYPE state = identity;
 			for(int i = 0,m=segments.length;i<m;i++) {
 				Segment KEY_VALUE_GENERIC_TYPE seg = segments[i];
-				int index = seg.firstIndex;
-				while(index != -1) {
-					state = operator.APPLY_VALUE(state, seg.values[index]);
-					index = (int)seg.links[index];
+				long stamp = seg.readLock();
+				try {
+					int index = seg.firstIndex;
+					while(index != -1) {
+						state = operator.APPLY_VALUE(state, seg.values[index]);
+						index = (int)seg.links[index];
+					}
+				}
+				finally {
+					seg.unlockRead(stamp);
 				}
 			}
 			return state;
@@ -1139,10 +1308,16 @@ public class CONCURRENT_HASH_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY
 			VALUE_SPECIAL_TYPE state = identity;
 			for(int i = 0,m=segments.length;i<m;i++) {
 				Segment KEY_VALUE_GENERIC_TYPE seg = segments[i];
-				int index = seg.firstIndex;
-				while(index != -1) {
-					state = operator.apply(state, seg.values[index]);
-					index = (int)seg.links[index];
+				long stamp = seg.readLock();
+				try {
+					int index = seg.firstIndex;
+					while(index != -1) {
+						state = operator.apply(state, seg.values[index]);
+						index = (int)seg.links[index];
+					}
+				}
+				finally {
+					seg.unlockRead(stamp);
 				}
 			}
 			return state;
@@ -1156,16 +1331,22 @@ public class CONCURRENT_HASH_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY
 			boolean empty = true;
 			for(int i = 0,m=segments.length;i<m;i++) {
 				Segment KEY_VALUE_GENERIC_TYPE seg = segments[i];
-				int index = seg.firstIndex;
-				while(index != -1) {
-					if(empty) {
-						empty = false;
-						state = seg.values[index];
+				long stamp = seg.readLock();
+				try {
+					int index = seg.firstIndex;
+					while(index != -1) {
+						if(empty) {
+							empty = false;
+							state = seg.values[index];
+							index = (int)seg.links[index];
+							continue;
+						}
+						state = operator.APPLY_VALUE(state, seg.values[index]);
 						index = (int)seg.links[index];
-						continue;
 					}
-					state = operator.APPLY_VALUE(state, seg.values[index]);
-					index = (int)seg.links[index];
+				}
+				finally {
+					seg.unlockRead(stamp);
 				}
 			}
 			return state;
@@ -1177,10 +1358,16 @@ public class CONCURRENT_HASH_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY
 			if(size() <= 0) return EMPTY_VALUE;
 			for(int i = 0,m=segments.length;i<m;i++) {
 				Segment KEY_VALUE_GENERIC_TYPE seg = segments[i];
-				int index = seg.firstIndex;
-				while(index != -1){
-					if(filter.VALUE_TEST_VALUE(seg.values[index])) return seg.values[index];
-					index = (int)seg.links[index];
+				long stamp = seg.readLock();
+				try {
+					int index = seg.firstIndex;
+					while(index != -1){
+						if(filter.VALUE_TEST_VALUE(seg.values[index])) return seg.values[index];
+						index = (int)seg.links[index];
+					}
+				}
+				finally {
+					seg.unlockRead(stamp);
 				}
 			}
 			return EMPTY_VALUE;
@@ -1192,10 +1379,16 @@ public class CONCURRENT_HASH_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY
 			int result = 0;
 			for(int i = 0,m=segments.length;i<m;i++) {
 				Segment KEY_VALUE_GENERIC_TYPE seg = segments[i];
-				int index = seg.firstIndex;
-				while(index != -1){
-					if(filter.VALUE_TEST_VALUE(seg.values[index])) result++;
-					index = (int)seg.links[index];
+				long stamp = seg.readLock();
+				try {
+					int index = seg.firstIndex;
+					while(index != -1){
+						if(filter.VALUE_TEST_VALUE(seg.values[index])) result++;
+						index = (int)seg.links[index];
+					}
+				}
+				finally {
+					seg.unlockRead(stamp);
 				}
 			}
 			return result;
@@ -1313,6 +1506,7 @@ public class CONCURRENT_HASH_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY
 				next = current = segments[currentSegment].lastIndex;
 			}
 			else {
+				if(next != -1) nextSegment = -1;
 				next = current = previous;
 			}
 			findPreviousIndex();
@@ -1328,6 +1522,7 @@ public class CONCURRENT_HASH_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY
 				previous = current = segments[currentSegment].firstIndex;
 			}
 			else {
+				if(previous != -1) previousSegment = -1;
 				previous = current = next;
 			}
 			findNextIndex();
@@ -1337,7 +1532,7 @@ public class CONCURRENT_HASH_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY
 		public void remove() {
 			if(current == -1) throw new IllegalStateException();
 			Segment KEY_VALUE_GENERIC_TYPE seg = segments[currentSegment];
-			seg.lock();
+			long stamp = seg.writeLock();
 			try {
 				if(current == previous) findPreviousIndex();
 				else findNextIndex();
@@ -1379,7 +1574,7 @@ public class CONCURRENT_HASH_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY
 				}
 			}
 			finally {
-				seg.unlock();
+				seg.unlockWrite(stamp);
 			}
 		}
 		
@@ -1447,7 +1642,7 @@ public class CONCURRENT_HASH_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY
 		@Override
 		public VALUE_TYPE setValue(VALUE_TYPE value) {
 			Segment KEY_VALUE_GENERIC_TYPE seg = segments[segmentIndex];
-			seg.lock();
+			long stamp = seg.writeLock();
 			try
 			{
 				VALUE_TYPE oldValue = ENTRY_VALUE();
@@ -1455,7 +1650,7 @@ public class CONCURRENT_HASH_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY
 				return oldValue;
 			}
 			finally {
-				seg.unlock();
+				seg.unlockWrite(stamp);
 			}
 		}
 		
@@ -1493,7 +1688,7 @@ public class CONCURRENT_HASH_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY
 		}
 	}
 	
-	protected static class Segment KEY_VALUE_GENERIC_TYPE extends ReentrantLock
+	protected static class Segment KEY_VALUE_GENERIC_TYPE extends StampedLock
 	{
 		private static final long serialVersionUID = -446894977795760975L;
 		protected final CONCURRENT_HASH_MAP KEY_VALUE_GENERIC_TYPE map;
@@ -1540,7 +1735,7 @@ public class CONCURRENT_HASH_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY
 		}
 		
 		protected Segment KEY_VALUE_GENERIC_TYPE copy(CONCURRENT_HASH_MAP KEY_VALUE_GENERIC_TYPE newMap) {
-			lock();
+			long stamp = readLock();
 			try
 			{
 				Segment KEY_VALUE_GENERIC_TYPE copy = new SegmentKV_BRACES(newMap);
@@ -1559,7 +1754,7 @@ public class CONCURRENT_HASH_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY
 				return copy;				
 			}
 			finally {
-				unlock();
+				unlockRead(stamp);
 			}
 		}
 		
@@ -1568,7 +1763,7 @@ public class CONCURRENT_HASH_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY
 		}
 		
 		protected VALUE_TYPE put(int hash, KEY_TYPE key, VALUE_TYPE value) {
-			lock();
+			long stamp = writeLock();
 			try {
 				int slot = findIndex(hash, key);
 				if(slot < 0) {
@@ -1580,12 +1775,12 @@ public class CONCURRENT_HASH_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY
 				return oldValue;
 			}
 			finally {
-				unlock();
+				unlockWrite(stamp);
 			}
 		}
 		
 		protected VALUE_TYPE putIfAbsent(int hash, KEY_TYPE key, VALUE_TYPE value) {
-			lock();
+			long stamp = writeLock();
 			try {
 				int slot = findIndex(hash, key);
 				if(slot < 0) {
@@ -1595,13 +1790,13 @@ public class CONCURRENT_HASH_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY
 				return values[slot];
 			}
 			finally {
-				unlock();
+				unlockWrite(stamp);
 			}	
 		}
 		
 #if VALUE_PRIMITIVES
 		protected VALUE_TYPE addTo(int hash, KEY_TYPE key, VALUE_TYPE value) {
-			lock();
+			long stamp = writeLock();
 			try {
 				int slot = findIndex(hash, key);
 				if(slot < 0) {
@@ -1613,12 +1808,12 @@ public class CONCURRENT_HASH_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY
 				return oldValue;
 			}
 			finally {
-				unlock();
+				unlockWrite(stamp);
 			}
 		}
 		
 		protected VALUE_TYPE subFrom(int hash, KEY_TYPE key, VALUE_TYPE value) {
-			lock();
+			long stamp = writeLock();
 			try {
 				int slot = findIndex(hash, key);
 				if(slot < 0) return getDefaultReturnValue();
@@ -1628,121 +1823,175 @@ public class CONCURRENT_HASH_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY
 				return oldValue;
 			}
 			finally {
-				unlock();
+				unlockWrite(stamp);
 			}
 		}
 #endif
 		
 #if !TYPE_OBJECT
 		protected boolean containsKey(int hash, KEY_TYPE key) {
-			return findIndex(hash, key) >= 0;
+			long stamp = readLock();
+			try {
+				return findIndex(hash, key) >= 0;				
+			}
+			finally {
+				unlockRead(stamp);
+			}
 		}
 		
 #endif
 		@Deprecated
 		protected boolean containsKey(int hash, Object key) {
-			return findIndex(hash, key) >= 0;
+			long stamp = readLock();
+			try {
+				return findIndex(hash, key) >= 0;				
+			}
+			finally {
+				unlockRead(stamp);
+			}
 		}
 		
 #if !VALUE_OBJECT
 		protected boolean containsValue(VALUE_TYPE value) {
-			int index = firstIndex;
-			while(index != -1) {
-				if(VALUE_EQUALS(values[index], value)) return true;
-				index = (int)links[index];
+			long stamp = readLock();
+			try {
+				int index = firstIndex;
+				while(index != -1) {
+					if(VALUE_EQUALS(values[index], value)) return true;
+					index = (int)links[index];
+				}
+				return false;				
 			}
-			return false;
+			finally {
+				unlockRead(stamp);
+			}
 		}
 		
 #endif
 		@Deprecated
 		protected boolean containsValue(Object value) {
-			int index = firstIndex;
-			while(index != -1) {
+			long stamp = readLock();
+			try {
+				int index = firstIndex;
+				while(index != -1) {
 #if VALUE_OBJECT
-				if(VALUE_EQUALS(values[index], value)) return true;
+					if(VALUE_EQUALS(values[index], value)) return true;
 #else
-				if((value == null && values[index] == getDefaultReturnValue()) || EQUALS_VALUE_TYPE(values[index], value)) return true;
+					if((value == null && values[index] == getDefaultReturnValue()) || EQUALS_VALUE_TYPE(values[index], value)) return true;
 #endif
-				index = (int)links[index];
+					index = (int)links[index];
+				}
+				return false;
 			}
-			return false;
+			finally {
+				unlockRead(stamp);
+			}
 		}
 		
 #if !TYPE_OBJECT
 		protected VALUE_TYPE get(int hash, KEY_TYPE key) {
-			int slot = findIndex(hash, key);
-			return slot < 0 ? getDefaultReturnValue() : values[slot];
+			long stamp = readLock();
+			try {
+				int slot = findIndex(hash, key);
+				return slot < 0 ? getDefaultReturnValue() : values[slot];	
+			}
+			finally {
+				unlockRead(stamp);
+			}
 		}
 		
 #endif
 		protected VALUE_TYPE get(int hash, Object key) {
-			int slot = findIndex(hash, key);
-			return slot < 0 ? getDefaultReturnValue() : values[slot];
+			long stamp = readLock();
+			try {
+				int slot = findIndex(hash, key);
+				return slot < 0 ? getDefaultReturnValue() : values[slot];	
+			}
+			finally {
+				unlockRead(stamp);
+			}
 		}
 		
 #if TYPE_OBJECT && VALUE_OBJECT
 		protected VALUE_TYPE getOrDefault(int hash, Object key, VALUE_TYPE defaultValue) {
-			int slot = findIndex(hash, key);
-			return slot < 0 ? defaultValue : values[slot];
+			long stamp = readLock();
+			try {
+				int slot = findIndex(hash, key);
+				return slot < 0 ? defaultValue : values[slot];				
+			}
+			finally {
+				unlockRead(stamp);
+			}
 		}
 
 #else
 		protected VALUE_TYPE getOrDefault(int hash, KEY_TYPE key, VALUE_TYPE defaultValue) {
-			int slot = findIndex(hash, key);
-			return slot < 0 ? defaultValue : values[slot];
+			long stamp = readLock();
+			try {
+				int slot = findIndex(hash, key);
+				return slot < 0 ? defaultValue : values[slot];				
+			}
+			finally {
+				unlockRead(stamp);
+			}
 		}
 		
 #endif
 		protected void forEach(BI_CONSUMER KEY_VALUE_GENERIC_TYPE action) {
-			int index = firstIndex;
-			while(index != -1) {
-				action.accept(keys[index], values[index]);
-				index = (int)links[index];
+			long stamp = readLock();
+			try {
+				int index = firstIndex;
+				while(index != -1) {
+					action.accept(keys[index], values[index]);
+					index = (int)links[index];
+				}				
+			}
+			finally {
+				unlockRead(stamp);
 			}
 		}
 		
 #if !TYPE_OBJECT
 		protected VALUE_TYPE remove(int hash, KEY_TYPE key) {
-			lock();
+			long stamp = writeLock();
 			try {
 				int slot = findIndex(hash, key);
 				if(slot < 0) return getDefaultReturnValue();
 				return removeIndex(slot);
 			}
 			finally {
-				unlock();
+				unlockWrite(stamp);
 			}
 		}
 		
 #endif
 		protected VALUE_TYPE removeOrDefault(int hash, KEY_TYPE key, VALUE_TYPE defaultValue) {
-			lock();
+			long stamp = writeLock();
 			try {
 				int slot = findIndex(hash, key);
 				if(slot < 0) return defaultValue;
 				return removeIndex(slot);
 			}
 			finally {
-				unlock();
+				unlockWrite(stamp);
 			}
 		}
 		
 		protected CLASS_VALUE_TYPE remove(int hash, Object key) {
-			lock();
+			long stamp = writeLock();
 			try {
 				int slot = findIndex(hash, key);
 				if(slot < 0) return VALUE_TO_OBJ(getDefaultReturnValue());
 				return VALUE_TO_OBJ(removeIndex(slot));
 			}
 			finally {
-				unlock();
+				unlockWrite(stamp);
 			}
 		}
 		
 #if !TYPE_OBJECT || !VALUE_OBJECT
 		protected boolean remove(int hash, KEY_TYPE key, VALUE_TYPE value) {
-			lock();
+			long stamp = writeLock();
 			try {
 				if(KEY_EQUALS_NULL(key)) {
 					if(containsNull && VALUE_EQUALS(value, values[nullIndex])) {
@@ -1767,37 +2016,44 @@ public class CONCURRENT_HASH_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY
 				}
 			}
 			finally {
-				unlock();
+				unlockWrite(stamp);
 			}
 		}
 		
 #endif
 		protected boolean remove(int hash, Object key, Object value) {
-			if(key == null) {
-				if(containsNull && EQUALS_VALUE_TYPE(values[nullIndex], value)) {
-					removeNullIndex();
-					return true;
+			long stamp = writeLock();
+			try
+			{
+				if(key == null) {
+					if(containsNull && EQUALS_VALUE_TYPE(values[nullIndex], value)) {
+						removeNullIndex();
+						return true;
+					}
+					return false;
 				}
-				return false;
-			}
-			int pos = hash & mask;
-			KEY_TYPE current = keys[pos];
-			if(KEY_EQUALS_NULL(current)) return false;
-			if(EQUALS_KEY_TYPE(current, key) && EQUALS_VALUE_TYPE(values[pos], value)) {
-				removeIndex(pos);
-				return true;
-			}
-			while(true) {
-				if(KEY_EQUALS_NULL((current = keys[pos = (++pos & mask)]))) return false;
-				else if(EQUALS_KEY_TYPE(current, key) && EQUALS_VALUE_TYPE(values[pos], value)){
+				int pos = hash & mask;
+				KEY_TYPE current = keys[pos];
+				if(KEY_EQUALS_NULL(current)) return false;
+				if(EQUALS_KEY_TYPE(current, key) && EQUALS_VALUE_TYPE(values[pos], value)) {
 					removeIndex(pos);
 					return true;
 				}
+				while(true) {
+					if(KEY_EQUALS_NULL((current = keys[pos = (++pos & mask)]))) return false;
+					else if(EQUALS_KEY_TYPE(current, key) && EQUALS_VALUE_TYPE(values[pos], value)){
+						removeIndex(pos);
+						return true;
+					}
+				}				
+			}
+			finally {
+				unlockWrite(stamp);
 			}
 		}
 		
 		protected boolean replace(int hash, KEY_TYPE key, VALUE_TYPE oldValue, VALUE_TYPE newValue) {
-			lock();
+			long stamp = writeLock();
 			try {
 				int index = findIndex(hash, key);
 				if(index < 0 || values[index] != oldValue) return false;
@@ -1805,12 +2061,12 @@ public class CONCURRENT_HASH_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY
 				return true;
 			}
 			finally {
-				unlock();
+				unlockWrite(stamp);
 			}
 		}
 		
 		protected VALUE_TYPE replace(int hash, KEY_TYPE key, VALUE_TYPE value) {
-			lock();
+			long stamp = writeLock();
 			try {
 				int index = findIndex(hash, key);
 				if(index < 0) return getDefaultReturnValue();
@@ -1819,12 +2075,12 @@ public class CONCURRENT_HASH_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY
 				return oldValue;
 			}
 			finally {
-				unlock();
+				unlockWrite(stamp);
 			}
 		}
 		
 		protected VALUE_TYPE compute(int hash, KEY_TYPE key, UNARY_OPERATOR KEY_VALUE_GENERIC_TYPE mappingFunction) {
-			lock();
+			long stamp = writeLock();
 			try {
 				int index = findIndex(hash, key);
 				if(index < 0) {
@@ -1842,12 +2098,12 @@ public class CONCURRENT_HASH_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY
 				return newValue;
 			}
 			finally {
-				unlock();
+				unlockWrite(stamp);
 			}
 		}
 		
 		protected VALUE_TYPE computeIfAbsent(int hash, KEY_TYPE key, FUNCTION KEY_VALUE_GENERIC_TYPE mappingFunction) {
-			lock();
+			long stamp = writeLock();
 			try {
 				int index = findIndex(hash, key);
 				if(index < 0) {
@@ -1865,12 +2121,12 @@ public class CONCURRENT_HASH_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY
 				return newValue;
 			}
 			finally {
-				unlock();
+				unlockWrite(stamp);
 			}
 		}
 		
 		protected VALUE_TYPE supplyIfAbsent(int hash, KEY_TYPE key, VALUE_SUPPLIER VALUE_GENERIC_TYPE valueProvider) {
-			lock();
+			long stamp = writeLock();
 			try {
 				int index = findIndex(hash, key);
 				if(index < 0) {
@@ -1888,12 +2144,12 @@ public class CONCURRENT_HASH_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY
 				return newValue;
 			}
 			finally {
-				unlock();
+				unlockWrite(stamp);
 			}
 		}
 		
 		protected VALUE_TYPE computeIfPresent(int hash, KEY_TYPE key, UNARY_OPERATOR KEY_VALUE_GENERIC_TYPE mappingFunction) {
-			lock();
+			long stamp = writeLock();
 			try {
 				int index = findIndex(hash, key);
 				if(index < 0 || VALUE_EQUALS(values[index], getDefaultReturnValue())) return getDefaultReturnValue();
@@ -1906,12 +2162,12 @@ public class CONCURRENT_HASH_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY
 				return newValue;
 			}
 			finally {
-				unlock();
+				unlockWrite(stamp);
 			}
 		}
 		
 		protected VALUE_TYPE merge(int hash, KEY_TYPE key, VALUE_TYPE value, VALUE_UNARY_OPERATOR VALUE_VALUE_GENERIC_TYPE mappingFunction) {
-			lock();
+			long stamp = writeLock();
 			try {
 				int index = findIndex(hash, key);
 				VALUE_TYPE newValue = index < 0 || VALUE_EQUALS(values[index], getDefaultReturnValue()) ? value : mappingFunction.APPLY_VALUE(values[index], value);
@@ -1924,13 +2180,13 @@ public class CONCURRENT_HASH_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY
 				return newValue;
 			}
 			finally {
-				unlock();
+				unlockWrite(stamp);
 			}
 		}
 		
 		protected void clear() {
 			if(size == 0) return;
-			lock();
+			long stamp = writeLock();
 			try {
 				size = 0;
 				containsNull = false;
@@ -1940,14 +2196,14 @@ public class CONCURRENT_HASH_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY
 				lastIndex = -1;
 			}
 			finally {
-				unlock();
+				unlockWrite(stamp);
 			}
 		}
 		
 		protected boolean trim(int size) {
 			int request = Math.max(minCapacity, HashUtil.nextPowerOfTwo((int)Math.ceil(size / loadFactor)));
 			if(request >= size || this.size > Math.min((int)Math.ceil(request * loadFactor), request - 1)) return false;
-			lock();
+			long stamp = writeLock();
 			try {
 				try {
 					rehash(request);
@@ -1956,7 +2212,7 @@ public class CONCURRENT_HASH_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY
 				return true;
 			}
 			finally {
-				unlock();
+				unlockWrite(stamp);
 			}
 		}
 		
@@ -1966,7 +2222,7 @@ public class CONCURRENT_HASH_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY
 				clear();
 				return;
 			}
-			lock();
+			long stamp = writeLock();
 			try {
 				if(nullIndex != -1) {
 					nullIndex = request;
@@ -1983,7 +2239,7 @@ public class CONCURRENT_HASH_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY
 				containsNull = false;
 			}
 			finally {
-				unlock();
+				unlockWrite(stamp);
 			}
 		}
 		
