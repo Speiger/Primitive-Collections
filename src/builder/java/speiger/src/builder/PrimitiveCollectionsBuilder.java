@@ -191,7 +191,7 @@ public class PrimitiveCollectionsBuilder extends TemplateProcessor
 					.filter(this::containsFiles)
 					.map(basePath::relativize)
 					.map(Path::toString)
-					.map(T -> T.replace("\\", "."))
+					.map(this::sanitize)
 					.forEach(T -> joiner.add("\texports "+T+";"));
 		}
 		catch(Exception e)
@@ -200,12 +200,18 @@ public class PrimitiveCollectionsBuilder extends TemplateProcessor
 			throw new RuntimeException(e);
 		}
 		StringBuilder builder = new StringBuilder();
-		builder.append("module ").append(basePath.relativize(getOutputFolder()).toString().replace("\\", ".")).append(" {\n");
+		builder.append("module ").append(sanitize(basePath.relativize(getOutputFolder()).toString())).append(" {\n");
 		builder.append(joiner.toString()).append("}");	
 		return builder.toString();
 	}
 	
-	private boolean containsFiles(Path path) {
+	private String sanitize(String input)
+	{
+		return input.replace("\\", ".").replace("/", ".");
+	}
+	
+	private boolean containsFiles(Path path) 
+	{
 		try(Stream<Path> stream = Files.walk(path, 1))
 		{
 			return stream.filter(Files::isRegularFile).findFirst().isPresent();
@@ -217,14 +223,12 @@ public class PrimitiveCollectionsBuilder extends TemplateProcessor
 		return false;
 	}
 	
-	private int getVersion() {
-	    String version = System.getProperty("java.version");
-	    if(version.startsWith("1.")) {
-	        version = version.substring(2, 3);
-	    } else {
-	        int dot = version.indexOf(".");
-	        if(dot != -1) { version = version.substring(0, dot); }
-	    } return Integer.parseInt(version);
+	private int getVersion() 
+	{
+		String version = System.getProperty("java.version");
+		if(version.startsWith("1.")) return Integer.parseInt(version.substring(2, 3));
+		int dot = version.indexOf(".");
+		return Integer.parseInt(dot != -1 ? version.substring(0, dot) : version);
 	}
 	
 	public static void main(String...args)
