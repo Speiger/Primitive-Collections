@@ -1,5 +1,5 @@
 jdk:
-   - openjdk14
+   - openjdk9
 install:
    - echo "Starting Jitpack Build"
    - chmod +x ./gradlew
