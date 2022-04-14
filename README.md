@@ -1,4 +1,6 @@
 ![build](https://github.com/Speiger/Primitive-Collections/actions/workflows/build_validator.yml/badge.svg)
+![Latest Release](https://jitpack.io/v/Speiger/Primitive-Collections.svg)
+
 
 # Primitive-Collections
 
@@ -96,9 +98,21 @@ repositories {
     }
 }
 dependencies {
-	compile 'de.speiger:Primitive-Collections:0.6.0'
+	implementation 'de.speiger:Primitive-Collections:0.6.0'
 }
 ```
+Using Jitpack Gradle
+```gradle
+repositories {
+    maven {
+        url = "https://jitpack.io"
+    }
+}
+dependencies {
+	implementation 'com.github.Speiger:Primitive-Collections:0.6.0'
+}
+```
+
 Direct:
 
 | Version 	| Jar                                                                                                                          	| Sources                                                                                                                              	| Java Doc                                                                                                                             	|
