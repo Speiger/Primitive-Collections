@@ -7,7 +7,6 @@ import java.util.AbstractCollection;
 import java.util.function.Consumer;
 #endif
 
-import speiger.src.collections.PACKAGE.collections.COLLECTION;
 #if !TYPE_OBJECT
 import speiger.src.collections.PACKAGE.functions.CONSUMER;
 import speiger.src.collections.PACKAGE.utils.ITERATORS;

@@ -316,6 +316,7 @@ public class CUSTOM_HASH_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_VAL
 #if !VALUE_OBJECT
 	@Override
 	public boolean containsValue(VALUE_TYPE value) {
+		if(containsNull && VALUE_EQUALS(values[nullIndex], value)) return true;
 		for(int i = nullIndex;i >= 0;i--)
 			if(!strategy.equals(keys[i], EMPTY_KEY_VALUE) && VALUE_EQUALS(values[i], value)) return true;
 		return false;
@@ -325,7 +326,12 @@ public class CUSTOM_HASH_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_VAL
 	@Override
 	@ValuePrimitive
 	public boolean containsValue(Object value) {
-		for(int i = nullIndex;i >= 0;i--)
+#if VALUE_OBJECT
+		if(containsNull && VALUE_EQUALS(values[nullIndex], value)) return true;
+#else
+		if(containsNull && ((value == null && values[nullIndex] == getDefaultReturnValue()) || EQUALS_VALUE_TYPE(values[nullIndex], value))) return true;
+#endif
+		for(int i = nullIndex-1;i >= 0;i--)
 #if VALUE_OBJECT
 			if(!strategy.equals(keys[i], EMPTY_KEY_VALUE) && EQUALS_VALUE_TYPE(values[i], value)) return true;
 #else
