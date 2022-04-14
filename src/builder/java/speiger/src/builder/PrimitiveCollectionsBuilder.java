@@ -200,6 +200,7 @@ public class PrimitiveCollectionsBuilder extends TemplateProcessor
 			throw new RuntimeException(e);
 		}
 		StringBuilder builder = new StringBuilder();
+		builder.append("/** @author Speiger */\n");
 		builder.append("module ").append(sanitize(basePath.relativize(getOutputFolder()).toString())).append(" {\n");
 		builder.append(joiner.toString()).append("}");	
 		return builder.toString();
