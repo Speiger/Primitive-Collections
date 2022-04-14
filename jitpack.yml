@@ -2,6 +2,7 @@ jdk:
    - openjdk14
 install:
    - echo "Starting Jitpack Build"
+   - chmod +x ./gradlew
    - echo "Generating Source"
    - ./gradlew generateGithubSource
    - echo "Finished Source Generation, Starting Build"
