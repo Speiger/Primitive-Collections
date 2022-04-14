@@ -361,18 +361,6 @@ public class SETS
 		}
 		
 		@Override
-		@Deprecated
-		public boolean addAndMoveToFirst(KEY_TYPE o) { throw new UnsupportedOperationException(); }
-		@Override
-		@Deprecated
-		public boolean addAndMoveToLast(KEY_TYPE o) { throw new UnsupportedOperationException(); }
-		@Override
-		@Deprecated
-		public boolean moveToFirst(KEY_TYPE o) { throw new UnsupportedOperationException(); }
-		@Override
-		@Deprecated
-		public boolean moveToLast(KEY_TYPE o) { throw new UnsupportedOperationException(); }
-		@Override
 		public COMPARATOR KEY_GENERIC_TYPE comparator() { return s.comparator(); }
 		@Override
 		public BI_ITERATOR KEY_GENERIC_TYPE iterator() { return ITERATORS.unmodifiable(s.iterator()); }
@@ -556,19 +544,7 @@ public class SETS
 			super(c, mutex);
 			s = c;
 		}
-
-		@Override
-		@Deprecated
-		public boolean addAndMoveToFirst(KEY_TYPE o) { synchronized(mutex) { return s.addAndMoveToFirst(o); } }
-		@Override
-		@Deprecated
-		public boolean addAndMoveToLast(KEY_TYPE o) { synchronized(mutex) { return s.addAndMoveToLast(o); } }
-		@Override
-		@Deprecated
-		public boolean moveToFirst(KEY_TYPE o) { synchronized(mutex) { return s.moveToFirst(o); } }
-		@Override
-		@Deprecated
-		public boolean moveToLast(KEY_TYPE o) { synchronized(mutex) { return s.moveToLast(o); } }
+		
 		@Override
 		public COMPARATOR KEY_GENERIC_TYPE comparator(){ synchronized(mutex) { return s.comparator(); } }
 		@Override

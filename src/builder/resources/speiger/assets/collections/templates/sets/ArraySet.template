@@ -3,7 +3,6 @@ package speiger.src.collections.PACKAGE.sets;
 import java.util.Arrays;
 import java.util.Collection;
 #if TYPE_OBJECT
-import java.util.Comparator;
 import java.util.function.Consumer;
 import java.util.function.BiFunction;
 #endif
@@ -21,7 +20,6 @@ import speiger.src.collections.objects.functions.consumer.BI_FROM_OBJECT_CONSUME
 import speiger.src.collections.PACKAGE.functions.function.PREDICATE;
 import speiger.src.collections.PACKAGE.functions.function.UNARY_OPERATOR;
 #if !TYPE_OBJECT
-import speiger.src.collections.PACKAGE.functions.COMPARATOR;
 import speiger.src.collections.PACKAGE.functions.CONSUMER;
 import speiger.src.collections.objects.utils.ObjectArrays;
 #endif
@@ -36,7 +34,7 @@ import speiger.src.collections.PACKAGE.utils.ARRAYS;
  * This implementation does not shrink the backing array
  * @Type(T)
  */
-public class ARRAY_SET KEY_GENERIC_TYPE extends ABSTRACT_SET KEY_GENERIC_TYPE implements SORTED_SET KEY_GENERIC_TYPE, ORDERED_SET KEY_GENERIC_TYPE
+public class ARRAY_SET KEY_GENERIC_TYPE extends ABSTRACT_SET KEY_GENERIC_TYPE implements ORDERED_SET KEY_GENERIC_TYPE
 {
 	/** The Backing Array */
 	protected transient KEY_TYPE[] data;
@@ -510,41 +508,11 @@ public class ARRAY_SET KEY_GENERIC_TYPE extends ABSTRACT_SET KEY_GENERIC_TYPE im
 		throw new NoSuchElementException();
 	}
 	
-	/**
-	 * Unsupported for now. Implementation is buggy and does not support the Java Standard with these functions.
-	 * It is a Unsorted Sorted Set. Thats why the SubSet implementation will be disabled until a better solution is found.
-	 * To give a simple reason: LinkedHashSets are also not SortedSets even so they could be.
-	 * @throws UnsupportedOperationException because it is not supported
-	 */
-	@Override
-	public SORTED_SET KEY_GENERIC_TYPE subSet(KEY_TYPE fromElement, KEY_TYPE toElement) { throw new UnsupportedOperationException(); }
-	/**
-	 * Unsupported for now. Implementation is buggy and does not support the Java Standard with these functions.
-	 * It is a Unsorted Sorted Set. Thats why the SubSet implementation will be disabled until a better solution is found.
-	 * To give a simple reason: LinkedHashSets are also not SortedSets even so they could be.
-	 * @throws UnsupportedOperationException because it is not supported
-	 */
-	@Override
-	public SORTED_SET KEY_GENERIC_TYPE headSet(KEY_TYPE toElement) { throw new UnsupportedOperationException(); }
-	/**
-	 * Unsupported for now. Implementation is buggy and does not support the Java Standard with these functions.
-	 * It is a Unsorted Sorted Set. Thats why the SubSet implementation will be disabled until a better solution is found.
-	 * To give a simple reason: LinkedHashSets are also not SortedSets even so they could be.
-	 * @throws UnsupportedOperationException because it is not supported
-	 */
-	@Override
-	public SORTED_SET KEY_GENERIC_TYPE tailSet(KEY_TYPE fromElement) { throw new UnsupportedOperationException(); }
-	
 	public ARRAY_SET KEY_GENERIC_TYPE copy() {
 		ARRAY_SET KEY_GENERIC_TYPE set = new ARRAY_SETBRACES();
 		set.data = Arrays.copyOf(data, data.length);
 		set.size = size;
 		return set;
-	}
-	
-	@Override
-	public COMPARATOR KEY_GENERIC_TYPE comparator() {
-		return null;
 	}
 	
 	@Override

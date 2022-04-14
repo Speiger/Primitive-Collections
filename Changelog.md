@@ -9,6 +9,7 @@
 - Added: ArrayList.of(Class, size) that allows you to allocate a size right at the creation of the List without having to create a wrapper array.
 - Added: A ConcurrentHashMap implementation.
 - Fixed: containsValue in the HashMap wouldn't check the nullKey
+- Removed: Deprecated functions from SortedMaps/Sets
 
 ### Version 0.5.3
 - Added: OrderedMap/Set

@@ -518,24 +518,6 @@ public class MAPS
 		}
 		
 		@Override
-		@Deprecated
-		public VALUE_TYPE putAndMoveToFirst(KEY_TYPE key, VALUE_TYPE value) { throw new UnsupportedOperationException(); }
-		@Override
-		@Deprecated
-		public VALUE_TYPE putAndMoveToLast(KEY_TYPE key, VALUE_TYPE value) { throw new UnsupportedOperationException(); }
-		@Override
-		@Deprecated
-		public boolean moveToFirst(KEY_TYPE key) { throw new UnsupportedOperationException(); }
-		@Override
-		@Deprecated
-		public boolean moveToLast(KEY_TYPE key) { throw new UnsupportedOperationException(); }
-		@Override
-		@Deprecated
-		public VALUE_TYPE getAndMoveToFirst(KEY_TYPE key) { throw new UnsupportedOperationException(); }
-		@Override
-		@Deprecated
-		public VALUE_TYPE getAndMoveToLast(KEY_TYPE key) { throw new UnsupportedOperationException(); }
-		@Override
 		public COMPARATOR KEY_GENERIC_TYPE comparator() { return map.comparator(); }
 		@Override
 		public SORTED_MAP KEY_VALUE_GENERIC_TYPE subMap(KEY_TYPE fromKey, KEY_TYPE toKey) { return MAPS.unmodifiable(map.subMap(fromKey, toKey)); }
@@ -833,24 +815,6 @@ public class MAPS
 			this.map = map;
 		}
 		
-		@Override
-		@Deprecated
-		public VALUE_TYPE putAndMoveToFirst(KEY_TYPE key, VALUE_TYPE value) { synchronized(mutex) { return map.putAndMoveToFirst(key, value); } }
-		@Override
-		@Deprecated
-		public VALUE_TYPE putAndMoveToLast(KEY_TYPE key, VALUE_TYPE value) { synchronized(mutex) { return map.putAndMoveToLast(key, value); } }
-		@Override
-		@Deprecated
-		public boolean moveToFirst(KEY_TYPE key) { synchronized(mutex) { return map.moveToFirst(key); } }
-		@Override
-		@Deprecated
-		public boolean moveToLast(KEY_TYPE key) { synchronized(mutex) { return map.moveToLast(key); } }
-		@Override
-		@Deprecated
-		public VALUE_TYPE getAndMoveToFirst(KEY_TYPE key) { synchronized(mutex) { return map.getAndMoveToFirst(key); } }
-		@Override
-		@Deprecated
-		public VALUE_TYPE getAndMoveToLast(KEY_TYPE key) { synchronized(mutex) { return map.getAndMoveToLast(key); } }
 		@Override
 		public COMPARATOR KEY_GENERIC_TYPE comparator() { synchronized(mutex) { return map.comparator(); } }
 		@Override

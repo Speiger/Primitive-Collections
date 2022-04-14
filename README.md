@@ -7,11 +7,12 @@ It is based on Java's Collection Library and FastUtil.
 But its focus is a different one.     
 
 ## Main Features:      
-- ArrayLists / LinkedLists
+- ArrayLists / LinkedLists / CopyOnWriteLists
 - HashSets/Maps (Linked & HashControl)
 - TreeSets/Maps (RB & AVL)
 - EnumMaps
 - Immutable Maps/Lists/Sets
+- ConcurrentHashMaps
 - Priority Queues
 - Streams & Functional Queries
 - SplitIterators
@@ -20,7 +21,7 @@ But its focus is a different one.
 - Unary/Functions
 - Suppliers
 - Bi/Consumers
-
+- AsyncBuilders
 
 ## Current Level of Stability
 Since this is a relatively new Library, stability was not perfect and some areas are not perfect yet.     
@@ -95,13 +96,14 @@ repositories {
     }
 }
 dependencies {
-	compile 'de.speiger:Primitive-Collections:0.5.3'
+	compile 'de.speiger:Primitive-Collections:0.6.0'
 }
 ```
 Direct:
 
 | Version 	| Jar                                                                                                                          	| Sources                                                                                                                              	| Java Doc                                                                                                                             	|
 |---------	|------------------------------------------------------------------------------------------------------------------------------	|--------------------------------------------------------------------------------------------------------------------------------------	|--------------------------------------------------------------------------------------------------------------------------------------	|
+| 0.6.0   	| [Download](https://maven.speiger.com/repository/main/de/speiger/Primitive-Collections/0.6.0/Primitive-Collections-0.6.0.jar) 	| [Download](https://maven.speiger.com/repository/main/de/speiger/Primitive-Collections/0.6.0/Primitive-Collections-0.6.0-sources.jar) 	| [Download](https://maven.speiger.com/repository/main/de/speiger/Primitive-Collections/0.6.0/Primitive-Collections-0.6.0-javadoc.jar) 	|
 | 0.5.3   	| [Download](https://maven.speiger.com/repository/main/de/speiger/Primitive-Collections/0.5.3/Primitive-Collections-0.5.3.jar) 	| [Download](https://maven.speiger.com/repository/main/de/speiger/Primitive-Collections/0.5.3/Primitive-Collections-0.5.3-sources.jar) 	| [Download](https://maven.speiger.com/repository/main/de/speiger/Primitive-Collections/0.5.3/Primitive-Collections-0.5.3-javadoc.jar) 	|
 | 0.5.2   	| [Download](https://maven.speiger.com/repository/main/de/speiger/Primitive-Collections/0.5.2/Primitive-Collections-0.5.2.jar) 	| [Download](https://maven.speiger.com/repository/main/de/speiger/Primitive-Collections/0.5.2/Primitive-Collections-0.5.2-sources.jar) 	| [Download](https://maven.speiger.com/repository/main/de/speiger/Primitive-Collections/0.5.2/Primitive-Collections-0.5.2-javadoc.jar) 	|
 | 0.5.1   	| [Download](https://maven.speiger.com/repository/main/de/speiger/Primitive-Collections/0.5.1/Primitive-Collections-0.5.1.jar) 	| [Download](https://maven.speiger.com/repository/main/de/speiger/Primitive-Collections/0.5.1/Primitive-Collections-0.5.1-sources.jar) 	| [Download](https://maven.speiger.com/repository/main/de/speiger/Primitive-Collections/0.5.1/Primitive-Collections-0.5.1-javadoc.jar) 	|

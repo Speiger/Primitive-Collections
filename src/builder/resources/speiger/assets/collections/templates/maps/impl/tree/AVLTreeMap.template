@@ -364,19 +364,6 @@ public class AVL_TREE_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_VALUE_
 	
 #endif
 	@Override
-	public VALUE_TYPE putAndMoveToFirst(KEY_TYPE key, VALUE_TYPE value) { throw new UnsupportedOperationException(); }
-	@Override
-	public VALUE_TYPE putAndMoveToLast(KEY_TYPE key, VALUE_TYPE value) { throw new UnsupportedOperationException(); }
-	@Override
-	public boolean moveToFirst(KEY_TYPE key) { throw new UnsupportedOperationException(); }
-	@Override
-	public boolean moveToLast(KEY_TYPE key) { throw new UnsupportedOperationException(); }
-	@Override
-	public VALUE_TYPE getAndMoveToFirst(KEY_TYPE key) { throw new UnsupportedOperationException(); }
-	@Override
-	public VALUE_TYPE getAndMoveToLast(KEY_TYPE key) { throw new UnsupportedOperationException(); }
-	
-	@Override
 	public COMPARATOR KEY_GENERIC_TYPE comparator() { return comparator; }
 
 #if TYPE_OBJECT
@@ -1067,14 +1054,6 @@ public class AVL_TREE_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_VALUE_
 #endif		
 		@Override
 		public boolean add(KEY_TYPE e) { throw new UnsupportedOperationException(); }
-		@Override
-		public boolean addAndMoveToFirst(KEY_TYPE o) { throw new UnsupportedOperationException(); }
-		@Override
-		public boolean addAndMoveToLast(KEY_TYPE o) { throw new UnsupportedOperationException(); }
-		@Override
-		public boolean moveToFirst(KEY_TYPE o) { throw new UnsupportedOperationException(); }
-		@Override
-		public boolean moveToLast(KEY_TYPE o) { throw new UnsupportedOperationException(); }
 		
 		@Override
 		public BI_ITERATOR KEY_GENERIC_TYPE iterator(KEY_TYPE fromElement) {
@@ -1543,18 +1522,6 @@ public class AVL_TREE_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_VALUE_
 		protected Node KEY_VALUE_GENERIC_TYPE absHighFence() { return (toEnd ? null : (hiInclusive ? map.findHigherNode(hi) : map.findCeilingNode(hi))); }
 		protected Node KEY_VALUE_GENERIC_TYPE absLowFence() { return (fromStart ? null : (loInclusive ?  map.findLowerNode(lo) : map.findFloorNode(lo))); }
 		
-		@Override
-		public VALUE_TYPE putAndMoveToFirst(KEY_TYPE key, VALUE_TYPE value) { throw new UnsupportedOperationException(); }
-		@Override
-		public VALUE_TYPE putAndMoveToLast(KEY_TYPE key, VALUE_TYPE value) { throw new UnsupportedOperationException(); }
-		@Override
-		public boolean moveToFirst(KEY_TYPE key) { throw new UnsupportedOperationException(); }
-		@Override
-		public boolean moveToLast(KEY_TYPE key) { throw new UnsupportedOperationException(); }
-		@Override
-		public VALUE_TYPE getAndMoveToFirst(KEY_TYPE key) { throw new UnsupportedOperationException(); }
-		@Override
-		public VALUE_TYPE getAndMoveToLast(KEY_TYPE key) { throw new UnsupportedOperationException(); }
 		@Override
 		public COMPARATOR KEY_GENERIC_TYPE comparator() { return map.comparator(); }
 		

@@ -1,6 +1,5 @@
 package speiger.src.collections.PACKAGE.maps.impl.misc;
 
-import java.util.Comparator;
 import java.util.Map;
 import java.util.NoSuchElementException;
 import java.util.function.Consumer;
@@ -10,16 +9,14 @@ import java.util.Objects;
 
 import speiger.src.collections.PACKAGE.collections.BI_ITERATOR;
 #if !TYPE_OBJECT
-import speiger.src.collections.PACKAGE.functions.COMPARATOR;
 import speiger.src.collections.PACKAGE.functions.CONSUMER;
 #endif
 import speiger.src.collections.PACKAGE.functions.consumer.BI_CONSUMER;
 import speiger.src.collections.PACKAGE.lists.LIST_ITERATOR;
 import speiger.src.collections.PACKAGE.maps.interfaces.MAP;
 import speiger.src.collections.PACKAGE.maps.interfaces.ORDERED_MAP;
-import speiger.src.collections.PACKAGE.maps.interfaces.SORTED_MAP;
 import speiger.src.collections.PACKAGE.sets.ABSTRACT_SET;
-import speiger.src.collections.PACKAGE.sets.SORTED_SET;
+import speiger.src.collections.PACKAGE.sets.ORDERED_SET;
 import speiger.src.collections.PACKAGE.sets.SET;
 import speiger.src.collections.VALUE_PACKAGE.collections.VALUE_ABSTRACT_COLLECTION;
 import speiger.src.collections.VALUE_PACKAGE.collections.VALUE_COLLECTION;
@@ -32,7 +29,6 @@ import speiger.src.collections.VALUE_PACKAGE.lists.VALUE_LIST_ITERATOR;
 import speiger.src.collections.objects.collections.ObjectBidirectionalIterator;
 import speiger.src.collections.objects.lists.ObjectListIterator;
 import speiger.src.collections.objects.sets.AbstractObjectSet;
-import speiger.src.collections.objects.sets.ObjectSortedSet;
 import speiger.src.collections.objects.sets.ObjectSet;
 #endif
 
@@ -43,7 +39,7 @@ import speiger.src.collections.objects.sets.ObjectSet;
  * @Type(T)
  * @ValueType(V)
  */
-public class LINKED_ENUM_MAP KEY_ENUM_VALUE_GENERIC_TYPE extends ENUM_MAP KEY_VALUE_GENERIC_TYPE implements SORTED_MAP KEY_VALUE_GENERIC_TYPE, ORDERED_MAP KEY_VALUE_GENERIC_TYPE
+public class LINKED_ENUM_MAP KEY_ENUM_VALUE_GENERIC_TYPE extends ENUM_MAP KEY_VALUE_GENERIC_TYPE implements ORDERED_MAP KEY_VALUE_GENERIC_TYPE
 {
 	/** The Backing array for links between nodes. Left 32 Bits => Previous Entry, Right 32 Bits => Next Entry */
 	protected long[] links;
@@ -271,20 +267,6 @@ public class LINKED_ENUM_MAP KEY_ENUM_VALUE_GENERIC_TYPE extends ENUM_MAP KEY_VA
 	}
 	
 	@Override
-	public COMPARATOR KEY_GENERIC_TYPE comparator() {
-		return null;
-	}
-	
-	@Override
-	public SORTED_MAP KEY_VALUE_GENERIC_TYPE subMap(T fromKey, T toKey) { throw new UnsupportedOperationException(); }
-	
-	@Override
-	public SORTED_MAP KEY_VALUE_GENERIC_TYPE headMap(T toKey) { throw new UnsupportedOperationException(); }
-	
-	@Override
-	public SORTED_MAP KEY_VALUE_GENERIC_TYPE tailMap(T fromKey) { throw new UnsupportedOperationException(); }
-	
-	@Override
 	public T FIRST_ENTRY_KEY() {
 		if(size == 0) throw new NoSuchElementException();
 		return keys[firstIndex];
@@ -434,7 +416,7 @@ public class LINKED_ENUM_MAP KEY_ENUM_VALUE_GENERIC_TYPE extends ENUM_MAP KEY_VA
 		}
 	}
 	
-	private class MapEntrySet extends AbstractObjectSet<MAP.Entry KEY_VALUE_GENERIC_TYPE> implements SORTED_MAP.FastSortedSet KEY_VALUE_GENERIC_TYPE {
+	private class MapEntrySet extends AbstractObjectSet<MAP.Entry KEY_VALUE_GENERIC_TYPE> implements ORDERED_MAP.FastOrderedSet KEY_VALUE_GENERIC_TYPE {
 		@Override
 		public boolean addAndMoveToFirst(MAP.Entry KEY_VALUE_GENERIC_TYPE o) { throw new UnsupportedOperationException(); }
 		@Override
@@ -559,20 +541,9 @@ public class LINKED_ENUM_MAP KEY_ENUM_VALUE_GENERIC_TYPE extends ENUM_MAP KEY_VA
 		public void clear() {
 			LINKED_ENUM_MAP.this.clear();
 		}
-		
-		@Override
-		public Comparator<MAP.Entry KEY_VALUE_GENERIC_TYPE> comparator() {
-			return null;
-		}
-		@Override
-		public ObjectSortedSet<MAP.Entry KEY_VALUE_GENERIC_TYPE> subSet(MAP.Entry KEY_VALUE_GENERIC_TYPE fromElement, MAP.Entry KEY_VALUE_GENERIC_TYPE toElement) { throw new UnsupportedOperationException(); }
-		@Override
-		public ObjectSortedSet<MAP.Entry KEY_VALUE_GENERIC_TYPE> headSet(MAP.Entry KEY_VALUE_GENERIC_TYPE toElement) { throw new UnsupportedOperationException(); }
-		@Override
-		public ObjectSortedSet<MAP.Entry KEY_VALUE_GENERIC_TYPE> tailSet(MAP.Entry KEY_VALUE_GENERIC_TYPE fromElement) { throw new UnsupportedOperationException(); }
 	}
 	
-	private final class KeySet extends ABSTRACT_SET KEY_GENERIC_TYPE implements SORTED_SET KEY_GENERIC_TYPE {
+	private final class KeySet extends ABSTRACT_SET KEY_GENERIC_TYPE implements ORDERED_SET KEY_GENERIC_TYPE {
 #if TYPE_OBJECT
 		@Override
 		@Deprecated
@@ -685,17 +656,6 @@ public class LINKED_ENUM_MAP KEY_ENUM_VALUE_GENERIC_TYPE extends ENUM_MAP KEY_VA
 		}
 		
 #endif
-		@Override
-		public COMPARATOR KEY_GENERIC_TYPE comparator() { return null; }
-		
-		@Override
-		public SORTED_SET KEY_GENERIC_TYPE subSet(T fromElement, T toElement) { throw new UnsupportedOperationException(); }
-
-		@Override
-		public SORTED_SET KEY_GENERIC_TYPE headSet(T toElement) { throw new UnsupportedOperationException(); }
-
-		@Override
-		public SORTED_SET KEY_GENERIC_TYPE tailSet(T fromElement) { throw new UnsupportedOperationException(); }
 	}
 	
 	private class Values extends VALUE_ABSTRACT_COLLECTION VALUE_GENERIC_TYPE {

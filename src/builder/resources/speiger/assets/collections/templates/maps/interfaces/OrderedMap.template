@@ -1,6 +1,8 @@
 package speiger.src.collections.PACKAGE.maps.interfaces;
 
 import speiger.src.collections.PACKAGE.utils.maps.MAPS;
+import speiger.src.collections.objects.collections.ObjectBidirectionalIterator;
+import speiger.src.collections.objects.sets.ObjectOrderedSet;
 /**
  * A Special Map Interface giving Access to some really usefull functions
  * The Idea behind this interface is to allow access to functions that give control to the Order of elements.
@@ -98,6 +100,7 @@ public interface ORDERED_MAP KEY_VALUE_GENERIC_TYPE extends MAP KEY_VALUE_GENERI
 	 * @return a new SortedMap that is synchronized
 	 * @see MAPS#synchronize
 	 */
+	@Override
 	public default ORDERED_MAP KEY_VALUE_GENERIC_TYPE synchronize() { return MAPS.synchronize(this); }
 	
 	/**
@@ -106,6 +109,7 @@ public interface ORDERED_MAP KEY_VALUE_GENERIC_TYPE extends MAP KEY_VALUE_GENERI
 	 * @return a new SortedMap Wrapper that is synchronized
 	 * @see MAPS#synchronize
 	 */
+	@Override
 	public default ORDERED_MAP KEY_VALUE_GENERIC_TYPE synchronize(Object mutex) { return MAPS.synchronize(this, mutex); }
 	
 	/**
@@ -113,5 +117,22 @@ public interface ORDERED_MAP KEY_VALUE_GENERIC_TYPE extends MAP KEY_VALUE_GENERI
 	 * @return a new SortedMap Wrapper that is unmodifiable
 	 * @see MAPS#unmodifiable
 	 */
+	@Override
 	public default ORDERED_MAP KEY_VALUE_GENERIC_TYPE unmodifiable() { return MAPS.unmodifiable(this); }
+	
+	/**
+	 * Fast Ordered Entry Set that allows for a faster Entry Iterator by recycling the Entry Object and just exchanging 1 internal value
+	 * @Type(T)
+	 * @ValueType(V)
+	 */
+	interface FastOrderedSet KEY_VALUE_GENERIC_TYPE extends MAP.FastEntrySet KEY_VALUE_GENERIC_TYPE, ObjectOrderedSet<MAP.Entry KEY_VALUE_GENERIC_TYPE> {
+		@Override
+		public ObjectBidirectionalIterator<MAP.Entry KEY_VALUE_GENERIC_TYPE> fastIterator();
+		/**
+		 * Fast iterator that recycles the given Entry object to improve speed and reduce object allocation
+		 * @param fromElement that is going to be started from.
+		 * @return a improved iterator that starts from the desired element
+		 */
+		public ObjectBidirectionalIterator<MAP.Entry KEY_VALUE_GENERIC_TYPE> fastIterator(KEY_TYPE fromElement);
+	}
 }

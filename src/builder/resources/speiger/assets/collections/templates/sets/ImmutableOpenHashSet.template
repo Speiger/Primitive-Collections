@@ -1,7 +1,6 @@
 package speiger.src.collections.PACKAGE.sets;
 
 #if TYPE_OBJECT
-import java.util.Comparator;
 import java.util.function.Consumer;
 import java.util.function.BiFunction;
 #endif
@@ -15,7 +14,6 @@ import speiger.src.collections.PACKAGE.collections.BI_ITERATOR;
 import speiger.src.collections.PACKAGE.collections.COLLECTION;
 import speiger.src.collections.PACKAGE.collections.ITERATOR;
 #if !TYPE_OBJECT
-import speiger.src.collections.PACKAGE.functions.COMPARATOR;
 import speiger.src.collections.PACKAGE.functions.CONSUMER;
 #endif
 import speiger.src.collections.objects.functions.consumer.BI_FROM_OBJECT_CONSUMER;
@@ -34,7 +32,7 @@ import speiger.src.collections.utils.SanityChecks;
  * Extra to that there is a couple quality of life functions provided
  * @Type(T)
  */
-public class IMMUTABLE_HASH_SET KEY_GENERIC_TYPE extends ABSTRACT_SET KEY_GENERIC_TYPE implements SORTED_SET KEY_GENERIC_TYPE
+public class IMMUTABLE_HASH_SET KEY_GENERIC_TYPE extends ABSTRACT_SET KEY_GENERIC_TYPE implements ORDERED_SET KEY_GENERIC_TYPE
 {
 	/** The Backing keys array */
 	protected transient KEY_TYPE[] keys;
@@ -458,18 +456,6 @@ public class IMMUTABLE_HASH_SET KEY_GENERIC_TYPE extends ABSTRACT_SET KEY_GENERI
 		set.links = Arrays.copyOf(links, links.length);
 		return set;
 	}
-	
-	@Override
-	public COMPARATOR KEY_GENERIC_TYPE comparator() { return null; }
-	
-	@Override
-	public SORTED_SET KEY_GENERIC_TYPE subSet(KEY_TYPE fromElement, KEY_TYPE toElement) { throw new UnsupportedOperationException(); }
-	
-	@Override
-	public SORTED_SET KEY_GENERIC_TYPE headSet(KEY_TYPE toElement) { throw new UnsupportedOperationException(); }
-	
-	@Override
-	public SORTED_SET KEY_GENERIC_TYPE tailSet(KEY_TYPE fromElement) { throw new UnsupportedOperationException(); }
 	
 	@Override
 	public void clear() { throw new UnsupportedOperationException(); }

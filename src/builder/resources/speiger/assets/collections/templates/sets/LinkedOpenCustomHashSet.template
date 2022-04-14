@@ -1,7 +1,6 @@
 package speiger.src.collections.PACKAGE.sets;
 
 #if TYPE_OBJECT
-import java.util.Comparator;
 import java.util.function.Consumer;
 import java.util.function.BiFunction;
 #endif
@@ -16,9 +15,6 @@ import speiger.src.collections.PACKAGE.collections.COLLECTION;
 import speiger.src.collections.PACKAGE.collections.ITERATOR;
 #endif
 import speiger.src.collections.PACKAGE.collections.BI_ITERATOR;
-#if !TYPE_OBJECT
-import speiger.src.collections.PACKAGE.functions.COMPARATOR;
-#endif
 import speiger.src.collections.PACKAGE.lists.LIST_ITERATOR;
 #if !TYPE_OBJECT
 import speiger.src.collections.PACKAGE.utils.ITERATORS;
@@ -37,7 +33,7 @@ import speiger.src.collections.utils.SanityChecks;
  * This implementation of SortedSet does not support SubSet of any kind. It implements the interface due to sortability and first/last access
  * @Type(T)
  */
-public class LINKED_CUSTOM_HASH_SET KEY_GENERIC_TYPE extends CUSTOM_HASH_SET KEY_GENERIC_TYPE implements SORTED_SET KEY_GENERIC_TYPE, ORDERED_SET KEY_GENERIC_TYPE
+public class LINKED_CUSTOM_HASH_SET KEY_GENERIC_TYPE extends CUSTOM_HASH_SET KEY_GENERIC_TYPE implements ORDERED_SET KEY_GENERIC_TYPE
 {
 	/** The Backing array for links between nodes. Left 32 Bits => Previous Entry, Right 32 Bits => Next Entry */
 	protected transient long[] links;
@@ -671,18 +667,6 @@ public class LINKED_CUSTOM_HASH_SET KEY_GENERIC_TYPE extends CUSTOM_HASH_SET KEY
 		set.lastIndex = lastIndex;
 		return set;
 	}
-	
-	@Override
-	public COMPARATOR KEY_GENERIC_TYPE comparator() { return null; }
-	
-	@Override
-	public SORTED_SET KEY_GENERIC_TYPE subSet(KEY_TYPE fromElement, KEY_TYPE toElement) { throw new UnsupportedOperationException(); }
-	
-	@Override
-	public SORTED_SET KEY_GENERIC_TYPE headSet(KEY_TYPE toElement) { throw new UnsupportedOperationException(); }
-	
-	@Override
-	public SORTED_SET KEY_GENERIC_TYPE tailSet(KEY_TYPE fromElement) { throw new UnsupportedOperationException(); }
 	
 	private class SetIterator implements LIST_ITERATOR KEY_GENERIC_TYPE {
 		int previous = -1;

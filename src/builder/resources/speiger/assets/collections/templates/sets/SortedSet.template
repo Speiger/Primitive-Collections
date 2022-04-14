@@ -19,51 +19,8 @@ import speiger.src.collections.PACKAGE.utils.SPLIT_ITERATORS;
  * @note ORDERED_SET is only extended until 0.6.0 for Compat reasons.
  * The supported classes already implement ORDERED_SET directly and will remove SORTED_SET implementations in favor of ORDERED_SET instead
  */
-public interface SORTED_SET KEY_GENERIC_TYPE extends ORDERED_SET KEY_GENERIC_TYPE, SortedSet<CLASS_TYPE>
+public interface SORTED_SET KEY_GENERIC_TYPE extends SET KEY_GENERIC_TYPE, SortedSet<CLASS_TYPE>
 {
-	
-	/**
-	 * A customized add method that allows you to insert into the first index.
-	 * @param o the element that should be inserted
-	 * @return true if it was added
-	 * @see java.util.Set#add(Object)
-	 * @note some implementations do not support this method
-	 * @deprecated use ORDERED_SET#addAndMoveToFirst instead (removed in 0.6.0)
-	 */
-	@Deprecated
-	public boolean addAndMoveToFirst(KEY_TYPE o);
-	/**
-	 * A customized add method that allows you to insert into the last index.
-	 * @param o the element that should be inserted
-	 * @return true if it was added
-	 * @see java.util.Set#add(Object)
-	 * @note some implementations do not support this method
-	 * @deprecated use ORDERED_SET#addAndMoveToLast instead (removed in 0.6.0)
-	 */
-	@Deprecated
-	public boolean addAndMoveToLast(KEY_TYPE o);
-	
-	/**
-	 * A specific move method to move a given key to the first index.
-	 * @param o that should be moved to the first index
-	 * @return true if the value was moved.
-	 * @note returns false if the value was not present in the first place
-	 * @note some implementations do not support this method
-	 * @deprecated use ORDERED_SET#moveToFirst instead (removed in 0.6.0)
-	 */
-	@Deprecated
-	public boolean moveToFirst(KEY_TYPE o);
-	/**
-	 * A specific move method to move a given key to the last index.
-	 * @param o that should be moved to the first last
-	 * @return true if the value was moved.
-	 * @note returns false if the value was not present in the first place
-	 * @note some implementations do not support this method
-	 * @deprecated use ORDERED_SET#moveToLast instead (removed in 0.6.0)
-	 */
-	@Deprecated
-	public boolean moveToLast(KEY_TYPE o);
-	
 	/**
 	 * A Type Specific Comparator method
 	 * @return the type specific comparator
