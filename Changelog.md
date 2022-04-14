@@ -3,7 +3,12 @@
 ### Version 0.6.0
 - Added: addOrGet for sets.
 - Added: Async API which allows to easily execute Iterables/Collections offthread without the complexity.
-- Added: ConcurrentArrayLists and tests for it
+- Added: CopyOnWriteArrayList and tests for it
+- Added: Support up to Java17.
+- Added: Build System now adds module-info if the Running JVM is 9 or higher
+- Added: ArrayList.of(Class, size) that allows you to allocate a size right at the creation of the List without having to create a wrapper array.
+- Added: A ConcurrentHashMap implementation.
+- Fixed: containsValue in the HashMap wouldn't check the nullKey
 
 ### Version 0.5.3
 - Added: OrderedMap/Set

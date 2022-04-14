@@ -103,6 +103,16 @@ public class ASYNC_BUILDER KEY_GENERIC_TYPE
 	}
 	
 	/**
+	 * Helper function that automatically wraps a Iterable into a AsyncBuilder since it forces this collections Iterable.
+	 * @param iterable that should be wrapped
+	 * @Type(T)
+	 * @return a AsyncBuilder with the iterable wrapped
+	 */
+	public static GENERIC_KEY_BRACES ASYNC_BUILDER KEY_GENERIC_TYPE of(Iterable<CLASS_TYPE> iterable) {
+		return new ASYNC_BUILDERBRACES(ITERABLES.wrap(iterable));
+	}
+	
+	/**
 	 * Maps the elements to something else
 	 * @param mapper the mapping function
 	 * @param <E> The return type.
