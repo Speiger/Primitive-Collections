@@ -71,7 +71,7 @@ Adding Elements to a Collection usually requires either a for loop or a Arrays.w
 This isn't an issue with Primitive Collections.
 ```java
 public void addMonths(ObjectCollection<String> months) {
-	months.addAll("January", "February", "March", "April", "May", "June", "July", "August, "September, "October", November", "December");
+	months.addAll("January", "February", "March", "April", "May", "June", "July", "August", "September, "October", November", "December");
 }
 
 public void addElements(ObjectCollection<String> result, String[] elements) {
