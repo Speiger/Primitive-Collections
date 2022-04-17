@@ -80,7 +80,7 @@ public void addElements(ObjectCollection<String> result, String[] elements) {
 ```
 
 ## containsAny
-Everyone hatest comparing if 2 collections have part of each other included.   
+Everyone hates comparing if 2 collections have part of each other included.   
 The solution usually requires for loops and keeping track if things were found or not.   
 And every Java Developer had this issue at least once and wished for a clean solution.
 ```java
