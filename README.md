@@ -35,51 +35,10 @@ These will be expanded on as time goes on.
 ### Benchmarks
 Benchmarks can be found here: [Click Me](https://github.com/Speiger/Primitive-Collections-Benchmarks/tree/master)
 
-## Specialized Functions
-New Specialized functions that were added to increase performance or reduce allocations or Quality Of life.
-To highlight things that may be wanted.
-- Iterable:
-	- map/flatMap/arrayFlatMap: A Light weight version of Stream.map().
-	- findFirst: Allows to find the first element of a Predicated Iterable.
-	- filter: Allows to filter unwanted elements for wrapped Iterable
-	- matchAny/matchNone/matchAll: Allows to find elements in a collection.
-	- count: counts all valid elements in a collection.
-	- forEach: Allows to input a second element into a forEach move allowing for more flexibility for Method References
-	- reduce/limit/peek/distinct: Light Versions of the Stream variant, to reduce Stream usage.
-	- pour: a function that allows to collect all elements within the Collection
-- Collection:
-	- addAll: addAll array version
-	- containsAny: Allows to test if another collection contains an of the elements of the tested collection.
-	- primitiveStream: Provides access to the closest Java Stream Type.
-	- copy: shallowCopies the collection, used instead of clone because this is better to use.
-		(subCollections not supported for obvious reasons)
-	- toArray: the ToArray function from Java9 and newer that uses a Functional interface and can use a method reference
-- List:
-	- add/get/removeElements (From FastUtil): Allows to add/get/remove an Array into/from a list. Just with less overhead
-	- extractElements: Allows to remove a Range of elements from the List and get what was removed.
-	- Unstable Sort(From FastUtil): Uses a faster but not stable sort (Quick-Sort as example) to sort the list.
-	- addIfAbsent/Present: adds a element only if absent/present in the list
-	- swapRemove: deletes a desired element and inserts the last element in its place instead of leftshifting elements.
-- SortedSet:
-	- addAndMoveToFirst/Last (From FastUtil but moved to Interface): Allows to add a element to the first/last position of a sorted set.
-	- moveToFirst/Last: Moves the desired element at the first/last position of the SortedSet.
-	- pollFirst/Last: Allows to poll the first/last element of the set.
-- Map:
-	- putAll: putAll but in Array form.
-	- putAllIfAbsent: Puts only the elements that are absent.
-	- addTo (Only Primitives Values) (From FastUtil but moved to Interface): allows to add to the value of a given key. If not present it will be added. (Accumulator)
-	- subFrom (Only Primitive Values): allows to subtract from the value of a given key. If value reached getDefaultReturnValue() element will be removed.
-	- addToAll: Same as addTo but bulkVersion.
-	- removeOrDefault: removes a Element and if not present returns the default value instead of the present value.
-	- mergeAll: BulkVersion of Merge function.
-	- supplyIfAbsent: A Supplier based computeIfAbsent
-- Sorted Map:
-	- addAndMoveToFirst/Last (From FastUtil but moved to Interface): Allows to add a element to the first/last position of a sorted Map.
-	- moveToFirst/Last: Moves the desired element at the first/last position of the Map.
-	- getAndMoveToFirst/Last: gets the element and moves it to the first/last position. Replicating a Optional LinkedHashMap feature.
-	- pollFirst/LastKey: Allows to poll the first/last element.
-	- first/LastValue: Allows to get the first/last value from the Map.
-	
+## Special Features
+[Here](features.md) you find a set of features added to Primitive Collections.
+These are designed to improve performance or to provide Quality of Life.
+
 	
 # Notes about Versions
 Any 0.x.0 version (Minor) can be reason for massive changes including API.     
