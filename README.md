@@ -6,7 +6,7 @@ This is a Simple Primitive Collections Library aimed to outperform Java's Collec
 Both in Performance and Quality of Life Features.  
 
 ## Benchmarks
-Benchmarks can be found here: [Click Me](https://github.com/Speiger/Primitive-Collections-Benchmarks/tree/master)
+Benchmarks can be found here: [[Charts]](https://github.com/Speiger/Primitive-Collections-Benchmarks/blob/master/BENCHMARKS-CHARTS.md), [[Tables]](https://github.com/Speiger/Primitive-Collections-Benchmarks/blob/master/BENCHMARKS.md)
 
 ## Special Features
 [Here](features.md) you find a set of features added to Primitive Collections.   
