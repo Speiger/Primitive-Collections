@@ -1,12 +1,16 @@
 ![build](https://github.com/Speiger/Primitive-Collections/actions/workflows/build_validator.yml/badge.svg)
 ![Latest Release](https://jitpack.io/v/Speiger/Primitive-Collections.svg)
 
-
 # Primitive-Collections
+This is a Simple Primitive Collections Library aimed to outperform Java's Collection Library and FastUtil.  
+Both in Performance and Quality of Life Features.  
 
-This is a Simple Primitive Collections Library i started as a hobby Project.     
-It is based on Java's Collection Library and FastUtil.     
-But its focus is a different one.     
+## Benchmarks
+Benchmarks can be found here: [Click Me](https://github.com/Speiger/Primitive-Collections-Benchmarks/tree/master)
+
+## Special Features
+[Here](features.md) you find a set of features added to Primitive Collections.   
+These are designed to improve performance or to provide Quality of Life.  
 
 ## Main Features:      
 - ArrayLists / LinkedLists / CopyOnWriteLists
@@ -17,36 +21,16 @@ But its focus is a different one.
 - ConcurrentHashMaps
 - Priority Queues
 - Streams & Functional Queries
-- SplitIterators
-- Iterators
+- Split/Iterators
 - Pairs
 - Unary/Functions
 - Suppliers
 - Bi/Consumers
-- AsyncBuilders
+- AsyncBuilders  
 
-## Current Level of Stability
-Since this is a relatively new Library, stability was not perfect and some areas are not perfect yet.     
-Thanks to [ben-manes](https://github.com/ben-manes) we now have Roughly 160k unit test covering Maps/Sets/Lists.     
-These tests cover Javas Collection API completely and ensuring a Stable implementation.     
-These freshly added tests allowed me to squash thousands of issues according to Googles Test Library (Guava-Tests).     
-These will be expanded on as time goes on.     
-
-### Benchmarks
-Benchmarks can be found here: [Click Me](https://github.com/Speiger/Primitive-Collections-Benchmarks/tree/master)
-
-## Special Features
-[Here](features.md) you find a set of features added to Primitive Collections.
-These are designed to improve performance or to provide Quality of Life.
-
-	
 # Notes about Versions
 Any 0.x.0 version (Minor) can be reason for massive changes including API.     
 To ensure that problems can be dealt with even if it is breaking the current API.     
-Any breaking changes will be Documented (once 1.0 is released)     
-
-Also to save space every 0.0.x (Patch) that is 2 Minor Versions behind will be removed. 
-So if 0.5.0 is released every 0.3.x patch will be deleted, except for the last patch for that minor version.
 
 # How to install
 Using Gradle:
@@ -72,7 +56,9 @@ dependencies {
 }
 ```
 
-Direct:
+<details>
+<summary>Direct: </summary>
+<p>
 
 | Version 	| Jar                                                                                                                          	| Sources                                                                                                                              	| Java Doc                                                                                                                             	|
 |---------	|------------------------------------------------------------------------------------------------------------------------------	|--------------------------------------------------------------------------------------------------------------------------------------	|--------------------------------------------------------------------------------------------------------------------------------------	|
@@ -88,6 +74,9 @@ Direct:
 | 0.4.1   	| [Download](https://maven.speiger.com/repository/main/de/speiger/Primitive-Collections/0.4.1/Primitive-Collections-0.4.1.jar) 	| [Download](https://maven.speiger.com/repository/main/de/speiger/Primitive-Collections/0.4.1/Primitive-Collections-0.4.1-sources.jar) 	| [Download](https://maven.speiger.com/repository/main/de/speiger/Primitive-Collections/0.4.1/Primitive-Collections-0.4.1-javadoc.jar) 	|
 | 0.4.0   	| [Download](https://maven.speiger.com/repository/main/de/speiger/Primitive-Collections/0.4.0/Primitive-Collections-0.4.0.jar) 	| [Download](https://maven.speiger.com/repository/main/de/speiger/Primitive-Collections/0.4.0/Primitive-Collections-0.4.0-sources.jar) 	| [Download](https://maven.speiger.com/repository/main/de/speiger/Primitive-Collections/0.4.0/Primitive-Collections-0.4.0-javadoc.jar) 	|
 | 0.3.6   	| [Download](https://maven.speiger.com/repository/main/de/speiger/Primitive-Collections/0.3.6/Primitive-Collections-0.3.6.jar) 	| [Download](https://maven.speiger.com/repository/main/de/speiger/Primitive-Collections/0.3.6/Primitive-Collections-0.3.6-sources.jar) 	| [Download](https://maven.speiger.com/repository/main/de/speiger/Primitive-Collections/0.3.6/Primitive-Collections-0.3.6-javadoc.jar) 	|
+
+</p>
+</details>
 
 # Contributing
 If you want to contribute.      
@@ -110,6 +99,3 @@ The SourceCode can be generated via:
 to build the jar:           
 /gradlew.bat build      
 do not combine the commands because they can not be executed at the same time.      
-
-## Current Down Sides (Random order)
-- Documentation is only present at the lowest level for most cases and needs a typo fixing.
