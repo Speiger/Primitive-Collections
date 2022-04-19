@@ -1,6 +1,5 @@
 plugins {
     id 'java-library'
-    id "org.sonarqube" version "3.3"
 }
 
 tasks.withType(JavaCompile) {
@@ -16,16 +15,6 @@ repositories {
     maven {
         url = "https://maven.speiger.com/repository/main"
     }
-}
-
-
-sonarqube {
-  properties {
-    properties["sonar.sources"] += sourceSets.main.allSource.srcDirs
-    property "sonar.projectKey", "Speiger_Primitive-Collections"
-    property "sonar.organization", "speiger"
-    property "sonar.host.url", "https://sonarcloud.io"
-  }
 }
 
 archivesBaseName = 'Primitive Collections'
