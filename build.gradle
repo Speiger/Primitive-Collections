@@ -57,6 +57,7 @@ dependencies {
 	builderImplementation 'de.speiger:Simple-Code-Generator:1.0.7'
     testImplementation 'junit:junit:4.12'
     testImplementation 'com.google.guava:guava-testlib:31.0.1-jre'
+    
 }
 
 task generateSource(type: JavaExec) {
@@ -91,6 +92,8 @@ task srcJar(type: Jar) {
     from sourceSets.main.allSource
     classifier = 'sources'
 }
+
+compileJava.dependsOn generateGithubSource
 
 javadoc.failOnError = false
 javadoc.options.memberLevel = JavadocMemberLevel.PUBLIC

@@ -19,8 +19,6 @@ jobs:
           java-version: 11
       - name: Make gradlew executable
         run: chmod +x ./gradlew
-      - name: Generate SourceCode with Gradle
-        run: ./gradlew generateGithubSource
       - name: Cache SonarCloud packages
         uses: actions/cache@v1
         with:
