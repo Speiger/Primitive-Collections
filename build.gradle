@@ -21,6 +21,7 @@ repositories {
 
 sonarqube {
   properties {
+    properties["sonar.sources"] += sourceSets.main.allSource.srcDirs
     property "sonar.projectKey", "Speiger_Primitive-Collections"
     property "sonar.organization", "speiger"
     property "sonar.host.url", "https://sonarcloud.io"
