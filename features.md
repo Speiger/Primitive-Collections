@@ -15,7 +15,7 @@ Functions that increase performance or are quality of life in their nature.
 Java adds themselves a lot of functional functions like,  
 - Stream:
 	- Map/FlatMap
-	- Filter/Distinct/Limit
+	- Filter/Distinct/Limit/Sorted
 	- Count/FindFirst/Collect
 	- Peek/ForEach/Reduce
 	- anyMatch/allMatch/NoneMatch   

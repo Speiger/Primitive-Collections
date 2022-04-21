@@ -106,10 +106,15 @@ public class ARRAY_FIFO_QUEUE KEY_GENERIC_TYPE extends ABSTRACT_PRIORITY_QUEUE K
 	
 	@Override
 	public void clear() {
+		if(first != last) {
 #if TYPE_OBJECT
-		Arrays.fill(array, null);
+			Arrays.fill(array, null);
 #endif
-		first = last = 0;
+			first = last = 0;
+		}
+		else if(first != 0) {
+			first = last = 0;
+		}
 	}
 	
 	@Override
@@ -152,9 +157,9 @@ public class ARRAY_FIFO_QUEUE KEY_GENERIC_TYPE extends ABSTRACT_PRIORITY_QUEUE K
 	
 	@Override
 	public KEY_TYPE peek(int index) {
-		if(first == last || index < 0 || index > size()) throw new NoSuchElementException();
+		if(first == last || index < 0 || index >= size()) throw new NoSuchElementException();
 		index += first;
-		return index > array.length ? array[index-array.length] : array[index];
+		return index >= array.length ? array[index-array.length] : array[index];
 	}
 	
 	@Override

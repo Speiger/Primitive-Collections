@@ -1,5 +1,10 @@
 # Changelog of versions
 
+### Version 0.6.1
+- Fixed: FIFO queue crashing when the last index is before the first index when peek is called.
+- Fixed: FIFO queue only clears the array if it was in use.
+- Added: Sorted Method for the stream replacing functions.
+
 ### Version 0.6.0
 - Added: addOrGet for sets.
 - Added: Async API which allows to easily execute Iterables/Collections offthread without the complexity.

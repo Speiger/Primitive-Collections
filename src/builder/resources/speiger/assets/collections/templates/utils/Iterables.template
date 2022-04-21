@@ -3,6 +3,8 @@ package speiger.src.collections.PACKAGE.utils;
 import java.util.Objects;
 #if TYPE_BOOLEAN
 import java.util.concurrent.atomic.AtomicInteger;
+#else if TYPE_OBJECT
+import java.util.Comparator;
 #endif
 import java.util.concurrent.atomic.AtomicLong;
 import java.util.function.Consumer;
@@ -12,8 +14,11 @@ import speiger.src.collections.PACKAGE.collections.ITERABLE;
 import speiger.src.collections.objects.collections.ObjectIterable;
 import speiger.src.collections.objects.collections.ObjectIterator;
 import speiger.src.collections.PACKAGE.functions.CONSUMER;
+import speiger.src.collections.PACKAGE.functions.COMPARATOR;
 #endif
 import speiger.src.collections.PACKAGE.collections.ITERATOR;
+import speiger.src.collections.PACKAGE.lists.LIST;
+import speiger.src.collections.PACKAGE.lists.ARRAY_LIST;
 import speiger.src.collections.PACKAGE.functions.function.TO_OBJECT_FUNCTION;
 import speiger.src.collections.PACKAGE.functions.function.PREDICATE;
 #if !TYPE_BOOLEAN
@@ -162,6 +167,30 @@ public class ITERABLES
 	 */
 	public static GENERIC_KEY_BRACES ITERABLE KEY_GENERIC_TYPE limit(Iterable<? extends CLASS_TYPE> iterable, long limit) {
 		return new LimitedIterableBRACES(wrap(iterable), limit);
+	}
+	
+	/**
+	 * A Helper function that sorts the Iterable.
+	 * This operation is heavily hurting performance because it rebuilds the entire iterator and then sorts it.
+	 * @param iterable that should be sorted
+	 * @param sorter that sorts the iterable. Can be null.
+	 * @Type(T)
+	 * @return a sorted iterable.
+	 */
+	public static GENERIC_KEY_BRACES ITERABLE KEY_GENERIC_TYPE sorted(ITERABLE KEY_GENERIC_TYPE iterable, COMPARATOR KEY_GENERIC_TYPE sorter) {
+		return new SortedIterableBRACES(iterable, sorter);
+	}
+	
+	/**
+	 * A Helper function that sorts the Iterable from a Java Iterable
+	 * This operation is heavily hurting performance because it rebuilds the entire iterator and then sorts it.
+	 * @param iterable that should be sorted
+	 * @param sorter that sorts the iterable. Can be null.
+	 * @Type(T)
+	 * @return a sorted iterable.
+	 */
+	public static GENERIC_KEY_BRACES ITERABLE KEY_GENERIC_TYPE sorted(Iterable<? extends CLASS_TYPE> iterable, COMPARATOR KEY_GENERIC_TYPE sorter) {
+		return new SortedIterableBRACES(wrap(iterable), sorter);
 	}
 	
 	/**
@@ -355,6 +384,42 @@ public class ITERABLES
 				counter.incrementAndGet();
 				action.accept(T);
 			});
+		}
+#endif
+	}
+	
+	private static class SortedIterable KEY_GENERIC_TYPE implements ITERABLE KEY_GENERIC_TYPE
+	{
+		ITERABLE KEY_GENERIC_TYPE iterable;
+		COMPARATOR KEY_GENERIC_TYPE sorter;
+		
+		public SortedIterable(ITERABLE KEY_GENERIC_TYPE iterable, COMPARATOR KEY_GENERIC_TYPE sorter) {
+			this.iterable = iterable;
+			this.sorter = sorter;
+		}
+		
+		@Override
+		public ITERATOR KEY_GENERIC_TYPE iterator() {
+			return ITERATORS.sorted(iterable.iterator(), sorter);
+		}
+		
+#if !TYPE_OBJECT
+		@Override
+		public void forEach(CONSUMER action) {
+			Objects.requireNonNull(action);
+			LIST KEY_GENERIC_TYPE list = new ARRAY_LISTBRACES();
+			iterable.forEach(list::add);
+			list.unstableSort(sorter);
+			list.forEach(action);
+		}
+#else
+		@Override
+		public void forEach(Consumer<? super CLASS_TYPE> action) {
+			Objects.requireNonNull(action);
+			LIST KEY_GENERIC_TYPE list = new ARRAY_LISTBRACES();
+			iterable.forEach(list::add);
+			list.unstableSort(sorter);
+			list.forEach(action);
 		}
 #endif
 	}

@@ -3,6 +3,7 @@ package speiger.src.collections.PACKAGE.utils;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 #if TYPE_OBJECT
+import java.util.Comparator;
 import java.util.function.CONSUMER;
 #endif
 
@@ -11,6 +12,7 @@ import speiger.src.collections.PACKAGE.collections.ITERATOR;
 import speiger.src.collections.objects.collections.ObjectIterator;
 import speiger.src.collections.objects.utils.ObjectIterators;
 import speiger.src.collections.PACKAGE.functions.CONSUMER;
+import speiger.src.collections.PACKAGE.functions.COMPARATOR;
 #endif
 import speiger.src.collections.PACKAGE.functions.function.TO_OBJECT_FUNCTION;
 import speiger.src.collections.PACKAGE.functions.function.PREDICATE;
@@ -233,6 +235,30 @@ public class ITERATORS
 	 */
 	public static GENERIC_KEY_BRACES ITERATOR KEY_GENERIC_TYPE limit(Iterator<? extends CLASS_TYPE> iterator, long limit) {
 		return new LimitedIteratorBRACES(wrap(iterator), limit);
+	}
+	
+	/**
+	 * A Helper function that sorts the Iterator beforehand.
+	 * This operation is heavily hurting performance because it rebuilds the entire iterator and then sorts it.
+	 * @param iterator that should be sorted.
+	 * @param sorter the sorter of the iterator. Can be null.
+	 * @Type(T)
+	 * @return a new sorted iterator
+	 */
+	public static GENERIC_KEY_BRACES ITERATOR KEY_GENERIC_TYPE sorted(ITERATOR KEY_GENERIC_TYPE iterator, COMPARATOR KEY_GENERIC_TYPE sorter) {
+		return new SortedIteratorBRACES(iterator, sorter);
+	}
+	
+	/**
+	 * A Helper function that sorts the Iterator beforehand from a Java Iterator.
+	 * This operation is heavily hurting performance because it rebuilds the entire iterator and then sorts it.
+	 * @param iterator that should be sorted.
+	 * @param sorter the sorter of the iterator. Can be null.
+	 * @Type(T)
+	 * @return a new sorted iterator
+	 */
+	public static GENERIC_KEY_BRACES ITERATOR KEY_GENERIC_TYPE sorted(Iterator<? extends CLASS_TYPE> iterator, COMPARATOR KEY_GENERIC_TYPE sorter) {
+		return new SortedIteratorBRACES(wrap(iterator), sorter);
 	}
 	
 	/**
@@ -868,6 +894,35 @@ public class ITERATORS
 			T result = last.next();
 			foundNext = false;
 			return result;
+		}
+	}
+	
+	private static class SortedIterator KEY_GENERIC_TYPE implements ITERATOR KEY_GENERIC_TYPE
+	{
+		ITERATOR KEY_GENERIC_TYPE iterator;
+		COMPARATOR KEY_GENERIC_TYPE sorter;
+		LIST KEY_GENERIC_TYPE sortedElements = null;
+		int index = 0;
+		
+		public SortedIterator(ITERATOR KEY_GENERIC_TYPE iterator, COMPARATOR KEY_GENERIC_TYPE sorter) {
+			this.iterator = iterator;
+			this.sorter = sorter;
+		}
+		
+		@Override
+		public boolean hasNext() {
+			if(sortedElements == null) {
+				boolean hasNext = iterator.hasNext();
+				sortedElements = hasNext ? pour(iterator) : LISTS.empty();
+				if(hasNext) sortedElements.unstableSort(sorter);
+			}
+			return index < sortedElements.size();
+		}
+		
+		@Override
+		public KEY_TYPE NEXT() {
+			if(!hasNext()) throw new IllegalStateException("End of Iterator");
+			return sortedElements.GET_KEY(index++);
 		}
 	}
 	

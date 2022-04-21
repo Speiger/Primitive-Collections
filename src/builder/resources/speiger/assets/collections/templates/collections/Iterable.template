@@ -5,9 +5,11 @@ import java.util.function.Consumer;
 #if !TYPE_OBJECT
 
 import speiger.src.collections.PACKAGE.functions.CONSUMER;
+import speiger.src.collections.PACKAGE.functions.COMPARATOR;
 import speiger.src.collections.objects.collections.ObjectIterable;
 #else
 import java.util.function.BiFunction;
+import java.util.Comparator;
 
 #endif
 import speiger.src.collections.PACKAGE.functions.function.TO_OBJECT_FUNCTION;
@@ -154,6 +156,15 @@ public interface ITERABLE KEY_GENERIC_TYPE extends Iterable<CLASS_TYPE>
 	 */
 	default ITERABLE KEY_GENERIC_TYPE limit(long limit) {
 		return ITERABLES.limit(this, limit);
+	}
+	
+	/**
+	 * A Helper function to reduce the usage of Streams and allows to sort the elements
+	 * @param sorter that sorts the elements.
+	 * @return a Iterable that is sorted
+	 */
+	default ITERABLE KEY_GENERIC_TYPE sorted(COMPARATOR KEY_GENERIC_TYPE sorter) {
+		return ITERABLES.sorted(this, sorter);
 	}
 	
 	/**

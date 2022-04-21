@@ -7,12 +7,13 @@ import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 import java.util.concurrent.locks.LockSupport;
 import java.util.function.Consumer;
-
 #if !TYPE_OBJECT
 
 import speiger.src.collections.PACKAGE.functions.CONSUMER;
+import speiger.src.collections.PACKAGE.functions.COMPARATOR;
 #else
 import java.util.function.BiFunction;
+import java.util.Comparator;
 
 #endif
 import speiger.src.collections.PACKAGE.collections.ITERABLE;
@@ -169,6 +170,17 @@ public class ASYNC_BUILDER KEY_GENERIC_TYPE
 	 */
 	public ASYNC_BUILDER KEY_GENERIC_TYPE limit(long limit) {
 		iterable = ITERABLES.limit(iterable, limit);
+		return this;
+	}
+	
+	/**
+	 * Sorts the elements inside of the Iterable.
+	 * This operation is heavily hurting performance because it rebuilds the entire iterator and then sorts it, and this will affect the pausing feature.
+	 * @param sorter that sorts the elements.
+	 * @return self with a sorter applied
+	 */
+	public ASYNC_BUILDER KEY_GENERIC_TYPE sorted(COMPARATOR KEY_GENERIC_TYPE sorter) {
+		iterable = ITERABLES.sorted(iterable, sorter);
 		return this;
 	}
 	

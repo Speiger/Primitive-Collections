@@ -1,6 +1,7 @@
 ![build](https://github.com/Speiger/Primitive-Collections/actions/workflows/build_validator.yml/badge.svg)
-![Latest Release](https://jitpack.io/v/Speiger/Primitive-Collections.svg)
-
+[![Latest Release](https://jitpack.io/v/Speiger/Primitive-Collections.svg)](https://jitpack.io/#Speiger/Primitive-Collections)
+[![License](https://img.shields.io/badge/License-Apache_2.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
+![GitHub commit activity](https://img.shields.io/github/commit-activity/m/Speiger/Primitive-Collections)
 # Primitive-Collections
 This is a Simple Primitive Collections Library aimed to outperform Java's Collection Library and FastUtil.  
 Both in Performance and Quality of Life Features.  
