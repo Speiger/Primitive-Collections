@@ -2,6 +2,5 @@ jdk:
    - openjdk9
 install:
    - chmod +x ./gradlew
-   - ./gradlew generateGithubSource
    - ./gradlew build publishToMavenLocal
    

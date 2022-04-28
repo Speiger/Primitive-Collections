@@ -98,6 +98,5 @@ Please if you want to contribute follow the [Rule-Sheet](RuleSheet.md). It keeps
 The SourceCode can be generated via:     
 /gradlew.bat generateSource      
 
-to build the jar:           
+to generate SourceCode and build the jar:           
 /gradlew.bat build      
-do not combine the commands because they can not be executed at the same time.      
