@@ -348,9 +348,11 @@ public class ARRAYS
 	 * @param array the array that needs to be sorted
 	 * @ArrayType(T)
 	 * @param comp the Comparator that decides the sorting order
+	 * @return input array.
 	 */
-	public static GENERIC_KEY_BRACES void stableSort(KEY_TYPE[] array, COMPARATOR KEY_GENERIC_TYPE comp) {
+	public static GENERIC_KEY_BRACES KEY_TYPE[] stableSort(KEY_TYPE[] array, COMPARATOR KEY_GENERIC_TYPE comp) {
 		stableSort(array, 0, array.length, comp);
+		return array;
 	}
 	
 	/**
@@ -386,9 +388,11 @@ public class ARRAYS
 	 * Stable sort referres to Mergesort or Insertionsort
 	 * @param array the array that needs to be sorted
 	 * @ArrayType(T)
+	 * @return input array
 	 */
-	public static GENERIC_KEY_BRACES void stableSort(KEY_TYPE[] array) {
+	public static GENERIC_KEY_BRACES KEY_TYPE[] stableSort(KEY_TYPE[] array) {
 		stableSort(array, 0, array.length);
+		return array;
 	}
 	
 	/**
@@ -423,9 +427,11 @@ public class ARRAYS
 	 * @param array the array that needs to be sorted
 	 * @param comp the Comparator that decides the sorting order
 	 * @ArrayType(T)
+	 * @return input array
 	 */
-	public static GENERIC_KEY_BRACES void unstableSort(KEY_TYPE[] array, COMPARATOR KEY_GENERIC_TYPE comp) {
+	public static GENERIC_KEY_BRACES KEY_TYPE[] unstableSort(KEY_TYPE[] array, COMPARATOR KEY_GENERIC_TYPE comp) {
 		unstableSort(array, 0, array.length, comp);
+		return array;
 	}
 	
 	/**
@@ -461,9 +467,11 @@ public class ARRAYS
 	 * Unstable sort referres to QuickSort or SelectionSort
 	 * @param array the array that needs to be sorted
 	 * @ArrayType(T)
+	 * @return input array
 	 */
-	public static GENERIC_KEY_BRACES void unstableSort(KEY_TYPE[] array) {
+	public static GENERIC_KEY_BRACES KEY_TYPE[] unstableSort(KEY_TYPE[] array) {
 		unstableSort(array, 0, array.length);
+		return array;
 	}
 	
 	/**
@@ -496,9 +504,11 @@ public class ARRAYS
 	 * @param array the array that needs to be sorted
 	 * @param comp the Comparator that decides the sorting order
 	 * @ArrayType(T)
+	 * @return input array
 	 */
-	public static GENERIC_KEY_BRACES void insertionSort(KEY_TYPE[] array, COMPARATOR KEY_GENERIC_TYPE comp) {
+	public static GENERIC_KEY_BRACES KEY_TYPE[] insertionSort(KEY_TYPE[] array, COMPARATOR KEY_GENERIC_TYPE comp) {
 		insertionSort(array, 0, array.length, comp);
+		return array;
 	}
 	
 	/**
@@ -535,9 +545,11 @@ public class ARRAYS
 	 * Sorts an array according to the natural ascending order using InsertionSort, 
 	 * @param array the array that needs to be sorted
 	 * @ArrayType(T)
+	 * @return input array
 	 */
-	public static GENERIC_KEY_BRACES void insertionSort(KEY_TYPE[] array) {
+	public static GENERIC_KEY_BRACES KEY_TYPE[] insertionSort(KEY_TYPE[] array) {
 		insertionSort(array, 0, array.length);
+		return array;
 	}
 	
 	/**
@@ -573,9 +585,11 @@ public class ARRAYS
 	 * @param array the array that needs to be sorted
 	 * @param comp the Comparator that decides the sorting order
 	 * @ArrayType(T)
+	 * @return input array
 	 */
-	public static GENERIC_KEY_BRACES void selectionSort(KEY_TYPE[] array, COMPARATOR KEY_GENERIC_TYPE comp) {
+	public static GENERIC_KEY_BRACES KEY_TYPE[] selectionSort(KEY_TYPE[] array, COMPARATOR KEY_GENERIC_TYPE comp) {
 		selectionSort(array, 0, array.length, comp);
+		return array;
 	}
 	
 	/**
@@ -617,9 +631,11 @@ public class ARRAYS
 	 * Sorts an array according to the natural ascending order using Selection Sort, 
 	 * @param array the array that needs to be sorted
 	 * @ArrayType(T)
+	 * @return input array
 	 */
-	public static GENERIC_KEY_BRACES void selectionSort(KEY_TYPE[] array) {
+	public static GENERIC_KEY_BRACES KEY_TYPE[] selectionSort(KEY_TYPE[] array) {
 		selectionSort(array, 0, array.length);
+		return array;
 	}
 	
 	/**
@@ -661,9 +677,11 @@ public class ARRAYS
 	 * @param array the array that needs to be sorted
 	 * @param comp the Comparator that decides the sorting order
 	 * @ArrayType(T)
+	 * @return input array
 	 */
-	public static GENERIC_KEY_BRACES void mergeSort(KEY_TYPE[] array, COMPARATOR KEY_GENERIC_TYPE comp) {
+	public static GENERIC_KEY_BRACES KEY_TYPE[] mergeSort(KEY_TYPE[] array, COMPARATOR KEY_GENERIC_TYPE comp) {
 		mergeSort(array, null, 0, array.length, comp);
+		return array;
 	}
 	
 	/**
@@ -713,9 +731,11 @@ public class ARRAYS
 	 * This implementation was copied from <a href="https://github.com/vigna/fastutil">FastUtil</a> with a couple custom optimizations
 	 * @param array the array that needs to be sorted
 	 * @ArrayType(T)
+	 * @return input array
 	 */
-	public static GENERIC_KEY_BRACES void mergeSort(KEY_TYPE[] array) {
+	public static GENERIC_KEY_BRACES KEY_TYPE[] mergeSort(KEY_TYPE[] array) {
 		mergeSort(array, null, 0, array.length);
+		return array;
 	}
 	
 	/**
@@ -922,9 +942,11 @@ public class ARRAYS
 	 * @author Speiger
 	 * @param array the array that needs to be sorted
 	 * @ArrayType(T)
+	 * @return input array
 	 */
-	public static GENERIC_KEY_BRACES void memFreeMergeSort(KEY_TYPE[] array) {
+	public static GENERIC_KEY_BRACES KEY_TYPE[] memFreeMergeSort(KEY_TYPE[] array) {
 		memFreeMergeSort(array, 0, array.length);
+		return array;
 	}
 	
 	/**
@@ -1099,9 +1121,11 @@ public class ARRAYS
 	 * @param array the array that needs to be sorted
 	 * @param comp the Comparator that decides the sorting order
 	 * @ArrayType(T)
+	 * @return input array
 	 */
-	public static GENERIC_KEY_BRACES void quickSort(KEY_TYPE[] array, COMPARATOR KEY_GENERIC_TYPE comp) {
+	public static GENERIC_KEY_BRACES KEY_TYPE[] quickSort(KEY_TYPE[] array, COMPARATOR KEY_GENERIC_TYPE comp) {
 		quickSort(array, 0, array.length, comp);
+		return array;
 	}
 	
 	/**
@@ -1157,9 +1181,11 @@ public class ARRAYS
 	 * and that sorting Algorithm is based on the tuned quicksort adapted from Jon L. Bentley and M. DouglasMcIlroy, "Engineering a Sort Function", Software: Practice and Experience, 23(11), pages1249−1265, 1993. 
 	 * @param array the array that needs to be sorted
 	 * @ArrayType(T)
+	 * @return input array
 	 */
-	public static GENERIC_KEY_BRACES void quickSort(KEY_TYPE[] array) {
+	public static GENERIC_KEY_BRACES KEY_TYPE[] quickSort(KEY_TYPE[] array) {
 		quickSort(array, 0, array.length);
+		return array;
 	}
 	
 	/**
