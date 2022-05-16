@@ -1,0 +1,2027 @@
+package speiger.src.collections.objects.maps.impl.concurrent;
+
+import java.util.Arrays;
+import java.util.Map;
+import java.util.NoSuchElementException;
+import java.util.Objects;
+import java.util.concurrent.locks.StampedLock;
+import java.util.function.Consumer;
+
+import java.util.function.BiFunction;
+
+import speiger.src.collections.objects.functions.consumer.ObjectObjectConsumer;
+import speiger.src.collections.objects.functions.function.Object2ObjectFunction;
+import speiger.src.collections.objects.functions.function.ObjectObjectUnaryOperator;
+import speiger.src.collections.objects.maps.abstracts.AbstractObject2ObjectMap;
+import speiger.src.collections.objects.maps.interfaces.Object2ObjectMap;
+import speiger.src.collections.objects.maps.interfaces.Object2ObjectConcurrentMap;
+import speiger.src.collections.objects.collections.AbstractObjectCollection;
+import speiger.src.collections.objects.collections.ObjectCollection;
+import speiger.src.collections.objects.functions.ObjectSupplier;
+import speiger.src.collections.objects.functions.function.Object2BooleanFunction;
+import speiger.src.collections.objects.collections.ObjectIterator;
+import speiger.src.collections.objects.collections.ObjectBidirectionalIterator;
+import speiger.src.collections.objects.sets.AbstractObjectSet;
+import speiger.src.collections.objects.sets.ObjectSet;
+import speiger.src.collections.utils.HashUtil;
+
+/**
+ * A TypeSpecific ConcurrentHashMap implementation that is based on <a href="https://github.com/google/guava">Guavas</a> approach and backing array implementations.
+ * Like <a href="https://github.com/google/guava">Guavas</a> implementation this solution can be accessed by multiple threads, but it is not as flexible as Javas implementation.
+ * The concurrencyLevel decides how many pools exist, and each pool can be accessed by 1 thread for writing and as many threads for reading.
+ * Though it is ill adviced to iterate over the collection using the Iterator if the Map is written to. Keep that in mind.
+ * 
+ * 
+ * @param <T> the type of elements maintained by this Collection
+ * @param <V> the type of elements maintained by this Collection
+ */
+public class Object2ObjectConcurrentOpenHashMap<T, V> extends AbstractObject2ObjectMap<T, V> implements Object2ObjectConcurrentMap<T, V>
+{
+	/** Segment Limit */
+	private static final int MAX_SEGMENTS = 1 << 16;
+	/** Buckets of the ConcurrentMap */
+	protected transient Segment<T, V>[] segments;
+	/** Bitshift of the HashCode */
+	protected transient int segmentShift;
+	/** Max Bits thats used in the segments */
+	protected transient int segmentMask;
+	/** EntrySet cache */
+	protected transient FastEntrySet<T, V> entrySet;
+	/** KeySet cache */
+	protected transient ObjectSet<T> keySet;
+	/** Values cache */
+	protected transient ObjectCollection<V> values;
+	
+	/**
+	 * Copy constructor that doesn't trigger the building of segments and allows to copy it faster.
+	 * @param unused not used, Just to keep all constructors accessible.
+	 */
+	protected Object2ObjectConcurrentOpenHashMap(boolean unused) {}
+	
+	/**
+	 * Default Constructor
+	 */
+	public Object2ObjectConcurrentOpenHashMap() {
+		this(HashUtil.DEFAULT_MIN_CAPACITY, HashUtil.DEFAULT_LOAD_FACTOR, HashUtil.DEFAULT_MIN_CONCURRENCY);
+	}
+	
+	/**
+	 * Constructor that defines the minimum capacity
+	 * @param minCapacity the minimum capacity the HashMap is allowed to be.
+	 * @throws IllegalStateException if the minimum capacity is negative
+	 */
+	public Object2ObjectConcurrentOpenHashMap(int minCapacity) {
+		this(minCapacity, HashUtil.DEFAULT_LOAD_FACTOR, HashUtil.DEFAULT_MIN_CONCURRENCY);		
+	}
+	
+	/**
+	 * Constructor that defines the minimum capacity and load factor
+	 * @param minCapacity the minimum capacity the HashMap is allowed to be.
+	 * @param loadFactor the percentage of how full the backing array can be before they resize
+	 * @throws IllegalStateException if the minimum capacity is negative
+	 * @throws IllegalStateException if the loadfactor is either below/equal to 0 or above/equal to 1
+	 */
+	public Object2ObjectConcurrentOpenHashMap(int minCapacity, float loadFactor) {
+		this(minCapacity, loadFactor, HashUtil.DEFAULT_MIN_CONCURRENCY);
+	}
+	
+	/**
+	 * Constructor that defines the minimum capacity and concurrencyLevel
+	 * @param minCapacity the minimum capacity the HashMap is allowed to be.
+	 * @param concurrencyLevel decides how many operations can be performed at once.
+	 * @throws IllegalStateException if the minimum capacity is negative
+	 * @throws IllegalStateException if the concurrencyLevel is either below/equal to 0 or above/equal to 65535
+	 */
+	public Object2ObjectConcurrentOpenHashMap(int minCapacity, int concurrencyLevel) {
+		this(minCapacity, HashUtil.DEFAULT_LOAD_FACTOR, concurrencyLevel);
+	}
+	
+	/**
+	 * Constructor that defines the load factor and concurrencyLevel
+	 * @param loadFactor the percentage of how full the backing array can be before they resize
+	 * @param concurrencyLevel decides how many operations can be performed at once.
+	 * @throws IllegalStateException if the loadfactor is either below/equal to 0 or above/equal to 1
+	 * @throws IllegalStateException if the concurrencyLevel is either below/equal to 0 or above/equal to 65535
+	 */
+	public Object2ObjectConcurrentOpenHashMap(float loadFactor, int concurrencyLevel) {
+		this(HashUtil.DEFAULT_MIN_CAPACITY, loadFactor, concurrencyLevel);
+	}
+	
+	/**
+	 * Constructor that defines the minimum capacity, load factor and concurrencyLevel
+	 * @param minCapacity the minimum capacity the HashMap is allowed to be.
+	 * @param loadFactor the percentage of how full the backing array can be before they resize
+	 * @param concurrencyLevel decides how many operations can be performed at once.
+	 * @throws IllegalStateException if the minimum capacity is negative
+	 * @throws IllegalStateException if the loadfactor is either below/equal to 0 or above/equal to 1
+	 * @throws IllegalStateException if the concurrencyLevel is either below/equal to 0 or above/equal to 65535
+	 */
+	public Object2ObjectConcurrentOpenHashMap(int minCapacity, float loadFactor, int concurrencyLevel) {
+		if(minCapacity < 0)	throw new IllegalStateException("Minimum Capacity is negative. This is not allowed");
+		if(loadFactor <= 0 || loadFactor >= 1F) throw new IllegalStateException("Load Factor is not between 0 and 1");
+		if(concurrencyLevel <= 0 || concurrencyLevel >= MAX_SEGMENTS) throw new IllegalStateException("concurrencyLevel has to be between 0 and 65536");
+		int segmentCount = HashUtil.nextPowerOfTwo(concurrencyLevel);
+		int shift = Integer.numberOfTrailingZeros(segmentCount);
+		segments = new Segment[segmentCount];
+		segmentShift = 32 - shift;
+		segmentMask = segmentCount - 1;
+		int segmentCapacity = minCapacity / segmentCount;
+		if(segmentCapacity * segmentCount < minCapacity) {
+			segmentCapacity++;
+		}
+		segmentCapacity = HashUtil.arraySize(segmentCapacity, loadFactor);
+		for(int i = 0;i<segmentCount;i++) {
+			segments[i] = new Segment<>(this, segmentCapacity, loadFactor, i == 0);
+		}
+	}
+	
+	/**
+	 * Helper constructor that allow to create a map from unboxed values
+	 * @param keys the keys that should be put into the map
+	 * @param values the values that should be put into the map.
+	 * @throws IllegalStateException if the keys and values do not match in lenght
+	 */
+	public Object2ObjectConcurrentOpenHashMap(T[] keys, V[] values) {
+		this(keys, values, HashUtil.DEFAULT_LOAD_FACTOR, HashUtil.DEFAULT_MIN_CONCURRENCY);
+	}
+	
+	/**
+	 * Helper constructor that allow to create a map from unboxed values
+	 * @param keys the keys that should be put into the map
+	 * @param values the values that should be put into the map.
+	 * @param loadFactor the percentage of how full the backing array can be before they resize
+	 * @throws IllegalStateException if the keys and values do not match in lenght
+	 * @throws IllegalStateException if the loadfactor is either below/equal to 0 or above/equal to 1
+	 */
+	public Object2ObjectConcurrentOpenHashMap(T[] keys, V[] values, float loadFactor) {
+		this(keys, values, loadFactor, HashUtil.DEFAULT_MIN_CONCURRENCY);
+	}
+	
+	/**
+	 * Helper constructor that allow to create a map from unboxed values
+	 * @param keys the keys that should be put into the map
+	 * @param values the values that should be put into the map.
+	 * @param concurrencyLevel decides how many operations can be performed at once.
+	 * @throws IllegalStateException if the keys and values do not match in lenght
+	 * @throws IllegalStateException if the concurrencyLevel is either below/equal to 0 or above/equal to 65535
+	 */
+	public Object2ObjectConcurrentOpenHashMap(T[] keys, V[] values, int concurrencyLevel) {
+		this(keys, values, HashUtil.DEFAULT_LOAD_FACTOR, concurrencyLevel);
+	}
+	
+	/**
+	 * Helper constructor that allow to create a map from unboxed values
+	 * @param keys the keys that should be put into the map
+	 * @param values the values that should be put into the map.
+	 * @param loadFactor the percentage of how full the backing array can be before they resize
+	 * @param concurrencyLevel decides how many operations can be performed at once.
+	 * @throws IllegalStateException if the keys and values do not match in lenght
+	 * @throws IllegalStateException if the loadfactor is either below/equal to 0 or above/equal to 1
+	 * @throws IllegalStateException if the concurrencyLevel is either below/equal to 0 or above/equal to 65535
+	 */
+	public Object2ObjectConcurrentOpenHashMap(T[] keys, V[] values, float loadFactor, int concurrencyLevel) {
+		this(keys.length, loadFactor, concurrencyLevel);
+		if(keys.length != values.length) throw new IllegalStateException("Input Arrays are not equal size");
+		for(int i = 0,m=keys.length;i<m;i++) put(keys[i], values[i]);
+	}
+	
+	/**
+	 * A Helper constructor that allows to create a Map with exactly the same values as the provided map.
+	 * @param map the values that should be present in the map
+	 */
+	public Object2ObjectConcurrentOpenHashMap(Map<? extends T, ? extends V> map) {
+		this(map, HashUtil.DEFAULT_LOAD_FACTOR, HashUtil.DEFAULT_MIN_CONCURRENCY);
+	}
+	
+	/**
+	 * A Helper constructor that allows to create a Map with exactly the same values as the provided map.
+	 * @param map the values that should be present in the map
+	 * @param loadFactor the percentage of how full the backing array can be before they resize
+	 * @throws IllegalStateException if the loadfactor is either below/equal to 0 or above/equal to 1
+	 */
+	public Object2ObjectConcurrentOpenHashMap(Map<? extends T, ? extends V> map, float loadFactor) {
+		this(map, loadFactor, HashUtil.DEFAULT_MIN_CONCURRENCY);
+	}
+	
+	/**
+	 * A Helper constructor that allows to create a Map with exactly the same values as the provided map.
+	 * @param map the values that should be present in the map
+	 * @param concurrencyLevel decides how many operations can be performed at once.
+	 * @throws IllegalStateException if the concurrencyLevel is either below/equal to 0 or above/equal to 65535
+	 */
+	public Object2ObjectConcurrentOpenHashMap(Map<? extends T, ? extends V> map, int concurrencyLevel) {
+		this(map, HashUtil.DEFAULT_LOAD_FACTOR, concurrencyLevel);
+	}
+	
+	/**
+	 * A Helper constructor that allows to create a Map with exactly the same values as the provided map.
+	 * @param map the values that should be present in the map
+	 * @param loadFactor the percentage of how full the backing array can be before they resize
+	 * @param concurrencyLevel decides how many operations can be performed at once.
+	 * @throws IllegalStateException if the loadfactor is either below/equal to 0 or above/equal to 1
+	 * @throws IllegalStateException if the concurrencyLevel is either below/equal to 0 or above/equal to 65535
+	 */
+	public Object2ObjectConcurrentOpenHashMap(Map<? extends T, ? extends V> map, float loadFactor, int concurrencyLevel) {
+		this(map.size(), loadFactor, concurrencyLevel);
+		putAll(map);
+	}
+	
+	/**
+	 * A Type Specific Helper function that allows to create a new Map with exactly the same values as the provided map.
+	 * @param map the values that should be present in the map
+ 	 */
+	public Object2ObjectConcurrentOpenHashMap(Object2ObjectMap<T, V> map) {
+		this(map, HashUtil.DEFAULT_LOAD_FACTOR, HashUtil.DEFAULT_MIN_CONCURRENCY);
+	}
+	
+	/**
+	 * A Type Specific Helper function that allows to create a new Map with exactly the same values as the provided map.
+	 * @param map the values that should be present in the map
+	 * @param loadFactor the percentage of how full the backing array can be before they resize
+	 * @throws IllegalStateException if the loadfactor is either below/equal to 0 or above/equal to 1
+ 	 */
+	public Object2ObjectConcurrentOpenHashMap(Object2ObjectMap<T, V> map, float loadFactor) {
+		this(map, loadFactor, HashUtil.DEFAULT_MIN_CONCURRENCY);
+	}
+	
+	/**
+	 * A Type Specific Helper function that allows to create a new Map with exactly the same values as the provided map.
+	 * @param map the values that should be present in the map
+	 * @param concurrencyLevel decides how many operations can be performed at once.
+	 * @throws IllegalStateException if the concurrencyLevel is either below/equal to 0 or above/equal to 65535
+ 	 */
+	public Object2ObjectConcurrentOpenHashMap(Object2ObjectMap<T, V> map, int concurrencyLevel) {
+		this(map, HashUtil.DEFAULT_LOAD_FACTOR, concurrencyLevel);
+	}
+	
+	/**
+	 * A Type Specific Helper function that allows to create a new Map with exactly the same values as the provided map.
+	 * @param map the values that should be present in the map
+	 * @param loadFactor the percentage of how full the backing array can be before they resize
+	 * @param concurrencyLevel decides how many operations can be performed at once.
+	 * @throws IllegalStateException if the loadfactor is either below/equal to 0 or above/equal to 1
+	 * @throws IllegalStateException if the concurrencyLevel is either below/equal to 0 or above/equal to 65535
+ 	 */
+	public Object2ObjectConcurrentOpenHashMap(Object2ObjectMap<T, V> map, float loadFactor, int concurrencyLevel) {
+		this(map.size(), loadFactor, concurrencyLevel);
+		putAll(map);
+	}
+	
+	@Override
+	public V put(T key, V value) {
+		int hash = getHashCode(key);
+		return getSegment(hash).put(hash, key, value);
+	}
+
+	@Override
+	public V putIfAbsent(T key, V value) {
+		int hash = getHashCode(key);
+		return getSegment(hash).putIfAbsent(hash, key, value);
+	}
+	
+	@Override
+	public V rem(T key) {
+		int hash = getHashCode(key);
+		return getSegment(hash).remove(hash, key);
+	}
+	
+	@Override
+	public boolean remove(Object key, Object value) {
+		int hash = getHashCode(key);
+		return getSegment(hash).remove(hash, key, value);
+	}
+
+	@Override
+	public V remOrDefault(T key, V defaultValue) {
+		int hash = getHashCode(key);
+		return getSegment(hash).removeOrDefault(hash, key, defaultValue);
+	}
+	
+	@Override
+	public V getObject(T key) {
+		int hash = getHashCode(key);
+		return getSegment(hash).get(hash, key);
+	}
+	
+	@Override
+	public V get(Object key) {
+		int hash = getHashCode(key);
+		return getSegment(hash).get(hash, key);
+	}
+	
+	@Override
+	public V getOrDefault(Object key, V defaultValue) {
+		int hash = getHashCode(key);
+		return getSegment(hash).getOrDefault(hash, key, defaultValue);
+	}
+	
+	
+	@Override
+	public void forEach(ObjectObjectConsumer<T, V> action) {
+		for(int i = 0,m=segments.length;i<m;i++) {
+			segments[i].forEach(action);
+		}
+	}
+	
+	@Override
+	public Object2ObjectConcurrentOpenHashMap<T, V> copy() {
+		Object2ObjectConcurrentOpenHashMap<T, V> copy = new Object2ObjectConcurrentOpenHashMap<>(false);
+		copy.segmentShift = segmentShift;
+		copy.segmentMask = segmentMask;
+		copy.segments = new Segment[segments.length];
+		for(int i = 0,m=segments.length;i<m;i++)
+			copy.segments[i] = segments[i].copy(copy);
+		return copy;
+	}
+	
+	@Override
+	public boolean replace(T key, V oldValue, V newValue) {
+		int hash = getHashCode(key);
+		return getSegment(hash).replace(hash, key, oldValue, newValue);
+	}
+
+	@Override
+	public V replace(T key, V value) {
+		int hash = getHashCode(key);
+		return getSegment(hash).replace(hash, key, value);
+	}
+
+	@Override
+	public V compute(T key, ObjectObjectUnaryOperator<T, V> mappingFunction) {
+		Objects.requireNonNull(mappingFunction);
+		int hash = getHashCode(key);
+		return getSegment(hash).compute(hash, key, mappingFunction);
+	}
+
+	@Override
+	public V computeIfAbsent(T key, Object2ObjectFunction<T, V> mappingFunction) {
+		Objects.requireNonNull(mappingFunction);
+		int hash = getHashCode(key);
+		return getSegment(hash).computeIfAbsent(hash, key, mappingFunction);
+	}
+
+	@Override
+	public V supplyIfAbsent(T key, ObjectSupplier<V> valueProvider) {
+		Objects.requireNonNull(valueProvider);
+		int hash = getHashCode(key);
+		return getSegment(hash).supplyIfAbsent(hash, key, valueProvider);
+	}
+
+	@Override
+	public V computeIfPresent(T key, ObjectObjectUnaryOperator<T, V> mappingFunction) {
+		Objects.requireNonNull(mappingFunction);
+		int hash = getHashCode(key);
+		return getSegment(hash).computeIfPresent(hash, key, mappingFunction);
+	}
+
+	@Override
+	public V merge(T key, V value, ObjectObjectUnaryOperator<V, V> mappingFunction) {
+		Objects.requireNonNull(mappingFunction);
+		int hash = getHashCode(key);
+		return getSegment(hash).merge(hash, key, value, mappingFunction);
+	}
+	
+	@Override
+	public void clear() {
+		for(int i = 0,m=segments.length;i<m;i++) {
+			segments[i].clear();
+		}
+	}
+	
+	@Override
+	public boolean isEmpty() {
+		for(int i = 0,m=segments.length;i<m;i++) {
+			if(segments[i].size > 0) return false;
+		}
+		return true;
+	}
+	
+	@Override
+	public int size() {
+		long size = 0L;
+		for(int i = 0,m=segments.length;i<m;i++) {
+			size += segments[i].size;
+		}
+		return size > Integer.MAX_VALUE ? Integer.MAX_VALUE : (int)size;
+	}
+	
+	@Override
+	public ObjectSet<Object2ObjectMap.Entry<T, V>> object2ObjectEntrySet() {
+		if(entrySet == null) entrySet = new MapEntrySet();
+		return entrySet;
+	}
+	
+	@Override
+	public ObjectSet<T> keySet() {
+		if(keySet == null) keySet = new KeySet();
+		return keySet;
+	}
+	
+	@Override
+	public ObjectCollection<V> values() {
+		if(values == null) values = new Values();
+		return values;
+	}
+	
+	protected int getSegmentIndex(int hash) {
+		return (hash >>> segmentShift) & segmentMask;
+	}
+	
+	protected Segment<T, V> getSegment(int hash) {
+	    return segments[(hash >>> segmentShift) & segmentMask];
+	}
+	
+	protected int getHashCode(Object obj) {
+		return HashUtil.mix(Objects.hashCode(obj));
+	}
+	
+	private class MapEntrySet extends AbstractObjectSet<Object2ObjectMap.Entry<T, V>> implements Object2ObjectMap.FastEntrySet<T, V> {
+		@Override
+		public ObjectBidirectionalIterator<Object2ObjectMap.Entry<T, V>> iterator() {
+			return new EntryIterator();
+		}
+		
+		@Override
+		public ObjectBidirectionalIterator<Object2ObjectMap.Entry<T, V>> fastIterator() {
+			return new FastEntryIterator();
+		}
+		
+		@Override
+		public MapEntrySet copy() { throw new UnsupportedOperationException(); }
+		
+		@Override
+		public void forEach(Consumer<? super Object2ObjectMap.Entry<T, V>> action) {
+			for(int i = 0,m=segments.length;i<m;i++) {
+				Segment<T, V> seg = segments[i];
+				long stamp = seg.readLock();
+				try {
+					int index = seg.firstIndex;
+					while(index != -1){
+						action.accept(new BasicEntry<>(seg.keys[index], seg.values[index]));
+						index = (int)seg.links[index];
+					}					
+				}
+				finally {
+					seg.unlockRead(stamp);
+				}
+			}
+		}
+		
+		@Override
+		public void fastForEach(Consumer<? super Object2ObjectMap.Entry<T, V>> action) {
+			BasicEntry<T, V> entry = new BasicEntry<>();
+			for(int i = 0,m=segments.length;i<m;i++) {
+				Segment<T, V> seg = segments[i];
+				long stamp = seg.readLock();
+				try {
+					int index = seg.firstIndex;
+					while(index != -1){
+						entry.set(seg.keys[index], seg.values[index]);
+						action.accept(entry);
+						index = (int)seg.links[index];
+					}					
+				}
+				finally {
+					seg.unlockRead(stamp);
+				}
+			}
+		}
+		
+		@Override
+		public <E> void forEach(E input, ObjectObjectConsumer<E, Object2ObjectMap.Entry<T, V>> action) {
+			Objects.requireNonNull(action);
+			for(int i = 0,m=segments.length;i<m;i++) {
+				Segment<T, V> seg = segments[i];
+				long stamp = seg.readLock();
+				try {
+					int index = seg.firstIndex;
+					while(index != -1) {
+						action.accept(input, new BasicEntry<>(seg.keys[index], seg.values[index]));
+						index = (int)seg.links[index];
+					}					
+				}
+				finally {
+					seg.unlockRead(stamp);
+				}
+			}
+		}
+		
+		@Override
+		public boolean matchesAny(Object2BooleanFunction<Object2ObjectMap.Entry<T, V>> filter) {
+			Objects.requireNonNull(filter);
+			BasicEntry<T, V> entry = new BasicEntry<>();
+			for(int i = 0,m=segments.length;i<m;i++) {
+				Segment<T, V> seg = segments[i];
+				long stamp = seg.readLock();
+				try {
+					int index = seg.firstIndex;
+					while(index != -1) {
+						entry.set(seg.keys[index], seg.values[index]);
+						if(filter.getBoolean(entry)) return true;
+						index = (int)seg.links[index];
+					}					
+				}
+				finally {
+					seg.unlockRead(stamp);
+				}
+			}
+			return false;
+		}
+		
+		@Override
+		public boolean matchesNone(Object2BooleanFunction<Object2ObjectMap.Entry<T, V>> filter) {
+			Objects.requireNonNull(filter);
+			BasicEntry<T, V> entry = new BasicEntry<>();
+			for(int i = 0,m=segments.length;i<m;i++) {
+				Segment<T, V> seg = segments[i];
+				long stamp = seg.readLock();
+				try {
+					int index = seg.firstIndex;
+					while(index != -1) {
+						entry.set(seg.keys[index], seg.values[index]);
+						if(filter.getBoolean(entry)) return false;
+						index = (int)seg.links[index];
+					}					
+				}
+				finally {
+					seg.unlockRead(stamp);
+				}
+			}
+			return true;
+		}
+		
+		@Override
+		public boolean matchesAll(Object2BooleanFunction<Object2ObjectMap.Entry<T, V>> filter) {
+			Objects.requireNonNull(filter);
+			BasicEntry<T, V> entry = new BasicEntry<>();
+			for(int i = 0,m=segments.length;i<m;i++) {
+				Segment<T, V> seg = segments[i];
+				long stamp = seg.readLock();
+				try {
+					int index = seg.firstIndex;
+					while(index != -1) {
+						entry.set(seg.keys[index], seg.values[index]);
+						if(!filter.getBoolean(entry)) return false;
+						index = (int)seg.links[index];
+					}
+				}
+				finally {
+					seg.unlockRead(stamp);
+				}
+			}
+			return true;
+		}
+		
+		@Override
+		public <E> E reduce(E identity, BiFunction<E, Object2ObjectMap.Entry<T, V>, E> operator) {
+			Objects.requireNonNull(operator);
+			E state = identity;
+			for(int i = 0,m=segments.length;i<m;i++) {
+				Segment<T, V> seg = segments[i];
+				long stamp = seg.readLock();
+				try {
+					int index = seg.firstIndex;
+					while(index != -1) {
+						state = operator.apply(state, new BasicEntry<>(seg.keys[index], seg.values[index]));
+						index = (int)seg.links[index];
+					}
+				}
+				finally {
+					seg.unlockRead(stamp);
+				}
+			}
+			return state;
+		}
+		
+		@Override
+		public Object2ObjectMap.Entry<T, V> reduce(ObjectObjectUnaryOperator<Object2ObjectMap.Entry<T, V>, Object2ObjectMap.Entry<T, V>> operator) {
+			Objects.requireNonNull(operator);
+			Object2ObjectMap.Entry<T, V> state = null;
+			boolean empty = true;
+			for(int i = 0,m=segments.length;i<m;i++) {
+				Segment<T, V> seg = segments[i];
+				long stamp = seg.readLock();
+				try {
+					int index = seg.firstIndex;
+					while(index != -1) {
+						if(empty) {
+							empty = false;
+							state = new BasicEntry<>(seg.keys[index], seg.values[index]);
+							index = (int)seg.links[index];
+							continue;
+						}
+						state = operator.apply(state, new BasicEntry<>(seg.keys[index], seg.values[index]));
+						index = (int)seg.links[index];
+					}					
+				}
+				finally {
+					seg.unlockRead(stamp);
+				}
+			}
+			return state;
+		}
+		
+		@Override
+		public Object2ObjectMap.Entry<T, V> findFirst(Object2BooleanFunction<Object2ObjectMap.Entry<T, V>> filter) {
+			Objects.requireNonNull(filter);
+			BasicEntry<T, V> entry = new BasicEntry<>();
+			for(int i = 0,m=segments.length;i<m;i++) {
+				Segment<T, V> seg = segments[i];
+				int index = seg.firstIndex;
+				long stamp = seg.readLock();
+				try {
+					while(index != -1) {
+						entry.set(seg.keys[index], seg.values[index]);
+						if(filter.getBoolean(entry)) return entry;
+						index = (int)seg.links[index];
+					}
+				}
+				finally {
+					seg.unlockRead(stamp);
+				}
+			}
+			return null;
+		}
+		
+		@Override
+		public int count(Object2BooleanFunction<Object2ObjectMap.Entry<T, V>> filter) {
+			Objects.requireNonNull(filter);
+			int result = 0;
+			BasicEntry<T, V> entry = new BasicEntry<>();
+			for(int i = 0,m=segments.length;i<m;i++) {
+				Segment<T, V> seg = segments[i];
+				long stamp = seg.readLock();
+				try {
+					int index = seg.firstIndex;
+					while(index != -1) {
+						entry.set(seg.keys[index], seg.values[index]);
+						if(filter.getBoolean(entry)) result++;
+						index = (int)seg.links[index];
+					}
+				}
+				finally {
+					seg.unlockRead(stamp);
+				}
+			}
+			return result;
+		}
+		
+		@Override
+		@Deprecated
+		public boolean contains(Object o) {
+			if(o instanceof Map.Entry) {
+				if(o instanceof Object2ObjectMap.Entry) {
+					Object2ObjectMap.Entry<T, V> entry = (Object2ObjectMap.Entry<T, V>)o;
+					T key = entry.getKey();
+					int hash = getHashCode(key);
+					Segment<T, V> seg = getSegment(hash);
+					long stamp = seg.readLock();
+					try {
+						int index = seg.findIndex(hash, key);
+						if(index >= 0) return Objects.equals(entry.getValue(), seg.values[index]);
+					}
+					finally {
+						seg.unlockRead(stamp);
+					}
+				}
+				else {
+					Map.Entry<?, ?> entry = (Map.Entry<?, ?>)o;
+					int hash = getHashCode(entry.getKey());
+					Segment<T, V> seg = getSegment(hash);
+					long stamp = seg.readLock();
+					try {
+						int index = seg.findIndex(hash, entry.getKey());
+						if(index >= 0) return Objects.equals(entry.getValue(), seg.values[index]);						
+					}
+					finally {
+						seg.unlockRead(stamp);
+					}
+				}
+			}
+			return false;
+		}
+		
+		@Override
+		@Deprecated
+		public boolean remove(Object o) {
+			if(o instanceof Map.Entry) {
+				if(o instanceof Object2ObjectMap.Entry) {
+					Object2ObjectMap.Entry<T, V> entry = (Object2ObjectMap.Entry<T, V>)o;
+					return Object2ObjectConcurrentOpenHashMap.this.remove(entry.getKey(), entry.getValue());
+				}
+				Map.Entry<?, ?> entry = (Map.Entry<?, ?>)o;
+				return Object2ObjectConcurrentOpenHashMap.this.remove(entry.getKey(), entry.getValue());
+			}
+			return false;
+		}
+		
+		@Override
+		public int size() {
+			return Object2ObjectConcurrentOpenHashMap.this.size();
+		}
+		
+		@Override
+		public void clear() {
+			Object2ObjectConcurrentOpenHashMap.this.clear();
+		}
+	}
+	
+	private final class KeySet extends AbstractObjectSet<T> implements ObjectSet<T> {
+		
+		@Override
+		public boolean add(T key) { throw new UnsupportedOperationException(); }
+		
+		@Override
+		@Deprecated
+		public boolean contains(Object e) {
+			return containsKey(e);
+		}
+		
+		@Override
+		public boolean remove(Object o) {
+			int oldSize = size();
+			Object2ObjectConcurrentOpenHashMap.this.remove(o);
+			return size() != oldSize;
+		}
+		
+		@Override
+		public ObjectBidirectionalIterator<T> iterator() {
+			return new KeyIterator();
+		}
+		
+		@Override
+		public KeySet copy() { throw new UnsupportedOperationException(); }
+		
+		@Override
+		public int size() {
+			return Object2ObjectConcurrentOpenHashMap.this.size();
+		}
+		
+		@Override
+		public void clear() {
+			Object2ObjectConcurrentOpenHashMap.this.clear();
+		}
+		
+		@Override
+		public void forEach(Consumer<? super T> action) {
+			Objects.requireNonNull(action);
+			for(int i = 0,m=segments.length;i<m;i++) {
+				Segment<T, V> seg = segments[i];
+				long stamp = seg.readLock();
+				try {
+					int index = seg.firstIndex;
+					while(index != -1){
+						action.accept(seg.keys[index]);
+						index = (int)seg.links[index];
+					}
+				}
+				finally {
+					seg.unlockRead(stamp);
+				}
+			}
+		}
+		
+		@Override
+		public <E> void forEach(E input, ObjectObjectConsumer<E, T> action) {
+			Objects.requireNonNull(action);
+			for(int i = 0,m=segments.length;i<m;i++) {
+				Segment<T, V> seg = segments[i];
+				long stamp = seg.readLock();
+				try {
+					int index = seg.firstIndex;
+					while(index != -1){
+						action.accept(input, seg.keys[index]);
+						index = (int)seg.links[index];
+					}
+				}
+				finally {
+					seg.unlockRead(stamp);
+				}
+			}
+		}
+		
+		@Override
+		public boolean matchesAny(Object2BooleanFunction<T> filter) {
+			Objects.requireNonNull(filter);
+			for(int i = 0,m=segments.length;i<m;i++) {
+				Segment<T, V> seg = segments[i];
+				long stamp = seg.readLock();
+				try {
+					int index = seg.firstIndex;
+					while(index != -1){
+						if(filter.getBoolean(seg.keys[index])) return true;
+						index = (int)seg.links[index];
+					}					
+				}
+				finally {
+					seg.unlockRead(stamp);
+				}
+			}
+			return false;
+		}
+		
+		@Override
+		public boolean matchesNone(Object2BooleanFunction<T> filter) {
+			Objects.requireNonNull(filter);
+			for(int i = 0,m=segments.length;i<m;i++) {
+				Segment<T, V> seg = segments[i];
+				long stamp = seg.readLock();
+				try {
+					int index = seg.firstIndex;
+					while(index != -1){
+						if(filter.getBoolean(seg.keys[index])) return false;
+						index = (int)seg.links[index];
+					}
+				}
+				finally {
+					seg.unlockRead(stamp);
+				}
+			}
+			return true;
+		}
+		
+		@Override
+		public boolean matchesAll(Object2BooleanFunction<T> filter) {
+			Objects.requireNonNull(filter);
+			for(int i = 0,m=segments.length;i<m;i++) {
+				Segment<T, V> seg = segments[i];
+				long stamp = seg.readLock();
+				try {
+					int index = seg.firstIndex;
+					while(index != -1){
+						if(!filter.getBoolean(seg.keys[index])) return false;
+						index = (int)seg.links[index];
+					}
+				}
+				finally {
+					seg.unlockRead(stamp);
+				}
+			}
+			return true;
+		}
+		
+		@Override
+		public <E> E reduce(E identity, BiFunction<E, T, E> operator) {
+			Objects.requireNonNull(operator);
+			E state = identity;
+			for(int i = 0,m=segments.length;i<m;i++) {
+				Segment<T, V> seg = segments[i];
+				long stamp = seg.readLock();
+				try {
+					int index = seg.firstIndex;
+					while(index != -1){
+						state = operator.apply(state, seg.keys[index]);
+						index = (int)seg.links[index];
+					}
+				}
+				finally {
+					seg.unlockRead(stamp);
+				}
+			}
+			return state;
+		}
+		
+		@Override
+		public T reduce(ObjectObjectUnaryOperator<T, T> operator) {
+			Objects.requireNonNull(operator);
+			T state = null;
+			boolean empty = true;
+			for(int i = 0,m=segments.length;i<m;i++) {
+				Segment<T, V> seg = segments[i];
+				long stamp = seg.readLock();
+				try {
+					int index = seg.firstIndex;
+					while(index != -1){
+						if(empty) {
+							empty = false;
+							state = seg.keys[index];
+							index = (int)seg.links[index];
+							continue;
+						}
+						state = operator.apply(state, seg.keys[index]);
+						index = (int)seg.links[index];
+					}
+				}
+				finally {
+					seg.unlockRead(stamp);
+				}
+			}
+			return state;
+		}
+		
+		@Override
+		public T findFirst(Object2BooleanFunction<T> filter) {
+			Objects.requireNonNull(filter);
+			for(int i = 0,m=segments.length;i<m;i++) {
+				Segment<T, V> seg = segments[i];
+				long stamp = seg.readLock();
+				try {
+					int index = seg.firstIndex;
+					while(index != -1){
+						if(filter.getBoolean(seg.keys[index])) return seg.keys[index];
+						index = (int)seg.links[index];
+					}
+				}
+				finally {
+					seg.unlockRead(stamp);
+				}
+			}
+			return null;
+		}
+		
+		@Override
+		public int count(Object2BooleanFunction<T> filter) {
+			Objects.requireNonNull(filter);
+			int result = 0;
+			for(int i = 0,m=segments.length;i<m;i++) {
+				Segment<T, V> seg = segments[i];
+				long stamp = seg.readLock();
+				try {
+					int index = seg.firstIndex;
+					while(index != -1){
+						if(filter.getBoolean(seg.keys[index])) result++;
+						index = (int)seg.links[index];
+					}
+				}
+				finally {
+					seg.unlockRead(stamp);
+				}
+			}
+			return result;
+		}
+	}
+	
+	private class Values extends AbstractObjectCollection<V> {
+		@Override
+		@Deprecated
+		public boolean contains(Object e) {
+			return containsValue(e);
+		}
+		
+		@Override
+		public boolean add(V o) {
+			throw new UnsupportedOperationException();
+		}
+
+		@Override
+		public ObjectIterator<V> iterator() {
+			return new ValueIterator();
+		}
+		
+		@Override
+		public int size() {
+			return Object2ObjectConcurrentOpenHashMap.this.size();
+		}
+		
+		@Override
+		public void clear() {
+			Object2ObjectConcurrentOpenHashMap.this.clear();
+		}
+		
+		@Override
+		public void forEach(Consumer<? super V> action) {
+			Objects.requireNonNull(action);
+			for(int i = 0,m=segments.length;i<m;i++) {
+				Segment<T, V> seg = segments[i];
+				long stamp = seg.readLock();
+				try {
+					int index = seg.firstIndex;
+					while(index != -1){
+						action.accept(seg.values[index]);
+						index = (int)seg.links[index];
+					}
+				}
+				finally {
+					seg.unlockRead(stamp);
+				}
+			}
+		}
+		
+		@Override
+		public <E> void forEach(E input, ObjectObjectConsumer<E, V> action) {
+			Objects.requireNonNull(action);
+			for(int i = 0,m=segments.length;i<m;i++) {
+				Segment<T, V> seg = segments[i];
+				long stamp = seg.readLock();
+				try {
+					int index = seg.firstIndex;
+					while(index != -1){
+						action.accept(input, seg.values[index]);
+						index = (int)seg.links[index];
+					}
+				}
+				finally {
+					seg.unlockRead(stamp);
+				}
+			}
+		}
+		
+		@Override
+		public boolean matchesAny(Object2BooleanFunction<V> filter) {
+			Objects.requireNonNull(filter);
+			for(int i = 0,m=segments.length;i<m;i++) {
+				Segment<T, V> seg = segments[i];
+				long stamp = seg.readLock();
+				try {
+					int index = seg.firstIndex;
+					while(index != -1){
+						if(filter.getBoolean(seg.values[index])) return true;
+						index = (int)seg.links[index];
+					}
+				}
+				finally {
+					seg.unlockRead(stamp);
+				}
+			}
+			return false;
+		}
+		
+		@Override
+		public boolean matchesNone(Object2BooleanFunction<V> filter) {
+			Objects.requireNonNull(filter);
+			for(int i = 0,m=segments.length;i<m;i++) {
+				Segment<T, V> seg = segments[i];
+				long stamp = seg.readLock();
+				try {
+					int index = seg.firstIndex;
+					while(index != -1) {
+						if(filter.getBoolean(seg.values[index])) return false;
+						index = (int)seg.links[index];
+					}
+				}
+				finally {
+					seg.unlockRead(stamp);
+				}
+			}
+			return true;
+		}
+		
+		@Override
+		public boolean matchesAll(Object2BooleanFunction<V> filter) {
+			Objects.requireNonNull(filter);
+			for(int i = 0,m=segments.length;i<m;i++) {
+				Segment<T, V> seg = segments[i];
+				long stamp = seg.readLock();
+				try {
+					int index = seg.firstIndex;
+					while(index != -1) {
+						if(!filter.getBoolean(seg.values[index])) return false;
+						index = (int)seg.links[index];
+					}
+				}
+				finally {
+					seg.unlockRead(stamp);
+				}
+			}
+			return true;
+		}
+		
+		@Override
+		public <E> E reduce(E identity, BiFunction<E, V, E> operator) {
+			Objects.requireNonNull(operator);
+			E state = identity;
+			for(int i = 0,m=segments.length;i<m;i++) {
+				Segment<T, V> seg = segments[i];
+				long stamp = seg.readLock();
+				try {
+					int index = seg.firstIndex;
+					while(index != -1) {
+						state = operator.apply(state, seg.values[index]);
+						index = (int)seg.links[index];
+					}
+				}
+				finally {
+					seg.unlockRead(stamp);
+				}
+			}
+			return state;
+		}
+		
+		@Override
+		public V reduce(ObjectObjectUnaryOperator<V, V> operator) {
+			Objects.requireNonNull(operator);
+			V state = null;
+			boolean empty = true;
+			for(int i = 0,m=segments.length;i<m;i++) {
+				Segment<T, V> seg = segments[i];
+				long stamp = seg.readLock();
+				try {
+					int index = seg.firstIndex;
+					while(index != -1) {
+						if(empty) {
+							empty = false;
+							state = seg.values[index];
+							index = (int)seg.links[index];
+							continue;
+						}
+						state = operator.apply(state, seg.values[index]);
+						index = (int)seg.links[index];
+					}
+				}
+				finally {
+					seg.unlockRead(stamp);
+				}
+			}
+			return state;
+		}
+		
+		@Override
+		public V findFirst(Object2BooleanFunction<V> filter) {
+			Objects.requireNonNull(filter);
+			if(size() <= 0) return null;
+			for(int i = 0,m=segments.length;i<m;i++) {
+				Segment<T, V> seg = segments[i];
+				long stamp = seg.readLock();
+				try {
+					int index = seg.firstIndex;
+					while(index != -1){
+						if(filter.getBoolean(seg.values[index])) return seg.values[index];
+						index = (int)seg.links[index];
+					}
+				}
+				finally {
+					seg.unlockRead(stamp);
+				}
+			}
+			return null;
+		}
+		
+		@Override
+		public int count(Object2BooleanFunction<V> filter) {
+			Objects.requireNonNull(filter);
+			int result = 0;
+			for(int i = 0,m=segments.length;i<m;i++) {
+				Segment<T, V> seg = segments[i];
+				long stamp = seg.readLock();
+				try {
+					int index = seg.firstIndex;
+					while(index != -1){
+						if(filter.getBoolean(seg.values[index])) result++;
+						index = (int)seg.links[index];
+					}
+				}
+				finally {
+					seg.unlockRead(stamp);
+				}
+			}
+			return result;
+		}
+	}
+	
+	private class FastEntryIterator extends MapIterator implements ObjectBidirectionalIterator<Object2ObjectMap.Entry<T, V>> {
+		MapEntry entry = new MapEntry();
+		
+		public FastEntryIterator() {}
+		
+		@Override
+		public Object2ObjectMap.Entry<T, V> next() {
+			entry.set(nextEntry(), currentSegment());
+			return entry;
+		}
+		
+		@Override
+		public Object2ObjectMap.Entry<T, V> previous() {
+			entry.set(previousEntry(), currentSegment());
+			return entry;
+		}
+	}
+	
+	private class EntryIterator extends MapIterator implements ObjectBidirectionalIterator<Object2ObjectMap.Entry<T, V>> {
+		MapEntry entry;
+		
+		public EntryIterator() {}
+		
+		@Override
+		public Object2ObjectMap.Entry<T, V> next() {
+			return entry = new MapEntry(nextEntry(), currentSegment());
+		}
+	
+		@Override
+		public Object2ObjectMap.Entry<T, V> previous() {
+			return entry = new MapEntry(previousEntry(), currentSegment());
+		}
+	
+		@Override
+		public void remove() {
+			super.remove();
+			entry.clear();
+		}
+	}
+	
+	private class ValueIterator extends MapIterator implements ObjectBidirectionalIterator<V> {
+		public ValueIterator() {}
+		
+		@Override
+		public V previous() {
+			return entry(previousEntry(), currentSegment());
+		}
+		
+		@Override
+		public V next() {
+			return entry(nextEntry(), currentSegment());
+		}
+		
+		protected V entry(int entry, int segment) {
+			return segments[segment].values[entry];
+		}
+	}
+	
+	private class KeyIterator extends MapIterator implements ObjectBidirectionalIterator<T> {
+		
+		public KeyIterator() {}
+		
+		@Override
+		public T previous() {
+			return entry(previousEntry(), currentSegment());
+		}
+		
+		@Override
+		public T next() {
+			return entry(nextEntry(), currentSegment());
+		}
+		
+		protected T entry(int entry, int segment) {
+			return segments[segment].keys[entry];
+		}
+	}
+	
+	private class MapIterator {
+		int previous = -1;
+		int next = -1;
+		int current = -1;
+		int previousSegment = -1;
+		int nextSegment = -1;
+		int currentSegment = -1;
+		
+		MapIterator() {
+			currentSegment = getFirstSegment();
+			if(currentSegment != -1) next = segments[currentSegment].firstIndex;
+		}
+		
+		public boolean hasNext() {
+			return next != -1 || nextSegment != -1;
+		}
+		
+		public boolean hasPrevious() {
+			return previous != -1 || previousSegment != -1;
+		}
+		
+		public int currentSegment() {
+			return currentSegment;
+		}
+		
+		public int previousEntry() {
+			if(!hasPrevious()) throw new NoSuchElementException();
+			if(previousSegment != -1) {
+				nextSegment = currentSegment;
+				currentSegment = previousSegment;
+				previousSegment = -1;
+				next = current = segments[currentSegment].lastIndex;
+			}
+			else {
+				if(next != -1) nextSegment = -1;
+				next = current = previous;
+			}
+			findPreviousIndex();
+			return current;
+		}
+		
+		public int nextEntry() {
+			if(!hasNext()) throw new NoSuchElementException();
+			if(nextSegment != -1) {
+				previousSegment = currentSegment;
+				currentSegment = nextSegment;
+				nextSegment = -1;
+				previous = current = segments[currentSegment].firstIndex;
+			}
+			else {
+				if(previous != -1) previousSegment = -1;
+				previous = current = next;
+			}
+			findNextIndex();
+			return current;
+		}
+		
+		public void remove() {
+			if(current == -1) throw new IllegalStateException();
+			Segment<T, V> seg = segments[currentSegment];
+			long stamp = seg.writeLock();
+			try {
+				if(current == previous) findPreviousIndex();
+				else findNextIndex();
+				seg.size--;
+				if(previous == -1) seg.firstIndex = next;
+				else seg.links[previous] ^= ((seg.links[previous] ^ (next & 0xFFFFFFFFL)) & 0xFFFFFFFFL);
+				
+				if(next == -1) seg.lastIndex = previous;
+				else seg.links[next] ^= ((seg.links[next] ^ ((previous & 0xFFFFFFFFL) << 32)) & 0xFFFFFFFF00000000L);
+				
+				if(current == seg.nullIndex) {
+					current = -1;
+					seg.containsNull = false;
+					seg.keys[seg.nullIndex] = null;
+					seg.values[seg.nullIndex] = null;
+				}
+				else {
+					int slot, last, startPos = current;
+					current = -1;
+					T current;
+					while(true) {
+						startPos = ((last = startPos) + 1) & seg.mask;
+						while(true){
+							if((current = seg.keys[startPos]) == null) {
+								seg.keys[last] = null;
+								seg.values[last] = null;
+								return;
+							}
+							slot = HashUtil.mix(Objects.hashCode(current)) & seg.mask;
+							if(last <= startPos ? (last >= slot || slot > startPos) : (last >= slot && slot > startPos)) break;
+							startPos = ++startPos & seg.mask;
+						}
+						seg.keys[last] = current;
+						seg.values[last] = seg.values[startPos];
+						if(next == startPos) next = last;
+						if(previous == startPos) previous = last;
+						seg.onNodeMoved(startPos, last);
+					}
+				}
+			}
+			finally {
+				seg.unlockWrite(stamp);
+			}
+		}
+		
+		protected void findPreviousIndex() {
+			previous = (int)(segments[currentSegment].links[current] >>> 32);
+			if(previous == -1) {
+				previousSegment = findPreviousSegment(currentSegment-1);
+			}
+		}
+		
+		protected void findNextIndex() {
+			next = (int)(segments[currentSegment].links[current]);
+			if(next == -1) {
+				nextSegment = findNextSegment(currentSegment+1);
+			}
+		}
+		
+		private int getFirstSegment() {
+			for(int i = 0,m=segments.length;i<m;i++) {
+				if(segments[i].firstIndex != -1) return i;
+			}
+			return -1;
+		}
+		
+		private int findNextSegment(int index) {
+			for(;index < segments.length && segments[index].firstIndex == -1;index++);
+			return index >= segments.length ? -1 : index;
+		}
+		
+		private int findPreviousSegment(int index) {
+			for(;index >= 0 && segments[index].lastIndex == -1;index--);
+			return index >= 0 ? index : -1;
+		}
+	}
+	
+	protected class MapEntry implements Object2ObjectMap.Entry<T, V>, Map.Entry<T, V> {
+		int index = -1;
+		int segmentIndex = -1;
+		
+		public MapEntry() {}
+		public MapEntry(int index, int segmentIndex) {
+			set(index, segmentIndex);
+		}
+		
+		public void set(int index, int segmentIndex) {
+			this.index = index;
+			this.segmentIndex = segmentIndex;
+		}
+		
+		public void clear() {
+			index = -1;
+			segmentIndex = -1;
+		}
+		
+		@Override
+		public T getKey() {
+			return segments[segmentIndex].keys[index];
+		}
+		
+		@Override
+		public V getValue() {
+			return segments[segmentIndex].values[index];
+		}
+		
+		@Override
+		public V setValue(V value) {
+			Segment<T, V> seg = segments[segmentIndex];
+			long stamp = seg.writeLock();
+			try
+			{
+				V oldValue = getValue();
+				seg.values[index] = value;
+				return oldValue;
+			}
+			finally {
+				seg.unlockWrite(stamp);
+			}
+		}
+		
+		@Override
+		public boolean equals(Object obj) {
+			if(obj instanceof Map.Entry) {
+				if(obj instanceof Object2ObjectMap.Entry) {
+					Object2ObjectMap.Entry<T, V> entry = (Object2ObjectMap.Entry<T, V>)obj;
+					return Objects.equals(getKey(), entry.getKey()) && Objects.equals(getValue(), entry.getValue());
+				}
+				Map.Entry<?, ?> entry = (Map.Entry<?, ?>)obj;
+				Object key = entry.getKey();
+				Object value = entry.getValue();
+				return Objects.equals(getKey(), key) && Objects.equals(getValue(), value);
+			}
+			return false;
+		}
+		
+		@Override
+		public int hashCode() {
+			return Objects.hashCode(getKey()) ^ Objects.hashCode(getValue());
+		}
+		
+		@Override
+		public String toString() {
+			return Objects.toString(getKey()) + "=" + Objects.toString(getValue());
+		}
+	}
+	
+	protected static class Segment<T, V> extends StampedLock
+	{
+		private static final long serialVersionUID = -446894977795760975L;
+		protected final Object2ObjectConcurrentOpenHashMap<T, V> map;
+		/** The Backing keys array */
+		protected transient T[] keys;
+		/** The Backing values array */
+		protected transient V[] values;
+		/** The Backing array for links between nodes. Left 32 Bits => Previous Entry, Right 32 Bits => Next Entry */
+		protected transient long[] links;
+		/** The First Index in the Map */
+		protected int firstIndex = -1;
+		/** The Last Index in the Map */
+		protected int lastIndex = -1;
+		/** If a null value is present */
+		protected transient boolean containsNull;
+		/** Index of the Null Value */
+		protected transient int nullIndex;
+		/** Maximum amount of Values that can be stored before the array gets expanded usually 75% */
+		protected transient int maxFill;
+		/** Max Index that is allowed to be searched through nullIndex - 1 */
+		protected transient int mask;
+		/** Amount of Elements stored in the HashMap */
+		protected int size;
+		/** Minimum array size the Segment will be */
+		protected transient int minCapacity;
+		/** How full the Arrays are allowed to get before resize */
+		protected float loadFactor;
+		
+		protected Segment(Object2ObjectConcurrentOpenHashMap<T, V> map) {
+			this.map = map;
+		}
+		
+		protected Segment(Object2ObjectConcurrentOpenHashMap<T, V> map, int minCapacity, float loadFactor, boolean isNullContainer) {
+			this.map = map;
+			this.minCapacity = minCapacity;
+			this.loadFactor = loadFactor;
+			mask = minCapacity - 1;
+			maxFill = Math.min((int)Math.ceil(minCapacity * loadFactor), minCapacity - 1);
+			nullIndex = isNullContainer ? minCapacity : -1;
+			int arraySize = minCapacity + (isNullContainer ? 1 : 0);
+			keys = (T[])new Object[arraySize];
+			values = (V[])new Object[arraySize];
+			links = new long[arraySize];
+		}
+		
+		protected Segment<T, V> copy(Object2ObjectConcurrentOpenHashMap<T, V> newMap) {
+			long stamp = readLock();
+			try
+			{
+				Segment<T, V> copy = new Segment<>(newMap);
+				copy.keys = Arrays.copyOf(keys, keys.length);
+				copy.values = Arrays.copyOf(values, values.length);
+				copy.links = Arrays.copyOf(links, links.length);
+				copy.firstIndex = firstIndex;
+				copy.lastIndex = lastIndex;
+				copy.containsNull = containsNull;
+				copy.nullIndex = nullIndex;
+				copy.maxFill = maxFill;
+				copy.mask = mask;
+				copy.size = size;
+				copy.minCapacity = minCapacity;
+				copy.loadFactor = loadFactor;
+				return copy;				
+			}
+			finally {
+				unlockRead(stamp);
+			}
+		}
+		
+		protected V getDefaultReturnValue() {
+			return map.getDefaultReturnValue();
+		}
+		
+		protected V put(int hash, T key, V value) {
+			long stamp = writeLock();
+			try {
+				int slot = findIndex(hash, key);
+				if(slot < 0) {
+					insert(-slot-1, key, value);
+					return getDefaultReturnValue();
+				}
+				V oldValue = values[slot];
+				values[slot] = value;
+				return oldValue;
+			}
+			finally {
+				unlockWrite(stamp);
+			}
+		}
+		
+		protected V putIfAbsent(int hash, T key, V value) {
+			long stamp = writeLock();
+			try {
+				int slot = findIndex(hash, key);
+				if(slot < 0) {
+					insert(-slot-1, key, value);
+					return getDefaultReturnValue();
+				}
+				return values[slot];
+			}
+			finally {
+				unlockWrite(stamp);
+			}	
+		}
+		
+		
+		@Deprecated
+		protected boolean containsKey(int hash, Object key) {
+			long stamp = readLock();
+			try {
+				return findIndex(hash, key) >= 0;				
+			}
+			finally {
+				unlockRead(stamp);
+			}
+		}
+		
+		@Deprecated
+		protected boolean containsValue(Object value) {
+			long stamp = readLock();
+			try {
+				int index = firstIndex;
+				while(index != -1) {
+					if(Objects.equals(values[index], value)) return true;
+					index = (int)links[index];
+				}
+				return false;
+			}
+			finally {
+				unlockRead(stamp);
+			}
+		}
+		
+		protected V get(int hash, Object key) {
+			long stamp = readLock();
+			try {
+				int slot = findIndex(hash, key);
+				return slot < 0 ? getDefaultReturnValue() : values[slot];	
+			}
+			finally {
+				unlockRead(stamp);
+			}
+		}
+		
+		protected V getOrDefault(int hash, Object key, V defaultValue) {
+			long stamp = readLock();
+			try {
+				int slot = findIndex(hash, key);
+				return slot < 0 ? defaultValue : values[slot];				
+			}
+			finally {
+				unlockRead(stamp);
+			}
+		}
+
+		protected void forEach(ObjectObjectConsumer<T, V> action) {
+			long stamp = readLock();
+			try {
+				int index = firstIndex;
+				while(index != -1) {
+					action.accept(keys[index], values[index]);
+					index = (int)links[index];
+				}				
+			}
+			finally {
+				unlockRead(stamp);
+			}
+		}
+		
+		protected V removeOrDefault(int hash, T key, V defaultValue) {
+			long stamp = writeLock();
+			try {
+				int slot = findIndex(hash, key);
+				if(slot < 0) return defaultValue;
+				return removeIndex(slot);
+			}
+			finally {
+				unlockWrite(stamp);
+			}
+		}
+		
+		protected V remove(int hash, Object key) {
+			long stamp = writeLock();
+			try {
+				int slot = findIndex(hash, key);
+				if(slot < 0) return getDefaultReturnValue();
+				return removeIndex(slot);
+			}
+			finally {
+				unlockWrite(stamp);
+			}
+		}
+		
+		protected boolean remove(int hash, Object key, Object value) {
+			long stamp = writeLock();
+			try
+			{
+				if(key == null) {
+					if(containsNull && Objects.equals(value, values[nullIndex])) {
+						removeNullIndex();
+						return true;
+					}
+					return false;
+				}
+				int pos = hash & mask;
+				T current = keys[pos];
+				if(current == null) return false;
+				if(Objects.equals(key, current) && Objects.equals(value, values[pos])) {
+					removeIndex(pos);
+					return true;
+				}
+				while(true) {
+					if((current = keys[pos = (++pos & mask)]) == null) return false;
+					else if(Objects.equals(key, current) && Objects.equals(value, values[pos])){
+						removeIndex(pos);
+						return true;
+					}
+				}				
+			}
+			finally {
+				unlockWrite(stamp);
+			}
+		}
+		
+		protected boolean replace(int hash, T key, V oldValue, V newValue) {
+			long stamp = writeLock();
+			try {
+				int index = findIndex(hash, key);
+				if(index < 0 || values[index] != oldValue) return false;
+				values[index] = newValue;
+				return true;
+			}
+			finally {
+				unlockWrite(stamp);
+			}
+		}
+		
+		protected V replace(int hash, T key, V value) {
+			long stamp = writeLock();
+			try {
+				int index = findIndex(hash, key);
+				if(index < 0) return getDefaultReturnValue();
+				V oldValue = values[index];
+				values[index] = value;
+				return oldValue;
+			}
+			finally {
+				unlockWrite(stamp);
+			}
+		}
+		
+		protected V compute(int hash, T key, ObjectObjectUnaryOperator<T, V> mappingFunction) {
+			long stamp = writeLock();
+			try {
+				int index = findIndex(hash, key);
+				if(index < 0) {
+					V newValue = mappingFunction.apply(key, getDefaultReturnValue());
+					if(Objects.equals(newValue, getDefaultReturnValue())) return newValue;
+					insert(-index-1, key, newValue);
+					return newValue;
+				}
+				V newValue = mappingFunction.apply(key, values[index]);
+				if(Objects.equals(newValue, getDefaultReturnValue())) {
+					removeIndex(index);
+					return newValue;
+				}
+				values[index] = newValue;
+				return newValue;
+			}
+			finally {
+				unlockWrite(stamp);
+			}
+		}
+		
+		protected V computeIfAbsent(int hash, T key, Object2ObjectFunction<T, V> mappingFunction) {
+			long stamp = writeLock();
+			try {
+				int index = findIndex(hash, key);
+				if(index < 0) {
+					V newValue = mappingFunction.getObject(key);
+					if(Objects.equals(newValue, getDefaultReturnValue())) return newValue;
+					insert(-index-1, key, newValue);
+					return newValue;
+				}
+				V newValue = values[index];
+				if(Objects.equals(newValue, getDefaultReturnValue())) {
+					newValue = mappingFunction.getObject(key);
+					if(Objects.equals(newValue, getDefaultReturnValue())) return newValue;
+					values[index] = newValue;
+				}
+				return newValue;
+			}
+			finally {
+				unlockWrite(stamp);
+			}
+		}
+		
+		protected V supplyIfAbsent(int hash, T key, ObjectSupplier<V> valueProvider) {
+			long stamp = writeLock();
+			try {
+				int index = findIndex(hash, key);
+				if(index < 0) {
+					V newValue = valueProvider.get();
+					if(Objects.equals(newValue, getDefaultReturnValue())) return newValue;
+					insert(-index-1, key, newValue);
+					return newValue;
+				}
+				V newValue = values[index];
+				if(Objects.equals(newValue, getDefaultReturnValue())) {
+					newValue = valueProvider.get();
+					if(Objects.equals(newValue, getDefaultReturnValue())) return newValue;
+					values[index] = newValue;
+				}
+				return newValue;
+			}
+			finally {
+				unlockWrite(stamp);
+			}
+		}
+		
+		protected V computeIfPresent(int hash, T key, ObjectObjectUnaryOperator<T, V> mappingFunction) {
+			long stamp = writeLock();
+			try {
+				int index = findIndex(hash, key);
+				if(index < 0 || Objects.equals(values[index], getDefaultReturnValue())) return getDefaultReturnValue();
+				V newValue = mappingFunction.apply(key, values[index]);
+				if(Objects.equals(newValue, getDefaultReturnValue())) {
+					removeIndex(index);
+					return newValue;
+				}
+				values[index] = newValue;
+				return newValue;
+			}
+			finally {
+				unlockWrite(stamp);
+			}
+		}
+		
+		protected V merge(int hash, T key, V value, ObjectObjectUnaryOperator<V, V> mappingFunction) {
+			long stamp = writeLock();
+			try {
+				int index = findIndex(hash, key);
+				V newValue = index < 0 || Objects.equals(values[index], getDefaultReturnValue()) ? value : mappingFunction.apply(values[index], value);
+				if(Objects.equals(newValue, getDefaultReturnValue())) {
+					if(index >= 0)
+						removeIndex(index);
+				}
+				else if(index < 0) insert(-index-1, key, newValue);
+				else values[index] = newValue;
+				return newValue;
+			}
+			finally {
+				unlockWrite(stamp);
+			}
+		}
+		
+		protected void clear() {
+			if(size == 0) return;
+			long stamp = writeLock();
+			try {
+				size = 0;
+				containsNull = false;
+				Arrays.fill(keys, null);
+				Arrays.fill(values, null);
+				firstIndex = -1;
+				lastIndex = -1;
+			}
+			finally {
+				unlockWrite(stamp);
+			}
+		}
+		
+		protected boolean trim(int size) {
+			int request = Math.max(minCapacity, HashUtil.nextPowerOfTwo((int)Math.ceil(size / loadFactor)));
+			if(request >= size || this.size > Math.min((int)Math.ceil(request * loadFactor), request - 1)) return false;
+			long stamp = writeLock();
+			try {
+				try {
+					rehash(request);
+				}
+				catch(OutOfMemoryError noMemory) { return false; }
+				return true;
+			}
+			finally {
+				unlockWrite(stamp);
+			}
+		}
+		
+		protected void clearAndTrim(int size) {
+			int request = Math.max(minCapacity, HashUtil.nextPowerOfTwo((int)Math.ceil(size / loadFactor)));
+			if(request >= size) {
+				clear();
+				return;
+			}
+			long stamp = writeLock();
+			try {
+				if(nullIndex != -1) {
+					nullIndex = request;
+				}
+				mask = request-1;
+				maxFill = Math.min((int)Math.ceil(request * loadFactor), request - 1);
+				int arraySize = request + (nullIndex != -1 ? 1 : 0);
+				keys = (T[])new Object[arraySize];
+				values = (V[])new Object[arraySize];
+				links = new long[arraySize];
+				this.size = 0;
+				firstIndex = -1;
+				lastIndex = -1;
+				containsNull = false;
+			}
+			finally {
+				unlockWrite(stamp);
+			}
+		}
+		
+		protected void insert(int slot, T key, V value) {
+			if(slot == nullIndex) containsNull = true;
+			keys[slot] = key;
+			values[slot] = value;
+			if(size == 0) {
+				firstIndex = lastIndex = slot;
+				links[slot] = -1L;
+			}
+			else {
+				links[lastIndex] ^= ((links[lastIndex] ^ (slot & 0xFFFFFFFFL)) & 0xFFFFFFFFL);
+				links[slot] = ((lastIndex & 0xFFFFFFFFL) << 32) | 0xFFFFFFFFL;
+				lastIndex = slot;
+			}
+			if(size++ >= maxFill) rehash(HashUtil.arraySize(size+1, loadFactor));
+		}
+		
+		protected V removeIndex(int pos) {
+			if(pos == nullIndex) return containsNull ? removeNullIndex() : getDefaultReturnValue();
+			V value = values[pos];
+			keys[pos] = null;
+			values[pos] = null;
+			size--;
+			onNodeRemoved(pos);
+			shiftKeys(pos);
+			if(nullIndex > minCapacity && size < maxFill / 4 && nullIndex > HashUtil.DEFAULT_MIN_CAPACITY) rehash(nullIndex / 2);
+			return value;
+		}
+		
+		protected V removeNullIndex() {
+			V value = values[nullIndex];
+			containsNull = false;
+			keys[nullIndex] = null;
+			values[nullIndex] = null;
+			size--;
+			onNodeRemoved(nullIndex);
+			if(nullIndex > minCapacity && size < maxFill / 4 && nullIndex > HashUtil.DEFAULT_MIN_CAPACITY) rehash(nullIndex / 2);
+			return value;
+		}
+		
+		protected int findIndex(int hash, Object key) {
+			if(key == null) return containsNull ? nullIndex : -(nullIndex + 1);
+			int pos = hash & mask;
+			T current = keys[pos];
+			if(current != null) {
+				if(Objects.equals(key, current)) return pos;
+				while((current = keys[pos = (++pos & mask)]) != null)
+					if(Objects.equals(key, current)) return pos;
+			}
+			return -(pos + 1);
+		}
+		
+		protected void shiftKeys(int startPos) {
+			int slot, last;
+			T current;
+			while(true) {
+				startPos = ((last = startPos) + 1) & mask;
+				while(true){
+					if((current = keys[startPos]) == null) {
+						keys[last] = null;
+						values[last] = null;
+						return;
+					}
+					slot = HashUtil.mix(Objects.hashCode(current)) & mask;
+					if(last <= startPos ? (last >= slot || slot > startPos) : (last >= slot && slot > startPos)) break;
+					startPos = ++startPos & mask;
+				}
+				keys[last] = current;
+				values[last] = values[startPos];
+				onNodeMoved(startPos, last);
+			}
+		}
+		
+		protected void rehash(int newSize) {
+			int newMask = newSize - 1;
+			int arraySize = newSize + (nullIndex != -1 ? 1 : 0);
+			T[] newKeys = (T[])new Object[arraySize];
+			V[] newValues = (V[])new Object[arraySize];
+			long[] newLinks = new long[arraySize];
+			int i = firstIndex, prev = -1, newPrev = -1, pos;
+			firstIndex = -1;
+			for(int j = size; j-- != 0;) {
+				if(keys[i] == null) pos = newSize;
+				else {
+					pos = HashUtil.mix(Objects.hashCode(keys[i])) & newMask;
+					while(newKeys[pos] != null) pos = ++pos & newMask;
+				}
+				newKeys[pos] = keys[i];
+				newValues[pos] = values[i];
+				if(prev != -1) {
+					newLinks[newPrev] ^= ((newLinks[newPrev] ^ (pos & 0xFFFFFFFFL)) & 0xFFFFFFFFL);
+					newLinks[pos] ^= ((newLinks[pos] ^ ((newPrev & 0xFFFFFFFFL) << 32)) & 0xFFFFFFFF00000000L);
+					newPrev = pos;
+				}
+				else {
+					newPrev = firstIndex = pos;
+					newLinks[pos] = -1L;
+				}
+				i = (int)links[prev = i];
+			}
+			links = newLinks;
+			lastIndex = newPrev;
+			if(newPrev != -1) newLinks[newPrev] |= 0xFFFFFFFFL;
+			if(nullIndex != -1) {
+				nullIndex = newSize;
+			}
+			mask = newMask;
+			maxFill = Math.min((int)Math.ceil(newSize * loadFactor), newSize - 1);
+			keys = newKeys;
+			values = newValues;
+		}
+		
+		protected void onNodeRemoved(int pos) {
+			if(size == 0) firstIndex = lastIndex = -1;
+			else if(firstIndex == pos) {
+				firstIndex = (int)links[pos];
+				if(0 <= firstIndex) links[firstIndex] |= 0xFFFFFFFF00000000L;
+			}
+			else if(lastIndex == pos) {
+				lastIndex = (int)(links[pos] >>> 32);
+				if(0 <= lastIndex) links[lastIndex] |= 0xFFFFFFFFL;
+			}
+			else {
+				long link = links[pos];
+				int prev = (int)(link >>> 32);
+				int next = (int)link;
+				links[prev] ^= ((links[prev] ^ (link & 0xFFFFFFFFL)) & 0xFFFFFFFFL);
+				links[next] ^= ((links[next] ^ (link & 0xFFFFFFFF00000000L)) & 0xFFFFFFFF00000000L);
+			}
+		}
+		
+		protected void onNodeMoved(int from, int to) {
+			if(size == 1) {
+				firstIndex = lastIndex = to;
+				links[to] = -1L;
+			}
+			else if(firstIndex == from) {
+				firstIndex = to;
+				links[(int)links[from]] ^= ((links[(int)links[from]] ^ ((to & 0xFFFFFFFFL) << 32)) & 0xFFFFFFFF00000000L);
+				links[to] = links[from];
+			}
+			else if(lastIndex == from) {
+				lastIndex = to;
+				links[(int)(links[from] >>> 32)] ^= ((links[(int)(links[from] >>> 32)] ^ (to & 0xFFFFFFFFL)) & 0xFFFFFFFFL);
+				links[to] = links[from];
+			}
+			else {
+				long link = links[from];
+				int prev = (int)(link >>> 32);
+				int next = (int)link;
+				links[prev] ^= ((links[prev] ^ (to & 0xFFFFFFFFL)) & 0xFFFFFFFFL);
+				links[next] ^= ((links[next] ^ ((to & 0xFFFFFFFFL) << 32)) & 0xFFFFFFFF00000000L);
+				links[to] = link;
+			}
+		}
+	}
+}
