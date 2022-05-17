@@ -74,11 +74,11 @@ public interface Object2ObjectSortedMap<T, V> extends SortedMap<T, V>, Object2Ob
 	public V lastValue();
 	
 	@Override
-	public default Object2ObjectSortedMap<T, V> subMap(T fromKey, T toKey) { return subMap(fromKey, toKey); }
+	public Object2ObjectSortedMap<T, V> subMap(T fromKey, T toKey);
 	@Override
-	public default Object2ObjectSortedMap<T, V> headMap(T toKey) { return headMap(toKey); }
+	public Object2ObjectSortedMap<T, V> headMap(T toKey);
 	@Override
-	public default Object2ObjectSortedMap<T, V> tailMap(T fromKey) { return tailMap(fromKey); }
+	public Object2ObjectSortedMap<T, V> tailMap(T fromKey);
 	
 	/**
 	 * Fast Sorted Entry Set that allows for a faster Entry Iterator by recycling the Entry Object and just exchanging 1 internal value

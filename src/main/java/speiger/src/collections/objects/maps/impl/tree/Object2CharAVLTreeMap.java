@@ -1597,7 +1597,7 @@ public class Object2CharAVLTreeMap<T> extends AbstractObject2CharMap<T> implemen
 					T key = entry.getKey();
 					if (!inRange(key)) return false;
 					Node<T> node = map.findNode(key);
-					if (node != null && node.getValue() == entry.getValue()) {
+					if (node != null && node.getCharValue() == entry.getCharValue()) {
 						map.removeNode(node);
 						return true;
 					}

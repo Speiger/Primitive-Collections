@@ -1614,7 +1614,7 @@ public class Double2LongAVLTreeMap extends AbstractDouble2LongMap implements Dou
 					double key = entry.getDoubleKey();
 					if (!inRange(key)) return false;
 					Node node = map.findNode(key);
-					if (node != null && node.getValue() == entry.getValue()) {
+					if (node != null && node.getLongValue() == entry.getLongValue()) {
 						map.removeNode(node);
 						return true;
 					}

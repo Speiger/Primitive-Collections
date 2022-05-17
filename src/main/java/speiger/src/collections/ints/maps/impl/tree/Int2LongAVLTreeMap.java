@@ -1614,7 +1614,7 @@ public class Int2LongAVLTreeMap extends AbstractInt2LongMap implements Int2LongN
 					int key = entry.getIntKey();
 					if (!inRange(key)) return false;
 					Node node = map.findNode(key);
-					if (node != null && node.getValue() == entry.getValue()) {
+					if (node != null && node.getLongValue() == entry.getLongValue()) {
 						map.removeNode(node);
 						return true;
 					}

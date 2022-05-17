@@ -1543,7 +1543,7 @@ public class Float2BooleanAVLTreeMap extends AbstractFloat2BooleanMap implements
 					float key = entry.getFloatKey();
 					if (!inRange(key)) return false;
 					Node node = map.findNode(key);
-					if (node != null && node.getValue() == entry.getValue()) {
+					if (node != null && node.getBooleanValue() == entry.getBooleanValue()) {
 						map.removeNode(node);
 						return true;
 					}

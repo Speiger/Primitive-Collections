@@ -1597,7 +1597,7 @@ public class Char2BooleanRBTreeMap extends AbstractChar2BooleanMap implements Ch
 					char key = entry.getCharKey();
 					if (!inRange(key)) return false;
 					Node node = map.findNode(key);
-					if (node != null && node.getValue() == entry.getValue()) {
+					if (node != null && node.getBooleanValue() == entry.getBooleanValue()) {
 						map.removeNode(node);
 						return true;
 					}

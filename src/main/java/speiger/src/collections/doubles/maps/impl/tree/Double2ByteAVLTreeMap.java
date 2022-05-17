@@ -1614,7 +1614,7 @@ public class Double2ByteAVLTreeMap extends AbstractDouble2ByteMap implements Dou
 					double key = entry.getDoubleKey();
 					if (!inRange(key)) return false;
 					Node node = map.findNode(key);
-					if (node != null && node.getValue() == entry.getValue()) {
+					if (node != null && node.getByteValue() == entry.getByteValue()) {
 						map.removeNode(node);
 						return true;
 					}

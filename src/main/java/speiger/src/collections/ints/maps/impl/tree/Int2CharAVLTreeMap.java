@@ -1614,7 +1614,7 @@ public class Int2CharAVLTreeMap extends AbstractInt2CharMap implements Int2CharN
 					int key = entry.getIntKey();
 					if (!inRange(key)) return false;
 					Node node = map.findNode(key);
-					if (node != null && node.getValue() == entry.getValue()) {
+					if (node != null && node.getCharValue() == entry.getCharValue()) {
 						map.removeNode(node);
 						return true;
 					}

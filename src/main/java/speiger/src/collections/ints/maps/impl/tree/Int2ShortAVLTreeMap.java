@@ -1614,7 +1614,7 @@ public class Int2ShortAVLTreeMap extends AbstractInt2ShortMap implements Int2Sho
 					int key = entry.getIntKey();
 					if (!inRange(key)) return false;
 					Node node = map.findNode(key);
-					if (node != null && node.getValue() == entry.getValue()) {
+					if (node != null && node.getShortValue() == entry.getShortValue()) {
 						map.removeNode(node);
 						return true;
 					}

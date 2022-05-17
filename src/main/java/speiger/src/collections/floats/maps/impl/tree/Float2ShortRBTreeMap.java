@@ -1668,7 +1668,7 @@ public class Float2ShortRBTreeMap extends AbstractFloat2ShortMap implements Floa
 					float key = entry.getFloatKey();
 					if (!inRange(key)) return false;
 					Node node = map.findNode(key);
-					if (node != null && node.getValue() == entry.getValue()) {
+					if (node != null && node.getShortValue() == entry.getShortValue()) {
 						map.removeNode(node);
 						return true;
 					}

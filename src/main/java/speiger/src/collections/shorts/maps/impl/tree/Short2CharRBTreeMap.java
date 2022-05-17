@@ -1668,7 +1668,7 @@ public class Short2CharRBTreeMap extends AbstractShort2CharMap implements Short2
 					short key = entry.getShortKey();
 					if (!inRange(key)) return false;
 					Node node = map.findNode(key);
-					if (node != null && node.getValue() == entry.getValue()) {
+					if (node != null && node.getCharValue() == entry.getCharValue()) {
 						map.removeNode(node);
 						return true;
 					}

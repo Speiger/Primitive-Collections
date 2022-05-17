@@ -1614,7 +1614,7 @@ public class Float2LongAVLTreeMap extends AbstractFloat2LongMap implements Float
 					float key = entry.getFloatKey();
 					if (!inRange(key)) return false;
 					Node node = map.findNode(key);
-					if (node != null && node.getValue() == entry.getValue()) {
+					if (node != null && node.getLongValue() == entry.getLongValue()) {
 						map.removeNode(node);
 						return true;
 					}

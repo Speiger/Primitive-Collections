@@ -1543,7 +1543,7 @@ public class Char2BooleanAVLTreeMap extends AbstractChar2BooleanMap implements C
 					char key = entry.getCharKey();
 					if (!inRange(key)) return false;
 					Node node = map.findNode(key);
-					if (node != null && node.getValue() == entry.getValue()) {
+					if (node != null && node.getBooleanValue() == entry.getBooleanValue()) {
 						map.removeNode(node);
 						return true;
 					}

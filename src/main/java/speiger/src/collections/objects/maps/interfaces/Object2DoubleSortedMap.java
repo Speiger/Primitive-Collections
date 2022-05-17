@@ -73,11 +73,11 @@ public interface Object2DoubleSortedMap<T> extends SortedMap<T, Double>, Object2
 	public double lastDoubleValue();
 	
 	@Override
-	public default Object2DoubleSortedMap<T> subMap(T fromKey, T toKey) { return subMap(fromKey, toKey); }
+	public Object2DoubleSortedMap<T> subMap(T fromKey, T toKey);
 	@Override
-	public default Object2DoubleSortedMap<T> headMap(T toKey) { return headMap(toKey); }
+	public Object2DoubleSortedMap<T> headMap(T toKey);
 	@Override
-	public default Object2DoubleSortedMap<T> tailMap(T fromKey) { return tailMap(fromKey); }
+	public Object2DoubleSortedMap<T> tailMap(T fromKey);
 	
 	/**
 	 * Fast Sorted Entry Set that allows for a faster Entry Iterator by recycling the Entry Object and just exchanging 1 internal value

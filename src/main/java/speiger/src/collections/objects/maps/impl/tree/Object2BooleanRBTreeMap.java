@@ -1580,7 +1580,7 @@ public class Object2BooleanRBTreeMap<T> extends AbstractObject2BooleanMap<T> imp
 					T key = entry.getKey();
 					if (!inRange(key)) return false;
 					Node<T> node = map.findNode(key);
-					if (node != null && node.getValue() == entry.getValue()) {
+					if (node != null && node.getBooleanValue() == entry.getBooleanValue()) {
 						map.removeNode(node);
 						return true;
 					}

@@ -1608,7 +1608,7 @@ public class Int2IntAVLTreeMap extends AbstractInt2IntMap implements Int2IntNavi
 					int key = entry.getIntKey();
 					if (!inRange(key)) return false;
 					Node node = map.findNode(key);
-					if (node != null && node.getValue() == entry.getValue()) {
+					if (node != null && node.getIntValue() == entry.getIntValue()) {
 						map.removeNode(node);
 						return true;
 					}

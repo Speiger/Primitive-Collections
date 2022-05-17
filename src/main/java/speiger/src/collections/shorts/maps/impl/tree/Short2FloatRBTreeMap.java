@@ -1668,7 +1668,7 @@ public class Short2FloatRBTreeMap extends AbstractShort2FloatMap implements Shor
 					short key = entry.getShortKey();
 					if (!inRange(key)) return false;
 					Node node = map.findNode(key);
-					if (node != null && Float.floatToIntBits(node.getValue()) == Float.floatToIntBits(entry.getValue())) {
+					if (node != null && Float.floatToIntBits(node.getFloatValue()) == Float.floatToIntBits(entry.getFloatValue())) {
 						map.removeNode(node);
 						return true;
 					}

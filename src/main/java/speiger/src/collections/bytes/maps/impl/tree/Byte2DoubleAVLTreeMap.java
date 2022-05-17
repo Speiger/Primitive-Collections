@@ -1614,7 +1614,7 @@ public class Byte2DoubleAVLTreeMap extends AbstractByte2DoubleMap implements Byt
 					byte key = entry.getByteKey();
 					if (!inRange(key)) return false;
 					Node node = map.findNode(key);
-					if (node != null && Double.doubleToLongBits(node.getValue()) == Double.doubleToLongBits(entry.getValue())) {
+					if (node != null && Double.doubleToLongBits(node.getDoubleValue()) == Double.doubleToLongBits(entry.getDoubleValue())) {
 						map.removeNode(node);
 						return true;
 					}

@@ -1652,7 +1652,7 @@ public class Object2ByteRBTreeMap<T> extends AbstractObject2ByteMap<T> implement
 					T key = entry.getKey();
 					if (!inRange(key)) return false;
 					Node<T> node = map.findNode(key);
-					if (node != null && node.getValue() == entry.getValue()) {
+					if (node != null && node.getByteValue() == entry.getByteValue()) {
 						map.removeNode(node);
 						return true;
 					}

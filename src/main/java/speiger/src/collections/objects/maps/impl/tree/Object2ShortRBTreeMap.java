@@ -1652,7 +1652,7 @@ public class Object2ShortRBTreeMap<T> extends AbstractObject2ShortMap<T> impleme
 					T key = entry.getKey();
 					if (!inRange(key)) return false;
 					Node<T> node = map.findNode(key);
-					if (node != null && node.getValue() == entry.getValue()) {
+					if (node != null && node.getShortValue() == entry.getShortValue()) {
 						map.removeNode(node);
 						return true;
 					}

@@ -1668,7 +1668,7 @@ public class Short2IntRBTreeMap extends AbstractShort2IntMap implements Short2In
 					short key = entry.getShortKey();
 					if (!inRange(key)) return false;
 					Node node = map.findNode(key);
-					if (node != null && node.getValue() == entry.getValue()) {
+					if (node != null && node.getIntValue() == entry.getIntValue()) {
 						map.removeNode(node);
 						return true;
 					}

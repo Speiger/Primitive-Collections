@@ -1668,7 +1668,7 @@ public class Long2DoubleRBTreeMap extends AbstractLong2DoubleMap implements Long
 					long key = entry.getLongKey();
 					if (!inRange(key)) return false;
 					Node node = map.findNode(key);
-					if (node != null && Double.doubleToLongBits(node.getValue()) == Double.doubleToLongBits(entry.getValue())) {
+					if (node != null && Double.doubleToLongBits(node.getDoubleValue()) == Double.doubleToLongBits(entry.getDoubleValue())) {
 						map.removeNode(node);
 						return true;
 					}

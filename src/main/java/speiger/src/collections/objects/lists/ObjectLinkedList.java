@@ -117,10 +117,16 @@ public class ObjectLinkedList<T> extends AbstractObjectList<T> implements Object
 		int length = c.size();
 		if(length == 0) return false;
 		checkAddRange(index);
-		Entry<T> next = null;
-		Entry<T> prev = null;
-		if(index == size) prev = last;
-		else if(index == 0) next = first;
+		Entry<T> next;
+		Entry<T> prev;
+		if(index == size) {
+			prev = last;
+			next = null;
+		}
+		else if(index == 0) {
+			next = first;
+			prev = null;
+		}
 		else {
 			next = getNode(index);
 			prev = next.prev;
@@ -145,10 +151,16 @@ public class ObjectLinkedList<T> extends AbstractObjectList<T> implements Object
 		int length = c.size();
 		if(length == 0) return false;
 		checkAddRange(index);
-		Entry<T> next = null;
-		Entry<T> prev = null;
-		if(index == size) prev = last;
-		else if(index == 0) next = first;
+		Entry<T> next;
+		Entry<T> prev;
+		if(index == size) {
+			prev = last;
+			next = null;
+		}
+		else if(index == 0) {
+			next = first;
+			prev = null;
+		}
 		else {
 			next = getNode(index);
 			prev = next.prev;
@@ -174,10 +186,16 @@ public class ObjectLinkedList<T> extends AbstractObjectList<T> implements Object
 		int length = c.size();
 		if(length == 0) return false;
 		checkAddRange(index);
-		Entry<T> next = null;
-		Entry<T> prev = null;
-		if(index == size) prev = last;
-		else if(index == 0) next = first;
+		Entry<T> next;
+		Entry<T> prev;
+		if(index == size) {
+			prev = last;
+			next = null;
+		}
+		else if(index == 0) {
+			next = first;
+			prev = null;
+		}
 		else {
 			next = getNode(index);
 			prev = next.prev;
@@ -224,10 +242,16 @@ public class ObjectLinkedList<T> extends AbstractObjectList<T> implements Object
 	public void addElements(int from, T[] a, int offset, int length) {
 		SanityChecks.checkArrayCapacity(a.length, offset, length);
 		checkAddRange(from);
-		Entry<T> next = null;
-		Entry<T> prev = null;
-		if(from == size) prev = last;
-		else if(from == 0) next = first;
+		Entry<T> next;
+		Entry<T> prev;
+		if(from == size) {
+			prev = last;
+			next = null;
+		}
+		else if(from == 0) {
+			next = first;
+			prev = null;
+		}
 		else {
 			next = getNode(from);
 			prev = next.prev;

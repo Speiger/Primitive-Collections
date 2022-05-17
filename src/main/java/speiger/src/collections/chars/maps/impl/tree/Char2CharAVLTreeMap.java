@@ -1608,7 +1608,7 @@ public class Char2CharAVLTreeMap extends AbstractChar2CharMap implements Char2Ch
 					char key = entry.getCharKey();
 					if (!inRange(key)) return false;
 					Node node = map.findNode(key);
-					if (node != null && node.getValue() == entry.getValue()) {
+					if (node != null && node.getCharValue() == entry.getCharValue()) {
 						map.removeNode(node);
 						return true;
 					}

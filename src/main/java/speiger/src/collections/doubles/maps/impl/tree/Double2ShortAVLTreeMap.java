@@ -1614,7 +1614,7 @@ public class Double2ShortAVLTreeMap extends AbstractDouble2ShortMap implements D
 					double key = entry.getDoubleKey();
 					if (!inRange(key)) return false;
 					Node node = map.findNode(key);
-					if (node != null && node.getValue() == entry.getValue()) {
+					if (node != null && node.getShortValue() == entry.getShortValue()) {
 						map.removeNode(node);
 						return true;
 					}

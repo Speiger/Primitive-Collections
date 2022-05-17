@@ -1597,7 +1597,7 @@ public class Int2BooleanRBTreeMap extends AbstractInt2BooleanMap implements Int2
 					int key = entry.getIntKey();
 					if (!inRange(key)) return false;
 					Node node = map.findNode(key);
-					if (node != null && node.getValue() == entry.getValue()) {
+					if (node != null && node.getBooleanValue() == entry.getBooleanValue()) {
 						map.removeNode(node);
 						return true;
 					}

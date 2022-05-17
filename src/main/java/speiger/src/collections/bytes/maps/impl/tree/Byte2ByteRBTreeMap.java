@@ -1662,7 +1662,7 @@ public class Byte2ByteRBTreeMap extends AbstractByte2ByteMap implements Byte2Byt
 					byte key = entry.getByteKey();
 					if (!inRange(key)) return false;
 					Node node = map.findNode(key);
-					if (node != null && node.getValue() == entry.getValue()) {
+					if (node != null && node.getByteValue() == entry.getByteValue()) {
 						map.removeNode(node);
 						return true;
 					}

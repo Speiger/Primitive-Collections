@@ -1668,7 +1668,7 @@ public class Long2ShortRBTreeMap extends AbstractLong2ShortMap implements Long2S
 					long key = entry.getLongKey();
 					if (!inRange(key)) return false;
 					Node node = map.findNode(key);
-					if (node != null && node.getValue() == entry.getValue()) {
+					if (node != null && node.getShortValue() == entry.getShortValue()) {
 						map.removeNode(node);
 						return true;
 					}

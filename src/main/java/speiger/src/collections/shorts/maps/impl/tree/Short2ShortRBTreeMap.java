@@ -1662,7 +1662,7 @@ public class Short2ShortRBTreeMap extends AbstractShort2ShortMap implements Shor
 					short key = entry.getShortKey();
 					if (!inRange(key)) return false;
 					Node node = map.findNode(key);
-					if (node != null && node.getValue() == entry.getValue()) {
+					if (node != null && node.getShortValue() == entry.getShortValue()) {
 						map.removeNode(node);
 						return true;
 					}

@@ -1608,7 +1608,7 @@ public class Short2ShortAVLTreeMap extends AbstractShort2ShortMap implements Sho
 					short key = entry.getShortKey();
 					if (!inRange(key)) return false;
 					Node node = map.findNode(key);
-					if (node != null && node.getValue() == entry.getValue()) {
+					if (node != null && node.getShortValue() == entry.getShortValue()) {
 						map.removeNode(node);
 						return true;
 					}

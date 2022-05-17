@@ -73,11 +73,11 @@ public interface Object2LongSortedMap<T> extends SortedMap<T, Long>, Object2Long
 	public long lastLongValue();
 	
 	@Override
-	public default Object2LongSortedMap<T> subMap(T fromKey, T toKey) { return subMap(fromKey, toKey); }
+	public Object2LongSortedMap<T> subMap(T fromKey, T toKey);
 	@Override
-	public default Object2LongSortedMap<T> headMap(T toKey) { return headMap(toKey); }
+	public Object2LongSortedMap<T> headMap(T toKey);
 	@Override
-	public default Object2LongSortedMap<T> tailMap(T fromKey) { return tailMap(fromKey); }
+	public Object2LongSortedMap<T> tailMap(T fromKey);
 	
 	/**
 	 * Fast Sorted Entry Set that allows for a faster Entry Iterator by recycling the Entry Object and just exchanging 1 internal value

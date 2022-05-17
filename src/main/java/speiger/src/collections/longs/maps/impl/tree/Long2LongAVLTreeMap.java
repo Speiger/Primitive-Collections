@@ -1608,7 +1608,7 @@ public class Long2LongAVLTreeMap extends AbstractLong2LongMap implements Long2Lo
 					long key = entry.getLongKey();
 					if (!inRange(key)) return false;
 					Node node = map.findNode(key);
-					if (node != null && node.getValue() == entry.getValue()) {
+					if (node != null && node.getLongValue() == entry.getLongValue()) {
 						map.removeNode(node);
 						return true;
 					}

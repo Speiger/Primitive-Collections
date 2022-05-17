@@ -73,11 +73,11 @@ public interface Object2FloatSortedMap<T> extends SortedMap<T, Float>, Object2Fl
 	public float lastFloatValue();
 	
 	@Override
-	public default Object2FloatSortedMap<T> subMap(T fromKey, T toKey) { return subMap(fromKey, toKey); }
+	public Object2FloatSortedMap<T> subMap(T fromKey, T toKey);
 	@Override
-	public default Object2FloatSortedMap<T> headMap(T toKey) { return headMap(toKey); }
+	public Object2FloatSortedMap<T> headMap(T toKey);
 	@Override
-	public default Object2FloatSortedMap<T> tailMap(T fromKey) { return tailMap(fromKey); }
+	public Object2FloatSortedMap<T> tailMap(T fromKey);
 	
 	/**
 	 * Fast Sorted Entry Set that allows for a faster Entry Iterator by recycling the Entry Object and just exchanging 1 internal value

@@ -73,11 +73,11 @@ public interface Object2BooleanSortedMap<T> extends SortedMap<T, Boolean>, Objec
 	public boolean lastBooleanValue();
 	
 	@Override
-	public default Object2BooleanSortedMap<T> subMap(T fromKey, T toKey) { return subMap(fromKey, toKey); }
+	public Object2BooleanSortedMap<T> subMap(T fromKey, T toKey);
 	@Override
-	public default Object2BooleanSortedMap<T> headMap(T toKey) { return headMap(toKey); }
+	public Object2BooleanSortedMap<T> headMap(T toKey);
 	@Override
-	public default Object2BooleanSortedMap<T> tailMap(T fromKey) { return tailMap(fromKey); }
+	public Object2BooleanSortedMap<T> tailMap(T fromKey);
 	
 	/**
 	 * Fast Sorted Entry Set that allows for a faster Entry Iterator by recycling the Entry Object and just exchanging 1 internal value

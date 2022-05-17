@@ -1597,7 +1597,7 @@ public class Object2LongAVLTreeMap<T> extends AbstractObject2LongMap<T> implemen
 					T key = entry.getKey();
 					if (!inRange(key)) return false;
 					Node<T> node = map.findNode(key);
-					if (node != null && node.getValue() == entry.getValue()) {
+					if (node != null && node.getLongValue() == entry.getLongValue()) {
 						map.removeNode(node);
 						return true;
 					}

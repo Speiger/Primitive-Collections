@@ -1652,7 +1652,7 @@ public class Object2DoubleRBTreeMap<T> extends AbstractObject2DoubleMap<T> imple
 					T key = entry.getKey();
 					if (!inRange(key)) return false;
 					Node<T> node = map.findNode(key);
-					if (node != null && Double.doubleToLongBits(node.getValue()) == Double.doubleToLongBits(entry.getValue())) {
+					if (node != null && Double.doubleToLongBits(node.getDoubleValue()) == Double.doubleToLongBits(entry.getDoubleValue())) {
 						map.removeNode(node);
 						return true;
 					}

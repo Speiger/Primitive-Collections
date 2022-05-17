@@ -1662,7 +1662,7 @@ public class Char2CharRBTreeMap extends AbstractChar2CharMap implements Char2Cha
 					char key = entry.getCharKey();
 					if (!inRange(key)) return false;
 					Node node = map.findNode(key);
-					if (node != null && node.getValue() == entry.getValue()) {
+					if (node != null && node.getCharValue() == entry.getCharValue()) {
 						map.removeNode(node);
 						return true;
 					}

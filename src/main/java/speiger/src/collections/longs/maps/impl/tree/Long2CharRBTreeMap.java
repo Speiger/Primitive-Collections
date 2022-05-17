@@ -1668,7 +1668,7 @@ public class Long2CharRBTreeMap extends AbstractLong2CharMap implements Long2Cha
 					long key = entry.getLongKey();
 					if (!inRange(key)) return false;
 					Node node = map.findNode(key);
-					if (node != null && node.getValue() == entry.getValue()) {
+					if (node != null && node.getCharValue() == entry.getCharValue()) {
 						map.removeNode(node);
 						return true;
 					}

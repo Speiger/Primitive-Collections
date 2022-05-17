@@ -1668,7 +1668,7 @@ public class Byte2IntRBTreeMap extends AbstractByte2IntMap implements Byte2IntNa
 					byte key = entry.getByteKey();
 					if (!inRange(key)) return false;
 					Node node = map.findNode(key);
-					if (node != null && node.getValue() == entry.getValue()) {
+					if (node != null && node.getIntValue() == entry.getIntValue()) {
 						map.removeNode(node);
 						return true;
 					}

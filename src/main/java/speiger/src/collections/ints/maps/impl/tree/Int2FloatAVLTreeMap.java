@@ -1614,7 +1614,7 @@ public class Int2FloatAVLTreeMap extends AbstractInt2FloatMap implements Int2Flo
 					int key = entry.getIntKey();
 					if (!inRange(key)) return false;
 					Node node = map.findNode(key);
-					if (node != null && Float.floatToIntBits(node.getValue()) == Float.floatToIntBits(entry.getValue())) {
+					if (node != null && Float.floatToIntBits(node.getFloatValue()) == Float.floatToIntBits(entry.getFloatValue())) {
 						map.removeNode(node);
 						return true;
 					}

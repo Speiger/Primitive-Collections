@@ -1614,7 +1614,7 @@ public class Byte2LongAVLTreeMap extends AbstractByte2LongMap implements Byte2Lo
 					byte key = entry.getByteKey();
 					if (!inRange(key)) return false;
 					Node node = map.findNode(key);
-					if (node != null && node.getValue() == entry.getValue()) {
+					if (node != null && node.getLongValue() == entry.getLongValue()) {
 						map.removeNode(node);
 						return true;
 					}

@@ -1614,7 +1614,7 @@ public class Float2ByteAVLTreeMap extends AbstractFloat2ByteMap implements Float
 					float key = entry.getFloatKey();
 					if (!inRange(key)) return false;
 					Node node = map.findNode(key);
-					if (node != null && node.getValue() == entry.getValue()) {
+					if (node != null && node.getByteValue() == entry.getByteValue()) {
 						map.removeNode(node);
 						return true;
 					}

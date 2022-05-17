@@ -1668,7 +1668,7 @@ public class Char2ShortRBTreeMap extends AbstractChar2ShortMap implements Char2S
 					char key = entry.getCharKey();
 					if (!inRange(key)) return false;
 					Node node = map.findNode(key);
-					if (node != null && node.getValue() == entry.getValue()) {
+					if (node != null && node.getShortValue() == entry.getShortValue()) {
 						map.removeNode(node);
 						return true;
 					}

@@ -1668,7 +1668,7 @@ public class Byte2FloatRBTreeMap extends AbstractByte2FloatMap implements Byte2F
 					byte key = entry.getByteKey();
 					if (!inRange(key)) return false;
 					Node node = map.findNode(key);
-					if (node != null && Float.floatToIntBits(node.getValue()) == Float.floatToIntBits(entry.getValue())) {
+					if (node != null && Float.floatToIntBits(node.getFloatValue()) == Float.floatToIntBits(entry.getFloatValue())) {
 						map.removeNode(node);
 						return true;
 					}

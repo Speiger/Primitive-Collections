@@ -73,11 +73,11 @@ public interface Object2CharSortedMap<T> extends SortedMap<T, Character>, Object
 	public char lastCharValue();
 	
 	@Override
-	public default Object2CharSortedMap<T> subMap(T fromKey, T toKey) { return subMap(fromKey, toKey); }
+	public Object2CharSortedMap<T> subMap(T fromKey, T toKey);
 	@Override
-	public default Object2CharSortedMap<T> headMap(T toKey) { return headMap(toKey); }
+	public Object2CharSortedMap<T> headMap(T toKey);
 	@Override
-	public default Object2CharSortedMap<T> tailMap(T fromKey) { return tailMap(fromKey); }
+	public Object2CharSortedMap<T> tailMap(T fromKey);
 	
 	/**
 	 * Fast Sorted Entry Set that allows for a faster Entry Iterator by recycling the Entry Object and just exchanging 1 internal value

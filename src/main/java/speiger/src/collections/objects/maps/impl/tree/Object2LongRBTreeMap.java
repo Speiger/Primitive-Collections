@@ -1652,7 +1652,7 @@ public class Object2LongRBTreeMap<T> extends AbstractObject2LongMap<T> implement
 					T key = entry.getKey();
 					if (!inRange(key)) return false;
 					Node<T> node = map.findNode(key);
-					if (node != null && node.getValue() == entry.getValue()) {
+					if (node != null && node.getLongValue() == entry.getLongValue()) {
 						map.removeNode(node);
 						return true;
 					}

@@ -1614,7 +1614,7 @@ public class Byte2CharAVLTreeMap extends AbstractByte2CharMap implements Byte2Ch
 					byte key = entry.getByteKey();
 					if (!inRange(key)) return false;
 					Node node = map.findNode(key);
-					if (node != null && node.getValue() == entry.getValue()) {
+					if (node != null && node.getCharValue() == entry.getCharValue()) {
 						map.removeNode(node);
 						return true;
 					}

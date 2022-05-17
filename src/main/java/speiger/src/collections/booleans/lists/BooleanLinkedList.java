@@ -116,10 +116,16 @@ public class BooleanLinkedList extends AbstractBooleanList implements BooleanPri
 		int length = c.size();
 		if(length == 0) return false;
 		checkAddRange(index);
-		Entry next = null;
-		Entry prev = null;
-		if(index == size) prev = last;
-		else if(index == 0) next = first;
+		Entry next;
+		Entry prev;
+		if(index == size) {
+			prev = last;
+			next = null;
+		}
+		else if(index == 0) {
+			next = first;
+			prev = null;
+		}
 		else {
 			next = getNode(index);
 			prev = next.prev;
@@ -144,10 +150,16 @@ public class BooleanLinkedList extends AbstractBooleanList implements BooleanPri
 		int length = c.size();
 		if(length == 0) return false;
 		checkAddRange(index);
-		Entry next = null;
-		Entry prev = null;
-		if(index == size) prev = last;
-		else if(index == 0) next = first;
+		Entry next;
+		Entry prev;
+		if(index == size) {
+			prev = last;
+			next = null;
+		}
+		else if(index == 0) {
+			next = first;
+			prev = null;
+		}
 		else {
 			next = getNode(index);
 			prev = next.prev;
@@ -174,10 +186,16 @@ public class BooleanLinkedList extends AbstractBooleanList implements BooleanPri
 		int length = c.size();
 		if(length == 0) return false;
 		checkAddRange(index);
-		Entry next = null;
-		Entry prev = null;
-		if(index == size) prev = last;
-		else if(index == 0) next = first;
+		Entry next;
+		Entry prev;
+		if(index == size) {
+			prev = last;
+			next = null;
+		}
+		else if(index == 0) {
+			next = first;
+			prev = null;
+		}
 		else {
 			next = getNode(index);
 			prev = next.prev;
@@ -224,10 +242,16 @@ public class BooleanLinkedList extends AbstractBooleanList implements BooleanPri
 	public void addElements(int from, boolean[] a, int offset, int length) {
 		SanityChecks.checkArrayCapacity(a.length, offset, length);
 		checkAddRange(from);
-		Entry next = null;
-		Entry prev = null;
-		if(from == size) prev = last;
-		else if(from == 0) next = first;
+		Entry next;
+		Entry prev;
+		if(from == size) {
+			prev = last;
+			next = null;
+		}
+		else if(from == 0) {
+			next = first;
+			prev = null;
+		}
 		else {
 			next = getNode(from);
 			prev = next.prev;

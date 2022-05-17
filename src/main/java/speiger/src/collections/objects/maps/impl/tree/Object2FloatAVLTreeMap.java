@@ -1597,7 +1597,7 @@ public class Object2FloatAVLTreeMap<T> extends AbstractObject2FloatMap<T> implem
 					T key = entry.getKey();
 					if (!inRange(key)) return false;
 					Node<T> node = map.findNode(key);
-					if (node != null && Float.floatToIntBits(node.getValue()) == Float.floatToIntBits(entry.getValue())) {
+					if (node != null && Float.floatToIntBits(node.getFloatValue()) == Float.floatToIntBits(entry.getFloatValue())) {
 						map.removeNode(node);
 						return true;
 					}

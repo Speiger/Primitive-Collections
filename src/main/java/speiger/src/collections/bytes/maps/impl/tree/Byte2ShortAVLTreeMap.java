@@ -1614,7 +1614,7 @@ public class Byte2ShortAVLTreeMap extends AbstractByte2ShortMap implements Byte2
 					byte key = entry.getByteKey();
 					if (!inRange(key)) return false;
 					Node node = map.findNode(key);
-					if (node != null && node.getValue() == entry.getValue()) {
+					if (node != null && node.getShortValue() == entry.getShortValue()) {
 						map.removeNode(node);
 						return true;
 					}

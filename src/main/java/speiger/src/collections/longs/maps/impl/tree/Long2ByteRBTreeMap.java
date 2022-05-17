@@ -1668,7 +1668,7 @@ public class Long2ByteRBTreeMap extends AbstractLong2ByteMap implements Long2Byt
 					long key = entry.getLongKey();
 					if (!inRange(key)) return false;
 					Node node = map.findNode(key);
-					if (node != null && node.getValue() == entry.getValue()) {
+					if (node != null && node.getByteValue() == entry.getByteValue()) {
 						map.removeNode(node);
 						return true;
 					}

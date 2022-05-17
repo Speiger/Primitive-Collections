@@ -1614,7 +1614,7 @@ public class Int2DoubleAVLTreeMap extends AbstractInt2DoubleMap implements Int2D
 					int key = entry.getIntKey();
 					if (!inRange(key)) return false;
 					Node node = map.findNode(key);
-					if (node != null && Double.doubleToLongBits(node.getValue()) == Double.doubleToLongBits(entry.getValue())) {
+					if (node != null && Double.doubleToLongBits(node.getDoubleValue()) == Double.doubleToLongBits(entry.getDoubleValue())) {
 						map.removeNode(node);
 						return true;
 					}
