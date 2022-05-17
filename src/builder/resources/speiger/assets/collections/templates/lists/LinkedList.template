@@ -152,10 +152,16 @@ public class LINKED_LIST KEY_GENERIC_TYPE extends ABSTRACT_LIST KEY_GENERIC_TYPE
 		int length = c.size();
 		if(length == 0) return false;
 		checkAddRange(index);
-		Entry KEY_GENERIC_TYPE next = null;
-		Entry KEY_GENERIC_TYPE prev = null;
-		if(index == size) prev = last;
-		else if(index == 0) next = first;
+		Entry KEY_GENERIC_TYPE next;
+		Entry KEY_GENERIC_TYPE prev;
+		if(index == size) {
+			prev = last;
+			next = null;
+		}
+		else if(index == 0) {
+			next = first;
+			prev = null;
+		}
 		else {
 			next = getNode(index);
 			prev = next.prev;
@@ -180,10 +186,16 @@ public class LINKED_LIST KEY_GENERIC_TYPE extends ABSTRACT_LIST KEY_GENERIC_TYPE
 		int length = c.size();
 		if(length == 0) return false;
 		checkAddRange(index);
-		Entry KEY_GENERIC_TYPE next = null;
-		Entry KEY_GENERIC_TYPE prev = null;
-		if(index == size) prev = last;
-		else if(index == 0) next = first;
+		Entry KEY_GENERIC_TYPE next;
+		Entry KEY_GENERIC_TYPE prev;
+		if(index == size) {
+			prev = last;
+			next = null;
+		}
+		else if(index == 0) {
+			next = first;
+			prev = null;
+		}
 		else {
 			next = getNode(index);
 			prev = next.prev;
@@ -210,10 +222,16 @@ public class LINKED_LIST KEY_GENERIC_TYPE extends ABSTRACT_LIST KEY_GENERIC_TYPE
 		int length = c.size();
 		if(length == 0) return false;
 		checkAddRange(index);
-		Entry KEY_GENERIC_TYPE next = null;
-		Entry KEY_GENERIC_TYPE prev = null;
-		if(index == size) prev = last;
-		else if(index == 0) next = first;
+		Entry KEY_GENERIC_TYPE next;
+		Entry KEY_GENERIC_TYPE prev;
+		if(index == size) {
+			prev = last;
+			next = null;
+		}
+		else if(index == 0) {
+			next = first;
+			prev = null;
+		}
 		else {
 			next = getNode(index);
 			prev = next.prev;
@@ -260,10 +278,16 @@ public class LINKED_LIST KEY_GENERIC_TYPE extends ABSTRACT_LIST KEY_GENERIC_TYPE
 	public void addElements(int from, KEY_TYPE[] a, int offset, int length) {
 		SanityChecks.checkArrayCapacity(a.length, offset, length);
 		checkAddRange(from);
-		Entry KEY_GENERIC_TYPE next = null;
-		Entry KEY_GENERIC_TYPE prev = null;
-		if(from == size) prev = last;
-		else if(from == 0) next = first;
+		Entry KEY_GENERIC_TYPE next;
+		Entry KEY_GENERIC_TYPE prev;
+		if(from == size) {
+			prev = last;
+			next = null;
+		}
+		else if(from == 0) {
+			next = first;
+			prev = null;
+		}
 		else {
 			next = getNode(from);
 			prev = next.prev;

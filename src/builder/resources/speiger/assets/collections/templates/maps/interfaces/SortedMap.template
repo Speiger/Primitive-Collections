@@ -155,11 +155,11 @@ public interface SORTED_MAP KEY_VALUE_GENERIC_TYPE extends SortedMap<CLASS_TYPE,
 	public VALUE_TYPE LAST_ENTRY_VALUE();
 	
 	@Override
-	public default SORTED_MAP KEY_VALUE_GENERIC_TYPE subMap(CLASS_TYPE fromKey, CLASS_TYPE toKey) { return subMap(OBJ_TO_KEY(fromKey), OBJ_TO_KEY(toKey)); }
+	public SORTED_MAP KEY_VALUE_GENERIC_TYPE subMap(CLASS_TYPE fromKey, CLASS_TYPE toKey);
 	@Override
-	public default SORTED_MAP KEY_VALUE_GENERIC_TYPE headMap(CLASS_TYPE toKey) { return headMap(OBJ_TO_KEY(toKey)); }
+	public SORTED_MAP KEY_VALUE_GENERIC_TYPE headMap(CLASS_TYPE toKey);
 	@Override
-	public default SORTED_MAP KEY_VALUE_GENERIC_TYPE tailMap(CLASS_TYPE fromKey) { return tailMap(OBJ_TO_KEY(fromKey)); }
+	public SORTED_MAP KEY_VALUE_GENERIC_TYPE tailMap(CLASS_TYPE fromKey);
 #endif
 	
 	/**

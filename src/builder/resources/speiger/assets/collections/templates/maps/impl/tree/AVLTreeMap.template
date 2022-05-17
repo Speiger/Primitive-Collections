@@ -1778,7 +1778,7 @@ public class AVL_TREE_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_VALUE_
 					KEY_TYPE key = entry.ENTRY_KEY();
 					if (!inRange(key)) return false;
 					Node KEY_VALUE_GENERIC_TYPE node = map.findNode(key);
-					if (node != null && VALUE_EQUALS(node.getValue(), entry.getValue())) {
+					if (node != null && VALUE_EQUALS(node.ENTRY_VALUE(), entry.ENTRY_VALUE())) {
 						map.removeNode(node);
 						return true;
 					}
