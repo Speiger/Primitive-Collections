@@ -386,6 +386,7 @@ public class IntArrayFIFOQueue extends AbstractIntPriorityQueue implements IntPr
 
 		@Override
 		public int nextInt() {
+			if(!hasNext()) throw new NoSuchElementException();
 			int value = array[index];
 			removeIndex(index);
 			index = ++index % array.length;

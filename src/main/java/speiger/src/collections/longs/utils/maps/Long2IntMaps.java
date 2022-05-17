@@ -36,7 +36,15 @@ public class Long2IntMaps
 	/**
 	 * Empty Map Variable
 	 */
-	public static final Long2IntMap EMPTY = new EmptyMap();
+	private static final Long2IntMap EMPTY = new EmptyMap();
+	
+	/**
+	 * Empty Map getter function that autocasts to the desired Key and Value
+	 * @return empty map of desired type
+	 */
+	public static Long2IntMap empty() { 
+		return EMPTY;
+	}
 	
 	/**
 	 * Helper method that provides the fastIterator that recycles a single Entry to increase throughput.
@@ -75,13 +83,6 @@ public class Long2IntMaps
 		else entries.forEach(action);
 	}
 	
-	/**
-	 * Empty Map getter function that autocasts to the desired Key and Value
-	 * @return empty map of desired type
-	 */
-	public static Long2IntMap empty() { 
-		return EMPTY;
-	}
 	
 	/**
 	 * Helper function that creates a Helper wrapper to synchronize access into the map.

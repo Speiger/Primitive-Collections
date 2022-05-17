@@ -386,6 +386,7 @@ public class LongArrayFIFOQueue extends AbstractLongPriorityQueue implements Lon
 
 		@Override
 		public long nextLong() {
+			if(!hasNext()) throw new NoSuchElementException();
 			long value = array[index];
 			removeIndex(index);
 			index = ++index % array.length;

@@ -1,5 +1,6 @@
 package speiger.src.collections.bytes.utils;
 
+import java.util.NoSuchElementException;
 import speiger.src.collections.bytes.collections.ByteBidirectionalIterator;
 import speiger.src.collections.bytes.functions.ByteComparator;
 import speiger.src.collections.bytes.collections.ByteIterator;
@@ -21,7 +22,7 @@ public class ByteSets
 	/**
 	 * Empty Set Variable
 	 */
-	public static final ByteSet EMPTY = new EmptySet();
+	private static final ByteSet EMPTY = new EmptySet();
 	
 	/**
 	 * EmptySet getter
@@ -178,10 +179,10 @@ public class ByteSets
 			return new ByteIterator() {
 				boolean next = true;
 				@Override
-				public boolean hasNext() { return next = false; }
+				public boolean hasNext() { return next; }
 				@Override
 				public byte nextByte() {
-					if(!next) throw new IllegalStateException();
+					if(!hasNext()) throw new NoSuchElementException();
 					next = false;
 					return element;
 				}

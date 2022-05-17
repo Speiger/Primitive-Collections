@@ -192,7 +192,7 @@ public class FloatHeapPriorityQueue extends AbstractFloatPriorityQueue
 	
 	@Override
 	public void enqueue(float e) {
-		if(size == array.length) array = Arrays.copyOf(array, (int)Math.max(Math.min((long)array.length + (array.length >> 1), SanityChecks.MAX_ARRAY_SIZE), size+1));
+		if(size == array.length) array = Arrays.copyOf(array, (int)Math.max(Math.min((long)array.length + (long)(array.length >> 1), (long)SanityChecks.MAX_ARRAY_SIZE), size+1));
 		array[size++] = e;
 		FloatArrays.shiftUp(array, size-1, comparator);
 	}
@@ -355,6 +355,7 @@ public class FloatHeapPriorityQueue extends AbstractFloatPriorityQueue
 		
 		@Override
 		public float nextFloat() {
+			if(!hasNext()) throw new NoSuchElementException();
 			return dequeue();
 		}
 	}

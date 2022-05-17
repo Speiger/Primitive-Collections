@@ -24,7 +24,7 @@ public class BooleanIterators
 	/**
 	 * Empty Iterator Reference
 	 */
-	public static final EmptyIterator EMPTY = new EmptyIterator();
+	private static final EmptyIterator EMPTY = new EmptyIterator();
 	
 	/**
 	 * Returns a Immutable EmptyIterator instance that is automatically casted.
@@ -677,7 +677,7 @@ public class BooleanIterators
 	
 		@Override
 		public boolean nextBoolean() {
-			return false;
+			throw new NoSuchElementException();
 		}
 
 		@Override
@@ -687,7 +687,7 @@ public class BooleanIterators
 		
 		@Override
 		public boolean previousBoolean() {
-			return false;
+			throw new NoSuchElementException();
 		}
 		
 		@Override
@@ -729,6 +729,7 @@ public class BooleanIterators
 		
 		@Override
 		public boolean nextBoolean() {
+			if(!hasNext()) throw new NoSuchElementException();
 			return a[from++];
 		}
 		
@@ -796,7 +797,7 @@ public class BooleanIterators
 		
 		@Override
 		public T next() {
-			if(!hasNext()) throw new IllegalStateException("End of Iterator");
+			if(!hasNext()) throw new NoSuchElementException();
 			T result = last.next();
 			foundNext = false;
 			return result;
@@ -832,7 +833,7 @@ public class BooleanIterators
 		
 		@Override
 		public T next() {
-			if(!hasNext()) throw new IllegalStateException("End of Iterator");
+			if(!hasNext()) throw new NoSuchElementException();
 			T result = last.next();
 			foundNext = false;
 			return result;
@@ -863,7 +864,7 @@ public class BooleanIterators
 		
 		@Override
 		public boolean nextBoolean() {
-			if(!hasNext()) throw new IllegalStateException("End of Iterator");
+			if(!hasNext()) throw new NoSuchElementException();
 			return sortedElements.getBoolean(index++);
 		}
 	}
@@ -900,7 +901,7 @@ public class BooleanIterators
 		
 		@Override
 		public boolean nextBoolean() {
-			if(!hasNext()) throw new IllegalStateException("End of Iterator");
+			if(!hasNext()) throw new NoSuchElementException();
 			foundNext = false;
 			return lastFound;
 		}
@@ -937,7 +938,7 @@ public class BooleanIterators
 		
 		@Override
 		public boolean nextBoolean() {
-			if(!hasNext()) throw new IllegalStateException("End of Iterator");
+			if(!hasNext()) throw new NoSuchElementException();
 			foundNext = false;
 			return lastFound;
 		}
@@ -960,7 +961,7 @@ public class BooleanIterators
 		
 		@Override
 		public boolean nextBoolean() {
-			if(!hasNext()) throw new IllegalStateException("End of Iterator");
+			if(!hasNext()) throw new NoSuchElementException();
 			limit--;
 			return iterator.nextBoolean();
 		}
@@ -983,7 +984,7 @@ public class BooleanIterators
 		
 		@Override
 		public boolean nextBoolean() {
-			if(!hasNext()) throw new IllegalStateException("End of Iterator");
+			if(!hasNext()) throw new NoSuchElementException();
 			boolean result = iterator.nextBoolean();
 			action.accept(result);
 			return result;

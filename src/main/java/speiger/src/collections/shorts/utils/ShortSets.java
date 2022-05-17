@@ -1,5 +1,6 @@
 package speiger.src.collections.shorts.utils;
 
+import java.util.NoSuchElementException;
 import speiger.src.collections.shorts.collections.ShortBidirectionalIterator;
 import speiger.src.collections.shorts.functions.ShortComparator;
 import speiger.src.collections.shorts.collections.ShortIterator;
@@ -21,7 +22,7 @@ public class ShortSets
 	/**
 	 * Empty Set Variable
 	 */
-	public static final ShortSet EMPTY = new EmptySet();
+	private static final ShortSet EMPTY = new EmptySet();
 	
 	/**
 	 * EmptySet getter
@@ -178,10 +179,10 @@ public class ShortSets
 			return new ShortIterator() {
 				boolean next = true;
 				@Override
-				public boolean hasNext() { return next = false; }
+				public boolean hasNext() { return next; }
 				@Override
 				public short nextShort() {
-					if(!next) throw new IllegalStateException();
+					if(!hasNext()) throw new NoSuchElementException();
 					next = false;
 					return element;
 				}

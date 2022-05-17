@@ -1,5 +1,6 @@
 package speiger.src.collections.ints.utils;
 
+import java.util.NoSuchElementException;
 import speiger.src.collections.ints.collections.IntBidirectionalIterator;
 import speiger.src.collections.ints.functions.IntComparator;
 import speiger.src.collections.ints.collections.IntIterator;
@@ -21,7 +22,7 @@ public class IntSets
 	/**
 	 * Empty Set Variable
 	 */
-	public static final IntSet EMPTY = new EmptySet();
+	private static final IntSet EMPTY = new EmptySet();
 	
 	/**
 	 * EmptySet getter
@@ -178,10 +179,10 @@ public class IntSets
 			return new IntIterator() {
 				boolean next = true;
 				@Override
-				public boolean hasNext() { return next = false; }
+				public boolean hasNext() { return next; }
 				@Override
 				public int nextInt() {
-					if(!next) throw new IllegalStateException();
+					if(!hasNext()) throw new NoSuchElementException();
 					next = false;
 					return element;
 				}

@@ -31,7 +31,16 @@ public class Object2DoubleMaps
 	/**
 	 * Empty Map Variable
 	 */
-	public static final Object2DoubleMap<?> EMPTY = new EmptyMap<>();
+	private static final Object2DoubleMap<?> EMPTY = new EmptyMap<>();
+	
+	/**
+	 * Empty Map getter function that autocasts to the desired Key and Value
+	 * @param <T> the type of elements maintained by this Collection
+	 * @return empty map of desired type
+	 */
+	public static <T> Object2DoubleMap<T> empty() { 
+		return (Object2DoubleMap<T>)EMPTY;
+	}
 	
 	/**
 	 * Helper method that provides the fastIterator that recycles a single Entry to increase throughput.
@@ -73,14 +82,6 @@ public class Object2DoubleMaps
 		else entries.forEach(action);
 	}
 	
-	/**
-	 * Empty Map getter function that autocasts to the desired Key and Value
-	 * @param <T> the type of elements maintained by this Collection
-	 * @return empty map of desired type
-	 */
-	public static <T> Object2DoubleMap<T> empty() { 
-		return (Object2DoubleMap<T>)EMPTY;
-	}
 	
 	/**
 	 * Helper function that creates a Helper wrapper to synchronize access into the map.

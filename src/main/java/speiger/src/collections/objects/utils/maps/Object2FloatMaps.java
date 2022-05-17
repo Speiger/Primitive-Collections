@@ -31,7 +31,16 @@ public class Object2FloatMaps
 	/**
 	 * Empty Map Variable
 	 */
-	public static final Object2FloatMap<?> EMPTY = new EmptyMap<>();
+	private static final Object2FloatMap<?> EMPTY = new EmptyMap<>();
+	
+	/**
+	 * Empty Map getter function that autocasts to the desired Key and Value
+	 * @param <T> the type of elements maintained by this Collection
+	 * @return empty map of desired type
+	 */
+	public static <T> Object2FloatMap<T> empty() { 
+		return (Object2FloatMap<T>)EMPTY;
+	}
 	
 	/**
 	 * Helper method that provides the fastIterator that recycles a single Entry to increase throughput.
@@ -73,14 +82,6 @@ public class Object2FloatMaps
 		else entries.forEach(action);
 	}
 	
-	/**
-	 * Empty Map getter function that autocasts to the desired Key and Value
-	 * @param <T> the type of elements maintained by this Collection
-	 * @return empty map of desired type
-	 */
-	public static <T> Object2FloatMap<T> empty() { 
-		return (Object2FloatMap<T>)EMPTY;
-	}
 	
 	/**
 	 * Helper function that creates a Helper wrapper to synchronize access into the map.

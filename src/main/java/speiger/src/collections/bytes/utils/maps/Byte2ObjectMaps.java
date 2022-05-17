@@ -35,7 +35,16 @@ public class Byte2ObjectMaps
 	/**
 	 * Empty Map Variable
 	 */
-	public static final Byte2ObjectMap<?> EMPTY = new EmptyMap<>();
+	private static final Byte2ObjectMap<?> EMPTY = new EmptyMap<>();
+	
+	/**
+	 * Empty Map getter function that autocasts to the desired Key and Value
+	 * @param <V> the type of elements maintained by this Collection
+	 * @return empty map of desired type
+	 */
+	public static <V> Byte2ObjectMap<V> empty() { 
+		return (Byte2ObjectMap<V>)EMPTY;
+	}
 	
 	/**
 	 * Helper method that provides the fastIterator that recycles a single Entry to increase throughput.
@@ -77,14 +86,6 @@ public class Byte2ObjectMaps
 		else entries.forEach(action);
 	}
 	
-	/**
-	 * Empty Map getter function that autocasts to the desired Key and Value
-	 * @param <V> the type of elements maintained by this Collection
-	 * @return empty map of desired type
-	 */
-	public static <V> Byte2ObjectMap<V> empty() { 
-		return (Byte2ObjectMap<V>)EMPTY;
-	}
 	
 	/**
 	 * Helper function that creates a Helper wrapper to synchronize access into the map.

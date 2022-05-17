@@ -386,6 +386,7 @@ public class CharArrayFIFOQueue extends AbstractCharPriorityQueue implements Cha
 
 		@Override
 		public char nextChar() {
+			if(!hasNext()) throw new NoSuchElementException();
 			char value = array[index];
 			removeIndex(index);
 			index = ++index % array.length;

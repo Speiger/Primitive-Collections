@@ -386,6 +386,7 @@ public class BooleanArrayFIFOQueue extends AbstractBooleanPriorityQueue implemen
 
 		@Override
 		public boolean nextBoolean() {
+			if(!hasNext()) throw new NoSuchElementException();
 			boolean value = array[index];
 			removeIndex(index);
 			index = ++index % array.length;

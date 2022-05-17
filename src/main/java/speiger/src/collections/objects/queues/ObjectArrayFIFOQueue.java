@@ -397,6 +397,7 @@ public class ObjectArrayFIFOQueue<T> extends AbstractObjectPriorityQueue<T> impl
 
 		@Override
 		public T next() {
+			if(!hasNext()) throw new NoSuchElementException();
 			T value = array[index];
 			removeIndex(index);
 			index = ++index % array.length;

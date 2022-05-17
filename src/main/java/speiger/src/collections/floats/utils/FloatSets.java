@@ -1,5 +1,6 @@
 package speiger.src.collections.floats.utils;
 
+import java.util.NoSuchElementException;
 import speiger.src.collections.floats.collections.FloatBidirectionalIterator;
 import speiger.src.collections.floats.functions.FloatComparator;
 import speiger.src.collections.floats.collections.FloatIterator;
@@ -21,7 +22,7 @@ public class FloatSets
 	/**
 	 * Empty Set Variable
 	 */
-	public static final FloatSet EMPTY = new EmptySet();
+	private static final FloatSet EMPTY = new EmptySet();
 	
 	/**
 	 * EmptySet getter
@@ -178,10 +179,10 @@ public class FloatSets
 			return new FloatIterator() {
 				boolean next = true;
 				@Override
-				public boolean hasNext() { return next = false; }
+				public boolean hasNext() { return next; }
 				@Override
 				public float nextFloat() {
-					if(!next) throw new IllegalStateException();
+					if(!hasNext()) throw new NoSuchElementException();
 					next = false;
 					return element;
 				}

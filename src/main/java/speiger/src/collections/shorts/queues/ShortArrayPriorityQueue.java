@@ -175,7 +175,7 @@ public class ShortArrayPriorityQueue extends AbstractShortPriorityQueue
 	
 	@Override
 	public void enqueue(short e) {
-		if(size == array.length) array = Arrays.copyOf(array, (int)Math.max(Math.min((long)array.length + (array.length >> 1), SanityChecks.MAX_ARRAY_SIZE), size+1));
+		if(size == array.length) array = Arrays.copyOf(array, (int)Math.max(Math.min((long)array.length + (long)(array.length >> 1), (long)SanityChecks.MAX_ARRAY_SIZE), size+1));
 		if(firstIndex != -1){
 			int compare = comparator == null ? Short.compare(e, array[firstIndex]) : comparator.compare(e, array[firstIndex]);
 			if(compare < 0) firstIndex = size;
@@ -380,6 +380,7 @@ public class ShortArrayPriorityQueue extends AbstractShortPriorityQueue
 		
 		@Override
 		public short nextShort() {
+			if(!hasNext()) throw new NoSuchElementException();
 			return dequeue();
 		}
 	}

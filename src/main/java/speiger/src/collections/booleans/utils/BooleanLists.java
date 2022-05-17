@@ -22,7 +22,7 @@ public class BooleanLists
 	/**
 	 * Empty List reference
 	 */
-	public static final EmptyList EMPTY = new EmptyList();
+	private static final EmptyList EMPTY = new EmptyList();
 	
 	/**
 	 * Returns a Immutable EmptyList instance that is automatically casted.

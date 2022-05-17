@@ -1,5 +1,6 @@
 package speiger.src.collections.chars.utils;
 
+import java.util.NoSuchElementException;
 import speiger.src.collections.chars.collections.CharBidirectionalIterator;
 import speiger.src.collections.chars.functions.CharComparator;
 import speiger.src.collections.chars.collections.CharIterator;
@@ -21,7 +22,7 @@ public class CharSets
 	/**
 	 * Empty Set Variable
 	 */
-	public static final CharSet EMPTY = new EmptySet();
+	private static final CharSet EMPTY = new EmptySet();
 	
 	/**
 	 * EmptySet getter
@@ -178,10 +179,10 @@ public class CharSets
 			return new CharIterator() {
 				boolean next = true;
 				@Override
-				public boolean hasNext() { return next = false; }
+				public boolean hasNext() { return next; }
 				@Override
 				public char nextChar() {
-					if(!next) throw new IllegalStateException();
+					if(!hasNext()) throw new NoSuchElementException();
 					next = false;
 					return element;
 				}

@@ -1,5 +1,6 @@
 package speiger.src.collections.doubles.utils;
 
+import java.util.NoSuchElementException;
 import speiger.src.collections.doubles.collections.DoubleBidirectionalIterator;
 import speiger.src.collections.doubles.functions.DoubleComparator;
 import speiger.src.collections.doubles.collections.DoubleIterator;
@@ -21,7 +22,7 @@ public class DoubleSets
 	/**
 	 * Empty Set Variable
 	 */
-	public static final DoubleSet EMPTY = new EmptySet();
+	private static final DoubleSet EMPTY = new EmptySet();
 	
 	/**
 	 * EmptySet getter
@@ -178,10 +179,10 @@ public class DoubleSets
 			return new DoubleIterator() {
 				boolean next = true;
 				@Override
-				public boolean hasNext() { return next = false; }
+				public boolean hasNext() { return next; }
 				@Override
 				public double nextDouble() {
-					if(!next) throw new IllegalStateException();
+					if(!hasNext()) throw new NoSuchElementException();
 					next = false;
 					return element;
 				}

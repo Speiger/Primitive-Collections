@@ -192,7 +192,7 @@ public class BooleanHeapPriorityQueue extends AbstractBooleanPriorityQueue
 	
 	@Override
 	public void enqueue(boolean e) {
-		if(size == array.length) array = Arrays.copyOf(array, (int)Math.max(Math.min((long)array.length + (array.length >> 1), SanityChecks.MAX_ARRAY_SIZE), size+1));
+		if(size == array.length) array = Arrays.copyOf(array, (int)Math.max(Math.min((long)array.length + (long)(array.length >> 1), (long)SanityChecks.MAX_ARRAY_SIZE), size+1));
 		array[size++] = e;
 		BooleanArrays.shiftUp(array, size-1, comparator);
 	}
@@ -355,6 +355,7 @@ public class BooleanHeapPriorityQueue extends AbstractBooleanPriorityQueue
 		
 		@Override
 		public boolean nextBoolean() {
+			if(!hasNext()) throw new NoSuchElementException();
 			return dequeue();
 		}
 	}

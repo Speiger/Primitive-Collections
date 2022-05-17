@@ -31,4 +31,4 @@ gradle-app.setting
 #/src/main/java/speiger/src/collections/objects/*
 
 #Cache result
-/src/builder/resources/speiger/assets/collections/cache.bin
+#/src/builder/resources/speiger/assets/collections/cache.bin

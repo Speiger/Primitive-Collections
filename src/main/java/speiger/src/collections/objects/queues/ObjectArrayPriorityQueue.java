@@ -181,7 +181,7 @@ public class ObjectArrayPriorityQueue<T> extends AbstractObjectPriorityQueue<T>
 	
 	@Override
 	public void enqueue(T e) {
-		if(size == array.length) array = Arrays.copyOf(array, (int)Math.max(Math.min((long)array.length + (array.length >> 1), SanityChecks.MAX_ARRAY_SIZE), size+1));
+		if(size == array.length) array = Arrays.copyOf(array, (int)Math.max(Math.min((long)array.length + (long)(array.length >> 1), (long)SanityChecks.MAX_ARRAY_SIZE), size+1));
 		if(firstIndex != -1){
 			int compare = comparator == null ? ((Comparable<T>)e).compareTo((T)array[firstIndex]) : comparator.compare(e, array[firstIndex]);
 			if(compare < 0) firstIndex = size;
@@ -389,6 +389,7 @@ public class ObjectArrayPriorityQueue<T> extends AbstractObjectPriorityQueue<T>
 		
 		@Override
 		public T next() {
+			if(!hasNext()) throw new NoSuchElementException();
 			return dequeue();
 		}
 	}

@@ -1,5 +1,6 @@
 package speiger.src.collections.longs.utils;
 
+import java.util.NoSuchElementException;
 import speiger.src.collections.longs.collections.LongBidirectionalIterator;
 import speiger.src.collections.longs.functions.LongComparator;
 import speiger.src.collections.longs.collections.LongIterator;
@@ -21,7 +22,7 @@ public class LongSets
 	/**
 	 * Empty Set Variable
 	 */
-	public static final LongSet EMPTY = new EmptySet();
+	private static final LongSet EMPTY = new EmptySet();
 	
 	/**
 	 * EmptySet getter
@@ -178,10 +179,10 @@ public class LongSets
 			return new LongIterator() {
 				boolean next = true;
 				@Override
-				public boolean hasNext() { return next = false; }
+				public boolean hasNext() { return next; }
 				@Override
 				public long nextLong() {
-					if(!next) throw new IllegalStateException();
+					if(!hasNext()) throw new NoSuchElementException();
 					next = false;
 					return element;
 				}

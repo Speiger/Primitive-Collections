@@ -1,5 +1,6 @@
 package speiger.src.collections.objects.utils;
 
+import java.util.NoSuchElementException;
 import java.util.Comparator;
 import speiger.src.collections.objects.collections.ObjectBidirectionalIterator;
 import speiger.src.collections.objects.collections.ObjectIterator;
@@ -21,7 +22,7 @@ public class ObjectSets
 	/**
 	 * Empty Set Variable
 	 */
-	public static final ObjectSet<?> EMPTY = new EmptySet<>();
+	private static final ObjectSet<?> EMPTY = new EmptySet<>();
 	
 	/**
 	 * EmptySet getter
@@ -191,10 +192,10 @@ public class ObjectSets
 			return new ObjectIterator<T>() {
 				boolean next = true;
 				@Override
-				public boolean hasNext() { return next = false; }
+				public boolean hasNext() { return next; }
 				@Override
 				public T next() {
-					if(!next) throw new IllegalStateException();
+					if(!hasNext()) throw new NoSuchElementException();
 					next = false;
 					return element;
 				}

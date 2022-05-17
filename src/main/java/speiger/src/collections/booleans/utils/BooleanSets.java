@@ -1,5 +1,6 @@
 package speiger.src.collections.booleans.utils;
 
+import java.util.NoSuchElementException;
 import speiger.src.collections.booleans.collections.BooleanIterator;
 import speiger.src.collections.booleans.sets.AbstractBooleanSet;
 import speiger.src.collections.booleans.sets.BooleanSet;
@@ -13,7 +14,7 @@ public class BooleanSets
 	/**
 	 * Empty Set Variable
 	 */
-	public static final BooleanSet EMPTY = new EmptySet();
+	private static final BooleanSet EMPTY = new EmptySet();
 	
 	/**
 	 * EmptySet getter
@@ -50,10 +51,10 @@ public class BooleanSets
 			return new BooleanIterator() {
 				boolean next = true;
 				@Override
-				public boolean hasNext() { return next = false; }
+				public boolean hasNext() { return next; }
 				@Override
 				public boolean nextBoolean() {
-					if(!next) throw new IllegalStateException();
+					if(!hasNext()) throw new NoSuchElementException();
 					next = false;
 					return element;
 				}

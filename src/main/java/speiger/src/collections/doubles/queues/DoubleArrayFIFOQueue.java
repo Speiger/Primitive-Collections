@@ -386,6 +386,7 @@ public class DoubleArrayFIFOQueue extends AbstractDoublePriorityQueue implements
 
 		@Override
 		public double nextDouble() {
+			if(!hasNext()) throw new NoSuchElementException();
 			double value = array[index];
 			removeIndex(index);
 			index = ++index % array.length;

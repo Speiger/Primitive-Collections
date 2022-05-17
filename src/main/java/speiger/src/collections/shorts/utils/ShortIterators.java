@@ -26,7 +26,7 @@ public class ShortIterators
 	/**
 	 * Empty Iterator Reference
 	 */
-	public static final EmptyIterator EMPTY = new EmptyIterator();
+	private static final EmptyIterator EMPTY = new EmptyIterator();
 	
 	/**
 	 * Returns a Immutable EmptyIterator instance that is automatically casted.
@@ -679,7 +679,7 @@ public class ShortIterators
 	
 		@Override
 		public short nextShort() {
-			return (short)0;
+			throw new NoSuchElementException();
 		}
 
 		@Override
@@ -689,7 +689,7 @@ public class ShortIterators
 		
 		@Override
 		public short previousShort() {
-			return (short)0;
+			throw new NoSuchElementException();
 		}
 		
 		@Override
@@ -731,6 +731,7 @@ public class ShortIterators
 		
 		@Override
 		public short nextShort() {
+			if(!hasNext()) throw new NoSuchElementException();
 			return a[from++];
 		}
 		
@@ -798,7 +799,7 @@ public class ShortIterators
 		
 		@Override
 		public T next() {
-			if(!hasNext()) throw new IllegalStateException("End of Iterator");
+			if(!hasNext()) throw new NoSuchElementException();
 			T result = last.next();
 			foundNext = false;
 			return result;
@@ -834,7 +835,7 @@ public class ShortIterators
 		
 		@Override
 		public T next() {
-			if(!hasNext()) throw new IllegalStateException("End of Iterator");
+			if(!hasNext()) throw new NoSuchElementException();
 			T result = last.next();
 			foundNext = false;
 			return result;
@@ -865,7 +866,7 @@ public class ShortIterators
 		
 		@Override
 		public short nextShort() {
-			if(!hasNext()) throw new IllegalStateException("End of Iterator");
+			if(!hasNext()) throw new NoSuchElementException();
 			return sortedElements.getShort(index++);
 		}
 	}
@@ -900,7 +901,7 @@ public class ShortIterators
 		
 		@Override
 		public short nextShort() {
-			if(!hasNext()) throw new IllegalStateException("End of Iterator");
+			if(!hasNext()) throw new NoSuchElementException();
 			foundNext = false;
 			return lastFound;
 		}
@@ -937,7 +938,7 @@ public class ShortIterators
 		
 		@Override
 		public short nextShort() {
-			if(!hasNext()) throw new IllegalStateException("End of Iterator");
+			if(!hasNext()) throw new NoSuchElementException();
 			foundNext = false;
 			return lastFound;
 		}
@@ -960,7 +961,7 @@ public class ShortIterators
 		
 		@Override
 		public short nextShort() {
-			if(!hasNext()) throw new IllegalStateException("End of Iterator");
+			if(!hasNext()) throw new NoSuchElementException();
 			limit--;
 			return iterator.nextShort();
 		}
@@ -983,7 +984,7 @@ public class ShortIterators
 		
 		@Override
 		public short nextShort() {
-			if(!hasNext()) throw new IllegalStateException("End of Iterator");
+			if(!hasNext()) throw new NoSuchElementException();
 			short result = iterator.nextShort();
 			action.accept(result);
 			return result;

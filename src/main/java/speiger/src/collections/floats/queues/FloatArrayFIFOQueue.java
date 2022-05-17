@@ -386,6 +386,7 @@ public class FloatArrayFIFOQueue extends AbstractFloatPriorityQueue implements F
 
 		@Override
 		public float nextFloat() {
+			if(!hasNext()) throw new NoSuchElementException();
 			float value = array[index];
 			removeIndex(index);
 			index = ++index % array.length;

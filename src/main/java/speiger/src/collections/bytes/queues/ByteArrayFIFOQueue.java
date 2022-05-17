@@ -386,6 +386,7 @@ public class ByteArrayFIFOQueue extends AbstractBytePriorityQueue implements Byt
 
 		@Override
 		public byte nextByte() {
+			if(!hasNext()) throw new NoSuchElementException();
 			byte value = array[index];
 			removeIndex(index);
 			index = ++index % array.length;

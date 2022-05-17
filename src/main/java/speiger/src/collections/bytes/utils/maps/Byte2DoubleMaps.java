@@ -36,7 +36,15 @@ public class Byte2DoubleMaps
 	/**
 	 * Empty Map Variable
 	 */
-	public static final Byte2DoubleMap EMPTY = new EmptyMap();
+	private static final Byte2DoubleMap EMPTY = new EmptyMap();
+	
+	/**
+	 * Empty Map getter function that autocasts to the desired Key and Value
+	 * @return empty map of desired type
+	 */
+	public static Byte2DoubleMap empty() { 
+		return EMPTY;
+	}
 	
 	/**
 	 * Helper method that provides the fastIterator that recycles a single Entry to increase throughput.
@@ -75,13 +83,6 @@ public class Byte2DoubleMaps
 		else entries.forEach(action);
 	}
 	
-	/**
-	 * Empty Map getter function that autocasts to the desired Key and Value
-	 * @return empty map of desired type
-	 */
-	public static Byte2DoubleMap empty() { 
-		return EMPTY;
-	}
 	
 	/**
 	 * Helper function that creates a Helper wrapper to synchronize access into the map.

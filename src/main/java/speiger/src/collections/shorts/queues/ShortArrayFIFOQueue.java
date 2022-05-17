@@ -386,6 +386,7 @@ public class ShortArrayFIFOQueue extends AbstractShortPriorityQueue implements S
 
 		@Override
 		public short nextShort() {
+			if(!hasNext()) throw new NoSuchElementException();
 			short value = array[index];
 			removeIndex(index);
 			index = ++index % array.length;
