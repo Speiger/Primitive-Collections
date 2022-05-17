@@ -1,5 +1,6 @@
 package speiger.src.collections.PACKAGE.utils;
 
+import java.util.NoSuchElementException;
 #if TYPE_BOOLEAN
 import speiger.src.collections.booleans.collections.BooleanIterator;
 import speiger.src.collections.booleans.sets.AbstractBooleanSet;
@@ -34,7 +35,7 @@ public class SETS
 	/**
 	 * Empty Set Variable
 	 */
-	public static final SET NO_GENERIC_TYPE EMPTY = new EmptySetBRACES();
+	private static final SET NO_GENERIC_TYPE EMPTY = new EmptySetBRACES();
 	
 	/**
 	 * EmptySet getter
@@ -216,10 +217,10 @@ public class SETS
 			return new ITERATOR KEY_GENERIC_TYPE() {
 				boolean next = true;
 				@Override
-				public boolean hasNext() { return next = false; }
+				public boolean hasNext() { return next; }
 				@Override
 				public KEY_TYPE NEXT() {
-					if(!next) throw new IllegalStateException();
+					if(!hasNext()) throw new NoSuchElementException();
 					next = false;
 					return element;
 				}

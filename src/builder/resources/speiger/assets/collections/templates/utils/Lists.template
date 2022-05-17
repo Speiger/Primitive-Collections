@@ -27,7 +27,7 @@ public class LISTS
 	/**
 	 * Empty List reference
 	 */
-	public static final EmptyList NO_GENERIC_TYPE EMPTY = new EmptyListBRACES();
+	private static final EmptyList NO_GENERIC_TYPE EMPTY = new EmptyListBRACES();
 	
 	/**
 	 * Returns a Immutable EmptyList instance that is automatically casted.

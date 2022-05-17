@@ -34,7 +34,7 @@ public class ITERATORS
 	/**
 	 * Empty Iterator Reference
 	 */
-	public static final EmptyIterator NO_GENERIC_TYPE EMPTY = new EmptyIteratorBRACES();
+	private static final EmptyIterator NO_GENERIC_TYPE EMPTY = new EmptyIteratorBRACES();
 	
 	/**
 	 * Returns a Immutable EmptyIterator instance that is automatically casted.
@@ -735,7 +735,7 @@ public class ITERATORS
 	
 		@Override
 		public KEY_TYPE NEXT() {
-			return EMPTY_KEY_VALUE;
+			throw new NoSuchElementException();
 		}
 
 		@Override
@@ -745,7 +745,7 @@ public class ITERATORS
 		
 		@Override
 		public KEY_TYPE PREVIOUS() {
-			return EMPTY_KEY_VALUE;
+			throw new NoSuchElementException();
 		}
 		
 		@Override
@@ -787,6 +787,7 @@ public class ITERATORS
 		
 		@Override
 		public KEY_TYPE NEXT() {
+			if(!hasNext()) throw new NoSuchElementException();
 			return a[from++];
 		}
 		
@@ -854,7 +855,7 @@ public class ITERATORS
 		
 		@Override
 		public T next() {
-			if(!hasNext()) throw new IllegalStateException("End of Iterator");
+			if(!hasNext()) throw new NoSuchElementException();
 			T result = last.next();
 			foundNext = false;
 			return result;
@@ -890,7 +891,7 @@ public class ITERATORS
 		
 		@Override
 		public T next() {
-			if(!hasNext()) throw new IllegalStateException("End of Iterator");
+			if(!hasNext()) throw new NoSuchElementException();
 			T result = last.next();
 			foundNext = false;
 			return result;
@@ -921,7 +922,7 @@ public class ITERATORS
 		
 		@Override
 		public KEY_TYPE NEXT() {
-			if(!hasNext()) throw new IllegalStateException("End of Iterator");
+			if(!hasNext()) throw new NoSuchElementException();
 			return sortedElements.GET_KEY(index++);
 		}
 	}
@@ -971,7 +972,7 @@ public class ITERATORS
 		
 		@Override
 		public KEY_TYPE NEXT() {
-			if(!hasNext()) throw new IllegalStateException("End of Iterator");
+			if(!hasNext()) throw new NoSuchElementException();
 			foundNext = false;
 			return lastFound;
 		}
@@ -1008,7 +1009,7 @@ public class ITERATORS
 		
 		@Override
 		public KEY_TYPE NEXT() {
-			if(!hasNext()) throw new IllegalStateException("End of Iterator");
+			if(!hasNext()) throw new NoSuchElementException();
 			foundNext = false;
 			return lastFound;
 		}
@@ -1031,7 +1032,7 @@ public class ITERATORS
 		
 		@Override
 		public KEY_TYPE NEXT() {
-			if(!hasNext()) throw new IllegalStateException("End of Iterator");
+			if(!hasNext()) throw new NoSuchElementException();
 			limit--;
 			return iterator.NEXT();
 		}
@@ -1054,7 +1055,7 @@ public class ITERATORS
 		
 		@Override
 		public KEY_TYPE NEXT() {
-			if(!hasNext()) throw new IllegalStateException("End of Iterator");
+			if(!hasNext()) throw new NoSuchElementException();
 			KEY_TYPE result = iterator.NEXT();
 			action.accept(result);
 			return result;
