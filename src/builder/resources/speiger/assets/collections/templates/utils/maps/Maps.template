@@ -57,7 +57,21 @@ public class MAPS
 	/**
 	 * Empty Map Variable
 	 */
-	public static final MAP NO_KV_GENERIC_TYPE EMPTY = new EmptyMapKV_BRACES();
+	private static final MAP NO_KV_GENERIC_TYPE EMPTY = new EmptyMapKV_BRACES();
+	
+	/**
+	 * Empty Map getter function that autocasts to the desired Key and Value
+	 * @Type(T)
+	 * @ValueType(V)
+	 * @return empty map of desired type
+	 */
+	public static GENERIC_KEY_VALUE_BRACES MAP KEY_VALUE_GENERIC_TYPE empty() { 
+#if TYPE_OBJECT || VALUE_OBJECT
+		return (MAP KEY_VALUE_GENERIC_TYPE)EMPTY;
+#else
+		return EMPTY;
+#endif
+	}
 	
 #endif	
 	/**
@@ -104,19 +118,6 @@ public class MAPS
 	}
 	
 #if !TYPE_BOOLEAN
-	/**
-	 * Empty Map getter function that autocasts to the desired Key and Value
-	 * @Type(T)
-	 * @ValueType(V)
-	 * @return empty map of desired type
-	 */
-	public static GENERIC_KEY_VALUE_BRACES MAP KEY_VALUE_GENERIC_TYPE empty() { 
-#if TYPE_OBJECT || VALUE_OBJECT
-		return (MAP KEY_VALUE_GENERIC_TYPE)EMPTY;
-#else
-		return EMPTY;
-#endif
-	}
 	
 	/**
 	 * Helper function that creates a Helper wrapper to synchronize access into the map.

@@ -1263,7 +1263,7 @@ public class LINKED_LIST KEY_GENERIC_TYPE extends ABSTRACT_LIST KEY_GENERIC_TYPE
 		
 		@Override
 		public long estimateSize() {
-			return list.size - index;
+			return (long)list.size - (long)index;
 		}
 		
 		@Override
@@ -1329,7 +1329,7 @@ public class LINKED_LIST KEY_GENERIC_TYPE extends ABSTRACT_LIST KEY_GENERIC_TYPE
 		
 		@Override
 		public long estimateSize() {
-			return list.size - index;
+			return (long)list.size - (long)index;
 		}
 		
 		@Override

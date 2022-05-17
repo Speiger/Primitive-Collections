@@ -187,7 +187,7 @@ public class ARRAY_PRIORITY_QUEUE KEY_GENERIC_TYPE extends ABSTRACT_PRIORITY_QUE
 	
 	@Override
 	public void enqueue(KEY_TYPE e) {
-		if(size == array.length) array = Arrays.copyOf(array, (int)Math.max(Math.min((long)array.length + (array.length >> 1), SanityChecks.MAX_ARRAY_SIZE), size+1));
+		if(size == array.length) array = Arrays.copyOf(array, (int)Math.max(Math.min((long)array.length + (long)(array.length >> 1), (long)SanityChecks.MAX_ARRAY_SIZE), size+1));
 		if(firstIndex != -1){
 			int compare = comparator == null ? COMPAREABLE_TO_KEY(e, array[firstIndex]) : comparator.compare(e, array[firstIndex]);
 			if(compare < 0) firstIndex = size;
@@ -414,6 +414,7 @@ public class ARRAY_PRIORITY_QUEUE KEY_GENERIC_TYPE extends ABSTRACT_PRIORITY_QUE
 		
 		@Override
 		public KEY_TYPE NEXT() {
+			if(!hasNext()) throw new NoSuchElementException();
 			return dequeue();
 		}
 	}

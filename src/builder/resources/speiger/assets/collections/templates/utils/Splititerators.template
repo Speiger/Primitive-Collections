@@ -1,6 +1,7 @@
 package speiger.src.collections.PACKAGE.utils;
 
 import java.util.Comparator;
+import java.util.NoSuchElementException;
 import java.util.Spliterator;
 #if PRIMITIVES
 import java.util.Spliterator.JAVA_SPLIT_ITERATOR;
@@ -329,7 +330,11 @@ public class SPLIT_ITERATORS
 		}
 		
 		@Override
-		public KEY_TYPE NEXT() { return array[index++]; }
+		public KEY_TYPE NEXT() {
+			if(!hasNext()) throw new NoSuchElementException();
+			return array[index++];
+		}
+		
 		@Override
 		public boolean hasNext() { return index < fence; }
 	}

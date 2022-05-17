@@ -434,6 +434,7 @@ public class ARRAY_FIFO_QUEUE KEY_GENERIC_TYPE extends ABSTRACT_PRIORITY_QUEUE K
 
 		@Override
 		public KEY_TYPE NEXT() {
+			if(!hasNext()) throw new NoSuchElementException();
 			KEY_TYPE value = array[index];
 			removeIndex(index);
 			index = ++index % array.length;
