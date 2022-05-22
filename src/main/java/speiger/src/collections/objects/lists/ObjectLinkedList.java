@@ -240,6 +240,7 @@ public class ObjectLinkedList<T> extends AbstractObjectList<T> implements Object
 	
 	@Override
 	public void addElements(int from, T[] a, int offset, int length) {
+		if(length <= 0) return;
 		SanityChecks.checkArrayCapacity(a.length, offset, length);
 		checkAddRange(from);
 		Entry<T> next;
@@ -512,12 +513,14 @@ public class ObjectLinkedList<T> extends AbstractObjectList<T> implements Object
 			first = temp;
 			return result;
 		}
-		Entry<T> temp = last;
-		last = temp.prev;
-		last.next = null;
-		temp.next = before.next;
-		temp.prev = before;
-		before.next = temp;
+		else if(before.next != last) {
+			Entry<T> temp = last;
+			last = temp.prev;
+			last.next = null;
+			temp.next = before.next;
+			temp.prev = before;
+			before.next = temp;
+		}
 		return result;
 	}
 	
@@ -542,12 +545,14 @@ public class ObjectLinkedList<T> extends AbstractObjectList<T> implements Object
 					first = temp;
 					return true;
 				}
-				Entry<T> temp = last;
-				last = temp.prev;
-				last.next = null;
-				temp.next = before.next;
-				temp.prev = before;
-				before.next = temp;
+				else if(before.next != last) {
+					Entry<T> temp = last;
+					last = temp.prev;
+					last.next = null;
+					temp.next = before.next;
+					temp.prev = before;
+					before.next = temp;
+				}
 				return true;
 			}
 		}
@@ -582,16 +587,18 @@ public class ObjectLinkedList<T> extends AbstractObjectList<T> implements Object
 		if(from < size - to) {
 			Entry<T> entry = getNode(from);
 			while(length > 0) {
-				entry = entry.next;
-				unlink(entry.prev);
+				Entry<T> next = entry.next;
+				unlink(entry);
+				entry = next;
 				length--;
 			}
 			return;
 		}
 		Entry<T> entry = getNode(to);
 		while(length > 0) {
-			entry = entry.prev;
-			unlink(entry.next);
+			Entry<T> prev = entry.prev;
+			unlink(entry);
+			entry = prev;
 			length--;
 		}
 	}
@@ -606,15 +613,17 @@ public class ObjectLinkedList<T> extends AbstractObjectList<T> implements Object
 		if(from < size - to) {
 			Entry<T> entry = getNode(from);
 			for(int i = 0;length > 0;i++, length--) {
-				entry = entry.next;
-				a[i] = (K)unlink(entry.prev);
+				Entry<T> next = entry.next;
+				a[i] = (K)unlink(entry);
+				entry = next;
 			}
 			return a;
 		}
 		Entry<T> entry = getNode(to);
-		for(int i = length-1;length > 0;i--) {
-			entry = entry.prev;
-			a[i] = (K)unlink(entry.next);
+		for(int i = length-1;length > 0;i--, length--) {
+			Entry<T> prev = entry.prev;
+			a[i] = (K)unlink(entry);
+			entry = prev;
 		}
 		return a;
 	}
@@ -1057,7 +1066,7 @@ public class ObjectLinkedList<T> extends AbstractObjectList<T> implements Object
 		
 		@Override
 		public long estimateSize() {
-			return list.size - index;
+			return (long)list.size - (long)index;
 		}
 		
 		@Override

@@ -237,6 +237,7 @@ public class LINKED_CUSTOM_HASH_SET KEY_GENERIC_TYPE extends CUSTOM_HASH_SET KEY
 			}
 			containsNull = true;
 			onNodeAdded(nullIndex);
+			moveToFirstIndex(nullIndex);
 		}
 		else {
 			int pos = HashUtil.mix(strategy.hashCode(o)) & mask;
@@ -249,6 +250,7 @@ public class LINKED_CUSTOM_HASH_SET KEY_GENERIC_TYPE extends CUSTOM_HASH_SET KEY
 			}
 			keys[pos] = o;
 			onNodeAdded(pos);
+			moveToFirstIndex(pos);
 		}
 		if(size++ >= maxFill) rehash(HashUtil.arraySize(size+1, loadFactor));
 		return true;

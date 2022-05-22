@@ -221,6 +221,7 @@ public class ShortLinkedOpenCustomHashSet extends ShortOpenCustomHashSet impleme
 			}
 			containsNull = true;
 			onNodeAdded(nullIndex);
+			moveToFirstIndex(nullIndex);
 		}
 		else {
 			int pos = HashUtil.mix(strategy.hashCode(o)) & mask;
@@ -233,6 +234,7 @@ public class ShortLinkedOpenCustomHashSet extends ShortOpenCustomHashSet impleme
 			}
 			keys[pos] = o;
 			onNodeAdded(pos);
+			moveToFirstIndex(pos);
 		}
 		if(size++ >= maxFill) rehash(HashUtil.arraySize(size+1, loadFactor));
 		return true;

@@ -318,6 +318,7 @@ public class CopyOnWriteDoubleArrayList extends AbstractDoubleList implements IT
 			double[] data = this.data;
 			int size = data.length;
 			if(from < 0 || from > size) throw new IndexOutOfBoundsException("Index: " + from + ", Size: " + size);
+			SanityChecks.checkArrayCapacity(a.length, offset, length);
 			double[] newElements;
 			if(from == size) {
 				newElements = Arrays.copyOf(data, size+length);
@@ -1377,7 +1378,7 @@ public class CopyOnWriteDoubleArrayList extends AbstractDoubleList implements IT
 			lock.lock();
 			try {
 				checkSubRange(from);
-				checkSubRange(to);
+				checkAddSubRange(to);
 				list.removeElements(from+parentOffset, to+parentOffset);
 				size -= to - from;
 			}
@@ -1392,9 +1393,9 @@ public class CopyOnWriteDoubleArrayList extends AbstractDoubleList implements IT
 			lock.lock();
 			try {
 				checkSubRange(from);
-				checkSubRange(to);
+				checkAddSubRange(to);
 				double[] result = list.extractElements(from+parentOffset, to+parentOffset);
-				size -= to - from;
+				size -= result.length;
 				return result;
 			}
 			finally {

@@ -155,6 +155,7 @@ public abstract class AbstractObjectCollection<T> extends AbstractCollection<T> 
 		for(ObjectIterator<T> iter = iterator();iter.hasNext();) {
 			T e = iter.next();
 			if(!c.contains(e)) {
+				r.accept(e);
 				iter.remove();
 				modified = true;
 			}

@@ -170,6 +170,7 @@ public class ObjectLinkedOpenHashSet<T> extends ObjectOpenHashSet<T> implements 
 			}
 			containsNull = true;
 			onNodeAdded(nullIndex);
+			moveToFirstIndex(nullIndex);
 		}
 		else {
 			int pos = HashUtil.mix(Objects.hashCode(o)) & mask;
@@ -182,6 +183,7 @@ public class ObjectLinkedOpenHashSet<T> extends ObjectOpenHashSet<T> implements 
 			}
 			keys[pos] = o;
 			onNodeAdded(pos);
+			moveToFirstIndex(pos);
 		}
 		if(size++ >= maxFill) rehash(HashUtil.arraySize(size+1, loadFactor));
 		return true;

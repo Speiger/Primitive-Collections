@@ -315,7 +315,7 @@ public abstract class ABSTRACT_LIST KEY_GENERIC_TYPE extends ABSTRACT_COLLECTION
 		public void removeElements(int from, int to) {
 			if(to-from <= 0) return;
 			checkSubRange(from);
-			checkSubRange(to);
+			checkAddSubRange(to);
 			list.removeElements(from+parentOffset, to+parentOffset);
 			size -= to - from;
 		}
@@ -324,9 +324,9 @@ public abstract class ABSTRACT_LIST KEY_GENERIC_TYPE extends ABSTRACT_COLLECTION
 		@Override
 		public <K> K[] extractElements(int from, int to, Class<K> type) {
 			checkSubRange(from);
-			checkSubRange(to);
+			checkAddSubRange(to);
 			K[] result = list.extractElements(from+parentOffset, to+parentOffset, type);
-			size -= to - from;
+			size -= result.length;
 			return result;
 		}
 
@@ -334,9 +334,9 @@ public abstract class ABSTRACT_LIST KEY_GENERIC_TYPE extends ABSTRACT_COLLECTION
 		@Override
 		public KEY_TYPE[] extractElements(int from, int to) {
 			checkSubRange(from);
-			checkSubRange(to);
+			checkAddSubRange(to);
 			KEY_TYPE[] result = list.extractElements(from+parentOffset, to+parentOffset);
-			size -= to - from;
+			size -= result.length;
 			return result;
 		}
 		

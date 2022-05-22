@@ -218,6 +218,7 @@ public abstract class AbstractCharCollection extends AbstractCollection<Characte
 		for(CharIterator iter = iterator();iter.hasNext();) {
 			char e = iter.nextChar();
 			if(!c.contains(e)) {
+				r.accept(e);
 				iter.remove();
 				modified = true;
 			}
@@ -243,6 +244,7 @@ public abstract class AbstractCharCollection extends AbstractCollection<Characte
 	public char[] toCharArray(char[] a) {
 		if(a == null || a.length < size()) a = new char[size()];
 		CharIterators.unwrap(a, iterator());
+		if (a.length > size()) a[size()] = (char)0;
 		return a;
 	}
 }

@@ -218,6 +218,7 @@ public abstract class AbstractIntCollection extends AbstractCollection<Integer> 
 		for(IntIterator iter = iterator();iter.hasNext();) {
 			int e = iter.nextInt();
 			if(!c.contains(e)) {
+				r.accept(e);
 				iter.remove();
 				modified = true;
 			}
@@ -243,6 +244,7 @@ public abstract class AbstractIntCollection extends AbstractCollection<Integer> 
 	public int[] toIntArray(int[] a) {
 		if(a == null || a.length < size()) a = new int[size()];
 		IntIterators.unwrap(a, iterator());
+		if (a.length > size()) a[size()] = 0;
 		return a;
 	}
 }

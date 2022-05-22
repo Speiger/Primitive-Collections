@@ -218,6 +218,7 @@ public abstract class AbstractLongCollection extends AbstractCollection<Long> im
 		for(LongIterator iter = iterator();iter.hasNext();) {
 			long e = iter.nextLong();
 			if(!c.contains(e)) {
+				r.accept(e);
 				iter.remove();
 				modified = true;
 			}
@@ -243,6 +244,7 @@ public abstract class AbstractLongCollection extends AbstractCollection<Long> im
 	public long[] toLongArray(long[] a) {
 		if(a == null || a.length < size()) a = new long[size()];
 		LongIterators.unwrap(a, iterator());
+		if (a.length > size()) a[size()] = 0L;
 		return a;
 	}
 }

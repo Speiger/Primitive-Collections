@@ -284,7 +284,7 @@ public abstract class AbstractByteList extends AbstractByteCollection implements
 		public void removeElements(int from, int to) {
 			if(to-from <= 0) return;
 			checkSubRange(from);
-			checkSubRange(to);
+			checkAddSubRange(to);
 			list.removeElements(from+parentOffset, to+parentOffset);
 			size -= to - from;
 		}
@@ -292,9 +292,9 @@ public abstract class AbstractByteList extends AbstractByteCollection implements
 		@Override
 		public byte[] extractElements(int from, int to) {
 			checkSubRange(from);
-			checkSubRange(to);
+			checkAddSubRange(to);
 			byte[] result = list.extractElements(from+parentOffset, to+parentOffset);
-			size -= to - from;
+			size -= result.length;
 			return result;
 		}
 		

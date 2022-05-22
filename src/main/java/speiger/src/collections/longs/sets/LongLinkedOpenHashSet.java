@@ -190,6 +190,7 @@ public class LongLinkedOpenHashSet extends LongOpenHashSet implements LongOrdere
 			}
 			containsNull = true;
 			onNodeAdded(nullIndex);
+			moveToFirstIndex(nullIndex);
 		}
 		else {
 			int pos = HashUtil.mix(Long.hashCode(o)) & mask;
@@ -202,6 +203,7 @@ public class LongLinkedOpenHashSet extends LongOpenHashSet implements LongOrdere
 			}
 			keys[pos] = o;
 			onNodeAdded(pos);
+			moveToFirstIndex(pos);
 		}
 		if(size++ >= maxFill) rehash(HashUtil.arraySize(size+1, loadFactor));
 		return true;

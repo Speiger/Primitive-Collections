@@ -94,6 +94,15 @@ public class BooleanAsyncBuilder
 	}
 	
 	/**
+	 * Helper function that automatically wraps a array into a AsyncBuilder since it forces this collections Iterable.
+	 * @param values that should be wrapped
+	 * @return a AsyncBuilder with the values wrapped
+	 */
+	public static BooleanAsyncBuilder of(boolean...values) {
+		return new BooleanAsyncBuilder(BooleanArrayList.wrap(values));
+	}
+	
+	/**
 	 * Maps the elements to something else
 	 * @param mapper the mapping function
 	 * @param <E> The return type.

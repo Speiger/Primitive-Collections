@@ -283,8 +283,9 @@ public class ObjectArrayList<T> extends AbstractObjectList<T> implements IObject
 	public void addElements(int from, T[] a, int offset, int length) {
 		if(length <= 0) return;
 		checkAddRange(from);
+		SanityChecks.checkArrayCapacity(a.length, offset, length);
 		grow(size + length);
-		if(from != size) System.arraycopy(data, from, data, from+length, size - length);
+		if(from != size) System.arraycopy(data, from, data, from+length, size - from);
 		size+=length;
 		System.arraycopy(a, offset, data, from, length);
 	}

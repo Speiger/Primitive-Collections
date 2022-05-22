@@ -218,6 +218,7 @@ public abstract class AbstractShortCollection extends AbstractCollection<Short> 
 		for(ShortIterator iter = iterator();iter.hasNext();) {
 			short e = iter.nextShort();
 			if(!c.contains(e)) {
+				r.accept(e);
 				iter.remove();
 				modified = true;
 			}
@@ -243,6 +244,7 @@ public abstract class AbstractShortCollection extends AbstractCollection<Short> 
 	public short[] toShortArray(short[] a) {
 		if(a == null || a.length < size()) a = new short[size()];
 		ShortIterators.unwrap(a, iterator());
+		if (a.length > size()) a[size()] = (short)0;
 		return a;
 	}
 }

@@ -190,6 +190,7 @@ public class FloatLinkedOpenHashSet extends FloatOpenHashSet implements FloatOrd
 			}
 			containsNull = true;
 			onNodeAdded(nullIndex);
+			moveToFirstIndex(nullIndex);
 		}
 		else {
 			int pos = HashUtil.mix(Float.hashCode(o)) & mask;
@@ -202,6 +203,7 @@ public class FloatLinkedOpenHashSet extends FloatOpenHashSet implements FloatOrd
 			}
 			keys[pos] = o;
 			onNodeAdded(pos);
+			moveToFirstIndex(pos);
 		}
 		if(size++ >= maxFill) rehash(HashUtil.arraySize(size+1, loadFactor));
 		return true;

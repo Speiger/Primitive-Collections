@@ -218,6 +218,7 @@ public abstract class AbstractDoubleCollection extends AbstractCollection<Double
 		for(DoubleIterator iter = iterator();iter.hasNext();) {
 			double e = iter.nextDouble();
 			if(!c.contains(e)) {
+				r.accept(e);
 				iter.remove();
 				modified = true;
 			}
@@ -243,6 +244,7 @@ public abstract class AbstractDoubleCollection extends AbstractCollection<Double
 	public double[] toDoubleArray(double[] a) {
 		if(a == null || a.length < size()) a = new double[size()];
 		DoubleIterators.unwrap(a, iterator());
+		if (a.length > size()) a[size()] = 0D;
 		return a;
 	}
 }

@@ -246,6 +246,7 @@ public class IntLinkedList extends AbstractIntList implements IntPriorityDequeue
 	
 	@Override
 	public void addElements(int from, int[] a, int offset, int length) {
+		if(length <= 0) return;
 		SanityChecks.checkArrayCapacity(a.length, offset, length);
 		checkAddRange(from);
 		Entry next;
@@ -564,12 +565,14 @@ public class IntLinkedList extends AbstractIntList implements IntPriorityDequeue
 			first = temp;
 			return result;
 		}
-		Entry temp = last;
-		last = temp.prev;
-		last.next = null;
-		temp.next = before.next;
-		temp.prev = before;
-		before.next = temp;
+		else if(before.next != last) {
+			Entry temp = last;
+			last = temp.prev;
+			last.next = null;
+			temp.next = before.next;
+			temp.prev = before;
+			before.next = temp;
+		}
 		return result;
 	}
 	
@@ -594,12 +597,14 @@ public class IntLinkedList extends AbstractIntList implements IntPriorityDequeue
 					first = temp;
 					return true;
 				}
-				Entry temp = last;
-				last = temp.prev;
-				last.next = null;
-				temp.next = before.next;
-				temp.prev = before;
-				before.next = temp;
+				else if(before.next != last) {
+					Entry temp = last;
+					last = temp.prev;
+					last.next = null;
+					temp.next = before.next;
+					temp.prev = before;
+					before.next = temp;
+				}
 				return true;
 			}
 		}
@@ -627,16 +632,18 @@ public class IntLinkedList extends AbstractIntList implements IntPriorityDequeue
 		if(from < size - to) {
 			Entry entry = getNode(from);
 			while(length > 0) {
-				entry = entry.next;
-				unlink(entry.prev);
+				Entry next = entry.next;
+				unlink(entry);
+				entry = next;
 				length--;
 			}
 			return;
 		}
 		Entry entry = getNode(to);
 		while(length > 0) {
-			entry = entry.prev;
-			unlink(entry.next);
+			Entry prev = entry.prev;
+			unlink(entry);
+			entry = prev;
 			length--;
 		}
 	}
@@ -651,15 +658,17 @@ public class IntLinkedList extends AbstractIntList implements IntPriorityDequeue
 		if(from < size - to) {
 			Entry entry = getNode(from);
 			for(int i = 0;length > 0;i++, length--) {
-				entry = entry.next;
-				d[i] = unlink(entry.prev);
+				Entry next = entry.next;
+				d[i] = unlink(entry);
+				entry = next;
 			}
 			return d;
 		}
 		Entry entry = getNode(to);
-		for(int i = length-1;length > 0;i--) {
-			entry = entry.prev;
-			d[i] = unlink(entry.next);
+		for(int i = length-1;length > 0;i--, length--) {
+			Entry prev = entry.prev;
+			d[i] = unlink(entry);
+			entry = prev;
 		}
 		return d;
 	}
@@ -1142,7 +1151,7 @@ public class IntLinkedList extends AbstractIntList implements IntPriorityDequeue
 		
 		@Override
 		public long estimateSize() {
-			return list.size - index;
+			return (long)list.size - (long)index;
 		}
 		
 		@Override
@@ -1207,7 +1216,7 @@ public class IntLinkedList extends AbstractIntList implements IntPriorityDequeue
 		
 		@Override
 		public long estimateSize() {
-			return list.size - index;
+			return (long)list.size - (long)index;
 		}
 		
 		@Override

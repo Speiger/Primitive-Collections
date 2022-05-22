@@ -262,8 +262,9 @@ public class LongArrayList extends AbstractLongList implements ILongArray, LongS
 	public void addElements(int from, long[] a, int offset, int length) {
 		if(length <= 0) return;
 		checkAddRange(from);
+		SanityChecks.checkArrayCapacity(a.length, offset, length);
 		grow(size + length);
-		if(from != size) System.arraycopy(data, from, data, from+length, size - length);
+		if(from != size) System.arraycopy(data, from, data, from+length, size - from);
 		size+=length;
 		System.arraycopy(a, offset, data, from, length);
 	}

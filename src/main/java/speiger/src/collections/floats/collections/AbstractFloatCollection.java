@@ -218,6 +218,7 @@ public abstract class AbstractFloatCollection extends AbstractCollection<Float> 
 		for(FloatIterator iter = iterator();iter.hasNext();) {
 			float e = iter.nextFloat();
 			if(!c.contains(e)) {
+				r.accept(e);
 				iter.remove();
 				modified = true;
 			}
@@ -243,6 +244,7 @@ public abstract class AbstractFloatCollection extends AbstractCollection<Float> 
 	public float[] toFloatArray(float[] a) {
 		if(a == null || a.length < size()) a = new float[size()];
 		FloatIterators.unwrap(a, iterator());
+		if (a.length > size()) a[size()] = 0F;
 		return a;
 	}
 }

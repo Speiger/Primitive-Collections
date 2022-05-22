@@ -98,6 +98,16 @@ public class ObjectAsyncBuilder<T>
 	}
 	
 	/**
+	 * Helper function that automatically wraps a array into a AsyncBuilder since it forces this collections Iterable.
+	 * @param values that should be wrapped
+	 * @param <T> the type of elements maintained by this Collection
+	 * @return a AsyncBuilder with the values wrapped
+	 */
+	public static <T> ObjectAsyncBuilder<T> of(T...values) {
+		return new ObjectAsyncBuilder<>(ObjectArrayList.wrap(values));
+	}
+	
+	/**
 	 * Maps the elements to something else
 	 * @param mapper the mapping function
 	 * @param <E> The return type.

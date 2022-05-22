@@ -218,6 +218,7 @@ public abstract class AbstractByteCollection extends AbstractCollection<Byte> im
 		for(ByteIterator iter = iterator();iter.hasNext();) {
 			byte e = iter.nextByte();
 			if(!c.contains(e)) {
+				r.accept(e);
 				iter.remove();
 				modified = true;
 			}
@@ -243,6 +244,7 @@ public abstract class AbstractByteCollection extends AbstractCollection<Byte> im
 	public byte[] toByteArray(byte[] a) {
 		if(a == null || a.length < size()) a = new byte[size()];
 		ByteIterators.unwrap(a, iterator());
+		if (a.length > size()) a[size()] = (byte)0;
 		return a;
 	}
 }

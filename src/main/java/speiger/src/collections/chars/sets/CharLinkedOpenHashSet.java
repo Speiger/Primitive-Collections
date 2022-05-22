@@ -190,6 +190,7 @@ public class CharLinkedOpenHashSet extends CharOpenHashSet implements CharOrdere
 			}
 			containsNull = true;
 			onNodeAdded(nullIndex);
+			moveToFirstIndex(nullIndex);
 		}
 		else {
 			int pos = HashUtil.mix(Character.hashCode(o)) & mask;
@@ -202,6 +203,7 @@ public class CharLinkedOpenHashSet extends CharOpenHashSet implements CharOrdere
 			}
 			keys[pos] = o;
 			onNodeAdded(pos);
+			moveToFirstIndex(pos);
 		}
 		if(size++ >= maxFill) rehash(HashUtil.arraySize(size+1, loadFactor));
 		return true;

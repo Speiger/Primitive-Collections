@@ -218,6 +218,7 @@ public abstract class AbstractBooleanCollection extends AbstractCollection<Boole
 		for(BooleanIterator iter = iterator();iter.hasNext();) {
 			boolean e = iter.nextBoolean();
 			if(!c.contains(e)) {
+				r.accept(e);
 				iter.remove();
 				modified = true;
 			}
@@ -243,6 +244,7 @@ public abstract class AbstractBooleanCollection extends AbstractCollection<Boole
 	public boolean[] toBooleanArray(boolean[] a) {
 		if(a == null || a.length < size()) a = new boolean[size()];
 		BooleanIterators.unwrap(a, iterator());
+		if (a.length > size()) a[size()] = false;
 		return a;
 	}
 }

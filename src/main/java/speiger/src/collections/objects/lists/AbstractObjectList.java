@@ -245,7 +245,7 @@ public abstract class AbstractObjectList<T> extends AbstractObjectCollection<T> 
 		public void removeElements(int from, int to) {
 			if(to-from <= 0) return;
 			checkSubRange(from);
-			checkSubRange(to);
+			checkAddSubRange(to);
 			list.removeElements(from+parentOffset, to+parentOffset);
 			size -= to - from;
 		}
@@ -253,9 +253,9 @@ public abstract class AbstractObjectList<T> extends AbstractObjectCollection<T> 
 		@Override
 		public <K> K[] extractElements(int from, int to, Class<K> type) {
 			checkSubRange(from);
-			checkSubRange(to);
+			checkAddSubRange(to);
 			K[] result = list.extractElements(from+parentOffset, to+parentOffset, type);
-			size -= to - from;
+			size -= result.length;
 			return result;
 		}
 
