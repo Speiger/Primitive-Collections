@@ -1,5 +1,7 @@
 package speiger.src.testers.ints.tests.set;
 
+import org.junit.Ignore;
+
 import static com.google.common.collect.testing.features.CollectionFeature.SUPPORTS_REMOVE;
 import static com.google.common.collect.testing.features.CollectionSize.ONE;
 import static com.google.common.collect.testing.features.CollectionSize.SEVERAL;
@@ -15,6 +17,7 @@ import speiger.src.collections.ints.sets.IntSortedSet;
 import speiger.src.testers.ints.tests.base.AbstractIntSetTester;
 import speiger.src.testers.ints.utils.IntHelpers;
 
+@Ignore
 public class IntSortedSetNaviationTester extends AbstractIntSetTester {
 	private IntSortedSet sortedSet;
 	private IntList values;

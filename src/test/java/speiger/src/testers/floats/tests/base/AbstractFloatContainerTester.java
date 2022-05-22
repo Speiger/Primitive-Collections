@@ -8,6 +8,8 @@ import com.google.common.collect.testing.TestContainerGenerator;
 import com.google.common.collect.testing.features.CollectionSize;
 import com.google.errorprone.annotations.OverridingMethodsMustInvokeSuper;
 
+import org.junit.Ignore;
+
 import speiger.src.collections.floats.collections.FloatCollection;
 import speiger.src.collections.floats.collections.FloatIterator;
 import speiger.src.collections.floats.lists.FloatArrayList;
@@ -18,6 +20,7 @@ import speiger.src.testers.floats.utils.FloatHelpers;
 import speiger.src.testers.floats.utils.FloatSamples;
 import speiger.src.testers.floats.utils.MinimalFloatCollection;
 
+@Ignore
 public abstract class AbstractFloatContainerTester extends AbstractTester<OneSizeTestContainerGenerator<Collection<Float>, Float>> {
 	protected FloatSamples samples;
 	protected FloatCollection container;

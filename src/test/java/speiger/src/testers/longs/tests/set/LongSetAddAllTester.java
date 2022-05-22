@@ -1,5 +1,7 @@
 package speiger.src.testers.longs.tests.set;
 
+import org.junit.Ignore;
+
 import static com.google.common.collect.testing.features.CollectionFeature.SUPPORTS_ADD;
 import static com.google.common.collect.testing.features.CollectionSize.ZERO;
 
@@ -9,6 +11,7 @@ import com.google.common.collect.testing.features.CollectionSize;
 import speiger.src.testers.longs.tests.base.AbstractLongSetTester;
 import speiger.src.testers.longs.utils.MinimalLongCollection;
 
+@Ignore
 public class LongSetAddAllTester extends AbstractLongSetTester {
 	@CollectionFeature.Require(SUPPORTS_ADD)
 	@CollectionSize.Require(absent = ZERO)

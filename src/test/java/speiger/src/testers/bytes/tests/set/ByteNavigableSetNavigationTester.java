@@ -1,5 +1,7 @@
 package speiger.src.testers.bytes.tests.set;
 
+import org.junit.Ignore;
+
 import static com.google.common.collect.testing.features.CollectionFeature.SUPPORTS_REMOVE;
 import static com.google.common.collect.testing.features.CollectionSize.ONE;
 import static com.google.common.collect.testing.features.CollectionSize.SEVERAL;
@@ -18,6 +20,7 @@ import speiger.src.collections.bytes.utils.ByteLists;
 import speiger.src.testers.bytes.tests.base.AbstractByteSetTester;
 import speiger.src.testers.bytes.utils.ByteHelpers;
 
+@Ignore
 public class ByteNavigableSetNavigationTester extends AbstractByteSetTester {
 	private ByteNavigableSet navigableSet;
 	private ByteList values;

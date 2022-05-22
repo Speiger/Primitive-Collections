@@ -1,5 +1,7 @@
 package speiger.src.testers.floats.tests.list;
 
+import org.junit.Ignore;
+
 import static com.google.common.collect.testing.features.CollectionFeature.FAILS_FAST_ON_CONCURRENT_MODIFICATION;
 import static com.google.common.collect.testing.features.CollectionSize.ONE;
 import static com.google.common.collect.testing.features.CollectionSize.ZERO;
@@ -16,6 +18,7 @@ import speiger.src.collections.floats.lists.FloatList;
 import speiger.src.testers.floats.tests.base.AbstractFloatListTester;
 import speiger.src.testers.floats.utils.FloatHelpers;
 
+@Ignore
 public class FloatListRemoveAtIndexTester extends AbstractFloatListTester {
 	@ListFeature.Require(absent = SUPPORTS_REMOVE_WITH_INDEX)
 	@CollectionSize.Require(absent = ZERO)

@@ -1,11 +1,14 @@
 package speiger.src.testers.chars.tests.collection;
 
+import org.junit.Ignore;
+
 import static com.google.common.collect.testing.features.CollectionSize.ZERO;
 
 import com.google.common.collect.testing.features.CollectionSize;
 
 import speiger.src.testers.chars.tests.base.AbstractCharCollectionTester;
 
+@Ignore
 public class CharCollectionContainsTester extends AbstractCharCollectionTester {
 	@CollectionSize.Require(absent = ZERO)
 	public void testContains_yes() {

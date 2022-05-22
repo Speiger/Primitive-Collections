@@ -1,5 +1,7 @@
 package speiger.src.testers.bytes.tests.collection;
 
+import org.junit.Ignore;
+
 import static com.google.common.collect.testing.features.CollectionSize.ONE;
 import static com.google.common.collect.testing.features.CollectionSize.ZERO;
 
@@ -8,6 +10,7 @@ import com.google.common.collect.testing.features.CollectionSize;
 import speiger.src.testers.bytes.tests.base.AbstractByteCollectionTester;
 import speiger.src.testers.bytes.utils.MinimalByteCollection;
 
+@Ignore
 public class ByteCollectionContainsAnyTester extends AbstractByteCollectionTester {
 	
 	public void testContainsAny_empty() {

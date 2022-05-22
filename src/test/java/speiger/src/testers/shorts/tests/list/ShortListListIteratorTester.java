@@ -1,5 +1,7 @@
 package speiger.src.testers.shorts.tests.list;
 
+import org.junit.Ignore;
+
 import static com.google.common.collect.testing.IteratorFeature.MODIFIABLE;
 import static com.google.common.collect.testing.IteratorFeature.UNMODIFIABLE;
 import static com.google.common.collect.testing.features.CollectionFeature.SUPPORTS_REMOVE;
@@ -19,6 +21,7 @@ import speiger.src.testers.shorts.tests.base.AbstractShortListTester;
 import speiger.src.testers.shorts.utils.ShortHelpers;
 import speiger.src.testers.shorts.utils.ShortListIteratorTester;
 
+@Ignore
 public class ShortListListIteratorTester extends AbstractShortListTester {
 	@CollectionFeature.Require(absent = SUPPORTS_REMOVE)
 	@ListFeature.Require(absent = { SUPPORTS_SET, SUPPORTS_ADD_WITH_INDEX })

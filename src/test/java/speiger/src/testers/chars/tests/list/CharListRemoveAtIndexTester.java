@@ -1,5 +1,7 @@
 package speiger.src.testers.chars.tests.list;
 
+import org.junit.Ignore;
+
 import static com.google.common.collect.testing.features.CollectionFeature.FAILS_FAST_ON_CONCURRENT_MODIFICATION;
 import static com.google.common.collect.testing.features.CollectionSize.ONE;
 import static com.google.common.collect.testing.features.CollectionSize.ZERO;
@@ -16,6 +18,7 @@ import speiger.src.collections.chars.lists.CharList;
 import speiger.src.testers.chars.tests.base.AbstractCharListTester;
 import speiger.src.testers.chars.utils.CharHelpers;
 
+@Ignore
 public class CharListRemoveAtIndexTester extends AbstractCharListTester {
 	@ListFeature.Require(absent = SUPPORTS_REMOVE_WITH_INDEX)
 	@CollectionSize.Require(absent = ZERO)

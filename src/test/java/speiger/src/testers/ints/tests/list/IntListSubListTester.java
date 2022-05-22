@@ -1,5 +1,7 @@
 package speiger.src.testers.ints.tests.list;
 
+import org.junit.Ignore;
+
 import static com.google.common.collect.testing.features.CollectionFeature.SERIALIZABLE_INCLUDING_VIEWS;
 import static com.google.common.collect.testing.features.CollectionSize.ONE;
 import static com.google.common.collect.testing.features.CollectionSize.ZERO;
@@ -21,6 +23,7 @@ import speiger.src.collections.ints.utils.IntLists;
 import speiger.src.testers.ints.tests.base.AbstractIntListTester;
 import speiger.src.testers.ints.utils.IntHelpers;
 
+@Ignore
 public class IntListSubListTester extends AbstractIntListTester {
 	public void testSubList_startNegative() {
 		try {

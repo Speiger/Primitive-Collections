@@ -1,7 +1,10 @@
 package speiger.src.testers.floats.tests.collection;
 
+import org.junit.Ignore;
+
 import speiger.src.testers.floats.tests.base.AbstractFloatCollectionTester;
 
+@Ignore
 public class FloatCollectionEqualsTester extends AbstractFloatCollectionTester {
 	public void testEquals_self() {
 		assertTrue("An Object should be equal to itself.", collection.equals(collection));

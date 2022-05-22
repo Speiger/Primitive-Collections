@@ -1,5 +1,7 @@
 package speiger.src.testers.chars.tests.set;
 
+import org.junit.Ignore;
+
 import com.google.common.collect.testing.features.CollectionSize;
 
 import speiger.src.collections.chars.collections.CharCollection;
@@ -7,6 +9,7 @@ import speiger.src.testers.chars.tests.base.AbstractCharSetTester;
 import speiger.src.testers.chars.utils.CharHelpers;
 import speiger.src.testers.chars.utils.MinimalCharSet;
 
+@Ignore
 public class CharSetEqualsTester extends AbstractCharSetTester {
 	public void testEquals_otherSetWithSameElements() {
 		assertTrue("A Set should equal any other Set containing the same elements.", getSet().equals(MinimalCharSet.of(getSampleElements())));

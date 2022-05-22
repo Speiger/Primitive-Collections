@@ -1,5 +1,7 @@
 package speiger.src.testers.doubles.tests.list;
 
+import org.junit.Ignore;
+
 import static com.google.common.collect.testing.features.CollectionFeature.SUPPORTS_REMOVE;
 import static com.google.common.collect.testing.features.CollectionSize.ONE;
 import static com.google.common.collect.testing.features.CollectionSize.ZERO;
@@ -9,6 +11,7 @@ import com.google.common.collect.testing.features.CollectionSize;
 
 import speiger.src.testers.doubles.tests.base.AbstractDoubleListTester;
 
+@Ignore
 public class DoubleListRemoveTester extends AbstractDoubleListTester {
 	@CollectionFeature.Require(SUPPORTS_REMOVE)
 	@CollectionSize.Require(absent = {ZERO, ONE})

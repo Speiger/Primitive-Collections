@@ -8,6 +8,8 @@ import com.google.common.collect.testing.TestContainerGenerator;
 import com.google.common.collect.testing.features.CollectionSize;
 import com.google.errorprone.annotations.OverridingMethodsMustInvokeSuper;
 
+import org.junit.Ignore;
+
 import speiger.src.collections.doubles.collections.DoubleCollection;
 import speiger.src.collections.doubles.collections.DoubleIterator;
 import speiger.src.collections.doubles.lists.DoubleArrayList;
@@ -18,6 +20,7 @@ import speiger.src.testers.doubles.utils.DoubleHelpers;
 import speiger.src.testers.doubles.utils.DoubleSamples;
 import speiger.src.testers.doubles.utils.MinimalDoubleCollection;
 
+@Ignore
 public abstract class AbstractDoubleContainerTester extends AbstractTester<OneSizeTestContainerGenerator<Collection<Double>, Double>> {
 	protected DoubleSamples samples;
 	protected DoubleCollection container;

@@ -1,5 +1,7 @@
 package speiger.src.testers.chars.tests.list;
 
+import org.junit.Ignore;
+
 import static com.google.common.collect.testing.features.CollectionSize.ONE;
 import static com.google.common.collect.testing.features.CollectionSize.ZERO;
 import static com.google.common.collect.testing.features.ListFeature.SUPPORTS_ADD_WITH_INDEX;
@@ -12,6 +14,7 @@ import speiger.src.collections.chars.lists.CharList;
 import speiger.src.testers.chars.tests.base.AbstractCharListTester;
 import speiger.src.testers.chars.utils.MinimalCharCollection;
 
+@Ignore
 public class CharListAddAllAtIndexTester extends AbstractCharListTester {
 	@ListFeature.Require(SUPPORTS_ADD_WITH_INDEX)
 	@CollectionSize.Require(absent = ZERO)

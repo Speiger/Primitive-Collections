@@ -1,5 +1,7 @@
 package speiger.src.testers.ints.tests.collection;
 
+import org.junit.Ignore;
+
 import static com.google.common.collect.testing.features.CollectionFeature.FAILS_FAST_ON_CONCURRENT_MODIFICATION;
 import static com.google.common.collect.testing.features.CollectionFeature.SUPPORTS_REMOVE;
 import static com.google.common.collect.testing.features.CollectionSize.SEVERAL;
@@ -13,6 +15,7 @@ import com.google.common.collect.testing.features.CollectionSize;
 import speiger.src.collections.ints.collections.IntIterator;
 import speiger.src.testers.ints.tests.base.AbstractIntCollectionTester;
 
+@Ignore
 public class IntCollectionClearTester extends AbstractIntCollectionTester {
 	@CollectionFeature.Require(SUPPORTS_REMOVE)
 	public void testClear() {

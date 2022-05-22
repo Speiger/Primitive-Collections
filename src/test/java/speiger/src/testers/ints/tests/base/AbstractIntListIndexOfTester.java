@@ -2,8 +2,11 @@ package speiger.src.testers.ints.tests.base;
 
 import static com.google.common.collect.testing.features.CollectionSize.ZERO;
 
+import org.junit.Ignore;
+
 import com.google.common.collect.testing.features.CollectionSize;
 
+@Ignore
 public abstract class AbstractIntListIndexOfTester extends AbstractIntListTester {
 	protected abstract int find(int o);
 	

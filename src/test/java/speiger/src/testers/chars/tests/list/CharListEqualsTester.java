@@ -1,5 +1,7 @@
 package speiger.src.testers.chars.tests.list;
 
+import org.junit.Ignore;
+
 import com.google.common.collect.testing.features.CollectionSize;
 
 import speiger.src.collections.chars.collections.CharCollection;
@@ -7,6 +9,7 @@ import speiger.src.collections.chars.lists.CharArrayList;
 import speiger.src.testers.chars.tests.base.AbstractCharListTester;
 import speiger.src.testers.chars.utils.MinimalCharSet;
 
+@Ignore
 public class CharListEqualsTester extends AbstractCharListTester {
 	public void testEquals_otherListWithSameElements() {
 		assertTrue("A List should equal any other List containing the same elements.", getList().equals(new CharArrayList(getOrderedElements())));

@@ -1,5 +1,7 @@
 package speiger.src.testers.doubles.tests.list;
 
+import org.junit.Ignore;
+
 import static com.google.common.collect.testing.features.CollectionSize.ZERO;
 import static com.google.common.collect.testing.features.ListFeature.SUPPORTS_SET;
 
@@ -10,6 +12,7 @@ import com.google.common.collect.testing.features.ListFeature;
 
 import speiger.src.testers.doubles.tests.base.AbstractDoubleListTester;
 
+@Ignore
 public class DoubleListReplaceAllTester extends AbstractDoubleListTester {
 	@ListFeature.Require(SUPPORTS_SET)
 	public void testReplaceAll() {

@@ -1,5 +1,7 @@
 package speiger.src.testers.floats.tests.list;
 
+import org.junit.Ignore;
+
 import static com.google.common.collect.testing.features.CollectionFeature.SUPPORTS_REMOVE;
 import static com.google.common.collect.testing.features.CollectionSize.ONE;
 import static com.google.common.collect.testing.features.CollectionSize.SEVERAL;
@@ -13,6 +15,7 @@ import speiger.src.testers.floats.tests.base.AbstractFloatListTester;
 import speiger.src.testers.floats.utils.FloatHelpers;
 import speiger.src.testers.floats.utils.MinimalFloatCollection;
 
+@Ignore
 public class FloatListRetainAllTester extends AbstractFloatListTester {
 	@CollectionFeature.Require(SUPPORTS_REMOVE)
 	@CollectionSize.Require(absent = { ZERO, ONE })

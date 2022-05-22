@@ -10,6 +10,8 @@ import java.util.ConcurrentModificationException;
 import com.google.common.collect.testing.features.CollectionFeature;
 import com.google.common.collect.testing.features.CollectionSize;
 
+import org.junit.Ignore;
+
 import speiger.src.collections.floats.collections.FloatIterator;
 import speiger.src.collections.floats.lists.FloatArrayList;
 import speiger.src.collections.floats.lists.FloatList;
@@ -17,6 +19,7 @@ import speiger.src.testers.floats.tests.base.AbstractFloatCollectionTester;
 import speiger.src.testers.floats.utils.FloatHelpers;
 import speiger.src.testers.floats.utils.MinimalFloatCollection;
 
+@Ignore
 public class FloatCollectionRemoveAllTester extends AbstractFloatCollectionTester {
 	@CollectionFeature.Require(SUPPORTS_REMOVE)
 	public void testRemoveAll_emptyCollection() {

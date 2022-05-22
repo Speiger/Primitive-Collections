@@ -13,6 +13,8 @@ import com.google.common.collect.testing.IteratorFeature;
 import com.google.common.collect.testing.features.CollectionFeature;
 import com.google.common.collect.testing.features.CollectionSize;
 
+import org.junit.Ignore;
+
 import speiger.src.collections.doubles.collections.DoubleIterable;
 import speiger.src.collections.doubles.collections.DoubleIterator;
 import speiger.src.collections.doubles.lists.DoubleArrayList;
@@ -21,6 +23,7 @@ import speiger.src.testers.doubles.tests.base.AbstractDoubleCollectionTester;
 import speiger.src.testers.doubles.utils.DoubleHelpers;
 import speiger.src.testers.doubles.utils.DoubleIteratorTester;
 
+@Ignore
 public class DoubleCollectionIteratorTester extends AbstractDoubleCollectionTester {
 	public void testIterator() {
 		DoubleList elements = new DoubleArrayList();

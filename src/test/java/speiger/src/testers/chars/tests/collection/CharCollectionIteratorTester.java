@@ -13,6 +13,8 @@ import com.google.common.collect.testing.IteratorFeature;
 import com.google.common.collect.testing.features.CollectionFeature;
 import com.google.common.collect.testing.features.CollectionSize;
 
+import org.junit.Ignore;
+
 import speiger.src.collections.chars.collections.CharIterable;
 import speiger.src.collections.chars.collections.CharIterator;
 import speiger.src.collections.chars.lists.CharArrayList;
@@ -21,6 +23,7 @@ import speiger.src.testers.chars.tests.base.AbstractCharCollectionTester;
 import speiger.src.testers.chars.utils.CharHelpers;
 import speiger.src.testers.chars.utils.CharIteratorTester;
 
+@Ignore
 public class CharCollectionIteratorTester extends AbstractCharCollectionTester {
 	public void testIterator() {
 		CharList elements = new CharArrayList();

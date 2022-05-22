@@ -1,5 +1,7 @@
 package speiger.src.testers.ints.tests.list;
 
+import org.junit.Ignore;
+
 import static com.google.common.collect.testing.features.CollectionFeature.SUPPORTS_REMOVE;
 import static com.google.common.collect.testing.features.CollectionSize.ONE;
 import static com.google.common.collect.testing.features.CollectionSize.SEVERAL;
@@ -13,6 +15,7 @@ import speiger.src.testers.ints.tests.base.AbstractIntListTester;
 import speiger.src.testers.ints.utils.IntHelpers;
 import speiger.src.testers.ints.utils.MinimalIntCollection;
 
+@Ignore
 public class IntListRetainAllTester extends AbstractIntListTester {
 	@CollectionFeature.Require(SUPPORTS_REMOVE)
 	@CollectionSize.Require(absent = { ZERO, ONE })

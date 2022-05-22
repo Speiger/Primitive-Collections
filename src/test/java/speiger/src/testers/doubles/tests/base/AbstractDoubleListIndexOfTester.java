@@ -2,8 +2,11 @@ package speiger.src.testers.doubles.tests.base;
 
 import static com.google.common.collect.testing.features.CollectionSize.ZERO;
 
+import org.junit.Ignore;
+
 import com.google.common.collect.testing.features.CollectionSize;
 
+@Ignore
 public abstract class AbstractDoubleListIndexOfTester extends AbstractDoubleListTester {
 	protected abstract int find(double o);
 	

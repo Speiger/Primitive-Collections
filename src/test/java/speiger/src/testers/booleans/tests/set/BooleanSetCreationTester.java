@@ -1,5 +1,7 @@
 package speiger.src.testers.booleans.tests.set;
 
+import org.junit.Ignore;
+
 import static com.google.common.collect.testing.features.CollectionFeature.REJECTS_DUPLICATES_AT_CREATION;
 import static com.google.common.collect.testing.features.CollectionSize.ONE;
 import static com.google.common.collect.testing.features.CollectionSize.ZERO;
@@ -10,6 +12,7 @@ import com.google.common.collect.testing.features.CollectionSize;
 import speiger.src.collections.booleans.lists.BooleanArrayList;
 import speiger.src.testers.booleans.tests.base.AbstractBooleanSetTester;
 
+@Ignore
 public class BooleanSetCreationTester extends AbstractBooleanSetTester {
 	@CollectionFeature.Require(absent = REJECTS_DUPLICATES_AT_CREATION)
 	@CollectionSize.Require(absent = { ZERO, ONE })

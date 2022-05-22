@@ -1,5 +1,7 @@
 package speiger.src.testers.ints.tests.list;
 
+import org.junit.Ignore;
+
 import static com.google.common.collect.testing.features.CollectionSize.SEVERAL;
 import static com.google.common.collect.testing.features.CollectionSize.ZERO;
 
@@ -8,6 +10,7 @@ import com.google.common.collect.testing.features.CollectionSize;
 import speiger.src.collections.ints.lists.IntArrayList;
 import speiger.src.testers.ints.tests.base.AbstractIntListTester;
 
+@Ignore
 public class IntListGetElementsTester extends AbstractIntListTester {
 	@CollectionSize.Require(SEVERAL)
 	public void testGetElements_valid() {

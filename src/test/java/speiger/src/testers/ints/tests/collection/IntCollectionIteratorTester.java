@@ -13,6 +13,8 @@ import com.google.common.collect.testing.IteratorFeature;
 import com.google.common.collect.testing.features.CollectionFeature;
 import com.google.common.collect.testing.features.CollectionSize;
 
+import org.junit.Ignore;
+
 import speiger.src.collections.ints.collections.IntIterable;
 import speiger.src.collections.ints.collections.IntIterator;
 import speiger.src.collections.ints.lists.IntArrayList;
@@ -21,6 +23,7 @@ import speiger.src.testers.ints.tests.base.AbstractIntCollectionTester;
 import speiger.src.testers.ints.utils.IntHelpers;
 import speiger.src.testers.ints.utils.IntIteratorTester;
 
+@Ignore
 public class IntCollectionIteratorTester extends AbstractIntCollectionTester {
 	public void testIterator() {
 		IntList elements = new IntArrayList();

@@ -7,6 +7,8 @@ import static com.google.common.collect.testing.features.CollectionSize.ZERO;
 import com.google.common.collect.testing.features.CollectionFeature;
 import com.google.common.collect.testing.features.CollectionSize;
 
+import org.junit.Ignore;
+
 import speiger.src.collections.doubles.collections.DoubleCollection;
 import speiger.src.collections.doubles.lists.DoubleArrayList;
 import speiger.src.collections.doubles.lists.DoubleList;
@@ -14,6 +16,7 @@ import speiger.src.testers.doubles.tests.base.AbstractDoubleCollectionTester;
 import speiger.src.testers.doubles.utils.DoubleHelpers;
 import speiger.src.testers.doubles.utils.MinimalDoubleCollection;
 
+@Ignore
 public class DoubleCollectionRetainAllTester extends AbstractDoubleCollectionTester {
 
 	private class Target {

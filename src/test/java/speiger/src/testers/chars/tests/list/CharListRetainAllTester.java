@@ -1,5 +1,7 @@
 package speiger.src.testers.chars.tests.list;
 
+import org.junit.Ignore;
+
 import static com.google.common.collect.testing.features.CollectionFeature.SUPPORTS_REMOVE;
 import static com.google.common.collect.testing.features.CollectionSize.ONE;
 import static com.google.common.collect.testing.features.CollectionSize.SEVERAL;
@@ -13,6 +15,7 @@ import speiger.src.testers.chars.tests.base.AbstractCharListTester;
 import speiger.src.testers.chars.utils.CharHelpers;
 import speiger.src.testers.chars.utils.MinimalCharCollection;
 
+@Ignore
 public class CharListRetainAllTester extends AbstractCharListTester {
 	@CollectionFeature.Require(SUPPORTS_REMOVE)
 	@CollectionSize.Require(absent = { ZERO, ONE })

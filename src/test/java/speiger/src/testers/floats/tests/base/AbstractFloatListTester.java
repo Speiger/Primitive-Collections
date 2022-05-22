@@ -1,9 +1,12 @@
 package speiger.src.testers.floats.tests.base;
 
+import org.junit.Ignore;
+
 import speiger.src.collections.floats.collections.FloatCollection;
 import speiger.src.collections.floats.lists.FloatList;
 import speiger.src.testers.floats.utils.FloatHelpers;
 
+@Ignore
 public class AbstractFloatListTester extends AbstractFloatCollectionTester {
 	protected final FloatList getList() {
 		return (FloatList) collection;

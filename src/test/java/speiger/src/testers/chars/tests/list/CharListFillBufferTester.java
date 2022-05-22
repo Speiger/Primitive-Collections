@@ -1,10 +1,13 @@
 package speiger.src.testers.chars.tests.list;
 
+import org.junit.Ignore;
+
 import java.nio.CharBuffer;
 
 import speiger.src.collections.chars.lists.CharArrayList;
 import speiger.src.testers.chars.tests.base.AbstractCharListTester;
 
+@Ignore
 public class CharListFillBufferTester extends AbstractCharListTester {
 
 	public void testFillBuffer() {

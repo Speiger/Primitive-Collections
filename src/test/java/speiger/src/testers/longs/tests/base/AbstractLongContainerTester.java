@@ -8,6 +8,8 @@ import com.google.common.collect.testing.TestContainerGenerator;
 import com.google.common.collect.testing.features.CollectionSize;
 import com.google.errorprone.annotations.OverridingMethodsMustInvokeSuper;
 
+import org.junit.Ignore;
+
 import speiger.src.collections.longs.collections.LongCollection;
 import speiger.src.collections.longs.collections.LongIterator;
 import speiger.src.collections.longs.lists.LongArrayList;
@@ -18,6 +20,7 @@ import speiger.src.testers.longs.utils.LongHelpers;
 import speiger.src.testers.longs.utils.LongSamples;
 import speiger.src.testers.longs.utils.MinimalLongCollection;
 
+@Ignore
 public abstract class AbstractLongContainerTester extends AbstractTester<OneSizeTestContainerGenerator<Collection<Long>, Long>> {
 	protected LongSamples samples;
 	protected LongCollection container;

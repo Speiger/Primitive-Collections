@@ -1,7 +1,10 @@
 package speiger.src.testers.bytes.tests.base;
 
+import org.junit.Ignore;
+
 import speiger.src.collections.bytes.collections.ByteCollection;
 
+@Ignore
 public class AbstractByteCollectionTester extends AbstractByteContainerTester {
 
 	protected ByteCollection collection;

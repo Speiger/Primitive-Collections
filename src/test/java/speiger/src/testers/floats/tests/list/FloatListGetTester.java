@@ -1,7 +1,10 @@
 package speiger.src.testers.floats.tests.list;
 
+import org.junit.Ignore;
+
 import speiger.src.testers.floats.tests.base.AbstractFloatListTester;
 
+@Ignore
 public class FloatListGetTester extends AbstractFloatListTester {
 	public void testGet_valid() {
 		expectContents(createOrderedArray());

@@ -1,9 +1,12 @@
 package speiger.src.testers.shorts.tests.base;
 
+import org.junit.Ignore;
+
 import speiger.src.collections.shorts.collections.ShortCollection;
 import speiger.src.collections.shorts.lists.ShortList;
 import speiger.src.testers.shorts.utils.ShortHelpers;
 
+@Ignore
 public class AbstractShortListTester extends AbstractShortCollectionTester {
 	protected final ShortList getList() {
 		return (ShortList) collection;

@@ -1,5 +1,7 @@
 package speiger.src.testers.chars.tests.list;
 
+import org.junit.Ignore;
+
 import static com.google.common.collect.testing.features.CollectionSize.SEVERAL;
 import static com.google.common.collect.testing.features.CollectionSize.ZERO;
 
@@ -8,6 +10,7 @@ import com.google.common.collect.testing.features.CollectionSize;
 import speiger.src.collections.chars.lists.CharArrayList;
 import speiger.src.testers.chars.tests.base.AbstractCharListTester;
 
+@Ignore
 public class CharListGetElementsTester extends AbstractCharListTester {
 	@CollectionSize.Require(SEVERAL)
 	public void testGetElements_valid() {

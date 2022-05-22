@@ -4,11 +4,14 @@ import static com.google.common.collect.testing.features.CollectionFeature.KNOWN
 
 import com.google.common.collect.testing.features.CollectionFeature;
 
+import org.junit.Ignore;
+
 import speiger.src.collections.chars.lists.CharArrayList;
 import speiger.src.collections.chars.lists.CharList;
 import speiger.src.testers.chars.tests.base.AbstractCharCollectionTester;
 import speiger.src.testers.chars.utils.CharHelpers;
 
+@Ignore
 public class CharCollectionForEachTester extends AbstractCharCollectionTester {
 	@CollectionFeature.Require(absent = KNOWN_ORDER)
 	public void testForEachUnknownOrder() {

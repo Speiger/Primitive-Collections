@@ -2,8 +2,11 @@ package speiger.src.testers.floats.tests.base;
 
 import static com.google.common.collect.testing.features.CollectionSize.ZERO;
 
+import org.junit.Ignore;
+
 import com.google.common.collect.testing.features.CollectionSize;
 
+@Ignore
 public abstract class AbstractFloatListIndexOfTester extends AbstractFloatListTester {
 	protected abstract int find(float o);
 	

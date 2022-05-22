@@ -1,12 +1,14 @@
 package speiger.src.testers.shorts.tests.collection;
 
 import org.junit.Assert;
+import org.junit.Ignore;
 
 import com.google.common.collect.testing.features.CollectionFeature;
 
 import speiger.src.collections.shorts.collections.ShortCollection;
 import speiger.src.testers.shorts.tests.base.AbstractShortCollectionTester;
 
+@Ignore
 public class ShortCollectionCopyTester extends AbstractShortCollectionTester {
 	
 	@CollectionFeature.Require(absent = {CollectionFeature.SUBSET_VIEW, CollectionFeature.DESCENDING_VIEW})

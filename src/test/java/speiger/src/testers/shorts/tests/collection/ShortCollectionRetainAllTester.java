@@ -7,6 +7,8 @@ import static com.google.common.collect.testing.features.CollectionSize.ZERO;
 import com.google.common.collect.testing.features.CollectionFeature;
 import com.google.common.collect.testing.features.CollectionSize;
 
+import org.junit.Ignore;
+
 import speiger.src.collections.shorts.collections.ShortCollection;
 import speiger.src.collections.shorts.lists.ShortArrayList;
 import speiger.src.collections.shorts.lists.ShortList;
@@ -14,6 +16,7 @@ import speiger.src.testers.shorts.tests.base.AbstractShortCollectionTester;
 import speiger.src.testers.shorts.utils.ShortHelpers;
 import speiger.src.testers.shorts.utils.MinimalShortCollection;
 
+@Ignore
 public class ShortCollectionRetainAllTester extends AbstractShortCollectionTester {
 
 	private class Target {

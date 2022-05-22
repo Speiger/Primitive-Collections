@@ -1,5 +1,7 @@
 package speiger.src.testers.chars.tests.list;
 
+import org.junit.Ignore;
+
 import static com.google.common.collect.testing.features.CollectionFeature.SERIALIZABLE_INCLUDING_VIEWS;
 import static com.google.common.collect.testing.features.CollectionSize.ONE;
 import static com.google.common.collect.testing.features.CollectionSize.ZERO;
@@ -21,6 +23,7 @@ import speiger.src.collections.chars.utils.CharLists;
 import speiger.src.testers.chars.tests.base.AbstractCharListTester;
 import speiger.src.testers.chars.utils.CharHelpers;
 
+@Ignore
 public class CharListSubListTester extends AbstractCharListTester {
 	public void testSubList_startNegative() {
 		try {

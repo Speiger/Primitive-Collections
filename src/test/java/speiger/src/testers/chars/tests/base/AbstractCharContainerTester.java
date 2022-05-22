@@ -8,6 +8,8 @@ import com.google.common.collect.testing.TestContainerGenerator;
 import com.google.common.collect.testing.features.CollectionSize;
 import com.google.errorprone.annotations.OverridingMethodsMustInvokeSuper;
 
+import org.junit.Ignore;
+
 import speiger.src.collections.chars.collections.CharCollection;
 import speiger.src.collections.chars.collections.CharIterator;
 import speiger.src.collections.chars.lists.CharArrayList;
@@ -18,6 +20,7 @@ import speiger.src.testers.chars.utils.CharHelpers;
 import speiger.src.testers.chars.utils.CharSamples;
 import speiger.src.testers.chars.utils.MinimalCharCollection;
 
+@Ignore
 public abstract class AbstractCharContainerTester extends AbstractTester<OneSizeTestContainerGenerator<Collection<Character>, Character>> {
 	protected CharSamples samples;
 	protected CharCollection container;

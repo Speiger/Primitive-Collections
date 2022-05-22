@@ -11,9 +11,12 @@ import java.util.ConcurrentModificationException;
 import com.google.common.collect.testing.features.CollectionFeature;
 import com.google.common.collect.testing.features.CollectionSize;
 
+import org.junit.Ignore;
+
 import speiger.src.collections.bytes.collections.ByteIterator;
 import speiger.src.testers.bytes.tests.base.AbstractByteCollectionTester;
 
+@Ignore
 public class ByteCollectionRemoveIfTester extends AbstractByteCollectionTester {
 	@CollectionFeature.Require(SUPPORTS_ITERATOR_REMOVE)
 	public void testRemoveIf_alwaysFalse() {

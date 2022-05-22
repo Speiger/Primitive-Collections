@@ -10,6 +10,8 @@ import java.util.ConcurrentModificationException;
 import com.google.common.collect.testing.features.CollectionFeature;
 import com.google.common.collect.testing.features.CollectionSize;
 
+import org.junit.Ignore;
+
 import speiger.src.collections.doubles.collections.DoubleIterator;
 import speiger.src.collections.doubles.lists.DoubleArrayList;
 import speiger.src.collections.doubles.lists.DoubleList;
@@ -17,6 +19,7 @@ import speiger.src.testers.doubles.tests.base.AbstractDoubleCollectionTester;
 import speiger.src.testers.doubles.utils.DoubleHelpers;
 import speiger.src.testers.doubles.utils.MinimalDoubleCollection;
 
+@Ignore
 public class DoubleCollectionRemoveAllTester extends AbstractDoubleCollectionTester {
 	@CollectionFeature.Require(SUPPORTS_REMOVE)
 	public void testRemoveAll_emptyCollection() {

@@ -1,7 +1,10 @@
 package speiger.src.testers.longs.tests.base;
 
+import org.junit.Ignore;
+
 import speiger.src.collections.longs.collections.LongCollection;
 
+@Ignore
 public class AbstractLongCollectionTester extends AbstractLongContainerTester {
 
 	protected LongCollection collection;

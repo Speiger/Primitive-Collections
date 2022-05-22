@@ -1,11 +1,14 @@
 package speiger.src.testers.booleans.tests.collection;
 
+import org.junit.Ignore;
+
 import static com.google.common.collect.testing.features.CollectionSize.ZERO;
 
 import com.google.common.collect.testing.features.CollectionSize;
 
 import speiger.src.testers.booleans.tests.base.AbstractBooleanCollectionTester;
 
+@Ignore
 public class BooleanCollectionContainsTester extends AbstractBooleanCollectionTester {
 	@CollectionSize.Require(absent = ZERO)
 	public void testContains_yes() {

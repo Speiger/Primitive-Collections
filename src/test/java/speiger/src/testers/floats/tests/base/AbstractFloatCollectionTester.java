@@ -1,7 +1,10 @@
 package speiger.src.testers.floats.tests.base;
 
+import org.junit.Ignore;
+
 import speiger.src.collections.floats.collections.FloatCollection;
 
+@Ignore
 public class AbstractFloatCollectionTester extends AbstractFloatContainerTester {
 
 	protected FloatCollection collection;

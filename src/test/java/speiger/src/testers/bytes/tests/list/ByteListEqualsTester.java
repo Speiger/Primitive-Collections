@@ -1,5 +1,7 @@
 package speiger.src.testers.bytes.tests.list;
 
+import org.junit.Ignore;
+
 import com.google.common.collect.testing.features.CollectionSize;
 
 import speiger.src.collections.bytes.collections.ByteCollection;
@@ -7,6 +9,7 @@ import speiger.src.collections.bytes.lists.ByteArrayList;
 import speiger.src.testers.bytes.tests.base.AbstractByteListTester;
 import speiger.src.testers.bytes.utils.MinimalByteSet;
 
+@Ignore
 public class ByteListEqualsTester extends AbstractByteListTester {
 	public void testEquals_otherListWithSameElements() {
 		assertTrue("A List should equal any other List containing the same elements.", getList().equals(new ByteArrayList(getOrderedElements())));

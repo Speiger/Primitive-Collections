@@ -4,10 +4,13 @@ import static com.google.common.collect.testing.features.CollectionFeature.KNOWN
 
 import com.google.common.collect.testing.features.CollectionFeature;
 
+import org.junit.Ignore;
+
 import speiger.src.collections.longs.lists.LongArrayList;
 import speiger.src.testers.longs.tests.base.AbstractLongCollectionTester;
 import speiger.src.testers.longs.utils.LongHelpers;
 
+@Ignore
 public class LongCollectionStreamTester extends AbstractLongCollectionTester {
 	@CollectionFeature.Require(absent = KNOWN_ORDER)
 	public void testStreamToArrayUnknownOrder() {

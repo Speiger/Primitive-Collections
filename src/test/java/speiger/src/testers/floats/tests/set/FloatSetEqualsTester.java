@@ -1,5 +1,7 @@
 package speiger.src.testers.floats.tests.set;
 
+import org.junit.Ignore;
+
 import com.google.common.collect.testing.features.CollectionSize;
 
 import speiger.src.collections.floats.collections.FloatCollection;
@@ -7,6 +9,7 @@ import speiger.src.testers.floats.tests.base.AbstractFloatSetTester;
 import speiger.src.testers.floats.utils.FloatHelpers;
 import speiger.src.testers.floats.utils.MinimalFloatSet;
 
+@Ignore
 public class FloatSetEqualsTester extends AbstractFloatSetTester {
 	public void testEquals_otherSetWithSameElements() {
 		assertTrue("A Set should equal any other Set containing the same elements.", getSet().equals(MinimalFloatSet.of(getSampleElements())));

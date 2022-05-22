@@ -2,8 +2,11 @@ package speiger.src.testers.booleans.tests.base;
 
 import static com.google.common.collect.testing.features.CollectionSize.ZERO;
 
+import org.junit.Ignore;
+
 import com.google.common.collect.testing.features.CollectionSize;
 
+@Ignore
 public abstract class AbstractBooleanListIndexOfTester extends AbstractBooleanListTester {
 	protected abstract int find(boolean o);
 	

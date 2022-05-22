@@ -1,5 +1,7 @@
 package speiger.src.testers.chars.tests.list;
 
+import org.junit.Ignore;
+
 import static com.google.common.collect.testing.features.CollectionFeature.SUPPORTS_ADD;
 import static com.google.common.collect.testing.features.CollectionSize.ZERO;
 
@@ -12,6 +14,7 @@ import speiger.src.collections.chars.lists.CharList;
 import speiger.src.testers.chars.tests.base.AbstractCharListTester;
 import speiger.src.testers.chars.utils.MinimalCharCollection;
 
+@Ignore
 public class CharListAddAllTester extends AbstractCharListTester {
 	@CollectionFeature.Require(SUPPORTS_ADD)
 	@CollectionSize.Require(absent = ZERO)

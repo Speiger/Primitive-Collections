@@ -1,5 +1,7 @@
 package speiger.src.testers.booleans.tests.list;
 
+import org.junit.Ignore;
+
 import static com.google.common.collect.testing.features.CollectionFeature.SERIALIZABLE_INCLUDING_VIEWS;
 import static com.google.common.collect.testing.features.CollectionSize.ONE;
 import static com.google.common.collect.testing.features.CollectionSize.ZERO;
@@ -21,6 +23,7 @@ import speiger.src.collections.booleans.utils.BooleanLists;
 import speiger.src.testers.booleans.tests.base.AbstractBooleanListTester;
 import speiger.src.testers.booleans.utils.BooleanHelpers;
 
+@Ignore
 public class BooleanListSubListTester extends AbstractBooleanListTester {
 	public void testSubList_startNegative() {
 		try {

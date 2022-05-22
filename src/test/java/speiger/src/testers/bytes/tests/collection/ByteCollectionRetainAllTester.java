@@ -7,6 +7,8 @@ import static com.google.common.collect.testing.features.CollectionSize.ZERO;
 import com.google.common.collect.testing.features.CollectionFeature;
 import com.google.common.collect.testing.features.CollectionSize;
 
+import org.junit.Ignore;
+
 import speiger.src.collections.bytes.collections.ByteCollection;
 import speiger.src.collections.bytes.lists.ByteArrayList;
 import speiger.src.collections.bytes.lists.ByteList;
@@ -14,6 +16,7 @@ import speiger.src.testers.bytes.tests.base.AbstractByteCollectionTester;
 import speiger.src.testers.bytes.utils.ByteHelpers;
 import speiger.src.testers.bytes.utils.MinimalByteCollection;
 
+@Ignore
 public class ByteCollectionRetainAllTester extends AbstractByteCollectionTester {
 
 	private class Target {

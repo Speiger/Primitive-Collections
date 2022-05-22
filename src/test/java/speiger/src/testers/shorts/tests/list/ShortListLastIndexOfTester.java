@@ -1,5 +1,7 @@
 package speiger.src.testers.shorts.tests.list;
 
+import org.junit.Ignore;
+
 import static com.google.common.collect.testing.features.CollectionFeature.REJECTS_DUPLICATES_AT_CREATION;
 import static com.google.common.collect.testing.features.CollectionSize.ONE;
 import static com.google.common.collect.testing.features.CollectionSize.ZERO;
@@ -9,6 +11,7 @@ import com.google.common.collect.testing.features.CollectionSize;
 
 import speiger.src.testers.shorts.tests.base.AbstractShortListIndexOfTester;
 
+@Ignore
 public class ShortListLastIndexOfTester extends AbstractShortListIndexOfTester {
 	@Override
 	protected int find(short o) {

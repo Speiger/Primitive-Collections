@@ -10,6 +10,8 @@ import java.util.ConcurrentModificationException;
 import com.google.common.collect.testing.features.CollectionFeature;
 import com.google.common.collect.testing.features.CollectionSize;
 
+import org.junit.Ignore;
+
 import speiger.src.collections.booleans.collections.BooleanIterator;
 import speiger.src.collections.booleans.lists.BooleanArrayList;
 import speiger.src.collections.booleans.lists.BooleanList;
@@ -17,6 +19,7 @@ import speiger.src.testers.booleans.tests.base.AbstractBooleanCollectionTester;
 import speiger.src.testers.booleans.utils.BooleanHelpers;
 import speiger.src.testers.booleans.utils.MinimalBooleanCollection;
 
+@Ignore
 public class BooleanCollectionRemoveAllTester extends AbstractBooleanCollectionTester {
 	@CollectionFeature.Require(SUPPORTS_REMOVE)
 	public void testRemoveAll_emptyCollection() {

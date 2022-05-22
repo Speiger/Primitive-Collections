@@ -1,5 +1,7 @@
 package speiger.src.testers.chars.tests.collection;
 
+import org.junit.Ignore;
+
 import static com.google.common.collect.testing.features.CollectionSize.ONE;
 import static com.google.common.collect.testing.features.CollectionSize.ZERO;
 
@@ -8,6 +10,7 @@ import com.google.common.collect.testing.features.CollectionSize;
 import speiger.src.testers.chars.tests.base.AbstractCharCollectionTester;
 import speiger.src.testers.chars.utils.MinimalCharCollection;
 
+@Ignore
 public class CharCollectionContainsAnyTester extends AbstractCharCollectionTester {
 	
 	public void testContainsAny_empty() {

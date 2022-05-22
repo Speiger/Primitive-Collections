@@ -1,5 +1,7 @@
 package speiger.src.testers.ints.tests.collection;
 
+import org.junit.Ignore;
+
 import static com.google.common.collect.testing.features.CollectionSize.ZERO;
 
 import com.google.common.collect.testing.features.CollectionSize;
@@ -7,6 +9,7 @@ import com.google.common.collect.testing.features.CollectionSize;
 import speiger.src.testers.ints.tests.base.AbstractIntCollectionTester;
 import speiger.src.testers.ints.utils.MinimalIntCollection;
 
+@Ignore
 public class IntCollectionContainsAllTester extends AbstractIntCollectionTester {
 	public void testContainsAll_empty() {
 		assertTrue("containsAll(empty) should return true", collection.containsAll(MinimalIntCollection.of()));

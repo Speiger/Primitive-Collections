@@ -8,6 +8,8 @@ import com.google.common.collect.testing.TestContainerGenerator;
 import com.google.common.collect.testing.features.CollectionSize;
 import com.google.errorprone.annotations.OverridingMethodsMustInvokeSuper;
 
+import org.junit.Ignore;
+
 import speiger.src.collections.bytes.collections.ByteCollection;
 import speiger.src.collections.bytes.collections.ByteIterator;
 import speiger.src.collections.bytes.lists.ByteArrayList;
@@ -18,6 +20,7 @@ import speiger.src.testers.bytes.utils.ByteHelpers;
 import speiger.src.testers.bytes.utils.ByteSamples;
 import speiger.src.testers.bytes.utils.MinimalByteCollection;
 
+@Ignore
 public abstract class AbstractByteContainerTester extends AbstractTester<OneSizeTestContainerGenerator<Collection<Byte>, Byte>> {
 	protected ByteSamples samples;
 	protected ByteCollection container;

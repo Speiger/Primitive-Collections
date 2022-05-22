@@ -1,5 +1,7 @@
 package speiger.src.testers.doubles.tests.set;
 
+import org.junit.Ignore;
+
 import static com.google.common.collect.testing.features.CollectionFeature.SUPPORTS_REMOVE;
 import static com.google.common.collect.testing.features.CollectionSize.ONE;
 import static com.google.common.collect.testing.features.CollectionSize.SEVERAL;
@@ -15,6 +17,7 @@ import speiger.src.collections.doubles.sets.DoubleOrderedSet;
 import speiger.src.testers.doubles.tests.base.AbstractDoubleSetTester;
 import speiger.src.testers.doubles.utils.DoubleHelpers;
 
+@Ignore
 public class DoubleOrderedSetNavigationTester extends AbstractDoubleSetTester {
 	private DoubleOrderedSet orderedSet;
 	private DoubleList values;

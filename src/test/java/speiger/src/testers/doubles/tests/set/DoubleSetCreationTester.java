@@ -1,5 +1,7 @@
 package speiger.src.testers.doubles.tests.set;
 
+import org.junit.Ignore;
+
 import static com.google.common.collect.testing.features.CollectionFeature.REJECTS_DUPLICATES_AT_CREATION;
 import static com.google.common.collect.testing.features.CollectionSize.ONE;
 import static com.google.common.collect.testing.features.CollectionSize.ZERO;
@@ -10,6 +12,7 @@ import com.google.common.collect.testing.features.CollectionSize;
 import speiger.src.collections.doubles.lists.DoubleArrayList;
 import speiger.src.testers.doubles.tests.base.AbstractDoubleSetTester;
 
+@Ignore
 public class DoubleSetCreationTester extends AbstractDoubleSetTester {
 	@CollectionFeature.Require(absent = REJECTS_DUPLICATES_AT_CREATION)
 	@CollectionSize.Require(absent = { ZERO, ONE })

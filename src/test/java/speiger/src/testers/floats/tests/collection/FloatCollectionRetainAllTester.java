@@ -7,6 +7,8 @@ import static com.google.common.collect.testing.features.CollectionSize.ZERO;
 import com.google.common.collect.testing.features.CollectionFeature;
 import com.google.common.collect.testing.features.CollectionSize;
 
+import org.junit.Ignore;
+
 import speiger.src.collections.floats.collections.FloatCollection;
 import speiger.src.collections.floats.lists.FloatArrayList;
 import speiger.src.collections.floats.lists.FloatList;
@@ -14,6 +16,7 @@ import speiger.src.testers.floats.tests.base.AbstractFloatCollectionTester;
 import speiger.src.testers.floats.utils.FloatHelpers;
 import speiger.src.testers.floats.utils.MinimalFloatCollection;
 
+@Ignore
 public class FloatCollectionRetainAllTester extends AbstractFloatCollectionTester {
 
 	private class Target {

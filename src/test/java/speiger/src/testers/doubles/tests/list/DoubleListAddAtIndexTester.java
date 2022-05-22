@@ -1,5 +1,7 @@
 package speiger.src.testers.doubles.tests.list;
 
+import org.junit.Ignore;
+
 import static com.google.common.collect.testing.features.CollectionFeature.FAILS_FAST_ON_CONCURRENT_MODIFICATION;
 import static com.google.common.collect.testing.features.CollectionSize.ONE;
 import static com.google.common.collect.testing.features.CollectionSize.ZERO;
@@ -14,6 +16,7 @@ import com.google.common.collect.testing.features.ListFeature;
 import speiger.src.collections.doubles.collections.DoubleIterator;
 import speiger.src.testers.doubles.tests.base.AbstractDoubleListTester;
 
+@Ignore
 public class DoubleListAddAtIndexTester extends AbstractDoubleListTester {
 	@ListFeature.Require(SUPPORTS_ADD_WITH_INDEX)
 	@CollectionSize.Require(absent = ZERO)

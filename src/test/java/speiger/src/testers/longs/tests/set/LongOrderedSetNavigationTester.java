@@ -1,5 +1,7 @@
 package speiger.src.testers.longs.tests.set;
 
+import org.junit.Ignore;
+
 import static com.google.common.collect.testing.features.CollectionFeature.SUPPORTS_REMOVE;
 import static com.google.common.collect.testing.features.CollectionSize.ONE;
 import static com.google.common.collect.testing.features.CollectionSize.SEVERAL;
@@ -15,6 +17,7 @@ import speiger.src.collections.longs.sets.LongOrderedSet;
 import speiger.src.testers.longs.tests.base.AbstractLongSetTester;
 import speiger.src.testers.longs.utils.LongHelpers;
 
+@Ignore
 public class LongOrderedSetNavigationTester extends AbstractLongSetTester {
 	private LongOrderedSet orderedSet;
 	private LongList values;

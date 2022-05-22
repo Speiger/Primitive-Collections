@@ -1,5 +1,7 @@
 package speiger.src.testers.shorts.tests.list;
 
+import org.junit.Ignore;
+
 import com.google.common.collect.testing.features.CollectionSize;
 
 import speiger.src.collections.shorts.collections.ShortCollection;
@@ -7,6 +9,7 @@ import speiger.src.collections.shorts.lists.ShortArrayList;
 import speiger.src.testers.shorts.tests.base.AbstractShortListTester;
 import speiger.src.testers.shorts.utils.MinimalShortSet;
 
+@Ignore
 public class ShortListEqualsTester extends AbstractShortListTester {
 	public void testEquals_otherListWithSameElements() {
 		assertTrue("A List should equal any other List containing the same elements.", getList().equals(new ShortArrayList(getOrderedElements())));

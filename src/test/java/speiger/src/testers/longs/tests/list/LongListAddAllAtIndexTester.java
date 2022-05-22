@@ -1,5 +1,7 @@
 package speiger.src.testers.longs.tests.list;
 
+import org.junit.Ignore;
+
 import static com.google.common.collect.testing.features.CollectionSize.ONE;
 import static com.google.common.collect.testing.features.CollectionSize.ZERO;
 import static com.google.common.collect.testing.features.ListFeature.SUPPORTS_ADD_WITH_INDEX;
@@ -12,6 +14,7 @@ import speiger.src.collections.longs.lists.LongList;
 import speiger.src.testers.longs.tests.base.AbstractLongListTester;
 import speiger.src.testers.longs.utils.MinimalLongCollection;
 
+@Ignore
 public class LongListAddAllAtIndexTester extends AbstractLongListTester {
 	@ListFeature.Require(SUPPORTS_ADD_WITH_INDEX)
 	@CollectionSize.Require(absent = ZERO)

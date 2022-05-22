@@ -8,6 +8,8 @@ import com.google.common.collect.testing.TestContainerGenerator;
 import com.google.common.collect.testing.features.CollectionSize;
 import com.google.errorprone.annotations.OverridingMethodsMustInvokeSuper;
 
+import org.junit.Ignore;
+
 import speiger.src.collections.ints.collections.IntCollection;
 import speiger.src.collections.ints.collections.IntIterator;
 import speiger.src.collections.ints.lists.IntArrayList;
@@ -18,6 +20,7 @@ import speiger.src.testers.ints.utils.IntHelpers;
 import speiger.src.testers.ints.utils.IntSamples;
 import speiger.src.testers.ints.utils.MinimalIntCollection;
 
+@Ignore
 public abstract class AbstractIntContainerTester extends AbstractTester<OneSizeTestContainerGenerator<Collection<Integer>, Integer>> {
 	protected IntSamples samples;
 	protected IntCollection container;

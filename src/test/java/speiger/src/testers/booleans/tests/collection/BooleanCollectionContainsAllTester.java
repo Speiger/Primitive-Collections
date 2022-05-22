@@ -1,5 +1,7 @@
 package speiger.src.testers.booleans.tests.collection;
 
+import org.junit.Ignore;
+
 import static com.google.common.collect.testing.features.CollectionSize.ZERO;
 
 import com.google.common.collect.testing.features.CollectionSize;
@@ -7,6 +9,7 @@ import com.google.common.collect.testing.features.CollectionSize;
 import speiger.src.testers.booleans.tests.base.AbstractBooleanCollectionTester;
 import speiger.src.testers.booleans.utils.MinimalBooleanCollection;
 
+@Ignore
 public class BooleanCollectionContainsAllTester extends AbstractBooleanCollectionTester {
 	public void testContainsAll_empty() {
 		assertTrue("containsAll(empty) should return true", collection.containsAll(MinimalBooleanCollection.of()));

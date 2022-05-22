@@ -1,7 +1,10 @@
 package speiger.src.testers.booleans.tests.list;
 
+import org.junit.Ignore;
+
 import speiger.src.testers.booleans.tests.base.AbstractBooleanListTester;
 
+@Ignore
 public class BooleanListGetTester extends AbstractBooleanListTester {
 	public void testGet_valid() {
 		expectContents(createOrderedArray());

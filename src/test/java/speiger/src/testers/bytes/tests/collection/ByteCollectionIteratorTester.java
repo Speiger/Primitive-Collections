@@ -13,6 +13,8 @@ import com.google.common.collect.testing.IteratorFeature;
 import com.google.common.collect.testing.features.CollectionFeature;
 import com.google.common.collect.testing.features.CollectionSize;
 
+import org.junit.Ignore;
+
 import speiger.src.collections.bytes.collections.ByteIterable;
 import speiger.src.collections.bytes.collections.ByteIterator;
 import speiger.src.collections.bytes.lists.ByteArrayList;
@@ -21,6 +23,7 @@ import speiger.src.testers.bytes.tests.base.AbstractByteCollectionTester;
 import speiger.src.testers.bytes.utils.ByteHelpers;
 import speiger.src.testers.bytes.utils.ByteIteratorTester;
 
+@Ignore
 public class ByteCollectionIteratorTester extends AbstractByteCollectionTester {
 	public void testIterator() {
 		ByteList elements = new ByteArrayList();

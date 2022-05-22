@@ -13,6 +13,8 @@ import com.google.common.collect.testing.IteratorFeature;
 import com.google.common.collect.testing.features.CollectionFeature;
 import com.google.common.collect.testing.features.CollectionSize;
 
+import org.junit.Ignore;
+
 import speiger.src.collections.longs.collections.LongIterable;
 import speiger.src.collections.longs.collections.LongIterator;
 import speiger.src.collections.longs.lists.LongArrayList;
@@ -21,6 +23,7 @@ import speiger.src.testers.longs.tests.base.AbstractLongCollectionTester;
 import speiger.src.testers.longs.utils.LongHelpers;
 import speiger.src.testers.longs.utils.LongIteratorTester;
 
+@Ignore
 public class LongCollectionIteratorTester extends AbstractLongCollectionTester {
 	public void testIterator() {
 		LongList elements = new LongArrayList();

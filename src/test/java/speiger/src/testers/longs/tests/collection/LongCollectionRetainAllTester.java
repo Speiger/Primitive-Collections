@@ -7,6 +7,8 @@ import static com.google.common.collect.testing.features.CollectionSize.ZERO;
 import com.google.common.collect.testing.features.CollectionFeature;
 import com.google.common.collect.testing.features.CollectionSize;
 
+import org.junit.Ignore;
+
 import speiger.src.collections.longs.collections.LongCollection;
 import speiger.src.collections.longs.lists.LongArrayList;
 import speiger.src.collections.longs.lists.LongList;
@@ -14,6 +16,7 @@ import speiger.src.testers.longs.tests.base.AbstractLongCollectionTester;
 import speiger.src.testers.longs.utils.LongHelpers;
 import speiger.src.testers.longs.utils.MinimalLongCollection;
 
+@Ignore
 public class LongCollectionRetainAllTester extends AbstractLongCollectionTester {
 
 	private class Target {

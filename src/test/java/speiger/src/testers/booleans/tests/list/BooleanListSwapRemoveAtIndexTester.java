@@ -1,5 +1,7 @@
 package speiger.src.testers.booleans.tests.list;
 
+import org.junit.Ignore;
+
 import static com.google.common.collect.testing.features.CollectionFeature.FAILS_FAST_ON_CONCURRENT_MODIFICATION;
 import static com.google.common.collect.testing.features.CollectionSize.ONE;
 import static com.google.common.collect.testing.features.CollectionSize.ZERO;
@@ -16,6 +18,7 @@ import speiger.src.collections.booleans.lists.BooleanList;
 import speiger.src.testers.booleans.tests.base.AbstractBooleanListTester;
 import speiger.src.testers.booleans.utils.BooleanHelpers;
 
+@Ignore
 public class BooleanListSwapRemoveAtIndexTester extends AbstractBooleanListTester {
 	@ListFeature.Require(absent = SUPPORTS_REMOVE_WITH_INDEX)
 	@CollectionSize.Require(absent = ZERO)

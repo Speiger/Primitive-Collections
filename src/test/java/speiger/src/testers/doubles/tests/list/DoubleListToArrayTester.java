@@ -1,5 +1,7 @@
 package speiger.src.testers.doubles.tests.list;
 
+import org.junit.Ignore;
+
 import static com.google.common.collect.testing.features.CollectionSize.ZERO;
 
 import com.google.common.collect.testing.features.CollectionSize;
@@ -7,6 +9,7 @@ import com.google.common.collect.testing.features.CollectionSize;
 import speiger.src.collections.doubles.lists.DoubleArrayList;
 import speiger.src.testers.doubles.tests.base.AbstractDoubleListTester;
 
+@Ignore
 public class DoubleListToArrayTester extends AbstractDoubleListTester {
 	public void testToArray_noArg() {
 		double[] actual = getList().toDoubleArray();

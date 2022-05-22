@@ -1,5 +1,7 @@
 package speiger.src.testers.shorts.tests.list;
 
+import org.junit.Ignore;
+
 import static com.google.common.collect.testing.features.CollectionSize.SEVERAL;
 import static com.google.common.collect.testing.features.CollectionSize.ZERO;
 
@@ -8,6 +10,7 @@ import com.google.common.collect.testing.features.CollectionSize;
 import speiger.src.collections.shorts.lists.ShortArrayList;
 import speiger.src.testers.shorts.tests.base.AbstractShortListTester;
 
+@Ignore
 public class ShortListGetElementsTester extends AbstractShortListTester {
 	@CollectionSize.Require(SEVERAL)
 	public void testGetElements_valid() {

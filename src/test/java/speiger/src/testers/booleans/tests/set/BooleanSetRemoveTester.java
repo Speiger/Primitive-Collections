@@ -1,5 +1,7 @@
 package speiger.src.testers.booleans.tests.set;
 
+import org.junit.Ignore;
+
 import static com.google.common.collect.testing.features.CollectionFeature.SUPPORTS_REMOVE;
 import static com.google.common.collect.testing.features.CollectionSize.ZERO;
 
@@ -8,6 +10,7 @@ import com.google.common.collect.testing.features.CollectionSize;
 
 import speiger.src.testers.booleans.tests.base.AbstractBooleanSetTester;
 
+@Ignore
 public class BooleanSetRemoveTester extends AbstractBooleanSetTester {
 	@CollectionFeature.Require(SUPPORTS_REMOVE)
 	@CollectionSize.Require(absent = ZERO)

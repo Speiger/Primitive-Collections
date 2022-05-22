@@ -1,5 +1,7 @@
 package speiger.src.testers.shorts.tests.set;
 
+import org.junit.Ignore;
+
 import static com.google.common.collect.testing.features.CollectionFeature.SUPPORTS_REMOVE;
 import static com.google.common.collect.testing.features.CollectionSize.ONE;
 import static com.google.common.collect.testing.features.CollectionSize.SEVERAL;
@@ -15,6 +17,7 @@ import speiger.src.collections.shorts.sets.ShortSortedSet;
 import speiger.src.testers.shorts.tests.base.AbstractShortSetTester;
 import speiger.src.testers.shorts.utils.ShortHelpers;
 
+@Ignore
 public class ShortSortedSetNaviationTester extends AbstractShortSetTester {
 	private ShortSortedSet sortedSet;
 	private ShortList values;

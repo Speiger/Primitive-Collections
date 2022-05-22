@@ -10,6 +10,8 @@ import java.util.ConcurrentModificationException;
 import com.google.common.collect.testing.features.CollectionFeature;
 import com.google.common.collect.testing.features.CollectionSize;
 
+import org.junit.Ignore;
+
 import speiger.src.collections.longs.collections.LongIterator;
 import speiger.src.collections.longs.lists.LongArrayList;
 import speiger.src.collections.longs.lists.LongList;
@@ -17,6 +19,7 @@ import speiger.src.testers.longs.tests.base.AbstractLongCollectionTester;
 import speiger.src.testers.longs.utils.LongHelpers;
 import speiger.src.testers.longs.utils.MinimalLongCollection;
 
+@Ignore
 public class LongCollectionRemoveAllTester extends AbstractLongCollectionTester {
 	@CollectionFeature.Require(SUPPORTS_REMOVE)
 	public void testRemoveAll_emptyCollection() {

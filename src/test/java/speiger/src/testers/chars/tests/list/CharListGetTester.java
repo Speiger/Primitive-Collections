@@ -1,7 +1,10 @@
 package speiger.src.testers.chars.tests.list;
 
+import org.junit.Ignore;
+
 import speiger.src.testers.chars.tests.base.AbstractCharListTester;
 
+@Ignore
 public class CharListGetTester extends AbstractCharListTester {
 	public void testGet_valid() {
 		expectContents(createOrderedArray());

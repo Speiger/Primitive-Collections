@@ -1,5 +1,7 @@
 package speiger.src.testers.doubles.tests.list;
 
+import org.junit.Ignore;
+
 import static com.google.common.collect.testing.features.CollectionFeature.FAILS_FAST_ON_CONCURRENT_MODIFICATION;
 import static com.google.common.collect.testing.features.CollectionSize.ONE;
 import static com.google.common.collect.testing.features.CollectionSize.ZERO;
@@ -16,6 +18,7 @@ import speiger.src.collections.doubles.lists.DoubleList;
 import speiger.src.testers.doubles.tests.base.AbstractDoubleListTester;
 import speiger.src.testers.doubles.utils.DoubleHelpers;
 
+@Ignore
 public class DoubleListSwapRemoveAtIndexTester extends AbstractDoubleListTester {
 	@ListFeature.Require(absent = SUPPORTS_REMOVE_WITH_INDEX)
 	@CollectionSize.Require(absent = ZERO)

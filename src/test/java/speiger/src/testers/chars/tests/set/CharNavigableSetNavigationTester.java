@@ -1,5 +1,7 @@
 package speiger.src.testers.chars.tests.set;
 
+import org.junit.Ignore;
+
 import static com.google.common.collect.testing.features.CollectionFeature.SUPPORTS_REMOVE;
 import static com.google.common.collect.testing.features.CollectionSize.ONE;
 import static com.google.common.collect.testing.features.CollectionSize.SEVERAL;
@@ -18,6 +20,7 @@ import speiger.src.collections.chars.utils.CharLists;
 import speiger.src.testers.chars.tests.base.AbstractCharSetTester;
 import speiger.src.testers.chars.utils.CharHelpers;
 
+@Ignore
 public class CharNavigableSetNavigationTester extends AbstractCharSetTester {
 	private CharNavigableSet navigableSet;
 	private CharList values;

@@ -1,5 +1,7 @@
 package speiger.src.testers.bytes.tests.collection;
 
+import org.junit.Ignore;
+
 import static com.google.common.collect.testing.features.CollectionFeature.FAILS_FAST_ON_CONCURRENT_MODIFICATION;
 import static com.google.common.collect.testing.features.CollectionFeature.SUPPORTS_REMOVE;
 import static com.google.common.collect.testing.features.CollectionSize.SEVERAL;
@@ -13,6 +15,7 @@ import com.google.common.collect.testing.features.CollectionSize;
 import speiger.src.collections.bytes.collections.ByteIterator;
 import speiger.src.testers.bytes.tests.base.AbstractByteCollectionTester;
 
+@Ignore
 public class ByteCollectionClearTester extends AbstractByteCollectionTester {
 	@CollectionFeature.Require(SUPPORTS_REMOVE)
 	public void testClear() {

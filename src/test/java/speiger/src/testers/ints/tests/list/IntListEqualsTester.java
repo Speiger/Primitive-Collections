@@ -1,5 +1,7 @@
 package speiger.src.testers.ints.tests.list;
 
+import org.junit.Ignore;
+
 import com.google.common.collect.testing.features.CollectionSize;
 
 import speiger.src.collections.ints.collections.IntCollection;
@@ -7,6 +9,7 @@ import speiger.src.collections.ints.lists.IntArrayList;
 import speiger.src.testers.ints.tests.base.AbstractIntListTester;
 import speiger.src.testers.ints.utils.MinimalIntSet;
 
+@Ignore
 public class IntListEqualsTester extends AbstractIntListTester {
 	public void testEquals_otherListWithSameElements() {
 		assertTrue("A List should equal any other List containing the same elements.", getList().equals(new IntArrayList(getOrderedElements())));

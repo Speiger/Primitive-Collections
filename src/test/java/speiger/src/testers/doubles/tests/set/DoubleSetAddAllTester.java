@@ -1,5 +1,7 @@
 package speiger.src.testers.doubles.tests.set;
 
+import org.junit.Ignore;
+
 import static com.google.common.collect.testing.features.CollectionFeature.SUPPORTS_ADD;
 import static com.google.common.collect.testing.features.CollectionSize.ZERO;
 
@@ -9,6 +11,7 @@ import com.google.common.collect.testing.features.CollectionSize;
 import speiger.src.testers.doubles.tests.base.AbstractDoubleSetTester;
 import speiger.src.testers.doubles.utils.MinimalDoubleCollection;
 
+@Ignore
 public class DoubleSetAddAllTester extends AbstractDoubleSetTester {
 	@CollectionFeature.Require(SUPPORTS_ADD)
 	@CollectionSize.Require(absent = ZERO)

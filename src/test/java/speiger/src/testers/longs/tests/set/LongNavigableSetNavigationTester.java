@@ -1,5 +1,7 @@
 package speiger.src.testers.longs.tests.set;
 
+import org.junit.Ignore;
+
 import static com.google.common.collect.testing.features.CollectionFeature.SUPPORTS_REMOVE;
 import static com.google.common.collect.testing.features.CollectionSize.ONE;
 import static com.google.common.collect.testing.features.CollectionSize.SEVERAL;
@@ -18,6 +20,7 @@ import speiger.src.collections.longs.utils.LongLists;
 import speiger.src.testers.longs.tests.base.AbstractLongSetTester;
 import speiger.src.testers.longs.utils.LongHelpers;
 
+@Ignore
 public class LongNavigableSetNavigationTester extends AbstractLongSetTester {
 	private LongNavigableSet navigableSet;
 	private LongList values;

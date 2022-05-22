@@ -1,12 +1,14 @@
 package speiger.src.testers.booleans.tests.collection;
 
 import org.junit.Assert;
+import org.junit.Ignore;
 
 import com.google.common.collect.testing.features.CollectionFeature;
 
 import speiger.src.collections.booleans.collections.BooleanCollection;
 import speiger.src.testers.booleans.tests.base.AbstractBooleanCollectionTester;
 
+@Ignore
 public class BooleanCollectionCopyTester extends AbstractBooleanCollectionTester {
 	
 	@CollectionFeature.Require(absent = {CollectionFeature.SUBSET_VIEW, CollectionFeature.DESCENDING_VIEW})

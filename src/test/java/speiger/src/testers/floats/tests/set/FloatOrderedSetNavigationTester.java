@@ -1,5 +1,7 @@
 package speiger.src.testers.floats.tests.set;
 
+import org.junit.Ignore;
+
 import static com.google.common.collect.testing.features.CollectionFeature.SUPPORTS_REMOVE;
 import static com.google.common.collect.testing.features.CollectionSize.ONE;
 import static com.google.common.collect.testing.features.CollectionSize.SEVERAL;
@@ -15,6 +17,7 @@ import speiger.src.collections.floats.sets.FloatOrderedSet;
 import speiger.src.testers.floats.tests.base.AbstractFloatSetTester;
 import speiger.src.testers.floats.utils.FloatHelpers;
 
+@Ignore
 public class FloatOrderedSetNavigationTester extends AbstractFloatSetTester {
 	private FloatOrderedSet orderedSet;
 	private FloatList values;

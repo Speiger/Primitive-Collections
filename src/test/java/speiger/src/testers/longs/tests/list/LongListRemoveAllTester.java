@@ -1,5 +1,7 @@
 package speiger.src.testers.longs.tests.list;
 
+import org.junit.Ignore;
+
 import static com.google.common.collect.testing.features.CollectionFeature.SUPPORTS_REMOVE;
 import static com.google.common.collect.testing.features.CollectionSize.ONE;
 import static com.google.common.collect.testing.features.CollectionSize.ZERO;
@@ -10,6 +12,7 @@ import com.google.common.collect.testing.features.CollectionSize;
 import speiger.src.testers.longs.tests.base.AbstractLongListTester;
 import speiger.src.testers.longs.utils.MinimalLongCollection;
 
+@Ignore
 public class LongListRemoveAllTester extends AbstractLongListTester {
 	@CollectionFeature.Require(SUPPORTS_REMOVE)
 	@CollectionSize.Require(absent = { ZERO, ONE })

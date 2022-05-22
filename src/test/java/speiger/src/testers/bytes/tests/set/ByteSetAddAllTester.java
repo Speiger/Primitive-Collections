@@ -1,5 +1,7 @@
 package speiger.src.testers.bytes.tests.set;
 
+import org.junit.Ignore;
+
 import static com.google.common.collect.testing.features.CollectionFeature.SUPPORTS_ADD;
 import static com.google.common.collect.testing.features.CollectionSize.ZERO;
 
@@ -9,6 +11,7 @@ import com.google.common.collect.testing.features.CollectionSize;
 import speiger.src.testers.bytes.tests.base.AbstractByteSetTester;
 import speiger.src.testers.bytes.utils.MinimalByteCollection;
 
+@Ignore
 public class ByteSetAddAllTester extends AbstractByteSetTester {
 	@CollectionFeature.Require(SUPPORTS_ADD)
 	@CollectionSize.Require(absent = ZERO)

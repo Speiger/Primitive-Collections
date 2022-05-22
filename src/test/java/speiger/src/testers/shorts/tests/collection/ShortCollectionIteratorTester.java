@@ -13,6 +13,8 @@ import com.google.common.collect.testing.IteratorFeature;
 import com.google.common.collect.testing.features.CollectionFeature;
 import com.google.common.collect.testing.features.CollectionSize;
 
+import org.junit.Ignore;
+
 import speiger.src.collections.shorts.collections.ShortIterable;
 import speiger.src.collections.shorts.collections.ShortIterator;
 import speiger.src.collections.shorts.lists.ShortArrayList;
@@ -21,6 +23,7 @@ import speiger.src.testers.shorts.tests.base.AbstractShortCollectionTester;
 import speiger.src.testers.shorts.utils.ShortHelpers;
 import speiger.src.testers.shorts.utils.ShortIteratorTester;
 
+@Ignore
 public class ShortCollectionIteratorTester extends AbstractShortCollectionTester {
 	public void testIterator() {
 		ShortList elements = new ShortArrayList();

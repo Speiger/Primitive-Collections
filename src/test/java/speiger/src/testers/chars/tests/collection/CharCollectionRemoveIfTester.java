@@ -11,9 +11,12 @@ import java.util.ConcurrentModificationException;
 import com.google.common.collect.testing.features.CollectionFeature;
 import com.google.common.collect.testing.features.CollectionSize;
 
+import org.junit.Ignore;
+
 import speiger.src.collections.chars.collections.CharIterator;
 import speiger.src.testers.chars.tests.base.AbstractCharCollectionTester;
 
+@Ignore
 public class CharCollectionRemoveIfTester extends AbstractCharCollectionTester {
 	@CollectionFeature.Require(SUPPORTS_ITERATOR_REMOVE)
 	public void testRemoveIf_alwaysFalse() {

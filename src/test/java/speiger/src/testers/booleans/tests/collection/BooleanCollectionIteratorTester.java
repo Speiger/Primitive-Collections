@@ -13,6 +13,8 @@ import com.google.common.collect.testing.IteratorFeature;
 import com.google.common.collect.testing.features.CollectionFeature;
 import com.google.common.collect.testing.features.CollectionSize;
 
+import org.junit.Ignore;
+
 import speiger.src.collections.booleans.collections.BooleanIterable;
 import speiger.src.collections.booleans.collections.BooleanIterator;
 import speiger.src.collections.booleans.lists.BooleanArrayList;
@@ -21,6 +23,7 @@ import speiger.src.testers.booleans.tests.base.AbstractBooleanCollectionTester;
 import speiger.src.testers.booleans.utils.BooleanHelpers;
 import speiger.src.testers.booleans.utils.BooleanIteratorTester;
 
+@Ignore
 public class BooleanCollectionIteratorTester extends AbstractBooleanCollectionTester {
 	public void testIterator() {
 		BooleanList elements = new BooleanArrayList();

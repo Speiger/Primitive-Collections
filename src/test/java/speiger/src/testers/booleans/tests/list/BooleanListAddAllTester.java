@@ -1,5 +1,7 @@
 package speiger.src.testers.booleans.tests.list;
 
+import org.junit.Ignore;
+
 import static com.google.common.collect.testing.features.CollectionFeature.SUPPORTS_ADD;
 import static com.google.common.collect.testing.features.CollectionSize.ZERO;
 
@@ -12,6 +14,7 @@ import speiger.src.collections.booleans.lists.BooleanList;
 import speiger.src.testers.booleans.tests.base.AbstractBooleanListTester;
 import speiger.src.testers.booleans.utils.MinimalBooleanCollection;
 
+@Ignore
 public class BooleanListAddAllTester extends AbstractBooleanListTester {
 	@CollectionFeature.Require(SUPPORTS_ADD)
 	@CollectionSize.Require(absent = ZERO)

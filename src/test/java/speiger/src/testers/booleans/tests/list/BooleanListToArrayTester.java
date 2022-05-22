@@ -1,5 +1,7 @@
 package speiger.src.testers.booleans.tests.list;
 
+import org.junit.Ignore;
+
 import static com.google.common.collect.testing.features.CollectionSize.ZERO;
 
 import com.google.common.collect.testing.features.CollectionSize;
@@ -7,6 +9,7 @@ import com.google.common.collect.testing.features.CollectionSize;
 import speiger.src.collections.booleans.lists.BooleanArrayList;
 import speiger.src.testers.booleans.tests.base.AbstractBooleanListTester;
 
+@Ignore
 public class BooleanListToArrayTester extends AbstractBooleanListTester {
 	public void testToArray_noArg() {
 		boolean[] actual = getList().toBooleanArray();

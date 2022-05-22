@@ -4,11 +4,14 @@ import static com.google.common.collect.testing.features.CollectionFeature.KNOWN
 
 import com.google.common.collect.testing.features.CollectionFeature;
 
+import org.junit.Ignore;
+
 import speiger.src.collections.longs.lists.LongArrayList;
 import speiger.src.collections.longs.lists.LongList;
 import speiger.src.testers.longs.tests.base.AbstractLongCollectionTester;
 import speiger.src.testers.longs.utils.LongHelpers;
 
+@Ignore
 public class LongCollectionToArrayTester extends AbstractLongCollectionTester{
 	public void testToArray_noArgs() {
 		long[] array = collection.toLongArray();

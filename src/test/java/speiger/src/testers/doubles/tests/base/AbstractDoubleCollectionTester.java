@@ -1,7 +1,10 @@
 package speiger.src.testers.doubles.tests.base;
 
+import org.junit.Ignore;
+
 import speiger.src.collections.doubles.collections.DoubleCollection;
 
+@Ignore
 public class AbstractDoubleCollectionTester extends AbstractDoubleContainerTester {
 
 	protected DoubleCollection collection;

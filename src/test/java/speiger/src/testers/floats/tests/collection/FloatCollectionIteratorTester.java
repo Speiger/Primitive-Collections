@@ -13,6 +13,8 @@ import com.google.common.collect.testing.IteratorFeature;
 import com.google.common.collect.testing.features.CollectionFeature;
 import com.google.common.collect.testing.features.CollectionSize;
 
+import org.junit.Ignore;
+
 import speiger.src.collections.floats.collections.FloatIterable;
 import speiger.src.collections.floats.collections.FloatIterator;
 import speiger.src.collections.floats.lists.FloatArrayList;
@@ -21,6 +23,7 @@ import speiger.src.testers.floats.tests.base.AbstractFloatCollectionTester;
 import speiger.src.testers.floats.utils.FloatHelpers;
 import speiger.src.testers.floats.utils.FloatIteratorTester;
 
+@Ignore
 public class FloatCollectionIteratorTester extends AbstractFloatCollectionTester {
 	public void testIterator() {
 		FloatList elements = new FloatArrayList();

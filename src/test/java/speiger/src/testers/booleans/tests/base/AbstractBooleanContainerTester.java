@@ -8,6 +8,8 @@ import com.google.common.collect.testing.TestContainerGenerator;
 import com.google.common.collect.testing.features.CollectionSize;
 import com.google.errorprone.annotations.OverridingMethodsMustInvokeSuper;
 
+import org.junit.Ignore;
+
 import speiger.src.collections.booleans.collections.BooleanCollection;
 import speiger.src.collections.booleans.collections.BooleanIterator;
 import speiger.src.collections.booleans.lists.BooleanArrayList;
@@ -18,6 +20,7 @@ import speiger.src.testers.booleans.utils.BooleanHelpers;
 import speiger.src.testers.booleans.utils.BooleanSamples;
 import speiger.src.testers.booleans.utils.MinimalBooleanCollection;
 
+@Ignore
 public abstract class AbstractBooleanContainerTester extends AbstractTester<OneSizeTestContainerGenerator<Collection<Boolean>, Boolean>> {
 	protected BooleanSamples samples;
 	protected BooleanCollection container;

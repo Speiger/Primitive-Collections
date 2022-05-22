@@ -1,5 +1,7 @@
 package speiger.src.testers.ints.tests.list;
 
+import org.junit.Ignore;
+
 import static com.google.common.collect.testing.features.CollectionFeature.FAILS_FAST_ON_CONCURRENT_MODIFICATION;
 import static com.google.common.collect.testing.features.CollectionSize.ONE;
 import static com.google.common.collect.testing.features.CollectionSize.ZERO;
@@ -16,6 +18,7 @@ import speiger.src.collections.ints.lists.IntList;
 import speiger.src.testers.ints.tests.base.AbstractIntListTester;
 import speiger.src.testers.ints.utils.IntHelpers;
 
+@Ignore
 public class IntListRemoveAtIndexTester extends AbstractIntListTester {
 	@ListFeature.Require(absent = SUPPORTS_REMOVE_WITH_INDEX)
 	@CollectionSize.Require(absent = ZERO)

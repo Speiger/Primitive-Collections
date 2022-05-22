@@ -1,7 +1,10 @@
 package speiger.src.testers.doubles.tests.list;
 
+import org.junit.Ignore;
+
 import speiger.src.testers.doubles.tests.base.AbstractDoubleListTester;
 
+@Ignore
 public class DoubleListGetTester extends AbstractDoubleListTester {
 	public void testGet_valid() {
 		expectContents(createOrderedArray());

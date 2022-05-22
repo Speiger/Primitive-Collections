@@ -7,6 +7,8 @@ import static com.google.common.collect.testing.features.CollectionSize.ZERO;
 import com.google.common.collect.testing.features.CollectionFeature;
 import com.google.common.collect.testing.features.CollectionSize;
 
+import org.junit.Ignore;
+
 import speiger.src.collections.ints.collections.IntCollection;
 import speiger.src.collections.ints.lists.IntArrayList;
 import speiger.src.collections.ints.lists.IntList;
@@ -14,6 +16,7 @@ import speiger.src.testers.ints.tests.base.AbstractIntCollectionTester;
 import speiger.src.testers.ints.utils.IntHelpers;
 import speiger.src.testers.ints.utils.MinimalIntCollection;
 
+@Ignore
 public class IntCollectionRetainAllTester extends AbstractIntCollectionTester {
 
 	private class Target {

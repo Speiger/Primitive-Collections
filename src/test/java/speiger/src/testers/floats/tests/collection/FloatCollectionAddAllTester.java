@@ -1,5 +1,7 @@
 package speiger.src.testers.floats.tests.collection;
 
+import org.junit.Ignore;
+
 import static com.google.common.collect.testing.features.CollectionFeature.FAILS_FAST_ON_CONCURRENT_MODIFICATION;
 import static com.google.common.collect.testing.features.CollectionFeature.SUPPORTS_ADD;
 import static com.google.common.collect.testing.features.CollectionSize.ZERO;
@@ -13,6 +15,7 @@ import speiger.src.collections.floats.collections.FloatIterator;
 import speiger.src.testers.floats.tests.base.AbstractFloatCollectionTester;
 import speiger.src.testers.floats.utils.MinimalFloatCollection;
 
+@Ignore
 public class FloatCollectionAddAllTester extends AbstractFloatCollectionTester {
 	@CollectionFeature.Require(SUPPORTS_ADD)
 	public void testAddAll_supportedNothing() {

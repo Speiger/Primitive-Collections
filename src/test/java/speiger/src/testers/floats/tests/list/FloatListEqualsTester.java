@@ -1,5 +1,7 @@
 package speiger.src.testers.floats.tests.list;
 
+import org.junit.Ignore;
+
 import com.google.common.collect.testing.features.CollectionSize;
 
 import speiger.src.collections.floats.collections.FloatCollection;
@@ -7,6 +9,7 @@ import speiger.src.collections.floats.lists.FloatArrayList;
 import speiger.src.testers.floats.tests.base.AbstractFloatListTester;
 import speiger.src.testers.floats.utils.MinimalFloatSet;
 
+@Ignore
 public class FloatListEqualsTester extends AbstractFloatListTester {
 	public void testEquals_otherListWithSameElements() {
 		assertTrue("A List should equal any other List containing the same elements.", getList().equals(new FloatArrayList(getOrderedElements())));

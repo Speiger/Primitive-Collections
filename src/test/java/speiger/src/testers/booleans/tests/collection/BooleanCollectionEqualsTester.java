@@ -1,7 +1,10 @@
 package speiger.src.testers.booleans.tests.collection;
 
+import org.junit.Ignore;
+
 import speiger.src.testers.booleans.tests.base.AbstractBooleanCollectionTester;
 
+@Ignore
 public class BooleanCollectionEqualsTester extends AbstractBooleanCollectionTester {
 	public void testEquals_self() {
 		assertTrue("An Object should be equal to itself.", collection.equals(collection));

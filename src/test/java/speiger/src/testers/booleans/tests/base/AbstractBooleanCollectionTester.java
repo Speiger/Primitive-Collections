@@ -1,7 +1,10 @@
 package speiger.src.testers.booleans.tests.base;
 
+import org.junit.Ignore;
+
 import speiger.src.collections.booleans.collections.BooleanCollection;
 
+@Ignore
 public class AbstractBooleanCollectionTester extends AbstractBooleanContainerTester {
 
 	protected BooleanCollection collection;

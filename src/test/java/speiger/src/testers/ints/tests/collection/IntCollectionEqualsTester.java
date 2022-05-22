@@ -1,7 +1,10 @@
 package speiger.src.testers.ints.tests.collection;
 
+import org.junit.Ignore;
+
 import speiger.src.testers.ints.tests.base.AbstractIntCollectionTester;
 
+@Ignore
 public class IntCollectionEqualsTester extends AbstractIntCollectionTester {
 	public void testEquals_self() {
 		assertTrue("An Object should be equal to itself.", collection.equals(collection));

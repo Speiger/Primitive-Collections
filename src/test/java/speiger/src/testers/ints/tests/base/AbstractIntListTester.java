@@ -1,9 +1,12 @@
 package speiger.src.testers.ints.tests.base;
 
+import org.junit.Ignore;
+
 import speiger.src.collections.ints.collections.IntCollection;
 import speiger.src.collections.ints.lists.IntList;
 import speiger.src.testers.ints.utils.IntHelpers;
 
+@Ignore
 public class AbstractIntListTester extends AbstractIntCollectionTester {
 	protected final IntList getList() {
 		return (IntList) collection;

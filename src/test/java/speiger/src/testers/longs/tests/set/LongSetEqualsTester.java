@@ -1,5 +1,7 @@
 package speiger.src.testers.longs.tests.set;
 
+import org.junit.Ignore;
+
 import com.google.common.collect.testing.features.CollectionSize;
 
 import speiger.src.collections.longs.collections.LongCollection;
@@ -7,6 +9,7 @@ import speiger.src.testers.longs.tests.base.AbstractLongSetTester;
 import speiger.src.testers.longs.utils.LongHelpers;
 import speiger.src.testers.longs.utils.MinimalLongSet;
 
+@Ignore
 public class LongSetEqualsTester extends AbstractLongSetTester {
 	public void testEquals_otherSetWithSameElements() {
 		assertTrue("A Set should equal any other Set containing the same elements.", getSet().equals(MinimalLongSet.of(getSampleElements())));

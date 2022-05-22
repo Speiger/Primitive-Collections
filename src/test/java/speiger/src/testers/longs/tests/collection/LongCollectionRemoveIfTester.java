@@ -11,9 +11,12 @@ import java.util.ConcurrentModificationException;
 import com.google.common.collect.testing.features.CollectionFeature;
 import com.google.common.collect.testing.features.CollectionSize;
 
+import org.junit.Ignore;
+
 import speiger.src.collections.longs.collections.LongIterator;
 import speiger.src.testers.longs.tests.base.AbstractLongCollectionTester;
 
+@Ignore
 public class LongCollectionRemoveIfTester extends AbstractLongCollectionTester {
 	@CollectionFeature.Require(SUPPORTS_ITERATOR_REMOVE)
 	public void testRemoveIf_alwaysFalse() {

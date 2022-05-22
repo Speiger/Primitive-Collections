@@ -1,11 +1,14 @@
 package speiger.src.testers.bytes.tests.collection;
 
+import org.junit.Ignore;
+
 import static com.google.common.collect.testing.features.CollectionSize.ZERO;
 
 import com.google.common.collect.testing.features.CollectionSize;
 
 import speiger.src.testers.bytes.tests.base.AbstractByteCollectionTester;
 
+@Ignore
 public class ByteCollectionContainsTester extends AbstractByteCollectionTester {
 	@CollectionSize.Require(absent = ZERO)
 	public void testContains_yes() {

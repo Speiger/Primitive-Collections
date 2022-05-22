@@ -1,7 +1,10 @@
 package speiger.src.testers.chars.tests.base;
 
+import org.junit.Ignore;
+
 import speiger.src.collections.chars.collections.CharCollection;
 
+@Ignore
 public class AbstractCharCollectionTester extends AbstractCharContainerTester {
 
 	protected CharCollection collection;

@@ -1,5 +1,7 @@
 package speiger.src.testers.longs.tests.list;
 
+import org.junit.Ignore;
+
 import static com.google.common.collect.testing.features.CollectionSize.ZERO;
 
 import com.google.common.collect.testing.features.CollectionSize;
@@ -7,6 +9,7 @@ import com.google.common.collect.testing.features.CollectionSize;
 import speiger.src.collections.longs.lists.LongArrayList;
 import speiger.src.testers.longs.tests.base.AbstractLongListTester;
 
+@Ignore
 public class LongListToArrayTester extends AbstractLongListTester {
 	public void testToArray_noArg() {
 		long[] actual = getList().toLongArray();

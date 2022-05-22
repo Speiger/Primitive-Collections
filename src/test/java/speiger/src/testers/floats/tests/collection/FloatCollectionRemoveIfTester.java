@@ -11,9 +11,12 @@ import java.util.ConcurrentModificationException;
 import com.google.common.collect.testing.features.CollectionFeature;
 import com.google.common.collect.testing.features.CollectionSize;
 
+import org.junit.Ignore;
+
 import speiger.src.collections.floats.collections.FloatIterator;
 import speiger.src.testers.floats.tests.base.AbstractFloatCollectionTester;
 
+@Ignore
 public class FloatCollectionRemoveIfTester extends AbstractFloatCollectionTester {
 	@CollectionFeature.Require(SUPPORTS_ITERATOR_REMOVE)
 	public void testRemoveIf_alwaysFalse() {

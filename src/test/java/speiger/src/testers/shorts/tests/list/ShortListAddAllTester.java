@@ -1,5 +1,7 @@
 package speiger.src.testers.shorts.tests.list;
 
+import org.junit.Ignore;
+
 import static com.google.common.collect.testing.features.CollectionFeature.SUPPORTS_ADD;
 import static com.google.common.collect.testing.features.CollectionSize.ZERO;
 
@@ -12,6 +14,7 @@ import speiger.src.collections.shorts.lists.ShortList;
 import speiger.src.testers.shorts.tests.base.AbstractShortListTester;
 import speiger.src.testers.shorts.utils.MinimalShortCollection;
 
+@Ignore
 public class ShortListAddAllTester extends AbstractShortListTester {
 	@CollectionFeature.Require(SUPPORTS_ADD)
 	@CollectionSize.Require(absent = ZERO)

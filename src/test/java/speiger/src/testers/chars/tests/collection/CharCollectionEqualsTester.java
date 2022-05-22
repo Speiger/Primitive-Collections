@@ -1,7 +1,10 @@
 package speiger.src.testers.chars.tests.collection;
 
+import org.junit.Ignore;
+
 import speiger.src.testers.chars.tests.base.AbstractCharCollectionTester;
 
+@Ignore
 public class CharCollectionEqualsTester extends AbstractCharCollectionTester {
 	public void testEquals_self() {
 		assertTrue("An Object should be equal to itself.", collection.equals(collection));

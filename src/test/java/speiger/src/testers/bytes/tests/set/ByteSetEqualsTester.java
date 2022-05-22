@@ -1,5 +1,7 @@
 package speiger.src.testers.bytes.tests.set;
 
+import org.junit.Ignore;
+
 import com.google.common.collect.testing.features.CollectionSize;
 
 import speiger.src.collections.bytes.collections.ByteCollection;
@@ -7,6 +9,7 @@ import speiger.src.testers.bytes.tests.base.AbstractByteSetTester;
 import speiger.src.testers.bytes.utils.ByteHelpers;
 import speiger.src.testers.bytes.utils.MinimalByteSet;
 
+@Ignore
 public class ByteSetEqualsTester extends AbstractByteSetTester {
 	public void testEquals_otherSetWithSameElements() {
 		assertTrue("A Set should equal any other Set containing the same elements.", getSet().equals(MinimalByteSet.of(getSampleElements())));

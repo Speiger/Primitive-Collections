@@ -1,5 +1,7 @@
 package speiger.src.testers.booleans.tests.list;
 
+import org.junit.Ignore;
+
 import static com.google.common.collect.testing.features.CollectionSize.ONE;
 import static com.google.common.collect.testing.features.CollectionSize.ZERO;
 import static com.google.common.collect.testing.features.ListFeature.SUPPORTS_ADD_WITH_INDEX;
@@ -12,6 +14,7 @@ import speiger.src.collections.booleans.lists.BooleanList;
 import speiger.src.testers.booleans.tests.base.AbstractBooleanListTester;
 import speiger.src.testers.booleans.utils.MinimalBooleanCollection;
 
+@Ignore
 public class BooleanListAddAllAtIndexTester extends AbstractBooleanListTester {
 	@ListFeature.Require(SUPPORTS_ADD_WITH_INDEX)
 	@CollectionSize.Require(absent = ZERO)

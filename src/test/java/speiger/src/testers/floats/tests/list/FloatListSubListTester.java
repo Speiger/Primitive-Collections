@@ -1,5 +1,7 @@
 package speiger.src.testers.floats.tests.list;
 
+import org.junit.Ignore;
+
 import static com.google.common.collect.testing.features.CollectionFeature.SERIALIZABLE_INCLUDING_VIEWS;
 import static com.google.common.collect.testing.features.CollectionSize.ONE;
 import static com.google.common.collect.testing.features.CollectionSize.ZERO;
@@ -21,6 +23,7 @@ import speiger.src.collections.floats.utils.FloatLists;
 import speiger.src.testers.floats.tests.base.AbstractFloatListTester;
 import speiger.src.testers.floats.utils.FloatHelpers;
 
+@Ignore
 public class FloatListSubListTester extends AbstractFloatListTester {
 	public void testSubList_startNegative() {
 		try {

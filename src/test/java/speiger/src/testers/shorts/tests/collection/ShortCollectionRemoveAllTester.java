@@ -10,6 +10,8 @@ import java.util.ConcurrentModificationException;
 import com.google.common.collect.testing.features.CollectionFeature;
 import com.google.common.collect.testing.features.CollectionSize;
 
+import org.junit.Ignore;
+
 import speiger.src.collections.shorts.collections.ShortIterator;
 import speiger.src.collections.shorts.lists.ShortArrayList;
 import speiger.src.collections.shorts.lists.ShortList;
@@ -17,6 +19,7 @@ import speiger.src.testers.shorts.tests.base.AbstractShortCollectionTester;
 import speiger.src.testers.shorts.utils.ShortHelpers;
 import speiger.src.testers.shorts.utils.MinimalShortCollection;
 
+@Ignore
 public class ShortCollectionRemoveAllTester extends AbstractShortCollectionTester {
 	@CollectionFeature.Require(SUPPORTS_REMOVE)
 	public void testRemoveAll_emptyCollection() {

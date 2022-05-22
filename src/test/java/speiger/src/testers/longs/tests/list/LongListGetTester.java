@@ -1,7 +1,10 @@
 package speiger.src.testers.longs.tests.list;
 
+import org.junit.Ignore;
+
 import speiger.src.testers.longs.tests.base.AbstractLongListTester;
 
+@Ignore
 public class LongListGetTester extends AbstractLongListTester {
 	public void testGet_valid() {
 		expectContents(createOrderedArray());
