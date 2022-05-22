@@ -324,8 +324,9 @@ public class ARRAY_LIST KEY_GENERIC_TYPE extends ABSTRACT_LIST KEY_GENERIC_TYPE 
 	public void addElements(int from, KEY_TYPE[] a, int offset, int length) {
 		if(length <= 0) return;
 		checkAddRange(from);
+		SanityChecks.checkArrayCapacity(a.length, offset, length);
 		grow(size + length);
-		if(from != size) System.arraycopy(data, from, data, from+length, size - length);
+		if(from != size) System.arraycopy(data, from, data, from+length, size - from);
 		size+=length;
 		System.arraycopy(a, offset, data, from, length);
 	}
