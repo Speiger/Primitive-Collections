@@ -362,11 +362,11 @@ public class ARRAY_LIST KEY_GENERIC_TYPE extends ABSTRACT_LIST KEY_GENERIC_TYPE 
 		int length = to - from;
 		if(length <= 0) return;
 		if(to != size) System.arraycopy(data, to, data, from, size - to);
+		size -= length;
 #if TYPE_OBJECT
 		for(int i = 0;i<length;i++)
-			data[i+to] = null;
+			data[i+size] = null;
 #endif
-		size -= length;
 	}
 	
 #if TYPE_OBJECT
@@ -382,13 +382,13 @@ public class ARRAY_LIST KEY_GENERIC_TYPE extends ABSTRACT_LIST KEY_GENERIC_TYPE 
 		checkRange(from);
 		checkAddRange(to);
 		int length = to - from;
+		if(length <= 0) return ARRAYS.newArray(type, 0);
 		K[] a = ARRAYS.newArray(type, length);
-		if(length <= 0) return a;
 		System.arraycopy(data, from, a, 0, length);
 		if(to != size) System.arraycopy(data, to, data, from, size - to);
+		size -= length;
 		for(int i = 0;i<length;i++)
-			data[i+to] = null;
-		size -= length;		
+			data[i+size] = null;
 		return a;
 	}
 	

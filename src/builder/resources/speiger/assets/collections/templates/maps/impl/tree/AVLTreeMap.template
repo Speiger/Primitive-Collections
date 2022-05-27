@@ -408,7 +408,7 @@ public class AVL_TREE_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_VALUE_
 	
 	@Override
 	public KEY_TYPE POLL_FIRST_ENTRY_KEY() {
-		if(tree == null) return EMPTY_KEY_VALUE;
+		if(tree == null) return getDefaultMinValue();
 		KEY_TYPE result = first.key;
 		removeNode(first);
 		return result;
@@ -422,7 +422,7 @@ public class AVL_TREE_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_VALUE_
 	
 	@Override
 	public KEY_TYPE POLL_LAST_ENTRY_KEY() {
-		if(tree == null) return EMPTY_KEY_VALUE;
+		if(tree == null) return getDefaultMaxValue();
 		KEY_TYPE result = last.key;
 		removeNode(last);
 		return result;
@@ -1022,6 +1022,33 @@ public class AVL_TREE_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_VALUE_
 		public KEY_TYPE ceiling(KEY_TYPE e) { return map.ceilingKey(e); }
 		@Override
 		public KEY_TYPE higher(KEY_TYPE e) { return map.higherKey(e); }
+		
+#if !TYPE_OBJECT
+		@Override
+		public CLASS_TYPE lower(CLASS_TYPE e) {
+			MAP.Entry KEY_VALUE_GENERIC_TYPE node = map.lowerEntry(OBJ_TO_KEY(e));
+			return node != null ? node.getKey() : null;
+		}
+		
+		@Override
+		public CLASS_TYPE floor(CLASS_TYPE e) {
+			MAP.Entry KEY_VALUE_GENERIC_TYPE node = map.floorEntry(OBJ_TO_KEY(e));
+			return node != null ? node.getKey() : null;
+		}
+		
+		@Override
+		public CLASS_TYPE higher(CLASS_TYPE e) {
+			MAP.Entry KEY_VALUE_GENERIC_TYPE node = map.higherEntry(OBJ_TO_KEY(e));
+			return node != null ? node.getKey() : null;
+		}
+		
+		@Override
+		public CLASS_TYPE ceiling(CLASS_TYPE e) {
+			MAP.Entry KEY_VALUE_GENERIC_TYPE node = map.ceilingEntry(OBJ_TO_KEY(e));
+			return node != null ? node.getKey() : null;
+		}
+		
+#endif
 		@Override
 		public KEY_TYPE POLL_FIRST_KEY() { return map.POLL_FIRST_ENTRY_KEY(); }
 		@Override
@@ -1461,8 +1488,8 @@ public class AVL_TREE_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_VALUE_
 		protected abstract BI_ITERATOR KEY_GENERIC_TYPE keyIterator(KEY_TYPE element);
 		protected abstract VALUE_BI_ITERATOR VALUE_GENERIC_TYPE valueIterator();
 		protected abstract BI_ITERATOR KEY_GENERIC_TYPE descendingKeyIterator();
-		protected KEY_TYPE lowKeyOrNull(Node KEY_VALUE_GENERIC_TYPE entry) { return entry == null ? EMPTY_KEY_VALUE : entry.key; }
-		protected KEY_TYPE highKeyOrNull(Node KEY_VALUE_GENERIC_TYPE entry) { return entry == null ? EMPTY_KEY_VALUE : entry.key; }
+		protected KEY_TYPE lowKeyOrNull(Node KEY_VALUE_GENERIC_TYPE entry) { return entry == null ? getDefaultMinValue() : entry.key; }
+		protected KEY_TYPE highKeyOrNull(Node KEY_VALUE_GENERIC_TYPE entry) { return entry == null ? getDefaultMaxValue() : entry.key; }
 		protected Node KEY_VALUE_GENERIC_TYPE next(Node KEY_VALUE_GENERIC_TYPE entry) { return entry.next(); }
 		protected Node KEY_VALUE_GENERIC_TYPE previous(Node KEY_VALUE_GENERIC_TYPE entry) { return entry.previous(); }
 		
@@ -1533,7 +1560,7 @@ public class AVL_TREE_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_VALUE_
 				map.removeNode(entry);
 				return result;
 			}
-			return EMPTY_KEY_VALUE;
+			return getDefaultMinValue();
 		}
 		
 		@Override
@@ -1544,7 +1571,7 @@ public class AVL_TREE_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_VALUE_
 				map.removeNode(entry);
 				return result;
 			}
-			return EMPTY_KEY_VALUE;
+			return getDefaultMaxValue();
 		}
 		
 		@Override
@@ -1632,7 +1659,7 @@ public class AVL_TREE_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_VALUE_
 		
 		@Override
 		public VALUE_TYPE REMOVE_VALUEOrDefault(KEY_TYPE key, VALUE_TYPE defaultValue) {
-			return inRange(key) ? map.REMOVE_VALUE(key) : defaultValue;
+			return inRange(key) ? map.REMOVE_VALUEOrDefault(key, defaultValue) : defaultValue;
 		}
 		
 #if TYPE_OBJECT && VALUE_OBJECT
@@ -2147,8 +2174,8 @@ public class AVL_TREE_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_VALUE_
 			public SubMapEntryIterator(Node KEY_VALUE_GENERIC_TYPE first, Node KEY_VALUE_GENERIC_TYPE forwardFence, Node KEY_VALUE_GENERIC_TYPE backwardFence)
 			{
 				next = first;
-				this.forwardFence = forwardFence == null ? null : forwardFence.key;
-				this.backwardFence = backwardFence == null ? null : backwardFence.key;
+				this.forwardFence = forwardFence == null ? EMPTY_KEY_VALUE : forwardFence.key;
+				this.backwardFence = backwardFence == null ? EMPTY_KEY_VALUE : backwardFence.key;
 				unboundForwardFence = forwardFence == null;
 				unboundBackwardFence = backwardFence == null;
 			}
