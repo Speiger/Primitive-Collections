@@ -11,7 +11,8 @@ import speiger.src.collections.bytes.lists.ByteArrayList;
 import speiger.src.testers.bytes.tests.base.AbstractByteListTester;
 
 @Ignore
-public class ByteListGetElementsTester extends AbstractByteListTester {
+public class ByteListGetElementsTester extends AbstractByteListTester
+{
 	@CollectionSize.Require(SEVERAL)
 	public void testGetElements_valid() {
 		byte[] samples = getSampleElements(2).toByteArray();
@@ -75,6 +76,7 @@ public class ByteListGetElementsTester extends AbstractByteListTester {
 		} catch (IndexOutOfBoundsException expected) {
 		}
 	}
+	
 	private static void assertArrayEquals(String message, byte[] expected, byte[] actual) {
 		assertEquals(message, ByteArrayList.wrap(expected), ByteArrayList.wrap(actual));
 	}

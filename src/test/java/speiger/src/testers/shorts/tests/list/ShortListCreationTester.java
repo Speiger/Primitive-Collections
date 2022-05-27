@@ -12,7 +12,8 @@ import com.google.common.collect.testing.features.CollectionSize;
 import speiger.src.testers.shorts.tests.base.AbstractShortListTester;
 
 @Ignore
-public class ShortListCreationTester extends AbstractShortListTester {
+public class ShortListCreationTester extends AbstractShortListTester
+{
 	@CollectionFeature.Require(absent = REJECTS_DUPLICATES_AT_CREATION)
 	@CollectionSize.Require(absent = { ZERO, ONE })
 	public void testCreateWithDuplicates() {

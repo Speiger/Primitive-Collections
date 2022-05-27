@@ -15,7 +15,8 @@ import speiger.src.collections.ints.collections.IntIterator;
 import speiger.src.testers.ints.tests.base.AbstractIntCollectionTester;
 
 @Ignore
-public class IntCollectionAddTester extends AbstractIntCollectionTester {
+public class IntCollectionAddTester extends AbstractIntCollectionTester
+{
 	@CollectionFeature.Require(SUPPORTS_ADD)
 	public void testAdd_supportedNotPresent() {
 		assertTrue("add(notPresent) should return true", collection.add(e3()));

@@ -9,7 +9,8 @@ import com.google.common.collect.testing.features.CollectionSize;
 import speiger.src.testers.ints.tests.base.AbstractIntCollectionTester;
 
 @Ignore
-public class IntCollectionContainsTester extends AbstractIntCollectionTester {
+public class IntCollectionContainsTester extends AbstractIntCollectionTester
+{
 	@CollectionSize.Require(absent = ZERO)
 	public void testContains_yes() {
 		assertTrue("contains(present) should return true", collection.contains(e0()));

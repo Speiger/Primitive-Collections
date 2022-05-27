@@ -2,12 +2,14 @@ package speiger.src.testers.longs.tests.base;
 
 import org.junit.Ignore;
 
+
 import speiger.src.collections.longs.collections.LongCollection;
 import speiger.src.collections.longs.lists.LongList;
 import speiger.src.testers.longs.utils.LongHelpers;
 
 @Ignore
-public class AbstractLongListTester extends AbstractLongCollectionTester {
+public class AbstractLongListTester extends AbstractLongCollectionTester
+{
 	protected final LongList getList() {
 		return (LongList) collection;
 	}

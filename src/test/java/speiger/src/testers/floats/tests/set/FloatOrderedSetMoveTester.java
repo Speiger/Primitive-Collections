@@ -15,7 +15,8 @@ import speiger.src.testers.floats.tests.base.AbstractFloatSetTester;
 import speiger.src.testers.floats.utils.FloatHelpers;
 
 @Ignore
-public class FloatOrderedSetMoveTester extends AbstractFloatSetTester {
+public class FloatOrderedSetMoveTester extends AbstractFloatSetTester
+{
 	private FloatOrderedSet orderedSet;
 	private FloatList values;
 	private float a;

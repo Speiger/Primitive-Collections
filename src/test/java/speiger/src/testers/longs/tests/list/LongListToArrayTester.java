@@ -10,7 +10,8 @@ import speiger.src.collections.longs.lists.LongArrayList;
 import speiger.src.testers.longs.tests.base.AbstractLongListTester;
 
 @Ignore
-public class LongListToArrayTester extends AbstractLongListTester {
+public class LongListToArrayTester extends AbstractLongListTester
+{
 	public void testToArray_noArg() {
 		long[] actual = getList().toLongArray();
 		assertArrayEquals("toArray() order should match list", createOrderedArray(), actual);

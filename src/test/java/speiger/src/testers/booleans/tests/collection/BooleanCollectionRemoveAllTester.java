@@ -20,7 +20,8 @@ import speiger.src.testers.booleans.utils.BooleanHelpers;
 import speiger.src.testers.booleans.utils.MinimalBooleanCollection;
 
 @Ignore
-public class BooleanCollectionRemoveAllTester extends AbstractBooleanCollectionTester {
+public class BooleanCollectionRemoveAllTester extends AbstractBooleanCollectionTester
+{
 	@CollectionFeature.Require(SUPPORTS_REMOVE)
 	public void testRemoveAll_emptyCollection() {
 		assertFalse("removeAll(emptyCollection) should return false", collection.removeAll(MinimalBooleanCollection.of()));

@@ -1,7 +1,5 @@
 package speiger.src.testers.chars.tests.base;
 
-import java.util.Collection;
-
 import com.google.common.collect.testing.AbstractTester;
 import com.google.common.collect.testing.OneSizeTestContainerGenerator;
 import com.google.common.collect.testing.TestContainerGenerator;
@@ -21,31 +19,36 @@ import speiger.src.testers.chars.utils.CharSamples;
 import speiger.src.testers.chars.utils.MinimalCharCollection;
 
 @Ignore
-public abstract class AbstractCharContainerTester extends AbstractTester<OneSizeTestContainerGenerator<Collection<Character>, Character>> {
+public abstract class AbstractCharContainerTester<E> extends AbstractTester<OneSizeTestContainerGenerator<E, Character>>
+{
 	protected CharSamples samples;
-	protected CharCollection container;
+	protected E container;
 	protected TestCharCollectionGenerator primitiveGenerator;
-	private CollectionSize size;
+	protected CollectionSize size;
 
 	@Override
 	@OverridingMethodsMustInvokeSuper
 	public void setUp() throws Exception {
 		super.setUp();
-		TestContainerGenerator<Collection<Character>, Character> generator = getSubjectGenerator().getInnerGenerator();
+		setupGenerator();
+	}
+	
+	protected void setupGenerator() {
+		TestContainerGenerator<E, Character> generator = getSubjectGenerator().getInnerGenerator();
 		if (!(generator instanceof TestCharCollectionGenerator)) throw new IllegalStateException("Test Generator Must extend TestCharCollectionGenerator");
 		primitiveGenerator = (TestCharCollectionGenerator) generator;
 		samples = primitiveGenerator.getSamples();
 		size = getSubjectGenerator().getCollectionSize();
-		resetContainer();
+		resetContainer();		
 	}
 
 	protected abstract CharCollection actualContents();
 
-	protected CharCollection resetContainer() {
+	protected E resetContainer() {
 		return resetContainer(createTestSubject());
 	}
 
-	protected CharCollection resetContainer(CharCollection newValue) {
+	protected E resetContainer(E newValue) {
 		container = newValue;
 		return container;
 	}
@@ -85,11 +88,11 @@ public abstract class AbstractCharContainerTester extends AbstractTester<OneSize
 	}
 
 	protected char[] createSamplesArray() {
-		return getSampleElements().toCharArray();
+		return getSampleElements().toCharArray(new char[getNumElements()]);
 	}
 
 	protected char[] createOrderedArray() {
-		return getOrderedElements().toCharArray();
+		return getOrderedElements().toCharArray(new char[getNumElements()]);
 	}
 
 	public static class ArrayWithDuplicate {
@@ -140,7 +143,11 @@ public abstract class AbstractCharContainerTester extends AbstractTester<OneSize
 	protected MinimalCharCollection emptyCollection() {
 		return MinimalCharCollection.of();
 	}
-
+	
+	public char[] createArray(char...array) {
+		return array;
+	}
+	
 	protected final char e0() {
 		return samples.e0();
 	}
@@ -161,8 +168,8 @@ public abstract class AbstractCharContainerTester extends AbstractTester<OneSize
 		return samples.e4();
 	}
 
-	protected CharCollection createTestSubject() {
-		return primitiveGenerator.create(getSampleElements(size.getNumElements()).toCharArray());
+	protected E createTestSubject() {
+		return (E)primitiveGenerator.create(getSampleElements(size.getNumElements()).toCharArray(new char[getNumElements()]));
 	}
 
 	protected CharCollection getSampleElements(int howMany) {

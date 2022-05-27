@@ -17,7 +17,8 @@ import speiger.src.testers.booleans.utils.BooleanHelpers;
 import speiger.src.testers.booleans.utils.MinimalBooleanCollection;
 
 @Ignore
-public class BooleanCollectionRetainAllTester extends AbstractBooleanCollectionTester {
+public class BooleanCollectionRetainAllTester extends AbstractBooleanCollectionTester
+{
 
 	private class Target {
 		private final BooleanCollection toRetain;

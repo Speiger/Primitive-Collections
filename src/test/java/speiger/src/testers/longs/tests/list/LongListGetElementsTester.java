@@ -11,7 +11,8 @@ import speiger.src.collections.longs.lists.LongArrayList;
 import speiger.src.testers.longs.tests.base.AbstractLongListTester;
 
 @Ignore
-public class LongListGetElementsTester extends AbstractLongListTester {
+public class LongListGetElementsTester extends AbstractLongListTester
+{
 	@CollectionSize.Require(SEVERAL)
 	public void testGetElements_valid() {
 		long[] samples = getSampleElements(2).toLongArray();
@@ -75,6 +76,7 @@ public class LongListGetElementsTester extends AbstractLongListTester {
 		} catch (IndexOutOfBoundsException expected) {
 		}
 	}
+	
 	private static void assertArrayEquals(String message, long[] expected, long[] actual) {
 		assertEquals(message, LongArrayList.wrap(expected), LongArrayList.wrap(actual));
 	}

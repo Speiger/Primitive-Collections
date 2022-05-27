@@ -10,7 +10,8 @@ import speiger.src.testers.booleans.utils.BooleanHelpers;
 import speiger.src.testers.booleans.utils.MinimalBooleanSet;
 
 @Ignore
-public class BooleanSetEqualsTester extends AbstractBooleanSetTester {
+public class BooleanSetEqualsTester extends AbstractBooleanSetTester
+{
 	public void testEquals_otherSetWithSameElements() {
 		assertTrue("A Set should equal any other Set containing the same elements.", getSet().equals(MinimalBooleanSet.of(getSampleElements())));
 	}

@@ -20,7 +20,8 @@ import speiger.src.testers.chars.utils.CharHelpers;
 import speiger.src.testers.chars.utils.MinimalCharCollection;
 
 @Ignore
-public class CharCollectionRemoveAllTester extends AbstractCharCollectionTester {
+public class CharCollectionRemoveAllTester extends AbstractCharCollectionTester
+{
 	@CollectionFeature.Require(SUPPORTS_REMOVE)
 	public void testRemoveAll_emptyCollection() {
 		assertFalse("removeAll(emptyCollection) should return false", collection.removeAll(MinimalCharCollection.of()));

@@ -20,7 +20,8 @@ import speiger.src.testers.floats.utils.FloatHelpers;
 import speiger.src.testers.floats.utils.MinimalFloatCollection;
 
 @Ignore
-public class FloatCollectionRemoveAllTester extends AbstractFloatCollectionTester {
+public class FloatCollectionRemoveAllTester extends AbstractFloatCollectionTester
+{
 	@CollectionFeature.Require(SUPPORTS_REMOVE)
 	public void testRemoveAll_emptyCollection() {
 		assertFalse("removeAll(emptyCollection) should return false", collection.removeAll(MinimalFloatCollection.of()));

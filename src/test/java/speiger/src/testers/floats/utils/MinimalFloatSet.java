@@ -1,5 +1,6 @@
 package speiger.src.testers.floats.utils;
 
+
 import speiger.src.collections.floats.collections.FloatIterable;
 import speiger.src.collections.floats.collections.FloatIterator;
 import speiger.src.collections.floats.lists.FloatArrayList;
@@ -20,7 +21,7 @@ public class MinimalFloatSet extends MinimalFloatCollection implements FloatSet 
 			if(list.contains(key)) continue;
 			list.add(key);
 		}
-		return new MinimalFloatSet(list.toFloatArray());
+		return new MinimalFloatSet(list.toFloatArray(new float[list.size()]));
 	}
 	
 	protected MinimalFloatSet(float[] contents) {
@@ -28,9 +29,7 @@ public class MinimalFloatSet extends MinimalFloatCollection implements FloatSet 
 	}
 	
 	@Override
-	public FloatSet copy() {
-		throw new UnsupportedOperationException();
-	}
+	public FloatSet copy() { throw new UnsupportedOperationException(); }
 	
 	@Override
 	public boolean equals(Object object) {
@@ -60,5 +59,4 @@ public class MinimalFloatSet extends MinimalFloatCollection implements FloatSet 
 		}
 		return false;
 	}
-
 }

@@ -12,7 +12,8 @@ import speiger.src.testers.doubles.tests.base.AbstractDoubleCollectionTester;
 import speiger.src.testers.doubles.utils.DoubleHelpers;
 
 @Ignore
-public class DoubleCollectionForEachTester extends AbstractDoubleCollectionTester {
+public class DoubleCollectionForEachTester extends AbstractDoubleCollectionTester
+{
 	@CollectionFeature.Require(absent = KNOWN_ORDER)
 	public void testForEachUnknownOrder() {
 		DoubleList elements = new DoubleArrayList();

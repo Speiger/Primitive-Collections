@@ -10,7 +10,8 @@ import speiger.src.collections.doubles.lists.DoubleArrayList;
 import speiger.src.testers.doubles.tests.base.AbstractDoubleListTester;
 
 @Ignore
-public class DoubleListToArrayTester extends AbstractDoubleListTester {
+public class DoubleListToArrayTester extends AbstractDoubleListTester
+{
 	public void testToArray_noArg() {
 		double[] actual = getList().toDoubleArray();
 		assertArrayEquals("toArray() order should match list", createOrderedArray(), actual);

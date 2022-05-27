@@ -11,7 +11,8 @@ import speiger.src.collections.chars.lists.CharArrayList;
 import speiger.src.testers.chars.tests.base.AbstractCharListTester;
 
 @Ignore
-public class CharListGetElementsTester extends AbstractCharListTester {
+public class CharListGetElementsTester extends AbstractCharListTester
+{
 	@CollectionSize.Require(SEVERAL)
 	public void testGetElements_valid() {
 		char[] samples = getSampleElements(2).toCharArray();
@@ -75,6 +76,7 @@ public class CharListGetElementsTester extends AbstractCharListTester {
 		} catch (IndexOutOfBoundsException expected) {
 		}
 	}
+	
 	private static void assertArrayEquals(String message, char[] expected, char[] actual) {
 		assertEquals(message, CharArrayList.wrap(expected), CharArrayList.wrap(actual));
 	}

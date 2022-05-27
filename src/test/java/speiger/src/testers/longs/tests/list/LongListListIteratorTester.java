@@ -22,7 +22,8 @@ import speiger.src.testers.longs.utils.LongHelpers;
 import speiger.src.testers.longs.utils.LongListIteratorTester;
 
 @Ignore
-public class LongListListIteratorTester extends AbstractLongListTester {
+public class LongListListIteratorTester extends AbstractLongListTester
+{
 	@CollectionFeature.Require(absent = SUPPORTS_REMOVE)
 	@ListFeature.Require(absent = { SUPPORTS_SET, SUPPORTS_ADD_WITH_INDEX })
 	public void testListIterator_unmodifiable() {

@@ -11,7 +11,8 @@ import com.google.common.collect.testing.features.CollectionSize;
 import speiger.src.testers.shorts.tests.base.AbstractShortSetTester;
 
 @Ignore
-public class ShortSetAddTester extends AbstractShortSetTester {
+public class ShortSetAddTester extends AbstractShortSetTester
+{
 	@CollectionFeature.Require(SUPPORTS_ADD)
 	@CollectionSize.Require(absent = ZERO)
 	public void testAdd_supportedPresent() {

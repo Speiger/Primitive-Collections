@@ -12,7 +12,8 @@ import speiger.src.testers.booleans.tests.base.AbstractBooleanCollectionTester;
 import speiger.src.testers.booleans.utils.BooleanHelpers;
 
 @Ignore
-public class BooleanCollectionForEachTester extends AbstractBooleanCollectionTester {
+public class BooleanCollectionForEachTester extends AbstractBooleanCollectionTester
+{
 	@CollectionFeature.Require(absent = KNOWN_ORDER)
 	public void testForEachUnknownOrder() {
 		BooleanList elements = new BooleanArrayList();

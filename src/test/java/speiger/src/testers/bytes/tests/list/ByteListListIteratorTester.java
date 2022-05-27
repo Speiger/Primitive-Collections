@@ -22,7 +22,8 @@ import speiger.src.testers.bytes.utils.ByteHelpers;
 import speiger.src.testers.bytes.utils.ByteListIteratorTester;
 
 @Ignore
-public class ByteListListIteratorTester extends AbstractByteListTester {
+public class ByteListListIteratorTester extends AbstractByteListTester
+{
 	@CollectionFeature.Require(absent = SUPPORTS_REMOVE)
 	@ListFeature.Require(absent = { SUPPORTS_SET, SUPPORTS_ADD_WITH_INDEX })
 	public void testListIterator_unmodifiable() {

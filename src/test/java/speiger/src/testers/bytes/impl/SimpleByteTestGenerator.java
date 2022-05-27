@@ -18,10 +18,9 @@ import speiger.src.testers.bytes.generators.TestByteSetGenerator;
 import speiger.src.testers.bytes.generators.TestByteSortedSetGenerator;
 import speiger.src.testers.bytes.utils.ByteSamples;
 
-public class SimpleByteTestGenerator<T extends ByteCollection> {
-	Function<byte[], T> mapper;
-	
-	public SimpleByteTestGenerator(Function<byte[], T> mapper) {
+public class SimpleByteTestGenerator<E extends ByteCollection> {
+	Function<byte[], E> mapper;
+	public SimpleByteTestGenerator(Function<byte[], E> mapper) {
 		this.mapper = mapper;
 	}
 	
@@ -29,11 +28,11 @@ public class SimpleByteTestGenerator<T extends ByteCollection> {
 		return new ByteSamples((byte)1, (byte)0, (byte)2, (byte)3, (byte)4);
 	}
 	
-	public T create(byte... elements) {
+	public E create(byte... elements) {
 		return mapper.apply(elements);
 	}
 	
-	public T create(Object... elements) {
+	public E create(Object... elements) {
 		byte[] array = new byte[elements.length];
 		int i = 0;
 		for (Object e : elements) {

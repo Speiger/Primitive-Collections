@@ -11,7 +11,8 @@ import com.google.common.collect.testing.features.ListFeature;
 import speiger.src.testers.chars.tests.base.AbstractCharListTester;
 
 @Ignore
-public class CharListSetTester extends AbstractCharListTester {
+public class CharListSetTester extends AbstractCharListTester
+{
 	@ListFeature.Require(SUPPORTS_SET)
 	@CollectionSize.Require(absent = ZERO)
 	public void testSet() {

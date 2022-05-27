@@ -63,7 +63,7 @@ public class LongNavigableSetTestSuiteBuilder extends LongSortedSetTestSuiteBuil
 
 	@Override
 	LongSortedSetTestSuiteBuilder newBuilderUsing(TestLongSortedSetGenerator delegate, Bound to, Bound from) {
-	    return using(new LongNavigableSetSubsetTestSetGenerator(delegate, to, from));
+	    return using(new LongNavigableSetSubsetTestSetGenerator (delegate, to, from));
 	}
 	
 	private TestSuite createDescendingSuite(FeatureSpecificTestSuiteBuilder<?, ? extends OneSizeTestContainerGenerator<Collection<Long>, Long>> parentBuilder) {
@@ -103,7 +103,7 @@ public class LongNavigableSetTestSuiteBuilder extends LongSortedSetTestSuiteBuil
 				LongLists.reverse(list);
 				return list;
 			}
-
+			
 			@Override
 			public LongNavigableSet create(long... elements) {
 				return delegate.create(elements).descendingSet();

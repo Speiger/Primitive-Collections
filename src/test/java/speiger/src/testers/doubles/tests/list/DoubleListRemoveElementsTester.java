@@ -11,7 +11,8 @@ import com.google.common.collect.testing.features.CollectionSize;
 import speiger.src.testers.doubles.tests.base.AbstractDoubleListTester;
 
 @Ignore
-public class DoubleListRemoveElementsTester extends AbstractDoubleListTester {
+public class DoubleListRemoveElementsTester extends AbstractDoubleListTester
+{
 	@CollectionFeature.Require(SUPPORTS_REMOVE)
 	@CollectionSize.Require(absent = {ZERO})
 	public void testRemoveElements() {

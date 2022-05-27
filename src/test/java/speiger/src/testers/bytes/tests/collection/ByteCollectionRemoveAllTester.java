@@ -20,7 +20,8 @@ import speiger.src.testers.bytes.utils.ByteHelpers;
 import speiger.src.testers.bytes.utils.MinimalByteCollection;
 
 @Ignore
-public class ByteCollectionRemoveAllTester extends AbstractByteCollectionTester {
+public class ByteCollectionRemoveAllTester extends AbstractByteCollectionTester
+{
 	@CollectionFeature.Require(SUPPORTS_REMOVE)
 	public void testRemoveAll_emptyCollection() {
 		assertFalse("removeAll(emptyCollection) should return false", collection.removeAll(MinimalByteCollection.of()));

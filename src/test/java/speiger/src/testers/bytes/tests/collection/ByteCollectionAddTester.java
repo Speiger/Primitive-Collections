@@ -15,7 +15,8 @@ import speiger.src.collections.bytes.collections.ByteIterator;
 import speiger.src.testers.bytes.tests.base.AbstractByteCollectionTester;
 
 @Ignore
-public class ByteCollectionAddTester extends AbstractByteCollectionTester {
+public class ByteCollectionAddTester extends AbstractByteCollectionTester
+{
 	@CollectionFeature.Require(SUPPORTS_ADD)
 	public void testAdd_supportedNotPresent() {
 		assertTrue("add(notPresent) should return true", collection.add(e3()));

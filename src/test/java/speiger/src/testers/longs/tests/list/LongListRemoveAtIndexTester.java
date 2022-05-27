@@ -19,7 +19,8 @@ import speiger.src.testers.longs.tests.base.AbstractLongListTester;
 import speiger.src.testers.longs.utils.LongHelpers;
 
 @Ignore
-public class LongListRemoveAtIndexTester extends AbstractLongListTester {
+public class LongListRemoveAtIndexTester extends AbstractLongListTester
+{
 	@ListFeature.Require(absent = SUPPORTS_REMOVE_WITH_INDEX)
 	@CollectionSize.Require(absent = ZERO)
 	public void testRemoveAtIndex_unsupported() {

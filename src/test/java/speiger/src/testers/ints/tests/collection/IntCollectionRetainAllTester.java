@@ -17,7 +17,8 @@ import speiger.src.testers.ints.utils.IntHelpers;
 import speiger.src.testers.ints.utils.MinimalIntCollection;
 
 @Ignore
-public class IntCollectionRetainAllTester extends AbstractIntCollectionTester {
+public class IntCollectionRetainAllTester extends AbstractIntCollectionTester
+{
 
 	private class Target {
 		private final IntCollection toRetain;

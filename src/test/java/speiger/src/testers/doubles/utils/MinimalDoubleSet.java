@@ -1,5 +1,6 @@
 package speiger.src.testers.doubles.utils;
 
+
 import speiger.src.collections.doubles.collections.DoubleIterable;
 import speiger.src.collections.doubles.collections.DoubleIterator;
 import speiger.src.collections.doubles.lists.DoubleArrayList;
@@ -20,7 +21,7 @@ public class MinimalDoubleSet extends MinimalDoubleCollection implements DoubleS
 			if(list.contains(key)) continue;
 			list.add(key);
 		}
-		return new MinimalDoubleSet(list.toDoubleArray());
+		return new MinimalDoubleSet(list.toDoubleArray(new double[list.size()]));
 	}
 	
 	protected MinimalDoubleSet(double[] contents) {
@@ -28,9 +29,7 @@ public class MinimalDoubleSet extends MinimalDoubleCollection implements DoubleS
 	}
 	
 	@Override
-	public DoubleSet copy() {
-		throw new UnsupportedOperationException();
-	}
+	public DoubleSet copy() { throw new UnsupportedOperationException(); }
 	
 	@Override
 	public boolean equals(Object object) {
@@ -60,5 +59,4 @@ public class MinimalDoubleSet extends MinimalDoubleCollection implements DoubleS
 		}
 		return false;
 	}
-
 }

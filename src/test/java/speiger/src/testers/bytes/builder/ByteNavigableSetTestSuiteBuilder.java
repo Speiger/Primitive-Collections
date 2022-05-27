@@ -63,7 +63,7 @@ public class ByteNavigableSetTestSuiteBuilder extends ByteSortedSetTestSuiteBuil
 
 	@Override
 	ByteSortedSetTestSuiteBuilder newBuilderUsing(TestByteSortedSetGenerator delegate, Bound to, Bound from) {
-	    return using(new ByteNavigableSetSubsetTestSetGenerator(delegate, to, from));
+	    return using(new ByteNavigableSetSubsetTestSetGenerator (delegate, to, from));
 	}
 	
 	private TestSuite createDescendingSuite(FeatureSpecificTestSuiteBuilder<?, ? extends OneSizeTestContainerGenerator<Collection<Byte>, Byte>> parentBuilder) {
@@ -103,7 +103,7 @@ public class ByteNavigableSetTestSuiteBuilder extends ByteSortedSetTestSuiteBuil
 				ByteLists.reverse(list);
 				return list;
 			}
-
+			
 			@Override
 			public ByteNavigableSet create(byte... elements) {
 				return delegate.create(elements).descendingSet();

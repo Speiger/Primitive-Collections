@@ -5,7 +5,8 @@ import org.junit.Ignore;
 import speiger.src.testers.shorts.tests.base.AbstractShortListTester;
 
 @Ignore
-public class ShortListGetTester extends AbstractShortListTester {
+public class ShortListGetTester extends AbstractShortListTester
+{
 	public void testGet_valid() {
 		expectContents(createOrderedArray());
 	}

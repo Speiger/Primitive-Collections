@@ -13,8 +13,8 @@ import speiger.src.collections.longs.sets.LongSortedSet;
 import speiger.src.testers.longs.generators.TestLongSortedSetGenerator;
 import speiger.src.testers.longs.utils.LongSamples;
 
-public class LongSortedSetSubsetTestSetGenerator implements TestLongSortedSetGenerator {
-
+public class LongSortedSetSubsetTestSetGenerator implements TestLongSortedSetGenerator
+{
 	final Bound to;
 	final Bound from;
 	final long firstInclusive;
@@ -117,7 +117,7 @@ public class LongSortedSetSubsetTestSetGenerator implements TestLongSortedSetGen
 
 		return createSubSet(set, firstExclusive, lastExclusive);
 	}
-
+	
 	@Override
 	public LongSortedSet create(Object... elements) {
 		long[] array = new long[elements.length];

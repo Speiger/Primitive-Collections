@@ -24,7 +24,8 @@ import speiger.src.testers.booleans.tests.base.AbstractBooleanListTester;
 import speiger.src.testers.booleans.utils.BooleanHelpers;
 
 @Ignore
-public class BooleanListSubListTester extends AbstractBooleanListTester {
+public class BooleanListSubListTester extends AbstractBooleanListTester
+{
 	public void testSubList_startNegative() {
 		try {
 			getList().subList(-1, 0);

@@ -5,8 +5,8 @@ import org.junit.Ignore;
 import speiger.src.collections.ints.collections.IntCollection;
 
 @Ignore
-public class AbstractIntCollectionTester extends AbstractIntContainerTester {
-
+public class AbstractIntCollectionTester extends AbstractIntContainerTester<IntCollection>
+{
 	protected IntCollection collection;
 
 	@Override

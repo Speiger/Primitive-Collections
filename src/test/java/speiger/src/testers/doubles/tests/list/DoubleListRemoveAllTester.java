@@ -13,7 +13,8 @@ import speiger.src.testers.doubles.tests.base.AbstractDoubleListTester;
 import speiger.src.testers.doubles.utils.MinimalDoubleCollection;
 
 @Ignore
-public class DoubleListRemoveAllTester extends AbstractDoubleListTester {
+public class DoubleListRemoveAllTester extends AbstractDoubleListTester
+{
 	@CollectionFeature.Require(SUPPORTS_REMOVE)
 	@CollectionSize.Require(absent = { ZERO, ONE })
 	public void testRemoveAll_duplicate() {

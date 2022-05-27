@@ -11,7 +11,8 @@ import com.google.common.collect.testing.features.ListFeature;
 import speiger.src.testers.floats.tests.base.AbstractFloatListTester;
 
 @Ignore
-public class FloatListSetTester extends AbstractFloatListTester {
+public class FloatListSetTester extends AbstractFloatListTester
+{
 	@ListFeature.Require(SUPPORTS_SET)
 	@CollectionSize.Require(absent = ZERO)
 	public void testSet() {

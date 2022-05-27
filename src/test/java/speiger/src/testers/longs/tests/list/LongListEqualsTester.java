@@ -10,7 +10,8 @@ import speiger.src.testers.longs.tests.base.AbstractLongListTester;
 import speiger.src.testers.longs.utils.MinimalLongSet;
 
 @Ignore
-public class LongListEqualsTester extends AbstractLongListTester {
+public class LongListEqualsTester extends AbstractLongListTester
+{
 	public void testEquals_otherListWithSameElements() {
 		assertTrue("A List should equal any other List containing the same elements.", getList().equals(new LongArrayList(getOrderedElements())));
 	}

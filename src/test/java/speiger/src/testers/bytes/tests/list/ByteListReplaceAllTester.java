@@ -13,7 +13,8 @@ import com.google.common.collect.testing.features.ListFeature;
 import speiger.src.testers.bytes.tests.base.AbstractByteListTester;
 
 @Ignore
-public class ByteListReplaceAllTester extends AbstractByteListTester {
+public class ByteListReplaceAllTester extends AbstractByteListTester
+{
 	@ListFeature.Require(SUPPORTS_SET)
 	public void testReplaceAll() {
 		getList().replaceBytes(e -> samples.e3());

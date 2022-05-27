@@ -11,7 +11,8 @@ import com.google.common.collect.testing.features.CollectionSize;
 import speiger.src.testers.doubles.tests.base.AbstractDoubleSetTester;
 
 @Ignore
-public class DoubleSetRemoveTester extends AbstractDoubleSetTester {
+public class DoubleSetRemoveTester extends AbstractDoubleSetTester
+{
 	@CollectionFeature.Require(SUPPORTS_REMOVE)
 	@CollectionSize.Require(absent = ZERO)
 	public void testRemove_present() {

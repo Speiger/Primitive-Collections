@@ -11,7 +11,8 @@ import com.google.common.collect.testing.features.CollectionSize;
 import speiger.src.testers.floats.tests.base.AbstractFloatListTester;
 
 @Ignore
-public class FloatListRemoveElementsTester extends AbstractFloatListTester {
+public class FloatListRemoveElementsTester extends AbstractFloatListTester
+{
 	@CollectionFeature.Require(SUPPORTS_REMOVE)
 	@CollectionSize.Require(absent = {ZERO})
 	public void testRemoveElements() {

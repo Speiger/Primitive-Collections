@@ -12,7 +12,8 @@ import speiger.src.testers.chars.tests.base.AbstractCharCollectionTester;
 import speiger.src.testers.chars.utils.CharHelpers;
 
 @Ignore
-public class CharCollectionToArrayTester extends AbstractCharCollectionTester{
+public class CharCollectionToArrayTester extends AbstractCharCollectionTester
+{
 	public void testToArray_noArgs() {
 		char[] array = collection.toCharArray();
 		expectArrayContentsAnyOrder(createSamplesArray(), array);

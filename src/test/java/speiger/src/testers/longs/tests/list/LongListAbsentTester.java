@@ -11,7 +11,8 @@ import com.google.common.collect.testing.features.CollectionSize;
 import speiger.src.testers.longs.tests.base.AbstractLongListTester;
 
 @Ignore
-public class LongListAbsentTester extends AbstractLongListTester {
+public class LongListAbsentTester extends AbstractLongListTester
+{
 	@CollectionFeature.Require(SUPPORTS_ADD)
 	@CollectionSize.Require(ONE)
 	public void testIfAbsent() {

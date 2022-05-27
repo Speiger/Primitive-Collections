@@ -12,7 +12,8 @@ import com.google.common.collect.testing.features.CollectionSize;
 import speiger.src.testers.doubles.tests.base.AbstractDoubleListTester;
 
 @Ignore
-public class DoubleListCreationTester extends AbstractDoubleListTester {
+public class DoubleListCreationTester extends AbstractDoubleListTester
+{
 	@CollectionFeature.Require(absent = REJECTS_DUPLICATES_AT_CREATION)
 	@CollectionSize.Require(absent = { ZERO, ONE })
 	public void testCreateWithDuplicates() {

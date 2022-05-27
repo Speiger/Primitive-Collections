@@ -24,7 +24,8 @@ import speiger.src.testers.shorts.tests.base.AbstractShortListTester;
 import speiger.src.testers.shorts.utils.ShortHelpers;
 
 @Ignore
-public class ShortListSubListTester extends AbstractShortListTester {
+public class ShortListSubListTester extends AbstractShortListTester
+{
 	public void testSubList_startNegative() {
 		try {
 			getList().subList(-1, 0);

@@ -17,7 +17,8 @@ import speiger.src.testers.floats.utils.FloatHelpers;
 import speiger.src.testers.floats.utils.MinimalFloatCollection;
 
 @Ignore
-public class FloatCollectionRetainAllTester extends AbstractFloatCollectionTester {
+public class FloatCollectionRetainAllTester extends AbstractFloatCollectionTester
+{
 
 	private class Target {
 		private final FloatCollection toRetain;

@@ -24,7 +24,8 @@ import speiger.src.testers.bytes.tests.base.AbstractByteListTester;
 import speiger.src.testers.bytes.utils.ByteHelpers;
 
 @Ignore
-public class ByteListSubListTester extends AbstractByteListTester {
+public class ByteListSubListTester extends AbstractByteListTester
+{
 	public void testSubList_startNegative() {
 		try {
 			getList().subList(-1, 0);

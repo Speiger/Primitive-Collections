@@ -16,7 +16,8 @@ import speiger.src.testers.chars.utils.CharHelpers;
 import speiger.src.testers.chars.utils.MinimalCharCollection;
 
 @Ignore
-public class CharListRetainAllTester extends AbstractCharListTester {
+public class CharListRetainAllTester extends AbstractCharListTester
+{
 	@CollectionFeature.Require(SUPPORTS_REMOVE)
 	@CollectionSize.Require(absent = { ZERO, ONE })
 	public void testRetainAll_duplicatesKept() {
@@ -42,7 +43,7 @@ public class CharListRetainAllTester extends AbstractCharListTester {
 	@CollectionFeature.Require(SUPPORTS_REMOVE)
 	@CollectionSize.Require(SEVERAL)
 	public void testRetainAll_countIgnored() {
-		resetContainer(primitiveGenerator.create(new char[]{e0(), e2(), e1(), e0()}));
+		resetContainer(primitiveGenerator.create(createArray(e0(), e2(), e1(), e0())));
 		assertTrue(getList().retainAll(CharArrayList.wrap(e0(), e1())));
 		CharHelpers.assertContentsInOrder(getList(), e0(), e1(), e0());
 	}

@@ -12,8 +12,8 @@ import com.google.common.collect.testing.features.CollectionSize;
 import speiger.src.testers.chars.tests.base.AbstractCharListIndexOfTester;
 
 @Ignore
-public class CharListIndexOfTester extends AbstractCharListIndexOfTester {
-
+public class CharListIndexOfTester extends AbstractCharListIndexOfTester
+{
 	@Override
 	protected int find(char o) {
 		return getList().indexOf(o);

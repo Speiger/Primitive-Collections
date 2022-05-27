@@ -24,7 +24,8 @@ import speiger.src.testers.floats.utils.FloatHelpers;
 import speiger.src.testers.floats.utils.FloatIteratorTester;
 
 @Ignore
-public class FloatCollectionIteratorTester extends AbstractFloatCollectionTester {
+public class FloatCollectionIteratorTester extends AbstractFloatCollectionTester
+{
 	public void testIterator() {
 		FloatList elements = new FloatArrayList();
 		for (FloatIterator iter = collection.iterator();iter.hasNext();) { // uses iterator()

@@ -11,7 +11,8 @@ import com.google.common.collect.testing.features.CollectionSize;
 import speiger.src.testers.booleans.tests.base.AbstractBooleanListTester;
 
 @Ignore
-public class BooleanListAbsentTester extends AbstractBooleanListTester {
+public class BooleanListAbsentTester extends AbstractBooleanListTester
+{
 	@CollectionFeature.Require(SUPPORTS_ADD)
 	@CollectionSize.Require(ONE)
 	public void testIfAbsent() {

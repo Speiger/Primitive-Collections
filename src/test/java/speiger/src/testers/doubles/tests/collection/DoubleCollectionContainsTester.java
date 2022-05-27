@@ -9,7 +9,8 @@ import com.google.common.collect.testing.features.CollectionSize;
 import speiger.src.testers.doubles.tests.base.AbstractDoubleCollectionTester;
 
 @Ignore
-public class DoubleCollectionContainsTester extends AbstractDoubleCollectionTester {
+public class DoubleCollectionContainsTester extends AbstractDoubleCollectionTester
+{
 	@CollectionSize.Require(absent = ZERO)
 	public void testContains_yes() {
 		assertTrue("contains(present) should return true", collection.contains(e0()));

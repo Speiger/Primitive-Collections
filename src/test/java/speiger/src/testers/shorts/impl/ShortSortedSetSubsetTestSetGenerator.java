@@ -13,8 +13,8 @@ import speiger.src.collections.shorts.sets.ShortSortedSet;
 import speiger.src.testers.shorts.generators.TestShortSortedSetGenerator;
 import speiger.src.testers.shorts.utils.ShortSamples;
 
-public class ShortSortedSetSubsetTestSetGenerator implements TestShortSortedSetGenerator {
-
+public class ShortSortedSetSubsetTestSetGenerator implements TestShortSortedSetGenerator
+{
 	final Bound to;
 	final Bound from;
 	final short firstInclusive;
@@ -117,7 +117,7 @@ public class ShortSortedSetSubsetTestSetGenerator implements TestShortSortedSetG
 
 		return createSubSet(set, firstExclusive, lastExclusive);
 	}
-
+	
 	@Override
 	public ShortSortedSet create(Object... elements) {
 		short[] array = new short[elements.length];

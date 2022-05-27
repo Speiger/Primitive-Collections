@@ -4,7 +4,6 @@ import java.util.function.Function;
 
 import com.google.common.collect.testing.features.CollectionSize;
 import com.google.common.collect.testing.features.SetFeature;
-
 import junit.framework.Test;
 import junit.framework.TestCase;
 import junit.framework.TestSuite;
@@ -26,12 +25,14 @@ import speiger.src.testers.shorts.builder.ShortOrderedSetTestSuiteBuilder;
 import speiger.src.testers.shorts.builder.ShortSetTestSuiteBuilder;
 import speiger.src.testers.shorts.builder.ShortSortedSetTestSuiteBuilder;
 import speiger.src.testers.shorts.impl.SimpleShortTestGenerator;
+import speiger.src.testers.utils.SpecialFeature;
 
 public class ShortSetTests extends TestCase {
 	
 	public static Test suite() {
 		TestSuite suite = new TestSuite("ShortSets");
 		suite(suite);
+		System.out.println("Generated ["+suite.countTestCases()+"] Tests");
 		return suite;
 	}
 	
@@ -48,41 +49,41 @@ public class ShortSetTests extends TestCase {
 		
 	public static Test setSuite(String name, Function<short[], ShortSet> factory) {
 		return ShortSetTestSuiteBuilder.using(new SimpleShortTestGenerator.Sets(factory)).named(name)
-				.withFeatures(CollectionSize.ANY, SetFeature.GENERAL_PURPOSE)
-				.createTestSuite();
+			.withFeatures(CollectionSize.ANY, SetFeature.GENERAL_PURPOSE, SpecialFeature.COPYING)
+			.createTestSuite();
 	}
-	
+
 	public static Test setImmutableSuite(String name, Function<short[], ShortSet> factory) {
 		return ShortSetTestSuiteBuilder.using(new SimpleShortTestGenerator.Sets(factory)).named(name)
-				.withFeatures(CollectionSize.ANY)
-				.createTestSuite();
+			.withFeatures(CollectionSize.ANY, SpecialFeature.COPYING)
+			.createTestSuite();
 	}
-	
+
 	public static Test orderedSetSuite(String name, Function<short[], ShortOrderedSet> factory) {
 		return ShortOrderedSetTestSuiteBuilder.using(new SimpleShortTestGenerator.OrderedSets(factory)).named(name)
-				.withFeatures(CollectionSize.ANY, SetFeature.GENERAL_PURPOSE)
-				.createTestSuite();
+			.withFeatures(CollectionSize.ANY, SetFeature.GENERAL_PURPOSE, SpecialFeature.COPYING)
+			.createTestSuite();
 	}
-	
+
 	public static Test immutableOrderedSetSuite(String name, Function<short[], ShortOrderedSet> factory) {
 		return ShortOrderedSetTestSuiteBuilder.using(new SimpleShortTestGenerator.OrderedSets(factory)).named(name)
-				.withFeatures(CollectionSize.ANY)
-				.createTestSuite();
+			.withFeatures(CollectionSize.ANY, SpecialFeature.COPYING)
+			.createTestSuite();
 	}
-	
+
 	public static Test sortedSetSuite(String name, Function<short[], ShortSortedSet> factory) {
 		return ShortSortedSetTestSuiteBuilder.using(new SimpleShortTestGenerator.SortedSets(factory)).named(name)
-				.withFeatures(CollectionSize.ANY, SetFeature.GENERAL_PURPOSE)
-				.createTestSuite();
+			.withFeatures(CollectionSize.ANY, SetFeature.GENERAL_PURPOSE, SpecialFeature.COPYING)
+			.createTestSuite();
 	}
-	
+
 	public static Test navigableSetSuite(String name, Function<short[], ShortNavigableSet> factory) {
 		return ShortNavigableSetTestSuiteBuilder.using(new SimpleShortTestGenerator.NavigableSets(factory)).named(name)
-				.withFeatures(CollectionSize.ANY, SetFeature.GENERAL_PURPOSE)
-				.createTestSuite();
+			.withFeatures(CollectionSize.ANY, SetFeature.GENERAL_PURPOSE, SpecialFeature.COPYING)
+			.createTestSuite();
 	}
 	
-	private static class HashStrategy implements ShortStrategy{
+	private static class HashStrategy implements ShortStrategy {
 		static final HashStrategy INSTANCE = new HashStrategy();
 		@Override
 		public int hashCode(short o) { return Short.hashCode(o); }

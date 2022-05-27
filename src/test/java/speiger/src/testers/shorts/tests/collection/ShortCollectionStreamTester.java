@@ -12,7 +12,8 @@ import speiger.src.testers.shorts.tests.base.AbstractShortCollectionTester;
 import speiger.src.testers.shorts.utils.ShortHelpers;
 
 @Ignore
-public class ShortCollectionStreamTester extends AbstractShortCollectionTester {
+public class ShortCollectionStreamTester extends AbstractShortCollectionTester
+{
 	@CollectionFeature.Require(absent = KNOWN_ORDER)
 	public void testStreamToArrayUnknownOrder() {
 		synchronized (collection) {

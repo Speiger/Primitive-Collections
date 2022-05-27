@@ -10,7 +10,8 @@ import speiger.src.collections.floats.lists.FloatArrayList;
 import speiger.src.testers.floats.tests.base.AbstractFloatListTester;
 
 @Ignore
-public class FloatListToArrayTester extends AbstractFloatListTester {
+public class FloatListToArrayTester extends AbstractFloatListTester
+{
 	public void testToArray_noArg() {
 		float[] actual = getList().toFloatArray();
 		assertArrayEquals("toArray() order should match list", createOrderedArray(), actual);

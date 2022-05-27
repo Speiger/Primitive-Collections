@@ -13,8 +13,8 @@ import speiger.src.collections.chars.sets.CharSortedSet;
 import speiger.src.testers.chars.generators.TestCharSortedSetGenerator;
 import speiger.src.testers.chars.utils.CharSamples;
 
-public class CharSortedSetSubsetTestSetGenerator implements TestCharSortedSetGenerator {
-
+public class CharSortedSetSubsetTestSetGenerator implements TestCharSortedSetGenerator
+{
 	final Bound to;
 	final Bound from;
 	final char firstInclusive;
@@ -117,7 +117,7 @@ public class CharSortedSetSubsetTestSetGenerator implements TestCharSortedSetGen
 
 		return createSubSet(set, firstExclusive, lastExclusive);
 	}
-
+	
 	@Override
 	public CharSortedSet create(Object... elements) {
 		char[] array = new char[elements.length];

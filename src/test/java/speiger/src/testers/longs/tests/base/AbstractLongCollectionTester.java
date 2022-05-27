@@ -5,8 +5,8 @@ import org.junit.Ignore;
 import speiger.src.collections.longs.collections.LongCollection;
 
 @Ignore
-public class AbstractLongCollectionTester extends AbstractLongContainerTester {
-
+public class AbstractLongCollectionTester extends AbstractLongContainerTester<LongCollection>
+{
 	protected LongCollection collection;
 
 	@Override

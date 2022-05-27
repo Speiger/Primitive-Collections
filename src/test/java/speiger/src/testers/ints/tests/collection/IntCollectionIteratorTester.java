@@ -24,7 +24,8 @@ import speiger.src.testers.ints.utils.IntHelpers;
 import speiger.src.testers.ints.utils.IntIteratorTester;
 
 @Ignore
-public class IntCollectionIteratorTester extends AbstractIntCollectionTester {
+public class IntCollectionIteratorTester extends AbstractIntCollectionTester
+{
 	public void testIterator() {
 		IntList elements = new IntArrayList();
 		for (IntIterator iter = collection.iterator();iter.hasNext();) { // uses iterator()

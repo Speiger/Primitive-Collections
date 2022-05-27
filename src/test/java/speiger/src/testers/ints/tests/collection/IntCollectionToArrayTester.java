@@ -12,7 +12,8 @@ import speiger.src.testers.ints.tests.base.AbstractIntCollectionTester;
 import speiger.src.testers.ints.utils.IntHelpers;
 
 @Ignore
-public class IntCollectionToArrayTester extends AbstractIntCollectionTester{
+public class IntCollectionToArrayTester extends AbstractIntCollectionTester
+{
 	public void testToArray_noArgs() {
 		int[] array = collection.toIntArray();
 		expectArrayContentsAnyOrder(createSamplesArray(), array);

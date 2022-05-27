@@ -20,11 +20,7 @@ repositories {
 }
 
 archivesBaseName = 'Primitive Collections'
-<<<<<<< HEAD
 version = '0.6.2';
-=======
-version = '0.6.1.17-SNAPSHOT';
->>>>>>> refs/remotes/origin/master
 
 sourceCompatibility = targetCompatibility = compileJava.sourceCompatibility = compileJava.targetCompatibility = JavaVersion.current();
 
@@ -101,7 +97,10 @@ artifacts {
 }
 
 test {
-    useJUnit()
+	filter {
+		excludeTestsMatching "speiger.src.testers.**.*"
+	}
+	useJUnit()
 }
 
 sonarqube {

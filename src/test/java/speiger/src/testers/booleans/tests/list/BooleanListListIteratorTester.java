@@ -22,7 +22,8 @@ import speiger.src.testers.booleans.utils.BooleanHelpers;
 import speiger.src.testers.booleans.utils.BooleanListIteratorTester;
 
 @Ignore
-public class BooleanListListIteratorTester extends AbstractBooleanListTester {
+public class BooleanListListIteratorTester extends AbstractBooleanListTester
+{
 	@CollectionFeature.Require(absent = SUPPORTS_REMOVE)
 	@ListFeature.Require(absent = { SUPPORTS_SET, SUPPORTS_ADD_WITH_INDEX })
 	public void testListIterator_unmodifiable() {

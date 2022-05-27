@@ -15,7 +15,8 @@ import speiger.src.collections.ints.collections.IntIterator;
 import speiger.src.testers.ints.tests.base.AbstractIntCollectionTester;
 
 @Ignore
-public class IntCollectionAddAllArrayTester extends AbstractIntCollectionTester {
+public class IntCollectionAddAllArrayTester extends AbstractIntCollectionTester
+{
 	@CollectionFeature.Require(SUPPORTS_ADD)
 	public void testAddAllArray_supportedNothing() {
 		assertFalse("addAll(nothing[]) should return false", collection.addAll(emptyArray()));

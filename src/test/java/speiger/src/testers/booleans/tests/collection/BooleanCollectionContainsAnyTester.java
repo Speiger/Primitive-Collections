@@ -11,8 +11,8 @@ import speiger.src.testers.booleans.tests.base.AbstractBooleanCollectionTester;
 import speiger.src.testers.booleans.utils.MinimalBooleanCollection;
 
 @Ignore
-public class BooleanCollectionContainsAnyTester extends AbstractBooleanCollectionTester {
-	
+public class BooleanCollectionContainsAnyTester extends AbstractBooleanCollectionTester
+{	
 	public void testContainsAny_empty() {
 		assertFalse("containsAny(empty) should return false", collection.containsAny(MinimalBooleanCollection.of()));
 	}

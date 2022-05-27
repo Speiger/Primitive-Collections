@@ -63,7 +63,7 @@ public class IntNavigableSetTestSuiteBuilder extends IntSortedSetTestSuiteBuilde
 
 	@Override
 	IntSortedSetTestSuiteBuilder newBuilderUsing(TestIntSortedSetGenerator delegate, Bound to, Bound from) {
-	    return using(new IntNavigableSetSubsetTestSetGenerator(delegate, to, from));
+	    return using(new IntNavigableSetSubsetTestSetGenerator (delegate, to, from));
 	}
 	
 	private TestSuite createDescendingSuite(FeatureSpecificTestSuiteBuilder<?, ? extends OneSizeTestContainerGenerator<Collection<Integer>, Integer>> parentBuilder) {
@@ -103,7 +103,7 @@ public class IntNavigableSetTestSuiteBuilder extends IntSortedSetTestSuiteBuilde
 				IntLists.reverse(list);
 				return list;
 			}
-
+			
 			@Override
 			public IntNavigableSet create(int... elements) {
 				return delegate.create(elements).descendingSet();

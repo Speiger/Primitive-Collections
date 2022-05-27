@@ -11,7 +11,8 @@ import speiger.src.collections.doubles.lists.DoubleArrayList;
 import speiger.src.testers.doubles.tests.base.AbstractDoubleListTester;
 
 @Ignore
-public class DoubleListGetElementsTester extends AbstractDoubleListTester {
+public class DoubleListGetElementsTester extends AbstractDoubleListTester
+{
 	@CollectionSize.Require(SEVERAL)
 	public void testGetElements_valid() {
 		double[] samples = getSampleElements(2).toDoubleArray();
@@ -75,6 +76,7 @@ public class DoubleListGetElementsTester extends AbstractDoubleListTester {
 		} catch (IndexOutOfBoundsException expected) {
 		}
 	}
+	
 	private static void assertArrayEquals(String message, double[] expected, double[] actual) {
 		assertEquals(message, DoubleArrayList.wrap(expected), DoubleArrayList.wrap(actual));
 	}

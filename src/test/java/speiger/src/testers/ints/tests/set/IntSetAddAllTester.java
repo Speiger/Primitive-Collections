@@ -12,7 +12,8 @@ import speiger.src.testers.ints.tests.base.AbstractIntSetTester;
 import speiger.src.testers.ints.utils.MinimalIntCollection;
 
 @Ignore
-public class IntSetAddAllTester extends AbstractIntSetTester {
+public class IntSetAddAllTester extends AbstractIntSetTester
+{
 	@CollectionFeature.Require(SUPPORTS_ADD)
 	@CollectionSize.Require(absent = ZERO)
 	public void testAddAll_supportedSomePresent() {

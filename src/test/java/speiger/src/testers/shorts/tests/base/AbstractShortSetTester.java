@@ -5,7 +5,8 @@ import org.junit.Ignore;
 import speiger.src.collections.shorts.sets.ShortSet;
 
 @Ignore
-public class AbstractShortSetTester extends AbstractShortCollectionTester {
+public class AbstractShortSetTester extends AbstractShortCollectionTester
+{
 	protected final ShortSet getSet() {
 		return (ShortSet)collection;
 	}

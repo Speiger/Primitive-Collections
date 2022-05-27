@@ -17,7 +17,8 @@ import speiger.src.collections.bytes.collections.ByteIterator;
 import speiger.src.testers.bytes.tests.base.AbstractByteListTester;
 
 @Ignore
-public class ByteListAddAtIndexTester extends AbstractByteListTester {
+public class ByteListAddAtIndexTester extends AbstractByteListTester
+{
 	@ListFeature.Require(SUPPORTS_ADD_WITH_INDEX)
 	@CollectionSize.Require(absent = ZERO)
 	public void testAddAtIndex_supportedPresent() {

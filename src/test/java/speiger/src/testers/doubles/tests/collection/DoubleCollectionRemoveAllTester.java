@@ -20,7 +20,8 @@ import speiger.src.testers.doubles.utils.DoubleHelpers;
 import speiger.src.testers.doubles.utils.MinimalDoubleCollection;
 
 @Ignore
-public class DoubleCollectionRemoveAllTester extends AbstractDoubleCollectionTester {
+public class DoubleCollectionRemoveAllTester extends AbstractDoubleCollectionTester
+{
 	@CollectionFeature.Require(SUPPORTS_REMOVE)
 	public void testRemoveAll_emptyCollection() {
 		assertFalse("removeAll(emptyCollection) should return false", collection.removeAll(MinimalDoubleCollection.of()));

@@ -10,7 +10,8 @@ import speiger.src.collections.ints.lists.IntArrayList;
 import speiger.src.testers.ints.tests.base.AbstractIntListTester;
 
 @Ignore
-public class IntListToArrayTester extends AbstractIntListTester {
+public class IntListToArrayTester extends AbstractIntListTester
+{
 	public void testToArray_noArg() {
 		int[] actual = getList().toIntArray();
 		assertArrayEquals("toArray() order should match list", createOrderedArray(), actual);

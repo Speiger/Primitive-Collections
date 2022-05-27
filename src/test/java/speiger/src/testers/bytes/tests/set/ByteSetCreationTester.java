@@ -13,7 +13,8 @@ import speiger.src.collections.bytes.lists.ByteArrayList;
 import speiger.src.testers.bytes.tests.base.AbstractByteSetTester;
 
 @Ignore
-public class ByteSetCreationTester extends AbstractByteSetTester {
+public class ByteSetCreationTester extends AbstractByteSetTester
+{
 	@CollectionFeature.Require(absent = REJECTS_DUPLICATES_AT_CREATION)
 	@CollectionSize.Require(absent = { ZERO, ONE })
 	public void testCreateWithDuplicates_nonNullDuplicatesNotRejected() {

@@ -22,7 +22,8 @@ import speiger.src.testers.doubles.utils.DoubleHelpers;
 import speiger.src.testers.doubles.utils.DoubleListIteratorTester;
 
 @Ignore
-public class DoubleListListIteratorTester extends AbstractDoubleListTester {
+public class DoubleListListIteratorTester extends AbstractDoubleListTester
+{
 	@CollectionFeature.Require(absent = SUPPORTS_REMOVE)
 	@ListFeature.Require(absent = { SUPPORTS_SET, SUPPORTS_ADD_WITH_INDEX })
 	public void testListIterator_unmodifiable() {

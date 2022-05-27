@@ -1,5 +1,6 @@
 package speiger.src.testers.longs.utils;
 
+
 import speiger.src.collections.longs.collections.LongIterable;
 import speiger.src.collections.longs.collections.LongIterator;
 import speiger.src.collections.longs.lists.LongArrayList;
@@ -20,7 +21,7 @@ public class MinimalLongSet extends MinimalLongCollection implements LongSet {
 			if(list.contains(key)) continue;
 			list.add(key);
 		}
-		return new MinimalLongSet(list.toLongArray());
+		return new MinimalLongSet(list.toLongArray(new long[list.size()]));
 	}
 	
 	protected MinimalLongSet(long[] contents) {
@@ -28,9 +29,7 @@ public class MinimalLongSet extends MinimalLongCollection implements LongSet {
 	}
 	
 	@Override
-	public LongSet copy() {
-		throw new UnsupportedOperationException();
-	}
+	public LongSet copy() { throw new UnsupportedOperationException(); }
 	
 	@Override
 	public boolean equals(Object object) {
@@ -60,5 +59,4 @@ public class MinimalLongSet extends MinimalLongCollection implements LongSet {
 		}
 		return false;
 	}
-
 }

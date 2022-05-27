@@ -12,7 +12,8 @@ import com.google.common.collect.testing.features.CollectionSize;
 import speiger.src.testers.booleans.tests.base.AbstractBooleanListIndexOfTester;
 
 @Ignore
-public class BooleanListLastIndexOfTester extends AbstractBooleanListIndexOfTester {
+public class BooleanListLastIndexOfTester extends AbstractBooleanListIndexOfTester
+{
 	@Override
 	protected int find(boolean o) {
 		return getList().lastIndexOf(o);

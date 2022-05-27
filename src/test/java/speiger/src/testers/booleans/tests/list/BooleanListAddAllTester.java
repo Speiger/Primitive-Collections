@@ -15,7 +15,8 @@ import speiger.src.testers.booleans.tests.base.AbstractBooleanListTester;
 import speiger.src.testers.booleans.utils.MinimalBooleanCollection;
 
 @Ignore
-public class BooleanListAddAllTester extends AbstractBooleanListTester {
+public class BooleanListAddAllTester extends AbstractBooleanListTester
+{
 	@CollectionFeature.Require(SUPPORTS_ADD)
 	@CollectionSize.Require(absent = ZERO)
 	public void testAddAll_supportedAllPresent() {

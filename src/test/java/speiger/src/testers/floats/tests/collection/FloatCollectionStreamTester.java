@@ -12,7 +12,8 @@ import speiger.src.testers.floats.tests.base.AbstractFloatCollectionTester;
 import speiger.src.testers.floats.utils.FloatHelpers;
 
 @Ignore
-public class FloatCollectionStreamTester extends AbstractFloatCollectionTester {
+public class FloatCollectionStreamTester extends AbstractFloatCollectionTester
+{
 	@CollectionFeature.Require(absent = KNOWN_ORDER)
 	public void testStreamToArrayUnknownOrder() {
 		synchronized (collection) {

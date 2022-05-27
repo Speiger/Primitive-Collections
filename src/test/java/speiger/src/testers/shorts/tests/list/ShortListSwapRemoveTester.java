@@ -12,7 +12,8 @@ import com.google.common.collect.testing.features.CollectionSize;
 import speiger.src.testers.shorts.tests.base.AbstractShortListTester;
 
 @Ignore
-public class ShortListSwapRemoveTester extends AbstractShortListTester {
+public class ShortListSwapRemoveTester extends AbstractShortListTester
+{
 	@CollectionFeature.Require(SUPPORTS_REMOVE)
 	@CollectionSize.Require(absent = {ZERO, ONE})
 	public void testRemove_duplicate() {

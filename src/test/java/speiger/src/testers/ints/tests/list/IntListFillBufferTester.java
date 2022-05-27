@@ -8,8 +8,8 @@ import speiger.src.collections.ints.lists.IntArrayList;
 import speiger.src.testers.ints.tests.base.AbstractIntListTester;
 
 @Ignore
-public class IntListFillBufferTester extends AbstractIntListTester {
-
+public class IntListFillBufferTester extends AbstractIntListTester
+{
 	public void testFillBuffer() {
 		IntBuffer buffer = IntBuffer.allocate(getNumElements());
 		getList().fillBuffer(buffer);

@@ -19,7 +19,8 @@ import speiger.src.testers.chars.tests.base.AbstractCharListTester;
 import speiger.src.testers.chars.utils.CharHelpers;
 
 @Ignore
-public class CharListSwapRemoveAtIndexTester extends AbstractCharListTester {
+public class CharListSwapRemoveAtIndexTester extends AbstractCharListTester
+{
 	@ListFeature.Require(absent = SUPPORTS_REMOVE_WITH_INDEX)
 	@CollectionSize.Require(absent = ZERO)
 	public void testRemoveAtIndex_unsupported() {

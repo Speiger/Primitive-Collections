@@ -19,7 +19,8 @@ import speiger.src.testers.floats.tests.base.AbstractFloatListTester;
 import speiger.src.testers.floats.utils.FloatHelpers;
 
 @Ignore
-public class FloatListRemoveAtIndexTester extends AbstractFloatListTester {
+public class FloatListRemoveAtIndexTester extends AbstractFloatListTester
+{
 	@ListFeature.Require(absent = SUPPORTS_REMOVE_WITH_INDEX)
 	@CollectionSize.Require(absent = ZERO)
 	public void testRemoveAtIndex_unsupported() {

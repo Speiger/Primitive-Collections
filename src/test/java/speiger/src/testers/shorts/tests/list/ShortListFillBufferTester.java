@@ -8,8 +8,8 @@ import speiger.src.collections.shorts.lists.ShortArrayList;
 import speiger.src.testers.shorts.tests.base.AbstractShortListTester;
 
 @Ignore
-public class ShortListFillBufferTester extends AbstractShortListTester {
-
+public class ShortListFillBufferTester extends AbstractShortListTester
+{
 	public void testFillBuffer() {
 		ShortBuffer buffer = ShortBuffer.allocate(getNumElements());
 		getList().fillBuffer(buffer);

@@ -12,7 +12,8 @@ import speiger.src.testers.chars.tests.base.AbstractCharCollectionTester;
 import speiger.src.testers.chars.utils.CharHelpers;
 
 @Ignore
-public class CharCollectionStreamTester extends AbstractCharCollectionTester {
+public class CharCollectionStreamTester extends AbstractCharCollectionTester
+{
 	@CollectionFeature.Require(absent = KNOWN_ORDER)
 	public void testStreamToArrayUnknownOrder() {
 		synchronized (collection) {

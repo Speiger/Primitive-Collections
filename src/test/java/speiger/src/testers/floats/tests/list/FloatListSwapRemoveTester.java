@@ -12,7 +12,8 @@ import com.google.common.collect.testing.features.CollectionSize;
 import speiger.src.testers.floats.tests.base.AbstractFloatListTester;
 
 @Ignore
-public class FloatListSwapRemoveTester extends AbstractFloatListTester {
+public class FloatListSwapRemoveTester extends AbstractFloatListTester
+{
 	@CollectionFeature.Require(SUPPORTS_REMOVE)
 	@CollectionSize.Require(absent = {ZERO, ONE})
 	public void testRemove_duplicate() {

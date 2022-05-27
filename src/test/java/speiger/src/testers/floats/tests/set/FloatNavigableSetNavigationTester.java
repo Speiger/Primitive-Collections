@@ -21,7 +21,8 @@ import speiger.src.testers.floats.tests.base.AbstractFloatSetTester;
 import speiger.src.testers.floats.utils.FloatHelpers;
 
 @Ignore
-public class FloatNavigableSetNavigationTester extends AbstractFloatSetTester {
+public class FloatNavigableSetNavigationTester extends AbstractFloatSetTester
+{
 	private FloatNavigableSet navigableSet;
 	private FloatList values;
 	private float a;
@@ -44,7 +45,7 @@ public class FloatNavigableSetNavigationTester extends AbstractFloatSetTester {
 	}
 	
 	protected void resetWithHole() {
-		super.resetContainer(primitiveGenerator.create(new float[]{a, c}));
+		super.resetContainer(primitiveGenerator.create(createArray(a, c)));
 		navigableSet = (FloatNavigableSet) getSet();
 	}
 

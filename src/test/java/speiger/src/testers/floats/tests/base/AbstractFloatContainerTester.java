@@ -1,7 +1,5 @@
 package speiger.src.testers.floats.tests.base;
 
-import java.util.Collection;
-
 import com.google.common.collect.testing.AbstractTester;
 import com.google.common.collect.testing.OneSizeTestContainerGenerator;
 import com.google.common.collect.testing.TestContainerGenerator;
@@ -21,31 +19,36 @@ import speiger.src.testers.floats.utils.FloatSamples;
 import speiger.src.testers.floats.utils.MinimalFloatCollection;
 
 @Ignore
-public abstract class AbstractFloatContainerTester extends AbstractTester<OneSizeTestContainerGenerator<Collection<Float>, Float>> {
+public abstract class AbstractFloatContainerTester<E> extends AbstractTester<OneSizeTestContainerGenerator<E, Float>>
+{
 	protected FloatSamples samples;
-	protected FloatCollection container;
+	protected E container;
 	protected TestFloatCollectionGenerator primitiveGenerator;
-	private CollectionSize size;
+	protected CollectionSize size;
 
 	@Override
 	@OverridingMethodsMustInvokeSuper
 	public void setUp() throws Exception {
 		super.setUp();
-		TestContainerGenerator<Collection<Float>, Float> generator = getSubjectGenerator().getInnerGenerator();
+		setupGenerator();
+	}
+	
+	protected void setupGenerator() {
+		TestContainerGenerator<E, Float> generator = getSubjectGenerator().getInnerGenerator();
 		if (!(generator instanceof TestFloatCollectionGenerator)) throw new IllegalStateException("Test Generator Must extend TestFloatCollectionGenerator");
 		primitiveGenerator = (TestFloatCollectionGenerator) generator;
 		samples = primitiveGenerator.getSamples();
 		size = getSubjectGenerator().getCollectionSize();
-		resetContainer();
+		resetContainer();		
 	}
 
 	protected abstract FloatCollection actualContents();
 
-	protected FloatCollection resetContainer() {
+	protected E resetContainer() {
 		return resetContainer(createTestSubject());
 	}
 
-	protected FloatCollection resetContainer(FloatCollection newValue) {
+	protected E resetContainer(E newValue) {
 		container = newValue;
 		return container;
 	}
@@ -85,11 +88,11 @@ public abstract class AbstractFloatContainerTester extends AbstractTester<OneSiz
 	}
 
 	protected float[] createSamplesArray() {
-		return getSampleElements().toFloatArray();
+		return getSampleElements().toFloatArray(new float[getNumElements()]);
 	}
 
 	protected float[] createOrderedArray() {
-		return getOrderedElements().toFloatArray();
+		return getOrderedElements().toFloatArray(new float[getNumElements()]);
 	}
 
 	public static class ArrayWithDuplicate {
@@ -140,7 +143,11 @@ public abstract class AbstractFloatContainerTester extends AbstractTester<OneSiz
 	protected MinimalFloatCollection emptyCollection() {
 		return MinimalFloatCollection.of();
 	}
-
+	
+	public float[] createArray(float...array) {
+		return array;
+	}
+	
 	protected final float e0() {
 		return samples.e0();
 	}
@@ -161,8 +168,8 @@ public abstract class AbstractFloatContainerTester extends AbstractTester<OneSiz
 		return samples.e4();
 	}
 
-	protected FloatCollection createTestSubject() {
-		return primitiveGenerator.create(getSampleElements(size.getNumElements()).toFloatArray());
+	protected E createTestSubject() {
+		return (E)primitiveGenerator.create(getSampleElements(size.getNumElements()).toFloatArray(new float[getNumElements()]));
 	}
 
 	protected FloatCollection getSampleElements(int howMany) {

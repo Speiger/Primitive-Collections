@@ -13,7 +13,8 @@ import speiger.src.testers.floats.tests.base.AbstractFloatListTester;
 import speiger.src.testers.floats.utils.MinimalFloatCollection;
 
 @Ignore
-public class FloatListRemoveAllTester extends AbstractFloatListTester {
+public class FloatListRemoveAllTester extends AbstractFloatListTester
+{
 	@CollectionFeature.Require(SUPPORTS_REMOVE)
 	@CollectionSize.Require(absent = { ZERO, ONE })
 	public void testRemoveAll_duplicate() {

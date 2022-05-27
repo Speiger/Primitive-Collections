@@ -15,7 +15,7 @@ import speiger.src.collections.longs.sets.LongSet;
 import speiger.src.collections.longs.utils.LongIterators;
 
 public class LongHelpers {
-	private static boolean equals(long key, long value) {
+	public static boolean equals(long key, long value) {
 		return key == value;
 	}
 
@@ -166,7 +166,7 @@ public class LongHelpers {
 		}
 		return iterator.nextLong();
 	}
-
+	
 	public static void testComparator(LongComparator comparator, long... valuesInExpectedOrder) {
 		testComparator(comparator, LongArrayList.wrap(valuesInExpectedOrder));
 	}

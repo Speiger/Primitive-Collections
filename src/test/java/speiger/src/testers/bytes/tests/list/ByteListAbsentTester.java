@@ -11,7 +11,8 @@ import com.google.common.collect.testing.features.CollectionSize;
 import speiger.src.testers.bytes.tests.base.AbstractByteListTester;
 
 @Ignore
-public class ByteListAbsentTester extends AbstractByteListTester {
+public class ByteListAbsentTester extends AbstractByteListTester
+{
 	@CollectionFeature.Require(SUPPORTS_ADD)
 	@CollectionSize.Require(ONE)
 	public void testIfAbsent() {

@@ -13,8 +13,8 @@ import speiger.src.collections.bytes.sets.ByteSortedSet;
 import speiger.src.testers.bytes.generators.TestByteSortedSetGenerator;
 import speiger.src.testers.bytes.utils.ByteSamples;
 
-public class ByteSortedSetSubsetTestSetGenerator implements TestByteSortedSetGenerator {
-
+public class ByteSortedSetSubsetTestSetGenerator implements TestByteSortedSetGenerator
+{
 	final Bound to;
 	final Bound from;
 	final byte firstInclusive;
@@ -117,7 +117,7 @@ public class ByteSortedSetSubsetTestSetGenerator implements TestByteSortedSetGen
 
 		return createSubSet(set, firstExclusive, lastExclusive);
 	}
-
+	
 	@Override
 	public ByteSortedSet create(Object... elements) {
 		byte[] array = new byte[elements.length];

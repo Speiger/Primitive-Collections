@@ -12,7 +12,8 @@ import speiger.src.testers.doubles.tests.base.AbstractDoubleSetTester;
 import speiger.src.testers.doubles.utils.MinimalDoubleCollection;
 
 @Ignore
-public class DoubleSetAddAllTester extends AbstractDoubleSetTester {
+public class DoubleSetAddAllTester extends AbstractDoubleSetTester
+{
 	@CollectionFeature.Require(SUPPORTS_ADD)
 	@CollectionSize.Require(absent = ZERO)
 	public void testAddAll_supportedSomePresent() {

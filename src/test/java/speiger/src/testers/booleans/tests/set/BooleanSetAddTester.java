@@ -11,7 +11,8 @@ import com.google.common.collect.testing.features.CollectionSize;
 import speiger.src.testers.booleans.tests.base.AbstractBooleanSetTester;
 
 @Ignore
-public class BooleanSetAddTester extends AbstractBooleanSetTester {
+public class BooleanSetAddTester extends AbstractBooleanSetTester
+{
 	@CollectionFeature.Require(SUPPORTS_ADD)
 	@CollectionSize.Require(absent = ZERO)
 	public void testAdd_supportedPresent() {

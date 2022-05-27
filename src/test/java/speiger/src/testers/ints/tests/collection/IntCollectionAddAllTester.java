@@ -16,7 +16,8 @@ import speiger.src.testers.ints.tests.base.AbstractIntCollectionTester;
 import speiger.src.testers.ints.utils.MinimalIntCollection;
 
 @Ignore
-public class IntCollectionAddAllTester extends AbstractIntCollectionTester {
+public class IntCollectionAddAllTester extends AbstractIntCollectionTester
+{
 	@CollectionFeature.Require(SUPPORTS_ADD)
 	public void testAddAll_supportedNothing() {
 		assertFalse("addAll(nothing) should return false", collection.addAll(emptyCollection()));

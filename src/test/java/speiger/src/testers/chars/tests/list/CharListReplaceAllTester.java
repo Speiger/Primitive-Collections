@@ -13,7 +13,8 @@ import com.google.common.collect.testing.features.ListFeature;
 import speiger.src.testers.chars.tests.base.AbstractCharListTester;
 
 @Ignore
-public class CharListReplaceAllTester extends AbstractCharListTester {
+public class CharListReplaceAllTester extends AbstractCharListTester
+{
 	@ListFeature.Require(SUPPORTS_SET)
 	public void testReplaceAll() {
 		getList().replaceChars(e -> samples.e3());

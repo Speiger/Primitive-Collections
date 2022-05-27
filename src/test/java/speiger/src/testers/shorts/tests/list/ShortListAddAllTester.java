@@ -15,7 +15,8 @@ import speiger.src.testers.shorts.tests.base.AbstractShortListTester;
 import speiger.src.testers.shorts.utils.MinimalShortCollection;
 
 @Ignore
-public class ShortListAddAllTester extends AbstractShortListTester {
+public class ShortListAddAllTester extends AbstractShortListTester
+{
 	@CollectionFeature.Require(SUPPORTS_ADD)
 	@CollectionSize.Require(absent = ZERO)
 	public void testAddAll_supportedAllPresent() {

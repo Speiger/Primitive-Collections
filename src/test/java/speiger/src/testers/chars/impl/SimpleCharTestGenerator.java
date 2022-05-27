@@ -18,10 +18,9 @@ import speiger.src.testers.chars.generators.TestCharSetGenerator;
 import speiger.src.testers.chars.generators.TestCharSortedSetGenerator;
 import speiger.src.testers.chars.utils.CharSamples;
 
-public class SimpleCharTestGenerator<T extends CharCollection> {
-	Function<char[], T> mapper;
-	
-	public SimpleCharTestGenerator(Function<char[], T> mapper) {
+public class SimpleCharTestGenerator<E extends CharCollection> {
+	Function<char[], E> mapper;
+	public SimpleCharTestGenerator(Function<char[], E> mapper) {
 		this.mapper = mapper;
 	}
 	
@@ -29,11 +28,11 @@ public class SimpleCharTestGenerator<T extends CharCollection> {
 		return new CharSamples('b', 'a', 'c', 'd', 'e');
 	}
 	
-	public T create(char... elements) {
+	public E create(char... elements) {
 		return mapper.apply(elements);
 	}
 	
-	public T create(Object... elements) {
+	public E create(Object... elements) {
 		char[] array = new char[elements.length];
 		int i = 0;
 		for (Object e : elements) {

@@ -15,7 +15,8 @@ import speiger.src.collections.chars.collections.CharIterator;
 import speiger.src.testers.chars.tests.base.AbstractCharCollectionTester;
 
 @Ignore
-public class CharCollectionAddAllArrayTester extends AbstractCharCollectionTester {
+public class CharCollectionAddAllArrayTester extends AbstractCharCollectionTester
+{
 	@CollectionFeature.Require(SUPPORTS_ADD)
 	public void testAddAllArray_supportedNothing() {
 		assertFalse("addAll(nothing[]) should return false", collection.addAll(emptyArray()));

@@ -10,7 +10,8 @@ import speiger.src.testers.ints.tests.base.AbstractIntCollectionTester;
 import speiger.src.testers.ints.utils.MinimalIntCollection;
 
 @Ignore
-public class IntCollectionContainsAllTester extends AbstractIntCollectionTester {
+public class IntCollectionContainsAllTester extends AbstractIntCollectionTester
+{
 	public void testContainsAll_empty() {
 		assertTrue("containsAll(empty) should return true", collection.containsAll(MinimalIntCollection.of()));
 	}

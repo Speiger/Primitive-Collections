@@ -18,10 +18,9 @@ import speiger.src.testers.shorts.generators.TestShortSetGenerator;
 import speiger.src.testers.shorts.generators.TestShortSortedSetGenerator;
 import speiger.src.testers.shorts.utils.ShortSamples;
 
-public class SimpleShortTestGenerator<T extends ShortCollection> {
-	Function<short[], T> mapper;
-	
-	public SimpleShortTestGenerator(Function<short[], T> mapper) {
+public class SimpleShortTestGenerator<E extends ShortCollection> {
+	Function<short[], E> mapper;
+	public SimpleShortTestGenerator(Function<short[], E> mapper) {
 		this.mapper = mapper;
 	}
 	
@@ -29,11 +28,11 @@ public class SimpleShortTestGenerator<T extends ShortCollection> {
 		return new ShortSamples((short)1, (short)0, (short)2, (short)3, (short)4);
 	}
 	
-	public T create(short... elements) {
+	public E create(short... elements) {
 		return mapper.apply(elements);
 	}
 	
-	public T create(Object... elements) {
+	public E create(Object... elements) {
 		short[] array = new short[elements.length];
 		int i = 0;
 		for (Object e : elements) {

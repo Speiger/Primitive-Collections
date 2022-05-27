@@ -10,7 +10,8 @@ import speiger.src.testers.bytes.tests.base.AbstractByteCollectionTester;
 import speiger.src.testers.bytes.utils.MinimalByteCollection;
 
 @Ignore
-public class ByteCollectionContainsAllTester extends AbstractByteCollectionTester {
+public class ByteCollectionContainsAllTester extends AbstractByteCollectionTester
+{
 	public void testContainsAll_empty() {
 		assertTrue("containsAll(empty) should return true", collection.containsAll(MinimalByteCollection.of()));
 	}

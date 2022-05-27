@@ -1,5 +1,6 @@
 package speiger.src.testers.booleans.utils;
 
+
 import speiger.src.collections.booleans.collections.BooleanIterable;
 import speiger.src.collections.booleans.collections.BooleanIterator;
 import speiger.src.collections.booleans.lists.BooleanArrayList;
@@ -20,7 +21,7 @@ public class MinimalBooleanSet extends MinimalBooleanCollection implements Boole
 			if(list.contains(key)) continue;
 			list.add(key);
 		}
-		return new MinimalBooleanSet(list.toBooleanArray());
+		return new MinimalBooleanSet(list.toBooleanArray(new boolean[list.size()]));
 	}
 	
 	protected MinimalBooleanSet(boolean[] contents) {
@@ -28,9 +29,7 @@ public class MinimalBooleanSet extends MinimalBooleanCollection implements Boole
 	}
 	
 	@Override
-	public BooleanSet copy() {
-		throw new UnsupportedOperationException();
-	}
+	public BooleanSet copy() { throw new UnsupportedOperationException(); }
 	
 	@Override
 	public boolean equals(Object object) {
@@ -60,5 +59,4 @@ public class MinimalBooleanSet extends MinimalBooleanCollection implements Boole
 		}
 		return false;
 	}
-
 }

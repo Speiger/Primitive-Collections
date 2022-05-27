@@ -15,7 +15,8 @@ import speiger.src.testers.ints.tests.base.AbstractIntSetTester;
 import speiger.src.testers.ints.utils.IntHelpers;
 
 @Ignore
-public class IntOrderedSetMoveTester extends AbstractIntSetTester {
+public class IntOrderedSetMoveTester extends AbstractIntSetTester
+{
 	private IntOrderedSet orderedSet;
 	private IntList values;
 	private int a;

@@ -20,7 +20,8 @@ import speiger.src.testers.shorts.utils.ShortHelpers;
 import speiger.src.testers.shorts.utils.MinimalShortCollection;
 
 @Ignore
-public class ShortCollectionRemoveAllTester extends AbstractShortCollectionTester {
+public class ShortCollectionRemoveAllTester extends AbstractShortCollectionTester
+{
 	@CollectionFeature.Require(SUPPORTS_REMOVE)
 	public void testRemoveAll_emptyCollection() {
 		assertFalse("removeAll(emptyCollection) should return false", collection.removeAll(MinimalShortCollection.of()));

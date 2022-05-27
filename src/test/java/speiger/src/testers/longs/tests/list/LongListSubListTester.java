@@ -24,7 +24,8 @@ import speiger.src.testers.longs.tests.base.AbstractLongListTester;
 import speiger.src.testers.longs.utils.LongHelpers;
 
 @Ignore
-public class LongListSubListTester extends AbstractLongListTester {
+public class LongListSubListTester extends AbstractLongListTester
+{
 	public void testSubList_startNegative() {
 		try {
 			getList().subList(-1, 0);

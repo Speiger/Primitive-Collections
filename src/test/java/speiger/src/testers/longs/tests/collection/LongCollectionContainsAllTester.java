@@ -10,7 +10,8 @@ import speiger.src.testers.longs.tests.base.AbstractLongCollectionTester;
 import speiger.src.testers.longs.utils.MinimalLongCollection;
 
 @Ignore
-public class LongCollectionContainsAllTester extends AbstractLongCollectionTester {
+public class LongCollectionContainsAllTester extends AbstractLongCollectionTester
+{
 	public void testContainsAll_empty() {
 		assertTrue("containsAll(empty) should return true", collection.containsAll(MinimalLongCollection.of()));
 	}

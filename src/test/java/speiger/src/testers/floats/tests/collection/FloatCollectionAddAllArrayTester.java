@@ -15,7 +15,8 @@ import speiger.src.collections.floats.collections.FloatIterator;
 import speiger.src.testers.floats.tests.base.AbstractFloatCollectionTester;
 
 @Ignore
-public class FloatCollectionAddAllArrayTester extends AbstractFloatCollectionTester {
+public class FloatCollectionAddAllArrayTester extends AbstractFloatCollectionTester
+{
 	@CollectionFeature.Require(SUPPORTS_ADD)
 	public void testAddAllArray_supportedNothing() {
 		assertFalse("addAll(nothing[]) should return false", collection.addAll(emptyArray()));

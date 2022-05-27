@@ -16,7 +16,8 @@ import speiger.src.collections.chars.collections.CharIterator;
 import speiger.src.testers.chars.tests.base.AbstractCharCollectionTester;
 
 @Ignore
-public class CharCollectionClearTester extends AbstractCharCollectionTester {
+public class CharCollectionClearTester extends AbstractCharCollectionTester
+{
 	@CollectionFeature.Require(SUPPORTS_REMOVE)
 	public void testClear() {
 		collection.clear();

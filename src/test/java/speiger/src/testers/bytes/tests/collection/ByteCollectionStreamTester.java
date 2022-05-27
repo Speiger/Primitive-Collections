@@ -12,7 +12,8 @@ import speiger.src.testers.bytes.tests.base.AbstractByteCollectionTester;
 import speiger.src.testers.bytes.utils.ByteHelpers;
 
 @Ignore
-public class ByteCollectionStreamTester extends AbstractByteCollectionTester {
+public class ByteCollectionStreamTester extends AbstractByteCollectionTester
+{
 	@CollectionFeature.Require(absent = KNOWN_ORDER)
 	public void testStreamToArrayUnknownOrder() {
 		synchronized (collection) {

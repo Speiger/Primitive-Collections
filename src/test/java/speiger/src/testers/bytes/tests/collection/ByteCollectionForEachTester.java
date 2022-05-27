@@ -12,7 +12,8 @@ import speiger.src.testers.bytes.tests.base.AbstractByteCollectionTester;
 import speiger.src.testers.bytes.utils.ByteHelpers;
 
 @Ignore
-public class ByteCollectionForEachTester extends AbstractByteCollectionTester {
+public class ByteCollectionForEachTester extends AbstractByteCollectionTester
+{
 	@CollectionFeature.Require(absent = KNOWN_ORDER)
 	public void testForEachUnknownOrder() {
 		ByteList elements = new ByteArrayList();

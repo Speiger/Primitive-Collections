@@ -10,7 +10,8 @@ import speiger.src.testers.doubles.tests.base.AbstractDoubleCollectionTester;
 import speiger.src.testers.doubles.utils.MinimalDoubleCollection;
 
 @Ignore
-public class DoubleCollectionContainsAllTester extends AbstractDoubleCollectionTester {
+public class DoubleCollectionContainsAllTester extends AbstractDoubleCollectionTester
+{
 	public void testContainsAll_empty() {
 		assertTrue("containsAll(empty) should return true", collection.containsAll(MinimalDoubleCollection.of()));
 	}

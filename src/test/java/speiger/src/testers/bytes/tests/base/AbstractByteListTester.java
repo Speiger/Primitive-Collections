@@ -2,12 +2,14 @@ package speiger.src.testers.bytes.tests.base;
 
 import org.junit.Ignore;
 
+
 import speiger.src.collections.bytes.collections.ByteCollection;
 import speiger.src.collections.bytes.lists.ByteList;
 import speiger.src.testers.bytes.utils.ByteHelpers;
 
 @Ignore
-public class AbstractByteListTester extends AbstractByteCollectionTester {
+public class AbstractByteListTester extends AbstractByteCollectionTester
+{
 	protected final ByteList getList() {
 		return (ByteList) collection;
 	}

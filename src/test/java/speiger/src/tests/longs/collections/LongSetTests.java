@@ -4,7 +4,6 @@ import java.util.function.Function;
 
 import com.google.common.collect.testing.features.CollectionSize;
 import com.google.common.collect.testing.features.SetFeature;
-
 import junit.framework.Test;
 import junit.framework.TestCase;
 import junit.framework.TestSuite;
@@ -26,12 +25,14 @@ import speiger.src.testers.longs.builder.LongOrderedSetTestSuiteBuilder;
 import speiger.src.testers.longs.builder.LongSetTestSuiteBuilder;
 import speiger.src.testers.longs.builder.LongSortedSetTestSuiteBuilder;
 import speiger.src.testers.longs.impl.SimpleLongTestGenerator;
+import speiger.src.testers.utils.SpecialFeature;
 
 public class LongSetTests extends TestCase {
 	
 	public static Test suite() {
 		TestSuite suite = new TestSuite("LongSets");
 		suite(suite);
+		System.out.println("Generated ["+suite.countTestCases()+"] Tests");
 		return suite;
 	}
 	
@@ -48,41 +49,41 @@ public class LongSetTests extends TestCase {
 		
 	public static Test setSuite(String name, Function<long[], LongSet> factory) {
 		return LongSetTestSuiteBuilder.using(new SimpleLongTestGenerator.Sets(factory)).named(name)
-				.withFeatures(CollectionSize.ANY, SetFeature.GENERAL_PURPOSE)
-				.createTestSuite();
+			.withFeatures(CollectionSize.ANY, SetFeature.GENERAL_PURPOSE, SpecialFeature.COPYING)
+			.createTestSuite();
 	}
-	
+
 	public static Test setImmutableSuite(String name, Function<long[], LongSet> factory) {
 		return LongSetTestSuiteBuilder.using(new SimpleLongTestGenerator.Sets(factory)).named(name)
-				.withFeatures(CollectionSize.ANY)
-				.createTestSuite();
+			.withFeatures(CollectionSize.ANY, SpecialFeature.COPYING)
+			.createTestSuite();
 	}
-	
+
 	public static Test orderedSetSuite(String name, Function<long[], LongOrderedSet> factory) {
 		return LongOrderedSetTestSuiteBuilder.using(new SimpleLongTestGenerator.OrderedSets(factory)).named(name)
-				.withFeatures(CollectionSize.ANY, SetFeature.GENERAL_PURPOSE)
-				.createTestSuite();
+			.withFeatures(CollectionSize.ANY, SetFeature.GENERAL_PURPOSE, SpecialFeature.COPYING)
+			.createTestSuite();
 	}
-	
+
 	public static Test immutableOrderedSetSuite(String name, Function<long[], LongOrderedSet> factory) {
 		return LongOrderedSetTestSuiteBuilder.using(new SimpleLongTestGenerator.OrderedSets(factory)).named(name)
-				.withFeatures(CollectionSize.ANY)
-				.createTestSuite();
+			.withFeatures(CollectionSize.ANY, SpecialFeature.COPYING)
+			.createTestSuite();
 	}
-	
+
 	public static Test sortedSetSuite(String name, Function<long[], LongSortedSet> factory) {
 		return LongSortedSetTestSuiteBuilder.using(new SimpleLongTestGenerator.SortedSets(factory)).named(name)
-				.withFeatures(CollectionSize.ANY, SetFeature.GENERAL_PURPOSE)
-				.createTestSuite();
+			.withFeatures(CollectionSize.ANY, SetFeature.GENERAL_PURPOSE, SpecialFeature.COPYING)
+			.createTestSuite();
 	}
-	
+
 	public static Test navigableSetSuite(String name, Function<long[], LongNavigableSet> factory) {
 		return LongNavigableSetTestSuiteBuilder.using(new SimpleLongTestGenerator.NavigableSets(factory)).named(name)
-				.withFeatures(CollectionSize.ANY, SetFeature.GENERAL_PURPOSE)
-				.createTestSuite();
+			.withFeatures(CollectionSize.ANY, SetFeature.GENERAL_PURPOSE, SpecialFeature.COPYING)
+			.createTestSuite();
 	}
 	
-	private static class HashStrategy implements LongStrategy{
+	private static class HashStrategy implements LongStrategy {
 		static final HashStrategy INSTANCE = new HashStrategy();
 		@Override
 		public int hashCode(long o) { return Long.hashCode(o); }

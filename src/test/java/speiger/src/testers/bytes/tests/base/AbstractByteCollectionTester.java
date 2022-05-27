@@ -5,8 +5,8 @@ import org.junit.Ignore;
 import speiger.src.collections.bytes.collections.ByteCollection;
 
 @Ignore
-public class AbstractByteCollectionTester extends AbstractByteContainerTester {
-
+public class AbstractByteCollectionTester extends AbstractByteContainerTester<ByteCollection>
+{
 	protected ByteCollection collection;
 
 	@Override

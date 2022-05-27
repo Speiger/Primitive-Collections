@@ -11,7 +11,8 @@ import speiger.src.collections.shorts.lists.ShortArrayList;
 import speiger.src.testers.shorts.tests.base.AbstractShortListTester;
 
 @Ignore
-public class ShortListGetElementsTester extends AbstractShortListTester {
+public class ShortListGetElementsTester extends AbstractShortListTester
+{
 	@CollectionSize.Require(SEVERAL)
 	public void testGetElements_valid() {
 		short[] samples = getSampleElements(2).toShortArray();
@@ -75,6 +76,7 @@ public class ShortListGetElementsTester extends AbstractShortListTester {
 		} catch (IndexOutOfBoundsException expected) {
 		}
 	}
+	
 	private static void assertArrayEquals(String message, short[] expected, short[] actual) {
 		assertEquals(message, ShortArrayList.wrap(expected), ShortArrayList.wrap(actual));
 	}

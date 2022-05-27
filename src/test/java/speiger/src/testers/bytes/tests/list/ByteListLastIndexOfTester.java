@@ -12,7 +12,8 @@ import com.google.common.collect.testing.features.CollectionSize;
 import speiger.src.testers.bytes.tests.base.AbstractByteListIndexOfTester;
 
 @Ignore
-public class ByteListLastIndexOfTester extends AbstractByteListIndexOfTester {
+public class ByteListLastIndexOfTester extends AbstractByteListIndexOfTester
+{
 	@Override
 	protected int find(byte o) {
 		return getList().lastIndexOf(o);

@@ -1,5 +1,6 @@
 package speiger.src.testers.bytes.utils;
 
+
 import speiger.src.collections.bytes.collections.ByteIterable;
 import speiger.src.collections.bytes.collections.ByteIterator;
 import speiger.src.collections.bytes.lists.ByteArrayList;
@@ -20,7 +21,7 @@ public class MinimalByteSet extends MinimalByteCollection implements ByteSet {
 			if(list.contains(key)) continue;
 			list.add(key);
 		}
-		return new MinimalByteSet(list.toByteArray());
+		return new MinimalByteSet(list.toByteArray(new byte[list.size()]));
 	}
 	
 	protected MinimalByteSet(byte[] contents) {
@@ -28,9 +29,7 @@ public class MinimalByteSet extends MinimalByteCollection implements ByteSet {
 	}
 	
 	@Override
-	public ByteSet copy() {
-		throw new UnsupportedOperationException();
-	}
+	public ByteSet copy() { throw new UnsupportedOperationException(); }
 	
 	@Override
 	public boolean equals(Object object) {
@@ -60,5 +59,4 @@ public class MinimalByteSet extends MinimalByteCollection implements ByteSet {
 		}
 		return false;
 	}
-
 }

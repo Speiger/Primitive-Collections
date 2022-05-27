@@ -16,7 +16,8 @@ import speiger.src.collections.ints.collections.IntIterator;
 import speiger.src.testers.ints.tests.base.AbstractIntCollectionTester;
 
 @Ignore
-public class IntCollectionClearTester extends AbstractIntCollectionTester {
+public class IntCollectionClearTester extends AbstractIntCollectionTester
+{
 	@CollectionFeature.Require(SUPPORTS_REMOVE)
 	public void testClear() {
 		collection.clear();

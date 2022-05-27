@@ -13,7 +13,8 @@ import com.google.common.collect.testing.features.ListFeature;
 import speiger.src.testers.ints.tests.base.AbstractIntListTester;
 
 @Ignore
-public class IntListReplaceAllTester extends AbstractIntListTester {
+public class IntListReplaceAllTester extends AbstractIntListTester
+{
 	@ListFeature.Require(SUPPORTS_SET)
 	public void testReplaceAll() {
 		getList().replaceInts(e -> samples.e3());

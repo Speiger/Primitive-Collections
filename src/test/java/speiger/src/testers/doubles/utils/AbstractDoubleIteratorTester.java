@@ -299,7 +299,7 @@ public abstract class AbstractDoubleIteratorTester{
 	 *
 	 * @see Stimulus#executeAndCompare(ListIterator, Iterator)
 	 */
-	private <T extends DoubleIterator> void internalExecuteAndCompare(T reference, T target, IteratorOperation method) {
+	private <E extends DoubleIterator> void internalExecuteAndCompare(E reference, E target, IteratorOperation method) {
 		double referenceReturnValue = -1D;
 		PermittedMetaException referenceException = null;
 		double targetReturnValue = -1D;
@@ -315,7 +315,7 @@ public abstract class AbstractDoubleIteratorTester{
 			if (method == nextDouble_METHOD && targetException == null && knownOrder == KnownOrder.UNKNOWN_ORDER) {
 				((MultiExceptionListIterator) reference).promoteToNext(targetReturnValue);
 			}
-
+			
 			referenceReturnValue = method.execute(reference);
 		} catch (PermittedMetaException e) {
 			referenceException = e;

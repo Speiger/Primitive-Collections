@@ -24,7 +24,8 @@ import speiger.src.testers.bytes.utils.ByteHelpers;
 import speiger.src.testers.bytes.utils.ByteIteratorTester;
 
 @Ignore
-public class ByteCollectionIteratorTester extends AbstractByteCollectionTester {
+public class ByteCollectionIteratorTester extends AbstractByteCollectionTester
+{
 	public void testIterator() {
 		ByteList elements = new ByteArrayList();
 		for (ByteIterator iter = collection.iterator();iter.hasNext();) { // uses iterator()

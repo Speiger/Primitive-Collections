@@ -13,7 +13,8 @@ import com.google.common.collect.testing.features.ListFeature;
 import speiger.src.testers.longs.tests.base.AbstractLongListTester;
 
 @Ignore
-public class LongListReplaceAllTester extends AbstractLongListTester {
+public class LongListReplaceAllTester extends AbstractLongListTester
+{
 	@ListFeature.Require(SUPPORTS_SET)
 	public void testReplaceAll() {
 		getList().replaceLongs(e -> samples.e3());

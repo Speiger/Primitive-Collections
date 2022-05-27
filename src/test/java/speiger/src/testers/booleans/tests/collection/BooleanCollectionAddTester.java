@@ -15,7 +15,8 @@ import speiger.src.collections.booleans.collections.BooleanIterator;
 import speiger.src.testers.booleans.tests.base.AbstractBooleanCollectionTester;
 
 @Ignore
-public class BooleanCollectionAddTester extends AbstractBooleanCollectionTester {
+public class BooleanCollectionAddTester extends AbstractBooleanCollectionTester
+{
 	@CollectionFeature.Require(SUPPORTS_ADD)
 	public void testAdd_supportedNotPresent() {
 		assertTrue("add(notPresent) should return true", collection.add(e3()));

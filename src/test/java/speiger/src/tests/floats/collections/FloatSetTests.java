@@ -4,7 +4,6 @@ import java.util.function.Function;
 
 import com.google.common.collect.testing.features.CollectionSize;
 import com.google.common.collect.testing.features.SetFeature;
-
 import junit.framework.Test;
 import junit.framework.TestCase;
 import junit.framework.TestSuite;
@@ -26,12 +25,14 @@ import speiger.src.testers.floats.builder.FloatOrderedSetTestSuiteBuilder;
 import speiger.src.testers.floats.builder.FloatSetTestSuiteBuilder;
 import speiger.src.testers.floats.builder.FloatSortedSetTestSuiteBuilder;
 import speiger.src.testers.floats.impl.SimpleFloatTestGenerator;
+import speiger.src.testers.utils.SpecialFeature;
 
 public class FloatSetTests extends TestCase {
 	
 	public static Test suite() {
 		TestSuite suite = new TestSuite("FloatSets");
 		suite(suite);
+		System.out.println("Generated ["+suite.countTestCases()+"] Tests");
 		return suite;
 	}
 	
@@ -48,41 +49,41 @@ public class FloatSetTests extends TestCase {
 		
 	public static Test setSuite(String name, Function<float[], FloatSet> factory) {
 		return FloatSetTestSuiteBuilder.using(new SimpleFloatTestGenerator.Sets(factory)).named(name)
-				.withFeatures(CollectionSize.ANY, SetFeature.GENERAL_PURPOSE)
-				.createTestSuite();
+			.withFeatures(CollectionSize.ANY, SetFeature.GENERAL_PURPOSE, SpecialFeature.COPYING)
+			.createTestSuite();
 	}
-	
+
 	public static Test setImmutableSuite(String name, Function<float[], FloatSet> factory) {
 		return FloatSetTestSuiteBuilder.using(new SimpleFloatTestGenerator.Sets(factory)).named(name)
-				.withFeatures(CollectionSize.ANY)
-				.createTestSuite();
+			.withFeatures(CollectionSize.ANY, SpecialFeature.COPYING)
+			.createTestSuite();
 	}
-	
+
 	public static Test orderedSetSuite(String name, Function<float[], FloatOrderedSet> factory) {
 		return FloatOrderedSetTestSuiteBuilder.using(new SimpleFloatTestGenerator.OrderedSets(factory)).named(name)
-				.withFeatures(CollectionSize.ANY, SetFeature.GENERAL_PURPOSE)
-				.createTestSuite();
+			.withFeatures(CollectionSize.ANY, SetFeature.GENERAL_PURPOSE, SpecialFeature.COPYING)
+			.createTestSuite();
 	}
-	
+
 	public static Test immutableOrderedSetSuite(String name, Function<float[], FloatOrderedSet> factory) {
 		return FloatOrderedSetTestSuiteBuilder.using(new SimpleFloatTestGenerator.OrderedSets(factory)).named(name)
-				.withFeatures(CollectionSize.ANY)
-				.createTestSuite();
+			.withFeatures(CollectionSize.ANY, SpecialFeature.COPYING)
+			.createTestSuite();
 	}
-	
+
 	public static Test sortedSetSuite(String name, Function<float[], FloatSortedSet> factory) {
 		return FloatSortedSetTestSuiteBuilder.using(new SimpleFloatTestGenerator.SortedSets(factory)).named(name)
-				.withFeatures(CollectionSize.ANY, SetFeature.GENERAL_PURPOSE)
-				.createTestSuite();
+			.withFeatures(CollectionSize.ANY, SetFeature.GENERAL_PURPOSE, SpecialFeature.COPYING)
+			.createTestSuite();
 	}
-	
+
 	public static Test navigableSetSuite(String name, Function<float[], FloatNavigableSet> factory) {
 		return FloatNavigableSetTestSuiteBuilder.using(new SimpleFloatTestGenerator.NavigableSets(factory)).named(name)
-				.withFeatures(CollectionSize.ANY, SetFeature.GENERAL_PURPOSE)
-				.createTestSuite();
+			.withFeatures(CollectionSize.ANY, SetFeature.GENERAL_PURPOSE, SpecialFeature.COPYING)
+			.createTestSuite();
 	}
 	
-	private static class HashStrategy implements FloatStrategy{
+	private static class HashStrategy implements FloatStrategy {
 		static final HashStrategy INSTANCE = new HashStrategy();
 		@Override
 		public int hashCode(float o) { return Float.hashCode(o); }

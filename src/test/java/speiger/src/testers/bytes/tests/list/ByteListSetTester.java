@@ -11,7 +11,8 @@ import com.google.common.collect.testing.features.ListFeature;
 import speiger.src.testers.bytes.tests.base.AbstractByteListTester;
 
 @Ignore
-public class ByteListSetTester extends AbstractByteListTester {
+public class ByteListSetTester extends AbstractByteListTester
+{
 	@ListFeature.Require(SUPPORTS_SET)
 	@CollectionSize.Require(absent = ZERO)
 	public void testSet() {

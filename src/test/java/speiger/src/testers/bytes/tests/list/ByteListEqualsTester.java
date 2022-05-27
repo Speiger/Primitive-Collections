@@ -10,7 +10,8 @@ import speiger.src.testers.bytes.tests.base.AbstractByteListTester;
 import speiger.src.testers.bytes.utils.MinimalByteSet;
 
 @Ignore
-public class ByteListEqualsTester extends AbstractByteListTester {
+public class ByteListEqualsTester extends AbstractByteListTester
+{
 	public void testEquals_otherListWithSameElements() {
 		assertTrue("A List should equal any other List containing the same elements.", getList().equals(new ByteArrayList(getOrderedElements())));
 	}

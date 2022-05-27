@@ -15,7 +15,7 @@ import speiger.src.collections.ints.sets.IntSet;
 import speiger.src.collections.ints.utils.IntIterators;
 
 public class IntHelpers {
-	private static boolean equals(int key, int value) {
+	public static boolean equals(int key, int value) {
 		return key == value;
 	}
 
@@ -166,7 +166,7 @@ public class IntHelpers {
 		}
 		return iterator.nextInt();
 	}
-
+	
 	public static void testComparator(IntComparator comparator, int... valuesInExpectedOrder) {
 		testComparator(comparator, IntArrayList.wrap(valuesInExpectedOrder));
 	}

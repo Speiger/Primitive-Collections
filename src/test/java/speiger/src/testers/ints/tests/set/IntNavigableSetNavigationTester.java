@@ -21,7 +21,8 @@ import speiger.src.testers.ints.tests.base.AbstractIntSetTester;
 import speiger.src.testers.ints.utils.IntHelpers;
 
 @Ignore
-public class IntNavigableSetNavigationTester extends AbstractIntSetTester {
+public class IntNavigableSetNavigationTester extends AbstractIntSetTester
+{
 	private IntNavigableSet navigableSet;
 	private IntList values;
 	private int a;
@@ -44,7 +45,7 @@ public class IntNavigableSetNavigationTester extends AbstractIntSetTester {
 	}
 	
 	protected void resetWithHole() {
-		super.resetContainer(primitiveGenerator.create(new int[]{a, c}));
+		super.resetContainer(primitiveGenerator.create(createArray(a, c)));
 		navigableSet = (IntNavigableSet) getSet();
 	}
 

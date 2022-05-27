@@ -5,7 +5,8 @@ import org.junit.Ignore;
 import speiger.src.testers.shorts.tests.base.AbstractShortCollectionTester;
 
 @Ignore
-public class ShortCollectionEqualsTester extends AbstractShortCollectionTester {
+public class ShortCollectionEqualsTester extends AbstractShortCollectionTester
+{
 	public void testEquals_self() {
 		assertTrue("An Object should be equal to itself.", collection.equals(collection));
 	}

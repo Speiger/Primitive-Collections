@@ -16,7 +16,8 @@ import speiger.src.testers.doubles.utils.DoubleHelpers;
 import speiger.src.testers.doubles.utils.MinimalDoubleCollection;
 
 @Ignore
-public class DoubleListRetainAllTester extends AbstractDoubleListTester {
+public class DoubleListRetainAllTester extends AbstractDoubleListTester
+{
 	@CollectionFeature.Require(SUPPORTS_REMOVE)
 	@CollectionSize.Require(absent = { ZERO, ONE })
 	public void testRetainAll_duplicatesKept() {
@@ -42,7 +43,7 @@ public class DoubleListRetainAllTester extends AbstractDoubleListTester {
 	@CollectionFeature.Require(SUPPORTS_REMOVE)
 	@CollectionSize.Require(SEVERAL)
 	public void testRetainAll_countIgnored() {
-		resetContainer(primitiveGenerator.create(new double[]{e0(), e2(), e1(), e0()}));
+		resetContainer(primitiveGenerator.create(createArray(e0(), e2(), e1(), e0())));
 		assertTrue(getList().retainAll(DoubleArrayList.wrap(e0(), e1())));
 		DoubleHelpers.assertContentsInOrder(getList(), e0(), e1(), e0());
 	}

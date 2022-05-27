@@ -12,7 +12,8 @@ import com.google.common.collect.testing.features.CollectionSize;
 import speiger.src.testers.bytes.tests.base.AbstractByteListTester;
 
 @Ignore
-public class ByteListSwapRemoveTester extends AbstractByteListTester {
+public class ByteListSwapRemoveTester extends AbstractByteListTester
+{
 	@CollectionFeature.Require(SUPPORTS_REMOVE)
 	@CollectionSize.Require(absent = {ZERO, ONE})
 	public void testRemove_duplicate() {

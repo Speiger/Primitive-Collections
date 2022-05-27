@@ -5,8 +5,8 @@ import org.junit.Ignore;
 import speiger.src.collections.chars.collections.CharCollection;
 
 @Ignore
-public class AbstractCharCollectionTester extends AbstractCharContainerTester {
-
+public class AbstractCharCollectionTester extends AbstractCharContainerTester<CharCollection>
+{
 	protected CharCollection collection;
 
 	@Override

@@ -5,7 +5,8 @@ import org.junit.Ignore;
 import speiger.src.testers.bytes.tests.base.AbstractByteCollectionTester;
 
 @Ignore
-public class ByteCollectionEqualsTester extends AbstractByteCollectionTester {
+public class ByteCollectionEqualsTester extends AbstractByteCollectionTester
+{
 	public void testEquals_self() {
 		assertTrue("An Object should be equal to itself.", collection.equals(collection));
 	}

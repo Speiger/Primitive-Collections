@@ -14,17 +14,18 @@ import speiger.src.collections.chars.lists.CharLinkedList;
 import speiger.src.collections.chars.lists.CharList;
 import speiger.src.testers.chars.builder.CharListTestSuiteBuilder;
 import speiger.src.testers.chars.impl.SimpleCharTestGenerator;
+import speiger.src.testers.utils.SpecialFeature;
 
 public class CharListTests extends TestCase {
 	
 	public static Test suite() {
 		TestSuite suite = new TestSuite("CharLists");
 		suite(suite);
+		System.out.println("Generated ["+suite.countTestCases()+"] Tests");
 		return suite;
 	}
-	
-	public static void suite(TestSuite suite)
-	{
+
+	public static void suite(TestSuite suite) {
 		suite.addTest(listSuite("CharArrayList", CharArrayList::new));
 		suite.addTest(listSuite("CharLinkedList", CharLinkedList::new));
 		suite.addTest(listImmutableSuite("ImmutableCharList", ImmutableCharList::new));
@@ -32,13 +33,14 @@ public class CharListTests extends TestCase {
 	
 	private static Test listSuite(String name, Function<char[], CharList> factory) {
 		return CharListTestSuiteBuilder.using(new SimpleCharTestGenerator.Lists(factory)).named(name)
-				.withFeatures(ListFeature.GENERAL_PURPOSE, CollectionSize.ANY)
+				.withFeatures(ListFeature.GENERAL_PURPOSE, CollectionSize.ANY, SpecialFeature.COPYING)
 				.createTestSuite();
 	}
 	
 	private static Test listImmutableSuite(String name, Function<char[], CharList> factory) {
 		return CharListTestSuiteBuilder.using(new SimpleCharTestGenerator.Lists(factory)).named(name)
-				.withFeatures(CollectionSize.ANY)
+				.withFeatures(CollectionSize.ANY, SpecialFeature.COPYING)
 				.createTestSuite();
 	}
+	
 }

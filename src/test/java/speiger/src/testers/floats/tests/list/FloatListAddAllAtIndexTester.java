@@ -15,7 +15,8 @@ import speiger.src.testers.floats.tests.base.AbstractFloatListTester;
 import speiger.src.testers.floats.utils.MinimalFloatCollection;
 
 @Ignore
-public class FloatListAddAllAtIndexTester extends AbstractFloatListTester {
+public class FloatListAddAllAtIndexTester extends AbstractFloatListTester
+{
 	@ListFeature.Require(SUPPORTS_ADD_WITH_INDEX)
 	@CollectionSize.Require(absent = ZERO)
 	public void testAddAllAtIndex_supportedAllPresent() {

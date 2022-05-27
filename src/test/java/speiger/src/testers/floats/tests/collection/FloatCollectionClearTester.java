@@ -16,7 +16,8 @@ import speiger.src.collections.floats.collections.FloatIterator;
 import speiger.src.testers.floats.tests.base.AbstractFloatCollectionTester;
 
 @Ignore
-public class FloatCollectionClearTester extends AbstractFloatCollectionTester {
+public class FloatCollectionClearTester extends AbstractFloatCollectionTester
+{
 	@CollectionFeature.Require(SUPPORTS_REMOVE)
 	public void testClear() {
 		collection.clear();

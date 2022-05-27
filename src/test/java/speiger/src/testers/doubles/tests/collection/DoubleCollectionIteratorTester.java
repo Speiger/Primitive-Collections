@@ -24,7 +24,8 @@ import speiger.src.testers.doubles.utils.DoubleHelpers;
 import speiger.src.testers.doubles.utils.DoubleIteratorTester;
 
 @Ignore
-public class DoubleCollectionIteratorTester extends AbstractDoubleCollectionTester {
+public class DoubleCollectionIteratorTester extends AbstractDoubleCollectionTester
+{
 	public void testIterator() {
 		DoubleList elements = new DoubleArrayList();
 		for (DoubleIterator iter = collection.iterator();iter.hasNext();) { // uses iterator()

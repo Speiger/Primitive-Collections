@@ -16,7 +16,8 @@ import speiger.src.testers.longs.utils.LongHelpers;
 import speiger.src.testers.longs.utils.MinimalLongCollection;
 
 @Ignore
-public class LongListRetainAllTester extends AbstractLongListTester {
+public class LongListRetainAllTester extends AbstractLongListTester
+{
 	@CollectionFeature.Require(SUPPORTS_REMOVE)
 	@CollectionSize.Require(absent = { ZERO, ONE })
 	public void testRetainAll_duplicatesKept() {
@@ -42,7 +43,7 @@ public class LongListRetainAllTester extends AbstractLongListTester {
 	@CollectionFeature.Require(SUPPORTS_REMOVE)
 	@CollectionSize.Require(SEVERAL)
 	public void testRetainAll_countIgnored() {
-		resetContainer(primitiveGenerator.create(new long[]{e0(), e2(), e1(), e0()}));
+		resetContainer(primitiveGenerator.create(createArray(e0(), e2(), e1(), e0())));
 		assertTrue(getList().retainAll(LongArrayList.wrap(e0(), e1())));
 		LongHelpers.assertContentsInOrder(getList(), e0(), e1(), e0());
 	}

@@ -17,7 +17,8 @@ import speiger.src.testers.doubles.utils.DoubleHelpers;
 import speiger.src.testers.doubles.utils.MinimalDoubleCollection;
 
 @Ignore
-public class DoubleCollectionRetainAllTester extends AbstractDoubleCollectionTester {
+public class DoubleCollectionRetainAllTester extends AbstractDoubleCollectionTester
+{
 
 	private class Target {
 		private final DoubleCollection toRetain;

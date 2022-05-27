@@ -8,8 +8,8 @@ import speiger.src.collections.doubles.lists.DoubleArrayList;
 import speiger.src.testers.doubles.tests.base.AbstractDoubleListTester;
 
 @Ignore
-public class DoubleListFillBufferTester extends AbstractDoubleListTester {
-
+public class DoubleListFillBufferTester extends AbstractDoubleListTester
+{
 	public void testFillBuffer() {
 		DoubleBuffer buffer = DoubleBuffer.allocate(getNumElements());
 		getList().fillBuffer(buffer);

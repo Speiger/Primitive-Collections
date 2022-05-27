@@ -19,7 +19,8 @@ import speiger.src.testers.shorts.tests.base.AbstractShortListTester;
 import speiger.src.testers.shorts.utils.ShortHelpers;
 
 @Ignore
-public class ShortListRemoveAtIndexTester extends AbstractShortListTester {
+public class ShortListRemoveAtIndexTester extends AbstractShortListTester
+{
 	@ListFeature.Require(absent = SUPPORTS_REMOVE_WITH_INDEX)
 	@CollectionSize.Require(absent = ZERO)
 	public void testRemoveAtIndex_unsupported() {

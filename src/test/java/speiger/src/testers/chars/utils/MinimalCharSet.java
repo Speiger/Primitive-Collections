@@ -1,5 +1,6 @@
 package speiger.src.testers.chars.utils;
 
+
 import speiger.src.collections.chars.collections.CharIterable;
 import speiger.src.collections.chars.collections.CharIterator;
 import speiger.src.collections.chars.lists.CharArrayList;
@@ -20,7 +21,7 @@ public class MinimalCharSet extends MinimalCharCollection implements CharSet {
 			if(list.contains(key)) continue;
 			list.add(key);
 		}
-		return new MinimalCharSet(list.toCharArray());
+		return new MinimalCharSet(list.toCharArray(new char[list.size()]));
 	}
 	
 	protected MinimalCharSet(char[] contents) {
@@ -28,9 +29,7 @@ public class MinimalCharSet extends MinimalCharCollection implements CharSet {
 	}
 	
 	@Override
-	public CharSet copy() {
-		throw new UnsupportedOperationException();
-	}
+	public CharSet copy() { throw new UnsupportedOperationException(); }
 	
 	@Override
 	public boolean equals(Object object) {
@@ -60,5 +59,4 @@ public class MinimalCharSet extends MinimalCharCollection implements CharSet {
 		}
 		return false;
 	}
-
 }

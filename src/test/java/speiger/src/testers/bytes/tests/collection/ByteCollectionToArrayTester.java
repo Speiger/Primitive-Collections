@@ -12,7 +12,8 @@ import speiger.src.testers.bytes.tests.base.AbstractByteCollectionTester;
 import speiger.src.testers.bytes.utils.ByteHelpers;
 
 @Ignore
-public class ByteCollectionToArrayTester extends AbstractByteCollectionTester{
+public class ByteCollectionToArrayTester extends AbstractByteCollectionTester
+{
 	public void testToArray_noArgs() {
 		byte[] array = collection.toByteArray();
 		expectArrayContentsAnyOrder(createSamplesArray(), array);

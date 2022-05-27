@@ -18,7 +18,8 @@ import speiger.src.testers.bytes.tests.base.AbstractByteSetTester;
 import speiger.src.testers.bytes.utils.ByteHelpers;
 
 @Ignore
-public class ByteOrderedSetNavigationTester extends AbstractByteSetTester {
+public class ByteOrderedSetNavigationTester extends AbstractByteSetTester
+{
 	private ByteOrderedSet orderedSet;
 	private ByteList values;
 	private byte a;

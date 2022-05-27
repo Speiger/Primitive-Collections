@@ -10,7 +10,8 @@ import speiger.src.testers.shorts.tests.base.AbstractShortCollectionTester;
 import speiger.src.testers.shorts.utils.MinimalShortCollection;
 
 @Ignore
-public class ShortCollectionContainsAllTester extends AbstractShortCollectionTester {
+public class ShortCollectionContainsAllTester extends AbstractShortCollectionTester
+{
 	public void testContainsAll_empty() {
 		assertTrue("containsAll(empty) should return true", collection.containsAll(MinimalShortCollection.of()));
 	}

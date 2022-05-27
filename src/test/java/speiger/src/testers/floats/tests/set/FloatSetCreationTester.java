@@ -13,7 +13,8 @@ import speiger.src.collections.floats.lists.FloatArrayList;
 import speiger.src.testers.floats.tests.base.AbstractFloatSetTester;
 
 @Ignore
-public class FloatSetCreationTester extends AbstractFloatSetTester {
+public class FloatSetCreationTester extends AbstractFloatSetTester
+{
 	@CollectionFeature.Require(absent = REJECTS_DUPLICATES_AT_CREATION)
 	@CollectionSize.Require(absent = { ZERO, ONE })
 	public void testCreateWithDuplicates_nonNullDuplicatesNotRejected() {

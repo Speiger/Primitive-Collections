@@ -9,7 +9,8 @@ import com.google.common.collect.testing.features.CollectionSize;
 import speiger.src.testers.floats.tests.base.AbstractFloatCollectionTester;
 
 @Ignore
-public class FloatCollectionContainsTester extends AbstractFloatCollectionTester {
+public class FloatCollectionContainsTester extends AbstractFloatCollectionTester
+{
 	@CollectionSize.Require(absent = ZERO)
 	public void testContains_yes() {
 		assertTrue("contains(present) should return true", collection.contains(e0()));

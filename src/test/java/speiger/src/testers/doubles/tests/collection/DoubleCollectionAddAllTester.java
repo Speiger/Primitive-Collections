@@ -16,7 +16,8 @@ import speiger.src.testers.doubles.tests.base.AbstractDoubleCollectionTester;
 import speiger.src.testers.doubles.utils.MinimalDoubleCollection;
 
 @Ignore
-public class DoubleCollectionAddAllTester extends AbstractDoubleCollectionTester {
+public class DoubleCollectionAddAllTester extends AbstractDoubleCollectionTester
+{
 	@CollectionFeature.Require(SUPPORTS_ADD)
 	public void testAddAll_supportedNothing() {
 		assertFalse("addAll(nothing) should return false", collection.addAll(emptyCollection()));

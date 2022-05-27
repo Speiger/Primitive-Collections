@@ -13,7 +13,8 @@ import speiger.src.testers.ints.tests.base.AbstractIntListTester;
 import speiger.src.testers.ints.utils.MinimalIntCollection;
 
 @Ignore
-public class IntListRemoveAllTester extends AbstractIntListTester {
+public class IntListRemoveAllTester extends AbstractIntListTester
+{
 	@CollectionFeature.Require(SUPPORTS_REMOVE)
 	@CollectionSize.Require(absent = { ZERO, ONE })
 	public void testRemoveAll_duplicate() {

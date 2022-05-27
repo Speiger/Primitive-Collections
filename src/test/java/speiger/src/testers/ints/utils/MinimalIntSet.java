@@ -1,5 +1,6 @@
 package speiger.src.testers.ints.utils;
 
+
 import speiger.src.collections.ints.collections.IntIterable;
 import speiger.src.collections.ints.collections.IntIterator;
 import speiger.src.collections.ints.lists.IntArrayList;
@@ -20,7 +21,7 @@ public class MinimalIntSet extends MinimalIntCollection implements IntSet {
 			if(list.contains(key)) continue;
 			list.add(key);
 		}
-		return new MinimalIntSet(list.toIntArray());
+		return new MinimalIntSet(list.toIntArray(new int[list.size()]));
 	}
 	
 	protected MinimalIntSet(int[] contents) {
@@ -28,9 +29,7 @@ public class MinimalIntSet extends MinimalIntCollection implements IntSet {
 	}
 	
 	@Override
-	public IntSet copy() {
-		throw new UnsupportedOperationException();
-	}
+	public IntSet copy() { throw new UnsupportedOperationException(); }
 	
 	@Override
 	public boolean equals(Object object) {
@@ -60,5 +59,4 @@ public class MinimalIntSet extends MinimalIntCollection implements IntSet {
 		}
 		return false;
 	}
-
 }

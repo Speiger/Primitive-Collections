@@ -1,5 +1,6 @@
 package speiger.src.testers.shorts.utils;
 
+
 import speiger.src.collections.shorts.collections.ShortIterable;
 import speiger.src.collections.shorts.collections.ShortIterator;
 import speiger.src.collections.shorts.lists.ShortArrayList;
@@ -20,7 +21,7 @@ public class MinimalShortSet extends MinimalShortCollection implements ShortSet 
 			if(list.contains(key)) continue;
 			list.add(key);
 		}
-		return new MinimalShortSet(list.toShortArray());
+		return new MinimalShortSet(list.toShortArray(new short[list.size()]));
 	}
 	
 	protected MinimalShortSet(short[] contents) {
@@ -28,9 +29,7 @@ public class MinimalShortSet extends MinimalShortCollection implements ShortSet 
 	}
 	
 	@Override
-	public ShortSet copy() {
-		throw new UnsupportedOperationException();
-	}
+	public ShortSet copy() { throw new UnsupportedOperationException(); }
 	
 	@Override
 	public boolean equals(Object object) {
@@ -60,5 +59,4 @@ public class MinimalShortSet extends MinimalShortCollection implements ShortSet 
 		}
 		return false;
 	}
-
 }

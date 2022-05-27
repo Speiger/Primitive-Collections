@@ -12,8 +12,8 @@ import com.google.common.collect.testing.features.CollectionSize;
 import speiger.src.testers.ints.tests.base.AbstractIntListIndexOfTester;
 
 @Ignore
-public class IntListIndexOfTester extends AbstractIntListIndexOfTester {
-
+public class IntListIndexOfTester extends AbstractIntListIndexOfTester
+{
 	@Override
 	protected int find(int o) {
 		return getList().indexOf(o);

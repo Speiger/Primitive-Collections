@@ -8,8 +8,8 @@ import speiger.src.collections.floats.lists.FloatArrayList;
 import speiger.src.testers.floats.tests.base.AbstractFloatListTester;
 
 @Ignore
-public class FloatListFillBufferTester extends AbstractFloatListTester {
-
+public class FloatListFillBufferTester extends AbstractFloatListTester
+{
 	public void testFillBuffer() {
 		FloatBuffer buffer = FloatBuffer.allocate(getNumElements());
 		getList().fillBuffer(buffer);

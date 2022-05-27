@@ -7,7 +7,8 @@ import org.junit.Ignore;
 import com.google.common.collect.testing.features.CollectionSize;
 
 @Ignore
-public abstract class AbstractDoubleListIndexOfTester extends AbstractDoubleListTester {
+public abstract class AbstractDoubleListIndexOfTester extends AbstractDoubleListTester
+{
 	protected abstract int find(double o);
 	
 	protected abstract String getMethodName();

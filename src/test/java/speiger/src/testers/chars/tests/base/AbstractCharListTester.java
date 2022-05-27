@@ -2,12 +2,14 @@ package speiger.src.testers.chars.tests.base;
 
 import org.junit.Ignore;
 
+
 import speiger.src.collections.chars.collections.CharCollection;
 import speiger.src.collections.chars.lists.CharList;
 import speiger.src.testers.chars.utils.CharHelpers;
 
 @Ignore
-public class AbstractCharListTester extends AbstractCharCollectionTester {
+public class AbstractCharListTester extends AbstractCharCollectionTester
+{
 	protected final CharList getList() {
 		return (CharList) collection;
 	}

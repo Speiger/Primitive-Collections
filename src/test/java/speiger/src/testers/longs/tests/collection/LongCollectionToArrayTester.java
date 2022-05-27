@@ -12,7 +12,8 @@ import speiger.src.testers.longs.tests.base.AbstractLongCollectionTester;
 import speiger.src.testers.longs.utils.LongHelpers;
 
 @Ignore
-public class LongCollectionToArrayTester extends AbstractLongCollectionTester{
+public class LongCollectionToArrayTester extends AbstractLongCollectionTester
+{
 	public void testToArray_noArgs() {
 		long[] array = collection.toLongArray();
 		expectArrayContentsAnyOrder(createSamplesArray(), array);

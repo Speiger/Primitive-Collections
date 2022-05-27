@@ -11,7 +11,8 @@ import com.google.common.collect.testing.features.CollectionSize;
 import speiger.src.testers.chars.tests.base.AbstractCharSetTester;
 
 @Ignore
-public class CharSetRemoveTester extends AbstractCharSetTester {
+public class CharSetRemoveTester extends AbstractCharSetTester
+{
 	@CollectionFeature.Require(SUPPORTS_REMOVE)
 	@CollectionSize.Require(absent = ZERO)
 	public void testRemove_present() {

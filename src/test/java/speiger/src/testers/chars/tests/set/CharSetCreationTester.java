@@ -13,7 +13,8 @@ import speiger.src.collections.chars.lists.CharArrayList;
 import speiger.src.testers.chars.tests.base.AbstractCharSetTester;
 
 @Ignore
-public class CharSetCreationTester extends AbstractCharSetTester {
+public class CharSetCreationTester extends AbstractCharSetTester
+{
 	@CollectionFeature.Require(absent = REJECTS_DUPLICATES_AT_CREATION)
 	@CollectionSize.Require(absent = { ZERO, ONE })
 	public void testCreateWithDuplicates_nonNullDuplicatesNotRejected() {

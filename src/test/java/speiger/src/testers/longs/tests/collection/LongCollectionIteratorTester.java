@@ -24,7 +24,8 @@ import speiger.src.testers.longs.utils.LongHelpers;
 import speiger.src.testers.longs.utils.LongIteratorTester;
 
 @Ignore
-public class LongCollectionIteratorTester extends AbstractLongCollectionTester {
+public class LongCollectionIteratorTester extends AbstractLongCollectionTester
+{
 	public void testIterator() {
 		LongList elements = new LongArrayList();
 		for (LongIterator iter = collection.iterator();iter.hasNext();) { // uses iterator()

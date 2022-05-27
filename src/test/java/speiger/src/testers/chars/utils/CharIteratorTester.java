@@ -6,7 +6,8 @@ import speiger.src.collections.chars.collections.CharIterable;
 import speiger.src.collections.chars.collections.CharIterator;
 import speiger.src.collections.chars.utils.CharLists;
 
-public abstract class CharIteratorTester extends AbstractCharIteratorTester {
+public abstract class CharIteratorTester extends AbstractCharIteratorTester
+{
 
 	public CharIteratorTester(int steps, Iterable<? extends IteratorFeature> features, CharIterable expectedElements,
 			KnownOrder knownOrder) {

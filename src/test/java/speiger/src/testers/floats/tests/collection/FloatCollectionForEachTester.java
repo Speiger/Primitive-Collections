@@ -12,7 +12,8 @@ import speiger.src.testers.floats.tests.base.AbstractFloatCollectionTester;
 import speiger.src.testers.floats.utils.FloatHelpers;
 
 @Ignore
-public class FloatCollectionForEachTester extends AbstractFloatCollectionTester {
+public class FloatCollectionForEachTester extends AbstractFloatCollectionTester
+{
 	@CollectionFeature.Require(absent = KNOWN_ORDER)
 	public void testForEachUnknownOrder() {
 		FloatList elements = new FloatArrayList();

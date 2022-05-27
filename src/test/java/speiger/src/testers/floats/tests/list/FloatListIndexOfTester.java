@@ -12,8 +12,8 @@ import com.google.common.collect.testing.features.CollectionSize;
 import speiger.src.testers.floats.tests.base.AbstractFloatListIndexOfTester;
 
 @Ignore
-public class FloatListIndexOfTester extends AbstractFloatListIndexOfTester {
-
+public class FloatListIndexOfTester extends AbstractFloatListIndexOfTester
+{
 	@Override
 	protected int find(float o) {
 		return getList().indexOf(o);

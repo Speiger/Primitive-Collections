@@ -14,17 +14,18 @@ import speiger.src.collections.bytes.lists.ByteLinkedList;
 import speiger.src.collections.bytes.lists.ByteList;
 import speiger.src.testers.bytes.builder.ByteListTestSuiteBuilder;
 import speiger.src.testers.bytes.impl.SimpleByteTestGenerator;
+import speiger.src.testers.utils.SpecialFeature;
 
 public class ByteListTests extends TestCase {
 	
 	public static Test suite() {
 		TestSuite suite = new TestSuite("ByteLists");
 		suite(suite);
+		System.out.println("Generated ["+suite.countTestCases()+"] Tests");
 		return suite;
 	}
-	
-	public static void suite(TestSuite suite)
-	{
+
+	public static void suite(TestSuite suite) {
 		suite.addTest(listSuite("ByteArrayList", ByteArrayList::new));
 		suite.addTest(listSuite("ByteLinkedList", ByteLinkedList::new));
 		suite.addTest(listImmutableSuite("ImmutableByteList", ImmutableByteList::new));
@@ -32,13 +33,14 @@ public class ByteListTests extends TestCase {
 	
 	private static Test listSuite(String name, Function<byte[], ByteList> factory) {
 		return ByteListTestSuiteBuilder.using(new SimpleByteTestGenerator.Lists(factory)).named(name)
-				.withFeatures(ListFeature.GENERAL_PURPOSE, CollectionSize.ANY)
+				.withFeatures(ListFeature.GENERAL_PURPOSE, CollectionSize.ANY, SpecialFeature.COPYING)
 				.createTestSuite();
 	}
 	
 	private static Test listImmutableSuite(String name, Function<byte[], ByteList> factory) {
 		return ByteListTestSuiteBuilder.using(new SimpleByteTestGenerator.Lists(factory)).named(name)
-				.withFeatures(CollectionSize.ANY)
+				.withFeatures(CollectionSize.ANY, SpecialFeature.COPYING)
 				.createTestSuite();
 	}
+	
 }

@@ -299,7 +299,7 @@ public abstract class AbstractFloatIteratorTester{
 	 *
 	 * @see Stimulus#executeAndCompare(ListIterator, Iterator)
 	 */
-	private <T extends FloatIterator> void internalExecuteAndCompare(T reference, T target, IteratorOperation method) {
+	private <E extends FloatIterator> void internalExecuteAndCompare(E reference, E target, IteratorOperation method) {
 		float referenceReturnValue = -1F;
 		PermittedMetaException referenceException = null;
 		float targetReturnValue = -1F;
@@ -315,7 +315,7 @@ public abstract class AbstractFloatIteratorTester{
 			if (method == nextFloat_METHOD && targetException == null && knownOrder == KnownOrder.UNKNOWN_ORDER) {
 				((MultiExceptionListIterator) reference).promoteToNext(targetReturnValue);
 			}
-
+			
 			referenceReturnValue = method.execute(reference);
 		} catch (PermittedMetaException e) {
 			referenceException = e;

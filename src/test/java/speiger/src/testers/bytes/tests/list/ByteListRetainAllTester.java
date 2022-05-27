@@ -16,7 +16,8 @@ import speiger.src.testers.bytes.utils.ByteHelpers;
 import speiger.src.testers.bytes.utils.MinimalByteCollection;
 
 @Ignore
-public class ByteListRetainAllTester extends AbstractByteListTester {
+public class ByteListRetainAllTester extends AbstractByteListTester
+{
 	@CollectionFeature.Require(SUPPORTS_REMOVE)
 	@CollectionSize.Require(absent = { ZERO, ONE })
 	public void testRetainAll_duplicatesKept() {
@@ -42,7 +43,7 @@ public class ByteListRetainAllTester extends AbstractByteListTester {
 	@CollectionFeature.Require(SUPPORTS_REMOVE)
 	@CollectionSize.Require(SEVERAL)
 	public void testRetainAll_countIgnored() {
-		resetContainer(primitiveGenerator.create(new byte[]{e0(), e2(), e1(), e0()}));
+		resetContainer(primitiveGenerator.create(createArray(e0(), e2(), e1(), e0())));
 		assertTrue(getList().retainAll(ByteArrayList.wrap(e0(), e1())));
 		ByteHelpers.assertContentsInOrder(getList(), e0(), e1(), e0());
 	}

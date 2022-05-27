@@ -15,7 +15,7 @@ import speiger.src.collections.chars.sets.CharSet;
 import speiger.src.collections.chars.utils.CharIterators;
 
 public class CharHelpers {
-	private static boolean equals(char key, char value) {
+	public static boolean equals(char key, char value) {
 		return key == value;
 	}
 
@@ -166,7 +166,7 @@ public class CharHelpers {
 		}
 		return iterator.nextChar();
 	}
-
+	
 	public static void testComparator(CharComparator comparator, char... valuesInExpectedOrder) {
 		testComparator(comparator, CharArrayList.wrap(valuesInExpectedOrder));
 	}

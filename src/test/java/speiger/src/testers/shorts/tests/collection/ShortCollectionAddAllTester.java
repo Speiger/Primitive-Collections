@@ -16,7 +16,8 @@ import speiger.src.testers.shorts.tests.base.AbstractShortCollectionTester;
 import speiger.src.testers.shorts.utils.MinimalShortCollection;
 
 @Ignore
-public class ShortCollectionAddAllTester extends AbstractShortCollectionTester {
+public class ShortCollectionAddAllTester extends AbstractShortCollectionTester
+{
 	@CollectionFeature.Require(SUPPORTS_ADD)
 	public void testAddAll_supportedNothing() {
 		assertFalse("addAll(nothing) should return false", collection.addAll(emptyCollection()));

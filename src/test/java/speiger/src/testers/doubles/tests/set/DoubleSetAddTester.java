@@ -11,7 +11,8 @@ import com.google.common.collect.testing.features.CollectionSize;
 import speiger.src.testers.doubles.tests.base.AbstractDoubleSetTester;
 
 @Ignore
-public class DoubleSetAddTester extends AbstractDoubleSetTester {
+public class DoubleSetAddTester extends AbstractDoubleSetTester
+{
 	@CollectionFeature.Require(SUPPORTS_ADD)
 	@CollectionSize.Require(absent = ZERO)
 	public void testAdd_supportedPresent() {

@@ -24,7 +24,8 @@ import speiger.src.testers.booleans.utils.BooleanHelpers;
 import speiger.src.testers.booleans.utils.BooleanIteratorTester;
 
 @Ignore
-public class BooleanCollectionIteratorTester extends AbstractBooleanCollectionTester {
+public class BooleanCollectionIteratorTester extends AbstractBooleanCollectionTester
+{
 	public void testIterator() {
 		BooleanList elements = new BooleanArrayList();
 		for (BooleanIterator iter = collection.iterator();iter.hasNext();) { // uses iterator()

@@ -21,7 +21,8 @@ import speiger.src.testers.shorts.tests.base.AbstractShortSetTester;
 import speiger.src.testers.shorts.utils.ShortHelpers;
 
 @Ignore
-public class ShortNavigableSetNavigationTester extends AbstractShortSetTester {
+public class ShortNavigableSetNavigationTester extends AbstractShortSetTester
+{
 	private ShortNavigableSet navigableSet;
 	private ShortList values;
 	private short a;
@@ -44,7 +45,7 @@ public class ShortNavigableSetNavigationTester extends AbstractShortSetTester {
 	}
 	
 	protected void resetWithHole() {
-		super.resetContainer(primitiveGenerator.create(new short[]{a, c}));
+		super.resetContainer(primitiveGenerator.create(createArray(a, c)));
 		navigableSet = (ShortNavigableSet) getSet();
 	}
 

@@ -8,8 +8,8 @@ import speiger.src.collections.chars.lists.CharArrayList;
 import speiger.src.testers.chars.tests.base.AbstractCharListTester;
 
 @Ignore
-public class CharListFillBufferTester extends AbstractCharListTester {
-
+public class CharListFillBufferTester extends AbstractCharListTester
+{
 	public void testFillBuffer() {
 		CharBuffer buffer = CharBuffer.allocate(getNumElements());
 		getList().fillBuffer(buffer);

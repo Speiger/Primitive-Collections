@@ -22,7 +22,8 @@ import speiger.src.testers.chars.utils.CharHelpers;
 import speiger.src.testers.chars.utils.CharListIteratorTester;
 
 @Ignore
-public class CharListListIteratorTester extends AbstractCharListTester {
+public class CharListListIteratorTester extends AbstractCharListTester
+{
 	@CollectionFeature.Require(absent = SUPPORTS_REMOVE)
 	@ListFeature.Require(absent = { SUPPORTS_SET, SUPPORTS_ADD_WITH_INDEX })
 	public void testListIterator_unmodifiable() {

@@ -5,13 +5,16 @@ import org.junit.Ignore;
 
 import com.google.common.collect.testing.features.CollectionFeature;
 
+import speiger.src.testers.utils.SpecialFeature;
 import speiger.src.collections.floats.collections.FloatCollection;
 import speiger.src.testers.floats.tests.base.AbstractFloatCollectionTester;
 
 @Ignore
-public class FloatCollectionCopyTester extends AbstractFloatCollectionTester {
+public class FloatCollectionCopyTester extends AbstractFloatCollectionTester
+{
 	
 	@CollectionFeature.Require(absent = {CollectionFeature.SUBSET_VIEW, CollectionFeature.DESCENDING_VIEW})
+	@SpecialFeature.Require(SpecialFeature.COPYING)
 	public void testEquals() {
 		FloatCollection copy = collection.copy();
 		Assert.assertFalse("Copied Collection shouldn't match", copy == collection);

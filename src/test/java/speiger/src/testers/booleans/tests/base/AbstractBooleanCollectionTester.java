@@ -5,8 +5,8 @@ import org.junit.Ignore;
 import speiger.src.collections.booleans.collections.BooleanCollection;
 
 @Ignore
-public class AbstractBooleanCollectionTester extends AbstractBooleanContainerTester {
-
+public class AbstractBooleanCollectionTester extends AbstractBooleanContainerTester<BooleanCollection>
+{
 	protected BooleanCollection collection;
 
 	@Override

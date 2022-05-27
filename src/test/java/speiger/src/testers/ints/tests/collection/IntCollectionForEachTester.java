@@ -12,7 +12,8 @@ import speiger.src.testers.ints.tests.base.AbstractIntCollectionTester;
 import speiger.src.testers.ints.utils.IntHelpers;
 
 @Ignore
-public class IntCollectionForEachTester extends AbstractIntCollectionTester {
+public class IntCollectionForEachTester extends AbstractIntCollectionTester
+{
 	@CollectionFeature.Require(absent = KNOWN_ORDER)
 	public void testForEachUnknownOrder() {
 		IntList elements = new IntArrayList();

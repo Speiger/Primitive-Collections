@@ -18,10 +18,9 @@ import speiger.src.testers.doubles.generators.TestDoubleSetGenerator;
 import speiger.src.testers.doubles.generators.TestDoubleSortedSetGenerator;
 import speiger.src.testers.doubles.utils.DoubleSamples;
 
-public class SimpleDoubleTestGenerator<T extends DoubleCollection> {
-	Function<double[], T> mapper;
-	
-	public SimpleDoubleTestGenerator(Function<double[], T> mapper) {
+public class SimpleDoubleTestGenerator<E extends DoubleCollection> {
+	Function<double[], E> mapper;
+	public SimpleDoubleTestGenerator(Function<double[], E> mapper) {
 		this.mapper = mapper;
 	}
 	
@@ -29,11 +28,11 @@ public class SimpleDoubleTestGenerator<T extends DoubleCollection> {
 		return new DoubleSamples(1, 0, 2, 3, 4);
 	}
 	
-	public T create(double... elements) {
+	public E create(double... elements) {
 		return mapper.apply(elements);
 	}
 	
-	public T create(Object... elements) {
+	public E create(Object... elements) {
 		double[] array = new double[elements.length];
 		int i = 0;
 		for (Object e : elements) {

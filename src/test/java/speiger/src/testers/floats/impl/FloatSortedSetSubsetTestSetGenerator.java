@@ -13,8 +13,8 @@ import speiger.src.collections.floats.sets.FloatSortedSet;
 import speiger.src.testers.floats.generators.TestFloatSortedSetGenerator;
 import speiger.src.testers.floats.utils.FloatSamples;
 
-public class FloatSortedSetSubsetTestSetGenerator implements TestFloatSortedSetGenerator {
-
+public class FloatSortedSetSubsetTestSetGenerator implements TestFloatSortedSetGenerator
+{
 	final Bound to;
 	final Bound from;
 	final float firstInclusive;
@@ -117,7 +117,7 @@ public class FloatSortedSetSubsetTestSetGenerator implements TestFloatSortedSetG
 
 		return createSubSet(set, firstExclusive, lastExclusive);
 	}
-
+	
 	@Override
 	public FloatSortedSet create(Object... elements) {
 		float[] array = new float[elements.length];

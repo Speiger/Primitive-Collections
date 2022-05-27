@@ -21,7 +21,8 @@ import speiger.src.testers.doubles.tests.base.AbstractDoubleSetTester;
 import speiger.src.testers.doubles.utils.DoubleHelpers;
 
 @Ignore
-public class DoubleNavigableSetNavigationTester extends AbstractDoubleSetTester {
+public class DoubleNavigableSetNavigationTester extends AbstractDoubleSetTester
+{
 	private DoubleNavigableSet navigableSet;
 	private DoubleList values;
 	private double a;
@@ -44,7 +45,7 @@ public class DoubleNavigableSetNavigationTester extends AbstractDoubleSetTester 
 	}
 	
 	protected void resetWithHole() {
-		super.resetContainer(primitiveGenerator.create(new double[]{a, c}));
+		super.resetContainer(primitiveGenerator.create(createArray(a, c)));
 		navigableSet = (DoubleNavigableSet) getSet();
 	}
 

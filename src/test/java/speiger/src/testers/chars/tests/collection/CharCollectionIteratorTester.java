@@ -24,7 +24,8 @@ import speiger.src.testers.chars.utils.CharHelpers;
 import speiger.src.testers.chars.utils.CharIteratorTester;
 
 @Ignore
-public class CharCollectionIteratorTester extends AbstractCharCollectionTester {
+public class CharCollectionIteratorTester extends AbstractCharCollectionTester
+{
 	public void testIterator() {
 		CharList elements = new CharArrayList();
 		for (CharIterator iter = collection.iterator();iter.hasNext();) { // uses iterator()

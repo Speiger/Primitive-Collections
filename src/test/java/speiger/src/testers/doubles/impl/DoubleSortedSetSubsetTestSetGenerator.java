@@ -13,8 +13,8 @@ import speiger.src.collections.doubles.sets.DoubleSortedSet;
 import speiger.src.testers.doubles.generators.TestDoubleSortedSetGenerator;
 import speiger.src.testers.doubles.utils.DoubleSamples;
 
-public class DoubleSortedSetSubsetTestSetGenerator implements TestDoubleSortedSetGenerator {
-
+public class DoubleSortedSetSubsetTestSetGenerator implements TestDoubleSortedSetGenerator
+{
 	final Bound to;
 	final Bound from;
 	final double firstInclusive;
@@ -117,7 +117,7 @@ public class DoubleSortedSetSubsetTestSetGenerator implements TestDoubleSortedSe
 
 		return createSubSet(set, firstExclusive, lastExclusive);
 	}
-
+	
 	@Override
 	public DoubleSortedSet create(Object... elements) {
 		double[] array = new double[elements.length];

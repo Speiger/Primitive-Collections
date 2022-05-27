@@ -10,7 +10,8 @@ import speiger.src.testers.doubles.tests.base.AbstractDoubleListTester;
 import speiger.src.testers.doubles.utils.MinimalDoubleSet;
 
 @Ignore
-public class DoubleListEqualsTester extends AbstractDoubleListTester {
+public class DoubleListEqualsTester extends AbstractDoubleListTester
+{
 	public void testEquals_otherListWithSameElements() {
 		assertTrue("A List should equal any other List containing the same elements.", getList().equals(new DoubleArrayList(getOrderedElements())));
 	}

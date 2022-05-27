@@ -20,7 +20,8 @@ import speiger.src.testers.longs.utils.LongHelpers;
 import speiger.src.testers.longs.utils.MinimalLongCollection;
 
 @Ignore
-public class LongCollectionRemoveAllTester extends AbstractLongCollectionTester {
+public class LongCollectionRemoveAllTester extends AbstractLongCollectionTester
+{
 	@CollectionFeature.Require(SUPPORTS_REMOVE)
 	public void testRemoveAll_emptyCollection() {
 		assertFalse("removeAll(emptyCollection) should return false", collection.removeAll(MinimalLongCollection.of()));

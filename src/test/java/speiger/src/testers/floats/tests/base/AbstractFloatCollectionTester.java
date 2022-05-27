@@ -5,8 +5,8 @@ import org.junit.Ignore;
 import speiger.src.collections.floats.collections.FloatCollection;
 
 @Ignore
-public class AbstractFloatCollectionTester extends AbstractFloatContainerTester {
-
+public class AbstractFloatCollectionTester extends AbstractFloatContainerTester<FloatCollection>
+{
 	protected FloatCollection collection;
 
 	@Override

@@ -13,11 +13,12 @@ import com.google.common.collect.testing.features.ListFeature;
 import speiger.src.testers.ints.tests.base.AbstractIntListTester;
 
 @Ignore
-public class IntListAddAllArrayAtIndexTester extends AbstractIntListTester {
+public class IntListAddAllArrayAtIndexTester extends AbstractIntListTester
+{
 	@ListFeature.Require(SUPPORTS_ADD_WITH_INDEX)
 	@CollectionSize.Require(absent = ZERO)
 	public void testAddAllArrayAtIndex_supportedAllPresent() {
-		getList().addElements(0, new int[]{e0()});
+		getList().addElements(0, createArray(e0()));
 		expectAddedIndex(0, e0());
 	}
 
@@ -25,7 +26,7 @@ public class IntListAddAllArrayAtIndexTester extends AbstractIntListTester {
 	@CollectionSize.Require(absent = ZERO)
 	public void testAddAllArrayAtIndex_unsupportedAllPresent() {
 		try {
-			getList().addElements(0, new int[]{e0()});
+			getList().addElements(0, createArray(e0()));
 			fail("addAll(n, allPresent) should throw");
 		} catch (UnsupportedOperationException expected) {
 		}
@@ -35,7 +36,7 @@ public class IntListAddAllArrayAtIndexTester extends AbstractIntListTester {
 	@ListFeature.Require(SUPPORTS_ADD_WITH_INDEX)
 	@CollectionSize.Require(absent = ZERO)
 	public void testAddAllArrayAtIndex_supportedSomePresent() {
-		getList().addElements(0, new int[]{e0(), e3()});
+		getList().addElements(0, createArray(e0(), e3()));
 		expectAddedIndex(0, e0(), e3());
 	}
 
@@ -43,7 +44,7 @@ public class IntListAddAllArrayAtIndexTester extends AbstractIntListTester {
 	@CollectionSize.Require(absent = ZERO)
 	public void testAddAllArrayAtIndex_unsupportedSomePresent() {
 		try {
-			getList().addElements(0, new int[]{e0(), e3()});
+			getList().addElements(0, createArray(e0(), e3()));
 			fail("addAll(n, allPresent) should throw");
 		} catch (UnsupportedOperationException expected) {
 		}
@@ -68,7 +69,7 @@ public class IntListAddAllArrayAtIndexTester extends AbstractIntListTester {
 
 	@ListFeature.Require(SUPPORTS_ADD_WITH_INDEX)
 	public void testAddAllArrayAtIndex_withDuplicates() {
-		getList().addElements(0, new int[]{e0(), e1(), e0(), e1()});
+		getList().addElements(0, createArray(e0(), e1(), e0(), e1()));
 		expectAddedIndex(0, e0(), e1(), e0(), e1());
 	}
 
@@ -99,7 +100,7 @@ public class IntListAddAllArrayAtIndexTester extends AbstractIntListTester {
 	@ListFeature.Require(SUPPORTS_ADD_WITH_INDEX)
 	public void testAddAllArrayAtIndex_negative() {
 		try {
-			getList().addElements(-1, new int[]{e3()});
+			getList().addElements(-1, createArray(e3()));
 			fail("addElements(-1, e) should throw");
 		} catch (IndexOutOfBoundsException expected) {
 		}
@@ -110,7 +111,7 @@ public class IntListAddAllArrayAtIndexTester extends AbstractIntListTester {
 	@ListFeature.Require(SUPPORTS_ADD_WITH_INDEX)
 	public void testAddAllArrayAtIndex_tooLarge() {
 		try {
-			getList().addElements(getNumElements() + 1, new int[]{e3()});
+			getList().addElements(getNumElements() + 1, createArray(e3()));
 			fail("addElements(size + 1, e) should throw");
 		} catch (IndexOutOfBoundsException expected) {
 		}

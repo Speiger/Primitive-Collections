@@ -10,7 +10,8 @@ import speiger.src.testers.longs.utils.LongHelpers;
 import speiger.src.testers.longs.utils.MinimalLongSet;
 
 @Ignore
-public class LongSetEqualsTester extends AbstractLongSetTester {
+public class LongSetEqualsTester extends AbstractLongSetTester
+{
 	public void testEquals_otherSetWithSameElements() {
 		assertTrue("A Set should equal any other Set containing the same elements.", getSet().equals(MinimalLongSet.of(getSampleElements())));
 	}

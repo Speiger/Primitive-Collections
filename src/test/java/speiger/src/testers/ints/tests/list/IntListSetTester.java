@@ -11,7 +11,8 @@ import com.google.common.collect.testing.features.ListFeature;
 import speiger.src.testers.ints.tests.base.AbstractIntListTester;
 
 @Ignore
-public class IntListSetTester extends AbstractIntListTester {
+public class IntListSetTester extends AbstractIntListTester
+{
 	@ListFeature.Require(SUPPORTS_SET)
 	@CollectionSize.Require(absent = ZERO)
 	public void testSet() {

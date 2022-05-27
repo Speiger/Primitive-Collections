@@ -13,7 +13,7 @@ import speiger.src.collections.booleans.lists.BooleanListIterator;
 import speiger.src.collections.booleans.utils.BooleanIterators;
 
 public class BooleanHelpers {
-	private static boolean equals(boolean key, boolean value) {
+	public static boolean equals(boolean key, boolean value) {
 		return key == value;
 	}
 
@@ -154,7 +154,7 @@ public class BooleanHelpers {
 		}
 		return iterator.nextBoolean();
 	}
-
+	
 	public static void testComparator(BooleanComparator comparator, boolean... valuesInExpectedOrder) {
 		testComparator(comparator, BooleanArrayList.wrap(valuesInExpectedOrder));
 	}

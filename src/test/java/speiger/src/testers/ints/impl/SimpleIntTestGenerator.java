@@ -18,10 +18,9 @@ import speiger.src.testers.ints.generators.TestIntSetGenerator;
 import speiger.src.testers.ints.generators.TestIntSortedSetGenerator;
 import speiger.src.testers.ints.utils.IntSamples;
 
-public class SimpleIntTestGenerator<T extends IntCollection> {
-	Function<int[], T> mapper;
-	
-	public SimpleIntTestGenerator(Function<int[], T> mapper) {
+public class SimpleIntTestGenerator<E extends IntCollection> {
+	Function<int[], E> mapper;
+	public SimpleIntTestGenerator(Function<int[], E> mapper) {
 		this.mapper = mapper;
 	}
 	
@@ -29,11 +28,11 @@ public class SimpleIntTestGenerator<T extends IntCollection> {
 		return new IntSamples(1, 0, 2, 3, 4);
 	}
 	
-	public T create(int... elements) {
+	public E create(int... elements) {
 		return mapper.apply(elements);
 	}
 	
-	public T create(Object... elements) {
+	public E create(Object... elements) {
 		int[] array = new int[elements.length];
 		int i = 0;
 		for (Object e : elements) {

@@ -5,7 +5,8 @@ import org.junit.Ignore;
 import speiger.src.collections.longs.sets.LongSet;
 
 @Ignore
-public class AbstractLongSetTester extends AbstractLongCollectionTester {
+public class AbstractLongSetTester extends AbstractLongCollectionTester
+{
 	protected final LongSet getSet() {
 		return (LongSet)collection;
 	}

@@ -15,7 +15,7 @@ import speiger.src.collections.bytes.sets.ByteSet;
 import speiger.src.collections.bytes.utils.ByteIterators;
 
 public class ByteHelpers {
-	private static boolean equals(byte key, byte value) {
+	public static boolean equals(byte key, byte value) {
 		return key == value;
 	}
 
@@ -166,7 +166,7 @@ public class ByteHelpers {
 		}
 		return iterator.nextByte();
 	}
-
+	
 	public static void testComparator(ByteComparator comparator, byte... valuesInExpectedOrder) {
 		testComparator(comparator, ByteArrayList.wrap(valuesInExpectedOrder));
 	}

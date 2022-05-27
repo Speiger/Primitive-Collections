@@ -15,7 +15,7 @@ import speiger.src.collections.doubles.sets.DoubleSet;
 import speiger.src.collections.doubles.utils.DoubleIterators;
 
 public class DoubleHelpers {
-	private static boolean equals(double key, double value) {
+	public static boolean equals(double key, double value) {
 		return key == value;
 	}
 
@@ -166,7 +166,7 @@ public class DoubleHelpers {
 		}
 		return iterator.nextDouble();
 	}
-
+	
 	public static void testComparator(DoubleComparator comparator, double... valuesInExpectedOrder) {
 		testComparator(comparator, DoubleArrayList.wrap(valuesInExpectedOrder));
 	}

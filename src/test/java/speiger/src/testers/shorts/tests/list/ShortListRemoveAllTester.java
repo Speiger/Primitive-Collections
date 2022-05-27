@@ -13,7 +13,8 @@ import speiger.src.testers.shorts.tests.base.AbstractShortListTester;
 import speiger.src.testers.shorts.utils.MinimalShortCollection;
 
 @Ignore
-public class ShortListRemoveAllTester extends AbstractShortListTester {
+public class ShortListRemoveAllTester extends AbstractShortListTester
+{
 	@CollectionFeature.Require(SUPPORTS_REMOVE)
 	@CollectionSize.Require(absent = { ZERO, ONE })
 	public void testRemoveAll_duplicate() {

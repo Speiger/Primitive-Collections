@@ -16,7 +16,8 @@ import speiger.src.testers.floats.utils.FloatHelpers;
 import speiger.src.testers.floats.utils.MinimalFloatCollection;
 
 @Ignore
-public class FloatListRetainAllTester extends AbstractFloatListTester {
+public class FloatListRetainAllTester extends AbstractFloatListTester
+{
 	@CollectionFeature.Require(SUPPORTS_REMOVE)
 	@CollectionSize.Require(absent = { ZERO, ONE })
 	public void testRetainAll_duplicatesKept() {
@@ -42,7 +43,7 @@ public class FloatListRetainAllTester extends AbstractFloatListTester {
 	@CollectionFeature.Require(SUPPORTS_REMOVE)
 	@CollectionSize.Require(SEVERAL)
 	public void testRetainAll_countIgnored() {
-		resetContainer(primitiveGenerator.create(new float[]{e0(), e2(), e1(), e0()}));
+		resetContainer(primitiveGenerator.create(createArray(e0(), e2(), e1(), e0())));
 		assertTrue(getList().retainAll(FloatArrayList.wrap(e0(), e1())));
 		FloatHelpers.assertContentsInOrder(getList(), e0(), e1(), e0());
 	}

@@ -19,7 +19,8 @@ import speiger.src.testers.bytes.tests.base.AbstractByteListTester;
 import speiger.src.testers.bytes.utils.ByteHelpers;
 
 @Ignore
-public class ByteListSwapRemoveAtIndexTester extends AbstractByteListTester {
+public class ByteListSwapRemoveAtIndexTester extends AbstractByteListTester
+{
 	@ListFeature.Require(absent = SUPPORTS_REMOVE_WITH_INDEX)
 	@CollectionSize.Require(absent = ZERO)
 	public void testRemoveAtIndex_unsupported() {

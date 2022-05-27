@@ -15,7 +15,8 @@ import speiger.src.collections.booleans.collections.BooleanIterator;
 import speiger.src.testers.booleans.tests.base.AbstractBooleanCollectionTester;
 
 @Ignore
-public class BooleanCollectionAddAllArrayTester extends AbstractBooleanCollectionTester {
+public class BooleanCollectionAddAllArrayTester extends AbstractBooleanCollectionTester
+{
 	@CollectionFeature.Require(SUPPORTS_ADD)
 	public void testAddAllArray_supportedNothing() {
 		assertFalse("addAll(nothing[]) should return false", collection.addAll(emptyArray()));

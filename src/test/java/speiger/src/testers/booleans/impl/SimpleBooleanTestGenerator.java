@@ -10,10 +10,9 @@ import speiger.src.testers.booleans.generators.TestBooleanCollectionGenerator;
 import speiger.src.testers.booleans.generators.TestBooleanListGenerator;
 import speiger.src.testers.booleans.utils.BooleanSamples;
 
-public class SimpleBooleanTestGenerator<T extends BooleanCollection> {
-	Function<boolean[], T> mapper;
-	
-	public SimpleBooleanTestGenerator(Function<boolean[], T> mapper) {
+public class SimpleBooleanTestGenerator<E extends BooleanCollection> {
+	Function<boolean[], E> mapper;
+	public SimpleBooleanTestGenerator(Function<boolean[], E> mapper) {
 		this.mapper = mapper;
 	}
 	
@@ -21,11 +20,11 @@ public class SimpleBooleanTestGenerator<T extends BooleanCollection> {
 		return new BooleanSamples(true, false, true, false, true);
 	}
 	
-	public T create(boolean... elements) {
+	public E create(boolean... elements) {
 		return mapper.apply(elements);
 	}
 	
-	public T create(Object... elements) {
+	public E create(Object... elements) {
 		boolean[] array = new boolean[elements.length];
 		int i = 0;
 		for (Object e : elements) {

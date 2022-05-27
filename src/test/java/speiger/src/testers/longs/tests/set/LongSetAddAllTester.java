@@ -12,7 +12,8 @@ import speiger.src.testers.longs.tests.base.AbstractLongSetTester;
 import speiger.src.testers.longs.utils.MinimalLongCollection;
 
 @Ignore
-public class LongSetAddAllTester extends AbstractLongSetTester {
+public class LongSetAddAllTester extends AbstractLongSetTester
+{
 	@CollectionFeature.Require(SUPPORTS_ADD)
 	@CollectionSize.Require(absent = ZERO)
 	public void testAddAll_supportedSomePresent() {

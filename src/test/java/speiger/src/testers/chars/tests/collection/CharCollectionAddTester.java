@@ -15,7 +15,8 @@ import speiger.src.collections.chars.collections.CharIterator;
 import speiger.src.testers.chars.tests.base.AbstractCharCollectionTester;
 
 @Ignore
-public class CharCollectionAddTester extends AbstractCharCollectionTester {
+public class CharCollectionAddTester extends AbstractCharCollectionTester
+{
 	@CollectionFeature.Require(SUPPORTS_ADD)
 	public void testAdd_supportedNotPresent() {
 		assertTrue("add(notPresent) should return true", collection.add(e3()));

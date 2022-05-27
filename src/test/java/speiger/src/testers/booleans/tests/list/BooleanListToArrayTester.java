@@ -10,7 +10,8 @@ import speiger.src.collections.booleans.lists.BooleanArrayList;
 import speiger.src.testers.booleans.tests.base.AbstractBooleanListTester;
 
 @Ignore
-public class BooleanListToArrayTester extends AbstractBooleanListTester {
+public class BooleanListToArrayTester extends AbstractBooleanListTester
+{
 	public void testToArray_noArg() {
 		boolean[] actual = getList().toBooleanArray();
 		assertArrayEquals("toArray() order should match list", createOrderedArray(), actual);

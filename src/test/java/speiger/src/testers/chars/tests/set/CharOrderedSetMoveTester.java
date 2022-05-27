@@ -15,7 +15,8 @@ import speiger.src.testers.chars.tests.base.AbstractCharSetTester;
 import speiger.src.testers.chars.utils.CharHelpers;
 
 @Ignore
-public class CharOrderedSetMoveTester extends AbstractCharSetTester {
+public class CharOrderedSetMoveTester extends AbstractCharSetTester
+{
 	private CharOrderedSet orderedSet;
 	private CharList values;
 	private char a;

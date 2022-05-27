@@ -7,7 +7,8 @@ import org.junit.Ignore;
 import com.google.common.collect.testing.features.CollectionSize;
 
 @Ignore
-public abstract class AbstractFloatListIndexOfTester extends AbstractFloatListTester {
+public abstract class AbstractFloatListIndexOfTester extends AbstractFloatListTester
+{
 	protected abstract int find(float o);
 	
 	protected abstract String getMethodName();

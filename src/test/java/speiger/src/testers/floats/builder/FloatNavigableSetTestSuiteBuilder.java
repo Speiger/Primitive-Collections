@@ -63,7 +63,7 @@ public class FloatNavigableSetTestSuiteBuilder extends FloatSortedSetTestSuiteBu
 
 	@Override
 	FloatSortedSetTestSuiteBuilder newBuilderUsing(TestFloatSortedSetGenerator delegate, Bound to, Bound from) {
-	    return using(new FloatNavigableSetSubsetTestSetGenerator(delegate, to, from));
+	    return using(new FloatNavigableSetSubsetTestSetGenerator (delegate, to, from));
 	}
 	
 	private TestSuite createDescendingSuite(FeatureSpecificTestSuiteBuilder<?, ? extends OneSizeTestContainerGenerator<Collection<Float>, Float>> parentBuilder) {
@@ -103,7 +103,7 @@ public class FloatNavigableSetTestSuiteBuilder extends FloatSortedSetTestSuiteBu
 				FloatLists.reverse(list);
 				return list;
 			}
-
+			
 			@Override
 			public FloatNavigableSet create(float... elements) {
 				return delegate.create(elements).descendingSet();

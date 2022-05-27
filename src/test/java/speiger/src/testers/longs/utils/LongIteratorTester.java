@@ -6,7 +6,8 @@ import speiger.src.collections.longs.collections.LongIterable;
 import speiger.src.collections.longs.collections.LongIterator;
 import speiger.src.collections.longs.utils.LongLists;
 
-public abstract class LongIteratorTester extends AbstractLongIteratorTester {
+public abstract class LongIteratorTester extends AbstractLongIteratorTester
+{
 
 	public LongIteratorTester(int steps, Iterable<? extends IteratorFeature> features, LongIterable expectedElements,
 			KnownOrder knownOrder) {

@@ -15,7 +15,7 @@ import speiger.src.collections.floats.sets.FloatSet;
 import speiger.src.collections.floats.utils.FloatIterators;
 
 public class FloatHelpers {
-	private static boolean equals(float key, float value) {
+	public static boolean equals(float key, float value) {
 		return key == value;
 	}
 
@@ -166,7 +166,7 @@ public class FloatHelpers {
 		}
 		return iterator.nextFloat();
 	}
-
+	
 	public static void testComparator(FloatComparator comparator, float... valuesInExpectedOrder) {
 		testComparator(comparator, FloatArrayList.wrap(valuesInExpectedOrder));
 	}

@@ -1,7 +1,5 @@
 package speiger.src.testers.longs.tests.base;
 
-import java.util.Collection;
-
 import com.google.common.collect.testing.AbstractTester;
 import com.google.common.collect.testing.OneSizeTestContainerGenerator;
 import com.google.common.collect.testing.TestContainerGenerator;
@@ -21,31 +19,36 @@ import speiger.src.testers.longs.utils.LongSamples;
 import speiger.src.testers.longs.utils.MinimalLongCollection;
 
 @Ignore
-public abstract class AbstractLongContainerTester extends AbstractTester<OneSizeTestContainerGenerator<Collection<Long>, Long>> {
+public abstract class AbstractLongContainerTester<E> extends AbstractTester<OneSizeTestContainerGenerator<E, Long>>
+{
 	protected LongSamples samples;
-	protected LongCollection container;
+	protected E container;
 	protected TestLongCollectionGenerator primitiveGenerator;
-	private CollectionSize size;
+	protected CollectionSize size;
 
 	@Override
 	@OverridingMethodsMustInvokeSuper
 	public void setUp() throws Exception {
 		super.setUp();
-		TestContainerGenerator<Collection<Long>, Long> generator = getSubjectGenerator().getInnerGenerator();
+		setupGenerator();
+	}
+	
+	protected void setupGenerator() {
+		TestContainerGenerator<E, Long> generator = getSubjectGenerator().getInnerGenerator();
 		if (!(generator instanceof TestLongCollectionGenerator)) throw new IllegalStateException("Test Generator Must extend TestLongCollectionGenerator");
 		primitiveGenerator = (TestLongCollectionGenerator) generator;
 		samples = primitiveGenerator.getSamples();
 		size = getSubjectGenerator().getCollectionSize();
-		resetContainer();
+		resetContainer();		
 	}
 
 	protected abstract LongCollection actualContents();
 
-	protected LongCollection resetContainer() {
+	protected E resetContainer() {
 		return resetContainer(createTestSubject());
 	}
 
-	protected LongCollection resetContainer(LongCollection newValue) {
+	protected E resetContainer(E newValue) {
 		container = newValue;
 		return container;
 	}
@@ -85,11 +88,11 @@ public abstract class AbstractLongContainerTester extends AbstractTester<OneSize
 	}
 
 	protected long[] createSamplesArray() {
-		return getSampleElements().toLongArray();
+		return getSampleElements().toLongArray(new long[getNumElements()]);
 	}
 
 	protected long[] createOrderedArray() {
-		return getOrderedElements().toLongArray();
+		return getOrderedElements().toLongArray(new long[getNumElements()]);
 	}
 
 	public static class ArrayWithDuplicate {
@@ -140,7 +143,11 @@ public abstract class AbstractLongContainerTester extends AbstractTester<OneSize
 	protected MinimalLongCollection emptyCollection() {
 		return MinimalLongCollection.of();
 	}
-
+	
+	public long[] createArray(long...array) {
+		return array;
+	}
+	
 	protected final long e0() {
 		return samples.e0();
 	}
@@ -161,8 +168,8 @@ public abstract class AbstractLongContainerTester extends AbstractTester<OneSize
 		return samples.e4();
 	}
 
-	protected LongCollection createTestSubject() {
-		return primitiveGenerator.create(getSampleElements(size.getNumElements()).toLongArray());
+	protected E createTestSubject() {
+		return (E)primitiveGenerator.create(getSampleElements(size.getNumElements()).toLongArray(new long[getNumElements()]));
 	}
 
 	protected LongCollection getSampleElements(int howMany) {

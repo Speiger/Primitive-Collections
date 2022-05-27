@@ -17,7 +17,8 @@ import speiger.src.collections.shorts.collections.ShortIterator;
 import speiger.src.testers.shorts.tests.base.AbstractShortCollectionTester;
 
 @Ignore
-public class ShortCollectionRemoveIfTester extends AbstractShortCollectionTester {
+public class ShortCollectionRemoveIfTester extends AbstractShortCollectionTester
+{
 	@CollectionFeature.Require(SUPPORTS_ITERATOR_REMOVE)
 	public void testRemoveIf_alwaysFalse() {
 		assertFalse("remoIf(x -> false) should return false", collection.remIf(x -> false));
@@ -28,7 +29,7 @@ public class ShortCollectionRemoveIfTester extends AbstractShortCollectionTester
 	@CollectionSize.Require(absent = ZERO)
 	public void testRemoveIf_sometimesTrue() {
 		assertTrue("remIf(isEqual(present)) should return true",
-				collection.remIf(T -> T == e0()));
+		collection.remIf(T -> T == e0()));
 		expectMissing(samples.e0());
 	}
 
@@ -57,7 +58,7 @@ public class ShortCollectionRemoveIfTester extends AbstractShortCollectionTester
 	public void testRemoveIf_unsupportedEmptyCollection() {
 		try {
 			assertFalse("remIf(Predicate) should return false or throw UnsupportedOperationException",
-					collection.remIf(x -> {throw new AssertionError("predicate should never be called");}));
+			collection.remIf(x -> {throw new AssertionError("predicate should never be called");}));
 		} catch (UnsupportedOperationException tolerated) {
 		}
 		expectUnchanged();

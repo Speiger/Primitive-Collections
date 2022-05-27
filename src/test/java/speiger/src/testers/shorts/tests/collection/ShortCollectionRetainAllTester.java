@@ -17,7 +17,8 @@ import speiger.src.testers.shorts.utils.ShortHelpers;
 import speiger.src.testers.shorts.utils.MinimalShortCollection;
 
 @Ignore
-public class ShortCollectionRetainAllTester extends AbstractShortCollectionTester {
+public class ShortCollectionRetainAllTester extends AbstractShortCollectionTester
+{
 
 	private class Target {
 		private final ShortCollection toRetain;

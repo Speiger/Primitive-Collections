@@ -12,7 +12,8 @@ import speiger.src.testers.booleans.tests.base.AbstractBooleanCollectionTester;
 import speiger.src.testers.booleans.utils.BooleanHelpers;
 
 @Ignore
-public class BooleanCollectionToArrayTester extends AbstractBooleanCollectionTester{
+public class BooleanCollectionToArrayTester extends AbstractBooleanCollectionTester
+{
 	public void testToArray_noArgs() {
 		boolean[] array = collection.toBooleanArray();
 		expectArrayContentsAnyOrder(createSamplesArray(), array);

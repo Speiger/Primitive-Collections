@@ -5,7 +5,8 @@ import org.junit.Ignore;
 import speiger.src.testers.doubles.tests.base.AbstractDoubleCollectionTester;
 
 @Ignore
-public class DoubleCollectionEqualsTester extends AbstractDoubleCollectionTester {
+public class DoubleCollectionEqualsTester extends AbstractDoubleCollectionTester
+{
 	public void testEquals_self() {
 		assertTrue("An Object should be equal to itself.", collection.equals(collection));
 	}

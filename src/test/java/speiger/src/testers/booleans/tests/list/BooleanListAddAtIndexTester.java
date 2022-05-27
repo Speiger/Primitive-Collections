@@ -17,7 +17,8 @@ import speiger.src.collections.booleans.collections.BooleanIterator;
 import speiger.src.testers.booleans.tests.base.AbstractBooleanListTester;
 
 @Ignore
-public class BooleanListAddAtIndexTester extends AbstractBooleanListTester {
+public class BooleanListAddAtIndexTester extends AbstractBooleanListTester
+{
 	@ListFeature.Require(SUPPORTS_ADD_WITH_INDEX)
 	@CollectionSize.Require(absent = ZERO)
 	public void testAddAtIndex_supportedPresent() {

@@ -24,7 +24,8 @@ import speiger.src.testers.shorts.utils.ShortHelpers;
 import speiger.src.testers.shorts.utils.ShortIteratorTester;
 
 @Ignore
-public class ShortCollectionIteratorTester extends AbstractShortCollectionTester {
+public class ShortCollectionIteratorTester extends AbstractShortCollectionTester
+{
 	public void testIterator() {
 		ShortList elements = new ShortArrayList();
 		for (ShortIterator iter = collection.iterator();iter.hasNext();) { // uses iterator()

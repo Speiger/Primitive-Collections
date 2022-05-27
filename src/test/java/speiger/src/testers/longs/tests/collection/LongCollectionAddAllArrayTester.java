@@ -15,7 +15,8 @@ import speiger.src.collections.longs.collections.LongIterator;
 import speiger.src.testers.longs.tests.base.AbstractLongCollectionTester;
 
 @Ignore
-public class LongCollectionAddAllArrayTester extends AbstractLongCollectionTester {
+public class LongCollectionAddAllArrayTester extends AbstractLongCollectionTester
+{
 	@CollectionFeature.Require(SUPPORTS_ADD)
 	public void testAddAllArray_supportedNothing() {
 		assertFalse("addAll(nothing[]) should return false", collection.addAll(emptyArray()));

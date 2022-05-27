@@ -22,7 +22,8 @@ import speiger.src.testers.floats.utils.FloatHelpers;
 import speiger.src.testers.floats.utils.FloatListIteratorTester;
 
 @Ignore
-public class FloatListListIteratorTester extends AbstractFloatListTester {
+public class FloatListListIteratorTester extends AbstractFloatListTester
+{
 	@CollectionFeature.Require(absent = SUPPORTS_REMOVE)
 	@ListFeature.Require(absent = { SUPPORTS_SET, SUPPORTS_ADD_WITH_INDEX })
 	public void testListIterator_unmodifiable() {

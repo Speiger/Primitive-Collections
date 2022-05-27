@@ -1,7 +1,5 @@
 package speiger.src.testers.ints.tests.base;
 
-import java.util.Collection;
-
 import com.google.common.collect.testing.AbstractTester;
 import com.google.common.collect.testing.OneSizeTestContainerGenerator;
 import com.google.common.collect.testing.TestContainerGenerator;
@@ -21,31 +19,36 @@ import speiger.src.testers.ints.utils.IntSamples;
 import speiger.src.testers.ints.utils.MinimalIntCollection;
 
 @Ignore
-public abstract class AbstractIntContainerTester extends AbstractTester<OneSizeTestContainerGenerator<Collection<Integer>, Integer>> {
+public abstract class AbstractIntContainerTester<E> extends AbstractTester<OneSizeTestContainerGenerator<E, Integer>>
+{
 	protected IntSamples samples;
-	protected IntCollection container;
+	protected E container;
 	protected TestIntCollectionGenerator primitiveGenerator;
-	private CollectionSize size;
+	protected CollectionSize size;
 
 	@Override
 	@OverridingMethodsMustInvokeSuper
 	public void setUp() throws Exception {
 		super.setUp();
-		TestContainerGenerator<Collection<Integer>, Integer> generator = getSubjectGenerator().getInnerGenerator();
+		setupGenerator();
+	}
+	
+	protected void setupGenerator() {
+		TestContainerGenerator<E, Integer> generator = getSubjectGenerator().getInnerGenerator();
 		if (!(generator instanceof TestIntCollectionGenerator)) throw new IllegalStateException("Test Generator Must extend TestIntCollectionGenerator");
 		primitiveGenerator = (TestIntCollectionGenerator) generator;
 		samples = primitiveGenerator.getSamples();
 		size = getSubjectGenerator().getCollectionSize();
-		resetContainer();
+		resetContainer();		
 	}
 
 	protected abstract IntCollection actualContents();
 
-	protected IntCollection resetContainer() {
+	protected E resetContainer() {
 		return resetContainer(createTestSubject());
 	}
 
-	protected IntCollection resetContainer(IntCollection newValue) {
+	protected E resetContainer(E newValue) {
 		container = newValue;
 		return container;
 	}
@@ -85,11 +88,11 @@ public abstract class AbstractIntContainerTester extends AbstractTester<OneSizeT
 	}
 
 	protected int[] createSamplesArray() {
-		return getSampleElements().toIntArray();
+		return getSampleElements().toIntArray(new int[getNumElements()]);
 	}
 
 	protected int[] createOrderedArray() {
-		return getOrderedElements().toIntArray();
+		return getOrderedElements().toIntArray(new int[getNumElements()]);
 	}
 
 	public static class ArrayWithDuplicate {
@@ -140,7 +143,11 @@ public abstract class AbstractIntContainerTester extends AbstractTester<OneSizeT
 	protected MinimalIntCollection emptyCollection() {
 		return MinimalIntCollection.of();
 	}
-
+	
+	public int[] createArray(int...array) {
+		return array;
+	}
+	
 	protected final int e0() {
 		return samples.e0();
 	}
@@ -161,8 +168,8 @@ public abstract class AbstractIntContainerTester extends AbstractTester<OneSizeT
 		return samples.e4();
 	}
 
-	protected IntCollection createTestSubject() {
-		return primitiveGenerator.create(getSampleElements(size.getNumElements()).toIntArray());
+	protected E createTestSubject() {
+		return (E)primitiveGenerator.create(getSampleElements(size.getNumElements()).toIntArray(new int[getNumElements()]));
 	}
 
 	protected IntCollection getSampleElements(int howMany) {

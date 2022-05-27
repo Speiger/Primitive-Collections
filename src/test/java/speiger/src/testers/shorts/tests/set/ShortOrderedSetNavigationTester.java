@@ -18,7 +18,8 @@ import speiger.src.testers.shorts.tests.base.AbstractShortSetTester;
 import speiger.src.testers.shorts.utils.ShortHelpers;
 
 @Ignore
-public class ShortOrderedSetNavigationTester extends AbstractShortSetTester {
+public class ShortOrderedSetNavigationTester extends AbstractShortSetTester
+{
 	private ShortOrderedSet orderedSet;
 	private ShortList values;
 	private short a;

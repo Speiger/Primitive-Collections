@@ -10,7 +10,8 @@ import speiger.src.testers.floats.utils.FloatHelpers;
 import speiger.src.testers.floats.utils.MinimalFloatSet;
 
 @Ignore
-public class FloatSetEqualsTester extends AbstractFloatSetTester {
+public class FloatSetEqualsTester extends AbstractFloatSetTester
+{
 	public void testEquals_otherSetWithSameElements() {
 		assertTrue("A Set should equal any other Set containing the same elements.", getSet().equals(MinimalFloatSet.of(getSampleElements())));
 	}

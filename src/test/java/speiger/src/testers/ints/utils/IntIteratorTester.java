@@ -6,7 +6,8 @@ import speiger.src.collections.ints.collections.IntIterable;
 import speiger.src.collections.ints.collections.IntIterator;
 import speiger.src.collections.ints.utils.IntLists;
 
-public abstract class IntIteratorTester extends AbstractIntIteratorTester {
+public abstract class IntIteratorTester extends AbstractIntIteratorTester
+{
 
 	public IntIteratorTester(int steps, Iterable<? extends IteratorFeature> features, IntIterable expectedElements,
 			KnownOrder knownOrder) {

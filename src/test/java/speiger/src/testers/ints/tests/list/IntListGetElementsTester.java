@@ -11,7 +11,8 @@ import speiger.src.collections.ints.lists.IntArrayList;
 import speiger.src.testers.ints.tests.base.AbstractIntListTester;
 
 @Ignore
-public class IntListGetElementsTester extends AbstractIntListTester {
+public class IntListGetElementsTester extends AbstractIntListTester
+{
 	@CollectionSize.Require(SEVERAL)
 	public void testGetElements_valid() {
 		int[] samples = getSampleElements(2).toIntArray();
@@ -75,6 +76,7 @@ public class IntListGetElementsTester extends AbstractIntListTester {
 		} catch (IndexOutOfBoundsException expected) {
 		}
 	}
+	
 	private static void assertArrayEquals(String message, int[] expected, int[] actual) {
 		assertEquals(message, IntArrayList.wrap(expected), IntArrayList.wrap(actual));
 	}

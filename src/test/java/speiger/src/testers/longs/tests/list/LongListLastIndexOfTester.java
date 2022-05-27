@@ -12,7 +12,8 @@ import com.google.common.collect.testing.features.CollectionSize;
 import speiger.src.testers.longs.tests.base.AbstractLongListIndexOfTester;
 
 @Ignore
-public class LongListLastIndexOfTester extends AbstractLongListIndexOfTester {
+public class LongListLastIndexOfTester extends AbstractLongListIndexOfTester
+{
 	@Override
 	protected int find(long o) {
 		return getList().lastIndexOf(o);

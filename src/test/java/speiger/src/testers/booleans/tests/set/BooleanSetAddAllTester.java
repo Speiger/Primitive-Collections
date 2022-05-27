@@ -12,7 +12,8 @@ import speiger.src.testers.booleans.tests.base.AbstractBooleanSetTester;
 import speiger.src.testers.booleans.utils.MinimalBooleanCollection;
 
 @Ignore
-public class BooleanSetAddAllTester extends AbstractBooleanSetTester {
+public class BooleanSetAddAllTester extends AbstractBooleanSetTester
+{
 	@CollectionFeature.Require(SUPPORTS_ADD)
 	@CollectionSize.Require(absent = ZERO)
 	public void testAddAll_supportedSomePresent() {

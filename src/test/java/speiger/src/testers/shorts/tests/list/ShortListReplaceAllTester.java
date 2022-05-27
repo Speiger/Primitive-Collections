@@ -13,7 +13,8 @@ import com.google.common.collect.testing.features.ListFeature;
 import speiger.src.testers.shorts.tests.base.AbstractShortListTester;
 
 @Ignore
-public class ShortListReplaceAllTester extends AbstractShortListTester {
+public class ShortListReplaceAllTester extends AbstractShortListTester
+{
 	@ListFeature.Require(SUPPORTS_SET)
 	public void testReplaceAll() {
 		getList().replaceShorts(e -> samples.e3());

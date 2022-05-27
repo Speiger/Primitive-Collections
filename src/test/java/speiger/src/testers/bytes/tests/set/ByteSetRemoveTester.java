@@ -11,7 +11,8 @@ import com.google.common.collect.testing.features.CollectionSize;
 import speiger.src.testers.bytes.tests.base.AbstractByteSetTester;
 
 @Ignore
-public class ByteSetRemoveTester extends AbstractByteSetTester {
+public class ByteSetRemoveTester extends AbstractByteSetTester
+{
 	@CollectionFeature.Require(SUPPORTS_REMOVE)
 	@CollectionSize.Require(absent = ZERO)
 	public void testRemove_present() {

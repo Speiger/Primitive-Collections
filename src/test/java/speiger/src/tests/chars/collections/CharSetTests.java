@@ -4,7 +4,6 @@ import java.util.function.Function;
 
 import com.google.common.collect.testing.features.CollectionSize;
 import com.google.common.collect.testing.features.SetFeature;
-
 import junit.framework.Test;
 import junit.framework.TestCase;
 import junit.framework.TestSuite;
@@ -26,12 +25,14 @@ import speiger.src.testers.chars.builder.CharOrderedSetTestSuiteBuilder;
 import speiger.src.testers.chars.builder.CharSetTestSuiteBuilder;
 import speiger.src.testers.chars.builder.CharSortedSetTestSuiteBuilder;
 import speiger.src.testers.chars.impl.SimpleCharTestGenerator;
+import speiger.src.testers.utils.SpecialFeature;
 
 public class CharSetTests extends TestCase {
 	
 	public static Test suite() {
 		TestSuite suite = new TestSuite("CharSets");
 		suite(suite);
+		System.out.println("Generated ["+suite.countTestCases()+"] Tests");
 		return suite;
 	}
 	
@@ -48,41 +49,41 @@ public class CharSetTests extends TestCase {
 		
 	public static Test setSuite(String name, Function<char[], CharSet> factory) {
 		return CharSetTestSuiteBuilder.using(new SimpleCharTestGenerator.Sets(factory)).named(name)
-				.withFeatures(CollectionSize.ANY, SetFeature.GENERAL_PURPOSE)
-				.createTestSuite();
+			.withFeatures(CollectionSize.ANY, SetFeature.GENERAL_PURPOSE, SpecialFeature.COPYING)
+			.createTestSuite();
 	}
-	
+
 	public static Test setImmutableSuite(String name, Function<char[], CharSet> factory) {
 		return CharSetTestSuiteBuilder.using(new SimpleCharTestGenerator.Sets(factory)).named(name)
-				.withFeatures(CollectionSize.ANY)
-				.createTestSuite();
+			.withFeatures(CollectionSize.ANY, SpecialFeature.COPYING)
+			.createTestSuite();
 	}
-	
+
 	public static Test orderedSetSuite(String name, Function<char[], CharOrderedSet> factory) {
 		return CharOrderedSetTestSuiteBuilder.using(new SimpleCharTestGenerator.OrderedSets(factory)).named(name)
-				.withFeatures(CollectionSize.ANY, SetFeature.GENERAL_PURPOSE)
-				.createTestSuite();
+			.withFeatures(CollectionSize.ANY, SetFeature.GENERAL_PURPOSE, SpecialFeature.COPYING)
+			.createTestSuite();
 	}
-	
+
 	public static Test immutableOrderedSetSuite(String name, Function<char[], CharOrderedSet> factory) {
 		return CharOrderedSetTestSuiteBuilder.using(new SimpleCharTestGenerator.OrderedSets(factory)).named(name)
-				.withFeatures(CollectionSize.ANY)
-				.createTestSuite();
+			.withFeatures(CollectionSize.ANY, SpecialFeature.COPYING)
+			.createTestSuite();
 	}
-	
+
 	public static Test sortedSetSuite(String name, Function<char[], CharSortedSet> factory) {
 		return CharSortedSetTestSuiteBuilder.using(new SimpleCharTestGenerator.SortedSets(factory)).named(name)
-				.withFeatures(CollectionSize.ANY, SetFeature.GENERAL_PURPOSE)
-				.createTestSuite();
+			.withFeatures(CollectionSize.ANY, SetFeature.GENERAL_PURPOSE, SpecialFeature.COPYING)
+			.createTestSuite();
 	}
-	
+
 	public static Test navigableSetSuite(String name, Function<char[], CharNavigableSet> factory) {
 		return CharNavigableSetTestSuiteBuilder.using(new SimpleCharTestGenerator.NavigableSets(factory)).named(name)
-				.withFeatures(CollectionSize.ANY, SetFeature.GENERAL_PURPOSE)
-				.createTestSuite();
+			.withFeatures(CollectionSize.ANY, SetFeature.GENERAL_PURPOSE, SpecialFeature.COPYING)
+			.createTestSuite();
 	}
 	
-	private static class HashStrategy implements CharStrategy{
+	private static class HashStrategy implements CharStrategy {
 		static final HashStrategy INSTANCE = new HashStrategy();
 		@Override
 		public int hashCode(char o) { return Character.hashCode(o); }

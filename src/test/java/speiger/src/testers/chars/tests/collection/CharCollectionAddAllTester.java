@@ -16,7 +16,8 @@ import speiger.src.testers.chars.tests.base.AbstractCharCollectionTester;
 import speiger.src.testers.chars.utils.MinimalCharCollection;
 
 @Ignore
-public class CharCollectionAddAllTester extends AbstractCharCollectionTester {
+public class CharCollectionAddAllTester extends AbstractCharCollectionTester
+{
 	@CollectionFeature.Require(SUPPORTS_ADD)
 	public void testAddAll_supportedNothing() {
 		assertFalse("addAll(nothing) should return false", collection.addAll(emptyCollection()));

@@ -11,7 +11,8 @@ import speiger.src.collections.booleans.lists.BooleanArrayList;
 import speiger.src.testers.booleans.tests.base.AbstractBooleanListTester;
 
 @Ignore
-public class BooleanListGetElementsTester extends AbstractBooleanListTester {
+public class BooleanListGetElementsTester extends AbstractBooleanListTester
+{
 	@CollectionSize.Require(SEVERAL)
 	public void testGetElements_valid() {
 		boolean[] samples = getSampleElements(2).toBooleanArray();
@@ -75,6 +76,7 @@ public class BooleanListGetElementsTester extends AbstractBooleanListTester {
 		} catch (IndexOutOfBoundsException expected) {
 		}
 	}
+	
 	private static void assertArrayEquals(String message, boolean[] expected, boolean[] actual) {
 		assertEquals(message, BooleanArrayList.wrap(expected), BooleanArrayList.wrap(actual));
 	}

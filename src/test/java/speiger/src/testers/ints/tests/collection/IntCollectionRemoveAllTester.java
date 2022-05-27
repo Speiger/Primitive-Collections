@@ -20,7 +20,8 @@ import speiger.src.testers.ints.utils.IntHelpers;
 import speiger.src.testers.ints.utils.MinimalIntCollection;
 
 @Ignore
-public class IntCollectionRemoveAllTester extends AbstractIntCollectionTester {
+public class IntCollectionRemoveAllTester extends AbstractIntCollectionTester
+{
 	@CollectionFeature.Require(SUPPORTS_REMOVE)
 	public void testRemoveAll_emptyCollection() {
 		assertFalse("removeAll(emptyCollection) should return false", collection.removeAll(MinimalIntCollection.of()));

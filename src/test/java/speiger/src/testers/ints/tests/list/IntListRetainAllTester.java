@@ -16,7 +16,8 @@ import speiger.src.testers.ints.utils.IntHelpers;
 import speiger.src.testers.ints.utils.MinimalIntCollection;
 
 @Ignore
-public class IntListRetainAllTester extends AbstractIntListTester {
+public class IntListRetainAllTester extends AbstractIntListTester
+{
 	@CollectionFeature.Require(SUPPORTS_REMOVE)
 	@CollectionSize.Require(absent = { ZERO, ONE })
 	public void testRetainAll_duplicatesKept() {
@@ -42,7 +43,7 @@ public class IntListRetainAllTester extends AbstractIntListTester {
 	@CollectionFeature.Require(SUPPORTS_REMOVE)
 	@CollectionSize.Require(SEVERAL)
 	public void testRetainAll_countIgnored() {
-		resetContainer(primitiveGenerator.create(new int[]{e0(), e2(), e1(), e0()}));
+		resetContainer(primitiveGenerator.create(createArray(e0(), e2(), e1(), e0())));
 		assertTrue(getList().retainAll(IntArrayList.wrap(e0(), e1())));
 		IntHelpers.assertContentsInOrder(getList(), e0(), e1(), e0());
 	}

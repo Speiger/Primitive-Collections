@@ -17,7 +17,8 @@ import speiger.src.testers.longs.utils.LongHelpers;
 import speiger.src.testers.longs.utils.MinimalLongCollection;
 
 @Ignore
-public class LongCollectionRetainAllTester extends AbstractLongCollectionTester {
+public class LongCollectionRetainAllTester extends AbstractLongCollectionTester
+{
 
 	private class Target {
 		private final LongCollection toRetain;

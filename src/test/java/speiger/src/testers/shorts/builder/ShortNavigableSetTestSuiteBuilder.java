@@ -63,7 +63,7 @@ public class ShortNavigableSetTestSuiteBuilder extends ShortSortedSetTestSuiteBu
 
 	@Override
 	ShortSortedSetTestSuiteBuilder newBuilderUsing(TestShortSortedSetGenerator delegate, Bound to, Bound from) {
-	    return using(new ShortNavigableSetSubsetTestSetGenerator(delegate, to, from));
+	    return using(new ShortNavigableSetSubsetTestSetGenerator (delegate, to, from));
 	}
 	
 	private TestSuite createDescendingSuite(FeatureSpecificTestSuiteBuilder<?, ? extends OneSizeTestContainerGenerator<Collection<Short>, Short>> parentBuilder) {
@@ -103,7 +103,7 @@ public class ShortNavigableSetTestSuiteBuilder extends ShortSortedSetTestSuiteBu
 				ShortLists.reverse(list);
 				return list;
 			}
-
+			
 			@Override
 			public ShortNavigableSet create(short... elements) {
 				return delegate.create(elements).descendingSet();

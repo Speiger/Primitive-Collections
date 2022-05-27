@@ -11,8 +11,8 @@ import speiger.src.testers.bytes.tests.base.AbstractByteCollectionTester;
 import speiger.src.testers.bytes.utils.MinimalByteCollection;
 
 @Ignore
-public class ByteCollectionContainsAnyTester extends AbstractByteCollectionTester {
-	
+public class ByteCollectionContainsAnyTester extends AbstractByteCollectionTester
+{	
 	public void testContainsAny_empty() {
 		assertFalse("containsAny(empty) should return false", collection.containsAny(MinimalByteCollection.of()));
 	}

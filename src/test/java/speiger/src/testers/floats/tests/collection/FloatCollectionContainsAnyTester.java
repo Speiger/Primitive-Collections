@@ -11,8 +11,8 @@ import speiger.src.testers.floats.tests.base.AbstractFloatCollectionTester;
 import speiger.src.testers.floats.utils.MinimalFloatCollection;
 
 @Ignore
-public class FloatCollectionContainsAnyTester extends AbstractFloatCollectionTester {
-	
+public class FloatCollectionContainsAnyTester extends AbstractFloatCollectionTester
+{	
 	public void testContainsAny_empty() {
 		assertFalse("containsAny(empty) should return false", collection.containsAny(MinimalFloatCollection.of()));
 	}

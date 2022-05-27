@@ -1,7 +1,5 @@
 package speiger.src.testers.doubles.tests.base;
 
-import java.util.Collection;
-
 import com.google.common.collect.testing.AbstractTester;
 import com.google.common.collect.testing.OneSizeTestContainerGenerator;
 import com.google.common.collect.testing.TestContainerGenerator;
@@ -21,31 +19,36 @@ import speiger.src.testers.doubles.utils.DoubleSamples;
 import speiger.src.testers.doubles.utils.MinimalDoubleCollection;
 
 @Ignore
-public abstract class AbstractDoubleContainerTester extends AbstractTester<OneSizeTestContainerGenerator<Collection<Double>, Double>> {
+public abstract class AbstractDoubleContainerTester<E> extends AbstractTester<OneSizeTestContainerGenerator<E, Double>>
+{
 	protected DoubleSamples samples;
-	protected DoubleCollection container;
+	protected E container;
 	protected TestDoubleCollectionGenerator primitiveGenerator;
-	private CollectionSize size;
+	protected CollectionSize size;
 
 	@Override
 	@OverridingMethodsMustInvokeSuper
 	public void setUp() throws Exception {
 		super.setUp();
-		TestContainerGenerator<Collection<Double>, Double> generator = getSubjectGenerator().getInnerGenerator();
+		setupGenerator();
+	}
+	
+	protected void setupGenerator() {
+		TestContainerGenerator<E, Double> generator = getSubjectGenerator().getInnerGenerator();
 		if (!(generator instanceof TestDoubleCollectionGenerator)) throw new IllegalStateException("Test Generator Must extend TestDoubleCollectionGenerator");
 		primitiveGenerator = (TestDoubleCollectionGenerator) generator;
 		samples = primitiveGenerator.getSamples();
 		size = getSubjectGenerator().getCollectionSize();
-		resetContainer();
+		resetContainer();		
 	}
 
 	protected abstract DoubleCollection actualContents();
 
-	protected DoubleCollection resetContainer() {
+	protected E resetContainer() {
 		return resetContainer(createTestSubject());
 	}
 
-	protected DoubleCollection resetContainer(DoubleCollection newValue) {
+	protected E resetContainer(E newValue) {
 		container = newValue;
 		return container;
 	}
@@ -85,11 +88,11 @@ public abstract class AbstractDoubleContainerTester extends AbstractTester<OneSi
 	}
 
 	protected double[] createSamplesArray() {
-		return getSampleElements().toDoubleArray();
+		return getSampleElements().toDoubleArray(new double[getNumElements()]);
 	}
 
 	protected double[] createOrderedArray() {
-		return getOrderedElements().toDoubleArray();
+		return getOrderedElements().toDoubleArray(new double[getNumElements()]);
 	}
 
 	public static class ArrayWithDuplicate {
@@ -140,7 +143,11 @@ public abstract class AbstractDoubleContainerTester extends AbstractTester<OneSi
 	protected MinimalDoubleCollection emptyCollection() {
 		return MinimalDoubleCollection.of();
 	}
-
+	
+	public double[] createArray(double...array) {
+		return array;
+	}
+	
 	protected final double e0() {
 		return samples.e0();
 	}
@@ -161,8 +168,8 @@ public abstract class AbstractDoubleContainerTester extends AbstractTester<OneSi
 		return samples.e4();
 	}
 
-	protected DoubleCollection createTestSubject() {
-		return primitiveGenerator.create(getSampleElements(size.getNumElements()).toDoubleArray());
+	protected E createTestSubject() {
+		return (E)primitiveGenerator.create(getSampleElements(size.getNumElements()).toDoubleArray(new double[getNumElements()]));
 	}
 
 	protected DoubleCollection getSampleElements(int howMany) {

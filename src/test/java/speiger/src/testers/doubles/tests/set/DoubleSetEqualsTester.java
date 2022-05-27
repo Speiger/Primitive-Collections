@@ -10,7 +10,8 @@ import speiger.src.testers.doubles.utils.DoubleHelpers;
 import speiger.src.testers.doubles.utils.MinimalDoubleSet;
 
 @Ignore
-public class DoubleSetEqualsTester extends AbstractDoubleSetTester {
+public class DoubleSetEqualsTester extends AbstractDoubleSetTester
+{
 	public void testEquals_otherSetWithSameElements() {
 		assertTrue("A Set should equal any other Set containing the same elements.", getSet().equals(MinimalDoubleSet.of(getSampleElements())));
 	}

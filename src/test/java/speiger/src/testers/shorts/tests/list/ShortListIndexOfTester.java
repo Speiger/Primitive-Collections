@@ -12,8 +12,8 @@ import com.google.common.collect.testing.features.CollectionSize;
 import speiger.src.testers.shorts.tests.base.AbstractShortListIndexOfTester;
 
 @Ignore
-public class ShortListIndexOfTester extends AbstractShortListIndexOfTester {
-
+public class ShortListIndexOfTester extends AbstractShortListIndexOfTester
+{
 	@Override
 	protected int find(short o) {
 		return getList().indexOf(o);

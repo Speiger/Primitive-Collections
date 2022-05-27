@@ -11,7 +11,8 @@ import com.google.common.collect.testing.features.CollectionSize;
 import speiger.src.testers.bytes.tests.base.AbstractByteSetTester;
 
 @Ignore
-public class ByteSetAddTester extends AbstractByteSetTester {
+public class ByteSetAddTester extends AbstractByteSetTester
+{
 	@CollectionFeature.Require(SUPPORTS_ADD)
 	@CollectionSize.Require(absent = ZERO)
 	public void testAdd_supportedPresent() {

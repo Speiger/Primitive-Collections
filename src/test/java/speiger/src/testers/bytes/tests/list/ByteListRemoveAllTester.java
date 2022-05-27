@@ -13,7 +13,8 @@ import speiger.src.testers.bytes.tests.base.AbstractByteListTester;
 import speiger.src.testers.bytes.utils.MinimalByteCollection;
 
 @Ignore
-public class ByteListRemoveAllTester extends AbstractByteListTester {
+public class ByteListRemoveAllTester extends AbstractByteListTester
+{
 	@CollectionFeature.Require(SUPPORTS_REMOVE)
 	@CollectionSize.Require(absent = { ZERO, ONE })
 	public void testRemoveAll_duplicate() {

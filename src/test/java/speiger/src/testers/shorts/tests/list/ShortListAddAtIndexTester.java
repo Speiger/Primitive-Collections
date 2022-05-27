@@ -17,7 +17,8 @@ import speiger.src.collections.shorts.collections.ShortIterator;
 import speiger.src.testers.shorts.tests.base.AbstractShortListTester;
 
 @Ignore
-public class ShortListAddAtIndexTester extends AbstractShortListTester {
+public class ShortListAddAtIndexTester extends AbstractShortListTester
+{
 	@ListFeature.Require(SUPPORTS_ADD_WITH_INDEX)
 	@CollectionSize.Require(absent = ZERO)
 	public void testAddAtIndex_supportedPresent() {

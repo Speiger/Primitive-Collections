@@ -13,7 +13,8 @@ import speiger.src.testers.chars.tests.base.AbstractCharListTester;
 import speiger.src.testers.chars.utils.MinimalCharCollection;
 
 @Ignore
-public class CharListRemoveAllTester extends AbstractCharListTester {
+public class CharListRemoveAllTester extends AbstractCharListTester
+{
 	@CollectionFeature.Require(SUPPORTS_REMOVE)
 	@CollectionSize.Require(absent = { ZERO, ONE })
 	public void testRemoveAll_duplicate() {

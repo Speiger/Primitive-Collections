@@ -299,7 +299,7 @@ public abstract class AbstractByteIteratorTester{
 	 *
 	 * @see Stimulus#executeAndCompare(ListIterator, Iterator)
 	 */
-	private <T extends ByteIterator> void internalExecuteAndCompare(T reference, T target, IteratorOperation method) {
+	private <E extends ByteIterator> void internalExecuteAndCompare(E reference, E target, IteratorOperation method) {
 		byte referenceReturnValue = (byte)-1;
 		PermittedMetaException referenceException = null;
 		byte targetReturnValue = (byte)-1;
@@ -315,7 +315,7 @@ public abstract class AbstractByteIteratorTester{
 			if (method == nextByte_METHOD && targetException == null && knownOrder == KnownOrder.UNKNOWN_ORDER) {
 				((MultiExceptionListIterator) reference).promoteToNext(targetReturnValue);
 			}
-
+			
 			referenceReturnValue = method.execute(reference);
 		} catch (PermittedMetaException e) {
 			referenceException = e;

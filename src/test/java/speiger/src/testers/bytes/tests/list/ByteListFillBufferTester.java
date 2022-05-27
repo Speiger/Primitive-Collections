@@ -8,8 +8,8 @@ import speiger.src.collections.bytes.lists.ByteArrayList;
 import speiger.src.testers.bytes.tests.base.AbstractByteListTester;
 
 @Ignore
-public class ByteListFillBufferTester extends AbstractByteListTester {
-
+public class ByteListFillBufferTester extends AbstractByteListTester
+{
 	public void testFillBuffer() {
 		ByteBuffer buffer = ByteBuffer.allocate(getNumElements());
 		getList().fillBuffer(buffer);

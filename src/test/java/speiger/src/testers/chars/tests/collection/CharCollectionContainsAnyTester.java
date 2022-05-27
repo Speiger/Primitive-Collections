@@ -11,8 +11,8 @@ import speiger.src.testers.chars.tests.base.AbstractCharCollectionTester;
 import speiger.src.testers.chars.utils.MinimalCharCollection;
 
 @Ignore
-public class CharCollectionContainsAnyTester extends AbstractCharCollectionTester {
-	
+public class CharCollectionContainsAnyTester extends AbstractCharCollectionTester
+{	
 	public void testContainsAny_empty() {
 		assertFalse("containsAny(empty) should return false", collection.containsAny(MinimalCharCollection.of()));
 	}

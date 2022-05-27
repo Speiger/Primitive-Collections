@@ -11,8 +11,8 @@ import speiger.src.testers.longs.tests.base.AbstractLongCollectionTester;
 import speiger.src.testers.longs.utils.MinimalLongCollection;
 
 @Ignore
-public class LongCollectionContainsAnyTester extends AbstractLongCollectionTester {
-	
+public class LongCollectionContainsAnyTester extends AbstractLongCollectionTester
+{	
 	public void testContainsAny_empty() {
 		assertFalse("containsAny(empty) should return false", collection.containsAny(MinimalLongCollection.of()));
 	}

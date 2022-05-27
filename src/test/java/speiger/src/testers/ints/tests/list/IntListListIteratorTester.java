@@ -22,7 +22,8 @@ import speiger.src.testers.ints.utils.IntHelpers;
 import speiger.src.testers.ints.utils.IntListIteratorTester;
 
 @Ignore
-public class IntListListIteratorTester extends AbstractIntListTester {
+public class IntListListIteratorTester extends AbstractIntListTester
+{
 	@CollectionFeature.Require(absent = SUPPORTS_REMOVE)
 	@ListFeature.Require(absent = { SUPPORTS_SET, SUPPORTS_ADD_WITH_INDEX })
 	public void testListIterator_unmodifiable() {

@@ -17,7 +17,8 @@ import speiger.src.testers.bytes.utils.ByteHelpers;
 import speiger.src.testers.bytes.utils.MinimalByteCollection;
 
 @Ignore
-public class ByteCollectionRetainAllTester extends AbstractByteCollectionTester {
+public class ByteCollectionRetainAllTester extends AbstractByteCollectionTester
+{
 
 	private class Target {
 		private final ByteCollection toRetain;

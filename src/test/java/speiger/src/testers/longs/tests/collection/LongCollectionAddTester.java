@@ -15,7 +15,8 @@ import speiger.src.collections.longs.collections.LongIterator;
 import speiger.src.testers.longs.tests.base.AbstractLongCollectionTester;
 
 @Ignore
-public class LongCollectionAddTester extends AbstractLongCollectionTester {
+public class LongCollectionAddTester extends AbstractLongCollectionTester
+{
 	@CollectionFeature.Require(SUPPORTS_ADD)
 	public void testAdd_supportedNotPresent() {
 		assertTrue("add(notPresent) should return true", collection.add(e3()));

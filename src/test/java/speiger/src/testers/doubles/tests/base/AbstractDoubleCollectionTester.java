@@ -5,8 +5,8 @@ import org.junit.Ignore;
 import speiger.src.collections.doubles.collections.DoubleCollection;
 
 @Ignore
-public class AbstractDoubleCollectionTester extends AbstractDoubleContainerTester {
-
+public class AbstractDoubleCollectionTester extends AbstractDoubleContainerTester<DoubleCollection>
+{
 	protected DoubleCollection collection;
 
 	@Override

@@ -15,7 +15,8 @@ import speiger.src.testers.chars.tests.base.AbstractCharListTester;
 import speiger.src.testers.chars.utils.MinimalCharCollection;
 
 @Ignore
-public class CharListAddAllTester extends AbstractCharListTester {
+public class CharListAddAllTester extends AbstractCharListTester
+{
 	@CollectionFeature.Require(SUPPORTS_ADD)
 	@CollectionSize.Require(absent = ZERO)
 	public void testAddAll_supportedAllPresent() {

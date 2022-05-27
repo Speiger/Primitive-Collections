@@ -13,8 +13,8 @@ import speiger.src.collections.ints.sets.IntSortedSet;
 import speiger.src.testers.ints.generators.TestIntSortedSetGenerator;
 import speiger.src.testers.ints.utils.IntSamples;
 
-public class IntSortedSetSubsetTestSetGenerator implements TestIntSortedSetGenerator {
-
+public class IntSortedSetSubsetTestSetGenerator implements TestIntSortedSetGenerator
+{
 	final Bound to;
 	final Bound from;
 	final int firstInclusive;
@@ -117,7 +117,7 @@ public class IntSortedSetSubsetTestSetGenerator implements TestIntSortedSetGener
 
 		return createSubSet(set, firstExclusive, lastExclusive);
 	}
-
+	
 	@Override
 	public IntSortedSet create(Object... elements) {
 		int[] array = new int[elements.length];

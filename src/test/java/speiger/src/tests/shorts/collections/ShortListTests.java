@@ -14,17 +14,18 @@ import speiger.src.collections.shorts.lists.ShortLinkedList;
 import speiger.src.collections.shorts.lists.ShortList;
 import speiger.src.testers.shorts.builder.ShortListTestSuiteBuilder;
 import speiger.src.testers.shorts.impl.SimpleShortTestGenerator;
+import speiger.src.testers.utils.SpecialFeature;
 
 public class ShortListTests extends TestCase {
 	
 	public static Test suite() {
 		TestSuite suite = new TestSuite("ShortLists");
 		suite(suite);
+		System.out.println("Generated ["+suite.countTestCases()+"] Tests");
 		return suite;
 	}
-	
-	public static void suite(TestSuite suite)
-	{
+
+	public static void suite(TestSuite suite) {
 		suite.addTest(listSuite("ShortArrayList", ShortArrayList::new));
 		suite.addTest(listSuite("ShortLinkedList", ShortLinkedList::new));
 		suite.addTest(listImmutableSuite("ImmutableShortList", ImmutableShortList::new));
@@ -32,13 +33,14 @@ public class ShortListTests extends TestCase {
 	
 	private static Test listSuite(String name, Function<short[], ShortList> factory) {
 		return ShortListTestSuiteBuilder.using(new SimpleShortTestGenerator.Lists(factory)).named(name)
-				.withFeatures(ListFeature.GENERAL_PURPOSE, CollectionSize.ANY)
+				.withFeatures(ListFeature.GENERAL_PURPOSE, CollectionSize.ANY, SpecialFeature.COPYING)
 				.createTestSuite();
 	}
 	
 	private static Test listImmutableSuite(String name, Function<short[], ShortList> factory) {
 		return ShortListTestSuiteBuilder.using(new SimpleShortTestGenerator.Lists(factory)).named(name)
-				.withFeatures(CollectionSize.ANY)
+				.withFeatures(CollectionSize.ANY, SpecialFeature.COPYING)
 				.createTestSuite();
 	}
+	
 }

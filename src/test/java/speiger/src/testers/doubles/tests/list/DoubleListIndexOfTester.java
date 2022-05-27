@@ -12,8 +12,8 @@ import com.google.common.collect.testing.features.CollectionSize;
 import speiger.src.testers.doubles.tests.base.AbstractDoubleListIndexOfTester;
 
 @Ignore
-public class DoubleListIndexOfTester extends AbstractDoubleListIndexOfTester {
-
+public class DoubleListIndexOfTester extends AbstractDoubleListIndexOfTester
+{
 	@Override
 	protected int find(double o) {
 		return getList().indexOf(o);

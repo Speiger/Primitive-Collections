@@ -63,7 +63,7 @@ public class DoubleNavigableSetTestSuiteBuilder extends DoubleSortedSetTestSuite
 
 	@Override
 	DoubleSortedSetTestSuiteBuilder newBuilderUsing(TestDoubleSortedSetGenerator delegate, Bound to, Bound from) {
-	    return using(new DoubleNavigableSetSubsetTestSetGenerator(delegate, to, from));
+	    return using(new DoubleNavigableSetSubsetTestSetGenerator (delegate, to, from));
 	}
 	
 	private TestSuite createDescendingSuite(FeatureSpecificTestSuiteBuilder<?, ? extends OneSizeTestContainerGenerator<Collection<Double>, Double>> parentBuilder) {
@@ -103,7 +103,7 @@ public class DoubleNavigableSetTestSuiteBuilder extends DoubleSortedSetTestSuite
 				DoubleLists.reverse(list);
 				return list;
 			}
-
+			
 			@Override
 			public DoubleNavigableSet create(double... elements) {
 				return delegate.create(elements).descendingSet();

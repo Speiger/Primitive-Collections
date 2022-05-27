@@ -63,7 +63,7 @@ public class CharNavigableSetTestSuiteBuilder extends CharSortedSetTestSuiteBuil
 
 	@Override
 	CharSortedSetTestSuiteBuilder newBuilderUsing(TestCharSortedSetGenerator delegate, Bound to, Bound from) {
-	    return using(new CharNavigableSetSubsetTestSetGenerator(delegate, to, from));
+	    return using(new CharNavigableSetSubsetTestSetGenerator (delegate, to, from));
 	}
 	
 	private TestSuite createDescendingSuite(FeatureSpecificTestSuiteBuilder<?, ? extends OneSizeTestContainerGenerator<Collection<Character>, Character>> parentBuilder) {
@@ -103,7 +103,7 @@ public class CharNavigableSetTestSuiteBuilder extends CharSortedSetTestSuiteBuil
 				CharLists.reverse(list);
 				return list;
 			}
-
+			
 			@Override
 			public CharNavigableSet create(char... elements) {
 				return delegate.create(elements).descendingSet();

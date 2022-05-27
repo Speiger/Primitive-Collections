@@ -11,7 +11,8 @@ import speiger.src.testers.longs.tests.base.AbstractLongCollectionTester;
 import speiger.src.testers.longs.utils.LongHelpers;
 
 @Ignore
-public class LongCollectionStreamTester extends AbstractLongCollectionTester {
+public class LongCollectionStreamTester extends AbstractLongCollectionTester
+{
 	@CollectionFeature.Require(absent = KNOWN_ORDER)
 	public void testStreamToArrayUnknownOrder() {
 		synchronized (collection) {

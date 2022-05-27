@@ -16,7 +16,8 @@ import speiger.src.collections.shorts.collections.ShortIterator;
 import speiger.src.testers.shorts.tests.base.AbstractShortCollectionTester;
 
 @Ignore
-public class ShortCollectionClearTester extends AbstractShortCollectionTester {
+public class ShortCollectionClearTester extends AbstractShortCollectionTester
+{
 	@CollectionFeature.Require(SUPPORTS_REMOVE)
 	public void testClear() {
 		collection.clear();

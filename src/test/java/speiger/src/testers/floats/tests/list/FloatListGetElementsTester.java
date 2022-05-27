@@ -11,7 +11,8 @@ import speiger.src.collections.floats.lists.FloatArrayList;
 import speiger.src.testers.floats.tests.base.AbstractFloatListTester;
 
 @Ignore
-public class FloatListGetElementsTester extends AbstractFloatListTester {
+public class FloatListGetElementsTester extends AbstractFloatListTester
+{
 	@CollectionSize.Require(SEVERAL)
 	public void testGetElements_valid() {
 		float[] samples = getSampleElements(2).toFloatArray();
@@ -75,6 +76,7 @@ public class FloatListGetElementsTester extends AbstractFloatListTester {
 		} catch (IndexOutOfBoundsException expected) {
 		}
 	}
+	
 	private static void assertArrayEquals(String message, float[] expected, float[] actual) {
 		assertEquals(message, FloatArrayList.wrap(expected), FloatArrayList.wrap(actual));
 	}

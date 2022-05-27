@@ -10,7 +10,8 @@ import speiger.src.collections.bytes.lists.ByteArrayList;
 import speiger.src.testers.bytes.tests.base.AbstractByteListTester;
 
 @Ignore
-public class ByteListToArrayTester extends AbstractByteListTester {
+public class ByteListToArrayTester extends AbstractByteListTester
+{
 	public void testToArray_noArg() {
 		byte[] actual = getList().toByteArray();
 		assertArrayEquals("toArray() order should match list", createOrderedArray(), actual);

@@ -15,7 +15,8 @@ import speiger.src.collections.shorts.collections.ShortIterator;
 import speiger.src.testers.shorts.tests.base.AbstractShortCollectionTester;
 
 @Ignore
-public class ShortCollectionAddTester extends AbstractShortCollectionTester {
+public class ShortCollectionAddTester extends AbstractShortCollectionTester
+{
 	@CollectionFeature.Require(SUPPORTS_ADD)
 	public void testAdd_supportedNotPresent() {
 		assertTrue("add(notPresent) should return true", collection.add(e3()));

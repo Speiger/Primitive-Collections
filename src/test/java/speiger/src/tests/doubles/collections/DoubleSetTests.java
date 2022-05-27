@@ -4,7 +4,6 @@ import java.util.function.Function;
 
 import com.google.common.collect.testing.features.CollectionSize;
 import com.google.common.collect.testing.features.SetFeature;
-
 import junit.framework.Test;
 import junit.framework.TestCase;
 import junit.framework.TestSuite;
@@ -26,12 +25,14 @@ import speiger.src.testers.doubles.builder.DoubleOrderedSetTestSuiteBuilder;
 import speiger.src.testers.doubles.builder.DoubleSetTestSuiteBuilder;
 import speiger.src.testers.doubles.builder.DoubleSortedSetTestSuiteBuilder;
 import speiger.src.testers.doubles.impl.SimpleDoubleTestGenerator;
+import speiger.src.testers.utils.SpecialFeature;
 
 public class DoubleSetTests extends TestCase {
 	
 	public static Test suite() {
 		TestSuite suite = new TestSuite("DoubleSets");
 		suite(suite);
+		System.out.println("Generated ["+suite.countTestCases()+"] Tests");
 		return suite;
 	}
 	
@@ -48,41 +49,41 @@ public class DoubleSetTests extends TestCase {
 		
 	public static Test setSuite(String name, Function<double[], DoubleSet> factory) {
 		return DoubleSetTestSuiteBuilder.using(new SimpleDoubleTestGenerator.Sets(factory)).named(name)
-				.withFeatures(CollectionSize.ANY, SetFeature.GENERAL_PURPOSE)
-				.createTestSuite();
+			.withFeatures(CollectionSize.ANY, SetFeature.GENERAL_PURPOSE, SpecialFeature.COPYING)
+			.createTestSuite();
 	}
-	
+
 	public static Test setImmutableSuite(String name, Function<double[], DoubleSet> factory) {
 		return DoubleSetTestSuiteBuilder.using(new SimpleDoubleTestGenerator.Sets(factory)).named(name)
-				.withFeatures(CollectionSize.ANY)
-				.createTestSuite();
+			.withFeatures(CollectionSize.ANY, SpecialFeature.COPYING)
+			.createTestSuite();
 	}
-	
+
 	public static Test orderedSetSuite(String name, Function<double[], DoubleOrderedSet> factory) {
 		return DoubleOrderedSetTestSuiteBuilder.using(new SimpleDoubleTestGenerator.OrderedSets(factory)).named(name)
-				.withFeatures(CollectionSize.ANY, SetFeature.GENERAL_PURPOSE)
-				.createTestSuite();
+			.withFeatures(CollectionSize.ANY, SetFeature.GENERAL_PURPOSE, SpecialFeature.COPYING)
+			.createTestSuite();
 	}
-	
+
 	public static Test immutableOrderedSetSuite(String name, Function<double[], DoubleOrderedSet> factory) {
 		return DoubleOrderedSetTestSuiteBuilder.using(new SimpleDoubleTestGenerator.OrderedSets(factory)).named(name)
-				.withFeatures(CollectionSize.ANY)
-				.createTestSuite();
+			.withFeatures(CollectionSize.ANY, SpecialFeature.COPYING)
+			.createTestSuite();
 	}
-	
+
 	public static Test sortedSetSuite(String name, Function<double[], DoubleSortedSet> factory) {
 		return DoubleSortedSetTestSuiteBuilder.using(new SimpleDoubleTestGenerator.SortedSets(factory)).named(name)
-				.withFeatures(CollectionSize.ANY, SetFeature.GENERAL_PURPOSE)
-				.createTestSuite();
+			.withFeatures(CollectionSize.ANY, SetFeature.GENERAL_PURPOSE, SpecialFeature.COPYING)
+			.createTestSuite();
 	}
-	
+
 	public static Test navigableSetSuite(String name, Function<double[], DoubleNavigableSet> factory) {
 		return DoubleNavigableSetTestSuiteBuilder.using(new SimpleDoubleTestGenerator.NavigableSets(factory)).named(name)
-				.withFeatures(CollectionSize.ANY, SetFeature.GENERAL_PURPOSE)
-				.createTestSuite();
+			.withFeatures(CollectionSize.ANY, SetFeature.GENERAL_PURPOSE, SpecialFeature.COPYING)
+			.createTestSuite();
 	}
 	
-	private static class HashStrategy implements DoubleStrategy{
+	private static class HashStrategy implements DoubleStrategy {
 		static final HashStrategy INSTANCE = new HashStrategy();
 		@Override
 		public int hashCode(double o) { return Double.hashCode(o); }

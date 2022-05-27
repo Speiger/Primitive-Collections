@@ -299,7 +299,7 @@ public abstract class AbstractCharIteratorTester{
 	 *
 	 * @see Stimulus#executeAndCompare(ListIterator, Iterator)
 	 */
-	private <T extends CharIterator> void internalExecuteAndCompare(T reference, T target, IteratorOperation method) {
+	private <E extends CharIterator> void internalExecuteAndCompare(E reference, E target, IteratorOperation method) {
 		char referenceReturnValue = (char)-1;
 		PermittedMetaException referenceException = null;
 		char targetReturnValue = (char)-1;
@@ -315,7 +315,7 @@ public abstract class AbstractCharIteratorTester{
 			if (method == nextChar_METHOD && targetException == null && knownOrder == KnownOrder.UNKNOWN_ORDER) {
 				((MultiExceptionListIterator) reference).promoteToNext(targetReturnValue);
 			}
-
+			
 			referenceReturnValue = method.execute(reference);
 		} catch (PermittedMetaException e) {
 			referenceException = e;

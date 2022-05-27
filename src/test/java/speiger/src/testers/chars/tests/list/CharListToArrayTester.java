@@ -10,7 +10,8 @@ import speiger.src.collections.chars.lists.CharArrayList;
 import speiger.src.testers.chars.tests.base.AbstractCharListTester;
 
 @Ignore
-public class CharListToArrayTester extends AbstractCharListTester {
+public class CharListToArrayTester extends AbstractCharListTester
+{
 	public void testToArray_noArg() {
 		char[] actual = getList().toCharArray();
 		assertArrayEquals("toArray() order should match list", createOrderedArray(), actual);

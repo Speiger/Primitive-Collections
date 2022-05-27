@@ -13,7 +13,8 @@ import speiger.src.collections.longs.lists.LongArrayList;
 import speiger.src.testers.longs.tests.base.AbstractLongSetTester;
 
 @Ignore
-public class LongSetCreationTester extends AbstractLongSetTester {
+public class LongSetCreationTester extends AbstractLongSetTester
+{
 	@CollectionFeature.Require(absent = REJECTS_DUPLICATES_AT_CREATION)
 	@CollectionSize.Require(absent = { ZERO, ONE })
 	public void testCreateWithDuplicates_nonNullDuplicatesNotRejected() {

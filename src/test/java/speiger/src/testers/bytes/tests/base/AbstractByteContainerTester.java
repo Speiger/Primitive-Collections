@@ -1,7 +1,5 @@
 package speiger.src.testers.bytes.tests.base;
 
-import java.util.Collection;
-
 import com.google.common.collect.testing.AbstractTester;
 import com.google.common.collect.testing.OneSizeTestContainerGenerator;
 import com.google.common.collect.testing.TestContainerGenerator;
@@ -21,31 +19,36 @@ import speiger.src.testers.bytes.utils.ByteSamples;
 import speiger.src.testers.bytes.utils.MinimalByteCollection;
 
 @Ignore
-public abstract class AbstractByteContainerTester extends AbstractTester<OneSizeTestContainerGenerator<Collection<Byte>, Byte>> {
+public abstract class AbstractByteContainerTester<E> extends AbstractTester<OneSizeTestContainerGenerator<E, Byte>>
+{
 	protected ByteSamples samples;
-	protected ByteCollection container;
+	protected E container;
 	protected TestByteCollectionGenerator primitiveGenerator;
-	private CollectionSize size;
+	protected CollectionSize size;
 
 	@Override
 	@OverridingMethodsMustInvokeSuper
 	public void setUp() throws Exception {
 		super.setUp();
-		TestContainerGenerator<Collection<Byte>, Byte> generator = getSubjectGenerator().getInnerGenerator();
+		setupGenerator();
+	}
+	
+	protected void setupGenerator() {
+		TestContainerGenerator<E, Byte> generator = getSubjectGenerator().getInnerGenerator();
 		if (!(generator instanceof TestByteCollectionGenerator)) throw new IllegalStateException("Test Generator Must extend TestByteCollectionGenerator");
 		primitiveGenerator = (TestByteCollectionGenerator) generator;
 		samples = primitiveGenerator.getSamples();
 		size = getSubjectGenerator().getCollectionSize();
-		resetContainer();
+		resetContainer();		
 	}
 
 	protected abstract ByteCollection actualContents();
 
-	protected ByteCollection resetContainer() {
+	protected E resetContainer() {
 		return resetContainer(createTestSubject());
 	}
 
-	protected ByteCollection resetContainer(ByteCollection newValue) {
+	protected E resetContainer(E newValue) {
 		container = newValue;
 		return container;
 	}
@@ -85,11 +88,11 @@ public abstract class AbstractByteContainerTester extends AbstractTester<OneSize
 	}
 
 	protected byte[] createSamplesArray() {
-		return getSampleElements().toByteArray();
+		return getSampleElements().toByteArray(new byte[getNumElements()]);
 	}
 
 	protected byte[] createOrderedArray() {
-		return getOrderedElements().toByteArray();
+		return getOrderedElements().toByteArray(new byte[getNumElements()]);
 	}
 
 	public static class ArrayWithDuplicate {
@@ -140,7 +143,11 @@ public abstract class AbstractByteContainerTester extends AbstractTester<OneSize
 	protected MinimalByteCollection emptyCollection() {
 		return MinimalByteCollection.of();
 	}
-
+	
+	public byte[] createArray(byte...array) {
+		return array;
+	}
+	
 	protected final byte e0() {
 		return samples.e0();
 	}
@@ -161,8 +168,8 @@ public abstract class AbstractByteContainerTester extends AbstractTester<OneSize
 		return samples.e4();
 	}
 
-	protected ByteCollection createTestSubject() {
-		return primitiveGenerator.create(getSampleElements(size.getNumElements()).toByteArray());
+	protected E createTestSubject() {
+		return (E)primitiveGenerator.create(getSampleElements(size.getNumElements()).toByteArray(new byte[getNumElements()]));
 	}
 
 	protected ByteCollection getSampleElements(int howMany) {

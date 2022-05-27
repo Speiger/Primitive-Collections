@@ -17,7 +17,8 @@ import speiger.src.testers.chars.utils.CharHelpers;
 import speiger.src.testers.chars.utils.MinimalCharCollection;
 
 @Ignore
-public class CharCollectionRetainAllTester extends AbstractCharCollectionTester {
+public class CharCollectionRetainAllTester extends AbstractCharCollectionTester
+{
 
 	private class Target {
 		private final CharCollection toRetain;

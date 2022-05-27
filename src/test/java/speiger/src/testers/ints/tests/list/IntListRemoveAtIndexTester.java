@@ -19,7 +19,8 @@ import speiger.src.testers.ints.tests.base.AbstractIntListTester;
 import speiger.src.testers.ints.utils.IntHelpers;
 
 @Ignore
-public class IntListRemoveAtIndexTester extends AbstractIntListTester {
+public class IntListRemoveAtIndexTester extends AbstractIntListTester
+{
 	@ListFeature.Require(absent = SUPPORTS_REMOVE_WITH_INDEX)
 	@CollectionSize.Require(absent = ZERO)
 	public void testRemoveAtIndex_unsupported() {

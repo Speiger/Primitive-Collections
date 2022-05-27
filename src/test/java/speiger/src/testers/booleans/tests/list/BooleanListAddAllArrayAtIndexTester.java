@@ -12,11 +12,12 @@ import com.google.common.collect.testing.features.ListFeature;
 import speiger.src.testers.booleans.tests.base.AbstractBooleanListTester;
 
 @Ignore
-public class BooleanListAddAllArrayAtIndexTester extends AbstractBooleanListTester {
+public class BooleanListAddAllArrayAtIndexTester extends AbstractBooleanListTester
+{
 	@ListFeature.Require(SUPPORTS_ADD_WITH_INDEX)
 	@CollectionSize.Require(absent = ZERO)
 	public void testAddAllArrayAtIndex_supportedAllPresent() {
-		getList().addElements(0, new boolean[]{e0()});
+		getList().addElements(0, createArray(e0()));
 		expectAddedIndex(0, e0());
 	}
 
@@ -24,7 +25,7 @@ public class BooleanListAddAllArrayAtIndexTester extends AbstractBooleanListTest
 	@CollectionSize.Require(absent = ZERO)
 	public void testAddAllArrayAtIndex_unsupportedAllPresent() {
 		try {
-			getList().addElements(0, new boolean[]{e0()});
+			getList().addElements(0, createArray(e0()));
 			fail("addAll(n, allPresent) should throw");
 		} catch (UnsupportedOperationException expected) {
 		}
@@ -34,7 +35,7 @@ public class BooleanListAddAllArrayAtIndexTester extends AbstractBooleanListTest
 	@ListFeature.Require(SUPPORTS_ADD_WITH_INDEX)
 	@CollectionSize.Require(absent = ZERO)
 	public void testAddAllArrayAtIndex_supportedSomePresent() {
-		getList().addElements(0, new boolean[]{e0(), e3()});
+		getList().addElements(0, createArray(e0(), e3()));
 		expectAddedIndex(0, e0(), e3());
 	}
 
@@ -42,7 +43,7 @@ public class BooleanListAddAllArrayAtIndexTester extends AbstractBooleanListTest
 	@CollectionSize.Require(absent = ZERO)
 	public void testAddAllArrayAtIndex_unsupportedSomePresent() {
 		try {
-			getList().addElements(0, new boolean[]{e0(), e3()});
+			getList().addElements(0, createArray(e0(), e3()));
 			fail("addAll(n, allPresent) should throw");
 		} catch (UnsupportedOperationException expected) {
 		}
@@ -67,7 +68,7 @@ public class BooleanListAddAllArrayAtIndexTester extends AbstractBooleanListTest
 
 	@ListFeature.Require(SUPPORTS_ADD_WITH_INDEX)
 	public void testAddAllArrayAtIndex_withDuplicates() {
-		getList().addElements(0, new boolean[]{e0(), e1(), e0(), e1()});
+		getList().addElements(0, createArray(e0(), e1(), e0(), e1()));
 		expectAddedIndex(0, e0(), e1(), e0(), e1());
 	}
 
@@ -98,7 +99,7 @@ public class BooleanListAddAllArrayAtIndexTester extends AbstractBooleanListTest
 	@ListFeature.Require(SUPPORTS_ADD_WITH_INDEX)
 	public void testAddAllArrayAtIndex_negative() {
 		try {
-			getList().addElements(-1, new boolean[]{e3()});
+			getList().addElements(-1, createArray(e3()));
 			fail("addElements(-1, e) should throw");
 		} catch (IndexOutOfBoundsException expected) {
 		}
@@ -109,7 +110,7 @@ public class BooleanListAddAllArrayAtIndexTester extends AbstractBooleanListTest
 	@ListFeature.Require(SUPPORTS_ADD_WITH_INDEX)
 	public void testAddAllArrayAtIndex_tooLarge() {
 		try {
-			getList().addElements(getNumElements() + 1, new boolean[]{e3()});
+			getList().addElements(getNumElements() + 1, createArray(e3()));
 			fail("addElements(size + 1, e) should throw");
 		} catch (IndexOutOfBoundsException expected) {
 		}

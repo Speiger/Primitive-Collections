@@ -6,7 +6,8 @@ import speiger.src.collections.booleans.collections.BooleanIterable;
 import speiger.src.collections.booleans.collections.BooleanIterator;
 import speiger.src.collections.booleans.utils.BooleanLists;
 
-public abstract class BooleanIteratorTester extends AbstractBooleanIteratorTester {
+public abstract class BooleanIteratorTester extends AbstractBooleanIteratorTester
+{
 
 	public BooleanIteratorTester(int steps, Iterable<? extends IteratorFeature> features, BooleanIterable expectedElements,
 			KnownOrder knownOrder) {

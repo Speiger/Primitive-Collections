@@ -15,7 +15,8 @@ import speiger.src.collections.doubles.collections.DoubleIterator;
 import speiger.src.testers.doubles.tests.base.AbstractDoubleCollectionTester;
 
 @Ignore
-public class DoubleCollectionAddTester extends AbstractDoubleCollectionTester {
+public class DoubleCollectionAddTester extends AbstractDoubleCollectionTester
+{
 	@CollectionFeature.Require(SUPPORTS_ADD)
 	public void testAdd_supportedNotPresent() {
 		assertTrue("add(notPresent) should return true", collection.add(e3()));

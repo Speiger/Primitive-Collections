@@ -12,8 +12,8 @@ import com.google.common.collect.testing.features.CollectionSize;
 import speiger.src.testers.booleans.tests.base.AbstractBooleanListIndexOfTester;
 
 @Ignore
-public class BooleanListIndexOfTester extends AbstractBooleanListIndexOfTester {
-
+public class BooleanListIndexOfTester extends AbstractBooleanListIndexOfTester
+{
 	@Override
 	protected int find(boolean o) {
 		return getList().indexOf(o);

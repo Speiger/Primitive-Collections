@@ -15,7 +15,8 @@ import speiger.src.collections.floats.collections.FloatIterator;
 import speiger.src.testers.floats.tests.base.AbstractFloatCollectionTester;
 
 @Ignore
-public class FloatCollectionAddTester extends AbstractFloatCollectionTester {
+public class FloatCollectionAddTester extends AbstractFloatCollectionTester
+{
 	@CollectionFeature.Require(SUPPORTS_ADD)
 	public void testAdd_supportedNotPresent() {
 		assertTrue("add(notPresent) should return true", collection.add(e3()));

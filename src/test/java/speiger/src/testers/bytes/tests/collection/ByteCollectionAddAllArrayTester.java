@@ -15,7 +15,8 @@ import speiger.src.collections.bytes.collections.ByteIterator;
 import speiger.src.testers.bytes.tests.base.AbstractByteCollectionTester;
 
 @Ignore
-public class ByteCollectionAddAllArrayTester extends AbstractByteCollectionTester {
+public class ByteCollectionAddAllArrayTester extends AbstractByteCollectionTester
+{
 	@CollectionFeature.Require(SUPPORTS_ADD)
 	public void testAddAllArray_supportedNothing() {
 		assertFalse("addAll(nothing[]) should return false", collection.addAll(emptyArray()));

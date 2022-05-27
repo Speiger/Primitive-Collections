@@ -7,7 +7,8 @@ import org.junit.Ignore;
 import com.google.common.collect.testing.features.CollectionSize;
 
 @Ignore
-public abstract class AbstractShortListIndexOfTester extends AbstractShortListTester {
+public abstract class AbstractShortListIndexOfTester extends AbstractShortListTester
+{
 	protected abstract int find(short o);
 	
 	protected abstract String getMethodName();

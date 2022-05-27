@@ -6,7 +6,8 @@ import speiger.src.collections.bytes.collections.ByteIterable;
 import speiger.src.collections.bytes.collections.ByteIterator;
 import speiger.src.collections.bytes.utils.ByteLists;
 
-public abstract class ByteIteratorTester extends AbstractByteIteratorTester {
+public abstract class ByteIteratorTester extends AbstractByteIteratorTester
+{
 
 	public ByteIteratorTester(int steps, Iterable<? extends IteratorFeature> features, ByteIterable expectedElements,
 			KnownOrder knownOrder) {

@@ -15,7 +15,8 @@ import speiger.src.testers.longs.tests.base.AbstractLongSetTester;
 import speiger.src.testers.longs.utils.LongHelpers;
 
 @Ignore
-public class LongOrderedSetMoveTester extends AbstractLongSetTester {
+public class LongOrderedSetMoveTester extends AbstractLongSetTester
+{
 	private LongOrderedSet orderedSet;
 	private LongList values;
 	private long a;

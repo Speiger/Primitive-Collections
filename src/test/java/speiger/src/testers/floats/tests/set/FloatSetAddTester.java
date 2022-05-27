@@ -11,7 +11,8 @@ import com.google.common.collect.testing.features.CollectionSize;
 import speiger.src.testers.floats.tests.base.AbstractFloatSetTester;
 
 @Ignore
-public class FloatSetAddTester extends AbstractFloatSetTester {
+public class FloatSetAddTester extends AbstractFloatSetTester
+{
 	@CollectionFeature.Require(SUPPORTS_ADD)
 	@CollectionSize.Require(absent = ZERO)
 	public void testAdd_supportedPresent() {

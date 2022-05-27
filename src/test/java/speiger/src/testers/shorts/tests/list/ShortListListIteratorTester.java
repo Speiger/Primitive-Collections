@@ -22,7 +22,8 @@ import speiger.src.testers.shorts.utils.ShortHelpers;
 import speiger.src.testers.shorts.utils.ShortListIteratorTester;
 
 @Ignore
-public class ShortListListIteratorTester extends AbstractShortListTester {
+public class ShortListListIteratorTester extends AbstractShortListTester
+{
 	@CollectionFeature.Require(absent = SUPPORTS_REMOVE)
 	@ListFeature.Require(absent = { SUPPORTS_SET, SUPPORTS_ADD_WITH_INDEX })
 	public void testListIterator_unmodifiable() {

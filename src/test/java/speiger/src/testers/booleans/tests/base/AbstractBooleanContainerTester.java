@@ -1,7 +1,5 @@
 package speiger.src.testers.booleans.tests.base;
 
-import java.util.Collection;
-
 import com.google.common.collect.testing.AbstractTester;
 import com.google.common.collect.testing.OneSizeTestContainerGenerator;
 import com.google.common.collect.testing.TestContainerGenerator;
@@ -21,31 +19,36 @@ import speiger.src.testers.booleans.utils.BooleanSamples;
 import speiger.src.testers.booleans.utils.MinimalBooleanCollection;
 
 @Ignore
-public abstract class AbstractBooleanContainerTester extends AbstractTester<OneSizeTestContainerGenerator<Collection<Boolean>, Boolean>> {
+public abstract class AbstractBooleanContainerTester<E> extends AbstractTester<OneSizeTestContainerGenerator<E, Boolean>>
+{
 	protected BooleanSamples samples;
-	protected BooleanCollection container;
+	protected E container;
 	protected TestBooleanCollectionGenerator primitiveGenerator;
-	private CollectionSize size;
+	protected CollectionSize size;
 
 	@Override
 	@OverridingMethodsMustInvokeSuper
 	public void setUp() throws Exception {
 		super.setUp();
-		TestContainerGenerator<Collection<Boolean>, Boolean> generator = getSubjectGenerator().getInnerGenerator();
+		setupGenerator();
+	}
+	
+	protected void setupGenerator() {
+		TestContainerGenerator<E, Boolean> generator = getSubjectGenerator().getInnerGenerator();
 		if (!(generator instanceof TestBooleanCollectionGenerator)) throw new IllegalStateException("Test Generator Must extend TestBooleanCollectionGenerator");
 		primitiveGenerator = (TestBooleanCollectionGenerator) generator;
 		samples = primitiveGenerator.getSamples();
 		size = getSubjectGenerator().getCollectionSize();
-		resetContainer();
+		resetContainer();		
 	}
 
 	protected abstract BooleanCollection actualContents();
 
-	protected BooleanCollection resetContainer() {
+	protected E resetContainer() {
 		return resetContainer(createTestSubject());
 	}
 
-	protected BooleanCollection resetContainer(BooleanCollection newValue) {
+	protected E resetContainer(E newValue) {
 		container = newValue;
 		return container;
 	}
@@ -85,11 +88,11 @@ public abstract class AbstractBooleanContainerTester extends AbstractTester<OneS
 	}
 
 	protected boolean[] createSamplesArray() {
-		return getSampleElements().toBooleanArray();
+		return getSampleElements().toBooleanArray(new boolean[getNumElements()]);
 	}
 
 	protected boolean[] createOrderedArray() {
-		return getOrderedElements().toBooleanArray();
+		return getOrderedElements().toBooleanArray(new boolean[getNumElements()]);
 	}
 
 	public static class ArrayWithDuplicate {
@@ -140,7 +143,11 @@ public abstract class AbstractBooleanContainerTester extends AbstractTester<OneS
 	protected MinimalBooleanCollection emptyCollection() {
 		return MinimalBooleanCollection.of();
 	}
-
+	
+	public boolean[] createArray(boolean...array) {
+		return array;
+	}
+	
 	protected final boolean e0() {
 		return samples.e0();
 	}
@@ -161,8 +168,8 @@ public abstract class AbstractBooleanContainerTester extends AbstractTester<OneS
 		return samples.e4();
 	}
 
-	protected BooleanCollection createTestSubject() {
-		return primitiveGenerator.create(getSampleElements(size.getNumElements()).toBooleanArray());
+	protected E createTestSubject() {
+		return (E)primitiveGenerator.create(getSampleElements(size.getNumElements()).toBooleanArray(new boolean[getNumElements()]));
 	}
 
 	protected BooleanCollection getSampleElements(int howMany) {

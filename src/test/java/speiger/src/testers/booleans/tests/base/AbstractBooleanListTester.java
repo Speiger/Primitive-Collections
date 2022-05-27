@@ -2,12 +2,14 @@ package speiger.src.testers.booleans.tests.base;
 
 import org.junit.Ignore;
 
+
 import speiger.src.collections.booleans.collections.BooleanCollection;
 import speiger.src.collections.booleans.lists.BooleanList;
 import speiger.src.testers.booleans.utils.BooleanHelpers;
 
 @Ignore
-public class AbstractBooleanListTester extends AbstractBooleanCollectionTester {
+public class AbstractBooleanListTester extends AbstractBooleanCollectionTester
+{
 	protected final BooleanList getList() {
 		return (BooleanList) collection;
 	}

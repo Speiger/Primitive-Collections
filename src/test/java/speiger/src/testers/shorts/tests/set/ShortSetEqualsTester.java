@@ -10,7 +10,8 @@ import speiger.src.testers.shorts.utils.ShortHelpers;
 import speiger.src.testers.shorts.utils.MinimalShortSet;
 
 @Ignore
-public class ShortSetEqualsTester extends AbstractShortSetTester {
+public class ShortSetEqualsTester extends AbstractShortSetTester
+{
 	public void testEquals_otherSetWithSameElements() {
 		assertTrue("A Set should equal any other Set containing the same elements.", getSet().equals(MinimalShortSet.of(getSampleElements())));
 	}

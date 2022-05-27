@@ -15,7 +15,7 @@ import speiger.src.collections.shorts.sets.ShortSet;
 import speiger.src.collections.shorts.utils.ShortIterators;
 
 public class ShortHelpers {
-	private static boolean equals(short key, short value) {
+	public static boolean equals(short key, short value) {
 		return key == value;
 	}
 
@@ -166,7 +166,7 @@ public class ShortHelpers {
 		}
 		return iterator.nextShort();
 	}
-
+	
 	public static void testComparator(ShortComparator comparator, short... valuesInExpectedOrder) {
 		testComparator(comparator, ShortArrayList.wrap(valuesInExpectedOrder));
 	}

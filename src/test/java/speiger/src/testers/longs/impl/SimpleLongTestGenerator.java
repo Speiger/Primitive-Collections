@@ -18,10 +18,9 @@ import speiger.src.testers.longs.generators.TestLongSetGenerator;
 import speiger.src.testers.longs.generators.TestLongSortedSetGenerator;
 import speiger.src.testers.longs.utils.LongSamples;
 
-public class SimpleLongTestGenerator<T extends LongCollection> {
-	Function<long[], T> mapper;
-	
-	public SimpleLongTestGenerator(Function<long[], T> mapper) {
+public class SimpleLongTestGenerator<E extends LongCollection> {
+	Function<long[], E> mapper;
+	public SimpleLongTestGenerator(Function<long[], E> mapper) {
 		this.mapper = mapper;
 	}
 	
@@ -29,11 +28,11 @@ public class SimpleLongTestGenerator<T extends LongCollection> {
 		return new LongSamples(1, 0, 2, 3, 4);
 	}
 	
-	public T create(long... elements) {
+	public E create(long... elements) {
 		return mapper.apply(elements);
 	}
 	
-	public T create(Object... elements) {
+	public E create(Object... elements) {
 		long[] array = new long[elements.length];
 		int i = 0;
 		for (Object e : elements) {

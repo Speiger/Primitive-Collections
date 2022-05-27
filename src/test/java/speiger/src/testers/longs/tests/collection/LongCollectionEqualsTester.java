@@ -5,7 +5,8 @@ import org.junit.Ignore;
 import speiger.src.testers.longs.tests.base.AbstractLongCollectionTester;
 
 @Ignore
-public class LongCollectionEqualsTester extends AbstractLongCollectionTester {
+public class LongCollectionEqualsTester extends AbstractLongCollectionTester
+{
 	public void testEquals_self() {
 		assertTrue("An Object should be equal to itself.", collection.equals(collection));
 	}

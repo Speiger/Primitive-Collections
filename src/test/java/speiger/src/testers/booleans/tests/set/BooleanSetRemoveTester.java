@@ -11,7 +11,8 @@ import com.google.common.collect.testing.features.CollectionSize;
 import speiger.src.testers.booleans.tests.base.AbstractBooleanSetTester;
 
 @Ignore
-public class BooleanSetRemoveTester extends AbstractBooleanSetTester {
+public class BooleanSetRemoveTester extends AbstractBooleanSetTester
+{
 	@CollectionFeature.Require(SUPPORTS_REMOVE)
 	@CollectionSize.Require(absent = ZERO)
 	public void testRemove_present() {

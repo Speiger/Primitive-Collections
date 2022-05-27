@@ -13,7 +13,8 @@ import speiger.src.collections.doubles.lists.DoubleArrayList;
 import speiger.src.testers.doubles.tests.base.AbstractDoubleSetTester;
 
 @Ignore
-public class DoubleSetCreationTester extends AbstractDoubleSetTester {
+public class DoubleSetCreationTester extends AbstractDoubleSetTester
+{
 	@CollectionFeature.Require(absent = REJECTS_DUPLICATES_AT_CREATION)
 	@CollectionSize.Require(absent = { ZERO, ONE })
 	public void testCreateWithDuplicates_nonNullDuplicatesNotRejected() {

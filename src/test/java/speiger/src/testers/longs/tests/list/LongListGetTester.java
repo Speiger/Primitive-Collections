@@ -5,7 +5,8 @@ import org.junit.Ignore;
 import speiger.src.testers.longs.tests.base.AbstractLongListTester;
 
 @Ignore
-public class LongListGetTester extends AbstractLongListTester {
+public class LongListGetTester extends AbstractLongListTester
+{
 	public void testGet_valid() {
 		expectContents(createOrderedArray());
 	}

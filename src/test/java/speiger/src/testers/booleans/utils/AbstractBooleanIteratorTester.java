@@ -299,7 +299,7 @@ public abstract class AbstractBooleanIteratorTester{
 	 *
 	 * @see Stimulus#executeAndCompare(ListIterator, Iterator)
 	 */
-	private <T extends BooleanIterator> void internalExecuteAndCompare(T reference, T target, IteratorOperation method) {
+	private <E extends BooleanIterator> void internalExecuteAndCompare(E reference, E target, IteratorOperation method) {
 		boolean referenceReturnValue = false;
 		PermittedMetaException referenceException = null;
 		boolean targetReturnValue = false;
@@ -315,7 +315,7 @@ public abstract class AbstractBooleanIteratorTester{
 			if (method == nextBoolean_METHOD && targetException == null && knownOrder == KnownOrder.UNKNOWN_ORDER) {
 				((MultiExceptionListIterator) reference).promoteToNext(targetReturnValue);
 			}
-
+			
 			referenceReturnValue = method.execute(reference);
 		} catch (PermittedMetaException e) {
 			referenceException = e;

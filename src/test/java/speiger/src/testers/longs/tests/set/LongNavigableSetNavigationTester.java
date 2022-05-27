@@ -21,7 +21,8 @@ import speiger.src.testers.longs.tests.base.AbstractLongSetTester;
 import speiger.src.testers.longs.utils.LongHelpers;
 
 @Ignore
-public class LongNavigableSetNavigationTester extends AbstractLongSetTester {
+public class LongNavigableSetNavigationTester extends AbstractLongSetTester
+{
 	private LongNavigableSet navigableSet;
 	private LongList values;
 	private long a;
@@ -44,7 +45,7 @@ public class LongNavigableSetNavigationTester extends AbstractLongSetTester {
 	}
 	
 	protected void resetWithHole() {
-		super.resetContainer(primitiveGenerator.create(new long[]{a, c}));
+		super.resetContainer(primitiveGenerator.create(createArray(a, c)));
 		navigableSet = (LongNavigableSet) getSet();
 	}
 

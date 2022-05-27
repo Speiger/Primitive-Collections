@@ -11,7 +11,8 @@ import speiger.src.testers.ints.tests.base.AbstractIntCollectionTester;
 import speiger.src.testers.ints.utils.IntHelpers;
 
 @Ignore
-public class IntCollectionStreamTester extends AbstractIntCollectionTester {
+public class IntCollectionStreamTester extends AbstractIntCollectionTester
+{
 	@CollectionFeature.Require(absent = KNOWN_ORDER)
 	public void testStreamToArrayUnknownOrder() {
 		synchronized (collection) {

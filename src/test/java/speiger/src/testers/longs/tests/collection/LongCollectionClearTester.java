@@ -16,7 +16,8 @@ import speiger.src.collections.longs.collections.LongIterator;
 import speiger.src.testers.longs.tests.base.AbstractLongCollectionTester;
 
 @Ignore
-public class LongCollectionClearTester extends AbstractLongCollectionTester {
+public class LongCollectionClearTester extends AbstractLongCollectionTester
+{
 	@CollectionFeature.Require(SUPPORTS_REMOVE)
 	public void testClear() {
 		collection.clear();

@@ -6,7 +6,8 @@ import speiger.src.collections.shorts.collections.ShortIterable;
 import speiger.src.collections.shorts.collections.ShortIterator;
 import speiger.src.collections.shorts.utils.ShortLists;
 
-public abstract class ShortIteratorTester extends AbstractShortIteratorTester {
+public abstract class ShortIteratorTester extends AbstractShortIteratorTester
+{
 
 	public ShortIteratorTester(int steps, Iterable<? extends IteratorFeature> features, ShortIterable expectedElements,
 			KnownOrder knownOrder) {

@@ -9,7 +9,8 @@ import com.google.common.collect.testing.features.CollectionSize;
 import speiger.src.testers.bytes.tests.base.AbstractByteCollectionTester;
 
 @Ignore
-public class ByteCollectionContainsTester extends AbstractByteCollectionTester {
+public class ByteCollectionContainsTester extends AbstractByteCollectionTester
+{
 	@CollectionSize.Require(absent = ZERO)
 	public void testContains_yes() {
 		assertTrue("contains(present) should return true", collection.contains(e0()));

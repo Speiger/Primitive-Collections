@@ -21,7 +21,8 @@ import speiger.src.testers.bytes.tests.base.AbstractByteSetTester;
 import speiger.src.testers.bytes.utils.ByteHelpers;
 
 @Ignore
-public class ByteNavigableSetNavigationTester extends AbstractByteSetTester {
+public class ByteNavigableSetNavigationTester extends AbstractByteSetTester
+{
 	private ByteNavigableSet navigableSet;
 	private ByteList values;
 	private byte a;
@@ -44,7 +45,7 @@ public class ByteNavigableSetNavigationTester extends AbstractByteSetTester {
 	}
 	
 	protected void resetWithHole() {
-		super.resetContainer(primitiveGenerator.create(new byte[]{a, c}));
+		super.resetContainer(primitiveGenerator.create(createArray(a, c)));
 		navigableSet = (ByteNavigableSet) getSet();
 	}
 

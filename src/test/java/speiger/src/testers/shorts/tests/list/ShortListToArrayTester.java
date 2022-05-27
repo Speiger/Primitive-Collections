@@ -10,7 +10,8 @@ import speiger.src.collections.shorts.lists.ShortArrayList;
 import speiger.src.testers.shorts.tests.base.AbstractShortListTester;
 
 @Ignore
-public class ShortListToArrayTester extends AbstractShortListTester {
+public class ShortListToArrayTester extends AbstractShortListTester
+{
 	public void testToArray_noArg() {
 		short[] actual = getList().toShortArray();
 		assertArrayEquals("toArray() order should match list", createOrderedArray(), actual);

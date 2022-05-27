@@ -6,7 +6,8 @@ import speiger.src.collections.floats.collections.FloatIterable;
 import speiger.src.collections.floats.collections.FloatIterator;
 import speiger.src.collections.floats.utils.FloatLists;
 
-public abstract class FloatIteratorTester extends AbstractFloatIteratorTester {
+public abstract class FloatIteratorTester extends AbstractFloatIteratorTester
+{
 
 	public FloatIteratorTester(int steps, Iterable<? extends IteratorFeature> features, FloatIterable expectedElements,
 			KnownOrder knownOrder) {
