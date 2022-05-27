@@ -101,6 +101,8 @@ test {
 		excludeTestsMatching "speiger.src.testers.**.*"
 	}
 	useJUnit()
+	maxHeapSize = "2048m"
+	maxParallelForks = 4
 }
 
 sonarqube {
