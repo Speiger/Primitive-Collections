@@ -722,8 +722,8 @@ public class LINKED_LIST KEY_GENERIC_TYPE extends ABSTRACT_LIST KEY_GENERIC_TYPE
 		checkRange(from);
 		checkAddRange(to);
 		int length = to - from;
+		if(length <= 0) return ARRAYS.newArray(type, 0);
 		K[] a = ARRAYS.newArray(type, length);
-		if(length <= 0) return a;
 		if(from < size - to) {
 			Entry KEY_GENERIC_TYPE entry = getNode(from);
 			for(int i = 0;length > 0;i++, length--) {
