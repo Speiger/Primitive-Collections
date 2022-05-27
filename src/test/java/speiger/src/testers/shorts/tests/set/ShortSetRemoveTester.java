@@ -11,6 +11,7 @@ import com.google.common.collect.testing.features.CollectionSize;
 import speiger.src.testers.shorts.tests.base.AbstractShortSetTester;
 
 @Ignore
+@SuppressWarnings("javadoc")
 public class ShortSetRemoveTester extends AbstractShortSetTester
 {
 	@CollectionFeature.Require(SUPPORTS_REMOVE)

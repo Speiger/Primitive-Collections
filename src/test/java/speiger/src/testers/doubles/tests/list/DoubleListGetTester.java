@@ -5,6 +5,7 @@ import org.junit.Ignore;
 import speiger.src.testers.doubles.tests.base.AbstractDoubleListTester;
 
 @Ignore
+@SuppressWarnings("javadoc")
 public class DoubleListGetTester extends AbstractDoubleListTester
 {
 	public void testGet_valid() {

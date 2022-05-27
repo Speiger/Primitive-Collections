@@ -11,6 +11,7 @@ import speiger.src.testers.floats.tests.base.AbstractFloatCollectionTester;
 import speiger.src.testers.floats.utils.MinimalFloatCollection;
 
 @Ignore
+@SuppressWarnings("javadoc")
 public class FloatCollectionContainsAnyTester extends AbstractFloatCollectionTester
 {	
 	public void testContainsAny_empty() {

@@ -9,6 +9,7 @@ import com.google.common.collect.testing.features.CollectionSize;
 import speiger.src.testers.bytes.tests.base.maps.AbstractByte2LongMapTester;
 
 @Ignore
+@SuppressWarnings("javadoc")
 public class Byte2LongMapContainsKeyTester extends AbstractByte2LongMapTester
 {
 	@CollectionSize.Require(absent = ZERO)

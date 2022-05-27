@@ -9,6 +9,7 @@ import com.google.common.collect.testing.features.CollectionSize;
 import speiger.src.testers.bytes.tests.base.AbstractByteCollectionTester;
 
 @Ignore
+@SuppressWarnings("javadoc")
 public class ByteCollectionContainsTester extends AbstractByteCollectionTester
 {
 	@CollectionSize.Require(absent = ZERO)

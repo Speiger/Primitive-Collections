@@ -10,6 +10,7 @@ import speiger.src.testers.objects.utils.ObjectHelpers;
 import speiger.src.testers.objects.utils.MinimalObjectSet;
 
 @Ignore
+@SuppressWarnings("javadoc")
 public class ObjectSetEqualsTester<T> extends AbstractObjectSetTester<T>
 {
 	public void testEquals_otherSetWithSameElements() {

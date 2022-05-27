@@ -20,6 +20,7 @@ import speiger.src.testers.objects.tests.base.maps.AbstractObject2LongMapTester;
 import speiger.src.testers.objects.utils.MinimalObjectCollection;
 
 @Ignore
+@SuppressWarnings("javadoc")
 public class Object2LongMapPutAllTester<T> extends AbstractObject2LongMapTester<T>
 {
 	@MapFeature.Require(SUPPORTS_PUT)

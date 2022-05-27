@@ -13,6 +13,7 @@ import com.google.common.collect.testing.features.ListFeature;
 import speiger.src.testers.doubles.tests.base.AbstractDoubleListTester;
 
 @Ignore
+@SuppressWarnings("javadoc")
 public class DoubleListReplaceAllTester extends AbstractDoubleListTester
 {
 	@ListFeature.Require(SUPPORTS_SET)

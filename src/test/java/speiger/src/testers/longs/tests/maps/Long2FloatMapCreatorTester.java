@@ -14,6 +14,7 @@ import speiger.src.collections.objects.lists.ObjectArrayList;
 import speiger.src.testers.longs.tests.base.maps.AbstractLong2FloatMapTester;
 
 @Ignore
+@SuppressWarnings("javadoc")
 public class Long2FloatMapCreatorTester extends AbstractLong2FloatMapTester
 {
 	@MapFeature.Require(absent = REJECTS_DUPLICATES_AT_CREATION)

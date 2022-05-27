@@ -8,7 +8,9 @@ import speiger.src.collections.objects.maps.interfaces.Object2IntMap;
 import speiger.src.testers.objects.tests.base.maps.AbstractObject2IntMapTester;
 
 @Ignore
-public class Object2IntMapHashCodeTester<T> extends AbstractObject2IntMapTester<T> {
+@SuppressWarnings("javadoc")
+public class Object2IntMapHashCodeTester<T> extends AbstractObject2IntMapTester<T>
+{
 	public void testHashCode() {
 		int expectedHashCode = 0;
 		for (Object2IntMap.Entry<T> entry : getSampleEntries()) {

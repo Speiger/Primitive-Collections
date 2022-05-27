@@ -10,6 +10,7 @@ import speiger.src.collections.bytes.collections.ByteIterable;
 import speiger.src.collections.bytes.collections.ByteIterator;
 import speiger.src.collections.bytes.lists.ByteListIterator;
 
+@SuppressWarnings("javadoc")
 public abstract class ByteListIteratorTester extends AbstractByteIteratorTester {
 
 	public ByteListIteratorTester(int steps, ByteIterable elementsToInsertIterable, Iterable<? extends IteratorFeature> features, ByteIterable expectedElements, int startIndex) {

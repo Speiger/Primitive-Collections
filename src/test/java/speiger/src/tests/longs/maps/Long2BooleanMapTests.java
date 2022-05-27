@@ -41,6 +41,7 @@ import speiger.src.testers.longs.tests.maps.Long2BooleanMapPutIfAbsentTester;
 import speiger.src.testers.utils.TestUtils;
 import speiger.src.testers.utils.SpecialFeature;
 
+@SuppressWarnings("javadoc")
 public class Long2BooleanMapTests extends TestCase
 {
 	public static Test suite() {

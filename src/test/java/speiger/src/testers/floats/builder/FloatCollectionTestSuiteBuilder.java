@@ -24,6 +24,7 @@ import speiger.src.testers.floats.tests.collection.FloatCollectionStreamTester;
 import speiger.src.testers.floats.tests.collection.FloatCollectionRetainAllTester;
 import speiger.src.testers.floats.tests.collection.FloatCollectionToArrayTester;
 
+@SuppressWarnings("javadoc")
 public class FloatCollectionTestSuiteBuilder extends CollectionTestSuiteBuilder<Float> {
 	public static FloatCollectionTestSuiteBuilder using(TestFloatCollectionGenerator generator) {
 		return (FloatCollectionTestSuiteBuilder) new FloatCollectionTestSuiteBuilder().usingGenerator(generator);

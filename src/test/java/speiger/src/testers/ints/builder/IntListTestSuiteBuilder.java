@@ -69,6 +69,7 @@ import speiger.src.testers.ints.tests.list.IntListSwapRemoveAtIndexTester;
 import speiger.src.testers.ints.tests.list.IntListSwapRemoveTester;
 import speiger.src.testers.ints.tests.list.IntListToArrayTester;
 
+@SuppressWarnings("javadoc")
 public class IntListTestSuiteBuilder extends IntCollectionTestSuiteBuilder {
 	public static IntListTestSuiteBuilder using(TestIntListGenerator generator) {
 		return (IntListTestSuiteBuilder) new IntListTestSuiteBuilder().usingGenerator(generator);

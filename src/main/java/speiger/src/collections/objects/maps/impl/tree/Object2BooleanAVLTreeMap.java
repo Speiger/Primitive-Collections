@@ -264,7 +264,7 @@ public class Object2BooleanAVLTreeMap<T> extends AbstractObject2BooleanMap<T> im
 	
 	@Override
 	public T pollFirstKey() {
-		if(tree == null) return null;
+		if(tree == null) return getDefaultMinValue();
 		T result = first.key;
 		removeNode(first);
 		return result;
@@ -278,7 +278,7 @@ public class Object2BooleanAVLTreeMap<T> extends AbstractObject2BooleanMap<T> im
 	
 	@Override
 	public T pollLastKey() {
-		if(tree == null) return null;
+		if(tree == null) return getDefaultMaxValue();
 		T result = last.key;
 		removeNode(last);
 		return result;
@@ -847,6 +847,7 @@ public class Object2BooleanAVLTreeMap<T> extends AbstractObject2BooleanMap<T> im
 		public T ceiling(T e) { return map.ceilingKey(e); }
 		@Override
 		public T higher(T e) { return map.higherKey(e); }
+		
 		@Override
 		public T pollFirst() { return map.pollFirstKey(); }
 		@Override
@@ -1249,8 +1250,8 @@ public class Object2BooleanAVLTreeMap<T> extends AbstractObject2BooleanMap<T> im
 		protected abstract ObjectBidirectionalIterator<T> keyIterator(T element);
 		protected abstract BooleanBidirectionalIterator valueIterator();
 		protected abstract ObjectBidirectionalIterator<T> descendingKeyIterator();
-		protected T lowKeyOrNull(Node<T> entry) { return entry == null ? null : entry.key; }
-		protected T highKeyOrNull(Node<T> entry) { return entry == null ? null : entry.key; }
+		protected T lowKeyOrNull(Node<T> entry) { return entry == null ? getDefaultMinValue() : entry.key; }
+		protected T highKeyOrNull(Node<T> entry) { return entry == null ? getDefaultMaxValue() : entry.key; }
 		protected Node<T> next(Node<T> entry) { return entry.next(); }
 		protected Node<T> previous(Node<T> entry) { return entry.previous(); }
 		
@@ -1321,7 +1322,7 @@ public class Object2BooleanAVLTreeMap<T> extends AbstractObject2BooleanMap<T> im
 				map.removeNode(entry);
 				return result;
 			}
-			return null;
+			return getDefaultMinValue();
 		}
 		
 		@Override
@@ -1332,7 +1333,7 @@ public class Object2BooleanAVLTreeMap<T> extends AbstractObject2BooleanMap<T> im
 				map.removeNode(entry);
 				return result;
 			}
-			return null;
+			return getDefaultMaxValue();
 		}
 		
 		@Override
@@ -1398,7 +1399,7 @@ public class Object2BooleanAVLTreeMap<T> extends AbstractObject2BooleanMap<T> im
 		
 		@Override
 		public boolean remOrDefault(T key, boolean defaultValue) {
-			return inRange(key) ? map.rem(key) : defaultValue;
+			return inRange(key) ? map.remOrDefault(key, defaultValue) : defaultValue;
 		}
 		
 		@Override

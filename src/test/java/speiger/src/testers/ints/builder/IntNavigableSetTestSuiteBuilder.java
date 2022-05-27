@@ -29,6 +29,7 @@ import speiger.src.testers.ints.impl.IntSortedSetSubsetTestSetGenerator.IntNavig
 import speiger.src.testers.ints.tests.set.IntNavigableSetNavigationTester;
 import speiger.src.testers.ints.utils.IntSamples;
 
+@SuppressWarnings("javadoc")
 public class IntNavigableSetTestSuiteBuilder extends IntSortedSetTestSuiteBuilder {
 	public static IntNavigableSetTestSuiteBuilder using(TestIntNavigableSetGenerator generator) {
 		return (IntNavigableSetTestSuiteBuilder) new IntNavigableSetTestSuiteBuilder().usingGenerator(generator);

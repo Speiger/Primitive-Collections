@@ -10,6 +10,7 @@ import speiger.src.testers.objects.tests.base.AbstractObjectListTester;
 import speiger.src.testers.objects.utils.MinimalObjectSet;
 
 @Ignore
+@SuppressWarnings("javadoc")
 public class ObjectListEqualsTester<T> extends AbstractObjectListTester<T>
 {
 	public void testEquals_otherListWithSameElements() {

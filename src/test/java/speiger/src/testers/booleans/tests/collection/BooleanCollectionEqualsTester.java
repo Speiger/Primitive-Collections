@@ -5,6 +5,7 @@ import org.junit.Ignore;
 import speiger.src.testers.booleans.tests.base.AbstractBooleanCollectionTester;
 
 @Ignore
+@SuppressWarnings("javadoc")
 public class BooleanCollectionEqualsTester extends AbstractBooleanCollectionTester
 {
 	public void testEquals_self() {

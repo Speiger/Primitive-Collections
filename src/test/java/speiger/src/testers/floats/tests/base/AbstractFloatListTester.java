@@ -8,6 +8,7 @@ import speiger.src.collections.floats.lists.FloatList;
 import speiger.src.testers.floats.utils.FloatHelpers;
 
 @Ignore
+@SuppressWarnings("javadoc")
 public class AbstractFloatListTester extends AbstractFloatCollectionTester
 {
 	protected final FloatList getList() {

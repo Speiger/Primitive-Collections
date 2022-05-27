@@ -11,6 +11,7 @@ import speiger.src.testers.objects.generators.TestObjectOrderedSetGenerator;
 import speiger.src.testers.objects.tests.set.ObjectOrderedSetMoveTester;
 import speiger.src.testers.objects.tests.set.ObjectOrderedSetNavigationTester;
 
+@SuppressWarnings("javadoc")
 public class ObjectOrderedSetTestSuiteBuilder<T> extends ObjectSetTestSuiteBuilder<T> {
 	public static <T> ObjectOrderedSetTestSuiteBuilder<T> using(TestObjectOrderedSetGenerator<T> generator) {
 		return (ObjectOrderedSetTestSuiteBuilder<T>) new ObjectOrderedSetTestSuiteBuilder<T>().usingGenerator(generator);

@@ -19,6 +19,7 @@ import speiger.src.testers.bytes.impl.maps.DerivedByte2LongMapGenerators;
 import speiger.src.testers.bytes.tests.maps.Byte2LongNavigableMapNavigationTester;
 import speiger.src.testers.utils.SpecialFeature;
 
+@SuppressWarnings("javadoc")
 public class Byte2LongNavigableMapTestSuiteBuilder extends Byte2LongSortedMapTestSuiteBuilder
 {
 	public static Byte2LongNavigableMapTestSuiteBuilder using(TestByte2LongSortedMapGenerator generator) {

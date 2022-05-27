@@ -12,6 +12,7 @@ import speiger.src.testers.shorts.tests.base.AbstractShortSetTester;
 import speiger.src.testers.shorts.utils.MinimalShortCollection;
 
 @Ignore
+@SuppressWarnings("javadoc")
 public class ShortSetAddAllTester extends AbstractShortSetTester
 {
 	@CollectionFeature.Require(SUPPORTS_ADD)

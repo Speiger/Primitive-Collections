@@ -25,6 +25,7 @@ import speiger.src.testers.doubles.generators.TestDoubleSetGenerator;
 import speiger.src.testers.doubles.generators.TestDoubleSortedSetGenerator;
 import speiger.src.testers.utils.SpecialFeature;
 
+@SuppressWarnings("javadoc")
 public class Double2BooleanSortedMapTestSuiteBuilder extends Double2BooleanMapTestSuiteBuilder {
 	public static Double2BooleanSortedMapTestSuiteBuilder using(TestDouble2BooleanSortedMapGenerator generator) {
 		return (Double2BooleanSortedMapTestSuiteBuilder) new Double2BooleanSortedMapTestSuiteBuilder().usingGenerator(generator);

@@ -13,6 +13,7 @@ import speiger.src.testers.bytes.generators.maps.TestByte2ByteMapGenerator;
 import speiger.src.testers.bytes.generators.maps.TestByte2ByteSortedMapGenerator;
 import speiger.src.testers.objects.utils.ObjectSamples;
 
+@SuppressWarnings("javadoc")
 public class SimpleByte2ByteMapTestGenerator<E extends Byte2ByteMap>
 {
 	BiFunction<byte[], byte[], E> mapper;

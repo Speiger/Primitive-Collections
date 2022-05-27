@@ -13,6 +13,7 @@ import speiger.src.testers.floats.generators.maps.TestFloat2CharMapGenerator;
 import speiger.src.testers.floats.generators.maps.TestFloat2CharSortedMapGenerator;
 import speiger.src.testers.objects.utils.ObjectSamples;
 
+@SuppressWarnings("javadoc")
 public class SimpleFloat2CharMapTestGenerator<E extends Float2CharMap>
 {
 	BiFunction<float[], char[], E> mapper;

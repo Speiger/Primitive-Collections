@@ -10,6 +10,7 @@ import speiger.src.testers.shorts.utils.ShortHelpers;
 import speiger.src.testers.shorts.utils.MinimalShortSet;
 
 @Ignore
+@SuppressWarnings("javadoc")
 public class ShortSetEqualsTester extends AbstractShortSetTester
 {
 	public void testEquals_otherSetWithSameElements() {

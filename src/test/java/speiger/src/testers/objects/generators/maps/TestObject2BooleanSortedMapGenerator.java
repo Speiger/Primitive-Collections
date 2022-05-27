@@ -6,6 +6,7 @@ import speiger.src.collections.objects.maps.interfaces.Object2BooleanMap;
 import speiger.src.collections.objects.maps.interfaces.Object2BooleanMap.Entry;
 import speiger.src.collections.objects.maps.interfaces.Object2BooleanSortedMap;
 
+@SuppressWarnings("javadoc")
 public interface TestObject2BooleanSortedMapGenerator<T> extends TestObject2BooleanMapGenerator<T>, TestSortedMapGenerator<T, Boolean>
 {
 	@Override

@@ -11,6 +11,7 @@ import speiger.src.testers.chars.tests.base.maps.AbstractChar2IntMapTester;
 import speiger.src.testers.objects.utils.ObjectHelpers;
 
 @Ignore
+@SuppressWarnings("javadoc")
 public class Char2IntMapEqualsTester extends AbstractChar2IntMapTester 
 {
 	public void testEquals_otherMapWithSameEntries() {

@@ -11,6 +11,7 @@ import speiger.src.collections.floats.lists.FloatArrayList;
 import speiger.src.testers.floats.tests.base.AbstractFloatListTester;
 
 @Ignore
+@SuppressWarnings("javadoc")
 public class FloatListGetElementsTester extends AbstractFloatListTester
 {
 	@CollectionSize.Require(SEVERAL)

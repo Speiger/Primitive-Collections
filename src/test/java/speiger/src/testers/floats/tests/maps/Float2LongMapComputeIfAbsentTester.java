@@ -12,6 +12,7 @@ import junit.framework.AssertionFailedError;
 import speiger.src.testers.floats.tests.base.maps.AbstractFloat2LongMapTester;
 
 @Ignore
+@SuppressWarnings("javadoc")
 public class Float2LongMapComputeIfAbsentTester extends AbstractFloat2LongMapTester
 {
 	@MapFeature.Require(SUPPORTS_PUT)

@@ -11,6 +11,7 @@ import speiger.src.collections.objects.collections.ObjectIterable;
 import speiger.src.collections.objects.lists.ObjectList;
 import speiger.src.testers.objects.utils.ObjectSamples;
 
+@SuppressWarnings("javadoc")
 public interface TestShort2ByteMapGenerator extends TestMapGenerator<Short, Byte> {
 	public ObjectSamples<Short2ByteMap.Entry> getSamples();
 	public ObjectIterable<Short2ByteMap.Entry> order(ObjectList<Short2ByteMap.Entry> insertionOrder);

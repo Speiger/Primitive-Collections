@@ -11,6 +11,7 @@ import com.google.common.collect.testing.features.ListFeature;
 import speiger.src.testers.shorts.tests.base.AbstractShortListTester;
 
 @Ignore
+@SuppressWarnings("javadoc")
 public class ShortListSetTester extends AbstractShortListTester
 {
 	@ListFeature.Require(SUPPORTS_SET)

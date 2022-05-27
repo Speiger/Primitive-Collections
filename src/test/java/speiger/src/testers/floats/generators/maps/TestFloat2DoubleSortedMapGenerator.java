@@ -6,6 +6,7 @@ import speiger.src.collections.floats.maps.interfaces.Float2DoubleMap;
 import speiger.src.collections.floats.maps.interfaces.Float2DoubleMap.Entry;
 import speiger.src.collections.floats.maps.interfaces.Float2DoubleSortedMap;
 
+@SuppressWarnings("javadoc")
 public interface TestFloat2DoubleSortedMapGenerator extends TestFloat2DoubleMapGenerator, TestSortedMapGenerator<Float, Double>
 {
 	@Override

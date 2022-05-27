@@ -15,6 +15,7 @@ import speiger.src.collections.objects.lists.ObjectList;
 import speiger.src.testers.floats.tests.base.maps.AbstractFloat2DoubleMapTester;
 
 @Ignore
+@SuppressWarnings("javadoc")
 public class Float2DoubleMapForEachTester extends AbstractFloat2DoubleMapTester
 {
 	@CollectionFeature.Require(KNOWN_ORDER)

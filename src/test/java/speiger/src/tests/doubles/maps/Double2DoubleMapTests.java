@@ -23,6 +23,7 @@ import speiger.src.testers.doubles.builder.maps.Double2DoubleNavigableMapTestSui
 import speiger.src.testers.doubles.impl.maps.SimpleDouble2DoubleMapTestGenerator;
 import speiger.src.testers.utils.SpecialFeature;
 
+@SuppressWarnings("javadoc")
 public class Double2DoubleMapTests extends TestCase
 {
 	public static Test suite() {

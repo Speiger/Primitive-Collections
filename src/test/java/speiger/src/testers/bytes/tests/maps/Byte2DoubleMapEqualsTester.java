@@ -11,6 +11,7 @@ import speiger.src.testers.bytes.tests.base.maps.AbstractByte2DoubleMapTester;
 import speiger.src.testers.objects.utils.ObjectHelpers;
 
 @Ignore
+@SuppressWarnings("javadoc")
 public class Byte2DoubleMapEqualsTester extends AbstractByte2DoubleMapTester 
 {
 	public void testEquals_otherMapWithSameEntries() {

@@ -11,6 +11,7 @@ import com.google.common.collect.testing.features.CollectionSize;
 import speiger.src.testers.longs.tests.base.AbstractLongSetTester;
 
 @Ignore
+@SuppressWarnings("javadoc")
 public class LongSetAddTester extends AbstractLongSetTester
 {
 	@CollectionFeature.Require(SUPPORTS_ADD)

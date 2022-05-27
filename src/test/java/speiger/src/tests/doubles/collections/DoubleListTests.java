@@ -16,7 +16,9 @@ import speiger.src.testers.doubles.builder.DoubleListTestSuiteBuilder;
 import speiger.src.testers.doubles.impl.SimpleDoubleTestGenerator;
 import speiger.src.testers.utils.SpecialFeature;
 
-public class DoubleListTests extends TestCase {
+@SuppressWarnings("javadoc")
+public class DoubleListTests extends TestCase
+{
 	
 	public static Test suite() {
 		TestSuite suite = new TestSuite("DoubleLists");

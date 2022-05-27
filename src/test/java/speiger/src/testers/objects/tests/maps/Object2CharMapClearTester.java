@@ -18,6 +18,7 @@ import speiger.src.collections.objects.collections.ObjectIterator;
 import speiger.src.testers.objects.tests.base.maps.AbstractObject2CharMapTester;
 
 @Ignore
+@SuppressWarnings("javadoc")
 public class Object2CharMapClearTester<T> extends AbstractObject2CharMapTester<T> 
 {
 	@MapFeature.Require(SUPPORTS_REMOVE)

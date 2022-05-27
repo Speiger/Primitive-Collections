@@ -11,6 +11,7 @@ import speiger.src.testers.longs.tests.base.maps.AbstractLong2BooleanMapTester;
 import speiger.src.testers.objects.utils.ObjectHelpers;
 
 @Ignore
+@SuppressWarnings("javadoc")
 public class Long2BooleanMapEqualsTester extends AbstractLong2BooleanMapTester 
 {
 	public void testEquals_otherMapWithSameEntries() {

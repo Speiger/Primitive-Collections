@@ -23,6 +23,7 @@ import speiger.src.testers.floats.tests.base.maps.AbstractFloat2IntMapTester;
 import speiger.src.testers.objects.utils.ObjectHelpers;
 
 @Ignore
+@SuppressWarnings("javadoc")
 public class Float2IntNavigableMapNavigationTester extends AbstractFloat2IntMapTester
 {
 	private Float2IntNavigableMap navigableMap;

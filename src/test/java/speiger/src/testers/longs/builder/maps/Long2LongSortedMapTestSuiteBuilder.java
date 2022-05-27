@@ -25,6 +25,7 @@ import speiger.src.testers.longs.generators.TestLongSetGenerator;
 import speiger.src.testers.longs.generators.TestLongSortedSetGenerator;
 import speiger.src.testers.utils.SpecialFeature;
 
+@SuppressWarnings("javadoc")
 public class Long2LongSortedMapTestSuiteBuilder extends Long2LongMapTestSuiteBuilder {
 	public static Long2LongSortedMapTestSuiteBuilder using(TestLong2LongSortedMapGenerator generator) {
 		return (Long2LongSortedMapTestSuiteBuilder) new Long2LongSortedMapTestSuiteBuilder().usingGenerator(generator);

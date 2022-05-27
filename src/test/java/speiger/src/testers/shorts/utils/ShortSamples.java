@@ -7,6 +7,7 @@ import speiger.src.collections.shorts.collections.ShortIterator;
 import speiger.src.collections.shorts.lists.ShortArrayList;
 import speiger.src.collections.shorts.lists.ShortList;
 
+@SuppressWarnings("javadoc")
 public class ShortSamples implements ShortIterable
 {
 	private final short e0;

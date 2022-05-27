@@ -13,6 +13,7 @@ import speiger.src.testers.floats.tests.base.AbstractFloatListTester;
 import speiger.src.testers.floats.utils.MinimalFloatCollection;
 
 @Ignore
+@SuppressWarnings("javadoc")
 public class FloatListRemoveAllTester extends AbstractFloatListTester
 {
 	@CollectionFeature.Require(SUPPORTS_REMOVE)

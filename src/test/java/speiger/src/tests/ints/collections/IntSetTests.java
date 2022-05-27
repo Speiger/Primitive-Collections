@@ -27,7 +27,9 @@ import speiger.src.testers.ints.builder.IntSortedSetTestSuiteBuilder;
 import speiger.src.testers.ints.impl.SimpleIntTestGenerator;
 import speiger.src.testers.utils.SpecialFeature;
 
-public class IntSetTests extends TestCase {
+@SuppressWarnings("javadoc")
+public class IntSetTests extends TestCase
+{
 	
 	public static Test suite() {
 		TestSuite suite = new TestSuite("IntSets");

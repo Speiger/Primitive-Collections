@@ -8,6 +8,7 @@ import speiger.src.collections.ints.lists.IntArrayList;
 import speiger.src.testers.ints.tests.base.AbstractIntListTester;
 
 @Ignore
+@SuppressWarnings("javadoc")
 public class IntListFillBufferTester extends AbstractIntListTester
 {
 	public void testFillBuffer() {

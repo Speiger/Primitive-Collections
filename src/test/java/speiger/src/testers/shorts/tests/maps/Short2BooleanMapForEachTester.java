@@ -15,6 +15,7 @@ import speiger.src.collections.objects.lists.ObjectList;
 import speiger.src.testers.shorts.tests.base.maps.AbstractShort2BooleanMapTester;
 
 @Ignore
+@SuppressWarnings("javadoc")
 public class Short2BooleanMapForEachTester extends AbstractShort2BooleanMapTester
 {
 	@CollectionFeature.Require(KNOWN_ORDER)

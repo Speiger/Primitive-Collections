@@ -12,6 +12,7 @@ import junit.framework.AssertionFailedError;
 import speiger.src.testers.ints.tests.base.maps.AbstractInt2ObjectMapTester;
 
 @Ignore
+@SuppressWarnings("javadoc")
 public class Int2ObjectMapSupplyIfAbsentTester<V> extends AbstractInt2ObjectMapTester<V>
 {
 	@MapFeature.Require(SUPPORTS_PUT)

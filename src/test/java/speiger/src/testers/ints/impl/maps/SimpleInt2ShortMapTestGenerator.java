@@ -13,6 +13,7 @@ import speiger.src.testers.ints.generators.maps.TestInt2ShortMapGenerator;
 import speiger.src.testers.ints.generators.maps.TestInt2ShortSortedMapGenerator;
 import speiger.src.testers.objects.utils.ObjectSamples;
 
+@SuppressWarnings("javadoc")
 public class SimpleInt2ShortMapTestGenerator<E extends Int2ShortMap>
 {
 	BiFunction<int[], short[], E> mapper;

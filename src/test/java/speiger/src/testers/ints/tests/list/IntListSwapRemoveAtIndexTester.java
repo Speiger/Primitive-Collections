@@ -19,6 +19,7 @@ import speiger.src.testers.ints.tests.base.AbstractIntListTester;
 import speiger.src.testers.ints.utils.IntHelpers;
 
 @Ignore
+@SuppressWarnings("javadoc")
 public class IntListSwapRemoveAtIndexTester extends AbstractIntListTester
 {
 	@ListFeature.Require(absent = SUPPORTS_REMOVE_WITH_INDEX)

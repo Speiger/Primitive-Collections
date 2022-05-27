@@ -15,6 +15,7 @@ import speiger.src.collections.objects.lists.ObjectList;
 import speiger.src.testers.floats.tests.base.maps.AbstractFloat2LongMapTester;
 
 @Ignore
+@SuppressWarnings("javadoc")
 public class Float2LongMapForEachTester extends AbstractFloat2LongMapTester
 {
 	@CollectionFeature.Require(KNOWN_ORDER)

@@ -17,6 +17,7 @@ import speiger.src.collections.floats.collections.FloatIterator;
 import speiger.src.testers.floats.tests.base.AbstractFloatListTester;
 
 @Ignore
+@SuppressWarnings("javadoc")
 public class FloatListAddAtIndexTester extends AbstractFloatListTester
 {
 	@ListFeature.Require(SUPPORTS_ADD_WITH_INDEX)

@@ -17,6 +17,7 @@ import speiger.src.collections.ints.maps.interfaces.Int2IntMap;
 import speiger.src.testers.ints.tests.base.maps.AbstractInt2IntMapTester;
 
 @Ignore
+@SuppressWarnings("javadoc")
 public class Int2IntMapPutTester extends AbstractInt2IntMapTester
 {	
 	@MapFeature.Require(SUPPORTS_PUT)

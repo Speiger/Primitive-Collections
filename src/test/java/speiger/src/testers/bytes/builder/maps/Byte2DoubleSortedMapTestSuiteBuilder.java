@@ -25,6 +25,7 @@ import speiger.src.testers.bytes.generators.TestByteSetGenerator;
 import speiger.src.testers.bytes.generators.TestByteSortedSetGenerator;
 import speiger.src.testers.utils.SpecialFeature;
 
+@SuppressWarnings("javadoc")
 public class Byte2DoubleSortedMapTestSuiteBuilder extends Byte2DoubleMapTestSuiteBuilder {
 	public static Byte2DoubleSortedMapTestSuiteBuilder using(TestByte2DoubleSortedMapGenerator generator) {
 		return (Byte2DoubleSortedMapTestSuiteBuilder) new Byte2DoubleSortedMapTestSuiteBuilder().usingGenerator(generator);

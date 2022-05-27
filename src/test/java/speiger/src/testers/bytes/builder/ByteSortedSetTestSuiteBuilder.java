@@ -18,6 +18,7 @@ import speiger.src.testers.bytes.generators.TestByteSortedSetGenerator;
 import speiger.src.testers.bytes.impl.ByteSortedSetSubsetTestSetGenerator;
 import speiger.src.testers.bytes.tests.set.ByteSortedSetNaviationTester;
 
+@SuppressWarnings("javadoc")
 public class ByteSortedSetTestSuiteBuilder extends ByteSetTestSuiteBuilder {
 	public static ByteSortedSetTestSuiteBuilder using(TestByteSortedSetGenerator generator) {
 		return (ByteSortedSetTestSuiteBuilder) new ByteSortedSetTestSuiteBuilder().usingGenerator(generator);

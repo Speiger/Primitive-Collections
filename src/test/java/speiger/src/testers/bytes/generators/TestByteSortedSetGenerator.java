@@ -2,6 +2,7 @@ package speiger.src.testers.bytes.generators;
 
 import speiger.src.collections.bytes.sets.ByteSortedSet;
 
+@SuppressWarnings("javadoc")
 public interface TestByteSortedSetGenerator extends TestByteSetGenerator {
 	@Override
 	ByteSortedSet create(byte... elements);

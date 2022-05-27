@@ -13,6 +13,7 @@ import speiger.src.collections.longs.sets.LongSortedSet;
 import speiger.src.testers.longs.generators.TestLongSortedSetGenerator;
 import speiger.src.testers.longs.utils.LongSamples;
 
+@SuppressWarnings("javadoc")
 public class LongSortedSetSubsetTestSetGenerator implements TestLongSortedSetGenerator
 {
 	final Bound to;

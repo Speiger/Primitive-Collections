@@ -6,6 +6,7 @@ import speiger.src.collections.floats.maps.interfaces.Float2BooleanMap;
 import speiger.src.collections.floats.maps.interfaces.Float2BooleanMap.Entry;
 import speiger.src.collections.floats.maps.interfaces.Float2BooleanSortedMap;
 
+@SuppressWarnings("javadoc")
 public interface TestFloat2BooleanSortedMapGenerator extends TestFloat2BooleanMapGenerator, TestSortedMapGenerator<Float, Boolean>
 {
 	@Override

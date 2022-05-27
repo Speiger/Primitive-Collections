@@ -9,6 +9,7 @@ import com.google.common.collect.testing.features.CollectionSize;
 import speiger.src.testers.ints.tests.base.maps.AbstractInt2ShortMapTester;
 
 @Ignore
+@SuppressWarnings("javadoc")
 public class Int2ShortMapContainsKeyTester extends AbstractInt2ShortMapTester
 {
 	@CollectionSize.Require(absent = ZERO)

@@ -24,6 +24,7 @@ import speiger.src.testers.shorts.utils.ShortHelpers;
 import speiger.src.testers.shorts.utils.ShortIteratorTester;
 
 @Ignore
+@SuppressWarnings("javadoc")
 public class ShortCollectionIteratorTester extends AbstractShortCollectionTester
 {
 	public void testIterator() {

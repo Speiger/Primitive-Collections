@@ -18,6 +18,7 @@ import speiger.src.testers.objects.tests.base.maps.AbstractObject2LongMapTester;
 import speiger.src.testers.objects.utils.ObjectSamples;
 
 @Ignore
+@SuppressWarnings("javadoc")
 public class Object2LongMapReplaceAllTester<T> extends AbstractObject2LongMapTester<T>
 {
 	private ObjectSamples<T> keys() {

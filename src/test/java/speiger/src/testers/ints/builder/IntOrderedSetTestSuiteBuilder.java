@@ -11,6 +11,7 @@ import speiger.src.testers.ints.generators.TestIntOrderedSetGenerator;
 import speiger.src.testers.ints.tests.set.IntOrderedSetMoveTester;
 import speiger.src.testers.ints.tests.set.IntOrderedSetNavigationTester;
 
+@SuppressWarnings("javadoc")
 public class IntOrderedSetTestSuiteBuilder extends IntSetTestSuiteBuilder {
 	public static IntOrderedSetTestSuiteBuilder using(TestIntOrderedSetGenerator generator) {
 		return (IntOrderedSetTestSuiteBuilder) new IntOrderedSetTestSuiteBuilder().usingGenerator(generator);

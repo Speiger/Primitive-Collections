@@ -23,6 +23,7 @@ import speiger.src.testers.floats.tests.base.maps.AbstractFloat2LongMapTester;
 import speiger.src.testers.objects.utils.ObjectHelpers;
 
 @Ignore
+@SuppressWarnings("javadoc")
 public class Float2LongNavigableMapNavigationTester extends AbstractFloat2LongMapTester
 {
 	private Float2LongNavigableMap navigableMap;

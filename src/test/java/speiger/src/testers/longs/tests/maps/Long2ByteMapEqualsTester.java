@@ -11,6 +11,7 @@ import speiger.src.testers.longs.tests.base.maps.AbstractLong2ByteMapTester;
 import speiger.src.testers.objects.utils.ObjectHelpers;
 
 @Ignore
+@SuppressWarnings("javadoc")
 public class Long2ByteMapEqualsTester extends AbstractLong2ByteMapTester 
 {
 	public void testEquals_otherMapWithSameEntries() {

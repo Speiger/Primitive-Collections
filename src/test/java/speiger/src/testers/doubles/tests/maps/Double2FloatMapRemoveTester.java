@@ -19,6 +19,7 @@ import speiger.src.collections.objects.collections.ObjectIterator;
 import speiger.src.testers.doubles.tests.base.maps.AbstractDouble2FloatMapTester;
 
 @Ignore
+@SuppressWarnings("javadoc")
 public class Double2FloatMapRemoveTester extends AbstractDouble2FloatMapTester
 {
 	@MapFeature.Require(SUPPORTS_REMOVE)

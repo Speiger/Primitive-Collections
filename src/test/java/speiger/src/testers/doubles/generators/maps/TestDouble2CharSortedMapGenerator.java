@@ -6,6 +6,7 @@ import speiger.src.collections.doubles.maps.interfaces.Double2CharMap;
 import speiger.src.collections.doubles.maps.interfaces.Double2CharMap.Entry;
 import speiger.src.collections.doubles.maps.interfaces.Double2CharSortedMap;
 
+@SuppressWarnings("javadoc")
 public interface TestDouble2CharSortedMapGenerator extends TestDouble2CharMapGenerator, TestSortedMapGenerator<Double, Character>
 {
 	@Override

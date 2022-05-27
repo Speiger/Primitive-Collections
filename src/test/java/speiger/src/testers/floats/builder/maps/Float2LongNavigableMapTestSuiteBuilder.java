@@ -19,6 +19,7 @@ import speiger.src.testers.floats.impl.maps.DerivedFloat2LongMapGenerators;
 import speiger.src.testers.floats.tests.maps.Float2LongNavigableMapNavigationTester;
 import speiger.src.testers.utils.SpecialFeature;
 
+@SuppressWarnings("javadoc")
 public class Float2LongNavigableMapTestSuiteBuilder extends Float2LongSortedMapTestSuiteBuilder
 {
 	public static Float2LongNavigableMapTestSuiteBuilder using(TestFloat2LongSortedMapGenerator generator) {

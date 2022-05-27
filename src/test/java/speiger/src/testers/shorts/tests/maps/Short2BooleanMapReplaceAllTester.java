@@ -18,6 +18,7 @@ import speiger.src.testers.shorts.tests.base.maps.AbstractShort2BooleanMapTester
 import speiger.src.testers.shorts.utils.ShortSamples;
 
 @Ignore
+@SuppressWarnings("javadoc")
 public class Short2BooleanMapReplaceAllTester extends AbstractShort2BooleanMapTester
 {
 	private ShortSamples keys() {

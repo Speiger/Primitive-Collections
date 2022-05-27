@@ -15,6 +15,7 @@ import speiger.src.collections.objects.lists.ObjectList;
 import speiger.src.testers.doubles.tests.base.maps.AbstractDouble2BooleanMapTester;
 
 @Ignore
+@SuppressWarnings("javadoc")
 public class Double2BooleanMapForEachTester extends AbstractDouble2BooleanMapTester
 {
 	@CollectionFeature.Require(KNOWN_ORDER)

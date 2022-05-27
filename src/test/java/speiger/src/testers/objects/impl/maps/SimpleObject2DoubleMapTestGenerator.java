@@ -15,6 +15,7 @@ import speiger.src.testers.objects.generators.maps.TestObject2DoubleMapGenerator
 import speiger.src.testers.objects.generators.maps.TestObject2DoubleSortedMapGenerator;
 import speiger.src.testers.objects.utils.ObjectSamples;
 
+@SuppressWarnings("javadoc")
 public class SimpleObject2DoubleMapTestGenerator<T, E extends Object2DoubleMap<T>>
 {
 	BiFunction<T[], double[], E> mapper;

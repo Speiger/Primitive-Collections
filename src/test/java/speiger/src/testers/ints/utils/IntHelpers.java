@@ -14,6 +14,7 @@ import speiger.src.collections.ints.sets.IntLinkedOpenHashSet;
 import speiger.src.collections.ints.sets.IntSet;
 import speiger.src.collections.ints.utils.IntIterators;
 
+@SuppressWarnings("javadoc")
 public class IntHelpers {
 	public static boolean equals(int key, int value) {
 		return key == value;

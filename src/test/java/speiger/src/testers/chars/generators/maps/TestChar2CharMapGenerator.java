@@ -11,6 +11,7 @@ import speiger.src.collections.objects.collections.ObjectIterable;
 import speiger.src.collections.objects.lists.ObjectList;
 import speiger.src.testers.objects.utils.ObjectSamples;
 
+@SuppressWarnings("javadoc")
 public interface TestChar2CharMapGenerator extends TestMapGenerator<Character, Character> {
 	public ObjectSamples<Char2CharMap.Entry> getSamples();
 	public ObjectIterable<Char2CharMap.Entry> order(ObjectList<Char2CharMap.Entry> insertionOrder);

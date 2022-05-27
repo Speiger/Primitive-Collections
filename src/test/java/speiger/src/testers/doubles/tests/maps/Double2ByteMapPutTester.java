@@ -18,6 +18,7 @@ import speiger.src.collections.doubles.maps.interfaces.Double2ByteMap;
 import speiger.src.testers.doubles.tests.base.maps.AbstractDouble2ByteMapTester;
 
 @Ignore
+@SuppressWarnings("javadoc")
 public class Double2ByteMapPutTester extends AbstractDouble2ByteMapTester
 {	
 	@MapFeature.Require(SUPPORTS_PUT)

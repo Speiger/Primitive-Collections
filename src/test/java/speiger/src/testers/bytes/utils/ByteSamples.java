@@ -7,6 +7,7 @@ import speiger.src.collections.bytes.collections.ByteIterator;
 import speiger.src.collections.bytes.lists.ByteArrayList;
 import speiger.src.collections.bytes.lists.ByteList;
 
+@SuppressWarnings("javadoc")
 public class ByteSamples implements ByteIterable
 {
 	private final byte e0;

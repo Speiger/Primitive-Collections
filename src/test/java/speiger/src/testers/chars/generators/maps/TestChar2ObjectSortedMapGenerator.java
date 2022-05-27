@@ -6,6 +6,7 @@ import speiger.src.collections.chars.maps.interfaces.Char2ObjectMap;
 import speiger.src.collections.chars.maps.interfaces.Char2ObjectMap.Entry;
 import speiger.src.collections.chars.maps.interfaces.Char2ObjectSortedMap;
 
+@SuppressWarnings("javadoc")
 public interface TestChar2ObjectSortedMapGenerator<V> extends TestChar2ObjectMapGenerator<V>, TestSortedMapGenerator<Character, V>
 {
 	@Override

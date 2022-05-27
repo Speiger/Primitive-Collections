@@ -7,6 +7,7 @@ import org.junit.Ignore;
 import com.google.common.collect.testing.features.CollectionSize;
 
 @Ignore
+@SuppressWarnings("javadoc")
 public abstract class AbstractByteListIndexOfTester extends AbstractByteListTester
 {
 	protected abstract int find(byte o);

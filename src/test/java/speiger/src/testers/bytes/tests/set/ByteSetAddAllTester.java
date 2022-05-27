@@ -12,6 +12,7 @@ import speiger.src.testers.bytes.tests.base.AbstractByteSetTester;
 import speiger.src.testers.bytes.utils.MinimalByteCollection;
 
 @Ignore
+@SuppressWarnings("javadoc")
 public class ByteSetAddAllTester extends AbstractByteSetTester
 {
 	@CollectionFeature.Require(SUPPORTS_ADD)

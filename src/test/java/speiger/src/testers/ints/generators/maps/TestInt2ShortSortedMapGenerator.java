@@ -6,6 +6,7 @@ import speiger.src.collections.ints.maps.interfaces.Int2ShortMap;
 import speiger.src.collections.ints.maps.interfaces.Int2ShortMap.Entry;
 import speiger.src.collections.ints.maps.interfaces.Int2ShortSortedMap;
 
+@SuppressWarnings("javadoc")
 public interface TestInt2ShortSortedMapGenerator extends TestInt2ShortMapGenerator, TestSortedMapGenerator<Integer, Short>
 {
 	@Override

@@ -13,6 +13,7 @@ import speiger.src.collections.shorts.sets.ShortSortedSet;
 import speiger.src.testers.shorts.generators.TestShortSortedSetGenerator;
 import speiger.src.testers.shorts.utils.ShortSamples;
 
+@SuppressWarnings("javadoc")
 public class ShortSortedSetSubsetTestSetGenerator implements TestShortSortedSetGenerator
 {
 	final Bound to;

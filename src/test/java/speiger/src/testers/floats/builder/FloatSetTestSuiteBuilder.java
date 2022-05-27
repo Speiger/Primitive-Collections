@@ -34,6 +34,7 @@ import speiger.src.testers.floats.tests.set.FloatSetCreationTester;
 import speiger.src.testers.floats.tests.set.FloatSetEqualsTester;
 import speiger.src.testers.floats.tests.set.FloatSetRemoveTester;
 
+@SuppressWarnings("javadoc")
 public class FloatSetTestSuiteBuilder extends FloatCollectionTestSuiteBuilder {
 	public static FloatSetTestSuiteBuilder using(TestFloatSetGenerator generator) {
 		return (FloatSetTestSuiteBuilder) new FloatSetTestSuiteBuilder().usingGenerator(generator);

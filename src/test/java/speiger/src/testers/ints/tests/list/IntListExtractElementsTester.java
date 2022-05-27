@@ -12,6 +12,7 @@ import speiger.src.collections.ints.lists.IntArrayList;
 import speiger.src.testers.ints.tests.base.AbstractIntListTester;
 
 @Ignore
+@SuppressWarnings("javadoc")
 public class IntListExtractElementsTester extends AbstractIntListTester
 {
 	@CollectionFeature.Require(SUPPORTS_REMOVE)

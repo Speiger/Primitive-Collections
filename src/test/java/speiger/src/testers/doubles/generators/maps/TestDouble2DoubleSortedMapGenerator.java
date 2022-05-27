@@ -6,6 +6,7 @@ import speiger.src.collections.doubles.maps.interfaces.Double2DoubleMap;
 import speiger.src.collections.doubles.maps.interfaces.Double2DoubleMap.Entry;
 import speiger.src.collections.doubles.maps.interfaces.Double2DoubleSortedMap;
 
+@SuppressWarnings("javadoc")
 public interface TestDouble2DoubleSortedMapGenerator extends TestDouble2DoubleMapGenerator, TestSortedMapGenerator<Double, Double>
 {
 	@Override

@@ -19,6 +19,7 @@ import speiger.src.testers.objects.tests.base.AbstractObjectListTester;
 import speiger.src.testers.objects.utils.ObjectHelpers;
 
 @Ignore
+@SuppressWarnings("javadoc")
 public class ObjectListRemoveAtIndexTester<T> extends AbstractObjectListTester<T>
 {
 	@ListFeature.Require(absent = SUPPORTS_REMOVE_WITH_INDEX)

@@ -18,6 +18,7 @@ import speiger.src.testers.floats.tests.base.maps.AbstractFloat2ObjectMapTester;
 import speiger.src.testers.floats.utils.FloatSamples;
 
 @Ignore
+@SuppressWarnings("javadoc")
 public class Float2ObjectMapReplaceAllTester<V> extends AbstractFloat2ObjectMapTester<V>
 {
 	private FloatSamples keys() {

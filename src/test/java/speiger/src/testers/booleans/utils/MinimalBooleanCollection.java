@@ -8,6 +8,7 @@ import speiger.src.collections.booleans.collections.BooleanIterator;
 import speiger.src.collections.booleans.functions.BooleanConsumer;
 import speiger.src.collections.booleans.lists.BooleanArrayList;
 
+@SuppressWarnings("javadoc")
 public class MinimalBooleanCollection extends AbstractBooleanCollection {
 
 	private final boolean[] contents;

@@ -11,6 +11,7 @@ import speiger.src.testers.bytes.generators.TestByteOrderedSetGenerator;
 import speiger.src.testers.bytes.tests.set.ByteOrderedSetMoveTester;
 import speiger.src.testers.bytes.tests.set.ByteOrderedSetNavigationTester;
 
+@SuppressWarnings("javadoc")
 public class ByteOrderedSetTestSuiteBuilder extends ByteSetTestSuiteBuilder {
 	public static ByteOrderedSetTestSuiteBuilder using(TestByteOrderedSetGenerator generator) {
 		return (ByteOrderedSetTestSuiteBuilder) new ByteOrderedSetTestSuiteBuilder().usingGenerator(generator);

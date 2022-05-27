@@ -16,6 +16,7 @@ import speiger.src.collections.bytes.maps.interfaces.Byte2FloatMap;
 import speiger.src.testers.bytes.tests.base.maps.AbstractByte2FloatMapTester;
 
 @Ignore
+@SuppressWarnings("javadoc")
 public class Byte2FloatMapToStringTester extends AbstractByte2FloatMapTester
 {
 	public void testToString_minimal() {

@@ -7,6 +7,7 @@ import speiger.src.collections.doubles.lists.DoubleArrayList;
 import speiger.src.collections.doubles.lists.DoubleList;
 import speiger.src.collections.doubles.sets.DoubleSet;
 
+@SuppressWarnings("javadoc")
 public class MinimalDoubleSet extends MinimalDoubleCollection implements DoubleSet {
 	public static MinimalDoubleSet of(double...array) {
 		return MinimalDoubleSet.of(DoubleArrayList.wrap(array));

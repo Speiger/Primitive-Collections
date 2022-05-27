@@ -12,6 +12,7 @@ import speiger.src.collections.booleans.lists.BooleanArrayList;
 import speiger.src.testers.booleans.tests.base.AbstractBooleanListTester;
 
 @Ignore
+@SuppressWarnings("javadoc")
 public class BooleanListExtractElementsTester extends AbstractBooleanListTester
 {
 	@CollectionFeature.Require(SUPPORTS_REMOVE)

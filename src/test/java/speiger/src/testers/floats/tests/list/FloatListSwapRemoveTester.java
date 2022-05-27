@@ -12,6 +12,7 @@ import com.google.common.collect.testing.features.CollectionSize;
 import speiger.src.testers.floats.tests.base.AbstractFloatListTester;
 
 @Ignore
+@SuppressWarnings("javadoc")
 public class FloatListSwapRemoveTester extends AbstractFloatListTester
 {
 	@CollectionFeature.Require(SUPPORTS_REMOVE)

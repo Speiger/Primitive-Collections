@@ -23,6 +23,7 @@ import speiger.src.testers.floats.builder.maps.Float2IntNavigableMapTestSuiteBui
 import speiger.src.testers.floats.impl.maps.SimpleFloat2IntMapTestGenerator;
 import speiger.src.testers.utils.SpecialFeature;
 
+@SuppressWarnings("javadoc")
 public class Float2IntMapTests extends TestCase
 {
 	public static Test suite() {

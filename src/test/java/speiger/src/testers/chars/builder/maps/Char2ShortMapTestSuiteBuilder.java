@@ -59,6 +59,7 @@ import speiger.src.testers.objects.tests.collection.ObjectCollectionRetainAllTes
 import speiger.src.testers.utils.SpecialFeature;
 import speiger.src.testers.utils.TestUtils;
 
+@SuppressWarnings("javadoc")
 public class Char2ShortMapTestSuiteBuilder extends MapTestSuiteBuilder<Character, Short> {
 	public static Char2ShortMapTestSuiteBuilder using(TestChar2ShortMapGenerator generator) {
 		return (Char2ShortMapTestSuiteBuilder) new Char2ShortMapTestSuiteBuilder().usingGenerator(generator);

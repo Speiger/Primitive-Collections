@@ -15,6 +15,7 @@ import speiger.src.testers.shorts.tests.base.AbstractShortListTester;
 import speiger.src.testers.shorts.utils.MinimalShortCollection;
 
 @Ignore
+@SuppressWarnings("javadoc")
 public class ShortListAddAllAtIndexTester extends AbstractShortListTester
 {
 	@ListFeature.Require(SUPPORTS_ADD_WITH_INDEX)

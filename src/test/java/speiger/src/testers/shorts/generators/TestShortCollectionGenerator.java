@@ -10,6 +10,7 @@ import speiger.src.collections.shorts.collections.ShortIterable;
 import speiger.src.collections.shorts.lists.ShortList;
 import speiger.src.testers.shorts.utils.ShortSamples;
 
+@SuppressWarnings("javadoc")
 public interface TestShortCollectionGenerator extends TestCollectionGenerator<Short>
 {
 	public ShortSamples getSamples();

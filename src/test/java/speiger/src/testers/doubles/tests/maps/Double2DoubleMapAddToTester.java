@@ -17,6 +17,7 @@ import speiger.src.collections.doubles.maps.interfaces.Double2DoubleMap;
 import speiger.src.testers.doubles.tests.base.maps.AbstractDouble2DoubleMapTester;
 
 @Ignore
+@SuppressWarnings("javadoc")
 public class Double2DoubleMapAddToTester extends AbstractDouble2DoubleMapTester
 {	@MapFeature.Require(SUPPORTS_PUT)
 	@CollectionSize.Require(absent = ZERO)

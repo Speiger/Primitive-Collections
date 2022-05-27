@@ -23,6 +23,7 @@ import speiger.src.testers.ints.tests.base.maps.AbstractInt2ByteMapTester;
 import speiger.src.testers.objects.utils.ObjectHelpers;
 
 @Ignore
+@SuppressWarnings("javadoc")
 public class Int2ByteNavigableMapNavigationTester extends AbstractInt2ByteMapTester
 {
 	private Int2ByteNavigableMap navigableMap;

@@ -18,6 +18,7 @@ import speiger.src.testers.shorts.generators.TestShortSetGenerator;
 import speiger.src.testers.shorts.generators.TestShortSortedSetGenerator;
 import speiger.src.testers.shorts.utils.ShortSamples;
 
+@SuppressWarnings("javadoc")
 public class SimpleShortTestGenerator<E extends ShortCollection> {
 	Function<short[], E> mapper;
 	public SimpleShortTestGenerator(Function<short[], E> mapper) {

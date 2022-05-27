@@ -23,6 +23,7 @@ import speiger.src.testers.chars.builder.maps.Char2CharNavigableMapTestSuiteBuil
 import speiger.src.testers.chars.impl.maps.SimpleChar2CharMapTestGenerator;
 import speiger.src.testers.utils.SpecialFeature;
 
+@SuppressWarnings("javadoc")
 public class Char2CharMapTests extends TestCase
 {
 	public static Test suite() {

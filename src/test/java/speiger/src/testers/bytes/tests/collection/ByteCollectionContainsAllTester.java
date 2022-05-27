@@ -10,6 +10,7 @@ import speiger.src.testers.bytes.tests.base.AbstractByteCollectionTester;
 import speiger.src.testers.bytes.utils.MinimalByteCollection;
 
 @Ignore
+@SuppressWarnings("javadoc")
 public class ByteCollectionContainsAllTester extends AbstractByteCollectionTester
 {
 	public void testContainsAll_empty() {

@@ -11,6 +11,7 @@ import speiger.src.testers.chars.tests.base.maps.AbstractChar2ByteMapTester;
 import speiger.src.testers.objects.utils.ObjectHelpers;
 
 @Ignore
+@SuppressWarnings("javadoc")
 public class Char2ByteMapEqualsTester extends AbstractChar2ByteMapTester 
 {
 	public void testEquals_otherMapWithSameEntries() {

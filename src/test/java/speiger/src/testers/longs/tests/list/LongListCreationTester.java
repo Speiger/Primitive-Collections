@@ -12,6 +12,7 @@ import com.google.common.collect.testing.features.CollectionSize;
 import speiger.src.testers.longs.tests.base.AbstractLongListTester;
 
 @Ignore
+@SuppressWarnings("javadoc")
 public class LongListCreationTester extends AbstractLongListTester
 {
 	@CollectionFeature.Require(absent = REJECTS_DUPLICATES_AT_CREATION)

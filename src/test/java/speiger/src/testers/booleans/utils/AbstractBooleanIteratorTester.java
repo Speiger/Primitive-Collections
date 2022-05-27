@@ -22,7 +22,9 @@ import speiger.src.collections.booleans.lists.BooleanArrayList;
 import speiger.src.collections.booleans.lists.BooleanList;
 import speiger.src.collections.booleans.lists.BooleanListIterator;
 
-public abstract class AbstractBooleanIteratorTester{
+@SuppressWarnings("javadoc")
+public abstract class AbstractBooleanIteratorTester
+{
 	private Stimulus<BooleanIterator>[] stimuli;
 	private final BooleanIterator elementsToInsert;
 	private final Set<IteratorFeature> features;
@@ -312,7 +314,7 @@ public abstract class AbstractBooleanIteratorTester{
 		}
 
 		try {
-			if (method == nextBoolean_METHOD && targetException == null && knownOrder == KnownOrder.UNKNOWN_ORDER) {
+			if (method == NEXT_METHOD && targetException == null && knownOrder == KnownOrder.UNKNOWN_ORDER) {
 				((MultiExceptionListIterator) reference).promoteToNext(targetReturnValue);
 			}
 			
@@ -346,7 +348,7 @@ public abstract class AbstractBooleanIteratorTester{
 		referenceException.assertPermitted(targetException);
 	}
 
-	private static final IteratorOperation removeBoolean_METHOD = new IteratorOperation() {
+	private static final IteratorOperation REMOVE_METHOD = new IteratorOperation() {
 		@Override
 		public boolean execute(BooleanIterator iterator) {
 			iterator.remove();
@@ -354,14 +356,14 @@ public abstract class AbstractBooleanIteratorTester{
 		}
 	};
 
-	private static final IteratorOperation nextBoolean_METHOD = new IteratorOperation() {
+	private static final IteratorOperation NEXT_METHOD = new IteratorOperation() {
 		@Override
 		public boolean execute(BooleanIterator iterator) {
 			return iterator.nextBoolean();
 		}
 	};
 
-	private static final IteratorOperation previousBoolean_METHOD = new IteratorOperation() {
+	private static final IteratorOperation PREVIOUS_METHOD = new IteratorOperation() {
 		@Override
 		public boolean execute(BooleanIterator iterator) {
 			return ((BooleanBidirectionalIterator) iterator).previousBoolean();
@@ -418,13 +420,13 @@ public abstract class AbstractBooleanIteratorTester{
 	Stimulus<BooleanIterator> next = new Stimulus<BooleanIterator>("next") {
 		@Override
 		void executeAndCompare(BooleanListIterator reference, BooleanIterator target) {
-			internalExecuteAndCompare(reference, target, nextBoolean_METHOD);
+			internalExecuteAndCompare(reference, target, NEXT_METHOD);
 		}
 	};
 	Stimulus<BooleanIterator> remove = new Stimulus<BooleanIterator>("remove") {
 		@Override
 		void executeAndCompare(BooleanListIterator reference, BooleanIterator target) {
-			internalExecuteAndCompare(reference, target, removeBoolean_METHOD);
+			internalExecuteAndCompare(reference, target, REMOVE_METHOD);
 		}
 	};
 
@@ -442,7 +444,7 @@ public abstract class AbstractBooleanIteratorTester{
 	Stimulus<BooleanBidirectionalIterator> previous = new Stimulus<BooleanBidirectionalIterator>("previous") {
 		@Override
 		void executeAndCompare(BooleanListIterator reference, BooleanBidirectionalIterator target) {
-			internalExecuteAndCompare(reference, target, previousBoolean_METHOD);
+			internalExecuteAndCompare(reference, target, PREVIOUS_METHOD);
 		}
 	};
 	

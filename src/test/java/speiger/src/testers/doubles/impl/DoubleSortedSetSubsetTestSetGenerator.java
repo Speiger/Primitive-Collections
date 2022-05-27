@@ -13,6 +13,7 @@ import speiger.src.collections.doubles.sets.DoubleSortedSet;
 import speiger.src.testers.doubles.generators.TestDoubleSortedSetGenerator;
 import speiger.src.testers.doubles.utils.DoubleSamples;
 
+@SuppressWarnings("javadoc")
 public class DoubleSortedSetSubsetTestSetGenerator implements TestDoubleSortedSetGenerator
 {
 	final Bound to;

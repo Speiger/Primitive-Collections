@@ -11,6 +11,7 @@ import speiger.src.testers.objects.tests.base.maps.AbstractObject2ShortMapTester
 import speiger.src.testers.objects.utils.ObjectHelpers;
 
 @Ignore
+@SuppressWarnings("javadoc")
 public class Object2ShortMapEqualsTester<T> extends AbstractObject2ShortMapTester<T> 
 {
 	public void testEquals_otherMapWithSameEntries() {

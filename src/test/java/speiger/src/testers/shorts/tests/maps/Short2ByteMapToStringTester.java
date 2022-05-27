@@ -16,6 +16,7 @@ import speiger.src.collections.shorts.maps.interfaces.Short2ByteMap;
 import speiger.src.testers.shorts.tests.base.maps.AbstractShort2ByteMapTester;
 
 @Ignore
+@SuppressWarnings("javadoc")
 public class Short2ByteMapToStringTester extends AbstractShort2ByteMapTester
 {
 	public void testToString_minimal() {

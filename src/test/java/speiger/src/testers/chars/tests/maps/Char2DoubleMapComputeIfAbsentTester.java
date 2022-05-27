@@ -12,6 +12,7 @@ import junit.framework.AssertionFailedError;
 import speiger.src.testers.chars.tests.base.maps.AbstractChar2DoubleMapTester;
 
 @Ignore
+@SuppressWarnings("javadoc")
 public class Char2DoubleMapComputeIfAbsentTester extends AbstractChar2DoubleMapTester
 {
 	@MapFeature.Require(SUPPORTS_PUT)

@@ -15,6 +15,7 @@ import speiger.src.testers.objects.generators.maps.TestObject2ObjectMapGenerator
 import speiger.src.testers.objects.generators.maps.TestObject2ObjectSortedMapGenerator;
 import speiger.src.testers.objects.utils.ObjectSamples;
 
+@SuppressWarnings("javadoc")
 public class SimpleObject2ObjectMapTestGenerator<T, V, E extends Object2ObjectMap<T, V>>
 {
 	BiFunction<T[], V[], E> mapper;

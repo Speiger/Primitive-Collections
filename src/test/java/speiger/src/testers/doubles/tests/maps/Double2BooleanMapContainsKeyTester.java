@@ -9,6 +9,7 @@ import com.google.common.collect.testing.features.CollectionSize;
 import speiger.src.testers.doubles.tests.base.maps.AbstractDouble2BooleanMapTester;
 
 @Ignore
+@SuppressWarnings("javadoc")
 public class Double2BooleanMapContainsKeyTester extends AbstractDouble2BooleanMapTester
 {
 	@CollectionSize.Require(absent = ZERO)

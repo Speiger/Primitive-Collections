@@ -12,6 +12,7 @@ import com.google.common.collect.testing.features.MapFeature;
 import speiger.src.testers.bytes.tests.base.maps.AbstractByte2DoubleMapTester;
 
 @Ignore
+@SuppressWarnings("javadoc")
 public class Byte2DoubleMapComputeTester extends AbstractByte2DoubleMapTester
 {
 	@MapFeature.Require({ SUPPORTS_PUT, SUPPORTS_REMOVE })

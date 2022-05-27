@@ -6,6 +6,7 @@ import speiger.src.collections.ints.maps.interfaces.Int2FloatMap;
 import speiger.src.collections.ints.maps.interfaces.Int2FloatMap.Entry;
 import speiger.src.collections.ints.maps.interfaces.Int2FloatSortedMap;
 
+@SuppressWarnings("javadoc")
 public interface TestInt2FloatSortedMapGenerator extends TestInt2FloatMapGenerator, TestSortedMapGenerator<Integer, Float>
 {
 	@Override

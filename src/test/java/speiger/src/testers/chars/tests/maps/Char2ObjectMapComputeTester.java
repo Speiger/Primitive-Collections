@@ -12,6 +12,7 @@ import com.google.common.collect.testing.features.MapFeature;
 import speiger.src.testers.chars.tests.base.maps.AbstractChar2ObjectMapTester;
 
 @Ignore
+@SuppressWarnings("javadoc")
 public class Char2ObjectMapComputeTester<V> extends AbstractChar2ObjectMapTester<V>
 {
 	@MapFeature.Require({ SUPPORTS_PUT, SUPPORTS_REMOVE })

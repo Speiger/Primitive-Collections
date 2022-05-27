@@ -24,6 +24,7 @@ import speiger.src.testers.booleans.tests.base.AbstractBooleanListTester;
 import speiger.src.testers.booleans.utils.BooleanHelpers;
 
 @Ignore
+@SuppressWarnings("javadoc")
 public class BooleanListSubListTester extends AbstractBooleanListTester
 {
 	public void testSubList_startNegative() {

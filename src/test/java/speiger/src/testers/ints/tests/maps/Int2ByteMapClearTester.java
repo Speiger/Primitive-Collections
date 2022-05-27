@@ -19,6 +19,7 @@ import speiger.src.collections.objects.collections.ObjectIterator;
 import speiger.src.testers.ints.tests.base.maps.AbstractInt2ByteMapTester;
 
 @Ignore
+@SuppressWarnings("javadoc")
 public class Int2ByteMapClearTester extends AbstractInt2ByteMapTester 
 {
 	@MapFeature.Require(SUPPORTS_REMOVE)

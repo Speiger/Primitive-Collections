@@ -6,9 +6,9 @@ import speiger.src.collections.bytes.collections.ByteIterable;
 import speiger.src.collections.bytes.collections.ByteIterator;
 import speiger.src.collections.bytes.utils.ByteLists;
 
+@SuppressWarnings("javadoc")
 public abstract class ByteIteratorTester extends AbstractByteIteratorTester
 {
-
 	public ByteIteratorTester(int steps, Iterable<? extends IteratorFeature> features, ByteIterable expectedElements,
 			KnownOrder knownOrder) {
 		super(steps, ByteLists.singleton((byte)-1), features, expectedElements, knownOrder, 0);

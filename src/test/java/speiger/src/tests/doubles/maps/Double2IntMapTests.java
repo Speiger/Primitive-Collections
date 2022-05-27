@@ -23,6 +23,7 @@ import speiger.src.testers.doubles.builder.maps.Double2IntNavigableMapTestSuiteB
 import speiger.src.testers.doubles.impl.maps.SimpleDouble2IntMapTestGenerator;
 import speiger.src.testers.utils.SpecialFeature;
 
+@SuppressWarnings("javadoc")
 public class Double2IntMapTests extends TestCase
 {
 	public static Test suite() {

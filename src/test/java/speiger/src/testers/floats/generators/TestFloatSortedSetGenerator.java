@@ -2,6 +2,7 @@ package speiger.src.testers.floats.generators;
 
 import speiger.src.collections.floats.sets.FloatSortedSet;
 
+@SuppressWarnings("javadoc")
 public interface TestFloatSortedSetGenerator extends TestFloatSetGenerator {
 	@Override
 	FloatSortedSet create(float... elements);

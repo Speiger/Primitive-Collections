@@ -270,7 +270,7 @@ public class Short2ObjectRBTreeMap<V> extends AbstractShort2ObjectMap<V> impleme
 	
 	@Override
 	public short pollFirstShortKey() {
-		if(tree == null) return (short)0;
+		if(tree == null) return getDefaultMinValue();
 		short result = first.key;
 		removeNode(first);
 		return result;
@@ -284,7 +284,7 @@ public class Short2ObjectRBTreeMap<V> extends AbstractShort2ObjectMap<V> impleme
 	
 	@Override
 	public short pollLastShortKey() {
-		if(tree == null) return (short)0;
+		if(tree == null) return getDefaultMaxValue();
 		short result = last.key;
 		removeNode(last);
 		return result;
@@ -911,6 +911,31 @@ public class Short2ObjectRBTreeMap<V> extends AbstractShort2ObjectMap<V> impleme
 		public short ceiling(short e) { return map.ceilingKey(e); }
 		@Override
 		public short higher(short e) { return map.higherKey(e); }
+		
+		@Override
+		public Short lower(Short e) {
+			Short2ObjectMap.Entry<V> node = map.lowerEntry(e.shortValue());
+			return node != null ? node.getKey() : null;
+		}
+		
+		@Override
+		public Short floor(Short e) {
+			Short2ObjectMap.Entry<V> node = map.floorEntry(e.shortValue());
+			return node != null ? node.getKey() : null;
+		}
+		
+		@Override
+		public Short higher(Short e) {
+			Short2ObjectMap.Entry<V> node = map.higherEntry(e.shortValue());
+			return node != null ? node.getKey() : null;
+		}
+		
+		@Override
+		public Short ceiling(Short e) {
+			Short2ObjectMap.Entry<V> node = map.ceilingEntry(e.shortValue());
+			return node != null ? node.getKey() : null;
+		}
+		
 		@Override
 		public short pollFirstShort() { return map.pollFirstShortKey(); }
 		@Override
@@ -1318,8 +1343,8 @@ public class Short2ObjectRBTreeMap<V> extends AbstractShort2ObjectMap<V> impleme
 		protected abstract ShortBidirectionalIterator keyIterator(short element);
 		protected abstract ObjectBidirectionalIterator<V> valueIterator();
 		protected abstract ShortBidirectionalIterator descendingKeyIterator();
-		protected short lowKeyOrNull(Node<V> entry) { return entry == null ? (short)0 : entry.key; }
-		protected short highKeyOrNull(Node<V> entry) { return entry == null ? (short)0 : entry.key; }
+		protected short lowKeyOrNull(Node<V> entry) { return entry == null ? getDefaultMinValue() : entry.key; }
+		protected short highKeyOrNull(Node<V> entry) { return entry == null ? getDefaultMaxValue() : entry.key; }
 		protected Node<V> next(Node<V> entry) { return entry.next(); }
 		protected Node<V> previous(Node<V> entry) { return entry.previous(); }
 		
@@ -1390,7 +1415,7 @@ public class Short2ObjectRBTreeMap<V> extends AbstractShort2ObjectMap<V> impleme
 				map.removeNode(entry);
 				return result;
 			}
-			return (short)0;
+			return getDefaultMinValue();
 		}
 		
 		@Override
@@ -1401,7 +1426,7 @@ public class Short2ObjectRBTreeMap<V> extends AbstractShort2ObjectMap<V> impleme
 				map.removeNode(entry);
 				return result;
 			}
-			return (short)0;
+			return getDefaultMaxValue();
 		}
 		
 		@Override
@@ -1467,7 +1492,7 @@ public class Short2ObjectRBTreeMap<V> extends AbstractShort2ObjectMap<V> impleme
 		
 		@Override
 		public V removeOrDefault(short key, V defaultValue) {
-			return inRange(key) ? map.remove(key) : defaultValue;
+			return inRange(key) ? map.removeOrDefault(key, defaultValue) : defaultValue;
 		}
 		
 		@Override
@@ -1943,8 +1968,8 @@ public class Short2ObjectRBTreeMap<V> extends AbstractShort2ObjectMap<V> impleme
 			public SubMapEntryIterator(Node<V> first, Node<V> forwardFence, Node<V> backwardFence)
 			{
 				next = first;
-				this.forwardFence = forwardFence == null ? null : forwardFence.key;
-				this.backwardFence = backwardFence == null ? null : backwardFence.key;
+				this.forwardFence = forwardFence == null ? (short)0 : forwardFence.key;
+				this.backwardFence = backwardFence == null ? (short)0 : backwardFence.key;
 				unboundForwardFence = forwardFence == null;
 				unboundBackwardFence = backwardFence == null;
 			}

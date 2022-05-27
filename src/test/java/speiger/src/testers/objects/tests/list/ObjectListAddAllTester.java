@@ -15,6 +15,7 @@ import speiger.src.testers.objects.tests.base.AbstractObjectListTester;
 import speiger.src.testers.objects.utils.MinimalObjectCollection;
 
 @Ignore
+@SuppressWarnings("javadoc")
 public class ObjectListAddAllTester<T> extends AbstractObjectListTester<T>
 {
 	@CollectionFeature.Require(SUPPORTS_ADD)

@@ -22,7 +22,9 @@ import speiger.src.collections.shorts.lists.ShortArrayList;
 import speiger.src.collections.shorts.lists.ShortList;
 import speiger.src.collections.shorts.lists.ShortListIterator;
 
-public abstract class AbstractShortIteratorTester{
+@SuppressWarnings("javadoc")
+public abstract class AbstractShortIteratorTester
+{
 	private Stimulus<ShortIterator>[] stimuli;
 	private final ShortIterator elementsToInsert;
 	private final Set<IteratorFeature> features;
@@ -312,7 +314,7 @@ public abstract class AbstractShortIteratorTester{
 		}
 
 		try {
-			if (method == nextShort_METHOD && targetException == null && knownOrder == KnownOrder.UNKNOWN_ORDER) {
+			if (method == NEXT_METHOD && targetException == null && knownOrder == KnownOrder.UNKNOWN_ORDER) {
 				((MultiExceptionListIterator) reference).promoteToNext(targetReturnValue);
 			}
 			
@@ -346,7 +348,7 @@ public abstract class AbstractShortIteratorTester{
 		referenceException.assertPermitted(targetException);
 	}
 
-	private static final IteratorOperation removeShort_METHOD = new IteratorOperation() {
+	private static final IteratorOperation REMOVE_METHOD = new IteratorOperation() {
 		@Override
 		public short execute(ShortIterator iterator) {
 			iterator.remove();
@@ -354,14 +356,14 @@ public abstract class AbstractShortIteratorTester{
 		}
 	};
 
-	private static final IteratorOperation nextShort_METHOD = new IteratorOperation() {
+	private static final IteratorOperation NEXT_METHOD = new IteratorOperation() {
 		@Override
 		public short execute(ShortIterator iterator) {
 			return iterator.nextShort();
 		}
 	};
 
-	private static final IteratorOperation previousShort_METHOD = new IteratorOperation() {
+	private static final IteratorOperation PREVIOUS_METHOD = new IteratorOperation() {
 		@Override
 		public short execute(ShortIterator iterator) {
 			return ((ShortBidirectionalIterator) iterator).previousShort();
@@ -418,13 +420,13 @@ public abstract class AbstractShortIteratorTester{
 	Stimulus<ShortIterator> next = new Stimulus<ShortIterator>("next") {
 		@Override
 		void executeAndCompare(ShortListIterator reference, ShortIterator target) {
-			internalExecuteAndCompare(reference, target, nextShort_METHOD);
+			internalExecuteAndCompare(reference, target, NEXT_METHOD);
 		}
 	};
 	Stimulus<ShortIterator> remove = new Stimulus<ShortIterator>("remove") {
 		@Override
 		void executeAndCompare(ShortListIterator reference, ShortIterator target) {
-			internalExecuteAndCompare(reference, target, removeShort_METHOD);
+			internalExecuteAndCompare(reference, target, REMOVE_METHOD);
 		}
 	};
 
@@ -442,7 +444,7 @@ public abstract class AbstractShortIteratorTester{
 	Stimulus<ShortBidirectionalIterator> previous = new Stimulus<ShortBidirectionalIterator>("previous") {
 		@Override
 		void executeAndCompare(ShortListIterator reference, ShortBidirectionalIterator target) {
-			internalExecuteAndCompare(reference, target, previousShort_METHOD);
+			internalExecuteAndCompare(reference, target, PREVIOUS_METHOD);
 		}
 	};
 	

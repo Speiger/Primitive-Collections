@@ -18,6 +18,7 @@ import speiger.src.testers.longs.tests.base.maps.AbstractLong2DoubleMapTester;
 import speiger.src.testers.longs.utils.LongSamples;
 
 @Ignore
+@SuppressWarnings("javadoc")
 public class Long2DoubleMapReplaceAllTester extends AbstractLong2DoubleMapTester
 {
 	private LongSamples keys() {

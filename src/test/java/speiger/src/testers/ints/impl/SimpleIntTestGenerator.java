@@ -18,6 +18,7 @@ import speiger.src.testers.ints.generators.TestIntSetGenerator;
 import speiger.src.testers.ints.generators.TestIntSortedSetGenerator;
 import speiger.src.testers.ints.utils.IntSamples;
 
+@SuppressWarnings("javadoc")
 public class SimpleIntTestGenerator<E extends IntCollection> {
 	Function<int[], E> mapper;
 	public SimpleIntTestGenerator(Function<int[], E> mapper) {

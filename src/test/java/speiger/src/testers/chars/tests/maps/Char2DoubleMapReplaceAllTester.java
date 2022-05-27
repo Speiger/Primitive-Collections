@@ -18,6 +18,7 @@ import speiger.src.testers.chars.tests.base.maps.AbstractChar2DoubleMapTester;
 import speiger.src.testers.chars.utils.CharSamples;
 
 @Ignore
+@SuppressWarnings("javadoc")
 public class Char2DoubleMapReplaceAllTester extends AbstractChar2DoubleMapTester
 {
 	private CharSamples keys() {

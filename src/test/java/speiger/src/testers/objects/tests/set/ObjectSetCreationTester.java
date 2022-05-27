@@ -13,6 +13,7 @@ import speiger.src.collections.objects.lists.ObjectArrayList;
 import speiger.src.testers.objects.tests.base.AbstractObjectSetTester;
 
 @Ignore
+@SuppressWarnings("javadoc")
 public class ObjectSetCreationTester<T> extends AbstractObjectSetTester<T>
 {
 	@CollectionFeature.Require(absent = REJECTS_DUPLICATES_AT_CREATION)

@@ -5,6 +5,7 @@ import org.junit.Ignore;
 import speiger.src.testers.ints.tests.base.AbstractIntCollectionTester;
 
 @Ignore
+@SuppressWarnings("javadoc")
 public class IntCollectionEqualsTester extends AbstractIntCollectionTester
 {
 	public void testEquals_self() {

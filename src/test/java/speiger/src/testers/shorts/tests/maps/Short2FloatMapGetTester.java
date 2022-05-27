@@ -9,6 +9,7 @@ import com.google.common.collect.testing.features.CollectionSize;
 import speiger.src.testers.shorts.tests.base.maps.AbstractShort2FloatMapTester;
 
 @Ignore
+@SuppressWarnings("javadoc")
 public class Short2FloatMapGetTester extends AbstractShort2FloatMapTester
 {
 	@CollectionSize.Require(absent = ZERO)

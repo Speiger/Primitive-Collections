@@ -14,6 +14,7 @@ import speiger.src.collections.objects.lists.ObjectArrayList;
 import speiger.src.testers.chars.tests.base.maps.AbstractChar2ByteMapTester;
 
 @Ignore
+@SuppressWarnings("javadoc")
 public class Char2ByteMapCreatorTester extends AbstractChar2ByteMapTester
 {
 	@MapFeature.Require(absent = REJECTS_DUPLICATES_AT_CREATION)

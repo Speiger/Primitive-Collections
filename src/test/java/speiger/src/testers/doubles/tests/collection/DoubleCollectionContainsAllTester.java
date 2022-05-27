@@ -10,6 +10,7 @@ import speiger.src.testers.doubles.tests.base.AbstractDoubleCollectionTester;
 import speiger.src.testers.doubles.utils.MinimalDoubleCollection;
 
 @Ignore
+@SuppressWarnings("javadoc")
 public class DoubleCollectionContainsAllTester extends AbstractDoubleCollectionTester
 {
 	public void testContainsAll_empty() {

@@ -8,6 +8,7 @@ import speiger.src.collections.doubles.collections.DoubleIterator;
 import speiger.src.collections.doubles.functions.DoubleConsumer;
 import speiger.src.collections.doubles.lists.DoubleArrayList;
 
+@SuppressWarnings("javadoc")
 public class MinimalDoubleCollection extends AbstractDoubleCollection {
 
 	private final double[] contents;

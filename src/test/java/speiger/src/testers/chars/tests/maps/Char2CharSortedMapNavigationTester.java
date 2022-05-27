@@ -21,6 +21,7 @@ import speiger.src.testers.chars.tests.base.maps.AbstractChar2CharMapTester;
 import speiger.src.testers.objects.utils.ObjectHelpers;
 
 @Ignore
+@SuppressWarnings("javadoc")
 public class Char2CharSortedMapNavigationTester extends AbstractChar2CharMapTester
 {
 	private Char2CharSortedMap sortedMap;

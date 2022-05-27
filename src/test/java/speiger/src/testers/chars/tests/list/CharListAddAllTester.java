@@ -15,6 +15,7 @@ import speiger.src.testers.chars.tests.base.AbstractCharListTester;
 import speiger.src.testers.chars.utils.MinimalCharCollection;
 
 @Ignore
+@SuppressWarnings("javadoc")
 public class CharListAddAllTester extends AbstractCharListTester
 {
 	@CollectionFeature.Require(SUPPORTS_ADD)

@@ -19,6 +19,7 @@ import speiger.src.collections.objects.collections.ObjectIterator;
 import speiger.src.testers.bytes.tests.base.maps.AbstractByte2BooleanMapTester;
 
 @Ignore
+@SuppressWarnings("javadoc")
 public class Byte2BooleanMapRemoveTester extends AbstractByte2BooleanMapTester
 {
 	@MapFeature.Require(SUPPORTS_REMOVE)

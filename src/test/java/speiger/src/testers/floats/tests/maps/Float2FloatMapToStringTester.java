@@ -16,6 +16,7 @@ import speiger.src.collections.floats.maps.interfaces.Float2FloatMap;
 import speiger.src.testers.floats.tests.base.maps.AbstractFloat2FloatMapTester;
 
 @Ignore
+@SuppressWarnings("javadoc")
 public class Float2FloatMapToStringTester extends AbstractFloat2FloatMapTester
 {
 	public void testToString_minimal() {

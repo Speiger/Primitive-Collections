@@ -9,6 +9,7 @@ import com.google.common.collect.testing.features.CollectionSize;
 import speiger.src.testers.chars.tests.base.maps.AbstractChar2BooleanMapTester;
 
 @Ignore
+@SuppressWarnings("javadoc")
 public class Char2BooleanMapContainsValueTester extends AbstractChar2BooleanMapTester
 {
 	@CollectionSize.Require(absent = ZERO)

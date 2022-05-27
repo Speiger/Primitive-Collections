@@ -15,6 +15,7 @@ import speiger.src.collections.objects.lists.ObjectList;
 import speiger.src.testers.objects.tests.base.maps.AbstractObject2ShortMapTester;
 
 @Ignore
+@SuppressWarnings("javadoc")
 public class Object2ShortMapForEachTester<T> extends AbstractObject2ShortMapTester<T>
 {
 	@CollectionFeature.Require(KNOWN_ORDER)

@@ -18,12 +18,13 @@ import speiger.src.collections.doubles.maps.interfaces.Double2CharMap;
 import speiger.src.testers.doubles.tests.base.maps.AbstractDouble2CharMapTester;
 
 @Ignore
+@SuppressWarnings("javadoc")
 public class Double2CharMapAddToTester extends AbstractDouble2CharMapTester
 {	@MapFeature.Require(SUPPORTS_PUT)
 	@CollectionSize.Require(absent = ZERO)
 	public void testAddTo_supportedPresent() {
 		assertEquals("addTo(present, value) should return the old value", v0(), getMap().addTo(k0(), v3()));
-		expectReplacement(entry(k0(), v3()));
+		expectReplacement(entry(k0(), (char)(v0()+v3())));
 	}
 	
 	@MapFeature.Require(SUPPORTS_PUT)

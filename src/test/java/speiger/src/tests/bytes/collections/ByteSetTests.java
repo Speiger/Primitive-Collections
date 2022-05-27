@@ -27,7 +27,9 @@ import speiger.src.testers.bytes.builder.ByteSortedSetTestSuiteBuilder;
 import speiger.src.testers.bytes.impl.SimpleByteTestGenerator;
 import speiger.src.testers.utils.SpecialFeature;
 
-public class ByteSetTests extends TestCase {
+@SuppressWarnings("javadoc")
+public class ByteSetTests extends TestCase
+{
 	
 	public static Test suite() {
 		TestSuite suite = new TestSuite("ByteSets");

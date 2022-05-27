@@ -5,6 +5,7 @@ import org.junit.Ignore;
 import speiger.src.collections.bytes.collections.ByteCollection;
 
 @Ignore
+@SuppressWarnings("javadoc")
 public class AbstractByteCollectionTester extends AbstractByteContainerTester<ByteCollection>
 {
 	protected ByteCollection collection;

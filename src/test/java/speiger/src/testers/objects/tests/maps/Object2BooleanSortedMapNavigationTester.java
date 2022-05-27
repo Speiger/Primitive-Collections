@@ -20,6 +20,7 @@ import speiger.src.testers.objects.tests.base.maps.AbstractObject2BooleanMapTest
 import speiger.src.testers.objects.utils.ObjectHelpers;
 
 @Ignore
+@SuppressWarnings("javadoc")
 public class Object2BooleanSortedMapNavigationTester<T> extends AbstractObject2BooleanMapTester<T>
 {
 	private Object2BooleanSortedMap<T> sortedMap;

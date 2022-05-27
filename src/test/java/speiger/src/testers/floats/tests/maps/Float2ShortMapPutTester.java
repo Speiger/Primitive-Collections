@@ -18,6 +18,7 @@ import speiger.src.collections.floats.maps.interfaces.Float2ShortMap;
 import speiger.src.testers.floats.tests.base.maps.AbstractFloat2ShortMapTester;
 
 @Ignore
+@SuppressWarnings("javadoc")
 public class Float2ShortMapPutTester extends AbstractFloat2ShortMapTester
 {	
 	@MapFeature.Require(SUPPORTS_PUT)

@@ -23,6 +23,7 @@ import speiger.src.testers.objects.tests.collection.ObjectCollectionRemoveIfTest
 import speiger.src.testers.objects.tests.collection.ObjectCollectionRetainAllTester;
 import speiger.src.testers.objects.tests.collection.ObjectCollectionToArrayTester;
 
+@SuppressWarnings("javadoc")
 public class ObjectCollectionTestSuiteBuilder<T> extends CollectionTestSuiteBuilder<T> {
 	public static <T> ObjectCollectionTestSuiteBuilder<T> using(TestObjectCollectionGenerator<T> generator) {
 		return (ObjectCollectionTestSuiteBuilder<T>) new ObjectCollectionTestSuiteBuilder<T>().usingGenerator(generator);

@@ -21,6 +21,7 @@ import speiger.src.testers.shorts.tests.base.maps.AbstractShort2IntMapTester;
 import speiger.src.testers.objects.utils.ObjectHelpers;
 
 @Ignore
+@SuppressWarnings("javadoc")
 public class Short2IntSortedMapNavigationTester extends AbstractShort2IntMapTester
 {
 	private Short2IntSortedMap sortedMap;

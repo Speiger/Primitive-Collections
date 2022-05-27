@@ -22,6 +22,7 @@ import speiger.src.testers.floats.utils.FloatHelpers;
 import speiger.src.testers.floats.utils.FloatListIteratorTester;
 
 @Ignore
+@SuppressWarnings("javadoc")
 public class FloatListListIteratorTester extends AbstractFloatListTester
 {
 	@CollectionFeature.Require(absent = SUPPORTS_REMOVE)

@@ -13,6 +13,7 @@ import com.google.common.collect.testing.features.ListFeature;
 import speiger.src.testers.longs.tests.base.AbstractLongListTester;
 
 @Ignore
+@SuppressWarnings("javadoc")
 public class LongListAddAllArrayAtIndexTester extends AbstractLongListTester
 {
 	@ListFeature.Require(SUPPORTS_ADD_WITH_INDEX)

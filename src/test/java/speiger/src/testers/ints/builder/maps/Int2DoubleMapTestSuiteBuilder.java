@@ -59,6 +59,7 @@ import speiger.src.testers.objects.tests.collection.ObjectCollectionRetainAllTes
 import speiger.src.testers.utils.SpecialFeature;
 import speiger.src.testers.utils.TestUtils;
 
+@SuppressWarnings("javadoc")
 public class Int2DoubleMapTestSuiteBuilder extends MapTestSuiteBuilder<Integer, Double> {
 	public static Int2DoubleMapTestSuiteBuilder using(TestInt2DoubleMapGenerator generator) {
 		return (Int2DoubleMapTestSuiteBuilder) new Int2DoubleMapTestSuiteBuilder().usingGenerator(generator);

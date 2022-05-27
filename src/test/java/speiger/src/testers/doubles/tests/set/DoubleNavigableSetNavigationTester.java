@@ -21,6 +21,7 @@ import speiger.src.testers.doubles.tests.base.AbstractDoubleSetTester;
 import speiger.src.testers.doubles.utils.DoubleHelpers;
 
 @Ignore
+@SuppressWarnings("javadoc")
 public class DoubleNavigableSetNavigationTester extends AbstractDoubleSetTester
 {
 	private DoubleNavigableSet navigableSet;

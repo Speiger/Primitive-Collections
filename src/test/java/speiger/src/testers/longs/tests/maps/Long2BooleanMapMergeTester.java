@@ -13,6 +13,7 @@ import junit.framework.AssertionFailedError;
 import speiger.src.testers.longs.tests.base.maps.AbstractLong2BooleanMapTester;
 
 @Ignore
+@SuppressWarnings("javadoc")
 public class Long2BooleanMapMergeTester extends AbstractLong2BooleanMapTester
 {
 	@MapFeature.Require(SUPPORTS_PUT)

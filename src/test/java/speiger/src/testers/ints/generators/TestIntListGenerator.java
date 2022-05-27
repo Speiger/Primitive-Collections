@@ -4,6 +4,7 @@ import com.google.common.collect.testing.TestListGenerator;
 
 import speiger.src.collections.ints.lists.IntList;
 
+@SuppressWarnings("javadoc")
 public interface TestIntListGenerator extends TestListGenerator<Integer>, TestIntCollectionGenerator
 {
 	@Override

@@ -19,6 +19,7 @@ import speiger.src.collections.objects.collections.ObjectIterator;
 import speiger.src.testers.longs.tests.base.maps.AbstractLong2BooleanMapTester;
 
 @Ignore
+@SuppressWarnings("javadoc")
 public class Long2BooleanMapClearTester extends AbstractLong2BooleanMapTester 
 {
 	@MapFeature.Require(SUPPORTS_REMOVE)

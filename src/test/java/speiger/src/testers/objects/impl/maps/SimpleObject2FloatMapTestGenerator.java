@@ -15,6 +15,7 @@ import speiger.src.testers.objects.generators.maps.TestObject2FloatMapGenerator;
 import speiger.src.testers.objects.generators.maps.TestObject2FloatSortedMapGenerator;
 import speiger.src.testers.objects.utils.ObjectSamples;
 
+@SuppressWarnings("javadoc")
 public class SimpleObject2FloatMapTestGenerator<T, E extends Object2FloatMap<T>>
 {
 	BiFunction<T[], float[], E> mapper;

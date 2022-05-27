@@ -18,6 +18,7 @@ import speiger.src.testers.bytes.tests.base.maps.AbstractByte2FloatMapTester;
 import speiger.src.testers.bytes.utils.ByteSamples;
 
 @Ignore
+@SuppressWarnings("javadoc")
 public class Byte2FloatMapReplaceAllTester extends AbstractByte2FloatMapTester
 {
 	private ByteSamples keys() {

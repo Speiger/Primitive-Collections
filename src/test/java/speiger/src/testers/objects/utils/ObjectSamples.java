@@ -7,6 +7,7 @@ import speiger.src.collections.objects.collections.ObjectIterator;
 import speiger.src.collections.objects.lists.ObjectArrayList;
 import speiger.src.collections.objects.lists.ObjectList;
 
+@SuppressWarnings("javadoc")
 public class ObjectSamples<T> implements ObjectIterable<T>
 {
 	private final T e0;

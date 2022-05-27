@@ -15,6 +15,7 @@ import speiger.src.testers.objects.generators.maps.TestObject2ByteMapGenerator;
 import speiger.src.testers.objects.generators.maps.TestObject2ByteSortedMapGenerator;
 import speiger.src.testers.objects.utils.ObjectSamples;
 
+@SuppressWarnings("javadoc")
 public class SimpleObject2ByteMapTestGenerator<T, E extends Object2ByteMap<T>>
 {
 	BiFunction<T[], byte[], E> mapper;

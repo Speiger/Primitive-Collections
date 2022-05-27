@@ -11,6 +11,7 @@ import speiger.src.testers.floats.tests.base.maps.AbstractFloat2IntMapTester;
 import speiger.src.testers.objects.utils.ObjectHelpers;
 
 @Ignore
+@SuppressWarnings("javadoc")
 public class Float2IntMapEqualsTester extends AbstractFloat2IntMapTester 
 {
 	public void testEquals_otherMapWithSameEntries() {

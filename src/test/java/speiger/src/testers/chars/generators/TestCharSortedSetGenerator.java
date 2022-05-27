@@ -2,6 +2,7 @@ package speiger.src.testers.chars.generators;
 
 import speiger.src.collections.chars.sets.CharSortedSet;
 
+@SuppressWarnings("javadoc")
 public interface TestCharSortedSetGenerator extends TestCharSetGenerator {
 	@Override
 	CharSortedSet create(char... elements);

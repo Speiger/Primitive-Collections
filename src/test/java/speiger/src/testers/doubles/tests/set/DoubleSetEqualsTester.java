@@ -10,6 +10,7 @@ import speiger.src.testers.doubles.utils.DoubleHelpers;
 import speiger.src.testers.doubles.utils.MinimalDoubleSet;
 
 @Ignore
+@SuppressWarnings("javadoc")
 public class DoubleSetEqualsTester extends AbstractDoubleSetTester
 {
 	public void testEquals_otherSetWithSameElements() {

@@ -18,6 +18,7 @@ import speiger.src.testers.chars.generators.TestCharSortedSetGenerator;
 import speiger.src.testers.chars.impl.CharSortedSetSubsetTestSetGenerator;
 import speiger.src.testers.chars.tests.set.CharSortedSetNaviationTester;
 
+@SuppressWarnings("javadoc")
 public class CharSortedSetTestSuiteBuilder extends CharSetTestSuiteBuilder {
 	public static CharSortedSetTestSuiteBuilder using(TestCharSortedSetGenerator generator) {
 		return (CharSortedSetTestSuiteBuilder) new CharSortedSetTestSuiteBuilder().usingGenerator(generator);

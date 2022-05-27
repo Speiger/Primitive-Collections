@@ -11,6 +11,7 @@ import speiger.src.collections.objects.collections.ObjectIterable;
 import speiger.src.collections.objects.lists.ObjectList;
 import speiger.src.testers.objects.utils.ObjectSamples;
 
+@SuppressWarnings("javadoc")
 public interface TestFloat2IntMapGenerator extends TestMapGenerator<Float, Integer> {
 	public ObjectSamples<Float2IntMap.Entry> getSamples();
 	public ObjectIterable<Float2IntMap.Entry> order(ObjectList<Float2IntMap.Entry> insertionOrder);

@@ -10,9 +10,9 @@ import speiger.src.collections.floats.collections.FloatCollection;
 import speiger.src.testers.floats.tests.base.AbstractFloatCollectionTester;
 
 @Ignore
+@SuppressWarnings("javadoc")
 public class FloatCollectionCopyTester extends AbstractFloatCollectionTester
 {
-	
 	@CollectionFeature.Require(absent = {CollectionFeature.SUBSET_VIEW, CollectionFeature.DESCENDING_VIEW})
 	@SpecialFeature.Require(SpecialFeature.COPYING)
 	public void testEquals() {

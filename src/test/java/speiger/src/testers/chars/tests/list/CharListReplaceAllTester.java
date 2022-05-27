@@ -13,6 +13,7 @@ import com.google.common.collect.testing.features.ListFeature;
 import speiger.src.testers.chars.tests.base.AbstractCharListTester;
 
 @Ignore
+@SuppressWarnings("javadoc")
 public class CharListReplaceAllTester extends AbstractCharListTester
 {
 	@ListFeature.Require(SUPPORTS_SET)

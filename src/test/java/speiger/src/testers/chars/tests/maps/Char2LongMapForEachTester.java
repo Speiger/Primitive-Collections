@@ -15,6 +15,7 @@ import speiger.src.collections.objects.lists.ObjectList;
 import speiger.src.testers.chars.tests.base.maps.AbstractChar2LongMapTester;
 
 @Ignore
+@SuppressWarnings("javadoc")
 public class Char2LongMapForEachTester extends AbstractChar2LongMapTester
 {
 	@CollectionFeature.Require(KNOWN_ORDER)

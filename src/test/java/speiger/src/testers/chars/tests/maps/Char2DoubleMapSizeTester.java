@@ -5,6 +5,7 @@ import org.junit.Ignore;
 import speiger.src.testers.chars.tests.base.maps.AbstractChar2DoubleMapTester;
 
 @Ignore
+@SuppressWarnings("javadoc")
 public class Char2DoubleMapSizeTester extends AbstractChar2DoubleMapTester {
 	
 	public void testSize() {

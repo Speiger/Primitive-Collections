@@ -4,6 +4,7 @@ import com.google.common.collect.testing.TestSetGenerator;
 
 import speiger.src.collections.objects.sets.ObjectSet;
 
+@SuppressWarnings("javadoc")
 public interface TestObjectSetGenerator<T> extends TestObjectCollectionGenerator<T>, TestSetGenerator<T> {
 	@Override
 	ObjectSet<T> create(Object...elements);

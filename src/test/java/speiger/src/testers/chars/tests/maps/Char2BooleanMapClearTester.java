@@ -19,6 +19,7 @@ import speiger.src.collections.objects.collections.ObjectIterator;
 import speiger.src.testers.chars.tests.base.maps.AbstractChar2BooleanMapTester;
 
 @Ignore
+@SuppressWarnings("javadoc")
 public class Char2BooleanMapClearTester extends AbstractChar2BooleanMapTester 
 {
 	@MapFeature.Require(SUPPORTS_REMOVE)

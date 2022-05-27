@@ -19,6 +19,7 @@ import speiger.src.testers.floats.tests.base.AbstractFloatListTester;
 import speiger.src.testers.floats.utils.FloatHelpers;
 
 @Ignore
+@SuppressWarnings("javadoc")
 public class FloatListSwapRemoveAtIndexTester extends AbstractFloatListTester
 {
 	@ListFeature.Require(absent = SUPPORTS_REMOVE_WITH_INDEX)

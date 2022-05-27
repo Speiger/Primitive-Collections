@@ -9,6 +9,7 @@ import com.google.common.collect.testing.features.CollectionSize;
 import speiger.src.testers.objects.tests.base.maps.AbstractObject2ObjectMapTester;
 
 @Ignore
+@SuppressWarnings("javadoc")
 public class Object2ObjectMapGetOrDefaultTester<T, V> extends AbstractObject2ObjectMapTester<T, V>
 {
 	@CollectionSize.Require(absent = ZERO)

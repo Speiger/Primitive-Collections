@@ -11,6 +11,7 @@ import com.google.common.collect.testing.features.MapFeature;
 import speiger.src.testers.longs.tests.base.maps.AbstractLong2FloatMapTester;
 
 @Ignore
+@SuppressWarnings("javadoc")
 public class Long2FloatMapRemoveEntryTester extends AbstractLong2FloatMapTester
 {
 	@MapFeature.Require(SUPPORTS_REMOVE)

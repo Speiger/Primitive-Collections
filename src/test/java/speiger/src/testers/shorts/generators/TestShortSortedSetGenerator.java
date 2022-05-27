@@ -2,6 +2,7 @@ package speiger.src.testers.shorts.generators;
 
 import speiger.src.collections.shorts.sets.ShortSortedSet;
 
+@SuppressWarnings("javadoc")
 public interface TestShortSortedSetGenerator extends TestShortSetGenerator {
 	@Override
 	ShortSortedSet create(short... elements);

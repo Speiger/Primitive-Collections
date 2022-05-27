@@ -8,6 +8,7 @@ import speiger.src.collections.floats.collections.FloatIterator;
 import speiger.src.collections.floats.functions.FloatConsumer;
 import speiger.src.collections.floats.lists.FloatArrayList;
 
+@SuppressWarnings("javadoc")
 public class MinimalFloatCollection extends AbstractFloatCollection {
 
 	private final float[] contents;

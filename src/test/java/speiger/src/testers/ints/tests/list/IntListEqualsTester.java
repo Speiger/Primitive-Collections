@@ -10,6 +10,7 @@ import speiger.src.testers.ints.tests.base.AbstractIntListTester;
 import speiger.src.testers.ints.utils.MinimalIntSet;
 
 @Ignore
+@SuppressWarnings("javadoc")
 public class IntListEqualsTester extends AbstractIntListTester
 {
 	public void testEquals_otherListWithSameElements() {

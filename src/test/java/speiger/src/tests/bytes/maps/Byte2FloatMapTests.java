@@ -23,6 +23,7 @@ import speiger.src.testers.bytes.builder.maps.Byte2FloatNavigableMapTestSuiteBui
 import speiger.src.testers.bytes.impl.maps.SimpleByte2FloatMapTestGenerator;
 import speiger.src.testers.utils.SpecialFeature;
 
+@SuppressWarnings("javadoc")
 public class Byte2FloatMapTests extends TestCase
 {
 	public static Test suite() {

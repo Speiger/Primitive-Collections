@@ -4,6 +4,7 @@ import com.google.common.collect.testing.TestSetGenerator;
 
 import speiger.src.collections.shorts.sets.ShortSet;
 
+@SuppressWarnings("javadoc")
 public interface TestShortSetGenerator extends TestShortCollectionGenerator, TestSetGenerator<Short> {
 	@Override
 	ShortSet create(short...elements);

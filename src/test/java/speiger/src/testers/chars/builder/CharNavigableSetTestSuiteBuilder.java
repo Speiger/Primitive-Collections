@@ -29,6 +29,7 @@ import speiger.src.testers.chars.impl.CharSortedSetSubsetTestSetGenerator.CharNa
 import speiger.src.testers.chars.tests.set.CharNavigableSetNavigationTester;
 import speiger.src.testers.chars.utils.CharSamples;
 
+@SuppressWarnings("javadoc")
 public class CharNavigableSetTestSuiteBuilder extends CharSortedSetTestSuiteBuilder {
 	public static CharNavigableSetTestSuiteBuilder using(TestCharNavigableSetGenerator generator) {
 		return (CharNavigableSetTestSuiteBuilder) new CharNavigableSetTestSuiteBuilder().usingGenerator(generator);

@@ -17,6 +17,7 @@ import speiger.src.collections.bytes.collections.ByteIterator;
 import speiger.src.testers.bytes.tests.base.AbstractByteCollectionTester;
 
 @Ignore
+@SuppressWarnings("javadoc")
 public class ByteCollectionRemoveIfTester extends AbstractByteCollectionTester
 {
 	@CollectionFeature.Require(SUPPORTS_ITERATOR_REMOVE)

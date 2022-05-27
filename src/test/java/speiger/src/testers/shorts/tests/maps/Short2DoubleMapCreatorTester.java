@@ -14,6 +14,7 @@ import speiger.src.collections.objects.lists.ObjectArrayList;
 import speiger.src.testers.shorts.tests.base.maps.AbstractShort2DoubleMapTester;
 
 @Ignore
+@SuppressWarnings("javadoc")
 public class Short2DoubleMapCreatorTester extends AbstractShort2DoubleMapTester
 {
 	@MapFeature.Require(absent = REJECTS_DUPLICATES_AT_CREATION)

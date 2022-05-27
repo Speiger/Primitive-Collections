@@ -19,6 +19,7 @@ import speiger.src.collections.objects.collections.ObjectIterator;
 import speiger.src.testers.chars.tests.base.maps.AbstractChar2IntMapTester;
 
 @Ignore
+@SuppressWarnings("javadoc")
 public class Char2IntMapClearTester extends AbstractChar2IntMapTester 
 {
 	@MapFeature.Require(SUPPORTS_REMOVE)

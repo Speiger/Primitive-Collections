@@ -20,6 +20,7 @@ import speiger.src.testers.doubles.tests.base.maps.AbstractDouble2ByteMapTester;
 import speiger.src.testers.objects.utils.MinimalObjectCollection;
 
 @Ignore
+@SuppressWarnings("javadoc")
 public class Double2ByteMapPutAllTester extends AbstractDouble2ByteMapTester
 {
 	@MapFeature.Require(SUPPORTS_PUT)

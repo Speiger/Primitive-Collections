@@ -10,6 +10,7 @@ import speiger.src.collections.booleans.collections.BooleanIterable;
 import speiger.src.collections.booleans.collections.BooleanIterator;
 import speiger.src.collections.booleans.lists.BooleanListIterator;
 
+@SuppressWarnings("javadoc")
 public abstract class BooleanListIteratorTester extends AbstractBooleanIteratorTester {
 
 	public BooleanListIteratorTester(int steps, BooleanIterable elementsToInsertIterable, Iterable<? extends IteratorFeature> features, BooleanIterable expectedElements, int startIndex) {

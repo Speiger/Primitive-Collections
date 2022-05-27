@@ -22,6 +22,7 @@ import speiger.src.testers.bytes.utils.ByteHelpers;
 import speiger.src.testers.bytes.utils.ByteListIteratorTester;
 
 @Ignore
+@SuppressWarnings("javadoc")
 public class ByteListListIteratorTester extends AbstractByteListTester
 {
 	@CollectionFeature.Require(absent = SUPPORTS_REMOVE)

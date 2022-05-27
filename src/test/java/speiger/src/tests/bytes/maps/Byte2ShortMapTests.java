@@ -23,6 +23,7 @@ import speiger.src.testers.bytes.builder.maps.Byte2ShortNavigableMapTestSuiteBui
 import speiger.src.testers.bytes.impl.maps.SimpleByte2ShortMapTestGenerator;
 import speiger.src.testers.utils.SpecialFeature;
 
+@SuppressWarnings("javadoc")
 public class Byte2ShortMapTests extends TestCase
 {
 	public static Test suite() {

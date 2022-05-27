@@ -7,7 +7,9 @@ import speiger.src.collections.floats.maps.interfaces.Float2ShortMap;
 import speiger.src.testers.floats.tests.base.maps.AbstractFloat2ShortMapTester;
 
 @Ignore
-public class Float2ShortMapHashCodeTester extends AbstractFloat2ShortMapTester {
+@SuppressWarnings("javadoc")
+public class Float2ShortMapHashCodeTester extends AbstractFloat2ShortMapTester
+{
 	public void testHashCode() {
 		int expectedHashCode = 0;
 		for (Float2ShortMap.Entry entry : getSampleEntries()) {

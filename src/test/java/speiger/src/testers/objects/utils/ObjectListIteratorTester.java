@@ -10,6 +10,7 @@ import speiger.src.collections.objects.collections.ObjectIterable;
 import speiger.src.collections.objects.collections.ObjectIterator;
 import speiger.src.collections.objects.lists.ObjectListIterator;
 
+@SuppressWarnings("javadoc")
 public abstract class ObjectListIteratorTester<T> extends AbstractObjectIteratorTester<T> {
 
 	public ObjectListIteratorTester(int steps, ObjectIterable<T> elementsToInsertIterable, Iterable<? extends IteratorFeature> features, ObjectIterable<T> expectedElements, int startIndex) {

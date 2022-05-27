@@ -11,6 +11,7 @@ import com.google.common.collect.testing.features.MapFeature;
 import speiger.src.testers.shorts.tests.base.maps.AbstractShort2ObjectMapTester;
 
 @Ignore
+@SuppressWarnings("javadoc")
 public class Short2ObjectMapRemoveEntryTester<V> extends AbstractShort2ObjectMapTester<V>
 {
 	@MapFeature.Require(SUPPORTS_REMOVE)

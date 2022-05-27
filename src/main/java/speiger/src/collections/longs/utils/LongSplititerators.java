@@ -1,6 +1,7 @@
 package speiger.src.collections.longs.utils;
 
 import java.util.Comparator;
+import java.util.NoSuchElementException;
 import java.util.Spliterator;
 import java.util.Spliterator.OfLong;
 import java.util.function.Consumer;
@@ -307,7 +308,11 @@ public class LongSplititerators
 		}
 		
 		@Override
-		public long nextLong() { return array[index++]; }
+		public long nextLong() {
+			if(!hasNext()) throw new NoSuchElementException();
+			return array[index++];
+		}
+		
 		@Override
 		public boolean hasNext() { return index < fence; }
 	}

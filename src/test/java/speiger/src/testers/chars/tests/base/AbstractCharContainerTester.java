@@ -19,6 +19,7 @@ import speiger.src.testers.chars.utils.CharSamples;
 import speiger.src.testers.chars.utils.MinimalCharCollection;
 
 @Ignore
+@SuppressWarnings("javadoc")
 public abstract class AbstractCharContainerTester<E> extends AbstractTester<OneSizeTestContainerGenerator<E, Character>>
 {
 	protected CharSamples samples;

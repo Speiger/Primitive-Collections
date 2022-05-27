@@ -332,7 +332,7 @@ public class Short2IntAVLTreeMap extends AbstractShort2IntMap implements Short2I
 	
 	@Override
 	public short pollFirstShortKey() {
-		if(tree == null) return (short)0;
+		if(tree == null) return getDefaultMinValue();
 		short result = first.key;
 		removeNode(first);
 		return result;
@@ -346,7 +346,7 @@ public class Short2IntAVLTreeMap extends AbstractShort2IntMap implements Short2I
 	
 	@Override
 	public short pollLastShortKey() {
-		if(tree == null) return (short)0;
+		if(tree == null) return getDefaultMaxValue();
 		short result = last.key;
 		removeNode(last);
 		return result;
@@ -918,6 +918,31 @@ public class Short2IntAVLTreeMap extends AbstractShort2IntMap implements Short2I
 		public short ceiling(short e) { return map.ceilingKey(e); }
 		@Override
 		public short higher(short e) { return map.higherKey(e); }
+		
+		@Override
+		public Short lower(Short e) {
+			Short2IntMap.Entry node = map.lowerEntry(e.shortValue());
+			return node != null ? node.getKey() : null;
+		}
+		
+		@Override
+		public Short floor(Short e) {
+			Short2IntMap.Entry node = map.floorEntry(e.shortValue());
+			return node != null ? node.getKey() : null;
+		}
+		
+		@Override
+		public Short higher(Short e) {
+			Short2IntMap.Entry node = map.higherEntry(e.shortValue());
+			return node != null ? node.getKey() : null;
+		}
+		
+		@Override
+		public Short ceiling(Short e) {
+			Short2IntMap.Entry node = map.ceilingEntry(e.shortValue());
+			return node != null ? node.getKey() : null;
+		}
+		
 		@Override
 		public short pollFirstShort() { return map.pollFirstShortKey(); }
 		@Override
@@ -1326,8 +1351,8 @@ public class Short2IntAVLTreeMap extends AbstractShort2IntMap implements Short2I
 		protected abstract ShortBidirectionalIterator keyIterator(short element);
 		protected abstract IntBidirectionalIterator valueIterator();
 		protected abstract ShortBidirectionalIterator descendingKeyIterator();
-		protected short lowKeyOrNull(Node entry) { return entry == null ? (short)0 : entry.key; }
-		protected short highKeyOrNull(Node entry) { return entry == null ? (short)0 : entry.key; }
+		protected short lowKeyOrNull(Node entry) { return entry == null ? getDefaultMinValue() : entry.key; }
+		protected short highKeyOrNull(Node entry) { return entry == null ? getDefaultMaxValue() : entry.key; }
 		protected Node next(Node entry) { return entry.next(); }
 		protected Node previous(Node entry) { return entry.previous(); }
 		
@@ -1398,7 +1423,7 @@ public class Short2IntAVLTreeMap extends AbstractShort2IntMap implements Short2I
 				map.removeNode(entry);
 				return result;
 			}
-			return (short)0;
+			return getDefaultMinValue();
 		}
 		
 		@Override
@@ -1409,7 +1434,7 @@ public class Short2IntAVLTreeMap extends AbstractShort2IntMap implements Short2I
 				map.removeNode(entry);
 				return result;
 			}
-			return (short)0;
+			return getDefaultMaxValue();
 		}
 		
 		@Override
@@ -1487,7 +1512,7 @@ public class Short2IntAVLTreeMap extends AbstractShort2IntMap implements Short2I
 		
 		@Override
 		public int removeOrDefault(short key, int defaultValue) {
-			return inRange(key) ? map.remove(key) : defaultValue;
+			return inRange(key) ? map.removeOrDefault(key, defaultValue) : defaultValue;
 		}
 		
 		@Override
@@ -1963,8 +1988,8 @@ public class Short2IntAVLTreeMap extends AbstractShort2IntMap implements Short2I
 			public SubMapEntryIterator(Node first, Node forwardFence, Node backwardFence)
 			{
 				next = first;
-				this.forwardFence = forwardFence == null ? null : forwardFence.key;
-				this.backwardFence = backwardFence == null ? null : backwardFence.key;
+				this.forwardFence = forwardFence == null ? (short)0 : forwardFence.key;
+				this.backwardFence = backwardFence == null ? (short)0 : backwardFence.key;
 				unboundForwardFence = forwardFence == null;
 				unboundBackwardFence = backwardFence == null;
 			}

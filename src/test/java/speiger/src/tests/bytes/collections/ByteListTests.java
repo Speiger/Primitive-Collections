@@ -16,7 +16,9 @@ import speiger.src.testers.bytes.builder.ByteListTestSuiteBuilder;
 import speiger.src.testers.bytes.impl.SimpleByteTestGenerator;
 import speiger.src.testers.utils.SpecialFeature;
 
-public class ByteListTests extends TestCase {
+@SuppressWarnings("javadoc")
+public class ByteListTests extends TestCase
+{
 	
 	public static Test suite() {
 		TestSuite suite = new TestSuite("ByteLists");

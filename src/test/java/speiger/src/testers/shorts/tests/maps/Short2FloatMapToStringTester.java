@@ -16,6 +16,7 @@ import speiger.src.collections.shorts.maps.interfaces.Short2FloatMap;
 import speiger.src.testers.shorts.tests.base.maps.AbstractShort2FloatMapTester;
 
 @Ignore
+@SuppressWarnings("javadoc")
 public class Short2FloatMapToStringTester extends AbstractShort2FloatMapTester
 {
 	public void testToString_minimal() {

@@ -34,6 +34,7 @@ import speiger.src.testers.shorts.tests.set.ShortSetCreationTester;
 import speiger.src.testers.shorts.tests.set.ShortSetEqualsTester;
 import speiger.src.testers.shorts.tests.set.ShortSetRemoveTester;
 
+@SuppressWarnings("javadoc")
 public class ShortSetTestSuiteBuilder extends ShortCollectionTestSuiteBuilder {
 	public static ShortSetTestSuiteBuilder using(TestShortSetGenerator generator) {
 		return (ShortSetTestSuiteBuilder) new ShortSetTestSuiteBuilder().usingGenerator(generator);

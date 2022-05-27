@@ -16,6 +16,7 @@ import speiger.src.collections.chars.maps.interfaces.Char2BooleanMap;
 import speiger.src.testers.chars.tests.base.maps.AbstractChar2BooleanMapTester;
 
 @Ignore
+@SuppressWarnings("javadoc")
 public class Char2BooleanMapToStringTester extends AbstractChar2BooleanMapTester
 {
 	public void testToString_minimal() {

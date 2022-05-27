@@ -9,6 +9,7 @@ import com.google.common.collect.testing.features.CollectionSize;
 import speiger.src.testers.longs.tests.base.maps.AbstractLong2DoubleMapTester;
 
 @Ignore
+@SuppressWarnings("javadoc")
 public class Long2DoubleMapIsEmptyTester extends AbstractLong2DoubleMapTester 
 {
 	  @CollectionSize.Require(ZERO)

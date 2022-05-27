@@ -18,6 +18,7 @@ import speiger.src.collections.ints.maps.interfaces.Int2CharMap;
 import speiger.src.testers.ints.tests.base.maps.AbstractInt2CharMapTester;
 
 @Ignore
+@SuppressWarnings("javadoc")
 public class Int2CharMapPutTester extends AbstractInt2CharMapTester
 {	
 	@MapFeature.Require(SUPPORTS_PUT)

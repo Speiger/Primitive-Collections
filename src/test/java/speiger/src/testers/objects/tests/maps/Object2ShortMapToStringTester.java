@@ -16,6 +16,7 @@ import speiger.src.collections.objects.maps.interfaces.Object2ShortMap;
 import speiger.src.testers.objects.tests.base.maps.AbstractObject2ShortMapTester;
 
 @Ignore
+@SuppressWarnings("javadoc")
 public class Object2ShortMapToStringTester<T> extends AbstractObject2ShortMapTester<T>
 {
 	public void testToString_minimal() {

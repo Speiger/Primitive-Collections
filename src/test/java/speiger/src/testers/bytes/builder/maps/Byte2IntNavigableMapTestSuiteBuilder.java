@@ -19,6 +19,7 @@ import speiger.src.testers.bytes.impl.maps.DerivedByte2IntMapGenerators;
 import speiger.src.testers.bytes.tests.maps.Byte2IntNavigableMapNavigationTester;
 import speiger.src.testers.utils.SpecialFeature;
 
+@SuppressWarnings("javadoc")
 public class Byte2IntNavigableMapTestSuiteBuilder extends Byte2IntSortedMapTestSuiteBuilder
 {
 	public static Byte2IntNavigableMapTestSuiteBuilder using(TestByte2IntSortedMapGenerator generator) {

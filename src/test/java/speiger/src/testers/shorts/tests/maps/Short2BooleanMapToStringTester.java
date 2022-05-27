@@ -16,6 +16,7 @@ import speiger.src.collections.shorts.maps.interfaces.Short2BooleanMap;
 import speiger.src.testers.shorts.tests.base.maps.AbstractShort2BooleanMapTester;
 
 @Ignore
+@SuppressWarnings("javadoc")
 public class Short2BooleanMapToStringTester extends AbstractShort2BooleanMapTester
 {
 	public void testToString_minimal() {

@@ -20,6 +20,7 @@ import speiger.src.testers.longs.utils.LongHelpers;
 import speiger.src.testers.longs.utils.MinimalLongCollection;
 
 @Ignore
+@SuppressWarnings("javadoc")
 public class LongCollectionRemoveAllTester extends AbstractLongCollectionTester
 {
 	@CollectionFeature.Require(SUPPORTS_REMOVE)

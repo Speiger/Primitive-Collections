@@ -5,6 +5,7 @@ import org.junit.Ignore;
 import speiger.src.testers.longs.tests.base.AbstractLongCollectionTester;
 
 @Ignore
+@SuppressWarnings("javadoc")
 public class LongCollectionEqualsTester extends AbstractLongCollectionTester
 {
 	public void testEquals_self() {

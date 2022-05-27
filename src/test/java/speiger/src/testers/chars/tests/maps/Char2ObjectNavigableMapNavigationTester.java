@@ -23,6 +23,7 @@ import speiger.src.testers.chars.tests.base.maps.AbstractChar2ObjectMapTester;
 import speiger.src.testers.objects.utils.ObjectHelpers;
 
 @Ignore
+@SuppressWarnings("javadoc")
 public class Char2ObjectNavigableMapNavigationTester<V> extends AbstractChar2ObjectMapTester<V>
 {
 	private Char2ObjectNavigableMap<V> navigableMap;

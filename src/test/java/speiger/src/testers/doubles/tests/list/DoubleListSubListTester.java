@@ -24,6 +24,7 @@ import speiger.src.testers.doubles.tests.base.AbstractDoubleListTester;
 import speiger.src.testers.doubles.utils.DoubleHelpers;
 
 @Ignore
+@SuppressWarnings("javadoc")
 public class DoubleListSubListTester extends AbstractDoubleListTester
 {
 	public void testSubList_startNegative() {

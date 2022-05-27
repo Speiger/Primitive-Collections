@@ -15,6 +15,7 @@ import speiger.src.collections.objects.sets.ObjectLinkedOpenHashSet;
 import speiger.src.collections.objects.sets.ObjectSet;
 import speiger.src.collections.objects.utils.ObjectIterators;
 
+@SuppressWarnings("javadoc")
 public class ObjectHelpers {
 	public static <T> boolean equals(T key, T value) {
 		return key == value;

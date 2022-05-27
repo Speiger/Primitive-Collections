@@ -7,7 +7,9 @@ import speiger.src.collections.longs.maps.interfaces.Long2FloatMap;
 import speiger.src.testers.longs.tests.base.maps.AbstractLong2FloatMapTester;
 
 @Ignore
-public class Long2FloatMapHashCodeTester extends AbstractLong2FloatMapTester {
+@SuppressWarnings("javadoc")
+public class Long2FloatMapHashCodeTester extends AbstractLong2FloatMapTester
+{
 	public void testHashCode() {
 		int expectedHashCode = 0;
 		for (Long2FloatMap.Entry entry : getSampleEntries()) {

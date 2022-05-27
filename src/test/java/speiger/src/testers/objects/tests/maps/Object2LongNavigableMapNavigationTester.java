@@ -22,6 +22,7 @@ import speiger.src.testers.objects.tests.base.maps.AbstractObject2LongMapTester;
 import speiger.src.testers.objects.utils.ObjectHelpers;
 
 @Ignore
+@SuppressWarnings("javadoc")
 public class Object2LongNavigableMapNavigationTester<T> extends AbstractObject2LongMapTester<T>
 {
 	private Object2LongNavigableMap<T> navigableMap;

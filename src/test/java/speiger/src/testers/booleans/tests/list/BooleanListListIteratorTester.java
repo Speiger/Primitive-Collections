@@ -22,6 +22,7 @@ import speiger.src.testers.booleans.utils.BooleanHelpers;
 import speiger.src.testers.booleans.utils.BooleanListIteratorTester;
 
 @Ignore
+@SuppressWarnings("javadoc")
 public class BooleanListListIteratorTester extends AbstractBooleanListTester
 {
 	@CollectionFeature.Require(absent = SUPPORTS_REMOVE)

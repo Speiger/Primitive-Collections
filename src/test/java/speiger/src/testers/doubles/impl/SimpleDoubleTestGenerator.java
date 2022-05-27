@@ -18,6 +18,7 @@ import speiger.src.testers.doubles.generators.TestDoubleSetGenerator;
 import speiger.src.testers.doubles.generators.TestDoubleSortedSetGenerator;
 import speiger.src.testers.doubles.utils.DoubleSamples;
 
+@SuppressWarnings("javadoc")
 public class SimpleDoubleTestGenerator<E extends DoubleCollection> {
 	Function<double[], E> mapper;
 	public SimpleDoubleTestGenerator(Function<double[], E> mapper) {

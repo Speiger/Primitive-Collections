@@ -18,7 +18,9 @@ import speiger.src.testers.doubles.tests.base.AbstractDoubleSetTester;
 import speiger.src.testers.doubles.utils.DoubleHelpers;
 
 @Ignore
-public class DoubleSortedSetNaviationTester extends AbstractDoubleSetTester {
+@SuppressWarnings("javadoc")
+public class DoubleSortedSetNaviationTester extends AbstractDoubleSetTester
+{
 	private DoubleSortedSet sortedSet;
 	private DoubleList values;
 	private double a;

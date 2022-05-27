@@ -12,6 +12,7 @@ import com.google.common.collect.testing.features.CollectionSize;
 import speiger.src.testers.shorts.tests.base.AbstractShortListTester;
 
 @Ignore
+@SuppressWarnings("javadoc")
 public class ShortListCreationTester extends AbstractShortListTester
 {
 	@CollectionFeature.Require(absent = REJECTS_DUPLICATES_AT_CREATION)

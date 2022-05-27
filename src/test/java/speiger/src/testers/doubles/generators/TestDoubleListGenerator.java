@@ -4,6 +4,7 @@ import com.google.common.collect.testing.TestListGenerator;
 
 import speiger.src.collections.doubles.lists.DoubleList;
 
+@SuppressWarnings("javadoc")
 public interface TestDoubleListGenerator extends TestListGenerator<Double>, TestDoubleCollectionGenerator
 {
 	@Override

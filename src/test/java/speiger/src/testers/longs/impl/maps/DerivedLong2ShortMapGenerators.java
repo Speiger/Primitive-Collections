@@ -40,6 +40,7 @@ import speiger.src.collections.objects.utils.ObjectLists;
 import speiger.src.testers.objects.generators.TestObjectSetGenerator;
 import speiger.src.testers.objects.utils.ObjectSamples;
 
+@SuppressWarnings("javadoc")
 public class DerivedLong2ShortMapGenerators {
 	public static class NavigableMapGenerator extends SortedMapGenerator {
 		public NavigableMapGenerator(TestLong2ShortSortedMapGenerator parent, Bound to, Bound from) {

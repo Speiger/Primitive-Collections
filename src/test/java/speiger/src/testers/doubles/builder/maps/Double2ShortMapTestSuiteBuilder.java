@@ -59,6 +59,7 @@ import speiger.src.testers.objects.tests.collection.ObjectCollectionRetainAllTes
 import speiger.src.testers.utils.SpecialFeature;
 import speiger.src.testers.utils.TestUtils;
 
+@SuppressWarnings("javadoc")
 public class Double2ShortMapTestSuiteBuilder extends MapTestSuiteBuilder<Double, Short> {
 	public static Double2ShortMapTestSuiteBuilder using(TestDouble2ShortMapGenerator generator) {
 		return (Double2ShortMapTestSuiteBuilder) new Double2ShortMapTestSuiteBuilder().usingGenerator(generator);
@@ -175,7 +176,8 @@ public class Double2ShortMapTestSuiteBuilder extends MapTestSuiteBuilder<Double,
 		TestUtils.getSurpession(suppressing, ObjectCollectionIteratorTester.class, "testIterator_removeAffectsBackingCollection");
 		TestUtils.getSurpession(suppressing, ObjectCollectionRemoveAllTester.class, "testRemoveAll_someFetchRemovedElements");
 		TestUtils.getSurpession(suppressing, ObjectCollectionRetainAllTester.class, "testRetainAllExtra_disjointPreviouslyNonEmpty", "testRetainAllExtra_containsDuplicatesSizeSeveral", "testRetainAllExtra_subset", "testRetainAllExtra_partialOverlap");
-
+		TestUtils.getSurpession(suppressing, CollectionIteratorTester.class, "testIterator_unknownOrderRemoveSupported");
+		TestUtils.getSurpession(suppressing, ObjectCollectionIteratorTester.class, "testIterator_unknownOrderRemoveSupported");
 		return suppressing;
 	}
 }

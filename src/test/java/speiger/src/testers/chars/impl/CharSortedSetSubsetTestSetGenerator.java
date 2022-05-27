@@ -13,6 +13,7 @@ import speiger.src.collections.chars.sets.CharSortedSet;
 import speiger.src.testers.chars.generators.TestCharSortedSetGenerator;
 import speiger.src.testers.chars.utils.CharSamples;
 
+@SuppressWarnings("javadoc")
 public class CharSortedSetSubsetTestSetGenerator implements TestCharSortedSetGenerator
 {
 	final Bound to;

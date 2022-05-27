@@ -18,6 +18,7 @@ import speiger.src.collections.chars.maps.interfaces.Char2LongMap;
 import speiger.src.testers.chars.tests.base.maps.AbstractChar2LongMapTester;
 
 @Ignore
+@SuppressWarnings("javadoc")
 public class Char2LongMapAddToTester extends AbstractChar2LongMapTester
 {	@MapFeature.Require(SUPPORTS_PUT)
 	@CollectionSize.Require(absent = ZERO)

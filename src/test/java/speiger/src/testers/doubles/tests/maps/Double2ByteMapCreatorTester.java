@@ -14,6 +14,7 @@ import speiger.src.collections.objects.lists.ObjectArrayList;
 import speiger.src.testers.doubles.tests.base.maps.AbstractDouble2ByteMapTester;
 
 @Ignore
+@SuppressWarnings("javadoc")
 public class Double2ByteMapCreatorTester extends AbstractDouble2ByteMapTester
 {
 	@MapFeature.Require(absent = REJECTS_DUPLICATES_AT_CREATION)

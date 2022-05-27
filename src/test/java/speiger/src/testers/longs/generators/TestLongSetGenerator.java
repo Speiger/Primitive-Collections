@@ -4,6 +4,7 @@ import com.google.common.collect.testing.TestSetGenerator;
 
 import speiger.src.collections.longs.sets.LongSet;
 
+@SuppressWarnings("javadoc")
 public interface TestLongSetGenerator extends TestLongCollectionGenerator, TestSetGenerator<Long> {
 	@Override
 	LongSet create(long...elements);

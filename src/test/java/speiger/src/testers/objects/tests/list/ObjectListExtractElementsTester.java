@@ -12,6 +12,7 @@ import speiger.src.collections.objects.lists.ObjectArrayList;
 import speiger.src.testers.objects.tests.base.AbstractObjectListTester;
 
 @Ignore
+@SuppressWarnings("javadoc")
 public class ObjectListExtractElementsTester<T> extends AbstractObjectListTester<T>
 {
 	@CollectionFeature.Require(SUPPORTS_REMOVE)

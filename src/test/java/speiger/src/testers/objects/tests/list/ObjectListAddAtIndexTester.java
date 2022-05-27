@@ -17,6 +17,7 @@ import speiger.src.collections.objects.collections.ObjectIterator;
 import speiger.src.testers.objects.tests.base.AbstractObjectListTester;
 
 @Ignore
+@SuppressWarnings("javadoc")
 public class ObjectListAddAtIndexTester<T> extends AbstractObjectListTester<T>
 {
 	@ListFeature.Require(SUPPORTS_ADD_WITH_INDEX)

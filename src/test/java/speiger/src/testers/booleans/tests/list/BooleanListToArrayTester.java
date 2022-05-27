@@ -10,6 +10,7 @@ import speiger.src.collections.booleans.lists.BooleanArrayList;
 import speiger.src.testers.booleans.tests.base.AbstractBooleanListTester;
 
 @Ignore
+@SuppressWarnings("javadoc")
 public class BooleanListToArrayTester extends AbstractBooleanListTester
 {
 	public void testToArray_noArg() {

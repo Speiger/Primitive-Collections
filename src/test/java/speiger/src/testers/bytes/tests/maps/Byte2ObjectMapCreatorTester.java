@@ -14,6 +14,7 @@ import speiger.src.collections.objects.lists.ObjectArrayList;
 import speiger.src.testers.bytes.tests.base.maps.AbstractByte2ObjectMapTester;
 
 @Ignore
+@SuppressWarnings("javadoc")
 public class Byte2ObjectMapCreatorTester<V> extends AbstractByte2ObjectMapTester<V>
 {
 	@MapFeature.Require(absent = REJECTS_DUPLICATES_AT_CREATION)

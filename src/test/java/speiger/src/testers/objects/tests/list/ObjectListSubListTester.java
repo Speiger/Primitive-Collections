@@ -24,6 +24,7 @@ import speiger.src.testers.objects.tests.base.AbstractObjectListTester;
 import speiger.src.testers.objects.utils.ObjectHelpers;
 
 @Ignore
+@SuppressWarnings("javadoc")
 public class ObjectListSubListTester<T> extends AbstractObjectListTester<T>
 {
 	public void testSubList_startNegative() {

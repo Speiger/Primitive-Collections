@@ -5,6 +5,7 @@ import org.junit.Ignore;
 import speiger.src.collections.floats.sets.FloatSet;
 
 @Ignore
+@SuppressWarnings("javadoc")
 public class AbstractFloatSetTester extends AbstractFloatCollectionTester
 {
 	protected final FloatSet getSet() {

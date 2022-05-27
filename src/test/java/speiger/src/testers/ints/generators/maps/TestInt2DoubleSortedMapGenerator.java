@@ -6,6 +6,7 @@ import speiger.src.collections.ints.maps.interfaces.Int2DoubleMap;
 import speiger.src.collections.ints.maps.interfaces.Int2DoubleMap.Entry;
 import speiger.src.collections.ints.maps.interfaces.Int2DoubleSortedMap;
 
+@SuppressWarnings("javadoc")
 public interface TestInt2DoubleSortedMapGenerator extends TestInt2DoubleMapGenerator, TestSortedMapGenerator<Integer, Double>
 {
 	@Override

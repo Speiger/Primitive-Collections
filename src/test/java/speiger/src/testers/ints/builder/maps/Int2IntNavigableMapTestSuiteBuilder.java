@@ -19,6 +19,7 @@ import speiger.src.testers.ints.impl.maps.DerivedInt2IntMapGenerators;
 import speiger.src.testers.ints.tests.maps.Int2IntNavigableMapNavigationTester;
 import speiger.src.testers.utils.SpecialFeature;
 
+@SuppressWarnings("javadoc")
 public class Int2IntNavigableMapTestSuiteBuilder extends Int2IntSortedMapTestSuiteBuilder
 {
 	public static Int2IntNavigableMapTestSuiteBuilder using(TestInt2IntSortedMapGenerator generator) {

@@ -15,6 +15,7 @@ import speiger.src.testers.objects.generators.maps.TestObject2ShortMapGenerator;
 import speiger.src.testers.objects.generators.maps.TestObject2ShortSortedMapGenerator;
 import speiger.src.testers.objects.utils.ObjectSamples;
 
+@SuppressWarnings("javadoc")
 public class SimpleObject2ShortMapTestGenerator<T, E extends Object2ShortMap<T>>
 {
 	BiFunction<T[], short[], E> mapper;

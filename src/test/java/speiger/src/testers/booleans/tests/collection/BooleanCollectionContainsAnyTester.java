@@ -11,6 +11,7 @@ import speiger.src.testers.booleans.tests.base.AbstractBooleanCollectionTester;
 import speiger.src.testers.booleans.utils.MinimalBooleanCollection;
 
 @Ignore
+@SuppressWarnings("javadoc")
 public class BooleanCollectionContainsAnyTester extends AbstractBooleanCollectionTester
 {	
 	public void testContainsAny_empty() {

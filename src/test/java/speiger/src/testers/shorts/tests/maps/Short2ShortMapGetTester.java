@@ -9,6 +9,7 @@ import com.google.common.collect.testing.features.CollectionSize;
 import speiger.src.testers.shorts.tests.base.maps.AbstractShort2ShortMapTester;
 
 @Ignore
+@SuppressWarnings("javadoc")
 public class Short2ShortMapGetTester extends AbstractShort2ShortMapTester
 {
 	@CollectionSize.Require(absent = ZERO)

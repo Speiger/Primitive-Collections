@@ -18,6 +18,7 @@ import speiger.src.collections.floats.maps.interfaces.Float2ObjectMap;
 import speiger.src.testers.floats.tests.base.maps.AbstractFloat2ObjectMapTester;
 
 @Ignore
+@SuppressWarnings("javadoc")
 public class Float2ObjectMapEntrySetTester<V> extends AbstractFloat2ObjectMapTester<V>
 {
 	@CollectionSize.Require(ONE)

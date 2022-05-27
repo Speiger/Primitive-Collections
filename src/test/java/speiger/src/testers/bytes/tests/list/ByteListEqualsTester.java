@@ -10,6 +10,7 @@ import speiger.src.testers.bytes.tests.base.AbstractByteListTester;
 import speiger.src.testers.bytes.utils.MinimalByteSet;
 
 @Ignore
+@SuppressWarnings("javadoc")
 public class ByteListEqualsTester extends AbstractByteListTester
 {
 	public void testEquals_otherListWithSameElements() {

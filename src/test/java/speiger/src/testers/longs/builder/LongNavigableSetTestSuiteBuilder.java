@@ -29,6 +29,7 @@ import speiger.src.testers.longs.impl.LongSortedSetSubsetTestSetGenerator.LongNa
 import speiger.src.testers.longs.tests.set.LongNavigableSetNavigationTester;
 import speiger.src.testers.longs.utils.LongSamples;
 
+@SuppressWarnings("javadoc")
 public class LongNavigableSetTestSuiteBuilder extends LongSortedSetTestSuiteBuilder {
 	public static LongNavigableSetTestSuiteBuilder using(TestLongNavigableSetGenerator generator) {
 		return (LongNavigableSetTestSuiteBuilder) new LongNavigableSetTestSuiteBuilder().usingGenerator(generator);

@@ -6,6 +6,7 @@ import speiger.src.collections.doubles.maps.interfaces.Double2BooleanMap;
 import speiger.src.collections.doubles.maps.interfaces.Double2BooleanMap.Entry;
 import speiger.src.collections.doubles.maps.interfaces.Double2BooleanSortedMap;
 
+@SuppressWarnings("javadoc")
 public interface TestDouble2BooleanSortedMapGenerator extends TestDouble2BooleanMapGenerator, TestSortedMapGenerator<Double, Boolean>
 {
 	@Override

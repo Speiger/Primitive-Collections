@@ -10,6 +10,7 @@ import speiger.src.testers.bytes.utils.ByteHelpers;
 import speiger.src.testers.bytes.utils.MinimalByteSet;
 
 @Ignore
+@SuppressWarnings("javadoc")
 public class ByteSetEqualsTester extends AbstractByteSetTester
 {
 	public void testEquals_otherSetWithSameElements() {

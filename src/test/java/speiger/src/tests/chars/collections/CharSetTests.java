@@ -27,7 +27,9 @@ import speiger.src.testers.chars.builder.CharSortedSetTestSuiteBuilder;
 import speiger.src.testers.chars.impl.SimpleCharTestGenerator;
 import speiger.src.testers.utils.SpecialFeature;
 
-public class CharSetTests extends TestCase {
+@SuppressWarnings("javadoc")
+public class CharSetTests extends TestCase
+{
 	
 	public static Test suite() {
 		TestSuite suite = new TestSuite("CharSets");

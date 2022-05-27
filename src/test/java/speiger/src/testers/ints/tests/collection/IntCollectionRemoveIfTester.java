@@ -17,6 +17,7 @@ import speiger.src.collections.ints.collections.IntIterator;
 import speiger.src.testers.ints.tests.base.AbstractIntCollectionTester;
 
 @Ignore
+@SuppressWarnings("javadoc")
 public class IntCollectionRemoveIfTester extends AbstractIntCollectionTester
 {
 	@CollectionFeature.Require(SUPPORTS_ITERATOR_REMOVE)

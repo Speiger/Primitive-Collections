@@ -41,6 +41,7 @@ import speiger.src.testers.shorts.tests.maps.Short2BooleanMapPutIfAbsentTester;
 import speiger.src.testers.utils.TestUtils;
 import speiger.src.testers.utils.SpecialFeature;
 
+@SuppressWarnings("javadoc")
 public class Short2BooleanMapTests extends TestCase
 {
 	public static Test suite() {

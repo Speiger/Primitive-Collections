@@ -12,6 +12,7 @@ import com.google.common.collect.testing.features.MapFeature;
 import speiger.src.testers.shorts.tests.base.maps.AbstractShort2IntMapTester;
 
 @Ignore
+@SuppressWarnings("javadoc")
 public class Short2IntMapComputeTester extends AbstractShort2IntMapTester
 {
 	@MapFeature.Require({ SUPPORTS_PUT, SUPPORTS_REMOVE })

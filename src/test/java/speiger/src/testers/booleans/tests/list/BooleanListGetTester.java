@@ -5,6 +5,7 @@ import org.junit.Ignore;
 import speiger.src.testers.booleans.tests.base.AbstractBooleanListTester;
 
 @Ignore
+@SuppressWarnings("javadoc")
 public class BooleanListGetTester extends AbstractBooleanListTester
 {
 	public void testGet_valid() {

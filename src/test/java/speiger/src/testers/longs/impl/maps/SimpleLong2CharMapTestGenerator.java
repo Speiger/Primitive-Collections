@@ -13,6 +13,7 @@ import speiger.src.testers.longs.generators.maps.TestLong2CharMapGenerator;
 import speiger.src.testers.longs.generators.maps.TestLong2CharSortedMapGenerator;
 import speiger.src.testers.objects.utils.ObjectSamples;
 
+@SuppressWarnings("javadoc")
 public class SimpleLong2CharMapTestGenerator<E extends Long2CharMap>
 {
 	BiFunction<long[], char[], E> mapper;

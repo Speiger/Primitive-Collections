@@ -22,6 +22,7 @@ import speiger.src.testers.longs.utils.LongHelpers;
 import speiger.src.testers.longs.utils.LongListIteratorTester;
 
 @Ignore
+@SuppressWarnings("javadoc")
 public class LongListListIteratorTester extends AbstractLongListTester
 {
 	@CollectionFeature.Require(absent = SUPPORTS_REMOVE)

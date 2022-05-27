@@ -6,6 +6,7 @@ import speiger.src.collections.bytes.maps.interfaces.Byte2LongMap;
 import speiger.src.collections.bytes.maps.interfaces.Byte2LongMap.Entry;
 import speiger.src.collections.bytes.maps.interfaces.Byte2LongSortedMap;
 
+@SuppressWarnings("javadoc")
 public interface TestByte2LongSortedMapGenerator extends TestByte2LongMapGenerator, TestSortedMapGenerator<Byte, Long>
 {
 	@Override

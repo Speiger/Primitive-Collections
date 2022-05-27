@@ -16,6 +16,7 @@ import speiger.src.collections.longs.maps.interfaces.Long2BooleanMap;
 import speiger.src.testers.longs.tests.base.maps.AbstractLong2BooleanMapTester;
 
 @Ignore
+@SuppressWarnings("javadoc")
 public class Long2BooleanMapToStringTester extends AbstractLong2BooleanMapTester
 {
 	public void testToString_minimal() {

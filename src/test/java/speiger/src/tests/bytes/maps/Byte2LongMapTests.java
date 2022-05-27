@@ -23,6 +23,7 @@ import speiger.src.testers.bytes.builder.maps.Byte2LongNavigableMapTestSuiteBuil
 import speiger.src.testers.bytes.impl.maps.SimpleByte2LongMapTestGenerator;
 import speiger.src.testers.utils.SpecialFeature;
 
+@SuppressWarnings("javadoc")
 public class Byte2LongMapTests extends TestCase
 {
 	public static Test suite() {

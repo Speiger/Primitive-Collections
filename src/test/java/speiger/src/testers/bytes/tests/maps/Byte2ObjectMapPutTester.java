@@ -18,6 +18,7 @@ import speiger.src.collections.bytes.maps.interfaces.Byte2ObjectMap;
 import speiger.src.testers.bytes.tests.base.maps.AbstractByte2ObjectMapTester;
 
 @Ignore
+@SuppressWarnings("javadoc")
 public class Byte2ObjectMapPutTester<V> extends AbstractByte2ObjectMapTester<V>
 {	
 	@MapFeature.Require(SUPPORTS_PUT)

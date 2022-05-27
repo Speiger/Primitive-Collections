@@ -20,6 +20,7 @@ import speiger.src.testers.longs.tests.base.maps.AbstractLong2BooleanMapTester;
 import speiger.src.testers.objects.utils.MinimalObjectCollection;
 
 @Ignore
+@SuppressWarnings("javadoc")
 public class Long2BooleanMapPutAllTester extends AbstractLong2BooleanMapTester
 {
 	@MapFeature.Require(SUPPORTS_PUT)

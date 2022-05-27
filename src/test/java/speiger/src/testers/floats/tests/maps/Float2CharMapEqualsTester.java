@@ -11,6 +11,7 @@ import speiger.src.testers.floats.tests.base.maps.AbstractFloat2CharMapTester;
 import speiger.src.testers.objects.utils.ObjectHelpers;
 
 @Ignore
+@SuppressWarnings("javadoc")
 public class Float2CharMapEqualsTester extends AbstractFloat2CharMapTester 
 {
 	public void testEquals_otherMapWithSameEntries() {

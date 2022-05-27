@@ -59,6 +59,7 @@ import speiger.src.testers.objects.tests.collection.ObjectCollectionRetainAllTes
 import speiger.src.testers.utils.SpecialFeature;
 import speiger.src.testers.utils.TestUtils;
 
+@SuppressWarnings("javadoc")
 public class Int2FloatMapTestSuiteBuilder extends MapTestSuiteBuilder<Integer, Float> {
 	public static Int2FloatMapTestSuiteBuilder using(TestInt2FloatMapGenerator generator) {
 		return (Int2FloatMapTestSuiteBuilder) new Int2FloatMapTestSuiteBuilder().usingGenerator(generator);

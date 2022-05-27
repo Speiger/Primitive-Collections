@@ -59,6 +59,7 @@ import speiger.src.testers.objects.tests.collection.ObjectCollectionRetainAllTes
 import speiger.src.testers.utils.SpecialFeature;
 import speiger.src.testers.utils.TestUtils;
 
+@SuppressWarnings("javadoc")
 public class Byte2IntMapTestSuiteBuilder extends MapTestSuiteBuilder<Byte, Integer> {
 	public static Byte2IntMapTestSuiteBuilder using(TestByte2IntMapGenerator generator) {
 		return (Byte2IntMapTestSuiteBuilder) new Byte2IntMapTestSuiteBuilder().usingGenerator(generator);

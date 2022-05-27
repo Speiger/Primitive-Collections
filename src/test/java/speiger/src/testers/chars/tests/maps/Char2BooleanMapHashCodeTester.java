@@ -7,7 +7,9 @@ import speiger.src.collections.chars.maps.interfaces.Char2BooleanMap;
 import speiger.src.testers.chars.tests.base.maps.AbstractChar2BooleanMapTester;
 
 @Ignore
-public class Char2BooleanMapHashCodeTester extends AbstractChar2BooleanMapTester {
+@SuppressWarnings("javadoc")
+public class Char2BooleanMapHashCodeTester extends AbstractChar2BooleanMapTester
+{
 	public void testHashCode() {
 		int expectedHashCode = 0;
 		for (Char2BooleanMap.Entry entry : getSampleEntries()) {

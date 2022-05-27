@@ -7,6 +7,7 @@ import speiger.src.collections.bytes.lists.ByteArrayList;
 import speiger.src.collections.bytes.lists.ByteList;
 import speiger.src.collections.bytes.sets.ByteSet;
 
+@SuppressWarnings("javadoc")
 public class MinimalByteSet extends MinimalByteCollection implements ByteSet {
 	public static MinimalByteSet of(byte...array) {
 		return MinimalByteSet.of(ByteArrayList.wrap(array));

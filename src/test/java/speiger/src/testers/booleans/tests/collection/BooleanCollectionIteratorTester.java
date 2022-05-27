@@ -24,6 +24,7 @@ import speiger.src.testers.booleans.utils.BooleanHelpers;
 import speiger.src.testers.booleans.utils.BooleanIteratorTester;
 
 @Ignore
+@SuppressWarnings("javadoc")
 public class BooleanCollectionIteratorTester extends AbstractBooleanCollectionTester
 {
 	public void testIterator() {

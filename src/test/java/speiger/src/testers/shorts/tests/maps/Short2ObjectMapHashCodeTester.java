@@ -8,7 +8,9 @@ import speiger.src.collections.shorts.maps.interfaces.Short2ObjectMap;
 import speiger.src.testers.shorts.tests.base.maps.AbstractShort2ObjectMapTester;
 
 @Ignore
-public class Short2ObjectMapHashCodeTester<V> extends AbstractShort2ObjectMapTester<V> {
+@SuppressWarnings("javadoc")
+public class Short2ObjectMapHashCodeTester<V> extends AbstractShort2ObjectMapTester<V>
+{
 	public void testHashCode() {
 		int expectedHashCode = 0;
 		for (Short2ObjectMap.Entry<V> entry : getSampleEntries()) {

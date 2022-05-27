@@ -12,6 +12,7 @@ import speiger.src.testers.doubles.tests.base.AbstractDoubleCollectionTester;
 import speiger.src.testers.doubles.utils.DoubleHelpers;
 
 @Ignore
+@SuppressWarnings("javadoc")
 public class DoubleCollectionForEachTester extends AbstractDoubleCollectionTester
 {
 	@CollectionFeature.Require(absent = KNOWN_ORDER)

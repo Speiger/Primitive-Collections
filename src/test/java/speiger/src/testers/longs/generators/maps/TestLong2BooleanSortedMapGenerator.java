@@ -6,6 +6,7 @@ import speiger.src.collections.longs.maps.interfaces.Long2BooleanMap;
 import speiger.src.collections.longs.maps.interfaces.Long2BooleanMap.Entry;
 import speiger.src.collections.longs.maps.interfaces.Long2BooleanSortedMap;
 
+@SuppressWarnings("javadoc")
 public interface TestLong2BooleanSortedMapGenerator extends TestLong2BooleanMapGenerator, TestSortedMapGenerator<Long, Boolean>
 {
 	@Override

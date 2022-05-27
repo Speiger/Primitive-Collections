@@ -12,6 +12,7 @@ import speiger.src.testers.chars.tests.base.AbstractCharCollectionTester;
 import speiger.src.testers.chars.utils.CharHelpers;
 
 @Ignore
+@SuppressWarnings("javadoc")
 public class CharCollectionToArrayTester extends AbstractCharCollectionTester
 {
 	public void testToArray_noArgs() {

@@ -16,6 +16,7 @@ import speiger.src.collections.bytes.maps.interfaces.Byte2LongMap;
 import speiger.src.testers.bytes.tests.base.maps.AbstractByte2LongMapTester;
 
 @Ignore
+@SuppressWarnings("javadoc")
 public class Byte2LongMapToStringTester extends AbstractByte2LongMapTester
 {
 	public void testToString_minimal() {

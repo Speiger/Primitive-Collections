@@ -17,6 +17,7 @@ import speiger.src.testers.ints.utils.IntSamples;
 import speiger.src.testers.ints.tests.base.maps.AbstractInt2IntMapTester;
 
 @Ignore
+@SuppressWarnings("javadoc")
 public class Int2IntMapReplaceAllTester extends AbstractInt2IntMapTester
 {
 	private IntSamples keys() {

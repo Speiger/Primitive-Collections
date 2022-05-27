@@ -56,6 +56,7 @@ import speiger.src.testers.objects.tests.collection.ObjectCollectionRetainAllTes
 import speiger.src.testers.utils.SpecialFeature;
 import speiger.src.testers.utils.TestUtils;
 
+@SuppressWarnings("javadoc")
 public class Object2BooleanMapTestSuiteBuilder<T> extends MapTestSuiteBuilder<T, Boolean> {
 	public static <T> Object2BooleanMapTestSuiteBuilder<T> using(TestObject2BooleanMapGenerator<T> generator) {
 		return (Object2BooleanMapTestSuiteBuilder<T>) new Object2BooleanMapTestSuiteBuilder<T>().usingGenerator(generator);

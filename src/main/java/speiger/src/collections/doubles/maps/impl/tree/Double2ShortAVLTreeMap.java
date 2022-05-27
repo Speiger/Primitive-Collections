@@ -332,7 +332,7 @@ public class Double2ShortAVLTreeMap extends AbstractDouble2ShortMap implements D
 	
 	@Override
 	public double pollFirstDoubleKey() {
-		if(tree == null) return 0D;
+		if(tree == null) return getDefaultMinValue();
 		double result = first.key;
 		removeNode(first);
 		return result;
@@ -346,7 +346,7 @@ public class Double2ShortAVLTreeMap extends AbstractDouble2ShortMap implements D
 	
 	@Override
 	public double pollLastDoubleKey() {
-		if(tree == null) return 0D;
+		if(tree == null) return getDefaultMaxValue();
 		double result = last.key;
 		removeNode(last);
 		return result;
@@ -918,6 +918,31 @@ public class Double2ShortAVLTreeMap extends AbstractDouble2ShortMap implements D
 		public double ceiling(double e) { return map.ceilingKey(e); }
 		@Override
 		public double higher(double e) { return map.higherKey(e); }
+		
+		@Override
+		public Double lower(Double e) {
+			Double2ShortMap.Entry node = map.lowerEntry(e.doubleValue());
+			return node != null ? node.getKey() : null;
+		}
+		
+		@Override
+		public Double floor(Double e) {
+			Double2ShortMap.Entry node = map.floorEntry(e.doubleValue());
+			return node != null ? node.getKey() : null;
+		}
+		
+		@Override
+		public Double higher(Double e) {
+			Double2ShortMap.Entry node = map.higherEntry(e.doubleValue());
+			return node != null ? node.getKey() : null;
+		}
+		
+		@Override
+		public Double ceiling(Double e) {
+			Double2ShortMap.Entry node = map.ceilingEntry(e.doubleValue());
+			return node != null ? node.getKey() : null;
+		}
+		
 		@Override
 		public double pollFirstDouble() { return map.pollFirstDoubleKey(); }
 		@Override
@@ -1326,8 +1351,8 @@ public class Double2ShortAVLTreeMap extends AbstractDouble2ShortMap implements D
 		protected abstract DoubleBidirectionalIterator keyIterator(double element);
 		protected abstract ShortBidirectionalIterator valueIterator();
 		protected abstract DoubleBidirectionalIterator descendingKeyIterator();
-		protected double lowKeyOrNull(Node entry) { return entry == null ? 0D : entry.key; }
-		protected double highKeyOrNull(Node entry) { return entry == null ? 0D : entry.key; }
+		protected double lowKeyOrNull(Node entry) { return entry == null ? getDefaultMinValue() : entry.key; }
+		protected double highKeyOrNull(Node entry) { return entry == null ? getDefaultMaxValue() : entry.key; }
 		protected Node next(Node entry) { return entry.next(); }
 		protected Node previous(Node entry) { return entry.previous(); }
 		
@@ -1398,7 +1423,7 @@ public class Double2ShortAVLTreeMap extends AbstractDouble2ShortMap implements D
 				map.removeNode(entry);
 				return result;
 			}
-			return 0D;
+			return getDefaultMinValue();
 		}
 		
 		@Override
@@ -1409,7 +1434,7 @@ public class Double2ShortAVLTreeMap extends AbstractDouble2ShortMap implements D
 				map.removeNode(entry);
 				return result;
 			}
-			return 0D;
+			return getDefaultMaxValue();
 		}
 		
 		@Override
@@ -1487,7 +1512,7 @@ public class Double2ShortAVLTreeMap extends AbstractDouble2ShortMap implements D
 		
 		@Override
 		public short removeOrDefault(double key, short defaultValue) {
-			return inRange(key) ? map.remove(key) : defaultValue;
+			return inRange(key) ? map.removeOrDefault(key, defaultValue) : defaultValue;
 		}
 		
 		@Override
@@ -1963,8 +1988,8 @@ public class Double2ShortAVLTreeMap extends AbstractDouble2ShortMap implements D
 			public SubMapEntryIterator(Node first, Node forwardFence, Node backwardFence)
 			{
 				next = first;
-				this.forwardFence = forwardFence == null ? null : forwardFence.key;
-				this.backwardFence = backwardFence == null ? null : backwardFence.key;
+				this.forwardFence = forwardFence == null ? 0D : forwardFence.key;
+				this.backwardFence = backwardFence == null ? 0D : backwardFence.key;
 				unboundForwardFence = forwardFence == null;
 				unboundBackwardFence = backwardFence == null;
 			}

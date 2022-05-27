@@ -25,6 +25,7 @@ import speiger.src.testers.shorts.generators.TestShortSetGenerator;
 import speiger.src.testers.shorts.generators.TestShortSortedSetGenerator;
 import speiger.src.testers.utils.SpecialFeature;
 
+@SuppressWarnings("javadoc")
 public class Short2CharSortedMapTestSuiteBuilder extends Short2CharMapTestSuiteBuilder {
 	public static Short2CharSortedMapTestSuiteBuilder using(TestShort2CharSortedMapGenerator generator) {
 		return (Short2CharSortedMapTestSuiteBuilder) new Short2CharSortedMapTestSuiteBuilder().usingGenerator(generator);

@@ -29,6 +29,7 @@ import speiger.src.testers.shorts.impl.ShortSortedSetSubsetTestSetGenerator.Shor
 import speiger.src.testers.shorts.tests.set.ShortNavigableSetNavigationTester;
 import speiger.src.testers.shorts.utils.ShortSamples;
 
+@SuppressWarnings("javadoc")
 public class ShortNavigableSetTestSuiteBuilder extends ShortSortedSetTestSuiteBuilder {
 	public static ShortNavigableSetTestSuiteBuilder using(TestShortNavigableSetGenerator generator) {
 		return (ShortNavigableSetTestSuiteBuilder) new ShortNavigableSetTestSuiteBuilder().usingGenerator(generator);

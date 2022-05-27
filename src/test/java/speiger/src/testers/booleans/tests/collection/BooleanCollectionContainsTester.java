@@ -9,6 +9,7 @@ import com.google.common.collect.testing.features.CollectionSize;
 import speiger.src.testers.booleans.tests.base.AbstractBooleanCollectionTester;
 
 @Ignore
+@SuppressWarnings("javadoc")
 public class BooleanCollectionContainsTester extends AbstractBooleanCollectionTester
 {
 	@CollectionSize.Require(absent = ZERO)

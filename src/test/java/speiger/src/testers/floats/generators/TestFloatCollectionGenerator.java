@@ -10,6 +10,7 @@ import speiger.src.collections.floats.collections.FloatIterable;
 import speiger.src.collections.floats.lists.FloatList;
 import speiger.src.testers.floats.utils.FloatSamples;
 
+@SuppressWarnings("javadoc")
 public interface TestFloatCollectionGenerator extends TestCollectionGenerator<Float>
 {
 	public FloatSamples getSamples();

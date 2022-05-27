@@ -19,6 +19,7 @@ import speiger.src.collections.objects.collections.ObjectIterator;
 import speiger.src.testers.bytes.tests.base.maps.AbstractByte2DoubleMapTester;
 
 @Ignore
+@SuppressWarnings("javadoc")
 public class Byte2DoubleMapRemoveTester extends AbstractByte2DoubleMapTester
 {
 	@MapFeature.Require(SUPPORTS_REMOVE)

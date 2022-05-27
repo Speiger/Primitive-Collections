@@ -18,6 +18,7 @@ import speiger.src.collections.longs.maps.interfaces.Long2ByteMap;
 import speiger.src.testers.longs.tests.base.maps.AbstractLong2ByteMapTester;
 
 @Ignore
+@SuppressWarnings("javadoc")
 public class Long2ByteMapEntrySetTester extends AbstractLong2ByteMapTester
 {
 	@CollectionSize.Require(ONE)

@@ -13,6 +13,7 @@ import speiger.src.collections.ints.lists.IntArrayList;
 import speiger.src.testers.ints.tests.base.AbstractIntSetTester;
 
 @Ignore
+@SuppressWarnings("javadoc")
 public class IntSetCreationTester extends AbstractIntSetTester
 {
 	@CollectionFeature.Require(absent = REJECTS_DUPLICATES_AT_CREATION)

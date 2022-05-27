@@ -20,8 +20,9 @@ import speiger.src.testers.objects.tests.base.AbstractObjectContainerTester;
 import speiger.src.testers.objects.utils.ObjectHelpers;
 
 @Ignore
-public class AbstractObject2CharMapTester<T> extends AbstractObjectContainerTester<Object2CharMap.Entry<T>, Object2CharMap<T>> {
-
+@SuppressWarnings("javadoc")
+public class AbstractObject2CharMapTester<T> extends AbstractObjectContainerTester<Object2CharMap.Entry<T>, Object2CharMap<T>>
+{
 	protected TestObject2CharMapGenerator<T> primitiveMapGenerator;
 
 	protected Object2CharMap<T> getMap() {

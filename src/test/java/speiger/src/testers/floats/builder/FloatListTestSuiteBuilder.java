@@ -69,6 +69,7 @@ import speiger.src.testers.floats.tests.list.FloatListSwapRemoveAtIndexTester;
 import speiger.src.testers.floats.tests.list.FloatListSwapRemoveTester;
 import speiger.src.testers.floats.tests.list.FloatListToArrayTester;
 
+@SuppressWarnings("javadoc")
 public class FloatListTestSuiteBuilder extends FloatCollectionTestSuiteBuilder {
 	public static FloatListTestSuiteBuilder using(TestFloatListGenerator generator) {
 		return (FloatListTestSuiteBuilder) new FloatListTestSuiteBuilder().usingGenerator(generator);

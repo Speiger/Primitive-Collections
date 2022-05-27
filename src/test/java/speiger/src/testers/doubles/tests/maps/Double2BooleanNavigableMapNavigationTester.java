@@ -23,6 +23,7 @@ import speiger.src.testers.doubles.tests.base.maps.AbstractDouble2BooleanMapTest
 import speiger.src.testers.objects.utils.ObjectHelpers;
 
 @Ignore
+@SuppressWarnings("javadoc")
 public class Double2BooleanNavigableMapNavigationTester extends AbstractDouble2BooleanMapTester
 {
 	private Double2BooleanNavigableMap navigableMap;

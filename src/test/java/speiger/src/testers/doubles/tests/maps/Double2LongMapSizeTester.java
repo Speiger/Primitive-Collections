@@ -5,6 +5,7 @@ import org.junit.Ignore;
 import speiger.src.testers.doubles.tests.base.maps.AbstractDouble2LongMapTester;
 
 @Ignore
+@SuppressWarnings("javadoc")
 public class Double2LongMapSizeTester extends AbstractDouble2LongMapTester {
 	
 	public void testSize() {

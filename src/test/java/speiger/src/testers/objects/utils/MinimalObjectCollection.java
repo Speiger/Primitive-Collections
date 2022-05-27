@@ -9,6 +9,7 @@ import speiger.src.collections.objects.collections.ObjectIterator;
 import speiger.src.collections.objects.utils.ObjectArrays;
 import speiger.src.collections.objects.lists.ObjectArrayList;
 
+@SuppressWarnings("javadoc")
 public class MinimalObjectCollection<T> extends AbstractObjectCollection<T> {
 
 	private final T[] contents;

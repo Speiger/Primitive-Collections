@@ -19,6 +19,7 @@ import speiger.src.collections.objects.collections.ObjectIterator;
 import speiger.src.testers.floats.tests.base.maps.AbstractFloat2LongMapTester;
 
 @Ignore
+@SuppressWarnings("javadoc")
 public class Float2LongMapRemoveTester extends AbstractFloat2LongMapTester
 {
 	@MapFeature.Require(SUPPORTS_REMOVE)

@@ -10,6 +10,7 @@ import speiger.src.collections.bytes.collections.ByteIterable;
 import speiger.src.collections.bytes.lists.ByteList;
 import speiger.src.testers.bytes.utils.ByteSamples;
 
+@SuppressWarnings("javadoc")
 public interface TestByteCollectionGenerator extends TestCollectionGenerator<Byte>
 {
 	public ByteSamples getSamples();

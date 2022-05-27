@@ -12,6 +12,7 @@ import com.google.common.collect.testing.features.MapFeature;
 import speiger.src.testers.bytes.tests.base.maps.AbstractByte2ObjectMapTester;
 
 @Ignore
+@SuppressWarnings("javadoc")
 public class Byte2ObjectMapComputeTester<V> extends AbstractByte2ObjectMapTester<V>
 {
 	@MapFeature.Require({ SUPPORTS_PUT, SUPPORTS_REMOVE })

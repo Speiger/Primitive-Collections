@@ -10,6 +10,7 @@ import speiger.src.testers.booleans.tests.base.AbstractBooleanCollectionTester;
 import speiger.src.testers.booleans.utils.MinimalBooleanCollection;
 
 @Ignore
+@SuppressWarnings("javadoc")
 public class BooleanCollectionContainsAllTester extends AbstractBooleanCollectionTester
 {
 	public void testContainsAll_empty() {

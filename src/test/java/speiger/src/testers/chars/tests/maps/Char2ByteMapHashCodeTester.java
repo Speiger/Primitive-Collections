@@ -7,7 +7,9 @@ import speiger.src.collections.chars.maps.interfaces.Char2ByteMap;
 import speiger.src.testers.chars.tests.base.maps.AbstractChar2ByteMapTester;
 
 @Ignore
-public class Char2ByteMapHashCodeTester extends AbstractChar2ByteMapTester {
+@SuppressWarnings("javadoc")
+public class Char2ByteMapHashCodeTester extends AbstractChar2ByteMapTester
+{
 	public void testHashCode() {
 		int expectedHashCode = 0;
 		for (Char2ByteMap.Entry entry : getSampleEntries()) {

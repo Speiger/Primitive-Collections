@@ -15,6 +15,7 @@ import speiger.src.collections.objects.lists.ObjectList;
 import speiger.src.testers.doubles.tests.base.maps.AbstractDouble2ObjectMapTester;
 
 @Ignore
+@SuppressWarnings("javadoc")
 public class Double2ObjectMapForEachTester<V> extends AbstractDouble2ObjectMapTester<V>
 {
 	@CollectionFeature.Require(KNOWN_ORDER)

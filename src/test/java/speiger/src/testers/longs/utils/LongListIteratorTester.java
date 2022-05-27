@@ -10,6 +10,7 @@ import speiger.src.collections.longs.collections.LongIterable;
 import speiger.src.collections.longs.collections.LongIterator;
 import speiger.src.collections.longs.lists.LongListIterator;
 
+@SuppressWarnings("javadoc")
 public abstract class LongListIteratorTester extends AbstractLongIteratorTester {
 
 	public LongListIteratorTester(int steps, LongIterable elementsToInsertIterable, Iterable<? extends IteratorFeature> features, LongIterable expectedElements, int startIndex) {

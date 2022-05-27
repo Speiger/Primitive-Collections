@@ -19,6 +19,7 @@ import speiger.src.testers.floats.impl.maps.DerivedFloat2IntMapGenerators;
 import speiger.src.testers.floats.tests.maps.Float2IntNavigableMapNavigationTester;
 import speiger.src.testers.utils.SpecialFeature;
 
+@SuppressWarnings("javadoc")
 public class Float2IntNavigableMapTestSuiteBuilder extends Float2IntSortedMapTestSuiteBuilder
 {
 	public static Float2IntNavigableMapTestSuiteBuilder using(TestFloat2IntSortedMapGenerator generator) {

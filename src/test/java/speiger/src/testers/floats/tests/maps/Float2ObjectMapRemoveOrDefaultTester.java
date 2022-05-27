@@ -18,6 +18,7 @@ import speiger.src.collections.objects.collections.ObjectIterator;
 import speiger.src.testers.floats.tests.base.maps.AbstractFloat2ObjectMapTester;
 
 @Ignore
+@SuppressWarnings("javadoc")
 public class Float2ObjectMapRemoveOrDefaultTester<V> extends AbstractFloat2ObjectMapTester<V>
 {
 	@MapFeature.Require(SUPPORTS_REMOVE)

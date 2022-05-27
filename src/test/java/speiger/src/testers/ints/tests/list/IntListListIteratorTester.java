@@ -22,6 +22,7 @@ import speiger.src.testers.ints.utils.IntHelpers;
 import speiger.src.testers.ints.utils.IntListIteratorTester;
 
 @Ignore
+@SuppressWarnings("javadoc")
 public class IntListListIteratorTester extends AbstractIntListTester
 {
 	@CollectionFeature.Require(absent = SUPPORTS_REMOVE)

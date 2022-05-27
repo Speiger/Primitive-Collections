@@ -25,6 +25,7 @@ import speiger.src.testers.chars.generators.TestCharSetGenerator;
 import speiger.src.testers.chars.generators.TestCharSortedSetGenerator;
 import speiger.src.testers.utils.SpecialFeature;
 
+@SuppressWarnings("javadoc")
 public class Char2BooleanSortedMapTestSuiteBuilder extends Char2BooleanMapTestSuiteBuilder {
 	public static Char2BooleanSortedMapTestSuiteBuilder using(TestChar2BooleanSortedMapGenerator generator) {
 		return (Char2BooleanSortedMapTestSuiteBuilder) new Char2BooleanSortedMapTestSuiteBuilder().usingGenerator(generator);

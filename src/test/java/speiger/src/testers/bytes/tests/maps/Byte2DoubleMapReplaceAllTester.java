@@ -18,6 +18,7 @@ import speiger.src.testers.bytes.tests.base.maps.AbstractByte2DoubleMapTester;
 import speiger.src.testers.bytes.utils.ByteSamples;
 
 @Ignore
+@SuppressWarnings("javadoc")
 public class Byte2DoubleMapReplaceAllTester extends AbstractByte2DoubleMapTester
 {
 	private ByteSamples keys() {

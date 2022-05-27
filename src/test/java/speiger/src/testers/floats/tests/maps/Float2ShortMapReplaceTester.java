@@ -11,6 +11,7 @@ import com.google.common.collect.testing.features.MapFeature;
 import speiger.src.testers.floats.tests.base.maps.AbstractFloat2ShortMapTester;
 
 @Ignore
+@SuppressWarnings("javadoc")
 public class Float2ShortMapReplaceTester extends AbstractFloat2ShortMapTester
 {
 	@MapFeature.Require(SUPPORTS_PUT)

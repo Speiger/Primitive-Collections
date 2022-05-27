@@ -17,6 +17,7 @@ import speiger.src.collections.bytes.maps.interfaces.Byte2ByteMap;
 import speiger.src.testers.bytes.tests.base.maps.AbstractByte2ByteMapTester;
 
 @Ignore
+@SuppressWarnings("javadoc")
 public class Byte2ByteMapAddToTester extends AbstractByte2ByteMapTester
 {	@MapFeature.Require(SUPPORTS_PUT)
 	@CollectionSize.Require(absent = ZERO)

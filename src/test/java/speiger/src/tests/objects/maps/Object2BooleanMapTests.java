@@ -41,6 +41,7 @@ import speiger.src.testers.objects.tests.maps.Object2BooleanMapPutIfAbsentTester
 import speiger.src.testers.utils.TestUtils;
 import speiger.src.testers.utils.SpecialFeature;
 
+@SuppressWarnings("javadoc")
 public class Object2BooleanMapTests extends TestCase
 {
 	public static Test suite() {

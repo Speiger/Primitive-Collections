@@ -8,6 +8,7 @@ import speiger.src.collections.chars.collections.CharIterator;
 import speiger.src.collections.chars.functions.CharConsumer;
 import speiger.src.collections.chars.lists.CharArrayList;
 
+@SuppressWarnings("javadoc")
 public class MinimalCharCollection extends AbstractCharCollection {
 
 	private final char[] contents;

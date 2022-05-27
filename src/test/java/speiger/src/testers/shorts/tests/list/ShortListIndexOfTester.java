@@ -12,6 +12,7 @@ import com.google.common.collect.testing.features.CollectionSize;
 import speiger.src.testers.shorts.tests.base.AbstractShortListIndexOfTester;
 
 @Ignore
+@SuppressWarnings("javadoc")
 public class ShortListIndexOfTester extends AbstractShortListIndexOfTester
 {
 	@Override

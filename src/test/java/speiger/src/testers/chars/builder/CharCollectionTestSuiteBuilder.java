@@ -24,6 +24,7 @@ import speiger.src.testers.chars.tests.collection.CharCollectionStreamTester;
 import speiger.src.testers.chars.tests.collection.CharCollectionRetainAllTester;
 import speiger.src.testers.chars.tests.collection.CharCollectionToArrayTester;
 
+@SuppressWarnings("javadoc")
 public class CharCollectionTestSuiteBuilder extends CollectionTestSuiteBuilder<Character> {
 	public static CharCollectionTestSuiteBuilder using(TestCharCollectionGenerator generator) {
 		return (CharCollectionTestSuiteBuilder) new CharCollectionTestSuiteBuilder().usingGenerator(generator);

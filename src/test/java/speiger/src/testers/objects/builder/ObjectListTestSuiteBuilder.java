@@ -69,6 +69,7 @@ import speiger.src.testers.objects.tests.list.ObjectListSwapRemoveAtIndexTester;
 import speiger.src.testers.objects.tests.list.ObjectListSwapRemoveTester;
 import speiger.src.testers.objects.tests.list.ObjectListToArrayTester;
 
+@SuppressWarnings("javadoc")
 public class ObjectListTestSuiteBuilder<T> extends ObjectCollectionTestSuiteBuilder<T> {
 	public static <T> ObjectListTestSuiteBuilder<T> using(TestObjectListGenerator<T> generator) {
 		return (ObjectListTestSuiteBuilder<T>) new ObjectListTestSuiteBuilder<T>().usingGenerator(generator);

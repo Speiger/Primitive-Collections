@@ -18,6 +18,7 @@ import speiger.src.collections.shorts.maps.interfaces.Short2DoubleMap;
 import speiger.src.testers.shorts.tests.base.maps.AbstractShort2DoubleMapTester;
 
 @Ignore
+@SuppressWarnings("javadoc")
 public class Short2DoubleMapAddToTester extends AbstractShort2DoubleMapTester
 {	@MapFeature.Require(SUPPORTS_PUT)
 	@CollectionSize.Require(absent = ZERO)

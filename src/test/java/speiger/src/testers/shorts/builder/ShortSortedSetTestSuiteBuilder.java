@@ -18,6 +18,7 @@ import speiger.src.testers.shorts.generators.TestShortSortedSetGenerator;
 import speiger.src.testers.shorts.impl.ShortSortedSetSubsetTestSetGenerator;
 import speiger.src.testers.shorts.tests.set.ShortSortedSetNaviationTester;
 
+@SuppressWarnings("javadoc")
 public class ShortSortedSetTestSuiteBuilder extends ShortSetTestSuiteBuilder {
 	public static ShortSortedSetTestSuiteBuilder using(TestShortSortedSetGenerator generator) {
 		return (ShortSortedSetTestSuiteBuilder) new ShortSortedSetTestSuiteBuilder().usingGenerator(generator);

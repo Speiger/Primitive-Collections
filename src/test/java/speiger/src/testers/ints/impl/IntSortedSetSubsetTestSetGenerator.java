@@ -13,6 +13,7 @@ import speiger.src.collections.ints.sets.IntSortedSet;
 import speiger.src.testers.ints.generators.TestIntSortedSetGenerator;
 import speiger.src.testers.ints.utils.IntSamples;
 
+@SuppressWarnings("javadoc")
 public class IntSortedSetSubsetTestSetGenerator implements TestIntSortedSetGenerator
 {
 	final Bound to;

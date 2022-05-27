@@ -24,6 +24,7 @@ import speiger.src.testers.bytes.tests.collection.ByteCollectionStreamTester;
 import speiger.src.testers.bytes.tests.collection.ByteCollectionRetainAllTester;
 import speiger.src.testers.bytes.tests.collection.ByteCollectionToArrayTester;
 
+@SuppressWarnings("javadoc")
 public class ByteCollectionTestSuiteBuilder extends CollectionTestSuiteBuilder<Byte> {
 	public static ByteCollectionTestSuiteBuilder using(TestByteCollectionGenerator generator) {
 		return (ByteCollectionTestSuiteBuilder) new ByteCollectionTestSuiteBuilder().usingGenerator(generator);

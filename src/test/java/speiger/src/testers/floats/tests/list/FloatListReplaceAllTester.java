@@ -13,6 +13,7 @@ import com.google.common.collect.testing.features.ListFeature;
 import speiger.src.testers.floats.tests.base.AbstractFloatListTester;
 
 @Ignore
+@SuppressWarnings("javadoc")
 public class FloatListReplaceAllTester extends AbstractFloatListTester
 {
 	@ListFeature.Require(SUPPORTS_SET)

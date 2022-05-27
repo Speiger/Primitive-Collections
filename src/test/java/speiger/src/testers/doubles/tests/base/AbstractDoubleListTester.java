@@ -8,6 +8,7 @@ import speiger.src.collections.doubles.lists.DoubleList;
 import speiger.src.testers.doubles.utils.DoubleHelpers;
 
 @Ignore
+@SuppressWarnings("javadoc")
 public class AbstractDoubleListTester extends AbstractDoubleCollectionTester
 {
 	protected final DoubleList getList() {

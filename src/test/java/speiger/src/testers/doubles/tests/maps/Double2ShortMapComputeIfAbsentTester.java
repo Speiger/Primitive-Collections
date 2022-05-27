@@ -12,6 +12,7 @@ import junit.framework.AssertionFailedError;
 import speiger.src.testers.doubles.tests.base.maps.AbstractDouble2ShortMapTester;
 
 @Ignore
+@SuppressWarnings("javadoc")
 public class Double2ShortMapComputeIfAbsentTester extends AbstractDouble2ShortMapTester
 {
 	@MapFeature.Require(SUPPORTS_PUT)

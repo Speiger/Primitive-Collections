@@ -41,6 +41,7 @@ import speiger.src.testers.bytes.tests.maps.Byte2BooleanMapPutIfAbsentTester;
 import speiger.src.testers.utils.TestUtils;
 import speiger.src.testers.utils.SpecialFeature;
 
+@SuppressWarnings("javadoc")
 public class Byte2BooleanMapTests extends TestCase
 {
 	public static Test suite() {

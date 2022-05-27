@@ -13,6 +13,7 @@ import junit.framework.AssertionFailedError;
 import speiger.src.testers.floats.tests.base.maps.AbstractFloat2CharMapTester;
 
 @Ignore
+@SuppressWarnings("javadoc")
 public class Float2CharMapMergeTester extends AbstractFloat2CharMapTester
 {
 	@MapFeature.Require(SUPPORTS_PUT)

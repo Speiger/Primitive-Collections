@@ -18,6 +18,7 @@ import speiger.src.testers.longs.generators.TestLongSetGenerator;
 import speiger.src.testers.longs.generators.TestLongSortedSetGenerator;
 import speiger.src.testers.longs.utils.LongSamples;
 
+@SuppressWarnings("javadoc")
 public class SimpleLongTestGenerator<E extends LongCollection> {
 	Function<long[], E> mapper;
 	public SimpleLongTestGenerator(Function<long[], E> mapper) {

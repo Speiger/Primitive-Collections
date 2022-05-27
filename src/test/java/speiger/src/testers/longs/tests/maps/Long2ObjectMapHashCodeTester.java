@@ -8,7 +8,9 @@ import speiger.src.collections.longs.maps.interfaces.Long2ObjectMap;
 import speiger.src.testers.longs.tests.base.maps.AbstractLong2ObjectMapTester;
 
 @Ignore
-public class Long2ObjectMapHashCodeTester<V> extends AbstractLong2ObjectMapTester<V> {
+@SuppressWarnings("javadoc")
+public class Long2ObjectMapHashCodeTester<V> extends AbstractLong2ObjectMapTester<V>
+{
 	public void testHashCode() {
 		int expectedHashCode = 0;
 		for (Long2ObjectMap.Entry<V> entry : getSampleEntries()) {

@@ -12,6 +12,7 @@ import junit.framework.AssertionFailedError;
 import speiger.src.testers.shorts.tests.base.maps.AbstractShort2BooleanMapTester;
 
 @Ignore
+@SuppressWarnings("javadoc")
 public class Short2BooleanMapComputeIfAbsentTester extends AbstractShort2BooleanMapTester
 {
 	@MapFeature.Require(SUPPORTS_PUT)

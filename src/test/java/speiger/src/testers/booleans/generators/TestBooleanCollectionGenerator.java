@@ -10,6 +10,7 @@ import speiger.src.collections.booleans.collections.BooleanIterable;
 import speiger.src.collections.booleans.lists.BooleanList;
 import speiger.src.testers.booleans.utils.BooleanSamples;
 
+@SuppressWarnings("javadoc")
 public interface TestBooleanCollectionGenerator extends TestCollectionGenerator<Boolean>
 {
 	public BooleanSamples getSamples();

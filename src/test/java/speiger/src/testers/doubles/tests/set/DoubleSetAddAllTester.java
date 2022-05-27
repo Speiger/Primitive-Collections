@@ -12,6 +12,7 @@ import speiger.src.testers.doubles.tests.base.AbstractDoubleSetTester;
 import speiger.src.testers.doubles.utils.MinimalDoubleCollection;
 
 @Ignore
+@SuppressWarnings("javadoc")
 public class DoubleSetAddAllTester extends AbstractDoubleSetTester
 {
 	@CollectionFeature.Require(SUPPORTS_ADD)

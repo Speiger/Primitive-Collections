@@ -21,6 +21,7 @@ import speiger.src.testers.ints.tests.base.maps.AbstractInt2DoubleMapTester;
 import speiger.src.testers.objects.utils.ObjectHelpers;
 
 @Ignore
+@SuppressWarnings("javadoc")
 public class Int2DoubleSortedMapNavigationTester extends AbstractInt2DoubleMapTester
 {
 	private Int2DoubleSortedMap sortedMap;

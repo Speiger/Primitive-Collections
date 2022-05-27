@@ -10,9 +10,9 @@ import speiger.src.collections.longs.collections.LongCollection;
 import speiger.src.testers.longs.tests.base.AbstractLongCollectionTester;
 
 @Ignore
+@SuppressWarnings("javadoc")
 public class LongCollectionCopyTester extends AbstractLongCollectionTester
 {
-	
 	@CollectionFeature.Require(absent = {CollectionFeature.SUBSET_VIEW, CollectionFeature.DESCENDING_VIEW})
 	@SpecialFeature.Require(SpecialFeature.COPYING)
 	public void testEquals() {

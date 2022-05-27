@@ -20,6 +20,7 @@ import speiger.src.testers.doubles.tests.base.maps.AbstractDouble2FloatMapTester
 import speiger.src.testers.objects.utils.MinimalObjectCollection;
 
 @Ignore
+@SuppressWarnings("javadoc")
 public class Double2FloatMapPutAllTester extends AbstractDouble2FloatMapTester
 {
 	@MapFeature.Require(SUPPORTS_PUT)

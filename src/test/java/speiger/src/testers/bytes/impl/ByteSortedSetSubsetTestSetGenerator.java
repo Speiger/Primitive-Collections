@@ -13,6 +13,7 @@ import speiger.src.collections.bytes.sets.ByteSortedSet;
 import speiger.src.testers.bytes.generators.TestByteSortedSetGenerator;
 import speiger.src.testers.bytes.utils.ByteSamples;
 
+@SuppressWarnings("javadoc")
 public class ByteSortedSetSubsetTestSetGenerator implements TestByteSortedSetGenerator
 {
 	final Bound to;

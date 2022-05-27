@@ -13,6 +13,7 @@ import com.google.common.collect.testing.features.ListFeature;
 import speiger.src.testers.chars.tests.base.AbstractCharListTester;
 
 @Ignore
+@SuppressWarnings("javadoc")
 public class CharListAddAllArrayAtIndexTester extends AbstractCharListTester
 {
 	@ListFeature.Require(SUPPORTS_ADD_WITH_INDEX)

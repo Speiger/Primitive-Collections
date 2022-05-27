@@ -19,6 +19,7 @@ import speiger.src.collections.objects.collections.ObjectIterator;
 import speiger.src.testers.ints.tests.base.maps.AbstractInt2DoubleMapTester;
 
 @Ignore
+@SuppressWarnings("javadoc")
 public class Int2DoubleMapRemoveTester extends AbstractInt2DoubleMapTester
 {
 	@MapFeature.Require(SUPPORTS_REMOVE)

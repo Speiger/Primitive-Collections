@@ -18,6 +18,7 @@ import speiger.src.testers.shorts.tests.base.maps.AbstractShort2FloatMapTester;
 import speiger.src.testers.shorts.utils.ShortSamples;
 
 @Ignore
+@SuppressWarnings("javadoc")
 public class Short2FloatMapReplaceAllTester extends AbstractShort2FloatMapTester
 {
 	private ShortSamples keys() {

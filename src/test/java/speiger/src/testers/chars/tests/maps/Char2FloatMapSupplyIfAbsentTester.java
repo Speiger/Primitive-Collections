@@ -12,6 +12,7 @@ import junit.framework.AssertionFailedError;
 import speiger.src.testers.chars.tests.base.maps.AbstractChar2FloatMapTester;
 
 @Ignore
+@SuppressWarnings("javadoc")
 public class Char2FloatMapSupplyIfAbsentTester extends AbstractChar2FloatMapTester
 {
 	@MapFeature.Require(SUPPORTS_PUT)

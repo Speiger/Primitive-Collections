@@ -7,6 +7,7 @@ import speiger.src.collections.ints.lists.IntArrayList;
 import speiger.src.collections.ints.lists.IntList;
 import speiger.src.collections.ints.sets.IntSet;
 
+@SuppressWarnings("javadoc")
 public class MinimalIntSet extends MinimalIntCollection implements IntSet {
 	public static MinimalIntSet of(int...array) {
 		return MinimalIntSet.of(IntArrayList.wrap(array));

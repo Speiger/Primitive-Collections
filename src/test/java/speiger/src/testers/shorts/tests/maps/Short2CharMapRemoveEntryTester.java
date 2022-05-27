@@ -11,6 +11,7 @@ import com.google.common.collect.testing.features.MapFeature;
 import speiger.src.testers.shorts.tests.base.maps.AbstractShort2CharMapTester;
 
 @Ignore
+@SuppressWarnings("javadoc")
 public class Short2CharMapRemoveEntryTester extends AbstractShort2CharMapTester
 {
 	@MapFeature.Require(SUPPORTS_REMOVE)

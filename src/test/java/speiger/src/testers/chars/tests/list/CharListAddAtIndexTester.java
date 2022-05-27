@@ -17,6 +17,7 @@ import speiger.src.collections.chars.collections.CharIterator;
 import speiger.src.testers.chars.tests.base.AbstractCharListTester;
 
 @Ignore
+@SuppressWarnings("javadoc")
 public class CharListAddAtIndexTester extends AbstractCharListTester
 {
 	@ListFeature.Require(SUPPORTS_ADD_WITH_INDEX)

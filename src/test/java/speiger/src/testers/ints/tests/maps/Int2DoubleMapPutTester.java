@@ -18,6 +18,7 @@ import speiger.src.collections.ints.maps.interfaces.Int2DoubleMap;
 import speiger.src.testers.ints.tests.base.maps.AbstractInt2DoubleMapTester;
 
 @Ignore
+@SuppressWarnings("javadoc")
 public class Int2DoubleMapPutTester extends AbstractInt2DoubleMapTester
 {	
 	@MapFeature.Require(SUPPORTS_PUT)

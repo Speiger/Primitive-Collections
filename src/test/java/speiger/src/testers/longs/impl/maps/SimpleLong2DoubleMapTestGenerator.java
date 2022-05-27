@@ -13,6 +13,7 @@ import speiger.src.testers.longs.generators.maps.TestLong2DoubleMapGenerator;
 import speiger.src.testers.longs.generators.maps.TestLong2DoubleSortedMapGenerator;
 import speiger.src.testers.objects.utils.ObjectSamples;
 
+@SuppressWarnings("javadoc")
 public class SimpleLong2DoubleMapTestGenerator<E extends Long2DoubleMap>
 {
 	BiFunction<long[], double[], E> mapper;

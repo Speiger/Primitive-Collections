@@ -16,6 +16,7 @@ import speiger.src.collections.chars.maps.interfaces.Char2IntMap;
 import speiger.src.testers.chars.tests.base.maps.AbstractChar2IntMapTester;
 
 @Ignore
+@SuppressWarnings("javadoc")
 public class Char2IntMapToStringTester extends AbstractChar2IntMapTester
 {
 	public void testToString_minimal() {

@@ -9,6 +9,7 @@ import com.google.common.collect.testing.features.CollectionSize;
 import speiger.src.testers.doubles.tests.base.AbstractDoubleCollectionTester;
 
 @Ignore
+@SuppressWarnings("javadoc")
 public class DoubleCollectionContainsTester extends AbstractDoubleCollectionTester
 {
 	@CollectionSize.Require(absent = ZERO)

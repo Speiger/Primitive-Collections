@@ -18,6 +18,7 @@ import speiger.src.collections.doubles.maps.interfaces.Double2LongMap;
 import speiger.src.testers.doubles.tests.base.maps.AbstractDouble2LongMapTester;
 
 @Ignore
+@SuppressWarnings("javadoc")
 public class Double2LongMapEntrySetTester extends AbstractDouble2LongMapTester
 {
 	@CollectionSize.Require(ONE)

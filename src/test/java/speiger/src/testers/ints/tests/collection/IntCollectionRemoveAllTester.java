@@ -20,6 +20,7 @@ import speiger.src.testers.ints.utils.IntHelpers;
 import speiger.src.testers.ints.utils.MinimalIntCollection;
 
 @Ignore
+@SuppressWarnings("javadoc")
 public class IntCollectionRemoveAllTester extends AbstractIntCollectionTester
 {
 	@CollectionFeature.Require(SUPPORTS_REMOVE)

@@ -18,7 +18,9 @@ import speiger.src.testers.bytes.tests.base.AbstractByteSetTester;
 import speiger.src.testers.bytes.utils.ByteHelpers;
 
 @Ignore
-public class ByteSortedSetNaviationTester extends AbstractByteSetTester {
+@SuppressWarnings("javadoc")
+public class ByteSortedSetNaviationTester extends AbstractByteSetTester
+{
 	private ByteSortedSet sortedSet;
 	private ByteList values;
 	private byte a;

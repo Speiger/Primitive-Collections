@@ -19,6 +19,7 @@ import speiger.src.collections.objects.maps.interfaces.Object2ShortMap;
 import speiger.src.testers.objects.tests.base.maps.AbstractObject2ShortMapTester;
 
 @Ignore
+@SuppressWarnings("javadoc")
 public class Object2ShortMapEntrySetTester<T> extends AbstractObject2ShortMapTester<T>
 {
 	@CollectionSize.Require(ONE)

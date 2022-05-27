@@ -12,6 +12,7 @@ import speiger.src.testers.ints.tests.base.AbstractIntCollectionTester;
 import speiger.src.testers.ints.utils.IntHelpers;
 
 @Ignore
+@SuppressWarnings("javadoc")
 public class IntCollectionToArrayTester extends AbstractIntCollectionTester
 {
 	public void testToArray_noArgs() {

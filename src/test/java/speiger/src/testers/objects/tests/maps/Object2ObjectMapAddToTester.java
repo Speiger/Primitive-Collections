@@ -5,6 +5,7 @@ import org.junit.Ignore;
 import speiger.src.testers.objects.tests.base.maps.AbstractObject2ObjectMapTester;
 
 @Ignore
+@SuppressWarnings("javadoc")
 public class Object2ObjectMapAddToTester<T, V> extends AbstractObject2ObjectMapTester<T, V>
 {
 }

@@ -12,6 +12,7 @@ import com.google.common.collect.testing.features.CollectionSize;
 import speiger.src.testers.ints.tests.base.AbstractIntListTester;
 
 @Ignore
+@SuppressWarnings("javadoc")
 public class IntListSwapRemoveTester extends AbstractIntListTester
 {
 	@CollectionFeature.Require(SUPPORTS_REMOVE)

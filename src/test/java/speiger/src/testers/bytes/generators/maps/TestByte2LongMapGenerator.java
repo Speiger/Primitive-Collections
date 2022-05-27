@@ -11,6 +11,7 @@ import speiger.src.collections.objects.collections.ObjectIterable;
 import speiger.src.collections.objects.lists.ObjectList;
 import speiger.src.testers.objects.utils.ObjectSamples;
 
+@SuppressWarnings("javadoc")
 public interface TestByte2LongMapGenerator extends TestMapGenerator<Byte, Long> {
 	public ObjectSamples<Byte2LongMap.Entry> getSamples();
 	public ObjectIterable<Byte2LongMap.Entry> order(ObjectList<Byte2LongMap.Entry> insertionOrder);

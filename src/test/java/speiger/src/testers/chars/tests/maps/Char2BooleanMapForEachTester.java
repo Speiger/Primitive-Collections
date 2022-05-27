@@ -15,6 +15,7 @@ import speiger.src.collections.objects.lists.ObjectList;
 import speiger.src.testers.chars.tests.base.maps.AbstractChar2BooleanMapTester;
 
 @Ignore
+@SuppressWarnings("javadoc")
 public class Char2BooleanMapForEachTester extends AbstractChar2BooleanMapTester
 {
 	@CollectionFeature.Require(KNOWN_ORDER)

@@ -25,6 +25,7 @@ import speiger.src.testers.bytes.generators.TestByteSetGenerator;
 import speiger.src.testers.bytes.generators.TestByteSortedSetGenerator;
 import speiger.src.testers.utils.SpecialFeature;
 
+@SuppressWarnings("javadoc")
 public class Byte2ShortSortedMapTestSuiteBuilder extends Byte2ShortMapTestSuiteBuilder {
 	public static Byte2ShortSortedMapTestSuiteBuilder using(TestByte2ShortSortedMapGenerator generator) {
 		return (Byte2ShortSortedMapTestSuiteBuilder) new Byte2ShortSortedMapTestSuiteBuilder().usingGenerator(generator);

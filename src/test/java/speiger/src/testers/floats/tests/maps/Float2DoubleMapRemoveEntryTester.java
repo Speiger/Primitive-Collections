@@ -11,6 +11,7 @@ import com.google.common.collect.testing.features.MapFeature;
 import speiger.src.testers.floats.tests.base.maps.AbstractFloat2DoubleMapTester;
 
 @Ignore
+@SuppressWarnings("javadoc")
 public class Float2DoubleMapRemoveEntryTester extends AbstractFloat2DoubleMapTester
 {
 	@MapFeature.Require(SUPPORTS_REMOVE)

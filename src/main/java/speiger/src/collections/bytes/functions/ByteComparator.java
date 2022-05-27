@@ -58,7 +58,6 @@ public interface ByteComparator extends Comparator<Byte>
 			this.original = original;
 		}
 		
-		@Override
 		public int compare(byte o1, byte o2) {
 			return original.compare(o2, o1);
 		}

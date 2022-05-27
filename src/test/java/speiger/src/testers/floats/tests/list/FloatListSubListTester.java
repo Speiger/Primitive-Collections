@@ -24,6 +24,7 @@ import speiger.src.testers.floats.tests.base.AbstractFloatListTester;
 import speiger.src.testers.floats.utils.FloatHelpers;
 
 @Ignore
+@SuppressWarnings("javadoc")
 public class FloatListSubListTester extends AbstractFloatListTester
 {
 	public void testSubList_startNegative() {

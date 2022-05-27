@@ -11,6 +11,7 @@ import speiger.src.testers.chars.tests.base.maps.AbstractChar2BooleanMapTester;
 import speiger.src.testers.objects.utils.ObjectHelpers;
 
 @Ignore
+@SuppressWarnings("javadoc")
 public class Char2BooleanMapEqualsTester extends AbstractChar2BooleanMapTester 
 {
 	public void testEquals_otherMapWithSameEntries() {

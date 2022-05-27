@@ -12,6 +12,7 @@ import speiger.src.testers.longs.tests.base.AbstractLongCollectionTester;
 import speiger.src.testers.longs.utils.LongHelpers;
 
 @Ignore
+@SuppressWarnings("javadoc")
 public class LongCollectionForEachTester extends AbstractLongCollectionTester
 {
 	@CollectionFeature.Require(absent = KNOWN_ORDER)

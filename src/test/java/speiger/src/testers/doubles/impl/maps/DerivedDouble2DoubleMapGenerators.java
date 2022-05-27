@@ -36,6 +36,7 @@ import speiger.src.collections.objects.utils.ObjectLists;
 import speiger.src.testers.objects.generators.TestObjectSetGenerator;
 import speiger.src.testers.objects.utils.ObjectSamples;
 
+@SuppressWarnings("javadoc")
 public class DerivedDouble2DoubleMapGenerators {
 	public static class NavigableMapGenerator extends SortedMapGenerator {
 		public NavigableMapGenerator(TestDouble2DoubleSortedMapGenerator parent, Bound to, Bound from) {

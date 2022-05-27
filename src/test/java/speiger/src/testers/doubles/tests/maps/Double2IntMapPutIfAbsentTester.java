@@ -11,6 +11,7 @@ import com.google.common.collect.testing.features.MapFeature;
 import speiger.src.testers.doubles.tests.base.maps.AbstractDouble2IntMapTester;
 
 @Ignore
+@SuppressWarnings("javadoc")
 public class Double2IntMapPutIfAbsentTester extends AbstractDouble2IntMapTester
 {
 	@MapFeature.Require(SUPPORTS_PUT)

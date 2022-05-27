@@ -11,6 +11,7 @@ import com.google.common.collect.testing.features.MapFeature;
 import speiger.src.testers.floats.tests.base.maps.AbstractFloat2ObjectMapTester;
 
 @Ignore
+@SuppressWarnings("javadoc")
 public class Float2ObjectMapRemoveEntryTester<V> extends AbstractFloat2ObjectMapTester<V>
 {
 	@MapFeature.Require(SUPPORTS_REMOVE)

@@ -16,6 +16,7 @@ import speiger.src.collections.floats.maps.interfaces.Float2BooleanMap;
 import speiger.src.testers.floats.tests.base.maps.AbstractFloat2BooleanMapTester;
 
 @Ignore
+@SuppressWarnings("javadoc")
 public class Float2BooleanMapToStringTester extends AbstractFloat2BooleanMapTester
 {
 	public void testToString_minimal() {

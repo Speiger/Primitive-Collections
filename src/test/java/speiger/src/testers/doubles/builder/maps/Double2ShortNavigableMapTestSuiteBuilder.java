@@ -19,6 +19,7 @@ import speiger.src.testers.doubles.impl.maps.DerivedDouble2ShortMapGenerators;
 import speiger.src.testers.doubles.tests.maps.Double2ShortNavigableMapNavigationTester;
 import speiger.src.testers.utils.SpecialFeature;
 
+@SuppressWarnings("javadoc")
 public class Double2ShortNavigableMapTestSuiteBuilder extends Double2ShortSortedMapTestSuiteBuilder
 {
 	public static Double2ShortNavigableMapTestSuiteBuilder using(TestDouble2ShortSortedMapGenerator generator) {

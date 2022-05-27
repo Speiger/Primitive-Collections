@@ -12,6 +12,7 @@ import speiger.src.testers.doubles.tests.base.AbstractDoubleCollectionTester;
 import speiger.src.testers.doubles.utils.DoubleHelpers;
 
 @Ignore
+@SuppressWarnings("javadoc")
 public class DoubleCollectionToArrayTester extends AbstractDoubleCollectionTester
 {
 	public void testToArray_noArgs() {

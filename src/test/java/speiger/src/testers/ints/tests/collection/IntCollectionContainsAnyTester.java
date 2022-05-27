@@ -11,6 +11,7 @@ import speiger.src.testers.ints.tests.base.AbstractIntCollectionTester;
 import speiger.src.testers.ints.utils.MinimalIntCollection;
 
 @Ignore
+@SuppressWarnings("javadoc")
 public class IntCollectionContainsAnyTester extends AbstractIntCollectionTester
 {	
 	public void testContainsAny_empty() {

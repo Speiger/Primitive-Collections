@@ -10,6 +10,7 @@ import speiger.src.collections.floats.collections.FloatIterable;
 import speiger.src.collections.floats.collections.FloatIterator;
 import speiger.src.collections.floats.lists.FloatListIterator;
 
+@SuppressWarnings("javadoc")
 public abstract class FloatListIteratorTester extends AbstractFloatIteratorTester {
 
 	public FloatListIteratorTester(int steps, FloatIterable elementsToInsertIterable, Iterable<? extends IteratorFeature> features, FloatIterable expectedElements, int startIndex) {

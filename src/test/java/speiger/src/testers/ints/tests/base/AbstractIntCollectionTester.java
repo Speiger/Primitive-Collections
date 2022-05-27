@@ -5,6 +5,7 @@ import org.junit.Ignore;
 import speiger.src.collections.ints.collections.IntCollection;
 
 @Ignore
+@SuppressWarnings("javadoc")
 public class AbstractIntCollectionTester extends AbstractIntContainerTester<IntCollection>
 {
 	protected IntCollection collection;

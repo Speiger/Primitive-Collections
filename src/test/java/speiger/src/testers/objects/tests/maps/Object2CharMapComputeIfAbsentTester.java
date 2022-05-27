@@ -12,6 +12,7 @@ import junit.framework.AssertionFailedError;
 import speiger.src.testers.objects.tests.base.maps.AbstractObject2CharMapTester;
 
 @Ignore
+@SuppressWarnings("javadoc")
 public class Object2CharMapComputeIfAbsentTester<T> extends AbstractObject2CharMapTester<T>
 {
 	@MapFeature.Require(SUPPORTS_PUT)

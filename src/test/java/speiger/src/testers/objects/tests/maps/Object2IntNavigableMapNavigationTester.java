@@ -22,6 +22,7 @@ import speiger.src.testers.objects.tests.base.maps.AbstractObject2IntMapTester;
 import speiger.src.testers.objects.utils.ObjectHelpers;
 
 @Ignore
+@SuppressWarnings("javadoc")
 public class Object2IntNavigableMapNavigationTester<T> extends AbstractObject2IntMapTester<T>
 {
 	private Object2IntNavigableMap<T> navigableMap;

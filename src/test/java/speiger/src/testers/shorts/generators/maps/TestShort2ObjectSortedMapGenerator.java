@@ -6,6 +6,7 @@ import speiger.src.collections.shorts.maps.interfaces.Short2ObjectMap;
 import speiger.src.collections.shorts.maps.interfaces.Short2ObjectMap.Entry;
 import speiger.src.collections.shorts.maps.interfaces.Short2ObjectSortedMap;
 
+@SuppressWarnings("javadoc")
 public interface TestShort2ObjectSortedMapGenerator<V> extends TestShort2ObjectMapGenerator<V>, TestSortedMapGenerator<Short, V>
 {
 	@Override

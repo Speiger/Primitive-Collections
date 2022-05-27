@@ -10,6 +10,7 @@ import speiger.src.collections.bytes.lists.ByteArrayList;
 import speiger.src.testers.bytes.tests.base.AbstractByteListTester;
 
 @Ignore
+@SuppressWarnings("javadoc")
 public class ByteListToArrayTester extends AbstractByteListTester
 {
 	public void testToArray_noArg() {

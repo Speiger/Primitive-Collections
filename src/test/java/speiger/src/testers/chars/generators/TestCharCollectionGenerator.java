@@ -10,6 +10,7 @@ import speiger.src.collections.chars.collections.CharIterable;
 import speiger.src.collections.chars.lists.CharList;
 import speiger.src.testers.chars.utils.CharSamples;
 
+@SuppressWarnings("javadoc")
 public interface TestCharCollectionGenerator extends TestCollectionGenerator<Character>
 {
 	public CharSamples getSamples();

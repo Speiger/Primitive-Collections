@@ -5,6 +5,7 @@ import org.junit.Ignore;
 import speiger.src.testers.doubles.tests.base.AbstractDoubleCollectionTester;
 
 @Ignore
+@SuppressWarnings("javadoc")
 public class DoubleCollectionEqualsTester extends AbstractDoubleCollectionTester
 {
 	public void testEquals_self() {

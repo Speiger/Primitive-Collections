@@ -15,6 +15,7 @@ import speiger.src.testers.objects.tests.base.AbstractObjectListTester;
 import speiger.src.testers.objects.utils.MinimalObjectCollection;
 
 @Ignore
+@SuppressWarnings("javadoc")
 public class ObjectListAddAllAtIndexTester<T> extends AbstractObjectListTester<T>
 {
 	@ListFeature.Require(SUPPORTS_ADD_WITH_INDEX)

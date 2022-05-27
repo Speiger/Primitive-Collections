@@ -9,6 +9,7 @@ import com.google.common.collect.testing.features.CollectionSize;
 import speiger.src.testers.objects.tests.base.maps.AbstractObject2BooleanMapTester;
 
 @Ignore
+@SuppressWarnings("javadoc")
 public class Object2BooleanMapContainsValueTester<T> extends AbstractObject2BooleanMapTester<T>
 {
 	@CollectionSize.Require(absent = ZERO)

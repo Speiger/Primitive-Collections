@@ -12,6 +12,7 @@ import com.google.common.collect.testing.features.CollectionSize;
 import speiger.src.testers.longs.tests.base.AbstractLongListTester;
 
 @Ignore
+@SuppressWarnings("javadoc")
 public class LongListSwapRemoveTester extends AbstractLongListTester
 {
 	@CollectionFeature.Require(SUPPORTS_REMOVE)

@@ -34,6 +34,7 @@ import speiger.src.testers.objects.tests.set.ObjectSetCreationTester;
 import speiger.src.testers.objects.tests.set.ObjectSetEqualsTester;
 import speiger.src.testers.objects.tests.set.ObjectSetRemoveTester;
 
+@SuppressWarnings("javadoc")
 public class ObjectSetTestSuiteBuilder<T> extends ObjectCollectionTestSuiteBuilder<T> {
 	public static <T> ObjectSetTestSuiteBuilder<T> using(TestObjectSetGenerator<T> generator) {
 		return (ObjectSetTestSuiteBuilder<T>) new ObjectSetTestSuiteBuilder<T>().usingGenerator(generator);

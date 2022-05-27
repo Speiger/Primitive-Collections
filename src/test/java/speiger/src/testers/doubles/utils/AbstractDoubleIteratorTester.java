@@ -22,7 +22,9 @@ import speiger.src.collections.doubles.lists.DoubleArrayList;
 import speiger.src.collections.doubles.lists.DoubleList;
 import speiger.src.collections.doubles.lists.DoubleListIterator;
 
-public abstract class AbstractDoubleIteratorTester{
+@SuppressWarnings("javadoc")
+public abstract class AbstractDoubleIteratorTester
+{
 	private Stimulus<DoubleIterator>[] stimuli;
 	private final DoubleIterator elementsToInsert;
 	private final Set<IteratorFeature> features;
@@ -312,7 +314,7 @@ public abstract class AbstractDoubleIteratorTester{
 		}
 
 		try {
-			if (method == nextDouble_METHOD && targetException == null && knownOrder == KnownOrder.UNKNOWN_ORDER) {
+			if (method == NEXT_METHOD && targetException == null && knownOrder == KnownOrder.UNKNOWN_ORDER) {
 				((MultiExceptionListIterator) reference).promoteToNext(targetReturnValue);
 			}
 			
@@ -346,7 +348,7 @@ public abstract class AbstractDoubleIteratorTester{
 		referenceException.assertPermitted(targetException);
 	}
 
-	private static final IteratorOperation removeDouble_METHOD = new IteratorOperation() {
+	private static final IteratorOperation REMOVE_METHOD = new IteratorOperation() {
 		@Override
 		public double execute(DoubleIterator iterator) {
 			iterator.remove();
@@ -354,14 +356,14 @@ public abstract class AbstractDoubleIteratorTester{
 		}
 	};
 
-	private static final IteratorOperation nextDouble_METHOD = new IteratorOperation() {
+	private static final IteratorOperation NEXT_METHOD = new IteratorOperation() {
 		@Override
 		public double execute(DoubleIterator iterator) {
 			return iterator.nextDouble();
 		}
 	};
 
-	private static final IteratorOperation previousDouble_METHOD = new IteratorOperation() {
+	private static final IteratorOperation PREVIOUS_METHOD = new IteratorOperation() {
 		@Override
 		public double execute(DoubleIterator iterator) {
 			return ((DoubleBidirectionalIterator) iterator).previousDouble();
@@ -418,13 +420,13 @@ public abstract class AbstractDoubleIteratorTester{
 	Stimulus<DoubleIterator> next = new Stimulus<DoubleIterator>("next") {
 		@Override
 		void executeAndCompare(DoubleListIterator reference, DoubleIterator target) {
-			internalExecuteAndCompare(reference, target, nextDouble_METHOD);
+			internalExecuteAndCompare(reference, target, NEXT_METHOD);
 		}
 	};
 	Stimulus<DoubleIterator> remove = new Stimulus<DoubleIterator>("remove") {
 		@Override
 		void executeAndCompare(DoubleListIterator reference, DoubleIterator target) {
-			internalExecuteAndCompare(reference, target, removeDouble_METHOD);
+			internalExecuteAndCompare(reference, target, REMOVE_METHOD);
 		}
 	};
 
@@ -442,7 +444,7 @@ public abstract class AbstractDoubleIteratorTester{
 	Stimulus<DoubleBidirectionalIterator> previous = new Stimulus<DoubleBidirectionalIterator>("previous") {
 		@Override
 		void executeAndCompare(DoubleListIterator reference, DoubleBidirectionalIterator target) {
-			internalExecuteAndCompare(reference, target, previousDouble_METHOD);
+			internalExecuteAndCompare(reference, target, PREVIOUS_METHOD);
 		}
 	};
 	

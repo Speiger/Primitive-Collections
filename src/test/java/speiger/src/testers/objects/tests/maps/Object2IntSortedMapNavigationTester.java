@@ -20,6 +20,7 @@ import speiger.src.testers.objects.tests.base.maps.AbstractObject2IntMapTester;
 import speiger.src.testers.objects.utils.ObjectHelpers;
 
 @Ignore
+@SuppressWarnings("javadoc")
 public class Object2IntSortedMapNavigationTester<T> extends AbstractObject2IntMapTester<T>
 {
 	private Object2IntSortedMap<T> sortedMap;

@@ -12,6 +12,7 @@ import speiger.src.testers.bytes.tests.base.AbstractByteCollectionTester;
 import speiger.src.testers.bytes.utils.ByteHelpers;
 
 @Ignore
+@SuppressWarnings("javadoc")
 public class ByteCollectionStreamTester extends AbstractByteCollectionTester
 {
 	@CollectionFeature.Require(absent = KNOWN_ORDER)

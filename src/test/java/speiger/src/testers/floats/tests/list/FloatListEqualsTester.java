@@ -10,6 +10,7 @@ import speiger.src.testers.floats.tests.base.AbstractFloatListTester;
 import speiger.src.testers.floats.utils.MinimalFloatSet;
 
 @Ignore
+@SuppressWarnings("javadoc")
 public class FloatListEqualsTester extends AbstractFloatListTester
 {
 	public void testEquals_otherListWithSameElements() {

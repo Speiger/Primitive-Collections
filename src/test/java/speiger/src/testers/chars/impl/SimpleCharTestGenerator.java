@@ -18,6 +18,7 @@ import speiger.src.testers.chars.generators.TestCharSetGenerator;
 import speiger.src.testers.chars.generators.TestCharSortedSetGenerator;
 import speiger.src.testers.chars.utils.CharSamples;
 
+@SuppressWarnings("javadoc")
 public class SimpleCharTestGenerator<E extends CharCollection> {
 	Function<char[], E> mapper;
 	public SimpleCharTestGenerator(Function<char[], E> mapper) {

@@ -18,7 +18,9 @@ import speiger.src.testers.objects.impl.SimpleObjectTestGenerator;
 import speiger.src.testers.utils.SpecialFeature;
 import speiger.src.testers.objects.utils.ObjectSamples;
 
-public class ObjectListTests extends TestCase {
+@SuppressWarnings("javadoc")
+public class ObjectListTests extends TestCase
+{
 	
 	public static Test suite() {
 		TestSuite suite = new TestSuite("ObjectLists");

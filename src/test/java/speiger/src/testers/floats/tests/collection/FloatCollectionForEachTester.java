@@ -12,6 +12,7 @@ import speiger.src.testers.floats.tests.base.AbstractFloatCollectionTester;
 import speiger.src.testers.floats.utils.FloatHelpers;
 
 @Ignore
+@SuppressWarnings("javadoc")
 public class FloatCollectionForEachTester extends AbstractFloatCollectionTester
 {
 	@CollectionFeature.Require(absent = KNOWN_ORDER)

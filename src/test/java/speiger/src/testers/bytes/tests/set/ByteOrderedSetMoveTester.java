@@ -15,6 +15,7 @@ import speiger.src.testers.bytes.tests.base.AbstractByteSetTester;
 import speiger.src.testers.bytes.utils.ByteHelpers;
 
 @Ignore
+@SuppressWarnings("javadoc")
 public class ByteOrderedSetMoveTester extends AbstractByteSetTester
 {
 	private ByteOrderedSet orderedSet;

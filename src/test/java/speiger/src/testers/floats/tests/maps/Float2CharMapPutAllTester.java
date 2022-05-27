@@ -20,6 +20,7 @@ import speiger.src.testers.floats.tests.base.maps.AbstractFloat2CharMapTester;
 import speiger.src.testers.objects.utils.MinimalObjectCollection;
 
 @Ignore
+@SuppressWarnings("javadoc")
 public class Float2CharMapPutAllTester extends AbstractFloat2CharMapTester
 {
 	@MapFeature.Require(SUPPORTS_PUT)

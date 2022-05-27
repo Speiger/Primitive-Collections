@@ -14,6 +14,7 @@ import speiger.src.testers.longs.generators.maps.TestLong2ObjectMapGenerator;
 import speiger.src.testers.longs.generators.maps.TestLong2ObjectSortedMapGenerator;
 import speiger.src.testers.objects.utils.ObjectSamples;
 
+@SuppressWarnings("javadoc")
 public class SimpleLong2ObjectMapTestGenerator<V, E extends Long2ObjectMap<V>>
 {
 	BiFunction<long[], V[], E> mapper;

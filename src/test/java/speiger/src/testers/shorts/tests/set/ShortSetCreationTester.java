@@ -13,6 +13,7 @@ import speiger.src.collections.shorts.lists.ShortArrayList;
 import speiger.src.testers.shorts.tests.base.AbstractShortSetTester;
 
 @Ignore
+@SuppressWarnings("javadoc")
 public class ShortSetCreationTester extends AbstractShortSetTester
 {
 	@CollectionFeature.Require(absent = REJECTS_DUPLICATES_AT_CREATION)

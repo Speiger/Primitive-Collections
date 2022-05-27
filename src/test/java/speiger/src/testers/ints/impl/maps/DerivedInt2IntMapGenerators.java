@@ -36,6 +36,7 @@ import speiger.src.collections.objects.utils.ObjectLists;
 import speiger.src.testers.objects.generators.TestObjectSetGenerator;
 import speiger.src.testers.objects.utils.ObjectSamples;
 
+@SuppressWarnings("javadoc")
 public class DerivedInt2IntMapGenerators {
 	public static class NavigableMapGenerator extends SortedMapGenerator {
 		public NavigableMapGenerator(TestInt2IntSortedMapGenerator parent, Bound to, Bound from) {

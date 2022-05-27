@@ -15,6 +15,7 @@ import speiger.src.collections.objects.lists.ObjectList;
 import speiger.src.testers.longs.tests.base.maps.AbstractLong2IntMapTester;
 
 @Ignore
+@SuppressWarnings("javadoc")
 public class Long2IntMapForEachTester extends AbstractLong2IntMapTester
 {
 	@CollectionFeature.Require(KNOWN_ORDER)

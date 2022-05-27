@@ -19,6 +19,7 @@ import speiger.src.testers.objects.utils.ObjectSamples;
 import speiger.src.testers.objects.utils.MinimalObjectCollection;
 
 @Ignore
+@SuppressWarnings("javadoc")
 public abstract class AbstractObjectContainerTester<T, E> extends AbstractTester<OneSizeTestContainerGenerator<E, T>>
 {
 	protected ObjectSamples<T> samples;

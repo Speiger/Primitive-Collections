@@ -10,9 +10,9 @@ import speiger.src.collections.booleans.collections.BooleanCollection;
 import speiger.src.testers.booleans.tests.base.AbstractBooleanCollectionTester;
 
 @Ignore
+@SuppressWarnings("javadoc")
 public class BooleanCollectionCopyTester extends AbstractBooleanCollectionTester
 {
-	
 	@CollectionFeature.Require(absent = {CollectionFeature.SUBSET_VIEW, CollectionFeature.DESCENDING_VIEW})
 	@SpecialFeature.Require(SpecialFeature.COPYING)
 	public void testEquals() {

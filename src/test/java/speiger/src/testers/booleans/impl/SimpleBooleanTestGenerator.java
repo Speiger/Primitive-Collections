@@ -10,6 +10,7 @@ import speiger.src.testers.booleans.generators.TestBooleanCollectionGenerator;
 import speiger.src.testers.booleans.generators.TestBooleanListGenerator;
 import speiger.src.testers.booleans.utils.BooleanSamples;
 
+@SuppressWarnings("javadoc")
 public class SimpleBooleanTestGenerator<E extends BooleanCollection> {
 	Function<boolean[], E> mapper;
 	public SimpleBooleanTestGenerator(Function<boolean[], E> mapper) {

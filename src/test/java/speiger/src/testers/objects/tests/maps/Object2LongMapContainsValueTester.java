@@ -9,6 +9,7 @@ import com.google.common.collect.testing.features.CollectionSize;
 import speiger.src.testers.objects.tests.base.maps.AbstractObject2LongMapTester;
 
 @Ignore
+@SuppressWarnings("javadoc")
 public class Object2LongMapContainsValueTester<T> extends AbstractObject2LongMapTester<T>
 {
 	@CollectionSize.Require(absent = ZERO)

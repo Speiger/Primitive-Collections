@@ -24,6 +24,7 @@ import speiger.src.testers.longs.tests.collection.LongCollectionStreamTester;
 import speiger.src.testers.longs.tests.collection.LongCollectionRetainAllTester;
 import speiger.src.testers.longs.tests.collection.LongCollectionToArrayTester;
 
+@SuppressWarnings("javadoc")
 public class LongCollectionTestSuiteBuilder extends CollectionTestSuiteBuilder<Long> {
 	public static LongCollectionTestSuiteBuilder using(TestLongCollectionGenerator generator) {
 		return (LongCollectionTestSuiteBuilder) new LongCollectionTestSuiteBuilder().usingGenerator(generator);

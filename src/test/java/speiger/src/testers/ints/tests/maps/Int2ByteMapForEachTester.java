@@ -15,6 +15,7 @@ import speiger.src.collections.objects.lists.ObjectList;
 import speiger.src.testers.ints.tests.base.maps.AbstractInt2ByteMapTester;
 
 @Ignore
+@SuppressWarnings("javadoc")
 public class Int2ByteMapForEachTester extends AbstractInt2ByteMapTester
 {
 	@CollectionFeature.Require(KNOWN_ORDER)

@@ -7,6 +7,7 @@ import speiger.src.collections.booleans.lists.BooleanArrayList;
 import speiger.src.collections.booleans.lists.BooleanList;
 import speiger.src.collections.booleans.sets.BooleanSet;
 
+@SuppressWarnings("javadoc")
 public class MinimalBooleanSet extends MinimalBooleanCollection implements BooleanSet {
 	public static MinimalBooleanSet of(boolean...array) {
 		return MinimalBooleanSet.of(BooleanArrayList.wrap(array));

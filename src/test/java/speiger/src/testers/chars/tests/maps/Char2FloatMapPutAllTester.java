@@ -20,6 +20,7 @@ import speiger.src.testers.chars.tests.base.maps.AbstractChar2FloatMapTester;
 import speiger.src.testers.objects.utils.MinimalObjectCollection;
 
 @Ignore
+@SuppressWarnings("javadoc")
 public class Char2FloatMapPutAllTester extends AbstractChar2FloatMapTester
 {
 	@MapFeature.Require(SUPPORTS_PUT)

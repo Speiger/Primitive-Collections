@@ -22,6 +22,7 @@ import speiger.src.testers.booleans.tests.collection.BooleanCollectionRemoveAllT
 import speiger.src.testers.booleans.tests.collection.BooleanCollectionRetainAllTester;
 import speiger.src.testers.booleans.tests.collection.BooleanCollectionToArrayTester;
 
+@SuppressWarnings("javadoc")
 public class BooleanCollectionTestSuiteBuilder extends CollectionTestSuiteBuilder<Boolean> {
 	public static BooleanCollectionTestSuiteBuilder using(TestBooleanCollectionGenerator generator) {
 		return (BooleanCollectionTestSuiteBuilder) new BooleanCollectionTestSuiteBuilder().usingGenerator(generator);

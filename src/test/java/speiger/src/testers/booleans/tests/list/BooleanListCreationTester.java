@@ -12,6 +12,7 @@ import com.google.common.collect.testing.features.CollectionSize;
 import speiger.src.testers.booleans.tests.base.AbstractBooleanListTester;
 
 @Ignore
+@SuppressWarnings("javadoc")
 public class BooleanListCreationTester extends AbstractBooleanListTester
 {
 	@CollectionFeature.Require(absent = REJECTS_DUPLICATES_AT_CREATION)

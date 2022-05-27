@@ -2,6 +2,7 @@ package speiger.src.testers.objects.generators;
 
 import speiger.src.collections.objects.sets.ObjectSortedSet;
 
+@SuppressWarnings("javadoc")
 public interface TestObjectSortedSetGenerator<T> extends TestObjectSetGenerator<T> {
 	@Override
 	ObjectSortedSet<T> create(Object... elements);

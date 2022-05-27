@@ -13,6 +13,7 @@ import speiger.src.testers.shorts.generators.maps.TestShort2BooleanMapGenerator;
 import speiger.src.testers.shorts.generators.maps.TestShort2BooleanSortedMapGenerator;
 import speiger.src.testers.objects.utils.ObjectSamples;
 
+@SuppressWarnings("javadoc")
 public class SimpleShort2BooleanMapTestGenerator<E extends Short2BooleanMap>
 {
 	BiFunction<short[], boolean[], E> mapper;

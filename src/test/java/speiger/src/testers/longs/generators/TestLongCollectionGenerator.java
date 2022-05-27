@@ -10,6 +10,7 @@ import speiger.src.collections.longs.collections.LongIterable;
 import speiger.src.collections.longs.lists.LongList;
 import speiger.src.testers.longs.utils.LongSamples;
 
+@SuppressWarnings("javadoc")
 public interface TestLongCollectionGenerator extends TestCollectionGenerator<Long>
 {
 	public LongSamples getSamples();

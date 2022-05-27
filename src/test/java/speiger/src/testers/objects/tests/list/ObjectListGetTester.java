@@ -5,6 +5,7 @@ import org.junit.Ignore;
 import speiger.src.testers.objects.tests.base.AbstractObjectListTester;
 
 @Ignore
+@SuppressWarnings("javadoc")
 public class ObjectListGetTester<T> extends AbstractObjectListTester<T>
 {
 	public void testGet_valid() {

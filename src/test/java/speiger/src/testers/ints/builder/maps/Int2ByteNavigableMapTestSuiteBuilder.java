@@ -19,6 +19,7 @@ import speiger.src.testers.ints.impl.maps.DerivedInt2ByteMapGenerators;
 import speiger.src.testers.ints.tests.maps.Int2ByteNavigableMapNavigationTester;
 import speiger.src.testers.utils.SpecialFeature;
 
+@SuppressWarnings("javadoc")
 public class Int2ByteNavigableMapTestSuiteBuilder extends Int2ByteSortedMapTestSuiteBuilder
 {
 	public static Int2ByteNavigableMapTestSuiteBuilder using(TestInt2ByteSortedMapGenerator generator) {

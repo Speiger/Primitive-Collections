@@ -21,6 +21,7 @@ import speiger.src.testers.longs.tests.base.AbstractLongSetTester;
 import speiger.src.testers.longs.utils.LongHelpers;
 
 @Ignore
+@SuppressWarnings("javadoc")
 public class LongNavigableSetNavigationTester extends AbstractLongSetTester
 {
 	private LongNavigableSet navigableSet;

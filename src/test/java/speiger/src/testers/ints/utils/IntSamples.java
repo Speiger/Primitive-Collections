@@ -7,6 +7,7 @@ import speiger.src.collections.ints.collections.IntIterator;
 import speiger.src.collections.ints.lists.IntArrayList;
 import speiger.src.collections.ints.lists.IntList;
 
+@SuppressWarnings("javadoc")
 public class IntSamples implements IntIterable
 {
 	private final int e0;

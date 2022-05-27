@@ -13,6 +13,7 @@ import speiger.src.collections.objects.sets.ObjectSortedSet;
 import speiger.src.testers.objects.generators.TestObjectSortedSetGenerator;
 import speiger.src.testers.objects.utils.ObjectSamples;
 
+@SuppressWarnings("javadoc")
 public class ObjectSortedSetSubsetTestSetGenerator<T> implements TestObjectSortedSetGenerator<T>
 {
 	final Bound to;

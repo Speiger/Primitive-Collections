@@ -273,7 +273,7 @@ public class Float2BooleanAVLTreeMap extends AbstractFloat2BooleanMap implements
 	
 	@Override
 	public float pollFirstFloatKey() {
-		if(tree == null) return 0F;
+		if(tree == null) return getDefaultMinValue();
 		float result = first.key;
 		removeNode(first);
 		return result;
@@ -287,7 +287,7 @@ public class Float2BooleanAVLTreeMap extends AbstractFloat2BooleanMap implements
 	
 	@Override
 	public float pollLastFloatKey() {
-		if(tree == null) return 0F;
+		if(tree == null) return getDefaultMaxValue();
 		float result = last.key;
 		removeNode(last);
 		return result;
@@ -859,6 +859,31 @@ public class Float2BooleanAVLTreeMap extends AbstractFloat2BooleanMap implements
 		public float ceiling(float e) { return map.ceilingKey(e); }
 		@Override
 		public float higher(float e) { return map.higherKey(e); }
+		
+		@Override
+		public Float lower(Float e) {
+			Float2BooleanMap.Entry node = map.lowerEntry(e.floatValue());
+			return node != null ? node.getKey() : null;
+		}
+		
+		@Override
+		public Float floor(Float e) {
+			Float2BooleanMap.Entry node = map.floorEntry(e.floatValue());
+			return node != null ? node.getKey() : null;
+		}
+		
+		@Override
+		public Float higher(Float e) {
+			Float2BooleanMap.Entry node = map.higherEntry(e.floatValue());
+			return node != null ? node.getKey() : null;
+		}
+		
+		@Override
+		public Float ceiling(Float e) {
+			Float2BooleanMap.Entry node = map.ceilingEntry(e.floatValue());
+			return node != null ? node.getKey() : null;
+		}
+		
 		@Override
 		public float pollFirstFloat() { return map.pollFirstFloatKey(); }
 		@Override
@@ -1267,8 +1292,8 @@ public class Float2BooleanAVLTreeMap extends AbstractFloat2BooleanMap implements
 		protected abstract FloatBidirectionalIterator keyIterator(float element);
 		protected abstract BooleanBidirectionalIterator valueIterator();
 		protected abstract FloatBidirectionalIterator descendingKeyIterator();
-		protected float lowKeyOrNull(Node entry) { return entry == null ? 0F : entry.key; }
-		protected float highKeyOrNull(Node entry) { return entry == null ? 0F : entry.key; }
+		protected float lowKeyOrNull(Node entry) { return entry == null ? getDefaultMinValue() : entry.key; }
+		protected float highKeyOrNull(Node entry) { return entry == null ? getDefaultMaxValue() : entry.key; }
 		protected Node next(Node entry) { return entry.next(); }
 		protected Node previous(Node entry) { return entry.previous(); }
 		
@@ -1339,7 +1364,7 @@ public class Float2BooleanAVLTreeMap extends AbstractFloat2BooleanMap implements
 				map.removeNode(entry);
 				return result;
 			}
-			return 0F;
+			return getDefaultMinValue();
 		}
 		
 		@Override
@@ -1350,7 +1375,7 @@ public class Float2BooleanAVLTreeMap extends AbstractFloat2BooleanMap implements
 				map.removeNode(entry);
 				return result;
 			}
-			return 0F;
+			return getDefaultMaxValue();
 		}
 		
 		@Override
@@ -1416,7 +1441,7 @@ public class Float2BooleanAVLTreeMap extends AbstractFloat2BooleanMap implements
 		
 		@Override
 		public boolean removeOrDefault(float key, boolean defaultValue) {
-			return inRange(key) ? map.remove(key) : defaultValue;
+			return inRange(key) ? map.removeOrDefault(key, defaultValue) : defaultValue;
 		}
 		
 		@Override
@@ -1892,8 +1917,8 @@ public class Float2BooleanAVLTreeMap extends AbstractFloat2BooleanMap implements
 			public SubMapEntryIterator(Node first, Node forwardFence, Node backwardFence)
 			{
 				next = first;
-				this.forwardFence = forwardFence == null ? null : forwardFence.key;
-				this.backwardFence = backwardFence == null ? null : backwardFence.key;
+				this.forwardFence = forwardFence == null ? 0F : forwardFence.key;
+				this.backwardFence = backwardFence == null ? 0F : backwardFence.key;
 				unboundForwardFence = forwardFence == null;
 				unboundBackwardFence = backwardFence == null;
 			}

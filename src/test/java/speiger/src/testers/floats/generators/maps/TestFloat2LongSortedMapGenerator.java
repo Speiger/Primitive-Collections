@@ -6,6 +6,7 @@ import speiger.src.collections.floats.maps.interfaces.Float2LongMap;
 import speiger.src.collections.floats.maps.interfaces.Float2LongMap.Entry;
 import speiger.src.collections.floats.maps.interfaces.Float2LongSortedMap;
 
+@SuppressWarnings("javadoc")
 public interface TestFloat2LongSortedMapGenerator extends TestFloat2LongMapGenerator, TestSortedMapGenerator<Float, Long>
 {
 	@Override

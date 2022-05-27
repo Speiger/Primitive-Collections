@@ -10,6 +10,7 @@ import speiger.src.testers.chars.tests.base.AbstractCharListTester;
 import speiger.src.testers.chars.utils.MinimalCharSet;
 
 @Ignore
+@SuppressWarnings("javadoc")
 public class CharListEqualsTester extends AbstractCharListTester
 {
 	public void testEquals_otherListWithSameElements() {

@@ -18,6 +18,7 @@ import speiger.src.testers.floats.tests.base.maps.AbstractFloat2BooleanMapTester
 import speiger.src.testers.floats.utils.FloatSamples;
 
 @Ignore
+@SuppressWarnings("javadoc")
 public class Float2BooleanMapReplaceAllTester extends AbstractFloat2BooleanMapTester
 {
 	private FloatSamples keys() {

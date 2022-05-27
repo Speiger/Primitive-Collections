@@ -11,6 +11,7 @@ import speiger.src.testers.floats.tests.base.maps.AbstractFloat2ByteMapTester;
 import speiger.src.testers.objects.utils.ObjectHelpers;
 
 @Ignore
+@SuppressWarnings("javadoc")
 public class Float2ByteMapEqualsTester extends AbstractFloat2ByteMapTester 
 {
 	public void testEquals_otherMapWithSameEntries() {

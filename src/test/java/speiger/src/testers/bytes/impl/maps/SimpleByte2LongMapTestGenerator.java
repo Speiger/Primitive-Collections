@@ -13,6 +13,7 @@ import speiger.src.testers.bytes.generators.maps.TestByte2LongMapGenerator;
 import speiger.src.testers.bytes.generators.maps.TestByte2LongSortedMapGenerator;
 import speiger.src.testers.objects.utils.ObjectSamples;
 
+@SuppressWarnings("javadoc")
 public class SimpleByte2LongMapTestGenerator<E extends Byte2LongMap>
 {
 	BiFunction<byte[], long[], E> mapper;

@@ -19,6 +19,7 @@ import speiger.src.testers.objects.impl.maps.DerivedObject2DoubleMapGenerators;
 import speiger.src.testers.objects.tests.maps.Object2DoubleNavigableMapNavigationTester;
 import speiger.src.testers.utils.SpecialFeature;
 
+@SuppressWarnings("javadoc")
 public class Object2DoubleNavigableMapTestSuiteBuilder<T> extends Object2DoubleSortedMapTestSuiteBuilder<T>
 {
 	public static <T> Object2DoubleNavigableMapTestSuiteBuilder<T> using(TestObject2DoubleSortedMapGenerator<T> generator) {

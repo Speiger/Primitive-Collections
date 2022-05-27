@@ -15,6 +15,7 @@ import speiger.src.testers.objects.generators.maps.TestObject2IntMapGenerator;
 import speiger.src.testers.objects.generators.maps.TestObject2IntSortedMapGenerator;
 import speiger.src.testers.objects.utils.ObjectSamples;
 
+@SuppressWarnings("javadoc")
 public class SimpleObject2IntMapTestGenerator<T, E extends Object2IntMap<T>>
 {
 	BiFunction<T[], int[], E> mapper;

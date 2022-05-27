@@ -11,6 +11,7 @@ import com.google.common.collect.testing.features.MapFeature;
 import speiger.src.testers.longs.tests.base.maps.AbstractLong2IntMapTester;
 
 @Ignore
+@SuppressWarnings("javadoc")
 public class Long2IntMapReplaceEntryTester extends AbstractLong2IntMapTester
 {
 	@MapFeature.Require(SUPPORTS_PUT)

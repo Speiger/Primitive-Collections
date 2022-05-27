@@ -17,6 +17,7 @@ import speiger.src.testers.longs.utils.LongHelpers;
 import speiger.src.testers.longs.utils.MinimalLongCollection;
 
 @Ignore
+@SuppressWarnings("javadoc")
 public class LongCollectionRetainAllTester extends AbstractLongCollectionTester
 {
 

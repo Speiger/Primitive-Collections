@@ -19,6 +19,7 @@ import speiger.src.testers.ints.impl.maps.DerivedInt2LongMapGenerators;
 import speiger.src.testers.ints.tests.maps.Int2LongNavigableMapNavigationTester;
 import speiger.src.testers.utils.SpecialFeature;
 
+@SuppressWarnings("javadoc")
 public class Int2LongNavigableMapTestSuiteBuilder extends Int2LongSortedMapTestSuiteBuilder
 {
 	public static Int2LongNavigableMapTestSuiteBuilder using(TestInt2LongSortedMapGenerator generator) {

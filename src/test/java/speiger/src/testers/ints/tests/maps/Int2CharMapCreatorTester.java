@@ -14,6 +14,7 @@ import speiger.src.collections.objects.lists.ObjectArrayList;
 import speiger.src.testers.ints.tests.base.maps.AbstractInt2CharMapTester;
 
 @Ignore
+@SuppressWarnings("javadoc")
 public class Int2CharMapCreatorTester extends AbstractInt2CharMapTester
 {
 	@MapFeature.Require(absent = REJECTS_DUPLICATES_AT_CREATION)

@@ -13,6 +13,7 @@ import speiger.src.testers.ints.generators.maps.TestInt2ByteMapGenerator;
 import speiger.src.testers.ints.generators.maps.TestInt2ByteSortedMapGenerator;
 import speiger.src.testers.objects.utils.ObjectSamples;
 
+@SuppressWarnings("javadoc")
 public class SimpleInt2ByteMapTestGenerator<E extends Int2ByteMap>
 {
 	BiFunction<int[], byte[], E> mapper;

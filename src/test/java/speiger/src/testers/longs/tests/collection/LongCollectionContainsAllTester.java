@@ -10,6 +10,7 @@ import speiger.src.testers.longs.tests.base.AbstractLongCollectionTester;
 import speiger.src.testers.longs.utils.MinimalLongCollection;
 
 @Ignore
+@SuppressWarnings("javadoc")
 public class LongCollectionContainsAllTester extends AbstractLongCollectionTester
 {
 	public void testContainsAll_empty() {

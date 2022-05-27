@@ -4,6 +4,7 @@ import com.google.common.collect.testing.TestSetGenerator;
 
 import speiger.src.collections.floats.sets.FloatSet;
 
+@SuppressWarnings("javadoc")
 public interface TestFloatSetGenerator extends TestFloatCollectionGenerator, TestSetGenerator<Float> {
 	@Override
 	FloatSet create(float...elements);

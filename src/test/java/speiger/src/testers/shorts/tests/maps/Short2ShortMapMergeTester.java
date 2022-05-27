@@ -13,6 +13,7 @@ import junit.framework.AssertionFailedError;
 import speiger.src.testers.shorts.tests.base.maps.AbstractShort2ShortMapTester;
 
 @Ignore
+@SuppressWarnings("javadoc")
 public class Short2ShortMapMergeTester extends AbstractShort2ShortMapTester
 {
 	@MapFeature.Require(SUPPORTS_PUT)

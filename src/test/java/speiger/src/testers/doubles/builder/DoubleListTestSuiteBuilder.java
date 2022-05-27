@@ -69,6 +69,7 @@ import speiger.src.testers.doubles.tests.list.DoubleListSwapRemoveAtIndexTester;
 import speiger.src.testers.doubles.tests.list.DoubleListSwapRemoveTester;
 import speiger.src.testers.doubles.tests.list.DoubleListToArrayTester;
 
+@SuppressWarnings("javadoc")
 public class DoubleListTestSuiteBuilder extends DoubleCollectionTestSuiteBuilder {
 	public static DoubleListTestSuiteBuilder using(TestDoubleListGenerator generator) {
 		return (DoubleListTestSuiteBuilder) new DoubleListTestSuiteBuilder().usingGenerator(generator);

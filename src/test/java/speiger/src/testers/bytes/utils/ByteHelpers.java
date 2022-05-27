@@ -14,6 +14,7 @@ import speiger.src.collections.bytes.sets.ByteLinkedOpenHashSet;
 import speiger.src.collections.bytes.sets.ByteSet;
 import speiger.src.collections.bytes.utils.ByteIterators;
 
+@SuppressWarnings("javadoc")
 public class ByteHelpers {
 	public static boolean equals(byte key, byte value) {
 		return key == value;

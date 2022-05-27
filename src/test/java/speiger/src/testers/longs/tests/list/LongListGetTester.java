@@ -5,6 +5,7 @@ import org.junit.Ignore;
 import speiger.src.testers.longs.tests.base.AbstractLongListTester;
 
 @Ignore
+@SuppressWarnings("javadoc")
 public class LongListGetTester extends AbstractLongListTester
 {
 	public void testGet_valid() {

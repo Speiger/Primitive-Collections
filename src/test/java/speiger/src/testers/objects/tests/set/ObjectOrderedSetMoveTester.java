@@ -15,6 +15,7 @@ import speiger.src.testers.objects.tests.base.AbstractObjectSetTester;
 import speiger.src.testers.objects.utils.ObjectHelpers;
 
 @Ignore
+@SuppressWarnings("javadoc")
 public class ObjectOrderedSetMoveTester<T> extends AbstractObjectSetTester<T>
 {
 	private ObjectOrderedSet<T> orderedSet;

@@ -13,6 +13,7 @@ import junit.framework.AssertionFailedError;
 import speiger.src.testers.longs.tests.base.maps.AbstractLong2ObjectMapTester;
 
 @Ignore
+@SuppressWarnings("javadoc")
 public class Long2ObjectMapMergeTester<V> extends AbstractLong2ObjectMapTester<V>
 {
 	@MapFeature.Require(SUPPORTS_PUT)

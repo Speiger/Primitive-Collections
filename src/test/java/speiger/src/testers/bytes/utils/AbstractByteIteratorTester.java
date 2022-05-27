@@ -22,7 +22,9 @@ import speiger.src.collections.bytes.lists.ByteArrayList;
 import speiger.src.collections.bytes.lists.ByteList;
 import speiger.src.collections.bytes.lists.ByteListIterator;
 
-public abstract class AbstractByteIteratorTester{
+@SuppressWarnings("javadoc")
+public abstract class AbstractByteIteratorTester
+{
 	private Stimulus<ByteIterator>[] stimuli;
 	private final ByteIterator elementsToInsert;
 	private final Set<IteratorFeature> features;
@@ -312,7 +314,7 @@ public abstract class AbstractByteIteratorTester{
 		}
 
 		try {
-			if (method == nextByte_METHOD && targetException == null && knownOrder == KnownOrder.UNKNOWN_ORDER) {
+			if (method == NEXT_METHOD && targetException == null && knownOrder == KnownOrder.UNKNOWN_ORDER) {
 				((MultiExceptionListIterator) reference).promoteToNext(targetReturnValue);
 			}
 			
@@ -346,7 +348,7 @@ public abstract class AbstractByteIteratorTester{
 		referenceException.assertPermitted(targetException);
 	}
 
-	private static final IteratorOperation removeByte_METHOD = new IteratorOperation() {
+	private static final IteratorOperation REMOVE_METHOD = new IteratorOperation() {
 		@Override
 		public byte execute(ByteIterator iterator) {
 			iterator.remove();
@@ -354,14 +356,14 @@ public abstract class AbstractByteIteratorTester{
 		}
 	};
 
-	private static final IteratorOperation nextByte_METHOD = new IteratorOperation() {
+	private static final IteratorOperation NEXT_METHOD = new IteratorOperation() {
 		@Override
 		public byte execute(ByteIterator iterator) {
 			return iterator.nextByte();
 		}
 	};
 
-	private static final IteratorOperation previousByte_METHOD = new IteratorOperation() {
+	private static final IteratorOperation PREVIOUS_METHOD = new IteratorOperation() {
 		@Override
 		public byte execute(ByteIterator iterator) {
 			return ((ByteBidirectionalIterator) iterator).previousByte();
@@ -418,13 +420,13 @@ public abstract class AbstractByteIteratorTester{
 	Stimulus<ByteIterator> next = new Stimulus<ByteIterator>("next") {
 		@Override
 		void executeAndCompare(ByteListIterator reference, ByteIterator target) {
-			internalExecuteAndCompare(reference, target, nextByte_METHOD);
+			internalExecuteAndCompare(reference, target, NEXT_METHOD);
 		}
 	};
 	Stimulus<ByteIterator> remove = new Stimulus<ByteIterator>("remove") {
 		@Override
 		void executeAndCompare(ByteListIterator reference, ByteIterator target) {
-			internalExecuteAndCompare(reference, target, removeByte_METHOD);
+			internalExecuteAndCompare(reference, target, REMOVE_METHOD);
 		}
 	};
 
@@ -442,7 +444,7 @@ public abstract class AbstractByteIteratorTester{
 	Stimulus<ByteBidirectionalIterator> previous = new Stimulus<ByteBidirectionalIterator>("previous") {
 		@Override
 		void executeAndCompare(ByteListIterator reference, ByteBidirectionalIterator target) {
-			internalExecuteAndCompare(reference, target, previousByte_METHOD);
+			internalExecuteAndCompare(reference, target, PREVIOUS_METHOD);
 		}
 	};
 	

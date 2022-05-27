@@ -17,6 +17,7 @@ import speiger.src.collections.doubles.collections.DoubleIterator;
 import speiger.src.testers.doubles.tests.base.AbstractDoubleListTester;
 
 @Ignore
+@SuppressWarnings("javadoc")
 public class DoubleListAddAtIndexTester extends AbstractDoubleListTester
 {
 	@ListFeature.Require(SUPPORTS_ADD_WITH_INDEX)

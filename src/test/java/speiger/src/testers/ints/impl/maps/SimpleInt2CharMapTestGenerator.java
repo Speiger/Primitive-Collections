@@ -13,6 +13,7 @@ import speiger.src.testers.ints.generators.maps.TestInt2CharMapGenerator;
 import speiger.src.testers.ints.generators.maps.TestInt2CharSortedMapGenerator;
 import speiger.src.testers.objects.utils.ObjectSamples;
 
+@SuppressWarnings("javadoc")
 public class SimpleInt2CharMapTestGenerator<E extends Int2CharMap>
 {
 	BiFunction<int[], char[], E> mapper;

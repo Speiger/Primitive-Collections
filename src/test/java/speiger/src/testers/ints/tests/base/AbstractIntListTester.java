@@ -8,6 +8,7 @@ import speiger.src.collections.ints.lists.IntList;
 import speiger.src.testers.ints.utils.IntHelpers;
 
 @Ignore
+@SuppressWarnings("javadoc")
 public class AbstractIntListTester extends AbstractIntCollectionTester
 {
 	protected final IntList getList() {

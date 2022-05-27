@@ -18,6 +18,7 @@ import speiger.src.testers.chars.tests.base.maps.AbstractChar2ByteMapTester;
 import speiger.src.testers.chars.utils.CharSamples;
 
 @Ignore
+@SuppressWarnings("javadoc")
 public class Char2ByteMapReplaceAllTester extends AbstractChar2ByteMapTester
 {
 	private CharSamples keys() {

@@ -12,6 +12,7 @@ import speiger.src.testers.booleans.tests.base.AbstractBooleanSetTester;
 import speiger.src.testers.booleans.utils.MinimalBooleanCollection;
 
 @Ignore
+@SuppressWarnings("javadoc")
 public class BooleanSetAddAllTester extends AbstractBooleanSetTester
 {
 	@CollectionFeature.Require(SUPPORTS_ADD)

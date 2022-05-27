@@ -20,6 +20,7 @@ import speiger.src.testers.doubles.utils.DoubleHelpers;
 import speiger.src.testers.doubles.utils.MinimalDoubleCollection;
 
 @Ignore
+@SuppressWarnings("javadoc")
 public class DoubleCollectionRemoveAllTester extends AbstractDoubleCollectionTester
 {
 	@CollectionFeature.Require(SUPPORTS_REMOVE)

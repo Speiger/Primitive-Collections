@@ -5,6 +5,7 @@ import org.junit.Ignore;
 import speiger.src.testers.floats.tests.base.AbstractFloatListTester;
 
 @Ignore
+@SuppressWarnings("javadoc")
 public class FloatListGetTester extends AbstractFloatListTester
 {
 	public void testGet_valid() {

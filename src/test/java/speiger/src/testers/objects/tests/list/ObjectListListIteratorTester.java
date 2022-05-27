@@ -22,6 +22,7 @@ import speiger.src.testers.objects.utils.ObjectHelpers;
 import speiger.src.testers.objects.utils.ObjectListIteratorTester;
 
 @Ignore
+@SuppressWarnings("javadoc")
 public class ObjectListListIteratorTester<T> extends AbstractObjectListTester<T>
 {
 	@CollectionFeature.Require(absent = SUPPORTS_REMOVE)

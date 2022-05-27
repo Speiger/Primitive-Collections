@@ -13,6 +13,7 @@ import junit.framework.AssertionFailedError;
 import speiger.src.testers.floats.tests.base.maps.AbstractFloat2ObjectMapTester;
 
 @Ignore
+@SuppressWarnings("javadoc")
 public class Float2ObjectMapMergeTester<V> extends AbstractFloat2ObjectMapTester<V>
 {
 	@MapFeature.Require(SUPPORTS_PUT)

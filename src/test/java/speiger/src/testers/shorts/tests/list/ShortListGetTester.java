@@ -5,6 +5,7 @@ import org.junit.Ignore;
 import speiger.src.testers.shorts.tests.base.AbstractShortListTester;
 
 @Ignore
+@SuppressWarnings("javadoc")
 public class ShortListGetTester extends AbstractShortListTester
 {
 	public void testGet_valid() {

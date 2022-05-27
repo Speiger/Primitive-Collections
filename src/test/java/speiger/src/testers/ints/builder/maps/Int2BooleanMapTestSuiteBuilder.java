@@ -58,6 +58,7 @@ import speiger.src.testers.objects.tests.collection.ObjectCollectionRetainAllTes
 import speiger.src.testers.utils.SpecialFeature;
 import speiger.src.testers.utils.TestUtils;
 
+@SuppressWarnings("javadoc")
 public class Int2BooleanMapTestSuiteBuilder extends MapTestSuiteBuilder<Integer, Boolean> {
 	public static Int2BooleanMapTestSuiteBuilder using(TestInt2BooleanMapGenerator generator) {
 		return (Int2BooleanMapTestSuiteBuilder) new Int2BooleanMapTestSuiteBuilder().usingGenerator(generator);

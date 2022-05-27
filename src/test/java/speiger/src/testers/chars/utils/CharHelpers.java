@@ -14,6 +14,7 @@ import speiger.src.collections.chars.sets.CharLinkedOpenHashSet;
 import speiger.src.collections.chars.sets.CharSet;
 import speiger.src.collections.chars.utils.CharIterators;
 
+@SuppressWarnings("javadoc")
 public class CharHelpers {
 	public static boolean equals(char key, char value) {
 		return key == value;

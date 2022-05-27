@@ -68,6 +68,7 @@ import speiger.src.testers.booleans.tests.list.BooleanListSwapRemoveAtIndexTeste
 import speiger.src.testers.booleans.tests.list.BooleanListSwapRemoveTester;
 import speiger.src.testers.booleans.tests.list.BooleanListToArrayTester;
 
+@SuppressWarnings("javadoc")
 public class BooleanListTestSuiteBuilder extends BooleanCollectionTestSuiteBuilder {
 	public static BooleanListTestSuiteBuilder using(TestBooleanListGenerator generator) {
 		return (BooleanListTestSuiteBuilder) new BooleanListTestSuiteBuilder().usingGenerator(generator);

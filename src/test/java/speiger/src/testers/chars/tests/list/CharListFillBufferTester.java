@@ -8,6 +8,7 @@ import speiger.src.collections.chars.lists.CharArrayList;
 import speiger.src.testers.chars.tests.base.AbstractCharListTester;
 
 @Ignore
+@SuppressWarnings("javadoc")
 public class CharListFillBufferTester extends AbstractCharListTester
 {
 	public void testFillBuffer() {

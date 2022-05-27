@@ -13,6 +13,7 @@ import junit.framework.AssertionFailedError;
 import speiger.src.testers.chars.tests.base.maps.AbstractChar2BooleanMapTester;
 
 @Ignore
+@SuppressWarnings("javadoc")
 public class Char2BooleanMapMergeTester extends AbstractChar2BooleanMapTester
 {
 	@MapFeature.Require(SUPPORTS_PUT)

@@ -15,6 +15,7 @@ import speiger.src.collections.objects.lists.ObjectList;
 import speiger.src.testers.bytes.tests.base.maps.AbstractByte2FloatMapTester;
 
 @Ignore
+@SuppressWarnings("javadoc")
 public class Byte2FloatMapForEachTester extends AbstractByte2FloatMapTester
 {
 	@CollectionFeature.Require(KNOWN_ORDER)

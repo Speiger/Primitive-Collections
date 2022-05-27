@@ -18,6 +18,7 @@ import speiger.src.collections.ints.maps.interfaces.Int2BooleanMap;
 import speiger.src.testers.ints.tests.base.maps.AbstractInt2BooleanMapTester;
 
 @Ignore
+@SuppressWarnings("javadoc")
 public class Int2BooleanMapPutTester extends AbstractInt2BooleanMapTester
 {	
 	@MapFeature.Require(SUPPORTS_PUT)

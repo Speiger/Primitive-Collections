@@ -16,6 +16,7 @@ import speiger.src.collections.bytes.maps.interfaces.Byte2BooleanMap;
 import speiger.src.testers.bytes.tests.base.maps.AbstractByte2BooleanMapTester;
 
 @Ignore
+@SuppressWarnings("javadoc")
 public class Byte2BooleanMapToStringTester extends AbstractByte2BooleanMapTester
 {
 	public void testToString_minimal() {

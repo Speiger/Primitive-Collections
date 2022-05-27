@@ -2,6 +2,7 @@ package speiger.src.testers.ints.generators;
 
 import speiger.src.collections.ints.sets.IntSortedSet;
 
+@SuppressWarnings("javadoc")
 public interface TestIntSortedSetGenerator extends TestIntSetGenerator {
 	@Override
 	IntSortedSet create(int... elements);

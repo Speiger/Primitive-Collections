@@ -5,6 +5,7 @@ import org.junit.Ignore;
 import speiger.src.testers.shorts.tests.base.maps.AbstractShort2ShortMapTester;
 
 @Ignore
+@SuppressWarnings("javadoc")
 public class Short2ShortMapSizeTester extends AbstractShort2ShortMapTester {
 	
 	public void testSize() {

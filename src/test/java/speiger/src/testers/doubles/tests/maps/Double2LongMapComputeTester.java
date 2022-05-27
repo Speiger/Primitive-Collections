@@ -12,6 +12,7 @@ import com.google.common.collect.testing.features.MapFeature;
 import speiger.src.testers.doubles.tests.base.maps.AbstractDouble2LongMapTester;
 
 @Ignore
+@SuppressWarnings("javadoc")
 public class Double2LongMapComputeTester extends AbstractDouble2LongMapTester
 {
 	@MapFeature.Require({ SUPPORTS_PUT, SUPPORTS_REMOVE })

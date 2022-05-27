@@ -21,6 +21,7 @@ import speiger.src.testers.longs.tests.base.maps.AbstractLong2FloatMapTester;
 import speiger.src.testers.objects.utils.ObjectHelpers;
 
 @Ignore
+@SuppressWarnings("javadoc")
 public class Long2FloatSortedMapNavigationTester extends AbstractLong2FloatMapTester
 {
 	private Long2FloatSortedMap sortedMap;

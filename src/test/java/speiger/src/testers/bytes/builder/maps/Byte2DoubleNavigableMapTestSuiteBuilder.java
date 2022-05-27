@@ -19,6 +19,7 @@ import speiger.src.testers.bytes.impl.maps.DerivedByte2DoubleMapGenerators;
 import speiger.src.testers.bytes.tests.maps.Byte2DoubleNavigableMapNavigationTester;
 import speiger.src.testers.utils.SpecialFeature;
 
+@SuppressWarnings("javadoc")
 public class Byte2DoubleNavigableMapTestSuiteBuilder extends Byte2DoubleSortedMapTestSuiteBuilder
 {
 	public static Byte2DoubleNavigableMapTestSuiteBuilder using(TestByte2DoubleSortedMapGenerator generator) {

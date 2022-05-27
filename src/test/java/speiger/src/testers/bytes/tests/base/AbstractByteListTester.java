@@ -8,6 +8,7 @@ import speiger.src.collections.bytes.lists.ByteList;
 import speiger.src.testers.bytes.utils.ByteHelpers;
 
 @Ignore
+@SuppressWarnings("javadoc")
 public class AbstractByteListTester extends AbstractByteCollectionTester
 {
 	protected final ByteList getList() {

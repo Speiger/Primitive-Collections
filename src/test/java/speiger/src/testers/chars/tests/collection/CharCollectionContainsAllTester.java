@@ -10,6 +10,7 @@ import speiger.src.testers.chars.tests.base.AbstractCharCollectionTester;
 import speiger.src.testers.chars.utils.MinimalCharCollection;
 
 @Ignore
+@SuppressWarnings("javadoc")
 public class CharCollectionContainsAllTester extends AbstractCharCollectionTester
 {
 	public void testContainsAll_empty() {

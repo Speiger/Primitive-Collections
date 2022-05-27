@@ -7,6 +7,7 @@ import speiger.src.collections.chars.collections.CharIterator;
 import speiger.src.collections.chars.lists.CharArrayList;
 import speiger.src.collections.chars.lists.CharList;
 
+@SuppressWarnings("javadoc")
 public class CharSamples implements CharIterable
 {
 	private final char e0;

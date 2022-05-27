@@ -19,6 +19,7 @@ import speiger.src.testers.objects.impl.maps.DerivedObject2LongMapGenerators;
 import speiger.src.testers.objects.tests.maps.Object2LongNavigableMapNavigationTester;
 import speiger.src.testers.utils.SpecialFeature;
 
+@SuppressWarnings("javadoc")
 public class Object2LongNavigableMapTestSuiteBuilder<T> extends Object2LongSortedMapTestSuiteBuilder<T>
 {
 	public static <T> Object2LongNavigableMapTestSuiteBuilder<T> using(TestObject2LongSortedMapGenerator<T> generator) {

@@ -18,6 +18,7 @@ import speiger.src.collections.longs.maps.interfaces.Long2IntMap;
 import speiger.src.testers.longs.tests.base.maps.AbstractLong2IntMapTester;
 
 @Ignore
+@SuppressWarnings("javadoc")
 public class Long2IntMapAddToTester extends AbstractLong2IntMapTester
 {	@MapFeature.Require(SUPPORTS_PUT)
 	@CollectionSize.Require(absent = ZERO)

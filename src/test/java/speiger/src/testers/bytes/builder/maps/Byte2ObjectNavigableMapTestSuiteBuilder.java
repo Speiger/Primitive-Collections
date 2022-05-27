@@ -19,6 +19,7 @@ import speiger.src.testers.bytes.impl.maps.DerivedByte2ObjectMapGenerators;
 import speiger.src.testers.bytes.tests.maps.Byte2ObjectNavigableMapNavigationTester;
 import speiger.src.testers.utils.SpecialFeature;
 
+@SuppressWarnings("javadoc")
 public class Byte2ObjectNavigableMapTestSuiteBuilder<V> extends Byte2ObjectSortedMapTestSuiteBuilder<V>
 {
 	public static <V> Byte2ObjectNavigableMapTestSuiteBuilder<V> using(TestByte2ObjectSortedMapGenerator<V> generator) {

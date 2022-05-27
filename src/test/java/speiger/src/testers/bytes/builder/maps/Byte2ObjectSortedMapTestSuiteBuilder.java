@@ -25,6 +25,7 @@ import speiger.src.testers.bytes.generators.TestByteSetGenerator;
 import speiger.src.testers.bytes.generators.TestByteSortedSetGenerator;
 import speiger.src.testers.utils.SpecialFeature;
 
+@SuppressWarnings("javadoc")
 public class Byte2ObjectSortedMapTestSuiteBuilder<V> extends Byte2ObjectMapTestSuiteBuilder<V> {
 	public static <V> Byte2ObjectSortedMapTestSuiteBuilder<V> using(TestByte2ObjectSortedMapGenerator<V> generator) {
 		return (Byte2ObjectSortedMapTestSuiteBuilder<V>) new Byte2ObjectSortedMapTestSuiteBuilder<V>().usingGenerator(generator);

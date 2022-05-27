@@ -19,6 +19,7 @@ import speiger.src.testers.chars.impl.maps.DerivedChar2BooleanMapGenerators;
 import speiger.src.testers.chars.tests.maps.Char2BooleanNavigableMapNavigationTester;
 import speiger.src.testers.utils.SpecialFeature;
 
+@SuppressWarnings("javadoc")
 public class Char2BooleanNavigableMapTestSuiteBuilder extends Char2BooleanSortedMapTestSuiteBuilder
 {
 	public static Char2BooleanNavigableMapTestSuiteBuilder using(TestChar2BooleanSortedMapGenerator generator) {

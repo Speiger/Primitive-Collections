@@ -9,6 +9,7 @@ import com.google.common.collect.testing.features.CollectionSize;
 import speiger.src.testers.doubles.tests.base.maps.AbstractDouble2FloatMapTester;
 
 @Ignore
+@SuppressWarnings("javadoc")
 public class Double2FloatMapGetOrDefaultTester extends AbstractDouble2FloatMapTester
 {
 	@CollectionSize.Require(absent = ZERO)

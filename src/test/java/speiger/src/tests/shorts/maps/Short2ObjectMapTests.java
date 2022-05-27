@@ -23,6 +23,7 @@ import speiger.src.testers.shorts.builder.maps.Short2ObjectNavigableMapTestSuite
 import speiger.src.testers.shorts.impl.maps.SimpleShort2ObjectMapTestGenerator;
 import speiger.src.testers.utils.SpecialFeature;
 
+@SuppressWarnings("javadoc")
 public class Short2ObjectMapTests extends TestCase
 {
 	public static Test suite() {

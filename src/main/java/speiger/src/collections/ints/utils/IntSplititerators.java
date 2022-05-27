@@ -1,6 +1,7 @@
 package speiger.src.collections.ints.utils;
 
 import java.util.Comparator;
+import java.util.NoSuchElementException;
 import java.util.Spliterator;
 import java.util.Spliterator.OfInt;
 import java.util.function.Consumer;
@@ -307,7 +308,11 @@ public class IntSplititerators
 		}
 		
 		@Override
-		public int nextInt() { return array[index++]; }
+		public int nextInt() {
+			if(!hasNext()) throw new NoSuchElementException();
+			return array[index++];
+		}
+		
 		@Override
 		public boolean hasNext() { return index < fence; }
 	}

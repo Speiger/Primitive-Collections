@@ -15,6 +15,7 @@ import speiger.src.testers.shorts.tests.base.AbstractShortSetTester;
 import speiger.src.testers.shorts.utils.ShortHelpers;
 
 @Ignore
+@SuppressWarnings("javadoc")
 public class ShortOrderedSetMoveTester extends AbstractShortSetTester
 {
 	private ShortOrderedSet orderedSet;

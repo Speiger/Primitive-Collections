@@ -11,6 +11,7 @@ import com.google.common.collect.testing.features.CollectionSize;
 import speiger.src.testers.doubles.tests.base.AbstractDoubleListTester;
 
 @Ignore
+@SuppressWarnings("javadoc")
 public class DoubleListPresentTester extends AbstractDoubleListTester
 {
 	@CollectionFeature.Require(SUPPORTS_ADD)

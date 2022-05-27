@@ -18,6 +18,7 @@ import speiger.src.collections.chars.maps.interfaces.Char2ShortMap;
 import speiger.src.testers.chars.tests.base.maps.AbstractChar2ShortMapTester;
 
 @Ignore
+@SuppressWarnings("javadoc")
 public class Char2ShortMapPutTester extends AbstractChar2ShortMapTester
 {	
 	@MapFeature.Require(SUPPORTS_PUT)

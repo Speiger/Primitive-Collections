@@ -16,6 +16,7 @@ import speiger.src.collections.chars.maps.interfaces.Char2ObjectMap;
 import speiger.src.testers.chars.tests.base.maps.AbstractChar2ObjectMapTester;
 
 @Ignore
+@SuppressWarnings("javadoc")
 public class Char2ObjectMapToStringTester<V> extends AbstractChar2ObjectMapTester<V>
 {
 	public void testToString_minimal() {

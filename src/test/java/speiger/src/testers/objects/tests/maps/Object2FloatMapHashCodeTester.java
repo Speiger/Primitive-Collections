@@ -8,7 +8,9 @@ import speiger.src.collections.objects.maps.interfaces.Object2FloatMap;
 import speiger.src.testers.objects.tests.base.maps.AbstractObject2FloatMapTester;
 
 @Ignore
-public class Object2FloatMapHashCodeTester<T> extends AbstractObject2FloatMapTester<T> {
+@SuppressWarnings("javadoc")
+public class Object2FloatMapHashCodeTester<T> extends AbstractObject2FloatMapTester<T>
+{
 	public void testHashCode() {
 		int expectedHashCode = 0;
 		for (Object2FloatMap.Entry<T> entry : getSampleEntries()) {

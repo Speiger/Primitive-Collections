@@ -19,6 +19,7 @@ import speiger.src.collections.objects.collections.ObjectIterator;
 import speiger.src.testers.bytes.tests.base.maps.AbstractByte2FloatMapTester;
 
 @Ignore
+@SuppressWarnings("javadoc")
 public class Byte2FloatMapClearTester extends AbstractByte2FloatMapTester 
 {
 	@MapFeature.Require(SUPPORTS_REMOVE)

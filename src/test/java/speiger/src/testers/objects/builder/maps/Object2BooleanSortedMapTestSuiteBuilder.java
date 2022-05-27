@@ -25,6 +25,7 @@ import speiger.src.testers.objects.generators.TestObjectSetGenerator;
 import speiger.src.testers.objects.generators.TestObjectSortedSetGenerator;
 import speiger.src.testers.utils.SpecialFeature;
 
+@SuppressWarnings("javadoc")
 public class Object2BooleanSortedMapTestSuiteBuilder<T> extends Object2BooleanMapTestSuiteBuilder<T> {
 	public static <T> Object2BooleanSortedMapTestSuiteBuilder<T> using(TestObject2BooleanSortedMapGenerator<T> generator) {
 		return (Object2BooleanSortedMapTestSuiteBuilder<T>) new Object2BooleanSortedMapTestSuiteBuilder<T>().usingGenerator(generator);

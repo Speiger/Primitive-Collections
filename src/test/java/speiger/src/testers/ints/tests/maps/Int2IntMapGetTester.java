@@ -9,6 +9,7 @@ import com.google.common.collect.testing.features.CollectionSize;
 import speiger.src.testers.ints.tests.base.maps.AbstractInt2IntMapTester;
 
 @Ignore
+@SuppressWarnings("javadoc")
 public class Int2IntMapGetTester extends AbstractInt2IntMapTester
 {
 	@CollectionSize.Require(absent = ZERO)

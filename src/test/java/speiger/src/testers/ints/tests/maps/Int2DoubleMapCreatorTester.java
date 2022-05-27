@@ -14,6 +14,7 @@ import speiger.src.collections.objects.lists.ObjectArrayList;
 import speiger.src.testers.ints.tests.base.maps.AbstractInt2DoubleMapTester;
 
 @Ignore
+@SuppressWarnings("javadoc")
 public class Int2DoubleMapCreatorTester extends AbstractInt2DoubleMapTester
 {
 	@MapFeature.Require(absent = REJECTS_DUPLICATES_AT_CREATION)

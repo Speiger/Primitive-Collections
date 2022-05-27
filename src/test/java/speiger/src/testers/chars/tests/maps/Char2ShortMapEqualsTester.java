@@ -11,6 +11,7 @@ import speiger.src.testers.chars.tests.base.maps.AbstractChar2ShortMapTester;
 import speiger.src.testers.objects.utils.ObjectHelpers;
 
 @Ignore
+@SuppressWarnings("javadoc")
 public class Char2ShortMapEqualsTester extends AbstractChar2ShortMapTester 
 {
 	public void testEquals_otherMapWithSameEntries() {

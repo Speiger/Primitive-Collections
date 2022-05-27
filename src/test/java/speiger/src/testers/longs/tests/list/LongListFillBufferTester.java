@@ -8,6 +8,7 @@ import speiger.src.collections.longs.lists.LongArrayList;
 import speiger.src.testers.longs.tests.base.AbstractLongListTester;
 
 @Ignore
+@SuppressWarnings("javadoc")
 public class LongListFillBufferTester extends AbstractLongListTester
 {
 	public void testFillBuffer() {

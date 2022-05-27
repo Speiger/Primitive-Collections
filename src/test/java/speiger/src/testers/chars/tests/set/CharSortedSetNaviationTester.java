@@ -18,7 +18,9 @@ import speiger.src.testers.chars.tests.base.AbstractCharSetTester;
 import speiger.src.testers.chars.utils.CharHelpers;
 
 @Ignore
-public class CharSortedSetNaviationTester extends AbstractCharSetTester {
+@SuppressWarnings("javadoc")
+public class CharSortedSetNaviationTester extends AbstractCharSetTester
+{
 	private CharSortedSet sortedSet;
 	private CharList values;
 	private char a;

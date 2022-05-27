@@ -11,6 +11,7 @@ import speiger.src.collections.chars.lists.CharArrayList;
 import speiger.src.testers.chars.tests.base.AbstractCharListTester;
 
 @Ignore
+@SuppressWarnings("javadoc")
 public class CharListGetElementsTester extends AbstractCharListTester
 {
 	@CollectionSize.Require(SEVERAL)

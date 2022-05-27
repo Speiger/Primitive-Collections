@@ -16,7 +16,9 @@ import speiger.src.testers.longs.builder.LongListTestSuiteBuilder;
 import speiger.src.testers.longs.impl.SimpleLongTestGenerator;
 import speiger.src.testers.utils.SpecialFeature;
 
-public class LongListTests extends TestCase {
+@SuppressWarnings("javadoc")
+public class LongListTests extends TestCase
+{
 	
 	public static Test suite() {
 		TestSuite suite = new TestSuite("LongLists");

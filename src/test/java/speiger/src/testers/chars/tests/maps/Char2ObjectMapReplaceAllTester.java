@@ -18,6 +18,7 @@ import speiger.src.testers.chars.tests.base.maps.AbstractChar2ObjectMapTester;
 import speiger.src.testers.chars.utils.CharSamples;
 
 @Ignore
+@SuppressWarnings("javadoc")
 public class Char2ObjectMapReplaceAllTester<V> extends AbstractChar2ObjectMapTester<V>
 {
 	private CharSamples keys() {

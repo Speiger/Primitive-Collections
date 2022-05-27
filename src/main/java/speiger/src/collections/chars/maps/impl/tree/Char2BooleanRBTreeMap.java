@@ -273,7 +273,7 @@ public class Char2BooleanRBTreeMap extends AbstractChar2BooleanMap implements Ch
 	
 	@Override
 	public char pollFirstCharKey() {
-		if(tree == null) return (char)0;
+		if(tree == null) return getDefaultMinValue();
 		char result = first.key;
 		removeNode(first);
 		return result;
@@ -287,7 +287,7 @@ public class Char2BooleanRBTreeMap extends AbstractChar2BooleanMap implements Ch
 	
 	@Override
 	public char pollLastCharKey() {
-		if(tree == null) return (char)0;
+		if(tree == null) return getDefaultMaxValue();
 		char result = last.key;
 		removeNode(last);
 		return result;
@@ -914,6 +914,31 @@ public class Char2BooleanRBTreeMap extends AbstractChar2BooleanMap implements Ch
 		public char ceiling(char e) { return map.ceilingKey(e); }
 		@Override
 		public char higher(char e) { return map.higherKey(e); }
+		
+		@Override
+		public Character lower(Character e) {
+			Char2BooleanMap.Entry node = map.lowerEntry(e.charValue());
+			return node != null ? node.getKey() : null;
+		}
+		
+		@Override
+		public Character floor(Character e) {
+			Char2BooleanMap.Entry node = map.floorEntry(e.charValue());
+			return node != null ? node.getKey() : null;
+		}
+		
+		@Override
+		public Character higher(Character e) {
+			Char2BooleanMap.Entry node = map.higherEntry(e.charValue());
+			return node != null ? node.getKey() : null;
+		}
+		
+		@Override
+		public Character ceiling(Character e) {
+			Char2BooleanMap.Entry node = map.ceilingEntry(e.charValue());
+			return node != null ? node.getKey() : null;
+		}
+		
 		@Override
 		public char pollFirstChar() { return map.pollFirstCharKey(); }
 		@Override
@@ -1321,8 +1346,8 @@ public class Char2BooleanRBTreeMap extends AbstractChar2BooleanMap implements Ch
 		protected abstract CharBidirectionalIterator keyIterator(char element);
 		protected abstract BooleanBidirectionalIterator valueIterator();
 		protected abstract CharBidirectionalIterator descendingKeyIterator();
-		protected char lowKeyOrNull(Node entry) { return entry == null ? (char)0 : entry.key; }
-		protected char highKeyOrNull(Node entry) { return entry == null ? (char)0 : entry.key; }
+		protected char lowKeyOrNull(Node entry) { return entry == null ? getDefaultMinValue() : entry.key; }
+		protected char highKeyOrNull(Node entry) { return entry == null ? getDefaultMaxValue() : entry.key; }
 		protected Node next(Node entry) { return entry.next(); }
 		protected Node previous(Node entry) { return entry.previous(); }
 		
@@ -1393,7 +1418,7 @@ public class Char2BooleanRBTreeMap extends AbstractChar2BooleanMap implements Ch
 				map.removeNode(entry);
 				return result;
 			}
-			return (char)0;
+			return getDefaultMinValue();
 		}
 		
 		@Override
@@ -1404,7 +1429,7 @@ public class Char2BooleanRBTreeMap extends AbstractChar2BooleanMap implements Ch
 				map.removeNode(entry);
 				return result;
 			}
-			return (char)0;
+			return getDefaultMaxValue();
 		}
 		
 		@Override
@@ -1470,7 +1495,7 @@ public class Char2BooleanRBTreeMap extends AbstractChar2BooleanMap implements Ch
 		
 		@Override
 		public boolean removeOrDefault(char key, boolean defaultValue) {
-			return inRange(key) ? map.remove(key) : defaultValue;
+			return inRange(key) ? map.removeOrDefault(key, defaultValue) : defaultValue;
 		}
 		
 		@Override
@@ -1946,8 +1971,8 @@ public class Char2BooleanRBTreeMap extends AbstractChar2BooleanMap implements Ch
 			public SubMapEntryIterator(Node first, Node forwardFence, Node backwardFence)
 			{
 				next = first;
-				this.forwardFence = forwardFence == null ? null : forwardFence.key;
-				this.backwardFence = backwardFence == null ? null : backwardFence.key;
+				this.forwardFence = forwardFence == null ? (char)0 : forwardFence.key;
+				this.backwardFence = backwardFence == null ? (char)0 : backwardFence.key;
 				unboundForwardFence = forwardFence == null;
 				unboundBackwardFence = backwardFence == null;
 			}

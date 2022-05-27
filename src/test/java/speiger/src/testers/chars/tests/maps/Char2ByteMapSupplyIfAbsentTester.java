@@ -12,6 +12,7 @@ import junit.framework.AssertionFailedError;
 import speiger.src.testers.chars.tests.base.maps.AbstractChar2ByteMapTester;
 
 @Ignore
+@SuppressWarnings("javadoc")
 public class Char2ByteMapSupplyIfAbsentTester extends AbstractChar2ByteMapTester
 {
 	@MapFeature.Require(SUPPORTS_PUT)

@@ -8,6 +8,7 @@ import speiger.src.collections.objects.lists.ObjectArrayList;
 import speiger.src.collections.objects.lists.ObjectList;
 import speiger.src.collections.objects.sets.ObjectSet;
 
+@SuppressWarnings("javadoc")
 public class MinimalObjectSet<T> extends MinimalObjectCollection<T> implements ObjectSet<T> {
 	public static <T> MinimalObjectSet<T> of(T...array) {
 		return MinimalObjectSet.of(ObjectArrayList.wrap(array));

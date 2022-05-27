@@ -5,6 +5,7 @@ import org.junit.Ignore;
 import speiger.src.testers.chars.tests.base.AbstractCharListTester;
 
 @Ignore
+@SuppressWarnings("javadoc")
 public class CharListGetTester extends AbstractCharListTester
 {
 	public void testGet_valid() {

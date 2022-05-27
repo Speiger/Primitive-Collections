@@ -18,6 +18,7 @@ import speiger.src.testers.objects.tests.base.maps.AbstractObject2FloatMapTester
 import speiger.src.testers.objects.utils.ObjectSamples;
 
 @Ignore
+@SuppressWarnings("javadoc")
 public class Object2FloatMapReplaceAllTester<T> extends AbstractObject2FloatMapTester<T>
 {
 	private ObjectSamples<T> keys() {

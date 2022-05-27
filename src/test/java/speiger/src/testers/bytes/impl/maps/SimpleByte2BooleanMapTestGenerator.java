@@ -13,6 +13,7 @@ import speiger.src.testers.bytes.generators.maps.TestByte2BooleanMapGenerator;
 import speiger.src.testers.bytes.generators.maps.TestByte2BooleanSortedMapGenerator;
 import speiger.src.testers.objects.utils.ObjectSamples;
 
+@SuppressWarnings("javadoc")
 public class SimpleByte2BooleanMapTestGenerator<E extends Byte2BooleanMap>
 {
 	BiFunction<byte[], boolean[], E> mapper;

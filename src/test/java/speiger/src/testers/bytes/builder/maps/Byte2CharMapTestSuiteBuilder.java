@@ -59,6 +59,7 @@ import speiger.src.testers.objects.tests.collection.ObjectCollectionRetainAllTes
 import speiger.src.testers.utils.SpecialFeature;
 import speiger.src.testers.utils.TestUtils;
 
+@SuppressWarnings("javadoc")
 public class Byte2CharMapTestSuiteBuilder extends MapTestSuiteBuilder<Byte, Character> {
 	public static Byte2CharMapTestSuiteBuilder using(TestByte2CharMapGenerator generator) {
 		return (Byte2CharMapTestSuiteBuilder) new Byte2CharMapTestSuiteBuilder().usingGenerator(generator);

@@ -16,7 +16,9 @@ import speiger.src.testers.floats.builder.FloatListTestSuiteBuilder;
 import speiger.src.testers.floats.impl.SimpleFloatTestGenerator;
 import speiger.src.testers.utils.SpecialFeature;
 
-public class FloatListTests extends TestCase {
+@SuppressWarnings("javadoc")
+public class FloatListTests extends TestCase
+{
 	
 	public static Test suite() {
 		TestSuite suite = new TestSuite("FloatLists");

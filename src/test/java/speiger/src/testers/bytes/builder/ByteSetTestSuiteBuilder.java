@@ -34,6 +34,7 @@ import speiger.src.testers.bytes.tests.set.ByteSetCreationTester;
 import speiger.src.testers.bytes.tests.set.ByteSetEqualsTester;
 import speiger.src.testers.bytes.tests.set.ByteSetRemoveTester;
 
+@SuppressWarnings("javadoc")
 public class ByteSetTestSuiteBuilder extends ByteCollectionTestSuiteBuilder {
 	public static ByteSetTestSuiteBuilder using(TestByteSetGenerator generator) {
 		return (ByteSetTestSuiteBuilder) new ByteSetTestSuiteBuilder().usingGenerator(generator);

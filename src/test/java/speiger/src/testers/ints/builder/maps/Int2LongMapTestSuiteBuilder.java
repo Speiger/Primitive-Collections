@@ -59,6 +59,7 @@ import speiger.src.testers.objects.tests.collection.ObjectCollectionRetainAllTes
 import speiger.src.testers.utils.SpecialFeature;
 import speiger.src.testers.utils.TestUtils;
 
+@SuppressWarnings("javadoc")
 public class Int2LongMapTestSuiteBuilder extends MapTestSuiteBuilder<Integer, Long> {
 	public static Int2LongMapTestSuiteBuilder using(TestInt2LongMapGenerator generator) {
 		return (Int2LongMapTestSuiteBuilder) new Int2LongMapTestSuiteBuilder().usingGenerator(generator);

@@ -11,6 +11,7 @@ import speiger.src.collections.ints.lists.IntArrayList;
 import speiger.src.testers.ints.tests.base.AbstractIntListTester;
 
 @Ignore
+@SuppressWarnings("javadoc")
 public class IntListGetElementsTester extends AbstractIntListTester
 {
 	@CollectionSize.Require(SEVERAL)

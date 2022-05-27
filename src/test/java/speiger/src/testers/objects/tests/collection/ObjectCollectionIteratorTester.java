@@ -24,6 +24,7 @@ import speiger.src.testers.objects.utils.ObjectHelpers;
 import speiger.src.testers.objects.utils.ObjectIteratorTester;
 
 @Ignore
+@SuppressWarnings("javadoc")
 public class ObjectCollectionIteratorTester<T> extends AbstractObjectCollectionTester<T>
 {
 	public void testIterator() {

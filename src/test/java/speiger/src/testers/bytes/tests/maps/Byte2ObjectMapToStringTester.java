@@ -16,6 +16,7 @@ import speiger.src.collections.bytes.maps.interfaces.Byte2ObjectMap;
 import speiger.src.testers.bytes.tests.base.maps.AbstractByte2ObjectMapTester;
 
 @Ignore
+@SuppressWarnings("javadoc")
 public class Byte2ObjectMapToStringTester<V> extends AbstractByte2ObjectMapTester<V>
 {
 	public void testToString_minimal() {

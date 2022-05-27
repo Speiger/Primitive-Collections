@@ -5,6 +5,7 @@ import org.junit.Ignore;
 import speiger.src.testers.objects.tests.base.maps.AbstractObject2CharMapTester;
 
 @Ignore
+@SuppressWarnings("javadoc")
 public class Object2CharMapSizeTester<T> extends AbstractObject2CharMapTester<T> {
 	
 	public void testSize() {

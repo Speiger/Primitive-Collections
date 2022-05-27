@@ -25,6 +25,7 @@ import speiger.src.testers.ints.generators.TestIntSetGenerator;
 import speiger.src.testers.ints.generators.TestIntSortedSetGenerator;
 import speiger.src.testers.utils.SpecialFeature;
 
+@SuppressWarnings("javadoc")
 public class Int2ByteSortedMapTestSuiteBuilder extends Int2ByteMapTestSuiteBuilder {
 	public static Int2ByteSortedMapTestSuiteBuilder using(TestInt2ByteSortedMapGenerator generator) {
 		return (Int2ByteSortedMapTestSuiteBuilder) new Int2ByteSortedMapTestSuiteBuilder().usingGenerator(generator);

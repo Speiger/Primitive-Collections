@@ -16,6 +16,7 @@ import speiger.src.collections.doubles.maps.interfaces.Double2ShortMap;
 import speiger.src.testers.doubles.tests.base.maps.AbstractDouble2ShortMapTester;
 
 @Ignore
+@SuppressWarnings("javadoc")
 public class Double2ShortMapToStringTester extends AbstractDouble2ShortMapTester
 {
 	public void testToString_minimal() {

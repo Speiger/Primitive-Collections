@@ -13,6 +13,7 @@ import junit.framework.AssertionFailedError;
 import speiger.src.testers.objects.tests.base.maps.AbstractObject2IntMapTester;
 
 @Ignore
+@SuppressWarnings("javadoc")
 public class Object2IntMapMergeTester<T> extends AbstractObject2IntMapTester<T>
 {
 	@MapFeature.Require(SUPPORTS_PUT)

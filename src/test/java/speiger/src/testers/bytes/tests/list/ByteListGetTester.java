@@ -5,6 +5,7 @@ import org.junit.Ignore;
 import speiger.src.testers.bytes.tests.base.AbstractByteListTester;
 
 @Ignore
+@SuppressWarnings("javadoc")
 public class ByteListGetTester extends AbstractByteListTester
 {
 	public void testGet_valid() {

@@ -12,6 +12,7 @@ import com.google.common.collect.testing.features.CollectionSize;
 import speiger.src.testers.booleans.tests.base.AbstractBooleanListIndexOfTester;
 
 @Ignore
+@SuppressWarnings("javadoc")
 public class BooleanListIndexOfTester extends AbstractBooleanListIndexOfTester
 {
 	@Override

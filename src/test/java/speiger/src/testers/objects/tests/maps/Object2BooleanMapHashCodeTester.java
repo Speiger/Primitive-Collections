@@ -8,7 +8,9 @@ import speiger.src.collections.objects.maps.interfaces.Object2BooleanMap;
 import speiger.src.testers.objects.tests.base.maps.AbstractObject2BooleanMapTester;
 
 @Ignore
-public class Object2BooleanMapHashCodeTester<T> extends AbstractObject2BooleanMapTester<T> {
+@SuppressWarnings("javadoc")
+public class Object2BooleanMapHashCodeTester<T> extends AbstractObject2BooleanMapTester<T>
+{
 	public void testHashCode() {
 		int expectedHashCode = 0;
 		for (Object2BooleanMap.Entry<T> entry : getSampleEntries()) {

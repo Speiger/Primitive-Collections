@@ -13,6 +13,7 @@ import speiger.src.testers.floats.generators.maps.TestFloat2FloatMapGenerator;
 import speiger.src.testers.floats.generators.maps.TestFloat2FloatSortedMapGenerator;
 import speiger.src.testers.objects.utils.ObjectSamples;
 
+@SuppressWarnings("javadoc")
 public class SimpleFloat2FloatMapTestGenerator<E extends Float2FloatMap>
 {
 	BiFunction<float[], float[], E> mapper;

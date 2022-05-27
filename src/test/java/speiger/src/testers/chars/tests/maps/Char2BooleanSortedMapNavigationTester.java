@@ -21,6 +21,7 @@ import speiger.src.testers.chars.tests.base.maps.AbstractChar2BooleanMapTester;
 import speiger.src.testers.objects.utils.ObjectHelpers;
 
 @Ignore
+@SuppressWarnings("javadoc")
 public class Char2BooleanSortedMapNavigationTester extends AbstractChar2BooleanMapTester
 {
 	private Char2BooleanSortedMap sortedMap;

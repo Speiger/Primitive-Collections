@@ -21,8 +21,9 @@ import speiger.src.testers.objects.tests.base.AbstractObjectContainerTester;
 import speiger.src.testers.objects.utils.ObjectHelpers;
 
 @Ignore
-public class AbstractFloat2BooleanMapTester extends AbstractObjectContainerTester<Float2BooleanMap.Entry, Float2BooleanMap> {
-
+@SuppressWarnings("javadoc")
+public class AbstractFloat2BooleanMapTester extends AbstractObjectContainerTester<Float2BooleanMap.Entry, Float2BooleanMap>
+{
 	protected TestFloat2BooleanMapGenerator primitiveMapGenerator;
 
 	protected Float2BooleanMap getMap() {

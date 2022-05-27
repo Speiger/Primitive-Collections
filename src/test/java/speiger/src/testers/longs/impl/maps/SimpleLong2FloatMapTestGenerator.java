@@ -13,6 +13,7 @@ import speiger.src.testers.longs.generators.maps.TestLong2FloatMapGenerator;
 import speiger.src.testers.longs.generators.maps.TestLong2FloatSortedMapGenerator;
 import speiger.src.testers.objects.utils.ObjectSamples;
 
+@SuppressWarnings("javadoc")
 public class SimpleLong2FloatMapTestGenerator<E extends Long2FloatMap>
 {
 	BiFunction<long[], float[], E> mapper;

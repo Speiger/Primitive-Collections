@@ -9,6 +9,7 @@ import speiger.src.collections.objects.lists.ObjectList;
 import speiger.src.testers.objects.utils.ObjectHelpers;
 
 @Ignore
+@SuppressWarnings("javadoc")
 public class AbstractObjectListTester<T> extends AbstractObjectCollectionTester<T>
 {
 	protected final ObjectList<T> getList() {

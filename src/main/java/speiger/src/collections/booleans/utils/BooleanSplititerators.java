@@ -1,6 +1,7 @@
 package speiger.src.collections.booleans.utils;
 
 import java.util.Comparator;
+import java.util.NoSuchElementException;
 import java.util.Spliterator;
 import java.util.function.Consumer;
 
@@ -245,7 +246,11 @@ public class BooleanSplititerators
 		}
 		
 		@Override
-		public boolean nextBoolean() { return array[index++]; }
+		public boolean nextBoolean() {
+			if(!hasNext()) throw new NoSuchElementException();
+			return array[index++];
+		}
+		
 		@Override
 		public boolean hasNext() { return index < fence; }
 	}

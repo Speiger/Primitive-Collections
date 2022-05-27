@@ -11,6 +11,7 @@ import com.google.common.collect.testing.features.CollectionSize;
 import speiger.src.testers.objects.tests.base.AbstractObjectSetTester;
 
 @Ignore
+@SuppressWarnings("javadoc")
 public class ObjectSetAddTester<T> extends AbstractObjectSetTester<T>
 {
 	@CollectionFeature.Require(SUPPORTS_ADD)

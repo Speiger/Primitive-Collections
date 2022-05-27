@@ -19,6 +19,7 @@ import speiger.src.collections.objects.maps.interfaces.Object2CharMap;
 import speiger.src.testers.objects.tests.base.maps.AbstractObject2CharMapTester;
 
 @Ignore
+@SuppressWarnings("javadoc")
 public class Object2CharMapEntrySetTester<T> extends AbstractObject2CharMapTester<T>
 {
 	@CollectionSize.Require(ONE)

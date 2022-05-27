@@ -18,12 +18,13 @@ import speiger.src.collections.objects.maps.interfaces.Object2CharMap;
 import speiger.src.testers.objects.tests.base.maps.AbstractObject2CharMapTester;
 
 @Ignore
+@SuppressWarnings("javadoc")
 public class Object2CharMapAddToTester<T> extends AbstractObject2CharMapTester<T>
 {	@MapFeature.Require(SUPPORTS_PUT)
 	@CollectionSize.Require(absent = ZERO)
 	public void testAddTo_supportedPresent() {
 		assertEquals("addTo(present, value) should return the old value", v0(), getMap().addTo(k0(), v3()));
-		expectReplacement(entry(k0(), v3()));
+		expectReplacement(entry(k0(), (char)(v0()+v3())));
 	}
 	
 	@MapFeature.Require(SUPPORTS_PUT)

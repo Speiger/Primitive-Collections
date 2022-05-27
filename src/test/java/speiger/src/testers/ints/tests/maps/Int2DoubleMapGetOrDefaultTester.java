@@ -9,6 +9,7 @@ import com.google.common.collect.testing.features.CollectionSize;
 import speiger.src.testers.ints.tests.base.maps.AbstractInt2DoubleMapTester;
 
 @Ignore
+@SuppressWarnings("javadoc")
 public class Int2DoubleMapGetOrDefaultTester extends AbstractInt2DoubleMapTester
 {
 	@CollectionSize.Require(absent = ZERO)

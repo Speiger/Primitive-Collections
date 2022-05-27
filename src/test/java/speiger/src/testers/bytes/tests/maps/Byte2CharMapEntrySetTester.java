@@ -18,6 +18,7 @@ import speiger.src.collections.bytes.maps.interfaces.Byte2CharMap;
 import speiger.src.testers.bytes.tests.base.maps.AbstractByte2CharMapTester;
 
 @Ignore
+@SuppressWarnings("javadoc")
 public class Byte2CharMapEntrySetTester extends AbstractByte2CharMapTester
 {
 	@CollectionSize.Require(ONE)

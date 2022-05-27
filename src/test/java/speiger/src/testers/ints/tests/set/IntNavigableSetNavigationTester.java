@@ -21,6 +21,7 @@ import speiger.src.testers.ints.tests.base.AbstractIntSetTester;
 import speiger.src.testers.ints.utils.IntHelpers;
 
 @Ignore
+@SuppressWarnings("javadoc")
 public class IntNavigableSetNavigationTester extends AbstractIntSetTester
 {
 	private IntNavigableSet navigableSet;

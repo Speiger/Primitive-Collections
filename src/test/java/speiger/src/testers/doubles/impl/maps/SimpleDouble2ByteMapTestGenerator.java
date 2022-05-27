@@ -13,6 +13,7 @@ import speiger.src.testers.doubles.generators.maps.TestDouble2ByteMapGenerator;
 import speiger.src.testers.doubles.generators.maps.TestDouble2ByteSortedMapGenerator;
 import speiger.src.testers.objects.utils.ObjectSamples;
 
+@SuppressWarnings("javadoc")
 public class SimpleDouble2ByteMapTestGenerator<E extends Double2ByteMap>
 {
 	BiFunction<double[], byte[], E> mapper;

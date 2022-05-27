@@ -20,6 +20,7 @@ import speiger.src.testers.shorts.tests.base.maps.AbstractShort2ByteMapTester;
 import speiger.src.testers.objects.utils.MinimalObjectCollection;
 
 @Ignore
+@SuppressWarnings("javadoc")
 public class Short2ByteMapPutAllTester extends AbstractShort2ByteMapTester
 {
 	@MapFeature.Require(SUPPORTS_PUT)

@@ -11,6 +11,7 @@ import speiger.src.testers.bytes.tests.base.maps.AbstractByte2ObjectMapTester;
 import speiger.src.testers.objects.utils.ObjectHelpers;
 
 @Ignore
+@SuppressWarnings("javadoc")
 public class Byte2ObjectMapEqualsTester<V> extends AbstractByte2ObjectMapTester<V> 
 {
 	public void testEquals_otherMapWithSameEntries() {

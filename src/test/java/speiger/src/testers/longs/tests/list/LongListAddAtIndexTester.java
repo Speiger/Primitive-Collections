@@ -17,6 +17,7 @@ import speiger.src.collections.longs.collections.LongIterator;
 import speiger.src.testers.longs.tests.base.AbstractLongListTester;
 
 @Ignore
+@SuppressWarnings("javadoc")
 public class LongListAddAtIndexTester extends AbstractLongListTester
 {
 	@ListFeature.Require(SUPPORTS_ADD_WITH_INDEX)

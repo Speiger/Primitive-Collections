@@ -13,6 +13,7 @@ import speiger.src.collections.booleans.lists.BooleanArrayList;
 import speiger.src.testers.booleans.tests.base.AbstractBooleanSetTester;
 
 @Ignore
+@SuppressWarnings("javadoc")
 public class BooleanSetCreationTester extends AbstractBooleanSetTester
 {
 	@CollectionFeature.Require(absent = REJECTS_DUPLICATES_AT_CREATION)

@@ -18,6 +18,7 @@ import speiger.src.testers.ints.tests.base.maps.AbstractInt2FloatMapTester;
 import speiger.src.testers.ints.utils.IntSamples;
 
 @Ignore
+@SuppressWarnings("javadoc")
 public class Int2FloatMapReplaceAllTester extends AbstractInt2FloatMapTester
 {
 	private IntSamples keys() {

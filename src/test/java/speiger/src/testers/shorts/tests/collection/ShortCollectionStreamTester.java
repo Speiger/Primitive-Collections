@@ -12,6 +12,7 @@ import speiger.src.testers.shorts.tests.base.AbstractShortCollectionTester;
 import speiger.src.testers.shorts.utils.ShortHelpers;
 
 @Ignore
+@SuppressWarnings("javadoc")
 public class ShortCollectionStreamTester extends AbstractShortCollectionTester
 {
 	@CollectionFeature.Require(absent = KNOWN_ORDER)

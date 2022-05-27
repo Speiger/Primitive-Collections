@@ -13,6 +13,7 @@ import speiger.src.testers.doubles.generators.maps.TestDouble2BooleanMapGenerato
 import speiger.src.testers.doubles.generators.maps.TestDouble2BooleanSortedMapGenerator;
 import speiger.src.testers.objects.utils.ObjectSamples;
 
+@SuppressWarnings("javadoc")
 public class SimpleDouble2BooleanMapTestGenerator<E extends Double2BooleanMap>
 {
 	BiFunction<double[], boolean[], E> mapper;

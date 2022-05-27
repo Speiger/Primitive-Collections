@@ -15,6 +15,7 @@ import speiger.src.collections.objects.lists.ObjectList;
 import speiger.src.testers.chars.tests.base.maps.AbstractChar2CharMapTester;
 
 @Ignore
+@SuppressWarnings("javadoc")
 public class Char2CharMapForEachTester extends AbstractChar2CharMapTester
 {
 	@CollectionFeature.Require(KNOWN_ORDER)

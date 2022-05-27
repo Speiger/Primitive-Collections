@@ -25,6 +25,7 @@ import speiger.src.testers.objects.generators.TestObjectSetGenerator;
 import speiger.src.testers.objects.generators.TestObjectSortedSetGenerator;
 import speiger.src.testers.utils.SpecialFeature;
 
+@SuppressWarnings("javadoc")
 public class Object2ShortSortedMapTestSuiteBuilder<T> extends Object2ShortMapTestSuiteBuilder<T> {
 	public static <T> Object2ShortSortedMapTestSuiteBuilder<T> using(TestObject2ShortSortedMapGenerator<T> generator) {
 		return (Object2ShortSortedMapTestSuiteBuilder<T>) new Object2ShortSortedMapTestSuiteBuilder<T>().usingGenerator(generator);

@@ -22,7 +22,9 @@ import speiger.src.collections.chars.lists.CharArrayList;
 import speiger.src.collections.chars.lists.CharList;
 import speiger.src.collections.chars.lists.CharListIterator;
 
-public abstract class AbstractCharIteratorTester{
+@SuppressWarnings("javadoc")
+public abstract class AbstractCharIteratorTester
+{
 	private Stimulus<CharIterator>[] stimuli;
 	private final CharIterator elementsToInsert;
 	private final Set<IteratorFeature> features;
@@ -312,7 +314,7 @@ public abstract class AbstractCharIteratorTester{
 		}
 
 		try {
-			if (method == nextChar_METHOD && targetException == null && knownOrder == KnownOrder.UNKNOWN_ORDER) {
+			if (method == NEXT_METHOD && targetException == null && knownOrder == KnownOrder.UNKNOWN_ORDER) {
 				((MultiExceptionListIterator) reference).promoteToNext(targetReturnValue);
 			}
 			
@@ -346,7 +348,7 @@ public abstract class AbstractCharIteratorTester{
 		referenceException.assertPermitted(targetException);
 	}
 
-	private static final IteratorOperation removeChar_METHOD = new IteratorOperation() {
+	private static final IteratorOperation REMOVE_METHOD = new IteratorOperation() {
 		@Override
 		public char execute(CharIterator iterator) {
 			iterator.remove();
@@ -354,14 +356,14 @@ public abstract class AbstractCharIteratorTester{
 		}
 	};
 
-	private static final IteratorOperation nextChar_METHOD = new IteratorOperation() {
+	private static final IteratorOperation NEXT_METHOD = new IteratorOperation() {
 		@Override
 		public char execute(CharIterator iterator) {
 			return iterator.nextChar();
 		}
 	};
 
-	private static final IteratorOperation previousChar_METHOD = new IteratorOperation() {
+	private static final IteratorOperation PREVIOUS_METHOD = new IteratorOperation() {
 		@Override
 		public char execute(CharIterator iterator) {
 			return ((CharBidirectionalIterator) iterator).previousChar();
@@ -418,13 +420,13 @@ public abstract class AbstractCharIteratorTester{
 	Stimulus<CharIterator> next = new Stimulus<CharIterator>("next") {
 		@Override
 		void executeAndCompare(CharListIterator reference, CharIterator target) {
-			internalExecuteAndCompare(reference, target, nextChar_METHOD);
+			internalExecuteAndCompare(reference, target, NEXT_METHOD);
 		}
 	};
 	Stimulus<CharIterator> remove = new Stimulus<CharIterator>("remove") {
 		@Override
 		void executeAndCompare(CharListIterator reference, CharIterator target) {
-			internalExecuteAndCompare(reference, target, removeChar_METHOD);
+			internalExecuteAndCompare(reference, target, REMOVE_METHOD);
 		}
 	};
 
@@ -442,7 +444,7 @@ public abstract class AbstractCharIteratorTester{
 	Stimulus<CharBidirectionalIterator> previous = new Stimulus<CharBidirectionalIterator>("previous") {
 		@Override
 		void executeAndCompare(CharListIterator reference, CharBidirectionalIterator target) {
-			internalExecuteAndCompare(reference, target, previousChar_METHOD);
+			internalExecuteAndCompare(reference, target, PREVIOUS_METHOD);
 		}
 	};
 	

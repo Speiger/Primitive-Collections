@@ -16,6 +16,7 @@ import speiger.src.collections.bytes.maps.interfaces.Byte2DoubleMap;
 import speiger.src.testers.bytes.tests.base.maps.AbstractByte2DoubleMapTester;
 
 @Ignore
+@SuppressWarnings("javadoc")
 public class Byte2DoubleMapToStringTester extends AbstractByte2DoubleMapTester
 {
 	public void testToString_minimal() {

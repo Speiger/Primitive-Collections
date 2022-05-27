@@ -12,6 +12,7 @@ import junit.framework.AssertionFailedError;
 import speiger.src.testers.bytes.tests.base.maps.AbstractByte2FloatMapTester;
 
 @Ignore
+@SuppressWarnings("javadoc")
 public class Byte2FloatMapSupplyIfAbsentTester extends AbstractByte2FloatMapTester
 {
 	@MapFeature.Require(SUPPORTS_PUT)

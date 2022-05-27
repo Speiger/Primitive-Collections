@@ -9,6 +9,7 @@ import com.google.common.collect.testing.features.CollectionSize;
 import speiger.src.testers.chars.tests.base.maps.AbstractChar2ByteMapTester;
 
 @Ignore
+@SuppressWarnings("javadoc")
 public class Char2ByteMapContainsKeyTester extends AbstractChar2ByteMapTester
 {
 	@CollectionSize.Require(absent = ZERO)

@@ -69,6 +69,7 @@ import speiger.src.testers.bytes.tests.list.ByteListSwapRemoveAtIndexTester;
 import speiger.src.testers.bytes.tests.list.ByteListSwapRemoveTester;
 import speiger.src.testers.bytes.tests.list.ByteListToArrayTester;
 
+@SuppressWarnings("javadoc")
 public class ByteListTestSuiteBuilder extends ByteCollectionTestSuiteBuilder {
 	public static ByteListTestSuiteBuilder using(TestByteListGenerator generator) {
 		return (ByteListTestSuiteBuilder) new ByteListTestSuiteBuilder().usingGenerator(generator);

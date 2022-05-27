@@ -19,6 +19,7 @@ import speiger.src.testers.bytes.utils.ByteSamples;
 import speiger.src.testers.bytes.utils.MinimalByteCollection;
 
 @Ignore
+@SuppressWarnings("javadoc")
 public abstract class AbstractByteContainerTester<E> extends AbstractTester<OneSizeTestContainerGenerator<E, Byte>>
 {
 	protected ByteSamples samples;

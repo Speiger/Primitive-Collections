@@ -12,6 +12,7 @@ import com.google.common.collect.testing.features.MapFeature;
 import speiger.src.testers.longs.tests.base.maps.AbstractLong2ByteMapTester;
 
 @Ignore
+@SuppressWarnings("javadoc")
 public class Long2ByteMapComputeTester extends AbstractLong2ByteMapTester
 {
 	@MapFeature.Require({ SUPPORTS_PUT, SUPPORTS_REMOVE })

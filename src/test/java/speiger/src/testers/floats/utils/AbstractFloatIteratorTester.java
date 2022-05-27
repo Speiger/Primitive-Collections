@@ -22,7 +22,9 @@ import speiger.src.collections.floats.lists.FloatArrayList;
 import speiger.src.collections.floats.lists.FloatList;
 import speiger.src.collections.floats.lists.FloatListIterator;
 
-public abstract class AbstractFloatIteratorTester{
+@SuppressWarnings("javadoc")
+public abstract class AbstractFloatIteratorTester
+{
 	private Stimulus<FloatIterator>[] stimuli;
 	private final FloatIterator elementsToInsert;
 	private final Set<IteratorFeature> features;
@@ -312,7 +314,7 @@ public abstract class AbstractFloatIteratorTester{
 		}
 
 		try {
-			if (method == nextFloat_METHOD && targetException == null && knownOrder == KnownOrder.UNKNOWN_ORDER) {
+			if (method == NEXT_METHOD && targetException == null && knownOrder == KnownOrder.UNKNOWN_ORDER) {
 				((MultiExceptionListIterator) reference).promoteToNext(targetReturnValue);
 			}
 			
@@ -346,7 +348,7 @@ public abstract class AbstractFloatIteratorTester{
 		referenceException.assertPermitted(targetException);
 	}
 
-	private static final IteratorOperation removeFloat_METHOD = new IteratorOperation() {
+	private static final IteratorOperation REMOVE_METHOD = new IteratorOperation() {
 		@Override
 		public float execute(FloatIterator iterator) {
 			iterator.remove();
@@ -354,14 +356,14 @@ public abstract class AbstractFloatIteratorTester{
 		}
 	};
 
-	private static final IteratorOperation nextFloat_METHOD = new IteratorOperation() {
+	private static final IteratorOperation NEXT_METHOD = new IteratorOperation() {
 		@Override
 		public float execute(FloatIterator iterator) {
 			return iterator.nextFloat();
 		}
 	};
 
-	private static final IteratorOperation previousFloat_METHOD = new IteratorOperation() {
+	private static final IteratorOperation PREVIOUS_METHOD = new IteratorOperation() {
 		@Override
 		public float execute(FloatIterator iterator) {
 			return ((FloatBidirectionalIterator) iterator).previousFloat();
@@ -418,13 +420,13 @@ public abstract class AbstractFloatIteratorTester{
 	Stimulus<FloatIterator> next = new Stimulus<FloatIterator>("next") {
 		@Override
 		void executeAndCompare(FloatListIterator reference, FloatIterator target) {
-			internalExecuteAndCompare(reference, target, nextFloat_METHOD);
+			internalExecuteAndCompare(reference, target, NEXT_METHOD);
 		}
 	};
 	Stimulus<FloatIterator> remove = new Stimulus<FloatIterator>("remove") {
 		@Override
 		void executeAndCompare(FloatListIterator reference, FloatIterator target) {
-			internalExecuteAndCompare(reference, target, removeFloat_METHOD);
+			internalExecuteAndCompare(reference, target, REMOVE_METHOD);
 		}
 	};
 
@@ -442,7 +444,7 @@ public abstract class AbstractFloatIteratorTester{
 	Stimulus<FloatBidirectionalIterator> previous = new Stimulus<FloatBidirectionalIterator>("previous") {
 		@Override
 		void executeAndCompare(FloatListIterator reference, FloatBidirectionalIterator target) {
-			internalExecuteAndCompare(reference, target, previousFloat_METHOD);
+			internalExecuteAndCompare(reference, target, PREVIOUS_METHOD);
 		}
 	};
 	

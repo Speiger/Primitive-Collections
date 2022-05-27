@@ -12,6 +12,7 @@ import com.google.common.collect.testing.features.MapFeature;
 import speiger.src.testers.chars.tests.base.maps.AbstractChar2DoubleMapTester;
 
 @Ignore
+@SuppressWarnings("javadoc")
 public class Char2DoubleMapComputeTester extends AbstractChar2DoubleMapTester
 {
 	@MapFeature.Require({ SUPPORTS_PUT, SUPPORTS_REMOVE })

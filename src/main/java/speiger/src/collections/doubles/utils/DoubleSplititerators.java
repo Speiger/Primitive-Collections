@@ -1,6 +1,7 @@
 package speiger.src.collections.doubles.utils;
 
 import java.util.Comparator;
+import java.util.NoSuchElementException;
 import java.util.Spliterator;
 import java.util.Spliterator.OfDouble;
 import java.util.function.Consumer;
@@ -307,7 +308,11 @@ public class DoubleSplititerators
 		}
 		
 		@Override
-		public double nextDouble() { return array[index++]; }
+		public double nextDouble() {
+			if(!hasNext()) throw new NoSuchElementException();
+			return array[index++];
+		}
+		
 		@Override
 		public boolean hasNext() { return index < fence; }
 	}

@@ -6,6 +6,7 @@ import speiger.src.collections.chars.maps.interfaces.Char2BooleanMap;
 import speiger.src.collections.chars.maps.interfaces.Char2BooleanMap.Entry;
 import speiger.src.collections.chars.maps.interfaces.Char2BooleanSortedMap;
 
+@SuppressWarnings("javadoc")
 public interface TestChar2BooleanSortedMapGenerator extends TestChar2BooleanMapGenerator, TestSortedMapGenerator<Character, Boolean>
 {
 	@Override

@@ -12,6 +12,7 @@ import com.google.common.collect.testing.features.MapFeature;
 import speiger.src.testers.objects.tests.base.maps.AbstractObject2ShortMapTester;
 
 @Ignore
+@SuppressWarnings("javadoc")
 public class Object2ShortMapComputeTester<T> extends AbstractObject2ShortMapTester<T>
 {
 	@MapFeature.Require({ SUPPORTS_PUT, SUPPORTS_REMOVE })

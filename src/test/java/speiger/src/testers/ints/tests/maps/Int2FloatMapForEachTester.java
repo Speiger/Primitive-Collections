@@ -15,6 +15,7 @@ import speiger.src.collections.objects.lists.ObjectList;
 import speiger.src.testers.ints.tests.base.maps.AbstractInt2FloatMapTester;
 
 @Ignore
+@SuppressWarnings("javadoc")
 public class Int2FloatMapForEachTester extends AbstractInt2FloatMapTester
 {
 	@CollectionFeature.Require(KNOWN_ORDER)

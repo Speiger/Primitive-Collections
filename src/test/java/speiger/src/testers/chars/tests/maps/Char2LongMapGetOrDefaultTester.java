@@ -9,6 +9,7 @@ import com.google.common.collect.testing.features.CollectionSize;
 import speiger.src.testers.chars.tests.base.maps.AbstractChar2LongMapTester;
 
 @Ignore
+@SuppressWarnings("javadoc")
 public class Char2LongMapGetOrDefaultTester extends AbstractChar2LongMapTester
 {
 	@CollectionSize.Require(absent = ZERO)

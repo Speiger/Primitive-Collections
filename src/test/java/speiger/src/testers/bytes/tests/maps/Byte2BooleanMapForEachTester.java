@@ -15,6 +15,7 @@ import speiger.src.collections.objects.lists.ObjectList;
 import speiger.src.testers.bytes.tests.base.maps.AbstractByte2BooleanMapTester;
 
 @Ignore
+@SuppressWarnings("javadoc")
 public class Byte2BooleanMapForEachTester extends AbstractByte2BooleanMapTester
 {
 	@CollectionFeature.Require(KNOWN_ORDER)

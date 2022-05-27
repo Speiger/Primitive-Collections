@@ -25,6 +25,7 @@ import speiger.src.testers.objects.generators.TestObjectSetGenerator;
 import speiger.src.testers.objects.generators.TestObjectSortedSetGenerator;
 import speiger.src.testers.utils.SpecialFeature;
 
+@SuppressWarnings("javadoc")
 public class Object2DoubleSortedMapTestSuiteBuilder<T> extends Object2DoubleMapTestSuiteBuilder<T> {
 	public static <T> Object2DoubleSortedMapTestSuiteBuilder<T> using(TestObject2DoubleSortedMapGenerator<T> generator) {
 		return (Object2DoubleSortedMapTestSuiteBuilder<T>) new Object2DoubleSortedMapTestSuiteBuilder<T>().usingGenerator(generator);

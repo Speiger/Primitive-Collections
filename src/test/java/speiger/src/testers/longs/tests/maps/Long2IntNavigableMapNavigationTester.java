@@ -23,6 +23,7 @@ import speiger.src.testers.longs.tests.base.maps.AbstractLong2IntMapTester;
 import speiger.src.testers.objects.utils.ObjectHelpers;
 
 @Ignore
+@SuppressWarnings("javadoc")
 public class Long2IntNavigableMapNavigationTester extends AbstractLong2IntMapTester
 {
 	private Long2IntNavigableMap navigableMap;

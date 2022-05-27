@@ -69,6 +69,7 @@ import speiger.src.testers.shorts.tests.list.ShortListSwapRemoveAtIndexTester;
 import speiger.src.testers.shorts.tests.list.ShortListSwapRemoveTester;
 import speiger.src.testers.shorts.tests.list.ShortListToArrayTester;
 
+@SuppressWarnings("javadoc")
 public class ShortListTestSuiteBuilder extends ShortCollectionTestSuiteBuilder {
 	public static ShortListTestSuiteBuilder using(TestShortListGenerator generator) {
 		return (ShortListTestSuiteBuilder) new ShortListTestSuiteBuilder().usingGenerator(generator);

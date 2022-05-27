@@ -24,6 +24,7 @@ import speiger.src.testers.ints.tests.base.AbstractIntListTester;
 import speiger.src.testers.ints.utils.IntHelpers;
 
 @Ignore
+@SuppressWarnings("javadoc")
 public class IntListSubListTester extends AbstractIntListTester
 {
 	public void testSubList_startNegative() {

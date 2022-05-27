@@ -21,6 +21,7 @@ import speiger.src.testers.bytes.tests.base.maps.AbstractByte2CharMapTester;
 import speiger.src.testers.objects.utils.ObjectHelpers;
 
 @Ignore
+@SuppressWarnings("javadoc")
 public class Byte2CharSortedMapNavigationTester extends AbstractByte2CharMapTester
 {
 	private Byte2CharSortedMap sortedMap;

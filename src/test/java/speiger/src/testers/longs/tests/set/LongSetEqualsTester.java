@@ -10,6 +10,7 @@ import speiger.src.testers.longs.utils.LongHelpers;
 import speiger.src.testers.longs.utils.MinimalLongSet;
 
 @Ignore
+@SuppressWarnings("javadoc")
 public class LongSetEqualsTester extends AbstractLongSetTester
 {
 	public void testEquals_otherSetWithSameElements() {

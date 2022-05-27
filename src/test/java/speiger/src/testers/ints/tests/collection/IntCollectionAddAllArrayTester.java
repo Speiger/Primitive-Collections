@@ -15,6 +15,7 @@ import speiger.src.collections.ints.collections.IntIterator;
 import speiger.src.testers.ints.tests.base.AbstractIntCollectionTester;
 
 @Ignore
+@SuppressWarnings("javadoc")
 public class IntCollectionAddAllArrayTester extends AbstractIntCollectionTester
 {
 	@CollectionFeature.Require(SUPPORTS_ADD)

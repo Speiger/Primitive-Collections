@@ -20,6 +20,7 @@ import speiger.src.testers.bytes.tests.base.maps.AbstractByte2FloatMapTester;
 import speiger.src.testers.objects.utils.MinimalObjectCollection;
 
 @Ignore
+@SuppressWarnings("javadoc")
 public class Byte2FloatMapPutAllTester extends AbstractByte2FloatMapTester
 {
 	@MapFeature.Require(SUPPORTS_PUT)

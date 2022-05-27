@@ -7,6 +7,7 @@ import speiger.src.collections.longs.lists.LongArrayList;
 import speiger.src.collections.longs.lists.LongList;
 import speiger.src.collections.longs.sets.LongSet;
 
+@SuppressWarnings("javadoc")
 public class MinimalLongSet extends MinimalLongCollection implements LongSet {
 	public static MinimalLongSet of(long...array) {
 		return MinimalLongSet.of(LongArrayList.wrap(array));

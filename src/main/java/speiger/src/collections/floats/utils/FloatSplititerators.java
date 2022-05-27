@@ -1,6 +1,7 @@
 package speiger.src.collections.floats.utils;
 
 import java.util.Comparator;
+import java.util.NoSuchElementException;
 import java.util.Spliterator;
 import java.util.Spliterator.OfDouble;
 import java.util.function.Consumer;
@@ -307,7 +308,11 @@ public class FloatSplititerators
 		}
 		
 		@Override
-		public float nextFloat() { return array[index++]; }
+		public float nextFloat() {
+			if(!hasNext()) throw new NoSuchElementException();
+			return array[index++];
+		}
+		
 		@Override
 		public boolean hasNext() { return index < fence; }
 	}

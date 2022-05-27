@@ -12,6 +12,7 @@ import junit.framework.AssertionFailedError;
 import speiger.src.testers.longs.tests.base.maps.AbstractLong2CharMapTester;
 
 @Ignore
+@SuppressWarnings("javadoc")
 public class Long2CharMapSupplyIfAbsentTester extends AbstractLong2CharMapTester
 {
 	@MapFeature.Require(SUPPORTS_PUT)

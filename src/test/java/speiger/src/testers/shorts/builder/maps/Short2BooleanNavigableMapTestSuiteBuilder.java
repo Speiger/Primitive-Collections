@@ -19,6 +19,7 @@ import speiger.src.testers.shorts.impl.maps.DerivedShort2BooleanMapGenerators;
 import speiger.src.testers.shorts.tests.maps.Short2BooleanNavigableMapNavigationTester;
 import speiger.src.testers.utils.SpecialFeature;
 
+@SuppressWarnings("javadoc")
 public class Short2BooleanNavigableMapTestSuiteBuilder extends Short2BooleanSortedMapTestSuiteBuilder
 {
 	public static Short2BooleanNavigableMapTestSuiteBuilder using(TestShort2BooleanSortedMapGenerator generator) {

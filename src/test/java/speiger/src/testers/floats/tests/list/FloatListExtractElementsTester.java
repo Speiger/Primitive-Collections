@@ -12,6 +12,7 @@ import speiger.src.collections.floats.lists.FloatArrayList;
 import speiger.src.testers.floats.tests.base.AbstractFloatListTester;
 
 @Ignore
+@SuppressWarnings("javadoc")
 public class FloatListExtractElementsTester extends AbstractFloatListTester
 {
 	@CollectionFeature.Require(SUPPORTS_REMOVE)

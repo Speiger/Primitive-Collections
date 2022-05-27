@@ -9,6 +9,7 @@ import com.google.common.collect.testing.features.CollectionSize;
 import speiger.src.testers.ints.tests.base.AbstractIntCollectionTester;
 
 @Ignore
+@SuppressWarnings("javadoc")
 public class IntCollectionContainsTester extends AbstractIntCollectionTester
 {
 	@CollectionSize.Require(absent = ZERO)

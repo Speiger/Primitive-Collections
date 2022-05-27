@@ -7,6 +7,7 @@ import speiger.src.collections.floats.lists.FloatArrayList;
 import speiger.src.collections.floats.lists.FloatList;
 import speiger.src.collections.floats.sets.FloatSet;
 
+@SuppressWarnings("javadoc")
 public class MinimalFloatSet extends MinimalFloatCollection implements FloatSet {
 	public static MinimalFloatSet of(float...array) {
 		return MinimalFloatSet.of(FloatArrayList.wrap(array));

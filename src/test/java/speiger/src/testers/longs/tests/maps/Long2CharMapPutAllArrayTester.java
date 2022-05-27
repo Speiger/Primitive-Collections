@@ -20,6 +20,7 @@ import speiger.src.testers.longs.tests.base.maps.AbstractLong2CharMapTester;
 import speiger.src.testers.objects.utils.MinimalObjectCollection;
 
 @Ignore
+@SuppressWarnings("javadoc")
 public class Long2CharMapPutAllArrayTester extends AbstractLong2CharMapTester
 {
 	@MapFeature.Require(SUPPORTS_PUT)

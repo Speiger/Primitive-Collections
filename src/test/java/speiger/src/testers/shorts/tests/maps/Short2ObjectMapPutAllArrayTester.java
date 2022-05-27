@@ -20,6 +20,7 @@ import speiger.src.testers.shorts.tests.base.maps.AbstractShort2ObjectMapTester;
 import speiger.src.testers.objects.utils.MinimalObjectCollection;
 
 @Ignore
+@SuppressWarnings("javadoc")
 public class Short2ObjectMapPutAllArrayTester<V> extends AbstractShort2ObjectMapTester<V>
 {
 	@MapFeature.Require(SUPPORTS_PUT)

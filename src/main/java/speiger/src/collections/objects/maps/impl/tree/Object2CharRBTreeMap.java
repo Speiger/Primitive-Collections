@@ -324,7 +324,7 @@ public class Object2CharRBTreeMap<T> extends AbstractObject2CharMap<T> implement
 	
 	@Override
 	public T pollFirstKey() {
-		if(tree == null) return null;
+		if(tree == null) return getDefaultMinValue();
 		T result = first.key;
 		removeNode(first);
 		return result;
@@ -338,7 +338,7 @@ public class Object2CharRBTreeMap<T> extends AbstractObject2CharMap<T> implement
 	
 	@Override
 	public T pollLastKey() {
-		if(tree == null) return null;
+		if(tree == null) return getDefaultMaxValue();
 		T result = last.key;
 		removeNode(last);
 		return result;
@@ -962,6 +962,7 @@ public class Object2CharRBTreeMap<T> extends AbstractObject2CharMap<T> implement
 		public T ceiling(T e) { return map.ceilingKey(e); }
 		@Override
 		public T higher(T e) { return map.higherKey(e); }
+		
 		@Override
 		public T pollFirst() { return map.pollFirstKey(); }
 		@Override
@@ -1363,8 +1364,8 @@ public class Object2CharRBTreeMap<T> extends AbstractObject2CharMap<T> implement
 		protected abstract ObjectBidirectionalIterator<T> keyIterator(T element);
 		protected abstract CharBidirectionalIterator valueIterator();
 		protected abstract ObjectBidirectionalIterator<T> descendingKeyIterator();
-		protected T lowKeyOrNull(Node<T> entry) { return entry == null ? null : entry.key; }
-		protected T highKeyOrNull(Node<T> entry) { return entry == null ? null : entry.key; }
+		protected T lowKeyOrNull(Node<T> entry) { return entry == null ? getDefaultMinValue() : entry.key; }
+		protected T highKeyOrNull(Node<T> entry) { return entry == null ? getDefaultMaxValue() : entry.key; }
 		protected Node<T> next(Node<T> entry) { return entry.next(); }
 		protected Node<T> previous(Node<T> entry) { return entry.previous(); }
 		
@@ -1435,7 +1436,7 @@ public class Object2CharRBTreeMap<T> extends AbstractObject2CharMap<T> implement
 				map.removeNode(entry);
 				return result;
 			}
-			return null;
+			return getDefaultMinValue();
 		}
 		
 		@Override
@@ -1446,7 +1447,7 @@ public class Object2CharRBTreeMap<T> extends AbstractObject2CharMap<T> implement
 				map.removeNode(entry);
 				return result;
 			}
-			return null;
+			return getDefaultMaxValue();
 		}
 		
 		@Override
@@ -1524,7 +1525,7 @@ public class Object2CharRBTreeMap<T> extends AbstractObject2CharMap<T> implement
 		
 		@Override
 		public char remOrDefault(T key, char defaultValue) {
-			return inRange(key) ? map.rem(key) : defaultValue;
+			return inRange(key) ? map.remOrDefault(key, defaultValue) : defaultValue;
 		}
 		
 		@Override

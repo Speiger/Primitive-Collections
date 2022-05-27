@@ -5,6 +5,7 @@ import org.junit.Ignore;
 import speiger.src.testers.bytes.tests.base.maps.AbstractByte2CharMapTester;
 
 @Ignore
+@SuppressWarnings("javadoc")
 public class Byte2CharMapSizeTester extends AbstractByte2CharMapTester {
 	
 	public void testSize() {

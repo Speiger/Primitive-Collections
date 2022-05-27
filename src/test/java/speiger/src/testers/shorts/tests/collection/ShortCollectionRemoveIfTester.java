@@ -17,6 +17,7 @@ import speiger.src.collections.shorts.collections.ShortIterator;
 import speiger.src.testers.shorts.tests.base.AbstractShortCollectionTester;
 
 @Ignore
+@SuppressWarnings("javadoc")
 public class ShortCollectionRemoveIfTester extends AbstractShortCollectionTester
 {
 	@CollectionFeature.Require(SUPPORTS_ITERATOR_REMOVE)

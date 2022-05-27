@@ -16,7 +16,9 @@ import speiger.src.testers.ints.builder.IntListTestSuiteBuilder;
 import speiger.src.testers.ints.impl.SimpleIntTestGenerator;
 import speiger.src.testers.utils.SpecialFeature;
 
-public class IntListTests extends TestCase {
+@SuppressWarnings("javadoc")
+public class IntListTests extends TestCase
+{
 	
 	public static Test suite() {
 		TestSuite suite = new TestSuite("IntLists");

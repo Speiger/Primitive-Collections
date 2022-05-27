@@ -9,6 +9,7 @@ import com.google.common.collect.testing.features.CollectionSize;
 import speiger.src.testers.longs.tests.base.maps.AbstractLong2IntMapTester;
 
 @Ignore
+@SuppressWarnings("javadoc")
 public class Long2IntMapContainsKeyTester extends AbstractLong2IntMapTester
 {
 	@CollectionSize.Require(absent = ZERO)

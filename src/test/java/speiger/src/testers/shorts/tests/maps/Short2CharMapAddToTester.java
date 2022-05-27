@@ -18,12 +18,13 @@ import speiger.src.collections.shorts.maps.interfaces.Short2CharMap;
 import speiger.src.testers.shorts.tests.base.maps.AbstractShort2CharMapTester;
 
 @Ignore
+@SuppressWarnings("javadoc")
 public class Short2CharMapAddToTester extends AbstractShort2CharMapTester
 {	@MapFeature.Require(SUPPORTS_PUT)
 	@CollectionSize.Require(absent = ZERO)
 	public void testAddTo_supportedPresent() {
 		assertEquals("addTo(present, value) should return the old value", v0(), getMap().addTo(k0(), v3()));
-		expectReplacement(entry(k0(), v3()));
+		expectReplacement(entry(k0(), (char)(v0()+v3())));
 	}
 	
 	@MapFeature.Require(SUPPORTS_PUT)

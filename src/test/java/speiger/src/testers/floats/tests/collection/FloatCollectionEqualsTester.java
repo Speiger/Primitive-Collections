@@ -5,6 +5,7 @@ import org.junit.Ignore;
 import speiger.src.testers.floats.tests.base.AbstractFloatCollectionTester;
 
 @Ignore
+@SuppressWarnings("javadoc")
 public class FloatCollectionEqualsTester extends AbstractFloatCollectionTester
 {
 	public void testEquals_self() {

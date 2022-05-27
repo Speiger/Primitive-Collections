@@ -11,6 +11,7 @@ import speiger.src.testers.longs.generators.TestLongOrderedSetGenerator;
 import speiger.src.testers.longs.tests.set.LongOrderedSetMoveTester;
 import speiger.src.testers.longs.tests.set.LongOrderedSetNavigationTester;
 
+@SuppressWarnings("javadoc")
 public class LongOrderedSetTestSuiteBuilder extends LongSetTestSuiteBuilder {
 	public static LongOrderedSetTestSuiteBuilder using(TestLongOrderedSetGenerator generator) {
 		return (LongOrderedSetTestSuiteBuilder) new LongOrderedSetTestSuiteBuilder().usingGenerator(generator);

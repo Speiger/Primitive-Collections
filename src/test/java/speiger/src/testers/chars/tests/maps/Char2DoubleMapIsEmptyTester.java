@@ -9,6 +9,7 @@ import com.google.common.collect.testing.features.CollectionSize;
 import speiger.src.testers.chars.tests.base.maps.AbstractChar2DoubleMapTester;
 
 @Ignore
+@SuppressWarnings("javadoc")
 public class Char2DoubleMapIsEmptyTester extends AbstractChar2DoubleMapTester 
 {
 	  @CollectionSize.Require(ZERO)

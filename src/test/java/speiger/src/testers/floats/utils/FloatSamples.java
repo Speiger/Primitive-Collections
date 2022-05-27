@@ -7,6 +7,7 @@ import speiger.src.collections.floats.collections.FloatIterator;
 import speiger.src.collections.floats.lists.FloatArrayList;
 import speiger.src.collections.floats.lists.FloatList;
 
+@SuppressWarnings("javadoc")
 public class FloatSamples implements FloatIterable
 {
 	private final float e0;

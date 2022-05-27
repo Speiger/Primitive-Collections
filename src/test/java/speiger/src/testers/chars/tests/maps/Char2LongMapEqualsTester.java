@@ -11,6 +11,7 @@ import speiger.src.testers.chars.tests.base.maps.AbstractChar2LongMapTester;
 import speiger.src.testers.objects.utils.ObjectHelpers;
 
 @Ignore
+@SuppressWarnings("javadoc")
 public class Char2LongMapEqualsTester extends AbstractChar2LongMapTester 
 {
 	public void testEquals_otherMapWithSameEntries() {

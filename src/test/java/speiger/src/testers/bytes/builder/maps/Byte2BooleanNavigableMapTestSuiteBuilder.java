@@ -19,6 +19,7 @@ import speiger.src.testers.bytes.impl.maps.DerivedByte2BooleanMapGenerators;
 import speiger.src.testers.bytes.tests.maps.Byte2BooleanNavigableMapNavigationTester;
 import speiger.src.testers.utils.SpecialFeature;
 
+@SuppressWarnings("javadoc")
 public class Byte2BooleanNavigableMapTestSuiteBuilder extends Byte2BooleanSortedMapTestSuiteBuilder
 {
 	public static Byte2BooleanNavigableMapTestSuiteBuilder using(TestByte2BooleanSortedMapGenerator generator) {

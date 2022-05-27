@@ -12,6 +12,7 @@ import speiger.src.collections.booleans.lists.BooleanList;
 import speiger.src.collections.booleans.lists.BooleanListIterator;
 import speiger.src.collections.booleans.utils.BooleanIterators;
 
+@SuppressWarnings("javadoc")
 public class BooleanHelpers {
 	public static boolean equals(boolean key, boolean value) {
 		return key == value;

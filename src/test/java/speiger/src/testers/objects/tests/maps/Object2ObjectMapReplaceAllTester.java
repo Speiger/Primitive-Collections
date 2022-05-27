@@ -17,6 +17,7 @@ import speiger.src.testers.objects.utils.ObjectSamples;
 import speiger.src.testers.objects.tests.base.maps.AbstractObject2ObjectMapTester;
 
 @Ignore
+@SuppressWarnings("javadoc")
 public class Object2ObjectMapReplaceAllTester<T, V> extends AbstractObject2ObjectMapTester<T, V>
 {
 	private ObjectSamples<T> keys() {

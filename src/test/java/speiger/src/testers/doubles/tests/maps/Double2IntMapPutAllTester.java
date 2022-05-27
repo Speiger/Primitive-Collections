@@ -20,6 +20,7 @@ import speiger.src.testers.doubles.tests.base.maps.AbstractDouble2IntMapTester;
 import speiger.src.testers.objects.utils.MinimalObjectCollection;
 
 @Ignore
+@SuppressWarnings("javadoc")
 public class Double2IntMapPutAllTester extends AbstractDouble2IntMapTester
 {
 	@MapFeature.Require(SUPPORTS_PUT)

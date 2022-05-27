@@ -18,7 +18,9 @@ import speiger.src.testers.ints.tests.base.AbstractIntSetTester;
 import speiger.src.testers.ints.utils.IntHelpers;
 
 @Ignore
-public class IntSortedSetNaviationTester extends AbstractIntSetTester {
+@SuppressWarnings("javadoc")
+public class IntSortedSetNaviationTester extends AbstractIntSetTester
+{
 	private IntSortedSet sortedSet;
 	private IntList values;
 	private int a;

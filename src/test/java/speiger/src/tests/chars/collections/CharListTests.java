@@ -16,7 +16,9 @@ import speiger.src.testers.chars.builder.CharListTestSuiteBuilder;
 import speiger.src.testers.chars.impl.SimpleCharTestGenerator;
 import speiger.src.testers.utils.SpecialFeature;
 
-public class CharListTests extends TestCase {
+@SuppressWarnings("javadoc")
+public class CharListTests extends TestCase
+{
 	
 	public static Test suite() {
 		TestSuite suite = new TestSuite("CharLists");

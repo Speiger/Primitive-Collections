@@ -25,6 +25,7 @@ import speiger.src.testers.floats.generators.TestFloatSetGenerator;
 import speiger.src.testers.floats.generators.TestFloatSortedSetGenerator;
 import speiger.src.testers.utils.SpecialFeature;
 
+@SuppressWarnings("javadoc")
 public class Float2BooleanSortedMapTestSuiteBuilder extends Float2BooleanMapTestSuiteBuilder {
 	public static Float2BooleanSortedMapTestSuiteBuilder using(TestFloat2BooleanSortedMapGenerator generator) {
 		return (Float2BooleanSortedMapTestSuiteBuilder) new Float2BooleanSortedMapTestSuiteBuilder().usingGenerator(generator);

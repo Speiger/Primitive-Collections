@@ -7,7 +7,9 @@ import speiger.src.collections.doubles.maps.interfaces.Double2BooleanMap;
 import speiger.src.testers.doubles.tests.base.maps.AbstractDouble2BooleanMapTester;
 
 @Ignore
-public class Double2BooleanMapHashCodeTester extends AbstractDouble2BooleanMapTester {
+@SuppressWarnings("javadoc")
+public class Double2BooleanMapHashCodeTester extends AbstractDouble2BooleanMapTester
+{
 	public void testHashCode() {
 		int expectedHashCode = 0;
 		for (Double2BooleanMap.Entry entry : getSampleEntries()) {

@@ -18,6 +18,7 @@ import speiger.src.testers.floats.generators.TestFloatSortedSetGenerator;
 import speiger.src.testers.floats.impl.FloatSortedSetSubsetTestSetGenerator;
 import speiger.src.testers.floats.tests.set.FloatSortedSetNaviationTester;
 
+@SuppressWarnings("javadoc")
 public class FloatSortedSetTestSuiteBuilder extends FloatSetTestSuiteBuilder {
 	public static FloatSortedSetTestSuiteBuilder using(TestFloatSortedSetGenerator generator) {
 		return (FloatSortedSetTestSuiteBuilder) new FloatSortedSetTestSuiteBuilder().usingGenerator(generator);

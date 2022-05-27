@@ -2,6 +2,7 @@ package speiger.src.testers.longs.generators;
 
 import speiger.src.collections.longs.sets.LongSortedSet;
 
+@SuppressWarnings("javadoc")
 public interface TestLongSortedSetGenerator extends TestLongSetGenerator {
 	@Override
 	LongSortedSet create(long... elements);

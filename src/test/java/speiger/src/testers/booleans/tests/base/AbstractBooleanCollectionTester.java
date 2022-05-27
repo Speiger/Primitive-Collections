@@ -5,6 +5,7 @@ import org.junit.Ignore;
 import speiger.src.collections.booleans.collections.BooleanCollection;
 
 @Ignore
+@SuppressWarnings("javadoc")
 public class AbstractBooleanCollectionTester extends AbstractBooleanContainerTester<BooleanCollection>
 {
 	protected BooleanCollection collection;

@@ -5,6 +5,7 @@ import org.junit.Ignore;
 import speiger.src.testers.chars.tests.base.AbstractCharCollectionTester;
 
 @Ignore
+@SuppressWarnings("javadoc")
 public class CharCollectionEqualsTester extends AbstractCharCollectionTester
 {
 	public void testEquals_self() {

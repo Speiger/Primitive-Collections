@@ -12,6 +12,7 @@ import com.google.common.collect.testing.features.CollectionSize;
 import speiger.src.testers.booleans.tests.base.AbstractBooleanListTester;
 
 @Ignore
+@SuppressWarnings("javadoc")
 public class BooleanListSwapRemoveTester extends AbstractBooleanListTester
 {
 	@CollectionFeature.Require(SUPPORTS_REMOVE)

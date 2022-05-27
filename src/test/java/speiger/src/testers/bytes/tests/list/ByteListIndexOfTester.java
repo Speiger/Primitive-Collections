@@ -12,6 +12,7 @@ import com.google.common.collect.testing.features.CollectionSize;
 import speiger.src.testers.bytes.tests.base.AbstractByteListIndexOfTester;
 
 @Ignore
+@SuppressWarnings("javadoc")
 public class ByteListIndexOfTester extends AbstractByteListIndexOfTester
 {
 	@Override

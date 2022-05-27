@@ -7,6 +7,7 @@ import speiger.src.collections.longs.collections.LongIterator;
 import speiger.src.collections.longs.lists.LongArrayList;
 import speiger.src.collections.longs.lists.LongList;
 
+@SuppressWarnings("javadoc")
 public class LongSamples implements LongIterable
 {
 	private final long e0;

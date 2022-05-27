@@ -11,6 +11,7 @@ import speiger.src.testers.shorts.tests.base.maps.AbstractShort2DoubleMapTester;
 import speiger.src.testers.objects.utils.ObjectHelpers;
 
 @Ignore
+@SuppressWarnings("javadoc")
 public class Short2DoubleMapEqualsTester extends AbstractShort2DoubleMapTester 
 {
 	public void testEquals_otherMapWithSameEntries() {

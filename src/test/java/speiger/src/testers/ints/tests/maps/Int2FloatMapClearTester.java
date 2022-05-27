@@ -19,6 +19,7 @@ import speiger.src.collections.objects.collections.ObjectIterator;
 import speiger.src.testers.ints.tests.base.maps.AbstractInt2FloatMapTester;
 
 @Ignore
+@SuppressWarnings("javadoc")
 public class Int2FloatMapClearTester extends AbstractInt2FloatMapTester 
 {
 	@MapFeature.Require(SUPPORTS_REMOVE)

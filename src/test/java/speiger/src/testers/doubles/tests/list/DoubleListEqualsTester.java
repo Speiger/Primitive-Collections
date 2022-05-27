@@ -10,6 +10,7 @@ import speiger.src.testers.doubles.tests.base.AbstractDoubleListTester;
 import speiger.src.testers.doubles.utils.MinimalDoubleSet;
 
 @Ignore
+@SuppressWarnings("javadoc")
 public class DoubleListEqualsTester extends AbstractDoubleListTester
 {
 	public void testEquals_otherListWithSameElements() {

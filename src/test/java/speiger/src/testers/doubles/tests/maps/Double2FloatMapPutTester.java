@@ -18,6 +18,7 @@ import speiger.src.collections.doubles.maps.interfaces.Double2FloatMap;
 import speiger.src.testers.doubles.tests.base.maps.AbstractDouble2FloatMapTester;
 
 @Ignore
+@SuppressWarnings("javadoc")
 public class Double2FloatMapPutTester extends AbstractDouble2FloatMapTester
 {	
 	@MapFeature.Require(SUPPORTS_PUT)

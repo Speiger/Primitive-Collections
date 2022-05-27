@@ -19,6 +19,7 @@ import speiger.src.testers.doubles.tests.base.AbstractDoubleListTester;
 import speiger.src.testers.doubles.utils.DoubleHelpers;
 
 @Ignore
+@SuppressWarnings("javadoc")
 public class DoubleListSwapRemoveAtIndexTester extends AbstractDoubleListTester
 {
 	@ListFeature.Require(absent = SUPPORTS_REMOVE_WITH_INDEX)

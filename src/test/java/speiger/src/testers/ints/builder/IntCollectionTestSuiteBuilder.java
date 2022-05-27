@@ -24,6 +24,7 @@ import speiger.src.testers.ints.tests.collection.IntCollectionStreamTester;
 import speiger.src.testers.ints.tests.collection.IntCollectionRetainAllTester;
 import speiger.src.testers.ints.tests.collection.IntCollectionToArrayTester;
 
+@SuppressWarnings("javadoc")
 public class IntCollectionTestSuiteBuilder extends CollectionTestSuiteBuilder<Integer> {
 	public static IntCollectionTestSuiteBuilder using(TestIntCollectionGenerator generator) {
 		return (IntCollectionTestSuiteBuilder) new IntCollectionTestSuiteBuilder().usingGenerator(generator);

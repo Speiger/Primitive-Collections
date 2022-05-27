@@ -12,6 +12,7 @@ import com.google.common.collect.testing.features.ListFeature;
 import speiger.src.testers.booleans.tests.base.AbstractBooleanListTester;
 
 @Ignore
+@SuppressWarnings("javadoc")
 public class BooleanListAddAllArrayAtIndexTester extends AbstractBooleanListTester
 {
 	@ListFeature.Require(SUPPORTS_ADD_WITH_INDEX)

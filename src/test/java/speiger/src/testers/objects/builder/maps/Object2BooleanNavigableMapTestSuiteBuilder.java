@@ -19,6 +19,7 @@ import speiger.src.testers.objects.impl.maps.DerivedObject2BooleanMapGenerators;
 import speiger.src.testers.objects.tests.maps.Object2BooleanNavigableMapNavigationTester;
 import speiger.src.testers.utils.SpecialFeature;
 
+@SuppressWarnings("javadoc")
 public class Object2BooleanNavigableMapTestSuiteBuilder<T> extends Object2BooleanSortedMapTestSuiteBuilder<T>
 {
 	public static <T> Object2BooleanNavigableMapTestSuiteBuilder<T> using(TestObject2BooleanSortedMapGenerator<T> generator) {

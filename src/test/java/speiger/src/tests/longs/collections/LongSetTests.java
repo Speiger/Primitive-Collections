@@ -27,7 +27,9 @@ import speiger.src.testers.longs.builder.LongSortedSetTestSuiteBuilder;
 import speiger.src.testers.longs.impl.SimpleLongTestGenerator;
 import speiger.src.testers.utils.SpecialFeature;
 
-public class LongSetTests extends TestCase {
+@SuppressWarnings("javadoc")
+public class LongSetTests extends TestCase
+{
 	
 	public static Test suite() {
 		TestSuite suite = new TestSuite("LongSets");

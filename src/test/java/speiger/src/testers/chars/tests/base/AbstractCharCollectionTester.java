@@ -5,6 +5,7 @@ import org.junit.Ignore;
 import speiger.src.collections.chars.collections.CharCollection;
 
 @Ignore
+@SuppressWarnings("javadoc")
 public class AbstractCharCollectionTester extends AbstractCharContainerTester<CharCollection>
 {
 	protected CharCollection collection;

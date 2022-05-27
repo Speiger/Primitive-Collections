@@ -15,6 +15,7 @@ import speiger.src.collections.objects.lists.ObjectList;
 import speiger.src.testers.bytes.tests.base.maps.AbstractByte2DoubleMapTester;
 
 @Ignore
+@SuppressWarnings("javadoc")
 public class Byte2DoubleMapForEachTester extends AbstractByte2DoubleMapTester
 {
 	@CollectionFeature.Require(KNOWN_ORDER)

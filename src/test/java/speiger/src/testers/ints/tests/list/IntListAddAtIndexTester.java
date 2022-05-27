@@ -17,6 +17,7 @@ import speiger.src.collections.ints.collections.IntIterator;
 import speiger.src.testers.ints.tests.base.AbstractIntListTester;
 
 @Ignore
+@SuppressWarnings("javadoc")
 public class IntListAddAtIndexTester extends AbstractIntListTester
 {
 	@ListFeature.Require(SUPPORTS_ADD_WITH_INDEX)

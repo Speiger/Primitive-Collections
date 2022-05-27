@@ -16,6 +16,7 @@ import speiger.src.collections.longs.maps.interfaces.Long2ObjectMap;
 import speiger.src.testers.longs.tests.base.maps.AbstractLong2ObjectMapTester;
 
 @Ignore
+@SuppressWarnings("javadoc")
 public class Long2ObjectMapToStringTester<V> extends AbstractLong2ObjectMapTester<V>
 {
 	public void testToString_minimal() {

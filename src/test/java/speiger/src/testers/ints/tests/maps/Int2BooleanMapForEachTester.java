@@ -15,6 +15,7 @@ import speiger.src.collections.objects.lists.ObjectList;
 import speiger.src.testers.ints.tests.base.maps.AbstractInt2BooleanMapTester;
 
 @Ignore
+@SuppressWarnings("javadoc")
 public class Int2BooleanMapForEachTester extends AbstractInt2BooleanMapTester
 {
 	@CollectionFeature.Require(KNOWN_ORDER)

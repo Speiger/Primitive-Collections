@@ -16,6 +16,7 @@ import speiger.src.collections.objects.maps.interfaces.Object2IntMap;
 import speiger.src.testers.objects.tests.base.maps.AbstractObject2IntMapTester;
 
 @Ignore
+@SuppressWarnings("javadoc")
 public class Object2IntMapToStringTester<T> extends AbstractObject2IntMapTester<T>
 {
 	public void testToString_minimal() {

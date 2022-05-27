@@ -18,6 +18,7 @@ import speiger.src.collections.chars.maps.interfaces.Char2DoubleMap;
 import speiger.src.testers.chars.tests.base.maps.AbstractChar2DoubleMapTester;
 
 @Ignore
+@SuppressWarnings("javadoc")
 public class Char2DoubleMapAddToTester extends AbstractChar2DoubleMapTester
 {	@MapFeature.Require(SUPPORTS_PUT)
 	@CollectionSize.Require(absent = ZERO)

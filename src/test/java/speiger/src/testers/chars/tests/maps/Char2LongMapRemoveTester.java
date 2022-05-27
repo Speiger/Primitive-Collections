@@ -19,6 +19,7 @@ import speiger.src.collections.objects.collections.ObjectIterator;
 import speiger.src.testers.chars.tests.base.maps.AbstractChar2LongMapTester;
 
 @Ignore
+@SuppressWarnings("javadoc")
 public class Char2LongMapRemoveTester extends AbstractChar2LongMapTester
 {
 	@MapFeature.Require(SUPPORTS_REMOVE)

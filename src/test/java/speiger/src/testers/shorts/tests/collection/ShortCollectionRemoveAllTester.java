@@ -20,6 +20,7 @@ import speiger.src.testers.shorts.utils.ShortHelpers;
 import speiger.src.testers.shorts.utils.MinimalShortCollection;
 
 @Ignore
+@SuppressWarnings("javadoc")
 public class ShortCollectionRemoveAllTester extends AbstractShortCollectionTester
 {
 	@CollectionFeature.Require(SUPPORTS_REMOVE)

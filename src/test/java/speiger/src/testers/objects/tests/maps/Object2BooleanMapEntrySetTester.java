@@ -19,6 +19,7 @@ import speiger.src.collections.objects.maps.interfaces.Object2BooleanMap;
 import speiger.src.testers.objects.tests.base.maps.AbstractObject2BooleanMapTester;
 
 @Ignore
+@SuppressWarnings("javadoc")
 public class Object2BooleanMapEntrySetTester<T> extends AbstractObject2BooleanMapTester<T>
 {
 	@CollectionSize.Require(ONE)

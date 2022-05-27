@@ -11,6 +11,7 @@ import com.google.common.collect.testing.features.ListFeature;
 import speiger.src.testers.booleans.tests.base.AbstractBooleanListTester;
 
 @Ignore
+@SuppressWarnings("javadoc")
 public class BooleanListSetTester extends AbstractBooleanListTester
 {
 	@ListFeature.Require(SUPPORTS_SET)

@@ -7,7 +7,9 @@ import speiger.src.collections.ints.maps.interfaces.Int2DoubleMap;
 import speiger.src.testers.ints.tests.base.maps.AbstractInt2DoubleMapTester;
 
 @Ignore
-public class Int2DoubleMapHashCodeTester extends AbstractInt2DoubleMapTester {
+@SuppressWarnings("javadoc")
+public class Int2DoubleMapHashCodeTester extends AbstractInt2DoubleMapTester
+{
 	public void testHashCode() {
 		int expectedHashCode = 0;
 		for (Int2DoubleMap.Entry entry : getSampleEntries()) {

@@ -332,7 +332,7 @@ public class Int2ByteAVLTreeMap extends AbstractInt2ByteMap implements Int2ByteN
 	
 	@Override
 	public int pollFirstIntKey() {
-		if(tree == null) return 0;
+		if(tree == null) return getDefaultMinValue();
 		int result = first.key;
 		removeNode(first);
 		return result;
@@ -346,7 +346,7 @@ public class Int2ByteAVLTreeMap extends AbstractInt2ByteMap implements Int2ByteN
 	
 	@Override
 	public int pollLastIntKey() {
-		if(tree == null) return 0;
+		if(tree == null) return getDefaultMaxValue();
 		int result = last.key;
 		removeNode(last);
 		return result;
@@ -918,6 +918,31 @@ public class Int2ByteAVLTreeMap extends AbstractInt2ByteMap implements Int2ByteN
 		public int ceiling(int e) { return map.ceilingKey(e); }
 		@Override
 		public int higher(int e) { return map.higherKey(e); }
+		
+		@Override
+		public Integer lower(Integer e) {
+			Int2ByteMap.Entry node = map.lowerEntry(e.intValue());
+			return node != null ? node.getKey() : null;
+		}
+		
+		@Override
+		public Integer floor(Integer e) {
+			Int2ByteMap.Entry node = map.floorEntry(e.intValue());
+			return node != null ? node.getKey() : null;
+		}
+		
+		@Override
+		public Integer higher(Integer e) {
+			Int2ByteMap.Entry node = map.higherEntry(e.intValue());
+			return node != null ? node.getKey() : null;
+		}
+		
+		@Override
+		public Integer ceiling(Integer e) {
+			Int2ByteMap.Entry node = map.ceilingEntry(e.intValue());
+			return node != null ? node.getKey() : null;
+		}
+		
 		@Override
 		public int pollFirstInt() { return map.pollFirstIntKey(); }
 		@Override
@@ -1326,8 +1351,8 @@ public class Int2ByteAVLTreeMap extends AbstractInt2ByteMap implements Int2ByteN
 		protected abstract IntBidirectionalIterator keyIterator(int element);
 		protected abstract ByteBidirectionalIterator valueIterator();
 		protected abstract IntBidirectionalIterator descendingKeyIterator();
-		protected int lowKeyOrNull(Node entry) { return entry == null ? 0 : entry.key; }
-		protected int highKeyOrNull(Node entry) { return entry == null ? 0 : entry.key; }
+		protected int lowKeyOrNull(Node entry) { return entry == null ? getDefaultMinValue() : entry.key; }
+		protected int highKeyOrNull(Node entry) { return entry == null ? getDefaultMaxValue() : entry.key; }
 		protected Node next(Node entry) { return entry.next(); }
 		protected Node previous(Node entry) { return entry.previous(); }
 		
@@ -1398,7 +1423,7 @@ public class Int2ByteAVLTreeMap extends AbstractInt2ByteMap implements Int2ByteN
 				map.removeNode(entry);
 				return result;
 			}
-			return 0;
+			return getDefaultMinValue();
 		}
 		
 		@Override
@@ -1409,7 +1434,7 @@ public class Int2ByteAVLTreeMap extends AbstractInt2ByteMap implements Int2ByteN
 				map.removeNode(entry);
 				return result;
 			}
-			return 0;
+			return getDefaultMaxValue();
 		}
 		
 		@Override
@@ -1487,7 +1512,7 @@ public class Int2ByteAVLTreeMap extends AbstractInt2ByteMap implements Int2ByteN
 		
 		@Override
 		public byte removeOrDefault(int key, byte defaultValue) {
-			return inRange(key) ? map.remove(key) : defaultValue;
+			return inRange(key) ? map.removeOrDefault(key, defaultValue) : defaultValue;
 		}
 		
 		@Override
@@ -1963,8 +1988,8 @@ public class Int2ByteAVLTreeMap extends AbstractInt2ByteMap implements Int2ByteN
 			public SubMapEntryIterator(Node first, Node forwardFence, Node backwardFence)
 			{
 				next = first;
-				this.forwardFence = forwardFence == null ? null : forwardFence.key;
-				this.backwardFence = backwardFence == null ? null : backwardFence.key;
+				this.forwardFence = forwardFence == null ? 0 : forwardFence.key;
+				this.backwardFence = backwardFence == null ? 0 : backwardFence.key;
 				unboundForwardFence = forwardFence == null;
 				unboundBackwardFence = backwardFence == null;
 			}

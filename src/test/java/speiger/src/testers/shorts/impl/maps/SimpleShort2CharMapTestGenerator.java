@@ -13,6 +13,7 @@ import speiger.src.testers.shorts.generators.maps.TestShort2CharMapGenerator;
 import speiger.src.testers.shorts.generators.maps.TestShort2CharSortedMapGenerator;
 import speiger.src.testers.objects.utils.ObjectSamples;
 
+@SuppressWarnings("javadoc")
 public class SimpleShort2CharMapTestGenerator<E extends Short2CharMap>
 {
 	BiFunction<short[], char[], E> mapper;

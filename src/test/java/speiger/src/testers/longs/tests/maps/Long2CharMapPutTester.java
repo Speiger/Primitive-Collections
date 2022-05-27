@@ -18,6 +18,7 @@ import speiger.src.collections.longs.maps.interfaces.Long2CharMap;
 import speiger.src.testers.longs.tests.base.maps.AbstractLong2CharMapTester;
 
 @Ignore
+@SuppressWarnings("javadoc")
 public class Long2CharMapPutTester extends AbstractLong2CharMapTester
 {	
 	@MapFeature.Require(SUPPORTS_PUT)

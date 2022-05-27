@@ -19,6 +19,7 @@ import speiger.src.collections.objects.collections.ObjectIterator;
 import speiger.src.testers.doubles.tests.base.maps.AbstractDouble2CharMapTester;
 
 @Ignore
+@SuppressWarnings("javadoc")
 public class Double2CharMapRemoveTester extends AbstractDouble2CharMapTester
 {
 	@MapFeature.Require(SUPPORTS_REMOVE)

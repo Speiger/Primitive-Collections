@@ -18,6 +18,7 @@ import speiger.src.testers.chars.tests.base.maps.AbstractChar2LongMapTester;
 import speiger.src.testers.chars.utils.CharSamples;
 
 @Ignore
+@SuppressWarnings("javadoc")
 public class Char2LongMapReplaceAllTester extends AbstractChar2LongMapTester
 {
 	private CharSamples keys() {

@@ -4,6 +4,7 @@ import com.google.common.collect.testing.TestListGenerator;
 
 import speiger.src.collections.booleans.lists.BooleanList;
 
+@SuppressWarnings("javadoc")
 public interface TestBooleanListGenerator extends TestListGenerator<Boolean>, TestBooleanCollectionGenerator
 {
 	@Override

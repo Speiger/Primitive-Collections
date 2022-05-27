@@ -19,6 +19,7 @@ import speiger.src.testers.longs.tests.base.AbstractLongListTester;
 import speiger.src.testers.longs.utils.LongHelpers;
 
 @Ignore
+@SuppressWarnings("javadoc")
 public class LongListSwapRemoveAtIndexTester extends AbstractLongListTester
 {
 	@ListFeature.Require(absent = SUPPORTS_REMOVE_WITH_INDEX)

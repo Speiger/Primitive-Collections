@@ -11,6 +11,7 @@ import com.google.common.collect.testing.features.MapFeature;
 import speiger.src.testers.longs.tests.base.maps.AbstractLong2CharMapTester;
 
 @Ignore
+@SuppressWarnings("javadoc")
 public class Long2CharMapPutIfAbsentTester extends AbstractLong2CharMapTester
 {
 	@MapFeature.Require(SUPPORTS_PUT)

@@ -5,6 +5,7 @@ import org.junit.Ignore;
 import speiger.src.testers.bytes.tests.base.AbstractByteCollectionTester;
 
 @Ignore
+@SuppressWarnings("javadoc")
 public class ByteCollectionEqualsTester extends AbstractByteCollectionTester
 {
 	public void testEquals_self() {

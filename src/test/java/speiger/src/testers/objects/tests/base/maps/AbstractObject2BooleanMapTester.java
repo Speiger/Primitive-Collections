@@ -20,8 +20,9 @@ import speiger.src.testers.objects.tests.base.AbstractObjectContainerTester;
 import speiger.src.testers.objects.utils.ObjectHelpers;
 
 @Ignore
-public class AbstractObject2BooleanMapTester<T> extends AbstractObjectContainerTester<Object2BooleanMap.Entry<T>, Object2BooleanMap<T>> {
-
+@SuppressWarnings("javadoc")
+public class AbstractObject2BooleanMapTester<T> extends AbstractObjectContainerTester<Object2BooleanMap.Entry<T>, Object2BooleanMap<T>>
+{
 	protected TestObject2BooleanMapGenerator<T> primitiveMapGenerator;
 
 	protected Object2BooleanMap<T> getMap() {

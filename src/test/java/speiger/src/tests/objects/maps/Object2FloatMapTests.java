@@ -23,6 +23,7 @@ import speiger.src.testers.objects.builder.maps.Object2FloatNavigableMapTestSuit
 import speiger.src.testers.objects.impl.maps.SimpleObject2FloatMapTestGenerator;
 import speiger.src.testers.utils.SpecialFeature;
 
+@SuppressWarnings("javadoc")
 public class Object2FloatMapTests extends TestCase
 {
 	public static Test suite() {

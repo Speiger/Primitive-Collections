@@ -12,6 +12,7 @@ import com.google.common.collect.testing.features.CollectionSize;
 import speiger.src.testers.objects.tests.base.AbstractObjectListIndexOfTester;
 
 @Ignore
+@SuppressWarnings("javadoc")
 public class ObjectListLastIndexOfTester<T> extends AbstractObjectListIndexOfTester<T>
 {
 	@Override

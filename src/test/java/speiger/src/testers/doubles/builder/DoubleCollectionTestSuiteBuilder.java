@@ -24,6 +24,7 @@ import speiger.src.testers.doubles.tests.collection.DoubleCollectionStreamTester
 import speiger.src.testers.doubles.tests.collection.DoubleCollectionRetainAllTester;
 import speiger.src.testers.doubles.tests.collection.DoubleCollectionToArrayTester;
 
+@SuppressWarnings("javadoc")
 public class DoubleCollectionTestSuiteBuilder extends CollectionTestSuiteBuilder<Double> {
 	public static DoubleCollectionTestSuiteBuilder using(TestDoubleCollectionGenerator generator) {
 		return (DoubleCollectionTestSuiteBuilder) new DoubleCollectionTestSuiteBuilder().usingGenerator(generator);

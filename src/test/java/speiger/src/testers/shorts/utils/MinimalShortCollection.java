@@ -8,6 +8,7 @@ import speiger.src.collections.shorts.collections.ShortIterator;
 import speiger.src.collections.shorts.functions.ShortConsumer;
 import speiger.src.collections.shorts.lists.ShortArrayList;
 
+@SuppressWarnings("javadoc")
 public class MinimalShortCollection extends AbstractShortCollection {
 
 	private final short[] contents;

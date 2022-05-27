@@ -12,6 +12,7 @@ import speiger.src.testers.floats.tests.base.AbstractFloatSetTester;
 import speiger.src.testers.floats.utils.MinimalFloatCollection;
 
 @Ignore
+@SuppressWarnings("javadoc")
 public class FloatSetAddAllTester extends AbstractFloatSetTester
 {
 	@CollectionFeature.Require(SUPPORTS_ADD)

@@ -10,6 +10,7 @@ import speiger.src.testers.ints.utils.IntHelpers;
 import speiger.src.testers.ints.utils.MinimalIntSet;
 
 @Ignore
+@SuppressWarnings("javadoc")
 public class IntSetEqualsTester extends AbstractIntSetTester
 {
 	public void testEquals_otherSetWithSameElements() {

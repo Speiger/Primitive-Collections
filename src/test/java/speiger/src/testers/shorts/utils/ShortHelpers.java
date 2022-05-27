@@ -14,6 +14,7 @@ import speiger.src.collections.shorts.sets.ShortLinkedOpenHashSet;
 import speiger.src.collections.shorts.sets.ShortSet;
 import speiger.src.collections.shorts.utils.ShortIterators;
 
+@SuppressWarnings("javadoc")
 public class ShortHelpers {
 	public static boolean equals(short key, short value) {
 		return key == value;

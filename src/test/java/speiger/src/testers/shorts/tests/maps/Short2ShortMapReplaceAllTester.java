@@ -17,6 +17,7 @@ import speiger.src.testers.shorts.utils.ShortSamples;
 import speiger.src.testers.shorts.tests.base.maps.AbstractShort2ShortMapTester;
 
 @Ignore
+@SuppressWarnings("javadoc")
 public class Short2ShortMapReplaceAllTester extends AbstractShort2ShortMapTester
 {
 	private ShortSamples keys() {

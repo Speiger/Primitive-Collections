@@ -10,6 +10,7 @@ import speiger.src.collections.objects.lists.ObjectArrayList;
 import speiger.src.testers.objects.tests.base.AbstractObjectListTester;
 
 @Ignore
+@SuppressWarnings("javadoc")
 public class ObjectListToArrayTester<T> extends AbstractObjectListTester<T>
 {
 	public void testToArray_noArg() {

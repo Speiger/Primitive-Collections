@@ -13,6 +13,7 @@ import speiger.src.collections.bytes.lists.ByteArrayList;
 import speiger.src.testers.bytes.tests.base.AbstractByteSetTester;
 
 @Ignore
+@SuppressWarnings("javadoc")
 public class ByteSetCreationTester extends AbstractByteSetTester
 {
 	@CollectionFeature.Require(absent = REJECTS_DUPLICATES_AT_CREATION)

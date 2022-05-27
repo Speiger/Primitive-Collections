@@ -10,6 +10,7 @@ import speiger.src.collections.chars.collections.CharIterable;
 import speiger.src.collections.chars.collections.CharIterator;
 import speiger.src.collections.chars.lists.CharListIterator;
 
+@SuppressWarnings("javadoc")
 public abstract class CharListIteratorTester extends AbstractCharIteratorTester {
 
 	public CharListIteratorTester(int steps, CharIterable elementsToInsertIterable, Iterable<? extends IteratorFeature> features, CharIterable expectedElements, int startIndex) {

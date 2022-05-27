@@ -11,6 +11,7 @@ import com.google.common.collect.testing.features.MapFeature;
 import speiger.src.testers.ints.tests.base.maps.AbstractInt2CharMapTester;
 
 @Ignore
+@SuppressWarnings("javadoc")
 public class Int2CharMapPutIfAbsentTester extends AbstractInt2CharMapTester
 {
 	@MapFeature.Require(SUPPORTS_PUT)

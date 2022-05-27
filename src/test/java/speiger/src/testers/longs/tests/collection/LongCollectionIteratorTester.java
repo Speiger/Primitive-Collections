@@ -24,6 +24,7 @@ import speiger.src.testers.longs.utils.LongHelpers;
 import speiger.src.testers.longs.utils.LongIteratorTester;
 
 @Ignore
+@SuppressWarnings("javadoc")
 public class LongCollectionIteratorTester extends AbstractLongCollectionTester
 {
 	public void testIterator() {

@@ -18,6 +18,7 @@ import speiger.src.collections.longs.maps.interfaces.Long2FloatMap;
 import speiger.src.testers.longs.tests.base.maps.AbstractLong2FloatMapTester;
 
 @Ignore
+@SuppressWarnings("javadoc")
 public class Long2FloatMapAddToTester extends AbstractLong2FloatMapTester
 {	@MapFeature.Require(SUPPORTS_PUT)
 	@CollectionSize.Require(absent = ZERO)

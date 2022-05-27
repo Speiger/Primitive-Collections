@@ -7,6 +7,7 @@ import speiger.src.collections.doubles.collections.DoubleIterator;
 import speiger.src.collections.doubles.lists.DoubleArrayList;
 import speiger.src.collections.doubles.lists.DoubleList;
 
+@SuppressWarnings("javadoc")
 public class DoubleSamples implements DoubleIterable
 {
 	private final double e0;

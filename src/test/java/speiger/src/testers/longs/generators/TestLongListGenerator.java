@@ -4,6 +4,7 @@ import com.google.common.collect.testing.TestListGenerator;
 
 import speiger.src.collections.longs.lists.LongList;
 
+@SuppressWarnings("javadoc")
 public interface TestLongListGenerator extends TestListGenerator<Long>, TestLongCollectionGenerator
 {
 	@Override

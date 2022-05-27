@@ -15,6 +15,7 @@ import speiger.src.testers.objects.generators.maps.TestObject2BooleanMapGenerato
 import speiger.src.testers.objects.generators.maps.TestObject2BooleanSortedMapGenerator;
 import speiger.src.testers.objects.utils.ObjectSamples;
 
+@SuppressWarnings("javadoc")
 public class SimpleObject2BooleanMapTestGenerator<T, E extends Object2BooleanMap<T>>
 {
 	BiFunction<T[], boolean[], E> mapper;

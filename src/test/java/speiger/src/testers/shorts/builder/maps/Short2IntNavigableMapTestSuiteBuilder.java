@@ -19,6 +19,7 @@ import speiger.src.testers.shorts.impl.maps.DerivedShort2IntMapGenerators;
 import speiger.src.testers.shorts.tests.maps.Short2IntNavigableMapNavigationTester;
 import speiger.src.testers.utils.SpecialFeature;
 
+@SuppressWarnings("javadoc")
 public class Short2IntNavigableMapTestSuiteBuilder extends Short2IntSortedMapTestSuiteBuilder
 {
 	public static Short2IntNavigableMapTestSuiteBuilder using(TestShort2IntSortedMapGenerator generator) {

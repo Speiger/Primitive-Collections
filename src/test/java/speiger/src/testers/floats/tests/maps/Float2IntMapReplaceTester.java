@@ -11,6 +11,7 @@ import com.google.common.collect.testing.features.MapFeature;
 import speiger.src.testers.floats.tests.base.maps.AbstractFloat2IntMapTester;
 
 @Ignore
+@SuppressWarnings("javadoc")
 public class Float2IntMapReplaceTester extends AbstractFloat2IntMapTester
 {
 	@MapFeature.Require(SUPPORTS_PUT)

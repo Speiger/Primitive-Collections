@@ -7,7 +7,9 @@ import speiger.src.collections.doubles.maps.interfaces.Double2CharMap;
 import speiger.src.testers.doubles.tests.base.maps.AbstractDouble2CharMapTester;
 
 @Ignore
-public class Double2CharMapHashCodeTester extends AbstractDouble2CharMapTester {
+@SuppressWarnings("javadoc")
+public class Double2CharMapHashCodeTester extends AbstractDouble2CharMapTester
+{
 	public void testHashCode() {
 		int expectedHashCode = 0;
 		for (Double2CharMap.Entry entry : getSampleEntries()) {

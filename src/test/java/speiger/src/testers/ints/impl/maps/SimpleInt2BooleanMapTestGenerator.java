@@ -13,6 +13,7 @@ import speiger.src.testers.ints.generators.maps.TestInt2BooleanMapGenerator;
 import speiger.src.testers.ints.generators.maps.TestInt2BooleanSortedMapGenerator;
 import speiger.src.testers.objects.utils.ObjectSamples;
 
+@SuppressWarnings("javadoc")
 public class SimpleInt2BooleanMapTestGenerator<E extends Int2BooleanMap>
 {
 	BiFunction<int[], boolean[], E> mapper;

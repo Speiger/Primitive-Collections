@@ -19,6 +19,7 @@ import speiger.src.testers.ints.utils.IntSamples;
 import speiger.src.testers.ints.utils.MinimalIntCollection;
 
 @Ignore
+@SuppressWarnings("javadoc")
 public abstract class AbstractIntContainerTester<E> extends AbstractTester<OneSizeTestContainerGenerator<E, Integer>>
 {
 	protected IntSamples samples;

@@ -18,12 +18,13 @@ import speiger.src.collections.bytes.maps.interfaces.Byte2CharMap;
 import speiger.src.testers.bytes.tests.base.maps.AbstractByte2CharMapTester;
 
 @Ignore
+@SuppressWarnings("javadoc")
 public class Byte2CharMapAddToTester extends AbstractByte2CharMapTester
 {	@MapFeature.Require(SUPPORTS_PUT)
 	@CollectionSize.Require(absent = ZERO)
 	public void testAddTo_supportedPresent() {
 		assertEquals("addTo(present, value) should return the old value", v0(), getMap().addTo(k0(), v3()));
-		expectReplacement(entry(k0(), v3()));
+		expectReplacement(entry(k0(), (char)(v0()+v3())));
 	}
 	
 	@MapFeature.Require(SUPPORTS_PUT)

@@ -9,6 +9,7 @@ import com.google.common.collect.testing.features.CollectionSize;
 import speiger.src.testers.floats.tests.base.AbstractFloatCollectionTester;
 
 @Ignore
+@SuppressWarnings("javadoc")
 public class FloatCollectionContainsTester extends AbstractFloatCollectionTester
 {
 	@CollectionSize.Require(absent = ZERO)

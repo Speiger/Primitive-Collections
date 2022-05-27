@@ -29,6 +29,7 @@ import speiger.src.testers.bytes.impl.ByteSortedSetSubsetTestSetGenerator.ByteNa
 import speiger.src.testers.bytes.tests.set.ByteNavigableSetNavigationTester;
 import speiger.src.testers.bytes.utils.ByteSamples;
 
+@SuppressWarnings("javadoc")
 public class ByteNavigableSetTestSuiteBuilder extends ByteSortedSetTestSuiteBuilder {
 	public static ByteNavigableSetTestSuiteBuilder using(TestByteNavigableSetGenerator generator) {
 		return (ByteNavigableSetTestSuiteBuilder) new ByteNavigableSetTestSuiteBuilder().usingGenerator(generator);

@@ -11,6 +11,7 @@ import speiger.src.testers.ints.tests.base.maps.AbstractInt2ObjectMapTester;
 import speiger.src.testers.objects.utils.ObjectHelpers;
 
 @Ignore
+@SuppressWarnings("javadoc")
 public class Int2ObjectMapEqualsTester<V> extends AbstractInt2ObjectMapTester<V> 
 {
 	public void testEquals_otherMapWithSameEntries() {

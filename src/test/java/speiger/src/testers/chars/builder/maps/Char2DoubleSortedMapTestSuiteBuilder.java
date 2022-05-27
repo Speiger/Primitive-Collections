@@ -25,6 +25,7 @@ import speiger.src.testers.chars.generators.TestCharSetGenerator;
 import speiger.src.testers.chars.generators.TestCharSortedSetGenerator;
 import speiger.src.testers.utils.SpecialFeature;
 
+@SuppressWarnings("javadoc")
 public class Char2DoubleSortedMapTestSuiteBuilder extends Char2DoubleMapTestSuiteBuilder {
 	public static Char2DoubleSortedMapTestSuiteBuilder using(TestChar2DoubleSortedMapGenerator generator) {
 		return (Char2DoubleSortedMapTestSuiteBuilder) new Char2DoubleSortedMapTestSuiteBuilder().usingGenerator(generator);

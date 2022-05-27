@@ -236,7 +236,7 @@ public class Object2ObjectRBTreeMap<T, V> extends AbstractObject2ObjectMap<T, V>
 	
 	@Override
 	public T pollFirstKey() {
-		if(tree == null) return null;
+		if(tree == null) return getDefaultMinValue();
 		T result = first.key;
 		removeNode(first);
 		return result;
@@ -250,7 +250,7 @@ public class Object2ObjectRBTreeMap<T, V> extends AbstractObject2ObjectMap<T, V>
 	
 	@Override
 	public T pollLastKey() {
-		if(tree == null) return null;
+		if(tree == null) return getDefaultMaxValue();
 		T result = last.key;
 		removeNode(last);
 		return result;
@@ -874,6 +874,7 @@ public class Object2ObjectRBTreeMap<T, V> extends AbstractObject2ObjectMap<T, V>
 		public T ceiling(T e) { return map.ceilingKey(e); }
 		@Override
 		public T higher(T e) { return map.higherKey(e); }
+		
 		@Override
 		public T pollFirst() { return map.pollFirstKey(); }
 		@Override
@@ -1275,8 +1276,8 @@ public class Object2ObjectRBTreeMap<T, V> extends AbstractObject2ObjectMap<T, V>
 		protected abstract ObjectBidirectionalIterator<T> keyIterator(T element);
 		protected abstract ObjectBidirectionalIterator<V> valueIterator();
 		protected abstract ObjectBidirectionalIterator<T> descendingKeyIterator();
-		protected T lowKeyOrNull(Node<T, V> entry) { return entry == null ? null : entry.key; }
-		protected T highKeyOrNull(Node<T, V> entry) { return entry == null ? null : entry.key; }
+		protected T lowKeyOrNull(Node<T, V> entry) { return entry == null ? getDefaultMinValue() : entry.key; }
+		protected T highKeyOrNull(Node<T, V> entry) { return entry == null ? getDefaultMaxValue() : entry.key; }
 		protected Node<T, V> next(Node<T, V> entry) { return entry.next(); }
 		protected Node<T, V> previous(Node<T, V> entry) { return entry.previous(); }
 		
@@ -1347,7 +1348,7 @@ public class Object2ObjectRBTreeMap<T, V> extends AbstractObject2ObjectMap<T, V>
 				map.removeNode(entry);
 				return result;
 			}
-			return null;
+			return getDefaultMinValue();
 		}
 		
 		@Override
@@ -1358,7 +1359,7 @@ public class Object2ObjectRBTreeMap<T, V> extends AbstractObject2ObjectMap<T, V>
 				map.removeNode(entry);
 				return result;
 			}
-			return null;
+			return getDefaultMaxValue();
 		}
 		
 		@Override
@@ -1424,7 +1425,7 @@ public class Object2ObjectRBTreeMap<T, V> extends AbstractObject2ObjectMap<T, V>
 		
 		@Override
 		public V remOrDefault(T key, V defaultValue) {
-			return inRange(key) ? map.rem(key) : defaultValue;
+			return inRange(key) ? map.remOrDefault(key, defaultValue) : defaultValue;
 		}
 		
 		@Override

@@ -12,6 +12,7 @@ import speiger.src.testers.booleans.tests.base.AbstractBooleanCollectionTester;
 import speiger.src.testers.booleans.utils.BooleanHelpers;
 
 @Ignore
+@SuppressWarnings("javadoc")
 public class BooleanCollectionForEachTester extends AbstractBooleanCollectionTester
 {
 	@CollectionFeature.Require(absent = KNOWN_ORDER)

@@ -13,6 +13,7 @@ import speiger.src.testers.floats.generators.maps.TestFloat2IntMapGenerator;
 import speiger.src.testers.floats.generators.maps.TestFloat2IntSortedMapGenerator;
 import speiger.src.testers.objects.utils.ObjectSamples;
 
+@SuppressWarnings("javadoc")
 public class SimpleFloat2IntMapTestGenerator<E extends Float2IntMap>
 {
 	BiFunction<float[], int[], E> mapper;

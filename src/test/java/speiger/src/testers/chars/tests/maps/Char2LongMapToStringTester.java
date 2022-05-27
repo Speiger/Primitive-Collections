@@ -16,6 +16,7 @@ import speiger.src.collections.chars.maps.interfaces.Char2LongMap;
 import speiger.src.testers.chars.tests.base.maps.AbstractChar2LongMapTester;
 
 @Ignore
+@SuppressWarnings("javadoc")
 public class Char2LongMapToStringTester extends AbstractChar2LongMapTester
 {
 	public void testToString_minimal() {

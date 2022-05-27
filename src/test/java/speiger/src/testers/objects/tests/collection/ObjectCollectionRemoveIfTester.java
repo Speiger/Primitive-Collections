@@ -18,6 +18,7 @@ import speiger.src.collections.objects.collections.ObjectIterator;
 import speiger.src.testers.objects.tests.base.AbstractObjectCollectionTester;
 
 @Ignore
+@SuppressWarnings("javadoc")
 public class ObjectCollectionRemoveIfTester<T> extends AbstractObjectCollectionTester<T>
 {
 	@CollectionFeature.Require(SUPPORTS_ITERATOR_REMOVE)

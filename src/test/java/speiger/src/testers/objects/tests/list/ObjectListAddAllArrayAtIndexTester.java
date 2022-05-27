@@ -13,6 +13,7 @@ import com.google.common.collect.testing.features.ListFeature;
 import speiger.src.testers.objects.tests.base.AbstractObjectListTester;
 
 @Ignore
+@SuppressWarnings("javadoc")
 public class ObjectListAddAllArrayAtIndexTester<T> extends AbstractObjectListTester<T>
 {
 	@ListFeature.Require(SUPPORTS_ADD_WITH_INDEX)

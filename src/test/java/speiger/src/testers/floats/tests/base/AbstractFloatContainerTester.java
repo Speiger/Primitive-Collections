@@ -19,6 +19,7 @@ import speiger.src.testers.floats.utils.FloatSamples;
 import speiger.src.testers.floats.utils.MinimalFloatCollection;
 
 @Ignore
+@SuppressWarnings("javadoc")
 public abstract class AbstractFloatContainerTester<E> extends AbstractTester<OneSizeTestContainerGenerator<E, Float>>
 {
 	protected FloatSamples samples;

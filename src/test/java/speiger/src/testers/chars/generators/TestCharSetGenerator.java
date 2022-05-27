@@ -4,6 +4,7 @@ import com.google.common.collect.testing.TestSetGenerator;
 
 import speiger.src.collections.chars.sets.CharSet;
 
+@SuppressWarnings("javadoc")
 public interface TestCharSetGenerator extends TestCharCollectionGenerator, TestSetGenerator<Character> {
 	@Override
 	CharSet create(char...elements);

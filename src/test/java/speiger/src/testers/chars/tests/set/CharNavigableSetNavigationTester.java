@@ -21,6 +21,7 @@ import speiger.src.testers.chars.tests.base.AbstractCharSetTester;
 import speiger.src.testers.chars.utils.CharHelpers;
 
 @Ignore
+@SuppressWarnings("javadoc")
 public class CharNavigableSetNavigationTester extends AbstractCharSetTester
 {
 	private CharNavigableSet navigableSet;

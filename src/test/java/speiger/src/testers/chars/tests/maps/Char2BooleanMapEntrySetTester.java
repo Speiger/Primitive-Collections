@@ -18,6 +18,7 @@ import speiger.src.collections.chars.maps.interfaces.Char2BooleanMap;
 import speiger.src.testers.chars.tests.base.maps.AbstractChar2BooleanMapTester;
 
 @Ignore
+@SuppressWarnings("javadoc")
 public class Char2BooleanMapEntrySetTester extends AbstractChar2BooleanMapTester
 {
 	@CollectionSize.Require(ONE)

@@ -34,6 +34,7 @@ import speiger.src.testers.ints.tests.set.IntSetCreationTester;
 import speiger.src.testers.ints.tests.set.IntSetEqualsTester;
 import speiger.src.testers.ints.tests.set.IntSetRemoveTester;
 
+@SuppressWarnings("javadoc")
 public class IntSetTestSuiteBuilder extends IntCollectionTestSuiteBuilder {
 	public static IntSetTestSuiteBuilder using(TestIntSetGenerator generator) {
 		return (IntSetTestSuiteBuilder) new IntSetTestSuiteBuilder().usingGenerator(generator);

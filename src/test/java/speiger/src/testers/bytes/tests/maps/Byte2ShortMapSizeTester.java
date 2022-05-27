@@ -5,6 +5,7 @@ import org.junit.Ignore;
 import speiger.src.testers.bytes.tests.base.maps.AbstractByte2ShortMapTester;
 
 @Ignore
+@SuppressWarnings("javadoc")
 public class Byte2ShortMapSizeTester extends AbstractByte2ShortMapTester {
 	
 	public void testSize() {

@@ -19,6 +19,7 @@ import speiger.src.collections.objects.collections.ObjectIterator;
 import speiger.src.testers.floats.tests.base.maps.AbstractFloat2CharMapTester;
 
 @Ignore
+@SuppressWarnings("javadoc")
 public class Float2CharMapRemoveTester extends AbstractFloat2CharMapTester
 {
 	@MapFeature.Require(SUPPORTS_REMOVE)

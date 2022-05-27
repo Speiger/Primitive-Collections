@@ -7,7 +7,9 @@ import speiger.src.collections.longs.maps.interfaces.Long2BooleanMap;
 import speiger.src.testers.longs.tests.base.maps.AbstractLong2BooleanMapTester;
 
 @Ignore
-public class Long2BooleanMapHashCodeTester extends AbstractLong2BooleanMapTester {
+@SuppressWarnings("javadoc")
+public class Long2BooleanMapHashCodeTester extends AbstractLong2BooleanMapTester
+{
 	public void testHashCode() {
 		int expectedHashCode = 0;
 		for (Long2BooleanMap.Entry entry : getSampleEntries()) {

@@ -16,6 +16,7 @@ import speiger.src.collections.floats.maps.interfaces.Float2LongMap;
 import speiger.src.testers.floats.tests.base.maps.AbstractFloat2LongMapTester;
 
 @Ignore
+@SuppressWarnings("javadoc")
 public class Float2LongMapToStringTester extends AbstractFloat2LongMapTester
 {
 	public void testToString_minimal() {

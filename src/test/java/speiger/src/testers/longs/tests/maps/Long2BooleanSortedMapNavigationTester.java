@@ -21,6 +21,7 @@ import speiger.src.testers.longs.tests.base.maps.AbstractLong2BooleanMapTester;
 import speiger.src.testers.objects.utils.ObjectHelpers;
 
 @Ignore
+@SuppressWarnings("javadoc")
 public class Long2BooleanSortedMapNavigationTester extends AbstractLong2BooleanMapTester
 {
 	private Long2BooleanSortedMap sortedMap;

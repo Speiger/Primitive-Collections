@@ -18,6 +18,7 @@ import speiger.src.collections.floats.maps.interfaces.Float2ByteMap;
 import speiger.src.testers.floats.tests.base.maps.AbstractFloat2ByteMapTester;
 
 @Ignore
+@SuppressWarnings("javadoc")
 public class Float2ByteMapPutTester extends AbstractFloat2ByteMapTester
 {	
 	@MapFeature.Require(SUPPORTS_PUT)

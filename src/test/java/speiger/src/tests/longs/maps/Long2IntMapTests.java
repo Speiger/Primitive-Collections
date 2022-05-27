@@ -23,6 +23,7 @@ import speiger.src.testers.longs.builder.maps.Long2IntNavigableMapTestSuiteBuild
 import speiger.src.testers.longs.impl.maps.SimpleLong2IntMapTestGenerator;
 import speiger.src.testers.utils.SpecialFeature;
 
+@SuppressWarnings("javadoc")
 public class Long2IntMapTests extends TestCase
 {
 	public static Test suite() {

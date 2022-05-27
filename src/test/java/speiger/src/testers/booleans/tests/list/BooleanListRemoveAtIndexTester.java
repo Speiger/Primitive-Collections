@@ -19,6 +19,7 @@ import speiger.src.testers.booleans.tests.base.AbstractBooleanListTester;
 import speiger.src.testers.booleans.utils.BooleanHelpers;
 
 @Ignore
+@SuppressWarnings("javadoc")
 public class BooleanListRemoveAtIndexTester extends AbstractBooleanListTester
 {
 	@ListFeature.Require(absent = SUPPORTS_REMOVE_WITH_INDEX)

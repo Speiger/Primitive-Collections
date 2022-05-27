@@ -11,6 +11,7 @@ import com.google.common.collect.testing.features.CollectionSize;
 import speiger.src.testers.floats.tests.base.AbstractFloatSetTester;
 
 @Ignore
+@SuppressWarnings("javadoc")
 public class FloatSetRemoveTester extends AbstractFloatSetTester
 {
 	@CollectionFeature.Require(SUPPORTS_REMOVE)

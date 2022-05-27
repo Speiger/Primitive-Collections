@@ -22,6 +22,7 @@ import speiger.src.testers.chars.utils.CharHelpers;
 import speiger.src.testers.chars.utils.CharListIteratorTester;
 
 @Ignore
+@SuppressWarnings("javadoc")
 public class CharListListIteratorTester extends AbstractCharListTester
 {
 	@CollectionFeature.Require(absent = SUPPORTS_REMOVE)

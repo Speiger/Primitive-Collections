@@ -11,6 +11,7 @@ import com.google.common.collect.testing.features.MapFeature;
 import speiger.src.testers.ints.tests.base.maps.AbstractInt2IntMapTester;
 
 @Ignore
+@SuppressWarnings("javadoc")
 public class Int2IntMapRemoveEntryTester extends AbstractInt2IntMapTester
 {
 	@MapFeature.Require(SUPPORTS_REMOVE)

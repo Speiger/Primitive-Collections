@@ -16,6 +16,7 @@ import speiger.src.collections.bytes.maps.interfaces.Byte2IntMap;
 import speiger.src.testers.bytes.tests.base.maps.AbstractByte2IntMapTester;
 
 @Ignore
+@SuppressWarnings("javadoc")
 public class Byte2IntMapToStringTester extends AbstractByte2IntMapTester
 {
 	public void testToString_minimal() {

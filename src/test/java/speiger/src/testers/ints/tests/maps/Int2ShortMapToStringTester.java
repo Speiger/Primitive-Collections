@@ -16,6 +16,7 @@ import speiger.src.collections.ints.maps.interfaces.Int2ShortMap;
 import speiger.src.testers.ints.tests.base.maps.AbstractInt2ShortMapTester;
 
 @Ignore
+@SuppressWarnings("javadoc")
 public class Int2ShortMapToStringTester extends AbstractInt2ShortMapTester
 {
 	public void testToString_minimal() {

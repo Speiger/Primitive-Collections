@@ -21,6 +21,7 @@ import speiger.src.testers.shorts.tests.base.AbstractShortSetTester;
 import speiger.src.testers.shorts.utils.ShortHelpers;
 
 @Ignore
+@SuppressWarnings("javadoc")
 public class ShortNavigableSetNavigationTester extends AbstractShortSetTester
 {
 	private ShortNavigableSet navigableSet;

@@ -11,6 +11,7 @@ import speiger.src.collections.objects.lists.ObjectArrayList;
 import speiger.src.testers.objects.tests.base.AbstractObjectListTester;
 
 @Ignore
+@SuppressWarnings("javadoc")
 public class ObjectListGetElementsTester<T> extends AbstractObjectListTester<T>
 {
 	@CollectionSize.Require(SEVERAL)

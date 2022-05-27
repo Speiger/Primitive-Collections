@@ -5,6 +5,7 @@ import org.junit.Ignore;
 import speiger.src.collections.objects.collections.ObjectCollection;
 
 @Ignore
+@SuppressWarnings("javadoc")
 public class AbstractObjectCollectionTester<T> extends AbstractObjectContainerTester<T, ObjectCollection<T>>
 {
 	protected ObjectCollection<T> collection;

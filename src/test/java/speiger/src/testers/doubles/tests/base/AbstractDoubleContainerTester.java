@@ -19,6 +19,7 @@ import speiger.src.testers.doubles.utils.DoubleSamples;
 import speiger.src.testers.doubles.utils.MinimalDoubleCollection;
 
 @Ignore
+@SuppressWarnings("javadoc")
 public abstract class AbstractDoubleContainerTester<E> extends AbstractTester<OneSizeTestContainerGenerator<E, Double>>
 {
 	protected DoubleSamples samples;

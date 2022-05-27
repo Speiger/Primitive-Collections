@@ -8,6 +8,7 @@ import speiger.src.collections.shorts.lists.ShortList;
 import speiger.src.testers.shorts.utils.ShortHelpers;
 
 @Ignore
+@SuppressWarnings("javadoc")
 public class AbstractShortListTester extends AbstractShortCollectionTester
 {
 	protected final ShortList getList() {

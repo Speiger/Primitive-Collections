@@ -22,7 +22,9 @@ import speiger.src.collections.objects.lists.ObjectArrayList;
 import speiger.src.collections.objects.lists.ObjectList;
 import speiger.src.collections.objects.lists.ObjectListIterator;
 
-public abstract class AbstractObjectIteratorTester<T>{
+@SuppressWarnings("javadoc")
+public abstract class AbstractObjectIteratorTester<T>
+{
 	private Stimulus<ObjectIterator<?>>[] stimuli;
 	private final ObjectIterator<T> elementsToInsert;
 	private final Set<IteratorFeature> features;
@@ -312,7 +314,7 @@ public abstract class AbstractObjectIteratorTester<T>{
 		}
 
 		try {
-			if (method == next_METHOD && targetException == null && knownOrder == KnownOrder.UNKNOWN_ORDER) {
+			if (method == NEXT_METHOD && targetException == null && knownOrder == KnownOrder.UNKNOWN_ORDER) {
 				((MultiExceptionListIterator) reference).promoteToNext((T)targetReturnValue);
 			}
 			
@@ -346,7 +348,7 @@ public abstract class AbstractObjectIteratorTester<T>{
 		referenceException.assertPermitted(targetException);
 	}
 
-	private static final IteratorOperation remove_METHOD = new IteratorOperation() {
+	private static final IteratorOperation REMOVE_METHOD = new IteratorOperation() {
 		@Override
 		public Object execute(ObjectIterator<?> iterator) {
 			iterator.remove();
@@ -354,14 +356,14 @@ public abstract class AbstractObjectIteratorTester<T>{
 		}
 	};
 
-	private static final IteratorOperation next_METHOD = new IteratorOperation() {
+	private static final IteratorOperation NEXT_METHOD = new IteratorOperation() {
 		@Override
 		public Object execute(ObjectIterator<?> iterator) {
 			return iterator.next();
 		}
 	};
 
-	private static final IteratorOperation previous_METHOD = new IteratorOperation() {
+	private static final IteratorOperation PREVIOUS_METHOD = new IteratorOperation() {
 		@Override
 		public Object execute(ObjectIterator<?> iterator) {
 			return ((ObjectBidirectionalIterator<?>) iterator).previous();
@@ -418,13 +420,13 @@ public abstract class AbstractObjectIteratorTester<T>{
 	Stimulus<ObjectIterator<?>> next = new Stimulus<ObjectIterator<?>>("next") {
 		@Override
 		void executeAndCompare(ObjectListIterator<?> reference, ObjectIterator<?> target) {
-			internalExecuteAndCompare(reference, target, next_METHOD);
+			internalExecuteAndCompare(reference, target, NEXT_METHOD);
 		}
 	};
 	Stimulus<ObjectIterator<?>> remove = new Stimulus<ObjectIterator<?>>("remove") {
 		@Override
 		void executeAndCompare(ObjectListIterator<?> reference, ObjectIterator<?> target) {
-			internalExecuteAndCompare(reference, target, remove_METHOD);
+			internalExecuteAndCompare(reference, target, REMOVE_METHOD);
 		}
 	};
 
@@ -442,7 +444,7 @@ public abstract class AbstractObjectIteratorTester<T>{
 	Stimulus<ObjectBidirectionalIterator<?>> previous = new Stimulus<ObjectBidirectionalIterator<?>>("previous") {
 		@Override
 		void executeAndCompare(ObjectListIterator<?> reference, ObjectBidirectionalIterator<?> target) {
-			internalExecuteAndCompare(reference, target, previous_METHOD);
+			internalExecuteAndCompare(reference, target, PREVIOUS_METHOD);
 		}
 	};
 	

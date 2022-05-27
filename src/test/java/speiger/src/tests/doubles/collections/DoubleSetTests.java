@@ -27,7 +27,9 @@ import speiger.src.testers.doubles.builder.DoubleSortedSetTestSuiteBuilder;
 import speiger.src.testers.doubles.impl.SimpleDoubleTestGenerator;
 import speiger.src.testers.utils.SpecialFeature;
 
-public class DoubleSetTests extends TestCase {
+@SuppressWarnings("javadoc")
+public class DoubleSetTests extends TestCase
+{
 	
 	public static Test suite() {
 		TestSuite suite = new TestSuite("DoubleSets");

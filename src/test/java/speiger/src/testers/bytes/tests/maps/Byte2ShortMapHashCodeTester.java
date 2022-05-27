@@ -7,7 +7,9 @@ import speiger.src.collections.bytes.maps.interfaces.Byte2ShortMap;
 import speiger.src.testers.bytes.tests.base.maps.AbstractByte2ShortMapTester;
 
 @Ignore
-public class Byte2ShortMapHashCodeTester extends AbstractByte2ShortMapTester {
+@SuppressWarnings("javadoc")
+public class Byte2ShortMapHashCodeTester extends AbstractByte2ShortMapTester
+{
 	public void testHashCode() {
 		int expectedHashCode = 0;
 		for (Byte2ShortMap.Entry entry : getSampleEntries()) {

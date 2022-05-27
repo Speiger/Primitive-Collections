@@ -22,7 +22,9 @@ import speiger.src.collections.longs.lists.LongArrayList;
 import speiger.src.collections.longs.lists.LongList;
 import speiger.src.collections.longs.lists.LongListIterator;
 
-public abstract class AbstractLongIteratorTester{
+@SuppressWarnings("javadoc")
+public abstract class AbstractLongIteratorTester
+{
 	private Stimulus<LongIterator>[] stimuli;
 	private final LongIterator elementsToInsert;
 	private final Set<IteratorFeature> features;
@@ -312,7 +314,7 @@ public abstract class AbstractLongIteratorTester{
 		}
 
 		try {
-			if (method == nextLong_METHOD && targetException == null && knownOrder == KnownOrder.UNKNOWN_ORDER) {
+			if (method == NEXT_METHOD && targetException == null && knownOrder == KnownOrder.UNKNOWN_ORDER) {
 				((MultiExceptionListIterator) reference).promoteToNext(targetReturnValue);
 			}
 			
@@ -346,7 +348,7 @@ public abstract class AbstractLongIteratorTester{
 		referenceException.assertPermitted(targetException);
 	}
 
-	private static final IteratorOperation removeLong_METHOD = new IteratorOperation() {
+	private static final IteratorOperation REMOVE_METHOD = new IteratorOperation() {
 		@Override
 		public long execute(LongIterator iterator) {
 			iterator.remove();
@@ -354,14 +356,14 @@ public abstract class AbstractLongIteratorTester{
 		}
 	};
 
-	private static final IteratorOperation nextLong_METHOD = new IteratorOperation() {
+	private static final IteratorOperation NEXT_METHOD = new IteratorOperation() {
 		@Override
 		public long execute(LongIterator iterator) {
 			return iterator.nextLong();
 		}
 	};
 
-	private static final IteratorOperation previousLong_METHOD = new IteratorOperation() {
+	private static final IteratorOperation PREVIOUS_METHOD = new IteratorOperation() {
 		@Override
 		public long execute(LongIterator iterator) {
 			return ((LongBidirectionalIterator) iterator).previousLong();
@@ -418,13 +420,13 @@ public abstract class AbstractLongIteratorTester{
 	Stimulus<LongIterator> next = new Stimulus<LongIterator>("next") {
 		@Override
 		void executeAndCompare(LongListIterator reference, LongIterator target) {
-			internalExecuteAndCompare(reference, target, nextLong_METHOD);
+			internalExecuteAndCompare(reference, target, NEXT_METHOD);
 		}
 	};
 	Stimulus<LongIterator> remove = new Stimulus<LongIterator>("remove") {
 		@Override
 		void executeAndCompare(LongListIterator reference, LongIterator target) {
-			internalExecuteAndCompare(reference, target, removeLong_METHOD);
+			internalExecuteAndCompare(reference, target, REMOVE_METHOD);
 		}
 	};
 
@@ -442,7 +444,7 @@ public abstract class AbstractLongIteratorTester{
 	Stimulus<LongBidirectionalIterator> previous = new Stimulus<LongBidirectionalIterator>("previous") {
 		@Override
 		void executeAndCompare(LongListIterator reference, LongBidirectionalIterator target) {
-			internalExecuteAndCompare(reference, target, previousLong_METHOD);
+			internalExecuteAndCompare(reference, target, PREVIOUS_METHOD);
 		}
 	};
 	

@@ -7,7 +7,9 @@ import speiger.src.collections.chars.maps.interfaces.Char2FloatMap;
 import speiger.src.testers.chars.tests.base.maps.AbstractChar2FloatMapTester;
 
 @Ignore
-public class Char2FloatMapHashCodeTester extends AbstractChar2FloatMapTester {
+@SuppressWarnings("javadoc")
+public class Char2FloatMapHashCodeTester extends AbstractChar2FloatMapTester
+{
 	public void testHashCode() {
 		int expectedHashCode = 0;
 		for (Char2FloatMap.Entry entry : getSampleEntries()) {

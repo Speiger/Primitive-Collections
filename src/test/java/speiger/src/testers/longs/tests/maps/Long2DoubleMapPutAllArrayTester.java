@@ -20,6 +20,7 @@ import speiger.src.testers.longs.tests.base.maps.AbstractLong2DoubleMapTester;
 import speiger.src.testers.objects.utils.MinimalObjectCollection;
 
 @Ignore
+@SuppressWarnings("javadoc")
 public class Long2DoubleMapPutAllArrayTester extends AbstractLong2DoubleMapTester
 {
 	@MapFeature.Require(SUPPORTS_PUT)

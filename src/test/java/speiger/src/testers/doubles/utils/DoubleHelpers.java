@@ -14,6 +14,7 @@ import speiger.src.collections.doubles.sets.DoubleLinkedOpenHashSet;
 import speiger.src.collections.doubles.sets.DoubleSet;
 import speiger.src.collections.doubles.utils.DoubleIterators;
 
+@SuppressWarnings("javadoc")
 public class DoubleHelpers {
 	public static boolean equals(double key, double value) {
 		return key == value;

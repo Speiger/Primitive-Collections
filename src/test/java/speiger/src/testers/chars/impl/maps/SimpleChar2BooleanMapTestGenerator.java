@@ -13,6 +13,7 @@ import speiger.src.testers.chars.generators.maps.TestChar2BooleanMapGenerator;
 import speiger.src.testers.chars.generators.maps.TestChar2BooleanSortedMapGenerator;
 import speiger.src.testers.objects.utils.ObjectSamples;
 
+@SuppressWarnings("javadoc")
 public class SimpleChar2BooleanMapTestGenerator<E extends Char2BooleanMap>
 {
 	BiFunction<char[], boolean[], E> mapper;

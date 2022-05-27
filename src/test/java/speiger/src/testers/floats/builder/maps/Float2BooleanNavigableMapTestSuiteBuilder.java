@@ -19,6 +19,7 @@ import speiger.src.testers.floats.impl.maps.DerivedFloat2BooleanMapGenerators;
 import speiger.src.testers.floats.tests.maps.Float2BooleanNavigableMapNavigationTester;
 import speiger.src.testers.utils.SpecialFeature;
 
+@SuppressWarnings("javadoc")
 public class Float2BooleanNavigableMapTestSuiteBuilder extends Float2BooleanSortedMapTestSuiteBuilder
 {
 	public static Float2BooleanNavigableMapTestSuiteBuilder using(TestFloat2BooleanSortedMapGenerator generator) {

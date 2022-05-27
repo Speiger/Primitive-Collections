@@ -16,6 +16,7 @@ import speiger.src.collections.doubles.maps.interfaces.Double2ObjectMap;
 import speiger.src.testers.doubles.tests.base.maps.AbstractDouble2ObjectMapTester;
 
 @Ignore
+@SuppressWarnings("javadoc")
 public class Double2ObjectMapToStringTester<V> extends AbstractDouble2ObjectMapTester<V>
 {
 	public void testToString_minimal() {

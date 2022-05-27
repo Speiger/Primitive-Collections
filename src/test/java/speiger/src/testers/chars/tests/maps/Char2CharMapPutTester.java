@@ -17,6 +17,7 @@ import speiger.src.collections.chars.maps.interfaces.Char2CharMap;
 import speiger.src.testers.chars.tests.base.maps.AbstractChar2CharMapTester;
 
 @Ignore
+@SuppressWarnings("javadoc")
 public class Char2CharMapPutTester extends AbstractChar2CharMapTester
 {	
 	@MapFeature.Require(SUPPORTS_PUT)

@@ -23,6 +23,7 @@ import speiger.src.testers.shorts.builder.maps.Short2DoubleNavigableMapTestSuite
 import speiger.src.testers.shorts.impl.maps.SimpleShort2DoubleMapTestGenerator;
 import speiger.src.testers.utils.SpecialFeature;
 
+@SuppressWarnings("javadoc")
 public class Short2DoubleMapTests extends TestCase
 {
 	public static Test suite() {

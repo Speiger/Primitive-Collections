@@ -69,6 +69,7 @@ import speiger.src.testers.longs.tests.list.LongListSwapRemoveAtIndexTester;
 import speiger.src.testers.longs.tests.list.LongListSwapRemoveTester;
 import speiger.src.testers.longs.tests.list.LongListToArrayTester;
 
+@SuppressWarnings("javadoc")
 public class LongListTestSuiteBuilder extends LongCollectionTestSuiteBuilder {
 	public static LongListTestSuiteBuilder using(TestLongListGenerator generator) {
 		return (LongListTestSuiteBuilder) new LongListTestSuiteBuilder().usingGenerator(generator);

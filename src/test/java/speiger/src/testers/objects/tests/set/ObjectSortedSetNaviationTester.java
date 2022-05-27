@@ -18,7 +18,9 @@ import speiger.src.testers.objects.tests.base.AbstractObjectSetTester;
 import speiger.src.testers.objects.utils.ObjectHelpers;
 
 @Ignore
-public class ObjectSortedSetNaviationTester<T> extends AbstractObjectSetTester<T> {
+@SuppressWarnings("javadoc")
+public class ObjectSortedSetNaviationTester<T> extends AbstractObjectSetTester<T>
+{
 	private ObjectSortedSet<T> sortedSet;
 	private ObjectList<T> values;
 	private T a;

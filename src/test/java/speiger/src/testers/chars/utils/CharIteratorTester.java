@@ -6,9 +6,9 @@ import speiger.src.collections.chars.collections.CharIterable;
 import speiger.src.collections.chars.collections.CharIterator;
 import speiger.src.collections.chars.utils.CharLists;
 
+@SuppressWarnings("javadoc")
 public abstract class CharIteratorTester extends AbstractCharIteratorTester
 {
-
 	public CharIteratorTester(int steps, Iterable<? extends IteratorFeature> features, CharIterable expectedElements,
 			KnownOrder knownOrder) {
 		super(steps, CharLists.singleton((char)-1), features, expectedElements, knownOrder, 0);

@@ -11,6 +11,7 @@ import com.google.common.collect.testing.features.CollectionSize;
 import speiger.src.testers.ints.tests.base.AbstractIntSetTester;
 
 @Ignore
+@SuppressWarnings("javadoc")
 public class IntSetAddTester extends AbstractIntSetTester
 {
 	@CollectionFeature.Require(SUPPORTS_ADD)

@@ -11,6 +11,7 @@ import speiger.src.collections.shorts.lists.ShortArrayList;
 import speiger.src.testers.shorts.tests.base.AbstractShortListTester;
 
 @Ignore
+@SuppressWarnings("javadoc")
 public class ShortListGetElementsTester extends AbstractShortListTester
 {
 	@CollectionSize.Require(SEVERAL)

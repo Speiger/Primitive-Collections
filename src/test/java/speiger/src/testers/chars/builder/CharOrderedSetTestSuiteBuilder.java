@@ -11,6 +11,7 @@ import speiger.src.testers.chars.generators.TestCharOrderedSetGenerator;
 import speiger.src.testers.chars.tests.set.CharOrderedSetMoveTester;
 import speiger.src.testers.chars.tests.set.CharOrderedSetNavigationTester;
 
+@SuppressWarnings("javadoc")
 public class CharOrderedSetTestSuiteBuilder extends CharSetTestSuiteBuilder {
 	public static CharOrderedSetTestSuiteBuilder using(TestCharOrderedSetGenerator generator) {
 		return (CharOrderedSetTestSuiteBuilder) new CharOrderedSetTestSuiteBuilder().usingGenerator(generator);

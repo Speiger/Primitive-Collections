@@ -14,6 +14,7 @@ import speiger.src.collections.floats.sets.FloatLinkedOpenHashSet;
 import speiger.src.collections.floats.sets.FloatSet;
 import speiger.src.collections.floats.utils.FloatIterators;
 
+@SuppressWarnings("javadoc")
 public class FloatHelpers {
 	public static boolean equals(float key, float value) {
 		return key == value;

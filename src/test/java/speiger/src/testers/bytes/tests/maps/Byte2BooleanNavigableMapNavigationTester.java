@@ -23,6 +23,7 @@ import speiger.src.testers.bytes.tests.base.maps.AbstractByte2BooleanMapTester;
 import speiger.src.testers.objects.utils.ObjectHelpers;
 
 @Ignore
+@SuppressWarnings("javadoc")
 public class Byte2BooleanNavigableMapNavigationTester extends AbstractByte2BooleanMapTester
 {
 	private Byte2BooleanNavigableMap navigableMap;

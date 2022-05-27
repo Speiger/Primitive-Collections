@@ -12,6 +12,7 @@ import junit.framework.AssertionFailedError;
 import speiger.src.testers.objects.tests.base.maps.AbstractObject2ByteMapTester;
 
 @Ignore
+@SuppressWarnings("javadoc")
 public class Object2ByteMapComputeIfPresentTester<T> extends AbstractObject2ByteMapTester<T>
 {
 	@MapFeature.Require(SUPPORTS_PUT)

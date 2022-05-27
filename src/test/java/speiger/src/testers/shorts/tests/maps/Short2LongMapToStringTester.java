@@ -16,6 +16,7 @@ import speiger.src.collections.shorts.maps.interfaces.Short2LongMap;
 import speiger.src.testers.shorts.tests.base.maps.AbstractShort2LongMapTester;
 
 @Ignore
+@SuppressWarnings("javadoc")
 public class Short2LongMapToStringTester extends AbstractShort2LongMapTester
 {
 	public void testToString_minimal() {

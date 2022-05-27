@@ -19,6 +19,7 @@ import speiger.src.collections.objects.collections.ObjectIterator;
 import speiger.src.testers.shorts.tests.base.maps.AbstractShort2BooleanMapTester;
 
 @Ignore
+@SuppressWarnings("javadoc")
 public class Short2BooleanMapClearTester extends AbstractShort2BooleanMapTester 
 {
 	@MapFeature.Require(SUPPORTS_REMOVE)

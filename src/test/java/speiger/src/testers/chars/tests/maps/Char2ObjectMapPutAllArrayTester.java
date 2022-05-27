@@ -20,6 +20,7 @@ import speiger.src.testers.chars.tests.base.maps.AbstractChar2ObjectMapTester;
 import speiger.src.testers.objects.utils.MinimalObjectCollection;
 
 @Ignore
+@SuppressWarnings("javadoc")
 public class Char2ObjectMapPutAllArrayTester<V> extends AbstractChar2ObjectMapTester<V>
 {
 	@MapFeature.Require(SUPPORTS_PUT)

@@ -18,6 +18,7 @@ import speiger.src.testers.longs.generators.TestLongSortedSetGenerator;
 import speiger.src.testers.longs.impl.LongSortedSetSubsetTestSetGenerator;
 import speiger.src.testers.longs.tests.set.LongSortedSetNaviationTester;
 
+@SuppressWarnings("javadoc")
 public class LongSortedSetTestSuiteBuilder extends LongSetTestSuiteBuilder {
 	public static LongSortedSetTestSuiteBuilder using(TestLongSortedSetGenerator generator) {
 		return (LongSortedSetTestSuiteBuilder) new LongSortedSetTestSuiteBuilder().usingGenerator(generator);

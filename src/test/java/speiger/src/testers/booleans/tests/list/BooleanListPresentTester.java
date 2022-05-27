@@ -11,6 +11,7 @@ import com.google.common.collect.testing.features.CollectionSize;
 import speiger.src.testers.booleans.tests.base.AbstractBooleanListTester;
 
 @Ignore
+@SuppressWarnings("javadoc")
 public class BooleanListPresentTester extends AbstractBooleanListTester
 {
 	@CollectionFeature.Require(SUPPORTS_ADD)

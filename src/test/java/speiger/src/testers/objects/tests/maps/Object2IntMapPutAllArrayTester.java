@@ -20,6 +20,7 @@ import speiger.src.testers.objects.tests.base.maps.AbstractObject2IntMapTester;
 import speiger.src.testers.objects.utils.MinimalObjectCollection;
 
 @Ignore
+@SuppressWarnings("javadoc")
 public class Object2IntMapPutAllArrayTester<T> extends AbstractObject2IntMapTester<T>
 {
 	@MapFeature.Require(SUPPORTS_PUT)

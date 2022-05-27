@@ -12,6 +12,7 @@ import com.google.common.collect.testing.features.CollectionSize;
 import speiger.src.testers.objects.tests.base.AbstractObjectListTester;
 
 @Ignore
+@SuppressWarnings("javadoc")
 public class ObjectListCreationTester<T> extends AbstractObjectListTester<T>
 {
 	@CollectionFeature.Require(absent = REJECTS_DUPLICATES_AT_CREATION)

@@ -4,6 +4,7 @@ import com.google.common.collect.testing.TestSetGenerator;
 
 import speiger.src.collections.booleans.sets.BooleanSet;
 
+@SuppressWarnings("javadoc")
 public interface TestBooleanSetGenerator extends TestBooleanCollectionGenerator, TestSetGenerator<Boolean> {
 	@Override
 	BooleanSet create(boolean...elements);

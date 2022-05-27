@@ -19,6 +19,7 @@ import speiger.src.collections.objects.collections.ObjectIterator;
 import speiger.src.testers.bytes.tests.base.maps.AbstractByte2ShortMapTester;
 
 @Ignore
+@SuppressWarnings("javadoc")
 public class Byte2ShortMapRemoveTester extends AbstractByte2ShortMapTester
 {
 	@MapFeature.Require(SUPPORTS_REMOVE)

@@ -332,7 +332,7 @@ public class Long2CharRBTreeMap extends AbstractLong2CharMap implements Long2Cha
 	
 	@Override
 	public long pollFirstLongKey() {
-		if(tree == null) return 0L;
+		if(tree == null) return getDefaultMinValue();
 		long result = first.key;
 		removeNode(first);
 		return result;
@@ -346,7 +346,7 @@ public class Long2CharRBTreeMap extends AbstractLong2CharMap implements Long2Cha
 	
 	@Override
 	public long pollLastLongKey() {
-		if(tree == null) return 0L;
+		if(tree == null) return getDefaultMaxValue();
 		long result = last.key;
 		removeNode(last);
 		return result;
@@ -973,6 +973,31 @@ public class Long2CharRBTreeMap extends AbstractLong2CharMap implements Long2Cha
 		public long ceiling(long e) { return map.ceilingKey(e); }
 		@Override
 		public long higher(long e) { return map.higherKey(e); }
+		
+		@Override
+		public Long lower(Long e) {
+			Long2CharMap.Entry node = map.lowerEntry(e.longValue());
+			return node != null ? node.getKey() : null;
+		}
+		
+		@Override
+		public Long floor(Long e) {
+			Long2CharMap.Entry node = map.floorEntry(e.longValue());
+			return node != null ? node.getKey() : null;
+		}
+		
+		@Override
+		public Long higher(Long e) {
+			Long2CharMap.Entry node = map.higherEntry(e.longValue());
+			return node != null ? node.getKey() : null;
+		}
+		
+		@Override
+		public Long ceiling(Long e) {
+			Long2CharMap.Entry node = map.ceilingEntry(e.longValue());
+			return node != null ? node.getKey() : null;
+		}
+		
 		@Override
 		public long pollFirstLong() { return map.pollFirstLongKey(); }
 		@Override
@@ -1380,8 +1405,8 @@ public class Long2CharRBTreeMap extends AbstractLong2CharMap implements Long2Cha
 		protected abstract LongBidirectionalIterator keyIterator(long element);
 		protected abstract CharBidirectionalIterator valueIterator();
 		protected abstract LongBidirectionalIterator descendingKeyIterator();
-		protected long lowKeyOrNull(Node entry) { return entry == null ? 0L : entry.key; }
-		protected long highKeyOrNull(Node entry) { return entry == null ? 0L : entry.key; }
+		protected long lowKeyOrNull(Node entry) { return entry == null ? getDefaultMinValue() : entry.key; }
+		protected long highKeyOrNull(Node entry) { return entry == null ? getDefaultMaxValue() : entry.key; }
 		protected Node next(Node entry) { return entry.next(); }
 		protected Node previous(Node entry) { return entry.previous(); }
 		
@@ -1452,7 +1477,7 @@ public class Long2CharRBTreeMap extends AbstractLong2CharMap implements Long2Cha
 				map.removeNode(entry);
 				return result;
 			}
-			return 0L;
+			return getDefaultMinValue();
 		}
 		
 		@Override
@@ -1463,7 +1488,7 @@ public class Long2CharRBTreeMap extends AbstractLong2CharMap implements Long2Cha
 				map.removeNode(entry);
 				return result;
 			}
-			return 0L;
+			return getDefaultMaxValue();
 		}
 		
 		@Override
@@ -1541,7 +1566,7 @@ public class Long2CharRBTreeMap extends AbstractLong2CharMap implements Long2Cha
 		
 		@Override
 		public char removeOrDefault(long key, char defaultValue) {
-			return inRange(key) ? map.remove(key) : defaultValue;
+			return inRange(key) ? map.removeOrDefault(key, defaultValue) : defaultValue;
 		}
 		
 		@Override
@@ -2017,8 +2042,8 @@ public class Long2CharRBTreeMap extends AbstractLong2CharMap implements Long2Cha
 			public SubMapEntryIterator(Node first, Node forwardFence, Node backwardFence)
 			{
 				next = first;
-				this.forwardFence = forwardFence == null ? null : forwardFence.key;
-				this.backwardFence = backwardFence == null ? null : backwardFence.key;
+				this.forwardFence = forwardFence == null ? 0L : forwardFence.key;
+				this.backwardFence = backwardFence == null ? 0L : backwardFence.key;
 				unboundForwardFence = forwardFence == null;
 				unboundBackwardFence = backwardFence == null;
 			}

@@ -7,6 +7,7 @@ import speiger.src.collections.chars.lists.CharArrayList;
 import speiger.src.collections.chars.lists.CharList;
 import speiger.src.collections.chars.sets.CharSet;
 
+@SuppressWarnings("javadoc")
 public class MinimalCharSet extends MinimalCharCollection implements CharSet {
 	public static MinimalCharSet of(char...array) {
 		return MinimalCharSet.of(CharArrayList.wrap(array));

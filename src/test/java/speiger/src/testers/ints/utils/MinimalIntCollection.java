@@ -8,6 +8,7 @@ import speiger.src.collections.ints.collections.IntIterator;
 import speiger.src.collections.ints.functions.IntConsumer;
 import speiger.src.collections.ints.lists.IntArrayList;
 
+@SuppressWarnings("javadoc")
 public class MinimalIntCollection extends AbstractIntCollection {
 
 	private final int[] contents;

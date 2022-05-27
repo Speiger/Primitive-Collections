@@ -16,6 +16,7 @@ import speiger.src.collections.doubles.maps.interfaces.Double2BooleanMap;
 import speiger.src.testers.doubles.tests.base.maps.AbstractDouble2BooleanMapTester;
 
 @Ignore
+@SuppressWarnings("javadoc")
 public class Double2BooleanMapToStringTester extends AbstractDouble2BooleanMapTester
 {
 	public void testToString_minimal() {

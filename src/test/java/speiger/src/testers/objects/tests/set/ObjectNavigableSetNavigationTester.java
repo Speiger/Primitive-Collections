@@ -21,6 +21,7 @@ import speiger.src.testers.objects.tests.base.AbstractObjectSetTester;
 import speiger.src.testers.objects.utils.ObjectHelpers;
 
 @Ignore
+@SuppressWarnings("javadoc")
 public class ObjectNavigableSetNavigationTester<T> extends AbstractObjectSetTester<T>
 {
 	private ObjectNavigableSet<T> navigableSet;

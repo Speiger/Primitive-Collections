@@ -9,6 +9,7 @@ import com.google.common.collect.testing.features.CollectionSize;
 import speiger.src.testers.floats.tests.base.maps.AbstractFloat2BooleanMapTester;
 
 @Ignore
+@SuppressWarnings("javadoc")
 public class Float2BooleanMapGetOrDefaultTester extends AbstractFloat2BooleanMapTester
 {
 	@CollectionSize.Require(absent = ZERO)

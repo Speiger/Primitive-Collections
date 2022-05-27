@@ -15,6 +15,7 @@ import speiger.src.collections.chars.collections.CharIterator;
 import speiger.src.testers.chars.tests.base.AbstractCharCollectionTester;
 
 @Ignore
+@SuppressWarnings("javadoc")
 public class CharCollectionAddAllArrayTester extends AbstractCharCollectionTester
 {
 	@CollectionFeature.Require(SUPPORTS_ADD)

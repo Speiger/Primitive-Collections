@@ -11,6 +11,7 @@ import com.google.common.collect.testing.features.CollectionSize;
 import speiger.src.testers.objects.tests.base.AbstractObjectListTester;
 
 @Ignore
+@SuppressWarnings("javadoc")
 public class ObjectListRemoveElementsTester<T> extends AbstractObjectListTester<T>
 {
 	@CollectionFeature.Require(SUPPORTS_REMOVE)

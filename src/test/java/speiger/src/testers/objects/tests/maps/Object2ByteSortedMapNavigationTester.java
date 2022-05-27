@@ -20,6 +20,7 @@ import speiger.src.testers.objects.tests.base.maps.AbstractObject2ByteMapTester;
 import speiger.src.testers.objects.utils.ObjectHelpers;
 
 @Ignore
+@SuppressWarnings("javadoc")
 public class Object2ByteSortedMapNavigationTester<T> extends AbstractObject2ByteMapTester<T>
 {
 	private Object2ByteSortedMap<T> sortedMap;

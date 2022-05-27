@@ -18,6 +18,7 @@ import speiger.src.testers.floats.tests.base.maps.AbstractFloat2DoubleMapTester;
 import speiger.src.testers.floats.utils.FloatSamples;
 
 @Ignore
+@SuppressWarnings("javadoc")
 public class Float2DoubleMapReplaceAllTester extends AbstractFloat2DoubleMapTester
 {
 	private FloatSamples keys() {

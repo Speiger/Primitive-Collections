@@ -41,6 +41,7 @@ import speiger.src.testers.doubles.tests.maps.Double2BooleanMapPutIfAbsentTester
 import speiger.src.testers.utils.TestUtils;
 import speiger.src.testers.utils.SpecialFeature;
 
+@SuppressWarnings("javadoc")
 public class Double2BooleanMapTests extends TestCase
 {
 	public static Test suite() {

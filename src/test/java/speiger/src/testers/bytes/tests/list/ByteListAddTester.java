@@ -11,6 +11,7 @@ import com.google.common.collect.testing.features.CollectionSize;
 import speiger.src.testers.bytes.tests.base.AbstractByteListTester;
 
 @Ignore
+@SuppressWarnings("javadoc")
 public class ByteListAddTester extends AbstractByteListTester
 {
 	@CollectionFeature.Require(SUPPORTS_ADD)

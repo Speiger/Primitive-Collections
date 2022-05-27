@@ -11,6 +11,7 @@ import com.google.common.collect.testing.features.MapFeature;
 import speiger.src.testers.ints.tests.base.maps.AbstractInt2ByteMapTester;
 
 @Ignore
+@SuppressWarnings("javadoc")
 public class Int2ByteMapReplaceEntryTester extends AbstractInt2ByteMapTester
 {
 	@MapFeature.Require(SUPPORTS_PUT)

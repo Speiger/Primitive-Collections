@@ -18,6 +18,7 @@ import speiger.src.collections.shorts.maps.interfaces.Short2IntMap;
 import speiger.src.testers.shorts.tests.base.maps.AbstractShort2IntMapTester;
 
 @Ignore
+@SuppressWarnings("javadoc")
 public class Short2IntMapPutTester extends AbstractShort2IntMapTester
 {	
 	@MapFeature.Require(SUPPORTS_PUT)

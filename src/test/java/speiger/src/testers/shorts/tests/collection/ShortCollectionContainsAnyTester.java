@@ -11,6 +11,7 @@ import speiger.src.testers.shorts.tests.base.AbstractShortCollectionTester;
 import speiger.src.testers.shorts.utils.MinimalShortCollection;
 
 @Ignore
+@SuppressWarnings("javadoc")
 public class ShortCollectionContainsAnyTester extends AbstractShortCollectionTester
 {	
 	public void testContainsAny_empty() {

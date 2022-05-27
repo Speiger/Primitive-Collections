@@ -11,6 +11,7 @@ import speiger.src.testers.shorts.tests.base.maps.AbstractShort2ByteMapTester;
 import speiger.src.testers.objects.utils.ObjectHelpers;
 
 @Ignore
+@SuppressWarnings("javadoc")
 public class Short2ByteMapEqualsTester extends AbstractShort2ByteMapTester 
 {
 	public void testEquals_otherMapWithSameEntries() {

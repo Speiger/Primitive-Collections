@@ -19,6 +19,7 @@ import speiger.src.collections.objects.maps.interfaces.Object2LongMap;
 import speiger.src.testers.objects.tests.base.maps.AbstractObject2LongMapTester;
 
 @Ignore
+@SuppressWarnings("javadoc")
 public class Object2LongMapEntrySetTester<T> extends AbstractObject2LongMapTester<T>
 {
 	@CollectionSize.Require(ONE)

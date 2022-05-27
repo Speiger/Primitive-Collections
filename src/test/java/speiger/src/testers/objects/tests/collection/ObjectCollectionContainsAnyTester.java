@@ -11,6 +11,7 @@ import speiger.src.testers.objects.tests.base.AbstractObjectCollectionTester;
 import speiger.src.testers.objects.utils.MinimalObjectCollection;
 
 @Ignore
+@SuppressWarnings("javadoc")
 public class ObjectCollectionContainsAnyTester<T> extends AbstractObjectCollectionTester<T>
 {	
 	public void testContainsAny_empty() {

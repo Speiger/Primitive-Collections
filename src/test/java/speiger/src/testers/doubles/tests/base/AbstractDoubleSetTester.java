@@ -5,6 +5,7 @@ import org.junit.Ignore;
 import speiger.src.collections.doubles.sets.DoubleSet;
 
 @Ignore
+@SuppressWarnings("javadoc")
 public class AbstractDoubleSetTester extends AbstractDoubleCollectionTester
 {
 	protected final DoubleSet getSet() {

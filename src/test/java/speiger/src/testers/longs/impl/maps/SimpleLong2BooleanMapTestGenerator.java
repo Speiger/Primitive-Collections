@@ -13,6 +13,7 @@ import speiger.src.testers.longs.generators.maps.TestLong2BooleanMapGenerator;
 import speiger.src.testers.longs.generators.maps.TestLong2BooleanSortedMapGenerator;
 import speiger.src.testers.objects.utils.ObjectSamples;
 
+@SuppressWarnings("javadoc")
 public class SimpleLong2BooleanMapTestGenerator<E extends Long2BooleanMap>
 {
 	BiFunction<long[], boolean[], E> mapper;

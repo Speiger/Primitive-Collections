@@ -23,6 +23,7 @@ import speiger.src.testers.bytes.builder.maps.Byte2DoubleNavigableMapTestSuiteBu
 import speiger.src.testers.bytes.impl.maps.SimpleByte2DoubleMapTestGenerator;
 import speiger.src.testers.utils.SpecialFeature;
 
+@SuppressWarnings("javadoc")
 public class Byte2DoubleMapTests extends TestCase
 {
 	public static Test suite() {

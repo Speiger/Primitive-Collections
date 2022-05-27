@@ -18,6 +18,7 @@ import speiger.src.collections.floats.maps.interfaces.Float2DoubleMap;
 import speiger.src.testers.floats.tests.base.maps.AbstractFloat2DoubleMapTester;
 
 @Ignore
+@SuppressWarnings("javadoc")
 public class Float2DoubleMapPutTester extends AbstractFloat2DoubleMapTester
 {	
 	@MapFeature.Require(SUPPORTS_PUT)

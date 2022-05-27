@@ -16,6 +16,7 @@ import speiger.src.testers.ints.tests.base.AbstractIntCollectionTester;
 import speiger.src.testers.ints.utils.MinimalIntCollection;
 
 @Ignore
+@SuppressWarnings("javadoc")
 public class IntCollectionAddAllTester extends AbstractIntCollectionTester
 {
 	@CollectionFeature.Require(SUPPORTS_ADD)

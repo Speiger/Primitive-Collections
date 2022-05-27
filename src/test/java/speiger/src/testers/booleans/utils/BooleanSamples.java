@@ -7,6 +7,7 @@ import speiger.src.collections.booleans.collections.BooleanIterator;
 import speiger.src.collections.booleans.lists.BooleanArrayList;
 import speiger.src.collections.booleans.lists.BooleanList;
 
+@SuppressWarnings("javadoc")
 public class BooleanSamples implements BooleanIterable
 {
 	private final boolean e0;

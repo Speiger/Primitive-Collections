@@ -17,6 +17,7 @@ import speiger.src.testers.booleans.utils.BooleanHelpers;
 import speiger.src.testers.booleans.utils.MinimalBooleanCollection;
 
 @Ignore
+@SuppressWarnings("javadoc")
 public class BooleanCollectionRetainAllTester extends AbstractBooleanCollectionTester
 {
 

@@ -321,9 +321,9 @@ public class ObjectArrayList<T> extends AbstractObjectList<T> implements IObject
 		int length = to - from;
 		if(length <= 0) return;
 		if(to != size) System.arraycopy(data, to, data, from, size - to);
-		for(int i = 0;i<length;i++)
-			data[i+to] = null;
 		size -= length;
+		for(int i = 0;i<length;i++)
+			data[i+size] = null;
 	}
 	
 	/**
@@ -338,13 +338,13 @@ public class ObjectArrayList<T> extends AbstractObjectList<T> implements IObject
 		checkRange(from);
 		checkAddRange(to);
 		int length = to - from;
+		if(length <= 0) return ObjectArrays.newArray(type, 0);
 		K[] a = ObjectArrays.newArray(type, length);
-		if(length <= 0) return a;
 		System.arraycopy(data, from, a, 0, length);
 		if(to != size) System.arraycopy(data, to, data, from, size - to);
+		size -= length;
 		for(int i = 0;i<length;i++)
-			data[i+to] = null;
-		size -= length;		
+			data[i+size] = null;
 		return a;
 	}
 	

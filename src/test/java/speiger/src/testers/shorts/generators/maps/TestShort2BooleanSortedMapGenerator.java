@@ -6,6 +6,7 @@ import speiger.src.collections.shorts.maps.interfaces.Short2BooleanMap;
 import speiger.src.collections.shorts.maps.interfaces.Short2BooleanMap.Entry;
 import speiger.src.collections.shorts.maps.interfaces.Short2BooleanSortedMap;
 
+@SuppressWarnings("javadoc")
 public interface TestShort2BooleanSortedMapGenerator extends TestShort2BooleanMapGenerator, TestSortedMapGenerator<Short, Boolean>
 {
 	@Override

@@ -17,6 +17,7 @@ import speiger.src.collections.longs.collections.LongIterator;
 import speiger.src.testers.longs.tests.base.AbstractLongCollectionTester;
 
 @Ignore
+@SuppressWarnings("javadoc")
 public class LongCollectionRemoveIfTester extends AbstractLongCollectionTester
 {
 	@CollectionFeature.Require(SUPPORTS_ITERATOR_REMOVE)

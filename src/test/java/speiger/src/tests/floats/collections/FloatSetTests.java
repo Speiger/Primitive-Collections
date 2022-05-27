@@ -27,7 +27,9 @@ import speiger.src.testers.floats.builder.FloatSortedSetTestSuiteBuilder;
 import speiger.src.testers.floats.impl.SimpleFloatTestGenerator;
 import speiger.src.testers.utils.SpecialFeature;
 
-public class FloatSetTests extends TestCase {
+@SuppressWarnings("javadoc")
+public class FloatSetTests extends TestCase
+{
 	
 	public static Test suite() {
 		TestSuite suite = new TestSuite("FloatSets");

@@ -14,6 +14,7 @@ import speiger.src.collections.objects.lists.ObjectArrayList;
 import speiger.src.testers.longs.tests.base.maps.AbstractLong2ObjectMapTester;
 
 @Ignore
+@SuppressWarnings("javadoc")
 public class Long2ObjectMapCreatorTester<V> extends AbstractLong2ObjectMapTester<V>
 {
 	@MapFeature.Require(absent = REJECTS_DUPLICATES_AT_CREATION)

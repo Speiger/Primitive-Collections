@@ -18,6 +18,7 @@ import speiger.src.testers.chars.tests.base.AbstractCharSetTester;
 import speiger.src.testers.chars.utils.CharHelpers;
 
 @Ignore
+@SuppressWarnings("javadoc")
 public class CharOrderedSetNavigationTester extends AbstractCharSetTester
 {
 	private CharOrderedSet orderedSet;

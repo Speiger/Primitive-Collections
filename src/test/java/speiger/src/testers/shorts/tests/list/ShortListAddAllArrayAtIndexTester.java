@@ -13,6 +13,7 @@ import com.google.common.collect.testing.features.ListFeature;
 import speiger.src.testers.shorts.tests.base.AbstractShortListTester;
 
 @Ignore
+@SuppressWarnings("javadoc")
 public class ShortListAddAllArrayAtIndexTester extends AbstractShortListTester
 {
 	@ListFeature.Require(SUPPORTS_ADD_WITH_INDEX)

@@ -34,6 +34,7 @@ import speiger.src.testers.longs.tests.set.LongSetCreationTester;
 import speiger.src.testers.longs.tests.set.LongSetEqualsTester;
 import speiger.src.testers.longs.tests.set.LongSetRemoveTester;
 
+@SuppressWarnings("javadoc")
 public class LongSetTestSuiteBuilder extends LongCollectionTestSuiteBuilder {
 	public static LongSetTestSuiteBuilder using(TestLongSetGenerator generator) {
 		return (LongSetTestSuiteBuilder) new LongSetTestSuiteBuilder().usingGenerator(generator);

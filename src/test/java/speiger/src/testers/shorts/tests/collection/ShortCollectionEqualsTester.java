@@ -5,6 +5,7 @@ import org.junit.Ignore;
 import speiger.src.testers.shorts.tests.base.AbstractShortCollectionTester;
 
 @Ignore
+@SuppressWarnings("javadoc")
 public class ShortCollectionEqualsTester extends AbstractShortCollectionTester
 {
 	public void testEquals_self() {

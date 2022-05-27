@@ -19,6 +19,7 @@ import speiger.src.testers.shorts.impl.maps.DerivedShort2FloatMapGenerators;
 import speiger.src.testers.shorts.tests.maps.Short2FloatNavigableMapNavigationTester;
 import speiger.src.testers.utils.SpecialFeature;
 
+@SuppressWarnings("javadoc")
 public class Short2FloatNavigableMapTestSuiteBuilder extends Short2FloatSortedMapTestSuiteBuilder
 {
 	public static Short2FloatNavigableMapTestSuiteBuilder using(TestShort2FloatSortedMapGenerator generator) {

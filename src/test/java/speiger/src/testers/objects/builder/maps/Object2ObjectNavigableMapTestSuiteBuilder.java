@@ -19,6 +19,7 @@ import speiger.src.testers.objects.impl.maps.DerivedObject2ObjectMapGenerators;
 import speiger.src.testers.objects.tests.maps.Object2ObjectNavigableMapNavigationTester;
 import speiger.src.testers.utils.SpecialFeature;
 
+@SuppressWarnings("javadoc")
 public class Object2ObjectNavigableMapTestSuiteBuilder<T, V> extends Object2ObjectSortedMapTestSuiteBuilder<T, V>
 {
 	public static <T, V> Object2ObjectNavigableMapTestSuiteBuilder<T, V> using(TestObject2ObjectSortedMapGenerator<T, V> generator) {

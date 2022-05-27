@@ -18,6 +18,7 @@ import speiger.src.testers.bytes.generators.TestByteSetGenerator;
 import speiger.src.testers.bytes.generators.TestByteSortedSetGenerator;
 import speiger.src.testers.bytes.utils.ByteSamples;
 
+@SuppressWarnings("javadoc")
 public class SimpleByteTestGenerator<E extends ByteCollection> {
 	Function<byte[], E> mapper;
 	public SimpleByteTestGenerator(Function<byte[], E> mapper) {

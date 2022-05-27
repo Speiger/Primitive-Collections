@@ -18,6 +18,7 @@ import speiger.src.collections.objects.collections.ObjectIterator;
 import speiger.src.testers.longs.tests.base.maps.AbstractLong2LongMapTester;
 
 @Ignore
+@SuppressWarnings("javadoc")
 public class Long2LongMapClearTester extends AbstractLong2LongMapTester 
 {
 	@MapFeature.Require(SUPPORTS_REMOVE)

@@ -19,6 +19,7 @@ import speiger.src.testers.ints.impl.maps.DerivedInt2ObjectMapGenerators;
 import speiger.src.testers.ints.tests.maps.Int2ObjectNavigableMapNavigationTester;
 import speiger.src.testers.utils.SpecialFeature;
 
+@SuppressWarnings("javadoc")
 public class Int2ObjectNavigableMapTestSuiteBuilder<V> extends Int2ObjectSortedMapTestSuiteBuilder<V>
 {
 	public static <V> Int2ObjectNavigableMapTestSuiteBuilder<V> using(TestInt2ObjectSortedMapGenerator<V> generator) {

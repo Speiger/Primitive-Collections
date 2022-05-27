@@ -6,6 +6,7 @@ import speiger.src.collections.shorts.maps.interfaces.Short2CharMap;
 import speiger.src.collections.shorts.maps.interfaces.Short2CharMap.Entry;
 import speiger.src.collections.shorts.maps.interfaces.Short2CharSortedMap;
 
+@SuppressWarnings("javadoc")
 public interface TestShort2CharSortedMapGenerator extends TestShort2CharMapGenerator, TestSortedMapGenerator<Short, Character>
 {
 	@Override

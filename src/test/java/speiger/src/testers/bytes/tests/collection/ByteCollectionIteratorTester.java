@@ -24,6 +24,7 @@ import speiger.src.testers.bytes.utils.ByteHelpers;
 import speiger.src.testers.bytes.utils.ByteIteratorTester;
 
 @Ignore
+@SuppressWarnings("javadoc")
 public class ByteCollectionIteratorTester extends AbstractByteCollectionTester
 {
 	public void testIterator() {

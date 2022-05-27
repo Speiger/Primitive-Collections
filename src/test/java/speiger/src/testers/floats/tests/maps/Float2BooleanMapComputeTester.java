@@ -12,6 +12,7 @@ import com.google.common.collect.testing.features.MapFeature;
 import speiger.src.testers.floats.tests.base.maps.AbstractFloat2BooleanMapTester;
 
 @Ignore
+@SuppressWarnings("javadoc")
 public class Float2BooleanMapComputeTester extends AbstractFloat2BooleanMapTester
 {
 	@MapFeature.Require({ SUPPORTS_PUT, SUPPORTS_REMOVE })

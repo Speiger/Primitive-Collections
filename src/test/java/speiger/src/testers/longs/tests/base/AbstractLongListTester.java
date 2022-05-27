@@ -8,6 +8,7 @@ import speiger.src.collections.longs.lists.LongList;
 import speiger.src.testers.longs.utils.LongHelpers;
 
 @Ignore
+@SuppressWarnings("javadoc")
 public class AbstractLongListTester extends AbstractLongCollectionTester
 {
 	protected final LongList getList() {

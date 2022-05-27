@@ -13,6 +13,7 @@ import junit.framework.AssertionFailedError;
 import speiger.src.testers.doubles.tests.base.maps.AbstractDouble2ByteMapTester;
 
 @Ignore
+@SuppressWarnings("javadoc")
 public class Double2ByteMapMergeTester extends AbstractDouble2ByteMapTester
 {
 	@MapFeature.Require(SUPPORTS_PUT)

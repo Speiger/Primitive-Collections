@@ -22,6 +22,7 @@ import speiger.src.testers.shorts.utils.ShortHelpers;
 import speiger.src.testers.shorts.utils.ShortListIteratorTester;
 
 @Ignore
+@SuppressWarnings("javadoc")
 public class ShortListListIteratorTester extends AbstractShortListTester
 {
 	@CollectionFeature.Require(absent = SUPPORTS_REMOVE)

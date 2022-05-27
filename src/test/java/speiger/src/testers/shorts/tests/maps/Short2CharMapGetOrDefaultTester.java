@@ -9,6 +9,7 @@ import com.google.common.collect.testing.features.CollectionSize;
 import speiger.src.testers.shorts.tests.base.maps.AbstractShort2CharMapTester;
 
 @Ignore
+@SuppressWarnings("javadoc")
 public class Short2CharMapGetOrDefaultTester extends AbstractShort2CharMapTester
 {
 	@CollectionSize.Require(absent = ZERO)

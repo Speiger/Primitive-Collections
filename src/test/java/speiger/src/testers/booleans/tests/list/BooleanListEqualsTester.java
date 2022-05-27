@@ -10,6 +10,7 @@ import speiger.src.testers.booleans.tests.base.AbstractBooleanListTester;
 import speiger.src.testers.booleans.utils.MinimalBooleanSet;
 
 @Ignore
+@SuppressWarnings("javadoc")
 public class BooleanListEqualsTester extends AbstractBooleanListTester
 {
 	public void testEquals_otherListWithSameElements() {

@@ -14,6 +14,7 @@ import speiger.src.collections.objects.lists.ObjectArrayList;
 import speiger.src.testers.floats.tests.base.maps.AbstractFloat2ObjectMapTester;
 
 @Ignore
+@SuppressWarnings("javadoc")
 public class Float2ObjectMapCreatorTester<V> extends AbstractFloat2ObjectMapTester<V>
 {
 	@MapFeature.Require(absent = REJECTS_DUPLICATES_AT_CREATION)

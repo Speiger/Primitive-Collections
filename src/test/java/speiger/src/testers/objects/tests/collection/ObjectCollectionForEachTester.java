@@ -12,6 +12,7 @@ import speiger.src.testers.objects.tests.base.AbstractObjectCollectionTester;
 import speiger.src.testers.objects.utils.ObjectHelpers;
 
 @Ignore
+@SuppressWarnings("javadoc")
 public class ObjectCollectionForEachTester<T> extends AbstractObjectCollectionTester<T>
 {
 	@CollectionFeature.Require(absent = KNOWN_ORDER)

@@ -13,6 +13,7 @@ import speiger.src.testers.doubles.generators.maps.TestDouble2CharMapGenerator;
 import speiger.src.testers.doubles.generators.maps.TestDouble2CharSortedMapGenerator;
 import speiger.src.testers.objects.utils.ObjectSamples;
 
+@SuppressWarnings("javadoc")
 public class SimpleDouble2CharMapTestGenerator<E extends Double2CharMap>
 {
 	BiFunction<double[], char[], E> mapper;

@@ -11,6 +11,7 @@ import com.google.common.collect.testing.features.MapFeature;
 import speiger.src.testers.shorts.tests.base.maps.AbstractShort2ShortMapTester;
 
 @Ignore
+@SuppressWarnings("javadoc")
 public class Short2ShortMapPutIfAbsentTester extends AbstractShort2ShortMapTester
 {
 	@MapFeature.Require(SUPPORTS_PUT)

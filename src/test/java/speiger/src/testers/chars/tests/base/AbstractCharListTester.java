@@ -8,6 +8,7 @@ import speiger.src.collections.chars.lists.CharList;
 import speiger.src.testers.chars.utils.CharHelpers;
 
 @Ignore
+@SuppressWarnings("javadoc")
 public class AbstractCharListTester extends AbstractCharCollectionTester
 {
 	protected final CharList getList() {

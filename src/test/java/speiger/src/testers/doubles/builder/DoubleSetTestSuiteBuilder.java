@@ -34,6 +34,7 @@ import speiger.src.testers.doubles.tests.set.DoubleSetCreationTester;
 import speiger.src.testers.doubles.tests.set.DoubleSetEqualsTester;
 import speiger.src.testers.doubles.tests.set.DoubleSetRemoveTester;
 
+@SuppressWarnings("javadoc")
 public class DoubleSetTestSuiteBuilder extends DoubleCollectionTestSuiteBuilder {
 	public static DoubleSetTestSuiteBuilder using(TestDoubleSetGenerator generator) {
 		return (DoubleSetTestSuiteBuilder) new DoubleSetTestSuiteBuilder().usingGenerator(generator);

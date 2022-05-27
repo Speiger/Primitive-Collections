@@ -12,6 +12,7 @@ import speiger.src.testers.longs.tests.base.AbstractLongSetTester;
 import speiger.src.testers.longs.utils.MinimalLongCollection;
 
 @Ignore
+@SuppressWarnings("javadoc")
 public class LongSetAddAllTester extends AbstractLongSetTester
 {
 	@CollectionFeature.Require(SUPPORTS_ADD)

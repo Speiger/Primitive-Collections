@@ -19,6 +19,7 @@ import speiger.src.testers.shorts.utils.ShortSamples;
 import speiger.src.testers.shorts.utils.MinimalShortCollection;
 
 @Ignore
+@SuppressWarnings("javadoc")
 public abstract class AbstractShortContainerTester<E> extends AbstractTester<OneSizeTestContainerGenerator<E, Short>>
 {
 	protected ShortSamples samples;

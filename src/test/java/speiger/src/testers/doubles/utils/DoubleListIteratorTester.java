@@ -10,6 +10,7 @@ import speiger.src.collections.doubles.collections.DoubleIterable;
 import speiger.src.collections.doubles.collections.DoubleIterator;
 import speiger.src.collections.doubles.lists.DoubleListIterator;
 
+@SuppressWarnings("javadoc")
 public abstract class DoubleListIteratorTester extends AbstractDoubleIteratorTester {
 
 	public DoubleListIteratorTester(int steps, DoubleIterable elementsToInsertIterable, Iterable<? extends IteratorFeature> features, DoubleIterable expectedElements, int startIndex) {

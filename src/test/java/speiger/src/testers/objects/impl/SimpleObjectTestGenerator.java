@@ -19,6 +19,7 @@ import speiger.src.testers.objects.generators.TestObjectSetGenerator;
 import speiger.src.testers.objects.generators.TestObjectSortedSetGenerator;
 import speiger.src.testers.objects.utils.ObjectSamples;
 
+@SuppressWarnings("javadoc")
 public class SimpleObjectTestGenerator<T, E extends ObjectCollection<T>> {
 	Function<T[], E> mapper;
 	ObjectSamples<T> elements;

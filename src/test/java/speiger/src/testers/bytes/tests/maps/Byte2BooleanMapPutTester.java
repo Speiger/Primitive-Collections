@@ -18,6 +18,7 @@ import speiger.src.collections.bytes.maps.interfaces.Byte2BooleanMap;
 import speiger.src.testers.bytes.tests.base.maps.AbstractByte2BooleanMapTester;
 
 @Ignore
+@SuppressWarnings("javadoc")
 public class Byte2BooleanMapPutTester extends AbstractByte2BooleanMapTester
 {	
 	@MapFeature.Require(SUPPORTS_PUT)

@@ -12,6 +12,7 @@ import com.google.common.collect.testing.features.CollectionSize;
 import speiger.src.testers.ints.tests.base.AbstractIntListIndexOfTester;
 
 @Ignore
+@SuppressWarnings("javadoc")
 public class IntListIndexOfTester extends AbstractIntListIndexOfTester
 {
 	@Override

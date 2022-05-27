@@ -41,6 +41,7 @@ import speiger.src.testers.floats.tests.maps.Float2BooleanMapPutIfAbsentTester;
 import speiger.src.testers.utils.TestUtils;
 import speiger.src.testers.utils.SpecialFeature;
 
+@SuppressWarnings("javadoc")
 public class Float2BooleanMapTests extends TestCase
 {
 	public static Test suite() {

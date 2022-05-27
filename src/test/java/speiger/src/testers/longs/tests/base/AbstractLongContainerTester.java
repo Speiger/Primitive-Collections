@@ -19,6 +19,7 @@ import speiger.src.testers.longs.utils.LongSamples;
 import speiger.src.testers.longs.utils.MinimalLongCollection;
 
 @Ignore
+@SuppressWarnings("javadoc")
 public abstract class AbstractLongContainerTester<E> extends AbstractTester<OneSizeTestContainerGenerator<E, Long>>
 {
 	protected LongSamples samples;

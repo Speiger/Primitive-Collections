@@ -23,6 +23,7 @@ import speiger.src.testers.objects.builder.maps.Object2ByteNavigableMapTestSuite
 import speiger.src.testers.objects.impl.maps.SimpleObject2ByteMapTestGenerator;
 import speiger.src.testers.utils.SpecialFeature;
 
+@SuppressWarnings("javadoc")
 public class Object2ByteMapTests extends TestCase
 {
 	public static Test suite() {

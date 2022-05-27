@@ -6,6 +6,7 @@ import speiger.src.collections.ints.maps.interfaces.Int2ByteMap;
 import speiger.src.collections.ints.maps.interfaces.Int2ByteMap.Entry;
 import speiger.src.collections.ints.maps.interfaces.Int2ByteSortedMap;
 
+@SuppressWarnings("javadoc")
 public interface TestInt2ByteSortedMapGenerator extends TestInt2ByteMapGenerator, TestSortedMapGenerator<Integer, Byte>
 {
 	@Override

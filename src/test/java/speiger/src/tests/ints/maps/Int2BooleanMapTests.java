@@ -41,6 +41,7 @@ import speiger.src.testers.ints.tests.maps.Int2BooleanMapPutIfAbsentTester;
 import speiger.src.testers.utils.TestUtils;
 import speiger.src.testers.utils.SpecialFeature;
 
+@SuppressWarnings("javadoc")
 public class Int2BooleanMapTests extends TestCase
 {
 	public static Test suite() {

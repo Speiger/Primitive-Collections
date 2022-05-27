@@ -8,6 +8,7 @@ import speiger.src.collections.longs.collections.LongIterator;
 import speiger.src.collections.longs.functions.LongConsumer;
 import speiger.src.collections.longs.lists.LongArrayList;
 
+@SuppressWarnings("javadoc")
 public class MinimalLongCollection extends AbstractLongCollection {
 
 	private final long[] contents;

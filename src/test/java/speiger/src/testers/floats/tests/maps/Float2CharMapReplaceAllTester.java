@@ -18,6 +18,7 @@ import speiger.src.testers.floats.tests.base.maps.AbstractFloat2CharMapTester;
 import speiger.src.testers.floats.utils.FloatSamples;
 
 @Ignore
+@SuppressWarnings("javadoc")
 public class Float2CharMapReplaceAllTester extends AbstractFloat2CharMapTester
 {
 	private FloatSamples keys() {

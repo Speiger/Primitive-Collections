@@ -5,6 +5,7 @@ import org.junit.Ignore;
 import speiger.src.testers.ints.tests.base.maps.AbstractInt2FloatMapTester;
 
 @Ignore
+@SuppressWarnings("javadoc")
 public class Int2FloatMapSizeTester extends AbstractInt2FloatMapTester {
 	
 	public void testSize() {

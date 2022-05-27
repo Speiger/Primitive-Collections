@@ -34,6 +34,7 @@ import speiger.src.testers.chars.tests.set.CharSetCreationTester;
 import speiger.src.testers.chars.tests.set.CharSetEqualsTester;
 import speiger.src.testers.chars.tests.set.CharSetRemoveTester;
 
+@SuppressWarnings("javadoc")
 public class CharSetTestSuiteBuilder extends CharCollectionTestSuiteBuilder {
 	public static CharSetTestSuiteBuilder using(TestCharSetGenerator generator) {
 		return (CharSetTestSuiteBuilder) new CharSetTestSuiteBuilder().usingGenerator(generator);

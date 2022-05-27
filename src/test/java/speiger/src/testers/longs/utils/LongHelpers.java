@@ -14,6 +14,7 @@ import speiger.src.collections.longs.sets.LongLinkedOpenHashSet;
 import speiger.src.collections.longs.sets.LongSet;
 import speiger.src.collections.longs.utils.LongIterators;
 
+@SuppressWarnings("javadoc")
 public class LongHelpers {
 	public static boolean equals(long key, long value) {
 		return key == value;

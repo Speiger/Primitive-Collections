@@ -10,9 +10,9 @@ import speiger.src.collections.doubles.collections.DoubleCollection;
 import speiger.src.testers.doubles.tests.base.AbstractDoubleCollectionTester;
 
 @Ignore
+@SuppressWarnings("javadoc")
 public class DoubleCollectionCopyTester extends AbstractDoubleCollectionTester
 {
-	
 	@CollectionFeature.Require(absent = {CollectionFeature.SUBSET_VIEW, CollectionFeature.DESCENDING_VIEW})
 	@SpecialFeature.Require(SpecialFeature.COPYING)
 	public void testEquals() {

@@ -13,6 +13,7 @@ import speiger.src.testers.bytes.generators.maps.TestByte2CharMapGenerator;
 import speiger.src.testers.bytes.generators.maps.TestByte2CharSortedMapGenerator;
 import speiger.src.testers.objects.utils.ObjectSamples;
 
+@SuppressWarnings("javadoc")
 public class SimpleByte2CharMapTestGenerator<E extends Byte2CharMap>
 {
 	BiFunction<byte[], char[], E> mapper;

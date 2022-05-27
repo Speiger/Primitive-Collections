@@ -19,6 +19,7 @@ import speiger.src.testers.booleans.utils.BooleanSamples;
 import speiger.src.testers.booleans.utils.MinimalBooleanCollection;
 
 @Ignore
+@SuppressWarnings("javadoc")
 public abstract class AbstractBooleanContainerTester<E> extends AbstractTester<OneSizeTestContainerGenerator<E, Boolean>>
 {
 	protected BooleanSamples samples;

@@ -11,6 +11,7 @@ import speiger.src.testers.ints.tests.base.maps.AbstractInt2DoubleMapTester;
 import speiger.src.testers.objects.utils.ObjectHelpers;
 
 @Ignore
+@SuppressWarnings("javadoc")
 public class Int2DoubleMapEqualsTester extends AbstractInt2DoubleMapTester 
 {
 	public void testEquals_otherMapWithSameEntries() {

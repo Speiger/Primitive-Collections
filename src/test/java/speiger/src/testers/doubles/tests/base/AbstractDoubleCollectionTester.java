@@ -5,6 +5,7 @@ import org.junit.Ignore;
 import speiger.src.collections.doubles.collections.DoubleCollection;
 
 @Ignore
+@SuppressWarnings("javadoc")
 public class AbstractDoubleCollectionTester extends AbstractDoubleContainerTester<DoubleCollection>
 {
 	protected DoubleCollection collection;

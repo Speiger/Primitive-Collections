@@ -15,6 +15,7 @@ import speiger.src.testers.objects.generators.maps.TestObject2CharMapGenerator;
 import speiger.src.testers.objects.generators.maps.TestObject2CharSortedMapGenerator;
 import speiger.src.testers.objects.utils.ObjectSamples;
 
+@SuppressWarnings("javadoc")
 public class SimpleObject2CharMapTestGenerator<T, E extends Object2CharMap<T>>
 {
 	BiFunction<T[], char[], E> mapper;

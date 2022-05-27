@@ -7,7 +7,9 @@ import speiger.src.collections.shorts.maps.interfaces.Short2BooleanMap;
 import speiger.src.testers.shorts.tests.base.maps.AbstractShort2BooleanMapTester;
 
 @Ignore
-public class Short2BooleanMapHashCodeTester extends AbstractShort2BooleanMapTester {
+@SuppressWarnings("javadoc")
+public class Short2BooleanMapHashCodeTester extends AbstractShort2BooleanMapTester
+{
 	public void testHashCode() {
 		int expectedHashCode = 0;
 		for (Short2BooleanMap.Entry entry : getSampleEntries()) {

@@ -10,6 +10,7 @@ import speiger.src.collections.shorts.collections.ShortIterable;
 import speiger.src.collections.shorts.collections.ShortIterator;
 import speiger.src.collections.shorts.lists.ShortListIterator;
 
+@SuppressWarnings("javadoc")
 public abstract class ShortListIteratorTester extends AbstractShortIteratorTester {
 
 	public ShortListIteratorTester(int steps, ShortIterable elementsToInsertIterable, Iterable<? extends IteratorFeature> features, ShortIterable expectedElements, int startIndex) {

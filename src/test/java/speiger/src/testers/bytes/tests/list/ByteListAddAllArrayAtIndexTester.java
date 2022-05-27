@@ -13,6 +13,7 @@ import com.google.common.collect.testing.features.ListFeature;
 import speiger.src.testers.bytes.tests.base.AbstractByteListTester;
 
 @Ignore
+@SuppressWarnings("javadoc")
 public class ByteListAddAllArrayAtIndexTester extends AbstractByteListTester
 {
 	@ListFeature.Require(SUPPORTS_ADD_WITH_INDEX)

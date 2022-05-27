@@ -10,6 +10,7 @@ import speiger.src.collections.doubles.collections.DoubleIterable;
 import speiger.src.collections.doubles.lists.DoubleList;
 import speiger.src.testers.doubles.utils.DoubleSamples;
 
+@SuppressWarnings("javadoc")
 public interface TestDoubleCollectionGenerator extends TestCollectionGenerator<Double>
 {
 	public DoubleSamples getSamples();

@@ -23,6 +23,7 @@ import speiger.src.testers.shorts.tests.base.maps.AbstractShort2FloatMapTester;
 import speiger.src.testers.objects.utils.ObjectHelpers;
 
 @Ignore
+@SuppressWarnings("javadoc")
 public class Short2FloatNavigableMapNavigationTester extends AbstractShort2FloatMapTester
 {
 	private Short2FloatNavigableMap navigableMap;

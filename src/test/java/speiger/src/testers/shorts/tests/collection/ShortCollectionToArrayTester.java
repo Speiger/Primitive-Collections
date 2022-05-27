@@ -12,6 +12,7 @@ import speiger.src.testers.shorts.tests.base.AbstractShortCollectionTester;
 import speiger.src.testers.shorts.utils.ShortHelpers;
 
 @Ignore
+@SuppressWarnings("javadoc")
 public class ShortCollectionToArrayTester extends AbstractShortCollectionTester
 {
 	public void testToArray_noArgs() {

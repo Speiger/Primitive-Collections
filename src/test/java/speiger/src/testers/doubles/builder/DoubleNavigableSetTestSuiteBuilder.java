@@ -29,6 +29,7 @@ import speiger.src.testers.doubles.impl.DoubleSortedSetSubsetTestSetGenerator.Do
 import speiger.src.testers.doubles.tests.set.DoubleNavigableSetNavigationTester;
 import speiger.src.testers.doubles.utils.DoubleSamples;
 
+@SuppressWarnings("javadoc")
 public class DoubleNavigableSetTestSuiteBuilder extends DoubleSortedSetTestSuiteBuilder {
 	public static DoubleNavigableSetTestSuiteBuilder using(TestDoubleNavigableSetGenerator generator) {
 		return (DoubleNavigableSetTestSuiteBuilder) new DoubleNavigableSetTestSuiteBuilder().usingGenerator(generator);

@@ -18,6 +18,7 @@ import speiger.src.collections.objects.collections.ObjectIterator;
 import speiger.src.testers.shorts.tests.base.maps.AbstractShort2ObjectMapTester;
 
 @Ignore
+@SuppressWarnings("javadoc")
 public class Short2ObjectMapRemoveOrDefaultTester<V> extends AbstractShort2ObjectMapTester<V>
 {
 	@MapFeature.Require(SUPPORTS_REMOVE)

@@ -24,6 +24,7 @@ import speiger.src.testers.doubles.utils.DoubleHelpers;
 import speiger.src.testers.doubles.utils.DoubleIteratorTester;
 
 @Ignore
+@SuppressWarnings("javadoc")
 public class DoubleCollectionIteratorTester extends AbstractDoubleCollectionTester
 {
 	public void testIterator() {

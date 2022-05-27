@@ -55,7 +55,9 @@ import speiger.src.testers.booleans.tests.list.BooleanListRemoveElementsTester;
 import speiger.src.testers.booleans.tests.list.BooleanListRetainAllTester;
 import speiger.src.testers.booleans.tests.list.BooleanListSubListTester;
 
-public class BooleanListTests extends TestCase {
+@SuppressWarnings("javadoc")
+public class BooleanListTests extends TestCase
+{
 	
 	public static Test suite() {
 		TestSuite suite = new TestSuite("BooleanLists");

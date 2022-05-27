@@ -22,6 +22,7 @@ import speiger.src.testers.doubles.utils.DoubleHelpers;
 import speiger.src.testers.doubles.utils.DoubleListIteratorTester;
 
 @Ignore
+@SuppressWarnings("javadoc")
 public class DoubleListListIteratorTester extends AbstractDoubleListTester
 {
 	@CollectionFeature.Require(absent = SUPPORTS_REMOVE)

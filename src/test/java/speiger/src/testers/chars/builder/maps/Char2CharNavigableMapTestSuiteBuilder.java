@@ -19,6 +19,7 @@ import speiger.src.testers.chars.impl.maps.DerivedChar2CharMapGenerators;
 import speiger.src.testers.chars.tests.maps.Char2CharNavigableMapNavigationTester;
 import speiger.src.testers.utils.SpecialFeature;
 
+@SuppressWarnings("javadoc")
 public class Char2CharNavigableMapTestSuiteBuilder extends Char2CharSortedMapTestSuiteBuilder
 {
 	public static Char2CharNavigableMapTestSuiteBuilder using(TestChar2CharSortedMapGenerator generator) {

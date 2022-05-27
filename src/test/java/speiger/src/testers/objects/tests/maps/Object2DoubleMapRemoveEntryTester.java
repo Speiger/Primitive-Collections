@@ -11,6 +11,7 @@ import com.google.common.collect.testing.features.MapFeature;
 import speiger.src.testers.objects.tests.base.maps.AbstractObject2DoubleMapTester;
 
 @Ignore
+@SuppressWarnings("javadoc")
 public class Object2DoubleMapRemoveEntryTester<T> extends AbstractObject2DoubleMapTester<T>
 {
 	@MapFeature.Require(SUPPORTS_REMOVE)

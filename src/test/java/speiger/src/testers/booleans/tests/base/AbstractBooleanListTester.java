@@ -8,6 +8,7 @@ import speiger.src.collections.booleans.lists.BooleanList;
 import speiger.src.testers.booleans.utils.BooleanHelpers;
 
 @Ignore
+@SuppressWarnings("javadoc")
 public class AbstractBooleanListTester extends AbstractBooleanCollectionTester
 {
 	protected final BooleanList getList() {

@@ -58,6 +58,7 @@ import speiger.src.testers.objects.tests.collection.ObjectCollectionRetainAllTes
 import speiger.src.testers.utils.SpecialFeature;
 import speiger.src.testers.utils.TestUtils;
 
+@SuppressWarnings("javadoc")
 public class Char2ObjectMapTestSuiteBuilder<V> extends MapTestSuiteBuilder<Character, V> {
 	public static <V> Char2ObjectMapTestSuiteBuilder<V> using(TestChar2ObjectMapGenerator<V> generator) {
 		return (Char2ObjectMapTestSuiteBuilder<V>) new Char2ObjectMapTestSuiteBuilder<V>().usingGenerator(generator);

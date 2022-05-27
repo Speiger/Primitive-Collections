@@ -11,6 +11,7 @@ import com.google.common.collect.testing.features.CollectionSize;
 import speiger.src.testers.chars.tests.base.AbstractCharSetTester;
 
 @Ignore
+@SuppressWarnings("javadoc")
 public class CharSetRemoveTester extends AbstractCharSetTester
 {
 	@CollectionFeature.Require(SUPPORTS_REMOVE)

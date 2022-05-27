@@ -18,6 +18,7 @@ import speiger.src.testers.longs.tests.base.maps.AbstractLong2FloatMapTester;
 import speiger.src.testers.longs.utils.LongSamples;
 
 @Ignore
+@SuppressWarnings("javadoc")
 public class Long2FloatMapReplaceAllTester extends AbstractLong2FloatMapTester
 {
 	private LongSamples keys() {

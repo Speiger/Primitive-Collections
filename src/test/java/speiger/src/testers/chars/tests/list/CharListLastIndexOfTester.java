@@ -12,6 +12,7 @@ import com.google.common.collect.testing.features.CollectionSize;
 import speiger.src.testers.chars.tests.base.AbstractCharListIndexOfTester;
 
 @Ignore
+@SuppressWarnings("javadoc")
 public class CharListLastIndexOfTester extends AbstractCharListIndexOfTester
 {
 	@Override

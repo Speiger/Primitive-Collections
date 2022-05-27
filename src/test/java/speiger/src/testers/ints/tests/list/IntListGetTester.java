@@ -5,6 +5,7 @@ import org.junit.Ignore;
 import speiger.src.testers.ints.tests.base.AbstractIntListTester;
 
 @Ignore
+@SuppressWarnings("javadoc")
 public class IntListGetTester extends AbstractIntListTester
 {
 	public void testGet_valid() {

@@ -7,6 +7,7 @@ import speiger.src.collections.shorts.lists.ShortArrayList;
 import speiger.src.collections.shorts.lists.ShortList;
 import speiger.src.collections.shorts.sets.ShortSet;
 
+@SuppressWarnings("javadoc")
 public class MinimalShortSet extends MinimalShortCollection implements ShortSet {
 	public static MinimalShortSet of(short...array) {
 		return MinimalShortSet.of(ShortArrayList.wrap(array));

@@ -11,6 +11,7 @@ import com.google.common.collect.testing.features.CollectionSize;
 import speiger.src.testers.bytes.tests.base.AbstractByteSetTester;
 
 @Ignore
+@SuppressWarnings("javadoc")
 public class ByteSetAddTester extends AbstractByteSetTester
 {
 	@CollectionFeature.Require(SUPPORTS_ADD)

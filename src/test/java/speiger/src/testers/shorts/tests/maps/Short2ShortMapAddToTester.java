@@ -17,6 +17,7 @@ import speiger.src.collections.shorts.maps.interfaces.Short2ShortMap;
 import speiger.src.testers.shorts.tests.base.maps.AbstractShort2ShortMapTester;
 
 @Ignore
+@SuppressWarnings("javadoc")
 public class Short2ShortMapAddToTester extends AbstractShort2ShortMapTester
 {	@MapFeature.Require(SUPPORTS_PUT)
 	@CollectionSize.Require(absent = ZERO)

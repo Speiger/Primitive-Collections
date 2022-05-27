@@ -13,6 +13,7 @@ import com.google.common.collect.testing.features.ListFeature;
 import speiger.src.testers.ints.tests.base.AbstractIntListTester;
 
 @Ignore
+@SuppressWarnings("javadoc")
 public class IntListReplaceAllTester extends AbstractIntListTester
 {
 	@ListFeature.Require(SUPPORTS_SET)

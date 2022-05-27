@@ -10,9 +10,9 @@ import speiger.src.collections.shorts.collections.ShortCollection;
 import speiger.src.testers.shorts.tests.base.AbstractShortCollectionTester;
 
 @Ignore
+@SuppressWarnings("javadoc")
 public class ShortCollectionCopyTester extends AbstractShortCollectionTester
 {
-	
 	@CollectionFeature.Require(absent = {CollectionFeature.SUBSET_VIEW, CollectionFeature.DESCENDING_VIEW})
 	@SpecialFeature.Require(SpecialFeature.COPYING)
 	public void testEquals() {

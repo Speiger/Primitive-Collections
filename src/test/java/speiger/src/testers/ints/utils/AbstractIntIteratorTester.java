@@ -22,7 +22,9 @@ import speiger.src.collections.ints.lists.IntArrayList;
 import speiger.src.collections.ints.lists.IntList;
 import speiger.src.collections.ints.lists.IntListIterator;
 
-public abstract class AbstractIntIteratorTester{
+@SuppressWarnings("javadoc")
+public abstract class AbstractIntIteratorTester
+{
 	private Stimulus<IntIterator>[] stimuli;
 	private final IntIterator elementsToInsert;
 	private final Set<IteratorFeature> features;
@@ -312,7 +314,7 @@ public abstract class AbstractIntIteratorTester{
 		}
 
 		try {
-			if (method == nextInt_METHOD && targetException == null && knownOrder == KnownOrder.UNKNOWN_ORDER) {
+			if (method == NEXT_METHOD && targetException == null && knownOrder == KnownOrder.UNKNOWN_ORDER) {
 				((MultiExceptionListIterator) reference).promoteToNext(targetReturnValue);
 			}
 			
@@ -346,7 +348,7 @@ public abstract class AbstractIntIteratorTester{
 		referenceException.assertPermitted(targetException);
 	}
 
-	private static final IteratorOperation removeInt_METHOD = new IteratorOperation() {
+	private static final IteratorOperation REMOVE_METHOD = new IteratorOperation() {
 		@Override
 		public int execute(IntIterator iterator) {
 			iterator.remove();
@@ -354,14 +356,14 @@ public abstract class AbstractIntIteratorTester{
 		}
 	};
 
-	private static final IteratorOperation nextInt_METHOD = new IteratorOperation() {
+	private static final IteratorOperation NEXT_METHOD = new IteratorOperation() {
 		@Override
 		public int execute(IntIterator iterator) {
 			return iterator.nextInt();
 		}
 	};
 
-	private static final IteratorOperation previousInt_METHOD = new IteratorOperation() {
+	private static final IteratorOperation PREVIOUS_METHOD = new IteratorOperation() {
 		@Override
 		public int execute(IntIterator iterator) {
 			return ((IntBidirectionalIterator) iterator).previousInt();
@@ -418,13 +420,13 @@ public abstract class AbstractIntIteratorTester{
 	Stimulus<IntIterator> next = new Stimulus<IntIterator>("next") {
 		@Override
 		void executeAndCompare(IntListIterator reference, IntIterator target) {
-			internalExecuteAndCompare(reference, target, nextInt_METHOD);
+			internalExecuteAndCompare(reference, target, NEXT_METHOD);
 		}
 	};
 	Stimulus<IntIterator> remove = new Stimulus<IntIterator>("remove") {
 		@Override
 		void executeAndCompare(IntListIterator reference, IntIterator target) {
-			internalExecuteAndCompare(reference, target, removeInt_METHOD);
+			internalExecuteAndCompare(reference, target, REMOVE_METHOD);
 		}
 	};
 
@@ -442,7 +444,7 @@ public abstract class AbstractIntIteratorTester{
 	Stimulus<IntBidirectionalIterator> previous = new Stimulus<IntBidirectionalIterator>("previous") {
 		@Override
 		void executeAndCompare(IntListIterator reference, IntBidirectionalIterator target) {
-			internalExecuteAndCompare(reference, target, previousInt_METHOD);
+			internalExecuteAndCompare(reference, target, PREVIOUS_METHOD);
 		}
 	};
 	

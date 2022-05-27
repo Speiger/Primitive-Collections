@@ -15,6 +15,7 @@ import speiger.src.collections.objects.lists.ObjectList;
 import speiger.src.testers.bytes.tests.base.maps.AbstractByte2LongMapTester;
 
 @Ignore
+@SuppressWarnings("javadoc")
 public class Byte2LongMapForEachTester extends AbstractByte2LongMapTester
 {
 	@CollectionFeature.Require(KNOWN_ORDER)

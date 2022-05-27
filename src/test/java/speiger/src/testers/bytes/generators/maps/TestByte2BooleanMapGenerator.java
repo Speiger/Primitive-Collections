@@ -11,6 +11,7 @@ import speiger.src.collections.objects.collections.ObjectIterable;
 import speiger.src.collections.objects.lists.ObjectList;
 import speiger.src.testers.objects.utils.ObjectSamples;
 
+@SuppressWarnings("javadoc")
 public interface TestByte2BooleanMapGenerator extends TestMapGenerator<Byte, Boolean> {
 	public ObjectSamples<Byte2BooleanMap.Entry> getSamples();
 	public ObjectIterable<Byte2BooleanMap.Entry> order(ObjectList<Byte2BooleanMap.Entry> insertionOrder);

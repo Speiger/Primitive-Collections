@@ -6,6 +6,7 @@ import speiger.src.collections.longs.maps.interfaces.Long2ObjectMap;
 import speiger.src.collections.longs.maps.interfaces.Long2ObjectMap.Entry;
 import speiger.src.collections.longs.maps.interfaces.Long2ObjectSortedMap;
 
+@SuppressWarnings("javadoc")
 public interface TestLong2ObjectSortedMapGenerator<V> extends TestLong2ObjectMapGenerator<V>, TestSortedMapGenerator<Long, V>
 {
 	@Override

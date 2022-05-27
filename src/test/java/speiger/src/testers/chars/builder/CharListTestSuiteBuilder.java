@@ -69,6 +69,7 @@ import speiger.src.testers.chars.tests.list.CharListSwapRemoveAtIndexTester;
 import speiger.src.testers.chars.tests.list.CharListSwapRemoveTester;
 import speiger.src.testers.chars.tests.list.CharListToArrayTester;
 
+@SuppressWarnings("javadoc")
 public class CharListTestSuiteBuilder extends CharCollectionTestSuiteBuilder {
 	public static CharListTestSuiteBuilder using(TestCharListGenerator generator) {
 		return (CharListTestSuiteBuilder) new CharListTestSuiteBuilder().usingGenerator(generator);

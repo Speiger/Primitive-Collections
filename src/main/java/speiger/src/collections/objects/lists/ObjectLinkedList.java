@@ -608,8 +608,8 @@ public class ObjectLinkedList<T> extends AbstractObjectList<T> implements Object
 		checkRange(from);
 		checkAddRange(to);
 		int length = to - from;
+		if(length <= 0) return ObjectArrays.newArray(type, 0);
 		K[] a = ObjectArrays.newArray(type, length);
-		if(length <= 0) return a;
 		if(from < size - to) {
 			Entry<T> entry = getNode(from);
 			for(int i = 0;length > 0;i++, length--) {

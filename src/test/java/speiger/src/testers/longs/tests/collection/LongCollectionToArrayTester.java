@@ -12,6 +12,7 @@ import speiger.src.testers.longs.tests.base.AbstractLongCollectionTester;
 import speiger.src.testers.longs.utils.LongHelpers;
 
 @Ignore
+@SuppressWarnings("javadoc")
 public class LongCollectionToArrayTester extends AbstractLongCollectionTester
 {
 	public void testToArray_noArgs() {

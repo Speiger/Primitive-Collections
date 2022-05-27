@@ -12,6 +12,7 @@ import com.google.common.collect.testing.features.CollectionSize;
 import speiger.src.testers.doubles.tests.base.AbstractDoubleListIndexOfTester;
 
 @Ignore
+@SuppressWarnings("javadoc")
 public class DoubleListIndexOfTester extends AbstractDoubleListIndexOfTester
 {
 	@Override

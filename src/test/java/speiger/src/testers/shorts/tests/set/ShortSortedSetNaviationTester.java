@@ -18,7 +18,9 @@ import speiger.src.testers.shorts.tests.base.AbstractShortSetTester;
 import speiger.src.testers.shorts.utils.ShortHelpers;
 
 @Ignore
-public class ShortSortedSetNaviationTester extends AbstractShortSetTester {
+@SuppressWarnings("javadoc")
+public class ShortSortedSetNaviationTester extends AbstractShortSetTester
+{
 	private ShortSortedSet sortedSet;
 	private ShortList values;
 	private short a;

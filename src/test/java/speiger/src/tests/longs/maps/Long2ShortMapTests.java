@@ -23,6 +23,7 @@ import speiger.src.testers.longs.builder.maps.Long2ShortNavigableMapTestSuiteBui
 import speiger.src.testers.longs.impl.maps.SimpleLong2ShortMapTestGenerator;
 import speiger.src.testers.utils.SpecialFeature;
 
+@SuppressWarnings("javadoc")
 public class Long2ShortMapTests extends TestCase
 {
 	public static Test suite() {

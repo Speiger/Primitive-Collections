@@ -13,6 +13,7 @@ import speiger.src.testers.ints.generators.maps.TestInt2LongMapGenerator;
 import speiger.src.testers.ints.generators.maps.TestInt2LongSortedMapGenerator;
 import speiger.src.testers.objects.utils.ObjectSamples;
 
+@SuppressWarnings("javadoc")
 public class SimpleInt2LongMapTestGenerator<E extends Int2LongMap>
 {
 	BiFunction<int[], long[], E> mapper;

@@ -6,6 +6,7 @@ import speiger.src.collections.bytes.maps.interfaces.Byte2ShortMap;
 import speiger.src.collections.bytes.maps.interfaces.Byte2ShortMap.Entry;
 import speiger.src.collections.bytes.maps.interfaces.Byte2ShortSortedMap;
 
+@SuppressWarnings("javadoc")
 public interface TestByte2ShortSortedMapGenerator extends TestByte2ShortMapGenerator, TestSortedMapGenerator<Byte, Short>
 {
 	@Override

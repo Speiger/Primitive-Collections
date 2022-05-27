@@ -20,6 +20,7 @@ import speiger.src.testers.bytes.utils.ByteHelpers;
 import speiger.src.testers.bytes.utils.MinimalByteCollection;
 
 @Ignore
+@SuppressWarnings("javadoc")
 public class ByteCollectionRemoveAllTester extends AbstractByteCollectionTester
 {
 	@CollectionFeature.Require(SUPPORTS_REMOVE)

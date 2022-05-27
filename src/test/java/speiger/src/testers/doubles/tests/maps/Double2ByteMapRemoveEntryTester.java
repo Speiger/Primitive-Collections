@@ -11,6 +11,7 @@ import com.google.common.collect.testing.features.MapFeature;
 import speiger.src.testers.doubles.tests.base.maps.AbstractDouble2ByteMapTester;
 
 @Ignore
+@SuppressWarnings("javadoc")
 public class Double2ByteMapRemoveEntryTester extends AbstractDouble2ByteMapTester
 {
 	@MapFeature.Require(SUPPORTS_REMOVE)

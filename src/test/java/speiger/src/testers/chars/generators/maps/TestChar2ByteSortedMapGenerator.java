@@ -6,6 +6,7 @@ import speiger.src.collections.chars.maps.interfaces.Char2ByteMap;
 import speiger.src.collections.chars.maps.interfaces.Char2ByteMap.Entry;
 import speiger.src.collections.chars.maps.interfaces.Char2ByteSortedMap;
 
+@SuppressWarnings("javadoc")
 public interface TestChar2ByteSortedMapGenerator extends TestChar2ByteMapGenerator, TestSortedMapGenerator<Character, Byte>
 {
 	@Override

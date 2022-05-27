@@ -12,6 +12,7 @@ import com.google.common.collect.testing.features.CollectionSize;
 import speiger.src.testers.floats.tests.base.AbstractFloatListIndexOfTester;
 
 @Ignore
+@SuppressWarnings("javadoc")
 public class FloatListLastIndexOfTester extends AbstractFloatListIndexOfTester
 {
 	@Override

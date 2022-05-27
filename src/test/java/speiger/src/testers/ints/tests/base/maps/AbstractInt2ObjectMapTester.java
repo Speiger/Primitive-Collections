@@ -22,8 +22,9 @@ import speiger.src.testers.objects.tests.base.AbstractObjectContainerTester;
 import speiger.src.testers.objects.utils.ObjectHelpers;
 
 @Ignore
-public class AbstractInt2ObjectMapTester<V> extends AbstractObjectContainerTester<Int2ObjectMap.Entry<V>, Int2ObjectMap<V>> {
-
+@SuppressWarnings("javadoc")
+public class AbstractInt2ObjectMapTester<V> extends AbstractObjectContainerTester<Int2ObjectMap.Entry<V>, Int2ObjectMap<V>>
+{
 	protected TestInt2ObjectMapGenerator<V> primitiveMapGenerator;
 
 	protected Int2ObjectMap<V> getMap() {

@@ -10,6 +10,7 @@ import speiger.src.collections.ints.collections.IntIterable;
 import speiger.src.collections.ints.lists.IntList;
 import speiger.src.testers.ints.utils.IntSamples;
 
+@SuppressWarnings("javadoc")
 public interface TestIntCollectionGenerator extends TestCollectionGenerator<Integer>
 {
 	public IntSamples getSamples();

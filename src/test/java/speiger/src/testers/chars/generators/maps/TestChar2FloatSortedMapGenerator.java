@@ -6,6 +6,7 @@ import speiger.src.collections.chars.maps.interfaces.Char2FloatMap;
 import speiger.src.collections.chars.maps.interfaces.Char2FloatMap.Entry;
 import speiger.src.collections.chars.maps.interfaces.Char2FloatSortedMap;
 
+@SuppressWarnings("javadoc")
 public interface TestChar2FloatSortedMapGenerator extends TestChar2FloatMapGenerator, TestSortedMapGenerator<Character, Float>
 {
 	@Override

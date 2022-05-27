@@ -19,6 +19,7 @@ import speiger.src.testers.bytes.impl.maps.DerivedByte2CharMapGenerators;
 import speiger.src.testers.bytes.tests.maps.Byte2CharNavigableMapNavigationTester;
 import speiger.src.testers.utils.SpecialFeature;
 
+@SuppressWarnings("javadoc")
 public class Byte2CharNavigableMapTestSuiteBuilder extends Byte2CharSortedMapTestSuiteBuilder
 {
 	public static Byte2CharNavigableMapTestSuiteBuilder using(TestByte2CharSortedMapGenerator generator) {

@@ -18,6 +18,7 @@ import speiger.src.testers.floats.generators.TestFloatSetGenerator;
 import speiger.src.testers.floats.generators.TestFloatSortedSetGenerator;
 import speiger.src.testers.floats.utils.FloatSamples;
 
+@SuppressWarnings("javadoc")
 public class SimpleFloatTestGenerator<E extends FloatCollection> {
 	Function<float[], E> mapper;
 	public SimpleFloatTestGenerator(Function<float[], E> mapper) {

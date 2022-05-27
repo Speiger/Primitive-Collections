@@ -19,6 +19,7 @@ import speiger.src.testers.longs.impl.maps.DerivedLong2BooleanMapGenerators;
 import speiger.src.testers.longs.tests.maps.Long2BooleanNavigableMapNavigationTester;
 import speiger.src.testers.utils.SpecialFeature;
 
+@SuppressWarnings("javadoc")
 public class Long2BooleanNavigableMapTestSuiteBuilder extends Long2BooleanSortedMapTestSuiteBuilder
 {
 	public static Long2BooleanNavigableMapTestSuiteBuilder using(TestLong2BooleanSortedMapGenerator generator) {

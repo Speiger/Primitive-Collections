@@ -5,6 +5,7 @@ import org.junit.Ignore;
 import speiger.src.collections.shorts.collections.ShortCollection;
 
 @Ignore
+@SuppressWarnings("javadoc")
 public class AbstractShortCollectionTester extends AbstractShortContainerTester<ShortCollection>
 {
 	protected ShortCollection collection;

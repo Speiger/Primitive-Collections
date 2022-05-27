@@ -13,6 +13,7 @@ import com.google.common.collect.testing.features.ListFeature;
 import speiger.src.testers.longs.tests.base.AbstractLongListTester;
 
 @Ignore
+@SuppressWarnings("javadoc")
 public class LongListReplaceAllTester extends AbstractLongListTester
 {
 	@ListFeature.Require(SUPPORTS_SET)

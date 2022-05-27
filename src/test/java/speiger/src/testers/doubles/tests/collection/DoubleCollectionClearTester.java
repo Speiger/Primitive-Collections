@@ -16,6 +16,7 @@ import speiger.src.collections.doubles.collections.DoubleIterator;
 import speiger.src.testers.doubles.tests.base.AbstractDoubleCollectionTester;
 
 @Ignore
+@SuppressWarnings("javadoc")
 public class DoubleCollectionClearTester extends AbstractDoubleCollectionTester
 {
 	@CollectionFeature.Require(SUPPORTS_REMOVE)

@@ -11,6 +11,7 @@ import speiger.src.testers.doubles.generators.TestDoubleOrderedSetGenerator;
 import speiger.src.testers.doubles.tests.set.DoubleOrderedSetMoveTester;
 import speiger.src.testers.doubles.tests.set.DoubleOrderedSetNavigationTester;
 
+@SuppressWarnings("javadoc")
 public class DoubleOrderedSetTestSuiteBuilder extends DoubleSetTestSuiteBuilder {
 	public static DoubleOrderedSetTestSuiteBuilder using(TestDoubleOrderedSetGenerator generator) {
 		return (DoubleOrderedSetTestSuiteBuilder) new DoubleOrderedSetTestSuiteBuilder().usingGenerator(generator);

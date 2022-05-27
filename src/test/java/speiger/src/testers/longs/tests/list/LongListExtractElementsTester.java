@@ -12,6 +12,7 @@ import speiger.src.collections.longs.lists.LongArrayList;
 import speiger.src.testers.longs.tests.base.AbstractLongListTester;
 
 @Ignore
+@SuppressWarnings("javadoc")
 public class LongListExtractElementsTester extends AbstractLongListTester
 {
 	@CollectionFeature.Require(SUPPORTS_REMOVE)

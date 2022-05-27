@@ -24,6 +24,7 @@ import speiger.src.testers.shorts.tests.collection.ShortCollectionStreamTester;
 import speiger.src.testers.shorts.tests.collection.ShortCollectionRetainAllTester;
 import speiger.src.testers.shorts.tests.collection.ShortCollectionToArrayTester;
 
+@SuppressWarnings("javadoc")
 public class ShortCollectionTestSuiteBuilder extends CollectionTestSuiteBuilder<Short> {
 	public static ShortCollectionTestSuiteBuilder using(TestShortCollectionGenerator generator) {
 		return (ShortCollectionTestSuiteBuilder) new ShortCollectionTestSuiteBuilder().usingGenerator(generator);

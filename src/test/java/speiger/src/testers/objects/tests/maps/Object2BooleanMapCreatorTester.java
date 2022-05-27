@@ -14,6 +14,7 @@ import speiger.src.collections.objects.lists.ObjectArrayList;
 import speiger.src.testers.objects.tests.base.maps.AbstractObject2BooleanMapTester;
 
 @Ignore
+@SuppressWarnings("javadoc")
 public class Object2BooleanMapCreatorTester<T> extends AbstractObject2BooleanMapTester<T>
 {
 	@MapFeature.Require(absent = REJECTS_DUPLICATES_AT_CREATION)

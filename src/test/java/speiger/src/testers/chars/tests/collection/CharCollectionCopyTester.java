@@ -10,9 +10,9 @@ import speiger.src.collections.chars.collections.CharCollection;
 import speiger.src.testers.chars.tests.base.AbstractCharCollectionTester;
 
 @Ignore
+@SuppressWarnings("javadoc")
 public class CharCollectionCopyTester extends AbstractCharCollectionTester
 {
-	
 	@CollectionFeature.Require(absent = {CollectionFeature.SUBSET_VIEW, CollectionFeature.DESCENDING_VIEW})
 	@SpecialFeature.Require(SpecialFeature.COPYING)
 	public void testEquals() {

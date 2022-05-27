@@ -15,6 +15,7 @@ import speiger.src.collections.objects.lists.ObjectList;
 import speiger.src.testers.ints.tests.base.maps.AbstractInt2ObjectMapTester;
 
 @Ignore
+@SuppressWarnings("javadoc")
 public class Int2ObjectMapForEachTester<V> extends AbstractInt2ObjectMapTester<V>
 {
 	@CollectionFeature.Require(KNOWN_ORDER)

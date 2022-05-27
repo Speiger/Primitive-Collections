@@ -10,6 +10,7 @@ import speiger.src.testers.floats.utils.FloatHelpers;
 import speiger.src.testers.floats.utils.MinimalFloatSet;
 
 @Ignore
+@SuppressWarnings("javadoc")
 public class FloatSetEqualsTester extends AbstractFloatSetTester
 {
 	public void testEquals_otherSetWithSameElements() {

@@ -8,6 +8,7 @@ import speiger.src.collections.bytes.collections.ByteIterator;
 import speiger.src.collections.bytes.functions.ByteConsumer;
 import speiger.src.collections.bytes.lists.ByteArrayList;
 
+@SuppressWarnings("javadoc")
 public class MinimalByteCollection extends AbstractByteCollection {
 
 	private final byte[] contents;

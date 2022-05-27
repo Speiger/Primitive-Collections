@@ -12,6 +12,7 @@ import speiger.src.testers.ints.tests.base.AbstractIntCollectionTester;
 import speiger.src.testers.ints.utils.IntHelpers;
 
 @Ignore
+@SuppressWarnings("javadoc")
 public class IntCollectionForEachTester extends AbstractIntCollectionTester
 {
 	@CollectionFeature.Require(absent = KNOWN_ORDER)

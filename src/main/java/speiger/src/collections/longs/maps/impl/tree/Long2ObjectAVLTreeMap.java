@@ -270,7 +270,7 @@ public class Long2ObjectAVLTreeMap<V> extends AbstractLong2ObjectMap<V> implemen
 	
 	@Override
 	public long pollFirstLongKey() {
-		if(tree == null) return 0L;
+		if(tree == null) return getDefaultMinValue();
 		long result = first.key;
 		removeNode(first);
 		return result;
@@ -284,7 +284,7 @@ public class Long2ObjectAVLTreeMap<V> extends AbstractLong2ObjectMap<V> implemen
 	
 	@Override
 	public long pollLastLongKey() {
-		if(tree == null) return 0L;
+		if(tree == null) return getDefaultMaxValue();
 		long result = last.key;
 		removeNode(last);
 		return result;
@@ -856,6 +856,31 @@ public class Long2ObjectAVLTreeMap<V> extends AbstractLong2ObjectMap<V> implemen
 		public long ceiling(long e) { return map.ceilingKey(e); }
 		@Override
 		public long higher(long e) { return map.higherKey(e); }
+		
+		@Override
+		public Long lower(Long e) {
+			Long2ObjectMap.Entry<V> node = map.lowerEntry(e.longValue());
+			return node != null ? node.getKey() : null;
+		}
+		
+		@Override
+		public Long floor(Long e) {
+			Long2ObjectMap.Entry<V> node = map.floorEntry(e.longValue());
+			return node != null ? node.getKey() : null;
+		}
+		
+		@Override
+		public Long higher(Long e) {
+			Long2ObjectMap.Entry<V> node = map.higherEntry(e.longValue());
+			return node != null ? node.getKey() : null;
+		}
+		
+		@Override
+		public Long ceiling(Long e) {
+			Long2ObjectMap.Entry<V> node = map.ceilingEntry(e.longValue());
+			return node != null ? node.getKey() : null;
+		}
+		
 		@Override
 		public long pollFirstLong() { return map.pollFirstLongKey(); }
 		@Override
@@ -1264,8 +1289,8 @@ public class Long2ObjectAVLTreeMap<V> extends AbstractLong2ObjectMap<V> implemen
 		protected abstract LongBidirectionalIterator keyIterator(long element);
 		protected abstract ObjectBidirectionalIterator<V> valueIterator();
 		protected abstract LongBidirectionalIterator descendingKeyIterator();
-		protected long lowKeyOrNull(Node<V> entry) { return entry == null ? 0L : entry.key; }
-		protected long highKeyOrNull(Node<V> entry) { return entry == null ? 0L : entry.key; }
+		protected long lowKeyOrNull(Node<V> entry) { return entry == null ? getDefaultMinValue() : entry.key; }
+		protected long highKeyOrNull(Node<V> entry) { return entry == null ? getDefaultMaxValue() : entry.key; }
 		protected Node<V> next(Node<V> entry) { return entry.next(); }
 		protected Node<V> previous(Node<V> entry) { return entry.previous(); }
 		
@@ -1336,7 +1361,7 @@ public class Long2ObjectAVLTreeMap<V> extends AbstractLong2ObjectMap<V> implemen
 				map.removeNode(entry);
 				return result;
 			}
-			return 0L;
+			return getDefaultMinValue();
 		}
 		
 		@Override
@@ -1347,7 +1372,7 @@ public class Long2ObjectAVLTreeMap<V> extends AbstractLong2ObjectMap<V> implemen
 				map.removeNode(entry);
 				return result;
 			}
-			return 0L;
+			return getDefaultMaxValue();
 		}
 		
 		@Override
@@ -1413,7 +1438,7 @@ public class Long2ObjectAVLTreeMap<V> extends AbstractLong2ObjectMap<V> implemen
 		
 		@Override
 		public V removeOrDefault(long key, V defaultValue) {
-			return inRange(key) ? map.remove(key) : defaultValue;
+			return inRange(key) ? map.removeOrDefault(key, defaultValue) : defaultValue;
 		}
 		
 		@Override
@@ -1889,8 +1914,8 @@ public class Long2ObjectAVLTreeMap<V> extends AbstractLong2ObjectMap<V> implemen
 			public SubMapEntryIterator(Node<V> first, Node<V> forwardFence, Node<V> backwardFence)
 			{
 				next = first;
-				this.forwardFence = forwardFence == null ? null : forwardFence.key;
-				this.backwardFence = backwardFence == null ? null : backwardFence.key;
+				this.forwardFence = forwardFence == null ? 0L : forwardFence.key;
+				this.backwardFence = backwardFence == null ? 0L : backwardFence.key;
 				unboundForwardFence = forwardFence == null;
 				unboundBackwardFence = backwardFence == null;
 			}

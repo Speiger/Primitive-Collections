@@ -13,6 +13,7 @@ import speiger.src.testers.doubles.generators.maps.TestDouble2DoubleMapGenerator
 import speiger.src.testers.doubles.generators.maps.TestDouble2DoubleSortedMapGenerator;
 import speiger.src.testers.objects.utils.ObjectSamples;
 
+@SuppressWarnings("javadoc")
 public class SimpleDouble2DoubleMapTestGenerator<E extends Double2DoubleMap>
 {
 	BiFunction<double[], double[], E> mapper;

@@ -13,6 +13,7 @@ import speiger.src.collections.floats.sets.FloatSortedSet;
 import speiger.src.testers.floats.generators.TestFloatSortedSetGenerator;
 import speiger.src.testers.floats.utils.FloatSamples;
 
+@SuppressWarnings("javadoc")
 public class FloatSortedSetSubsetTestSetGenerator implements TestFloatSortedSetGenerator
 {
 	final Bound to;

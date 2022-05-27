@@ -18,6 +18,7 @@ import speiger.src.testers.bytes.tests.base.maps.AbstractByte2ObjectMapTester;
 import speiger.src.testers.bytes.utils.ByteSamples;
 
 @Ignore
+@SuppressWarnings("javadoc")
 public class Byte2ObjectMapReplaceAllTester<V> extends AbstractByte2ObjectMapTester<V>
 {
 	private ByteSamples keys() {

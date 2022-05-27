@@ -7,7 +7,9 @@ import speiger.src.collections.bytes.maps.interfaces.Byte2ByteMap;
 import speiger.src.testers.bytes.tests.base.maps.AbstractByte2ByteMapTester;
 
 @Ignore
-public class Byte2ByteMapHashCodeTester extends AbstractByte2ByteMapTester {
+@SuppressWarnings("javadoc")
+public class Byte2ByteMapHashCodeTester extends AbstractByte2ByteMapTester
+{
 	public void testHashCode() {
 		int expectedHashCode = 0;
 		for (Byte2ByteMap.Entry entry : getSampleEntries()) {

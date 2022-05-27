@@ -16,6 +16,7 @@ import speiger.src.collections.chars.maps.interfaces.Char2DoubleMap;
 import speiger.src.testers.chars.tests.base.maps.AbstractChar2DoubleMapTester;
 
 @Ignore
+@SuppressWarnings("javadoc")
 public class Char2DoubleMapToStringTester extends AbstractChar2DoubleMapTester
 {
 	public void testToString_minimal() {

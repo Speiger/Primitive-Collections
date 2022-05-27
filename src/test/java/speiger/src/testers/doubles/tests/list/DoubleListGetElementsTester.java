@@ -11,6 +11,7 @@ import speiger.src.collections.doubles.lists.DoubleArrayList;
 import speiger.src.testers.doubles.tests.base.AbstractDoubleListTester;
 
 @Ignore
+@SuppressWarnings("javadoc")
 public class DoubleListGetElementsTester extends AbstractDoubleListTester
 {
 	@CollectionSize.Require(SEVERAL)

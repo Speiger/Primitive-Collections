@@ -18,6 +18,7 @@ import speiger.src.collections.objects.collections.ObjectIterator;
 import speiger.src.testers.longs.tests.base.maps.AbstractLong2ObjectMapTester;
 
 @Ignore
+@SuppressWarnings("javadoc")
 public class Long2ObjectMapRemoveOrDefaultTester<V> extends AbstractLong2ObjectMapTester<V>
 {
 	@MapFeature.Require(SUPPORTS_REMOVE)

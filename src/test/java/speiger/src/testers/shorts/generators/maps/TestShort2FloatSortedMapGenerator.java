@@ -6,6 +6,7 @@ import speiger.src.collections.shorts.maps.interfaces.Short2FloatMap;
 import speiger.src.collections.shorts.maps.interfaces.Short2FloatMap.Entry;
 import speiger.src.collections.shorts.maps.interfaces.Short2FloatSortedMap;
 
+@SuppressWarnings("javadoc")
 public interface TestShort2FloatSortedMapGenerator extends TestShort2FloatMapGenerator, TestSortedMapGenerator<Short, Float>
 {
 	@Override

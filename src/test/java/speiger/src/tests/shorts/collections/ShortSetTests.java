@@ -27,7 +27,9 @@ import speiger.src.testers.shorts.builder.ShortSortedSetTestSuiteBuilder;
 import speiger.src.testers.shorts.impl.SimpleShortTestGenerator;
 import speiger.src.testers.utils.SpecialFeature;
 
-public class ShortSetTests extends TestCase {
+@SuppressWarnings("javadoc")
+public class ShortSetTests extends TestCase
+{
 	
 	public static Test suite() {
 		TestSuite suite = new TestSuite("ShortSets");
