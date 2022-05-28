@@ -5,8 +5,8 @@ on:
     branches: [ master ]
 
 jobs:
-  build:
-    runs-on: ubuntu-latest
+    build:
+        runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
       - name: Set up JDK 11
@@ -17,7 +17,11 @@ jobs:
         run: |
           chmod +x gradlew
           ./gradlew build jacocoTestCoverage
-
+ 	   - name: Upload Report
+      uses: 'actions/upload-artifact@v2'
+      with:
+        name: report.xml
+          paths: ${{ github.workspace }}/build/reports/jacoco/test/jacocoTestReport.xml
       - name: Add coverage to PR
         id: jacoco
         uses: madrapps/jacoco-report@v1.2
