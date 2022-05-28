@@ -1,5 +1,26 @@
 # Changelog of versions
 
+### Version 0.6.2
+- Added: Array only sorting function return the inputed array. This was done to allow for static final references to use the method in one go without having to make lambda wrappers. Cleaner code.
+- Added: Iterator Wrappers are now a bit more in Compliance with Java Standards.
+- Added: AsyncBuilders now Support Array Inputs to create cleaner code.
+- Changed: LinkedList.addBulk variable definition was triggering a false positive.
+- Fixed: TreeMap.subMap().entrySet().remove() wouldn't check primitives properly.
+- Fixed: SortedMap.sub/tail/headMap were looping into themselves.
+- Fixed: AbstractCollection.retainAll didn't push removed values through the consumer.
+- Fixed: AbstractCollection.toArray wouldn't reset the last entry if the input array was larger then the elements in the collection.
+- Fixed: SubList didn't check for ranges properly or didn't use parent list to validate changes.
+- Fixed: ArrayList.addElements didn't check input array fully and used the wrong variable to move the elements around.
+- Fixed: LinkedList.addElements(EmptyInput) would crash.
+- Fixed: LinkedList.swapRemove didn't account for if the removed element was the prelast one.
+- Fixed: LinkedList.removeElements would break the implementation if the list was almost empty and the middle element was removed.
+- Fixed: LinkedHashSet.addAndMoveToFirst wouldn't move elements to the first place.
+- Fixed: ArrayList/LinkedList extractElements crashing when 0 or less elements are desired.
+- Fixed: TreeMap pollFirst/LastKey should return the defaultMin/max value instead of a Empty value.
+- Fixed: TreeMap keySet implementation was missing the class type implementations to pass keySet tests.
+- Fixed: TreeMap.SubMap Iterator (primitive Keys) was crashing because a Null was set on to a primitive.
+
+
 ### Version 0.6.1
 - Fixed: FIFO queue crashing when the last index is before the first index when peek is called.
 - Fixed: FIFO queue only clears the array if it was in use.

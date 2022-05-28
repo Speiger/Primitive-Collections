@@ -42,7 +42,7 @@ repositories {
     }
 }
 dependencies {
-	implementation 'com.github.Speiger:Primitive-Collections:0.6.1'
+	implementation 'com.github.Speiger:Primitive-Collections:0.6.2'
 }
 ```
 Using Custom Gradle:
@@ -53,7 +53,7 @@ repositories {
     }
 }
 dependencies {
-	implementation 'de.speiger:Primitive-Collections:0.6.1'
+	implementation 'de.speiger:Primitive-Collections:0.6.2'
 }
 ```
 
@@ -63,6 +63,7 @@ dependencies {
 
 | Version 	| Jar                                                                                                                          	| Sources                                                                                                                              	| Java Doc                                                                                                                             	|
 |---------	|------------------------------------------------------------------------------------------------------------------------------	|--------------------------------------------------------------------------------------------------------------------------------------	|--------------------------------------------------------------------------------------------------------------------------------------	|
+| 0.6.2   	| [Download](https://maven.speiger.com/repository/main/de/speiger/Primitive-Collections/0.6.2/Primitive-Collections-0.6.2.jar) 	| [Download](https://maven.speiger.com/repository/main/de/speiger/Primitive-Collections/0.6.2/Primitive-Collections-0.6.2-sources.jar) 	| [Download](https://maven.speiger.com/repository/main/de/speiger/Primitive-Collections/0.6.2/Primitive-Collections-0.6.2-javadoc.jar) 	|
 | 0.6.1   	| [Download](https://maven.speiger.com/repository/main/de/speiger/Primitive-Collections/0.6.1/Primitive-Collections-0.6.1.jar) 	| [Download](https://maven.speiger.com/repository/main/de/speiger/Primitive-Collections/0.6.1/Primitive-Collections-0.6.1-sources.jar) 	| [Download](https://maven.speiger.com/repository/main/de/speiger/Primitive-Collections/0.6.1/Primitive-Collections-0.6.1-javadoc.jar) 	|
 | 0.6.0   	| [Download](https://maven.speiger.com/repository/main/de/speiger/Primitive-Collections/0.6.0/Primitive-Collections-0.6.0.jar) 	| [Download](https://maven.speiger.com/repository/main/de/speiger/Primitive-Collections/0.6.0/Primitive-Collections-0.6.0-sources.jar) 	| [Download](https://maven.speiger.com/repository/main/de/speiger/Primitive-Collections/0.6.0/Primitive-Collections-0.6.0-javadoc.jar) 	|
 | 0.5.3   	| [Download](https://maven.speiger.com/repository/main/de/speiger/Primitive-Collections/0.5.3/Primitive-Collections-0.5.3.jar) 	| [Download](https://maven.speiger.com/repository/main/de/speiger/Primitive-Collections/0.5.3/Primitive-Collections-0.5.3-sources.jar) 	| [Download](https://maven.speiger.com/repository/main/de/speiger/Primitive-Collections/0.5.3/Primitive-Collections-0.5.3-javadoc.jar) 	|

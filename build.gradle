@@ -1,6 +1,5 @@
 plugins {
     id 'java-library'
-    id 'jacoco'
 }
 
 tasks.withType(JavaCompile) {
@@ -19,7 +18,7 @@ repositories {
 }
 
 archivesBaseName = 'Primitive Collections'
-version = '0.6.1.18-SNAPSHOT';
+version = '0.6.2';
 
 sourceCompatibility = targetCompatibility = compileJava.sourceCompatibility = compileJava.targetCompatibility = JavaVersion.current();
 
@@ -97,12 +96,6 @@ artifacts {
 
 test {
     useJUnit()
-}
-
-jacocoTestReport {
-    reports {
-        xml.enabled true
-    }
 }
 
 publishing {
