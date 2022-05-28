@@ -1,8 +1,7 @@
 name: Build
 on:
   push:
-    branches:
-      - debug
+    branches: [debug, release-1.0]
   pull_request:
     types: [opened, synchronize, reopened]
 jobs:
