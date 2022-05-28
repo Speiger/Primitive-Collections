@@ -1,5 +1,6 @@
 plugins {
     id 'java-library'
+    id 'jacoco'
 }
 
 tasks.withType(JavaCompile) {
@@ -96,6 +97,12 @@ artifacts {
 
 test {
     useJUnit()
+}
+
+jacocoTestReport {
+    reports {
+        xml.enabled true
+    }
 }
 
 publishing {
