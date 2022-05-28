@@ -102,7 +102,6 @@ test {
 	}
 	useJUnit()
 	maxHeapSize = "2048m"
-	maxParallelForks = 2
 }
 
 sonarqube {
