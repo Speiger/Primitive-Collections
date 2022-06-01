@@ -356,7 +356,7 @@ public class LISTS
 		
 #endif
 		@Override
-		public void addElements(int from, KEY_TYPE[] a, int offset, int length) { synchronized(mutex) { addElements(from, a, offset, length); } }
+		public void addElements(int from, KEY_TYPE[] a, int offset, int length) { synchronized(mutex) { l.addElements(from, a, offset, length); } }
 		
 		@Override
 		public KEY_TYPE[] getElements(int from, KEY_TYPE[] a, int offset, int length) { synchronized(mutex) { return l.getElements(from, a, offset, length); } }
