@@ -43,6 +43,7 @@ import speiger.src.collections.VALUE_PACKAGE.collections.VALUE_COLLECTION;
 #if !SAME_TYPE
 import speiger.src.collections.VALUE_PACKAGE.functions.function.VALUE_UNARY_OPERATOR;
 #endif
+import speiger.src.collections.VALUE_PACKAGE.functions.VALUE_SUPPLIER;
 import speiger.src.collections.VALUE_PACKAGE.utils.VALUE_COLLECTIONS;
 #if !SAME_TYPE && !VALUE_OBJECT
 import speiger.src.collections.VALUE_PACKAGE.utils.VALUE_SETS;
@@ -255,7 +256,7 @@ public class MAPS
 	 * @ValueType(V)
 	 * @return a Unmodifyable Entry
 	 */
-	public static GENERIC_KEY_VALUE_BRACES MAP.Entry KEY_VALUE_GENERIC_TYPE unmodifiable(MAP.Entry KEY_VALUE_GENERIC_TYPE entry) { return entry instanceof UnmodifyableEntry ? entry : new UnmodifyableEntryKV_BRACES(entry); }
+	public static GENERIC_KEY_VALUE_BRACES MAP.Entry KEY_VALUE_GENERIC_TYPE unmodifiable(MAP.Entry KEY_VALUE_GENERIC_TYPE entry) { return entry instanceof UnmodifyableEntry ? entry : (entry == null ? null : new UnmodifyableEntryKV_BRACES(entry)); }
 	/**
 	 * A Helper function that creates a Unmodifyable Entry
 	 * @param entry the Entry that should be made unmodifiable
@@ -263,7 +264,7 @@ public class MAPS
 	 * @ValueType(V)
 	 * @return a Unmodifyable Entry
 	 */
-	public static GENERIC_KEY_VALUE_BRACES MAP.Entry KEY_VALUE_GENERIC_TYPE unmodifiable(Map.Entry<CLASS_TYPE, CLASS_VALUE_TYPE> entry) { return entry instanceof UnmodifyableEntry ? (UnmodifyableEntry KEY_VALUE_GENERIC_TYPE)entry : new UnmodifyableEntryKV_BRACES(entry); }
+	public static GENERIC_KEY_VALUE_BRACES MAP.Entry KEY_VALUE_GENERIC_TYPE unmodifiable(Map.Entry<CLASS_TYPE, CLASS_VALUE_TYPE> entry) { return entry instanceof UnmodifyableEntry ? (UnmodifyableEntry KEY_VALUE_GENERIC_TYPE)entry : (entry == null ? null : new UnmodifyableEntryKV_BRACES(entry)); }
 	
 	/**
 	 * Creates a Singleton map from the provided values.
@@ -410,7 +411,7 @@ public class MAPS
 		}
 		
 		@Override
-		public NAVIGABLE_MAP KEY_VALUE_GENERIC_TYPE descendingMap() { return MAPS.synchronize(map.descendingMap()); }
+		public NAVIGABLE_MAP KEY_VALUE_GENERIC_TYPE descendingMap() { return MAPS.unmodifiable(map.descendingMap()); }
 		@Override
 		public NAVIGABLE_SET KEY_GENERIC_TYPE navigableKeySet() { return SETS.unmodifiable(map.navigableKeySet()); }
 		@Override
@@ -582,11 +583,26 @@ public class MAPS
 		public boolean remove(KEY_TYPE key, VALUE_TYPE value) { throw new UnsupportedOperationException(); }
 #endif
 		@Override
-		public VALUE_TYPE GET_VALUE(KEY_TYPE key) { return map.GET_VALUE(key); }
+		public VALUE_TYPE GET_VALUE(KEY_TYPE key) {
+			VALUE_TYPE type = map.GET_VALUE(key);
+			return VALUE_EQUALS(type, map.getDefaultReturnValue()) ? getDefaultReturnValue() : type;
+		}
 #if !TYPE_OBJECT || !VALUE_OBJECT
 		@Override
 		public VALUE_TYPE getOrDefault(KEY_TYPE key, VALUE_TYPE defaultValue) { return map.getOrDefault(key, defaultValue); }
 #endif
+		@Override
+		public VALUE_TYPE COMPUTE(KEY_TYPE key, UNARY_OPERATOR KEY_VALUE_GENERIC_TYPE mappingFunction) { throw new UnsupportedOperationException(); }
+		@Override
+		public VALUE_TYPE COMPUTE_IF_ABSENT(KEY_TYPE key, FUNCTION KEY_VALUE_GENERIC_TYPE mappingFunction) { throw new UnsupportedOperationException(); }
+		@Override
+		public VALUE_TYPE COMPUTE_IF_PRESENT(KEY_TYPE key, UNARY_OPERATOR KEY_VALUE_GENERIC_TYPE mappingFunction) { throw new UnsupportedOperationException(); }
+		@Override
+		public VALUE_TYPE SUPPLY_IF_ABSENT(KEY_TYPE key, VALUE_SUPPLIER VALUE_GENERIC_TYPE valueProvider) { throw new UnsupportedOperationException(); }
+		@Override
+		public VALUE_TYPE MERGE(KEY_TYPE key, VALUE_TYPE value, VALUE_UNARY_OPERATOR VALUE_VALUE_GENERIC_TYPE mappingFunction) { throw new UnsupportedOperationException(); }
+		@Override
+		public void BULK_MERGE(MAP KEY_VALUE_GENERIC_TYPE m, VALUE_UNARY_OPERATOR VALUE_VALUE_GENERIC_TYPE mappingFunction) { throw new UnsupportedOperationException(); }
 		@Override
 		public MAP KEY_VALUE_GENERIC_TYPE copy() { return map.copy(); }
 		
@@ -950,6 +966,8 @@ public class MAPS
 		public VALUE_TYPE COMPUTE_IF_ABSENT(KEY_TYPE key, FUNCTION KEY_VALUE_GENERIC_TYPE mappingFunction) { synchronized(mutex) { return map.COMPUTE_IF_ABSENT(key, mappingFunction); } }
 		@Override
 		public VALUE_TYPE COMPUTE_IF_PRESENT(KEY_TYPE key, UNARY_OPERATOR KEY_VALUE_GENERIC_TYPE mappingFunction) { synchronized(mutex) { return map.COMPUTE_IF_PRESENT(key, mappingFunction); } }
+		@Override
+		public VALUE_TYPE SUPPLY_IF_ABSENT(KEY_TYPE key, VALUE_SUPPLIER VALUE_GENERIC_TYPE valueProvider) { synchronized(mutex) { return map.SUPPLY_IF_ABSENT(key, valueProvider); } }
 		@Override
 		public VALUE_TYPE MERGE(KEY_TYPE key, VALUE_TYPE value, VALUE_UNARY_OPERATOR VALUE_VALUE_GENERIC_TYPE mappingFunction) { synchronized(mutex) { return map.MERGE(key, value, mappingFunction); } }
 		@Override
