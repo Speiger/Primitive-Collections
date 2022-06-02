@@ -30,8 +30,9 @@ import speiger.src.collections.PACKAGE.maps.interfaces.MAP;
 import speiger.src.collections.PACKAGE.maps.interfaces.NAVIGABLE_MAP;
 import speiger.src.collections.PACKAGE.sets.ABSTRACT_SET;
 import speiger.src.collections.PACKAGE.sets.NAVIGABLE_SET;
+#if TYPE_OBJECT
 import speiger.src.collections.PACKAGE.sets.SET;
-import speiger.src.collections.PACKAGE.sets.SORTED_SET;
+#endif
 import speiger.src.collections.PACKAGE.utils.maps.MAPS;
 import speiger.src.collections.VALUE_PACKAGE.collections.VALUE_ABSTRACT_COLLECTION;
 import speiger.src.collections.VALUE_PACKAGE.collections.VALUE_COLLECTION;
@@ -682,7 +683,7 @@ public class AVL_TREE_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_VALUE_
 	}
 	
 	@Override
-	public SORTED_SET KEY_GENERIC_TYPE keySet() {
+	public NAVIGABLE_SET KEY_GENERIC_TYPE keySet() {
 		return navigableKeySet();
 	}
 	
@@ -1474,7 +1475,7 @@ public class AVL_TREE_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_VALUE_
 		}
 		
 		@Override
-		public SET KEY_GENERIC_TYPE keySet() {
+		public NAVIGABLE_SET KEY_GENERIC_TYPE keySet() {
 			return navigableKeySet();
 		}
 		

@@ -30,8 +30,9 @@ import speiger.src.collections.PACKAGE.maps.interfaces.MAP;
 import speiger.src.collections.PACKAGE.maps.interfaces.NAVIGABLE_MAP;
 import speiger.src.collections.PACKAGE.sets.ABSTRACT_SET;
 import speiger.src.collections.PACKAGE.sets.NAVIGABLE_SET;
+#if TYPE_OBJECT
 import speiger.src.collections.PACKAGE.sets.SET;
-import speiger.src.collections.PACKAGE.sets.SORTED_SET;
+#endif
 import speiger.src.collections.PACKAGE.utils.maps.MAPS;
 import speiger.src.collections.VALUE_PACKAGE.collections.VALUE_ABSTRACT_COLLECTION;
 import speiger.src.collections.VALUE_PACKAGE.collections.VALUE_COLLECTION;
@@ -685,7 +686,7 @@ public class RB_TREE_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_VALUE_G
 	}
 	
 	@Override
-	public SORTED_SET KEY_GENERIC_TYPE keySet() {
+	public NAVIGABLE_SET KEY_GENERIC_TYPE keySet() {
 		return navigableKeySet();
 	}
 	
@@ -1311,6 +1312,11 @@ public class RB_TREE_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_VALUE_G
 		}
 		
 		@Override
+		public NAVIGABLE_SET KEY_GENERIC_TYPE keySet() {
+			return navigableKeySet();
+		}
+		
+		@Override
 		public NAVIGABLE_MAP KEY_VALUE_GENERIC_TYPE subMap(KEY_TYPE fromKey, boolean fromInclusive, KEY_TYPE toKey, boolean toInclusive) {
 			if (!inRange(fromKey, fromInclusive)) throw new IllegalArgumentException("fromKey out of range");
 			if (!inRange(toKey, toInclusive)) throw new IllegalArgumentException("toKey out of range");
@@ -1394,6 +1400,11 @@ public class RB_TREE_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_VALUE_G
 		public NAVIGABLE_SET KEY_GENERIC_TYPE navigableKeySet() {
 			if(keySet == null) keySet = new KeySetKV_BRACES(this);
 			return keySet;
+		}
+		
+		@Override
+		public NAVIGABLE_SET KEY_GENERIC_TYPE keySet() {
+			return navigableKeySet();
 		}
 		
 		@Override
@@ -1531,7 +1542,7 @@ public class RB_TREE_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_VALUE_G
 		}
 		
 		@Override
-		public SET KEY_GENERIC_TYPE keySet() {
+		public NAVIGABLE_SET KEY_GENERIC_TYPE keySet() {
 			return navigableKeySet();
 		}
 		

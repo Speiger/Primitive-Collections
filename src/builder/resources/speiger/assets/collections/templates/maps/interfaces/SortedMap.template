@@ -9,9 +9,11 @@ import speiger.src.collections.VALUE_PACKAGE.collections.VALUE_COLLECTION;
 #if !TYPE_OBJECT
 import speiger.src.collections.PACKAGE.functions.COMPARATOR;
 #endif
-import speiger.src.collections.PACKAGE.sets.SET;
+import speiger.src.collections.PACKAGE.sets.SORTED_SET;
 import speiger.src.collections.PACKAGE.utils.maps.MAPS;
+#if !TYPE_OBJECT
 import speiger.src.collections.objects.sets.ObjectSortedSet;
+#endif
 import speiger.src.collections.objects.collections.ObjectBidirectionalIterator;
 
 /**
@@ -31,7 +33,7 @@ public interface SORTED_MAP KEY_VALUE_GENERIC_TYPE extends SortedMap<CLASS_TYPE,
 	public SORTED_MAP KEY_VALUE_GENERIC_TYPE copy();
 	
 	@Override
-	public SET KEY_GENERIC_TYPE keySet();
+	public SORTED_SET KEY_GENERIC_TYPE keySet();
 	@Override
 	public VALUE_COLLECTION VALUE_GENERIC_TYPE values();
 	

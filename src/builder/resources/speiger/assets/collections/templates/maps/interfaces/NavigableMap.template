@@ -34,7 +34,9 @@ public interface NAVIGABLE_MAP KEY_VALUE_GENERIC_TYPE extends SORTED_MAP KEY_VAL
 	/** @return a Type Specific pollLastEntry */
 	@Override
 	public MAP.Entry KEY_VALUE_GENERIC_TYPE pollLastEntry();
-	
+	/** @return a Type Specific Navigable Key Set */
+	@Override
+	public NAVIGABLE_SET KEY_GENERIC_TYPE keySet();
 	/**
 	 * Creates a Wrapped NavigableMap that is Synchronized
 	 * @return a new NavigableMap that is synchronized
