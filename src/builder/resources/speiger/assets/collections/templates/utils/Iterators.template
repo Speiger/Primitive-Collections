@@ -299,7 +299,7 @@ public class ITERATORS
 	 * @ArrayType(T)
 	 * @return a Iterator that is wrapping a array.
 	 */
-	public static GENERIC_KEY_BRACES ArrayIterator KEY_GENERIC_TYPE wrap(KEY_TYPE[] a) {
+	public static GENERIC_KEY_BRACES ArrayIterator KEY_GENERIC_TYPE wrap(KEY_TYPE... a) {
 		return wrap(a, 0, a.length);
 	}
 	
@@ -755,7 +755,7 @@ public class ITERATORS
 		
 		@Override
 		public int previousIndex() {
-			return 0;
+			return -1;
 		}
 		
 		@Override

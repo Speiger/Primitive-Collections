@@ -540,7 +540,8 @@ public abstract class ABSTRACT_LIST KEY_GENERIC_TYPE extends ABSTRACT_COLLECTION
 		
 		@Override
 		public void add(KEY_TYPE e) {
-			ABSTRACT_LIST.this.add(index++, e);
+			ABSTRACT_LIST.this.add(index, e);
+			index++;
 			lastReturned = -1;
 		}
 		

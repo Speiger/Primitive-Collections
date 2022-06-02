@@ -350,7 +350,7 @@ public class COLLECTIONS
 		@Override
 		public boolean contains(KEY_TYPE o) { return false; }
 		@Override
-		public boolean containsAll(COLLECTION KEY_GENERIC_TYPE c) { return false; }
+		public boolean containsAll(COLLECTION KEY_GENERIC_TYPE c) { return c.isEmpty(); }
 		@Override
 		public boolean containsAny(COLLECTION KEY_GENERIC_TYPE c) { return false; }
 #else
@@ -362,7 +362,7 @@ public class COLLECTIONS
 		public boolean containsAny(Collection<?> c) { return false; }
 		@Override
 		@Primitive
-		public boolean containsAll(Collection<?> c) { return false; }
+		public boolean containsAll(Collection<?> c) { return c.isEmpty(); }
 		@Override
 		public int hashCode() { return 0; }
 		
@@ -401,14 +401,28 @@ public class COLLECTIONS
 		public Object[] toArray() { return ObjectArrays.EMPTY_ARRAY; }
 #if !TYPE_OBJECT
 		@Override
-		public <T> T[] toArray(T[] a) { return a; }
+		public <T> T[] toArray(T[] a) {
+			if(a != null && a.length > 0)
+				a[0] = null;
+			return a;
+		}
+		
 		@Override
 		public KEY_TYPE[] TO_ARRAY() { return ARRAYS.EMPTY_ARRAY; }
 		@Override
-		public KEY_TYPE[] TO_ARRAY(KEY_TYPE[] a) { return a; }
+		public KEY_TYPE[] TO_ARRAY(KEY_TYPE[] a) {
+			if(a != null && a.length > 0)
+				a[0] = EMPTY_KEY_VALUE;
+			return a;
+		}
+		
 #else
 		@Override
-		public <E> E[] toArray(E[] a) { return a; }
+		public <E> E[] toArray(E[] a) {
+			if(a != null && a.length > 0)
+				a[0] = EMPTY_KEY_VALUE;
+			return a;
+		}
 #endif
 		@Override
 		public ITERATOR KEY_GENERIC_TYPE iterator() { return ITERATORS.empty(); }
