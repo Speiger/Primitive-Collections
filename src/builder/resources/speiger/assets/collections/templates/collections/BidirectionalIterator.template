@@ -57,7 +57,7 @@ public interface BI_ITERATOR KEY_GENERIC_TYPE extends ITERATOR KEY_GENERIC_TYPE
 	public default int back(int amount) {
 		if(amount < 0) throw new IllegalStateException("Can't go forward");
 		int i = 0;
-		for(;i<amount && hasPrevious();previous(),i++);
+		for(;i<amount && hasPrevious();PREVIOUS(),i++);
 		return i;
 	}
 }

@@ -2051,26 +2051,36 @@ public class AVL_TREE_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_VALUE_
 		class DecsendingSubEntryIterator extends SubMapEntryIterator implements ObjectBidirectionalIterator<MAP.Entry KEY_VALUE_GENERIC_TYPE>
 		{
 			public DecsendingSubEntryIterator(Node KEY_VALUE_GENERIC_TYPE first, Node KEY_VALUE_GENERIC_TYPE forwardFence, Node KEY_VALUE_GENERIC_TYPE backwardFence) {
-				super(first, forwardFence, backwardFence);
+				super(first, forwardFence, backwardFence, false);
+			}
+			
+			@Override
+			protected Node KEY_VALUE_GENERIC_TYPE moveNext(Node KEY_VALUE_GENERIC_TYPE node) {
+				return node.previous();
+			}
+			
+			@Override
+			protected Node KEY_VALUE_GENERIC_TYPE movePrevious(Node KEY_VALUE_GENERIC_TYPE node) {
+				return node.next();
 			}
 			
 			@Override
 			public MAP.Entry KEY_VALUE_GENERIC_TYPE previous() {
 				if(!hasPrevious()) throw new NoSuchElementException();
-				return nextEntry();
+				return previousEntry();
 			}
 
 			@Override
 			public MAP.Entry KEY_VALUE_GENERIC_TYPE next() {
 				if(!hasNext()) throw new NoSuchElementException();
-				return previousEntry();
+				return nextEntry();
 			}
 		}
 		
 		class AcsendingSubEntryIterator extends SubMapEntryIterator implements ObjectBidirectionalIterator<MAP.Entry KEY_VALUE_GENERIC_TYPE>
 		{
 			public AcsendingSubEntryIterator(Node KEY_VALUE_GENERIC_TYPE first, Node KEY_VALUE_GENERIC_TYPE forwardFence, Node KEY_VALUE_GENERIC_TYPE backwardFence) {
-				super(first, forwardFence, backwardFence);
+				super(first, forwardFence, backwardFence, true);
 			}
 
 			@Override
@@ -2089,26 +2099,36 @@ public class AVL_TREE_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_VALUE_
 		class DecsendingSubKeyIterator extends SubMapEntryIterator implements BI_ITERATOR KEY_GENERIC_TYPE
 		{
 			public DecsendingSubKeyIterator(Node KEY_VALUE_GENERIC_TYPE first, Node KEY_VALUE_GENERIC_TYPE forwardFence, Node KEY_VALUE_GENERIC_TYPE backwardFence) {
-				super(first, forwardFence, backwardFence);
+				super(first, forwardFence, backwardFence, false);
+			}
+			
+			@Override
+			protected Node KEY_VALUE_GENERIC_TYPE moveNext(Node KEY_VALUE_GENERIC_TYPE node) {
+				return node.previous();
+			}
+			
+			@Override
+			protected Node KEY_VALUE_GENERIC_TYPE movePrevious(Node KEY_VALUE_GENERIC_TYPE node) {
+				return node.next();
 			}
 			
 			@Override
 			public KEY_TYPE PREVIOUS() {
 				if(!hasPrevious()) throw new NoSuchElementException();
-				return nextEntry().key;
+				return previousEntry().key;
 			}
 
 			@Override
 			public KEY_TYPE NEXT() {
 				if(!hasNext()) throw new NoSuchElementException();
-				return previousEntry().key;
+				return nextEntry().key;
 			}
 		}
 		
 		class AcsendingSubKeyIterator extends SubMapEntryIterator implements BI_ITERATOR KEY_GENERIC_TYPE
 		{
 			public AcsendingSubKeyIterator(Node KEY_VALUE_GENERIC_TYPE first, Node KEY_VALUE_GENERIC_TYPE forwardFence, Node KEY_VALUE_GENERIC_TYPE backwardFence) {
-				super(first, forwardFence, backwardFence);
+				super(first, forwardFence, backwardFence, true);
 			}
 
 			@Override
@@ -2127,7 +2147,7 @@ public class AVL_TREE_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_VALUE_
 		class AcsendingSubValueIterator extends SubMapEntryIterator implements VALUE_BI_ITERATOR VALUE_GENERIC_TYPE
 		{
 			public AcsendingSubValueIterator(Node KEY_VALUE_GENERIC_TYPE first, Node KEY_VALUE_GENERIC_TYPE forwardFence, Node KEY_VALUE_GENERIC_TYPE backwardFence) {
-				super(first, forwardFence, backwardFence);
+				super(first, forwardFence, backwardFence, true);
 			}
 
 			@Override
@@ -2146,39 +2166,60 @@ public class AVL_TREE_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_VALUE_
 		class DecsendingSubValueIterator extends SubMapEntryIterator implements VALUE_BI_ITERATOR VALUE_GENERIC_TYPE
 		{
 			public DecsendingSubValueIterator(Node KEY_VALUE_GENERIC_TYPE first, Node KEY_VALUE_GENERIC_TYPE forwardFence, Node KEY_VALUE_GENERIC_TYPE backwardFence) {
-				super(first, forwardFence, backwardFence);
+				super(first, forwardFence, backwardFence, false);
+			}
+			
+			@Override
+			protected Node KEY_VALUE_GENERIC_TYPE moveNext(Node KEY_VALUE_GENERIC_TYPE node) {
+				return node.previous();
+			}
+			
+			@Override
+			protected Node KEY_VALUE_GENERIC_TYPE movePrevious(Node KEY_VALUE_GENERIC_TYPE node) {
+				return node.next();
 			}
 			
 			@Override
 			public VALUE_TYPE VALUE_PREVIOUS() {
 				if(!hasPrevious()) throw new NoSuchElementException();
-				return nextEntry().value;
+				return previousEntry().value;
 			}
 
 			@Override
 			public VALUE_TYPE VALUE_NEXT() {
 				if(!hasNext()) throw new NoSuchElementException();
-				return previousEntry().value;
+				return nextEntry().value;
 			}
 		}
 		
 		abstract class SubMapEntryIterator
 		{
+			final boolean isForward;
 			boolean wasForward;
 			Node KEY_VALUE_GENERIC_TYPE lastReturned;
 			Node KEY_VALUE_GENERIC_TYPE next;
+			Node KEY_VALUE_GENERIC_TYPE previous;
 			boolean unboundForwardFence;
 			boolean unboundBackwardFence;
 			KEY_TYPE forwardFence;
 			KEY_TYPE backwardFence;
 			
-			public SubMapEntryIterator(Node KEY_VALUE_GENERIC_TYPE first, Node KEY_VALUE_GENERIC_TYPE forwardFence, Node KEY_VALUE_GENERIC_TYPE backwardFence)
-			{
+			public SubMapEntryIterator(Node KEY_VALUE_GENERIC_TYPE first, Node KEY_VALUE_GENERIC_TYPE forwardFence, Node KEY_VALUE_GENERIC_TYPE backwardFence, boolean isForward) {
 				next = first;
+				previous = first == null ? null : movePrevious(first);
 				this.forwardFence = forwardFence == null ? EMPTY_KEY_VALUE : forwardFence.key;
 				this.backwardFence = backwardFence == null ? EMPTY_KEY_VALUE : backwardFence.key;
 				unboundForwardFence = forwardFence == null;
 				unboundBackwardFence = backwardFence == null;
+				this.isForward = isForward;
+			}
+			
+			protected Node KEY_VALUE_GENERIC_TYPE moveNext(Node KEY_VALUE_GENERIC_TYPE node) {
+				return node.next();
+			}
+			
+			protected Node KEY_VALUE_GENERIC_TYPE movePrevious(Node KEY_VALUE_GENERIC_TYPE node) {
+				return node.previous();
 			}
 			
 			public boolean hasNext() {
@@ -2187,26 +2228,30 @@ public class AVL_TREE_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_VALUE_
 			
 			protected Node KEY_VALUE_GENERIC_TYPE nextEntry() {
 				lastReturned = next;
+				previous = next;
 				Node KEY_VALUE_GENERIC_TYPE result = next;
-				next = next.next();
-				wasForward = true;
+				next = moveNext(next);
+				wasForward = isForward;
 				return result;
 			}
 			
 			public boolean hasPrevious() {
-                return next != null && (unboundBackwardFence || next.key != backwardFence);
+                return previous != null && (unboundBackwardFence || previous.key != backwardFence);
 			}
 			
 			protected Node KEY_VALUE_GENERIC_TYPE previousEntry() {
-				lastReturned = next;
-				Node KEY_VALUE_GENERIC_TYPE result = next;
-				next = next.previous();
-				wasForward = false;
+				lastReturned = previous;
+				next = previous;
+				Node KEY_VALUE_GENERIC_TYPE result = previous;
+				previous = movePrevious(previous);
+				wasForward = !isForward;
 				return result;
 			}
 			
 			public void remove() {
 				if(lastReturned == null) throw new IllegalStateException();
+				if(next == lastReturned) next = moveNext(next);
+				if(previous == lastReturned) previous = movePrevious(previous);
 				if(wasForward && lastReturned.needsSuccessor()) next = lastReturned;
 				map.removeNode(lastReturned);
 				lastReturned = null;
@@ -2520,19 +2565,29 @@ public class AVL_TREE_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_VALUE_
 	class DescendingKeyIterator extends MapEntryIterator implements BI_ITERATOR KEY_GENERIC_TYPE
 	{
 		public DescendingKeyIterator(Node KEY_VALUE_GENERIC_TYPE first) {
-			super(first);
-		}
-
-		@Override
-		public KEY_TYPE PREVIOUS() {
-			if(!hasPrevious()) throw new NoSuchElementException();
-			return nextEntry().key;
+			super(first, false);
 		}
 		
 		@Override
+		protected Node KEY_VALUE_GENERIC_TYPE moveNext(Node KEY_VALUE_GENERIC_TYPE node) {
+			return node.previous();
+		}
+		
+		@Override
+		protected Node KEY_VALUE_GENERIC_TYPE movePrevious(Node KEY_VALUE_GENERIC_TYPE node) {
+			return node.next();
+		}
+		
+		@Override
+		public KEY_TYPE PREVIOUS() {
+			if(!hasPrevious()) throw new NoSuchElementException();
+			return previousEntry().key;
+		}
+
+		@Override
 		public KEY_TYPE NEXT() {
 			if(!hasNext()) throw new NoSuchElementException();
-			return previousEntry().key;
+			return nextEntry().key;
 		}
 	}
 	
@@ -2540,7 +2595,7 @@ public class AVL_TREE_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_VALUE_
 	{
 		public AscendingMapEntryIterator(Node KEY_VALUE_GENERIC_TYPE first)
 		{
-			super(first);
+			super(first, true);
 		}
 
 		@Override
@@ -2559,7 +2614,7 @@ public class AVL_TREE_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_VALUE_
 	class AscendingValueIterator extends MapEntryIterator implements VALUE_BI_ITERATOR VALUE_GENERIC_TYPE
 	{
 		public AscendingValueIterator(Node KEY_VALUE_GENERIC_TYPE first) {
-			super(first);
+			super(first, true);
 		}
 
 		@Override
@@ -2578,7 +2633,7 @@ public class AVL_TREE_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_VALUE_
 	class AscendingKeyIterator extends MapEntryIterator implements BI_ITERATOR KEY_GENERIC_TYPE
 	{
 		public AscendingKeyIterator(Node KEY_VALUE_GENERIC_TYPE first) {
-			super(first);
+			super(first, true);
 		}
 
 		@Override
@@ -2596,13 +2651,24 @@ public class AVL_TREE_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_VALUE_
 	
 	abstract class MapEntryIterator
 	{
+		final boolean isForward;
 		boolean wasMoved = false;
 		Node KEY_VALUE_GENERIC_TYPE lastReturned;
 		Node KEY_VALUE_GENERIC_TYPE next;
+		Node KEY_VALUE_GENERIC_TYPE previous;
 		
-		public MapEntryIterator(Node KEY_VALUE_GENERIC_TYPE first)
-		{
+		public MapEntryIterator(Node KEY_VALUE_GENERIC_TYPE first, boolean isForward) {
 			next = first;
+			previous = first == null ? null : movePrevious(first);
+			this.isForward = isForward;
+		}
+		
+		protected Node KEY_VALUE_GENERIC_TYPE moveNext(Node KEY_VALUE_GENERIC_TYPE node) {
+			return node.next();
+		}
+		
+		protected Node KEY_VALUE_GENERIC_TYPE movePrevious(Node KEY_VALUE_GENERIC_TYPE node) {
+			return node.previous();
 		}
 		
 		public boolean hasNext() {
@@ -2611,26 +2677,30 @@ public class AVL_TREE_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_VALUE_
 		
 		protected Node KEY_VALUE_GENERIC_TYPE nextEntry() {
 			lastReturned = next;
+			previous = next;
 			Node KEY_VALUE_GENERIC_TYPE result = next;
-			next = next.next();
-			wasMoved = true;
+			next = moveNext(next);
+			wasMoved = isForward;
 			return result;
 		}
 		
 		public boolean hasPrevious() {
-            return next != null;
+            return previous != null;
 		}
 		
 		protected Node KEY_VALUE_GENERIC_TYPE previousEntry() {
-			lastReturned = next;
-			Node KEY_VALUE_GENERIC_TYPE result = next;
-			next = next.previous();
-			wasMoved = false;
+			lastReturned = previous;
+			next = previous;
+			Node KEY_VALUE_GENERIC_TYPE result = previous;
+			previous = movePrevious(previous);
+			wasMoved = !isForward;
 			return result;
 		}
 		
 		public void remove() {
 			if(lastReturned == null) throw new IllegalStateException();
+			if(next == lastReturned) next = moveNext(next);
+			if(previous == lastReturned) previous = movePrevious(previous);
 			if(wasMoved && lastReturned.needsSuccessor()) next = lastReturned;
 			removeNode(lastReturned);
 			lastReturned = null;

@@ -25,7 +25,9 @@ import speiger.src.collections.PACKAGE.lists.LIST_ITERATOR;
 import speiger.src.collections.PACKAGE.maps.interfaces.ORDERED_MAP;
 import speiger.src.collections.PACKAGE.maps.abstracts.ABSTRACT_MAP;
 import speiger.src.collections.PACKAGE.maps.interfaces.MAP;
+#if !TYPE_OBJECT
 import speiger.src.collections.PACKAGE.sets.ORDERED_SET;
+#endif
 import speiger.src.collections.PACKAGE.utils.maps.MAPS;
 #if !TYPE_OBJECT
 import speiger.src.collections.PACKAGE.utils.ARRAYS;
@@ -47,7 +49,6 @@ import speiger.src.collections.VALUE_PACKAGE.functions.function.VALUE_PREDICATE;
 #endif
 #if !TYPE_OBJECT
 import speiger.src.collections.PACKAGE.sets.ABSTRACT_SET;
-import speiger.src.collections.PACKAGE.sets.SET;
 #endif
 import speiger.src.collections.VALUE_PACKAGE.collections.VALUE_ABSTRACT_COLLECTION;
 import speiger.src.collections.VALUE_PACKAGE.collections.VALUE_COLLECTION;
@@ -70,7 +71,7 @@ import speiger.src.collections.objects.functions.function.ObjectObjectUnaryOpera
 import speiger.src.collections.objects.lists.ObjectListIterator;
 #endif
 import speiger.src.collections.objects.sets.AbstractObjectSet;
-import speiger.src.collections.objects.sets.ObjectSet;
+import speiger.src.collections.objects.sets.ObjectOrderedSet;
 import speiger.src.collections.utils.HashUtil;
 import speiger.src.collections.utils.SanityChecks;
 
@@ -100,9 +101,9 @@ public class IMMUTABLE_HASH_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_
 	/** The Last Index in the Map */
 	protected int lastIndex = -1;
 	/** EntrySet cache */
-	protected transient FastEntrySet KEY_VALUE_GENERIC_TYPE entrySet;
+	protected transient FastOrderedSet KEY_VALUE_GENERIC_TYPE entrySet;
 	/** KeySet cache */
-	protected transient SET KEY_GENERIC_TYPE keySet;
+	protected transient ORDERED_SET KEY_GENERIC_TYPE keySet;
 	/** Values cache */
 	protected transient VALUE_COLLECTION VALUE_GENERIC_TYPE valuesC;
 	
@@ -429,13 +430,13 @@ public class IMMUTABLE_HASH_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_
 	}	
 
 	@Override
-	public ObjectSet<MAP.Entry KEY_VALUE_GENERIC_TYPE> ENTRY_SET() {
+	public ObjectOrderedSet<MAP.Entry KEY_VALUE_GENERIC_TYPE> ENTRY_SET() {
 		if(entrySet == null) entrySet = new MapEntrySet();
 		return entrySet;
 	}
 	
 	@Override
-	public SET KEY_GENERIC_TYPE keySet() {
+	public ORDERED_SET KEY_GENERIC_TYPE keySet() {
 		if(keySet == null) keySet = new KeySet();
 		return keySet;
 	}

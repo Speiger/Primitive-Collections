@@ -22,7 +22,6 @@ import speiger.src.collections.PACKAGE.maps.interfaces.MAP;
 import speiger.src.collections.PACKAGE.maps.interfaces.ORDERED_MAP;
 import speiger.src.collections.PACKAGE.sets.ABSTRACT_SET;
 import speiger.src.collections.PACKAGE.sets.ORDERED_SET;
-import speiger.src.collections.PACKAGE.sets.SET;
 import speiger.src.collections.VALUE_PACKAGE.collections.VALUE_ABSTRACT_COLLECTION;
 import speiger.src.collections.VALUE_PACKAGE.collections.VALUE_COLLECTION;
 import speiger.src.collections.VALUE_PACKAGE.collections.VALUE_ITERATOR;
@@ -56,7 +55,7 @@ import speiger.src.collections.objects.functions.function.ObjectObjectUnaryOpera
 import speiger.src.collections.objects.collections.ObjectBidirectionalIterator;
 import speiger.src.collections.objects.lists.ObjectListIterator;
 import speiger.src.collections.objects.sets.AbstractObjectSet;
-import speiger.src.collections.objects.sets.ObjectSet;
+import speiger.src.collections.objects.sets.ObjectOrderedSet;
 #endif
 import speiger.src.collections.utils.HashUtil;
 
@@ -262,7 +261,7 @@ public class LINKED_HASH_MAP KEY_VALUE_GENERIC_TYPE extends HASH_MAP KEY_VALUE_G
 	
 	@Override
 	public boolean moveToFirst(KEY_TYPE key) {
-		if(KEY_EQUALS(FIRST_ENTRY_KEY(), key)) return false;
+		if(isEmpty() || KEY_EQUALS(FIRST_ENTRY_KEY(), key)) return false;
 		if(KEY_EQUALS_NULL(key)) {
 			if(containsNull) {
 				moveToFirstIndex(nullIndex);
@@ -284,7 +283,7 @@ public class LINKED_HASH_MAP KEY_VALUE_GENERIC_TYPE extends HASH_MAP KEY_VALUE_G
 	
 	@Override
 	public boolean moveToLast(KEY_TYPE key) {
-		if(KEY_EQUALS(LAST_ENTRY_KEY(), key)) return false;
+		if(isEmpty() || KEY_EQUALS(LAST_ENTRY_KEY(), key)) return false;
 		if(KEY_EQUALS_NULL(key)) {
 			if(containsNull) {
 				moveToLastIndex(nullIndex);
@@ -425,15 +424,15 @@ public class LINKED_HASH_MAP KEY_VALUE_GENERIC_TYPE extends HASH_MAP KEY_VALUE_G
 	}
 	
 	@Override
-	public ObjectSet<MAP.Entry KEY_VALUE_GENERIC_TYPE> ENTRY_SET() {
+	public ObjectOrderedSet<MAP.Entry KEY_VALUE_GENERIC_TYPE> ENTRY_SET() {
 		if(entrySet == null) entrySet = new MapEntrySet();
-		return entrySet;
+		return (ObjectOrderedSet<MAP.Entry KEY_VALUE_GENERIC_TYPE>)entrySet;
 	}
 	
 	@Override
-	public SET KEY_GENERIC_TYPE keySet() {
+	public ORDERED_SET KEY_GENERIC_TYPE keySet() {
 		if(keySet == null) keySet = new KeySet();
-		return keySet;
+		return (ORDERED_SET KEY_GENERIC_TYPE)keySet;
 	}
 	
 	@Override

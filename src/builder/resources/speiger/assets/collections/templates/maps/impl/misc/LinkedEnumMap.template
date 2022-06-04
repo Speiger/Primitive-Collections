@@ -17,7 +17,6 @@ import speiger.src.collections.PACKAGE.maps.interfaces.MAP;
 import speiger.src.collections.PACKAGE.maps.interfaces.ORDERED_MAP;
 import speiger.src.collections.PACKAGE.sets.ABSTRACT_SET;
 import speiger.src.collections.PACKAGE.sets.ORDERED_SET;
-import speiger.src.collections.PACKAGE.sets.SET;
 import speiger.src.collections.VALUE_PACKAGE.collections.VALUE_ABSTRACT_COLLECTION;
 import speiger.src.collections.VALUE_PACKAGE.collections.VALUE_COLLECTION;
 import speiger.src.collections.VALUE_PACKAGE.collections.VALUE_ITERATOR;
@@ -29,7 +28,6 @@ import speiger.src.collections.VALUE_PACKAGE.lists.VALUE_LIST_ITERATOR;
 import speiger.src.collections.objects.collections.ObjectBidirectionalIterator;
 import speiger.src.collections.objects.lists.ObjectListIterator;
 import speiger.src.collections.objects.sets.AbstractObjectSet;
-import speiger.src.collections.objects.sets.ObjectSet;
 #endif
 
 /**
@@ -315,15 +313,15 @@ public class LINKED_ENUM_MAP KEY_ENUM_VALUE_GENERIC_TYPE extends ENUM_MAP KEY_VA
 	}
 	
 	@Override
-	public ObjectSet<MAP.Entry KEY_VALUE_GENERIC_TYPE> ENTRY_SET() {
+	public ObjectOrderedSet<MAP.Entry KEY_VALUE_GENERIC_TYPE> ENTRY_SET() {
 		if(entrySet == null) entrySet = new MapEntrySet();
-		return entrySet;
+		return (ObjectOrderedSet<MAP.Entry KEY_VALUE_GENERIC_TYPE>)entrySet;
 	}
 	
 	@Override
-	public SET KEY_GENERIC_TYPE keySet() {
+	public ORDERED_SET KEY_GENERIC_TYPE keySet() {
 		if(keySet == null) keySet = new KeySet();
-		return keySet;
+		return (ORDERED_SET KEY_GENERIC_TYPE)keySet;
 	}
 	
 	@Override

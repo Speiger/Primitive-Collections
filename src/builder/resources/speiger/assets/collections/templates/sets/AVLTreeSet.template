@@ -1298,6 +1298,7 @@ public class AVL_TREE_SET KEY_GENERIC_TYPE extends ABSTRACT_SET KEY_GENERIC_TYPE
 		{
 			Entry KEY_GENERIC_TYPE lastReturned;
 			Entry KEY_GENERIC_TYPE next;
+			Entry KEY_GENERIC_TYPE previous;
 			boolean forwards = false;
 			boolean unboundForwardFence;
 			boolean unboundBackwardFence;
@@ -1307,6 +1308,7 @@ public class AVL_TREE_SET KEY_GENERIC_TYPE extends ABSTRACT_SET KEY_GENERIC_TYPE
 			public AscendingSubSetIterator(Entry KEY_GENERIC_TYPE first, Entry KEY_GENERIC_TYPE forwardFence, Entry KEY_GENERIC_TYPE backwardFence)
 			{
 				next = first;
+				previous = first == null ? null : first.previous();
 				this.forwardFence = forwardFence == null ? EMPTY_KEY_VALUE : forwardFence.key;
 				this.backwardFence = backwardFence == null ? EMPTY_KEY_VALUE : backwardFence.key;
 				unboundForwardFence = forwardFence == null;
@@ -1322,6 +1324,7 @@ public class AVL_TREE_SET KEY_GENERIC_TYPE extends ABSTRACT_SET KEY_GENERIC_TYPE
 			public KEY_TYPE NEXT() {
 				if(!hasNext()) throw new NoSuchElementException();
 				lastReturned = next;
+				previous = next;
 				KEY_TYPE result = next.key;
 				next = next.next();
 				forwards = true;
@@ -1330,15 +1333,16 @@ public class AVL_TREE_SET KEY_GENERIC_TYPE extends ABSTRACT_SET KEY_GENERIC_TYPE
 			
 			@Override
 			public boolean hasPrevious() {
-                return next != null && (unboundBackwardFence || next.key != backwardFence);
+                return previous != null && (unboundBackwardFence || previous.key != backwardFence);
 			}
 			
 			@Override
 			public KEY_TYPE PREVIOUS() {
 				if(!hasPrevious()) throw new NoSuchElementException();
-				lastReturned = next;
-				KEY_TYPE result = next.key;
-				next = next.previous();
+				lastReturned = previous;
+				next = previous;
+				KEY_TYPE result = previous.key;
+				previous = previous.previous();
 				forwards = false;
 				return result;
 			}
@@ -1346,6 +1350,8 @@ public class AVL_TREE_SET KEY_GENERIC_TYPE extends ABSTRACT_SET KEY_GENERIC_TYPE
 			@Override
 			public void remove() {
 				if(lastReturned == null) throw new IllegalStateException();
+				if(previous == lastReturned) previous = previous.previous();
+				if(next == lastReturned) next = next.next();
 				if(forwards && lastReturned.needsSuccessor()) next = lastReturned;
 				set.removeNode(lastReturned);
 				lastReturned = null;
@@ -1356,6 +1362,7 @@ public class AVL_TREE_SET KEY_GENERIC_TYPE extends ABSTRACT_SET KEY_GENERIC_TYPE
 		{
 			Entry KEY_GENERIC_TYPE lastReturned;
 			Entry KEY_GENERIC_TYPE next;
+			Entry KEY_GENERIC_TYPE previous;
 			boolean forwards = false;
 			boolean unboundForwardFence;
 			boolean unboundBackwardFence;
@@ -1365,6 +1372,7 @@ public class AVL_TREE_SET KEY_GENERIC_TYPE extends ABSTRACT_SET KEY_GENERIC_TYPE
 			public DescendingSubSetIterator(Entry KEY_GENERIC_TYPE first, Entry KEY_GENERIC_TYPE forwardFence, Entry KEY_GENERIC_TYPE backwardFence)
 			{
 				next = first;
+				previous = first == null ? null : first.next();
 				this.forwardFence = forwardFence == null ? EMPTY_KEY_VALUE : forwardFence.key;
 				this.backwardFence = backwardFence == null ? EMPTY_KEY_VALUE : backwardFence.key;
 				unboundForwardFence = forwardFence == null;
@@ -1380,6 +1388,7 @@ public class AVL_TREE_SET KEY_GENERIC_TYPE extends ABSTRACT_SET KEY_GENERIC_TYPE
 			public KEY_TYPE NEXT() {
 				if(!hasNext()) throw new NoSuchElementException();
 				lastReturned = next;
+				previous = next;
 				KEY_TYPE result = next.key;
 				next = next.previous();
 				forwards = false;
@@ -1388,15 +1397,16 @@ public class AVL_TREE_SET KEY_GENERIC_TYPE extends ABSTRACT_SET KEY_GENERIC_TYPE
 			
 			@Override
 			public boolean hasPrevious() {
-                return next != null && (unboundBackwardFence || next.key != backwardFence);
+                return previous != null && (unboundBackwardFence || previous.key != backwardFence);
 			}
 			
 			@Override
 			public KEY_TYPE PREVIOUS() {
 				if(!hasPrevious()) throw new NoSuchElementException();
-				lastReturned = next;
-				KEY_TYPE result = next.key;
-				next = next.next();
+				lastReturned = previous;
+				next = previous;
+				KEY_TYPE result = previous.key;
+				previous = previous.next();
 				forwards = true;
 				return result;
 			}
@@ -1404,6 +1414,8 @@ public class AVL_TREE_SET KEY_GENERIC_TYPE extends ABSTRACT_SET KEY_GENERIC_TYPE
 			@Override
 			public void remove() {
 				if(lastReturned == null) throw new IllegalStateException();
+				if(previous == lastReturned) previous = previous.next();
+				if(next == lastReturned) next = next.previous();
 				if(forwards && lastReturned.needsSuccessor()) next = lastReturned;
 				set.removeNode(lastReturned);
 				lastReturned = null;
@@ -1415,11 +1427,13 @@ public class AVL_TREE_SET KEY_GENERIC_TYPE extends ABSTRACT_SET KEY_GENERIC_TYPE
 	{
 		Entry KEY_GENERIC_TYPE lastReturned;
 		Entry KEY_GENERIC_TYPE next;
+		Entry KEY_GENERIC_TYPE previous;
 		boolean forwards = false;
 		
 		public AscendingSetIterator(Entry KEY_GENERIC_TYPE first)
 		{
 			next = first;
+			previous = first == null ? null : first.previous();
 		}
 		
 		@Override
@@ -1431,6 +1445,7 @@ public class AVL_TREE_SET KEY_GENERIC_TYPE extends ABSTRACT_SET KEY_GENERIC_TYPE
 		public KEY_TYPE NEXT() {
 			if(!hasNext()) throw new NoSuchElementException();
 			lastReturned = next;
+			previous = next;
 			KEY_TYPE result = next.key;
 			next = next.next();
 			forwards = true;
@@ -1439,15 +1454,16 @@ public class AVL_TREE_SET KEY_GENERIC_TYPE extends ABSTRACT_SET KEY_GENERIC_TYPE
 		
 		@Override
 		public boolean hasPrevious() {
-            return next != null;
+            return previous != null;
 		}
 		
 		@Override
 		public KEY_TYPE PREVIOUS() {
 			if(!hasPrevious()) throw new NoSuchElementException();
-			lastReturned = next;
-			KEY_TYPE result = next.key;
-			next = next.previous();
+			lastReturned = previous;
+			next = previous;
+			KEY_TYPE result = previous.key;
+			previous = previous.previous();
 			forwards = false;
 			return result;
 		}
@@ -1455,6 +1471,8 @@ public class AVL_TREE_SET KEY_GENERIC_TYPE extends ABSTRACT_SET KEY_GENERIC_TYPE
 		@Override
 		public void remove() {
 			if(lastReturned == null) throw new IllegalStateException();
+			if(lastReturned == previous) previous = previous.previous();
+			if(lastReturned == next) next = next.next();
 			if(forwards && lastReturned.needsSuccessor()) next = lastReturned;
 			removeNode(lastReturned);
 			lastReturned = null;
@@ -1465,11 +1483,13 @@ public class AVL_TREE_SET KEY_GENERIC_TYPE extends ABSTRACT_SET KEY_GENERIC_TYPE
 	{
 		Entry KEY_GENERIC_TYPE lastReturned;
 		Entry KEY_GENERIC_TYPE next;
+		Entry KEY_GENERIC_TYPE previous;
 		boolean forwards = false;
 
 		public DescendingSetIterator(Entry KEY_GENERIC_TYPE first)
 		{
 			next = first;
+			previous = first == null ? null : first.next();
 		}
 		
 		@Override
@@ -1481,6 +1501,7 @@ public class AVL_TREE_SET KEY_GENERIC_TYPE extends ABSTRACT_SET KEY_GENERIC_TYPE
 		public KEY_TYPE NEXT() {
 			if(!hasNext()) throw new NoSuchElementException();
 			lastReturned = next;
+			previous = next;
 			KEY_TYPE result = next.key;
 			next = next.previous();
 			forwards = false;
@@ -1489,15 +1510,16 @@ public class AVL_TREE_SET KEY_GENERIC_TYPE extends ABSTRACT_SET KEY_GENERIC_TYPE
 		
 		@Override
 		public boolean hasPrevious() {
-            return next != null;
+            return previous != null;
 		}
 		
 		@Override
 		public KEY_TYPE PREVIOUS() {
 			if(!hasPrevious()) throw new NoSuchElementException();
-			lastReturned = next;
-			KEY_TYPE result = next.key;
-			next = next.next();
+			lastReturned = previous;
+			next = previous;
+			KEY_TYPE result = previous.key;
+			previous = previous.next();
 			forwards = true;
 			return result;
 		}
@@ -1505,6 +1527,8 @@ public class AVL_TREE_SET KEY_GENERIC_TYPE extends ABSTRACT_SET KEY_GENERIC_TYPE
 		@Override
 		public void remove() {
 			if(lastReturned == null) throw new IllegalStateException();
+			if(lastReturned == previous) previous = previous.next();
+			if(lastReturned == next) next = next.previous();
 			if(forwards && lastReturned.needsSuccessor()) next = lastReturned;
 			removeNode(lastReturned);
 			lastReturned = null;
