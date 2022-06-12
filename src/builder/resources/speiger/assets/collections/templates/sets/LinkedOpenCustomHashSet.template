@@ -123,7 +123,7 @@ public class LINKED_CUSTOM_HASH_SET KEY_GENERIC_TYPE extends CUSTOM_HASH_SET KEY
 	 * @throws IllegalStateException if offset and length causes to step outside of the arrays range
 	 */
 	public LINKED_CUSTOM_HASH_SET(KEY_TYPE[] array, int offset, int length, float loadFactor, STRATEGY KEY_SUPER_GENERIC_TYPE strategy) {
-		this(length < 0 ? 0 : length, strategy);
+		this(length, strategy);
 		SanityChecks.checkArrayCapacity(array.length, offset, length);
 		for(int i = 0;i<length;i++) add(array[offset+i]);
 	}
@@ -284,7 +284,7 @@ public class LINKED_CUSTOM_HASH_SET KEY_GENERIC_TYPE extends CUSTOM_HASH_SET KEY
 	
 	@Override
 	public boolean moveToFirst(KEY_TYPE o) {
-		if(strategy.equals(FIRST_KEY(), o)) return false;
+		if(isEmpty() || strategy.equals(FIRST_KEY(), o)) return false;
 		if(strategy.equals(o, EMPTY_KEY_VALUE)) {
 			if(containsNull) {
 				moveToFirstIndex(nullIndex);
@@ -306,7 +306,7 @@ public class LINKED_CUSTOM_HASH_SET KEY_GENERIC_TYPE extends CUSTOM_HASH_SET KEY
 	
 	@Override
 	public boolean moveToLast(KEY_TYPE o) {
-		if(strategy.equals(LAST_KEY(), o)) return false;
+		if(isEmpty() || strategy.equals(LAST_KEY(), o)) return false;
 		if(strategy.equals(o, EMPTY_KEY_VALUE)) {
 			if(containsNull) {
 				moveToLastIndex(nullIndex);
@@ -372,8 +372,7 @@ public class LINKED_CUSTOM_HASH_SET KEY_GENERIC_TYPE extends CUSTOM_HASH_SET KEY
 	public KEY_TYPE POLL_FIRST_KEY() {
 		if(size == 0) throw new NoSuchElementException();
 		int pos = firstIndex;
-		firstIndex = (int)links[pos];
-		if(0 <= firstIndex) links[firstIndex] |= 0xFFFFFFFF00000000L;
+		onNodeRemoved(pos);
 		KEY_TYPE result = keys[pos];
 		size--;
 		if(strategy.equals(result, EMPTY_KEY_VALUE)) {
@@ -395,8 +394,7 @@ public class LINKED_CUSTOM_HASH_SET KEY_GENERIC_TYPE extends CUSTOM_HASH_SET KEY
 	public KEY_TYPE POLL_LAST_KEY() {
 		if(size == 0) throw new NoSuchElementException();
 		int pos = lastIndex;
-		lastIndex = (int)(links[pos] >>> 32);
-		if(0 <= lastIndex) links[lastIndex] |= 0xFFFFFFFFL;
+		onNodeRemoved(pos);
 		KEY_TYPE result = keys[pos];
 		size--;
 		if(strategy.equals(result, EMPTY_KEY_VALUE)) {
@@ -510,7 +508,7 @@ public class LINKED_CUSTOM_HASH_SET KEY_GENERIC_TYPE extends CUSTOM_HASH_SET KEY
 	@Override
 	public void clearAndTrim(int size) {
 		int request = Math.max(minCapacity, HashUtil.nextPowerOfTwo((int)Math.ceil(size / loadFactor)));
-		if(request >= size) {
+		if(request >= nullIndex) {
 			clear();
 			return;
 		}
@@ -725,6 +723,7 @@ public class LINKED_CUSTOM_HASH_SET KEY_GENERIC_TYPE extends CUSTOM_HASH_SET KEY
 				next = (int)(links[current]);
 				result++;
 			}
+			if(index >= 0) index+=result;
 			return result;
 		}
 		
@@ -736,6 +735,7 @@ public class LINKED_CUSTOM_HASH_SET KEY_GENERIC_TYPE extends CUSTOM_HASH_SET KEY
 				previous = (int)(links[current] >> 32);
 				result++;
 			}
+			if(index >= 0) index-=result;
 			return result;
 		}
 		

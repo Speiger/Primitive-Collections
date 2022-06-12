@@ -1578,13 +1578,15 @@ public class AVL_TREE_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_VALUE_
 		@Override
 		public VALUE_TYPE FIRST_ENTRY_VALUE() {
 			Node KEY_VALUE_GENERIC_TYPE entry = subLowest();
-			return entry == null ? map.getDefaultReturnValue() : entry.value;
+			if(entry == null) throw new NoSuchElementException();
+			return entry.value;
 		}
 		
 		@Override
 		public VALUE_TYPE LAST_ENTRY_VALUE() {
 			Node KEY_VALUE_GENERIC_TYPE entry = subHighest();
-			return entry == null ? map.getDefaultReturnValue() : entry.value;
+			if(entry == null) throw new NoSuchElementException();
+			return entry.value;
 		}
 		
 		@Override

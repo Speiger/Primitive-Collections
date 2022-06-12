@@ -9,8 +9,9 @@ import java.util.Iterator;
 import java.util.NoSuchElementException;
 import java.util.Objects;
 import java.util.concurrent.locks.ReentrantLock;
-#if TYPE_OBJECT
 import java.util.function.Consumer;
+import java.util.function.Supplier;
+#if TYPE_OBJECT
 import java.util.function.BiFunction;
 #endif
 import java.util.function.Predicate;
@@ -154,6 +155,14 @@ public class COPY_ON_WRITE_LIST KEY_GENERIC_TYPE extends ABSTRACT_LIST KEY_GENER
 	}
 	
 #endif
+	
+	private void setArray(KEY_TYPE[] data) {
+		this.data = data;
+	}
+	
+	private KEY_TYPE[] getArray() {
+		return data;
+	}
 	
 	/**
 	 * Appends the specified element to the end of this list.
@@ -410,6 +419,8 @@ public class COPY_ON_WRITE_LIST KEY_GENERIC_TYPE extends ABSTRACT_LIST KEY_GENER
 	 */
 	@Override
 	public void removeElements(int from, int to) {
+		checkRange(from);
+		checkAddRange(to);
 		int length = to - from;
 		if(length <= 0) return;
 		ReentrantLock lock = this.lock;
@@ -440,9 +451,11 @@ public class COPY_ON_WRITE_LIST KEY_GENERIC_TYPE extends ABSTRACT_LIST KEY_GENER
 	 */
 	@Override
 	public <K> K[] extractElements(int from, int to, Class<K> type) {
+		checkRange(from);
+		checkAddRange(to);
 		int length = to - from;
+		if(length <= 0) return ARRAYS.newArray(type, 0);
 		K[] a = ARRAYS.newArray(type, length);
-		if(length <= 0) return a;
 		ReentrantLock lock = this.lock;
 		lock.lock();
 		try {
@@ -450,9 +463,9 @@ public class COPY_ON_WRITE_LIST KEY_GENERIC_TYPE extends ABSTRACT_LIST KEY_GENER
 			System.arraycopy(data, from, a, 0, length);
 			if(to == data.length) this.data = Arrays.copyOf(data, data.length - length);
 			else {
-				int size = data.length-1;
-				KEY_TYPE[] newElements = NEW_KEY_ARRAY(size);
-				System.arraycopy(data, 0, newElements, 0, from);
+				int size = data.length;
+				KEY_TYPE[] newElements = NEW_KEY_ARRAY(size-length);
+				if(from != 0) System.arraycopy(data, 0, newElements, 0, from);
 				System.arraycopy(data, to, newElements, from, size - to);
 				this.data = newElements;
 			}
@@ -472,6 +485,8 @@ public class COPY_ON_WRITE_LIST KEY_GENERIC_TYPE extends ABSTRACT_LIST KEY_GENER
 	 */
 	@Override
 	public KEY_TYPE[] extractElements(int from, int to) {
+		checkRange(from);
+		checkAddRange(to);
 		int length = to - from;
 		if(length <= 0) return EMPTY_KEY_ARRAY;
 		ReentrantLock lock = this.lock;
@@ -482,9 +497,9 @@ public class COPY_ON_WRITE_LIST KEY_GENERIC_TYPE extends ABSTRACT_LIST KEY_GENER
 			System.arraycopy(data, from, a, 0, length);
 			if(to == data.length) this.data = Arrays.copyOf(data, data.length - length);
 			else {
-				int size = data.length-1;
-				KEY_TYPE[] newElements = NEW_KEY_ARRAY(size);
-				System.arraycopy(data, 0, newElements, 0, from);
+				int size = data.length;
+				KEY_TYPE[] newElements = NEW_KEY_ARRAY(size-length);
+				if(from != 0) System.arraycopy(data, 0, newElements, 0, from);
 				System.arraycopy(data, to, newElements, from, size - to);
 				this.data = newElements;
 			}
@@ -720,7 +735,7 @@ public class COPY_ON_WRITE_LIST KEY_GENERIC_TYPE extends ABSTRACT_LIST KEY_GENER
 	@Override
 	public LIST KEY_GENERIC_TYPE subList(int fromIndex, int toIndex) {
 		SanityChecks.checkArrayCapacity(data.length, fromIndex, toIndex-fromIndex);
-		return new COWSubListBRACES(this, 0, fromIndex, toIndex);
+		return new COWSubListBRACES(this, lock, this::setArray, this::getArray, 0, fromIndex, toIndex);
 	}
 	
 	/**
@@ -1389,7 +1404,12 @@ public class COPY_ON_WRITE_LIST KEY_GENERIC_TYPE extends ABSTRACT_LIST KEY_GENER
 			throw new IndexOutOfBoundsException("Index: " + index + ", Size: " + data.length);
 	}
 	
-	#if PRIMITIVES
+	protected void checkAddRange(int index) {
+		if (index < 0 || index > data.length)
+			throw new IndexOutOfBoundsException("Index: " + index + ", Size: " + data.length);
+	}
+	
+#if PRIMITIVES
 	/**
 	 * Returns a Java-Type-Specific Stream to reduce boxing/unboxing.
 	 * @return a Stream of the closest java type
@@ -1436,7 +1456,7 @@ public class COPY_ON_WRITE_LIST KEY_GENERIC_TYPE extends ABSTRACT_LIST KEY_GENER
 		@Override
 		public KEY_TYPE PREVIOUS() {
 			if(!hasPrevious()) throw new NoSuchElementException();
-			return data[index--];
+			return data[--index];
 		}
 		
 		@Override
@@ -1459,7 +1479,7 @@ public class COPY_ON_WRITE_LIST KEY_GENERIC_TYPE extends ABSTRACT_LIST KEY_GENER
 		@Override
 		public int skip(int amount) {
 			if(amount < 0) throw new IllegalStateException("Negative Numbers are not allowed");
-			int steps = Math.min(amount, (data.length - 1) - index);
+			int steps = Math.min(amount, data.length - index);
 			index += steps;
 			return steps;
 		}
@@ -1475,13 +1495,19 @@ public class COPY_ON_WRITE_LIST KEY_GENERIC_TYPE extends ABSTRACT_LIST KEY_GENER
 	
 	private static class COWSubList KEY_GENERIC_TYPE extends ABSTRACT_LIST KEY_GENERIC_TYPE
 	{
-		final COPY_ON_WRITE_LIST KEY_GENERIC_TYPE list;
+		final ABSTRACT_LIST KEY_GENERIC_TYPE list;
+		final ReentrantLock lock;
+		final Consumer<KEY_TYPE[]> setter;
+		final Supplier<KEY_TYPE[]> getter;
 		final int parentOffset;
 		final int offset;
 		int size;
 		
-		public COWSubList(COPY_ON_WRITE_LIST KEY_GENERIC_TYPE list, int offset, int from, int to) {
+		public COWSubList(ABSTRACT_LIST KEY_GENERIC_TYPE list, ReentrantLock lock, Consumer<KEY_TYPE[]> setter, Supplier<KEY_TYPE[]> getter, int offset, int from, int to) {
 			this.list = list;
+			this.lock = lock;
+			this.setter = setter;
+			this.getter = getter;
 			this.parentOffset = from;
 			this.offset = offset + from;
 			this.size = to - from;
@@ -1489,7 +1515,6 @@ public class COPY_ON_WRITE_LIST KEY_GENERIC_TYPE extends ABSTRACT_LIST KEY_GENER
 		
 		@Override
 		public void add(int index, KEY_TYPE element) {
-			ReentrantLock lock = list.lock;
 			lock.lock();
 			try {
 				checkAddSubRange(index);
@@ -1505,7 +1530,6 @@ public class COPY_ON_WRITE_LIST KEY_GENERIC_TYPE extends ABSTRACT_LIST KEY_GENER
 		public boolean addAll(int index, Collection<? extends CLASS_TYPE> c) {
 			int add = c.size();
 			if(add <= 0) return false;
-			ReentrantLock lock = list.lock;
 			lock.lock();
 			try {
 				checkAddSubRange(index);
@@ -1522,7 +1546,6 @@ public class COPY_ON_WRITE_LIST KEY_GENERIC_TYPE extends ABSTRACT_LIST KEY_GENER
 		public boolean addAll(int index, COLLECTION KEY_GENERIC_TYPE c) {
 			int add = c.size();
 			if(add <= 0) return false;
-			ReentrantLock lock = list.lock;
 			lock.lock();
 			try {
 				checkAddSubRange(index);
@@ -1539,7 +1562,6 @@ public class COPY_ON_WRITE_LIST KEY_GENERIC_TYPE extends ABSTRACT_LIST KEY_GENER
 		public boolean addAll(int index, LIST KEY_GENERIC_TYPE c) {
 			int add = c.size();
 			if(add <= 0) return false;
-			ReentrantLock lock = list.lock;
 			lock.lock();
 			try {
 				checkAddSubRange(index);
@@ -1555,7 +1577,6 @@ public class COPY_ON_WRITE_LIST KEY_GENERIC_TYPE extends ABSTRACT_LIST KEY_GENER
 		@Override
 		public void addElements(int from, KEY_TYPE[] a, int offset, int length) {
 			if(length <= 0) return;
-			ReentrantLock lock = list.lock;
 			lock.lock();
 			try {
 				checkAddSubRange(from);
@@ -1571,13 +1592,12 @@ public class COPY_ON_WRITE_LIST KEY_GENERIC_TYPE extends ABSTRACT_LIST KEY_GENER
 		public KEY_TYPE[] getElements(int from, KEY_TYPE[] a, int offset, int length) {
 			SanityChecks.checkArrayCapacity(size, from, length);
 			SanityChecks.checkArrayCapacity(a.length, offset, length);
-			return list.getElements(from+this.offset, a, offset, length);
+			return list.getElements(from+parentOffset, a, offset, length);
 		}
 		
 		@Override
 		public void removeElements(int from, int to) {
 			if(to-from <= 0) return;
-			ReentrantLock lock = list.lock;
 			lock.lock();
 			try {
 				checkSubRange(from);
@@ -1593,7 +1613,6 @@ public class COPY_ON_WRITE_LIST KEY_GENERIC_TYPE extends ABSTRACT_LIST KEY_GENER
 #if TYPE_OBJECT
 		@Override
 		public <K> K[] extractElements(int from, int to, Class<K> type) {
-			ReentrantLock lock = list.lock;
 			lock.lock();
 			try {
 				checkSubRange(from);
@@ -1610,7 +1629,6 @@ public class COPY_ON_WRITE_LIST KEY_GENERIC_TYPE extends ABSTRACT_LIST KEY_GENER
 #else
 		@Override
 		public KEY_TYPE[] extractElements(int from, int to) {
-			ReentrantLock lock = list.lock;
 			lock.lock();
 			try {
 				checkSubRange(from);
@@ -1628,16 +1646,15 @@ public class COPY_ON_WRITE_LIST KEY_GENERIC_TYPE extends ABSTRACT_LIST KEY_GENER
 		@Override
 		public KEY_TYPE GET_KEY(int index) {
 			checkSubRange(index);
-			return list.GET_KEY(offset+index);
+			return list.GET_KEY(parentOffset+index);
 		}
 
 		@Override
 		public KEY_TYPE set(int index, KEY_TYPE element) {
-			ReentrantLock lock = list.lock;
 			lock.lock();
 			try {
 				checkSubRange(index);
-				return list.set(offset+index, element);
+				return list.set(parentOffset+index, element);
 			}
 			finally {
 				lock.unlock();
@@ -1646,11 +1663,18 @@ public class COPY_ON_WRITE_LIST KEY_GENERIC_TYPE extends ABSTRACT_LIST KEY_GENER
 		
 		@Override
 		public KEY_TYPE swapRemove(int index) {
-			ReentrantLock lock = list.lock;
+			if(index < 0 || index >= size) throw new IndexOutOfBoundsException();
+			ReentrantLock lock = this.lock;
 			lock.lock();
 			try {
-				checkSubRange(index);
-				KEY_TYPE result = list.swapRemove(index+parentOffset);
+				KEY_TYPE[] data = getter.get();
+				KEY_TYPE result = data[offset+index];
+				KEY_TYPE[] newElements = NEW_KEY_ARRAY(data.length-1);
+				int end = offset+size-1;
+				System.arraycopy(data, 0, newElements, 0, end);
+				if(end != newElements.length) System.arraycopy(data, end+1, newElements, end, data.length-end-1);
+				if(index+offset != end) newElements[index+offset] = data[end];
+				setter.accept(newElements);
 				size--;
 				return result;
 			}
@@ -1661,7 +1685,6 @@ public class COPY_ON_WRITE_LIST KEY_GENERIC_TYPE extends ABSTRACT_LIST KEY_GENER
 		
 		@Override
 		public KEY_TYPE REMOVE(int index) {
-			ReentrantLock lock = list.lock;
 			lock.lock();
 			try {
 				checkSubRange(index);
@@ -1674,6 +1697,371 @@ public class COPY_ON_WRITE_LIST KEY_GENERIC_TYPE extends ABSTRACT_LIST KEY_GENER
 			}
 		}
 		
+#if !TYPE_OBJECT
+		@Override
+		public boolean REMOVE_KEY(KEY_TYPE type) {
+			int index = indexOf(type);
+			if(index == -1) return false;
+			REMOVE(index);
+			return true;
+		}
+		
+#else
+		@Override
+		public boolean remove(Object type) {
+			int index = indexOf(type);
+			if(index == -1) return false;
+			REMOVE(index);
+			return true;
+		}
+		
+#endif
+		
+#if TYPE_OBJECT
+		@Override
+		public void sort(Comparator<? super CLASS_TYPE> c) {
+			ReentrantLock lock = this.lock;
+			lock.lock();
+			try {
+				KEY_TYPE[] data = getter.get();
+				KEY_TYPE[] newData = Arrays.copyOf(data, data.length);
+				if(c != null) ARRAYS.stableSort(newData, offset, offset+size, c);
+				else ARRAYS.stableSort(newData, offset, offset+size);
+				setter.accept(newData);
+			}
+			finally {
+				lock.unlock();
+			}
+		}
+		
+		@Override
+		public void unstableSort(Comparator<? super CLASS_TYPE> c) {
+			ReentrantLock lock = this.lock;
+			lock.lock();
+			try {
+				KEY_TYPE[] data = getter.get();
+				KEY_TYPE[] newData = Arrays.copyOf(data, data.length);
+				if(c != null) ARRAYS.unstableSort(newData, offset, offset+size, c);
+				else ARRAYS.unstableSort(newData, offset, offset+size);
+				setter.accept(newData);
+			}
+			finally {
+				lock.unlock();
+			}
+		}
+		
+#else
+		@Override
+		public void sort(COMPARATOR c) {
+			ReentrantLock lock = this.lock;
+			lock.lock();
+			try {
+				KEY_TYPE[] data = getter.get();
+				KEY_TYPE[] newData = Arrays.copyOf(data, data.length);
+				if(c != null) ARRAYS.stableSort(newData, offset, offset+size, c);
+				else ARRAYS.stableSort(newData, offset, offset+size);
+				setter.accept(newData);
+			}
+			finally {
+				lock.unlock();
+			}
+		}
+		
+		@Override
+		public void unstableSort(COMPARATOR c) {
+			ReentrantLock lock = this.lock;
+			lock.lock();
+			try {
+				KEY_TYPE[] data = getter.get();
+				KEY_TYPE[] newData = Arrays.copyOf(data, data.length);
+				if(c != null) ARRAYS.unstableSort(newData, offset, offset+size, c);
+				else ARRAYS.unstableSort(newData, offset, offset+size);
+				setter.accept(newData);
+			}
+			finally {
+				lock.unlock();
+			}	
+		}
+		
+#endif
+		
+		@Override
+		@Deprecated
+		public boolean removeAll(Collection<?> c) {
+			if(c.isEmpty()) return false;
+			ReentrantLock lock = this.lock;
+			lock.lock();
+			try {
+				KEY_TYPE[] data = getter.get();
+				KEY_TYPE[] newElements = NEW_KEY_ARRAY(data.length);
+				int j = 0;
+				for(int i= 0,m=data.length;i<m;i++) {
+					if(i < offset || i >= offset+size) newElements[j++] = data[i];
+					else if(!c.contains(KEY_TO_OBJ(data[i]))) newElements[j++] = data[i];
+				}
+				if(data.length != j) {
+					setter.accept(Arrays.copyOf(newElements, j));
+					size -= data.length - j;
+					return true;
+				}
+				return false;
+			}
+			finally {
+				lock.unlock();
+			}
+		}
+		
+		@Override
+		@Deprecated
+		public boolean retainAll(Collection<?> c) {
+			ReentrantLock lock = this.lock;
+			lock.lock();
+			try {
+				KEY_TYPE[] data = getter.get();
+				if(c.isEmpty()) {
+					if(size > 0) {
+						clear();
+						return true;
+					}
+					return false;
+				}
+				KEY_TYPE[] newElements = NEW_KEY_ARRAY(data.length);
+				int j = 0;
+				for(int i= 0,m=data.length;i<m;i++) {
+					if(i < offset || i >= offset+size) newElements[j++] = data[i];
+					else if(c.contains(KEY_TO_OBJ(data[i]))) newElements[j++] = data[i];
+				}
+				if(data.length != j) {
+					setter.accept(Arrays.copyOf(newElements, j));
+					size -= data.length - j;
+					return true;
+				}
+				return false;
+			}
+			finally {
+				lock.unlock();
+			}
+		}
+		
+		@Override
+		@Deprecated
+		public boolean removeIf(Predicate<? super CLASS_TYPE> filter) {
+			Objects.requireNonNull(filter);
+			ReentrantLock lock = this.lock;
+			lock.lock();
+			try {
+				KEY_TYPE[] data = getter.get();
+				KEY_TYPE[] newElements = NEW_KEY_ARRAY(data.length);
+				int j = 0;
+				for(int i= 0,m=data.length;i<m;i++) {
+					if(i < offset || i >= offset+size) newElements[j++] = data[i];
+					else if(!filter.test(KEY_TO_OBJ(data[i]))) newElements[j++] = data[i];
+				}
+				if(data.length != j) {
+					setter.accept(Arrays.copyOf(newElements, j));
+					size -= data.length - j;
+					return true;
+				}
+				return false;
+			}
+			finally {
+				lock.unlock();
+			}
+		}
+		
+		@Override
+		public boolean removeAll(COLLECTION KEY_GENERIC_TYPE c) {
+			if(c.isEmpty()) return false;
+			ReentrantLock lock = this.lock;
+			lock.lock();
+			try {
+				KEY_TYPE[] data = getter.get();
+				KEY_TYPE[] newElements = NEW_KEY_ARRAY(data.length);
+				int j = 0;
+				for(int i= 0,m=data.length;i<m;i++) {
+					if(i < offset || i >= offset+size) newElements[j++] = data[i];
+					else if(!c.contains(data[i])) newElements[j++] = data[i];
+				}
+				if(data.length != j) {
+					setter.accept(Arrays.copyOf(newElements, j));
+					size -= data.length - j;
+					return true;
+				}
+				return false;
+			}
+			finally {
+				lock.unlock();
+			}
+		}
+		
+		@Override
+		public boolean removeAll(COLLECTION KEY_GENERIC_TYPE c, CONSUMER KEY_GENERIC_TYPE r) {
+			if(c.isEmpty()) return false;
+			ReentrantLock lock = this.lock;
+			lock.lock();
+			try {
+				KEY_TYPE[] data = getter.get();
+				KEY_TYPE[] newElements = NEW_KEY_ARRAY(data.length);
+				int j = 0;
+				for(int i= 0,m=data.length;i<m;i++) {
+					if(i < offset || i >= offset+size) newElements[j++] = data[i];
+					else if(!c.contains(data[i])) newElements[j++] = data[i];
+					else r.accept(data[i]);
+				}
+				if(data.length != j) {
+					setter.accept(Arrays.copyOf(newElements, j));
+					size -= data.length - j;
+					return true;
+				}
+				return false;
+			}
+			finally {
+				lock.unlock();
+			}
+		}
+		
+		@Override
+		public boolean retainAll(COLLECTION KEY_GENERIC_TYPE c) {
+			ReentrantLock lock = this.lock;
+			lock.lock();
+			try {
+				KEY_TYPE[] data = getter.get();
+				if(c.isEmpty()) {
+					if(size > 0) {
+						clear();
+						return true;
+					}
+					return false;
+				}
+				KEY_TYPE[] newElements = NEW_KEY_ARRAY(data.length);
+				int j = 0;
+				for(int i= 0,m=data.length;i<m;i++) {
+					if(i < offset || i >= offset+size) newElements[j++] = data[i];
+					else if(c.contains(data[i])) newElements[j++] = data[i];
+				}
+				if(data.length != j) {
+					setter.accept(Arrays.copyOf(newElements, j));;
+					size -= data.length - j;
+					return true;
+				}
+				return false;
+			}
+			finally {
+				lock.unlock();
+			}
+		}
+		
+		@Override
+		public boolean retainAll(COLLECTION KEY_GENERIC_TYPE c, CONSUMER KEY_GENERIC_TYPE r) {
+			ReentrantLock lock = this.lock;
+			lock.lock();
+			try {
+				KEY_TYPE[] data = getter.get();
+				if(c.isEmpty()) {
+					if(size > 0) {
+						forEach(r);
+						clear();
+						return true;
+					}
+					return false;
+				}
+				KEY_TYPE[] newElements = NEW_KEY_ARRAY(data.length);
+				int j = 0;
+				for(int i= 0,m=data.length;i<m;i++) {
+					if(i < offset || i >= offset+size) newElements[j++] = data[i];
+					else if(c.contains(data[i])) newElements[j++] = data[i];
+					else r.accept(data[i]);
+				}
+				if(data.length != j) {
+					setter.accept(Arrays.copyOf(newElements, j));
+					size -= data.length - j;
+					return true;
+				}
+				return false;
+			}
+			finally {
+				lock.unlock();
+			}
+		}
+		
+#if PRIMITIVES
+		@Override
+		public boolean remIf(JAVA_PREDICATE filter) {
+			Objects.requireNonNull(filter);
+			ReentrantLock lock = this.lock;
+			lock.lock();
+			try {
+				KEY_TYPE[] data = getter.get();
+				KEY_TYPE[] newElements = NEW_KEY_ARRAY(data.length);
+				int j = 0;
+				for(int i=0,m=data.length;i<m;i++) {
+					if(i < offset || i >= offset+size) newElements[j++] = data[i];
+					else if(!filter.test(data[i])) newElements[j++] = data[i];
+				}
+				if(data.length != j) {
+					setter.accept(Arrays.copyOf(newElements, j));
+					size -= data.length - j;
+					return true;
+				}
+				return false;
+			}
+			finally {
+				lock.unlock();
+			}
+		}
+		
+#endif
+		
+		@Override
+		@Primitive
+		public void replaceAll(UnaryOperator<CLASS_TYPE> o) {
+#if PRIMITIVES
+			Objects.requireNonNull(o);
+#if TYPE_BYTE || TYPE_SHORT || TYPE_CHAR || TYPE_FLOAT
+			REPLACE(T -> OBJ_TO_KEY(o.apply(KEY_TO_OBJ(SanityChecks.SANITY_CAST(T)))));
+#else
+			REPLACE(T -> OBJ_TO_KEY(o.apply(KEY_TO_OBJ(T))));
+#endif
+#else
+			Objects.requireNonNull(o);
+			ReentrantLock lock = this.lock;
+			lock.lock();
+			try {
+				KEY_TYPE[] data = getter.get();
+				KEY_TYPE[] newData = Arrays.copyOf(data, data.length);
+				for(int i = 0,m=size;i<m;i++)
+					newData[i+offset] = OBJ_TO_KEY(o.apply(KEY_TO_OBJ(newData[i+offset])));
+				setter.accept(newData);
+			}
+			finally {
+				lock.unlock();
+			}
+#endif
+		}
+		
+#if PRIMITIVES
+		@Override
+		public void REPLACE(JAVA_UNARY_OPERATOR o) {
+			Objects.requireNonNull(o);
+			ReentrantLock lock = this.lock;
+			lock.lock();
+			try {
+				KEY_TYPE[] data = getter.get();
+				KEY_TYPE[] newData = Arrays.copyOf(data, data.length);
+				for(int i = 0,m=size;i<m;i++)
+#if TYPE_BYTE || TYPE_SHORT || TYPE_CHAR || TYPE_FLOAT
+					newData[i+offset] = SanityChecks.SANITY_CAST(o.APPLY_CAST(newData[i+offset]));
+#else
+					newData[i+offset] = o.APPLY(newData[i+offset]);
+#endif
+				setter.accept(newData);
+			}
+			finally {
+				lock.unlock();
+			}
+		}
+		
+#endif		
 		@Override
 		public int size() {
 			return size;
@@ -1682,10 +2070,9 @@ public class COPY_ON_WRITE_LIST KEY_GENERIC_TYPE extends ABSTRACT_LIST KEY_GENER
 		@Override
 		public void clear() {
 			if(size == 0) return;
-			ReentrantLock lock = list.lock;
 			lock.lock();
 			try {
-				list.removeElements(offset, offset+size);
+				list.removeElements(parentOffset, parentOffset+size);
 				size = 0;
 			}
 			finally {
@@ -1705,7 +2092,7 @@ public class COPY_ON_WRITE_LIST KEY_GENERIC_TYPE extends ABSTRACT_LIST KEY_GENER
 		@Override
 		public LIST KEY_GENERIC_TYPE subList(int fromIndex, int toIndex) {
 			SanityChecks.checkArrayCapacity(size, fromIndex, toIndex-fromIndex);
-			return new COWSubListBRACES(list, offset, fromIndex, toIndex);
+			return new COWSubListBRACES(this, lock, setter, getter, offset, fromIndex, toIndex);
 		}
 		
 		protected void checkSubRange(int index) {
@@ -1773,7 +2160,7 @@ public class COPY_ON_WRITE_LIST KEY_GENERIC_TYPE extends ABSTRACT_LIST KEY_GENER
 		@Override
 		public int skip(int amount) {
 			if(amount < 0) throw new IllegalStateException("Negative Numbers are not allowed");
-			int steps = Math.min(amount, (list.size() - 1) - index);
+			int steps = Math.min(amount, list.size() - index);
 			index += steps;
 			return steps;
 		}

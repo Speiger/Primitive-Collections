@@ -362,7 +362,11 @@ public class HASH_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_VALUE_GENE
 	@Override
 	public boolean remove(Object key, Object value) {
 		Objects.requireNonNull(value);
+#if TYPE_OBJECT
 		if(key == null) {
+#else
+		if(key == null || (key instanceof CLASS_TYPE && KEY_EQUALS_NULL(CLASS_TO_KEY(key)))) {
+#endif
 			if(containsNull && EQUALS_VALUE_TYPE(values[nullIndex], value)) {
 				removeNullIndex();
 				return true;
@@ -589,7 +593,7 @@ public class HASH_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_VALUE_GENE
 	@Override
 	public boolean trim(int size) {
 		int request = Math.max(minCapacity, HashUtil.nextPowerOfTwo((int)Math.ceil(size / loadFactor)));
-		if(request >= size || this.size > Math.min((int)Math.ceil(request * loadFactor), request - 1)) return false;
+		if(request >= nullIndex || this.size >= Math.min((int)Math.ceil(request * loadFactor), request - 1)) return false;
 		try {
 			rehash(request);
 		}
@@ -600,7 +604,7 @@ public class HASH_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_VALUE_GENE
 	@Override
 	public void clearAndTrim(int size) {
 		int request = Math.max(minCapacity, HashUtil.nextPowerOfTwo((int)Math.ceil(size / loadFactor)));
-		if(request >= size) {
+		if(request >= nullIndex) {
 			clear();
 			return;
 		}
@@ -629,6 +633,9 @@ public class HASH_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_VALUE_GENE
 #endif
 	protected int findIndex(Object key) {
 		if(key == null) return containsNull ? nullIndex : -(nullIndex + 1);
+#if !TYPE_OBJECT
+		if(key instanceof CLASS_TYPE && KEY_EQUALS_NULL(CLASS_TO_KEY(key))) return containsNull ? nullIndex : -(nullIndex + 1);
+#endif
 		int pos = HashUtil.mix(key.hashCode()) & mask;
 		KEY_TYPE current = keys[pos];
 		if(KEY_EQUALS_NOT_NULL(current)) {

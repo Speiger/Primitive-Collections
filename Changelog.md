@@ -1,5 +1,44 @@
 # Changelog of versions
 
+### Version 0.7.0
+- Added: Over 11 Million Unit Tests to this library to ensure quality.
+- Added: ArrayList size constructor now throws IllegalStateException if the size parameter is negative
+- Added: EnumMap specialized forEach implementation.
+- Added: AbstractMap.remove now delegates to its primitive counterpart.
+- Added: ConcurrentHashMap now implements ITrimmable
+- Refactor: Removed a lot of disabled code from ArraySet.
+- Removed: LinkedList.addAll(index, List) now delegates to LinkedList.addAll(index, Collection) due to no special optimization required.
+- Fixed: AbstractList.SubList.get/set/swapRemove didn't calculate their List index Properly
+- Fixed: AbstractList.SubList chains now properly if you create SubLists within SubLists.
+- Fixed: AbstractList.Iterator.add now respects Immutable/UnmodifiableLists.
+- Fixed: AbstractList.Iterator.skip/back now keep track of the last returned value for remove function to work properly.
+- Fixed: CopyOnWriteArrayList.extract/removeElements(int, int) does now proper range checks and remove elements properly.
+- Fixed: CopyOnWriteArrayList.SubList now works properly. (Reimplemented entirely)
+- Fixed: CopyOnWriteArrayList.Iterator.previous() was returning the wrong values.
+- Fixed: CopyOnWriteArrayList.Iterator.skip now skips the right amount of elements and stops where it should.
+- Fixed: LinkedList.first/last/dequeue/dequeueLast now throws NoSuchElementException when empty instead of IllegalStateException.
+- Fixed: LinkedList had an edge case where the entire reverse iterator would break if the wrong element was removed.
+- Fixed: LinkedList.extractElement now returns the correct values.
+- Fixed: AbstractMap.entrySet().remove(Object) now returns true if defaultReturnValue elements were removed.
+- Fixed: ConcurrentHashMap.remove(Object, Object) checks if the type matches before comparing against null Values.
+- Fixed: LinkedHashMap.clearAndTrim() was checking the wrong value for determining the full reset or clearing of a Map.
+- Fixed: HashMap.trim/clearToTrim() was using the wrong value to determin if something should be done.
+- Fixed: HashMap now compares empty values (0) against nullKeys when Object Variants of the type are used.
+- Fixed: ImmutableMap now compares empty values (0) against nullKeys when Object Variants of the type are used.
+- Fixed: ArrayMap.iterator(key) now throws NoSuchElementException when the element wasn't found.
+- Fixed: Linked/EnumMap array constructor was creating the wrong size values array.
+- Fixed: LinkedEnumMap.getAndMoveToFirst/Last was moving elements even if the element wasn't present.
+- Fixed: AVL/RBTreeMap.getFirst/LastKey was not throwing a NoSuchElementException if the map was empty.
+- Fixed: Map.Builder wasn't throwing a IllegalStateException when creating a negative size builder.
+- Fixed: AVL/RBTreeSet.DecendingSet.subSet(from, fromInclusive, to, toInclusive) was creating a corrupt asending subset.
+- Fixed: ArraySet throws now a IllegalStateException when trying to create it with a negative size.
+- Fixed: ArraySet.addMoveToLast(key) was crashing when a key was already present.
+- Fixed: Immutable/LinkedHashSet now keep track of their iteration index properly.
+- Fixed: LinkedHashSet.moveToFirst/Last(key) would crash if the Set was empty.
+- Fixed: LinkedHashSet.clearAndTrim() was checking the wrong value for determining the full reset or clearing of a Map.
+- Fixed: HashSet.trim/clearToTrim() was using the wrong value to determin if something should be done.
+
+
 ### Version 0.6.2
 - Added: Array only sorting function return the inputed array. This was done to allow for static final references to use the method in one go without having to make lambda wrappers. Cleaner code.
 - Added: Iterator Wrappers are now a bit more in Compliance with Java Standards.

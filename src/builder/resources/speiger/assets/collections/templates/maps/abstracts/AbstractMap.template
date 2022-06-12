@@ -285,6 +285,16 @@ public abstract class ABSTRACT_MAP KEY_VALUE_GENERIC_TYPE extends AbstractMap<CL
 	}
 	
 #endif
+	
+	@Override
+	public CLASS_VALUE_TYPE remove(Object key) {
+#if TYPE_OBJECT
+		return VALUE_TO_OBJ(REMOVE_VALUE((CLASS_TYPE)key));
+#else
+		return key instanceof CLASS_TYPE ? VALUE_TO_OBJ(REMOVE_VALUE(CLASS_TO_KEY(key))) : VALUE_TO_OBJ(getDefaultReturnValue());
+#endif
+	}
+	
 	@Override
 	public void forEach(BI_CONSUMER KEY_VALUE_GENERIC_TYPE action) {
 		Objects.requireNonNull(action);
@@ -306,7 +316,11 @@ public abstract class ABSTRACT_MAP KEY_VALUE_GENERIC_TYPE extends AbstractMap<CL
 #else
 			@Override
 			public boolean remove(Object o) {
-				return VALUE_EQUALS_NOT(ABSTRACT_MAP.this.remove(o), getDefaultReturnValue());
+				if(ABSTRACT_MAP.this.containsKey(o)) {
+					ABSTRACT_MAP.this.remove(o);
+					return true;
+				}
+				return false;
 			}
 			
 #endif

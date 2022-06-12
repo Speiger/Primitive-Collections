@@ -110,7 +110,7 @@ public class LINKED_HASH_SET KEY_GENERIC_TYPE extends HASH_SET KEY_GENERIC_TYPE 
 	 * @throws IllegalStateException if offset and length causes to step outside of the arrays range
 	 */
 	public LINKED_HASH_SET(KEY_TYPE[] array, int offset, int length, float loadFactor) {
-		this(length < 0 ? 0 : length);
+		this(length);
 		SanityChecks.checkArrayCapacity(array.length, offset, length);
 		for(int i = 0;i<length;i++) add(array[offset+i]);
 	}
@@ -255,7 +255,7 @@ public class LINKED_HASH_SET KEY_GENERIC_TYPE extends HASH_SET KEY_GENERIC_TYPE 
 	
 	@Override
 	public boolean moveToFirst(KEY_TYPE o) {
-		if(KEY_EQUALS(FIRST_KEY(), o)) return false;
+		if(isEmpty() || KEY_EQUALS(FIRST_KEY(), o)) return false;
 		if(KEY_EQUALS_NULL(o)) {
 			if(containsNull) {
 				moveToFirstIndex(nullIndex);
@@ -277,7 +277,7 @@ public class LINKED_HASH_SET KEY_GENERIC_TYPE extends HASH_SET KEY_GENERIC_TYPE 
 	
 	@Override
 	public boolean moveToLast(KEY_TYPE o) {
-		if(KEY_EQUALS(LAST_KEY(), o)) return false;
+		if(isEmpty() || KEY_EQUALS(LAST_KEY(), o)) return false;
 		if(KEY_EQUALS_NULL(o)) {
 			if(containsNull) {
 				moveToLastIndex(nullIndex);
@@ -343,8 +343,7 @@ public class LINKED_HASH_SET KEY_GENERIC_TYPE extends HASH_SET KEY_GENERIC_TYPE 
 	public KEY_TYPE POLL_FIRST_KEY() {
 		if(size == 0) throw new NoSuchElementException();
 		int pos = firstIndex;
-		firstIndex = (int)links[pos];
-		if(0 <= firstIndex) links[firstIndex] |= 0xFFFFFFFF00000000L;
+		onNodeRemoved(pos);
 		KEY_TYPE result = keys[pos];
 		size--;
 		if(KEY_EQUALS_NULL(result)) {
@@ -366,8 +365,7 @@ public class LINKED_HASH_SET KEY_GENERIC_TYPE extends HASH_SET KEY_GENERIC_TYPE 
 	public KEY_TYPE POLL_LAST_KEY() {
 		if(size == 0) throw new NoSuchElementException();
 		int pos = lastIndex;
-		lastIndex = (int)(links[pos] >>> 32);
-		if(0 <= lastIndex) links[lastIndex] |= 0xFFFFFFFFL;
+		onNodeRemoved(pos);
 		KEY_TYPE result = keys[pos];
 		size--;
 		if(KEY_EQUALS_NULL(result)) {
@@ -601,7 +599,7 @@ public class LINKED_HASH_SET KEY_GENERIC_TYPE extends HASH_SET KEY_GENERIC_TYPE 
 	@Override
 	public void clearAndTrim(int size) {
 		int request = Math.max(minCapacity, HashUtil.nextPowerOfTwo((int)Math.ceil(size / loadFactor)));
-		if(request >= size) {
+		if(request >= nullIndex) {
 			clear();
 			return;
 		}
@@ -686,6 +684,7 @@ public class LINKED_HASH_SET KEY_GENERIC_TYPE extends HASH_SET KEY_GENERIC_TYPE 
 				next = (int)(links[current]);
 				result++;
 			}
+			if(index >= 0) index+=result;
 			return result;
 		}
 		
@@ -697,6 +696,7 @@ public class LINKED_HASH_SET KEY_GENERIC_TYPE extends HASH_SET KEY_GENERIC_TYPE 
 				previous = (int)(links[current] >> 32);
 				result++;
 			}
+			if(index >= 0) index-=result;
 			return result;
 		}
 		

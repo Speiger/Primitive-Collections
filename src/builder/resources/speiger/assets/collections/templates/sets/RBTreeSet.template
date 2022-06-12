@@ -949,15 +949,11 @@ public class RB_TREE_SET KEY_GENERIC_TYPE extends ABSTRACT_SET KEY_GENERIC_TYPE 
 		@Override
 		public COMPARATOR KEY_GENERIC_TYPE comparator() { return comparator; }
 		
-		public KEY_TYPE getDefaultMaxValue() { return super.getDefaultMinValue(); }
-		
-		public KEY_TYPE getDefaultMinValue() { return super.getDefaultMaxValue(); }
-		
 		@Override
 		public NAVIGABLE_SET KEY_GENERIC_TYPE subSet(KEY_TYPE fromElement, boolean fromInclusive, KEY_TYPE toElement, boolean toInclusive) {
 			if(!inRange(fromElement, fromInclusive)) throw new IllegalArgumentException("fromElement out of range");
 			if(!inRange(toElement, toInclusive)) throw new IllegalArgumentException("toElement out of range");
-			return new DescendingSubSetBRACES(set, false, fromElement, fromInclusive, false, toElement, toInclusive);
+			return new DescendingSubSetBRACES(set, false, toElement, toInclusive, false, fromElement, fromInclusive);
 		}
 		
 		@Override
@@ -1034,21 +1030,15 @@ public class RB_TREE_SET KEY_GENERIC_TYPE extends ABSTRACT_SET KEY_GENERIC_TYPE 
 #if !TYPE_OBJECT
 		@Override
 		public void setDefaultMaxValue(KEY_TYPE value) { set.setDefaultMaxValue(value); }
-		
 		@Override
 		public KEY_TYPE getDefaultMaxValue() { return set.getDefaultMaxValue(); }
-		
 		@Override
 		public void setDefaultMinValue(KEY_TYPE value) { set.setDefaultMinValue(value); }
-		
 		@Override
 		public KEY_TYPE getDefaultMinValue() { return set.getDefaultMinValue(); }
-		
 #else
 		public KEY_TYPE getDefaultMaxValue() { return null; }
-		
 		public KEY_TYPE getDefaultMinValue() { return null; }
-		
 #endif
 		@Override
 		public abstract	BI_ITERATOR KEY_GENERIC_TYPE iterator();

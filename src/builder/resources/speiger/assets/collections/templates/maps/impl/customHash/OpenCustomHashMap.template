@@ -394,7 +394,11 @@ public class CUSTOM_HASH_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_VAL
 	@Override
 	public boolean remove(Object key, Object value) {
 		Objects.requireNonNull(value);
+#if TYPE_OBJECT
 		if(key == null) {
+#else
+		if(key == null || (key instanceof CLASS_TYPE && strategy.equals(CLASS_TO_KEY(key), EMPTY_KEY_VALUE))) {
+#endif
 			if(containsNull && EQUALS_VALUE_TYPE(values[nullIndex], value)) {
 				removeNullIndex();
 				return true;
@@ -628,7 +632,7 @@ public class CUSTOM_HASH_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_VAL
 	@Override
 	public boolean trim(int size) {
 		int request = Math.max(minCapacity, HashUtil.nextPowerOfTwo((int)Math.ceil(size / loadFactor)));
-		if(request >= size || this.size > Math.min((int)Math.ceil(request * loadFactor), request - 1)) return false;
+		if(request >= nullIndex || this.size > Math.min((int)Math.ceil(request * loadFactor), request - 1)) return false;
 		try {
 			rehash(request);
 		}
@@ -639,7 +643,7 @@ public class CUSTOM_HASH_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_VAL
 	@Override
 	public void clearAndTrim(int size) {
 		int request = Math.max(minCapacity, HashUtil.nextPowerOfTwo((int)Math.ceil(size / loadFactor)));
-		if(request >= size) {
+		if(request >= nullIndex) {
 			clear();
 			return;
 		}
@@ -669,6 +673,9 @@ public class CUSTOM_HASH_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_VAL
 	protected int findIndex(CLASS_TYPE key) {
 		if(key == null) return containsNull ? nullIndex : -(nullIndex + 1);
 		KEY_TYPE keyType = CLASS_TO_KEY(key);
+#if !TYPE_OBJECT
+		if(strategy.equals(keyType, EMPTY_KEY_VALUE)) return containsNull ? nullIndex : -(nullIndex + 1);
+#endif
 		int pos = HashUtil.mix(strategy.hashCode(keyType)) & mask;
 		KEY_TYPE current = keys[pos];
 		if(!strategy.equals(current, EMPTY_KEY_VALUE)) {

@@ -66,9 +66,9 @@ public class LINKED_ENUM_MAP KEY_ENUM_VALUE_GENERIC_TYPE extends ENUM_MAP KEY_VA
 		if(keys.length != values.length) throw new IllegalArgumentException("Keys and Values have to be the same size");
 		keyType = keys[0].getDeclaringClass();
 		this.keys = getKeyUniverse(keyType);
-		this.values = NEW_VALUE_ARRAY(keys.length);
-		present = new long[((keys.length - 1) >> 6) + 1];
-		links = new long[keys.length];
+		this.values = NEW_VALUE_ARRAY(this.keys.length);
+		present = new long[((this.keys.length - 1) >> 6) + 1];
+		links = new long[this.keys.length];
 		putAll(keys, values);
 	}
 	
@@ -84,9 +84,9 @@ public class LINKED_ENUM_MAP KEY_ENUM_VALUE_GENERIC_TYPE extends ENUM_MAP KEY_VA
 		if(keys.length != values.length) throw new IllegalArgumentException("Keys and Values have to be the same size");
 		keyType = keys[0].getDeclaringClass();
 		this.keys = getKeyUniverse(keyType);
-		this.values = NEW_VALUE_ARRAY(keys.length);
-		present = new long[((keys.length - 1) >> 6) + 1];
-		links = new long[keys.length];
+		this.values = NEW_VALUE_ARRAY(this.keys.length);
+		present = new long[((this.keys.length - 1) >> 6) + 1];
+		links = new long[this.keys.length];
 		putAll(keys, values);		
 	}
 	
@@ -239,7 +239,7 @@ public class LINKED_ENUM_MAP KEY_ENUM_VALUE_GENERIC_TYPE extends ENUM_MAP KEY_VA
 	@Override
 	public VALUE_TYPE getAndMoveToFirst(T key) {
 		int index = key.ordinal();
-		if(index < 0) return getDefaultReturnValue();
+		if(!isSet(index)) return getDefaultReturnValue();
 		moveToFirstIndex(index);
 		return values[index];
 	}
@@ -247,7 +247,7 @@ public class LINKED_ENUM_MAP KEY_ENUM_VALUE_GENERIC_TYPE extends ENUM_MAP KEY_VA
 	@Override
 	public VALUE_TYPE getAndMoveToLast(T key) {
 		int index = key.ordinal();
-		if(index < 0) return getDefaultReturnValue();
+		if(!isSet(index)) return getDefaultReturnValue();
 		moveToLastIndex(index);
 		return values[index];
 	}
@@ -828,6 +828,7 @@ public class LINKED_ENUM_MAP KEY_ENUM_VALUE_GENERIC_TYPE extends ENUM_MAP KEY_VA
 			previous = from.ordinal() - 1;
 			index = from.ordinal();
 			next = from.ordinal();
+			if(!isSet(index)) throw new NoSuchElementException();
 		}
 		
 		public boolean hasNext() {

@@ -517,6 +517,9 @@ public class IMMUTABLE_HASH_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_
 #endif
 	protected int findIndex(Object key) {
 		if(key == null) return containsNull ? nullIndex : -(nullIndex + 1);
+#if !TYPE_OBJECT
+		if(KEY_EQUALS_NULL(CLASS_TO_KEY(key))) return containsNull ? nullIndex : -(nullIndex + 1);
+#endif
 		int pos = HashUtil.mix(key.hashCode()) & mask;
 		KEY_TYPE current = keys[pos];
 		if(KEY_EQUALS_NOT_NULL(current)) {

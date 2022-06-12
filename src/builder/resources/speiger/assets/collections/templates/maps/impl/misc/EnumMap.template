@@ -4,6 +4,7 @@ import java.util.Arrays;
 import java.util.Map;
 import java.util.NoSuchElementException;
 import java.util.Objects;
+import java.util.function.Consumer;
 
 import speiger.src.collections.VALUE_PACKAGE.collections.VALUE_ABSTRACT_COLLECTION;
 import speiger.src.collections.VALUE_PACKAGE.collections.VALUE_COLLECTION;
@@ -76,8 +77,8 @@ public class ENUM_MAP KEY_ENUM_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_VALUE
 		if(keys.length != values.length) throw new IllegalArgumentException("Keys and Values have to be the same size");
 		keyType = keys[0].getDeclaringClass();
 		this.keys = getKeyUniverse(keyType);
-		this.values = NEW_VALUE_ARRAY(keys.length);
-		present = new long[((keys.length - 1) >> 6) + 1];
+		this.values = NEW_VALUE_ARRAY(this.keys.length);
+		present = new long[((this.keys.length - 1) >> 6) + 1];
 		putAll(keys, values);
 	}
 	
@@ -93,8 +94,8 @@ public class ENUM_MAP KEY_ENUM_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_VALUE
 		if(keys.length != values.length) throw new IllegalArgumentException("Keys and Values have to be the same size");
 		keyType = keys[0].getDeclaringClass();
 		this.keys = getKeyUniverse(keyType);
-		this.values = NEW_VALUE_ARRAY(keys.length);
-		present = new long[((keys.length - 1) >> 6) + 1];
+		this.values = NEW_VALUE_ARRAY(this.keys.length);
+		present = new long[((this.keys.length - 1) >> 6) + 1];
 		putAll(keys, values);		
 	}
 	
@@ -528,6 +529,14 @@ public class ENUM_MAP KEY_ENUM_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_VALUE
 				return ENUM_MAP.this.remove(entry.getKey(), entry.getValue());
 			}
 			return false;
+		}
+		
+		@Override
+		public void forEach(Consumer<? super MAP.Entry KEY_VALUE_GENERIC_TYPE> action) {
+			if(size() <= 0) return;
+			for(int i = 0,m=keys.length;i<m;i++) {
+				if(isSet(i)) action.accept(new BasicEntryKV_BRACES(keys[i], values[i]));
+			}
 		}
 		
 		@Override

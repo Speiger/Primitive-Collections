@@ -308,7 +308,7 @@ public abstract class ABSTRACT_LIST KEY_GENERIC_TYPE extends ABSTRACT_COLLECTION
 		public KEY_TYPE[] getElements(int from, KEY_TYPE[] a, int offset, int length) {
 			SanityChecks.checkArrayCapacity(size, from, length);
 			SanityChecks.checkArrayCapacity(a.length, offset, length);
-			return list.getElements(from+this.offset, a, offset, length);
+			return list.getElements(from+parentOffset, a, offset, length);
 		}
 		
 		@Override
@@ -344,19 +344,25 @@ public abstract class ABSTRACT_LIST KEY_GENERIC_TYPE extends ABSTRACT_COLLECTION
 		@Override
 		public KEY_TYPE GET_KEY(int index) {
 			checkSubRange(index);
-			return list.GET_KEY(offset+index);
+			return list.GET_KEY(parentOffset+index);
 		}
 
 		@Override
 		public KEY_TYPE set(int index, KEY_TYPE element) {
 			checkSubRange(index);
-			return list.set(offset+index, element);
+			return list.set(parentOffset+index, element);
 		}
 		
 		@Override
 		public KEY_TYPE swapRemove(int index) {
 			checkSubRange(index);
-			KEY_TYPE result = list.swapRemove(index+parentOffset);
+			if(index == size-1) {
+				KEY_TYPE result = list.REMOVE(parentOffset+size-1);
+				size--;
+				return result;
+			}
+			KEY_TYPE result = list.set(index+parentOffset, list.GET_KEY(parentOffset+size-1));
+			list.REMOVE(parentOffset+size-1);
 			size--;
 			return result;
 		}
@@ -386,7 +392,7 @@ public abstract class ABSTRACT_LIST KEY_GENERIC_TYPE extends ABSTRACT_COLLECTION
 		@Override
 		public LIST KEY_GENERIC_TYPE subList(int fromIndex, int toIndex) {
 			SanityChecks.checkArrayCapacity(size, fromIndex, toIndex-fromIndex);
-			return new SubList(list, offset, fromIndex, toIndex);
+			return new SubList(this, offset, fromIndex, toIndex);
 		}
 		
 		protected void checkSubRange(int index) {
@@ -460,15 +466,17 @@ public abstract class ABSTRACT_LIST KEY_GENERIC_TYPE extends ABSTRACT_COLLECTION
 			
 			@Override
 			public void add(KEY_TYPE e) {
-				list.add(index++, e);
+				list.add(index, e);
+				index++;
 				lastReturned = -1;
 			}
 			
 			@Override
 			public int skip(int amount) {
 				if(amount < 0) throw new IllegalStateException("Negative Numbers are not allowed");
-				int steps = Math.min(amount, (list.size() - 1) - index);
+				int steps = Math.min(amount, size() - index);
 				index += steps;
+				if(steps > 0) lastReturned = Math.min(index-1, size()-1);
 				return steps;
 			}
 			
@@ -477,6 +485,7 @@ public abstract class ABSTRACT_LIST KEY_GENERIC_TYPE extends ABSTRACT_COLLECTION
 				if(amount < 0) throw new IllegalStateException("Negative Numbers are not allowed");
 				int steps = Math.min(amount, index);
 				index -= steps;
+				if(steps > 0) lastReturned = Math.min(index, size()-1);
 				return steps;
 			}
 		}

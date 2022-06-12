@@ -73,6 +73,7 @@ import speiger.src.collections.objects.collections.ObjectBidirectionalIterator;
 import speiger.src.collections.objects.sets.AbstractObjectSet;
 import speiger.src.collections.objects.sets.ObjectSet;
 import speiger.src.collections.utils.HashUtil;
+import speiger.src.collections.utils.ITrimmable;
 
 /**
  * A TypeSpecific ConcurrentHashMap implementation that is based on <a href="https://github.com/google/guava">Guavas</a> approach and backing array implementations.
@@ -84,7 +85,7 @@ import speiger.src.collections.utils.HashUtil;
  * @Type(T)
  * @ValueType(V)
  */
-public class CONCURRENT_HASH_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_VALUE_GENERIC_TYPE implements CONCURRENT_MAP KEY_VALUE_GENERIC_TYPE
+public class CONCURRENT_HASH_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_VALUE_GENERIC_TYPE implements CONCURRENT_MAP KEY_VALUE_GENERIC_TYPE, ITrimmable
 {
 	/** Segment Limit */
 	private static final int MAX_SEGMENTS = 1 << 16;
@@ -535,6 +536,30 @@ public class CONCURRENT_HASH_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY
 	public void clear() {
 		for(int i = 0,m=segments.length;i<m;i++) {
 			segments[i].clear();
+		}
+	}
+	
+	@Override
+	public boolean trim(int size) {
+		int segmentCapacity = size / segments.length;
+		if(segmentCapacity * segments.length < size) {
+			segmentCapacity++;
+		}
+		boolean result = false;
+		for(int i = 0, m=segments.length;i<m;i++) {
+			result |= segments[i].trim(segmentCapacity);
+		}
+		return result;
+	}
+	
+	@Override
+	public void clearAndTrim(int size) {
+		int segmentCapacity = size / segments.length;
+		if(segmentCapacity * segments.length < size) {
+			segmentCapacity++;
+		}
+		for(int i = 0, m=segments.length;i<m;i++) {
+			segments[i].clearAndTrim(segmentCapacity);
 		}
 	}
 	
@@ -2025,7 +2050,11 @@ public class CONCURRENT_HASH_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY
 			long stamp = writeLock();
 			try
 			{
+#if TYPE_OBJECT
 				if(key == null) {
+#else
+				if(key == null || (key instanceof CLASS_TYPE && KEY_EQUALS_NULL(CLASS_TO_KEY(key)))) {
+#endif
 					if(containsNull && EQUALS_VALUE_TYPE(values[nullIndex], value)) {
 						removeNullIndex();
 						return true;
@@ -2202,7 +2231,7 @@ public class CONCURRENT_HASH_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY
 		
 		protected boolean trim(int size) {
 			int request = Math.max(minCapacity, HashUtil.nextPowerOfTwo((int)Math.ceil(size / loadFactor)));
-			if(request >= size || this.size > Math.min((int)Math.ceil(request * loadFactor), request - 1)) return false;
+			if(request >= mask+1 || this.size > Math.min((int)Math.ceil(request * loadFactor), request - 1)) return false;
 			long stamp = writeLock();
 			try {
 				try {
@@ -2218,7 +2247,7 @@ public class CONCURRENT_HASH_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY
 		
 		protected void clearAndTrim(int size) {
 			int request = Math.max(minCapacity, HashUtil.nextPowerOfTwo((int)Math.ceil(size / loadFactor)));
-			if(request >= size) {
+			if(request >= mask+1) {
 				clear();
 				return;
 			}
@@ -2298,6 +2327,9 @@ public class CONCURRENT_HASH_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY
 #endif
 		protected int findIndex(int hash, Object key) {
 			if(key == null) return containsNull ? nullIndex : -(nullIndex + 1);
+#if !TYPE_OBJECT
+			if(KEY_EQUALS_NULL(CLASS_TO_KEY(key))) return containsNull ? nullIndex : -(nullIndex + 1);
+#endif
 			int pos = hash & mask;
 			KEY_TYPE current = keys[pos];
 			if(KEY_EQUALS_NOT_NULL(current)) {

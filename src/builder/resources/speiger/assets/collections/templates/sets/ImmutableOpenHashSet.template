@@ -510,6 +510,7 @@ public class IMMUTABLE_HASH_SET KEY_GENERIC_TYPE extends ABSTRACT_SET KEY_GENERI
 				next = (int)(links[current]);
 				result++;
 			}
+			if(index >= 0) index+=result;
 			return result;
 		}
 		
@@ -521,6 +522,7 @@ public class IMMUTABLE_HASH_SET KEY_GENERIC_TYPE extends ABSTRACT_SET KEY_GENERI
 				previous = (int)(links[current] >> 32);
 				result++;
 			}
+			if(index >= 0) index-=result;
 			return result;
 		}
 		
