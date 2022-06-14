@@ -79,7 +79,7 @@ task generateTestSource(type: JavaExec) {
 	description = 'Builds the sourcecode for the Tests'
  	classpath = sourceSets.builder.runtimeClasspath
  	main = 'speiger.src.builder.PrimitiveCollectionsBuilder'
- 	args = ['tests']
+ 	args = ['tests', 'silent']
 }
 
 task javadocJar(type: Jar) {

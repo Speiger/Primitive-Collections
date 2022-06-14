@@ -11,18 +11,16 @@ jobs:
       strategy:
          fail-fast: false
          matrix:
-            jdk: [8, 11, 14, 16, 17]
+            jdk: [8, 11, 14, 16, 17, 18]
 
       runs-on: ubuntu-latest
       steps:
-         - uses: actions/checkout@v2
+         - uses: actions/checkout@v1
          
          - name: Set up JDK ${{ matrix.jdk }}
            uses: actions/setup-java@v3
            with:
                java-version: ${{ matrix.jdk }}
-               distribution: temurin
-               cache: gradle
 
          - name: Validate Gradle wrapper
            uses: gradle/wrapper-validation-action@e6e38bacfdf1a337459f332974bb2327a31aaf4b
