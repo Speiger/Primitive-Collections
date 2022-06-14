@@ -27,7 +27,7 @@ jobs:
          
       - uses: GuillaumeFalourd/copy-push-files@v1
         with:
-          source_files: src/builder src/main src/test Changelog.md README.md
+          source_files: src Changelog.md README.md
           remote_repository: https://github.com/Speiger/Primitive-Collections
           access_token: ${{ secrets.PUSH_TOKEN }}
           target_branch: debug
