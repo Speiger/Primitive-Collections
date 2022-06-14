@@ -1,0 +1,225 @@
+package speiger.src.testers.PACKAGE.tests.maps;
+
+#ignore
+import static com.google.common.collect.testing.features.CollectionSize.SEVERAL;
+import static com.google.common.collect.testing.features.CollectionSize.ZERO;
+import static com.google.common.collect.testing.features.MapFeature.FAILS_FAST_ON_CONCURRENT_MODIFICATION;
+import static com.google.common.collect.testing.features.MapFeature.SUPPORTS_REMOVE;
+#endignore
+
+import java.util.ConcurrentModificationException;
+
+import org.junit.Ignore;
+
+import com.google.common.collect.testing.features.CollectionSize;
+import com.google.common.collect.testing.features.MapFeature;
+
+#if !VALUE_OBJECT
+import speiger.src.collections.VALUE_PACKAGE.collections.VALUE_ITERATOR;
+#endif
+#if !TYPE_OBJECT && !SAME_TYPE
+import speiger.src.collections.PACKAGE.collections.ITERATOR;
+#endif
+import speiger.src.collections.PACKAGE.maps.interfaces.MAP;
+import speiger.src.collections.objects.collections.ObjectIterator;
+import speiger.src.testers.PACKAGE.tests.base.maps.ABSTRACT_MAP_TESTER;
+
+@Ignore
+@SuppressWarnings("javadoc")
+public class FILE_KEY_TYPE2FILE_VALUE_TYPEMapRemoveTester KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP_TESTER KEY_VALUE_GENERIC_TYPE
+{
+#ignore
+	@MapFeature.Require(SUPPORTS_REMOVE)
+	@CollectionSize.Require(absent = ZERO)
+#endignore
+	public void testRemove_present() {
+		int initialSize = getMap().size();
+		assertEquals("remove(present) should return the associated value", v0(), getMap().REMOVE_VALUE(k0()));
+		assertEquals("remove(present) should decrease a map's size by one.", initialSize - 1, getMap().size());
+		expectMissing(e0());
+	}
+
+#if !TYPE_OBJECT
+	enum WrongType {
+		INSTANCE;
+	}
+	
+#ignore
+	@MapFeature.Require(SUPPORTS_REMOVE)
+	@CollectionSize.Require(absent = ZERO)
+#endignore
+	public void testRemove_WrongType() {
+		assertFalse("Should return false if the wrong type is going to be removed", getMap().remove(WrongType.INSTANCE, v0()));
+	}
+	
+#endif
+#ignore
+	@MapFeature.Require(SUPPORTS_REMOVE)
+	@CollectionSize.Require(SEVERAL)
+#endignore
+	public void testRemove_lastPresent() {
+		int initialSize = getMap().size();
+		assertEquals("remove(present) should return the associated value", v2(), getMap().REMOVE_VALUE(k2()));
+		assertEquals("remove(present) should decrease a map's size by one.", initialSize - 1, getMap().size());
+		expectMissing(e2());
+	}
+	
+#if !TYPE_OBJECT
+#ignore
+	@MapFeature.Require(SUPPORTS_REMOVE)
+	@CollectionSize.Require(absent = ZERO)
+#endignore
+	public void testRemoveObject_present() {
+		int initialSize = getMap().size();
+		assertEquals("remove(present) should return the associated value", VALUE_TO_OBJ(v0()), getMap().remove(KEY_TO_OBJ(k0())));
+		assertEquals("remove(present) should decrease a map's size by one.", initialSize - 1, getMap().size());
+		expectMissing(e0());
+	}
+
+#ignore
+	@MapFeature.Require(SUPPORTS_REMOVE)
+	@CollectionSize.Require(SEVERAL)
+#endignore
+	public void testRemoveObject_presentLast() {
+		int initialSize = getMap().size();
+		assertEquals("remove(present) should return the associated value", VALUE_TO_OBJ(v2()), getMap().remove(KEY_TO_OBJ(k2())));
+		assertEquals("remove(present) should decrease a map's size by one.", initialSize - 1, getMap().size());
+		expectMissing(e2());
+	}
+	
+#ignore
+	@MapFeature.Require(SUPPORTS_REMOVE)
+	@CollectionSize.Require(absent = ZERO)
+#endignore
+	public void testRemoveObject_missing() {
+		int initialSize = getMap().size();
+		assertEquals("remove(missing) should return the associated value", VALUE_TO_OBJ(INVALID_VALUE), getMap().remove(KEY_TO_OBJ(k3())));
+		assertEquals("remove(missing) should not have changed in size.", initialSize, getMap().size());
+		expectUnchanged();
+	}
+	
+#endif
+#ignore
+	@MapFeature.Require({ FAILS_FAST_ON_CONCURRENT_MODIFICATION, SUPPORTS_REMOVE })
+	@CollectionSize.Require(SEVERAL)
+#endignore
+	public void testRemovePresentConcurrentWithEntrySetIteration() {
+		try {
+			ObjectIterator<MAP.Entry KEY_VALUE_GENERIC_TYPE> iterator = getMap().ENTRY_SET().iterator();
+			getMap().REMOVE_VALUE(k0());
+			iterator.next();
+			fail("Expected ConcurrentModificationException");
+		} catch (ConcurrentModificationException expected) {
+			// success
+		}
+	}
+	
+#if !TYPE_OBJECT
+#ignore
+	@MapFeature.Require({ FAILS_FAST_ON_CONCURRENT_MODIFICATION, SUPPORTS_REMOVE })
+	@CollectionSize.Require(SEVERAL)
+#endignore
+	public void testRemoveObjectPresentConcurrentWithEntrySetIteration() {
+		try {
+			ObjectIterator<MAP.Entry KEY_VALUE_GENERIC_TYPE> iterator = getMap().ENTRY_SET().iterator();
+			getMap().remove(KEY_TO_OBJ(k0()));
+			iterator.next();
+			fail("Expected ConcurrentModificationException");
+		} catch (ConcurrentModificationException expected) {
+			// success
+		}
+	}
+
+#endif
+#ignore
+	@MapFeature.Require({ FAILS_FAST_ON_CONCURRENT_MODIFICATION, SUPPORTS_REMOVE })
+	@CollectionSize.Require(SEVERAL)
+#endignore
+	public void testRemovePresentConcurrentWithKeySetIteration() {
+		try {
+			ITERATOR KEY_GENERIC_TYPE iterator = getMap().keySet().iterator();
+			getMap().REMOVE_VALUE(k0());
+			iterator.NEXT();
+			fail("Expected ConcurrentModificationException");
+		} catch (ConcurrentModificationException expected) {
+			// success
+		}
+	}
+
+#ignore
+	@MapFeature.Require({ FAILS_FAST_ON_CONCURRENT_MODIFICATION, SUPPORTS_REMOVE })
+	@CollectionSize.Require(SEVERAL)
+#endignore
+	public void testRemovePresentConcurrentWithValuesIteration() {
+		try {
+			VALUE_ITERATOR VALUE_GENERIC_TYPE iterator = getMap().values().iterator();
+			getMap().REMOVE_VALUE(k0());
+			iterator.VALUE_NEXT();
+			fail("Expected ConcurrentModificationException");
+		} catch (ConcurrentModificationException expected) {
+			// success
+		}
+	}
+
+#ignore
+	@MapFeature.Require(SUPPORTS_REMOVE)
+#endignore
+	public void testRemove_notPresent() {
+		assertEquals("remove(notPresent) should return INVALID_VALUE", INVALID_VALUE, getMap().REMOVE_VALUE(k3()));
+		expectUnchanged();
+	}
+
+#ignore
+	@MapFeature.Require(absent = SUPPORTS_REMOVE)
+	@CollectionSize.Require(absent = ZERO)
+#endignore
+	public void testRemove_unsupported() {
+		try {
+			getMap().REMOVE_VALUE(k0());
+			fail("remove(present) should throw UnsupportedOperationException");
+		} catch (UnsupportedOperationException expected) {
+		}
+		expectUnchanged();
+		assertEquals("remove(present) should not remove the element", v0(), get(k0()));
+	}
+
+#ignore
+	@MapFeature.Require(absent = SUPPORTS_REMOVE)
+#endignore
+	public void testRemove_unsupportedNotPresent() {
+		try {
+			assertEquals("remove(notPresent) should return INVALID_VALUE or throw UnsupportedOperationException", INVALID_VALUE, getMap().REMOVE_VALUE(k3()));
+		} catch (UnsupportedOperationException tolerated) {
+		}
+		expectUnchanged();
+		expectMissing(e3());
+	}
+
+#if !TYPE_OBJECT
+#ignore
+	@MapFeature.Require(absent = SUPPORTS_REMOVE)
+	@CollectionSize.Require(absent = ZERO)
+#endignore
+	public void testRemoveObject_unsupported() {
+		try {
+			getMap().remove(KEY_TO_OBJ(k0()));
+			fail("remove(present) should throw UnsupportedOperationException");
+		} catch (UnsupportedOperationException expected) {
+		}
+		expectUnchanged();
+		assertEquals("remove(present) should not remove the element", VALUE_TO_OBJ(v0()), get(KEY_TO_OBJ(k0())));
+	}
+	
+#ignore
+	@MapFeature.Require(absent = SUPPORTS_REMOVE)
+#endignore
+	public void testRemoveObject_unsupportedNotPresent() {
+		try {
+			assertEquals("remove(notPresent) should return INVALID_VALUE or throw UnsupportedOperationException", VALUE_TO_OBJ(INVALID_VALUE), getMap().remove(KEY_TO_OBJ(k3())));
+		} catch (UnsupportedOperationException tolerated) {
+		}
+		expectUnchanged();
+		expectMissing(e3());
+	}
+#endif
+}

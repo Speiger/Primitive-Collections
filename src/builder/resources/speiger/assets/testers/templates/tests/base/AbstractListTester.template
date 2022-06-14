@@ -1,0 +1,39 @@
+package speiger.src.testers.PACKAGE.tests.base;
+
+import org.junit.Ignore;
+
+#if TYPE_OBJECT
+import java.util.Objects;
+#endif
+
+import speiger.src.collections.PACKAGE.collections.COLLECTION;
+import speiger.src.collections.PACKAGE.lists.LIST;
+import speiger.src.testers.PACKAGE.utils.HELPERS;
+
+@Ignore
+@SuppressWarnings("javadoc")
+public class ABSTRACT_LIST_TESTER KEY_GENERIC_TYPE extends ABSTRACT_COLLECTION_TESTER KEY_GENERIC_TYPE
+{
+	protected final LIST KEY_GENERIC_TYPE getList() {
+		return (LIST KEY_GENERIC_TYPE) collection;
+	}
+
+	@Override
+	protected void expectContents(COLLECTION KEY_GENERIC_TYPE expectedCollection) {
+		LIST KEY_GENERIC_TYPE expectedList = HELPERS.copyToList(expectedCollection);
+		if (getList().size() != expectedList.size()) {
+			fail("size mismatch: " + reportContext(expectedList));
+		}
+		for (int i = 0; i < expectedList.size(); i++) {
+			KEY_TYPE expected = expectedList.GET_KEY(i);
+			KEY_TYPE actual = getList().GET_KEY(i);
+			if (KEY_EQUALS_NOT(expected, actual)) {
+				fail("mismatch at index " + i + ": " + reportContext(expectedList));
+			}
+		}
+	}
+
+	private String reportContext(LIST KEY_GENERIC_TYPE expected) {
+		return String.format("expected collection %s; actual collection %s", expected, collection);
+	}
+}

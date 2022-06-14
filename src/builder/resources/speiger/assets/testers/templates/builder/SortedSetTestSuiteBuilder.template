@@ -1,0 +1,88 @@
+package speiger.src.testers.PACKAGE.builder;
+
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+
+import com.google.common.collect.testing.AbstractTester;
+import com.google.common.collect.testing.DerivedCollectionGenerators.Bound;
+import com.google.common.collect.testing.FeatureSpecificTestSuiteBuilder;
+import com.google.common.collect.testing.Helpers;
+import com.google.common.collect.testing.OneSizeTestContainerGenerator;
+import com.google.common.collect.testing.features.CollectionFeature;
+import com.google.common.collect.testing.features.Feature;
+import com.google.common.collect.testing.testers.SortedSetNavigationTester;
+
+import junit.framework.TestSuite;
+import speiger.src.testers.PACKAGE.generators.TEST_SORTED_SET_GENERATOR;
+import speiger.src.testers.PACKAGE.impl.SUB_SORTED_SET_CLASS_GENERATOR;
+import speiger.src.testers.PACKAGE.tests.set.FILE_KEY_TYPESortedSetIterationTester;
+import speiger.src.testers.PACKAGE.tests.set.FILE_KEY_TYPESortedSetNaviationTester;
+import speiger.src.testers.utils.SpecialFeature;
+
+@SuppressWarnings("javadoc")
+public class SORTED_SET_TEST_BUILDER KEY_GENERIC_TYPE extends SET_TEST_BUILDER KEY_GENERIC_TYPE {
+	public static GENERIC_KEY_BRACES SORTED_SET_TEST_BUILDER KEY_GENERIC_TYPE using(TEST_SORTED_SET_GENERATOR KEY_GENERIC_TYPE generator) {
+		return (SORTED_SET_TEST_BUILDER KEY_GENERIC_TYPE) new SORTED_SET_TEST_BUILDER KEY_GENERIC_TYPE().usingGenerator(generator);
+	}
+	
+	@Override
+	@SuppressWarnings("rawtypes")
+	protected List<Class<? extends AbstractTester>> getTesters() {
+		List<Class<? extends AbstractTester>> testers = Helpers.copyToList(super.getTesters());
+		testers.add(SortedSetNavigationTester.class);
+		testers.add(FILE_KEY_TYPESortedSetIterationTester.class);
+		testers.add(FILE_KEY_TYPESortedSetNaviationTester.class);
+		return testers;
+	}
+	
+	@Override
+	public TestSuite createTestSuite() {
+		if (!getFeatures().contains(CollectionFeature.KNOWN_ORDER)) {
+			List<Feature<?>> features = Helpers.copyToList(getFeatures());
+#ignore
+			features.add(CollectionFeature.KNOWN_ORDER);
+#endignore
+			withFeatures(features);
+		}
+		return super.createTestSuite();
+	}
+
+	@Override
+	protected List<TestSuite> createDerivedSuites(
+			FeatureSpecificTestSuiteBuilder<?, ? extends OneSizeTestContainerGenerator<Collection<CLASS_TYPE>, CLASS_TYPE>> parentBuilder) {
+		List<TestSuite> derivedSuites = super.createDerivedSuites(parentBuilder);
+
+#ignore
+		if (!parentBuilder.getFeatures().contains(CollectionFeature.SUBSET_VIEW)) {
+#endignore
+			derivedSuites.add(createSubsetSuite(parentBuilder, Bound.NO_BOUND, Bound.EXCLUSIVE));
+			derivedSuites.add(createSubsetSuite(parentBuilder, Bound.INCLUSIVE, Bound.NO_BOUND));
+			derivedSuites.add(createSubsetSuite(parentBuilder, Bound.INCLUSIVE, Bound.EXCLUSIVE));
+		}
+
+		return derivedSuites;
+	}
+
+	final TestSuite createSubsetSuite(
+			FeatureSpecificTestSuiteBuilder<?, ? extends OneSizeTestContainerGenerator<Collection<CLASS_TYPE>, CLASS_TYPE>> parentBuilder,
+			Bound from, Bound to) {
+		TEST_SORTED_SET_GENERATOR KEY_GENERIC_TYPE delegate = (TEST_SORTED_SET_GENERATOR KEY_GENERIC_TYPE) parentBuilder.getSubjectGenerator().getInnerGenerator();
+
+		List<Feature<?>> features = new ArrayList<>(parentBuilder.getFeatures());
+#ignore
+		features.remove(CollectionFeature.ALLOWS_NULL_VALUES);
+		features.add(CollectionFeature.SUBSET_VIEW);
+		features.remove(SpecialFeature.COPYING);
+		features.remove(SpecialFeature.CHILDREN_COPY);
+#endignore
+
+		return newBuilderUsing(delegate, to, from).named(parentBuilder.getName() + " subSet " + from + "-" + to)
+				.withFeatures(features).suppressing(parentBuilder.getSuppressedTests())
+				.withSetUp(parentBuilder.getSetUp()).withTearDown(parentBuilder.getTearDown()).createTestSuite();
+	}
+
+	SORTED_SET_TEST_BUILDER KEY_GENERIC_TYPE newBuilderUsing(TEST_SORTED_SET_GENERATOR KEY_GENERIC_TYPE delegate, Bound to, Bound from) {
+		return using(new SUB_SORTED_SET_CLASS_GENERATORBRACES(delegate, to, from));
+	}
+}

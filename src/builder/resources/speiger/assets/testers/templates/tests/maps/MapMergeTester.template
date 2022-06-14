@@ -1,0 +1,93 @@
+package speiger.src.testers.PACKAGE.tests.maps;
+
+#ignore
+import static com.google.common.collect.testing.features.CollectionSize.ZERO;
+import static com.google.common.collect.testing.features.MapFeature.SUPPORTS_PUT;
+import static com.google.common.collect.testing.features.MapFeature.SUPPORTS_REMOVE;
+#endignore
+
+import org.junit.Ignore;
+
+import com.google.common.collect.testing.features.CollectionSize;
+import com.google.common.collect.testing.features.MapFeature;
+
+import junit.framework.AssertionFailedError;
+import speiger.src.testers.PACKAGE.tests.base.maps.ABSTRACT_MAP_TESTER;
+
+@Ignore
+@SuppressWarnings("javadoc")
+public class FILE_KEY_TYPE2FILE_VALUE_TYPEMapMergeTester KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP_TESTER KEY_VALUE_GENERIC_TYPE
+{
+#ignore
+	@MapFeature.Require(SUPPORTS_PUT)
+#endignore
+	public void testAbsent() {
+		assertEquals("Map.MERGE(absent, value, function) should return value", v3(),
+				getMap().MERGE(k3(), v3(), (oldV, newV) -> {
+					throw new AssertionFailedError("Should not call MERGE function if key was absent");
+				}));
+		expectAdded(e3());
+	}
+
+#ignore
+	@MapFeature.Require(SUPPORTS_PUT)
+	@CollectionSize.Require(absent = ZERO)
+#endignore
+	public void testMergePresent() {
+		assertEquals("Map.MERGE(present, value, function) should return function result", v4(),
+				getMap().MERGE(k0(), v3(), (oldV, newV) -> {
+					assertEquals(v0(), oldV);
+					assertEquals(v3(), newV);
+					return v4();
+				}));
+		expectReplacement(entry(k0(), v4()));
+	}
+
+	private static class ExpectedException extends RuntimeException {
+		private static final long serialVersionUID = 1L;
+	}
+
+#ignore
+	@MapFeature.Require(SUPPORTS_PUT)
+	@CollectionSize.Require(absent = ZERO)
+#endignore
+	public void testMergeFunctionThrows() {
+		try {
+			getMap().MERGE(k0(), v3(), (oldV, newV) -> {
+				assertEquals(v0(), oldV);
+				assertEquals(v3(), newV);
+				throw new ExpectedException();
+			});
+			fail("Expected ExpectedException");
+		} catch (ExpectedException expected) {
+		}
+		expectUnchanged();
+	}
+
+#ignore
+	@MapFeature.Require(SUPPORTS_REMOVE)
+	@CollectionSize.Require(absent = ZERO)
+#endignore
+	public void testMergePresentToNull() {
+		assertEquals("Map.MERGE(present, value, functionReturningNull) should return INVALID_VALUE", INVALID_VALUE,
+				getMap().MERGE(k0(), v3(), (oldV, newV) -> {
+					assertEquals(v0(), oldV);
+					assertEquals(v3(), newV);
+					return INVALID_VALUE;
+				}));
+		expectMissing(e0());
+	}
+
+#ignore
+	@MapFeature.Require(absent = SUPPORTS_PUT)
+#endignore
+	public void testMergeUnsupported() {
+		try {
+			getMap().MERGE(k3(), v3(), (oldV, newV) -> {
+				throw new AssertionFailedError();
+			});
+			fail("Expected UnsupportedOperationException");
+		} catch (UnsupportedOperationException expected) {
+		}
+	}
+}

@@ -30,5 +30,19 @@ gradle-app.setting
 /src/main/java/speiger/src/collections/doubles/*
 /src/main/java/speiger/src/collections/objects/*
 
+#Generated Tests
+/src/test/java/speiger/src/testers/booleans/*
+/src/test/java/speiger/src/testers/bytes/*
+/src/test/java/speiger/src/testers/shorts/*
+/src/test/java/speiger/src/testers/chars/*
+/src/test/java/speiger/src/testers/ints/*
+/src/test/java/speiger/src/testers/longs/*
+/src/test/java/speiger/src/testers/floats/*
+/src/test/java/speiger/src/testers/doubles/*
+/src/test/java/speiger/src/testers/objects/*
+/src/test/java/speiger/src/tests/*
+
 #Cache result
 /src/builder/resources/speiger/assets/collections/cache.bin
+/src/builder/resources/speiger/assets/testers/cache.bin
+/src/builder/resources/speiger/assets/tests/cache.bin

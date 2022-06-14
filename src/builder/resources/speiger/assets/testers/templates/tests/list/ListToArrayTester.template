@@ -1,0 +1,37 @@
+package speiger.src.testers.PACKAGE.tests.list;
+
+import org.junit.Ignore;
+
+#ignore
+import static com.google.common.collect.testing.features.CollectionSize.ZERO;
+#endignore
+
+import com.google.common.collect.testing.features.CollectionSize;
+
+import speiger.src.collections.PACKAGE.lists.ARRAY_LIST;
+import speiger.src.testers.PACKAGE.tests.base.ABSTRACT_LIST_TESTER;
+
+@Ignore
+@SuppressWarnings("javadoc")
+public class FILE_KEY_TYPEListToArrayTester KEY_GENERIC_TYPE extends ABSTRACT_LIST_TESTER KEY_GENERIC_TYPE
+{
+	public void testToArray_noArg() {
+		KEY_OBJECT_TYPE[] actual = getList().TO_ARRAY();
+		assertArrayEquals("toArray() order should match list", createOrderedArray(), actual);
+	}
+
+	@CollectionSize.Require(absent = ZERO)
+	public void testToArray_tooSmall() {
+		KEY_TYPE[] actual = getList().TO_ARRAY(NEW_KEY_ARRAY(0));
+		assertArrayEquals("toArray(tooSmall) order should match list", createOrderedArray(), actual);
+	}
+
+	public void testToArray_largeEnough() {
+		KEY_TYPE[] actual = getList().TO_ARRAY(NEW_KEY_ARRAY(getNumElements()));
+		assertArrayEquals("toArray(largeEnough) order should match list", createOrderedArray(), actual);
+	}
+
+	private static void assertArrayEquals(String message, KEY_OBJECT_TYPE[] expected, KEY_OBJECT_TYPE[] actual) {
+		assertEquals(message, ARRAY_LIST.wrap(expected), ARRAY_LIST.wrap(actual));
+	}
+}

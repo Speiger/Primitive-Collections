@@ -1,0 +1,54 @@
+package speiger.src.testers.PACKAGE.tests.set;
+
+import org.junit.Ignore;
+
+#ignore
+import static com.google.common.collect.testing.features.CollectionFeature.SUPPORTS_REMOVE;
+import static com.google.common.collect.testing.features.CollectionSize.ZERO;
+import static com.google.common.collect.testing.features.CollectionSize.SEVERAL;
+#endignore
+
+import com.google.common.collect.testing.features.CollectionFeature;
+import com.google.common.collect.testing.features.CollectionSize;
+
+import speiger.src.testers.PACKAGE.tests.base.ABSTRACT_SET_TESTER;
+
+@Ignore
+@SuppressWarnings("javadoc")
+public class FILE_KEY_TYPESetRemoveTester KEY_GENERIC_TYPE extends ABSTRACT_SET_TESTER KEY_GENERIC_TYPE
+{
+#ignore
+	@CollectionFeature.Require(SUPPORTS_REMOVE)
+	@CollectionSize.Require(absent = ZERO)
+#endignore
+	public void testRemove_present() {
+		getSet().remove(e0());
+		assertFalse("After remove(present) a set should not contain the removed element.", getSet().contains(e0()));
+	}
+
+#ignore
+	@CollectionFeature.Require(SUPPORTS_REMOVE)
+#endignore
+	public void testRemove_Missing() {
+		getSet().remove(e3());
+		assertFalse("After remove(present) a set should not contain the removed element.", getSet().contains(e3()));
+	}
+
+#ignore
+	@CollectionFeature.Require(SUPPORTS_REMOVE)
+	@CollectionSize.Require(SEVERAL)
+#endignore
+	public void testRemove_middle() {
+		getSet().remove(e1());
+		assertFalse("After remove(present) a set should not contain the removed element.", getSet().contains(e1()));
+	}
+
+#ignore
+	@CollectionFeature.Require(SUPPORTS_REMOVE)
+	@CollectionSize.Require(SEVERAL)
+#endignore
+	public void testRemove_last() {
+		getSet().remove(e2());
+		assertFalse("After remove(present) a set should not contain the removed element.", getSet().contains(e2()));
+	}
+}

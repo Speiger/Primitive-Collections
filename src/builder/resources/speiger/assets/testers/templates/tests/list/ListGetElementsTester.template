@@ -1,0 +1,90 @@
+package speiger.src.testers.PACKAGE.tests.list;
+
+import org.junit.Ignore;
+
+#ignore
+import static com.google.common.collect.testing.features.CollectionSize.SEVERAL;
+import static com.google.common.collect.testing.features.CollectionSize.ZERO;
+#endignore
+
+import com.google.common.collect.testing.features.CollectionSize;
+
+import speiger.src.collections.PACKAGE.lists.ARRAY_LIST;
+import speiger.src.testers.PACKAGE.tests.base.ABSTRACT_LIST_TESTER;
+
+@Ignore
+@SuppressWarnings("javadoc")
+public class FILE_KEY_TYPEListGetElementsTester KEY_GENERIC_TYPE extends ABSTRACT_LIST_TESTER KEY_GENERIC_TYPE
+{
+#ignore
+	@CollectionSize.Require(SEVERAL)
+#endignore
+	public void testGetElements_valid() {
+		KEY_OBJECT_TYPE[] samples = getSampleElements(2).TO_ARRAY();
+		assertArrayEquals("getElements(from, result) should match", samples, getList().getElements(0, NEW_KEY_ARRAY(2)));
+	}
+	
+#ignore
+	@CollectionSize.Require(absent = ZERO)
+#endignore
+	public void testGetElements_validSmallerArray() {
+		KEY_OBJECT_TYPE[] samples = getSampleElements(2).TO_ARRAY();
+		samples[1] = EMPTY_KEY_VALUE;
+		assertArrayEquals("getElements(from, result) should match", samples, getList().getElements(0, NEW_KEY_ARRAY(2), 0, 1));
+	}
+	
+	public void testGetElements_outputToLarge() {
+		try {
+			getList().getElements(0, NEW_KEY_ARRAY(10));
+			fail("getElements(from, output) should have thrown a IndexOutOfBoundsException");
+		} catch (IndexOutOfBoundsException e) {
+		}
+	}
+	
+	public void testGetElements_offsetToSmall() {
+		try {
+			getList().getElements(0, NEW_KEY_ARRAY(2), -1, 2);
+			fail("getElements(from, output, offset, length) should have thrown a IndexOutOfBoundsException");
+		} catch (IndexOutOfBoundsException e) {
+			//success
+		}
+	}
+
+	public void testGetElements_offsetToLarge() {
+		try {
+			getList().getElements(0, NEW_KEY_ARRAY(2), 10, 2);
+			fail("getElements(from, output, offset, length) should have thrown a IndexOutOfBoundsException");
+		} catch (IndexOutOfBoundsException e) {
+			//success
+		}
+	}
+	
+	public void testGetElements_lengthExceedingArray() {
+		try {
+			getList().getElements(0, NEW_KEY_ARRAY(2), 0, 10);
+			fail("getElements(from, output, offset, length) should have thrown a IndexOutOfBoundsException");
+		} catch (IndexOutOfBoundsException e) {
+			//success
+		}
+	}
+	
+	public void testGet_negative() {
+		try {
+			getList().getElements(-1, NEW_KEY_ARRAY(2));
+			fail("getElements(-1) should throw");
+		} catch (IndexOutOfBoundsException expected) {
+		}
+	}
+	
+	public void testGet_tooLarge() {
+		try {
+			getList().getElements(getNumElements(), NEW_KEY_ARRAY(2));
+			fail("get(size) should throw");
+		} catch (IndexOutOfBoundsException expected) {
+		}
+	}
+	
+	private static void assertArrayEquals(String message, KEY_OBJECT_TYPE[] expected, KEY_OBJECT_TYPE[] actual) {
+		assertEquals(message, ARRAY_LIST.wrap(expected), ARRAY_LIST.wrap(actual));
+	}
+}

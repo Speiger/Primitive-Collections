@@ -1,0 +1,395 @@
+package speiger.src.tests.PACKAGE.maps;
+
+#if VALUE_BOOLEAN
+import java.lang.reflect.Method;
+import java.util.ArrayList;
+import java.util.List;
+#endif
+import java.util.Arrays;
+import java.util.Collection;
+#if TYPE_OBJECT
+import java.util.Objects;
+#endif
+import java.util.function.BiFunction;
+
+#if TYPE_OBJECT
+import com.google.common.collect.testing.AnEnum;
+#endif
+import com.google.common.collect.testing.features.CollectionFeature;
+import com.google.common.collect.testing.features.CollectionSize;
+import com.google.common.collect.testing.features.MapFeature;
+import com.google.common.collect.testing.features.Feature;
+#if VALUE_BOOLEAN
+import com.google.common.collect.testing.testers.CollectionAddAllTester;
+import com.google.common.collect.testing.testers.CollectionAddTester;
+import com.google.common.collect.testing.testers.CollectionContainsAllTester;
+import com.google.common.collect.testing.testers.CollectionContainsTester;
+import com.google.common.collect.testing.testers.CollectionRetainAllTester;
+#endif
+
+
+import junit.framework.Test;
+import junit.framework.TestCase;
+import junit.framework.TestSuite;
+import speiger.src.collections.PACKAGE.maps.impl.concurrent.CONCURRENT_HASH_MAP;
+import speiger.src.collections.PACKAGE.maps.impl.hash.LINKED_HASH_MAP;
+import speiger.src.collections.PACKAGE.maps.impl.immutable.IMMUTABLE_HASH_MAP;
+import speiger.src.collections.PACKAGE.maps.impl.customHash.CUSTOM_HASH_MAP;
+import speiger.src.collections.PACKAGE.maps.impl.customHash.LINKED_CUSTOM_HASH_MAP;
+import speiger.src.collections.PACKAGE.maps.impl.hash.HASH_MAP;
+import speiger.src.collections.PACKAGE.maps.impl.misc.ARRAY_MAP;
+#if TYPE_OBJECT
+import speiger.src.collections.PACKAGE.maps.impl.misc.ENUM_MAP;
+import speiger.src.collections.PACKAGE.maps.impl.misc.LINKED_ENUM_MAP;
+#endif
+import speiger.src.collections.PACKAGE.maps.impl.tree.AVL_TREE_MAP;
+import speiger.src.collections.PACKAGE.maps.impl.tree.RB_TREE_MAP;
+import speiger.src.collections.PACKAGE.maps.interfaces.MAP;
+import speiger.src.collections.PACKAGE.maps.interfaces.ORDERED_MAP;
+import speiger.src.collections.PACKAGE.maps.interfaces.SORTED_MAP;
+import speiger.src.collections.PACKAGE.utils.STRATEGY;
+import speiger.src.collections.PACKAGE.utils.maps.MAPS;
+import speiger.src.testers.PACKAGE.builder.maps.MAP_TEST_BUILDER;
+import speiger.src.testers.PACKAGE.builder.maps.ORDERED_MAP_TEST_BUILDER;
+import speiger.src.testers.PACKAGE.builder.maps.NAVIGABLE_MAP_TEST_BUILDER;
+import speiger.src.testers.PACKAGE.impl.maps.SIMPLE_MAP_TEST_GENERATOR;
+import speiger.src.testers.PACKAGE.impl.maps.MAP_CONSTRUCTOR_TESTS;
+import speiger.src.testers.PACKAGE.impl.maps.SIMPLE_TEST_MAP;
+import speiger.src.testers.objects.tests.collection.ObjectCollectionIteratorTester;
+#if !SAME_TYPE && !TYPE_OBJECT
+import speiger.src.testers.PACKAGE.tests.collection.FILE_KEY_TYPECollectionIteratorTester;
+#endif
+#if !VALUE_OBJECT
+import speiger.src.testers.VALUE_PACKAGE.tests.collection.FILE_VALUE_TYPECollectionIteratorTester;
+#endif
+import speiger.src.testers.PACKAGE.tests.misc.PAIRTester;
+#if VALUE_BOOLEAN
+import speiger.src.testers.booleans.tests.collection.BooleanCollectionAddAllArrayTester;
+import speiger.src.testers.booleans.tests.collection.BooleanCollectionAddAllTester;
+import speiger.src.testers.PACKAGE.tests.maps.FILE_KEY_TYPE2FILE_VALUE_TYPEMapContainsValueTester;
+import speiger.src.testers.PACKAGE.tests.maps.FILE_KEY_TYPE2FILE_VALUE_TYPEMapComputeTester;
+import speiger.src.testers.PACKAGE.tests.maps.FILE_KEY_TYPE2FILE_VALUE_TYPEMapComputeIfAbsentTester;
+import speiger.src.testers.PACKAGE.tests.maps.FILE_KEY_TYPE2FILE_VALUE_TYPEMapComputeIfPresentTester;
+import speiger.src.testers.PACKAGE.tests.maps.FILE_KEY_TYPE2FILE_VALUE_TYPEMapSupplyIfAbsentTester;
+import speiger.src.testers.PACKAGE.tests.maps.FILE_KEY_TYPE2FILE_VALUE_TYPEMapMergeTester;
+import speiger.src.testers.PACKAGE.tests.maps.FILE_KEY_TYPE2FILE_VALUE_TYPEMapPutIfAbsentTester;
+import speiger.src.testers.PACKAGE.tests.maps.FILE_KEY_TYPE2FILE_VALUE_TYPEMapRemoveEntryTester;
+#endif
+import speiger.src.testers.utils.SpecialFeature;
+import speiger.src.testers.utils.TestUtils;
+
+@SuppressWarnings("javadoc")
+public class MAP_TESTS extends TestCase
+{
+	public static Test suite() {
+		TestSuite suite = new TestSuite("MAPS");
+		suite(suite);
+		constructorSuite(suite);
+		pairSuite(suite);
+		System.out.println("Generated ["+suite.countTestCases()+"] Tests");
+		return suite;
+	}
+	
+	public static void pairSuite(TestSuite suite) {
+		TestSuite pairs = new TestSuite("Constructors");
+		pairs.addTest(new TestSuite(PAIRTester.Mutable.class));
+		pairs.addTest(new TestSuite(PAIRTester.Immutable.class));
+		suite.addTest(pairs);
+	}
+	
+	public static void constructorSuite(TestSuite suite) {
+		TestSuite constructors = new TestSuite("Constructors");
+		constructors.addTest(new TestSuite(MAP_CONSTRUCTOR_TESTS.HashMap.class));
+		constructors.addTest(new TestSuite(MAP_CONSTRUCTOR_TESTS.LinkedHashMap.class));
+#if TYPE_OBJECT
+		constructors.addTest(new TestSuite(MAP_CONSTRUCTOR_TESTS.EnumMap.class));
+		constructors.addTest(new TestSuite(MAP_CONSTRUCTOR_TESTS.LinkedEnumMap.class));
+#endif
+		constructors.addTest(new TestSuite(MAP_CONSTRUCTOR_TESTS.CustomHashMap.class));
+		constructors.addTest(new TestSuite(MAP_CONSTRUCTOR_TESTS.LinkedCustomHashMap.class));
+		constructors.addTest(new TestSuite(MAP_CONSTRUCTOR_TESTS.ImmutableHashMap.class));
+		constructors.addTest(new TestSuite(MAP_CONSTRUCTOR_TESTS.ConcurrentHashMap.class));
+		constructors.addTest(new TestSuite(MAP_CONSTRUCTOR_TESTS.ArrayMap.class));
+		constructors.addTest(new TestSuite(MAP_CONSTRUCTOR_TESTS.RBTreeMap.class));
+		constructors.addTest(new TestSuite(MAP_CONSTRUCTOR_TESTS.AVLTreeMap.class));
+		constructors.addTest(new TestSuite(MAP_CONSTRUCTOR_TESTS.RBTreeMapComparator.class));
+		constructors.addTest(new TestSuite(MAP_CONSTRUCTOR_TESTS.AVLTreeMapComparator.class));
+		
+		constructors.addTest(new TestSuite(MAP_CONSTRUCTOR_TESTS.HashMapBuilder.class));
+		constructors.addTest(new TestSuite(MAP_CONSTRUCTOR_TESTS.LinkedHashMapBuilder.class));
+		constructors.addTest(new TestSuite(MAP_CONSTRUCTOR_TESTS.CustomHashMapBuilder.class));
+		constructors.addTest(new TestSuite(MAP_CONSTRUCTOR_TESTS.LinkedCustomHashMapBuilder.class));
+		constructors.addTest(new TestSuite(MAP_CONSTRUCTOR_TESTS.ImmutableHashMapBuilder.class));
+		constructors.addTest(new TestSuite(MAP_CONSTRUCTOR_TESTS.ConcurrentHashMapBuilder.class));
+		constructors.addTest(new TestSuite(MAP_CONSTRUCTOR_TESTS.ArrayMapBuilder.class));
+		constructors.addTest(new TestSuite(MAP_CONSTRUCTOR_TESTS.RBTreeMapBuilder.class));
+		constructors.addTest(new TestSuite(MAP_CONSTRUCTOR_TESTS.AVLTreeMapBuilder.class));
+		constructors.addTest(new TestSuite(MAP_CONSTRUCTOR_TESTS.RBTreeMapComparatorBuilder.class));
+		constructors.addTest(new TestSuite(MAP_CONSTRUCTOR_TESTS.AVLTreeMapComparatorBuilder.class));
+		suite.addTest(constructors);
+	}
+	
+	public static void suite(TestSuite suite) {
+		suite.addTest(mapSuite("HASH_MAP", HASH_MAP::new, getFeatures(), -1, true));
+		suite.addTest(orderedMapSuite("LINKED_HASH_MAP", LINKED_HASH_MAP::new, getFeatures(), -1));
+		suite.addTest(orderedMapSuite("IMMUTABLE_HASH_MAP", IMMUTABLE_HASH_MAP::new, getImmutableFeatures(), -1));
+#if TYPE_OBJECT
+		suite.addTest(enumMapSuite("ENUM_MAP", ENUM_MAP::new, getFeatures(), 5));
+		suite.addTest(enumOrderedMapSuite("LINKED_ENUM_MAP", (K, V) -> K.length <= 0 ? new LINKED_ENUM_MAP<>(AnEnum.class) : new LINKED_ENUM_MAP<>(K, V), getFeatures(), 5));
+#endif
+		suite.addTest(mapSuite("CUSTOM_HASH_MAP", (K, V) -> new CUSTOM_HASH_MAPKV_BRACES(K, V, HashStrategy.INSTANCE), getFeatures(), -1, true));
+		suite.addTest(orderedMapSuite("LINKED_CUSTOM_HASH_MAP", (K, V) -> new LINKED_CUSTOM_HASH_MAPKV_BRACES(K, V, HashStrategy.INSTANCE), getFeatures(), -1));
+		suite.addTest(orderedMapSuite("ARRAY_MAP", ARRAY_MAP::new, getFeatures(), -1));
+		suite.addTest(concurrentMapSuite("CONCURRENT_HASH_MAP", CONCURRENT_HASH_MAP::new, getFeatures(), 2));
+		suite.addTest(concurrentMapSuite("CONCURRENT_HASH_MAP", CONCURRENT_HASH_MAP::new, getFeatures(), 3));
+		suite.addTest(navigableMapSuite("RB_TREE_MAP", RB_TREE_MAP::new, getFeatures(), -1));
+		suite.addTest(navigableMapSuite("AVL_TREE_MAP", AVL_TREE_MAP::new, getFeatures(), -1));
+		suite.addTest(navigableMapSuite("SynchronizedRB_TREE_MAP", (K, V) -> new RB_TREE_MAPKV_BRACES(K, V).synchronize(), getLimitedFeatures(), -1));
+		suite.addTest(navigableMapSuite("UnmodifiableRB_TREE_MAP", (K, V) -> new RB_TREE_MAPKV_BRACES(K, V).unmodifiable(), getLimitedImmutableFeatures(), -1));
+		suite.addTest(orderedMapSuite("SynchronizedORDERED_MAP", (K, V) -> new LINKED_HASH_MAPKV_BRACES(K, V).synchronize(), getFeatures(), -1));
+		suite.addTest(orderedMapSuite("UnmodifiableORDERED_MAP", (K, V) -> new LINKED_HASH_MAPKV_BRACES(K, V).unmodifiable(), getImmutableFeatures(), -1));
+		suite.addTest(mapSuite("EmptyMAP", (K, V) -> MAPS.empty(), getEmptyFeatures(), 0, false));
+		suite.addTest(mapSuite("SingletonMAP", (K, V) -> MAPS.singleton(K[0], V[0]), getEmptyFeatures(), 1, false));
+		suite.addTest(mapSuite("AbstractMap", SIMPLE_TEST_MAP::new, getTestFeatures(), -1, false));
+	}
+	
+#if TYPE_OBJECT
+#if VALUE_OBJECT
+	private static Test enumMapSuite(String name, BiFunction<AnEnum[], String[], MAP<AnEnum, String>> factory, Collection<Feature<?>> features, int size) {
+		SIMPLE_MAP_TEST_GENERATOR.Maps<AnEnum, String> generator = new SIMPLE_MAP_TEST_GENERATOR.Maps<AnEnum, String>(factory);
+		MAP_TEST_BUILDER<AnEnum, String> builder = MAP_TEST_BUILDER.using(generator);
+#else
+	private static Test enumMapSuite(String name, BiFunction<AnEnum[], VALUE_TYPE[], MAP<AnEnum>> factory, Collection<Feature<?>> features, int size) {
+		SIMPLE_MAP_TEST_GENERATOR.Maps<AnEnum> generator = new SIMPLE_MAP_TEST_GENERATOR.Maps<AnEnum>(factory);
+		MAP_TEST_BUILDER<AnEnum> builder = MAP_TEST_BUILDER.using(generator);
+#endif
+		builder.shouldBlockKeys(true);
+		generator.setKeys(AnEnum.values());
+#if VALUE_OBJECT
+		generator.setValues(createValues());
+#ignore
+		builder.withFeatures(MapFeature.ALLOWS_NULL_VALUES);
+#endignore
+#if SAME_TYPE
+		builder.withFeatures(MapFeature.ALLOWS_NULL_ENTRY_QUERIES);
+#endif
+#endif
+		builder.withFeatures(getSizes(size)).withFeatures(features);
+#if VALUE_BOOLEAN
+		builder.suppressing(getSuppression());
+#endif
+		return builder.named(name).createTestSuite();
+}
+
+#if VALUE_OBJECT
+	private static Test enumOrderedMapSuite(String name, BiFunction<AnEnum[], String[], ORDERED_MAP<AnEnum, String>> factory, Collection<Feature<?>> features, int size) {
+		SIMPLE_MAP_TEST_GENERATOR.OrderedMaps<AnEnum, String> generator = new SIMPLE_MAP_TEST_GENERATOR.OrderedMaps<AnEnum, String>(factory);
+		ORDERED_MAP_TEST_BUILDER<AnEnum, String> builder = ORDERED_MAP_TEST_BUILDER.using(generator);
+#else
+	private static Test enumOrderedMapSuite(String name, BiFunction<AnEnum[], VALUE_TYPE[], ORDERED_MAP<AnEnum>> factory, Collection<Feature<?>> features, int size) {
+		SIMPLE_MAP_TEST_GENERATOR.OrderedMaps<AnEnum> generator = new SIMPLE_MAP_TEST_GENERATOR.OrderedMaps<AnEnum>(factory);
+		ORDERED_MAP_TEST_BUILDER<AnEnum> builder = ORDERED_MAP_TEST_BUILDER.using(generator);
+#endif
+		generator.setKeys(AnEnum.values());
+#if VALUE_OBJECT
+		generator.setValues(createValues());
+#ignore
+		builder.withFeatures(MapFeature.ALLOWS_NULL_VALUES);
+#endignore
+#if SAME_TYPE
+		builder.withFeatures(MapFeature.ALLOWS_NULL_ENTRY_QUERIES);
+#endif
+#endif
+		builder.withFeatures(getSizes(size)).withFeatures(features);
+#if VALUE_BOOLEAN
+		builder.suppressing(getSuppression());
+#endif
+		return builder.named(name).createTestSuite();
+	}
+	
+#endif
+	
+	private static Test mapSuite(String name, BiFunction<KEY_STRING_TYPE[], VALUE_STRING_TYPE[], MAP KEY_VALUE_STRING_GENERIC_TYPE> factory, Collection<Feature<?>> features, int size, boolean sorted) {
+		SIMPLE_MAP_TEST_GENERATOR.Maps KEY_VALUE_STRING_GENERIC_TYPE generator = new SIMPLE_MAP_TEST_GENERATOR.Maps KEY_VALUE_STRING_GENERIC_TYPE(factory);
+		MAP_TEST_BUILDER KEY_VALUE_STRING_GENERIC_TYPE builder = MAP_TEST_BUILDER.using(generator);
+		builder.shouldBlockKeys(sorted);
+#if TYPE_OBJECT
+		generator.setKeys(createKeys());
+#ignore
+		builder.withFeatures(MapFeature.ALLOWS_NULL_KEYS);
+#endignore
+#endif
+#if VALUE_OBJECT
+		generator.setValues(createValues());
+#ignore
+		builder.withFeatures(MapFeature.ALLOWS_NULL_VALUES);
+#endignore
+#if SAME_TYPE
+		builder.withFeatures(MapFeature.ALLOWS_NULL_ENTRY_QUERIES);
+#endif
+#endif
+		builder.withFeatures(getSizes(size)).withFeatures(features);
+#if VALUE_BOOLEAN
+		builder.suppressing(getSuppression());
+#endif
+		return builder.named(name).createTestSuite();
+	}
+	
+	private static Test concurrentMapSuite(String name, BiFunction<KEY_STRING_TYPE[], VALUE_STRING_TYPE[], MAP KEY_VALUE_STRING_GENERIC_TYPE> factory, Collection<Feature<?>> features, int size) {
+		SIMPLE_MAP_TEST_GENERATOR.Maps KEY_VALUE_STRING_GENERIC_TYPE generator = new SIMPLE_MAP_TEST_GENERATOR.Maps KEY_VALUE_STRING_GENERIC_TYPE(factory);
+		MAP_TEST_BUILDER KEY_VALUE_STRING_GENERIC_TYPE builder = MAP_TEST_BUILDER.using(generator);
+#if TYPE_OBJECT
+		generator.setKeys(createKeys());
+#ignore
+		builder.withFeatures(MapFeature.ALLOWS_NULL_KEYS);
+#endignore
+#endif
+#if VALUE_OBJECT
+		generator.setValues(createValues());
+#ignore
+		builder.withFeatures(MapFeature.ALLOWS_NULL_VALUES);
+#endignore
+#if SAME_TYPE
+		builder.withFeatures(MapFeature.ALLOWS_NULL_ENTRY_QUERIES);
+#endif
+#endif
+		builder.withFeatures(getSizes(size)).withFeatures(features);
+		if(size == 3) {
+			builder.suppressing(TestUtils.getSurpession(ObjectCollectionIteratorTester.class, "testIterator_unknownOrderRemoveSupported"));
+			builder.suppressing(TestUtils.getSurpession(FILE_KEY_TYPECollectionIteratorTester.class, "testIterator_unknownOrderRemoveSupported"));
+			builder.suppressing(TestUtils.getSurpession(FILE_VALUE_TYPECollectionIteratorTester.class, "testIterator_unknownOrderRemoveSupported"));
+		}
+#if VALUE_BOOLEAN
+		builder.suppressing(getSuppression());
+#endif
+		return builder.named(name).createTestSuite();
+	}
+	
+	private static Test orderedMapSuite(String name, BiFunction<KEY_STRING_TYPE[], VALUE_STRING_TYPE[], ORDERED_MAP KEY_VALUE_STRING_GENERIC_TYPE> factory, Collection<Feature<?>> features, int size) {
+		SIMPLE_MAP_TEST_GENERATOR.OrderedMaps KEY_VALUE_STRING_GENERIC_TYPE generator = new SIMPLE_MAP_TEST_GENERATOR.OrderedMaps KEY_VALUE_STRING_GENERIC_TYPE(factory);
+		ORDERED_MAP_TEST_BUILDER KEY_VALUE_STRING_GENERIC_TYPE builder = ORDERED_MAP_TEST_BUILDER.using(generator);
+#if TYPE_OBJECT
+		generator.setKeys(createKeys());
+#ignore
+		builder.withFeatures(MapFeature.ALLOWS_NULL_KEYS);
+#endignore
+#endif
+#if VALUE_OBJECT
+		generator.setValues(createValues());
+#ignore
+		builder.withFeatures(MapFeature.ALLOWS_NULL_VALUES);
+#endignore
+#if SAME_TYPE
+		builder.withFeatures(MapFeature.ALLOWS_NULL_ENTRY_QUERIES);
+#endif
+#endif
+		builder.withFeatures(getSizes(size)).withFeatures(features);
+#if VALUE_BOOLEAN
+		builder.suppressing(getSuppression());
+#endif
+		return builder.named(name).createTestSuite();
+	}
+	
+	private static Test navigableMapSuite(String name, BiFunction<KEY_STRING_TYPE[], VALUE_STRING_TYPE[], SORTED_MAP KEY_VALUE_STRING_GENERIC_TYPE> factory, Collection<Feature<?>> features, int size) {
+		SIMPLE_MAP_TEST_GENERATOR.SortedMaps KEY_VALUE_STRING_GENERIC_TYPE generator = new SIMPLE_MAP_TEST_GENERATOR.SortedMaps KEY_VALUE_STRING_GENERIC_TYPE(factory);
+		NAVIGABLE_MAP_TEST_BUILDER KEY_VALUE_STRING_GENERIC_TYPE builder = NAVIGABLE_MAP_TEST_BUILDER.using(generator);
+#if TYPE_OBJECT
+		generator.setKeys(createKeys());
+#endif
+#if VALUE_OBJECT
+		generator.setValues(createValues());
+#ignore
+		builder.withFeatures(MapFeature.ALLOWS_NULL_VALUES);
+#endignore
+#if SAME_TYPE
+		builder.withFeatures(MapFeature.ALLOWS_NULL_ENTRY_QUERIES);
+#endif
+#endif
+		builder.withFeatures(getSizes(size)).withFeatures(features);
+#if VALUE_BOOLEAN
+		builder.suppressing(getSuppression());
+#endif
+		return builder.named(name).createTestSuite();
+	}
+	
+	private static class HashStrategy implements STRATEGY KEY_STRING_GENERIC_TYPE {
+		static final HashStrategy INSTANCE = new HashStrategy();
+		@Override
+		public int hashCode(KEY_STRING_TYPE o) { return KEY_TO_HASH(o); }
+		@Override
+		public boolean equals(KEY_STRING_TYPE key, KEY_STRING_TYPE value) { return KEY_EQUALS(key, value); }
+	}
+	
+#ignore
+	private static Collection<CollectionSize> getSizes(int size) {
+		switch(size) {
+			case 0: return Arrays.asList(CollectionSize.ZERO);
+			case 1: return Arrays.asList(CollectionSize.ONE);
+			case 2: return Arrays.asList(CollectionSize.ZERO, CollectionSize.ONE);
+			case 3: return Arrays.asList(CollectionSize.SEVERAL);
+			case 4: return Arrays.asList(CollectionSize.ZERO, CollectionSize.SEVERAL);
+			case 5: return Arrays.asList(CollectionSize.ONE, CollectionSize.SEVERAL);
+			default: return Arrays.asList(CollectionSize.ANY);
+		}
+	}
+	
+	private static Collection<Feature<?>> getFeatures() {
+		return Arrays.asList(MapFeature.GENERAL_PURPOSE, CollectionFeature.SUPPORTS_ITERATOR_REMOVE, SpecialFeature.COPYING, SpecialFeature.MODIFIABLE);
+	}
+	
+	private static Collection<Feature<?>> getTestFeatures() {
+		return Arrays.asList(MapFeature.GENERAL_PURPOSE, CollectionFeature.SUPPORTS_ITERATOR_REMOVE, SpecialFeature.MODIFIABLE);
+	}
+	
+	private static Collection<Feature<?>> getEmptyFeatures() {
+		return Arrays.asList(SpecialFeature.CHILDREN_COPY);
+	}
+	
+	private static Collection<Feature<?>> getImmutableFeatures() {
+		return Arrays.asList(SpecialFeature.COPYING);
+	}
+	
+	private static Collection<Feature<?>> getLimitedFeatures() {
+		return Arrays.asList(MapFeature.GENERAL_PURPOSE, CollectionFeature.SUPPORTS_ITERATOR_REMOVE, SpecialFeature.SUBMAP, SpecialFeature.DESCENDING, SpecialFeature.COPYING, SpecialFeature.MODIFIABLE);
+	}
+	
+	private static Collection<Feature<?>> getLimitedImmutableFeatures() {
+		return Arrays.asList(SpecialFeature.SUBMAP, SpecialFeature.DESCENDING, SpecialFeature.COPYING);
+	}
+#endignore
+#if TYPE_OBJECT
+	private static String[] createKeys() {
+		return new String[]{"one", "two", "three", "four", "five", "!! a", "!! b", "~~ a", "~~ b"};
+	}
+	
+#endif
+#if VALUE_OBJECT
+	private static String[] createValues() {
+		return new String[]{"January", "February", "March", "April", "May", "below view", "below view", "above view", "above view"};
+	}
+	
+#endif
+#if VALUE_BOOLEAN
+	public static List<Method> getSuppression() {
+		List<Method> list = new ArrayList<>();
+		TestUtils.getSurpession(list, FILE_KEY_TYPE2FILE_VALUE_TYPEMapComputeTester.class, "testCompute_absentToPresent", "testCompute_presentToPresent");
+		TestUtils.getSurpession(list, FILE_KEY_TYPE2FILE_VALUE_TYPEMapComputeIfAbsentTester.class, "testComputeIfAbsent_supportedAbsent");
+		TestUtils.getSurpession(list, FILE_KEY_TYPE2FILE_VALUE_TYPEMapComputeIfPresentTester.class, "testCompute_presentToPresent", "testComputeIfPresent_supportedPresent");
+		TestUtils.getSurpession(list, FILE_KEY_TYPE2FILE_VALUE_TYPEMapSupplyIfAbsentTester.class, "testSupplyIfAbsent_supportedAbsent");
+		TestUtils.getSurpession(list, FILE_KEY_TYPE2FILE_VALUE_TYPEMapMergeTester.class, "testAbsent");
+		TestUtils.getSurpession(list, FILE_KEY_TYPE2FILE_VALUE_TYPEMapPutIfAbsentTester.class, "testPutIfAbsent_supportedAbsent");
+		TestUtils.getSurpession(list, FILE_KEY_TYPE2FILE_VALUE_TYPEMapRemoveEntryTester.class, "testRemove_supportedPresentLastWrongValue", "testRemoveObject_supportedPresentLastWrongValue");
+
+		TestUtils.getSurpession(list, CollectionAddTester.class, "testAdd_unsupportedNotPresent");
+		TestUtils.getSurpession(list, CollectionAddAllTester.class, "testAddAll_unsupportedNonePresent");
+		TestUtils.getSurpession(list, FILE_KEY_TYPE2FILE_VALUE_TYPEMapContainsValueTester.class, "testContains_no");
+		TestUtils.getSurpession(list, CollectionContainsTester.class, "testContains_no");
+		TestUtils.getSurpession(list, CollectionRetainAllTester.class, "testRetainAll_disjointPreviouslyNonEmpty");
+		TestUtils.getSurpession(list, BooleanCollectionAddAllTester.class, "testAddAll_unsupportedNonePresent");
+		TestUtils.getSurpession(list, BooleanCollectionAddAllArrayTester.class, "testAddAllArray_unsupportedNonePresent");
+		TestUtils.getSurpession(list, CollectionContainsAllTester.class, "testContainsAll_disjoint", "testContainsAll_partialOverlap");
+		return list;
+	}
+	
+#endif
+}

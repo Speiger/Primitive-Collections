@@ -1,0 +1,47 @@
+package speiger.src.testers.PACKAGE.tests.iterable;
+
+#if TYPE_OBJECT
+import java.util.Objects;
+
+#endif
+import org.junit.Ignore;
+
+import com.google.common.collect.testing.features.CollectionSize;
+
+import speiger.src.testers.PACKAGE.tests.base.ABSTRACT_COLLECTION_TESTER;
+
+@Ignore
+@SuppressWarnings("javadoc")
+public class FILE_KEY_TYPEIterableCountTester KEY_GENERIC_TYPE extends ABSTRACT_COLLECTION_TESTER KEY_GENERIC_TYPE
+{
+	public void testIterableCount_null() {
+		try {
+			collection.count(null);
+			fail("This should throw a NullPointerException");
+		} catch (NullPointerException e) {
+		}
+	}
+	
+	public void testIterableCount_NoneFound() {
+		assertEquals("Expected none to be found", 0, collection.count(T -> false));
+	}
+	
+	public void testIterableCount_AllFound() {
+		assertEquals("Expected All to be found", getNumElements(), collection.count(T -> true));
+	}
+	
+#ignore
+	@CollectionSize.Require(absent = CollectionSize.ZERO)
+#endignore
+	public void testIterableCount_FindFirst() 
+	{
+		assertEquals("First element should be found", 1, collection.count(T -> KEY_EQUALS(T, e0())));		
+	}
+	
+#ignore
+	@CollectionSize.Require(CollectionSize.SEVERAL)
+#endignore
+	public void testIterableCount_FindLast() {
+		assertEquals("Last element should be found", 1, collection.count(T -> KEY_EQUALS(T, e2())));
+	}
+}

@@ -1,0 +1,40 @@
+package speiger.src.testers.PACKAGE.tests.maps;
+
+#ignore
+import static com.google.common.collect.testing.features.CollectionSize.ZERO;
+#endignore
+
+import org.junit.Ignore;
+
+import com.google.common.collect.testing.features.CollectionSize;
+
+import speiger.src.testers.PACKAGE.tests.base.maps.ABSTRACT_MAP_TESTER;
+
+@Ignore
+@SuppressWarnings("javadoc")
+public class FILE_KEY_TYPE2FILE_VALUE_TYPEMapGetTester KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP_TESTER KEY_VALUE_GENERIC_TYPE
+{
+#ignore
+	@CollectionSize.Require(absent = ZERO)
+#endignore
+	public void testGet_yes() {
+		assertEquals("get(present) should return the associated value", v0(), get(k0()));
+	}
+	
+	public void testGet_no() {
+		assertEquals("get(notPresent) should return INVALID_VALUE", INVALID_VALUE, get(k3()));
+	}
+	
+#if !TYPE_OBJECT
+#ignore
+	@CollectionSize.Require(absent = ZERO)
+#endignore
+	public void testGetObject_yes() {
+		assertEquals("get(present) should return the associated value", VALUE_TO_OBJ(v0()), get(KEY_TO_OBJ(k0())));
+	}
+
+	public void testGetObject_no() {
+		assertEquals("get(notPresent) should return INVALID_VALUE", VALUE_TO_OBJ(INVALID_VALUE), get(KEY_TO_OBJ(k3())));
+	}
+#endif
+}

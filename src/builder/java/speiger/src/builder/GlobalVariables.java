@@ -35,21 +35,43 @@ public class GlobalVariables
 		addSimpleMapper("CLASS_TYPE", type.getClassType());
 		addSimpleMapper("CLASS_VALUE_TYPE", valueType.getClassValueType());
 		addSimpleMapper("KEY_TYPE", type.getKeyType());
+		addSimpleMapper("KEY_OBJECT_TYPE", type.isObject() ? "Object" : type.getKeyType());
+		addSimpleMapper("KEY_STRING_TYPE", type.isObject() ? "String" : type.getKeyType());
 		addSimpleMapper("KEY_SPECIAL_TYPE", type.isObject() ? "E" : type.getKeyType());
+		addSimpleMapper("CLASS_OBJECT_TYPE", type.getClassType());
+		addSimpleMapper("CLASS_OBJECT_VALUE_TYPE", valueType.getClassValueType());
+		addSimpleMapper("CLASS_STRING_TYPE", type.isObject() ? "String" : type.getClassType());
+		addSimpleMapper("CLASS_STRING_VALUE_TYPE", valueType.isObject() ? "String" : valueType.getClassValueType());
 		addSimpleMapper("VALUE_TYPE", valueType.getValueType());
+		addSimpleMapper("VALUE_OBJECT_TYPE", valueType.isObject() ? "Object" : valueType.getValueType());
+		addSimpleMapper("VALUE_STRING_TYPE", valueType.isObject() ? "String" : valueType.getValueType());
 		addSimpleMapper("VALUE_SPECIAL_TYPE", valueType.isObject() ? "E" : valueType.getKeyType());
+		addSimpleMapper("KEY_JAVA_TYPE", type.getCustomJDKType().getKeyType());
+		addSimpleMapper("VALUE_JAVA_TYPE", type.getCustomJDKType().getKeyType());
 		
 		addSimpleMapper("EMPTY_KEY_VALUE", type.getEmptyValue());
 		addSimpleMapper("EMPTY_VALUE", valueType.getEmptyValue());
 		
+		addSimpleMapper("INVALID_KEY_VALUE", type.getInvalidValue());
+		addSimpleMapper("INVALID_VALUE", valueType.getInvalidValue());
+		
+		addSimpleMapper(" KEY_STRING_GENERIC_TYPE", type.isObject() ? "<String>" : "");
+		addSimpleMapper(" VALUE_STRING_GENERIC_TYPE", valueType.isObject() ? "<String>" : "");
+		addSimpleMapper(" KEY_VALUE_STRING_GENERIC_TYPE", type.isObject() ? (valueType.isObject() ? "<String, String>" : "<String>") : (valueType.isObject() ? "<String>" : ""));
+
+		
 		addSimpleMapper(" KEY_GENERIC_TYPE", type.isObject() ? "<"+type.getKeyType()+">" : "");
 		addSimpleMapper(" KEY_KEY_GENERIC_TYPE", type.isObject() ? "<"+type.getKeyType()+", "+type.getKeyType()+">" : "");
+		addSimpleMapper(" KEY_CLASS_GENERIC_TYPE", type.isObject() ? "<"+type.getClassType()+">" : "");
+
 		
 		addSimpleMapper(" VALUE_GENERIC_TYPE", valueType.isObject() ? "<"+valueType.getValueType()+">" : "");
 		addSimpleMapper(" VALUE_VALUE_GENERIC_TYPE", valueType.isObject() ? "<"+valueType.getValueType()+", "+valueType.getValueType()+">" : "");
+		addSimpleMapper(" VALUE_CLASS_GENERIC_TYPE", valueType.isObject() ? "<"+valueType.getClassValueType()+">" : "");
 		
 		addSimpleMapper(" KEY_VALUE_GENERIC_TYPE", type.isObject() ? (valueType.isObject() ? "<"+type.getKeyType()+", "+valueType.getValueType()+">" : "<"+type.getKeyType()+">") : (valueType.isObject() ? "<"+valueType.getValueType()+">" : ""));
 		addSimpleMapper(" KEY_VALUE_VALUE_GENERIC_TYPE", type.isObject() ? (valueType.isObject() ? "<"+type.getKeyType()+", "+valueType.getValueType()+", "+valueType.getValueType()+">" : "<"+type.getKeyType()+">") : (valueType.isObject() ? "<"+valueType.getValueType()+", "+valueType.getValueType()+">" : ""));
+		addInjectMapper(" KEY_VALUE_SPECIAL_GENERIC_TYPE", type.isObject() ? (valueType.isObject() ? "<"+type.getKeyType()+", "+valueType.getValueType()+", %s>" : "<"+type.getKeyType()+", %s>") : (valueType.isObject() ? "<"+valueType.getValueType()+", %s>" : "<%s>")).setBraceType("<>").removeBraces();
 		
 		addSimpleMapper(" NO_GENERIC_TYPE", type.isObject() ? "<?>" : "");
 		addSimpleMapper(" NO_KV_GENERIC_TYPE", type.isObject() ? (valueType.isObject() ? "<?, ?>" : "<?>") : valueType.isObject() ? "<?>" : "");
@@ -59,6 +81,10 @@ public class GlobalVariables
 		addSimpleMapper(" VALUE_SUPER_GENERIC_TYPE", valueType.isObject() ? "<? super "+valueType.getValueType()+">" : "");
 		addSimpleMapper(" KEY_VALUE_SUPER_GENERIC_TYPE", type.isObject() ? (valueType.isObject() ? "<? super "+type.getKeyType()+", ? super "+valueType.getValueType()+">" : "<? super "+type.getKeyType()+">") : (valueType.isObject() ? "<? super "+valueType.getValueType()+">" : ""));
 		
+		addSimpleMapper(" KEY_UNKNOWN_GENERIC_TYPE", type.isObject() ? "<? extends "+type.getKeyType()+">" : "");
+		addSimpleMapper(" VALUE_UNKNOWN_GENERIC_TYPE", valueType.isObject() ? "<? extends "+valueType.getValueType()+">" : "");
+		addSimpleMapper(" KEY_VALUE_UNKNOWN_GENERIC_TYPE", type.isObject() ? (valueType.isObject() ? "<? extends "+type.getKeyType()+", ? extends "+valueType.getValueType()+">" : "<? extends "+type.getKeyType()+">") : (valueType.isObject() ? "<? extends "+valueType.getValueType()+">" : ""));
+
 		addSimpleMapper(" KEY_ENUM_VALUE_GENERIC_TYPE", type.isObject() ? (valueType.isObject() ? "<"+type.getKeyType()+" extends Enum<"+type.getKeyType()+">, "+valueType.getValueType()+">" : "<"+type.getKeyType()+" extends Enum<"+type.getKeyType()+">>") : (valueType.isObject() ? "<"+valueType.getValueType()+">" : ""));
 		addSimpleMapper(" KEY_VALUE_ENUM_GENERIC_TYPE", type.isObject() ? (valueType.isObject() ? "<"+type.getKeyType()+", "+valueType.getValueType()+" extends Enum<"+valueType.getValueType()+">>" : "<"+type.getKeyType()+">") : (valueType.isObject() ? "<"+valueType.getValueType()+" extends Enum<"+valueType.getValueType()+">>" : ""));
 		
@@ -83,6 +109,7 @@ public class GlobalVariables
 		addSimpleMapper(" GENERIC_KEY_VALUE_BRACES", type.isObject() ? (valueType.isObject() ? " <"+type.getKeyType()+", "+valueType.getValueType()+">" : " <"+type.getKeyType()+">") : (valueType.isObject() ? " <"+valueType.getValueType()+">" : ""));
 		addSimpleMapper(" COMPAREABLE_KEY_BRACES", type.isObject() ? " <"+type.getKeyType()+" extends Comparable<T>>" : "");
 		addSimpleMapper("KV_BRACES", type.isObject() || valueType.isObject() ? "<>" : "");
+		addSimpleMapper("VALUE_BRACES", valueType.isObject() ? "<>" : "");
 		addSimpleMapper("BRACES", type.isObject() ? "<>" : "");
 		if(type.needsCustomJDKType())
 		{
@@ -120,6 +147,7 @@ public class GlobalVariables
 		addInjectMapper(fix+"_EQUALS_NULL", type.getComparableValue()+" == "+(type.isPrimitiveBlocking() || type.needsCast() ? type.getEmptyValue() : "0")).removeBraces();
 		addArgumentMapper(fix+"_EQUALS_NOT", type.getEquals(true)).removeBraces();
 		addArgumentMapper(fix+"_EQUALS", type.getEquals(false)).removeBraces();
+		addSimpleMapper("FILE_"+fix+"_TYPE", type.getFileType());
 		
 		addArgumentMapper("COMPAREABLE_TO_"+fix, type.isObject() ? "((Comparable<"+type.getKeyType(value)+">)%1$s).compareTo(("+type.getKeyType(value)+")%2$s)" : type.getClassType(value)+".compare(%1$s, %2$s)").removeBraces();
 		addArgumentMapper("COMPARE_TO_"+fix, type.isObject() ? "%1$s.compareTo(%2$s)" : type.getClassType(value)+".compare(%1$s, %2$s)").removeBraces();
@@ -135,7 +163,8 @@ public class GlobalVariables
 		addSimpleMapper("EMPTY_"+fix+"_ARRAY", type.isObject() ? "("+fix+"_TYPE[])ARRAYS.EMPTY_ARRAY" : "ARRAYS.EMPTY_ARRAY");
 		addInjectMapper("NEW_"+fix+"_ARRAY", type.isObject() ? "("+fix+"_TYPE[])new Object[%s]" : "new "+fix+"_TYPE[%s]").removeBraces();
 		addInjectMapper("NEW_SPECIAL_"+fix+"_ARRAY", type.isObject() ? "(E[])new Object[%s]" : "new "+fix+"_TYPE[%s]").removeBraces();
-		addInjectMapper("NEW_CLASS"+(value ? "_VALUE" : "")+"_ARRAY", type.isObject() ? "(CLASS_TYPE[])new Object[%s]" : "new CLASS_TYPE[%s]").removeBraces();
+		if(value) addInjectMapper("NEW_CLASS_VALUE_ARRAY", type.isObject() ? "(CLASS_VALUE_TYPE[])new Object[%s]" : "new CLASS_VALUE_TYPE[%s]").removeBraces();
+		else addInjectMapper("NEW_CLASS_ARRAY", type.isObject() ? "(CLASS_TYPE[])new Object[%s]" : "new CLASS_TYPE[%s]").removeBraces();
 	}
 	
 	public GlobalVariables createPreFunctions()
@@ -186,7 +215,43 @@ public class GlobalVariables
 		addClassMapper("RB_TREE_SET", "RBTreeSet");
 		addClassMapper("AVL_TREE_SET", "AVLTreeSet");
 		addClassMapper("ARRAY_SET", "ArraySet");
+		addAbstractBiMapper("SIMPLE_TEST_MAP", "Test%sMap", "2");
 		
+		//Final UnitTest Classes
+		addAbstractMapper("MINIMAL_COLLECTION", "Minimal%sCollection");
+		addAbstractMapper("MINIMAL_SET", "Minimal%sSet");
+		addAbstractMapper("ABSTRACT_CONTAINER_TESTER", "Abstract%sContainerTester");
+		addAbstractMapper("ABSTRACT_COLLECTION_TESTER", "Abstract%sCollectionTester");
+		addAbstractMapper("ABSTRACT_QUEUE_TESTER", "Abstract%sQueueTester");
+		addAbstractMapper("ABSTRACT_LIST_INDEX_OF_TESTER", "Abstract%sListIndexOfTester");
+		addAbstractMapper("ABSTRACT_LIST_TESTER", "Abstract%sListTester");
+		addAbstractMapper("ABSTRACT_SET_TESTER", "Abstract%sSetTester");
+		addAbstractMapper("ABSTRACT_ITERATOR_TESTER", "Abstract%sIteratorTester");
+		addAbstractBiMapper("ABSTRACT_MAP_TESTER", "Abstract%sMapTester", "2");
+		addClassMapper("LIST_ITERATOR_TESTER", "ListIteratorTester");
+		addClassMapper("BIDIRECTIONAL_ITERATOR_TESTER", "BidirectionalteratorTester");
+		addClassMapper("ITERATOR_TESTER", "IteratorTester");
+		addClassMapper("COLLECTION_TEST_BUILDER", "CollectionTestSuiteBuilder");
+		addClassMapper("DEQUEUE_TEST_BUILDER", "DequeueTestSuiteBuilder");
+		addClassMapper("QUEUE_TEST_BUILDER", "QueueTestSuiteBuilder");
+		addClassMapper("LIST_TEST_BUILDER", "ListTestSuiteBuilder");
+		addClassMapper("ORDERED_SET_TEST_BUILDER", "OrderedSetTestSuiteBuilder");
+		addClassMapper("SORTED_SET_TEST_BUILDER", "SortedSetTestSuiteBuilder");
+		addClassMapper("NAVIGABLE_SET_TEST_BUILDER", "NavigableSetTestSuiteBuilder");
+		addClassMapper("SET_TEST_BUILDER", "SetTestSuiteBuilder");
+		addAbstractBiMapper("NAVIGABLE_MAP_TEST_BUILDER", "%sNavigableMapTestSuiteBuilder", "2");
+		addAbstractBiMapper("SORTED_MAP_TEST_BUILDER", "%sSortedMapTestSuiteBuilder", "2");
+		addAbstractBiMapper("ORDERED_MAP_TEST_BUILDER", "%sOrderedMapTestSuiteBuilder", "2");
+		addAbstractBiMapper("MAP_TEST_BUILDER", "%sMapTestSuiteBuilder", "2");
+		addAbstractBiMapper("MAP_CONSTRUCTOR_TESTS", "%sMapConstructorTests", "2");
+		addClassMapper("COLLECTION_CONSTRUCTOR_TESTS", "CollectionConstructorTests");
+		addClassMapper("SUB_SORTED_SET_CLASS_GENERATOR", "SortedSetSubsetTestSetGenerator");
+		addClassMapper("SUB_NAVIGABLE_SET_CLASS_GENERATOR", "NavigableSetSubsetTestSetGenerator");
+		addClassMapper("LIST_TESTS", "ListTests");
+		addClassMapper("SET_TESTS", "SetTests");
+		addClassMapper("QUEUE_TESTS", "QueueTests");
+		addBiClassMapper("MAP_TESTS", "MapTests", "2");
+
 		//Abstract Classes
 		addAbstractMapper("ABSTRACT_COLLECTION", "Abstract%sCollection");
 		addAbstractMapper("ABSTRACT_PRIORITY_QUEUE", "Abstract%sPriorityQueue");
@@ -206,6 +271,24 @@ public class GlobalVariables
 		addClassMapper("ITERATORS", "Iterators");
 		addClassMapper("ITERABLES", "Iterables");
 		addBiClassMapper("MAPS", "Maps", "2");
+		addClassMapper("SAMPLE_ELEMENTS", "Samples");
+		
+		//UnitTest Helper Classes
+		addClassMapper("HELPERS", "Helpers");
+		addAbstractMapper("TEST_COLLECTION_GENERATOR", "Test%sCollectionGenerator");
+		addAbstractMapper("TEST_QUEUE_GENERATOR", "Test%sQueueGenerator");
+		addAbstractMapper("TEST_LIST_GENERATOR", "Test%sListGenerator");
+		addAbstractMapper("TEST_NAVIGABLE_SET_GENERATOR", "Test%sNavigableSetGenerator");
+		addAbstractMapper("TEST_SORTED_SET_GENERATOR", "Test%sSortedSetGenerator");
+		addAbstractMapper("TEST_ORDERED_SET_GENERATOR", "Test%sOrderedSetGenerator");
+		addAbstractMapper("TEST_SET_GENERATOR", "Test%sSetGenerator");
+		addAbstractMapper("SIMPLE_TEST_GENERATOR", "Simple%sTestGenerator");
+		addAbstractMapper("SIMPLE_QUEUE_TEST_GENERATOR", "Simple%sQueueTestGenerator");
+		addAbstractBiMapper("SIMPLE_MAP_TEST_GENERATOR", "Simple%sMapTestGenerator", "2");
+		addAbstractBiMapper("DERIVED_MAP_GENERATORS", "Derived%sMapGenerators", "2");
+		addAbstractBiMapper("TEST_ORDERED_MAP_GENERATOR", "Test%sOrderedMapGenerator", "2");
+		addAbstractBiMapper("TEST_SORTED_MAP_GENERATOR", "Test%sSortedMapGenerator", "2");
+		addAbstractBiMapper("TEST_MAP_GENERATOR", "Test%sMapGenerator", "2");
 		
 		//Interfaces
 		addClassMapper("LIST_ITERATOR", "ListIterator");
@@ -245,7 +328,6 @@ public class GlobalVariables
 			if(!valueType.isObject()) addSimpleMapper("VALUE_CONSUMER", valueType.getFileType()+"Consumer");
 			else addSimpleMapper("VALUE_CONSUMER", "Consumer");
 			addSimpleMapper("CONSUMER", "Consumer");
-			addSimpleMapper("COMPARATOR", "Comparator");	
 			addSimpleMapper("IARRAY", "IObjectArray");
 		}
 		else
@@ -256,9 +338,10 @@ public class GlobalVariables
 				addSimpleMapper("CONSUMER", type.getFileType()+"Consumer");
 			}
 			else addClassMapper("CONSUMER", "Consumer");
-			addClassMapper("COMPARATOR", "Comparator");
 			addFunctionMappers("IARRAY", "I%sArray");
 		}
+		addSimpleMapper("VALUE_COMPARATOR", valueType.isObject() ? "Comparator" : String.format("%sComparator", valueType.getNonFileType()));
+		addSimpleMapper("COMPARATOR", type.isObject() ? "Comparator" : String.format("%sComparator", type.getNonFileType()));
 		return this;
 	}
 	
@@ -308,6 +391,7 @@ public class GlobalVariables
 		addSimpleMapper("VALUE_TEST_VALUE", valueType.isObject() ? "getBoolean" : "get");
 		addSimpleMapper("TEST_VALUE", type.isObject() ? "getBoolean" : "get");
 		addSimpleMapper("NEW_STREAM", type.isPrimitiveBlocking() ? "" : type.getCustomJDKType().getKeyType()+"Stream");
+		addSimpleMapper("VALUE_TO_ARRAY", "to"+valueType.getNonFileType()+"Array");
 		addSimpleMapper("TO_ARRAY", "to"+type.getNonFileType()+"Array");
 		addSimpleMapper("[SPACE]", " ");
 		return this;

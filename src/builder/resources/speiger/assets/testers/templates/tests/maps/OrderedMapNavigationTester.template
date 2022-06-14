@@ -1,0 +1,303 @@
+package speiger.src.testers.PACKAGE.tests.maps;
+
+#ignore
+import static com.google.common.collect.testing.features.CollectionSize.ONE;
+import static com.google.common.collect.testing.features.CollectionSize.SEVERAL;
+import static com.google.common.collect.testing.features.CollectionSize.ZERO;
+import static com.google.common.collect.testing.features.MapFeature.SUPPORTS_REMOVE;
+import static com.google.common.collect.testing.features.MapFeature.SUPPORTS_PUT;
+#endignore
+
+import java.util.NoSuchElementException;
+
+import org.junit.Ignore;
+
+import com.google.common.collect.testing.features.CollectionSize;
+import com.google.common.collect.testing.features.MapFeature;
+
+import speiger.src.collections.PACKAGE.maps.interfaces.MAP;
+import speiger.src.collections.PACKAGE.maps.interfaces.ORDERED_MAP;
+import speiger.src.collections.objects.lists.ObjectList;
+import speiger.src.testers.PACKAGE.tests.base.maps.ABSTRACT_MAP_TESTER;
+import speiger.src.testers.objects.utils.ObjectHelpers;
+
+@SuppressWarnings("javadoc")
+@Ignore
+public class FILE_KEY_TYPE2FILE_VALUE_TYPEOrderedMapNavigationTester KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP_TESTER KEY_VALUE_GENERIC_TYPE
+{
+	private ORDERED_MAP KEY_VALUE_GENERIC_TYPE orderedMap;
+	private ObjectList<MAP.Entry KEY_VALUE_GENERIC_TYPE> values;
+	private KEY_TYPE a;
+	private VALUE_TYPE aValue;
+	private KEY_TYPE c;
+	private VALUE_TYPE cValue;
+	
+	@Override
+	public void setUp() throws Exception {
+		super.setUp();
+		orderedMap = (ORDERED_MAP KEY_VALUE_GENERIC_TYPE) getMap();
+		values = ObjectHelpers.copyToList(getSampleElements(getSubjectGenerator().getCollectionSize().getNumElements()));
+		if (values.size() >= 1) {
+			a = values.get(0).ENTRY_KEY();
+			aValue = values.get(0).ENTRY_VALUE();
+			if (values.size() >= 3) {
+				c = values.get(2).ENTRY_KEY();
+				cValue = values.get(2).ENTRY_VALUE();
+			}
+		}
+	}
+	
+#ignore
+	@MapFeature.Require(SUPPORTS_PUT)
+	@CollectionSize.Require(ZERO)
+#endignore
+	public void testPutEmptyMapToFirst() {
+		orderedMap.putAndMoveToFirst(k0(), v0());
+		expectAdded(e0());
+	}
+
+#ignore
+	@MapFeature.Require(SUPPORTS_PUT)
+	@CollectionSize.Require(ZERO)
+#endignore
+	public void testPutEmptyMapToLast() {
+		orderedMap.putAndMoveToLast(k0(), v0());
+		expectAdded(e0());
+	}
+	
+#ignore
+	@MapFeature.Require(SUPPORTS_REMOVE)
+	@CollectionSize.Require(SEVERAL)
+#endignore
+	public void testyMapPollFirstEmpty() {
+		int polled = 0;
+		int expectedPolls = orderedMap.size();
+		while(polled < expectedPolls) {
+			orderedMap.POLL_FIRST_ENTRY_KEY();
+			polled++;
+		}
+		assertTrue("Map should be empty", orderedMap.isEmpty());
+	}
+
+#ignore
+	@MapFeature.Require(SUPPORTS_REMOVE)
+	@CollectionSize.Require(SEVERAL)
+#endignore
+	public void testyMapPollLastEmpty() {
+		int polled = 0;
+		int expectedPolls = orderedMap.size();
+		while(polled < expectedPolls) {
+			orderedMap.POLL_LAST_ENTRY_KEY();
+			polled++;
+		}
+		assertTrue("Map should be empty", orderedMap.isEmpty());
+	}
+	
+#ignore
+	@MapFeature.Require(SUPPORTS_REMOVE)
+	@CollectionSize.Require(ZERO)
+#endignore
+	public void testEmptyMapPollFirst() {
+		try {
+			orderedMap.POLL_FIRST_ENTRY_KEY();
+			fail("OrderedMap.POLL_FIRST_ENTRY_KEY should throw NoSuchElementException");
+		} catch (NoSuchElementException e) {
+		}
+		expectUnchanged();
+	}
+	
+#ignore
+	@MapFeature.Require(SUPPORTS_REMOVE)
+	@CollectionSize.Require(ZERO)
+#endignore
+	public void testEmptyMapPollLast() {
+		try {
+			orderedMap.POLL_LAST_ENTRY_KEY();
+			fail("OrderedMap.POLL_LAST_ENTRY_KEY should throw NoSuchElementException");
+		} catch (NoSuchElementException e) {
+		}
+		expectUnchanged();
+	}
+	
+#ignore
+	@MapFeature.Require(absent = SUPPORTS_REMOVE)
+#endignore
+	public void testUnsupportedMapPollFirst() {
+		try {
+			orderedMap.POLL_FIRST_ENTRY_KEY();
+			fail("OrderedMap.POLL_FIRST_ENTRY_KEY should throw UnsupportedOperationException");
+		} catch (UnsupportedOperationException e) {
+		}
+		expectUnchanged();
+	}
+	
+#ignore
+	@MapFeature.Require(absent = SUPPORTS_REMOVE)
+#endignore
+	public void testUnsupportedMapPollLast() {
+		try {
+			orderedMap.POLL_LAST_ENTRY_KEY();
+			fail("OrderedMap.POLL_LAST_ENTRY_KEY should throw UnsupportedOperationException");
+		} catch (UnsupportedOperationException e) {
+		}
+		expectUnchanged();
+	}
+	
+#ignore
+	@MapFeature.Require(SUPPORTS_REMOVE)
+	@CollectionSize.Require(ONE)
+#endignore
+	public void testSingletonMapPollFirst() {
+		assertEquals(a, orderedMap.POLL_FIRST_ENTRY_KEY());
+		assertTrue(orderedMap.isEmpty());
+	}
+	
+#ignore
+	@MapFeature.Require(SUPPORTS_REMOVE)
+	@CollectionSize.Require(ONE)
+#endignore
+	public void testSingletonMapPollLast() {
+		assertEquals(a, orderedMap.POLL_LAST_ENTRY_KEY());
+		assertTrue(orderedMap.isEmpty());
+	}
+	
+#ignore
+	@MapFeature.Require(SUPPORTS_REMOVE)
+	@CollectionSize.Require(SEVERAL)
+#endignore
+	public void testPollFirst() {
+		assertEquals(a, orderedMap.POLL_FIRST_ENTRY_KEY());
+		assertEquals(values.subList(1, values.size()), ObjectHelpers.copyToList(orderedMap.ENTRY_SET()));
+	}
+
+#ignore
+	@MapFeature.Require(SUPPORTS_REMOVE)
+	@CollectionSize.Require(SEVERAL)
+#endignore
+	public void testPollLast() {
+		assertEquals(c, orderedMap.POLL_LAST_ENTRY_KEY());
+		assertEquals(values.subList(0, values.size()-1), ObjectHelpers.copyToList(orderedMap.ENTRY_SET()));
+	}
+	
+#ignore
+	@MapFeature.Require(absent = SUPPORTS_REMOVE)
+#endignore
+	public void testPollFirstUnsupported() {
+		try {
+			orderedMap.POLL_FIRST_ENTRY_KEY();
+			fail();
+		} catch (UnsupportedOperationException e) {
+		}
+	}
+	
+#ignore
+	@MapFeature.Require(absent = SUPPORTS_REMOVE)
+#endignore
+	public void testPollLastUnsupported() {
+		try {
+			orderedMap.POLL_LAST_ENTRY_KEY();
+			fail();
+		} catch (UnsupportedOperationException e) {
+		}
+	}
+	
+#ignore
+	@CollectionSize.Require(ZERO)
+#endignore
+	public void testEmptyMapFirstKey() {
+		try {
+			orderedMap.FIRST_ENTRY_KEY();
+			fail();
+		} catch (NoSuchElementException e) {
+		}
+	}
+	
+#ignore
+	@CollectionSize.Require(ZERO)
+#endignore
+	public void testEmptyMapFirstValue() {
+		try {
+			orderedMap.FIRST_ENTRY_VALUE();
+			fail();
+		} catch (NoSuchElementException e) {
+		}
+	}
+
+#ignore
+	@CollectionSize.Require(ZERO)
+#endignore
+	public void testEmptyMapLastKey() {
+		try {
+			orderedMap.LAST_ENTRY_KEY();
+			fail();
+		} catch (NoSuchElementException e) {
+		}
+	}
+	
+#ignore
+	@CollectionSize.Require(ZERO)
+#endignore
+	public void testEmptyMapLastValue() {
+		try {
+			orderedMap.LAST_ENTRY_VALUE();
+			fail();
+		} catch (NoSuchElementException e) {
+		}
+	}
+	
+#ignore
+	@CollectionSize.Require(ONE)
+#endignore
+	public void testSingletonMapFirstKey() {
+		assertEquals(a, orderedMap.FIRST_ENTRY_KEY());
+	}
+	
+#ignore
+	@CollectionSize.Require(ONE)
+#endignore
+	public void testSingletonMapFirstValue() {
+		assertEquals(aValue, orderedMap.FIRST_ENTRY_VALUE());
+	}
+
+#ignore
+	@CollectionSize.Require(ONE)
+#endignore
+	public void testSingletonMapLastKey() {
+		assertEquals(a, orderedMap.LAST_ENTRY_KEY());
+	}
+	
+#ignore
+	@CollectionSize.Require(ONE)
+#endignore
+	public void testSingletonMapLastValue() {
+		assertEquals(aValue, orderedMap.FIRST_ENTRY_VALUE());
+	}
+
+#ignore
+	@CollectionSize.Require(SEVERAL)
+#endignore
+	public void testFirstKey() {
+		assertEquals(a, orderedMap.FIRST_ENTRY_KEY());
+	}
+	
+#ignore
+	@CollectionSize.Require(SEVERAL)
+#endignore
+	public void testFirstValue() {
+		assertEquals(aValue, orderedMap.FIRST_ENTRY_VALUE());
+	}
+
+#ignore
+	@CollectionSize.Require(SEVERAL)
+#endignore
+	public void testLastKey() {
+		assertEquals(c, orderedMap.LAST_ENTRY_KEY());
+	}
+	
+#ignore
+	@CollectionSize.Require(SEVERAL)
+#endignore
+	public void testLastValue() {
+		assertEquals(cValue, orderedMap.LAST_ENTRY_VALUE());
+	}
+}

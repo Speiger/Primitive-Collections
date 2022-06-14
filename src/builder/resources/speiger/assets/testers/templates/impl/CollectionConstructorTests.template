@@ -1,0 +1,314 @@
+package speiger.src.testers.PACKAGE.impl;
+
+#if TYPE_OBJECT
+import java.util.Arrays;
+import java.util.Comparator;
+import java.util.Objects;
+#endif
+
+import org.junit.Ignore;
+
+import speiger.src.collections.PACKAGE.lists.ARRAY_LIST;
+import speiger.src.collections.PACKAGE.lists.LINKED_LIST;
+import speiger.src.collections.PACKAGE.lists.COPY_ON_WRITE_LIST;
+import speiger.src.collections.PACKAGE.lists.IMMUTABLE_LIST;
+#if !TYPE_BOOLEAN
+import speiger.src.collections.PACKAGE.sets.AVL_TREE_SET;
+import speiger.src.collections.PACKAGE.sets.ARRAY_SET;
+import speiger.src.collections.PACKAGE.sets.LINKED_CUSTOM_HASH_SET;
+import speiger.src.collections.PACKAGE.sets.LINKED_HASH_SET;
+import speiger.src.collections.PACKAGE.sets.CUSTOM_HASH_SET;
+import speiger.src.collections.PACKAGE.sets.HASH_SET;
+import speiger.src.collections.PACKAGE.sets.RB_TREE_SET;
+import speiger.src.collections.PACKAGE.sets.IMMUTABLE_HASH_SET;
+import speiger.src.collections.PACKAGE.utils.STRATEGY;
+#endif
+#if TYPE_OBJECT
+import speiger.src.collections.objects.utils.StringSortTest;
+#endif
+import speiger.src.testers.PACKAGE.tests.collection.FILE_KEY_TYPECollectionConstructorTester;
+
+@Ignore
+@SuppressWarnings("javadoc")
+public class COLLECTION_CONSTRUCTOR_TESTS
+{
+	public static class ArrayList extends FILE_KEY_TYPECollectionConstructorTester KEY_STRING_GENERIC_TYPE
+	{
+		@SuppressWarnings("deprecation")
+		public ArrayList() {
+			setSimpleConstructor(ARRAY_LIST::new);
+			setSizeConstructor(T -> new ARRAY_LISTBRACES(T));
+			setPArrayConstructor(T -> new ARRAY_LISTBRACES(T));
+			setPCollectionConstructor(T -> new ARRAY_LISTBRACES(T));
+			setCollectionConstructor(T -> new ARRAY_LISTBRACES(T));
+		}
+		
+#if TYPE_OBJECT
+		@Override
+		protected String[] createKeyElements() {
+			return Arrays.copyOfRange(StringSortTest.NAMES, 0, 100);
+		}
+#endif
+	}
+	
+	public static class LinkedList extends FILE_KEY_TYPECollectionConstructorTester KEY_STRING_GENERIC_TYPE
+	{
+		@SuppressWarnings("deprecation")
+		public LinkedList() {
+			setSimpleConstructor(LINKED_LIST::new);
+			setPArrayConstructor(T -> new LINKED_LISTBRACES(T));
+			setPCollectionConstructor(T -> new LINKED_LISTBRACES(T));
+			setCollectionConstructor(T -> new LINKED_LISTBRACES(T));
+		}
+		
+#if TYPE_OBJECT
+		@Override
+		protected String[] createKeyElements() {
+			return Arrays.copyOfRange(StringSortTest.NAMES, 0, 100);
+		}
+#endif
+	}
+	
+	public static class CopyOnWriteArrayList extends FILE_KEY_TYPECollectionConstructorTester KEY_STRING_GENERIC_TYPE
+	{
+		@SuppressWarnings("deprecation")
+		public CopyOnWriteArrayList() {
+			setSimpleConstructor(COPY_ON_WRITE_LIST::new);
+			setPArrayConstructor(T -> new COPY_ON_WRITE_LISTBRACES(T));
+			setPCollectionConstructor(T -> new COPY_ON_WRITE_LISTBRACES(T));
+			setCollectionConstructor(T -> new COPY_ON_WRITE_LISTBRACES(T));
+		}
+		
+#if TYPE_OBJECT
+		@Override
+		protected String[] createKeyElements() {
+			return Arrays.copyOfRange(StringSortTest.NAMES, 0, 100);
+		}
+#endif
+	}
+	
+	public static class ImmutableList extends FILE_KEY_TYPECollectionConstructorTester KEY_STRING_GENERIC_TYPE
+	{
+		@SuppressWarnings("deprecation")
+		public ImmutableList() {
+			setPArrayConstructor(T -> new IMMUTABLE_LISTBRACES(T));
+			setPCollectionConstructor(T -> new IMMUTABLE_LISTBRACES(T));
+			setCollectionConstructor(T -> new IMMUTABLE_LISTBRACES(T));
+		}
+		
+#if TYPE_OBJECT
+		@Override
+		protected String[] createKeyElements() {
+			return Arrays.copyOfRange(StringSortTest.NAMES, 0, 100);
+		}
+#endif
+	}
+	
+#if !TYPE_BOOLEAN
+	public static class HashSet extends FILE_KEY_TYPECollectionConstructorTester KEY_STRING_GENERIC_TYPE
+	{
+		@SuppressWarnings("deprecation")
+		public HashSet() {
+			setSimpleConstructor(HASH_SET::new);
+			setSizeConstructor(T -> new HASH_SETBRACES(T));
+			setPArrayConstructor(T -> new HASH_SETBRACES(T));
+			setPCollectionConstructor(T -> new HASH_SETBRACES(T));
+			setCollectionConstructor(T -> new HASH_SETBRACES(T));
+		}
+		
+#if TYPE_OBJECT
+		@Override
+		protected String[] createKeyElements() {
+			return Arrays.copyOfRange(StringSortTest.NAMES, 0, 100);
+		}
+#endif
+	}
+	
+	public static class LinkedHashSet extends FILE_KEY_TYPECollectionConstructorTester KEY_STRING_GENERIC_TYPE
+	{
+		@SuppressWarnings("deprecation")
+		public LinkedHashSet() {
+			setSimpleConstructor(LINKED_HASH_SET::new);
+			setSizeConstructor(T -> new LINKED_HASH_SETBRACES(T));
+			setPArrayConstructor(T -> new LINKED_HASH_SETBRACES(T));
+			setPCollectionConstructor(T -> new LINKED_HASH_SETBRACES(T));
+			setCollectionConstructor(T -> new LINKED_HASH_SETBRACES(T));
+		}
+		
+#if TYPE_OBJECT
+		@Override
+		protected String[] createKeyElements() {
+			return Arrays.copyOfRange(StringSortTest.NAMES, 0, 100);
+		}
+#endif
+	}
+	
+	public static class CustomHashSet extends FILE_KEY_TYPECollectionConstructorTester KEY_STRING_GENERIC_TYPE
+	{
+		@SuppressWarnings("deprecation")
+		public CustomHashSet() {
+			setSimpleConstructor(() -> new CUSTOM_HASH_SET KEY_STRING_GENERIC_TYPE(HashStrategy.INSTANCE));
+			setSizeConstructor(T -> new CUSTOM_HASH_SET KEY_STRING_GENERIC_TYPE(T, HashStrategy.INSTANCE));
+			setPArrayConstructor(T -> new CUSTOM_HASH_SET KEY_STRING_GENERIC_TYPE(T, HashStrategy.INSTANCE));
+			setPCollectionConstructor(T -> new CUSTOM_HASH_SET KEY_STRING_GENERIC_TYPE(T, HashStrategy.INSTANCE));
+			setCollectionConstructor(T -> new CUSTOM_HASH_SET KEY_STRING_GENERIC_TYPE(T, HashStrategy.INSTANCE));
+		}
+		
+#if TYPE_OBJECT
+		@Override
+		protected String[] createKeyElements() {
+			return Arrays.copyOfRange(StringSortTest.NAMES, 0, 100);
+		}
+#endif
+	}
+	
+	public static class LinkedCustomHashSet extends FILE_KEY_TYPECollectionConstructorTester KEY_STRING_GENERIC_TYPE
+	{
+		@SuppressWarnings("deprecation")
+		public LinkedCustomHashSet() {
+			setSimpleConstructor(() -> new LINKED_CUSTOM_HASH_SET KEY_STRING_GENERIC_TYPE(HashStrategy.INSTANCE));
+			setSizeConstructor(T -> new LINKED_CUSTOM_HASH_SET KEY_STRING_GENERIC_TYPE(T, HashStrategy.INSTANCE));
+			setPArrayConstructor(T -> new LINKED_CUSTOM_HASH_SET KEY_STRING_GENERIC_TYPE(T, HashStrategy.INSTANCE));
+			setPCollectionConstructor(T -> new LINKED_CUSTOM_HASH_SET KEY_STRING_GENERIC_TYPE(T, HashStrategy.INSTANCE));
+			setCollectionConstructor(T -> new LINKED_CUSTOM_HASH_SET KEY_STRING_GENERIC_TYPE(T, HashStrategy.INSTANCE));
+		}
+		
+#if TYPE_OBJECT
+		@Override
+		protected String[] createKeyElements() {
+			return Arrays.copyOfRange(StringSortTest.NAMES, 0, 100);
+		}
+#endif
+	}
+	
+	public static class ImmutableHashSet extends FILE_KEY_TYPECollectionConstructorTester KEY_STRING_GENERIC_TYPE
+	{
+		@SuppressWarnings("deprecation")
+		public ImmutableHashSet() {
+			setPArrayConstructor(T -> new IMMUTABLE_HASH_SETBRACES(T));
+			setPCollectionConstructor(T -> new IMMUTABLE_HASH_SETBRACES(T));
+			setCollectionConstructor(T -> new IMMUTABLE_HASH_SETBRACES(T));
+		}
+		
+#if TYPE_OBJECT
+		@Override
+		protected String[] createKeyElements() {
+			return Arrays.copyOfRange(StringSortTest.NAMES, 0, 100);
+		}
+#endif
+	}
+	
+	public static class ArraySet extends FILE_KEY_TYPECollectionConstructorTester KEY_STRING_GENERIC_TYPE
+	{
+		@SuppressWarnings("deprecation")
+		public ArraySet() {
+			setSimpleConstructor(ARRAY_SET::new);
+			setSizeConstructor(T -> new ARRAY_SETBRACES(T));
+			setPArrayConstructor(T -> new ARRAY_SETBRACES(T));
+			setPCollectionConstructor(T -> new ARRAY_SETBRACES(T));
+			setCollectionConstructor(T -> new ARRAY_SETBRACES(T));
+		}
+		
+#if TYPE_OBJECT
+		@Override
+		protected String[] createKeyElements() {
+			return Arrays.copyOfRange(StringSortTest.NAMES, 0, 100);
+		}
+#endif
+	}
+	
+	public static class RBTreeSet extends FILE_KEY_TYPECollectionConstructorTester KEY_STRING_GENERIC_TYPE
+	{
+		@SuppressWarnings("deprecation")
+		public RBTreeSet() {
+			setSimpleConstructor(RB_TREE_SET::new);
+			setPArrayConstructor(T -> new RB_TREE_SETBRACES(T));
+			setPCollectionConstructor(T -> new RB_TREE_SETBRACES(T));
+			setCollectionConstructor(T -> new RB_TREE_SETBRACES(T));
+		}
+		
+#if TYPE_OBJECT
+		@Override
+		protected String[] createKeyElements() {
+			return Arrays.copyOfRange(StringSortTest.NAMES, 0, 100);
+		}
+#endif
+	}
+	
+	public static class AVLTreeSet extends FILE_KEY_TYPECollectionConstructorTester KEY_STRING_GENERIC_TYPE
+	{
+		@SuppressWarnings("deprecation")
+		public AVLTreeSet() {
+			setSimpleConstructor(AVL_TREE_SET::new);
+			setPArrayConstructor(T -> new AVL_TREE_SETBRACES(T));
+			setPCollectionConstructor(T -> new AVL_TREE_SETBRACES(T));
+			setCollectionConstructor(T -> new AVL_TREE_SETBRACES(T));
+		}
+		
+#if TYPE_OBJECT
+		@Override
+		protected String[] createKeyElements() {
+			return Arrays.copyOfRange(StringSortTest.NAMES, 0, 100);
+		}
+#endif
+	}
+	
+	public static class RBTreeSetComparator extends FILE_KEY_TYPECollectionConstructorTester KEY_STRING_GENERIC_TYPE
+	{
+		@SuppressWarnings("deprecation")
+		public RBTreeSetComparator() {
+#if TYPE_OBJECT
+			setSimpleConstructor(() -> new RB_TREE_SET<String>(Comparator.naturalOrder()));
+			setPArrayConstructor(T -> new RB_TREE_SET<>(T, Comparator.naturalOrder()));
+			setPCollectionConstructor(T -> new RB_TREE_SET<>(T, Comparator.naturalOrder()));
+			setCollectionConstructor(T -> new RB_TREE_SET<>(T, Comparator.naturalOrder()));
+#else
+			setSimpleConstructor(() -> new RB_TREE_SET(CLASS_TYPE::compare));
+			setPArrayConstructor(T -> new RB_TREE_SET(T, CLASS_TYPE::compare));
+			setPCollectionConstructor(T -> new RB_TREE_SET(T, CLASS_TYPE::compare));
+			setCollectionConstructor(T -> new RB_TREE_SET(T, CLASS_TYPE::compare));
+#endif
+		}
+		
+#if TYPE_OBJECT
+		@Override
+		protected String[] createKeyElements() {
+			return Arrays.copyOfRange(StringSortTest.NAMES, 0, 100);
+		}
+#endif
+	}
+	
+	public static class AVLTreeSetComparator extends FILE_KEY_TYPECollectionConstructorTester KEY_STRING_GENERIC_TYPE
+	{
+		@SuppressWarnings("deprecation")
+		public AVLTreeSetComparator() {
+#if TYPE_OBJECT
+			setSimpleConstructor(() -> new AVL_TREE_SET<String>(Comparator.naturalOrder()));
+			setPArrayConstructor(T -> new AVL_TREE_SET<>(T, Comparator.naturalOrder()));
+			setPCollectionConstructor(T -> new AVL_TREE_SET<>(T, Comparator.naturalOrder()));
+			setCollectionConstructor(T -> new AVL_TREE_SET<>(T, Comparator.naturalOrder()));
+#else
+			setSimpleConstructor(() -> new AVL_TREE_SET(CLASS_TYPE::compare));
+			setPArrayConstructor(T -> new AVL_TREE_SET(T, CLASS_TYPE::compare));
+			setPCollectionConstructor(T -> new AVL_TREE_SET(T, CLASS_TYPE::compare));
+			setCollectionConstructor(T -> new AVL_TREE_SET(T, CLASS_TYPE::compare));
+#endif
+		}
+		
+#if TYPE_OBJECT
+		@Override
+		protected String[] createKeyElements() {
+			return Arrays.copyOfRange(StringSortTest.NAMES, 0, 100);
+		}
+#endif
+	}
+	
+	private static class HashStrategy implements STRATEGY KEY_STRING_GENERIC_TYPE {
+		static final HashStrategy INSTANCE = new HashStrategy();
+		@Override
+		public int hashCode(KEY_STRING_TYPE o) { return KEY_TO_HASH(o); }
+		@Override
+		public boolean equals(KEY_STRING_TYPE key, KEY_STRING_TYPE value) { return KEY_EQUALS(key, value); }
+	}
+#endif
+}

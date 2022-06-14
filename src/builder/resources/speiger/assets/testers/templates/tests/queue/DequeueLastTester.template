@@ -1,0 +1,48 @@
+package speiger.src.testers.PACKAGE.tests.queue;
+
+import java.util.NoSuchElementException;
+
+import org.junit.Ignore;
+
+import com.google.common.collect.testing.features.CollectionFeature;
+import com.google.common.collect.testing.features.CollectionSize;
+
+import speiger.src.collections.PACKAGE.queues.PRIORITY_DEQUEUE;
+import speiger.src.testers.PACKAGE.tests.base.ABSTRACT_QUEUE_TESTER;
+
+@Ignore
+@SuppressWarnings("javadoc")
+public class FILE_KEY_TYPEDequeueLastTester KEY_GENERIC_TYPE extends ABSTRACT_QUEUE_TESTER KEY_GENERIC_TYPE
+{
+	protected PRIORITY_DEQUEUE KEY_GENERIC_TYPE getDequeue() {
+		return (PRIORITY_DEQUEUE KEY_GENERIC_TYPE)queue;
+	}
+	
+#ignore
+	@CollectionSize.Require(CollectionSize.ZERO)
+#endignore
+	public void testQueueTopEmpty() {
+		try {
+			getDequeue().last();
+			fail("Queue Should throw a NoSuchElementException");
+		}
+		catch(NoSuchElementException e) {}
+	}
+	
+#ignore
+	@CollectionSize.Require(CollectionSize.ONE)
+#endignore
+	public void testQueueTopOne() {
+		assertEquals("PriorityQueue.first should be equal", e0(), getDequeue().last());
+		expectUnchanged();
+	}
+	
+#ignore
+	@CollectionFeature.Require(CollectionFeature.KNOWN_ORDER)
+	@CollectionSize.Require(CollectionSize.SEVERAL)
+#endignore
+	public void testQueueTopSeveral() {
+		assertEquals("PriorityQueue.first should be equal", e2(), getDequeue().last());
+		expectUnchanged();
+	}
+}

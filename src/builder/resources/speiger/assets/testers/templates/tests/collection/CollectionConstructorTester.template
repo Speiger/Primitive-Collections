@@ -1,0 +1,165 @@
+package speiger.src.testers.PACKAGE.tests.collection;
+
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.function.Function;
+import java.util.function.IntFunction;
+import java.util.function.Supplier;
+
+import org.junit.Assert;
+import org.junit.Test;
+import org.junit.Ignore;
+import junit.framework.TestCase;
+
+import speiger.src.collections.PACKAGE.lists.ARRAY_LIST;
+import speiger.src.collections.PACKAGE.collections.COLLECTION;
+#if !TYPE_OBJECT
+import speiger.src.collections.PACKAGE.utils.ARRAYS;
+#endif
+import speiger.src.collections.utils.ITrimmable;
+
+@Ignore
+@SuppressWarnings("javadoc")
+public abstract class FILE_KEY_TYPECollectionConstructorTester KEY_GENERIC_TYPE extends TestCase
+{
+	protected Supplier<COLLECTION KEY_GENERIC_TYPE> simpleConstructor;
+	protected IntFunction<COLLECTION KEY_GENERIC_TYPE> sizeConstructor;
+	protected Function<KEY_TYPE[], COLLECTION KEY_GENERIC_TYPE> pArrayConstructor;
+#if !TYPE_OBJECT
+	protected Function<CLASS_TYPE[], COLLECTION KEY_GENERIC_TYPE> arrayConstructor;
+#endif
+	protected Function<Collection<? extends CLASS_TYPE>, COLLECTION KEY_GENERIC_TYPE> collectionConstructor;
+	protected Function<COLLECTION KEY_GENERIC_TYPE, COLLECTION KEY_GENERIC_TYPE> pCollectionConstructor;
+	protected KEY_TYPE[] keys = createKeyElements();
+	
+	protected void setSimpleConstructor(Supplier<COLLECTION KEY_GENERIC_TYPE> simpleConstructor) {
+		this.simpleConstructor = simpleConstructor;
+	}
+	
+	protected void setSizeConstructor(IntFunction<COLLECTION KEY_GENERIC_TYPE> sizeConstructor) {
+		this.sizeConstructor = sizeConstructor;
+	}
+	
+	protected void setPArrayConstructor(Function<KEY_TYPE[], COLLECTION KEY_GENERIC_TYPE> pArrayConstructor) {
+		this.pArrayConstructor = pArrayConstructor;
+	}
+	
+#if !TYPE_OBJECT
+	protected void setArrayConstructor(Function<CLASS_TYPE[], COLLECTION KEY_GENERIC_TYPE> arrayConstructor) {
+		this.arrayConstructor = arrayConstructor;
+	}
+
+#endif
+	protected void setCollectionConstructor(Function<Collection<? extends CLASS_TYPE>, COLLECTION KEY_GENERIC_TYPE> collectionConstructor) {
+		this.collectionConstructor = collectionConstructor;
+	}
+	
+	protected void setPCollectionConstructor(Function<COLLECTION KEY_GENERIC_TYPE, COLLECTION KEY_GENERIC_TYPE> pCollectionConstructor) {
+		this.pCollectionConstructor = pCollectionConstructor;
+	}
+	
+	@Test
+	public void testPrimitiveArrayConstructor() {
+		if(pArrayConstructor == null) return;
+		Assert.assertTrue(pArrayConstructor.apply(keys) != null);
+	}
+	
+#if !TYPE_OBJECT
+	@Test
+	public void testArrayConstructor() {
+		if(arrayConstructor == null) return;
+#if TYPE_OBJECT
+		Assert.assertTrue(arrayConstructor.apply(keys) != null);
+#else
+		Assert.assertTrue(arrayConstructor.apply(ARRAYS.wrap(keys)) != null);
+#endif
+	}
+	
+#endif
+	@Test
+	public void testPrimitiveMapsConstructor() {
+		if(pCollectionConstructor == null) return;
+		Assert.assertTrue(pCollectionConstructor.apply(new ARRAY_LISTBRACES(keys)) != null);
+	}
+	
+	@Test
+	public void testMapsConstructor() {
+		if(collectionConstructor == null) return;
+		Assert.assertTrue(collectionConstructor.apply(new ArrayList<>(new ARRAY_LISTBRACES(keys))) != null);
+	}
+	
+	@Test
+	public void testSimpleConstructor() {
+		if(simpleConstructor == null) return;
+		Assert.assertTrue(simpleConstructor.get() != null);
+	}
+	
+	@Test
+	public void testSizeConstructor_empty() {
+		if(sizeConstructor == null) return;
+		Assert.assertTrue(sizeConstructor.apply(0) != null);
+	}
+	
+	@Test
+	public void testSizeConstructor_smallSize() {
+		if(sizeConstructor == null) return;
+		Assert.assertTrue(sizeConstructor.apply(32) != null);
+	}
+	
+	@Test
+	public void testSizeConstructor_largeSize() {
+		if(sizeConstructor == null) return;
+		Assert.assertTrue(sizeConstructor.apply(25212) != null);
+	}
+	
+	@Test
+	public void testRehash() {
+		if(sizeConstructor == null) return;
+		try
+		{
+			COLLECTION KEY_GENERIC_TYPE set = sizeConstructor.apply(0);
+			if(set instanceof ITrimmable) {
+				ITrimmable trim = (ITrimmable)set;
+				set.addAll(keys);
+				set.clear();
+				Assert.assertTrue(trim.trim());
+				Assert.assertFalse(trim.trim());
+				set.addAll(keys);
+				trim.clearAndTrim();
+				set.addAll(keys);
+				trim.clearAndTrim(Short.MAX_VALUE);
+			}
+		}
+		catch(UnsupportedOperationException e) {
+			//Ignore thats fine
+		}
+	}
+	
+	@Test
+	public void testSizeConstructor_InvalidSize() {
+		if(sizeConstructor == null) return;
+		try {
+			sizeConstructor.apply(-1);
+			Assert.fail("When Inputted Size is negative this should crash");
+		}
+		catch(IllegalStateException e) {
+		}
+	}
+	
+#if TYPE_OBJECT
+	protected abstract KEY_TYPE[] createKeyElements();
+	
+#else
+	protected KEY_TYPE[] createKeyElements() {
+		KEY_TYPE[] keys = NEW_KEY_ARRAY(100);
+		for(int i = 0;i<100;i++) {
+#if TYPE_BOOLEAN
+			keys[i] = i % 2 != 0;
+#else
+			keys[i] = (KEY_TYPE)i;
+#endif
+		}
+		return keys;
+	}
+#endif
+}

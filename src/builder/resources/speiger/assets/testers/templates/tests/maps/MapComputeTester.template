@@ -1,0 +1,145 @@
+package speiger.src.testers.PACKAGE.tests.maps;
+
+#ignore
+import static com.google.common.collect.testing.features.CollectionSize.ZERO;
+import static com.google.common.collect.testing.features.MapFeature.SUPPORTS_PUT;
+import static com.google.common.collect.testing.features.MapFeature.SUPPORTS_REMOVE;
+#endignore
+
+import org.junit.Ignore;
+
+import com.google.common.collect.testing.features.CollectionSize;
+import com.google.common.collect.testing.features.MapFeature;
+
+import speiger.src.testers.PACKAGE.tests.base.maps.ABSTRACT_MAP_TESTER;
+
+@Ignore
+@SuppressWarnings("javadoc")
+public class FILE_KEY_TYPE2FILE_VALUE_TYPEMapComputeTester KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP_TESTER KEY_VALUE_GENERIC_TYPE
+{
+#ignore
+	@MapFeature.Require({ SUPPORTS_PUT, SUPPORTS_REMOVE })
+#endignore
+	public void testCompute_absentToPresent() {
+		assertEquals("Map.COMPUTE(absent, functionReturningValue) should return value", v3(),
+				getMap().COMPUTE(k3(), (k, v) -> {
+					assertEquals(k3(), k);
+					assertEquals(INVALID_VALUE, v);
+					return v3();
+				}));
+		expectAdded(e3());
+		assertEquals(getNumElements() + 1, getMap().size());
+	}
+
+#ignore
+	@MapFeature.Require({ SUPPORTS_PUT, SUPPORTS_REMOVE })
+#endignore
+	public void testCompute_absentToAbsent() {
+		assertEquals("Map.COMPUTE(absent, functionReturningNull) should return INVALID_VALUE", INVALID_VALUE, getMap().COMPUTE(k3(), (k, v) -> {
+			assertEquals(k3(), k);
+			assertEquals(INVALID_VALUE, v);
+			return INVALID_VALUE;
+		}));
+		expectUnchanged();
+		assertEquals(getNumElements(), getMap().size());
+	}
+
+#ignore
+	@MapFeature.Require({ SUPPORTS_PUT, SUPPORTS_REMOVE })
+	@CollectionSize.Require(absent = ZERO)
+#endignore
+	public void testCompute_presentToPresent() {
+		assertEquals("Map.COMPUTE(present, functionReturningValue) should return new value", v3(),
+				getMap().COMPUTE(k0(), (k, v) -> {
+					assertEquals(k0(), k);
+					assertEquals(v0(), v);
+					return v3();
+				}));
+		expectReplacement(entry(k0(), v3()));
+		assertEquals(getNumElements(), getMap().size());
+	}
+
+#ignore
+	@MapFeature.Require({ SUPPORTS_PUT, SUPPORTS_REMOVE })
+	@CollectionSize.Require(absent = ZERO)
+#endignore
+	public void testCompute_presentToAbsent() {
+		assertEquals("Map.COMPUTE(present, functionReturningNull) should return INVALID_VALUE", INVALID_VALUE, getMap().COMPUTE(k0(), (k, v) -> {
+			assertEquals(k0(), k);
+			assertEquals(v0(), v);
+			return INVALID_VALUE;
+		}));
+		expectMissing(e0());
+		expectMissingKeys(k0());
+		assertEquals(getNumElements() - 1, getMap().size());
+	}
+	
+	static class ExpectedException extends RuntimeException {
+		private static final long serialVersionUID = 1L;
+	}
+
+#ignore
+	@MapFeature.Require({ SUPPORTS_PUT, SUPPORTS_REMOVE })
+	@CollectionSize.Require(absent = ZERO)
+#endignore
+	public void testCompute_presentFunctionThrows() {
+		try {
+			getMap().COMPUTE(k0(), (k, v) -> {
+				assertEquals(k0(), k);
+				assertEquals(v0(), v);
+				throw new ExpectedException();
+			});
+			fail("Expected ExpectedException");
+		} catch (ExpectedException expected) {
+		}
+		expectUnchanged();
+	}
+
+#ignore
+	@MapFeature.Require({ SUPPORTS_PUT, SUPPORTS_REMOVE })
+#endignore
+	public void testCompute_absentFunctionThrows() {
+		try {
+			getMap().COMPUTE(k3(), (k, v) -> {
+				assertEquals(k3(), k);
+				assertEquals(INVALID_VALUE, v);
+				throw new ExpectedException();
+			});
+			fail("Expected ExpectedException");
+		} catch (ExpectedException expected) {
+		}
+		expectUnchanged();
+	}
+	
+#ignore
+	@MapFeature.Require(absent = SUPPORTS_REMOVE)
+#endignore
+	public void testCompute_removeAbsent() {
+		try {
+			getMap().COMPUTE(k3(), (k, v) -> {
+				assertEquals(k3(), k);
+				assertEquals(INVALID_VALUE, v);
+				return INVALID_VALUE;
+			});
+			fail("Expected UnsupportedOperationException");
+		} catch (UnsupportedOperationException expected) {
+		}
+		expectUnchanged();
+	}
+
+#ignore
+	@MapFeature.Require(absent = SUPPORTS_PUT)
+#endignore
+	public void testCompute_putAbsent() {
+		try {
+			getMap().COMPUTE(k3(), (k, v) -> {
+				assertEquals(k3(), k);
+				assertEquals(INVALID_VALUE, v);
+				return INVALID_VALUE;
+			});
+			fail("Expected UnsupportedOperationException");
+		} catch (UnsupportedOperationException expected) {
+		}
+		expectUnchanged();
+	}
+}

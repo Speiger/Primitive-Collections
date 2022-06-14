@@ -1,0 +1,221 @@
+package speiger.src.testers.PACKAGE.impl;
+
+import java.util.List;
+import java.util.function.Function;
+
+import speiger.src.collections.PACKAGE.collections.COLLECTION;
+import speiger.src.collections.PACKAGE.collections.ITERABLE;
+import speiger.src.collections.PACKAGE.lists.LIST;
+#if !TYPE_BOOLEAN
+import speiger.src.collections.PACKAGE.sets.NAVIGABLE_SET;
+import speiger.src.collections.PACKAGE.sets.ORDERED_SET;
+import speiger.src.collections.PACKAGE.sets.SET;
+import speiger.src.collections.PACKAGE.sets.SORTED_SET;
+#if TYPE_OBJECT
+import speiger.src.collections.objects.utils.ObjectArrays;
+#endif
+#endif
+import speiger.src.testers.PACKAGE.generators.TEST_COLLECTION_GENERATOR;
+import speiger.src.testers.PACKAGE.generators.TEST_LIST_GENERATOR;
+#if !TYPE_BOOLEAN
+import speiger.src.testers.PACKAGE.generators.TEST_NAVIGABLE_SET_GENERATOR;
+import speiger.src.testers.PACKAGE.generators.TEST_ORDERED_SET_GENERATOR;
+import speiger.src.testers.PACKAGE.generators.TEST_SET_GENERATOR;
+import speiger.src.testers.PACKAGE.generators.TEST_SORTED_SET_GENERATOR;
+#endif
+import speiger.src.testers.PACKAGE.utils.SAMPLE_ELEMENTS;
+
+@SuppressWarnings("javadoc")
+public class SIMPLE_TEST_GENERATOR KKS_GENERIC_TYPE<E extends COLLECTION KEY_GENERIC_TYPE> {
+	Function<KEY_TYPE[], E> mapper;
+#if TYPE_OBJECT
+	KEY_TYPE[] keys;
+#endif
+	
+	public SIMPLE_TEST_GENERATOR(Function<KEY_TYPE[], E> mapper) {
+		this.mapper = mapper;
+	}
+	
+#if TYPE_OBJECT
+	public SIMPLE_TEST_GENERATOR KKS_GENERIC_TYPE<E> setElements(KEY_TYPE...keys) {
+		this.keys = keys;
+		return this;
+	}
+	
+#endif
+	public SAMPLE_ELEMENTS KEY_GENERIC_TYPE getSamples() {
+#if TYPE_BOOLEAN
+		return new SAMPLE_ELEMENTS(true, false, true, false, true);
+#else if TYPE_BYTE
+		return new SAMPLE_ELEMENTS((byte)0, (byte)1, (byte)2, (byte)3, (byte)4);
+#else if TYPE_SHORT
+		return new SAMPLE_ELEMENTS((short)0, (short)1, (short)2, (short)3, (short)4);
+#else if TYPE_CHAR
+		return new SAMPLE_ELEMENTS((char)0, (char)1, (char)2, (char)3, (char)4);
+#else if TYPE_OBJECT
+		return new SAMPLE_ELEMENTSBRACES(keys[0], keys[1], keys[2], keys[3], keys[4]);
+#else
+		return new SAMPLE_ELEMENTS(0, 1, 2, 3, 4);
+#endif
+	}
+	
+#if !TYPE_OBJECT
+	public E create(KEY_TYPE... elements) {
+		return mapper.apply(elements);
+	}
+	
+	public E create(Object... elements) {
+		KEY_TYPE[] array = NEW_KEY_ARRAY(elements.length);
+		int i = 0;
+		for (Object e : elements) {
+			array[i++] = CLASS_TO_KEY(e);
+		}
+		return mapper.apply(array);
+	}
+	
+#else
+	public E create(Object... elements) {
+		T[] array = (T[])ObjectArrays.newArray(keys[0].getClass(), elements.length);
+		int i = 0;
+		for (Object e : elements) {
+			array[i++] = CLASS_TO_KEY(e);
+		}
+		return mapper.apply(array);
+	}
+
+#endif
+	public ITERABLE KEY_GENERIC_TYPE order(LIST KEY_GENERIC_TYPE insertionOrder) {
+		return insertionOrder;
+	}
+	
+	public Iterable<CLASS_TYPE> order(List<CLASS_TYPE> insertionOrder) {
+		return insertionOrder;
+	}
+	
+	public static class Collections KEY_GENERIC_TYPE extends SIMPLE_TEST_GENERATOR KKS_GENERIC_TYPE<COLLECTION KEY_GENERIC_TYPE> implements TEST_COLLECTION_GENERATOR KEY_GENERIC_TYPE
+	{
+		public Collections(Function<KEY_TYPE[], COLLECTION KEY_GENERIC_TYPE> mapper) {
+			super(mapper);
+		}
+	}
+	
+	public static class Lists KEY_GENERIC_TYPE extends SIMPLE_TEST_GENERATOR KKS_GENERIC_TYPE<LIST KEY_GENERIC_TYPE> implements TEST_LIST_GENERATOR KEY_GENERIC_TYPE
+	{
+		public Lists(Function<KEY_TYPE[], LIST KEY_GENERIC_TYPE> mapper) {
+			super(mapper);
+		}
+	}
+	
+#if !TYPE_BOOLEAN
+	public static class Sets KEY_GENERIC_TYPE extends SIMPLE_TEST_GENERATOR KKS_GENERIC_TYPE<SET KEY_GENERIC_TYPE> implements TEST_SET_GENERATOR KEY_GENERIC_TYPE
+	{
+		public Sets(Function<KEY_TYPE[], SET KEY_GENERIC_TYPE> mapper) {
+			super(mapper);
+		}
+	}
+	
+	public static class OrderedSets KEY_GENERIC_TYPE extends SIMPLE_TEST_GENERATOR KKS_GENERIC_TYPE<ORDERED_SET KEY_GENERIC_TYPE> implements TEST_ORDERED_SET_GENERATOR KEY_GENERIC_TYPE
+	{
+		public OrderedSets(Function<KEY_TYPE[], ORDERED_SET KEY_GENERIC_TYPE> mapper) {
+			super(mapper);
+		}
+	}
+	
+	public static class SortedSets KEY_GENERIC_TYPE extends SIMPLE_TEST_GENERATOR KKS_GENERIC_TYPE<SORTED_SET KEY_GENERIC_TYPE> implements TEST_SORTED_SET_GENERATOR KEY_GENERIC_TYPE
+	{
+		public SortedSets(Function<KEY_TYPE[], SORTED_SET KEY_GENERIC_TYPE> mapper) {
+			super(mapper);
+		}
+		
+		@Override
+		public ITERABLE KEY_GENERIC_TYPE order(LIST KEY_GENERIC_TYPE insertionOrder) {
+			insertionOrder.sort(null);
+			return insertionOrder;
+		}
+		
+		@Override
+		public Iterable<CLASS_TYPE> order(List<CLASS_TYPE> insertionOrder) {
+			insertionOrder.sort(null);
+			return insertionOrder;
+		}
+		
+#if TYPE_CHAR
+		@Override
+		public KEY_TYPE belowSamplesLesser() { return '_'; }
+		@Override
+		public KEY_TYPE belowSamplesGreater() { return '`'; }
+		@Override
+		public KEY_TYPE aboveSamplesLesser() { return 'f'; }
+		@Override
+		public KEY_TYPE aboveSamplesGreater() { return 'g'; }
+#else if TYPE_OBJECT
+		@Override
+		public KEY_TYPE belowSamplesLesser() { return keys[5]; }
+		@Override
+		public KEY_TYPE belowSamplesGreater() { return keys[6]; }
+		@Override
+		public KEY_TYPE aboveSamplesLesser() { return keys[7]; }
+		@Override
+		public KEY_TYPE aboveSamplesGreater() { return keys[8]; }
+#else
+		@Override
+		public KEY_TYPE belowSamplesLesser() { return -2; }
+		@Override
+		public KEY_TYPE belowSamplesGreater() { return -1; }
+		@Override
+		public KEY_TYPE aboveSamplesLesser() { return 5; }
+		@Override
+		public KEY_TYPE aboveSamplesGreater() { return 6; }
+#endif
+	}
+	
+	public static class NavigableSets KEY_GENERIC_TYPE extends SIMPLE_TEST_GENERATOR KKS_GENERIC_TYPE<NAVIGABLE_SET KEY_GENERIC_TYPE> implements TEST_NAVIGABLE_SET_GENERATOR KEY_GENERIC_TYPE
+	{
+		public NavigableSets(Function<KEY_TYPE[], NAVIGABLE_SET KEY_GENERIC_TYPE> mapper) {
+			super(mapper);
+		}
+		
+		@Override
+		public ITERABLE KEY_GENERIC_TYPE order(LIST KEY_GENERIC_TYPE insertionOrder) {
+			insertionOrder.sort(null);
+			return insertionOrder;
+		}
+		
+		@Override
+		public Iterable<CLASS_TYPE> order(List<CLASS_TYPE> insertionOrder) {
+			insertionOrder.sort(null);
+			return insertionOrder;
+		}
+		
+#if TYPE_CHAR
+		public SAMPLE_ELEMENTS KEY_GENERIC_TYPE getSamples() { return new SAMPLE_ELEMENTS('a', 'b', 'c', 'd', 'e'); }
+		@Override
+		public KEY_TYPE belowSamplesLesser() { return '_'; }
+		@Override
+		public KEY_TYPE belowSamplesGreater() { return '`'; }
+		@Override
+		public KEY_TYPE aboveSamplesLesser() { return 'f'; }
+		@Override
+		public KEY_TYPE aboveSamplesGreater() { return 'g'; }
+#else if TYPE_OBJECT
+		@Override
+		public KEY_TYPE belowSamplesLesser() { return keys[5]; }
+		@Override
+		public KEY_TYPE belowSamplesGreater() { return keys[6]; }
+		@Override
+		public KEY_TYPE aboveSamplesLesser() { return keys[7]; }
+		@Override
+		public KEY_TYPE aboveSamplesGreater() { return keys[8]; }
+#else
+		@Override
+		public KEY_TYPE belowSamplesLesser() { return -2; }
+		@Override
+		public KEY_TYPE belowSamplesGreater() { return -1; }
+		@Override
+		public KEY_TYPE aboveSamplesLesser() { return 5; }
+		@Override
+		public KEY_TYPE aboveSamplesGreater() { return 6; }
+#endif
+	}
+#endif
+}

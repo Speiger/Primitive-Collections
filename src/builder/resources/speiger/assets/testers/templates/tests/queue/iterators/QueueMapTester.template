@@ -1,0 +1,182 @@
+package speiger.src.testers.PACKAGE.tests.queue.iterators;
+
+#if TYPE_OBJECT || TYPE_BOOLEAN
+import java.util.Objects;
+#endif
+
+import org.junit.Ignore;
+
+import com.google.common.collect.testing.features.CollectionFeature;
+
+#if TYPE_OBJECT || TYPE_BOOLEAN
+import speiger.src.collections.chars.utils.CharArrays;
+#endif
+import speiger.src.collections.objects.lists.ObjectArrayList;
+import speiger.src.collections.objects.lists.ObjectList;
+import speiger.src.testers.PACKAGE.tests.base.ABSTRACT_QUEUE_TESTER;
+import speiger.src.testers.PACKAGE.utils.HELPERS;
+#if !TYPE_OBJECT
+import speiger.src.testers.objects.utils.ObjectHelpers;
+#endif
+
+@Ignore
+@SuppressWarnings("javadoc")
+public class FILE_KEY_TYPEQueueMapTester KEY_GENERIC_TYPE extends ABSTRACT_QUEUE_TESTER KEY_GENERIC_TYPE
+{
+	public void testQueueMap_ToString() {
+		assertEquals(HELPERS.copyToList(queue.TO_ARRAY()).toString(), queue.map(CLASS_OBJECT_TYPE::toString).pourAsList().toString());
+	}
+#if TYPE_BOOLEAN
+
+#ignore
+	@CollectionFeature.Require(CollectionFeature.KNOWN_ORDER)
+#endignore
+	public void testQueueMap_Collection() {
+		ObjectList<Character> result = new ObjectArrayList<>();
+		for(KEY_TYPE entry : getOrderedElements()) {
+			result.addAll(toRange(entry));
+		}
+		assertEquals(result, queue.flatMap(T -> ObjectArrayList.wrap(toRange(T))).pourAsList());
+	}
+	
+#ignore
+	@CollectionFeature.Require(CollectionFeature.KNOWN_ORDER)
+#endignore
+	public void testQueueMap_Array() {
+		ObjectList<Character> result = new ObjectArrayList<>();
+		for(KEY_TYPE entry : getOrderedElements()) {
+			result.addAll(toRange(entry));
+		}
+		assertEquals(result, queue.arrayflatMap(this::toRange).pourAsList());
+	}
+	
+#ignore
+	@CollectionFeature.Require(absent = CollectionFeature.KNOWN_ORDER)
+#endignore
+	public void testQueueMap_CollectionUnordered() {
+		ObjectList<Character> result = new ObjectArrayList<>();
+		for(KEY_TYPE entry : getOrderedElements()) {
+			result.addAll(toRange(entry));
+		}
+		ObjectHelpers.assertEqualIgnoringOrder(result, queue.flatMap(T -> ObjectArrayList.wrap(toRange(T))).pourAsList());
+	}
+	
+#ignore
+	@CollectionFeature.Require(absent = CollectionFeature.KNOWN_ORDER)
+#endignore
+	public void testQueueMap_ArrayUnordered() {
+		ObjectList<Character> result = new ObjectArrayList<>();
+		for(KEY_TYPE entry : getOrderedElements()) {
+			result.addAll(toRange(entry));
+		}
+		ObjectHelpers.assertEqualIgnoringOrder(result, queue.arrayflatMap(this::toRange).pourAsList());
+	}
+	
+	private Character[] toRange(boolean value) {
+		return CharArrays.wrap(Objects.toString(value).toCharArray());
+
+	}
+#else if !TYPE_OBJECT
+
+#ignore
+	@CollectionFeature.Require(CollectionFeature.KNOWN_ORDER)
+#endignore
+	public void testQueueMap_Collection() {
+		ObjectList<Integer> result = new ObjectArrayList<>();
+		for(KEY_TYPE entry : getOrderedElements()) {
+			result.addAll(toRange((int)entry));
+		}
+		assertEquals(result, queue.flatMap(T -> ObjectArrayList.wrap(toRange((int)T))).pourAsList());
+	}
+	
+#ignore
+	@CollectionFeature.Require(CollectionFeature.KNOWN_ORDER)
+#endignore
+	public void testQueueMap_Array() {
+		ObjectList<Integer> result = new ObjectArrayList<>();
+		for(KEY_TYPE entry : getOrderedElements()) {
+			result.addAll(toRange((int)entry));
+		}
+		assertEquals(result, queue.arrayflatMap(T -> toRange((int)T)).pourAsList());
+	}
+	
+#ignore
+	@CollectionFeature.Require(absent = CollectionFeature.KNOWN_ORDER)
+#endignore
+	public void testQueueMap_CollectionUnordered() {
+		ObjectList<Integer> result = new ObjectArrayList<>();
+		for(KEY_TYPE entry : getOrderedElements()) {
+			result.addAll(toRange((int)entry));
+		}
+		ObjectHelpers.assertEqualIgnoringOrder(result, queue.flatMap(T -> ObjectArrayList.wrap(toRange((int)T))).pourAsList());
+	}
+	
+#ignore
+	@CollectionFeature.Require(absent = CollectionFeature.KNOWN_ORDER)
+#endignore
+	public void testQueueMap_ArrayUnordered() {
+		ObjectList<Integer> result = new ObjectArrayList<>();
+		for(KEY_TYPE entry : getOrderedElements()) {
+			result.addAll(toRange((int)entry));
+		}
+		ObjectHelpers.assertEqualIgnoringOrder(result, queue.arrayflatMap(T -> toRange((int)T)).pourAsList());
+	}
+	
+	private Integer[] toRange(int range) {
+		Integer[] result = new Integer[range];
+		for(int i = 0;i<range;i++) {
+			result[i] = Integer.valueOf(i);
+		}
+		return result;
+	}
+#else
+
+#ignore
+	@CollectionFeature.Require(CollectionFeature.KNOWN_ORDER)
+#endignore
+	public void testQueueMap_Collection() {
+		ObjectList<Character> result = new ObjectArrayList<>();
+		for(KEY_TYPE entry : getOrderedElements()) {
+			result.addAll(toRange(entry));
+		}
+		assertEquals(result, queue.flatMap(T -> ObjectArrayList.wrap(toRange(T))).pourAsList());
+	}
+
+#ignore
+	@CollectionFeature.Require(CollectionFeature.KNOWN_ORDER)
+#endignore
+	public void testQueueMap_Array() {
+		ObjectList<Character> result = new ObjectArrayList<>();
+		for(KEY_TYPE entry : getOrderedElements()) {
+			result.addAll(toRange(entry));
+		}
+		assertEquals(result, queue.arrayflatMap(this::toRange).pourAsList());
+	}
+	
+#ignore
+	@CollectionFeature.Require(absent = CollectionFeature.KNOWN_ORDER)
+#endignore
+	public void testQueueMap_CollectionUnordered() {
+		ObjectList<Character> result = new ObjectArrayList<>();
+		for(KEY_TYPE entry : getOrderedElements()) {
+			result.addAll(toRange(entry));
+		}
+		ObjectHelpers.assertEqualIgnoringOrder(result, queue.flatMap(T -> ObjectArrayList.wrap(toRange(T))).pourAsList());
+	}
+	
+#ignore
+	@CollectionFeature.Require(absent = CollectionFeature.KNOWN_ORDER)
+#endignore
+	public void testQueueMap_ArrayUnordered() {
+		ObjectList<Character> result = new ObjectArrayList<>();
+		for(KEY_TYPE entry : getOrderedElements()) {
+			result.addAll(toRange(entry));
+		}
+		ObjectHelpers.assertEqualIgnoringOrder(result, queue.arrayflatMap(this::toRange).pourAsList());
+	}
+
+	private Character[] toRange(T obj) {
+		return CharArrays.wrap(Objects.toString(obj).toCharArray());
+	}
+#endif
+}

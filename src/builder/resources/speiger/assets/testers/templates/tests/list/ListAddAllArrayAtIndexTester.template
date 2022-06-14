@@ -1,0 +1,194 @@
+package speiger.src.testers.PACKAGE.tests.list;
+
+import org.junit.Ignore;
+
+#if !TYPE_BOOLEAN
+#ignore
+import static com.google.common.collect.testing.features.CollectionFeature.SUPPORTS_ADD;
+#endignore
+#endif
+#ignore
+import static com.google.common.collect.testing.features.CollectionSize.ONE;
+import static com.google.common.collect.testing.features.CollectionSize.ZERO;
+import static com.google.common.collect.testing.features.ListFeature.SUPPORTS_ADD_WITH_INDEX;
+#endignore
+
+#if !TYPE_BOOLEAN
+import com.google.common.collect.testing.features.CollectionFeature;
+#endif
+import com.google.common.collect.testing.features.CollectionSize;
+import com.google.common.collect.testing.features.ListFeature;
+
+import speiger.src.testers.PACKAGE.tests.base.ABSTRACT_LIST_TESTER;
+
+@Ignore
+@SuppressWarnings("javadoc")
+public class FILE_KEY_TYPEListAddAllArrayAtIndexTester KEY_GENERIC_TYPE extends ABSTRACT_LIST_TESTER KEY_GENERIC_TYPE
+{
+#ignore
+	@ListFeature.Require(SUPPORTS_ADD_WITH_INDEX)
+	@CollectionSize.Require(absent = ZERO)
+#endignore
+	public void testAddAllArrayAtIndex_supportedAllPresent() {
+		getList().addElements(0, createArray(e0()));
+		expectAddedIndex(0, e0());
+	}
+
+#ignore
+	@ListFeature.Require(absent = SUPPORTS_ADD_WITH_INDEX)
+	@CollectionSize.Require(absent = ZERO)
+#endignore
+	public void testAddAllArrayAtIndex_unsupportedAllPresent() {
+		try {
+			getList().addElements(0, createArray(e0()));
+			fail("addAll(n, allPresent) should throw");
+		} catch (UnsupportedOperationException expected) {
+		}
+		expectUnchanged();
+	}
+
+#ignore
+	@ListFeature.Require(SUPPORTS_ADD_WITH_INDEX)
+	@CollectionSize.Require(absent = ZERO)
+#endignore
+	public void testAddAllArrayAtIndex_supportedSomePresent() {
+		getList().addElements(0, createArray(e0(), e3()));
+		expectAddedIndex(0, e0(), e3());
+	}
+
+#ignore
+	@ListFeature.Require(absent = SUPPORTS_ADD_WITH_INDEX)
+	@CollectionSize.Require(absent = ZERO)
+#endignore
+	public void testAddAllArrayAtIndex_unsupportedSomePresent() {
+		try {
+			getList().addElements(0, createArray(e0(), e3()));
+			fail("addAll(n, allPresent) should throw");
+		} catch (UnsupportedOperationException expected) {
+		}
+		expectUnchanged();
+		expectMissing(e3());
+	}
+
+#ignore
+	@ListFeature.Require(SUPPORTS_ADD_WITH_INDEX)
+#endignore
+	public void testAddAllArrayAtIndex_supportedNothing() {
+		getList().addElements(0, emptyArray());
+		expectUnchanged();
+	}
+
+#ignore
+	@ListFeature.Require(absent = SUPPORTS_ADD_WITH_INDEX)
+#endignore
+	public void testAddAllArrayAtIndex_unsupportedNothing() {
+		try {
+			getList().addElements(0, emptyArray());
+		} catch (UnsupportedOperationException tolerated) {
+		}
+		expectUnchanged();
+	}
+
+#ignore
+	@ListFeature.Require(SUPPORTS_ADD_WITH_INDEX)
+#endignore
+	public void testAddAllArrayAtIndex_withDuplicates() {
+		getList().addElements(0, createArray(e0(), e1(), e0(), e1()));
+		expectAddedIndex(0, e0(), e1(), e0(), e1());
+	}
+
+#ignore
+	@ListFeature.Require(SUPPORTS_ADD_WITH_INDEX)
+	@CollectionSize.Require(absent = { ZERO, ONE })
+#endignore
+	public void testAddAllArrayAtIndex_middle() {
+		getList().addElements(getNumElements() / 2, createDisjointArray());
+		expectAdded(getNumElements() / 2, createDisjointCollection());
+	}
+
+#ignore
+	@ListFeature.Require(SUPPORTS_ADD_WITH_INDEX)
+	@CollectionSize.Require(absent = ZERO)
+#endignore
+	public void testAddAllArrayAtIndex_end() {
+		getList().addElements(getNumElements(), createDisjointArray());
+		expectAdded(getNumElements(), createDisjointCollection());
+	}
+
+#ignore
+	@ListFeature.Require(SUPPORTS_ADD_WITH_INDEX)
+#endignore
+	public void testAddAllArrayAtIndex_nullCollectionReference() {
+		try {
+#if TYPE_OBJECT
+			getList().addElements(0, (T[])null);
+#else
+			getList().addElements(0, null);
+#endif
+			fail("addElements(n, null) should throw");
+		} catch (NullPointerException expected) {
+		}
+		expectUnchanged();
+	}
+
+#ignore
+	@ListFeature.Require(SUPPORTS_ADD_WITH_INDEX)
+#endignore
+	public void testAddAllArrayAtIndex_negative() {
+		try {
+			getList().addElements(-1, createArray(e3()));
+			fail("addElements(-1, e) should throw");
+		} catch (IndexOutOfBoundsException expected) {
+		}
+		expectUnchanged();
+		expectMissing(e3());
+	}
+
+#ignore
+	@ListFeature.Require(SUPPORTS_ADD_WITH_INDEX)
+#endignore
+	public void testAddAllArrayAtIndex_tooLarge() {
+		try {
+			getList().addElements(getNumElements() + 1, createArray(e3()));
+			fail("addElements(size + 1, e) should throw");
+		} catch (IndexOutOfBoundsException expected) {
+		}
+		expectUnchanged();
+		expectMissing(e3());
+	}
+	
+#if !TYPE_BOOLEAN
+#ignore
+	@CollectionFeature.Require(SUPPORTS_ADD)
+#endignore
+	public void testAddAllArray_supportedToLargeOffset() {
+		try {
+			getList().addElements(0, createDisjointArray(), 5, 2);
+		} catch (IndexOutOfBoundsException e) {
+		}
+		expectUnchanged();
+		expectMissing(e3(), e4());
+	}
+	
+#ignore
+	@CollectionFeature.Require(SUPPORTS_ADD)
+#endignore
+	public void testAddAllArray_supportedToSmallOffset() {
+		try {
+			getList().addElements(0, createDisjointArray(), -1, 2);
+		} catch (IndexOutOfBoundsException e) {
+		}
+		expectUnchanged();
+		expectMissing(e3(), e4());
+	}
+	
+#ignore
+	@CollectionFeature.Require(SUPPORTS_ADD)
+#endignore
+	public void testAddAllArray_supportedAddSubArray() {
+		getList().addElements(0, createDisjointArray(), 0, 1);
+		expectAddedIndex(0, e3());
+		expectMissing(e4());
+	}
+#endif
+}

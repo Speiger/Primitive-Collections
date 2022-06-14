@@ -1,0 +1,285 @@
+package speiger.src.testers.PACKAGE.tests.set;
+
+import org.junit.Ignore;
+
+#ignore
+import static com.google.common.collect.testing.features.CollectionFeature.SUPPORTS_REMOVE;
+import static com.google.common.collect.testing.features.CollectionSize.ONE;
+import static com.google.common.collect.testing.features.CollectionSize.SEVERAL;
+import static com.google.common.collect.testing.features.CollectionSize.ZERO;
+#endignore
+
+import java.util.TreeSet;
+
+import com.google.common.collect.testing.features.CollectionFeature;
+import com.google.common.collect.testing.features.CollectionSize;
+
+import speiger.src.collections.PACKAGE.collections.ITERATOR;
+import speiger.src.collections.PACKAGE.lists.ARRAY_LIST;
+import speiger.src.collections.PACKAGE.lists.LIST;
+import speiger.src.collections.PACKAGE.sets.NAVIGABLE_SET;
+import speiger.src.collections.PACKAGE.utils.LISTS;
+import speiger.src.testers.PACKAGE.tests.base.ABSTRACT_SET_TESTER;
+import speiger.src.testers.PACKAGE.utils.HELPERS;
+
+@Ignore
+@SuppressWarnings("javadoc")
+public class FILE_KEY_TYPENavigableSetNavigationTester KEY_GENERIC_TYPE extends ABSTRACT_SET_TESTER KEY_GENERIC_TYPE
+{
+	private NAVIGABLE_SET KEY_GENERIC_TYPE navigableSet;
+	private LIST KEY_GENERIC_TYPE values;
+	private KEY_TYPE a;
+	private KEY_TYPE b;
+	private KEY_TYPE c;
+
+	@Override
+	public void setUp() throws Exception {
+		super.setUp();
+		navigableSet = (NAVIGABLE_SET KEY_GENERIC_TYPE) getSet();
+		values = HELPERS.copyToList(getSampleElements(getSubjectGenerator().getCollectionSize().getNumElements()));
+		values.sort(navigableSet.comparator());
+		if (values.size() >= 1) {
+			a = values.GET_KEY(0);
+			if (values.size() >= 3) {
+				b = values.GET_KEY(1);
+				c = values.GET_KEY(2);
+			}
+		}
+	}
+	
+	protected void resetWithHole() {
+		super.resetContainer(primitiveGenerator.create(createArray(a, c)));
+		navigableSet = (NAVIGABLE_SET KEY_GENERIC_TYPE) getSet();
+	}
+
+#ignore
+	@CollectionFeature.Require(SUPPORTS_REMOVE)
+	@CollectionSize.Require(ZERO)
+#endignore
+	public void testEmptySetPollFirst() {
+#if TYPE_OBJECT
+		assertEquals(null, navigableSet.POLL_FIRST_KEY());
+#else
+		assertEquals(navigableSet.getDefaultMinValue(), navigableSet.POLL_FIRST_KEY());
+#endif
+	}
+
+#ignore
+	@CollectionSize.Require(ZERO)
+#endignore
+	public void testEmptySetNearby() {
+#if TYPE_OBJECT
+		assertEquals(null, navigableSet.lower(e0()));
+		assertEquals(null, navigableSet.floor(e0()));
+		assertEquals(null, navigableSet.ceiling(e0()));
+		assertEquals(null, navigableSet.higher(e0()));
+#else
+		assertEquals(navigableSet.getDefaultMinValue(), navigableSet.lower(e0()));
+		assertEquals(navigableSet.getDefaultMinValue(), navigableSet.floor(e0()));
+		assertEquals(navigableSet.getDefaultMaxValue(), navigableSet.ceiling(e0()));
+		assertEquals(navigableSet.getDefaultMaxValue(), navigableSet.higher(e0()));
+#endif
+	}
+
+#ignore
+	@CollectionFeature.Require(SUPPORTS_REMOVE)
+	@CollectionSize.Require(ZERO)
+#endignore
+	public void testEmptySetPollLast() {
+#if TYPE_OBJECT
+		assertEquals(null, navigableSet.POLL_LAST_KEY());
+#else
+		assertEquals(navigableSet.getDefaultMaxValue(), navigableSet.POLL_LAST_KEY());
+#endif
+	}
+
+#ignore
+	@CollectionFeature.Require(SUPPORTS_REMOVE)
+	@CollectionSize.Require(ONE)
+#endignore
+	public void testSingletonSetPollFirst() {
+		assertEquals(a, navigableSet.POLL_FIRST_KEY());
+		assertTrue(navigableSet.isEmpty());
+	}
+
+#ignore
+	@CollectionSize.Require(ONE)
+#endignore
+	public void testSingletonSetNearby() {
+#if TYPE_OBJECT
+		assertEquals(null, navigableSet.lower(e0()));
+		assertEquals(a, navigableSet.floor(e0()));
+		assertEquals(a, navigableSet.ceiling(e0()));
+		assertEquals(null, navigableSet.higher(e0()));
+#else
+		assertEquals(navigableSet.getDefaultMinValue(), navigableSet.lower(e0()));
+		assertEquals(a, navigableSet.floor(e0()));
+		assertEquals(a, navigableSet.ceiling(e0()));
+		assertEquals(navigableSet.getDefaultMaxValue(), navigableSet.higher(e0()));
+#endif
+	}
+
+#ignore
+	@CollectionFeature.Require(SUPPORTS_REMOVE)
+	@CollectionSize.Require(ONE)
+#endignore
+	public void testSingletonSetPollLast() {
+		assertEquals(a, navigableSet.POLL_LAST_KEY());
+		assertTrue(navigableSet.isEmpty());
+	}
+
+#ignore
+	@CollectionFeature.Require(SUPPORTS_REMOVE)
+	@CollectionSize.Require(SEVERAL)
+#endignore
+	public void testPollFirst() {
+		assertEquals(a, navigableSet.POLL_FIRST_KEY());
+		assertEquals(values.subList(1, values.size()), HELPERS.copyToList(navigableSet));
+	}
+
+#ignore
+	@CollectionFeature.Require(absent = SUPPORTS_REMOVE)
+#endignore
+	public void testPollFirstUnsupported() {
+		try {
+			navigableSet.POLL_FIRST_KEY();
+			fail();
+		} catch (UnsupportedOperationException e) {
+		}
+	}
+
+#ignore
+	@CollectionSize.Require(SEVERAL)
+#endignore
+	public void testLowerHole() {
+		resetWithHole();
+#if TYPE_OBJECT
+		assertEquals(null, navigableSet.lower(a));
+#else
+		assertEquals(navigableSet.getDefaultMinValue(), navigableSet.lower(a));
+#endif
+		assertEquals(a, navigableSet.lower(b));
+		assertEquals(a, navigableSet.lower(c));
+	}
+
+#ignore
+	@CollectionSize.Require(SEVERAL)
+#endignore
+	public void testFloorHole() {
+		resetWithHole();
+		assertEquals(a, navigableSet.floor(a));
+		assertEquals(a, navigableSet.floor(b));
+		assertEquals(c, navigableSet.floor(c));
+	}
+
+#ignore
+	@CollectionSize.Require(SEVERAL)
+#endignore
+	public void testCeilingHole() {
+		resetWithHole();
+		assertEquals(a, navigableSet.ceiling(a));
+		assertEquals(c, navigableSet.ceiling(b));
+		assertEquals(c, navigableSet.ceiling(c));
+	}
+
+#ignore
+	@CollectionSize.Require(SEVERAL)
+#endignore
+	public void testHigherHole() {
+		resetWithHole();
+		assertEquals(c, navigableSet.higher(a));
+		assertEquals(c, navigableSet.higher(b));
+#if TYPE_OBJECT
+		assertEquals(null, navigableSet.higher(c));
+#else
+		assertEquals(navigableSet.getDefaultMaxValue(), navigableSet.higher(c));
+#endif
+	}
+
+	/*
+	 * TODO(cpovirk): make "too small" and "too large" elements available for
+	 * better navigation testing. At that point, we may be able to eliminate the
+	 * "hole" tests, which would mean that ContiguousSet's tests would no longer
+	 * need to suppress them.
+	 */
+#ignore
+	@CollectionSize.Require(SEVERAL)
+#endignore
+	public void testLower() {
+#if TYPE_OBJECT
+		assertEquals(null, navigableSet.lower(a));
+#else
+		assertEquals(navigableSet.getDefaultMinValue(), navigableSet.lower(a));
+#endif
+		assertEquals(a, navigableSet.lower(b));
+		assertEquals(b, navigableSet.lower(c));
+	}
+
+#ignore
+	@CollectionSize.Require(SEVERAL)
+#endignore
+	public void testFloor() {
+		assertEquals(a, navigableSet.floor(a));
+		assertEquals(b, navigableSet.floor(b));
+		assertEquals(c, navigableSet.floor(c));
+	}
+
+#ignore
+	@CollectionSize.Require(SEVERAL)
+#endignore
+	public void testCeiling() {
+		assertEquals(a, navigableSet.ceiling(a));
+		assertEquals(b, navigableSet.ceiling(b));
+		assertEquals(c, navigableSet.ceiling(c));
+	}
+
+#ignore
+	@CollectionSize.Require(SEVERAL)
+#endignore
+	public void testHigher() {
+		assertEquals(b, navigableSet.higher(a));
+		assertEquals(c, navigableSet.higher(b));
+#if TYPE_OBJECT
+		assertEquals(null, navigableSet.higher(c));
+#else
+		assertEquals(navigableSet.getDefaultMaxValue(), navigableSet.higher(c));
+#endif
+	}
+
+#ignore
+	@CollectionFeature.Require(SUPPORTS_REMOVE)
+	@CollectionSize.Require(SEVERAL)
+#endignore
+	public void testPollLast() {
+		assertEquals(c, navigableSet.POLL_LAST_KEY());
+		assertEquals(values.subList(0, values.size() - 1), HELPERS.copyToList(navigableSet));
+	}
+
+#ignore
+	@CollectionFeature.Require(absent = SUPPORTS_REMOVE)
+#endignore
+	public void testPollLastUnsupported() {
+		try {
+			navigableSet.POLL_LAST_KEY();
+			fail();
+		} catch (UnsupportedOperationException e) {
+		}
+	}
+
+#ignore
+	@CollectionSize.Require(SEVERAL)
+#endignore
+	public void testDescendingNavigation() {
+		LIST KEY_GENERIC_TYPE descending = new ARRAY_LISTBRACES();
+		for (ITERATOR KEY_GENERIC_TYPE i = navigableSet.descendingIterator(); i.hasNext();) {
+			descending.add(i.NEXT());
+		}
+		LISTS.reverse(descending);
+		assertEquals(values, descending);
+	}
+
+	public void testEmptySubSet() {
+		NAVIGABLE_SET KEY_GENERIC_TYPE empty = navigableSet.subSet(e0(), false, e0(), false);
+		assertEquals(new TreeSet<>(), empty);
+	}
+}

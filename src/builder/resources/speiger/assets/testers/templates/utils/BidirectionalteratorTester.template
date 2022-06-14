@@ -1,0 +1,34 @@
+package speiger.src.testers.PACKAGE.utils;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import com.google.common.collect.testing.Helpers;
+import com.google.common.collect.testing.IteratorFeature;
+
+import speiger.src.collections.PACKAGE.collections.ITERABLE;
+import speiger.src.collections.PACKAGE.collections.ITERATOR;
+import speiger.src.collections.PACKAGE.collections.BI_ITERATOR;
+import speiger.src.collections.PACKAGE.utils.LISTS;
+
+@SuppressWarnings("javadoc")
+public abstract class BIDIRECTIONAL_ITERATOR_TESTER KEY_GENERIC_TYPE extends ABSTRACT_ITERATOR_TESTER KEY_GENERIC_TYPE {
+
+	public BIDIRECTIONAL_ITERATOR_TESTER(int steps, Iterable<? extends IteratorFeature> features, ITERABLE KEY_GENERIC_TYPE expectedElements, KnownOrder knownOrder) {
+		super(steps, LISTS.singleton(INVALID_KEY_VALUE), features, expectedElements, knownOrder, 0);
+	}
+
+	@Override
+	protected Iterable<? extends Stimulus<ITERATOR NO_GENERIC_TYPE>> getStimulusValues() {
+	    List<Stimulus<ITERATOR NO_GENERIC_TYPE>> list = new ArrayList<>();
+	    Helpers.addAll(list, iteratorStimuli());
+	    for(Stimulus<?> iter : biIteratorStimuli())
+	    {
+	    	list.add((Stimulus<ITERATOR NO_GENERIC_TYPE>)iter);
+	    }
+	    return list;
+	}
+
+	@Override
+	protected abstract BI_ITERATOR KEY_GENERIC_TYPE newTargetIterator();
+}

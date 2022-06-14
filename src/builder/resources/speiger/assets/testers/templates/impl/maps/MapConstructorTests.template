@@ -1,0 +1,934 @@
+package speiger.src.testers.PACKAGE.impl.maps;
+
+#if TYPE_OBJECT || VALUE_OBJECT
+import java.util.Arrays;
+#endif
+#if TYPE_OBJECT
+import java.util.Objects;
+import java.util.Comparator;
+#endif
+
+#if TYPE_OBJECT
+import org.junit.Assert;
+#endif
+import org.junit.Ignore;
+import org.junit.Test;
+
+#if TYPE_OBJECT
+import com.google.common.collect.testing.AnEnum;
+#endif
+
+import speiger.src.collections.PACKAGE.maps.interfaces.MAP;
+import speiger.src.collections.PACKAGE.maps.impl.hash.HASH_MAP;
+import speiger.src.collections.PACKAGE.maps.impl.hash.LINKED_HASH_MAP;
+import speiger.src.collections.PACKAGE.maps.impl.customHash.CUSTOM_HASH_MAP;
+import speiger.src.collections.PACKAGE.maps.impl.customHash.LINKED_CUSTOM_HASH_MAP;
+import speiger.src.collections.PACKAGE.maps.impl.concurrent.CONCURRENT_HASH_MAP;
+#if TYPE_OBJECT
+import speiger.src.collections.PACKAGE.maps.impl.misc.ENUM_MAP;
+import speiger.src.collections.PACKAGE.maps.impl.misc.LINKED_ENUM_MAP;
+#endif
+
+import speiger.src.collections.PACKAGE.maps.impl.tree.RB_TREE_MAP;
+import speiger.src.collections.PACKAGE.maps.impl.tree.AVL_TREE_MAP;
+import speiger.src.collections.PACKAGE.utils.STRATEGY;
+import speiger.src.testers.PACKAGE.tests.maps.FILE_KEY_TYPE2FILE_VALUE_TYPEMapConstructorTester;
+#if TYPE_OBJECT || VALUE_OBJECT
+import speiger.src.collections.objects.utils.StringSortTest;
+#endif
+
+@Ignore
+@SuppressWarnings("javadoc")
+public class MAP_CONSTRUCTOR_TESTS
+{
+	public static class HashMap extends FILE_KEY_TYPE2FILE_VALUE_TYPEMapConstructorTester KEY_VALUE_STRING_GENERIC_TYPE
+	{
+		public HashMap() {
+			setSimpleConstructor(MAP.builder()::map);
+			setSizeConstructor(MAP.builder()::map);
+			setPArrayConstructor(MAP.builder()::map);
+#if !TYPE_OBJECT || !VALUE_OBJECT
+			setArrayConstructor(MAP.builder()::map);
+#endif
+			setPMapConstructor(MAP.builder()::map);
+			setMapConstructor(MAP.builder()::map);
+		}
+		
+		@Test
+		public void testWrongLoadFactorSize() {
+			setSizeConstructor(T -> new HASH_MAP KEY_VALUE_STRING_GENERIC_TYPE(T, 0F));
+			try {
+				testSizeConstructor_smallSize();
+				fail("A Constructor using a 0 LoadFactor should error");
+			} catch(IllegalStateException e) {
+			}
+			
+			setSizeConstructor(T -> new HASH_MAP KEY_VALUE_STRING_GENERIC_TYPE(T, 1F));
+			try {
+				testSizeConstructor_smallSize();
+				fail("A Constructor using a 1 LoadFactor should error");
+			} catch(IllegalStateException e) {
+			}
+		}
+		
+#if TYPE_OBJECT
+		@Override
+		protected String[] createKeyElements() {
+			return Arrays.copyOfRange(StringSortTest.NAMES, 0, 100);
+		}
+		
+#endif
+#if VALUE_OBJECT
+		@Override
+		protected String[] createValueElements() {
+			return Arrays.copyOfRange(StringSortTest.NAMES, 100, 200);
+		}
+		
+#endif
+	}
+	
+	public static class LinkedHashMap extends FILE_KEY_TYPE2FILE_VALUE_TYPEMapConstructorTester KEY_VALUE_STRING_GENERIC_TYPE
+	{
+		public LinkedHashMap() {
+			setSimpleConstructor(MAP.builder()::linkedMap);
+			setSizeConstructor(MAP.builder()::linkedMap);
+			setPArrayConstructor(MAP.builder()::linkedMap);
+#if !TYPE_OBJECT || !VALUE_OBJECT
+			setArrayConstructor(MAP.builder()::linkedMap);
+#endif
+			setPMapConstructor(MAP.builder()::linkedMap);
+			setMapConstructor(MAP.builder()::linkedMap);
+		}
+		
+		@Test
+		public void testWrongLoadFactorSize() {
+			setSizeConstructor(T -> new LINKED_HASH_MAP KEY_VALUE_STRING_GENERIC_TYPE(T, 0F));
+			try {
+				testSizeConstructor_smallSize();
+				fail("A Constructor using a 0 LoadFactor should error");
+			} catch(IllegalStateException e) {
+			}
+			
+			setSizeConstructor(T -> new LINKED_HASH_MAP KEY_VALUE_STRING_GENERIC_TYPE(T, 1F));
+			try {
+				testSizeConstructor_smallSize();
+				fail("A Constructor using a 1 LoadFactor should error");
+			} catch(IllegalStateException e) {
+			}
+		}
+		
+#if TYPE_OBJECT
+		@Override
+		protected String[] createKeyElements() {
+			return Arrays.copyOfRange(StringSortTest.NAMES, 0, 100);
+		}
+		
+#endif
+#if VALUE_OBJECT
+		@Override
+		protected String[] createValueElements() {
+			return Arrays.copyOfRange(StringSortTest.NAMES, 100, 200);
+		}
+		
+#endif
+	}
+	
+#if TYPE_OBJECT
+#if VALUE_OBJECT
+	public static class EnumMap extends FILE_KEY_TYPE2FILE_VALUE_TYPEMapConstructorTester<AnEnum, String>
+#else
+	public static class EnumMap extends FILE_KEY_TYPE2FILE_VALUE_TYPEMapConstructorTester<AnEnum>
+#endif
+	{
+		public EnumMap() {
+			setSimpleConstructor(() -> new ENUM_MAP<>(AnEnum.class));
+			setPArrayConstructor(ENUM_MAP::new);
+#if !TYPE_OBJECT || !VALUE_OBJECT
+			setArrayConstructor(ENUM_MAP::new);
+#endif
+			setPMapConstructor(ENUM_MAP::new);
+			setMapConstructor(ENUM_MAP::new);
+		}
+		
+		@Test
+		public void testEnumMapConstructor() {
+			if(pMapConstructor == null) return;
+			Assert.assertTrue(pMapConstructor.apply(new ENUM_MAP<>(new LINKED_HASH_MAPKV_BRACES(keys, values))) != null);
+		}
+		
+		@Test
+		public void testObjectEnumMapConstructor() {
+			if(pMapConstructor == null) return;
+			Assert.assertTrue(mapConstructor.apply(new ENUM_MAP<>(new LINKED_HASH_MAPKV_BRACES(keys, values))) != null);
+		}
+		
+		@Override
+		protected AnEnum[] createKeyElements() {
+			return AnEnum.values();
+		}
+		
+#if VALUE_OBJECT
+		@Override
+		protected String[] createValueElements() {
+			return Arrays.copyOf(StringSortTest.NAMES, AnEnum.values().length);
+		}
+#else
+		@Override
+		protected int getSize() {
+			return AnEnum.values().length;
+		}
+#endif
+	}
+
+#if VALUE_OBJECT
+	public static class LinkedEnumMap extends FILE_KEY_TYPE2FILE_VALUE_TYPEMapConstructorTester<AnEnum, String>
+#else
+	public static class LinkedEnumMap extends FILE_KEY_TYPE2FILE_VALUE_TYPEMapConstructorTester<AnEnum>
+#endif
+	{
+		public LinkedEnumMap() {
+			setSimpleConstructor(() -> new LINKED_ENUM_MAP<>(AnEnum.class));
+			setPArrayConstructor(LINKED_ENUM_MAP::new);
+#if !TYPE_OBJECT || !VALUE_OBJECT
+			setArrayConstructor(LINKED_ENUM_MAP::new);
+#endif
+			setPMapConstructor(LINKED_ENUM_MAP::new);
+			setMapConstructor(LINKED_ENUM_MAP::new);
+		}
+		
+		@Test
+		public void testEnumMapConstructor() {
+			if(pMapConstructor == null) return;
+			Assert.assertTrue(pMapConstructor.apply(new LINKED_ENUM_MAP<>(new LINKED_HASH_MAPKV_BRACES(keys, values))) != null);
+			Assert.assertTrue(pMapConstructor.apply(new ENUM_MAP<>(new LINKED_HASH_MAPKV_BRACES(keys, values))) != null);
+		}
+		
+		@Test
+		public void testObjectEnumMapConstructor() {
+			if(mapConstructor == null) return;
+			Assert.assertTrue(mapConstructor.apply(new LINKED_ENUM_MAP<>(new LINKED_HASH_MAPKV_BRACES(keys, values))) != null);
+			Assert.assertTrue(mapConstructor.apply(new ENUM_MAP<>(new LINKED_HASH_MAPKV_BRACES(keys, values))) != null);
+		}
+		
+		@Override
+		protected AnEnum[] createKeyElements() {
+			return AnEnum.values();
+		}
+		
+#if VALUE_OBJECT
+		@Override
+		protected String[] createValueElements() {
+			return Arrays.copyOf(StringSortTest.NAMES, AnEnum.values().length);
+		}
+#else
+		@Override
+		protected int getSize() {
+			return AnEnum.values().length;
+		}
+#endif
+	}
+	
+#endif
+	public static class CustomHashMap extends FILE_KEY_TYPE2FILE_VALUE_TYPEMapConstructorTester KEY_VALUE_STRING_GENERIC_TYPE
+	{
+		public CustomHashMap() {
+			setSimpleConstructor(() -> MAP.builder().customMap(HashStrategy.INSTANCE));
+			setSizeConstructor(T -> MAP.builder().customMap(T, HashStrategy.INSTANCE));
+			setPArrayConstructor((K, V) -> MAP.builder().customMap(K, V, HashStrategy.INSTANCE));
+#if !TYPE_OBJECT || !VALUE_OBJECT
+			setArrayConstructor((K, V) -> MAP.builder().customMap(K, V, HashStrategy.INSTANCE));
+#endif
+			setPMapConstructor(T -> MAP.builder().customMap(T, HashStrategy.INSTANCE));
+			setMapConstructor(T -> MAP.builder().customMap(T, HashStrategy.INSTANCE));
+		}
+		
+		@Test
+		public void testWrongLoadFactorSize() {
+			setSizeConstructor(T -> new CUSTOM_HASH_MAP KEY_VALUE_STRING_GENERIC_TYPE(T, 0F, HashStrategy.INSTANCE));
+			try {
+				testSizeConstructor_smallSize();
+				fail("A Constructor using a 0 LoadFactor should error");
+			} catch(IllegalStateException e) {
+			}
+			
+			setSizeConstructor(T -> new CUSTOM_HASH_MAP KEY_VALUE_STRING_GENERIC_TYPE(T, 1F, HashStrategy.INSTANCE));
+			try {
+				testSizeConstructor_smallSize();
+				fail("A Constructor using a 1 LoadFactor should error");
+			} catch(IllegalStateException e) {
+			}
+		}
+		
+#if TYPE_OBJECT
+		@Override
+		protected String[] createKeyElements() {
+			return Arrays.copyOfRange(StringSortTest.NAMES, 0, 100);
+		}
+		
+#endif
+#if VALUE_OBJECT
+		@Override
+		protected String[] createValueElements() {
+			return Arrays.copyOfRange(StringSortTest.NAMES, 100, 200);
+		}
+		
+#endif
+	}
+	
+	public static class LinkedCustomHashMap extends FILE_KEY_TYPE2FILE_VALUE_TYPEMapConstructorTester KEY_VALUE_STRING_GENERIC_TYPE
+	{
+		public LinkedCustomHashMap() {
+			setSimpleConstructor(() -> MAP.builder().customLinkedMap(HashStrategy.INSTANCE));
+			setSizeConstructor(T -> MAP.builder().customLinkedMap(T, HashStrategy.INSTANCE));
+			setPArrayConstructor((K, V) -> MAP.builder().customLinkedMap(K, V, HashStrategy.INSTANCE));
+#if !TYPE_OBJECT || !VALUE_OBJECT
+			setArrayConstructor((K, V) -> MAP.builder().customLinkedMap(K, V, HashStrategy.INSTANCE));
+#endif
+			setPMapConstructor(T -> MAP.builder().customLinkedMap(T, HashStrategy.INSTANCE));
+			setMapConstructor(T -> MAP.builder().customLinkedMap(T, HashStrategy.INSTANCE));
+		}
+		
+		@Test
+		public void testWrongLoadFactorSize() {
+			setSizeConstructor(T -> new LINKED_CUSTOM_HASH_MAP KEY_VALUE_STRING_GENERIC_TYPE(T, 0F, HashStrategy.INSTANCE));
+			try {
+				testSizeConstructor_smallSize();
+				fail("A Constructor using a 0 LoadFactor should error");
+			} catch(IllegalStateException e) {
+			}
+			
+			setSizeConstructor(T -> new LINKED_CUSTOM_HASH_MAP KEY_VALUE_STRING_GENERIC_TYPE(T, 1F, HashStrategy.INSTANCE));
+			try {
+				testSizeConstructor_smallSize();
+				fail("A Constructor using a 1 LoadFactor should error");
+			} catch(IllegalStateException e) {
+			}
+		}
+		
+#if TYPE_OBJECT
+		@Override
+		protected String[] createKeyElements() {
+			return Arrays.copyOfRange(StringSortTest.NAMES, 0, 100);
+		}
+		
+#endif
+#if VALUE_OBJECT
+		@Override
+		protected String[] createValueElements() {
+			return Arrays.copyOfRange(StringSortTest.NAMES, 100, 200);
+		}
+		
+#endif
+	}
+	
+	public static class ImmutableHashMap extends FILE_KEY_TYPE2FILE_VALUE_TYPEMapConstructorTester KEY_VALUE_STRING_GENERIC_TYPE
+	{
+		public ImmutableHashMap() {
+			setPArrayConstructor(MAP.builder()::immutable);
+#if !TYPE_OBJECT || !VALUE_OBJECT
+			setArrayConstructor(MAP.builder()::immutable);
+#endif
+			setPMapConstructor(MAP.builder()::immutable);
+			setMapConstructor(MAP.builder()::immutable);
+		}
+		
+#if TYPE_OBJECT
+		@Override
+		protected String[] createKeyElements() {
+			return Arrays.copyOfRange(StringSortTest.NAMES, 0, 100);
+		}
+		
+#endif
+#if VALUE_OBJECT
+		@Override
+		protected String[] createValueElements() {
+			return Arrays.copyOfRange(StringSortTest.NAMES, 100, 200);
+		}
+		
+#endif
+	}
+	
+	public static class ConcurrentHashMap extends FILE_KEY_TYPE2FILE_VALUE_TYPEMapConstructorTester KEY_VALUE_STRING_GENERIC_TYPE
+	{
+		public ConcurrentHashMap() {
+			setSimpleConstructor(CONCURRENT_HASH_MAP::new);
+			setSizeConstructor(CONCURRENT_HASH_MAP::new);
+			setPArrayConstructor(CONCURRENT_HASH_MAP::new);
+#if !TYPE_OBJECT || !VALUE_OBJECT
+			setArrayConstructor(CONCURRENT_HASH_MAP::new);
+#endif
+			setPMapConstructor(CONCURRENT_HASH_MAP::new);
+			setMapConstructor(CONCURRENT_HASH_MAP::new);
+		}
+		
+		@Test
+		public void testWrongLoadFactorSize() {
+			setSizeConstructor(T -> new CONCURRENT_HASH_MAP KEY_VALUE_STRING_GENERIC_TYPE(T, 0F));
+			try {
+				testSizeConstructor_smallSize();
+				fail("A Constructor using a 0 LoadFactor should error");
+			} catch(IllegalStateException e) {
+			}
+			
+			setSizeConstructor(T -> new CONCURRENT_HASH_MAP KEY_VALUE_STRING_GENERIC_TYPE(T, 1F));
+			try {
+				testSizeConstructor_smallSize();
+				fail("A Constructor using a 1 LoadFactor should error");
+			} catch(IllegalStateException e) {
+			}
+		}
+		
+		@Test
+		public void testWrongConcurrency() {
+			setSizeConstructor(T -> new CONCURRENT_HASH_MAP KEY_VALUE_STRING_GENERIC_TYPE(T, 0));
+			try {
+				testSizeConstructor_smallSize();
+				fail("A Constructor using a 0 Concurrency should error");
+			} catch(IllegalStateException e) {
+			}
+			
+			setSizeConstructor(T -> new CONCURRENT_HASH_MAP KEY_VALUE_STRING_GENERIC_TYPE(T, Integer.MAX_VALUE));
+			try {
+				testSizeConstructor_smallSize();
+				fail("A Constructor using a 65536 or larger Concurrency should error");
+			} catch(IllegalStateException e) {
+			}
+		}
+		
+#if TYPE_OBJECT
+		@Override
+		protected String[] createKeyElements() {
+			return Arrays.copyOfRange(StringSortTest.NAMES, 0, 100);
+		}
+		
+#endif
+#if VALUE_OBJECT
+		@Override
+		protected String[] createValueElements() {
+			return Arrays.copyOfRange(StringSortTest.NAMES, 100, 200);
+		}
+		
+#endif
+	}
+	
+	public static class ArrayMap extends FILE_KEY_TYPE2FILE_VALUE_TYPEMapConstructorTester KEY_VALUE_STRING_GENERIC_TYPE
+	{
+		public ArrayMap() {
+			setSimpleConstructor(MAP.builder()::arrayMap);
+			setSizeConstructor(MAP.builder()::arrayMap);
+			setPArrayConstructor(MAP.builder()::arrayMap);
+#if !TYPE_OBJECT || !VALUE_OBJECT
+			setArrayConstructor(MAP.builder()::arrayMap);
+#endif
+			setPMapConstructor(MAP.builder()::arrayMap);
+			setMapConstructor(MAP.builder()::arrayMap);
+		}
+		
+#if TYPE_OBJECT
+		@Override
+		protected String[] createKeyElements() {
+			return Arrays.copyOfRange(StringSortTest.NAMES, 0, 100);
+		}
+		
+#endif
+#if VALUE_OBJECT
+		@Override
+		protected String[] createValueElements() {
+			return Arrays.copyOfRange(StringSortTest.NAMES, 100, 200);
+		}
+		
+#endif
+	}
+	
+	public static class RBTreeMap extends FILE_KEY_TYPE2FILE_VALUE_TYPEMapConstructorTester KEY_VALUE_STRING_GENERIC_TYPE
+	{
+		public RBTreeMap() {
+			setSimpleConstructor(MAP.builder()::rbTreeMap);
+			setPArrayConstructor(RB_TREE_MAP::new);
+#if !TYPE_OBJECT || !VALUE_OBJECT
+			setArrayConstructor(RB_TREE_MAP::new);
+#endif
+			setPMapConstructor(RB_TREE_MAP::new);
+			setMapConstructor(RB_TREE_MAP::new);
+		}
+		
+#if TYPE_OBJECT
+		@Override
+		protected String[] createKeyElements() {
+			return Arrays.copyOfRange(StringSortTest.NAMES, 0, 100);
+		}
+		
+#endif
+#if VALUE_OBJECT
+		@Override
+		protected String[] createValueElements() {
+			return Arrays.copyOfRange(StringSortTest.NAMES, 100, 200);
+		}
+		
+#endif
+	}
+	
+	public static class RBTreeMapComparator extends FILE_KEY_TYPE2FILE_VALUE_TYPEMapConstructorTester KEY_VALUE_STRING_GENERIC_TYPE
+	{
+		public RBTreeMapComparator() {
+#if TYPE_OBJECT
+			setSimpleConstructor(() -> MAP.builder(). KEY_VALUE_STRING_GENERIC_TYPErbTreeMap(Comparator.naturalOrder()));
+			setPArrayConstructor((K, V) -> MAP.builder().rbTreeMap(K, V, Comparator.naturalOrder()));
+#if !TYPE_OBJECT || !VALUE_OBJECT
+			setArrayConstructor((K, V) -> MAP.builder().rbTreeMap(K, V, Comparator.naturalOrder()));
+#endif
+			setPMapConstructor(T -> MAP.builder().rbTreeMap(T, Comparator.naturalOrder()));
+			setMapConstructor(T -> MAP.builder().rbTreeMap(T, Comparator.naturalOrder()));
+#else
+			setSimpleConstructor(() -> MAP.builder().rbTreeMap(CLASS_TYPE::compare));
+			setPArrayConstructor((K, V) -> MAP.builder().rbTreeMap(K, V, CLASS_TYPE::compare));
+#if !TYPE_OBJECT || !VALUE_OBJECT
+			setArrayConstructor((K, V) -> MAP.builder().rbTreeMap(K, V, CLASS_TYPE::compare));
+#endif
+			setPMapConstructor(T -> MAP.builder().rbTreeMap(T, CLASS_TYPE::compare));
+			setMapConstructor(T -> MAP.builder().rbTreeMap(T, CLASS_TYPE::compare));
+#endif
+		}
+		
+#if TYPE_OBJECT
+		@Override
+		protected String[] createKeyElements() {
+			return Arrays.copyOfRange(StringSortTest.NAMES, 0, 100);
+		}
+		
+#endif
+#if VALUE_OBJECT
+		@Override
+		protected String[] createValueElements() {
+			return Arrays.copyOfRange(StringSortTest.NAMES, 100, 200);
+		}
+		
+#endif
+	}
+	
+	public static class AVLTreeMap extends FILE_KEY_TYPE2FILE_VALUE_TYPEMapConstructorTester KEY_VALUE_STRING_GENERIC_TYPE
+	{
+		public AVLTreeMap() {
+			setSimpleConstructor(MAP.builder()::avlTreeMap);
+			setPArrayConstructor(AVL_TREE_MAP::new);
+#if !TYPE_OBJECT || !VALUE_OBJECT
+			setArrayConstructor(AVL_TREE_MAP::new);
+#endif
+			setPMapConstructor(AVL_TREE_MAP::new);
+			setMapConstructor(AVL_TREE_MAP::new);
+		}
+		
+#if TYPE_OBJECT
+		@Override
+		protected String[] createKeyElements() {
+			return Arrays.copyOfRange(StringSortTest.NAMES, 0, 100);
+		}
+		
+#endif
+#if VALUE_OBJECT
+		@Override
+		protected String[] createValueElements() {
+			return Arrays.copyOfRange(StringSortTest.NAMES, 100, 200);
+		}
+		
+#endif
+	}
+	
+	public static class AVLTreeMapComparator extends FILE_KEY_TYPE2FILE_VALUE_TYPEMapConstructorTester KEY_VALUE_STRING_GENERIC_TYPE
+	{
+		public AVLTreeMapComparator() {
+#if TYPE_OBJECT
+			setSimpleConstructor(() -> MAP.builder(). KEY_VALUE_STRING_GENERIC_TYPEavlTreeMap(Comparator.naturalOrder()));
+			setPArrayConstructor((K, V) -> MAP.builder().avlTreeMap(K, V, Comparator.naturalOrder()));
+#if !TYPE_OBJECT || !VALUE_OBJECT
+			setArrayConstructor((K, V) -> MAP.builder().avlTreeMap(K, V, Comparator.naturalOrder()));
+#endif
+			setPMapConstructor(T -> MAP.builder().avlTreeMap(T, Comparator.naturalOrder()));
+			setMapConstructor(T -> MAP.builder().avlTreeMap(T, Comparator.naturalOrder()));
+#else
+			setSimpleConstructor(() -> MAP.builder().avlTreeMap(CLASS_TYPE::compare));
+			setPArrayConstructor((K, V) -> MAP.builder().avlTreeMap(K, V, CLASS_TYPE::compare));
+#if !TYPE_OBJECT || !VALUE_OBJECT
+			setArrayConstructor((K, V) -> MAP.builder().avlTreeMap(K, V, CLASS_TYPE::compare));
+#endif
+			setPMapConstructor(T -> MAP.builder().avlTreeMap(T, CLASS_TYPE::compare));
+			setMapConstructor(T -> MAP.builder().avlTreeMap(T, CLASS_TYPE::compare));
+#endif
+		}
+		
+#if TYPE_OBJECT
+		@Override
+		protected String[] createKeyElements() {
+			return Arrays.copyOfRange(StringSortTest.NAMES, 0, 100);
+		}
+		
+#endif
+#if VALUE_OBJECT
+		@Override
+		protected String[] createValueElements() {
+			return Arrays.copyOfRange(StringSortTest.NAMES, 100, 200);
+		}
+		
+#endif
+	}
+	
+	private static class HashStrategy implements STRATEGY KEY_STRING_GENERIC_TYPE {
+		static final HashStrategy INSTANCE = new HashStrategy();
+		@Override
+		public int hashCode(KEY_STRING_TYPE o) { return KEY_TO_HASH(o); }
+		@Override
+		public boolean equals(KEY_STRING_TYPE key, KEY_STRING_TYPE value) { return KEY_EQUALS(key, value); }
+	}
+	
+	public static class HashMapBuilder extends FILE_KEY_TYPE2FILE_VALUE_TYPEMapConstructorTester KEY_VALUE_STRING_GENERIC_TYPE
+	{
+		public HashMapBuilder() {
+			setSimpleConstructor(() -> MAP.builder(). KEY_VALUE_STRING_GENERIC_TYPEstart().map());
+			setSizeConstructor(T -> MAP.builder(). KEY_VALUE_STRING_GENERIC_TYPEstart(T).map());
+			setPArrayConstructor((K, V) -> putAll(MAP.builder(). KEY_VALUE_STRING_GENERIC_TYPEstart(), K, V).map());
+#if !TYPE_OBJECT || !VALUE_OBJECT
+			setArrayConstructor((K, V) -> putAll(MAP.builder(). KEY_VALUE_STRING_GENERIC_TYPEstart(), K, V).map());
+#endif
+			setPMapConstructor(T -> MAP.builder(). KEY_VALUE_STRING_GENERIC_TYPEstart().putAll(T).map());
+			setMapConstructor(T -> MAP.builder(). KEY_VALUE_STRING_GENERIC_TYPEstart().putAll(T).map());
+		}
+		
+#if TYPE_OBJECT
+		@Override
+		protected String[] createKeyElements() {
+			return Arrays.copyOfRange(StringSortTest.NAMES, 0, 100);
+		}
+		
+#endif
+#if VALUE_OBJECT
+		@Override
+		protected String[] createValueElements() {
+			return Arrays.copyOfRange(StringSortTest.NAMES, 100, 200);
+		}
+		
+#endif
+	}
+	
+	public static class LinkedHashMapBuilder extends FILE_KEY_TYPE2FILE_VALUE_TYPEMapConstructorTester KEY_VALUE_STRING_GENERIC_TYPE
+	{
+		public LinkedHashMapBuilder() {
+			setSimpleConstructor(() -> MAP.builder(). KEY_VALUE_STRING_GENERIC_TYPEstart().linkedMap());
+			setSizeConstructor(T -> MAP.builder(). KEY_VALUE_STRING_GENERIC_TYPEstart(T).linkedMap());
+			setPArrayConstructor((K, V) -> putAll(MAP.builder(). KEY_VALUE_STRING_GENERIC_TYPEstart(), K, V).linkedMap());
+#if !TYPE_OBJECT || !VALUE_OBJECT
+			setArrayConstructor((K, V) -> putAll(MAP.builder(). KEY_VALUE_STRING_GENERIC_TYPEstart(), K, V).linkedMap());
+#endif
+			setPMapConstructor(T -> MAP.builder(). KEY_VALUE_STRING_GENERIC_TYPEstart().putAll(T).linkedMap());
+			setMapConstructor(T -> MAP.builder(). KEY_VALUE_STRING_GENERIC_TYPEstart().putAll(T).linkedMap());
+		}
+		
+#if TYPE_OBJECT
+		@Override
+		protected String[] createKeyElements() {
+			return Arrays.copyOfRange(StringSortTest.NAMES, 0, 100);
+		}
+		
+#endif
+#if VALUE_OBJECT
+		@Override
+		protected String[] createValueElements() {
+			return Arrays.copyOfRange(StringSortTest.NAMES, 100, 200);
+		}
+		
+#endif
+	}
+	
+	public static class CustomHashMapBuilder extends FILE_KEY_TYPE2FILE_VALUE_TYPEMapConstructorTester KEY_VALUE_STRING_GENERIC_TYPE
+	{
+		public CustomHashMapBuilder() {
+			setSimpleConstructor(() -> MAP.builder(). KEY_VALUE_STRING_GENERIC_TYPEstart().customMap(HashStrategy.INSTANCE));
+			setSizeConstructor(T -> MAP.builder(). KEY_VALUE_STRING_GENERIC_TYPEstart(T).customMap(HashStrategy.INSTANCE));
+			setPArrayConstructor((K, V) -> putAll(MAP.builder(). KEY_VALUE_STRING_GENERIC_TYPEstart(), K, V).customMap(HashStrategy.INSTANCE));
+#if !TYPE_OBJECT || !VALUE_OBJECT
+			setArrayConstructor((K, V) -> putAll(MAP.builder(). KEY_VALUE_STRING_GENERIC_TYPEstart(), K, V).customMap(HashStrategy.INSTANCE));
+#endif
+			setPMapConstructor(T -> MAP.builder(). KEY_VALUE_STRING_GENERIC_TYPEstart().putAll(T).customMap(HashStrategy.INSTANCE));
+			setMapConstructor(T -> MAP.builder(). KEY_VALUE_STRING_GENERIC_TYPEstart().putAll(T).customMap(HashStrategy.INSTANCE));
+		}
+		
+#if TYPE_OBJECT
+		@Override
+		protected String[] createKeyElements() {
+			return Arrays.copyOfRange(StringSortTest.NAMES, 0, 100);
+		}
+		
+#endif
+#if VALUE_OBJECT
+		@Override
+		protected String[] createValueElements() {
+			return Arrays.copyOfRange(StringSortTest.NAMES, 100, 200);
+		}
+		
+#endif
+	}
+	
+	public static class LinkedCustomHashMapBuilder extends FILE_KEY_TYPE2FILE_VALUE_TYPEMapConstructorTester KEY_VALUE_STRING_GENERIC_TYPE
+	{
+		public LinkedCustomHashMapBuilder() {
+			setSimpleConstructor(() -> MAP.builder(). KEY_VALUE_STRING_GENERIC_TYPEstart().customLinkedMap(HashStrategy.INSTANCE));
+			setSizeConstructor(T -> MAP.builder(). KEY_VALUE_STRING_GENERIC_TYPEstart(T).customLinkedMap(HashStrategy.INSTANCE));
+			setPArrayConstructor((K, V) -> putAll(MAP.builder(). KEY_VALUE_STRING_GENERIC_TYPEstart(), K, V).customLinkedMap(HashStrategy.INSTANCE));
+#if !TYPE_OBJECT || !VALUE_OBJECT
+			setArrayConstructor((K, V) -> putAll(MAP.builder(). KEY_VALUE_STRING_GENERIC_TYPEstart(), K, V).customLinkedMap(HashStrategy.INSTANCE));
+#endif
+			setPMapConstructor(T -> MAP.builder(). KEY_VALUE_STRING_GENERIC_TYPEstart().putAll(T).customLinkedMap(HashStrategy.INSTANCE));
+			setMapConstructor(T -> MAP.builder(). KEY_VALUE_STRING_GENERIC_TYPEstart().putAll(T).customLinkedMap(HashStrategy.INSTANCE));
+
+		}
+		
+#if TYPE_OBJECT
+		@Override
+		protected String[] createKeyElements() {
+			return Arrays.copyOfRange(StringSortTest.NAMES, 0, 100);
+		}
+		
+#endif
+#if VALUE_OBJECT
+		@Override
+		protected String[] createValueElements() {
+			return Arrays.copyOfRange(StringSortTest.NAMES, 100, 200);
+		}
+		
+#endif
+	}
+	
+	public static class ImmutableHashMapBuilder extends FILE_KEY_TYPE2FILE_VALUE_TYPEMapConstructorTester KEY_VALUE_STRING_GENERIC_TYPE
+	{
+		public ImmutableHashMapBuilder() {			
+			setPArrayConstructor((K, V) -> putAll(MAP.builder(). KEY_VALUE_STRING_GENERIC_TYPEstart(), K, V).immutable());
+#if !TYPE_OBJECT || !VALUE_OBJECT
+			setArrayConstructor((K, V) -> putAll(MAP.builder(). KEY_VALUE_STRING_GENERIC_TYPEstart(), K, V).immutable());
+#endif
+			setPMapConstructor(T -> MAP.builder(). KEY_VALUE_STRING_GENERIC_TYPEstart().putAll(T).immutable());
+			setMapConstructor(T -> MAP.builder(). KEY_VALUE_STRING_GENERIC_TYPEstart().putAll(T).immutable());
+		}
+		
+#if TYPE_OBJECT
+		@Override
+		protected String[] createKeyElements() {
+			return Arrays.copyOfRange(StringSortTest.NAMES, 0, 100);
+		}
+		
+#endif
+#if VALUE_OBJECT
+		@Override
+		protected String[] createValueElements() {
+			return Arrays.copyOfRange(StringSortTest.NAMES, 100, 200);
+		}
+		
+#endif
+	}
+	
+	public static class ConcurrentHashMapBuilder extends FILE_KEY_TYPE2FILE_VALUE_TYPEMapConstructorTester KEY_VALUE_STRING_GENERIC_TYPE
+	{
+		public ConcurrentHashMapBuilder() {
+			setSimpleConstructor(() -> MAP.builder(). KEY_VALUE_STRING_GENERIC_TYPEstart().concurrentMap());
+			setSizeConstructor(T -> MAP.builder(). KEY_VALUE_STRING_GENERIC_TYPEstart(T).concurrentMap());
+			setPArrayConstructor((K, V) -> putAll(MAP.builder(). KEY_VALUE_STRING_GENERIC_TYPEstart(), K, V).concurrentMap());
+#if !TYPE_OBJECT || !VALUE_OBJECT
+			setArrayConstructor((K, V) -> putAll(MAP.builder(). KEY_VALUE_STRING_GENERIC_TYPEstart(), K, V).concurrentMap());
+#endif
+			setPMapConstructor(T -> MAP.builder(). KEY_VALUE_STRING_GENERIC_TYPEstart().putAll(T).concurrentMap());
+			setMapConstructor(T -> MAP.builder(). KEY_VALUE_STRING_GENERIC_TYPEstart().putAll(T).concurrentMap());
+		}
+		
+#if TYPE_OBJECT
+		@Override
+		protected String[] createKeyElements() {
+			return Arrays.copyOfRange(StringSortTest.NAMES, 0, 100);
+		}
+		
+#endif
+#if VALUE_OBJECT
+		@Override
+		protected String[] createValueElements() {
+			return Arrays.copyOfRange(StringSortTest.NAMES, 100, 200);
+		}
+		
+#endif
+	}
+	
+	public static class ArrayMapBuilder extends FILE_KEY_TYPE2FILE_VALUE_TYPEMapConstructorTester KEY_VALUE_STRING_GENERIC_TYPE
+	{
+		public ArrayMapBuilder() {
+			setSimpleConstructor(() -> MAP.builder(). KEY_VALUE_STRING_GENERIC_TYPEstart().arrayMap());
+			setSizeConstructor(T -> MAP.builder(). KEY_VALUE_STRING_GENERIC_TYPEstart(T).arrayMap());
+			setPArrayConstructor((K, V) -> putAll(MAP.builder(). KEY_VALUE_STRING_GENERIC_TYPEstart(), K, V).arrayMap());
+#if !TYPE_OBJECT || !VALUE_OBJECT
+			setArrayConstructor((K, V) -> putAll(MAP.builder(). KEY_VALUE_STRING_GENERIC_TYPEstart(), K, V).arrayMap());
+#endif
+			setPMapConstructor(T -> MAP.builder(). KEY_VALUE_STRING_GENERIC_TYPEstart().putAll(T).arrayMap());
+			setMapConstructor(T -> MAP.builder(). KEY_VALUE_STRING_GENERIC_TYPEstart().putAll(T).arrayMap());
+		}
+		
+#if TYPE_OBJECT
+		@Override
+		protected String[] createKeyElements() {
+			return Arrays.copyOfRange(StringSortTest.NAMES, 0, 100);
+		}
+		
+#endif
+#if VALUE_OBJECT
+		@Override
+		protected String[] createValueElements() {
+			return Arrays.copyOfRange(StringSortTest.NAMES, 100, 200);
+		}
+		
+#endif
+	}
+	
+	public static class RBTreeMapBuilder extends FILE_KEY_TYPE2FILE_VALUE_TYPEMapConstructorTester KEY_VALUE_STRING_GENERIC_TYPE
+	{
+		public RBTreeMapBuilder() {
+			setSimpleConstructor(() -> MAP.builder(). KEY_VALUE_STRING_GENERIC_TYPEstart().rbTreeMap());
+			setPArrayConstructor((K, V) -> putAll(MAP.builder(). KEY_VALUE_STRING_GENERIC_TYPEstart(), K, V).rbTreeMap());
+#if !TYPE_OBJECT || !VALUE_OBJECT
+			setArrayConstructor((K, V) -> putAll(MAP.builder(). KEY_VALUE_STRING_GENERIC_TYPEstart(), K, V).rbTreeMap());
+#endif
+			setPMapConstructor(T -> MAP.builder(). KEY_VALUE_STRING_GENERIC_TYPEstart().putAll(T).rbTreeMap());
+			setMapConstructor(T -> MAP.builder(). KEY_VALUE_STRING_GENERIC_TYPEstart().putAll(T).rbTreeMap());
+		}
+		
+#if TYPE_OBJECT
+		@Override
+		protected String[] createKeyElements() {
+			return Arrays.copyOfRange(StringSortTest.NAMES, 0, 100);
+		}
+		
+#endif
+#if VALUE_OBJECT
+		@Override
+		protected String[] createValueElements() {
+			return Arrays.copyOfRange(StringSortTest.NAMES, 100, 200);
+		}
+		
+#endif
+	}
+	
+	public static class RBTreeMapComparatorBuilder extends FILE_KEY_TYPE2FILE_VALUE_TYPEMapConstructorTester KEY_VALUE_STRING_GENERIC_TYPE
+	{
+		public RBTreeMapComparatorBuilder() {
+#if TYPE_OBJECT
+			setSimpleConstructor(() -> MAP.builder(). KEY_VALUE_STRING_GENERIC_TYPEstart().rbTreeMap(Comparator.naturalOrder()));
+			setPArrayConstructor((K, V) -> putAll(MAP.builder(). KEY_VALUE_STRING_GENERIC_TYPEstart(), K, V).rbTreeMap(Comparator.naturalOrder()));
+#if !TYPE_OBJECT || !VALUE_OBJECT
+			setArrayConstructor((K, V) -> putAll(MAP.builder(). KEY_VALUE_STRING_GENERIC_TYPEstart(), K, V).rbTreeMap(Comparator.naturalOrder()));
+#endif
+			setPMapConstructor(T -> MAP.builder(). KEY_VALUE_STRING_GENERIC_TYPEstart().putAll(T).rbTreeMap(Comparator.naturalOrder()));
+			setMapConstructor(T -> MAP.builder(). KEY_VALUE_STRING_GENERIC_TYPEstart().putAll(T).rbTreeMap(Comparator.naturalOrder()));
+#else
+			setSimpleConstructor(() -> MAP.builder(). KEY_VALUE_STRING_GENERIC_TYPEstart().rbTreeMap(CLASS_TYPE::compare));
+			setPArrayConstructor((K, V) -> putAll(MAP.builder(). KEY_VALUE_STRING_GENERIC_TYPEstart(), K, V).rbTreeMap(CLASS_TYPE::compare));
+#if !TYPE_OBJECT || !VALUE_OBJECT
+			setArrayConstructor((K, V) -> putAll(MAP.builder(). KEY_VALUE_STRING_GENERIC_TYPEstart(), K, V).rbTreeMap(CLASS_TYPE::compare));
+#endif
+			setPMapConstructor(T -> MAP.builder(). KEY_VALUE_STRING_GENERIC_TYPEstart().putAll(T).rbTreeMap(CLASS_TYPE::compare));
+			setMapConstructor(T -> MAP.builder(). KEY_VALUE_STRING_GENERIC_TYPEstart().putAll(T).rbTreeMap(CLASS_TYPE::compare));
+#endif
+		}
+		
+#if TYPE_OBJECT
+		@Override
+		protected String[] createKeyElements() {
+			return Arrays.copyOfRange(StringSortTest.NAMES, 0, 100);
+		}
+		
+#endif
+#if VALUE_OBJECT
+		@Override
+		protected String[] createValueElements() {
+			return Arrays.copyOfRange(StringSortTest.NAMES, 100, 200);
+		}
+		
+#endif
+	}
+	
+	public static class AVLTreeMapBuilder extends FILE_KEY_TYPE2FILE_VALUE_TYPEMapConstructorTester KEY_VALUE_STRING_GENERIC_TYPE
+	{
+		public AVLTreeMapBuilder() {
+			setSimpleConstructor(() -> MAP.builder(). KEY_VALUE_STRING_GENERIC_TYPEstart().avlTreeMap());
+			setPArrayConstructor((K, V) -> putAll(MAP.builder(). KEY_VALUE_STRING_GENERIC_TYPEstart(), K, V).avlTreeMap());
+#if !TYPE_OBJECT || !VALUE_OBJECT
+			setArrayConstructor((K, V) -> putAll(MAP.builder(). KEY_VALUE_STRING_GENERIC_TYPEstart(), K, V).avlTreeMap());
+#endif
+			setPMapConstructor(T -> MAP.builder(). KEY_VALUE_STRING_GENERIC_TYPEstart().putAll(T).avlTreeMap());
+			setMapConstructor(T -> MAP.builder(). KEY_VALUE_STRING_GENERIC_TYPEstart().putAll(T).avlTreeMap());
+		}
+		
+#if TYPE_OBJECT
+		@Override
+		protected String[] createKeyElements() {
+			return Arrays.copyOfRange(StringSortTest.NAMES, 0, 100);
+		}
+		
+#endif
+#if VALUE_OBJECT
+		@Override
+		protected String[] createValueElements() {
+			return Arrays.copyOfRange(StringSortTest.NAMES, 100, 200);
+		}
+		
+#endif
+	}
+	
+	public static class AVLTreeMapComparatorBuilder extends FILE_KEY_TYPE2FILE_VALUE_TYPEMapConstructorTester KEY_VALUE_STRING_GENERIC_TYPE
+	{
+		public AVLTreeMapComparatorBuilder() {
+#if TYPE_OBJECT
+			setSimpleConstructor(() -> MAP.builder(). KEY_VALUE_STRING_GENERIC_TYPEstart().avlTreeMap(Comparator.naturalOrder()));
+			setPArrayConstructor((K, V) -> putAll(MAP.builder(). KEY_VALUE_STRING_GENERIC_TYPEstart(), K, V).avlTreeMap(Comparator.naturalOrder()));
+#if !TYPE_OBJECT || !VALUE_OBJECT
+			setArrayConstructor((K, V) -> putAll(MAP.builder(). KEY_VALUE_STRING_GENERIC_TYPEstart(), K, V).avlTreeMap(Comparator.naturalOrder()));
+#endif
+			setPMapConstructor(T -> MAP.builder(). KEY_VALUE_STRING_GENERIC_TYPEstart().putAll(T).avlTreeMap(Comparator.naturalOrder()));
+			setMapConstructor(T -> MAP.builder(). KEY_VALUE_STRING_GENERIC_TYPEstart().putAll(T).avlTreeMap(Comparator.naturalOrder()));
+#else
+			setSimpleConstructor(() -> MAP.builder(). KEY_VALUE_STRING_GENERIC_TYPEstart().avlTreeMap(CLASS_TYPE::compare));
+			setPArrayConstructor((K, V) -> putAll(MAP.builder(). KEY_VALUE_STRING_GENERIC_TYPEstart(), K, V).avlTreeMap(CLASS_TYPE::compare));
+#if !TYPE_OBJECT || !VALUE_OBJECT
+			setArrayConstructor((K, V) -> putAll(MAP.builder(). KEY_VALUE_STRING_GENERIC_TYPEstart(), K, V).avlTreeMap(CLASS_TYPE::compare));
+#endif
+			setPMapConstructor(T -> MAP.builder(). KEY_VALUE_STRING_GENERIC_TYPEstart().putAll(T).avlTreeMap(CLASS_TYPE::compare));
+			setMapConstructor(T -> MAP.builder(). KEY_VALUE_STRING_GENERIC_TYPEstart().putAll(T).avlTreeMap(CLASS_TYPE::compare));
+#endif
+		}
+		
+#if TYPE_OBJECT
+		@Override
+		protected String[] createKeyElements() {
+			return Arrays.copyOfRange(StringSortTest.NAMES, 0, 100);
+		}
+		
+#endif
+#if VALUE_OBJECT
+		@Override
+		protected String[] createValueElements() {
+			return Arrays.copyOfRange(StringSortTest.NAMES, 100, 200);
+		}
+		
+#endif
+	}
+	
+	private static MAP.BuilderCache KEY_VALUE_STRING_GENERIC_TYPE putAll(MAP.BuilderCache KEY_VALUE_STRING_GENERIC_TYPE cache, KEY_STRING_TYPE[] keys, VALUE_STRING_TYPE[] values) {
+		if(keys.length != values.length) throw new IllegalStateException("Keys & Values lengths must match");
+		for(int i = 0;i<keys.length;i++) {
+			cache.put(keys[i], values[i]);
+		}
+		return cache;
+	}
+#if !TYPE_OBJECT || !VALUE_OBJECT
+
+	private static MAP.BuilderCache KEY_VALUE_STRING_GENERIC_TYPE putAll(MAP.BuilderCache KEY_VALUE_STRING_GENERIC_TYPE cache, CLASS_STRING_TYPE[] keys, CLASS_STRING_VALUE_TYPE[] values) {
+		if(keys.length != values.length) throw new IllegalStateException("Keys & Values lengths must match");
+		for(int i = 0;i<keys.length;i++) {
+			cache.put(keys[i], values[i]);
+		}
+		return cache;
+	}
+#endif
+}

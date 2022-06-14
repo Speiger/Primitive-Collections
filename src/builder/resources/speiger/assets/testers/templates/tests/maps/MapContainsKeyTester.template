@@ -1,0 +1,67 @@
+package speiger.src.testers.PACKAGE.tests.maps;
+
+#ignore
+import static com.google.common.collect.testing.features.CollectionSize.ZERO;
+#endignore
+#if !TYPE_OBJECT
+#ignore
+import static com.google.common.collect.testing.features.CollectionSize.ONE;
+#endignore
+#endif
+
+import org.junit.Ignore;
+
+import com.google.common.collect.testing.features.CollectionSize;
+#if !TYPE_OBJECT
+import com.google.common.collect.testing.features.MapFeature;
+#endif
+
+import speiger.src.testers.PACKAGE.tests.base.maps.ABSTRACT_MAP_TESTER;
+
+@Ignore
+@SuppressWarnings("javadoc")
+public class FILE_KEY_TYPE2FILE_VALUE_TYPEMapContainsKeyTester KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP_TESTER KEY_VALUE_GENERIC_TYPE
+{
+#ignore
+	@CollectionSize.Require(absent = ZERO)
+#endignore
+	public void testContains_yes() {
+		assertTrue("containsKey(present) should return true", getMap().containsKey(k0()));
+	}
+	
+	public void testContains_no() {
+		assertFalse("containsKey(notPresent) should return false", getMap().containsKey(k3()));
+	}
+	
+#if !TYPE_OBJECT
+
+#ignore
+	@CollectionSize.Require(absent = ZERO)
+#endignore
+	public void testContainsObject_yes() {
+		assertTrue("containsKey(present) should return true", getMap().containsKey(KEY_TO_OBJ(k0())));
+	}
+	
+	public void testContainsObject_no() {
+		assertFalse("containsKey(notPresent) should return false", getMap().containsKey(KEY_TO_OBJ(k3())));
+	}
+	
+#if !TYPE_CHAR
+#ignore
+	@CollectionSize.Require(absent = ZERO)
+	@MapFeature.Require(MapFeature.ALLOWS_NULL_KEYS)
+#endignore
+	public void testContains_null_yes() {
+		assertTrue("containsKey(null) should return true", getMap().containsKey(null));		
+	}
+
+#endif
+#ignore
+	@CollectionSize.Require(ONE)
+	@MapFeature.Require(MapFeature.ALLOWS_NULL_KEYS)
+#endignore
+	public void testContains_null_no() {
+		assertFalse("containsKey(null) should return false", getMap().containsKey(null));		
+	}
+#endif
+}

@@ -1,0 +1,59 @@
+package speiger.src.testers.PACKAGE.tests.collection;
+
+#ignore
+import static com.google.common.collect.testing.features.CollectionFeature.KNOWN_ORDER;
+#endignore
+
+import com.google.common.collect.testing.features.CollectionFeature;
+
+import org.junit.Ignore;
+
+import speiger.src.collections.PACKAGE.lists.ARRAY_LIST;
+#if !JDK_TYPE
+import speiger.src.collections.utils.SanityChecks;
+#endif
+import speiger.src.testers.PACKAGE.tests.base.ABSTRACT_COLLECTION_TESTER;
+import speiger.src.testers.PACKAGE.utils.HELPERS;
+
+@Ignore
+@SuppressWarnings("javadoc")
+public class FILE_KEY_TYPECollectionStreamTester KEY_GENERIC_TYPE extends ABSTRACT_COLLECTION_TESTER KEY_GENERIC_TYPE
+{
+#ignore
+	@CollectionFeature.Require(absent = KNOWN_ORDER)
+	public void testStreamToArrayUnknownOrder() {
+#endignore
+		synchronized (collection) {
+			HELPERS.assertContentsAnyOrder(getSampleElements(), unwrap(collection.primitiveStream().toArray()));
+		}
+	}
+
+#ignore
+	@CollectionFeature.Require(KNOWN_ORDER)
+	public void testStreamToArrayKnownOrder() {
+#endignore
+		synchronized (collection) {
+			assertEquals(getOrderedElements(), ARRAY_LIST.wrap(unwrap(collection.primitiveStream().toArray())));
+		}
+	}
+
+	public void testStreamCount() {
+		synchronized (collection) {
+			assertEquals(getNumElements(), collection.primitiveStream().count());
+		}
+	}
+	
+#if JDK_TYPE
+	public KEY_TYPE[] unwrap(KEY_TYPE[] input) {
+		return input;
+	}
+#else
+	public KEY_TYPE[] unwrap(KEY_JAVA_TYPE[] input) {
+		KEY_TYPE[] other = NEW_KEY_ARRAY(input.length);
+		for(int i = 0,m=input.length;i<m;i++) {
+			other[i] = SanityChecks.SANITY_CAST(input[i]);
+		}
+		return other;
+	}
+#endif
+}

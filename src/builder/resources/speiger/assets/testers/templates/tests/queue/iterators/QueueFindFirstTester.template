@@ -1,0 +1,43 @@
+package speiger.src.testers.PACKAGE.tests.queue.iterators;
+
+#if TYPE_OBJECT
+import java.util.Objects;
+
+#endif
+import org.junit.Ignore;
+
+import com.google.common.collect.testing.features.CollectionSize;
+
+import speiger.src.testers.PACKAGE.tests.base.ABSTRACT_QUEUE_TESTER;
+
+@Ignore
+@SuppressWarnings("javadoc")
+public class FILE_KEY_TYPEQueueFindFirstTester KEY_GENERIC_TYPE extends ABSTRACT_QUEUE_TESTER KEY_GENERIC_TYPE
+{
+	public void testQueueFindFirst_null() {
+		try {
+			queue.findFirst(null);
+			fail("This should throw a NullPointerException");
+		}
+		catch (NullPointerException e) {
+		}
+	}
+	
+#ignore
+	@CollectionSize.Require(absent = CollectionSize.ZERO)
+#endignore
+	public void testQueueFindFirst_FindFirstElements() {
+		assertEquals("First Element should be found", e0(), queue.findFirst(T -> KEY_EQUALS(T, e0())));
+	}
+	
+	public void testQueueFindFirst_FindNothing() {
+		assertEquals("No element should be found", EMPTY_KEY_VALUE, queue.findFirst(T -> KEY_EQUALS(T, e4())));
+	}
+	
+#ignore
+	@CollectionSize.Require(CollectionSize.SEVERAL)
+#endignore
+	public void testQueueFindFirst_FindLastElement() {
+		assertEquals("Last Element should be found", e2(), queue.findFirst(T -> KEY_EQUALS(T, e2())));
+	}
+}

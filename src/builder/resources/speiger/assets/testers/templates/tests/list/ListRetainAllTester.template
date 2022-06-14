@@ -1,0 +1,59 @@
+package speiger.src.testers.PACKAGE.tests.list;
+
+import org.junit.Ignore;
+
+#ignore
+import static com.google.common.collect.testing.features.CollectionFeature.SUPPORTS_REMOVE;
+import static com.google.common.collect.testing.features.CollectionSize.ONE;
+import static com.google.common.collect.testing.features.CollectionSize.SEVERAL;
+import static com.google.common.collect.testing.features.CollectionSize.ZERO;
+#endignore
+
+import com.google.common.collect.testing.features.CollectionFeature;
+import com.google.common.collect.testing.features.CollectionSize;
+
+import speiger.src.collections.PACKAGE.lists.ARRAY_LIST;
+import speiger.src.testers.PACKAGE.tests.base.ABSTRACT_LIST_TESTER;
+import speiger.src.testers.PACKAGE.utils.HELPERS;
+import speiger.src.testers.PACKAGE.utils.MINIMAL_COLLECTION;
+
+@Ignore
+@SuppressWarnings("javadoc")
+public class FILE_KEY_TYPEListRetainAllTester KEY_GENERIC_TYPE extends ABSTRACT_LIST_TESTER KEY_GENERIC_TYPE
+{
+#ignore
+	@CollectionFeature.Require(SUPPORTS_REMOVE)
+	@CollectionSize.Require(absent = { ZERO, ONE })
+#endignore
+	public void testRetainAll_duplicatesKept() {
+		KEY_TYPE[] array = createSamplesArray();
+		array[1] = e0();
+		collection = primitiveGenerator.create(array);
+		assertFalse("containsDuplicates.retainAll(superset) should return false", collection.retainAll(MINIMAL_COLLECTION.of(createSamplesArray())));
+		expectContents(array);
+	}
+
+#ignore
+	@SuppressWarnings("unchecked")
+	@CollectionFeature.Require(SUPPORTS_REMOVE)
+	@CollectionSize.Require(SEVERAL)
+#endignore
+	public void testRetainAll_duplicatesRemoved() {
+		KEY_TYPE[] array = createSamplesArray();
+		array[1] = e0();
+		collection = primitiveGenerator.create(array);
+		assertTrue("containsDuplicates.retainAll(subset) should return true", collection.retainAll(MINIMAL_COLLECTION.of(e2())));
+		expectContents(e2());
+	}
+
+#ignore
+	@SuppressWarnings("unchecked")
+	@CollectionFeature.Require(SUPPORTS_REMOVE)
+	@CollectionSize.Require(SEVERAL)
+#endignore
+	public void testRetainAll_countIgnored() {
+		resetContainer(primitiveGenerator.create(createArray(e0(), e2(), e1(), e0())));
+		assertTrue(getList().retainAll(ARRAY_LIST.wrap(e0(), e1())));
+		HELPERS.assertContentsInOrder(getList(), e0(), e1(), e0());
+	}
+}

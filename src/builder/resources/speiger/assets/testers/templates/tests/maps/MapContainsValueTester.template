@@ -1,0 +1,49 @@
+package speiger.src.testers.PACKAGE.tests.maps;
+
+#ignore
+import static com.google.common.collect.testing.features.CollectionSize.ZERO;
+#endignore
+
+import org.junit.Ignore;
+
+import com.google.common.collect.testing.features.CollectionSize;
+
+import speiger.src.testers.PACKAGE.tests.base.maps.ABSTRACT_MAP_TESTER;
+
+@Ignore
+@SuppressWarnings("javadoc")
+public class FILE_KEY_TYPE2FILE_VALUE_TYPEMapContainsValueTester KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP_TESTER KEY_VALUE_GENERIC_TYPE
+{
+#ignore
+	@CollectionSize.Require(absent = ZERO)
+#endignore
+	public void testContains_yes() {
+		assertTrue("containsValue(present) should return true", getMap().containsValue(v0()));
+	}
+
+	public void testContains_no() {
+		assertFalse("containsValue(notPresent) should return false", getMap().containsValue(v3()));
+	}
+	
+#ignore
+	@CollectionSize.Require(absent = ZERO)
+#endignore
+	public void testContainsObject_yes() {
+		assertTrue("containsValue(present) should return true", getMap().containsValue(VALUE_TO_OBJ(v0())));
+	}
+
+#if !VALUE_BOOLEAN
+	public void testContainsObject_no() {
+		assertFalse("containsValue(notPresent) should return false", getMap().containsValue(VALUE_TO_OBJ(v3())));
+	}
+
+#if !VALUE_OBJECT
+#ignore
+	@CollectionSize.Require(absent = ZERO)
+#endignore
+	public void testContains_null() {
+		assertFalse("containsValue(present) should return false", getMap().containsValue(null));
+	}
+#endif
+#endif	
+}

@@ -1,0 +1,55 @@
+package speiger.src.testers.PACKAGE.tests.collection;
+
+#ignore
+import static com.google.common.collect.testing.features.CollectionFeature.KNOWN_ORDER;
+#endignore
+
+import com.google.common.collect.testing.features.CollectionFeature;
+
+import org.junit.Ignore;
+
+import speiger.src.collections.PACKAGE.lists.ARRAY_LIST;
+import speiger.src.collections.PACKAGE.lists.LIST;
+import speiger.src.testers.PACKAGE.tests.base.ABSTRACT_COLLECTION_TESTER;
+import speiger.src.testers.PACKAGE.utils.HELPERS;
+
+@Ignore
+@SuppressWarnings("javadoc")
+public class FILE_KEY_TYPECollectionForEachTester KEY_GENERIC_TYPE extends ABSTRACT_COLLECTION_TESTER KEY_GENERIC_TYPE
+{
+#ignore
+	@CollectionFeature.Require(absent = KNOWN_ORDER)
+	public void testForEachUnknownOrder() {
+#endignore
+		LIST KEY_GENERIC_TYPE elements = new ARRAY_LISTBRACES();
+		collection.forEach(elements::add);
+		HELPERS.assertContentsAnyOrder(elements, createSamplesArray());
+	}
+	
+#ignore
+@CollectionFeature.Require(absent = KNOWN_ORDER)
+	public void testForEachExtraUnknownOrder() {
+#endignore
+		LIST KEY_GENERIC_TYPE elements = new ARRAY_LISTBRACES();
+		collection.forEach(elements, LIST::add);
+		HELPERS.assertContentsAnyOrder(elements, createSamplesArray());
+	}
+	
+#ignore
+	@CollectionFeature.Require(KNOWN_ORDER)
+	public void testForEachKnownOrder() {
+#endignore
+		LIST KEY_GENERIC_TYPE elements = new ARRAY_LISTBRACES();
+		collection.forEach(elements::add);
+		assertEquals("Different ordered iteration", HELPERS.copyToList(getOrderedElements()), elements);
+	}
+	
+#ignore
+	@CollectionFeature.Require(KNOWN_ORDER)
+	public void testForEachExtraKnownOrder() {
+#endignore
+		LIST KEY_GENERIC_TYPE elements = new ARRAY_LISTBRACES();
+		collection.forEach(elements, LIST::add);
+		assertEquals("Different ordered iteration", HELPERS.copyToList(getOrderedElements()), elements);
+	}
+}

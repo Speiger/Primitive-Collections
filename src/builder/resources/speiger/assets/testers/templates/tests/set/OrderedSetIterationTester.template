@@ -1,0 +1,56 @@
+package speiger.src.testers.PACKAGE.tests.set;
+
+import java.util.NoSuchElementException;
+
+import org.junit.Assert;
+import org.junit.Ignore;
+
+import com.google.common.collect.testing.features.CollectionSize;
+
+import speiger.src.collections.PACKAGE.sets.ORDERED_SET;
+import speiger.src.testers.PACKAGE.tests.base.ABSTRACT_SET_TESTER;
+
+@Ignore
+@SuppressWarnings("javadoc")
+public class FILE_KEY_TYPEOrderedSetIterationTester KEY_GENERIC_TYPE extends ABSTRACT_SET_TESTER KEY_GENERIC_TYPE
+{
+	private ORDERED_SET KEY_GENERIC_TYPE orderedSet;
+	
+	@Override
+	public void setUp() throws Exception {
+		super.setUp();
+		orderedSet = (ORDERED_SET KEY_GENERIC_TYPE) getSet();
+	}
+	
+#ignore
+	@CollectionSize.Require(absent = CollectionSize.ZERO)
+#endignore
+	public void testMissingIterator() {
+		try {
+			orderedSet.iterator(e3());
+			fail("Iterator with missing Element should throw NoSuchElementException");
+		} 
+		catch(NoSuchElementException e) {}
+	}
+	
+#ignore
+	@CollectionSize.Require(absent = CollectionSize.ZERO)
+#endignore
+	public void testFirstElement() {
+		Assert.assertTrue(orderedSet.iterator(e0()) != null);
+	}
+
+#ignore
+	@CollectionSize.Require(CollectionSize.SEVERAL)
+#endignore
+	public void testLastElement() {
+		Assert.assertTrue(orderedSet.iterator(e2()) != null);
+	}
+	
+#ignore
+	@CollectionSize.Require(CollectionSize.SEVERAL)
+#endignore
+	public void testCenterElement() {
+		Assert.assertTrue(orderedSet.iterator(e1()) != null);
+	}
+}

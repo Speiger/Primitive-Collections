@@ -1,0 +1,32 @@
+package speiger.src.testers.PACKAGE.tests.list;
+
+import org.junit.Ignore;
+
+#ignore
+import static com.google.common.collect.testing.features.CollectionFeature.SUPPORTS_REMOVE;
+import static com.google.common.collect.testing.features.CollectionSize.ONE;
+import static com.google.common.collect.testing.features.CollectionSize.ZERO;
+#endignore
+
+import com.google.common.collect.testing.features.CollectionFeature;
+import com.google.common.collect.testing.features.CollectionSize;
+
+import speiger.src.testers.PACKAGE.tests.base.ABSTRACT_LIST_TESTER;
+import speiger.src.testers.PACKAGE.utils.MINIMAL_COLLECTION;
+
+@Ignore
+@SuppressWarnings("javadoc")
+public class FILE_KEY_TYPEListRemoveAllTester KEY_GENERIC_TYPE extends ABSTRACT_LIST_TESTER KEY_GENERIC_TYPE
+{
+#ignore
+	@CollectionFeature.Require(SUPPORTS_REMOVE)
+	@CollectionSize.Require(absent = { ZERO, ONE })
+#endignore
+	public void testRemoveAll_duplicate() {
+		ArrayWithDuplicate KEY_GENERIC_TYPE arrayAndDuplicate = createArrayWithDuplicateElement();
+		collection = primitiveGenerator.create(arrayAndDuplicate.elements);
+		KEY_TYPE duplicate = arrayAndDuplicate.duplicate;
+		assertTrue("removeAll(intersectingCollection) should return true", getList().removeAll(MINIMAL_COLLECTION.of(duplicate)));
+		assertFalse("after removeAll(e), a collection should not contain e even if it initially contained e more than once.", getList().contains(duplicate));
+	}
+}

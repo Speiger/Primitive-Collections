@@ -1,0 +1,36 @@
+package speiger.src.testers.PACKAGE.tests.set;
+
+import org.junit.Ignore;
+
+#ignore
+import static com.google.common.collect.testing.features.CollectionFeature.SUPPORTS_ADD;
+import static com.google.common.collect.testing.features.CollectionSize.ZERO;
+#endignore
+
+import com.google.common.collect.testing.features.CollectionFeature;
+import com.google.common.collect.testing.features.CollectionSize;
+
+import speiger.src.testers.PACKAGE.tests.base.ABSTRACT_SET_TESTER;
+
+@Ignore
+@SuppressWarnings("javadoc")
+public class FILE_KEY_TYPESetAddTester KEY_GENERIC_TYPE extends ABSTRACT_SET_TESTER KEY_GENERIC_TYPE
+{
+#ignore
+	@CollectionFeature.Require(SUPPORTS_ADD)
+	@CollectionSize.Require(absent = ZERO)
+#endignore
+	public void testAdd_supportedPresent() {
+		assertFalse("add(present) should return false", getSet().add(e0()));
+		expectUnchanged();
+	}
+
+#ignore
+	@CollectionFeature.Require(SUPPORTS_ADD)
+	@CollectionSize.Require(ZERO)
+#endignore
+	public void testAdd_supportedMissing() {
+		assertTrue("add(missing) should return true", getSet().add(e0()));
+		expectAdded(e0());
+	}
+}

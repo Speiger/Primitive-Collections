@@ -1,0 +1,25 @@
+package speiger.src.testers.PACKAGE.generators.maps;
+
+import com.google.common.collect.testing.TestSortedMapGenerator;
+
+import speiger.src.collections.PACKAGE.maps.interfaces.MAP;
+import speiger.src.collections.PACKAGE.maps.interfaces.MAP.Entry;
+import speiger.src.collections.PACKAGE.maps.interfaces.SORTED_MAP;
+
+@SuppressWarnings("javadoc")
+public interface TEST_SORTED_MAP_GENERATOR KEY_VALUE_GENERIC_TYPE extends TEST_MAP_GENERATOR KEY_VALUE_GENERIC_TYPE, TestSortedMapGenerator<CLASS_TYPE, CLASS_VALUE_TYPE>
+{
+	@Override
+	default SORTED_MAP KEY_VALUE_GENERIC_TYPE create(Object... elements) { return (SORTED_MAP KEY_VALUE_GENERIC_TYPE) TEST_MAP_GENERATOR.super.create(elements); }
+	@Override
+	SORTED_MAP KEY_VALUE_GENERIC_TYPE create(MAP.Entry KEY_VALUE_GENERIC_TYPE... elements);
+	
+	@Override
+	Entry KEY_VALUE_GENERIC_TYPE belowSamplesLesser();
+	@Override
+	Entry KEY_VALUE_GENERIC_TYPE belowSamplesGreater();
+	@Override
+	Entry KEY_VALUE_GENERIC_TYPE aboveSamplesLesser();
+	@Override
+	Entry KEY_VALUE_GENERIC_TYPE aboveSamplesGreater();
+}

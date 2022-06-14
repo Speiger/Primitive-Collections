@@ -1,0 +1,46 @@
+package speiger.src.testers.PACKAGE.generators.maps;
+
+import java.util.Map;
+
+import com.google.common.collect.testing.Helpers;
+import com.google.common.collect.testing.SampleElements;
+import com.google.common.collect.testing.TestMapGenerator;
+
+import speiger.src.collections.PACKAGE.maps.interfaces.MAP;
+import speiger.src.collections.objects.collections.ObjectIterable;
+import speiger.src.collections.objects.lists.ObjectList;
+import speiger.src.testers.objects.utils.ObjectSamples;
+
+@SuppressWarnings("javadoc")
+public interface TEST_MAP_GENERATOR KEY_VALUE_GENERIC_TYPE extends TestMapGenerator<CLASS_TYPE, CLASS_VALUE_TYPE> {
+	public ObjectSamples<MAP.Entry KEY_VALUE_GENERIC_TYPE> getSamples();
+	public ObjectIterable<MAP.Entry KEY_VALUE_GENERIC_TYPE> order(ObjectList<MAP.Entry KEY_VALUE_GENERIC_TYPE> insertionOrder);
+	public MAP KEY_VALUE_GENERIC_TYPE create(MAP.Entry KEY_VALUE_GENERIC_TYPE... elements);
+	@Override
+	default MAP KEY_VALUE_GENERIC_TYPE create(Object... elements) {
+		MAP.Entry KEY_VALUE_GENERIC_TYPE[] result = new MAP.Entry[elements.length];
+		for(int i = 0;i<elements.length;i++) {
+			result[i] = (MAP.Entry KEY_VALUE_GENERIC_TYPE) elements[i];
+		}
+		return create(result);
+	}
+	
+	@Override
+	default CLASS_TYPE[] createKeyArray(int length) { return NEW_CLASS_ARRAY(length); }
+	@Override
+	default CLASS_VALUE_TYPE[] createValueArray(int length) { return NEW_CLASS_VALUE_ARRAY(length); }
+	@Override
+	default MAP.Entry KEY_VALUE_GENERIC_TYPE[] createArray(int length) { return new MAP.Entry[length]; }
+	
+	@Override
+	default SampleElements<Map.Entry<CLASS_TYPE, CLASS_VALUE_TYPE>> samples() {
+		ObjectSamples<MAP.Entry KEY_VALUE_GENERIC_TYPE> samples = getSamples();
+		return new SampleElements<>(
+			Helpers.mapEntry(samples.e0().ENTRY_KEY(), samples.e0().ENTRY_VALUE()), 
+			Helpers.mapEntry(samples.e1().ENTRY_KEY(), samples.e1().ENTRY_VALUE()), 
+			Helpers.mapEntry(samples.e2().ENTRY_KEY(), samples.e2().ENTRY_VALUE()), 
+			Helpers.mapEntry(samples.e3().ENTRY_KEY(), samples.e3().ENTRY_VALUE()), 
+			Helpers.mapEntry(samples.e4().ENTRY_KEY(), samples.e4().ENTRY_VALUE())
+		);
+	}
+}

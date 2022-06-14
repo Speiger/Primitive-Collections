@@ -1,0 +1,102 @@
+package speiger.src.testers.PACKAGE.tests.list;
+
+#if TYPE_OBJECT
+import java.util.Comparator;
+#endif
+
+import org.junit.Ignore;
+
+import com.google.common.collect.testing.features.CollectionSize;
+import com.google.common.collect.testing.features.ListFeature;
+
+import speiger.src.collections.PACKAGE.lists.ARRAY_LIST;
+import speiger.src.collections.PACKAGE.utils.LISTS;
+import speiger.src.collections.utils.SanityChecks;
+import speiger.src.testers.PACKAGE.tests.base.ABSTRACT_LIST_TESTER;
+
+@Ignore
+@SuppressWarnings("javadoc")
+public class FILE_KEY_TYPEListSortTester KEY_GENERIC_TYPE extends ABSTRACT_LIST_TESTER KEY_GENERIC_TYPE
+{
+#ignore
+	@ListFeature.Require(ListFeature.SUPPORTS_SET)
+	@CollectionSize.Require(CollectionSize.SEVERAL)
+#endignore
+	public void testStableSort() {
+		KEY_TYPE[] keys = collection.TO_ARRAY(NEW_KEY_ARRAY(collection.size()));
+		SanityChecks.getRandom().setSeed(212121212L);
+		LISTS.shuffle(getList());
+		assertFalse(getList().equals(ARRAY_LIST.wrap(keys)));
+		getList().sort(null);
+		assertEquals(ARRAY_LIST.wrap(keys), getList());
+	}
+	
+#ignore
+	@ListFeature.Require(ListFeature.SUPPORTS_SET)
+	@CollectionSize.Require(CollectionSize.SEVERAL)
+#endignore
+	public void testStableSort_Comparator() {
+		KEY_TYPE[] keys = collection.TO_ARRAY(NEW_KEY_ARRAY(collection.size()));
+		SanityChecks.getRandom().setSeed(212121212L);
+		LISTS.shuffle(getList());
+		assertFalse(getList().equals(ARRAY_LIST.wrap(keys)));
+#if TYPE_OBJECT
+		getList().sort((Comparator<T>)Comparator.naturalOrder());
+#else
+		getList().sort(CLASS_TYPE::compare);
+#endif
+		assertEquals(ARRAY_LIST.wrap(keys), getList());
+	}
+	
+#ignore
+	@ListFeature.Require(absent = ListFeature.SUPPORTS_SET)
+#endignore
+	public void testStableSort_Null() {
+		try {
+			getList().sort(null);
+		}
+		catch(UnsupportedOperationException e) {
+		}
+	}
+	
+#ignore
+	@ListFeature.Require(ListFeature.SUPPORTS_SET)
+	@CollectionSize.Require(CollectionSize.SEVERAL)
+#endignore
+	public void testUnstableSort() {
+		KEY_TYPE[] keys = collection.TO_ARRAY(NEW_KEY_ARRAY(collection.size()));
+		SanityChecks.getRandom().setSeed(212121212L);
+		LISTS.shuffle(getList());
+		assertFalse(getList().equals(ARRAY_LIST.wrap(keys)));
+		getList().unstableSort(null);
+		assertEquals(ARRAY_LIST.wrap(keys), getList());		
+	}
+
+#ignore
+	@ListFeature.Require(ListFeature.SUPPORTS_SET)
+	@CollectionSize.Require(CollectionSize.SEVERAL)
+#endignore
+	public void testUnstableSort_Comparator() {
+		KEY_TYPE[] keys = collection.TO_ARRAY(NEW_KEY_ARRAY(collection.size()));
+		SanityChecks.getRandom().setSeed(212121212L);
+		LISTS.shuffle(getList());
+		assertFalse(getList().equals(ARRAY_LIST.wrap(keys)));
+#if TYPE_OBJECT
+		getList().unstableSort((Comparator<T>)Comparator.naturalOrder());
+#else
+		getList().unstableSort(CLASS_TYPE::compare);
+#endif
+		assertEquals(ARRAY_LIST.wrap(keys), getList());
+	}
+	
+#ignore
+	@ListFeature.Require(absent = ListFeature.SUPPORTS_SET)
+#endignore
+	public void testUnstableSort_Null() {
+		try {
+			getList().unstableSort(null);
+		}
+		catch(UnsupportedOperationException e) {
+		}
+	}
+}

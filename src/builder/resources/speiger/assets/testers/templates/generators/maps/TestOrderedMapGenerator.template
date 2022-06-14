@@ -1,0 +1,13 @@
+package speiger.src.testers.PACKAGE.generators.maps;
+
+import speiger.src.collections.PACKAGE.maps.interfaces.MAP;
+import speiger.src.collections.PACKAGE.maps.interfaces.ORDERED_MAP;
+
+@SuppressWarnings("javadoc")
+public interface TEST_ORDERED_MAP_GENERATOR KEY_VALUE_GENERIC_TYPE extends TEST_MAP_GENERATOR KEY_VALUE_GENERIC_TYPE
+{
+	@Override
+	default ORDERED_MAP KEY_VALUE_GENERIC_TYPE create(Object... elements) { return (ORDERED_MAP KEY_VALUE_GENERIC_TYPE) TEST_MAP_GENERATOR.super.create(elements); }
+	@Override
+	ORDERED_MAP KEY_VALUE_GENERIC_TYPE create(MAP.Entry KEY_VALUE_GENERIC_TYPE... elements);
+}

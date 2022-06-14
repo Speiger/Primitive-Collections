@@ -1,0 +1,45 @@
+package speiger.src.testers.PACKAGE.tests.set;
+
+import org.junit.Ignore;
+
+#ignore
+import static com.google.common.collect.testing.features.CollectionFeature.REJECTS_DUPLICATES_AT_CREATION;
+import static com.google.common.collect.testing.features.CollectionSize.ONE;
+import static com.google.common.collect.testing.features.CollectionSize.ZERO;
+#endignore
+
+import com.google.common.collect.testing.features.CollectionFeature;
+import com.google.common.collect.testing.features.CollectionSize;
+
+import speiger.src.collections.PACKAGE.lists.ARRAY_LIST;
+import speiger.src.testers.PACKAGE.tests.base.ABSTRACT_SET_TESTER;
+
+@Ignore
+@SuppressWarnings("javadoc")
+public class FILE_KEY_TYPESetCreationTester KEY_GENERIC_TYPE extends ABSTRACT_SET_TESTER KEY_GENERIC_TYPE
+{
+#ignore
+	@CollectionFeature.Require(absent = REJECTS_DUPLICATES_AT_CREATION)
+	@CollectionSize.Require(absent = { ZERO, ONE })
+#endignore
+	public void testCreateWithDuplicates_nonNullDuplicatesNotRejected() {
+		KEY_TYPE[] array = createSamplesArray();
+		array[1] = e0();
+		collection = primitiveGenerator.create(array);
+		expectContents(ARRAY_LIST.wrap(array).subList(1, getNumElements()));
+	}
+	
+#ignore
+	@CollectionFeature.Require(REJECTS_DUPLICATES_AT_CREATION)
+	@CollectionSize.Require(absent = { ZERO, ONE })
+#endignore
+	public void testCreateWithDuplicates_nonNullDuplicatesRejected() {
+		KEY_TYPE[] array = createSamplesArray();
+		array[1] = e0();
+		try {
+			collection = primitiveGenerator.create(array);
+			fail("Should reject duplicate non-null elements at creation");
+		} catch (IllegalArgumentException expected) {
+		}
+	}
+}

@@ -1,0 +1,14 @@
+package speiger.src.testers.PACKAGE.tests.base;
+
+import org.junit.Ignore;
+
+import speiger.src.collections.PACKAGE.sets.SET;
+
+@Ignore
+@SuppressWarnings("javadoc")
+public class ABSTRACT_SET_TESTER KEY_GENERIC_TYPE extends ABSTRACT_COLLECTION_TESTER KEY_GENERIC_TYPE
+{
+	protected final SET KEY_GENERIC_TYPE getSet() {
+		return (SET KEY_GENERIC_TYPE)collection;
+	}
+}

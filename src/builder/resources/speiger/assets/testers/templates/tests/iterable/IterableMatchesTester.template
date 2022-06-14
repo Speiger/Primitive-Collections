@@ -1,0 +1,107 @@
+package speiger.src.testers.PACKAGE.tests.iterable;
+
+#if TYPE_OBJECT
+import java.util.Objects;
+
+#endif
+import org.junit.Ignore;
+
+import com.google.common.collect.testing.features.CollectionSize;
+
+import speiger.src.collections.PACKAGE.sets.HASH_SET;
+import speiger.src.collections.PACKAGE.sets.SET;
+import speiger.src.testers.PACKAGE.tests.base.ABSTRACT_COLLECTION_TESTER;
+
+@Ignore
+@SuppressWarnings("javadoc")
+public class FILE_KEY_TYPEIterableMatchesTester KEY_GENERIC_TYPE extends ABSTRACT_COLLECTION_TESTER KEY_GENERIC_TYPE
+{
+	public void testIterableMatch_AnyNull() {
+		try {
+			collection.matchesAny(null);
+			fail("MatchesAny should throw a NullPointException");
+		}
+		catch (NullPointerException e) {
+		}
+	}
+	
+#ignore
+	@CollectionSize.Require(absent = CollectionSize.ZERO)
+#endignore
+	public void testIterableMatch_AnyFoundFirstElement() {
+		assertTrue("Element ["+e0()+"] should be found", collection.matchesAny(T -> KEY_EQUALS(T, e0())));
+	}
+	
+#ignore
+	@CollectionSize.Require(CollectionSize.SEVERAL)
+#endignore
+	public void testIterableMatch_AnyFoundLastElement() {
+		assertTrue("Element ["+e2()+"] should be found", collection.matchesAny(T -> KEY_EQUALS(T, e2())));
+	}
+	
+	public void testIterableMatch_AnyFoundNoElement() {
+		assertFalse("Element ["+e4()+"] should not be found", collection.matchesAny(T -> KEY_EQUALS(T, e4())));
+	}
+	
+	public void testIterableMatch_NoneNull() {
+		try {
+			collection.matchesNone(null);
+			fail("MatchesNone should throw a NullPointException");
+		}
+		catch (NullPointerException e) {
+		}
+	}
+	
+#ignore
+	@CollectionSize.Require(absent = CollectionSize.ZERO)
+#endignore
+	public void testIterableMatch_NoneFoundFirstElement() {
+		assertFalse("Element ["+e0()+"] should not be found", collection.matchesNone(T -> KEY_EQUALS(T, e0())));
+	}
+	
+#ignore
+	@CollectionSize.Require(CollectionSize.SEVERAL)
+#endignore
+	public void testIterableMatch_NoneFoundLastElement() {
+		assertFalse("Element ["+e2()+"] should not be found", collection.matchesNone(T -> KEY_EQUALS(T, e2())));
+	}
+	
+	public void testIterableMatch_NoneFoundNoElement() {
+		assertTrue("Element ["+e4()+"] should not be found", collection.matchesNone(T -> KEY_EQUALS(T, e4())));
+	}
+	
+	public void testIterableMatch_AllNull() {
+		try {
+			collection.matchesAll(null);
+			fail("MatchesAny should throw a NullPointException");
+		}
+		catch (NullPointerException e) {
+		}
+	}
+	
+	public void testIterableMatch_AllFoundAllElements() {
+		SET KEY_GENERIC_TYPE set = new HASH_SETBRACES(collection);
+		assertTrue("All elements should be found", collection.matchesAll(set::contains));
+	}
+	
+#ignore
+	@CollectionSize.Require(absent = CollectionSize.ZERO)
+#endignore
+	public void testIterableMatch_AllFoundNone() {
+		assertFalse("It should not find anything", collection.matchesAll(T -> false));
+	}
+	
+#ignore
+	@CollectionSize.Require(CollectionSize.ZERO)
+#endignore
+	public void testIterableMatch_AllFoundNoneEmpty() {
+		assertTrue("Empty Collections should return true even if all have to be found", collection.matchesAll(T -> false));
+	}
+	
+#ignore
+	@CollectionSize.Require(CollectionSize.SEVERAL)
+#endignore
+	public void testIterableMatches_AllPartical() {
+		assertFalse("Even if some elements were found, it should return false", collection.matchesAll(T -> KEY_EQUALS(T, e0())));
+	}
+}

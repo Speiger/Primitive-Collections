@@ -1,0 +1,304 @@
+package speiger.src.testers.PACKAGE.builder.maps;
+
+import java.lang.reflect.Method;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+
+import com.google.common.collect.testing.AbstractTester;
+import com.google.common.collect.testing.FeatureSpecificTestSuiteBuilder;
+import com.google.common.collect.testing.MapTestSuiteBuilder;
+import com.google.common.collect.testing.OneSizeTestContainerGenerator;
+import com.google.common.collect.testing.features.CollectionFeature;
+import com.google.common.collect.testing.features.Feature;
+import com.google.common.collect.testing.features.MapFeature;
+import com.google.common.collect.testing.testers.CollectionIteratorTester;
+#if VALUE_BOOLEAN
+import com.google.common.collect.testing.testers.CollectionRemoveTester;
+import com.google.common.collect.testing.testers.CollectionRetainAllTester;
+#endif
+
+import junit.framework.TestSuite;
+import speiger.src.collections.PACKAGE.maps.interfaces.MAP;
+import speiger.src.testers.VALUE_PACKAGE.builder.VALUE_COLLECTION_TEST_BUILDER;
+import speiger.src.testers.VALUE_PACKAGE.generators.VALUE_TEST_COLLECTION_GENERATOR;
+#if !TYPE_OBJECT
+import speiger.src.testers.PACKAGE.builder.SET_TEST_BUILDER;
+import speiger.src.testers.PACKAGE.generators.TEST_SET_GENERATOR;
+#endif
+import speiger.src.testers.PACKAGE.generators.maps.TEST_MAP_GENERATOR;
+import speiger.src.testers.PACKAGE.impl.maps.DERIVED_MAP_GENERATORS;
+#if TYPE_CHAR || TYPE_FLOAT || TYPE_DOUBLE
+import speiger.src.testers.PACKAGE.tests.collection.FILE_KEY_TYPECollectionIteratorTester;
+#if !SAME_TYPE && !VALUE_OBJECT
+import speiger.src.testers.VALUE_PACKAGE.tests.collection.FILE_VALUE_TYPECollectionIteratorTester;
+#endif
+#else if TYPE_OBJECT && !VALUE_OBJECT
+import speiger.src.testers.VALUE_PACKAGE.tests.collection.FILE_VALUE_TYPECollectionIteratorTester;
+#endif
+#if VALUE_PRIMITIVES
+import speiger.src.testers.PACKAGE.tests.maps.FILE_KEY_TYPE2FILE_VALUE_TYPEMapAddToTester;
+import speiger.src.testers.PACKAGE.tests.maps.FILE_KEY_TYPE2FILE_VALUE_TYPEMapSubFromTester;
+#endif
+#if VALUE_BOOLEAN
+#if !TYPE_CHAR && !TYPE_FLOAT && !TYPE_DOUBLE && !TYPE_OBJECT
+import speiger.src.testers.VALUE_PACKAGE.tests.collection.FILE_VALUE_TYPECollectionIteratorTester;
+#endif
+import speiger.src.testers.VALUE_PACKAGE.tests.collection.FILE_VALUE_TYPECollectionRemoveAllTester;
+import speiger.src.testers.VALUE_PACKAGE.tests.collection.FILE_VALUE_TYPECollectionRetainAllTester;
+#endif
+
+import speiger.src.testers.PACKAGE.tests.maps.FILE_KEY_TYPE2FILE_VALUE_TYPEMapClearTester;
+import speiger.src.testers.PACKAGE.tests.maps.FILE_KEY_TYPE2FILE_VALUE_TYPEMapComputeIfAbsentTester;
+import speiger.src.testers.PACKAGE.tests.maps.FILE_KEY_TYPE2FILE_VALUE_TYPEMapComputeIfPresentTester;
+import speiger.src.testers.PACKAGE.tests.maps.FILE_KEY_TYPE2FILE_VALUE_TYPEMapComputeTester;
+import speiger.src.testers.PACKAGE.tests.maps.FILE_KEY_TYPE2FILE_VALUE_TYPEMapCopyTester;
+import speiger.src.testers.PACKAGE.tests.maps.FILE_KEY_TYPE2FILE_VALUE_TYPEMapContainsTester;
+import speiger.src.testers.PACKAGE.tests.maps.FILE_KEY_TYPE2FILE_VALUE_TYPEMapContainsKeyTester;
+import speiger.src.testers.PACKAGE.tests.maps.FILE_KEY_TYPE2FILE_VALUE_TYPEMapContainsValueTester;
+import speiger.src.testers.PACKAGE.tests.maps.FILE_KEY_TYPE2FILE_VALUE_TYPEMapEntrySetTester;
+import speiger.src.testers.PACKAGE.tests.maps.FILE_KEY_TYPE2FILE_VALUE_TYPEMapEqualsTester;
+import speiger.src.testers.PACKAGE.tests.maps.FILE_KEY_TYPE2FILE_VALUE_TYPEMapForEachTester;
+import speiger.src.testers.PACKAGE.tests.maps.FILE_KEY_TYPE2FILE_VALUE_TYPEMapGetOrDefaultTester;
+import speiger.src.testers.PACKAGE.tests.maps.FILE_KEY_TYPE2FILE_VALUE_TYPEMapGetTester;
+import speiger.src.testers.PACKAGE.tests.maps.FILE_KEY_TYPE2FILE_VALUE_TYPEMapHashCodeTester;
+import speiger.src.testers.PACKAGE.tests.maps.FILE_KEY_TYPE2FILE_VALUE_TYPEMapIsEmptyTester;
+import speiger.src.testers.PACKAGE.tests.maps.FILE_KEY_TYPE2FILE_VALUE_TYPEMapMergeTester;
+import speiger.src.testers.PACKAGE.tests.maps.FILE_KEY_TYPE2FILE_VALUE_TYPEMapMergeBulkTester;
+import speiger.src.testers.PACKAGE.tests.maps.FILE_KEY_TYPE2FILE_VALUE_TYPEMapPutAllArrayTester;
+import speiger.src.testers.PACKAGE.tests.maps.FILE_KEY_TYPE2FILE_VALUE_TYPEMapPutAllTester;
+import speiger.src.testers.PACKAGE.tests.maps.FILE_KEY_TYPE2FILE_VALUE_TYPEMapPutIfAbsentTester;
+import speiger.src.testers.PACKAGE.tests.maps.FILE_KEY_TYPE2FILE_VALUE_TYPEMapPutTester;
+import speiger.src.testers.PACKAGE.tests.maps.FILE_KEY_TYPE2FILE_VALUE_TYPEMapRemoveEntryTester;
+import speiger.src.testers.PACKAGE.tests.maps.FILE_KEY_TYPE2FILE_VALUE_TYPEMapRemoveOrDefaultTester;
+import speiger.src.testers.PACKAGE.tests.maps.FILE_KEY_TYPE2FILE_VALUE_TYPEMapRemoveTester;
+import speiger.src.testers.PACKAGE.tests.maps.FILE_KEY_TYPE2FILE_VALUE_TYPEMapReplaceAllTester;
+import speiger.src.testers.PACKAGE.tests.maps.FILE_KEY_TYPE2FILE_VALUE_TYPEMapReplaceEntryTester;
+import speiger.src.testers.PACKAGE.tests.maps.FILE_KEY_TYPE2FILE_VALUE_TYPEMapReplaceTester;
+import speiger.src.testers.PACKAGE.tests.maps.FILE_KEY_TYPE2FILE_VALUE_TYPEMapSizeTester;
+import speiger.src.testers.PACKAGE.tests.maps.FILE_KEY_TYPE2FILE_VALUE_TYPEMapSupplyIfAbsentTester;
+import speiger.src.testers.PACKAGE.tests.maps.FILE_KEY_TYPE2FILE_VALUE_TYPEMapToStringTester;
+import speiger.src.testers.objects.builder.ObjectSetTestSuiteBuilder;
+import speiger.src.testers.objects.generators.TestObjectSetGenerator;
+import speiger.src.testers.objects.tests.collection.ObjectCollectionIteratorTester;
+import speiger.src.testers.objects.tests.collection.ObjectCollectionRemoveAllTester;
+import speiger.src.testers.objects.tests.collection.ObjectCollectionRetainAllTester;
+import speiger.src.testers.utils.SpecialFeature;
+import speiger.src.testers.utils.TestUtils;
+
+@SuppressWarnings("javadoc")
+public class MAP_TEST_BUILDER KEY_VALUE_GENERIC_TYPE extends MapTestSuiteBuilder<CLASS_TYPE, CLASS_VALUE_TYPE> {
+	boolean shouldBlockKeys;
+	
+	public static GENERIC_KEY_VALUE_BRACES MAP_TEST_BUILDER KEY_VALUE_GENERIC_TYPE using(TEST_MAP_GENERATOR KEY_VALUE_GENERIC_TYPE generator) {
+		return (MAP_TEST_BUILDER KEY_VALUE_GENERIC_TYPE) new MAP_TEST_BUILDER KEY_VALUE_GENERIC_TYPE().usingGenerator(generator);
+	}
+	
+	public MAP_TEST_BUILDER KEY_VALUE_GENERIC_TYPE shouldBlockKeys(boolean value) {
+		shouldBlockKeys = value;
+		return this;
+	}
+	
+	@Override
+	@SuppressWarnings("rawtypes")
+	protected List<Class<? extends AbstractTester>> getTesters() {
+		List<Class<? extends AbstractTester>> testers = new ArrayList<>();
+		testers.add(FILE_KEY_TYPE2FILE_VALUE_TYPEMapClearTester.class);
+		testers.add(FILE_KEY_TYPE2FILE_VALUE_TYPEMapComputeTester.class);
+		testers.add(FILE_KEY_TYPE2FILE_VALUE_TYPEMapComputeIfAbsentTester.class);
+		testers.add(FILE_KEY_TYPE2FILE_VALUE_TYPEMapComputeIfPresentTester.class);
+		testers.add(FILE_KEY_TYPE2FILE_VALUE_TYPEMapSupplyIfAbsentTester.class);
+		testers.add(FILE_KEY_TYPE2FILE_VALUE_TYPEMapCopyTester.class);
+		testers.add(FILE_KEY_TYPE2FILE_VALUE_TYPEMapContainsTester.class);
+		testers.add(FILE_KEY_TYPE2FILE_VALUE_TYPEMapContainsKeyTester.class);
+		testers.add(FILE_KEY_TYPE2FILE_VALUE_TYPEMapContainsValueTester.class);
+		testers.add(FILE_KEY_TYPE2FILE_VALUE_TYPEMapEntrySetTester.class);
+		testers.add(FILE_KEY_TYPE2FILE_VALUE_TYPEMapEqualsTester.class);
+		testers.add(FILE_KEY_TYPE2FILE_VALUE_TYPEMapForEachTester.class);
+		testers.add(FILE_KEY_TYPE2FILE_VALUE_TYPEMapGetTester.class);
+		testers.add(FILE_KEY_TYPE2FILE_VALUE_TYPEMapGetOrDefaultTester.class);
+		testers.add(FILE_KEY_TYPE2FILE_VALUE_TYPEMapHashCodeTester.class);
+		testers.add(FILE_KEY_TYPE2FILE_VALUE_TYPEMapIsEmptyTester.class);
+		testers.add(FILE_KEY_TYPE2FILE_VALUE_TYPEMapMergeTester.class);
+		testers.add(FILE_KEY_TYPE2FILE_VALUE_TYPEMapMergeBulkTester.class);
+		testers.add(FILE_KEY_TYPE2FILE_VALUE_TYPEMapPutTester.class);
+#if VALUE_PRIMITIVES
+		testers.add(FILE_KEY_TYPE2FILE_VALUE_TYPEMapAddToTester.class);
+		testers.add(FILE_KEY_TYPE2FILE_VALUE_TYPEMapSubFromTester.class);
+#endif
+		testers.add(FILE_KEY_TYPE2FILE_VALUE_TYPEMapPutAllTester.class);
+		testers.add(FILE_KEY_TYPE2FILE_VALUE_TYPEMapPutAllArrayTester.class);
+		testers.add(FILE_KEY_TYPE2FILE_VALUE_TYPEMapPutIfAbsentTester.class);
+		testers.add(FILE_KEY_TYPE2FILE_VALUE_TYPEMapRemoveTester.class);
+		testers.add(FILE_KEY_TYPE2FILE_VALUE_TYPEMapRemoveEntryTester.class);
+		testers.add(FILE_KEY_TYPE2FILE_VALUE_TYPEMapRemoveOrDefaultTester.class);
+		testers.add(FILE_KEY_TYPE2FILE_VALUE_TYPEMapReplaceTester.class);
+		testers.add(FILE_KEY_TYPE2FILE_VALUE_TYPEMapReplaceAllTester.class);
+		testers.add(FILE_KEY_TYPE2FILE_VALUE_TYPEMapReplaceEntryTester.class);
+		testers.add(FILE_KEY_TYPE2FILE_VALUE_TYPEMapSizeTester.class);
+		testers.add(FILE_KEY_TYPE2FILE_VALUE_TYPEMapToStringTester.class);
+		return testers;
+	}
+
+	@Override
+	protected List<TestSuite> createDerivedSuites(FeatureSpecificTestSuiteBuilder<?, ? extends OneSizeTestContainerGenerator<Map<CLASS_TYPE, CLASS_VALUE_TYPE>, Map.Entry<CLASS_TYPE, CLASS_VALUE_TYPE>>> parentBuilder) {
+		List<TestSuite> derivedSuites = new ArrayList<>();
+		derivedSuites.add(createDerivedEntrySetSuite(
+				DERIVED_MAP_GENERATORS.entrySetGenerator(parentBuilder.getSubjectGenerator()))
+						.withFeatures(computeEntrySetFeatures(parentBuilder.getFeatures()))
+						.named(parentBuilder.getName() + " entrySet")
+						.suppressing(getEntrySetSuppressing(parentBuilder.getSuppressedTests())).suppressing(getSuppressing(1))
+						.withSetUp(parentBuilder.getSetUp()).withTearDown(parentBuilder.getTearDown())
+						.createTestSuite());
+
+		derivedSuites.add(createDerivedKeySetSuite(
+				DERIVED_MAP_GENERATORS.keySetGenerator(parentBuilder.getSubjectGenerator()))
+						.withFeatures(computeKeySetFeatures(parentBuilder.getFeatures()))
+						.named(parentBuilder.getName() + " keys").suppressing(parentBuilder.getSuppressedTests()).suppressing(getSuppressing(0))
+						.withSetUp(parentBuilder.getSetUp()).withTearDown(parentBuilder.getTearDown())
+						.createTestSuite());
+#if !TYPE_CHAR && !TYPE_OBJECT && !TYPE_FLOAT && !TYPE_DOUBLE || !VALUE_BOOLEAN
+		derivedSuites.add(createDerivedValueCollectionSuite(
+				new DERIVED_MAP_GENERATORS.MapValueCollectionGeneratorKV_BRACES(parentBuilder.getSubjectGenerator()))
+						.named(parentBuilder.getName() + " values")
+						.withFeatures(computeValuesCollectionFeatures(parentBuilder.getFeatures()))
+						.suppressing(parentBuilder.getSuppressedTests()).suppressing(getSuppressing(2)).withSetUp(parentBuilder.getSetUp())
+						.withTearDown(parentBuilder.getTearDown()).createTestSuite());
+#endif
+		return derivedSuites;
+	}
+
+	protected ObjectSetTestSuiteBuilder<MAP.Entry KEY_VALUE_GENERIC_TYPE> createDerivedEntrySetSuite(TestObjectSetGenerator<MAP.Entry KEY_VALUE_GENERIC_TYPE> entrySetGenerator) {
+		return ObjectSetTestSuiteBuilder.using(entrySetGenerator);
+	}
+	
+	protected SET_TEST_BUILDER KEY_GENERIC_TYPE createDerivedKeySetSuite(TEST_SET_GENERATOR KEY_GENERIC_TYPE generator) {
+		return SET_TEST_BUILDER.using(generator);
+	}
+	
+	protected VALUE_COLLECTION_TEST_BUILDER VALUE_GENERIC_TYPE createDerivedValueCollectionSuite(VALUE_TEST_COLLECTION_GENERATOR VALUE_GENERIC_TYPE generator) {
+		return VALUE_COLLECTION_TEST_BUILDER.using(generator);
+	}
+	
+	private Method[] getSuppressing(int type) {
+#if TYPE_CHAR || TYPE_OBJECT || TYPE_FLOAT || TYPE_DOUBLE
+		if(shouldBlockKeys) {
+			switch(type) {
+				case 0: return TestUtils.getSurpession(FILE_KEY_TYPECollectionIteratorTester.class, "testIterator_unknownOrderRemoveSupported");
+				case 1: return TestUtils.getSurpession(ObjectCollectionIteratorTester.class, "testIterator_unknownOrderRemoveSupported");
+				case 2: {
+					List<Method> result = new ArrayList<>();
+					TestUtils.getSurpession(result, FILE_VALUE_TYPECollectionIteratorTester.class, "testIterator_unknownOrderRemoveSupported");
+#if VALUE_BOOLEAN
+					TestUtils.getSurpession(result, CollectionRemoveTester.class, "testRemove_present");
+					TestUtils.getSurpession(result, CollectionRetainAllTester.class);
+					TestUtils.getSurpession(result, FILE_VALUE_TYPECollectionIteratorTester.class, "testIterator_removeAffectsBackingCollection");
+					TestUtils.getSurpession(result, FILE_VALUE_TYPECollectionRemoveAllTester.class, "testRemoveAll_someFetchRemovedElements");
+					TestUtils.getSurpession(result, FILE_VALUE_TYPECollectionRetainAllTester.class);
+#endif
+					return result.toArray(new Method[result.size()]);
+				}
+			}
+		}
+		return new Method[0];
+#else if VALUE_BOOLEAN
+		if(type == 2) {
+			List<Method> result = new ArrayList<>();
+			TestUtils.getSurpession(result, FILE_VALUE_TYPECollectionIteratorTester.class, "testIterator_unknownOrderRemoveSupported");
+#if VALUE_BOOLEAN
+			TestUtils.getSurpession(result, CollectionRemoveTester.class, "testRemove_present");
+			TestUtils.getSurpession(result, CollectionRetainAllTester.class);
+			TestUtils.getSurpession(result, FILE_VALUE_TYPECollectionIteratorTester.class, "testIterator_removeAffectsBackingCollection");
+			TestUtils.getSurpession(result, FILE_VALUE_TYPECollectionRemoveAllTester.class, "testRemoveAll_someFetchRemovedElements");
+			TestUtils.getSurpession(result, FILE_VALUE_TYPECollectionRetainAllTester.class);
+#endif
+			return result.toArray(new Method[result.size()]);
+		}
+		return new Method[0];
+#else
+		return new Method[0];
+#endif
+	}
+	
+	private static Set<Feature<?>> computeEntrySetFeatures(Set<Feature<?>> mapFeatures) {
+		Set<Feature<?>> entrySetFeatures = MapTestSuiteBuilder.computeCommonDerivedCollectionFeatures(mapFeatures);
+#ignore
+		if (mapFeatures.contains(MapFeature.ALLOWS_NULL_ENTRY_QUERIES)) {
+			entrySetFeatures.add(CollectionFeature.ALLOWS_NULL_QUERIES);
+		}
+		if(mapFeatures.contains(SpecialFeature.CHILDREN_COPY)) {
+			entrySetFeatures.add(SpecialFeature.COPYING);
+		}
+		else {
+			entrySetFeatures.remove(SpecialFeature.COPYING);
+		}
+		if(mapFeatures.contains(SpecialFeature.MODIFIABLE)) {
+			entrySetFeatures.add(SpecialFeature.MODIFIABLE);
+		}
+		else {
+			entrySetFeatures.remove(SpecialFeature.MODIFIABLE);
+		}
+		entrySetFeatures.add(SpecialFeature.MAP_ENTRY);
+#endignore
+		return entrySetFeatures;
+	}
+
+	private static Set<Feature<?>> computeKeySetFeatures(Set<Feature<?>> mapFeatures) {
+		Set<Feature<?>> keySetFeatures = MapTestSuiteBuilder.computeCommonDerivedCollectionFeatures(mapFeatures);
+#ignore
+		keySetFeatures.add(CollectionFeature.SUBSET_VIEW);
+		if (mapFeatures.contains(MapFeature.ALLOWS_NULL_KEYS)) {
+			keySetFeatures.add(CollectionFeature.ALLOWS_NULL_VALUES);
+		} else if (mapFeatures.contains(MapFeature.ALLOWS_NULL_KEY_QUERIES)) {
+			keySetFeatures.add(CollectionFeature.ALLOWS_NULL_QUERIES);
+		}
+		if(mapFeatures.contains(SpecialFeature.CHILDREN_COPY)) {
+			keySetFeatures.add(SpecialFeature.COPYING);
+		}
+		else {
+			keySetFeatures.remove(SpecialFeature.COPYING);
+		}
+		if(mapFeatures.contains(SpecialFeature.MODIFIABLE)) {
+			keySetFeatures.add(SpecialFeature.MODIFIABLE);
+		}
+		else {
+			keySetFeatures.remove(SpecialFeature.MODIFIABLE);
+		}
+#endignore
+		return keySetFeatures;
+	}
+
+#if !TYPE_CHAR && !TYPE_OBJECT && !TYPE_FLOAT && !TYPE_DOUBLE || !VALUE_BOOLEAN
+	private static Set<Feature<?>> computeValuesCollectionFeatures(Set<Feature<?>> mapFeatures) {
+		Set<Feature<?>> valuesCollectionFeatures = MapTestSuiteBuilder.computeCommonDerivedCollectionFeatures(mapFeatures);
+#ignore
+		if (mapFeatures.contains(MapFeature.ALLOWS_NULL_VALUE_QUERIES)) {
+			valuesCollectionFeatures.add(CollectionFeature.ALLOWS_NULL_QUERIES);
+		}
+		if (mapFeatures.contains(MapFeature.ALLOWS_NULL_VALUES)) {
+			valuesCollectionFeatures.add(CollectionFeature.ALLOWS_NULL_VALUES);
+		}
+		if(mapFeatures.contains(SpecialFeature.CHILDREN_COPY)) {
+			valuesCollectionFeatures.add(SpecialFeature.COPYING);
+		}
+		else {
+			valuesCollectionFeatures.remove(SpecialFeature.COPYING);
+		}
+#endignore
+		return valuesCollectionFeatures;
+	}
+	
+#endif
+	private static Set<Method> getEntrySetSuppressing(Set<Method> suppressing) {
+		TestUtils.getSurpession(suppressing, CollectionIteratorTester.class, "testIterator_removeAffectsBackingCollection");
+		TestUtils.getSurpession(suppressing, ObjectCollectionIteratorTester.class, "testIterator_removeAffectsBackingCollection");
+		TestUtils.getSurpession(suppressing, ObjectCollectionRemoveAllTester.class, "testRemoveAll_someFetchRemovedElements");
+		TestUtils.getSurpession(suppressing, ObjectCollectionRetainAllTester.class, "testRetainAllExtra_disjointPreviouslyNonEmpty", "testRetainAllExtra_containsDuplicatesSizeSeveral", "testRetainAllExtra_subset", "testRetainAllExtra_partialOverlap");
+#if TYPE_DOUBLE || TYPE_FLOAT
+		TestUtils.getSurpession(suppressing, CollectionIteratorTester.class, "testIterator_unknownOrderRemoveSupported");
+		TestUtils.getSurpession(suppressing, ObjectCollectionIteratorTester.class, "testIterator_unknownOrderRemoveSupported");
+#endif
+		return suppressing;
+	}
+}

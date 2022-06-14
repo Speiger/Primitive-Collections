@@ -1,0 +1,86 @@
+package speiger.src.testers.PACKAGE.tests.list;
+
+#ignore
+import static com.google.common.collect.testing.features.CollectionFeature.SUPPORTS_REMOVE;
+import static com.google.common.collect.testing.features.CollectionSize.ZERO;
+#endignore
+
+import com.google.common.collect.testing.features.CollectionFeature;
+import com.google.common.collect.testing.features.CollectionSize;
+
+import org.junit.Ignore;
+
+import speiger.src.collections.PACKAGE.lists.ARRAY_LIST;
+import speiger.src.testers.PACKAGE.tests.base.ABSTRACT_LIST_TESTER;
+
+@Ignore
+@SuppressWarnings("javadoc")
+public class FILE_KEY_TYPEListExtractElementsTester KEY_GENERIC_TYPE extends ABSTRACT_LIST_TESTER KEY_GENERIC_TYPE
+{
+#ignore
+	@CollectionFeature.Require(SUPPORTS_REMOVE)
+	@CollectionSize.Require(absent = {ZERO})
+#endignore
+	public void testRemoveElements() {
+#if TYPE_OBJECT
+		assertArrayEquals("The Extracted Elements should be present", getSampleElements(1).TO_ARRAY(), getList().extractElements(0, 1, Object.class));
+#else
+		assertArrayEquals("The Extracted Elements should be present", getSampleElements(1).TO_ARRAY(), getList().extractElements(0, 1));
+#endif
+		expectMissing(e0());
+	}
+	
+#ignore
+	@CollectionFeature.Require(SUPPORTS_REMOVE)
+	@CollectionSize.Require(absent = {ZERO})
+#endignore
+	public void testRemove_FromToLow() {
+		try {
+#if TYPE_OBJECT
+			getList().extractElements(-1, 1, Object.class);
+#else
+			getList().extractElements(-1, 1);
+#endif
+			fail("extractElements(toLow, high) should throw IndexOutOfBoundsException");
+		} catch (IndexOutOfBoundsException e) {
+		}
+		expectUnchanged();
+	}
+	
+#ignore
+	@CollectionFeature.Require(SUPPORTS_REMOVE)
+	@CollectionSize.Require(absent = {ZERO})
+#endignore
+	public void testRemove_toToHigh() {
+		try {
+#if TYPE_OBJECT
+			getList().extractElements(0, getNumElements()+1, Object.class);
+#else
+			getList().extractElements(0, getNumElements()+1);
+#endif
+			fail("extractElements(low, toHigh) should throw IndexOutOfBoundsException");
+		} catch (IndexOutOfBoundsException e) {
+		}
+		expectUnchanged();
+	}
+	
+#ignore
+	@CollectionFeature.Require(SUPPORTS_REMOVE)
+	@CollectionSize.Require(absent = {ZERO})
+#endignore
+	public void testRemove_mixedUp() {
+		try {
+#if TYPE_OBJECT
+			getList().extractElements(1, 0, Object.class);
+#else
+			getList().extractElements(1, 0);
+#endif
+		} catch (IndexOutOfBoundsException e) {
+		}
+		expectUnchanged();
+	}
+	
+	private static void assertArrayEquals(String message, KEY_OBJECT_TYPE[] expected, KEY_OBJECT_TYPE[] actual) {
+		assertEquals(message, ARRAY_LIST.wrap(expected), ARRAY_LIST.wrap(actual));
+	}
+}

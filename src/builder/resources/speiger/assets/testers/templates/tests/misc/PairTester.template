@@ -1,0 +1,261 @@
+package speiger.src.testers.PACKAGE.tests.misc;
+
+#if TYPE_OBJECT || VALUE_OBJECT
+import java.util.Objects;
+#endif
+
+import java.util.function.BiFunction;
+import java.util.function.Function;
+import java.util.function.Supplier;
+
+import org.junit.Test;
+
+import junit.framework.TestCase;
+import speiger.src.collections.VALUE_PACKAGE.functions.function.FILE_VALUE_TYPE2ObjectFunction;
+#if !SAME_TYPE
+import speiger.src.collections.PACKAGE.functions.function.TO_OBJECT_FUNCTION;
+#endif
+import speiger.src.collections.PACKAGE.misc.pairs.PAIR;
+
+@SuppressWarnings("javadoc")
+public class PAIRTester KEY_VALUE_GENERIC_TYPE extends TestCase
+{
+	Supplier<PAIR KEY_VALUE_GENERIC_TYPE> simple;
+	Function<PAIR KEY_VALUE_GENERIC_TYPE, PAIR KEY_VALUE_GENERIC_TYPE> copier;
+	BiFunction<KEY_TYPE[], VALUE_TYPE[], PAIR KEY_VALUE_GENERIC_TYPE> constructor;
+	TO_OBJECT_FUNCTION KKS_GENERIC_TYPE<PAIR KEY_VALUE_GENERIC_TYPE> keyConstructor;
+	FILE_VALUE_TYPE2ObjectFunction VVS_GENERIC_TYPE<PAIR KEY_VALUE_GENERIC_TYPE> valueConstructor;
+	boolean mutable;
+	
+	protected PAIRTester(boolean mutable) {
+		this.mutable = mutable;
+	}
+
+	protected void setSimple(Supplier<PAIR KEY_VALUE_GENERIC_TYPE> simple) {
+		this.simple = simple;
+	}
+
+	protected void setCopier(Function<PAIR KEY_VALUE_GENERIC_TYPE, PAIR KEY_VALUE_GENERIC_TYPE> copier) {
+		this.copier = copier;
+	}
+
+	protected void setConstructor(BiFunction<KEY_TYPE[], VALUE_TYPE[], PAIR KEY_VALUE_GENERIC_TYPE> constructor) {
+		this.constructor = constructor;
+	}
+
+	protected void setKeyConstructor(TO_OBJECT_FUNCTION KKS_GENERIC_TYPE<PAIR KEY_VALUE_GENERIC_TYPE> keyConstructor) {
+		this.keyConstructor = keyConstructor;
+	}
+
+	protected void setValueConstructor(FILE_VALUE_TYPE2ObjectFunction VVS_GENERIC_TYPE<PAIR KEY_VALUE_GENERIC_TYPE> valueConstructor) {
+		this.valueConstructor = valueConstructor;
+	}
+	
+#if TYPE_BOOLEAN
+	protected KEY_TYPE getKey() {
+		return true;
+	}
+	
+#else
+	protected KEY_TYPE getKey() {
+		return INVALID_KEY_VALUE;
+	}
+		
+#endif
+#if VALUE_BOOLEAN
+	protected VALUE_TYPE getValue() {
+		return true;
+	}
+
+#else
+	protected VALUE_TYPE getValue() {
+		return INVALID_VALUE;
+	}
+
+#endif
+	protected KEY_TYPE[] getKeyArray() {
+		KEY_TYPE[] keys = NEW_KEY_ARRAY(1);
+		keys[0] = getKey();
+		return keys;
+	}
+	
+	protected VALUE_TYPE[] getValueArray() {
+		VALUE_TYPE[] values = NEW_VALUE_ARRAY(1);
+		values[0] = getValue();
+		return values;
+	}
+	
+	@Test
+	public void testCopyConstructor() {
+		PAIR KEY_VALUE_GENERIC_TYPE base = PAIR.of();
+		PAIR KEY_VALUE_GENERIC_TYPE result = copier.apply(base);
+		assertTrue(base != result);
+	}
+	
+	@Test
+	public void testKeyMatching() {
+#if TYPE_OBJECT
+		PAIR KEY_VALUE_GENERIC_TYPE pair = keyConstructor.getObject(getKey());
+#else
+		PAIR KEY_VALUE_GENERIC_TYPE pair = keyConstructor.GET_VALUE(getKey());
+#endif
+		assertEquals(getKey(), pair.ENTRY_KEY());
+		assertEquals(EMPTY_VALUE, pair.ENTRY_VALUE());
+	}
+	
+	@Test
+	public void testValueMatching() {
+#if VALUE_OBJECT
+		PAIR KEY_VALUE_GENERIC_TYPE pair = valueConstructor.getObject(getValue());
+#else
+		PAIR KEY_VALUE_GENERIC_TYPE pair = valueConstructor.get(getValue());
+#endif
+		assertEquals(EMPTY_KEY_VALUE, pair.ENTRY_KEY());
+		assertEquals(getValue(), pair.ENTRY_VALUE());
+	}
+	
+	@Test
+	public void testEntryMatching() {
+		PAIR KEY_VALUE_GENERIC_TYPE pair = constructor.apply(getKeyArray(), getValueArray());
+		assertEquals(getKey(), pair.ENTRY_KEY());
+		assertEquals(getValue(), pair.ENTRY_VALUE());
+	}
+	
+	@Test
+	public void testCopying() {
+		PAIR KEY_VALUE_GENERIC_TYPE pair = simple.get();
+		PAIR KEY_VALUE_GENERIC_TYPE copy = pair.shallowCopy();
+		if(mutable) {
+			assertTrue(pair != copy);
+			assertEquals(pair.ENTRY_KEY(), copy.ENTRY_KEY());
+			assertEquals(pair.ENTRY_VALUE(), copy.ENTRY_VALUE());
+		}
+		else {
+			assertTrue(pair == copy);
+			assertEquals(pair.ENTRY_KEY(), copy.ENTRY_KEY());
+			assertEquals(pair.ENTRY_VALUE(), copy.ENTRY_VALUE());
+		}
+		assertTrue(pair.equals(copy));
+		assertFalse(pair.equals(null));
+		assertFalse(pair.equals(PAIR.of(getKey(), getValue())));
+		assertEquals(KEY_TO_STRING(pair.ENTRY_KEY())+"->"+VALUE_TO_STRING(pair.ENTRY_VALUE()), pair.toString());
+		assertEquals(KEY_TO_HASH(pair.ENTRY_KEY()) ^ VALUE_TO_HASH(pair.ENTRY_VALUE()), pair.hashCode());
+	}
+	
+	@Test
+	public void testSetKey() {
+		PAIR KEY_VALUE_GENERIC_TYPE pair = simple.get();
+		if(mutable) {
+			PAIR KEY_VALUE_GENERIC_TYPE changed = pair.KEY_ENTRY(getKey());
+			assertTrue(pair == changed);
+			assertEquals(pair.ENTRY_KEY(), changed.ENTRY_KEY());
+		}
+		else {
+			PAIR KEY_VALUE_GENERIC_TYPE changed = pair.KEY_ENTRY(getKey());
+			assertTrue(pair != changed);
+			assertTrue(KEY_EQUALS_NOT(pair.ENTRY_KEY(), changed.ENTRY_KEY()));
+		}
+	}
+	
+	@Test
+	public void testSetValue() {
+		PAIR KEY_VALUE_GENERIC_TYPE pair = simple.get();
+		if(mutable) {
+			PAIR KEY_VALUE_GENERIC_TYPE changed = pair.VALUE_ENTRY(getValue());
+			assertTrue(pair == changed);
+			assertEquals(pair.ENTRY_VALUE(), changed.ENTRY_VALUE());
+		}
+		else {
+			PAIR KEY_VALUE_GENERIC_TYPE changed = pair.VALUE_ENTRY(getValue());
+			assertTrue(pair != changed);
+			assertTrue(VALUE_EQUALS_NOT(pair.ENTRY_VALUE(), changed.ENTRY_VALUE()));
+		}
+	}
+	
+	@Test
+	public void testSetEntry() {
+		PAIR KEY_VALUE_GENERIC_TYPE pair = simple.get();
+		if(mutable) {
+			PAIR KEY_VALUE_GENERIC_TYPE changed = pair.set(getKey(), getValue());
+			assertTrue(pair == changed);
+			assertEquals(pair.ENTRY_VALUE(), changed.ENTRY_VALUE());
+			assertEquals(pair.ENTRY_KEY(), changed.ENTRY_KEY());
+		}
+		else {
+			PAIR KEY_VALUE_GENERIC_TYPE changed = pair.set(getKey(), getValue());
+			assertTrue(pair != changed);
+			assertTrue(VALUE_EQUALS_NOT(pair.ENTRY_VALUE(), changed.ENTRY_VALUE()));
+			assertTrue(KEY_EQUALS_NOT(pair.ENTRY_KEY(), changed.ENTRY_KEY()));
+		}
+	}
+	
+	public static class Mutable extends PAIRTester KEY_VALUE_STRING_GENERIC_TYPE
+	{
+		public Mutable() {
+			super(true);
+			setSimple(PAIR::mutable);
+			setCopier(PAIR::mutable);
+			setConstructor((K, V) -> PAIR.mutable(K[0], V[0]));
+			setKeyConstructor(PAIR::mutableKey);
+			setValueConstructor(PAIR::mutableValue);
+		}
+		
+#if TYPE_OBJECT
+		@Override
+		public String getKey() {
+			return "key";
+		}
+		
+		@Override
+		public String[] getKeyArray() {
+			return new String[]{"key"};
+		}
+#endif
+#if VALUE_OBJECT
+		@Override
+		public String getValue() {
+			return "value";
+		}
+		
+		@Override
+		public String[] getValueArray() {
+			return new String[]{"value"};
+		}
+#endif
+	}
+	
+	public static class Immutable extends PAIRTester KEY_VALUE_STRING_GENERIC_TYPE
+	{
+		public Immutable() {
+			super(false);
+			setSimple(PAIR::of);
+			setCopier(PAIR::of);
+			setConstructor((K, V) -> PAIR.of(K[0], V[0]));
+			setKeyConstructor(PAIR::ofKey);
+			setValueConstructor(PAIR::ofValue);
+		}
+		
+#if TYPE_OBJECT
+		@Override
+		public String getKey() {
+			return "key";
+		}
+		
+		@Override
+		public String[] getKeyArray() {
+			return new String[]{"key"};
+		}
+#endif
+#if VALUE_OBJECT
+		@Override
+		public String getValue() {
+			return "value";
+		}
+		
+		@Override
+		public String[] getValueArray() {
+			return new String[]{"value"};
+		}
+#endif
+	}
+}

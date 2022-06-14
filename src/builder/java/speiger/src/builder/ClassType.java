@@ -3,15 +3,15 @@ package speiger.src.builder;
 @SuppressWarnings("javadoc")
 public enum ClassType
 {
-	BOOLEAN("boolean", "Boolean", "Boolean", "booleans", "BOOLEAN", "false"),
-	BYTE("byte", "Byte", "Byte", "bytes", "BYTE", "(byte)0"),
-	SHORT("short", "Short", "Short", "shorts", "SHORT", "(short)0"),
-	CHAR("char", "Character", "Char", "chars", "CHAR", "(char)0"),
-	INT("int", "Integer", "Int", "ints", "INT", "0"),
-	LONG("long", "Long", "Long", "longs", "LONG", "0L"),
-	FLOAT("float", "Float", "Float", "floats", "FLOAT", "0F"),
-	DOUBLE("double", "Double", "Double", "doubles", "DOUBLE", "0D"),
-	OBJECT("T", "T", "Object", "objects", "OBJECT", "null");
+	BOOLEAN("boolean", "Boolean", "Boolean", "booleans", "BOOLEAN", "false", "false"),
+	BYTE("byte", "Byte", "Byte", "bytes", "BYTE", "(byte)0", "(byte)-1"),
+	SHORT("short", "Short", "Short", "shorts", "SHORT", "(short)0", "(short)-1"),
+	CHAR("char", "Character", "Char", "chars", "CHAR", "(char)0", "(char)-1"),
+	INT("int", "Integer", "Int", "ints", "INT", "0", "-1"),
+	LONG("long", "Long", "Long", "longs", "LONG", "0L", "-1L"),
+	FLOAT("float", "Float", "Float", "floats", "FLOAT", "0F", "-1F"),
+	DOUBLE("double", "Double", "Double", "doubles", "DOUBLE", "0D", "-1D"),
+	OBJECT("T", "T", "Object", "objects", "OBJECT", "null", "null");
 	
 	String keyType;
 	String classType;
@@ -19,8 +19,9 @@ public enum ClassType
 	String pathType;
 	String capType;
 	String emptyValue;
+	String invalidValue;
 	
-	private ClassType(String keyType, String classType, String fileType, String pathType, String capType, String emptyValue)
+	private ClassType(String keyType, String classType, String fileType, String pathType, String capType, String emptyValue, String invalidValue)
 	{
 		this.keyType = keyType;
 		this.classType = classType;
@@ -28,6 +29,7 @@ public enum ClassType
 		this.pathType = pathType;
 		this.capType = capType;
 		this.emptyValue = emptyValue;
+		this.invalidValue = invalidValue;
 	}
 	
 	public String getKeyType()
@@ -88,6 +90,11 @@ public enum ClassType
 	public String getEmptyValue()
 	{
 		return emptyValue;
+	}
+	
+	public String getInvalidValue()
+	{
+		return invalidValue;
 	}
 	
 	public boolean isObject()

@@ -1,0 +1,110 @@
+package speiger.src.testers.PACKAGE.tests.maps;
+
+#ignore
+import static com.google.common.collect.testing.features.CollectionFeature.KNOWN_ORDER;
+import static com.google.common.collect.testing.features.CollectionSize.ZERO;
+import static com.google.common.collect.testing.features.MapFeature.SUPPORTS_PUT;
+#endignore
+
+import org.junit.Ignore;
+
+import com.google.common.collect.testing.features.CollectionFeature;
+import com.google.common.collect.testing.features.CollectionSize;
+import com.google.common.collect.testing.features.MapFeature;
+
+import speiger.src.collections.PACKAGE.maps.interfaces.MAP;
+import speiger.src.collections.objects.lists.ObjectArrayList;
+import speiger.src.collections.objects.lists.ObjectList;
+import speiger.src.testers.VALUE_PACKAGE.utils.VALUE_SAMPLE_ELEMENTS;
+import speiger.src.testers.PACKAGE.tests.base.maps.ABSTRACT_MAP_TESTER;
+#if !SAME_TYPE
+import speiger.src.testers.PACKAGE.utils.SAMPLE_ELEMENTS;
+#endif
+
+@Ignore
+@SuppressWarnings("javadoc")
+public class FILE_KEY_TYPE2FILE_VALUE_TYPEMapReplaceAllTester KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP_TESTER KEY_VALUE_GENERIC_TYPE
+{
+	private SAMPLE_ELEMENTS KEY_GENERIC_TYPE keys() {
+		return new SAMPLE_ELEMENTSBRACES(k0(), k1(), k2(), k3(), k4());
+	}
+
+	private VALUE_SAMPLE_ELEMENTS VALUE_GENERIC_TYPE values() {
+		return new VALUE_SAMPLE_ELEMENTSVALUE_BRACES(v0(), v1(), v2(), v3(), v4());
+	}
+
+#ignore
+	@MapFeature.Require(SUPPORTS_PUT)
+#endignore
+	public void testReplaceAllRotate() {
+		getMap().REPLACE_VALUES((k, v) -> {
+			int index = keys().asList().indexOf(k);
+			return values().asList().VALUE_GET_KEY(index + 1);
+		});
+		ObjectList<MAP.Entry KEY_VALUE_GENERIC_TYPE> expectedEntries = new ObjectArrayList<>();
+		for (MAP.Entry KEY_VALUE_GENERIC_TYPE entry : getSampleEntries()) {
+			int index = keys().asList().indexOf(entry.ENTRY_KEY());
+			expectedEntries.add(entry(entry.ENTRY_KEY(), values().asList().VALUE_GET_KEY(index + 1)));
+		}
+		expectContents(expectedEntries);
+	}
+
+#ignore
+	@MapFeature.Require(SUPPORTS_PUT)
+	@CollectionFeature.Require(KNOWN_ORDER)
+#endignore
+	public void testReplaceAllPreservesOrder() {
+		getMap().REPLACE_VALUES((k, v) -> {
+			int index = keys().asList().indexOf(k);
+			return values().asList().VALUE_GET_KEY(index + 1);
+		});
+		ObjectList<MAP.Entry KEY_VALUE_GENERIC_TYPE> orderedEntries = getOrderedElements();
+		int index = 0;
+		for (KEY_TYPE key : getMap().keySet()) {
+			assertEquals(orderedEntries.get(index).ENTRY_KEY(), key);
+			index++;
+		}
+	}
+
+#ignore
+	@MapFeature.Require(absent = SUPPORTS_PUT)
+	@CollectionSize.Require(absent = ZERO)
+#endignore
+	public void testReplaceAll_unsupported() {
+		try {
+			getMap().REPLACE_VALUES((k, v) -> {
+				int index = keys().asList().indexOf(k);
+				return values().asList().VALUE_GET_KEY(index + 1);
+			});
+			fail("REPLACE_VALUES() should throw UnsupportedOperation if a map does " + "not support it and is not empty.");
+		} catch (UnsupportedOperationException expected) {
+		}
+		expectUnchanged();
+	}
+
+#ignore
+	@MapFeature.Require(absent = SUPPORTS_PUT)
+	@CollectionSize.Require(ZERO)
+#endignore
+	public void testReplaceAll_unsupportedByEmptyCollection() {
+		try {
+			getMap().REPLACE_VALUES((k, v) -> {
+				int index = keys().asList().indexOf(k);
+				return values().asList().VALUE_GET_KEY(index + 1);
+			});
+		} catch (UnsupportedOperationException tolerated) {
+		}
+		expectUnchanged();
+	}
+
+#ignore
+	@MapFeature.Require(absent = SUPPORTS_PUT)
+#endignore
+	public void testReplaceAll_unsupportedNoOpFunction() {
+		try {
+			getMap().REPLACE_VALUES((k, v) -> v);
+		} catch (UnsupportedOperationException tolerated) {
+		}
+		expectUnchanged();
+	}
+}

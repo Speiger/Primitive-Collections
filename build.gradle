@@ -1,5 +1,6 @@
 plugins {
     id 'java-library'
+    id "jacoco"
 }
 
 tasks.withType(JavaCompile) {
@@ -62,7 +63,7 @@ task generateGithubSource(type: JavaExec) {
 	description = 'Builds the sourcecode for Github Actions'
  	classpath = sourceSets.builder.runtimeClasspath
  	main = 'speiger.src.builder.PrimitiveCollectionsBuilder'
- 	args = ['false', 'true']
+ 	args = ['silent']
 }
 
 task forceGenerateSource(type: JavaExec) {
@@ -70,7 +71,15 @@ task forceGenerateSource(type: JavaExec) {
 	description = 'Builds the sourcecode forceful'
  	classpath = sourceSets.builder.runtimeClasspath
  	main = 'speiger.src.builder.PrimitiveCollectionsBuilder'
- 	args = ['true']
+ 	args = ['force']
+}
+
+task generateTestSource(type: JavaExec) {
+	group = 'internal'
+	description = 'Builds the sourcecode for the Tests'
+ 	classpath = sourceSets.builder.runtimeClasspath
+ 	main = 'speiger.src.builder.PrimitiveCollectionsBuilder'
+ 	args = ['tests']
 }
 
 task javadocJar(type: Jar) {
@@ -94,8 +103,152 @@ artifacts {
     archives srcJar
 }
 
+task testBooleans(type: Test) {
+	group 'tests'
+	description 'Tests all Boolean Collections'
+	filter {
+		excludeTestsMatching "speiger.src.testers.**.*"
+		includeTestsMatching "speiger.src.tests.booleans.**.*"
+	}
+	useJUnit()
+	ignoreFailures = true
+	maxHeapSize = "1024m"
+}
+
+task testBytes(type: Test) {
+	group 'tests'
+	description 'Tests all Byte Collections'
+	filter {
+		excludeTestsMatching "speiger.src.testers.**.*"
+		includeTestsMatching "speiger.src.tests.bytes.**.*"
+	}
+	useJUnit()
+	ignoreFailures = true
+	maxHeapSize = "1024m"
+	maxParallelForks = 2
+}
+
+task testShorts(type: Test) {
+	group 'tests'
+	description 'Tests all Short Collections'
+	filter {
+		excludeTestsMatching "speiger.src.testers.**.*"
+		includeTestsMatching "speiger.src.tests.shorts.**.*"
+	}
+	useJUnit()
+	ignoreFailures = true
+	maxHeapSize = "1024m"
+	maxParallelForks = 2
+}
+
+task testChars(type: Test) {
+	group 'tests'
+	description 'Tests all Character Collections'
+	filter {
+		excludeTestsMatching "speiger.src.testers.**.*"
+		includeTestsMatching "speiger.src.tests.chars.**.*"
+	}
+	useJUnit()
+	ignoreFailures = true
+	maxHeapSize = "1024m"
+	maxParallelForks = 2
+}
+
+task testInts(type: Test) {
+	group 'tests'
+	description 'Tests all Int Collections'
+	filter {
+		excludeTestsMatching "speiger.src.testers.**.*"
+		includeTestsMatching "speiger.src.tests.ints.**.*"
+	}
+	useJUnit()
+	ignoreFailures = true
+	maxHeapSize = "1024m"
+	maxParallelForks = 2
+}
+
+task testLongs(type: Test) {
+	group 'tests'
+	description 'Tests all Long Collections'
+	filter {
+		excludeTestsMatching "speiger.src.testers.**.*"
+		includeTestsMatching "speiger.src.tests.longs.**.*"
+	}
+	useJUnit()
+	ignoreFailures = true
+	maxHeapSize = "1024m"
+	maxParallelForks = 2
+}
+
+task testFloats(type: Test) {
+	group 'tests'
+	description 'Tests all Float Collections'
+	filter {
+		excludeTestsMatching "speiger.src.testers.**.*"
+		includeTestsMatching "speiger.src.tests.floats.**.*"
+	}
+	useJUnit()
+	ignoreFailures = true
+	maxHeapSize = "1024m"
+	maxParallelForks = 2
+}
+
+task testDoubles(type: Test) {
+	group 'tests'
+	description 'Tests all Double Collections'
+	filter {
+		excludeTestsMatching "speiger.src.testers.**.*"
+		includeTestsMatching "speiger.src.tests.doubles.**.*"
+	}
+	useJUnit()
+	ignoreFailures = true
+	maxHeapSize = "1024m"
+	maxParallelForks = 2
+}
+
+task testObjects(type: Test) {
+	group 'tests'
+	description 'Tests all Object Collections'
+	filter {
+		excludeTestsMatching "speiger.src.testers.**.*"
+		includeTestsMatching "speiger.src.tests.objects.**.*"
+	}
+	useJUnit()
+	ignoreFailures = true
+	maxHeapSize = "1024m"
+	maxParallelForks = 2
+}
+
+if(System.getProperty("full_test_suite", "false").toBoolean()) {
+	test.dependsOn testBooleans
+	test.dependsOn testBytes
+	test.dependsOn testShorts
+	test.dependsOn testChars
+	test.dependsOn testInts
+	test.dependsOn testLongs
+	test.dependsOn testFloats
+	test.dependsOn testDoubles
+	test.dependsOn testObjects
+}
+
 test {
-    useJUnit()
+	filter {
+		excludeTestsMatching "speiger.src.testers.**.*"
+		excludeTestsMatching "speiger.src.tests.**.*"
+		excludeTestsMatching "tests.**.*"
+	}
+	useJUnit()
+	ignoreFailures = true
+	maxHeapSize = "1024m"
+}
+
+jacocoTestReport {
+    executionData fileTree(project.buildDir.absolutePath).include("jacoco/*.exec")
+    reports {
+        xml.enabled true
+        html.enabled = true
+        csv.enabled true
+    }
 }
 
 publishing {

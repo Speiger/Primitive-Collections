@@ -1,0 +1,23 @@
+package speiger.src.testers.PACKAGE.tests.list;
+
+import org.junit.Ignore;
+
+import java.nio.JAVA_BUFFER;
+
+import speiger.src.collections.PACKAGE.lists.ARRAY_LIST;
+import speiger.src.testers.PACKAGE.tests.base.ABSTRACT_LIST_TESTER;
+
+@Ignore
+@SuppressWarnings("javadoc")
+public class FILE_KEY_TYPEListFillBufferTester KEY_GENERIC_TYPE extends ABSTRACT_LIST_TESTER KEY_GENERIC_TYPE
+{
+	public void testFillBuffer() {
+		JAVA_BUFFER buffer = JAVA_BUFFER.allocate(getNumElements());
+		getList().fillBuffer(buffer);
+		assertArrayEquals("Fill Buffer elements should equal", getSampleElements().TO_ARRAY(), buffer.array());
+	}
+
+	private static void assertArrayEquals(String message, KEY_TYPE[] expected, KEY_TYPE[] actual) {
+		assertEquals(message, ARRAY_LIST.wrap(expected), ARRAY_LIST.wrap(actual));
+	}
+}

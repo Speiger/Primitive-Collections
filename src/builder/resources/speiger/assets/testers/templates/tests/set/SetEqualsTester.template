@@ -1,0 +1,45 @@
+package speiger.src.testers.PACKAGE.tests.set;
+
+import org.junit.Ignore;
+
+import com.google.common.collect.testing.features.CollectionSize;
+
+import speiger.src.collections.PACKAGE.collections.COLLECTION;
+import speiger.src.testers.PACKAGE.tests.base.ABSTRACT_SET_TESTER;
+import speiger.src.testers.PACKAGE.utils.HELPERS;
+import speiger.src.testers.PACKAGE.utils.MINIMAL_SET;
+
+@Ignore
+@SuppressWarnings("javadoc")
+public class FILE_KEY_TYPESetEqualsTester KEY_GENERIC_TYPE extends ABSTRACT_SET_TESTER KEY_GENERIC_TYPE
+{
+	public void testEquals_otherSetWithSameElements() {
+		assertTrue("A Set should equal any other Set containing the same elements.", getSet().equals(MINIMAL_SET.of(getSampleElements())));
+	}
+
+#ignore
+	@CollectionSize.Require(absent = CollectionSize.ZERO)
+#endignore
+	public void testEquals_otherSetWithDifferentElements() {
+		COLLECTION KEY_GENERIC_TYPE elements = getSampleElements(getNumElements() - 1);
+		elements.add(e3());
+		assertFalse("A Set should not equal another Set containing different elements.", getSet().equals(MINIMAL_SET.of(elements)));
+	}
+
+#ignore
+	@CollectionSize.Require(absent = CollectionSize.ZERO)
+#endignore
+	public void testEquals_smallerSet() {
+		COLLECTION KEY_GENERIC_TYPE fewerElements = getSampleElements(getNumElements() - 1);
+		assertFalse("Sets of different sizes should not be equal.", getSet().equals(MINIMAL_SET.of(fewerElements)));
+	}
+
+	public void testEquals_largerSet() {
+		COLLECTION KEY_GENERIC_TYPE moreElements = getSampleElements(getNumElements() + 1);
+		assertFalse("Sets of different sizes should not be equal.", getSet().equals(MINIMAL_SET.of(moreElements)));
+	}
+
+	public void testEquals_list() {
+		assertFalse("A List should never equal a Set.", getSet().equals(HELPERS.copyToList(getSet())));
+	}
+}

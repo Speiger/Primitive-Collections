@@ -1,0 +1,56 @@
+package speiger.src.testers.PACKAGE.tests.maps;
+
+#ignore
+import static com.google.common.collect.testing.features.CollectionFeature.SUPPORTS_ITERATOR_REMOVE;
+import static com.google.common.collect.testing.features.CollectionSize.ONE;
+import static com.google.common.collect.testing.features.CollectionSize.ZERO;
+import static com.google.common.collect.testing.features.MapFeature.SUPPORTS_PUT;
+#endignore
+
+import java.util.Iterator;
+import java.util.Set;
+#if TYPE_OBJECT
+import java.util.Objects;
+#endif
+
+import org.junit.Ignore;
+
+import com.google.common.collect.testing.features.CollectionFeature;
+import com.google.common.collect.testing.features.CollectionSize;
+import com.google.common.collect.testing.features.MapFeature;
+
+import speiger.src.collections.PACKAGE.maps.interfaces.MAP;
+import speiger.src.testers.PACKAGE.tests.base.maps.ABSTRACT_MAP_TESTER;
+
+@Ignore
+@SuppressWarnings("javadoc")
+public class FILE_KEY_TYPE2FILE_VALUE_TYPEMapEntrySetTester KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP_TESTER KEY_VALUE_GENERIC_TYPE
+{
+#ignore
+	@CollectionSize.Require(ONE)
+	@CollectionFeature.Require(SUPPORTS_ITERATOR_REMOVE)
+#endignore
+	public void testEntrySetIteratorRemove() {
+		Set<MAP.Entry KEY_VALUE_GENERIC_TYPE> entrySet = getMap().ENTRY_SET();
+		Iterator<MAP.Entry KEY_VALUE_GENERIC_TYPE> entryItr = entrySet.iterator();
+		assertEquals(e0(), entryItr.next());
+		entryItr.remove();
+		assertTrue(getMap().isEmpty());
+		assertFalse(entrySet.contains(e0()));
+	}
+	
+#ignore
+	@MapFeature.Require(SUPPORTS_PUT)
+	@CollectionSize.Require(absent = ZERO)
+#endignore
+	public void testSetValue() {
+		for (MAP.Entry KEY_VALUE_GENERIC_TYPE entry : getMap().ENTRY_SET()) {
+			if (KEY_EQUALS(entry.ENTRY_KEY(), k0())) {
+				assertEquals("entry.setValue() should return the old value", v0(), entry.setValue(v3()));
+				break;
+			}
+		}
+		expectReplacement(entry(k0(), v3()));
+	}
+
+}

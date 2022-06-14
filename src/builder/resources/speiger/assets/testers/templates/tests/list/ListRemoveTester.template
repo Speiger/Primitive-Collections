@@ -1,0 +1,40 @@
+package speiger.src.testers.PACKAGE.tests.list;
+
+import org.junit.Ignore;
+
+#ignore
+import static com.google.common.collect.testing.features.CollectionFeature.SUPPORTS_REMOVE;
+import static com.google.common.collect.testing.features.CollectionSize.ONE;
+import static com.google.common.collect.testing.features.CollectionSize.ZERO;
+#endignore
+
+import com.google.common.collect.testing.features.CollectionFeature;
+import com.google.common.collect.testing.features.CollectionSize;
+
+import speiger.src.testers.PACKAGE.tests.base.ABSTRACT_LIST_TESTER;
+
+@Ignore
+@SuppressWarnings("javadoc")
+public class FILE_KEY_TYPEListRemoveTester KEY_GENERIC_TYPE extends ABSTRACT_LIST_TESTER KEY_GENERIC_TYPE
+{
+#ignore
+	@CollectionFeature.Require(SUPPORTS_REMOVE)
+	@CollectionSize.Require(absent = {ZERO, ONE})
+#endignore
+	public void testRemove_duplicate() {
+		ArrayWithDuplicate KEY_GENERIC_TYPE arrayAndDuplicate = createArrayWithDuplicateElement();
+		collection = primitiveGenerator.create(arrayAndDuplicate.elements);
+		KEY_TYPE duplicate = arrayAndDuplicate.duplicate;
+
+		int firstIndex = getList().indexOf(duplicate);
+		int initialSize = getList().size();
+#if TYPE_OBJECT
+		assertTrue("remove(present) should return true", getList().remove(duplicate));
+#else
+		assertTrue("remove(present) should return true", getList().REMOVE_KEY(duplicate));
+#endif
+		assertTrue("After remove(duplicate), a list should still contain the duplicate element", getList().contains(duplicate));
+		assertFalse("remove(duplicate) should remove the first instance of the " + "duplicate element in the list", firstIndex == getList().indexOf(duplicate));
+		assertEquals("remove(present) should decrease the size of a list by one.", initialSize - 1, getList().size());
+	}
+}

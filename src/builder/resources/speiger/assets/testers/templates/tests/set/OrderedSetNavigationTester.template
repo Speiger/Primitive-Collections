@@ -1,0 +1,248 @@
+package speiger.src.testers.PACKAGE.tests.set;
+
+import org.junit.Ignore;
+
+#ignore
+import static com.google.common.collect.testing.features.CollectionFeature.SUPPORTS_ADD;
+import static com.google.common.collect.testing.features.CollectionFeature.SUPPORTS_REMOVE;
+import static com.google.common.collect.testing.features.CollectionSize.ONE;
+import static com.google.common.collect.testing.features.CollectionSize.SEVERAL;
+import static com.google.common.collect.testing.features.CollectionSize.ZERO;
+#endignore
+
+import java.util.NoSuchElementException;
+
+import com.google.common.collect.testing.features.CollectionFeature;
+import com.google.common.collect.testing.features.CollectionSize;
+
+import speiger.src.collections.PACKAGE.lists.LIST;
+import speiger.src.collections.PACKAGE.sets.ORDERED_SET;
+import speiger.src.testers.PACKAGE.tests.base.ABSTRACT_SET_TESTER;
+import speiger.src.testers.PACKAGE.utils.HELPERS;
+
+@Ignore
+@SuppressWarnings("javadoc")
+public class FILE_KEY_TYPEOrderedSetNavigationTester KEY_GENERIC_TYPE extends ABSTRACT_SET_TESTER KEY_GENERIC_TYPE
+{
+	private ORDERED_SET KEY_GENERIC_TYPE orderedSet;
+	private LIST KEY_GENERIC_TYPE values;
+	private KEY_TYPE a;
+	private KEY_TYPE c;
+	
+	@Override
+	public void setUp() throws Exception {
+		super.setUp();
+		orderedSet = (ORDERED_SET KEY_GENERIC_TYPE) getSet();
+		values = HELPERS.copyToList(getSampleElements(getSubjectGenerator().getCollectionSize().getNumElements()));
+		if (values.size() >= 1) {
+			a = values.GET_KEY(0);
+			if (values.size() >= 3) {
+				c = values.GET_KEY(2);
+			}
+		}
+	}
+	
+#ignore
+	@CollectionFeature.Require(SUPPORTS_ADD)
+	@CollectionSize.Require(ZERO)
+#endignore
+	public void testAddEmptySetToFirst() {
+		orderedSet.addAndMoveToFirst(e0());
+		expectAdded(e0());
+	}
+	
+#ignore
+	@CollectionFeature.Require(SUPPORTS_ADD)
+	@CollectionSize.Require(ZERO)
+#endignore
+	public void testAddEmptySetToLast() {
+	orderedSet.addAndMoveToLast(e0());
+		expectAdded(e0());
+	}
+	
+#ignore
+	@CollectionFeature.Require(SUPPORTS_REMOVE)
+	@CollectionSize.Require(SEVERAL)
+#endignore
+	public void testyMapPollFirstEmpty() {
+		int polled = 0;
+		int expectedPolls = orderedSet.size();
+		while(polled < expectedPolls) {
+			orderedSet.POLL_FIRST_KEY();
+			polled++;
+		}
+		assertTrue("Map should be empty", orderedSet.isEmpty());
+	}
+	
+#ignore
+	@CollectionFeature.Require(SUPPORTS_REMOVE)
+	@CollectionSize.Require(SEVERAL)
+#endignore
+	public void testyMapPollLastEmpty() {
+		int polled = 0;
+		int expectedPolls = orderedSet.size();
+		while(polled < expectedPolls) {
+			orderedSet.POLL_LAST_KEY();
+			polled++;
+		}
+		assertTrue("Map should be empty", orderedSet.isEmpty());
+	}
+	
+#ignore
+	@CollectionFeature.Require(SUPPORTS_REMOVE)
+	@CollectionSize.Require(ZERO)
+#endignore
+	public void testEmptySetPollFirst() {
+		try {
+			orderedSet.POLL_FIRST_KEY();
+			fail("OrderedSet.POLL_FIRST_KEY should throw NoSuchElementException");
+		} catch (NoSuchElementException e) {
+		}
+		expectUnchanged();
+	}
+	
+#ignore
+	@CollectionFeature.Require(SUPPORTS_REMOVE)
+	@CollectionSize.Require(ZERO)
+#endignore
+	public void testEmptySetPollLast() {
+		try {
+			orderedSet.POLL_LAST_KEY();
+			fail("OrderedSet.POLL_LAST_KEY should throw NoSuchElementException");
+		} catch (NoSuchElementException e) {
+		}
+		expectUnchanged();
+	}
+	
+#ignore
+	@CollectionFeature.Require(absent = SUPPORTS_REMOVE)
+#endignore
+	public void testUnsupportedSetPollFirst() {
+		try {
+			orderedSet.POLL_FIRST_KEY();
+			fail("OrderedSet.POLL_FIRST_KEY should throw UnsupportedOperationException");
+		} catch (UnsupportedOperationException e) {
+		}
+		expectUnchanged();
+	}
+	
+#ignore
+	@CollectionFeature.Require(absent = SUPPORTS_REMOVE)
+#endignore
+	public void testUnsupportedSetPollLast() {
+		try {
+			orderedSet.POLL_LAST_KEY();
+			fail("OrderedSet.POLL_LAST_KEY should throw UnsupportedOperationException");
+		} catch (UnsupportedOperationException e) {
+		}
+		expectUnchanged();
+	}
+	
+#ignore
+	@CollectionFeature.Require(SUPPORTS_REMOVE)
+	@CollectionSize.Require(ONE)
+#endignore
+	public void testSingletonSetPollFirst() {
+		assertEquals(a, orderedSet.POLL_FIRST_KEY());
+		assertTrue(orderedSet.isEmpty());
+	}
+	
+#ignore
+	@CollectionFeature.Require(SUPPORTS_REMOVE)
+	@CollectionSize.Require(ONE)
+#endignore
+	public void testSingletonSetPollLast() {
+		assertEquals(a, orderedSet.POLL_LAST_KEY());
+		assertTrue(orderedSet.isEmpty());
+	}
+	
+#ignore
+	@CollectionFeature.Require(SUPPORTS_REMOVE)
+	@CollectionSize.Require(SEVERAL)
+#endignore
+	public void testPollFirst() {
+		assertEquals(a, orderedSet.POLL_FIRST_KEY());
+		assertEquals(values.subList(1, values.size()), HELPERS.copyToList(orderedSet));
+	}
+
+#ignore
+	@CollectionFeature.Require(SUPPORTS_REMOVE)
+	@CollectionSize.Require(SEVERAL)
+#endignore
+	public void testPollLast() {
+		assertEquals(c, orderedSet.POLL_LAST_KEY());
+		assertEquals(values.subList(0, values.size()-1), HELPERS.copyToList(orderedSet));
+	}
+	
+#ignore
+	@CollectionFeature.Require(absent = SUPPORTS_REMOVE)
+#endignore
+	public void testPollFirstUnsupported() {
+		try {
+			orderedSet.POLL_FIRST_KEY();
+			fail();
+		} catch (UnsupportedOperationException e) {
+		}
+	}
+	
+#ignore
+	@CollectionFeature.Require(absent = SUPPORTS_REMOVE)
+#endignore
+	public void testPollLastUnsupported() {
+		try {
+			orderedSet.POLL_LAST_KEY();
+			fail();
+		} catch (UnsupportedOperationException e) {
+		}
+	}
+	
+#ignore
+	@CollectionSize.Require(ZERO)
+#endignore
+	public void testEmptySetFirst() {
+		try {
+			orderedSet.FIRST_KEY();
+			fail();
+		} catch (NoSuchElementException e) {
+		}
+	}
+
+#ignore
+	@CollectionSize.Require(ZERO)
+#endignore
+	public void testEmptySetLast() {
+		try {
+			orderedSet.LAST_KEY();
+			fail();
+		} catch (NoSuchElementException e) {
+		}
+	}
+
+#ignore
+	@CollectionSize.Require(ONE)
+#endignore
+	public void testSingletonSetFirst() {
+		assertEquals(a, orderedSet.FIRST_KEY());
+	}
+
+#ignore
+	@CollectionSize.Require(ONE)
+#endignore
+	public void testSingletonSetLast() {
+		assertEquals(a, orderedSet.LAST_KEY());
+	}
+
+#ignore
+	@CollectionSize.Require(SEVERAL)
+#endignore
+	public void testFirst() {
+		assertEquals(a, orderedSet.FIRST_KEY());
+	}
+
+#ignore
+	@CollectionSize.Require(SEVERAL)
+#endignore
+	public void testLast() {
+		assertEquals(c, orderedSet.LAST_KEY());
+	}
+}

@@ -1,0 +1,27 @@
+package speiger.src.testers.PACKAGE.tests.collection;
+
+import org.junit.Ignore;
+
+#ignore
+import static com.google.common.collect.testing.features.CollectionSize.ZERO;
+#endignore
+
+import com.google.common.collect.testing.features.CollectionSize;
+
+import speiger.src.testers.PACKAGE.tests.base.ABSTRACT_COLLECTION_TESTER;
+
+@Ignore
+@SuppressWarnings("javadoc")
+public class FILE_KEY_TYPECollectionContainsTester KEY_GENERIC_TYPE extends ABSTRACT_COLLECTION_TESTER KEY_GENERIC_TYPE
+{
+#ignore
+	@CollectionSize.Require(absent = ZERO)
+	public void testContains_yes() {
+		assertTrue("contains(present) should return true", collection.contains(e0()));
+	}
+
+	public void testContains_no() {
+		assertFalse("contains(notPresent) should return false", collection.contains(e3()));
+	}
+#endignore
+}

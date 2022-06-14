@@ -1,0 +1,28 @@
+package speiger.src.testers.PACKAGE.builder;
+
+import java.util.List;
+
+import com.google.common.collect.testing.AbstractTester;
+
+import speiger.src.testers.PACKAGE.generators.TEST_QUEUE_GENERATOR;
+import speiger.src.testers.PACKAGE.tests.queue.FILE_KEY_TYPEDequeueDequeueTester;
+import speiger.src.testers.PACKAGE.tests.queue.FILE_KEY_TYPEDequeueEnqueueTester;
+import speiger.src.testers.PACKAGE.tests.queue.FILE_KEY_TYPEDequeueLastTester;
+
+@SuppressWarnings("javadoc")
+public class DEQUEUE_TEST_BUILDER KEY_GENERIC_TYPE extends QUEUE_TEST_BUILDER KEY_GENERIC_TYPE
+{
+	public static GENERIC_KEY_BRACES DEQUEUE_TEST_BUILDER KEY_GENERIC_TYPE using(TEST_QUEUE_GENERATOR KEY_GENERIC_TYPE builder) {
+		return (DEQUEUE_TEST_BUILDER KEY_GENERIC_TYPE)new DEQUEUE_TEST_BUILDER KEY_GENERIC_TYPE().usingGenerator(builder);
+	}
+	
+	@Override
+	@SuppressWarnings("rawtypes")
+	protected List<Class<? extends AbstractTester>> getTesters() {
+		List<Class<? extends AbstractTester>> tester = super.getTesters();
+		tester.add(FILE_KEY_TYPEDequeueDequeueTester.class);
+		tester.add(FILE_KEY_TYPEDequeueEnqueueTester.class);
+		tester.add(FILE_KEY_TYPEDequeueLastTester.class);
+		return tester;
+	}
+}

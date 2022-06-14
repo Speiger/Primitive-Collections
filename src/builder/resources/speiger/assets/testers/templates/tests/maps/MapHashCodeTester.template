@@ -1,0 +1,27 @@
+package speiger.src.testers.PACKAGE.tests.maps;
+
+#if TYPE_OBJECT || VALUE_OBJECT
+import java.util.Objects;
+#endif
+
+import org.junit.Ignore;
+
+import speiger.src.collections.PACKAGE.maps.interfaces.MAP;
+import speiger.src.testers.PACKAGE.tests.base.maps.ABSTRACT_MAP_TESTER;
+
+@Ignore
+@SuppressWarnings("javadoc")
+public class FILE_KEY_TYPE2FILE_VALUE_TYPEMapHashCodeTester KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP_TESTER KEY_VALUE_GENERIC_TYPE
+{
+	public void testHashCode() {
+		int expectedHashCode = 0;
+		for (MAP.Entry KEY_VALUE_GENERIC_TYPE entry : getSampleEntries()) {
+			expectedHashCode += hash(entry);
+		}
+		assertEquals("A Map's hashCode() should be the sum of those of its entries.", expectedHashCode, getMap().hashCode());
+	}
+
+	private static GENERIC_KEY_VALUE_BRACES int hash(MAP.Entry KEY_VALUE_GENERIC_TYPE e) {
+		return KEY_TO_HASH(e.ENTRY_KEY()) ^ VALUE_TO_HASH(e.ENTRY_VALUE());
+	}
+}

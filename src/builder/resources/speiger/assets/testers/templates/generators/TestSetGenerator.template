@@ -1,0 +1,15 @@
+package speiger.src.testers.PACKAGE.generators;
+
+import com.google.common.collect.testing.TestSetGenerator;
+
+import speiger.src.collections.PACKAGE.sets.SET;
+
+@SuppressWarnings("javadoc")
+public interface TEST_SET_GENERATOR KEY_GENERIC_TYPE extends TEST_COLLECTION_GENERATOR KEY_GENERIC_TYPE, TestSetGenerator<CLASS_TYPE> {
+#if !TYPE_OBJECT
+	@Override
+	SET KEY_GENERIC_TYPE create(KEY_TYPE...elements);
+#endif
+	@Override
+	SET KEY_GENERIC_TYPE create(Object...elements);
+}

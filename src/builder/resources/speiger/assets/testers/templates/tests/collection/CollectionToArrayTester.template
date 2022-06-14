@@ -1,0 +1,116 @@
+package speiger.src.testers.PACKAGE.tests.collection;
+
+#ignore
+import static com.google.common.collect.testing.features.CollectionFeature.KNOWN_ORDER;
+#endignore
+
+import com.google.common.collect.testing.features.CollectionFeature;
+
+import org.junit.Ignore;
+
+import speiger.src.collections.PACKAGE.lists.ARRAY_LIST;
+import speiger.src.collections.PACKAGE.lists.LIST;
+import speiger.src.testers.PACKAGE.tests.base.ABSTRACT_COLLECTION_TESTER;
+import speiger.src.testers.PACKAGE.utils.HELPERS;
+
+@Ignore
+@SuppressWarnings("javadoc")
+public class FILE_KEY_TYPECollectionToArrayTester KEY_GENERIC_TYPE extends ABSTRACT_COLLECTION_TESTER KEY_GENERIC_TYPE
+{
+	public void testToArray_noArgs() {
+		KEY_OBJECT_TYPE[] array = collection.TO_ARRAY();
+		expectArrayContentsAnyOrder(createSamplesArray(), array);
+	}
+
+	public void testToArray_emptyArray() {
+		KEY_TYPE[] empty = emptyArray();
+		KEY_TYPE[] array = collection.TO_ARRAY(empty);
+		assertEquals("toLongArray(emptyT[]).length:", getNumElements(), array.length);
+		expectArrayContentsAnyOrder(createSamplesArray(), array);
+	}
+
+#ignore
+	@CollectionFeature.Require(KNOWN_ORDER)
+	public void testToArray_emptyArray_ordered() {
+#endignore
+		KEY_TYPE[] empty = emptyArray();
+		KEY_TYPE[] array = collection.TO_ARRAY(empty);
+		assertEquals("toLongArray(emptyT[]).length:", getNumElements(), array.length);
+		expectArrayContentsInOrder(getOrderedElements(), array);
+	}
+
+	public void testToArray_emptyArrayOfObject() {
+		KEY_TYPE[] in = emptyArray();
+		KEY_TYPE[] array = collection.TO_ARRAY(in);
+		assertEquals("toLongArray(emptyObject[]).length", getNumElements(), array.length);
+		expectArrayContentsAnyOrder(createSamplesArray(), array);
+	}
+
+	public void testToArray_rightSizedArray() {
+		KEY_TYPE[] array = NEW_KEY_ARRAY(getNumElements());
+		assertSame("toLongArray(sameSizeE[]) should return the given array", array, collection.TO_ARRAY(array));
+		expectArrayContentsAnyOrder(createSamplesArray(), array);
+	}
+	
+#ignore
+	@CollectionFeature.Require(KNOWN_ORDER)
+	public void testToArray_rightSizedArray_ordered() {
+#endignore
+		KEY_TYPE[] array = NEW_KEY_ARRAY(getNumElements());
+		assertSame("toLongArray(sameSizeE[]) should return the given array", array, collection.TO_ARRAY(array));
+		expectArrayContentsInOrder(getOrderedElements(), array);
+	}
+
+	public void testToArray_rightSizedArrayOfObject() {
+		KEY_TYPE[] array = NEW_KEY_ARRAY(getNumElements());
+		assertSame("toLongArray(sameSizeObject[]) should return the given array", array, collection.TO_ARRAY(array));
+		expectArrayContentsAnyOrder(createSamplesArray(), array);
+	}
+
+#ignore
+	@CollectionFeature.Require(KNOWN_ORDER)
+	public void testToArray_rightSizedArrayOfObject_ordered() {
+#endignore
+		KEY_TYPE[] array = NEW_KEY_ARRAY(getNumElements());
+		assertSame("toLongArray(sameSizeObject[]) should return the given array", array, collection.TO_ARRAY(array));
+		expectArrayContentsInOrder(getOrderedElements(), array);
+	}
+
+	public void testToArray_oversizedArray() {
+		KEY_TYPE[] array = NEW_KEY_ARRAY(getNumElements() + 2);
+		array[getNumElements()] = e3();
+		array[getNumElements() + 1] = e3();
+		assertSame("toLongArray(overSizedE[]) should return the given array", array, collection.TO_ARRAY(array));
+
+		LIST KEY_GENERIC_TYPE subArray = ARRAY_LIST.wrap(array).subList(0, getNumElements());
+		KEY_TYPE[] expectedSubArray = createSamplesArray();
+		for (int i = 0; i < getNumElements(); i++) {
+			assertTrue("toLongArray(overSizedE[]) should contain element " + expectedSubArray[i], subArray.contains(expectedSubArray[i]));
+		}
+		assertEquals("The array element immediately following the end of the collection should be nulled", EMPTY_KEY_VALUE, array[getNumElements()]);
+	}
+
+#ignore
+	@CollectionFeature.Require(KNOWN_ORDER)
+	public void testToArray_oversizedArray_ordered() {
+#endignore
+		KEY_TYPE[] array = NEW_KEY_ARRAY(getNumElements() + 2);
+		array[getNumElements()] = e3();
+		array[getNumElements() + 1] = e3();
+		assertSame("toLongArray(overSizedE[]) should return the given array", array, collection.TO_ARRAY(array));
+
+		LIST KEY_GENERIC_TYPE expected = getOrderedElements();
+		for (int i = 0; i < getNumElements(); i++) {
+			assertEquals(expected.GET_KEY(i), array[i]);
+		}
+		assertEquals("The array element immediately following the end of the collection should be nulled", EMPTY_KEY_VALUE, array[getNumElements()]);
+	}
+
+	private void expectArrayContentsAnyOrder(KEY_OBJECT_TYPE[] expected, KEY_OBJECT_TYPE[] actual) {
+		HELPERS.assertEqualIgnoringOrder(ARRAY_LIST.wrap(expected), ARRAY_LIST.wrap(actual));
+	}
+
+	private void expectArrayContentsInOrder(LIST KEY_GENERIC_TYPE expected, KEY_TYPE[] actual) {
+		assertEquals("TO_ARRAY() ordered contents: ", expected, ARRAY_LIST.wrap(actual));
+	}
+}

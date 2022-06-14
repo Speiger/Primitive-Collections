@@ -1,0 +1,38 @@
+package speiger.src.testers.PACKAGE.builder;
+
+import java.util.List;
+
+import com.google.common.collect.testing.AbstractTester;
+import com.google.common.collect.testing.Helpers;
+import com.google.common.collect.testing.features.CollectionFeature;
+
+import junit.framework.TestSuite;
+import speiger.src.testers.PACKAGE.generators.TEST_ORDERED_SET_GENERATOR;
+import speiger.src.testers.PACKAGE.tests.set.FILE_KEY_TYPEOrderedSetMoveTester;
+import speiger.src.testers.PACKAGE.tests.set.FILE_KEY_TYPEOrderedSetIterationTester;
+import speiger.src.testers.PACKAGE.tests.set.FILE_KEY_TYPEOrderedSetNavigationTester;
+
+@SuppressWarnings("javadoc")
+public class ORDERED_SET_TEST_BUILDER KEY_GENERIC_TYPE extends SET_TEST_BUILDER KEY_GENERIC_TYPE {
+	public static GENERIC_KEY_BRACES ORDERED_SET_TEST_BUILDER KEY_GENERIC_TYPE using(TEST_ORDERED_SET_GENERATOR KEY_GENERIC_TYPE generator) {
+		return (ORDERED_SET_TEST_BUILDER KEY_GENERIC_TYPE) new ORDERED_SET_TEST_BUILDER KEY_GENERIC_TYPE().usingGenerator(generator);
+	}
+	
+	@Override
+	@SuppressWarnings("rawtypes")
+	protected List<Class<? extends AbstractTester>> getTesters() {
+		List<Class<? extends AbstractTester>> testers = Helpers.copyToList(super.getTesters());
+		testers.add(FILE_KEY_TYPEOrderedSetNavigationTester.class);
+		testers.add(FILE_KEY_TYPEOrderedSetMoveTester.class);
+		testers.add(FILE_KEY_TYPEOrderedSetIterationTester.class);
+		return testers;
+	}
+	
+	@Override
+	public TestSuite createTestSuite() {
+#ignore
+		withFeatures(CollectionFeature.KNOWN_ORDER);
+#endignore
+		return super.createTestSuite();
+	}
+}

@@ -1,0 +1,81 @@
+package speiger.src.testers.PACKAGE.tests.base;
+
+#if TYPE_OBJECT
+import java.util.Objects;
+#endif
+
+import org.junit.Ignore;
+
+import com.google.common.collect.testing.TestContainerGenerator;
+
+import speiger.src.collections.PACKAGE.collections.COLLECTION;
+import speiger.src.collections.PACKAGE.collections.ITERATOR;
+import speiger.src.collections.PACKAGE.lists.ARRAY_LIST;
+import speiger.src.collections.PACKAGE.lists.LIST;
+import speiger.src.collections.PACKAGE.queues.PRIORITY_QUEUE;
+import speiger.src.collections.PACKAGE.utils.LISTS;
+import speiger.src.testers.PACKAGE.generators.TEST_QUEUE_GENERATOR;
+import speiger.src.testers.PACKAGE.utils.HELPERS;
+
+@Ignore
+@SuppressWarnings("javadoc")
+public class ABSTRACT_QUEUE_TESTER KEY_GENERIC_TYPE extends ABSTRACT_CONTAINER_TESTER KKS_GENERIC_TYPE<PRIORITY_QUEUE KEY_CLASS_GENERIC_TYPE>
+{
+	protected TEST_QUEUE_GENERATOR KEY_GENERIC_TYPE queueGenerator;
+	protected PRIORITY_QUEUE KEY_GENERIC_TYPE queue;
+	
+	@Override
+	protected void setupGenerator() {
+		TestContainerGenerator<PRIORITY_QUEUE KEY_GENERIC_TYPE, CLASS_TYPE> generator = getSubjectGenerator().getInnerGenerator();
+		if (!(generator instanceof TEST_QUEUE_GENERATOR)) throw new IllegalStateException("Test Generator Must extend TestLongCollectionGenerator");
+		queueGenerator = (TEST_QUEUE_GENERATOR KEY_GENERIC_TYPE) generator;
+		samples = queueGenerator.getSamples();
+		size = getSubjectGenerator().getCollectionSize();
+		resetContainer();		
+	}
+	
+	@Override
+	protected COLLECTION KEY_GENERIC_TYPE actualContents() { return null; }
+	
+	@Override
+	protected PRIORITY_QUEUE KEY_GENERIC_TYPE resetContainer(PRIORITY_QUEUE KEY_GENERIC_TYPE newValue) {
+		queue = super.resetContainer(newValue);
+		return queue;
+	}
+	
+	protected void resetQueue() {
+		resetContainer();
+	}
+	
+	protected LIST KEY_GENERIC_TYPE getOrderedElements() {
+		LIST KEY_GENERIC_TYPE list = new ARRAY_LISTBRACES();
+		for (ITERATOR KEY_GENERIC_TYPE iter = queueGenerator.order(new ARRAY_LISTBRACES(getSampleElements())).iterator(); iter.hasNext();) {
+			list.add(iter.NEXT());
+		}
+		return LISTS.unmodifiable(list);
+	}
+	
+	@Override
+	protected PRIORITY_QUEUE KEY_GENERIC_TYPE createTestSubject() {
+		return queueGenerator.create(getSampleElements(size.getNumElements()).TO_ARRAY(NEW_KEY_ARRAY(getNumElements())));
+	}
+	
+	@Override
+	protected void expectContents(COLLECTION KEY_GENERIC_TYPE expected) {
+		HELPERS.assertContentsAnyOrder(expected, queue.TO_ARRAY());
+	}
+	
+	@Override
+	protected void expectMissing(KEY_TYPE... elements) {
+		for (KEY_TYPE element : elements) {
+			assertFalse("Should not contain " + element, contains(element));
+		}
+	}
+	
+	protected boolean contains(KEY_TYPE element) {
+		for(int i = 0,m=queue.size();i<m;i++) {
+			if(KEY_EQUALS(queue.peek(i), element)) return true;
+		}
+		return false;
+	}
+}

@@ -1,0 +1,25 @@
+package speiger.src.testers.PACKAGE.tests.queue.iterators;
+
+import org.junit.Ignore;
+
+import com.google.common.collect.testing.features.CollectionSize;
+
+import speiger.src.collections.PACKAGE.lists.ARRAY_LIST;
+import speiger.src.collections.PACKAGE.lists.LIST;
+import speiger.src.testers.PACKAGE.tests.base.ABSTRACT_QUEUE_TESTER;
+
+@Ignore
+@SuppressWarnings("javadoc")
+public class FILE_KEY_TYPEQueueLimitTester KEY_GENERIC_TYPE extends ABSTRACT_QUEUE_TESTER KEY_GENERIC_TYPE
+{
+#ignore
+	@CollectionSize.Require(absent = CollectionSize.ZERO)
+#endignore
+	public void testQueueLimit() {
+		LIST KEY_GENERIC_TYPE list = new ARRAY_LISTBRACES(queue.TO_ARRAY());
+		list.REMOVE(list.size()-1);
+		LIST KEY_GENERIC_TYPE result = queue.limit(getNumElements()-1).pourAsList();
+		assertEquals(list.size(), result.size());
+		assertEquals("Limit does not retain the iteration order", list, result);
+	}
+}

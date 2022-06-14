@@ -1,0 +1,132 @@
+package speiger.src.testers.PACKAGE.tests.iterable;
+
+#if TYPE_OBJECT
+import java.util.Objects;
+#endif
+
+import org.junit.Ignore;
+
+import com.google.common.collect.testing.features.CollectionFeature;
+
+#if TYPE_OBJECT
+import speiger.src.collections.chars.utils.CharArrays;
+#endif
+import speiger.src.collections.objects.lists.ObjectArrayList;
+import speiger.src.collections.objects.lists.ObjectList;
+import speiger.src.testers.PACKAGE.tests.base.ABSTRACT_COLLECTION_TESTER;
+import speiger.src.testers.PACKAGE.utils.HELPERS;
+#if !TYPE_OBJECT
+import speiger.src.testers.objects.utils.ObjectHelpers;
+#endif
+
+@Ignore
+@SuppressWarnings("javadoc")
+public class FILE_KEY_TYPEIterableMapTester KEY_GENERIC_TYPE extends ABSTRACT_COLLECTION_TESTER KEY_GENERIC_TYPE
+{
+	public void testIterableMap_ToString() {
+		assertEquals(HELPERS.copyToList(collection).toString(), collection.map(CLASS_OBJECT_TYPE::toString).pourAsList().toString());
+	}
+#if !TYPE_OBJECT
+
+#ignore
+	@CollectionFeature.Require(CollectionFeature.KNOWN_ORDER)
+#endignore
+	public void testIterableMap_Collection() {
+		ObjectList<Integer> result = new ObjectArrayList<>();
+		for(KEY_TYPE entry : getOrderedElements()) {
+			result.addAll(toRange((int)entry));
+		}
+		assertEquals(result, collection.flatMap(T -> ObjectArrayList.wrap(toRange((int)T))).pourAsList());
+	}
+	
+#ignore
+	@CollectionFeature.Require(CollectionFeature.KNOWN_ORDER)
+#endignore
+	public void testIterableMap_Array() {
+		ObjectList<Integer> result = new ObjectArrayList<>();
+		for(KEY_TYPE entry : getOrderedElements()) {
+			result.addAll(toRange((int)entry));
+		}
+		assertEquals(result, collection.arrayflatMap(T -> toRange((int)T)).pourAsList());
+	}
+	
+#ignore
+	@CollectionFeature.Require(absent = CollectionFeature.KNOWN_ORDER)
+#endignore
+	public void testIterableMap_CollectionUnordered() {
+		ObjectList<Integer> result = new ObjectArrayList<>();
+		for(KEY_TYPE entry : getOrderedElements()) {
+			result.addAll(toRange((int)entry));
+		}
+		ObjectHelpers.assertEqualIgnoringOrder(result, collection.flatMap(T -> ObjectArrayList.wrap(toRange((int)T))).pourAsList());
+	}
+	
+#ignore
+	@CollectionFeature.Require(absent = CollectionFeature.KNOWN_ORDER)
+#endignore
+	public void testIterableMap_ArrayUnordered() {
+		ObjectList<Integer> result = new ObjectArrayList<>();
+		for(KEY_TYPE entry : getOrderedElements()) {
+			result.addAll(toRange((int)entry));
+		}
+		ObjectHelpers.assertEqualIgnoringOrder(result, collection.arrayflatMap(T -> toRange((int)T)).pourAsList());
+	}
+	
+	private Integer[] toRange(int range) {
+		Integer[] result = new Integer[range];
+		for(int i = 0;i<range;i++) {
+			result[i] = Integer.valueOf(i);
+		}
+		return result;
+	}
+#else
+
+#ignore
+	@CollectionFeature.Require(CollectionFeature.KNOWN_ORDER)
+#endignore
+	public void testIterableMap_Collection() {
+		ObjectList<Character> result = new ObjectArrayList<>();
+		for(KEY_TYPE entry : getOrderedElements()) {
+			result.addAll(toRange(entry));
+		}
+		assertEquals(result, collection.flatMap(T -> ObjectArrayList.wrap(toRange(T))).pourAsList());
+	}
+
+#ignore
+	@CollectionFeature.Require(CollectionFeature.KNOWN_ORDER)
+#endignore
+	public void testIterableMap_Array() {
+		ObjectList<Character> result = new ObjectArrayList<>();
+		for(KEY_TYPE entry : getOrderedElements()) {
+			result.addAll(toRange(entry));
+		}
+		assertEquals(result, collection.arrayflatMap(this::toRange).pourAsList());
+	}
+	
+#ignore
+	@CollectionFeature.Require(absent = CollectionFeature.KNOWN_ORDER)
+#endignore
+	public void testIterableMap_CollectionUnordered() {
+		ObjectList<Character> result = new ObjectArrayList<>();
+		for(KEY_TYPE entry : getOrderedElements()) {
+			result.addAll(toRange(entry));
+		}
+		ObjectHelpers.assertEqualIgnoringOrder(result, collection.flatMap(T -> ObjectArrayList.wrap(toRange(T))).pourAsList());
+	}
+	
+#ignore
+	@CollectionFeature.Require(absent = CollectionFeature.KNOWN_ORDER)
+#endignore
+	public void testIterableMap_ArrayUnordered() {
+		ObjectList<Character> result = new ObjectArrayList<>();
+		for(KEY_TYPE entry : getOrderedElements()) {
+			result.addAll(toRange(entry));
+		}
+		ObjectHelpers.assertEqualIgnoringOrder(result, collection.arrayflatMap(this::toRange).pourAsList());
+	}
+
+	private Character[] toRange(T obj) {
+		return CharArrays.wrap(Objects.toString(obj).toCharArray());
+	}
+#endif
+}

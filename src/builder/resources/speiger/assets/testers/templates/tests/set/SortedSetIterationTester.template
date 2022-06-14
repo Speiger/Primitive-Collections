@@ -1,0 +1,43 @@
+package speiger.src.testers.PACKAGE.tests.set;
+
+import org.junit.Assert;
+import org.junit.Ignore;
+
+import com.google.common.collect.testing.features.CollectionSize;
+
+import speiger.src.collections.PACKAGE.sets.SORTED_SET;
+import speiger.src.testers.PACKAGE.tests.base.ABSTRACT_SET_TESTER;
+
+@Ignore
+@SuppressWarnings("javadoc")
+public class FILE_KEY_TYPESortedSetIterationTester KEY_GENERIC_TYPE extends ABSTRACT_SET_TESTER KEY_GENERIC_TYPE
+{
+	private SORTED_SET KEY_GENERIC_TYPE sortedSet;
+	
+	@Override
+	public void setUp() throws Exception {
+		super.setUp();
+		sortedSet = (SORTED_SET KEY_GENERIC_TYPE) getSet();
+	}
+	
+#ignore
+	@CollectionSize.Require(absent = CollectionSize.ZERO)
+#endignore
+	public void testFirstElement() {
+		Assert.assertTrue(sortedSet.iterator(e0()) != null);
+	}
+
+#ignore
+	@CollectionSize.Require(CollectionSize.SEVERAL)
+#endignore
+	public void testLastElement() {
+		Assert.assertTrue(sortedSet.iterator(e2()) != null);
+	}
+	
+#ignore
+	@CollectionSize.Require(CollectionSize.SEVERAL)
+#endignore
+	public void testCenterElement() {
+		Assert.assertTrue(sortedSet.iterator(e1()) != null);
+	}
+}

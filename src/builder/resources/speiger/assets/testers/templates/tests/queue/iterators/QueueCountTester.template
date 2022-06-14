@@ -1,0 +1,47 @@
+package speiger.src.testers.PACKAGE.tests.queue.iterators;
+
+#if TYPE_OBJECT
+import java.util.Objects;
+
+#endif
+import org.junit.Ignore;
+
+import com.google.common.collect.testing.features.CollectionSize;
+
+import speiger.src.testers.PACKAGE.tests.base.ABSTRACT_QUEUE_TESTER;
+
+@Ignore
+@SuppressWarnings("javadoc")
+public class FILE_KEY_TYPEQueueCountTester KEY_GENERIC_TYPE extends ABSTRACT_QUEUE_TESTER KEY_GENERIC_TYPE
+{
+	public void testQueueCount_null() {
+		try {
+			queue.count(null);
+			fail("This should throw a NullPointerException");
+		} catch (NullPointerException e) {
+		}
+	}
+	
+	public void testQueueCount_NoneFound() {
+		assertEquals("Expected none to be found", 0, queue.count(T -> false));
+	}
+	
+	public void testQueueCount_AllFound() {
+		assertEquals("Expected All to be found", getNumElements(), queue.count(T -> true));
+	}
+	
+#ignore
+	@CollectionSize.Require(absent = CollectionSize.ZERO)
+#endignore
+	public void testQueueCount_FindFirst() 
+	{
+		assertEquals("First element should be found", 1, queue.count(T -> KEY_EQUALS(T, e0())));		
+	}
+	
+#ignore
+	@CollectionSize.Require(CollectionSize.SEVERAL)
+#endignore
+	public void testQueueCount_FindLast() {
+		assertEquals("Last element should be found", 1, queue.count(T -> KEY_EQUALS(T, e2())));
+	}
+}

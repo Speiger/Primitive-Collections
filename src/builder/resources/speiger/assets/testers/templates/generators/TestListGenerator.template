@@ -1,0 +1,16 @@
+package speiger.src.testers.PACKAGE.generators;
+
+import com.google.common.collect.testing.TestListGenerator;
+
+import speiger.src.collections.PACKAGE.lists.LIST;
+
+@SuppressWarnings("javadoc")
+public interface TEST_LIST_GENERATOR KEY_GENERIC_TYPE extends TestListGenerator<CLASS_TYPE>, TEST_COLLECTION_GENERATOR KEY_GENERIC_TYPE
+{
+	@Override
+	LIST KEY_GENERIC_TYPE create(Object... elements);
+#if !TYPE_OBJECT
+	@Override
+	LIST KEY_GENERIC_TYPE create(KEY_TYPE... elements);
+#endif
+}

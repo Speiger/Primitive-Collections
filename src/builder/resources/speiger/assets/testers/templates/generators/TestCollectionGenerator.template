@@ -1,0 +1,30 @@
+package speiger.src.testers.PACKAGE.generators;
+
+import java.util.List;
+
+import com.google.common.collect.testing.SampleElements;
+import com.google.common.collect.testing.TestCollectionGenerator;
+
+import speiger.src.collections.PACKAGE.collections.COLLECTION;
+import speiger.src.collections.PACKAGE.collections.ITERABLE;
+import speiger.src.collections.PACKAGE.lists.LIST;
+import speiger.src.testers.PACKAGE.utils.SAMPLE_ELEMENTS;
+
+@SuppressWarnings("javadoc")
+public interface TEST_COLLECTION_GENERATOR KEY_GENERIC_TYPE extends TestCollectionGenerator<CLASS_TYPE>
+{
+	public SAMPLE_ELEMENTS KEY_GENERIC_TYPE getSamples();
+#if !TYPE_OBJECT
+	public COLLECTION KEY_GENERIC_TYPE create(KEY_TYPE...elements);
+#endif
+	public ITERABLE KEY_GENERIC_TYPE order(LIST KEY_GENERIC_TYPE insertionOrder);
+	
+	@Override
+	public default SampleElements<CLASS_TYPE> samples() {return getSamples().toSamples();}
+	@Override
+	public COLLECTION KEY_GENERIC_TYPE create(Object... elements);
+	@Override
+	public default CLASS_TYPE[] createArray(int length) { return NEW_CLASS_ARRAY(length); }
+	@Override
+	public Iterable<CLASS_TYPE> order(List<CLASS_TYPE> insertionOrder);
+}

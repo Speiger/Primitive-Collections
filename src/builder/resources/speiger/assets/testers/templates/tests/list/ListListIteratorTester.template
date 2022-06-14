@@ -1,0 +1,73 @@
+package speiger.src.testers.PACKAGE.tests.list;
+
+import org.junit.Ignore;
+
+#ignore
+import static com.google.common.collect.testing.IteratorFeature.MODIFIABLE;
+import static com.google.common.collect.testing.IteratorFeature.UNMODIFIABLE;
+#endignore
+
+import java.util.Set;
+
+import com.google.common.collect.testing.IteratorFeature;
+
+import speiger.src.collections.PACKAGE.lists.LIST;
+import speiger.src.collections.PACKAGE.lists.LIST_ITERATOR;
+import speiger.src.collections.PACKAGE.utils.LISTS;
+import speiger.src.testers.PACKAGE.tests.base.ABSTRACT_LIST_TESTER;
+import speiger.src.testers.PACKAGE.utils.HELPERS;
+import speiger.src.testers.PACKAGE.utils.LIST_ITERATOR_TESTER;
+
+import speiger.src.testers.utils.SpecialFeature;
+
+@Ignore
+@SuppressWarnings("javadoc")
+public class FILE_KEY_TYPEListListIteratorTester KEY_GENERIC_TYPE extends ABSTRACT_LIST_TESTER KEY_GENERIC_TYPE
+{
+#ignore
+	@SpecialFeature.Require(absent = SpecialFeature.ITERATOR_MODIFIABLE)
+	public void testListIterator_unmodifiable() {
+		runListIteratorTest(UNMODIFIABLE);
+	}
+	
+	@SpecialFeature.Require(SpecialFeature.ITERATOR_MODIFIABLE)
+	public void testListIterator_fullyModifiable() {
+		runListIteratorTest(MODIFIABLE);
+	}
+#endignore
+
+	private void runListIteratorTest(Set<IteratorFeature> features) {
+		new LIST_ITERATOR_TESTER KEY_GENERIC_TYPE(4, LISTS.singleton(e4()), features, HELPERS.copyToList(getOrderedElements()), 0) {
+			@Override
+			protected LIST_ITERATOR KEY_GENERIC_TYPE newTargetIterator() {
+				resetCollection();
+				return getList().listIterator();
+			}
+
+			@Override
+			protected void verify(LIST KEY_GENERIC_TYPE elements) {
+				expectContents(elements);
+			}
+		}.test();
+	}
+
+	public void testListIterator_tooLow() {
+		try {
+			getList().listIterator(-1);
+			fail();
+		} catch (IndexOutOfBoundsException expected) {
+		}
+	}
+
+	public void testListIterator_tooHigh() {
+		try {
+			getList().listIterator(getNumElements() + 1);
+			fail();
+		} catch (IndexOutOfBoundsException expected) {
+		}
+	}
+
+	public void testListIterator_atSize() {
+		getList().listIterator(getNumElements());
+	}
+}

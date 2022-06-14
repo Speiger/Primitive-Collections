@@ -1,0 +1,83 @@
+package speiger.src.testers.PACKAGE.tests.list;
+
+import org.junit.Ignore;
+
+#ignore
+import static com.google.common.collect.testing.features.CollectionSize.ZERO;
+import static com.google.common.collect.testing.features.ListFeature.SUPPORTS_SET;
+#endignore
+
+import com.google.common.collect.testing.features.CollectionSize;
+import com.google.common.collect.testing.features.ListFeature;
+
+import speiger.src.testers.PACKAGE.tests.base.ABSTRACT_LIST_TESTER;
+
+@Ignore
+@SuppressWarnings("javadoc")
+public class FILE_KEY_TYPEListSetTester KEY_GENERIC_TYPE extends ABSTRACT_LIST_TESTER KEY_GENERIC_TYPE
+{
+#ignore
+	@ListFeature.Require(SUPPORTS_SET)
+	@CollectionSize.Require(absent = ZERO)
+#endignore
+	public void testSet() {
+		doTestSet(e3());
+	}
+	
+	private void doTestSet(KEY_TYPE newValue) {
+		int index = aValidIndex();
+		KEY_TYPE initialValue = getList().GET_KEY(index);
+		assertEquals("set(i, x) should return the old element at position i.", initialValue, getList().set(index, newValue));
+		assertEquals("After set(i, x), get(i) should return x", newValue, getList().GET_KEY(index));
+		assertEquals("set() should not change the size of a list.", getNumElements(), getList().size());
+	}
+
+#ignore
+	@ListFeature.Require(SUPPORTS_SET)
+	public void testSet_indexTooLow() {
+		try {
+			getList().set(-1, e3());
+			fail("set(-1) should throw IndexOutOfBoundsException");
+		} catch (IndexOutOfBoundsException expected) {
+		}
+		expectUnchanged();
+	}
+
+	@ListFeature.Require(SUPPORTS_SET)
+	public void testSet_indexTooHigh() {
+		int index = getNumElements();
+		try {
+			getList().set(index, e3());
+			fail("set(size) should throw IndexOutOfBoundsException");
+		} catch (IndexOutOfBoundsException expected) {
+		}
+		expectUnchanged();
+	}
+
+	@CollectionSize.Require(absent = ZERO)
+	@ListFeature.Require(absent = SUPPORTS_SET)
+	public void testSet_unsupported() {
+		try {
+			getList().set(aValidIndex(), e3());
+			fail("set() should throw UnsupportedOperationException");
+		} catch (UnsupportedOperationException expected) {
+		}
+		expectUnchanged();
+	}
+
+	@CollectionSize.Require(ZERO)
+	@ListFeature.Require(absent = SUPPORTS_SET)
+	public void testSet_unsupportedByEmptyList() {
+		try {
+			getList().set(0, e3());
+			fail("set() should throw UnsupportedOperationException or IndexOutOfBoundsException");
+		} catch (UnsupportedOperationException | IndexOutOfBoundsException tolerated) {
+		}
+		expectUnchanged();
+	}
+#endignore
+
+	private int aValidIndex() {
+		return getList().size() / 2;
+	}
+}

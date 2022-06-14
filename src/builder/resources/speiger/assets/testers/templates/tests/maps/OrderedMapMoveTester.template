@@ -1,0 +1,374 @@
+package speiger.src.testers.PACKAGE.tests.maps;
+
+#ignore
+import static com.google.common.collect.testing.features.CollectionSize.SEVERAL;
+import static com.google.common.collect.testing.features.MapFeature.SUPPORTS_PUT;
+import static org.junit.Assert.assertNotEquals;
+#endignore
+
+import com.google.common.collect.testing.features.CollectionSize;
+import com.google.common.collect.testing.features.MapFeature;
+
+import speiger.src.collections.PACKAGE.maps.interfaces.MAP;
+import speiger.src.collections.PACKAGE.maps.interfaces.ORDERED_MAP;
+import speiger.src.collections.objects.lists.ObjectList;
+import speiger.src.testers.PACKAGE.tests.base.maps.ABSTRACT_MAP_TESTER;
+import speiger.src.testers.objects.utils.ObjectHelpers;
+
+@SuppressWarnings("javadoc")
+public class FILE_KEY_TYPE2FILE_VALUE_TYPEOrderedMapMoveTester KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP_TESTER KEY_VALUE_GENERIC_TYPE
+{
+	private ORDERED_MAP KEY_VALUE_GENERIC_TYPE orderedMap;
+	private ObjectList<MAP.Entry KEY_VALUE_GENERIC_TYPE> values;
+	private KEY_TYPE a;
+	private VALUE_TYPE aValue;
+	private KEY_TYPE c;
+	private VALUE_TYPE cValue;
+	
+	@Override
+	public void setUp() throws Exception {
+		super.setUp();
+		orderedMap = (ORDERED_MAP KEY_VALUE_GENERIC_TYPE)getMap();
+		values = ObjectHelpers.copyToList(getSampleElements(getSubjectGenerator().getCollectionSize().getNumElements()));
+		if (values.size() >= 1) {
+			a = values.get(0).ENTRY_KEY();
+			aValue = values.get(0).ENTRY_VALUE();
+			if (values.size() >= 3) {
+				c = values.get(2).ENTRY_KEY();
+				cValue = values.get(2).ENTRY_VALUE();
+			}
+		}
+	}
+		
+#ignore
+	@MapFeature.Require(SUPPORTS_PUT)
+	@CollectionSize.Require(SEVERAL)
+#endignore
+	public void testaddMoveToFirstMissing()
+	{
+		assertEquals(a, orderedMap.FIRST_ENTRY_KEY());
+		assertEquals(INVALID_VALUE, orderedMap.putAndMoveToFirst(k4(), v4()));
+		assertNotEquals(a, orderedMap.FIRST_ENTRY_KEY());
+		assertEquals(k4(), orderedMap.FIRST_ENTRY_KEY());
+	}
+	
+#ignore
+	@MapFeature.Require(SUPPORTS_PUT)
+	@CollectionSize.Require(SEVERAL)
+#endignore
+	public void testaddMoveToFirstPreset()
+	{
+		assertEquals(a, orderedMap.FIRST_ENTRY_KEY());
+		assertEquals(cValue, orderedMap.putAndMoveToFirst(c, v4()));
+		assertNotEquals(a, orderedMap.FIRST_ENTRY_KEY());
+		assertEquals(c, orderedMap.FIRST_ENTRY_KEY());
+	}
+	
+#ignore
+	@MapFeature.Require(SUPPORTS_PUT)
+	@CollectionSize.Require(SEVERAL)
+#endignore
+	public void testaddMoveToLastMissing()
+	{
+		assertEquals(c, orderedMap.LAST_ENTRY_KEY());
+		assertEquals(INVALID_VALUE, orderedMap.putAndMoveToLast(k4(), v4()));
+		assertNotEquals(c, orderedMap.LAST_ENTRY_KEY());
+		assertEquals(k4(), orderedMap.LAST_ENTRY_KEY());
+	}
+	
+#ignore
+	@MapFeature.Require(SUPPORTS_PUT)
+	@CollectionSize.Require(SEVERAL)
+#endignore
+	public void testaddMoveToLastPreset()
+	{
+		assertEquals(c, orderedMap.LAST_ENTRY_KEY());
+		assertEquals(aValue, orderedMap.putAndMoveToLast(a, v4()));
+		assertNotEquals(c, orderedMap.LAST_ENTRY_KEY());
+		assertEquals(a, orderedMap.LAST_ENTRY_KEY());
+	}
+	
+#ignore
+	@MapFeature.Require(SUPPORTS_PUT)
+	@CollectionSize.Require(SEVERAL)
+#endignore
+	public void testMoveToFirstMissing()
+	{
+		assertEquals(a, orderedMap.FIRST_ENTRY_KEY());
+		assertEquals(false, orderedMap.moveToFirst(k4()));
+		assertEquals(a, orderedMap.FIRST_ENTRY_KEY());
+	}
+	
+#ignore
+	@MapFeature.Require(SUPPORTS_PUT)
+	@CollectionSize.Require(SEVERAL)
+#endignore
+	public void testMoveToFirstPreset()
+	{
+		assertEquals(a, orderedMap.FIRST_ENTRY_KEY());
+		assertEquals(true, orderedMap.moveToFirst(c));
+		assertNotEquals(a, orderedMap.FIRST_ENTRY_KEY());
+		assertEquals(c, orderedMap.FIRST_ENTRY_KEY());
+	}
+	
+#ignore
+	@MapFeature.Require(SUPPORTS_PUT)
+	@CollectionSize.Require(SEVERAL)
+#endignore
+	public void testMoveToLastMissing()
+	{
+		assertEquals(c, orderedMap.LAST_ENTRY_KEY());
+		assertEquals(false, orderedMap.moveToLast(k4()));
+		assertEquals(c, orderedMap.LAST_ENTRY_KEY());
+	}
+	
+#ignore
+	@MapFeature.Require(SUPPORTS_PUT)
+	@CollectionSize.Require(SEVERAL)
+#endignore
+	public void testMoveToLastPreset()
+	{
+		assertEquals(c, orderedMap.LAST_ENTRY_KEY());
+		assertEquals(true, orderedMap.moveToLast(a));
+		assertNotEquals(c, orderedMap.LAST_ENTRY_KEY());
+		assertEquals(a, orderedMap.LAST_ENTRY_KEY());
+	}
+	
+#ignore
+	@MapFeature.Require(SUPPORTS_PUT)
+	@CollectionSize.Require(SEVERAL)
+#endignore
+	public void testGetAndMoveToFirstMissing()
+	{
+		assertEquals(a, orderedMap.FIRST_ENTRY_KEY());
+		assertEquals(INVALID_VALUE, orderedMap.getAndMoveToFirst(k4()));
+		assertEquals(a, orderedMap.FIRST_ENTRY_KEY());
+	}
+	
+#ignore
+	@MapFeature.Require(SUPPORTS_PUT)
+	@CollectionSize.Require(SEVERAL)
+#endignore
+	public void testGetAndMoveToFirstPreset()
+	{
+		assertEquals(a, orderedMap.FIRST_ENTRY_KEY());
+		assertEquals(cValue, orderedMap.getAndMoveToFirst(c));
+		assertNotEquals(a, orderedMap.FIRST_ENTRY_KEY());
+		assertEquals(c, orderedMap.FIRST_ENTRY_KEY());
+	}
+	
+#ignore
+	@MapFeature.Require(SUPPORTS_PUT)
+	@CollectionSize.Require(SEVERAL)
+#endignore
+	public void testGetAndMoveToLastMissing()
+	{
+		assertEquals(c, orderedMap.LAST_ENTRY_KEY());
+		assertEquals(INVALID_VALUE, orderedMap.getAndMoveToLast(k4()));
+		assertEquals(c, orderedMap.LAST_ENTRY_KEY());
+	}
+	
+#ignore
+	@MapFeature.Require(SUPPORTS_PUT)
+	@CollectionSize.Require(SEVERAL)
+#endignore
+	public void testGetAndMoveToLastPreset()
+	{
+		assertEquals(c, orderedMap.LAST_ENTRY_KEY());
+		assertEquals(aValue, orderedMap.getAndMoveToLast(a));
+		assertNotEquals(c, orderedMap.LAST_ENTRY_KEY());
+		assertEquals(a, orderedMap.LAST_ENTRY_KEY());
+	}
+	
+#ignore
+	@MapFeature.Require(absent = SUPPORTS_PUT)
+#endignore
+	public void testaddMoveToFirstUnsupported()
+	{
+		try {
+			orderedMap.putAndMoveToFirst(k4(), v4());
+			fail("addAndMoveToFirst should throw UnsupportedOperationException");
+		} catch (UnsupportedOperationException e) {
+		}
+		expectUnchanged();
+	}
+	
+#ignore
+	@MapFeature.Require(absent = SUPPORTS_PUT)
+#endignore
+	public void testaddMoveToLastUnsupported()
+	{
+		try {
+			orderedMap.putAndMoveToFirst(k4(), v4());
+			fail("addAndMoveToLast should throw UnsupportedOperationException");
+		} catch (UnsupportedOperationException e) {
+		}
+		expectUnchanged();
+	}
+	
+#ignore
+	@MapFeature.Require(absent = SUPPORTS_PUT)
+#endignore
+	public void testMoveToFirstUnsupported()
+	{
+		try {
+			orderedMap.moveToFirst(c);
+			fail("moveToFirst should throw UnsupportedOperationException");
+		} catch (UnsupportedOperationException e) {
+		}
+		expectUnchanged();
+	}
+	
+#ignore
+	@MapFeature.Require(absent = SUPPORTS_PUT)
+#endignore
+	public void testMoveToLastUnsupported()
+	{
+		try {
+			orderedMap.moveToLast(a);
+			fail("moveToLast should throw UnsupportedOperationException");
+		} catch (UnsupportedOperationException e) {
+		}
+		expectUnchanged();
+	}
+	
+#ignore
+	@MapFeature.Require(absent = SUPPORTS_PUT)
+#endignore
+	public void testGetAndMoveToFirstUnsupported()
+	{
+		try {
+			orderedMap.getAndMoveToFirst(c);
+			fail("getAndMoveToFirst should throw UnsupportedOperationException");
+		} catch (UnsupportedOperationException e) {
+		}
+		expectUnchanged();
+	}
+	
+#ignore
+	@MapFeature.Require(absent = SUPPORTS_PUT)
+#endignore
+	public void testGetMoveToLastUnsupported()
+	{
+		try {
+			orderedMap.getAndMoveToLast(a);
+			fail("getAndMoveToLast should throw UnsupportedOperationException");
+		} catch (UnsupportedOperationException e) {
+		}
+		expectUnchanged();
+	}
+
+#ignore
+	@MapFeature.Require(SUPPORTS_PUT)
+	@CollectionSize.Require(SEVERAL)
+#endignore
+	public void testMoveCenterToLast()
+	{
+		assertEquals(c, orderedMap.LAST_ENTRY_KEY());
+		assertTrue(orderedMap.moveToLast(k1()));
+		assertNotEquals(c, orderedMap.LAST_ENTRY_KEY());
+		assertEquals(k1(), orderedMap.LAST_ENTRY_KEY());
+	}
+
+#ignore
+	@MapFeature.Require(SUPPORTS_PUT)
+	@CollectionSize.Require(SEVERAL)
+#endignore
+	public void testMoveCenterToFirst()
+	{
+		assertEquals(a, orderedMap.FIRST_ENTRY_KEY());
+		assertTrue(orderedMap.moveToFirst(k1()));
+		assertNotEquals(c, orderedMap.FIRST_ENTRY_KEY());
+		assertEquals(k1(), orderedMap.FIRST_ENTRY_KEY());
+	}
+
+#ignore
+	@MapFeature.Require(SUPPORTS_PUT)
+	@CollectionSize.Require(SEVERAL)
+#endignore
+	public void testMoveForthAndBack()
+	{
+		assertEquals(c, orderedMap.LAST_ENTRY_KEY());
+		assertTrue(orderedMap.moveToLast(k0()));
+		assertNotEquals(c, orderedMap.LAST_ENTRY_KEY());
+		assertEquals(a, orderedMap.LAST_ENTRY_KEY());
+		assertNotEquals(a, orderedMap.FIRST_ENTRY_KEY());
+		assertTrue(orderedMap.moveToFirst(k0()));
+		assertEquals(a, orderedMap.FIRST_ENTRY_KEY());
+	}
+
+#ignore
+	@MapFeature.Require(SUPPORTS_PUT)
+	@CollectionSize.Require(SEVERAL)
+#endignore
+	public void testMoveBackAndForth()
+	{
+		assertEquals(a, orderedMap.FIRST_ENTRY_KEY());
+		assertTrue(orderedMap.moveToFirst(k2()));
+		assertNotEquals(a, orderedMap.FIRST_ENTRY_KEY());
+		assertEquals(c, orderedMap.FIRST_ENTRY_KEY());
+		assertNotEquals(c, orderedMap.LAST_ENTRY_KEY());
+		assertTrue(orderedMap.moveToLast(k2()));
+		assertEquals(c, orderedMap.LAST_ENTRY_KEY());
+	}
+
+#ignore
+	@MapFeature.Require(SUPPORTS_PUT)
+	@CollectionSize.Require(SEVERAL)
+#endignore
+	public void testPutForthAndBack()
+	{
+		assertEquals(c, orderedMap.LAST_ENTRY_KEY());
+		assertEquals(v0(), orderedMap.putAndMoveToLast(k0(), v0()));
+		assertNotEquals(c, orderedMap.LAST_ENTRY_KEY());
+		assertEquals(a, orderedMap.LAST_ENTRY_KEY());
+		assertNotEquals(a, orderedMap.FIRST_ENTRY_KEY());
+		assertEquals(v0(), orderedMap.putAndMoveToFirst(k0(), v0()));
+		assertEquals(a, orderedMap.FIRST_ENTRY_KEY());
+	}
+
+#ignore
+	@MapFeature.Require(SUPPORTS_PUT)
+	@CollectionSize.Require(SEVERAL)
+#endignore
+	public void testPutBackAndForth()
+	{
+		assertEquals(a, orderedMap.FIRST_ENTRY_KEY());
+		assertEquals(v2(), orderedMap.putAndMoveToFirst(k2(), v2()));
+		assertNotEquals(a, orderedMap.FIRST_ENTRY_KEY());
+		assertEquals(c, orderedMap.FIRST_ENTRY_KEY());
+		assertNotEquals(c, orderedMap.LAST_ENTRY_KEY());
+		assertEquals(v2(), orderedMap.putAndMoveToLast(k2(), v2()));
+		assertEquals(c, orderedMap.LAST_ENTRY_KEY());
+	}
+
+#ignore
+	@MapFeature.Require(SUPPORTS_PUT)
+	@CollectionSize.Require(SEVERAL)
+#endignore
+	public void testGetForthAndBack()
+	{
+		assertEquals(c, orderedMap.LAST_ENTRY_KEY());
+		assertEquals(v0(), orderedMap.getAndMoveToLast(k0()));
+		assertNotEquals(c, orderedMap.LAST_ENTRY_KEY());
+		assertEquals(a, orderedMap.LAST_ENTRY_KEY());
+		assertNotEquals(a, orderedMap.FIRST_ENTRY_KEY());
+		assertEquals(v0(), orderedMap.getAndMoveToFirst(k0()));
+		assertEquals(a, orderedMap.FIRST_ENTRY_KEY());
+	}
+	
+#ignore
+	@MapFeature.Require(SUPPORTS_PUT)
+	@CollectionSize.Require(SEVERAL)
+#endignore
+	public void testGetBackAndForth()
+	{
+		assertEquals(a, orderedMap.FIRST_ENTRY_KEY());
+		assertEquals(v2(), orderedMap.getAndMoveToFirst(k2()));
+		assertNotEquals(a, orderedMap.FIRST_ENTRY_KEY());
+		assertEquals(c, orderedMap.FIRST_ENTRY_KEY());
+		assertNotEquals(c, orderedMap.LAST_ENTRY_KEY());
+		assertEquals(v2(), orderedMap.getAndMoveToLast(k2()));
+		assertEquals(c, orderedMap.LAST_ENTRY_KEY());
+	}
+}

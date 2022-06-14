@@ -1,0 +1,42 @@
+package speiger.src.testers.PACKAGE.tests.collection;
+
+import org.junit.Ignore;
+
+#ignore
+import static com.google.common.collect.testing.features.CollectionSize.ONE;
+import static com.google.common.collect.testing.features.CollectionSize.ZERO;
+#endignore
+
+import com.google.common.collect.testing.features.CollectionSize;
+
+import speiger.src.testers.PACKAGE.tests.base.ABSTRACT_COLLECTION_TESTER;
+import speiger.src.testers.PACKAGE.utils.MINIMAL_COLLECTION;
+
+@Ignore
+@SuppressWarnings("javadoc")
+public class FILE_KEY_TYPECollectionContainsAnyTester KEY_GENERIC_TYPE extends ABSTRACT_COLLECTION_TESTER KEY_GENERIC_TYPE
+{	
+	public void testContainsAny_empty() {
+		assertFalse("containsAny(empty) should return false", collection.containsAny(MINIMAL_COLLECTION.of()));
+	}
+#ignore
+	@CollectionSize.Require(absent = ZERO)
+	public void testContainsAny_subset() {
+#endignore
+		assertTrue("containsAny(subset) should return true", collection.containsAny(MINIMAL_COLLECTION.of(e0())));
+	}
+	
+#ignore
+	@CollectionSize.Require(ONE)
+	public void testContainsAny_subSetElement() {
+#endignore
+		assertFalse("containsAny(empty) should return false", collection.containsAny(MINIMAL_COLLECTION.of()));
+	}
+	
+#ignore
+	@CollectionSize.Require(ONE)
+	public void testContainsAny_subSetElements() {
+#endignore
+		assertTrue("containsAny(subset) should return true", collection.containsAny(getSampleElements(5)));
+	}
+}

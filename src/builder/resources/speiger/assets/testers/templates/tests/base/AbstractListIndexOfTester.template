@@ -1,0 +1,27 @@
+package speiger.src.testers.PACKAGE.tests.base;
+
+#ignore
+import static com.google.common.collect.testing.features.CollectionSize.ZERO;
+#endignore
+
+import org.junit.Ignore;
+
+import com.google.common.collect.testing.features.CollectionSize;
+
+@Ignore
+@SuppressWarnings("javadoc")
+public abstract class ABSTRACT_LIST_INDEX_OF_TESTER KEY_GENERIC_TYPE extends ABSTRACT_LIST_TESTER KEY_GENERIC_TYPE
+{
+	protected abstract int find(KEY_TYPE o);
+	
+	protected abstract String getMethodName();
+	
+	@CollectionSize.Require(absent = ZERO)
+	public void testFind_yes() {
+		assertEquals(getMethodName() + "(firstElement) should return 0", 0, find(getOrderedElements().GET_KEY(0)));
+	}
+	
+	public void testFind_no() {
+		assertEquals(getMethodName() + "(notPresent) should return -1", -1, find(e3()));
+	}
+}

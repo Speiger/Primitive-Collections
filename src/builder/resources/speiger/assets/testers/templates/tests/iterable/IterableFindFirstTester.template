@@ -1,0 +1,43 @@
+package speiger.src.testers.PACKAGE.tests.iterable;
+
+#if TYPE_OBJECT
+import java.util.Objects;
+
+#endif
+import org.junit.Ignore;
+
+import com.google.common.collect.testing.features.CollectionSize;
+
+import speiger.src.testers.PACKAGE.tests.base.ABSTRACT_COLLECTION_TESTER;
+
+@Ignore
+@SuppressWarnings("javadoc")
+public class FILE_KEY_TYPEIterableFindFirstTester KEY_GENERIC_TYPE extends ABSTRACT_COLLECTION_TESTER KEY_GENERIC_TYPE
+{
+	public void testIterableFindFirst_null() {
+		try {
+			container.findFirst(null);
+			fail("This should throw a NullPointerException");
+		}
+		catch (NullPointerException e) {
+		}
+	}
+	
+#ignore
+	@CollectionSize.Require(absent = CollectionSize.ZERO)
+#endignore
+	public void testIterableFindFirst_FindFirstElements() {
+		assertEquals("First Element should be found", e0(), container.findFirst(T -> KEY_EQUALS(T, e0())));
+	}
+	
+	public void testIterableFindFirst_FindNothing() {
+		assertEquals("No element should be found", EMPTY_KEY_VALUE, container.findFirst(T -> KEY_EQUALS(T, e4())));
+	}
+	
+#ignore
+	@CollectionSize.Require(CollectionSize.SEVERAL)
+#endignore
+	public void testIterableFindFirst_FindLastElement() {
+		assertEquals("Last Element should be found", e2(), container.findFirst(T -> KEY_EQUALS(T, e2())));
+	}
+}

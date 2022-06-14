@@ -1,0 +1,38 @@
+package speiger.src.testers.PACKAGE.tests.maps;
+
+import org.junit.Assert;
+import org.junit.Ignore;
+
+import speiger.src.collections.PACKAGE.maps.interfaces.MAP;
+import speiger.src.collections.PACKAGE.utils.maps.MAPS;
+import speiger.src.testers.PACKAGE.tests.base.maps.ABSTRACT_MAP_TESTER;
+import speiger.src.testers.utils.SpecialFeature;
+
+@Ignore
+@SuppressWarnings("javadoc")
+public class FILE_KEY_TYPE2FILE_VALUE_TYPEMapCopyTester KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP_TESTER KEY_VALUE_GENERIC_TYPE
+{
+#ignore
+	@SpecialFeature.Require(SpecialFeature.COPYING)
+#endignore
+	public void testEquals() {
+		MAP KEY_VALUE_GENERIC_TYPE copy = container.copy();
+		if(!(copy instanceof MAPS.EmptyMap)) {
+			Assert.assertFalse("Copied Map shouldn't match", copy == container);
+		}
+		Assert.assertTrue("Copied Map contents should match", copy.equals(container));
+	}
+
+#ignore
+	@SpecialFeature.Require(absent = SpecialFeature.COPYING)
+#endignore
+	public void testEqualsFail() {
+		try {
+			assertNull(container.copy());
+			fail("If Copying isn't supported it should throw a UnsupportedOperationException");
+		}
+		catch(UnsupportedOperationException e) {
+			//Success
+		}
+	}
+}

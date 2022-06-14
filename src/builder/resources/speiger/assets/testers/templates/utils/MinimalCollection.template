@@ -1,0 +1,95 @@
+package speiger.src.testers.PACKAGE.utils;
+
+import java.util.Collection;
+#if TYPE_OBJECT
+import java.util.function.Consumer;
+#endif
+
+import speiger.src.collections.PACKAGE.collections.ABSTRACT_COLLECTION;
+import speiger.src.collections.PACKAGE.collections.COLLECTION;
+import speiger.src.collections.PACKAGE.collections.ITERATOR;
+#if !TYPE_OBJECT
+import speiger.src.collections.PACKAGE.functions.CONSUMER;
+#else
+import speiger.src.collections.objects.utils.ObjectArrays;
+#endif
+import speiger.src.collections.PACKAGE.lists.ARRAY_LIST;
+
+@SuppressWarnings("javadoc")
+public class MINIMAL_COLLECTION KEY_GENERIC_TYPE extends ABSTRACT_COLLECTION KEY_GENERIC_TYPE {
+
+	private final KEY_TYPE[] contents;
+
+	protected MINIMAL_COLLECTION(KEY_TYPE[] contents) {
+		this.contents = contents;
+	}
+
+	public static GENERIC_KEY_BRACES MINIMAL_COLLECTION KEY_GENERIC_TYPE of(KEY_TYPE... contents) {
+		return new MINIMAL_COLLECTIONBRACES(contents);
+	}
+	
+	@Override
+	public boolean add(KEY_TYPE o) {
+		throw new UnsupportedOperationException();
+	}
+
+	@Override
+	public boolean removeAll(COLLECTION KEY_GENERIC_TYPE c) {
+		throw new UnsupportedOperationException();
+	}
+
+	@Override
+	public boolean removeAll(COLLECTION KEY_GENERIC_TYPE c, CONSUMER KEY_GENERIC_TYPE r) {
+		throw new UnsupportedOperationException();
+	}
+
+	@Override
+	public boolean retainAll(COLLECTION KEY_GENERIC_TYPE c) {
+		throw new UnsupportedOperationException();
+	}
+
+	@Override
+	public boolean retainAll(COLLECTION KEY_GENERIC_TYPE c, CONSUMER KEY_GENERIC_TYPE r) {
+		throw new UnsupportedOperationException();
+	}
+
+	@Override
+	public boolean removeAll(Collection<?> c) {
+		throw new UnsupportedOperationException();
+	}
+
+	@Override
+	public boolean retainAll(Collection<?> c) {
+		throw new UnsupportedOperationException();
+	}
+
+	@Override
+	public ITERATOR KEY_GENERIC_TYPE iterator() {
+		return ARRAY_LIST.wrap(contents).iterator();
+	}
+	
+#if !TYPE_OBJECT
+	@Override
+	public KEY_TYPE[] TO_ARRAY(KEY_TYPE[] a) {
+		if(a.length < contents.length) a = new KEY_TYPE[contents.length];
+		System.arraycopy(contents, 0, a, 0, contents.length);
+		if (a.length > contents.length) a[contents.length] = EMPTY_KEY_VALUE;
+		return a;
+	}
+	
+#else
+	@Override
+	public <E> E[] toArray(E[] a) {
+		if(a == null) a = (E[])new Object[contents.length];
+		else if(a.length < contents.length) a = (E[])ObjectArrays.newArray(a.getClass().getComponentType(), contents.length);
+        System.arraycopy(contents, 0, a, 0, contents.length);
+		if (a.length > contents.length) a[contents.length] = null;
+		return a;
+	}
+	
+#endif
+	@Override
+	public int size() {
+		return contents.length;
+	}
+}

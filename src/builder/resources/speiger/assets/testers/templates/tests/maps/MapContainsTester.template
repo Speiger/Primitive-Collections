@@ -1,0 +1,74 @@
+package speiger.src.testers.PACKAGE.tests.maps;
+
+import java.util.AbstractMap;
+
+#ignore
+import static com.google.common.collect.testing.features.CollectionSize.ZERO;
+import static com.google.common.collect.testing.features.CollectionSize.ONE;
+#endignore
+
+import org.junit.Ignore;
+
+import com.google.common.collect.testing.features.CollectionSize;
+
+import speiger.src.collections.PACKAGE.maps.interfaces.MAP;
+import speiger.src.testers.PACKAGE.tests.base.maps.ABSTRACT_MAP_TESTER;
+
+@Ignore
+@SuppressWarnings("javadoc")
+public class FILE_KEY_TYPE2FILE_VALUE_TYPEMapContainsTester KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP_TESTER KEY_VALUE_GENERIC_TYPE
+{
+#ignore
+	@CollectionSize.Require(absent = ZERO)
+#endignore
+	public void testContains_yes() {
+		assertTrue("contains(present) should return true", getMap().ENTRY_SET().contains(e0()));
+	}
+
+#ignore
+	@CollectionSize.Require(absent = ZERO)
+#endignore
+	public void testContainsObject_yes() {
+		assertTrue("contains(present) should return true", getMap().ENTRY_SET().contains(new AbstractMap.SimpleEntry<>(e0())));
+	}
+	
+	public void testContains_no() {
+		assertFalse("contains(notPresent) should return false", getMap().ENTRY_SET().contains(e3()));
+	}
+	
+	public void testContainsObject_no() {
+		assertFalse("contains(notPresent) should return false", getMap().ENTRY_SET().contains(new AbstractMap.SimpleEntry<>(e3())));
+	}
+	
+#ignore
+	@CollectionSize.Require(ONE)
+#endignore
+	public void testContainsEntry_yes() {
+		MAP.Entry KEY_VALUE_GENERIC_TYPE value = getMap().ENTRY_SET().iterator().next();
+		assertTrue("MAP.Entry.equals() should return true", value.equals(e0()));
+	}
+
+#ignore
+	@CollectionSize.Require(ONE)
+#endignore
+	public void testContainsEntryObject_yes() {
+		MAP.Entry KEY_VALUE_GENERIC_TYPE value = getMap().ENTRY_SET().iterator().next();
+		assertTrue("MAP.Entry.equals() should return true", value.equals(new AbstractMap.SimpleEntry<>(e0())));
+	}
+	
+#ignore
+	@CollectionSize.Require(ONE)
+#endignore
+	public void testContainsEntry_no() {
+		MAP.Entry KEY_VALUE_GENERIC_TYPE value = getMap().ENTRY_SET().iterator().next();
+		assertFalse("MAP.Entry.equals() should return false", value.equals(e3()));
+	}
+	
+#ignore
+	@CollectionSize.Require(ONE)
+#endignore
+	public void testContainsEntryObject_no() {
+		MAP.Entry KEY_VALUE_GENERIC_TYPE value = getMap().ENTRY_SET().iterator().next();
+		assertFalse("MAP.Entry.equals() should return false", value.equals(new AbstractMap.SimpleEntry<>(e3())));
+	}
+}

@@ -1,0 +1,45 @@
+package speiger.src.testers.PACKAGE.tests.list;
+
+import org.junit.Ignore;
+
+import com.google.common.collect.testing.features.CollectionSize;
+
+import speiger.src.collections.PACKAGE.collections.COLLECTION;
+import speiger.src.collections.PACKAGE.lists.ARRAY_LIST;
+import speiger.src.testers.PACKAGE.tests.base.ABSTRACT_LIST_TESTER;
+import speiger.src.testers.PACKAGE.utils.MINIMAL_SET;
+
+@Ignore
+@SuppressWarnings("javadoc")
+public class FILE_KEY_TYPEListEqualsTester KEY_GENERIC_TYPE extends ABSTRACT_LIST_TESTER KEY_GENERIC_TYPE
+{
+	public void testEquals_otherListWithSameElements() {
+		assertTrue("A List should equal any other List containing the same elements.", getList().equals(new ARRAY_LISTBRACES(getOrderedElements())));
+	}
+
+#ignore
+	@CollectionSize.Require(absent = CollectionSize.ZERO)
+#endignore
+	public void testEquals_otherListWithDifferentElements() {
+		ARRAY_LIST KEY_GENERIC_TYPE other = new ARRAY_LISTBRACES(getSampleElements());
+		other.set(other.size() / 2, e3());
+		assertFalse("A List should not equal another List containing different elements.", getList().equals(other));
+	}
+
+#ignore
+	@CollectionSize.Require(absent = CollectionSize.ZERO)
+#endignore
+	public void testEquals_shorterList() {
+		COLLECTION KEY_GENERIC_TYPE fewerElements = getSampleElements(getNumElements() - 1);
+		assertFalse("Lists of different sizes should not be equal.", getList().equals(new ARRAY_LISTBRACES(fewerElements)));
+	}
+
+	public void testEquals_longerList() {
+		COLLECTION KEY_GENERIC_TYPE moreElements = getSampleElements(getNumElements() + 1);
+		assertFalse("Lists of different sizes should not be equal.", getList().equals(new ARRAY_LISTBRACES(moreElements)));
+	}
+
+	public void testEquals_set() {
+		assertFalse("A List should never equal a Set.", getList().equals(MINIMAL_SET.of(getList())));
+	}
+}

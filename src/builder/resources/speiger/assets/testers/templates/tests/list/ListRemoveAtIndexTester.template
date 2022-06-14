@@ -1,0 +1,106 @@
+package speiger.src.testers.PACKAGE.tests.list;
+
+import org.junit.Ignore;
+
+#ignore
+import static com.google.common.collect.testing.features.CollectionFeature.FAILS_FAST_ON_CONCURRENT_MODIFICATION;
+import static com.google.common.collect.testing.features.CollectionSize.ONE;
+import static com.google.common.collect.testing.features.CollectionSize.ZERO;
+import static com.google.common.collect.testing.features.ListFeature.SUPPORTS_REMOVE_WITH_INDEX;
+#endignore
+
+import java.util.ConcurrentModificationException;
+
+import com.google.common.collect.testing.features.CollectionFeature;
+import com.google.common.collect.testing.features.CollectionSize;
+import com.google.common.collect.testing.features.ListFeature;
+
+import speiger.src.collections.PACKAGE.collections.ITERATOR;
+import speiger.src.collections.PACKAGE.lists.LIST;
+import speiger.src.testers.PACKAGE.tests.base.ABSTRACT_LIST_TESTER;
+import speiger.src.testers.PACKAGE.utils.HELPERS;
+
+@Ignore
+@SuppressWarnings("javadoc")
+public class FILE_KEY_TYPEListRemoveAtIndexTester KEY_GENERIC_TYPE extends ABSTRACT_LIST_TESTER KEY_GENERIC_TYPE
+{
+#ignore
+	@ListFeature.Require(absent = SUPPORTS_REMOVE_WITH_INDEX)
+	@CollectionSize.Require(absent = ZERO)
+#endignore
+	public void testRemoveAtIndex_unsupported() {
+		try {
+			getList().REMOVE(0);
+			fail("remove(i) should throw");
+		} catch (UnsupportedOperationException expected) {
+		}
+		expectUnchanged();
+	}
+
+#ignore
+	@ListFeature.Require(SUPPORTS_REMOVE_WITH_INDEX)
+#endignore
+	public void testRemoveAtIndex_negative() {
+		try {
+			getList().REMOVE(-1);
+			fail("remove(-1) should throw");
+		} catch (IndexOutOfBoundsException expected) {
+		}
+		expectUnchanged();
+	}
+
+#ignore
+	@ListFeature.Require(SUPPORTS_REMOVE_WITH_INDEX)
+#endignore
+	public void testRemoveAtIndex_tooLarge() {
+		try {
+			getList().REMOVE(getNumElements());
+			fail("remove(size) should throw");
+		} catch (IndexOutOfBoundsException expected) {
+		}
+		expectUnchanged();
+	}
+
+#ignore
+	@ListFeature.Require(SUPPORTS_REMOVE_WITH_INDEX)
+	@CollectionSize.Require(absent = ZERO)
+	public void testRemoveAtIndex_first() {
+		runRemoveTest(0);
+	}
+
+	@ListFeature.Require(SUPPORTS_REMOVE_WITH_INDEX)
+	@CollectionSize.Require(absent = { ZERO, ONE })
+	public void testRemoveAtIndex_middle() {
+		runRemoveTest(getNumElements() / 2);
+	}
+
+	@CollectionFeature.Require(FAILS_FAST_ON_CONCURRENT_MODIFICATION)
+	@ListFeature.Require(SUPPORTS_REMOVE_WITH_INDEX)
+	@CollectionSize.Require(absent = ZERO)
+#endignore
+	public void testRemoveAtIndexConcurrentWithIteration() {
+		try {
+			ITERATOR KEY_GENERIC_TYPE iterator = collection.iterator();
+			getList().REMOVE(getNumElements() / 2);
+			iterator.NEXT();
+			fail("Expected ConcurrentModificationException");
+		} catch (ConcurrentModificationException expected) {
+			// success
+		}
+	}
+
+#ignore
+	@ListFeature.Require(SUPPORTS_REMOVE_WITH_INDEX)
+	@CollectionSize.Require(absent = ZERO)
+#endignore
+	public void testRemoveAtIndex_last() {
+		runRemoveTest(getNumElements() - 1);
+	}
+
+	private void runRemoveTest(int index) {
+		assertEquals(String.format("remove(%d) should return the element at index %d", index, index), getList().GET_KEY(index), getList().REMOVE(index));
+		LIST KEY_GENERIC_TYPE expected = HELPERS.copyToList(createSamplesArray());
+		expected.REMOVE(index);
+		expectContents(expected);
+	}
+}

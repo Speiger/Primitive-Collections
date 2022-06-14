@@ -1,0 +1,45 @@
+package speiger.src.testers.PACKAGE.tests.collection;
+
+import org.junit.Ignore;
+
+#ignore
+import static com.google.common.collect.testing.features.CollectionSize.ZERO;
+#endignore
+
+import com.google.common.collect.testing.features.CollectionSize;
+
+import speiger.src.testers.PACKAGE.tests.base.ABSTRACT_COLLECTION_TESTER;
+import speiger.src.testers.PACKAGE.utils.MINIMAL_COLLECTION;
+
+@Ignore
+@SuppressWarnings("javadoc")
+public class FILE_KEY_TYPECollectionContainsAllTester KEY_GENERIC_TYPE extends ABSTRACT_COLLECTION_TESTER KEY_GENERIC_TYPE
+{
+	public void testContainsAll_empty() {
+		assertTrue("containsAll(empty) should return true", collection.containsAll(MINIMAL_COLLECTION.of()));
+	}
+
+#ignore
+	@CollectionSize.Require(absent = ZERO)
+	public void testContainsAll_subset() {
+#endignore
+		assertTrue("containsAll(subset) should return true", collection.containsAll(MINIMAL_COLLECTION.of(e0())));
+	}
+
+	public void testContainsAll_sameElements() {
+		assertTrue("containsAll(sameElements) should return true", collection.containsAll(MINIMAL_COLLECTION.of(createSamplesArray())));
+	}
+	
+	public void testContainsAll_self() {
+		assertTrue("containsAll(this) should return true", collection.containsAll(collection));
+	}
+
+	public void testContainsAll_partialOverlap() {
+		assertFalse("containsAll(partialOverlap) should return false", collection.containsAll(MINIMAL_COLLECTION.of(e0(), e3())));
+	}
+
+	public void testContainsAll_disjoint() {
+		assertFalse("containsAll(disjoint) should return false", collection.containsAll(MINIMAL_COLLECTION.of(e3())));
+	}
+	
+}

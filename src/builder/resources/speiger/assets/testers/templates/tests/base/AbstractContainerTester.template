@@ -1,0 +1,188 @@
+package speiger.src.testers.PACKAGE.tests.base;
+
+import com.google.common.collect.testing.AbstractTester;
+import com.google.common.collect.testing.OneSizeTestContainerGenerator;
+import com.google.common.collect.testing.TestContainerGenerator;
+import com.google.common.collect.testing.features.CollectionSize;
+import com.google.errorprone.annotations.OverridingMethodsMustInvokeSuper;
+
+import org.junit.Ignore;
+
+import speiger.src.collections.PACKAGE.collections.COLLECTION;
+import speiger.src.collections.PACKAGE.collections.ITERATOR;
+import speiger.src.collections.PACKAGE.lists.ARRAY_LIST;
+import speiger.src.collections.PACKAGE.lists.LIST;
+import speiger.src.collections.PACKAGE.utils.LISTS;
+import speiger.src.testers.PACKAGE.generators.TEST_COLLECTION_GENERATOR;
+import speiger.src.testers.PACKAGE.utils.HELPERS;
+import speiger.src.testers.PACKAGE.utils.SAMPLE_ELEMENTS;
+import speiger.src.testers.PACKAGE.utils.MINIMAL_COLLECTION;
+
+@Ignore
+@SuppressWarnings("javadoc")
+public abstract class ABSTRACT_CONTAINER_TESTER KKS_GENERIC_TYPE<E> extends AbstractTester<OneSizeTestContainerGenerator<E, CLASS_TYPE>>
+{
+	protected SAMPLE_ELEMENTS KEY_GENERIC_TYPE samples;
+	protected E container;
+	protected TEST_COLLECTION_GENERATOR KEY_GENERIC_TYPE primitiveGenerator;
+	protected CollectionSize size;
+
+	@Override
+	@OverridingMethodsMustInvokeSuper
+	public void setUp() throws Exception {
+		super.setUp();
+		setupGenerator();
+	}
+	
+	protected void setupGenerator() {
+		TestContainerGenerator<E, CLASS_TYPE> generator = getSubjectGenerator().getInnerGenerator();
+		if (!(generator instanceof TEST_COLLECTION_GENERATOR)) throw new IllegalStateException("Test Generator Must extend TEST_COLLECTION_GENERATOR");
+		primitiveGenerator = (TEST_COLLECTION_GENERATOR KEY_GENERIC_TYPE) generator;
+		samples = primitiveGenerator.getSamples();
+		size = getSubjectGenerator().getCollectionSize();
+		resetContainer();		
+	}
+
+	protected abstract COLLECTION KEY_GENERIC_TYPE actualContents();
+
+	protected E resetContainer() {
+		return resetContainer(createTestSubject());
+	}
+
+	protected E resetContainer(E newValue) {
+		container = newValue;
+		return container;
+	}
+
+	protected void expectContents(KEY_TYPE... elements) {
+		expectContents(ARRAY_LIST.wrap(elements));
+	}
+
+	protected void expectContents(COLLECTION KEY_GENERIC_TYPE expected) {
+		HELPERS.assertEqualIgnoringOrder(expected, actualContents());
+	}
+
+	protected void expectUnchanged() {
+		expectContents(getOrderedElements());
+	}
+
+	protected final void expectAdded(KEY_TYPE... elements) {
+		LIST KEY_GENERIC_TYPE expected = HELPERS.copyToList(getSampleElements());
+		expected.addAll(elements);
+		expectContents(expected);
+	}
+
+	protected final void expectAddedIndex(int index, KEY_TYPE... elements) {
+		expectAdded(index, ARRAY_LIST.wrap(elements));
+	}
+
+	protected final void expectAdded(int index, COLLECTION KEY_GENERIC_TYPE elements) {
+		LIST KEY_GENERIC_TYPE expected = HELPERS.copyToList(getSampleElements());
+		expected.addAll(index, elements);
+		expectContents(expected);
+	}
+
+	protected void expectMissing(KEY_TYPE... elements) {
+		for (KEY_TYPE element : elements) {
+			assertFalse("Should not contain " + element, actualContents().contains(element));
+		}
+	}
+
+	protected KEY_TYPE[] createSamplesArray() {
+		return getSampleElements().TO_ARRAY(NEW_KEY_ARRAY(getNumElements()));
+	}
+
+	protected KEY_TYPE[] createOrderedArray() {
+		return getOrderedElements().TO_ARRAY(NEW_KEY_ARRAY(getNumElements()));
+	}
+
+	public static class ArrayWithDuplicate KEY_GENERIC_TYPE {
+		public final KEY_TYPE[] elements;
+		public final KEY_TYPE duplicate;
+
+		private ArrayWithDuplicate(KEY_TYPE[] elements, KEY_TYPE duplicate) {
+			this.elements = elements;
+			this.duplicate = duplicate;
+		}
+	}
+
+	protected ArrayWithDuplicate KEY_GENERIC_TYPE createArrayWithDuplicateElement() {
+		KEY_TYPE[] elements = createSamplesArray();
+		KEY_TYPE duplicate = elements[(elements.length / 2) - 1];
+		elements[(elements.length / 2) + 1] = duplicate;
+		return new ArrayWithDuplicateBRACES(elements, duplicate);
+	}
+
+	protected int getNumElements() {
+		return size.getNumElements();
+	}
+
+	protected COLLECTION KEY_GENERIC_TYPE getSampleElements() {
+		return getSampleElements(getNumElements());
+	}
+
+	protected LIST KEY_GENERIC_TYPE getOrderedElements() {
+		LIST KEY_GENERIC_TYPE list = new ARRAY_LISTBRACES();
+		for (ITERATOR KEY_GENERIC_TYPE iter = primitiveGenerator.order(new ARRAY_LISTBRACES(getSampleElements())).iterator(); iter.hasNext();) {
+			list.add(iter.NEXT());
+		}
+		return LISTS.unmodifiable(list);
+	}
+	
+#if TYPE_OBJECT
+	protected KEY_TYPE[] createDisjointArray() {
+		KEY_TYPE[] array = NEW_KEY_ARRAY(2);
+		array[0] = e3();
+		array[1] = e4();
+		return array;
+	}
+#else
+	protected KEY_TYPE[] createDisjointArray() {
+		return new KEY_TYPE[]{e3(), e4()};
+	}
+	
+#endif	
+	protected KEY_TYPE[] emptyArray() {
+		return NEW_KEY_ARRAY(0);
+	}
+	
+	protected MINIMAL_COLLECTION KEY_GENERIC_TYPE createDisjointCollection() {
+		return MINIMAL_COLLECTION.of(e3(), e4());
+	}
+	
+	protected MINIMAL_COLLECTION KEY_GENERIC_TYPE emptyCollection() {
+		return MINIMAL_COLLECTION.of();
+	}
+	
+	public KEY_TYPE[] createArray(KEY_TYPE...array) {
+		return array;
+	}
+	
+	protected final KEY_TYPE e0() {
+		return samples.e0();
+	}
+
+	protected final KEY_TYPE e1() {
+		return samples.e1();
+	}
+
+	protected final KEY_TYPE e2() {
+		return samples.e2();
+	}
+
+	protected final KEY_TYPE e3() {
+		return samples.e3();
+	}
+
+	protected final KEY_TYPE e4() {
+		return samples.e4();
+	}
+
+	protected E createTestSubject() {
+		return (E)primitiveGenerator.create(getSampleElements(size.getNumElements()).TO_ARRAY(NEW_KEY_ARRAY(getNumElements())));
+	}
+
+	protected COLLECTION KEY_GENERIC_TYPE getSampleElements(int howMany) {
+		return new ARRAY_LISTBRACES(samples.asList().subList(0, howMany));
+	}
+}

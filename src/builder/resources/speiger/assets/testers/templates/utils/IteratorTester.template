@@ -1,0 +1,20 @@
+package speiger.src.testers.PACKAGE.utils;
+
+import com.google.common.collect.testing.IteratorFeature;
+
+import speiger.src.collections.PACKAGE.collections.ITERABLE;
+import speiger.src.collections.PACKAGE.collections.ITERATOR;
+import speiger.src.collections.PACKAGE.utils.LISTS;
+
+@SuppressWarnings("javadoc")
+public abstract class ITERATOR_TESTER KEY_GENERIC_TYPE extends ABSTRACT_ITERATOR_TESTER KEY_GENERIC_TYPE
+{
+	public ITERATOR_TESTER(int steps, Iterable<? extends IteratorFeature> features, ITERABLE KEY_GENERIC_TYPE expectedElements, KnownOrder knownOrder) {
+		super(steps, LISTS.singleton(INVALID_KEY_VALUE), features, expectedElements, knownOrder, 0);
+	}
+
+	@Override
+	protected Iterable<? extends Stimulus<ITERATOR NO_GENERIC_TYPE>> getStimulusValues() {
+		return iteratorStimuli();
+	}
+}

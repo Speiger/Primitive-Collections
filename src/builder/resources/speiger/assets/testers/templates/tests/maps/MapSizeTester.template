@@ -1,0 +1,14 @@
+package speiger.src.testers.PACKAGE.tests.maps;
+
+import org.junit.Ignore;
+
+import speiger.src.testers.PACKAGE.tests.base.maps.ABSTRACT_MAP_TESTER;
+
+@Ignore
+@SuppressWarnings("javadoc")
+public class FILE_KEY_TYPE2FILE_VALUE_TYPEMapSizeTester KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP_TESTER KEY_VALUE_GENERIC_TYPE {
+	
+	public void testSize() {
+		assertEquals("size():", getNumElements(), getMap().size());
+	}
+}

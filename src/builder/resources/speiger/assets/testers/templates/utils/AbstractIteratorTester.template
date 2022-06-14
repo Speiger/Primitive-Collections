@@ -1,0 +1,533 @@
+package speiger.src.testers.PACKAGE.utils;
+
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Iterator;
+import java.util.List;
+import java.util.ListIterator;
+import java.util.NoSuchElementException;
+import java.util.Set;
+
+import org.junit.Assert;
+
+import com.google.common.collect.testing.Helpers;
+import com.google.common.collect.testing.IteratorFeature;
+
+import junit.framework.AssertionFailedError;
+import speiger.src.collections.PACKAGE.collections.BI_ITERATOR;
+import speiger.src.collections.PACKAGE.collections.ITERABLE;
+import speiger.src.collections.PACKAGE.collections.ITERATOR;
+import speiger.src.collections.PACKAGE.lists.ARRAY_LIST;
+import speiger.src.collections.PACKAGE.lists.LIST;
+import speiger.src.collections.PACKAGE.lists.LIST_ITERATOR;
+
+@SuppressWarnings("javadoc")
+public abstract class ABSTRACT_ITERATOR_TESTER KEY_GENERIC_TYPE
+{
+	private Stimulus<ITERATOR NO_GENERIC_TYPE>[] stimuli;
+	private final ITERATOR KEY_GENERIC_TYPE elementsToInsert;
+	private final Set<IteratorFeature> features;
+	private final LIST KEY_GENERIC_TYPE expectedElements;
+	private final int startIndex;
+	private final KnownOrder knownOrder;
+
+	private abstract static class PermittedMetaException extends RuntimeException {
+		static final PermittedMetaException UOE_OR_ISE = new PermittedMetaException(
+				"UnsupportedOperationException or IllegalStateException") {
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			boolean isPermitted(RuntimeException exception) {
+				return exception instanceof UnsupportedOperationException || exception instanceof IllegalStateException;
+			}
+		};
+		static final PermittedMetaException UOE = new PermittedMetaException("UnsupportedOperationException") {
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			boolean isPermitted(RuntimeException exception) {
+				return exception instanceof UnsupportedOperationException;
+			}
+		};
+		static final PermittedMetaException ISE = new PermittedMetaException("IllegalStateException") {
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			boolean isPermitted(RuntimeException exception) {
+				return exception instanceof IllegalStateException;
+			}
+		};
+		static final PermittedMetaException NSEE = new PermittedMetaException("NoSuchElementException") {
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			boolean isPermitted(RuntimeException exception) {
+				return exception instanceof NoSuchElementException;
+			}
+		};
+
+		private PermittedMetaException(String message) {
+			super(message);
+		}
+
+		abstract boolean isPermitted(RuntimeException exception);
+
+		void assertPermitted(RuntimeException exception) {
+			if (!isPermitted(exception)) {
+				String message = "Exception " + exception.getClass().getSimpleName() + " was thrown; expected "
+						+ getMessage();
+				AssertionFailedError assertionFailedError = new AssertionFailedError(String.valueOf(message));
+				assertionFailedError.initCause(exception);
+				throw assertionFailedError;
+			}
+		}
+
+		private static final long serialVersionUID = 0;
+	}
+
+	private static final class UnknownElementException extends RuntimeException {
+		private UnknownElementException(Collection<?> expected, Object actual) {
+			super("Returned value '" + actual + "' not found. Remaining elements: " + expected);
+		}
+
+		private static final long serialVersionUID = 0;
+	}
+
+	protected final class MultiExceptionListIterator implements LIST_ITERATOR KEY_GENERIC_TYPE {
+		final ARRAY_LIST KEY_GENERIC_TYPE nextElements = new ARRAY_LISTBRACES();
+		final ARRAY_LIST KEY_GENERIC_TYPE previousElements = new ARRAY_LISTBRACES();
+		ARRAY_LIST KEY_GENERIC_TYPE stackWithLastReturnedElementAtTop = null;
+
+		MultiExceptionListIterator(LIST KEY_GENERIC_TYPE expectedElements) {
+			HELPERS.addAll(nextElements, HELPERS.reverse(expectedElements));
+			for (int i = 0; i < startIndex; i++) {
+				previousElements.push(nextElements.pop());
+			}
+		}
+
+		@Override
+		public void add(KEY_TYPE e) {
+			if (!features.contains(IteratorFeature.SUPPORTS_ADD)) {
+				throw PermittedMetaException.UOE;
+			}
+
+			previousElements.push(e);
+			stackWithLastReturnedElementAtTop = null;
+		}
+
+		@Override
+		public boolean hasNext() {
+			return !nextElements.isEmpty();
+		}
+
+		@Override
+		public boolean hasPrevious() {
+			return !previousElements.isEmpty();
+		}
+
+		@Override
+		public KEY_TYPE NEXT() {
+			return transferElement(nextElements, previousElements);
+		}
+
+		@Override
+		public int nextIndex() {
+			return previousElements.size();
+		}
+
+		@Override
+		public KEY_TYPE PREVIOUS() {
+			return transferElement(previousElements, nextElements);
+		}
+
+		@Override
+		public int previousIndex() {
+			return nextIndex() - 1;
+		}
+
+		@Override
+		public void remove() {
+#ignore
+			throwIfInvalid(IteratorFeature.SUPPORTS_REMOVE);
+#endignore
+			
+			stackWithLastReturnedElementAtTop.pop();
+			stackWithLastReturnedElementAtTop = null;
+		}
+
+		@Override
+		public void set(KEY_TYPE e) {
+#ignore
+			throwIfInvalid(IteratorFeature.SUPPORTS_SET);
+#endignore
+
+			stackWithLastReturnedElementAtTop.pop();
+			stackWithLastReturnedElementAtTop.push(e);
+		}
+
+		void promoteToNext(KEY_TYPE e) {
+#if TYPE_OBJECT
+			if (nextElements.remove(e)) {
+#else
+			if (nextElements.REMOVE_KEY(e)) {
+#endif
+				nextElements.push(e);
+			} else {
+				throw new UnknownElementException(nextElements, e);
+			}
+		}
+
+		private KEY_TYPE transferElement(ARRAY_LIST KEY_GENERIC_TYPE source, ARRAY_LIST KEY_GENERIC_TYPE destination) {
+			if (source.isEmpty()) {
+				throw PermittedMetaException.NSEE;
+			}
+
+			destination.push(source.pop());
+			stackWithLastReturnedElementAtTop = destination;
+			return destination.top();
+		}
+
+		private void throwIfInvalid(IteratorFeature methodFeature) {
+			if (!features.contains(methodFeature)) {
+				if (stackWithLastReturnedElementAtTop == null) {
+					throw PermittedMetaException.UOE_OR_ISE;
+				} else {
+					throw PermittedMetaException.UOE;
+				}
+			} else if (stackWithLastReturnedElementAtTop == null) {
+				throw PermittedMetaException.ISE;
+			}
+		}
+
+		private LIST KEY_GENERIC_TYPE getElements() {
+			LIST KEY_GENERIC_TYPE elements = new ARRAY_LISTBRACES();
+			HELPERS.addAll(elements, previousElements);
+			HELPERS.addAll(elements, HELPERS.reverse(nextElements));
+			return elements;
+		}
+	}
+
+	public enum KnownOrder {
+#ignore
+		KNOWN_ORDER, UNKNOWN_ORDER
+#endignore
+	}
+
+	ABSTRACT_ITERATOR_TESTER(int steps, ITERABLE KEY_GENERIC_TYPE elementsToInsertIterable,
+			Iterable<? extends IteratorFeature> features, ITERABLE KEY_GENERIC_TYPE expectedElements, KnownOrder knownOrder, int startIndex) {
+		stimuli = new Stimulus[steps];
+		if (!elementsToInsertIterable.iterator().hasNext()) {
+			throw new IllegalArgumentException();
+		}
+		elementsToInsert = HELPERS.cycle(elementsToInsertIterable);
+		this.features = Helpers.copyToSet(features);
+		this.expectedElements = HELPERS.copyToList(expectedElements);
+		this.knownOrder = knownOrder;
+		this.startIndex = startIndex;
+	}
+
+	protected abstract Iterable<? extends Stimulus<ITERATOR NO_GENERIC_TYPE>> getStimulusValues();
+
+	protected abstract ITERATOR KEY_GENERIC_TYPE newTargetIterator();
+	protected void verify(LIST KEY_GENERIC_TYPE elements) {
+	}
+
+	/** Executes the test. */
+	public final void test() {
+		try {
+			recurse(0);
+		} catch (RuntimeException e) {
+			throw new RuntimeException(Arrays.toString(stimuli), e);
+		}
+	}
+
+	public void testForEachRemaining() {
+		for (int i = 0; i < expectedElements.size() - 1; i++) {
+			
+			LIST KEY_GENERIC_TYPE targetElements = new ARRAY_LISTBRACES();
+			ITERATOR KEY_GENERIC_TYPE iterator = newTargetIterator();
+			for (int j = 0; j < i; j++) {
+				targetElements.add(iterator.NEXT());
+			}
+			iterator.forEachRemaining(targetElements::add);
+			if (knownOrder == KnownOrder.KNOWN_ORDER) {
+				Assert.assertEquals(expectedElements, targetElements);
+			} else {
+				HELPERS.assertEqualIgnoringOrder(expectedElements, targetElements);
+			}
+		}
+	}
+
+	private void recurse(int level) {
+		if (level == stimuli.length) {
+			// We've filled the array.
+			compareResultsForThisListOfStimuli();
+		} else {
+			// Keep recursing to fill the array.
+			for (Stimulus<ITERATOR NO_GENERIC_TYPE> stimulus : getStimulusValues()) {
+				stimuli[level] = stimulus;
+				recurse(level + 1);
+			}
+		}
+	}
+
+	private void compareResultsForThisListOfStimuli() {
+		int removes = Collections.frequency(Arrays.asList(stimuli), remove);
+#ignore
+		if ((!features.contains(IteratorFeature.SUPPORTS_REMOVE) && removes > 1) || (stimuli.length >= 5 && removes > 2)) {
+#endignore
+			// removes are the most expensive thing to test, since they often
+			// throw exceptions with stack
+			// traces, so we test them a bit less aggressively
+			return;
+		}
+
+		MultiExceptionListIterator reference = new MultiExceptionListIterator(expectedElements);
+		ITERATOR KEY_GENERIC_TYPE target = newTargetIterator();
+		for (int i = 0; i < stimuli.length; i++) {
+			String s = Arrays.asList(stimuli)+", Index: "+i;
+			try {
+				stimuli[i].executeAndCompare(reference, target, s);
+				verify(reference.getElements());
+			} catch (AssertionFailedError cause) {
+			    AssertionFailedError assertionFailedError = new AssertionFailedError(String.valueOf("failed with stimuli " + subListCopy(stimuli, i + 1)));
+			    assertionFailedError.initCause(cause);
+			    throw assertionFailedError;
+			}
+		}
+	}
+
+	private static List<Object> subListCopy(Object[] source, int size) {
+		final Object[] copy = new Object[size];
+		System.arraycopy(source, 0, copy, 0, size);
+		return Arrays.asList(copy);
+	}
+
+	private interface IteratorOperation {
+		KEY_OBJECT_TYPE execute(ITERATOR NO_GENERIC_TYPE iterator);
+	}
+
+	/**
+	 * Apply this method to both iterators and return normally only if both
+	 * produce the same response.
+	 *
+	 * @see Stimulus#executeAndCompare(ListIterator, Iterator)
+	 */
+	private <E extends ITERATOR NO_GENERIC_TYPE> void internalExecuteAndCompare(E reference, E target, IteratorOperation method) {
+		KEY_OBJECT_TYPE referenceReturnValue = INVALID_KEY_VALUE;
+		PermittedMetaException referenceException = null;
+		KEY_OBJECT_TYPE targetReturnValue = INVALID_KEY_VALUE;
+		RuntimeException targetException = null;
+
+		try {
+			targetReturnValue = method.execute(target);
+		} catch (RuntimeException e) {
+			targetException = e;
+		}
+
+		try {
+#ignore
+			if (method == NEXT_METHOD && targetException == null && knownOrder == KnownOrder.UNKNOWN_ORDER) {
+#endignore
+#if TYPE_OBJECT
+				((MultiExceptionListIterator) reference).promoteToNext((T)targetReturnValue);
+#else
+				((MultiExceptionListIterator) reference).promoteToNext(targetReturnValue);
+#endif
+			}
+			
+			referenceReturnValue = method.execute(reference);
+		} catch (PermittedMetaException e) {
+			referenceException = e;
+		} catch (UnknownElementException e) {
+		    AssertionFailedError assertionFailedError = new AssertionFailedError(String.valueOf(e.getMessage()));
+		    assertionFailedError.initCause(e);
+		    throw assertionFailedError;
+		}
+
+		if (referenceException == null) {
+			if (targetException != null) {
+			    AssertionFailedError assertionFailedError = new AssertionFailedError("Target threw exception when reference did not");
+			    assertionFailedError.initCause(targetException);
+			    throw assertionFailedError;
+			}
+#if TYPE_FLOAT
+			Assert.assertEquals(Float.floatToIntBits(referenceReturnValue), Float.floatToIntBits(targetReturnValue));
+#else if TYPE_DOUBLE
+			Assert.assertEquals(Double.doubleToLongBits(referenceReturnValue), Double.doubleToLongBits(targetReturnValue));
+#else
+			Assert.assertEquals(referenceReturnValue, targetReturnValue);
+#endif
+			return;
+		}
+
+		if (targetException == null) {
+			Assert.fail("Target failed to throw " + referenceException+", Stimuli: "+Arrays.asList(stimuli));
+		}
+
+		/*
+		 * Reference iterator threw an exception, so we should expect an
+		 * acceptable exception from the target.
+		 */
+		referenceException.assertPermitted(targetException);
+	}
+
+#ignore
+	private static final IteratorOperation REMOVE_METHOD = new IteratorOperation() {
+#endignore
+		@Override
+		public KEY_OBJECT_TYPE execute(ITERATOR NO_GENERIC_TYPE iterator) {
+			iterator.remove();
+			return INVALID_KEY_VALUE;
+		}
+	};
+
+#ignore
+	private static final IteratorOperation NEXT_METHOD = new IteratorOperation() {
+#endignore
+		@Override
+		public KEY_OBJECT_TYPE execute(ITERATOR NO_GENERIC_TYPE iterator) {
+			return iterator.NEXT();
+		}
+	};
+
+#ignore
+	private static final IteratorOperation PREVIOUS_METHOD = new IteratorOperation() {
+#endignore
+		@Override
+		public KEY_OBJECT_TYPE execute(ITERATOR NO_GENERIC_TYPE iterator) {
+			return ((BI_ITERATOR NO_GENERIC_TYPE) iterator).PREVIOUS();
+		}
+	};
+
+	private final IteratorOperation newAddMethod() {
+		final KEY_OBJECT_TYPE toInsert = elementsToInsert.NEXT();
+		return new IteratorOperation() {
+			@Override
+			public KEY_OBJECT_TYPE execute(ITERATOR NO_GENERIC_TYPE iterator) {
+				@SuppressWarnings("unchecked")
+				LIST_ITERATOR KEY_SPECIAL_GENERIC_TYPE<Object> rawIterator = (LIST_ITERATOR KEY_SPECIAL_GENERIC_TYPE<Object>) iterator;
+				rawIterator.add(toInsert);
+				return INVALID_KEY_VALUE;
+			}
+		};
+	}
+
+	private final IteratorOperation newSetMethod() {
+		final KEY_OBJECT_TYPE toInsert = elementsToInsert.NEXT();
+		return new IteratorOperation() {
+			@Override
+			public KEY_OBJECT_TYPE execute(ITERATOR NO_GENERIC_TYPE iterator) {
+				@SuppressWarnings("unchecked")
+				LIST_ITERATOR KEY_SPECIAL_GENERIC_TYPE<Object> li = (LIST_ITERATOR KEY_SPECIAL_GENERIC_TYPE<Object>) iterator;
+				li.set(toInsert);
+				return INVALID_KEY_VALUE;
+			}
+		};
+	}
+
+	abstract static class Stimulus<E extends ITERATOR NO_GENERIC_TYPE> {
+		private final String toString;
+
+		protected Stimulus(String toString) {
+			this.toString = toString;
+		}
+
+		abstract void executeAndCompare(LIST_ITERATOR NO_GENERIC_TYPE reference, E target, String stimuli);
+
+		@Override
+		public String toString() {
+			return toString;
+		}
+	}
+
+	Stimulus<ITERATOR NO_GENERIC_TYPE> hasNext = new Stimulus<ITERATOR NO_GENERIC_TYPE>("hasNext") {
+		@Override
+		void executeAndCompare(LIST_ITERATOR NO_GENERIC_TYPE reference, ITERATOR NO_GENERIC_TYPE target, String stimuli) {
+			Assert.assertEquals("hasNext wasn't matching. Stimuli: "+stimuli, reference.hasNext(), target.hasNext());
+		}
+	};
+	Stimulus<ITERATOR NO_GENERIC_TYPE> next = new Stimulus<ITERATOR NO_GENERIC_TYPE>("next") {
+		@Override
+		void executeAndCompare(LIST_ITERATOR NO_GENERIC_TYPE reference, ITERATOR NO_GENERIC_TYPE target, String stimuli) {
+#ignore
+			internalExecuteAndCompare(reference, target, NEXT_METHOD);
+#endignore
+		}
+	};
+	Stimulus<ITERATOR NO_GENERIC_TYPE> remove = new Stimulus<ITERATOR NO_GENERIC_TYPE>("remove") {
+		@Override
+		void executeAndCompare(LIST_ITERATOR NO_GENERIC_TYPE reference, ITERATOR NO_GENERIC_TYPE target, String stimuli) {
+#ignore
+			internalExecuteAndCompare(reference, target, REMOVE_METHOD);
+#endignore
+		}
+	};
+	Stimulus<ITERATOR NO_GENERIC_TYPE> skip = new Stimulus<ITERATOR NO_GENERIC_TYPE>("skip") {
+		@Override
+		void executeAndCompare(LIST_ITERATOR NO_GENERIC_TYPE reference, ITERATOR NO_GENERIC_TYPE target, String stimuli) {
+			Assert.assertEquals("skip wasn't matching. Stimuli: "+stimuli, reference.skip(1), target.skip(1));
+		}
+	};
+	
+	@SuppressWarnings("unchecked")
+	List<Stimulus<ITERATOR NO_GENERIC_TYPE>> iteratorStimuli() {
+		return Arrays.asList(hasNext, skip, next, remove);
+	}
+	
+	Stimulus<BI_ITERATOR NO_GENERIC_TYPE> hasPrevious = new Stimulus<BI_ITERATOR NO_GENERIC_TYPE>("hasPrevious") {
+		@Override
+		void executeAndCompare(LIST_ITERATOR NO_GENERIC_TYPE reference, BI_ITERATOR NO_GENERIC_TYPE target, String stimuli) {
+			Assert.assertEquals("hasPrevious wasn't matching. Stimuli: "+stimuli, reference.hasPrevious(), target.hasPrevious());
+		}
+	};
+	Stimulus<BI_ITERATOR NO_GENERIC_TYPE> previous = new Stimulus<BI_ITERATOR NO_GENERIC_TYPE>("previous") {
+		@Override
+		void executeAndCompare(LIST_ITERATOR NO_GENERIC_TYPE reference, BI_ITERATOR NO_GENERIC_TYPE target, String stimuli) {
+#ignore
+			internalExecuteAndCompare(reference, target, PREVIOUS_METHOD);
+#endignore
+		}
+	};
+	Stimulus<BI_ITERATOR NO_GENERIC_TYPE> back = new Stimulus<BI_ITERATOR NO_GENERIC_TYPE>("back") {
+		@Override
+		void executeAndCompare(LIST_ITERATOR NO_GENERIC_TYPE reference, BI_ITERATOR NO_GENERIC_TYPE target, String stimuli) {
+			Assert.assertEquals("back wasn't matching. Stimuli: "+stimuli, reference.back(1), target.back(1));
+		}
+	};
+	
+	
+	List<Stimulus<BI_ITERATOR NO_GENERIC_TYPE>> biIteratorStimuli() {
+		return Arrays.asList(hasPrevious, back, previous);
+	}
+	
+	Stimulus<LIST_ITERATOR NO_GENERIC_TYPE> nextIndex = new Stimulus<LIST_ITERATOR NO_GENERIC_TYPE>("nextIndex") {
+		@Override
+		void executeAndCompare(LIST_ITERATOR NO_GENERIC_TYPE reference, LIST_ITERATOR NO_GENERIC_TYPE target, String stimuli) {
+			Assert.assertEquals("nextIndex wasn't matching. Stimuli: "+stimuli, reference.nextIndex(), target.nextIndex());
+		}
+	};
+	Stimulus<LIST_ITERATOR NO_GENERIC_TYPE> previousIndex = new Stimulus<LIST_ITERATOR NO_GENERIC_TYPE>("previousIndex") {
+		@Override
+		void executeAndCompare(LIST_ITERATOR NO_GENERIC_TYPE reference, LIST_ITERATOR NO_GENERIC_TYPE target, String stimuli) {
+			Assert.assertEquals("previous wasn't matching. Stimuli: "+stimuli, reference.previousIndex(), target.previousIndex());
+		}
+	};
+	Stimulus<LIST_ITERATOR NO_GENERIC_TYPE> add = new Stimulus<LIST_ITERATOR NO_GENERIC_TYPE>("add") {
+		@Override
+		void executeAndCompare(LIST_ITERATOR NO_GENERIC_TYPE reference, LIST_ITERATOR NO_GENERIC_TYPE target, String stimuli) {
+			internalExecuteAndCompare(reference, target, newAddMethod());
+		}
+	};
+	Stimulus<LIST_ITERATOR NO_GENERIC_TYPE> set = new Stimulus<LIST_ITERATOR NO_GENERIC_TYPE>("set") {
+		@Override
+		void executeAndCompare(LIST_ITERATOR NO_GENERIC_TYPE reference, LIST_ITERATOR NO_GENERIC_TYPE target, String stimuli) {
+			internalExecuteAndCompare(reference, target, newSetMethod());
+		}
+	};
+
+	List<Stimulus<LIST_ITERATOR NO_GENERIC_TYPE>> listIteratorStimuli() {
+		return Arrays.asList(nextIndex, previousIndex, add, set);
+	}
+}

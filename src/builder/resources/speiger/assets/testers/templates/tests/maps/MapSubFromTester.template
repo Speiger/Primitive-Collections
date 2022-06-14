@@ -1,0 +1,148 @@
+package speiger.src.testers.PACKAGE.tests.maps;
+
+import org.junit.Ignore;
+
+#if VALUE_PRIMITIVES
+#ignore
+import static com.google.common.collect.testing.features.CollectionSize.ZERO;
+import static com.google.common.collect.testing.features.CollectionSize.SEVERAL;
+import static com.google.common.collect.testing.features.MapFeature.FAILS_FAST_ON_CONCURRENT_MODIFICATION;
+import static com.google.common.collect.testing.features.MapFeature.SUPPORTS_REMOVE;
+#endignore
+
+import java.util.ConcurrentModificationException;
+import java.util.Iterator;
+
+
+import com.google.common.collect.testing.features.CollectionSize;
+import com.google.common.collect.testing.features.MapFeature;
+
+import speiger.src.collections.VALUE_PACKAGE.collections.VALUE_ITERATOR;
+#if !SAME_TYPE
+import speiger.src.collections.PACKAGE.collections.ITERATOR;
+#endif
+import speiger.src.collections.PACKAGE.maps.interfaces.MAP;
+#endif
+import speiger.src.testers.PACKAGE.tests.base.maps.ABSTRACT_MAP_TESTER;
+
+@Ignore
+@SuppressWarnings("javadoc")
+public class FILE_KEY_TYPE2FILE_VALUE_TYPEMapSubFromTester KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP_TESTER KEY_VALUE_GENERIC_TYPE
+{
+#if VALUE_PRIMITIVES
+#ignore
+	@MapFeature.Require(SUPPORTS_REMOVE)
+	@CollectionSize.Require(SEVERAL)
+#endignore
+	public void testSubFrom_supportedPresent() {
+		assertEquals("subFrom(present, value) should return the old value", v1(), getMap().subFrom(k1(), v3()));
+		expectMissing(e1());
+	}
+	
+#ignore
+	@MapFeature.Require(SUPPORTS_REMOVE)
+#endignore
+	public void testSubFrom_supportedNotPresent() {
+		assertEquals("subFrom(notPresent, value) should return INVALID_VALUE", INVALID_VALUE, subFrom(e3()));
+		expectUnchanged();
+	}
+	
+#ignore
+	@MapFeature.Require(SUPPORTS_REMOVE)
+	@CollectionSize.Require(SEVERAL)
+#endignore
+	public void testSubFromSum_supportedNotPresent() {
+		assertEquals("subFrom(notPresent, value) should return "+v2(), v2(), getMap().subFrom(k2(), v3()));
+		assertEquals("subFrom(notPresent, value) should return INVALID_VALUE", INVALID_VALUE, subFrom(e2()));
+		expectMissing(e2());
+	}
+
+
+#ignore
+	@MapFeature.Require({ FAILS_FAST_ON_CONCURRENT_MODIFICATION, SUPPORTS_REMOVE })
+	@CollectionSize.Require(absent = ZERO)
+#endignore
+	public void testSubFromAbsentConcurrentWithEntrySetIteration() {
+		try {
+			Iterator<MAP.Entry KEY_VALUE_GENERIC_TYPE> iterator = getMap().ENTRY_SET().iterator();
+			subFrom(e3());
+			iterator.next();
+			fail("Expected ConcurrentModificationException");
+		} catch (ConcurrentModificationException expected) {
+			// success
+		}
+	}
+
+#ignore
+	@MapFeature.Require({ FAILS_FAST_ON_CONCURRENT_MODIFICATION, SUPPORTS_REMOVE })
+	@CollectionSize.Require(absent = ZERO)
+#endignore
+	public void testSubFromAbsentConcurrentWithKeySetIteration() {
+		try {
+			ITERATOR KEY_GENERIC_TYPE iterator = getMap().keySet().iterator();
+			subFrom(e3());
+			iterator.NEXT();
+			fail("Expected ConcurrentModificationException");
+		} catch (ConcurrentModificationException expected) {
+			// success
+		}
+	}
+
+#ignore
+	@MapFeature.Require({ FAILS_FAST_ON_CONCURRENT_MODIFICATION, SUPPORTS_REMOVE })
+	@CollectionSize.Require(absent = ZERO)
+#endignore
+	public void testSubFromAbsentConcurrentWithValueIteration() {
+		try {
+			VALUE_ITERATOR VALUE_GENERIC_TYPE iterator = getMap().values().iterator();
+			subFrom(e3());
+			iterator.VALUE_NEXT();
+			fail("Expected ConcurrentModificationException");
+		} catch (ConcurrentModificationException expected) {
+			// success
+		}
+	}
+
+#ignore
+	@MapFeature.Require(absent = SUPPORTS_REMOVE)
+#endignore
+	public void testSubFrom_unsupportedNotPresent() {
+		try {
+			subFrom(e3());
+			fail("subFrom(notPresent, value) should throw");
+		} catch (UnsupportedOperationException expected) {
+		}
+		expectUnchanged();
+		expectMissing(e3());
+	}
+
+#ignore
+	@MapFeature.Require(absent = SUPPORTS_REMOVE)
+	@CollectionSize.Require(absent = ZERO)
+#endignore
+	public void testSubFrom_unsupportedPresentExistingValue() {
+		try {
+			assertEquals("subFrom(present, existingValue) should return present or throw", v0(), subFrom(e0()));
+		} catch (UnsupportedOperationException tolerated) {
+		}
+		expectUnchanged();
+	}
+
+#ignore
+	@MapFeature.Require(absent = SUPPORTS_REMOVE)
+	@CollectionSize.Require(absent = ZERO)
+#endignore
+	public void testSubFrom_unsupportedPresentDifferentValue() {
+		try {
+			getMap().subFrom(k0(), v3());
+			fail("subFrom(present, differentValue) should throw");
+		} catch (UnsupportedOperationException expected) {
+		}
+		expectUnchanged();
+	}
+	
+	private VALUE_TYPE subFrom(MAP.Entry KEY_VALUE_GENERIC_TYPE entry) {
+		return getMap().subFrom(entry.ENTRY_KEY(), entry.ENTRY_VALUE());
+	}
+#endif
+}

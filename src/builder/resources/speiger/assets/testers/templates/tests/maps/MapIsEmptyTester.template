@@ -1,0 +1,30 @@
+package speiger.src.testers.PACKAGE.tests.maps;
+
+#ignore
+import static com.google.common.collect.testing.features.CollectionSize.ZERO;
+#endignore
+
+import org.junit.Ignore;
+
+import com.google.common.collect.testing.features.CollectionSize;
+
+import speiger.src.testers.PACKAGE.tests.base.maps.ABSTRACT_MAP_TESTER;
+
+@Ignore
+@SuppressWarnings("javadoc")
+public class FILE_KEY_TYPE2FILE_VALUE_TYPEMapIsEmptyTester KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP_TESTER KEY_VALUE_GENERIC_TYPE 
+{
+#ignore
+	  @CollectionSize.Require(ZERO)
+#endignore
+	  public void testIsEmpty_yes() {
+	    assertTrue("isEmpty() should return true", getMap().isEmpty());
+	  }
+
+#ignore
+	  @CollectionSize.Require(absent = ZERO)
+#endignore
+	  public void testIsEmpty_no() {
+	    assertFalse("isEmpty() should return false", getMap().isEmpty());
+	  }
+}

@@ -1,0 +1,28 @@
+package speiger.src.testers.PACKAGE.tests.base;
+
+import org.junit.Ignore;
+
+import speiger.src.collections.PACKAGE.collections.COLLECTION;
+
+@Ignore
+@SuppressWarnings("javadoc")
+public class ABSTRACT_COLLECTION_TESTER KEY_GENERIC_TYPE extends ABSTRACT_CONTAINER_TESTER KKS_GENERIC_TYPE<COLLECTION KEY_CLASS_GENERIC_TYPE>
+{
+	protected COLLECTION KEY_GENERIC_TYPE collection;
+
+	@Override
+	protected COLLECTION KEY_GENERIC_TYPE actualContents() {
+		return collection;
+	}
+
+	@Override
+	protected COLLECTION KEY_GENERIC_TYPE resetContainer(COLLECTION KEY_GENERIC_TYPE newContents) {
+		collection = super.resetContainer(newContents);
+		return collection;
+	}
+
+	protected void resetCollection() {
+		resetContainer();
+	}
+
+}

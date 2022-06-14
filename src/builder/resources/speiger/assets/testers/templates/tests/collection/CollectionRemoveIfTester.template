@@ -1,0 +1,119 @@
+package speiger.src.testers.PACKAGE.tests.collection;
+
+#ignore
+import static com.google.common.collect.testing.features.CollectionFeature.FAILS_FAST_ON_CONCURRENT_MODIFICATION;
+import static com.google.common.collect.testing.features.CollectionFeature.SUPPORTS_REMOVE;
+import static com.google.common.collect.testing.features.CollectionSize.SEVERAL;
+import static com.google.common.collect.testing.features.CollectionSize.ZERO;
+#endignore
+
+import java.util.ConcurrentModificationException;
+#if TYPE_OBJECT
+import java.util.Objects;
+#endif
+
+import com.google.common.collect.testing.features.CollectionFeature;
+import com.google.common.collect.testing.features.CollectionSize;
+
+import org.junit.Ignore;
+
+import speiger.src.collections.PACKAGE.collections.ITERATOR;
+import speiger.src.testers.PACKAGE.tests.base.ABSTRACT_COLLECTION_TESTER;
+
+@Ignore
+@SuppressWarnings("javadoc")
+public class FILE_KEY_TYPECollectionRemoveIfTester KEY_GENERIC_TYPE extends ABSTRACT_COLLECTION_TESTER KEY_GENERIC_TYPE
+{
+#ignore
+	@CollectionFeature.Require(SUPPORTS_REMOVE)
+#endignore
+	public void testRemoveIf_alwaysFalse() {
+#if TYPE_OBJECT
+		assertFalse("remoIf(x -> false) should return false", collection.removeIf(x -> false));
+#else
+		assertFalse("remoIf(x -> false) should return false", collection.remIf(x -> false));
+#endif
+		expectUnchanged();
+	}
+
+#ignore
+	@CollectionFeature.Require(SUPPORTS_REMOVE)
+	@CollectionSize.Require(absent = ZERO)
+#endignore
+	public void testRemoveIf_sometimesTrue() {
+		assertTrue("remIf(isEqual(present)) should return true",
+#if TYPE_OBJECT
+		collection.removeIf(T -> Objects.equals(T, e0())));
+#else
+		collection.remIf(T -> T == e0()));
+#endif
+		expectMissing(samples.e0());
+	}
+
+#ignore
+	@CollectionFeature.Require(SUPPORTS_REMOVE)
+	@CollectionSize.Require(absent = ZERO)
+#endignore
+	public void testRemoveIf_allPresent() {
+#if TYPE_OBJECT
+		assertTrue("remIf(x -> true) should return true", collection.removeIf(x -> true));
+#else
+		assertTrue("remIf(x -> true) should return true", collection.remIf(x -> true));
+#endif
+		expectContents();
+	}
+
+#ignore
+	@CollectionFeature.Require({ SUPPORTS_REMOVE, FAILS_FAST_ON_CONCURRENT_MODIFICATION })
+	@CollectionSize.Require(SEVERAL)
+#endignore
+	public void testRemoveIfSomeMatchesConcurrentWithIteration() {
+		try {
+			ITERATOR KEY_GENERIC_TYPE iterator = collection.iterator();
+#if TYPE_OBJECT
+			assertTrue(collection.removeIf(T -> Objects.equals(T, e0())));
+#else
+			assertTrue(collection.remIf(T -> T == e0()));
+#endif
+			iterator.NEXT();
+			fail("Expected ConcurrentModificationException");
+		} catch (ConcurrentModificationException expected) {
+			// success
+		}
+	}
+
+#ignore
+	@CollectionFeature.Require(absent = SUPPORTS_REMOVE)
+	@CollectionSize.Require(ZERO)
+#endignore
+	public void testRemoveIf_unsupportedEmptyCollection() {
+		try {
+			assertFalse("remIf(Predicate) should return false or throw UnsupportedOperationException",
+#if TYPE_OBJECT
+			collection.removeIf(x -> {throw new AssertionError("predicate should never be called");}));
+#else
+			collection.remIf(x -> {throw new AssertionError("predicate should never be called");}));
+#endif
+		} catch (UnsupportedOperationException tolerated) {
+		}
+		expectUnchanged();
+	}
+
+#ignore
+	@CollectionFeature.Require(absent = SUPPORTS_REMOVE)
+	@CollectionSize.Require(absent = ZERO)
+#endignore
+	public void testRemoveIf_alwaysTrueUnsupported() {
+		try {
+#if TYPE_OBJECT
+			collection.removeIf(x -> true);
+#else
+			collection.remIf(x -> true);
+			fail("remIf(x -> true) should throw " + "UnsupportedOperationException");
+#endif
+		} catch (UnsupportedOperationException expected) {
+		}
+		expectUnchanged();
+		assertTrue(collection.contains(samples.e0()));
+	}
+}

@@ -1,0 +1,24 @@
+package speiger.src.testers.PACKAGE.tests.queue.iterators;
+
+import org.junit.Ignore;
+
+import com.google.common.collect.testing.features.CollectionSize;
+
+import speiger.src.collections.PACKAGE.lists.LIST;
+import speiger.src.testers.PACKAGE.tests.base.ABSTRACT_QUEUE_TESTER;
+
+@Ignore
+@SuppressWarnings("javadoc")
+public class FILE_KEY_TYPEQueueDistinctTester KEY_GENERIC_TYPE extends ABSTRACT_QUEUE_TESTER KEY_GENERIC_TYPE
+{
+#ignore
+	@CollectionSize.Require(CollectionSize.SEVERAL)
+#endignore
+	public void testDistinct()
+	{
+		ArrayWithDuplicate KEY_GENERIC_TYPE duplicate = createArrayWithDuplicateElement();
+		resetContainer(queueGenerator.create(duplicate.elements));
+		LIST KEY_GENERIC_TYPE list = queue.distinct().pourAsList();
+		assertEquals("Distinct should remove duplicate elements", list.indexOf(duplicate.duplicate), list.lastIndexOf(duplicate.duplicate));
+	}
+}

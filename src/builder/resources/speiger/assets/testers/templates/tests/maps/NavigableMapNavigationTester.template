@@ -1,0 +1,333 @@
+package speiger.src.testers.PACKAGE.tests.maps;
+
+#ignore
+import static com.google.common.collect.testing.features.CollectionSize.ONE;
+import static com.google.common.collect.testing.features.CollectionSize.SEVERAL;
+import static com.google.common.collect.testing.features.CollectionSize.ZERO;
+import static com.google.common.collect.testing.features.MapFeature.SUPPORTS_REMOVE;
+#endignore
+
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
+
+import org.junit.Ignore;
+
+import com.google.common.collect.testing.features.CollectionSize;
+import com.google.common.collect.testing.features.MapFeature;
+
+#if !TYPE_OBJECT
+import speiger.src.collections.PACKAGE.functions.COMPARATOR;
+#endif
+import speiger.src.collections.PACKAGE.maps.interfaces.MAP.Entry;
+import speiger.src.collections.PACKAGE.maps.interfaces.NAVIGABLE_MAP;
+import speiger.src.collections.objects.lists.ObjectArrayList;
+import speiger.src.collections.objects.lists.ObjectList;
+import speiger.src.testers.PACKAGE.tests.base.maps.ABSTRACT_MAP_TESTER;
+import speiger.src.testers.objects.utils.ObjectHelpers;
+
+@Ignore
+@SuppressWarnings("javadoc")
+public class FILE_KEY_TYPE2FILE_VALUE_TYPENavigableMapNavigationTester KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP_TESTER KEY_VALUE_GENERIC_TYPE
+{
+	private NAVIGABLE_MAP KEY_VALUE_GENERIC_TYPE navigableMap;
+	private List<Entry KEY_VALUE_GENERIC_TYPE> entries;
+	private Entry KEY_VALUE_GENERIC_TYPE a;
+	private Entry KEY_VALUE_GENERIC_TYPE b;
+	private Entry KEY_VALUE_GENERIC_TYPE c;
+
+	@Override
+	public void setUp() throws Exception {
+		super.setUp();
+		navigableMap = (NAVIGABLE_MAP KEY_VALUE_GENERIC_TYPE) getMap();
+		entries = ObjectHelpers.copyToList(getSampleElements(getNumElements()));
+		entries.sort(entryComparator(navigableMap.comparator()));
+		if (entries.size() >= 1) {
+			a = entries.get(0);
+			if (entries.size() >= 3) {
+				b = entries.get(1);
+				c = entries.get(2);
+			}
+		}
+	}
+	
+	public static GENERIC_KEY_VALUE_BRACES Comparator<Entry KEY_VALUE_GENERIC_TYPE> entryComparator(COMPARATOR KEY_GENERIC_TYPE keyComparator) {
+		return new Comparator<Entry KEY_VALUE_GENERIC_TYPE>() {
+			@Override
+			public int compare(Entry KEY_VALUE_GENERIC_TYPE a, Entry KEY_VALUE_GENERIC_TYPE b) {
+				return (keyComparator == null) ? COMPAREABLE_TO_KEY(a.ENTRY_KEY(), b.ENTRY_KEY()) : keyComparator.compare(a.ENTRY_KEY(), b.ENTRY_KEY());
+			}
+		};
+	}
+	
+	@SuppressWarnings("unchecked")
+	private void resetWithHole() {
+		Entry KEY_VALUE_GENERIC_TYPE[] entries = new Entry[] { a, c };
+		super.resetMap(entries);
+		navigableMap = (NAVIGABLE_MAP KEY_VALUE_GENERIC_TYPE) getMap();
+	}
+
+#ignore
+	@CollectionSize.Require(ZERO)
+#endignore
+	public void testEmptyMapFirst() {
+		assertNull(navigableMap.firstEntry());
+	}
+
+#ignore
+	@MapFeature.Require(SUPPORTS_REMOVE)
+	@CollectionSize.Require(ZERO)
+#endignore
+	public void testEmptyMapPollFirst() {
+		assertNull(navigableMap.pollFirstEntry());
+	}
+
+#ignore
+	@CollectionSize.Require(ZERO)
+#endignore
+	public void testEmptyMapNearby() {
+#if TYPE_OBJECT
+		assertNull(navigableMap.lowerEntry(k0()));
+		assertNull(navigableMap.lowerKey(k0()));
+		assertNull(navigableMap.floorEntry(k0()));
+		assertNull(navigableMap.floorKey(k0()));
+		assertNull(navigableMap.ceilingEntry(k0()));
+		assertNull(navigableMap.ceilingKey(k0()));
+		assertNull(navigableMap.higherEntry(k0()));
+		assertNull(navigableMap.higherKey(k0()));
+#else
+		assertNull(navigableMap.lowerEntry(k0()));
+		assertEquals(CLASS_TYPE.MAX_VALUE, navigableMap.lowerKey(k0()));
+		assertNull(navigableMap.floorEntry(k0()));
+		assertEquals(CLASS_TYPE.MAX_VALUE, navigableMap.floorKey(k0()));
+		assertNull(navigableMap.ceilingEntry(k0()));
+		assertEquals(CLASS_TYPE.MIN_VALUE, navigableMap.ceilingKey(k0()));
+		assertNull(navigableMap.higherEntry(k0()));
+		assertEquals(CLASS_TYPE.MIN_VALUE, navigableMap.higherKey(k0()));
+#endif
+	}
+
+#ignore
+	@CollectionSize.Require(ZERO)
+#endignore
+	public void testEmptyMapLast() {
+		assertNull(navigableMap.lastEntry());
+	}
+
+#ignore
+	@MapFeature.Require(SUPPORTS_REMOVE)
+	@CollectionSize.Require(ZERO)
+#endignore
+	public void testEmptyMapPollLast() {
+		assertNull(navigableMap.pollLastEntry());
+	}
+
+#ignore
+	@CollectionSize.Require(ONE)
+#endignore
+	public void testSingletonMapFirst() {
+		assertEquals(a, navigableMap.firstEntry());
+	}
+
+#ignore
+	@MapFeature.Require(SUPPORTS_REMOVE)
+	@CollectionSize.Require(ONE)
+#endignore
+	public void testSingletonMapPollFirst() {
+		assertEquals(a, navigableMap.pollFirstEntry());
+		assertTrue(navigableMap.isEmpty());
+	}
+
+#ignore
+	@CollectionSize.Require(ONE)
+#endignore
+	public void testSingletonMapNearby() {
+#if TYPE_OBJECT
+		assertNull(navigableMap.lowerEntry(k0()));
+		assertNull(navigableMap.lowerKey(k0()));
+		assertEquals(a, navigableMap.floorEntry(k0()));
+		assertEquals(a.ENTRY_KEY(), navigableMap.floorKey(k0()));
+		assertEquals(a, navigableMap.ceilingEntry(k0()));
+		assertEquals(a.ENTRY_KEY(), navigableMap.ceilingKey(k0()));
+		assertNull(navigableMap.higherEntry(k0()));
+		assertNull(navigableMap.higherKey(k0()));
+#else
+		assertNull(navigableMap.lowerEntry(k0()));
+		assertEquals(CLASS_TYPE.MAX_VALUE, navigableMap.lowerKey(k0()));
+		assertEquals(a, navigableMap.floorEntry(k0()));
+		assertEquals(a.ENTRY_KEY(), navigableMap.floorKey(k0()));
+		assertEquals(a, navigableMap.ceilingEntry(k0()));
+		assertEquals(a.ENTRY_KEY(), navigableMap.ceilingKey(k0()));
+		assertNull(navigableMap.higherEntry(k0()));
+		assertEquals(CLASS_TYPE.MIN_VALUE, navigableMap.higherKey(k0()));
+#endif
+	}
+
+#ignore
+	@CollectionSize.Require(ONE)
+#endignore
+	public void testSingletonMapLast() {
+		assertEquals(a, navigableMap.lastEntry());
+	}
+
+#ignore
+	@MapFeature.Require(SUPPORTS_REMOVE)
+	@CollectionSize.Require(ONE)
+#endignore
+	public void testSingletonMapPollLast() {
+		assertEquals(a, navigableMap.pollLastEntry());
+		assertTrue(navigableMap.isEmpty());
+	}
+
+#ignore
+	@CollectionSize.Require(SEVERAL)
+#endignore
+	public void testFirst() {
+		assertEquals(a, navigableMap.firstEntry());
+	}
+
+#ignore
+	@MapFeature.Require(SUPPORTS_REMOVE)
+	@CollectionSize.Require(SEVERAL)
+#endignore
+	public void testPollFirst() {
+		assertEquals(a, navigableMap.pollFirstEntry());
+		assertEquals(entries.subList(1, entries.size()), ObjectHelpers.copyToList(navigableMap.ENTRY_SET()));
+	}
+
+#ignore
+	@MapFeature.Require(absent = SUPPORTS_REMOVE)
+#endignore
+	public void testPollFirstUnsupported() {
+		try {
+			navigableMap.pollFirstEntry();
+			fail();
+		} catch (UnsupportedOperationException e) {
+		}
+	}
+
+#ignore
+	@CollectionSize.Require(SEVERAL)
+#endignore
+	public void testLower() {
+		resetWithHole();
+		assertEquals(null, navigableMap.lowerEntry(a.ENTRY_KEY()));
+#if TYPE_OBJECT
+		assertNull(navigableMap.lowerKey(a.ENTRY_KEY()));
+#else
+		assertEquals(CLASS_TYPE.MAX_VALUE, navigableMap.lowerKey(a.ENTRY_KEY()));
+#endif
+		assertEquals(a, navigableMap.lowerEntry(b.ENTRY_KEY()));
+		assertEquals(a.ENTRY_KEY(), navigableMap.lowerKey(b.ENTRY_KEY()));
+		assertEquals(a, navigableMap.lowerEntry(c.ENTRY_KEY()));
+		assertEquals(a.ENTRY_KEY(), navigableMap.lowerKey(c.ENTRY_KEY()));
+	}
+
+#ignore
+	@CollectionSize.Require(SEVERAL)
+#endignore
+	public void testFloor() {
+		resetWithHole();
+		assertEquals(a, navigableMap.floorEntry(a.ENTRY_KEY()));
+		assertEquals(a.ENTRY_KEY(), navigableMap.floorKey(a.ENTRY_KEY()));
+		assertEquals(a, navigableMap.floorEntry(b.ENTRY_KEY()));
+		assertEquals(a.ENTRY_KEY(), navigableMap.floorKey(b.ENTRY_KEY()));
+		assertEquals(c, navigableMap.floorEntry(c.ENTRY_KEY()));
+		assertEquals(c.ENTRY_KEY(), navigableMap.floorKey(c.ENTRY_KEY()));
+	}
+
+#ignore
+	@CollectionSize.Require(SEVERAL)
+#endignore
+	public void testCeiling() {
+		resetWithHole();
+		assertEquals(a, navigableMap.ceilingEntry(a.ENTRY_KEY()));
+		assertEquals(a.ENTRY_KEY(), navigableMap.ceilingKey(a.ENTRY_KEY()));
+		assertEquals(c, navigableMap.ceilingEntry(b.ENTRY_KEY()));
+		assertEquals(c.ENTRY_KEY(), navigableMap.ceilingKey(b.ENTRY_KEY()));
+		assertEquals(c, navigableMap.ceilingEntry(c.ENTRY_KEY()));
+		assertEquals(c.ENTRY_KEY(), navigableMap.ceilingKey(c.ENTRY_KEY()));
+	}
+
+#ignore
+	@CollectionSize.Require(SEVERAL)
+#endignore
+	public void testHigher() {
+		resetWithHole();
+		assertEquals(c, navigableMap.higherEntry(a.ENTRY_KEY()));
+		assertEquals(c.ENTRY_KEY(), navigableMap.higherKey(a.ENTRY_KEY()));
+		assertEquals(c, navigableMap.higherEntry(b.ENTRY_KEY()));
+		assertEquals(c.ENTRY_KEY(), navigableMap.higherKey(b.ENTRY_KEY()));
+		assertEquals(null, navigableMap.higherEntry(c.ENTRY_KEY()));
+#if TYPE_OBJECT
+		assertNull(navigableMap.higherKey(c.ENTRY_KEY()));
+#else
+		assertEquals(CLASS_TYPE.MIN_VALUE, navigableMap.higherKey(c.ENTRY_KEY()));
+#endif
+	}
+
+#ignore
+	@CollectionSize.Require(SEVERAL)
+#endignore
+	public void testLast() {
+		assertEquals(c, navigableMap.lastEntry());
+	}
+
+#ignore
+	@MapFeature.Require(SUPPORTS_REMOVE)
+	@CollectionSize.Require(SEVERAL)
+#endignore
+	public void testPollLast() {
+		assertEquals(c, navigableMap.pollLastEntry());
+		assertEquals(entries.subList(0, entries.size() - 1), ObjectHelpers.copyToList(navigableMap.ENTRY_SET()));
+	}
+
+#ignore
+	@MapFeature.Require(absent = SUPPORTS_REMOVE)
+	@CollectionSize.Require(SEVERAL)
+#endignore
+	public void testPollLastUnsupported() {
+		try {
+			navigableMap.pollLastEntry();
+			fail();
+		} catch (UnsupportedOperationException e) {
+		}
+	}
+
+#ignore
+	@CollectionSize.Require(SEVERAL)
+#endignore
+	public void testDescendingNavigation() {
+		ObjectList<Entry KEY_VALUE_GENERIC_TYPE> descending = new ObjectArrayList<>(navigableMap.descendingMap().ENTRY_SET());
+		Collections.reverse(descending);
+		assertEquals(entries, descending);
+	}
+
+#ignore
+	@CollectionSize.Require(absent = ZERO)
+#endignore
+	public void testHeadMapExclusive() {
+		assertFalse(navigableMap.headMap(a.ENTRY_KEY(), false).containsKey(a.ENTRY_KEY()));
+	}
+
+#ignore
+	@CollectionSize.Require(absent = ZERO)
+#endignore
+	public void testHeadMapInclusive() {
+		assertTrue(navigableMap.headMap(a.ENTRY_KEY(), true).containsKey(a.ENTRY_KEY()));
+	}
+
+#ignore
+	@CollectionSize.Require(absent = ZERO)
+#endignore
+	public void testTailMapExclusive() {
+		assertFalse(navigableMap.tailMap(a.ENTRY_KEY(), false).containsKey(a.ENTRY_KEY()));
+	}
+
+#ignore
+	@CollectionSize.Require(absent = ZERO)
+#endignore
+	public void testTailMapInclusive() {
+		assertTrue(navigableMap.tailMap(a.ENTRY_KEY(), true).containsKey(a.ENTRY_KEY()));
+	}
+}

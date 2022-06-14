@@ -1,0 +1,73 @@
+package speiger.src.testers.PACKAGE.utils;
+
+import com.google.common.collect.testing.SampleElements;
+
+import speiger.src.collections.PACKAGE.collections.ITERABLE;
+import speiger.src.collections.PACKAGE.collections.ITERATOR;
+import speiger.src.collections.PACKAGE.lists.ARRAY_LIST;
+import speiger.src.collections.PACKAGE.lists.LIST;
+
+@SuppressWarnings("javadoc")
+public class SAMPLE_ELEMENTS KEY_GENERIC_TYPE implements ITERABLE KEY_GENERIC_TYPE
+{
+	private final KEY_TYPE e0;
+	private final KEY_TYPE e1;
+	private final KEY_TYPE e2;
+	private final KEY_TYPE e3;
+	private final KEY_TYPE e4;
+	
+	public SAMPLE_ELEMENTS(SampleElements<CLASS_TYPE> samples)
+	{
+		this(samples.e0(), samples.e1(), samples.e2(), samples.e3(), samples.e4());
+	}
+	
+	public SAMPLE_ELEMENTS(KEY_TYPE e0, KEY_TYPE e1, KEY_TYPE e2, KEY_TYPE e3, KEY_TYPE e4)
+	{
+		this.e0 = e0;
+		this.e1 = e1;
+		this.e2 = e2;
+		this.e3 = e3;
+		this.e4 = e4;
+	}
+	
+	public SampleElements<CLASS_TYPE> toSamples()
+	{
+		return new SampleElements<>(e0(), e1(), e2(), e3(), e4());
+	}
+	
+	@Override
+	public ITERATOR KEY_GENERIC_TYPE iterator()
+	{
+		return asList().iterator();
+	}
+	
+	public LIST KEY_GENERIC_TYPE asList()
+	{
+		return ARRAY_LIST.wrap(e0(), e1(), e2(), e3(), e4());
+	}
+	
+	public KEY_TYPE e0()
+	{
+		return e0;
+	}
+	
+	public KEY_TYPE e1()
+	{
+		return e1;
+	}
+	
+	public KEY_TYPE e2()
+	{
+		return e2;
+	}
+	
+	public KEY_TYPE e3()
+	{
+		return e3;
+	}
+	
+	public KEY_TYPE e4()
+	{
+		return e4;
+	}
+}

@@ -1,0 +1,91 @@
+package speiger.src.testers.PACKAGE.builder;
+
+import java.util.List;
+
+import com.google.common.collect.testing.AbstractTester;
+import com.google.common.collect.testing.CollectionTestSuiteBuilder;
+import com.google.common.collect.testing.Helpers;
+import com.google.common.collect.testing.testers.CollectionRemoveIfTester;
+
+import speiger.src.testers.base.tests.collection.JavaCollectionRemoveIfTester;
+import speiger.src.testers.PACKAGE.generators.TEST_COLLECTION_GENERATOR;
+import speiger.src.testers.PACKAGE.tests.collection.FILE_KEY_TYPECollectionAddAllArrayTester;
+import speiger.src.testers.PACKAGE.tests.collection.FILE_KEY_TYPECollectionAddAllTester;
+import speiger.src.testers.PACKAGE.tests.collection.FILE_KEY_TYPECollectionAddTester;
+import speiger.src.testers.PACKAGE.tests.collection.FILE_KEY_TYPECollectionClearTester;
+import speiger.src.testers.PACKAGE.tests.collection.FILE_KEY_TYPECollectionContainsAllTester;
+import speiger.src.testers.PACKAGE.tests.collection.FILE_KEY_TYPECollectionContainsAnyTester;
+import speiger.src.testers.PACKAGE.tests.collection.FILE_KEY_TYPECollectionContainsTester;
+import speiger.src.testers.PACKAGE.tests.collection.FILE_KEY_TYPECollectionCopyTester;
+import speiger.src.testers.PACKAGE.tests.collection.FILE_KEY_TYPECollectionEqualsTester;
+import speiger.src.testers.PACKAGE.tests.collection.FILE_KEY_TYPECollectionForEachTester;
+import speiger.src.testers.PACKAGE.tests.collection.FILE_KEY_TYPECollectionIteratorTester;
+import speiger.src.testers.PACKAGE.tests.collection.FILE_KEY_TYPECollectionRemoveAllTester;
+#if !TYPE_BOOLEAN
+import speiger.src.testers.PACKAGE.tests.collection.FILE_KEY_TYPECollectionRemoveIfTester;
+#if !TYPE_OBJECT
+import speiger.src.testers.PACKAGE.tests.collection.FILE_KEY_TYPECollectionStreamTester;
+#endif
+#endif
+import speiger.src.testers.PACKAGE.tests.collection.FILE_KEY_TYPECollectionRetainAllTester;
+import speiger.src.testers.PACKAGE.tests.collection.FILE_KEY_TYPECollectionToArrayTester;
+#if !TYPE_BOOLEAN
+import speiger.src.testers.PACKAGE.tests.iterable.FILE_KEY_TYPEIterableCountTester;
+import speiger.src.testers.PACKAGE.tests.iterable.FILE_KEY_TYPEIterableDistinctTester;
+import speiger.src.testers.PACKAGE.tests.iterable.FILE_KEY_TYPEIterableFilterTester;
+import speiger.src.testers.PACKAGE.tests.iterable.FILE_KEY_TYPEIterableFindFirstTester;
+import speiger.src.testers.PACKAGE.tests.iterable.FILE_KEY_TYPEIterableLimitTester;
+import speiger.src.testers.PACKAGE.tests.iterable.FILE_KEY_TYPEIterableMapTester;
+import speiger.src.testers.PACKAGE.tests.iterable.FILE_KEY_TYPEIterableMatchesTester;
+import speiger.src.testers.PACKAGE.tests.iterable.FILE_KEY_TYPEIterablePeekTester;
+import speiger.src.testers.PACKAGE.tests.iterable.FILE_KEY_TYPEIterableReduceTester;
+import speiger.src.testers.PACKAGE.tests.iterable.FILE_KEY_TYPEIterableSortedTester;
+#endif
+
+@SuppressWarnings("javadoc")
+public class COLLECTION_TEST_BUILDER KEY_GENERIC_TYPE extends CollectionTestSuiteBuilder<CLASS_TYPE> {
+	public static GENERIC_KEY_BRACES COLLECTION_TEST_BUILDER KEY_GENERIC_TYPE using(TEST_COLLECTION_GENERATOR KEY_GENERIC_TYPE generator) {
+		return (COLLECTION_TEST_BUILDER KEY_GENERIC_TYPE) new COLLECTION_TEST_BUILDER KEY_GENERIC_TYPE().usingGenerator(generator);
+	}
+
+	@Override
+	@SuppressWarnings("rawtypes")
+	protected List<Class<? extends AbstractTester>> getTesters() {
+		List<Class<? extends AbstractTester>> testers = Helpers.copyToList(super.getTesters());
+		testers.remove(CollectionRemoveIfTester.class);
+		testers.add(JavaCollectionRemoveIfTester.class);
+#if !TYPE_BOOLEAN
+		testers.add(FILE_KEY_TYPEIterableMapTester.class);
+		testers.add(FILE_KEY_TYPEIterableFilterTester.class);
+		testers.add(FILE_KEY_TYPEIterableDistinctTester.class);
+		testers.add(FILE_KEY_TYPEIterableLimitTester.class);
+		testers.add(FILE_KEY_TYPEIterableSortedTester.class);
+		testers.add(FILE_KEY_TYPEIterableMatchesTester.class);
+		testers.add(FILE_KEY_TYPEIterablePeekTester.class);
+		testers.add(FILE_KEY_TYPEIterableReduceTester.class);
+		testers.add(FILE_KEY_TYPEIterableCountTester.class);
+		testers.add(FILE_KEY_TYPEIterableFindFirstTester.class);
+#endif
+		testers.add(FILE_KEY_TYPECollectionAddAllTester.class);
+		testers.add(FILE_KEY_TYPECollectionAddAllArrayTester.class);
+		testers.add(FILE_KEY_TYPECollectionAddTester.class);
+		testers.add(FILE_KEY_TYPECollectionClearTester.class);
+		testers.add(FILE_KEY_TYPECollectionContainsAllTester.class);
+		testers.add(FILE_KEY_TYPECollectionContainsAnyTester.class);
+		testers.add(FILE_KEY_TYPECollectionContainsTester.class);
+		testers.add(FILE_KEY_TYPECollectionCopyTester.class);
+		testers.add(FILE_KEY_TYPECollectionEqualsTester.class);
+		testers.add(FILE_KEY_TYPECollectionForEachTester.class);
+		testers.add(FILE_KEY_TYPECollectionIteratorTester.class);
+		testers.add(FILE_KEY_TYPECollectionRemoveAllTester.class);
+		testers.add(FILE_KEY_TYPECollectionRetainAllTester.class);
+#if !TYPE_BOOLEAN
+		testers.add(FILE_KEY_TYPECollectionRemoveIfTester.class);
+#if !TYPE_OBJECT
+		testers.add(FILE_KEY_TYPECollectionStreamTester.class);
+#endif
+#endif
+		testers.add(FILE_KEY_TYPECollectionToArrayTester.class);
+		return testers;
+	}
+}

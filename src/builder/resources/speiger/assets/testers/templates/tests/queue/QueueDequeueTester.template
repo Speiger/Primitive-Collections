@@ -1,0 +1,48 @@
+package speiger.src.testers.PACKAGE.tests.queue;
+
+import java.util.NoSuchElementException;
+
+import org.junit.Ignore;
+
+import com.google.common.collect.testing.features.CollectionFeature;
+import com.google.common.collect.testing.features.CollectionSize;
+
+import speiger.src.testers.PACKAGE.tests.base.ABSTRACT_QUEUE_TESTER;
+
+@Ignore
+@SuppressWarnings("javadoc")
+public class FILE_KEY_TYPEQueueDequeueTester KEY_GENERIC_TYPE extends ABSTRACT_QUEUE_TESTER KEY_GENERIC_TYPE
+{
+#ignore
+	@CollectionFeature.Require(CollectionFeature.SUPPORTS_REMOVE)
+	@CollectionSize.Require(CollectionSize.ZERO)
+#endignore
+	public void testDequeueFirst_Empty() {
+		try {
+			queue.dequeue();
+			fail("Queue.dequeue should throw a NoSuchElementException");
+		}
+		catch(NoSuchElementException e) { }
+		expectUnchanged();
+	}
+	
+#ignore
+	@CollectionFeature.Require(absent = CollectionFeature.SUPPORTS_REMOVE)
+#endignore
+	public void testDequeueFirst_Unsupported() {
+		try {
+			queue.dequeue();
+			fail("Queue.dequeue should throw a UnsupportedOperationException");
+		}
+		catch(UnsupportedOperationException e) { }
+	}
+	
+#ignore
+	@CollectionFeature.Require(CollectionFeature.SUPPORTS_REMOVE)
+	@CollectionSize.Require(absent = CollectionSize.ZERO)
+#endignore
+	public void testDequeueFirst() {
+		assertEquals("Queue.dequeue should match", e0(), queue.dequeue());
+		expectMissing(e0());
+	}
+}

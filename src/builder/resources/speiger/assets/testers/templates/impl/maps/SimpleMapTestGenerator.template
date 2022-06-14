@@ -1,0 +1,200 @@
+package speiger.src.testers.PACKAGE.impl.maps;
+
+import java.util.Comparator;
+import java.util.List;
+import java.util.Map;
+#if TYPE_OBJECT
+import java.util.Objects;
+#endif
+import java.util.function.BiFunction;
+import java.util.function.Consumer;
+
+import speiger.src.collections.PACKAGE.maps.abstracts.ABSTRACT_MAP;
+import speiger.src.collections.PACKAGE.maps.interfaces.MAP;
+import speiger.src.collections.PACKAGE.maps.interfaces.CONCURRENT_MAP;
+import speiger.src.collections.PACKAGE.maps.interfaces.ORDERED_MAP;
+import speiger.src.collections.PACKAGE.maps.interfaces.SORTED_MAP;
+import speiger.src.collections.objects.collections.ObjectIterable;
+#if TYPE_OBJECT || VALUE_OBJECT
+import speiger.src.collections.objects.utils.ObjectArrays;
+#endif
+import speiger.src.collections.objects.lists.ObjectList;
+import speiger.src.collections.objects.lists.ObjectArrayList;
+import speiger.src.testers.PACKAGE.generators.maps.TEST_MAP_GENERATOR;
+import speiger.src.testers.PACKAGE.generators.maps.TEST_ORDERED_MAP_GENERATOR;
+import speiger.src.testers.PACKAGE.generators.maps.TEST_SORTED_MAP_GENERATOR;
+import speiger.src.testers.objects.utils.ObjectSamples;
+
+@SuppressWarnings("javadoc")
+public class SIMPLE_MAP_TEST_GENERATOR KEY_VALUE_SPECIAL_GENERIC_TYPE<E extends MAP KEY_VALUE_GENERIC_TYPE>
+{
+	BiFunction<KEY_TYPE[], VALUE_TYPE[], E> mapper;
+#if TYPE_BYTE
+	KEY_TYPE[] keys = new KEY_TYPE[]{(byte)0, (byte)1, (byte)2, (byte)3, (byte)4, (byte)-2, (byte)-1, (byte)5, (byte)6};
+#else if TYPE_SHORT
+	KEY_TYPE[] keys = new KEY_TYPE[]{(short)0, (short)1, (short)2, (short)3, (short)4, (short)-2, (short)-1, (short)5, (short)6};
+#else if TYPE_CHAR
+	KEY_TYPE[] keys = new KEY_TYPE[]{(char)0, (char)1, (char)2, (char)3, (char)4};
+#else if TYPE_OBJECT
+	KEY_TYPE[] keys;
+#else
+	KEY_TYPE[] keys = new KEY_TYPE[]{0, 1, 2, 3, 4, -2, -1, 5, 6};
+#endif
+#if VALUE_BOOLEAN
+	VALUE_TYPE[] values = new VALUE_TYPE[]{true, true, true, false, true, false, true, false, true};
+#else if VALUE_BYTE
+	VALUE_TYPE[] values = new VALUE_TYPE[]{(byte)0, (byte)1, (byte)2, (byte)3, (byte)4, (byte)-2, (byte)-1, (byte)5, (byte)6};
+#else if VALUE_SHORT
+	VALUE_TYPE[] values = new VALUE_TYPE[]{(short)0, (short)1, (short)2, (short)3, (short)4, (short)-2, (short)-1, (short)5, (short)6};
+#else if VALUE_CHAR
+	VALUE_TYPE[] values = new VALUE_TYPE[]{(char)0, (char)1, (char)2, (char)3, (char)4};
+#else if VALUE_OBJECT
+	VALUE_TYPE[] values;
+#else
+	VALUE_TYPE[] values = new VALUE_TYPE[]{0, 1, 2, 3, 4, -2, -1, 5, 6};
+#endif
+	
+	public SIMPLE_MAP_TEST_GENERATOR(BiFunction<KEY_TYPE[], VALUE_TYPE[], E> mapper) {
+		this.mapper = mapper;
+	}
+	
+#if TYPE_OBJECT || TYPE_CHAR
+	public void setKeys(KEY_TYPE... keys) {
+		this.keys = keys;
+	}
+	
+#endif
+#if VALUE_OBJECT || VALUE_CHAR
+	public void setValues(VALUE_TYPE... values) {
+		this.values = values;
+	}
+	
+#endif
+	public ObjectSamples<MAP.Entry KEY_VALUE_GENERIC_TYPE> getSamples() {
+		return new ObjectSamples<MAP.Entry KEY_VALUE_GENERIC_TYPE>(
+			new ABSTRACT_MAP.BasicEntryKV_BRACES(keys[0], values[0]),
+			new ABSTRACT_MAP.BasicEntryKV_BRACES(keys[1], values[1]),
+			new ABSTRACT_MAP.BasicEntryKV_BRACES(keys[2], values[2]),
+			new ABSTRACT_MAP.BasicEntryKV_BRACES(keys[3], values[3]),
+			new ABSTRACT_MAP.BasicEntryKV_BRACES(keys[4], values[4])
+		);
+	}
+	
+	public E create(MAP.Entry KEY_VALUE_GENERIC_TYPE... elements) {
+#if TYPE_OBJECT
+		KEY_TYPE[] keys = (T[])ObjectArrays.newArray(getSamples().e0().ENTRY_KEY().getClass(), elements.length);
+#else
+		KEY_TYPE[] keys = NEW_KEY_ARRAY(elements.length);
+#endif
+#if VALUE_OBJECT
+		VALUE_TYPE[] values = (V[])ObjectArrays.newArray(getSamples().e0().ENTRY_VALUE().getClass(), elements.length);
+#else
+		VALUE_TYPE[] values = NEW_VALUE_ARRAY(elements.length);
+#endif
+		for(int i = 0;i<elements.length;i++) {
+			keys[i] = elements[i].ENTRY_KEY();
+			values[i] = elements[i].ENTRY_VALUE();
+		}
+		return mapper.apply(keys, values);
+	}
+	
+	public Iterable<Map.Entry<CLASS_TYPE, CLASS_VALUE_TYPE>> order(List<Map.Entry<CLASS_TYPE, CLASS_VALUE_TYPE>> insertionOrder) {
+		return insertionOrder;
+	}
+	
+	public ObjectIterable<MAP.Entry KEY_VALUE_GENERIC_TYPE> order(ObjectList<MAP.Entry KEY_VALUE_GENERIC_TYPE> insertionOrder) {
+		return insertionOrder;
+	}
+	
+	public static class Maps KEY_VALUE_GENERIC_TYPE extends SIMPLE_MAP_TEST_GENERATOR KEY_VALUE_SPECIAL_GENERIC_TYPE<MAP KEY_VALUE_GENERIC_TYPE> implements TEST_MAP_GENERATOR KEY_VALUE_GENERIC_TYPE
+	{
+		public Maps(BiFunction<KEY_TYPE[], VALUE_TYPE[], MAP KEY_VALUE_GENERIC_TYPE> mapper) {
+			super(mapper);
+		}
+	}
+	
+	public static class OrderedMaps KEY_VALUE_GENERIC_TYPE extends SIMPLE_MAP_TEST_GENERATOR KEY_VALUE_SPECIAL_GENERIC_TYPE<ORDERED_MAP KEY_VALUE_GENERIC_TYPE> implements TEST_ORDERED_MAP_GENERATOR KEY_VALUE_GENERIC_TYPE
+	{
+		public OrderedMaps(BiFunction<KEY_TYPE[], VALUE_TYPE[], ORDERED_MAP KEY_VALUE_GENERIC_TYPE> mapper) {
+			super(mapper);
+		}
+	}
+	
+	public static class ConcurrentMaps KEY_VALUE_GENERIC_TYPE extends SIMPLE_MAP_TEST_GENERATOR KEY_VALUE_SPECIAL_GENERIC_TYPE<CONCURRENT_MAP KEY_VALUE_GENERIC_TYPE> implements TEST_MAP_GENERATOR KEY_VALUE_GENERIC_TYPE
+	{
+		Consumer<ObjectList<MAP.Entry KEY_VALUE_GENERIC_TYPE>> sorter; 
+		
+		public ConcurrentMaps(BiFunction<KEY_TYPE[], VALUE_TYPE[], CONCURRENT_MAP KEY_VALUE_GENERIC_TYPE> mapper, Consumer<ObjectList<MAP.Entry KEY_VALUE_GENERIC_TYPE>> sorter) {
+			super(mapper);
+			this.sorter = sorter;
+		}
+		
+		public Iterable<Map.Entry<CLASS_TYPE, CLASS_VALUE_TYPE>> order(List<Map.Entry<CLASS_TYPE, CLASS_VALUE_TYPE>> insertionOrder) {
+			ObjectList<MAP.Entry KEY_VALUE_GENERIC_TYPE> newList = new ObjectArrayList<>();
+			for(Map.Entry<CLASS_TYPE, CLASS_VALUE_TYPE> entry : insertionOrder) {
+				newList.add(new ABSTRACT_MAP.BasicEntryKV_BRACES(entry.getKey(), entry.getValue()));
+			}
+			order(newList);
+			insertionOrder.sort(new Comparator<Map.Entry<CLASS_TYPE, CLASS_VALUE_TYPE>>() {
+				@Override
+				public int compare(Map.Entry<CLASS_TYPE, CLASS_VALUE_TYPE> key, Map.Entry<CLASS_TYPE, CLASS_VALUE_TYPE> value) {
+					return Integer.signum(indexOf(OBJ_TO_KEY(key.getKey())) - indexOf(OBJ_TO_KEY(value.getKey())));
+				}
+				
+				protected int indexOf(KEY_TYPE key) {
+					for(int i = 0,m=newList.size();i<m;i++) {
+						if(KEY_EQUALS(newList.get(i).ENTRY_KEY(), key)) return i;
+					}
+					throw new IllegalArgumentException("MAP.entry sorter was corrupting data");
+				}
+			});
+			return insertionOrder;
+		}
+		
+		public ObjectIterable<MAP.Entry KEY_VALUE_GENERIC_TYPE> order(ObjectList<MAP.Entry KEY_VALUE_GENERIC_TYPE> insertionOrder) {
+			sorter.accept(insertionOrder);
+			return insertionOrder;
+		}
+	}
+	
+	public static class SortedMaps KEY_VALUE_GENERIC_TYPE extends SIMPLE_MAP_TEST_GENERATOR KEY_VALUE_SPECIAL_GENERIC_TYPE<SORTED_MAP KEY_VALUE_GENERIC_TYPE> implements TEST_SORTED_MAP_GENERATOR KEY_VALUE_GENERIC_TYPE
+	{
+		public SortedMaps(BiFunction<KEY_TYPE[], VALUE_TYPE[], SORTED_MAP KEY_VALUE_GENERIC_TYPE> mapper) {
+			super(mapper);
+#if TYPE_CHAR
+			setKeys(new KEY_TYPE[]{'a', 'b', 'c', 'd', 'e', '_', '`', 'f', 'g'});
+#endif
+#if VALUE_CHAR
+			setValues(new VALUE_TYPE[]{'a', 'b', 'c', 'd', 'e', '_', '`', 'f', 'g'});
+#endif
+
+		}
+		
+		public Iterable<Map.Entry<CLASS_TYPE, CLASS_VALUE_TYPE>> order(List<Map.Entry<CLASS_TYPE, CLASS_VALUE_TYPE>> insertionOrder) {
+#if TYPE_OBJECT
+			insertionOrder.sort(DERIVED_MAP_GENERATORS.entryObjectComparator((Comparator<T>)Comparator.naturalOrder()));
+#else
+			insertionOrder.sort(DERIVED_MAP_GENERATORS.entryObjectComparator(CLASS_TYPE::compare));
+#endif
+			return insertionOrder;
+		}
+		
+		public ObjectIterable<MAP.Entry KEY_VALUE_GENERIC_TYPE> order(ObjectList<MAP.Entry KEY_VALUE_GENERIC_TYPE> insertionOrder) {
+#if TYPE_OBJECT
+			insertionOrder.sort(DERIVED_MAP_GENERATORS.entryComparator((Comparator<T>)Comparator.naturalOrder()));
+#else
+			insertionOrder.sort(DERIVED_MAP_GENERATORS.entryComparator(CLASS_TYPE::compare));
+#endif
+			return insertionOrder;
+		}
+		
+		@Override
+		public MAP.Entry KEY_VALUE_GENERIC_TYPE belowSamplesLesser() { return new ABSTRACT_MAP.BasicEntryKV_BRACES(keys[5], values[5]); }
+		@Override
+		public MAP.Entry KEY_VALUE_GENERIC_TYPE belowSamplesGreater() { return new ABSTRACT_MAP.BasicEntryKV_BRACES(keys[6], values[6]); }
+		@Override
+		public MAP.Entry KEY_VALUE_GENERIC_TYPE aboveSamplesLesser() { return new ABSTRACT_MAP.BasicEntryKV_BRACES(keys[7], values[7]); }
+		@Override
+		public MAP.Entry KEY_VALUE_GENERIC_TYPE aboveSamplesGreater() { return new ABSTRACT_MAP.BasicEntryKV_BRACES(keys[8], values[8]); }
+	}
+}

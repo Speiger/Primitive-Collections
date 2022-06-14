@@ -1,0 +1,38 @@
+package speiger.src.testers.PACKAGE.tests.collection;
+
+import org.junit.Assert;
+import org.junit.Ignore;
+
+import speiger.src.testers.utils.SpecialFeature;
+import speiger.src.collections.PACKAGE.collections.COLLECTION;
+import speiger.src.collections.PACKAGE.utils.COLLECTIONS;
+import speiger.src.testers.PACKAGE.tests.base.ABSTRACT_COLLECTION_TESTER;
+
+@Ignore
+@SuppressWarnings("javadoc")
+public class FILE_KEY_TYPECollectionCopyTester KEY_GENERIC_TYPE extends ABSTRACT_COLLECTION_TESTER KEY_GENERIC_TYPE
+{
+#ignore
+	@SpecialFeature.Require(SpecialFeature.COPYING)
+#endignore
+	public void testEquals() {
+		COLLECTION KEY_GENERIC_TYPE copy = collection.copy();
+		if(!(collection instanceof COLLECTIONS.EmptyCollection)) {
+			Assert.assertFalse("Copied Collection shouldn't match", copy == collection);
+		}
+		Assert.assertTrue("Copied Collection contents should match", copy.equals(collection));
+	}
+
+#ignore
+	@SpecialFeature.Require(absent = SpecialFeature.COPYING)
+#endignore
+	public void testEqualsFail() {
+		try {
+			assertNull(collection.copy());
+			fail("If Copying isn't supported it should throw a UnsupportedOperationException");
+		}
+		catch(UnsupportedOperationException e) {
+			//Success
+		}
+	}
+}

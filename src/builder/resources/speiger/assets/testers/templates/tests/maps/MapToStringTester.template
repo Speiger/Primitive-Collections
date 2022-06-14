@@ -1,0 +1,58 @@
+package speiger.src.testers.PACKAGE.tests.maps;
+
+#ignore
+import static com.google.common.collect.testing.features.CollectionFeature.NON_STANDARD_TOSTRING;
+import static com.google.common.collect.testing.features.CollectionSize.ONE;
+import static com.google.common.collect.testing.features.CollectionSize.ZERO;
+#endignore
+
+import java.util.Set;
+
+import org.junit.Ignore;
+
+import com.google.common.collect.testing.features.CollectionFeature;
+import com.google.common.collect.testing.features.CollectionSize;
+
+import speiger.src.collections.PACKAGE.maps.impl.hash.LINKED_HASH_MAP;
+import speiger.src.collections.PACKAGE.maps.interfaces.MAP;
+import speiger.src.testers.PACKAGE.tests.base.maps.ABSTRACT_MAP_TESTER;
+
+@Ignore
+@SuppressWarnings("javadoc")
+public class FILE_KEY_TYPE2FILE_VALUE_TYPEMapToStringTester KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP_TESTER KEY_VALUE_GENERIC_TYPE
+{
+	public void testToString_minimal() {
+		assertNotNull("toString() should not return null", getMap().toString());
+	}
+
+#ignore
+	@CollectionSize.Require(ZERO)
+	@CollectionFeature.Require(absent = NON_STANDARD_TOSTRING)
+#endignore
+	public void testToString_size0() {
+		assertEquals("emptyMap.toString should return {}", "{}", getMap().toString());
+	}
+
+#ignore
+	@CollectionSize.Require(ONE)
+	@CollectionFeature.Require(absent = NON_STANDARD_TOSTRING)
+#endignore
+	public void testToString_size1() {
+		assertEquals("size1Map.toString should return {entry}", "{" + e0() + "}", getMap().toString());
+	}
+
+#ignore
+	@CollectionFeature.Require(absent = NON_STANDARD_TOSTRING)
+#endignore
+	public void testToString_formatting() {
+		assertEquals("map.toString() incorrect", expectedToString(getMap().ENTRY_SET()), getMap().toString());
+	}
+
+	private String expectedToString(Set<MAP.Entry KEY_VALUE_GENERIC_TYPE> entries) {
+		MAP KEY_VALUE_GENERIC_TYPE reference = new LINKED_HASH_MAPKV_BRACES();
+		for (MAP.Entry KEY_VALUE_GENERIC_TYPE entry : entries) {
+			reference.put(entry.ENTRY_KEY(), entry.ENTRY_VALUE());
+		}
+		return reference.toString();
+	}
+}

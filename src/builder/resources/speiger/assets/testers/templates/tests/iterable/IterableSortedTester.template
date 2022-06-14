@@ -1,0 +1,43 @@
+package speiger.src.testers.PACKAGE.tests.iterable;
+
+import org.junit.Ignore;
+
+#if TYPE_OBJECT
+import java.util.Comparator;
+import java.util.Map;
+#endif
+
+import com.google.common.collect.testing.features.CollectionFeature;
+
+import speiger.src.collections.PACKAGE.lists.ARRAY_LIST;
+import speiger.src.collections.PACKAGE.lists.LIST;
+import speiger.src.testers.PACKAGE.tests.base.ABSTRACT_COLLECTION_TESTER;
+import speiger.src.testers.utils.SpecialFeature;
+
+@Ignore
+@SuppressWarnings("javadoc")
+public class FILE_KEY_TYPEIterableSortedTester KEY_GENERIC_TYPE extends ABSTRACT_COLLECTION_TESTER KEY_GENERIC_TYPE
+{	
+#ignore
+	@CollectionFeature.Require(absent = CollectionFeature.KNOWN_ORDER)
+	@SpecialFeature.Require(absent = SpecialFeature.MAP_ENTRY)
+#endignore
+	public void testIterableSorted() {
+		LIST KEY_GENERIC_TYPE expected = new ARRAY_LISTBRACES(collection);
+		expected.sort(null);
+		assertEquals("Elements were expected to be sorted", expected, collection.sorted(null).pourAsList());
+	}
+
+#if TYPE_OBJECT
+#ignore
+	@CollectionFeature.Require(absent = CollectionFeature.KNOWN_ORDER)
+	@SpecialFeature.Require(SpecialFeature.MAP_ENTRY)
+#endignore
+	public void testIterableSortedEntry() {
+		ObjectList<T> expected = new ObjectArrayList<>(collection);
+		Comparator<T> comparator = Comparator.comparing(T -> (Comparable<Object>)((Map.Entry<Object, Object>)T).getKey());
+		expected.sort(comparator);
+		assertEquals("Elements were expected to be sorted", expected, collection.sorted(comparator).pourAsList());
+	}
+#endif
+}

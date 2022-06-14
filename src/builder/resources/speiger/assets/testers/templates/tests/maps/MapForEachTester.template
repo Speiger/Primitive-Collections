@@ -1,0 +1,59 @@
+package speiger.src.testers.PACKAGE.tests.maps;
+
+#ignore
+import static com.google.common.collect.testing.features.CollectionFeature.KNOWN_ORDER;
+#endignore
+
+import java.util.List;
+
+import org.junit.Ignore;
+
+import com.google.common.collect.testing.Helpers;
+import com.google.common.collect.testing.features.CollectionFeature;
+
+import speiger.src.collections.PACKAGE.maps.interfaces.MAP;
+import speiger.src.collections.PACKAGE.utils.maps.MAPS;
+import speiger.src.collections.objects.lists.ObjectArrayList;
+import speiger.src.collections.objects.lists.ObjectList;
+import speiger.src.testers.PACKAGE.tests.base.maps.ABSTRACT_MAP_TESTER;
+
+@Ignore
+@SuppressWarnings("javadoc")
+public class FILE_KEY_TYPE2FILE_VALUE_TYPEMapForEachTester KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP_TESTER KEY_VALUE_GENERIC_TYPE
+{
+#ignore
+	@CollectionFeature.Require(KNOWN_ORDER)
+#endignore
+	public void testForEachKnownOrder() {
+		ObjectList<MAP.Entry KEY_VALUE_GENERIC_TYPE> entries = new ObjectArrayList<>();
+		getMap().forEach((k, v) -> entries.add(entry(k, v)));
+		assertEquals(getOrderedElements(), entries);
+	}
+
+#ignore
+	@CollectionFeature.Require(absent = KNOWN_ORDER)
+#endignore
+	public void testForEachUnknownOrder() {
+		List<MAP.Entry KEY_VALUE_GENERIC_TYPE> entries = new ObjectArrayList<>();
+		getMap().forEach((k, v) -> entries.add(entry(k, v)));
+		Helpers.assertEqualIgnoringOrder(getSampleEntries(), entries);
+	}
+
+#ignore
+	@CollectionFeature.Require(KNOWN_ORDER)
+#endignore
+	public void testFastForEachKnownOrder() {
+		ObjectList<MAP.Entry KEY_VALUE_GENERIC_TYPE> entries = new ObjectArrayList<>();
+		MAPS.fastForEach(getMap(), T -> entries.add(entry(T.ENTRY_KEY(), T.ENTRY_VALUE())));
+		assertEquals(getOrderedElements(), entries);
+	}
+	
+#ignore
+	@CollectionFeature.Require(absent = KNOWN_ORDER)
+#endignore
+	public void testFastForEachUnknownOrder() {
+		List<MAP.Entry KEY_VALUE_GENERIC_TYPE> entries = new ObjectArrayList<>();
+		MAPS.fastForEach(getMap(), T -> entries.add(entry(T.ENTRY_KEY(), T.ENTRY_VALUE())));
+		Helpers.assertEqualIgnoringOrder(getSampleEntries(), entries);
+	}
+}

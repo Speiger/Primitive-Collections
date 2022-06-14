@@ -1,0 +1,80 @@
+package speiger.src.testers.PACKAGE.tests.queue.iterators;
+
+#if TYPE_OBJECT
+import java.util.Objects;
+
+#endif
+import org.junit.Ignore;
+
+import speiger.src.testers.PACKAGE.tests.base.ABSTRACT_QUEUE_TESTER;
+
+@Ignore
+@SuppressWarnings("javadoc")
+public class FILE_KEY_TYPEQueueReduceTester KEY_GENERIC_TYPE extends ABSTRACT_QUEUE_TESTER KEY_GENERIC_TYPE
+{
+	public void testQueueReduce_Null() {
+		try {
+			queue.reduce(null);
+			fail("This should crash");
+		} catch (NullPointerException e) {
+		}
+	}
+	
+	public void testQueueReduce_extraNull() {
+		try {
+			queue.reduce(EMPTY_KEY_VALUE, null);
+			fail("This should crash");
+		} catch (NullPointerException e) {
+		}
+	}
+	
+	public void testQueueReduce() {
+		assertEquals("The sum of the queue should match", getSum(), queue.reduce(this::sum));
+	}
+	
+	public void testQueueExtraReduce() {
+#if TYPE_OBJECT
+		assertEquals("The sum of the queue should match", getObjectSum(), queue.reduce(new StringBuilder(), this::sum).toString());		
+#else
+		assertEquals("The sum of the queue should match", getSum(), queue.reduce(EMPTY_KEY_VALUE, this::sum));
+#endif
+	}
+	
+	public KEY_TYPE getSum()
+	{
+		KEY_TYPE result = EMPTY_KEY_VALUE;
+		for(KEY_TYPE key : queue.TO_ARRAY(NEW_KEY_ARRAY(queue.size())))
+		{
+			result = sum(result, key);
+		}
+		return result;
+	}
+	
+	public KEY_TYPE sum(KEY_TYPE key, KEY_TYPE value)
+	{
+#if TYPE_BYTE || TYPE_SHORT || TYPE_CHAR
+		return (KEY_TYPE)(key + value);
+#else if TYPE_OBJECT
+		return value;
+#else if TYPE_BOOLEAN
+		return key ^ value;
+#else
+		return key + value;
+#endif
+	}
+	
+#if TYPE_OBJECT
+	public StringBuilder sum(StringBuilder builder, T value) {
+		return builder.append(Objects.toString(value));
+	}
+	
+	public String getObjectSum() {
+		StringBuilder builder = new StringBuilder();
+		for(T key : queue.TO_ARRAY(NEW_KEY_ARRAY(queue.size())))
+		{
+			builder = sum(builder, key);
+		}
+		return builder.toString();
+	}
+#endif
+}

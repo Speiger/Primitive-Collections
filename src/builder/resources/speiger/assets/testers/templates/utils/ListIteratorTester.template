@@ -1,0 +1,36 @@
+package speiger.src.testers.PACKAGE.utils;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import com.google.common.collect.testing.Helpers;
+import com.google.common.collect.testing.IteratorFeature;
+
+import speiger.src.collections.PACKAGE.collections.ITERABLE;
+import speiger.src.collections.PACKAGE.collections.ITERATOR;
+import speiger.src.collections.PACKAGE.lists.LIST_ITERATOR;
+
+@SuppressWarnings("javadoc")
+public abstract class LIST_ITERATOR_TESTER KEY_GENERIC_TYPE extends ABSTRACT_ITERATOR_TESTER KEY_GENERIC_TYPE {
+	public LIST_ITERATOR_TESTER(int steps, ITERABLE KEY_GENERIC_TYPE elementsToInsertIterable, Iterable<? extends IteratorFeature> features, ITERABLE KEY_GENERIC_TYPE expectedElements, int startIndex) {
+		super(steps, elementsToInsertIterable, features, expectedElements, KnownOrder.KNOWN_ORDER, startIndex);
+	}
+
+	@Override
+	protected Iterable<? extends Stimulus<ITERATOR NO_GENERIC_TYPE>> getStimulusValues() {
+	    List<Stimulus<ITERATOR NO_GENERIC_TYPE>> list = new ArrayList<>();
+	    Helpers.addAll(list, iteratorStimuli());
+	    for(Stimulus<?> iter : biIteratorStimuli())
+	    {
+	    	list.add((Stimulus<ITERATOR NO_GENERIC_TYPE>)iter);
+	    }
+	    for(Stimulus<?> iter : listIteratorStimuli())
+	    {
+	    	list.add((Stimulus<ITERATOR NO_GENERIC_TYPE>)iter);
+	    }
+	    return list;
+	}
+
+	@Override
+	protected abstract LIST_ITERATOR KEY_GENERIC_TYPE newTargetIterator();
+}

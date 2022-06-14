@@ -1,0 +1,140 @@
+package speiger.src.testers.PACKAGE.builder;
+
+#ignore
+import static com.google.common.collect.testing.features.CollectionFeature.DESCENDING_VIEW;
+import static com.google.common.collect.testing.features.CollectionFeature.SUBSET_VIEW;
+#endignore
+
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+
+import com.google.common.collect.testing.AbstractTester;
+import com.google.common.collect.testing.DerivedCollectionGenerators.Bound;
+import com.google.common.collect.testing.FeatureSpecificTestSuiteBuilder;
+import com.google.common.collect.testing.Helpers;
+import com.google.common.collect.testing.OneSizeTestContainerGenerator;
+import com.google.common.collect.testing.SampleElements;
+import com.google.common.collect.testing.features.Feature;
+import com.google.common.collect.testing.testers.NavigableSetNavigationTester;
+
+import junit.framework.TestSuite;
+import speiger.src.collections.PACKAGE.collections.ITERABLE;
+import speiger.src.collections.PACKAGE.lists.ARRAY_LIST;
+import speiger.src.collections.PACKAGE.lists.LIST;
+import speiger.src.collections.PACKAGE.sets.NAVIGABLE_SET;
+import speiger.src.collections.PACKAGE.utils.LISTS;
+import speiger.src.testers.PACKAGE.generators.TEST_NAVIGABLE_SET_GENERATOR;
+import speiger.src.testers.PACKAGE.generators.TEST_SORTED_SET_GENERATOR;
+import speiger.src.testers.PACKAGE.impl.SUB_SORTED_SET_CLASS_GENERATOR.SUB_NAVIGABLE_SET_CLASS_GENERATOR;
+import speiger.src.testers.PACKAGE.tests.set.FILE_KEY_TYPENavigableSetNavigationTester;
+import speiger.src.testers.PACKAGE.utils.SAMPLE_ELEMENTS;
+import speiger.src.testers.utils.SpecialFeature;
+
+@SuppressWarnings("javadoc")
+public class NAVIGABLE_SET_TEST_BUILDER KEY_GENERIC_TYPE extends SORTED_SET_TEST_BUILDER KEY_GENERIC_TYPE {
+	public static GENERIC_KEY_BRACES NAVIGABLE_SET_TEST_BUILDER KEY_GENERIC_TYPE using(TEST_NAVIGABLE_SET_GENERATOR KEY_GENERIC_TYPE generator) {
+		return (NAVIGABLE_SET_TEST_BUILDER KEY_GENERIC_TYPE) new NAVIGABLE_SET_TEST_BUILDER KEY_GENERIC_TYPE().usingGenerator(generator);
+	}
+	
+	@Override
+	@SuppressWarnings("rawtypes")
+	protected List<Class<? extends AbstractTester>> getTesters() {
+		List<Class<? extends AbstractTester>> testers = Helpers.copyToList(super.getTesters());
+		testers.add(NavigableSetNavigationTester.class);
+		testers.add(FILE_KEY_TYPENavigableSetNavigationTester.class);
+		return testers;
+	}
+	
+	@Override
+	protected List<TestSuite> createDerivedSuites(FeatureSpecificTestSuiteBuilder<?, ? extends OneSizeTestContainerGenerator<Collection<CLASS_TYPE>, CLASS_TYPE>> parentBuilder) {
+		List<TestSuite> derivedSuites = new ArrayList<>(super.createDerivedSuites(parentBuilder));
+
+#ignore
+		if (!parentBuilder.getFeatures().contains(SUBSET_VIEW)) {
+#endignore
+			// Other combinations are inherited from SortedSetTestSuiteBuilder.
+			derivedSuites.add(createSubsetSuite(parentBuilder, Bound.NO_BOUND, Bound.INCLUSIVE));
+			derivedSuites.add(createSubsetSuite(parentBuilder, Bound.EXCLUSIVE, Bound.NO_BOUND));
+			derivedSuites.add(createSubsetSuite(parentBuilder, Bound.EXCLUSIVE, Bound.EXCLUSIVE));
+			derivedSuites.add(createSubsetSuite(parentBuilder, Bound.EXCLUSIVE, Bound.INCLUSIVE));
+			derivedSuites.add(createSubsetSuite(parentBuilder, Bound.INCLUSIVE, Bound.INCLUSIVE));
+		}
+#ignore
+		if (!parentBuilder.getFeatures().contains(DESCENDING_VIEW)) {
+#endignore
+			derivedSuites.add(createDescendingSuite(parentBuilder));
+		}
+		return derivedSuites;
+	}
+
+	@Override
+	SORTED_SET_TEST_BUILDER KEY_GENERIC_TYPE newBuilderUsing(TEST_SORTED_SET_GENERATOR KEY_GENERIC_TYPE delegate, Bound to, Bound from) {
+	    return NAVIGABLE_SET_TEST_BUILDER.using(new SUB_NAVIGABLE_SET_CLASS_GENERATORBRACES(delegate, to, from));
+	}
+	
+	private TestSuite createDescendingSuite(FeatureSpecificTestSuiteBuilder<?, ? extends OneSizeTestContainerGenerator<Collection<CLASS_TYPE>, CLASS_TYPE>> parentBuilder) {
+		TEST_NAVIGABLE_SET_GENERATOR KEY_GENERIC_TYPE delegate = (TEST_NAVIGABLE_SET_GENERATOR KEY_GENERIC_TYPE) parentBuilder.getSubjectGenerator().getInnerGenerator();
+
+		List<Feature<?>> features = new ArrayList<>();
+#ignore
+		features.add(DESCENDING_VIEW);
+		features.addAll(parentBuilder.getFeatures());
+		features.remove(SpecialFeature.COPYING);
+		features.remove(SpecialFeature.CHILDREN_COPY);
+#endignore
+
+		return NAVIGABLE_SET_TEST_BUILDER.using(new TEST_NAVIGABLE_SET_GENERATOR KEY_GENERIC_TYPE() {
+
+			@Override
+			public SampleElements<CLASS_TYPE> samples() {
+				return delegate.samples();
+			}
+			
+			@Override
+			public SAMPLE_ELEMENTS KEY_GENERIC_TYPE getSamples() {
+				return delegate.getSamples();
+			}
+
+			@Override
+			public ITERABLE KEY_GENERIC_TYPE order(LIST KEY_GENERIC_TYPE insertionOrder) {
+				LIST KEY_GENERIC_TYPE list = new ARRAY_LISTBRACES();
+				delegate.order(insertionOrder).forEach(list::add);
+				LISTS.reverse(list);
+				return list;
+			}
+
+			@Override
+			public Iterable<CLASS_TYPE> order(List<CLASS_TYPE> insertionOrder) {
+				LIST KEY_GENERIC_TYPE list = new ARRAY_LISTBRACES();
+				for(CLASS_TYPE entry : delegate.order(insertionOrder))
+				{
+					list.add(OBJ_TO_KEY(entry));
+				}
+				LISTS.reverse(list);
+				return list;
+			}
+			@Override
+			public KEY_TYPE belowSamplesLesser() { return delegate.aboveSamplesGreater(); }
+			@Override
+			public KEY_TYPE belowSamplesGreater() { return delegate.aboveSamplesLesser(); }
+			@Override
+			public KEY_TYPE aboveSamplesLesser() { return delegate.belowSamplesGreater(); }
+			@Override
+			public KEY_TYPE aboveSamplesGreater() { return delegate.belowSamplesLesser(); }
+			
+#if !TYPE_OBJECT
+			@Override
+			public NAVIGABLE_SET KEY_GENERIC_TYPE create(KEY_TYPE... elements) {
+				return delegate.create(elements).descendingSet();
+			}
+
+#endif
+			@Override
+			public NAVIGABLE_SET KEY_GENERIC_TYPE create(Object... elements) {
+				return delegate.create(elements).descendingSet();
+			}
+		}).named(parentBuilder.getName() + " descending").withFeatures(features)
+				.suppressing(parentBuilder.getSuppressedTests()).createTestSuite();
+	}
+}

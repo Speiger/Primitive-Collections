@@ -1,0 +1,196 @@
+package speiger.src.tests.PACKAGE.collections;
+
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.function.Function;
+#if TYPE_OBJECT
+import java.util.Comparator;
+import java.util.Objects;
+#endif
+
+import com.google.common.collect.testing.features.CollectionSize;
+import com.google.common.collect.testing.features.SetFeature;
+import com.google.common.collect.testing.features.Feature;
+#if TYPE_OBJECT
+import com.google.common.collect.testing.features.CollectionFeature;
+#endif
+import junit.framework.Test;
+import junit.framework.TestCase;
+import junit.framework.TestSuite;
+import speiger.src.collections.PACKAGE.sets.IMMUTABLE_HASH_SET;
+import speiger.src.collections.PACKAGE.sets.AVL_TREE_SET;
+import speiger.src.collections.PACKAGE.sets.ARRAY_SET;
+import speiger.src.collections.PACKAGE.sets.LINKED_CUSTOM_HASH_SET;
+import speiger.src.collections.PACKAGE.sets.LINKED_HASH_SET;
+import speiger.src.collections.PACKAGE.sets.NAVIGABLE_SET;
+import speiger.src.collections.PACKAGE.sets.CUSTOM_HASH_SET;
+import speiger.src.collections.PACKAGE.sets.HASH_SET;
+import speiger.src.collections.PACKAGE.sets.ORDERED_SET;
+import speiger.src.collections.PACKAGE.sets.RB_TREE_SET;
+import speiger.src.collections.PACKAGE.sets.SET;
+import speiger.src.collections.PACKAGE.utils.SETS;
+import speiger.src.collections.PACKAGE.utils.STRATEGY;
+import speiger.src.testers.PACKAGE.builder.NAVIGABLE_SET_TEST_BUILDER;
+import speiger.src.testers.PACKAGE.builder.ORDERED_SET_TEST_BUILDER;
+import speiger.src.testers.PACKAGE.builder.SET_TEST_BUILDER;
+#if TYPE_OBJECT
+import speiger.src.testers.PACKAGE.generators.TEST_NAVIGABLE_SET_GENERATOR;
+import speiger.src.testers.PACKAGE.generators.TEST_ORDERED_SET_GENERATOR;
+import speiger.src.testers.PACKAGE.generators.TEST_SET_GENERATOR;
+#endif
+import speiger.src.testers.PACKAGE.impl.COLLECTION_CONSTRUCTOR_TESTS;
+import speiger.src.testers.PACKAGE.impl.SIMPLE_TEST_GENERATOR;
+#if TYPE_CHAR || TYPE_FLOAT || TYPE_DOUBLE || TYPE_OBJECT
+import speiger.src.testers.PACKAGE.tests.collection.FILE_KEY_TYPECollectionIteratorTester;
+#endif
+import speiger.src.testers.utils.SpecialFeature;
+#if TYPE_CHAR || TYPE_FLOAT || TYPE_DOUBLE || TYPE_OBJECT
+import speiger.src.testers.utils.TestUtils;
+#endif
+
+@SuppressWarnings("javadoc")
+public class SET_TESTS extends TestCase
+{
+	public static Test suite() {
+		TestSuite suite = new TestSuite("SETS");
+		suite(suite);
+		constructorSuite(suite);
+		System.out.println("Generated ["+suite.countTestCases()+"] Tests");
+		return suite;
+	}
+	
+	public static void constructorSuite(TestSuite suite) {
+		TestSuite constructors = new TestSuite("Constructors");
+		constructors.addTest(new TestSuite(COLLECTION_CONSTRUCTOR_TESTS.HashSet.class));
+		constructors.addTest(new TestSuite(COLLECTION_CONSTRUCTOR_TESTS.LinkedHashSet.class));
+		constructors.addTest(new TestSuite(COLLECTION_CONSTRUCTOR_TESTS.CustomHashSet.class));
+		constructors.addTest(new TestSuite(COLLECTION_CONSTRUCTOR_TESTS.LinkedCustomHashSet.class));
+		constructors.addTest(new TestSuite(COLLECTION_CONSTRUCTOR_TESTS.ImmutableHashSet.class));
+		constructors.addTest(new TestSuite(COLLECTION_CONSTRUCTOR_TESTS.ArraySet.class));
+		constructors.addTest(new TestSuite(COLLECTION_CONSTRUCTOR_TESTS.RBTreeSet.class));
+		constructors.addTest(new TestSuite(COLLECTION_CONSTRUCTOR_TESTS.AVLTreeSet.class));
+		constructors.addTest(new TestSuite(COLLECTION_CONSTRUCTOR_TESTS.RBTreeSetComparator.class));
+		constructors.addTest(new TestSuite(COLLECTION_CONSTRUCTOR_TESTS.AVLTreeSetComparator.class));
+		suite.addTest(constructors);
+	}
+	
+	public static void suite(TestSuite suite) {
+		suite.addTest(setSuite("HASH_SET", HASH_SET::new, getFeatures(), -1, true));
+		suite.addTest(orderedSetSuite("LINKED_HASH_SET", LINKED_HASH_SET::new, getFeatures(), -1));
+		suite.addTest(setSuite("CUSTOM_HASH_SET", T -> new CUSTOM_HASH_SETBRACES(T, HashStrategy.INSTANCE), getFeatures(), -1, true));
+		suite.addTest(orderedSetSuite("LINKED_CUSTOM_HASH_SET", T -> new LINKED_CUSTOM_HASH_SETBRACES(T, HashStrategy.INSTANCE), getFeatures(), -1));
+		suite.addTest(orderedSetSuite("IMMUTABLE_HASH_SET", IMMUTABLE_HASH_SET::new, getImmutableFeatures(), -1));
+		suite.addTest(orderedSetSuite("ARRAY_SET", ARRAY_SET::new, getFeatures(), -1));
+#if TYPE_OBJECT
+		suite.addTest(navigableSetSuite("RB_TREE_SET", RB_TREE_SET::new, getFeatures(), false, -1));
+		suite.addTest(navigableSetSuite("AVL_TREE_SET", AVL_TREE_SET::new, getFeatures(), false, -1));
+		suite.addTest(navigableSetSuite("RB_TREE_SET_Null", T -> new RB_TREE_SET<>(T, Comparator.nullsFirst(Comparator.naturalOrder())), getFeatures(), true, -1));
+		suite.addTest(navigableSetSuite("AVL_TREE_SET_Null", T -> new AVL_TREE_SET<>(T, Comparator.nullsFirst(Comparator.naturalOrder())), getFeatures(), true, -1));
+		suite.addTest(navigableSetSuite("Synchronized RB_TREE_SET", T -> new RB_TREE_SET<>(T).synchronize(), getFeatures(), false, -1));
+		suite.addTest(navigableSetSuite("Unmodifiable RB_TREE_SET", T -> new RB_TREE_SET<>(T).unmodifiable(), getImmutableFeatures(), false, -1));
+#else
+		suite.addTest(navigableSetSuite("RB_TREE_SET", RB_TREE_SET::new, getFeatures(), -1));
+		suite.addTest(navigableSetSuite("AVL_TREE_SET", AVL_TREE_SET::new, getFeatures(), -1));
+		suite.addTest(navigableSetSuite("Synchronized RB_TREE_SET", T -> new RB_TREE_SET(T).synchronize(), getFeatures(), -1));
+		suite.addTest(navigableSetSuite("Unmodifiable RB_TREE_SET", T -> new RB_TREE_SET(T).unmodifiable(), getImmutableFeatures(), -1));
+#endif
+		suite.addTest(setSuite("Empty SET", T -> SETS.empty(), getImmutableFeatures(), 0, false));
+		suite.addTest(setSuite("Singleton SET", T -> SETS.singleton(T[0]), getImmutableFeatures(), 1, false));
+		suite.addTest(orderedSetSuite("Synchronized LINKED_HASH_SET", T -> new LINKED_HASH_SETBRACES(T).synchronize(), getFeatures(), -1));
+		suite.addTest(orderedSetSuite("Unmodifiable LINKED_HASH_SET", T -> new LINKED_HASH_SETBRACES(T).unmodifiable(), getImmutableFeatures(), -1));
+	}
+		
+#if TYPE_OBJECT
+	public static Test setSuite(String name, Function<String[], SET<String>> factory, Collection<Feature<?>> features, int size, boolean sorted) {
+		SET_TEST_BUILDER<String> builder = (SET_TEST_BUILDER<String>)SET_TEST_BUILDER.using((TEST_SET_GENERATOR<String>)new SIMPLE_TEST_GENERATOR.SetsBRACES(factory).setElements(createSortedStrings())).named(name)
+#ignore
+			.withFeatures(getSizes(size)).withFeatures(CollectionFeature.ALLOWS_NULL_VALUES).withFeatures(features);
+#endignore
+		if(sorted) builder.suppressing(TestUtils.getSurpession(FILE_KEY_TYPECollectionIteratorTester.class, "testIterator_unknownOrderRemoveSupported"));
+		return builder.createTestSuite();
+	}
+
+	public static Test orderedSetSuite(String name, Function<String[], ORDERED_SET<String>> factory, Collection<Feature<?>> features, int size) {
+		return ORDERED_SET_TEST_BUILDER.using((TEST_ORDERED_SET_GENERATOR<String>)new SIMPLE_TEST_GENERATOR.OrderedSetsBRACES(factory).setElements(createSortedStrings())).named(name)
+#ignore
+			.withFeatures(getSizes(size)).withFeatures(CollectionFeature.ALLOWS_NULL_VALUES).withFeatures(features).createTestSuite();
+#endignore
+	}
+
+	public static Test navigableSetSuite(String name, Function<String[], NAVIGABLE_SET<String>> factory, Collection<Feature<?>> features, boolean nullValues, int size) {
+		NAVIGABLE_SET_TEST_BUILDER<String> builder = (NAVIGABLE_SET_TEST_BUILDER<String>)NAVIGABLE_SET_TEST_BUILDER.using((TEST_NAVIGABLE_SET_GENERATOR<String>)new SIMPLE_TEST_GENERATOR.NavigableSetsBRACES(factory).setElements(createSortedStrings())).named(name)
+#ignore
+			.withFeatures(getSizes(size)).withFeatures(features);
+		if(nullValues) builder.withFeatures(CollectionFeature.ALLOWS_NULL_VALUES);
+#endignore
+		return builder.createTestSuite();
+	}
+	
+	private static class HashStrategy implements STRATEGY<String> {
+		static final HashStrategy INSTANCE = new HashStrategy();
+		@Override
+		public int hashCode(String o) { return KEY_TO_HASH(o); }
+		@Override
+		public boolean equals(String key, String value) { return KEY_EQUALS(key, value); }
+	}
+	
+	private static String[] createSortedStrings() {
+		return new String[]{"a", "b", "c", "d", "e", "!! a", "!! b", "~~ a", "~~ b"};
+	}
+#else
+	public static Test setSuite(String name, Function<KEY_TYPE[], SET KEY_GENERIC_TYPE> factory, Collection<Feature<?>> features, int size, boolean sorted) {
+		SET_TEST_BUILDER builder = (SET_TEST_BUILDER)SET_TEST_BUILDER.using(new SIMPLE_TEST_GENERATOR.SetsBRACES(factory)).named(name)
+#ignore
+			.withFeatures(getSizes(size)).withFeatures(features);
+#endignore
+#if TYPE_CHAR || TYPE_FLOAT || TYPE_DOUBLE
+		if(sorted) builder.suppressing(TestUtils.getSurpession(FILE_KEY_TYPECollectionIteratorTester.class, "testIterator_unknownOrderRemoveSupported"));
+#endif
+		return builder.createTestSuite();
+	}
+	
+	public static Test orderedSetSuite(String name, Function<KEY_TYPE[], ORDERED_SET KEY_GENERIC_TYPE> factory, Collection<Feature<?>> features, int size) {
+		return ORDERED_SET_TEST_BUILDER.using(new SIMPLE_TEST_GENERATOR.OrderedSetsBRACES(factory)).named(name)
+#ignore
+			.withFeatures(getSizes(size)).withFeatures(features).createTestSuite();
+#endignore
+	}
+	
+	public static Test navigableSetSuite(String name, Function<KEY_TYPE[], NAVIGABLE_SET KEY_GENERIC_TYPE> factory, Collection<Feature<?>> features, int size) {
+		return NAVIGABLE_SET_TEST_BUILDER.using(new SIMPLE_TEST_GENERATOR.NavigableSetsBRACES(factory)).named(name)
+#ignore
+			.withFeatures(getSizes(size)).withFeatures(features).createTestSuite();
+#endignore
+	}
+	
+	private static class HashStrategy implements STRATEGY KEY_GENERIC_TYPE {
+		static final HashStrategy INSTANCE = new HashStrategy();
+		@Override
+		public int hashCode(KEY_TYPE o) { return KEY_TO_HASH(o); }
+		@Override
+		public boolean equals(KEY_TYPE key, KEY_TYPE value) { return KEY_EQUALS(key, value); }
+	}
+#endif
+	
+#ignore
+	private static Collection<CollectionSize> getSizes(int size) {
+		switch(size) {
+			case 0: return Arrays.asList(CollectionSize.ZERO);
+			case 1: return Arrays.asList(CollectionSize.ONE);
+			case 2: return Arrays.asList(CollectionSize.ZERO, CollectionSize.ONE);
+			case 3: return Arrays.asList(CollectionSize.SEVERAL);
+			case 4: return Arrays.asList(CollectionSize.ZERO, CollectionSize.SEVERAL);
+			case 5: return Arrays.asList(CollectionSize.ONE, CollectionSize.SEVERAL);
+			default: return Arrays.asList(CollectionSize.ANY);
+		}
+	}
+	
+	private static Collection<Feature<?>> getImmutableFeatures() {
+		return Arrays.asList(SpecialFeature.COPYING);
+	}
+	
+	private static Collection<Feature<?>> getFeatures() {
+		return Arrays.asList(SetFeature.GENERAL_PURPOSE, SpecialFeature.COPYING, SpecialFeature.MODIFIABLE);
+	}
+#endignore
+}

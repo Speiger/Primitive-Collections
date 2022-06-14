@@ -1,0 +1,52 @@
+package speiger.src.testers.PACKAGE.tests.queue.iterators;
+
+#if TYPE_OBJECT
+import java.util.Objects;
+
+#endif
+import org.junit.Ignore;
+
+import com.google.common.collect.testing.features.CollectionSize;
+
+import speiger.src.collections.PACKAGE.collections.COLLECTION;
+import speiger.src.collections.PACKAGE.utils.SETS;
+import speiger.src.testers.PACKAGE.tests.base.ABSTRACT_QUEUE_TESTER;
+
+@Ignore
+@SuppressWarnings("javadoc")
+public class FILE_KEY_TYPEQueueFilterTester KEY_GENERIC_TYPE extends ABSTRACT_QUEUE_TESTER KEY_GENERIC_TYPE
+{
+	public void testQueueFilter_missingElement() {
+		assertTrue(expectMissing(queue.filter(T -> KEY_EQUALS_NOT(T, e0())).pourAsList(), e0()));
+	}
+	
+#ignore
+	@CollectionSize.Require(absent = CollectionSize.ZERO)
+#endignore
+	public void testQueueFilter_filterElement() {
+		assertFalse(expectMissing(SETS.singleton(e0()), queue.filter(T -> KEY_EQUALS(T, e0())).pourAsList().TO_ARRAY()));		
+	}
+	
+#ignore
+	@CollectionSize.Require(CollectionSize.ONE)
+#endignore
+	public void testQueueFilter_filterMissing() {
+		assertTrue(queue.filter(T -> KEY_EQUALS(T, e1())).pourAsList().isEmpty());
+	}
+	
+#ignore
+	@CollectionSize.Require(CollectionSize.SEVERAL)
+#endignore
+	public void testQueueFilter_filterSeveral() {
+		assertTrue(expectMissing(SETS.singleton(e1()), queue.filter(T -> KEY_EQUALS_NOT(T, e1())).pourAsList().TO_ARRAY()));
+	}
+	
+	protected boolean expectMissing(COLLECTION KEY_GENERIC_TYPE result, KEY_OBJECT_TYPE...elements)
+	{
+		for(KEY_OBJECT_TYPE element : elements)
+		{
+			if(result.contains(element)) return false;
+		}
+		return true;
+	}
+}

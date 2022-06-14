@@ -1,0 +1,35 @@
+package speiger.src.testers.PACKAGE.tests.list;
+
+import org.junit.Ignore;
+
+import speiger.src.testers.PACKAGE.tests.base.ABSTRACT_LIST_TESTER;
+
+@Ignore
+@SuppressWarnings("javadoc")
+public class FILE_KEY_TYPEListGetTester KEY_GENERIC_TYPE extends ABSTRACT_LIST_TESTER KEY_GENERIC_TYPE
+{
+	public void testGet_valid() {
+		expectContents(createOrderedArray());
+	}
+	
+	public void testGet_validList() {
+		expectContents(getOrderedElements());
+	}
+
+	public void testGet_negative() {
+		try {
+			getList().GET_KEY(-1);
+			fail("get(-1) should throw");
+		} catch (IndexOutOfBoundsException expected) {
+		}
+	}
+
+	public void testGet_tooLarge() {
+		try {
+			getList().GET_KEY(getNumElements());
+			fail("get(size) should throw");
+		} catch (IndexOutOfBoundsException expected) {
+		}
+	}
+	
+}

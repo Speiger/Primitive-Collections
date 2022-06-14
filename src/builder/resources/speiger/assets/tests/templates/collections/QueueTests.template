@@ -1,0 +1,89 @@
+package speiger.src.tests.PACKAGE.collections;
+
+import java.util.Arrays;
+import java.util.Collection;
+#if TYPE_OBJECT
+import java.util.Comparator;
+#endif
+import java.util.function.Function;
+
+import com.google.common.collect.testing.features.CollectionFeature;
+import com.google.common.collect.testing.features.CollectionSize;
+import com.google.common.collect.testing.features.Feature;
+
+import junit.framework.Test;
+import junit.framework.TestCase;
+import junit.framework.TestSuite;
+import speiger.src.collections.PACKAGE.lists.LINKED_LIST;
+import speiger.src.collections.PACKAGE.queues.ARRAY_FIFO_QUEUE;
+import speiger.src.collections.PACKAGE.queues.ARRAY_PRIORITY_QUEUE;
+import speiger.src.collections.PACKAGE.queues.HEAP_PRIORITY_QUEUE;
+import speiger.src.collections.PACKAGE.queues.PRIORITY_QUEUE;
+import speiger.src.testers.PACKAGE.builder.DEQUEUE_TEST_BUILDER;
+import speiger.src.testers.PACKAGE.builder.QUEUE_TEST_BUILDER;
+import speiger.src.testers.PACKAGE.impl.SIMPLE_QUEUE_TEST_GENERATOR;
+import speiger.src.testers.utils.SpecialFeature;
+
+@SuppressWarnings("javadoc")
+public class QUEUE_TESTS extends TestCase
+{
+	public static Test suite() {
+		TestSuite suite = new TestSuite("PRIORITY_QUEUES");
+		suite(suite);
+		System.out.println("Generated ["+suite.countTestCases()+"] Tests");
+		return suite;
+	}
+	
+	public static void suite(TestSuite suite) {
+		suite.addTest(dequeueSuite("ARRAY_FIFO_QUEUE", T -> new ARRAY_FIFO_QUEUEBRACES(T), getFeatures(), -1));
+		suite.addTest(queueSuite("HEAP_PRIORITY_QUEUE", T -> new HEAP_PRIORITY_QUEUEBRACES(T), getFeatures(), -1));
+#if TYPE_OBJECT
+		suite.addTest(queueSuite("HEAP_PRIORITY_QUEUEComparator", T -> new HEAP_PRIORITY_QUEUEBRACES(T, Comparator.naturalOrder()), getFeatures(), -1));
+		suite.addTest(queueSuite("ARRAY_PRIORITY_QUEUEComparator", T -> new ARRAY_PRIORITY_QUEUEBRACES(T, Comparator.naturalOrder()), getFeatures(), -1));
+#else
+		suite.addTest(queueSuite("HEAP_PRIORITY_QUEUEComparator", T -> new HEAP_PRIORITY_QUEUEBRACES(T, CLASS_TYPE::compare), getFeatures(), -1));
+		suite.addTest(queueSuite("ARRAY_PRIORITY_QUEUEComparator", T -> new ARRAY_PRIORITY_QUEUEBRACES(T, CLASS_TYPE::compare), getFeatures(), -1));
+#endif
+		suite.addTest(queueSuite("ARRAY_PRIORITY_QUEUE", T -> new ARRAY_PRIORITY_QUEUEBRACES(T), getFeatures(), -1));
+		suite.addTest(dequeueSuite("LINKED_LIST", T -> new LINKED_LISTBRACES(T), getFeatures(), -1));
+	}
+	
+#if TYPE_OBJECT
+	private static Test queueSuite(String name, Function<String[], PRIORITY_QUEUE<String>> factory, Collection<Feature<?>> features, int size) {
+		return QUEUE_TEST_BUILDER.using(new SIMPLE_QUEUE_TEST_GENERATOR<String>(factory).setElements(createStrings())).named(name).withFeatures(features).withFeatures(getSizes(size)).createTestSuite();
+	}
+	
+	private static Test dequeueSuite(String name, Function<String[], PRIORITY_QUEUE<String>> factory, Collection<Feature<?>> features, int size) {
+		return DEQUEUE_TEST_BUILDER.using(new SIMPLE_QUEUE_TEST_GENERATOR<String>(factory).setElements(createStrings())).named(name).withFeatures(features).withFeatures(getSizes(size)).createTestSuite();
+	}
+	
+	private static String[] createStrings() {
+		return new String[]{"a", "b", "c", "d", "e"};
+	}
+	
+#else
+	private static Test queueSuite(String name, Function<KEY_TYPE[], PRIORITY_QUEUE KEY_GENERIC_TYPE> factory, Collection<Feature<?>> features, int size) {
+		return QUEUE_TEST_BUILDER.using(new SIMPLE_QUEUE_TEST_GENERATORBRACES(factory)).named(name).withFeatures(features).withFeatures(getSizes(size)).createTestSuite();
+	}
+
+	private static Test dequeueSuite(String name, Function<KEY_TYPE[], PRIORITY_QUEUE KEY_GENERIC_TYPE> factory, Collection<Feature<?>> features, int size) {
+		return DEQUEUE_TEST_BUILDER.using(new SIMPLE_QUEUE_TEST_GENERATORBRACES(factory)).named(name).withFeatures(features).withFeatures(getSizes(size)).createTestSuite();
+	}
+	
+#endif
+	private static Collection<CollectionSize> getSizes(int size) {
+		switch(size) {
+			case 0: return Arrays.asList(CollectionSize.ZERO);
+			case 1: return Arrays.asList(CollectionSize.ONE);
+			case 2: return Arrays.asList(CollectionSize.ZERO, CollectionSize.ONE);
+			case 3: return Arrays.asList(CollectionSize.SEVERAL);
+			case 4: return Arrays.asList(CollectionSize.ZERO, CollectionSize.SEVERAL);
+			case 5: return Arrays.asList(CollectionSize.ONE, CollectionSize.SEVERAL);
+			default: return Arrays.asList(CollectionSize.ANY);
+		}
+	}
+	
+	private static Collection<Feature<?>> getFeatures() {
+		return Arrays.asList(CollectionFeature.GENERAL_PURPOSE, SpecialFeature.COPYING, CollectionFeature.KNOWN_ORDER);
+	}
+}

@@ -1,0 +1,173 @@
+package speiger.src.testers.PACKAGE.impl;
+
+#if TYPE_OBJECT
+import java.util.Comparator;
+#endif
+import java.util.List;
+
+import com.google.common.collect.testing.DerivedCollectionGenerators.Bound;
+
+import speiger.src.collections.PACKAGE.collections.ITERABLE;
+#if !TYPE_OBJECT
+import speiger.src.collections.PACKAGE.functions.COMPARATOR;
+#endif
+import speiger.src.collections.PACKAGE.lists.ARRAY_LIST;
+import speiger.src.collections.PACKAGE.lists.LIST;
+import speiger.src.collections.PACKAGE.sets.NAVIGABLE_SET;
+import speiger.src.collections.PACKAGE.sets.SORTED_SET;
+import speiger.src.testers.PACKAGE.generators.TEST_SORTED_SET_GENERATOR;
+import speiger.src.testers.PACKAGE.generators.TEST_NAVIGABLE_SET_GENERATOR;
+import speiger.src.testers.PACKAGE.utils.SAMPLE_ELEMENTS;
+
+@SuppressWarnings("javadoc")
+public class SUB_SORTED_SET_CLASS_GENERATOR KEY_GENERIC_TYPE implements TEST_SORTED_SET_GENERATOR KEY_GENERIC_TYPE
+{
+	final Bound to;
+	final Bound from;
+	final KEY_TYPE firstInclusive;
+	final KEY_TYPE lastInclusive;
+	private final COMPARATOR KEY_GENERIC_TYPE comparator;
+	private final TEST_SORTED_SET_GENERATOR KEY_GENERIC_TYPE delegate;
+
+	public SUB_SORTED_SET_CLASS_GENERATOR(TEST_SORTED_SET_GENERATOR KEY_GENERIC_TYPE delegate, Bound to, Bound from) {
+		this.to = to;
+		this.from = from;
+		this.delegate = delegate;
+
+		SORTED_SET KEY_GENERIC_TYPE emptySet = delegate.create(NEW_KEY_ARRAY(0));
+		comparator = emptySet.comparator();
+
+		SAMPLE_ELEMENTS KEY_GENERIC_TYPE samples = delegate.getSamples();
+		LIST KEY_GENERIC_TYPE samplesList = new ARRAY_LISTBRACES(samples.asList());
+		samplesList.sort(comparator);
+		firstInclusive = samplesList.GET_KEY(0);
+		lastInclusive = samplesList.GET_KEY(samplesList.size() - 1);
+	}
+
+	public final TEST_SORTED_SET_GENERATOR KEY_GENERIC_TYPE getInnerGenerator() {
+		return delegate;
+	}
+
+	public final Bound getTo() {
+		return to;
+	}
+
+	public final Bound getFrom() {
+		return from;
+	}
+
+	SORTED_SET KEY_GENERIC_TYPE createSubSet(SORTED_SET KEY_GENERIC_TYPE set, KEY_TYPE firstExclusive, KEY_TYPE lastExclusive) {
+		if (from == Bound.NO_BOUND && to == Bound.EXCLUSIVE) {
+			return set.headSet(lastExclusive);
+		} else if (from == Bound.INCLUSIVE && to == Bound.NO_BOUND) {
+			return set.tailSet(firstInclusive);
+		} else if (from == Bound.INCLUSIVE && to == Bound.EXCLUSIVE) {
+			return set.subSet(firstInclusive, lastExclusive);
+		} else {
+			throw new IllegalArgumentException();
+		}
+	}
+
+	@Override
+	public KEY_TYPE belowSamplesLesser() {
+		throw new UnsupportedOperationException();
+	}
+
+	@Override
+	public KEY_TYPE belowSamplesGreater() {
+		throw new UnsupportedOperationException();
+	}
+
+	@Override
+	public KEY_TYPE aboveSamplesLesser() {
+		throw new UnsupportedOperationException();
+	}
+
+	@Override
+	public KEY_TYPE aboveSamplesGreater() {
+		throw new UnsupportedOperationException();
+	}
+
+	@Override
+	public SAMPLE_ELEMENTS KEY_GENERIC_TYPE getSamples() {
+		return delegate.getSamples();
+	}
+
+	@Override
+	public ITERABLE KEY_GENERIC_TYPE order(LIST KEY_GENERIC_TYPE insertionOrder) {
+		return delegate.order(insertionOrder);
+	}
+
+	@Override
+	public Iterable<CLASS_TYPE> order(List<CLASS_TYPE> insertionOrder) {
+		return delegate.order(insertionOrder);
+	}
+
+	@Override
+	public SORTED_SET KEY_GENERIC_TYPE create(KEY_OBJECT_TYPE... elements) {
+#if TYPE_OBJECT
+		LIST KEY_GENERIC_TYPE normalValues = (LIST KEY_GENERIC_TYPE)ARRAY_LIST.wrap(elements);
+#else
+		LIST KEY_GENERIC_TYPE normalValues = ARRAY_LIST.wrap(elements);
+#endif
+		LIST KEY_GENERIC_TYPE extremeValues = new ARRAY_LISTBRACES();
+		KEY_TYPE firstExclusive = delegate.belowSamplesGreater();
+		KEY_TYPE lastExclusive = delegate.aboveSamplesLesser();
+		if (from != Bound.NO_BOUND) {
+			extremeValues.add(delegate.belowSamplesLesser());
+			extremeValues.add(delegate.belowSamplesGreater());
+		}
+		if (to != Bound.NO_BOUND) {
+			extremeValues.add(delegate.aboveSamplesLesser());
+			extremeValues.add(delegate.aboveSamplesGreater());
+		}
+		LIST KEY_GENERIC_TYPE allEntries = new ARRAY_LISTBRACES();
+		allEntries.addAll(extremeValues);
+		allEntries.addAll(normalValues);
+		SORTED_SET KEY_GENERIC_TYPE set = delegate.create(allEntries.toArray());
+
+		return createSubSet(set, firstExclusive, lastExclusive);
+	}
+	
+#if !TYPE_OBJECT
+	@Override
+	public SORTED_SET KEY_GENERIC_TYPE create(Object... elements) {
+		KEY_TYPE[] array = NEW_KEY_ARRAY(elements.length);
+		int i = 0;
+		for (Object e : elements) {
+			array[i++] = CLASS_TO_KEY(e);
+		}
+		return create(array);
+	}
+
+#endif
+	public static final class SUB_NAVIGABLE_SET_CLASS_GENERATOR KEY_GENERIC_TYPE extends SUB_SORTED_SET_CLASS_GENERATOR KEY_GENERIC_TYPE implements TEST_NAVIGABLE_SET_GENERATOR KEY_GENERIC_TYPE {
+		public SUB_NAVIGABLE_SET_CLASS_GENERATOR(TEST_SORTED_SET_GENERATOR KEY_GENERIC_TYPE delegate, Bound to, Bound from) {
+			super(delegate, to, from);
+		}
+		
+#if !TYPE_OBJECT
+		@Override
+		public NAVIGABLE_SET KEY_GENERIC_TYPE create(KEY_TYPE... elements) {
+			return (NAVIGABLE_SET KEY_GENERIC_TYPE)super.create(elements);
+		}
+		
+#endif
+		@Override
+		public NAVIGABLE_SET KEY_GENERIC_TYPE create(Object... elements) {
+			return (NAVIGABLE_SET KEY_GENERIC_TYPE)super.create(elements);
+		}
+		
+		@Override
+		NAVIGABLE_SET KEY_GENERIC_TYPE createSubSet(SORTED_SET KEY_GENERIC_TYPE sortedSet, KEY_TYPE firstExclusive, KEY_TYPE lastExclusive) {
+			NAVIGABLE_SET KEY_GENERIC_TYPE set = (NAVIGABLE_SET KEY_GENERIC_TYPE) sortedSet;
+			if (from == Bound.NO_BOUND && to == Bound.INCLUSIVE) return set.headSet(lastInclusive, true);	
+			else if (from == Bound.EXCLUSIVE && to == Bound.NO_BOUND) return set.tailSet(firstExclusive, false);	
+			else if (from == Bound.EXCLUSIVE && to == Bound.EXCLUSIVE) return set.subSet(firstExclusive, false, lastExclusive, false);
+			else if (from == Bound.EXCLUSIVE && to == Bound.INCLUSIVE) return set.subSet(firstExclusive, false, lastInclusive, true);
+			else if (from == Bound.INCLUSIVE && to == Bound.INCLUSIVE) return set.subSet(firstInclusive, true, lastInclusive, true);
+			return (NAVIGABLE_SET KEY_GENERIC_TYPE)super.createSubSet(set, firstExclusive, lastExclusive);
+
+		}
+	}
+}

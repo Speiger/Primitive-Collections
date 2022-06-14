@@ -1,0 +1,115 @@
+package speiger.src.testers.PACKAGE.tests.list;
+
+import org.junit.Ignore;
+
+#ignore
+import static com.google.common.collect.testing.features.CollectionFeature.SUPPORTS_ADD;
+import static com.google.common.collect.testing.features.CollectionSize.ZERO;
+#endignore
+
+import com.google.common.collect.testing.features.CollectionFeature;
+import com.google.common.collect.testing.features.CollectionSize;
+
+import speiger.src.collections.PACKAGE.collections.COLLECTION;
+import speiger.src.collections.PACKAGE.lists.ARRAY_LIST;
+import speiger.src.collections.PACKAGE.lists.LIST;
+import speiger.src.testers.PACKAGE.tests.base.ABSTRACT_LIST_TESTER;
+import speiger.src.testers.PACKAGE.utils.MINIMAL_COLLECTION;
+
+@Ignore
+@SuppressWarnings("javadoc")
+public class FILE_KEY_TYPEListAddAllTester KEY_GENERIC_TYPE extends ABSTRACT_LIST_TESTER KEY_GENERIC_TYPE
+{
+#ignore
+	@CollectionFeature.Require(SUPPORTS_ADD)
+	@CollectionSize.Require(absent = ZERO)
+#endignore
+	public void testAddAll_supportedAllPresent() {
+		assertTrue("addAll(allPresent) should return true", getList().addAll(MINIMAL_COLLECTION.of(e0())));
+		expectAdded(e0());
+	}
+	
+#ignore
+	@CollectionFeature.Require(absent = SUPPORTS_ADD)
+	@CollectionSize.Require(absent = ZERO)
+#endignore
+	public void testAddAll_unsupportedAllPresent() {
+		try {
+			getList().addAll(MINIMAL_COLLECTION.of(e0()));
+			fail("addAll(allPresent) should throw");
+		} catch (UnsupportedOperationException expected) {
+		}
+		expectUnchanged();
+	}
+
+#ignore
+	@CollectionFeature.Require(SUPPORTS_ADD)
+#endignore
+	public void testAddAll_withDuplicates() {
+		MINIMAL_COLLECTION KEY_GENERIC_TYPE elementsToAdd = MINIMAL_COLLECTION.of(e0(), e1(), e0(), e1());
+		assertTrue("addAll(hasDuplicates) should return true", getList().addAll(elementsToAdd));
+		expectAdded(e0(), e1(), e0(), e1());
+	}
+	
+#ignore
+	@CollectionFeature.Require(SUPPORTS_ADD)
+	@CollectionSize.Require(absent = ZERO)
+#endignore
+	public void testAddAllListCollection_supportedAllPresent() {
+		assertTrue("addAll(allPresent) should return true", getList().addAll((COLLECTION KEY_GENERIC_TYPE)ARRAY_LIST.wrap(e0())));
+		expectAdded(e0());
+	}
+	
+#ignore
+	@CollectionFeature.Require(absent = SUPPORTS_ADD)
+	@CollectionSize.Require(absent = ZERO)
+#endignore
+	public void testAddAllListCollection_unsupportedAllPresent() {
+		try {
+			getList().addAll((COLLECTION KEY_GENERIC_TYPE)ARRAY_LIST.wrap(e0()));
+			fail("addAll(allPresent) should throw");
+		} catch (UnsupportedOperationException expected) {
+		}
+		expectUnchanged();
+	}
+
+#ignore
+	@CollectionFeature.Require(SUPPORTS_ADD)
+#endignore
+	public void testAddAllListCollection_withDuplicates() {
+		COLLECTION KEY_GENERIC_TYPE elementsToAdd = ARRAY_LIST.wrap(e0(), e1(), e0(), e1());
+		assertTrue("addAll(hasDuplicates) should return true", getList().addAll(elementsToAdd));
+		expectAdded(e0(), e1(), e0(), e1());
+	}
+	
+#ignore
+	@CollectionFeature.Require(SUPPORTS_ADD)
+	@CollectionSize.Require(absent = ZERO)
+#endignore
+	public void testAddAllList_supportedAllPresent() {
+		assertTrue("addAll(allPresent) should return true", getList().addAll(ARRAY_LIST.wrap(e0())));
+		expectAdded(e0());
+	}
+	
+#ignore
+	@CollectionFeature.Require(absent = SUPPORTS_ADD)
+	@CollectionSize.Require(absent = ZERO)
+#endignore
+	public void testAddAllList_unsupportedAllPresent() {
+		try {
+			getList().addAll(ARRAY_LIST.wrap(e0()));
+			fail("addAll(allPresent) should throw");
+		} catch (UnsupportedOperationException expected) {
+		}
+		expectUnchanged();
+	}
+
+#ignore
+	@CollectionFeature.Require(SUPPORTS_ADD)
+#endignore
+	public void testAddAllList_withDuplicates() {
+		LIST KEY_GENERIC_TYPE elementsToAdd = ARRAY_LIST.wrap(e0(), e1(), e0(), e1());
+		assertTrue("addAll(hasDuplicates) should return true", getList().addAll(elementsToAdd));
+		expectAdded(e0(), e1(), e0(), e1());
+	}
+}

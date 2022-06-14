@@ -1,0 +1,328 @@
+package speiger.src.testers.PACKAGE.tests.maps;
+
+#ignore
+import static com.google.common.collect.testing.Helpers.assertEqualInOrder;
+import static com.google.common.collect.testing.features.CollectionSize.ONE;
+import static com.google.common.collect.testing.features.CollectionSize.SEVERAL;
+import static com.google.common.collect.testing.features.CollectionSize.ZERO;
+import static com.google.common.collect.testing.features.MapFeature.SUPPORTS_REMOVE;
+#endignore
+
+import java.util.Comparator;
+import java.util.Iterator;
+import java.util.NoSuchElementException;
+
+import org.junit.Ignore;
+
+import com.google.common.collect.testing.features.CollectionSize;
+import com.google.common.collect.testing.features.MapFeature;
+
+#if !TYPE_OBJECT
+import speiger.src.collections.PACKAGE.functions.COMPARATOR;
+#endif
+import speiger.src.collections.PACKAGE.maps.interfaces.MAP.Entry;
+import speiger.src.collections.PACKAGE.maps.interfaces.SORTED_MAP;
+import speiger.src.collections.objects.lists.ObjectList;
+import speiger.src.testers.PACKAGE.tests.base.maps.ABSTRACT_MAP_TESTER;
+import speiger.src.testers.objects.utils.ObjectHelpers;
+
+@Ignore
+@SuppressWarnings("javadoc")
+public class FILE_KEY_TYPE2FILE_VALUE_TYPESortedMapNavigationTester KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP_TESTER KEY_VALUE_GENERIC_TYPE
+{
+	private SORTED_MAP KEY_VALUE_GENERIC_TYPE sortedMap;
+	private ObjectList<Entry KEY_VALUE_GENERIC_TYPE> entries;
+	private Entry KEY_VALUE_GENERIC_TYPE a;
+	private Entry KEY_VALUE_GENERIC_TYPE c;
+
+	@Override
+	public void setUp() throws Exception {
+		super.setUp();
+		sortedMap = (SORTED_MAP KEY_VALUE_GENERIC_TYPE) getMap();
+		entries = ObjectHelpers.copyToList(getSampleElements(getNumElements()));
+		entries.sort(entryComparator(sortedMap.comparator()));
+		if (entries.size() >= 1) {
+			a = entries.get(0);
+			if (entries.size() >= 3) {
+				c = entries.get(2);
+			}
+		}
+	}
+
+	public static GENERIC_KEY_VALUE_BRACES Comparator<Entry KEY_VALUE_GENERIC_TYPE> entryComparator(COMPARATOR KEY_GENERIC_TYPE keyComparator) {
+		return new Comparator<Entry KEY_VALUE_GENERIC_TYPE>() {
+			@Override
+			public int compare(Entry KEY_VALUE_GENERIC_TYPE a, Entry KEY_VALUE_GENERIC_TYPE b) {
+				return (keyComparator == null) ? COMPAREABLE_TO_KEY(a.ENTRY_KEY(), b.ENTRY_KEY()) : keyComparator.compare(a.ENTRY_KEY(), b.ENTRY_KEY());
+			}
+		};
+	}
+	
+#ignore
+	@MapFeature.Require(SUPPORTS_REMOVE)
+	@CollectionSize.Require(ZERO)
+#endignore
+	public void testEmptyMapPollFirst() {
+#if TYPE_OBJECT
+		assertNull(sortedMap.POLL_FIRST_ENTRY_KEY());
+#else
+		assertEquals(CLASS_TYPE.MAX_VALUE, sortedMap.POLL_FIRST_ENTRY_KEY());
+#endif
+		expectUnchanged();
+	}
+	
+#ignore
+	@MapFeature.Require(SUPPORTS_REMOVE)
+	@CollectionSize.Require(ZERO)
+#endignore
+	public void testEmptyMapPollLast() {
+#if TYPE_OBJECT
+		assertNull(sortedMap.POLL_FIRST_ENTRY_KEY());
+#else
+		assertEquals(CLASS_TYPE.MIN_VALUE, sortedMap.POLL_LAST_ENTRY_KEY());
+#endif
+		expectUnchanged();
+	}
+	
+#ignore
+	@MapFeature.Require(absent = SUPPORTS_REMOVE)
+#endignore
+	public void testUnsupportedMapPollFirst() {
+		try {
+			sortedMap.POLL_FIRST_ENTRY_KEY();
+			fail("OrderedMap.POLL_FIRST_ENTRY_KEY should throw UnsupportedOperationException");
+		} catch (UnsupportedOperationException e) {
+		}
+		expectUnchanged();
+	}
+	
+#ignore
+	@MapFeature.Require(absent = SUPPORTS_REMOVE)
+#endignore
+	public void testUnsupportedMapPollLast() {
+		try {
+			sortedMap.POLL_LAST_ENTRY_KEY();
+			fail("OrderedMap.POLL_LAST_ENTRY_KEY should throw UnsupportedOperationException");
+		} catch (UnsupportedOperationException e) {
+		}
+		expectUnchanged();
+	}
+	
+#ignore
+	@MapFeature.Require(SUPPORTS_REMOVE)
+	@CollectionSize.Require(ONE)
+#endignore
+	public void testSingletonMapPollFirst() {
+		assertEquals(a.ENTRY_KEY(), sortedMap.POLL_FIRST_ENTRY_KEY());
+		assertTrue(sortedMap.isEmpty());
+	}
+	
+#ignore
+	@MapFeature.Require(SUPPORTS_REMOVE)
+	@CollectionSize.Require(ONE)
+#endignore
+	public void testSingletonMapPollLast() {
+		assertEquals(a.ENTRY_KEY(), sortedMap.POLL_LAST_ENTRY_KEY());
+		assertTrue(sortedMap.isEmpty());
+	}
+	
+#ignore
+	@MapFeature.Require(SUPPORTS_REMOVE)
+	@CollectionSize.Require(SEVERAL)
+#endignore
+	public void testPollFirst() {
+		assertEquals(a.ENTRY_KEY(), sortedMap.POLL_FIRST_ENTRY_KEY());
+		assertEquals(entries.subList(1, entries.size()), ObjectHelpers.copyToList(sortedMap.ENTRY_SET()));
+	}
+
+#ignore
+	@MapFeature.Require(SUPPORTS_REMOVE)
+	@CollectionSize.Require(SEVERAL)
+#endignore
+	public void testPollLast() {
+		assertEquals(c.ENTRY_KEY(), sortedMap.POLL_LAST_ENTRY_KEY());
+		assertEquals(entries.subList(0, entries.size()-1), ObjectHelpers.copyToList(sortedMap.ENTRY_SET()));
+	}
+	
+#ignore
+	@MapFeature.Require(absent = SUPPORTS_REMOVE)
+#endignore
+	public void testPollFirstUnsupported() {
+		try {
+			sortedMap.POLL_FIRST_ENTRY_KEY();
+			fail();
+		} catch (UnsupportedOperationException e) {
+		}
+	}
+	
+#ignore
+	@MapFeature.Require(absent = SUPPORTS_REMOVE)
+#endignore
+	public void testPollLastUnsupported() {
+		try {
+			sortedMap.POLL_LAST_ENTRY_KEY();
+			fail();
+		} catch (UnsupportedOperationException e) {
+		}
+	}
+	
+#ignore
+	@CollectionSize.Require(ZERO)
+#endignore
+	public void testEmptyMapFirst() {
+		try {
+			sortedMap.FIRST_ENTRY_KEY();
+			fail();
+		} catch (NoSuchElementException e) {
+		}
+	}
+
+#ignore
+	@CollectionSize.Require(ZERO)
+#endignore
+	public void testEmptyMapLast() {
+		try {
+			assertEquals(EMPTY_VALUE, sortedMap.LAST_ENTRY_KEY());
+			fail();
+		} catch (NoSuchElementException e) {
+		}
+	}
+	
+#ignore
+	@CollectionSize.Require(ZERO)
+#endignore
+	public void testEmptyMapFirstValue() {
+		try {
+			sortedMap.FIRST_ENTRY_VALUE();
+			fail();
+		} catch (NoSuchElementException e) {
+		}
+	}
+	
+#ignore
+	@CollectionSize.Require(ZERO)
+#endignore
+	public void testEmptyMapLastValue() {
+		try {
+			sortedMap.LAST_ENTRY_VALUE();
+			fail();
+		} catch (NoSuchElementException e) {
+		}
+	}
+	
+#ignore
+	@CollectionSize.Require(ONE)
+#endignore
+	public void testSingletonMapFirstValue() {
+		assertEquals(a.ENTRY_VALUE(), sortedMap.FIRST_ENTRY_VALUE());
+	}
+	
+#ignore
+	@CollectionSize.Require(ONE)
+#endignore
+	public void testSingletonMapLastValue() {
+		assertEquals(a.ENTRY_VALUE(), sortedMap.FIRST_ENTRY_VALUE());
+	}
+	
+#ignore
+	@CollectionSize.Require(SEVERAL)
+#endignore
+	public void testFirstValue() {
+		assertEquals(a.ENTRY_VALUE(), sortedMap.FIRST_ENTRY_VALUE());
+	}
+	
+#ignore
+	@CollectionSize.Require(SEVERAL)
+#endignore
+	public void testLastValue() {
+		assertEquals(c.ENTRY_VALUE(), sortedMap.LAST_ENTRY_VALUE());
+	}
+	
+#ignore
+	@CollectionSize.Require(ONE)
+#endignore
+	public void testSingletonMapFirst() {
+		assertEquals(a.ENTRY_KEY(), sortedMap.FIRST_ENTRY_KEY());
+	}
+
+#ignore
+	@CollectionSize.Require(ONE)
+#endignore
+	public void testSingletonMapLast() {
+		assertEquals(a.ENTRY_KEY(), sortedMap.LAST_ENTRY_KEY());
+	}
+
+#ignore
+	@CollectionSize.Require(SEVERAL)
+#endignore
+	public void testFirst() {
+		assertEquals(a.ENTRY_KEY(), sortedMap.FIRST_ENTRY_KEY());
+	}
+
+#ignore
+	@CollectionSize.Require(SEVERAL)
+#endignore
+	public void testLast() {
+		assertEquals(c.ENTRY_KEY(), sortedMap.LAST_ENTRY_KEY());
+	}
+
+#ignore
+	@CollectionSize.Require(absent = ZERO)
+#endignore
+	public void testHeadMapExclusive() {
+		assertFalse(sortedMap.headMap(a.ENTRY_KEY()).containsKey(a.ENTRY_KEY()));
+	}
+
+#ignore
+	@CollectionSize.Require(absent = ZERO)
+#endignore
+	public void testTailMapInclusive() {
+		assertTrue(sortedMap.tailMap(a.ENTRY_KEY()).containsKey(a.ENTRY_KEY()));
+	}
+	
+#ignore
+	@CollectionSize.Require(absent = SEVERAL)
+#endignore
+	public void testSubMap() {
+		ObjectList<Entry KEY_VALUE_GENERIC_TYPE> entries = ObjectHelpers.copyToList(getSampleElements(getNumElements()));
+		entries.sort(entryComparator(sortedMap.comparator()));
+		for (int i = 0; i < entries.size(); i++) {
+			for (int j = i + 1; j < entries.size(); j++) {
+				assertEqualInOrder(entries.subList(i, j), sortedMap.subMap(entries.get(i).ENTRY_KEY(), entries.get(j).ENTRY_KEY()).ENTRY_SET());
+			}
+		}
+	}
+
+#ignore
+	@CollectionSize.Require(SEVERAL)
+#endignore
+	public void testSubMapIllegal() {
+		try {
+			sortedMap.subMap(c.ENTRY_KEY(), a.ENTRY_KEY());
+			fail("Expected IllegalArgumentException");
+		} catch (IllegalArgumentException expected) {
+		}
+	}
+
+#ignore
+	@CollectionSize.Require(absent = ZERO)
+#endignore
+	public void testOrderedByComparator() {
+		@SuppressWarnings("unchecked")
+		COMPARATOR KEY_GENERIC_TYPE comparator = sortedMap.comparator();
+		if (comparator == null) {
+#if TYPE_OBJECT
+			comparator = (Comparator<T>)Comparator.naturalOrder();
+#else
+			comparator = CLASS_TYPE::compare;
+#endif
+		}
+		Iterator<Entry KEY_VALUE_GENERIC_TYPE> entryItr = sortedMap.ENTRY_SET().iterator();
+		Entry KEY_VALUE_GENERIC_TYPE prevEntry = entryItr.next();
+		while (entryItr.hasNext()) {
+			Entry KEY_VALUE_GENERIC_TYPE nextEntry = entryItr.next();
+			assertTrue(comparator.compare(prevEntry.ENTRY_KEY(), nextEntry.ENTRY_KEY()) < 0);
+			prevEntry = nextEntry;
+		}
+	}
+}

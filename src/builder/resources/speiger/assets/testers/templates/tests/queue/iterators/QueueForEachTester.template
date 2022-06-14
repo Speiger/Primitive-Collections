@@ -1,0 +1,19 @@
+package speiger.src.testers.PACKAGE.tests.queue.iterators;
+
+import org.junit.Ignore;
+
+import speiger.src.collections.PACKAGE.lists.ARRAY_LIST;
+import speiger.src.collections.PACKAGE.lists.LIST;
+import speiger.src.testers.PACKAGE.tests.base.ABSTRACT_QUEUE_TESTER;
+
+@Ignore
+@SuppressWarnings("javadoc")
+public class FILE_KEY_TYPEQueueForEachTester KEY_GENERIC_TYPE extends ABSTRACT_QUEUE_TESTER KEY_GENERIC_TYPE
+{
+	public void testQueueForEach() {
+		LIST KEY_GENERIC_TYPE peeked = new ARRAY_LISTBRACES();
+		LIST KEY_GENERIC_TYPE result = new ARRAY_LISTBRACES();
+		queue.peek(peeked::add).forEach(result, LIST::add);
+		assertEquals("Collections should match since peek is just a preview of foreach", result, peeked);
+	}
+}

@@ -1,0 +1,161 @@
+package speiger.src.testers.PACKAGE.tests.collection;
+
+#ignore
+import static com.google.common.collect.testing.IteratorFeature.MODIFIABLE;
+import static com.google.common.collect.testing.IteratorFeature.UNMODIFIABLE;
+import static com.google.common.collect.testing.features.CollectionFeature.KNOWN_ORDER;
+import static com.google.common.collect.testing.features.CollectionFeature.SUPPORTS_ITERATOR_REMOVE;
+import static com.google.common.collect.testing.features.CollectionSize.ZERO;
+#endignore
+
+import java.util.NoSuchElementException;
+import java.util.Set;
+import java.util.EnumSet;
+import java.util.Collections;
+
+import com.google.common.collect.testing.IteratorFeature;
+import com.google.common.collect.testing.features.CollectionFeature;
+import com.google.common.collect.testing.features.CollectionSize;
+
+import org.junit.Ignore;
+
+import speiger.src.collections.PACKAGE.collections.ITERABLE;
+import speiger.src.collections.PACKAGE.collections.ITERATOR;
+import speiger.src.collections.PACKAGE.collections.BI_ITERATOR;
+import speiger.src.collections.PACKAGE.lists.ARRAY_LIST;
+import speiger.src.collections.PACKAGE.lists.LIST;
+import speiger.src.collections.PACKAGE.lists.LIST_ITERATOR;
+import speiger.src.collections.PACKAGE.utils.LISTS;
+import speiger.src.testers.PACKAGE.tests.base.ABSTRACT_COLLECTION_TESTER;
+import speiger.src.testers.PACKAGE.utils.HELPERS;
+import speiger.src.testers.PACKAGE.utils.ITERATOR_TESTER;
+import speiger.src.testers.PACKAGE.utils.LIST_ITERATOR_TESTER;
+import speiger.src.testers.PACKAGE.utils.BIDIRECTIONAL_ITERATOR_TESTER;
+
+@Ignore
+@SuppressWarnings("javadoc")
+public class FILE_KEY_TYPECollectionIteratorTester KEY_GENERIC_TYPE extends ABSTRACT_COLLECTION_TESTER KEY_GENERIC_TYPE
+{
+	public void testIterator() {
+		LIST KEY_GENERIC_TYPE elements = new ARRAY_LISTBRACES();
+		for (ITERATOR KEY_GENERIC_TYPE iter = collection.iterator();iter.hasNext();) { // uses iterator()
+			elements.add(iter.NEXT());
+		}
+		HELPERS.assertContentsAnyOrder(elements, createSamplesArray());
+	}
+	
+#ignore
+	@CollectionFeature.Require(KNOWN_ORDER)
+	public void testIterationOrdering() {
+#endignore
+		LIST KEY_GENERIC_TYPE elements = new ARRAY_LISTBRACES();
+		for (ITERATOR KEY_GENERIC_TYPE iter = collection.iterator();iter.hasNext();) { // uses iterator()
+			elements.add(iter.NEXT());
+		}
+		LIST KEY_GENERIC_TYPE expected = HELPERS.copyToList(getOrderedElements());
+		assertEquals("Different ordered iteration", expected, elements);
+	}
+
+#ignore
+	@CollectionFeature.Require(SUPPORTS_ITERATOR_REMOVE)
+	@CollectionSize.Require(absent = ZERO)
+	public void testIterator_removeAffectsBackingCollection() {
+#endignore
+		int originalSize = collection.size();
+		ITERATOR KEY_GENERIC_TYPE iterator = collection.iterator();
+		KEY_TYPE element = iterator.NEXT();
+		assertTrue(collection.contains(element)); // sanity check
+		iterator.remove();
+		assertFalse(collection.contains(element));
+		assertEquals(originalSize - 1, collection.size());
+	}
+
+#ignore
+	@CollectionFeature.Require({ KNOWN_ORDER, SUPPORTS_ITERATOR_REMOVE })
+	public void testIterator_knownOrderRemoveSupported() {
+#endignore
+		runIteratorTest(MODIFIABLE, ITERATOR_TESTER.KnownOrder.KNOWN_ORDER, getOrderedElements());
+	}
+
+#ignore
+	@CollectionFeature.Require(value = KNOWN_ORDER, absent = SUPPORTS_ITERATOR_REMOVE)
+	public void testIterator_knownOrderRemoveUnsupported() {
+#endignore
+		runIteratorTest(UNMODIFIABLE, ITERATOR_TESTER.KnownOrder.KNOWN_ORDER, getOrderedElements());
+	}
+
+#ignore
+	@CollectionFeature.Require(absent = KNOWN_ORDER, value = SUPPORTS_ITERATOR_REMOVE)
+	public void testIterator_unknownOrderRemoveSupported() {
+#endignore
+		runIteratorTest(MODIFIABLE, ITERATOR_TESTER.KnownOrder.UNKNOWN_ORDER, getSampleElements());
+	}
+
+#ignore
+	@CollectionFeature.Require(absent = { KNOWN_ORDER, SUPPORTS_ITERATOR_REMOVE })
+	public void testIterator_unknownOrderRemoveUnsupported() {
+#endignore
+		runIteratorTest(UNMODIFIABLE, ITERATOR_TESTER.KnownOrder.UNKNOWN_ORDER, getSampleElements());
+	}
+
+	private void runIteratorTest(Set<IteratorFeature> features, ITERATOR_TESTER.KnownOrder knownOrder, ITERABLE KEY_GENERIC_TYPE elements) {
+		if(knownOrder == ITERATOR_TESTER.KnownOrder.KNOWN_ORDER && !(collection instanceof LIST) && collection.iterator() instanceof LIST_ITERATOR) {
+			Set<IteratorFeature> listFeature = features.isEmpty() ? features : EnumSet.copyOf(features);
+#ignore
+			listFeature.retainAll(EnumSet.of(IteratorFeature.SUPPORTS_REMOVE));
+#endignore
+			new LIST_ITERATOR_TESTER KEY_GENERIC_TYPE(2, LISTS.singleton(INVALID_VALUE), Collections.unmodifiableSet(listFeature), elements, 0) {
+				@Override
+				protected LIST_ITERATOR KEY_GENERIC_TYPE newTargetIterator() {
+					resetCollection();
+					return (LIST_ITERATOR KEY_GENERIC_TYPE)collection.iterator();
+				}
+
+				@Override
+				protected void verify(LIST KEY_GENERIC_TYPE elements) {
+					expectContents(elements);
+				}
+			}.test();			
+		}
+		if(collection.iterator() instanceof BI_ITERATOR) {
+			new BIDIRECTIONAL_ITERATOR_TESTER KEY_GENERIC_TYPE(4, features, elements, knownOrder) {
+				@Override
+				protected BI_ITERATOR KEY_GENERIC_TYPE newTargetIterator() {
+					resetCollection();
+					return (BI_ITERATOR KEY_GENERIC_TYPE)collection.iterator();
+				}
+
+				@Override
+				protected void verify(LIST KEY_GENERIC_TYPE elements) {
+					expectContents(elements);
+				}
+			}.test();			
+			return;
+		}
+		new ITERATOR_TESTER KEY_GENERIC_TYPE(5, features, elements, knownOrder) {
+			@Override
+			protected ITERATOR KEY_GENERIC_TYPE newTargetIterator() {
+				resetCollection();
+				return collection.iterator();
+			}
+
+			@Override
+			protected void verify(LIST KEY_GENERIC_TYPE elements) {
+				expectContents(elements);
+			}
+		}.test();
+	}
+
+	public void testIteratorNoSuchElementException() {
+		ITERATOR KEY_GENERIC_TYPE iterator = collection.iterator();
+		while (iterator.hasNext()) {
+			iterator.NEXT();
+		}
+
+		try {
+			iterator.NEXT();
+			fail("iterator.next() should throw NoSuchElementException");
+		} catch (NoSuchElementException expected) {
+		}
+	}
+}

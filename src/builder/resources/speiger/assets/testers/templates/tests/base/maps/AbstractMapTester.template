@@ -1,0 +1,243 @@
+package speiger.src.testers.PACKAGE.tests.base.maps;
+
+import java.util.Locale;
+import java.util.Map;
+#if VALUE_OBJECT
+import java.util.Objects;
+#endif
+
+import org.junit.Ignore;
+
+import com.google.common.collect.testing.TestContainerGenerator;
+
+import speiger.src.collections.PACKAGE.maps.abstracts.ABSTRACT_MAP;
+import speiger.src.collections.PACKAGE.maps.interfaces.MAP;
+import speiger.src.collections.objects.collections.ObjectCollection;
+import speiger.src.collections.objects.collections.ObjectIterator;
+import speiger.src.collections.objects.lists.ObjectArrayList;
+import speiger.src.collections.objects.lists.ObjectList;
+import speiger.src.collections.objects.lists.ObjectListIterator;
+import speiger.src.collections.objects.utils.ObjectLists;
+import speiger.src.testers.PACKAGE.generators.maps.TEST_MAP_GENERATOR;
+#if !TYPE_OBJECT
+import speiger.src.testers.PACKAGE.utils.HELPERS;
+#endif
+import speiger.src.testers.objects.tests.base.AbstractObjectContainerTester;
+import speiger.src.testers.objects.utils.ObjectHelpers;
+
+@Ignore
+@SuppressWarnings("javadoc")
+public class ABSTRACT_MAP_TESTER KEY_VALUE_GENERIC_TYPE extends AbstractObjectContainerTester<MAP.Entry KEY_VALUE_GENERIC_TYPE, MAP KEY_VALUE_GENERIC_TYPE>
+{
+	protected TEST_MAP_GENERATOR KEY_VALUE_GENERIC_TYPE primitiveMapGenerator;
+
+	protected MAP KEY_VALUE_GENERIC_TYPE getMap() {
+		return container;
+	}
+
+	@Override
+	protected void setupGenerator() {
+		TestContainerGenerator<? extends Map<CLASS_TYPE, CLASS_VALUE_TYPE>, ? extends Map.Entry<CLASS_TYPE, CLASS_VALUE_TYPE>> generator = getSubjectGenerator().getInnerGenerator();
+		if (!(generator instanceof TEST_MAP_GENERATOR)) throw new IllegalStateException("Test Generator Must extend TestLong2ByteMapGenerator");
+		primitiveMapGenerator = (TEST_MAP_GENERATOR KEY_VALUE_GENERIC_TYPE) generator;
+		samples = primitiveMapGenerator.getSamples();
+		size = getSubjectGenerator().getCollectionSize();
+		resetContainer();
+	}
+	
+	@Override
+	protected MAP KEY_VALUE_GENERIC_TYPE createTestSubject() {
+		return primitiveMapGenerator.create(getSampleElements(size.getNumElements()).toArray(new MAP.Entry[getNumElements()]));
+	}
+	
+	@Override
+	protected ObjectList<MAP.Entry KEY_VALUE_GENERIC_TYPE> getOrderedElements() {
+		ObjectList<MAP.Entry KEY_VALUE_GENERIC_TYPE> list = new ObjectArrayList<>();
+		for (ObjectIterator<MAP.Entry KEY_VALUE_GENERIC_TYPE> iter = primitiveMapGenerator.order(new ObjectArrayList<MAP.Entry KEY_VALUE_GENERIC_TYPE>(getSampleElements())).iterator(); iter.hasNext();) {
+			list.add(iter.next());
+		}
+		return ObjectLists.unmodifiable(list);
+	}
+	
+	@Override
+	protected ObjectCollection<MAP.Entry KEY_VALUE_GENERIC_TYPE> actualContents() {
+		return getMap().ENTRY_SET();
+	}
+
+	protected final void resetMap() {
+		resetContainer();
+	}
+
+	protected void resetMap(MAP.Entry KEY_VALUE_GENERIC_TYPE[] entries) {
+		resetContainer(primitiveMapGenerator.create(entries));
+	}
+	
+	@Override
+	protected MAP KEY_VALUE_GENERIC_TYPE resetContainer(MAP KEY_VALUE_GENERIC_TYPE newValue) {
+		newValue.setDefaultReturnValue(INVALID_VALUE);
+		return super.resetContainer(newValue);
+	}
+
+	protected void expectMissingKeys(KEY_TYPE... elements) {
+		for (KEY_TYPE element : elements) {
+			assertFalse("Should not contain key " + element, getMap().containsKey(element));
+		}
+	}
+
+	protected void expectMissingValues(VALUE_TYPE... elements) {
+		for (VALUE_TYPE element : elements) {
+			assertFalse("Should not contain value " + element, getMap().containsValue(element));
+		}
+	}
+	
+	protected int getNumEntries() {
+		return getNumElements();
+	}
+		
+	protected ObjectCollection<MAP.Entry KEY_VALUE_GENERIC_TYPE> getSampleEntries(int howMany) {
+		return getSampleElements(howMany);
+	}
+
+	protected ObjectCollection<MAP.Entry KEY_VALUE_GENERIC_TYPE> getSampleEntries() {
+		return getSampleElements();
+	}
+
+	@Override
+	protected void expectMissing(MAP.Entry KEY_VALUE_GENERIC_TYPE... entries) {
+		for (MAP.Entry KEY_VALUE_GENERIC_TYPE entry : entries) {
+			assertFalse("Should not contain entry " + entry, actualContents().contains(entry));
+#if !VALUE_BOOLEAN
+			assertFalse("Should not contain key " + entry.ENTRY_KEY() + " mapped to value " + entry.ENTRY_VALUE(), valueEquals(getMap().get(entry.ENTRY_KEY()), entry.ENTRY_VALUE()));
+#endif
+		}
+	}
+
+	@Override
+	protected void expectContents(ObjectCollection<MAP.Entry KEY_VALUE_GENERIC_TYPE> expected) {
+		super.expectContents(expected);
+		for (MAP.Entry KEY_VALUE_GENERIC_TYPE entry : expected) {
+			assertEquals("Wrong value for key " + entry.ENTRY_KEY(), entry.ENTRY_VALUE(), getMap().GET_VALUE(entry.ENTRY_KEY()));
+		}
+	}
+
+	protected final void expectReplacement(MAP.Entry KEY_VALUE_GENERIC_TYPE newEntry) {
+		ObjectList<MAP.Entry KEY_VALUE_GENERIC_TYPE> expected = ObjectHelpers.copyToList(getSampleElements());
+		replaceValue(expected, newEntry);
+		expectContents(expected);
+	}
+
+	private void replaceValue(ObjectList<MAP.Entry KEY_VALUE_GENERIC_TYPE> expected, MAP.Entry KEY_VALUE_GENERIC_TYPE newEntry) {
+		for (ObjectListIterator<MAP.Entry KEY_VALUE_GENERIC_TYPE> i = expected.listIterator(); i.hasNext();) {
+			if (HELPERS.equals(i.next().ENTRY_KEY(), newEntry.ENTRY_KEY())) {
+				i.set(newEntry);
+				return;
+			}
+		}
+		throw new IllegalArgumentException(String.format(Locale.ROOT, "key %s not found in entries %s", newEntry.ENTRY_KEY(), expected));
+	}
+	
+#if !VALUE_BOOLEAN
+	private static GENERIC_VALUE_BRACES boolean valueEquals(VALUE_TYPE a, VALUE_TYPE b) {
+		return VALUE_EQUALS(a, b);
+	}
+	
+#endif
+	protected MAP.Entry KEY_VALUE_GENERIC_TYPE entry(KEY_TYPE key, VALUE_TYPE value) {
+		return new ABSTRACT_MAP.BasicEntryKV_BRACES(key, value);
+	}
+	
+	protected KEY_TYPE[] emptyKeyArray() {
+		return NEW_KEY_ARRAY(0);
+	}
+	
+	protected KEY_TYPE[] createDisjointedKeyArray() {
+		KEY_TYPE[] array = NEW_KEY_ARRAY(2);
+		array[0] = k3();
+		array[1] = k4();
+		return array;
+	}
+	
+	protected CLASS_TYPE[] emptyKeyObjectArray() {
+		return NEW_CLASS_ARRAY(0);
+	}
+	
+	protected CLASS_TYPE[] createDisjointedKeyObjectArray() {
+		CLASS_TYPE[] array = NEW_CLASS_ARRAY(2);
+		array[0] = k3();
+		array[1] = k4();
+		return array;
+	}
+	
+	protected VALUE_TYPE[] emptyValueArray() {
+		return NEW_VALUE_ARRAY(0);
+	}
+	
+	protected VALUE_TYPE[] createDisjointedValueArray() {
+		VALUE_TYPE[] array = NEW_VALUE_ARRAY(2);
+		array[0] = v3();
+		array[1] = v4();
+		return array;
+	}
+	
+	protected CLASS_VALUE_TYPE[] emptyValueObjectArray() {
+		return NEW_CLASS_VALUE_ARRAY(0);
+	}
+	
+	protected CLASS_VALUE_TYPE[] createDisjointedValueObjectArray() {
+		CLASS_VALUE_TYPE[] array = NEW_CLASS_VALUE_ARRAY(2);
+		array[0] = v3();
+		array[1] = v4();
+		return array;
+	}
+	
+	protected VALUE_TYPE get(KEY_TYPE key) {
+		return getMap().GET_VALUE(key);
+	}
+	
+#if !TYPE_OBJECT
+	@SuppressWarnings("deprecation")
+	protected CLASS_VALUE_TYPE get(CLASS_TYPE key) {
+		return getMap().get(key);
+	}
+	
+#endif
+	protected final KEY_TYPE k0() {
+		return e0().ENTRY_KEY();
+	}
+
+	protected final VALUE_TYPE v0() {
+		return e0().ENTRY_VALUE();
+	}
+
+	protected final KEY_TYPE k1() {
+		return e1().ENTRY_KEY();
+	}
+
+	protected final VALUE_TYPE v1() {
+		return e1().ENTRY_VALUE();
+	}
+
+	protected final KEY_TYPE k2() {
+		return e2().ENTRY_KEY();
+	}
+
+	protected final VALUE_TYPE v2() {
+		return e2().ENTRY_VALUE();
+	}
+
+	protected final KEY_TYPE k3() {
+		return e3().ENTRY_KEY();
+	}
+
+	protected final VALUE_TYPE v3() {
+		return e3().ENTRY_VALUE();
+	}
+
+	protected final KEY_TYPE k4() {
+		return e4().ENTRY_KEY();
+	}
+
+	protected final VALUE_TYPE v4() {
+		return e4().ENTRY_VALUE();
+	}
+}

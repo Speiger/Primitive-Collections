@@ -1,0 +1,60 @@
+package speiger.src.testers.PACKAGE.builder;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import com.google.common.collect.testing.AbstractTester;
+import com.google.common.collect.testing.PerCollectionSizeTestSuiteBuilder;
+
+import speiger.src.collections.PACKAGE.queues.PRIORITY_QUEUE;
+import speiger.src.testers.PACKAGE.generators.TEST_QUEUE_GENERATOR;
+import speiger.src.testers.PACKAGE.tests.queue.FILE_KEY_TYPEQueueDequeueTester;
+import speiger.src.testers.PACKAGE.tests.queue.FILE_KEY_TYPEQueueEnqueueTester;
+import speiger.src.testers.PACKAGE.tests.queue.FILE_KEY_TYPEQueueFirstTester;
+import speiger.src.testers.PACKAGE.tests.queue.FILE_KEY_TYPEQueueRemoveTester;
+import speiger.src.testers.PACKAGE.tests.queue.iterators.FILE_KEY_TYPEQueueCountTester;
+import speiger.src.testers.PACKAGE.tests.queue.iterators.FILE_KEY_TYPEQueueDistinctTester;
+import speiger.src.testers.PACKAGE.tests.queue.iterators.FILE_KEY_TYPEQueueFilterTester;
+import speiger.src.testers.PACKAGE.tests.queue.iterators.FILE_KEY_TYPEQueueFindFirstTester;
+import speiger.src.testers.PACKAGE.tests.queue.iterators.FILE_KEY_TYPEQueueLimitTester;
+import speiger.src.testers.PACKAGE.tests.queue.iterators.FILE_KEY_TYPEQueueMapTester;
+import speiger.src.testers.PACKAGE.tests.queue.iterators.FILE_KEY_TYPEQueueMatchesTester;
+import speiger.src.testers.PACKAGE.tests.queue.iterators.FILE_KEY_TYPEQueuePeekTester;
+import speiger.src.testers.PACKAGE.tests.queue.iterators.FILE_KEY_TYPEQueueForEachTester;
+import speiger.src.testers.PACKAGE.tests.queue.iterators.FILE_KEY_TYPEQueueReduceTester;
+import speiger.src.testers.PACKAGE.tests.queue.iterators.FILE_KEY_TYPEQueueSortedTester;
+
+@SuppressWarnings("javadoc")
+public class QUEUE_TEST_BUILDER KEY_GENERIC_TYPE extends PerCollectionSizeTestSuiteBuilder<QUEUE_TEST_BUILDER KEY_GENERIC_TYPE, TEST_QUEUE_GENERATOR KEY_GENERIC_TYPE, PRIORITY_QUEUE KEY_GENERIC_TYPE, CLASS_TYPE>
+{
+	public static GENERIC_KEY_BRACES QUEUE_TEST_BUILDER KEY_GENERIC_TYPE using(TEST_QUEUE_GENERATOR KEY_GENERIC_TYPE builder) {
+		return new QUEUE_TEST_BUILDER KEY_GENERIC_TYPE().usingGenerator(builder);
+	}
+	
+	@Override
+	@SuppressWarnings("rawtypes")
+	protected List<Class<? extends AbstractTester>> getTesters()
+	{
+		List<Class<? extends AbstractTester>> testers = new ArrayList<>();
+		testers.add(FILE_KEY_TYPEQueueEnqueueTester.class);
+		testers.add(FILE_KEY_TYPEQueueDequeueTester.class);
+		testers.add(FILE_KEY_TYPEQueueFirstTester.class);
+		testers.add(FILE_KEY_TYPEQueueRemoveTester.class);
+		testers.add(FILE_KEY_TYPEQueueCountTester.class);
+		testers.add(FILE_KEY_TYPEQueueCountTester.class);
+		testers.add(FILE_KEY_TYPEQueueDequeueTester.class);
+		testers.add(FILE_KEY_TYPEQueueDistinctTester.class);
+		testers.add(FILE_KEY_TYPEQueueFilterTester.class);
+		testers.add(FILE_KEY_TYPEQueueFindFirstTester.class);
+		testers.add(FILE_KEY_TYPEQueueFirstTester.class);
+		testers.add(FILE_KEY_TYPEQueueLimitTester.class);
+		testers.add(FILE_KEY_TYPEQueueMapTester.class);
+		testers.add(FILE_KEY_TYPEQueueMatchesTester.class);
+		testers.add(FILE_KEY_TYPEQueuePeekTester.class);
+		testers.add(FILE_KEY_TYPEQueueForEachTester.class);
+		testers.add(FILE_KEY_TYPEQueueReduceTester.class);
+		testers.add(FILE_KEY_TYPEQueueSortedTester.class);
+		return testers;
+	}
+	
+}

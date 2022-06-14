@@ -1,0 +1,237 @@
+package speiger.src.testers.PACKAGE.utils;
+
+#if TYPE_OBJECT
+import java.util.Comparator;
+import java.util.Objects;
+#endif
+
+import org.junit.Assert;
+
+import speiger.src.collections.PACKAGE.collections.COLLECTION;
+import speiger.src.collections.PACKAGE.collections.ITERABLE;
+import speiger.src.collections.PACKAGE.collections.ITERATOR;
+#if !TYPE_OBJECT
+import speiger.src.collections.PACKAGE.functions.COMPARATOR;
+#endif
+import speiger.src.collections.PACKAGE.lists.ARRAY_LIST;
+import speiger.src.collections.PACKAGE.lists.LIST;
+import speiger.src.collections.PACKAGE.lists.LIST_ITERATOR;
+#if !TYPE_BOOLEAN
+import speiger.src.collections.PACKAGE.sets.LINKED_HASH_SET;
+import speiger.src.collections.PACKAGE.sets.SET;
+#endif
+import speiger.src.collections.PACKAGE.utils.ITERATORS;
+
+@SuppressWarnings("javadoc")
+public class HELPERS {
+	public static GENERIC_KEY_BRACES boolean equals(KEY_TYPE key, KEY_TYPE value) {
+		return key == value;
+	}
+
+	public static GENERIC_KEY_BRACES LIST KEY_GENERIC_TYPE copyToList(ITERABLE KEY_UNKNOWN_GENERIC_TYPE elements) {
+		LIST KEY_GENERIC_TYPE list = new ARRAY_LISTBRACES();
+		addAll(list, elements);
+		return list;
+	}
+
+	public static GENERIC_KEY_BRACES LIST KEY_GENERIC_TYPE copyToList(KEY_TYPE[] elements) {
+		return copyToList(ARRAY_LIST.wrap(elements));
+	}
+	
+#if !TYPE_BOOLEAN
+	public static GENERIC_KEY_BRACES SET KEY_GENERIC_TYPE copyToSet(ITERABLE KEY_UNKNOWN_GENERIC_TYPE elements) {
+		SET KEY_GENERIC_TYPE set = new LINKED_HASH_SETBRACES();
+		addAll(set, elements);
+		return set;
+	}
+
+	public static GENERIC_KEY_BRACES SET KEY_GENERIC_TYPE copyToSet(KEY_TYPE[] elements) {
+		return copyToSet(ARRAY_LIST.wrap(elements));
+	}
+
+#endif
+	public static GENERIC_KEY_BRACES boolean addAll(COLLECTION KEY_GENERIC_TYPE addTo, ITERABLE KEY_UNKNOWN_GENERIC_TYPE elementsToAdd) {
+		boolean modified = false;
+		for (ITERATOR KEY_UNKNOWN_GENERIC_TYPE iter = elementsToAdd.iterator(); iter.hasNext();) {
+			modified |= addTo.add(iter.NEXT());
+		}
+		return modified;
+	}
+
+	public static GENERIC_KEY_BRACES void assertEqualInOrder(ITERABLE KEY_UNKNOWN_GENERIC_TYPE expected, ITERABLE KEY_UNKNOWN_GENERIC_TYPE actual) {
+		ITERATOR KEY_UNKNOWN_GENERIC_TYPE expectedIter = expected.iterator();
+		ITERATOR KEY_UNKNOWN_GENERIC_TYPE actualIter = actual.iterator();
+		while (expectedIter.hasNext() && actualIter.hasNext()) {
+			if (KEY_EQUALS(expectedIter.NEXT(), actualIter.NEXT()))
+				continue;
+			Assert.fail("contents were not equal and in the same order: expected = "+expected+", actual = "+actual);
+		}
+		if (expectedIter.hasNext() || actualIter.hasNext()) {
+			Assert.fail("contents were not equal and in the same order: expected = "+expected+", actual = "+actual);
+		}
+	}
+
+	public static GENERIC_KEY_BRACES void assertContentsInOrder(ITERABLE KEY_UNKNOWN_GENERIC_TYPE actual, KEY_TYPE... expected) {
+		assertEqualInOrder(ARRAY_LIST.wrap(expected), actual);
+	}
+
+	public static GENERIC_KEY_BRACES void assertEqualIgnoringOrder(ITERABLE KEY_UNKNOWN_GENERIC_TYPE expected, ITERABLE KEY_UNKNOWN_GENERIC_TYPE actual) {
+		LIST KEY_GENERIC_TYPE exp = copyToList(expected);
+		LIST KEY_GENERIC_TYPE act = copyToList(actual);
+		String actString = act.toString();
+		for (ITERATOR KEY_UNKNOWN_GENERIC_TYPE iter = exp.iterator(); iter.hasNext();) {
+			KEY_TYPE value = iter.NEXT();
+#if TYPE_OBJECT
+			if (!act.remove(value)) {
+#else
+			if (!act.REMOVE_KEY(value)) {
+#endif
+				Assert.fail("did not contain expected element "+value+", expected = "+exp+", actual = "+ actString);
+			}
+		}
+		Assert.assertTrue("unexpected elements: "+act, act.isEmpty());
+	}
+
+	public static GENERIC_KEY_BRACES void assertContentsAnyOrder(ITERABLE KEY_UNKNOWN_GENERIC_TYPE actual, KEY_TYPE... expected) {
+		assertEqualIgnoringOrder(ARRAY_LIST.wrap(expected), actual);
+	}
+
+	public static GENERIC_KEY_BRACES void assertContains(ITERABLE KEY_UNKNOWN_GENERIC_TYPE actual, KEY_TYPE expected) {
+		boolean contained = false;
+		if (actual instanceof COLLECTION) {
+			contained = ((COLLECTION KEY_GENERIC_TYPE) actual).contains(expected);
+		} else {
+			for (ITERATOR KEY_UNKNOWN_GENERIC_TYPE iter = actual.iterator(); iter.hasNext();) {
+				if (KEY_EQUALS(iter.NEXT(), expected)) {
+					contained = true;
+					break;
+				}
+			}
+		}
+
+		if (!contained) {
+			Assert.fail("Not true that "+actual+" contains "+expected);
+		}
+	}
+
+	public static GENERIC_KEY_BRACES void assertContainsAllOf(ITERABLE KEY_UNKNOWN_GENERIC_TYPE actual, KEY_TYPE... expected) {
+		LIST KEY_GENERIC_TYPE expectedList = new ARRAY_LISTBRACES();
+		expectedList.addAll(expected);
+
+		for (ITERATOR KEY_UNKNOWN_GENERIC_TYPE iter = actual.iterator(); iter.hasNext();) {
+#if TYPE_OBJECT
+			expectedList.remove(iter.NEXT());
+#else
+			expectedList.REMOVE_KEY(iter.NEXT());
+#endif
+		}
+		if (!expectedList.isEmpty()) {
+			Assert.fail("Not true that "+actual+" contains all of "+ARRAY_LIST.wrap(expected));
+		}
+	}
+
+	static GENERIC_KEY_BRACES ITERABLE KEY_GENERIC_TYPE reverse(LIST KEY_GENERIC_TYPE list) {
+		return new ITERABLE KEY_GENERIC_TYPE() {
+			@Override
+			public ITERATOR KEY_GENERIC_TYPE iterator() {
+				final LIST_ITERATOR KEY_GENERIC_TYPE listIter = list.listIterator(list.size());
+				return new ITERATOR KEY_GENERIC_TYPE() {
+					@Override
+					public boolean hasNext() {
+						return listIter.hasPrevious();
+					}
+
+					@Override
+					public KEY_TYPE NEXT() {
+						return listIter.PREVIOUS();
+					}
+
+					@Override
+					public void remove() {
+						listIter.remove();
+					}
+				};
+			}
+		};
+	}
+
+	static GENERIC_KEY_BRACES ITERATOR KEY_GENERIC_TYPE cycle(ITERABLE KEY_GENERIC_TYPE iterable) {
+		return new ITERATOR KEY_GENERIC_TYPE() {
+			ITERATOR KEY_GENERIC_TYPE iterator = ITERATORS.empty();
+
+			@Override
+			public boolean hasNext() {
+				return true;
+			}
+
+			@Override
+			public KEY_TYPE NEXT() {
+				if (!iterator.hasNext()) {
+					iterator = iterable.iterator();
+				}
+				return iterator.NEXT();
+			}
+
+			@Override
+			public void remove() {
+				throw new UnsupportedOperationException();
+			}
+		};
+	}
+
+	static GENERIC_KEY_BRACES KEY_TYPE get(ITERATOR KEY_GENERIC_TYPE iterator, int position) {
+		for (int i = 0; i < position; i++) {
+			iterator.NEXT();
+		}
+		return iterator.NEXT();
+	}
+	
+	public static GENERIC_KEY_BRACES void testComparator(COMPARATOR KEY_GENERIC_TYPE comparator, KEY_TYPE... valuesInExpectedOrder) {
+		testComparator(comparator, ARRAY_LIST.wrap(valuesInExpectedOrder));
+	}
+
+	public static GENERIC_KEY_BRACES void testComparator(COMPARATOR KEY_GENERIC_TYPE comparator, LIST KEY_GENERIC_TYPE valuesInExpectedOrder) {
+		for (int i = 0; i < valuesInExpectedOrder.size(); i++) {
+			KEY_TYPE t = valuesInExpectedOrder.GET_KEY(i);
+			for (int j = 0; j < i; j++) {
+				KEY_TYPE lesser = valuesInExpectedOrder.GET_KEY(j);
+				Assert.assertTrue(comparator+".compare("+lesser+", "+t+")", comparator.compare(lesser, t) < 0);
+			}
+			Assert.assertEquals(comparator+".compare("+t+", "+t+")", 0, comparator.compare(t, t));
+			for (int j = i+1; j < valuesInExpectedOrder.size(); j++) {
+				KEY_TYPE greater = valuesInExpectedOrder.GET_KEY(j);
+				Assert.assertTrue(comparator+".compare("+greater+", "+t+")", comparator.compare(greater, t) > 0);
+			}
+		}
+	}
+
+	public static COMPAREABLE_KEY_BRACES void testCompareToAndEquals(LIST KEY_GENERIC_TYPE valuesInExpectedOrder) {
+		for (int i = 0; i < valuesInExpectedOrder.size(); i++) {
+			KEY_TYPE t = valuesInExpectedOrder.GET_KEY(i);
+
+			for (int j = 0; j < i; j++) {
+				KEY_TYPE lesser = valuesInExpectedOrder.GET_KEY(j);
+				Assert.assertTrue(lesser+".compareTo("+t+')', COMPARE_TO_KEY(lesser, t) < 0);
+				Assert.assertFalse(lesser == t);
+			}
+
+			Assert.assertEquals(t+".compareTo("+t+')', 0, COMPARE_TO_KEY(t, t));
+			Assert.assertTrue(equals(t, t));
+
+			for (int j = i+1; j < valuesInExpectedOrder.size(); j++) {
+				KEY_TYPE greater = valuesInExpectedOrder.GET_KEY(j);
+				Assert.assertTrue(greater+".compareTo("+t+')', COMPARE_TO_KEY(greater, t) > 0);
+				Assert.assertFalse(greater == t);
+			}
+		}
+	}
+
+	public static GENERIC_KEY_BRACES COLLECTION KEY_GENERIC_TYPE misleadingSizeCollection(final int delta) {
+		return new ARRAY_LIST KEY_GENERIC_TYPE() {
+			@Override
+			public int size() {
+				return Math.max(0, super.size()+delta);
+			}
+		};
+	}
+}

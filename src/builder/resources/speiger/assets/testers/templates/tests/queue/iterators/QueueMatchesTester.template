@@ -1,0 +1,107 @@
+package speiger.src.testers.PACKAGE.tests.queue.iterators;
+
+#if TYPE_OBJECT
+import java.util.Objects;
+
+#endif
+import org.junit.Ignore;
+
+import com.google.common.collect.testing.features.CollectionSize;
+
+import speiger.src.collections.PACKAGE.lists.ARRAY_LIST;
+import speiger.src.collections.PACKAGE.collections.COLLECTION;
+import speiger.src.testers.PACKAGE.tests.base.ABSTRACT_QUEUE_TESTER;
+
+@Ignore
+@SuppressWarnings("javadoc")
+public class FILE_KEY_TYPEQueueMatchesTester KEY_GENERIC_TYPE extends ABSTRACT_QUEUE_TESTER KEY_GENERIC_TYPE
+{
+	public void testQueueMatch_AnyNull() {
+		try {
+			queue.matchesAny(null);
+			fail("MatchesAny should throw a NullPointException");
+		}
+		catch (NullPointerException e) {
+		}
+	}
+	
+#ignore
+	@CollectionSize.Require(absent = CollectionSize.ZERO)
+#endignore
+	public void testQueueMatch_AnyFoundFirstElement() {
+		assertTrue("Element ["+e0()+"] should be found", queue.matchesAny(T -> KEY_EQUALS(T, e0())));
+	}
+	
+#ignore
+	@CollectionSize.Require(CollectionSize.SEVERAL)
+#endignore
+	public void testQueueMatch_AnyFoundLastElement() {
+		assertTrue("Element ["+e2()+"] should be found", queue.matchesAny(T -> KEY_EQUALS(T, e2())));
+	}
+	
+	public void testQueueMatch_AnyFoundNoElement() {
+		assertFalse("Element ["+e4()+"] should not be found", queue.matchesAny(T -> KEY_EQUALS(T, e4())));
+	}
+	
+	public void testQueueMatch_NoneNull() {
+		try {
+			queue.matchesNone(null);
+			fail("MatchesNone should throw a NullPointException");
+		}
+		catch (NullPointerException e) {
+		}
+	}
+	
+#ignore
+	@CollectionSize.Require(absent = CollectionSize.ZERO)
+#endignore
+	public void testQueueMatch_NoneFoundFirstElement() {
+		assertFalse("Element ["+e0()+"] should not be found", queue.matchesNone(T -> KEY_EQUALS(T, e0())));
+	}
+	
+#ignore
+	@CollectionSize.Require(CollectionSize.SEVERAL)
+#endignore
+	public void testQueueMatch_NoneFoundLastElement() {
+		assertFalse("Element ["+e2()+"] should not be found", queue.matchesNone(T -> KEY_EQUALS(T, e2())));
+	}
+	
+	public void testQueueMatch_NoneFoundNoElement() {
+		assertTrue("Element ["+e4()+"] should not be found", queue.matchesNone(T -> KEY_EQUALS(T, e4())));
+	}
+	
+	public void testQueueMatch_AllNull() {
+		try {
+			queue.matchesAll(null);
+			fail("MatchesAny should throw a NullPointException");
+		}
+		catch (NullPointerException e) {
+		}
+	}
+	
+	public void testQueueMatch_AllFoundAllElements() {
+		COLLECTION KEY_GENERIC_TYPE lists = new ARRAY_LISTBRACES(queue.TO_ARRAY());
+		assertTrue("All elements should be found", queue.matchesAll(lists::contains));
+	}
+	
+#ignore
+	@CollectionSize.Require(absent = CollectionSize.ZERO)
+#endignore
+	public void testQueueMatch_AllFoundNone() {
+		assertFalse("It should not find anything", queue.matchesAll(T -> false));
+	}
+	
+#ignore
+	@CollectionSize.Require(CollectionSize.ZERO)
+#endignore
+	public void testQueueMatch_AllFoundNoneEmpty() {
+		assertTrue("Empty Collections should return true even if all have to be found", queue.matchesAll(T -> false));
+	}
+	
+#ignore
+	@CollectionSize.Require(CollectionSize.SEVERAL)
+#endignore
+	public void testQueueMatches_AllPartical() {
+		assertFalse("Even if some elements were found, it should return false", queue.matchesAll(T -> KEY_EQUALS(T, e0())));
+	}
+}

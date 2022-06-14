@@ -1,0 +1,110 @@
+package speiger.src.testers.PACKAGE.tests.maps;
+
+#ignore
+import static com.google.common.collect.testing.features.CollectionSize.SEVERAL;
+import static com.google.common.collect.testing.features.CollectionSize.ZERO;
+import static com.google.common.collect.testing.features.MapFeature.FAILS_FAST_ON_CONCURRENT_MODIFICATION;
+import static com.google.common.collect.testing.features.MapFeature.SUPPORTS_REMOVE;
+#endignore
+
+import java.util.ConcurrentModificationException;
+
+import org.junit.Ignore;
+
+import com.google.common.collect.testing.features.CollectionSize;
+import com.google.common.collect.testing.features.MapFeature;
+
+#if !VALUE_OBJECT
+import speiger.src.collections.VALUE_PACKAGE.collections.VALUE_ITERATOR;
+#endif
+#if !TYPE_OBJECT && !SAME_TYPE
+import speiger.src.collections.PACKAGE.collections.ITERATOR;
+#endif
+import speiger.src.collections.PACKAGE.maps.interfaces.MAP.Entry;
+import speiger.src.collections.objects.collections.ObjectIterator;
+import speiger.src.testers.PACKAGE.tests.base.maps.ABSTRACT_MAP_TESTER;
+
+@Ignore
+@SuppressWarnings("javadoc")
+public class FILE_KEY_TYPE2FILE_VALUE_TYPEMapClearTester KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP_TESTER KEY_VALUE_GENERIC_TYPE 
+{
+#ignore
+	@MapFeature.Require(SUPPORTS_REMOVE)
+#endignore
+	public void testClear() {
+		getMap().clear();
+		assertTrue("After clear(), a map should be empty.", getMap().isEmpty());
+		assertEquals(0, getMap().size());
+		assertFalse(getMap().ENTRY_SET().iterator().hasNext());
+	}
+
+#ignore
+	@MapFeature.Require({ FAILS_FAST_ON_CONCURRENT_MODIFICATION, SUPPORTS_REMOVE })
+	@CollectionSize.Require(SEVERAL)
+#endignore
+	public void testClearConcurrentWithEntrySetIteration() {
+		try {
+			ObjectIterator<Entry KEY_VALUE_GENERIC_TYPE> iterator = getMap().ENTRY_SET().iterator();
+			getMap().clear();
+			iterator.next();
+			fail("Expected ConcurrentModificationException");
+		} catch (ConcurrentModificationException expected) {
+			// success
+		}
+	}
+
+#ignore
+	@MapFeature.Require({ FAILS_FAST_ON_CONCURRENT_MODIFICATION, SUPPORTS_REMOVE })
+	@CollectionSize.Require(SEVERAL)
+#endignore
+	public void testClearConcurrentWithKeySetIteration() {
+		try {
+			ITERATOR KEY_GENERIC_TYPE iterator = getMap().keySet().iterator();
+			getMap().clear();
+			iterator.NEXT();
+			fail("Expected ConcurrentModificationException");
+		} catch (ConcurrentModificationException expected) {
+			// success
+		}
+	}
+
+#ignore
+	@MapFeature.Require({ FAILS_FAST_ON_CONCURRENT_MODIFICATION, SUPPORTS_REMOVE })
+	@CollectionSize.Require(SEVERAL)
+#endignore
+	public void testClearConcurrentWithValuesIteration() {
+		try {
+			VALUE_ITERATOR VALUE_GENERIC_TYPE iterator = getMap().values().iterator();
+			getMap().clear();
+			iterator.VALUE_NEXT();
+			fail("Expected ConcurrentModificationException");
+		} catch (ConcurrentModificationException expected) {
+			// success
+		}
+	}
+
+#ignore
+	@MapFeature.Require(absent = SUPPORTS_REMOVE)
+	@CollectionSize.Require(absent = ZERO)
+#endignore
+	public void testClear_unsupported() {
+		try {
+			getMap().clear();
+			fail("clear() should throw UnsupportedOperation if a map does not support it and is not empty.");
+		} catch (UnsupportedOperationException expected) {
+		}
+		expectUnchanged();
+	}
+
+#ignore
+	@MapFeature.Require(absent = SUPPORTS_REMOVE)
+	@CollectionSize.Require(ZERO)
+#endignore
+	public void testClear_unsupportedByEmptyCollection() {
+		try {
+			getMap().clear();
+		} catch (UnsupportedOperationException tolerated) {
+		}
+		expectUnchanged();
+	}
+}

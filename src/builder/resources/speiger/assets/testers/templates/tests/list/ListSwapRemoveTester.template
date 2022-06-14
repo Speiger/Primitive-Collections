@@ -1,0 +1,81 @@
+package speiger.src.testers.PACKAGE.tests.list;
+
+import org.junit.Ignore;
+
+#ignore
+import static com.google.common.collect.testing.features.CollectionFeature.SUPPORTS_REMOVE;
+import static com.google.common.collect.testing.features.CollectionSize.ONE;
+import static com.google.common.collect.testing.features.CollectionSize.ZERO;
+#endignore
+
+import com.google.common.collect.testing.features.CollectionFeature;
+import com.google.common.collect.testing.features.CollectionSize;
+
+#if !TYPE_BOOLEAN
+import speiger.src.collections.PACKAGE.collections.COLLECTION;
+#endif
+import speiger.src.testers.PACKAGE.tests.base.ABSTRACT_LIST_TESTER;
+
+@Ignore
+@SuppressWarnings("javadoc")
+public class FILE_KEY_TYPEListSwapRemoveTester KEY_GENERIC_TYPE extends ABSTRACT_LIST_TESTER KEY_GENERIC_TYPE
+{
+#ignore
+	@CollectionFeature.Require(SUPPORTS_REMOVE)
+	@CollectionSize.Require(absent = {ZERO, ONE})
+#endignore
+	public void testRemove_duplicate() {
+		ArrayWithDuplicate KEY_GENERIC_TYPE arrayAndDuplicate = createArrayWithDuplicateElement();
+		collection = primitiveGenerator.create(arrayAndDuplicate.elements);
+		KEY_TYPE duplicate = arrayAndDuplicate.duplicate;
+		KEY_TYPE lastElement = arrayAndDuplicate.elements[arrayAndDuplicate.elements.length-1];
+		
+		int firstIndex = getList().indexOf(duplicate);
+		int initialSize = getList().size();
+		assertTrue("swapRemove(present) should return true", getList().REMOVE_SWAP(duplicate));
+		assertTrue("removed element should have moved the last element in its place", getList().GET_KEY(firstIndex) == lastElement);
+		assertTrue("After remove(duplicate), a list should still contain the duplicate element", getList().contains(duplicate));
+		assertEquals("remove(present) should decrease the size of a list by one.", initialSize - 1, getList().size());
+	}
+#if !TYPE_BOOLEAN
+	
+#ignore
+	@CollectionFeature.Require(SUPPORTS_REMOVE)
+	@CollectionSize.Require(absent = {ZERO, ONE})
+#endignore
+	public void testSwapRemove_First() {
+		assertTrue(getList().REMOVE_SWAP(e0()));
+		assertFalse(getList().contains(e0()));
+	}
+	
+#ignore
+	@CollectionFeature.Require(SUPPORTS_REMOVE)
+	@CollectionSize.Require(absent = { ZERO, ONE })
+#endignore
+	public void testRemoveAtSecondOfFour() {
+		COLLECTION KEY_GENERIC_TYPE samples = getSampleElements(4);
+		KEY_TYPE[] data = samples.TO_ARRAY(NEW_KEY_ARRAY(4));
+		collection = primitiveGenerator.create(data);
+		assertTrue(getList().REMOVE_SWAP(data[2]));
+		assertFalse(getList().contains(data[2]));
+	}
+	
+#ignore
+	@CollectionFeature.Require(SUPPORTS_REMOVE)
+	@CollectionSize.Require(absent = {ZERO, ONE})
+#endignore
+	public void testSwapRemove_Middle() {
+		assertTrue(getList().REMOVE_SWAP(e1()));
+		assertFalse(getList().contains(e1()));
+	}
+	
+#ignore
+	@CollectionFeature.Require(SUPPORTS_REMOVE)
+	@CollectionSize.Require(absent = {ZERO, ONE})
+#endignore
+	public void testSwapRemove_Missing() {
+		assertFalse(getList().REMOVE_SWAP(e3()));
+		assertFalse(getList().contains(e3()));
+	}
+#endif
+}

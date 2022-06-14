@@ -1,0 +1,68 @@
+package speiger.src.testers.PACKAGE.tests.queue;
+
+import org.junit.Ignore;
+
+import com.google.common.collect.testing.features.CollectionFeature;
+
+import speiger.src.collections.PACKAGE.collections.COLLECTION;
+import speiger.src.testers.PACKAGE.tests.base.ABSTRACT_QUEUE_TESTER;
+
+@Ignore
+@SuppressWarnings("javadoc")
+public class FILE_KEY_TYPEQueueEnqueueTester KEY_GENERIC_TYPE extends ABSTRACT_QUEUE_TESTER KEY_GENERIC_TYPE
+{
+#ignore
+	@CollectionFeature.Require(CollectionFeature.SUPPORTS_ADD)
+#endignore
+	public void testEnqueue() {
+		int initSize = queue.size();
+		queue.enqueue(e3());
+		assertEquals(initSize+1, queue.size());
+		expectAdded(e3());
+	}
+	
+#ignore
+	@CollectionFeature.Require(absent = CollectionFeature.SUPPORTS_ADD)
+#endignore
+	public void testEnqueue_Unsupported() {
+		try {
+			queue.enqueue(e3());
+			fail("Queue should throw a UnsupportedOperationException");
+		}
+		catch(UnsupportedOperationException e) {
+		}
+	}
+	
+#ignore
+	@CollectionFeature.Require(CollectionFeature.SUPPORTS_ADD)
+#endignore
+	public void testEnqueue_allArray() {
+		int initSize = queue.size();
+		KEY_TYPE[] array = createDisjointArray();
+		queue.enqueueAll(array);
+		assertEquals(initSize+array.length, queue.size());
+		expectAdded(array);
+	}
+	
+#ignore
+	@CollectionFeature.Require(CollectionFeature.SUPPORTS_ADD)
+#endignore
+	public void testEnqueue_allArrayPartial() {
+		int initSize = queue.size();
+		KEY_TYPE[] array = createDisjointArray();
+		queue.enqueueAll(array, 1);
+		assertEquals(initSize+1, queue.size());
+		expectAdded(array[0]);
+	}
+	
+#ignore
+	@CollectionFeature.Require(CollectionFeature.SUPPORTS_ADD)
+#endignore
+	public void testEnqueue_all() {
+		int initSize = queue.size();
+		COLLECTION KEY_GENERIC_TYPE collection = createDisjointCollection();
+		queue.enqueueAll(collection);
+		assertEquals(initSize+collection.size(), queue.size());
+		expectAdded(collection.TO_ARRAY(NEW_KEY_ARRAY(collection.size())));
+	}
+}
