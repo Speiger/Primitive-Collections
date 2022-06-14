@@ -23,8 +23,6 @@ jobs:
       -  name: Make gradlew executable
          run: chmod +x ./gradlew
       -  name: Build and Test
-         env:
-            GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
          run: ./gradlew generateTestSource test jacocoTestReport --info -Dfull_test_suite=true
          
       -  name: Publish Test Result
