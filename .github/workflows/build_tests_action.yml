@@ -23,7 +23,7 @@ jobs:
       -  name: Make gradlew executable
          run: chmod +x ./gradlew
       -  name: Build and Test
-         run: ./gradlew generateTestSource test jacocoTestReport --info -Dfull_test_suite=true
+         run: ./gradlew generateTestSource test jacocoTestReport --info -Dfull_test_suite=true --no-daemon
          
       -  name: Publish Test Result
          uses: EnricoMi/publish-unit-test-result-action@v1
@@ -32,7 +32,6 @@ jobs:
          with:
             files: build/test-results/**/*.xml
             fail_on: nothing
-            ignore_runs: true
             json_thousands_separator: .
             time_unit: milliseconds
             
