@@ -1,0 +1,83 @@
+name: SubTests
+
+on:
+   push:
+      branches: [ master ]
+      
+jobs:
+   build:
+      name: Unit Tests
+      runs-on: ubuntu-latest
+      steps:
+      -  uses: actions/checkout@v2
+         with:
+            fetch-depth: 0
+            
+      -  name: Set up JDK 11
+         uses: actions/setup-java@v3
+         with:
+            distribution: temurin
+            java-version: 11
+            cache: gradle
+            
+      -  name: Make gradlew executable
+         run: chmod +x ./gradlew
+      -  name: Build and Test
+         run: |
+           ./gradlew generateTestSource -Dfull_test_suite=true
+           ./gradlew --stop
+         
+      -  name: Publish Test Result
+         uses: EnricoMi/publish-unit-test-result-action@v1
+         id: test-results
+         if: always()
+         with:
+            files: build/test-results/**/*.xml
+            fail_on: nothing
+            json_thousands_separator: .
+            time_unit: milliseconds
+            
+      -  name: Create Badge Color
+         shell: bash
+         run: |
+            case ${{ fromJSON( steps.test-results.outputs.json ).conclusion }} in
+              success)
+                echo "BADGE_COLOR=31c653" >> $GITHUB_ENV
+                ;;
+              failure)
+                echo "BADGE_COLOR=800000" >> $GITHUB_ENV
+                ;;
+              neutral)
+                echo "BADGE_COLOR=696969" >> $GITHUB_ENV
+                ;;
+            esac
+
+      -  name: Create Test Badge
+         uses: emibcn/badge-action@v1.2.4
+         with:
+            label: Tests
+            status: '${{ fromJSON( steps.test-results.outputs.json ).conclusion }}, Passed: ${{ fromJSON( steps.test-results.outputs.json ).formatted.stats.tests_succ }}, Skipped: ${{ fromJSON( steps.test-results.outputs.json ).formatted.stats.tests_skip }}, Failed: ${{ fromJSON( steps.test-results.outputs.json ).formatted.stats.tests_fail }}'
+            color: ${{ env.BADGE_COLOR }}
+            path: tests.svg
+
+      -  name: Create Coverage Badge
+         id: jacoco
+         uses: cicirello/jacoco-badge-generator@v2
+         with:
+            jacoco-csv-file: build/reports/jacoco/test/jacocoTestReport.csv
+            badges-directory: null
+            intervals: 95 80 70 60 50 0
+      
+      -  name: Upload Test Badge
+         uses: exuanbo/actions-deploy-gist@v1
+         with:
+            token: ${{ secrets.GIST_TOKEN }}
+            gist_id: 280257cd19cbe1dda3789bebd4ff65cf
+            file_path: tests.svg
+            
+      -  name: Upload Coverage Badge
+         uses: exuanbo/actions-deploy-gist@v1
+         with:
+            token: ${{ secrets.GIST_TOKEN }}
+            gist_id: 280257cd19cbe1dda3789bebd4ff65cf
+            file_path: jacoco.svg
