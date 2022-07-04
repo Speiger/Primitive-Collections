@@ -23,7 +23,9 @@ jobs:
       -  name: Make gradlew executable
          run: chmod +x ./gradlew
       -  name: Build and Test
-         run: ./gradlew generateTestSource test jacocoTestReport --info -Dfull_test_suite=true --no-daemon
+         run: |
+           ./gradlew generateTestSource test jacocoTestReport --info -Dfull_test_suite=true
+           ./gradlew --stop
          
       -  name: Publish Test Result
          uses: EnricoMi/publish-unit-test-result-action@v1
