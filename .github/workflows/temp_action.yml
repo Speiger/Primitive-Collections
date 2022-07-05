@@ -27,6 +27,9 @@ jobs:
            ./gradlew generateTestSource -Dfull_test_suite=true
            ./gradlew --stop
          
+      -  name: Forced Delay
+         run: sleep 10
+         
       -  name: Publish Test Result
          uses: EnricoMi/publish-unit-test-result-action@v1
          id: test-results
