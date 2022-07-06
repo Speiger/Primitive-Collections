@@ -30,6 +30,11 @@ jobs:
       -  name: Forced Delay
          run: sleep 10
          
+      - name: Set Swap Space
+        uses: pierotofy/set-swap-space@master
+        with:
+          swap-size-gb: 5
+         
       -  name: Publish Test Result
          uses: EnricoMi/publish-unit-test-result-action@v1
          id: test-results
