@@ -28,7 +28,7 @@ jobs:
            ./gradlew --stop
          
       -  name: Publish Test Result
-         uses: EnricoMi/publish-unit-test-result-action@v1
+         uses: EnricoMi/publish-unit-test-result-action@v2
          id: test-results
          if: always()
          with:

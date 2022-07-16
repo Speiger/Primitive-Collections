@@ -28,7 +28,7 @@ jobs:
          run: ./gradlew generateTestSource test jacocoTestReport --info -Dfull_test_suite=true
          
       -  name: Publish Test Result
-         uses: EnricoMi/publish-unit-test-result-action@v1
+         uses: EnricoMi/publish-unit-test-result-action@v2
          id: test-results
          if: always()
          with:
