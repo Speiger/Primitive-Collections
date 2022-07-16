@@ -148,6 +148,28 @@ public class ITERABLES
 	}
 	
 	/**
+	 * A Helper function that repeats the Iterable a specific amount of times
+	 * @param iterable that should be repeated
+	 * @param repeats the amount of times the iterable should be repeated
+	 * @Type(T)
+	 * @return a repeating iterable
+	 */
+	public static GENERIC_KEY_BRACES ITERABLE KEY_GENERIC_TYPE repeat(ITERABLE KEY_GENERIC_TYPE iterable, int repeats) {
+		return new RepeatingIterableBRACES(iterable, repeats);
+	}
+	
+	/**
+	 * A Helper function that repeats the Iterable a specific amount of times from a Java Iterable
+	 * @param iterable that should be repeated
+	 * @param repeats the amount of times the iterable should be repeated
+	 * @Type(T)
+	 * @return a repeating iterable
+	 */
+	public static GENERIC_KEY_BRACES ITERABLE KEY_GENERIC_TYPE repeat(Iterable<? extends CLASS_TYPE> iterable, int repeats) {
+		return new RepeatingIterableBRACES(wrap(iterable), repeats);
+	}
+	
+	/**
 	 * A Helper function that hard limits the Iterable to a specific size
 	 * @param iterable that should be limited
 	 * @param limit the amount of elements it should be limited to
@@ -318,6 +340,42 @@ public class ITERABLES
 				for(int i = 0,m=array.length;i<m;action.accept(array[i++]));
 			});
 		}
+	}
+	
+	private static class RepeatingIterable KEY_GENERIC_TYPE implements ITERABLE KEY_GENERIC_TYPE
+	{
+		ITERABLE KEY_GENERIC_TYPE iterable;
+		int repeats;
+		
+		public RepeatingIterable(ITERABLE KEY_GENERIC_TYPE iterable, int repeats) {
+			this.iterable = iterable;
+			this.repeats = repeats;
+		}
+		
+		@Override
+		public ITERATOR KEY_GENERIC_TYPE iterator() {
+			return ITERATORS.repeat(iterable.iterator(), repeats);
+		}
+		
+#if !TYPE_OBJECT
+		@Override
+		public void forEach(CONSUMER action) {
+			Objects.requireNonNull(action);
+			LIST KEY_GENERIC_TYPE list = new ARRAY_LISTBRACES();
+			iterable.forEach(action.andThen(list::add));
+			for(int i = 0;i<repeats;i++)
+				list.forEach(action);
+		}
+#else
+		@Override
+		public void forEach(Consumer<? super CLASS_TYPE> action) {
+			Objects.requireNonNull(action);
+			LIST KEY_GENERIC_TYPE list = new ARRAY_LISTBRACES();
+			iterable.forEach(T -> {action.accept(T); list.add(T);});
+			for(int i = 0;i<repeats;i++)
+				list.forEach(action);
+		}
+#endif
 	}
 	
 	private static class FilteredIterable KEY_GENERIC_TYPE implements ITERABLE KEY_GENERIC_TYPE

@@ -216,6 +216,28 @@ public class ITERATORS
 	}
 	
 	/**
+	 * A Helper function that repeats the Iterator a specific amount of times
+	 * @param iterator that should be repeated
+	 * @param repeats the amount of times the iterator should be repeated
+	 * @Type(T)
+	 * @return a repeating iterator
+	 */
+	public static GENERIC_KEY_BRACES ITERATOR KEY_GENERIC_TYPE repeat(ITERATOR KEY_GENERIC_TYPE iterator, int repeats) {
+		return new RepeatingIteratorBRACES(iterator, repeats);
+	}
+	
+	/**
+	 * A Helper function that repeats the Iterator a specific amount of times from a Java Iterator
+	 * @param iterator that should be repeated
+	 * @param repeats the amount of times the iterator should be repeated
+	 * @Type(T)
+	 * @return a repeating iterator
+	 */
+	public static GENERIC_KEY_BRACES ITERATOR KEY_GENERIC_TYPE repeat(Iterator<? extends CLASS_TYPE> iterator, int repeats) {
+		return new RepeatingIteratorBRACES(wrap(iterator), repeats);
+	}
+	
+	/**
 	 * A Helper function that hard limits the Iterator to a specific size
 	 * @param iterator that should be limited
 	 * @param limit the amount of elements it should be limited to
@@ -895,6 +917,38 @@ public class ITERATORS
 			T result = last.next();
 			foundNext = false;
 			return result;
+		}
+	}
+	
+	private static class RepeatingIterator KEY_GENERIC_TYPE implements ITERATOR KEY_GENERIC_TYPE
+	{
+		final int repeats;
+		int index = 0;
+		ITERATOR KEY_GENERIC_TYPE iter;
+		LIST KEY_GENERIC_TYPE list = new ARRAY_LISTBRACES();
+		
+		public RepeatingIterator(ITERATOR KEY_GENERIC_TYPE iter, int repeat) {
+			this.iter = iter;
+			this.repeats = repeat;
+		}
+		
+		@Override
+		public boolean hasNext() {
+			if(iter.hasNext()) return true;
+			if(index < repeats) {
+				index++;
+				iter = list.iterator();
+				return iter.hasNext();
+			}
+			return false;
+		}
+
+		@Override
+		public KEY_TYPE NEXT() {
+			if(!hasNext()) throw new NoSuchElementException();
+			KEY_TYPE value = iter.NEXT();
+			if(index == 0) list.add(value);
+			return value;
 		}
 	}
 	

@@ -150,6 +150,15 @@ public interface ITERABLE KEY_GENERIC_TYPE extends Iterable<CLASS_TYPE>
 	}
 	
 	/**
+	 * A Helper function to reduce the usage of Streams and allows to repeat elements a desired amount of times
+	 * @param repeats how many times the elements should be repeated
+	 * @return a Iterable that is repeating multiple times
+	 */
+	default ITERABLE KEY_GENERIC_TYPE repeat(int repeats) {
+		return ITERABLES.repeat(this, repeats);
+	}
+	
+	/**
 	 * A Helper function to reduce the usage of Streams and allows to limit the amount of elements
 	 * @param limit the amount of elements it should be limited to
 	 * @return a Iterable that is limited in length
