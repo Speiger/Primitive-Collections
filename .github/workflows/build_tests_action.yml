@@ -32,7 +32,7 @@ jobs:
          id: test-results
          if: always()
          with:
-            files: build/test-results/**/*.xml
+            junit_files: build/test-results/**/*.xml
             fail_on: nothing
             ignore_runs: true
             json_thousands_separator: .
