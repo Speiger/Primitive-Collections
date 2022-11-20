@@ -202,6 +202,11 @@ public class ARRAY_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_VALUE_GEN
 			insertIndex(size++, key, value);
 			return getDefaultReturnValue();
 		}
+		else if(VALUE_EQUALS(values[index], getDefaultReturnValue())) {
+			VALUE_TYPE oldValue = values[index];
+			values[index] = value;
+			return oldValue;
+		}
 		return values[index];
 	}
 	

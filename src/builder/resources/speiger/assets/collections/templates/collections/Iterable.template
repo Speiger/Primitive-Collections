@@ -10,6 +10,7 @@ import speiger.src.collections.objects.collections.ObjectIterable;
 #else
 import java.util.function.BiFunction;
 import java.util.Comparator;
+import speiger.src.collections.ints.functions.function.Int2ObjectFunction;
 
 #endif
 import speiger.src.collections.PACKAGE.functions.function.TO_OBJECT_FUNCTION;
@@ -26,6 +27,7 @@ import speiger.src.collections.PACKAGE.utils.ASYNC_BUILDER;
 import speiger.src.collections.PACKAGE.utils.SPLIT_ITERATORS;
 import speiger.src.collections.PACKAGE.utils.ITERABLES;
 import speiger.src.collections.PACKAGE.utils.ITERATORS;
+import speiger.src.collections.utils.ISizeProvider;
 
 /**
  * A Type-Specific {@link Iterable} that reduces (un)boxing
@@ -117,6 +119,7 @@ public interface ITERABLE KEY_GENERIC_TYPE extends Iterable<CLASS_TYPE>
 	 * @param <V> The return type supplier.
 	 * @param <E> The return type.
 	 * @return a new Iterable that returns the desired result
+	 * @note does not support TO_ARRAY optimizations.
 	 */
 	default <E, V extends Iterable<E>> ObjectIterable<E> flatMap(TO_OBJECT_FUNCTION KKS_GENERIC_TYPE<V> mapper) {
 		return ITERABLES.flatMap(this, mapper);
@@ -127,6 +130,7 @@ public interface ITERABLE KEY_GENERIC_TYPE extends Iterable<CLASS_TYPE>
 	 * @param mapper the flatMapping function
 	 * @param <E> The return type.
 	 * @return a new Iterable that returns the desired result
+	 * @note does not support TO_ARRAY optimizations.
 	 */
 	default <E> ObjectIterable<E> arrayflatMap(TO_OBJECT_FUNCTION KKS_GENERIC_TYPE<E[]> mapper) {
 		return ITERABLES.arrayFlatMap(this, mapper);
@@ -136,6 +140,7 @@ public interface ITERABLE KEY_GENERIC_TYPE extends Iterable<CLASS_TYPE>
 	 * A Helper function to reduce the usage of Streams and allows to filter out unwanted elements
 	 * @param filter the elements that should be kept.
 	 * @return a Iterable that filtered out all unwanted elements
+	 * @note does not support TO_ARRAY optimizations.
 	 */
 	default ITERABLE KEY_GENERIC_TYPE filter(PREDICATE KEY_GENERIC_TYPE filter) {
 		return ITERABLES.filter(this, filter);
@@ -144,6 +149,7 @@ public interface ITERABLE KEY_GENERIC_TYPE extends Iterable<CLASS_TYPE>
 	/**
 	 * A Helper function to reduce the usage of Streams and allows to filter out duplicated elements
 	 * @return a Iterable that filtered out all duplicated elements
+	 * @note does not support TO_ARRAY optimizations.
 	 */
 	default ITERABLE KEY_GENERIC_TYPE distinct() {
 		return ITERABLES.distinct(this);
@@ -211,6 +217,44 @@ public interface ITERABLE KEY_GENERIC_TYPE extends Iterable<CLASS_TYPE>
 	 */
 	default SET KEY_GENERIC_TYPE pourAsSet() { 
 		return pour(new LINKED_HASH_SETBRACES()); 		
+	}
+	
+#endif
+	
+#if TYPE_OBJECT
+	/**
+	 * A Helper function that reduces the usage of streams and allows to collect all elements as a Array
+	 * @param action is the creator function of said Array to ensure type is kept.
+	 * @return a new Array of all elements
+	 */
+	default KEY_TYPE[] TO_ARRAY(Int2ObjectFunction<KEY_TYPE[]> action) {
+		ISizeProvider prov = ISizeProvider.of(this);
+		if(prov != null) {
+			int size = prov.size();
+			if(size >= 0) {
+				KEY_TYPE[] array = action.get(size);
+				ITERATORS.unwrap(array, iterator());
+				return array;
+			}
+		}
+		return ITERATORS.pour(iterator()).TO_ARRAY(action);
+	}
+#else
+	/**
+	 * A Helper function that reduces the usage of streams and allows to collect all elements as a Array
+	 * @return a new Array of all elements
+	 */
+	default KEY_TYPE[] TO_ARRAY() {
+		ISizeProvider prov = ISizeProvider.of(this);
+		if(prov != null) {
+			int size = prov.size();
+			if(size >= 0) {
+				KEY_TYPE[] array = NEW_KEY_ARRAY(size);
+				ITERATORS.unwrap(array, iterator());
+				return array;
+			}
+		}
+		return ITERATORS.pour(iterator()).TO_ARRAY();
 	}
 	
 #endif

@@ -16,13 +16,14 @@ import speiger.src.collections.PACKAGE.functions.CONSUMER;
 #endif
 import speiger.src.collections.PACKAGE.utils.SPLIT_ITERATORS;
 import speiger.src.collections.PACKAGE.utils.COLLECTIONS;
+import speiger.src.collections.utils.ISizeProvider;
 import speiger.src.collections.utils.SanityChecks;
 
 /**
  * A Type-Specific {@link Collection} that reduces (un)boxing
  * @Type(T)
  */
-public interface COLLECTION KEY_GENERIC_TYPE extends Collection<CLASS_TYPE>, ITERABLE KEY_GENERIC_TYPE
+public interface COLLECTION KEY_GENERIC_TYPE extends Collection<CLASS_TYPE>, ITERABLE KEY_GENERIC_TYPE, ISizeProvider
 {
 #if !TYPE_OBJECT
 	/**

@@ -1,5 +1,11 @@
 # Changelog of versions
 
+### Version 0.7.1 (Unreleased)
+- Added: ISizeProvider interface (Optimization Helper)
+- Added: ISizeProvider into most Iterable implementations (Distinct/Filter/FlatMap/ArrayFlatMap don't support it, for obvious reasons)
+- Added: ToArray function into Iterable which uses ISizeProvider to reduce overhead of duplicating arrays.
+- Fixed: putIfAbsent now replaces defaultValues
+
 ### Version 0.7.0
 - Added: Over 11 Million Unit Tests to this library to ensure quality.
 - Added: ArrayList size constructor now throws IllegalStateException if the size parameter is negative

@@ -103,6 +103,26 @@ public interface MAP KEY_VALUE_GENERIC_TYPE extends Map<CLASS_TYPE, CLASS_VALUE_
 	public VALUE_TYPE put(KEY_TYPE key, VALUE_TYPE value);
 	
 	/**
+	 * A Helper method that allows to put int a MAP.Entry into a map.
+	 * @param entry then Entry that should be inserted.
+	 * @return the last present value or default return value.
+	 */
+	public default VALUE_TYPE put(Entry KEY_VALUE_GENERIC_TYPE entry) {
+		return put(entry.ENTRY_KEY(), entry.ENTRY_VALUE());
+	}
+	
+#if !TYPE_OBJECT || !VALUE_OBJECT
+	/**
+	 * A Helper method that allows to put int a Map.Entry into a map.
+	 * @param entry then Entry that should be inserted.
+	 * @return the last present value or default return	value.
+	 */
+	public default CLASS_VALUE_TYPE put(Map.Entry<CLASS_TYPE, CLASS_VALUE_TYPE> entry) {
+		return put(entry.getKey(), entry.getValue());
+	}
+
+#endif
+	/**
 	 * Type Specific array method to bulk add elements into a map without creating a wrapper and increasing performances
 	 * @param keys the keys that should be added
 	 * @param values the values that should be added

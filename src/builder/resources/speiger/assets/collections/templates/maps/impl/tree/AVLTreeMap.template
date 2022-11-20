@@ -280,7 +280,10 @@ public class AVL_TREE_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_VALUE_
 		int compare = 0;
 		Node KEY_VALUE_GENERIC_TYPE parent = tree;
 		while(true) {
-			if((compare = compare(key, parent.key)) == 0) return parent.value;
+			if((compare = compare(key, parent.key)) == 0) {
+				if(VALUE_EQUALS(parent.value, getDefaultReturnValue())) return parent.setValue(value);
+				return parent.value;
+			}
 			if(compare < 0) {
 				if(parent.left == null) break;
 				parent = parent.left;

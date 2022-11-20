@@ -161,7 +161,14 @@ public class ENUM_MAP KEY_ENUM_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_VALUE
 	@Override
 	public VALUE_TYPE putIfAbsent(T key, VALUE_TYPE value) {
 		int index = key.ordinal();
-		if(isSet(index)) return values[index];
+		if(isSet(index)) {
+			if(VALUE_EQUALS(values[index], getDefaultReturnValue())) {
+				VALUE_TYPE oldValue = values[index];
+				values[index] = value;
+				return oldValue;
+			}
+			return values[index];
+		}
 		set(index);
 		values[index] = value;
 		return getDefaultReturnValue();

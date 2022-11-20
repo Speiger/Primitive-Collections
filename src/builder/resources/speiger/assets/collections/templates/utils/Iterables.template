@@ -25,6 +25,7 @@ import speiger.src.collections.PACKAGE.functions.function.PREDICATE;
 import speiger.src.collections.PACKAGE.sets.HASH_SET;
 import speiger.src.collections.PACKAGE.sets.SET;
 #endif
+import speiger.src.collections.utils.ISizeProvider;
 
 /**
  * A Helper class for Iterables
@@ -247,7 +248,7 @@ public class ITERABLES
 		return new WrappedIterableBRACES(iterable);
 	}
 	
-	private static class WrappedIterable KEY_GENERIC_TYPE implements ITERABLE KEY_GENERIC_TYPE
+	private static class WrappedIterable KEY_GENERIC_TYPE implements ITERABLE KEY_GENERIC_TYPE, ISizeProvider
 	{
 		Iterable<? extends CLASS_TYPE> iterable;
 		
@@ -257,6 +258,12 @@ public class ITERABLES
 		
 		public ITERATOR KEY_GENERIC_TYPE iterator() {
 			return ITERATORS.wrap(iterable.iterator());
+		}
+		
+		@Override
+		public int size() {
+			ISizeProvider prov = ISizeProvider.of(iterable);
+			return prov == null ? -1 : prov.size();
 		}
 		
 #if !TYPE_OBJECT
@@ -273,7 +280,7 @@ public class ITERABLES
 #endif
 	}
 	
-	private static class MappedIterable KSS_GENERIC_TYPE<E, T> implements ObjectIterable<T>
+	private static class MappedIterable KSS_GENERIC_TYPE<E, T> implements ObjectIterable<T>, ISizeProvider
 	{
 		ITERABLE KEY_SPECIAL_GENERIC_TYPE<E> iterable;
 		TO_OBJECT_FUNCTION KSS_GENERIC_TYPE<E, T> mapper;
@@ -285,6 +292,12 @@ public class ITERABLES
 		
 		public ObjectIterator<T> iterator() {
 			return ITERATORS.map(iterable.iterator(), mapper);
+		}
+		
+		@Override
+		public int size() {
+			ISizeProvider prov = ISizeProvider.of(this);
+			return prov == null ? -1 : prov.size();
 		}
 		
 		@Override
@@ -342,7 +355,7 @@ public class ITERABLES
 		}
 	}
 	
-	private static class RepeatingIterable KEY_GENERIC_TYPE implements ITERABLE KEY_GENERIC_TYPE
+	private static class RepeatingIterable KEY_GENERIC_TYPE implements ITERABLE KEY_GENERIC_TYPE, ISizeProvider
 	{
 		ITERABLE KEY_GENERIC_TYPE iterable;
 		int repeats;
@@ -355,6 +368,12 @@ public class ITERABLES
 		@Override
 		public ITERATOR KEY_GENERIC_TYPE iterator() {
 			return ITERATORS.repeat(iterable.iterator(), repeats);
+		}
+		
+		@Override
+		public int size() {
+			ISizeProvider prov = ISizeProvider.of(iterable);
+			return prov == null ? -1 : prov.size() * (repeats+1);
 		}
 		
 #if !TYPE_OBJECT
@@ -407,7 +426,7 @@ public class ITERABLES
 #endif
 	}
 	
-	private static class LimitedIterable KEY_GENERIC_TYPE implements ITERABLE KEY_GENERIC_TYPE
+	private static class LimitedIterable KEY_GENERIC_TYPE implements ITERABLE KEY_GENERIC_TYPE, ISizeProvider
 	{
 		ITERABLE KEY_GENERIC_TYPE iterable;
 		long limit;
@@ -420,6 +439,12 @@ public class ITERABLES
 		@Override
 		public ITERATOR KEY_GENERIC_TYPE iterator() {
 			return ITERATORS.limit(iterable.iterator(), limit);
+		}
+		
+		@Override
+		public int size() {
+			ISizeProvider prov = ISizeProvider.of(iterable);
+			return prov == null ? -1 : (int)Math.min(prov.size(), limit);
 		}
 		
 #if !TYPE_OBJECT
@@ -446,7 +471,7 @@ public class ITERABLES
 #endif
 	}
 	
-	private static class SortedIterable KEY_GENERIC_TYPE implements ITERABLE KEY_GENERIC_TYPE
+	private static class SortedIterable KEY_GENERIC_TYPE implements ITERABLE KEY_GENERIC_TYPE, ISizeProvider
 	{
 		ITERABLE KEY_GENERIC_TYPE iterable;
 		COMPARATOR KEY_GENERIC_TYPE sorter;
@@ -459,6 +484,12 @@ public class ITERABLES
 		@Override
 		public ITERATOR KEY_GENERIC_TYPE iterator() {
 			return ITERATORS.sorted(iterable.iterator(), sorter);
+		}
+		
+		@Override
+		public int size() {
+			ISizeProvider prov = ISizeProvider.of(iterable);
+			return prov == null ? -1 : prov.size();
 		}
 		
 #if !TYPE_OBJECT
@@ -520,7 +551,7 @@ public class ITERABLES
 #endif
 	}
 	
-	private static class PeekIterable KEY_GENERIC_TYPE implements ITERABLE KEY_GENERIC_TYPE
+	private static class PeekIterable KEY_GENERIC_TYPE implements ITERABLE KEY_GENERIC_TYPE, ISizeProvider
 	{
 		ITERABLE KEY_GENERIC_TYPE iterable;
 		CONSUMER KEY_GENERIC_TYPE action;
@@ -533,6 +564,12 @@ public class ITERABLES
 		@Override
 		public ITERATOR KEY_GENERIC_TYPE iterator() {
 			return ITERATORS.peek(iterable.iterator(), action);
+		}
+		
+		@Override
+		public int size() {
+			ISizeProvider prov = ISizeProvider.of(iterable);
+			return prov == null ? -1 : prov.size();
 		}
 		
 #if !TYPE_OBJECT

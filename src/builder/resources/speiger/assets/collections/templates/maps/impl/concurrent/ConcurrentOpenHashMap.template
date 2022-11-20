@@ -1812,6 +1812,11 @@ public class CONCURRENT_HASH_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY
 					insert(-slot-1, key, value);
 					return getDefaultReturnValue();
 				}
+				else if(VALUE_EQUALS(values[slot], getDefaultReturnValue())) {
+					VALUE_TYPE oldValue = values[slot];
+					values[slot] = value;
+					return oldValue;
+				}
 				return values[slot];
 			}
 			finally {
