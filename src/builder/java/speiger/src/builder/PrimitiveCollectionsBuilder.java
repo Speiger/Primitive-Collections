@@ -224,6 +224,18 @@ public class PrimitiveCollectionsBuilder extends TemplateProcessor
 		}
 	}
 	
+	public void test() throws InterruptedException, IOException
+	{
+		init();
+		List<String> keys = new ArrayList<>();
+		List<String> values = new ArrayList<>();
+		for(int i = 0,m=variables.size();i<m;i++) {
+			variables.get(i).testComparason(keys, values);
+		}
+		System.out.println("Original: "+keys);
+		System.out.println("Copy:     "+values);
+	}
+	
 	@Override
 	public void createProcesses(String name, Consumer<TemplateProcess> acceptor)
 	{
@@ -317,7 +329,7 @@ public class PrimitiveCollectionsBuilder extends TemplateProcessor
 			boolean force = flags.contains("force");
 			boolean tests = flags.contains("tests");
 			boolean forceTests =  flags.contains("force-tests");
-			
+//			new PrimitiveCollectionsBuilder(silent).test();
             new PrimitiveCollectionsBuilder(silent).process(force);
             if(tests) {
     			createTests(silent).process(force || forceTests);

@@ -2,6 +2,8 @@ package speiger.src.builder;
 
 import java.nio.file.Path;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
@@ -394,6 +396,7 @@ public class GlobalVariables
 		addSimpleMapper("VALUE_TO_ARRAY", "to"+valueType.getNonFileType()+"Array");
 		addSimpleMapper("TO_ARRAY", "to"+type.getNonFileType()+"Array");
 		addSimpleMapper("[SPACE]", " ");
+		operators.sort(Comparator.comparing(IMapper::getSearchValue, this::sort));
 		return this;
 	}
 	
@@ -419,6 +422,20 @@ public class GlobalVariables
 		return process;
 	}
 	
+	public void testComparason(List<String> keys, List<String> values) {
+		List<IMapper> copy = new ArrayList<>(operators);
+		Collections.shuffle(copy);
+		copy.sort(Comparator.comparing(IMapper::getSearchValue, this::sort));
+		operators.stream().map(IMapper::getSearchValue).forEach(keys::add);
+		copy.stream().map(IMapper::getSearchValue).forEach(values::add);
+	}
+	
+	private int sort(String key, String value) {
+		if(value.contains(key)) return 1;
+		else if(key.contains(value)) return -1;
+		return 0;
+	}
+	
 	public ClassType getType()
 	{
 		return type;
@@ -426,82 +443,82 @@ public class GlobalVariables
 	
 	private void addClassMapper(String pattern, String replacement)
 	{
-		operators.add(new SimpleMapper(type.name()+"[VALUE_"+pattern+"]", "VALUE_"+pattern, valueType.getFileType()+replacement));
-		operators.add(new SimpleMapper(type.name()+"["+pattern+"]", pattern, type.getFileType()+replacement));
+		operators.add(new SimpleMapper("VALUE_"+pattern, "VALUE_"+pattern, valueType.getFileType()+replacement));
+		operators.add(new SimpleMapper(pattern, pattern, type.getFileType()+replacement));
 	}
 	
 	private void addBiClassMapper(String pattern, String replacement, String splitter)
 	{
-		operators.add(new SimpleMapper(type.name()+"[KEY_"+pattern+"]", "KEY_"+pattern, type.getFileType()+splitter+type.getFileType()+replacement));
-		operators.add(new SimpleMapper(type.name()+"[VALUE_"+pattern+"]", "VALUE_"+pattern, valueType.getFileType()+splitter+valueType.getFileType()+replacement));
-		operators.add(new SimpleMapper(type.name()+"["+pattern+"]", pattern, type.getFileType()+splitter+valueType.getFileType()+replacement));
+		operators.add(new SimpleMapper("KEY_"+pattern, "KEY_"+pattern, type.getFileType()+splitter+type.getFileType()+replacement));
+		operators.add(new SimpleMapper("VALUE_"+pattern, "VALUE_"+pattern, valueType.getFileType()+splitter+valueType.getFileType()+replacement));
+		operators.add(new SimpleMapper(pattern, pattern, type.getFileType()+splitter+valueType.getFileType()+replacement));
 	}
 	
 	private void addAbstractMapper(String pattern, String replacement)
 	{
-		operators.add(new SimpleMapper(type.name()+"[VALUE_"+pattern+"]", "VALUE_"+pattern, String.format(replacement, valueType.getFileType())));
-		operators.add(new SimpleMapper(type.name()+"["+pattern+"]", pattern, String.format(replacement, type.getFileType())));		
+		operators.add(new SimpleMapper("VALUE_"+pattern, "VALUE_"+pattern, String.format(replacement, valueType.getFileType())));
+		operators.add(new SimpleMapper(pattern, pattern, String.format(replacement, type.getFileType())));		
 	}
 	
 	private void addAbstractBiMapper(String pattern, String replacement, String splitter) 
 	{
-		operators.add(new SimpleMapper(type.name()+"["+pattern+"]", pattern, String.format(replacement, type.getFileType()+splitter+valueType.getFileType())));
+		operators.add(new SimpleMapper(pattern, pattern, String.format(replacement, type.getFileType()+splitter+valueType.getFileType())));
 	}
 	
 	private void addFunctionMapper(String pattern, String replacement)
 	{
-		operators.add(new SimpleMapper(type.name()+"[VALUE_"+pattern+"]", "VALUE_"+pattern, replacement+valueType.getNonFileType()));
-		operators.add(new SimpleMapper(type.name()+"["+pattern+"]", pattern, replacement+type.getNonFileType()));
+		operators.add(new SimpleMapper("VALUE_"+pattern, "VALUE_"+pattern, replacement+valueType.getNonFileType()));
+		operators.add(new SimpleMapper(pattern, pattern, replacement+type.getNonFileType()));
 	}
 	
 	private void addFunctionValueMapper(String pattern, String replacement)
 	{
-		operators.add(new SimpleMapper(type.name()+"["+pattern+"]", pattern, replacement+valueType.getNonFileType()));
+		operators.add(new SimpleMapper(pattern, pattern, replacement+valueType.getNonFileType()));
 	}
 	
 	private void addFunctionMappers(String pattern, String replacement)
 	{
-		operators.add(new SimpleMapper(type.name()+"[VALUE_"+pattern+"]", "VALUE_"+pattern, String.format(replacement, valueType.getNonFileType())));		
-		operators.add(new SimpleMapper(type.name()+"["+pattern+"]", pattern, String.format(replacement, type.getNonFileType())));		
+		operators.add(new SimpleMapper("VALUE_"+pattern, "VALUE_"+pattern, String.format(replacement, valueType.getNonFileType())));		
+		operators.add(new SimpleMapper(pattern, pattern, String.format(replacement, type.getNonFileType())));		
 	}
 	
 	private void addFunctionValueMappers(String pattern, String replacement)
 	{
-		operators.add(new SimpleMapper(type.name()+"["+pattern+"]", pattern, String.format(replacement, valueType.getNonFileType())));		
+		operators.add(new SimpleMapper(pattern, pattern, String.format(replacement, valueType.getNonFileType())));		
 	}
 	
 	private void addSimpleMapper(String pattern, String replacement)
 	{
-		operators.add(new SimpleMapper(type.name()+"["+pattern+"]", pattern, replacement));
+		operators.add(new SimpleMapper(pattern, pattern, replacement));
 	}
 	
 	private void addAnnontion(String pattern, String value)
 	{
-		if(type == ClassType.OBJECT) operators.add(new LineMapper(type.name()+"["+pattern+"]", pattern));
-		else operators.add(new SimpleMapper(type.name()+"["+pattern+"]", pattern, value));
+		if(type == ClassType.OBJECT) operators.add(new LineMapper(pattern, pattern));
+		else operators.add(new SimpleMapper(pattern, pattern, value));
 	}
 	
 	private void addValueAnnontion(String pattern, String value)
 	{
-		if(valueType == ClassType.OBJECT) operators.add(new LineMapper(valueType.name()+"["+pattern+"]", pattern));
-		else operators.add(new SimpleMapper(valueType.name()+"["+pattern+"]", pattern, value));
+		if(valueType == ClassType.OBJECT) operators.add(new LineMapper(pattern, pattern));
+		else operators.add(new SimpleMapper(pattern, pattern, value));
 	}
 	
 	private void addComment(String pattern, String value)
 	{
-		if(type == ClassType.OBJECT) operators.add(new InjectMapper(type.name()+"["+pattern+"]", pattern, value).removeBraces());
-		else operators.add(new LineMapper(type.name()+"["+pattern+"]", pattern));
+		if(type == ClassType.OBJECT) operators.add(new InjectMapper(pattern, pattern, value).removeBraces());
+		else operators.add(new LineMapper(pattern, pattern));
 	}
 	
 	private void addValueComment(String pattern, String value)
 	{
-		if(valueType == ClassType.OBJECT) operators.add(new InjectMapper(valueType.name()+"["+pattern+"]", pattern, value).removeBraces());
-		else operators.add(new LineMapper(valueType.name()+"["+pattern+"]", pattern));
+		if(valueType == ClassType.OBJECT) operators.add(new InjectMapper(pattern, pattern, value).removeBraces());
+		else operators.add(new LineMapper(pattern, pattern));
 	}
 	
 	private InjectMapper addInjectMapper(String pattern, String replacement)
 	{
-		InjectMapper mapper = new InjectMapper(type.name()+"["+pattern+"]", pattern, replacement);
+		InjectMapper mapper = new InjectMapper(pattern, pattern, replacement);
 		operators.add(mapper);
 		return mapper;
 	}
@@ -513,7 +530,7 @@ public class GlobalVariables
 	
 	private ArgumentMapper addArgumentMapper(String pattern, String replacement, String splitter)
 	{
-		ArgumentMapper mapper = new ArgumentMapper(type.name()+"["+pattern+"]", pattern, replacement, splitter);
+		ArgumentMapper mapper = new ArgumentMapper(pattern, pattern, replacement, splitter);
 		operators.add(mapper);
 		return mapper;
 	}
