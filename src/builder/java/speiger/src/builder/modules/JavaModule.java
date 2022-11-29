@@ -8,10 +8,11 @@ public class JavaModule extends BaseModule
 	@Override
 	protected void loadVariables()
 	{
-		loadBaseVariables();
 		createHelperVars(keyType, false, "KEY");
 		createHelperVars(valueType, true, "VALUE");
+		loadBaseVariables();
 		loadClasses();
+		loadFunctions();
 	}
 	
 	@Override
@@ -29,7 +30,16 @@ public class JavaModule extends BaseModule
 	
 	private void loadFunctions()
 	{
+		addSimpleMapper("APPLY_KEY_VALUE", keyType.isObject() ? "apply" : "applyAs"+keyType.getNonFileType());
+		addSimpleMapper("APPLY_VALUE", valueType.isObject() ? "apply" : "applyAs"+valueType.getNonFileType());
+		addSimpleMapper("APPLY_CAST", "applyAs"+keyType.getCustomJDKType().getNonFileType());
+		addSimpleMapper("APPLY", keyType.isObject() ? "apply" : "applyAs"+keyType.getNonFileType());
 		
+		//Shared by Maps and Pairs so moved to java.
+		addFunctionMappers("ENTRY_KEY", "get%sKey");
+		addFunctionValueMappers("ENTRY_VALUE", "get%sValue");
+		addFunctionMappers("KEY_ENTRY", "set%sKey");
+		addFunctionValueMappers("VALUE_ENTRY", "set%sValue");
 	}
 	
 	private void loadClasses()
@@ -138,6 +148,7 @@ public class JavaModule extends BaseModule
 		{
 			addSimpleMapper("SANITY_CAST_VALUE", "castTo"+valueType.getFileType());
 		}
+		addSimpleMapper("[SPACE]", " ");
 		addComment("@ArrayType", "@param <%s> the keyType of array that the operation should be applied");
 		addComment("@Type", "@param <%s> the keyType of elements maintained by this Collection");
 		addValueComment("@ValueArrayType", "@param <%s> the keyType of array that the operation should be applied");

@@ -1,6 +1,8 @@
-package speiger.src.builder.modules;
+package speiger.src.builder;
 
+import java.io.IOException;
 import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -8,6 +10,16 @@ import java.util.List;
 import java.util.Map;
 import java.util.function.Consumer;
 
+import speiger.src.builder.modules.AsyncModule;
+import speiger.src.builder.modules.BaseModule;
+import speiger.src.builder.modules.CollectionModule;
+import speiger.src.builder.modules.FunctionModule;
+import speiger.src.builder.modules.JavaModule;
+import speiger.src.builder.modules.ListModule;
+import speiger.src.builder.modules.MapModule;
+import speiger.src.builder.modules.PairModule;
+import speiger.src.builder.modules.PrioQueueModule;
+import speiger.src.builder.modules.SetModule;
 import speiger.src.builder.processor.TemplateProcess;
 import speiger.src.builder.processor.TemplateProcessor;
 
@@ -19,6 +31,27 @@ public class ModuleBuilder extends TemplateProcessor
 	List<ModulePackage> enumPackages = new ArrayList<>();
 	Map<String, RequiredType> requirements = new HashMap<>();
 	
+	public static void main(String...args)
+	{
+		try
+		{
+			new ModuleBuilder(true).process(true);
+		}
+		catch(IOException e)
+		{
+			e.printStackTrace();
+		}
+		catch(InterruptedException e)
+		{
+			e.printStackTrace();
+		}
+	}
+	
+	public ModuleBuilder(boolean silencedSuccess)
+	{
+		super(silencedSuccess, Paths.get("src/builder/resources/speiger/assets/collections/templates/"), Paths.get("src/main/java/speiger/src/collections/"), Paths.get("src/builder/resources/speiger/assets/collections/"));
+	}
+	
 	public ModuleBuilder(boolean silencedSuccess, Path sourceFolder, Path outputFolder, Path dataFolder)
 	{
 		super(silencedSuccess, sourceFolder, outputFolder, dataFolder);
@@ -29,6 +62,15 @@ public class ModuleBuilder extends TemplateProcessor
 	{
 		prepPackages();
 		//Init Modules here
+		addModule(new JavaModule());
+		addModule(new FunctionModule());
+		addModule(new CollectionModule());
+		addModule(new PrioQueueModule());
+		addModule(new ListModule());
+		addModule(new SetModule());
+		addModule(new MapModule());
+		addModule(new PairModule());
+		addModule(new AsyncModule());
 		finishPackages();
 	}
 	

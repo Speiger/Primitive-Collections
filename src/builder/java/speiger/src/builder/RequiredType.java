@@ -1,4 +1,4 @@
-package speiger.src.builder.modules;
+package speiger.src.builder;
 
 @SuppressWarnings("javadoc")
 public enum RequiredType

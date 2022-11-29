@@ -1,7 +1,8 @@
-package speiger.src.builder.modules;
+package speiger.src.builder;
 
 import java.nio.file.Path;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -14,7 +15,6 @@ import java.util.function.Consumer;
 import java.util.function.Predicate;
 import java.util.function.UnaryOperator;
 
-import speiger.src.builder.ClassType;
 import speiger.src.builder.mappers.IMapper;
 import speiger.src.builder.processor.TemplateProcess;
 
@@ -38,6 +38,7 @@ public class ModulePackage
 	}
 	
 	public void finish() {
+		mappers.sort(Comparator.comparing(IMapper::getSearchValue, Comparator.comparingInt(String::length).reversed()));
 		mappers.sort(Comparator.comparing(IMapper::getSearchValue, this::sort));
 	}
 	
@@ -77,8 +78,8 @@ public class ModulePackage
 		blockedFilters.add(filter);
 	}
 	
-	public void addBlockedFile(String name) {
-		blocked.add(name);
+	public void addBlockedFiles(String... names) {
+		blocked.addAll(Arrays.asList(names));
 	}
 	
 	public void addSplitter(String fileName, String splitter) {
@@ -93,7 +94,7 @@ public class ModulePackage
 		if(isBlocked(fileName)) return;
 		String splitter = String.format(splitters.getOrDefault(fileName, keyType.getFileType()), keyType.getFileType(), valueType.getFileType());
 		String newName = String.format(nameRemapper.getOrDefault(fileName, "%s"+fileName), splitter);
-		TemplateProcess process = new TemplateProcess(newName);
+		TemplateProcess process = new TemplateProcess(newName+".java");
 		process.setPathBuilder(new PathBuilder(keyType.getPathType()));
 		process.addFlags(flags);
 		process.addMappers(mappers);
@@ -119,7 +120,6 @@ public class ModulePackage
 	}
 	
 	private int sort(String key, String value) {
-		if(key.equals(value)) return 0;
 		if(value.contains(key)) return 1;
 		else if(key.contains(value)) return -1;
 		return 0;
