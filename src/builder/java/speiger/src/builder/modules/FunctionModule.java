@@ -4,26 +4,23 @@ package speiger.src.builder.modules;
 public class FunctionModule extends BaseModule
 {
 	@Override
-	protected void loadVariables()
-	{
-		loadFunctions();
-		loadClasses();
-		loadRemappers();
-		loadBlockades();
-	}
-	
+	public String getModuleName() { return "Function"; }
 	@Override
-	protected void loadFlags()
-	{
-		
-	}
+	public boolean isBiModule() { return true; }
+	@Override
+	protected void loadVariables() { loadBlockades(); }
+	@Override
+	protected void loadFlags() {}
+	@Override
+	protected void loadTestClasses() {}
 	
 	private void loadBlockades()
 	{
 		if(keyType.isObject()) addBlockedFiles("Consumer", "Comparator");
 	}
 	
-	private void loadRemappers()
+	@Override
+	protected void loadRemappers()
 	{
 		addBiRequirement("BiConsumer", "");
 		addBiRequirement("UnaryOperator", "");
@@ -31,13 +28,15 @@ public class FunctionModule extends BaseModule
 		addRemapper("BiConsumer", "%sConsumer");
 	}
 	
-	private void loadFunctions()
+	@Override
+	protected void loadFunctions()
 	{
 		addSimpleMapper("VALUE_TEST_VALUE", valueType.isObject() ? "getBoolean" : "get");
 		addSimpleMapper("TEST_VALUE", keyType.isObject() ? "getBoolean" : "get");
 	}
 	
-	private void loadClasses()
+	@Override
+	protected void loadClasses()
 	{
 		//Interfaces
 		addBiClassMapper("BI_CONSUMER", "Consumer", "");

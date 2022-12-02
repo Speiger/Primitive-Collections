@@ -6,37 +6,47 @@ import speiger.src.builder.ClassType;
 public class SetModule extends BaseModule
 {
 	@Override
-	protected void loadVariables()
-	{
-		loadClasses();
-		loadFunctions();
-		loadReamppers();
-		loadBlockades();
-	}
-	
+	public String getModuleName() { return "Set"; }
 	@Override
-	protected void loadFlags()
-	{
-		
-	}
+	protected void loadVariables() { loadBlockades(); }
+	@Override
+	protected void loadFlags() {}
 	
 	private void loadBlockades()
 	{
 		if(keyType == ClassType.BOOLEAN)
 		{
+			//Main Classes
 			addBlockedFiles("SortedSet", "NavigableSet", "AVLTreeSet", "RBTreeSet");
 			addBlockedFiles("OrderedSet", "ArraySet", "LinkedOpenHashSet", "LinkedOpenCustomHashSet");
 			addBlockedFiles("OpenHashSet", "OpenCustomHashSet", "ImmutableOpenHashSet");
+			
+			//Test Classes
+			addBlockedFiles("SetTests", "SetTestSuiteBuilder");
+			addBlockedFiles("OrderedSetTestSuiteBuilder", "TestOrderedSetGenerator", "OrderedSetMoveTester", "OrderedSetNavigationTester", "OrderedMapNavigationTester", "OrderedMapTestSuiteBuilder", "OrderedSetIterationTester");
+			addBlockedFiles("SortedSetTestSuiteBuilder", "TestSortedSetGenerator", "SortedSetNaviationTester", "SortedSetSubsetTestSetGenerator", "SortedSetIterationTester", "SortedSetNaviationTester");
+			addBlockedFiles("NavigableSetTestSuiteBuilder", "TestNavigableSetGenerator", "NavigableSetNavigationTester");
 		}
 	}
 	
-	private void loadReamppers()
+	@Override
+	protected void loadRemappers()
 	{
+		//Main Classes
 		addRemapper("AbstractSet", "Abstract%sSet");
 		addRemapper("ImmutableOpenHashSet", "Immutable%sOpenHashSet");
+		
+		//Test Classes
+		addRemapper("MinimalSet", "Minimal%sSet");
+		addRemapper("TestNavigableSetGenerator", "Test%sNavigableSetGenerator");
+		addRemapper("TestSortedSetGenerator", "Test%sSortedSetGenerator");
+		addRemapper("TestOrderedSetGenerator", "Test%sOrderedSetGenerator");
+		addRemapper("TestSetGenerator", "Test%sSetGenerator");
+		addRemapper("AbstractSetTester", "Abstract%sSetTester");
 	}
 	
-	private void loadFunctions()
+	@Override
+	protected void loadFunctions()
 	{
 		addFunctionMapper("POLL_FIRST_KEY", "pollFirst");
 		addFunctionMapper("POLL_LAST_KEY", "pollLast");
@@ -44,7 +54,31 @@ public class SetModule extends BaseModule
 		addFunctionMapper("LAST_KEY", "last");
 	}
 	
-	private void loadClasses()
+	@Override
+	protected void loadTestClasses()
+	{
+		//Implementation Classes
+		addAbstractMapper("MINIMAL_SET", "Minimal%sSet");
+		addClassMapper("ORDERED_SET_TEST_BUILDER", "OrderedSetTestSuiteBuilder");
+		addClassMapper("SORTED_SET_TEST_BUILDER", "SortedSetTestSuiteBuilder");
+		addClassMapper("NAVIGABLE_SET_TEST_BUILDER", "NavigableSetTestSuiteBuilder");
+		addClassMapper("SET_TEST_BUILDER", "SetTestSuiteBuilder");
+		addClassMapper("SET_TESTS", "SetTests");
+
+		//Abstract Classes
+		addAbstractMapper("ABSTRACT_SET_TESTER", "Abstract%sSetTester");
+		
+		//Helper Classes
+		addClassMapper("SUB_SORTED_SET_CLASS_GENERATOR", "SortedSetSubsetTestSetGenerator");
+		addClassMapper("SUB_NAVIGABLE_SET_CLASS_GENERATOR", "NavigableSetSubsetTestSetGenerator");
+		addAbstractMapper("TEST_NAVIGABLE_SET_GENERATOR", "Test%sNavigableSetGenerator");
+		addAbstractMapper("TEST_SORTED_SET_GENERATOR", "Test%sSortedSetGenerator");
+		addAbstractMapper("TEST_ORDERED_SET_GENERATOR", "Test%sOrderedSetGenerator");
+		addAbstractMapper("TEST_SET_GENERATOR", "Test%sSetGenerator");
+	}
+	
+	@Override
+	protected void loadClasses()
 	{
 		//Implementation Classes
 		addClassMapper("LINKED_CUSTOM_HASH_SET", "LinkedOpenCustomHashSet");

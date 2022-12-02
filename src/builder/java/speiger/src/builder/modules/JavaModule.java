@@ -6,13 +6,13 @@ import speiger.src.builder.ClassType;
 public class JavaModule extends BaseModule
 {
 	@Override
+	public String getModuleName() { return "Base"; }
+	@Override
 	protected void loadVariables()
 	{
 		createHelperVars(keyType, false, "KEY");
 		createHelperVars(valueType, true, "VALUE");
 		loadBaseVariables();
-		loadClasses();
-		loadFunctions();
 	}
 	
 	@Override
@@ -28,7 +28,11 @@ public class JavaModule extends BaseModule
 		if(valueType.needsCustomJDKType()) addFlag("JDK_VALUE");
 	}
 	
-	private void loadFunctions()
+	@Override
+	protected void loadRemappers() {}
+
+	@Override
+	protected void loadFunctions()
 	{
 		addSimpleMapper("APPLY_KEY_VALUE", keyType.isObject() ? "apply" : "applyAs"+keyType.getNonFileType());
 		addSimpleMapper("APPLY_VALUE", valueType.isObject() ? "apply" : "applyAs"+valueType.getNonFileType());
@@ -42,7 +46,8 @@ public class JavaModule extends BaseModule
 		addFunctionValueMappers("VALUE_ENTRY", "set%sValue");
 	}
 	
-	private void loadClasses()
+	@Override
+	protected void loadClasses()
 	{
 		addSimpleMapper("JAVA_PREDICATE", keyType.isPrimitiveBlocking() ? "" : keyType.getCustomJDKType().getFileType()+"Predicate");
 		addSimpleMapper("JAVA_CONSUMER", keyType.isPrimitiveBlocking() ? "" : "java.util.function."+keyType.getCustomJDKType().getFileType()+"Consumer");
@@ -53,6 +58,13 @@ public class JavaModule extends BaseModule
 		addSimpleMapper("JAVA_SPLIT_ITERATOR", keyType.isPrimitiveBlocking() ? "Spliterator" : "Of"+keyType.getCustomJDKType().getFileType());
 		addSimpleMapper("JAVA_STREAM", keyType.isPrimitiveBlocking() ? "" : keyType.getCustomJDKType().getFileType()+"Stream");
 		addSimpleMapper("JAVA_BUFFER", keyType.getFileType()+"Buffer");
+	}
+	
+	@Override
+	protected void loadTestClasses()
+	{
+		addClassMapper("HELPERS", "Helpers");
+		addClassMapper("SAMPLE_ELEMENTS", "Samples");
 	}
 	
 	private void loadBaseVariables()

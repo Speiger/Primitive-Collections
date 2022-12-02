@@ -52,6 +52,11 @@ public enum ClassType
 		return classType;
 	}
 	
+	public String getClassPath()
+	{
+		return this == OBJECT ? "Object" : classType;
+	}
+	
 	public String getClassType(boolean value) 
 	{
 		return value && this == OBJECT ? "V" : classType;

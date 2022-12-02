@@ -1,10 +1,13 @@
 package speiger.src.builder.modules;
 
+import java.util.Collections;
+import java.util.Set;
 import java.util.function.Predicate;
 
 import speiger.src.builder.ClassType;
 import speiger.src.builder.ModulePackage;
 import speiger.src.builder.RequiredType;
+import speiger.src.builder.SettingsManager;
 import speiger.src.builder.mappers.ArgumentMapper;
 import speiger.src.builder.mappers.InjectMapper;
 import speiger.src.builder.mappers.LineMapper;
@@ -13,16 +16,25 @@ import speiger.src.builder.mappers.SimpleMapper;
 @SuppressWarnings("javadoc")
 public abstract class BaseModule
 {
+	SettingsManager manager;
 	ModulePackage entry;
 	protected ClassType keyType;
 	protected ClassType valueType;
 	
-	public final void init(ModulePackage entry)
-	{
+	public final void setManager(SettingsManager manager) {
+		this.manager = manager;
+		manager.addModule(this);
+	}
+	
+	public final void init(ModulePackage entry) {
 		this.entry = entry;
 		keyType = entry.getKeyType();
 		valueType = entry.getValueType();
 		loadVariables();
+		loadClasses();
+		loadTestClasses();
+		loadFunctions();
+		loadRemappers();
 		loadFlags();
 	}
 	
@@ -30,13 +42,26 @@ public abstract class BaseModule
 		entry = null;
 		keyType = null;
 		valueType = null;
+		manager = null;
 	}
 	
 	protected abstract void loadVariables();
+	protected abstract void loadClasses();
+	protected abstract void loadTestClasses();
+	protected abstract void loadFunctions();
+	protected abstract void loadRemappers();
 	protected abstract void loadFlags();
 	
-	protected void addFlag(String name)
-	{
+	public abstract String getModuleName();
+	public boolean isBiModule() { return false; }
+	public Set<String> getModuleKeys(ClassType keyType, ClassType valueType) { return Collections.emptySet(); }
+	
+	protected boolean isModuleEnabled(String name) {
+		if(manager == null) return true;
+		return manager.isModuleEnabled(this, keyType, valueType, name);
+	}
+	
+	protected void addFlag(String name) {
 		entry.addFlag(name);
 	}
 	

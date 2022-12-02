@@ -7,8 +7,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.EnumMap;
-import java.util.EnumSet;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -16,25 +15,34 @@ import java.util.Map;
 import java.util.Set;
 import java.util.StringJoiner;
 import java.util.function.Consumer;
-import java.util.function.Predicate;
 import java.util.stream.Stream;
 
+import speiger.src.builder.modules.AsyncModule;
+import speiger.src.builder.modules.BaseModule;
+import speiger.src.builder.modules.CollectionModule;
+import speiger.src.builder.modules.FunctionModule;
+import speiger.src.builder.modules.JavaModule;
+import speiger.src.builder.modules.ListModule;
+import speiger.src.builder.modules.MapModule;
+import speiger.src.builder.modules.PairModule;
+import speiger.src.builder.modules.PrioQueueModule;
+import speiger.src.builder.modules.SetModule;
 import speiger.src.builder.processor.TemplateProcess;
 import speiger.src.builder.processor.TemplateProcessor;
 
 @SuppressWarnings("javadoc")
 public class PrimitiveCollectionsBuilder extends TemplateProcessor
 {
-	Map<String, EnumSet<ClassType>> blocked = new HashMap<>();
-	EnumMap<ClassType, List<Predicate<String>>> blockedPredicate = new EnumMap<>(ClassType.class);
-	Map<String, String> nameRemapper = new HashMap<>();
-	Map<String, String> biRequired = new HashMap<>();
-	Set<String> enumRequired = new HashSet<>();
-	public static final ClassType[] TYPE = ClassType.values();
-	List<GlobalVariables> variables = new ArrayList<>();
-	List<GlobalVariables> biVariables = new ArrayList<>();
-	List<GlobalVariables> enumVariables = new ArrayList<>();
-	boolean special = false;
+	private static final int SPECIAL = 0x1; //Detects if the Builder is generating tests
+	private static final int LOAD = 0x2; //If Configs should be loaded
+	private static final int ANTI_SAVE = SPECIAL | LOAD; //If save should be disabled since load/save shouldn't happen at the same time.
+	private static final int SAVE = 0x4; //if the configuration should be created
+	List<ModulePackage> simplePackages = new ArrayList<>();
+	List<ModulePackage> biPackages = new ArrayList<>();
+	List<ModulePackage> enumPackages = new ArrayList<>();
+	Map<String, RequiredType> requirements = new HashMap<>();
+	SettingsManager manager = new SettingsManager();
+	int flags;
 	
 	public PrimitiveCollectionsBuilder()
 	{
@@ -56,17 +64,26 @@ public class PrimitiveCollectionsBuilder extends TemplateProcessor
 		super(silencedSuccess, sourceFolder, outputFolder, dataFolder);
 	}
 	
-	private PrimitiveCollectionsBuilder setSpecial() {
-		special = true;
+	private PrimitiveCollectionsBuilder setFlags(int flags) {
+		this.flags = flags;
+		if((flags & ANTI_SAVE) != 0) {
+			this.flags &= ~SAVE;
+		}
 		return this;
 	}
 	
-	private static PrimitiveCollectionsBuilder createTests(boolean silent) {
-		return new PrimitiveCollectionsBuilder(silent, Paths.get("src/builder/resources/speiger/assets/tests/templates/"), Paths.get("src/test/java/speiger/src/tests/"), Paths.get("src/builder/resources/speiger/assets/tests/")).setSpecial();
+	private static PrimitiveCollectionsBuilder createTests(boolean silent, int flags) {
+		return new PrimitiveCollectionsBuilder(silent, 
+				Paths.get("src/builder/resources/speiger/assets/tests/templates/"), 
+				Paths.get("src/test/java/speiger/src/tests/"), 
+				Paths.get("src/builder/resources/speiger/assets/tests/")).setFlags(flags | SPECIAL);
 	}
 	
-	private static PrimitiveCollectionsBuilder createTesters(boolean silent) {
-		return new PrimitiveCollectionsBuilder(silent, Paths.get("src/builder/resources/speiger/assets/testers/templates/"), Paths.get("src/test/java/speiger/src/testers/"), Paths.get("src/builder/resources/speiger/assets/testers/")).setSpecial();
+	private static PrimitiveCollectionsBuilder createTesters(boolean silent, int flags) {
+		return new PrimitiveCollectionsBuilder(silent, 
+				Paths.get("src/builder/resources/speiger/assets/testers/templates/"), 
+				Paths.get("src/test/java/speiger/src/testers/"), 
+				Paths.get("src/builder/resources/speiger/assets/testers/")).setFlags(flags | SPECIAL);
 	}
 	
 	@Override
@@ -90,7 +107,7 @@ public class PrimitiveCollectionsBuilder extends TemplateProcessor
 	@Override
 	protected void afterFinish()
 	{
-		if(!special && getVersion() > 8) 
+		if((flags & SPECIAL) == 0 && getVersion() > 8) 
 		{
 			Path basePath = Paths.get("src/main/java");
 			try(BufferedWriter writer = Files.newBufferedWriter(basePath.resolve("module-info.java")))
@@ -105,170 +122,62 @@ public class PrimitiveCollectionsBuilder extends TemplateProcessor
 	}
 	
 	@Override
-	protected void init()
+	protected void init() 
 	{
-		variables.clear();
-		for(ClassType clzType : TYPE)
+		prepPackages();
+		//Init Modules here
+		addModule(new JavaModule());
+		addModule(new FunctionModule());
+		addModule(new CollectionModule());
+		addModule(new PrioQueueModule());
+		addModule(new ListModule());
+		addModule(new SetModule());
+		addModule(new MapModule());
+		addModule(new PairModule());
+		addModule(new AsyncModule());
+		finishPackages();
+	}
+	
+	public void addModule(BaseModule module)
+	{
+		module.setManager(manager);
+		biPackages.forEach(module::init);
+		module.cleanup();
+	}
+	
+	private void finishPackages() 
+	{
+		biPackages.forEach(ModulePackage::finish);
+		if((flags & SAVE) != 0) manager.save();
+	}
+	
+	private void prepPackages()
+	{
+		if((flags & LOAD) != 0) manager.load();
+		for(ModulePackage entry : ModulePackage.createPackages())
 		{
-			for(ClassType subType : TYPE)
-			{
-				create(clzType, subType);
-			}
-		}
-		enumRequired.add("EnumMap");
-		enumRequired.add("LinkedEnumMap");
-		biRequired.put("BiConsumer", "");
-		biRequired.put("UnaryOperator", "");
-		biRequired.put("Pair", "");
-		biRequired.put("MutablePair", "");
-		biRequired.put("ImmutablePair", "");
-		addBiClass("Function", "Maps", "Map", "SortedMap", "OrderedMap", "NavigableMap", "ConcurrentMap", "AbstractMap", "ConcurrentOpenHashMap", "ImmutableOpenHashMap", "OpenHashMap", "LinkedOpenHashMap", "OpenCustomHashMap", "LinkedOpenCustomHashMap", "ArrayMap", "RBTreeMap", "AVLTreeMap");
-		nameRemapper.put("BiConsumer", "%sConsumer");
-		nameRemapper.put("IArray", "I%sArray");
-		nameRemapper.put("AbstractMap", "Abstract%sMap");
-		nameRemapper.put("AbstractCollection", "Abstract%sCollection");
-		nameRemapper.put("AbstractPriorityQueue", "Abstract%sPriorityQueue");
-		nameRemapper.put("AbstractSet", "Abstract%sSet");
-		nameRemapper.put("AbstractList", "Abstract%sList");
-		nameRemapper.put("EnumMap", "Enum2%sMap");
-		nameRemapper.put("LinkedEnumMap", "LinkedEnum2%sMap");
-		nameRemapper.put("ImmutableList", "Immutable%sList");
-		nameRemapper.put("CopyOnWriteList", "CopyOnWrite%sArrayList");
-		nameRemapper.put("ImmutableOpenHashSet", "Immutable%sOpenHashSet");
-		nameRemapper.put("ImmutableOpenHashMap", "Immutable%sOpenHashMap");
-		
-		
-		addBlockage(ClassType.OBJECT, "Consumer", "Comparator", "Stack");
-		addBlockage(ClassType.BOOLEAN, "ArraySet", "AVLTreeSet", "RBTreeSet", "SortedSet", "OrderedSet", "NavigableSet", "OpenHashSet", "OpenCustomHashSet", "LinkedOpenHashSet", "LinkedOpenCustomHashSet");
-		addBlockage(ClassType.BOOLEAN, "ConcurrentOpenHashMap", "ImmutableOpenHashMap", "ImmutableOpenHashSet", "SortedMap", "OrderedMap", "NavigableMap", "ConcurrentMap", "OpenHashMap", "LinkedOpenHashMap", "OpenCustomHashMap", "LinkedOpenCustomHashMap", "ArrayMap", "RBTreeMap", "AVLTreeMap");
-		
-		//UnitTesters
-		nameRemapper.put("AbstractIteratorTester", "Abstract%sIteratorTester");
-		nameRemapper.put("MinimalCollection", "Minimal%sCollection");
-		nameRemapper.put("MinimalSet", "Minimal%sSet");
-		nameRemapper.put("TestCollectionGenerator", "Test%sCollectionGenerator");
-		nameRemapper.put("TestQueueGenerator", "Test%sQueueGenerator");
-		nameRemapper.put("TestListGenerator", "Test%sListGenerator");
-		nameRemapper.put("TestNavigableSetGenerator", "Test%sNavigableSetGenerator");
-		nameRemapper.put("TestSortedSetGenerator", "Test%sSortedSetGenerator");
-		nameRemapper.put("TestOrderedSetGenerator", "Test%sOrderedSetGenerator");
-		nameRemapper.put("TestSetGenerator", "Test%sSetGenerator");
-		nameRemapper.put("AbstractContainerTester", "Abstract%sContainerTester");
-		nameRemapper.put("AbstractCollectionTester", "Abstract%sCollectionTester");
-		nameRemapper.put("AbstractQueueTester", "Abstract%sQueueTester");
-		nameRemapper.put("AbstractListTester", "Abstract%sListTester");
-		nameRemapper.put("AbstractListIndexOfTester", "Abstract%sListIndexOfTester");
-		nameRemapper.put("AbstractSetTester", "Abstract%sSetTester");
-		nameRemapper.put("SimpleTestGenerator", "Simple%sTestGenerator");
-		nameRemapper.put("SimpleQueueTestGenerator", "Simple%sQueueTestGenerator");
-		nameRemapper.put("TestMapGenerator", "Test%sMapGenerator");
-		nameRemapper.put("TestSortedMapGenerator", "Test%sSortedMapGenerator");
-		nameRemapper.put("TestOrderedMapGenerator", "Test%sOrderedMapGenerator");
-		nameRemapper.put("SimpleMapTestGenerator", "Simple%sMapTestGenerator");
-		nameRemapper.put("DerivedMapGenerators", "Derived%sMapGenerators");
-		nameRemapper.put("AbstractMapTester", "Abstract%sMapTester");
-		nameRemapper.put("TestMap", "Test%sMap");
-		biRequired.put("PairTester", "");
-		
-		addBiClass("TestMapGenerator", "TestSortedMapGenerator", "TestOrderedMapGenerator", "SimpleMapTestGenerator", "DerivedMapGenerators", "AbstractMapTester", "MapTestSuiteBuilder", "SortedMapTestSuiteBuilder", "NavigableMapTestSuiteBuilder", "OrderedMapTestSuiteBuilder", "MapTests", "MapConstructorTests", "TestMap");
-		addBiClass("MapAddToTester", "MapSubFromTester", "MapClearTester", "MapComputeIfAbsentTester", "MapComputeIfPresentTester", "MapComputeTester", "MapCopyTester", "MapContainsTester", "MapContainsKeyTester", "MapContainsValueTester", "MapCreatorTester", "MapEntrySetTester",
-			"MapEqualsTester", "MapForEachTester", "MapGetOrDefaultTester", "MapGetTester", "MapHashCodeTester", "MapIsEmptyTester", "MapMergeTester", "MapMergeBulkTester", "MapPutAllArrayTester", "MapPutAllTester", "MapPutIfAbsentTester", "MapPutTester",
-			"MapRemoveEntryTester", "MapRemoveOrDefaultTester", "MapRemoveTester", "MapReplaceAllTester", "MapReplaceEntryTester", "MapReplaceTester", "MapSizeTester", "MapSupplyIfAbsentTester", "MapToStringTester",
-			"NavigableMapNavigationTester", "SortedMapNavigationTester", "OrderedMapNavigationTester", "OrderedMapMoveTester", "MapConstructorTester");
-		
-		addBlockage(ClassType.OBJECT, "CollectionStreamTester", "ListFillBufferTester");
-		addBlockage(ClassType.BOOLEAN, "TestOrderedSetGenerator", "TestSortedSetGenerator", "TestNavigableSetGenerator", "CollectionRemoveIfTester", "CollectionStreamTester", "ListFillBufferTester", "ListReplaceAllTester", "NavigableSetNavigationTester", "SetTests", "MapConstructorTests", "TestMap", "QueueTests");
-		addBlockage(ClassType.BOOLEAN, "OrderedSetMoveTester", "OrderedSetNavigationTester", "SortedSetNaviationTester", "SetTestSuiteBuilder", "OrderedSetTestSuiteBuilder", "SortedSetTestSuiteBuilder", "NavigableSetTestSuiteBuilder", "SortedSetSubsetTestSetGenerator", "OrderedMapNavigationTester", "OrderedMapTestSuiteBuilder", "OrderedSetIterationTester", "SortedSetIterationTester");
-		addBlockage(ClassType.BOOLEAN, "TestMapGenerator", "TestSortedMapGenerator", "TestOrderedMapGenerator", "SimpleMapTestGenerator", "DerivedMapGenerators", "AbstractMapTester", "MapTestSuiteBuilder", "SortedMapTestSuiteBuilder", "NavigableMapTestSuiteBuilder", "MapTests");
-		addBlockage(ClassType.BOOLEAN, T -> T.endsWith("Tester") && (T.startsWith("Iterable") ||T.startsWith("Map") || T.startsWith("OrderedMap") || T.startsWith("SortedMap") || T.startsWith("NavigableMap")));
-	}
-	
-	protected void create(ClassType mainType, ClassType subType) 
-	{
-		GlobalVariables type = new GlobalVariables(mainType, subType);
-		type.createFlags();
-		type.createHelperVariables();
-		type.createVariables();
-		type.createPreFunctions();
-		type.createClassTypes();
-		type.createFunctions();
-		if(mainType == subType) variables.add(type);
-		biVariables.add(type);
-		if(mainType.isObject()) enumVariables.add(type);
-	}
-	
-	protected void addBiClass(String...classNames) 
-	{
-		for(String s : classNames)
-		{
-			biRequired.put(s, "2");
-		}
-	}
-	
-	protected void addBlockage(ClassType type, Predicate<String> filter)
-	{
-		blockedPredicate.computeIfAbsent(type, T -> new ArrayList<>()).add(filter);
-	}
-	
-	protected void addBlockage(ClassType type, String...args) 
-	{
-		for(String s : args) 
-		{
-			EnumSet<ClassType> set = blocked.get(s);
-			if(set == null) 
-			{
-				set = EnumSet.noneOf(ClassType.class);
-				blocked.put(s, set);
-			}
-			set.add(type);
-		}
-	}
-	
-	public void test() throws InterruptedException, IOException
-	{
-		init();
-		List<String> keys = new ArrayList<>();
-		List<String> values = new ArrayList<>();
-		for(int i = 0,m=variables.size();i<m;i++) {
-			variables.get(i).testComparason(keys, values);
-		}
-		System.out.println("Original: "+keys);
-		System.out.println("Copy:     "+values);
+			entry.setRequirements(requirements::put);
+			biPackages.add(entry);
+			if(entry.isSame()) simplePackages.add(entry);
+			if(entry.isEnumValid()) enumPackages.add(entry);
+		}		
 	}
 	
 	@Override
-	public void createProcesses(String name, Consumer<TemplateProcess> acceptor)
+	public void createProcesses(String fileName, Consumer<TemplateProcess> process)
 	{
-		String splitter = biRequired.get(name);
-		boolean valueRequired = enumRequired.contains(name);
-		List<GlobalVariables> vars = getVariablesByClass(name, splitter != null);
-		for(int i = 0,m=vars.size();i<m;i++)
+		List<ModulePackage> packages = getPackagesByRequirement(requirements.get(fileName));
+		for(int i = 0,m=packages.size();i<m;i++)
 		{
-			GlobalVariables type = vars.get(i);
-			if(isAllowed(type.getType(), name))
-			{
-				acceptor.accept(type.create(nameRemapper.getOrDefault(name, "%s"+name), splitter, valueRequired));
-			}
+			packages.get(i).process(fileName, process);
 		}
 	}
 	
-	protected boolean isAllowed(ClassType type, String fileName)
-	{
-		EnumSet<ClassType> types = blocked.get(fileName);
-		if(types != null && types.contains(type)) return false;
-		List<Predicate<String>> list = blockedPredicate.get(type);
-		if(list != null) {
-			for(int i = 0,m=list.size();i<m;i++) {
-				if(list.get(i).test(fileName)) return false;
-			}
-		}
-		return true;
-	}
-	
-	protected List<GlobalVariables> getVariablesByClass(String name, boolean bi) {
-		if(enumRequired.contains(name)) return enumVariables;
-		if(bi) return biVariables;
-		return variables;
+	protected List<ModulePackage> getPackagesByRequirement(RequiredType type) {
+		if(type == null) return simplePackages;
+		if(type == RequiredType.BI_CLASS) return biPackages;
+		if(type == RequiredType.ENUM) return enumPackages;
+		return Collections.emptyList();
 	}
 	
 	private String getModuleInfo(Path basePath) {
@@ -326,14 +235,17 @@ public class PrimitiveCollectionsBuilder extends TemplateProcessor
 		{
 			Set<String> flags = new HashSet<>(Arrays.asList(args));
 			boolean silent = flags.contains("silent");
-			boolean force = !flags.contains("force");
+			boolean force = flags.contains("force");
 			boolean tests = flags.contains("tests");
 			boolean forceTests =  flags.contains("force-tests");
+			boolean load = flags.contains("load");
+			boolean save = !flags.contains("save");
+			int flag = (load ? LOAD : 0) | (save ? SAVE : 0);
 //			new PrimitiveCollectionsBuilder(silent).test();
-            new PrimitiveCollectionsBuilder(silent).process(force);
+            new PrimitiveCollectionsBuilder(silent).setFlags(flag).process(force);
             if(tests) {
-    			createTests(silent).process(force || forceTests);
-    			createTesters(silent).process(force || forceTests);
+    			createTests(silent, flag).process(force || forceTests);
+    			createTesters(silent, flag).process(force || forceTests);
             }
         }
 		catch(InterruptedException | IOException e)

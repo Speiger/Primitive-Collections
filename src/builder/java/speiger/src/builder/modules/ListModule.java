@@ -1,31 +1,43 @@
 package speiger.src.builder.modules;
 
+import speiger.src.builder.ClassType;
+
 @SuppressWarnings("javadoc")
 public class ListModule extends BaseModule
 {
-	
 	@Override
-	protected void loadVariables()
+	public String getModuleName() { return "List"; }
+	@Override
+	protected void loadVariables() { loadBlockedFiles(); }
+	@Override
+	protected void loadFlags() {}
+	
+	private void loadBlockedFiles()
 	{
-		loadClasses();
-		loadFunctions();
-		loadRemappers();
+		if(keyType.isObject()) {
+			addBlockedFiles("ListFillBufferTester");
+		}
+		if(keyType == ClassType.BOOLEAN) {
+			addBlockedFiles("ListFillBufferTester", "ListReplaceAllTester");
+		}
 	}
 	
 	@Override
-	protected void loadFlags()
+	protected void loadRemappers()
 	{
-		
-	}
-	
-	private void loadRemappers()
-	{
+		//Main Classes
 		addRemapper("AbstractList", "Abstract%sList");
 		addRemapper("ImmutableList", "Immutable%sList");
 		addRemapper("CopyOnWriteList", "CopyOnWrite%sArrayList");
+		
+		//Test Classes
+		addRemapper("AbstractListTester", "Abstract%sListTester");
+		addRemapper("AbstractListIndexOfTester", "Abstract%sListIndexOfTester");
+		addRemapper("TestListGenerator", "Test%sListGenerator");
 	}
 	
-	private void loadFunctions()
+	@Override
+	protected void loadFunctions()
 	{
 		addFunctionMapper("GET_KEY", "get");
 		addFunctionMapper("REMOVE_LAST", "removeLast");
@@ -34,7 +46,8 @@ public class ListModule extends BaseModule
 		addFunctionMappers("SORT", "sort%ss");
 	}
 	
-	private void loadClasses()
+	@Override
+	protected void loadClasses()
 	{
 		//Implementation Classes
 		addClassMapper("ARRAY_LIST", "ArrayList");
@@ -53,10 +66,22 @@ public class ListModule extends BaseModule
 		//Helper Classes
 		addClassMapper("LISTS", "Lists");
 		
-		
 		//Interfaces
 		addClassMapper("LIST", "List");
+	}
+	
+	@Override
+	protected void loadTestClasses()
+	{
+		//Implementation Classes
+		addClassMapper("LIST_TEST_BUILDER", "ListTestSuiteBuilder");
+		addClassMapper("LIST_TESTS", "ListTests");
+
+		//Abstract Classes
+		addAbstractMapper("ABSTRACT_LIST_INDEX_OF_TESTER", "Abstract%sListIndexOfTester");
+		addAbstractMapper("ABSTRACT_LIST_TESTER", "Abstract%sListTester");
 		
-		
+		//Helper classes
+		addAbstractMapper("TEST_LIST_GENERATOR", "Test%sListGenerator");
 	}
 }

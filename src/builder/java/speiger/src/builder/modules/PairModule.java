@@ -4,26 +4,32 @@ package speiger.src.builder.modules;
 public class PairModule extends BaseModule
 {
 	@Override
-	protected void loadVariables()
-	{
-		loadClasses();
-		loadRemappers();
-	}
+	public String getModuleName() { return "Pair"; }
+	@Override
+	public boolean isBiModule() { return true; }
+	@Override
+	protected void loadVariables() {}
+	@Override
+	protected void loadFlags() {}
+	@Override
+	protected void loadFunctions() {}
+	@Override
+	protected void loadTestClasses() {}
 	
 	@Override
-	protected void loadFlags()
+	protected void loadRemappers()
 	{
-		
-	}
-	
-	private void loadRemappers()
-	{
+		//Main Classes
 		addBiRequirement("Pair", "");
 		addBiRequirement("MutablePair", "");
 		addBiRequirement("ImmutablePair", "");
+		
+		//Test Classes
+		addBiRequirement("PairTester", "");
 	}
 	
-	private void loadClasses()
+	@Override
+	protected void loadClasses()
 	{
 		//Implementations
 		addBiClassMapper("IMMUTABLE_PAIR", "ImmutablePair", "");

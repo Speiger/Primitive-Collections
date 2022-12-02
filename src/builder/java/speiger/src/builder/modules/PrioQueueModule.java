@@ -1,27 +1,40 @@
 package speiger.src.builder.modules;
 
+import speiger.src.builder.ClassType;
+
 @SuppressWarnings("javadoc")
 public class PrioQueueModule extends BaseModule
 {
 	@Override
-	protected void loadVariables()
+	public String getModuleName() { return "PriorityQueue"; }
+	@Override
+	protected void loadVariables() { loadBlockades(); }
+	@Override
+	protected void loadFlags() {}
+	@Override
+	protected void loadFunctions() {}
+	
+	private void loadBlockades()
 	{
-		loadClasses();
-		loadReampper();
+		if(keyType == ClassType.BOOLEAN) {
+			addBlockedFiles("QueueTests");
+		}
 	}
 	
 	@Override
-	protected void loadFlags()
+	protected void loadRemappers()
 	{
+		//Main Classes
+		addRemapper("AbstractPriorityQueue", "Abstract%sPriorityQueue");
 		
+		//Test Classes
+		addRemapper("TestQueueGenerator", "Test%sQueueGenerator");
+		addRemapper("AbstractQueueTester", "Abstract%sQueueTester");
+		addRemapper("SimpleQueueTestGenerator", "Simple%sQueueTestGenerator");
 	}
 	
-	private void loadReampper()
-	{
-		addRemapper("AbstractPriorityQueue", "Abstract%sPriorityQueue");
-	}
-		
-	private void loadClasses()
+	@Override
+	protected void loadClasses()
 	{
 		//Implementation Classes
 		addClassMapper("ARRAY_FIFO_QUEUE", "ArrayFIFOQueue");
@@ -36,7 +49,22 @@ public class PrioQueueModule extends BaseModule
 		
 		//Interfaces
 		addClassMapper("PRIORITY_QUEUE", "PriorityQueue");
-		addClassMapper("PRIORITY_DEQUEUE", "PriorityDequeue");
+		addClassMapper("PRIORITY_DEQUEUE", "PriorityDequeue");	
+	}
+	
+	@Override
+	protected void loadTestClasses() 
+	{
+		//Implementation Classes
+		addClassMapper("DEQUEUE_TEST_BUILDER", "DequeueTestSuiteBuilder");
+		addClassMapper("QUEUE_TEST_BUILDER", "QueueTestSuiteBuilder");
+		addClassMapper("QUEUE_TESTS", "QueueTests");
 		
+		//Abstract Classes
+		addAbstractMapper("ABSTRACT_QUEUE_TESTER", "Abstract%sQueueTester");
+		
+		//Helper Classes
+		addAbstractMapper("SIMPLE_QUEUE_TEST_GENERATOR", "Simple%sQueueTestGenerator");
+		addAbstractMapper("TEST_QUEUE_GENERATOR", "Test%sQueueGenerator");
 	}
 }

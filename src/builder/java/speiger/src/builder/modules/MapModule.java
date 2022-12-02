@@ -6,33 +6,36 @@ import speiger.src.builder.ClassType;
 public class MapModule extends BaseModule
 {
 	@Override
-	protected void loadVariables()
-	{
-		loadFunctions();
-		loadClasses();
-		loadRemappers();
-		loadBlockades();
-	}
-	
+	public String getModuleName() { return "Map"; }
 	@Override
-	protected void loadFlags()
-	{
-		
-	}
+	public boolean isBiModule() { return true; }
+	@Override
+	protected void loadVariables() { loadBlockades(); }
+	@Override
+	protected void loadFlags() {}
 	
 	private void loadBlockades()
 	{
 		if(keyType == ClassType.BOOLEAN)
 		{
+			//Main Classes
 			addBlockedFiles("SortedMap", "NavigableMap", "RBTreeMap", "AVLTreeMap");
 			addBlockedFiles("OrderedMap", "ArrayMap", "LinkedOpenHashMap", "LinkedOpenCustomHashMap");
 			addBlockedFiles("ConcurrentMap", "ConcurrentOpenHashMap");
 			addBlockedFiles("ImmutableOpenHashMap", "OpenHashMap", "OpenCustomHashMap");
+			
+			//Test Classes
+			addBlockedFiles("TestMap", "MapTests", "MapTestSuiteBuilder", "MapConstructorTests", "TestMapGenerator", "SimpleMapTestGenerator", "DerivedMapGenerators", "AbstractMapTester");
+			addBlockedFiles("TestSortedMapGenerator", "NavigableMapTestSuiteBuilder", "SortedMapTestSuiteBuilder");
+			addBlockedFiles("TestOrderedMapGenerator");
+			addBlockedFilter(T -> T.endsWith("Tester") && (T.startsWith("Map") || T.startsWith("OrderedMap") || T.startsWith("SortedMap") || T.startsWith("NavigableMap")));
 		}
 	}
 	
-	private void loadRemappers()
+	@Override
+	protected void loadRemappers()
 	{
+		//Main Classes
 		addBiRequirement("Map");
 		addBiRequirement("SortedMap");
 		addBiRequirement("OrderedMap");
@@ -56,9 +59,71 @@ public class MapModule extends BaseModule
 		addRemapper("EnumMap", "Enum2%sMap");
 		addRemapper("LinkedEnumMap", "LinkedEnum2%sMap");
 		addRemapper("ImmutableOpenHashMap", "Immutable%sOpenHashMap");
+		
+		//Test Classes
+		addBiRequirement("TestMapGenerator");
+		addBiRequirement("TestSortedMapGenerator");
+		addBiRequirement("TestOrderedMapGenerator");
+		addBiRequirement("SimpleMapTestGenerator");
+		addBiRequirement("DerivedMapGenerators");
+		addBiRequirement("AbstractMapTester");
+		addBiRequirement("MapTestSuiteBuilder");
+		addBiRequirement("SortedMapTestSuiteBuilder");
+		addBiRequirement("NavigableMapTestSuiteBuilder");
+		addBiRequirement("OrderedMapTestSuiteBuilder");
+		addBiRequirement("MapTests");
+		addBiRequirement("MapConstructorTests");
+		addBiRequirement("TestMap");
+		addBiRequirement("MapAddToTester");
+		addBiRequirement("MapSubFromTester");
+		addBiRequirement("MapClearTester");
+		addBiRequirement("MapComputeIfAbsentTester");
+		addBiRequirement("MapComputeIfPresentTester");
+		addBiRequirement("MapComputeTester");
+		addBiRequirement("MapCopyTester");
+		addBiRequirement("MapContainsTester");
+		addBiRequirement("MapContainsKeyTester");
+		addBiRequirement("MapContainsValueTester");
+		addBiRequirement("MapCreatorTester");
+		addBiRequirement("MapEntrySetTester");
+		addBiRequirement("MapEqualsTester");
+		addBiRequirement("MapForEachTester");
+		addBiRequirement("MapGetOrDefaultTester");
+		addBiRequirement("MapGetTester");
+		addBiRequirement("MapHashCodeTester");
+		addBiRequirement("MapIsEmptyTester");
+		addBiRequirement("MapMergeTester");
+		addBiRequirement("MapMergeBulkTester");
+		addBiRequirement("MapPutAllArrayTester");
+		addBiRequirement("MapPutAllTester");
+		addBiRequirement("MapPutIfAbsentTester");
+		addBiRequirement("MapPutTester");
+		addBiRequirement("MapRemoveEntryTester");
+		addBiRequirement("MapRemoveOrDefaultTester");
+		addBiRequirement("MapRemoveTester");
+		addBiRequirement("MapReplaceAllTester");
+		addBiRequirement("MapReplaceEntryTester");
+		addBiRequirement("MapReplaceTester");
+		addBiRequirement("MapSizeTester");
+		addBiRequirement("MapSupplyIfAbsentTester");
+		addBiRequirement("MapToStringTester");
+		addBiRequirement("NavigableMapNavigationTester");
+		addBiRequirement("SortedMapNavigationTester");
+		addBiRequirement("OrderedMapNavigationTester");
+		addBiRequirement("OrderedMapMoveTester");
+		addBiRequirement("MapConstructorTester");
+		
+		addRemapper("TestMapGenerator", "Test%sMapGenerator");
+		addRemapper("TestSortedMapGenerator", "Test%sSortedMapGenerator");
+		addRemapper("TestOrderedMapGenerator", "Test%sOrderedMapGenerator");
+		addRemapper("SimpleMapTestGenerator", "Simple%sMapTestGenerator");
+		addRemapper("DerivedMapGenerators", "Derived%sMapGenerators");
+		addRemapper("AbstractMapTester", "Abstract%sMapTester");
+		addRemapper("TestMap", "Test%sMap");
 	}
 	
-	private void loadFunctions()
+	@Override
+	protected void loadFunctions()
 	{
 		addFunctionValueMapper("BULK_MERGE", "mergeAll");
 		addFunctionValueMappers("COMPUTE_IF_ABSENT", "compute%sIfAbsent");
@@ -84,7 +149,8 @@ public class MapModule extends BaseModule
 		addFunctionValueMappers("SUPPLY_IF_ABSENT", "supply%sIfAbsent");
 	}
 	
-	private void loadClasses()
+	@Override
+	protected void loadClasses()
 	{
 		//Implementation Classes
 		addAbstractBiMapper("IMMUTABLE_HASH_MAP", "Immutable%sOpenHashMap", "2");
@@ -111,5 +177,28 @@ public class MapModule extends BaseModule
 		addBiClassMapper("SORTED_MAP", "SortedMap", "2");
 		addBiClassMapper("CONCURRENT_MAP", "ConcurrentMap", "2");
 		addBiClassMapper("MAP", "Map", "2");
+	}
+	
+	@Override
+	protected void loadTestClasses()
+	{
+		//Implementation Classes
+		addAbstractBiMapper("SIMPLE_TEST_MAP", "Test%sMap", "2");
+		addBiClassMapper("MAP_TESTS", "MapTests", "2");
+		addAbstractBiMapper("NAVIGABLE_MAP_TEST_BUILDER", "%sNavigableMapTestSuiteBuilder", "2");
+		addAbstractBiMapper("SORTED_MAP_TEST_BUILDER", "%sSortedMapTestSuiteBuilder", "2");
+		addAbstractBiMapper("ORDERED_MAP_TEST_BUILDER", "%sOrderedMapTestSuiteBuilder", "2");
+		addAbstractBiMapper("MAP_TEST_BUILDER", "%sMapTestSuiteBuilder", "2");
+		
+		//Abstract Classes
+		addAbstractBiMapper("ABSTRACT_MAP_TESTER", "Abstract%sMapTester", "2");
+		
+		//Helper Classes
+		addAbstractBiMapper("MAP_CONSTRUCTOR_TESTS", "%sMapConstructorTests", "2");
+		addAbstractBiMapper("SIMPLE_MAP_TEST_GENERATOR", "Simple%sMapTestGenerator", "2");
+		addAbstractBiMapper("DERIVED_MAP_GENERATORS", "Derived%sMapGenerators", "2");
+		addAbstractBiMapper("TEST_ORDERED_MAP_GENERATOR", "Test%sOrderedMapGenerator", "2");
+		addAbstractBiMapper("TEST_SORTED_MAP_GENERATOR", "Test%sSortedMapGenerator", "2");
+		addAbstractBiMapper("TEST_MAP_GENERATOR", "Test%sMapGenerator", "2");
 	}
 }

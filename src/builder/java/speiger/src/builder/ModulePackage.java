@@ -21,6 +21,7 @@ import speiger.src.builder.processor.TemplateProcess;
 @SuppressWarnings("javadoc")
 public class ModulePackage
 {
+	private static final BiConsumer<String, RequiredType> VOID = (K, V) -> {};
 	public static final ClassType[] TYPE = ClassType.values();
 	final ClassType keyType;
 	final ClassType valueType;
@@ -30,7 +31,7 @@ public class ModulePackage
 	List<Predicate<String>> blockedFilters = new ArrayList<>();
 	List<IMapper> mappers = new ArrayList<>();
 	Set<String> flags = new LinkedHashSet<>();
-	BiConsumer<String, RequiredType> requirements = (K, V) -> {};
+	BiConsumer<String, RequiredType> requirements = VOID;
 	
 	public ModulePackage(ClassType keyType, ClassType valueType) {
 		this.keyType = keyType;
@@ -38,6 +39,7 @@ public class ModulePackage
 	}
 	
 	public void finish() {
+		requirements = VOID;
 		mappers.sort(Comparator.comparing(IMapper::getSearchValue, Comparator.comparingInt(String::length).reversed()));
 		mappers.sort(Comparator.comparing(IMapper::getSearchValue, this::sort));
 	}

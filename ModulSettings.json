@@ -1,0 +1,1082 @@
+{
+	"Async": true,
+	"Base": true,
+	"Collection": true,
+	"Function": true,
+	"List": true,
+	"Map": true,
+	"Pair": true,
+	"PriorityQueue": true,
+	"Set": true,
+	"Boolean": {
+		"Base": {
+			"enabled": true
+		},
+		"Boolean": {
+			"Function": {
+				"enabled": true
+			},
+			"Map": {
+				"enabled": true
+			},
+			"Pair": {
+				"enabled": true
+			}
+		},
+		"Byte": {
+			"Function": {
+				"enabled": true
+			},
+			"Map": {
+				"enabled": true
+			},
+			"Pair": {
+				"enabled": true
+			}
+		},
+		"Short": {
+			"Function": {
+				"enabled": true
+			},
+			"Map": {
+				"enabled": true
+			},
+			"Pair": {
+				"enabled": true
+			}
+		},
+		"Character": {
+			"Function": {
+				"enabled": true
+			},
+			"Map": {
+				"enabled": true
+			},
+			"Pair": {
+				"enabled": true
+			}
+		},
+		"Integer": {
+			"Function": {
+				"enabled": true
+			},
+			"Map": {
+				"enabled": true
+			},
+			"Pair": {
+				"enabled": true
+			}
+		},
+		"Long": {
+			"Function": {
+				"enabled": true
+			},
+			"Map": {
+				"enabled": true
+			},
+			"Pair": {
+				"enabled": true
+			}
+		},
+		"Float": {
+			"Function": {
+				"enabled": true
+			},
+			"Map": {
+				"enabled": true
+			},
+			"Pair": {
+				"enabled": true
+			}
+		},
+		"Double": {
+			"Function": {
+				"enabled": true
+			},
+			"Map": {
+				"enabled": true
+			},
+			"Pair": {
+				"enabled": true
+			}
+		},
+		"Object": {
+			"Function": {
+				"enabled": true
+			},
+			"Map": {
+				"enabled": true
+			},
+			"Pair": {
+				"enabled": true
+			}
+		},
+		"Collection": {
+			"enabled": true
+		},
+		"PriorityQueue": {
+			"enabled": true
+		},
+		"List": {
+			"enabled": true
+		},
+		"Set": {
+			"enabled": true
+		},
+		"Async": {
+			"enabled": true
+		}
+	},
+	"Byte": {
+		"Base": {
+			"enabled": true
+		},
+		"Boolean": {
+			"Function": {
+				"enabled": true
+			},
+			"Map": {
+				"enabled": true
+			},
+			"Pair": {
+				"enabled": true
+			}
+		},
+		"Byte": {
+			"Function": {
+				"enabled": true
+			},
+			"Map": {
+				"enabled": true
+			},
+			"Pair": {
+				"enabled": true
+			}
+		},
+		"Short": {
+			"Function": {
+				"enabled": true
+			},
+			"Map": {
+				"enabled": true
+			},
+			"Pair": {
+				"enabled": true
+			}
+		},
+		"Character": {
+			"Function": {
+				"enabled": true
+			},
+			"Map": {
+				"enabled": true
+			},
+			"Pair": {
+				"enabled": true
+			}
+		},
+		"Integer": {
+			"Function": {
+				"enabled": true
+			},
+			"Map": {
+				"enabled": true
+			},
+			"Pair": {
+				"enabled": true
+			}
+		},
+		"Long": {
+			"Function": {
+				"enabled": true
+			},
+			"Map": {
+				"enabled": true
+			},
+			"Pair": {
+				"enabled": true
+			}
+		},
+		"Float": {
+			"Function": {
+				"enabled": true
+			},
+			"Map": {
+				"enabled": true
+			},
+			"Pair": {
+				"enabled": true
+			}
+		},
+		"Double": {
+			"Function": {
+				"enabled": true
+			},
+			"Map": {
+				"enabled": true
+			},
+			"Pair": {
+				"enabled": true
+			}
+		},
+		"Object": {
+			"Function": {
+				"enabled": true
+			},
+			"Map": {
+				"enabled": true
+			},
+			"Pair": {
+				"enabled": true
+			}
+		},
+		"Collection": {
+			"enabled": true
+		},
+		"PriorityQueue": {
+			"enabled": true
+		},
+		"List": {
+			"enabled": true
+		},
+		"Set": {
+			"enabled": true
+		},
+		"Async": {
+			"enabled": true
+		}
+	},
+	"Short": {
+		"Base": {
+			"enabled": true
+		},
+		"Boolean": {
+			"Function": {
+				"enabled": true
+			},
+			"Map": {
+				"enabled": true
+			},
+			"Pair": {
+				"enabled": true
+			}
+		},
+		"Byte": {
+			"Function": {
+				"enabled": true
+			},
+			"Map": {
+				"enabled": true
+			},
+			"Pair": {
+				"enabled": true
+			}
+		},
+		"Short": {
+			"Function": {
+				"enabled": true
+			},
+			"Map": {
+				"enabled": true
+			},
+			"Pair": {
+				"enabled": true
+			}
+		},
+		"Character": {
+			"Function": {
+				"enabled": true
+			},
+			"Map": {
+				"enabled": true
+			},
+			"Pair": {
+				"enabled": true
+			}
+		},
+		"Integer": {
+			"Function": {
+				"enabled": true
+			},
+			"Map": {
+				"enabled": true
+			},
+			"Pair": {
+				"enabled": true
+			}
+		},
+		"Long": {
+			"Function": {
+				"enabled": true
+			},
+			"Map": {
+				"enabled": true
+			},
+			"Pair": {
+				"enabled": true
+			}
+		},
+		"Float": {
+			"Function": {
+				"enabled": true
+			},
+			"Map": {
+				"enabled": true
+			},
+			"Pair": {
+				"enabled": true
+			}
+		},
+		"Double": {
+			"Function": {
+				"enabled": true
+			},
+			"Map": {
+				"enabled": true
+			},
+			"Pair": {
+				"enabled": true
+			}
+		},
+		"Object": {
+			"Function": {
+				"enabled": true
+			},
+			"Map": {
+				"enabled": true
+			},
+			"Pair": {
+				"enabled": true
+			}
+		},
+		"Collection": {
+			"enabled": true
+		},
+		"PriorityQueue": {
+			"enabled": true
+		},
+		"List": {
+			"enabled": true
+		},
+		"Set": {
+			"enabled": true
+		},
+		"Async": {
+			"enabled": true
+		}
+	},
+	"Character": {
+		"Base": {
+			"enabled": true
+		},
+		"Boolean": {
+			"Function": {
+				"enabled": true
+			},
+			"Map": {
+				"enabled": true
+			},
+			"Pair": {
+				"enabled": true
+			}
+		},
+		"Byte": {
+			"Function": {
+				"enabled": true
+			},
+			"Map": {
+				"enabled": true
+			},
+			"Pair": {
+				"enabled": true
+			}
+		},
+		"Short": {
+			"Function": {
+				"enabled": true
+			},
+			"Map": {
+				"enabled": true
+			},
+			"Pair": {
+				"enabled": true
+			}
+		},
+		"Character": {
+			"Function": {
+				"enabled": true
+			},
+			"Map": {
+				"enabled": true
+			},
+			"Pair": {
+				"enabled": true
+			}
+		},
+		"Integer": {
+			"Function": {
+				"enabled": true
+			},
+			"Map": {
+				"enabled": true
+			},
+			"Pair": {
+				"enabled": true
+			}
+		},
+		"Long": {
+			"Function": {
+				"enabled": true
+			},
+			"Map": {
+				"enabled": true
+			},
+			"Pair": {
+				"enabled": true
+			}
+		},
+		"Float": {
+			"Function": {
+				"enabled": true
+			},
+			"Map": {
+				"enabled": true
+			},
+			"Pair": {
+				"enabled": true
+			}
+		},
+		"Double": {
+			"Function": {
+				"enabled": true
+			},
+			"Map": {
+				"enabled": true
+			},
+			"Pair": {
+				"enabled": true
+			}
+		},
+		"Object": {
+			"Function": {
+				"enabled": true
+			},
+			"Map": {
+				"enabled": true
+			},
+			"Pair": {
+				"enabled": true
+			}
+		},
+		"Collection": {
+			"enabled": true
+		},
+		"PriorityQueue": {
+			"enabled": true
+		},
+		"List": {
+			"enabled": true
+		},
+		"Set": {
+			"enabled": true
+		},
+		"Async": {
+			"enabled": true
+		}
+	},
+	"Integer": {
+		"Base": {
+			"enabled": true
+		},
+		"Boolean": {
+			"Function": {
+				"enabled": true
+			},
+			"Map": {
+				"enabled": true
+			},
+			"Pair": {
+				"enabled": true
+			}
+		},
+		"Byte": {
+			"Function": {
+				"enabled": true
+			},
+			"Map": {
+				"enabled": true
+			},
+			"Pair": {
+				"enabled": true
+			}
+		},
+		"Short": {
+			"Function": {
+				"enabled": true
+			},
+			"Map": {
+				"enabled": true
+			},
+			"Pair": {
+				"enabled": true
+			}
+		},
+		"Character": {
+			"Function": {
+				"enabled": true
+			},
+			"Map": {
+				"enabled": true
+			},
+			"Pair": {
+				"enabled": true
+			}
+		},
+		"Integer": {
+			"Function": {
+				"enabled": true
+			},
+			"Map": {
+				"enabled": true
+			},
+			"Pair": {
+				"enabled": true
+			}
+		},
+		"Long": {
+			"Function": {
+				"enabled": true
+			},
+			"Map": {
+				"enabled": true
+			},
+			"Pair": {
+				"enabled": true
+			}
+		},
+		"Float": {
+			"Function": {
+				"enabled": true
+			},
+			"Map": {
+				"enabled": true
+			},
+			"Pair": {
+				"enabled": true
+			}
+		},
+		"Double": {
+			"Function": {
+				"enabled": true
+			},
+			"Map": {
+				"enabled": true
+			},
+			"Pair": {
+				"enabled": true
+			}
+		},
+		"Object": {
+			"Function": {
+				"enabled": true
+			},
+			"Map": {
+				"enabled": true
+			},
+			"Pair": {
+				"enabled": true
+			}
+		},
+		"Collection": {
+			"enabled": true
+		},
+		"PriorityQueue": {
+			"enabled": true
+		},
+		"List": {
+			"enabled": true
+		},
+		"Set": {
+			"enabled": true
+		},
+		"Async": {
+			"enabled": true
+		}
+	},
+	"Long": {
+		"Base": {
+			"enabled": true
+		},
+		"Boolean": {
+			"Function": {
+				"enabled": true
+			},
+			"Map": {
+				"enabled": true
+			},
+			"Pair": {
+				"enabled": true
+			}
+		},
+		"Byte": {
+			"Function": {
+				"enabled": true
+			},
+			"Map": {
+				"enabled": true
+			},
+			"Pair": {
+				"enabled": true
+			}
+		},
+		"Short": {
+			"Function": {
+				"enabled": true
+			},
+			"Map": {
+				"enabled": true
+			},
+			"Pair": {
+				"enabled": true
+			}
+		},
+		"Character": {
+			"Function": {
+				"enabled": true
+			},
+			"Map": {
+				"enabled": true
+			},
+			"Pair": {
+				"enabled": true
+			}
+		},
+		"Integer": {
+			"Function": {
+				"enabled": true
+			},
+			"Map": {
+				"enabled": true
+			},
+			"Pair": {
+				"enabled": true
+			}
+		},
+		"Long": {
+			"Function": {
+				"enabled": true
+			},
+			"Map": {
+				"enabled": true
+			},
+			"Pair": {
+				"enabled": true
+			}
+		},
+		"Float": {
+			"Function": {
+				"enabled": true
+			},
+			"Map": {
+				"enabled": true
+			},
+			"Pair": {
+				"enabled": true
+			}
+		},
+		"Double": {
+			"Function": {
+				"enabled": true
+			},
+			"Map": {
+				"enabled": true
+			},
+			"Pair": {
+				"enabled": true
+			}
+		},
+		"Object": {
+			"Function": {
+				"enabled": true
+			},
+			"Map": {
+				"enabled": true
+			},
+			"Pair": {
+				"enabled": true
+			}
+		},
+		"Collection": {
+			"enabled": true
+		},
+		"PriorityQueue": {
+			"enabled": true
+		},
+		"List": {
+			"enabled": true
+		},
+		"Set": {
+			"enabled": true
+		},
+		"Async": {
+			"enabled": true
+		}
+	},
+	"Float": {
+		"Base": {
+			"enabled": true
+		},
+		"Boolean": {
+			"Function": {
+				"enabled": true
+			},
+			"Map": {
+				"enabled": true
+			},
+			"Pair": {
+				"enabled": true
+			}
+		},
+		"Byte": {
+			"Function": {
+				"enabled": true
+			},
+			"Map": {
+				"enabled": true
+			},
+			"Pair": {
+				"enabled": true
+			}
+		},
+		"Short": {
+			"Function": {
+				"enabled": true
+			},
+			"Map": {
+				"enabled": true
+			},
+			"Pair": {
+				"enabled": true
+			}
+		},
+		"Character": {
+			"Function": {
+				"enabled": true
+			},
+			"Map": {
+				"enabled": true
+			},
+			"Pair": {
+				"enabled": true
+			}
+		},
+		"Integer": {
+			"Function": {
+				"enabled": true
+			},
+			"Map": {
+				"enabled": true
+			},
+			"Pair": {
+				"enabled": true
+			}
+		},
+		"Long": {
+			"Function": {
+				"enabled": true
+			},
+			"Map": {
+				"enabled": true
+			},
+			"Pair": {
+				"enabled": true
+			}
+		},
+		"Float": {
+			"Function": {
+				"enabled": true
+			},
+			"Map": {
+				"enabled": true
+			},
+			"Pair": {
+				"enabled": true
+			}
+		},
+		"Double": {
+			"Function": {
+				"enabled": true
+			},
+			"Map": {
+				"enabled": true
+			},
+			"Pair": {
+				"enabled": true
+			}
+		},
+		"Object": {
+			"Function": {
+				"enabled": true
+			},
+			"Map": {
+				"enabled": true
+			},
+			"Pair": {
+				"enabled": true
+			}
+		},
+		"Collection": {
+			"enabled": true
+		},
+		"PriorityQueue": {
+			"enabled": true
+		},
+		"List": {
+			"enabled": true
+		},
+		"Set": {
+			"enabled": true
+		},
+		"Async": {
+			"enabled": true
+		}
+	},
+	"Double": {
+		"Base": {
+			"enabled": true
+		},
+		"Boolean": {
+			"Function": {
+				"enabled": true
+			},
+			"Map": {
+				"enabled": true
+			},
+			"Pair": {
+				"enabled": true
+			}
+		},
+		"Byte": {
+			"Function": {
+				"enabled": true
+			},
+			"Map": {
+				"enabled": true
+			},
+			"Pair": {
+				"enabled": true
+			}
+		},
+		"Short": {
+			"Function": {
+				"enabled": true
+			},
+			"Map": {
+				"enabled": true
+			},
+			"Pair": {
+				"enabled": true
+			}
+		},
+		"Character": {
+			"Function": {
+				"enabled": true
+			},
+			"Map": {
+				"enabled": true
+			},
+			"Pair": {
+				"enabled": true
+			}
+		},
+		"Integer": {
+			"Function": {
+				"enabled": true
+			},
+			"Map": {
+				"enabled": true
+			},
+			"Pair": {
+				"enabled": true
+			}
+		},
+		"Long": {
+			"Function": {
+				"enabled": true
+			},
+			"Map": {
+				"enabled": true
+			},
+			"Pair": {
+				"enabled": true
+			}
+		},
+		"Float": {
+			"Function": {
+				"enabled": true
+			},
+			"Map": {
+				"enabled": true
+			},
+			"Pair": {
+				"enabled": true
+			}
+		},
+		"Double": {
+			"Function": {
+				"enabled": true
+			},
+			"Map": {
+				"enabled": true
+			},
+			"Pair": {
+				"enabled": true
+			}
+		},
+		"Object": {
+			"Function": {
+				"enabled": true
+			},
+			"Map": {
+				"enabled": true
+			},
+			"Pair": {
+				"enabled": true
+			}
+		},
+		"Collection": {
+			"enabled": true
+		},
+		"PriorityQueue": {
+			"enabled": true
+		},
+		"List": {
+			"enabled": true
+		},
+		"Set": {
+			"enabled": true
+		},
+		"Async": {
+			"enabled": true
+		}
+	},
+	"Object": {
+		"Base": {
+			"enabled": true
+		},
+		"Boolean": {
+			"Function": {
+				"enabled": true
+			},
+			"Map": {
+				"enabled": true
+			},
+			"Pair": {
+				"enabled": true
+			}
+		},
+		"Byte": {
+			"Function": {
+				"enabled": true
+			},
+			"Map": {
+				"enabled": true
+			},
+			"Pair": {
+				"enabled": true
+			}
+		},
+		"Short": {
+			"Function": {
+				"enabled": true
+			},
+			"Map": {
+				"enabled": true
+			},
+			"Pair": {
+				"enabled": true
+			}
+		},
+		"Character": {
+			"Function": {
+				"enabled": true
+			},
+			"Map": {
+				"enabled": true
+			},
+			"Pair": {
+				"enabled": true
+			}
+		},
+		"Integer": {
+			"Function": {
+				"enabled": true
+			},
+			"Map": {
+				"enabled": true
+			},
+			"Pair": {
+				"enabled": true
+			}
+		},
+		"Long": {
+			"Function": {
+				"enabled": true
+			},
+			"Map": {
+				"enabled": true
+			},
+			"Pair": {
+				"enabled": true
+			}
+		},
+		"Float": {
+			"Function": {
+				"enabled": true
+			},
+			"Map": {
+				"enabled": true
+			},
+			"Pair": {
+				"enabled": true
+			}
+		},
+		"Double": {
+			"Function": {
+				"enabled": true
+			},
+			"Map": {
+				"enabled": true
+			},
+			"Pair": {
+				"enabled": true
+			}
+		},
+		"Object": {
+			"Function": {
+				"enabled": true
+			},
+			"Map": {
+				"enabled": true
+			},
+			"Pair": {
+				"enabled": true
+			}
+		},
+		"Collection": {
+			"enabled": true
+		},
+		"PriorityQueue": {
+			"enabled": true
+		},
+		"List": {
+			"enabled": true
+		},
+		"Set": {
+			"enabled": true
+		},
+		"Async": {
+			"enabled": true
+		}
+	}
+}
