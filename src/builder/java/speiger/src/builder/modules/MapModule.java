@@ -13,6 +13,8 @@ public class MapModule extends BaseModule
 	protected void loadVariables() {}
 	@Override
 	protected void loadFlags() {}
+	@Override
+	public boolean isModuleValid(ClassType keyType, ClassType valueType) { return keyType != ClassType.BOOLEAN; }
 	
 	@Override
 	protected void loadBlockades()

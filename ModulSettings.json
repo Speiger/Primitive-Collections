@@ -13,6 +13,87 @@
 		"Base": {
 			"enabled": true
 		},
+		"Boolean": {
+			"enabled": true,
+			"Function": {
+				"enabled": true
+			},
+			"Pair": {
+				"enabled": true
+			}
+		},
+		"Byte": {
+			"enabled": true,
+			"Function": {
+				"enabled": true
+			},
+			"Pair": {
+				"enabled": true
+			}
+		},
+		"Short": {
+			"enabled": true,
+			"Function": {
+				"enabled": true
+			},
+			"Pair": {
+				"enabled": true
+			}
+		},
+		"Character": {
+			"enabled": true,
+			"Function": {
+				"enabled": true
+			},
+			"Pair": {
+				"enabled": true
+			}
+		},
+		"Integer": {
+			"enabled": true,
+			"Function": {
+				"enabled": true
+			},
+			"Pair": {
+				"enabled": true
+			}
+		},
+		"Long": {
+			"enabled": true,
+			"Function": {
+				"enabled": true
+			},
+			"Pair": {
+				"enabled": true
+			}
+		},
+		"Float": {
+			"enabled": true,
+			"Function": {
+				"enabled": true
+			},
+			"Pair": {
+				"enabled": true
+			}
+		},
+		"Double": {
+			"enabled": true,
+			"Function": {
+				"enabled": true
+			},
+			"Pair": {
+				"enabled": true
+			}
+		},
+		"Object": {
+			"enabled": true,
+			"Function": {
+				"enabled": true
+			},
+			"Pair": {
+				"enabled": true
+			}
+		},
 		"Collection": {
 			"enabled": true
 		},

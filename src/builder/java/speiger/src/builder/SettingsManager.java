@@ -54,8 +54,8 @@ public class SettingsManager
 		data.addProperty(moduleName, true);
 		if(module.isBiModule()) {
 			for(ClassType keyType : ModulePackage.TYPE) {
-				if(keyType == ClassType.BOOLEAN) continue;
 				for(ClassType valueType : ModulePackage.TYPE) {
+					if(!module.isModuleValid(keyType, valueType)) continue;
 					JsonObject obj = new JsonObject();
 					obj.addProperty("enabled", true);
 					for(String key : module.getModuleKeys(keyType, valueType)) {
@@ -67,6 +67,7 @@ public class SettingsManager
 			return;
 		}
 		for(ClassType keyType : ModulePackage.TYPE) {
+			if(!module.isModuleValid(keyType, keyType)) continue;
 			JsonObject obj = new JsonObject();
 			obj.addProperty("enabled", true);
 			for(String key : module.getModuleKeys(keyType, keyType)) {
