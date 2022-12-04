@@ -8,11 +8,12 @@ public class CollectionModule extends BaseModule
 	@Override
 	public String getModuleName() { return "Collection"; }
 	@Override
-	protected void loadVariables() { loadBlockades(); }
+	protected void loadVariables() {}
 	@Override
 	protected void loadFlags() {}
 	
-	private void loadBlockades()
+	@Override
+	protected void loadBlockades()
 	{
 		if(keyType.isObject()) {
 			addBlockedFiles("Stack");

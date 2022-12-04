@@ -17,27 +17,33 @@ import java.util.Comparator;
 
 #endif
 import speiger.src.collections.PACKAGE.collections.ITERABLE;
+#if OBJECT_ASYNC_MODULE
 import speiger.src.collections.PACKAGE.collections.COLLECTION;
+#endif
 import speiger.src.collections.PACKAGE.collections.ITERATOR;
 import speiger.src.collections.PACKAGE.functions.TASK;
 import speiger.src.collections.PACKAGE.functions.function.PREDICATE;
+#if OBJECT_ASYNC_MODULE
 import speiger.src.collections.PACKAGE.functions.function.TO_OBJECT_FUNCTION;
+#endif
 import speiger.src.collections.PACKAGE.functions.function.UNARY_OPERATOR;
 import speiger.src.collections.PACKAGE.lists.ARRAY_LIST;
+#if OBJECT_ASYNC_MODULE
 import speiger.src.collections.PACKAGE.lists.LIST;
 #if !TYPE_BOOLEAN
 import speiger.src.collections.PACKAGE.sets.SET;
 import speiger.src.collections.PACKAGE.sets.LINKED_HASH_SET;
 #endif
-#if !TYPE_BOOLEAN
+#endif
+#if !TYPE_BOOLEAN && BOOLEAN_ASYNC_MODULE
 import speiger.src.collections.booleans.utils.BooleanAsyncBuilder;
 import speiger.src.collections.booleans.utils.BooleanAsyncBuilder.BaseBooleanTask;
 #endif
-#if !TYPE_OBJECT
+#if !TYPE_OBJECT && OBJECT_ASYNC_MODULE
 import speiger.src.collections.objects.utils.ObjectAsyncBuilder;
 import speiger.src.collections.objects.utils.ObjectAsyncBuilder.BaseObjectTask;
 #endif
-#if !TYPE_INT
+#if !TYPE_INT && INT_ASYNC_MODULE
 import speiger.src.collections.ints.utils.IntAsyncBuilder;
 import speiger.src.collections.ints.utils.IntAsyncBuilder.BaseIntTask;
 #endif
@@ -123,6 +129,7 @@ public class ASYNC_BUILDER KEY_GENERIC_TYPE
 		return new ASYNC_BUILDERBRACES(ARRAY_LIST.wrap(values));
 	}
 	
+#if OBJECT_ASYNC_MODULE
 	/**
 	 * Maps the elements to something else
 	 * @param mapper the mapping function
@@ -154,6 +161,7 @@ public class ASYNC_BUILDER KEY_GENERIC_TYPE
 		return new ObjectAsyncBuilder<>(ITERABLES.arrayFlatMap(iterable, mapper));
 	}
 	
+#endif
 	/**
 	 * Filters out the unwanted elements out of the Iterable
 	 * @param filter the elements that should be kept
@@ -214,6 +222,7 @@ public class ASYNC_BUILDER KEY_GENERIC_TYPE
 		return this;
 	}
 	
+#if OBJECT_ASYNC_MODULE
 	/**
 	 * Iterates over the Iterable with a desired action
 	 * @param action that should be applied
@@ -223,6 +232,7 @@ public class ASYNC_BUILDER KEY_GENERIC_TYPE
 		return new ObjectAsyncBuilder<>(new ForEachTask<>(iterable.iterator(), action));
 	}
 	
+#endif
 	/**
 	 * Reduces the elements inside of the Iterable down to one element
 	 * @param operator that reduces the elements.
@@ -257,6 +267,7 @@ public class ASYNC_BUILDER KEY_GENERIC_TYPE
 	}
 	
 #endif
+#if OBJECT_ASYNC_MODULE
 	/**
 	 * Pours all elements into a List that can be later
 	 * @return a new Builder with the pour function applied
@@ -285,6 +296,8 @@ public class ASYNC_BUILDER KEY_GENERIC_TYPE
 		return new ObjectAsyncBuilder<>(new CollectTask<>(iterable.iterator(), collection));
 	}
 	
+#endif
+#if BOOLEAN_ASYNC_MODULE
 	/**
 	 * Searches through the elements of the Iterable to find if the desired element is present.
 	 * @param filter that decides the desired elements
@@ -312,6 +325,7 @@ public class ASYNC_BUILDER KEY_GENERIC_TYPE
 		return new BooleanAsyncBuilder(new MatchTaskBRACES(iterable.iterator(), filter, 2));
 	}
 	
+#endif
 	/**
 	 * Searches through the elements of the Iterable to find if the desired element.
 	 * If not present it will return the default value of the type
@@ -323,6 +337,7 @@ public class ASYNC_BUILDER KEY_GENERIC_TYPE
 		return this;
 	}
 	
+#if INT_ASYNC_MODULE
 	/**
 	 * Counts all desired elements inside the Iterable
 	 * @param filter that decides the desired elements
@@ -332,6 +347,7 @@ public class ASYNC_BUILDER KEY_GENERIC_TYPE
 		return new IntAsyncBuilder(new CountTaskBRACES(iterable.iterator(), filter));
 	}
 	
+#endif
 	/**
 	 * Optional way to add a custom executor that runs this offthread task.
 	 * Can only be set after the action was decided on.
@@ -512,6 +528,7 @@ public class ASYNC_BUILDER KEY_GENERIC_TYPE
 		}
 	}
 	
+#if BOOLEAN_ASYNC_MODULE
 	private static class MatchTask KEY_GENERIC_TYPE extends BaseBooleanTask
 	{
 		ITERATOR KEY_GENERIC_TYPE iter;
@@ -580,6 +597,7 @@ public class ASYNC_BUILDER KEY_GENERIC_TYPE
 		}
 	}
 	
+#endif
 	private static class FindFirstTask KEY_GENERIC_TYPE extends BASE_TASK KEY_GENERIC_TYPE
 	{
 		ITERATOR KEY_GENERIC_TYPE iter;
@@ -614,6 +632,7 @@ public class ASYNC_BUILDER KEY_GENERIC_TYPE
 		}
 	}
 	
+#if INT_ASYNC_MODULE
 	private static class CountTask KEY_GENERIC_TYPE extends BaseIntTask
 	{
 		ITERATOR KEY_GENERIC_TYPE iter;
@@ -648,6 +667,8 @@ public class ASYNC_BUILDER KEY_GENERIC_TYPE
 		}
 	}
 	
+#endif
+#if OBJECT_ASYNC_MODULE
 	private static class CollectTask KSS_GENERIC_TYPE<V, T extends COLLECTION KEY_SPECIAL_GENERIC_TYPE<V>> extends BaseObjectTask<T>
 	{
 		ITERATOR KEY_SPECIAL_GENERIC_TYPE<V> iter;
@@ -704,6 +725,7 @@ public class ASYNC_BUILDER KEY_GENERIC_TYPE
 		}
 	}
 	
+#endif
 	/**
 	 * Base Task of the Actions that can be performed.
 	 * Allows to simplify the actions that get executed.

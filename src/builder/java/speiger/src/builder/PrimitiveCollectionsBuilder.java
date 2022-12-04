@@ -239,7 +239,7 @@ public class PrimitiveCollectionsBuilder extends TemplateProcessor
 			boolean tests = flags.contains("tests");
 			boolean forceTests =  flags.contains("force-tests");
 			boolean load = flags.contains("load");
-			boolean save = !flags.contains("save");
+			boolean save = flags.contains("save");
 			int flag = (load ? LOAD : 0) | (save ? SAVE : 0);
 //			new PrimitiveCollectionsBuilder(silent).test();
             new PrimitiveCollectionsBuilder(silent).setFlags(flag).process(force);

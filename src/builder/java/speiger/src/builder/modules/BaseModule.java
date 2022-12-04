@@ -35,6 +35,7 @@ public abstract class BaseModule
 		loadTestClasses();
 		loadFunctions();
 		loadRemappers();
+		loadBlockades();
 		loadFlags();
 	}
 	
@@ -50,19 +51,28 @@ public abstract class BaseModule
 	protected abstract void loadTestClasses();
 	protected abstract void loadFunctions();
 	protected abstract void loadRemappers();
+	protected abstract void loadBlockades();
 	protected abstract void loadFlags();
 	
 	public abstract String getModuleName();
 	public boolean isBiModule() { return false; }
 	public Set<String> getModuleKeys(ClassType keyType, ClassType valueType) { return Collections.emptySet(); }
 	
+	protected boolean isModuleEnabled() {
+		return manager == null || manager.isModuleEnabled(this, keyType, valueType);
+	}
+	
 	protected boolean isModuleEnabled(String name) {
-		if(manager == null) return true;
-		return manager.isModuleEnabled(this, keyType, valueType, name);
+		return manager == null || manager.isModuleEnabled(this, keyType, valueType, name);
 	}
 	
 	protected void addFlag(String name) {
 		entry.addFlag(name);
+	}
+	
+	protected void addKeyFlag(String name) {
+		entry.addFlag(name);
+		entry.addFlag(keyType.getCapType()+"_"+name);
 	}
 	
 	protected void addBiRequirement(String fileName) {

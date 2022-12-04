@@ -8,11 +8,14 @@ public class ListModule extends BaseModule
 	@Override
 	public String getModuleName() { return "List"; }
 	@Override
-	protected void loadVariables() { loadBlockedFiles(); }
+	protected void loadVariables() {}
 	@Override
-	protected void loadFlags() {}
+	protected void loadFlags() {
+		
+	}
 	
-	private void loadBlockedFiles()
+	@Override
+	protected void loadBlockades()
 	{
 		if(keyType.isObject()) {
 			addBlockedFiles("ListFillBufferTester");
@@ -52,7 +55,6 @@ public class ListModule extends BaseModule
 		//Implementation Classes
 		addClassMapper("ARRAY_LIST", "ArrayList");
 		addAbstractMapper("COPY_ON_WRITE_LIST", "CopyOnWrite%sArrayList");
-		addClassMapper("ASYNC_BUILDER", "AsyncBuilder");
 		addClassMapper("LINKED_LIST", "LinkedList");
 		addAbstractMapper("IMMUTABLE_LIST", "Immutable%sList");
 		

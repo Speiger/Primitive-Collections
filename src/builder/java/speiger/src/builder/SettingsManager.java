@@ -20,13 +20,30 @@ public class SettingsManager
 	JsonObject data = new JsonObject();
 	Set<String> moduleNames = new TreeSet<>(String.CASE_INSENSITIVE_ORDER);
 	
+	public boolean isModuleEnabled(BaseModule base, ClassType keyType, ClassType valueType) {
+		if(!loaded) return true;
+		if(!isEnabled(data, base.getModuleName())) return false;
+		JsonObject result = getObject(data, keyType.getClassPath(), false);
+		if(!isEnabled(result, "enabled")) return false;
+		if(base.isBiModule()) {
+			result = getObject(result, valueType.getClassPath(), false);
+			if(!isEnabled(result, "enabled")) return false;
+		}
+		result = getObject(result, base.getModuleName(), false);
+		return result.size() <= 0 || isEnabled(result, "enabled");		
+	}
+	
 	public boolean isModuleEnabled(BaseModule base, ClassType keyType, ClassType valueType, String entry)
 	{
 		if(!loaded) return true;
 		if(!isEnabled(data, base.getModuleName())) return false;
-		JsonObject result = getObject(data, keyType.getClassPath());
-		if(base.isBiModule()) result = getObject(result, valueType.getClassPath());
-		result = getObject(result, base.getModuleName());
+		JsonObject result = getObject(data, keyType.getClassPath(), false);
+		if(!isEnabled(result, "enabled")) return false;
+		if(base.isBiModule()) {
+			result = getObject(result, valueType.getClassPath(), false);
+			if(!isEnabled(result, "enabled")) return false;
+		}
+		result = getObject(result, base.getModuleName(), false);
 		return result.size() <= 0 || (isEnabled(result, "enabled") && isEnabled(result, entry));
 	}
 	
@@ -37,6 +54,7 @@ public class SettingsManager
 		data.addProperty(moduleName, true);
 		if(module.isBiModule()) {
 			for(ClassType keyType : ModulePackage.TYPE) {
+				if(keyType == ClassType.BOOLEAN) continue;
 				for(ClassType valueType : ModulePackage.TYPE) {
 					JsonObject obj = new JsonObject();
 					obj.addProperty("enabled", true);
@@ -82,18 +100,19 @@ public class SettingsManager
 	}
 	
 	private void addModule(ClassType keyType, ClassType valueType, boolean bi, String moduleName, JsonObject obj) {
-		JsonObject result = getObject(data, keyType.getClassPath());
+		JsonObject result = getObject(data, keyType.getClassPath(), true);
 		if(bi) {
-			result = getObject(result, valueType.getClassPath());
+			result = getObject(result, valueType.getClassPath(), true);
 		}
 		result.add(moduleName, obj);
 	}
 	
-	private JsonObject getObject(JsonObject data, String name) {
+	private JsonObject getObject(JsonObject data, String name, boolean create) {
 		JsonObject obj = data.getAsJsonObject(name);
 		if(obj == null) {
 			obj = new JsonObject();
 			data.add(name, obj);
+			if(create) obj.addProperty("enabled", true);
 		}
 		return obj;
 	}

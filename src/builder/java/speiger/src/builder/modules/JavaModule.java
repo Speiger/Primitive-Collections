@@ -30,7 +30,9 @@ public class JavaModule extends BaseModule
 	
 	@Override
 	protected void loadRemappers() {}
-
+	@Override
+	protected void loadBlockades() {}
+	
 	@Override
 	protected void loadFunctions()
 	{

@@ -8,13 +8,14 @@ public class FunctionModule extends BaseModule
 	@Override
 	public boolean isBiModule() { return true; }
 	@Override
-	protected void loadVariables() { loadBlockades(); }
+	protected void loadVariables() {}
 	@Override
 	protected void loadFlags() {}
 	@Override
 	protected void loadTestClasses() {}
 	
-	private void loadBlockades()
+	@Override
+	protected void loadBlockades()
 	{
 		if(keyType.isObject()) addBlockedFiles("Consumer", "Comparator");
 	}

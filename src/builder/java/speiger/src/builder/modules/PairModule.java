@@ -10,6 +10,8 @@ public class PairModule extends BaseModule
 	@Override
 	protected void loadVariables() {}
 	@Override
+	protected void loadBlockades() {}
+	@Override
 	protected void loadFlags() {}
 	@Override
 	protected void loadFunctions() {}

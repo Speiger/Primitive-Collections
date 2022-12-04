@@ -14,11 +14,24 @@ public class AsyncModule extends BaseModule
 	@Override
 	protected void loadFunctions() {}
 	@Override
-	protected void loadFlags() {}
+	protected void loadBlockades() {
+		if(!isModuleEnabled()) {
+			addBlockedFiles("AsyncBuilder");
+		}
+	}
+	@Override
+	protected void loadFlags() {
+		if(isModuleEnabled()) {
+			addKeyFlag("ASYNC_MODULE");
+		}
+	}
 	
 	@Override
 	protected void loadClasses()
 	{
+		//Implementation Classes
+		addClassMapper("ASYNC_BUILDER", "AsyncBuilder");
+		
 		//Abstract Classes
 		addAbstractMapper("BASE_TASK", "Base%sTask");
 		

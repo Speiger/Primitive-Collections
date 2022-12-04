@@ -9,107 +9,9 @@
 	"PriorityQueue": true,
 	"Set": true,
 	"Boolean": {
+		"enabled": true,
 		"Base": {
 			"enabled": true
-		},
-		"Boolean": {
-			"Function": {
-				"enabled": true
-			},
-			"Map": {
-				"enabled": true
-			},
-			"Pair": {
-				"enabled": true
-			}
-		},
-		"Byte": {
-			"Function": {
-				"enabled": true
-			},
-			"Map": {
-				"enabled": true
-			},
-			"Pair": {
-				"enabled": true
-			}
-		},
-		"Short": {
-			"Function": {
-				"enabled": true
-			},
-			"Map": {
-				"enabled": true
-			},
-			"Pair": {
-				"enabled": true
-			}
-		},
-		"Character": {
-			"Function": {
-				"enabled": true
-			},
-			"Map": {
-				"enabled": true
-			},
-			"Pair": {
-				"enabled": true
-			}
-		},
-		"Integer": {
-			"Function": {
-				"enabled": true
-			},
-			"Map": {
-				"enabled": true
-			},
-			"Pair": {
-				"enabled": true
-			}
-		},
-		"Long": {
-			"Function": {
-				"enabled": true
-			},
-			"Map": {
-				"enabled": true
-			},
-			"Pair": {
-				"enabled": true
-			}
-		},
-		"Float": {
-			"Function": {
-				"enabled": true
-			},
-			"Map": {
-				"enabled": true
-			},
-			"Pair": {
-				"enabled": true
-			}
-		},
-		"Double": {
-			"Function": {
-				"enabled": true
-			},
-			"Map": {
-				"enabled": true
-			},
-			"Pair": {
-				"enabled": true
-			}
-		},
-		"Object": {
-			"Function": {
-				"enabled": true
-			},
-			"Map": {
-				"enabled": true
-			},
-			"Pair": {
-				"enabled": true
-			}
 		},
 		"Collection": {
 			"enabled": true
@@ -128,10 +30,12 @@
 		}
 	},
 	"Byte": {
+		"enabled": true,
 		"Base": {
 			"enabled": true
 		},
 		"Boolean": {
+			"enabled": true,
 			"Function": {
 				"enabled": true
 			},
@@ -143,6 +47,7 @@
 			}
 		},
 		"Byte": {
+			"enabled": true,
 			"Function": {
 				"enabled": true
 			},
@@ -154,6 +59,7 @@
 			}
 		},
 		"Short": {
+			"enabled": true,
 			"Function": {
 				"enabled": true
 			},
@@ -165,6 +71,7 @@
 			}
 		},
 		"Character": {
+			"enabled": true,
 			"Function": {
 				"enabled": true
 			},
@@ -176,6 +83,7 @@
 			}
 		},
 		"Integer": {
+			"enabled": true,
 			"Function": {
 				"enabled": true
 			},
@@ -187,6 +95,7 @@
 			}
 		},
 		"Long": {
+			"enabled": true,
 			"Function": {
 				"enabled": true
 			},
@@ -198,6 +107,7 @@
 			}
 		},
 		"Float": {
+			"enabled": true,
 			"Function": {
 				"enabled": true
 			},
@@ -209,6 +119,7 @@
 			}
 		},
 		"Double": {
+			"enabled": true,
 			"Function": {
 				"enabled": true
 			},
@@ -220,6 +131,7 @@
 			}
 		},
 		"Object": {
+			"enabled": true,
 			"Function": {
 				"enabled": true
 			},
@@ -247,10 +159,12 @@
 		}
 	},
 	"Short": {
+		"enabled": true,
 		"Base": {
 			"enabled": true
 		},
 		"Boolean": {
+			"enabled": true,
 			"Function": {
 				"enabled": true
 			},
@@ -262,6 +176,7 @@
 			}
 		},
 		"Byte": {
+			"enabled": true,
 			"Function": {
 				"enabled": true
 			},
@@ -273,6 +188,7 @@
 			}
 		},
 		"Short": {
+			"enabled": true,
 			"Function": {
 				"enabled": true
 			},
@@ -284,6 +200,7 @@
 			}
 		},
 		"Character": {
+			"enabled": true,
 			"Function": {
 				"enabled": true
 			},
@@ -295,6 +212,7 @@
 			}
 		},
 		"Integer": {
+			"enabled": true,
 			"Function": {
 				"enabled": true
 			},
@@ -306,6 +224,7 @@
 			}
 		},
 		"Long": {
+			"enabled": true,
 			"Function": {
 				"enabled": true
 			},
@@ -317,6 +236,7 @@
 			}
 		},
 		"Float": {
+			"enabled": true,
 			"Function": {
 				"enabled": true
 			},
@@ -328,6 +248,7 @@
 			}
 		},
 		"Double": {
+			"enabled": true,
 			"Function": {
 				"enabled": true
 			},
@@ -339,6 +260,7 @@
 			}
 		},
 		"Object": {
+			"enabled": true,
 			"Function": {
 				"enabled": true
 			},
@@ -366,10 +288,12 @@
 		}
 	},
 	"Character": {
+		"enabled": true,
 		"Base": {
 			"enabled": true
 		},
 		"Boolean": {
+			"enabled": true,
 			"Function": {
 				"enabled": true
 			},
@@ -381,6 +305,7 @@
 			}
 		},
 		"Byte": {
+			"enabled": true,
 			"Function": {
 				"enabled": true
 			},
@@ -392,6 +317,7 @@
 			}
 		},
 		"Short": {
+			"enabled": true,
 			"Function": {
 				"enabled": true
 			},
@@ -403,6 +329,7 @@
 			}
 		},
 		"Character": {
+			"enabled": true,
 			"Function": {
 				"enabled": true
 			},
@@ -414,6 +341,7 @@
 			}
 		},
 		"Integer": {
+			"enabled": true,
 			"Function": {
 				"enabled": true
 			},
@@ -425,6 +353,7 @@
 			}
 		},
 		"Long": {
+			"enabled": true,
 			"Function": {
 				"enabled": true
 			},
@@ -436,6 +365,7 @@
 			}
 		},
 		"Float": {
+			"enabled": true,
 			"Function": {
 				"enabled": true
 			},
@@ -447,6 +377,7 @@
 			}
 		},
 		"Double": {
+			"enabled": true,
 			"Function": {
 				"enabled": true
 			},
@@ -458,6 +389,7 @@
 			}
 		},
 		"Object": {
+			"enabled": true,
 			"Function": {
 				"enabled": true
 			},
@@ -485,10 +417,12 @@
 		}
 	},
 	"Integer": {
+		"enabled": true,
 		"Base": {
 			"enabled": true
 		},
 		"Boolean": {
+			"enabled": true,
 			"Function": {
 				"enabled": true
 			},
@@ -500,6 +434,7 @@
 			}
 		},
 		"Byte": {
+			"enabled": true,
 			"Function": {
 				"enabled": true
 			},
@@ -511,6 +446,7 @@
 			}
 		},
 		"Short": {
+			"enabled": true,
 			"Function": {
 				"enabled": true
 			},
@@ -522,6 +458,7 @@
 			}
 		},
 		"Character": {
+			"enabled": true,
 			"Function": {
 				"enabled": true
 			},
@@ -533,6 +470,7 @@
 			}
 		},
 		"Integer": {
+			"enabled": true,
 			"Function": {
 				"enabled": true
 			},
@@ -544,6 +482,7 @@
 			}
 		},
 		"Long": {
+			"enabled": true,
 			"Function": {
 				"enabled": true
 			},
@@ -555,6 +494,7 @@
 			}
 		},
 		"Float": {
+			"enabled": true,
 			"Function": {
 				"enabled": true
 			},
@@ -566,6 +506,7 @@
 			}
 		},
 		"Double": {
+			"enabled": true,
 			"Function": {
 				"enabled": true
 			},
@@ -577,6 +518,7 @@
 			}
 		},
 		"Object": {
+			"enabled": true,
 			"Function": {
 				"enabled": true
 			},
@@ -604,10 +546,12 @@
 		}
 	},
 	"Long": {
+		"enabled": true,
 		"Base": {
 			"enabled": true
 		},
 		"Boolean": {
+			"enabled": true,
 			"Function": {
 				"enabled": true
 			},
@@ -619,6 +563,7 @@
 			}
 		},
 		"Byte": {
+			"enabled": true,
 			"Function": {
 				"enabled": true
 			},
@@ -630,6 +575,7 @@
 			}
 		},
 		"Short": {
+			"enabled": true,
 			"Function": {
 				"enabled": true
 			},
@@ -641,6 +587,7 @@
 			}
 		},
 		"Character": {
+			"enabled": true,
 			"Function": {
 				"enabled": true
 			},
@@ -652,6 +599,7 @@
 			}
 		},
 		"Integer": {
+			"enabled": true,
 			"Function": {
 				"enabled": true
 			},
@@ -663,6 +611,7 @@
 			}
 		},
 		"Long": {
+			"enabled": true,
 			"Function": {
 				"enabled": true
 			},
@@ -674,6 +623,7 @@
 			}
 		},
 		"Float": {
+			"enabled": true,
 			"Function": {
 				"enabled": true
 			},
@@ -685,6 +635,7 @@
 			}
 		},
 		"Double": {
+			"enabled": true,
 			"Function": {
 				"enabled": true
 			},
@@ -696,6 +647,7 @@
 			}
 		},
 		"Object": {
+			"enabled": true,
 			"Function": {
 				"enabled": true
 			},
@@ -723,10 +675,12 @@
 		}
 	},
 	"Float": {
+		"enabled": true,
 		"Base": {
 			"enabled": true
 		},
 		"Boolean": {
+			"enabled": true,
 			"Function": {
 				"enabled": true
 			},
@@ -738,6 +692,7 @@
 			}
 		},
 		"Byte": {
+			"enabled": true,
 			"Function": {
 				"enabled": true
 			},
@@ -749,6 +704,7 @@
 			}
 		},
 		"Short": {
+			"enabled": true,
 			"Function": {
 				"enabled": true
 			},
@@ -760,6 +716,7 @@
 			}
 		},
 		"Character": {
+			"enabled": true,
 			"Function": {
 				"enabled": true
 			},
@@ -771,6 +728,7 @@
 			}
 		},
 		"Integer": {
+			"enabled": true,
 			"Function": {
 				"enabled": true
 			},
@@ -782,6 +740,7 @@
 			}
 		},
 		"Long": {
+			"enabled": true,
 			"Function": {
 				"enabled": true
 			},
@@ -793,6 +752,7 @@
 			}
 		},
 		"Float": {
+			"enabled": true,
 			"Function": {
 				"enabled": true
 			},
@@ -804,6 +764,7 @@
 			}
 		},
 		"Double": {
+			"enabled": true,
 			"Function": {
 				"enabled": true
 			},
@@ -815,6 +776,7 @@
 			}
 		},
 		"Object": {
+			"enabled": true,
 			"Function": {
 				"enabled": true
 			},
@@ -842,10 +804,12 @@
 		}
 	},
 	"Double": {
+		"enabled": true,
 		"Base": {
 			"enabled": true
 		},
 		"Boolean": {
+			"enabled": true,
 			"Function": {
 				"enabled": true
 			},
@@ -857,6 +821,7 @@
 			}
 		},
 		"Byte": {
+			"enabled": true,
 			"Function": {
 				"enabled": true
 			},
@@ -868,6 +833,7 @@
 			}
 		},
 		"Short": {
+			"enabled": true,
 			"Function": {
 				"enabled": true
 			},
@@ -879,6 +845,7 @@
 			}
 		},
 		"Character": {
+			"enabled": true,
 			"Function": {
 				"enabled": true
 			},
@@ -890,6 +857,7 @@
 			}
 		},
 		"Integer": {
+			"enabled": true,
 			"Function": {
 				"enabled": true
 			},
@@ -901,6 +869,7 @@
 			}
 		},
 		"Long": {
+			"enabled": true,
 			"Function": {
 				"enabled": true
 			},
@@ -912,6 +881,7 @@
 			}
 		},
 		"Float": {
+			"enabled": true,
 			"Function": {
 				"enabled": true
 			},
@@ -923,6 +893,7 @@
 			}
 		},
 		"Double": {
+			"enabled": true,
 			"Function": {
 				"enabled": true
 			},
@@ -934,6 +905,7 @@
 			}
 		},
 		"Object": {
+			"enabled": true,
 			"Function": {
 				"enabled": true
 			},
@@ -961,10 +933,12 @@
 		}
 	},
 	"Object": {
+		"enabled": true,
 		"Base": {
 			"enabled": true
 		},
 		"Boolean": {
+			"enabled": true,
 			"Function": {
 				"enabled": true
 			},
@@ -976,6 +950,7 @@
 			}
 		},
 		"Byte": {
+			"enabled": true,
 			"Function": {
 				"enabled": true
 			},
@@ -987,6 +962,7 @@
 			}
 		},
 		"Short": {
+			"enabled": true,
 			"Function": {
 				"enabled": true
 			},
@@ -998,6 +974,7 @@
 			}
 		},
 		"Character": {
+			"enabled": true,
 			"Function": {
 				"enabled": true
 			},
@@ -1009,6 +986,7 @@
 			}
 		},
 		"Integer": {
+			"enabled": true,
 			"Function": {
 				"enabled": true
 			},
@@ -1020,6 +998,7 @@
 			}
 		},
 		"Long": {
+			"enabled": true,
 			"Function": {
 				"enabled": true
 			},
@@ -1031,6 +1010,7 @@
 			}
 		},
 		"Float": {
+			"enabled": true,
 			"Function": {
 				"enabled": true
 			},
@@ -1042,6 +1022,7 @@
 			}
 		},
 		"Double": {
+			"enabled": true,
 			"Function": {
 				"enabled": true
 			},
@@ -1053,6 +1034,7 @@
 			}
 		},
 		"Object": {
+			"enabled": true,
 			"Function": {
 				"enabled": true
 			},

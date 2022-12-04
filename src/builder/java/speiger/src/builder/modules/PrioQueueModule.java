@@ -8,13 +8,14 @@ public class PrioQueueModule extends BaseModule
 	@Override
 	public String getModuleName() { return "PriorityQueue"; }
 	@Override
-	protected void loadVariables() { loadBlockades(); }
+	protected void loadVariables() {}
 	@Override
 	protected void loadFlags() {}
 	@Override
 	protected void loadFunctions() {}
 	
-	private void loadBlockades()
+	@Override
+	protected void loadBlockades()
 	{
 		if(keyType == ClassType.BOOLEAN) {
 			addBlockedFiles("QueueTests");
