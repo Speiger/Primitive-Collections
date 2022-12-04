@@ -7,7 +7,9 @@ import speiger.src.collections.utils.IArray;
 
 /**
  * Type-Specific Helper class to get the underlying array of array implementations.
+#if ARRAY_LIST_FEATURE
  * @see speiger.src.collections.PACKAGE.lists.ARRAY_LIST
+#endif
  * @Type(T)
  */
 public interface IARRAY KEY_GENERIC_TYPE extends IArray

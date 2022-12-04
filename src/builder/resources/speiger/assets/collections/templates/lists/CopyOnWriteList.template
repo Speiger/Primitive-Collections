@@ -148,8 +148,8 @@ public class COPY_ON_WRITE_LIST KEY_GENERIC_TYPE extends ABSTRACT_LIST KEY_GENER
 	 * @Type(T)
 	 * @return a typed List
 	 */
-	public static GENERIC_KEY_BRACES ARRAY_LIST KEY_GENERIC_TYPE of(Class<KEY_TYPE> c) {
-		ARRAY_LIST KEY_GENERIC_TYPE list = new ARRAY_LISTBRACES();
+	public static GENERIC_KEY_BRACES COPY_ON_WRITE_LIST KEY_GENERIC_TYPE of(Class<KEY_TYPE> c) {
+		COPY_ON_WRITE_LIST KEY_GENERIC_TYPE list = new COPY_ON_WRITE_LISTBRACES();
 		list.data = (KEY_TYPE[])ObjectArrays.newArray(c, 0);
 		return list;
 	}

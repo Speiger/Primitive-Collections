@@ -5,6 +5,8 @@
 - Added: ISizeProvider into most Iterable implementations (Distinct/Filter/FlatMap/ArrayFlatMap don't support it, for obvious reasons)
 - Added: ToArray function into Iterable which uses ISizeProvider to reduce overhead of duplicating arrays.
 - Fixed: putIfAbsent now replaces defaultValues
+- Fixed: OpenHashSet/Map and their Custom Variants no longer rely on List implementations.
+- Fixed: ObjectCopyOnWriteList.of did create a ObjectArrayList instead of the CopyOnWrite variant. 
 
 ### Version 0.7.0
 - Added: Over 11 Million Unit Tests to this library to ensure quality.

@@ -22,8 +22,6 @@ import speiger.src.collections.PACKAGE.functions.function.SINGLE_UNARY_OPERATOR;
 #if !TYPE_OBJECT && !VALUE_BOOLEAN
 import speiger.src.collections.PACKAGE.functions.function.PREDICATE;
 #endif
-import speiger.src.collections.PACKAGE.lists.ARRAY_LIST;
-import speiger.src.collections.PACKAGE.lists.LIST;
 import speiger.src.collections.PACKAGE.maps.abstracts.ABSTRACT_MAP;
 import speiger.src.collections.PACKAGE.maps.interfaces.MAP;
 import speiger.src.collections.PACKAGE.utils.maps.MAPS;
@@ -1376,7 +1374,8 @@ public class HASH_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_VALUE_GENE
 		int lastReturned = -1;
 		int nextIndex = Integer.MIN_VALUE;
 		boolean returnNull = containsNull;
-		LIST KEY_GENERIC_TYPE wrapped = null;
+		KEY_TYPE[] wrapped = null;
+		int wrappedIndex = 0;
 		
 		public boolean hasNext() {
 			if(nextIndex == Integer.MIN_VALUE) {
@@ -1388,7 +1387,7 @@ public class HASH_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_VALUE_GENE
 				{
 					while(true) {
 						if(--pos < 0) {
-							if(wrapped == null || wrapped.size() <= -pos - 1) break;
+							if(wrapped == null || wrappedIndex <= -pos - 1) break;
 							nextIndex = -pos - 1;
 							break;
 						}
@@ -1407,7 +1406,7 @@ public class HASH_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_VALUE_GENE
 			returnedPos = pos;
 			if(nextIndex < 0){
 				lastReturned = Integer.MAX_VALUE;
-				int value = findIndex(wrapped.GET_KEY(nextIndex));
+				int value = findIndex(wrapped[nextIndex]);
 				if(value < 0) throw new IllegalStateException("Entry ["+nextIndex+"] was removed during Iteration");
 				nextIndex = Integer.MIN_VALUE;
 				return value;
@@ -1426,7 +1425,7 @@ public class HASH_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_VALUE_GENE
 			}
 			else if(returnedPos >= 0) shiftKeys(returnedPos);
 			else {
-				HASH_MAP.this.remove(wrapped.GET_KEY(-returnedPos - 1));
+				HASH_MAP.this.remove(wrapped[-returnedPos - 1]);
 				lastReturned = -1;
 				return;
 			}
@@ -1449,13 +1448,20 @@ public class HASH_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_VALUE_GENE
 					if(last <= startPos ? (last >= slot || slot > startPos) : (last >= slot && slot > startPos)) break;
 					startPos = ++startPos & mask;
 				}
-				if(startPos < last) {
-					if(wrapped == null) wrapped = new ARRAY_LISTBRACES(2);
-					wrapped.add(keys[startPos]);
-				}
+				if(startPos < last) addWrapper(keys[startPos]);
 				keys[last] = current;
 				values[last] = values[startPos];
 			}
+		}
+		
+		private void addWrapper(KEY_TYPE value) {
+			if(wrapped == null) wrapped = NEW_KEY_ARRAY(2);
+			else if(wrappedIndex >= wrapped.length) {
+				KEY_TYPE[] newArray = NEW_KEY_ARRAY(wrapped.length * 2);
+				System.arraycopy(wrapped, 0, newArray, 0, wrapped.length);
+				wrapped = newArray;
+			}
+			wrapped[wrappedIndex++] = value;
 		}
 	}
 }

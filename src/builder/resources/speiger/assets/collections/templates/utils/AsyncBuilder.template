@@ -27,9 +27,12 @@ import speiger.src.collections.PACKAGE.functions.function.PREDICATE;
 import speiger.src.collections.PACKAGE.functions.function.TO_OBJECT_FUNCTION;
 #endif
 import speiger.src.collections.PACKAGE.functions.function.UNARY_OPERATOR;
-import speiger.src.collections.PACKAGE.lists.ARRAY_LIST;
 #if OBJECT_ASYNC_MODULE
-import speiger.src.collections.PACKAGE.lists.LIST;
+#if ARRAY_LIST_FEATURE
+import speiger.src.collections.PACKAGE.lists.ARRAY_LIST;
+#else if LINKED_LIST_FEATURE
+import speiger.src.collections.PACKAGE.lists.LINKED_LIST;
+#endif
 #if !TYPE_BOOLEAN
 import speiger.src.collections.PACKAGE.sets.SET;
 import speiger.src.collections.PACKAGE.sets.LINKED_HASH_SET;
@@ -119,6 +122,7 @@ public class ASYNC_BUILDER KEY_GENERIC_TYPE
 		return new ASYNC_BUILDERBRACES(ITERABLES.wrap(iterable));
 	}
 	
+#if ARRAY_LIST_FEATURE
 	/**
 	 * Helper function that automatically wraps a array into a AsyncBuilder since it forces this collections Iterable.
 	 * @param values that should be wrapped
@@ -129,6 +133,7 @@ public class ASYNC_BUILDER KEY_GENERIC_TYPE
 		return new ASYNC_BUILDERBRACES(ARRAY_LIST.wrap(values));
 	}
 	
+#endif
 #if OBJECT_ASYNC_MODULE
 	/**
 	 * Maps the elements to something else
@@ -268,14 +273,20 @@ public class ASYNC_BUILDER KEY_GENERIC_TYPE
 	
 #endif
 #if OBJECT_ASYNC_MODULE
+#if ARRAY_LIST_FEATURE || LINKED_LIST_FEATURE
 	/**
 	 * Pours all elements into a List that can be later
 	 * @return a new Builder with the pour function applied
 	 */
 	public ObjectAsyncBuilder<LIST KEY_GENERIC_TYPE> pourAsList() {
+#if ARRAY_LIST_FEATURE
 		return pour(new ARRAY_LISTBRACES());
+#else
+		return pour(new LINKED_LISTBRACES());
+#endif
 	}
 	
+#endif
 #if !TYPE_BOOLEAN
 	/**
 	 * Pours all elements into a Set that can be later

@@ -10,6 +10,7 @@ import java.util.concurrent.atomic.AtomicLong;
 import java.util.function.Consumer;
 
 import speiger.src.collections.PACKAGE.collections.ITERABLE;
+import speiger.src.collections.PACKAGE.collections.COLLECTION;
 #if !TYPE_OBJECT
 import speiger.src.collections.objects.collections.ObjectIterable;
 import speiger.src.collections.objects.collections.ObjectIterator;
@@ -17,8 +18,6 @@ import speiger.src.collections.PACKAGE.functions.CONSUMER;
 import speiger.src.collections.PACKAGE.functions.COMPARATOR;
 #endif
 import speiger.src.collections.PACKAGE.collections.ITERATOR;
-import speiger.src.collections.PACKAGE.lists.LIST;
-import speiger.src.collections.PACKAGE.lists.ARRAY_LIST;
 import speiger.src.collections.PACKAGE.functions.function.TO_OBJECT_FUNCTION;
 import speiger.src.collections.PACKAGE.functions.function.PREDICATE;
 #if !TYPE_BOOLEAN
@@ -380,19 +379,19 @@ public class ITERABLES
 		@Override
 		public void forEach(CONSUMER action) {
 			Objects.requireNonNull(action);
-			LIST KEY_GENERIC_TYPE list = new ARRAY_LISTBRACES();
-			iterable.forEach(action.andThen(list::add));
+			COLLECTION KEY_GENERIC_TYPE repeater = COLLECTIONS.wrapper();
+			iterable.forEach(action.andThen(repeater::add));
 			for(int i = 0;i<repeats;i++)
-				list.forEach(action);
+				repeater.forEach(action);
 		}
 #else
 		@Override
 		public void forEach(Consumer<? super CLASS_TYPE> action) {
 			Objects.requireNonNull(action);
-			LIST KEY_GENERIC_TYPE list = new ARRAY_LISTBRACES();
-			iterable.forEach(T -> {action.accept(T); list.add(T);});
+			COLLECTION KEY_GENERIC_TYPE repeater = COLLECTIONS.wrapper();
+			iterable.forEach(T -> {action.accept(T); repeater.add(T);});
 			for(int i = 0;i<repeats;i++)
-				list.forEach(action);
+				repeater.forEach(action);
 		}
 #endif
 	}
@@ -496,19 +495,19 @@ public class ITERABLES
 		@Override
 		public void forEach(CONSUMER action) {
 			Objects.requireNonNull(action);
-			LIST KEY_GENERIC_TYPE list = new ARRAY_LISTBRACES();
-			iterable.forEach(list::add);
-			list.unstableSort(sorter);
-			list.forEach(action);
+			COLLECTIONS.CollectionWrapper KEY_GENERIC_TYPE wrapper = COLLECTIONS.wrapper();
+			iterable.forEach(wrapper::add);
+			wrapper.unstableSort(sorter);
+			wrapper.forEach(action);
 		}
 #else
 		@Override
 		public void forEach(Consumer<? super CLASS_TYPE> action) {
 			Objects.requireNonNull(action);
-			LIST KEY_GENERIC_TYPE list = new ARRAY_LISTBRACES();
-			iterable.forEach(list::add);
-			list.unstableSort(sorter);
-			list.forEach(action);
+			COLLECTIONS.CollectionWrapper KEY_GENERIC_TYPE wrapper = COLLECTIONS.wrapper();
+			iterable.forEach(wrapper::add);
+			wrapper.unstableSort(sorter);
+			wrapper.forEach(action);
 		}
 #endif
 	}

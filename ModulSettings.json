@@ -3,7 +3,7 @@
 	"Base": true,
 	"Collection": true,
 	"Function": true,
-	"List": true,
+	"List": false,
 	"Map": true,
 	"Pair": true,
 	"PriorityQueue": true,
@@ -101,7 +101,12 @@
 			"enabled": true
 		},
 		"List": {
-			"enabled": true
+			"enabled": true,
+			"Lists": true,
+			"ImmutableList": true,
+			"CopyOnWriteList": true,
+			"ArrayList": true,
+			"LinkedList": true
 		},
 		"Set": {
 			"enabled": true
@@ -230,7 +235,12 @@
 			"enabled": true
 		},
 		"List": {
-			"enabled": true
+			"enabled": true,
+			"Lists": true,
+			"ImmutableList": true,
+			"CopyOnWriteList": true,
+			"ArrayList": true,
+			"LinkedList": true
 		},
 		"Set": {
 			"enabled": true
@@ -359,7 +369,12 @@
 			"enabled": true
 		},
 		"List": {
-			"enabled": true
+			"enabled": true,
+			"Lists": true,
+			"ImmutableList": true,
+			"CopyOnWriteList": true,
+			"ArrayList": true,
+			"LinkedList": true
 		},
 		"Set": {
 			"enabled": true
@@ -488,7 +503,12 @@
 			"enabled": true
 		},
 		"List": {
-			"enabled": true
+			"enabled": true,
+			"Lists": true,
+			"ImmutableList": true,
+			"CopyOnWriteList": true,
+			"ArrayList": true,
+			"LinkedList": true
 		},
 		"Set": {
 			"enabled": true
@@ -617,7 +637,12 @@
 			"enabled": true
 		},
 		"List": {
-			"enabled": true
+			"enabled": true,
+			"Lists": true,
+			"ImmutableList": true,
+			"CopyOnWriteList": true,
+			"ArrayList": true,
+			"LinkedList": true
 		},
 		"Set": {
 			"enabled": true
@@ -746,7 +771,12 @@
 			"enabled": true
 		},
 		"List": {
-			"enabled": true
+			"enabled": true,
+			"Lists": true,
+			"ImmutableList": true,
+			"CopyOnWriteList": true,
+			"ArrayList": true,
+			"LinkedList": true
 		},
 		"Set": {
 			"enabled": true
@@ -875,7 +905,12 @@
 			"enabled": true
 		},
 		"List": {
-			"enabled": true
+			"enabled": true,
+			"Lists": true,
+			"ImmutableList": true,
+			"CopyOnWriteList": true,
+			"ArrayList": true,
+			"LinkedList": true
 		},
 		"Set": {
 			"enabled": true
@@ -1004,7 +1039,12 @@
 			"enabled": true
 		},
 		"List": {
-			"enabled": true
+			"enabled": true,
+			"Lists": true,
+			"ImmutableList": true,
+			"CopyOnWriteList": true,
+			"ArrayList": true,
+			"LinkedList": true
 		},
 		"Set": {
 			"enabled": true
@@ -1133,7 +1173,12 @@
 			"enabled": true
 		},
 		"List": {
-			"enabled": true
+			"enabled": true,
+			"Lists": true,
+			"ImmutableList": true,
+			"CopyOnWriteList": true,
+			"ArrayList": true,
+			"LinkedList": true
 		},
 		"Set": {
 			"enabled": true

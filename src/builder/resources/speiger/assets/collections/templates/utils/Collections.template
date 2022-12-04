@@ -1,7 +1,10 @@
 package speiger.src.collections.PACKAGE.utils;
 
+import java.util.Arrays;
 import java.util.Collection;
+import java.util.Objects;
 #if TYPE_OBJECT
+import java.util.Comparator;
 import java.util.function.BiFunction;
 #endif
 import java.util.function.Predicate;
@@ -13,6 +16,9 @@ import java.util.function.Consumer;
 import speiger.src.collections.PACKAGE.collections.ABSTRACT_COLLECTION;
 import speiger.src.collections.PACKAGE.collections.COLLECTION;
 import speiger.src.collections.PACKAGE.collections.ITERATOR;
+#if !TYPE_OBJECT
+import speiger.src.collections.PACKAGE.functions.COMPARATOR;
+#endif
 import speiger.src.collections.objects.utils.ObjectArrays;
 #if !TYPE_OBJECT
 import speiger.src.collections.PACKAGE.functions.CONSUMER;
@@ -21,6 +27,9 @@ import speiger.src.collections.PACKAGE.utils.ARRAYS;
 import speiger.src.collections.PACKAGE.functions.function.PREDICATE;
 import speiger.src.collections.PACKAGE.functions.function.UNARY_OPERATOR;
 import speiger.src.collections.objects.functions.consumer.BI_FROM_OBJECT_CONSUMER;
+import speiger.src.collections.utils.ITrimmable;
+import speiger.src.collections.utils.SanityChecks;
+
 /**
  * A Helper class for Collections
  */
@@ -73,6 +82,200 @@ public class COLLECTIONS
 	 */
 	public static GENERIC_KEY_BRACES COLLECTION KEY_GENERIC_TYPE synchronize(COLLECTION KEY_GENERIC_TYPE c, Object mutex) {
 		return c instanceof SynchronizedCollection ? c : new SynchronizedCollectionBRACES(c, mutex);
+	}
+	
+	protected static GENERIC_KEY_BRACES CollectionWrapper KEY_GENERIC_TYPE wrapper() {
+		return new CollectionWrapperBRACES();
+	}
+	
+	protected static GENERIC_KEY_BRACES CollectionWrapper KEY_GENERIC_TYPE wrapper(int size) {
+		return new CollectionWrapperBRACES(size);
+	}
+	
+	protected static class CollectionWrapper KEY_GENERIC_TYPE extends ABSTRACT_COLLECTION KEY_GENERIC_TYPE implements ITrimmable {
+		KEY_TYPE[] elements;
+		int size = 0;
+		
+		public CollectionWrapper() {
+			this(10);
+		}
+		
+		public CollectionWrapper(int size) {
+			if(size < 0) throw new IllegalStateException("Size has to be 0 or greater");
+			elements = NEW_KEY_ARRAY(size);
+		}
+		
+		@Override
+		public boolean add(KEY_TYPE o) {
+			if(size >= elements.length) elements = Arrays.copyOf(elements, (int)Math.min((long)elements.length + (elements.length >> 1), SanityChecks.MAX_ARRAY_SIZE));
+			elements[size++] = o;
+			return true;
+		}
+		
+		public KEY_TYPE GET_KEY(int index) {
+			if(index < 0 || index >= size) throw new IndexOutOfBoundsException("Index: " + index + ", Size: " + size);
+			return elements[index];
+		}
+		
+#if TYPE_OBJECT
+		@Override
+		public boolean remove(Object e) {
+			for(int i = 0;i<size;i++) {
+				if(KEY_EQUALS(elements[i], e)) {
+					removeIndex(i);
+					return true;
+				}
+			}
+			return false;
+		}
+		
+#else
+		@Override
+		public boolean REMOVE_KEY(KEY_TYPE e) {
+			for(int i = 0;i<size;i++) {
+				if(KEY_EQUALS(elements[i], e)) {
+					removeIndex(i);
+					return true;
+				}
+			}
+			return false;
+		}
+		
+#endif
+		private void removeIndex(int index) {
+			if(index < 0 || index >= size) throw new IndexOutOfBoundsException("Index: " + index + ", Size: " + size);
+			size--;
+			if(index != size) System.arraycopy(elements, index+1, elements, index, size - index);
+		}
+		
+		@Override
+		public ITERATOR KEY_GENERIC_TYPE iterator() {
+			return new ITERATOR KEY_GENERIC_TYPE() {
+				int index = 0;
+				int lastReturned = -1;
+				
+				@Override
+				public boolean hasNext() {
+					return index < size;
+				}
+				
+				@Override
+				public KEY_TYPE NEXT() {
+					int i = index++;
+					return elements[(lastReturned = i)];
+				}
+				
+				@Override
+				public void remove() {
+					if(lastReturned == -1) throw new IllegalStateException();
+					removeIndex(lastReturned);
+					index = lastReturned;
+					lastReturned = -1;
+				}
+			};
+		}
+		
+		@Override
+		public int size() {
+			return size;
+		}
+		
+		@Override
+		public void clear() {
+#if TYPE_OBJECT
+			for(int i = 0;i<size;elements[i] = null,i++);
+#endif
+			size = 0;
+		}
+		
+#if TYPE_OBJECT
+		public void sort(Comparator<? super CLASS_TYPE> c) {
+			if(c != null) ARRAYS.stableSort(elements, size, c);
+			else ARRAYS.stableSort(elements, size);
+		}
+
+		public void unstableSort(Comparator<? super CLASS_TYPE> c) {
+			if(c != null) ARRAYS.unstableSort(elements, size, c);
+			else ARRAYS.unstableSort(elements, size);
+		}
+		
+#else
+		public void sort(COMPARATOR c) {
+			if(c != null) ARRAYS.stableSort(elements, size, c);
+			else ARRAYS.stableSort(elements, size);
+		}
+		
+		public void unstableSort(COMPARATOR c) {
+			if(c != null) ARRAYS.unstableSort(elements, size, c);
+			else ARRAYS.unstableSort(elements, size);		
+		}
+		
+#endif
+		@Override
+		public void forEach(CONSUMER KEY_SUPER_GENERIC_TYPE action) {
+			Objects.requireNonNull(action);
+			for(int i = 0;i<size;i++)
+				action.accept(elements[i]);
+		}
+		
+		@Override
+		public <E> void forEach(E input, BI_FROM_OBJECT_CONSUMER KSK_GENERIC_TYPE<E> action) {
+			Objects.requireNonNull(action);
+			for(int i = 0;i<size;i++)
+				action.accept(input, elements[i]);		
+		}
+		
+		@Override
+		public boolean trim(int size) {
+			if(size > size() || size() == elements.length) return false;
+			int value = Math.max(size, size());
+			elements = value == 0 ? EMPTY_KEY_ARRAY : Arrays.copyOf(elements, value);
+			return true;
+		}
+		
+		@Override
+		public void clearAndTrim(int size) {
+			if(elements.length <= size) {
+				clear();
+				return;
+			}
+			elements = size == 0 ? EMPTY_KEY_ARRAY : NEW_KEY_ARRAY(size);
+			this.size = size;
+		}
+		
+		@Override
+		@Primitive
+		public Object[] toArray() {
+			Object[] obj = new Object[size];
+			for(int i = 0;i<size;i++)
+				obj[i] = KEY_TO_OBJ(elements[i]);
+			return obj;
+		}
+		
+		@Override
+		@Primitive
+		public <E> E[] toArray(E[] a) {
+			if(a == null) a = (E[])new Object[size];
+			else if(a.length < size) a = (E[])ObjectArrays.newArray(a.getClass().getComponentType(), size);
+	#if TYPE_OBJECT
+	        System.arraycopy(elements, 0, a, 0, size);
+	#else
+			for(int i = 0;i<size;i++)
+				a[i] = (E)KEY_TO_OBJ(elements[i]);
+	#endif
+			if (a.length > size) a[size] = null;
+			return a;
+		}
+		
+#if !TYPE_OBJECT
+		@Override
+		public KEY_TYPE[] TO_ARRAY(KEY_TYPE[] a) {
+			if(a.length < size) a = new KEY_TYPE[size];
+			System.arraycopy(elements, 0, a, 0, size);
+			if (a.length > size) a[size] = EMPTY_KEY_VALUE;
+			return a;
+		}		
+#endif
 	}
 	
 	/**
