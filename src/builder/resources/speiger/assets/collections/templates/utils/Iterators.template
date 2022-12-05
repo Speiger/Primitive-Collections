@@ -22,6 +22,7 @@ import speiger.src.collections.PACKAGE.lists.ARRAY_LIST;
 #else if LINKED_LIST_FEATURE
 import speiger.src.collections.PACKAGE.lists.LINKED_LIST;
 #endif
+import speiger.src.collections.PACKAGE.lists.LIST;
 #endif
 import speiger.src.collections.PACKAGE.lists.LIST_ITERATOR;
 import speiger.src.collections.PACKAGE.collections.BI_ITERATOR;

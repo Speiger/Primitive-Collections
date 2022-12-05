@@ -6,7 +6,8 @@
 - Added: ToArray function into Iterable which uses ISizeProvider to reduce overhead of duplicating arrays.
 - Fixed: putIfAbsent now replaces defaultValues
 - Fixed: OpenHashSet/Map and their Custom Variants no longer rely on List implementations.
-- Fixed: ObjectCopyOnWriteList.of did create a ObjectArrayList instead of the CopyOnWrite variant. 
+- Fixed: ObjectCopyOnWriteList.of did create a ObjectArrayList instead of the CopyOnWrite variant.
+- Removed: BooleanSet and Maps that start with a Boolean classes since they can not be used anyways.
 
 ### Version 0.7.0
 - Added: Over 11 Million Unit Tests to this library to ensure quality.

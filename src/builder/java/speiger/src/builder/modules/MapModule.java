@@ -1,5 +1,9 @@
 package speiger.src.builder.modules;
 
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Set;
+
 import speiger.src.builder.ClassType;
 
 @SuppressWarnings("javadoc")
@@ -17,6 +21,12 @@ public class MapModule extends BaseModule
 	public boolean isModuleValid(ClassType keyType, ClassType valueType) { return keyType != ClassType.BOOLEAN; }
 	
 	@Override
+	public Set<String> getModuleKeys(ClassType keyType, ClassType valueType)
+	{
+		return new HashSet<>(Arrays.asList("ConcurrentMap", "HashMap", "CustomHashMap", "ImmutableMap", "ArrayMap", "EnumMap", "AVLTreeMap", "RBTreeMap"));
+	}
+	
+	@Override
 	protected void loadBlockades()
 	{
 		if(keyType == ClassType.BOOLEAN)
@@ -25,7 +35,7 @@ public class MapModule extends BaseModule
 			addBlockedFiles("SortedMap", "NavigableMap", "RBTreeMap", "AVLTreeMap");
 			addBlockedFiles("OrderedMap", "ArrayMap", "LinkedOpenHashMap", "LinkedOpenCustomHashMap");
 			addBlockedFiles("ConcurrentMap", "ConcurrentOpenHashMap");
-			addBlockedFiles("ImmutableOpenHashMap", "OpenHashMap", "OpenCustomHashMap");
+			addBlockedFiles("Map", "Maps", "AbstractMap", "ImmutableOpenHashMap", "OpenHashMap", "OpenCustomHashMap");
 			
 			//Test Classes
 			addBlockedFiles("TestMap", "MapTests", "MapTestSuiteBuilder", "MapConstructorTests", "TestMapGenerator", "SimpleMapTestGenerator", "DerivedMapGenerators", "AbstractMapTester");

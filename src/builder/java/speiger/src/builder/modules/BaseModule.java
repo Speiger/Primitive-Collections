@@ -73,7 +73,7 @@ public abstract class BaseModule
 	
 	protected void addKeyFlag(String name) {
 		entry.addFlag(name);
-		entry.addFlag(keyType.getCapType()+"_"+name);
+		entry.addGlobalFlag(keyType.getCapType()+"_"+name);
 	}
 	
 	protected void addBiRequirement(String fileName) {

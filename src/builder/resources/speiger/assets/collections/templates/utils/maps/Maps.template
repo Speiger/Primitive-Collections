@@ -49,9 +49,6 @@ import speiger.src.collections.VALUE_PACKAGE.functions.function.VALUE_UNARY_OPER
 #endif
 import speiger.src.collections.VALUE_PACKAGE.functions.VALUE_SUPPLIER;
 import speiger.src.collections.VALUE_PACKAGE.utils.VALUE_COLLECTIONS;
-#if !SAME_TYPE && !VALUE_OBJECT
-import speiger.src.collections.VALUE_PACKAGE.utils.VALUE_SETS;
-#endif
 #endif
 
 /**
@@ -344,7 +341,7 @@ public class MAPS
 		
 		@Override
 		public VALUE_COLLECTION VALUE_GENERIC_TYPE values() { 
-			if(values == null) values = VALUE_SETS.singleton(value);
+			if(values == null) values = VALUE_COLLECTIONS.singleton(value);
 			return values;
 		}
 		@Override

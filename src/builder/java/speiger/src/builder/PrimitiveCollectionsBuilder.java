@@ -37,6 +37,7 @@ public class PrimitiveCollectionsBuilder extends TemplateProcessor
 	private static final int LOAD = 0x2; //If Configs should be loaded
 	private static final int ANTI_SAVE = SPECIAL | LOAD; //If save should be disabled since load/save shouldn't happen at the same time.
 	private static final int SAVE = 0x4; //if the configuration should be created
+	Set<String> globalFlags = new HashSet<>();
 	List<ModulePackage> simplePackages = new ArrayList<>();
 	List<ModulePackage> biPackages = new ArrayList<>();
 	List<ModulePackage> enumPackages = new ArrayList<>();
@@ -154,7 +155,7 @@ public class PrimitiveCollectionsBuilder extends TemplateProcessor
 	private void prepPackages()
 	{
 		if((flags & LOAD) != 0) manager.load();
-		for(ModulePackage entry : ModulePackage.createPackages())
+		for(ModulePackage entry : ModulePackage.createPackages(globalFlags))
 		{
 			entry.setRequirements(requirements::put);
 			biPackages.add(entry);

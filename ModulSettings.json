@@ -3,7 +3,7 @@
 	"Base": true,
 	"Collection": true,
 	"Function": true,
-	"List": false,
+	"List": true,
 	"Map": true,
 	"Pair": true,
 	"PriorityQueue": true,
@@ -126,7 +126,15 @@
 				"enabled": true
 			},
 			"Map": {
-				"enabled": true
+				"enabled": true,
+				"HashMap": true,
+				"RBTreeMap": true,
+				"ConcurrentMap": true,
+				"ArrayMap": true,
+				"AVLTreeMap": true,
+				"CustomHashMap": true,
+				"EnumMap": true,
+				"ImmutableMap": true
 			},
 			"Pair": {
 				"enabled": true
@@ -138,7 +146,15 @@
 				"enabled": true
 			},
 			"Map": {
-				"enabled": true
+				"enabled": true,
+				"HashMap": true,
+				"RBTreeMap": true,
+				"ConcurrentMap": true,
+				"ArrayMap": true,
+				"AVLTreeMap": true,
+				"CustomHashMap": true,
+				"EnumMap": true,
+				"ImmutableMap": true
 			},
 			"Pair": {
 				"enabled": true
@@ -150,7 +166,15 @@
 				"enabled": true
 			},
 			"Map": {
-				"enabled": true
+				"enabled": true,
+				"HashMap": true,
+				"RBTreeMap": true,
+				"ConcurrentMap": true,
+				"ArrayMap": true,
+				"AVLTreeMap": true,
+				"CustomHashMap": true,
+				"EnumMap": true,
+				"ImmutableMap": true
 			},
 			"Pair": {
 				"enabled": true
@@ -162,7 +186,15 @@
 				"enabled": true
 			},
 			"Map": {
-				"enabled": true
+				"enabled": true,
+				"HashMap": true,
+				"RBTreeMap": true,
+				"ConcurrentMap": true,
+				"ArrayMap": true,
+				"AVLTreeMap": true,
+				"CustomHashMap": true,
+				"EnumMap": true,
+				"ImmutableMap": true
 			},
 			"Pair": {
 				"enabled": true
@@ -174,7 +206,15 @@
 				"enabled": true
 			},
 			"Map": {
-				"enabled": true
+				"enabled": true,
+				"HashMap": true,
+				"RBTreeMap": true,
+				"ConcurrentMap": true,
+				"ArrayMap": true,
+				"AVLTreeMap": true,
+				"CustomHashMap": true,
+				"EnumMap": true,
+				"ImmutableMap": true
 			},
 			"Pair": {
 				"enabled": true
@@ -186,7 +226,15 @@
 				"enabled": true
 			},
 			"Map": {
-				"enabled": true
+				"enabled": true,
+				"HashMap": true,
+				"RBTreeMap": true,
+				"ConcurrentMap": true,
+				"ArrayMap": true,
+				"AVLTreeMap": true,
+				"CustomHashMap": true,
+				"EnumMap": true,
+				"ImmutableMap": true
 			},
 			"Pair": {
 				"enabled": true
@@ -198,7 +246,15 @@
 				"enabled": true
 			},
 			"Map": {
-				"enabled": true
+				"enabled": true,
+				"HashMap": true,
+				"RBTreeMap": true,
+				"ConcurrentMap": true,
+				"ArrayMap": true,
+				"AVLTreeMap": true,
+				"CustomHashMap": true,
+				"EnumMap": true,
+				"ImmutableMap": true
 			},
 			"Pair": {
 				"enabled": true
@@ -210,7 +266,15 @@
 				"enabled": true
 			},
 			"Map": {
-				"enabled": true
+				"enabled": true,
+				"HashMap": true,
+				"RBTreeMap": true,
+				"ConcurrentMap": true,
+				"ArrayMap": true,
+				"AVLTreeMap": true,
+				"CustomHashMap": true,
+				"EnumMap": true,
+				"ImmutableMap": true
 			},
 			"Pair": {
 				"enabled": true
@@ -222,7 +286,15 @@
 				"enabled": true
 			},
 			"Map": {
-				"enabled": true
+				"enabled": true,
+				"HashMap": true,
+				"RBTreeMap": true,
+				"ConcurrentMap": true,
+				"ArrayMap": true,
+				"AVLTreeMap": true,
+				"CustomHashMap": true,
+				"EnumMap": true,
+				"ImmutableMap": true
 			},
 			"Pair": {
 				"enabled": true
@@ -260,7 +332,15 @@
 				"enabled": true
 			},
 			"Map": {
-				"enabled": true
+				"enabled": true,
+				"HashMap": true,
+				"RBTreeMap": true,
+				"ConcurrentMap": true,
+				"ArrayMap": true,
+				"AVLTreeMap": true,
+				"CustomHashMap": true,
+				"EnumMap": true,
+				"ImmutableMap": true
 			},
 			"Pair": {
 				"enabled": true
@@ -272,7 +352,15 @@
 				"enabled": true
 			},
 			"Map": {
-				"enabled": true
+				"enabled": true,
+				"HashMap": true,
+				"RBTreeMap": true,
+				"ConcurrentMap": true,
+				"ArrayMap": true,
+				"AVLTreeMap": true,
+				"CustomHashMap": true,
+				"EnumMap": true,
+				"ImmutableMap": true
 			},
 			"Pair": {
 				"enabled": true
@@ -284,7 +372,15 @@
 				"enabled": true
 			},
 			"Map": {
-				"enabled": true
+				"enabled": true,
+				"HashMap": true,
+				"RBTreeMap": true,
+				"ConcurrentMap": true,
+				"ArrayMap": true,
+				"AVLTreeMap": true,
+				"CustomHashMap": true,
+				"EnumMap": true,
+				"ImmutableMap": true
 			},
 			"Pair": {
 				"enabled": true
@@ -296,7 +392,15 @@
 				"enabled": true
 			},
 			"Map": {
-				"enabled": true
+				"enabled": true,
+				"HashMap": true,
+				"RBTreeMap": true,
+				"ConcurrentMap": true,
+				"ArrayMap": true,
+				"AVLTreeMap": true,
+				"CustomHashMap": true,
+				"EnumMap": true,
+				"ImmutableMap": true
 			},
 			"Pair": {
 				"enabled": true
@@ -308,7 +412,15 @@
 				"enabled": true
 			},
 			"Map": {
-				"enabled": true
+				"enabled": true,
+				"HashMap": true,
+				"RBTreeMap": true,
+				"ConcurrentMap": true,
+				"ArrayMap": true,
+				"AVLTreeMap": true,
+				"CustomHashMap": true,
+				"EnumMap": true,
+				"ImmutableMap": true
 			},
 			"Pair": {
 				"enabled": true
@@ -320,7 +432,15 @@
 				"enabled": true
 			},
 			"Map": {
-				"enabled": true
+				"enabled": true,
+				"HashMap": true,
+				"RBTreeMap": true,
+				"ConcurrentMap": true,
+				"ArrayMap": true,
+				"AVLTreeMap": true,
+				"CustomHashMap": true,
+				"EnumMap": true,
+				"ImmutableMap": true
 			},
 			"Pair": {
 				"enabled": true
@@ -332,7 +452,15 @@
 				"enabled": true
 			},
 			"Map": {
-				"enabled": true
+				"enabled": true,
+				"HashMap": true,
+				"RBTreeMap": true,
+				"ConcurrentMap": true,
+				"ArrayMap": true,
+				"AVLTreeMap": true,
+				"CustomHashMap": true,
+				"EnumMap": true,
+				"ImmutableMap": true
 			},
 			"Pair": {
 				"enabled": true
@@ -344,7 +472,15 @@
 				"enabled": true
 			},
 			"Map": {
-				"enabled": true
+				"enabled": true,
+				"HashMap": true,
+				"RBTreeMap": true,
+				"ConcurrentMap": true,
+				"ArrayMap": true,
+				"AVLTreeMap": true,
+				"CustomHashMap": true,
+				"EnumMap": true,
+				"ImmutableMap": true
 			},
 			"Pair": {
 				"enabled": true
@@ -356,7 +492,15 @@
 				"enabled": true
 			},
 			"Map": {
-				"enabled": true
+				"enabled": true,
+				"HashMap": true,
+				"RBTreeMap": true,
+				"ConcurrentMap": true,
+				"ArrayMap": true,
+				"AVLTreeMap": true,
+				"CustomHashMap": true,
+				"EnumMap": true,
+				"ImmutableMap": true
 			},
 			"Pair": {
 				"enabled": true
@@ -394,7 +538,15 @@
 				"enabled": true
 			},
 			"Map": {
-				"enabled": true
+				"enabled": true,
+				"HashMap": true,
+				"RBTreeMap": true,
+				"ConcurrentMap": true,
+				"ArrayMap": true,
+				"AVLTreeMap": true,
+				"CustomHashMap": true,
+				"EnumMap": true,
+				"ImmutableMap": true
 			},
 			"Pair": {
 				"enabled": true
@@ -406,7 +558,15 @@
 				"enabled": true
 			},
 			"Map": {
-				"enabled": true
+				"enabled": true,
+				"HashMap": true,
+				"RBTreeMap": true,
+				"ConcurrentMap": true,
+				"ArrayMap": true,
+				"AVLTreeMap": true,
+				"CustomHashMap": true,
+				"EnumMap": true,
+				"ImmutableMap": true
 			},
 			"Pair": {
 				"enabled": true
@@ -418,7 +578,15 @@
 				"enabled": true
 			},
 			"Map": {
-				"enabled": true
+				"enabled": true,
+				"HashMap": true,
+				"RBTreeMap": true,
+				"ConcurrentMap": true,
+				"ArrayMap": true,
+				"AVLTreeMap": true,
+				"CustomHashMap": true,
+				"EnumMap": true,
+				"ImmutableMap": true
 			},
 			"Pair": {
 				"enabled": true
@@ -430,7 +598,15 @@
 				"enabled": true
 			},
 			"Map": {
-				"enabled": true
+				"enabled": true,
+				"HashMap": true,
+				"RBTreeMap": true,
+				"ConcurrentMap": true,
+				"ArrayMap": true,
+				"AVLTreeMap": true,
+				"CustomHashMap": true,
+				"EnumMap": true,
+				"ImmutableMap": true
 			},
 			"Pair": {
 				"enabled": true
@@ -442,7 +618,15 @@
 				"enabled": true
 			},
 			"Map": {
-				"enabled": true
+				"enabled": true,
+				"HashMap": true,
+				"RBTreeMap": true,
+				"ConcurrentMap": true,
+				"ArrayMap": true,
+				"AVLTreeMap": true,
+				"CustomHashMap": true,
+				"EnumMap": true,
+				"ImmutableMap": true
 			},
 			"Pair": {
 				"enabled": true
@@ -454,7 +638,15 @@
 				"enabled": true
 			},
 			"Map": {
-				"enabled": true
+				"enabled": true,
+				"HashMap": true,
+				"RBTreeMap": true,
+				"ConcurrentMap": true,
+				"ArrayMap": true,
+				"AVLTreeMap": true,
+				"CustomHashMap": true,
+				"EnumMap": true,
+				"ImmutableMap": true
 			},
 			"Pair": {
 				"enabled": true
@@ -466,7 +658,15 @@
 				"enabled": true
 			},
 			"Map": {
-				"enabled": true
+				"enabled": true,
+				"HashMap": true,
+				"RBTreeMap": true,
+				"ConcurrentMap": true,
+				"ArrayMap": true,
+				"AVLTreeMap": true,
+				"CustomHashMap": true,
+				"EnumMap": true,
+				"ImmutableMap": true
 			},
 			"Pair": {
 				"enabled": true
@@ -478,7 +678,15 @@
 				"enabled": true
 			},
 			"Map": {
-				"enabled": true
+				"enabled": true,
+				"HashMap": true,
+				"RBTreeMap": true,
+				"ConcurrentMap": true,
+				"ArrayMap": true,
+				"AVLTreeMap": true,
+				"CustomHashMap": true,
+				"EnumMap": true,
+				"ImmutableMap": true
 			},
 			"Pair": {
 				"enabled": true
@@ -490,7 +698,15 @@
 				"enabled": true
 			},
 			"Map": {
-				"enabled": true
+				"enabled": true,
+				"HashMap": true,
+				"RBTreeMap": true,
+				"ConcurrentMap": true,
+				"ArrayMap": true,
+				"AVLTreeMap": true,
+				"CustomHashMap": true,
+				"EnumMap": true,
+				"ImmutableMap": true
 			},
 			"Pair": {
 				"enabled": true
@@ -528,7 +744,15 @@
 				"enabled": true
 			},
 			"Map": {
-				"enabled": true
+				"enabled": true,
+				"HashMap": true,
+				"RBTreeMap": true,
+				"ConcurrentMap": true,
+				"ArrayMap": true,
+				"AVLTreeMap": true,
+				"CustomHashMap": true,
+				"EnumMap": true,
+				"ImmutableMap": true
 			},
 			"Pair": {
 				"enabled": true
@@ -540,7 +764,15 @@
 				"enabled": true
 			},
 			"Map": {
-				"enabled": true
+				"enabled": true,
+				"HashMap": true,
+				"RBTreeMap": true,
+				"ConcurrentMap": true,
+				"ArrayMap": true,
+				"AVLTreeMap": true,
+				"CustomHashMap": true,
+				"EnumMap": true,
+				"ImmutableMap": true
 			},
 			"Pair": {
 				"enabled": true
@@ -552,7 +784,15 @@
 				"enabled": true
 			},
 			"Map": {
-				"enabled": true
+				"enabled": true,
+				"HashMap": true,
+				"RBTreeMap": true,
+				"ConcurrentMap": true,
+				"ArrayMap": true,
+				"AVLTreeMap": true,
+				"CustomHashMap": true,
+				"EnumMap": true,
+				"ImmutableMap": true
 			},
 			"Pair": {
 				"enabled": true
@@ -564,7 +804,15 @@
 				"enabled": true
 			},
 			"Map": {
-				"enabled": true
+				"enabled": true,
+				"HashMap": true,
+				"RBTreeMap": true,
+				"ConcurrentMap": true,
+				"ArrayMap": true,
+				"AVLTreeMap": true,
+				"CustomHashMap": true,
+				"EnumMap": true,
+				"ImmutableMap": true
 			},
 			"Pair": {
 				"enabled": true
@@ -576,7 +824,15 @@
 				"enabled": true
 			},
 			"Map": {
-				"enabled": true
+				"enabled": true,
+				"HashMap": true,
+				"RBTreeMap": true,
+				"ConcurrentMap": true,
+				"ArrayMap": true,
+				"AVLTreeMap": true,
+				"CustomHashMap": true,
+				"EnumMap": true,
+				"ImmutableMap": true
 			},
 			"Pair": {
 				"enabled": true
@@ -588,7 +844,15 @@
 				"enabled": true
 			},
 			"Map": {
-				"enabled": true
+				"enabled": true,
+				"HashMap": true,
+				"RBTreeMap": true,
+				"ConcurrentMap": true,
+				"ArrayMap": true,
+				"AVLTreeMap": true,
+				"CustomHashMap": true,
+				"EnumMap": true,
+				"ImmutableMap": true
 			},
 			"Pair": {
 				"enabled": true
@@ -600,7 +864,15 @@
 				"enabled": true
 			},
 			"Map": {
-				"enabled": true
+				"enabled": true,
+				"HashMap": true,
+				"RBTreeMap": true,
+				"ConcurrentMap": true,
+				"ArrayMap": true,
+				"AVLTreeMap": true,
+				"CustomHashMap": true,
+				"EnumMap": true,
+				"ImmutableMap": true
 			},
 			"Pair": {
 				"enabled": true
@@ -612,7 +884,15 @@
 				"enabled": true
 			},
 			"Map": {
-				"enabled": true
+				"enabled": true,
+				"HashMap": true,
+				"RBTreeMap": true,
+				"ConcurrentMap": true,
+				"ArrayMap": true,
+				"AVLTreeMap": true,
+				"CustomHashMap": true,
+				"EnumMap": true,
+				"ImmutableMap": true
 			},
 			"Pair": {
 				"enabled": true
@@ -624,7 +904,15 @@
 				"enabled": true
 			},
 			"Map": {
-				"enabled": true
+				"enabled": true,
+				"HashMap": true,
+				"RBTreeMap": true,
+				"ConcurrentMap": true,
+				"ArrayMap": true,
+				"AVLTreeMap": true,
+				"CustomHashMap": true,
+				"EnumMap": true,
+				"ImmutableMap": true
 			},
 			"Pair": {
 				"enabled": true
@@ -662,7 +950,15 @@
 				"enabled": true
 			},
 			"Map": {
-				"enabled": true
+				"enabled": true,
+				"HashMap": true,
+				"RBTreeMap": true,
+				"ConcurrentMap": true,
+				"ArrayMap": true,
+				"AVLTreeMap": true,
+				"CustomHashMap": true,
+				"EnumMap": true,
+				"ImmutableMap": true
 			},
 			"Pair": {
 				"enabled": true
@@ -674,7 +970,15 @@
 				"enabled": true
 			},
 			"Map": {
-				"enabled": true
+				"enabled": true,
+				"HashMap": true,
+				"RBTreeMap": true,
+				"ConcurrentMap": true,
+				"ArrayMap": true,
+				"AVLTreeMap": true,
+				"CustomHashMap": true,
+				"EnumMap": true,
+				"ImmutableMap": true
 			},
 			"Pair": {
 				"enabled": true
@@ -686,7 +990,15 @@
 				"enabled": true
 			},
 			"Map": {
-				"enabled": true
+				"enabled": true,
+				"HashMap": true,
+				"RBTreeMap": true,
+				"ConcurrentMap": true,
+				"ArrayMap": true,
+				"AVLTreeMap": true,
+				"CustomHashMap": true,
+				"EnumMap": true,
+				"ImmutableMap": true
 			},
 			"Pair": {
 				"enabled": true
@@ -698,7 +1010,15 @@
 				"enabled": true
 			},
 			"Map": {
-				"enabled": true
+				"enabled": true,
+				"HashMap": true,
+				"RBTreeMap": true,
+				"ConcurrentMap": true,
+				"ArrayMap": true,
+				"AVLTreeMap": true,
+				"CustomHashMap": true,
+				"EnumMap": true,
+				"ImmutableMap": true
 			},
 			"Pair": {
 				"enabled": true
@@ -710,7 +1030,15 @@
 				"enabled": true
 			},
 			"Map": {
-				"enabled": true
+				"enabled": true,
+				"HashMap": true,
+				"RBTreeMap": true,
+				"ConcurrentMap": true,
+				"ArrayMap": true,
+				"AVLTreeMap": true,
+				"CustomHashMap": true,
+				"EnumMap": true,
+				"ImmutableMap": true
 			},
 			"Pair": {
 				"enabled": true
@@ -722,7 +1050,15 @@
 				"enabled": true
 			},
 			"Map": {
-				"enabled": true
+				"enabled": true,
+				"HashMap": true,
+				"RBTreeMap": true,
+				"ConcurrentMap": true,
+				"ArrayMap": true,
+				"AVLTreeMap": true,
+				"CustomHashMap": true,
+				"EnumMap": true,
+				"ImmutableMap": true
 			},
 			"Pair": {
 				"enabled": true
@@ -734,7 +1070,15 @@
 				"enabled": true
 			},
 			"Map": {
-				"enabled": true
+				"enabled": true,
+				"HashMap": true,
+				"RBTreeMap": true,
+				"ConcurrentMap": true,
+				"ArrayMap": true,
+				"AVLTreeMap": true,
+				"CustomHashMap": true,
+				"EnumMap": true,
+				"ImmutableMap": true
 			},
 			"Pair": {
 				"enabled": true
@@ -746,7 +1090,15 @@
 				"enabled": true
 			},
 			"Map": {
-				"enabled": true
+				"enabled": true,
+				"HashMap": true,
+				"RBTreeMap": true,
+				"ConcurrentMap": true,
+				"ArrayMap": true,
+				"AVLTreeMap": true,
+				"CustomHashMap": true,
+				"EnumMap": true,
+				"ImmutableMap": true
 			},
 			"Pair": {
 				"enabled": true
@@ -758,7 +1110,15 @@
 				"enabled": true
 			},
 			"Map": {
-				"enabled": true
+				"enabled": true,
+				"HashMap": true,
+				"RBTreeMap": true,
+				"ConcurrentMap": true,
+				"ArrayMap": true,
+				"AVLTreeMap": true,
+				"CustomHashMap": true,
+				"EnumMap": true,
+				"ImmutableMap": true
 			},
 			"Pair": {
 				"enabled": true
@@ -796,7 +1156,15 @@
 				"enabled": true
 			},
 			"Map": {
-				"enabled": true
+				"enabled": true,
+				"HashMap": true,
+				"RBTreeMap": true,
+				"ConcurrentMap": true,
+				"ArrayMap": true,
+				"AVLTreeMap": true,
+				"CustomHashMap": true,
+				"EnumMap": true,
+				"ImmutableMap": true
 			},
 			"Pair": {
 				"enabled": true
@@ -808,7 +1176,15 @@
 				"enabled": true
 			},
 			"Map": {
-				"enabled": true
+				"enabled": true,
+				"HashMap": true,
+				"RBTreeMap": true,
+				"ConcurrentMap": true,
+				"ArrayMap": true,
+				"AVLTreeMap": true,
+				"CustomHashMap": true,
+				"EnumMap": true,
+				"ImmutableMap": true
 			},
 			"Pair": {
 				"enabled": true
@@ -820,7 +1196,15 @@
 				"enabled": true
 			},
 			"Map": {
-				"enabled": true
+				"enabled": true,
+				"HashMap": true,
+				"RBTreeMap": true,
+				"ConcurrentMap": true,
+				"ArrayMap": true,
+				"AVLTreeMap": true,
+				"CustomHashMap": true,
+				"EnumMap": true,
+				"ImmutableMap": true
 			},
 			"Pair": {
 				"enabled": true
@@ -832,7 +1216,15 @@
 				"enabled": true
 			},
 			"Map": {
-				"enabled": true
+				"enabled": true,
+				"HashMap": true,
+				"RBTreeMap": true,
+				"ConcurrentMap": true,
+				"ArrayMap": true,
+				"AVLTreeMap": true,
+				"CustomHashMap": true,
+				"EnumMap": true,
+				"ImmutableMap": true
 			},
 			"Pair": {
 				"enabled": true
@@ -844,7 +1236,15 @@
 				"enabled": true
 			},
 			"Map": {
-				"enabled": true
+				"enabled": true,
+				"HashMap": true,
+				"RBTreeMap": true,
+				"ConcurrentMap": true,
+				"ArrayMap": true,
+				"AVLTreeMap": true,
+				"CustomHashMap": true,
+				"EnumMap": true,
+				"ImmutableMap": true
 			},
 			"Pair": {
 				"enabled": true
@@ -856,7 +1256,15 @@
 				"enabled": true
 			},
 			"Map": {
-				"enabled": true
+				"enabled": true,
+				"HashMap": true,
+				"RBTreeMap": true,
+				"ConcurrentMap": true,
+				"ArrayMap": true,
+				"AVLTreeMap": true,
+				"CustomHashMap": true,
+				"EnumMap": true,
+				"ImmutableMap": true
 			},
 			"Pair": {
 				"enabled": true
@@ -868,7 +1276,15 @@
 				"enabled": true
 			},
 			"Map": {
-				"enabled": true
+				"enabled": true,
+				"HashMap": true,
+				"RBTreeMap": true,
+				"ConcurrentMap": true,
+				"ArrayMap": true,
+				"AVLTreeMap": true,
+				"CustomHashMap": true,
+				"EnumMap": true,
+				"ImmutableMap": true
 			},
 			"Pair": {
 				"enabled": true
@@ -880,7 +1296,15 @@
 				"enabled": true
 			},
 			"Map": {
-				"enabled": true
+				"enabled": true,
+				"HashMap": true,
+				"RBTreeMap": true,
+				"ConcurrentMap": true,
+				"ArrayMap": true,
+				"AVLTreeMap": true,
+				"CustomHashMap": true,
+				"EnumMap": true,
+				"ImmutableMap": true
 			},
 			"Pair": {
 				"enabled": true
@@ -892,7 +1316,15 @@
 				"enabled": true
 			},
 			"Map": {
-				"enabled": true
+				"enabled": true,
+				"HashMap": true,
+				"RBTreeMap": true,
+				"ConcurrentMap": true,
+				"ArrayMap": true,
+				"AVLTreeMap": true,
+				"CustomHashMap": true,
+				"EnumMap": true,
+				"ImmutableMap": true
 			},
 			"Pair": {
 				"enabled": true
@@ -930,7 +1362,15 @@
 				"enabled": true
 			},
 			"Map": {
-				"enabled": true
+				"enabled": true,
+				"HashMap": true,
+				"RBTreeMap": true,
+				"ConcurrentMap": true,
+				"ArrayMap": true,
+				"AVLTreeMap": true,
+				"CustomHashMap": true,
+				"EnumMap": true,
+				"ImmutableMap": true
 			},
 			"Pair": {
 				"enabled": true
@@ -942,7 +1382,15 @@
 				"enabled": true
 			},
 			"Map": {
-				"enabled": true
+				"enabled": true,
+				"HashMap": true,
+				"RBTreeMap": true,
+				"ConcurrentMap": true,
+				"ArrayMap": true,
+				"AVLTreeMap": true,
+				"CustomHashMap": true,
+				"EnumMap": true,
+				"ImmutableMap": true
 			},
 			"Pair": {
 				"enabled": true
@@ -954,7 +1402,15 @@
 				"enabled": true
 			},
 			"Map": {
-				"enabled": true
+				"enabled": true,
+				"HashMap": true,
+				"RBTreeMap": true,
+				"ConcurrentMap": true,
+				"ArrayMap": true,
+				"AVLTreeMap": true,
+				"CustomHashMap": true,
+				"EnumMap": true,
+				"ImmutableMap": true
 			},
 			"Pair": {
 				"enabled": true
@@ -966,7 +1422,15 @@
 				"enabled": true
 			},
 			"Map": {
-				"enabled": true
+				"enabled": true,
+				"HashMap": true,
+				"RBTreeMap": true,
+				"ConcurrentMap": true,
+				"ArrayMap": true,
+				"AVLTreeMap": true,
+				"CustomHashMap": true,
+				"EnumMap": true,
+				"ImmutableMap": true
 			},
 			"Pair": {
 				"enabled": true
@@ -978,7 +1442,15 @@
 				"enabled": true
 			},
 			"Map": {
-				"enabled": true
+				"enabled": true,
+				"HashMap": true,
+				"RBTreeMap": true,
+				"ConcurrentMap": true,
+				"ArrayMap": true,
+				"AVLTreeMap": true,
+				"CustomHashMap": true,
+				"EnumMap": true,
+				"ImmutableMap": true
 			},
 			"Pair": {
 				"enabled": true
@@ -990,7 +1462,15 @@
 				"enabled": true
 			},
 			"Map": {
-				"enabled": true
+				"enabled": true,
+				"HashMap": true,
+				"RBTreeMap": true,
+				"ConcurrentMap": true,
+				"ArrayMap": true,
+				"AVLTreeMap": true,
+				"CustomHashMap": true,
+				"EnumMap": true,
+				"ImmutableMap": true
 			},
 			"Pair": {
 				"enabled": true
@@ -1002,7 +1482,15 @@
 				"enabled": true
 			},
 			"Map": {
-				"enabled": true
+				"enabled": true,
+				"HashMap": true,
+				"RBTreeMap": true,
+				"ConcurrentMap": true,
+				"ArrayMap": true,
+				"AVLTreeMap": true,
+				"CustomHashMap": true,
+				"EnumMap": true,
+				"ImmutableMap": true
 			},
 			"Pair": {
 				"enabled": true
@@ -1014,7 +1502,15 @@
 				"enabled": true
 			},
 			"Map": {
-				"enabled": true
+				"enabled": true,
+				"HashMap": true,
+				"RBTreeMap": true,
+				"ConcurrentMap": true,
+				"ArrayMap": true,
+				"AVLTreeMap": true,
+				"CustomHashMap": true,
+				"EnumMap": true,
+				"ImmutableMap": true
 			},
 			"Pair": {
 				"enabled": true
@@ -1026,7 +1522,15 @@
 				"enabled": true
 			},
 			"Map": {
-				"enabled": true
+				"enabled": true,
+				"HashMap": true,
+				"RBTreeMap": true,
+				"ConcurrentMap": true,
+				"ArrayMap": true,
+				"AVLTreeMap": true,
+				"CustomHashMap": true,
+				"EnumMap": true,
+				"ImmutableMap": true
 			},
 			"Pair": {
 				"enabled": true
@@ -1064,7 +1568,15 @@
 				"enabled": true
 			},
 			"Map": {
-				"enabled": true
+				"enabled": true,
+				"HashMap": true,
+				"RBTreeMap": true,
+				"ConcurrentMap": true,
+				"ArrayMap": true,
+				"AVLTreeMap": true,
+				"CustomHashMap": true,
+				"EnumMap": true,
+				"ImmutableMap": true
 			},
 			"Pair": {
 				"enabled": true
@@ -1076,7 +1588,15 @@
 				"enabled": true
 			},
 			"Map": {
-				"enabled": true
+				"enabled": true,
+				"HashMap": true,
+				"RBTreeMap": true,
+				"ConcurrentMap": true,
+				"ArrayMap": true,
+				"AVLTreeMap": true,
+				"CustomHashMap": true,
+				"EnumMap": true,
+				"ImmutableMap": true
 			},
 			"Pair": {
 				"enabled": true
@@ -1088,7 +1608,15 @@
 				"enabled": true
 			},
 			"Map": {
-				"enabled": true
+				"enabled": true,
+				"HashMap": true,
+				"RBTreeMap": true,
+				"ConcurrentMap": true,
+				"ArrayMap": true,
+				"AVLTreeMap": true,
+				"CustomHashMap": true,
+				"EnumMap": true,
+				"ImmutableMap": true
 			},
 			"Pair": {
 				"enabled": true
@@ -1100,7 +1628,15 @@
 				"enabled": true
 			},
 			"Map": {
-				"enabled": true
+				"enabled": true,
+				"HashMap": true,
+				"RBTreeMap": true,
+				"ConcurrentMap": true,
+				"ArrayMap": true,
+				"AVLTreeMap": true,
+				"CustomHashMap": true,
+				"EnumMap": true,
+				"ImmutableMap": true
 			},
 			"Pair": {
 				"enabled": true
@@ -1112,7 +1648,15 @@
 				"enabled": true
 			},
 			"Map": {
-				"enabled": true
+				"enabled": true,
+				"HashMap": true,
+				"RBTreeMap": true,
+				"ConcurrentMap": true,
+				"ArrayMap": true,
+				"AVLTreeMap": true,
+				"CustomHashMap": true,
+				"EnumMap": true,
+				"ImmutableMap": true
 			},
 			"Pair": {
 				"enabled": true
@@ -1124,7 +1668,15 @@
 				"enabled": true
 			},
 			"Map": {
-				"enabled": true
+				"enabled": true,
+				"HashMap": true,
+				"RBTreeMap": true,
+				"ConcurrentMap": true,
+				"ArrayMap": true,
+				"AVLTreeMap": true,
+				"CustomHashMap": true,
+				"EnumMap": true,
+				"ImmutableMap": true
 			},
 			"Pair": {
 				"enabled": true
@@ -1136,7 +1688,15 @@
 				"enabled": true
 			},
 			"Map": {
-				"enabled": true
+				"enabled": true,
+				"HashMap": true,
+				"RBTreeMap": true,
+				"ConcurrentMap": true,
+				"ArrayMap": true,
+				"AVLTreeMap": true,
+				"CustomHashMap": true,
+				"EnumMap": true,
+				"ImmutableMap": true
 			},
 			"Pair": {
 				"enabled": true
@@ -1148,7 +1708,15 @@
 				"enabled": true
 			},
 			"Map": {
-				"enabled": true
+				"enabled": true,
+				"HashMap": true,
+				"RBTreeMap": true,
+				"ConcurrentMap": true,
+				"ArrayMap": true,
+				"AVLTreeMap": true,
+				"CustomHashMap": true,
+				"EnumMap": true,
+				"ImmutableMap": true
 			},
 			"Pair": {
 				"enabled": true
@@ -1160,7 +1728,15 @@
 				"enabled": true
 			},
 			"Map": {
-				"enabled": true
+				"enabled": true,
+				"HashMap": true,
+				"RBTreeMap": true,
+				"ConcurrentMap": true,
+				"ArrayMap": true,
+				"AVLTreeMap": true,
+				"CustomHashMap": true,
+				"EnumMap": true,
+				"ImmutableMap": true
 			},
 			"Pair": {
 				"enabled": true

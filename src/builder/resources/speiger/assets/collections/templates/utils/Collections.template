@@ -2,6 +2,7 @@ package speiger.src.collections.PACKAGE.utils;
 
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.NoSuchElementException;
 import java.util.Objects;
 #if TYPE_OBJECT
 import java.util.Comparator;
@@ -82,6 +83,16 @@ public class COLLECTIONS
 	 */
 	public static GENERIC_KEY_BRACES COLLECTION KEY_GENERIC_TYPE synchronize(COLLECTION KEY_GENERIC_TYPE c, Object mutex) {
 		return c instanceof SynchronizedCollection ? c : new SynchronizedCollectionBRACES(c, mutex);
+	}
+	
+	/**
+	 * Creates a Singleton Collection of a given element
+	 * @param element the element that should be converted into a singleton collection
+	 * @Type(T)
+	 * @return a singletoncollection of the given element
+	 */
+	public static GENERIC_KEY_BRACES COLLECTION KEY_GENERIC_TYPE singleton(KEY_TYPE element) {
+		return new SingletonCollectionBRACES(element);
 	}
 	
 	protected static GENERIC_KEY_BRACES CollectionWrapper KEY_GENERIC_TYPE wrapper() {
@@ -276,6 +287,42 @@ public class COLLECTIONS
 			return a;
 		}		
 #endif
+	}
+	
+	private static class SingletonCollection KEY_GENERIC_TYPE extends ABSTRACT_COLLECTION KEY_GENERIC_TYPE
+	{
+		KEY_TYPE element;
+		
+		SingletonCollection(KEY_TYPE element) {
+			this.element = element;
+		}
+		
+#if !TYPE_OBJECT
+		@Override
+		public boolean REMOVE_KEY(KEY_TYPE o) { throw new UnsupportedOperationException(); }
+#endif
+		@Override
+		public boolean add(KEY_TYPE o) { throw new UnsupportedOperationException(); }
+		@Override
+		public ITERATOR KEY_GENERIC_TYPE iterator()
+		{
+			return new ITERATOR KEY_GENERIC_TYPE() {
+				boolean next = true;
+				@Override
+				public boolean hasNext() { return next; }
+				@Override
+				public KEY_TYPE NEXT() {
+					if(!hasNext()) throw new NoSuchElementException();
+					next = false;
+					return element;
+				}
+			};
+		}
+		@Override
+		public int size() { return 1; }
+		
+		@Override
+		public SingletonCollection KEY_GENERIC_TYPE copy() { return new SingletonCollectionBRACES(element); }
 	}
 	
 	/**

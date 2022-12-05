@@ -20,7 +20,7 @@ public class SetModule extends BaseModule
 			//Main Classes
 			addBlockedFiles("SortedSet", "NavigableSet", "AVLTreeSet", "RBTreeSet");
 			addBlockedFiles("OrderedSet", "ArraySet", "LinkedOpenHashSet", "LinkedOpenCustomHashSet");
-			addBlockedFiles("OpenHashSet", "OpenCustomHashSet", "ImmutableOpenHashSet");
+			addBlockedFiles("Set", "Sets", "AbstractSet", "OpenHashSet", "OpenCustomHashSet", "ImmutableOpenHashSet");
 			
 			//Test Classes
 			addBlockedFiles("SetTests", "SetTestSuiteBuilder");

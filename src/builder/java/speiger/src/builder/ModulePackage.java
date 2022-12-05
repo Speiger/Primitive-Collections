@@ -31,9 +31,11 @@ public class ModulePackage
 	List<Predicate<String>> blockedFilters = new ArrayList<>();
 	List<IMapper> mappers = new ArrayList<>();
 	Set<String> flags = new LinkedHashSet<>();
+	Set<String> globalFlags;
 	BiConsumer<String, RequiredType> requirements = VOID;
 	
-	public ModulePackage(ClassType keyType, ClassType valueType) {
+	public ModulePackage(Set<String> globalFlags, ClassType keyType, ClassType valueType) {
+		this.globalFlags = globalFlags;
 		this.keyType = keyType;
 		this.valueType = valueType;
 	}
@@ -68,6 +70,10 @@ public class ModulePackage
 		flags.add(flag);
 	}
 	
+	public void addGlobalFlag(String flag) {
+		globalFlags.add(flag);
+	}
+	
 	public void addRequirement(String fileName, RequiredType type) {
 		requirements.accept(fileName, type);
 	}
@@ -99,6 +105,7 @@ public class ModulePackage
 		TemplateProcess process = new TemplateProcess(newName+".java");
 		process.setPathBuilder(new PathBuilder(keyType.getPathType()));
 		process.addFlags(flags);
+		process.addFlags(globalFlags);
 		process.addMappers(mappers);
 		result.accept(process);
 	}
@@ -111,11 +118,11 @@ public class ModulePackage
 		return false;
 	}
 	
-	public static List<ModulePackage> createPackages() {
+	public static List<ModulePackage> createPackages(Set<String> globalFlags) {
 		List<ModulePackage> list = new ArrayList<>();
 		for(ClassType key : TYPE) {
 			for(ClassType value : TYPE) {
-				list.add(new ModulePackage(key, value));
+				list.add(new ModulePackage(globalFlags, key, value));
 			}
 		}
 		return list;

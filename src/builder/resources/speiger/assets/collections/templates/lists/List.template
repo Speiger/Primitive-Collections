@@ -20,7 +20,7 @@ import speiger.src.collections.PACKAGE.collections.SPLIT_ITERATOR;
 import speiger.src.collections.PACKAGE.functions.COMPARATOR;
 #endif
 import speiger.src.collections.PACKAGE.utils.ARRAYS;
-#if LIST_FEATURE
+#if LISTS_FEATURE
 import speiger.src.collections.PACKAGE.utils.LISTS;
 #endif
 import speiger.src.collections.PACKAGE.utils.SPLIT_ITERATORS;
