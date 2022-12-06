@@ -12,33 +12,64 @@ import java.util.function.Consumer;
 import java.util.function.Function;
 
 #if TYPE_OBJECT
+#if AVL_TREE_MAP_FEATURE || RB_TREE_MAP_FEATURE
 import java.util.Comparator;
+#endif
 #endif
 
 import speiger.src.collections.VALUE_PACKAGE.collections.VALUE_COLLECTION;
 import speiger.src.collections.PACKAGE.functions.consumer.BI_CONSUMER;
 import speiger.src.collections.PACKAGE.functions.function.FUNCTION;
 import speiger.src.collections.PACKAGE.functions.function.UNARY_OPERATOR;
-#if !TYPE_OBJECT && !TYPE_BOOLEAN
+#if !TYPE_OBJECT && !TYPE_BOOLEAN && SORTED_MAP_FEATURE
+#if AVL_TREE_MAP_FEATURE || RB_TREE_MAP_FEATURE
 import speiger.src.collections.PACKAGE.functions.COMPARATOR;
 #endif
+#endif
 #if !TYPE_BOOLEAN
+#if LINKED_CUSTOM_MAP_FEATURE
 import speiger.src.collections.PACKAGE.maps.impl.customHash.LINKED_CUSTOM_HASH_MAP;
+#endif
+#if CUSTOM_MAP_FEATURE
 import speiger.src.collections.PACKAGE.maps.impl.customHash.CUSTOM_HASH_MAP;
+#endif
+#if LINKED_MAP_FEATURE
 import speiger.src.collections.PACKAGE.maps.impl.hash.LINKED_HASH_MAP;
+#endif
+#if MAP_FEATURE
 import speiger.src.collections.PACKAGE.maps.impl.hash.HASH_MAP;
+#endif
+#if IMMUTABLE_MAP_FEATURE
 import speiger.src.collections.PACKAGE.maps.impl.immutable.IMMUTABLE_HASH_MAP;
+#endif
+#if AVL_TREE_MAP_FEATURE
 import speiger.src.collections.PACKAGE.maps.impl.tree.AVL_TREE_MAP;
+#endif
+#if RB_TREE_MAP_FEATURE
 import speiger.src.collections.PACKAGE.maps.impl.tree.RB_TREE_MAP;
+#endif
+#if ARRAY_MAP_FEATURE
 import speiger.src.collections.PACKAGE.maps.impl.misc.ARRAY_MAP;
+#endif
+#if CONCURRENT_MAP_FEATURE
 import speiger.src.collections.PACKAGE.maps.impl.concurrent.CONCURRENT_HASH_MAP;
+#endif
 #if TYPE_OBJECT
+#if ENUM_MAP_FEATURE
 import speiger.src.collections.PACKAGE.maps.impl.misc.ENUM_MAP;
+#endif
+#if LINKED_ENUM_MAP_FEATURE
 import speiger.src.collections.PACKAGE.maps.impl.misc.LINKED_ENUM_MAP;
 #endif
+#endif
+
 import speiger.src.collections.objects.collections.ObjectIterable;
+#if CUSTOM_MAP_FEATURE || LINKED_CUSTOM_MAP_FEATURE
 import speiger.src.collections.PACKAGE.utils.STRATEGY;
+#endif
+#if MAPS_FEATURE
 import speiger.src.collections.PACKAGE.utils.maps.MAPS;
+#endif
 #endif
 import speiger.src.collections.PACKAGE.sets.SET;
 #if !SAME_TYPE
@@ -505,7 +536,7 @@ public interface MAP KEY_VALUE_GENERIC_TYPE extends Map<CLASS_TYPE, CLASS_VALUE_
 	 */
 	public ObjectSet<Entry KEY_VALUE_GENERIC_TYPE> ENTRY_SET();
 	
-#if !TYPE_BOOLEAN
+#if MAPS_FEATURE
 	/**
 	 * Creates a Wrapped Map that is Synchronized
 	 * @return a new Map that is synchronized
@@ -658,6 +689,7 @@ public interface MAP KEY_VALUE_GENERIC_TYPE extends Map<CLASS_TYPE, CLASS_VALUE_
 		}
 		
 #endif
+#if MAP_FEATURE
 		/**
 		* Helper function to unify code
 		* @Type(T)
@@ -731,6 +763,8 @@ public interface MAP KEY_VALUE_GENERIC_TYPE extends Map<CLASS_TYPE, CLASS_VALUE_
 			return new HASH_MAPKV_BRACES(map);
 		}
 		
+#endif
+#if LINKED_MAP_FEATURE
 		/**
 		* Helper function to unify code
 		* @Type(T)
@@ -804,6 +838,8 @@ public interface MAP KEY_VALUE_GENERIC_TYPE extends Map<CLASS_TYPE, CLASS_VALUE_
 			return new IMMUTABLE_HASH_MAPKV_BRACES(map);
 		}
 		
+#endif
+#if IMMUTABLE_MAP_FEATURE
 		/**
 		* Helper function to unify code
 		* @param keys the keys that should be inserted
@@ -856,7 +892,9 @@ public interface MAP KEY_VALUE_GENERIC_TYPE extends Map<CLASS_TYPE, CLASS_VALUE_
 			return new IMMUTABLE_HASH_MAPKV_BRACES(map);
 		}
 		
+#endif
 #if TYPE_OBJECT
+#if ENUM_MAP_FEATURE
 		/**
 		 * Helper function to unify code
 		 * @param keyType the EnumClass that should be used
@@ -924,6 +962,8 @@ public interface MAP KEY_VALUE_GENERIC_TYPE extends Map<CLASS_TYPE, CLASS_VALUE_
 			return new ENUM_MAPKV_BRACES(map);
 		}
 		
+#endif
+#if LINKED_ENUM_MAP_FEATURE
 		/**
 		 * Helper function to unify code
 		 * @param keyType the EnumClass that should be used
@@ -990,7 +1030,10 @@ public interface MAP KEY_VALUE_GENERIC_TYPE extends Map<CLASS_TYPE, CLASS_VALUE_
 		public GENERIC_KEY_ENUM_VALUE_BRACES LINKED_ENUM_MAP KEY_VALUE_GENERIC_TYPE linkedEnumMap(MAP KEY_VALUE_GENERIC_TYPE map) {
 			return new LINKED_ENUM_MAPKV_BRACES(map);
 		}
+		
 #endif
+#endif
+#if CUSTOM_MAP_FEATURE
 		/**
 		* Helper function to unify code
 		* @param strategy the Hash Controller
@@ -1070,6 +1113,8 @@ public interface MAP KEY_VALUE_GENERIC_TYPE extends Map<CLASS_TYPE, CLASS_VALUE_
 			return new CUSTOM_HASH_MAPKV_BRACES(map, strategy);
 		}
 		
+#endif
+#if LINKED_CUSTOM_MAP_FEATURE
 		/**
 		* Helper function to unify code
 		* @param strategy the Hash Controller
@@ -1149,6 +1194,8 @@ public interface MAP KEY_VALUE_GENERIC_TYPE extends Map<CLASS_TYPE, CLASS_VALUE_
 			return new LINKED_CUSTOM_HASH_MAPKV_BRACES(map, strategy);
 		}
 		
+#endif
+#if ARRAY_MAP_FEATURE
 		/**
 		* Helper function to unify code
 		* @Type(T)
@@ -1222,7 +1269,8 @@ public interface MAP KEY_VALUE_GENERIC_TYPE extends Map<CLASS_TYPE, CLASS_VALUE_
 			return new ARRAY_MAPKV_BRACES(map);
 		}
 		
-		
+#endif
+#if RB_TREE_MAP_FEATURE
 		/**
 		* Helper function to unify code
 		* @Type(T)
@@ -1300,6 +1348,8 @@ public interface MAP KEY_VALUE_GENERIC_TYPE extends Map<CLASS_TYPE, CLASS_VALUE_
 			return new RB_TREE_MAPKV_BRACES(map, comp);
 		}
 		
+#endif
+#if AVL_TREE_MAP_FEATURE
 		/**
 		* Helper function to unify code
 		* @Type(T)
@@ -1376,6 +1426,7 @@ public interface MAP KEY_VALUE_GENERIC_TYPE extends Map<CLASS_TYPE, CLASS_VALUE_
 		public GENERIC_KEY_VALUE_BRACES AVL_TREE_MAP KEY_VALUE_GENERIC_TYPE avlTreeMap(Map<? extends CLASS_TYPE, ? extends CLASS_VALUE_TYPE> map, COMPARATOR KEY_GENERIC_TYPE comp) {
 			return new AVL_TREE_MAPKV_BRACES(map, comp);
 		}
+#endif
 	}
 	
 	/**
@@ -1454,7 +1505,11 @@ public interface MAP KEY_VALUE_GENERIC_TYPE extends Map<CLASS_TYPE, CLASS_VALUE_
 		 * @return self
 		 */
 		public BuilderCache KEY_VALUE_GENERIC_TYPE putAll(MAP KEY_VALUE_GENERIC_TYPE map) {
+#if MAPS_FEATURE
 			return putAll(MAPS.fastIterable(map));
+#else
+			return putAll(map.ENTRY_SET());
+#endif
 		}
 		
 		/**
@@ -1483,11 +1538,14 @@ public interface MAP KEY_VALUE_GENERIC_TYPE extends Map<CLASS_TYPE, CLASS_VALUE_
 			return this;
 		}
 		
+#if MAP_FEATURE || LINKED_MAP_FEATURE || CUSTOM_MAP_FEATURE || LINKED_CUSTOM_MAP_FEATURE || AVL_TREE_MAP_FEATURE || RB_TREE_MAP_FEATURE || CONCURRENT_MAP_FEATURE
 		private <E extends MAP KEY_VALUE_GENERIC_TYPE> E putElements(E e){
 			e.putAll(keys, values, 0, size);
 			return e;
 		}
 		
+#endif
+#if MAP_FEATURE
 		/**
 		 * Builds the Keys and Values into a Hash Map
 		 * @return a HASH_MAP
@@ -1496,6 +1554,8 @@ public interface MAP KEY_VALUE_GENERIC_TYPE extends Map<CLASS_TYPE, CLASS_VALUE_
 			return putElements(new HASH_MAPKV_BRACES(size));
 		}
 		
+#endif
+#if LINKED_MAP_FEATURE
 		/**
 		 * Builds the Keys and Values into a Linked Hash Map
 		 * @return a LINKED_HASH_MAP
@@ -1504,6 +1564,8 @@ public interface MAP KEY_VALUE_GENERIC_TYPE extends Map<CLASS_TYPE, CLASS_VALUE_
 			return putElements(new LINKED_HASH_MAPKV_BRACES(size));
 		}
 		
+#endif
+#if IMMUTABLE_MAP_FEATURE
 		/**
 		 * Builds the Keys and Values into a Immutable Hash Map
 		 * @return a IMMUTABLE_HASH_MAP
@@ -1512,6 +1574,8 @@ public interface MAP KEY_VALUE_GENERIC_TYPE extends Map<CLASS_TYPE, CLASS_VALUE_
 			return new IMMUTABLE_HASH_MAPKV_BRACES(Arrays.copyOf(keys, size), Arrays.copyOf(values, size));
 		}
 		
+#endif
+#if CUSTOM_MAP_FEATURE
 		/**
 		 * Builds the Keys and Values into a Custom Hash Map
 		 * @param strategy the that controls the keys and values
@@ -1521,6 +1585,8 @@ public interface MAP KEY_VALUE_GENERIC_TYPE extends Map<CLASS_TYPE, CLASS_VALUE_
 			return putElements(new CUSTOM_HASH_MAPKV_BRACES(size, strategy));
 		}
 		
+#endif
+#if LINKED_CUSTOM_MAP_FEATURE
 		/**
 		 * Builds the Keys and Values into a Linked Custom Hash Map
 		 * @param strategy the that controls the keys and values
@@ -1530,6 +1596,8 @@ public interface MAP KEY_VALUE_GENERIC_TYPE extends Map<CLASS_TYPE, CLASS_VALUE_
 			return putElements(new LINKED_CUSTOM_HASH_MAPKV_BRACES(size, strategy));
 		}
 		
+#endif
+#if CONCURRENT_MAP_FEATURE
 		/**
 		 * Builds the Keys and Values into a Concurrent Hash Map
 		 * @return a CONCURRENT_HASH_MAP
@@ -1538,6 +1606,8 @@ public interface MAP KEY_VALUE_GENERIC_TYPE extends Map<CLASS_TYPE, CLASS_VALUE_
 			return putElements(new CONCURRENT_HASH_MAPKV_BRACES(size));
 		}
 		
+#endif
+#if ARRAY_MAP_FEATURE
 		/**
 		 * Builds the Keys and Values into a Array Map
 		 * @return a ARRAY_MAP
@@ -1546,6 +1616,8 @@ public interface MAP KEY_VALUE_GENERIC_TYPE extends Map<CLASS_TYPE, CLASS_VALUE_
 			return new ARRAY_MAPKV_BRACES(keys, values, size);
 		}
 		
+#endif
+#if RB_TREE_MAP_FEATURE
 		/**
 		 * Builds the Keys and Values into a RedBlack TreeMap
 		 * @return a RB_TREE_MAP
@@ -1563,6 +1635,8 @@ public interface MAP KEY_VALUE_GENERIC_TYPE extends Map<CLASS_TYPE, CLASS_VALUE_
 			return putElements(new RB_TREE_MAPKV_BRACES(comp));
 		}
 		
+#endif
+#if AVL_TREE_MAP_FEATURE
 		/**
 		 * Builds the Keys and Values into a AVL TreeMap
 		 * @return a AVL_TREE_MAP
@@ -1579,6 +1653,7 @@ public interface MAP KEY_VALUE_GENERIC_TYPE extends Map<CLASS_TYPE, CLASS_VALUE_
 		public AVL_TREE_MAP KEY_VALUE_GENERIC_TYPE avlTreeMap(COMPARATOR KEY_GENERIC_TYPE comp) {
 			return putElements(new AVL_TREE_MAPKV_BRACES(comp));
 		}
+#endif
 	}
 #endif
 }

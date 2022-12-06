@@ -10,7 +10,9 @@ import speiger.src.collections.VALUE_PACKAGE.collections.VALUE_COLLECTION;
 import speiger.src.collections.PACKAGE.functions.COMPARATOR;
 #endif
 import speiger.src.collections.PACKAGE.sets.SORTED_SET;
+#if MAPS_FEATURE
 import speiger.src.collections.PACKAGE.utils.maps.MAPS;
+#endif
 #if !TYPE_OBJECT
 import speiger.src.collections.objects.sets.ObjectSortedSet;
 #endif
@@ -37,6 +39,7 @@ public interface SORTED_MAP KEY_VALUE_GENERIC_TYPE extends SortedMap<CLASS_TYPE,
 	@Override
 	public VALUE_COLLECTION VALUE_GENERIC_TYPE values();
 	
+#if MAPS_FEATURE
 	/**
 	 * Creates a Wrapped SortedMap that is Synchronized
 	 * @return a new SortedMap that is synchronized
@@ -59,6 +62,7 @@ public interface SORTED_MAP KEY_VALUE_GENERIC_TYPE extends SortedMap<CLASS_TYPE,
 	 */
 	public default SORTED_MAP KEY_VALUE_GENERIC_TYPE unmodifiable() { return MAPS.unmodifiable(this); }
 	
+#endif
 #if !TYPE_OBJECT
 	/**
 	 * A Type Specific SubMap method to reduce boxing/unboxing

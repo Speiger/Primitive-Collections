@@ -16,19 +16,78 @@ public class MapModule extends BaseModule
 	@Override
 	protected void loadVariables() {}
 	@Override
-	protected void loadFlags() {}
-	@Override
 	public boolean isModuleValid(ClassType keyType, ClassType valueType) { return keyType != ClassType.BOOLEAN; }
 	
 	@Override
 	public Set<String> getModuleKeys(ClassType keyType, ClassType valueType)
 	{
-		return new HashSet<>(Arrays.asList("ConcurrentMap", "HashMap", "CustomHashMap", "ImmutableMap", "ArrayMap", "EnumMap", "AVLTreeMap", "RBTreeMap"));
+		Set<String> sets = new HashSet<>();
+		sets.add("Maps");
+		sets.addAll(Arrays.asList("OrderedMap", "SortedMap"));
+		sets.addAll(Arrays.asList("ArrayMap", "ConcurrentMap", "ImmutableMap"));
+		sets.addAll(Arrays.asList("HashMap", "LinkedHashMap"));
+		sets.addAll(Arrays.asList("CustomHashMap", "LinkedCustomHashMap"));
+		sets.addAll(Arrays.asList("EnumMap", "LinkedEnumMap"));
+		sets.addAll(Arrays.asList("AVLTreeMap", "RBTreeMap"));
+		return sets;
+	}
+	
+	@Override
+	protected void loadFlags() {
+		if(isModuleEnabled()) addFlag("MAP_MODULE");
+		if(isModuleEnabled("Maps")) addFlag("Maps");
+		boolean hashMap = isModuleEnabled("HashMap");
+		boolean customHashMap = isModuleEnabled("CustomHashMap");
+		boolean enumMap = isModuleEnabled("EnumMap");
+		
+		if(isModuleEnabled("OrderedMap")) {
+			addFlag("ORDERED_MAP_FEATURE");
+			if(isModuleEnabled("ArrayMap")) addFlag("ARRAY_MAP_FEATURE");
+			if(hashMap && isModuleEnabled("LinkedHashMap")) addFlag("LINKED_MAP_FEATURE");
+			if(customHashMap && isModuleEnabled("LinkedCustomHashMap")) addFlag("LINKED_CUSTOM_MAP_FEATURE");
+			if(enumMap && isModuleEnabled("LinkedEnumMap")) addFlag("LINKED_ENUM_MAP_FEATURE");
+		}
+		if(isModuleEnabled("SortedMap")) {
+			addFlag("SORTED_MAP_FEATURE");
+			if(isModuleEnabled("AVLTreeMap")) addFlag("AVL_TREE_MAP_FEATURE");
+			if(isModuleEnabled("RBTreeMap")) addFlag("RB_TREE_MAP_FEATURE");
+		}
+		if(isModuleEnabled("ConcurrentMap")) addFlag("CONCURRENT_MAP_FEATURE");
+		if(isModuleEnabled("ImmutableMap")) addFlag("IMMUTABLE_MAP_FEATURE");
+		if(hashMap) addFlag("HASH_MAP_FEATURE");
+		if(customHashMap) addFlag("CUSTOM_HASH_MAP_FEATURE");
+		if(enumMap) addFlag("ENUM_MAP_FEATURE");
 	}
 	
 	@Override
 	protected void loadBlockades()
 	{
+		if(!isModuleEnabled()) addBlockedFiles("Map", "AbstractMap");
+		if(!isModuleEnabled("Maps")) addBlockedFiles("Maps");
+		if(!isModuleEnabled("ImmutableMap")) addBlockedFiles("ImmutableOpenHashMap");
+		if(!isModuleEnabled("ConcurrentMap")) addBlockedFiles("ConcurrentMap", "ConcurrentOpenHashMap");
+		
+		boolean ordered = !isModuleEnabled("OrderedMap");
+		if(ordered) addBlockedFiles("OrderedMap");
+		boolean hashMap = !isModuleEnabled("HashMap");
+		if(hashMap) addBlockedFiles("OpenHashMap");
+		if(hashMap || ordered || !isModuleEnabled("LinkedHashMap")) addBlockedFiles("LinkedOpenHashMap");
+		
+		boolean customHashMap = !isModuleEnabled("CustomHashMap");
+		if(customHashMap) addBlockedFiles("OpenCustomHashMap");
+		if(customHashMap || ordered || !isModuleEnabled("LinkedCustomHashMap")) addBlockedFiles("LinkedOpenCustomHashMap");
+		
+		boolean enumMap = !isModuleEnabled("EnumMap");
+		if(enumMap) addBlockedFiles("EnumMap");
+		if(enumMap || ordered || !isModuleEnabled("LinkedEnumMap")) addBlockedFiles("LinkedEnumMap");
+		
+		if(ordered || isModuleEnabled("ArrayMap")) addBlockedFiles("ArrayMap");
+		
+		boolean sorted = !isModuleEnabled("SortedMap");
+		if(sorted) addBlockedFiles("SortedMap", "NavigableMap");
+		if(sorted || !isModuleEnabled("AVLTreeMap")) addBlockedFiles("AVLTreeMap");
+		if(sorted || !isModuleEnabled("RBTreeMap")) addBlockedFiles("RBTreeMap");
+		
 		if(keyType == ClassType.BOOLEAN)
 		{
 			//Main Classes

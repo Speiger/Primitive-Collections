@@ -28,7 +28,6 @@ import speiger.src.collections.PACKAGE.maps.interfaces.MAP;
 #if !TYPE_OBJECT
 import speiger.src.collections.PACKAGE.sets.ORDERED_SET;
 #endif
-import speiger.src.collections.PACKAGE.utils.maps.MAPS;
 #if !TYPE_OBJECT
 import speiger.src.collections.PACKAGE.utils.ARRAYS;
 #endif
@@ -215,7 +214,7 @@ public class IMMUTABLE_HASH_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_
 		KEY_TYPE[] keys = NEW_KEY_ARRAY(map.size());
 		VALUE_TYPE[] values = NEW_VALUE_ARRAY(keys.length);
 		int index = 0;
-		for(MAP.Entry KEY_VALUE_GENERIC_TYPE entry : MAPS.fastIterable(map)) {
+		for(MAP.Entry KEY_VALUE_GENERIC_TYPE entry : getFastIterable(map)) {
 			keys[index] = entry.ENTRY_KEY();
 			values[index] = entry.ENTRY_VALUE();
 			index++;

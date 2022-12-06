@@ -24,13 +24,13 @@ public class SettingsManager
 		if(!loaded) return true;
 		if(!isEnabled(data, base.getModuleName())) return false;
 		JsonObject result = getObject(data, keyType.getClassPath(), false);
-		if(!isEnabled(result, "enabled")) return false;
+		if(!isEnabled(result, "Enabled")) return false;
 		if(base.isBiModule()) {
 			result = getObject(result, valueType.getClassPath(), false);
-			if(!isEnabled(result, "enabled")) return false;
+			if(!isEnabled(result, "Enabled")) return false;
 		}
 		result = getObject(result, base.getModuleName(), false);
-		return result.size() <= 0 || isEnabled(result, "enabled");		
+		return result.size() <= 0 || isEnabled(result, "Enabled");		
 	}
 	
 	public boolean isModuleEnabled(BaseModule base, ClassType keyType, ClassType valueType, String entry)
@@ -38,13 +38,13 @@ public class SettingsManager
 		if(!loaded) return true;
 		if(!isEnabled(data, base.getModuleName())) return false;
 		JsonObject result = getObject(data, keyType.getClassPath(), false);
-		if(!isEnabled(result, "enabled")) return false;
+		if(!isEnabled(result, "Enabled")) return false;
 		if(base.isBiModule()) {
 			result = getObject(result, valueType.getClassPath(), false);
-			if(!isEnabled(result, "enabled")) return false;
+			if(!isEnabled(result, "Enabled")) return false;
 		}
 		result = getObject(result, base.getModuleName(), false);
-		return result.size() <= 0 || (isEnabled(result, "enabled") && isEnabled(result, entry));
+		return result.size() <= 0 || (isEnabled(result, "Enabled") && isEnabled(result, entry));
 	}
 	
 	public void addModule(BaseModule module) {
@@ -57,7 +57,7 @@ public class SettingsManager
 				for(ClassType valueType : ModulePackage.TYPE) {
 					if(!module.isModuleValid(keyType, valueType)) continue;
 					JsonObject obj = new JsonObject();
-					obj.addProperty("enabled", true);
+					obj.addProperty("Enabled", true);
 					for(String key : module.getModuleKeys(keyType, valueType)) {
 						obj.addProperty(key, true);
 					}
@@ -69,7 +69,7 @@ public class SettingsManager
 		for(ClassType keyType : ModulePackage.TYPE) {
 			if(!module.isModuleValid(keyType, keyType)) continue;
 			JsonObject obj = new JsonObject();
-			obj.addProperty("enabled", true);
+			obj.addProperty("Enabled", true);
 			for(String key : module.getModuleKeys(keyType, keyType)) {
 				obj.addProperty(key, true);
 			}

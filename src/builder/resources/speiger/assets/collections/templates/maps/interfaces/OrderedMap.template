@@ -1,6 +1,8 @@
 package speiger.src.collections.PACKAGE.maps.interfaces;
 
+#if MAPS_FEATURE
 import speiger.src.collections.PACKAGE.utils.maps.MAPS;
+#endif
 #if !TYPE_OBJECT
 import speiger.src.collections.PACKAGE.sets.ORDERED_SET;
 #endif
@@ -102,6 +104,7 @@ public interface ORDERED_MAP KEY_VALUE_GENERIC_TYPE extends MAP KEY_VALUE_GENERI
 	@Override
 	public ObjectOrderedSet<MAP.Entry KEY_VALUE_GENERIC_TYPE> ENTRY_SET();
 	
+#if MAPS_FEATURE
 	/**
 	 * Creates a Wrapped SortedMap that is Synchronized
 	 * @return a new SortedMap that is synchronized
@@ -127,6 +130,7 @@ public interface ORDERED_MAP KEY_VALUE_GENERIC_TYPE extends MAP KEY_VALUE_GENERI
 	@Override
 	public default ORDERED_MAP KEY_VALUE_GENERIC_TYPE unmodifiable() { return MAPS.unmodifiable(this); }
 	
+#endif
 	/**
 	 * Fast Ordered Entry Set that allows for a faster Entry Iterator by recycling the Entry Object and just exchanging 1 internal value
 	 * @Type(T)

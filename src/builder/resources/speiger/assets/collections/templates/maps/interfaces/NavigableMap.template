@@ -2,7 +2,9 @@ package speiger.src.collections.PACKAGE.maps.interfaces;
 
 import java.util.NavigableMap;
 import speiger.src.collections.PACKAGE.sets.NAVIGABLE_SET;
+#if MAPS_FEATURE
 import speiger.src.collections.PACKAGE.utils.maps.MAPS;
+#endif
 
 /**
  * A Type Specific Navigable Map interface with a couple helper methods
@@ -37,6 +39,8 @@ public interface NAVIGABLE_MAP KEY_VALUE_GENERIC_TYPE extends SORTED_MAP KEY_VAL
 	/** @return a Type Specific Navigable Key Set */
 	@Override
 	public NAVIGABLE_SET KEY_GENERIC_TYPE keySet();
+	
+#if MAPS_FEATURE
 	/**
 	 * Creates a Wrapped NavigableMap that is Synchronized
 	 * @return a new NavigableMap that is synchronized
@@ -59,6 +63,7 @@ public interface NAVIGABLE_MAP KEY_VALUE_GENERIC_TYPE extends SORTED_MAP KEY_VAL
 	 */
 	public default NAVIGABLE_MAP KEY_VALUE_GENERIC_TYPE unmodifiable() { return MAPS.unmodifiable(this); }
 	
+#endif
 #if !TYPE_OBJECT
 	/**
 	 * A Type Specific SubMap method to reduce boxing/unboxing

@@ -24,7 +24,6 @@ import speiger.src.collections.PACKAGE.functions.function.PREDICATE;
 #endif
 import speiger.src.collections.PACKAGE.maps.abstracts.ABSTRACT_MAP;
 import speiger.src.collections.PACKAGE.maps.interfaces.MAP;
-import speiger.src.collections.PACKAGE.utils.maps.MAPS;
 #if !TYPE_OBJECT
 import speiger.src.collections.PACKAGE.sets.ABSTRACT_SET;
 import speiger.src.collections.PACKAGE.sets.SET;
@@ -607,7 +606,7 @@ public class CUSTOM_HASH_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_VAL
 	@Override
 	public void BULK_MERGE(MAP KEY_VALUE_GENERIC_TYPE m, VALUE_UNARY_OPERATOR VALUE_VALUE_GENERIC_TYPE mappingFunction) {
 		Objects.requireNonNull(mappingFunction);
-		for(MAP.Entry KEY_VALUE_GENERIC_TYPE entry : MAPS.fastIterable(m)) {
+		for(MAP.Entry KEY_VALUE_GENERIC_TYPE entry : getFastIterable(m)) {
 			KEY_TYPE key = entry.ENTRY_KEY();
 			int index = findIndex(key);
 			VALUE_TYPE newValue = index < 0 || VALUE_EQUALS(values[index], getDefaultReturnValue()) ? entry.ENTRY_VALUE() : mappingFunction.APPLY_VALUE(values[index], entry.ENTRY_VALUE());

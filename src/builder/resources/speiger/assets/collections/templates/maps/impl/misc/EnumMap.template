@@ -19,7 +19,6 @@ import speiger.src.collections.PACKAGE.functions.consumer.BI_CONSUMER;
 import speiger.src.collections.PACKAGE.functions.function.UNARY_OPERATOR;
 #endif
 import speiger.src.collections.PACKAGE.functions.function.FUNCTION;
-import speiger.src.collections.PACKAGE.utils.maps.MAPS;
 import speiger.src.collections.objects.maps.abstracts.ABSTRACT_MAP;
 import speiger.src.collections.objects.maps.interfaces.MAP;
 import speiger.src.collections.objects.sets.AbstractObjectSet;
@@ -449,7 +448,7 @@ public class ENUM_MAP KEY_ENUM_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_VALUE
 	@Override
 	public void BULK_MERGE(MAP KEY_VALUE_GENERIC_TYPE m, VALUE_UNARY_OPERATOR VALUE_VALUE_GENERIC_TYPE mappingFunction) {
 		Objects.requireNonNull(mappingFunction);
-		for(MAP.Entry KEY_VALUE_GENERIC_TYPE entry : MAPS.fastIterable(m)) {
+		for(MAP.Entry KEY_VALUE_GENERIC_TYPE entry : getFastIterable(m)) {
 			T key = entry.ENTRY_KEY();
 			int index = key.ordinal();
 			VALUE_TYPE newValue = !isSet(index) || VALUE_EQUALS(values[index], getDefaultReturnValue()) ? entry.ENTRY_VALUE() : mappingFunction.APPLY_VALUE(values[index], entry.ENTRY_VALUE());

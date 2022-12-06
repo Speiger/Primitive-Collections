@@ -27,7 +27,6 @@ import speiger.src.collections.PACKAGE.maps.interfaces.MAP;
 import speiger.src.collections.PACKAGE.maps.interfaces.ORDERED_MAP;
 import speiger.src.collections.PACKAGE.sets.ABSTRACT_SET;
 import speiger.src.collections.PACKAGE.sets.ORDERED_SET;
-import speiger.src.collections.PACKAGE.utils.maps.MAPS;
 import speiger.src.collections.VALUE_PACKAGE.collections.VALUE_ABSTRACT_COLLECTION;
 import speiger.src.collections.VALUE_PACKAGE.collections.VALUE_COLLECTION;
 import speiger.src.collections.VALUE_PACKAGE.collections.VALUE_ITERATOR;
@@ -176,7 +175,7 @@ public class ARRAY_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_VALUE_GEN
  	 */
 	public ARRAY_MAP(MAP KEY_VALUE_GENERIC_TYPE map) {
 		this(map.size());
-		for(ObjectIterator<MAP.Entry KEY_VALUE_GENERIC_TYPE> iter = MAPS.fastIterator(map);iter.hasNext();size++) {
+		for(ObjectIterator<MAP.Entry KEY_VALUE_GENERIC_TYPE> iter = getFastIterator(map);iter.hasNext();size++) {
 			MAP.Entry KEY_VALUE_GENERIC_TYPE entry = iter.next();
 			keys[size] = entry.ENTRY_KEY();
 			values[size] = entry.ENTRY_VALUE();
@@ -566,7 +565,7 @@ public class ARRAY_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_VALUE_GEN
 	@Override
 	public void BULK_MERGE(MAP KEY_VALUE_GENERIC_TYPE m, VALUE_UNARY_OPERATOR VALUE_VALUE_GENERIC_TYPE mappingFunction) {
 		Objects.requireNonNull(mappingFunction);
-		for(MAP.Entry KEY_VALUE_GENERIC_TYPE entry : MAPS.fastIterable(m)) {
+		for(MAP.Entry KEY_VALUE_GENERIC_TYPE entry : getFastIterable(m)) {
 			KEY_TYPE key = entry.ENTRY_KEY();
 			int index = findIndex(key);
 			VALUE_TYPE newValue = index == -1 || VALUE_EQUALS(values[index], getDefaultReturnValue()) ? entry.ENTRY_VALUE() : mappingFunction.APPLY_VALUE(values[index], entry.ENTRY_VALUE());

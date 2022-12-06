@@ -11,97 +11,97 @@
 	"Boolean": {
 		"enabled": true,
 		"Base": {
-			"enabled": true
+			"Enabled": true
 		},
 		"Boolean": {
 			"enabled": true,
 			"Function": {
-				"enabled": true
+				"Enabled": true
 			},
 			"Pair": {
-				"enabled": true
+				"Enabled": true
 			}
 		},
 		"Byte": {
 			"enabled": true,
 			"Function": {
-				"enabled": true
+				"Enabled": true
 			},
 			"Pair": {
-				"enabled": true
+				"Enabled": true
 			}
 		},
 		"Short": {
 			"enabled": true,
 			"Function": {
-				"enabled": true
+				"Enabled": true
 			},
 			"Pair": {
-				"enabled": true
+				"Enabled": true
 			}
 		},
 		"Character": {
 			"enabled": true,
 			"Function": {
-				"enabled": true
+				"Enabled": true
 			},
 			"Pair": {
-				"enabled": true
+				"Enabled": true
 			}
 		},
 		"Integer": {
 			"enabled": true,
 			"Function": {
-				"enabled": true
+				"Enabled": true
 			},
 			"Pair": {
-				"enabled": true
+				"Enabled": true
 			}
 		},
 		"Long": {
 			"enabled": true,
 			"Function": {
-				"enabled": true
+				"Enabled": true
 			},
 			"Pair": {
-				"enabled": true
+				"Enabled": true
 			}
 		},
 		"Float": {
 			"enabled": true,
 			"Function": {
-				"enabled": true
+				"Enabled": true
 			},
 			"Pair": {
-				"enabled": true
+				"Enabled": true
 			}
 		},
 		"Double": {
 			"enabled": true,
 			"Function": {
-				"enabled": true
+				"Enabled": true
 			},
 			"Pair": {
-				"enabled": true
+				"Enabled": true
 			}
 		},
 		"Object": {
 			"enabled": true,
 			"Function": {
-				"enabled": true
+				"Enabled": true
 			},
 			"Pair": {
-				"enabled": true
+				"Enabled": true
 			}
 		},
 		"Collection": {
-			"enabled": true
+			"Enabled": true
 		},
 		"PriorityQueue": {
-			"enabled": true
+			"Enabled": true
 		},
 		"List": {
-			"enabled": true,
+			"Enabled": true,
 			"Lists": true,
 			"ImmutableList": true,
 			"CopyOnWriteList": true,
@@ -109,205 +109,259 @@
 			"LinkedList": true
 		},
 		"Set": {
-			"enabled": true
+			"Enabled": true
 		},
 		"Async": {
-			"enabled": true
+			"Enabled": true
 		}
 	},
 	"Byte": {
 		"enabled": true,
 		"Base": {
-			"enabled": true
+			"Enabled": true
 		},
 		"Boolean": {
 			"enabled": true,
 			"Function": {
-				"enabled": true
+				"Enabled": true
 			},
 			"Map": {
-				"enabled": true,
+				"Enabled": true,
 				"HashMap": true,
 				"RBTreeMap": true,
 				"ConcurrentMap": true,
 				"ArrayMap": true,
 				"AVLTreeMap": true,
 				"CustomHashMap": true,
-				"EnumMap": true,
-				"ImmutableMap": true
+				"ImmutableMap": true,
+				"LinkedCustomHashMap": true,
+				"LinkedHashMap": true,
+				"Maps": true,
+				"SortedMap": true,
+				"LinkedEnumMap": true,
+				"OrderedMap": true,
+				"EnumMap": true
 			},
 			"Pair": {
-				"enabled": true
+				"Enabled": true
 			}
 		},
 		"Byte": {
 			"enabled": true,
 			"Function": {
-				"enabled": true
+				"Enabled": true
 			},
 			"Map": {
-				"enabled": true,
+				"Enabled": true,
 				"HashMap": true,
 				"RBTreeMap": true,
 				"ConcurrentMap": true,
 				"ArrayMap": true,
 				"AVLTreeMap": true,
 				"CustomHashMap": true,
-				"EnumMap": true,
-				"ImmutableMap": true
+				"ImmutableMap": true,
+				"LinkedCustomHashMap": true,
+				"LinkedHashMap": true,
+				"Maps": true,
+				"SortedMap": true,
+				"LinkedEnumMap": true,
+				"OrderedMap": true,
+				"EnumMap": true
 			},
 			"Pair": {
-				"enabled": true
+				"Enabled": true
 			}
 		},
 		"Short": {
 			"enabled": true,
 			"Function": {
-				"enabled": true
+				"Enabled": true
 			},
 			"Map": {
-				"enabled": true,
+				"Enabled": true,
 				"HashMap": true,
 				"RBTreeMap": true,
 				"ConcurrentMap": true,
 				"ArrayMap": true,
 				"AVLTreeMap": true,
 				"CustomHashMap": true,
-				"EnumMap": true,
-				"ImmutableMap": true
+				"ImmutableMap": true,
+				"LinkedCustomHashMap": true,
+				"LinkedHashMap": true,
+				"Maps": true,
+				"SortedMap": true,
+				"LinkedEnumMap": true,
+				"OrderedMap": true,
+				"EnumMap": true
 			},
 			"Pair": {
-				"enabled": true
+				"Enabled": true
 			}
 		},
 		"Character": {
 			"enabled": true,
 			"Function": {
-				"enabled": true
+				"Enabled": true
 			},
 			"Map": {
-				"enabled": true,
+				"Enabled": true,
 				"HashMap": true,
 				"RBTreeMap": true,
 				"ConcurrentMap": true,
 				"ArrayMap": true,
 				"AVLTreeMap": true,
 				"CustomHashMap": true,
-				"EnumMap": true,
-				"ImmutableMap": true
+				"ImmutableMap": true,
+				"LinkedCustomHashMap": true,
+				"LinkedHashMap": true,
+				"Maps": true,
+				"SortedMap": true,
+				"LinkedEnumMap": true,
+				"OrderedMap": true,
+				"EnumMap": true
 			},
 			"Pair": {
-				"enabled": true
+				"Enabled": true
 			}
 		},
 		"Integer": {
 			"enabled": true,
 			"Function": {
-				"enabled": true
+				"Enabled": true
 			},
 			"Map": {
-				"enabled": true,
+				"Enabled": true,
 				"HashMap": true,
 				"RBTreeMap": true,
 				"ConcurrentMap": true,
 				"ArrayMap": true,
 				"AVLTreeMap": true,
 				"CustomHashMap": true,
-				"EnumMap": true,
-				"ImmutableMap": true
+				"ImmutableMap": true,
+				"LinkedCustomHashMap": true,
+				"LinkedHashMap": true,
+				"Maps": true,
+				"SortedMap": true,
+				"LinkedEnumMap": true,
+				"OrderedMap": true,
+				"EnumMap": true
 			},
 			"Pair": {
-				"enabled": true
+				"Enabled": true
 			}
 		},
 		"Long": {
 			"enabled": true,
 			"Function": {
-				"enabled": true
+				"Enabled": true
 			},
 			"Map": {
-				"enabled": true,
+				"Enabled": true,
 				"HashMap": true,
 				"RBTreeMap": true,
 				"ConcurrentMap": true,
 				"ArrayMap": true,
 				"AVLTreeMap": true,
 				"CustomHashMap": true,
-				"EnumMap": true,
-				"ImmutableMap": true
+				"ImmutableMap": true,
+				"LinkedCustomHashMap": true,
+				"LinkedHashMap": true,
+				"Maps": true,
+				"SortedMap": true,
+				"LinkedEnumMap": true,
+				"OrderedMap": true,
+				"EnumMap": true
 			},
 			"Pair": {
-				"enabled": true
+				"Enabled": true
 			}
 		},
 		"Float": {
 			"enabled": true,
 			"Function": {
-				"enabled": true
+				"Enabled": true
 			},
 			"Map": {
-				"enabled": true,
+				"Enabled": true,
 				"HashMap": true,
 				"RBTreeMap": true,
 				"ConcurrentMap": true,
 				"ArrayMap": true,
 				"AVLTreeMap": true,
 				"CustomHashMap": true,
-				"EnumMap": true,
-				"ImmutableMap": true
+				"ImmutableMap": true,
+				"LinkedCustomHashMap": true,
+				"LinkedHashMap": true,
+				"Maps": true,
+				"SortedMap": true,
+				"LinkedEnumMap": true,
+				"OrderedMap": true,
+				"EnumMap": true
 			},
 			"Pair": {
-				"enabled": true
+				"Enabled": true
 			}
 		},
 		"Double": {
 			"enabled": true,
 			"Function": {
-				"enabled": true
+				"Enabled": true
 			},
 			"Map": {
-				"enabled": true,
+				"Enabled": true,
 				"HashMap": true,
 				"RBTreeMap": true,
 				"ConcurrentMap": true,
 				"ArrayMap": true,
 				"AVLTreeMap": true,
 				"CustomHashMap": true,
-				"EnumMap": true,
-				"ImmutableMap": true
+				"ImmutableMap": true,
+				"LinkedCustomHashMap": true,
+				"LinkedHashMap": true,
+				"Maps": true,
+				"SortedMap": true,
+				"LinkedEnumMap": true,
+				"OrderedMap": true,
+				"EnumMap": true
 			},
 			"Pair": {
-				"enabled": true
+				"Enabled": true
 			}
 		},
 		"Object": {
 			"enabled": true,
 			"Function": {
-				"enabled": true
+				"Enabled": true
 			},
 			"Map": {
-				"enabled": true,
+				"Enabled": true,
 				"HashMap": true,
 				"RBTreeMap": true,
 				"ConcurrentMap": true,
 				"ArrayMap": true,
 				"AVLTreeMap": true,
 				"CustomHashMap": true,
-				"EnumMap": true,
-				"ImmutableMap": true
+				"ImmutableMap": true,
+				"LinkedCustomHashMap": true,
+				"LinkedHashMap": true,
+				"Maps": true,
+				"SortedMap": true,
+				"LinkedEnumMap": true,
+				"OrderedMap": true,
+				"EnumMap": true
 			},
 			"Pair": {
-				"enabled": true
+				"Enabled": true
 			}
 		},
 		"Collection": {
-			"enabled": true
+			"Enabled": true
 		},
 		"PriorityQueue": {
-			"enabled": true
+			"Enabled": true
 		},
 		"List": {
-			"enabled": true,
+			"Enabled": true,
 			"Lists": true,
 			"ImmutableList": true,
 			"CopyOnWriteList": true,
@@ -315,205 +369,259 @@
 			"LinkedList": true
 		},
 		"Set": {
-			"enabled": true
+			"Enabled": true
 		},
 		"Async": {
-			"enabled": true
+			"Enabled": true
 		}
 	},
 	"Short": {
 		"enabled": true,
 		"Base": {
-			"enabled": true
+			"Enabled": true
 		},
 		"Boolean": {
 			"enabled": true,
 			"Function": {
-				"enabled": true
+				"Enabled": true
 			},
 			"Map": {
-				"enabled": true,
+				"Enabled": true,
 				"HashMap": true,
 				"RBTreeMap": true,
 				"ConcurrentMap": true,
 				"ArrayMap": true,
 				"AVLTreeMap": true,
 				"CustomHashMap": true,
-				"EnumMap": true,
-				"ImmutableMap": true
+				"ImmutableMap": true,
+				"LinkedCustomHashMap": true,
+				"LinkedHashMap": true,
+				"Maps": true,
+				"SortedMap": true,
+				"LinkedEnumMap": true,
+				"OrderedMap": true,
+				"EnumMap": true
 			},
 			"Pair": {
-				"enabled": true
+				"Enabled": true
 			}
 		},
 		"Byte": {
 			"enabled": true,
 			"Function": {
-				"enabled": true
+				"Enabled": true
 			},
 			"Map": {
-				"enabled": true,
+				"Enabled": true,
 				"HashMap": true,
 				"RBTreeMap": true,
 				"ConcurrentMap": true,
 				"ArrayMap": true,
 				"AVLTreeMap": true,
 				"CustomHashMap": true,
-				"EnumMap": true,
-				"ImmutableMap": true
+				"ImmutableMap": true,
+				"LinkedCustomHashMap": true,
+				"LinkedHashMap": true,
+				"Maps": true,
+				"SortedMap": true,
+				"LinkedEnumMap": true,
+				"OrderedMap": true,
+				"EnumMap": true
 			},
 			"Pair": {
-				"enabled": true
+				"Enabled": true
 			}
 		},
 		"Short": {
 			"enabled": true,
 			"Function": {
-				"enabled": true
+				"Enabled": true
 			},
 			"Map": {
-				"enabled": true,
+				"Enabled": true,
 				"HashMap": true,
 				"RBTreeMap": true,
 				"ConcurrentMap": true,
 				"ArrayMap": true,
 				"AVLTreeMap": true,
 				"CustomHashMap": true,
-				"EnumMap": true,
-				"ImmutableMap": true
+				"ImmutableMap": true,
+				"LinkedCustomHashMap": true,
+				"LinkedHashMap": true,
+				"Maps": true,
+				"SortedMap": true,
+				"LinkedEnumMap": true,
+				"OrderedMap": true,
+				"EnumMap": true
 			},
 			"Pair": {
-				"enabled": true
+				"Enabled": true
 			}
 		},
 		"Character": {
 			"enabled": true,
 			"Function": {
-				"enabled": true
+				"Enabled": true
 			},
 			"Map": {
-				"enabled": true,
+				"Enabled": true,
 				"HashMap": true,
 				"RBTreeMap": true,
 				"ConcurrentMap": true,
 				"ArrayMap": true,
 				"AVLTreeMap": true,
 				"CustomHashMap": true,
-				"EnumMap": true,
-				"ImmutableMap": true
+				"ImmutableMap": true,
+				"LinkedCustomHashMap": true,
+				"LinkedHashMap": true,
+				"Maps": true,
+				"SortedMap": true,
+				"LinkedEnumMap": true,
+				"OrderedMap": true,
+				"EnumMap": true
 			},
 			"Pair": {
-				"enabled": true
+				"Enabled": true
 			}
 		},
 		"Integer": {
 			"enabled": true,
 			"Function": {
-				"enabled": true
+				"Enabled": true
 			},
 			"Map": {
-				"enabled": true,
+				"Enabled": true,
 				"HashMap": true,
 				"RBTreeMap": true,
 				"ConcurrentMap": true,
 				"ArrayMap": true,
 				"AVLTreeMap": true,
 				"CustomHashMap": true,
-				"EnumMap": true,
-				"ImmutableMap": true
+				"ImmutableMap": true,
+				"LinkedCustomHashMap": true,
+				"LinkedHashMap": true,
+				"Maps": true,
+				"SortedMap": true,
+				"LinkedEnumMap": true,
+				"OrderedMap": true,
+				"EnumMap": true
 			},
 			"Pair": {
-				"enabled": true
+				"Enabled": true
 			}
 		},
 		"Long": {
 			"enabled": true,
 			"Function": {
-				"enabled": true
+				"Enabled": true
 			},
 			"Map": {
-				"enabled": true,
+				"Enabled": true,
 				"HashMap": true,
 				"RBTreeMap": true,
 				"ConcurrentMap": true,
 				"ArrayMap": true,
 				"AVLTreeMap": true,
 				"CustomHashMap": true,
-				"EnumMap": true,
-				"ImmutableMap": true
+				"ImmutableMap": true,
+				"LinkedCustomHashMap": true,
+				"LinkedHashMap": true,
+				"Maps": true,
+				"SortedMap": true,
+				"LinkedEnumMap": true,
+				"OrderedMap": true,
+				"EnumMap": true
 			},
 			"Pair": {
-				"enabled": true
+				"Enabled": true
 			}
 		},
 		"Float": {
 			"enabled": true,
 			"Function": {
-				"enabled": true
+				"Enabled": true
 			},
 			"Map": {
-				"enabled": true,
+				"Enabled": true,
 				"HashMap": true,
 				"RBTreeMap": true,
 				"ConcurrentMap": true,
 				"ArrayMap": true,
 				"AVLTreeMap": true,
 				"CustomHashMap": true,
-				"EnumMap": true,
-				"ImmutableMap": true
+				"ImmutableMap": true,
+				"LinkedCustomHashMap": true,
+				"LinkedHashMap": true,
+				"Maps": true,
+				"SortedMap": true,
+				"LinkedEnumMap": true,
+				"OrderedMap": true,
+				"EnumMap": true
 			},
 			"Pair": {
-				"enabled": true
+				"Enabled": true
 			}
 		},
 		"Double": {
 			"enabled": true,
 			"Function": {
-				"enabled": true
+				"Enabled": true
 			},
 			"Map": {
-				"enabled": true,
+				"Enabled": true,
 				"HashMap": true,
 				"RBTreeMap": true,
 				"ConcurrentMap": true,
 				"ArrayMap": true,
 				"AVLTreeMap": true,
 				"CustomHashMap": true,
-				"EnumMap": true,
-				"ImmutableMap": true
+				"ImmutableMap": true,
+				"LinkedCustomHashMap": true,
+				"LinkedHashMap": true,
+				"Maps": true,
+				"SortedMap": true,
+				"LinkedEnumMap": true,
+				"OrderedMap": true,
+				"EnumMap": true
 			},
 			"Pair": {
-				"enabled": true
+				"Enabled": true
 			}
 		},
 		"Object": {
 			"enabled": true,
 			"Function": {
-				"enabled": true
+				"Enabled": true
 			},
 			"Map": {
-				"enabled": true,
+				"Enabled": true,
 				"HashMap": true,
 				"RBTreeMap": true,
 				"ConcurrentMap": true,
 				"ArrayMap": true,
 				"AVLTreeMap": true,
 				"CustomHashMap": true,
-				"EnumMap": true,
-				"ImmutableMap": true
+				"ImmutableMap": true,
+				"LinkedCustomHashMap": true,
+				"LinkedHashMap": true,
+				"Maps": true,
+				"SortedMap": true,
+				"LinkedEnumMap": true,
+				"OrderedMap": true,
+				"EnumMap": true
 			},
 			"Pair": {
-				"enabled": true
+				"Enabled": true
 			}
 		},
 		"Collection": {
-			"enabled": true
+			"Enabled": true
 		},
 		"PriorityQueue": {
-			"enabled": true
+			"Enabled": true
 		},
 		"List": {
-			"enabled": true,
+			"Enabled": true,
 			"Lists": true,
 			"ImmutableList": true,
 			"CopyOnWriteList": true,
@@ -521,205 +629,259 @@
 			"LinkedList": true
 		},
 		"Set": {
-			"enabled": true
+			"Enabled": true
 		},
 		"Async": {
-			"enabled": true
+			"Enabled": true
 		}
 	},
 	"Character": {
 		"enabled": true,
 		"Base": {
-			"enabled": true
+			"Enabled": true
 		},
 		"Boolean": {
 			"enabled": true,
 			"Function": {
-				"enabled": true
+				"Enabled": true
 			},
 			"Map": {
-				"enabled": true,
+				"Enabled": true,
 				"HashMap": true,
 				"RBTreeMap": true,
 				"ConcurrentMap": true,
 				"ArrayMap": true,
 				"AVLTreeMap": true,
 				"CustomHashMap": true,
-				"EnumMap": true,
-				"ImmutableMap": true
+				"ImmutableMap": true,
+				"LinkedCustomHashMap": true,
+				"LinkedHashMap": true,
+				"Maps": true,
+				"SortedMap": true,
+				"LinkedEnumMap": true,
+				"OrderedMap": true,
+				"EnumMap": true
 			},
 			"Pair": {
-				"enabled": true
+				"Enabled": true
 			}
 		},
 		"Byte": {
 			"enabled": true,
 			"Function": {
-				"enabled": true
+				"Enabled": true
 			},
 			"Map": {
-				"enabled": true,
+				"Enabled": true,
 				"HashMap": true,
 				"RBTreeMap": true,
 				"ConcurrentMap": true,
 				"ArrayMap": true,
 				"AVLTreeMap": true,
 				"CustomHashMap": true,
-				"EnumMap": true,
-				"ImmutableMap": true
+				"ImmutableMap": true,
+				"LinkedCustomHashMap": true,
+				"LinkedHashMap": true,
+				"Maps": true,
+				"SortedMap": true,
+				"LinkedEnumMap": true,
+				"OrderedMap": true,
+				"EnumMap": true
 			},
 			"Pair": {
-				"enabled": true
+				"Enabled": true
 			}
 		},
 		"Short": {
 			"enabled": true,
 			"Function": {
-				"enabled": true
+				"Enabled": true
 			},
 			"Map": {
-				"enabled": true,
+				"Enabled": true,
 				"HashMap": true,
 				"RBTreeMap": true,
 				"ConcurrentMap": true,
 				"ArrayMap": true,
 				"AVLTreeMap": true,
 				"CustomHashMap": true,
-				"EnumMap": true,
-				"ImmutableMap": true
+				"ImmutableMap": true,
+				"LinkedCustomHashMap": true,
+				"LinkedHashMap": true,
+				"Maps": true,
+				"SortedMap": true,
+				"LinkedEnumMap": true,
+				"OrderedMap": true,
+				"EnumMap": true
 			},
 			"Pair": {
-				"enabled": true
+				"Enabled": true
 			}
 		},
 		"Character": {
 			"enabled": true,
 			"Function": {
-				"enabled": true
+				"Enabled": true
 			},
 			"Map": {
-				"enabled": true,
+				"Enabled": true,
 				"HashMap": true,
 				"RBTreeMap": true,
 				"ConcurrentMap": true,
 				"ArrayMap": true,
 				"AVLTreeMap": true,
 				"CustomHashMap": true,
-				"EnumMap": true,
-				"ImmutableMap": true
+				"ImmutableMap": true,
+				"LinkedCustomHashMap": true,
+				"LinkedHashMap": true,
+				"Maps": true,
+				"SortedMap": true,
+				"LinkedEnumMap": true,
+				"OrderedMap": true,
+				"EnumMap": true
 			},
 			"Pair": {
-				"enabled": true
+				"Enabled": true
 			}
 		},
 		"Integer": {
 			"enabled": true,
 			"Function": {
-				"enabled": true
+				"Enabled": true
 			},
 			"Map": {
-				"enabled": true,
+				"Enabled": true,
 				"HashMap": true,
 				"RBTreeMap": true,
 				"ConcurrentMap": true,
 				"ArrayMap": true,
 				"AVLTreeMap": true,
 				"CustomHashMap": true,
-				"EnumMap": true,
-				"ImmutableMap": true
+				"ImmutableMap": true,
+				"LinkedCustomHashMap": true,
+				"LinkedHashMap": true,
+				"Maps": true,
+				"SortedMap": true,
+				"LinkedEnumMap": true,
+				"OrderedMap": true,
+				"EnumMap": true
 			},
 			"Pair": {
-				"enabled": true
+				"Enabled": true
 			}
 		},
 		"Long": {
 			"enabled": true,
 			"Function": {
-				"enabled": true
+				"Enabled": true
 			},
 			"Map": {
-				"enabled": true,
+				"Enabled": true,
 				"HashMap": true,
 				"RBTreeMap": true,
 				"ConcurrentMap": true,
 				"ArrayMap": true,
 				"AVLTreeMap": true,
 				"CustomHashMap": true,
-				"EnumMap": true,
-				"ImmutableMap": true
+				"ImmutableMap": true,
+				"LinkedCustomHashMap": true,
+				"LinkedHashMap": true,
+				"Maps": true,
+				"SortedMap": true,
+				"LinkedEnumMap": true,
+				"OrderedMap": true,
+				"EnumMap": true
 			},
 			"Pair": {
-				"enabled": true
+				"Enabled": true
 			}
 		},
 		"Float": {
 			"enabled": true,
 			"Function": {
-				"enabled": true
+				"Enabled": true
 			},
 			"Map": {
-				"enabled": true,
+				"Enabled": true,
 				"HashMap": true,
 				"RBTreeMap": true,
 				"ConcurrentMap": true,
 				"ArrayMap": true,
 				"AVLTreeMap": true,
 				"CustomHashMap": true,
-				"EnumMap": true,
-				"ImmutableMap": true
+				"ImmutableMap": true,
+				"LinkedCustomHashMap": true,
+				"LinkedHashMap": true,
+				"Maps": true,
+				"SortedMap": true,
+				"LinkedEnumMap": true,
+				"OrderedMap": true,
+				"EnumMap": true
 			},
 			"Pair": {
-				"enabled": true
+				"Enabled": true
 			}
 		},
 		"Double": {
 			"enabled": true,
 			"Function": {
-				"enabled": true
+				"Enabled": true
 			},
 			"Map": {
-				"enabled": true,
+				"Enabled": true,
 				"HashMap": true,
 				"RBTreeMap": true,
 				"ConcurrentMap": true,
 				"ArrayMap": true,
 				"AVLTreeMap": true,
 				"CustomHashMap": true,
-				"EnumMap": true,
-				"ImmutableMap": true
+				"ImmutableMap": true,
+				"LinkedCustomHashMap": true,
+				"LinkedHashMap": true,
+				"Maps": true,
+				"SortedMap": true,
+				"LinkedEnumMap": true,
+				"OrderedMap": true,
+				"EnumMap": true
 			},
 			"Pair": {
-				"enabled": true
+				"Enabled": true
 			}
 		},
 		"Object": {
 			"enabled": true,
 			"Function": {
-				"enabled": true
+				"Enabled": true
 			},
 			"Map": {
-				"enabled": true,
+				"Enabled": true,
 				"HashMap": true,
 				"RBTreeMap": true,
 				"ConcurrentMap": true,
 				"ArrayMap": true,
 				"AVLTreeMap": true,
 				"CustomHashMap": true,
-				"EnumMap": true,
-				"ImmutableMap": true
+				"ImmutableMap": true,
+				"LinkedCustomHashMap": true,
+				"LinkedHashMap": true,
+				"Maps": true,
+				"SortedMap": true,
+				"LinkedEnumMap": true,
+				"OrderedMap": true,
+				"EnumMap": true
 			},
 			"Pair": {
-				"enabled": true
+				"Enabled": true
 			}
 		},
 		"Collection": {
-			"enabled": true
+			"Enabled": true
 		},
 		"PriorityQueue": {
-			"enabled": true
+			"Enabled": true
 		},
 		"List": {
-			"enabled": true,
+			"Enabled": true,
 			"Lists": true,
 			"ImmutableList": true,
 			"CopyOnWriteList": true,
@@ -727,205 +889,259 @@
 			"LinkedList": true
 		},
 		"Set": {
-			"enabled": true
+			"Enabled": true
 		},
 		"Async": {
-			"enabled": true
+			"Enabled": true
 		}
 	},
 	"Integer": {
 		"enabled": true,
 		"Base": {
-			"enabled": true
+			"Enabled": true
 		},
 		"Boolean": {
 			"enabled": true,
 			"Function": {
-				"enabled": true
+				"Enabled": true
 			},
 			"Map": {
-				"enabled": true,
+				"Enabled": true,
 				"HashMap": true,
 				"RBTreeMap": true,
 				"ConcurrentMap": true,
 				"ArrayMap": true,
 				"AVLTreeMap": true,
 				"CustomHashMap": true,
-				"EnumMap": true,
-				"ImmutableMap": true
+				"ImmutableMap": true,
+				"LinkedCustomHashMap": true,
+				"LinkedHashMap": true,
+				"Maps": true,
+				"SortedMap": true,
+				"LinkedEnumMap": true,
+				"OrderedMap": true,
+				"EnumMap": true
 			},
 			"Pair": {
-				"enabled": true
+				"Enabled": true
 			}
 		},
 		"Byte": {
 			"enabled": true,
 			"Function": {
-				"enabled": true
+				"Enabled": true
 			},
 			"Map": {
-				"enabled": true,
+				"Enabled": true,
 				"HashMap": true,
 				"RBTreeMap": true,
 				"ConcurrentMap": true,
 				"ArrayMap": true,
 				"AVLTreeMap": true,
 				"CustomHashMap": true,
-				"EnumMap": true,
-				"ImmutableMap": true
+				"ImmutableMap": true,
+				"LinkedCustomHashMap": true,
+				"LinkedHashMap": true,
+				"Maps": true,
+				"SortedMap": true,
+				"LinkedEnumMap": true,
+				"OrderedMap": true,
+				"EnumMap": true
 			},
 			"Pair": {
-				"enabled": true
+				"Enabled": true
 			}
 		},
 		"Short": {
 			"enabled": true,
 			"Function": {
-				"enabled": true
+				"Enabled": true
 			},
 			"Map": {
-				"enabled": true,
+				"Enabled": true,
 				"HashMap": true,
 				"RBTreeMap": true,
 				"ConcurrentMap": true,
 				"ArrayMap": true,
 				"AVLTreeMap": true,
 				"CustomHashMap": true,
-				"EnumMap": true,
-				"ImmutableMap": true
+				"ImmutableMap": true,
+				"LinkedCustomHashMap": true,
+				"LinkedHashMap": true,
+				"Maps": true,
+				"SortedMap": true,
+				"LinkedEnumMap": true,
+				"OrderedMap": true,
+				"EnumMap": true
 			},
 			"Pair": {
-				"enabled": true
+				"Enabled": true
 			}
 		},
 		"Character": {
 			"enabled": true,
 			"Function": {
-				"enabled": true
+				"Enabled": true
 			},
 			"Map": {
-				"enabled": true,
+				"Enabled": true,
 				"HashMap": true,
 				"RBTreeMap": true,
 				"ConcurrentMap": true,
 				"ArrayMap": true,
 				"AVLTreeMap": true,
 				"CustomHashMap": true,
-				"EnumMap": true,
-				"ImmutableMap": true
+				"ImmutableMap": true,
+				"LinkedCustomHashMap": true,
+				"LinkedHashMap": true,
+				"Maps": true,
+				"SortedMap": true,
+				"LinkedEnumMap": true,
+				"OrderedMap": true,
+				"EnumMap": true
 			},
 			"Pair": {
-				"enabled": true
+				"Enabled": true
 			}
 		},
 		"Integer": {
 			"enabled": true,
 			"Function": {
-				"enabled": true
+				"Enabled": true
 			},
 			"Map": {
-				"enabled": true,
+				"Enabled": true,
 				"HashMap": true,
 				"RBTreeMap": true,
 				"ConcurrentMap": true,
 				"ArrayMap": true,
 				"AVLTreeMap": true,
 				"CustomHashMap": true,
-				"EnumMap": true,
-				"ImmutableMap": true
+				"ImmutableMap": true,
+				"LinkedCustomHashMap": true,
+				"LinkedHashMap": true,
+				"Maps": true,
+				"SortedMap": true,
+				"LinkedEnumMap": true,
+				"OrderedMap": true,
+				"EnumMap": true
 			},
 			"Pair": {
-				"enabled": true
+				"Enabled": true
 			}
 		},
 		"Long": {
 			"enabled": true,
 			"Function": {
-				"enabled": true
+				"Enabled": true
 			},
 			"Map": {
-				"enabled": true,
+				"Enabled": true,
 				"HashMap": true,
 				"RBTreeMap": true,
 				"ConcurrentMap": true,
 				"ArrayMap": true,
 				"AVLTreeMap": true,
 				"CustomHashMap": true,
-				"EnumMap": true,
-				"ImmutableMap": true
+				"ImmutableMap": true,
+				"LinkedCustomHashMap": true,
+				"LinkedHashMap": true,
+				"Maps": true,
+				"SortedMap": true,
+				"LinkedEnumMap": true,
+				"OrderedMap": true,
+				"EnumMap": true
 			},
 			"Pair": {
-				"enabled": true
+				"Enabled": true
 			}
 		},
 		"Float": {
 			"enabled": true,
 			"Function": {
-				"enabled": true
+				"Enabled": true
 			},
 			"Map": {
-				"enabled": true,
+				"Enabled": true,
 				"HashMap": true,
 				"RBTreeMap": true,
 				"ConcurrentMap": true,
 				"ArrayMap": true,
 				"AVLTreeMap": true,
 				"CustomHashMap": true,
-				"EnumMap": true,
-				"ImmutableMap": true
+				"ImmutableMap": true,
+				"LinkedCustomHashMap": true,
+				"LinkedHashMap": true,
+				"Maps": true,
+				"SortedMap": true,
+				"LinkedEnumMap": true,
+				"OrderedMap": true,
+				"EnumMap": true
 			},
 			"Pair": {
-				"enabled": true
+				"Enabled": true
 			}
 		},
 		"Double": {
 			"enabled": true,
 			"Function": {
-				"enabled": true
+				"Enabled": true
 			},
 			"Map": {
-				"enabled": true,
+				"Enabled": true,
 				"HashMap": true,
 				"RBTreeMap": true,
 				"ConcurrentMap": true,
 				"ArrayMap": true,
 				"AVLTreeMap": true,
 				"CustomHashMap": true,
-				"EnumMap": true,
-				"ImmutableMap": true
+				"ImmutableMap": true,
+				"LinkedCustomHashMap": true,
+				"LinkedHashMap": true,
+				"Maps": true,
+				"SortedMap": true,
+				"LinkedEnumMap": true,
+				"OrderedMap": true,
+				"EnumMap": true
 			},
 			"Pair": {
-				"enabled": true
+				"Enabled": true
 			}
 		},
 		"Object": {
 			"enabled": true,
 			"Function": {
-				"enabled": true
+				"Enabled": true
 			},
 			"Map": {
-				"enabled": true,
+				"Enabled": true,
 				"HashMap": true,
 				"RBTreeMap": true,
 				"ConcurrentMap": true,
 				"ArrayMap": true,
 				"AVLTreeMap": true,
 				"CustomHashMap": true,
-				"EnumMap": true,
-				"ImmutableMap": true
+				"ImmutableMap": true,
+				"LinkedCustomHashMap": true,
+				"LinkedHashMap": true,
+				"Maps": true,
+				"SortedMap": true,
+				"LinkedEnumMap": true,
+				"OrderedMap": true,
+				"EnumMap": true
 			},
 			"Pair": {
-				"enabled": true
+				"Enabled": true
 			}
 		},
 		"Collection": {
-			"enabled": true
+			"Enabled": true
 		},
 		"PriorityQueue": {
-			"enabled": true
+			"Enabled": true
 		},
 		"List": {
-			"enabled": true,
+			"Enabled": true,
 			"Lists": true,
 			"ImmutableList": true,
 			"CopyOnWriteList": true,
@@ -933,205 +1149,259 @@
 			"LinkedList": true
 		},
 		"Set": {
-			"enabled": true
+			"Enabled": true
 		},
 		"Async": {
-			"enabled": true
+			"Enabled": true
 		}
 	},
 	"Long": {
 		"enabled": true,
 		"Base": {
-			"enabled": true
+			"Enabled": true
 		},
 		"Boolean": {
 			"enabled": true,
 			"Function": {
-				"enabled": true
+				"Enabled": true
 			},
 			"Map": {
-				"enabled": true,
+				"Enabled": true,
 				"HashMap": true,
 				"RBTreeMap": true,
 				"ConcurrentMap": true,
 				"ArrayMap": true,
 				"AVLTreeMap": true,
 				"CustomHashMap": true,
-				"EnumMap": true,
-				"ImmutableMap": true
+				"ImmutableMap": true,
+				"LinkedCustomHashMap": true,
+				"LinkedHashMap": true,
+				"Maps": true,
+				"SortedMap": true,
+				"LinkedEnumMap": true,
+				"OrderedMap": true,
+				"EnumMap": true
 			},
 			"Pair": {
-				"enabled": true
+				"Enabled": true
 			}
 		},
 		"Byte": {
 			"enabled": true,
 			"Function": {
-				"enabled": true
+				"Enabled": true
 			},
 			"Map": {
-				"enabled": true,
+				"Enabled": true,
 				"HashMap": true,
 				"RBTreeMap": true,
 				"ConcurrentMap": true,
 				"ArrayMap": true,
 				"AVLTreeMap": true,
 				"CustomHashMap": true,
-				"EnumMap": true,
-				"ImmutableMap": true
+				"ImmutableMap": true,
+				"LinkedCustomHashMap": true,
+				"LinkedHashMap": true,
+				"Maps": true,
+				"SortedMap": true,
+				"LinkedEnumMap": true,
+				"OrderedMap": true,
+				"EnumMap": true
 			},
 			"Pair": {
-				"enabled": true
+				"Enabled": true
 			}
 		},
 		"Short": {
 			"enabled": true,
 			"Function": {
-				"enabled": true
+				"Enabled": true
 			},
 			"Map": {
-				"enabled": true,
+				"Enabled": true,
 				"HashMap": true,
 				"RBTreeMap": true,
 				"ConcurrentMap": true,
 				"ArrayMap": true,
 				"AVLTreeMap": true,
 				"CustomHashMap": true,
-				"EnumMap": true,
-				"ImmutableMap": true
+				"ImmutableMap": true,
+				"LinkedCustomHashMap": true,
+				"LinkedHashMap": true,
+				"Maps": true,
+				"SortedMap": true,
+				"LinkedEnumMap": true,
+				"OrderedMap": true,
+				"EnumMap": true
 			},
 			"Pair": {
-				"enabled": true
+				"Enabled": true
 			}
 		},
 		"Character": {
 			"enabled": true,
 			"Function": {
-				"enabled": true
+				"Enabled": true
 			},
 			"Map": {
-				"enabled": true,
+				"Enabled": true,
 				"HashMap": true,
 				"RBTreeMap": true,
 				"ConcurrentMap": true,
 				"ArrayMap": true,
 				"AVLTreeMap": true,
 				"CustomHashMap": true,
-				"EnumMap": true,
-				"ImmutableMap": true
+				"ImmutableMap": true,
+				"LinkedCustomHashMap": true,
+				"LinkedHashMap": true,
+				"Maps": true,
+				"SortedMap": true,
+				"LinkedEnumMap": true,
+				"OrderedMap": true,
+				"EnumMap": true
 			},
 			"Pair": {
-				"enabled": true
+				"Enabled": true
 			}
 		},
 		"Integer": {
 			"enabled": true,
 			"Function": {
-				"enabled": true
+				"Enabled": true
 			},
 			"Map": {
-				"enabled": true,
+				"Enabled": true,
 				"HashMap": true,
 				"RBTreeMap": true,
 				"ConcurrentMap": true,
 				"ArrayMap": true,
 				"AVLTreeMap": true,
 				"CustomHashMap": true,
-				"EnumMap": true,
-				"ImmutableMap": true
+				"ImmutableMap": true,
+				"LinkedCustomHashMap": true,
+				"LinkedHashMap": true,
+				"Maps": true,
+				"SortedMap": true,
+				"LinkedEnumMap": true,
+				"OrderedMap": true,
+				"EnumMap": true
 			},
 			"Pair": {
-				"enabled": true
+				"Enabled": true
 			}
 		},
 		"Long": {
 			"enabled": true,
 			"Function": {
-				"enabled": true
+				"Enabled": true
 			},
 			"Map": {
-				"enabled": true,
+				"Enabled": true,
 				"HashMap": true,
 				"RBTreeMap": true,
 				"ConcurrentMap": true,
 				"ArrayMap": true,
 				"AVLTreeMap": true,
 				"CustomHashMap": true,
-				"EnumMap": true,
-				"ImmutableMap": true
+				"ImmutableMap": true,
+				"LinkedCustomHashMap": true,
+				"LinkedHashMap": true,
+				"Maps": true,
+				"SortedMap": true,
+				"LinkedEnumMap": true,
+				"OrderedMap": true,
+				"EnumMap": true
 			},
 			"Pair": {
-				"enabled": true
+				"Enabled": true
 			}
 		},
 		"Float": {
 			"enabled": true,
 			"Function": {
-				"enabled": true
+				"Enabled": true
 			},
 			"Map": {
-				"enabled": true,
+				"Enabled": true,
 				"HashMap": true,
 				"RBTreeMap": true,
 				"ConcurrentMap": true,
 				"ArrayMap": true,
 				"AVLTreeMap": true,
 				"CustomHashMap": true,
-				"EnumMap": true,
-				"ImmutableMap": true
+				"ImmutableMap": true,
+				"LinkedCustomHashMap": true,
+				"LinkedHashMap": true,
+				"Maps": true,
+				"SortedMap": true,
+				"LinkedEnumMap": true,
+				"OrderedMap": true,
+				"EnumMap": true
 			},
 			"Pair": {
-				"enabled": true
+				"Enabled": true
 			}
 		},
 		"Double": {
 			"enabled": true,
 			"Function": {
-				"enabled": true
+				"Enabled": true
 			},
 			"Map": {
-				"enabled": true,
+				"Enabled": true,
 				"HashMap": true,
 				"RBTreeMap": true,
 				"ConcurrentMap": true,
 				"ArrayMap": true,
 				"AVLTreeMap": true,
 				"CustomHashMap": true,
-				"EnumMap": true,
-				"ImmutableMap": true
+				"ImmutableMap": true,
+				"LinkedCustomHashMap": true,
+				"LinkedHashMap": true,
+				"Maps": true,
+				"SortedMap": true,
+				"LinkedEnumMap": true,
+				"OrderedMap": true,
+				"EnumMap": true
 			},
 			"Pair": {
-				"enabled": true
+				"Enabled": true
 			}
 		},
 		"Object": {
 			"enabled": true,
 			"Function": {
-				"enabled": true
+				"Enabled": true
 			},
 			"Map": {
-				"enabled": true,
+				"Enabled": true,
 				"HashMap": true,
 				"RBTreeMap": true,
 				"ConcurrentMap": true,
 				"ArrayMap": true,
 				"AVLTreeMap": true,
 				"CustomHashMap": true,
-				"EnumMap": true,
-				"ImmutableMap": true
+				"ImmutableMap": true,
+				"LinkedCustomHashMap": true,
+				"LinkedHashMap": true,
+				"Maps": true,
+				"SortedMap": true,
+				"LinkedEnumMap": true,
+				"OrderedMap": true,
+				"EnumMap": true
 			},
 			"Pair": {
-				"enabled": true
+				"Enabled": true
 			}
 		},
 		"Collection": {
-			"enabled": true
+			"Enabled": true
 		},
 		"PriorityQueue": {
-			"enabled": true
+			"Enabled": true
 		},
 		"List": {
-			"enabled": true,
+			"Enabled": true,
 			"Lists": true,
 			"ImmutableList": true,
 			"CopyOnWriteList": true,
@@ -1139,205 +1409,259 @@
 			"LinkedList": true
 		},
 		"Set": {
-			"enabled": true
+			"Enabled": true
 		},
 		"Async": {
-			"enabled": true
+			"Enabled": true
 		}
 	},
 	"Float": {
 		"enabled": true,
 		"Base": {
-			"enabled": true
+			"Enabled": true
 		},
 		"Boolean": {
 			"enabled": true,
 			"Function": {
-				"enabled": true
+				"Enabled": true
 			},
 			"Map": {
-				"enabled": true,
+				"Enabled": true,
 				"HashMap": true,
 				"RBTreeMap": true,
 				"ConcurrentMap": true,
 				"ArrayMap": true,
 				"AVLTreeMap": true,
 				"CustomHashMap": true,
-				"EnumMap": true,
-				"ImmutableMap": true
+				"ImmutableMap": true,
+				"LinkedCustomHashMap": true,
+				"LinkedHashMap": true,
+				"Maps": true,
+				"SortedMap": true,
+				"LinkedEnumMap": true,
+				"OrderedMap": true,
+				"EnumMap": true
 			},
 			"Pair": {
-				"enabled": true
+				"Enabled": true
 			}
 		},
 		"Byte": {
 			"enabled": true,
 			"Function": {
-				"enabled": true
+				"Enabled": true
 			},
 			"Map": {
-				"enabled": true,
+				"Enabled": true,
 				"HashMap": true,
 				"RBTreeMap": true,
 				"ConcurrentMap": true,
 				"ArrayMap": true,
 				"AVLTreeMap": true,
 				"CustomHashMap": true,
-				"EnumMap": true,
-				"ImmutableMap": true
+				"ImmutableMap": true,
+				"LinkedCustomHashMap": true,
+				"LinkedHashMap": true,
+				"Maps": true,
+				"SortedMap": true,
+				"LinkedEnumMap": true,
+				"OrderedMap": true,
+				"EnumMap": true
 			},
 			"Pair": {
-				"enabled": true
+				"Enabled": true
 			}
 		},
 		"Short": {
 			"enabled": true,
 			"Function": {
-				"enabled": true
+				"Enabled": true
 			},
 			"Map": {
-				"enabled": true,
+				"Enabled": true,
 				"HashMap": true,
 				"RBTreeMap": true,
 				"ConcurrentMap": true,
 				"ArrayMap": true,
 				"AVLTreeMap": true,
 				"CustomHashMap": true,
-				"EnumMap": true,
-				"ImmutableMap": true
+				"ImmutableMap": true,
+				"LinkedCustomHashMap": true,
+				"LinkedHashMap": true,
+				"Maps": true,
+				"SortedMap": true,
+				"LinkedEnumMap": true,
+				"OrderedMap": true,
+				"EnumMap": true
 			},
 			"Pair": {
-				"enabled": true
+				"Enabled": true
 			}
 		},
 		"Character": {
 			"enabled": true,
 			"Function": {
-				"enabled": true
+				"Enabled": true
 			},
 			"Map": {
-				"enabled": true,
+				"Enabled": true,
 				"HashMap": true,
 				"RBTreeMap": true,
 				"ConcurrentMap": true,
 				"ArrayMap": true,
 				"AVLTreeMap": true,
 				"CustomHashMap": true,
-				"EnumMap": true,
-				"ImmutableMap": true
+				"ImmutableMap": true,
+				"LinkedCustomHashMap": true,
+				"LinkedHashMap": true,
+				"Maps": true,
+				"SortedMap": true,
+				"LinkedEnumMap": true,
+				"OrderedMap": true,
+				"EnumMap": true
 			},
 			"Pair": {
-				"enabled": true
+				"Enabled": true
 			}
 		},
 		"Integer": {
 			"enabled": true,
 			"Function": {
-				"enabled": true
+				"Enabled": true
 			},
 			"Map": {
-				"enabled": true,
+				"Enabled": true,
 				"HashMap": true,
 				"RBTreeMap": true,
 				"ConcurrentMap": true,
 				"ArrayMap": true,
 				"AVLTreeMap": true,
 				"CustomHashMap": true,
-				"EnumMap": true,
-				"ImmutableMap": true
+				"ImmutableMap": true,
+				"LinkedCustomHashMap": true,
+				"LinkedHashMap": true,
+				"Maps": true,
+				"SortedMap": true,
+				"LinkedEnumMap": true,
+				"OrderedMap": true,
+				"EnumMap": true
 			},
 			"Pair": {
-				"enabled": true
+				"Enabled": true
 			}
 		},
 		"Long": {
 			"enabled": true,
 			"Function": {
-				"enabled": true
+				"Enabled": true
 			},
 			"Map": {
-				"enabled": true,
+				"Enabled": true,
 				"HashMap": true,
 				"RBTreeMap": true,
 				"ConcurrentMap": true,
 				"ArrayMap": true,
 				"AVLTreeMap": true,
 				"CustomHashMap": true,
-				"EnumMap": true,
-				"ImmutableMap": true
+				"ImmutableMap": true,
+				"LinkedCustomHashMap": true,
+				"LinkedHashMap": true,
+				"Maps": true,
+				"SortedMap": true,
+				"LinkedEnumMap": true,
+				"OrderedMap": true,
+				"EnumMap": true
 			},
 			"Pair": {
-				"enabled": true
+				"Enabled": true
 			}
 		},
 		"Float": {
 			"enabled": true,
 			"Function": {
-				"enabled": true
+				"Enabled": true
 			},
 			"Map": {
-				"enabled": true,
+				"Enabled": true,
 				"HashMap": true,
 				"RBTreeMap": true,
 				"ConcurrentMap": true,
 				"ArrayMap": true,
 				"AVLTreeMap": true,
 				"CustomHashMap": true,
-				"EnumMap": true,
-				"ImmutableMap": true
+				"ImmutableMap": true,
+				"LinkedCustomHashMap": true,
+				"LinkedHashMap": true,
+				"Maps": true,
+				"SortedMap": true,
+				"LinkedEnumMap": true,
+				"OrderedMap": true,
+				"EnumMap": true
 			},
 			"Pair": {
-				"enabled": true
+				"Enabled": true
 			}
 		},
 		"Double": {
 			"enabled": true,
 			"Function": {
-				"enabled": true
+				"Enabled": true
 			},
 			"Map": {
-				"enabled": true,
+				"Enabled": true,
 				"HashMap": true,
 				"RBTreeMap": true,
 				"ConcurrentMap": true,
 				"ArrayMap": true,
 				"AVLTreeMap": true,
 				"CustomHashMap": true,
-				"EnumMap": true,
-				"ImmutableMap": true
+				"ImmutableMap": true,
+				"LinkedCustomHashMap": true,
+				"LinkedHashMap": true,
+				"Maps": true,
+				"SortedMap": true,
+				"LinkedEnumMap": true,
+				"OrderedMap": true,
+				"EnumMap": true
 			},
 			"Pair": {
-				"enabled": true
+				"Enabled": true
 			}
 		},
 		"Object": {
 			"enabled": true,
 			"Function": {
-				"enabled": true
+				"Enabled": true
 			},
 			"Map": {
-				"enabled": true,
+				"Enabled": true,
 				"HashMap": true,
 				"RBTreeMap": true,
 				"ConcurrentMap": true,
 				"ArrayMap": true,
 				"AVLTreeMap": true,
 				"CustomHashMap": true,
-				"EnumMap": true,
-				"ImmutableMap": true
+				"ImmutableMap": true,
+				"LinkedCustomHashMap": true,
+				"LinkedHashMap": true,
+				"Maps": true,
+				"SortedMap": true,
+				"LinkedEnumMap": true,
+				"OrderedMap": true,
+				"EnumMap": true
 			},
 			"Pair": {
-				"enabled": true
+				"Enabled": true
 			}
 		},
 		"Collection": {
-			"enabled": true
+			"Enabled": true
 		},
 		"PriorityQueue": {
-			"enabled": true
+			"Enabled": true
 		},
 		"List": {
-			"enabled": true,
+			"Enabled": true,
 			"Lists": true,
 			"ImmutableList": true,
 			"CopyOnWriteList": true,
@@ -1345,205 +1669,259 @@
 			"LinkedList": true
 		},
 		"Set": {
-			"enabled": true
+			"Enabled": true
 		},
 		"Async": {
-			"enabled": true
+			"Enabled": true
 		}
 	},
 	"Double": {
 		"enabled": true,
 		"Base": {
-			"enabled": true
+			"Enabled": true
 		},
 		"Boolean": {
 			"enabled": true,
 			"Function": {
-				"enabled": true
+				"Enabled": true
 			},
 			"Map": {
-				"enabled": true,
+				"Enabled": true,
 				"HashMap": true,
 				"RBTreeMap": true,
 				"ConcurrentMap": true,
 				"ArrayMap": true,
 				"AVLTreeMap": true,
 				"CustomHashMap": true,
-				"EnumMap": true,
-				"ImmutableMap": true
+				"ImmutableMap": true,
+				"LinkedCustomHashMap": true,
+				"LinkedHashMap": true,
+				"Maps": true,
+				"SortedMap": true,
+				"LinkedEnumMap": true,
+				"OrderedMap": true,
+				"EnumMap": true
 			},
 			"Pair": {
-				"enabled": true
+				"Enabled": true
 			}
 		},
 		"Byte": {
 			"enabled": true,
 			"Function": {
-				"enabled": true
+				"Enabled": true
 			},
 			"Map": {
-				"enabled": true,
+				"Enabled": true,
 				"HashMap": true,
 				"RBTreeMap": true,
 				"ConcurrentMap": true,
 				"ArrayMap": true,
 				"AVLTreeMap": true,
 				"CustomHashMap": true,
-				"EnumMap": true,
-				"ImmutableMap": true
+				"ImmutableMap": true,
+				"LinkedCustomHashMap": true,
+				"LinkedHashMap": true,
+				"Maps": true,
+				"SortedMap": true,
+				"LinkedEnumMap": true,
+				"OrderedMap": true,
+				"EnumMap": true
 			},
 			"Pair": {
-				"enabled": true
+				"Enabled": true
 			}
 		},
 		"Short": {
 			"enabled": true,
 			"Function": {
-				"enabled": true
+				"Enabled": true
 			},
 			"Map": {
-				"enabled": true,
+				"Enabled": true,
 				"HashMap": true,
 				"RBTreeMap": true,
 				"ConcurrentMap": true,
 				"ArrayMap": true,
 				"AVLTreeMap": true,
 				"CustomHashMap": true,
-				"EnumMap": true,
-				"ImmutableMap": true
+				"ImmutableMap": true,
+				"LinkedCustomHashMap": true,
+				"LinkedHashMap": true,
+				"Maps": true,
+				"SortedMap": true,
+				"LinkedEnumMap": true,
+				"OrderedMap": true,
+				"EnumMap": true
 			},
 			"Pair": {
-				"enabled": true
+				"Enabled": true
 			}
 		},
 		"Character": {
 			"enabled": true,
 			"Function": {
-				"enabled": true
+				"Enabled": true
 			},
 			"Map": {
-				"enabled": true,
+				"Enabled": true,
 				"HashMap": true,
 				"RBTreeMap": true,
 				"ConcurrentMap": true,
 				"ArrayMap": true,
 				"AVLTreeMap": true,
 				"CustomHashMap": true,
-				"EnumMap": true,
-				"ImmutableMap": true
+				"ImmutableMap": true,
+				"LinkedCustomHashMap": true,
+				"LinkedHashMap": true,
+				"Maps": true,
+				"SortedMap": true,
+				"LinkedEnumMap": true,
+				"OrderedMap": true,
+				"EnumMap": true
 			},
 			"Pair": {
-				"enabled": true
+				"Enabled": true
 			}
 		},
 		"Integer": {
 			"enabled": true,
 			"Function": {
-				"enabled": true
+				"Enabled": true
 			},
 			"Map": {
-				"enabled": true,
+				"Enabled": true,
 				"HashMap": true,
 				"RBTreeMap": true,
 				"ConcurrentMap": true,
 				"ArrayMap": true,
 				"AVLTreeMap": true,
 				"CustomHashMap": true,
-				"EnumMap": true,
-				"ImmutableMap": true
+				"ImmutableMap": true,
+				"LinkedCustomHashMap": true,
+				"LinkedHashMap": true,
+				"Maps": true,
+				"SortedMap": true,
+				"LinkedEnumMap": true,
+				"OrderedMap": true,
+				"EnumMap": true
 			},
 			"Pair": {
-				"enabled": true
+				"Enabled": true
 			}
 		},
 		"Long": {
 			"enabled": true,
 			"Function": {
-				"enabled": true
+				"Enabled": true
 			},
 			"Map": {
-				"enabled": true,
+				"Enabled": true,
 				"HashMap": true,
 				"RBTreeMap": true,
 				"ConcurrentMap": true,
 				"ArrayMap": true,
 				"AVLTreeMap": true,
 				"CustomHashMap": true,
-				"EnumMap": true,
-				"ImmutableMap": true
+				"ImmutableMap": true,
+				"LinkedCustomHashMap": true,
+				"LinkedHashMap": true,
+				"Maps": true,
+				"SortedMap": true,
+				"LinkedEnumMap": true,
+				"OrderedMap": true,
+				"EnumMap": true
 			},
 			"Pair": {
-				"enabled": true
+				"Enabled": true
 			}
 		},
 		"Float": {
 			"enabled": true,
 			"Function": {
-				"enabled": true
+				"Enabled": true
 			},
 			"Map": {
-				"enabled": true,
+				"Enabled": true,
 				"HashMap": true,
 				"RBTreeMap": true,
 				"ConcurrentMap": true,
 				"ArrayMap": true,
 				"AVLTreeMap": true,
 				"CustomHashMap": true,
-				"EnumMap": true,
-				"ImmutableMap": true
+				"ImmutableMap": true,
+				"LinkedCustomHashMap": true,
+				"LinkedHashMap": true,
+				"Maps": true,
+				"SortedMap": true,
+				"LinkedEnumMap": true,
+				"OrderedMap": true,
+				"EnumMap": true
 			},
 			"Pair": {
-				"enabled": true
+				"Enabled": true
 			}
 		},
 		"Double": {
 			"enabled": true,
 			"Function": {
-				"enabled": true
+				"Enabled": true
 			},
 			"Map": {
-				"enabled": true,
+				"Enabled": true,
 				"HashMap": true,
 				"RBTreeMap": true,
 				"ConcurrentMap": true,
 				"ArrayMap": true,
 				"AVLTreeMap": true,
 				"CustomHashMap": true,
-				"EnumMap": true,
-				"ImmutableMap": true
+				"ImmutableMap": true,
+				"LinkedCustomHashMap": true,
+				"LinkedHashMap": true,
+				"Maps": true,
+				"SortedMap": true,
+				"LinkedEnumMap": true,
+				"OrderedMap": true,
+				"EnumMap": true
 			},
 			"Pair": {
-				"enabled": true
+				"Enabled": true
 			}
 		},
 		"Object": {
 			"enabled": true,
 			"Function": {
-				"enabled": true
+				"Enabled": true
 			},
 			"Map": {
-				"enabled": true,
+				"Enabled": true,
 				"HashMap": true,
 				"RBTreeMap": true,
 				"ConcurrentMap": true,
 				"ArrayMap": true,
 				"AVLTreeMap": true,
 				"CustomHashMap": true,
-				"EnumMap": true,
-				"ImmutableMap": true
+				"ImmutableMap": true,
+				"LinkedCustomHashMap": true,
+				"LinkedHashMap": true,
+				"Maps": true,
+				"SortedMap": true,
+				"LinkedEnumMap": true,
+				"OrderedMap": true,
+				"EnumMap": true
 			},
 			"Pair": {
-				"enabled": true
+				"Enabled": true
 			}
 		},
 		"Collection": {
-			"enabled": true
+			"Enabled": true
 		},
 		"PriorityQueue": {
-			"enabled": true
+			"Enabled": true
 		},
 		"List": {
-			"enabled": true,
+			"Enabled": true,
 			"Lists": true,
 			"ImmutableList": true,
 			"CopyOnWriteList": true,
@@ -1551,205 +1929,259 @@
 			"LinkedList": true
 		},
 		"Set": {
-			"enabled": true
+			"Enabled": true
 		},
 		"Async": {
-			"enabled": true
+			"Enabled": true
 		}
 	},
 	"Object": {
 		"enabled": true,
 		"Base": {
-			"enabled": true
+			"Enabled": true
 		},
 		"Boolean": {
 			"enabled": true,
 			"Function": {
-				"enabled": true
+				"Enabled": true
 			},
 			"Map": {
-				"enabled": true,
+				"Enabled": true,
 				"HashMap": true,
 				"RBTreeMap": true,
 				"ConcurrentMap": true,
 				"ArrayMap": true,
 				"AVLTreeMap": true,
 				"CustomHashMap": true,
-				"EnumMap": true,
-				"ImmutableMap": true
+				"ImmutableMap": true,
+				"LinkedCustomHashMap": true,
+				"LinkedHashMap": true,
+				"Maps": true,
+				"SortedMap": true,
+				"LinkedEnumMap": true,
+				"OrderedMap": true,
+				"EnumMap": true
 			},
 			"Pair": {
-				"enabled": true
+				"Enabled": true
 			}
 		},
 		"Byte": {
 			"enabled": true,
 			"Function": {
-				"enabled": true
+				"Enabled": true
 			},
 			"Map": {
-				"enabled": true,
+				"Enabled": true,
 				"HashMap": true,
 				"RBTreeMap": true,
 				"ConcurrentMap": true,
 				"ArrayMap": true,
 				"AVLTreeMap": true,
 				"CustomHashMap": true,
-				"EnumMap": true,
-				"ImmutableMap": true
+				"ImmutableMap": true,
+				"LinkedCustomHashMap": true,
+				"LinkedHashMap": true,
+				"Maps": true,
+				"SortedMap": true,
+				"LinkedEnumMap": true,
+				"OrderedMap": true,
+				"EnumMap": true
 			},
 			"Pair": {
-				"enabled": true
+				"Enabled": true
 			}
 		},
 		"Short": {
 			"enabled": true,
 			"Function": {
-				"enabled": true
+				"Enabled": true
 			},
 			"Map": {
-				"enabled": true,
+				"Enabled": true,
 				"HashMap": true,
 				"RBTreeMap": true,
 				"ConcurrentMap": true,
 				"ArrayMap": true,
 				"AVLTreeMap": true,
 				"CustomHashMap": true,
-				"EnumMap": true,
-				"ImmutableMap": true
+				"ImmutableMap": true,
+				"LinkedCustomHashMap": true,
+				"LinkedHashMap": true,
+				"Maps": true,
+				"SortedMap": true,
+				"LinkedEnumMap": true,
+				"OrderedMap": true,
+				"EnumMap": true
 			},
 			"Pair": {
-				"enabled": true
+				"Enabled": true
 			}
 		},
 		"Character": {
 			"enabled": true,
 			"Function": {
-				"enabled": true
+				"Enabled": true
 			},
 			"Map": {
-				"enabled": true,
+				"Enabled": true,
 				"HashMap": true,
 				"RBTreeMap": true,
 				"ConcurrentMap": true,
 				"ArrayMap": true,
 				"AVLTreeMap": true,
 				"CustomHashMap": true,
-				"EnumMap": true,
-				"ImmutableMap": true
+				"ImmutableMap": true,
+				"LinkedCustomHashMap": true,
+				"LinkedHashMap": true,
+				"Maps": true,
+				"SortedMap": true,
+				"LinkedEnumMap": true,
+				"OrderedMap": true,
+				"EnumMap": true
 			},
 			"Pair": {
-				"enabled": true
+				"Enabled": true
 			}
 		},
 		"Integer": {
 			"enabled": true,
 			"Function": {
-				"enabled": true
+				"Enabled": true
 			},
 			"Map": {
-				"enabled": true,
+				"Enabled": true,
 				"HashMap": true,
 				"RBTreeMap": true,
 				"ConcurrentMap": true,
 				"ArrayMap": true,
 				"AVLTreeMap": true,
 				"CustomHashMap": true,
-				"EnumMap": true,
-				"ImmutableMap": true
+				"ImmutableMap": true,
+				"LinkedCustomHashMap": true,
+				"LinkedHashMap": true,
+				"Maps": true,
+				"SortedMap": true,
+				"LinkedEnumMap": true,
+				"OrderedMap": true,
+				"EnumMap": true
 			},
 			"Pair": {
-				"enabled": true
+				"Enabled": true
 			}
 		},
 		"Long": {
 			"enabled": true,
 			"Function": {
-				"enabled": true
+				"Enabled": true
 			},
 			"Map": {
-				"enabled": true,
+				"Enabled": true,
 				"HashMap": true,
 				"RBTreeMap": true,
 				"ConcurrentMap": true,
 				"ArrayMap": true,
 				"AVLTreeMap": true,
 				"CustomHashMap": true,
-				"EnumMap": true,
-				"ImmutableMap": true
+				"ImmutableMap": true,
+				"LinkedCustomHashMap": true,
+				"LinkedHashMap": true,
+				"Maps": true,
+				"SortedMap": true,
+				"LinkedEnumMap": true,
+				"OrderedMap": true,
+				"EnumMap": true
 			},
 			"Pair": {
-				"enabled": true
+				"Enabled": true
 			}
 		},
 		"Float": {
 			"enabled": true,
 			"Function": {
-				"enabled": true
+				"Enabled": true
 			},
 			"Map": {
-				"enabled": true,
+				"Enabled": true,
 				"HashMap": true,
 				"RBTreeMap": true,
 				"ConcurrentMap": true,
 				"ArrayMap": true,
 				"AVLTreeMap": true,
 				"CustomHashMap": true,
-				"EnumMap": true,
-				"ImmutableMap": true
+				"ImmutableMap": true,
+				"LinkedCustomHashMap": true,
+				"LinkedHashMap": true,
+				"Maps": true,
+				"SortedMap": true,
+				"LinkedEnumMap": true,
+				"OrderedMap": true,
+				"EnumMap": true
 			},
 			"Pair": {
-				"enabled": true
+				"Enabled": true
 			}
 		},
 		"Double": {
 			"enabled": true,
 			"Function": {
-				"enabled": true
+				"Enabled": true
 			},
 			"Map": {
-				"enabled": true,
+				"Enabled": true,
 				"HashMap": true,
 				"RBTreeMap": true,
 				"ConcurrentMap": true,
 				"ArrayMap": true,
 				"AVLTreeMap": true,
 				"CustomHashMap": true,
-				"EnumMap": true,
-				"ImmutableMap": true
+				"ImmutableMap": true,
+				"LinkedCustomHashMap": true,
+				"LinkedHashMap": true,
+				"Maps": true,
+				"SortedMap": true,
+				"LinkedEnumMap": true,
+				"OrderedMap": true,
+				"EnumMap": true
 			},
 			"Pair": {
-				"enabled": true
+				"Enabled": true
 			}
 		},
 		"Object": {
 			"enabled": true,
 			"Function": {
-				"enabled": true
+				"Enabled": true
 			},
 			"Map": {
-				"enabled": true,
+				"Enabled": true,
 				"HashMap": true,
 				"RBTreeMap": true,
 				"ConcurrentMap": true,
 				"ArrayMap": true,
 				"AVLTreeMap": true,
 				"CustomHashMap": true,
-				"EnumMap": true,
-				"ImmutableMap": true
+				"ImmutableMap": true,
+				"LinkedCustomHashMap": true,
+				"LinkedHashMap": true,
+				"Maps": true,
+				"SortedMap": true,
+				"LinkedEnumMap": true,
+				"OrderedMap": true,
+				"EnumMap": true
 			},
 			"Pair": {
-				"enabled": true
+				"Enabled": true
 			}
 		},
 		"Collection": {
-			"enabled": true
+			"Enabled": true
 		},
 		"PriorityQueue": {
-			"enabled": true
+			"Enabled": true
 		},
 		"List": {
-			"enabled": true,
+			"Enabled": true,
 			"Lists": true,
 			"ImmutableList": true,
 			"CopyOnWriteList": true,
@@ -1757,10 +2189,10 @@
 			"LinkedList": true
 		},
 		"Set": {
-			"enabled": true
+			"Enabled": true
 		},
 		"Async": {
-			"enabled": true
+			"Enabled": true
 		}
 	}
 }

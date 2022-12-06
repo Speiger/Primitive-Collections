@@ -33,7 +33,6 @@ import speiger.src.collections.PACKAGE.sets.NAVIGABLE_SET;
 #if TYPE_OBJECT
 import speiger.src.collections.PACKAGE.sets.SET;
 #endif
-import speiger.src.collections.PACKAGE.utils.maps.MAPS;
 import speiger.src.collections.VALUE_PACKAGE.collections.VALUE_ABSTRACT_COLLECTION;
 import speiger.src.collections.VALUE_PACKAGE.collections.VALUE_COLLECTION;
 import speiger.src.collections.VALUE_PACKAGE.collections.VALUE_ITERATOR;
@@ -630,7 +629,7 @@ public class RB_TREE_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_VALUE_G
 	@Override
 	public void BULK_MERGE(MAP KEY_VALUE_GENERIC_TYPE m, VALUE_UNARY_OPERATOR VALUE_VALUE_GENERIC_TYPE mappingFunction) {
 		Objects.requireNonNull(mappingFunction);
-		for(MAP.Entry KEY_VALUE_GENERIC_TYPE entry : MAPS.fastIterable(m)) {
+		for(MAP.Entry KEY_VALUE_GENERIC_TYPE entry : getFastIterable(m)) {
 			KEY_TYPE key = entry.ENTRY_KEY();
 			Node KEY_VALUE_GENERIC_TYPE subEntry = findNode(key);
 			VALUE_TYPE newValue = subEntry == null || VALUE_EQUALS(subEntry.value, getDefaultReturnValue()) ? entry.ENTRY_VALUE() : mappingFunction.APPLY_VALUE(subEntry.value, entry.ENTRY_VALUE());
