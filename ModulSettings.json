@@ -108,9 +108,6 @@
 			"ArrayList": true,
 			"LinkedList": true
 		},
-		"Set": {
-			"Enabled": true
-		},
 		"Async": {
 			"Enabled": true
 		}
@@ -369,7 +366,18 @@
 			"LinkedList": true
 		},
 		"Set": {
-			"Enabled": true
+			"Enabled": true,
+			"LinkedHashSet": true,
+			"LinkedCustomHashSet": true,
+			"OrderedSet": true,
+			"ArraySet": true,
+			"AVLTreeSet": true,
+			"ImmutableSet": true,
+			"CustomHashSet": true,
+			"Sets": true,
+			"SortedSet": true,
+			"HashSet": true,
+			"RBTreeSet": true
 		},
 		"Async": {
 			"Enabled": true
@@ -629,7 +637,18 @@
 			"LinkedList": true
 		},
 		"Set": {
-			"Enabled": true
+			"Enabled": true,
+			"LinkedHashSet": true,
+			"LinkedCustomHashSet": true,
+			"OrderedSet": true,
+			"ArraySet": true,
+			"AVLTreeSet": true,
+			"ImmutableSet": true,
+			"CustomHashSet": true,
+			"Sets": true,
+			"SortedSet": true,
+			"HashSet": true,
+			"RBTreeSet": true
 		},
 		"Async": {
 			"Enabled": true
@@ -889,7 +908,18 @@
 			"LinkedList": true
 		},
 		"Set": {
-			"Enabled": true
+			"Enabled": true,
+			"LinkedHashSet": true,
+			"LinkedCustomHashSet": true,
+			"OrderedSet": true,
+			"ArraySet": true,
+			"AVLTreeSet": true,
+			"ImmutableSet": true,
+			"CustomHashSet": true,
+			"Sets": true,
+			"SortedSet": true,
+			"HashSet": true,
+			"RBTreeSet": true
 		},
 		"Async": {
 			"Enabled": true
@@ -1149,7 +1179,18 @@
 			"LinkedList": true
 		},
 		"Set": {
-			"Enabled": true
+			"Enabled": true,
+			"LinkedHashSet": true,
+			"LinkedCustomHashSet": true,
+			"OrderedSet": true,
+			"ArraySet": true,
+			"AVLTreeSet": true,
+			"ImmutableSet": true,
+			"CustomHashSet": true,
+			"Sets": true,
+			"SortedSet": true,
+			"HashSet": true,
+			"RBTreeSet": true
 		},
 		"Async": {
 			"Enabled": true
@@ -1409,7 +1450,18 @@
 			"LinkedList": true
 		},
 		"Set": {
-			"Enabled": true
+			"Enabled": true,
+			"LinkedHashSet": true,
+			"LinkedCustomHashSet": true,
+			"OrderedSet": true,
+			"ArraySet": true,
+			"AVLTreeSet": true,
+			"ImmutableSet": true,
+			"CustomHashSet": true,
+			"Sets": true,
+			"SortedSet": true,
+			"HashSet": true,
+			"RBTreeSet": true
 		},
 		"Async": {
 			"Enabled": true
@@ -1669,7 +1721,18 @@
 			"LinkedList": true
 		},
 		"Set": {
-			"Enabled": true
+			"Enabled": true,
+			"LinkedHashSet": true,
+			"LinkedCustomHashSet": true,
+			"OrderedSet": true,
+			"ArraySet": true,
+			"AVLTreeSet": true,
+			"ImmutableSet": true,
+			"CustomHashSet": true,
+			"Sets": true,
+			"SortedSet": true,
+			"HashSet": true,
+			"RBTreeSet": true
 		},
 		"Async": {
 			"Enabled": true
@@ -1929,7 +1992,18 @@
 			"LinkedList": true
 		},
 		"Set": {
-			"Enabled": true
+			"Enabled": true,
+			"LinkedHashSet": true,
+			"LinkedCustomHashSet": true,
+			"OrderedSet": true,
+			"ArraySet": true,
+			"AVLTreeSet": true,
+			"ImmutableSet": true,
+			"CustomHashSet": true,
+			"Sets": true,
+			"SortedSet": true,
+			"HashSet": true,
+			"RBTreeSet": true
 		},
 		"Async": {
 			"Enabled": true
@@ -2189,7 +2263,18 @@
 			"LinkedList": true
 		},
 		"Set": {
-			"Enabled": true
+			"Enabled": true,
+			"LinkedHashSet": true,
+			"LinkedCustomHashSet": true,
+			"OrderedSet": true,
+			"ArraySet": true,
+			"AVLTreeSet": true,
+			"ImmutableSet": true,
+			"CustomHashSet": true,
+			"Sets": true,
+			"SortedSet": true,
+			"HashSet": true,
+			"RBTreeSet": true
 		},
 		"Async": {
 			"Enabled": true

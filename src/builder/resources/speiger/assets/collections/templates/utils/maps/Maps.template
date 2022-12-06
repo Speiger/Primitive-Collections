@@ -126,8 +126,6 @@ public class MAPS
 		else entries.forEach(action);
 	}
 	
-#if !TYPE_BOOLEAN
-	
 	/**
 	 * Helper function that creates a Helper wrapper to synchronize access into the map.
 	 * @param map the map that should be synchronized
@@ -198,7 +196,7 @@ public class MAPS
 	public static GENERIC_KEY_VALUE_BRACES ORDERED_MAP KEY_VALUE_GENERIC_TYPE synchronize(ORDERED_MAP KEY_VALUE_GENERIC_TYPE map, Object mutex) { return map instanceof SynchronizedOrderedMap ? map : new SynchronizedOrderedMapKV_BRACES(map, mutex); }
 	
 #endif
-#if NAVIGABLE_MAP_FEATURE
+#if SORTED_MAP_FEATURE
 	/**
 	 * Helper function that creates a Helper wrapper to synchronize access into the NavigableMap.
 	 * @param map the NavigableMap that should be synchronized
@@ -1174,5 +1172,4 @@ public class MAPS
 		public void forEach(BiConsumer<? super CLASS_TYPE, ? super CLASS_VALUE_TYPE> action) { synchronized(mutex) { map.forEach(action); } }
 #endif
 	}
-#endif
 }

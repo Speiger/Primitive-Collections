@@ -33,7 +33,8 @@ public class MapModule extends BaseModule
 	}
 	
 	@Override
-	protected void loadFlags() {
+	protected void loadFlags()
+	{
 		if(isModuleEnabled()) addFlag("MAP_MODULE");
 		if(isModuleEnabled("Maps")) addFlag("Maps");
 		boolean hashMap = isModuleEnabled("HashMap");
@@ -81,7 +82,7 @@ public class MapModule extends BaseModule
 		if(enumMap) addBlockedFiles("EnumMap");
 		if(enumMap || ordered || !isModuleEnabled("LinkedEnumMap")) addBlockedFiles("LinkedEnumMap");
 		
-		if(ordered || isModuleEnabled("ArrayMap")) addBlockedFiles("ArrayMap");
+		if(ordered || !isModuleEnabled("ArrayMap")) addBlockedFiles("ArrayMap");
 		
 		boolean sorted = !isModuleEnabled("SortedMap");
 		if(sorted) addBlockedFiles("SortedMap", "NavigableMap");
