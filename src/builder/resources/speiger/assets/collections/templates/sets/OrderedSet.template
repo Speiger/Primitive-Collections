@@ -2,7 +2,9 @@ package speiger.src.collections.PACKAGE.sets;
 
 import speiger.src.collections.PACKAGE.collections.BI_ITERATOR;
 import speiger.src.collections.PACKAGE.collections.SPLIT_ITERATOR;
+#if SETS_FEATURE
 import speiger.src.collections.PACKAGE.utils.SETS;
+#endif
 import speiger.src.collections.PACKAGE.utils.SPLIT_ITERATORS;
 
 /**
@@ -87,7 +89,7 @@ public interface ORDERED_SET KEY_GENERIC_TYPE extends SET KEY_GENERIC_TYPE
 	 */
 	public KEY_TYPE POLL_LAST_KEY();
 	
-#if !TYPE_BOOLEAN
+#if SETS_FEATURE
 	/**
 	 * Creates a Wrapped OrderedSet that is Synchronized
 	 * @return a new OrderedSet that is synchronized

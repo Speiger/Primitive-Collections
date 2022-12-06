@@ -4,7 +4,9 @@ import java.util.NavigableSet;
 
 import speiger.src.collections.PACKAGE.collections.BI_ITERATOR;
 import speiger.src.collections.PACKAGE.collections.SPLIT_ITERATOR;
+#if SETS_FEATURE
 import speiger.src.collections.PACKAGE.utils.SETS;
+#endif
 import speiger.src.collections.PACKAGE.utils.SPLIT_ITERATORS;
 
 /**
@@ -119,7 +121,7 @@ public interface NAVIGABLE_SET KEY_GENERIC_TYPE extends NavigableSet<CLASS_TYPE>
 	@Override
 	public NAVIGABLE_SET KEY_GENERIC_TYPE copy();
 	
-#if !TYPE_BOOLEAN
+#if SETS_FEATURE
 	/**
 	 * Creates a Wrapped NavigableSet that is Synchronized
 	 * @return a new NavigableSet that is synchronized

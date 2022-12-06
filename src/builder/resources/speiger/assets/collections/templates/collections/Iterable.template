@@ -25,9 +25,25 @@ import speiger.src.collections.PACKAGE.lists.ARRAY_LIST;
 import speiger.src.collections.PACKAGE.lists.LINKED_LIST;
 #endif
 #endif
-#if !TYPE_BOOLEAN
+#if SET_MODULE && !TYPE_BOOLEAN
 import speiger.src.collections.PACKAGE.sets.SET;
+#if LINKED_SET_FEATURE || LINKED_CUSTOM_SET_FEATURE || SET_FEATURE || CUSTOM_SET_FEATURE || RB_TREE_SET_FEATURE || AVL_TREE_SET_FEATURE || ARRAY_SET_FEATURE
+#if LINKED_SET_FEATURE
 import speiger.src.collections.PACKAGE.sets.LINKED_HASH_SET;
+#else if LINKED_CUSTOM_SET_FEATURE
+import speiger.src.collections.PACKAGE.sets.LINKED_CUSTOM_HASH_SET;
+#else if SET_FEATURE
+import speiger.src.collections.PACKAGE.sets.HASH_SET;
+#else if CUSTOM_SET_FEATURE
+import speiger.src.collections.PACKAGE.sets.CUSTOM_HASH_SET;
+#else if RB_TREE_SET_FEATURE
+import speiger.src.collections.PACKAGE.sets.RB_TREE_SET;
+#else if AVL_TREE_SET_FEATURE
+import speiger.src.collections.PACKAGE.sets.AVL_TREE_SET;
+#else if ARRAY_SET_FEATURE
+import speiger.src.collections.PACKAGE.sets.ARRAY_SET;
+#endif
+#endif
 #endif
 import speiger.src.collections.PACKAGE.utils.ARRAYS;
 #if ASYNC_MODULE
@@ -36,6 +52,9 @@ import speiger.src.collections.PACKAGE.utils.ASYNC_BUILDER;
 import speiger.src.collections.PACKAGE.utils.SPLIT_ITERATORS;
 import speiger.src.collections.PACKAGE.utils.ITERABLES;
 import speiger.src.collections.PACKAGE.utils.ITERATORS;
+#if !LINKED_HASH_SET_FEATURE && LINKED_CUSTOM_HASH_SET_FEATURE
+import speiger.src.collections.PACKAGE.utils.STRATEGY;
+#endif
 import speiger.src.collections.utils.ISizeProvider;
 
 /**
@@ -227,17 +246,32 @@ public interface ITERABLE KEY_GENERIC_TYPE extends Iterable<CLASS_TYPE>
 	}
 	
 #endif
-#if !TYPE_BOOLEAN
+#if !TYPE_BOOLEAN && SET_MODULE
+#if LINKED_SET_FEATURE || LINKED_CUSTOM_SET_FEATURE || SET_FEATURE || CUSTOM_SET_FEATURE || RB_TREE_SET_FEATURE || AVL_TREE_SET_FEATURE || ARRAY_SET_FEATURE
 	/**
 	 * A Helper function that reduces the usage of streams and allows to collect all elements as a LinkedHashSet
 	 * @return a new LinkedHashSet of all elements
 	 */
 	default SET KEY_GENERIC_TYPE pourAsSet() { 
-		return pour(new LINKED_HASH_SETBRACES()); 		
+#if LINKED_SET_FEATURE
+		return pour(new LINKED_HASH_SETBRACES());
+#else if LINKED_CUSTOM_SET_FEATURE
+		return pour(new LINKED_CUSTOM_HASH_SETBRACES(STRATEGY.normalStrategy()));
+#else if SET_FEATURE
+		return pour(new HASH_SETBRACES());
+#else if CUSTOM_SET_FEATURE
+		return pour(new CUSTOM_HASH_SETBRACES(STRATEGY.normalStrategy()));
+#else if RB_TREE_SET_FEATURE
+		return pour(new RB_Tree_SETBRACES());
+#else if AVL_TREE_SET_FEATURE
+		return pour(new AVL_Tree_SETBRACES());
+#else if ARRAY_SET_FEATURE
+		return pour(new ARRAY_SETBRACES());
+#endif
 	}
 	
 #endif
-	
+#endif	
 #if TYPE_OBJECT
 	/**
 	 * A Helper function that reduces the usage of streams and allows to collect all elements as a Array
