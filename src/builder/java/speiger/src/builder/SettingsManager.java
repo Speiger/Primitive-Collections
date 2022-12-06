@@ -113,7 +113,7 @@ public class SettingsManager
 		if(obj == null) {
 			obj = new JsonObject();
 			data.add(name, obj);
-			if(create) obj.addProperty("enabled", true);
+			if(create) obj.addProperty("Enabled", true);
 		}
 		return obj;
 	}
