@@ -22,15 +22,12 @@ import speiger.src.collections.PACKAGE.lists.ARRAY_LIST;
 #else if LINKED_LIST_FEATURE
 import speiger.src.collections.PACKAGE.lists.LINKED_LIST;
 #endif
+
 import speiger.src.collections.PACKAGE.lists.LIST;
 #endif
 import speiger.src.collections.PACKAGE.lists.LIST_ITERATOR;
 import speiger.src.collections.PACKAGE.collections.BI_ITERATOR;
 import speiger.src.collections.PACKAGE.collections.COLLECTION;
-#if !TYPE_BOOLEAN
-import speiger.src.collections.PACKAGE.sets.HASH_SET;
-import speiger.src.collections.PACKAGE.sets.SET;
-#endif
 
 /**
  * A Helper class for Iterators
@@ -987,7 +984,7 @@ public class ITERATORS
 #if TYPE_BOOLEAN
 		int filtered;
 #else
-		SET KEY_GENERIC_TYPE filtered = new HASH_SETBRACES();
+		COLLECTION KEY_GENERIC_TYPE filtered = COLLECTIONS.distinctWrapper();
 #endif
 		KEY_TYPE lastFound;
 		boolean foundNext = false;

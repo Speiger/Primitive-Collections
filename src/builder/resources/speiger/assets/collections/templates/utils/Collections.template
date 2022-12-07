@@ -2,6 +2,9 @@ package speiger.src.collections.PACKAGE.utils;
 
 import java.util.Arrays;
 import java.util.Collection;
+#if !TYPE_BOOLEAN
+import java.util.ConcurrentModificationException;
+#endif
 import java.util.NoSuchElementException;
 import java.util.Objects;
 #if TYPE_OBJECT
@@ -28,6 +31,9 @@ import speiger.src.collections.PACKAGE.utils.ARRAYS;
 import speiger.src.collections.PACKAGE.functions.function.PREDICATE;
 import speiger.src.collections.PACKAGE.functions.function.UNARY_OPERATOR;
 import speiger.src.collections.objects.functions.consumer.BI_FROM_OBJECT_CONSUMER;
+#if !TYPE_BOOLEAN
+import speiger.src.collections.utils.HashUtil;
+#endif
 import speiger.src.collections.utils.ITrimmable;
 import speiger.src.collections.utils.SanityChecks;
 
@@ -103,6 +109,16 @@ public class COLLECTIONS
 		return new CollectionWrapperBRACES(size);
 	}
 	
+#if !TYPE_BOOLEAN
+	protected static GENERIC_KEY_BRACES DistinctCollectionWrapper KEY_GENERIC_TYPE distinctWrapper() {
+		return new DistinctCollectionWrapperBRACES();
+	}
+	
+	protected static GENERIC_KEY_BRACES DistinctCollectionWrapper KEY_GENERIC_TYPE distinctWrapper(int size) {
+		return new DistinctCollectionWrapperBRACES(size);
+	}
+	
+#endif	
 	protected static class CollectionWrapper KEY_GENERIC_TYPE extends ABSTRACT_COLLECTION KEY_GENERIC_TYPE implements ITrimmable {
 		KEY_TYPE[] elements;
 		int size = 0;
@@ -289,6 +305,307 @@ public class COLLECTIONS
 #endif
 	}
 	
+#if !TYPE_BOOLEAN
+	protected static class DistinctCollectionWrapper KEY_GENERIC_TYPE extends ABSTRACT_COLLECTION KEY_GENERIC_TYPE {
+		KEY_TYPE[] keys;
+		boolean containsNull;
+		int minCapacity;
+		int nullIndex;
+		int maxFill;
+		int mask;
+		int size;
+		
+		public DistinctCollectionWrapper() {
+			this(HashUtil.DEFAULT_MIN_CAPACITY);
+		}
+		
+		public DistinctCollectionWrapper(int size) {
+			if(minCapacity < 0)	throw new IllegalStateException("Minimum Capacity is negative. This is not allowed");
+			minCapacity = nullIndex = HashUtil.arraySize(minCapacity, HashUtil.DEFAULT_LOAD_FACTOR);
+			mask = nullIndex - 1;
+			maxFill = Math.min((int)Math.ceil(nullIndex * HashUtil.DEFAULT_LOAD_FACTOR), nullIndex - 1);
+			keys = NEW_KEY_ARRAY(nullIndex + 1);
+		}
+
+		@Override
+		public boolean add(KEY_TYPE o) {
+			if(KEY_EQUALS_NULL(o)) {
+				if(containsNull) return false;
+				containsNull = true;
+			}
+			else {
+				int pos = HashUtil.mix(KEY_TO_HASH(o)) & mask;
+				KEY_TYPE current = keys[pos];
+				if(KEY_EQUALS_NOT_NULL(current)) {
+					if(KEY_EQUALS(current, o)) return false;
+					while(KEY_EQUALS_NOT_NULL((current = keys[pos = (++pos & mask)])))
+						if(KEY_EQUALS(current, o)) return false;
+				}
+				keys[pos] = o;
+			}
+			if(size++ >= maxFill) rehash(HashUtil.arraySize(size+1, HashUtil.DEFAULT_LOAD_FACTOR));
+			return true;
+		}
+		
+		@Override
+		public boolean contains(Object o) {
+#if TYPE_OBJECT
+			if(o == null) return containsNull;
+#else
+			if(o == null) return false;
+			if(o instanceof CLASS_TYPE && KEY_EQUALS(CLASS_TO_KEY(o), EMPTY_KEY_VALUE)) return containsNull;
+#endif
+			int pos = HashUtil.mix(o.hashCode()) & mask;
+			KEY_TYPE current = keys[pos];
+			if(KEY_EQUALS_NULL(current)) return false;
+			if(EQUALS_KEY_TYPE(current, o)) return true;
+			while(true) {
+				if(KEY_EQUALS_NULL((current = keys[pos = (++pos & mask)]))) return false;
+				else if(EQUALS_KEY_TYPE(current, o)) return true;
+			}
+		}
+
+		@Override
+		public boolean remove(Object o) {
+#if TYPE_OBJECT
+			if(o == null) return (containsNull ? removeNullIndex() : false);
+#else
+			if(o == null) return false;
+			if(o instanceof CLASS_TYPE && KEY_EQUALS(CLASS_TO_KEY(o), EMPTY_KEY_VALUE)) return (containsNull ? removeNullIndex() : false);
+#endif
+			int pos = HashUtil.mix(o.hashCode()) & mask;
+			KEY_TYPE current = keys[pos];
+			if(KEY_EQUALS_NULL(current)) return false;
+			if(EQUALS_KEY_TYPE(current, o)) return removeIndex(pos);
+			while(true) {
+				if(KEY_EQUALS_NULL((current = keys[pos = (++pos & mask)]))) return false;
+				else if(EQUALS_KEY_TYPE(current, o)) return removeIndex(pos);
+			}
+		}
+
+#if !TYPE_OBJECT
+		@Override
+		public boolean contains(KEY_TYPE o) {
+			if(KEY_EQUALS_NULL(o)) return containsNull;
+			int pos = HashUtil.mix(KEY_TO_HASH(o)) & mask;
+			KEY_TYPE current = keys[pos];
+			if(KEY_EQUALS_NULL(current)) return false;
+			if(KEY_EQUALS(current, o)) return true;
+			while(true) {
+				if(KEY_EQUALS_NULL((current = keys[pos = (++pos & mask)]))) return false;
+				else if(KEY_EQUALS(current, o)) return true;
+			}
+		}
+		
+		@Override
+		public boolean REMOVE_KEY(KEY_TYPE o) {
+			if(KEY_EQUALS_NULL(o)) return containsNull ? removeNullIndex() : false;
+			int pos = HashUtil.mix(KEY_TO_HASH(o)) & mask;
+			KEY_TYPE current = keys[pos];
+			if(KEY_EQUALS_NULL(current)) return false;
+			if(KEY_EQUALS(current, o)) return removeIndex(pos);
+			while(true) {
+				if(KEY_EQUALS_NULL((current = keys[pos = (++pos & mask)]))) return false;
+				else if(KEY_EQUALS(current, o)) return removeIndex(pos);
+			}
+		}
+		
+#endif		
+		protected boolean removeIndex(int pos) {
+			if(pos == nullIndex) return containsNull ? removeNullIndex() : false;
+			keys[pos] = EMPTY_KEY_VALUE;
+			size--;
+			shiftKeys(pos);
+			if(nullIndex > minCapacity && size < maxFill / 4 && nullIndex > HashUtil.DEFAULT_MIN_CAPACITY) rehash(nullIndex / 2);
+			return true;
+		}
+		
+		protected boolean removeNullIndex() {
+			containsNull = false;
+			keys[nullIndex] = EMPTY_KEY_VALUE;
+			size--;
+			if(nullIndex > minCapacity && size < maxFill / 4 && nullIndex > HashUtil.DEFAULT_MIN_CAPACITY) rehash(nullIndex / 2);
+			return true;
+		}
+		
+		@Override
+		public ITERATOR KEY_GENERIC_TYPE iterator() {
+			return new SetIterator();
+		}
+		
+		@Override
+		public void forEach(CONSUMER KEY_SUPER_GENERIC_TYPE action) {
+			if(size() <= 0) return;
+			if(containsNull) action.accept(keys[nullIndex]);
+			for(int i = nullIndex-1;i>=0;i--) {
+				if(KEY_EQUALS_NOT_NULL(keys[i])) action.accept(keys[i]);
+			}
+		}
+		
+		@Override
+		public DistinctCollectionWrapper KEY_GENERIC_TYPE copy() {
+			DistinctCollectionWrapper KEY_GENERIC_TYPE set = new DistinctCollectionWrapperBRACES(0);
+			set.minCapacity = minCapacity;
+			set.mask = mask;
+			set.maxFill = maxFill;
+			set.nullIndex = nullIndex;
+			set.containsNull = containsNull;
+			set.size = size;
+			set.keys = Arrays.copyOf(keys, keys.length);
+			return set;
+		}
+		
+		protected void shiftKeys(int startPos) {
+			int slot, last;
+			KEY_TYPE current;
+			while(true) {
+				startPos = ((last = startPos) + 1) & mask;
+				while(true){
+					if(KEY_EQUALS_NULL((current = keys[startPos]))) {
+						keys[last] = EMPTY_KEY_VALUE;
+						return;
+					}
+					slot = HashUtil.mix(KEY_TO_HASH(current)) & mask;
+					if(last <= startPos ? (last >= slot || slot > startPos) : (last >= slot && slot > startPos)) break;
+					startPos = ++startPos & mask;
+				}
+				keys[last] = current;
+			}
+		}
+		
+		protected void rehash(int newSize) {
+			int newMask = newSize - 1;
+			KEY_TYPE[] newKeys = NEW_KEY_ARRAY(newSize + 1);
+			for(int i = nullIndex, pos = 0, j = (size - (containsNull ? 1 : 0));j-- != 0;) {
+				while(true) {
+					if(--i < 0) throw new ConcurrentModificationException("Set was modified during rehash");
+					if(KEY_EQUALS_NOT_NULL(keys[i])) break;
+				}
+				if(KEY_EQUALS_NOT_NULL(newKeys[pos = HashUtil.mix(KEY_TO_HASH(keys[i])) & newMask]))
+					while(KEY_EQUALS_NOT_NULL(newKeys[pos = (++pos & newMask)]));
+				newKeys[pos] = keys[i];
+			}
+			nullIndex = newSize;
+			mask = newMask;
+			maxFill = Math.min((int)Math.ceil(nullIndex * HashUtil.DEFAULT_LOAD_FACTOR), nullIndex - 1);
+			keys = newKeys;
+		}
+		
+		@Override
+		public void clear() {
+			if(size == 0) return;
+			size = 0;
+			containsNull = false;
+			Arrays.fill(keys, EMPTY_KEY_VALUE);
+		}
+		
+		@Override
+		public int size() {
+			return size;
+		}
+		
+		private class SetIterator implements ITERATOR KEY_GENERIC_TYPE {
+			int pos = nullIndex;
+			int returnedPos = -1;
+			int lastReturned = -1;
+			int nextIndex = Integer.MIN_VALUE;
+			boolean returnNull = containsNull;
+			KEY_TYPE[] wrapped = null;
+			int wrappedIndex = 0;
+			
+			@Override
+			public boolean hasNext() {
+				if(nextIndex == Integer.MIN_VALUE) {
+					if(returnNull) {
+						returnNull = false;
+						nextIndex = nullIndex;
+					}
+					else
+					{
+						while(true) {
+							if(--pos < 0) {
+								if(wrapped == null || wrappedIndex <= -pos - 1) break;
+								nextIndex = -pos - 1;
+								break;
+							}
+							if(KEY_EQUALS_NOT_NULL(keys[pos])){
+								nextIndex = pos;
+								break;
+							}
+						}
+					}
+				}
+				return nextIndex != Integer.MIN_VALUE;
+			}
+			
+			@Override
+			public KEY_TYPE NEXT() {
+				if(!hasNext()) throw new NoSuchElementException();
+				returnedPos = pos;
+				if(nextIndex < 0){
+					lastReturned = Integer.MAX_VALUE;
+					KEY_TYPE value = wrapped[nextIndex];
+					nextIndex = Integer.MIN_VALUE;
+					return value;
+				}
+				KEY_TYPE value = keys[(lastReturned = nextIndex)];
+				nextIndex = Integer.MIN_VALUE;
+				return value;
+			}
+			
+			@Override
+			public void remove() {
+				if(lastReturned == -1) throw new IllegalStateException();
+				if(lastReturned == nullIndex) {
+					containsNull = false;
+					keys[nullIndex] = EMPTY_KEY_VALUE;
+				}
+				else if(returnedPos >= 0) shiftKeys(returnedPos);
+				else {
+#if TYPE_OBJECT
+					DistinctCollectionWrapper.this.remove(wrapped[-returnedPos - 1]);
+#else
+					DistinctCollectionWrapper.this.REMOVE_KEY(wrapped[-returnedPos - 1]);
+#endif
+					lastReturned = -1;
+					return;
+				}
+				size--;
+				lastReturned = -1;
+			}
+			
+			private void shiftKeys(int startPos) {
+				int slot, last;
+				KEY_TYPE current;
+				while(true) {
+					startPos = ((last = startPos) + 1) & mask;
+					while(true){
+						if(KEY_EQUALS_NULL((current = keys[startPos]))) {
+							keys[last] = EMPTY_KEY_VALUE;
+							return;
+						}
+						slot = HashUtil.mix(KEY_TO_HASH(current)) & mask;
+						if(last <= startPos ? (last >= slot || slot > startPos) : (last >= slot && slot > startPos)) break;
+						startPos = ++startPos & mask;
+					}
+					if(startPos < last) addWrapper(keys[startPos]);
+					keys[last] = current;
+				}
+			}
+			
+			private void addWrapper(KEY_TYPE value) {
+				if(wrapped == null) wrapped = NEW_KEY_ARRAY(2);
+				else if(wrappedIndex >= wrapped.length) {
+					KEY_TYPE[] newArray = NEW_KEY_ARRAY(wrapped.length * 2);
+					System.arraycopy(wrapped, 0, newArray, 0, wrapped.length);
+					wrapped = newArray;
+				}
+				wrapped[wrappedIndex++] = value;
+			}
+		}
+	}
+	
+#endif
 	private static class SingletonCollection KEY_GENERIC_TYPE extends ABSTRACT_COLLECTION KEY_GENERIC_TYPE
 	{
 		KEY_TYPE element;

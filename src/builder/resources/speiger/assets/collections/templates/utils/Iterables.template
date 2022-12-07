@@ -20,10 +20,6 @@ import speiger.src.collections.PACKAGE.functions.COMPARATOR;
 import speiger.src.collections.PACKAGE.collections.ITERATOR;
 import speiger.src.collections.PACKAGE.functions.function.TO_OBJECT_FUNCTION;
 import speiger.src.collections.PACKAGE.functions.function.PREDICATE;
-#if !TYPE_BOOLEAN
-import speiger.src.collections.PACKAGE.sets.HASH_SET;
-import speiger.src.collections.PACKAGE.sets.SET;
-#endif
 import speiger.src.collections.utils.ISizeProvider;
 
 /**
@@ -537,14 +533,14 @@ public class ITERABLES
 				action.accept(T);
 			});
 #else
-			SET KEY_GENERIC_TYPE filtered = new HASH_SETBRACES();
+			COLLECTION KEY_GENERIC_TYPE filtered = COLLECTIONS.distinctWrapper();
 			iterable.forEach(T -> { if(filtered.add(T)) action.accept(T); });
 #endif
 		}
 #else
 		public void forEach(Consumer<? super CLASS_TYPE> action) {
 			Objects.requireNonNull(action);
-			SET KEY_GENERIC_TYPE filtered = new HASH_SETBRACES();
+			COLLECTION KEY_GENERIC_TYPE filtered = COLLECTIONS.distinctWrapper();
 			iterable.forEach(T -> { if(filtered.add(T)) action.accept(T); });
 		}
 #endif
