@@ -1,5 +1,11 @@
 package speiger.src.builder.modules;
 
+import java.util.Arrays;
+import java.util.Set;
+import java.util.TreeSet;
+
+import speiger.src.builder.ClassType;
+
 @SuppressWarnings("javadoc")
 public class PairModule extends BaseModule
 {
@@ -11,17 +17,28 @@ public class PairModule extends BaseModule
 	@Override
 	protected void loadVariables() {}
 	@Override
-	protected void loadBlockades() {}
-	@Override
-	protected void loadFlags() {}
-	@Override
 	protected void loadFunctions() {}
 	@Override
 	protected void loadTestClasses() {}
+	@Override
+	public Set<String> getModuleKeys(ClassType keyType, ClassType valueType) { return new TreeSet<>(Arrays.asList("Mutable", "Immutable")); }
 	
 	@Override
-	protected void loadRemappers()
-	{
+	protected void loadFlags() {
+		if(isModuleEnabled()) addFlag("PAIR_MODULE");
+		if(isModuleEnabled("Mutable")) addFlag("MUTABLE_PAIR");
+		if(isModuleEnabled("Immutable")) addFlag("IMMUTABLE_PAIR");
+	}
+	
+	@Override
+	protected void loadBlockades() {
+		if(!isModuleEnabled()) addBlockedFiles("Pair");
+		if(!isModuleEnabled("Mutable")) addBlockedFiles("MutablePair");
+		if(!isModuleEnabled("Immutable")) addBlockedFiles("ImmutablePair");
+	}
+	
+	@Override
+	protected void loadRemappers() {
 		//Main Classes
 		addBiRequirement("Pair", "");
 		addBiRequirement("MutablePair", "");
@@ -32,8 +49,7 @@ public class PairModule extends BaseModule
 	}
 	
 	@Override
-	protected void loadClasses()
-	{
+	protected void loadClasses() {
 		//Implementations
 		addBiClassMapper("IMMUTABLE_PAIR", "ImmutablePair", "");
 		addBiClassMapper("MUTABLE_PAIR", "MutablePair", "");

@@ -19,7 +19,9 @@
 				"Enabled": true
 			},
 			"Pair": {
-				"Enabled": true
+				"Enabled": true,
+				"Immutable": false,
+				"Mutable": true
 			}
 		},
 		"Byte": {
@@ -28,7 +30,9 @@
 				"Enabled": true
 			},
 			"Pair": {
-				"Enabled": true
+				"Enabled": true,
+				"Immutable": false,
+				"Mutable": true
 			}
 		},
 		"Short": {
@@ -37,7 +41,9 @@
 				"Enabled": true
 			},
 			"Pair": {
-				"Enabled": true
+				"Enabled": true,
+				"Immutable": false,
+				"Mutable": true
 			}
 		},
 		"Character": {
@@ -46,7 +52,9 @@
 				"Enabled": true
 			},
 			"Pair": {
-				"Enabled": true
+				"Enabled": true,
+				"Immutable": false,
+				"Mutable": true
 			}
 		},
 		"Integer": {
@@ -55,7 +63,9 @@
 				"Enabled": true
 			},
 			"Pair": {
-				"Enabled": true
+				"Enabled": true,
+				"Immutable": false,
+				"Mutable": true
 			}
 		},
 		"Long": {
@@ -64,7 +74,9 @@
 				"Enabled": true
 			},
 			"Pair": {
-				"Enabled": true
+				"Enabled": true,
+				"Immutable": false,
+				"Mutable": true
 			}
 		},
 		"Float": {
@@ -73,7 +85,9 @@
 				"Enabled": true
 			},
 			"Pair": {
-				"Enabled": true
+				"Enabled": true,
+				"Immutable": false,
+				"Mutable": true
 			}
 		},
 		"Double": {
@@ -82,7 +96,9 @@
 				"Enabled": true
 			},
 			"Pair": {
-				"Enabled": true
+				"Enabled": true,
+				"Immutable": false,
+				"Mutable": true
 			}
 		},
 		"Object": {
@@ -91,7 +107,9 @@
 				"Enabled": true
 			},
 			"Pair": {
-				"Enabled": true
+				"Enabled": true,
+				"Immutable": false,
+				"Mutable": true
 			}
 		},
 		"Collection": {
@@ -142,7 +160,9 @@
 				"Wrappers": true
 			},
 			"Pair": {
-				"Enabled": true
+				"Enabled": true,
+				"Immutable": false,
+				"Mutable": true
 			}
 		},
 		"Byte": {
@@ -169,7 +189,9 @@
 				"Wrappers": true
 			},
 			"Pair": {
-				"Enabled": true
+				"Enabled": true,
+				"Immutable": false,
+				"Mutable": true
 			}
 		},
 		"Short": {
@@ -196,7 +218,9 @@
 				"Wrappers": true
 			},
 			"Pair": {
-				"Enabled": true
+				"Enabled": true,
+				"Immutable": false,
+				"Mutable": true
 			}
 		},
 		"Character": {
@@ -223,7 +247,9 @@
 				"Wrappers": true
 			},
 			"Pair": {
-				"Enabled": true
+				"Enabled": true,
+				"Immutable": false,
+				"Mutable": true
 			}
 		},
 		"Integer": {
@@ -250,7 +276,9 @@
 				"Wrappers": true
 			},
 			"Pair": {
-				"Enabled": true
+				"Enabled": true,
+				"Immutable": false,
+				"Mutable": true
 			}
 		},
 		"Long": {
@@ -277,7 +305,9 @@
 				"Wrappers": true
 			},
 			"Pair": {
-				"Enabled": true
+				"Enabled": true,
+				"Immutable": false,
+				"Mutable": true
 			}
 		},
 		"Float": {
@@ -304,7 +334,9 @@
 				"Wrappers": true
 			},
 			"Pair": {
-				"Enabled": true
+				"Enabled": true,
+				"Immutable": false,
+				"Mutable": true
 			}
 		},
 		"Double": {
@@ -331,7 +363,9 @@
 				"Wrappers": true
 			},
 			"Pair": {
-				"Enabled": true
+				"Enabled": true,
+				"Immutable": false,
+				"Mutable": true
 			}
 		},
 		"Object": {
@@ -358,7 +392,9 @@
 				"Wrappers": true
 			},
 			"Pair": {
-				"Enabled": true
+				"Enabled": true,
+				"Immutable": false,
+				"Mutable": true
 			}
 		},
 		"Collection": {
@@ -424,7 +460,9 @@
 				"Wrappers": true
 			},
 			"Pair": {
-				"Enabled": true
+				"Enabled": true,
+				"Immutable": false,
+				"Mutable": true
 			}
 		},
 		"Byte": {
@@ -451,7 +489,9 @@
 				"Wrappers": true
 			},
 			"Pair": {
-				"Enabled": true
+				"Enabled": true,
+				"Immutable": false,
+				"Mutable": true
 			}
 		},
 		"Short": {
@@ -478,7 +518,9 @@
 				"Wrappers": true
 			},
 			"Pair": {
-				"Enabled": true
+				"Enabled": true,
+				"Immutable": false,
+				"Mutable": true
 			}
 		},
 		"Character": {
@@ -505,7 +547,9 @@
 				"Wrappers": true
 			},
 			"Pair": {
-				"Enabled": true
+				"Enabled": true,
+				"Immutable": false,
+				"Mutable": true
 			}
 		},
 		"Integer": {
@@ -532,7 +576,9 @@
 				"Wrappers": true
 			},
 			"Pair": {
-				"Enabled": true
+				"Enabled": true,
+				"Immutable": false,
+				"Mutable": true
 			}
 		},
 		"Long": {
@@ -559,7 +605,9 @@
 				"Wrappers": true
 			},
 			"Pair": {
-				"Enabled": true
+				"Enabled": true,
+				"Immutable": false,
+				"Mutable": true
 			}
 		},
 		"Float": {
@@ -586,7 +634,9 @@
 				"Wrappers": true
 			},
 			"Pair": {
-				"Enabled": true
+				"Enabled": true,
+				"Immutable": false,
+				"Mutable": true
 			}
 		},
 		"Double": {
@@ -613,7 +663,9 @@
 				"Wrappers": true
 			},
 			"Pair": {
-				"Enabled": true
+				"Enabled": true,
+				"Immutable": false,
+				"Mutable": true
 			}
 		},
 		"Object": {
@@ -640,7 +692,9 @@
 				"Wrappers": true
 			},
 			"Pair": {
-				"Enabled": true
+				"Enabled": true,
+				"Immutable": false,
+				"Mutable": true
 			}
 		},
 		"Collection": {
@@ -706,7 +760,9 @@
 				"Wrappers": true
 			},
 			"Pair": {
-				"Enabled": true
+				"Enabled": true,
+				"Immutable": false,
+				"Mutable": true
 			}
 		},
 		"Byte": {
@@ -733,7 +789,9 @@
 				"Wrappers": true
 			},
 			"Pair": {
-				"Enabled": true
+				"Enabled": true,
+				"Immutable": false,
+				"Mutable": true
 			}
 		},
 		"Short": {
@@ -760,7 +818,9 @@
 				"Wrappers": true
 			},
 			"Pair": {
-				"Enabled": true
+				"Enabled": true,
+				"Immutable": false,
+				"Mutable": true
 			}
 		},
 		"Character": {
@@ -787,7 +847,9 @@
 				"Wrappers": true
 			},
 			"Pair": {
-				"Enabled": true
+				"Enabled": true,
+				"Immutable": false,
+				"Mutable": true
 			}
 		},
 		"Integer": {
@@ -814,7 +876,9 @@
 				"Wrappers": true
 			},
 			"Pair": {
-				"Enabled": true
+				"Enabled": true,
+				"Immutable": false,
+				"Mutable": true
 			}
 		},
 		"Long": {
@@ -841,7 +905,9 @@
 				"Wrappers": true
 			},
 			"Pair": {
-				"Enabled": true
+				"Enabled": true,
+				"Immutable": false,
+				"Mutable": true
 			}
 		},
 		"Float": {
@@ -868,7 +934,9 @@
 				"Wrappers": true
 			},
 			"Pair": {
-				"Enabled": true
+				"Enabled": true,
+				"Immutable": false,
+				"Mutable": true
 			}
 		},
 		"Double": {
@@ -895,7 +963,9 @@
 				"Wrappers": true
 			},
 			"Pair": {
-				"Enabled": true
+				"Enabled": true,
+				"Immutable": false,
+				"Mutable": true
 			}
 		},
 		"Object": {
@@ -922,7 +992,9 @@
 				"Wrappers": true
 			},
 			"Pair": {
-				"Enabled": true
+				"Enabled": true,
+				"Immutable": false,
+				"Mutable": true
 			}
 		},
 		"Collection": {
@@ -988,7 +1060,9 @@
 				"Wrappers": true
 			},
 			"Pair": {
-				"Enabled": true
+				"Enabled": true,
+				"Immutable": false,
+				"Mutable": true
 			}
 		},
 		"Byte": {
@@ -1015,7 +1089,9 @@
 				"Wrappers": true
 			},
 			"Pair": {
-				"Enabled": true
+				"Enabled": true,
+				"Immutable": false,
+				"Mutable": true
 			}
 		},
 		"Short": {
@@ -1042,7 +1118,9 @@
 				"Wrappers": true
 			},
 			"Pair": {
-				"Enabled": true
+				"Enabled": true,
+				"Immutable": false,
+				"Mutable": true
 			}
 		},
 		"Character": {
@@ -1069,7 +1147,9 @@
 				"Wrappers": true
 			},
 			"Pair": {
-				"Enabled": true
+				"Enabled": true,
+				"Immutable": false,
+				"Mutable": true
 			}
 		},
 		"Integer": {
@@ -1096,7 +1176,9 @@
 				"Wrappers": true
 			},
 			"Pair": {
-				"Enabled": true
+				"Enabled": true,
+				"Immutable": false,
+				"Mutable": true
 			}
 		},
 		"Long": {
@@ -1123,7 +1205,9 @@
 				"Wrappers": true
 			},
 			"Pair": {
-				"Enabled": true
+				"Enabled": true,
+				"Immutable": false,
+				"Mutable": true
 			}
 		},
 		"Float": {
@@ -1150,7 +1234,9 @@
 				"Wrappers": true
 			},
 			"Pair": {
-				"Enabled": true
+				"Enabled": true,
+				"Immutable": false,
+				"Mutable": true
 			}
 		},
 		"Double": {
@@ -1177,7 +1263,9 @@
 				"Wrappers": true
 			},
 			"Pair": {
-				"Enabled": true
+				"Enabled": true,
+				"Immutable": false,
+				"Mutable": true
 			}
 		},
 		"Object": {
@@ -1204,7 +1292,9 @@
 				"Wrappers": true
 			},
 			"Pair": {
-				"Enabled": true
+				"Enabled": true,
+				"Immutable": false,
+				"Mutable": true
 			}
 		},
 		"Collection": {
@@ -1270,7 +1360,9 @@
 				"Wrappers": true
 			},
 			"Pair": {
-				"Enabled": true
+				"Enabled": true,
+				"Immutable": false,
+				"Mutable": true
 			}
 		},
 		"Byte": {
@@ -1297,7 +1389,9 @@
 				"Wrappers": true
 			},
 			"Pair": {
-				"Enabled": true
+				"Enabled": true,
+				"Immutable": false,
+				"Mutable": true
 			}
 		},
 		"Short": {
@@ -1324,7 +1418,9 @@
 				"Wrappers": true
 			},
 			"Pair": {
-				"Enabled": true
+				"Enabled": true,
+				"Immutable": false,
+				"Mutable": true
 			}
 		},
 		"Character": {
@@ -1351,7 +1447,9 @@
 				"Wrappers": true
 			},
 			"Pair": {
-				"Enabled": true
+				"Enabled": true,
+				"Immutable": false,
+				"Mutable": true
 			}
 		},
 		"Integer": {
@@ -1378,7 +1476,9 @@
 				"Wrappers": true
 			},
 			"Pair": {
-				"Enabled": true
+				"Enabled": true,
+				"Immutable": false,
+				"Mutable": true
 			}
 		},
 		"Long": {
@@ -1405,7 +1505,9 @@
 				"Wrappers": true
 			},
 			"Pair": {
-				"Enabled": true
+				"Enabled": true,
+				"Immutable": false,
+				"Mutable": true
 			}
 		},
 		"Float": {
@@ -1432,7 +1534,9 @@
 				"Wrappers": true
 			},
 			"Pair": {
-				"Enabled": true
+				"Enabled": true,
+				"Immutable": false,
+				"Mutable": true
 			}
 		},
 		"Double": {
@@ -1459,7 +1563,9 @@
 				"Wrappers": true
 			},
 			"Pair": {
-				"Enabled": true
+				"Enabled": true,
+				"Immutable": false,
+				"Mutable": true
 			}
 		},
 		"Object": {
@@ -1486,7 +1592,9 @@
 				"Wrappers": true
 			},
 			"Pair": {
-				"Enabled": true
+				"Enabled": true,
+				"Immutable": false,
+				"Mutable": true
 			}
 		},
 		"Collection": {
@@ -1552,7 +1660,9 @@
 				"Wrappers": true
 			},
 			"Pair": {
-				"Enabled": true
+				"Enabled": true,
+				"Immutable": false,
+				"Mutable": true
 			}
 		},
 		"Byte": {
@@ -1579,7 +1689,9 @@
 				"Wrappers": true
 			},
 			"Pair": {
-				"Enabled": true
+				"Enabled": true,
+				"Immutable": false,
+				"Mutable": true
 			}
 		},
 		"Short": {
@@ -1606,7 +1718,9 @@
 				"Wrappers": true
 			},
 			"Pair": {
-				"Enabled": true
+				"Enabled": true,
+				"Immutable": false,
+				"Mutable": true
 			}
 		},
 		"Character": {
@@ -1633,7 +1747,9 @@
 				"Wrappers": true
 			},
 			"Pair": {
-				"Enabled": true
+				"Enabled": true,
+				"Immutable": false,
+				"Mutable": true
 			}
 		},
 		"Integer": {
@@ -1660,7 +1776,9 @@
 				"Wrappers": true
 			},
 			"Pair": {
-				"Enabled": true
+				"Enabled": true,
+				"Immutable": false,
+				"Mutable": true
 			}
 		},
 		"Long": {
@@ -1687,7 +1805,9 @@
 				"Wrappers": true
 			},
 			"Pair": {
-				"Enabled": true
+				"Enabled": true,
+				"Immutable": false,
+				"Mutable": true
 			}
 		},
 		"Float": {
@@ -1714,7 +1834,9 @@
 				"Wrappers": true
 			},
 			"Pair": {
-				"Enabled": true
+				"Enabled": true,
+				"Immutable": false,
+				"Mutable": true
 			}
 		},
 		"Double": {
@@ -1741,7 +1863,9 @@
 				"Wrappers": true
 			},
 			"Pair": {
-				"Enabled": true
+				"Enabled": true,
+				"Immutable": false,
+				"Mutable": true
 			}
 		},
 		"Object": {
@@ -1768,7 +1892,9 @@
 				"Wrappers": true
 			},
 			"Pair": {
-				"Enabled": true
+				"Enabled": true,
+				"Immutable": false,
+				"Mutable": true
 			}
 		},
 		"Collection": {
@@ -1834,7 +1960,9 @@
 				"Wrappers": true
 			},
 			"Pair": {
-				"Enabled": true
+				"Enabled": true,
+				"Immutable": false,
+				"Mutable": true
 			}
 		},
 		"Byte": {
@@ -1861,7 +1989,9 @@
 				"Wrappers": true
 			},
 			"Pair": {
-				"Enabled": true
+				"Enabled": true,
+				"Immutable": false,
+				"Mutable": true
 			}
 		},
 		"Short": {
@@ -1888,7 +2018,9 @@
 				"Wrappers": true
 			},
 			"Pair": {
-				"Enabled": true
+				"Enabled": true,
+				"Immutable": false,
+				"Mutable": true
 			}
 		},
 		"Character": {
@@ -1915,7 +2047,9 @@
 				"Wrappers": true
 			},
 			"Pair": {
-				"Enabled": true
+				"Enabled": true,
+				"Immutable": false,
+				"Mutable": true
 			}
 		},
 		"Integer": {
@@ -1942,7 +2076,9 @@
 				"Wrappers": true
 			},
 			"Pair": {
-				"Enabled": true
+				"Enabled": true,
+				"Immutable": false,
+				"Mutable": true
 			}
 		},
 		"Long": {
@@ -1969,7 +2105,9 @@
 				"Wrappers": true
 			},
 			"Pair": {
-				"Enabled": true
+				"Enabled": true,
+				"Immutable": false,
+				"Mutable": true
 			}
 		},
 		"Float": {
@@ -1996,7 +2134,9 @@
 				"Wrappers": true
 			},
 			"Pair": {
-				"Enabled": true
+				"Enabled": true,
+				"Immutable": false,
+				"Mutable": true
 			}
 		},
 		"Double": {
@@ -2023,7 +2163,9 @@
 				"Wrappers": true
 			},
 			"Pair": {
-				"Enabled": true
+				"Enabled": true,
+				"Immutable": false,
+				"Mutable": true
 			}
 		},
 		"Object": {
@@ -2050,7 +2192,9 @@
 				"Wrappers": true
 			},
 			"Pair": {
-				"Enabled": true
+				"Enabled": true,
+				"Immutable": false,
+				"Mutable": true
 			}
 		},
 		"Collection": {
@@ -2116,7 +2260,9 @@
 				"Wrappers": true
 			},
 			"Pair": {
-				"Enabled": true
+				"Enabled": true,
+				"Immutable": false,
+				"Mutable": true
 			}
 		},
 		"Byte": {
@@ -2143,7 +2289,9 @@
 				"Wrappers": true
 			},
 			"Pair": {
-				"Enabled": true
+				"Enabled": true,
+				"Immutable": false,
+				"Mutable": true
 			}
 		},
 		"Short": {
@@ -2170,7 +2318,9 @@
 				"Wrappers": true
 			},
 			"Pair": {
-				"Enabled": true
+				"Enabled": true,
+				"Immutable": false,
+				"Mutable": true
 			}
 		},
 		"Character": {
@@ -2197,7 +2347,9 @@
 				"Wrappers": true
 			},
 			"Pair": {
-				"Enabled": true
+				"Enabled": true,
+				"Immutable": false,
+				"Mutable": true
 			}
 		},
 		"Integer": {
@@ -2224,7 +2376,9 @@
 				"Wrappers": true
 			},
 			"Pair": {
-				"Enabled": true
+				"Enabled": true,
+				"Immutable": false,
+				"Mutable": true
 			}
 		},
 		"Long": {
@@ -2251,7 +2405,9 @@
 				"Wrappers": true
 			},
 			"Pair": {
-				"Enabled": true
+				"Enabled": true,
+				"Immutable": false,
+				"Mutable": true
 			}
 		},
 		"Float": {
@@ -2278,7 +2434,9 @@
 				"Wrappers": true
 			},
 			"Pair": {
-				"Enabled": true
+				"Enabled": true,
+				"Immutable": false,
+				"Mutable": true
 			}
 		},
 		"Double": {
@@ -2305,7 +2463,9 @@
 				"Wrappers": true
 			},
 			"Pair": {
-				"Enabled": true
+				"Enabled": true,
+				"Immutable": false,
+				"Mutable": true
 			}
 		},
 		"Object": {
@@ -2332,7 +2492,9 @@
 				"Wrappers": true
 			},
 			"Pair": {
-				"Enabled": true
+				"Enabled": true,
+				"Immutable": false,
+				"Mutable": true
 			}
 		},
 		"Collection": {
