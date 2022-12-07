@@ -19,6 +19,8 @@ public class MapModule extends BaseModule
 	protected void loadVariables() {}
 	@Override
 	public boolean isModuleValid(ClassType keyType, ClassType valueType) { return keyType != ClassType.BOOLEAN; }
+	@Override
+	public boolean areDependenciesLoaded() { return isDependencyLoaded(SetModule.INSTANCE) && isDependencyLoaded(CollectionModule.INSTANCE, false); }
 	
 	@Override
 	public Set<String> getModuleKeys(ClassType keyType, ClassType valueType)
@@ -32,11 +34,6 @@ public class MapModule extends BaseModule
 		sets.addAll(Arrays.asList("EnumMap", "LinkedEnumMap"));
 		sets.addAll(Arrays.asList("AVLTreeMap", "RBTreeMap"));
 		return sets;
-	}
-	
-	@Override
-	protected boolean areDependenciesLoaded() {
-		return isDependencyLoaded(SetModule.INSTANCE) && isDependencyLoaded(CollectionModule.INSTANCE, false);
 	}
 	
 	@Override

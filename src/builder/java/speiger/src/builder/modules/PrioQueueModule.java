@@ -16,7 +16,7 @@ public class PrioQueueModule extends BaseModule
 	@Override
 	protected void loadFunctions() {}
 	@Override
-	protected boolean areDependenciesLoaded() { return isDependencyLoaded(CollectionModule.INSTANCE); }
+	public boolean areDependenciesLoaded() { return isDependencyLoaded(CollectionModule.INSTANCE); }
 	@Override
 	protected void loadBlockades()
 	{

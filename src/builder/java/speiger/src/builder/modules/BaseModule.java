@@ -60,11 +60,11 @@ public abstract class BaseModule
 	public boolean isModuleValid(ClassType keyType, ClassType valueType) { return true; }
 	
 	protected boolean isModuleEnabled() {
-		return manager == null || (manager.isModuleEnabled(this, keyType, valueType) && areDependenciesLoaded());
+		return manager == null || manager.isModuleEnabled(this, keyType, valueType);
 	}
 	
 	protected boolean isModuleEnabled(String name) {
-		return manager == null || (manager.isModuleEnabled(this, keyType, valueType, name) && areDependenciesLoaded());
+		return manager == null || manager.isModuleEnabled(this, keyType, valueType, name);
 	}
 	
 	protected boolean isDependencyLoaded(BaseModule module) {
@@ -75,7 +75,7 @@ public abstract class BaseModule
 		return manager == null || (module.isBiModule() ? manager.isModuleEnabled(module, keyType, valueType) : (key ? manager.isModuleEnabled(module, keyType, keyType) : manager.isModuleEnabled(module, valueType, valueType))); 
 	}
 	
-	protected boolean areDependenciesLoaded() {
+	public boolean areDependenciesLoaded() {
 		return true;
 	}
 	

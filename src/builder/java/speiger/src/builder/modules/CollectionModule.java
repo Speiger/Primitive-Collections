@@ -13,7 +13,8 @@ public class CollectionModule extends BaseModule
 	protected void loadVariables() {}
 	@Override
 	protected void loadFlags() {}
-	
+	@Override
+	public boolean areDependenciesLoaded(){ return isDependencyLoaded(JavaModule.INSTANCE); }
 	@Override
 	protected void loadBlockades()
 	{

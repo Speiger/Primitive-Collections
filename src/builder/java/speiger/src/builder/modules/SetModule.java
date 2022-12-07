@@ -19,7 +19,7 @@ public class SetModule extends BaseModule
 	@Override
 	public boolean isModuleValid(ClassType keyType, ClassType valueType) { return keyType != ClassType.BOOLEAN; }
 	@Override
-	protected boolean areDependenciesLoaded() { return isDependencyLoaded(CollectionModule.INSTANCE); }
+	public boolean areDependenciesLoaded() { return isDependencyLoaded(CollectionModule.INSTANCE); }
 	@Override
 	public Set<String> getModuleKeys(ClassType keyType, ClassType valueType) {
 		Set<String> sets = new HashSet<>();

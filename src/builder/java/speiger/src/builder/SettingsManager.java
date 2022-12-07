@@ -30,7 +30,7 @@ public class SettingsManager
 			if(!isEnabled(result, "Enabled")) return false;
 		}
 		result = getObject(result, base.getModuleName(), false);
-		return result.size() <= 0 || isEnabled(result, "Enabled");		
+		return (result.size() <= 0 || isEnabled(result, "Enabled")) && base.areDependenciesLoaded();		
 	}
 	
 	public boolean isModuleEnabled(BaseModule base, ClassType keyType, ClassType valueType, String entry)
@@ -44,7 +44,7 @@ public class SettingsManager
 			if(!isEnabled(result, "Enabled")) return false;
 		}
 		result = getObject(result, base.getModuleName(), false);
-		return result.size() <= 0 || (isEnabled(result, "Enabled") && isEnabled(result, entry));
+		return (result.size() <= 0 || (isEnabled(result, "Enabled") && isEnabled(result, entry))) && base.areDependenciesLoaded();
 	}
 	
 	public void addModule(BaseModule module) {

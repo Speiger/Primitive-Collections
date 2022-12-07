@@ -45,7 +45,7 @@ public class ListModule extends BaseModule
 	}
 	
 	@Override
-	protected boolean areDependenciesLoaded() {
+	public boolean areDependenciesLoaded() {
 		return isDependencyLoaded(CollectionModule.INSTANCE);
 	}
 	
