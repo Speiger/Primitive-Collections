@@ -49,7 +49,9 @@ import speiger.src.collections.PACKAGE.utils.ARRAYS;
 #if ASYNC_MODULE
 import speiger.src.collections.PACKAGE.utils.ASYNC_BUILDER;
 #endif
+#if SPLIT_ITERATOR_FEATURE
 import speiger.src.collections.PACKAGE.utils.SPLIT_ITERATORS;
+#endif
 import speiger.src.collections.PACKAGE.utils.ITERABLES;
 import speiger.src.collections.PACKAGE.utils.ITERATORS;
 #if !LINKED_HASH_SET_FEATURE && LINKED_CUSTOM_HASH_SET_FEATURE
@@ -114,6 +116,7 @@ public interface ITERABLE KEY_GENERIC_TYPE extends Iterable<CLASS_TYPE>
 		iterator().forEachRemaining(input, action);
 	}
 	
+#if SPLIT_ITERATOR_FEATURE
 	/**
 	 * A Type Specific Type Splititerator to reduce boxing/unboxing
 	 * @return type specific splititerator
@@ -121,6 +124,7 @@ public interface ITERABLE KEY_GENERIC_TYPE extends Iterable<CLASS_TYPE>
 	@Override
 	default SPLIT_ITERATOR KEY_GENERIC_TYPE spliterator() { return SPLIT_ITERATORS.createUnknownSplititerator(iterator(), 0); }
 	
+#endif
 #if ASYNC_MODULE
 	/**
 	 * Creates a Async Builder for moving work of the thread.

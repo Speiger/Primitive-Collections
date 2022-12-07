@@ -5,8 +5,10 @@ import java.util.Collection;
 import java.util.Objects;
 import java.util.function.JAVA_PREDICATE;
 import java.util.function.Predicate;
+#if SPLIT_ITERATOR_FEATURE && STREAM_FEATURE
 import java.util.stream.JAVA_STREAM;
 import java.util.stream.StreamSupport;
+#endif
 #endif
 #if TYPE_OBJECT
 import java.util.function.Consumer;
@@ -14,7 +16,9 @@ import speiger.src.collections.ints.functions.function.Int2ObjectFunction;
 #else
 import speiger.src.collections.PACKAGE.functions.CONSUMER;
 #endif
+#if SPLIT_ITERATOR_FEATURE
 import speiger.src.collections.PACKAGE.utils.SPLIT_ITERATORS;
+#endif
 import speiger.src.collections.PACKAGE.utils.COLLECTIONS;
 import speiger.src.collections.utils.ISizeProvider;
 import speiger.src.collections.utils.SanityChecks;
@@ -291,6 +295,7 @@ public interface COLLECTION KEY_GENERIC_TYPE extends Collection<CLASS_TYPE>, ITE
 	 */
 	public default COLLECTION KEY_GENERIC_TYPE unmodifiable() { return COLLECTIONS.unmodifiable(this); }
 	
+#if SPLIT_ITERATOR_FEATURE
 #if PRIMITIVES
 	/**
 	 * Returns a Java-Type-Specific Stream to reduce boxing/unboxing.
@@ -303,11 +308,15 @@ public interface COLLECTION KEY_GENERIC_TYPE extends Collection<CLASS_TYPE>, ITE
 	 * @return a Stream of the closest java type
 	 */
 	default JAVA_STREAM parallelPrimitiveStream() { return StreamSupport.NEW_STREAM(SPLIT_ITERATORS.createJavaSplititerator(this, 0), true); }
+	
 #endif
+#if STREAM_FEATURE
 	/**
 	 * A Type Specific Type Splititerator to reduce boxing/unboxing
 	 * @return type specific splititerator
 	 */
 	@Override
 	default SPLIT_ITERATOR KEY_GENERIC_TYPE spliterator() { return SPLIT_ITERATORS.createSplititerator(this, 0); }
+#endif
+#endif
 }

@@ -8,7 +8,10 @@ import java.util.Collection;
 import java.util.Iterator;
 import java.util.Objects;
 #if TYPE_OBJECT
+#if IARRAY_FEATURE || TYPE_OBJECT
 import java.util.function.Consumer;
+#endif
+
 import java.util.function.BiFunction;
 #endif
 import java.util.function.Predicate;
@@ -38,33 +41,38 @@ import speiger.src.collections.utils.Stack;
 #else
 import speiger.src.collections.objects.utils.ObjectArrays;
 #endif
-#if PRIMITIVES
+#if PRIMITIVES && SPLIT_ITERATOR_FEATURE && STREAM_FEATURE
 import java.util.stream.JAVA_STREAM;
 import java.util.stream.StreamSupport;
 #endif
+#if IARRAY_FEATURE
 import speiger.src.collections.PACKAGE.utils.IARRAY;
+#endif
+#if SPLIT_ITERATOR_FEATURE
 import speiger.src.collections.PACKAGE.collections.SPLIT_ITERATOR;
 import speiger.src.collections.PACKAGE.utils.SPLIT_ITERATORS;
+#endif
+#if !IARRAY_FEATURE
+import speiger.src.collections.utils.IArray;
+#endif
 import speiger.src.collections.utils.SanityChecks;
 
-#if TYPE_OBJECT
 /**
  * A Type-Specific Array-based implementation of list that is written to reduce (un)boxing
  * 
- * <p>This implementation is optimized to improve how data is processed with interfaces like {@link IARRAY}, {@link Stack}
+#if IARRAY_FEATURE
+ * <p>This implementation is optimized to improve how data is processed with interfaces like {@link IARRAY}, {@link STACK}
+#else
+ * <p>This implementation is optimized to improve how data is processed with interfaces like {@link IArray}, {@link STACK}
+#endif
  * and with optimized functions that use type-specific implementations for primitives and optimized logic for bulkactions.
- *
+ * 
  * @Type(T)
  */
-public class ARRAY_LIST KEY_GENERIC_TYPE extends ABSTRACT_LIST KEY_GENERIC_TYPE implements IARRAY<KEY_TYPE>, Stack<KEY_TYPE>
+#if IARRAY_FEATURE
+public class ARRAY_LIST KEY_GENERIC_TYPE extends ABSTRACT_LIST KEY_GENERIC_TYPE implements IARRAY KEY_GENERIC_TYPE, STACK KEY_GENERIC_TYPE
 #else
-/**
- * A Type-Specific Array-based implementation of list that is written to reduce (un)boxing
- * 
- * <p>This implementation is optimized to improve how data is processed with interfaces like {@link IARRAY}, {@link STACK}
- * and with optimized functions that use type-specific implementations for primitives and optimized logic for bulkactions.
- */
-public class ARRAY_LIST KEY_GENERIC_TYPE extends ABSTRACT_LIST KEY_GENERIC_TYPE implements IARRAY, STACK
+public class ARRAY_LIST KEY_GENERIC_TYPE extends ABSTRACT_LIST KEY_GENERIC_TYPE implements IArray, STACK KEY_GENERIC_TYPE
 #endif
 {
 	static final int DEFAULT_ARRAY_SIZE = 10;
@@ -587,6 +595,7 @@ public class ARRAY_LIST KEY_GENERIC_TYPE extends ABSTRACT_LIST KEY_GENERIC_TYPE 
 		return data[(size() - 1) - index];
 	}
 	
+#if IARRAY_FEATURE
 	/**
 	 * Provides the Underlying Array in the Implementation
 	 * @return underlying Array
@@ -606,6 +615,7 @@ public class ARRAY_LIST KEY_GENERIC_TYPE extends ABSTRACT_LIST KEY_GENERIC_TYPE 
 		return data.getClass() != Object[].class;
 	}
 	
+#endif
 #endif
 	/**
 	 * A Type Specific foreach function that reduces (un)boxing
@@ -1159,8 +1169,8 @@ public class ARRAY_LIST KEY_GENERIC_TYPE extends ABSTRACT_LIST KEY_GENERIC_TYPE 
 			throw new IndexOutOfBoundsException("Index: " + index + ", Size: " + size);
 	}
 	
-	
-#if PRIMITIVES
+#if SPLIT_ITERATOR_FEATURE
+#if PRIMITIVES && STREAM_FEATURE
 	/**
 	 * Returns a Java-Type-Specific Stream to reduce boxing/unboxing.
 	 * @return a Stream of the closest java type
@@ -1177,4 +1187,5 @@ public class ARRAY_LIST KEY_GENERIC_TYPE extends ABSTRACT_LIST KEY_GENERIC_TYPE 
 	 */
 	@Override
 	public SPLIT_ITERATOR KEY_GENERIC_TYPE spliterator() { return SPLIT_ITERATORS.createArraySplititerator(data, size, 16464); }
+#endif
 }

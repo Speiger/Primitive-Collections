@@ -20,7 +20,7 @@ public class AsyncModule extends BaseModule
 	@Override
 	protected void loadBlockades() {
 		if(!isModuleEnabled()) {
-			addBlockedFiles("AsyncBuilder");
+			addBlockedFiles("AsyncBuilder", "Task");
 		}
 	}
 	@Override

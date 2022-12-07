@@ -1,5 +1,9 @@
 package speiger.src.builder.modules;
 
+import java.util.Arrays;
+import java.util.Set;
+import java.util.TreeSet;
+
 import speiger.src.builder.ClassType;
 
 @SuppressWarnings("javadoc")
@@ -12,12 +16,32 @@ public class CollectionModule extends BaseModule
 	@Override
 	protected void loadVariables() {}
 	@Override
-	protected void loadFlags() {}
-	@Override
 	public boolean areDependenciesLoaded(){ return isDependencyLoaded(JavaModule.INSTANCE); }
+	
 	@Override
-	protected void loadBlockades()
+	public Set<String> getModuleKeys(ClassType keyType, ClassType valueType)
 	{
+		return new TreeSet<>(Arrays.asList("Streams", "Splititerators", "IArray", "Strategy"));
+	}
+	
+	@Override
+	protected void loadFlags() {
+		if(isModuleEnabled()) addKeyFlag("COLLECTION_MODULE");
+		if(isModuleEnabled("Streams")) addKeyFlag("STREAM_FEATURE");
+		if(isModuleEnabled("Splititerators")) addKeyFlag("SPLIT_ITERATOR_FEATURE");
+		if(isModuleEnabled("IArray")) addKeyFlag("IARRAY_FEATURE");
+	}
+	
+	@Override
+	protected void loadBlockades() {
+		if(!isModuleEnabled()) {
+			addBlockedFiles("Iterable", "Iterables", "Iterator", "Iterators", "BidirectionalIterator", "ListIterator");
+			addBlockedFiles("Arrays", "Collection", "AbstractCollection", "Collections", "Stack");
+		}
+		if(!isModuleEnabled("Splititerators")) addBlockedFiles("Splititerator", "Splititerators");
+		if(!isModuleEnabled("IArray")) addBlockedFiles("IArray");
+		if(!isModuleEnabled("Strategy")) addBlockedFiles("Strategy");
+		
 		if(keyType.isObject()) {
 			addBlockedFiles("Stack");
 			addBlockedFiles("CollectionStreamTester");
