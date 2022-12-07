@@ -90,10 +90,11 @@ public class SetModule extends BaseModule
 			addBlockedFiles("Set", "Sets", "AbstractSet", "OpenHashSet", "OpenCustomHashSet", "ImmutableOpenHashSet");
 			
 			//Test Classes
-			addBlockedFiles("SetTests", "SetTestSuiteBuilder");
+			addBlockedFiles("SetTests", "SetTestSuiteBuilder", "TestSetGenerator");
 			addBlockedFiles("OrderedSetTestSuiteBuilder", "TestOrderedSetGenerator", "OrderedSetMoveTester", "OrderedSetNavigationTester", "OrderedSetIterationTester");
 			addBlockedFiles("SortedSetTestSuiteBuilder", "TestSortedSetGenerator", "SortedSetNaviationTester", "SortedSetSubsetTestSetGenerator", "SortedSetIterationTester", "SortedSetNaviationTester");
 			addBlockedFiles("NavigableSetTestSuiteBuilder", "TestNavigableSetGenerator", "NavigableSetNavigationTester");
+			addBlockedFiles("MinimalSet", "AbstractSetTester", "SetAddAllTester", "SetAddTester", "SetCreationTester", "SetEqualsTester", "SetRemoveTester");
 		}
 	}
 	

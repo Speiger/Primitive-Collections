@@ -7,7 +7,9 @@ import com.google.common.collect.testing.features.CollectionSize;
 import speiger.src.collections.PACKAGE.collections.COLLECTION;
 import speiger.src.collections.PACKAGE.lists.ARRAY_LIST;
 import speiger.src.testers.PACKAGE.tests.base.ABSTRACT_LIST_TESTER;
+#if !TYPE_BOOLEAN
 import speiger.src.testers.PACKAGE.utils.MINIMAL_SET;
+#endif
 
 @Ignore
 @SuppressWarnings("javadoc")
@@ -38,8 +40,10 @@ public class FILE_KEY_TYPEListEqualsTester KEY_GENERIC_TYPE extends ABSTRACT_LIS
 		COLLECTION KEY_GENERIC_TYPE moreElements = getSampleElements(getNumElements() + 1);
 		assertFalse("Lists of different sizes should not be equal.", getList().equals(new ARRAY_LISTBRACES(moreElements)));
 	}
-
+	
+#if !TYPE_BOOLEAN
 	public void testEquals_set() {
 		assertFalse("A List should never equal a Set.", getList().equals(MINIMAL_SET.of(getList())));
 	}
+#endif
 }

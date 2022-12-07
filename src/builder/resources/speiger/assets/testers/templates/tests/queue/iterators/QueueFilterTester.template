@@ -9,7 +9,7 @@ import org.junit.Ignore;
 import com.google.common.collect.testing.features.CollectionSize;
 
 import speiger.src.collections.PACKAGE.collections.COLLECTION;
-import speiger.src.collections.PACKAGE.utils.SETS;
+import speiger.src.collections.PACKAGE.utils.COLLECTIONS;
 import speiger.src.testers.PACKAGE.tests.base.ABSTRACT_QUEUE_TESTER;
 
 @Ignore
@@ -24,7 +24,7 @@ public class FILE_KEY_TYPEQueueFilterTester KEY_GENERIC_TYPE extends ABSTRACT_QU
 	@CollectionSize.Require(absent = CollectionSize.ZERO)
 #endignore
 	public void testQueueFilter_filterElement() {
-		assertFalse(expectMissing(SETS.singleton(e0()), queue.filter(T -> KEY_EQUALS(T, e0())).pourAsList().TO_ARRAY()));		
+		assertFalse(expectMissing(COLLECTIONS.singleton(e0()), queue.filter(T -> KEY_EQUALS(T, e0())).pourAsList().TO_ARRAY()));		
 	}
 	
 #ignore
@@ -38,7 +38,7 @@ public class FILE_KEY_TYPEQueueFilterTester KEY_GENERIC_TYPE extends ABSTRACT_QU
 	@CollectionSize.Require(CollectionSize.SEVERAL)
 #endignore
 	public void testQueueFilter_filterSeveral() {
-		assertTrue(expectMissing(SETS.singleton(e1()), queue.filter(T -> KEY_EQUALS_NOT(T, e1())).pourAsList().TO_ARRAY()));
+		assertTrue(expectMissing(COLLECTIONS.singleton(e1()), queue.filter(T -> KEY_EQUALS_NOT(T, e1())).pourAsList().TO_ARRAY()));
 	}
 	
 	protected boolean expectMissing(COLLECTION KEY_GENERIC_TYPE result, KEY_OBJECT_TYPE...elements)

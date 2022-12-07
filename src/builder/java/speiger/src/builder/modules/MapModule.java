@@ -59,8 +59,8 @@ public class MapModule extends BaseModule
 		}
 		if(implementations && isModuleEnabled("ConcurrentMap")) addFlag("CONCURRENT_MAP_FEATURE");
 		if(implementations && isModuleEnabled("ImmutableMap")) addFlag("IMMUTABLE_MAP_FEATURE");
-		if(hashMap) addFlag("HASH_MAP_FEATURE");
-		if(customHashMap) addFlag("CUSTOM_HASH_MAP_FEATURE");
+		if(hashMap) addFlag("MAP_FEATURE");
+		if(customHashMap) addFlag("CUSTOM_MAP_FEATURE");
 		if(enumMap) addFlag("ENUM_MAP_FEATURE");
 	}
 	
@@ -104,7 +104,7 @@ public class MapModule extends BaseModule
 			
 			//Test Classes
 			addBlockedFiles("TestMap", "MapTests", "MapTestSuiteBuilder", "MapConstructorTests", "TestMapGenerator", "SimpleMapTestGenerator", "DerivedMapGenerators", "AbstractMapTester");
-			addBlockedFiles("TestSortedMapGenerator", "NavigableMapTestSuiteBuilder", "SortedMapTestSuiteBuilder");
+			addBlockedFiles("TestSortedMapGenerator", "OrderedMapTestSuiteBuilder", "NavigableMapTestSuiteBuilder", "SortedMapTestSuiteBuilder");
 			addBlockedFiles("TestOrderedMapGenerator");
 			addBlockedFilter(T -> T.endsWith("Tester") && (T.startsWith("Map") || T.startsWith("OrderedMap") || T.startsWith("SortedMap") || T.startsWith("NavigableMap")));
 		}

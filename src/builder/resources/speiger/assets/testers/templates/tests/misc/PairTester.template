@@ -94,22 +94,14 @@ public class PAIRTester KEY_VALUE_GENERIC_TYPE extends TestCase
 	
 	@Test
 	public void testKeyMatching() {
-#if TYPE_OBJECT
-		PAIR KEY_VALUE_GENERIC_TYPE pair = keyConstructor.getObject(getKey());
-#else
-		PAIR KEY_VALUE_GENERIC_TYPE pair = keyConstructor.GET_VALUE(getKey());
-#endif
+		PAIR KEY_VALUE_GENERIC_TYPE pair = keyConstructor.apply(getKey());
 		assertEquals(getKey(), pair.ENTRY_KEY());
 		assertEquals(EMPTY_VALUE, pair.ENTRY_VALUE());
 	}
 	
 	@Test
 	public void testValueMatching() {
-#if VALUE_OBJECT
-		PAIR KEY_VALUE_GENERIC_TYPE pair = valueConstructor.getObject(getValue());
-#else
-		PAIR KEY_VALUE_GENERIC_TYPE pair = valueConstructor.get(getValue());
-#endif
+		PAIR KEY_VALUE_GENERIC_TYPE pair = valueConstructor.apply(getValue());
 		assertEquals(EMPTY_KEY_VALUE, pair.ENTRY_KEY());
 		assertEquals(getValue(), pair.ENTRY_VALUE());
 	}
