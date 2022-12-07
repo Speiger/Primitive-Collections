@@ -376,7 +376,7 @@ public class ENUM_MAP KEY_ENUM_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_VALUE
 	public VALUE_TYPE COMPUTE_IF_ABSENT(T key, FUNCTION KEY_VALUE_GENERIC_TYPE mappingFunction) {
 		int index = key.ordinal();
 		if(!isSet(index)) {
-			VALUE_TYPE newValue = mappingFunction.GET_VALUE(key);
+			VALUE_TYPE newValue = mappingFunction.APPLY(key);
 			if(VALUE_EQUALS(newValue, getDefaultReturnValue())) return newValue;
 			set(index);
 			values[index] = newValue;			
@@ -384,7 +384,7 @@ public class ENUM_MAP KEY_ENUM_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_VALUE
 		}
 		VALUE_TYPE newValue = values[index];
 		if(VALUE_EQUALS(newValue, getDefaultReturnValue())) {
-			newValue = mappingFunction.GET_VALUE(key);
+			newValue = mappingFunction.APPLY(key);
 			if(VALUE_EQUALS(newValue, getDefaultReturnValue())) return newValue;
 			values[index] = newValue;
 		}

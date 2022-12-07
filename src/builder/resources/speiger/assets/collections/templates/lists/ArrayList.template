@@ -649,7 +649,7 @@ public class ARRAY_LIST KEY_GENERIC_TYPE extends ABSTRACT_LIST KEY_GENERIC_TYPE 
 	public boolean matchesAny(PREDICATE KEY_GENERIC_TYPE filter) {
 		Objects.requireNonNull(filter);
 		for(int i = 0;i<size;i++) {
-			if(filter.TEST_VALUE(data[i])) return true;
+			if(filter.test(data[i])) return true;
 		}
 		return false;
 	}
@@ -658,7 +658,7 @@ public class ARRAY_LIST KEY_GENERIC_TYPE extends ABSTRACT_LIST KEY_GENERIC_TYPE 
 	public boolean matchesNone(PREDICATE KEY_GENERIC_TYPE filter) {
 		Objects.requireNonNull(filter);
 		for(int i = 0;i<size;i++) {
-			if(filter.TEST_VALUE(data[i])) return false;
+			if(filter.test(data[i])) return false;
 		}
 		return true;
 	}
@@ -667,7 +667,7 @@ public class ARRAY_LIST KEY_GENERIC_TYPE extends ABSTRACT_LIST KEY_GENERIC_TYPE 
 	public boolean matchesAll(PREDICATE KEY_GENERIC_TYPE filter) {
 		Objects.requireNonNull(filter);
 		for(int i = 0;i<size;i++) {
-			if(!filter.TEST_VALUE(data[i])) return false;
+			if(!filter.test(data[i])) return false;
 		}
 		return true;
 	}
@@ -676,7 +676,7 @@ public class ARRAY_LIST KEY_GENERIC_TYPE extends ABSTRACT_LIST KEY_GENERIC_TYPE 
 	public KEY_TYPE findFirst(PREDICATE KEY_GENERIC_TYPE filter) {
 		Objects.requireNonNull(filter);
 		for(int i = 0;i<size;i++) {
-			if(filter.TEST_VALUE(data[i])) return data[i];
+			if(filter.test(data[i])) return data[i];
 		}
 		return EMPTY_VALUE;
 	}
@@ -725,7 +725,7 @@ public class ARRAY_LIST KEY_GENERIC_TYPE extends ABSTRACT_LIST KEY_GENERIC_TYPE 
 		Objects.requireNonNull(filter);
 		int result = 0;
 		for(int i = 0;i<size;i++) {
-			if(filter.TEST_VALUE(data[i])) result++;
+			if(filter.test(data[i])) result++;
 		}
 		return result;
 	}

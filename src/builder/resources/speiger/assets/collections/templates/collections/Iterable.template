@@ -287,7 +287,7 @@ public interface ITERABLE KEY_GENERIC_TYPE extends Iterable<CLASS_TYPE>
 		if(prov != null) {
 			int size = prov.size();
 			if(size >= 0) {
-				KEY_TYPE[] array = action.get(size);
+				KEY_TYPE[] array = action.apply(size);
 				ITERATORS.unwrap(array, iterator());
 				return array;
 			}
@@ -321,7 +321,7 @@ public interface ITERABLE KEY_GENERIC_TYPE extends Iterable<CLASS_TYPE>
 	default boolean matchesAny(PREDICATE KEY_GENERIC_TYPE filter) {
 		Objects.requireNonNull(filter);
 		for(ITERATOR KEY_GENERIC_TYPE iter = iterator();iter.hasNext();) {
-			if(filter.TEST_VALUE(iter.NEXT())) return true;
+			if(filter.test(iter.NEXT())) return true;
 		}
 		return false;
 	}
@@ -334,7 +334,7 @@ public interface ITERABLE KEY_GENERIC_TYPE extends Iterable<CLASS_TYPE>
 	default boolean matchesNone(PREDICATE KEY_GENERIC_TYPE filter) {
 		Objects.requireNonNull(filter);
 		for(ITERATOR KEY_GENERIC_TYPE iter = iterator();iter.hasNext();) {
-			if(filter.TEST_VALUE(iter.NEXT())) return false;
+			if(filter.test(iter.NEXT())) return false;
 		}
 		return true;
 	}
@@ -347,7 +347,7 @@ public interface ITERABLE KEY_GENERIC_TYPE extends Iterable<CLASS_TYPE>
 	default boolean matchesAll(PREDICATE KEY_GENERIC_TYPE filter) {
 		Objects.requireNonNull(filter);
 		for(ITERATOR KEY_GENERIC_TYPE iter = iterator();iter.hasNext();) {
-			if(!filter.TEST_VALUE(iter.NEXT())) return false;
+			if(!filter.test(iter.NEXT())) return false;
 		}
 		return true;
 	}
@@ -361,7 +361,7 @@ public interface ITERABLE KEY_GENERIC_TYPE extends Iterable<CLASS_TYPE>
 		Objects.requireNonNull(filter);
 		for(ITERATOR KEY_GENERIC_TYPE iter = iterator();iter.hasNext();) {
 			KEY_TYPE entry = iter.NEXT();
-			if(filter.TEST_VALUE(entry)) return entry;
+			if(filter.test(entry)) return entry;
 		}
 		return EMPTY_VALUE;
 	}
@@ -432,7 +432,7 @@ public interface ITERABLE KEY_GENERIC_TYPE extends Iterable<CLASS_TYPE>
 		Objects.requireNonNull(filter);
 		int result = 0;
 		for(ITERATOR KEY_GENERIC_TYPE iter = iterator();iter.hasNext();) {
-			if(filter.TEST_VALUE(iter.NEXT())) result++;
+			if(filter.test(iter.NEXT())) result++;
 		}
 		return result;
 	}

@@ -539,14 +539,14 @@ public class CUSTOM_HASH_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_VAL
 		Objects.requireNonNull(mappingFunction);
 		int index = findIndex(key);
 		if(index < 0) {
-			VALUE_TYPE newValue = mappingFunction.GET_VALUE(key);
+			VALUE_TYPE newValue = mappingFunction.APPLY(key);
 			if(VALUE_EQUALS(newValue, getDefaultReturnValue())) return newValue;
 			insert(-index-1, key, newValue);
 			return newValue;
 		}
 		VALUE_TYPE newValue = values[index];
 		if(VALUE_EQUALS(newValue, getDefaultReturnValue())) {
-			newValue = mappingFunction.GET_VALUE(key);
+			newValue = mappingFunction.APPLY(key);
 			if(VALUE_EQUALS(newValue, getDefaultReturnValue())) return newValue;
 			values[index] = newValue;
 		}
@@ -883,12 +883,12 @@ public class CUSTOM_HASH_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_VAL
 			BasicEntry KEY_VALUE_GENERIC_TYPE entry = new BasicEntryKV_BRACES();
 			if(containsNull) {
 				entry.set(keys[nullIndex], values[nullIndex]);
-				if(filter.getBoolean(entry)) return true;
+				if(filter.test(entry)) return true;
 			}
 			for(int i = nullIndex-1;i>=0;i--) {
 				if(!strategy.equals(keys[i], EMPTY_KEY_VALUE)) {
 					entry.set(keys[i], values[i]);
-					if(filter.getBoolean(entry)) return true;
+					if(filter.test(entry)) return true;
 				}
 			}
 			return false;
@@ -901,12 +901,12 @@ public class CUSTOM_HASH_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_VAL
 			BasicEntry KEY_VALUE_GENERIC_TYPE entry = new BasicEntryKV_BRACES();
 			if(containsNull) {
 				entry.set(keys[nullIndex], values[nullIndex]);
-				if(filter.getBoolean(entry)) return false;
+				if(filter.test(entry)) return false;
 			}
 			for(int i = nullIndex-1;i>=0;i--) {
 				if(!strategy.equals(keys[i], EMPTY_KEY_VALUE)) {
 					entry.set(keys[i], values[i]);
-					if(filter.getBoolean(entry)) return false;
+					if(filter.test(entry)) return false;
 				}
 			}
 			return true;
@@ -919,12 +919,12 @@ public class CUSTOM_HASH_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_VAL
 			BasicEntry KEY_VALUE_GENERIC_TYPE entry = new BasicEntryKV_BRACES();
 			if(containsNull) {
 				entry.set(keys[nullIndex], values[nullIndex]);
-				if(!filter.getBoolean(entry)) return false;
+				if(!filter.test(entry)) return false;
 			}
 			for(int i = nullIndex-1;i>=0;i--) {
 				if(!strategy.equals(keys[i], EMPTY_KEY_VALUE)) {
 					entry.set(keys[i], values[i]);
-					if(!filter.getBoolean(entry)) return false;
+					if(!filter.test(entry)) return false;
 				}
 			}
 			return true;
@@ -970,12 +970,12 @@ public class CUSTOM_HASH_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_VAL
 			BasicEntry KEY_VALUE_GENERIC_TYPE entry = new BasicEntryKV_BRACES();
 			if(containsNull) {
 				entry.set(keys[nullIndex], values[nullIndex]);
-				if(filter.getBoolean(entry)) return entry;
+				if(filter.test(entry)) return entry;
 			}
 			for(int i = nullIndex-1;i>=0;i--) {
 				if(!strategy.equals(keys[i], EMPTY_KEY_VALUE)) {
 					entry.set(keys[i], values[i]);
-					if(filter.getBoolean(entry)) return entry;
+					if(filter.test(entry)) return entry;
 				}
 			}
 			return null;
@@ -989,12 +989,12 @@ public class CUSTOM_HASH_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_VAL
 			int result = 0;
 			if(containsNull) {
 				entry.set(keys[nullIndex], values[nullIndex]);
-				if(filter.getBoolean(entry)) result++;
+				if(filter.test(entry)) result++;
 			}
 			for(int i = nullIndex-1;i>=0;i--) {
 				if(!strategy.equals(keys[i], EMPTY_KEY_VALUE)) {
 					entry.set(keys[i], values[i]);
-					if(filter.getBoolean(entry)) result++;
+					if(filter.test(entry)) result++;
 				}
 			}
 			return result;
@@ -1117,9 +1117,9 @@ public class CUSTOM_HASH_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_VAL
 		public boolean matchesAny(PREDICATE KEY_GENERIC_TYPE filter) {
 			Objects.requireNonNull(filter);
 			if(size() <= 0) return false;
-			if(containsNull && filter.TEST_VALUE(keys[nullIndex])) return true;
+			if(containsNull && filter.test(keys[nullIndex])) return true;
 			for(int i = nullIndex-1;i>=0;i--) {
-				if(!strategy.equals(keys[i], EMPTY_KEY_VALUE) && filter.TEST_VALUE(keys[i])) return true;
+				if(!strategy.equals(keys[i], EMPTY_KEY_VALUE) && filter.test(keys[i])) return true;
 			}
 			return false;
 		}
@@ -1128,9 +1128,9 @@ public class CUSTOM_HASH_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_VAL
 		public boolean matchesNone(PREDICATE KEY_GENERIC_TYPE filter) {
 			Objects.requireNonNull(filter);
 			if(size() <= 0) return true;
-			if(containsNull && filter.TEST_VALUE(keys[nullIndex])) return false;
+			if(containsNull && filter.test(keys[nullIndex])) return false;
 			for(int i = nullIndex-1;i>=0;i--) {
-				if(!strategy.equals(keys[i], EMPTY_KEY_VALUE) && filter.TEST_VALUE(keys[i])) return false;
+				if(!strategy.equals(keys[i], EMPTY_KEY_VALUE) && filter.test(keys[i])) return false;
 			}
 			return true;
 		}
@@ -1139,9 +1139,9 @@ public class CUSTOM_HASH_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_VAL
 		public boolean matchesAll(PREDICATE KEY_GENERIC_TYPE filter) {
 			Objects.requireNonNull(filter);
 			if(size() <= 0) return true;
-			if(containsNull && !filter.TEST_VALUE(keys[nullIndex])) return false;
+			if(containsNull && !filter.test(keys[nullIndex])) return false;
 			for(int i = nullIndex-1;i>=0;i--) {
-				if(!strategy.equals(keys[i], EMPTY_KEY_VALUE) && !filter.TEST_VALUE(keys[i])) return false;
+				if(!strategy.equals(keys[i], EMPTY_KEY_VALUE) && !filter.test(keys[i])) return false;
 			}
 			return true;
 		}
@@ -1198,9 +1198,9 @@ public class CUSTOM_HASH_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_VAL
 		public KEY_TYPE findFirst(PREDICATE KEY_GENERIC_TYPE filter) {
 			Objects.requireNonNull(filter);
 			if(size() <= 0) return EMPTY_KEY_VALUE;
-			if(containsNull && filter.TEST_VALUE(keys[nullIndex])) return keys[nullIndex];
+			if(containsNull && filter.test(keys[nullIndex])) return keys[nullIndex];
 			for(int i = nullIndex-1;i>=0;i--) {
-				if(!strategy.equals(keys[i], EMPTY_KEY_VALUE) && filter.TEST_VALUE(keys[i])) return keys[i];
+				if(!strategy.equals(keys[i], EMPTY_KEY_VALUE) && filter.test(keys[i])) return keys[i];
 			}
 			return EMPTY_KEY_VALUE;
 		}
@@ -1210,9 +1210,9 @@ public class CUSTOM_HASH_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_VAL
 			Objects.requireNonNull(filter);
 			if(size() <= 0) return 0;
 			int result = 0;
-			if(containsNull && filter.TEST_VALUE(keys[nullIndex])) result++;
+			if(containsNull && filter.test(keys[nullIndex])) result++;
 			for(int i = nullIndex-1;i>=0;i--) {
-				if(!strategy.equals(keys[i], EMPTY_KEY_VALUE) && filter.TEST_VALUE(keys[i])) result++;
+				if(!strategy.equals(keys[i], EMPTY_KEY_VALUE) && filter.test(keys[i])) result++;
 			}
 			return result;
 		}
@@ -1273,9 +1273,9 @@ public class CUSTOM_HASH_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_VAL
 		public boolean matchesAny(VALUE_PREDICATE VALUE_GENERIC_TYPE filter) {
 			Objects.requireNonNull(filter);
 			if(size() <= 0) return false;
-			if(containsNull && filter.VALUE_TEST_VALUE(values[nullIndex])) return true;
+			if(containsNull && filter.test(values[nullIndex])) return true;
 			for(int i = nullIndex-1;i>=0;i--) {
-				if(!strategy.equals(keys[i], EMPTY_KEY_VALUE) && filter.VALUE_TEST_VALUE(values[i])) return true;
+				if(!strategy.equals(keys[i], EMPTY_KEY_VALUE) && filter.test(values[i])) return true;
 			}
 			return false;
 		}
@@ -1284,9 +1284,9 @@ public class CUSTOM_HASH_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_VAL
 		public boolean matchesNone(VALUE_PREDICATE VALUE_GENERIC_TYPE filter) {
 			Objects.requireNonNull(filter);
 			if(size() <= 0) return true;
-			if(containsNull && filter.VALUE_TEST_VALUE(values[nullIndex])) return false;
+			if(containsNull && filter.test(values[nullIndex])) return false;
 			for(int i = nullIndex-1;i>=0;i--) {
-				if(!strategy.equals(keys[i], EMPTY_KEY_VALUE) && filter.VALUE_TEST_VALUE(values[i])) return false;
+				if(!strategy.equals(keys[i], EMPTY_KEY_VALUE) && filter.test(values[i])) return false;
 			}
 			return true;
 		}
@@ -1295,9 +1295,9 @@ public class CUSTOM_HASH_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_VAL
 		public boolean matchesAll(VALUE_PREDICATE VALUE_GENERIC_TYPE filter) {
 			Objects.requireNonNull(filter);
 			if(size() <= 0) return true;
-			if(containsNull && !filter.VALUE_TEST_VALUE(values[nullIndex])) return false;
+			if(containsNull && !filter.test(values[nullIndex])) return false;
 			for(int i = nullIndex-1;i>=0;i--) {
-				if(!strategy.equals(keys[i], EMPTY_KEY_VALUE) && !filter.VALUE_TEST_VALUE(values[i])) return false;
+				if(!strategy.equals(keys[i], EMPTY_KEY_VALUE) && !filter.test(values[i])) return false;
 			}
 			return true;
 		}
@@ -1354,9 +1354,9 @@ public class CUSTOM_HASH_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_VAL
 		public VALUE_TYPE findFirst(VALUE_PREDICATE VALUE_GENERIC_TYPE filter) {
 			Objects.requireNonNull(filter);
 			if(size() <= 0) return EMPTY_VALUE;
-			if(containsNull && filter.VALUE_TEST_VALUE(values[nullIndex])) return values[nullIndex];
+			if(containsNull && filter.test(values[nullIndex])) return values[nullIndex];
 			for(int i = nullIndex-1;i>=0;i--) {
-				if(!strategy.equals(keys[i], EMPTY_KEY_VALUE) && filter.VALUE_TEST_VALUE(values[i])) return values[i];
+				if(!strategy.equals(keys[i], EMPTY_KEY_VALUE) && filter.test(values[i])) return values[i];
 			}
 			return EMPTY_VALUE;
 		}
@@ -1366,9 +1366,9 @@ public class CUSTOM_HASH_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_VAL
 			Objects.requireNonNull(filter);
 			if(size() <= 0) return 0;
 			int result = 0;
-			if(containsNull && filter.VALUE_TEST_VALUE(values[nullIndex])) result++;
+			if(containsNull && filter.test(values[nullIndex])) result++;
 			for(int i = nullIndex-1;i>=0;i--) {
-				if(!strategy.equals(keys[i], EMPTY_KEY_VALUE) && filter.VALUE_TEST_VALUE(values[i])) result++;
+				if(!strategy.equals(keys[i], EMPTY_KEY_VALUE) && filter.test(values[i])) result++;
 			}
 			return result;
 		}

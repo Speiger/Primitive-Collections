@@ -273,7 +273,7 @@ public class ARRAY_PRIORITY_QUEUE KEY_GENERIC_TYPE extends ABSTRACT_PRIORITY_QUE
 	public boolean matchesAny(PREDICATE KEY_GENERIC_TYPE filter) {
 		Objects.requireNonNull(filter);
 		for(int i = 0;i<size;i++) {
-			if(filter.TEST_VALUE(array[i])) return true;
+			if(filter.test(array[i])) return true;
 		}
 		return false;
 	}
@@ -282,7 +282,7 @@ public class ARRAY_PRIORITY_QUEUE KEY_GENERIC_TYPE extends ABSTRACT_PRIORITY_QUE
 	public boolean matchesNone(PREDICATE KEY_GENERIC_TYPE filter) {
 		Objects.requireNonNull(filter);
 		for(int i = 0;i<size;i++) {
-			if(filter.TEST_VALUE(array[i])) return false;
+			if(filter.test(array[i])) return false;
 		}
 		return true;
 	}
@@ -291,7 +291,7 @@ public class ARRAY_PRIORITY_QUEUE KEY_GENERIC_TYPE extends ABSTRACT_PRIORITY_QUE
 	public boolean matchesAll(PREDICATE KEY_GENERIC_TYPE filter) {
 		Objects.requireNonNull(filter);
 		for(int i = 0;i<size;i++) {
-			if(!filter.TEST_VALUE(array[i])) return false;
+			if(!filter.test(array[i])) return false;
 		}
 		return true;
 	}
@@ -339,7 +339,7 @@ public class ARRAY_PRIORITY_QUEUE KEY_GENERIC_TYPE extends ABSTRACT_PRIORITY_QUE
 	public KEY_TYPE findFirst(PREDICATE KEY_GENERIC_TYPE filter) {
 		Objects.requireNonNull(filter);
 		for(int i = 0;i<size;i++) {
-			if(filter.TEST_VALUE(array[i])) {
+			if(filter.test(array[i])) {
 				KEY_TYPE data = array[i];
 				removeIndex(i);
 				return data;
@@ -353,7 +353,7 @@ public class ARRAY_PRIORITY_QUEUE KEY_GENERIC_TYPE extends ABSTRACT_PRIORITY_QUE
 		Objects.requireNonNull(filter);
 		int result = 0;
 		for(int i = 0;i<size;i++) {
-			if(filter.TEST_VALUE(array[i])) result++;
+			if(filter.test(array[i])) result++;
 		}
 		return result;
 	}

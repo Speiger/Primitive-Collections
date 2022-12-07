@@ -190,7 +190,7 @@ public interface PRIORITY_QUEUE KEY_GENERIC_TYPE extends ITERABLE KEY_GENERIC_TY
 	 * @see Collection#toArray(Object[])
 	 */
 	default KEY_TYPE[] TO_ARRAY(Int2ObjectFunction<KEY_TYPE[]> action) {
-		return TO_ARRAY(action.get(size()));
+		return TO_ARRAY(action.apply(size()));
 	}
 #endif
 }

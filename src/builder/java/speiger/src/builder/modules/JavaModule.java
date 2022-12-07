@@ -41,7 +41,6 @@ public class JavaModule extends BaseModule
 		addSimpleMapper("APPLY_KEY_VALUE", keyType.isObject() ? "apply" : "applyAs"+keyType.getNonFileType());
 		addSimpleMapper("APPLY_VALUE", valueType.isObject() ? "apply" : "applyAs"+valueType.getNonFileType());
 		addSimpleMapper("APPLY_CAST", "applyAs"+keyType.getCustomJDKType().getNonFileType());
-		addSimpleMapper("APPLY", keyType.isObject() ? "apply" : "applyAs"+keyType.getNonFileType());
 		
 		//Shared by Maps and Pairs so moved to java.
 		addFunctionMappers("ENTRY_KEY", "get%sKey");

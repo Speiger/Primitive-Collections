@@ -832,7 +832,7 @@ public class ITERATORS
 		
 		@Override
 		public T next() {
-			return mapper.GET_VALUE(iterator.NEXT());
+			return mapper.apply(iterator.NEXT());
 		}
 		
 		@Override
@@ -858,7 +858,7 @@ public class ITERATORS
 			foundNext = true;
 			while(iterator.hasNext()) {
 				if(last != null && last.hasNext()) return;
-				last = mapper.GET_VALUE(iterator.NEXT()).iterator();
+				last = mapper.apply(iterator.NEXT()).iterator();
 			}
 		}
 		
@@ -894,7 +894,7 @@ public class ITERATORS
 			foundNext = true;
 			while(iterator.hasNext()) {
 				if(last != null && last.hasNext()) return;
-				last = ObjectIterators.wrap(mapper.GET_VALUE(iterator.NEXT()));
+				last = ObjectIterators.wrap(mapper.apply(iterator.NEXT()));
 			}
 		}
 		
@@ -1045,7 +1045,7 @@ public class ITERATORS
 			if(foundNext) return;
 			while(iterator.hasNext()) {
 				lastFound = iterator.NEXT();
-				if(filter.TEST_VALUE(lastFound)) {
+				if(filter.test(lastFound)) {
 					foundNext = true;
 					break;
 				}

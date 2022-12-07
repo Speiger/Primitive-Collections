@@ -698,7 +698,7 @@ public class CONCURRENT_HASH_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY
 					int index = seg.firstIndex;
 					while(index != -1) {
 						entry.set(seg.keys[index], seg.values[index]);
-						if(filter.getBoolean(entry)) return true;
+						if(filter.test(entry)) return true;
 						index = (int)seg.links[index];
 					}					
 				}
@@ -720,7 +720,7 @@ public class CONCURRENT_HASH_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY
 					int index = seg.firstIndex;
 					while(index != -1) {
 						entry.set(seg.keys[index], seg.values[index]);
-						if(filter.getBoolean(entry)) return false;
+						if(filter.test(entry)) return false;
 						index = (int)seg.links[index];
 					}					
 				}
@@ -742,7 +742,7 @@ public class CONCURRENT_HASH_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY
 					int index = seg.firstIndex;
 					while(index != -1) {
 						entry.set(seg.keys[index], seg.values[index]);
-						if(!filter.getBoolean(entry)) return false;
+						if(!filter.test(entry)) return false;
 						index = (int)seg.links[index];
 					}
 				}
@@ -813,7 +813,7 @@ public class CONCURRENT_HASH_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY
 				try {
 					while(index != -1) {
 						entry.set(seg.keys[index], seg.values[index]);
-						if(filter.getBoolean(entry)) return entry;
+						if(filter.test(entry)) return entry;
 						index = (int)seg.links[index];
 					}
 				}
@@ -836,7 +836,7 @@ public class CONCURRENT_HASH_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY
 					int index = seg.firstIndex;
 					while(index != -1) {
 						entry.set(seg.keys[index], seg.values[index]);
-						if(filter.getBoolean(entry)) result++;
+						if(filter.test(entry)) result++;
 						index = (int)seg.links[index];
 					}
 				}
@@ -1005,7 +1005,7 @@ public class CONCURRENT_HASH_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY
 				try {
 					int index = seg.firstIndex;
 					while(index != -1){
-						if(filter.TEST_VALUE(seg.keys[index])) return true;
+						if(filter.test(seg.keys[index])) return true;
 						index = (int)seg.links[index];
 					}					
 				}
@@ -1025,7 +1025,7 @@ public class CONCURRENT_HASH_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY
 				try {
 					int index = seg.firstIndex;
 					while(index != -1){
-						if(filter.TEST_VALUE(seg.keys[index])) return false;
+						if(filter.test(seg.keys[index])) return false;
 						index = (int)seg.links[index];
 					}
 				}
@@ -1045,7 +1045,7 @@ public class CONCURRENT_HASH_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY
 				try {
 					int index = seg.firstIndex;
 					while(index != -1){
-						if(!filter.TEST_VALUE(seg.keys[index])) return false;
+						if(!filter.test(seg.keys[index])) return false;
 						index = (int)seg.links[index];
 					}
 				}
@@ -1138,7 +1138,7 @@ public class CONCURRENT_HASH_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY
 				try {
 					int index = seg.firstIndex;
 					while(index != -1){
-						if(filter.TEST_VALUE(seg.keys[index])) return seg.keys[index];
+						if(filter.test(seg.keys[index])) return seg.keys[index];
 						index = (int)seg.links[index];
 					}
 				}
@@ -1159,7 +1159,7 @@ public class CONCURRENT_HASH_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY
 				try {
 					int index = seg.firstIndex;
 					while(index != -1){
-						if(filter.TEST_VALUE(seg.keys[index])) result++;
+						if(filter.test(seg.keys[index])) result++;
 						index = (int)seg.links[index];
 					}
 				}
@@ -1253,7 +1253,7 @@ public class CONCURRENT_HASH_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY
 				try {
 					int index = seg.firstIndex;
 					while(index != -1){
-						if(filter.VALUE_TEST_VALUE(seg.values[index])) return true;
+						if(filter.test(seg.values[index])) return true;
 						index = (int)seg.links[index];
 					}
 				}
@@ -1273,7 +1273,7 @@ public class CONCURRENT_HASH_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY
 				try {
 					int index = seg.firstIndex;
 					while(index != -1) {
-						if(filter.VALUE_TEST_VALUE(seg.values[index])) return false;
+						if(filter.test(seg.values[index])) return false;
 						index = (int)seg.links[index];
 					}
 				}
@@ -1293,7 +1293,7 @@ public class CONCURRENT_HASH_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY
 				try {
 					int index = seg.firstIndex;
 					while(index != -1) {
-						if(!filter.VALUE_TEST_VALUE(seg.values[index])) return false;
+						if(!filter.test(seg.values[index])) return false;
 						index = (int)seg.links[index];
 					}
 				}
@@ -1387,7 +1387,7 @@ public class CONCURRENT_HASH_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY
 				try {
 					int index = seg.firstIndex;
 					while(index != -1){
-						if(filter.VALUE_TEST_VALUE(seg.values[index])) return seg.values[index];
+						if(filter.test(seg.values[index])) return seg.values[index];
 						index = (int)seg.links[index];
 					}
 				}
@@ -1408,7 +1408,7 @@ public class CONCURRENT_HASH_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY
 				try {
 					int index = seg.firstIndex;
 					while(index != -1){
-						if(filter.VALUE_TEST_VALUE(seg.values[index])) result++;
+						if(filter.test(seg.values[index])) result++;
 						index = (int)seg.links[index];
 					}
 				}
@@ -2141,14 +2141,14 @@ public class CONCURRENT_HASH_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY
 			try {
 				int index = findIndex(hash, key);
 				if(index < 0) {
-					VALUE_TYPE newValue = mappingFunction.GET_VALUE(key);
+					VALUE_TYPE newValue = mappingFunction.APPLY(key);
 					if(VALUE_EQUALS(newValue, getDefaultReturnValue())) return newValue;
 					insert(-index-1, key, newValue);
 					return newValue;
 				}
 				VALUE_TYPE newValue = values[index];
 				if(VALUE_EQUALS(newValue, getDefaultReturnValue())) {
-					newValue = mappingFunction.GET_VALUE(key);
+					newValue = mappingFunction.APPLY(key);
 					if(VALUE_EQUALS(newValue, getDefaultReturnValue())) return newValue;
 					values[index] = newValue;
 				}

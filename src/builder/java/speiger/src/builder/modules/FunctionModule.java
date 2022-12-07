@@ -34,8 +34,7 @@ public class FunctionModule extends BaseModule
 	@Override
 	protected void loadFunctions()
 	{
-		addSimpleMapper("VALUE_TEST_VALUE", valueType.isObject() ? "getBoolean" : "get");
-		addSimpleMapper("TEST_VALUE", keyType.isObject() ? "getBoolean" : "get");
+		addSimpleMapper("APPLY", keyType.getApply(valueType));
 	}
 	
 	@Override

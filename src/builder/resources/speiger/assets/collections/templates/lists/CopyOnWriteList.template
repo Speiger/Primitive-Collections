@@ -775,7 +775,7 @@ public class COPY_ON_WRITE_LIST KEY_GENERIC_TYPE extends ABSTRACT_LIST KEY_GENER
 		Objects.requireNonNull(filter);
 		KEY_TYPE[] data = this.data;
 		for(int i = 0,m=data.length;i<m;i++) {
-			if(filter.TEST_VALUE(data[i])) return true;
+			if(filter.test(data[i])) return true;
 		}
 		return false;
 	}
@@ -785,7 +785,7 @@ public class COPY_ON_WRITE_LIST KEY_GENERIC_TYPE extends ABSTRACT_LIST KEY_GENER
 		Objects.requireNonNull(filter);
 		KEY_TYPE[] data = this.data;
 		for(int i = 0,m=data.length;i<m;i++) {
-			if(filter.TEST_VALUE(data[i])) return false;
+			if(filter.test(data[i])) return false;
 		}
 		return true;
 	}
@@ -795,7 +795,7 @@ public class COPY_ON_WRITE_LIST KEY_GENERIC_TYPE extends ABSTRACT_LIST KEY_GENER
 		Objects.requireNonNull(filter);
 		KEY_TYPE[] data = this.data;
 		for(int i = 0,m=data.length;i<m;i++) {
-			if(!filter.TEST_VALUE(data[i])) return false;
+			if(!filter.test(data[i])) return false;
 		}
 		return true;
 	}
@@ -805,7 +805,7 @@ public class COPY_ON_WRITE_LIST KEY_GENERIC_TYPE extends ABSTRACT_LIST KEY_GENER
 		Objects.requireNonNull(filter);
 		KEY_TYPE[] data = this.data;
 		for(int i = 0,m=data.length;i<m;i++) {
-			if(filter.TEST_VALUE(data[i])) return data[i];
+			if(filter.test(data[i])) return data[i];
 		}
 		return EMPTY_VALUE;
 	}
@@ -858,7 +858,7 @@ public class COPY_ON_WRITE_LIST KEY_GENERIC_TYPE extends ABSTRACT_LIST KEY_GENER
 		KEY_TYPE[] data = this.data;
 		int result = 0;
 		for(int i = 0,m=data.length;i<m;i++) {
-			if(filter.TEST_VALUE(data[i])) result++;
+			if(filter.test(data[i])) result++;
 		}
 		return result;
 	}

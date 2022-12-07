@@ -421,7 +421,7 @@ public class LINKED_LIST KEY_GENERIC_TYPE extends ABSTRACT_LIST KEY_GENERIC_TYPE
 	public boolean matchesAny(PREDICATE KEY_GENERIC_TYPE filter) {
 		Objects.requireNonNull(filter);
 		for(Entry KEY_GENERIC_TYPE entry = first;entry != null;entry = entry.next) {
-			if(filter.TEST_VALUE(entry.value)) return true;
+			if(filter.test(entry.value)) return true;
 		}
 		return false;
 	}
@@ -430,7 +430,7 @@ public class LINKED_LIST KEY_GENERIC_TYPE extends ABSTRACT_LIST KEY_GENERIC_TYPE
 	public boolean matchesNone(PREDICATE KEY_GENERIC_TYPE filter) {
 		Objects.requireNonNull(filter);
 		for(Entry KEY_GENERIC_TYPE entry = first;entry != null;entry = entry.next) {
-			if(filter.TEST_VALUE(entry.value)) return false;
+			if(filter.test(entry.value)) return false;
 		}
 		return true;
 	}
@@ -439,7 +439,7 @@ public class LINKED_LIST KEY_GENERIC_TYPE extends ABSTRACT_LIST KEY_GENERIC_TYPE
 	public boolean matchesAll(PREDICATE KEY_GENERIC_TYPE filter) {
 		Objects.requireNonNull(filter);
 		for(Entry KEY_GENERIC_TYPE entry = first;entry != null;entry = entry.next) {
-			if(!filter.TEST_VALUE(entry.value)) return false;
+			if(!filter.test(entry.value)) return false;
 		}
 		return true;
 	}
@@ -448,7 +448,7 @@ public class LINKED_LIST KEY_GENERIC_TYPE extends ABSTRACT_LIST KEY_GENERIC_TYPE
 	public KEY_TYPE findFirst(PREDICATE KEY_GENERIC_TYPE filter) {
 		Objects.requireNonNull(filter);
 		for(Entry KEY_GENERIC_TYPE entry = first;entry != null;entry = entry.next) {
-			if(filter.TEST_VALUE(entry.value)) return entry.value;
+			if(filter.test(entry.value)) return entry.value;
 		}
 		return EMPTY_VALUE;
 	}
@@ -497,7 +497,7 @@ public class LINKED_LIST KEY_GENERIC_TYPE extends ABSTRACT_LIST KEY_GENERIC_TYPE
 		Objects.requireNonNull(filter);
 		int result = 0;
 		for(Entry KEY_GENERIC_TYPE entry = first;entry != null;entry = entry.next) {
-			if(filter.TEST_VALUE(entry.value)) result++;
+			if(filter.test(entry.value)) result++;
 		}
 		return result;
 	}

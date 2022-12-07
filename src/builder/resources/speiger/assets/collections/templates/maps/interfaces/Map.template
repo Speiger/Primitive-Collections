@@ -435,13 +435,19 @@ public interface MAP KEY_VALUE_GENERIC_TYPE extends Map<CLASS_TYPE, CLASS_VALUE_
 		return VALUE_TO_OBJ(replace(OBJ_TO_KEY(key), OBJ_TO_VALUE(value)));
 	}
 	
+#endif
+	@Override
+	public default VALUE_TYPE APPLY(KEY_TYPE key) {
+		return GET_VALUE(key);
+	}
 	/**
 	 * A Type Specific get method to reduce boxing/unboxing
 	 * @param key the key that is searched for
 	 * @return the searched value or default return value
 	 */
-	@Override
 	public VALUE_TYPE GET_VALUE(KEY_TYPE key);
+	
+#if !TYPE_OBJECT || !VALUE_OBJECT
 	/**
 	 * A Type Specific getOrDefault method to reduce boxing/unboxing
 	 * @param key the key that is searched for

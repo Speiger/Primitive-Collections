@@ -593,11 +593,7 @@ public class ASYNC_BUILDER KEY_GENERIC_TYPE
 			switch(type) {
 				case 0:
 					while(shouldRun() && iter.hasNext()) {
-#if TYPE_OBJECT
-						if(filter.getBoolean(iter.NEXT())) {
-#else
-						if(filter.GET_VALUE(iter.NEXT())) {
-#endif
+						if(filter.test(iter.NEXT())) {
 							setResult(true);
 							return true;
 						}
@@ -605,11 +601,7 @@ public class ASYNC_BUILDER KEY_GENERIC_TYPE
 					break;
 				case 1:
 					while(shouldRun() && iter.hasNext()) {
-#if TYPE_OBJECT
-						if(filter.getBoolean(iter.NEXT())) {
-#else
-						if(filter.GET_VALUE(iter.NEXT())) {
-#endif
+						if(filter.test(iter.NEXT())) {
 							setResult(false);
 							return true;
 						}
@@ -617,11 +609,7 @@ public class ASYNC_BUILDER KEY_GENERIC_TYPE
 					break;
 				case 2:
 					while(shouldRun() && iter.hasNext()) {
-#if TYPE_OBJECT
-						if(!filter.getBoolean(iter.NEXT())) {
-#else
-						if(!filter.GET_VALUE(iter.NEXT())) {
-#endif
+						if(!filter.test(iter.NEXT())) {
 							setResult(false);
 							return true;
 						}
@@ -658,11 +646,7 @@ public class ASYNC_BUILDER KEY_GENERIC_TYPE
 		protected boolean execute() throws Exception {
 			while(shouldRun() && iter.hasNext()) {
 				KEY_TYPE entry = iter.NEXT();
-#if TYPE_OBJECT
-				if(filter.getBoolean(iter.NEXT())) {
-#else
-				if(filter.GET_VALUE(iter.NEXT())) {
-#endif
+				if(filter.test(iter.NEXT())) {
 					setResult(entry);
 					return true;
 				}
@@ -693,7 +677,7 @@ public class ASYNC_BUILDER KEY_GENERIC_TYPE
 		@Override
 		protected boolean execute() throws Exception {
 			while(shouldRun() && iter.hasNext()) {
-				if(filter.TEST_VALUE(iter.NEXT())) {
+				if(filter.test(iter.NEXT())) {
 					counted++;
 				}
 			}

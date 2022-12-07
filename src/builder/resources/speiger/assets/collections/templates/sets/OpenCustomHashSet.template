@@ -522,9 +522,9 @@ public class CUSTOM_HASH_SET KEY_GENERIC_TYPE extends ABSTRACT_SET KEY_GENERIC_T
 	public boolean matchesAny(PREDICATE KEY_GENERIC_TYPE filter) {
 		Objects.requireNonNull(filter);
 		if(size() <= 0) return false;
-		if(containsNull && filter.TEST_VALUE(keys[nullIndex])) return true;
+		if(containsNull && filter.test(keys[nullIndex])) return true;
 		for(int i = nullIndex-1;i>=0;i--) {
-			if(!strategy.equals(keys[i], EMPTY_KEY_VALUE) && filter.TEST_VALUE(keys[i])) return true;
+			if(!strategy.equals(keys[i], EMPTY_KEY_VALUE) && filter.test(keys[i])) return true;
 		}
 		return false;
 	}
@@ -533,9 +533,9 @@ public class CUSTOM_HASH_SET KEY_GENERIC_TYPE extends ABSTRACT_SET KEY_GENERIC_T
 	public boolean matchesNone(PREDICATE KEY_GENERIC_TYPE filter) {
 		Objects.requireNonNull(filter);
 		if(size() <= 0) return true;
-		if(containsNull && filter.TEST_VALUE(keys[nullIndex])) return false;
+		if(containsNull && filter.test(keys[nullIndex])) return false;
 		for(int i = nullIndex-1;i>=0;i--) {
-			if(!strategy.equals(keys[i], EMPTY_KEY_VALUE) && filter.TEST_VALUE(keys[i])) return false;
+			if(!strategy.equals(keys[i], EMPTY_KEY_VALUE) && filter.test(keys[i])) return false;
 		}
 		return true;
 	}
@@ -544,9 +544,9 @@ public class CUSTOM_HASH_SET KEY_GENERIC_TYPE extends ABSTRACT_SET KEY_GENERIC_T
 	public boolean matchesAll(PREDICATE KEY_GENERIC_TYPE filter) {
 		Objects.requireNonNull(filter);
 		if(size() <= 0) return true;
-		if(containsNull && !filter.TEST_VALUE(keys[nullIndex])) return false;
+		if(containsNull && !filter.test(keys[nullIndex])) return false;
 		for(int i = nullIndex-1;i>=0;i--) {
-			if(!strategy.equals(keys[i], EMPTY_KEY_VALUE) && !filter.TEST_VALUE(keys[i])) return false;
+			if(!strategy.equals(keys[i], EMPTY_KEY_VALUE) && !filter.test(keys[i])) return false;
 		}
 		return true;
 	}
@@ -603,9 +603,9 @@ public class CUSTOM_HASH_SET KEY_GENERIC_TYPE extends ABSTRACT_SET KEY_GENERIC_T
 	public KEY_TYPE findFirst(PREDICATE KEY_GENERIC_TYPE filter) {
 		Objects.requireNonNull(filter);
 		if(size() <= 0) return EMPTY_VALUE;
-		if(containsNull && filter.TEST_VALUE(keys[nullIndex])) return keys[nullIndex];
+		if(containsNull && filter.test(keys[nullIndex])) return keys[nullIndex];
 		for(int i = nullIndex-1;i>=0;i--) {
-			if(!strategy.equals(keys[i], EMPTY_KEY_VALUE) && filter.TEST_VALUE(keys[i])) return keys[i];
+			if(!strategy.equals(keys[i], EMPTY_KEY_VALUE) && filter.test(keys[i])) return keys[i];
 		}
 		return EMPTY_VALUE;
 	}
@@ -615,9 +615,9 @@ public class CUSTOM_HASH_SET KEY_GENERIC_TYPE extends ABSTRACT_SET KEY_GENERIC_T
 		Objects.requireNonNull(filter);
 		if(size() <= 0) return 0;
 		int result = 0;
-		if(containsNull && filter.TEST_VALUE(keys[nullIndex])) result++;
+		if(containsNull && filter.test(keys[nullIndex])) result++;
 		for(int i = nullIndex-1;i>=0;i--) {
-			if(!strategy.equals(keys[i], EMPTY_KEY_VALUE) && filter.TEST_VALUE(keys[i])) result++;
+			if(!strategy.equals(keys[i], EMPTY_KEY_VALUE) && filter.test(keys[i])) result++;
 		}
 		return result;
 	}

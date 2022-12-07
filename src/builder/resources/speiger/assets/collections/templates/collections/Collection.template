@@ -183,7 +183,7 @@ public interface COLLECTION KEY_GENERIC_TYPE extends Collection<CLASS_TYPE>, ITE
 	 * @see Collection#toArray(Object[])
 	 */
 	default KEY_TYPE[] TO_ARRAY(Int2ObjectFunction<KEY_TYPE[]> action) {
-		return TO_ARRAY(action.get(size()));
+		return TO_ARRAY(action.apply(size()));
 	}
 	
 #else

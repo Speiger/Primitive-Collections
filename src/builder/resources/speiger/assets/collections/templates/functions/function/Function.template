@@ -21,12 +21,9 @@ public interface FUNCTION KEY_VALUE_GENERIC_TYPE
 	 * @param k the value that should be processed
 	 * @return the result of the function
 	 */
-	public VALUE_TYPE GET_VALUE(KEY_TYPE k);
+	public VALUE_TYPE APPLY(KEY_TYPE k);
 	
-#if JDK_FUNCTION
-#if VALUE_BOOLEAN
-	@Override
-	public default VALUE_TYPE test(KEY_TYPE k) { return GET_VALUE(k); }
+#if JDK_FUNCTION && VALUE_BOOLEAN
 	
 	/**
 	 * A Type specific and-function helper function that reduces boxing/unboxing
@@ -35,19 +32,19 @@ public interface FUNCTION KEY_VALUE_GENERIC_TYPE
 	 */
 	public default FUNCTION KEY_VALUE_GENERIC_TYPE andType(FUNCTION KEY_VALUE_GENERIC_TYPE other) {
 		Objects.requireNonNull(other);
-		return T -> GET_VALUE(T) && other.GET_VALUE(T);
+		return T -> APPLY(T) && other.APPLY(T);
 	}
 	
 	@Override
 	@Deprecated
 	public default FUNCTION KEY_VALUE_GENERIC_TYPE and(JAVA_FUNCTION KEY_VALUE_SUPER_GENERIC_TYPE other) {
 		Objects.requireNonNull(other);
-		return T -> GET_VALUE(T) && other.test(T);
+		return T -> APPLY(T) && other.APPLY(T);
 	}
 	
 	@Override
 	public default FUNCTION KEY_VALUE_GENERIC_TYPE negate() {
-		return T -> !GET_VALUE(T);
+		return T -> !APPLY(T);
 	}
 	
 	/**
@@ -57,23 +54,14 @@ public interface FUNCTION KEY_VALUE_GENERIC_TYPE
 	 */
 	public default FUNCTION KEY_VALUE_GENERIC_TYPE orType(FUNCTION KEY_VALUE_GENERIC_TYPE other) {
 		Objects.requireNonNull(other);
-		return T -> GET_VALUE(T) || other.GET_VALUE(T);
+		return T -> APPLY(T) || other.APPLY(T);
 	}
 	
 	@Override
 	@Deprecated
 	public default FUNCTION KEY_VALUE_GENERIC_TYPE or(JAVA_FUNCTION KEY_VALUE_SUPER_GENERIC_TYPE other) {
 		Objects.requireNonNull(other);
-		return T -> GET_VALUE(T) || other.test(T);
+		return T -> APPLY(T) || other.APPLY(T);
 	}
-#else if VALUE_OBJECT
-	
-	@Override
-	public default VALUE_TYPE apply(KEY_TYPE k) { return GET_VALUE(k); }
-#else
-	
-	@Override
-	public default VALUE_TYPE APPLY_VALUE(KEY_TYPE k) { return GET_VALUE(k); }
-#endif
 #endif
 }

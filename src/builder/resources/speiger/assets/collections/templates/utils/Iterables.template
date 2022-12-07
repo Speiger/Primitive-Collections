@@ -298,7 +298,7 @@ public class ITERABLES
 		@Override
 		public void forEach(Consumer<? super T> action) {
 			Objects.requireNonNull(action);
-			iterable.forEach(E -> action.accept(mapper.GET_VALUE(E)));
+			iterable.forEach(E -> action.accept(mapper.apply(E)));
 		}
 	}
 	
@@ -320,7 +320,7 @@ public class ITERABLES
 		@Override
 		public void forEach(Consumer<? super T> action) {
 			Objects.requireNonNull(action);
-			iterable.forEach(E -> mapper.GET_VALUE(E).forEach(action));
+			iterable.forEach(E -> mapper.apply(E).forEach(action));
 		}
 		
 	}
@@ -344,7 +344,7 @@ public class ITERABLES
 		public void forEach(Consumer<? super T> action) {
 			Objects.requireNonNull(action);
 			iterable.forEach(E -> {
-				T[] array = mapper.GET_VALUE(E);
+				T[] array = mapper.apply(E);
 				for(int i = 0,m=array.length;i<m;action.accept(array[i++]));
 			});
 		}
@@ -411,12 +411,12 @@ public class ITERABLES
 		@Override
 		public void forEach(CONSUMER action) {
 			Objects.requireNonNull(action);
-			iterable.forEach(T -> { if(!filter.TEST_VALUE(T)) action.accept(T); } );
+			iterable.forEach(T -> { if(!filter.test(T)) action.accept(T); } );
 		}
 #else
 		public void forEach(Consumer<? super CLASS_TYPE> action) {
 			Objects.requireNonNull(action);
-			iterable.forEach(T -> { if(!filter.TEST_VALUE(T)) action.accept(T); } );
+			iterable.forEach(T -> { if(!filter.test(T)) action.accept(T); } );
 		}
 #endif
 	}

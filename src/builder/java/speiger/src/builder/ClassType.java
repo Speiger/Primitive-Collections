@@ -133,6 +133,12 @@ public enum ClassType
 		}
 	}
 	
+	public String getApply(ClassType other) {
+		if(other == BOOLEAN) return "test";
+		if(other == ClassType.OBJECT) return "apply";
+		return "applyAs"+other.getFileType();
+	}
+	
 	public String getEquals(boolean not)
 	{
 		switch(this)

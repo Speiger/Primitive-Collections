@@ -214,7 +214,7 @@ public abstract class ABSTRACT_MAP KEY_VALUE_GENERIC_TYPE extends AbstractMap<CL
 		Objects.requireNonNull(mappingFunction);
 		VALUE_TYPE value;
 		if((value = GET_VALUE(key)) == getDefaultReturnValue() || !containsKey(key)) {
-			VALUE_TYPE newValue = mappingFunction.GET_VALUE(key);
+			VALUE_TYPE newValue = mappingFunction.APPLY(key);
 			if(VALUE_EQUALS_NOT(newValue, getDefaultReturnValue())) {
 				put(key, newValue);
 				return newValue;
