@@ -6,7 +6,9 @@ import java.util.Iterator;
 #endif
 import speiger.src.collections.PACKAGE.collections.COLLECTION;
 import speiger.src.collections.PACKAGE.collections.ITERATOR;
+#if QUEUES_FEATURE
 import speiger.src.collections.PACKAGE.utils.PRIORITY_QUEUES;
+#endif
 
 /**
  * A Type Speciifc PriorityDeque or Dequeue interface to allow implementations like FIFO queues.
@@ -81,6 +83,7 @@ public interface PRIORITY_DEQUEUE KEY_GENERIC_TYPE extends PRIORITY_QUEUE KEY_GE
 	 */
 	public default KEY_TYPE last() { return peek(size()-1); }
 	
+#if QUEUES_FEATURE
 	/**
 	 * Creates a Wrapped PriorityDequeue that is Synchronized
 	 * @return a new PriorityDequeue that is synchronized
@@ -96,6 +99,7 @@ public interface PRIORITY_DEQUEUE KEY_GENERIC_TYPE extends PRIORITY_QUEUE KEY_GE
 	 */
 	public default PRIORITY_DEQUEUE KEY_GENERIC_TYPE synchronizeQueue(Object mutex) { return PRIORITY_QUEUES.synchronize(this, mutex); }
 	
+#endif
 	@Override
 	public PRIORITY_DEQUEUE KEY_GENERIC_TYPE copy();
 }

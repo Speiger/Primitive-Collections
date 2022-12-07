@@ -1,7 +1,9 @@
 package speiger.src.collections.PACKAGE.lists;
 
 #if TYPE_OBJECT
+#if DEQUEUE_FEATURE
 import java.util.Comparator;
+#endif
 import java.util.function.BiFunction;
 #else if PRIMITIVES
 import java.nio.JAVA_BUFFER;
@@ -31,9 +33,13 @@ import speiger.src.collections.PACKAGE.collections.STACK;
 import speiger.src.collections.ints.functions.function.Int2ObjectFunction;
 #endif
 import speiger.src.collections.PACKAGE.collections.ITERATOR;
+#if DEQUEUE_FEATURE
 import speiger.src.collections.PACKAGE.queues.PRIORITY_DEQUEUE;
+#endif
 #if !TYPE_OBJECT
+#if DEQUEUE_FEATURE
 import speiger.src.collections.PACKAGE.functions.COMPARATOR;
+#endif
 import speiger.src.collections.PACKAGE.functions.CONSUMER;
 #endif
 import speiger.src.collections.PACKAGE.utils.ARRAYS;
@@ -62,10 +68,10 @@ import speiger.src.collections.utils.SanityChecks;
  * 
  * @Type(T)
  */
-#if TYPE_OBJECT
-public class LINKED_LIST KEY_GENERIC_TYPE extends ABSTRACT_LIST KEY_GENERIC_TYPE implements PRIORITY_DEQUEUE KEY_GENERIC_TYPE, Stack KEY_GENERIC_TYPE
-#else
+#if DEQUEUE_FEATURE
 public class LINKED_LIST KEY_GENERIC_TYPE extends ABSTRACT_LIST KEY_GENERIC_TYPE implements PRIORITY_DEQUEUE KEY_GENERIC_TYPE, STACK KEY_GENERIC_TYPE
+#else
+public class LINKED_LIST KEY_GENERIC_TYPE extends ABSTRACT_LIST KEY_GENERIC_TYPE implements STACK KEY_GENERIC_TYPE
 #endif
 {
 	Entry KEY_GENERIC_TYPE first;
@@ -222,6 +228,7 @@ public class LINKED_LIST KEY_GENERIC_TYPE extends ABSTRACT_LIST KEY_GENERIC_TYPE
 		return true;
 	}
 	
+#if DEQUEUE_FEATURE
 	@Override
 	public void enqueue(KEY_TYPE e) {
 		add(e);
@@ -232,6 +239,7 @@ public class LINKED_LIST KEY_GENERIC_TYPE extends ABSTRACT_LIST KEY_GENERIC_TYPE
 		add(0, e);
 	}
 	
+#endif
 	@Override
 	public void push(KEY_TYPE e) {
 		add(e);
@@ -291,6 +299,7 @@ public class LINKED_LIST KEY_GENERIC_TYPE extends ABSTRACT_LIST KEY_GENERIC_TYPE
 		return a;
 	}
 	
+#if DEQUEUE_FEATURE
 	@Override
 	public KEY_TYPE first() {
 		if(first == null) throw new NoSuchElementException();
@@ -303,11 +312,11 @@ public class LINKED_LIST KEY_GENERIC_TYPE extends ABSTRACT_LIST KEY_GENERIC_TYPE
 		return last.value;
 	}
 	
+#endif
 	@Override
 	public KEY_TYPE peek(int index) {
 		return GET_KEY((size() - 1) - index);
 	}
-	
 	@Override
 	public KEY_TYPE GET_KEY(int index) {
 		checkRange(index);
@@ -525,6 +534,7 @@ public class LINKED_LIST KEY_GENERIC_TYPE extends ABSTRACT_LIST KEY_GENERIC_TYPE
 	}
 	
 #endif
+#if DEQUEUE_FEATURE
 	@Override
 	public void onChanged() {}
 	@Override
@@ -538,25 +548,24 @@ public class LINKED_LIST KEY_GENERIC_TYPE extends ABSTRACT_LIST KEY_GENERIC_TYPE
 	
 	@Override
 	public KEY_TYPE dequeueLast() {
+		return pop();
+	}
+	
+#endif
+	@Override
+	public KEY_TYPE pop() {
 		if(last == null) throw new NoSuchElementException();
 		return unlinkLast(last);
 	}
 	
-	@Override
-	public KEY_TYPE pop() {
-		return dequeueLast();
-	}
-	
+#if DEQUEUE_FEATURE
 	@Override
 	public boolean removeFirst(KEY_TYPE e) {
-		if(size == 0) return false;
-		for(Entry KEY_GENERIC_TYPE entry = first;entry != null;entry = entry.next) {
-			if(KEY_EQUALS(entry.value, e)) {
-				unlink(entry);
-				return true;
-			}
-		}
-		return false;
+#if TYPE_OBJECT
+		return remove(e);
+#else
+		return REMOVE_KEY(e);
+#endif
 	}
 	
 	@Override
@@ -571,6 +580,7 @@ public class LINKED_LIST KEY_GENERIC_TYPE extends ABSTRACT_LIST KEY_GENERIC_TYPE
 		return false;
 	}
 	
+#endif
 	@Override
 	public KEY_TYPE swapRemove(int index) {
 		checkRange(index);
@@ -653,7 +663,14 @@ public class LINKED_LIST KEY_GENERIC_TYPE extends ABSTRACT_LIST KEY_GENERIC_TYPE
 #else
 	@Override
 	public boolean REMOVE_KEY(KEY_TYPE e) {
-		return removeFirst(e);
+		if(size == 0) return false;
+		for(Entry KEY_GENERIC_TYPE entry = first;entry != null;entry = entry.next) {
+			if(KEY_EQUALS(entry.value, e)) {
+				unlink(entry);
+				return true;
+			}
+		}
+		return false;
 	}
 	
 #endif

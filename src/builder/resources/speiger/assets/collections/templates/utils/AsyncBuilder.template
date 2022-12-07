@@ -37,8 +37,8 @@ import speiger.src.collections.PACKAGE.lists.LINKED_LIST;
 #endif
 #if !TYPE_BOOLEAN && OBJECT_ASYNC_MODULE
 #if SET_MODULE
-import speiger.src.collections.PACKAGE.sets.SET;
 #if LINKED_SET_FEATURE || LINKED_CUSTOM_SET_FEATURE || SET_FEATURE || CUSTOM_SET_FEATURE || RB_TREE_SET_FEATURE || AVL_TREE_SET_FEATURE || ARRAY_SET_FEATURE
+import speiger.src.collections.PACKAGE.sets.SET;
 #if LINKED_SET_FEATURE
 import speiger.src.collections.PACKAGE.sets.LINKED_HASH_SET;
 #else if LINKED_CUSTOM_SET_FEATURE

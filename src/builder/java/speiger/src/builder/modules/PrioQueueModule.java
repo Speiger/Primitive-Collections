@@ -1,5 +1,9 @@
 package speiger.src.builder.modules;
 
+import java.util.Arrays;
+import java.util.Set;
+import java.util.TreeSet;
+
 import speiger.src.builder.ClassType;
 
 @SuppressWarnings("javadoc")
@@ -12,22 +16,46 @@ public class PrioQueueModule extends BaseModule
 	@Override
 	protected void loadVariables() {}
 	@Override
-	protected void loadFlags() {}
-	@Override
 	protected void loadFunctions() {}
 	@Override
 	public boolean areDependenciesLoaded() { return isDependencyLoaded(CollectionModule.INSTANCE); }
+	
 	@Override
-	protected void loadBlockades()
-	{
+	public Set<String> getModuleKeys(ClassType keyType, ClassType valueType) {
+		return new TreeSet<>(Arrays.asList("Wrappers", "Implementations", "Dequeue", "FiFoQueue", "HeapQueue", "ArrayPrioQueue"));
+	}
+	
+	@Override
+	protected void loadFlags() {
+		if(isModuleEnabled()) addFlag("QUEUE_MODULE");
+		if(isModuleEnabled("Wrappers")) addKeyFlag("QUEUES_FEATURE");
+		boolean implementations = isModuleEnabled("Implementations");
+		if(isModuleEnabled("Dequeue")) {
+			addKeyFlag("DEQUEUE_FEATURE");
+			if(implementations && isModuleEnabled("FiFoQueue")) addKeyFlag("FIFO_QUEUE_FEATURE");
+		}
+		if(implementations && isModuleEnabled("HeapQueue")) addKeyFlag("HEAP_QUEUE_FEATURE");
+		if(implementations && isModuleEnabled("ArrayPrioQueue")) addKeyFlag("ARRAY_QUEUE_FEATURE");
+	}
+	
+	@Override
+	protected void loadBlockades() {
+		if(!isModuleEnabled()) addBlockedFiles("PriorityQueue", "AbstractPriorityQueue");
+		if(!isModuleEnabled("Wrappers")) addBlockedFiles("PriorityQueues");
+		boolean implementations = !isModuleEnabled("Implementations");
+		boolean dequeue = !isModuleEnabled("Dequeue");
+		if(dequeue) addBlockedFiles("PriorityDequeue"); 
+		if(dequeue || implementations || !isModuleEnabled("FiFoQueue")) addBlockedFiles("ArrayFIFOQueue");
+		if(implementations || !isModuleEnabled("HeapQueue")) addBlockedFiles("HeapPriorityQueue");
+		if(implementations || !isModuleEnabled("ArrayPrioQueue")) addBlockedFiles("ArrayPriorityQueue");
+		
 		if(keyType == ClassType.BOOLEAN) {
 			addBlockedFiles("QueueTests");
 		}
 	}
 	
 	@Override
-	protected void loadRemappers()
-	{
+	protected void loadRemappers() {
 		//Main Classes
 		addRemapper("AbstractPriorityQueue", "Abstract%sPriorityQueue");
 		
@@ -38,8 +66,7 @@ public class PrioQueueModule extends BaseModule
 	}
 	
 	@Override
-	protected void loadClasses()
-	{
+	protected void loadClasses() {
 		//Implementation Classes
 		addClassMapper("ARRAY_FIFO_QUEUE", "ArrayFIFOQueue");
 		addClassMapper("ARRAY_PRIORITY_QUEUE", "ArrayPriorityQueue");

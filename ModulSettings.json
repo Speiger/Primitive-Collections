@@ -20,7 +20,7 @@
 			},
 			"Pair": {
 				"Enabled": true,
-				"Immutable": false,
+				"Immutable": true,
 				"Mutable": true
 			}
 		},
@@ -31,7 +31,7 @@
 			},
 			"Pair": {
 				"Enabled": true,
-				"Immutable": false,
+				"Immutable": true,
 				"Mutable": true
 			}
 		},
@@ -42,7 +42,7 @@
 			},
 			"Pair": {
 				"Enabled": true,
-				"Immutable": false,
+				"Immutable": true,
 				"Mutable": true
 			}
 		},
@@ -53,7 +53,7 @@
 			},
 			"Pair": {
 				"Enabled": true,
-				"Immutable": false,
+				"Immutable": true,
 				"Mutable": true
 			}
 		},
@@ -64,7 +64,7 @@
 			},
 			"Pair": {
 				"Enabled": true,
-				"Immutable": false,
+				"Immutable": true,
 				"Mutable": true
 			}
 		},
@@ -75,7 +75,7 @@
 			},
 			"Pair": {
 				"Enabled": true,
-				"Immutable": false,
+				"Immutable": true,
 				"Mutable": true
 			}
 		},
@@ -86,7 +86,7 @@
 			},
 			"Pair": {
 				"Enabled": true,
-				"Immutable": false,
+				"Immutable": true,
 				"Mutable": true
 			}
 		},
@@ -97,7 +97,7 @@
 			},
 			"Pair": {
 				"Enabled": true,
-				"Immutable": false,
+				"Immutable": true,
 				"Mutable": true
 			}
 		},
@@ -108,7 +108,7 @@
 			},
 			"Pair": {
 				"Enabled": true,
-				"Immutable": false,
+				"Immutable": true,
 				"Mutable": true
 			}
 		},
@@ -116,14 +116,20 @@
 			"Enabled": true
 		},
 		"PriorityQueue": {
-			"Enabled": true
+			"Enabled": true,
+			"ArrayPrioQueue": true,
+			"Dequeue": true,
+			"FiFoQueue": true,
+			"HeapQueue": true,
+			"Implementations": false,
+			"Wrappers": true
 		},
 		"List": {
 			"Enabled": true,
 			"ArrayList": true,
 			"CopyOnWriteList": true,
 			"ImmutableList": true,
-			"Implementations": true,
+			"Implementations": false,
 			"LinkedList": true,
 			"Wrappers": true
 		},
@@ -150,7 +156,7 @@
 				"EnumMap": true,
 				"HashMap": true,
 				"ImmutableMap": true,
-				"Implementations": true,
+				"Implementations": false,
 				"LinkedCustomHashMap": true,
 				"LinkedEnumMap": true,
 				"LinkedHashMap": true,
@@ -161,7 +167,7 @@
 			},
 			"Pair": {
 				"Enabled": true,
-				"Immutable": false,
+				"Immutable": true,
 				"Mutable": true
 			}
 		},
@@ -179,7 +185,7 @@
 				"EnumMap": true,
 				"HashMap": true,
 				"ImmutableMap": true,
-				"Implementations": true,
+				"Implementations": false,
 				"LinkedCustomHashMap": true,
 				"LinkedEnumMap": true,
 				"LinkedHashMap": true,
@@ -190,7 +196,7 @@
 			},
 			"Pair": {
 				"Enabled": true,
-				"Immutable": false,
+				"Immutable": true,
 				"Mutable": true
 			}
 		},
@@ -208,7 +214,7 @@
 				"EnumMap": true,
 				"HashMap": true,
 				"ImmutableMap": true,
-				"Implementations": true,
+				"Implementations": false,
 				"LinkedCustomHashMap": true,
 				"LinkedEnumMap": true,
 				"LinkedHashMap": true,
@@ -219,7 +225,7 @@
 			},
 			"Pair": {
 				"Enabled": true,
-				"Immutable": false,
+				"Immutable": true,
 				"Mutable": true
 			}
 		},
@@ -237,7 +243,7 @@
 				"EnumMap": true,
 				"HashMap": true,
 				"ImmutableMap": true,
-				"Implementations": true,
+				"Implementations": false,
 				"LinkedCustomHashMap": true,
 				"LinkedEnumMap": true,
 				"LinkedHashMap": true,
@@ -248,7 +254,7 @@
 			},
 			"Pair": {
 				"Enabled": true,
-				"Immutable": false,
+				"Immutable": true,
 				"Mutable": true
 			}
 		},
@@ -266,7 +272,7 @@
 				"EnumMap": true,
 				"HashMap": true,
 				"ImmutableMap": true,
-				"Implementations": true,
+				"Implementations": false,
 				"LinkedCustomHashMap": true,
 				"LinkedEnumMap": true,
 				"LinkedHashMap": true,
@@ -277,7 +283,7 @@
 			},
 			"Pair": {
 				"Enabled": true,
-				"Immutable": false,
+				"Immutable": true,
 				"Mutable": true
 			}
 		},
@@ -295,7 +301,7 @@
 				"EnumMap": true,
 				"HashMap": true,
 				"ImmutableMap": true,
-				"Implementations": true,
+				"Implementations": false,
 				"LinkedCustomHashMap": true,
 				"LinkedEnumMap": true,
 				"LinkedHashMap": true,
@@ -306,7 +312,7 @@
 			},
 			"Pair": {
 				"Enabled": true,
-				"Immutable": false,
+				"Immutable": true,
 				"Mutable": true
 			}
 		},
@@ -324,7 +330,7 @@
 				"EnumMap": true,
 				"HashMap": true,
 				"ImmutableMap": true,
-				"Implementations": true,
+				"Implementations": false,
 				"LinkedCustomHashMap": true,
 				"LinkedEnumMap": true,
 				"LinkedHashMap": true,
@@ -335,7 +341,7 @@
 			},
 			"Pair": {
 				"Enabled": true,
-				"Immutable": false,
+				"Immutable": true,
 				"Mutable": true
 			}
 		},
@@ -353,7 +359,7 @@
 				"EnumMap": true,
 				"HashMap": true,
 				"ImmutableMap": true,
-				"Implementations": true,
+				"Implementations": false,
 				"LinkedCustomHashMap": true,
 				"LinkedEnumMap": true,
 				"LinkedHashMap": true,
@@ -364,7 +370,7 @@
 			},
 			"Pair": {
 				"Enabled": true,
-				"Immutable": false,
+				"Immutable": true,
 				"Mutable": true
 			}
 		},
@@ -382,7 +388,7 @@
 				"EnumMap": true,
 				"HashMap": true,
 				"ImmutableMap": true,
-				"Implementations": true,
+				"Implementations": false,
 				"LinkedCustomHashMap": true,
 				"LinkedEnumMap": true,
 				"LinkedHashMap": true,
@@ -393,7 +399,7 @@
 			},
 			"Pair": {
 				"Enabled": true,
-				"Immutable": false,
+				"Immutable": true,
 				"Mutable": true
 			}
 		},
@@ -401,14 +407,20 @@
 			"Enabled": true
 		},
 		"PriorityQueue": {
-			"Enabled": true
+			"Enabled": true,
+			"ArrayPrioQueue": true,
+			"Dequeue": true,
+			"FiFoQueue": true,
+			"HeapQueue": true,
+			"Implementations": false,
+			"Wrappers": true
 		},
 		"List": {
 			"Enabled": true,
 			"ArrayList": true,
 			"CopyOnWriteList": true,
 			"ImmutableList": true,
-			"Implementations": true,
+			"Implementations": false,
 			"LinkedList": true,
 			"Wrappers": true
 		},
@@ -419,7 +431,7 @@
 			"CustomHashSet": true,
 			"HashSet": true,
 			"ImmutableSet": true,
-			"Implementations": true,
+			"Implementations": false,
 			"LinkedCustomHashSet": true,
 			"LinkedHashSet": true,
 			"OrderedSet": true,
@@ -450,7 +462,7 @@
 				"EnumMap": true,
 				"HashMap": true,
 				"ImmutableMap": true,
-				"Implementations": true,
+				"Implementations": false,
 				"LinkedCustomHashMap": true,
 				"LinkedEnumMap": true,
 				"LinkedHashMap": true,
@@ -461,7 +473,7 @@
 			},
 			"Pair": {
 				"Enabled": true,
-				"Immutable": false,
+				"Immutable": true,
 				"Mutable": true
 			}
 		},
@@ -479,7 +491,7 @@
 				"EnumMap": true,
 				"HashMap": true,
 				"ImmutableMap": true,
-				"Implementations": true,
+				"Implementations": false,
 				"LinkedCustomHashMap": true,
 				"LinkedEnumMap": true,
 				"LinkedHashMap": true,
@@ -490,7 +502,7 @@
 			},
 			"Pair": {
 				"Enabled": true,
-				"Immutable": false,
+				"Immutable": true,
 				"Mutable": true
 			}
 		},
@@ -508,7 +520,7 @@
 				"EnumMap": true,
 				"HashMap": true,
 				"ImmutableMap": true,
-				"Implementations": true,
+				"Implementations": false,
 				"LinkedCustomHashMap": true,
 				"LinkedEnumMap": true,
 				"LinkedHashMap": true,
@@ -519,7 +531,7 @@
 			},
 			"Pair": {
 				"Enabled": true,
-				"Immutable": false,
+				"Immutable": true,
 				"Mutable": true
 			}
 		},
@@ -537,7 +549,7 @@
 				"EnumMap": true,
 				"HashMap": true,
 				"ImmutableMap": true,
-				"Implementations": true,
+				"Implementations": false,
 				"LinkedCustomHashMap": true,
 				"LinkedEnumMap": true,
 				"LinkedHashMap": true,
@@ -548,7 +560,7 @@
 			},
 			"Pair": {
 				"Enabled": true,
-				"Immutable": false,
+				"Immutable": true,
 				"Mutable": true
 			}
 		},
@@ -566,7 +578,7 @@
 				"EnumMap": true,
 				"HashMap": true,
 				"ImmutableMap": true,
-				"Implementations": true,
+				"Implementations": false,
 				"LinkedCustomHashMap": true,
 				"LinkedEnumMap": true,
 				"LinkedHashMap": true,
@@ -577,7 +589,7 @@
 			},
 			"Pair": {
 				"Enabled": true,
-				"Immutable": false,
+				"Immutable": true,
 				"Mutable": true
 			}
 		},
@@ -595,7 +607,7 @@
 				"EnumMap": true,
 				"HashMap": true,
 				"ImmutableMap": true,
-				"Implementations": true,
+				"Implementations": false,
 				"LinkedCustomHashMap": true,
 				"LinkedEnumMap": true,
 				"LinkedHashMap": true,
@@ -606,7 +618,7 @@
 			},
 			"Pair": {
 				"Enabled": true,
-				"Immutable": false,
+				"Immutable": true,
 				"Mutable": true
 			}
 		},
@@ -624,7 +636,7 @@
 				"EnumMap": true,
 				"HashMap": true,
 				"ImmutableMap": true,
-				"Implementations": true,
+				"Implementations": false,
 				"LinkedCustomHashMap": true,
 				"LinkedEnumMap": true,
 				"LinkedHashMap": true,
@@ -635,7 +647,7 @@
 			},
 			"Pair": {
 				"Enabled": true,
-				"Immutable": false,
+				"Immutable": true,
 				"Mutable": true
 			}
 		},
@@ -653,7 +665,7 @@
 				"EnumMap": true,
 				"HashMap": true,
 				"ImmutableMap": true,
-				"Implementations": true,
+				"Implementations": false,
 				"LinkedCustomHashMap": true,
 				"LinkedEnumMap": true,
 				"LinkedHashMap": true,
@@ -664,7 +676,7 @@
 			},
 			"Pair": {
 				"Enabled": true,
-				"Immutable": false,
+				"Immutable": true,
 				"Mutable": true
 			}
 		},
@@ -682,7 +694,7 @@
 				"EnumMap": true,
 				"HashMap": true,
 				"ImmutableMap": true,
-				"Implementations": true,
+				"Implementations": false,
 				"LinkedCustomHashMap": true,
 				"LinkedEnumMap": true,
 				"LinkedHashMap": true,
@@ -693,7 +705,7 @@
 			},
 			"Pair": {
 				"Enabled": true,
-				"Immutable": false,
+				"Immutable": true,
 				"Mutable": true
 			}
 		},
@@ -701,14 +713,20 @@
 			"Enabled": true
 		},
 		"PriorityQueue": {
-			"Enabled": true
+			"Enabled": true,
+			"ArrayPrioQueue": true,
+			"Dequeue": true,
+			"FiFoQueue": true,
+			"HeapQueue": true,
+			"Implementations": false,
+			"Wrappers": true
 		},
 		"List": {
 			"Enabled": true,
 			"ArrayList": true,
 			"CopyOnWriteList": true,
 			"ImmutableList": true,
-			"Implementations": true,
+			"Implementations": false,
 			"LinkedList": true,
 			"Wrappers": true
 		},
@@ -719,7 +737,7 @@
 			"CustomHashSet": true,
 			"HashSet": true,
 			"ImmutableSet": true,
-			"Implementations": true,
+			"Implementations": false,
 			"LinkedCustomHashSet": true,
 			"LinkedHashSet": true,
 			"OrderedSet": true,
@@ -750,7 +768,7 @@
 				"EnumMap": true,
 				"HashMap": true,
 				"ImmutableMap": true,
-				"Implementations": true,
+				"Implementations": false,
 				"LinkedCustomHashMap": true,
 				"LinkedEnumMap": true,
 				"LinkedHashMap": true,
@@ -761,7 +779,7 @@
 			},
 			"Pair": {
 				"Enabled": true,
-				"Immutable": false,
+				"Immutable": true,
 				"Mutable": true
 			}
 		},
@@ -779,7 +797,7 @@
 				"EnumMap": true,
 				"HashMap": true,
 				"ImmutableMap": true,
-				"Implementations": true,
+				"Implementations": false,
 				"LinkedCustomHashMap": true,
 				"LinkedEnumMap": true,
 				"LinkedHashMap": true,
@@ -790,7 +808,7 @@
 			},
 			"Pair": {
 				"Enabled": true,
-				"Immutable": false,
+				"Immutable": true,
 				"Mutable": true
 			}
 		},
@@ -808,7 +826,7 @@
 				"EnumMap": true,
 				"HashMap": true,
 				"ImmutableMap": true,
-				"Implementations": true,
+				"Implementations": false,
 				"LinkedCustomHashMap": true,
 				"LinkedEnumMap": true,
 				"LinkedHashMap": true,
@@ -819,7 +837,7 @@
 			},
 			"Pair": {
 				"Enabled": true,
-				"Immutable": false,
+				"Immutable": true,
 				"Mutable": true
 			}
 		},
@@ -837,7 +855,7 @@
 				"EnumMap": true,
 				"HashMap": true,
 				"ImmutableMap": true,
-				"Implementations": true,
+				"Implementations": false,
 				"LinkedCustomHashMap": true,
 				"LinkedEnumMap": true,
 				"LinkedHashMap": true,
@@ -848,7 +866,7 @@
 			},
 			"Pair": {
 				"Enabled": true,
-				"Immutable": false,
+				"Immutable": true,
 				"Mutable": true
 			}
 		},
@@ -866,7 +884,7 @@
 				"EnumMap": true,
 				"HashMap": true,
 				"ImmutableMap": true,
-				"Implementations": true,
+				"Implementations": false,
 				"LinkedCustomHashMap": true,
 				"LinkedEnumMap": true,
 				"LinkedHashMap": true,
@@ -877,7 +895,7 @@
 			},
 			"Pair": {
 				"Enabled": true,
-				"Immutable": false,
+				"Immutable": true,
 				"Mutable": true
 			}
 		},
@@ -895,7 +913,7 @@
 				"EnumMap": true,
 				"HashMap": true,
 				"ImmutableMap": true,
-				"Implementations": true,
+				"Implementations": false,
 				"LinkedCustomHashMap": true,
 				"LinkedEnumMap": true,
 				"LinkedHashMap": true,
@@ -906,7 +924,7 @@
 			},
 			"Pair": {
 				"Enabled": true,
-				"Immutable": false,
+				"Immutable": true,
 				"Mutable": true
 			}
 		},
@@ -924,7 +942,7 @@
 				"EnumMap": true,
 				"HashMap": true,
 				"ImmutableMap": true,
-				"Implementations": true,
+				"Implementations": false,
 				"LinkedCustomHashMap": true,
 				"LinkedEnumMap": true,
 				"LinkedHashMap": true,
@@ -935,7 +953,7 @@
 			},
 			"Pair": {
 				"Enabled": true,
-				"Immutable": false,
+				"Immutable": true,
 				"Mutable": true
 			}
 		},
@@ -953,7 +971,7 @@
 				"EnumMap": true,
 				"HashMap": true,
 				"ImmutableMap": true,
-				"Implementations": true,
+				"Implementations": false,
 				"LinkedCustomHashMap": true,
 				"LinkedEnumMap": true,
 				"LinkedHashMap": true,
@@ -964,7 +982,7 @@
 			},
 			"Pair": {
 				"Enabled": true,
-				"Immutable": false,
+				"Immutable": true,
 				"Mutable": true
 			}
 		},
@@ -982,7 +1000,7 @@
 				"EnumMap": true,
 				"HashMap": true,
 				"ImmutableMap": true,
-				"Implementations": true,
+				"Implementations": false,
 				"LinkedCustomHashMap": true,
 				"LinkedEnumMap": true,
 				"LinkedHashMap": true,
@@ -993,7 +1011,7 @@
 			},
 			"Pair": {
 				"Enabled": true,
-				"Immutable": false,
+				"Immutable": true,
 				"Mutable": true
 			}
 		},
@@ -1001,14 +1019,20 @@
 			"Enabled": true
 		},
 		"PriorityQueue": {
-			"Enabled": true
+			"Enabled": true,
+			"ArrayPrioQueue": true,
+			"Dequeue": true,
+			"FiFoQueue": true,
+			"HeapQueue": true,
+			"Implementations": false,
+			"Wrappers": true
 		},
 		"List": {
 			"Enabled": true,
 			"ArrayList": true,
 			"CopyOnWriteList": true,
 			"ImmutableList": true,
-			"Implementations": true,
+			"Implementations": false,
 			"LinkedList": true,
 			"Wrappers": true
 		},
@@ -1019,7 +1043,7 @@
 			"CustomHashSet": true,
 			"HashSet": true,
 			"ImmutableSet": true,
-			"Implementations": true,
+			"Implementations": false,
 			"LinkedCustomHashSet": true,
 			"LinkedHashSet": true,
 			"OrderedSet": true,
@@ -1050,7 +1074,7 @@
 				"EnumMap": true,
 				"HashMap": true,
 				"ImmutableMap": true,
-				"Implementations": true,
+				"Implementations": false,
 				"LinkedCustomHashMap": true,
 				"LinkedEnumMap": true,
 				"LinkedHashMap": true,
@@ -1061,7 +1085,7 @@
 			},
 			"Pair": {
 				"Enabled": true,
-				"Immutable": false,
+				"Immutable": true,
 				"Mutable": true
 			}
 		},
@@ -1079,7 +1103,7 @@
 				"EnumMap": true,
 				"HashMap": true,
 				"ImmutableMap": true,
-				"Implementations": true,
+				"Implementations": false,
 				"LinkedCustomHashMap": true,
 				"LinkedEnumMap": true,
 				"LinkedHashMap": true,
@@ -1090,7 +1114,7 @@
 			},
 			"Pair": {
 				"Enabled": true,
-				"Immutable": false,
+				"Immutable": true,
 				"Mutable": true
 			}
 		},
@@ -1108,7 +1132,7 @@
 				"EnumMap": true,
 				"HashMap": true,
 				"ImmutableMap": true,
-				"Implementations": true,
+				"Implementations": false,
 				"LinkedCustomHashMap": true,
 				"LinkedEnumMap": true,
 				"LinkedHashMap": true,
@@ -1119,7 +1143,7 @@
 			},
 			"Pair": {
 				"Enabled": true,
-				"Immutable": false,
+				"Immutable": true,
 				"Mutable": true
 			}
 		},
@@ -1137,7 +1161,7 @@
 				"EnumMap": true,
 				"HashMap": true,
 				"ImmutableMap": true,
-				"Implementations": true,
+				"Implementations": false,
 				"LinkedCustomHashMap": true,
 				"LinkedEnumMap": true,
 				"LinkedHashMap": true,
@@ -1148,7 +1172,7 @@
 			},
 			"Pair": {
 				"Enabled": true,
-				"Immutable": false,
+				"Immutable": true,
 				"Mutable": true
 			}
 		},
@@ -1166,7 +1190,7 @@
 				"EnumMap": true,
 				"HashMap": true,
 				"ImmutableMap": true,
-				"Implementations": true,
+				"Implementations": false,
 				"LinkedCustomHashMap": true,
 				"LinkedEnumMap": true,
 				"LinkedHashMap": true,
@@ -1177,7 +1201,7 @@
 			},
 			"Pair": {
 				"Enabled": true,
-				"Immutable": false,
+				"Immutable": true,
 				"Mutable": true
 			}
 		},
@@ -1195,7 +1219,7 @@
 				"EnumMap": true,
 				"HashMap": true,
 				"ImmutableMap": true,
-				"Implementations": true,
+				"Implementations": false,
 				"LinkedCustomHashMap": true,
 				"LinkedEnumMap": true,
 				"LinkedHashMap": true,
@@ -1206,7 +1230,7 @@
 			},
 			"Pair": {
 				"Enabled": true,
-				"Immutable": false,
+				"Immutable": true,
 				"Mutable": true
 			}
 		},
@@ -1224,7 +1248,7 @@
 				"EnumMap": true,
 				"HashMap": true,
 				"ImmutableMap": true,
-				"Implementations": true,
+				"Implementations": false,
 				"LinkedCustomHashMap": true,
 				"LinkedEnumMap": true,
 				"LinkedHashMap": true,
@@ -1235,7 +1259,7 @@
 			},
 			"Pair": {
 				"Enabled": true,
-				"Immutable": false,
+				"Immutable": true,
 				"Mutable": true
 			}
 		},
@@ -1253,7 +1277,7 @@
 				"EnumMap": true,
 				"HashMap": true,
 				"ImmutableMap": true,
-				"Implementations": true,
+				"Implementations": false,
 				"LinkedCustomHashMap": true,
 				"LinkedEnumMap": true,
 				"LinkedHashMap": true,
@@ -1264,7 +1288,7 @@
 			},
 			"Pair": {
 				"Enabled": true,
-				"Immutable": false,
+				"Immutable": true,
 				"Mutable": true
 			}
 		},
@@ -1282,7 +1306,7 @@
 				"EnumMap": true,
 				"HashMap": true,
 				"ImmutableMap": true,
-				"Implementations": true,
+				"Implementations": false,
 				"LinkedCustomHashMap": true,
 				"LinkedEnumMap": true,
 				"LinkedHashMap": true,
@@ -1293,7 +1317,7 @@
 			},
 			"Pair": {
 				"Enabled": true,
-				"Immutable": false,
+				"Immutable": true,
 				"Mutable": true
 			}
 		},
@@ -1301,14 +1325,20 @@
 			"Enabled": true
 		},
 		"PriorityQueue": {
-			"Enabled": true
+			"Enabled": true,
+			"ArrayPrioQueue": true,
+			"Dequeue": true,
+			"FiFoQueue": true,
+			"HeapQueue": true,
+			"Implementations": false,
+			"Wrappers": true
 		},
 		"List": {
 			"Enabled": true,
 			"ArrayList": true,
 			"CopyOnWriteList": true,
 			"ImmutableList": true,
-			"Implementations": true,
+			"Implementations": false,
 			"LinkedList": true,
 			"Wrappers": true
 		},
@@ -1319,7 +1349,7 @@
 			"CustomHashSet": true,
 			"HashSet": true,
 			"ImmutableSet": true,
-			"Implementations": true,
+			"Implementations": false,
 			"LinkedCustomHashSet": true,
 			"LinkedHashSet": true,
 			"OrderedSet": true,
@@ -1350,7 +1380,7 @@
 				"EnumMap": true,
 				"HashMap": true,
 				"ImmutableMap": true,
-				"Implementations": true,
+				"Implementations": false,
 				"LinkedCustomHashMap": true,
 				"LinkedEnumMap": true,
 				"LinkedHashMap": true,
@@ -1361,7 +1391,7 @@
 			},
 			"Pair": {
 				"Enabled": true,
-				"Immutable": false,
+				"Immutable": true,
 				"Mutable": true
 			}
 		},
@@ -1379,7 +1409,7 @@
 				"EnumMap": true,
 				"HashMap": true,
 				"ImmutableMap": true,
-				"Implementations": true,
+				"Implementations": false,
 				"LinkedCustomHashMap": true,
 				"LinkedEnumMap": true,
 				"LinkedHashMap": true,
@@ -1390,7 +1420,7 @@
 			},
 			"Pair": {
 				"Enabled": true,
-				"Immutable": false,
+				"Immutable": true,
 				"Mutable": true
 			}
 		},
@@ -1408,7 +1438,7 @@
 				"EnumMap": true,
 				"HashMap": true,
 				"ImmutableMap": true,
-				"Implementations": true,
+				"Implementations": false,
 				"LinkedCustomHashMap": true,
 				"LinkedEnumMap": true,
 				"LinkedHashMap": true,
@@ -1419,7 +1449,7 @@
 			},
 			"Pair": {
 				"Enabled": true,
-				"Immutable": false,
+				"Immutable": true,
 				"Mutable": true
 			}
 		},
@@ -1437,7 +1467,7 @@
 				"EnumMap": true,
 				"HashMap": true,
 				"ImmutableMap": true,
-				"Implementations": true,
+				"Implementations": false,
 				"LinkedCustomHashMap": true,
 				"LinkedEnumMap": true,
 				"LinkedHashMap": true,
@@ -1448,7 +1478,7 @@
 			},
 			"Pair": {
 				"Enabled": true,
-				"Immutable": false,
+				"Immutable": true,
 				"Mutable": true
 			}
 		},
@@ -1466,7 +1496,7 @@
 				"EnumMap": true,
 				"HashMap": true,
 				"ImmutableMap": true,
-				"Implementations": true,
+				"Implementations": false,
 				"LinkedCustomHashMap": true,
 				"LinkedEnumMap": true,
 				"LinkedHashMap": true,
@@ -1477,7 +1507,7 @@
 			},
 			"Pair": {
 				"Enabled": true,
-				"Immutable": false,
+				"Immutable": true,
 				"Mutable": true
 			}
 		},
@@ -1495,7 +1525,7 @@
 				"EnumMap": true,
 				"HashMap": true,
 				"ImmutableMap": true,
-				"Implementations": true,
+				"Implementations": false,
 				"LinkedCustomHashMap": true,
 				"LinkedEnumMap": true,
 				"LinkedHashMap": true,
@@ -1506,7 +1536,7 @@
 			},
 			"Pair": {
 				"Enabled": true,
-				"Immutable": false,
+				"Immutable": true,
 				"Mutable": true
 			}
 		},
@@ -1524,7 +1554,7 @@
 				"EnumMap": true,
 				"HashMap": true,
 				"ImmutableMap": true,
-				"Implementations": true,
+				"Implementations": false,
 				"LinkedCustomHashMap": true,
 				"LinkedEnumMap": true,
 				"LinkedHashMap": true,
@@ -1535,7 +1565,7 @@
 			},
 			"Pair": {
 				"Enabled": true,
-				"Immutable": false,
+				"Immutable": true,
 				"Mutable": true
 			}
 		},
@@ -1553,7 +1583,7 @@
 				"EnumMap": true,
 				"HashMap": true,
 				"ImmutableMap": true,
-				"Implementations": true,
+				"Implementations": false,
 				"LinkedCustomHashMap": true,
 				"LinkedEnumMap": true,
 				"LinkedHashMap": true,
@@ -1564,7 +1594,7 @@
 			},
 			"Pair": {
 				"Enabled": true,
-				"Immutable": false,
+				"Immutable": true,
 				"Mutable": true
 			}
 		},
@@ -1582,7 +1612,7 @@
 				"EnumMap": true,
 				"HashMap": true,
 				"ImmutableMap": true,
-				"Implementations": true,
+				"Implementations": false,
 				"LinkedCustomHashMap": true,
 				"LinkedEnumMap": true,
 				"LinkedHashMap": true,
@@ -1593,7 +1623,7 @@
 			},
 			"Pair": {
 				"Enabled": true,
-				"Immutable": false,
+				"Immutable": true,
 				"Mutable": true
 			}
 		},
@@ -1601,14 +1631,20 @@
 			"Enabled": true
 		},
 		"PriorityQueue": {
-			"Enabled": true
+			"Enabled": true,
+			"ArrayPrioQueue": true,
+			"Dequeue": true,
+			"FiFoQueue": true,
+			"HeapQueue": true,
+			"Implementations": false,
+			"Wrappers": true
 		},
 		"List": {
 			"Enabled": true,
 			"ArrayList": true,
 			"CopyOnWriteList": true,
 			"ImmutableList": true,
-			"Implementations": true,
+			"Implementations": false,
 			"LinkedList": true,
 			"Wrappers": true
 		},
@@ -1619,7 +1655,7 @@
 			"CustomHashSet": true,
 			"HashSet": true,
 			"ImmutableSet": true,
-			"Implementations": true,
+			"Implementations": false,
 			"LinkedCustomHashSet": true,
 			"LinkedHashSet": true,
 			"OrderedSet": true,
@@ -1650,7 +1686,7 @@
 				"EnumMap": true,
 				"HashMap": true,
 				"ImmutableMap": true,
-				"Implementations": true,
+				"Implementations": false,
 				"LinkedCustomHashMap": true,
 				"LinkedEnumMap": true,
 				"LinkedHashMap": true,
@@ -1661,7 +1697,7 @@
 			},
 			"Pair": {
 				"Enabled": true,
-				"Immutable": false,
+				"Immutable": true,
 				"Mutable": true
 			}
 		},
@@ -1679,7 +1715,7 @@
 				"EnumMap": true,
 				"HashMap": true,
 				"ImmutableMap": true,
-				"Implementations": true,
+				"Implementations": false,
 				"LinkedCustomHashMap": true,
 				"LinkedEnumMap": true,
 				"LinkedHashMap": true,
@@ -1690,7 +1726,7 @@
 			},
 			"Pair": {
 				"Enabled": true,
-				"Immutable": false,
+				"Immutable": true,
 				"Mutable": true
 			}
 		},
@@ -1708,7 +1744,7 @@
 				"EnumMap": true,
 				"HashMap": true,
 				"ImmutableMap": true,
-				"Implementations": true,
+				"Implementations": false,
 				"LinkedCustomHashMap": true,
 				"LinkedEnumMap": true,
 				"LinkedHashMap": true,
@@ -1719,7 +1755,7 @@
 			},
 			"Pair": {
 				"Enabled": true,
-				"Immutable": false,
+				"Immutable": true,
 				"Mutable": true
 			}
 		},
@@ -1737,7 +1773,7 @@
 				"EnumMap": true,
 				"HashMap": true,
 				"ImmutableMap": true,
-				"Implementations": true,
+				"Implementations": false,
 				"LinkedCustomHashMap": true,
 				"LinkedEnumMap": true,
 				"LinkedHashMap": true,
@@ -1748,7 +1784,7 @@
 			},
 			"Pair": {
 				"Enabled": true,
-				"Immutable": false,
+				"Immutable": true,
 				"Mutable": true
 			}
 		},
@@ -1766,7 +1802,7 @@
 				"EnumMap": true,
 				"HashMap": true,
 				"ImmutableMap": true,
-				"Implementations": true,
+				"Implementations": false,
 				"LinkedCustomHashMap": true,
 				"LinkedEnumMap": true,
 				"LinkedHashMap": true,
@@ -1777,7 +1813,7 @@
 			},
 			"Pair": {
 				"Enabled": true,
-				"Immutable": false,
+				"Immutable": true,
 				"Mutable": true
 			}
 		},
@@ -1795,7 +1831,7 @@
 				"EnumMap": true,
 				"HashMap": true,
 				"ImmutableMap": true,
-				"Implementations": true,
+				"Implementations": false,
 				"LinkedCustomHashMap": true,
 				"LinkedEnumMap": true,
 				"LinkedHashMap": true,
@@ -1806,7 +1842,7 @@
 			},
 			"Pair": {
 				"Enabled": true,
-				"Immutable": false,
+				"Immutable": true,
 				"Mutable": true
 			}
 		},
@@ -1824,7 +1860,7 @@
 				"EnumMap": true,
 				"HashMap": true,
 				"ImmutableMap": true,
-				"Implementations": true,
+				"Implementations": false,
 				"LinkedCustomHashMap": true,
 				"LinkedEnumMap": true,
 				"LinkedHashMap": true,
@@ -1835,7 +1871,7 @@
 			},
 			"Pair": {
 				"Enabled": true,
-				"Immutable": false,
+				"Immutable": true,
 				"Mutable": true
 			}
 		},
@@ -1853,7 +1889,7 @@
 				"EnumMap": true,
 				"HashMap": true,
 				"ImmutableMap": true,
-				"Implementations": true,
+				"Implementations": false,
 				"LinkedCustomHashMap": true,
 				"LinkedEnumMap": true,
 				"LinkedHashMap": true,
@@ -1864,7 +1900,7 @@
 			},
 			"Pair": {
 				"Enabled": true,
-				"Immutable": false,
+				"Immutable": true,
 				"Mutable": true
 			}
 		},
@@ -1882,7 +1918,7 @@
 				"EnumMap": true,
 				"HashMap": true,
 				"ImmutableMap": true,
-				"Implementations": true,
+				"Implementations": false,
 				"LinkedCustomHashMap": true,
 				"LinkedEnumMap": true,
 				"LinkedHashMap": true,
@@ -1893,7 +1929,7 @@
 			},
 			"Pair": {
 				"Enabled": true,
-				"Immutable": false,
+				"Immutable": true,
 				"Mutable": true
 			}
 		},
@@ -1901,14 +1937,20 @@
 			"Enabled": true
 		},
 		"PriorityQueue": {
-			"Enabled": true
+			"Enabled": true,
+			"ArrayPrioQueue": true,
+			"Dequeue": true,
+			"FiFoQueue": true,
+			"HeapQueue": true,
+			"Implementations": false,
+			"Wrappers": true
 		},
 		"List": {
 			"Enabled": true,
 			"ArrayList": true,
 			"CopyOnWriteList": true,
 			"ImmutableList": true,
-			"Implementations": true,
+			"Implementations": false,
 			"LinkedList": true,
 			"Wrappers": true
 		},
@@ -1919,7 +1961,7 @@
 			"CustomHashSet": true,
 			"HashSet": true,
 			"ImmutableSet": true,
-			"Implementations": true,
+			"Implementations": false,
 			"LinkedCustomHashSet": true,
 			"LinkedHashSet": true,
 			"OrderedSet": true,
@@ -1950,7 +1992,7 @@
 				"EnumMap": true,
 				"HashMap": true,
 				"ImmutableMap": true,
-				"Implementations": true,
+				"Implementations": false,
 				"LinkedCustomHashMap": true,
 				"LinkedEnumMap": true,
 				"LinkedHashMap": true,
@@ -1961,7 +2003,7 @@
 			},
 			"Pair": {
 				"Enabled": true,
-				"Immutable": false,
+				"Immutable": true,
 				"Mutable": true
 			}
 		},
@@ -1979,7 +2021,7 @@
 				"EnumMap": true,
 				"HashMap": true,
 				"ImmutableMap": true,
-				"Implementations": true,
+				"Implementations": false,
 				"LinkedCustomHashMap": true,
 				"LinkedEnumMap": true,
 				"LinkedHashMap": true,
@@ -1990,7 +2032,7 @@
 			},
 			"Pair": {
 				"Enabled": true,
-				"Immutable": false,
+				"Immutable": true,
 				"Mutable": true
 			}
 		},
@@ -2008,7 +2050,7 @@
 				"EnumMap": true,
 				"HashMap": true,
 				"ImmutableMap": true,
-				"Implementations": true,
+				"Implementations": false,
 				"LinkedCustomHashMap": true,
 				"LinkedEnumMap": true,
 				"LinkedHashMap": true,
@@ -2019,7 +2061,7 @@
 			},
 			"Pair": {
 				"Enabled": true,
-				"Immutable": false,
+				"Immutable": true,
 				"Mutable": true
 			}
 		},
@@ -2037,7 +2079,7 @@
 				"EnumMap": true,
 				"HashMap": true,
 				"ImmutableMap": true,
-				"Implementations": true,
+				"Implementations": false,
 				"LinkedCustomHashMap": true,
 				"LinkedEnumMap": true,
 				"LinkedHashMap": true,
@@ -2048,7 +2090,7 @@
 			},
 			"Pair": {
 				"Enabled": true,
-				"Immutable": false,
+				"Immutable": true,
 				"Mutable": true
 			}
 		},
@@ -2066,7 +2108,7 @@
 				"EnumMap": true,
 				"HashMap": true,
 				"ImmutableMap": true,
-				"Implementations": true,
+				"Implementations": false,
 				"LinkedCustomHashMap": true,
 				"LinkedEnumMap": true,
 				"LinkedHashMap": true,
@@ -2077,7 +2119,7 @@
 			},
 			"Pair": {
 				"Enabled": true,
-				"Immutable": false,
+				"Immutable": true,
 				"Mutable": true
 			}
 		},
@@ -2095,7 +2137,7 @@
 				"EnumMap": true,
 				"HashMap": true,
 				"ImmutableMap": true,
-				"Implementations": true,
+				"Implementations": false,
 				"LinkedCustomHashMap": true,
 				"LinkedEnumMap": true,
 				"LinkedHashMap": true,
@@ -2106,7 +2148,7 @@
 			},
 			"Pair": {
 				"Enabled": true,
-				"Immutable": false,
+				"Immutable": true,
 				"Mutable": true
 			}
 		},
@@ -2124,7 +2166,7 @@
 				"EnumMap": true,
 				"HashMap": true,
 				"ImmutableMap": true,
-				"Implementations": true,
+				"Implementations": false,
 				"LinkedCustomHashMap": true,
 				"LinkedEnumMap": true,
 				"LinkedHashMap": true,
@@ -2135,7 +2177,7 @@
 			},
 			"Pair": {
 				"Enabled": true,
-				"Immutable": false,
+				"Immutable": true,
 				"Mutable": true
 			}
 		},
@@ -2153,7 +2195,7 @@
 				"EnumMap": true,
 				"HashMap": true,
 				"ImmutableMap": true,
-				"Implementations": true,
+				"Implementations": false,
 				"LinkedCustomHashMap": true,
 				"LinkedEnumMap": true,
 				"LinkedHashMap": true,
@@ -2164,7 +2206,7 @@
 			},
 			"Pair": {
 				"Enabled": true,
-				"Immutable": false,
+				"Immutable": true,
 				"Mutable": true
 			}
 		},
@@ -2182,7 +2224,7 @@
 				"EnumMap": true,
 				"HashMap": true,
 				"ImmutableMap": true,
-				"Implementations": true,
+				"Implementations": false,
 				"LinkedCustomHashMap": true,
 				"LinkedEnumMap": true,
 				"LinkedHashMap": true,
@@ -2193,7 +2235,7 @@
 			},
 			"Pair": {
 				"Enabled": true,
-				"Immutable": false,
+				"Immutable": true,
 				"Mutable": true
 			}
 		},
@@ -2201,14 +2243,20 @@
 			"Enabled": true
 		},
 		"PriorityQueue": {
-			"Enabled": true
+			"Enabled": true,
+			"ArrayPrioQueue": true,
+			"Dequeue": true,
+			"FiFoQueue": true,
+			"HeapQueue": true,
+			"Implementations": false,
+			"Wrappers": true
 		},
 		"List": {
 			"Enabled": true,
 			"ArrayList": true,
 			"CopyOnWriteList": true,
 			"ImmutableList": true,
-			"Implementations": true,
+			"Implementations": false,
 			"LinkedList": true,
 			"Wrappers": true
 		},
@@ -2219,7 +2267,7 @@
 			"CustomHashSet": true,
 			"HashSet": true,
 			"ImmutableSet": true,
-			"Implementations": true,
+			"Implementations": false,
 			"LinkedCustomHashSet": true,
 			"LinkedHashSet": true,
 			"OrderedSet": true,
@@ -2250,7 +2298,7 @@
 				"EnumMap": true,
 				"HashMap": true,
 				"ImmutableMap": true,
-				"Implementations": true,
+				"Implementations": false,
 				"LinkedCustomHashMap": true,
 				"LinkedEnumMap": true,
 				"LinkedHashMap": true,
@@ -2261,7 +2309,7 @@
 			},
 			"Pair": {
 				"Enabled": true,
-				"Immutable": false,
+				"Immutable": true,
 				"Mutable": true
 			}
 		},
@@ -2279,7 +2327,7 @@
 				"EnumMap": true,
 				"HashMap": true,
 				"ImmutableMap": true,
-				"Implementations": true,
+				"Implementations": false,
 				"LinkedCustomHashMap": true,
 				"LinkedEnumMap": true,
 				"LinkedHashMap": true,
@@ -2290,7 +2338,7 @@
 			},
 			"Pair": {
 				"Enabled": true,
-				"Immutable": false,
+				"Immutable": true,
 				"Mutable": true
 			}
 		},
@@ -2308,7 +2356,7 @@
 				"EnumMap": true,
 				"HashMap": true,
 				"ImmutableMap": true,
-				"Implementations": true,
+				"Implementations": false,
 				"LinkedCustomHashMap": true,
 				"LinkedEnumMap": true,
 				"LinkedHashMap": true,
@@ -2319,7 +2367,7 @@
 			},
 			"Pair": {
 				"Enabled": true,
-				"Immutable": false,
+				"Immutable": true,
 				"Mutable": true
 			}
 		},
@@ -2337,7 +2385,7 @@
 				"EnumMap": true,
 				"HashMap": true,
 				"ImmutableMap": true,
-				"Implementations": true,
+				"Implementations": false,
 				"LinkedCustomHashMap": true,
 				"LinkedEnumMap": true,
 				"LinkedHashMap": true,
@@ -2348,7 +2396,7 @@
 			},
 			"Pair": {
 				"Enabled": true,
-				"Immutable": false,
+				"Immutable": true,
 				"Mutable": true
 			}
 		},
@@ -2366,7 +2414,7 @@
 				"EnumMap": true,
 				"HashMap": true,
 				"ImmutableMap": true,
-				"Implementations": true,
+				"Implementations": false,
 				"LinkedCustomHashMap": true,
 				"LinkedEnumMap": true,
 				"LinkedHashMap": true,
@@ -2377,7 +2425,7 @@
 			},
 			"Pair": {
 				"Enabled": true,
-				"Immutable": false,
+				"Immutable": true,
 				"Mutable": true
 			}
 		},
@@ -2395,7 +2443,7 @@
 				"EnumMap": true,
 				"HashMap": true,
 				"ImmutableMap": true,
-				"Implementations": true,
+				"Implementations": false,
 				"LinkedCustomHashMap": true,
 				"LinkedEnumMap": true,
 				"LinkedHashMap": true,
@@ -2406,7 +2454,7 @@
 			},
 			"Pair": {
 				"Enabled": true,
-				"Immutable": false,
+				"Immutable": true,
 				"Mutable": true
 			}
 		},
@@ -2424,7 +2472,7 @@
 				"EnumMap": true,
 				"HashMap": true,
 				"ImmutableMap": true,
-				"Implementations": true,
+				"Implementations": false,
 				"LinkedCustomHashMap": true,
 				"LinkedEnumMap": true,
 				"LinkedHashMap": true,
@@ -2435,7 +2483,7 @@
 			},
 			"Pair": {
 				"Enabled": true,
-				"Immutable": false,
+				"Immutable": true,
 				"Mutable": true
 			}
 		},
@@ -2453,7 +2501,7 @@
 				"EnumMap": true,
 				"HashMap": true,
 				"ImmutableMap": true,
-				"Implementations": true,
+				"Implementations": false,
 				"LinkedCustomHashMap": true,
 				"LinkedEnumMap": true,
 				"LinkedHashMap": true,
@@ -2464,7 +2512,7 @@
 			},
 			"Pair": {
 				"Enabled": true,
-				"Immutable": false,
+				"Immutable": true,
 				"Mutable": true
 			}
 		},
@@ -2482,7 +2530,7 @@
 				"EnumMap": true,
 				"HashMap": true,
 				"ImmutableMap": true,
-				"Implementations": true,
+				"Implementations": false,
 				"LinkedCustomHashMap": true,
 				"LinkedEnumMap": true,
 				"LinkedHashMap": true,
@@ -2493,7 +2541,7 @@
 			},
 			"Pair": {
 				"Enabled": true,
-				"Immutable": false,
+				"Immutable": true,
 				"Mutable": true
 			}
 		},
@@ -2501,14 +2549,20 @@
 			"Enabled": true
 		},
 		"PriorityQueue": {
-			"Enabled": true
+			"Enabled": true,
+			"ArrayPrioQueue": true,
+			"Dequeue": true,
+			"FiFoQueue": true,
+			"HeapQueue": true,
+			"Implementations": false,
+			"Wrappers": true
 		},
 		"List": {
 			"Enabled": true,
 			"ArrayList": true,
 			"CopyOnWriteList": true,
 			"ImmutableList": true,
-			"Implementations": true,
+			"Implementations": false,
 			"LinkedList": true,
 			"Wrappers": true
 		},
@@ -2519,7 +2573,7 @@
 			"CustomHashSet": true,
 			"HashSet": true,
 			"ImmutableSet": true,
-			"Implementations": true,
+			"Implementations": false,
 			"LinkedCustomHashSet": true,
 			"LinkedHashSet": true,
 			"OrderedSet": true,

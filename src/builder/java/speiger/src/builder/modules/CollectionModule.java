@@ -75,7 +75,8 @@ public class CollectionModule extends BaseModule
 		addClassMapper("LIST_ITERATOR", "ListIterator");
 		addClassMapper("BI_ITERATOR", "BidirectionalIterator");
 		addClassMapper("ITERATOR", "Iterator");
-		addClassMapper("STACK", "Stack");
+		if(keyType.isObject()) addSimpleMapper("STACK", "Stack");
+		else addClassMapper("STACK", "Stack");
 		addClassMapper("STRATEGY", "Strategy");
 	}
 	
