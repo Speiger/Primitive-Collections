@@ -149,11 +149,8 @@ public class PrimitiveCollectionsBuilder extends TemplateProcessor
 	
 	public void addModules(List<BaseModule> modules)
 	{
-		if((flags & LOAD) != 0)
-		{
-			for(int i = 0,m=modules.size();i<m;i++) {
-				modules.get(i).setManager(manager);
-			}
+		for(int i = 0,m=modules.size();i<m;i++) {
+			modules.get(i).setManager(manager);
 		}
 		for(int i = 0,m=modules.size();i<m;i++) {
 			biPackages.forEach(modules.get(i)::init);
@@ -256,8 +253,8 @@ public class PrimitiveCollectionsBuilder extends TemplateProcessor
 			boolean force = flags.contains("force");
 			boolean tests = flags.contains("tests");
 			boolean forceTests =  flags.contains("force-tests");
-			boolean load = !flags.contains("load");
-			boolean save = flags.contains("save");
+			boolean load = flags.contains("load");
+			boolean save = !flags.contains("save");
 			int flag = (load ? LOAD : 0) | (save ? SAVE : 0);
             new PrimitiveCollectionsBuilder(silent).setFlags(flag).process(force);
             if(tests) {

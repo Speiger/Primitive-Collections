@@ -16,14 +16,14 @@ import speiger.src.collections.PACKAGE.functions.COMPARATOR;
 #endif
 import speiger.src.collections.PACKAGE.functions.function.TO_OBJECT_FUNCTION;
 import speiger.src.collections.PACKAGE.functions.function.PREDICATE;
-#if LIST_MODULE
+#if ARRAY_LIST_FEATURE || LINKED_LIST_FEATURE
+import speiger.src.collections.PACKAGE.lists.LIST;
 #if ARRAY_LIST_FEATURE
 import speiger.src.collections.PACKAGE.lists.ARRAY_LIST;
 #else if LINKED_LIST_FEATURE
 import speiger.src.collections.PACKAGE.lists.LINKED_LIST;
 #endif
 
-import speiger.src.collections.PACKAGE.lists.LIST;
 #endif
 import speiger.src.collections.PACKAGE.lists.LIST_ITERATOR;
 import speiger.src.collections.PACKAGE.collections.BI_ITERATOR;

@@ -1,8 +1,8 @@
 package speiger.src.builder.modules;
 
 import java.util.Arrays;
-import java.util.HashSet;
 import java.util.Set;
+import java.util.TreeSet;
 
 import speiger.src.builder.ClassType;
 
@@ -18,21 +18,23 @@ public class ListModule extends BaseModule
 	@Override
 	protected void loadFlags() {
 		if(isModuleEnabled()) addKeyFlag("LIST_MODULE");
-		if(isModuleEnabled("Lists")) addKeyFlag("LISTS_FEATURE");
-		if(isModuleEnabled("ArrayList")) addKeyFlag("ARRAY_LIST_FEATURE");
-		if(isModuleEnabled("LinkedList")) addKeyFlag("LINKED_LIST_FEATURE");
-		if(isModuleEnabled("ImmutableList")) addKeyFlag("IMMUTABLE_LIST_FEATURE");
-		if(isModuleEnabled("CopyOnWriteList")) addKeyFlag("COPY_ON_WRITE_LIST_FEATURE");
+		if(isModuleEnabled("Wrappers")) addKeyFlag("LISTS_FEATURE");
+		boolean implementations = isModuleEnabled("Implementations");
+		if(implementations && isModuleEnabled("ArrayList")) addKeyFlag("ARRAY_LIST_FEATURE");
+		if(implementations && isModuleEnabled("LinkedList")) addKeyFlag("LINKED_LIST_FEATURE");
+		if(implementations && isModuleEnabled("ImmutableList")) addKeyFlag("IMMUTABLE_LIST_FEATURE");
+		if(implementations && isModuleEnabled("CopyOnWriteList")) addKeyFlag("COPY_ON_WRITE_LIST_FEATURE");
 	}
 	
 	@Override
 	protected void loadBlockades()
 	{
-		if(!isModuleEnabled("Lists")) addBlockedFiles("Lists");
-		if(!isModuleEnabled("ArrayList")) addBlockedFiles("ArrayList");
-		if(!isModuleEnabled("LinkedList")) addBlockedFiles("LinkedList");
-		if(!isModuleEnabled("ImmutableList")) addBlockedFiles("ImmutableList");
-		if(!isModuleEnabled("CopyOnWriteList")) addBlockedFiles("CopyOnWriteList");
+		if(!isModuleEnabled("Wrappers")) addBlockedFiles("Lists");
+		boolean implementations = !isModuleEnabled("Implementations");
+		if(implementations || !isModuleEnabled("ArrayList")) addBlockedFiles("ArrayList");
+		if(implementations || !isModuleEnabled("LinkedList")) addBlockedFiles("LinkedList");
+		if(implementations || !isModuleEnabled("ImmutableList")) addBlockedFiles("ImmutableList");
+		if(implementations || !isModuleEnabled("CopyOnWriteList")) addBlockedFiles("CopyOnWriteList");
 		if(!isModuleEnabled()) addBlockedFiles("List", "AbstractList");
 		
 		if(keyType.isObject()) addBlockedFiles("ListFillBufferTester");
@@ -41,7 +43,7 @@ public class ListModule extends BaseModule
 	
 	@Override
 	public Set<String> getModuleKeys(ClassType keyType, ClassType valueType) {
-		return new HashSet<>(Arrays.asList("Lists", "ArrayList", "LinkedList", "ImmutableList", "CopyOnWriteList"));
+		return new TreeSet<>(Arrays.asList("Implementations", "Wrappers", "ArrayList", "LinkedList", "ImmutableList", "CopyOnWriteList"));
 	}
 	
 	@Override

@@ -102,11 +102,12 @@
 		},
 		"List": {
 			"Enabled": true,
-			"Lists": true,
-			"ImmutableList": true,
-			"CopyOnWriteList": true,
 			"ArrayList": true,
-			"LinkedList": true
+			"CopyOnWriteList": true,
+			"ImmutableList": true,
+			"Implementations": true,
+			"LinkedList": true,
+			"Wrappers": true
 		},
 		"Async": {
 			"Enabled": true
@@ -124,20 +125,21 @@
 			},
 			"Map": {
 				"Enabled": true,
-				"HashMap": true,
-				"RBTreeMap": true,
-				"ConcurrentMap": true,
-				"ArrayMap": true,
 				"AVLTreeMap": true,
+				"ArrayMap": true,
+				"ConcurrentMap": true,
 				"CustomHashMap": true,
+				"EnumMap": true,
+				"HashMap": true,
 				"ImmutableMap": true,
+				"Implementations": true,
 				"LinkedCustomHashMap": true,
-				"LinkedHashMap": true,
-				"Maps": true,
-				"SortedMap": true,
 				"LinkedEnumMap": true,
+				"LinkedHashMap": true,
 				"OrderedMap": true,
-				"EnumMap": true
+				"RBTreeMap": true,
+				"SortedMap": true,
+				"Wrappers": true
 			},
 			"Pair": {
 				"Enabled": true
@@ -150,20 +152,21 @@
 			},
 			"Map": {
 				"Enabled": true,
-				"HashMap": true,
-				"RBTreeMap": true,
-				"ConcurrentMap": true,
-				"ArrayMap": true,
 				"AVLTreeMap": true,
+				"ArrayMap": true,
+				"ConcurrentMap": true,
 				"CustomHashMap": true,
+				"EnumMap": true,
+				"HashMap": true,
 				"ImmutableMap": true,
+				"Implementations": true,
 				"LinkedCustomHashMap": true,
-				"LinkedHashMap": true,
-				"Maps": true,
-				"SortedMap": true,
 				"LinkedEnumMap": true,
+				"LinkedHashMap": true,
 				"OrderedMap": true,
-				"EnumMap": true
+				"RBTreeMap": true,
+				"SortedMap": true,
+				"Wrappers": true
 			},
 			"Pair": {
 				"Enabled": true
@@ -176,20 +179,21 @@
 			},
 			"Map": {
 				"Enabled": true,
-				"HashMap": true,
-				"RBTreeMap": true,
-				"ConcurrentMap": true,
-				"ArrayMap": true,
 				"AVLTreeMap": true,
+				"ArrayMap": true,
+				"ConcurrentMap": true,
 				"CustomHashMap": true,
+				"EnumMap": true,
+				"HashMap": true,
 				"ImmutableMap": true,
+				"Implementations": true,
 				"LinkedCustomHashMap": true,
-				"LinkedHashMap": true,
-				"Maps": true,
-				"SortedMap": true,
 				"LinkedEnumMap": true,
+				"LinkedHashMap": true,
 				"OrderedMap": true,
-				"EnumMap": true
+				"RBTreeMap": true,
+				"SortedMap": true,
+				"Wrappers": true
 			},
 			"Pair": {
 				"Enabled": true
@@ -202,20 +206,21 @@
 			},
 			"Map": {
 				"Enabled": true,
-				"HashMap": true,
-				"RBTreeMap": true,
-				"ConcurrentMap": true,
-				"ArrayMap": true,
 				"AVLTreeMap": true,
+				"ArrayMap": true,
+				"ConcurrentMap": true,
 				"CustomHashMap": true,
+				"EnumMap": true,
+				"HashMap": true,
 				"ImmutableMap": true,
+				"Implementations": true,
 				"LinkedCustomHashMap": true,
-				"LinkedHashMap": true,
-				"Maps": true,
-				"SortedMap": true,
 				"LinkedEnumMap": true,
+				"LinkedHashMap": true,
 				"OrderedMap": true,
-				"EnumMap": true
+				"RBTreeMap": true,
+				"SortedMap": true,
+				"Wrappers": true
 			},
 			"Pair": {
 				"Enabled": true
@@ -228,20 +233,21 @@
 			},
 			"Map": {
 				"Enabled": true,
-				"HashMap": true,
-				"RBTreeMap": true,
-				"ConcurrentMap": true,
-				"ArrayMap": true,
 				"AVLTreeMap": true,
+				"ArrayMap": true,
+				"ConcurrentMap": true,
 				"CustomHashMap": true,
+				"EnumMap": true,
+				"HashMap": true,
 				"ImmutableMap": true,
+				"Implementations": true,
 				"LinkedCustomHashMap": true,
-				"LinkedHashMap": true,
-				"Maps": true,
-				"SortedMap": true,
 				"LinkedEnumMap": true,
+				"LinkedHashMap": true,
 				"OrderedMap": true,
-				"EnumMap": true
+				"RBTreeMap": true,
+				"SortedMap": true,
+				"Wrappers": true
 			},
 			"Pair": {
 				"Enabled": true
@@ -254,20 +260,21 @@
 			},
 			"Map": {
 				"Enabled": true,
-				"HashMap": true,
-				"RBTreeMap": true,
-				"ConcurrentMap": true,
-				"ArrayMap": true,
 				"AVLTreeMap": true,
+				"ArrayMap": true,
+				"ConcurrentMap": true,
 				"CustomHashMap": true,
+				"EnumMap": true,
+				"HashMap": true,
 				"ImmutableMap": true,
+				"Implementations": true,
 				"LinkedCustomHashMap": true,
-				"LinkedHashMap": true,
-				"Maps": true,
-				"SortedMap": true,
 				"LinkedEnumMap": true,
+				"LinkedHashMap": true,
 				"OrderedMap": true,
-				"EnumMap": true
+				"RBTreeMap": true,
+				"SortedMap": true,
+				"Wrappers": true
 			},
 			"Pair": {
 				"Enabled": true
@@ -280,20 +287,21 @@
 			},
 			"Map": {
 				"Enabled": true,
-				"HashMap": true,
-				"RBTreeMap": true,
-				"ConcurrentMap": true,
-				"ArrayMap": true,
 				"AVLTreeMap": true,
+				"ArrayMap": true,
+				"ConcurrentMap": true,
 				"CustomHashMap": true,
+				"EnumMap": true,
+				"HashMap": true,
 				"ImmutableMap": true,
+				"Implementations": true,
 				"LinkedCustomHashMap": true,
-				"LinkedHashMap": true,
-				"Maps": true,
-				"SortedMap": true,
 				"LinkedEnumMap": true,
+				"LinkedHashMap": true,
 				"OrderedMap": true,
-				"EnumMap": true
+				"RBTreeMap": true,
+				"SortedMap": true,
+				"Wrappers": true
 			},
 			"Pair": {
 				"Enabled": true
@@ -306,20 +314,21 @@
 			},
 			"Map": {
 				"Enabled": true,
-				"HashMap": true,
-				"RBTreeMap": true,
-				"ConcurrentMap": true,
-				"ArrayMap": true,
 				"AVLTreeMap": true,
+				"ArrayMap": true,
+				"ConcurrentMap": true,
 				"CustomHashMap": true,
+				"EnumMap": true,
+				"HashMap": true,
 				"ImmutableMap": true,
+				"Implementations": true,
 				"LinkedCustomHashMap": true,
-				"LinkedHashMap": true,
-				"Maps": true,
-				"SortedMap": true,
 				"LinkedEnumMap": true,
+				"LinkedHashMap": true,
 				"OrderedMap": true,
-				"EnumMap": true
+				"RBTreeMap": true,
+				"SortedMap": true,
+				"Wrappers": true
 			},
 			"Pair": {
 				"Enabled": true
@@ -332,20 +341,21 @@
 			},
 			"Map": {
 				"Enabled": true,
-				"HashMap": true,
-				"RBTreeMap": true,
-				"ConcurrentMap": true,
-				"ArrayMap": true,
 				"AVLTreeMap": true,
+				"ArrayMap": true,
+				"ConcurrentMap": true,
 				"CustomHashMap": true,
+				"EnumMap": true,
+				"HashMap": true,
 				"ImmutableMap": true,
+				"Implementations": true,
 				"LinkedCustomHashMap": true,
-				"LinkedHashMap": true,
-				"Maps": true,
-				"SortedMap": true,
 				"LinkedEnumMap": true,
+				"LinkedHashMap": true,
 				"OrderedMap": true,
-				"EnumMap": true
+				"RBTreeMap": true,
+				"SortedMap": true,
+				"Wrappers": true
 			},
 			"Pair": {
 				"Enabled": true
@@ -359,25 +369,27 @@
 		},
 		"List": {
 			"Enabled": true,
-			"Lists": true,
-			"ImmutableList": true,
-			"CopyOnWriteList": true,
 			"ArrayList": true,
-			"LinkedList": true
+			"CopyOnWriteList": true,
+			"ImmutableList": true,
+			"Implementations": true,
+			"LinkedList": true,
+			"Wrappers": true
 		},
 		"Set": {
 			"Enabled": true,
-			"LinkedHashSet": true,
-			"LinkedCustomHashSet": true,
-			"OrderedSet": true,
-			"ArraySet": true,
 			"AVLTreeSet": true,
-			"ImmutableSet": true,
+			"ArraySet": true,
 			"CustomHashSet": true,
-			"Sets": true,
-			"SortedSet": true,
 			"HashSet": true,
-			"RBTreeSet": true
+			"ImmutableSet": true,
+			"Implementations": true,
+			"LinkedCustomHashSet": true,
+			"LinkedHashSet": true,
+			"OrderedSet": true,
+			"RBTreeSet": true,
+			"SortedSet": true,
+			"Wrappers": true
 		},
 		"Async": {
 			"Enabled": true
@@ -395,20 +407,21 @@
 			},
 			"Map": {
 				"Enabled": true,
-				"HashMap": true,
-				"RBTreeMap": true,
-				"ConcurrentMap": true,
-				"ArrayMap": true,
 				"AVLTreeMap": true,
+				"ArrayMap": true,
+				"ConcurrentMap": true,
 				"CustomHashMap": true,
+				"EnumMap": true,
+				"HashMap": true,
 				"ImmutableMap": true,
+				"Implementations": true,
 				"LinkedCustomHashMap": true,
-				"LinkedHashMap": true,
-				"Maps": true,
-				"SortedMap": true,
 				"LinkedEnumMap": true,
+				"LinkedHashMap": true,
 				"OrderedMap": true,
-				"EnumMap": true
+				"RBTreeMap": true,
+				"SortedMap": true,
+				"Wrappers": true
 			},
 			"Pair": {
 				"Enabled": true
@@ -421,20 +434,21 @@
 			},
 			"Map": {
 				"Enabled": true,
-				"HashMap": true,
-				"RBTreeMap": true,
-				"ConcurrentMap": true,
-				"ArrayMap": true,
 				"AVLTreeMap": true,
+				"ArrayMap": true,
+				"ConcurrentMap": true,
 				"CustomHashMap": true,
+				"EnumMap": true,
+				"HashMap": true,
 				"ImmutableMap": true,
+				"Implementations": true,
 				"LinkedCustomHashMap": true,
-				"LinkedHashMap": true,
-				"Maps": true,
-				"SortedMap": true,
 				"LinkedEnumMap": true,
+				"LinkedHashMap": true,
 				"OrderedMap": true,
-				"EnumMap": true
+				"RBTreeMap": true,
+				"SortedMap": true,
+				"Wrappers": true
 			},
 			"Pair": {
 				"Enabled": true
@@ -447,20 +461,21 @@
 			},
 			"Map": {
 				"Enabled": true,
-				"HashMap": true,
-				"RBTreeMap": true,
-				"ConcurrentMap": true,
-				"ArrayMap": true,
 				"AVLTreeMap": true,
+				"ArrayMap": true,
+				"ConcurrentMap": true,
 				"CustomHashMap": true,
+				"EnumMap": true,
+				"HashMap": true,
 				"ImmutableMap": true,
+				"Implementations": true,
 				"LinkedCustomHashMap": true,
-				"LinkedHashMap": true,
-				"Maps": true,
-				"SortedMap": true,
 				"LinkedEnumMap": true,
+				"LinkedHashMap": true,
 				"OrderedMap": true,
-				"EnumMap": true
+				"RBTreeMap": true,
+				"SortedMap": true,
+				"Wrappers": true
 			},
 			"Pair": {
 				"Enabled": true
@@ -473,20 +488,21 @@
 			},
 			"Map": {
 				"Enabled": true,
-				"HashMap": true,
-				"RBTreeMap": true,
-				"ConcurrentMap": true,
-				"ArrayMap": true,
 				"AVLTreeMap": true,
+				"ArrayMap": true,
+				"ConcurrentMap": true,
 				"CustomHashMap": true,
+				"EnumMap": true,
+				"HashMap": true,
 				"ImmutableMap": true,
+				"Implementations": true,
 				"LinkedCustomHashMap": true,
-				"LinkedHashMap": true,
-				"Maps": true,
-				"SortedMap": true,
 				"LinkedEnumMap": true,
+				"LinkedHashMap": true,
 				"OrderedMap": true,
-				"EnumMap": true
+				"RBTreeMap": true,
+				"SortedMap": true,
+				"Wrappers": true
 			},
 			"Pair": {
 				"Enabled": true
@@ -499,20 +515,21 @@
 			},
 			"Map": {
 				"Enabled": true,
-				"HashMap": true,
-				"RBTreeMap": true,
-				"ConcurrentMap": true,
-				"ArrayMap": true,
 				"AVLTreeMap": true,
+				"ArrayMap": true,
+				"ConcurrentMap": true,
 				"CustomHashMap": true,
+				"EnumMap": true,
+				"HashMap": true,
 				"ImmutableMap": true,
+				"Implementations": true,
 				"LinkedCustomHashMap": true,
-				"LinkedHashMap": true,
-				"Maps": true,
-				"SortedMap": true,
 				"LinkedEnumMap": true,
+				"LinkedHashMap": true,
 				"OrderedMap": true,
-				"EnumMap": true
+				"RBTreeMap": true,
+				"SortedMap": true,
+				"Wrappers": true
 			},
 			"Pair": {
 				"Enabled": true
@@ -525,20 +542,21 @@
 			},
 			"Map": {
 				"Enabled": true,
-				"HashMap": true,
-				"RBTreeMap": true,
-				"ConcurrentMap": true,
-				"ArrayMap": true,
 				"AVLTreeMap": true,
+				"ArrayMap": true,
+				"ConcurrentMap": true,
 				"CustomHashMap": true,
+				"EnumMap": true,
+				"HashMap": true,
 				"ImmutableMap": true,
+				"Implementations": true,
 				"LinkedCustomHashMap": true,
-				"LinkedHashMap": true,
-				"Maps": true,
-				"SortedMap": true,
 				"LinkedEnumMap": true,
+				"LinkedHashMap": true,
 				"OrderedMap": true,
-				"EnumMap": true
+				"RBTreeMap": true,
+				"SortedMap": true,
+				"Wrappers": true
 			},
 			"Pair": {
 				"Enabled": true
@@ -551,20 +569,21 @@
 			},
 			"Map": {
 				"Enabled": true,
-				"HashMap": true,
-				"RBTreeMap": true,
-				"ConcurrentMap": true,
-				"ArrayMap": true,
 				"AVLTreeMap": true,
+				"ArrayMap": true,
+				"ConcurrentMap": true,
 				"CustomHashMap": true,
+				"EnumMap": true,
+				"HashMap": true,
 				"ImmutableMap": true,
+				"Implementations": true,
 				"LinkedCustomHashMap": true,
-				"LinkedHashMap": true,
-				"Maps": true,
-				"SortedMap": true,
 				"LinkedEnumMap": true,
+				"LinkedHashMap": true,
 				"OrderedMap": true,
-				"EnumMap": true
+				"RBTreeMap": true,
+				"SortedMap": true,
+				"Wrappers": true
 			},
 			"Pair": {
 				"Enabled": true
@@ -577,20 +596,21 @@
 			},
 			"Map": {
 				"Enabled": true,
-				"HashMap": true,
-				"RBTreeMap": true,
-				"ConcurrentMap": true,
-				"ArrayMap": true,
 				"AVLTreeMap": true,
+				"ArrayMap": true,
+				"ConcurrentMap": true,
 				"CustomHashMap": true,
+				"EnumMap": true,
+				"HashMap": true,
 				"ImmutableMap": true,
+				"Implementations": true,
 				"LinkedCustomHashMap": true,
-				"LinkedHashMap": true,
-				"Maps": true,
-				"SortedMap": true,
 				"LinkedEnumMap": true,
+				"LinkedHashMap": true,
 				"OrderedMap": true,
-				"EnumMap": true
+				"RBTreeMap": true,
+				"SortedMap": true,
+				"Wrappers": true
 			},
 			"Pair": {
 				"Enabled": true
@@ -603,20 +623,21 @@
 			},
 			"Map": {
 				"Enabled": true,
-				"HashMap": true,
-				"RBTreeMap": true,
-				"ConcurrentMap": true,
-				"ArrayMap": true,
 				"AVLTreeMap": true,
+				"ArrayMap": true,
+				"ConcurrentMap": true,
 				"CustomHashMap": true,
+				"EnumMap": true,
+				"HashMap": true,
 				"ImmutableMap": true,
+				"Implementations": true,
 				"LinkedCustomHashMap": true,
-				"LinkedHashMap": true,
-				"Maps": true,
-				"SortedMap": true,
 				"LinkedEnumMap": true,
+				"LinkedHashMap": true,
 				"OrderedMap": true,
-				"EnumMap": true
+				"RBTreeMap": true,
+				"SortedMap": true,
+				"Wrappers": true
 			},
 			"Pair": {
 				"Enabled": true
@@ -630,25 +651,27 @@
 		},
 		"List": {
 			"Enabled": true,
-			"Lists": true,
-			"ImmutableList": true,
-			"CopyOnWriteList": true,
 			"ArrayList": true,
-			"LinkedList": true
+			"CopyOnWriteList": true,
+			"ImmutableList": true,
+			"Implementations": true,
+			"LinkedList": true,
+			"Wrappers": true
 		},
 		"Set": {
 			"Enabled": true,
-			"LinkedHashSet": true,
-			"LinkedCustomHashSet": true,
-			"OrderedSet": true,
-			"ArraySet": true,
 			"AVLTreeSet": true,
-			"ImmutableSet": true,
+			"ArraySet": true,
 			"CustomHashSet": true,
-			"Sets": true,
-			"SortedSet": true,
 			"HashSet": true,
-			"RBTreeSet": true
+			"ImmutableSet": true,
+			"Implementations": true,
+			"LinkedCustomHashSet": true,
+			"LinkedHashSet": true,
+			"OrderedSet": true,
+			"RBTreeSet": true,
+			"SortedSet": true,
+			"Wrappers": true
 		},
 		"Async": {
 			"Enabled": true
@@ -666,20 +689,21 @@
 			},
 			"Map": {
 				"Enabled": true,
-				"HashMap": true,
-				"RBTreeMap": true,
-				"ConcurrentMap": true,
-				"ArrayMap": true,
 				"AVLTreeMap": true,
+				"ArrayMap": true,
+				"ConcurrentMap": true,
 				"CustomHashMap": true,
+				"EnumMap": true,
+				"HashMap": true,
 				"ImmutableMap": true,
+				"Implementations": true,
 				"LinkedCustomHashMap": true,
-				"LinkedHashMap": true,
-				"Maps": true,
-				"SortedMap": true,
 				"LinkedEnumMap": true,
+				"LinkedHashMap": true,
 				"OrderedMap": true,
-				"EnumMap": true
+				"RBTreeMap": true,
+				"SortedMap": true,
+				"Wrappers": true
 			},
 			"Pair": {
 				"Enabled": true
@@ -692,20 +716,21 @@
 			},
 			"Map": {
 				"Enabled": true,
-				"HashMap": true,
-				"RBTreeMap": true,
-				"ConcurrentMap": true,
-				"ArrayMap": true,
 				"AVLTreeMap": true,
+				"ArrayMap": true,
+				"ConcurrentMap": true,
 				"CustomHashMap": true,
+				"EnumMap": true,
+				"HashMap": true,
 				"ImmutableMap": true,
+				"Implementations": true,
 				"LinkedCustomHashMap": true,
-				"LinkedHashMap": true,
-				"Maps": true,
-				"SortedMap": true,
 				"LinkedEnumMap": true,
+				"LinkedHashMap": true,
 				"OrderedMap": true,
-				"EnumMap": true
+				"RBTreeMap": true,
+				"SortedMap": true,
+				"Wrappers": true
 			},
 			"Pair": {
 				"Enabled": true
@@ -718,20 +743,21 @@
 			},
 			"Map": {
 				"Enabled": true,
-				"HashMap": true,
-				"RBTreeMap": true,
-				"ConcurrentMap": true,
-				"ArrayMap": true,
 				"AVLTreeMap": true,
+				"ArrayMap": true,
+				"ConcurrentMap": true,
 				"CustomHashMap": true,
+				"EnumMap": true,
+				"HashMap": true,
 				"ImmutableMap": true,
+				"Implementations": true,
 				"LinkedCustomHashMap": true,
-				"LinkedHashMap": true,
-				"Maps": true,
-				"SortedMap": true,
 				"LinkedEnumMap": true,
+				"LinkedHashMap": true,
 				"OrderedMap": true,
-				"EnumMap": true
+				"RBTreeMap": true,
+				"SortedMap": true,
+				"Wrappers": true
 			},
 			"Pair": {
 				"Enabled": true
@@ -744,20 +770,21 @@
 			},
 			"Map": {
 				"Enabled": true,
-				"HashMap": true,
-				"RBTreeMap": true,
-				"ConcurrentMap": true,
-				"ArrayMap": true,
 				"AVLTreeMap": true,
+				"ArrayMap": true,
+				"ConcurrentMap": true,
 				"CustomHashMap": true,
+				"EnumMap": true,
+				"HashMap": true,
 				"ImmutableMap": true,
+				"Implementations": true,
 				"LinkedCustomHashMap": true,
-				"LinkedHashMap": true,
-				"Maps": true,
-				"SortedMap": true,
 				"LinkedEnumMap": true,
+				"LinkedHashMap": true,
 				"OrderedMap": true,
-				"EnumMap": true
+				"RBTreeMap": true,
+				"SortedMap": true,
+				"Wrappers": true
 			},
 			"Pair": {
 				"Enabled": true
@@ -770,20 +797,21 @@
 			},
 			"Map": {
 				"Enabled": true,
-				"HashMap": true,
-				"RBTreeMap": true,
-				"ConcurrentMap": true,
-				"ArrayMap": true,
 				"AVLTreeMap": true,
+				"ArrayMap": true,
+				"ConcurrentMap": true,
 				"CustomHashMap": true,
+				"EnumMap": true,
+				"HashMap": true,
 				"ImmutableMap": true,
+				"Implementations": true,
 				"LinkedCustomHashMap": true,
-				"LinkedHashMap": true,
-				"Maps": true,
-				"SortedMap": true,
 				"LinkedEnumMap": true,
+				"LinkedHashMap": true,
 				"OrderedMap": true,
-				"EnumMap": true
+				"RBTreeMap": true,
+				"SortedMap": true,
+				"Wrappers": true
 			},
 			"Pair": {
 				"Enabled": true
@@ -796,20 +824,21 @@
 			},
 			"Map": {
 				"Enabled": true,
-				"HashMap": true,
-				"RBTreeMap": true,
-				"ConcurrentMap": true,
-				"ArrayMap": true,
 				"AVLTreeMap": true,
+				"ArrayMap": true,
+				"ConcurrentMap": true,
 				"CustomHashMap": true,
+				"EnumMap": true,
+				"HashMap": true,
 				"ImmutableMap": true,
+				"Implementations": true,
 				"LinkedCustomHashMap": true,
-				"LinkedHashMap": true,
-				"Maps": true,
-				"SortedMap": true,
 				"LinkedEnumMap": true,
+				"LinkedHashMap": true,
 				"OrderedMap": true,
-				"EnumMap": true
+				"RBTreeMap": true,
+				"SortedMap": true,
+				"Wrappers": true
 			},
 			"Pair": {
 				"Enabled": true
@@ -822,20 +851,21 @@
 			},
 			"Map": {
 				"Enabled": true,
-				"HashMap": true,
-				"RBTreeMap": true,
-				"ConcurrentMap": true,
-				"ArrayMap": true,
 				"AVLTreeMap": true,
+				"ArrayMap": true,
+				"ConcurrentMap": true,
 				"CustomHashMap": true,
+				"EnumMap": true,
+				"HashMap": true,
 				"ImmutableMap": true,
+				"Implementations": true,
 				"LinkedCustomHashMap": true,
-				"LinkedHashMap": true,
-				"Maps": true,
-				"SortedMap": true,
 				"LinkedEnumMap": true,
+				"LinkedHashMap": true,
 				"OrderedMap": true,
-				"EnumMap": true
+				"RBTreeMap": true,
+				"SortedMap": true,
+				"Wrappers": true
 			},
 			"Pair": {
 				"Enabled": true
@@ -848,20 +878,21 @@
 			},
 			"Map": {
 				"Enabled": true,
-				"HashMap": true,
-				"RBTreeMap": true,
-				"ConcurrentMap": true,
-				"ArrayMap": true,
 				"AVLTreeMap": true,
+				"ArrayMap": true,
+				"ConcurrentMap": true,
 				"CustomHashMap": true,
+				"EnumMap": true,
+				"HashMap": true,
 				"ImmutableMap": true,
+				"Implementations": true,
 				"LinkedCustomHashMap": true,
-				"LinkedHashMap": true,
-				"Maps": true,
-				"SortedMap": true,
 				"LinkedEnumMap": true,
+				"LinkedHashMap": true,
 				"OrderedMap": true,
-				"EnumMap": true
+				"RBTreeMap": true,
+				"SortedMap": true,
+				"Wrappers": true
 			},
 			"Pair": {
 				"Enabled": true
@@ -874,20 +905,21 @@
 			},
 			"Map": {
 				"Enabled": true,
-				"HashMap": true,
-				"RBTreeMap": true,
-				"ConcurrentMap": true,
-				"ArrayMap": true,
 				"AVLTreeMap": true,
+				"ArrayMap": true,
+				"ConcurrentMap": true,
 				"CustomHashMap": true,
+				"EnumMap": true,
+				"HashMap": true,
 				"ImmutableMap": true,
+				"Implementations": true,
 				"LinkedCustomHashMap": true,
-				"LinkedHashMap": true,
-				"Maps": true,
-				"SortedMap": true,
 				"LinkedEnumMap": true,
+				"LinkedHashMap": true,
 				"OrderedMap": true,
-				"EnumMap": true
+				"RBTreeMap": true,
+				"SortedMap": true,
+				"Wrappers": true
 			},
 			"Pair": {
 				"Enabled": true
@@ -901,25 +933,27 @@
 		},
 		"List": {
 			"Enabled": true,
-			"Lists": true,
-			"ImmutableList": true,
-			"CopyOnWriteList": true,
 			"ArrayList": true,
-			"LinkedList": true
+			"CopyOnWriteList": true,
+			"ImmutableList": true,
+			"Implementations": true,
+			"LinkedList": true,
+			"Wrappers": true
 		},
 		"Set": {
 			"Enabled": true,
-			"LinkedHashSet": true,
-			"LinkedCustomHashSet": true,
-			"OrderedSet": true,
-			"ArraySet": true,
 			"AVLTreeSet": true,
-			"ImmutableSet": true,
+			"ArraySet": true,
 			"CustomHashSet": true,
-			"Sets": true,
-			"SortedSet": true,
 			"HashSet": true,
-			"RBTreeSet": true
+			"ImmutableSet": true,
+			"Implementations": true,
+			"LinkedCustomHashSet": true,
+			"LinkedHashSet": true,
+			"OrderedSet": true,
+			"RBTreeSet": true,
+			"SortedSet": true,
+			"Wrappers": true
 		},
 		"Async": {
 			"Enabled": true
@@ -937,20 +971,21 @@
 			},
 			"Map": {
 				"Enabled": true,
-				"HashMap": true,
-				"RBTreeMap": true,
-				"ConcurrentMap": true,
-				"ArrayMap": true,
 				"AVLTreeMap": true,
+				"ArrayMap": true,
+				"ConcurrentMap": true,
 				"CustomHashMap": true,
+				"EnumMap": true,
+				"HashMap": true,
 				"ImmutableMap": true,
+				"Implementations": true,
 				"LinkedCustomHashMap": true,
-				"LinkedHashMap": true,
-				"Maps": true,
-				"SortedMap": true,
 				"LinkedEnumMap": true,
+				"LinkedHashMap": true,
 				"OrderedMap": true,
-				"EnumMap": true
+				"RBTreeMap": true,
+				"SortedMap": true,
+				"Wrappers": true
 			},
 			"Pair": {
 				"Enabled": true
@@ -963,20 +998,21 @@
 			},
 			"Map": {
 				"Enabled": true,
-				"HashMap": true,
-				"RBTreeMap": true,
-				"ConcurrentMap": true,
-				"ArrayMap": true,
 				"AVLTreeMap": true,
+				"ArrayMap": true,
+				"ConcurrentMap": true,
 				"CustomHashMap": true,
+				"EnumMap": true,
+				"HashMap": true,
 				"ImmutableMap": true,
+				"Implementations": true,
 				"LinkedCustomHashMap": true,
-				"LinkedHashMap": true,
-				"Maps": true,
-				"SortedMap": true,
 				"LinkedEnumMap": true,
+				"LinkedHashMap": true,
 				"OrderedMap": true,
-				"EnumMap": true
+				"RBTreeMap": true,
+				"SortedMap": true,
+				"Wrappers": true
 			},
 			"Pair": {
 				"Enabled": true
@@ -989,20 +1025,21 @@
 			},
 			"Map": {
 				"Enabled": true,
-				"HashMap": true,
-				"RBTreeMap": true,
-				"ConcurrentMap": true,
-				"ArrayMap": true,
 				"AVLTreeMap": true,
+				"ArrayMap": true,
+				"ConcurrentMap": true,
 				"CustomHashMap": true,
+				"EnumMap": true,
+				"HashMap": true,
 				"ImmutableMap": true,
+				"Implementations": true,
 				"LinkedCustomHashMap": true,
-				"LinkedHashMap": true,
-				"Maps": true,
-				"SortedMap": true,
 				"LinkedEnumMap": true,
+				"LinkedHashMap": true,
 				"OrderedMap": true,
-				"EnumMap": true
+				"RBTreeMap": true,
+				"SortedMap": true,
+				"Wrappers": true
 			},
 			"Pair": {
 				"Enabled": true
@@ -1015,20 +1052,21 @@
 			},
 			"Map": {
 				"Enabled": true,
-				"HashMap": true,
-				"RBTreeMap": true,
-				"ConcurrentMap": true,
-				"ArrayMap": true,
 				"AVLTreeMap": true,
+				"ArrayMap": true,
+				"ConcurrentMap": true,
 				"CustomHashMap": true,
+				"EnumMap": true,
+				"HashMap": true,
 				"ImmutableMap": true,
+				"Implementations": true,
 				"LinkedCustomHashMap": true,
-				"LinkedHashMap": true,
-				"Maps": true,
-				"SortedMap": true,
 				"LinkedEnumMap": true,
+				"LinkedHashMap": true,
 				"OrderedMap": true,
-				"EnumMap": true
+				"RBTreeMap": true,
+				"SortedMap": true,
+				"Wrappers": true
 			},
 			"Pair": {
 				"Enabled": true
@@ -1041,20 +1079,21 @@
 			},
 			"Map": {
 				"Enabled": true,
-				"HashMap": true,
-				"RBTreeMap": true,
-				"ConcurrentMap": true,
-				"ArrayMap": true,
 				"AVLTreeMap": true,
+				"ArrayMap": true,
+				"ConcurrentMap": true,
 				"CustomHashMap": true,
+				"EnumMap": true,
+				"HashMap": true,
 				"ImmutableMap": true,
+				"Implementations": true,
 				"LinkedCustomHashMap": true,
-				"LinkedHashMap": true,
-				"Maps": true,
-				"SortedMap": true,
 				"LinkedEnumMap": true,
+				"LinkedHashMap": true,
 				"OrderedMap": true,
-				"EnumMap": true
+				"RBTreeMap": true,
+				"SortedMap": true,
+				"Wrappers": true
 			},
 			"Pair": {
 				"Enabled": true
@@ -1067,20 +1106,21 @@
 			},
 			"Map": {
 				"Enabled": true,
-				"HashMap": true,
-				"RBTreeMap": true,
-				"ConcurrentMap": true,
-				"ArrayMap": true,
 				"AVLTreeMap": true,
+				"ArrayMap": true,
+				"ConcurrentMap": true,
 				"CustomHashMap": true,
+				"EnumMap": true,
+				"HashMap": true,
 				"ImmutableMap": true,
+				"Implementations": true,
 				"LinkedCustomHashMap": true,
-				"LinkedHashMap": true,
-				"Maps": true,
-				"SortedMap": true,
 				"LinkedEnumMap": true,
+				"LinkedHashMap": true,
 				"OrderedMap": true,
-				"EnumMap": true
+				"RBTreeMap": true,
+				"SortedMap": true,
+				"Wrappers": true
 			},
 			"Pair": {
 				"Enabled": true
@@ -1093,20 +1133,21 @@
 			},
 			"Map": {
 				"Enabled": true,
-				"HashMap": true,
-				"RBTreeMap": true,
-				"ConcurrentMap": true,
-				"ArrayMap": true,
 				"AVLTreeMap": true,
+				"ArrayMap": true,
+				"ConcurrentMap": true,
 				"CustomHashMap": true,
+				"EnumMap": true,
+				"HashMap": true,
 				"ImmutableMap": true,
+				"Implementations": true,
 				"LinkedCustomHashMap": true,
-				"LinkedHashMap": true,
-				"Maps": true,
-				"SortedMap": true,
 				"LinkedEnumMap": true,
+				"LinkedHashMap": true,
 				"OrderedMap": true,
-				"EnumMap": true
+				"RBTreeMap": true,
+				"SortedMap": true,
+				"Wrappers": true
 			},
 			"Pair": {
 				"Enabled": true
@@ -1119,20 +1160,21 @@
 			},
 			"Map": {
 				"Enabled": true,
-				"HashMap": true,
-				"RBTreeMap": true,
-				"ConcurrentMap": true,
-				"ArrayMap": true,
 				"AVLTreeMap": true,
+				"ArrayMap": true,
+				"ConcurrentMap": true,
 				"CustomHashMap": true,
+				"EnumMap": true,
+				"HashMap": true,
 				"ImmutableMap": true,
+				"Implementations": true,
 				"LinkedCustomHashMap": true,
-				"LinkedHashMap": true,
-				"Maps": true,
-				"SortedMap": true,
 				"LinkedEnumMap": true,
+				"LinkedHashMap": true,
 				"OrderedMap": true,
-				"EnumMap": true
+				"RBTreeMap": true,
+				"SortedMap": true,
+				"Wrappers": true
 			},
 			"Pair": {
 				"Enabled": true
@@ -1145,20 +1187,21 @@
 			},
 			"Map": {
 				"Enabled": true,
-				"HashMap": true,
-				"RBTreeMap": true,
-				"ConcurrentMap": true,
-				"ArrayMap": true,
 				"AVLTreeMap": true,
+				"ArrayMap": true,
+				"ConcurrentMap": true,
 				"CustomHashMap": true,
+				"EnumMap": true,
+				"HashMap": true,
 				"ImmutableMap": true,
+				"Implementations": true,
 				"LinkedCustomHashMap": true,
-				"LinkedHashMap": true,
-				"Maps": true,
-				"SortedMap": true,
 				"LinkedEnumMap": true,
+				"LinkedHashMap": true,
 				"OrderedMap": true,
-				"EnumMap": true
+				"RBTreeMap": true,
+				"SortedMap": true,
+				"Wrappers": true
 			},
 			"Pair": {
 				"Enabled": true
@@ -1172,25 +1215,27 @@
 		},
 		"List": {
 			"Enabled": true,
-			"Lists": true,
-			"ImmutableList": true,
-			"CopyOnWriteList": true,
 			"ArrayList": true,
-			"LinkedList": true
+			"CopyOnWriteList": true,
+			"ImmutableList": true,
+			"Implementations": true,
+			"LinkedList": true,
+			"Wrappers": true
 		},
 		"Set": {
 			"Enabled": true,
-			"LinkedHashSet": true,
-			"LinkedCustomHashSet": true,
-			"OrderedSet": true,
-			"ArraySet": true,
 			"AVLTreeSet": true,
-			"ImmutableSet": true,
+			"ArraySet": true,
 			"CustomHashSet": true,
-			"Sets": true,
-			"SortedSet": true,
 			"HashSet": true,
-			"RBTreeSet": true
+			"ImmutableSet": true,
+			"Implementations": true,
+			"LinkedCustomHashSet": true,
+			"LinkedHashSet": true,
+			"OrderedSet": true,
+			"RBTreeSet": true,
+			"SortedSet": true,
+			"Wrappers": true
 		},
 		"Async": {
 			"Enabled": true
@@ -1208,20 +1253,21 @@
 			},
 			"Map": {
 				"Enabled": true,
-				"HashMap": true,
-				"RBTreeMap": true,
-				"ConcurrentMap": true,
-				"ArrayMap": true,
 				"AVLTreeMap": true,
+				"ArrayMap": true,
+				"ConcurrentMap": true,
 				"CustomHashMap": true,
+				"EnumMap": true,
+				"HashMap": true,
 				"ImmutableMap": true,
+				"Implementations": true,
 				"LinkedCustomHashMap": true,
-				"LinkedHashMap": true,
-				"Maps": true,
-				"SortedMap": true,
 				"LinkedEnumMap": true,
+				"LinkedHashMap": true,
 				"OrderedMap": true,
-				"EnumMap": true
+				"RBTreeMap": true,
+				"SortedMap": true,
+				"Wrappers": true
 			},
 			"Pair": {
 				"Enabled": true
@@ -1234,20 +1280,21 @@
 			},
 			"Map": {
 				"Enabled": true,
-				"HashMap": true,
-				"RBTreeMap": true,
-				"ConcurrentMap": true,
-				"ArrayMap": true,
 				"AVLTreeMap": true,
+				"ArrayMap": true,
+				"ConcurrentMap": true,
 				"CustomHashMap": true,
+				"EnumMap": true,
+				"HashMap": true,
 				"ImmutableMap": true,
+				"Implementations": true,
 				"LinkedCustomHashMap": true,
-				"LinkedHashMap": true,
-				"Maps": true,
-				"SortedMap": true,
 				"LinkedEnumMap": true,
+				"LinkedHashMap": true,
 				"OrderedMap": true,
-				"EnumMap": true
+				"RBTreeMap": true,
+				"SortedMap": true,
+				"Wrappers": true
 			},
 			"Pair": {
 				"Enabled": true
@@ -1260,20 +1307,21 @@
 			},
 			"Map": {
 				"Enabled": true,
-				"HashMap": true,
-				"RBTreeMap": true,
-				"ConcurrentMap": true,
-				"ArrayMap": true,
 				"AVLTreeMap": true,
+				"ArrayMap": true,
+				"ConcurrentMap": true,
 				"CustomHashMap": true,
+				"EnumMap": true,
+				"HashMap": true,
 				"ImmutableMap": true,
+				"Implementations": true,
 				"LinkedCustomHashMap": true,
-				"LinkedHashMap": true,
-				"Maps": true,
-				"SortedMap": true,
 				"LinkedEnumMap": true,
+				"LinkedHashMap": true,
 				"OrderedMap": true,
-				"EnumMap": true
+				"RBTreeMap": true,
+				"SortedMap": true,
+				"Wrappers": true
 			},
 			"Pair": {
 				"Enabled": true
@@ -1286,20 +1334,21 @@
 			},
 			"Map": {
 				"Enabled": true,
-				"HashMap": true,
-				"RBTreeMap": true,
-				"ConcurrentMap": true,
-				"ArrayMap": true,
 				"AVLTreeMap": true,
+				"ArrayMap": true,
+				"ConcurrentMap": true,
 				"CustomHashMap": true,
+				"EnumMap": true,
+				"HashMap": true,
 				"ImmutableMap": true,
+				"Implementations": true,
 				"LinkedCustomHashMap": true,
-				"LinkedHashMap": true,
-				"Maps": true,
-				"SortedMap": true,
 				"LinkedEnumMap": true,
+				"LinkedHashMap": true,
 				"OrderedMap": true,
-				"EnumMap": true
+				"RBTreeMap": true,
+				"SortedMap": true,
+				"Wrappers": true
 			},
 			"Pair": {
 				"Enabled": true
@@ -1312,20 +1361,21 @@
 			},
 			"Map": {
 				"Enabled": true,
-				"HashMap": true,
-				"RBTreeMap": true,
-				"ConcurrentMap": true,
-				"ArrayMap": true,
 				"AVLTreeMap": true,
+				"ArrayMap": true,
+				"ConcurrentMap": true,
 				"CustomHashMap": true,
+				"EnumMap": true,
+				"HashMap": true,
 				"ImmutableMap": true,
+				"Implementations": true,
 				"LinkedCustomHashMap": true,
-				"LinkedHashMap": true,
-				"Maps": true,
-				"SortedMap": true,
 				"LinkedEnumMap": true,
+				"LinkedHashMap": true,
 				"OrderedMap": true,
-				"EnumMap": true
+				"RBTreeMap": true,
+				"SortedMap": true,
+				"Wrappers": true
 			},
 			"Pair": {
 				"Enabled": true
@@ -1338,20 +1388,21 @@
 			},
 			"Map": {
 				"Enabled": true,
-				"HashMap": true,
-				"RBTreeMap": true,
-				"ConcurrentMap": true,
-				"ArrayMap": true,
 				"AVLTreeMap": true,
+				"ArrayMap": true,
+				"ConcurrentMap": true,
 				"CustomHashMap": true,
+				"EnumMap": true,
+				"HashMap": true,
 				"ImmutableMap": true,
+				"Implementations": true,
 				"LinkedCustomHashMap": true,
-				"LinkedHashMap": true,
-				"Maps": true,
-				"SortedMap": true,
 				"LinkedEnumMap": true,
+				"LinkedHashMap": true,
 				"OrderedMap": true,
-				"EnumMap": true
+				"RBTreeMap": true,
+				"SortedMap": true,
+				"Wrappers": true
 			},
 			"Pair": {
 				"Enabled": true
@@ -1364,20 +1415,21 @@
 			},
 			"Map": {
 				"Enabled": true,
-				"HashMap": true,
-				"RBTreeMap": true,
-				"ConcurrentMap": true,
-				"ArrayMap": true,
 				"AVLTreeMap": true,
+				"ArrayMap": true,
+				"ConcurrentMap": true,
 				"CustomHashMap": true,
+				"EnumMap": true,
+				"HashMap": true,
 				"ImmutableMap": true,
+				"Implementations": true,
 				"LinkedCustomHashMap": true,
-				"LinkedHashMap": true,
-				"Maps": true,
-				"SortedMap": true,
 				"LinkedEnumMap": true,
+				"LinkedHashMap": true,
 				"OrderedMap": true,
-				"EnumMap": true
+				"RBTreeMap": true,
+				"SortedMap": true,
+				"Wrappers": true
 			},
 			"Pair": {
 				"Enabled": true
@@ -1390,20 +1442,21 @@
 			},
 			"Map": {
 				"Enabled": true,
-				"HashMap": true,
-				"RBTreeMap": true,
-				"ConcurrentMap": true,
-				"ArrayMap": true,
 				"AVLTreeMap": true,
+				"ArrayMap": true,
+				"ConcurrentMap": true,
 				"CustomHashMap": true,
+				"EnumMap": true,
+				"HashMap": true,
 				"ImmutableMap": true,
+				"Implementations": true,
 				"LinkedCustomHashMap": true,
-				"LinkedHashMap": true,
-				"Maps": true,
-				"SortedMap": true,
 				"LinkedEnumMap": true,
+				"LinkedHashMap": true,
 				"OrderedMap": true,
-				"EnumMap": true
+				"RBTreeMap": true,
+				"SortedMap": true,
+				"Wrappers": true
 			},
 			"Pair": {
 				"Enabled": true
@@ -1416,20 +1469,21 @@
 			},
 			"Map": {
 				"Enabled": true,
-				"HashMap": true,
-				"RBTreeMap": true,
-				"ConcurrentMap": true,
-				"ArrayMap": true,
 				"AVLTreeMap": true,
+				"ArrayMap": true,
+				"ConcurrentMap": true,
 				"CustomHashMap": true,
+				"EnumMap": true,
+				"HashMap": true,
 				"ImmutableMap": true,
+				"Implementations": true,
 				"LinkedCustomHashMap": true,
-				"LinkedHashMap": true,
-				"Maps": true,
-				"SortedMap": true,
 				"LinkedEnumMap": true,
+				"LinkedHashMap": true,
 				"OrderedMap": true,
-				"EnumMap": true
+				"RBTreeMap": true,
+				"SortedMap": true,
+				"Wrappers": true
 			},
 			"Pair": {
 				"Enabled": true
@@ -1443,25 +1497,27 @@
 		},
 		"List": {
 			"Enabled": true,
-			"Lists": true,
-			"ImmutableList": true,
-			"CopyOnWriteList": true,
 			"ArrayList": true,
-			"LinkedList": true
+			"CopyOnWriteList": true,
+			"ImmutableList": true,
+			"Implementations": true,
+			"LinkedList": true,
+			"Wrappers": true
 		},
 		"Set": {
 			"Enabled": true,
-			"LinkedHashSet": true,
-			"LinkedCustomHashSet": true,
-			"OrderedSet": true,
-			"ArraySet": true,
 			"AVLTreeSet": true,
-			"ImmutableSet": true,
+			"ArraySet": true,
 			"CustomHashSet": true,
-			"Sets": true,
-			"SortedSet": true,
 			"HashSet": true,
-			"RBTreeSet": true
+			"ImmutableSet": true,
+			"Implementations": true,
+			"LinkedCustomHashSet": true,
+			"LinkedHashSet": true,
+			"OrderedSet": true,
+			"RBTreeSet": true,
+			"SortedSet": true,
+			"Wrappers": true
 		},
 		"Async": {
 			"Enabled": true
@@ -1479,20 +1535,21 @@
 			},
 			"Map": {
 				"Enabled": true,
-				"HashMap": true,
-				"RBTreeMap": true,
-				"ConcurrentMap": true,
-				"ArrayMap": true,
 				"AVLTreeMap": true,
+				"ArrayMap": true,
+				"ConcurrentMap": true,
 				"CustomHashMap": true,
+				"EnumMap": true,
+				"HashMap": true,
 				"ImmutableMap": true,
+				"Implementations": true,
 				"LinkedCustomHashMap": true,
-				"LinkedHashMap": true,
-				"Maps": true,
-				"SortedMap": true,
 				"LinkedEnumMap": true,
+				"LinkedHashMap": true,
 				"OrderedMap": true,
-				"EnumMap": true
+				"RBTreeMap": true,
+				"SortedMap": true,
+				"Wrappers": true
 			},
 			"Pair": {
 				"Enabled": true
@@ -1505,20 +1562,21 @@
 			},
 			"Map": {
 				"Enabled": true,
-				"HashMap": true,
-				"RBTreeMap": true,
-				"ConcurrentMap": true,
-				"ArrayMap": true,
 				"AVLTreeMap": true,
+				"ArrayMap": true,
+				"ConcurrentMap": true,
 				"CustomHashMap": true,
+				"EnumMap": true,
+				"HashMap": true,
 				"ImmutableMap": true,
+				"Implementations": true,
 				"LinkedCustomHashMap": true,
-				"LinkedHashMap": true,
-				"Maps": true,
-				"SortedMap": true,
 				"LinkedEnumMap": true,
+				"LinkedHashMap": true,
 				"OrderedMap": true,
-				"EnumMap": true
+				"RBTreeMap": true,
+				"SortedMap": true,
+				"Wrappers": true
 			},
 			"Pair": {
 				"Enabled": true
@@ -1531,20 +1589,21 @@
 			},
 			"Map": {
 				"Enabled": true,
-				"HashMap": true,
-				"RBTreeMap": true,
-				"ConcurrentMap": true,
-				"ArrayMap": true,
 				"AVLTreeMap": true,
+				"ArrayMap": true,
+				"ConcurrentMap": true,
 				"CustomHashMap": true,
+				"EnumMap": true,
+				"HashMap": true,
 				"ImmutableMap": true,
+				"Implementations": true,
 				"LinkedCustomHashMap": true,
-				"LinkedHashMap": true,
-				"Maps": true,
-				"SortedMap": true,
 				"LinkedEnumMap": true,
+				"LinkedHashMap": true,
 				"OrderedMap": true,
-				"EnumMap": true
+				"RBTreeMap": true,
+				"SortedMap": true,
+				"Wrappers": true
 			},
 			"Pair": {
 				"Enabled": true
@@ -1557,20 +1616,21 @@
 			},
 			"Map": {
 				"Enabled": true,
-				"HashMap": true,
-				"RBTreeMap": true,
-				"ConcurrentMap": true,
-				"ArrayMap": true,
 				"AVLTreeMap": true,
+				"ArrayMap": true,
+				"ConcurrentMap": true,
 				"CustomHashMap": true,
+				"EnumMap": true,
+				"HashMap": true,
 				"ImmutableMap": true,
+				"Implementations": true,
 				"LinkedCustomHashMap": true,
-				"LinkedHashMap": true,
-				"Maps": true,
-				"SortedMap": true,
 				"LinkedEnumMap": true,
+				"LinkedHashMap": true,
 				"OrderedMap": true,
-				"EnumMap": true
+				"RBTreeMap": true,
+				"SortedMap": true,
+				"Wrappers": true
 			},
 			"Pair": {
 				"Enabled": true
@@ -1583,20 +1643,21 @@
 			},
 			"Map": {
 				"Enabled": true,
-				"HashMap": true,
-				"RBTreeMap": true,
-				"ConcurrentMap": true,
-				"ArrayMap": true,
 				"AVLTreeMap": true,
+				"ArrayMap": true,
+				"ConcurrentMap": true,
 				"CustomHashMap": true,
+				"EnumMap": true,
+				"HashMap": true,
 				"ImmutableMap": true,
+				"Implementations": true,
 				"LinkedCustomHashMap": true,
-				"LinkedHashMap": true,
-				"Maps": true,
-				"SortedMap": true,
 				"LinkedEnumMap": true,
+				"LinkedHashMap": true,
 				"OrderedMap": true,
-				"EnumMap": true
+				"RBTreeMap": true,
+				"SortedMap": true,
+				"Wrappers": true
 			},
 			"Pair": {
 				"Enabled": true
@@ -1609,20 +1670,21 @@
 			},
 			"Map": {
 				"Enabled": true,
-				"HashMap": true,
-				"RBTreeMap": true,
-				"ConcurrentMap": true,
-				"ArrayMap": true,
 				"AVLTreeMap": true,
+				"ArrayMap": true,
+				"ConcurrentMap": true,
 				"CustomHashMap": true,
+				"EnumMap": true,
+				"HashMap": true,
 				"ImmutableMap": true,
+				"Implementations": true,
 				"LinkedCustomHashMap": true,
-				"LinkedHashMap": true,
-				"Maps": true,
-				"SortedMap": true,
 				"LinkedEnumMap": true,
+				"LinkedHashMap": true,
 				"OrderedMap": true,
-				"EnumMap": true
+				"RBTreeMap": true,
+				"SortedMap": true,
+				"Wrappers": true
 			},
 			"Pair": {
 				"Enabled": true
@@ -1635,20 +1697,21 @@
 			},
 			"Map": {
 				"Enabled": true,
-				"HashMap": true,
-				"RBTreeMap": true,
-				"ConcurrentMap": true,
-				"ArrayMap": true,
 				"AVLTreeMap": true,
+				"ArrayMap": true,
+				"ConcurrentMap": true,
 				"CustomHashMap": true,
+				"EnumMap": true,
+				"HashMap": true,
 				"ImmutableMap": true,
+				"Implementations": true,
 				"LinkedCustomHashMap": true,
-				"LinkedHashMap": true,
-				"Maps": true,
-				"SortedMap": true,
 				"LinkedEnumMap": true,
+				"LinkedHashMap": true,
 				"OrderedMap": true,
-				"EnumMap": true
+				"RBTreeMap": true,
+				"SortedMap": true,
+				"Wrappers": true
 			},
 			"Pair": {
 				"Enabled": true
@@ -1661,20 +1724,21 @@
 			},
 			"Map": {
 				"Enabled": true,
-				"HashMap": true,
-				"RBTreeMap": true,
-				"ConcurrentMap": true,
-				"ArrayMap": true,
 				"AVLTreeMap": true,
+				"ArrayMap": true,
+				"ConcurrentMap": true,
 				"CustomHashMap": true,
+				"EnumMap": true,
+				"HashMap": true,
 				"ImmutableMap": true,
+				"Implementations": true,
 				"LinkedCustomHashMap": true,
-				"LinkedHashMap": true,
-				"Maps": true,
-				"SortedMap": true,
 				"LinkedEnumMap": true,
+				"LinkedHashMap": true,
 				"OrderedMap": true,
-				"EnumMap": true
+				"RBTreeMap": true,
+				"SortedMap": true,
+				"Wrappers": true
 			},
 			"Pair": {
 				"Enabled": true
@@ -1687,20 +1751,21 @@
 			},
 			"Map": {
 				"Enabled": true,
-				"HashMap": true,
-				"RBTreeMap": true,
-				"ConcurrentMap": true,
-				"ArrayMap": true,
 				"AVLTreeMap": true,
+				"ArrayMap": true,
+				"ConcurrentMap": true,
 				"CustomHashMap": true,
+				"EnumMap": true,
+				"HashMap": true,
 				"ImmutableMap": true,
+				"Implementations": true,
 				"LinkedCustomHashMap": true,
-				"LinkedHashMap": true,
-				"Maps": true,
-				"SortedMap": true,
 				"LinkedEnumMap": true,
+				"LinkedHashMap": true,
 				"OrderedMap": true,
-				"EnumMap": true
+				"RBTreeMap": true,
+				"SortedMap": true,
+				"Wrappers": true
 			},
 			"Pair": {
 				"Enabled": true
@@ -1714,25 +1779,27 @@
 		},
 		"List": {
 			"Enabled": true,
-			"Lists": true,
-			"ImmutableList": true,
-			"CopyOnWriteList": true,
 			"ArrayList": true,
-			"LinkedList": true
+			"CopyOnWriteList": true,
+			"ImmutableList": true,
+			"Implementations": true,
+			"LinkedList": true,
+			"Wrappers": true
 		},
 		"Set": {
 			"Enabled": true,
-			"LinkedHashSet": true,
-			"LinkedCustomHashSet": true,
-			"OrderedSet": true,
-			"ArraySet": true,
 			"AVLTreeSet": true,
-			"ImmutableSet": true,
+			"ArraySet": true,
 			"CustomHashSet": true,
-			"Sets": true,
-			"SortedSet": true,
 			"HashSet": true,
-			"RBTreeSet": true
+			"ImmutableSet": true,
+			"Implementations": true,
+			"LinkedCustomHashSet": true,
+			"LinkedHashSet": true,
+			"OrderedSet": true,
+			"RBTreeSet": true,
+			"SortedSet": true,
+			"Wrappers": true
 		},
 		"Async": {
 			"Enabled": true
@@ -1750,20 +1817,21 @@
 			},
 			"Map": {
 				"Enabled": true,
-				"HashMap": true,
-				"RBTreeMap": true,
-				"ConcurrentMap": true,
-				"ArrayMap": true,
 				"AVLTreeMap": true,
+				"ArrayMap": true,
+				"ConcurrentMap": true,
 				"CustomHashMap": true,
+				"EnumMap": true,
+				"HashMap": true,
 				"ImmutableMap": true,
+				"Implementations": true,
 				"LinkedCustomHashMap": true,
-				"LinkedHashMap": true,
-				"Maps": true,
-				"SortedMap": true,
 				"LinkedEnumMap": true,
+				"LinkedHashMap": true,
 				"OrderedMap": true,
-				"EnumMap": true
+				"RBTreeMap": true,
+				"SortedMap": true,
+				"Wrappers": true
 			},
 			"Pair": {
 				"Enabled": true
@@ -1776,20 +1844,21 @@
 			},
 			"Map": {
 				"Enabled": true,
-				"HashMap": true,
-				"RBTreeMap": true,
-				"ConcurrentMap": true,
-				"ArrayMap": true,
 				"AVLTreeMap": true,
+				"ArrayMap": true,
+				"ConcurrentMap": true,
 				"CustomHashMap": true,
+				"EnumMap": true,
+				"HashMap": true,
 				"ImmutableMap": true,
+				"Implementations": true,
 				"LinkedCustomHashMap": true,
-				"LinkedHashMap": true,
-				"Maps": true,
-				"SortedMap": true,
 				"LinkedEnumMap": true,
+				"LinkedHashMap": true,
 				"OrderedMap": true,
-				"EnumMap": true
+				"RBTreeMap": true,
+				"SortedMap": true,
+				"Wrappers": true
 			},
 			"Pair": {
 				"Enabled": true
@@ -1802,20 +1871,21 @@
 			},
 			"Map": {
 				"Enabled": true,
-				"HashMap": true,
-				"RBTreeMap": true,
-				"ConcurrentMap": true,
-				"ArrayMap": true,
 				"AVLTreeMap": true,
+				"ArrayMap": true,
+				"ConcurrentMap": true,
 				"CustomHashMap": true,
+				"EnumMap": true,
+				"HashMap": true,
 				"ImmutableMap": true,
+				"Implementations": true,
 				"LinkedCustomHashMap": true,
-				"LinkedHashMap": true,
-				"Maps": true,
-				"SortedMap": true,
 				"LinkedEnumMap": true,
+				"LinkedHashMap": true,
 				"OrderedMap": true,
-				"EnumMap": true
+				"RBTreeMap": true,
+				"SortedMap": true,
+				"Wrappers": true
 			},
 			"Pair": {
 				"Enabled": true
@@ -1828,20 +1898,21 @@
 			},
 			"Map": {
 				"Enabled": true,
-				"HashMap": true,
-				"RBTreeMap": true,
-				"ConcurrentMap": true,
-				"ArrayMap": true,
 				"AVLTreeMap": true,
+				"ArrayMap": true,
+				"ConcurrentMap": true,
 				"CustomHashMap": true,
+				"EnumMap": true,
+				"HashMap": true,
 				"ImmutableMap": true,
+				"Implementations": true,
 				"LinkedCustomHashMap": true,
-				"LinkedHashMap": true,
-				"Maps": true,
-				"SortedMap": true,
 				"LinkedEnumMap": true,
+				"LinkedHashMap": true,
 				"OrderedMap": true,
-				"EnumMap": true
+				"RBTreeMap": true,
+				"SortedMap": true,
+				"Wrappers": true
 			},
 			"Pair": {
 				"Enabled": true
@@ -1854,20 +1925,21 @@
 			},
 			"Map": {
 				"Enabled": true,
-				"HashMap": true,
-				"RBTreeMap": true,
-				"ConcurrentMap": true,
-				"ArrayMap": true,
 				"AVLTreeMap": true,
+				"ArrayMap": true,
+				"ConcurrentMap": true,
 				"CustomHashMap": true,
+				"EnumMap": true,
+				"HashMap": true,
 				"ImmutableMap": true,
+				"Implementations": true,
 				"LinkedCustomHashMap": true,
-				"LinkedHashMap": true,
-				"Maps": true,
-				"SortedMap": true,
 				"LinkedEnumMap": true,
+				"LinkedHashMap": true,
 				"OrderedMap": true,
-				"EnumMap": true
+				"RBTreeMap": true,
+				"SortedMap": true,
+				"Wrappers": true
 			},
 			"Pair": {
 				"Enabled": true
@@ -1880,20 +1952,21 @@
 			},
 			"Map": {
 				"Enabled": true,
-				"HashMap": true,
-				"RBTreeMap": true,
-				"ConcurrentMap": true,
-				"ArrayMap": true,
 				"AVLTreeMap": true,
+				"ArrayMap": true,
+				"ConcurrentMap": true,
 				"CustomHashMap": true,
+				"EnumMap": true,
+				"HashMap": true,
 				"ImmutableMap": true,
+				"Implementations": true,
 				"LinkedCustomHashMap": true,
-				"LinkedHashMap": true,
-				"Maps": true,
-				"SortedMap": true,
 				"LinkedEnumMap": true,
+				"LinkedHashMap": true,
 				"OrderedMap": true,
-				"EnumMap": true
+				"RBTreeMap": true,
+				"SortedMap": true,
+				"Wrappers": true
 			},
 			"Pair": {
 				"Enabled": true
@@ -1906,20 +1979,21 @@
 			},
 			"Map": {
 				"Enabled": true,
-				"HashMap": true,
-				"RBTreeMap": true,
-				"ConcurrentMap": true,
-				"ArrayMap": true,
 				"AVLTreeMap": true,
+				"ArrayMap": true,
+				"ConcurrentMap": true,
 				"CustomHashMap": true,
+				"EnumMap": true,
+				"HashMap": true,
 				"ImmutableMap": true,
+				"Implementations": true,
 				"LinkedCustomHashMap": true,
-				"LinkedHashMap": true,
-				"Maps": true,
-				"SortedMap": true,
 				"LinkedEnumMap": true,
+				"LinkedHashMap": true,
 				"OrderedMap": true,
-				"EnumMap": true
+				"RBTreeMap": true,
+				"SortedMap": true,
+				"Wrappers": true
 			},
 			"Pair": {
 				"Enabled": true
@@ -1932,20 +2006,21 @@
 			},
 			"Map": {
 				"Enabled": true,
-				"HashMap": true,
-				"RBTreeMap": true,
-				"ConcurrentMap": true,
-				"ArrayMap": true,
 				"AVLTreeMap": true,
+				"ArrayMap": true,
+				"ConcurrentMap": true,
 				"CustomHashMap": true,
+				"EnumMap": true,
+				"HashMap": true,
 				"ImmutableMap": true,
+				"Implementations": true,
 				"LinkedCustomHashMap": true,
-				"LinkedHashMap": true,
-				"Maps": true,
-				"SortedMap": true,
 				"LinkedEnumMap": true,
+				"LinkedHashMap": true,
 				"OrderedMap": true,
-				"EnumMap": true
+				"RBTreeMap": true,
+				"SortedMap": true,
+				"Wrappers": true
 			},
 			"Pair": {
 				"Enabled": true
@@ -1958,20 +2033,21 @@
 			},
 			"Map": {
 				"Enabled": true,
-				"HashMap": true,
-				"RBTreeMap": true,
-				"ConcurrentMap": true,
-				"ArrayMap": true,
 				"AVLTreeMap": true,
+				"ArrayMap": true,
+				"ConcurrentMap": true,
 				"CustomHashMap": true,
+				"EnumMap": true,
+				"HashMap": true,
 				"ImmutableMap": true,
+				"Implementations": true,
 				"LinkedCustomHashMap": true,
-				"LinkedHashMap": true,
-				"Maps": true,
-				"SortedMap": true,
 				"LinkedEnumMap": true,
+				"LinkedHashMap": true,
 				"OrderedMap": true,
-				"EnumMap": true
+				"RBTreeMap": true,
+				"SortedMap": true,
+				"Wrappers": true
 			},
 			"Pair": {
 				"Enabled": true
@@ -1985,25 +2061,27 @@
 		},
 		"List": {
 			"Enabled": true,
-			"Lists": true,
-			"ImmutableList": true,
-			"CopyOnWriteList": true,
 			"ArrayList": true,
-			"LinkedList": true
+			"CopyOnWriteList": true,
+			"ImmutableList": true,
+			"Implementations": true,
+			"LinkedList": true,
+			"Wrappers": true
 		},
 		"Set": {
 			"Enabled": true,
-			"LinkedHashSet": true,
-			"LinkedCustomHashSet": true,
-			"OrderedSet": true,
-			"ArraySet": true,
 			"AVLTreeSet": true,
-			"ImmutableSet": true,
+			"ArraySet": true,
 			"CustomHashSet": true,
-			"Sets": true,
-			"SortedSet": true,
 			"HashSet": true,
-			"RBTreeSet": true
+			"ImmutableSet": true,
+			"Implementations": true,
+			"LinkedCustomHashSet": true,
+			"LinkedHashSet": true,
+			"OrderedSet": true,
+			"RBTreeSet": true,
+			"SortedSet": true,
+			"Wrappers": true
 		},
 		"Async": {
 			"Enabled": true
@@ -2021,20 +2099,21 @@
 			},
 			"Map": {
 				"Enabled": true,
-				"HashMap": true,
-				"RBTreeMap": true,
-				"ConcurrentMap": true,
-				"ArrayMap": true,
 				"AVLTreeMap": true,
+				"ArrayMap": true,
+				"ConcurrentMap": true,
 				"CustomHashMap": true,
+				"EnumMap": true,
+				"HashMap": true,
 				"ImmutableMap": true,
+				"Implementations": true,
 				"LinkedCustomHashMap": true,
-				"LinkedHashMap": true,
-				"Maps": true,
-				"SortedMap": true,
 				"LinkedEnumMap": true,
+				"LinkedHashMap": true,
 				"OrderedMap": true,
-				"EnumMap": true
+				"RBTreeMap": true,
+				"SortedMap": true,
+				"Wrappers": true
 			},
 			"Pair": {
 				"Enabled": true
@@ -2047,20 +2126,21 @@
 			},
 			"Map": {
 				"Enabled": true,
-				"HashMap": true,
-				"RBTreeMap": true,
-				"ConcurrentMap": true,
-				"ArrayMap": true,
 				"AVLTreeMap": true,
+				"ArrayMap": true,
+				"ConcurrentMap": true,
 				"CustomHashMap": true,
+				"EnumMap": true,
+				"HashMap": true,
 				"ImmutableMap": true,
+				"Implementations": true,
 				"LinkedCustomHashMap": true,
-				"LinkedHashMap": true,
-				"Maps": true,
-				"SortedMap": true,
 				"LinkedEnumMap": true,
+				"LinkedHashMap": true,
 				"OrderedMap": true,
-				"EnumMap": true
+				"RBTreeMap": true,
+				"SortedMap": true,
+				"Wrappers": true
 			},
 			"Pair": {
 				"Enabled": true
@@ -2073,20 +2153,21 @@
 			},
 			"Map": {
 				"Enabled": true,
-				"HashMap": true,
-				"RBTreeMap": true,
-				"ConcurrentMap": true,
-				"ArrayMap": true,
 				"AVLTreeMap": true,
+				"ArrayMap": true,
+				"ConcurrentMap": true,
 				"CustomHashMap": true,
+				"EnumMap": true,
+				"HashMap": true,
 				"ImmutableMap": true,
+				"Implementations": true,
 				"LinkedCustomHashMap": true,
-				"LinkedHashMap": true,
-				"Maps": true,
-				"SortedMap": true,
 				"LinkedEnumMap": true,
+				"LinkedHashMap": true,
 				"OrderedMap": true,
-				"EnumMap": true
+				"RBTreeMap": true,
+				"SortedMap": true,
+				"Wrappers": true
 			},
 			"Pair": {
 				"Enabled": true
@@ -2099,20 +2180,21 @@
 			},
 			"Map": {
 				"Enabled": true,
-				"HashMap": true,
-				"RBTreeMap": true,
-				"ConcurrentMap": true,
-				"ArrayMap": true,
 				"AVLTreeMap": true,
+				"ArrayMap": true,
+				"ConcurrentMap": true,
 				"CustomHashMap": true,
+				"EnumMap": true,
+				"HashMap": true,
 				"ImmutableMap": true,
+				"Implementations": true,
 				"LinkedCustomHashMap": true,
-				"LinkedHashMap": true,
-				"Maps": true,
-				"SortedMap": true,
 				"LinkedEnumMap": true,
+				"LinkedHashMap": true,
 				"OrderedMap": true,
-				"EnumMap": true
+				"RBTreeMap": true,
+				"SortedMap": true,
+				"Wrappers": true
 			},
 			"Pair": {
 				"Enabled": true
@@ -2125,20 +2207,21 @@
 			},
 			"Map": {
 				"Enabled": true,
-				"HashMap": true,
-				"RBTreeMap": true,
-				"ConcurrentMap": true,
-				"ArrayMap": true,
 				"AVLTreeMap": true,
+				"ArrayMap": true,
+				"ConcurrentMap": true,
 				"CustomHashMap": true,
+				"EnumMap": true,
+				"HashMap": true,
 				"ImmutableMap": true,
+				"Implementations": true,
 				"LinkedCustomHashMap": true,
-				"LinkedHashMap": true,
-				"Maps": true,
-				"SortedMap": true,
 				"LinkedEnumMap": true,
+				"LinkedHashMap": true,
 				"OrderedMap": true,
-				"EnumMap": true
+				"RBTreeMap": true,
+				"SortedMap": true,
+				"Wrappers": true
 			},
 			"Pair": {
 				"Enabled": true
@@ -2151,20 +2234,21 @@
 			},
 			"Map": {
 				"Enabled": true,
-				"HashMap": true,
-				"RBTreeMap": true,
-				"ConcurrentMap": true,
-				"ArrayMap": true,
 				"AVLTreeMap": true,
+				"ArrayMap": true,
+				"ConcurrentMap": true,
 				"CustomHashMap": true,
+				"EnumMap": true,
+				"HashMap": true,
 				"ImmutableMap": true,
+				"Implementations": true,
 				"LinkedCustomHashMap": true,
-				"LinkedHashMap": true,
-				"Maps": true,
-				"SortedMap": true,
 				"LinkedEnumMap": true,
+				"LinkedHashMap": true,
 				"OrderedMap": true,
-				"EnumMap": true
+				"RBTreeMap": true,
+				"SortedMap": true,
+				"Wrappers": true
 			},
 			"Pair": {
 				"Enabled": true
@@ -2177,20 +2261,21 @@
 			},
 			"Map": {
 				"Enabled": true,
-				"HashMap": true,
-				"RBTreeMap": true,
-				"ConcurrentMap": true,
-				"ArrayMap": true,
 				"AVLTreeMap": true,
+				"ArrayMap": true,
+				"ConcurrentMap": true,
 				"CustomHashMap": true,
+				"EnumMap": true,
+				"HashMap": true,
 				"ImmutableMap": true,
+				"Implementations": true,
 				"LinkedCustomHashMap": true,
-				"LinkedHashMap": true,
-				"Maps": true,
-				"SortedMap": true,
 				"LinkedEnumMap": true,
+				"LinkedHashMap": true,
 				"OrderedMap": true,
-				"EnumMap": true
+				"RBTreeMap": true,
+				"SortedMap": true,
+				"Wrappers": true
 			},
 			"Pair": {
 				"Enabled": true
@@ -2203,20 +2288,21 @@
 			},
 			"Map": {
 				"Enabled": true,
-				"HashMap": true,
-				"RBTreeMap": true,
-				"ConcurrentMap": true,
-				"ArrayMap": true,
 				"AVLTreeMap": true,
+				"ArrayMap": true,
+				"ConcurrentMap": true,
 				"CustomHashMap": true,
+				"EnumMap": true,
+				"HashMap": true,
 				"ImmutableMap": true,
+				"Implementations": true,
 				"LinkedCustomHashMap": true,
-				"LinkedHashMap": true,
-				"Maps": true,
-				"SortedMap": true,
 				"LinkedEnumMap": true,
+				"LinkedHashMap": true,
 				"OrderedMap": true,
-				"EnumMap": true
+				"RBTreeMap": true,
+				"SortedMap": true,
+				"Wrappers": true
 			},
 			"Pair": {
 				"Enabled": true
@@ -2229,20 +2315,21 @@
 			},
 			"Map": {
 				"Enabled": true,
-				"HashMap": true,
-				"RBTreeMap": true,
-				"ConcurrentMap": true,
-				"ArrayMap": true,
 				"AVLTreeMap": true,
+				"ArrayMap": true,
+				"ConcurrentMap": true,
 				"CustomHashMap": true,
+				"EnumMap": true,
+				"HashMap": true,
 				"ImmutableMap": true,
+				"Implementations": true,
 				"LinkedCustomHashMap": true,
-				"LinkedHashMap": true,
-				"Maps": true,
-				"SortedMap": true,
 				"LinkedEnumMap": true,
+				"LinkedHashMap": true,
 				"OrderedMap": true,
-				"EnumMap": true
+				"RBTreeMap": true,
+				"SortedMap": true,
+				"Wrappers": true
 			},
 			"Pair": {
 				"Enabled": true
@@ -2256,25 +2343,27 @@
 		},
 		"List": {
 			"Enabled": true,
-			"Lists": true,
-			"ImmutableList": true,
-			"CopyOnWriteList": true,
 			"ArrayList": true,
-			"LinkedList": true
+			"CopyOnWriteList": true,
+			"ImmutableList": true,
+			"Implementations": true,
+			"LinkedList": true,
+			"Wrappers": true
 		},
 		"Set": {
 			"Enabled": true,
-			"LinkedHashSet": true,
-			"LinkedCustomHashSet": true,
-			"OrderedSet": true,
-			"ArraySet": true,
 			"AVLTreeSet": true,
-			"ImmutableSet": true,
+			"ArraySet": true,
 			"CustomHashSet": true,
-			"Sets": true,
-			"SortedSet": true,
 			"HashSet": true,
-			"RBTreeSet": true
+			"ImmutableSet": true,
+			"Implementations": true,
+			"LinkedCustomHashSet": true,
+			"LinkedHashSet": true,
+			"OrderedSet": true,
+			"RBTreeSet": true,
+			"SortedSet": true,
+			"Wrappers": true
 		},
 		"Async": {
 			"Enabled": true

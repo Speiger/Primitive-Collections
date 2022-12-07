@@ -1,8 +1,8 @@
 package speiger.src.builder.modules;
 
 import java.util.Arrays;
-import java.util.HashSet;
 import java.util.Set;
+import java.util.TreeSet;
 
 import speiger.src.builder.ClassType;
 
@@ -23,10 +23,9 @@ public class MapModule extends BaseModule
 	public boolean areDependenciesLoaded() { return isDependencyLoaded(SetModule.INSTANCE) && isDependencyLoaded(CollectionModule.INSTANCE, false); }
 	
 	@Override
-	public Set<String> getModuleKeys(ClassType keyType, ClassType valueType)
-	{
-		Set<String> sets = new HashSet<>();
-		sets.add("Maps");
+	public Set<String> getModuleKeys(ClassType keyType, ClassType valueType) {
+		Set<String> sets = new TreeSet<>();
+		sets.addAll(Arrays.asList("Wrappers", "Implementations"));
 		sets.addAll(Arrays.asList("OrderedMap", "SortedMap"));
 		sets.addAll(Arrays.asList("ArrayMap", "ConcurrentMap", "ImmutableMap"));
 		sets.addAll(Arrays.asList("HashMap", "LinkedHashMap"));
@@ -40,10 +39,11 @@ public class MapModule extends BaseModule
 	protected void loadFlags()
 	{
 		if(isModuleEnabled()) addFlag("MAP_MODULE");
-		if(isModuleEnabled("Maps")) addFlag("Maps");
-		boolean hashMap = isModuleEnabled("HashMap");
-		boolean customHashMap = isModuleEnabled("CustomHashMap");
-		boolean enumMap = isModuleEnabled("EnumMap");
+		if(isModuleEnabled("Wrappers")) addFlag("MAPS_FEATURE");
+		boolean implementations = isModuleEnabled("Implementations");
+		boolean hashMap = implementations && isModuleEnabled("HashMap");
+		boolean customHashMap = implementations && isModuleEnabled("CustomHashMap");
+		boolean enumMap = implementations && isModuleEnabled("EnumMap");
 		
 		if(isModuleEnabled("OrderedMap")) {
 			addFlag("ORDERED_MAP_FEATURE");
@@ -54,11 +54,11 @@ public class MapModule extends BaseModule
 		}
 		if(isModuleEnabled("SortedMap")) {
 			addFlag("SORTED_MAP_FEATURE");
-			if(isModuleEnabled("AVLTreeMap")) addFlag("AVL_TREE_MAP_FEATURE");
-			if(isModuleEnabled("RBTreeMap")) addFlag("RB_TREE_MAP_FEATURE");
+			if(implementations && isModuleEnabled("AVLTreeMap")) addFlag("AVL_TREE_MAP_FEATURE");
+			if(implementations && isModuleEnabled("RBTreeMap")) addFlag("RB_TREE_MAP_FEATURE");
 		}
-		if(isModuleEnabled("ConcurrentMap")) addFlag("CONCURRENT_MAP_FEATURE");
-		if(isModuleEnabled("ImmutableMap")) addFlag("IMMUTABLE_MAP_FEATURE");
+		if(implementations && isModuleEnabled("ConcurrentMap")) addFlag("CONCURRENT_MAP_FEATURE");
+		if(implementations && isModuleEnabled("ImmutableMap")) addFlag("IMMUTABLE_MAP_FEATURE");
 		if(hashMap) addFlag("HASH_MAP_FEATURE");
 		if(customHashMap) addFlag("CUSTOM_HASH_MAP_FEATURE");
 		if(enumMap) addFlag("ENUM_MAP_FEATURE");
@@ -68,21 +68,22 @@ public class MapModule extends BaseModule
 	protected void loadBlockades()
 	{
 		if(!isModuleEnabled()) addBlockedFiles("Map", "AbstractMap");
-		if(!isModuleEnabled("Maps")) addBlockedFiles("Maps");
-		if(!isModuleEnabled("ImmutableMap")) addBlockedFiles("ImmutableOpenHashMap");
-		if(!isModuleEnabled("ConcurrentMap")) addBlockedFiles("ConcurrentMap", "ConcurrentOpenHashMap");
+		if(!isModuleEnabled("Wrappers")) addBlockedFiles("Maps");
+		boolean implementations = !isModuleEnabled("Implementations");
+		if(implementations || !isModuleEnabled("ImmutableMap")) addBlockedFiles("ImmutableOpenHashMap");
+		if(implementations || !isModuleEnabled("ConcurrentMap")) addBlockedFiles("ConcurrentMap", "ConcurrentOpenHashMap");
 		
 		boolean ordered = !isModuleEnabled("OrderedMap");
 		if(ordered) addBlockedFiles("OrderedMap");
-		boolean hashMap = !isModuleEnabled("HashMap");
+		boolean hashMap = implementations || !isModuleEnabled("HashMap");
 		if(hashMap) addBlockedFiles("OpenHashMap");
 		if(hashMap || ordered || !isModuleEnabled("LinkedHashMap")) addBlockedFiles("LinkedOpenHashMap");
 		
-		boolean customHashMap = !isModuleEnabled("CustomHashMap");
+		boolean customHashMap = implementations || !isModuleEnabled("CustomHashMap");
 		if(customHashMap) addBlockedFiles("OpenCustomHashMap");
 		if(customHashMap || ordered || !isModuleEnabled("LinkedCustomHashMap")) addBlockedFiles("LinkedOpenCustomHashMap");
 		
-		boolean enumMap = !isModuleEnabled("EnumMap");
+		boolean enumMap = implementations || !isModuleEnabled("EnumMap");
 		if(enumMap) addBlockedFiles("EnumMap");
 		if(enumMap || ordered || !isModuleEnabled("LinkedEnumMap")) addBlockedFiles("LinkedEnumMap");
 		
@@ -90,8 +91,8 @@ public class MapModule extends BaseModule
 		
 		boolean sorted = !isModuleEnabled("SortedMap");
 		if(sorted) addBlockedFiles("SortedMap", "NavigableMap");
-		if(sorted || !isModuleEnabled("AVLTreeMap")) addBlockedFiles("AVLTreeMap");
-		if(sorted || !isModuleEnabled("RBTreeMap")) addBlockedFiles("RBTreeMap");
+		if(implementations || sorted || !isModuleEnabled("AVLTreeMap")) addBlockedFiles("AVLTreeMap");
+		if(implementations || sorted || !isModuleEnabled("RBTreeMap")) addBlockedFiles("RBTreeMap");
 		
 		if(keyType == ClassType.BOOLEAN)
 		{

@@ -27,13 +27,13 @@ import speiger.src.collections.PACKAGE.functions.function.PREDICATE;
 import speiger.src.collections.PACKAGE.functions.function.TO_OBJECT_FUNCTION;
 #endif
 import speiger.src.collections.PACKAGE.functions.function.UNARY_OPERATOR;
-#if OBJECT_ASYNC_MODULE
+#if ARRAY_LIST_FEATURE || LINKED_LIST_FEATURE 
 import speiger.src.collections.PACKAGE.lists.LIST;
-#endif
 #if ARRAY_LIST_FEATURE
 import speiger.src.collections.PACKAGE.lists.ARRAY_LIST;
 #else if LINKED_LIST_FEATURE
 import speiger.src.collections.PACKAGE.lists.LINKED_LIST;
+#endif
 #endif
 #if !TYPE_BOOLEAN && OBJECT_ASYNC_MODULE
 #if SET_MODULE

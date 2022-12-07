@@ -1,8 +1,8 @@
 package speiger.src.builder.modules;
 
 import java.util.Arrays;
-import java.util.HashSet;
 import java.util.Set;
+import java.util.TreeSet;
 
 import speiger.src.builder.ClassType;
 
@@ -22,8 +22,8 @@ public class SetModule extends BaseModule
 	public boolean areDependenciesLoaded() { return isDependencyLoaded(CollectionModule.INSTANCE); }
 	@Override
 	public Set<String> getModuleKeys(ClassType keyType, ClassType valueType) {
-		Set<String> sets = new HashSet<>();
-		sets.add("Sets");
+		Set<String> sets = new TreeSet<>();
+		sets.addAll(Arrays.asList("Wrappers", "Implementations"));
 		sets.addAll(Arrays.asList("OrderedSet", "SortedSet"));
 		sets.addAll(Arrays.asList("ArraySet", "ImmutableSet"));
 		sets.addAll(Arrays.asList("HashSet", "LinkedHashSet"));
@@ -36,22 +36,23 @@ public class SetModule extends BaseModule
 	protected void loadFlags()
 	{
 		if(isModuleEnabled()) addFlag("SET_MODULE");
-		if(isModuleEnabled("Sets")) addFlag("Sets");
-		boolean hashSet = isModuleEnabled("HashSet");
-		boolean customHashSet = isModuleEnabled("CustomHashSet");
+		if(isModuleEnabled("Wrappers")) addFlag("SETS_FEATURE");
+		boolean implementations = isModuleEnabled("Implementations");
+		boolean hashSet = implementations && isModuleEnabled("HashSet");
+		boolean customHashSet = implementations && isModuleEnabled("CustomHashSet");
 		
 		if(isModuleEnabled("OrderedSet")) {
 			addFlag("ORDERED_SET_FEATURE");
-			if(isModuleEnabled("ArraySet")) addFlag("ARRAY_SET_FEATURE");
+			if(implementations && isModuleEnabled("ArraySet")) addFlag("ARRAY_SET_FEATURE");
 			if(hashSet && isModuleEnabled("LinkedHashSet")) addFlag("LINKED_SET_FEATURE");
 			if(customHashSet && isModuleEnabled("LinkedCustomHashSet")) addFlag("LINKED_CUSTOM_SET_FEATURE");
 		}
 		if(isModuleEnabled("SortedSet")) {
 			addFlag("SORTED_SET_FEATURE");
-			if(isModuleEnabled("AVLTreeSet")) addFlag("AVL_TREE_SET_FEATURE");
-			if(isModuleEnabled("RBTreeSet")) addFlag("RB_TREE_SET_FEATURE");
+			if(implementations && isModuleEnabled("AVLTreeSet")) addFlag("AVL_TREE_SET_FEATURE");
+			if(implementations && isModuleEnabled("RBTreeSet")) addFlag("RB_TREE_SET_FEATURE");
 		}
-		if(isModuleEnabled("ImmutableSet")) addFlag("IMMUTABLE_SET_FEATURE");
+		if(implementations && isModuleEnabled("ImmutableSet")) addFlag("IMMUTABLE_SET_FEATURE");
 		if(hashSet) addFlag("HASH_SET_FEATURE");
 		if(customHashSet) addFlag("CUSTOM_HASH_SET_FEATURE");
 	}
@@ -60,25 +61,26 @@ public class SetModule extends BaseModule
 	protected void loadBlockades()
 	{
 		if(!isModuleEnabled()) addBlockedFiles("Set", "AbstractSet");
-		if(!isModuleEnabled("Sets")) addBlockedFiles("Sets");
-		if(!isModuleEnabled("ImmutableSet")) addBlockedFiles("ImmutableOpenHashSet");
+		if(!isModuleEnabled("Wrappers")) addBlockedFiles("Sets");
+		boolean implementations = !isModuleEnabled("Implementations");
+		if(implementations || !isModuleEnabled("ImmutableSet")) addBlockedFiles("ImmutableOpenHashSet");
 		
 		boolean ordered = !isModuleEnabled("OrderedSet");
 		if(ordered) addBlockedFiles("OrderedSet");
-		boolean hashSet = !isModuleEnabled("HashSet");
+		boolean hashSet = implementations || !isModuleEnabled("HashSet");
 		if(hashSet) addBlockedFiles("OpenHashSet");
 		if(hashSet || ordered || !isModuleEnabled("LinkedHashSet")) addBlockedFiles("LinkedOpenHashSet");
 		
-		boolean customHashSet = !isModuleEnabled("CustomHashSet");
+		boolean customHashSet = implementations || !isModuleEnabled("CustomHashSet");
 		if(customHashSet) addBlockedFiles("OpenCustomHashSet");
 		if(customHashSet || ordered || !isModuleEnabled("LinkedCustomHashSet")) addBlockedFiles("LinkedOpenCustomHashSet");
 		
-		if(ordered || !isModuleEnabled("ArraySet")) addBlockedFiles("ArraySet");
+		if(implementations || ordered || !isModuleEnabled("ArraySet")) addBlockedFiles("ArraySet");
 		
 		boolean sorted = !isModuleEnabled("SortedSet");
 		if(sorted) addBlockedFiles("SortedSet", "NavigableSet");
-		if(sorted || !isModuleEnabled("AVLTreeSet")) addBlockedFiles("AVLTreeSet");
-		if(sorted || !isModuleEnabled("RBTreeSet")) addBlockedFiles("RBTreeSet");
+		if(implementations || sorted || !isModuleEnabled("AVLTreeSet")) addBlockedFiles("AVLTreeSet");
+		if(implementations || sorted || !isModuleEnabled("RBTreeSet")) addBlockedFiles("RBTreeSet");
 		
 		if(keyType == ClassType.BOOLEAN)
 		{
