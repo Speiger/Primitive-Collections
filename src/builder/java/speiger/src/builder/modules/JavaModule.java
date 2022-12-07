@@ -5,6 +5,8 @@ import speiger.src.builder.ClassType;
 @SuppressWarnings("javadoc")
 public class JavaModule extends BaseModule
 {
+	public static final BaseModule INSTANCE = new JavaModule();
+	
 	@Override
 	public String getModuleName() { return "Base"; }
 	@Override

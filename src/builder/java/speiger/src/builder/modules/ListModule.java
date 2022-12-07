@@ -9,6 +9,8 @@ import speiger.src.builder.ClassType;
 @SuppressWarnings("javadoc")
 public class ListModule extends BaseModule
 {
+	public static final BaseModule INSTANCE = new ListModule();
+	
 	@Override
 	public String getModuleName() { return "List"; }
 	@Override
@@ -38,9 +40,13 @@ public class ListModule extends BaseModule
 	}
 	
 	@Override
-	public Set<String> getModuleKeys(ClassType keyType, ClassType valueType)
-	{
+	public Set<String> getModuleKeys(ClassType keyType, ClassType valueType) {
 		return new HashSet<>(Arrays.asList("Lists", "ArrayList", "LinkedList", "ImmutableList", "CopyOnWriteList"));
+	}
+	
+	@Override
+	protected boolean areDependenciesLoaded() {
+		return isDependencyLoaded(CollectionModule.INSTANCE);
 	}
 	
 	@Override

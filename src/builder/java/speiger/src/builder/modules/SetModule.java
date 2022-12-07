@@ -9,20 +9,19 @@ import speiger.src.builder.ClassType;
 @SuppressWarnings("javadoc")
 public class SetModule extends BaseModule
 {
+	public static final BaseModule INSTANCE = new SetModule();
+	
 	@Override
 	public String getModuleName() { return "Set"; }
 	@Override
 	protected void loadVariables() {}
 	
 	@Override
-	public boolean isModuleValid(ClassType keyType, ClassType valueType)
-	{
-		return keyType != ClassType.BOOLEAN;
-	}
-	
+	public boolean isModuleValid(ClassType keyType, ClassType valueType) { return keyType != ClassType.BOOLEAN; }
 	@Override
-	public Set<String> getModuleKeys(ClassType keyType, ClassType valueType)
-	{
+	protected boolean areDependenciesLoaded() { return isDependencyLoaded(CollectionModule.INSTANCE); }
+	@Override
+	public Set<String> getModuleKeys(ClassType keyType, ClassType valueType) {
 		Set<String> sets = new HashSet<>();
 		sets.add("Sets");
 		sets.addAll(Arrays.asList("OrderedSet", "SortedSet"));

@@ -3,6 +3,8 @@ package speiger.src.builder.modules;
 @SuppressWarnings("javadoc")
 public class FunctionModule extends BaseModule
 {
+	public static final BaseModule INSTANCE = new FunctionModule();
+	
 	@Override
 	public String getModuleName() { return "Function"; }
 	@Override

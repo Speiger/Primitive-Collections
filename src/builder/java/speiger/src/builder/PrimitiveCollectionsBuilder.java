@@ -122,28 +122,45 @@ public class PrimitiveCollectionsBuilder extends TemplateProcessor
 		}
 	}
 	
+	public List<BaseModule> createModules()
+	{
+		List<BaseModule> modules = new ArrayList<>();
+		modules.add(JavaModule.INSTANCE);
+		modules.add(FunctionModule.INSTANCE);
+		modules.add(CollectionModule.INSTANCE);
+		modules.add(PrioQueueModule.INSTANCE);
+		modules.add(ListModule.INSTANCE);
+		modules.add(SetModule.INSTANCE);
+		modules.add(MapModule.INSTANCE);
+		modules.add(PairModule.INSTANCE);
+		modules.add(AsyncModule.INSTANCE);
+		return modules;
+	}
+
+	
 	@Override
 	protected void init() 
 	{
 		prepPackages();
 		//Init Modules here
-		addModule(new JavaModule());
-		addModule(new FunctionModule());
-		addModule(new CollectionModule());
-		addModule(new PrioQueueModule());
-		addModule(new ListModule());
-		addModule(new SetModule());
-		addModule(new MapModule());
-		addModule(new PairModule());
-		addModule(new AsyncModule());
+		addModules(createModules());
 		finishPackages();
 	}
 	
-	public void addModule(BaseModule module)
+	public void addModules(List<BaseModule> modules)
 	{
-		module.setManager(manager);
-		biPackages.forEach(module::init);
-		module.cleanup();
+		if((flags & LOAD) != 0)
+		{
+			for(int i = 0,m=modules.size();i<m;i++) {
+				modules.get(i).setManager(manager);
+			}
+		}
+		for(int i = 0,m=modules.size();i<m;i++) {
+			biPackages.forEach(modules.get(i)::init);
+		}
+		for(int i = 0,m=modules.size();i<m;i++) {
+			modules.get(i).cleanup();
+		}
 	}
 	
 	private void finishPackages() 
@@ -239,7 +256,7 @@ public class PrimitiveCollectionsBuilder extends TemplateProcessor
 			boolean force = flags.contains("force");
 			boolean tests = flags.contains("tests");
 			boolean forceTests =  flags.contains("force-tests");
-			boolean load = flags.contains("load");
+			boolean load = !flags.contains("load");
 			boolean save = flags.contains("save");
 			int flag = (load ? LOAD : 0) | (save ? SAVE : 0);
             new PrimitiveCollectionsBuilder(silent).setFlags(flag).process(force);

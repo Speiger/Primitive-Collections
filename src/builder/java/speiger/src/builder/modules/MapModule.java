@@ -9,6 +9,8 @@ import speiger.src.builder.ClassType;
 @SuppressWarnings("javadoc")
 public class MapModule extends BaseModule
 {
+	public static final BaseModule INSTANCE = new MapModule();
+	
 	@Override
 	public String getModuleName() { return "Map"; }
 	@Override
@@ -30,6 +32,11 @@ public class MapModule extends BaseModule
 		sets.addAll(Arrays.asList("EnumMap", "LinkedEnumMap"));
 		sets.addAll(Arrays.asList("AVLTreeMap", "RBTreeMap"));
 		return sets;
+	}
+	
+	@Override
+	protected boolean areDependenciesLoaded() {
+		return isDependencyLoaded(SetModule.INSTANCE) && isDependencyLoaded(CollectionModule.INSTANCE, false);
 	}
 	
 	@Override

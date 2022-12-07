@@ -3,6 +3,8 @@ package speiger.src.builder.modules;
 @SuppressWarnings("javadoc")
 public class AsyncModule extends BaseModule
 {
+	public static final BaseModule INSTANCE = new AsyncModule();
+	
 	@Override
 	public String getModuleName() { return "Async"; }
 	@Override
@@ -13,6 +15,8 @@ public class AsyncModule extends BaseModule
 	protected void loadTestClasses() {}
 	@Override
 	protected void loadFunctions() {}
+	@Override
+	protected boolean areDependenciesLoaded() { return isDependencyLoaded(CollectionModule.INSTANCE); }
 	@Override
 	protected void loadBlockades() {
 		if(!isModuleEnabled()) {

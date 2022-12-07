@@ -3,6 +3,7 @@ package speiger.src.builder.modules;
 @SuppressWarnings("javadoc")
 public class PairModule extends BaseModule
 {
+	public static final BaseModule INSTANCE = new PairModule();
 	@Override
 	public String getModuleName() { return "Pair"; }
 	@Override

@@ -5,6 +5,8 @@ import speiger.src.builder.ClassType;
 @SuppressWarnings("javadoc")
 public class PrioQueueModule extends BaseModule
 {
+	public static final BaseModule INSTANCE = new PrioQueueModule();
+	
 	@Override
 	public String getModuleName() { return "PriorityQueue"; }
 	@Override
@@ -13,7 +15,8 @@ public class PrioQueueModule extends BaseModule
 	protected void loadFlags() {}
 	@Override
 	protected void loadFunctions() {}
-	
+	@Override
+	protected boolean areDependenciesLoaded() { return isDependencyLoaded(CollectionModule.INSTANCE); }
 	@Override
 	protected void loadBlockades()
 	{

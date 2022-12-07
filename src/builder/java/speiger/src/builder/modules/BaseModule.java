@@ -60,11 +60,23 @@ public abstract class BaseModule
 	public boolean isModuleValid(ClassType keyType, ClassType valueType) { return true; }
 	
 	protected boolean isModuleEnabled() {
-		return manager == null || manager.isModuleEnabled(this, keyType, valueType);
+		return manager == null || (manager.isModuleEnabled(this, keyType, valueType) && areDependenciesLoaded());
 	}
 	
 	protected boolean isModuleEnabled(String name) {
-		return manager == null || manager.isModuleEnabled(this, keyType, valueType, name);
+		return manager == null || (manager.isModuleEnabled(this, keyType, valueType, name) && areDependenciesLoaded());
+	}
+	
+	protected boolean isDependencyLoaded(BaseModule module) {
+		return isDependencyLoaded(module, true);
+	}
+	
+	protected boolean isDependencyLoaded(BaseModule module, boolean key) {
+		return manager == null || (module.isBiModule() ? manager.isModuleEnabled(module, keyType, valueType) : (key ? manager.isModuleEnabled(module, keyType, keyType) : manager.isModuleEnabled(module, valueType, valueType))); 
+	}
+	
+	protected boolean areDependenciesLoaded() {
+		return true;
 	}
 	
 	protected void addFlag(String name) {
