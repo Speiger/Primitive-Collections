@@ -52,6 +52,11 @@ public enum ClassType
 		return classType;
 	}
 	
+	public String getClassPath()
+	{
+		return this == OBJECT ? "Object" : classType;
+	}
+	
 	public String getClassType(boolean value) 
 	{
 		return value && this == OBJECT ? "V" : classType;
@@ -126,6 +131,12 @@ public enum ClassType
 			case OBJECT: return "%1$s";
 			default: return "%1$s";
 		}
+	}
+	
+	public String getApply(ClassType other) {
+		if(other == BOOLEAN) return "test";
+		if(other == ClassType.OBJECT) return "apply";
+		return "applyAs"+other.getFileType();
 	}
 	
 	public String getEquals(boolean not)

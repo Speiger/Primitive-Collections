@@ -16,15 +16,18 @@ import speiger.src.collections.PACKAGE.functions.COMPARATOR;
 #endif
 import speiger.src.collections.PACKAGE.functions.function.TO_OBJECT_FUNCTION;
 import speiger.src.collections.PACKAGE.functions.function.PREDICATE;
-import speiger.src.collections.PACKAGE.lists.ARRAY_LIST;
+#if ARRAY_LIST_FEATURE || LINKED_LIST_FEATURE
 import speiger.src.collections.PACKAGE.lists.LIST;
+#if ARRAY_LIST_FEATURE
+import speiger.src.collections.PACKAGE.lists.ARRAY_LIST;
+#else if LINKED_LIST_FEATURE
+import speiger.src.collections.PACKAGE.lists.LINKED_LIST;
+#endif
+
+#endif
 import speiger.src.collections.PACKAGE.lists.LIST_ITERATOR;
 import speiger.src.collections.PACKAGE.collections.BI_ITERATOR;
 import speiger.src.collections.PACKAGE.collections.COLLECTION;
-#if !TYPE_BOOLEAN
-import speiger.src.collections.PACKAGE.sets.HASH_SET;
-import speiger.src.collections.PACKAGE.sets.SET;
-#endif
 
 /**
  * A Helper class for Iterators
@@ -468,6 +471,8 @@ public class ITERATORS
 	}
 	
 #endif
+#if LIST_MODULE
+#if ARRAY_LIST_FEATURE || LINKED_LIST_FEATURE
 	/**
 	 * A Helper function to pours all elements of a Iterator into a List
 	 * @param iter the elements that should be poured into list.
@@ -486,12 +491,20 @@ public class ITERATORS
 	 * @return A list of all requested elements of the Iterator
 	 */
 	public static GENERIC_KEY_BRACES LIST KEY_GENERIC_TYPE pour(ITERATOR KEY_GENERIC_TYPE iter, int max) {
+#if ARRAY_LIST_FEATURE
 		ARRAY_LIST KEY_GENERIC_TYPE list = new ARRAY_LISTBRACES();
+#else
+		LINKED_LIST KEY_GENERIC_TYPE list = new LINKED_LISTBRACES();
+#endif
 		pour(iter, list, max);
+#if ARRAY_LIST_FEATURE
 		list.trim();
+#endif
 		return list;
 	}
 	
+#endif
+#endif
 	/**
 	 * A Helper function to pours all elements of a Iterator into a Collection
 	 * @param iter the elements that should be poured into list.
@@ -624,7 +637,7 @@ public class ITERATORS
 		@Override
 		public void remove() { it.remove(); }
 	}
-
+	
 	private static class ReverseListIterator KEY_GENERIC_TYPE implements LIST_ITERATOR KEY_GENERIC_TYPE {
 		LIST_ITERATOR KEY_GENERIC_TYPE it;
 		
@@ -747,45 +760,25 @@ public class ITERATORS
 			return iterator.NEXT();
 		}
 	}
-
+	
 	private static class EmptyIterator KEY_GENERIC_TYPE implements LIST_ITERATOR KEY_GENERIC_TYPE
 	{
 		@Override
-		public boolean hasNext() {
-			return false;
-		}
-	
+		public boolean hasNext() { return false; }
 		@Override
-		public KEY_TYPE NEXT() {
-			throw new NoSuchElementException();
-		}
-
+		public KEY_TYPE NEXT() { throw new NoSuchElementException(); }
 		@Override
-		public boolean hasPrevious() {
-			return false;
-		}
-		
+		public boolean hasPrevious() { return false; }
 		@Override
-		public KEY_TYPE PREVIOUS() {
-			throw new NoSuchElementException();
-		}
-		
+		public KEY_TYPE PREVIOUS() { throw new NoSuchElementException(); }
 		@Override
-		public int nextIndex() {
-			return 0;
-		}
-		
+		public int nextIndex() { return 0; }
 		@Override
-		public int previousIndex() {
-			return -1;
-		}
-		
+		public int previousIndex() { return -1; }
 		@Override
 		public void remove() { throw new UnsupportedOperationException(); }
-
 		@Override
 		public void set(KEY_TYPE e) { throw new UnsupportedOperationException(); }
-
 		@Override
 		public void add(KEY_TYPE e) { throw new UnsupportedOperationException(); }
 	}
@@ -839,7 +832,7 @@ public class ITERATORS
 		
 		@Override
 		public T next() {
-			return mapper.GET_VALUE(iterator.NEXT());
+			return mapper.apply(iterator.NEXT());
 		}
 		
 		@Override
@@ -865,7 +858,7 @@ public class ITERATORS
 			foundNext = true;
 			while(iterator.hasNext()) {
 				if(last != null && last.hasNext()) return;
-				last = mapper.GET_VALUE(iterator.NEXT()).iterator();
+				last = mapper.apply(iterator.NEXT()).iterator();
 			}
 		}
 		
@@ -901,7 +894,7 @@ public class ITERATORS
 			foundNext = true;
 			while(iterator.hasNext()) {
 				if(last != null && last.hasNext()) return;
-				last = ObjectIterators.wrap(mapper.GET_VALUE(iterator.NEXT()));
+				last = ObjectIterators.wrap(mapper.apply(iterator.NEXT()));
 			}
 		}
 		
@@ -925,7 +918,7 @@ public class ITERATORS
 		final int repeats;
 		int index = 0;
 		ITERATOR KEY_GENERIC_TYPE iter;
-		LIST KEY_GENERIC_TYPE list = new ARRAY_LISTBRACES();
+		COLLECTION KEY_GENERIC_TYPE repeater = COLLECTIONS.wrapper();
 		
 		public RepeatingIterator(ITERATOR KEY_GENERIC_TYPE iter, int repeat) {
 			this.iter = iter;
@@ -937,7 +930,7 @@ public class ITERATORS
 			if(iter.hasNext()) return true;
 			if(index < repeats) {
 				index++;
-				iter = list.iterator();
+				iter = repeater.iterator();
 				return iter.hasNext();
 			}
 			return false;
@@ -947,7 +940,7 @@ public class ITERATORS
 		public KEY_TYPE NEXT() {
 			if(!hasNext()) throw new NoSuchElementException();
 			KEY_TYPE value = iter.NEXT();
-			if(index == 0) list.add(value);
+			if(index == 0) repeater.add(value);
 			return value;
 		}
 	}
@@ -956,7 +949,7 @@ public class ITERATORS
 	{
 		ITERATOR KEY_GENERIC_TYPE iterator;
 		COMPARATOR KEY_GENERIC_TYPE sorter;
-		LIST KEY_GENERIC_TYPE sortedElements = null;
+		COLLECTIONS.CollectionWrapper KEY_GENERIC_TYPE sortedElements = null;
 		int index = 0;
 		
 		public SortedIterator(ITERATOR KEY_GENERIC_TYPE iterator, COMPARATOR KEY_GENERIC_TYPE sorter) {
@@ -968,7 +961,11 @@ public class ITERATORS
 		public boolean hasNext() {
 			if(sortedElements == null) {
 				boolean hasNext = iterator.hasNext();
-				sortedElements = hasNext ? pour(iterator) : LISTS.empty();
+				if(hasNext) {
+					sortedElements = COLLECTIONS.wrapper();
+					pour(iterator, sortedElements);
+				}
+				else sortedElements = COLLECTIONS.wrapper();
 				if(hasNext) sortedElements.unstableSort(sorter);
 			}
 			return index < sortedElements.size();
@@ -987,7 +984,7 @@ public class ITERATORS
 #if TYPE_BOOLEAN
 		int filtered;
 #else
-		SET KEY_GENERIC_TYPE filtered = new HASH_SETBRACES();
+		COLLECTION KEY_GENERIC_TYPE filtered = COLLECTIONS.distinctWrapper();
 #endif
 		KEY_TYPE lastFound;
 		boolean foundNext = false;
@@ -1048,7 +1045,7 @@ public class ITERATORS
 			if(foundNext) return;
 			while(iterator.hasNext()) {
 				lastFound = iterator.NEXT();
-				if(filter.TEST_VALUE(lastFound)) {
+				if(filter.test(lastFound)) {
 					foundNext = true;
 					break;
 				}

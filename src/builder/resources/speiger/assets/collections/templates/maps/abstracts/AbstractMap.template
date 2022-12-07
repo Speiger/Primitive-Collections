@@ -11,7 +11,9 @@ import speiger.src.collections.PACKAGE.functions.function.UNARY_OPERATOR;
 import speiger.src.collections.PACKAGE.maps.interfaces.MAP;
 import speiger.src.collections.PACKAGE.sets.ABSTRACT_SET;
 import speiger.src.collections.PACKAGE.sets.SET;
+#if MAPS_FEATURE
 import speiger.src.collections.PACKAGE.utils.maps.MAPS;
+#endif
 import speiger.src.collections.VALUE_PACKAGE.collections.VALUE_ABSTRACT_COLLECTION;
 import speiger.src.collections.VALUE_PACKAGE.collections.VALUE_COLLECTION;
 #if !SAME_TYPE
@@ -19,6 +21,7 @@ import speiger.src.collections.VALUE_PACKAGE.collections.VALUE_ITERATOR;
 import speiger.src.collections.VALUE_PACKAGE.functions.function.VALUE_UNARY_OPERATOR;
 #endif
 import speiger.src.collections.VALUE_PACKAGE.functions.VALUE_SUPPLIER;
+import speiger.src.collections.objects.collections.ObjectIterable;
 #if !TYPE_OBJECT && !VALUE_OBJECT
 import speiger.src.collections.objects.collections.ObjectIterator;
 #endif
@@ -47,6 +50,22 @@ public abstract class ABSTRACT_MAP KEY_VALUE_GENERIC_TYPE extends AbstractMap<CL
 		return this;
 	}
 	
+	protected ObjectIterable<MAP.Entry KEY_VALUE_GENERIC_TYPE> getFastIterable(MAP KEY_VALUE_GENERIC_TYPE map) {
+#if MAPS_FEATURE
+		return MAPS.fastIterable(map);
+#else
+		return map.ENTRY_SET();
+#endif
+	}
+	
+	protected ObjectIterator<MAP.Entry KEY_VALUE_GENERIC_TYPE> getFastIterator(MAP KEY_VALUE_GENERIC_TYPE map) {
+#if MAPS_FEATURE
+		return MAPS.fastIterator(map);
+#else
+		return map.ENTRY_SET().iterator();
+#endif
+	}
+	
 	@Override
 	public MAP KEY_VALUE_GENERIC_TYPE copy() { 
 		throw new UnsupportedOperationException();
@@ -63,14 +82,14 @@ public abstract class ABSTRACT_MAP KEY_VALUE_GENERIC_TYPE extends AbstractMap<CL
 #if VALUE_PRIMITIVES
 	@Override
 	public void addToAll(MAP KEY_VALUE_GENERIC_TYPE m) {
-		for(MAP.Entry KEY_VALUE_GENERIC_TYPE entry : MAPS.fastIterable(m))
+		for(MAP.Entry KEY_VALUE_GENERIC_TYPE entry : getFastIterable(m))
 			addTo(entry.ENTRY_KEY(), entry.ENTRY_VALUE());
 	}
 	
 #endif
 	@Override
 	public void putAll(MAP KEY_VALUE_GENERIC_TYPE m) {
-		for(ObjectIterator<MAP.Entry KEY_VALUE_GENERIC_TYPE> iter = MAPS.fastIterator(m);iter.hasNext();) {
+		for(ObjectIterator<MAP.Entry KEY_VALUE_GENERIC_TYPE> iter = getFastIterator(m);iter.hasNext();) {
 			MAP.Entry KEY_VALUE_GENERIC_TYPE entry = iter.next();
 			put(entry.ENTRY_KEY(), entry.ENTRY_VALUE());
 		}
@@ -101,7 +120,7 @@ public abstract class ABSTRACT_MAP KEY_VALUE_GENERIC_TYPE extends AbstractMap<CL
 #endif
 	@Override
 	public void putAllIfAbsent(MAP KEY_VALUE_GENERIC_TYPE m) {
-		for(MAP.Entry KEY_VALUE_GENERIC_TYPE entry : MAPS.fastIterable(m))
+		for(MAP.Entry KEY_VALUE_GENERIC_TYPE entry : getFastIterable(m))
 			putIfAbsent(entry.ENTRY_KEY(), entry.ENTRY_VALUE());
 	}
 	
@@ -161,14 +180,14 @@ public abstract class ABSTRACT_MAP KEY_VALUE_GENERIC_TYPE extends AbstractMap<CL
 	
 	@Override
 	public void REPLACE_VALUES(MAP KEY_VALUE_GENERIC_TYPE m) {
-		for(MAP.Entry KEY_VALUE_GENERIC_TYPE entry : MAPS.fastIterable(m))
+		for(MAP.Entry KEY_VALUE_GENERIC_TYPE entry : getFastIterable(m))
 			replace(entry.ENTRY_KEY(), entry.ENTRY_VALUE());
 	}
 	
 	@Override
 	public void REPLACE_VALUES(UNARY_OPERATOR KEY_VALUE_GENERIC_TYPE mappingFunction) {
 		Objects.requireNonNull(mappingFunction);
-		for(ObjectIterator<MAP.Entry KEY_VALUE_GENERIC_TYPE> iter = MAPS.fastIterator(this);iter.hasNext();) {
+		for(ObjectIterator<MAP.Entry KEY_VALUE_GENERIC_TYPE> iter = getFastIterator(this);iter.hasNext();) {
 			MAP.Entry KEY_VALUE_GENERIC_TYPE entry = iter.next();
 			entry.setValue(mappingFunction.APPLY_VALUE(entry.ENTRY_KEY(), entry.ENTRY_VALUE()));
 		}
@@ -195,7 +214,7 @@ public abstract class ABSTRACT_MAP KEY_VALUE_GENERIC_TYPE extends AbstractMap<CL
 		Objects.requireNonNull(mappingFunction);
 		VALUE_TYPE value;
 		if((value = GET_VALUE(key)) == getDefaultReturnValue() || !containsKey(key)) {
-			VALUE_TYPE newValue = mappingFunction.GET_VALUE(key);
+			VALUE_TYPE newValue = mappingFunction.APPLY(key);
 			if(VALUE_EQUALS_NOT(newValue, getDefaultReturnValue())) {
 				put(key, newValue);
 				return newValue;
@@ -246,7 +265,7 @@ public abstract class ABSTRACT_MAP KEY_VALUE_GENERIC_TYPE extends AbstractMap<CL
 	@Override
 	public void BULK_MERGE(MAP KEY_VALUE_GENERIC_TYPE m, VALUE_UNARY_OPERATOR VALUE_VALUE_GENERIC_TYPE mappingFunction) {
 		Objects.requireNonNull(mappingFunction);
-		for(MAP.Entry KEY_VALUE_GENERIC_TYPE entry : MAPS.fastIterable(m)) {
+		for(MAP.Entry KEY_VALUE_GENERIC_TYPE entry : getFastIterable(m)) {
 			KEY_TYPE key = entry.ENTRY_KEY();
 			VALUE_TYPE oldValue = GET_VALUE(key);
 			VALUE_TYPE newValue = VALUE_EQUALS(oldValue, getDefaultReturnValue()) ? entry.ENTRY_VALUE() : mappingFunction.APPLY_VALUE(oldValue, entry.ENTRY_VALUE());
@@ -298,7 +317,7 @@ public abstract class ABSTRACT_MAP KEY_VALUE_GENERIC_TYPE extends AbstractMap<CL
 	@Override
 	public void forEach(BI_CONSUMER KEY_VALUE_GENERIC_TYPE action) {
 		Objects.requireNonNull(action);
-		for(ObjectIterator<MAP.Entry KEY_VALUE_GENERIC_TYPE> iter = MAPS.fastIterator(this);iter.hasNext();) {
+		for(ObjectIterator<MAP.Entry KEY_VALUE_GENERIC_TYPE> iter = getFastIterator(this);iter.hasNext();) {
 			MAP.Entry KEY_VALUE_GENERIC_TYPE entry = iter.next();
 			action.accept(entry.ENTRY_KEY(), entry.ENTRY_VALUE());
 		}
@@ -332,7 +351,7 @@ public abstract class ABSTRACT_MAP KEY_VALUE_GENERIC_TYPE extends AbstractMap<CL
 			@Override
 			public ITERATOR KEY_GENERIC_TYPE iterator() {
 				return new ITERATOR KEY_GENERIC_TYPE() {
-					ObjectIterator<MAP.Entry KEY_VALUE_GENERIC_TYPE> iter = MAPS.fastIterator(ABSTRACT_MAP.this);
+					ObjectIterator<MAP.Entry KEY_VALUE_GENERIC_TYPE> iter = getFastIterator(ABSTRACT_MAP.this);
 					@Override
 					public boolean hasNext() {
 						return iter.hasNext();
@@ -383,7 +402,7 @@ public abstract class ABSTRACT_MAP KEY_VALUE_GENERIC_TYPE extends AbstractMap<CL
 			@Override
 			public VALUE_ITERATOR VALUE_GENERIC_TYPE iterator() {
 				return new VALUE_ITERATOR VALUE_GENERIC_TYPE() {
-					ObjectIterator<MAP.Entry KEY_VALUE_GENERIC_TYPE> iter = MAPS.fastIterator(ABSTRACT_MAP.this);
+					ObjectIterator<MAP.Entry KEY_VALUE_GENERIC_TYPE> iter = getFastIterator(ABSTRACT_MAP.this);
 					@Override
 					public boolean hasNext() {
 						return iter.hasNext();
@@ -423,7 +442,7 @@ public abstract class ABSTRACT_MAP KEY_VALUE_GENERIC_TYPE extends AbstractMap<CL
 	@Override
 	public int hashCode() {
 		int hash = 0;
-		ObjectIterator<MAP.Entry KEY_VALUE_GENERIC_TYPE> iter = MAPS.fastIterator(this);
+		ObjectIterator<MAP.Entry KEY_VALUE_GENERIC_TYPE> iter = getFastIterator(this);
 		while(iter.hasNext()) hash += iter.next().hashCode();
 		return hash;
 	}

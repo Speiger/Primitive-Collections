@@ -28,7 +28,6 @@ import speiger.src.collections.PACKAGE.maps.interfaces.MAP;
 #if !TYPE_OBJECT
 import speiger.src.collections.PACKAGE.sets.ORDERED_SET;
 #endif
-import speiger.src.collections.PACKAGE.utils.maps.MAPS;
 #if !TYPE_OBJECT
 import speiger.src.collections.PACKAGE.utils.ARRAYS;
 #endif
@@ -215,7 +214,7 @@ public class IMMUTABLE_HASH_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_
 		KEY_TYPE[] keys = NEW_KEY_ARRAY(map.size());
 		VALUE_TYPE[] values = NEW_VALUE_ARRAY(keys.length);
 		int index = 0;
-		for(MAP.Entry KEY_VALUE_GENERIC_TYPE entry : MAPS.fastIterable(map)) {
+		for(MAP.Entry KEY_VALUE_GENERIC_TYPE entry : getFastIterable(map)) {
 			keys[index] = entry.ENTRY_KEY();
 			values[index] = entry.ENTRY_VALUE();
 			index++;
@@ -678,7 +677,7 @@ public class IMMUTABLE_HASH_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_
 			int index = firstIndex;
 			while(index != -1) {
 				entry.set(keys[index], values[index]);
-				if(filter.getBoolean(entry)) return true;
+				if(filter.test(entry)) return true;
 				index = (int)links[index];
 			}
 			return false;
@@ -692,7 +691,7 @@ public class IMMUTABLE_HASH_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_
 			int index = firstIndex;
 			while(index != -1) {
 				entry.set(keys[index], values[index]);
-				if(filter.getBoolean(entry)) return false;
+				if(filter.test(entry)) return false;
 				index = (int)links[index];
 			}
 			return true;
@@ -706,7 +705,7 @@ public class IMMUTABLE_HASH_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_
 			int index = firstIndex;
 			while(index != -1) {
 				entry.set(keys[index], values[index]);
-				if(!filter.getBoolean(entry)) return false;
+				if(!filter.test(entry)) return false;
 				index = (int)links[index];
 			}
 			return true;
@@ -751,7 +750,7 @@ public class IMMUTABLE_HASH_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_
 			int index = firstIndex;
 			while(index != -1) {
 				entry.set(keys[index], values[index]);
-				if(filter.getBoolean(entry)) return entry;
+				if(filter.test(entry)) return entry;
 				index = (int)links[index];
 			}
 			return null;
@@ -766,7 +765,7 @@ public class IMMUTABLE_HASH_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_
 			int index = firstIndex;
 			while(index != -1) {
 				entry.set(keys[index], values[index]);
-				if(filter.getBoolean(entry)) result++;
+				if(filter.test(entry)) result++;
 				index = (int)links[index];
 			}
 			return result;
@@ -904,7 +903,7 @@ public class IMMUTABLE_HASH_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_
 			if(size() <= 0) return false;
 			int index = firstIndex;
 			while(index != -1){
-				if(filter.TEST_VALUE(keys[index])) return true;
+				if(filter.test(keys[index])) return true;
 				index = (int)links[index];
 			}
 			return false;
@@ -916,7 +915,7 @@ public class IMMUTABLE_HASH_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_
 			if(size() <= 0) return true;
 			int index = firstIndex;
 			while(index != -1){
-				if(filter.TEST_VALUE(keys[index])) return false;
+				if(filter.test(keys[index])) return false;
 				index = (int)links[index];
 			}
 			return true;
@@ -928,7 +927,7 @@ public class IMMUTABLE_HASH_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_
 			if(size() <= 0) return true;
 			int index = firstIndex;
 			while(index != -1){
-				if(!filter.TEST_VALUE(keys[index])) return false;
+				if(!filter.test(keys[index])) return false;
 				index = (int)links[index];
 			}
 			return true;
@@ -986,7 +985,7 @@ public class IMMUTABLE_HASH_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_
 			if(size() <= 0) return EMPTY_KEY_VALUE;
 			int index = firstIndex;
 			while(index != -1){
-				if(filter.TEST_VALUE(keys[index])) return keys[index];
+				if(filter.test(keys[index])) return keys[index];
 				index = (int)links[index];
 			}
 			return EMPTY_KEY_VALUE;
@@ -999,7 +998,7 @@ public class IMMUTABLE_HASH_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_
 			int index = firstIndex;
 			int result = 0;
 			while(index != -1){
-				if(filter.TEST_VALUE(keys[index])) result++;
+				if(filter.test(keys[index])) result++;
 				index = (int)links[index];
 			}
 			return result;
@@ -1065,7 +1064,7 @@ public class IMMUTABLE_HASH_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_
 			if(size() <= 0) return false;
 			int index = firstIndex;
 			while(index != -1){
-				if(filter.VALUE_TEST_VALUE(values[index])) return true;
+				if(filter.test(values[index])) return true;
 				index = (int)links[index];
 			}
 			return false;
@@ -1077,7 +1076,7 @@ public class IMMUTABLE_HASH_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_
 			if(size() <= 0) return true;
 			int index = firstIndex;
 			while(index != -1){
-				if(filter.VALUE_TEST_VALUE(values[index])) return false;
+				if(filter.test(values[index])) return false;
 				index = (int)links[index];
 			}
 			return true;
@@ -1089,7 +1088,7 @@ public class IMMUTABLE_HASH_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_
 			if(size() <= 0) return true;
 			int index = firstIndex;
 			while(index != -1){
-				if(!filter.VALUE_TEST_VALUE(values[index])) return false;
+				if(!filter.test(values[index])) return false;
 				index = (int)links[index];
 			}
 			return true;
@@ -1147,7 +1146,7 @@ public class IMMUTABLE_HASH_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_
 			if(size() <= 0) return EMPTY_VALUE;
 			int index = firstIndex;
 			while(index != -1){
-				if(filter.VALUE_TEST_VALUE(values[index])) return values[index];
+				if(filter.test(values[index])) return values[index];
 				index = (int)links[index];
 			}
 			return EMPTY_VALUE;
@@ -1160,7 +1159,7 @@ public class IMMUTABLE_HASH_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_
 			int result = 0;
 			int index = firstIndex;
 			while(index != -1){
-				if(filter.VALUE_TEST_VALUE(values[index])) result++;
+				if(filter.test(values[index])) result++;
 				index = (int)links[index];
 			}
 			return result;

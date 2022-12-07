@@ -5,7 +5,7 @@ import java.util.Set;
 import speiger.src.collections.PACKAGE.collections.COLLECTION;
 import speiger.src.collections.PACKAGE.collections.ITERATOR;
 import speiger.src.collections.PACKAGE.collections.SPLIT_ITERATOR;
-#if !TYPE_BOOLEAN
+#if SETS_FEATURE
 import speiger.src.collections.PACKAGE.utils.SETS;
 #endif
 import speiger.src.collections.PACKAGE.utils.SPLIT_ITERATORS;
@@ -64,7 +64,7 @@ public interface SET KEY_GENERIC_TYPE extends Set<CLASS_TYPE>, COLLECTION KEY_GE
 	public KEY_TYPE addOrGet(KEY_TYPE o);
 	
 #endif
-#if !TYPE_BOOLEAN
+#if SETS_FEATURE
 	/**
 	 * Creates a Wrapped Set that is Synchronized
 	 * @return a new Set that is synchronized

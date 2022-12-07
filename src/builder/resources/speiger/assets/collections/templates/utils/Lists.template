@@ -2,10 +2,14 @@ package speiger.src.collections.PACKAGE.utils;
 
 import java.util.Collection;
 import java.util.List;
+#if IARRAY_FEATURE
 import java.util.Objects;
+#endif
 import java.util.Random;
 import java.util.RandomAccess;
+#if IARRAY_FEATURE || TYPE_OBJECT
 import java.util.function.Consumer;
+#endif
 #if PRIMITIVES
 import java.nio.JAVA_BUFFER;
 #endif
@@ -17,7 +21,9 @@ import speiger.src.collections.PACKAGE.functions.CONSUMER;
 import speiger.src.collections.PACKAGE.lists.ABSTRACT_LIST;
 import speiger.src.collections.PACKAGE.lists.LIST;
 import speiger.src.collections.PACKAGE.lists.LIST_ITERATOR;
+#if IARRAY_FEATURE
 import speiger.src.collections.PACKAGE.utils.ARRAYS;
+#endif
 import speiger.src.collections.utils.SanityChecks;
 
 /**
@@ -60,7 +66,11 @@ public class LISTS
 	 * @return a synchronized list wrapper. If the list is implementing RandomAccess or IARRAY that is also transferred. If the List already a synchronized wrapper then it just returns itself.
 	 */
 	public static GENERIC_KEY_BRACES LIST KEY_GENERIC_TYPE synchronize(LIST KEY_GENERIC_TYPE l) {
+#if IARRAY_FEATURE
 		return l instanceof SynchronizedList ? l : (l instanceof IARRAY ? new SynchronizedArrayListBRACES(l) : (l instanceof RandomAccess ? new SynchronizedRandomAccessListBRACES(l) : new SynchronizedListBRACES(l)));
+#else
+		return l instanceof SynchronizedList ? l : (l instanceof RandomAccess ? new SynchronizedRandomAccessListBRACES(l) : new SynchronizedListBRACES(l));
+#endif
 	}
 	
 	/**
@@ -71,7 +81,11 @@ public class LISTS
 	 * @return a synchronized list wrapper. If the list is implementing RandomAccess or IARRAY that is also transferred. If the List already a synchronized wrapper then it just returns itself.
 	 */
 	public static GENERIC_KEY_BRACES LIST KEY_GENERIC_TYPE synchronize(LIST KEY_GENERIC_TYPE l, Object mutex) {
+#if IARRAY_FEATURE
 		return l instanceof SynchronizedList ? l : (l instanceof IARRAY ? new SynchronizedArrayListBRACES(l, mutex) : (l instanceof RandomAccess ? new SynchronizedRandomAccessListBRACES(l, mutex) : new SynchronizedListBRACES(l, mutex)));
+#else
+		return l instanceof SynchronizedList ? l : (l instanceof RandomAccess ? new SynchronizedRandomAccessListBRACES(l, mutex) : new SynchronizedListBRACES(l, mutex));
+#endif
 	}
 	
 	/**
@@ -92,6 +106,7 @@ public class LISTS
 	 */
 	public static GENERIC_KEY_BRACES LIST KEY_GENERIC_TYPE reverse(LIST KEY_GENERIC_TYPE list) {
 		int size = list.size();
+#if IARRAY_FEATURE
 		if(list instanceof IARRAY) {
 			IARRAY KEY_GENERIC_TYPE array = (IARRAY KEY_GENERIC_TYPE)list;
 #if TYPE_OBJECT
@@ -106,6 +121,7 @@ public class LISTS
 			return list;
 #endif
 		}
+#endif
 		if(list instanceof RandomAccess) {
 			for (int i = 0, mid = size >> 1, j = size - 1; i < mid; i++, j--) {
 				KEY_TYPE t = list.GET_KEY(i);
@@ -143,6 +159,7 @@ public class LISTS
 	 */
 	public static GENERIC_KEY_BRACES LIST KEY_GENERIC_TYPE shuffle(LIST KEY_GENERIC_TYPE list, Random random) {
 		int size = list.size();
+#if IARRAY_FEATURE
 		if(list instanceof IARRAY) {
 			IARRAY KEY_GENERIC_TYPE array = (IARRAY KEY_GENERIC_TYPE)list;
 #if TYPE_OBJECT
@@ -164,7 +181,8 @@ public class LISTS
 #endif
 			return list;
 		}
-		for(int i = list.size(); i-- != 0;) {
+#endif
+		for(int i = size; i-- != 0;) {
 			int p = random.nextInt(i + 1);
 			KEY_TYPE t = list.GET_KEY(i);
 			list.set(i, list.GET_KEY(p));
@@ -231,6 +249,7 @@ public class LISTS
 		public SingletonList KEY_GENERIC_TYPE copy() { return new SingletonListBRACES(element); }
 	}
 	
+#if IARRAY_FEATURE
 	private static class SynchronizedArrayList KEY_GENERIC_TYPE extends SynchronizedList KEY_GENERIC_TYPE implements IARRAY KEY_GENERIC_TYPE
 	{
 		IARRAY KEY_GENERIC_TYPE l;
@@ -271,6 +290,7 @@ public class LISTS
 		}
 	}
 	
+#endif
 	private static class SynchronizedRandomAccessList KEY_GENERIC_TYPE extends SynchronizedList KEY_GENERIC_TYPE implements RandomAccess 
 	{
 		SynchronizedRandomAccessList(LIST KEY_GENERIC_TYPE l) {

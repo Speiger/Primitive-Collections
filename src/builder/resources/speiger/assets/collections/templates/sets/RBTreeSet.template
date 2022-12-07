@@ -364,7 +364,7 @@ public class RB_TREE_SET KEY_GENERIC_TYPE extends ABSTRACT_SET KEY_GENERIC_TYPE 
 	public boolean matchesAny(PREDICATE KEY_GENERIC_TYPE filter) {
 		Objects.requireNonNull(filter);
 		for(Entry KEY_GENERIC_TYPE entry = first;entry != null;entry = entry.next()) {
-			if(filter.TEST_VALUE(entry.key)) return true;
+			if(filter.test(entry.key)) return true;
 		}
 		return false;
 	}
@@ -373,7 +373,7 @@ public class RB_TREE_SET KEY_GENERIC_TYPE extends ABSTRACT_SET KEY_GENERIC_TYPE 
 	public boolean matchesNone(PREDICATE KEY_GENERIC_TYPE filter) {
 		Objects.requireNonNull(filter);
 		for(Entry KEY_GENERIC_TYPE entry = first;entry != null;entry = entry.next()) {
-			if(filter.TEST_VALUE(entry.key)) return false;
+			if(filter.test(entry.key)) return false;
 		}
 		return true;
 	}
@@ -382,7 +382,7 @@ public class RB_TREE_SET KEY_GENERIC_TYPE extends ABSTRACT_SET KEY_GENERIC_TYPE 
 	public boolean matchesAll(PREDICATE KEY_GENERIC_TYPE filter) {
 		Objects.requireNonNull(filter);
 		for(Entry KEY_GENERIC_TYPE entry = first;entry != null;entry = entry.next()) {
-			if(!filter.TEST_VALUE(entry.key)) return false;
+			if(!filter.test(entry.key)) return false;
 		}
 		return true;
 	}
@@ -430,7 +430,7 @@ public class RB_TREE_SET KEY_GENERIC_TYPE extends ABSTRACT_SET KEY_GENERIC_TYPE 
 	public KEY_TYPE findFirst(PREDICATE KEY_GENERIC_TYPE filter) {
 		Objects.requireNonNull(filter);
 		for(Entry KEY_GENERIC_TYPE entry = first;entry != null;entry = entry.next()) {
-			if(filter.TEST_VALUE(entry.key)) return entry.key;
+			if(filter.test(entry.key)) return entry.key;
 		}
 		return EMPTY_VALUE;
 	}
@@ -440,7 +440,7 @@ public class RB_TREE_SET KEY_GENERIC_TYPE extends ABSTRACT_SET KEY_GENERIC_TYPE 
 		Objects.requireNonNull(filter);
 		int result = 0;
 		for(Entry KEY_GENERIC_TYPE entry = first;entry != null;entry = entry.next()) {
-			if(filter.TEST_VALUE(entry.key)) result++;
+			if(filter.test(entry.key)) result++;
 		}
 		return result;
 	}
@@ -1264,7 +1264,7 @@ public class RB_TREE_SET KEY_GENERIC_TYPE extends ABSTRACT_SET KEY_GENERIC_TYPE 
 		public boolean matchesAny(PREDICATE KEY_GENERIC_TYPE filter) {
 			Objects.requireNonNull(filter);
 			for(Entry KEY_GENERIC_TYPE entry = start();entry != null && inRange(entry.key);entry = next(entry)) {
-				if(filter.TEST_VALUE(entry.key)) return true;
+				if(filter.test(entry.key)) return true;
 			}
 			return false;
 		}
@@ -1273,7 +1273,7 @@ public class RB_TREE_SET KEY_GENERIC_TYPE extends ABSTRACT_SET KEY_GENERIC_TYPE 
 		public boolean matchesNone(PREDICATE KEY_GENERIC_TYPE filter) {
 			Objects.requireNonNull(filter);
 			for(Entry KEY_GENERIC_TYPE entry = start();entry != null && inRange(entry.key);entry = next(entry)) {
-				if(filter.TEST_VALUE(entry.key)) return false;
+				if(filter.test(entry.key)) return false;
 			}
 			return true;
 		}
@@ -1282,7 +1282,7 @@ public class RB_TREE_SET KEY_GENERIC_TYPE extends ABSTRACT_SET KEY_GENERIC_TYPE 
 		public boolean matchesAll(PREDICATE KEY_GENERIC_TYPE filter) {
 			Objects.requireNonNull(filter);
 			for(Entry KEY_GENERIC_TYPE entry = start();entry != null && inRange(entry.key);entry = next(entry)) {
-				if(!filter.TEST_VALUE(entry.key)) return false;
+				if(!filter.test(entry.key)) return false;
 			}
 			return true;
 		}
@@ -1330,7 +1330,7 @@ public class RB_TREE_SET KEY_GENERIC_TYPE extends ABSTRACT_SET KEY_GENERIC_TYPE 
 		public KEY_TYPE findFirst(PREDICATE KEY_GENERIC_TYPE filter) {
 			Objects.requireNonNull(filter);
 			for(Entry KEY_GENERIC_TYPE entry = start();entry != null && inRange(entry.key);entry = next(entry)) {
-				if(filter.TEST_VALUE(entry.key)) return entry.key;
+				if(filter.test(entry.key)) return entry.key;
 			}
 			return EMPTY_VALUE;
 		}
@@ -1340,7 +1340,7 @@ public class RB_TREE_SET KEY_GENERIC_TYPE extends ABSTRACT_SET KEY_GENERIC_TYPE 
 			Objects.requireNonNull(filter);
 			int result = 0;
 			for(Entry KEY_GENERIC_TYPE entry = start();entry != null && inRange(entry.key);entry = next(entry)) {
-				if(filter.TEST_VALUE(entry.key)) result++;
+				if(filter.test(entry.key)) result++;
 			}
 			return result;
 		}

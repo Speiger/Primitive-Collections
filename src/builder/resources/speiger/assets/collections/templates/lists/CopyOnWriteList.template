@@ -41,12 +41,14 @@ import speiger.src.collections.utils.Stack;
 #else
 import speiger.src.collections.objects.utils.ObjectArrays;
 #endif
-#if PRIMITIVES
+#if PRIMITIVES && STREAM_FEATURE && SPLIT_ITERATOR_FEATURE
 import java.util.stream.JAVA_STREAM;
 import java.util.stream.StreamSupport;
 #endif
+#if SPLIT_ITERATOR_FEATURE
 import speiger.src.collections.PACKAGE.collections.SPLIT_ITERATOR;
 import speiger.src.collections.PACKAGE.utils.SPLIT_ITERATORS;
+#endif
 import speiger.src.collections.utils.ITrimmable;
 import speiger.src.collections.utils.SanityChecks;
 
@@ -148,8 +150,8 @@ public class COPY_ON_WRITE_LIST KEY_GENERIC_TYPE extends ABSTRACT_LIST KEY_GENER
 	 * @Type(T)
 	 * @return a typed List
 	 */
-	public static GENERIC_KEY_BRACES ARRAY_LIST KEY_GENERIC_TYPE of(Class<KEY_TYPE> c) {
-		ARRAY_LIST KEY_GENERIC_TYPE list = new ARRAY_LISTBRACES();
+	public static GENERIC_KEY_BRACES COPY_ON_WRITE_LIST KEY_GENERIC_TYPE of(Class<KEY_TYPE> c) {
+		COPY_ON_WRITE_LIST KEY_GENERIC_TYPE list = new COPY_ON_WRITE_LISTBRACES();
 		list.data = (KEY_TYPE[])ObjectArrays.newArray(c, 0);
 		return list;
 	}
@@ -773,7 +775,7 @@ public class COPY_ON_WRITE_LIST KEY_GENERIC_TYPE extends ABSTRACT_LIST KEY_GENER
 		Objects.requireNonNull(filter);
 		KEY_TYPE[] data = this.data;
 		for(int i = 0,m=data.length;i<m;i++) {
-			if(filter.TEST_VALUE(data[i])) return true;
+			if(filter.test(data[i])) return true;
 		}
 		return false;
 	}
@@ -783,7 +785,7 @@ public class COPY_ON_WRITE_LIST KEY_GENERIC_TYPE extends ABSTRACT_LIST KEY_GENER
 		Objects.requireNonNull(filter);
 		KEY_TYPE[] data = this.data;
 		for(int i = 0,m=data.length;i<m;i++) {
-			if(filter.TEST_VALUE(data[i])) return false;
+			if(filter.test(data[i])) return false;
 		}
 		return true;
 	}
@@ -793,7 +795,7 @@ public class COPY_ON_WRITE_LIST KEY_GENERIC_TYPE extends ABSTRACT_LIST KEY_GENER
 		Objects.requireNonNull(filter);
 		KEY_TYPE[] data = this.data;
 		for(int i = 0,m=data.length;i<m;i++) {
-			if(!filter.TEST_VALUE(data[i])) return false;
+			if(!filter.test(data[i])) return false;
 		}
 		return true;
 	}
@@ -803,7 +805,7 @@ public class COPY_ON_WRITE_LIST KEY_GENERIC_TYPE extends ABSTRACT_LIST KEY_GENER
 		Objects.requireNonNull(filter);
 		KEY_TYPE[] data = this.data;
 		for(int i = 0,m=data.length;i<m;i++) {
-			if(filter.TEST_VALUE(data[i])) return data[i];
+			if(filter.test(data[i])) return data[i];
 		}
 		return EMPTY_VALUE;
 	}
@@ -856,7 +858,7 @@ public class COPY_ON_WRITE_LIST KEY_GENERIC_TYPE extends ABSTRACT_LIST KEY_GENER
 		KEY_TYPE[] data = this.data;
 		int result = 0;
 		for(int i = 0,m=data.length;i<m;i++) {
-			if(filter.TEST_VALUE(data[i])) result++;
+			if(filter.test(data[i])) result++;
 		}
 		return result;
 	}
@@ -1408,8 +1410,9 @@ public class COPY_ON_WRITE_LIST KEY_GENERIC_TYPE extends ABSTRACT_LIST KEY_GENER
 		if (index < 0 || index > data.length)
 			throw new IndexOutOfBoundsException("Index: " + index + ", Size: " + data.length);
 	}
-	
-#if PRIMITIVES
+
+#if SPLIT_ITERATOR_FEATURE
+#if PRIMITIVES && STREAM_FEATURE
 	/**
 	 * Returns a Java-Type-Specific Stream to reduce boxing/unboxing.
 	 * @return a Stream of the closest java type
@@ -1427,6 +1430,7 @@ public class COPY_ON_WRITE_LIST KEY_GENERIC_TYPE extends ABSTRACT_LIST KEY_GENER
 	@Override
 	public SPLIT_ITERATOR KEY_GENERIC_TYPE spliterator() { return SPLIT_ITERATORS.createArraySplititerator(data, data.length, 16464); }
 	
+#endif
 	static final class COWIterator KEY_GENERIC_TYPE implements LIST_ITERATOR KEY_GENERIC_TYPE
 	{
 		KEY_TYPE[] data;
@@ -2080,9 +2084,11 @@ public class COPY_ON_WRITE_LIST KEY_GENERIC_TYPE extends ABSTRACT_LIST KEY_GENER
 			}
 		}
 		
+#if SPLIT_ITERATOR_FEATURE
 		@Override
 		public SPLIT_ITERATOR KEY_GENERIC_TYPE spliterator() { return SPLIT_ITERATORS.createSplititerator(this, 16464); }
 		
+#endif
 		@Override
 		public LIST_ITERATOR KEY_GENERIC_TYPE listIterator(int index) {
 			if(index < 0 || index > size()) throw new IndexOutOfBoundsException();

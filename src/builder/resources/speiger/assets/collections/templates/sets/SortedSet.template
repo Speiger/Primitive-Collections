@@ -9,7 +9,9 @@ import java.util.Comparator;
 #else
 import speiger.src.collections.PACKAGE.functions.COMPARATOR;
 #endif
+#if SETS_FEATURE
 import speiger.src.collections.PACKAGE.utils.SETS;
+#endif
 import speiger.src.collections.PACKAGE.utils.SPLIT_ITERATORS;
 
 /**
@@ -41,7 +43,7 @@ public interface SORTED_SET KEY_GENERIC_TYPE extends SET KEY_GENERIC_TYPE, Sorte
 	 */
 	public BI_ITERATOR KEY_GENERIC_TYPE iterator(KEY_TYPE fromElement);
 	
-#if !TYPE_BOOLEAN
+#if SETS_FEATURE
 	/**
 	 * Creates a Wrapped SortedSet that is Synchronized
 	 * @return a new SortedSet that is synchronized

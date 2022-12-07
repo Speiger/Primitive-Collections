@@ -11,7 +11,9 @@ import speiger.src.collections.PACKAGE.collections.COLLECTION;
 #if !TYPE_OBJECT
 import speiger.src.collections.PACKAGE.functions.COMPARATOR;
 #endif
+#if DEQUEUE_FEATURE
 import speiger.src.collections.PACKAGE.queues.PRIORITY_DEQUEUE;
+#endif
 import speiger.src.collections.PACKAGE.queues.PRIORITY_QUEUE;
 #if !TYPE_OBJECT
 import speiger.src.collections.PACKAGE.functions.CONSUMER;
@@ -46,6 +48,7 @@ public class PRIORITY_QUEUES
 		return queue instanceof SynchronizedPriorityQueue ? (SynchronizedPriorityQueue KEY_GENERIC_TYPE)queue : new SynchronizedPriorityQueueBRACES(queue, mutex);
 	}
 	
+#if DEQUEUE_FEATURE
 	/**
 	 * Returns a synchronized PriorityDequeue instance based on the instance given.
 	 * @param dequeue that should be synchronized
@@ -67,6 +70,7 @@ public class PRIORITY_QUEUES
 		return dequeue instanceof SynchronizedPriorityDequeue ? (SynchronizedPriorityDequeue KEY_GENERIC_TYPE)dequeue : new SynchronizedPriorityDequeueBRACES(dequeue, mutex);
 	}
 	
+#endif
 	/**
 	 * Wrapper class for synchronization
 	 * @Type(T)
@@ -134,6 +138,7 @@ public class PRIORITY_QUEUES
 		public int count(PREDICATE KEY_GENERIC_TYPE filter) { synchronized(mutex) { return queue.count(filter); } }
 	}
 	
+#if DEQUEUE_FEATURE
 	/**
 	 * Wrapper class for synchronization
 	 * @Type(T)
@@ -166,4 +171,5 @@ public class PRIORITY_QUEUES
 		@Override
 		public PRIORITY_DEQUEUE KEY_GENERIC_TYPE copy() { synchronized(mutex) { return dequeue.copy(); } }
 	}
+#endif
 }

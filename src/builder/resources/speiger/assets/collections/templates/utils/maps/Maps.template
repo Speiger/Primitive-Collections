@@ -3,9 +3,9 @@ package speiger.src.collections.PACKAGE.utils.maps;
 #if !TYPE_BOOLEAN
 import java.util.Map;
 import java.util.Objects;
-#if TYPE_OBJECT
+#if TYPE_OBJECT && SORTED_MAP_FEATURE
 import java.util.Comparator;
-#else
+#else if !TYPE_OBJECT
 import java.util.function.BiConsumer;
 import java.util.function.BiFunction;
 #endif
@@ -18,27 +18,34 @@ import java.util.function.Function;
 import speiger.src.collections.objects.collections.ObjectIterable;
 import speiger.src.collections.objects.collections.ObjectIterator;
 import speiger.src.collections.objects.sets.ObjectSet;
-#if !TYPE_BOOLEAN
 import speiger.src.collections.objects.collections.ObjectBidirectionalIterator;
 import speiger.src.collections.objects.utils.ObjectIterators;
 import speiger.src.collections.objects.utils.ObjectSets;
 #if !TYPE_OBJECT
 import speiger.src.collections.objects.sets.ObjectOrderedSet;
+#if SORTED_MAP_FEATURE
 import speiger.src.collections.PACKAGE.functions.COMPARATOR;
+#endif
 #endif
 import speiger.src.collections.PACKAGE.functions.consumer.BI_CONSUMER;
 import speiger.src.collections.PACKAGE.functions.function.FUNCTION;
 import speiger.src.collections.PACKAGE.functions.function.UNARY_OPERATOR;
 import speiger.src.collections.PACKAGE.maps.abstracts.ABSTRACT_MAP;
-#endif
 import speiger.src.collections.PACKAGE.maps.interfaces.MAP;
-#if !TYPE_BOOLEAN
+#if SORTED_MAP_FEATURE
 import speiger.src.collections.PACKAGE.maps.interfaces.NAVIGABLE_MAP;
 import speiger.src.collections.PACKAGE.maps.interfaces.SORTED_MAP;
+#endif
+#if ORDERED_MAP_FEATURE
 import speiger.src.collections.PACKAGE.maps.interfaces.ORDERED_MAP;
+#endif
+#if SORTED_MAP_FEATURE
 import speiger.src.collections.PACKAGE.sets.NAVIGABLE_SET;
 import speiger.src.collections.PACKAGE.sets.SORTED_SET;
+#endif
+#if ORDERED_MAP_FEATURE
 import speiger.src.collections.PACKAGE.sets.ORDERED_SET;
+#endif
 #if !TYPE_OBJECT
 import speiger.src.collections.PACKAGE.sets.SET;
 import speiger.src.collections.PACKAGE.utils.SETS;
@@ -49,10 +56,6 @@ import speiger.src.collections.VALUE_PACKAGE.functions.function.VALUE_UNARY_OPER
 #endif
 import speiger.src.collections.VALUE_PACKAGE.functions.VALUE_SUPPLIER;
 import speiger.src.collections.VALUE_PACKAGE.utils.VALUE_COLLECTIONS;
-#if !SAME_TYPE && !VALUE_OBJECT
-import speiger.src.collections.VALUE_PACKAGE.utils.VALUE_SETS;
-#endif
-#endif
 
 /**
  * A Helper class that provides you with Singleton/Empty/Synchronized/Unmodifyable Maps
@@ -123,8 +126,6 @@ public class MAPS
 		else entries.forEach(action);
 	}
 	
-#if !TYPE_BOOLEAN
-	
 	/**
 	 * Helper function that creates a Helper wrapper to synchronize access into the map.
 	 * @param map the map that should be synchronized
@@ -147,6 +148,7 @@ public class MAPS
 	 */
 	public static GENERIC_KEY_VALUE_BRACES MAP KEY_VALUE_GENERIC_TYPE synchronize(MAP KEY_VALUE_GENERIC_TYPE map, Object mutex) { return map instanceof SynchronizedMap ? map : new SynchronizedMapKV_BRACES(map, mutex); }
 	
+#if SORTED_MAP_FEATURE
 	/**
 	 * Helper function that creates a Helper wrapper to synchronize access into the SortedMap.
 	 * @param map the SortedMap that should be synchronized
@@ -169,6 +171,8 @@ public class MAPS
 	 */
 	public static GENERIC_KEY_VALUE_BRACES SORTED_MAP KEY_VALUE_GENERIC_TYPE synchronize(SORTED_MAP KEY_VALUE_GENERIC_TYPE map, Object mutex) { return map instanceof SynchronizedSortedMap ? map : new SynchronizedSortedMapKV_BRACES(map, mutex); }
 	
+#endif
+#if ORDERED_MAP_FEATURE
 	/**
 	 * Helper function that creates a Helper wrapper to synchronize access into the OrderedMap.
 	 * @param map the OrderedMap that should be synchronized
@@ -191,6 +195,8 @@ public class MAPS
 	 */
 	public static GENERIC_KEY_VALUE_BRACES ORDERED_MAP KEY_VALUE_GENERIC_TYPE synchronize(ORDERED_MAP KEY_VALUE_GENERIC_TYPE map, Object mutex) { return map instanceof SynchronizedOrderedMap ? map : new SynchronizedOrderedMapKV_BRACES(map, mutex); }
 	
+#endif
+#if SORTED_MAP_FEATURE
 	/**
 	 * Helper function that creates a Helper wrapper to synchronize access into the NavigableMap.
 	 * @param map the NavigableMap that should be synchronized
@@ -213,6 +219,7 @@ public class MAPS
 	 */
 	public static GENERIC_KEY_VALUE_BRACES NAVIGABLE_MAP KEY_VALUE_GENERIC_TYPE synchronize(NAVIGABLE_MAP KEY_VALUE_GENERIC_TYPE map, Object mutex) { return map instanceof SynchronizedNavigableMap ? map : new SynchronizedNavigableMapKV_BRACES(map, mutex); }
 	
+#endif
 	/**
 	 * A Helper function that creates a Helper wrapper to only allow Read Access into the Map
 	 * @param map the map that should be made Unmodifiable
@@ -223,6 +230,7 @@ public class MAPS
 	 */
 	public static GENERIC_KEY_VALUE_BRACES MAP KEY_VALUE_GENERIC_TYPE unmodifiable(MAP KEY_VALUE_GENERIC_TYPE map) { return map instanceof UnmodifyableMap ? map : new UnmodifyableMapKV_BRACES(map); }
 	
+#if ORDERED_MAP_FEATURE
 	/**
 	 * A Helper function that creates a Helper wrapper to only allow Read Access into the OrderedMap
 	 * @param map the OrderedMap that should be made Unmodifiable
@@ -233,6 +241,8 @@ public class MAPS
 	 */
 	public static GENERIC_KEY_VALUE_BRACES ORDERED_MAP KEY_VALUE_GENERIC_TYPE unmodifiable(ORDERED_MAP KEY_VALUE_GENERIC_TYPE map) { return map instanceof UnmodifyableOrderedMap ? map : new UnmodifyableOrderedMapKV_BRACES(map); }
 	
+#endif
+#if SORTED_MAP_FEATURE
 	/**
 	 * A Helper function that creates a Helper wrapper to only allow Read Access into the SortedMap
 	 * @param map the SortedMap that should be made Unmodifiable
@@ -253,6 +263,7 @@ public class MAPS
 	 */
 	public static GENERIC_KEY_VALUE_BRACES NAVIGABLE_MAP KEY_VALUE_GENERIC_TYPE unmodifiable(NAVIGABLE_MAP KEY_VALUE_GENERIC_TYPE map) { return map instanceof UnmodifyableNavigableMap ? map : new UnmodifyableNavigableMapKV_BRACES(map); }
 	
+#endif
 	/**
 	 * A Helper function that creates a Unmodifyable Entry
 	 * @param entry the Entry that should be made unmodifiable
@@ -344,7 +355,7 @@ public class MAPS
 		
 		@Override
 		public VALUE_COLLECTION VALUE_GENERIC_TYPE values() { 
-			if(values == null) values = VALUE_SETS.singleton(value);
+			if(values == null) values = VALUE_COLLECTIONS.singleton(value);
 			return values;
 		}
 		@Override
@@ -425,6 +436,7 @@ public class MAPS
 		public void set(KEY_TYPE key, VALUE_TYPE value) { throw new UnsupportedOperationException(); }
 	}
 	
+#if SORTED_MAP_FEATURE
 	/**
 	 * The Unmodifyable Navigable Map implementation that is sued for the unmodifyableMap function
 	 * @Type(T)
@@ -496,6 +508,8 @@ public class MAPS
 		public NAVIGABLE_MAP KEY_VALUE_GENERIC_TYPE copy() { return map.copy(); }
 	}
 	
+#endif
+#if ORDERED_MAP_FEATURE
 	/**
 	 * The Unmodifyable Ordered Map implementation that is sued for the unmodifyableMap function
 	 * @Type(T)
@@ -548,6 +562,8 @@ public class MAPS
 		}
 	}
 	
+#endif
+#if SORTED_MAP_FEATURE
 	/**
 	 * The Unmodifyable Sorted Map implementation that is sued for the unmodifyableMap function
 	 * @Type(T)
@@ -587,6 +603,7 @@ public class MAPS
 		public SORTED_MAP KEY_VALUE_GENERIC_TYPE copy() { return map.copy(); }
 	}
 	
+#endif
 	/**
 	 * The Unmodifyable Map implementation that is sued for the unmodifyableMap function
 	 * @Type(T)
@@ -669,7 +686,7 @@ public class MAPS
 		}
 	}
 	
-	
+#if ORDERED_MAP_FEATURE
 	/**
 	 * The Unmodifyable Ordered Set implementation for the Unmodifyable Ordered Map implementation
 	 * @Type(T)
@@ -708,6 +725,7 @@ public class MAPS
 		public MAP.Entry KEY_VALUE_GENERIC_TYPE pollLast() { throw new UnsupportedOperationException(); }
 	}
 	
+#endif
 	/**
 	 * The Unmodifyable Set implementation for the Unmodifyable Map implementation
 	 * @Type(T)
@@ -741,6 +759,7 @@ public class MAPS
 		
 	}
 	
+#if SORTED_MAP_FEATURE
 	/**
 	 * The Synchronized Navigable Map implementation used by the synchronizedMap helper function
 	 * @Type(T)
@@ -859,6 +878,8 @@ public class MAPS
 #endif
 	}
 	
+#endif
+#if ORDERED_MAP_FEATURE
 	/**
 	 * The Synchronized Ordered Map implementation used by the synchronizedMap helper function
 	 * @Type(T)
@@ -916,6 +937,8 @@ public class MAPS
 		}
 	}
 	
+#endif
+#if SORTED_MAP_FEATURE
 	/**
 	 * The Synchronized Sorted Map implementation used by the synchronizedMap helper function
 	 * @Type(T)
@@ -977,6 +1000,7 @@ public class MAPS
 #endif
 	}
 	
+#endif
 	/**
 	 * The Synchronized Map implementation used by the synchronizedMap helper function
 	 * @Type(T)
@@ -1148,5 +1172,4 @@ public class MAPS
 		public void forEach(BiConsumer<? super CLASS_TYPE, ? super CLASS_VALUE_TYPE> action) { synchronized(mutex) { map.forEach(action); } }
 #endif
 	}
-#endif
 }

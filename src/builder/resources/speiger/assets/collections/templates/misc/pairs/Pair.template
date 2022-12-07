@@ -1,7 +1,12 @@
 package speiger.src.collections.PACKAGE.misc.pairs;
 
+#if IMMUTABLE_PAIR
 import speiger.src.collections.PACKAGE.misc.pairs.impl.IMMUTABLE_PAIR;
+#endif
+#if MUTABLE_PAIR
 import speiger.src.collections.PACKAGE.misc.pairs.impl.MUTABLE_PAIR;
+#endif
+
 /**
  * Key Value Pair Interface that allows to reduce boxing/unboxing.
  * @Type(T)
@@ -9,6 +14,7 @@ import speiger.src.collections.PACKAGE.misc.pairs.impl.MUTABLE_PAIR;
  */
 public interface PAIR KEY_VALUE_GENERIC_TYPE
 {
+#if IMMUTABLE_PAIR
 	/**
 	 * Empty Reference for Immutable Pairs
 	 */
@@ -68,6 +74,8 @@ public interface PAIR KEY_VALUE_GENERIC_TYPE
 		return new IMMUTABLE_PAIRKV_BRACES(pair.ENTRY_KEY(), pair.ENTRY_VALUE());
 	}
 	
+#endif
+#if MUTABLE_PAIR
 	/**
 	 * @Type(T)
 	 * @ValueType(V)
@@ -118,6 +126,7 @@ public interface PAIR KEY_VALUE_GENERIC_TYPE
 		return new MUTABLE_PAIRKV_BRACES(pair.ENTRY_KEY(), pair.ENTRY_VALUE());
 	}
 	
+#endif
 	/**
 	 * Sets the Key of the Pair.
 	 * @param key the key that should be set.

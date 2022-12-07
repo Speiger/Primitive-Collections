@@ -270,7 +270,7 @@ public class ARRAY_FIFO_QUEUE KEY_GENERIC_TYPE extends ABSTRACT_PRIORITY_QUEUE K
 	public boolean matchesAny(PREDICATE KEY_GENERIC_TYPE filter) {
 		Objects.requireNonNull(filter);
 		for(int i = 0,m=size();i<m;i++) {
-			if(filter.TEST_VALUE(array[(first + i) % array.length])) return true;
+			if(filter.test(array[(first + i) % array.length])) return true;
 		}
 		return false;
 	}
@@ -279,7 +279,7 @@ public class ARRAY_FIFO_QUEUE KEY_GENERIC_TYPE extends ABSTRACT_PRIORITY_QUEUE K
 	public boolean matchesNone(PREDICATE KEY_GENERIC_TYPE filter) {
 		Objects.requireNonNull(filter);
 		for(int i = 0,m=size();i<m;i++) {
-			if(filter.TEST_VALUE(array[(first + i) % array.length])) return false;
+			if(filter.test(array[(first + i) % array.length])) return false;
 		}
 		return true;
 	}
@@ -288,7 +288,7 @@ public class ARRAY_FIFO_QUEUE KEY_GENERIC_TYPE extends ABSTRACT_PRIORITY_QUEUE K
 	public boolean matchesAll(PREDICATE KEY_GENERIC_TYPE filter) {
 		Objects.requireNonNull(filter);
 		for(int i = 0,m=size();i<m;i++) {
-			if(!filter.TEST_VALUE(array[(first + i) % array.length])) return false;
+			if(!filter.test(array[(first + i) % array.length])) return false;
 		}
 		return true;
 	}
@@ -298,7 +298,7 @@ public class ARRAY_FIFO_QUEUE KEY_GENERIC_TYPE extends ABSTRACT_PRIORITY_QUEUE K
 		Objects.requireNonNull(filter);
 		for(int i = 0,m=size();i<m;i++) {
 			int index = (first + i) % array.length;
-			if(filter.TEST_VALUE(array[index])) {
+			if(filter.test(array[index])) {
 				KEY_TYPE data = array[index];
 				removeIndex(index);
 				return data;
@@ -351,7 +351,7 @@ public class ARRAY_FIFO_QUEUE KEY_GENERIC_TYPE extends ABSTRACT_PRIORITY_QUEUE K
 		Objects.requireNonNull(filter);
 		int result = 0;
 		for(int i = 0,m=size();i<m;i++) {
-			if(filter.TEST_VALUE(array[(first + i) % array.length])) result++;
+			if(filter.test(array[(first + i) % array.length])) result++;
 		}
 		return result;
 	}

@@ -12,7 +12,9 @@ import speiger.src.collections.PACKAGE.functions.COMPARATOR;
 import speiger.src.collections.PACKAGE.collections.COLLECTION;
 import speiger.src.collections.PACKAGE.collections.ITERABLE;
 import speiger.src.collections.PACKAGE.collections.ITERATOR;
+#if QUEUES_FEATURE
 import speiger.src.collections.PACKAGE.utils.PRIORITY_QUEUES;
+#endif
 
 
 /**
@@ -147,8 +149,9 @@ public interface PRIORITY_QUEUE KEY_GENERIC_TYPE extends ITERABLE KEY_GENERIC_TY
 	 * @return draining iterator of the PriorityQueue
 	 */
 	public ITERATOR KEY_GENERIC_TYPE iterator();
+
 #endif
-	
+#if QUEUES_FEATURE
 	/**
 	 * Creates a Wrapped PriorityQueue that is Synchronized
 	 * @return a new PriorityQueue that is synchronized
@@ -163,7 +166,8 @@ public interface PRIORITY_QUEUE KEY_GENERIC_TYPE extends ITERABLE KEY_GENERIC_TY
 	 * @see PRIORITY_QUEUES#synchronize
 	 */
 	public default PRIORITY_QUEUE KEY_GENERIC_TYPE synchronizeQueue(Object mutex) { return PRIORITY_QUEUES.synchronize(this, mutex); }
-	
+
+#endif
 	/**
 	 * A method to drop the contents of the Queue without clearing the queue
 	 * @Type(E)
@@ -186,7 +190,7 @@ public interface PRIORITY_QUEUE KEY_GENERIC_TYPE extends ITERABLE KEY_GENERIC_TY
 	 * @see Collection#toArray(Object[])
 	 */
 	default KEY_TYPE[] TO_ARRAY(Int2ObjectFunction<KEY_TYPE[]> action) {
-		return TO_ARRAY(action.get(size()));
+		return TO_ARRAY(action.apply(size()));
 	}
 #endif
 }

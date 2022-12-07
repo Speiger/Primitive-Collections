@@ -1,5 +1,7 @@
 package speiger.src.collections.PACKAGE.utils;
 
+import java.util.Objects;
+
 /**
  * A Type Specific Strategy class that allows to give control hashcode generation and equals comparason for maps
  * @Type(T)
@@ -19,6 +21,17 @@ public interface STRATEGY KEY_GENERIC_TYPE
 	public static GENERIC_KEY_BRACES STRATEGY KEY_GENERIC_TYPE identityStrategy() { return (STRATEGY<KEY_TYPE>)IDENTITY; }
 	
 #endif
+	/**
+	 * Normal Strategy
+	 */
+	public static final STRATEGY NO_GENERIC_TYPE NORMAL = new NormalStrategyBRACES();
+	
+	/**
+	 * @Type(T)
+	 * @return a Normal Strategy that is behaving exactly like the normal Hash Strategy in the Hash Collections
+	 */
+	public static GENERIC_KEY_BRACES STRATEGY KEY_GENERIC_TYPE normalStrategy() { return (STRATEGY KEY_GENERIC_TYPE)NORMAL; }
+	
 	/**
 	 * Type Specific HashCode function
 	 * @param o the element that the hashcode is requested for (if object may be null)
@@ -47,5 +60,18 @@ public interface STRATEGY KEY_GENERIC_TYPE
 		@Override
 		public boolean equals(KEY_TYPE key, KEY_TYPE value) { return key == value; }
 	}
+	
 #endif
+	/**
+	 * A Strategy that simulates the normal Hash Collection Behavior if you want to use Hash Control Collections to replace normal ones.
+	 * Only real reason to do that is you have to use this and want to get rid of implementations.
+	 * @Type(T)
+	 */
+	public static class NormalStrategy KEY_GENERIC_TYPE implements STRATEGY KEY_GENERIC_TYPE
+	{
+		@Override
+		public int hashCode(KEY_TYPE o) { return KEY_TO_HASH(o); }
+		@Override
+		public boolean equals(KEY_TYPE key, KEY_TYPE value) { return EQUALS_KEY_TYPE(key, value); }
+	}
 }

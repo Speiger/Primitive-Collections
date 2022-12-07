@@ -9,10 +9,11 @@ import speiger.src.collections.PACKAGE.functions.COMPARATOR;
 #else
 import java.util.Comparator;
 
+import speiger.src.collections.ints.functions.function.Int2ObjectFunction;
 #endif
 import speiger.src.collections.PACKAGE.collections.ITERATOR;
-import speiger.src.collections.PACKAGE.lists.ARRAY_LIST;
 import speiger.src.collections.PACKAGE.utils.ITERATORS;
+import speiger.src.collections.PACKAGE.utils.COLLECTIONS;
 import speiger.src.collections.utils.SanityChecks;
 
 /**
@@ -132,10 +133,39 @@ public class ARRAYS
 	 * @return array with all requested elements of the iterator
 	 */
 	public static GENERIC_KEY_BRACES KEY_TYPE[] pour(ITERATOR KEY_GENERIC_TYPE iter, int max) {
-		ARRAY_LIST KEY_GENERIC_TYPE list = new ARRAY_LISTBRACES();
+		COLLECTIONS.CollectionWrapper KEY_GENERIC_TYPE list = COLLECTIONS.wrapper();
 		ITERATORS.pour(iter, list, max);
 		return list.TO_ARRAY(NEW_KEY_ARRAY(list.size()));
 	}
+	
+#if TYPE_OBJECT
+	/**
+	 * A Helper function that pours all elements of a iterator into a Array
+	 * @param iter the elements that should be gathered.
+	 * @ArrayType(T)
+	 * @param action that is creating the Array to be poured into
+	 * @return array with all elements of the iterator
+	 */
+	public static GENERIC_KEY_BRACES KEY_TYPE[] pour(ITERATOR KEY_GENERIC_TYPE iter, Int2ObjectFunction<KEY_TYPE[]> action) {
+		return pour(iter, Integer.MAX_VALUE, action);
+	}
+	
+	/**
+	 * A Helper function that pours all elements of a iterator into a Array
+	 * @param iter the elements that should be gathered.
+	 * @param max how many elements should be added
+	 * @param action that is creating the Array to be poured into
+	 * @ArrayType(T)
+	 * @return array with all requested elements of the iterator
+	 */
+	public static GENERIC_KEY_BRACES KEY_TYPE[] pour(ITERATOR KEY_GENERIC_TYPE iter, int max, Int2ObjectFunction<KEY_TYPE[]> action) {
+		COLLECTIONS.CollectionWrapper KEY_GENERIC_TYPE list = COLLECTIONS.wrapper();
+		ITERATORS.pour(iter, list, max);
+		return list.TO_ARRAY(action.apply(list.size()));
+	}
+	
+#endif
+	
 	/**
 	 * Method to validate if the current value is the lowest value in the heap
 	 * @param data the current heap.

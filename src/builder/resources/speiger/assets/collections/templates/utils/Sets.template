@@ -2,31 +2,30 @@ package speiger.src.collections.PACKAGE.utils;
 
 import java.util.NoSuchElementException;
 import java.util.Set;
-#if TYPE_BOOLEAN
-import speiger.src.collections.booleans.collections.BooleanIterator;
-import speiger.src.collections.booleans.sets.AbstractBooleanSet;
-import speiger.src.collections.booleans.sets.BooleanSet;
-import speiger.src.collections.booleans.utils.BooleanCollections.EmptyCollection;
-#else
-#if TYPE_OBJECT
+#if TYPE_OBJECT && SORTED_SET_FEATURE
 import java.util.Comparator;
 
 #endif
 import speiger.src.collections.PACKAGE.collections.BI_ITERATOR;
-#if !TYPE_OBJECT
+#if !TYPE_OBJECT && SORTED_SET_FEATURE
 import speiger.src.collections.PACKAGE.functions.COMPARATOR;
 #endif
 import speiger.src.collections.PACKAGE.collections.ITERATOR;
+#if SORTED_SET_FEATURE
 import speiger.src.collections.PACKAGE.sets.NAVIGABLE_SET;
+#endif
 import speiger.src.collections.PACKAGE.sets.ABSTRACT_SET;
 import speiger.src.collections.PACKAGE.sets.SET;
+#if ORDERED_SET_FEATURE
 import speiger.src.collections.PACKAGE.sets.ORDERED_SET;
+#endif
+#if SORTED_SET_FEATURE
 import speiger.src.collections.PACKAGE.sets.SORTED_SET;
+#endif
 import speiger.src.collections.PACKAGE.utils.COLLECTIONS.EmptyCollection;
 import speiger.src.collections.PACKAGE.utils.COLLECTIONS.SynchronizedCollection;
 import speiger.src.collections.PACKAGE.utils.COLLECTIONS.UnmodifiableCollection;
 import speiger.src.collections.utils.ITrimmable;
-#endif
 
 /**
  * A Helper class for sets
@@ -51,7 +50,6 @@ public class SETS
 #endif
 	}
 	
-#if !TYPE_BOOLEAN
 	/**
 	 * Creates a Synchronized set while preserving the ITrimmable interface
 	 * @param s the set that should be synchronized
@@ -75,6 +73,7 @@ public class SETS
 		return s instanceof SynchronizedSet ? s : (s instanceof ITrimmable ? new SynchronizedTrimSetBRACES(s, mutex) : new SynchronizedSetBRACES(s, mutex));
 	}
 	
+#if SORTED_SET_FEATURE
 	/**
 	 * Creates a Synchronized SortedSet while preserving the ITrimmable interface
 	 * @param s the set that should be synchronized
@@ -98,6 +97,8 @@ public class SETS
 		return s instanceof SynchronizedSortedSet ? s : (s instanceof ITrimmable ? new SynchronizedSortedTrimSetBRACES(s, mutex) : new SynchronizedSortedSetBRACES(s, mutex));
 	}
 	
+#endif
+#if ORDERED_SET_FEATURE
 	/**
 	 * Creates a Synchronized OrderedSet while preserving the ITrimmable interface
 	 * @param s the set that should be synchronized
@@ -121,6 +122,8 @@ public class SETS
 		return s instanceof SynchronizedOrderedSet ? s : (s instanceof ITrimmable ? new SynchronizedOrderedTrimSetBRACES(s, mutex) : new SynchronizedOrderedSetBRACES(s, mutex));
 	}
 	
+#endif
+#if SORTED_SET_FEATURE
 	/**
 	 * Creates a Synchronized NavigableSet while preserving the ITrimmable interface
 	 * @param s the set that should be synchronized
@@ -144,6 +147,7 @@ public class SETS
 		return s instanceof SynchronizedNavigableSet ? s : (s instanceof ITrimmable ? new SynchronizedNavigableTrimSetBRACES(s, mutex) : new SynchronizedNavigableSetBRACES(s, mutex));
 	}
 	
+#endif
 	/**
 	 * Creates Unmodifyable Set wrapper
 	 * @param s set that should be made unmodifiable
@@ -154,6 +158,7 @@ public class SETS
 		return s instanceof UnmodifiableSet ? s : new UnmodifiableSetBRACES(s);
 	}
 	
+#if SORTED_SET_FEATURE
 	/**
 	 * Creates Unmodifyable SortedSet wrapper
 	 * @param s sortedSet that should be made unmodifiable
@@ -164,6 +169,8 @@ public class SETS
 		return s instanceof UnmodifiableSortedSet ? s : new UnmodifiableSortedSetBRACES(s);
 	}
 	
+#endif
+#if ORDERED_SET_FEATURE
 	/**
 	 * Creates Unmodifyable OrderedSet wrapper
 	 * @param s OrderedSet that should be made unmodifiable
@@ -174,6 +181,8 @@ public class SETS
 		return s instanceof UnmodifiableOrderedSet ? s : new UnmodifiableOrderedSetBRACES(s);
 	}
 	
+#endif
+#if SORTED_SET_FEATURE
 	/**
 	 * Creates Unmodifyable NavigableSet wrapper
 	 * @param s navigableSet that should be made unmodifiable
@@ -254,7 +263,7 @@ public class SETS
 		public EmptySet KEY_GENERIC_TYPE copy() { return this; }
 	}
 	
-#if !TYPE_BOOLEAN
+#if SORTED_SET_FEATURE
 	private static class UnmodifiableNavigableSet KEY_GENERIC_TYPE extends UnmodifiableSortedSet KEY_GENERIC_TYPE implements NAVIGABLE_SET KEY_GENERIC_TYPE
 	{
 		NAVIGABLE_SET KEY_GENERIC_TYPE n;
@@ -340,6 +349,8 @@ public class SETS
 		public NAVIGABLE_SET KEY_GENERIC_TYPE tailSet(KEY_TYPE fromElement) { return SETS.unmodifiable(n.tailSet(fromElement)); }
 	}
 	
+#endif
+#if ORDERED_SET_FEATURE
 	private static class UnmodifiableOrderedSet KEY_GENERIC_TYPE extends UnmodifiableSet KEY_GENERIC_TYPE implements ORDERED_SET KEY_GENERIC_TYPE
 	{
 		ORDERED_SET KEY_GENERIC_TYPE s;
@@ -373,6 +384,8 @@ public class SETS
 		public KEY_TYPE POLL_LAST_KEY() { throw new UnsupportedOperationException(); }
 	}
 	
+#endif
+#if SORTED_SET_FEATURE
 	private static class UnmodifiableSortedSet KEY_GENERIC_TYPE extends UnmodifiableSet KEY_GENERIC_TYPE implements SORTED_SET KEY_GENERIC_TYPE
 	{
 		SORTED_SET KEY_GENERIC_TYPE s;
@@ -406,6 +419,7 @@ public class SETS
 		public KEY_TYPE POLL_LAST_KEY() { throw new UnsupportedOperationException(); }
 	}
 	
+#endif
 	/**
 	 * Unmodifyable Set wrapper that helps is used with unmodifyableSet function
 	 * @Type(T)
@@ -434,6 +448,7 @@ public class SETS
 #endif
 	}
 	
+#if SORTED_SET_FEATURE
 	private static class SynchronizedNavigableTrimSet KEY_GENERIC_TYPE extends SynchronizedNavigableSet KEY_GENERIC_TYPE implements ITrimmable
 	{
 		ITrimmable trim;
@@ -597,6 +612,8 @@ public class SETS
 		public KEY_TYPE POLL_LAST_KEY() { synchronized(mutex) { return s.POLL_LAST_KEY(); } }
 	}
 	
+#endif
+#if ORDERED_SET_FEATURE
 	private static class SynchronizedOrderedTrimSet KEY_GENERIC_TYPE extends SynchronizedOrderedSet KEY_GENERIC_TYPE implements ITrimmable
 	{
 		ITrimmable trim;
@@ -656,6 +673,7 @@ public class SETS
 		public KEY_TYPE POLL_LAST_KEY() { synchronized(mutex) { return s.POLL_LAST_KEY(); } }
 	}
 	
+#endif
 	private static class SynchronizedTrimSet KEY_GENERIC_TYPE extends SynchronizedSet KEY_GENERIC_TYPE implements ITrimmable
 	{
 		ITrimmable trim;
@@ -704,5 +722,4 @@ public class SETS
 		public boolean remove(KEY_TYPE o) { synchronized(mutex) { return s.remove(o); } }
 #endif
 	}
-#endif
 }

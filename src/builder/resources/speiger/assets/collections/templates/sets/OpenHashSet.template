@@ -13,8 +13,6 @@ import java.util.function.BiFunction;
 
 import speiger.src.collections.PACKAGE.collections.COLLECTION;
 import speiger.src.collections.PACKAGE.collections.ITERATOR;
-import speiger.src.collections.PACKAGE.lists.ARRAY_LIST;
-import speiger.src.collections.PACKAGE.lists.LIST;
 #if !TYPE_OBJECT
 import speiger.src.collections.PACKAGE.utils.ITERATORS;
 import speiger.src.collections.PACKAGE.functions.CONSUMER;
@@ -387,9 +385,9 @@ public class HASH_SET KEY_GENERIC_TYPE extends ABSTRACT_SET KEY_GENERIC_TYPE imp
 	public boolean matchesAny(PREDICATE KEY_GENERIC_TYPE filter) {
 		Objects.requireNonNull(filter);
 		if(size() <= 0) return false;
-		if(containsNull && filter.TEST_VALUE(keys[nullIndex])) return true;
+		if(containsNull && filter.test(keys[nullIndex])) return true;
 		for(int i = nullIndex-1;i>=0;i--) {
-			if(KEY_EQUALS_NOT_NULL(keys[i]) && filter.TEST_VALUE(keys[i])) return true;
+			if(KEY_EQUALS_NOT_NULL(keys[i]) && filter.test(keys[i])) return true;
 		}
 		return false;
 	}
@@ -398,9 +396,9 @@ public class HASH_SET KEY_GENERIC_TYPE extends ABSTRACT_SET KEY_GENERIC_TYPE imp
 	public boolean matchesNone(PREDICATE KEY_GENERIC_TYPE filter) {
 		Objects.requireNonNull(filter);
 		if(size() <= 0) return true;
-		if(containsNull && filter.TEST_VALUE(keys[nullIndex])) return false;
+		if(containsNull && filter.test(keys[nullIndex])) return false;
 		for(int i = nullIndex-1;i>=0;i--) {
-			if(KEY_EQUALS_NOT_NULL(keys[i]) && filter.TEST_VALUE(keys[i])) return false;
+			if(KEY_EQUALS_NOT_NULL(keys[i]) && filter.test(keys[i])) return false;
 		}
 		return true;
 	}
@@ -409,9 +407,9 @@ public class HASH_SET KEY_GENERIC_TYPE extends ABSTRACT_SET KEY_GENERIC_TYPE imp
 	public boolean matchesAll(PREDICATE KEY_GENERIC_TYPE filter) {
 		Objects.requireNonNull(filter);
 		if(size() <= 0) return true;
-		if(containsNull && !filter.TEST_VALUE(keys[nullIndex])) return false;
+		if(containsNull && !filter.test(keys[nullIndex])) return false;
 		for(int i = nullIndex-1;i>=0;i--) {
-			if(KEY_EQUALS_NOT_NULL(keys[i]) && !filter.TEST_VALUE(keys[i])) return false;
+			if(KEY_EQUALS_NOT_NULL(keys[i]) && !filter.test(keys[i])) return false;
 		}
 		return true;
 	}
@@ -468,9 +466,9 @@ public class HASH_SET KEY_GENERIC_TYPE extends ABSTRACT_SET KEY_GENERIC_TYPE imp
 	public KEY_TYPE findFirst(PREDICATE KEY_GENERIC_TYPE filter) {
 		Objects.requireNonNull(filter);
 		if(size() <= 0) return EMPTY_VALUE;
-		if(containsNull && filter.TEST_VALUE(keys[nullIndex])) return keys[nullIndex];
+		if(containsNull && filter.test(keys[nullIndex])) return keys[nullIndex];
 		for(int i = nullIndex-1;i>=0;i--) {
-			if(KEY_EQUALS_NOT_NULL(keys[i]) && filter.TEST_VALUE(keys[i])) return keys[i];
+			if(KEY_EQUALS_NOT_NULL(keys[i]) && filter.test(keys[i])) return keys[i];
 		}
 		return EMPTY_VALUE;
 	}
@@ -480,9 +478,9 @@ public class HASH_SET KEY_GENERIC_TYPE extends ABSTRACT_SET KEY_GENERIC_TYPE imp
 		Objects.requireNonNull(filter);
 		if(size() <= 0) return 0;
 		int result = 0;
-		if(containsNull && filter.TEST_VALUE(keys[nullIndex])) result++;
+		if(containsNull && filter.test(keys[nullIndex])) result++;
 		for(int i = nullIndex-1;i>=0;i--) {
-			if(KEY_EQUALS_NOT_NULL(keys[i]) && filter.TEST_VALUE(keys[i])) result++;
+			if(KEY_EQUALS_NOT_NULL(keys[i]) && filter.test(keys[i])) result++;
 		}
 		return result;
 	}
@@ -597,7 +595,8 @@ public class HASH_SET KEY_GENERIC_TYPE extends ABSTRACT_SET KEY_GENERIC_TYPE imp
 		int lastReturned = -1;
 		int nextIndex = Integer.MIN_VALUE;
 		boolean returnNull = containsNull;
-		LIST KEY_GENERIC_TYPE wrapped = null;
+		KEY_TYPE[] wrapped = null;
+		int wrappedIndex = 0;
 		
 		@Override
 		public boolean hasNext() {
@@ -610,7 +609,7 @@ public class HASH_SET KEY_GENERIC_TYPE extends ABSTRACT_SET KEY_GENERIC_TYPE imp
 				{
 					while(true) {
 						if(--pos < 0) {
-							if(wrapped == null || wrapped.size() <= -pos - 1) break;
+							if(wrapped == null || wrappedIndex <= -pos - 1) break;
 							nextIndex = -pos - 1;
 							break;
 						}
@@ -630,7 +629,7 @@ public class HASH_SET KEY_GENERIC_TYPE extends ABSTRACT_SET KEY_GENERIC_TYPE imp
 			returnedPos = pos;
 			if(nextIndex < 0){
 				lastReturned = Integer.MAX_VALUE;
-				KEY_TYPE value = wrapped.GET_KEY(nextIndex);
+				KEY_TYPE value = wrapped[nextIndex];
 				nextIndex = Integer.MIN_VALUE;
 				return value;
 			}
@@ -648,7 +647,7 @@ public class HASH_SET KEY_GENERIC_TYPE extends ABSTRACT_SET KEY_GENERIC_TYPE imp
 			}
 			else if(returnedPos >= 0) shiftKeys(returnedPos);
 			else {
-				HASH_SET.this.remove(wrapped.GET_KEY(-returnedPos - 1));
+				HASH_SET.this.remove(wrapped[-returnedPos - 1]);
 				lastReturned = -1;
 				return;
 			}
@@ -670,12 +669,19 @@ public class HASH_SET KEY_GENERIC_TYPE extends ABSTRACT_SET KEY_GENERIC_TYPE imp
 					if(last <= startPos ? (last >= slot || slot > startPos) : (last >= slot && slot > startPos)) break;
 					startPos = ++startPos & mask;
 				}
-				if(startPos < last) {
-					if(wrapped == null) wrapped = new ARRAY_LISTBRACES(2);
-					wrapped.add(keys[startPos]);
-				}
+				if(startPos < last) addWrapper(keys[startPos]);
 				keys[last] = current;
 			}
+		}
+		
+		private void addWrapper(KEY_TYPE value) {
+			if(wrapped == null) wrapped = NEW_KEY_ARRAY(2);
+			else if(wrappedIndex >= wrapped.length) {
+				KEY_TYPE[] newArray = NEW_KEY_ARRAY(wrapped.length * 2);
+				System.arraycopy(wrapped, 0, newArray, 0, wrapped.length);
+				wrapped = newArray;
+			}
+			wrapped[wrappedIndex++] = value;
 		}
 	}
 }

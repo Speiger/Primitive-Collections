@@ -29,12 +29,14 @@ import speiger.src.collections.PACKAGE.functions.function.PREDICATE;
 import speiger.src.collections.PACKAGE.functions.function.UNARY_OPERATOR;
 import speiger.src.collections.objects.utils.ObjectArrays;
 import speiger.src.collections.PACKAGE.utils.ITERATORS;
-#if PRIMITIVES
+#if PRIMITIVES && SPLIT_ITERATOR_FEATURE && STREAM_FEATURE
 import java.util.stream.JAVA_STREAM;
 import java.util.stream.StreamSupport;
 #endif
+#if SPLIT_ITERATOR_FEATURE
 import speiger.src.collections.PACKAGE.collections.SPLIT_ITERATOR;
 import speiger.src.collections.PACKAGE.utils.SPLIT_ITERATORS;
+#endif
 import speiger.src.collections.utils.SanityChecks;
 
 #if TYPE_OBJECT
@@ -301,7 +303,7 @@ public class IMMUTABLE_LIST KEY_GENERIC_TYPE extends ABSTRACT_LIST KEY_GENERIC_T
 	public boolean matchesAny(PREDICATE KEY_GENERIC_TYPE filter) {
 		Objects.requireNonNull(filter);
 		for(int i = 0,m=data.length;i<m;i++) {
-			if(filter.TEST_VALUE(data[i])) return true;
+			if(filter.test(data[i])) return true;
 		}
 		return false;
 	}
@@ -310,7 +312,7 @@ public class IMMUTABLE_LIST KEY_GENERIC_TYPE extends ABSTRACT_LIST KEY_GENERIC_T
 	public boolean matchesNone(PREDICATE KEY_GENERIC_TYPE filter) {
 		Objects.requireNonNull(filter);
 		for(int i = 0,m=data.length;i<m;i++) {
-			if(filter.TEST_VALUE(data[i])) return false;
+			if(filter.test(data[i])) return false;
 		}
 		return true;
 	}
@@ -319,7 +321,7 @@ public class IMMUTABLE_LIST KEY_GENERIC_TYPE extends ABSTRACT_LIST KEY_GENERIC_T
 	public boolean matchesAll(PREDICATE KEY_GENERIC_TYPE filter) {
 		Objects.requireNonNull(filter);
 		for(int i = 0,m=data.length;i<m;i++) {
-			if(!filter.TEST_VALUE(data[i])) return false;
+			if(!filter.test(data[i])) return false;
 		}
 		return true;
 	}
@@ -328,7 +330,7 @@ public class IMMUTABLE_LIST KEY_GENERIC_TYPE extends ABSTRACT_LIST KEY_GENERIC_T
 	public KEY_TYPE findFirst(PREDICATE KEY_GENERIC_TYPE filter) {
 		Objects.requireNonNull(filter);
 		for(int i = 0,m=data.length;i<m;i++) {
-			if(filter.TEST_VALUE(data[i])) return data[i];
+			if(filter.test(data[i])) return data[i];
 		}
 		return EMPTY_VALUE;
 	}
@@ -377,7 +379,7 @@ public class IMMUTABLE_LIST KEY_GENERIC_TYPE extends ABSTRACT_LIST KEY_GENERIC_T
 		Objects.requireNonNull(filter);
 		int result = 0;
 		for(int i = 0,m=data.length;i<m;i++) {
-			if(filter.TEST_VALUE(data[i])) result++;
+			if(filter.test(data[i])) result++;
 		}
 		return result;
 	}
@@ -487,7 +489,8 @@ public class IMMUTABLE_LIST KEY_GENERIC_TYPE extends ABSTRACT_LIST KEY_GENERIC_T
 			throw new IndexOutOfBoundsException("Index: " + index + ", Size: " + data.length);
 	}
 	
-#if PRIMITIVES
+#if SPLIT_ITERATOR_FEATURE
+#if PRIMITIVES && STREAM_FEATURE
 	/**
 	 * Returns a Java-Type-Specific Stream to reduce boxing/unboxing.
 	 * @return a Stream of the closest java type
@@ -505,6 +508,7 @@ public class IMMUTABLE_LIST KEY_GENERIC_TYPE extends ABSTRACT_LIST KEY_GENERIC_T
 	@Override
 	public SPLIT_ITERATOR KEY_GENERIC_TYPE spliterator() { return SPLIT_ITERATORS.createArraySplititerator(data, data.length, 16464); }
 	
+#endif
 	private class LIST_ITER implements LIST_ITERATOR KEY_GENERIC_TYPE {
 		int index;
 		

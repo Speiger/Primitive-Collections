@@ -547,7 +547,7 @@ public class LINKED_CUSTOM_HASH_SET KEY_GENERIC_TYPE extends CUSTOM_HASH_SET KEY
 		Objects.requireNonNull(filter);
 		int index = firstIndex;
 		while(index != -1) {
-			if(filter.TEST_VALUE(keys[index])) return true;
+			if(filter.test(keys[index])) return true;
 			index = (int)links[index];
 		}
 		return false;
@@ -558,7 +558,7 @@ public class LINKED_CUSTOM_HASH_SET KEY_GENERIC_TYPE extends CUSTOM_HASH_SET KEY
 		Objects.requireNonNull(filter);
 		int index = firstIndex;
 		while(index != -1) {
-			if(filter.TEST_VALUE(keys[index])) return false;
+			if(filter.test(keys[index])) return false;
 			index = (int)links[index];
 		}
 		return true;
@@ -569,7 +569,7 @@ public class LINKED_CUSTOM_HASH_SET KEY_GENERIC_TYPE extends CUSTOM_HASH_SET KEY
 		Objects.requireNonNull(filter);
 		int index = firstIndex;
 		while(index != -1) {
-			if(!filter.TEST_VALUE(keys[index])) return false;
+			if(!filter.test(keys[index])) return false;
 			index = (int)links[index];
 		}
 		return true;
@@ -624,7 +624,7 @@ public class LINKED_CUSTOM_HASH_SET KEY_GENERIC_TYPE extends CUSTOM_HASH_SET KEY
 		Objects.requireNonNull(filter);
 		int index = firstIndex;
 		while(index != -1) {
-			if(filter.TEST_VALUE(keys[index])) return keys[index];
+			if(filter.test(keys[index])) return keys[index];
 			index = (int)links[index];
 		}
 		return EMPTY_VALUE;
@@ -636,7 +636,7 @@ public class LINKED_CUSTOM_HASH_SET KEY_GENERIC_TYPE extends CUSTOM_HASH_SET KEY
 		int result = 0;
 		int index = firstIndex;
 		while(index != -1) {
-			if(filter.TEST_VALUE(keys[index])) result++;
+			if(filter.test(keys[index])) result++;
 			index = (int)links[index];
 		}
 		return result;
