@@ -131,7 +131,8 @@ public class IMMUTABLE_LIST KEY_GENERIC_TYPE extends ABSTRACT_LIST KEY_GENERIC_T
 	
 	@Override
 	public KEY_TYPE[] getElements(int from, KEY_TYPE[] a, int offset, int length) {
-		SanityChecks.checkArrayCapacity(data.length, offset, length);
+		SanityChecks.checkArrayCapacity(a.length, offset, length);
+		SanityChecks.checkArrayCapacity(data.length, from, length);
 		System.arraycopy(data, from, a, offset, length);
 		return a;
 	}

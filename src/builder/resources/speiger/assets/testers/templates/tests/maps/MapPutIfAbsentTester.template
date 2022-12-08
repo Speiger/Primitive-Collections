@@ -32,7 +32,17 @@ public class FILE_KEY_TYPE2FILE_VALUE_TYPEMapPutIfAbsentTester KEY_VALUE_GENERIC
 		assertEquals("putIfAbsent(present, value) should return existing value", v0(), getMap().putIfAbsent(k0(), v3()));
 		expectUnchanged();
 	}
-
+	
+#ignore
+	@MapFeature.Require(SUPPORTS_PUT)
+#endignore
+	public void testPutIfAbsent_replaceableDefaultValue() {
+		getMap().putIfAbsent(k3(), getMap().getDefaultReturnValue());
+		assertEquals("get(present) should return defaultValue value", getMap().getDefaultReturnValue(), get(k3()));
+		getMap().putIfAbsent(k3(), v3());
+		assertEquals("get(present) value should have been replaced", v3(), get(k3()));
+	}
+	
 #ignore
 	@MapFeature.Require(absent = SUPPORTS_PUT)
 #endignore

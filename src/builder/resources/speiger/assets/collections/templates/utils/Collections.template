@@ -5,6 +5,7 @@ import java.util.Collection;
 #if !TYPE_BOOLEAN
 import java.util.ConcurrentModificationException;
 #endif
+import java.util.Iterator;
 import java.util.NoSuchElementException;
 import java.util.Objects;
 #if TYPE_OBJECT
@@ -635,6 +636,27 @@ public class COLLECTIONS
 				}
 			};
 		}
+		
+		@Override
+		public boolean equals(Object o) {
+			if (o == this)
+				return true;
+			if (!(o instanceof Collection))
+				return false;
+			Collection<?> l = (Collection<?>)o;
+			if(l.size() != size()) return false;
+			Iterator<?> iter = l.iterator();
+			if (iter.hasNext() && !Objects.equals(element, iter.next())) {
+				return false;
+			}
+			return !iter.hasNext();
+		}
+		
+		@Override
+		public int hashCode() {
+			return KEY_TO_HASH(element);
+		}
+		
 		@Override
 		public int size() { return 1; }
 		
