@@ -13,8 +13,13 @@ import java.util.function.Consumer;
 #endif
 import java.util.function.Predicate;
 import java.util.function.UnaryOperator;
+#if !TYPE_OBJECT && JDK_FUNCTION
+import java.util.function.PREDICATE;
+#endif
 #if PRIMITIVES
+#if !JDK_FUNCTION
 import java.util.function.JAVA_PREDICATE;
+#endif
 import java.util.function.JAVA_UNARY_OPERATOR;
 #endif
 
@@ -25,7 +30,9 @@ import speiger.src.collections.PACKAGE.functions.CONSUMER;
 import speiger.src.collections.PACKAGE.utils.ARRAYS;
 #endif
 import speiger.src.collections.objects.functions.consumer.BI_FROM_OBJECT_CONSUMER;
+#if !JDK_FUNCTION
 import speiger.src.collections.PACKAGE.functions.function.PREDICATE;
+#endif
 import speiger.src.collections.PACKAGE.functions.function.UNARY_OPERATOR;
 import speiger.src.collections.objects.utils.ObjectArrays;
 import speiger.src.collections.PACKAGE.utils.ITERATORS;

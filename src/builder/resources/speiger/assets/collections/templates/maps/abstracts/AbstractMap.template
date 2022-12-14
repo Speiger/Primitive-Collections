@@ -3,10 +3,15 @@ package speiger.src.collections.PACKAGE.maps.abstracts;
 import java.util.AbstractMap;
 import java.util.Map;
 import java.util.Objects;
+#if VALUE_BOOLEAN && JDK_FUNCTION
+import java.util.function.PREDICATE;
+#endif
 
 import speiger.src.collections.PACKAGE.collections.ITERATOR;
 import speiger.src.collections.PACKAGE.functions.consumer.BI_CONSUMER;
+#if !VALUE_BOOLEAN || !JDK_FUNCTION
 import speiger.src.collections.PACKAGE.functions.function.FUNCTION;
+#endif
 import speiger.src.collections.PACKAGE.functions.function.UNARY_OPERATOR;
 import speiger.src.collections.PACKAGE.maps.interfaces.MAP;
 import speiger.src.collections.PACKAGE.sets.ABSTRACT_SET;

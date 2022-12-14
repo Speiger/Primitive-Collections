@@ -1,6 +1,6 @@
 package speiger.src.collections.PACKAGE.functions.function;
 
-#if JDK_FUNCTION && VALUE_BOOLEAN
+#if VALUE_BOOLEAN || SAME_TYPE
 import java.util.Objects;
 #endif
 
@@ -23,7 +23,65 @@ public interface FUNCTION KEY_VALUE_GENERIC_TYPE
 	 */
 	public VALUE_TYPE APPLY(KEY_TYPE k);
 	
-#if JDK_FUNCTION && VALUE_BOOLEAN
+#if SAME_TYPE
+	/**
+	 * Creates a Default function that returns the input provided.
+	 * @Type(T)
+	 * @return a input returning function
+	 */
+	public static GENERIC_KEY_BRACES FUNCTION KEY_SAME_GENERIC_TYPE identity() {
+		return T -> T;
+	}
+	
+	/**
+	 * Returns a composed function that first applies the {@code before}
+     * function to its input, and then applies this function to the result.
+     * If evaluation of either function throws an exception, it is relayed to
+     * the caller of the composed function.
+     * 
+     * @Type(I)
+     * @param before the function that should be used first
+     * @return a composed function with a different starting function.
+	 */
+	public default GENERIC_SPECIAL_VALUE_BRACES<I> FUNCTION SV_GENERIC_TYPE<I> compose(FUNCTION SK_GENERIC_TYPE<I> before) {
+        Objects.requireNonNull(before);
+		return T -> APPLY(before.APPLY(T));
+	}
+	
+	/**
+     * Returns a composed function that first applies this function to
+     * its input, and then applies the {@code after} function to the result.
+     * If evaluation of either function throws an exception, it is relayed to
+     * the caller of the composed function.
+     * 
+     * @Type(I)
+     * @param after the function that should be used last
+     * @return a composed function with a different starting function.
+	 */
+	public default GENERIC_SPECIAL_VALUE_BRACES<I> FUNCTION KS_GENERIC_TYPE<I> andThen(FUNCTION VS_GENERIC_TYPE<I> after) {
+        Objects.requireNonNull(after);
+		return T -> after.APPLY(APPLY(T));
+	}
+	
+#endif
+#if VALUE_BOOLEAN
+	/**
+	 * Creates a Always true function that may be useful if you don't need to process information or just want a default.
+	 * @Type(T)
+	 * @return a default returning function
+	 */
+	public static GENERIC_KEY_BRACES FUNCTION KEY_GENERIC_TYPE alwaysTrue() {
+		return T -> true;
+	}
+	
+	/**
+	 * Creates a Always false function that may be useful if you don't need to process information or just want a default.
+	 * @Type(T)
+	 * @return a default returning function
+	 */
+	public static GENERIC_KEY_BRACES FUNCTION KEY_GENERIC_TYPE alwaysFalse() {
+		return T -> false;
+	}
 	
 	/**
 	 * A Type specific and-function helper function that reduces boxing/unboxing
@@ -35,6 +93,7 @@ public interface FUNCTION KEY_VALUE_GENERIC_TYPE
 		return T -> APPLY(T) && other.APPLY(T);
 	}
 	
+#if JDK_FUNCTION
 	@Override
 	@Deprecated
 	public default FUNCTION KEY_VALUE_GENERIC_TYPE and(JAVA_FUNCTION KEY_VALUE_SUPER_GENERIC_TYPE other) {
@@ -43,6 +102,12 @@ public interface FUNCTION KEY_VALUE_GENERIC_TYPE
 	}
 	
 	@Override
+#else
+	/**
+	 * A type specific inverter function
+	 * @return the same function but inverts the result
+	 */
+#endif
 	public default FUNCTION KEY_VALUE_GENERIC_TYPE negate() {
 		return T -> !APPLY(T);
 	}
@@ -57,11 +122,13 @@ public interface FUNCTION KEY_VALUE_GENERIC_TYPE
 		return T -> APPLY(T) || other.APPLY(T);
 	}
 	
+#if JDK_FUNCTION
 	@Override
 	@Deprecated
 	public default FUNCTION KEY_VALUE_GENERIC_TYPE or(JAVA_FUNCTION KEY_VALUE_SUPER_GENERIC_TYPE other) {
 		Objects.requireNonNull(other);
 		return T -> APPLY(T) || other.APPLY(T);
 	}
+#endif
 #endif
 }

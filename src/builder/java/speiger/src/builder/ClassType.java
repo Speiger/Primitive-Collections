@@ -114,7 +114,7 @@ public enum ClassType
 	
 	public boolean needsCustomJDKType()
 	{
-		return this == BYTE || this == SHORT || this == CHAR || this == FLOAT;
+		return this == BOOLEAN || this == BYTE || this == SHORT || this == CHAR || this == FLOAT;
 	}
 	
 	public boolean needsCast()

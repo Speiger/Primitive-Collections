@@ -6,8 +6,14 @@ import java.util.NoSuchElementException;
 import java.util.Objects;
 import java.util.concurrent.locks.StampedLock;
 import java.util.function.Consumer;
-
+import java.util.function.Predicate;
 import java.util.function.BiFunction;
+#if !TYPE_OBJECT && JDK_TYPE
+import java.util.function.PREDICATE;
+#endif
+#if !SAME_TYPE && JDK_VALUE && !VALUE_OBJECT
+import java.util.function.VALUE_PREDICATE;
+#endif
 
 #if !TYPE_OBJECT
 import speiger.src.collections.PACKAGE.collections.BI_ITERATOR;
@@ -18,12 +24,14 @@ import speiger.src.collections.PACKAGE.functions.CONSUMER;
 import speiger.src.collections.objects.functions.consumer.BI_FROM_OBJECT_CONSUMER;
 #endif
 import speiger.src.collections.PACKAGE.functions.consumer.BI_CONSUMER;
+#if !VALUE_BOOLEAN || !JDK_TYPE
 import speiger.src.collections.PACKAGE.functions.function.FUNCTION;
+#endif
 import speiger.src.collections.PACKAGE.functions.function.UNARY_OPERATOR;
 #if !SAME_TYPE
 import speiger.src.collections.PACKAGE.functions.function.SINGLE_UNARY_OPERATOR;
 #endif
-#if !TYPE_OBJECT && !VALUE_BOOLEAN
+#if !TYPE_OBJECT && !VALUE_BOOLEAN && !JDK_TYPE
 import speiger.src.collections.PACKAGE.functions.function.PREDICATE;
 #endif
 import speiger.src.collections.PACKAGE.maps.abstracts.ABSTRACT_MAP;
@@ -43,6 +51,7 @@ import speiger.src.collections.VALUE_PACKAGE.functions.function.VALUE_UNARY_OPER
 #if !TYPE_OBJECT
 import speiger.src.collections.objects.functions.function.ObjectObjectUnaryOperator;
 #endif
+
 import speiger.src.collections.VALUE_PACKAGE.collections.VALUE_ITERATOR;
 import speiger.src.collections.VALUE_PACKAGE.collections.VALUE_BI_ITERATOR;
 import speiger.src.collections.VALUE_PACKAGE.functions.VALUE_CONSUMER;
@@ -54,17 +63,13 @@ import speiger.src.collections.objects.functions.function.ObjectObjectUnaryOpera
 #if !TYPE_OBJECT && !VALUE_OBJECT || !VALUE_OBJECT
 import speiger.src.collections.objects.functions.consumer.ObjectObjectConsumer;
 #endif
-#if !TYPE_OBJECT || !VALUE_BOOLEAN
-#if !VALUE_OBJECT || SAME_TYPE
-import speiger.src.collections.objects.functions.function.Object2BooleanFunction;
-#endif
-#endif
 #if !SAME_TYPE
 #if !TYPE_OBJECT
 import speiger.src.collections.objects.functions.consumer.VALUE_BI_FROM_OBJECT_CONSUMER;
 #endif
-
+#if !JDK_VALUE
 import speiger.src.collections.VALUE_PACKAGE.functions.function.VALUE_PREDICATE;
+#endif
 #endif
 #if VALUE_OBJECT
 import speiger.src.collections.objects.collections.ObjectIterator;
@@ -688,7 +693,7 @@ public class CONCURRENT_HASH_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY
 		}
 		
 		@Override
-		public boolean matchesAny(Object2BooleanFunction<MAP.Entry KEY_VALUE_GENERIC_TYPE> filter) {
+		public boolean matchesAny(Predicate<MAP.Entry KEY_VALUE_GENERIC_TYPE> filter) {
 			Objects.requireNonNull(filter);
 			BasicEntry KEY_VALUE_GENERIC_TYPE entry = new BasicEntryKV_BRACES();
 			for(int i = 0,m=segments.length;i<m;i++) {
@@ -710,7 +715,7 @@ public class CONCURRENT_HASH_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY
 		}
 		
 		@Override
-		public boolean matchesNone(Object2BooleanFunction<MAP.Entry KEY_VALUE_GENERIC_TYPE> filter) {
+		public boolean matchesNone(Predicate<MAP.Entry KEY_VALUE_GENERIC_TYPE> filter) {
 			Objects.requireNonNull(filter);
 			BasicEntry KEY_VALUE_GENERIC_TYPE entry = new BasicEntryKV_BRACES();
 			for(int i = 0,m=segments.length;i<m;i++) {
@@ -732,7 +737,7 @@ public class CONCURRENT_HASH_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY
 		}
 		
 		@Override
-		public boolean matchesAll(Object2BooleanFunction<MAP.Entry KEY_VALUE_GENERIC_TYPE> filter) {
+		public boolean matchesAll(Predicate<MAP.Entry KEY_VALUE_GENERIC_TYPE> filter) {
 			Objects.requireNonNull(filter);
 			BasicEntry KEY_VALUE_GENERIC_TYPE entry = new BasicEntryKV_BRACES();
 			for(int i = 0,m=segments.length;i<m;i++) {
@@ -803,7 +808,7 @@ public class CONCURRENT_HASH_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY
 		}
 		
 		@Override
-		public MAP.Entry KEY_VALUE_GENERIC_TYPE findFirst(Object2BooleanFunction<MAP.Entry KEY_VALUE_GENERIC_TYPE> filter) {
+		public MAP.Entry KEY_VALUE_GENERIC_TYPE findFirst(Predicate<MAP.Entry KEY_VALUE_GENERIC_TYPE> filter) {
 			Objects.requireNonNull(filter);
 			BasicEntry KEY_VALUE_GENERIC_TYPE entry = new BasicEntryKV_BRACES();
 			for(int i = 0,m=segments.length;i<m;i++) {
@@ -825,7 +830,7 @@ public class CONCURRENT_HASH_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY
 		}
 		
 		@Override
-		public int count(Object2BooleanFunction<MAP.Entry KEY_VALUE_GENERIC_TYPE> filter) {
+		public int count(Predicate<MAP.Entry KEY_VALUE_GENERIC_TYPE> filter) {
 			Objects.requireNonNull(filter);
 			int result = 0;
 			BasicEntry KEY_VALUE_GENERIC_TYPE entry = new BasicEntryKV_BRACES();

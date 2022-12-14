@@ -27,7 +27,7 @@ public class JavaModule extends BaseModule
 		if(!keyType.needsCustomJDKType()) addFlag("JDK_TYPE");
 		if(!keyType.isPrimitiveBlocking()) addFlag("PRIMITIVES");
 		if(!valueType.isPrimitiveBlocking()) addFlag("VALUE_PRIMITIVES");
-		if(valueType.needsCustomJDKType()) addFlag("JDK_VALUE");
+		if(!valueType.needsCustomJDKType()) addFlag("JDK_VALUE");
 	}
 	
 	@Override
@@ -100,7 +100,9 @@ public class JavaModule extends BaseModule
 		addSimpleMapper(" KEY_STRING_GENERIC_TYPE", keyType.isObject() ? "<String>" : "");
 		addSimpleMapper(" VALUE_STRING_GENERIC_TYPE", valueType.isObject() ? "<String>" : "");
 		addSimpleMapper(" KEY_VALUE_STRING_GENERIC_TYPE", keyType.isObject() ? (valueType.isObject() ? "<String, String>" : "<String>") : (valueType.isObject() ? "<String>" : ""));
-
+		
+		addSimpleMapper(" KEY_SAME_GENERIC_TYPE", keyType.isObject() ? "<T, T>" : "");
+		addSimpleMapper(" VALUE_SAME_GENERIC_TYPE", keyType.isObject() ? "<V, V>" : "");
 		
 		addSimpleMapper(" KEY_GENERIC_TYPE", keyType.isObject() ? "<"+keyType.getKeyType()+">" : "");
 		addSimpleMapper(" KEY_KEY_GENERIC_TYPE", keyType.isObject() ? "<"+keyType.getKeyType()+", "+keyType.getKeyType()+">" : "");
@@ -135,9 +137,14 @@ public class JavaModule extends BaseModule
 		addInjectMapper(" KSK_GENERIC_TYPE", keyType.isObject() ? "<%s, "+keyType.getKeyType()+">" : "<%s>").removeBraces().setBraceType("<>");
 		addInjectMapper(" KKS_GENERIC_TYPE", keyType.isObject() ? "<"+keyType.getKeyType()+", %s>" : "<%s>").removeBraces().setBraceType("<>");
 		addArgumentMapper(" KSS_GENERIC_TYPE", keyType.isObject() ? "<%1$s, %2$s>" : "<%2$s>").removeBraces().setBraceType("<>");		
+		addInjectMapper(" SK_GENERIC_TYPE", keyType.isObject() ? "<%s, "+keyType.getKeyType()+">" : "").removeBraces().setBraceType("<>");
+		addInjectMapper(" KS_GENERIC_TYPE", keyType.isObject() ? "<"+keyType.getKeyType()+", %s>" : "").removeBraces().setBraceType("<>");
 		addInjectMapper(" VSV_GENERIC_TYPE", valueType.isObject() ? "<%s, "+valueType.getValueType()+">" : "<%s>").removeBraces().setBraceType("<>");
 		addInjectMapper(" VVS_GENERIC_TYPE", valueType.isObject() ? "<"+valueType.getValueType()+", %s>" : "<%s>").removeBraces().setBraceType("<>");
-		addArgumentMapper(" VSS_GENERIC_TYPE", valueType.isObject() ? "<%1$s, %2$s>" : "<%2$s>").removeBraces().setBraceType("<>");		
+		addArgumentMapper(" VSS_GENERIC_TYPE", valueType.isObject() ? "<%1$s, %2$s>" : "<%2$s>").removeBraces().setBraceType("<>");	
+		addInjectMapper(" SV_GENERIC_TYPE", valueType.isObject() ? "<%s, "+valueType.getValueType()+">" : "").removeBraces().setBraceType("<>");
+		addInjectMapper(" VS_GENERIC_TYPE", valueType.isObject() ? "<"+valueType.getValueType()+", %s>" : "").removeBraces().setBraceType("<>");
+
 
 		addSimpleMapper(" GENERIC_KEY_BRACES", keyType.isObject() ? " <"+keyType.getKeyType()+">" : "");
 		addSimpleMapper(" GENERIC_VALUE_BRACES", valueType.isObject() ? " <"+valueType.getValueType()+">" : "");

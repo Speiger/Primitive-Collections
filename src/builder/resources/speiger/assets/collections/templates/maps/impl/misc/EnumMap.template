@@ -5,6 +5,10 @@ import java.util.Map;
 import java.util.NoSuchElementException;
 import java.util.Objects;
 import java.util.function.Consumer;
+#if VALUE_BOOLEAN
+import java.util.function.Predicate;
+#endif
+
 
 import speiger.src.collections.VALUE_PACKAGE.collections.VALUE_ABSTRACT_COLLECTION;
 import speiger.src.collections.VALUE_PACKAGE.collections.VALUE_COLLECTION;
@@ -18,7 +22,9 @@ import speiger.src.collections.PACKAGE.functions.consumer.BI_CONSUMER;
 #if !VALUE_OBJECT
 import speiger.src.collections.PACKAGE.functions.function.UNARY_OPERATOR;
 #endif
+#if !VALUE_BOOLEAN
 import speiger.src.collections.PACKAGE.functions.function.FUNCTION;
+#endif
 import speiger.src.collections.objects.maps.abstracts.ABSTRACT_MAP;
 import speiger.src.collections.objects.maps.interfaces.MAP;
 import speiger.src.collections.objects.sets.AbstractObjectSet;

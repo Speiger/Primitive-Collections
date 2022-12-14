@@ -8,6 +8,9 @@ import java.util.Comparator;
 #endif
 import java.util.concurrent.atomic.AtomicLong;
 import java.util.function.Consumer;
+#if JDK_FUNCTION
+import java.util.function.PREDICATE;
+#endif
 
 import speiger.src.collections.PACKAGE.collections.ITERABLE;
 import speiger.src.collections.PACKAGE.collections.COLLECTION;
@@ -19,7 +22,9 @@ import speiger.src.collections.PACKAGE.functions.COMPARATOR;
 #endif
 import speiger.src.collections.PACKAGE.collections.ITERATOR;
 import speiger.src.collections.PACKAGE.functions.function.TO_OBJECT_FUNCTION;
+#if !JDK_FUNCTION
 import speiger.src.collections.PACKAGE.functions.function.PREDICATE;
+#endif
 import speiger.src.collections.utils.ISizeProvider;
 
 /**

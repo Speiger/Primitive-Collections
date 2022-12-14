@@ -14,10 +14,15 @@ import java.util.function.Supplier;
 #if TYPE_OBJECT
 import java.util.function.BiFunction;
 #endif
+#if !TYPE_OBJECT && JDK_FUNCTION
+import java.util.function.PREDICATE;
+#endif
 import java.util.function.Predicate;
 import java.util.function.UnaryOperator;
 #if PRIMITIVES
+#if !JDK_FUNCTION
 import java.util.function.JAVA_PREDICATE;
+#endif
 import java.util.function.JAVA_UNARY_OPERATOR;
 import java.nio.JAVA_BUFFER;
 #endif
@@ -32,7 +37,9 @@ import speiger.src.collections.PACKAGE.functions.COMPARATOR;
 import speiger.src.collections.PACKAGE.functions.CONSUMER;
 #endif
 import speiger.src.collections.objects.functions.consumer.BI_FROM_OBJECT_CONSUMER;
+#if !JDK_FUNCTION
 import speiger.src.collections.PACKAGE.functions.function.PREDICATE;
+#endif
 import speiger.src.collections.PACKAGE.functions.function.UNARY_OPERATOR;
 import speiger.src.collections.PACKAGE.utils.ARRAYS;
 import speiger.src.collections.PACKAGE.utils.ITERATORS;

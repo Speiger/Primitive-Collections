@@ -6,6 +6,9 @@ import java.util.NoSuchElementException;
 import java.util.Comparator;
 import java.util.function.CONSUMER;
 #endif
+#if JDK_FUNCTION
+import java.util.function.PREDICATE;
+#endif
 
 import speiger.src.collections.PACKAGE.collections.ITERATOR;
 #if !TYPE_OBJECT
@@ -15,7 +18,9 @@ import speiger.src.collections.PACKAGE.functions.CONSUMER;
 import speiger.src.collections.PACKAGE.functions.COMPARATOR;
 #endif
 import speiger.src.collections.PACKAGE.functions.function.TO_OBJECT_FUNCTION;
+#if !JDK_FUNCTION
 import speiger.src.collections.PACKAGE.functions.function.PREDICATE;
+#endif
 #if ARRAY_LIST_FEATURE || LINKED_LIST_FEATURE
 import speiger.src.collections.PACKAGE.lists.LIST;
 #if ARRAY_LIST_FEATURE

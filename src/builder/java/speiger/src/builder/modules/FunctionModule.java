@@ -1,5 +1,8 @@
 package speiger.src.builder.modules;
 
+import speiger.src.builder.ClassType;
+import speiger.src.builder.RequiredType;
+
 @SuppressWarnings("javadoc")
 public class FunctionModule extends BaseModule
 {
@@ -27,7 +30,11 @@ public class FunctionModule extends BaseModule
 	{
 		addBiRequirement("BiConsumer", "");
 		addBiRequirement("UnaryOperator", "");
-		addBiRequirement("Function");
+		if(valueType == ClassType.BOOLEAN) {
+			addRequirement("Function", "%1$s", RequiredType.BI_CLASS);
+			addRemapper("Function", (keyType.isObject() ? "" : "%s")+"Predicate");
+		}
+		else addBiRequirement("Function");
 		addRemapper("BiConsumer", "%sConsumer");
 	}
 	
@@ -45,8 +52,10 @@ public class FunctionModule extends BaseModule
 		addClassMapper("BI_TO_OBJECT_CONSUMER", "ObjectConsumer");
 		addAbstractMapper("BI_FROM_OBJECT_CONSUMER", "Object%sConsumer");
 		addClassMapper("TO_OBJECT_FUNCTION", "2ObjectFunction");
-		addBiClassMapper("FUNCTION", "Function", "2");
-		addClassMapper("PREDICATE", "2BooleanFunction");
+		if(valueType == ClassType.BOOLEAN) addFunctionMappers("FUNCTION", "%sPredicate");
+		else addBiClassMapper("FUNCTION", "Function", "2");
+		
+		addFunctionMappers("PREDICATE", "%sPredicate");
 		addClassMapper("SUPPLIER", "Supplier");
 		addAbstractMapper("SINGLE_UNARY_OPERATOR", "%1$s%1$sUnaryOperator");
 		addBiClassMapper("UNARY_OPERATOR", "UnaryOperator", "");

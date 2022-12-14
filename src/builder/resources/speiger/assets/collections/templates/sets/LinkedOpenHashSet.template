@@ -9,6 +9,9 @@ import java.util.Objects;
 import java.util.function.Consumer;
 import java.util.function.BiFunction;
 #endif
+#if JDK_FUNCTION
+import java.util.function.PREDICATE;
+#endif
 
 import speiger.src.collections.PACKAGE.collections.COLLECTION;
 #if !TYPE_OBJECT
@@ -19,7 +22,9 @@ import speiger.src.collections.PACKAGE.collections.BI_ITERATOR;
 import speiger.src.collections.PACKAGE.functions.CONSUMER;
 #endif
 import speiger.src.collections.objects.functions.consumer.BI_FROM_OBJECT_CONSUMER;
+#if !JDK_FUNCTION
 import speiger.src.collections.PACKAGE.functions.function.PREDICATE;
+#endif
 import speiger.src.collections.PACKAGE.functions.function.UNARY_OPERATOR;
 import speiger.src.collections.PACKAGE.lists.LIST_ITERATOR;
 #if !TYPE_OBJECT

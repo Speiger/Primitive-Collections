@@ -1,14 +1,17 @@
 # Changelog of versions
 
-### Version 0.7.1 (Unreleased)
+### Version 0.8.0 (Unreleased)
 - Added: ISizeProvider interface (Optimization Helper)
 - Added: ISizeProvider into most Iterable implementations (Distinct/Filter/FlatMap/ArrayFlatMap don't support it, for obvious reasons)
 - Added: ToArray function into Iterable which uses ISizeProvider to reduce overhead of duplicating arrays.
+- Added: Functions that have the same type, Int2IntFunction as example, have now a identity function.
+- Added: Functions of a BooleanValue have now alwaysTrue/False function.
 - Fixed: putIfAbsent now replaces defaultValues
 - Fixed: OpenHashSet/Map and their Custom Variants no longer rely on List implementations.
 - Fixed: ObjectCopyOnWriteList.of did create a ObjectArrayList instead of the CopyOnWrite variant.
 - Removed: BooleanSet and Maps that start with a Boolean classes since they can not be used anyways.
 - Breaking Change: Function classes now use the "apply/applyAs/test" format from Java itself, instead of the "get" format. This cleans up a lot of things. But will break existing function class implementations
+- Breaking Change: Classes that used PrimitiveCollection functions now default to java functions where applicable, this is to increase compat.
 
 ### Version 0.7.0
 - Added: Over 11 Million Unit Tests to this library to ensure quality.

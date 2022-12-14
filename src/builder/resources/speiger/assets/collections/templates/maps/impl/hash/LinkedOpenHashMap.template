@@ -3,16 +3,23 @@ package speiger.src.collections.PACKAGE.maps.impl.hash;
 import java.util.Arrays;
 import java.util.Map;
 import java.util.NoSuchElementException;
+import java.util.Objects;
 import java.util.function.Consumer;
 import java.util.function.BiFunction;
-import java.util.Objects;
+import java.util.function.Predicate;
+#if !TYPE_OBJECT && JDK_TYPE
+import java.util.function.PREDICATE;
+#endif
+#if !SAME_TYPE && JDK_VALUE && !VALUE_OBJECT
+import java.util.function.VALUE_PREDICATE;
+#endif
 
 import speiger.src.collections.PACKAGE.collections.BI_ITERATOR;
 #if !TYPE_OBJECT
 import speiger.src.collections.PACKAGE.functions.CONSUMER;
 import speiger.src.collections.objects.functions.consumer.BI_FROM_OBJECT_CONSUMER;
 #endif
-#if !TYPE_OBJECT || VALUE_BOOLEAN
+#if !TYPE_OBJECT && !JDK_TYPE
 import speiger.src.collections.PACKAGE.functions.function.PREDICATE;
 #endif
 import speiger.src.collections.PACKAGE.functions.consumer.BI_CONSUMER;
@@ -35,17 +42,14 @@ import speiger.src.collections.VALUE_PACKAGE.lists.VALUE_LIST_ITERATOR;
 #if !TYPE_OBJECT && !VALUE_OBJECT || !VALUE_OBJECT
 import speiger.src.collections.objects.functions.consumer.ObjectObjectConsumer;
 #endif
-#if !TYPE_OBJECT || !VALUE_BOOLEAN
-#if !VALUE_OBJECT || SAME_TYPE
-import speiger.src.collections.objects.functions.function.Object2BooleanFunction;
-#endif
-#endif
 #if !SAME_TYPE
 #if !TYPE_OBJECT
 import speiger.src.collections.objects.functions.consumer.VALUE_BI_FROM_OBJECT_CONSUMER;
 
 #endif
+#if !JDK_VALUE
 import speiger.src.collections.VALUE_PACKAGE.functions.function.VALUE_PREDICATE;
+#endif
 #endif
 #if !TYPE_OBJECT
 #if !VALUE_OBJECT
@@ -699,7 +703,7 @@ public class LINKED_HASH_MAP KEY_VALUE_GENERIC_TYPE extends HASH_MAP KEY_VALUE_G
 		}
 		
 		@Override
-		public boolean matchesAny(Object2BooleanFunction<MAP.Entry KEY_VALUE_GENERIC_TYPE> filter) {
+		public boolean matchesAny(Predicate<MAP.Entry KEY_VALUE_GENERIC_TYPE> filter) {
 			Objects.requireNonNull(filter);
 			if(size() <= 0) return false;
 			BasicEntry KEY_VALUE_GENERIC_TYPE entry = new BasicEntryKV_BRACES();
@@ -713,7 +717,7 @@ public class LINKED_HASH_MAP KEY_VALUE_GENERIC_TYPE extends HASH_MAP KEY_VALUE_G
 		}
 		
 		@Override
-		public boolean matchesNone(Object2BooleanFunction<MAP.Entry KEY_VALUE_GENERIC_TYPE> filter) {
+		public boolean matchesNone(Predicate<MAP.Entry KEY_VALUE_GENERIC_TYPE> filter) {
 			Objects.requireNonNull(filter);
 			if(size() <= 0) return true;
 			BasicEntry KEY_VALUE_GENERIC_TYPE entry = new BasicEntryKV_BRACES();
@@ -727,7 +731,7 @@ public class LINKED_HASH_MAP KEY_VALUE_GENERIC_TYPE extends HASH_MAP KEY_VALUE_G
 		}
 		
 		@Override
-		public boolean matchesAll(Object2BooleanFunction<MAP.Entry KEY_VALUE_GENERIC_TYPE> filter) {
+		public boolean matchesAll(Predicate<MAP.Entry KEY_VALUE_GENERIC_TYPE> filter) {
 			Objects.requireNonNull(filter);
 			if(size() <= 0) return true;
 			BasicEntry KEY_VALUE_GENERIC_TYPE entry = new BasicEntryKV_BRACES();
@@ -772,7 +776,7 @@ public class LINKED_HASH_MAP KEY_VALUE_GENERIC_TYPE extends HASH_MAP KEY_VALUE_G
 		}
 		
 		@Override
-		public MAP.Entry KEY_VALUE_GENERIC_TYPE findFirst(Object2BooleanFunction<MAP.Entry KEY_VALUE_GENERIC_TYPE> filter) {
+		public MAP.Entry KEY_VALUE_GENERIC_TYPE findFirst(Predicate<MAP.Entry KEY_VALUE_GENERIC_TYPE> filter) {
 			Objects.requireNonNull(filter);
 			if(size() <= 0) return null;
 			BasicEntry KEY_VALUE_GENERIC_TYPE entry = new BasicEntryKV_BRACES();
@@ -786,7 +790,7 @@ public class LINKED_HASH_MAP KEY_VALUE_GENERIC_TYPE extends HASH_MAP KEY_VALUE_G
 		}
 		
 		@Override
-		public int count(Object2BooleanFunction<MAP.Entry KEY_VALUE_GENERIC_TYPE> filter) {
+		public int count(Predicate<MAP.Entry KEY_VALUE_GENERIC_TYPE> filter) {
 			Objects.requireNonNull(filter);
 			if(size() <= 0) return 0;
 			int result = 0;
