@@ -4,8 +4,7 @@ package speiger.src.collections.PACKAGE.queues;
 import java.util.Comparator;
 import java.util.Collection;
 import java.util.Iterator;
-
-import speiger.src.collections.ints.functions.function.Int2ObjectFunction;
+import java.util.function.IntFunction;
 #else
 import speiger.src.collections.PACKAGE.functions.COMPARATOR;
 #endif
@@ -189,7 +188,7 @@ public interface PRIORITY_QUEUE KEY_GENERIC_TYPE extends ITERABLE KEY_GENERIC_TY
 	 * @return an array containing all of the elements in this collection
 	 * @see Collection#toArray(Object[])
 	 */
-	default KEY_TYPE[] TO_ARRAY(Int2ObjectFunction<KEY_TYPE[]> action) {
+	default KEY_TYPE[] TO_ARRAY(IntFunction<KEY_TYPE[]> action) {
 		return TO_ARRAY(action.apply(size()));
 	}
 #endif

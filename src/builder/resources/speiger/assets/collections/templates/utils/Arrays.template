@@ -8,8 +8,8 @@ import java.util.concurrent.RecursiveAction;
 import speiger.src.collections.PACKAGE.functions.COMPARATOR;
 #else
 import java.util.Comparator;
+import java.util.function.IntFunction;
 
-import speiger.src.collections.ints.functions.function.Int2ObjectFunction;
 #endif
 import speiger.src.collections.PACKAGE.collections.ITERATOR;
 import speiger.src.collections.PACKAGE.utils.ITERATORS;
@@ -146,7 +146,7 @@ public class ARRAYS
 	 * @param action that is creating the Array to be poured into
 	 * @return array with all elements of the iterator
 	 */
-	public static GENERIC_KEY_BRACES KEY_TYPE[] pour(ITERATOR KEY_GENERIC_TYPE iter, Int2ObjectFunction<KEY_TYPE[]> action) {
+	public static GENERIC_KEY_BRACES KEY_TYPE[] pour(ITERATOR KEY_GENERIC_TYPE iter, IntFunction<KEY_TYPE[]> action) {
 		return pour(iter, Integer.MAX_VALUE, action);
 	}
 	
@@ -158,7 +158,7 @@ public class ARRAYS
 	 * @ArrayType(T)
 	 * @return array with all requested elements of the iterator
 	 */
-	public static GENERIC_KEY_BRACES KEY_TYPE[] pour(ITERATOR KEY_GENERIC_TYPE iter, int max, Int2ObjectFunction<KEY_TYPE[]> action) {
+	public static GENERIC_KEY_BRACES KEY_TYPE[] pour(ITERATOR KEY_GENERIC_TYPE iter, int max, IntFunction<KEY_TYPE[]> action) {
 		COLLECTIONS.CollectionWrapper KEY_GENERIC_TYPE list = COLLECTIONS.wrapper();
 		ITERATORS.pour(iter, list, max);
 		return list.TO_ARRAY(action.apply(list.size()));

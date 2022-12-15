@@ -34,6 +34,18 @@ public class FunctionModule extends BaseModule
 			addRequirement("Function", "%1$s", RequiredType.BI_CLASS);
 			addRemapper("Function", (keyType.isObject() ? "" : "%s")+"Predicate");
 		}
+		else if(keyType.isObject() && !valueType.isObject()) {
+			addRequirement("Function", "%2$s", RequiredType.BI_CLASS);
+			addRemapper("Function", "To%sFunction");			
+		}
+		else if(keyType == valueType) {
+			addRequirement("Function", "%1$s", RequiredType.BI_CLASS);
+			addRemapper("Function", (keyType.isObject() ? "" : "%s")+"UnaryOperator");
+		}
+		else if(valueType.isObject()) {
+			addRequirement("Function", "%1$s", RequiredType.BI_CLASS);
+			addRemapper("Function", "%sFunction");
+		}
 		else addBiRequirement("Function");
 		addRemapper("BiConsumer", "%sConsumer");
 	}
@@ -51,8 +63,12 @@ public class FunctionModule extends BaseModule
 		addBiClassMapper("BI_CONSUMER", "Consumer", "");
 		addClassMapper("BI_TO_OBJECT_CONSUMER", "ObjectConsumer");
 		addAbstractMapper("BI_FROM_OBJECT_CONSUMER", "Object%sConsumer");
-		addClassMapper("TO_OBJECT_FUNCTION", "2ObjectFunction");
+		if(keyType.isObject()) addFunctionMappers("TO_OBJECT_FUNCTION", "UnaryOperator");
+		else addClassMapper("TO_OBJECT_FUNCTION", "Function");
 		if(valueType == ClassType.BOOLEAN) addFunctionMappers("FUNCTION", "%sPredicate");
+		else if(keyType.isObject() && !valueType.isObject()) addFunctionValueMappers("FUNCTION", "To%sFunction");
+		else if(keyType == valueType) addFunctionMappers("FUNCTION", "%sUnaryOperator");
+		else if(valueType.isObject()) addFunctionMappers("FUNCTION", "%sFunction");
 		else addBiClassMapper("FUNCTION", "Function", "2");
 		
 		addFunctionMappers("PREDICATE", "%sPredicate");

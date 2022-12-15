@@ -4,6 +4,7 @@ package speiger.src.collections.PACKAGE.lists;
 #if DEQUEUE_FEATURE
 import java.util.Comparator;
 #endif
+
 import java.util.function.BiFunction;
 #else if PRIMITIVES
 import java.nio.JAVA_BUFFER;
@@ -18,6 +19,9 @@ import java.util.Spliterator.JAVA_SPLIT_ITERATOR;
 #endif
 import java.util.function.Consumer;
 import java.util.function.Predicate;
+#if TYPE_OBJECT
+import java.util.function.IntFunction;
+#endif
 #if !TYPE_OBJECT && JDK_FUNCTION
 import java.util.function.PREDICATE;
 #endif
@@ -36,8 +40,6 @@ import speiger.src.collections.PACKAGE.functions.function.UNARY_OPERATOR;
 import speiger.src.collections.PACKAGE.collections.COLLECTION;
 #if !TYPE_OBJECT
 import speiger.src.collections.PACKAGE.collections.STACK;
-#else
-import speiger.src.collections.ints.functions.function.Int2ObjectFunction;
 #endif
 import speiger.src.collections.PACKAGE.collections.ITERATOR;
 #if DEQUEUE_FEATURE
@@ -990,7 +992,7 @@ public class LINKED_LIST KEY_GENERIC_TYPE extends ABSTRACT_LIST KEY_GENERIC_TYPE
 	
 #else
 	@Override
-	public T[] toArray(Int2ObjectFunction<T[]> action) {
+	public T[] toArray(IntFunction<T[]> action) {
 		return super.toArray(action);
 	}
 	

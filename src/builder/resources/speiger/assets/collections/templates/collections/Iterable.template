@@ -13,8 +13,8 @@ import speiger.src.collections.PACKAGE.functions.COMPARATOR;
 import speiger.src.collections.objects.collections.ObjectIterable;
 #else
 import java.util.function.BiFunction;
+import java.util.function.IntFunction;
 import java.util.Comparator;
-import speiger.src.collections.ints.functions.function.Int2ObjectFunction;
 
 #endif
 import speiger.src.collections.PACKAGE.functions.function.TO_OBJECT_FUNCTION;
@@ -288,7 +288,7 @@ public interface ITERABLE KEY_GENERIC_TYPE extends Iterable<CLASS_TYPE>
 	 * @param action is the creator function of said Array to ensure type is kept.
 	 * @return a new Array of all elements
 	 */
-	default KEY_TYPE[] TO_ARRAY(Int2ObjectFunction<KEY_TYPE[]> action) {
+	default KEY_TYPE[] TO_ARRAY(IntFunction<KEY_TYPE[]> action) {
 		ISizeProvider prov = ISizeProvider.of(this);
 		if(prov != null) {
 			int size = prov.size();

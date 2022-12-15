@@ -12,7 +12,7 @@ import java.util.stream.StreamSupport;
 #endif
 #if TYPE_OBJECT
 import java.util.function.Consumer;
-import speiger.src.collections.ints.functions.function.Int2ObjectFunction;
+import java.util.function.IntFunction;
 #else
 import speiger.src.collections.PACKAGE.functions.CONSUMER;
 #endif
@@ -182,7 +182,7 @@ public interface COLLECTION KEY_GENERIC_TYPE extends Collection<CLASS_TYPE>, ITE
 	 * @return an array containing all of the elements in this collection
 	 * @see Collection#toArray(Object[])
 	 */
-	default KEY_TYPE[] TO_ARRAY(Int2ObjectFunction<KEY_TYPE[]> action) {
+	default KEY_TYPE[] TO_ARRAY(IntFunction<KEY_TYPE[]> action) {
 		return TO_ARRAY(action.apply(size()));
 	}
 	

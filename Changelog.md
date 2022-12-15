@@ -12,6 +12,7 @@
 - Removed: BooleanSet and Maps that start with a Boolean classes since they can not be used anyways.
 - Breaking Change: Function classes now use the "apply/applyAs/test" format from Java itself, instead of the "get" format. This cleans up a lot of things. But will break existing function class implementations
 - Breaking Change: Classes that used PrimitiveCollection functions now default to java functions where applicable, this is to increase compat.
+- Breaking Change: Some function classes now get closer to javas terms. (Predicate/UnaryOperator etc)
 
 ### Version 0.7.0
 - Added: Over 11 Million Unit Tests to this library to ensure quality.
