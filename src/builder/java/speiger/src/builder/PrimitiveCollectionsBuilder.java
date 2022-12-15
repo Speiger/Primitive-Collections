@@ -251,7 +251,7 @@ public class PrimitiveCollectionsBuilder extends TemplateProcessor
 			Set<String> flags = new HashSet<>(Arrays.asList(args));
 			boolean silent = flags.contains("silent");
 			boolean force = flags.contains("force");
-			boolean tests = !flags.contains("tests");
+			boolean tests = flags.contains("tests");
 			boolean forceTests =  flags.contains("force-tests");
 			boolean load = flags.contains("load");
 			boolean save = flags.contains("save");
