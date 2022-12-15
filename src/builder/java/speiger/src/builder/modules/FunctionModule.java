@@ -65,6 +65,7 @@ public class FunctionModule extends BaseModule
 		addBiClassMapper("BI_CONSUMER", "Consumer", "");
 		addClassMapper("BI_TO_OBJECT_CONSUMER", "ObjectConsumer");
 		addAbstractMapper("BI_FROM_OBJECT_CONSUMER", "Object%sConsumer");
+		addAbstractMapper("BI_FROM_INT_CONSUMER", "Int%sConsumer");
 		if(keyType.isObject()) {
 			addSimpleMapper("TO_OBJECT_FUNCTION", keyType.getNonFileType()+"UnaryOperator");
 			addSimpleMapper("VALUE_TO_OBJECT_FUNCTION", valueType.isObject() ? "UnaryOperator" : valueType.getFileType()+"Function");

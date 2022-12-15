@@ -5,17 +5,18 @@ import java.nio.JAVA_BUFFER;
 #endif
 import java.util.List;
 #if !TYPE_OBJECT && !TYPE_BOOLEAN
-import java.util.Objects;
 import java.util.function.JAVA_UNARY_OPERATOR;
-import java.util.function.UnaryOperator;
-#else if TYPE_OBJECT
+#endif
+
 import java.util.Objects;
+import java.util.Comparator;
+#if !TYPE_BOOLEAN
 import java.util.function.UnaryOperator;
 #endif
-import java.util.Comparator;
 
 import speiger.src.collections.PACKAGE.collections.COLLECTION;
 import speiger.src.collections.PACKAGE.collections.SPLIT_ITERATOR;
+import speiger.src.collections.ints.functions.consumer.BI_FROM_INT_CONSUMER;
 #if !TYPE_OBJECT
 import speiger.src.collections.PACKAGE.functions.COMPARATOR;
 #endif
@@ -360,6 +361,15 @@ public interface LIST KEY_GENERIC_TYPE extends COLLECTION KEY_GENERIC_TYPE, List
 	}
 	
 #endif
+	/**
+	 * A Indexed forEach implementation that allows you to keep track of how many elements were already iterated over.
+	 * @param action The action to be performed for each element
+	 * @throws java.lang.NullPointerException if the specified action is null
+	 */
+	public default void forEachIndexed(BI_FROM_INT_CONSUMER KEY_GENERIC_TYPE action) {
+		Objects.requireNonNull(action);
+		for(int i = 0,m=size();i<m;action.accept(i, GET_KEY(i++)));
+	}
 	/**
 	 * A Type-Specific Iterator of listIterator
 	 * @see java.util.List#listIterator
