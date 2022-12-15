@@ -214,7 +214,6 @@ public class MapModule extends BaseModule
 		addFunctionValueMappers("FIRST_ENTRY_VALUE", "first%sValue");
 		if(keyType.isObject()) addFunctionValueMapper("GET_VALUE", valueType.isObject() ? "getObject" : "get");
 		else addSimpleMapper("GET_VALUE", "get");
-		addSimpleMapper("GET_JAVA", keyType.isObject() ? "get" : "getAs"+keyType.getCustomJDKType().getNonFileType());
 		addFunctionMappers("LAST_ENTRY_KEY", "last%sKey");
 		addFunctionValueMappers("LAST_ENTRY_VALUE", "last%sValue");
 		addFunctionValueMapper("MERGE", "merge");

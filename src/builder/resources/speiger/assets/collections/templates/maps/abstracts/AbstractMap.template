@@ -233,7 +233,7 @@ public abstract class ABSTRACT_MAP KEY_VALUE_GENERIC_TYPE extends AbstractMap<CL
 		Objects.requireNonNull(valueProvider);
 		VALUE_TYPE value;
 		if((value = GET_VALUE(key)) == getDefaultReturnValue() || !containsKey(key)) {
-			VALUE_TYPE newValue = valueProvider.VALUE_GET_KEY();
+			VALUE_TYPE newValue = valueProvider.VALUE_SUPPLY_GET();
 			if(VALUE_EQUALS_NOT(newValue, getDefaultReturnValue())) {
 				put(key, newValue);
 				return newValue;

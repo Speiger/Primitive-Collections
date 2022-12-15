@@ -525,14 +525,14 @@ public class HASH_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_VALUE_GENE
 		Objects.requireNonNull(valueProvider);
 		int index = findIndex(key);
 		if(index < 0) {
-			VALUE_TYPE newValue = valueProvider.VALUE_GET_KEY();
+			VALUE_TYPE newValue = valueProvider.VALUE_SUPPLY_GET();
 			if(VALUE_EQUALS(newValue, getDefaultReturnValue())) return newValue;
 			insert(-index-1, key, newValue);
 			return newValue;
 		}
 		VALUE_TYPE newValue = values[index];
 		if(VALUE_EQUALS(newValue, getDefaultReturnValue())) {
-			newValue = valueProvider.VALUE_GET_KEY();
+			newValue = valueProvider.VALUE_SUPPLY_GET();
 			if(VALUE_EQUALS(newValue, getDefaultReturnValue())) return newValue;
 			values[index] = newValue;
 		}

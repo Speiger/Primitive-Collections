@@ -401,7 +401,7 @@ public class ENUM_MAP KEY_ENUM_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_VALUE
 	public VALUE_TYPE SUPPLY_IF_ABSENT(T key, VALUE_SUPPLIER VALUE_GENERIC_TYPE valueProvider) {
 		int index = key.ordinal();
 		if(!isSet(index)) {
-			VALUE_TYPE newValue = valueProvider.VALUE_GET_KEY();
+			VALUE_TYPE newValue = valueProvider.VALUE_SUPPLY_GET();
 			if(VALUE_EQUALS(newValue, getDefaultReturnValue())) return newValue;
 			set(index);
 			values[index] = newValue;			
@@ -409,7 +409,7 @@ public class ENUM_MAP KEY_ENUM_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_VALUE
 		}
 		VALUE_TYPE newValue = values[index];
 		if(VALUE_EQUALS(newValue, getDefaultReturnValue())) {
-			newValue = valueProvider.VALUE_GET_KEY();
+			newValue = valueProvider.VALUE_SUPPLY_GET();
 			if(VALUE_EQUALS(newValue, getDefaultReturnValue())) return newValue;
 			values[index] = newValue;
 		}
