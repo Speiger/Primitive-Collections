@@ -992,7 +992,7 @@ public class LINKED_LIST KEY_GENERIC_TYPE extends ABSTRACT_LIST KEY_GENERIC_TYPE
 	
 #else
 	@Override
-	public T[] toArray(IntFunction<T[]> action) {
+	public <E> E[] toArray(IntFunction<E[]> action) {
 		return super.toArray(action);
 	}
 	

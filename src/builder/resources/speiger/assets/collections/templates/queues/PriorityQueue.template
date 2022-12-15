@@ -188,7 +188,7 @@ public interface PRIORITY_QUEUE KEY_GENERIC_TYPE extends ITERABLE KEY_GENERIC_TY
 	 * @return an array containing all of the elements in this collection
 	 * @see Collection#toArray(Object[])
 	 */
-	default KEY_TYPE[] TO_ARRAY(IntFunction<KEY_TYPE[]> action) {
+	default <E> E[] TO_ARRAY(IntFunction<E[]> action) {
 		return TO_ARRAY(action.apply(size()));
 	}
 #endif

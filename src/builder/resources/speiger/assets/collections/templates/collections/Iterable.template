@@ -288,12 +288,12 @@ public interface ITERABLE KEY_GENERIC_TYPE extends Iterable<CLASS_TYPE>
 	 * @param action is the creator function of said Array to ensure type is kept.
 	 * @return a new Array of all elements
 	 */
-	default KEY_TYPE[] TO_ARRAY(IntFunction<KEY_TYPE[]> action) {
+	default <E> E[] TO_ARRAY(IntFunction<E[]> action) {
 		ISizeProvider prov = ISizeProvider.of(this);
 		if(prov != null) {
 			int size = prov.size();
 			if(size >= 0) {
-				KEY_TYPE[] array = action.apply(size);
+				E[] array = action.apply(size);
 				ITERATORS.unwrap(array, iterator());
 				return array;
 			}
