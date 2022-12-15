@@ -11,7 +11,7 @@ import java.util.function.Supplier;
 import org.junit.Test;
 
 import junit.framework.TestCase;
-import speiger.src.collections.VALUE_PACKAGE.functions.function.FILE_VALUE_TYPE2ObjectFunction;
+import speiger.src.collections.VALUE_PACKAGE.functions.function.VALUE_TO_OBJECT_FUNCTION;	
 #if !SAME_TYPE
 import speiger.src.collections.PACKAGE.functions.function.TO_OBJECT_FUNCTION;
 #endif
@@ -24,7 +24,7 @@ public class PAIRTester KEY_VALUE_GENERIC_TYPE extends TestCase
 	Function<PAIR KEY_VALUE_GENERIC_TYPE, PAIR KEY_VALUE_GENERIC_TYPE> copier;
 	BiFunction<KEY_TYPE[], VALUE_TYPE[], PAIR KEY_VALUE_GENERIC_TYPE> constructor;
 	TO_OBJECT_FUNCTION KKS_GENERIC_TYPE<PAIR KEY_VALUE_GENERIC_TYPE> keyConstructor;
-	FILE_VALUE_TYPE2ObjectFunction VVS_GENERIC_TYPE<PAIR KEY_VALUE_GENERIC_TYPE> valueConstructor;
+	VALUE_TO_OBJECT_FUNCTION VVS_GENERIC_TYPE<PAIR KEY_VALUE_GENERIC_TYPE> valueConstructor;
 	boolean mutable;
 	
 	protected PAIRTester(boolean mutable) {
@@ -47,7 +47,7 @@ public class PAIRTester KEY_VALUE_GENERIC_TYPE extends TestCase
 		this.keyConstructor = keyConstructor;
 	}
 
-	protected void setValueConstructor(FILE_VALUE_TYPE2ObjectFunction VVS_GENERIC_TYPE<PAIR KEY_VALUE_GENERIC_TYPE> valueConstructor) {
+	protected void setValueConstructor(VALUE_TO_OBJECT_FUNCTION VVS_GENERIC_TYPE<PAIR KEY_VALUE_GENERIC_TYPE> valueConstructor) {
 		this.valueConstructor = valueConstructor;
 	}
 	
