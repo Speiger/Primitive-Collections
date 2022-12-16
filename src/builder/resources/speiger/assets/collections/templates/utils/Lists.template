@@ -5,7 +5,11 @@ import java.util.List;
 #if IARRAY_FEATURE
 import java.util.Objects;
 #endif
-import java.util.Random;
+#if JAVA_VERSION>=17
+import java.util.random.RANDOM;
+#else
+import java.util.RANDOM;
+#endif
 import java.util.RandomAccess;
 #if IARRAY_FEATURE || TYPE_OBJECT
 import java.util.function.Consumer;
@@ -157,7 +161,7 @@ public class LISTS
 	 * @Type(T)
 	 * @return the input list
 	 */
-	public static GENERIC_KEY_BRACES LIST KEY_GENERIC_TYPE shuffle(LIST KEY_GENERIC_TYPE list, Random random) {
+	public static GENERIC_KEY_BRACES LIST KEY_GENERIC_TYPE shuffle(LIST KEY_GENERIC_TYPE list, RANDOM random) {
 		int size = list.size();
 #if IARRAY_FEATURE
 		if(list instanceof IARRAY) {

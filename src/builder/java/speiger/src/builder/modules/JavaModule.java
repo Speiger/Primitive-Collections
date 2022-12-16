@@ -22,12 +22,20 @@ public class JavaModule extends BaseModule
 	{
 		addFlag("TYPE_"+keyType.getCapType());
 		addFlag("VALUE_"+valueType.getCapType());
+		addValue("JAVA_VERSION", getVersion());
 		if(keyType == valueType) addFlag("SAME_TYPE");
 		if(keyType.hasFunction(valueType)) addFlag("JDK_FUNCTION");
 		if(!keyType.needsCustomJDKType()) addFlag("JDK_TYPE");
 		if(!keyType.isPrimitiveBlocking()) addFlag("PRIMITIVES");
 		if(!valueType.isPrimitiveBlocking()) addFlag("VALUE_PRIMITIVES");
 		if(!valueType.needsCustomJDKType()) addFlag("JDK_VALUE");
+	}
+	
+	private int getVersion()  {
+		String version = System.getProperty("java.version");
+		if(version.startsWith("1.")) return Integer.parseInt(version.substring(2, 3));
+		int dot = version.indexOf(".");
+		return Integer.parseInt(dot != -1 ? version.substring(0, dot) : version);
 	}
 	
 	@Override
@@ -52,6 +60,8 @@ public class JavaModule extends BaseModule
 	@Override
 	protected void loadClasses()
 	{
+		if(getVersion() >= 17) addSimpleMapper("RANDOM", "RandomGenerator");
+		else addSimpleMapper("RANDOM", "Random");
 		addSimpleMapper("JAVA_PREDICATE", keyType.isPrimitiveBlocking() ? "" : keyType.getCustomJDKType().getFileType()+"Predicate");
 		addSimpleMapper("JAVA_CONSUMER", keyType.isPrimitiveBlocking() ? "" : "java.util.function."+keyType.getCustomJDKType().getFileType()+"Consumer");
 		addSimpleMapper("JAVA_SUPPLIER", keyType.isPrimitiveBlocking() ? "" : "java.util.function."+keyType.getCustomJDKType().getFileType()+"Supplier");

@@ -11,6 +11,7 @@ import java.util.function.Consumer;
 import speiger.src.collections.PACKAGE.functions.CONSUMER;
 import speiger.src.collections.PACKAGE.utils.ITERATORS;
 #endif
+import speiger.src.collections.PACKAGE.utils.ARRAYS;
 
 /**
  * Abstract Type Specific Collection that reduces boxing/unboxing
@@ -245,6 +246,7 @@ public abstract class ABSTRACT_COLLECTION KEY_GENERIC_TYPE extends AbstractColle
 	 */
 	@Override
 	public KEY_TYPE[] TO_ARRAY() {
+		if(isEmpty()) return ARRAYS.EMPTY_ARRAY;
 		return TO_ARRAY(new KEY_TYPE[size()]);
 	}
 	

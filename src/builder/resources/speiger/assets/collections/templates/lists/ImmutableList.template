@@ -446,6 +446,7 @@ public class IMMUTABLE_LIST KEY_GENERIC_TYPE extends ABSTRACT_LIST KEY_GENERIC_T
 	@Override
 	@Primitive
 	public Object[] toArray() {
+		if(data.length == 0) return ObjectArrays.EMPTY_ARRAY;
 		Object[] obj = new Object[data.length];
 		for(int i = 0,m=data.length;i<m;i++)
 			obj[i] = KEY_TO_OBJ(data[i]);

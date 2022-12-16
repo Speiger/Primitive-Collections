@@ -12,6 +12,7 @@ import java.util.function.Consumer;
 import speiger.src.collections.PACKAGE.functions.CONSUMER;
 import speiger.src.collections.PACKAGE.functions.COMPARATOR;
 #else
+import java.util.function.IntFunction;
 import java.util.function.BiFunction;
 import java.util.Comparator;
 
@@ -69,6 +70,7 @@ import speiger.src.collections.objects.utils.ObjectAsyncBuilder.BaseObjectTask;
 import speiger.src.collections.ints.utils.IntAsyncBuilder;
 import speiger.src.collections.ints.utils.IntAsyncBuilder.BaseIntTask;
 #endif
+import speiger.src.collections.utils.ISizeProvider;
 import speiger.src.collections.utils.SanityChecks;
 
 /**
@@ -292,6 +294,26 @@ public class ASYNC_BUILDER KEY_GENERIC_TYPE
 	
 #endif
 #if OBJECT_ASYNC_MODULE
+#if TYPE_OBJECT
+	/**
+	 * Pours all elements of the Iterable down into a Array.
+	 * @param action creates the final array that should be copied into.
+	 * @return a new Builder with the ToArray function applied
+	 */
+	public ObjectAsyncBuilder<KEY_TYPE[]> TO_ARRAY(IntFunction<KEY_TYPE[]> action) {
+		return new ObjectAsyncBuilder<>(new ArrayTaskBRACES(iterable, action));
+	}
+	
+#else
+	/**
+	 * Pours all elements of the Iterable down into a Array.
+	 * @return a new Builder with the ToArray function applied
+	 */
+	public ObjectAsyncBuilder<KEY_TYPE[]> TO_ARRAY() {
+		return new ObjectAsyncBuilder<>(new ArrayTaskBRACES(iterable));
+	}
+	
+#endif
 #if ARRAY_LIST_FEATURE || LINKED_LIST_FEATURE
 	/**
 	 * Pours all elements into a List that can be later
@@ -726,6 +748,51 @@ public class ASYNC_BUILDER KEY_GENERIC_TYPE
 		protected void onCompletion() {
 			super.onCompletion();
 			iter = null;
+		}
+	}
+	
+	private static class ArrayTask KEY_GENERIC_TYPE extends BaseObjectTask<KEY_TYPE[]>
+	{
+		ITERATOR KEY_GENERIC_TYPE iter;
+		COLLECTIONS.CollectionWrapper KEY_GENERIC_TYPE wrapper;
+#if TYPE_OBJECT
+		IntFunction<KEY_TYPE[]> builder;
+		
+		public ArrayTask(ITERABLE KEY_GENERIC_TYPE iterable, IntFunction<KEY_TYPE[]> builder) {
+			this.builder = builder;
+#else
+	
+		public ArrayTask(ITERABLE KEY_GENERIC_TYPE iterable) {
+#endif
+			iter = iterable.iterator();
+			ISizeProvider prov = ISizeProvider.of(iterable);
+			int size = prov == null ? -1 : prov.size();
+			wrapper = size < 0 ? COLLECTIONS.wrapper() : COLLECTIONS.wrapper(size);
+		}
+		
+		@Override
+		protected boolean execute() throws Exception {
+			while(shouldRun() && iter.hasNext()) {
+				wrapper.add(iter.NEXT());
+			}
+			if(!iter.hasNext()) {
+#if TYPE_OBJECT
+				setResult(wrapper.TO_ARRAY(builder));
+#else
+				setResult(wrapper.TO_ARRAY());
+#endif
+				wrapper = null;
+			}
+			return false;
+		}
+		
+		@Override
+		protected void onCompletion() {
+			super.onCompletion();
+			iter = null;
+#if TYPE_OBJECT
+			builder = null;
+#endif
 		}
 	}
 	

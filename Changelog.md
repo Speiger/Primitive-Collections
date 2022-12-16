@@ -6,7 +6,11 @@
 - Added: ToArray function into Iterable which uses ISizeProvider to reduce overhead of duplicating arrays.
 - Added: Functions that have the same type, Int2IntFunction as example, have now a identity function.
 - Added: Functions of a BooleanValue have now alwaysTrue/False function.
-- Added: ForEachIndexed for Lists only for now. (Might get added to others too if necessary)
+- Added: ForEachIndexed for all Iterable implementations
+- Added: RandomGenerator support (Java17), though requires self compilation
+- Added: Optimizations for HashUtils next power of function.
+- Added: toArray() now returns a cached empty array if the collection is empty.
+- Added: toArray function for AsyncBuilder
 - Fixed: putIfAbsent now replaces defaultValues
 - Fixed: OpenHashSet/Map and their Custom Variants no longer rely on List implementations.
 - Fixed: ObjectCopyOnWriteList.of did create a ObjectArrayList instead of the CopyOnWrite variant.

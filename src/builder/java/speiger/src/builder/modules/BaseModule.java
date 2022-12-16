@@ -83,6 +83,10 @@ public abstract class BaseModule
 		entry.addFlag(name);
 	}
 	
+	protected void addValue(String name, int value) {
+		entry.addValue(name, value);
+	}
+	
 	protected void addKeyFlag(String name) {
 		entry.addFlag(name);
 		entry.addGlobalFlag(keyType.getCapType()+"_"+name);

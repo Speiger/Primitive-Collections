@@ -54,10 +54,9 @@ import speiger.src.collections.PACKAGE.functions.COMPARATOR;
 import speiger.src.collections.PACKAGE.functions.CONSUMER;
 #endif
 import speiger.src.collections.PACKAGE.utils.ARRAYS;
+import speiger.src.collections.objects.utils.ObjectArrays;
 #if TYPE_OBJECT
 import speiger.src.collections.utils.Stack;
-#else
-import speiger.src.collections.objects.utils.ObjectArrays;
 #endif
 #if PRIMITIVES
 import java.util.stream.JAVA_STREAM;
@@ -967,6 +966,7 @@ public class LINKED_LIST KEY_GENERIC_TYPE extends ABSTRACT_LIST KEY_GENERIC_TYPE
 #endif
 	@Override
 	public Object[] toArray() {
+		if(size == 0) return ObjectArrays.EMPTY_ARRAY;
 		Object[] obj = new Object[size];
 		int i = 0;
 		for(Entry KEY_GENERIC_TYPE entry = first;entry != null;entry = entry.next) {

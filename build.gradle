@@ -46,7 +46,7 @@ configurations {
 
 dependencies {
 	builderImplementation 'com.google.code.gson:gson:2.10'
-	builderImplementation 'de.speiger:Simple-Code-Generator:1.2.1'
+	builderImplementation 'de.speiger:Simple-Code-Generator:1.2.2'
     testImplementation 'junit:junit:4.12'
     testImplementation 'com.google.guava:guava-testlib:31.0.1-jre'
     

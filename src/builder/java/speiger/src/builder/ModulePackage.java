@@ -32,6 +32,7 @@ public class ModulePackage
 	List<IMapper> mappers = new ArrayList<>();
 	Set<String> flags = new LinkedHashSet<>();
 	Set<String> globalFlags;
+	Map<String, Integer> flaggedValues = new HashMap<>();
 	BiConsumer<String, RequiredType> requirements = VOID;
 	
 	public ModulePackage(Set<String> globalFlags, ClassType keyType, ClassType valueType) {
@@ -74,6 +75,10 @@ public class ModulePackage
 		globalFlags.add(flag);
 	}
 	
+	public void addValue(String key, int value) {
+		flaggedValues.put(key, value);
+	}
+	
 	public void addRequirement(String fileName, RequiredType type) {
 		requirements.accept(fileName, type);
 	}
@@ -107,6 +112,7 @@ public class ModulePackage
 		process.addFlags(flags);
 		process.addFlags(globalFlags);
 		process.addMappers(mappers);
+		process.addValues(flaggedValues);
 		result.accept(process);
 	}
 	

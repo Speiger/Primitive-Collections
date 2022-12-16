@@ -551,6 +551,7 @@ public class ARRAY_SET KEY_GENERIC_TYPE extends ABSTRACT_SET KEY_GENERIC_TYPE im
 	@Override
 	@Deprecated
 	public Object[] toArray() {
+		if(isEmpty()) return ObjectArrays.EMPTY_ARRAY;
 		Object[] obj = new Object[size()];
 		for(int i = 0;i<size();i++)
 			obj[i] = KEY_TO_OBJ(data[i]);

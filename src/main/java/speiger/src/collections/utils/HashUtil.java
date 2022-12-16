@@ -51,15 +51,7 @@ public class HashUtil
 	 * @return the input number rounded up to the next power of two
 	 */
 	public static int nextPowerOfTwo(int x) {
-		if(x != 0) {
-			x--;
-			x |= x >> 1;
-			x |= x >> 2;
-			x |= x >> 4;
-			x |= x >> 8;
-			x |= x >> 16;
-		}
-		return x + 1;
+		return 1 << (32 - Integer.numberOfLeadingZeros(x - 1));
 	}
 	
 	/**
@@ -69,16 +61,7 @@ public class HashUtil
 	 * @return the input number rounded up to the next power of two
 	 */
 	public static long nextPowerOfTwo(long x) {
-		if(x != 0) {
-			x--;
-			x |= x >> 1;
-			x |= x >> 2;
-			x |= x >> 4;
-			x |= x >> 8;
-			x |= x >> 16;
-			x |= x >> 32;
-		}
-		return x + 1L;
+		return 1L << (64 - Long.numberOfLeadingZeros(x - 1));
 	}
 	
 	/**

@@ -42,11 +42,10 @@ import speiger.src.collections.PACKAGE.functions.function.PREDICATE;
 #endif
 import speiger.src.collections.PACKAGE.functions.function.UNARY_OPERATOR;
 import speiger.src.collections.PACKAGE.utils.ARRAYS;
+import speiger.src.collections.objects.utils.ObjectArrays;
 import speiger.src.collections.PACKAGE.utils.ITERATORS;
 #if TYPE_OBJECT
 import speiger.src.collections.utils.Stack;
-#else
-import speiger.src.collections.objects.utils.ObjectArrays;
 #endif
 #if PRIMITIVES && STREAM_FEATURE && SPLIT_ITERATOR_FEATURE
 import java.util.stream.JAVA_STREAM;
@@ -1291,6 +1290,7 @@ public class COPY_ON_WRITE_LIST KEY_GENERIC_TYPE extends ABSTRACT_LIST KEY_GENER
 	public Object[] toArray() {
 		KEY_TYPE[] data = this.data;
 		int size = data.length;
+		if(size == 0) return ObjectArrays.EMPTY_ARRAY;
 		Object[] obj = new Object[size];
 		for(int i = 0;i<size;i++)
 			obj[i] = KEY_TO_OBJ(data[i]);
