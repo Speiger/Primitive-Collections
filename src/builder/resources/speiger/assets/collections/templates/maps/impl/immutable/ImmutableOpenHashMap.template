@@ -19,6 +19,13 @@ import speiger.src.collections.PACKAGE.collections.BI_ITERATOR;
 import speiger.src.collections.PACKAGE.functions.CONSUMER;
 import speiger.src.collections.objects.functions.consumer.BI_FROM_OBJECT_CONSUMER;
 #endif
+import speiger.src.collections.ints.functions.consumer.BI_FROM_INT_CONSUMER;
+#if !TYPE_OBJECT && !VALUE_OBJECT
+import speiger.src.collections.ints.functions.consumer.IntObjectConsumer;
+#endif
+#if !SAME_TYPE
+import speiger.src.collections.ints.functions.consumer.VALUE_BI_FROM_INT_CONSUMER;
+#endif
 #if !TYPE_OBJECT && !VALUE_BOOLEAN && !JDK_TYPE
 import speiger.src.collections.PACKAGE.functions.function.PREDICATE;
 #endif
@@ -665,6 +672,18 @@ public class IMMUTABLE_HASH_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_
 		}
 		
 		@Override
+		public void forEachIndexed(IntObjectConsumer<MAP.Entry KEY_VALUE_GENERIC_TYPE> action) {
+			Objects.requireNonNull(action);
+			if(size() <= 0) return;
+			int count = 0;
+			int index = firstIndex;
+			while(index != -1) {
+				action.accept(count++, new BasicEntryKV_BRACES(keys[index], values[index]));
+				index = (int)links[index];
+			}
+		}
+		
+		@Override
 		public <E> void forEach(E input, ObjectObjectConsumer<E, MAP.Entry KEY_VALUE_GENERIC_TYPE> action) {
 			Objects.requireNonNull(action);
 			if(size() <= 0) return;
@@ -893,6 +912,18 @@ public class IMMUTABLE_HASH_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_
 		}
 		
 		@Override
+		public void forEachIndexed(BI_FROM_INT_CONSUMER KEY_GENERIC_TYPE action) {
+			Objects.requireNonNull(action);
+			if(size() <= 0) return;
+			int count = 0;
+			int index = firstIndex;
+			while(index != -1){
+				action.accept(count++, keys[index]);
+				index = (int)links[index];
+			}
+		}
+		
+		@Override
 		public <E> void forEach(E input, BI_FROM_OBJECT_CONSUMER KSK_GENERIC_TYPE<E> action) {
 			Objects.requireNonNull(action);
 			if(size() <= 0) return;
@@ -1049,6 +1080,18 @@ public class IMMUTABLE_HASH_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_
 			int index = firstIndex;
 			while(index != -1){
 				action.accept(values[index]);
+				index = (int)links[index];
+			}
+		}
+		
+		@Override
+		public void forEachIndexed(VALUE_BI_FROM_INT_CONSUMER VALUE_GENERIC_TYPE action) {
+			Objects.requireNonNull(action);
+			if(size() <= 0) return;
+			int count = 0;
+			int index = firstIndex;
+			while(index != -1){
+				action.accept(count++, values[index]);
 				index = (int)links[index];
 			}
 		}

@@ -20,6 +20,13 @@ import speiger.src.collections.PACKAGE.collections.ITERATOR;
 import speiger.src.collections.PACKAGE.functions.CONSUMER;
 import speiger.src.collections.objects.functions.consumer.BI_FROM_OBJECT_CONSUMER;
 #endif
+import speiger.src.collections.ints.functions.consumer.BI_FROM_INT_CONSUMER;
+#if !TYPE_OBJECT && !VALUE_OBJECT
+import speiger.src.collections.ints.functions.consumer.IntObjectConsumer;
+#endif
+#if !SAME_TYPE
+import speiger.src.collections.ints.functions.consumer.VALUE_BI_FROM_INT_CONSUMER;
+#endif
 import speiger.src.collections.PACKAGE.functions.consumer.BI_CONSUMER;
 #if !VALUE_BOOLEAN || !JDK_TYPE
 import speiger.src.collections.PACKAGE.functions.function.FUNCTION;
@@ -874,6 +881,16 @@ public class CUSTOM_HASH_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_VAL
 		}
 		
 		@Override
+		public void forEachIndexed(IntObjectConsumer<MAP.Entry KEY_VALUE_GENERIC_TYPE> action) {
+			Objects.requireNonNull(action);
+			if(size() <= 0) return;
+			if(containsNull) action.accept(0, new BasicEntryKV_BRACES(keys[nullIndex], values[nullIndex]));
+			for(int i = nullIndex-1, index = containsNull ? 1 : 0;i>=0;i--) {
+				if(!strategy.equals(keys[i], EMPTY_KEY_VALUE)) action.accept(index++, new BasicEntryKV_BRACES(keys[i], values[i]));
+			}
+		}
+		
+		@Override
 		public <E> void forEach(E input, ObjectObjectConsumer<E, MAP.Entry KEY_VALUE_GENERIC_TYPE> action) {
 			Objects.requireNonNull(action);
 			if(size() <= 0) return;
@@ -1111,6 +1128,16 @@ public class CUSTOM_HASH_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_VAL
 		}
 		
 		@Override
+		public void forEachIndexed(BI_FROM_INT_CONSUMER KEY_GENERIC_TYPE action) {
+			Objects.requireNonNull(action);
+			if(size() <= 0) return;
+			if(containsNull) action.accept(0, keys[nullIndex]);
+			for(int i = nullIndex-1, index = containsNull ? 1 : 0;i>=0;i--) {
+				if(!strategy.equals(keys[i], EMPTY_KEY_VALUE)) action.accept(index++, keys[i]);
+			}
+		}
+		
+		@Override
 		public <E> void forEach(E input, BI_FROM_OBJECT_CONSUMER KSK_GENERIC_TYPE<E> action) {
 			Objects.requireNonNull(action);
 			if(size() <= 0) return;
@@ -1264,6 +1291,16 @@ public class CUSTOM_HASH_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_VAL
 			if(containsNull) action.accept(values[nullIndex]);
 			for(int i = nullIndex-1;i>=0;i--)
 				if(!strategy.equals(keys[i], EMPTY_KEY_VALUE)) action.accept(values[i]);
+		}
+		
+		@Override
+		public void forEachIndexed(VALUE_BI_FROM_INT_CONSUMER VALUE_GENERIC_TYPE action) {
+			Objects.requireNonNull(action);
+			if(size() <= 0) return;
+			if(containsNull) action.accept(0, values[nullIndex]);
+			for(int i = nullIndex-1, index = containsNull ? 1 : 0;i>=0;i--) {
+				if(!strategy.equals(keys[i], EMPTY_KEY_VALUE)) action.accept(index++, values[i]);
+			}
 		}
 		
 		@Override

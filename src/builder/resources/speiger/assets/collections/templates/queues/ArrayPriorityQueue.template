@@ -18,6 +18,7 @@ import speiger.src.collections.PACKAGE.collections.ITERATOR;
 import speiger.src.collections.PACKAGE.functions.COMPARATOR;
 import speiger.src.collections.PACKAGE.functions.CONSUMER;
 #endif
+import speiger.src.collections.ints.functions.consumer.BI_FROM_INT_CONSUMER;
 import speiger.src.collections.objects.functions.consumer.BI_FROM_OBJECT_CONSUMER;
 #if !JDK_FUNCTION
 import speiger.src.collections.PACKAGE.functions.function.PREDICATE;
@@ -215,6 +216,13 @@ public class ARRAY_PRIORITY_QUEUE KEY_GENERIC_TYPE extends ABSTRACT_PRIORITY_QUE
 	}
 	
 	@Override
+	public KEY_TYPE first() {
+		if(isEmpty()) throw new NoSuchElementException();
+		if(firstIndex == -1) findFirstIndex();
+		return array[firstIndex];
+	}
+	
+	@Override
 	public KEY_TYPE peek(int index) {
 		if(index < 0 || index >= size) throw new NoSuchElementException();
 		return array[index];
@@ -266,6 +274,12 @@ public class ARRAY_PRIORITY_QUEUE KEY_GENERIC_TYPE extends ABSTRACT_PRIORITY_QUE
 	public void forEach(CONSUMER KEY_SUPER_GENERIC_TYPE action) {
 		Objects.requireNonNull(action);
 		for(int i = 0,m=size;i<m;i++) action.accept(dequeue());
+	}
+	
+	@Override
+	public void forEachIndexed(BI_FROM_INT_CONSUMER KEY_GENERIC_TYPE action) {
+		Objects.requireNonNull(action);
+		for(int i = 0,m=size;i<m;i++) action.accept(i, dequeue());
 	}
 	
 	@Override

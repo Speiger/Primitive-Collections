@@ -19,6 +19,7 @@ import speiger.src.collections.PACKAGE.collections.BI_ITERATOR;
 import speiger.src.collections.PACKAGE.collections.COLLECTION;
 import speiger.src.collections.PACKAGE.collections.ITERATOR;
 
+import speiger.src.collections.ints.functions.consumer.BI_FROM_INT_CONSUMER;
 import speiger.src.collections.objects.functions.consumer.BI_FROM_OBJECT_CONSUMER;
 #if !JDK_FUNCTION
 import speiger.src.collections.PACKAGE.functions.function.PREDICATE;
@@ -394,6 +395,12 @@ public class ARRAY_SET KEY_GENERIC_TYPE extends ABSTRACT_SET KEY_GENERIC_TYPE im
 	public void forEach(CONSUMER KEY_SUPER_GENERIC_TYPE action) {
 		Objects.requireNonNull(action);
 		for(int i = 0;i<size;action.accept(data[i++]));
+	}
+	
+	@Override
+	public void forEachIndexed(BI_FROM_INT_CONSUMER KEY_GENERIC_TYPE action) {
+		Objects.requireNonNull(action);
+		for(int i = 0;i<size;action.accept(i, data[i++]));
 	}
 	
 	@Override

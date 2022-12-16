@@ -19,6 +19,7 @@ import speiger.src.collections.PACKAGE.collections.BI_ITERATOR;
 import speiger.src.collections.PACKAGE.functions.COMPARATOR;
 import speiger.src.collections.PACKAGE.functions.CONSUMER;
 #endif
+import speiger.src.collections.ints.functions.consumer.BI_FROM_INT_CONSUMER;
 import speiger.src.collections.objects.functions.consumer.BI_FROM_OBJECT_CONSUMER;
 #if !JDK_FUNCTION
 import speiger.src.collections.PACKAGE.functions.function.PREDICATE;
@@ -356,6 +357,15 @@ public class AVL_TREE_SET KEY_GENERIC_TYPE extends ABSTRACT_SET KEY_GENERIC_TYPE
 		Objects.requireNonNull(action);
 		for(Entry KEY_GENERIC_TYPE entry = first;entry != null;entry = entry.next()) {
 			action.accept(entry.key);
+		}
+	}
+	
+	@Override
+	public void forEachIndexed(BI_FROM_INT_CONSUMER KEY_GENERIC_TYPE action) {
+		Objects.requireNonNull(action);
+		int index = 0;
+		for(Entry KEY_GENERIC_TYPE entry = first;entry != null;entry = entry.next()) {
+			action.accept(index++, entry.key);
 		}
 	}
 	
@@ -1195,6 +1205,15 @@ public class AVL_TREE_SET KEY_GENERIC_TYPE extends ABSTRACT_SET KEY_GENERIC_TYPE
 			Objects.requireNonNull(action);
 			for(Entry KEY_GENERIC_TYPE entry = start();entry != null && inRange(entry.key);entry = next(entry)) {
 				action.accept(entry.key);
+			}
+		}
+		
+		@Override
+		public void forEachIndexed(BI_FROM_INT_CONSUMER KEY_GENERIC_TYPE action) {
+			Objects.requireNonNull(action);
+			int index = 0;
+			for(Entry KEY_GENERIC_TYPE entry = start();entry != null && inRange(entry.key);entry = next(entry)) {
+				action.accept(index++, entry.key);
 			}
 		}
 		

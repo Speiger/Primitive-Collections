@@ -18,6 +18,7 @@ import java.util.Comparator;
 
 #endif
 import speiger.src.collections.PACKAGE.functions.function.TO_OBJECT_FUNCTION;
+import speiger.src.collections.ints.functions.consumer.BI_FROM_INT_CONSUMER;
 import speiger.src.collections.objects.functions.consumer.BI_FROM_OBJECT_CONSUMER;
 #if !JDK_FUNCTION
 import speiger.src.collections.PACKAGE.functions.function.PREDICATE;
@@ -110,6 +111,17 @@ public interface ITERABLE KEY_GENERIC_TYPE extends Iterable<CLASS_TYPE>
 	}
 	
 #endif
+	/**
+	 * A Indexed forEach implementation that allows you to keep track of how many elements were already iterated over.
+	 * @param action The action to be performed for each element
+	 * @throws java.lang.NullPointerException if the specified action is null
+	 */
+	public default void forEachIndexed(BI_FROM_INT_CONSUMER KEY_GENERIC_TYPE action) {
+		Objects.requireNonNull(action);
+		int index = 0;
+		for(ITERATOR KEY_GENERIC_TYPE iter = iterator();iter.hasNext();action.accept(index++, iter.NEXT()));
+	}
+	
 	/**
 	 * Helper function to reduce Lambda usage and allow for more method references, since these are faster/cleaner.
 	 * @param input the object that should be included

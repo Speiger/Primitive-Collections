@@ -20,6 +20,7 @@ import speiger.src.collections.PACKAGE.collections.ITERATOR;
 import speiger.src.collections.PACKAGE.utils.ITERATORS;
 import speiger.src.collections.PACKAGE.functions.CONSUMER;
 #endif
+import speiger.src.collections.ints.functions.consumer.BI_FROM_INT_CONSUMER;
 import speiger.src.collections.objects.functions.consumer.BI_FROM_OBJECT_CONSUMER;
 #if !JDK_FUNCTION
 import speiger.src.collections.PACKAGE.functions.function.PREDICATE;
@@ -373,6 +374,16 @@ public class HASH_SET KEY_GENERIC_TYPE extends ABSTRACT_SET KEY_GENERIC_TYPE imp
 		if(containsNull) action.accept(keys[nullIndex]);
 		for(int i = nullIndex-1;i>=0;i--) {
 			if(KEY_EQUALS_NOT_NULL(keys[i])) action.accept(keys[i]);
+		}
+	}
+	
+	@Override
+	public void forEachIndexed(BI_FROM_INT_CONSUMER KEY_GENERIC_TYPE action) {
+		Objects.requireNonNull(action);
+		if(size() <= 0) return;
+		if(containsNull) action.accept(0, keys[nullIndex]);
+		for(int i = nullIndex-1, index = containsNull ? 1 : 0;i>=0;i--) {
+			if(KEY_EQUALS_NOT_NULL(keys[i])) action.accept(index++, keys[i]);
 		}
 	}
 	
