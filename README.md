@@ -17,6 +17,10 @@ Benchmarks can be found here: [[Charts]](https://github.com/Speiger/Primitive-Co
 [Here](features.md) you find a set of features added to Primitive Collections.   
 These are designed to improve performance or to provide Quality of Life.  
 
+[Here](EXTRAS.md) you also find features that can be used when you compile the library for yourself.    
+These features are not used by default to have a wider range of compat, or require self compilation.    
+Such as pruning classes that are not needed in your code.
+
 ## Main Features:      
 - ArrayLists / LinkedLists / CopyOnWriteLists
 - HashSets/Maps (Linked & HashControl)
@@ -71,7 +75,11 @@ Please if you want to contribute follow the [Rule-Sheet](RuleSheet.md). It keeps
 # How to Build
 
 The SourceCode can be generated via:     
+```
 /gradlew.bat generateSource      
+```
 
 to generate SourceCode and build the jar:           
+```
 /gradlew.bat build      
+```

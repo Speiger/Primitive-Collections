@@ -83,6 +83,14 @@ task generateTestSource(type: JavaExec) {
  	args = ['tests', 'silent']
 }
 
+task generateLimitSource(type: JavaExec) {
+	group = 'internal'
+	description = 'Builds the Sourcecode with the ModuleSettings.json applied'
+ 	classpath = sourceSets.builder.runtimeClasspath
+ 	main = 'speiger.src.builder.PrimitiveCollectionsBuilder'
+ 	args = ['silent', 'load']
+}
+
 task javadocJar(type: Jar) {
     from javadoc
     classifier = 'javadoc'

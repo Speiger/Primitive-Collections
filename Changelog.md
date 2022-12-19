@@ -1,6 +1,6 @@
 # Changelog of versions
 
-### Version 0.8.0 (Unreleased)
+### Version 0.8.0
 - Added: ISizeProvider interface (Optimization Helper)
 - Added: ISizeProvider into most Iterable implementations (Distinct/Filter/FlatMap/ArrayFlatMap don't support it, for obvious reasons)
 - Added: ToArray function into Iterable which uses ISizeProvider to reduce overhead of duplicating arrays.
@@ -11,6 +11,7 @@
 - Added: Optimizations for HashUtils next power of function.
 - Added: toArray() now returns a cached empty array if the collection is empty.
 - Added: toArray function for AsyncBuilder
+- Added: Modularization to the library where feature can be disabled as needed. (Requires Self-Compilation)
 - Fixed: putIfAbsent now replaces defaultValues
 - Fixed: OpenHashSet/Map and their Custom Variants no longer rely on List implementations.
 - Fixed: ObjectCopyOnWriteList.of did create a ObjectArrayList instead of the CopyOnWrite variant.

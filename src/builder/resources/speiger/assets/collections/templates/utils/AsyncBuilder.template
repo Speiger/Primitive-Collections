@@ -782,6 +782,7 @@ public class ASYNC_BUILDER KEY_GENERIC_TYPE
 				setResult(wrapper.TO_ARRAY());
 #endif
 				wrapper = null;
+				return true;
 			}
 			return false;
 		}
