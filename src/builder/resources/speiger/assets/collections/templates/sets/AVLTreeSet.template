@@ -27,6 +27,7 @@ import speiger.src.collections.PACKAGE.functions.function.PREDICATE;
 import speiger.src.collections.PACKAGE.functions.function.UNARY_OPERATOR;
 import speiger.src.collections.PACKAGE.collections.COLLECTION;
 import speiger.src.collections.PACKAGE.collections.ITERATOR;
+import speiger.src.collections.objects.utils.ObjectArrays;
 #if !TYPE_OBJECT
 import speiger.src.collections.PACKAGE.utils.ITERATORS;
 #endif
@@ -649,6 +650,44 @@ public class AVL_TREE_SET KEY_GENERIC_TYPE extends ABSTRACT_SET KEY_GENERIC_TYPE
 		first = null;
 		last = null;
 		tree = null;
+	}
+	
+#if !TYPE_OBJECT
+	@Override
+	public KEY_TYPE[] TO_ARRAY(KEY_TYPE[] a) {
+		if(a == null || a.length < size()) a = new KEY_TYPE[size()];
+		int index = 0;
+		for(Entry KEY_GENERIC_TYPE entry = first;entry != null;entry = entry.next()) {
+			a[index++] = entry.key;
+		}
+		if (a.length > size) a[size] = EMPTY_KEY_VALUE;
+		return a;
+	}
+	
+#endif
+	@Override
+	@Deprecated
+	public Object[] toArray() {
+		if(isEmpty()) return ObjectArrays.EMPTY_ARRAY;
+		Object[] obj = new Object[size()];
+		int index = 0;
+		for(Entry KEY_GENERIC_TYPE entry = first;entry != null;entry = entry.next()) {
+			obj[index++] = KEY_TO_OBJ(entry.key);
+		}
+		return obj;
+	}
+	
+	@Override
+	@Primitive
+	public <E> E[] toArray(E[] a) {
+		if(a == null) a = (E[])new Object[size()];
+		else if(a.length < size()) a = (E[])ObjectArrays.newArray(a.getClass().getComponentType(), size());
+		int index = 0;
+		for(Entry KEY_GENERIC_TYPE entry = first;entry != null;entry = entry.next()) {
+			a[index++] = (E)KEY_TO_OBJ(entry.key);
+		}
+		if (a.length > size) a[size] = null;
+		return a;
 	}
 	
 	public AVL_TREE_SET KEY_GENERIC_TYPE copy() {

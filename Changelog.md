@@ -2,6 +2,7 @@
 
 ### Version 0.8.0
 - Added: getFirst/getLast/removeFirst/removeLast to Lists
+- Added: Dedicated implementations for toArray into TreeSets
 
 ### Version 0.8.0
 - Added: ISizeProvider interface (Optimization Helper)

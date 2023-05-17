@@ -382,13 +382,17 @@ public interface MAP KEY_VALUE_GENERIC_TYPE extends Map<CLASS_TYPE, CLASS_VALUE_
 	public void REPLACE_VALUES(UNARY_OPERATOR KEY_VALUE_GENERIC_TYPE mappingFunction);
 	/**
 	 * A Type Specific compute method to reduce boxing/unboxing
+	 * If the generated value equals the getDefaultReturnValue it will simply not insert it since that is treated as "null".
+	 * A "Null Value" will be treated as "Do not insert/remove" based on how the Java has specified it.
 	 * @param key the key that should be computed
 	 * @param mappingFunction the operator that should generate the value
 	 * @return the result of the computation
 	 */
 	public VALUE_TYPE COMPUTE(KEY_TYPE key, UNARY_OPERATOR KEY_VALUE_GENERIC_TYPE mappingFunction);
 	/**
-	 * A Type Specific compute method to reduce boxing/unboxing
+	 * A Type Specific computeIfAbsent method to reduce boxing/unboxing
+	 * If the generated value equals the getDefaultReturnValue it will simply not insert it since that is treated as "null".
+	 * A "Null Value" will be treated as "Do not insert/remove" based on how the Java has specified it.
 	 * @param key the key that should be computed
 	 * @param mappingFunction the operator that should generate the value if not present
 	 * @return the result of the computed value or present value
@@ -397,6 +401,8 @@ public interface MAP KEY_VALUE_GENERIC_TYPE extends Map<CLASS_TYPE, CLASS_VALUE_
 	
 	/**
 	 * A Supplier based computeIfAbsent function to fill the most used usecase of this function
+	 * If the generated value equals the getDefaultReturnValue it will simply not insert it since that is treated as "null".
+	 * A "Null Value" will be treated as "Do not insert/remove" based on how the Java has specified it.
 	 * @param key the key that should be computed
 	 * @param valueProvider the value if not present
 	 * @return the result of the computed value or present value
@@ -404,6 +410,8 @@ public interface MAP KEY_VALUE_GENERIC_TYPE extends Map<CLASS_TYPE, CLASS_VALUE_
 	public VALUE_TYPE SUPPLY_IF_ABSENT(KEY_TYPE key, VALUE_SUPPLIER VALUE_GENERIC_TYPE valueProvider);
 	/**
 	 * A Type Specific compute method to reduce boxing/unboxing
+	 * If the generated value equals the getDefaultReturnValue it will simply not insert it since that is treated as "null".
+	 * A "Null Value" will be treated as "Do not insert/remove" based on how the Java has specified it.
 	 * @param key the key that should be computed
 	 * @param mappingFunction the operator that should generate the value if present
 	 * @return the result of the default return value or present value
@@ -412,6 +420,8 @@ public interface MAP KEY_VALUE_GENERIC_TYPE extends Map<CLASS_TYPE, CLASS_VALUE_
 	public VALUE_TYPE COMPUTE_IF_PRESENT(KEY_TYPE key, UNARY_OPERATOR KEY_VALUE_GENERIC_TYPE mappingFunction);
 	/**
 	 * A Type Specific merge method to reduce boxing/unboxing
+	 * If the generated value equals the getDefaultReturnValue it will simply not insert it since that is treated as "null".
+	 * A "Null Value" will be treated as "Do not insert/remove" based on how the Java has specified it.
 	 * @param key the key that should be be searched for
 	 * @param value the value that should be merged with
 	 * @param mappingFunction the operator that should generate the new Value
@@ -421,6 +431,8 @@ public interface MAP KEY_VALUE_GENERIC_TYPE extends Map<CLASS_TYPE, CLASS_VALUE_
 	public VALUE_TYPE MERGE(KEY_TYPE key, VALUE_TYPE value, VALUE_UNARY_OPERATOR VALUE_VALUE_GENERIC_TYPE mappingFunction);
 	/**
 	 * A Bulk method for merging Maps.
+	 * If the generated value equals the getDefaultReturnValue it will simply not insert it since that is treated as "null".
+	 * A "Null Value" will be treated as "Do not insert/remove" based on how the Java has specified it.
 	 * @param m the entries that should be bulk added
 	 * @param mappingFunction the operator that should generate the new Value
 	 * @note if the result matches the default return value then the key is removed from the map
