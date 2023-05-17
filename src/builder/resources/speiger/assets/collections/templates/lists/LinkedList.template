@@ -314,21 +314,43 @@ public class LINKED_LIST KEY_GENERIC_TYPE extends ABSTRACT_LIST KEY_GENERIC_TYPE
 #if DEQUEUE_FEATURE
 	@Override
 	public KEY_TYPE first() {
+		return GET_FIRST_KEY();
+	}
+	
+	@Override
+	public KEY_TYPE last() {
+		return GET_LAST_KEY();
+	}
+	
+#endif
+	@Override
+	public KEY_TYPE GET_FIRST_KEY() {
 		if(first == null) throw new NoSuchElementException();
 		return first.value;
 	}
 	
 	@Override
-	public KEY_TYPE last() {
+	public KEY_TYPE GET_LAST_KEY() {
 		if(last == null) throw new NoSuchElementException();
 		return last.value;
 	}
 	
-#endif
+	@Override
+	public KEY_TYPE REMOVE_FIRST_KEY() {
+		if(first == null) throw new NoSuchElementException();
+		return unlinkFirst(first);
+	}
+	
+	@Override
+	public KEY_TYPE REMOVE_LAST_KEY() {
+		return pop();
+	}
+	
 	@Override
 	public KEY_TYPE peek(int index) {
 		return GET_KEY((size() - 1) - index);
 	}
+	
 	@Override
 	public KEY_TYPE GET_KEY(int index) {
 		checkRange(index);
@@ -1146,8 +1168,7 @@ public class LINKED_LIST KEY_GENERIC_TYPE extends ABSTRACT_LIST KEY_GENERIC_TYPE
 		Entry KEY_GENERIC_TYPE prev;
 		Entry KEY_GENERIC_TYPE next;
 		
-		public Entry(KEY_TYPE value, Entry KEY_GENERIC_TYPE prev, Entry KEY_GENERIC_TYPE next)
-		{
+		public Entry(KEY_TYPE value, Entry KEY_GENERIC_TYPE prev, Entry KEY_GENERIC_TYPE next) {
 			this.value = value;
 			this.prev = prev;
 			this.next = next;

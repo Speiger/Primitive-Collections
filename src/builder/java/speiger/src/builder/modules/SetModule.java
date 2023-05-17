@@ -120,7 +120,7 @@ public class SetModule extends BaseModule
 		addFunctionMapper("POLL_FIRST_KEY", "pollFirst");
 		addFunctionMapper("POLL_LAST_KEY", "pollLast");
 		addFunctionMapper("FIRST_KEY", "first");
-		addFunctionMapper("LAST_KEY", "last");
+		addFunctionMapper("LAST_KEY", "last");	
 	}
 	
 	@Override

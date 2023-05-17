@@ -1,6 +1,9 @@
 # Changelog of versions
 
 ### Version 0.8.0
+- Added: getFirst/getLast/removeFirst/removeLast to Lists
+
+### Version 0.8.0
 - Added: ISizeProvider interface (Optimization Helper)
 - Added: ISizeProvider into most Iterable implementations (Distinct/Filter/FlatMap/ArrayFlatMap don't support it, for obvious reasons)
 - Added: ToArray function into Iterable which uses ISizeProvider to reduce overhead of duplicating arrays.

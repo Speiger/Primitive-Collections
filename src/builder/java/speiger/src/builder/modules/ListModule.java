@@ -69,7 +69,10 @@ public class ListModule extends BaseModule
 	protected void loadFunctions()
 	{
 		addFunctionMapper("GET_KEY", "get");
-		addFunctionMapper("REMOVE_LAST", "removeLast");
+		addFunctionMapper("GET_FIRST_KEY", "getFirst");
+		addFunctionMapper("GET_LAST_KEY", "getLast");
+		addFunctionMapper("REMOVE_FIRST_KEY", "removeFirst");
+		addFunctionMapper("REMOVE_LAST_KEY", "removeLast");
 		addFunctionMapper("REMOVE_SWAP", "swapRemove");
 		addFunctionMappers("REPLACE", keyType.isObject() ? "replaceObjects" : "replace%ss");
 		addFunctionMappers("SORT", "sort%ss");

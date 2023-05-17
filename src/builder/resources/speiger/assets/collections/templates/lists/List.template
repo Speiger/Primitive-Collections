@@ -98,6 +98,46 @@ public interface LIST KEY_GENERIC_TYPE extends COLLECTION KEY_GENERIC_TYPE, List
 	 */
 	public boolean addAll(int index, LIST KEY_GENERIC_TYPE c);
 	
+	/**
+	 * Helper method that returns the first element of a List.
+	 * This function was introduced due to how annoying it is to get/remove the last element of a list.
+	 * This simplifies this process a bit.
+	 * @return first element of the list
+	 */
+	public default KEY_TYPE GET_FIRST_KEY() {
+		return GET_KEY(0);
+	}
+	
+	/**
+	 * Helper method that returns the last element of a List.
+	 * This function was introduced due to how annoying it is to get/remove the last element of a list.
+	 * This simplifies this process a bit.
+	 * @return last element of the list
+	 */
+	public default KEY_TYPE GET_LAST_KEY() {
+		return GET_KEY(size() - 1);
+	}
+	
+	/**
+	 * Helper method that removes and returns the first element of a List.
+	 * This function was introduced due to how annoying it is to get/remove the last element of a list.
+	 * This simplifies this process a bit.
+	 * @return first element of the list and removes it
+	 */
+	public default KEY_TYPE REMOVE_FIRST_KEY() {
+		return REMOVE(0);
+	}
+	
+	/**
+	 * Helper method that removes and returns the last element of a List.
+	 * This function was introduced due to how annoying it is to get/remove the last element of a list.
+	 * This simplifies this process a bit.
+	 * @return last element of the list and removes it
+	 */
+	public default KEY_TYPE REMOVE_LAST_KEY() {
+		return REMOVE(size() - 1);
+	}
+	
 #if !TYPE_OBJECT
 	/**
 	 * A Type-Specific get function to reduce (un)boxing
