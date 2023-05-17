@@ -25,9 +25,6 @@ import speiger.src.collections.PACKAGE.functions.CONSUMER;
 import speiger.src.collections.PACKAGE.lists.ABSTRACT_LIST;
 import speiger.src.collections.PACKAGE.lists.LIST;
 import speiger.src.collections.PACKAGE.lists.LIST_ITERATOR;
-#if IARRAY_FEATURE
-import speiger.src.collections.PACKAGE.utils.ARRAYS;
-#endif
 import speiger.src.collections.utils.SanityChecks;
 
 /**

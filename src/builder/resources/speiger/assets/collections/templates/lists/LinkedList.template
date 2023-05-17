@@ -53,7 +53,9 @@ import speiger.src.collections.PACKAGE.functions.COMPARATOR;
 
 import speiger.src.collections.PACKAGE.functions.CONSUMER;
 #endif
+#if !TYPE_OBJECT
 import speiger.src.collections.PACKAGE.utils.ARRAYS;
+#endif
 import speiger.src.collections.objects.utils.ObjectArrays;
 #if TYPE_OBJECT
 import speiger.src.collections.utils.Stack;

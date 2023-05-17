@@ -10,8 +10,8 @@ import java.util.function.Consumer;
 #if !TYPE_OBJECT
 import speiger.src.collections.PACKAGE.functions.CONSUMER;
 import speiger.src.collections.PACKAGE.utils.ITERATORS;
-#endif
 import speiger.src.collections.PACKAGE.utils.ARRAYS;
+#endif
 
 /**
  * Abstract Type Specific Collection that reduces boxing/unboxing

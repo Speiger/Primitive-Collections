@@ -50,6 +50,7 @@ public abstract class BaseInt2IntMapTest
 	}
 	
 	@Test
+	@SuppressWarnings("unlikely-arg-type")
 	public void testContains()
 	{
 		if(!getValidMapTests().contains(MapTests.CONTAINS)) return;

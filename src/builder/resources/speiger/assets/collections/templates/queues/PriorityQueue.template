@@ -185,6 +185,7 @@ public interface PRIORITY_QUEUE KEY_GENERIC_TYPE extends ITERABLE KEY_GENERIC_TY
 	/**
 	 * A Helper function that simplifies the process of creating a new Array.
 	 * @param action the array creation function
+	 * @param <E> the returning arrayType
 	 * @return an array containing all of the elements in this collection
 	 * @see Collection#toArray(Object[])
 	 */

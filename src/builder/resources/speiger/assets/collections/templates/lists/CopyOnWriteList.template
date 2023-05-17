@@ -41,7 +41,9 @@ import speiger.src.collections.objects.functions.consumer.BI_FROM_OBJECT_CONSUME
 import speiger.src.collections.PACKAGE.functions.function.PREDICATE;
 #endif
 import speiger.src.collections.PACKAGE.functions.function.UNARY_OPERATOR;
+#if !TYPE_OBJECT
 import speiger.src.collections.PACKAGE.utils.ARRAYS;
+#endif
 import speiger.src.collections.objects.utils.ObjectArrays;
 import speiger.src.collections.PACKAGE.utils.ITERATORS;
 #if TYPE_OBJECT

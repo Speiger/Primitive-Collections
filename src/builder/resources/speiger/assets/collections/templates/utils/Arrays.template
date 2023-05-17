@@ -16,8 +16,6 @@ import java.util.function.IntFunction;
 
 #endif
 import speiger.src.collections.PACKAGE.collections.ITERATOR;
-import speiger.src.collections.PACKAGE.utils.ITERATORS;
-import speiger.src.collections.PACKAGE.utils.COLLECTIONS;
 import speiger.src.collections.utils.SanityChecks;
 
 /**
@@ -147,6 +145,7 @@ public class ARRAYS
 	 * A Helper function that pours all elements of a iterator into a Array
 	 * @param iter the elements that should be gathered.
 	 * @ArrayType(T)
+	 * @ArrayType(E)
 	 * @param action that is creating the Array to be poured into
 	 * @return array with all elements of the iterator
 	 */
@@ -160,6 +159,7 @@ public class ARRAYS
 	 * @param max how many elements should be added
 	 * @param action that is creating the Array to be poured into
 	 * @ArrayType(T)
+	 * @ArrayType(E)
 	 * @return array with all requested elements of the iterator
 	 */
 	public static <T, E> E[] pour(ITERATOR KEY_GENERIC_TYPE iter, int max, IntFunction<E[]> action) {

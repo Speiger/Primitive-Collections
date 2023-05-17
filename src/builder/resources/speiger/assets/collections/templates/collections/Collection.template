@@ -179,6 +179,7 @@ public interface COLLECTION KEY_GENERIC_TYPE extends Collection<CLASS_TYPE>, ITE
 	/**
 	 * A Helper function that simplifies the process of creating a new Array.
 	 * @param action the array creation function
+	 * @param <E> the returning arrayType
 	 * @return an array containing all of the elements in this collection
 	 * @see Collection#toArray(Object[])
 	 */

@@ -27,10 +27,9 @@ import speiger.src.collections.PACKAGE.collections.ITERATOR;
 #if !TYPE_OBJECT
 import speiger.src.collections.PACKAGE.functions.COMPARATOR;
 #endif
-import speiger.src.collections.objects.utils.ObjectArrays;
 #if !TYPE_OBJECT
+import speiger.src.collections.objects.utils.ObjectArrays;
 import speiger.src.collections.PACKAGE.functions.CONSUMER;
-import speiger.src.collections.PACKAGE.utils.ARRAYS;
 #endif
 #if !JDK_FUNCTION
 import speiger.src.collections.PACKAGE.functions.function.PREDICATE;

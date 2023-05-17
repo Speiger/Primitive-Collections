@@ -298,6 +298,7 @@ public interface ITERABLE KEY_GENERIC_TYPE extends Iterable<CLASS_TYPE>
 	/**
 	 * A Helper function that reduces the usage of streams and allows to collect all elements as a Array
 	 * @param action is the creator function of said Array to ensure type is kept.
+	 * @param <E> the returning arrayType
 	 * @return a new Array of all elements
 	 */
 	default <E> E[] TO_ARRAY(IntFunction<E[]> action) {
