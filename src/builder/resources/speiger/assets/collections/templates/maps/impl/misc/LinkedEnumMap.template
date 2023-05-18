@@ -480,17 +480,17 @@ public class LINKED_ENUM_MAP KEY_ENUM_VALUE_GENERIC_TYPE extends ENUM_MAP KEY_VA
 		public void forEach(Consumer<? super MAP.Entry KEY_VALUE_GENERIC_TYPE> action) {
 			int index = firstIndex;
 			while(index != -1){
-				action.accept(new BasicEntryKV_BRACES(keys[index], values[index]));
+				action.accept(new MapEntry(index));
 				index = (int)links[index];
 			}
 		}
 		
 		@Override
 		public void fastForEach(Consumer<? super MAP.Entry KEY_VALUE_GENERIC_TYPE> action) {
-			BasicEntry KEY_VALUE_GENERIC_TYPE entry = new BasicEntryKV_BRACES();
+			MapEntry entry = new MapEntry();
 			int index = firstIndex;
 			while(index != -1){
-				entry.set(keys[index], values[index]);
+				entry.set(index);
 				action.accept(entry);
 				index = (int)links[index];
 			}
@@ -910,7 +910,11 @@ public class LINKED_ENUM_MAP KEY_ENUM_VALUE_GENERIC_TYPE extends ENUM_MAP KEY_VA
 		public MapEntry(int index) {
 			this.index = index;
 		}
-
+		
+		void set(int index) {
+			this.index = index;
+		}
+		
 		@Override
 		public KEY_TYPE ENTRY_KEY() {
 			return keys[index];

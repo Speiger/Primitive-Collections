@@ -684,7 +684,11 @@ public class ENUM_MAP KEY_ENUM_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_VALUE
 		public MapEntry(int index) {
 			this.index = index;
 		}
-
+		
+		void set(int index) {
+			this.index = index;
+		}
+		
 		@Override
 		public KEY_TYPE ENTRY_KEY() {
 			return keys[index];

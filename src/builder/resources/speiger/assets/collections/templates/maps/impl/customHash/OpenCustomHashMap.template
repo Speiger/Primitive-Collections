@@ -797,7 +797,11 @@ public class CUSTOM_HASH_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_VAL
 		public MapEntry(int index) {
 			this.index = index;
 		}
-
+		
+		void set(int index) {
+			this.index = index;
+		}
+		
 		@Override
 		public KEY_TYPE ENTRY_KEY() {
 			return keys[index];
@@ -862,21 +866,21 @@ public class CUSTOM_HASH_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_VAL
 		
 		@Override
 		public void forEach(Consumer<? super MAP.Entry KEY_VALUE_GENERIC_TYPE> action) {
-			if(containsNull) action.accept(new BasicEntryKV_BRACES(keys[nullIndex], values[nullIndex]));
+			if(containsNull) action.accept(new MapEntry(nullIndex));
 			for(int i = nullIndex-1;i>=0;i--)
-				if(!strategy.equals(keys[i], EMPTY_KEY_VALUE)) action.accept(new BasicEntryKV_BRACES(keys[i], values[i]));
+				if(!strategy.equals(keys[i], EMPTY_KEY_VALUE)) action.accept(new MapEntry(i));
 		}
 		
 		@Override
 		public void fastForEach(Consumer<? super MAP.Entry KEY_VALUE_GENERIC_TYPE> action) {
-			BasicEntry KEY_VALUE_GENERIC_TYPE entry = new BasicEntryKV_BRACES();
+			MapEntry entry = new MapEntry();
 			if(containsNull) {
-				entry.set(keys[nullIndex], values[nullIndex]);
+				entry.set(nullIndex);
 				action.accept(entry);
 			}
 			for(int i = nullIndex-1;i>=0;i--) {
 				if(!strategy.equals(keys[i], EMPTY_KEY_VALUE)) {
-					entry.set(keys[i], values[i]);
+					entry.set(i);
 					action.accept(entry);
 				}
 			}
@@ -886,9 +890,9 @@ public class CUSTOM_HASH_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_VAL
 		public void forEachIndexed(IntObjectConsumer<MAP.Entry KEY_VALUE_GENERIC_TYPE> action) {
 			Objects.requireNonNull(action);
 			if(size() <= 0) return;
-			if(containsNull) action.accept(0, new BasicEntryKV_BRACES(keys[nullIndex], values[nullIndex]));
+			if(containsNull) action.accept(0, new MapEntry(nullIndex));
 			for(int i = nullIndex-1, index = containsNull ? 1 : 0;i>=0;i--) {
-				if(!strategy.equals(keys[i], EMPTY_KEY_VALUE)) action.accept(index++, new BasicEntryKV_BRACES(keys[i], values[i]));
+				if(!strategy.equals(keys[i], EMPTY_KEY_VALUE)) action.accept(index++, new MapEntry(i));
 			}
 		}
 		
@@ -896,9 +900,9 @@ public class CUSTOM_HASH_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_VAL
 		public <E> void forEach(E input, ObjectObjectConsumer<E, MAP.Entry KEY_VALUE_GENERIC_TYPE> action) {
 			Objects.requireNonNull(action);
 			if(size() <= 0) return;
-			if(containsNull) action.accept(input, new BasicEntryKV_BRACES(keys[nullIndex], values[nullIndex]));
+			if(containsNull) action.accept(input, new MapEntry(nullIndex));
 			for(int i = nullIndex-1;i>=0;i--) {
-				if(!strategy.equals(keys[i], EMPTY_KEY_VALUE)) action.accept(input, new BasicEntryKV_BRACES(keys[i], values[i]));
+				if(!strategy.equals(keys[i], EMPTY_KEY_VALUE)) action.accept(input, new MapEntry(i));
 			}
 		}
 		
@@ -906,14 +910,14 @@ public class CUSTOM_HASH_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_VAL
 		public boolean matchesAny(Predicate<MAP.Entry KEY_VALUE_GENERIC_TYPE> filter) {
 			Objects.requireNonNull(filter);
 			if(size() <= 0) return false;
-			BasicEntry KEY_VALUE_GENERIC_TYPE entry = new BasicEntryKV_BRACES();
+			MapEntry entry = new MapEntry();
 			if(containsNull) {
-				entry.set(keys[nullIndex], values[nullIndex]);
+				entry.set(nullIndex);
 				if(filter.test(entry)) return true;
 			}
 			for(int i = nullIndex-1;i>=0;i--) {
 				if(!strategy.equals(keys[i], EMPTY_KEY_VALUE)) {
-					entry.set(keys[i], values[i]);
+					entry.set(i);
 					if(filter.test(entry)) return true;
 				}
 			}
@@ -924,14 +928,14 @@ public class CUSTOM_HASH_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_VAL
 		public boolean matchesNone(Predicate<MAP.Entry KEY_VALUE_GENERIC_TYPE> filter) {
 			Objects.requireNonNull(filter);
 			if(size() <= 0) return true;
-			BasicEntry KEY_VALUE_GENERIC_TYPE entry = new BasicEntryKV_BRACES();
+			MapEntry entry = new MapEntry();
 			if(containsNull) {
-				entry.set(keys[nullIndex], values[nullIndex]);
+				entry.set(nullIndex);
 				if(filter.test(entry)) return false;
 			}
 			for(int i = nullIndex-1;i>=0;i--) {
 				if(!strategy.equals(keys[i], EMPTY_KEY_VALUE)) {
-					entry.set(keys[i], values[i]);
+					entry.set(i);
 					if(filter.test(entry)) return false;
 				}
 			}
@@ -942,14 +946,14 @@ public class CUSTOM_HASH_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_VAL
 		public boolean matchesAll(Predicate<MAP.Entry KEY_VALUE_GENERIC_TYPE> filter) {
 			Objects.requireNonNull(filter);
 			if(size() <= 0) return true;
-			BasicEntry KEY_VALUE_GENERIC_TYPE entry = new BasicEntryKV_BRACES();
+			MapEntry entry = new MapEntry();
 			if(containsNull) {
-				entry.set(keys[nullIndex], values[nullIndex]);
+				entry.set(nullIndex);
 				if(!filter.test(entry)) return false;
 			}
 			for(int i = nullIndex-1;i>=0;i--) {
 				if(!strategy.equals(keys[i], EMPTY_KEY_VALUE)) {
-					entry.set(keys[i], values[i]);
+					entry.set(i);
 					if(!filter.test(entry)) return false;
 				}
 			}
@@ -960,10 +964,10 @@ public class CUSTOM_HASH_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_VAL
 		public <E> E reduce(E identity, BiFunction<E, MAP.Entry KEY_VALUE_GENERIC_TYPE, E> operator) {
 			Objects.requireNonNull(operator);
 			E state = identity;
-			if(containsNull) state = operator.apply(state, new BasicEntryKV_BRACES(keys[nullIndex], values[nullIndex]));
+			if(containsNull) state = operator.apply(state, new MapEntry(nullIndex));
 			for(int i = nullIndex-1;i>=0;i--) {
 				if(strategy.equals(keys[i], EMPTY_KEY_VALUE)) continue;
-				state = operator.apply(state, new BasicEntryKV_BRACES(keys[i], values[i]));
+				state = operator.apply(state, new MapEntry(i));
 			}
 			return state;
 		}
@@ -974,17 +978,17 @@ public class CUSTOM_HASH_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_VAL
 			MAP.Entry KEY_VALUE_GENERIC_TYPE state = null;
 			boolean empty = true;
 			if(containsNull) {
-				state = new BasicEntryKV_BRACES(keys[nullIndex], values[nullIndex]);
+				state = new MapEntry(nullIndex);
 				empty = false;
 			}
 			for(int i = nullIndex-1;i>=0;i--) {
 				if(strategy.equals(keys[i], EMPTY_KEY_VALUE)) continue;
 				if(empty) {
 					empty = false;
-					state = new BasicEntryKV_BRACES(keys[i], values[i]);
+					state = new MapEntry(i);
 					continue;
 				}
-				state = operator.apply(state, new BasicEntryKV_BRACES(keys[i], values[i]));
+				state = operator.apply(state, new MapEntry(i));
 			}
 			return state;
 		}
@@ -993,14 +997,14 @@ public class CUSTOM_HASH_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_VAL
 		public MAP.Entry KEY_VALUE_GENERIC_TYPE findFirst(Predicate<MAP.Entry KEY_VALUE_GENERIC_TYPE> filter) {
 			Objects.requireNonNull(filter);
 			if(size() <= 0) return null;
-			BasicEntry KEY_VALUE_GENERIC_TYPE entry = new BasicEntryKV_BRACES();
+			MapEntry entry = new MapEntry();
 			if(containsNull) {
-				entry.set(keys[nullIndex], values[nullIndex]);
+				entry.set(nullIndex);
 				if(filter.test(entry)) return entry;
 			}
 			for(int i = nullIndex-1;i>=0;i--) {
 				if(!strategy.equals(keys[i], EMPTY_KEY_VALUE)) {
-					entry.set(keys[i], values[i]);
+					entry.set(i);
 					if(filter.test(entry)) return entry;
 				}
 			}
@@ -1011,15 +1015,15 @@ public class CUSTOM_HASH_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_VAL
 		public int count(Predicate<MAP.Entry KEY_VALUE_GENERIC_TYPE> filter) {
 			Objects.requireNonNull(filter);
 			if(size() <= 0) return 0;
-			BasicEntry KEY_VALUE_GENERIC_TYPE entry = new BasicEntryKV_BRACES();
+			MapEntry entry = new MapEntry();
 			int result = 0;
 			if(containsNull) {
-				entry.set(keys[nullIndex], values[nullIndex]);
+				entry.set(nullIndex);
 				if(filter.test(entry)) result++;
 			}
 			for(int i = nullIndex-1;i>=0;i--) {
 				if(!strategy.equals(keys[i], EMPTY_KEY_VALUE)) {
-					entry.set(keys[i], values[i]);
+					entry.set(i);
 					if(filter.test(entry)) result++;
 				}
 			}

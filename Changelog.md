@@ -3,6 +3,7 @@
 ### Version 0.8.0
 - Added: getFirst/getLast/removeFirst/removeLast to Lists
 - Added: Dedicated implementations for toArray into TreeSets
+- Fixed: forEach methods in Maps now can use "setValue" functions.
 
 ### Version 0.8.0
 - Added: ISizeProvider interface (Optimization Helper)

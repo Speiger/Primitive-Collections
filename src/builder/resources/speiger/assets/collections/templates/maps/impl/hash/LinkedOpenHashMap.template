@@ -684,17 +684,17 @@ public class LINKED_HASH_MAP KEY_VALUE_GENERIC_TYPE extends HASH_MAP KEY_VALUE_G
 		public void forEach(Consumer<? super MAP.Entry KEY_VALUE_GENERIC_TYPE> action) {
 			int index = firstIndex;
 			while(index != -1){
-				action.accept(new BasicEntryKV_BRACES(keys[index], values[index]));
+				action.accept(new MapEntry(index));
 				index = (int)links[index];
 			}
 		}
 		
 		@Override
 		public void fastForEach(Consumer<? super MAP.Entry KEY_VALUE_GENERIC_TYPE> action) {
-			BasicEntry KEY_VALUE_GENERIC_TYPE entry = new BasicEntryKV_BRACES();
+			MapEntry entry = new MapEntry();
 			int index = firstIndex;
 			while(index != -1){
-				entry.set(keys[index], values[index]);
+				entry.set(index);
 				action.accept(entry);
 				index = (int)links[index];
 			}
@@ -707,7 +707,7 @@ public class LINKED_HASH_MAP KEY_VALUE_GENERIC_TYPE extends HASH_MAP KEY_VALUE_G
 			int count = 0;
 			int index = firstIndex;
 			while(index != -1) {
-				action.accept(count++, new BasicEntryKV_BRACES(keys[index], values[index]));
+				action.accept(count++, new MapEntry(index));
 				index = (int)links[index];
 			}
 		}
@@ -718,7 +718,7 @@ public class LINKED_HASH_MAP KEY_VALUE_GENERIC_TYPE extends HASH_MAP KEY_VALUE_G
 			if(size() <= 0) return;
 			int index = firstIndex;
 			while(index != -1) {
-				action.accept(input, new BasicEntryKV_BRACES(keys[index], values[index]));
+				action.accept(input, new MapEntry(index));
 				index = (int)links[index];
 			}
 		}
@@ -727,10 +727,10 @@ public class LINKED_HASH_MAP KEY_VALUE_GENERIC_TYPE extends HASH_MAP KEY_VALUE_G
 		public boolean matchesAny(Predicate<MAP.Entry KEY_VALUE_GENERIC_TYPE> filter) {
 			Objects.requireNonNull(filter);
 			if(size() <= 0) return false;
-			BasicEntry KEY_VALUE_GENERIC_TYPE entry = new BasicEntryKV_BRACES();
+			MapEntry entry = new MapEntry();
 			int index = firstIndex;
 			while(index != -1) {
-				entry.set(keys[index], values[index]);
+				entry.set(index);
 				if(filter.test(entry)) return true;
 				index = (int)links[index];
 			}
@@ -741,10 +741,10 @@ public class LINKED_HASH_MAP KEY_VALUE_GENERIC_TYPE extends HASH_MAP KEY_VALUE_G
 		public boolean matchesNone(Predicate<MAP.Entry KEY_VALUE_GENERIC_TYPE> filter) {
 			Objects.requireNonNull(filter);
 			if(size() <= 0) return true;
-			BasicEntry KEY_VALUE_GENERIC_TYPE entry = new BasicEntryKV_BRACES();
+			MapEntry entry = new MapEntry();
 			int index = firstIndex;
 			while(index != -1) {
-				entry.set(keys[index], values[index]);
+				entry.set(index);
 				if(filter.test(entry)) return false;
 				index = (int)links[index];
 			}
@@ -755,10 +755,10 @@ public class LINKED_HASH_MAP KEY_VALUE_GENERIC_TYPE extends HASH_MAP KEY_VALUE_G
 		public boolean matchesAll(Predicate<MAP.Entry KEY_VALUE_GENERIC_TYPE> filter) {
 			Objects.requireNonNull(filter);
 			if(size() <= 0) return true;
-			BasicEntry KEY_VALUE_GENERIC_TYPE entry = new BasicEntryKV_BRACES();
+			MapEntry entry = new MapEntry();
 			int index = firstIndex;
 			while(index != -1) {
-				entry.set(keys[index], values[index]);
+				entry.set(index);
 				if(!filter.test(entry)) return false;
 				index = (int)links[index];
 			}
@@ -771,7 +771,7 @@ public class LINKED_HASH_MAP KEY_VALUE_GENERIC_TYPE extends HASH_MAP KEY_VALUE_G
 			E state = identity;
 			int index = firstIndex;
 			while(index != -1) {
-				state = operator.apply(state, new BasicEntryKV_BRACES(keys[index], values[index]));
+				state = operator.apply(state, new MapEntry(index));
 				index = (int)links[index];
 			}
 			return state;
@@ -786,11 +786,11 @@ public class LINKED_HASH_MAP KEY_VALUE_GENERIC_TYPE extends HASH_MAP KEY_VALUE_G
 			while(index != -1) {
 				if(empty) {
 					empty = false;
-					state = new BasicEntryKV_BRACES(keys[index], values[index]);
+					state = new MapEntry(index);
 					index = (int)links[index];
 					continue;
 				}
-				state = operator.apply(state, new BasicEntryKV_BRACES(keys[index], values[index]));
+				state = operator.apply(state, new MapEntry(index));
 				index = (int)links[index];
 			}
 			return state;
@@ -800,10 +800,10 @@ public class LINKED_HASH_MAP KEY_VALUE_GENERIC_TYPE extends HASH_MAP KEY_VALUE_G
 		public MAP.Entry KEY_VALUE_GENERIC_TYPE findFirst(Predicate<MAP.Entry KEY_VALUE_GENERIC_TYPE> filter) {
 			Objects.requireNonNull(filter);
 			if(size() <= 0) return null;
-			BasicEntry KEY_VALUE_GENERIC_TYPE entry = new BasicEntryKV_BRACES();
+			MapEntry entry = new MapEntry();
 			int index = firstIndex;
 			while(index != -1) {
-				entry.set(keys[index], values[index]);
+				entry.set(index);
 				if(filter.test(entry)) return entry;
 				index = (int)links[index];
 			}
@@ -815,10 +815,10 @@ public class LINKED_HASH_MAP KEY_VALUE_GENERIC_TYPE extends HASH_MAP KEY_VALUE_G
 			Objects.requireNonNull(filter);
 			if(size() <= 0) return 0;
 			int result = 0;
-			BasicEntry KEY_VALUE_GENERIC_TYPE entry = new BasicEntryKV_BRACES();
+			MapEntry entry = new MapEntry();
 			int index = firstIndex;
 			while(index != -1) {
-				entry.set(keys[index], values[index]);
+				entry.set(index);
 				if(filter.test(entry)) result++;
 				index = (int)links[index];
 			}

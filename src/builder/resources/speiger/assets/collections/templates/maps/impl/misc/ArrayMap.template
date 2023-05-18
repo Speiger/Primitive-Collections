@@ -788,16 +788,16 @@ public class ARRAY_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_VALUE_GEN
 		public void forEach(Consumer<? super MAP.Entry KEY_VALUE_GENERIC_TYPE> action) {
 			Objects.requireNonNull(action);
 			for(int i = 0;i<size;i++)
-				action.accept(new BasicEntryKV_BRACES(keys[i], values[i]));
+				action.accept(new MapEntry(i));
 		}
 		
 		@Override
 		public void fastForEach(Consumer<? super MAP.Entry KEY_VALUE_GENERIC_TYPE> action) {
 			Objects.requireNonNull(action);
 			if(size() <= 0) return;
-			BasicEntry KEY_VALUE_GENERIC_TYPE entry = new BasicEntryKV_BRACES();
+			MapEntry entry = new MapEntry();
 			for(int i = 0;i<size;i++) {
-				entry.set(keys[i], values[i]);
+				entry.set(i);
 				action.accept(entry);
 			}
 		}
@@ -806,7 +806,7 @@ public class ARRAY_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_VALUE_GEN
 		public void forEachIndexed(IntObjectConsumer<MAP.Entry KEY_VALUE_GENERIC_TYPE> action) {
 			Objects.requireNonNull(action);
 			for(int i = 0;i<size;i++) {
-				action.accept(i, new BasicEntryKV_BRACES(keys[i], values[i]));
+				action.accept(i, new MapEntry(i));
 			}
 		}
 		
@@ -814,7 +814,7 @@ public class ARRAY_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_VALUE_GEN
 		public <E> void forEach(E input, ObjectObjectConsumer<E, MAP.Entry KEY_VALUE_GENERIC_TYPE> action) {
 			Objects.requireNonNull(action);
 			for(int i = 0;i<size;i++) {
-				action.accept(input, new BasicEntryKV_BRACES(keys[i], values[i]));
+				action.accept(input, new MapEntry(i));
 			}
 		}
 		
@@ -822,9 +822,9 @@ public class ARRAY_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_VALUE_GEN
 		public boolean matchesAny(Predicate<MAP.Entry KEY_VALUE_GENERIC_TYPE> filter) {
 			Objects.requireNonNull(filter);
 			if(size() <= 0) return false;
-			BasicEntry KEY_VALUE_GENERIC_TYPE entry = new BasicEntryKV_BRACES();
+			MapEntry entry = new MapEntry();
 			for(int i = 0;i<size;i++) {
-				entry.set(keys[i], values[i]);
+				entry.set(i);
 				if(filter.test(entry)) return true;
 			}
 			return false;
@@ -834,9 +834,9 @@ public class ARRAY_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_VALUE_GEN
 		public boolean matchesNone(Predicate<MAP.Entry KEY_VALUE_GENERIC_TYPE> filter) {
 			Objects.requireNonNull(filter);
 			if(size() <= 0) return true;
-			BasicEntry KEY_VALUE_GENERIC_TYPE entry = new BasicEntryKV_BRACES();
+			MapEntry entry = new MapEntry();
 			for(int i = 0;i<size;i++) {
-				entry.set(keys[i], values[i]);
+				entry.set(i);
 				if(filter.test(entry)) return false;
 			}
 			return true;
@@ -846,9 +846,9 @@ public class ARRAY_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_VALUE_GEN
 		public boolean matchesAll(Predicate<MAP.Entry KEY_VALUE_GENERIC_TYPE> filter) {
 			Objects.requireNonNull(filter);
 			if(size() <= 0) return true;
-			BasicEntry KEY_VALUE_GENERIC_TYPE entry = new BasicEntryKV_BRACES();
+			MapEntry entry = new MapEntry();
 			for(int i = 0;i<size;i++) {
-				entry.set(keys[i], values[i]);
+				entry.set(i);
 				if(!filter.test(entry)) return false;
 			}
 			return true;
@@ -859,7 +859,7 @@ public class ARRAY_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_VALUE_GEN
 			Objects.requireNonNull(operator);
 			E state = identity;
 			for(int i = 0;i<size;i++) {
-				state = operator.apply(state, new BasicEntryKV_BRACES(keys[i], values[i]));
+				state = operator.apply(state, new MapEntry(i));
 			}
 			return state;
 		}
@@ -872,10 +872,10 @@ public class ARRAY_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_VALUE_GEN
 			for(int i = 0;i<size;i++) {
 				if(empty) {
 					empty = false;
-					state = new BasicEntryKV_BRACES(keys[i], values[i]);
+					state = new MapEntry(i);
 					continue;
 				}
-				state = operator.apply(state, new BasicEntryKV_BRACES(keys[i], values[i]));
+				state = operator.apply(state, new MapEntry(i));
 			}
 			return state;
 		}
@@ -884,9 +884,9 @@ public class ARRAY_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_VALUE_GEN
 		public MAP.Entry KEY_VALUE_GENERIC_TYPE findFirst(Predicate<MAP.Entry KEY_VALUE_GENERIC_TYPE> filter) {
 			Objects.requireNonNull(filter);
 			if(size() <= 0) return null;
-			BasicEntry KEY_VALUE_GENERIC_TYPE entry = new BasicEntryKV_BRACES();
+			MapEntry entry = new MapEntry();
 			for(int i = 0;i<size;i++) {
-				entry.set(keys[i], values[i]);
+				entry.set(i);
 				if(filter.test(entry)) return entry;
 			}
 			return null;
@@ -897,9 +897,9 @@ public class ARRAY_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_VALUE_GEN
 			Objects.requireNonNull(filter);
 			if(size() <= 0) return 0;
 			int result = 0;
-			BasicEntry KEY_VALUE_GENERIC_TYPE entry = new BasicEntryKV_BRACES();
+			MapEntry entry = new MapEntry();
 			for(int i = 0;i<size;i++) {
-				entry.set(keys[i], values[i]);
+				entry.set(i);
 				if(filter.test(entry)) result++;
 			}
 			return result;
@@ -1404,7 +1404,11 @@ public class ARRAY_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_VALUE_GEN
 		public MapEntry(int index) {
 			this.index = index;
 		}
-
+		
+		void set(int index) {
+			this.index = index;
+		}
+		
 		@Override
 		public KEY_TYPE ENTRY_KEY() {
 			return keys[index];

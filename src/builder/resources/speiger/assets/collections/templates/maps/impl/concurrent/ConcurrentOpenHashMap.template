@@ -652,7 +652,7 @@ public class CONCURRENT_HASH_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY
 				try {
 					int index = seg.firstIndex;
 					while(index != -1){
-						action.accept(new BasicEntryKV_BRACES(seg.keys[index], seg.values[index]));
+						action.accept(new MapEntry(index, i));
 						index = (int)seg.links[index];
 					}					
 				}
@@ -664,14 +664,14 @@ public class CONCURRENT_HASH_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY
 		
 		@Override
 		public void fastForEach(Consumer<? super MAP.Entry KEY_VALUE_GENERIC_TYPE> action) {
-			BasicEntry KEY_VALUE_GENERIC_TYPE entry = new BasicEntryKV_BRACES();
+			MapEntry entry = new MapEntry();
 			for(int i = 0,m=segments.length;i<m;i++) {
 				Segment KEY_VALUE_GENERIC_TYPE seg = segments[i];
 				long stamp = seg.readLock();
 				try {
 					int index = seg.firstIndex;
 					while(index != -1){
-						entry.set(seg.keys[index], seg.values[index]);
+						entry.set(index, i);
 						action.accept(entry);
 						index = (int)seg.links[index];
 					}					
@@ -692,7 +692,7 @@ public class CONCURRENT_HASH_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY
 				try {
 					int index = seg.firstIndex;
 					while(index != -1) {
-						action.accept(count++, new BasicEntryKV_BRACES(seg.keys[index], seg.values[index]));
+						action.accept(count++, new MapEntry(index, i));
 						index = (int)seg.links[index];
 					}					
 				}
@@ -711,7 +711,7 @@ public class CONCURRENT_HASH_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY
 				try {
 					int index = seg.firstIndex;
 					while(index != -1) {
-						action.accept(input, new BasicEntryKV_BRACES(seg.keys[index], seg.values[index]));
+						action.accept(input, new MapEntry(index, i));
 						index = (int)seg.links[index];
 					}					
 				}
@@ -724,14 +724,14 @@ public class CONCURRENT_HASH_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY
 		@Override
 		public boolean matchesAny(Predicate<MAP.Entry KEY_VALUE_GENERIC_TYPE> filter) {
 			Objects.requireNonNull(filter);
-			BasicEntry KEY_VALUE_GENERIC_TYPE entry = new BasicEntryKV_BRACES();
+			MapEntry entry = new MapEntry();
 			for(int i = 0,m=segments.length;i<m;i++) {
 				Segment KEY_VALUE_GENERIC_TYPE seg = segments[i];
 				long stamp = seg.readLock();
 				try {
 					int index = seg.firstIndex;
 					while(index != -1) {
-						entry.set(seg.keys[index], seg.values[index]);
+						entry.set(index, i);
 						if(filter.test(entry)) return true;
 						index = (int)seg.links[index];
 					}					
@@ -746,14 +746,14 @@ public class CONCURRENT_HASH_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY
 		@Override
 		public boolean matchesNone(Predicate<MAP.Entry KEY_VALUE_GENERIC_TYPE> filter) {
 			Objects.requireNonNull(filter);
-			BasicEntry KEY_VALUE_GENERIC_TYPE entry = new BasicEntryKV_BRACES();
+			MapEntry entry = new MapEntry();
 			for(int i = 0,m=segments.length;i<m;i++) {
 				Segment KEY_VALUE_GENERIC_TYPE seg = segments[i];
 				long stamp = seg.readLock();
 				try {
 					int index = seg.firstIndex;
 					while(index != -1) {
-						entry.set(seg.keys[index], seg.values[index]);
+						entry.set(index, i);
 						if(filter.test(entry)) return false;
 						index = (int)seg.links[index];
 					}					
@@ -768,14 +768,14 @@ public class CONCURRENT_HASH_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY
 		@Override
 		public boolean matchesAll(Predicate<MAP.Entry KEY_VALUE_GENERIC_TYPE> filter) {
 			Objects.requireNonNull(filter);
-			BasicEntry KEY_VALUE_GENERIC_TYPE entry = new BasicEntryKV_BRACES();
+			MapEntry entry = new MapEntry();
 			for(int i = 0,m=segments.length;i<m;i++) {
 				Segment KEY_VALUE_GENERIC_TYPE seg = segments[i];
 				long stamp = seg.readLock();
 				try {
 					int index = seg.firstIndex;
 					while(index != -1) {
-						entry.set(seg.keys[index], seg.values[index]);
+						entry.set(index, i);
 						if(!filter.test(entry)) return false;
 						index = (int)seg.links[index];
 					}
@@ -797,7 +797,7 @@ public class CONCURRENT_HASH_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY
 				try {
 					int index = seg.firstIndex;
 					while(index != -1) {
-						state = operator.apply(state, new BasicEntryKV_BRACES(seg.keys[index], seg.values[index]));
+						state = operator.apply(state, new MapEntry(index, i));
 						index = (int)seg.links[index];
 					}
 				}
@@ -821,11 +821,11 @@ public class CONCURRENT_HASH_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY
 					while(index != -1) {
 						if(empty) {
 							empty = false;
-							state = new BasicEntryKV_BRACES(seg.keys[index], seg.values[index]);
+							state = new MapEntry(index, i);
 							index = (int)seg.links[index];
 							continue;
 						}
-						state = operator.apply(state, new BasicEntryKV_BRACES(seg.keys[index], seg.values[index]));
+						state = operator.apply(state, new MapEntry(index, i));
 						index = (int)seg.links[index];
 					}					
 				}
@@ -839,14 +839,14 @@ public class CONCURRENT_HASH_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY
 		@Override
 		public MAP.Entry KEY_VALUE_GENERIC_TYPE findFirst(Predicate<MAP.Entry KEY_VALUE_GENERIC_TYPE> filter) {
 			Objects.requireNonNull(filter);
-			BasicEntry KEY_VALUE_GENERIC_TYPE entry = new BasicEntryKV_BRACES();
+			MapEntry entry = new MapEntry();
 			for(int i = 0,m=segments.length;i<m;i++) {
 				Segment KEY_VALUE_GENERIC_TYPE seg = segments[i];
 				int index = seg.firstIndex;
 				long stamp = seg.readLock();
 				try {
 					while(index != -1) {
-						entry.set(seg.keys[index], seg.values[index]);
+						entry.set(index, i);
 						if(filter.test(entry)) return entry;
 						index = (int)seg.links[index];
 					}
@@ -862,14 +862,14 @@ public class CONCURRENT_HASH_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY
 		public int count(Predicate<MAP.Entry KEY_VALUE_GENERIC_TYPE> filter) {
 			Objects.requireNonNull(filter);
 			int result = 0;
-			BasicEntry KEY_VALUE_GENERIC_TYPE entry = new BasicEntryKV_BRACES();
+			MapEntry entry = new MapEntry();
 			for(int i = 0,m=segments.length;i<m;i++) {
 				Segment KEY_VALUE_GENERIC_TYPE seg = segments[i];
 				long stamp = seg.readLock();
 				try {
 					int index = seg.firstIndex;
 					while(index != -1) {
-						entry.set(seg.keys[index], seg.values[index]);
+						entry.set(index, i);
 						if(filter.test(entry)) result++;
 						index = (int)seg.links[index];
 					}
