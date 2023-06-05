@@ -1,5 +1,8 @@
 package speiger.src.collections.utils;
 
+import java.util.Collection;
+import java.util.NoSuchElementException;
+import java.util.function.IntFunction;
 
 /**
  * The Stack Interface represents the Last-In-First-Out layout (LIFO).
@@ -15,6 +18,14 @@ public interface Stack<T>
 	 * @param e the Object to insert
 	 */
 	public void push(T e);
+	
+	/**
+	 * Helper function that pushes the top element on top of the stack again.
+	 * @throws NoSuchElementException if the stack is empty
+	 */
+	public default void pushTop() {
+		push(top());
+	}
 	
 	/**
 	 * Removes the Object on top of the stack.
@@ -59,4 +70,33 @@ public interface Stack<T>
  	 * @throws ArrayIndexOutOfBoundsException if the index is out of bounds
 	 */
 	public T peek(int index);
+	
+	/**
+	 * A method to drop the contents of the Queue without clearing the queue
+	 * @param <E> the keyType of elements maintained by this Collection
+	 * @return the contents of the queue into a seperate array.
+	 */
+	public default <E> E[] toArray() {
+		return toArray((E[])new Object[size()]); 
+	}
+	
+	/**
+	 * A method to drop the contents of the Stack without clearing the stack
+	 * @param array where the elements should be inserted to. If it does not fit then it creates a new appropriately created array
+	 * @param <E> the keyType of elements maintained by this Collection
+	 * @return the contents of the stack into a separate array.
+	 * @note if the Type is generic then a Object Array is created instead of a Type Array
+	 */
+	public <E> E[] toArray(E[] array);
+	
+	/**
+	 * A Helper function that simplifies the process of creating a new Array.
+	 * @param action the array creation function
+	 * @param <E> the returning arrayType
+	 * @return an array containing all of the elements in this collection
+	 * @see Collection#toArray(Object[])
+	 */
+	public default <E> E[] toArray(IntFunction<E[]> action) {
+		return toArray(action.apply(size()));
+	}
 }

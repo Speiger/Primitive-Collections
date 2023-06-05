@@ -1,5 +1,7 @@
 package speiger.src.collections.PACKAGE.collections;
 
+import java.util.NoSuchElementException;
+
 import speiger.src.collections.utils.Stack;
 
 /**
@@ -13,6 +15,14 @@ public interface STACK
 	 * @see Stack#push(Object)
 	 */
 	public void push(KEY_TYPE e);
+	
+	/**
+	 * Helper function that pushes the top element on top of the stack again.
+	 * @throws NoSuchElementException if the stack is empty
+	 */
+	public default void pushTop() {
+		push(top());
+	}
 	
 	/**
 	 * Removes the Object on top of the stack.
@@ -59,4 +69,19 @@ public interface STACK
 	public default boolean isEmpty() {
 		return size() == 0;
 	}
+	
+	/**
+	 * A method to drop the contents of the Stack without clearing the stack
+	 * @Type(E)
+	 * @return the contents of the stack into a seperate array.
+	 */
+	public default GENERIC_SPECIAL_KEY_BRACES<E> KEY_SPECIAL_TYPE[] TO_ARRAY() { return TO_ARRAY(NEW_SPECIAL_KEY_ARRAY(size())); }
+	/**
+	 * A method to drop the contents of the Stack without clearing the stack
+	 * @param input where the elements should be inserted to. If it does not fit then it creates a new appropiatly created array
+	 * @Type(E)
+	 * @return the contents of the stack into a seperate array.
+	 * @note if the Type is generic then a Object Array is created instead of a Type Array
+	 */
+	public GENERIC_SPECIAL_KEY_BRACES<E> KEY_SPECIAL_TYPE[] TO_ARRAY(KEY_SPECIAL_TYPE[] input);
 }

@@ -1,5 +1,13 @@
 # Changelog of versions
 
+### Version 0.8.1
+- Added: getFirst/getLast/removeFirst/removeLast to List.class.
+- Added: Dedicated Set toArray implementations.
+- Added: ToArray/pushTop functions to Stack.class.
+- Added: ComputeNonDefault functions which will contain the current behavior of the Compute function, while the Compute will be changed to be more java compliant!
+- Fixed: SetValue wasn't working on forEach implementations.
+
+
 ### Version 0.8.0
 - Added: getFirst/getLast/removeFirst/removeLast to Lists
 - Added: Dedicated implementations for toArray into TreeSets

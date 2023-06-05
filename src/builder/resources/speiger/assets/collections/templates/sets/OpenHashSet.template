@@ -26,6 +26,8 @@ import speiger.src.collections.objects.functions.consumer.BI_FROM_OBJECT_CONSUME
 import speiger.src.collections.PACKAGE.functions.function.PREDICATE;
 #endif
 import speiger.src.collections.PACKAGE.functions.function.UNARY_OPERATOR;
+import speiger.src.collections.objects.utils.ObjectArrays;
+
 import speiger.src.collections.utils.HashUtil;
 import speiger.src.collections.utils.ITrimmable;
 import speiger.src.collections.utils.SanityChecks;
@@ -366,6 +368,41 @@ public class HASH_SET KEY_GENERIC_TYPE extends ABSTRACT_SET KEY_GENERIC_TYPE imp
 		keys = NEW_KEY_ARRAY(request + 1);
 		this.size = 0;
 		containsNull = false;
+	}
+	
+#if !TYPE_OBJECT
+	@Override
+	public KEY_TYPE[] TO_ARRAY(KEY_TYPE[] a) {
+		if(a == null || a.length < size()) a = new KEY_TYPE[size()];
+		for(int i = nullIndex-1, index = 0;i>=0;i--) {
+			if(KEY_EQUALS_NOT_NULL(keys[i])) a[index++] = keys[i];
+		}
+		if (a.length > size) a[size] = EMPTY_KEY_VALUE;
+		return a;
+	}
+	
+#endif
+	@Override
+	@Deprecated
+	public Object[] toArray() {
+		if(isEmpty()) return ObjectArrays.EMPTY_ARRAY;
+		Object[] obj = new Object[size()];
+		for(int i = nullIndex-1, index = 0;i>=0;i--) {
+			if(KEY_EQUALS_NOT_NULL(keys[i])) obj[index++] = KEY_TO_OBJ(keys[i]);
+		}
+		return obj;
+	}
+	
+	@Override
+	@Primitive
+	public <E> E[] toArray(E[] a) {
+		if(a == null) a = (E[])new Object[size()];
+		else if(a.length < size()) a = (E[])ObjectArrays.newArray(a.getClass().getComponentType(), size());
+		for(int i = nullIndex-1, index = 0;i>=0;i--) {
+			if(KEY_EQUALS_NOT_NULL(keys[i])) a[index++] = (E)KEY_TO_OBJ(keys[i]);
+		}
+		if (a.length > size) a[size] = null;
+		return a;
 	}
 	
 	@Override
