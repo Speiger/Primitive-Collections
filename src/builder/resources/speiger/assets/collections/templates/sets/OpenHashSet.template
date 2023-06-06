@@ -374,7 +374,8 @@ public class HASH_SET KEY_GENERIC_TYPE extends ABSTRACT_SET KEY_GENERIC_TYPE imp
 	@Override
 	public KEY_TYPE[] TO_ARRAY(KEY_TYPE[] a) {
 		if(a == null || a.length < size()) a = new KEY_TYPE[size()];
-		for(int i = nullIndex-1, index = 0;i>=0;i--) {
+		if(containsNull) a[0] = EMPTY_KEY_VALUE;
+		for(int i = nullIndex-1, index = containsNull ? 1 : 0;i>=0;i--) {
 			if(KEY_EQUALS_NOT_NULL(keys[i])) a[index++] = keys[i];
 		}
 		if (a.length > size) a[size] = EMPTY_KEY_VALUE;
@@ -387,7 +388,8 @@ public class HASH_SET KEY_GENERIC_TYPE extends ABSTRACT_SET KEY_GENERIC_TYPE imp
 	public Object[] toArray() {
 		if(isEmpty()) return ObjectArrays.EMPTY_ARRAY;
 		Object[] obj = new Object[size()];
-		for(int i = nullIndex-1, index = 0;i>=0;i--) {
+		if(containsNull) obj[0] = KEY_TO_OBJ(EMPTY_KEY_VALUE);
+		for(int i = nullIndex-1, index = containsNull ? 1 : 0;i>=0;i--) {
 			if(KEY_EQUALS_NOT_NULL(keys[i])) obj[index++] = KEY_TO_OBJ(keys[i]);
 		}
 		return obj;
@@ -398,7 +400,8 @@ public class HASH_SET KEY_GENERIC_TYPE extends ABSTRACT_SET KEY_GENERIC_TYPE imp
 	public <E> E[] toArray(E[] a) {
 		if(a == null) a = (E[])new Object[size()];
 		else if(a.length < size()) a = (E[])ObjectArrays.newArray(a.getClass().getComponentType(), size());
-		for(int i = nullIndex-1, index = 0;i>=0;i--) {
+		if(containsNull) a[0] = (E)KEY_TO_OBJ(EMPTY_KEY_VALUE);
+		for(int i = nullIndex-1, index = containsNull ? 1 : 0;i>=0;i--) {
 			if(KEY_EQUALS_NOT_NULL(keys[i])) a[index++] = (E)KEY_TO_OBJ(keys[i]);
 		}
 		if (a.length > size) a[size] = null;

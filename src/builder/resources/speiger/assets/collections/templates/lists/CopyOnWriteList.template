@@ -13,6 +13,7 @@ import java.util.function.Consumer;
 import java.util.function.Supplier;
 #if TYPE_OBJECT
 import java.util.function.BiFunction;
+import java.util.function.IntFunction;
 #endif
 #if !TYPE_OBJECT && JDK_FUNCTION
 import java.util.function.PREDICATE;
@@ -1330,6 +1331,11 @@ public class COPY_ON_WRITE_LIST KEY_GENERIC_TYPE extends ABSTRACT_LIST KEY_GENER
 		System.arraycopy(data, 0, a, 0, size);
 		if (a.length > size) a[size] = EMPTY_KEY_VALUE;
 		return a;
+	}
+#else
+	@Override
+	public <E> E[] toArray(IntFunction<E[]> action) {
+		return super.toArray(action);
 	}
 	
 #endif
