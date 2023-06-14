@@ -363,6 +363,30 @@ public class ENUM_MAP KEY_ENUM_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_VALUE
 		int index = key.ordinal();
 		if(!isSet(index)) {
 			VALUE_TYPE newValue = mappingFunction.APPLY_VALUE(key, getDefaultReturnValue());
+#if VALUE_OBJECT
+			if(VALUE_EQUALS(newValue, getDefaultReturnValue())) return newValue;
+#endif
+			set(index);
+			values[index] = newValue;
+			return newValue;
+		}
+		VALUE_TYPE newValue = mappingFunction.APPLY_VALUE(key, values[index]);
+#if VALUE_OBJECT
+		if(VALUE_EQUALS(newValue, getDefaultReturnValue())) {
+			clear(index);
+			values[index] = EMPTY_VALUE;
+			return newValue;
+		}
+#endif
+		values[index] = newValue;
+		return newValue;
+	}
+	
+	@Override
+	public VALUE_TYPE COMPUTENonDefault(T key, UNARY_OPERATOR KEY_VALUE_GENERIC_TYPE mappingFunction) {
+		int index = key.ordinal();
+		if(!isSet(index)) {
+			VALUE_TYPE newValue = mappingFunction.APPLY_VALUE(key, getDefaultReturnValue());
 			if(VALUE_EQUALS(newValue, getDefaultReturnValue())) return newValue;
 			set(index);
 			values[index] = newValue;
@@ -380,6 +404,29 @@ public class ENUM_MAP KEY_ENUM_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_VALUE
 	
 	@Override
 	public VALUE_TYPE COMPUTE_IF_ABSENT(T key, FUNCTION KEY_VALUE_GENERIC_TYPE mappingFunction) {
+		int index = key.ordinal();
+		if(!isSet(index)) {
+			VALUE_TYPE newValue = mappingFunction.APPLY(key);
+#if VALUE_OBJECT
+			if(VALUE_EQUALS(newValue, getDefaultReturnValue())) return newValue;
+#endif
+			set(index);
+			values[index] = newValue;			
+			return newValue;
+		}
+		VALUE_TYPE newValue = values[index];
+#if VALUE_OBJECT
+		if(VALUE_EQUALS(newValue, getDefaultReturnValue())) {
+			newValue = mappingFunction.APPLY(key);
+			if(VALUE_EQUALS(newValue, getDefaultReturnValue())) return newValue;
+			values[index] = newValue;
+		}
+#endif
+		return newValue;
+	}
+	
+	@Override
+	public VALUE_TYPE COMPUTE_IF_ABSENTNonDefault(T key, FUNCTION KEY_VALUE_GENERIC_TYPE mappingFunction) {
 		int index = key.ordinal();
 		if(!isSet(index)) {
 			VALUE_TYPE newValue = mappingFunction.APPLY(key);
@@ -402,6 +449,29 @@ public class ENUM_MAP KEY_ENUM_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_VALUE
 		int index = key.ordinal();
 		if(!isSet(index)) {
 			VALUE_TYPE newValue = valueProvider.VALUE_SUPPLY_GET();
+#if VALUE_OBJECT
+			if(VALUE_EQUALS(newValue, getDefaultReturnValue())) return newValue;
+#endif
+			set(index);
+			values[index] = newValue;			
+			return newValue;
+		}
+		VALUE_TYPE newValue = values[index];
+#if VALUE_OBJECT
+		if(VALUE_EQUALS(newValue, getDefaultReturnValue())) {
+			newValue = valueProvider.VALUE_SUPPLY_GET();
+			if(VALUE_EQUALS(newValue, getDefaultReturnValue())) return newValue;
+			values[index] = newValue;
+		}
+#endif
+		return newValue;
+	}
+	
+	@Override
+	public VALUE_TYPE SUPPLY_IF_ABSENTNonDefault(T key, VALUE_SUPPLIER VALUE_GENERIC_TYPE valueProvider) {
+		int index = key.ordinal();
+		if(!isSet(index)) {
+			VALUE_TYPE newValue = valueProvider.VALUE_SUPPLY_GET();
 			if(VALUE_EQUALS(newValue, getDefaultReturnValue())) return newValue;
 			set(index);
 			values[index] = newValue;			
@@ -418,6 +488,25 @@ public class ENUM_MAP KEY_ENUM_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_VALUE
 	
 	@Override
 	public VALUE_TYPE COMPUTE_IF_PRESENT(T key, UNARY_OPERATOR KEY_VALUE_GENERIC_TYPE mappingFunction) {
+		int index = key.ordinal();
+#if !VALUE_OBJECT
+		if(!isSet(index)) return getDefaultReturnValue();
+		VALUE_TYPE newValue = mappingFunction.APPLY_VALUE(key, values[index]);
+#else
+		if(!isSet(index) || VALUE_EQUALS(values[index], getDefaultReturnValue())) return getDefaultReturnValue();
+		VALUE_TYPE newValue = mappingFunction.APPLY_VALUE(key, values[index]);
+		if(VALUE_EQUALS(newValue, getDefaultReturnValue())) {
+			clear(index);
+			values[index] = EMPTY_VALUE;
+			return newValue;
+		}
+#endif
+		values[index] = newValue;
+		return newValue;
+	}
+	
+	@Override
+	public VALUE_TYPE COMPUTE_IF_PRESENTNonDefault(T key, UNARY_OPERATOR KEY_VALUE_GENERIC_TYPE mappingFunction) {
 		int index = key.ordinal();
 		if(!isSet(index) || VALUE_EQUALS(values[index], getDefaultReturnValue())) return getDefaultReturnValue();
 		VALUE_TYPE newValue = mappingFunction.APPLY_VALUE(key, values[index]);

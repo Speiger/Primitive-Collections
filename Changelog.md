@@ -5,7 +5,9 @@
 - Added: Dedicated Set toArray implementations.
 - Added: ToArray/pushTop functions to Stack.class.
 - Added: ComputeNonDefault functions which will contain the current behavior of the Compute function, while the Compute will be changed to be more java compliant!
+- Added: List.reversed, which returns a SubList that has all elements in reversed order and also inserts reversed.
 - Fixed: SetValue wasn't working on forEach implementations.
+- Fixed: Compute functions now perform with primitives more java compliant. Meaning that getDefaultReturnValue function no longer is seen as null.
 
 ### Version 0.8.0
 - Added: getFirst/getLast/removeFirst/removeLast to Lists

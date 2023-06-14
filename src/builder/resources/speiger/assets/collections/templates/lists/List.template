@@ -432,6 +432,12 @@ public interface LIST KEY_GENERIC_TYPE extends COLLECTION KEY_GENERIC_TYPE, List
 	@Override
 	public LIST KEY_GENERIC_TYPE subList(int from, int to);
 	
+	/**
+	 * A Type-Specific List Helper that shows all elements in reverse.
+	 * @return a list wrapper that has all elements reversed!
+	 */
+	public LIST KEY_GENERIC_TYPE reversed();
+	
 #if LISTS_FEATURE
 	/**
 	 * Creates a Wrapped List that is Synchronized

@@ -1,10 +1,12 @@
 package speiger.src.collections.PACKAGE.lists;
 
 import java.util.Collection;
+import java.util.Iterator;
 import java.util.List;
 import java.util.ListIterator;
 import java.util.NoSuchElementException;
 import java.util.Objects;
+import java.util.RandomAccess;
 
 import speiger.src.collections.PACKAGE.collections.ABSTRACT_COLLECTION;
 import speiger.src.collections.PACKAGE.collections.COLLECTION;
@@ -66,8 +68,7 @@ public abstract class ABSTRACT_LIST KEY_GENERIC_TYPE extends ABSTRACT_COLLECTION
 	 */
 	@Override
 	@Deprecated
-	public boolean addAll(Collection<? extends CLASS_TYPE> c)
-	{
+	public boolean addAll(Collection<? extends CLASS_TYPE> c) {
 		return c instanceof COLLECTION ? addAll((COLLECTION KEY_GENERIC_TYPE)c) : addAll(size(), c);
 	}
 	
@@ -222,6 +223,11 @@ public abstract class ABSTRACT_LIST KEY_GENERIC_TYPE extends ABSTRACT_COLLECTION
 	}
 	
 	@Override
+	public LIST KEY_GENERIC_TYPE reversed() {
+		return new ReversedList(this);
+	}
+	
+	@Override
 	public ITERATOR KEY_GENERIC_TYPE iterator() {
 		return listIterator(0);
 	}
@@ -244,6 +250,138 @@ public abstract class ABSTRACT_LIST KEY_GENERIC_TYPE extends ABSTRACT_COLLECTION
 	}
 	
 	public ABSTRACT_LIST KEY_GENERIC_TYPE copy() { throw new UnsupportedOperationException(); }
+	
+	private class ReversedList extends ABSTRACT_LIST KEY_GENERIC_TYPE
+	{
+		final ABSTRACT_LIST KEY_GENERIC_TYPE list;
+		
+		public ReversedList(ABSTRACT_LIST KEY_GENERIC_TYPE list) {
+			this.list = list;
+		}
+
+		@Override
+		public void add(int index, KEY_TYPE e) {
+			list.add(list.size() - index - 1, e);
+		}
+		
+		@Override
+		public boolean addAll(int index, COLLECTION KEY_GENERIC_TYPE c) {
+			return addCollection(index, c);
+		}
+		
+		@Override
+		public boolean addAll(int index, LIST KEY_GENERIC_TYPE c) {
+			if(c instanceof RandomAccess) {
+				for(int i = 0,m=c.size();i<m;i++) {
+					list.add(list.size() - index - i - 1, c.GET_KEY(i));
+				}
+				return true;
+			}
+			return addCollection(index, c);
+		}
+		
+		private boolean addCollection(int index, COLLECTION KEY_GENERIC_TYPE c) {
+			int i = 0;
+			for(ITERATOR KEY_GENERIC_TYPE iter = c.iterator();iter.hasNext();i++) {
+				list.add(list.size() - index - i - 1, iter.NEXT());
+			}
+			return true;
+		}
+		
+		@Override
+		public boolean addAll(int index, Collection<? extends CLASS_TYPE> c) {
+			int i = 0;
+			for(Iterator<? extends CLASS_TYPE> iter = c.iterator();iter.hasNext();i++) {
+				list.add(list.size() - index - i - 1, iter.next());
+			}
+			return true;
+		}
+		
+		@Override
+		public KEY_TYPE GET_KEY(int index) {
+			return list.GET_KEY(list.size() - index - 1);
+		}
+
+		@Override
+		public KEY_TYPE set(int index, KEY_TYPE e) {
+			return list.set(list.size() - index - 1, e);
+		}
+
+		@Override
+		public KEY_TYPE REMOVE(int index) {
+			return list.REMOVE(list.size() - index - 1);
+		}
+		
+		@Override
+		public void addElements(int from, KEY_TYPE[] a, int offset, int length) {
+			for(int i = 0,m=length;i<m;i++) {
+				list.add(list.size() - from - i - 1, a[i+offset]);
+			}
+		}
+		
+		@Override
+		public KEY_TYPE[] getElements(int from, KEY_TYPE[] a, int offset, int length) {
+			return reverse(list.getElements(list.size() - from - 1, a, offset, length));
+		}
+
+		@Override
+		public void removeElements(int from, int to) {
+			list.removeElements(list.size() - to - 1, list.size() - from - 1);
+		}
+
+		@Override
+		public KEY_TYPE swapRemove(int index) {
+			return list.swapRemove(list.size() - index - 1);
+		}
+#if TYPE_OBJECT
+		@Override
+		public <K> K[] extractElements(int from, int to, Class<K> type) {
+			return reverse(list.extractElements(list.size() - to - 1, list.size() - from - 1, type));
+		}
+		
+#else
+		@Override
+		public KEY_TYPE[] extractElements(int from, int to) {
+			return reverse(list.extractElements(list.size() - to - 1, list.size() - from - 1));
+		}
+		
+#endif
+		@Override
+		public int size() {
+			return list.size();
+		}
+		
+		@Override
+		public void clear() {
+			list.clear();
+		}
+		
+		@Override
+		public LIST KEY_GENERIC_TYPE reversed() {
+			return list;
+		}
+		
+#if TYPE_OBJECT
+		private <K> K[] reverse(K[] data) {
+			for (int i = 0, mid = data.length >> 1, j = data.length - 1; i < mid; i++, j--) {
+				K t = data[i];
+				data[i] = data[j];
+				data[j] = t;
+			}
+			return data;
+		}
+#else
+		private KEY_TYPE[] reverse(KEY_TYPE[] data) {
+			for (int i = 0, mid = data.length >> 1, j = data.length - 1; i < mid; i++, j--) {
+				KEY_TYPE t = data[i];
+				data[i] = data[j];
+				data[j] = t;
+			}
+			return data;
+		}
+	
+#endif
+	}
 	
 	private class SubList extends ABSTRACT_LIST KEY_GENERIC_TYPE
 	{
