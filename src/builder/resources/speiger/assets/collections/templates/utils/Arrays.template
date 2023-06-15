@@ -690,7 +690,7 @@ public class ARRAYS
 	 * @ArrayType(T)
 	 */
 	public static GENERIC_KEY_BRACES void selectionSort(KEY_TYPE[] array, int from, int to) {
-		for (int i = from; i < to; i++) {
+		for (int i = from,m=to-1; i < m; i++) {
 			KEY_TYPE min = array[i];
 			int minId = i;
 			for(int j = i+1; j < to; j++) {
