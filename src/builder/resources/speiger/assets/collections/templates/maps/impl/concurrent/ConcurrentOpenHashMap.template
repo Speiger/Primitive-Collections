@@ -680,7 +680,7 @@ public class CONCURRENT_HASH_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY
 				try {
 					int index = seg.firstIndex;
 					while(index != -1){
-						action.accept(new MapEntry(index, i));
+						action.accept(new ValueMapEntry(index, i));
 						index = (int)seg.links[index];
 					}					
 				}
@@ -720,7 +720,7 @@ public class CONCURRENT_HASH_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY
 				try {
 					int index = seg.firstIndex;
 					while(index != -1) {
-						action.accept(count++, new MapEntry(index, i));
+						action.accept(count++, new ValueMapEntry(index, i));
 						index = (int)seg.links[index];
 					}					
 				}
@@ -739,7 +739,7 @@ public class CONCURRENT_HASH_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY
 				try {
 					int index = seg.firstIndex;
 					while(index != -1) {
-						action.accept(input, new MapEntry(index, i));
+						action.accept(input, new ValueMapEntry(index, i));
 						index = (int)seg.links[index];
 					}					
 				}
@@ -825,7 +825,7 @@ public class CONCURRENT_HASH_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY
 				try {
 					int index = seg.firstIndex;
 					while(index != -1) {
-						state = operator.apply(state, new MapEntry(index, i));
+						state = operator.apply(state, new ValueMapEntry(index, i));
 						index = (int)seg.links[index];
 					}
 				}
@@ -849,11 +849,11 @@ public class CONCURRENT_HASH_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY
 					while(index != -1) {
 						if(empty) {
 							empty = false;
-							state = new MapEntry(index, i);
+							state = new ValueMapEntry(index, i);
 							index = (int)seg.links[index];
 							continue;
 						}
-						state = operator.apply(state, new MapEntry(index, i));
+						state = operator.apply(state, new ValueMapEntry(index, i));
 						index = (int)seg.links[index];
 					}					
 				}
@@ -1547,12 +1547,12 @@ public class CONCURRENT_HASH_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY
 		
 		@Override
 		public MAP.Entry KEY_VALUE_GENERIC_TYPE next() {
-			return entry = new MapEntry(nextEntry(), currentSegment());
+			return entry = new ValueMapEntry(nextEntry(), currentSegment());
 		}
 	
 		@Override
 		public MAP.Entry KEY_VALUE_GENERIC_TYPE previous() {
-			return entry = new MapEntry(previousEntry(), currentSegment());
+			return entry = new ValueMapEntry(previousEntry(), currentSegment());
 		}
 	
 		@Override
@@ -1737,6 +1737,33 @@ public class CONCURRENT_HASH_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY
 		}
 	}
 	
+	protected class ValueMapEntry extends MapEntry {
+		protected KEY_TYPE key;
+		protected VALUE_TYPE value;
+		
+		public ValueMapEntry(int index, int segmentIndex) {
+			super(index, segmentIndex);
+			key = segments[segmentIndex].keys[index];
+			value = segments[segmentIndex].values[index];
+		}
+		
+		@Override
+		public KEY_TYPE ENTRY_KEY() {
+			return key;
+		}
+
+		@Override
+		public VALUE_TYPE ENTRY_VALUE() {
+			return value;
+		}
+		
+		@Override
+		public VALUE_TYPE setValue(VALUE_TYPE value) {
+			this.value = value;
+			return super.setValue(value);
+		}
+	}
+	
 	protected class MapEntry implements MAP.Entry KEY_VALUE_GENERIC_TYPE, Map.Entry<CLASS_TYPE, CLASS_VALUE_TYPE> {
 		int index = -1;
 		int segmentIndex = -1;
@@ -1772,7 +1799,7 @@ public class CONCURRENT_HASH_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY
 			long stamp = seg.writeLock();
 			try
 			{
-				VALUE_TYPE oldValue = ENTRY_VALUE();
+				VALUE_TYPE oldValue = seg.values[index];
 				seg.values[index] = value;
 				return oldValue;
 			}

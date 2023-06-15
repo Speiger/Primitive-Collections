@@ -21,52 +21,49 @@ public class FILE_KEY_TYPE2FILE_VALUE_TYPEMapComputeIfPresentTester KEY_VALUE_GE
 	@MapFeature.Require(SUPPORTS_PUT)
 #endignore
 	public void testComputeIfPresent_supportedAbsent() {
-		assertEquals("COMPUTE_IF_PRESENT(notPresent, function) should return INVALID_VALUE", INVALID_VALUE,
-				getMap().COMPUTE_IF_PRESENT(k3(), (k, v) -> {
-					throw new AssertionFailedError();
-				}));
+		assertEquals("COMPUTE_IF_PRESENT(notPresent, function) should return INVALID_VALUE", INVALID_VALUE, getMap().COMPUTE_IF_PRESENTNonDefault(k3(), (k, v) -> {
+			throw new AssertionFailedError();
+		}));
 		expectUnchanged();
 	}
-
+	
 #ignore
 	@MapFeature.Require(SUPPORTS_PUT)
 	@CollectionSize.Require(absent = ZERO)
 #endignore
 	public void testComputeIfPresent_supportedPresent() {
-		assertEquals("COMPUTE_IF_PRESENT(present, function) should return new value", v3(),
-				getMap().COMPUTE_IF_PRESENT(k0(), (k, v) -> {
-					assertEquals(k0(), k);
-					assertEquals(v0(), v);
-					return v3();
-				}));
+		assertEquals("COMPUTE_IF_PRESENT(present, function) should return new value", v3(), getMap().COMPUTE_IF_PRESENTNonDefault(k0(), (k, v) -> {
+			assertEquals(k0(), k);
+			assertEquals(v0(), v);
+			return v3();
+		}));
 		expectReplacement(entry(k0(), v3()));
 	}
-
+	
 #ignore
 	@MapFeature.Require(SUPPORTS_PUT)
 	@CollectionSize.Require(absent = ZERO)
 #endignore
 	public void testComputeIfPresent_functionReturnsNull() {
-		assertEquals("COMPUTE_IF_PRESENT(present, returnsNull) should return INVALID_VALUE", INVALID_VALUE,
-				getMap().COMPUTE_IF_PRESENT(k0(), (k, v) -> {
-					assertEquals(k0(), k);
-					assertEquals(v0(), v);
-					return INVALID_VALUE;
-				}));
+		assertEquals("COMPUTE_IF_PRESENT(present, returnsNull) should return INVALID_VALUE", INVALID_VALUE, getMap().COMPUTE_IF_PRESENTNonDefault(k0(), (k, v) -> {
+			assertEquals(k0(), k);
+			assertEquals(v0(), v);
+			return INVALID_VALUE;
+		}));
 		expectMissing(e0());
 	}
-
+	
 	static class ExpectedException extends RuntimeException {
 		private static final long serialVersionUID = 1L;
 	}
-
+	
 #ignore
 	@MapFeature.Require(SUPPORTS_PUT)
 	@CollectionSize.Require(absent = ZERO)
 #endignore
 	public void testComputeIfPresent_functionThrows() {
 		try {
-			getMap().COMPUTE_IF_PRESENT(k0(), (k, v) -> {
+			getMap().COMPUTE_IF_PRESENTNonDefault(k0(), (k, v) -> {
 				assertEquals(k0(), k);
 				assertEquals(v0(), v);
 				throw new ExpectedException();
@@ -82,7 +79,7 @@ public class FILE_KEY_TYPE2FILE_VALUE_TYPEMapComputeIfPresentTester KEY_VALUE_GE
 #endignore
 	public void testComputeIfPresent_unsupportedAbsent() {
 		try {
-			getMap().COMPUTE_IF_PRESENT(k3(), (k, v) -> {
+			getMap().COMPUTE_IF_PRESENTNonDefault(k3(), (k, v) -> {
 				throw new AssertionFailedError();
 			});
 		} catch (UnsupportedOperationException tolerated) {
@@ -96,7 +93,7 @@ public class FILE_KEY_TYPE2FILE_VALUE_TYPEMapComputeIfPresentTester KEY_VALUE_GE
 #endignore
 	public void testComputeIfPresent_unsupportedPresent() {
 		try {
-			getMap().COMPUTE_IF_PRESENT(k0(), (k, v) -> v3());
+			getMap().COMPUTE_IF_PRESENTNonDefault(k0(), (k, v) -> v3());
 			fail("Expected UnsupportedOperationException");
 		} catch (UnsupportedOperationException expected) {
 		}

@@ -83,6 +83,14 @@ task generateTestSource(type: JavaExec) {
  	args = ['tests', 'silent']
 }
 
+task forceGenerateTestSource(type: JavaExec) {
+	group = 'internal'
+	description = 'Builds the sourcecode for the Tests'
+ 	classpath = sourceSets.builder.runtimeClasspath
+ 	main = 'speiger.src.builder.PrimitiveCollectionsBuilder'
+ 	args = ['tests', 'silent', 'force']
+}
+
 task generateLimitSource(type: JavaExec) {
 	group = 'internal'
 	description = 'Builds the Sourcecode with the ModuleSettings.json applied'
@@ -121,7 +129,7 @@ task testBooleans(type: Test) {
 	}
 	useJUnit()
 	ignoreFailures = true
-	maxHeapSize = "1024m"
+	maxHeapSize = maxMemory
 }
 
 task testBytes(type: Test) {
@@ -133,8 +141,8 @@ task testBytes(type: Test) {
 	}
 	useJUnit()
 	ignoreFailures = true
-	maxHeapSize = "1024m"
-	maxParallelForks = 2
+	maxHeapSize = maxMemory
+	maxParallelForks = testThreads as Integer
 }
 
 task testShorts(type: Test) {
@@ -146,8 +154,8 @@ task testShorts(type: Test) {
 	}
 	useJUnit()
 	ignoreFailures = true
-	maxHeapSize = "1024m"
-	maxParallelForks = 2
+	maxHeapSize = maxMemory
+	maxParallelForks = testThreads as Integer
 }
 
 task testChars(type: Test) {
@@ -159,8 +167,8 @@ task testChars(type: Test) {
 	}
 	useJUnit()
 	ignoreFailures = true
-	maxHeapSize = "1024m"
-	maxParallelForks = 2
+	maxHeapSize = maxMemory
+	maxParallelForks = testThreads as Integer
 }
 
 task testInts(type: Test) {
@@ -172,8 +180,8 @@ task testInts(type: Test) {
 	}
 	useJUnit()
 	ignoreFailures = true
-	maxHeapSize = "1024m"
-	maxParallelForks = 2
+	maxHeapSize = maxMemory
+	maxParallelForks = testThreads as Integer
 }
 
 task testLongs(type: Test) {
@@ -185,8 +193,8 @@ task testLongs(type: Test) {
 	}
 	useJUnit()
 	ignoreFailures = true
-	maxHeapSize = "1024m"
-	maxParallelForks = 2
+	maxHeapSize = maxMemory
+	maxParallelForks = testThreads as Integer
 }
 
 task testFloats(type: Test) {
@@ -198,8 +206,8 @@ task testFloats(type: Test) {
 	}
 	useJUnit()
 	ignoreFailures = true
-	maxHeapSize = "1024m"
-	maxParallelForks = 2
+	maxHeapSize = maxMemory
+	maxParallelForks = testThreads as Integer
 }
 
 task testDoubles(type: Test) {
@@ -211,8 +219,8 @@ task testDoubles(type: Test) {
 	}
 	useJUnit()
 	ignoreFailures = true
-	maxHeapSize = "1024m"
-	maxParallelForks = 2
+	maxHeapSize = maxMemory
+	maxParallelForks = testThreads as Integer
 }
 
 task testObjects(type: Test) {
@@ -224,8 +232,8 @@ task testObjects(type: Test) {
 	}
 	useJUnit()
 	ignoreFailures = true
-	maxHeapSize = "1024m"
-	maxParallelForks = 2
+	maxHeapSize = maxMemory
+	maxParallelForks = testThreads as Integer
 }
 
 if(System.getProperty("full_test_suite", "false").toBoolean()) {
@@ -248,7 +256,7 @@ test {
 	}
 	useJUnit()
 	ignoreFailures = true
-	maxHeapSize = "1024m"
+	maxHeapSize = maxMemory
 }
 
 jacocoTestReport {

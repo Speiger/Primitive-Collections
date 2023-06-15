@@ -26,14 +26,13 @@ public class FILE_KEY_TYPE2FILE_VALUE_TYPEMapComputeIfAbsentTester KEY_VALUE_GEN
 	@MapFeature.Require(SUPPORTS_PUT)
 #endignore
 	public void testComputeIfAbsent_supportedAbsent() {
-		assertEquals("COMPUTE_IF_ABSENT(notPresent, function) should return new value", v3(),
-				getMap().COMPUTE_IF_ABSENT(k3(), k -> {
-					assertEquals(k3(), k);
-					return v3();
-				}));
+		assertEquals("COMPUTE_IF_ABSENT(notPresent, function) should return new value", v3(), getMap().COMPUTE_IF_ABSENTNonDefault(k3(), k -> {
+			assertEquals(k3(), k);
+			return v3();
+		}));
 		expectAdded(e3());
 	}
-
+	
 #if !VALUE_BOOLEAN
 #ignore
 	@MapFeature.Require(SUPPORTS_PUT)
@@ -41,22 +40,20 @@ public class FILE_KEY_TYPE2FILE_VALUE_TYPEMapComputeIfAbsentTester KEY_VALUE_GEN
 #endignore
 	public void testComputeIfAbsent_supportedAbsentFirst() {
 		getMap().setDefaultReturnValue(v0());
-		assertEquals("COMPUTE_IF_ABSENT(notPresent, function) should return new value", v3(),
-			getMap().COMPUTE_IF_ABSENT(k0(), k -> {
-				assertEquals(k0(), k);
-				return v3();
-			}));
+		assertEquals("COMPUTE_IF_ABSENT(notPresent, function) should return new value", v3(), getMap().COMPUTE_IF_ABSENTNonDefault(k0(), k -> {
+			assertEquals(k0(), k);
+			return v3();
+		}));
 		expectContents(entry(k0(), v3()));
 	}
-
+	
 #ignore
 	@MapFeature.Require(SUPPORTS_PUT)
 	@CollectionSize.Require(ONE)
 #endignore
 	public void testComputeIfAbsent_supportedAbsentSameResult() {
 		getMap().setDefaultReturnValue(v0());
-		assertEquals("COMPUTE_IF_ABSENT(notPresent, function) should return new value", v0(),
-			getMap().COMPUTE_IF_ABSENT(k0(), k -> {
+		assertEquals("COMPUTE_IF_ABSENT(notPresent, function) should return new value", v0(), getMap().COMPUTE_IF_ABSENTNonDefault(k0(), k -> {
 			assertEquals(k0(), k);
 			return v0();
 		}));
@@ -69,35 +66,33 @@ public class FILE_KEY_TYPE2FILE_VALUE_TYPEMapComputeIfAbsentTester KEY_VALUE_GEN
 	@CollectionSize.Require(absent = ZERO)
 #endignore
 	public void testComputeIfAbsent_supportedPresent() {
-		assertEquals("COMPUTE_IF_ABSENT(present, function) should return existing value", v0(),
-				getMap().COMPUTE_IF_ABSENT(k0(), k -> {
-					throw new AssertionFailedError();
-				}));
+		assertEquals("COMPUTE_IF_ABSENT(present, function) should return existing value", v0(), getMap().COMPUTE_IF_ABSENTNonDefault(k0(), k -> {
+			throw new AssertionFailedError();
+		}));
 		expectUnchanged();
 	}
-
+	
 #ignore
 	@MapFeature.Require(SUPPORTS_PUT)
 #endignore
 	public void testComputeIfAbsent_functionReturnsNullNotInserted() {
-		assertEquals("COMPUTE_IF_ABSENT(absent, returnsNull) should return INVALID_VALUE",
-				INVALID_VALUE, getMap().COMPUTE_IF_ABSENT(k3(), k -> {
-					assertEquals(k3(), k);
-					return INVALID_VALUE;
-				}));
+		assertEquals("COMPUTE_IF_ABSENT(absent, returnsNull) should return INVALID_VALUE", INVALID_VALUE, getMap().COMPUTE_IF_ABSENTNonDefault(k3(), k -> {
+			assertEquals(k3(), k);
+			return INVALID_VALUE;
+		}));
 		expectUnchanged();
 	}
-
+	
 	static class ExpectedException extends RuntimeException {
 		private static final long serialVersionUID = 1L;
 	}
-
+	
 #ignore
 	@MapFeature.Require(SUPPORTS_PUT)
 #endignore
 	public void testComputeIfAbsent_functionThrows() {
 		try {
-			getMap().COMPUTE_IF_ABSENT(k3(), k -> {
+			getMap().COMPUTE_IF_ABSENTNonDefault(k3(), k -> {
 				assertEquals(k3(), k);
 				throw new ExpectedException();
 			});
@@ -112,7 +107,7 @@ public class FILE_KEY_TYPE2FILE_VALUE_TYPEMapComputeIfAbsentTester KEY_VALUE_GEN
 #endignore
 	public void testComputeIfAbsent_unsupportedAbsent() {
 		try {
-			getMap().COMPUTE_IF_ABSENT(k3(), k -> {
+			getMap().COMPUTE_IF_ABSENTNonDefault(k3(), k -> {
 				// allowed to be called
 				assertEquals(k3(), k);
 				return v3();
@@ -129,11 +124,10 @@ public class FILE_KEY_TYPE2FILE_VALUE_TYPEMapComputeIfAbsentTester KEY_VALUE_GEN
 #endignore
 	public void testComputeIfAbsent_unsupportedPresentExistingValue() {
 		try {
-			assertEquals("COMPUTE_IF_ABSENT(present, returnsCurrentValue) should return present or throw", v0(),
-					getMap().COMPUTE_IF_ABSENT(k0(), k -> {
-						assertEquals(k0(), k);
-						return v0();
-					}));
+			assertEquals("COMPUTE_IF_ABSENT(present, returnsCurrentValue) should return present or throw", v0(), getMap().COMPUTE_IF_ABSENTNonDefault(k0(), k -> {
+				assertEquals(k0(), k);
+				return v0();
+			}));
 		} catch (UnsupportedOperationException tolerated) {
 		}
 		expectUnchanged();
@@ -145,11 +139,10 @@ public class FILE_KEY_TYPE2FILE_VALUE_TYPEMapComputeIfAbsentTester KEY_VALUE_GEN
 #endignore
 	public void testComputeIfAbsent_unsupportedPresentDifferentValue() {
 		try {
-			assertEquals("COMPUTE_IF_ABSENT(present, returnsDifferentValue) should return present or throw", v0(),
-					getMap().COMPUTE_IF_ABSENT(k0(), k -> {
-						assertEquals(k0(), k);
-						return v3();
-					}));
+			assertEquals("COMPUTE_IF_ABSENT(present, returnsDifferentValue) should return present or throw", v0(), getMap().COMPUTE_IF_ABSENTNonDefault(k0(), k -> {
+				assertEquals(k0(), k);
+				return v3();
+			}));
 		} catch (UnsupportedOperationException tolerated) {
 		}
 		expectUnchanged();

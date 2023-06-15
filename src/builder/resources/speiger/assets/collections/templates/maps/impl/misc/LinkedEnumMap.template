@@ -480,7 +480,7 @@ public class LINKED_ENUM_MAP KEY_ENUM_VALUE_GENERIC_TYPE extends ENUM_MAP KEY_VA
 		public void forEach(Consumer<? super MAP.Entry KEY_VALUE_GENERIC_TYPE> action) {
 			int index = firstIndex;
 			while(index != -1){
-				action.accept(new MapEntry(index));
+				action.accept(new ValueMapEntry(index));
 				index = (int)links[index];
 			}
 		}
@@ -749,12 +749,12 @@ public class LINKED_ENUM_MAP KEY_ENUM_VALUE_GENERIC_TYPE extends ENUM_MAP KEY_VA
 		
 		@Override
 		public MAP.Entry KEY_VALUE_GENERIC_TYPE next() {
-			return entry = new MapEntry(nextEntry());
+			return entry = new ValueMapEntry(nextEntry());
 		}
 		
 		@Override
 		public MAP.Entry KEY_VALUE_GENERIC_TYPE previous() {
-			return entry = new MapEntry(previousEntry());
+			return entry = new ValueMapEntry(previousEntry());
 		}
 		
 		@Override
@@ -903,6 +903,33 @@ public class LINKED_ENUM_MAP KEY_ENUM_VALUE_GENERIC_TYPE extends ENUM_MAP KEY_VA
 		}
 	}
 	
+	protected class ValueMapEntry extends MapEntry {
+		protected KEY_TYPE key;
+		protected VALUE_TYPE value;
+		
+		public ValueMapEntry(int index) {
+			super(index);
+			key = keys[index];
+			value = values[index];
+		}
+		
+		@Override
+		public KEY_TYPE ENTRY_KEY() {
+			return key;
+		}
+
+		@Override
+		public VALUE_TYPE ENTRY_VALUE() {
+			return value;
+		}
+		
+		@Override
+		public VALUE_TYPE setValue(VALUE_TYPE value) {
+			this.value = value;
+			return super.setValue(value);
+		}
+	}
+	
 	protected class MapEntry implements MAP.Entry KEY_VALUE_GENERIC_TYPE, Map.Entry<CLASS_TYPE, CLASS_VALUE_TYPE> {
 		public int index = -1;
 		
@@ -937,19 +964,19 @@ public class LINKED_ENUM_MAP KEY_ENUM_VALUE_GENERIC_TYPE extends ENUM_MAP KEY_VA
 			if(obj instanceof Map.Entry) {
 				if(obj instanceof MAP.Entry) {
 					MAP.Entry KEY_VALUE_GENERIC_TYPE entry = (MAP.Entry KEY_VALUE_GENERIC_TYPE)obj;
-					return KEY_EQUALS(keys[index], entry.ENTRY_KEY()) && VALUE_EQUALS(values[index], entry.ENTRY_VALUE());
+					return KEY_EQUALS(ENTRY_KEY(), entry.ENTRY_KEY()) && VALUE_EQUALS(ENTRY_VALUE(), entry.ENTRY_VALUE());
 				}
 				Map.Entry<?, ?> entry = (Map.Entry<?, ?>)obj;
 				Object key = entry.getKey();
 				Object value = entry.getValue();
 #if TYPE_OBJECT && VALUE_OBJECT
-				return KEY_EQUALS(keys[index], key) && VALUE_EQUALS(values[index], value);
+				return KEY_EQUALS(ENTRY_KEY(), key) && VALUE_EQUALS(ENTRY_VALUE(), value);
 #else if TYPE_OBJECT
-				return value instanceof CLASS_VALUE_TYPE && KEY_EQUALS(keys[index], key) && VALUE_EQUALS(values[index], CLASS_TO_VALUE(value));
+				return value instanceof CLASS_VALUE_TYPE && KEY_EQUALS(ENTRY_KEY(), key) && VALUE_EQUALS(ENTRY_VALUE(), CLASS_TO_VALUE(value));
 #else if VALUE_OBJECT
-				return key instanceof CLASS_TYPE && KEY_EQUALS(keys[index], CLASS_TO_KEY(key)) && VALUE_EQUALS(values[index], value);
+				return key instanceof CLASS_TYPE && KEY_EQUALS(ENTRY_KEY(), CLASS_TO_KEY(key)) && VALUE_EQUALS(ENTRY_VALUE(), value);
 #else
-				return key instanceof CLASS_TYPE && value instanceof CLASS_VALUE_TYPE && KEY_EQUALS(keys[index], CLASS_TO_KEY(key)) && VALUE_EQUALS(values[index], CLASS_TO_VALUE(value));
+				return key instanceof CLASS_TYPE && value instanceof CLASS_VALUE_TYPE && KEY_EQUALS(ENTRY_KEY(), CLASS_TO_KEY(key)) && VALUE_EQUALS(ENTRY_VALUE(), CLASS_TO_VALUE(value));
 #endif
 			}
 			return false;
@@ -957,12 +984,12 @@ public class LINKED_ENUM_MAP KEY_ENUM_VALUE_GENERIC_TYPE extends ENUM_MAP KEY_VA
 		
 		@Override
 		public int hashCode() {
-			return KEY_TO_HASH(keys[index]) ^ VALUE_TO_HASH(values[index]);
+			return KEY_TO_HASH(ENTRY_KEY()) ^ VALUE_TO_HASH(ENTRY_VALUE());
 		}
 		
 		@Override
 		public String toString() {
-			return KEY_TO_STRING(keys[index]) + "=" + VALUE_TO_STRING(values[index]);
+			return KEY_TO_STRING(ENTRY_KEY()) + "=" + VALUE_TO_STRING(ENTRY_VALUE());
 		}
 	}
 }

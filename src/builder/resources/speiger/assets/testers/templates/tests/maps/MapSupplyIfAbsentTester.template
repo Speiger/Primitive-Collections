@@ -26,8 +26,7 @@ public class FILE_KEY_TYPE2FILE_VALUE_TYPEMapSupplyIfAbsentTester KEY_VALUE_GENE
 	@MapFeature.Require(SUPPORTS_PUT)
 #endignore
 	public void testSupplyIfAbsent_supportedAbsent() {
-		assertEquals("SUPPLY_IF_ABSENT(notPresent, function) should return new value", v3(),
-				getMap().SUPPLY_IF_ABSENT(k3(), this::v3));
+		assertEquals("SUPPLY_IF_ABSENT(notPresent, function) should return new value", v3(), getMap().SUPPLY_IF_ABSENTNonDefault(k3(), this::v3));
 		expectAdded(e3());
 	}
 	
@@ -38,8 +37,7 @@ public class FILE_KEY_TYPE2FILE_VALUE_TYPEMapSupplyIfAbsentTester KEY_VALUE_GENE
 #endignore
 	public void testSupplyIfAbsent_supportedAbsentFirst() {
 		getMap().setDefaultReturnValue(v0());
-		assertEquals("SUPPLY_IF_ABSENT(notPresent, function) should return new value", v3(),
-			getMap().SUPPLY_IF_ABSENT(k0(), this::v3));
+		assertEquals("SUPPLY_IF_ABSENT(notPresent, function) should return new value", v3(), getMap().SUPPLY_IF_ABSENTNonDefault(k0(), this::v3));
 		expectContents(entry(k0(), v3()));
 	}
 	
@@ -49,8 +47,7 @@ public class FILE_KEY_TYPE2FILE_VALUE_TYPEMapSupplyIfAbsentTester KEY_VALUE_GENE
 #endignore
 	public void testSupplyIfAbsent_supportedAbsentSameResult() {
 		getMap().setDefaultReturnValue(v0());
-		assertEquals("SUPPLY_IF_ABSENT(notPresent, function) should return new value", v0(),
-			getMap().SUPPLY_IF_ABSENT(k0(), this::v0));
+		assertEquals("SUPPLY_IF_ABSENT(notPresent, function) should return new value", v0(), getMap().SUPPLY_IF_ABSENTNonDefault(k0(), this::v0));
 		expectUnchanged();
 	}
 	
@@ -60,10 +57,9 @@ public class FILE_KEY_TYPE2FILE_VALUE_TYPEMapSupplyIfAbsentTester KEY_VALUE_GENE
 	@CollectionSize.Require(absent = ZERO)
 #endignore
 	public void testSupplyIfAbsent_supportedPresent() {
-		assertEquals("SUPPLY_IF_ABSENT(present, function) should return existing value", v0(),
-				getMap().SUPPLY_IF_ABSENT(k0(), () -> {
-					throw new AssertionFailedError();
-				}));
+		assertEquals("SUPPLY_IF_ABSENT(present, function) should return existing value", v0(), getMap().SUPPLY_IF_ABSENTNonDefault(k0(), () -> {
+			throw new AssertionFailedError();
+		}));
 		expectUnchanged();
 	}
 
@@ -71,7 +67,7 @@ public class FILE_KEY_TYPE2FILE_VALUE_TYPEMapSupplyIfAbsentTester KEY_VALUE_GENE
 	@MapFeature.Require(SUPPORTS_PUT)
 #endignore
 	public void testSupplyIfAbsent_functionReturnsNullNotInserted() {
-		assertEquals("SUPPLY_IF_ABSENT(absent, returnsNull) should return INVALID_VALUE", INVALID_VALUE, getMap().SUPPLY_IF_ABSENT(k3(), () -> INVALID_VALUE));
+		assertEquals("SUPPLY_IF_ABSENT(absent, returnsNull) should return INVALID_VALUE", INVALID_VALUE, getMap().SUPPLY_IF_ABSENTNonDefault(k3(), () -> INVALID_VALUE));
 		expectUnchanged();
 	}
 
@@ -84,7 +80,7 @@ public class FILE_KEY_TYPE2FILE_VALUE_TYPEMapSupplyIfAbsentTester KEY_VALUE_GENE
 #endignore
 	public void testSupplyIfAbsent_functionThrows() {
 		try {
-			getMap().SUPPLY_IF_ABSENT(k3(), () -> {
+			getMap().SUPPLY_IF_ABSENTNonDefault(k3(), () -> {
 				throw new ExpectedException();
 			});
 			fail("Expected ExpectedException");
@@ -98,7 +94,7 @@ public class FILE_KEY_TYPE2FILE_VALUE_TYPEMapSupplyIfAbsentTester KEY_VALUE_GENE
 #endignore
 	public void testSupplyIfAbsent_unsupportedAbsent() {
 		try {
-			getMap().SUPPLY_IF_ABSENT(k3(), this::v3);
+			getMap().SUPPLY_IF_ABSENTNonDefault(k3(), this::v3);
 			fail("SUPPLY_IF_ABSENT(notPresent, function) should throw");
 		} catch (UnsupportedOperationException expected) {
 		}
@@ -111,7 +107,7 @@ public class FILE_KEY_TYPE2FILE_VALUE_TYPEMapSupplyIfAbsentTester KEY_VALUE_GENE
 #endignore
 	public void testSupplyIfAbsent_unsupportedPresentExistingValue() {
 		try {
-			assertEquals("SUPPLY_IF_ABSENT(present, returnsCurrentValue) should return present or throw", v0(), getMap().SUPPLY_IF_ABSENT(k0(), this::v0));
+			assertEquals("SUPPLY_IF_ABSENT(present, returnsCurrentValue) should return present or throw", v0(), getMap().SUPPLY_IF_ABSENTNonDefault(k0(), this::v0));
 		} catch (UnsupportedOperationException tolerated) {
 		}
 		expectUnchanged();
@@ -123,7 +119,7 @@ public class FILE_KEY_TYPE2FILE_VALUE_TYPEMapSupplyIfAbsentTester KEY_VALUE_GENE
 #endignore
 	public void testSupplyIfAbsent_unsupportedPresentDifferentValue() {
 		try {
-			assertEquals("SUPPLY_IF_ABSENT(present, returnsDifferentValue) should return present or throw", v0(), getMap().SUPPLY_IF_ABSENT(k0(), this::v3));
+			assertEquals("SUPPLY_IF_ABSENT(present, returnsDifferentValue) should return present or throw", v0(), getMap().SUPPLY_IF_ABSENTNonDefault(k0(), this::v3));
 		} catch (UnsupportedOperationException tolerated) {
 		}
 		expectUnchanged();

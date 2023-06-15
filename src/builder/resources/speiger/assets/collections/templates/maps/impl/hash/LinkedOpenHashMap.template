@@ -684,7 +684,7 @@ public class LINKED_HASH_MAP KEY_VALUE_GENERIC_TYPE extends HASH_MAP KEY_VALUE_G
 		public void forEach(Consumer<? super MAP.Entry KEY_VALUE_GENERIC_TYPE> action) {
 			int index = firstIndex;
 			while(index != -1){
-				action.accept(new MapEntry(index));
+				action.accept(new ValueMapEntry(index));
 				index = (int)links[index];
 			}
 		}
@@ -707,7 +707,7 @@ public class LINKED_HASH_MAP KEY_VALUE_GENERIC_TYPE extends HASH_MAP KEY_VALUE_G
 			int count = 0;
 			int index = firstIndex;
 			while(index != -1) {
-				action.accept(count++, new MapEntry(index));
+				action.accept(count++, new ValueMapEntry(index));
 				index = (int)links[index];
 			}
 		}
@@ -718,7 +718,7 @@ public class LINKED_HASH_MAP KEY_VALUE_GENERIC_TYPE extends HASH_MAP KEY_VALUE_G
 			if(size() <= 0) return;
 			int index = firstIndex;
 			while(index != -1) {
-				action.accept(input, new MapEntry(index));
+				action.accept(input, new ValueMapEntry(index));
 				index = (int)links[index];
 			}
 		}
@@ -771,7 +771,7 @@ public class LINKED_HASH_MAP KEY_VALUE_GENERIC_TYPE extends HASH_MAP KEY_VALUE_G
 			E state = identity;
 			int index = firstIndex;
 			while(index != -1) {
-				state = operator.apply(state, new MapEntry(index));
+				state = operator.apply(state, new ValueMapEntry(index));
 				index = (int)links[index];
 			}
 			return state;
@@ -786,11 +786,11 @@ public class LINKED_HASH_MAP KEY_VALUE_GENERIC_TYPE extends HASH_MAP KEY_VALUE_G
 			while(index != -1) {
 				if(empty) {
 					empty = false;
-					state = new MapEntry(index);
+					state = new ValueMapEntry(index);
 					index = (int)links[index];
 					continue;
 				}
-				state = operator.apply(state, new MapEntry(index));
+				state = operator.apply(state, new ValueMapEntry(index));
 				index = (int)links[index];
 			}
 			return state;
@@ -1312,12 +1312,12 @@ public class LINKED_HASH_MAP KEY_VALUE_GENERIC_TYPE extends HASH_MAP KEY_VALUE_G
 		
 		@Override
 		public MAP.Entry KEY_VALUE_GENERIC_TYPE next() {
-			return entry = new MapEntry(nextEntry());
+			return entry = new ValueMapEntry(nextEntry());
 		}
 		
 		@Override
 		public MAP.Entry KEY_VALUE_GENERIC_TYPE previous() {
-			return entry = new MapEntry(previousEntry());
+			return entry = new ValueMapEntry(previousEntry());
 		}
 		
 		@Override

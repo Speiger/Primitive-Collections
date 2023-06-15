@@ -876,7 +876,7 @@ public class ARRAY_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_VALUE_GEN
 		public void forEach(Consumer<? super MAP.Entry KEY_VALUE_GENERIC_TYPE> action) {
 			Objects.requireNonNull(action);
 			for(int i = 0;i<size;i++)
-				action.accept(new MapEntry(i));
+				action.accept(new ValueMapEntry(i));
 		}
 		
 		@Override
@@ -894,7 +894,7 @@ public class ARRAY_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_VALUE_GEN
 		public void forEachIndexed(IntObjectConsumer<MAP.Entry KEY_VALUE_GENERIC_TYPE> action) {
 			Objects.requireNonNull(action);
 			for(int i = 0;i<size;i++) {
-				action.accept(i, new MapEntry(i));
+				action.accept(i, new ValueMapEntry(i));
 			}
 		}
 		
@@ -902,7 +902,7 @@ public class ARRAY_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_VALUE_GEN
 		public <E> void forEach(E input, ObjectObjectConsumer<E, MAP.Entry KEY_VALUE_GENERIC_TYPE> action) {
 			Objects.requireNonNull(action);
 			for(int i = 0;i<size;i++) {
-				action.accept(input, new MapEntry(i));
+				action.accept(input, new ValueMapEntry(i));
 			}
 		}
 		
@@ -947,7 +947,7 @@ public class ARRAY_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_VALUE_GEN
 			Objects.requireNonNull(operator);
 			E state = identity;
 			for(int i = 0;i<size;i++) {
-				state = operator.apply(state, new MapEntry(i));
+				state = operator.apply(state, new ValueMapEntry(i));
 			}
 			return state;
 		}
@@ -960,10 +960,10 @@ public class ARRAY_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_VALUE_GEN
 			for(int i = 0;i<size;i++) {
 				if(empty) {
 					empty = false;
-					state = new MapEntry(i);
+					state = new ValueMapEntry(i);
 					continue;
 				}
-				state = operator.apply(state, new MapEntry(i));
+				state = operator.apply(state, new ValueMapEntry(i));
 			}
 			return state;
 		}
@@ -1364,12 +1364,12 @@ public class ARRAY_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_VALUE_GEN
 		
 		@Override
 		public MAP.Entry KEY_VALUE_GENERIC_TYPE next() {
-			return entry = new MapEntry(nextEntry());
+			return entry = new ValueMapEntry(nextEntry());
 		}
 		
 		@Override
 		public MAP.Entry KEY_VALUE_GENERIC_TYPE previous() {
-			return entry = new MapEntry(previousEntry());
+			return entry = new ValueMapEntry(previousEntry());
 		}
 		
 		@Override
@@ -1485,6 +1485,33 @@ public class ARRAY_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_VALUE_GEN
 		}
 	}
 	
+	protected class ValueMapEntry extends MapEntry {
+		protected KEY_TYPE key;
+		protected VALUE_TYPE value;
+		
+		public ValueMapEntry(int index) {
+			super(index);
+			key = keys[index];
+			value = values[index];
+		}
+		
+		@Override
+		public KEY_TYPE ENTRY_KEY() {
+			return key;
+		}
+
+		@Override
+		public VALUE_TYPE ENTRY_VALUE() {
+			return value;
+		}
+		
+		@Override
+		public VALUE_TYPE setValue(VALUE_TYPE value) {
+			this.value = value;
+			return super.setValue(value);
+		}
+	}
+	
 	private class MapEntry implements MAP.Entry KEY_VALUE_GENERIC_TYPE, Map.Entry<CLASS_TYPE, CLASS_VALUE_TYPE> {
 		int index = -1;
 		
@@ -1519,19 +1546,19 @@ public class ARRAY_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_VALUE_GEN
 			if(obj instanceof Map.Entry) {
 				if(obj instanceof MAP.Entry) {
 					MAP.Entry KEY_VALUE_GENERIC_TYPE entry = (MAP.Entry KEY_VALUE_GENERIC_TYPE)obj;
-					return KEY_EQUALS(keys[index], entry.ENTRY_KEY()) && VALUE_EQUALS(values[index], entry.ENTRY_VALUE());
+					return KEY_EQUALS(keys[index], entry.ENTRY_KEY()) && VALUE_EQUALS(ENTRY_VALUE(), entry.ENTRY_VALUE());
 				}
 				Map.Entry<?, ?> entry = (Map.Entry<?, ?>)obj;
 				Object key = entry.getKey();
 				Object value = entry.getValue();
 #if TYPE_OBJECT && VALUE_OBJECT
-				return KEY_EQUALS(keys[index], key) && VALUE_EQUALS(values[index], value);
+				return KEY_EQUALS(ENTRY_KEY(), key) && VALUE_EQUALS(ENTRY_VALUE(), value);
 #else if TYPE_OBJECT
-				return value instanceof CLASS_VALUE_TYPE && KEY_EQUALS(keys[index], key) && VALUE_EQUALS(values[index], CLASS_TO_VALUE(value));
+				return value instanceof CLASS_VALUE_TYPE && KEY_EQUALS(ENTRY_KEY(), key) && VALUE_EQUALS(ENTRY_VALUE(), CLASS_TO_VALUE(value));
 #else if VALUE_OBJECT
-				return key instanceof CLASS_TYPE && KEY_EQUALS(keys[index], CLASS_TO_KEY(key)) && VALUE_EQUALS(values[index], value);
+				return key instanceof CLASS_TYPE && KEY_EQUALS(ENTRY_KEY(), CLASS_TO_KEY(key)) && VALUE_EQUALS(ENTRY_VALUE(), value);
 #else
-				return key instanceof CLASS_TYPE && value instanceof CLASS_VALUE_TYPE && KEY_EQUALS(keys[index], CLASS_TO_KEY(key)) && VALUE_EQUALS(values[index], CLASS_TO_VALUE(value));
+				return key instanceof CLASS_TYPE && value instanceof CLASS_VALUE_TYPE && KEY_EQUALS(ENTRY_KEY(), CLASS_TO_KEY(key)) && VALUE_EQUALS(ENTRY_VALUE(), CLASS_TO_VALUE(value));
 #endif
 			}
 			return false;
@@ -1539,12 +1566,12 @@ public class ARRAY_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_VALUE_GEN
 		
 		@Override
 		public int hashCode() {
-			return KEY_TO_HASH(keys[index]) ^ VALUE_TO_HASH(values[index]);
+			return KEY_TO_HASH(ENTRY_KEY()) ^ VALUE_TO_HASH(ENTRY_VALUE());
 		}
 		
 		@Override
 		public String toString() {
-			return KEY_TO_STRING(keys[index]) + "=" + VALUE_TO_STRING(values[index]);
+			return KEY_TO_STRING(ENTRY_KEY()) + "=" + VALUE_TO_STRING(ENTRY_VALUE());
 		}
 	}
 }

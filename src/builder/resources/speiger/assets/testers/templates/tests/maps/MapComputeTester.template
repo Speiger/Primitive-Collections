@@ -21,12 +21,11 @@ public class FILE_KEY_TYPE2FILE_VALUE_TYPEMapComputeTester KEY_VALUE_GENERIC_TYP
 	@MapFeature.Require({ SUPPORTS_PUT, SUPPORTS_REMOVE })
 #endignore
 	public void testCompute_absentToPresent() {
-		assertEquals("Map.COMPUTE(absent, functionReturningValue) should return value", v3(),
-				getMap().COMPUTE(k3(), (k, v) -> {
-					assertEquals(k3(), k);
-					assertEquals(INVALID_VALUE, v);
-					return v3();
-				}));
+		assertEquals("Map.COMPUTE(absent, functionReturningValue) should return value", v3(), getMap().COMPUTENonDefault(k3(), (k, v) -> {
+			assertEquals(k3(), k);
+			assertEquals(INVALID_VALUE, v);
+			return v3();
+		}));
 		expectAdded(e3());
 		assertEquals(getNumElements() + 1, getMap().size());
 	}
@@ -35,7 +34,7 @@ public class FILE_KEY_TYPE2FILE_VALUE_TYPEMapComputeTester KEY_VALUE_GENERIC_TYP
 	@MapFeature.Require({ SUPPORTS_PUT, SUPPORTS_REMOVE })
 #endignore
 	public void testCompute_absentToAbsent() {
-		assertEquals("Map.COMPUTE(absent, functionReturningNull) should return INVALID_VALUE", INVALID_VALUE, getMap().COMPUTE(k3(), (k, v) -> {
+		assertEquals("Map.COMPUTE(absent, functionReturningNull) should return INVALID_VALUE", INVALID_VALUE, getMap().COMPUTENonDefault(k3(), (k, v) -> {
 			assertEquals(k3(), k);
 			assertEquals(INVALID_VALUE, v);
 			return INVALID_VALUE;
@@ -49,12 +48,11 @@ public class FILE_KEY_TYPE2FILE_VALUE_TYPEMapComputeTester KEY_VALUE_GENERIC_TYP
 	@CollectionSize.Require(absent = ZERO)
 #endignore
 	public void testCompute_presentToPresent() {
-		assertEquals("Map.COMPUTE(present, functionReturningValue) should return new value", v3(),
-				getMap().COMPUTE(k0(), (k, v) -> {
-					assertEquals(k0(), k);
-					assertEquals(v0(), v);
-					return v3();
-				}));
+		assertEquals("Map.COMPUTE(present, functionReturningValue) should return new value", v3(), getMap().COMPUTENonDefault(k0(), (k, v) -> {
+			assertEquals(k0(), k);
+			assertEquals(v0(), v);
+			return v3();
+		}));
 		expectReplacement(entry(k0(), v3()));
 		assertEquals(getNumElements(), getMap().size());
 	}
@@ -64,7 +62,7 @@ public class FILE_KEY_TYPE2FILE_VALUE_TYPEMapComputeTester KEY_VALUE_GENERIC_TYP
 	@CollectionSize.Require(absent = ZERO)
 #endignore
 	public void testCompute_presentToAbsent() {
-		assertEquals("Map.COMPUTE(present, functionReturningNull) should return INVALID_VALUE", INVALID_VALUE, getMap().COMPUTE(k0(), (k, v) -> {
+		assertEquals("Map.COMPUTE(present, functionReturningNull) should return INVALID_VALUE", INVALID_VALUE, getMap().COMPUTENonDefault(k0(), (k, v) -> {
 			assertEquals(k0(), k);
 			assertEquals(v0(), v);
 			return INVALID_VALUE;
@@ -84,7 +82,7 @@ public class FILE_KEY_TYPE2FILE_VALUE_TYPEMapComputeTester KEY_VALUE_GENERIC_TYP
 #endignore
 	public void testCompute_presentFunctionThrows() {
 		try {
-			getMap().COMPUTE(k0(), (k, v) -> {
+			getMap().COMPUTENonDefault(k0(), (k, v) -> {
 				assertEquals(k0(), k);
 				assertEquals(v0(), v);
 				throw new ExpectedException();
@@ -100,7 +98,7 @@ public class FILE_KEY_TYPE2FILE_VALUE_TYPEMapComputeTester KEY_VALUE_GENERIC_TYP
 #endignore
 	public void testCompute_absentFunctionThrows() {
 		try {
-			getMap().COMPUTE(k3(), (k, v) -> {
+			getMap().COMPUTENonDefault(k3(), (k, v) -> {
 				assertEquals(k3(), k);
 				assertEquals(INVALID_VALUE, v);
 				throw new ExpectedException();
@@ -116,7 +114,7 @@ public class FILE_KEY_TYPE2FILE_VALUE_TYPEMapComputeTester KEY_VALUE_GENERIC_TYP
 #endignore
 	public void testCompute_removeAbsent() {
 		try {
-			getMap().COMPUTE(k3(), (k, v) -> {
+			getMap().COMPUTENonDefault(k3(), (k, v) -> {
 				assertEquals(k3(), k);
 				assertEquals(INVALID_VALUE, v);
 				return INVALID_VALUE;
@@ -132,7 +130,7 @@ public class FILE_KEY_TYPE2FILE_VALUE_TYPEMapComputeTester KEY_VALUE_GENERIC_TYP
 #endignore
 	public void testCompute_putAbsent() {
 		try {
-			getMap().COMPUTE(k3(), (k, v) -> {
+			getMap().COMPUTENonDefault(k3(), (k, v) -> {
 				assertEquals(k3(), k);
 				assertEquals(INVALID_VALUE, v);
 				return INVALID_VALUE;
