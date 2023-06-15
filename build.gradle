@@ -101,12 +101,12 @@ task generateLimitSource(type: JavaExec) {
 
 task javadocJar(type: Jar) {
     from javadoc
-    classifier = 'javadoc'
+    archiveClassifier = 'javadoc'
 }
 
 task srcJar(type: Jar) {
     from sourceSets.main.allSource
-    classifier = 'sources'
+    archiveClassifier = 'sources'
 }
 
 compileJava.dependsOn generateGithubSource
@@ -262,9 +262,9 @@ test {
 jacocoTestReport {
     executionData fileTree(project.buildDir.absolutePath).include("jacoco/*.exec")
     reports {
-        xml.enabled true
-        html.enabled = true
-        csv.enabled true
+        xml.required = true
+        html.required = true
+        csv.required = true
     }
 }
 
