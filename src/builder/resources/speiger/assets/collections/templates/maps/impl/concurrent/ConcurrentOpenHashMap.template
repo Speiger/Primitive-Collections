@@ -519,17 +519,32 @@ public class CONCURRENT_HASH_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY
 	}
 	
 	@Override
-	public VALUE_TYPE COMPUTENonDefault(KEY_TYPE key, UNARY_OPERATOR KEY_VALUE_GENERIC_TYPE mappingFunction) {
-		Objects.requireNonNull(mappingFunction);
-		int hash = getHashCode(key);
-		return getSegment(hash).computeNonDefault(hash, key, mappingFunction);
-	}
-
-	@Override
 	public VALUE_TYPE COMPUTE_IF_ABSENT(KEY_TYPE key, FUNCTION KEY_VALUE_GENERIC_TYPE mappingFunction) {
 		Objects.requireNonNull(mappingFunction);
 		int hash = getHashCode(key);
 		return getSegment(hash).computeIfAbsent(hash, key, mappingFunction);
+	}
+	
+	@Override
+	public VALUE_TYPE SUPPLY_IF_ABSENT(KEY_TYPE key, VALUE_SUPPLIER VALUE_GENERIC_TYPE valueProvider) {
+		Objects.requireNonNull(valueProvider);
+		int hash = getHashCode(key);
+		return getSegment(hash).supplyIfAbsent(hash, key, valueProvider);
+	}
+	
+	@Override
+	public VALUE_TYPE COMPUTE_IF_PRESENT(KEY_TYPE key, UNARY_OPERATOR KEY_VALUE_GENERIC_TYPE mappingFunction) {
+		Objects.requireNonNull(mappingFunction);
+		int hash = getHashCode(key);
+		return getSegment(hash).computeIfPresent(hash, key, mappingFunction);
+	}
+	
+#if !VALUE_OBJECT
+	@Override
+	public VALUE_TYPE COMPUTENonDefault(KEY_TYPE key, UNARY_OPERATOR KEY_VALUE_GENERIC_TYPE mappingFunction) {
+		Objects.requireNonNull(mappingFunction);
+		int hash = getHashCode(key);
+		return getSegment(hash).computeNonDefault(hash, key, mappingFunction);
 	}
 	
 	@Override
@@ -540,24 +555,10 @@ public class CONCURRENT_HASH_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY
 	}
 
 	@Override
-	public VALUE_TYPE SUPPLY_IF_ABSENT(KEY_TYPE key, VALUE_SUPPLIER VALUE_GENERIC_TYPE valueProvider) {
-		Objects.requireNonNull(valueProvider);
-		int hash = getHashCode(key);
-		return getSegment(hash).supplyIfAbsent(hash, key, valueProvider);
-	}
-	
-	@Override
 	public VALUE_TYPE SUPPLY_IF_ABSENTNonDefault(KEY_TYPE key, VALUE_SUPPLIER VALUE_GENERIC_TYPE valueProvider) {
 		Objects.requireNonNull(valueProvider);
 		int hash = getHashCode(key);
 		return getSegment(hash).supplyIfAbsentNonDefault(hash, key, valueProvider);
-	}
-	
-	@Override
-	public VALUE_TYPE COMPUTE_IF_PRESENT(KEY_TYPE key, UNARY_OPERATOR KEY_VALUE_GENERIC_TYPE mappingFunction) {
-		Objects.requireNonNull(mappingFunction);
-		int hash = getHashCode(key);
-		return getSegment(hash).computeIfPresent(hash, key, mappingFunction);
 	}
 	
 	@Override
@@ -567,6 +568,7 @@ public class CONCURRENT_HASH_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY
 		return getSegment(hash).computeIfPresentNonDefault(hash, key, mappingFunction);
 	}
 	
+#endif
 	@Override
 	public VALUE_TYPE MERGE(KEY_TYPE key, VALUE_TYPE value, VALUE_UNARY_OPERATOR VALUE_VALUE_GENERIC_TYPE mappingFunction) {
 		Objects.requireNonNull(mappingFunction);
@@ -2269,29 +2271,6 @@ public class CONCURRENT_HASH_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY
 			}
 		}
 		
-		protected VALUE_TYPE computeNonDefault(int hash, KEY_TYPE key, UNARY_OPERATOR KEY_VALUE_GENERIC_TYPE mappingFunction) {
-			long stamp = writeLock();
-			try {
-				int index = findIndex(hash, key);
-				if(index < 0) {
-					VALUE_TYPE newValue = mappingFunction.APPLY_VALUE(key, getDefaultReturnValue());
-					if(VALUE_EQUALS(newValue, getDefaultReturnValue())) return newValue;
-					insert(-index-1, key, newValue);
-					return newValue;
-				}
-				VALUE_TYPE newValue = mappingFunction.APPLY_VALUE(key, values[index]);
-				if(VALUE_EQUALS(newValue, getDefaultReturnValue())) {
-					removeIndex(index);
-					return newValue;
-				}
-				values[index] = newValue;
-				return newValue;
-			}
-			finally {
-				unlockWrite(stamp);
-			}
-		}
-		
 		protected VALUE_TYPE computeIfAbsent(int hash, KEY_TYPE key, FUNCTION KEY_VALUE_GENERIC_TYPE mappingFunction) {
 			long stamp = writeLock();
 			try {
@@ -2318,30 +2297,7 @@ public class CONCURRENT_HASH_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY
 				unlockWrite(stamp);
 			}
 		}
-		
-		protected VALUE_TYPE computeIfAbsentNonDefault(int hash, KEY_TYPE key, FUNCTION KEY_VALUE_GENERIC_TYPE mappingFunction) {
-			long stamp = writeLock();
-			try {
-				int index = findIndex(hash, key);
-				if(index < 0) {
-					VALUE_TYPE newValue = mappingFunction.APPLY(key);
-					if(VALUE_EQUALS(newValue, getDefaultReturnValue())) return newValue;
-					insert(-index-1, key, newValue);
-					return newValue;
-				}
-				VALUE_TYPE newValue = values[index];
-				if(VALUE_EQUALS(newValue, getDefaultReturnValue())) {
-					newValue = mappingFunction.APPLY(key);
-					if(VALUE_EQUALS(newValue, getDefaultReturnValue())) return newValue;
-					values[index] = newValue;
-				}
-				return newValue;
-			}
-			finally {
-				unlockWrite(stamp);
-			}
-		}
-		
+				
 		protected VALUE_TYPE supplyIfAbsent(int hash, KEY_TYPE key, VALUE_SUPPLIER VALUE_GENERIC_TYPE valueProvider) {
 			long stamp = writeLock();
 			try {
@@ -2362,6 +2318,76 @@ public class CONCURRENT_HASH_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY
 					values[index] = newValue;
 				}
 #endif
+				return newValue;
+			}
+			finally {
+				unlockWrite(stamp);
+			}
+		}
+				
+		protected VALUE_TYPE computeIfPresent(int hash, KEY_TYPE key, UNARY_OPERATOR KEY_VALUE_GENERIC_TYPE mappingFunction) {
+			long stamp = writeLock();
+			try {
+				int index = findIndex(hash, key);
+#if !VALUE_OBJECT
+				if(index < 0) return getDefaultReturnValue();
+				VALUE_TYPE newValue = mappingFunction.APPLY_VALUE(key, values[index]);
+#else
+				if(index < 0 || VALUE_EQUALS(values[index], getDefaultReturnValue())) return getDefaultReturnValue();
+				VALUE_TYPE newValue = mappingFunction.APPLY_VALUE(key, values[index]);
+				if(VALUE_EQUALS(newValue, getDefaultReturnValue())) {
+					removeIndex(index);
+					return newValue;
+				}
+#endif
+				values[index] = newValue;
+				return newValue;
+			}
+			finally {
+				unlockWrite(stamp);
+			}
+		}
+		
+		protected VALUE_TYPE computeNonDefault(int hash, KEY_TYPE key, UNARY_OPERATOR KEY_VALUE_GENERIC_TYPE mappingFunction) {
+			long stamp = writeLock();
+			try {
+				int index = findIndex(hash, key);
+				if(index < 0) {
+					VALUE_TYPE newValue = mappingFunction.APPLY_VALUE(key, getDefaultReturnValue());
+					if(VALUE_EQUALS(newValue, getDefaultReturnValue())) return newValue;
+					insert(-index-1, key, newValue);
+					return newValue;
+				}
+				VALUE_TYPE newValue = mappingFunction.APPLY_VALUE(key, values[index]);
+				if(VALUE_EQUALS(newValue, getDefaultReturnValue())) {
+					removeIndex(index);
+					return newValue;
+				}
+				values[index] = newValue;
+				return newValue;
+			}
+			finally {
+				unlockWrite(stamp);
+			}
+		}
+		
+#if !VALUE_OBJECT
+		protected VALUE_TYPE computeIfAbsentNonDefault(int hash, KEY_TYPE key, FUNCTION KEY_VALUE_GENERIC_TYPE mappingFunction) {
+			long stamp = writeLock();
+			try {
+				int index = findIndex(hash, key);
+				if(index < 0) {
+					VALUE_TYPE newValue = mappingFunction.APPLY(key);
+					if(VALUE_EQUALS(newValue, getDefaultReturnValue())) return newValue;
+					insert(-index-1, key, newValue);
+					return newValue;
+				}
+				VALUE_TYPE newValue = values[index];
+				if(VALUE_EQUALS(newValue, getDefaultReturnValue())) {
+					newValue = mappingFunction.APPLY(key);
+					if(VALUE_EQUALS(newValue, getDefaultReturnValue())) return newValue;
+					values[index] = newValue;
+				}
 				return newValue;
 			}
 			finally {
@@ -2392,29 +2418,6 @@ public class CONCURRENT_HASH_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY
 			}
 		}
 		
-		protected VALUE_TYPE computeIfPresent(int hash, KEY_TYPE key, UNARY_OPERATOR KEY_VALUE_GENERIC_TYPE mappingFunction) {
-			long stamp = writeLock();
-			try {
-				int index = findIndex(hash, key);
-#if !VALUE_OBJECT
-				if(index < 0) return getDefaultReturnValue();
-				VALUE_TYPE newValue = mappingFunction.APPLY_VALUE(key, values[index]);
-#else
-				if(index < 0 || VALUE_EQUALS(values[index], getDefaultReturnValue())) return getDefaultReturnValue();
-				VALUE_TYPE newValue = mappingFunction.APPLY_VALUE(key, values[index]);
-				if(VALUE_EQUALS(newValue, getDefaultReturnValue())) {
-					removeIndex(index);
-					return newValue;
-				}
-#endif
-				values[index] = newValue;
-				return newValue;
-			}
-			finally {
-				unlockWrite(stamp);
-			}
-		}
-		
 		protected VALUE_TYPE computeIfPresentNonDefault(int hash, KEY_TYPE key, UNARY_OPERATOR KEY_VALUE_GENERIC_TYPE mappingFunction) {
 			long stamp = writeLock();
 			try {
@@ -2433,6 +2436,7 @@ public class CONCURRENT_HASH_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY
 			}
 		}
 		
+#endif		
 		protected VALUE_TYPE merge(int hash, KEY_TYPE key, VALUE_TYPE value, VALUE_UNARY_OPERATOR VALUE_VALUE_GENERIC_TYPE mappingFunction) {
 			long stamp = writeLock();
 			try {

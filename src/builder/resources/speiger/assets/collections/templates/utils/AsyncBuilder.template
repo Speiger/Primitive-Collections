@@ -16,6 +16,16 @@ import java.util.function.IntFunction;
 import java.util.function.BiFunction;
 import java.util.Comparator;
 
+#iterate
+#argument MAPPER Predicate ToByteFunction ToShortFunction ToIntFunction ToLongFunction ToFloatFunction ToDoubleFunction
+#argument BUILDER BooleanAsyncBuilder ByteAsyncBuilder ShortAsyncBuilder IntAsyncBuilder LongAsyncBuilder FloatAsyncBuilder DoubleAsyncBuilder
+#argument PACKAGE booleans bytes shorts ints longs floats doubles
+#argument CHECK BOOLEAN_ASYNC_MODULE BYTE_ASYNC_MODULE SHORT_ASYNC_MODULE INT_ASYNC_MODULE LONG_ASYNC_MODULE FLOAT_ASYNC_MODULE DOUBLE_ASYNC_MODULE
+#if CHECK
+import speiger.src.collections.objects.functions.function.MAPPER;
+import speiger.src.collections.PACKAGE.utils.BUILDER;
+#endif
+#enditerate
 #endif
 import speiger.src.collections.PACKAGE.collections.ITERABLE;
 #if OBJECT_ASYNC_MODULE
@@ -23,7 +33,9 @@ import speiger.src.collections.PACKAGE.collections.COLLECTION;
 #endif
 import speiger.src.collections.PACKAGE.collections.ITERATOR;
 import speiger.src.collections.PACKAGE.functions.TASK;
+#if !TYPE_OBJECT
 import speiger.src.collections.PACKAGE.functions.function.PREDICATE;
+#endif
 #if OBJECT_ASYNC_MODULE
 import speiger.src.collections.PACKAGE.functions.function.TO_OBJECT_FUNCTION;
 #endif
@@ -59,7 +71,9 @@ import speiger.src.collections.PACKAGE.sets.ARRAY_SET;
 #endif
 #endif
 #if !TYPE_BOOLEAN && BOOLEAN_ASYNC_MODULE
+#if !TYPE_OBJECT
 import speiger.src.collections.booleans.utils.BooleanAsyncBuilder;
+#endif
 import speiger.src.collections.booleans.utils.BooleanAsyncBuilder.BaseBooleanTask;
 #endif
 #if !TYPE_OBJECT && OBJECT_ASYNC_MODULE
@@ -67,7 +81,9 @@ import speiger.src.collections.objects.utils.ObjectAsyncBuilder;
 import speiger.src.collections.objects.utils.ObjectAsyncBuilder.BaseObjectTask;
 #endif
 #if !TYPE_INT && INT_ASYNC_MODULE
+#if !TYPE_OBJECT
 import speiger.src.collections.ints.utils.IntAsyncBuilder;
+#endif
 import speiger.src.collections.ints.utils.IntAsyncBuilder.BaseIntTask;
 #endif
 import speiger.src.collections.utils.ISizeProvider;
@@ -187,6 +203,25 @@ public class ASYNC_BUILDER KEY_GENERIC_TYPE
 		return new ObjectAsyncBuilder<>(ITERABLES.arrayFlatMap(iterable, mapper));
 	}
 	
+#endif
+#if TYPE_OBJECT
+#iterate
+#argument BUILDER BooleanAsyncBuilder ByteAsyncBuilder ShortAsyncBuilder IntAsyncBuilder LongAsyncBuilder FloatAsyncBuilder DoubleAsyncBuilder
+#argument MAPPER Predicate ToByteFunction ToShortFunction ToIntFunction ToLongFunction ToFloatFunction ToDoubleFunction
+#argument TYPE Boolean Byte Short Int Long Float Double
+#argument CHECK BOOLEAN_ASYNC_MODULE BYTE_ASYNC_MODULE SHORT_ASYNC_MODULE INT_ASYNC_MODULE LONG_ASYNC_MODULE FLOAT_ASYNC_MODULE DOUBLE_ASYNC_MODULE
+#if CHECK
+	/**
+	 * Maps the elements to something else
+	 * @param mapper the mapping function
+	 * @return a new Builder Object with the mapped Iterable
+	 */
+	public BUILDER mapToTYPE(MAPPER<T> mapper) {
+		return new BUILDER(ITERABLES.mapToTYPE(iterable, mapper));
+	}
+	
+#endif
+#enditerate
 #endif
 	/**
 	 * Filters out the unwanted elements out of the Iterable

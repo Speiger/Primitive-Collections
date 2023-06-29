@@ -19,6 +19,26 @@ import speiger.src.collections.objects.collections.ObjectIterable;
 import speiger.src.collections.objects.collections.ObjectIterator;
 import speiger.src.collections.PACKAGE.functions.CONSUMER;
 import speiger.src.collections.PACKAGE.functions.COMPARATOR;
+#else
+#if BOOLEAN_COLLECTION_MODULE
+import speiger.src.collections.booleans.functions.BooleanConsumer;
+import speiger.src.collections.booleans.collections.BooleanIterable;
+import speiger.src.collections.booleans.collections.BooleanIterator;
+#endif
+#iterate
+#argument FILTER_TYPE BYTE_COLLECTION_MODULE SHORT_COLLECTION_MODULE INT_COLLECTION_MODULE LONG_COLLECTION_MODULE FLOAT_COLLECTION_MODULE DOUBLE_COLLECTION_MODULE
+#argument CONSUMER ByteConsumer ShortConsumer IntConsumer LongConsumer FloatConsumer DoubleConsumer
+#argument OUTPUT_ITERABLE ByteIterable ShortIterable IntIterable LongIterable FloatIterable DoubleIterable
+#argument OUTPUT_ITERATOR ByteIterator ShortIterator IntIterator LongIterator FloatIterator DoubleIterator
+#argument MAPPER ToByteFunction ToShortFunction ToIntFunction ToLongFunction ToFloatFunction ToDoubleFunction
+#argument PACKAGE bytes shorts ints longs floats doubles
+#if FILTER_TYPE
+import speiger.src.collections.PACKAGE.functions.CONSUMER;
+import speiger.src.collections.objects.functions.function.MAPPER;
+import speiger.src.collections.PACKAGE.collections.OUTPUT_ITERABLE;
+import speiger.src.collections.PACKAGE.collections.OUTPUT_ITERATOR;
+#endif
+#enditerate
 #endif
 import speiger.src.collections.PACKAGE.collections.ITERATOR;
 import speiger.src.collections.PACKAGE.functions.function.TO_OBJECT_FUNCTION;
@@ -56,6 +76,39 @@ public class ITERABLES
 		return new MappedIterable<>(iterable, mapper);
 	}
 	
+#if TYPE_OBJECT
+#iterate
+#argument MAPPED_TYPE MappedBoolean MappedByte MappedShort MappedInt MappedLong MappedFloat MappedDouble
+#argument OUTPUT_ITERABLE BooleanIterable ByteIterable ShortIterable IntIterable LongIterable FloatIterable DoubleIterable
+#argument MAPPER Predicate ToByteFunction ToShortFunction ToIntFunction ToLongFunction ToFloatFunction ToDoubleFunction
+#argument DATA_TYPE Boolean Byte Short Int Long Float Double
+#argument FILTER_TYPE BOOLEAN_COLLECTION_MODULE BYTE_COLLECTION_MODULE SHORT_COLLECTION_MODULE INT_COLLECTION_MODULE LONG_COLLECTION_MODULE FLOAT_COLLECTION_MODULE DOUBLE_COLLECTION_MODULE
+#if FILTER_TYPE
+	/**
+	 * A Helper function that maps a Java-Iterable into a new Type.
+	 * @param iterable the iterable that should be mapped
+	 * @param mapper the function that decides what the result turns into.
+	 * @Type(T)
+	 * @return a iterable that is mapped to a new result
+	 */
+	public static <T> OUTPUT_ITERABLE mapToDATA_TYPE(Iterable<? extends CLASS_TYPE> iterable, MAPPER<T> mapper) {
+		return new MAPPED_TYPEIterable<>(wrap(iterable), mapper);
+	}
+	
+	/**
+	 * A Helper function that maps a Iterable into a new Type.
+	 * @param iterable the iterable that should be mapped
+	 * @param mapper the function that decides what the result turns into.
+	 * @Type(T)
+	 * @return a iterable that is mapped to a new result
+	 */
+	public static <T> OUTPUT_ITERABLE mapToDATA_TYPE(ITERABLE KEY_GENERIC_TYPE iterable, MAPPER<T> mapper) {
+		return new MAPPED_TYPEIterable<>(iterable, mapper);
+	}
+	
+#endif
+#enditerate
+#endif
 	/**
 	 * A Helper function that flatMaps a Java-Iterable into a new Type.
 	 * @param iterable the iterable that should be flatMapped
@@ -280,6 +333,44 @@ public class ITERABLES
 #endif
 	}
 	
+#if TYPE_OBJECT
+#iterate
+#argument CONSUMER BooleanConsumer ByteConsumer ShortConsumer IntConsumer LongConsumer FloatConsumer DoubleConsumer
+#argument MAPPED_TYPE MappedBoolean MappedByte MappedShort MappedInt MappedLong MappedFloat MappedDouble
+#argument OUTPUT_ITERABLE BooleanIterable ByteIterable ShortIterable IntIterable LongIterable FloatIterable DoubleIterable
+#argument OUTPUT_ITERATOR BooleanIterator ByteIterator ShortIterator IntIterator LongIterator FloatIterator DoubleIterator
+#argument MAPPER Predicate ToByteFunction ToShortFunction ToIntFunction ToLongFunction ToFloatFunction ToDoubleFunction
+#argument APPLY test applyAsByte applyAsShort applyAsInt applyAsLong applyAsFloat applyAsDouble
+#argument DATA_TYPE Boolean Byte Short Int Long Float Double
+	private static class MAPPED_TYPEIterable<E> implements OUTPUT_ITERABLE, ISizeProvider
+	{
+		ITERABLE KEY_SPECIAL_GENERIC_TYPE<E> iterable;
+		MAPPER<E> mapper;
+		
+		MAPPED_TYPEIterable(ITERABLE<E> iterable, MAPPER<E> mapper) {
+			this.iterable = iterable;
+			this.mapper = mapper;
+		}
+		
+		public OUTPUT_ITERATOR iterator() {
+			return ITERATORS.mapToDATA_TYPE(iterable.iterator(), mapper);
+		}
+		
+		@Override
+		public int size() {
+			ISizeProvider prov = ISizeProvider.of(this);
+			return prov == null ? -1 : prov.size();
+		}
+		
+		@Override
+		public void forEach(CONSUMER action) {
+			Objects.requireNonNull(action);
+			iterable.forEach(E -> action.accept(mapper.APPLY(E)));
+		}
+	}
+	
+#enditerate
+#endif
 	private static class MappedIterable KSS_GENERIC_TYPE<E, T> implements ObjectIterable<T>, ISizeProvider
 	{
 		ITERABLE KEY_SPECIAL_GENERIC_TYPE<E> iterable;

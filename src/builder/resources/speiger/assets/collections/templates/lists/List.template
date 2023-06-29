@@ -24,6 +24,9 @@ import speiger.src.collections.PACKAGE.utils.ARRAYS;
 #if LISTS_FEATURE
 import speiger.src.collections.PACKAGE.utils.LISTS;
 #endif
+#if INT_LIST_MODULE && !TYPE_INT
+import speiger.src.collections.ints.lists.IntList;
+#endif
 import speiger.src.collections.PACKAGE.utils.SPLIT_ITERATORS;
 #if TYPE_BYTE || TYPE_SHORT || TYPE_CHAR || TYPE_FLOAT
 import speiger.src.collections.utils.SanityChecks;
@@ -425,6 +428,26 @@ public interface LIST KEY_GENERIC_TYPE extends COLLECTION KEY_GENERIC_TYPE, List
 	@Override
 	public LIST_ITERATOR KEY_GENERIC_TYPE listIterator(int index);
 	
+	/**
+	 * Creates a Iterator that follows the indecies provided.<br>
+	 * For example if the Lists Contents is:<br> -1, 0 1 <br>and the indecies are: <br>0, 1, 2, 2, 1, 0<br>
+	 * then the iterator will return the following values: <br>-1, 0, 1, 1, 0, -1
+	 * @param indecies that should be used for the iteration.
+	 * @return a custom indexed iterator
+	 */
+	public LIST_ITERATOR KEY_GENERIC_TYPE indexedIterator(int...indecies);
+	
+#if INT_LIST_MODULE
+	/**
+	 * Creates a Iterator that follows the indecies provided.<br>
+	 * For example if the Lists Contents is:<br> -1, 0 1 <br>and the indecies are: <br>0, 1, 2, 2, 1, 0<br>
+	 * then the iterator will return the following values: <br>-1, 0, 1, 1, 0, -1
+	 * @param indecies that should be used for the iteration.
+	 * @return a custom indexed iterator
+	 */
+	public LIST_ITERATOR KEY_GENERIC_TYPE indexedIterator(IntList indecies);
+	
+#endif
 	/**
 	 * A Type-Specific List of subList
 	 * @see java.util.List#subList(int, int)

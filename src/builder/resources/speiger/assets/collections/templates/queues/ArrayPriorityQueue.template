@@ -229,6 +229,13 @@ public class ARRAY_PRIORITY_QUEUE KEY_GENERIC_TYPE extends ABSTRACT_PRIORITY_QUE
 	}
 	
 	@Override
+	public boolean contains(KEY_TYPE e) {
+		for(int i = 0;i<size;i++)
+			if(KEY_EQUALS(e, array[i])) return true;
+		return false;
+	}
+	
+	@Override
 	public boolean removeFirst(KEY_TYPE e) {
 		for(int i = 0;i<size;i++)
 			if(KEY_EQUALS(e, array[i])) return removeIndex(i);

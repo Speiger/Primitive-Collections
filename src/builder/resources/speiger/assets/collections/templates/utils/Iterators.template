@@ -16,6 +16,20 @@ import speiger.src.collections.objects.collections.ObjectIterator;
 import speiger.src.collections.objects.utils.ObjectIterators;
 import speiger.src.collections.PACKAGE.functions.CONSUMER;
 import speiger.src.collections.PACKAGE.functions.COMPARATOR;
+#else
+#if BOOLEAN_COLLECTION_MODULE
+import speiger.src.collections.booleans.collections.BooleanIterator;
+#endif
+#iterate
+#argument ITERATOR ByteIterator ShortIterator IntIterator LongIterator FloatIterator DoubleIterator
+#argument PACKAGE bytes shorts ints longs floats doubles
+#argument MAPPER ToByteFunction ToShortFunction ToIntFunction ToLongFunction ToFloatFunction ToDoubleFunction
+#argument FILTER_TYPE BYTE_COLLECTION_MODULE SHORT_COLLECTION_MODULE INT_COLLECTION_MODULE LONG_COLLECTION_MODULE FLOAT_COLLECTION_MODULE DOUBLE_COLLECTION_MODULE
+#if BOOLEAN_COLLECTION_MODULE
+import speiger.src.collections.objects.functions.function.MAPPER;
+import speiger.src.collections.PACKAGE.collections.ITERATOR;
+#endif
+#enditerate
 #endif
 import speiger.src.collections.PACKAGE.functions.function.TO_OBJECT_FUNCTION;
 import speiger.src.collections.objects.functions.consumer.BI_FROM_OBJECT_CONSUMER;
@@ -109,6 +123,7 @@ public class ITERATORS
 		return iterator instanceof UnmodifiableListIterator ? iterator : new UnmodifiableListIteratorBRACES(iterator);
 	}
 	
+#if OBJECT_COLLECTION_MODULE
 	/**
 	 * A Helper function that maps a Java-Iterator into a new Type.
 	 * @param iterator that should be mapped
@@ -133,6 +148,40 @@ public class ITERATORS
 		return new MappedIterator<>(iterator, mapper);
 	}
 	
+#endif
+#if TYPE_OBJECT
+#iterate
+#argument MAPPED_TYPE MappedBoolean MappedByte MappedShort MappedInt MappedLong MappedFloat MappedDouble
+#argument OUTPUT_ITERATOR BooleanIterator ByteIterator ShortIterator IntIterator LongIterator FloatIterator DoubleIterator
+#argument MAPPER Predicate ToByteFunction ToShortFunction ToIntFunction ToLongFunction ToFloatFunction ToDoubleFunction
+#argument DATA_TYPE Boolean Byte Short Int Long Float Double
+#argument FILTER_TYPE BOOLEAN_COLLECTION_MODULE BYTE_COLLECTION_MODULE SHORT_COLLECTION_MODULE INT_COLLECTION_MODULE LONG_COLLECTION_MODULE FLOAT_COLLECTION_MODULE DOUBLE_COLLECTION_MODULE
+#if FILTER_TYPE
+	/**
+	 * A Helper function that maps a Java-Iterator into a new Type.
+	 * @param iterator that should be mapped
+	 * @param mapper the function that decides what the result turns into.
+	 * @Type(T)
+	 * @return a iterator that is mapped to a new result
+	 */
+	public static <T> OUTPUT_ITERATOR mapToDATA_TYPE(Iterator<? extends CLASS_TYPE> iterator, MAPPER<T> mapper) {
+		return new MAPPED_TYPEIterator<>(wrap(iterator), mapper);
+	}
+	
+	/**
+	 * A Helper function that maps a Iterator into a new Type.
+	 * @param iterator that should be mapped
+	 * @param mapper the function that decides what the result turns into.
+	 * @Type(T)
+	 * @return a iterator that is mapped to a new result
+	 */
+	public static <T> OUTPUT_ITERATOR mapToDATA_TYPE(ITERATOR KEY_GENERIC_TYPE iterator, MAPPER<T> mapper) {
+		return new MAPPED_TYPEIterator<>(iterator, mapper);
+	}
+	
+#endif
+#enditerate
+#endif
 	/**
 	 * A Helper function that flatMaps a Java-Iterator into a new Type.
 	 * @param iterator that should be flatMapped
@@ -868,6 +917,42 @@ public class ITERATORS
 		}
 	}
 	
+#if TYPE_OBJECT
+#iterate
+#argument MAPPED_TYPE MappedBoolean MappedByte MappedShort MappedInt MappedLong MappedFloat MappedDouble
+#argument NEXT_TYPE nextBoolean nextByte nextShort nextInt nextLong nextFloat nextDouble
+#argument OUTPUT_ITERATOR BooleanIterator ByteIterator ShortIterator IntIterator LongIterator FloatIterator DoubleIterator
+#argument MAPPER Predicate ToByteFunction ToShortFunction ToIntFunction ToLongFunction ToFloatFunction ToDoubleFunction
+#argument APPLY test applyAsByte applyAsShort applyAsInt applyAsLong applyAsFloat applyAsDouble
+#argument DATA_TYPE boolean byte short int long float double
+	private static class MAPPED_TYPEIterator<E> implements OUTPUT_ITERATOR
+	{
+		ITERATOR<E> iterator;
+		MAPPER<E> mapper;
+		
+		MAPPED_TYPEIterator(ITERATOR KEY_SPECIAL_GENERIC_TYPE<E> iterator, MAPPER<E> mapper) {
+			this.iterator = iterator;
+			this.mapper = mapper;
+		}
+		
+		@Override
+		public boolean hasNext() {
+			return iterator.hasNext();
+		}
+		
+		@Override
+		public DATA_TYPE NEXT_TYPE() {
+			return mapper.APPLY(iterator.NEXT());
+		}
+		
+		@Override
+		public int skip(int amount) {
+			return iterator.skip(amount);
+		}
+	}
+	
+#enditerate
+#endif
 	private static class FlatMappedIterator KSS_GENERIC_TYPE<E, T,[SPACE]V extends Iterable<T>> implements ObjectIterator<T>
 	{
 		ITERATOR KEY_SPECIAL_GENERIC_TYPE<E> iterator;

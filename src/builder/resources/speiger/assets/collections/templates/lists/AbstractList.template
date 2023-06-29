@@ -12,6 +12,9 @@ import speiger.src.collections.PACKAGE.collections.ABSTRACT_COLLECTION;
 import speiger.src.collections.PACKAGE.collections.COLLECTION;
 import speiger.src.collections.PACKAGE.collections.ITERATOR;
 import speiger.src.collections.PACKAGE.collections.SPLIT_ITERATOR;
+#if INT_LIST_MODULE && !TYPE_INT
+import speiger.src.collections.ints.lists.IntList;
+#endif
 import speiger.src.collections.PACKAGE.utils.SPLIT_ITERATORS;
 import speiger.src.collections.utils.SanityChecks;
 
@@ -236,13 +239,25 @@ public abstract class ABSTRACT_LIST KEY_GENERIC_TYPE extends ABSTRACT_COLLECTION
 	public LIST_ITERATOR KEY_GENERIC_TYPE listIterator() {
 		return listIterator(0);
 	}
-
+		
 	@Override
 	public LIST_ITERATOR KEY_GENERIC_TYPE listIterator(int index) {
 		if(index < 0 || index > size()) throw new IndexOutOfBoundsException();
 		return new LIST_ITER(index);
 	}
 	
+	@Override
+	public LIST_ITERATOR KEY_GENERIC_TYPE indexedIterator(int...indecies) {
+		return new IndexedIterator(indecies);
+	}
+	
+#if INT_LIST_MODULE
+	@Override
+	public LIST_ITERATOR KEY_GENERIC_TYPE indexedIterator(IntList indecies) {
+		return new ListIndexedIterator(indecies);
+	}
+	
+#endif
 	@Override
 	public void size(int size) {
 		while(size > size()) add(EMPTY_KEY_VALUE);
@@ -628,7 +643,155 @@ public abstract class ABSTRACT_LIST KEY_GENERIC_TYPE extends ABSTRACT_COLLECTION
 			}
 		}
 	}
+	
+#if INT_LIST_MODULE
+	private class ListIndexedIterator implements LIST_ITERATOR KEY_GENERIC_TYPE {
+		IntList indecies;
+		int index;
+		int lastReturned = -1;
 		
+		ListIndexedIterator(IntList indecies) {
+			this.indecies = indecies;
+		}
+		
+		@Override
+		public boolean hasNext() {
+			return index < indecies.size();
+		}
+		
+		@Override
+		public KEY_TYPE NEXT() {
+			if(!hasNext()) throw new NoSuchElementException();
+			int i = index++;
+			return GET_KEY((lastReturned = indecies.getInt(i)));
+		}
+		
+		@Override
+		public boolean hasPrevious() {
+			return index > 0;
+		}
+		
+		@Override
+		public KEY_TYPE PREVIOUS() {
+			if(!hasPrevious()) throw new NoSuchElementException();
+			index--;
+			return GET_KEY((lastReturned = indecies.getInt(index)));
+		}
+		
+		@Override
+		public int nextIndex() {
+			return index;
+		}
+		
+		@Override
+		public int previousIndex() {
+			return index-1;
+		}
+		
+		@Override
+		public void remove() { throw new UnsupportedOperationException(); }
+		@Override
+		public void add(KEY_TYPE e) { throw new UnsupportedOperationException(); }
+		
+		@Override
+		public void set(KEY_TYPE e) {
+			if(lastReturned == -1) throw new IllegalStateException();
+			ABSTRACT_LIST.this.set(lastReturned, e);
+		}
+		
+		@Override
+		public int skip(int amount) {
+			if(amount < 0) throw new IllegalStateException("Negative Numbers are not allowed");
+			int steps = Math.min(amount, indecies.size() - index);
+			index += steps;
+			if(steps > 0) lastReturned = Math.min(index-1, indecies.size()-1);
+			return steps;
+		}
+		
+		@Override
+		public int back(int amount) {
+			if(amount < 0) throw new IllegalStateException("Negative Numbers are not allowed");
+			int steps = Math.min(amount, index);
+			index -= steps;
+			if(steps > 0) lastReturned = Math.max(index, 0);
+			return steps;
+		}
+	}
+	
+#endif
+	private class IndexedIterator implements LIST_ITERATOR KEY_GENERIC_TYPE {
+		int[] indecies;
+		int index;
+		int lastReturned = -1;
+		
+		IndexedIterator(int[] indecies) {
+			this.indecies = indecies;
+		}
+		
+		@Override
+		public boolean hasNext() {
+			return index < indecies.length;
+		}
+		
+		@Override
+		public KEY_TYPE NEXT() {
+			if(!hasNext()) throw new NoSuchElementException();
+			int i = index++;
+			return GET_KEY((lastReturned = indecies[i]));
+		}
+		
+		@Override
+		public boolean hasPrevious() {
+			return index > 0;
+		}
+		
+		@Override
+		public KEY_TYPE PREVIOUS() {
+			if(!hasPrevious()) throw new NoSuchElementException();
+			index--;
+			return GET_KEY((lastReturned = indecies[index]));
+		}
+		
+		@Override
+		public int nextIndex() {
+			return index;
+		}
+		
+		@Override
+		public int previousIndex() {
+			return index-1;
+		}
+		
+		@Override
+		public void remove() { throw new UnsupportedOperationException(); }
+		@Override
+		public void add(KEY_TYPE e) { throw new UnsupportedOperationException(); }
+		
+		@Override
+		public void set(KEY_TYPE e) {
+			if(lastReturned == -1) throw new IllegalStateException();
+			ABSTRACT_LIST.this.set(lastReturned, e);
+		}
+		
+		@Override
+		public int skip(int amount) {
+			if(amount < 0) throw new IllegalStateException("Negative Numbers are not allowed");
+			int steps = Math.min(amount, indecies.length - index);
+			index += steps;
+			if(steps > 0) lastReturned = Math.min(index-1, indecies.length-1);
+			return steps;
+		}
+		
+		@Override
+		public int back(int amount) {
+			if(amount < 0) throw new IllegalStateException("Negative Numbers are not allowed");
+			int steps = Math.min(amount, index);
+			index -= steps;
+			if(steps > 0) lastReturned = Math.max(index, 0);
+			return steps;
+		}
+	}
+	
 	private class LIST_ITER implements LIST_ITERATOR KEY_GENERIC_TYPE {
 		int index;
 		int lastReturned = -1;
@@ -706,7 +869,7 @@ public abstract class ABSTRACT_LIST KEY_GENERIC_TYPE extends ABSTRACT_COLLECTION
 			if(amount < 0) throw new IllegalStateException("Negative Numbers are not allowed");
 			int steps = Math.min(amount, index);
 			index -= steps;
-			if(steps > 0) lastReturned = Math.min(index, size()-1);
+			if(steps > 0) lastReturned = Math.max(index, 0);
 			return steps;
 		}
 	}
