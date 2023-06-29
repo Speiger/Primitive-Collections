@@ -12,6 +12,7 @@
 - Added: Iterators/Async Builders now support MapToPrimitiveType function on the object variant. So more processing can be done. (Will be expanded upon later versions)
 - Fixed: SetValue wasn't working on forEach implementations.
 - Fixed: Compute functions now perform with primitives more java compliant. Meaning that getDefaultReturnValue function no longer is seen as null.
+- Fixed: Supplier was using the wrong dataType in their function name.
 - Updated: SimpleCodeGenerator 1.3.0 is now being used which allows for iterative code support.
 
 ### Version 0.8.0

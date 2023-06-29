@@ -53,6 +53,11 @@ import speiger.src.testers.PACKAGE.tests.maps.FILE_KEY_TYPE2FILE_VALUE_TYPEMapCl
 import speiger.src.testers.PACKAGE.tests.maps.FILE_KEY_TYPE2FILE_VALUE_TYPEMapComputeIfAbsentTester;
 import speiger.src.testers.PACKAGE.tests.maps.FILE_KEY_TYPE2FILE_VALUE_TYPEMapComputeIfPresentTester;
 import speiger.src.testers.PACKAGE.tests.maps.FILE_KEY_TYPE2FILE_VALUE_TYPEMapComputeTester;
+#if !VALUE_OBJECT
+import speiger.src.testers.PACKAGE.tests.maps.FILE_KEY_TYPE2FILE_VALUE_TYPEMapComputeIfAbsentNonDefaultTester;
+import speiger.src.testers.PACKAGE.tests.maps.FILE_KEY_TYPE2FILE_VALUE_TYPEMapComputeIfPresentNonDefaultTester;
+import speiger.src.testers.PACKAGE.tests.maps.FILE_KEY_TYPE2FILE_VALUE_TYPEMapComputeNonDefaultTester;
+#endif
 import speiger.src.testers.PACKAGE.tests.maps.FILE_KEY_TYPE2FILE_VALUE_TYPEMapCopyTester;
 import speiger.src.testers.PACKAGE.tests.maps.FILE_KEY_TYPE2FILE_VALUE_TYPEMapContainsTester;
 import speiger.src.testers.PACKAGE.tests.maps.FILE_KEY_TYPE2FILE_VALUE_TYPEMapContainsKeyTester;
@@ -78,6 +83,9 @@ import speiger.src.testers.PACKAGE.tests.maps.FILE_KEY_TYPE2FILE_VALUE_TYPEMapRe
 import speiger.src.testers.PACKAGE.tests.maps.FILE_KEY_TYPE2FILE_VALUE_TYPEMapReplaceTester;
 import speiger.src.testers.PACKAGE.tests.maps.FILE_KEY_TYPE2FILE_VALUE_TYPEMapSizeTester;
 import speiger.src.testers.PACKAGE.tests.maps.FILE_KEY_TYPE2FILE_VALUE_TYPEMapSupplyIfAbsentTester;
+#if !VALUE_OBJECT
+import speiger.src.testers.PACKAGE.tests.maps.FILE_KEY_TYPE2FILE_VALUE_TYPEMapSupplyIfAbsentNonDefaultTester;
+#endif
 import speiger.src.testers.PACKAGE.tests.maps.FILE_KEY_TYPE2FILE_VALUE_TYPEMapToStringTester;
 import speiger.src.testers.objects.builder.ObjectSetTestSuiteBuilder;
 import speiger.src.testers.objects.generators.TestObjectSetGenerator;
@@ -105,6 +113,12 @@ public class MAP_TEST_BUILDER KEY_VALUE_GENERIC_TYPE extends MapTestSuiteBuilder
 	protected List<Class<? extends AbstractTester>> getTesters() {
 		List<Class<? extends AbstractTester>> testers = new ArrayList<>();
 		testers.add(FILE_KEY_TYPE2FILE_VALUE_TYPEMapClearTester.class);
+#if !VALUE_OBJECT
+		testers.add(FILE_KEY_TYPE2FILE_VALUE_TYPEMapComputeNonDefaultTester.class);
+		testers.add(FILE_KEY_TYPE2FILE_VALUE_TYPEMapComputeIfAbsentNonDefaultTester.class);
+		testers.add(FILE_KEY_TYPE2FILE_VALUE_TYPEMapComputeIfPresentNonDefaultTester.class);
+		testers.add(FILE_KEY_TYPE2FILE_VALUE_TYPEMapSupplyIfAbsentNonDefaultTester.class);
+#endif
 		testers.add(FILE_KEY_TYPE2FILE_VALUE_TYPEMapComputeTester.class);
 		testers.add(FILE_KEY_TYPE2FILE_VALUE_TYPEMapComputeIfAbsentTester.class);
 		testers.add(FILE_KEY_TYPE2FILE_VALUE_TYPEMapComputeIfPresentTester.class);
