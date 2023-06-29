@@ -455,6 +455,40 @@ public class Long2IntAVLTreeMap extends AbstractLong2IntMap implements Long2IntN
 	}
 	
 	@Override
+	public int computeIntIfAbsent(long key, Long2IntFunction mappingFunction) {
+		Objects.requireNonNull(mappingFunction);
+		Node entry = findNode(key);
+		if(entry == null) {
+			int newValue = mappingFunction.applyAsInt(key);
+			put(key, newValue);
+			return newValue;
+		}
+		return entry.value;
+	}
+	
+	@Override
+	public int supplyIntIfAbsent(long key, IntSupplier valueProvider) {
+		Objects.requireNonNull(valueProvider);
+		Node entry = findNode(key);
+		if(entry == null) {
+			int newValue = valueProvider.getAsInt();
+			put(key, newValue);
+			return newValue;
+		}
+		return entry.value;
+	}
+	
+	@Override
+	public int computeIntIfPresent(long key, LongIntUnaryOperator mappingFunction) {
+		Objects.requireNonNull(mappingFunction);
+		Node entry = findNode(key);
+		if(entry == null) return getDefaultReturnValue();
+		int newValue = mappingFunction.applyAsInt(key, entry.value);
+		entry.value = newValue;
+		return newValue;
+	}
+	
+	@Override
 	public int computeIntNonDefault(long key, LongIntUnaryOperator mappingFunction) {
 		Objects.requireNonNull(mappingFunction);
 		Node entry = findNode(key);
@@ -471,18 +505,6 @@ public class Long2IntAVLTreeMap extends AbstractLong2IntMap implements Long2IntN
 		}
 		entry.value = newValue;
 		return newValue;
-	}
-	
-	@Override
-	public int computeIntIfAbsent(long key, Long2IntFunction mappingFunction) {
-		Objects.requireNonNull(mappingFunction);
-		Node entry = findNode(key);
-		if(entry == null) {
-			int newValue = mappingFunction.applyAsInt(key);
-			put(key, newValue);
-			return newValue;
-		}
-		return entry.value;
 	}
 	
 	@Override
@@ -504,18 +526,6 @@ public class Long2IntAVLTreeMap extends AbstractLong2IntMap implements Long2IntN
 	}
 	
 	@Override
-	public int supplyIntIfAbsent(long key, IntSupplier valueProvider) {
-		Objects.requireNonNull(valueProvider);
-		Node entry = findNode(key);
-		if(entry == null) {
-			int newValue = valueProvider.getAsInt();
-			put(key, newValue);
-			return newValue;
-		}
-		return entry.value;
-	}
-	
-	@Override
 	public int supplyIntIfAbsentNonDefault(long key, IntSupplier valueProvider) {
 		Objects.requireNonNull(valueProvider);
 		Node entry = findNode(key);
@@ -531,16 +541,6 @@ public class Long2IntAVLTreeMap extends AbstractLong2IntMap implements Long2IntN
 			entry.value = newValue;
 		}
 		return entry.value;
-	}
-	
-	@Override
-	public int computeIntIfPresent(long key, LongIntUnaryOperator mappingFunction) {
-		Objects.requireNonNull(mappingFunction);
-		Node entry = findNode(key);
-		if(entry == null) return getDefaultReturnValue();
-		int newValue = mappingFunction.applyAsInt(key, entry.value);
-		entry.value = newValue;
-		return newValue;
 	}
 	
 	@Override
@@ -1558,14 +1558,9 @@ public class Long2IntAVLTreeMap extends AbstractLong2IntMap implements Long2IntN
 			Objects.requireNonNull(mappingFunction);
 			if(!inRange(key)) return getDefaultReturnValue();
 			Node entry = map.findNode(key);
-			if(entry == null || entry.value == getDefaultReturnValue()) return getDefaultReturnValue();
-			int newValue = mappingFunction.apply(key, entry.value);
-			if(newValue == getDefaultReturnValue()) {
-				map.removeNode(entry);
-				return newValue;
-			}
-			entry.value = newValue;
-			return newValue;
+			if(entry == null) return getDefaultReturnValue();
+			entry.value = mappingFunction.apply(key, entry.value);
+			return entry.value;
 		}
 		
 		@Override

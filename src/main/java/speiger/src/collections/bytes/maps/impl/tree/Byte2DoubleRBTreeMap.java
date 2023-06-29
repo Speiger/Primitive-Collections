@@ -454,6 +454,40 @@ public class Byte2DoubleRBTreeMap extends AbstractByte2DoubleMap implements Byte
 	}
 	
 	@Override
+	public double computeDoubleIfAbsent(byte key, Byte2DoubleFunction mappingFunction) {
+		Objects.requireNonNull(mappingFunction);
+		Node entry = findNode(key);
+		if(entry == null) {
+			double newValue = mappingFunction.applyAsDouble(key);
+			put(key, newValue);
+			return newValue;
+		}
+		return entry.value;
+	}
+	
+	@Override
+	public double supplyDoubleIfAbsent(byte key, DoubleSupplier valueProvider) {
+		Objects.requireNonNull(valueProvider);
+		Node entry = findNode(key);
+		if(entry == null) {
+			double newValue = valueProvider.getAsDouble();
+			put(key, newValue);
+			return newValue;
+		}
+		return entry.value;
+	}
+	
+	@Override
+	public double computeDoubleIfPresent(byte key, ByteDoubleUnaryOperator mappingFunction) {
+		Objects.requireNonNull(mappingFunction);
+		Node entry = findNode(key);
+		if(entry == null) return getDefaultReturnValue();
+		double newValue = mappingFunction.applyAsDouble(key, entry.value);
+		entry.value = newValue;
+		return newValue;
+	}
+	
+	@Override
 	public double computeDoubleNonDefault(byte key, ByteDoubleUnaryOperator mappingFunction) {
 		Objects.requireNonNull(mappingFunction);
 		Node entry = findNode(key);
@@ -470,18 +504,6 @@ public class Byte2DoubleRBTreeMap extends AbstractByte2DoubleMap implements Byte
 		}
 		entry.value = newValue;
 		return newValue;
-	}
-	
-	@Override
-	public double computeDoubleIfAbsent(byte key, Byte2DoubleFunction mappingFunction) {
-		Objects.requireNonNull(mappingFunction);
-		Node entry = findNode(key);
-		if(entry == null) {
-			double newValue = mappingFunction.applyAsDouble(key);
-			put(key, newValue);
-			return newValue;
-		}
-		return entry.value;
 	}
 	
 	@Override
@@ -503,18 +525,6 @@ public class Byte2DoubleRBTreeMap extends AbstractByte2DoubleMap implements Byte
 	}
 	
 	@Override
-	public double supplyDoubleIfAbsent(byte key, DoubleSupplier valueProvider) {
-		Objects.requireNonNull(valueProvider);
-		Node entry = findNode(key);
-		if(entry == null) {
-			double newValue = valueProvider.getAsDouble();
-			put(key, newValue);
-			return newValue;
-		}
-		return entry.value;
-	}
-	
-	@Override
 	public double supplyDoubleIfAbsentNonDefault(byte key, DoubleSupplier valueProvider) {
 		Objects.requireNonNull(valueProvider);
 		Node entry = findNode(key);
@@ -530,16 +540,6 @@ public class Byte2DoubleRBTreeMap extends AbstractByte2DoubleMap implements Byte
 			entry.value = newValue;
 		}
 		return entry.value;
-	}
-	
-	@Override
-	public double computeDoubleIfPresent(byte key, ByteDoubleUnaryOperator mappingFunction) {
-		Objects.requireNonNull(mappingFunction);
-		Node entry = findNode(key);
-		if(entry == null) return getDefaultReturnValue();
-		double newValue = mappingFunction.applyAsDouble(key, entry.value);
-		entry.value = newValue;
-		return newValue;
 	}
 	
 	@Override
@@ -1621,14 +1621,9 @@ public class Byte2DoubleRBTreeMap extends AbstractByte2DoubleMap implements Byte
 			Objects.requireNonNull(mappingFunction);
 			if(!inRange(key)) return getDefaultReturnValue();
 			Node entry = map.findNode(key);
-			if(entry == null || Double.doubleToLongBits(entry.value) == Double.doubleToLongBits(getDefaultReturnValue())) return getDefaultReturnValue();
-			double newValue = mappingFunction.apply(key, entry.value);
-			if(Double.doubleToLongBits(newValue) == Double.doubleToLongBits(getDefaultReturnValue())) {
-				map.removeNode(entry);
-				return newValue;
-			}
-			entry.value = newValue;
-			return newValue;
+			if(entry == null) return getDefaultReturnValue();
+			entry.value = mappingFunction.apply(key, entry.value);
+			return entry.value;
 		}
 		
 		@Override

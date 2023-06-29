@@ -246,17 +246,17 @@ public class Char2BooleanMaps
 		@Override
 		public boolean computeBoolean(char key, CharBooleanUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
 		@Override
-		public boolean computeBooleanNonDefault(char key, CharBooleanUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
-		@Override
 		public boolean computeBooleanIfAbsent(char key, CharPredicate mappingFunction) { throw new UnsupportedOperationException(); }
-		@Override
-		public boolean computeBooleanIfAbsentNonDefault(char key, CharPredicate mappingFunction) { throw new UnsupportedOperationException(); }
 		@Override
 		public boolean computeBooleanIfPresent(char key, CharBooleanUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
 		@Override
-		public boolean computeBooleanIfPresentNonDefault(char key, CharBooleanUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
-		@Override
 		public boolean supplyBooleanIfAbsent(char key, BooleanSupplier valueProvider) { throw new UnsupportedOperationException(); }
+		@Override
+		public boolean computeBooleanNonDefault(char key, CharBooleanUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
+		@Override
+		public boolean computeBooleanIfAbsentNonDefault(char key, CharPredicate mappingFunction) { throw new UnsupportedOperationException(); }
+		@Override
+		public boolean computeBooleanIfPresentNonDefault(char key, CharBooleanUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
 		@Override
 		public boolean supplyBooleanIfAbsentNonDefault(char key, BooleanSupplier valueProvider) { throw new UnsupportedOperationException(); }
 		@Override
@@ -304,17 +304,17 @@ public class Char2BooleanMaps
 		@Override
 		public boolean computeBoolean(char key, CharBooleanUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
 		@Override
-		public boolean computeBooleanNonDefault(char key, CharBooleanUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
-		@Override
 		public boolean computeBooleanIfAbsent(char key, CharPredicate mappingFunction) { throw new UnsupportedOperationException(); }
-		@Override
-		public boolean computeBooleanIfAbsentNonDefault(char key, CharPredicate mappingFunction) { throw new UnsupportedOperationException(); }
 		@Override
 		public boolean computeBooleanIfPresent(char key, CharBooleanUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
 		@Override
-		public boolean computeBooleanIfPresentNonDefault(char key, CharBooleanUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
-		@Override
 		public boolean supplyBooleanIfAbsent(char key, BooleanSupplier valueProvider) { throw new UnsupportedOperationException(); }
+		@Override
+		public boolean computeBooleanNonDefault(char key, CharBooleanUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
+		@Override
+		public boolean computeBooleanIfAbsentNonDefault(char key, CharPredicate mappingFunction) { throw new UnsupportedOperationException(); }
+		@Override
+		public boolean computeBooleanIfPresentNonDefault(char key, CharBooleanUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
 		@Override
 		public boolean supplyBooleanIfAbsentNonDefault(char key, BooleanSupplier valueProvider) { throw new UnsupportedOperationException(); }
 		@Override
@@ -535,17 +535,17 @@ public class Char2BooleanMaps
 		@Override
 		public boolean computeBoolean(char key, CharBooleanUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
 		@Override
-		public boolean computeBooleanNonDefault(char key, CharBooleanUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
-		@Override
 		public boolean computeBooleanIfAbsent(char key, CharPredicate mappingFunction) { throw new UnsupportedOperationException(); }
-		@Override
-		public boolean computeBooleanIfAbsentNonDefault(char key, CharPredicate mappingFunction) { throw new UnsupportedOperationException(); }
 		@Override
 		public boolean computeBooleanIfPresent(char key, CharBooleanUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
 		@Override
-		public boolean computeBooleanIfPresentNonDefault(char key, CharBooleanUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
-		@Override
 		public boolean supplyBooleanIfAbsent(char key, BooleanSupplier valueProvider) { throw new UnsupportedOperationException(); }
+		@Override
+		public boolean computeBooleanNonDefault(char key, CharBooleanUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
+		@Override
+		public boolean computeBooleanIfAbsentNonDefault(char key, CharPredicate mappingFunction) { throw new UnsupportedOperationException(); }
+		@Override
+		public boolean computeBooleanIfPresentNonDefault(char key, CharBooleanUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
 		@Override
 		public boolean supplyBooleanIfAbsentNonDefault(char key, BooleanSupplier valueProvider) { throw new UnsupportedOperationException(); }
 		@Override
@@ -938,17 +938,17 @@ public class Char2BooleanMaps
 		@Override
 		public boolean computeBoolean(char key, CharBooleanUnaryOperator mappingFunction) { synchronized(mutex) { return map.computeBoolean(key, mappingFunction); } }
 		@Override
-		public boolean computeBooleanNonDefault(char key, CharBooleanUnaryOperator mappingFunction) { synchronized(mutex) { return map.computeBooleanNonDefault(key, mappingFunction); } }
-		@Override
 		public boolean computeBooleanIfAbsent(char key, CharPredicate mappingFunction) { synchronized(mutex) { return map.computeBooleanIfAbsent(key, mappingFunction); } }
-		@Override
-		public boolean computeBooleanIfAbsentNonDefault(char key, CharPredicate mappingFunction) { synchronized(mutex) { return map.computeBooleanIfAbsentNonDefault(key, mappingFunction); } }
 		@Override
 		public boolean computeBooleanIfPresent(char key, CharBooleanUnaryOperator mappingFunction) { synchronized(mutex) { return map.computeBooleanIfPresent(key, mappingFunction); } }
 		@Override
-		public boolean computeBooleanIfPresentNonDefault(char key, CharBooleanUnaryOperator mappingFunction) { synchronized(mutex) { return map.computeBooleanIfPresentNonDefault(key, mappingFunction); } }
-		@Override
 		public boolean supplyBooleanIfAbsent(char key, BooleanSupplier valueProvider) { synchronized(mutex) { return map.supplyBooleanIfAbsent(key, valueProvider); } }
+		@Override
+		public boolean computeBooleanNonDefault(char key, CharBooleanUnaryOperator mappingFunction) { synchronized(mutex) { return map.computeBooleanNonDefault(key, mappingFunction); } }
+		@Override
+		public boolean computeBooleanIfAbsentNonDefault(char key, CharPredicate mappingFunction) { synchronized(mutex) { return map.computeBooleanIfAbsentNonDefault(key, mappingFunction); } }
+		@Override
+		public boolean computeBooleanIfPresentNonDefault(char key, CharBooleanUnaryOperator mappingFunction) { synchronized(mutex) { return map.computeBooleanIfPresentNonDefault(key, mappingFunction); } }
 		@Override
 		public boolean supplyBooleanIfAbsentNonDefault(char key, BooleanSupplier valueProvider) { synchronized(mutex) { return map.supplyBooleanIfAbsentNonDefault(key, valueProvider); } }
 		@Override

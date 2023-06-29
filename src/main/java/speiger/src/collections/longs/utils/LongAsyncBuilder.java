@@ -21,12 +21,10 @@ import speiger.src.collections.longs.lists.LongList;
 import speiger.src.collections.longs.lists.LongArrayList;
 import speiger.src.collections.longs.sets.LongSet;
 import speiger.src.collections.longs.sets.LongLinkedOpenHashSet;
-import speiger.src.collections.booleans.utils.BooleanAsyncBuilder;
-import speiger.src.collections.booleans.utils.BooleanAsyncBuilder.BaseBooleanTask;
+import speiger.src.collections.booleans.utils.BooleanAsyncBuilder;import speiger.src.collections.booleans.utils.BooleanAsyncBuilder.BaseBooleanTask;
 import speiger.src.collections.objects.utils.ObjectAsyncBuilder;
 import speiger.src.collections.objects.utils.ObjectAsyncBuilder.BaseObjectTask;
-import speiger.src.collections.ints.utils.IntAsyncBuilder;
-import speiger.src.collections.ints.utils.IntAsyncBuilder.BaseIntTask;
+import speiger.src.collections.ints.utils.IntAsyncBuilder;import speiger.src.collections.ints.utils.IntAsyncBuilder.BaseIntTask;
 import speiger.src.collections.utils.ISizeProvider;
 import speiger.src.collections.utils.SanityChecks;
 

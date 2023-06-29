@@ -441,6 +441,42 @@ public class Long2BooleanOpenCustomHashMap extends AbstractLong2BooleanMap imple
 	}
 	
 	@Override
+	public boolean computeBooleanIfAbsent(long key, LongPredicate mappingFunction) {
+		Objects.requireNonNull(mappingFunction);
+		int index = findIndex(key);
+		if(index < 0) {
+			boolean newValue = mappingFunction.test(key);
+			insert(-index-1, key, newValue);
+			return newValue;
+		}
+		boolean newValue = values[index];
+		return newValue;
+	}
+		
+	@Override
+	public boolean supplyBooleanIfAbsent(long key, BooleanSupplier valueProvider) {
+		Objects.requireNonNull(valueProvider);
+		int index = findIndex(key);
+		if(index < 0) {
+			boolean newValue = valueProvider.getAsBoolean();
+			insert(-index-1, key, newValue);
+			return newValue;
+		}
+		boolean newValue = values[index];
+		return newValue;
+	}
+	
+	@Override
+	public boolean computeBooleanIfPresent(long key, LongBooleanUnaryOperator mappingFunction) {
+		Objects.requireNonNull(mappingFunction);
+		int index = findIndex(key);
+		if(index < 0) return getDefaultReturnValue();
+		boolean newValue = mappingFunction.applyAsBoolean(key, values[index]);
+		values[index] = newValue;
+		return newValue;
+	}
+	
+	@Override
 	public boolean computeBooleanNonDefault(long key, LongBooleanUnaryOperator mappingFunction) {
 		Objects.requireNonNull(mappingFunction);
 		int index = findIndex(key);
@@ -456,19 +492,6 @@ public class Long2BooleanOpenCustomHashMap extends AbstractLong2BooleanMap imple
 			return newValue;
 		}
 		values[index] = newValue;
-		return newValue;
-	}
-	
-	@Override
-	public boolean computeBooleanIfAbsent(long key, LongPredicate mappingFunction) {
-		Objects.requireNonNull(mappingFunction);
-		int index = findIndex(key);
-		if(index < 0) {
-			boolean newValue = mappingFunction.test(key);
-			insert(-index-1, key, newValue);
-			return newValue;
-		}
-		boolean newValue = values[index];
 		return newValue;
 	}
 	
@@ -492,19 +515,6 @@ public class Long2BooleanOpenCustomHashMap extends AbstractLong2BooleanMap imple
 	}
 	
 	@Override
-	public boolean supplyBooleanIfAbsent(long key, BooleanSupplier valueProvider) {
-		Objects.requireNonNull(valueProvider);
-		int index = findIndex(key);
-		if(index < 0) {
-			boolean newValue = valueProvider.getAsBoolean();
-			insert(-index-1, key, newValue);
-			return newValue;
-		}
-		boolean newValue = values[index];
-		return newValue;
-	}
-	
-	@Override
 	public boolean supplyBooleanIfAbsentNonDefault(long key, BooleanSupplier valueProvider) {
 		Objects.requireNonNull(valueProvider);
 		int index = findIndex(key);
@@ -520,16 +530,6 @@ public class Long2BooleanOpenCustomHashMap extends AbstractLong2BooleanMap imple
 			if(newValue == getDefaultReturnValue()) return newValue;
 			values[index] = newValue;
 		}
-		return newValue;
-	}
-	
-	@Override
-	public boolean computeBooleanIfPresent(long key, LongBooleanUnaryOperator mappingFunction) {
-		Objects.requireNonNull(mappingFunction);
-		int index = findIndex(key);
-		if(index < 0) return getDefaultReturnValue();
-		boolean newValue = mappingFunction.applyAsBoolean(key, values[index]);
-		values[index] = newValue;
 		return newValue;
 	}
 	

@@ -209,6 +209,13 @@ public class IntArrayPriorityQueue extends AbstractIntPriorityQueue
 	}
 	
 	@Override
+	public boolean contains(int e) {
+		for(int i = 0;i<size;i++)
+			if(e == array[i]) return true;
+		return false;
+	}
+	
+	@Override
 	public boolean removeFirst(int e) {
 		for(int i = 0;i<size;i++)
 			if(e == array[i]) return removeIndex(i);

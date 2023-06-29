@@ -284,15 +284,6 @@ public interface Short2BooleanMap extends Map<Short, Boolean>, ShortPredicate
 	 */
 	public boolean computeBoolean(short key, ShortBooleanUnaryOperator mappingFunction);
 	/**
-	 * A Type Specific compute method to reduce boxing/unboxing
-	 * If the generated value equals the getDefaultReturnValue it will simply not insert it since that is treated as "null".
-	 * A "Null Value" will be treated as "Do not insert/remove" based on how the Java has specified it.
-	 * @param key the key that should be computed
-	 * @param mappingFunction the operator that should generate the value
-	 * @return the result of the computation
-	 */
-	public boolean computeBooleanNonDefault(short key, ShortBooleanUnaryOperator mappingFunction);
-	/**
 	 * A Type Specific computeIfAbsent method to reduce boxing/unboxing
 	 * If the generated value equals the getDefaultReturnValue it will simply not insert it since that is treated as "null".
 	 * A "Null Value" will be treated as "Do not insert/remove" based on how the Java has specified it.
@@ -301,6 +292,34 @@ public interface Short2BooleanMap extends Map<Short, Boolean>, ShortPredicate
 	 * @return the result of the computed value or present value
 	 */
 	public boolean computeBooleanIfAbsent(short key, ShortPredicate mappingFunction);
+	/**
+	 * A Supplier based computeIfAbsent function to fill the most used usecase of this function
+	 * If the generated value equals the getDefaultReturnValue it will simply not insert it since that is treated as "null".
+	 * A "Null Value" will be treated as "Do not insert/remove" based on how the Java has specified it.
+	 * @param key the key that should be computed
+	 * @param valueProvider the value if not present
+	 * @return the result of the computed value or present value
+	 */	
+	public boolean supplyBooleanIfAbsent(short key, BooleanSupplier valueProvider);
+	/**
+	 * A Type Specific compute method to reduce boxing/unboxing
+	 * If the generated value equals the getDefaultReturnValue it will simply not insert it since that is treated as "null".
+	 * A "Null Value" will be treated as "Do not insert/remove" based on how the Java has specified it.
+	 * @param key the key that should be computed
+	 * @param mappingFunction the operator that should generate the value if present
+	 * @return the result of the default return value or present value
+	 * @note if not present then compute is not executed
+	 */
+	public boolean computeBooleanIfPresent(short key, ShortBooleanUnaryOperator mappingFunction);
+	/**
+	 * A Type Specific compute method to reduce boxing/unboxing
+	 * If the generated value equals the getDefaultReturnValue it will simply not insert it since that is treated as "null".
+	 * A "Null Value" will be treated as "Do not insert/remove" based on how the Java has specified it.
+	 * @param key the key that should be computed
+	 * @param mappingFunction the operator that should generate the value
+	 * @return the result of the computation
+	 */
+	public boolean computeBooleanNonDefault(short key, ShortBooleanUnaryOperator mappingFunction);
 	/**
 	 * A Type Specific computeIfAbsent method to reduce boxing/unboxing
 	 * If the generated value equals the getDefaultReturnValue it will simply not insert it since that is treated as "null".
@@ -318,26 +337,7 @@ public interface Short2BooleanMap extends Map<Short, Boolean>, ShortPredicate
 	 * @param valueProvider the value if not present
 	 * @return the result of the computed value or present value
 	 */	
-	public boolean supplyBooleanIfAbsent(short key, BooleanSupplier valueProvider);
-	/**
-	 * A Supplier based computeIfAbsent function to fill the most used usecase of this function
-	 * If the generated value equals the getDefaultReturnValue it will simply not insert it since that is treated as "null".
-	 * A "Null Value" will be treated as "Do not insert/remove" based on how the Java has specified it.
-	 * @param key the key that should be computed
-	 * @param valueProvider the value if not present
-	 * @return the result of the computed value or present value
-	 */	
 	public boolean supplyBooleanIfAbsentNonDefault(short key, BooleanSupplier valueProvider);
-	/**
-	 * A Type Specific compute method to reduce boxing/unboxing
-	 * If the generated value equals the getDefaultReturnValue it will simply not insert it since that is treated as "null".
-	 * A "Null Value" will be treated as "Do not insert/remove" based on how the Java has specified it.
-	 * @param key the key that should be computed
-	 * @param mappingFunction the operator that should generate the value if present
-	 * @return the result of the default return value or present value
-	 * @note if not present then compute is not executed
-	 */
-	public boolean computeBooleanIfPresent(short key, ShortBooleanUnaryOperator mappingFunction);
 	/**
 	 * A Type Specific compute method to reduce boxing/unboxing
 	 * If the generated value equals the getDefaultReturnValue it will simply not insert it since that is treated as "null".

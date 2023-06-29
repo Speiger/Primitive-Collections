@@ -151,6 +151,39 @@ public abstract class AbstractObject2BooleanMap<T> extends AbstractMap<T, Boolea
 	}
 	
 	@Override
+	public boolean computeBooleanIfAbsent(T key, Predicate<T> mappingFunction) {
+		Objects.requireNonNull(mappingFunction);
+		if(!containsKey(key)) {
+			boolean newValue = mappingFunction.test(key);
+			put(key, newValue);
+			return newValue;
+		}
+		return get(key);
+	}
+	
+	@Override
+	public boolean supplyBooleanIfAbsent(T key, BooleanSupplier valueProvider) {
+		Objects.requireNonNull(valueProvider);
+		if(!containsKey(key)) {
+			boolean newValue = valueProvider.getAsBoolean();
+			put(key, newValue);
+			return newValue;
+		}
+		return get(key);
+	}
+	
+	@Override
+	public boolean computeBooleanIfPresent(T key, ObjectBooleanUnaryOperator<T> mappingFunction) {
+		Objects.requireNonNull(mappingFunction);
+		if(containsKey(key)) {
+			boolean newValue = mappingFunction.applyAsBoolean(key, getBoolean(key));
+			put(key, newValue);
+			return newValue;
+		}
+		return getDefaultReturnValue();
+	}
+	
+	@Override
 	public boolean computeBooleanNonDefault(T key, ObjectBooleanUnaryOperator<T> mappingFunction) {
 		Objects.requireNonNull(mappingFunction);
 		boolean value = getBoolean(key);
@@ -164,17 +197,6 @@ public abstract class AbstractObject2BooleanMap<T> extends AbstractMap<T, Boolea
 		}
 		put(key, newValue);
 		return newValue;
-	}
-	
-	@Override
-	public boolean computeBooleanIfAbsent(T key, Predicate<T> mappingFunction) {
-		Objects.requireNonNull(mappingFunction);
-		if(!containsKey(key)) {
-			boolean newValue = mappingFunction.test(key);
-			put(key, newValue);
-			return newValue;
-		}
-		return get(key);
 	}
 	
 	@Override
@@ -192,17 +214,6 @@ public abstract class AbstractObject2BooleanMap<T> extends AbstractMap<T, Boolea
 	}
 	
 	@Override
-	public boolean supplyBooleanIfAbsent(T key, BooleanSupplier valueProvider) {
-		Objects.requireNonNull(valueProvider);
-		if(!containsKey(key)) {
-			boolean newValue = valueProvider.getAsBoolean();
-			put(key, newValue);
-			return newValue;
-		}
-		return get(key);
-	}
-	
-	@Override
 	public boolean supplyBooleanIfAbsentNonDefault(T key, BooleanSupplier valueProvider) {
 		Objects.requireNonNull(valueProvider);
 		boolean value;
@@ -214,17 +225,6 @@ public abstract class AbstractObject2BooleanMap<T> extends AbstractMap<T, Boolea
 			}
 		}
 		return value;
-	}
-	
-	@Override
-	public boolean computeBooleanIfPresent(T key, ObjectBooleanUnaryOperator<T> mappingFunction) {
-		Objects.requireNonNull(mappingFunction);
-		if(containsKey(key)) {
-			boolean newValue = mappingFunction.applyAsBoolean(key, getBoolean(key));
-			put(key, newValue);
-			return newValue;
-		}
-		return getDefaultReturnValue();
 	}
 	
 	@Override

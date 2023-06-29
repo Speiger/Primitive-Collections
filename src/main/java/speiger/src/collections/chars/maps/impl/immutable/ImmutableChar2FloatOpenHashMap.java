@@ -418,20 +418,19 @@ public class ImmutableChar2FloatOpenHashMap extends AbstractChar2FloatMap implem
 	@Override
 	public float computeFloat(char key, CharFloatUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
 	@Override
-	public float computeFloatNonDefault(char key, CharFloatUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
-	@Override
 	public float computeFloatIfAbsent(char key, Char2FloatFunction mappingFunction) { throw new UnsupportedOperationException(); }
-	@Override
-	public float computeFloatIfAbsentNonDefault(char key, Char2FloatFunction mappingFunction) { throw new UnsupportedOperationException(); }
 	@Override
 	public float supplyFloatIfAbsent(char key, FloatSupplier valueProvider) { throw new UnsupportedOperationException(); }
 	@Override
-	public float supplyFloatIfAbsentNonDefault(char key, FloatSupplier valueProvider) { throw new UnsupportedOperationException(); }
-	@Override
 	public float computeFloatIfPresent(char key, CharFloatUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
 	@Override
+	public float computeFloatNonDefault(char key, CharFloatUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
+	@Override
+	public float computeFloatIfAbsentNonDefault(char key, Char2FloatFunction mappingFunction) { throw new UnsupportedOperationException(); }
+	@Override
+	public float supplyFloatIfAbsentNonDefault(char key, FloatSupplier valueProvider) { throw new UnsupportedOperationException(); }
+	@Override
 	public float computeFloatIfPresentNonDefault(char key, CharFloatUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
-	
 	@Override
 	public float mergeFloat(char key, float value, FloatFloatUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
 	

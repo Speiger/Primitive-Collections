@@ -447,6 +447,43 @@ public class Object2ByteRBTreeMap<T> extends AbstractObject2ByteMap<T> implement
 	}
 	
 	@Override
+	public byte computeByteIfAbsent(T key, ToByteFunction<T> mappingFunction) {
+		Objects.requireNonNull(mappingFunction);
+		validate(key);
+		Node<T> entry = findNode(key);
+		if(entry == null) {
+			byte newValue = mappingFunction.applyAsByte(key);
+			put(key, newValue);
+			return newValue;
+		}
+		return entry.value;
+	}
+	
+	@Override
+	public byte supplyByteIfAbsent(T key, ByteSupplier valueProvider) {
+		Objects.requireNonNull(valueProvider);
+		validate(key);
+		Node<T> entry = findNode(key);
+		if(entry == null) {
+			byte newValue = valueProvider.getAsByte();
+			put(key, newValue);
+			return newValue;
+		}
+		return entry.value;
+	}
+	
+	@Override
+	public byte computeByteIfPresent(T key, ObjectByteUnaryOperator<T> mappingFunction) {
+		Objects.requireNonNull(mappingFunction);
+		validate(key);
+		Node<T> entry = findNode(key);
+		if(entry == null) return getDefaultReturnValue();
+		byte newValue = mappingFunction.applyAsByte(key, entry.value);
+		entry.value = newValue;
+		return newValue;
+	}
+	
+	@Override
 	public byte computeByteNonDefault(T key, ObjectByteUnaryOperator<T> mappingFunction) {
 		Objects.requireNonNull(mappingFunction);
 		validate(key);
@@ -464,19 +501,6 @@ public class Object2ByteRBTreeMap<T> extends AbstractObject2ByteMap<T> implement
 		}
 		entry.value = newValue;
 		return newValue;
-	}
-	
-	@Override
-	public byte computeByteIfAbsent(T key, ToByteFunction<T> mappingFunction) {
-		Objects.requireNonNull(mappingFunction);
-		validate(key);
-		Node<T> entry = findNode(key);
-		if(entry == null) {
-			byte newValue = mappingFunction.applyAsByte(key);
-			put(key, newValue);
-			return newValue;
-		}
-		return entry.value;
 	}
 	
 	@Override
@@ -499,46 +523,22 @@ public class Object2ByteRBTreeMap<T> extends AbstractObject2ByteMap<T> implement
 	}
 	
 	@Override
-	public byte supplyByteIfAbsent(T key, ByteSupplier valueProvider) {
-		Objects.requireNonNull(valueProvider);
-		validate(key);
-		Node<T> entry = findNode(key);
-		if(entry == null) {
-			byte newValue = valueProvider.getAsInt();
-			put(key, newValue);
-			return newValue;
-		}
-		return entry.value;
-	}
-	
-	@Override
 	public byte supplyByteIfAbsentNonDefault(T key, ByteSupplier valueProvider) {
 		Objects.requireNonNull(valueProvider);
 		validate(key);
 		Node<T> entry = findNode(key);
 		if(entry == null) {
-			byte newValue = valueProvider.getAsInt();
+			byte newValue = valueProvider.getAsByte();
 			if(newValue == getDefaultReturnValue()) return newValue;
 			put(key, newValue);
 			return newValue;
 		}
 		if(entry.value == getDefaultReturnValue()) {
-			byte newValue = valueProvider.getAsInt();
+			byte newValue = valueProvider.getAsByte();
 			if(newValue == getDefaultReturnValue()) return newValue;
 			entry.value = newValue;
 		}
 		return entry.value;
-	}
-	
-	@Override
-	public byte computeByteIfPresent(T key, ObjectByteUnaryOperator<T> mappingFunction) {
-		Objects.requireNonNull(mappingFunction);
-		validate(key);
-		Node<T> entry = findNode(key);
-		if(entry == null) return getDefaultReturnValue();
-		byte newValue = mappingFunction.applyAsByte(key, entry.value);
-		entry.value = newValue;
-		return newValue;
 	}
 	
 	@Override
@@ -1584,14 +1584,9 @@ public class Object2ByteRBTreeMap<T> extends AbstractObject2ByteMap<T> implement
 			map.validate(key);
 			if(!inRange(key)) return getDefaultReturnValue();
 			Node<T> entry = map.findNode(key);
-			if(entry == null || entry.value == getDefaultReturnValue()) return getDefaultReturnValue();
-			byte newValue = mappingFunction.apply(key, entry.value);
-			if(newValue == getDefaultReturnValue()) {
-				map.removeNode(entry);
-				return newValue;
-			}
-			entry.value = newValue;
-			return newValue;
+			if(entry == null) return getDefaultReturnValue();
+			entry.value = mappingFunction.apply(key, entry.value);
+			return entry.value;
 		}
 		
 		@Override

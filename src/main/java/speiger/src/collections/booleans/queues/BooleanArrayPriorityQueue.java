@@ -209,6 +209,13 @@ public class BooleanArrayPriorityQueue extends AbstractBooleanPriorityQueue
 	}
 	
 	@Override
+	public boolean contains(boolean e) {
+		for(int i = 0;i<size;i++)
+			if(e == array[i]) return true;
+		return false;
+	}
+	
+	@Override
 	public boolean removeFirst(boolean e) {
 		for(int i = 0;i<size;i++)
 			if(e == array[i]) return removeIndex(i);

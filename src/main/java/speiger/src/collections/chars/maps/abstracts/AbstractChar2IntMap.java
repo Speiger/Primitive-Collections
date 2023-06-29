@@ -158,6 +158,39 @@ public abstract class AbstractChar2IntMap extends AbstractMap<Character, Integer
 	}
 	
 	@Override
+	public int computeIntIfAbsent(char key, Char2IntFunction mappingFunction) {
+		Objects.requireNonNull(mappingFunction);
+		if(!containsKey(key)) {
+			int newValue = mappingFunction.applyAsInt(key);
+			put(key, newValue);
+			return newValue;
+		}
+		return get(key);
+	}
+	
+	@Override
+	public int supplyIntIfAbsent(char key, IntSupplier valueProvider) {
+		Objects.requireNonNull(valueProvider);
+		if(!containsKey(key)) {
+			int newValue = valueProvider.getAsInt();
+			put(key, newValue);
+			return newValue;
+		}
+		return get(key);
+	}
+	
+	@Override
+	public int computeIntIfPresent(char key, CharIntUnaryOperator mappingFunction) {
+		Objects.requireNonNull(mappingFunction);
+		if(containsKey(key)) {
+			int newValue = mappingFunction.applyAsInt(key, get(key));
+			put(key, newValue);
+			return newValue;
+		}
+		return getDefaultReturnValue();
+	}
+	
+	@Override
 	public int computeIntNonDefault(char key, CharIntUnaryOperator mappingFunction) {
 		Objects.requireNonNull(mappingFunction);
 		int value = get(key);
@@ -171,17 +204,6 @@ public abstract class AbstractChar2IntMap extends AbstractMap<Character, Integer
 		}
 		put(key, newValue);
 		return newValue;
-	}
-	
-	@Override
-	public int computeIntIfAbsent(char key, Char2IntFunction mappingFunction) {
-		Objects.requireNonNull(mappingFunction);
-		if(!containsKey(key)) {
-			int newValue = mappingFunction.applyAsInt(key);
-			put(key, newValue);
-			return newValue;
-		}
-		return get(key);
 	}
 	
 	@Override
@@ -199,17 +221,6 @@ public abstract class AbstractChar2IntMap extends AbstractMap<Character, Integer
 	}
 	
 	@Override
-	public int supplyIntIfAbsent(char key, IntSupplier valueProvider) {
-		Objects.requireNonNull(valueProvider);
-		if(!containsKey(key)) {
-			int newValue = valueProvider.getAsInt();
-			put(key, newValue);
-			return newValue;
-		}
-		return get(key);
-	}
-	
-	@Override
 	public int supplyIntIfAbsentNonDefault(char key, IntSupplier valueProvider) {
 		Objects.requireNonNull(valueProvider);
 		int value;
@@ -221,17 +232,6 @@ public abstract class AbstractChar2IntMap extends AbstractMap<Character, Integer
 			}
 		}
 		return value;
-	}
-	
-	@Override
-	public int computeIntIfPresent(char key, CharIntUnaryOperator mappingFunction) {
-		Objects.requireNonNull(mappingFunction);
-		if(containsKey(key)) {
-			int newValue = mappingFunction.applyAsInt(key, get(key));
-			put(key, newValue);
-			return newValue;
-		}
-		return getDefaultReturnValue();
 	}
 	
 	@Override

@@ -11,6 +11,7 @@ import speiger.src.collections.booleans.collections.BooleanCollection;
 import speiger.src.collections.booleans.functions.BooleanConsumer;
 import speiger.src.collections.booleans.lists.AbstractBooleanList;
 import speiger.src.collections.booleans.lists.BooleanList;
+import speiger.src.collections.ints.lists.IntList;
 import speiger.src.collections.booleans.lists.BooleanListIterator;
 import speiger.src.collections.utils.SanityChecks;
 
@@ -314,6 +315,16 @@ public class BooleanLists
 		}
 		
 		@Override
+		public BooleanListIterator indexedIterator(int...indecies) {
+			return l.indexedIterator(indecies);
+		}
+		
+		@Override
+		public BooleanListIterator indexedIterator(IntList indecies) {
+			return l.indexedIterator(indecies);
+		}
+		
+		@Override
 		public BooleanList subList(int from, int to) {
 			return BooleanLists.synchronize(l.subList(from, to));
 		}
@@ -421,6 +432,16 @@ public class BooleanLists
 		}
 		
 		@Override
+		public BooleanListIterator indexedIterator(int...indecies) {
+			return BooleanIterators.unmodifiable(l.indexedIterator(indecies));
+		}
+		
+		@Override
+		public BooleanListIterator indexedIterator(IntList indecies) {
+			return BooleanIterators.unmodifiable(l.indexedIterator(indecies));
+		}
+		
+		@Override
 		public BooleanList subList(int from, int to) {
 			return BooleanLists.unmodifiable(l.subList(from, to));
 		}
@@ -506,6 +527,16 @@ public class BooleanLists
 			if(index != 0)
 				throw new IndexOutOfBoundsException();
 			return BooleanIterators.empty();
+		}
+		
+		@Override
+		public BooleanListIterator indexedIterator(int...indecies) {
+			return BooleanIterators.empty(); 
+		}
+		
+		@Override
+		public BooleanListIterator indexedIterator(IntList indecies) {
+			return BooleanIterators.empty(); 
 		}
 		
 		@Override

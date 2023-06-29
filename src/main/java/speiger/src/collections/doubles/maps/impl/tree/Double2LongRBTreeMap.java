@@ -454,6 +454,40 @@ public class Double2LongRBTreeMap extends AbstractDouble2LongMap implements Doub
 	}
 	
 	@Override
+	public long computeLongIfAbsent(double key, Double2LongFunction mappingFunction) {
+		Objects.requireNonNull(mappingFunction);
+		Node entry = findNode(key);
+		if(entry == null) {
+			long newValue = mappingFunction.applyAsLong(key);
+			put(key, newValue);
+			return newValue;
+		}
+		return entry.value;
+	}
+	
+	@Override
+	public long supplyLongIfAbsent(double key, LongSupplier valueProvider) {
+		Objects.requireNonNull(valueProvider);
+		Node entry = findNode(key);
+		if(entry == null) {
+			long newValue = valueProvider.getAsLong();
+			put(key, newValue);
+			return newValue;
+		}
+		return entry.value;
+	}
+	
+	@Override
+	public long computeLongIfPresent(double key, DoubleLongUnaryOperator mappingFunction) {
+		Objects.requireNonNull(mappingFunction);
+		Node entry = findNode(key);
+		if(entry == null) return getDefaultReturnValue();
+		long newValue = mappingFunction.applyAsLong(key, entry.value);
+		entry.value = newValue;
+		return newValue;
+	}
+	
+	@Override
 	public long computeLongNonDefault(double key, DoubleLongUnaryOperator mappingFunction) {
 		Objects.requireNonNull(mappingFunction);
 		Node entry = findNode(key);
@@ -470,18 +504,6 @@ public class Double2LongRBTreeMap extends AbstractDouble2LongMap implements Doub
 		}
 		entry.value = newValue;
 		return newValue;
-	}
-	
-	@Override
-	public long computeLongIfAbsent(double key, Double2LongFunction mappingFunction) {
-		Objects.requireNonNull(mappingFunction);
-		Node entry = findNode(key);
-		if(entry == null) {
-			long newValue = mappingFunction.applyAsLong(key);
-			put(key, newValue);
-			return newValue;
-		}
-		return entry.value;
 	}
 	
 	@Override
@@ -503,18 +525,6 @@ public class Double2LongRBTreeMap extends AbstractDouble2LongMap implements Doub
 	}
 	
 	@Override
-	public long supplyLongIfAbsent(double key, LongSupplier valueProvider) {
-		Objects.requireNonNull(valueProvider);
-		Node entry = findNode(key);
-		if(entry == null) {
-			long newValue = valueProvider.getAsLong();
-			put(key, newValue);
-			return newValue;
-		}
-		return entry.value;
-	}
-	
-	@Override
 	public long supplyLongIfAbsentNonDefault(double key, LongSupplier valueProvider) {
 		Objects.requireNonNull(valueProvider);
 		Node entry = findNode(key);
@@ -530,16 +540,6 @@ public class Double2LongRBTreeMap extends AbstractDouble2LongMap implements Doub
 			entry.value = newValue;
 		}
 		return entry.value;
-	}
-	
-	@Override
-	public long computeLongIfPresent(double key, DoubleLongUnaryOperator mappingFunction) {
-		Objects.requireNonNull(mappingFunction);
-		Node entry = findNode(key);
-		if(entry == null) return getDefaultReturnValue();
-		long newValue = mappingFunction.applyAsLong(key, entry.value);
-		entry.value = newValue;
-		return newValue;
 	}
 	
 	@Override
@@ -1621,14 +1621,9 @@ public class Double2LongRBTreeMap extends AbstractDouble2LongMap implements Doub
 			Objects.requireNonNull(mappingFunction);
 			if(!inRange(key)) return getDefaultReturnValue();
 			Node entry = map.findNode(key);
-			if(entry == null || entry.value == getDefaultReturnValue()) return getDefaultReturnValue();
-			long newValue = mappingFunction.apply(key, entry.value);
-			if(newValue == getDefaultReturnValue()) {
-				map.removeNode(entry);
-				return newValue;
-			}
-			entry.value = newValue;
-			return newValue;
+			if(entry == null) return getDefaultReturnValue();
+			entry.value = mappingFunction.apply(key, entry.value);
+			return entry.value;
 		}
 		
 		@Override

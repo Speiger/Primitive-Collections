@@ -246,17 +246,17 @@ public class Long2BooleanMaps
 		@Override
 		public boolean computeBoolean(long key, LongBooleanUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
 		@Override
-		public boolean computeBooleanNonDefault(long key, LongBooleanUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
-		@Override
 		public boolean computeBooleanIfAbsent(long key, LongPredicate mappingFunction) { throw new UnsupportedOperationException(); }
-		@Override
-		public boolean computeBooleanIfAbsentNonDefault(long key, LongPredicate mappingFunction) { throw new UnsupportedOperationException(); }
 		@Override
 		public boolean computeBooleanIfPresent(long key, LongBooleanUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
 		@Override
-		public boolean computeBooleanIfPresentNonDefault(long key, LongBooleanUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
-		@Override
 		public boolean supplyBooleanIfAbsent(long key, BooleanSupplier valueProvider) { throw new UnsupportedOperationException(); }
+		@Override
+		public boolean computeBooleanNonDefault(long key, LongBooleanUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
+		@Override
+		public boolean computeBooleanIfAbsentNonDefault(long key, LongPredicate mappingFunction) { throw new UnsupportedOperationException(); }
+		@Override
+		public boolean computeBooleanIfPresentNonDefault(long key, LongBooleanUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
 		@Override
 		public boolean supplyBooleanIfAbsentNonDefault(long key, BooleanSupplier valueProvider) { throw new UnsupportedOperationException(); }
 		@Override
@@ -304,17 +304,17 @@ public class Long2BooleanMaps
 		@Override
 		public boolean computeBoolean(long key, LongBooleanUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
 		@Override
-		public boolean computeBooleanNonDefault(long key, LongBooleanUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
-		@Override
 		public boolean computeBooleanIfAbsent(long key, LongPredicate mappingFunction) { throw new UnsupportedOperationException(); }
-		@Override
-		public boolean computeBooleanIfAbsentNonDefault(long key, LongPredicate mappingFunction) { throw new UnsupportedOperationException(); }
 		@Override
 		public boolean computeBooleanIfPresent(long key, LongBooleanUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
 		@Override
-		public boolean computeBooleanIfPresentNonDefault(long key, LongBooleanUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
-		@Override
 		public boolean supplyBooleanIfAbsent(long key, BooleanSupplier valueProvider) { throw new UnsupportedOperationException(); }
+		@Override
+		public boolean computeBooleanNonDefault(long key, LongBooleanUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
+		@Override
+		public boolean computeBooleanIfAbsentNonDefault(long key, LongPredicate mappingFunction) { throw new UnsupportedOperationException(); }
+		@Override
+		public boolean computeBooleanIfPresentNonDefault(long key, LongBooleanUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
 		@Override
 		public boolean supplyBooleanIfAbsentNonDefault(long key, BooleanSupplier valueProvider) { throw new UnsupportedOperationException(); }
 		@Override
@@ -535,17 +535,17 @@ public class Long2BooleanMaps
 		@Override
 		public boolean computeBoolean(long key, LongBooleanUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
 		@Override
-		public boolean computeBooleanNonDefault(long key, LongBooleanUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
-		@Override
 		public boolean computeBooleanIfAbsent(long key, LongPredicate mappingFunction) { throw new UnsupportedOperationException(); }
-		@Override
-		public boolean computeBooleanIfAbsentNonDefault(long key, LongPredicate mappingFunction) { throw new UnsupportedOperationException(); }
 		@Override
 		public boolean computeBooleanIfPresent(long key, LongBooleanUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
 		@Override
-		public boolean computeBooleanIfPresentNonDefault(long key, LongBooleanUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
-		@Override
 		public boolean supplyBooleanIfAbsent(long key, BooleanSupplier valueProvider) { throw new UnsupportedOperationException(); }
+		@Override
+		public boolean computeBooleanNonDefault(long key, LongBooleanUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
+		@Override
+		public boolean computeBooleanIfAbsentNonDefault(long key, LongPredicate mappingFunction) { throw new UnsupportedOperationException(); }
+		@Override
+		public boolean computeBooleanIfPresentNonDefault(long key, LongBooleanUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
 		@Override
 		public boolean supplyBooleanIfAbsentNonDefault(long key, BooleanSupplier valueProvider) { throw new UnsupportedOperationException(); }
 		@Override
@@ -938,17 +938,17 @@ public class Long2BooleanMaps
 		@Override
 		public boolean computeBoolean(long key, LongBooleanUnaryOperator mappingFunction) { synchronized(mutex) { return map.computeBoolean(key, mappingFunction); } }
 		@Override
-		public boolean computeBooleanNonDefault(long key, LongBooleanUnaryOperator mappingFunction) { synchronized(mutex) { return map.computeBooleanNonDefault(key, mappingFunction); } }
-		@Override
 		public boolean computeBooleanIfAbsent(long key, LongPredicate mappingFunction) { synchronized(mutex) { return map.computeBooleanIfAbsent(key, mappingFunction); } }
-		@Override
-		public boolean computeBooleanIfAbsentNonDefault(long key, LongPredicate mappingFunction) { synchronized(mutex) { return map.computeBooleanIfAbsentNonDefault(key, mappingFunction); } }
 		@Override
 		public boolean computeBooleanIfPresent(long key, LongBooleanUnaryOperator mappingFunction) { synchronized(mutex) { return map.computeBooleanIfPresent(key, mappingFunction); } }
 		@Override
-		public boolean computeBooleanIfPresentNonDefault(long key, LongBooleanUnaryOperator mappingFunction) { synchronized(mutex) { return map.computeBooleanIfPresentNonDefault(key, mappingFunction); } }
-		@Override
 		public boolean supplyBooleanIfAbsent(long key, BooleanSupplier valueProvider) { synchronized(mutex) { return map.supplyBooleanIfAbsent(key, valueProvider); } }
+		@Override
+		public boolean computeBooleanNonDefault(long key, LongBooleanUnaryOperator mappingFunction) { synchronized(mutex) { return map.computeBooleanNonDefault(key, mappingFunction); } }
+		@Override
+		public boolean computeBooleanIfAbsentNonDefault(long key, LongPredicate mappingFunction) { synchronized(mutex) { return map.computeBooleanIfAbsentNonDefault(key, mappingFunction); } }
+		@Override
+		public boolean computeBooleanIfPresentNonDefault(long key, LongBooleanUnaryOperator mappingFunction) { synchronized(mutex) { return map.computeBooleanIfPresentNonDefault(key, mappingFunction); } }
 		@Override
 		public boolean supplyBooleanIfAbsentNonDefault(long key, BooleanSupplier valueProvider) { synchronized(mutex) { return map.supplyBooleanIfAbsentNonDefault(key, valueProvider); } }
 		@Override

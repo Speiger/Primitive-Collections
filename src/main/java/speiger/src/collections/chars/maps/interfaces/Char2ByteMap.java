@@ -309,15 +309,6 @@ public interface Char2ByteMap extends Map<Character, Byte>, Char2ByteFunction
 	 */
 	public byte computeByte(char key, CharByteUnaryOperator mappingFunction);
 	/**
-	 * A Type Specific compute method to reduce boxing/unboxing
-	 * If the generated value equals the getDefaultReturnValue it will simply not insert it since that is treated as "null".
-	 * A "Null Value" will be treated as "Do not insert/remove" based on how the Java has specified it.
-	 * @param key the key that should be computed
-	 * @param mappingFunction the operator that should generate the value
-	 * @return the result of the computation
-	 */
-	public byte computeByteNonDefault(char key, CharByteUnaryOperator mappingFunction);
-	/**
 	 * A Type Specific computeIfAbsent method to reduce boxing/unboxing
 	 * If the generated value equals the getDefaultReturnValue it will simply not insert it since that is treated as "null".
 	 * A "Null Value" will be treated as "Do not insert/remove" based on how the Java has specified it.
@@ -326,6 +317,34 @@ public interface Char2ByteMap extends Map<Character, Byte>, Char2ByteFunction
 	 * @return the result of the computed value or present value
 	 */
 	public byte computeByteIfAbsent(char key, Char2ByteFunction mappingFunction);
+	/**
+	 * A Supplier based computeIfAbsent function to fill the most used usecase of this function
+	 * If the generated value equals the getDefaultReturnValue it will simply not insert it since that is treated as "null".
+	 * A "Null Value" will be treated as "Do not insert/remove" based on how the Java has specified it.
+	 * @param key the key that should be computed
+	 * @param valueProvider the value if not present
+	 * @return the result of the computed value or present value
+	 */	
+	public byte supplyByteIfAbsent(char key, ByteSupplier valueProvider);
+	/**
+	 * A Type Specific compute method to reduce boxing/unboxing
+	 * If the generated value equals the getDefaultReturnValue it will simply not insert it since that is treated as "null".
+	 * A "Null Value" will be treated as "Do not insert/remove" based on how the Java has specified it.
+	 * @param key the key that should be computed
+	 * @param mappingFunction the operator that should generate the value if present
+	 * @return the result of the default return value or present value
+	 * @note if not present then compute is not executed
+	 */
+	public byte computeByteIfPresent(char key, CharByteUnaryOperator mappingFunction);
+	/**
+	 * A Type Specific compute method to reduce boxing/unboxing
+	 * If the generated value equals the getDefaultReturnValue it will simply not insert it since that is treated as "null".
+	 * A "Null Value" will be treated as "Do not insert/remove" based on how the Java has specified it.
+	 * @param key the key that should be computed
+	 * @param mappingFunction the operator that should generate the value
+	 * @return the result of the computation
+	 */
+	public byte computeByteNonDefault(char key, CharByteUnaryOperator mappingFunction);
 	/**
 	 * A Type Specific computeIfAbsent method to reduce boxing/unboxing
 	 * If the generated value equals the getDefaultReturnValue it will simply not insert it since that is treated as "null".
@@ -343,26 +362,7 @@ public interface Char2ByteMap extends Map<Character, Byte>, Char2ByteFunction
 	 * @param valueProvider the value if not present
 	 * @return the result of the computed value or present value
 	 */	
-	public byte supplyByteIfAbsent(char key, ByteSupplier valueProvider);
-	/**
-	 * A Supplier based computeIfAbsent function to fill the most used usecase of this function
-	 * If the generated value equals the getDefaultReturnValue it will simply not insert it since that is treated as "null".
-	 * A "Null Value" will be treated as "Do not insert/remove" based on how the Java has specified it.
-	 * @param key the key that should be computed
-	 * @param valueProvider the value if not present
-	 * @return the result of the computed value or present value
-	 */	
 	public byte supplyByteIfAbsentNonDefault(char key, ByteSupplier valueProvider);
-	/**
-	 * A Type Specific compute method to reduce boxing/unboxing
-	 * If the generated value equals the getDefaultReturnValue it will simply not insert it since that is treated as "null".
-	 * A "Null Value" will be treated as "Do not insert/remove" based on how the Java has specified it.
-	 * @param key the key that should be computed
-	 * @param mappingFunction the operator that should generate the value if present
-	 * @return the result of the default return value or present value
-	 * @note if not present then compute is not executed
-	 */
-	public byte computeByteIfPresent(char key, CharByteUnaryOperator mappingFunction);
 	/**
 	 * A Type Specific compute method to reduce boxing/unboxing
 	 * If the generated value equals the getDefaultReturnValue it will simply not insert it since that is treated as "null".

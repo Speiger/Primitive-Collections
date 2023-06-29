@@ -2,6 +2,7 @@ package speiger.src.collections.ints.utils;
 
 import java.util.Iterator;
 import java.util.NoSuchElementException;
+import java.util.function.Consumer;
 import java.util.function.IntPredicate;
 
 import speiger.src.collections.ints.collections.IntIterator;
@@ -10,12 +11,14 @@ import speiger.src.collections.objects.utils.ObjectIterators;
 import speiger.src.collections.ints.functions.IntConsumer;
 import speiger.src.collections.ints.functions.IntComparator;
 import speiger.src.collections.ints.functions.function.IntFunction;
+import speiger.src.collections.objects.functions.consumer.ObjectIntConsumer;
 import speiger.src.collections.ints.lists.IntList;
 import speiger.src.collections.ints.lists.IntArrayList;
 
 import speiger.src.collections.ints.lists.IntListIterator;
 import speiger.src.collections.ints.collections.IntBidirectionalIterator;
 import speiger.src.collections.ints.collections.IntCollection;
+import speiger.src.collections.ints.utils.IntCollections.CollectionWrapper;
 
 /**
  * A Helper class for Iterators
@@ -204,6 +207,24 @@ public class IntIterators
 	 */
 	public static IntIterator repeat(Iterator<? extends Integer> iterator, int repeats) {
 		return new RepeatingIterator(wrap(iterator), repeats);
+	}
+	
+	/**
+	 * A Helper function that creates a infinitely looping iterator
+	 * @param iterator that should be looping infinitely
+	 * @return a infinitely looping iterator
+	 */
+	public static IntIterator infinite(IntIterator iterator) {
+		return new InfiniteIterator(iterator);
+	}
+	
+	/**
+	 * A Helper function that creates a infinitely looping iterator from a Java Iterator
+	 * @param iterator that should be looping infinitely
+	 * @return a infinitely looping iterator
+	 */
+	public static IntIterator infinite(Iterator<? extends Integer> iterator) {
+		return new InfiniteIterator(wrap(iterator));
 	}
 	
 	/**
@@ -839,6 +860,40 @@ public class IntIterators
 			foundNext = false;
 			return result;
 		}
+	}
+	
+	private static class InfiniteIterator implements IntIterator
+	{
+		IntIterator iter;
+		CollectionWrapper looper = IntCollections.wrapper();
+		int index = 0;
+		
+		public InfiniteIterator(IntIterator iter) {
+			this.iter = iter;
+		}
+		
+		@Override
+		public boolean hasNext() {
+			return true;
+		}
+
+		@Override
+		public int nextInt() {
+			if(iter != null) {
+				if(iter.hasNext()) {
+					int value = iter.nextInt();
+					looper.add(value);
+					return value;
+				}
+				else iter = null;
+			}
+			return looper.getInt((index++) % looper.size());
+		}
+		
+		@Override
+		public void forEachRemaining(IntConsumer action) { throw new UnsupportedOperationException("This is a instant deadlock, so unsupported"); }
+		public void forEachRemaining(Consumer<? super Integer> action) { throw new UnsupportedOperationException("This is a instant deadlock, so unsupported"); }
+		public <E> void forEachRemaining(E input, ObjectIntConsumer<E> action) { throw new UnsupportedOperationException("This is a instant deadlock, so unsupported"); }
 	}
 	
 	private static class RepeatingIterator implements IntIterator

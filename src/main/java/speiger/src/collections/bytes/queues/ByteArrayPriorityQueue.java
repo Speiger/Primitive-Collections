@@ -209,6 +209,13 @@ public class ByteArrayPriorityQueue extends AbstractBytePriorityQueue
 	}
 	
 	@Override
+	public boolean contains(byte e) {
+		for(int i = 0;i<size;i++)
+			if(e == array[i]) return true;
+		return false;
+	}
+	
+	@Override
 	public boolean removeFirst(byte e) {
 		for(int i = 0;i<size;i++)
 			if(e == array[i]) return removeIndex(i);

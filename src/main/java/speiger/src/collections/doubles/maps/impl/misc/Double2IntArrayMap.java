@@ -443,6 +443,42 @@ public class Double2IntArrayMap extends AbstractDouble2IntMap implements Double2
 	}
 	
 	@Override
+	public int computeIntIfAbsent(double key, Double2IntFunction mappingFunction) {
+		Objects.requireNonNull(mappingFunction);
+		int index = findIndex(key);
+		if(index == -1) {
+			int newValue = mappingFunction.applyAsInt(key);
+			insertIndex(size++, key, newValue);
+			return newValue;
+		}
+		int newValue = values[index];
+		return newValue;
+	}
+		
+	@Override
+	public int supplyIntIfAbsent(double key, IntSupplier valueProvider) {
+		Objects.requireNonNull(valueProvider);
+		int index = findIndex(key);
+		if(index == -1) {
+			int newValue = valueProvider.getAsInt();
+			insertIndex(size++, key, newValue);
+			return newValue;
+		}
+		int newValue = values[index];
+		return newValue;
+	}
+		
+	@Override
+	public int computeIntIfPresent(double key, DoubleIntUnaryOperator mappingFunction) {
+		Objects.requireNonNull(mappingFunction);
+		int index = findIndex(key);
+		if(index == -1) return getDefaultReturnValue();
+		int newValue = mappingFunction.applyAsInt(key, values[index]);
+		values[index] = newValue;
+		return newValue;
+	}
+	
+	@Override
 	public int computeIntNonDefault(double key, DoubleIntUnaryOperator mappingFunction) {
 		Objects.requireNonNull(mappingFunction);
 		int index = findIndex(key);
@@ -458,19 +494,6 @@ public class Double2IntArrayMap extends AbstractDouble2IntMap implements Double2
 			return newValue;
 		}
 		values[index] = newValue;
-		return newValue;
-	}
-	
-	@Override
-	public int computeIntIfAbsent(double key, Double2IntFunction mappingFunction) {
-		Objects.requireNonNull(mappingFunction);
-		int index = findIndex(key);
-		if(index == -1) {
-			int newValue = mappingFunction.applyAsInt(key);
-			insertIndex(size++, key, newValue);
-			return newValue;
-		}
-		int newValue = values[index];
 		return newValue;
 	}
 	
@@ -494,19 +517,6 @@ public class Double2IntArrayMap extends AbstractDouble2IntMap implements Double2
 	}
 	
 	@Override
-	public int supplyIntIfAbsent(double key, IntSupplier valueProvider) {
-		Objects.requireNonNull(valueProvider);
-		int index = findIndex(key);
-		if(index == -1) {
-			int newValue = valueProvider.getAsInt();
-			insertIndex(size++, key, newValue);
-			return newValue;
-		}
-		int newValue = values[index];
-		return newValue;
-	}
-	
-	@Override
 	public int supplyIntIfAbsentNonDefault(double key, IntSupplier valueProvider) {
 		Objects.requireNonNull(valueProvider);
 		int index = findIndex(key);
@@ -522,16 +532,6 @@ public class Double2IntArrayMap extends AbstractDouble2IntMap implements Double2
 			if(newValue == getDefaultReturnValue()) return newValue;
 			values[index] = newValue;
 		}
-		return newValue;
-	}
-	
-	@Override
-	public int computeIntIfPresent(double key, DoubleIntUnaryOperator mappingFunction) {
-		Objects.requireNonNull(mappingFunction);
-		int index = findIndex(key);
-		if(index == -1) return getDefaultReturnValue();
-		int newValue = mappingFunction.applyAsInt(key, values[index]);
-		values[index] = newValue;
 		return newValue;
 	}
 	

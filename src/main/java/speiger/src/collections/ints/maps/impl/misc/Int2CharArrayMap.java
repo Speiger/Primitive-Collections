@@ -442,6 +442,42 @@ public class Int2CharArrayMap extends AbstractInt2CharMap implements Int2CharOrd
 	}
 	
 	@Override
+	public char computeCharIfAbsent(int key, Int2CharFunction mappingFunction) {
+		Objects.requireNonNull(mappingFunction);
+		int index = findIndex(key);
+		if(index == -1) {
+			char newValue = mappingFunction.applyAsChar(key);
+			insertIndex(size++, key, newValue);
+			return newValue;
+		}
+		char newValue = values[index];
+		return newValue;
+	}
+		
+	@Override
+	public char supplyCharIfAbsent(int key, CharSupplier valueProvider) {
+		Objects.requireNonNull(valueProvider);
+		int index = findIndex(key);
+		if(index == -1) {
+			char newValue = valueProvider.getAsChar();
+			insertIndex(size++, key, newValue);
+			return newValue;
+		}
+		char newValue = values[index];
+		return newValue;
+	}
+		
+	@Override
+	public char computeCharIfPresent(int key, IntCharUnaryOperator mappingFunction) {
+		Objects.requireNonNull(mappingFunction);
+		int index = findIndex(key);
+		if(index == -1) return getDefaultReturnValue();
+		char newValue = mappingFunction.applyAsChar(key, values[index]);
+		values[index] = newValue;
+		return newValue;
+	}
+	
+	@Override
 	public char computeCharNonDefault(int key, IntCharUnaryOperator mappingFunction) {
 		Objects.requireNonNull(mappingFunction);
 		int index = findIndex(key);
@@ -457,19 +493,6 @@ public class Int2CharArrayMap extends AbstractInt2CharMap implements Int2CharOrd
 			return newValue;
 		}
 		values[index] = newValue;
-		return newValue;
-	}
-	
-	@Override
-	public char computeCharIfAbsent(int key, Int2CharFunction mappingFunction) {
-		Objects.requireNonNull(mappingFunction);
-		int index = findIndex(key);
-		if(index == -1) {
-			char newValue = mappingFunction.applyAsChar(key);
-			insertIndex(size++, key, newValue);
-			return newValue;
-		}
-		char newValue = values[index];
 		return newValue;
 	}
 	
@@ -493,44 +516,21 @@ public class Int2CharArrayMap extends AbstractInt2CharMap implements Int2CharOrd
 	}
 	
 	@Override
-	public char supplyCharIfAbsent(int key, CharSupplier valueProvider) {
-		Objects.requireNonNull(valueProvider);
-		int index = findIndex(key);
-		if(index == -1) {
-			char newValue = valueProvider.getAsInt();
-			insertIndex(size++, key, newValue);
-			return newValue;
-		}
-		char newValue = values[index];
-		return newValue;
-	}
-	
-	@Override
 	public char supplyCharIfAbsentNonDefault(int key, CharSupplier valueProvider) {
 		Objects.requireNonNull(valueProvider);
 		int index = findIndex(key);
 		if(index == -1) {
-			char newValue = valueProvider.getAsInt();
+			char newValue = valueProvider.getAsChar();
 			if(newValue == getDefaultReturnValue()) return newValue;
 			insertIndex(size++, key, newValue);
 			return newValue;
 		}
 		char newValue = values[index];
 		if(newValue == getDefaultReturnValue()) {
-			newValue = valueProvider.getAsInt();
+			newValue = valueProvider.getAsChar();
 			if(newValue == getDefaultReturnValue()) return newValue;
 			values[index] = newValue;
 		}
-		return newValue;
-	}
-	
-	@Override
-	public char computeCharIfPresent(int key, IntCharUnaryOperator mappingFunction) {
-		Objects.requireNonNull(mappingFunction);
-		int index = findIndex(key);
-		if(index == -1) return getDefaultReturnValue();
-		char newValue = mappingFunction.applyAsChar(key, values[index]);
-		values[index] = newValue;
 		return newValue;
 	}
 	

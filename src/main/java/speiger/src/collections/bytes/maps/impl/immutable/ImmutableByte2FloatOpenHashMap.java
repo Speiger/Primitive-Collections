@@ -418,20 +418,19 @@ public class ImmutableByte2FloatOpenHashMap extends AbstractByte2FloatMap implem
 	@Override
 	public float computeFloat(byte key, ByteFloatUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
 	@Override
-	public float computeFloatNonDefault(byte key, ByteFloatUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
-	@Override
 	public float computeFloatIfAbsent(byte key, Byte2FloatFunction mappingFunction) { throw new UnsupportedOperationException(); }
-	@Override
-	public float computeFloatIfAbsentNonDefault(byte key, Byte2FloatFunction mappingFunction) { throw new UnsupportedOperationException(); }
 	@Override
 	public float supplyFloatIfAbsent(byte key, FloatSupplier valueProvider) { throw new UnsupportedOperationException(); }
 	@Override
-	public float supplyFloatIfAbsentNonDefault(byte key, FloatSupplier valueProvider) { throw new UnsupportedOperationException(); }
-	@Override
 	public float computeFloatIfPresent(byte key, ByteFloatUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
 	@Override
+	public float computeFloatNonDefault(byte key, ByteFloatUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
+	@Override
+	public float computeFloatIfAbsentNonDefault(byte key, Byte2FloatFunction mappingFunction) { throw new UnsupportedOperationException(); }
+	@Override
+	public float supplyFloatIfAbsentNonDefault(byte key, FloatSupplier valueProvider) { throw new UnsupportedOperationException(); }
+	@Override
 	public float computeFloatIfPresentNonDefault(byte key, ByteFloatUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
-	
 	@Override
 	public float mergeFloat(byte key, float value, FloatFloatUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
 	

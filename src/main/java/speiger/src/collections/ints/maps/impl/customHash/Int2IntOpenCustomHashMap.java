@@ -454,6 +454,42 @@ public class Int2IntOpenCustomHashMap extends AbstractInt2IntMap implements ITri
 	}
 	
 	@Override
+	public int computeIntIfAbsent(int key, IntUnaryOperator mappingFunction) {
+		Objects.requireNonNull(mappingFunction);
+		int index = findIndex(key);
+		if(index < 0) {
+			int newValue = mappingFunction.applyAsInt(key);
+			insert(-index-1, key, newValue);
+			return newValue;
+		}
+		int newValue = values[index];
+		return newValue;
+	}
+		
+	@Override
+	public int supplyIntIfAbsent(int key, IntSupplier valueProvider) {
+		Objects.requireNonNull(valueProvider);
+		int index = findIndex(key);
+		if(index < 0) {
+			int newValue = valueProvider.getAsInt();
+			insert(-index-1, key, newValue);
+			return newValue;
+		}
+		int newValue = values[index];
+		return newValue;
+	}
+	
+	@Override
+	public int computeIntIfPresent(int key, IntIntUnaryOperator mappingFunction) {
+		Objects.requireNonNull(mappingFunction);
+		int index = findIndex(key);
+		if(index < 0) return getDefaultReturnValue();
+		int newValue = mappingFunction.applyAsInt(key, values[index]);
+		values[index] = newValue;
+		return newValue;
+	}
+	
+	@Override
 	public int computeIntNonDefault(int key, IntIntUnaryOperator mappingFunction) {
 		Objects.requireNonNull(mappingFunction);
 		int index = findIndex(key);
@@ -469,19 +505,6 @@ public class Int2IntOpenCustomHashMap extends AbstractInt2IntMap implements ITri
 			return newValue;
 		}
 		values[index] = newValue;
-		return newValue;
-	}
-	
-	@Override
-	public int computeIntIfAbsent(int key, IntUnaryOperator mappingFunction) {
-		Objects.requireNonNull(mappingFunction);
-		int index = findIndex(key);
-		if(index < 0) {
-			int newValue = mappingFunction.applyAsInt(key);
-			insert(-index-1, key, newValue);
-			return newValue;
-		}
-		int newValue = values[index];
 		return newValue;
 	}
 	
@@ -505,19 +528,6 @@ public class Int2IntOpenCustomHashMap extends AbstractInt2IntMap implements ITri
 	}
 	
 	@Override
-	public int supplyIntIfAbsent(int key, IntSupplier valueProvider) {
-		Objects.requireNonNull(valueProvider);
-		int index = findIndex(key);
-		if(index < 0) {
-			int newValue = valueProvider.getAsInt();
-			insert(-index-1, key, newValue);
-			return newValue;
-		}
-		int newValue = values[index];
-		return newValue;
-	}
-	
-	@Override
 	public int supplyIntIfAbsentNonDefault(int key, IntSupplier valueProvider) {
 		Objects.requireNonNull(valueProvider);
 		int index = findIndex(key);
@@ -533,16 +543,6 @@ public class Int2IntOpenCustomHashMap extends AbstractInt2IntMap implements ITri
 			if(newValue == getDefaultReturnValue()) return newValue;
 			values[index] = newValue;
 		}
-		return newValue;
-	}
-	
-	@Override
-	public int computeIntIfPresent(int key, IntIntUnaryOperator mappingFunction) {
-		Objects.requireNonNull(mappingFunction);
-		int index = findIndex(key);
-		if(index < 0) return getDefaultReturnValue();
-		int newValue = mappingFunction.applyAsInt(key, values[index]);
-		values[index] = newValue;
 		return newValue;
 	}
 	

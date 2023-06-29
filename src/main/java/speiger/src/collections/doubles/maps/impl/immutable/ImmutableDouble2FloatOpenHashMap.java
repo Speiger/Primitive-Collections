@@ -418,20 +418,19 @@ public class ImmutableDouble2FloatOpenHashMap extends AbstractDouble2FloatMap im
 	@Override
 	public float computeFloat(double key, DoubleFloatUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
 	@Override
-	public float computeFloatNonDefault(double key, DoubleFloatUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
-	@Override
 	public float computeFloatIfAbsent(double key, Double2FloatFunction mappingFunction) { throw new UnsupportedOperationException(); }
-	@Override
-	public float computeFloatIfAbsentNonDefault(double key, Double2FloatFunction mappingFunction) { throw new UnsupportedOperationException(); }
 	@Override
 	public float supplyFloatIfAbsent(double key, FloatSupplier valueProvider) { throw new UnsupportedOperationException(); }
 	@Override
-	public float supplyFloatIfAbsentNonDefault(double key, FloatSupplier valueProvider) { throw new UnsupportedOperationException(); }
-	@Override
 	public float computeFloatIfPresent(double key, DoubleFloatUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
 	@Override
+	public float computeFloatNonDefault(double key, DoubleFloatUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
+	@Override
+	public float computeFloatIfAbsentNonDefault(double key, Double2FloatFunction mappingFunction) { throw new UnsupportedOperationException(); }
+	@Override
+	public float supplyFloatIfAbsentNonDefault(double key, FloatSupplier valueProvider) { throw new UnsupportedOperationException(); }
+	@Override
 	public float computeFloatIfPresentNonDefault(double key, DoubleFloatUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
-	
 	@Override
 	public float mergeFloat(double key, float value, FloatFloatUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
 	

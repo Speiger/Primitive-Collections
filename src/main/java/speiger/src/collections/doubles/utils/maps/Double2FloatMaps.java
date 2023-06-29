@@ -250,17 +250,17 @@ public class Double2FloatMaps
 		@Override
 		public float computeFloat(double key, DoubleFloatUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
 		@Override
-		public float computeFloatNonDefault(double key, DoubleFloatUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
-		@Override
 		public float computeFloatIfAbsent(double key, Double2FloatFunction mappingFunction) { throw new UnsupportedOperationException(); }
-		@Override
-		public float computeFloatIfAbsentNonDefault(double key, Double2FloatFunction mappingFunction) { throw new UnsupportedOperationException(); }
 		@Override
 		public float computeFloatIfPresent(double key, DoubleFloatUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
 		@Override
-		public float computeFloatIfPresentNonDefault(double key, DoubleFloatUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
-		@Override
 		public float supplyFloatIfAbsent(double key, FloatSupplier valueProvider) { throw new UnsupportedOperationException(); }
+		@Override
+		public float computeFloatNonDefault(double key, DoubleFloatUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
+		@Override
+		public float computeFloatIfAbsentNonDefault(double key, Double2FloatFunction mappingFunction) { throw new UnsupportedOperationException(); }
+		@Override
+		public float computeFloatIfPresentNonDefault(double key, DoubleFloatUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
 		@Override
 		public float supplyFloatIfAbsentNonDefault(double key, FloatSupplier valueProvider) { throw new UnsupportedOperationException(); }
 		@Override
@@ -312,17 +312,17 @@ public class Double2FloatMaps
 		@Override
 		public float computeFloat(double key, DoubleFloatUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
 		@Override
-		public float computeFloatNonDefault(double key, DoubleFloatUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
-		@Override
 		public float computeFloatIfAbsent(double key, Double2FloatFunction mappingFunction) { throw new UnsupportedOperationException(); }
-		@Override
-		public float computeFloatIfAbsentNonDefault(double key, Double2FloatFunction mappingFunction) { throw new UnsupportedOperationException(); }
 		@Override
 		public float computeFloatIfPresent(double key, DoubleFloatUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
 		@Override
-		public float computeFloatIfPresentNonDefault(double key, DoubleFloatUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
-		@Override
 		public float supplyFloatIfAbsent(double key, FloatSupplier valueProvider) { throw new UnsupportedOperationException(); }
+		@Override
+		public float computeFloatNonDefault(double key, DoubleFloatUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
+		@Override
+		public float computeFloatIfAbsentNonDefault(double key, Double2FloatFunction mappingFunction) { throw new UnsupportedOperationException(); }
+		@Override
+		public float computeFloatIfPresentNonDefault(double key, DoubleFloatUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
 		@Override
 		public float supplyFloatIfAbsentNonDefault(double key, FloatSupplier valueProvider) { throw new UnsupportedOperationException(); }
 		@Override
@@ -547,17 +547,17 @@ public class Double2FloatMaps
 		@Override
 		public float computeFloat(double key, DoubleFloatUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
 		@Override
-		public float computeFloatNonDefault(double key, DoubleFloatUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
-		@Override
 		public float computeFloatIfAbsent(double key, Double2FloatFunction mappingFunction) { throw new UnsupportedOperationException(); }
-		@Override
-		public float computeFloatIfAbsentNonDefault(double key, Double2FloatFunction mappingFunction) { throw new UnsupportedOperationException(); }
 		@Override
 		public float computeFloatIfPresent(double key, DoubleFloatUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
 		@Override
-		public float computeFloatIfPresentNonDefault(double key, DoubleFloatUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
-		@Override
 		public float supplyFloatIfAbsent(double key, FloatSupplier valueProvider) { throw new UnsupportedOperationException(); }
+		@Override
+		public float computeFloatNonDefault(double key, DoubleFloatUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
+		@Override
+		public float computeFloatIfAbsentNonDefault(double key, Double2FloatFunction mappingFunction) { throw new UnsupportedOperationException(); }
+		@Override
+		public float computeFloatIfPresentNonDefault(double key, DoubleFloatUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
 		@Override
 		public float supplyFloatIfAbsentNonDefault(double key, FloatSupplier valueProvider) { throw new UnsupportedOperationException(); }
 		@Override
@@ -955,17 +955,17 @@ public class Double2FloatMaps
 		@Override
 		public float computeFloat(double key, DoubleFloatUnaryOperator mappingFunction) { synchronized(mutex) { return map.computeFloat(key, mappingFunction); } }
 		@Override
-		public float computeFloatNonDefault(double key, DoubleFloatUnaryOperator mappingFunction) { synchronized(mutex) { return map.computeFloatNonDefault(key, mappingFunction); } }
-		@Override
 		public float computeFloatIfAbsent(double key, Double2FloatFunction mappingFunction) { synchronized(mutex) { return map.computeFloatIfAbsent(key, mappingFunction); } }
-		@Override
-		public float computeFloatIfAbsentNonDefault(double key, Double2FloatFunction mappingFunction) { synchronized(mutex) { return map.computeFloatIfAbsentNonDefault(key, mappingFunction); } }
 		@Override
 		public float computeFloatIfPresent(double key, DoubleFloatUnaryOperator mappingFunction) { synchronized(mutex) { return map.computeFloatIfPresent(key, mappingFunction); } }
 		@Override
-		public float computeFloatIfPresentNonDefault(double key, DoubleFloatUnaryOperator mappingFunction) { synchronized(mutex) { return map.computeFloatIfPresentNonDefault(key, mappingFunction); } }
-		@Override
 		public float supplyFloatIfAbsent(double key, FloatSupplier valueProvider) { synchronized(mutex) { return map.supplyFloatIfAbsent(key, valueProvider); } }
+		@Override
+		public float computeFloatNonDefault(double key, DoubleFloatUnaryOperator mappingFunction) { synchronized(mutex) { return map.computeFloatNonDefault(key, mappingFunction); } }
+		@Override
+		public float computeFloatIfAbsentNonDefault(double key, Double2FloatFunction mappingFunction) { synchronized(mutex) { return map.computeFloatIfAbsentNonDefault(key, mappingFunction); } }
+		@Override
+		public float computeFloatIfPresentNonDefault(double key, DoubleFloatUnaryOperator mappingFunction) { synchronized(mutex) { return map.computeFloatIfPresentNonDefault(key, mappingFunction); } }
 		@Override
 		public float supplyFloatIfAbsentNonDefault(double key, FloatSupplier valueProvider) { synchronized(mutex) { return map.supplyFloatIfAbsentNonDefault(key, valueProvider); } }
 		@Override

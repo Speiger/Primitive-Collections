@@ -443,6 +443,42 @@ public class Short2FloatArrayMap extends AbstractShort2FloatMap implements Short
 	}
 	
 	@Override
+	public float computeFloatIfAbsent(short key, Short2FloatFunction mappingFunction) {
+		Objects.requireNonNull(mappingFunction);
+		int index = findIndex(key);
+		if(index == -1) {
+			float newValue = mappingFunction.applyAsFloat(key);
+			insertIndex(size++, key, newValue);
+			return newValue;
+		}
+		float newValue = values[index];
+		return newValue;
+	}
+		
+	@Override
+	public float supplyFloatIfAbsent(short key, FloatSupplier valueProvider) {
+		Objects.requireNonNull(valueProvider);
+		int index = findIndex(key);
+		if(index == -1) {
+			float newValue = valueProvider.getAsFloat();
+			insertIndex(size++, key, newValue);
+			return newValue;
+		}
+		float newValue = values[index];
+		return newValue;
+	}
+		
+	@Override
+	public float computeFloatIfPresent(short key, ShortFloatUnaryOperator mappingFunction) {
+		Objects.requireNonNull(mappingFunction);
+		int index = findIndex(key);
+		if(index == -1) return getDefaultReturnValue();
+		float newValue = mappingFunction.applyAsFloat(key, values[index]);
+		values[index] = newValue;
+		return newValue;
+	}
+	
+	@Override
 	public float computeFloatNonDefault(short key, ShortFloatUnaryOperator mappingFunction) {
 		Objects.requireNonNull(mappingFunction);
 		int index = findIndex(key);
@@ -458,19 +494,6 @@ public class Short2FloatArrayMap extends AbstractShort2FloatMap implements Short
 			return newValue;
 		}
 		values[index] = newValue;
-		return newValue;
-	}
-	
-	@Override
-	public float computeFloatIfAbsent(short key, Short2FloatFunction mappingFunction) {
-		Objects.requireNonNull(mappingFunction);
-		int index = findIndex(key);
-		if(index == -1) {
-			float newValue = mappingFunction.applyAsFloat(key);
-			insertIndex(size++, key, newValue);
-			return newValue;
-		}
-		float newValue = values[index];
 		return newValue;
 	}
 	
@@ -494,44 +517,21 @@ public class Short2FloatArrayMap extends AbstractShort2FloatMap implements Short
 	}
 	
 	@Override
-	public float supplyFloatIfAbsent(short key, FloatSupplier valueProvider) {
-		Objects.requireNonNull(valueProvider);
-		int index = findIndex(key);
-		if(index == -1) {
-			float newValue = valueProvider.getAsDouble();
-			insertIndex(size++, key, newValue);
-			return newValue;
-		}
-		float newValue = values[index];
-		return newValue;
-	}
-	
-	@Override
 	public float supplyFloatIfAbsentNonDefault(short key, FloatSupplier valueProvider) {
 		Objects.requireNonNull(valueProvider);
 		int index = findIndex(key);
 		if(index == -1) {
-			float newValue = valueProvider.getAsDouble();
+			float newValue = valueProvider.getAsFloat();
 			if(Float.floatToIntBits(newValue) == Float.floatToIntBits(getDefaultReturnValue())) return newValue;
 			insertIndex(size++, key, newValue);
 			return newValue;
 		}
 		float newValue = values[index];
 		if(Float.floatToIntBits(newValue) == Float.floatToIntBits(getDefaultReturnValue())) {
-			newValue = valueProvider.getAsDouble();
+			newValue = valueProvider.getAsFloat();
 			if(Float.floatToIntBits(newValue) == Float.floatToIntBits(getDefaultReturnValue())) return newValue;
 			values[index] = newValue;
 		}
-		return newValue;
-	}
-	
-	@Override
-	public float computeFloatIfPresent(short key, ShortFloatUnaryOperator mappingFunction) {
-		Objects.requireNonNull(mappingFunction);
-		int index = findIndex(key);
-		if(index == -1) return getDefaultReturnValue();
-		float newValue = mappingFunction.applyAsFloat(key, values[index]);
-		values[index] = newValue;
 		return newValue;
 	}
 	

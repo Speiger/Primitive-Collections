@@ -418,20 +418,19 @@ public class ImmutableFloat2CharOpenHashMap extends AbstractFloat2CharMap implem
 	@Override
 	public char computeChar(float key, FloatCharUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
 	@Override
-	public char computeCharNonDefault(float key, FloatCharUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
-	@Override
 	public char computeCharIfAbsent(float key, Float2CharFunction mappingFunction) { throw new UnsupportedOperationException(); }
-	@Override
-	public char computeCharIfAbsentNonDefault(float key, Float2CharFunction mappingFunction) { throw new UnsupportedOperationException(); }
 	@Override
 	public char supplyCharIfAbsent(float key, CharSupplier valueProvider) { throw new UnsupportedOperationException(); }
 	@Override
-	public char supplyCharIfAbsentNonDefault(float key, CharSupplier valueProvider) { throw new UnsupportedOperationException(); }
-	@Override
 	public char computeCharIfPresent(float key, FloatCharUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
 	@Override
+	public char computeCharNonDefault(float key, FloatCharUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
+	@Override
+	public char computeCharIfAbsentNonDefault(float key, Float2CharFunction mappingFunction) { throw new UnsupportedOperationException(); }
+	@Override
+	public char supplyCharIfAbsentNonDefault(float key, CharSupplier valueProvider) { throw new UnsupportedOperationException(); }
+	@Override
 	public char computeCharIfPresentNonDefault(float key, FloatCharUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
-	
 	@Override
 	public char mergeChar(float key, char value, CharCharUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
 	

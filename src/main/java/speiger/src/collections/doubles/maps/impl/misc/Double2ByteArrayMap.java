@@ -443,6 +443,42 @@ public class Double2ByteArrayMap extends AbstractDouble2ByteMap implements Doubl
 	}
 	
 	@Override
+	public byte computeByteIfAbsent(double key, Double2ByteFunction mappingFunction) {
+		Objects.requireNonNull(mappingFunction);
+		int index = findIndex(key);
+		if(index == -1) {
+			byte newValue = mappingFunction.applyAsByte(key);
+			insertIndex(size++, key, newValue);
+			return newValue;
+		}
+		byte newValue = values[index];
+		return newValue;
+	}
+		
+	@Override
+	public byte supplyByteIfAbsent(double key, ByteSupplier valueProvider) {
+		Objects.requireNonNull(valueProvider);
+		int index = findIndex(key);
+		if(index == -1) {
+			byte newValue = valueProvider.getAsByte();
+			insertIndex(size++, key, newValue);
+			return newValue;
+		}
+		byte newValue = values[index];
+		return newValue;
+	}
+		
+	@Override
+	public byte computeByteIfPresent(double key, DoubleByteUnaryOperator mappingFunction) {
+		Objects.requireNonNull(mappingFunction);
+		int index = findIndex(key);
+		if(index == -1) return getDefaultReturnValue();
+		byte newValue = mappingFunction.applyAsByte(key, values[index]);
+		values[index] = newValue;
+		return newValue;
+	}
+	
+	@Override
 	public byte computeByteNonDefault(double key, DoubleByteUnaryOperator mappingFunction) {
 		Objects.requireNonNull(mappingFunction);
 		int index = findIndex(key);
@@ -458,19 +494,6 @@ public class Double2ByteArrayMap extends AbstractDouble2ByteMap implements Doubl
 			return newValue;
 		}
 		values[index] = newValue;
-		return newValue;
-	}
-	
-	@Override
-	public byte computeByteIfAbsent(double key, Double2ByteFunction mappingFunction) {
-		Objects.requireNonNull(mappingFunction);
-		int index = findIndex(key);
-		if(index == -1) {
-			byte newValue = mappingFunction.applyAsByte(key);
-			insertIndex(size++, key, newValue);
-			return newValue;
-		}
-		byte newValue = values[index];
 		return newValue;
 	}
 	
@@ -494,44 +517,21 @@ public class Double2ByteArrayMap extends AbstractDouble2ByteMap implements Doubl
 	}
 	
 	@Override
-	public byte supplyByteIfAbsent(double key, ByteSupplier valueProvider) {
-		Objects.requireNonNull(valueProvider);
-		int index = findIndex(key);
-		if(index == -1) {
-			byte newValue = valueProvider.getAsInt();
-			insertIndex(size++, key, newValue);
-			return newValue;
-		}
-		byte newValue = values[index];
-		return newValue;
-	}
-	
-	@Override
 	public byte supplyByteIfAbsentNonDefault(double key, ByteSupplier valueProvider) {
 		Objects.requireNonNull(valueProvider);
 		int index = findIndex(key);
 		if(index == -1) {
-			byte newValue = valueProvider.getAsInt();
+			byte newValue = valueProvider.getAsByte();
 			if(newValue == getDefaultReturnValue()) return newValue;
 			insertIndex(size++, key, newValue);
 			return newValue;
 		}
 		byte newValue = values[index];
 		if(newValue == getDefaultReturnValue()) {
-			newValue = valueProvider.getAsInt();
+			newValue = valueProvider.getAsByte();
 			if(newValue == getDefaultReturnValue()) return newValue;
 			values[index] = newValue;
 		}
-		return newValue;
-	}
-	
-	@Override
-	public byte computeByteIfPresent(double key, DoubleByteUnaryOperator mappingFunction) {
-		Objects.requireNonNull(mappingFunction);
-		int index = findIndex(key);
-		if(index == -1) return getDefaultReturnValue();
-		byte newValue = mappingFunction.applyAsByte(key, values[index]);
-		values[index] = newValue;
 		return newValue;
 	}
 	

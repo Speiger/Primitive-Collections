@@ -89,6 +89,8 @@ public class DoublePriorityQueues
 		@Override
 		public double peek(int index) { synchronized(mutex) { return queue.peek(index); } }
 		@Override
+		public boolean contains(double e) { synchronized(mutex) { return queue.contains(e); } }
+		@Override
 		public boolean removeFirst(double e) { synchronized(mutex) { return queue.removeFirst(e); } }
 		@Override
 		public boolean removeLast(double e) { synchronized(mutex) { return queue.removeLast(e); } }

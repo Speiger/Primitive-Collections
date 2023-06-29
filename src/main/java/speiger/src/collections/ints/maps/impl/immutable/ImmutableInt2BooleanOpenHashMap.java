@@ -412,20 +412,19 @@ public class ImmutableInt2BooleanOpenHashMap extends AbstractInt2BooleanMap impl
 	@Override
 	public boolean computeBoolean(int key, IntBooleanUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
 	@Override
-	public boolean computeBooleanNonDefault(int key, IntBooleanUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
-	@Override
 	public boolean computeBooleanIfAbsent(int key, IntPredicate mappingFunction) { throw new UnsupportedOperationException(); }
-	@Override
-	public boolean computeBooleanIfAbsentNonDefault(int key, IntPredicate mappingFunction) { throw new UnsupportedOperationException(); }
 	@Override
 	public boolean supplyBooleanIfAbsent(int key, BooleanSupplier valueProvider) { throw new UnsupportedOperationException(); }
 	@Override
-	public boolean supplyBooleanIfAbsentNonDefault(int key, BooleanSupplier valueProvider) { throw new UnsupportedOperationException(); }
-	@Override
 	public boolean computeBooleanIfPresent(int key, IntBooleanUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
 	@Override
+	public boolean computeBooleanNonDefault(int key, IntBooleanUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
+	@Override
+	public boolean computeBooleanIfAbsentNonDefault(int key, IntPredicate mappingFunction) { throw new UnsupportedOperationException(); }
+	@Override
+	public boolean supplyBooleanIfAbsentNonDefault(int key, BooleanSupplier valueProvider) { throw new UnsupportedOperationException(); }
+	@Override
 	public boolean computeBooleanIfPresentNonDefault(int key, IntBooleanUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
-	
 	@Override
 	public boolean mergeBoolean(int key, boolean value, BooleanBooleanUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
 	

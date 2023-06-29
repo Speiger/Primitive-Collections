@@ -147,6 +147,15 @@ public class BooleanArrayFIFOQueue extends AbstractBooleanPriorityQueue implemen
 	}
 	
 	@Override
+	public boolean contains(boolean e) {
+		if(first == last) return false;
+		for(int i = 0,m=size();i<m;i++) {
+			if(e == array[(first + i) % array.length]) return true;
+		}
+		return false;
+	}
+	
+	@Override
 	public boolean removeFirst(boolean e) {
 		if(first == last) return false;
 		for(int i = 0,m=size();i<m;i++) {

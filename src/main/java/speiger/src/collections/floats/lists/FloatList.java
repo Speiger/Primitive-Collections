@@ -14,6 +14,7 @@ import speiger.src.collections.ints.functions.consumer.IntFloatConsumer;
 import speiger.src.collections.floats.functions.FloatComparator;
 import speiger.src.collections.floats.utils.FloatArrays;
 import speiger.src.collections.floats.utils.FloatLists;
+import speiger.src.collections.ints.lists.IntList;
 import speiger.src.collections.floats.utils.FloatSplititerators;
 import speiger.src.collections.utils.SanityChecks;
 
@@ -341,6 +342,24 @@ public interface FloatList extends FloatCollection, List<Float>
 	 */
 	@Override
 	public FloatListIterator listIterator(int index);
+	
+	/**
+	 * Creates a Iterator that follows the indecies provided.<br>
+	 * For example if the Lists Contents is:<br> -1, 0 1 <br>and the indecies are: <br>0, 1, 2, 2, 1, 0<br>
+	 * then the iterator will return the following values: <br>-1, 0, 1, 1, 0, -1
+	 * @param indecies that should be used for the iteration.
+	 * @return a custom indexed iterator
+	 */
+	public FloatListIterator indexedIterator(int...indecies);
+	
+	/**
+	 * Creates a Iterator that follows the indecies provided.<br>
+	 * For example if the Lists Contents is:<br> -1, 0 1 <br>and the indecies are: <br>0, 1, 2, 2, 1, 0<br>
+	 * then the iterator will return the following values: <br>-1, 0, 1, 1, 0, -1
+	 * @param indecies that should be used for the iteration.
+	 * @return a custom indexed iterator
+	 */
+	public FloatListIterator indexedIterator(IntList indecies);
 	
 	/**
 	 * A Type-Specific List of subList

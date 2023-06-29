@@ -440,17 +440,31 @@ public class Object2ShortConcurrentOpenHashMap<T> extends AbstractObject2ShortMa
 	}
 	
 	@Override
-	public short computeShortNonDefault(T key, ObjectShortUnaryOperator<T> mappingFunction) {
-		Objects.requireNonNull(mappingFunction);
-		int hash = getHashCode(key);
-		return getSegment(hash).computeNonDefault(hash, key, mappingFunction);
-	}
-
-	@Override
 	public short computeShortIfAbsent(T key, ToShortFunction<T> mappingFunction) {
 		Objects.requireNonNull(mappingFunction);
 		int hash = getHashCode(key);
 		return getSegment(hash).computeIfAbsent(hash, key, mappingFunction);
+	}
+	
+	@Override
+	public short supplyShortIfAbsent(T key, ShortSupplier valueProvider) {
+		Objects.requireNonNull(valueProvider);
+		int hash = getHashCode(key);
+		return getSegment(hash).supplyIfAbsent(hash, key, valueProvider);
+	}
+	
+	@Override
+	public short computeShortIfPresent(T key, ObjectShortUnaryOperator<T> mappingFunction) {
+		Objects.requireNonNull(mappingFunction);
+		int hash = getHashCode(key);
+		return getSegment(hash).computeIfPresent(hash, key, mappingFunction);
+	}
+	
+	@Override
+	public short computeShortNonDefault(T key, ObjectShortUnaryOperator<T> mappingFunction) {
+		Objects.requireNonNull(mappingFunction);
+		int hash = getHashCode(key);
+		return getSegment(hash).computeNonDefault(hash, key, mappingFunction);
 	}
 	
 	@Override
@@ -461,24 +475,10 @@ public class Object2ShortConcurrentOpenHashMap<T> extends AbstractObject2ShortMa
 	}
 
 	@Override
-	public short supplyShortIfAbsent(T key, ShortSupplier valueProvider) {
-		Objects.requireNonNull(valueProvider);
-		int hash = getHashCode(key);
-		return getSegment(hash).supplyIfAbsent(hash, key, valueProvider);
-	}
-	
-	@Override
 	public short supplyShortIfAbsentNonDefault(T key, ShortSupplier valueProvider) {
 		Objects.requireNonNull(valueProvider);
 		int hash = getHashCode(key);
 		return getSegment(hash).supplyIfAbsentNonDefault(hash, key, valueProvider);
-	}
-	
-	@Override
-	public short computeShortIfPresent(T key, ObjectShortUnaryOperator<T> mappingFunction) {
-		Objects.requireNonNull(mappingFunction);
-		int hash = getHashCode(key);
-		return getSegment(hash).computeIfPresent(hash, key, mappingFunction);
 	}
 	
 	@Override
@@ -2028,6 +2028,54 @@ public class Object2ShortConcurrentOpenHashMap<T> extends AbstractObject2ShortMa
 			}
 		}
 		
+		protected short computeIfAbsent(int hash, T key, ToShortFunction<T> mappingFunction) {
+			long stamp = writeLock();
+			try {
+				int index = findIndex(hash, key);
+				if(index < 0) {
+					short newValue = mappingFunction.applyAsShort(key);
+					insert(-index-1, key, newValue);
+					return newValue;
+				}
+				short newValue = values[index];
+				return newValue;
+			}
+			finally {
+				unlockWrite(stamp);
+			}
+		}
+				
+		protected short supplyIfAbsent(int hash, T key, ShortSupplier valueProvider) {
+			long stamp = writeLock();
+			try {
+				int index = findIndex(hash, key);
+				if(index < 0) {
+					short newValue = valueProvider.getAsShort();
+					insert(-index-1, key, newValue);
+					return newValue;
+				}
+				short newValue = values[index];
+				return newValue;
+			}
+			finally {
+				unlockWrite(stamp);
+			}
+		}
+				
+		protected short computeIfPresent(int hash, T key, ObjectShortUnaryOperator<T> mappingFunction) {
+			long stamp = writeLock();
+			try {
+				int index = findIndex(hash, key);
+				if(index < 0) return getDefaultReturnValue();
+				short newValue = mappingFunction.applyAsShort(key, values[index]);
+				values[index] = newValue;
+				return newValue;
+			}
+			finally {
+				unlockWrite(stamp);
+			}
+		}
+		
 		protected short computeNonDefault(int hash, T key, ObjectShortUnaryOperator<T> mappingFunction) {
 			long stamp = writeLock();
 			try {
@@ -2044,23 +2092,6 @@ public class Object2ShortConcurrentOpenHashMap<T> extends AbstractObject2ShortMa
 					return newValue;
 				}
 				values[index] = newValue;
-				return newValue;
-			}
-			finally {
-				unlockWrite(stamp);
-			}
-		}
-		
-		protected short computeIfAbsent(int hash, T key, ToShortFunction<T> mappingFunction) {
-			long stamp = writeLock();
-			try {
-				int index = findIndex(hash, key);
-				if(index < 0) {
-					short newValue = mappingFunction.applyAsShort(key);
-					insert(-index-1, key, newValue);
-					return newValue;
-				}
-				short newValue = values[index];
 				return newValue;
 			}
 			finally {
@@ -2091,53 +2122,22 @@ public class Object2ShortConcurrentOpenHashMap<T> extends AbstractObject2ShortMa
 			}
 		}
 		
-		protected short supplyIfAbsent(int hash, T key, ShortSupplier valueProvider) {
-			long stamp = writeLock();
-			try {
-				int index = findIndex(hash, key);
-				if(index < 0) {
-					short newValue = valueProvider.getAsInt();
-					insert(-index-1, key, newValue);
-					return newValue;
-				}
-				short newValue = values[index];
-				return newValue;
-			}
-			finally {
-				unlockWrite(stamp);
-			}
-		}
-		
 		protected short supplyIfAbsentNonDefault(int hash, T key, ShortSupplier valueProvider) {
 			long stamp = writeLock();
 			try {
 				int index = findIndex(hash, key);
 				if(index < 0) {
-					short newValue = valueProvider.getAsInt();
+					short newValue = valueProvider.getAsShort();
 					if(newValue == getDefaultReturnValue()) return newValue;
 					insert(-index-1, key, newValue);
 					return newValue;
 				}
 				short newValue = values[index];
 				if(newValue == getDefaultReturnValue()) {
-					newValue = valueProvider.getAsInt();
+					newValue = valueProvider.getAsShort();
 					if(newValue == getDefaultReturnValue()) return newValue;
 					values[index] = newValue;
 				}
-				return newValue;
-			}
-			finally {
-				unlockWrite(stamp);
-			}
-		}
-		
-		protected short computeIfPresent(int hash, T key, ObjectShortUnaryOperator<T> mappingFunction) {
-			long stamp = writeLock();
-			try {
-				int index = findIndex(hash, key);
-				if(index < 0) return getDefaultReturnValue();
-				short newValue = mappingFunction.applyAsShort(key, values[index]);
-				values[index] = newValue;
 				return newValue;
 			}
 			finally {

@@ -214,6 +214,13 @@ public class FloatHeapPriorityQueue extends AbstractFloatPriorityQueue
 	}
 	
 	@Override
+	public boolean contains(float e) {
+		for(int i = 0;i<size;i++)
+			if(Float.floatToIntBits(e) == Float.floatToIntBits(array[i])) return true;
+		return false;
+	}
+	
+	@Override
 	public boolean removeFirst(float e) {
 		for(int i = 0;i<size;i++)
 			if(Float.floatToIntBits(e) == Float.floatToIntBits(array[i])) return removeIndex(i);

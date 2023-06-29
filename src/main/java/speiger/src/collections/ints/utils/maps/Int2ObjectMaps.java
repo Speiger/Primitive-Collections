@@ -266,19 +266,11 @@ public class Int2ObjectMaps
 		@Override
 		public V compute(int key, IntObjectUnaryOperator<V> mappingFunction) { throw new UnsupportedOperationException(); }
 		@Override
-		public V computeNonDefault(int key, IntObjectUnaryOperator<V> mappingFunction) { throw new UnsupportedOperationException(); }
-		@Override
 		public V computeIfAbsent(int key, IntFunction<V> mappingFunction) { throw new UnsupportedOperationException(); }
-		@Override
-		public V computeIfAbsentNonDefault(int key, IntFunction<V> mappingFunction) { throw new UnsupportedOperationException(); }
 		@Override
 		public V computeIfPresent(int key, IntObjectUnaryOperator<V> mappingFunction) { throw new UnsupportedOperationException(); }
 		@Override
-		public V computeIfPresentNonDefault(int key, IntObjectUnaryOperator<V> mappingFunction) { throw new UnsupportedOperationException(); }
-		@Override
 		public V supplyIfAbsent(int key, ObjectSupplier<V> valueProvider) { throw new UnsupportedOperationException(); }
-		@Override
-		public V supplyIfAbsentNonDefault(int key, ObjectSupplier<V> valueProvider) { throw new UnsupportedOperationException(); }
 		@Override
 		public V merge(int key, V value, ObjectObjectUnaryOperator<V, V> mappingFunction) { throw new UnsupportedOperationException(); }
 		@Override
@@ -325,19 +317,11 @@ public class Int2ObjectMaps
 		@Override
 		public V compute(int key, IntObjectUnaryOperator<V> mappingFunction) { throw new UnsupportedOperationException(); }
 		@Override
-		public V computeNonDefault(int key, IntObjectUnaryOperator<V> mappingFunction) { throw new UnsupportedOperationException(); }
-		@Override
 		public V computeIfAbsent(int key, IntFunction<V> mappingFunction) { throw new UnsupportedOperationException(); }
-		@Override
-		public V computeIfAbsentNonDefault(int key, IntFunction<V> mappingFunction) { throw new UnsupportedOperationException(); }
 		@Override
 		public V computeIfPresent(int key, IntObjectUnaryOperator<V> mappingFunction) { throw new UnsupportedOperationException(); }
 		@Override
-		public V computeIfPresentNonDefault(int key, IntObjectUnaryOperator<V> mappingFunction) { throw new UnsupportedOperationException(); }
-		@Override
 		public V supplyIfAbsent(int key, ObjectSupplier<V> valueProvider) { throw new UnsupportedOperationException(); }
-		@Override
-		public V supplyIfAbsentNonDefault(int key, ObjectSupplier<V> valueProvider) { throw new UnsupportedOperationException(); }
 		@Override
 		public V merge(int key, V value, ObjectObjectUnaryOperator<V, V> mappingFunction) { throw new UnsupportedOperationException(); }
 		@Override
@@ -561,19 +545,11 @@ public class Int2ObjectMaps
 		@Override
 		public V compute(int key, IntObjectUnaryOperator<V> mappingFunction) { throw new UnsupportedOperationException(); }
 		@Override
-		public V computeNonDefault(int key, IntObjectUnaryOperator<V> mappingFunction) { throw new UnsupportedOperationException(); }
-		@Override
 		public V computeIfAbsent(int key, IntFunction<V> mappingFunction) { throw new UnsupportedOperationException(); }
-		@Override
-		public V computeIfAbsentNonDefault(int key, IntFunction<V> mappingFunction) { throw new UnsupportedOperationException(); }
 		@Override
 		public V computeIfPresent(int key, IntObjectUnaryOperator<V> mappingFunction) { throw new UnsupportedOperationException(); }
 		@Override
-		public V computeIfPresentNonDefault(int key, IntObjectUnaryOperator<V> mappingFunction) { throw new UnsupportedOperationException(); }
-		@Override
 		public V supplyIfAbsent(int key, ObjectSupplier<V> valueProvider) { throw new UnsupportedOperationException(); }
-		@Override
-		public V supplyIfAbsentNonDefault(int key, ObjectSupplier<V> valueProvider) { throw new UnsupportedOperationException(); }
 		@Override
 		public V merge(int key, V value, ObjectObjectUnaryOperator<V, V> mappingFunction) { throw new UnsupportedOperationException(); }
 		@Override
@@ -968,19 +944,11 @@ public class Int2ObjectMaps
 		@Override
 		public V compute(int key, IntObjectUnaryOperator<V> mappingFunction) { synchronized(mutex) { return map.compute(key, mappingFunction); } }
 		@Override
-		public V computeNonDefault(int key, IntObjectUnaryOperator<V> mappingFunction) { synchronized(mutex) { return map.computeNonDefault(key, mappingFunction); } }
-		@Override
 		public V computeIfAbsent(int key, IntFunction<V> mappingFunction) { synchronized(mutex) { return map.computeIfAbsent(key, mappingFunction); } }
-		@Override
-		public V computeIfAbsentNonDefault(int key, IntFunction<V> mappingFunction) { synchronized(mutex) { return map.computeIfAbsentNonDefault(key, mappingFunction); } }
 		@Override
 		public V computeIfPresent(int key, IntObjectUnaryOperator<V> mappingFunction) { synchronized(mutex) { return map.computeIfPresent(key, mappingFunction); } }
 		@Override
-		public V computeIfPresentNonDefault(int key, IntObjectUnaryOperator<V> mappingFunction) { synchronized(mutex) { return map.computeIfPresentNonDefault(key, mappingFunction); } }
-		@Override
 		public V supplyIfAbsent(int key, ObjectSupplier<V> valueProvider) { synchronized(mutex) { return map.supplyIfAbsent(key, valueProvider); } }
-		@Override
-		public V supplyIfAbsentNonDefault(int key, ObjectSupplier<V> valueProvider) { synchronized(mutex) { return map.supplyIfAbsentNonDefault(key, valueProvider); } }
 		@Override
 		public V merge(int key, V value, ObjectObjectUnaryOperator<V, V> mappingFunction) { synchronized(mutex) { return map.merge(key, value, mappingFunction); } }
 		@Override

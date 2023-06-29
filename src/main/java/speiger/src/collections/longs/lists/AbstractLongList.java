@@ -12,6 +12,7 @@ import speiger.src.collections.longs.collections.AbstractLongCollection;
 import speiger.src.collections.longs.collections.LongCollection;
 import speiger.src.collections.longs.collections.LongIterator;
 import speiger.src.collections.longs.collections.LongSplititerator;
+import speiger.src.collections.ints.lists.IntList;
 import speiger.src.collections.longs.utils.LongSplititerators;
 import speiger.src.collections.utils.SanityChecks;
 
@@ -205,11 +206,21 @@ public abstract class AbstractLongList extends AbstractLongCollection implements
 	public LongListIterator listIterator() {
 		return listIterator(0);
 	}
-
+		
 	@Override
 	public LongListIterator listIterator(int index) {
 		if(index < 0 || index > size()) throw new IndexOutOfBoundsException();
 		return new LongListIter(index);
+	}
+	
+	@Override
+	public LongListIterator indexedIterator(int...indecies) {
+		return new IndexedIterator(indecies);
+	}
+	
+	@Override
+	public LongListIterator indexedIterator(IntList indecies) {
+		return new ListIndexedIterator(indecies);
 	}
 	
 	@Override
@@ -566,7 +577,153 @@ public abstract class AbstractLongList extends AbstractLongCollection implements
 			}
 		}
 	}
+	
+	private class ListIndexedIterator implements LongListIterator {
+		IntList indecies;
+		int index;
+		int lastReturned = -1;
 		
+		ListIndexedIterator(IntList indecies) {
+			this.indecies = indecies;
+		}
+		
+		@Override
+		public boolean hasNext() {
+			return index < indecies.size();
+		}
+		
+		@Override
+		public long nextLong() {
+			if(!hasNext()) throw new NoSuchElementException();
+			int i = index++;
+			return getLong((lastReturned = indecies.getInt(i)));
+		}
+		
+		@Override
+		public boolean hasPrevious() {
+			return index > 0;
+		}
+		
+		@Override
+		public long previousLong() {
+			if(!hasPrevious()) throw new NoSuchElementException();
+			index--;
+			return getLong((lastReturned = indecies.getInt(index)));
+		}
+		
+		@Override
+		public int nextIndex() {
+			return index;
+		}
+		
+		@Override
+		public int previousIndex() {
+			return index-1;
+		}
+		
+		@Override
+		public void remove() { throw new UnsupportedOperationException(); }
+		@Override
+		public void add(long e) { throw new UnsupportedOperationException(); }
+		
+		@Override
+		public void set(long e) {
+			if(lastReturned == -1) throw new IllegalStateException();
+			AbstractLongList.this.set(lastReturned, e);
+		}
+		
+		@Override
+		public int skip(int amount) {
+			if(amount < 0) throw new IllegalStateException("Negative Numbers are not allowed");
+			int steps = Math.min(amount, indecies.size() - index);
+			index += steps;
+			if(steps > 0) lastReturned = Math.min(index-1, indecies.size()-1);
+			return steps;
+		}
+		
+		@Override
+		public int back(int amount) {
+			if(amount < 0) throw new IllegalStateException("Negative Numbers are not allowed");
+			int steps = Math.min(amount, index);
+			index -= steps;
+			if(steps > 0) lastReturned = Math.max(index, 0);
+			return steps;
+		}
+	}
+	
+	private class IndexedIterator implements LongListIterator {
+		int[] indecies;
+		int index;
+		int lastReturned = -1;
+		
+		IndexedIterator(int[] indecies) {
+			this.indecies = indecies;
+		}
+		
+		@Override
+		public boolean hasNext() {
+			return index < indecies.length;
+		}
+		
+		@Override
+		public long nextLong() {
+			if(!hasNext()) throw new NoSuchElementException();
+			int i = index++;
+			return getLong((lastReturned = indecies[i]));
+		}
+		
+		@Override
+		public boolean hasPrevious() {
+			return index > 0;
+		}
+		
+		@Override
+		public long previousLong() {
+			if(!hasPrevious()) throw new NoSuchElementException();
+			index--;
+			return getLong((lastReturned = indecies[index]));
+		}
+		
+		@Override
+		public int nextIndex() {
+			return index;
+		}
+		
+		@Override
+		public int previousIndex() {
+			return index-1;
+		}
+		
+		@Override
+		public void remove() { throw new UnsupportedOperationException(); }
+		@Override
+		public void add(long e) { throw new UnsupportedOperationException(); }
+		
+		@Override
+		public void set(long e) {
+			if(lastReturned == -1) throw new IllegalStateException();
+			AbstractLongList.this.set(lastReturned, e);
+		}
+		
+		@Override
+		public int skip(int amount) {
+			if(amount < 0) throw new IllegalStateException("Negative Numbers are not allowed");
+			int steps = Math.min(amount, indecies.length - index);
+			index += steps;
+			if(steps > 0) lastReturned = Math.min(index-1, indecies.length-1);
+			return steps;
+		}
+		
+		@Override
+		public int back(int amount) {
+			if(amount < 0) throw new IllegalStateException("Negative Numbers are not allowed");
+			int steps = Math.min(amount, index);
+			index -= steps;
+			if(steps > 0) lastReturned = Math.max(index, 0);
+			return steps;
+		}
+	}
+	
 	private class LongListIter implements LongListIterator {
 		int index;
 		int lastReturned = -1;
@@ -644,7 +801,7 @@ public abstract class AbstractLongList extends AbstractLongCollection implements
 			if(amount < 0) throw new IllegalStateException("Negative Numbers are not allowed");
 			int steps = Math.min(amount, index);
 			index -= steps;
-			if(steps > 0) lastReturned = Math.min(index, size()-1);
+			if(steps > 0) lastReturned = Math.max(index, 0);
 			return steps;
 		}
 	}

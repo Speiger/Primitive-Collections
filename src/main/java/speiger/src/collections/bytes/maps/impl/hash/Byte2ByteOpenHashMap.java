@@ -424,6 +424,42 @@ public class Byte2ByteOpenHashMap extends AbstractByte2ByteMap implements ITrimm
 		values[index] = newValue;
 		return newValue;
 	}
+		
+	@Override
+	public byte computeByteIfAbsent(byte key, ByteUnaryOperator mappingFunction) {
+		Objects.requireNonNull(mappingFunction);
+		int index = findIndex(key);
+		if(index < 0) {
+			byte newValue = mappingFunction.applyAsByte(key);
+			insert(-index-1, key, newValue);
+			return newValue;
+		}
+		byte newValue = values[index];
+		return newValue;
+	}
+	
+	@Override
+	public byte supplyByteIfAbsent(byte key, ByteSupplier valueProvider) {
+		Objects.requireNonNull(valueProvider);
+		int index = findIndex(key);
+		if(index < 0) {
+			byte newValue = valueProvider.getAsByte();
+			insert(-index-1, key, newValue);
+			return newValue;
+		}
+		byte newValue = values[index];
+		return newValue;
+	}
+		
+	@Override
+	public byte computeByteIfPresent(byte key, ByteByteUnaryOperator mappingFunction) {
+		Objects.requireNonNull(mappingFunction);
+		int index = findIndex(key);
+		if(index < 0) return getDefaultReturnValue();
+		byte newValue = mappingFunction.applyAsByte(key, values[index]);
+		values[index] = newValue;
+		return newValue;
+	}
 	
 	@Override
 	public byte computeByteNonDefault(byte key, ByteByteUnaryOperator mappingFunction) {
@@ -441,19 +477,6 @@ public class Byte2ByteOpenHashMap extends AbstractByte2ByteMap implements ITrimm
 			return newValue;
 		}
 		values[index] = newValue;
-		return newValue;
-	}
-	
-	@Override
-	public byte computeByteIfAbsent(byte key, ByteUnaryOperator mappingFunction) {
-		Objects.requireNonNull(mappingFunction);
-		int index = findIndex(key);
-		if(index < 0) {
-			byte newValue = mappingFunction.applyAsByte(key);
-			insert(-index-1, key, newValue);
-			return newValue;
-		}
-		byte newValue = values[index];
 		return newValue;
 	}
 	
@@ -477,44 +500,21 @@ public class Byte2ByteOpenHashMap extends AbstractByte2ByteMap implements ITrimm
 	}
 	
 	@Override
-	public byte supplyByteIfAbsent(byte key, ByteSupplier valueProvider) {
-		Objects.requireNonNull(valueProvider);
-		int index = findIndex(key);
-		if(index < 0) {
-			byte newValue = valueProvider.getAsInt();
-			insert(-index-1, key, newValue);
-			return newValue;
-		}
-		byte newValue = values[index];
-		return newValue;
-	}
-	
-	@Override
 	public byte supplyByteIfAbsentNonDefault(byte key, ByteSupplier valueProvider) {
 		Objects.requireNonNull(valueProvider);
 		int index = findIndex(key);
 		if(index < 0) {
-			byte newValue = valueProvider.getAsInt();
+			byte newValue = valueProvider.getAsByte();
 			if(newValue == getDefaultReturnValue()) return newValue;
 			insert(-index-1, key, newValue);
 			return newValue;
 		}
 		byte newValue = values[index];
 		if(newValue == getDefaultReturnValue()) {
-			newValue = valueProvider.getAsInt();
+			newValue = valueProvider.getAsByte();
 			if(newValue == getDefaultReturnValue()) return newValue;
 			values[index] = newValue;
 		}
-		return newValue;
-	}
-	
-	@Override
-	public byte computeByteIfPresent(byte key, ByteByteUnaryOperator mappingFunction) {
-		Objects.requireNonNull(mappingFunction);
-		int index = findIndex(key);
-		if(index < 0) return getDefaultReturnValue();
-		byte newValue = mappingFunction.applyAsByte(key, values[index]);
-		values[index] = newValue;
 		return newValue;
 	}
 	

@@ -309,15 +309,6 @@ public interface Double2FloatMap extends Map<Double, Float>, Double2FloatFunctio
 	 */
 	public float computeFloat(double key, DoubleFloatUnaryOperator mappingFunction);
 	/**
-	 * A Type Specific compute method to reduce boxing/unboxing
-	 * If the generated value equals the getDefaultReturnValue it will simply not insert it since that is treated as "null".
-	 * A "Null Value" will be treated as "Do not insert/remove" based on how the Java has specified it.
-	 * @param key the key that should be computed
-	 * @param mappingFunction the operator that should generate the value
-	 * @return the result of the computation
-	 */
-	public float computeFloatNonDefault(double key, DoubleFloatUnaryOperator mappingFunction);
-	/**
 	 * A Type Specific computeIfAbsent method to reduce boxing/unboxing
 	 * If the generated value equals the getDefaultReturnValue it will simply not insert it since that is treated as "null".
 	 * A "Null Value" will be treated as "Do not insert/remove" based on how the Java has specified it.
@@ -326,6 +317,34 @@ public interface Double2FloatMap extends Map<Double, Float>, Double2FloatFunctio
 	 * @return the result of the computed value or present value
 	 */
 	public float computeFloatIfAbsent(double key, Double2FloatFunction mappingFunction);
+	/**
+	 * A Supplier based computeIfAbsent function to fill the most used usecase of this function
+	 * If the generated value equals the getDefaultReturnValue it will simply not insert it since that is treated as "null".
+	 * A "Null Value" will be treated as "Do not insert/remove" based on how the Java has specified it.
+	 * @param key the key that should be computed
+	 * @param valueProvider the value if not present
+	 * @return the result of the computed value or present value
+	 */	
+	public float supplyFloatIfAbsent(double key, FloatSupplier valueProvider);
+	/**
+	 * A Type Specific compute method to reduce boxing/unboxing
+	 * If the generated value equals the getDefaultReturnValue it will simply not insert it since that is treated as "null".
+	 * A "Null Value" will be treated as "Do not insert/remove" based on how the Java has specified it.
+	 * @param key the key that should be computed
+	 * @param mappingFunction the operator that should generate the value if present
+	 * @return the result of the default return value or present value
+	 * @note if not present then compute is not executed
+	 */
+	public float computeFloatIfPresent(double key, DoubleFloatUnaryOperator mappingFunction);
+	/**
+	 * A Type Specific compute method to reduce boxing/unboxing
+	 * If the generated value equals the getDefaultReturnValue it will simply not insert it since that is treated as "null".
+	 * A "Null Value" will be treated as "Do not insert/remove" based on how the Java has specified it.
+	 * @param key the key that should be computed
+	 * @param mappingFunction the operator that should generate the value
+	 * @return the result of the computation
+	 */
+	public float computeFloatNonDefault(double key, DoubleFloatUnaryOperator mappingFunction);
 	/**
 	 * A Type Specific computeIfAbsent method to reduce boxing/unboxing
 	 * If the generated value equals the getDefaultReturnValue it will simply not insert it since that is treated as "null".
@@ -343,26 +362,7 @@ public interface Double2FloatMap extends Map<Double, Float>, Double2FloatFunctio
 	 * @param valueProvider the value if not present
 	 * @return the result of the computed value or present value
 	 */	
-	public float supplyFloatIfAbsent(double key, FloatSupplier valueProvider);
-	/**
-	 * A Supplier based computeIfAbsent function to fill the most used usecase of this function
-	 * If the generated value equals the getDefaultReturnValue it will simply not insert it since that is treated as "null".
-	 * A "Null Value" will be treated as "Do not insert/remove" based on how the Java has specified it.
-	 * @param key the key that should be computed
-	 * @param valueProvider the value if not present
-	 * @return the result of the computed value or present value
-	 */	
 	public float supplyFloatIfAbsentNonDefault(double key, FloatSupplier valueProvider);
-	/**
-	 * A Type Specific compute method to reduce boxing/unboxing
-	 * If the generated value equals the getDefaultReturnValue it will simply not insert it since that is treated as "null".
-	 * A "Null Value" will be treated as "Do not insert/remove" based on how the Java has specified it.
-	 * @param key the key that should be computed
-	 * @param mappingFunction the operator that should generate the value if present
-	 * @return the result of the default return value or present value
-	 * @note if not present then compute is not executed
-	 */
-	public float computeFloatIfPresent(double key, DoubleFloatUnaryOperator mappingFunction);
 	/**
 	 * A Type Specific compute method to reduce boxing/unboxing
 	 * If the generated value equals the getDefaultReturnValue it will simply not insert it since that is treated as "null".

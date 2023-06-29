@@ -463,6 +463,42 @@ public class Short2LongOpenCustomHashMap extends AbstractShort2LongMap implement
 	}
 	
 	@Override
+	public long computeLongIfAbsent(short key, Short2LongFunction mappingFunction) {
+		Objects.requireNonNull(mappingFunction);
+		int index = findIndex(key);
+		if(index < 0) {
+			long newValue = mappingFunction.applyAsLong(key);
+			insert(-index-1, key, newValue);
+			return newValue;
+		}
+		long newValue = values[index];
+		return newValue;
+	}
+		
+	@Override
+	public long supplyLongIfAbsent(short key, LongSupplier valueProvider) {
+		Objects.requireNonNull(valueProvider);
+		int index = findIndex(key);
+		if(index < 0) {
+			long newValue = valueProvider.getAsLong();
+			insert(-index-1, key, newValue);
+			return newValue;
+		}
+		long newValue = values[index];
+		return newValue;
+	}
+	
+	@Override
+	public long computeLongIfPresent(short key, ShortLongUnaryOperator mappingFunction) {
+		Objects.requireNonNull(mappingFunction);
+		int index = findIndex(key);
+		if(index < 0) return getDefaultReturnValue();
+		long newValue = mappingFunction.applyAsLong(key, values[index]);
+		values[index] = newValue;
+		return newValue;
+	}
+	
+	@Override
 	public long computeLongNonDefault(short key, ShortLongUnaryOperator mappingFunction) {
 		Objects.requireNonNull(mappingFunction);
 		int index = findIndex(key);
@@ -478,19 +514,6 @@ public class Short2LongOpenCustomHashMap extends AbstractShort2LongMap implement
 			return newValue;
 		}
 		values[index] = newValue;
-		return newValue;
-	}
-	
-	@Override
-	public long computeLongIfAbsent(short key, Short2LongFunction mappingFunction) {
-		Objects.requireNonNull(mappingFunction);
-		int index = findIndex(key);
-		if(index < 0) {
-			long newValue = mappingFunction.applyAsLong(key);
-			insert(-index-1, key, newValue);
-			return newValue;
-		}
-		long newValue = values[index];
 		return newValue;
 	}
 	
@@ -514,19 +537,6 @@ public class Short2LongOpenCustomHashMap extends AbstractShort2LongMap implement
 	}
 	
 	@Override
-	public long supplyLongIfAbsent(short key, LongSupplier valueProvider) {
-		Objects.requireNonNull(valueProvider);
-		int index = findIndex(key);
-		if(index < 0) {
-			long newValue = valueProvider.getAsLong();
-			insert(-index-1, key, newValue);
-			return newValue;
-		}
-		long newValue = values[index];
-		return newValue;
-	}
-	
-	@Override
 	public long supplyLongIfAbsentNonDefault(short key, LongSupplier valueProvider) {
 		Objects.requireNonNull(valueProvider);
 		int index = findIndex(key);
@@ -542,16 +552,6 @@ public class Short2LongOpenCustomHashMap extends AbstractShort2LongMap implement
 			if(newValue == getDefaultReturnValue()) return newValue;
 			values[index] = newValue;
 		}
-		return newValue;
-	}
-	
-	@Override
-	public long computeLongIfPresent(short key, ShortLongUnaryOperator mappingFunction) {
-		Objects.requireNonNull(mappingFunction);
-		int index = findIndex(key);
-		if(index < 0) return getDefaultReturnValue();
-		long newValue = mappingFunction.applyAsLong(key, values[index]);
-		values[index] = newValue;
 		return newValue;
 	}
 	

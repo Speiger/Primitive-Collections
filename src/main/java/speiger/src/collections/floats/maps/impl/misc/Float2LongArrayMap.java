@@ -443,6 +443,42 @@ public class Float2LongArrayMap extends AbstractFloat2LongMap implements Float2L
 	}
 	
 	@Override
+	public long computeLongIfAbsent(float key, Float2LongFunction mappingFunction) {
+		Objects.requireNonNull(mappingFunction);
+		int index = findIndex(key);
+		if(index == -1) {
+			long newValue = mappingFunction.applyAsLong(key);
+			insertIndex(size++, key, newValue);
+			return newValue;
+		}
+		long newValue = values[index];
+		return newValue;
+	}
+		
+	@Override
+	public long supplyLongIfAbsent(float key, LongSupplier valueProvider) {
+		Objects.requireNonNull(valueProvider);
+		int index = findIndex(key);
+		if(index == -1) {
+			long newValue = valueProvider.getAsLong();
+			insertIndex(size++, key, newValue);
+			return newValue;
+		}
+		long newValue = values[index];
+		return newValue;
+	}
+		
+	@Override
+	public long computeLongIfPresent(float key, FloatLongUnaryOperator mappingFunction) {
+		Objects.requireNonNull(mappingFunction);
+		int index = findIndex(key);
+		if(index == -1) return getDefaultReturnValue();
+		long newValue = mappingFunction.applyAsLong(key, values[index]);
+		values[index] = newValue;
+		return newValue;
+	}
+	
+	@Override
 	public long computeLongNonDefault(float key, FloatLongUnaryOperator mappingFunction) {
 		Objects.requireNonNull(mappingFunction);
 		int index = findIndex(key);
@@ -458,19 +494,6 @@ public class Float2LongArrayMap extends AbstractFloat2LongMap implements Float2L
 			return newValue;
 		}
 		values[index] = newValue;
-		return newValue;
-	}
-	
-	@Override
-	public long computeLongIfAbsent(float key, Float2LongFunction mappingFunction) {
-		Objects.requireNonNull(mappingFunction);
-		int index = findIndex(key);
-		if(index == -1) {
-			long newValue = mappingFunction.applyAsLong(key);
-			insertIndex(size++, key, newValue);
-			return newValue;
-		}
-		long newValue = values[index];
 		return newValue;
 	}
 	
@@ -494,19 +517,6 @@ public class Float2LongArrayMap extends AbstractFloat2LongMap implements Float2L
 	}
 	
 	@Override
-	public long supplyLongIfAbsent(float key, LongSupplier valueProvider) {
-		Objects.requireNonNull(valueProvider);
-		int index = findIndex(key);
-		if(index == -1) {
-			long newValue = valueProvider.getAsLong();
-			insertIndex(size++, key, newValue);
-			return newValue;
-		}
-		long newValue = values[index];
-		return newValue;
-	}
-	
-	@Override
 	public long supplyLongIfAbsentNonDefault(float key, LongSupplier valueProvider) {
 		Objects.requireNonNull(valueProvider);
 		int index = findIndex(key);
@@ -522,16 +532,6 @@ public class Float2LongArrayMap extends AbstractFloat2LongMap implements Float2L
 			if(newValue == getDefaultReturnValue()) return newValue;
 			values[index] = newValue;
 		}
-		return newValue;
-	}
-	
-	@Override
-	public long computeLongIfPresent(float key, FloatLongUnaryOperator mappingFunction) {
-		Objects.requireNonNull(mappingFunction);
-		int index = findIndex(key);
-		if(index == -1) return getDefaultReturnValue();
-		long newValue = mappingFunction.applyAsLong(key, values[index]);
-		values[index] = newValue;
 		return newValue;
 	}
 	

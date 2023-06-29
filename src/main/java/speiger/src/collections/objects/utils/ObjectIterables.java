@@ -8,6 +8,33 @@ import java.util.function.Predicate;
 
 import speiger.src.collections.objects.collections.ObjectIterable;
 import speiger.src.collections.objects.collections.ObjectCollection;
+import speiger.src.collections.booleans.functions.BooleanConsumer;
+import speiger.src.collections.booleans.collections.BooleanIterable;
+import speiger.src.collections.booleans.collections.BooleanIterator;
+import speiger.src.collections.bytes.functions.ByteConsumer;
+import speiger.src.collections.objects.functions.function.ToByteFunction;
+import speiger.src.collections.bytes.collections.ByteIterable;
+import speiger.src.collections.bytes.collections.ByteIterator;
+import speiger.src.collections.shorts.functions.ShortConsumer;
+import speiger.src.collections.objects.functions.function.ToShortFunction;
+import speiger.src.collections.shorts.collections.ShortIterable;
+import speiger.src.collections.shorts.collections.ShortIterator;
+import speiger.src.collections.ints.functions.IntConsumer;
+import speiger.src.collections.objects.functions.function.ToIntFunction;
+import speiger.src.collections.ints.collections.IntIterable;
+import speiger.src.collections.ints.collections.IntIterator;
+import speiger.src.collections.longs.functions.LongConsumer;
+import speiger.src.collections.objects.functions.function.ToLongFunction;
+import speiger.src.collections.longs.collections.LongIterable;
+import speiger.src.collections.longs.collections.LongIterator;
+import speiger.src.collections.floats.functions.FloatConsumer;
+import speiger.src.collections.objects.functions.function.ToFloatFunction;
+import speiger.src.collections.floats.collections.FloatIterable;
+import speiger.src.collections.floats.collections.FloatIterator;
+import speiger.src.collections.doubles.functions.DoubleConsumer;
+import speiger.src.collections.objects.functions.function.ToDoubleFunction;
+import speiger.src.collections.doubles.collections.DoubleIterable;
+import speiger.src.collections.doubles.collections.DoubleIterator;
 import speiger.src.collections.objects.collections.ObjectIterator;
 import speiger.src.collections.objects.functions.function.UnaryOperator;
 import speiger.src.collections.utils.ISizeProvider;
@@ -39,6 +66,160 @@ public class ObjectIterables
 	 */
 	public static <T, E> ObjectIterable<E> map(ObjectIterable<T> iterable, UnaryOperator<T, E> mapper) {
 		return new MappedIterable<>(iterable, mapper);
+	}
+	
+	/**
+	 * A Helper function that maps a Java-Iterable into a new Type.
+	 * @param iterable the iterable that should be mapped
+	 * @param mapper the function that decides what the result turns into.
+	 * @param <T> the keyType of elements maintained by this Collection
+	 * @return a iterable that is mapped to a new result
+	 */
+	public static <T> BooleanIterable mapToBoolean(Iterable<? extends T> iterable, Predicate<T> mapper) {
+		return new MappedBooleanIterable<>(wrap(iterable), mapper);
+	}
+	
+	/**
+	 * A Helper function that maps a Iterable into a new Type.
+	 * @param iterable the iterable that should be mapped
+	 * @param mapper the function that decides what the result turns into.
+	 * @param <T> the keyType of elements maintained by this Collection
+	 * @return a iterable that is mapped to a new result
+	 */
+	public static <T> BooleanIterable mapToBoolean(ObjectIterable<T> iterable, Predicate<T> mapper) {
+		return new MappedBooleanIterable<>(iterable, mapper);
+	}
+	
+	/**
+	 * A Helper function that maps a Java-Iterable into a new Type.
+	 * @param iterable the iterable that should be mapped
+	 * @param mapper the function that decides what the result turns into.
+	 * @param <T> the keyType of elements maintained by this Collection
+	 * @return a iterable that is mapped to a new result
+	 */
+	public static <T> ByteIterable mapToByte(Iterable<? extends T> iterable, ToByteFunction<T> mapper) {
+		return new MappedByteIterable<>(wrap(iterable), mapper);
+	}
+	
+	/**
+	 * A Helper function that maps a Iterable into a new Type.
+	 * @param iterable the iterable that should be mapped
+	 * @param mapper the function that decides what the result turns into.
+	 * @param <T> the keyType of elements maintained by this Collection
+	 * @return a iterable that is mapped to a new result
+	 */
+	public static <T> ByteIterable mapToByte(ObjectIterable<T> iterable, ToByteFunction<T> mapper) {
+		return new MappedByteIterable<>(iterable, mapper);
+	}
+	
+	/**
+	 * A Helper function that maps a Java-Iterable into a new Type.
+	 * @param iterable the iterable that should be mapped
+	 * @param mapper the function that decides what the result turns into.
+	 * @param <T> the keyType of elements maintained by this Collection
+	 * @return a iterable that is mapped to a new result
+	 */
+	public static <T> ShortIterable mapToShort(Iterable<? extends T> iterable, ToShortFunction<T> mapper) {
+		return new MappedShortIterable<>(wrap(iterable), mapper);
+	}
+	
+	/**
+	 * A Helper function that maps a Iterable into a new Type.
+	 * @param iterable the iterable that should be mapped
+	 * @param mapper the function that decides what the result turns into.
+	 * @param <T> the keyType of elements maintained by this Collection
+	 * @return a iterable that is mapped to a new result
+	 */
+	public static <T> ShortIterable mapToShort(ObjectIterable<T> iterable, ToShortFunction<T> mapper) {
+		return new MappedShortIterable<>(iterable, mapper);
+	}
+	
+	/**
+	 * A Helper function that maps a Java-Iterable into a new Type.
+	 * @param iterable the iterable that should be mapped
+	 * @param mapper the function that decides what the result turns into.
+	 * @param <T> the keyType of elements maintained by this Collection
+	 * @return a iterable that is mapped to a new result
+	 */
+	public static <T> IntIterable mapToInt(Iterable<? extends T> iterable, ToIntFunction<T> mapper) {
+		return new MappedIntIterable<>(wrap(iterable), mapper);
+	}
+	
+	/**
+	 * A Helper function that maps a Iterable into a new Type.
+	 * @param iterable the iterable that should be mapped
+	 * @param mapper the function that decides what the result turns into.
+	 * @param <T> the keyType of elements maintained by this Collection
+	 * @return a iterable that is mapped to a new result
+	 */
+	public static <T> IntIterable mapToInt(ObjectIterable<T> iterable, ToIntFunction<T> mapper) {
+		return new MappedIntIterable<>(iterable, mapper);
+	}
+	
+	/**
+	 * A Helper function that maps a Java-Iterable into a new Type.
+	 * @param iterable the iterable that should be mapped
+	 * @param mapper the function that decides what the result turns into.
+	 * @param <T> the keyType of elements maintained by this Collection
+	 * @return a iterable that is mapped to a new result
+	 */
+	public static <T> LongIterable mapToLong(Iterable<? extends T> iterable, ToLongFunction<T> mapper) {
+		return new MappedLongIterable<>(wrap(iterable), mapper);
+	}
+	
+	/**
+	 * A Helper function that maps a Iterable into a new Type.
+	 * @param iterable the iterable that should be mapped
+	 * @param mapper the function that decides what the result turns into.
+	 * @param <T> the keyType of elements maintained by this Collection
+	 * @return a iterable that is mapped to a new result
+	 */
+	public static <T> LongIterable mapToLong(ObjectIterable<T> iterable, ToLongFunction<T> mapper) {
+		return new MappedLongIterable<>(iterable, mapper);
+	}
+	
+	/**
+	 * A Helper function that maps a Java-Iterable into a new Type.
+	 * @param iterable the iterable that should be mapped
+	 * @param mapper the function that decides what the result turns into.
+	 * @param <T> the keyType of elements maintained by this Collection
+	 * @return a iterable that is mapped to a new result
+	 */
+	public static <T> FloatIterable mapToFloat(Iterable<? extends T> iterable, ToFloatFunction<T> mapper) {
+		return new MappedFloatIterable<>(wrap(iterable), mapper);
+	}
+	
+	/**
+	 * A Helper function that maps a Iterable into a new Type.
+	 * @param iterable the iterable that should be mapped
+	 * @param mapper the function that decides what the result turns into.
+	 * @param <T> the keyType of elements maintained by this Collection
+	 * @return a iterable that is mapped to a new result
+	 */
+	public static <T> FloatIterable mapToFloat(ObjectIterable<T> iterable, ToFloatFunction<T> mapper) {
+		return new MappedFloatIterable<>(iterable, mapper);
+	}
+	
+	/**
+	 * A Helper function that maps a Java-Iterable into a new Type.
+	 * @param iterable the iterable that should be mapped
+	 * @param mapper the function that decides what the result turns into.
+	 * @param <T> the keyType of elements maintained by this Collection
+	 * @return a iterable that is mapped to a new result
+	 */
+	public static <T> DoubleIterable mapToDouble(Iterable<? extends T> iterable, ToDoubleFunction<T> mapper) {
+		return new MappedDoubleIterable<>(wrap(iterable), mapper);
+	}
+	
+	/**
+	 * A Helper function that maps a Iterable into a new Type.
+	 * @param iterable the iterable that should be mapped
+	 * @param mapper the function that decides what the result turns into.
+	 * @param <T> the keyType of elements maintained by this Collection
+	 * @return a iterable that is mapped to a new result
+	 */
+	public static <T> DoubleIterable mapToDouble(ObjectIterable<T> iterable, ToDoubleFunction<T> mapper) {
+		return new MappedDoubleIterable<>(iterable, mapper);
 	}
 	
 	/**
@@ -254,6 +435,195 @@ public class ObjectIterables
 		public void forEach(Consumer<? super T> action) {
 			Objects.requireNonNull(action);
 			iterable.forEach(action);
+		}
+	}
+	
+	private static class MappedBooleanIterable<E> implements BooleanIterable, ISizeProvider
+	{
+		ObjectIterable<E> iterable;
+		Predicate<E> mapper;
+		
+		MappedBooleanIterable(ObjectIterable<E> iterable, Predicate<E> mapper) {
+			this.iterable = iterable;
+			this.mapper = mapper;
+		}
+		
+		public BooleanIterator iterator() {
+			return ObjectIterators.mapToBoolean(iterable.iterator(), mapper);
+		}
+		
+		@Override
+		public int size() {
+			ISizeProvider prov = ISizeProvider.of(this);
+			return prov == null ? -1 : prov.size();
+		}
+		
+		@Override
+		public void forEach(BooleanConsumer action) {
+			Objects.requireNonNull(action);
+			iterable.forEach(E -> action.accept(mapper.test(E)));
+		}
+	}
+	
+	private static class MappedByteIterable<E> implements ByteIterable, ISizeProvider
+	{
+		ObjectIterable<E> iterable;
+		ToByteFunction<E> mapper;
+		
+		MappedByteIterable(ObjectIterable<E> iterable, ToByteFunction<E> mapper) {
+			this.iterable = iterable;
+			this.mapper = mapper;
+		}
+		
+		public ByteIterator iterator() {
+			return ObjectIterators.mapToByte(iterable.iterator(), mapper);
+		}
+		
+		@Override
+		public int size() {
+			ISizeProvider prov = ISizeProvider.of(this);
+			return prov == null ? -1 : prov.size();
+		}
+		
+		@Override
+		public void forEach(ByteConsumer action) {
+			Objects.requireNonNull(action);
+			iterable.forEach(E -> action.accept(mapper.applyAsByte(E)));
+		}
+	}
+	
+	private static class MappedShortIterable<E> implements ShortIterable, ISizeProvider
+	{
+		ObjectIterable<E> iterable;
+		ToShortFunction<E> mapper;
+		
+		MappedShortIterable(ObjectIterable<E> iterable, ToShortFunction<E> mapper) {
+			this.iterable = iterable;
+			this.mapper = mapper;
+		}
+		
+		public ShortIterator iterator() {
+			return ObjectIterators.mapToShort(iterable.iterator(), mapper);
+		}
+		
+		@Override
+		public int size() {
+			ISizeProvider prov = ISizeProvider.of(this);
+			return prov == null ? -1 : prov.size();
+		}
+		
+		@Override
+		public void forEach(ShortConsumer action) {
+			Objects.requireNonNull(action);
+			iterable.forEach(E -> action.accept(mapper.applyAsShort(E)));
+		}
+	}
+	
+	private static class MappedIntIterable<E> implements IntIterable, ISizeProvider
+	{
+		ObjectIterable<E> iterable;
+		ToIntFunction<E> mapper;
+		
+		MappedIntIterable(ObjectIterable<E> iterable, ToIntFunction<E> mapper) {
+			this.iterable = iterable;
+			this.mapper = mapper;
+		}
+		
+		public IntIterator iterator() {
+			return ObjectIterators.mapToInt(iterable.iterator(), mapper);
+		}
+		
+		@Override
+		public int size() {
+			ISizeProvider prov = ISizeProvider.of(this);
+			return prov == null ? -1 : prov.size();
+		}
+		
+		@Override
+		public void forEach(IntConsumer action) {
+			Objects.requireNonNull(action);
+			iterable.forEach(E -> action.accept(mapper.applyAsInt(E)));
+		}
+	}
+	
+	private static class MappedLongIterable<E> implements LongIterable, ISizeProvider
+	{
+		ObjectIterable<E> iterable;
+		ToLongFunction<E> mapper;
+		
+		MappedLongIterable(ObjectIterable<E> iterable, ToLongFunction<E> mapper) {
+			this.iterable = iterable;
+			this.mapper = mapper;
+		}
+		
+		public LongIterator iterator() {
+			return ObjectIterators.mapToLong(iterable.iterator(), mapper);
+		}
+		
+		@Override
+		public int size() {
+			ISizeProvider prov = ISizeProvider.of(this);
+			return prov == null ? -1 : prov.size();
+		}
+		
+		@Override
+		public void forEach(LongConsumer action) {
+			Objects.requireNonNull(action);
+			iterable.forEach(E -> action.accept(mapper.applyAsLong(E)));
+		}
+	}
+	
+	private static class MappedFloatIterable<E> implements FloatIterable, ISizeProvider
+	{
+		ObjectIterable<E> iterable;
+		ToFloatFunction<E> mapper;
+		
+		MappedFloatIterable(ObjectIterable<E> iterable, ToFloatFunction<E> mapper) {
+			this.iterable = iterable;
+			this.mapper = mapper;
+		}
+		
+		public FloatIterator iterator() {
+			return ObjectIterators.mapToFloat(iterable.iterator(), mapper);
+		}
+		
+		@Override
+		public int size() {
+			ISizeProvider prov = ISizeProvider.of(this);
+			return prov == null ? -1 : prov.size();
+		}
+		
+		@Override
+		public void forEach(FloatConsumer action) {
+			Objects.requireNonNull(action);
+			iterable.forEach(E -> action.accept(mapper.applyAsFloat(E)));
+		}
+	}
+	
+	private static class MappedDoubleIterable<E> implements DoubleIterable, ISizeProvider
+	{
+		ObjectIterable<E> iterable;
+		ToDoubleFunction<E> mapper;
+		
+		MappedDoubleIterable(ObjectIterable<E> iterable, ToDoubleFunction<E> mapper) {
+			this.iterable = iterable;
+			this.mapper = mapper;
+		}
+		
+		public DoubleIterator iterator() {
+			return ObjectIterators.mapToDouble(iterable.iterator(), mapper);
+		}
+		
+		@Override
+		public int size() {
+			ISizeProvider prov = ISizeProvider.of(this);
+			return prov == null ? -1 : prov.size();
+		}
+		
+		@Override
+		public void forEach(DoubleConsumer action) {
+			Objects.requireNonNull(action);
+			iterable.forEach(E -> action.accept(mapper.applyAsDouble(E)));
 		}
 	}
 	

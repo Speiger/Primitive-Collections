@@ -309,15 +309,6 @@ public interface Short2CharMap extends Map<Short, Character>, Short2CharFunction
 	 */
 	public char computeChar(short key, ShortCharUnaryOperator mappingFunction);
 	/**
-	 * A Type Specific compute method to reduce boxing/unboxing
-	 * If the generated value equals the getDefaultReturnValue it will simply not insert it since that is treated as "null".
-	 * A "Null Value" will be treated as "Do not insert/remove" based on how the Java has specified it.
-	 * @param key the key that should be computed
-	 * @param mappingFunction the operator that should generate the value
-	 * @return the result of the computation
-	 */
-	public char computeCharNonDefault(short key, ShortCharUnaryOperator mappingFunction);
-	/**
 	 * A Type Specific computeIfAbsent method to reduce boxing/unboxing
 	 * If the generated value equals the getDefaultReturnValue it will simply not insert it since that is treated as "null".
 	 * A "Null Value" will be treated as "Do not insert/remove" based on how the Java has specified it.
@@ -326,6 +317,34 @@ public interface Short2CharMap extends Map<Short, Character>, Short2CharFunction
 	 * @return the result of the computed value or present value
 	 */
 	public char computeCharIfAbsent(short key, Short2CharFunction mappingFunction);
+	/**
+	 * A Supplier based computeIfAbsent function to fill the most used usecase of this function
+	 * If the generated value equals the getDefaultReturnValue it will simply not insert it since that is treated as "null".
+	 * A "Null Value" will be treated as "Do not insert/remove" based on how the Java has specified it.
+	 * @param key the key that should be computed
+	 * @param valueProvider the value if not present
+	 * @return the result of the computed value or present value
+	 */	
+	public char supplyCharIfAbsent(short key, CharSupplier valueProvider);
+	/**
+	 * A Type Specific compute method to reduce boxing/unboxing
+	 * If the generated value equals the getDefaultReturnValue it will simply not insert it since that is treated as "null".
+	 * A "Null Value" will be treated as "Do not insert/remove" based on how the Java has specified it.
+	 * @param key the key that should be computed
+	 * @param mappingFunction the operator that should generate the value if present
+	 * @return the result of the default return value or present value
+	 * @note if not present then compute is not executed
+	 */
+	public char computeCharIfPresent(short key, ShortCharUnaryOperator mappingFunction);
+	/**
+	 * A Type Specific compute method to reduce boxing/unboxing
+	 * If the generated value equals the getDefaultReturnValue it will simply not insert it since that is treated as "null".
+	 * A "Null Value" will be treated as "Do not insert/remove" based on how the Java has specified it.
+	 * @param key the key that should be computed
+	 * @param mappingFunction the operator that should generate the value
+	 * @return the result of the computation
+	 */
+	public char computeCharNonDefault(short key, ShortCharUnaryOperator mappingFunction);
 	/**
 	 * A Type Specific computeIfAbsent method to reduce boxing/unboxing
 	 * If the generated value equals the getDefaultReturnValue it will simply not insert it since that is treated as "null".
@@ -343,26 +362,7 @@ public interface Short2CharMap extends Map<Short, Character>, Short2CharFunction
 	 * @param valueProvider the value if not present
 	 * @return the result of the computed value or present value
 	 */	
-	public char supplyCharIfAbsent(short key, CharSupplier valueProvider);
-	/**
-	 * A Supplier based computeIfAbsent function to fill the most used usecase of this function
-	 * If the generated value equals the getDefaultReturnValue it will simply not insert it since that is treated as "null".
-	 * A "Null Value" will be treated as "Do not insert/remove" based on how the Java has specified it.
-	 * @param key the key that should be computed
-	 * @param valueProvider the value if not present
-	 * @return the result of the computed value or present value
-	 */	
 	public char supplyCharIfAbsentNonDefault(short key, CharSupplier valueProvider);
-	/**
-	 * A Type Specific compute method to reduce boxing/unboxing
-	 * If the generated value equals the getDefaultReturnValue it will simply not insert it since that is treated as "null".
-	 * A "Null Value" will be treated as "Do not insert/remove" based on how the Java has specified it.
-	 * @param key the key that should be computed
-	 * @param mappingFunction the operator that should generate the value if present
-	 * @return the result of the default return value or present value
-	 * @note if not present then compute is not executed
-	 */
-	public char computeCharIfPresent(short key, ShortCharUnaryOperator mappingFunction);
 	/**
 	 * A Type Specific compute method to reduce boxing/unboxing
 	 * If the generated value equals the getDefaultReturnValue it will simply not insert it since that is treated as "null".

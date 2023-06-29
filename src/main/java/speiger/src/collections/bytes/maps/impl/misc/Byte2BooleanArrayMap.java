@@ -420,6 +420,42 @@ public class Byte2BooleanArrayMap extends AbstractByte2BooleanMap implements Byt
 	}
 	
 	@Override
+	public boolean computeBooleanIfAbsent(byte key, BytePredicate mappingFunction) {
+		Objects.requireNonNull(mappingFunction);
+		int index = findIndex(key);
+		if(index == -1) {
+			boolean newValue = mappingFunction.test(key);
+			insertIndex(size++, key, newValue);
+			return newValue;
+		}
+		boolean newValue = values[index];
+		return newValue;
+	}
+		
+	@Override
+	public boolean supplyBooleanIfAbsent(byte key, BooleanSupplier valueProvider) {
+		Objects.requireNonNull(valueProvider);
+		int index = findIndex(key);
+		if(index == -1) {
+			boolean newValue = valueProvider.getAsBoolean();
+			insertIndex(size++, key, newValue);
+			return newValue;
+		}
+		boolean newValue = values[index];
+		return newValue;
+	}
+		
+	@Override
+	public boolean computeBooleanIfPresent(byte key, ByteBooleanUnaryOperator mappingFunction) {
+		Objects.requireNonNull(mappingFunction);
+		int index = findIndex(key);
+		if(index == -1) return getDefaultReturnValue();
+		boolean newValue = mappingFunction.applyAsBoolean(key, values[index]);
+		values[index] = newValue;
+		return newValue;
+	}
+	
+	@Override
 	public boolean computeBooleanNonDefault(byte key, ByteBooleanUnaryOperator mappingFunction) {
 		Objects.requireNonNull(mappingFunction);
 		int index = findIndex(key);
@@ -435,19 +471,6 @@ public class Byte2BooleanArrayMap extends AbstractByte2BooleanMap implements Byt
 			return newValue;
 		}
 		values[index] = newValue;
-		return newValue;
-	}
-	
-	@Override
-	public boolean computeBooleanIfAbsent(byte key, BytePredicate mappingFunction) {
-		Objects.requireNonNull(mappingFunction);
-		int index = findIndex(key);
-		if(index == -1) {
-			boolean newValue = mappingFunction.test(key);
-			insertIndex(size++, key, newValue);
-			return newValue;
-		}
-		boolean newValue = values[index];
 		return newValue;
 	}
 	
@@ -471,19 +494,6 @@ public class Byte2BooleanArrayMap extends AbstractByte2BooleanMap implements Byt
 	}
 	
 	@Override
-	public boolean supplyBooleanIfAbsent(byte key, BooleanSupplier valueProvider) {
-		Objects.requireNonNull(valueProvider);
-		int index = findIndex(key);
-		if(index == -1) {
-			boolean newValue = valueProvider.getAsBoolean();
-			insertIndex(size++, key, newValue);
-			return newValue;
-		}
-		boolean newValue = values[index];
-		return newValue;
-	}
-	
-	@Override
 	public boolean supplyBooleanIfAbsentNonDefault(byte key, BooleanSupplier valueProvider) {
 		Objects.requireNonNull(valueProvider);
 		int index = findIndex(key);
@@ -499,16 +509,6 @@ public class Byte2BooleanArrayMap extends AbstractByte2BooleanMap implements Byt
 			if(newValue == getDefaultReturnValue()) return newValue;
 			values[index] = newValue;
 		}
-		return newValue;
-	}
-	
-	@Override
-	public boolean computeBooleanIfPresent(byte key, ByteBooleanUnaryOperator mappingFunction) {
-		Objects.requireNonNull(mappingFunction);
-		int index = findIndex(key);
-		if(index == -1) return getDefaultReturnValue();
-		boolean newValue = mappingFunction.applyAsBoolean(key, values[index]);
-		values[index] = newValue;
 		return newValue;
 	}
 	

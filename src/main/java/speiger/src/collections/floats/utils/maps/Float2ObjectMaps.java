@@ -266,19 +266,11 @@ public class Float2ObjectMaps
 		@Override
 		public V compute(float key, FloatObjectUnaryOperator<V> mappingFunction) { throw new UnsupportedOperationException(); }
 		@Override
-		public V computeNonDefault(float key, FloatObjectUnaryOperator<V> mappingFunction) { throw new UnsupportedOperationException(); }
-		@Override
 		public V computeIfAbsent(float key, FloatFunction<V> mappingFunction) { throw new UnsupportedOperationException(); }
-		@Override
-		public V computeIfAbsentNonDefault(float key, FloatFunction<V> mappingFunction) { throw new UnsupportedOperationException(); }
 		@Override
 		public V computeIfPresent(float key, FloatObjectUnaryOperator<V> mappingFunction) { throw new UnsupportedOperationException(); }
 		@Override
-		public V computeIfPresentNonDefault(float key, FloatObjectUnaryOperator<V> mappingFunction) { throw new UnsupportedOperationException(); }
-		@Override
 		public V supplyIfAbsent(float key, ObjectSupplier<V> valueProvider) { throw new UnsupportedOperationException(); }
-		@Override
-		public V supplyIfAbsentNonDefault(float key, ObjectSupplier<V> valueProvider) { throw new UnsupportedOperationException(); }
 		@Override
 		public V merge(float key, V value, ObjectObjectUnaryOperator<V, V> mappingFunction) { throw new UnsupportedOperationException(); }
 		@Override
@@ -325,19 +317,11 @@ public class Float2ObjectMaps
 		@Override
 		public V compute(float key, FloatObjectUnaryOperator<V> mappingFunction) { throw new UnsupportedOperationException(); }
 		@Override
-		public V computeNonDefault(float key, FloatObjectUnaryOperator<V> mappingFunction) { throw new UnsupportedOperationException(); }
-		@Override
 		public V computeIfAbsent(float key, FloatFunction<V> mappingFunction) { throw new UnsupportedOperationException(); }
-		@Override
-		public V computeIfAbsentNonDefault(float key, FloatFunction<V> mappingFunction) { throw new UnsupportedOperationException(); }
 		@Override
 		public V computeIfPresent(float key, FloatObjectUnaryOperator<V> mappingFunction) { throw new UnsupportedOperationException(); }
 		@Override
-		public V computeIfPresentNonDefault(float key, FloatObjectUnaryOperator<V> mappingFunction) { throw new UnsupportedOperationException(); }
-		@Override
 		public V supplyIfAbsent(float key, ObjectSupplier<V> valueProvider) { throw new UnsupportedOperationException(); }
-		@Override
-		public V supplyIfAbsentNonDefault(float key, ObjectSupplier<V> valueProvider) { throw new UnsupportedOperationException(); }
 		@Override
 		public V merge(float key, V value, ObjectObjectUnaryOperator<V, V> mappingFunction) { throw new UnsupportedOperationException(); }
 		@Override
@@ -561,19 +545,11 @@ public class Float2ObjectMaps
 		@Override
 		public V compute(float key, FloatObjectUnaryOperator<V> mappingFunction) { throw new UnsupportedOperationException(); }
 		@Override
-		public V computeNonDefault(float key, FloatObjectUnaryOperator<V> mappingFunction) { throw new UnsupportedOperationException(); }
-		@Override
 		public V computeIfAbsent(float key, FloatFunction<V> mappingFunction) { throw new UnsupportedOperationException(); }
-		@Override
-		public V computeIfAbsentNonDefault(float key, FloatFunction<V> mappingFunction) { throw new UnsupportedOperationException(); }
 		@Override
 		public V computeIfPresent(float key, FloatObjectUnaryOperator<V> mappingFunction) { throw new UnsupportedOperationException(); }
 		@Override
-		public V computeIfPresentNonDefault(float key, FloatObjectUnaryOperator<V> mappingFunction) { throw new UnsupportedOperationException(); }
-		@Override
 		public V supplyIfAbsent(float key, ObjectSupplier<V> valueProvider) { throw new UnsupportedOperationException(); }
-		@Override
-		public V supplyIfAbsentNonDefault(float key, ObjectSupplier<V> valueProvider) { throw new UnsupportedOperationException(); }
 		@Override
 		public V merge(float key, V value, ObjectObjectUnaryOperator<V, V> mappingFunction) { throw new UnsupportedOperationException(); }
 		@Override
@@ -968,19 +944,11 @@ public class Float2ObjectMaps
 		@Override
 		public V compute(float key, FloatObjectUnaryOperator<V> mappingFunction) { synchronized(mutex) { return map.compute(key, mappingFunction); } }
 		@Override
-		public V computeNonDefault(float key, FloatObjectUnaryOperator<V> mappingFunction) { synchronized(mutex) { return map.computeNonDefault(key, mappingFunction); } }
-		@Override
 		public V computeIfAbsent(float key, FloatFunction<V> mappingFunction) { synchronized(mutex) { return map.computeIfAbsent(key, mappingFunction); } }
-		@Override
-		public V computeIfAbsentNonDefault(float key, FloatFunction<V> mappingFunction) { synchronized(mutex) { return map.computeIfAbsentNonDefault(key, mappingFunction); } }
 		@Override
 		public V computeIfPresent(float key, FloatObjectUnaryOperator<V> mappingFunction) { synchronized(mutex) { return map.computeIfPresent(key, mappingFunction); } }
 		@Override
-		public V computeIfPresentNonDefault(float key, FloatObjectUnaryOperator<V> mappingFunction) { synchronized(mutex) { return map.computeIfPresentNonDefault(key, mappingFunction); } }
-		@Override
 		public V supplyIfAbsent(float key, ObjectSupplier<V> valueProvider) { synchronized(mutex) { return map.supplyIfAbsent(key, valueProvider); } }
-		@Override
-		public V supplyIfAbsentNonDefault(float key, ObjectSupplier<V> valueProvider) { synchronized(mutex) { return map.supplyIfAbsentNonDefault(key, valueProvider); } }
 		@Override
 		public V merge(float key, V value, ObjectObjectUnaryOperator<V, V> mappingFunction) { synchronized(mutex) { return map.merge(key, value, mappingFunction); } }
 		@Override

@@ -416,25 +416,6 @@ public class Float2ObjectArrayMap<V> extends AbstractFloat2ObjectMap<V> implemen
 	}
 	
 	@Override
-	public V computeNonDefault(float key, FloatObjectUnaryOperator<V> mappingFunction) {
-		Objects.requireNonNull(mappingFunction);
-		int index = findIndex(key);
-		if(index == -1) {
-			V newValue = mappingFunction.apply(key, getDefaultReturnValue());
-			if(Objects.equals(newValue, getDefaultReturnValue())) return newValue;
-			insertIndex(size++, key, newValue);
-			return newValue;
-		}
-		V newValue = mappingFunction.apply(key, values[index]);
-		if(Objects.equals(newValue, getDefaultReturnValue())) {
-			removeIndex(index);
-			return newValue;
-		}
-		values[index] = newValue;
-		return newValue;
-	}
-	
-	@Override
 	public V computeIfAbsent(float key, FloatFunction<V> mappingFunction) {
 		Objects.requireNonNull(mappingFunction);
 		int index = findIndex(key);
@@ -452,26 +433,7 @@ public class Float2ObjectArrayMap<V> extends AbstractFloat2ObjectMap<V> implemen
 		}
 		return newValue;
 	}
-	
-	@Override
-	public V computeIfAbsentNonDefault(float key, FloatFunction<V> mappingFunction) {
-		Objects.requireNonNull(mappingFunction);
-		int index = findIndex(key);
-		if(index == -1) {
-			V newValue = mappingFunction.apply(key);
-			if(Objects.equals(newValue, getDefaultReturnValue())) return newValue;
-			insertIndex(size++, key, newValue);
-			return newValue;
-		}
-		V newValue = values[index];
-		if(Objects.equals(newValue, getDefaultReturnValue())) {
-			newValue = mappingFunction.apply(key);
-			if(Objects.equals(newValue, getDefaultReturnValue())) return newValue;
-			values[index] = newValue;
-		}
-		return newValue;
-	}
-	
+		
 	@Override
 	public V supplyIfAbsent(float key, ObjectSupplier<V> valueProvider) {
 		Objects.requireNonNull(valueProvider);
@@ -490,42 +452,9 @@ public class Float2ObjectArrayMap<V> extends AbstractFloat2ObjectMap<V> implemen
 		}
 		return newValue;
 	}
-	
-	@Override
-	public V supplyIfAbsentNonDefault(float key, ObjectSupplier<V> valueProvider) {
-		Objects.requireNonNull(valueProvider);
-		int index = findIndex(key);
-		if(index == -1) {
-			V newValue = valueProvider.get();
-			if(Objects.equals(newValue, getDefaultReturnValue())) return newValue;
-			insertIndex(size++, key, newValue);
-			return newValue;
-		}
-		V newValue = values[index];
-		if(Objects.equals(newValue, getDefaultReturnValue())) {
-			newValue = valueProvider.get();
-			if(Objects.equals(newValue, getDefaultReturnValue())) return newValue;
-			values[index] = newValue;
-		}
-		return newValue;
-	}
-	
+		
 	@Override
 	public V computeIfPresent(float key, FloatObjectUnaryOperator<V> mappingFunction) {
-		Objects.requireNonNull(mappingFunction);
-		int index = findIndex(key);
-		if(index == -1 || Objects.equals(values[index], getDefaultReturnValue())) return getDefaultReturnValue();
-		V newValue = mappingFunction.apply(key, values[index]);
-		if(Objects.equals(newValue, getDefaultReturnValue())) {
-			removeIndex(index);
-			return newValue;
-		}
-		values[index] = newValue;
-		return newValue;
-	}
-	
-	@Override
-	public V computeIfPresentNonDefault(float key, FloatObjectUnaryOperator<V> mappingFunction) {
 		Objects.requireNonNull(mappingFunction);
 		int index = findIndex(key);
 		if(index == -1 || Objects.equals(values[index], getDefaultReturnValue())) return getDefaultReturnValue();

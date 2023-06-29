@@ -443,6 +443,42 @@ public class Short2IntArrayMap extends AbstractShort2IntMap implements Short2Int
 	}
 	
 	@Override
+	public int computeIntIfAbsent(short key, Short2IntFunction mappingFunction) {
+		Objects.requireNonNull(mappingFunction);
+		int index = findIndex(key);
+		if(index == -1) {
+			int newValue = mappingFunction.applyAsInt(key);
+			insertIndex(size++, key, newValue);
+			return newValue;
+		}
+		int newValue = values[index];
+		return newValue;
+	}
+		
+	@Override
+	public int supplyIntIfAbsent(short key, IntSupplier valueProvider) {
+		Objects.requireNonNull(valueProvider);
+		int index = findIndex(key);
+		if(index == -1) {
+			int newValue = valueProvider.getAsInt();
+			insertIndex(size++, key, newValue);
+			return newValue;
+		}
+		int newValue = values[index];
+		return newValue;
+	}
+		
+	@Override
+	public int computeIntIfPresent(short key, ShortIntUnaryOperator mappingFunction) {
+		Objects.requireNonNull(mappingFunction);
+		int index = findIndex(key);
+		if(index == -1) return getDefaultReturnValue();
+		int newValue = mappingFunction.applyAsInt(key, values[index]);
+		values[index] = newValue;
+		return newValue;
+	}
+	
+	@Override
 	public int computeIntNonDefault(short key, ShortIntUnaryOperator mappingFunction) {
 		Objects.requireNonNull(mappingFunction);
 		int index = findIndex(key);
@@ -458,19 +494,6 @@ public class Short2IntArrayMap extends AbstractShort2IntMap implements Short2Int
 			return newValue;
 		}
 		values[index] = newValue;
-		return newValue;
-	}
-	
-	@Override
-	public int computeIntIfAbsent(short key, Short2IntFunction mappingFunction) {
-		Objects.requireNonNull(mappingFunction);
-		int index = findIndex(key);
-		if(index == -1) {
-			int newValue = mappingFunction.applyAsInt(key);
-			insertIndex(size++, key, newValue);
-			return newValue;
-		}
-		int newValue = values[index];
 		return newValue;
 	}
 	
@@ -494,19 +517,6 @@ public class Short2IntArrayMap extends AbstractShort2IntMap implements Short2Int
 	}
 	
 	@Override
-	public int supplyIntIfAbsent(short key, IntSupplier valueProvider) {
-		Objects.requireNonNull(valueProvider);
-		int index = findIndex(key);
-		if(index == -1) {
-			int newValue = valueProvider.getAsInt();
-			insertIndex(size++, key, newValue);
-			return newValue;
-		}
-		int newValue = values[index];
-		return newValue;
-	}
-	
-	@Override
 	public int supplyIntIfAbsentNonDefault(short key, IntSupplier valueProvider) {
 		Objects.requireNonNull(valueProvider);
 		int index = findIndex(key);
@@ -522,16 +532,6 @@ public class Short2IntArrayMap extends AbstractShort2IntMap implements Short2Int
 			if(newValue == getDefaultReturnValue()) return newValue;
 			values[index] = newValue;
 		}
-		return newValue;
-	}
-	
-	@Override
-	public int computeIntIfPresent(short key, ShortIntUnaryOperator mappingFunction) {
-		Objects.requireNonNull(mappingFunction);
-		int index = findIndex(key);
-		if(index == -1) return getDefaultReturnValue();
-		int newValue = mappingFunction.applyAsInt(key, values[index]);
-		values[index] = newValue;
 		return newValue;
 	}
 	

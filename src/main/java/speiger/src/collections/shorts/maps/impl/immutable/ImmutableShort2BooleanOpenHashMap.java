@@ -413,20 +413,19 @@ public class ImmutableShort2BooleanOpenHashMap extends AbstractShort2BooleanMap 
 	@Override
 	public boolean computeBoolean(short key, ShortBooleanUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
 	@Override
-	public boolean computeBooleanNonDefault(short key, ShortBooleanUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
-	@Override
 	public boolean computeBooleanIfAbsent(short key, ShortPredicate mappingFunction) { throw new UnsupportedOperationException(); }
-	@Override
-	public boolean computeBooleanIfAbsentNonDefault(short key, ShortPredicate mappingFunction) { throw new UnsupportedOperationException(); }
 	@Override
 	public boolean supplyBooleanIfAbsent(short key, BooleanSupplier valueProvider) { throw new UnsupportedOperationException(); }
 	@Override
-	public boolean supplyBooleanIfAbsentNonDefault(short key, BooleanSupplier valueProvider) { throw new UnsupportedOperationException(); }
-	@Override
 	public boolean computeBooleanIfPresent(short key, ShortBooleanUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
 	@Override
+	public boolean computeBooleanNonDefault(short key, ShortBooleanUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
+	@Override
+	public boolean computeBooleanIfAbsentNonDefault(short key, ShortPredicate mappingFunction) { throw new UnsupportedOperationException(); }
+	@Override
+	public boolean supplyBooleanIfAbsentNonDefault(short key, BooleanSupplier valueProvider) { throw new UnsupportedOperationException(); }
+	@Override
 	public boolean computeBooleanIfPresentNonDefault(short key, ShortBooleanUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
-	
 	@Override
 	public boolean mergeBoolean(short key, boolean value, BooleanBooleanUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
 	

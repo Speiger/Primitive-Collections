@@ -454,6 +454,40 @@ public class Short2FloatRBTreeMap extends AbstractShort2FloatMap implements Shor
 	}
 	
 	@Override
+	public float computeFloatIfAbsent(short key, Short2FloatFunction mappingFunction) {
+		Objects.requireNonNull(mappingFunction);
+		Node entry = findNode(key);
+		if(entry == null) {
+			float newValue = mappingFunction.applyAsFloat(key);
+			put(key, newValue);
+			return newValue;
+		}
+		return entry.value;
+	}
+	
+	@Override
+	public float supplyFloatIfAbsent(short key, FloatSupplier valueProvider) {
+		Objects.requireNonNull(valueProvider);
+		Node entry = findNode(key);
+		if(entry == null) {
+			float newValue = valueProvider.getAsFloat();
+			put(key, newValue);
+			return newValue;
+		}
+		return entry.value;
+	}
+	
+	@Override
+	public float computeFloatIfPresent(short key, ShortFloatUnaryOperator mappingFunction) {
+		Objects.requireNonNull(mappingFunction);
+		Node entry = findNode(key);
+		if(entry == null) return getDefaultReturnValue();
+		float newValue = mappingFunction.applyAsFloat(key, entry.value);
+		entry.value = newValue;
+		return newValue;
+	}
+	
+	@Override
 	public float computeFloatNonDefault(short key, ShortFloatUnaryOperator mappingFunction) {
 		Objects.requireNonNull(mappingFunction);
 		Node entry = findNode(key);
@@ -470,18 +504,6 @@ public class Short2FloatRBTreeMap extends AbstractShort2FloatMap implements Shor
 		}
 		entry.value = newValue;
 		return newValue;
-	}
-	
-	@Override
-	public float computeFloatIfAbsent(short key, Short2FloatFunction mappingFunction) {
-		Objects.requireNonNull(mappingFunction);
-		Node entry = findNode(key);
-		if(entry == null) {
-			float newValue = mappingFunction.applyAsFloat(key);
-			put(key, newValue);
-			return newValue;
-		}
-		return entry.value;
 	}
 	
 	@Override
@@ -503,43 +525,21 @@ public class Short2FloatRBTreeMap extends AbstractShort2FloatMap implements Shor
 	}
 	
 	@Override
-	public float supplyFloatIfAbsent(short key, FloatSupplier valueProvider) {
-		Objects.requireNonNull(valueProvider);
-		Node entry = findNode(key);
-		if(entry == null) {
-			float newValue = valueProvider.getAsDouble();
-			put(key, newValue);
-			return newValue;
-		}
-		return entry.value;
-	}
-	
-	@Override
 	public float supplyFloatIfAbsentNonDefault(short key, FloatSupplier valueProvider) {
 		Objects.requireNonNull(valueProvider);
 		Node entry = findNode(key);
 		if(entry == null) {
-			float newValue = valueProvider.getAsDouble();
+			float newValue = valueProvider.getAsFloat();
 			if(Float.floatToIntBits(newValue) == Float.floatToIntBits(getDefaultReturnValue())) return newValue;
 			put(key, newValue);
 			return newValue;
 		}
 		if(Float.floatToIntBits(entry.value) == Float.floatToIntBits(getDefaultReturnValue())) {
-			float newValue = valueProvider.getAsDouble();
+			float newValue = valueProvider.getAsFloat();
 			if(Float.floatToIntBits(newValue) == Float.floatToIntBits(getDefaultReturnValue())) return newValue;
 			entry.value = newValue;
 		}
 		return entry.value;
-	}
-	
-	@Override
-	public float computeFloatIfPresent(short key, ShortFloatUnaryOperator mappingFunction) {
-		Objects.requireNonNull(mappingFunction);
-		Node entry = findNode(key);
-		if(entry == null) return getDefaultReturnValue();
-		float newValue = mappingFunction.applyAsFloat(key, entry.value);
-		entry.value = newValue;
-		return newValue;
 	}
 	
 	@Override
@@ -1621,14 +1621,9 @@ public class Short2FloatRBTreeMap extends AbstractShort2FloatMap implements Shor
 			Objects.requireNonNull(mappingFunction);
 			if(!inRange(key)) return getDefaultReturnValue();
 			Node entry = map.findNode(key);
-			if(entry == null || Float.floatToIntBits(entry.value) == Float.floatToIntBits(getDefaultReturnValue())) return getDefaultReturnValue();
-			float newValue = mappingFunction.apply(key, entry.value);
-			if(Float.floatToIntBits(newValue) == Float.floatToIntBits(getDefaultReturnValue())) {
-				map.removeNode(entry);
-				return newValue;
-			}
-			entry.value = newValue;
-			return newValue;
+			if(entry == null) return getDefaultReturnValue();
+			entry.value = mappingFunction.apply(key, entry.value);
+			return entry.value;
 		}
 		
 		@Override

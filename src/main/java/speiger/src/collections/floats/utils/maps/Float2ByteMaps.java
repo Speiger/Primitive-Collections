@@ -250,17 +250,17 @@ public class Float2ByteMaps
 		@Override
 		public byte computeByte(float key, FloatByteUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
 		@Override
-		public byte computeByteNonDefault(float key, FloatByteUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
-		@Override
 		public byte computeByteIfAbsent(float key, Float2ByteFunction mappingFunction) { throw new UnsupportedOperationException(); }
-		@Override
-		public byte computeByteIfAbsentNonDefault(float key, Float2ByteFunction mappingFunction) { throw new UnsupportedOperationException(); }
 		@Override
 		public byte computeByteIfPresent(float key, FloatByteUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
 		@Override
-		public byte computeByteIfPresentNonDefault(float key, FloatByteUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
-		@Override
 		public byte supplyByteIfAbsent(float key, ByteSupplier valueProvider) { throw new UnsupportedOperationException(); }
+		@Override
+		public byte computeByteNonDefault(float key, FloatByteUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
+		@Override
+		public byte computeByteIfAbsentNonDefault(float key, Float2ByteFunction mappingFunction) { throw new UnsupportedOperationException(); }
+		@Override
+		public byte computeByteIfPresentNonDefault(float key, FloatByteUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
 		@Override
 		public byte supplyByteIfAbsentNonDefault(float key, ByteSupplier valueProvider) { throw new UnsupportedOperationException(); }
 		@Override
@@ -312,17 +312,17 @@ public class Float2ByteMaps
 		@Override
 		public byte computeByte(float key, FloatByteUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
 		@Override
-		public byte computeByteNonDefault(float key, FloatByteUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
-		@Override
 		public byte computeByteIfAbsent(float key, Float2ByteFunction mappingFunction) { throw new UnsupportedOperationException(); }
-		@Override
-		public byte computeByteIfAbsentNonDefault(float key, Float2ByteFunction mappingFunction) { throw new UnsupportedOperationException(); }
 		@Override
 		public byte computeByteIfPresent(float key, FloatByteUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
 		@Override
-		public byte computeByteIfPresentNonDefault(float key, FloatByteUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
-		@Override
 		public byte supplyByteIfAbsent(float key, ByteSupplier valueProvider) { throw new UnsupportedOperationException(); }
+		@Override
+		public byte computeByteNonDefault(float key, FloatByteUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
+		@Override
+		public byte computeByteIfAbsentNonDefault(float key, Float2ByteFunction mappingFunction) { throw new UnsupportedOperationException(); }
+		@Override
+		public byte computeByteIfPresentNonDefault(float key, FloatByteUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
 		@Override
 		public byte supplyByteIfAbsentNonDefault(float key, ByteSupplier valueProvider) { throw new UnsupportedOperationException(); }
 		@Override
@@ -547,17 +547,17 @@ public class Float2ByteMaps
 		@Override
 		public byte computeByte(float key, FloatByteUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
 		@Override
-		public byte computeByteNonDefault(float key, FloatByteUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
-		@Override
 		public byte computeByteIfAbsent(float key, Float2ByteFunction mappingFunction) { throw new UnsupportedOperationException(); }
-		@Override
-		public byte computeByteIfAbsentNonDefault(float key, Float2ByteFunction mappingFunction) { throw new UnsupportedOperationException(); }
 		@Override
 		public byte computeByteIfPresent(float key, FloatByteUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
 		@Override
-		public byte computeByteIfPresentNonDefault(float key, FloatByteUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
-		@Override
 		public byte supplyByteIfAbsent(float key, ByteSupplier valueProvider) { throw new UnsupportedOperationException(); }
+		@Override
+		public byte computeByteNonDefault(float key, FloatByteUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
+		@Override
+		public byte computeByteIfAbsentNonDefault(float key, Float2ByteFunction mappingFunction) { throw new UnsupportedOperationException(); }
+		@Override
+		public byte computeByteIfPresentNonDefault(float key, FloatByteUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
 		@Override
 		public byte supplyByteIfAbsentNonDefault(float key, ByteSupplier valueProvider) { throw new UnsupportedOperationException(); }
 		@Override
@@ -955,17 +955,17 @@ public class Float2ByteMaps
 		@Override
 		public byte computeByte(float key, FloatByteUnaryOperator mappingFunction) { synchronized(mutex) { return map.computeByte(key, mappingFunction); } }
 		@Override
-		public byte computeByteNonDefault(float key, FloatByteUnaryOperator mappingFunction) { synchronized(mutex) { return map.computeByteNonDefault(key, mappingFunction); } }
-		@Override
 		public byte computeByteIfAbsent(float key, Float2ByteFunction mappingFunction) { synchronized(mutex) { return map.computeByteIfAbsent(key, mappingFunction); } }
-		@Override
-		public byte computeByteIfAbsentNonDefault(float key, Float2ByteFunction mappingFunction) { synchronized(mutex) { return map.computeByteIfAbsentNonDefault(key, mappingFunction); } }
 		@Override
 		public byte computeByteIfPresent(float key, FloatByteUnaryOperator mappingFunction) { synchronized(mutex) { return map.computeByteIfPresent(key, mappingFunction); } }
 		@Override
-		public byte computeByteIfPresentNonDefault(float key, FloatByteUnaryOperator mappingFunction) { synchronized(mutex) { return map.computeByteIfPresentNonDefault(key, mappingFunction); } }
-		@Override
 		public byte supplyByteIfAbsent(float key, ByteSupplier valueProvider) { synchronized(mutex) { return map.supplyByteIfAbsent(key, valueProvider); } }
+		@Override
+		public byte computeByteNonDefault(float key, FloatByteUnaryOperator mappingFunction) { synchronized(mutex) { return map.computeByteNonDefault(key, mappingFunction); } }
+		@Override
+		public byte computeByteIfAbsentNonDefault(float key, Float2ByteFunction mappingFunction) { synchronized(mutex) { return map.computeByteIfAbsentNonDefault(key, mappingFunction); } }
+		@Override
+		public byte computeByteIfPresentNonDefault(float key, FloatByteUnaryOperator mappingFunction) { synchronized(mutex) { return map.computeByteIfPresentNonDefault(key, mappingFunction); } }
 		@Override
 		public byte supplyByteIfAbsentNonDefault(float key, ByteSupplier valueProvider) { synchronized(mutex) { return map.supplyByteIfAbsentNonDefault(key, valueProvider); } }
 		@Override

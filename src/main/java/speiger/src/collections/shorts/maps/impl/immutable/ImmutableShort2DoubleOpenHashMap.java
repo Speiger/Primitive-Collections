@@ -418,20 +418,19 @@ public class ImmutableShort2DoubleOpenHashMap extends AbstractShort2DoubleMap im
 	@Override
 	public double computeDouble(short key, ShortDoubleUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
 	@Override
-	public double computeDoubleNonDefault(short key, ShortDoubleUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
-	@Override
 	public double computeDoubleIfAbsent(short key, Short2DoubleFunction mappingFunction) { throw new UnsupportedOperationException(); }
-	@Override
-	public double computeDoubleIfAbsentNonDefault(short key, Short2DoubleFunction mappingFunction) { throw new UnsupportedOperationException(); }
 	@Override
 	public double supplyDoubleIfAbsent(short key, DoubleSupplier valueProvider) { throw new UnsupportedOperationException(); }
 	@Override
-	public double supplyDoubleIfAbsentNonDefault(short key, DoubleSupplier valueProvider) { throw new UnsupportedOperationException(); }
-	@Override
 	public double computeDoubleIfPresent(short key, ShortDoubleUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
 	@Override
+	public double computeDoubleNonDefault(short key, ShortDoubleUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
+	@Override
+	public double computeDoubleIfAbsentNonDefault(short key, Short2DoubleFunction mappingFunction) { throw new UnsupportedOperationException(); }
+	@Override
+	public double supplyDoubleIfAbsentNonDefault(short key, DoubleSupplier valueProvider) { throw new UnsupportedOperationException(); }
+	@Override
 	public double computeDoubleIfPresentNonDefault(short key, ShortDoubleUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
-	
 	@Override
 	public double mergeDouble(short key, double value, DoubleDoubleUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
 	

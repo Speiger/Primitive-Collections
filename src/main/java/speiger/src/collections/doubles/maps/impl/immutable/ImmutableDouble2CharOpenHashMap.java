@@ -418,20 +418,19 @@ public class ImmutableDouble2CharOpenHashMap extends AbstractDouble2CharMap impl
 	@Override
 	public char computeChar(double key, DoubleCharUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
 	@Override
-	public char computeCharNonDefault(double key, DoubleCharUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
-	@Override
 	public char computeCharIfAbsent(double key, Double2CharFunction mappingFunction) { throw new UnsupportedOperationException(); }
-	@Override
-	public char computeCharIfAbsentNonDefault(double key, Double2CharFunction mappingFunction) { throw new UnsupportedOperationException(); }
 	@Override
 	public char supplyCharIfAbsent(double key, CharSupplier valueProvider) { throw new UnsupportedOperationException(); }
 	@Override
-	public char supplyCharIfAbsentNonDefault(double key, CharSupplier valueProvider) { throw new UnsupportedOperationException(); }
-	@Override
 	public char computeCharIfPresent(double key, DoubleCharUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
 	@Override
+	public char computeCharNonDefault(double key, DoubleCharUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
+	@Override
+	public char computeCharIfAbsentNonDefault(double key, Double2CharFunction mappingFunction) { throw new UnsupportedOperationException(); }
+	@Override
+	public char supplyCharIfAbsentNonDefault(double key, CharSupplier valueProvider) { throw new UnsupportedOperationException(); }
+	@Override
 	public char computeCharIfPresentNonDefault(double key, DoubleCharUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
-	
 	@Override
 	public char mergeChar(double key, char value, CharCharUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
 	

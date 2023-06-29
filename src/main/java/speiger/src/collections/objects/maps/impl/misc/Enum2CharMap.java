@@ -327,6 +327,41 @@ public class Enum2CharMap<T extends Enum<T>> extends AbstractObject2CharMap<T>
 	}
 	
 	@Override
+	public char computeCharIfAbsent(T key, ToCharFunction<T> mappingFunction) {
+		int index = key.ordinal();
+		if(!isSet(index)) {
+			char newValue = mappingFunction.applyAsChar(key);
+			set(index);
+			values[index] = newValue;			
+			return newValue;
+		}
+		char newValue = values[index];
+		return newValue;
+	}
+		
+	@Override
+	public char supplyCharIfAbsent(T key, CharSupplier valueProvider) {
+		int index = key.ordinal();
+		if(!isSet(index)) {
+			char newValue = valueProvider.getAsChar();
+			set(index);
+			values[index] = newValue;			
+			return newValue;
+		}
+		char newValue = values[index];
+		return newValue;
+	}
+	
+	@Override
+	public char computeCharIfPresent(T key, ObjectCharUnaryOperator<T> mappingFunction) {
+		int index = key.ordinal();
+		if(!isSet(index)) return getDefaultReturnValue();
+		char newValue = mappingFunction.applyAsChar(key, values[index]);
+		values[index] = newValue;
+		return newValue;
+	}
+	
+	@Override
 	public char computeCharNonDefault(T key, ObjectCharUnaryOperator<T> mappingFunction) {
 		int index = key.ordinal();
 		if(!isSet(index)) {
@@ -343,19 +378,6 @@ public class Enum2CharMap<T extends Enum<T>> extends AbstractObject2CharMap<T>
 			return newValue;
 		}
 		values[index] = newValue;
-		return newValue;
-	}
-	
-	@Override
-	public char computeCharIfAbsent(T key, ToCharFunction<T> mappingFunction) {
-		int index = key.ordinal();
-		if(!isSet(index)) {
-			char newValue = mappingFunction.applyAsChar(key);
-			set(index);
-			values[index] = newValue;			
-			return newValue;
-		}
-		char newValue = values[index];
 		return newValue;
 	}
 	
@@ -379,23 +401,10 @@ public class Enum2CharMap<T extends Enum<T>> extends AbstractObject2CharMap<T>
 	}
 	
 	@Override
-	public char supplyCharIfAbsent(T key, CharSupplier valueProvider) {
-		int index = key.ordinal();
-		if(!isSet(index)) {
-			char newValue = valueProvider.getAsInt();
-			set(index);
-			values[index] = newValue;			
-			return newValue;
-		}
-		char newValue = values[index];
-		return newValue;
-	}
-	
-	@Override
 	public char supplyCharIfAbsentNonDefault(T key, CharSupplier valueProvider) {
 		int index = key.ordinal();
 		if(!isSet(index)) {
-			char newValue = valueProvider.getAsInt();
+			char newValue = valueProvider.getAsChar();
 			if(newValue == getDefaultReturnValue()) return newValue;
 			set(index);
 			values[index] = newValue;			
@@ -403,19 +412,10 @@ public class Enum2CharMap<T extends Enum<T>> extends AbstractObject2CharMap<T>
 		}
 		char newValue = values[index];
 		if(newValue == getDefaultReturnValue()) {
-			newValue = valueProvider.getAsInt();
+			newValue = valueProvider.getAsChar();
 			if(newValue == getDefaultReturnValue()) return newValue;
 			values[index] = newValue;
 		}
-		return newValue;
-	}
-	
-	@Override
-	public char computeCharIfPresent(T key, ObjectCharUnaryOperator<T> mappingFunction) {
-		int index = key.ordinal();
-		if(!isSet(index)) return getDefaultReturnValue();
-		char newValue = mappingFunction.applyAsChar(key, values[index]);
-		values[index] = newValue;
 		return newValue;
 	}
 	

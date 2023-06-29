@@ -293,15 +293,6 @@ public interface Object2LongMap<T> extends Map<T, Long>, ToLongFunction<T>
 	 */
 	public long computeLong(T key, ObjectLongUnaryOperator<T> mappingFunction);
 	/**
-	 * A Type Specific compute method to reduce boxing/unboxing
-	 * If the generated value equals the getDefaultReturnValue it will simply not insert it since that is treated as "null".
-	 * A "Null Value" will be treated as "Do not insert/remove" based on how the Java has specified it.
-	 * @param key the key that should be computed
-	 * @param mappingFunction the operator that should generate the value
-	 * @return the result of the computation
-	 */
-	public long computeLongNonDefault(T key, ObjectLongUnaryOperator<T> mappingFunction);
-	/**
 	 * A Type Specific computeIfAbsent method to reduce boxing/unboxing
 	 * If the generated value equals the getDefaultReturnValue it will simply not insert it since that is treated as "null".
 	 * A "Null Value" will be treated as "Do not insert/remove" based on how the Java has specified it.
@@ -310,6 +301,34 @@ public interface Object2LongMap<T> extends Map<T, Long>, ToLongFunction<T>
 	 * @return the result of the computed value or present value
 	 */
 	public long computeLongIfAbsent(T key, ToLongFunction<T> mappingFunction);
+	/**
+	 * A Supplier based computeIfAbsent function to fill the most used usecase of this function
+	 * If the generated value equals the getDefaultReturnValue it will simply not insert it since that is treated as "null".
+	 * A "Null Value" will be treated as "Do not insert/remove" based on how the Java has specified it.
+	 * @param key the key that should be computed
+	 * @param valueProvider the value if not present
+	 * @return the result of the computed value or present value
+	 */	
+	public long supplyLongIfAbsent(T key, LongSupplier valueProvider);
+	/**
+	 * A Type Specific compute method to reduce boxing/unboxing
+	 * If the generated value equals the getDefaultReturnValue it will simply not insert it since that is treated as "null".
+	 * A "Null Value" will be treated as "Do not insert/remove" based on how the Java has specified it.
+	 * @param key the key that should be computed
+	 * @param mappingFunction the operator that should generate the value if present
+	 * @return the result of the default return value or present value
+	 * @note if not present then compute is not executed
+	 */
+	public long computeLongIfPresent(T key, ObjectLongUnaryOperator<T> mappingFunction);
+	/**
+	 * A Type Specific compute method to reduce boxing/unboxing
+	 * If the generated value equals the getDefaultReturnValue it will simply not insert it since that is treated as "null".
+	 * A "Null Value" will be treated as "Do not insert/remove" based on how the Java has specified it.
+	 * @param key the key that should be computed
+	 * @param mappingFunction the operator that should generate the value
+	 * @return the result of the computation
+	 */
+	public long computeLongNonDefault(T key, ObjectLongUnaryOperator<T> mappingFunction);
 	/**
 	 * A Type Specific computeIfAbsent method to reduce boxing/unboxing
 	 * If the generated value equals the getDefaultReturnValue it will simply not insert it since that is treated as "null".
@@ -327,26 +346,7 @@ public interface Object2LongMap<T> extends Map<T, Long>, ToLongFunction<T>
 	 * @param valueProvider the value if not present
 	 * @return the result of the computed value or present value
 	 */	
-	public long supplyLongIfAbsent(T key, LongSupplier valueProvider);
-	/**
-	 * A Supplier based computeIfAbsent function to fill the most used usecase of this function
-	 * If the generated value equals the getDefaultReturnValue it will simply not insert it since that is treated as "null".
-	 * A "Null Value" will be treated as "Do not insert/remove" based on how the Java has specified it.
-	 * @param key the key that should be computed
-	 * @param valueProvider the value if not present
-	 * @return the result of the computed value or present value
-	 */	
 	public long supplyLongIfAbsentNonDefault(T key, LongSupplier valueProvider);
-	/**
-	 * A Type Specific compute method to reduce boxing/unboxing
-	 * If the generated value equals the getDefaultReturnValue it will simply not insert it since that is treated as "null".
-	 * A "Null Value" will be treated as "Do not insert/remove" based on how the Java has specified it.
-	 * @param key the key that should be computed
-	 * @param mappingFunction the operator that should generate the value if present
-	 * @return the result of the default return value or present value
-	 * @note if not present then compute is not executed
-	 */
-	public long computeLongIfPresent(T key, ObjectLongUnaryOperator<T> mappingFunction);
 	/**
 	 * A Type Specific compute method to reduce boxing/unboxing
 	 * If the generated value equals the getDefaultReturnValue it will simply not insert it since that is treated as "null".

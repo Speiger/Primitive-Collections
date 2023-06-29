@@ -396,6 +396,40 @@ public class Byte2BooleanAVLTreeMap extends AbstractByte2BooleanMap implements B
 	}
 	
 	@Override
+	public boolean computeBooleanIfAbsent(byte key, BytePredicate mappingFunction) {
+		Objects.requireNonNull(mappingFunction);
+		Node entry = findNode(key);
+		if(entry == null) {
+			boolean newValue = mappingFunction.test(key);
+			put(key, newValue);
+			return newValue;
+		}
+		return entry.value;
+	}
+	
+	@Override
+	public boolean supplyBooleanIfAbsent(byte key, BooleanSupplier valueProvider) {
+		Objects.requireNonNull(valueProvider);
+		Node entry = findNode(key);
+		if(entry == null) {
+			boolean newValue = valueProvider.getAsBoolean();
+			put(key, newValue);
+			return newValue;
+		}
+		return entry.value;
+	}
+	
+	@Override
+	public boolean computeBooleanIfPresent(byte key, ByteBooleanUnaryOperator mappingFunction) {
+		Objects.requireNonNull(mappingFunction);
+		Node entry = findNode(key);
+		if(entry == null) return getDefaultReturnValue();
+		boolean newValue = mappingFunction.applyAsBoolean(key, entry.value);
+		entry.value = newValue;
+		return newValue;
+	}
+	
+	@Override
 	public boolean computeBooleanNonDefault(byte key, ByteBooleanUnaryOperator mappingFunction) {
 		Objects.requireNonNull(mappingFunction);
 		Node entry = findNode(key);
@@ -412,18 +446,6 @@ public class Byte2BooleanAVLTreeMap extends AbstractByte2BooleanMap implements B
 		}
 		entry.value = newValue;
 		return newValue;
-	}
-	
-	@Override
-	public boolean computeBooleanIfAbsent(byte key, BytePredicate mappingFunction) {
-		Objects.requireNonNull(mappingFunction);
-		Node entry = findNode(key);
-		if(entry == null) {
-			boolean newValue = mappingFunction.test(key);
-			put(key, newValue);
-			return newValue;
-		}
-		return entry.value;
 	}
 	
 	@Override
@@ -445,18 +467,6 @@ public class Byte2BooleanAVLTreeMap extends AbstractByte2BooleanMap implements B
 	}
 	
 	@Override
-	public boolean supplyBooleanIfAbsent(byte key, BooleanSupplier valueProvider) {
-		Objects.requireNonNull(valueProvider);
-		Node entry = findNode(key);
-		if(entry == null) {
-			boolean newValue = valueProvider.getAsBoolean();
-			put(key, newValue);
-			return newValue;
-		}
-		return entry.value;
-	}
-	
-	@Override
 	public boolean supplyBooleanIfAbsentNonDefault(byte key, BooleanSupplier valueProvider) {
 		Objects.requireNonNull(valueProvider);
 		Node entry = findNode(key);
@@ -472,16 +482,6 @@ public class Byte2BooleanAVLTreeMap extends AbstractByte2BooleanMap implements B
 			entry.value = newValue;
 		}
 		return entry.value;
-	}
-	
-	@Override
-	public boolean computeBooleanIfPresent(byte key, ByteBooleanUnaryOperator mappingFunction) {
-		Objects.requireNonNull(mappingFunction);
-		Node entry = findNode(key);
-		if(entry == null) return getDefaultReturnValue();
-		boolean newValue = mappingFunction.applyAsBoolean(key, entry.value);
-		entry.value = newValue;
-		return newValue;
 	}
 	
 	@Override
@@ -1487,14 +1487,9 @@ public class Byte2BooleanAVLTreeMap extends AbstractByte2BooleanMap implements B
 			Objects.requireNonNull(mappingFunction);
 			if(!inRange(key)) return getDefaultReturnValue();
 			Node entry = map.findNode(key);
-			if(entry == null || entry.value == getDefaultReturnValue()) return getDefaultReturnValue();
-			boolean newValue = mappingFunction.apply(key, entry.value);
-			if(newValue == getDefaultReturnValue()) {
-				map.removeNode(entry);
-				return newValue;
-			}
-			entry.value = newValue;
-			return newValue;
+			if(entry == null) return getDefaultReturnValue();
+			entry.value = mappingFunction.apply(key, entry.value);
+			return entry.value;
 		}
 		
 		@Override

@@ -455,6 +455,40 @@ public class Long2ShortAVLTreeMap extends AbstractLong2ShortMap implements Long2
 	}
 	
 	@Override
+	public short computeShortIfAbsent(long key, Long2ShortFunction mappingFunction) {
+		Objects.requireNonNull(mappingFunction);
+		Node entry = findNode(key);
+		if(entry == null) {
+			short newValue = mappingFunction.applyAsShort(key);
+			put(key, newValue);
+			return newValue;
+		}
+		return entry.value;
+	}
+	
+	@Override
+	public short supplyShortIfAbsent(long key, ShortSupplier valueProvider) {
+		Objects.requireNonNull(valueProvider);
+		Node entry = findNode(key);
+		if(entry == null) {
+			short newValue = valueProvider.getAsShort();
+			put(key, newValue);
+			return newValue;
+		}
+		return entry.value;
+	}
+	
+	@Override
+	public short computeShortIfPresent(long key, LongShortUnaryOperator mappingFunction) {
+		Objects.requireNonNull(mappingFunction);
+		Node entry = findNode(key);
+		if(entry == null) return getDefaultReturnValue();
+		short newValue = mappingFunction.applyAsShort(key, entry.value);
+		entry.value = newValue;
+		return newValue;
+	}
+	
+	@Override
 	public short computeShortNonDefault(long key, LongShortUnaryOperator mappingFunction) {
 		Objects.requireNonNull(mappingFunction);
 		Node entry = findNode(key);
@@ -471,18 +505,6 @@ public class Long2ShortAVLTreeMap extends AbstractLong2ShortMap implements Long2
 		}
 		entry.value = newValue;
 		return newValue;
-	}
-	
-	@Override
-	public short computeShortIfAbsent(long key, Long2ShortFunction mappingFunction) {
-		Objects.requireNonNull(mappingFunction);
-		Node entry = findNode(key);
-		if(entry == null) {
-			short newValue = mappingFunction.applyAsShort(key);
-			put(key, newValue);
-			return newValue;
-		}
-		return entry.value;
 	}
 	
 	@Override
@@ -504,43 +526,21 @@ public class Long2ShortAVLTreeMap extends AbstractLong2ShortMap implements Long2
 	}
 	
 	@Override
-	public short supplyShortIfAbsent(long key, ShortSupplier valueProvider) {
-		Objects.requireNonNull(valueProvider);
-		Node entry = findNode(key);
-		if(entry == null) {
-			short newValue = valueProvider.getAsInt();
-			put(key, newValue);
-			return newValue;
-		}
-		return entry.value;
-	}
-	
-	@Override
 	public short supplyShortIfAbsentNonDefault(long key, ShortSupplier valueProvider) {
 		Objects.requireNonNull(valueProvider);
 		Node entry = findNode(key);
 		if(entry == null) {
-			short newValue = valueProvider.getAsInt();
+			short newValue = valueProvider.getAsShort();
 			if(newValue == getDefaultReturnValue()) return newValue;
 			put(key, newValue);
 			return newValue;
 		}
 		if(entry.value == getDefaultReturnValue()) {
-			short newValue = valueProvider.getAsInt();
+			short newValue = valueProvider.getAsShort();
 			if(newValue == getDefaultReturnValue()) return newValue;
 			entry.value = newValue;
 		}
 		return entry.value;
-	}
-	
-	@Override
-	public short computeShortIfPresent(long key, LongShortUnaryOperator mappingFunction) {
-		Objects.requireNonNull(mappingFunction);
-		Node entry = findNode(key);
-		if(entry == null) return getDefaultReturnValue();
-		short newValue = mappingFunction.applyAsShort(key, entry.value);
-		entry.value = newValue;
-		return newValue;
 	}
 	
 	@Override
@@ -1558,14 +1558,9 @@ public class Long2ShortAVLTreeMap extends AbstractLong2ShortMap implements Long2
 			Objects.requireNonNull(mappingFunction);
 			if(!inRange(key)) return getDefaultReturnValue();
 			Node entry = map.findNode(key);
-			if(entry == null || entry.value == getDefaultReturnValue()) return getDefaultReturnValue();
-			short newValue = mappingFunction.apply(key, entry.value);
-			if(newValue == getDefaultReturnValue()) {
-				map.removeNode(entry);
-				return newValue;
-			}
-			entry.value = newValue;
-			return newValue;
+			if(entry == null) return getDefaultReturnValue();
+			entry.value = mappingFunction.apply(key, entry.value);
+			return entry.value;
 		}
 		
 		@Override

@@ -147,6 +147,15 @@ public class DoubleArrayFIFOQueue extends AbstractDoublePriorityQueue implements
 	}
 	
 	@Override
+	public boolean contains(double e) {
+		if(first == last) return false;
+		for(int i = 0,m=size();i<m;i++) {
+			if(e == array[(first + i) % array.length]) return true;
+		}
+		return false;
+	}
+	
+	@Override
 	public boolean removeFirst(double e) {
 		if(first == last) return false;
 		for(int i = 0,m=size();i<m;i++) {

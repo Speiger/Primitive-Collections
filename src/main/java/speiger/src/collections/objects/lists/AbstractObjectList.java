@@ -12,6 +12,7 @@ import speiger.src.collections.objects.collections.AbstractObjectCollection;
 import speiger.src.collections.objects.collections.ObjectCollection;
 import speiger.src.collections.objects.collections.ObjectIterator;
 import speiger.src.collections.objects.collections.ObjectSplititerator;
+import speiger.src.collections.ints.lists.IntList;
 import speiger.src.collections.objects.utils.ObjectSplititerators;
 import speiger.src.collections.utils.SanityChecks;
 
@@ -166,11 +167,21 @@ public abstract class AbstractObjectList<T> extends AbstractObjectCollection<T> 
 	public ObjectListIterator<T> listIterator() {
 		return listIterator(0);
 	}
-
+		
 	@Override
 	public ObjectListIterator<T> listIterator(int index) {
 		if(index < 0 || index > size()) throw new IndexOutOfBoundsException();
 		return new ObjectListIter(index);
+	}
+	
+	@Override
+	public ObjectListIterator<T> indexedIterator(int...indecies) {
+		return new IndexedIterator(indecies);
+	}
+	
+	@Override
+	public ObjectListIterator<T> indexedIterator(IntList indecies) {
+		return new ListIndexedIterator(indecies);
 	}
 	
 	@Override
@@ -526,7 +537,153 @@ public abstract class AbstractObjectList<T> extends AbstractObjectCollection<T> 
 			}
 		}
 	}
+	
+	private class ListIndexedIterator implements ObjectListIterator<T> {
+		IntList indecies;
+		int index;
+		int lastReturned = -1;
 		
+		ListIndexedIterator(IntList indecies) {
+			this.indecies = indecies;
+		}
+		
+		@Override
+		public boolean hasNext() {
+			return index < indecies.size();
+		}
+		
+		@Override
+		public T next() {
+			if(!hasNext()) throw new NoSuchElementException();
+			int i = index++;
+			return get((lastReturned = indecies.getInt(i)));
+		}
+		
+		@Override
+		public boolean hasPrevious() {
+			return index > 0;
+		}
+		
+		@Override
+		public T previous() {
+			if(!hasPrevious()) throw new NoSuchElementException();
+			index--;
+			return get((lastReturned = indecies.getInt(index)));
+		}
+		
+		@Override
+		public int nextIndex() {
+			return index;
+		}
+		
+		@Override
+		public int previousIndex() {
+			return index-1;
+		}
+		
+		@Override
+		public void remove() { throw new UnsupportedOperationException(); }
+		@Override
+		public void add(T e) { throw new UnsupportedOperationException(); }
+		
+		@Override
+		public void set(T e) {
+			if(lastReturned == -1) throw new IllegalStateException();
+			AbstractObjectList.this.set(lastReturned, e);
+		}
+		
+		@Override
+		public int skip(int amount) {
+			if(amount < 0) throw new IllegalStateException("Negative Numbers are not allowed");
+			int steps = Math.min(amount, indecies.size() - index);
+			index += steps;
+			if(steps > 0) lastReturned = Math.min(index-1, indecies.size()-1);
+			return steps;
+		}
+		
+		@Override
+		public int back(int amount) {
+			if(amount < 0) throw new IllegalStateException("Negative Numbers are not allowed");
+			int steps = Math.min(amount, index);
+			index -= steps;
+			if(steps > 0) lastReturned = Math.max(index, 0);
+			return steps;
+		}
+	}
+	
+	private class IndexedIterator implements ObjectListIterator<T> {
+		int[] indecies;
+		int index;
+		int lastReturned = -1;
+		
+		IndexedIterator(int[] indecies) {
+			this.indecies = indecies;
+		}
+		
+		@Override
+		public boolean hasNext() {
+			return index < indecies.length;
+		}
+		
+		@Override
+		public T next() {
+			if(!hasNext()) throw new NoSuchElementException();
+			int i = index++;
+			return get((lastReturned = indecies[i]));
+		}
+		
+		@Override
+		public boolean hasPrevious() {
+			return index > 0;
+		}
+		
+		@Override
+		public T previous() {
+			if(!hasPrevious()) throw new NoSuchElementException();
+			index--;
+			return get((lastReturned = indecies[index]));
+		}
+		
+		@Override
+		public int nextIndex() {
+			return index;
+		}
+		
+		@Override
+		public int previousIndex() {
+			return index-1;
+		}
+		
+		@Override
+		public void remove() { throw new UnsupportedOperationException(); }
+		@Override
+		public void add(T e) { throw new UnsupportedOperationException(); }
+		
+		@Override
+		public void set(T e) {
+			if(lastReturned == -1) throw new IllegalStateException();
+			AbstractObjectList.this.set(lastReturned, e);
+		}
+		
+		@Override
+		public int skip(int amount) {
+			if(amount < 0) throw new IllegalStateException("Negative Numbers are not allowed");
+			int steps = Math.min(amount, indecies.length - index);
+			index += steps;
+			if(steps > 0) lastReturned = Math.min(index-1, indecies.length-1);
+			return steps;
+		}
+		
+		@Override
+		public int back(int amount) {
+			if(amount < 0) throw new IllegalStateException("Negative Numbers are not allowed");
+			int steps = Math.min(amount, index);
+			index -= steps;
+			if(steps > 0) lastReturned = Math.max(index, 0);
+			return steps;
+		}
+	}
+	
 	private class ObjectListIter implements ObjectListIterator<T> {
 		int index;
 		int lastReturned = -1;
@@ -604,7 +761,7 @@ public abstract class AbstractObjectList<T> extends AbstractObjectCollection<T> 
 			if(amount < 0) throw new IllegalStateException("Negative Numbers are not allowed");
 			int steps = Math.min(amount, index);
 			index -= steps;
-			if(steps > 0) lastReturned = Math.min(index, size()-1);
+			if(steps > 0) lastReturned = Math.max(index, 0);
 			return steps;
 		}
 	}

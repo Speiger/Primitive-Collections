@@ -463,6 +463,42 @@ public class Float2DoubleOpenCustomHashMap extends AbstractFloat2DoubleMap imple
 	}
 	
 	@Override
+	public double computeDoubleIfAbsent(float key, Float2DoubleFunction mappingFunction) {
+		Objects.requireNonNull(mappingFunction);
+		int index = findIndex(key);
+		if(index < 0) {
+			double newValue = mappingFunction.applyAsDouble(key);
+			insert(-index-1, key, newValue);
+			return newValue;
+		}
+		double newValue = values[index];
+		return newValue;
+	}
+		
+	@Override
+	public double supplyDoubleIfAbsent(float key, DoubleSupplier valueProvider) {
+		Objects.requireNonNull(valueProvider);
+		int index = findIndex(key);
+		if(index < 0) {
+			double newValue = valueProvider.getAsDouble();
+			insert(-index-1, key, newValue);
+			return newValue;
+		}
+		double newValue = values[index];
+		return newValue;
+	}
+	
+	@Override
+	public double computeDoubleIfPresent(float key, FloatDoubleUnaryOperator mappingFunction) {
+		Objects.requireNonNull(mappingFunction);
+		int index = findIndex(key);
+		if(index < 0) return getDefaultReturnValue();
+		double newValue = mappingFunction.applyAsDouble(key, values[index]);
+		values[index] = newValue;
+		return newValue;
+	}
+	
+	@Override
 	public double computeDoubleNonDefault(float key, FloatDoubleUnaryOperator mappingFunction) {
 		Objects.requireNonNull(mappingFunction);
 		int index = findIndex(key);
@@ -478,19 +514,6 @@ public class Float2DoubleOpenCustomHashMap extends AbstractFloat2DoubleMap imple
 			return newValue;
 		}
 		values[index] = newValue;
-		return newValue;
-	}
-	
-	@Override
-	public double computeDoubleIfAbsent(float key, Float2DoubleFunction mappingFunction) {
-		Objects.requireNonNull(mappingFunction);
-		int index = findIndex(key);
-		if(index < 0) {
-			double newValue = mappingFunction.applyAsDouble(key);
-			insert(-index-1, key, newValue);
-			return newValue;
-		}
-		double newValue = values[index];
 		return newValue;
 	}
 	
@@ -514,19 +537,6 @@ public class Float2DoubleOpenCustomHashMap extends AbstractFloat2DoubleMap imple
 	}
 	
 	@Override
-	public double supplyDoubleIfAbsent(float key, DoubleSupplier valueProvider) {
-		Objects.requireNonNull(valueProvider);
-		int index = findIndex(key);
-		if(index < 0) {
-			double newValue = valueProvider.getAsDouble();
-			insert(-index-1, key, newValue);
-			return newValue;
-		}
-		double newValue = values[index];
-		return newValue;
-	}
-	
-	@Override
 	public double supplyDoubleIfAbsentNonDefault(float key, DoubleSupplier valueProvider) {
 		Objects.requireNonNull(valueProvider);
 		int index = findIndex(key);
@@ -542,16 +552,6 @@ public class Float2DoubleOpenCustomHashMap extends AbstractFloat2DoubleMap imple
 			if(Double.doubleToLongBits(newValue) == Double.doubleToLongBits(getDefaultReturnValue())) return newValue;
 			values[index] = newValue;
 		}
-		return newValue;
-	}
-	
-	@Override
-	public double computeDoubleIfPresent(float key, FloatDoubleUnaryOperator mappingFunction) {
-		Objects.requireNonNull(mappingFunction);
-		int index = findIndex(key);
-		if(index < 0) return getDefaultReturnValue();
-		double newValue = mappingFunction.applyAsDouble(key, values[index]);
-		values[index] = newValue;
 		return newValue;
 	}
 	

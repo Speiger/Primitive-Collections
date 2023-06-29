@@ -454,6 +454,40 @@ public class Short2CharRBTreeMap extends AbstractShort2CharMap implements Short2
 	}
 	
 	@Override
+	public char computeCharIfAbsent(short key, Short2CharFunction mappingFunction) {
+		Objects.requireNonNull(mappingFunction);
+		Node entry = findNode(key);
+		if(entry == null) {
+			char newValue = mappingFunction.applyAsChar(key);
+			put(key, newValue);
+			return newValue;
+		}
+		return entry.value;
+	}
+	
+	@Override
+	public char supplyCharIfAbsent(short key, CharSupplier valueProvider) {
+		Objects.requireNonNull(valueProvider);
+		Node entry = findNode(key);
+		if(entry == null) {
+			char newValue = valueProvider.getAsChar();
+			put(key, newValue);
+			return newValue;
+		}
+		return entry.value;
+	}
+	
+	@Override
+	public char computeCharIfPresent(short key, ShortCharUnaryOperator mappingFunction) {
+		Objects.requireNonNull(mappingFunction);
+		Node entry = findNode(key);
+		if(entry == null) return getDefaultReturnValue();
+		char newValue = mappingFunction.applyAsChar(key, entry.value);
+		entry.value = newValue;
+		return newValue;
+	}
+	
+	@Override
 	public char computeCharNonDefault(short key, ShortCharUnaryOperator mappingFunction) {
 		Objects.requireNonNull(mappingFunction);
 		Node entry = findNode(key);
@@ -470,18 +504,6 @@ public class Short2CharRBTreeMap extends AbstractShort2CharMap implements Short2
 		}
 		entry.value = newValue;
 		return newValue;
-	}
-	
-	@Override
-	public char computeCharIfAbsent(short key, Short2CharFunction mappingFunction) {
-		Objects.requireNonNull(mappingFunction);
-		Node entry = findNode(key);
-		if(entry == null) {
-			char newValue = mappingFunction.applyAsChar(key);
-			put(key, newValue);
-			return newValue;
-		}
-		return entry.value;
 	}
 	
 	@Override
@@ -503,43 +525,21 @@ public class Short2CharRBTreeMap extends AbstractShort2CharMap implements Short2
 	}
 	
 	@Override
-	public char supplyCharIfAbsent(short key, CharSupplier valueProvider) {
-		Objects.requireNonNull(valueProvider);
-		Node entry = findNode(key);
-		if(entry == null) {
-			char newValue = valueProvider.getAsInt();
-			put(key, newValue);
-			return newValue;
-		}
-		return entry.value;
-	}
-	
-	@Override
 	public char supplyCharIfAbsentNonDefault(short key, CharSupplier valueProvider) {
 		Objects.requireNonNull(valueProvider);
 		Node entry = findNode(key);
 		if(entry == null) {
-			char newValue = valueProvider.getAsInt();
+			char newValue = valueProvider.getAsChar();
 			if(newValue == getDefaultReturnValue()) return newValue;
 			put(key, newValue);
 			return newValue;
 		}
 		if(entry.value == getDefaultReturnValue()) {
-			char newValue = valueProvider.getAsInt();
+			char newValue = valueProvider.getAsChar();
 			if(newValue == getDefaultReturnValue()) return newValue;
 			entry.value = newValue;
 		}
 		return entry.value;
-	}
-	
-	@Override
-	public char computeCharIfPresent(short key, ShortCharUnaryOperator mappingFunction) {
-		Objects.requireNonNull(mappingFunction);
-		Node entry = findNode(key);
-		if(entry == null) return getDefaultReturnValue();
-		char newValue = mappingFunction.applyAsChar(key, entry.value);
-		entry.value = newValue;
-		return newValue;
 	}
 	
 	@Override
@@ -1621,14 +1621,9 @@ public class Short2CharRBTreeMap extends AbstractShort2CharMap implements Short2
 			Objects.requireNonNull(mappingFunction);
 			if(!inRange(key)) return getDefaultReturnValue();
 			Node entry = map.findNode(key);
-			if(entry == null || entry.value == getDefaultReturnValue()) return getDefaultReturnValue();
-			char newValue = mappingFunction.apply(key, entry.value);
-			if(newValue == getDefaultReturnValue()) {
-				map.removeNode(entry);
-				return newValue;
-			}
-			entry.value = newValue;
-			return newValue;
+			if(entry == null) return getDefaultReturnValue();
+			entry.value = mappingFunction.apply(key, entry.value);
+			return entry.value;
 		}
 		
 		@Override

@@ -441,6 +441,42 @@ public class Float2BooleanOpenCustomHashMap extends AbstractFloat2BooleanMap imp
 	}
 	
 	@Override
+	public boolean computeBooleanIfAbsent(float key, FloatPredicate mappingFunction) {
+		Objects.requireNonNull(mappingFunction);
+		int index = findIndex(key);
+		if(index < 0) {
+			boolean newValue = mappingFunction.test(key);
+			insert(-index-1, key, newValue);
+			return newValue;
+		}
+		boolean newValue = values[index];
+		return newValue;
+	}
+		
+	@Override
+	public boolean supplyBooleanIfAbsent(float key, BooleanSupplier valueProvider) {
+		Objects.requireNonNull(valueProvider);
+		int index = findIndex(key);
+		if(index < 0) {
+			boolean newValue = valueProvider.getAsBoolean();
+			insert(-index-1, key, newValue);
+			return newValue;
+		}
+		boolean newValue = values[index];
+		return newValue;
+	}
+	
+	@Override
+	public boolean computeBooleanIfPresent(float key, FloatBooleanUnaryOperator mappingFunction) {
+		Objects.requireNonNull(mappingFunction);
+		int index = findIndex(key);
+		if(index < 0) return getDefaultReturnValue();
+		boolean newValue = mappingFunction.applyAsBoolean(key, values[index]);
+		values[index] = newValue;
+		return newValue;
+	}
+	
+	@Override
 	public boolean computeBooleanNonDefault(float key, FloatBooleanUnaryOperator mappingFunction) {
 		Objects.requireNonNull(mappingFunction);
 		int index = findIndex(key);
@@ -456,19 +492,6 @@ public class Float2BooleanOpenCustomHashMap extends AbstractFloat2BooleanMap imp
 			return newValue;
 		}
 		values[index] = newValue;
-		return newValue;
-	}
-	
-	@Override
-	public boolean computeBooleanIfAbsent(float key, FloatPredicate mappingFunction) {
-		Objects.requireNonNull(mappingFunction);
-		int index = findIndex(key);
-		if(index < 0) {
-			boolean newValue = mappingFunction.test(key);
-			insert(-index-1, key, newValue);
-			return newValue;
-		}
-		boolean newValue = values[index];
 		return newValue;
 	}
 	
@@ -492,19 +515,6 @@ public class Float2BooleanOpenCustomHashMap extends AbstractFloat2BooleanMap imp
 	}
 	
 	@Override
-	public boolean supplyBooleanIfAbsent(float key, BooleanSupplier valueProvider) {
-		Objects.requireNonNull(valueProvider);
-		int index = findIndex(key);
-		if(index < 0) {
-			boolean newValue = valueProvider.getAsBoolean();
-			insert(-index-1, key, newValue);
-			return newValue;
-		}
-		boolean newValue = values[index];
-		return newValue;
-	}
-	
-	@Override
 	public boolean supplyBooleanIfAbsentNonDefault(float key, BooleanSupplier valueProvider) {
 		Objects.requireNonNull(valueProvider);
 		int index = findIndex(key);
@@ -520,16 +530,6 @@ public class Float2BooleanOpenCustomHashMap extends AbstractFloat2BooleanMap imp
 			if(newValue == getDefaultReturnValue()) return newValue;
 			values[index] = newValue;
 		}
-		return newValue;
-	}
-	
-	@Override
-	public boolean computeBooleanIfPresent(float key, FloatBooleanUnaryOperator mappingFunction) {
-		Objects.requireNonNull(mappingFunction);
-		int index = findIndex(key);
-		if(index < 0) return getDefaultReturnValue();
-		boolean newValue = mappingFunction.applyAsBoolean(key, values[index]);
-		values[index] = newValue;
 		return newValue;
 	}
 	

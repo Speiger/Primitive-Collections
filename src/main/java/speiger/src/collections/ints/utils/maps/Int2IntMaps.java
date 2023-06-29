@@ -249,17 +249,17 @@ public class Int2IntMaps
 		@Override
 		public int computeInt(int key, IntIntUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
 		@Override
-		public int computeIntNonDefault(int key, IntIntUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
-		@Override
 		public int computeIntIfAbsent(int key, IntUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
-		@Override
-		public int computeIntIfAbsentNonDefault(int key, IntUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
 		@Override
 		public int computeIntIfPresent(int key, IntIntUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
 		@Override
-		public int computeIntIfPresentNonDefault(int key, IntIntUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
-		@Override
 		public int supplyIntIfAbsent(int key, IntSupplier valueProvider) { throw new UnsupportedOperationException(); }
+		@Override
+		public int computeIntNonDefault(int key, IntIntUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
+		@Override
+		public int computeIntIfAbsentNonDefault(int key, IntUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
+		@Override
+		public int computeIntIfPresentNonDefault(int key, IntIntUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
 		@Override
 		public int supplyIntIfAbsentNonDefault(int key, IntSupplier valueProvider) { throw new UnsupportedOperationException(); }
 		@Override
@@ -311,17 +311,17 @@ public class Int2IntMaps
 		@Override
 		public int computeInt(int key, IntIntUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
 		@Override
-		public int computeIntNonDefault(int key, IntIntUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
-		@Override
 		public int computeIntIfAbsent(int key, IntUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
-		@Override
-		public int computeIntIfAbsentNonDefault(int key, IntUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
 		@Override
 		public int computeIntIfPresent(int key, IntIntUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
 		@Override
-		public int computeIntIfPresentNonDefault(int key, IntIntUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
-		@Override
 		public int supplyIntIfAbsent(int key, IntSupplier valueProvider) { throw new UnsupportedOperationException(); }
+		@Override
+		public int computeIntNonDefault(int key, IntIntUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
+		@Override
+		public int computeIntIfAbsentNonDefault(int key, IntUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
+		@Override
+		public int computeIntIfPresentNonDefault(int key, IntIntUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
 		@Override
 		public int supplyIntIfAbsentNonDefault(int key, IntSupplier valueProvider) { throw new UnsupportedOperationException(); }
 		@Override
@@ -546,17 +546,17 @@ public class Int2IntMaps
 		@Override
 		public int computeInt(int key, IntIntUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
 		@Override
-		public int computeIntNonDefault(int key, IntIntUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
-		@Override
 		public int computeIntIfAbsent(int key, IntUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
-		@Override
-		public int computeIntIfAbsentNonDefault(int key, IntUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
 		@Override
 		public int computeIntIfPresent(int key, IntIntUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
 		@Override
-		public int computeIntIfPresentNonDefault(int key, IntIntUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
-		@Override
 		public int supplyIntIfAbsent(int key, IntSupplier valueProvider) { throw new UnsupportedOperationException(); }
+		@Override
+		public int computeIntNonDefault(int key, IntIntUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
+		@Override
+		public int computeIntIfAbsentNonDefault(int key, IntUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
+		@Override
+		public int computeIntIfPresentNonDefault(int key, IntIntUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
 		@Override
 		public int supplyIntIfAbsentNonDefault(int key, IntSupplier valueProvider) { throw new UnsupportedOperationException(); }
 		@Override
@@ -954,17 +954,17 @@ public class Int2IntMaps
 		@Override
 		public int computeInt(int key, IntIntUnaryOperator mappingFunction) { synchronized(mutex) { return map.computeInt(key, mappingFunction); } }
 		@Override
-		public int computeIntNonDefault(int key, IntIntUnaryOperator mappingFunction) { synchronized(mutex) { return map.computeIntNonDefault(key, mappingFunction); } }
-		@Override
 		public int computeIntIfAbsent(int key, IntUnaryOperator mappingFunction) { synchronized(mutex) { return map.computeIntIfAbsent(key, mappingFunction); } }
-		@Override
-		public int computeIntIfAbsentNonDefault(int key, IntUnaryOperator mappingFunction) { synchronized(mutex) { return map.computeIntIfAbsentNonDefault(key, mappingFunction); } }
 		@Override
 		public int computeIntIfPresent(int key, IntIntUnaryOperator mappingFunction) { synchronized(mutex) { return map.computeIntIfPresent(key, mappingFunction); } }
 		@Override
-		public int computeIntIfPresentNonDefault(int key, IntIntUnaryOperator mappingFunction) { synchronized(mutex) { return map.computeIntIfPresentNonDefault(key, mappingFunction); } }
-		@Override
 		public int supplyIntIfAbsent(int key, IntSupplier valueProvider) { synchronized(mutex) { return map.supplyIntIfAbsent(key, valueProvider); } }
+		@Override
+		public int computeIntNonDefault(int key, IntIntUnaryOperator mappingFunction) { synchronized(mutex) { return map.computeIntNonDefault(key, mappingFunction); } }
+		@Override
+		public int computeIntIfAbsentNonDefault(int key, IntUnaryOperator mappingFunction) { synchronized(mutex) { return map.computeIntIfAbsentNonDefault(key, mappingFunction); } }
+		@Override
+		public int computeIntIfPresentNonDefault(int key, IntIntUnaryOperator mappingFunction) { synchronized(mutex) { return map.computeIntIfPresentNonDefault(key, mappingFunction); } }
 		@Override
 		public int supplyIntIfAbsentNonDefault(int key, IntSupplier valueProvider) { synchronized(mutex) { return map.supplyIntIfAbsentNonDefault(key, valueProvider); } }
 		@Override

@@ -157,6 +157,39 @@ public abstract class AbstractObject2LongMap<T> extends AbstractMap<T, Long> imp
 	}
 	
 	@Override
+	public long computeLongIfAbsent(T key, ToLongFunction<T> mappingFunction) {
+		Objects.requireNonNull(mappingFunction);
+		if(!containsKey(key)) {
+			long newValue = mappingFunction.applyAsLong(key);
+			put(key, newValue);
+			return newValue;
+		}
+		return get(key);
+	}
+	
+	@Override
+	public long supplyLongIfAbsent(T key, LongSupplier valueProvider) {
+		Objects.requireNonNull(valueProvider);
+		if(!containsKey(key)) {
+			long newValue = valueProvider.getAsLong();
+			put(key, newValue);
+			return newValue;
+		}
+		return get(key);
+	}
+	
+	@Override
+	public long computeLongIfPresent(T key, ObjectLongUnaryOperator<T> mappingFunction) {
+		Objects.requireNonNull(mappingFunction);
+		if(containsKey(key)) {
+			long newValue = mappingFunction.applyAsLong(key, getLong(key));
+			put(key, newValue);
+			return newValue;
+		}
+		return getDefaultReturnValue();
+	}
+	
+	@Override
 	public long computeLongNonDefault(T key, ObjectLongUnaryOperator<T> mappingFunction) {
 		Objects.requireNonNull(mappingFunction);
 		long value = getLong(key);
@@ -170,17 +203,6 @@ public abstract class AbstractObject2LongMap<T> extends AbstractMap<T, Long> imp
 		}
 		put(key, newValue);
 		return newValue;
-	}
-	
-	@Override
-	public long computeLongIfAbsent(T key, ToLongFunction<T> mappingFunction) {
-		Objects.requireNonNull(mappingFunction);
-		if(!containsKey(key)) {
-			long newValue = mappingFunction.applyAsLong(key);
-			put(key, newValue);
-			return newValue;
-		}
-		return get(key);
 	}
 	
 	@Override
@@ -198,17 +220,6 @@ public abstract class AbstractObject2LongMap<T> extends AbstractMap<T, Long> imp
 	}
 	
 	@Override
-	public long supplyLongIfAbsent(T key, LongSupplier valueProvider) {
-		Objects.requireNonNull(valueProvider);
-		if(!containsKey(key)) {
-			long newValue = valueProvider.getAsLong();
-			put(key, newValue);
-			return newValue;
-		}
-		return get(key);
-	}
-	
-	@Override
 	public long supplyLongIfAbsentNonDefault(T key, LongSupplier valueProvider) {
 		Objects.requireNonNull(valueProvider);
 		long value;
@@ -220,17 +231,6 @@ public abstract class AbstractObject2LongMap<T> extends AbstractMap<T, Long> imp
 			}
 		}
 		return value;
-	}
-	
-	@Override
-	public long computeLongIfPresent(T key, ObjectLongUnaryOperator<T> mappingFunction) {
-		Objects.requireNonNull(mappingFunction);
-		if(containsKey(key)) {
-			long newValue = mappingFunction.applyAsLong(key, getLong(key));
-			put(key, newValue);
-			return newValue;
-		}
-		return getDefaultReturnValue();
 	}
 	
 	@Override

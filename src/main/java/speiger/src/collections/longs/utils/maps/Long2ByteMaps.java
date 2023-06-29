@@ -250,17 +250,17 @@ public class Long2ByteMaps
 		@Override
 		public byte computeByte(long key, LongByteUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
 		@Override
-		public byte computeByteNonDefault(long key, LongByteUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
-		@Override
 		public byte computeByteIfAbsent(long key, Long2ByteFunction mappingFunction) { throw new UnsupportedOperationException(); }
-		@Override
-		public byte computeByteIfAbsentNonDefault(long key, Long2ByteFunction mappingFunction) { throw new UnsupportedOperationException(); }
 		@Override
 		public byte computeByteIfPresent(long key, LongByteUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
 		@Override
-		public byte computeByteIfPresentNonDefault(long key, LongByteUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
-		@Override
 		public byte supplyByteIfAbsent(long key, ByteSupplier valueProvider) { throw new UnsupportedOperationException(); }
+		@Override
+		public byte computeByteNonDefault(long key, LongByteUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
+		@Override
+		public byte computeByteIfAbsentNonDefault(long key, Long2ByteFunction mappingFunction) { throw new UnsupportedOperationException(); }
+		@Override
+		public byte computeByteIfPresentNonDefault(long key, LongByteUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
 		@Override
 		public byte supplyByteIfAbsentNonDefault(long key, ByteSupplier valueProvider) { throw new UnsupportedOperationException(); }
 		@Override
@@ -312,17 +312,17 @@ public class Long2ByteMaps
 		@Override
 		public byte computeByte(long key, LongByteUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
 		@Override
-		public byte computeByteNonDefault(long key, LongByteUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
-		@Override
 		public byte computeByteIfAbsent(long key, Long2ByteFunction mappingFunction) { throw new UnsupportedOperationException(); }
-		@Override
-		public byte computeByteIfAbsentNonDefault(long key, Long2ByteFunction mappingFunction) { throw new UnsupportedOperationException(); }
 		@Override
 		public byte computeByteIfPresent(long key, LongByteUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
 		@Override
-		public byte computeByteIfPresentNonDefault(long key, LongByteUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
-		@Override
 		public byte supplyByteIfAbsent(long key, ByteSupplier valueProvider) { throw new UnsupportedOperationException(); }
+		@Override
+		public byte computeByteNonDefault(long key, LongByteUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
+		@Override
+		public byte computeByteIfAbsentNonDefault(long key, Long2ByteFunction mappingFunction) { throw new UnsupportedOperationException(); }
+		@Override
+		public byte computeByteIfPresentNonDefault(long key, LongByteUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
 		@Override
 		public byte supplyByteIfAbsentNonDefault(long key, ByteSupplier valueProvider) { throw new UnsupportedOperationException(); }
 		@Override
@@ -547,17 +547,17 @@ public class Long2ByteMaps
 		@Override
 		public byte computeByte(long key, LongByteUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
 		@Override
-		public byte computeByteNonDefault(long key, LongByteUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
-		@Override
 		public byte computeByteIfAbsent(long key, Long2ByteFunction mappingFunction) { throw new UnsupportedOperationException(); }
-		@Override
-		public byte computeByteIfAbsentNonDefault(long key, Long2ByteFunction mappingFunction) { throw new UnsupportedOperationException(); }
 		@Override
 		public byte computeByteIfPresent(long key, LongByteUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
 		@Override
-		public byte computeByteIfPresentNonDefault(long key, LongByteUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
-		@Override
 		public byte supplyByteIfAbsent(long key, ByteSupplier valueProvider) { throw new UnsupportedOperationException(); }
+		@Override
+		public byte computeByteNonDefault(long key, LongByteUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
+		@Override
+		public byte computeByteIfAbsentNonDefault(long key, Long2ByteFunction mappingFunction) { throw new UnsupportedOperationException(); }
+		@Override
+		public byte computeByteIfPresentNonDefault(long key, LongByteUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
 		@Override
 		public byte supplyByteIfAbsentNonDefault(long key, ByteSupplier valueProvider) { throw new UnsupportedOperationException(); }
 		@Override
@@ -955,17 +955,17 @@ public class Long2ByteMaps
 		@Override
 		public byte computeByte(long key, LongByteUnaryOperator mappingFunction) { synchronized(mutex) { return map.computeByte(key, mappingFunction); } }
 		@Override
-		public byte computeByteNonDefault(long key, LongByteUnaryOperator mappingFunction) { synchronized(mutex) { return map.computeByteNonDefault(key, mappingFunction); } }
-		@Override
 		public byte computeByteIfAbsent(long key, Long2ByteFunction mappingFunction) { synchronized(mutex) { return map.computeByteIfAbsent(key, mappingFunction); } }
-		@Override
-		public byte computeByteIfAbsentNonDefault(long key, Long2ByteFunction mappingFunction) { synchronized(mutex) { return map.computeByteIfAbsentNonDefault(key, mappingFunction); } }
 		@Override
 		public byte computeByteIfPresent(long key, LongByteUnaryOperator mappingFunction) { synchronized(mutex) { return map.computeByteIfPresent(key, mappingFunction); } }
 		@Override
-		public byte computeByteIfPresentNonDefault(long key, LongByteUnaryOperator mappingFunction) { synchronized(mutex) { return map.computeByteIfPresentNonDefault(key, mappingFunction); } }
-		@Override
 		public byte supplyByteIfAbsent(long key, ByteSupplier valueProvider) { synchronized(mutex) { return map.supplyByteIfAbsent(key, valueProvider); } }
+		@Override
+		public byte computeByteNonDefault(long key, LongByteUnaryOperator mappingFunction) { synchronized(mutex) { return map.computeByteNonDefault(key, mappingFunction); } }
+		@Override
+		public byte computeByteIfAbsentNonDefault(long key, Long2ByteFunction mappingFunction) { synchronized(mutex) { return map.computeByteIfAbsentNonDefault(key, mappingFunction); } }
+		@Override
+		public byte computeByteIfPresentNonDefault(long key, LongByteUnaryOperator mappingFunction) { synchronized(mutex) { return map.computeByteIfPresentNonDefault(key, mappingFunction); } }
 		@Override
 		public byte supplyByteIfAbsentNonDefault(long key, ByteSupplier valueProvider) { synchronized(mutex) { return map.supplyByteIfAbsentNonDefault(key, valueProvider); } }
 		@Override

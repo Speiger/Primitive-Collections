@@ -395,44 +395,7 @@ public class Long2ObjectRBTreeMap<V> extends AbstractLong2ObjectMap<V> implement
 	}
 	
 	@Override
-	public V computeNonDefault(long key, LongObjectUnaryOperator<V> mappingFunction) {
-		Objects.requireNonNull(mappingFunction);
-		Node<V> entry = findNode(key);
-		if(entry == null) {
-			V newValue = mappingFunction.apply(key, getDefaultReturnValue());
-			if(Objects.equals(newValue, getDefaultReturnValue())) return newValue;
-			put(key, newValue);
-			return newValue;
-		}
-		V newValue = mappingFunction.apply(key, entry.value);
-		if(Objects.equals(newValue, getDefaultReturnValue())) {
-			removeNode(entry);
-			return newValue;
-		}
-		entry.value = newValue;
-		return newValue;
-	}
-	
-	@Override
 	public V computeIfAbsent(long key, LongFunction<V> mappingFunction) {
-		Objects.requireNonNull(mappingFunction);
-		Node<V> entry = findNode(key);
-		if(entry == null) {
-			V newValue = mappingFunction.apply(key);
-			if(Objects.equals(newValue, getDefaultReturnValue())) return newValue;
-			put(key, newValue);
-			return newValue;
-		}
-		if(Objects.equals(entry.value, getDefaultReturnValue())) {
-			V newValue = mappingFunction.apply(key);
-			if(Objects.equals(newValue, getDefaultReturnValue())) return newValue;
-			entry.value = newValue;
-		}
-		return entry.value;
-	}
-	
-	@Override
-	public V computeIfAbsentNonDefault(long key, LongFunction<V> mappingFunction) {
 		Objects.requireNonNull(mappingFunction);
 		Node<V> entry = findNode(key);
 		if(entry == null) {
@@ -468,39 +431,7 @@ public class Long2ObjectRBTreeMap<V> extends AbstractLong2ObjectMap<V> implement
 	}
 	
 	@Override
-	public V supplyIfAbsentNonDefault(long key, ObjectSupplier<V> valueProvider) {
-		Objects.requireNonNull(valueProvider);
-		Node<V> entry = findNode(key);
-		if(entry == null) {
-			V newValue = valueProvider.get();
-			if(Objects.equals(newValue, getDefaultReturnValue())) return newValue;
-			put(key, newValue);
-			return newValue;
-		}
-		if(Objects.equals(entry.value, getDefaultReturnValue())) {
-			V newValue = valueProvider.get();
-			if(Objects.equals(newValue, getDefaultReturnValue())) return newValue;
-			entry.value = newValue;
-		}
-		return entry.value;
-	}
-	
-	@Override
 	public V computeIfPresent(long key, LongObjectUnaryOperator<V> mappingFunction) {
-		Objects.requireNonNull(mappingFunction);
-		Node<V> entry = findNode(key);
-		if(entry == null || Objects.equals(entry.value, getDefaultReturnValue())) return getDefaultReturnValue();
-		V newValue = mappingFunction.apply(key, entry.value);
-		if(Objects.equals(newValue, getDefaultReturnValue())) {
-			removeNode(entry);
-			return newValue;
-		}
-		entry.value = newValue;
-		return newValue;
-	}
-	
-	@Override
-	public V computeIfPresentNonDefault(long key, LongObjectUnaryOperator<V> mappingFunction) {
 		Objects.requireNonNull(mappingFunction);
 		Node<V> entry = findNode(key);
 		if(entry == null || Objects.equals(entry.value, getDefaultReturnValue())) return getDefaultReturnValue();

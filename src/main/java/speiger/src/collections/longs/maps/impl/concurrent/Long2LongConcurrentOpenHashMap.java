@@ -445,17 +445,31 @@ public class Long2LongConcurrentOpenHashMap extends AbstractLong2LongMap impleme
 	}
 	
 	@Override
-	public long computeLongNonDefault(long key, LongLongUnaryOperator mappingFunction) {
-		Objects.requireNonNull(mappingFunction);
-		int hash = getHashCode(key);
-		return getSegment(hash).computeNonDefault(hash, key, mappingFunction);
-	}
-
-	@Override
 	public long computeLongIfAbsent(long key, LongUnaryOperator mappingFunction) {
 		Objects.requireNonNull(mappingFunction);
 		int hash = getHashCode(key);
 		return getSegment(hash).computeIfAbsent(hash, key, mappingFunction);
+	}
+	
+	@Override
+	public long supplyLongIfAbsent(long key, LongSupplier valueProvider) {
+		Objects.requireNonNull(valueProvider);
+		int hash = getHashCode(key);
+		return getSegment(hash).supplyIfAbsent(hash, key, valueProvider);
+	}
+	
+	@Override
+	public long computeLongIfPresent(long key, LongLongUnaryOperator mappingFunction) {
+		Objects.requireNonNull(mappingFunction);
+		int hash = getHashCode(key);
+		return getSegment(hash).computeIfPresent(hash, key, mappingFunction);
+	}
+	
+	@Override
+	public long computeLongNonDefault(long key, LongLongUnaryOperator mappingFunction) {
+		Objects.requireNonNull(mappingFunction);
+		int hash = getHashCode(key);
+		return getSegment(hash).computeNonDefault(hash, key, mappingFunction);
 	}
 	
 	@Override
@@ -466,24 +480,10 @@ public class Long2LongConcurrentOpenHashMap extends AbstractLong2LongMap impleme
 	}
 
 	@Override
-	public long supplyLongIfAbsent(long key, LongSupplier valueProvider) {
-		Objects.requireNonNull(valueProvider);
-		int hash = getHashCode(key);
-		return getSegment(hash).supplyIfAbsent(hash, key, valueProvider);
-	}
-	
-	@Override
 	public long supplyLongIfAbsentNonDefault(long key, LongSupplier valueProvider) {
 		Objects.requireNonNull(valueProvider);
 		int hash = getHashCode(key);
 		return getSegment(hash).supplyIfAbsentNonDefault(hash, key, valueProvider);
-	}
-	
-	@Override
-	public long computeLongIfPresent(long key, LongLongUnaryOperator mappingFunction) {
-		Objects.requireNonNull(mappingFunction);
-		int hash = getHashCode(key);
-		return getSegment(hash).computeIfPresent(hash, key, mappingFunction);
 	}
 	
 	@Override
@@ -2069,6 +2069,54 @@ public class Long2LongConcurrentOpenHashMap extends AbstractLong2LongMap impleme
 			}
 		}
 		
+		protected long computeIfAbsent(int hash, long key, LongUnaryOperator mappingFunction) {
+			long stamp = writeLock();
+			try {
+				int index = findIndex(hash, key);
+				if(index < 0) {
+					long newValue = mappingFunction.applyAsLong(key);
+					insert(-index-1, key, newValue);
+					return newValue;
+				}
+				long newValue = values[index];
+				return newValue;
+			}
+			finally {
+				unlockWrite(stamp);
+			}
+		}
+				
+		protected long supplyIfAbsent(int hash, long key, LongSupplier valueProvider) {
+			long stamp = writeLock();
+			try {
+				int index = findIndex(hash, key);
+				if(index < 0) {
+					long newValue = valueProvider.getAsLong();
+					insert(-index-1, key, newValue);
+					return newValue;
+				}
+				long newValue = values[index];
+				return newValue;
+			}
+			finally {
+				unlockWrite(stamp);
+			}
+		}
+				
+		protected long computeIfPresent(int hash, long key, LongLongUnaryOperator mappingFunction) {
+			long stamp = writeLock();
+			try {
+				int index = findIndex(hash, key);
+				if(index < 0) return getDefaultReturnValue();
+				long newValue = mappingFunction.applyAsLong(key, values[index]);
+				values[index] = newValue;
+				return newValue;
+			}
+			finally {
+				unlockWrite(stamp);
+			}
+		}
+		
 		protected long computeNonDefault(int hash, long key, LongLongUnaryOperator mappingFunction) {
 			long stamp = writeLock();
 			try {
@@ -2085,23 +2133,6 @@ public class Long2LongConcurrentOpenHashMap extends AbstractLong2LongMap impleme
 					return newValue;
 				}
 				values[index] = newValue;
-				return newValue;
-			}
-			finally {
-				unlockWrite(stamp);
-			}
-		}
-		
-		protected long computeIfAbsent(int hash, long key, LongUnaryOperator mappingFunction) {
-			long stamp = writeLock();
-			try {
-				int index = findIndex(hash, key);
-				if(index < 0) {
-					long newValue = mappingFunction.applyAsLong(key);
-					insert(-index-1, key, newValue);
-					return newValue;
-				}
-				long newValue = values[index];
 				return newValue;
 			}
 			finally {
@@ -2132,23 +2163,6 @@ public class Long2LongConcurrentOpenHashMap extends AbstractLong2LongMap impleme
 			}
 		}
 		
-		protected long supplyIfAbsent(int hash, long key, LongSupplier valueProvider) {
-			long stamp = writeLock();
-			try {
-				int index = findIndex(hash, key);
-				if(index < 0) {
-					long newValue = valueProvider.getAsLong();
-					insert(-index-1, key, newValue);
-					return newValue;
-				}
-				long newValue = values[index];
-				return newValue;
-			}
-			finally {
-				unlockWrite(stamp);
-			}
-		}
-		
 		protected long supplyIfAbsentNonDefault(int hash, long key, LongSupplier valueProvider) {
 			long stamp = writeLock();
 			try {
@@ -2165,20 +2179,6 @@ public class Long2LongConcurrentOpenHashMap extends AbstractLong2LongMap impleme
 					if(newValue == getDefaultReturnValue()) return newValue;
 					values[index] = newValue;
 				}
-				return newValue;
-			}
-			finally {
-				unlockWrite(stamp);
-			}
-		}
-		
-		protected long computeIfPresent(int hash, long key, LongLongUnaryOperator mappingFunction) {
-			long stamp = writeLock();
-			try {
-				int index = findIndex(hash, key);
-				if(index < 0) return getDefaultReturnValue();
-				long newValue = mappingFunction.applyAsLong(key, values[index]);
-				values[index] = newValue;
 				return newValue;
 			}
 			finally {

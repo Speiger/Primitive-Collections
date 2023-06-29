@@ -327,6 +327,41 @@ public class Enum2FloatMap<T extends Enum<T>> extends AbstractObject2FloatMap<T>
 	}
 	
 	@Override
+	public float computeFloatIfAbsent(T key, ToFloatFunction<T> mappingFunction) {
+		int index = key.ordinal();
+		if(!isSet(index)) {
+			float newValue = mappingFunction.applyAsFloat(key);
+			set(index);
+			values[index] = newValue;			
+			return newValue;
+		}
+		float newValue = values[index];
+		return newValue;
+	}
+		
+	@Override
+	public float supplyFloatIfAbsent(T key, FloatSupplier valueProvider) {
+		int index = key.ordinal();
+		if(!isSet(index)) {
+			float newValue = valueProvider.getAsFloat();
+			set(index);
+			values[index] = newValue;			
+			return newValue;
+		}
+		float newValue = values[index];
+		return newValue;
+	}
+	
+	@Override
+	public float computeFloatIfPresent(T key, ObjectFloatUnaryOperator<T> mappingFunction) {
+		int index = key.ordinal();
+		if(!isSet(index)) return getDefaultReturnValue();
+		float newValue = mappingFunction.applyAsFloat(key, values[index]);
+		values[index] = newValue;
+		return newValue;
+	}
+	
+	@Override
 	public float computeFloatNonDefault(T key, ObjectFloatUnaryOperator<T> mappingFunction) {
 		int index = key.ordinal();
 		if(!isSet(index)) {
@@ -343,19 +378,6 @@ public class Enum2FloatMap<T extends Enum<T>> extends AbstractObject2FloatMap<T>
 			return newValue;
 		}
 		values[index] = newValue;
-		return newValue;
-	}
-	
-	@Override
-	public float computeFloatIfAbsent(T key, ToFloatFunction<T> mappingFunction) {
-		int index = key.ordinal();
-		if(!isSet(index)) {
-			float newValue = mappingFunction.applyAsFloat(key);
-			set(index);
-			values[index] = newValue;			
-			return newValue;
-		}
-		float newValue = values[index];
 		return newValue;
 	}
 	
@@ -379,23 +401,10 @@ public class Enum2FloatMap<T extends Enum<T>> extends AbstractObject2FloatMap<T>
 	}
 	
 	@Override
-	public float supplyFloatIfAbsent(T key, FloatSupplier valueProvider) {
-		int index = key.ordinal();
-		if(!isSet(index)) {
-			float newValue = valueProvider.getAsDouble();
-			set(index);
-			values[index] = newValue;			
-			return newValue;
-		}
-		float newValue = values[index];
-		return newValue;
-	}
-	
-	@Override
 	public float supplyFloatIfAbsentNonDefault(T key, FloatSupplier valueProvider) {
 		int index = key.ordinal();
 		if(!isSet(index)) {
-			float newValue = valueProvider.getAsDouble();
+			float newValue = valueProvider.getAsFloat();
 			if(Float.floatToIntBits(newValue) == Float.floatToIntBits(getDefaultReturnValue())) return newValue;
 			set(index);
 			values[index] = newValue;			
@@ -403,19 +412,10 @@ public class Enum2FloatMap<T extends Enum<T>> extends AbstractObject2FloatMap<T>
 		}
 		float newValue = values[index];
 		if(Float.floatToIntBits(newValue) == Float.floatToIntBits(getDefaultReturnValue())) {
-			newValue = valueProvider.getAsDouble();
+			newValue = valueProvider.getAsFloat();
 			if(Float.floatToIntBits(newValue) == Float.floatToIntBits(getDefaultReturnValue())) return newValue;
 			values[index] = newValue;
 		}
-		return newValue;
-	}
-	
-	@Override
-	public float computeFloatIfPresent(T key, ObjectFloatUnaryOperator<T> mappingFunction) {
-		int index = key.ordinal();
-		if(!isSet(index)) return getDefaultReturnValue();
-		float newValue = mappingFunction.applyAsFloat(key, values[index]);
-		values[index] = newValue;
 		return newValue;
 	}
 	

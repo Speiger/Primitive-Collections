@@ -2,6 +2,7 @@ package speiger.src.collections.floats.utils;
 
 import java.util.Iterator;
 import java.util.NoSuchElementException;
+import java.util.function.Consumer;
 
 import speiger.src.collections.floats.collections.FloatIterator;
 import speiger.src.collections.objects.collections.ObjectIterator;
@@ -9,6 +10,7 @@ import speiger.src.collections.objects.utils.ObjectIterators;
 import speiger.src.collections.floats.functions.FloatConsumer;
 import speiger.src.collections.floats.functions.FloatComparator;
 import speiger.src.collections.floats.functions.function.FloatFunction;
+import speiger.src.collections.objects.functions.consumer.ObjectFloatConsumer;
 import speiger.src.collections.floats.functions.function.FloatPredicate;
 import speiger.src.collections.floats.lists.FloatList;
 import speiger.src.collections.floats.lists.FloatArrayList;
@@ -16,6 +18,7 @@ import speiger.src.collections.floats.lists.FloatArrayList;
 import speiger.src.collections.floats.lists.FloatListIterator;
 import speiger.src.collections.floats.collections.FloatBidirectionalIterator;
 import speiger.src.collections.floats.collections.FloatCollection;
+import speiger.src.collections.floats.utils.FloatCollections.CollectionWrapper;
 
 /**
  * A Helper class for Iterators
@@ -204,6 +207,24 @@ public class FloatIterators
 	 */
 	public static FloatIterator repeat(Iterator<? extends Float> iterator, int repeats) {
 		return new RepeatingIterator(wrap(iterator), repeats);
+	}
+	
+	/**
+	 * A Helper function that creates a infinitely looping iterator
+	 * @param iterator that should be looping infinitely
+	 * @return a infinitely looping iterator
+	 */
+	public static FloatIterator infinite(FloatIterator iterator) {
+		return new InfiniteIterator(iterator);
+	}
+	
+	/**
+	 * A Helper function that creates a infinitely looping iterator from a Java Iterator
+	 * @param iterator that should be looping infinitely
+	 * @return a infinitely looping iterator
+	 */
+	public static FloatIterator infinite(Iterator<? extends Float> iterator) {
+		return new InfiniteIterator(wrap(iterator));
 	}
 	
 	/**
@@ -839,6 +860,40 @@ public class FloatIterators
 			foundNext = false;
 			return result;
 		}
+	}
+	
+	private static class InfiniteIterator implements FloatIterator
+	{
+		FloatIterator iter;
+		CollectionWrapper looper = FloatCollections.wrapper();
+		int index = 0;
+		
+		public InfiniteIterator(FloatIterator iter) {
+			this.iter = iter;
+		}
+		
+		@Override
+		public boolean hasNext() {
+			return true;
+		}
+
+		@Override
+		public float nextFloat() {
+			if(iter != null) {
+				if(iter.hasNext()) {
+					float value = iter.nextFloat();
+					looper.add(value);
+					return value;
+				}
+				else iter = null;
+			}
+			return looper.getFloat((index++) % looper.size());
+		}
+		
+		@Override
+		public void forEachRemaining(FloatConsumer action) { throw new UnsupportedOperationException("This is a instant deadlock, so unsupported"); }
+		public void forEachRemaining(Consumer<? super Float> action) { throw new UnsupportedOperationException("This is a instant deadlock, so unsupported"); }
+		public <E> void forEachRemaining(E input, ObjectFloatConsumer<E> action) { throw new UnsupportedOperationException("This is a instant deadlock, so unsupported"); }
 	}
 	
 	private static class RepeatingIterator implements FloatIterator

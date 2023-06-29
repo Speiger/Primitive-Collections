@@ -8,5 +8,5 @@ public interface ShortSupplier
 	/**
 	 * @return the supplied value
 	 */
-	public short getAsInt();
+	public short getAsShort();
 }

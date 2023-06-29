@@ -250,17 +250,17 @@ public class Float2LongMaps
 		@Override
 		public long computeLong(float key, FloatLongUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
 		@Override
-		public long computeLongNonDefault(float key, FloatLongUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
-		@Override
 		public long computeLongIfAbsent(float key, Float2LongFunction mappingFunction) { throw new UnsupportedOperationException(); }
-		@Override
-		public long computeLongIfAbsentNonDefault(float key, Float2LongFunction mappingFunction) { throw new UnsupportedOperationException(); }
 		@Override
 		public long computeLongIfPresent(float key, FloatLongUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
 		@Override
-		public long computeLongIfPresentNonDefault(float key, FloatLongUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
-		@Override
 		public long supplyLongIfAbsent(float key, LongSupplier valueProvider) { throw new UnsupportedOperationException(); }
+		@Override
+		public long computeLongNonDefault(float key, FloatLongUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
+		@Override
+		public long computeLongIfAbsentNonDefault(float key, Float2LongFunction mappingFunction) { throw new UnsupportedOperationException(); }
+		@Override
+		public long computeLongIfPresentNonDefault(float key, FloatLongUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
 		@Override
 		public long supplyLongIfAbsentNonDefault(float key, LongSupplier valueProvider) { throw new UnsupportedOperationException(); }
 		@Override
@@ -312,17 +312,17 @@ public class Float2LongMaps
 		@Override
 		public long computeLong(float key, FloatLongUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
 		@Override
-		public long computeLongNonDefault(float key, FloatLongUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
-		@Override
 		public long computeLongIfAbsent(float key, Float2LongFunction mappingFunction) { throw new UnsupportedOperationException(); }
-		@Override
-		public long computeLongIfAbsentNonDefault(float key, Float2LongFunction mappingFunction) { throw new UnsupportedOperationException(); }
 		@Override
 		public long computeLongIfPresent(float key, FloatLongUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
 		@Override
-		public long computeLongIfPresentNonDefault(float key, FloatLongUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
-		@Override
 		public long supplyLongIfAbsent(float key, LongSupplier valueProvider) { throw new UnsupportedOperationException(); }
+		@Override
+		public long computeLongNonDefault(float key, FloatLongUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
+		@Override
+		public long computeLongIfAbsentNonDefault(float key, Float2LongFunction mappingFunction) { throw new UnsupportedOperationException(); }
+		@Override
+		public long computeLongIfPresentNonDefault(float key, FloatLongUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
 		@Override
 		public long supplyLongIfAbsentNonDefault(float key, LongSupplier valueProvider) { throw new UnsupportedOperationException(); }
 		@Override
@@ -547,17 +547,17 @@ public class Float2LongMaps
 		@Override
 		public long computeLong(float key, FloatLongUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
 		@Override
-		public long computeLongNonDefault(float key, FloatLongUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
-		@Override
 		public long computeLongIfAbsent(float key, Float2LongFunction mappingFunction) { throw new UnsupportedOperationException(); }
-		@Override
-		public long computeLongIfAbsentNonDefault(float key, Float2LongFunction mappingFunction) { throw new UnsupportedOperationException(); }
 		@Override
 		public long computeLongIfPresent(float key, FloatLongUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
 		@Override
-		public long computeLongIfPresentNonDefault(float key, FloatLongUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
-		@Override
 		public long supplyLongIfAbsent(float key, LongSupplier valueProvider) { throw new UnsupportedOperationException(); }
+		@Override
+		public long computeLongNonDefault(float key, FloatLongUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
+		@Override
+		public long computeLongIfAbsentNonDefault(float key, Float2LongFunction mappingFunction) { throw new UnsupportedOperationException(); }
+		@Override
+		public long computeLongIfPresentNonDefault(float key, FloatLongUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
 		@Override
 		public long supplyLongIfAbsentNonDefault(float key, LongSupplier valueProvider) { throw new UnsupportedOperationException(); }
 		@Override
@@ -955,17 +955,17 @@ public class Float2LongMaps
 		@Override
 		public long computeLong(float key, FloatLongUnaryOperator mappingFunction) { synchronized(mutex) { return map.computeLong(key, mappingFunction); } }
 		@Override
-		public long computeLongNonDefault(float key, FloatLongUnaryOperator mappingFunction) { synchronized(mutex) { return map.computeLongNonDefault(key, mappingFunction); } }
-		@Override
 		public long computeLongIfAbsent(float key, Float2LongFunction mappingFunction) { synchronized(mutex) { return map.computeLongIfAbsent(key, mappingFunction); } }
-		@Override
-		public long computeLongIfAbsentNonDefault(float key, Float2LongFunction mappingFunction) { synchronized(mutex) { return map.computeLongIfAbsentNonDefault(key, mappingFunction); } }
 		@Override
 		public long computeLongIfPresent(float key, FloatLongUnaryOperator mappingFunction) { synchronized(mutex) { return map.computeLongIfPresent(key, mappingFunction); } }
 		@Override
-		public long computeLongIfPresentNonDefault(float key, FloatLongUnaryOperator mappingFunction) { synchronized(mutex) { return map.computeLongIfPresentNonDefault(key, mappingFunction); } }
-		@Override
 		public long supplyLongIfAbsent(float key, LongSupplier valueProvider) { synchronized(mutex) { return map.supplyLongIfAbsent(key, valueProvider); } }
+		@Override
+		public long computeLongNonDefault(float key, FloatLongUnaryOperator mappingFunction) { synchronized(mutex) { return map.computeLongNonDefault(key, mappingFunction); } }
+		@Override
+		public long computeLongIfAbsentNonDefault(float key, Float2LongFunction mappingFunction) { synchronized(mutex) { return map.computeLongIfAbsentNonDefault(key, mappingFunction); } }
+		@Override
+		public long computeLongIfPresentNonDefault(float key, FloatLongUnaryOperator mappingFunction) { synchronized(mutex) { return map.computeLongIfPresentNonDefault(key, mappingFunction); } }
 		@Override
 		public long supplyLongIfAbsentNonDefault(float key, LongSupplier valueProvider) { synchronized(mutex) { return map.supplyLongIfAbsentNonDefault(key, valueProvider); } }
 		@Override

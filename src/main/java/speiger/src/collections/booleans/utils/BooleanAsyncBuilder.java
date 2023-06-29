@@ -21,8 +21,7 @@ import speiger.src.collections.booleans.lists.BooleanList;
 import speiger.src.collections.booleans.lists.BooleanArrayList;
 import speiger.src.collections.objects.utils.ObjectAsyncBuilder;
 import speiger.src.collections.objects.utils.ObjectAsyncBuilder.BaseObjectTask;
-import speiger.src.collections.ints.utils.IntAsyncBuilder;
-import speiger.src.collections.ints.utils.IntAsyncBuilder.BaseIntTask;
+import speiger.src.collections.ints.utils.IntAsyncBuilder;import speiger.src.collections.ints.utils.IntAsyncBuilder.BaseIntTask;
 import speiger.src.collections.utils.ISizeProvider;
 import speiger.src.collections.utils.SanityChecks;
 

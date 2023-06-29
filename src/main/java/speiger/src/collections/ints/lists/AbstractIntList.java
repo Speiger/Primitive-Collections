@@ -205,11 +205,21 @@ public abstract class AbstractIntList extends AbstractIntCollection implements I
 	public IntListIterator listIterator() {
 		return listIterator(0);
 	}
-
+		
 	@Override
 	public IntListIterator listIterator(int index) {
 		if(index < 0 || index > size()) throw new IndexOutOfBoundsException();
 		return new IntListIter(index);
+	}
+	
+	@Override
+	public IntListIterator indexedIterator(int...indecies) {
+		return new IndexedIterator(indecies);
+	}
+	
+	@Override
+	public IntListIterator indexedIterator(IntList indecies) {
+		return new ListIndexedIterator(indecies);
 	}
 	
 	@Override
@@ -566,7 +576,153 @@ public abstract class AbstractIntList extends AbstractIntCollection implements I
 			}
 		}
 	}
+	
+	private class ListIndexedIterator implements IntListIterator {
+		IntList indecies;
+		int index;
+		int lastReturned = -1;
 		
+		ListIndexedIterator(IntList indecies) {
+			this.indecies = indecies;
+		}
+		
+		@Override
+		public boolean hasNext() {
+			return index < indecies.size();
+		}
+		
+		@Override
+		public int nextInt() {
+			if(!hasNext()) throw new NoSuchElementException();
+			int i = index++;
+			return getInt((lastReturned = indecies.getInt(i)));
+		}
+		
+		@Override
+		public boolean hasPrevious() {
+			return index > 0;
+		}
+		
+		@Override
+		public int previousInt() {
+			if(!hasPrevious()) throw new NoSuchElementException();
+			index--;
+			return getInt((lastReturned = indecies.getInt(index)));
+		}
+		
+		@Override
+		public int nextIndex() {
+			return index;
+		}
+		
+		@Override
+		public int previousIndex() {
+			return index-1;
+		}
+		
+		@Override
+		public void remove() { throw new UnsupportedOperationException(); }
+		@Override
+		public void add(int e) { throw new UnsupportedOperationException(); }
+		
+		@Override
+		public void set(int e) {
+			if(lastReturned == -1) throw new IllegalStateException();
+			AbstractIntList.this.set(lastReturned, e);
+		}
+		
+		@Override
+		public int skip(int amount) {
+			if(amount < 0) throw new IllegalStateException("Negative Numbers are not allowed");
+			int steps = Math.min(amount, indecies.size() - index);
+			index += steps;
+			if(steps > 0) lastReturned = Math.min(index-1, indecies.size()-1);
+			return steps;
+		}
+		
+		@Override
+		public int back(int amount) {
+			if(amount < 0) throw new IllegalStateException("Negative Numbers are not allowed");
+			int steps = Math.min(amount, index);
+			index -= steps;
+			if(steps > 0) lastReturned = Math.max(index, 0);
+			return steps;
+		}
+	}
+	
+	private class IndexedIterator implements IntListIterator {
+		int[] indecies;
+		int index;
+		int lastReturned = -1;
+		
+		IndexedIterator(int[] indecies) {
+			this.indecies = indecies;
+		}
+		
+		@Override
+		public boolean hasNext() {
+			return index < indecies.length;
+		}
+		
+		@Override
+		public int nextInt() {
+			if(!hasNext()) throw new NoSuchElementException();
+			int i = index++;
+			return getInt((lastReturned = indecies[i]));
+		}
+		
+		@Override
+		public boolean hasPrevious() {
+			return index > 0;
+		}
+		
+		@Override
+		public int previousInt() {
+			if(!hasPrevious()) throw new NoSuchElementException();
+			index--;
+			return getInt((lastReturned = indecies[index]));
+		}
+		
+		@Override
+		public int nextIndex() {
+			return index;
+		}
+		
+		@Override
+		public int previousIndex() {
+			return index-1;
+		}
+		
+		@Override
+		public void remove() { throw new UnsupportedOperationException(); }
+		@Override
+		public void add(int e) { throw new UnsupportedOperationException(); }
+		
+		@Override
+		public void set(int e) {
+			if(lastReturned == -1) throw new IllegalStateException();
+			AbstractIntList.this.set(lastReturned, e);
+		}
+		
+		@Override
+		public int skip(int amount) {
+			if(amount < 0) throw new IllegalStateException("Negative Numbers are not allowed");
+			int steps = Math.min(amount, indecies.length - index);
+			index += steps;
+			if(steps > 0) lastReturned = Math.min(index-1, indecies.length-1);
+			return steps;
+		}
+		
+		@Override
+		public int back(int amount) {
+			if(amount < 0) throw new IllegalStateException("Negative Numbers are not allowed");
+			int steps = Math.min(amount, index);
+			index -= steps;
+			if(steps > 0) lastReturned = Math.max(index, 0);
+			return steps;
+		}
+	}
+	
 	private class IntListIter implements IntListIterator {
 		int index;
 		int lastReturned = -1;
@@ -644,7 +800,7 @@ public abstract class AbstractIntList extends AbstractIntCollection implements I
 			if(amount < 0) throw new IllegalStateException("Negative Numbers are not allowed");
 			int steps = Math.min(amount, index);
 			index -= steps;
-			if(steps > 0) lastReturned = Math.min(index, size()-1);
+			if(steps > 0) lastReturned = Math.max(index, 0);
 			return steps;
 		}
 	}

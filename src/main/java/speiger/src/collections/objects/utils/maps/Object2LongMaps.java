@@ -264,17 +264,17 @@ public class Object2LongMaps
 		@Override
 		public long computeLong(T key, ObjectLongUnaryOperator<T> mappingFunction) { throw new UnsupportedOperationException(); }
 		@Override
-		public long computeLongNonDefault(T key, ObjectLongUnaryOperator<T> mappingFunction) { throw new UnsupportedOperationException(); }
-		@Override
 		public long computeLongIfAbsent(T key, ToLongFunction<T> mappingFunction) { throw new UnsupportedOperationException(); }
-		@Override
-		public long computeLongIfAbsentNonDefault(T key, ToLongFunction<T> mappingFunction) { throw new UnsupportedOperationException(); }
 		@Override
 		public long computeLongIfPresent(T key, ObjectLongUnaryOperator<T> mappingFunction) { throw new UnsupportedOperationException(); }
 		@Override
-		public long computeLongIfPresentNonDefault(T key, ObjectLongUnaryOperator<T> mappingFunction) { throw new UnsupportedOperationException(); }
-		@Override
 		public long supplyLongIfAbsent(T key, LongSupplier valueProvider) { throw new UnsupportedOperationException(); }
+		@Override
+		public long computeLongNonDefault(T key, ObjectLongUnaryOperator<T> mappingFunction) { throw new UnsupportedOperationException(); }
+		@Override
+		public long computeLongIfAbsentNonDefault(T key, ToLongFunction<T> mappingFunction) { throw new UnsupportedOperationException(); }
+		@Override
+		public long computeLongIfPresentNonDefault(T key, ObjectLongUnaryOperator<T> mappingFunction) { throw new UnsupportedOperationException(); }
 		@Override
 		public long supplyLongIfAbsentNonDefault(T key, LongSupplier valueProvider) { throw new UnsupportedOperationException(); }
 		@Override
@@ -327,17 +327,17 @@ public class Object2LongMaps
 		@Override
 		public long computeLong(T key, ObjectLongUnaryOperator<T> mappingFunction) { throw new UnsupportedOperationException(); }
 		@Override
-		public long computeLongNonDefault(T key, ObjectLongUnaryOperator<T> mappingFunction) { throw new UnsupportedOperationException(); }
-		@Override
 		public long computeLongIfAbsent(T key, ToLongFunction<T> mappingFunction) { throw new UnsupportedOperationException(); }
-		@Override
-		public long computeLongIfAbsentNonDefault(T key, ToLongFunction<T> mappingFunction) { throw new UnsupportedOperationException(); }
 		@Override
 		public long computeLongIfPresent(T key, ObjectLongUnaryOperator<T> mappingFunction) { throw new UnsupportedOperationException(); }
 		@Override
-		public long computeLongIfPresentNonDefault(T key, ObjectLongUnaryOperator<T> mappingFunction) { throw new UnsupportedOperationException(); }
-		@Override
 		public long supplyLongIfAbsent(T key, LongSupplier valueProvider) { throw new UnsupportedOperationException(); }
+		@Override
+		public long computeLongNonDefault(T key, ObjectLongUnaryOperator<T> mappingFunction) { throw new UnsupportedOperationException(); }
+		@Override
+		public long computeLongIfAbsentNonDefault(T key, ToLongFunction<T> mappingFunction) { throw new UnsupportedOperationException(); }
+		@Override
+		public long computeLongIfPresentNonDefault(T key, ObjectLongUnaryOperator<T> mappingFunction) { throw new UnsupportedOperationException(); }
 		@Override
 		public long supplyLongIfAbsentNonDefault(T key, LongSupplier valueProvider) { throw new UnsupportedOperationException(); }
 		@Override
@@ -559,17 +559,17 @@ public class Object2LongMaps
 		@Override
 		public long computeLong(T key, ObjectLongUnaryOperator<T> mappingFunction) { throw new UnsupportedOperationException(); }
 		@Override
-		public long computeLongNonDefault(T key, ObjectLongUnaryOperator<T> mappingFunction) { throw new UnsupportedOperationException(); }
-		@Override
 		public long computeLongIfAbsent(T key, ToLongFunction<T> mappingFunction) { throw new UnsupportedOperationException(); }
-		@Override
-		public long computeLongIfAbsentNonDefault(T key, ToLongFunction<T> mappingFunction) { throw new UnsupportedOperationException(); }
 		@Override
 		public long computeLongIfPresent(T key, ObjectLongUnaryOperator<T> mappingFunction) { throw new UnsupportedOperationException(); }
 		@Override
-		public long computeLongIfPresentNonDefault(T key, ObjectLongUnaryOperator<T> mappingFunction) { throw new UnsupportedOperationException(); }
-		@Override
 		public long supplyLongIfAbsent(T key, LongSupplier valueProvider) { throw new UnsupportedOperationException(); }
+		@Override
+		public long computeLongNonDefault(T key, ObjectLongUnaryOperator<T> mappingFunction) { throw new UnsupportedOperationException(); }
+		@Override
+		public long computeLongIfAbsentNonDefault(T key, ToLongFunction<T> mappingFunction) { throw new UnsupportedOperationException(); }
+		@Override
+		public long computeLongIfPresentNonDefault(T key, ObjectLongUnaryOperator<T> mappingFunction) { throw new UnsupportedOperationException(); }
 		@Override
 		public long supplyLongIfAbsentNonDefault(T key, LongSupplier valueProvider) { throw new UnsupportedOperationException(); }
 		@Override
@@ -906,17 +906,17 @@ public class Object2LongMaps
 		@Override
 		public long computeLong(T key, ObjectLongUnaryOperator<T> mappingFunction) { synchronized(mutex) { return map.computeLong(key, mappingFunction); } }
 		@Override
-		public long computeLongNonDefault(T key, ObjectLongUnaryOperator<T> mappingFunction) { synchronized(mutex) { return map.computeLongNonDefault(key, mappingFunction); } }
-		@Override
 		public long computeLongIfAbsent(T key, ToLongFunction<T> mappingFunction) { synchronized(mutex) { return map.computeLongIfAbsent(key, mappingFunction); } }
-		@Override
-		public long computeLongIfAbsentNonDefault(T key, ToLongFunction<T> mappingFunction) { synchronized(mutex) { return map.computeLongIfAbsentNonDefault(key, mappingFunction); } }
 		@Override
 		public long computeLongIfPresent(T key, ObjectLongUnaryOperator<T> mappingFunction) { synchronized(mutex) { return map.computeLongIfPresent(key, mappingFunction); } }
 		@Override
-		public long computeLongIfPresentNonDefault(T key, ObjectLongUnaryOperator<T> mappingFunction) { synchronized(mutex) { return map.computeLongIfPresentNonDefault(key, mappingFunction); } }
-		@Override
 		public long supplyLongIfAbsent(T key, LongSupplier valueProvider) { synchronized(mutex) { return map.supplyLongIfAbsent(key, valueProvider); } }
+		@Override
+		public long computeLongNonDefault(T key, ObjectLongUnaryOperator<T> mappingFunction) { synchronized(mutex) { return map.computeLongNonDefault(key, mappingFunction); } }
+		@Override
+		public long computeLongIfAbsentNonDefault(T key, ToLongFunction<T> mappingFunction) { synchronized(mutex) { return map.computeLongIfAbsentNonDefault(key, mappingFunction); } }
+		@Override
+		public long computeLongIfPresentNonDefault(T key, ObjectLongUnaryOperator<T> mappingFunction) { synchronized(mutex) { return map.computeLongIfPresentNonDefault(key, mappingFunction); } }
 		@Override
 		public long supplyLongIfAbsentNonDefault(T key, LongSupplier valueProvider) { synchronized(mutex) { return map.supplyLongIfAbsentNonDefault(key, valueProvider); } }
 		@Override

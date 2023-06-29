@@ -436,6 +436,42 @@ public class Long2LongArrayMap extends AbstractLong2LongMap implements Long2Long
 	}
 	
 	@Override
+	public long computeLongIfAbsent(long key, LongUnaryOperator mappingFunction) {
+		Objects.requireNonNull(mappingFunction);
+		int index = findIndex(key);
+		if(index == -1) {
+			long newValue = mappingFunction.applyAsLong(key);
+			insertIndex(size++, key, newValue);
+			return newValue;
+		}
+		long newValue = values[index];
+		return newValue;
+	}
+		
+	@Override
+	public long supplyLongIfAbsent(long key, LongSupplier valueProvider) {
+		Objects.requireNonNull(valueProvider);
+		int index = findIndex(key);
+		if(index == -1) {
+			long newValue = valueProvider.getAsLong();
+			insertIndex(size++, key, newValue);
+			return newValue;
+		}
+		long newValue = values[index];
+		return newValue;
+	}
+		
+	@Override
+	public long computeLongIfPresent(long key, LongLongUnaryOperator mappingFunction) {
+		Objects.requireNonNull(mappingFunction);
+		int index = findIndex(key);
+		if(index == -1) return getDefaultReturnValue();
+		long newValue = mappingFunction.applyAsLong(key, values[index]);
+		values[index] = newValue;
+		return newValue;
+	}
+	
+	@Override
 	public long computeLongNonDefault(long key, LongLongUnaryOperator mappingFunction) {
 		Objects.requireNonNull(mappingFunction);
 		int index = findIndex(key);
@@ -451,19 +487,6 @@ public class Long2LongArrayMap extends AbstractLong2LongMap implements Long2Long
 			return newValue;
 		}
 		values[index] = newValue;
-		return newValue;
-	}
-	
-	@Override
-	public long computeLongIfAbsent(long key, LongUnaryOperator mappingFunction) {
-		Objects.requireNonNull(mappingFunction);
-		int index = findIndex(key);
-		if(index == -1) {
-			long newValue = mappingFunction.applyAsLong(key);
-			insertIndex(size++, key, newValue);
-			return newValue;
-		}
-		long newValue = values[index];
 		return newValue;
 	}
 	
@@ -487,19 +510,6 @@ public class Long2LongArrayMap extends AbstractLong2LongMap implements Long2Long
 	}
 	
 	@Override
-	public long supplyLongIfAbsent(long key, LongSupplier valueProvider) {
-		Objects.requireNonNull(valueProvider);
-		int index = findIndex(key);
-		if(index == -1) {
-			long newValue = valueProvider.getAsLong();
-			insertIndex(size++, key, newValue);
-			return newValue;
-		}
-		long newValue = values[index];
-		return newValue;
-	}
-	
-	@Override
 	public long supplyLongIfAbsentNonDefault(long key, LongSupplier valueProvider) {
 		Objects.requireNonNull(valueProvider);
 		int index = findIndex(key);
@@ -515,16 +525,6 @@ public class Long2LongArrayMap extends AbstractLong2LongMap implements Long2Long
 			if(newValue == getDefaultReturnValue()) return newValue;
 			values[index] = newValue;
 		}
-		return newValue;
-	}
-	
-	@Override
-	public long computeLongIfPresent(long key, LongLongUnaryOperator mappingFunction) {
-		Objects.requireNonNull(mappingFunction);
-		int index = findIndex(key);
-		if(index == -1) return getDefaultReturnValue();
-		long newValue = mappingFunction.applyAsLong(key, values[index]);
-		values[index] = newValue;
 		return newValue;
 	}
 	

@@ -327,6 +327,41 @@ public class Enum2ShortMap<T extends Enum<T>> extends AbstractObject2ShortMap<T>
 	}
 	
 	@Override
+	public short computeShortIfAbsent(T key, ToShortFunction<T> mappingFunction) {
+		int index = key.ordinal();
+		if(!isSet(index)) {
+			short newValue = mappingFunction.applyAsShort(key);
+			set(index);
+			values[index] = newValue;			
+			return newValue;
+		}
+		short newValue = values[index];
+		return newValue;
+	}
+		
+	@Override
+	public short supplyShortIfAbsent(T key, ShortSupplier valueProvider) {
+		int index = key.ordinal();
+		if(!isSet(index)) {
+			short newValue = valueProvider.getAsShort();
+			set(index);
+			values[index] = newValue;			
+			return newValue;
+		}
+		short newValue = values[index];
+		return newValue;
+	}
+	
+	@Override
+	public short computeShortIfPresent(T key, ObjectShortUnaryOperator<T> mappingFunction) {
+		int index = key.ordinal();
+		if(!isSet(index)) return getDefaultReturnValue();
+		short newValue = mappingFunction.applyAsShort(key, values[index]);
+		values[index] = newValue;
+		return newValue;
+	}
+	
+	@Override
 	public short computeShortNonDefault(T key, ObjectShortUnaryOperator<T> mappingFunction) {
 		int index = key.ordinal();
 		if(!isSet(index)) {
@@ -343,19 +378,6 @@ public class Enum2ShortMap<T extends Enum<T>> extends AbstractObject2ShortMap<T>
 			return newValue;
 		}
 		values[index] = newValue;
-		return newValue;
-	}
-	
-	@Override
-	public short computeShortIfAbsent(T key, ToShortFunction<T> mappingFunction) {
-		int index = key.ordinal();
-		if(!isSet(index)) {
-			short newValue = mappingFunction.applyAsShort(key);
-			set(index);
-			values[index] = newValue;			
-			return newValue;
-		}
-		short newValue = values[index];
 		return newValue;
 	}
 	
@@ -379,23 +401,10 @@ public class Enum2ShortMap<T extends Enum<T>> extends AbstractObject2ShortMap<T>
 	}
 	
 	@Override
-	public short supplyShortIfAbsent(T key, ShortSupplier valueProvider) {
-		int index = key.ordinal();
-		if(!isSet(index)) {
-			short newValue = valueProvider.getAsInt();
-			set(index);
-			values[index] = newValue;			
-			return newValue;
-		}
-		short newValue = values[index];
-		return newValue;
-	}
-	
-	@Override
 	public short supplyShortIfAbsentNonDefault(T key, ShortSupplier valueProvider) {
 		int index = key.ordinal();
 		if(!isSet(index)) {
-			short newValue = valueProvider.getAsInt();
+			short newValue = valueProvider.getAsShort();
 			if(newValue == getDefaultReturnValue()) return newValue;
 			set(index);
 			values[index] = newValue;			
@@ -403,19 +412,10 @@ public class Enum2ShortMap<T extends Enum<T>> extends AbstractObject2ShortMap<T>
 		}
 		short newValue = values[index];
 		if(newValue == getDefaultReturnValue()) {
-			newValue = valueProvider.getAsInt();
+			newValue = valueProvider.getAsShort();
 			if(newValue == getDefaultReturnValue()) return newValue;
 			values[index] = newValue;
 		}
-		return newValue;
-	}
-	
-	@Override
-	public short computeShortIfPresent(T key, ObjectShortUnaryOperator<T> mappingFunction) {
-		int index = key.ordinal();
-		if(!isSet(index)) return getDefaultReturnValue();
-		short newValue = mappingFunction.applyAsShort(key, values[index]);
-		values[index] = newValue;
 		return newValue;
 	}
 	

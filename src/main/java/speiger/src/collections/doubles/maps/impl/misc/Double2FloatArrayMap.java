@@ -443,6 +443,42 @@ public class Double2FloatArrayMap extends AbstractDouble2FloatMap implements Dou
 	}
 	
 	@Override
+	public float computeFloatIfAbsent(double key, Double2FloatFunction mappingFunction) {
+		Objects.requireNonNull(mappingFunction);
+		int index = findIndex(key);
+		if(index == -1) {
+			float newValue = mappingFunction.applyAsFloat(key);
+			insertIndex(size++, key, newValue);
+			return newValue;
+		}
+		float newValue = values[index];
+		return newValue;
+	}
+		
+	@Override
+	public float supplyFloatIfAbsent(double key, FloatSupplier valueProvider) {
+		Objects.requireNonNull(valueProvider);
+		int index = findIndex(key);
+		if(index == -1) {
+			float newValue = valueProvider.getAsFloat();
+			insertIndex(size++, key, newValue);
+			return newValue;
+		}
+		float newValue = values[index];
+		return newValue;
+	}
+		
+	@Override
+	public float computeFloatIfPresent(double key, DoubleFloatUnaryOperator mappingFunction) {
+		Objects.requireNonNull(mappingFunction);
+		int index = findIndex(key);
+		if(index == -1) return getDefaultReturnValue();
+		float newValue = mappingFunction.applyAsFloat(key, values[index]);
+		values[index] = newValue;
+		return newValue;
+	}
+	
+	@Override
 	public float computeFloatNonDefault(double key, DoubleFloatUnaryOperator mappingFunction) {
 		Objects.requireNonNull(mappingFunction);
 		int index = findIndex(key);
@@ -458,19 +494,6 @@ public class Double2FloatArrayMap extends AbstractDouble2FloatMap implements Dou
 			return newValue;
 		}
 		values[index] = newValue;
-		return newValue;
-	}
-	
-	@Override
-	public float computeFloatIfAbsent(double key, Double2FloatFunction mappingFunction) {
-		Objects.requireNonNull(mappingFunction);
-		int index = findIndex(key);
-		if(index == -1) {
-			float newValue = mappingFunction.applyAsFloat(key);
-			insertIndex(size++, key, newValue);
-			return newValue;
-		}
-		float newValue = values[index];
 		return newValue;
 	}
 	
@@ -494,44 +517,21 @@ public class Double2FloatArrayMap extends AbstractDouble2FloatMap implements Dou
 	}
 	
 	@Override
-	public float supplyFloatIfAbsent(double key, FloatSupplier valueProvider) {
-		Objects.requireNonNull(valueProvider);
-		int index = findIndex(key);
-		if(index == -1) {
-			float newValue = valueProvider.getAsDouble();
-			insertIndex(size++, key, newValue);
-			return newValue;
-		}
-		float newValue = values[index];
-		return newValue;
-	}
-	
-	@Override
 	public float supplyFloatIfAbsentNonDefault(double key, FloatSupplier valueProvider) {
 		Objects.requireNonNull(valueProvider);
 		int index = findIndex(key);
 		if(index == -1) {
-			float newValue = valueProvider.getAsDouble();
+			float newValue = valueProvider.getAsFloat();
 			if(Float.floatToIntBits(newValue) == Float.floatToIntBits(getDefaultReturnValue())) return newValue;
 			insertIndex(size++, key, newValue);
 			return newValue;
 		}
 		float newValue = values[index];
 		if(Float.floatToIntBits(newValue) == Float.floatToIntBits(getDefaultReturnValue())) {
-			newValue = valueProvider.getAsDouble();
+			newValue = valueProvider.getAsFloat();
 			if(Float.floatToIntBits(newValue) == Float.floatToIntBits(getDefaultReturnValue())) return newValue;
 			values[index] = newValue;
 		}
-		return newValue;
-	}
-	
-	@Override
-	public float computeFloatIfPresent(double key, DoubleFloatUnaryOperator mappingFunction) {
-		Objects.requireNonNull(mappingFunction);
-		int index = findIndex(key);
-		if(index == -1) return getDefaultReturnValue();
-		float newValue = mappingFunction.applyAsFloat(key, values[index]);
-		values[index] = newValue;
 		return newValue;
 	}
 	

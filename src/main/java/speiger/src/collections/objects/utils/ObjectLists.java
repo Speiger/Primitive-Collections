@@ -10,6 +10,7 @@ import java.util.function.Consumer;
 import speiger.src.collections.objects.collections.ObjectCollection;
 import speiger.src.collections.objects.lists.AbstractObjectList;
 import speiger.src.collections.objects.lists.ObjectList;
+import speiger.src.collections.ints.lists.IntList;
 import speiger.src.collections.objects.lists.ObjectListIterator;
 import speiger.src.collections.utils.SanityChecks;
 
@@ -325,6 +326,16 @@ public class ObjectLists
 		}
 		
 		@Override
+		public ObjectListIterator<T> indexedIterator(int...indecies) {
+			return l.indexedIterator(indecies);
+		}
+		
+		@Override
+		public ObjectListIterator<T> indexedIterator(IntList indecies) {
+			return l.indexedIterator(indecies);
+		}
+		
+		@Override
 		public ObjectList<T> subList(int from, int to) {
 			return ObjectLists.synchronize(l.subList(from, to));
 		}
@@ -421,6 +432,16 @@ public class ObjectLists
 		}
 		
 		@Override
+		public ObjectListIterator<T> indexedIterator(int...indecies) {
+			return ObjectIterators.unmodifiable(l.indexedIterator(indecies));
+		}
+		
+		@Override
+		public ObjectListIterator<T> indexedIterator(IntList indecies) {
+			return ObjectIterators.unmodifiable(l.indexedIterator(indecies));
+		}
+		
+		@Override
 		public ObjectList<T> subList(int from, int to) {
 			return ObjectLists.unmodifiable(l.subList(from, to));
 		}
@@ -497,6 +518,16 @@ public class ObjectLists
 			if(index != 0)
 				throw new IndexOutOfBoundsException();
 			return ObjectIterators.empty();
+		}
+		
+		@Override
+		public ObjectListIterator<T> indexedIterator(int...indecies) {
+			return ObjectIterators.empty(); 
+		}
+		
+		@Override
+		public ObjectListIterator<T> indexedIterator(IntList indecies) {
+			return ObjectIterators.empty(); 
 		}
 		
 		@Override

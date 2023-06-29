@@ -418,20 +418,19 @@ public class ImmutableByte2CharOpenHashMap extends AbstractByte2CharMap implemen
 	@Override
 	public char computeChar(byte key, ByteCharUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
 	@Override
-	public char computeCharNonDefault(byte key, ByteCharUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
-	@Override
 	public char computeCharIfAbsent(byte key, Byte2CharFunction mappingFunction) { throw new UnsupportedOperationException(); }
-	@Override
-	public char computeCharIfAbsentNonDefault(byte key, Byte2CharFunction mappingFunction) { throw new UnsupportedOperationException(); }
 	@Override
 	public char supplyCharIfAbsent(byte key, CharSupplier valueProvider) { throw new UnsupportedOperationException(); }
 	@Override
-	public char supplyCharIfAbsentNonDefault(byte key, CharSupplier valueProvider) { throw new UnsupportedOperationException(); }
-	@Override
 	public char computeCharIfPresent(byte key, ByteCharUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
 	@Override
+	public char computeCharNonDefault(byte key, ByteCharUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
+	@Override
+	public char computeCharIfAbsentNonDefault(byte key, Byte2CharFunction mappingFunction) { throw new UnsupportedOperationException(); }
+	@Override
+	public char supplyCharIfAbsentNonDefault(byte key, CharSupplier valueProvider) { throw new UnsupportedOperationException(); }
+	@Override
 	public char computeCharIfPresentNonDefault(byte key, ByteCharUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
-	
 	@Override
 	public char mergeChar(byte key, char value, CharCharUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
 	

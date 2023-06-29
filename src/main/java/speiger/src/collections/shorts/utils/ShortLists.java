@@ -12,6 +12,7 @@ import speiger.src.collections.shorts.collections.ShortCollection;
 import speiger.src.collections.shorts.functions.ShortConsumer;
 import speiger.src.collections.shorts.lists.AbstractShortList;
 import speiger.src.collections.shorts.lists.ShortList;
+import speiger.src.collections.ints.lists.IntList;
 import speiger.src.collections.shorts.lists.ShortListIterator;
 import speiger.src.collections.utils.SanityChecks;
 
@@ -318,6 +319,16 @@ public class ShortLists
 		}
 		
 		@Override
+		public ShortListIterator indexedIterator(int...indecies) {
+			return l.indexedIterator(indecies);
+		}
+		
+		@Override
+		public ShortListIterator indexedIterator(IntList indecies) {
+			return l.indexedIterator(indecies);
+		}
+		
+		@Override
 		public ShortList subList(int from, int to) {
 			return ShortLists.synchronize(l.subList(from, to));
 		}
@@ -427,6 +438,16 @@ public class ShortLists
 		}
 		
 		@Override
+		public ShortListIterator indexedIterator(int...indecies) {
+			return ShortIterators.unmodifiable(l.indexedIterator(indecies));
+		}
+		
+		@Override
+		public ShortListIterator indexedIterator(IntList indecies) {
+			return ShortIterators.unmodifiable(l.indexedIterator(indecies));
+		}
+		
+		@Override
 		public ShortList subList(int from, int to) {
 			return ShortLists.unmodifiable(l.subList(from, to));
 		}
@@ -512,6 +533,16 @@ public class ShortLists
 			if(index != 0)
 				throw new IndexOutOfBoundsException();
 			return ShortIterators.empty();
+		}
+		
+		@Override
+		public ShortListIterator indexedIterator(int...indecies) {
+			return ShortIterators.empty(); 
+		}
+		
+		@Override
+		public ShortListIterator indexedIterator(IntList indecies) {
+			return ShortIterators.empty(); 
 		}
 		
 		@Override

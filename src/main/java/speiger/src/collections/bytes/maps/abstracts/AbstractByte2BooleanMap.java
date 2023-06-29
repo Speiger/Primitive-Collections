@@ -152,6 +152,39 @@ public abstract class AbstractByte2BooleanMap extends AbstractMap<Byte, Boolean>
 	}
 	
 	@Override
+	public boolean computeBooleanIfAbsent(byte key, BytePredicate mappingFunction) {
+		Objects.requireNonNull(mappingFunction);
+		if(!containsKey(key)) {
+			boolean newValue = mappingFunction.test(key);
+			put(key, newValue);
+			return newValue;
+		}
+		return get(key);
+	}
+	
+	@Override
+	public boolean supplyBooleanIfAbsent(byte key, BooleanSupplier valueProvider) {
+		Objects.requireNonNull(valueProvider);
+		if(!containsKey(key)) {
+			boolean newValue = valueProvider.getAsBoolean();
+			put(key, newValue);
+			return newValue;
+		}
+		return get(key);
+	}
+	
+	@Override
+	public boolean computeBooleanIfPresent(byte key, ByteBooleanUnaryOperator mappingFunction) {
+		Objects.requireNonNull(mappingFunction);
+		if(containsKey(key)) {
+			boolean newValue = mappingFunction.applyAsBoolean(key, get(key));
+			put(key, newValue);
+			return newValue;
+		}
+		return getDefaultReturnValue();
+	}
+	
+	@Override
 	public boolean computeBooleanNonDefault(byte key, ByteBooleanUnaryOperator mappingFunction) {
 		Objects.requireNonNull(mappingFunction);
 		boolean value = get(key);
@@ -165,17 +198,6 @@ public abstract class AbstractByte2BooleanMap extends AbstractMap<Byte, Boolean>
 		}
 		put(key, newValue);
 		return newValue;
-	}
-	
-	@Override
-	public boolean computeBooleanIfAbsent(byte key, BytePredicate mappingFunction) {
-		Objects.requireNonNull(mappingFunction);
-		if(!containsKey(key)) {
-			boolean newValue = mappingFunction.test(key);
-			put(key, newValue);
-			return newValue;
-		}
-		return get(key);
 	}
 	
 	@Override
@@ -193,17 +215,6 @@ public abstract class AbstractByte2BooleanMap extends AbstractMap<Byte, Boolean>
 	}
 	
 	@Override
-	public boolean supplyBooleanIfAbsent(byte key, BooleanSupplier valueProvider) {
-		Objects.requireNonNull(valueProvider);
-		if(!containsKey(key)) {
-			boolean newValue = valueProvider.getAsBoolean();
-			put(key, newValue);
-			return newValue;
-		}
-		return get(key);
-	}
-	
-	@Override
 	public boolean supplyBooleanIfAbsentNonDefault(byte key, BooleanSupplier valueProvider) {
 		Objects.requireNonNull(valueProvider);
 		boolean value;
@@ -215,17 +226,6 @@ public abstract class AbstractByte2BooleanMap extends AbstractMap<Byte, Boolean>
 			}
 		}
 		return value;
-	}
-	
-	@Override
-	public boolean computeBooleanIfPresent(byte key, ByteBooleanUnaryOperator mappingFunction) {
-		Objects.requireNonNull(mappingFunction);
-		if(containsKey(key)) {
-			boolean newValue = mappingFunction.applyAsBoolean(key, get(key));
-			put(key, newValue);
-			return newValue;
-		}
-		return getDefaultReturnValue();
 	}
 	
 	@Override

@@ -264,17 +264,17 @@ public class Object2FloatMaps
 		@Override
 		public float computeFloat(T key, ObjectFloatUnaryOperator<T> mappingFunction) { throw new UnsupportedOperationException(); }
 		@Override
-		public float computeFloatNonDefault(T key, ObjectFloatUnaryOperator<T> mappingFunction) { throw new UnsupportedOperationException(); }
-		@Override
 		public float computeFloatIfAbsent(T key, ToFloatFunction<T> mappingFunction) { throw new UnsupportedOperationException(); }
-		@Override
-		public float computeFloatIfAbsentNonDefault(T key, ToFloatFunction<T> mappingFunction) { throw new UnsupportedOperationException(); }
 		@Override
 		public float computeFloatIfPresent(T key, ObjectFloatUnaryOperator<T> mappingFunction) { throw new UnsupportedOperationException(); }
 		@Override
-		public float computeFloatIfPresentNonDefault(T key, ObjectFloatUnaryOperator<T> mappingFunction) { throw new UnsupportedOperationException(); }
-		@Override
 		public float supplyFloatIfAbsent(T key, FloatSupplier valueProvider) { throw new UnsupportedOperationException(); }
+		@Override
+		public float computeFloatNonDefault(T key, ObjectFloatUnaryOperator<T> mappingFunction) { throw new UnsupportedOperationException(); }
+		@Override
+		public float computeFloatIfAbsentNonDefault(T key, ToFloatFunction<T> mappingFunction) { throw new UnsupportedOperationException(); }
+		@Override
+		public float computeFloatIfPresentNonDefault(T key, ObjectFloatUnaryOperator<T> mappingFunction) { throw new UnsupportedOperationException(); }
 		@Override
 		public float supplyFloatIfAbsentNonDefault(T key, FloatSupplier valueProvider) { throw new UnsupportedOperationException(); }
 		@Override
@@ -327,17 +327,17 @@ public class Object2FloatMaps
 		@Override
 		public float computeFloat(T key, ObjectFloatUnaryOperator<T> mappingFunction) { throw new UnsupportedOperationException(); }
 		@Override
-		public float computeFloatNonDefault(T key, ObjectFloatUnaryOperator<T> mappingFunction) { throw new UnsupportedOperationException(); }
-		@Override
 		public float computeFloatIfAbsent(T key, ToFloatFunction<T> mappingFunction) { throw new UnsupportedOperationException(); }
-		@Override
-		public float computeFloatIfAbsentNonDefault(T key, ToFloatFunction<T> mappingFunction) { throw new UnsupportedOperationException(); }
 		@Override
 		public float computeFloatIfPresent(T key, ObjectFloatUnaryOperator<T> mappingFunction) { throw new UnsupportedOperationException(); }
 		@Override
-		public float computeFloatIfPresentNonDefault(T key, ObjectFloatUnaryOperator<T> mappingFunction) { throw new UnsupportedOperationException(); }
-		@Override
 		public float supplyFloatIfAbsent(T key, FloatSupplier valueProvider) { throw new UnsupportedOperationException(); }
+		@Override
+		public float computeFloatNonDefault(T key, ObjectFloatUnaryOperator<T> mappingFunction) { throw new UnsupportedOperationException(); }
+		@Override
+		public float computeFloatIfAbsentNonDefault(T key, ToFloatFunction<T> mappingFunction) { throw new UnsupportedOperationException(); }
+		@Override
+		public float computeFloatIfPresentNonDefault(T key, ObjectFloatUnaryOperator<T> mappingFunction) { throw new UnsupportedOperationException(); }
 		@Override
 		public float supplyFloatIfAbsentNonDefault(T key, FloatSupplier valueProvider) { throw new UnsupportedOperationException(); }
 		@Override
@@ -559,17 +559,17 @@ public class Object2FloatMaps
 		@Override
 		public float computeFloat(T key, ObjectFloatUnaryOperator<T> mappingFunction) { throw new UnsupportedOperationException(); }
 		@Override
-		public float computeFloatNonDefault(T key, ObjectFloatUnaryOperator<T> mappingFunction) { throw new UnsupportedOperationException(); }
-		@Override
 		public float computeFloatIfAbsent(T key, ToFloatFunction<T> mappingFunction) { throw new UnsupportedOperationException(); }
-		@Override
-		public float computeFloatIfAbsentNonDefault(T key, ToFloatFunction<T> mappingFunction) { throw new UnsupportedOperationException(); }
 		@Override
 		public float computeFloatIfPresent(T key, ObjectFloatUnaryOperator<T> mappingFunction) { throw new UnsupportedOperationException(); }
 		@Override
-		public float computeFloatIfPresentNonDefault(T key, ObjectFloatUnaryOperator<T> mappingFunction) { throw new UnsupportedOperationException(); }
-		@Override
 		public float supplyFloatIfAbsent(T key, FloatSupplier valueProvider) { throw new UnsupportedOperationException(); }
+		@Override
+		public float computeFloatNonDefault(T key, ObjectFloatUnaryOperator<T> mappingFunction) { throw new UnsupportedOperationException(); }
+		@Override
+		public float computeFloatIfAbsentNonDefault(T key, ToFloatFunction<T> mappingFunction) { throw new UnsupportedOperationException(); }
+		@Override
+		public float computeFloatIfPresentNonDefault(T key, ObjectFloatUnaryOperator<T> mappingFunction) { throw new UnsupportedOperationException(); }
 		@Override
 		public float supplyFloatIfAbsentNonDefault(T key, FloatSupplier valueProvider) { throw new UnsupportedOperationException(); }
 		@Override
@@ -906,17 +906,17 @@ public class Object2FloatMaps
 		@Override
 		public float computeFloat(T key, ObjectFloatUnaryOperator<T> mappingFunction) { synchronized(mutex) { return map.computeFloat(key, mappingFunction); } }
 		@Override
-		public float computeFloatNonDefault(T key, ObjectFloatUnaryOperator<T> mappingFunction) { synchronized(mutex) { return map.computeFloatNonDefault(key, mappingFunction); } }
-		@Override
 		public float computeFloatIfAbsent(T key, ToFloatFunction<T> mappingFunction) { synchronized(mutex) { return map.computeFloatIfAbsent(key, mappingFunction); } }
-		@Override
-		public float computeFloatIfAbsentNonDefault(T key, ToFloatFunction<T> mappingFunction) { synchronized(mutex) { return map.computeFloatIfAbsentNonDefault(key, mappingFunction); } }
 		@Override
 		public float computeFloatIfPresent(T key, ObjectFloatUnaryOperator<T> mappingFunction) { synchronized(mutex) { return map.computeFloatIfPresent(key, mappingFunction); } }
 		@Override
-		public float computeFloatIfPresentNonDefault(T key, ObjectFloatUnaryOperator<T> mappingFunction) { synchronized(mutex) { return map.computeFloatIfPresentNonDefault(key, mappingFunction); } }
-		@Override
 		public float supplyFloatIfAbsent(T key, FloatSupplier valueProvider) { synchronized(mutex) { return map.supplyFloatIfAbsent(key, valueProvider); } }
+		@Override
+		public float computeFloatNonDefault(T key, ObjectFloatUnaryOperator<T> mappingFunction) { synchronized(mutex) { return map.computeFloatNonDefault(key, mappingFunction); } }
+		@Override
+		public float computeFloatIfAbsentNonDefault(T key, ToFloatFunction<T> mappingFunction) { synchronized(mutex) { return map.computeFloatIfAbsentNonDefault(key, mappingFunction); } }
+		@Override
+		public float computeFloatIfPresentNonDefault(T key, ObjectFloatUnaryOperator<T> mappingFunction) { synchronized(mutex) { return map.computeFloatIfPresentNonDefault(key, mappingFunction); } }
 		@Override
 		public float supplyFloatIfAbsentNonDefault(T key, FloatSupplier valueProvider) { synchronized(mutex) { return map.supplyFloatIfAbsentNonDefault(key, valueProvider); } }
 		@Override

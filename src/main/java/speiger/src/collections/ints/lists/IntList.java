@@ -342,6 +342,24 @@ public interface IntList extends IntCollection, List<Integer>
 	public IntListIterator listIterator(int index);
 	
 	/**
+	 * Creates a Iterator that follows the indecies provided.<br>
+	 * For example if the Lists Contents is:<br> -1, 0 1 <br>and the indecies are: <br>0, 1, 2, 2, 1, 0<br>
+	 * then the iterator will return the following values: <br>-1, 0, 1, 1, 0, -1
+	 * @param indecies that should be used for the iteration.
+	 * @return a custom indexed iterator
+	 */
+	public IntListIterator indexedIterator(int...indecies);
+	
+	/**
+	 * Creates a Iterator that follows the indecies provided.<br>
+	 * For example if the Lists Contents is:<br> -1, 0 1 <br>and the indecies are: <br>0, 1, 2, 2, 1, 0<br>
+	 * then the iterator will return the following values: <br>-1, 0, 1, 1, 0, -1
+	 * @param indecies that should be used for the iteration.
+	 * @return a custom indexed iterator
+	 */
+	public IntListIterator indexedIterator(IntList indecies);
+	
+	/**
 	 * A Type-Specific List of subList
 	 * @see java.util.List#subList(int, int)
 	 */

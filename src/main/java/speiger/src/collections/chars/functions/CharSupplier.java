@@ -8,5 +8,5 @@ public interface CharSupplier
 	/**
 	 * @return the supplied value
 	 */
-	public char getAsInt();
+	public char getAsChar();
 }

@@ -250,17 +250,17 @@ public class Float2ShortMaps
 		@Override
 		public short computeShort(float key, FloatShortUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
 		@Override
-		public short computeShortNonDefault(float key, FloatShortUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
-		@Override
 		public short computeShortIfAbsent(float key, Float2ShortFunction mappingFunction) { throw new UnsupportedOperationException(); }
-		@Override
-		public short computeShortIfAbsentNonDefault(float key, Float2ShortFunction mappingFunction) { throw new UnsupportedOperationException(); }
 		@Override
 		public short computeShortIfPresent(float key, FloatShortUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
 		@Override
-		public short computeShortIfPresentNonDefault(float key, FloatShortUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
-		@Override
 		public short supplyShortIfAbsent(float key, ShortSupplier valueProvider) { throw new UnsupportedOperationException(); }
+		@Override
+		public short computeShortNonDefault(float key, FloatShortUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
+		@Override
+		public short computeShortIfAbsentNonDefault(float key, Float2ShortFunction mappingFunction) { throw new UnsupportedOperationException(); }
+		@Override
+		public short computeShortIfPresentNonDefault(float key, FloatShortUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
 		@Override
 		public short supplyShortIfAbsentNonDefault(float key, ShortSupplier valueProvider) { throw new UnsupportedOperationException(); }
 		@Override
@@ -312,17 +312,17 @@ public class Float2ShortMaps
 		@Override
 		public short computeShort(float key, FloatShortUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
 		@Override
-		public short computeShortNonDefault(float key, FloatShortUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
-		@Override
 		public short computeShortIfAbsent(float key, Float2ShortFunction mappingFunction) { throw new UnsupportedOperationException(); }
-		@Override
-		public short computeShortIfAbsentNonDefault(float key, Float2ShortFunction mappingFunction) { throw new UnsupportedOperationException(); }
 		@Override
 		public short computeShortIfPresent(float key, FloatShortUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
 		@Override
-		public short computeShortIfPresentNonDefault(float key, FloatShortUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
-		@Override
 		public short supplyShortIfAbsent(float key, ShortSupplier valueProvider) { throw new UnsupportedOperationException(); }
+		@Override
+		public short computeShortNonDefault(float key, FloatShortUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
+		@Override
+		public short computeShortIfAbsentNonDefault(float key, Float2ShortFunction mappingFunction) { throw new UnsupportedOperationException(); }
+		@Override
+		public short computeShortIfPresentNonDefault(float key, FloatShortUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
 		@Override
 		public short supplyShortIfAbsentNonDefault(float key, ShortSupplier valueProvider) { throw new UnsupportedOperationException(); }
 		@Override
@@ -547,17 +547,17 @@ public class Float2ShortMaps
 		@Override
 		public short computeShort(float key, FloatShortUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
 		@Override
-		public short computeShortNonDefault(float key, FloatShortUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
-		@Override
 		public short computeShortIfAbsent(float key, Float2ShortFunction mappingFunction) { throw new UnsupportedOperationException(); }
-		@Override
-		public short computeShortIfAbsentNonDefault(float key, Float2ShortFunction mappingFunction) { throw new UnsupportedOperationException(); }
 		@Override
 		public short computeShortIfPresent(float key, FloatShortUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
 		@Override
-		public short computeShortIfPresentNonDefault(float key, FloatShortUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
-		@Override
 		public short supplyShortIfAbsent(float key, ShortSupplier valueProvider) { throw new UnsupportedOperationException(); }
+		@Override
+		public short computeShortNonDefault(float key, FloatShortUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
+		@Override
+		public short computeShortIfAbsentNonDefault(float key, Float2ShortFunction mappingFunction) { throw new UnsupportedOperationException(); }
+		@Override
+		public short computeShortIfPresentNonDefault(float key, FloatShortUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
 		@Override
 		public short supplyShortIfAbsentNonDefault(float key, ShortSupplier valueProvider) { throw new UnsupportedOperationException(); }
 		@Override
@@ -955,17 +955,17 @@ public class Float2ShortMaps
 		@Override
 		public short computeShort(float key, FloatShortUnaryOperator mappingFunction) { synchronized(mutex) { return map.computeShort(key, mappingFunction); } }
 		@Override
-		public short computeShortNonDefault(float key, FloatShortUnaryOperator mappingFunction) { synchronized(mutex) { return map.computeShortNonDefault(key, mappingFunction); } }
-		@Override
 		public short computeShortIfAbsent(float key, Float2ShortFunction mappingFunction) { synchronized(mutex) { return map.computeShortIfAbsent(key, mappingFunction); } }
-		@Override
-		public short computeShortIfAbsentNonDefault(float key, Float2ShortFunction mappingFunction) { synchronized(mutex) { return map.computeShortIfAbsentNonDefault(key, mappingFunction); } }
 		@Override
 		public short computeShortIfPresent(float key, FloatShortUnaryOperator mappingFunction) { synchronized(mutex) { return map.computeShortIfPresent(key, mappingFunction); } }
 		@Override
-		public short computeShortIfPresentNonDefault(float key, FloatShortUnaryOperator mappingFunction) { synchronized(mutex) { return map.computeShortIfPresentNonDefault(key, mappingFunction); } }
-		@Override
 		public short supplyShortIfAbsent(float key, ShortSupplier valueProvider) { synchronized(mutex) { return map.supplyShortIfAbsent(key, valueProvider); } }
+		@Override
+		public short computeShortNonDefault(float key, FloatShortUnaryOperator mappingFunction) { synchronized(mutex) { return map.computeShortNonDefault(key, mappingFunction); } }
+		@Override
+		public short computeShortIfAbsentNonDefault(float key, Float2ShortFunction mappingFunction) { synchronized(mutex) { return map.computeShortIfAbsentNonDefault(key, mappingFunction); } }
+		@Override
+		public short computeShortIfPresentNonDefault(float key, FloatShortUnaryOperator mappingFunction) { synchronized(mutex) { return map.computeShortIfPresentNonDefault(key, mappingFunction); } }
 		@Override
 		public short supplyShortIfAbsentNonDefault(float key, ShortSupplier valueProvider) { synchronized(mutex) { return map.supplyShortIfAbsentNonDefault(key, valueProvider); } }
 		@Override

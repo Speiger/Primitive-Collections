@@ -246,17 +246,17 @@ public class Byte2BooleanMaps
 		@Override
 		public boolean computeBoolean(byte key, ByteBooleanUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
 		@Override
-		public boolean computeBooleanNonDefault(byte key, ByteBooleanUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
-		@Override
 		public boolean computeBooleanIfAbsent(byte key, BytePredicate mappingFunction) { throw new UnsupportedOperationException(); }
-		@Override
-		public boolean computeBooleanIfAbsentNonDefault(byte key, BytePredicate mappingFunction) { throw new UnsupportedOperationException(); }
 		@Override
 		public boolean computeBooleanIfPresent(byte key, ByteBooleanUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
 		@Override
-		public boolean computeBooleanIfPresentNonDefault(byte key, ByteBooleanUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
-		@Override
 		public boolean supplyBooleanIfAbsent(byte key, BooleanSupplier valueProvider) { throw new UnsupportedOperationException(); }
+		@Override
+		public boolean computeBooleanNonDefault(byte key, ByteBooleanUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
+		@Override
+		public boolean computeBooleanIfAbsentNonDefault(byte key, BytePredicate mappingFunction) { throw new UnsupportedOperationException(); }
+		@Override
+		public boolean computeBooleanIfPresentNonDefault(byte key, ByteBooleanUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
 		@Override
 		public boolean supplyBooleanIfAbsentNonDefault(byte key, BooleanSupplier valueProvider) { throw new UnsupportedOperationException(); }
 		@Override
@@ -304,17 +304,17 @@ public class Byte2BooleanMaps
 		@Override
 		public boolean computeBoolean(byte key, ByteBooleanUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
 		@Override
-		public boolean computeBooleanNonDefault(byte key, ByteBooleanUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
-		@Override
 		public boolean computeBooleanIfAbsent(byte key, BytePredicate mappingFunction) { throw new UnsupportedOperationException(); }
-		@Override
-		public boolean computeBooleanIfAbsentNonDefault(byte key, BytePredicate mappingFunction) { throw new UnsupportedOperationException(); }
 		@Override
 		public boolean computeBooleanIfPresent(byte key, ByteBooleanUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
 		@Override
-		public boolean computeBooleanIfPresentNonDefault(byte key, ByteBooleanUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
-		@Override
 		public boolean supplyBooleanIfAbsent(byte key, BooleanSupplier valueProvider) { throw new UnsupportedOperationException(); }
+		@Override
+		public boolean computeBooleanNonDefault(byte key, ByteBooleanUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
+		@Override
+		public boolean computeBooleanIfAbsentNonDefault(byte key, BytePredicate mappingFunction) { throw new UnsupportedOperationException(); }
+		@Override
+		public boolean computeBooleanIfPresentNonDefault(byte key, ByteBooleanUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
 		@Override
 		public boolean supplyBooleanIfAbsentNonDefault(byte key, BooleanSupplier valueProvider) { throw new UnsupportedOperationException(); }
 		@Override
@@ -535,17 +535,17 @@ public class Byte2BooleanMaps
 		@Override
 		public boolean computeBoolean(byte key, ByteBooleanUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
 		@Override
-		public boolean computeBooleanNonDefault(byte key, ByteBooleanUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
-		@Override
 		public boolean computeBooleanIfAbsent(byte key, BytePredicate mappingFunction) { throw new UnsupportedOperationException(); }
-		@Override
-		public boolean computeBooleanIfAbsentNonDefault(byte key, BytePredicate mappingFunction) { throw new UnsupportedOperationException(); }
 		@Override
 		public boolean computeBooleanIfPresent(byte key, ByteBooleanUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
 		@Override
-		public boolean computeBooleanIfPresentNonDefault(byte key, ByteBooleanUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
-		@Override
 		public boolean supplyBooleanIfAbsent(byte key, BooleanSupplier valueProvider) { throw new UnsupportedOperationException(); }
+		@Override
+		public boolean computeBooleanNonDefault(byte key, ByteBooleanUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
+		@Override
+		public boolean computeBooleanIfAbsentNonDefault(byte key, BytePredicate mappingFunction) { throw new UnsupportedOperationException(); }
+		@Override
+		public boolean computeBooleanIfPresentNonDefault(byte key, ByteBooleanUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
 		@Override
 		public boolean supplyBooleanIfAbsentNonDefault(byte key, BooleanSupplier valueProvider) { throw new UnsupportedOperationException(); }
 		@Override
@@ -938,17 +938,17 @@ public class Byte2BooleanMaps
 		@Override
 		public boolean computeBoolean(byte key, ByteBooleanUnaryOperator mappingFunction) { synchronized(mutex) { return map.computeBoolean(key, mappingFunction); } }
 		@Override
-		public boolean computeBooleanNonDefault(byte key, ByteBooleanUnaryOperator mappingFunction) { synchronized(mutex) { return map.computeBooleanNonDefault(key, mappingFunction); } }
-		@Override
 		public boolean computeBooleanIfAbsent(byte key, BytePredicate mappingFunction) { synchronized(mutex) { return map.computeBooleanIfAbsent(key, mappingFunction); } }
-		@Override
-		public boolean computeBooleanIfAbsentNonDefault(byte key, BytePredicate mappingFunction) { synchronized(mutex) { return map.computeBooleanIfAbsentNonDefault(key, mappingFunction); } }
 		@Override
 		public boolean computeBooleanIfPresent(byte key, ByteBooleanUnaryOperator mappingFunction) { synchronized(mutex) { return map.computeBooleanIfPresent(key, mappingFunction); } }
 		@Override
-		public boolean computeBooleanIfPresentNonDefault(byte key, ByteBooleanUnaryOperator mappingFunction) { synchronized(mutex) { return map.computeBooleanIfPresentNonDefault(key, mappingFunction); } }
-		@Override
 		public boolean supplyBooleanIfAbsent(byte key, BooleanSupplier valueProvider) { synchronized(mutex) { return map.supplyBooleanIfAbsent(key, valueProvider); } }
+		@Override
+		public boolean computeBooleanNonDefault(byte key, ByteBooleanUnaryOperator mappingFunction) { synchronized(mutex) { return map.computeBooleanNonDefault(key, mappingFunction); } }
+		@Override
+		public boolean computeBooleanIfAbsentNonDefault(byte key, BytePredicate mappingFunction) { synchronized(mutex) { return map.computeBooleanIfAbsentNonDefault(key, mappingFunction); } }
+		@Override
+		public boolean computeBooleanIfPresentNonDefault(byte key, ByteBooleanUnaryOperator mappingFunction) { synchronized(mutex) { return map.computeBooleanIfPresentNonDefault(key, mappingFunction); } }
 		@Override
 		public boolean supplyBooleanIfAbsentNonDefault(byte key, BooleanSupplier valueProvider) { synchronized(mutex) { return map.supplyBooleanIfAbsentNonDefault(key, valueProvider); } }
 		@Override

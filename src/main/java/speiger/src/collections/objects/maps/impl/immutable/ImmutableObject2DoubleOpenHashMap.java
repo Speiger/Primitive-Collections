@@ -402,20 +402,19 @@ public class ImmutableObject2DoubleOpenHashMap<T> extends AbstractObject2DoubleM
 	@Override
 	public double computeDouble(T key, ObjectDoubleUnaryOperator<T> mappingFunction) { throw new UnsupportedOperationException(); }
 	@Override
-	public double computeDoubleNonDefault(T key, ObjectDoubleUnaryOperator<T> mappingFunction) { throw new UnsupportedOperationException(); }
-	@Override
 	public double computeDoubleIfAbsent(T key, ToDoubleFunction<T> mappingFunction) { throw new UnsupportedOperationException(); }
-	@Override
-	public double computeDoubleIfAbsentNonDefault(T key, ToDoubleFunction<T> mappingFunction) { throw new UnsupportedOperationException(); }
 	@Override
 	public double supplyDoubleIfAbsent(T key, DoubleSupplier valueProvider) { throw new UnsupportedOperationException(); }
 	@Override
-	public double supplyDoubleIfAbsentNonDefault(T key, DoubleSupplier valueProvider) { throw new UnsupportedOperationException(); }
-	@Override
 	public double computeDoubleIfPresent(T key, ObjectDoubleUnaryOperator<T> mappingFunction) { throw new UnsupportedOperationException(); }
 	@Override
+	public double computeDoubleNonDefault(T key, ObjectDoubleUnaryOperator<T> mappingFunction) { throw new UnsupportedOperationException(); }
+	@Override
+	public double computeDoubleIfAbsentNonDefault(T key, ToDoubleFunction<T> mappingFunction) { throw new UnsupportedOperationException(); }
+	@Override
+	public double supplyDoubleIfAbsentNonDefault(T key, DoubleSupplier valueProvider) { throw new UnsupportedOperationException(); }
+	@Override
 	public double computeDoubleIfPresentNonDefault(T key, ObjectDoubleUnaryOperator<T> mappingFunction) { throw new UnsupportedOperationException(); }
-	
 	@Override
 	public double mergeDouble(T key, double value, DoubleDoubleUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
 	

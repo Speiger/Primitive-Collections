@@ -447,6 +447,43 @@ public class Object2IntRBTreeMap<T> extends AbstractObject2IntMap<T> implements 
 	}
 	
 	@Override
+	public int computeIntIfAbsent(T key, ToIntFunction<T> mappingFunction) {
+		Objects.requireNonNull(mappingFunction);
+		validate(key);
+		Node<T> entry = findNode(key);
+		if(entry == null) {
+			int newValue = mappingFunction.applyAsInt(key);
+			put(key, newValue);
+			return newValue;
+		}
+		return entry.value;
+	}
+	
+	@Override
+	public int supplyIntIfAbsent(T key, IntSupplier valueProvider) {
+		Objects.requireNonNull(valueProvider);
+		validate(key);
+		Node<T> entry = findNode(key);
+		if(entry == null) {
+			int newValue = valueProvider.getAsInt();
+			put(key, newValue);
+			return newValue;
+		}
+		return entry.value;
+	}
+	
+	@Override
+	public int computeIntIfPresent(T key, ObjectIntUnaryOperator<T> mappingFunction) {
+		Objects.requireNonNull(mappingFunction);
+		validate(key);
+		Node<T> entry = findNode(key);
+		if(entry == null) return getDefaultReturnValue();
+		int newValue = mappingFunction.applyAsInt(key, entry.value);
+		entry.value = newValue;
+		return newValue;
+	}
+	
+	@Override
 	public int computeIntNonDefault(T key, ObjectIntUnaryOperator<T> mappingFunction) {
 		Objects.requireNonNull(mappingFunction);
 		validate(key);
@@ -464,19 +501,6 @@ public class Object2IntRBTreeMap<T> extends AbstractObject2IntMap<T> implements 
 		}
 		entry.value = newValue;
 		return newValue;
-	}
-	
-	@Override
-	public int computeIntIfAbsent(T key, ToIntFunction<T> mappingFunction) {
-		Objects.requireNonNull(mappingFunction);
-		validate(key);
-		Node<T> entry = findNode(key);
-		if(entry == null) {
-			int newValue = mappingFunction.applyAsInt(key);
-			put(key, newValue);
-			return newValue;
-		}
-		return entry.value;
 	}
 	
 	@Override
@@ -499,19 +523,6 @@ public class Object2IntRBTreeMap<T> extends AbstractObject2IntMap<T> implements 
 	}
 	
 	@Override
-	public int supplyIntIfAbsent(T key, IntSupplier valueProvider) {
-		Objects.requireNonNull(valueProvider);
-		validate(key);
-		Node<T> entry = findNode(key);
-		if(entry == null) {
-			int newValue = valueProvider.getAsInt();
-			put(key, newValue);
-			return newValue;
-		}
-		return entry.value;
-	}
-	
-	@Override
 	public int supplyIntIfAbsentNonDefault(T key, IntSupplier valueProvider) {
 		Objects.requireNonNull(valueProvider);
 		validate(key);
@@ -528,17 +539,6 @@ public class Object2IntRBTreeMap<T> extends AbstractObject2IntMap<T> implements 
 			entry.value = newValue;
 		}
 		return entry.value;
-	}
-	
-	@Override
-	public int computeIntIfPresent(T key, ObjectIntUnaryOperator<T> mappingFunction) {
-		Objects.requireNonNull(mappingFunction);
-		validate(key);
-		Node<T> entry = findNode(key);
-		if(entry == null) return getDefaultReturnValue();
-		int newValue = mappingFunction.applyAsInt(key, entry.value);
-		entry.value = newValue;
-		return newValue;
 	}
 	
 	@Override
@@ -1584,14 +1584,9 @@ public class Object2IntRBTreeMap<T> extends AbstractObject2IntMap<T> implements 
 			map.validate(key);
 			if(!inRange(key)) return getDefaultReturnValue();
 			Node<T> entry = map.findNode(key);
-			if(entry == null || entry.value == getDefaultReturnValue()) return getDefaultReturnValue();
-			int newValue = mappingFunction.apply(key, entry.value);
-			if(newValue == getDefaultReturnValue()) {
-				map.removeNode(entry);
-				return newValue;
-			}
-			entry.value = newValue;
-			return newValue;
+			if(entry == null) return getDefaultReturnValue();
+			entry.value = mappingFunction.apply(key, entry.value);
+			return entry.value;
 		}
 		
 		@Override

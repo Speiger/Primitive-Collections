@@ -397,20 +397,11 @@ public class ImmutableByte2ObjectOpenHashMap<V> extends AbstractByte2ObjectMap<V
 	@Override
 	public V compute(byte key, ByteObjectUnaryOperator<V> mappingFunction) { throw new UnsupportedOperationException(); }
 	@Override
-	public V computeNonDefault(byte key, ByteObjectUnaryOperator<V> mappingFunction) { throw new UnsupportedOperationException(); }
-	@Override
 	public V computeIfAbsent(byte key, ByteFunction<V> mappingFunction) { throw new UnsupportedOperationException(); }
-	@Override
-	public V computeIfAbsentNonDefault(byte key, ByteFunction<V> mappingFunction) { throw new UnsupportedOperationException(); }
 	@Override
 	public V supplyIfAbsent(byte key, ObjectSupplier<V> valueProvider) { throw new UnsupportedOperationException(); }
 	@Override
-	public V supplyIfAbsentNonDefault(byte key, ObjectSupplier<V> valueProvider) { throw new UnsupportedOperationException(); }
-	@Override
 	public V computeIfPresent(byte key, ByteObjectUnaryOperator<V> mappingFunction) { throw new UnsupportedOperationException(); }
-	@Override
-	public V computeIfPresentNonDefault(byte key, ByteObjectUnaryOperator<V> mappingFunction) { throw new UnsupportedOperationException(); }
-	
 	@Override
 	public V merge(byte key, V value, ObjectObjectUnaryOperator<V, V> mappingFunction) { throw new UnsupportedOperationException(); }
 	

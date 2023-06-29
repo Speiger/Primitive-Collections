@@ -408,6 +408,42 @@ public class Double2BooleanOpenHashMap extends AbstractDouble2BooleanMap impleme
 		values[index] = newValue;
 		return newValue;
 	}
+		
+	@Override
+	public boolean computeBooleanIfAbsent(double key, DoublePredicate mappingFunction) {
+		Objects.requireNonNull(mappingFunction);
+		int index = findIndex(key);
+		if(index < 0) {
+			boolean newValue = mappingFunction.test(key);
+			insert(-index-1, key, newValue);
+			return newValue;
+		}
+		boolean newValue = values[index];
+		return newValue;
+	}
+	
+	@Override
+	public boolean supplyBooleanIfAbsent(double key, BooleanSupplier valueProvider) {
+		Objects.requireNonNull(valueProvider);
+		int index = findIndex(key);
+		if(index < 0) {
+			boolean newValue = valueProvider.getAsBoolean();
+			insert(-index-1, key, newValue);
+			return newValue;
+		}
+		boolean newValue = values[index];
+		return newValue;
+	}
+		
+	@Override
+	public boolean computeBooleanIfPresent(double key, DoubleBooleanUnaryOperator mappingFunction) {
+		Objects.requireNonNull(mappingFunction);
+		int index = findIndex(key);
+		if(index < 0) return getDefaultReturnValue();
+		boolean newValue = mappingFunction.applyAsBoolean(key, values[index]);
+		values[index] = newValue;
+		return newValue;
+	}
 	
 	@Override
 	public boolean computeBooleanNonDefault(double key, DoubleBooleanUnaryOperator mappingFunction) {
@@ -425,19 +461,6 @@ public class Double2BooleanOpenHashMap extends AbstractDouble2BooleanMap impleme
 			return newValue;
 		}
 		values[index] = newValue;
-		return newValue;
-	}
-	
-	@Override
-	public boolean computeBooleanIfAbsent(double key, DoublePredicate mappingFunction) {
-		Objects.requireNonNull(mappingFunction);
-		int index = findIndex(key);
-		if(index < 0) {
-			boolean newValue = mappingFunction.test(key);
-			insert(-index-1, key, newValue);
-			return newValue;
-		}
-		boolean newValue = values[index];
 		return newValue;
 	}
 	
@@ -461,19 +484,6 @@ public class Double2BooleanOpenHashMap extends AbstractDouble2BooleanMap impleme
 	}
 	
 	@Override
-	public boolean supplyBooleanIfAbsent(double key, BooleanSupplier valueProvider) {
-		Objects.requireNonNull(valueProvider);
-		int index = findIndex(key);
-		if(index < 0) {
-			boolean newValue = valueProvider.getAsBoolean();
-			insert(-index-1, key, newValue);
-			return newValue;
-		}
-		boolean newValue = values[index];
-		return newValue;
-	}
-	
-	@Override
 	public boolean supplyBooleanIfAbsentNonDefault(double key, BooleanSupplier valueProvider) {
 		Objects.requireNonNull(valueProvider);
 		int index = findIndex(key);
@@ -489,16 +499,6 @@ public class Double2BooleanOpenHashMap extends AbstractDouble2BooleanMap impleme
 			if(newValue == getDefaultReturnValue()) return newValue;
 			values[index] = newValue;
 		}
-		return newValue;
-	}
-	
-	@Override
-	public boolean computeBooleanIfPresent(double key, DoubleBooleanUnaryOperator mappingFunction) {
-		Objects.requireNonNull(mappingFunction);
-		int index = findIndex(key);
-		if(index < 0) return getDefaultReturnValue();
-		boolean newValue = mappingFunction.applyAsBoolean(key, values[index]);
-		values[index] = newValue;
 		return newValue;
 	}
 	

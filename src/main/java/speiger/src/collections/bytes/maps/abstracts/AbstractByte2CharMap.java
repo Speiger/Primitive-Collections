@@ -158,6 +158,39 @@ public abstract class AbstractByte2CharMap extends AbstractMap<Byte, Character> 
 	}
 	
 	@Override
+	public char computeCharIfAbsent(byte key, Byte2CharFunction mappingFunction) {
+		Objects.requireNonNull(mappingFunction);
+		if(!containsKey(key)) {
+			char newValue = mappingFunction.applyAsChar(key);
+			put(key, newValue);
+			return newValue;
+		}
+		return get(key);
+	}
+	
+	@Override
+	public char supplyCharIfAbsent(byte key, CharSupplier valueProvider) {
+		Objects.requireNonNull(valueProvider);
+		if(!containsKey(key)) {
+			char newValue = valueProvider.getAsChar();
+			put(key, newValue);
+			return newValue;
+		}
+		return get(key);
+	}
+	
+	@Override
+	public char computeCharIfPresent(byte key, ByteCharUnaryOperator mappingFunction) {
+		Objects.requireNonNull(mappingFunction);
+		if(containsKey(key)) {
+			char newValue = mappingFunction.applyAsChar(key, get(key));
+			put(key, newValue);
+			return newValue;
+		}
+		return getDefaultReturnValue();
+	}
+	
+	@Override
 	public char computeCharNonDefault(byte key, ByteCharUnaryOperator mappingFunction) {
 		Objects.requireNonNull(mappingFunction);
 		char value = get(key);
@@ -171,17 +204,6 @@ public abstract class AbstractByte2CharMap extends AbstractMap<Byte, Character> 
 		}
 		put(key, newValue);
 		return newValue;
-	}
-	
-	@Override
-	public char computeCharIfAbsent(byte key, Byte2CharFunction mappingFunction) {
-		Objects.requireNonNull(mappingFunction);
-		if(!containsKey(key)) {
-			char newValue = mappingFunction.applyAsChar(key);
-			put(key, newValue);
-			return newValue;
-		}
-		return get(key);
 	}
 	
 	@Override
@@ -199,39 +221,17 @@ public abstract class AbstractByte2CharMap extends AbstractMap<Byte, Character> 
 	}
 	
 	@Override
-	public char supplyCharIfAbsent(byte key, CharSupplier valueProvider) {
-		Objects.requireNonNull(valueProvider);
-		if(!containsKey(key)) {
-			char newValue = valueProvider.getAsInt();
-			put(key, newValue);
-			return newValue;
-		}
-		return get(key);
-	}
-	
-	@Override
 	public char supplyCharIfAbsentNonDefault(byte key, CharSupplier valueProvider) {
 		Objects.requireNonNull(valueProvider);
 		char value;
 		if((value = get(key)) == getDefaultReturnValue() || !containsKey(key)) {
-			char newValue = valueProvider.getAsInt();
+			char newValue = valueProvider.getAsChar();
 			if(newValue != getDefaultReturnValue()) {
 				put(key, newValue);
 				return newValue;
 			}
 		}
 		return value;
-	}
-	
-	@Override
-	public char computeCharIfPresent(byte key, ByteCharUnaryOperator mappingFunction) {
-		Objects.requireNonNull(mappingFunction);
-		if(containsKey(key)) {
-			char newValue = mappingFunction.applyAsChar(key, get(key));
-			put(key, newValue);
-			return newValue;
-		}
-		return getDefaultReturnValue();
 	}
 	
 	@Override

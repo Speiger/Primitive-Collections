@@ -353,20 +353,11 @@ public class ImmutableObject2ObjectOpenHashMap<T, V> extends AbstractObject2Obje
 	@Override
 	public V compute(T key, ObjectObjectUnaryOperator<T, V> mappingFunction) { throw new UnsupportedOperationException(); }
 	@Override
-	public V computeNonDefault(T key, ObjectObjectUnaryOperator<T, V> mappingFunction) { throw new UnsupportedOperationException(); }
-	@Override
 	public V computeIfAbsent(T key, UnaryOperator<T, V> mappingFunction) { throw new UnsupportedOperationException(); }
-	@Override
-	public V computeIfAbsentNonDefault(T key, UnaryOperator<T, V> mappingFunction) { throw new UnsupportedOperationException(); }
 	@Override
 	public V supplyIfAbsent(T key, ObjectSupplier<V> valueProvider) { throw new UnsupportedOperationException(); }
 	@Override
-	public V supplyIfAbsentNonDefault(T key, ObjectSupplier<V> valueProvider) { throw new UnsupportedOperationException(); }
-	@Override
 	public V computeIfPresent(T key, ObjectObjectUnaryOperator<T, V> mappingFunction) { throw new UnsupportedOperationException(); }
-	@Override
-	public V computeIfPresentNonDefault(T key, ObjectObjectUnaryOperator<T, V> mappingFunction) { throw new UnsupportedOperationException(); }
-	
 	@Override
 	public V merge(T key, V value, ObjectObjectUnaryOperator<V, V> mappingFunction) { throw new UnsupportedOperationException(); }
 	

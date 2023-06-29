@@ -447,6 +447,43 @@ public class Object2CharRBTreeMap<T> extends AbstractObject2CharMap<T> implement
 	}
 	
 	@Override
+	public char computeCharIfAbsent(T key, ToCharFunction<T> mappingFunction) {
+		Objects.requireNonNull(mappingFunction);
+		validate(key);
+		Node<T> entry = findNode(key);
+		if(entry == null) {
+			char newValue = mappingFunction.applyAsChar(key);
+			put(key, newValue);
+			return newValue;
+		}
+		return entry.value;
+	}
+	
+	@Override
+	public char supplyCharIfAbsent(T key, CharSupplier valueProvider) {
+		Objects.requireNonNull(valueProvider);
+		validate(key);
+		Node<T> entry = findNode(key);
+		if(entry == null) {
+			char newValue = valueProvider.getAsChar();
+			put(key, newValue);
+			return newValue;
+		}
+		return entry.value;
+	}
+	
+	@Override
+	public char computeCharIfPresent(T key, ObjectCharUnaryOperator<T> mappingFunction) {
+		Objects.requireNonNull(mappingFunction);
+		validate(key);
+		Node<T> entry = findNode(key);
+		if(entry == null) return getDefaultReturnValue();
+		char newValue = mappingFunction.applyAsChar(key, entry.value);
+		entry.value = newValue;
+		return newValue;
+	}
+	
+	@Override
 	public char computeCharNonDefault(T key, ObjectCharUnaryOperator<T> mappingFunction) {
 		Objects.requireNonNull(mappingFunction);
 		validate(key);
@@ -464,19 +501,6 @@ public class Object2CharRBTreeMap<T> extends AbstractObject2CharMap<T> implement
 		}
 		entry.value = newValue;
 		return newValue;
-	}
-	
-	@Override
-	public char computeCharIfAbsent(T key, ToCharFunction<T> mappingFunction) {
-		Objects.requireNonNull(mappingFunction);
-		validate(key);
-		Node<T> entry = findNode(key);
-		if(entry == null) {
-			char newValue = mappingFunction.applyAsChar(key);
-			put(key, newValue);
-			return newValue;
-		}
-		return entry.value;
 	}
 	
 	@Override
@@ -499,46 +523,22 @@ public class Object2CharRBTreeMap<T> extends AbstractObject2CharMap<T> implement
 	}
 	
 	@Override
-	public char supplyCharIfAbsent(T key, CharSupplier valueProvider) {
-		Objects.requireNonNull(valueProvider);
-		validate(key);
-		Node<T> entry = findNode(key);
-		if(entry == null) {
-			char newValue = valueProvider.getAsInt();
-			put(key, newValue);
-			return newValue;
-		}
-		return entry.value;
-	}
-	
-	@Override
 	public char supplyCharIfAbsentNonDefault(T key, CharSupplier valueProvider) {
 		Objects.requireNonNull(valueProvider);
 		validate(key);
 		Node<T> entry = findNode(key);
 		if(entry == null) {
-			char newValue = valueProvider.getAsInt();
+			char newValue = valueProvider.getAsChar();
 			if(newValue == getDefaultReturnValue()) return newValue;
 			put(key, newValue);
 			return newValue;
 		}
 		if(entry.value == getDefaultReturnValue()) {
-			char newValue = valueProvider.getAsInt();
+			char newValue = valueProvider.getAsChar();
 			if(newValue == getDefaultReturnValue()) return newValue;
 			entry.value = newValue;
 		}
 		return entry.value;
-	}
-	
-	@Override
-	public char computeCharIfPresent(T key, ObjectCharUnaryOperator<T> mappingFunction) {
-		Objects.requireNonNull(mappingFunction);
-		validate(key);
-		Node<T> entry = findNode(key);
-		if(entry == null) return getDefaultReturnValue();
-		char newValue = mappingFunction.applyAsChar(key, entry.value);
-		entry.value = newValue;
-		return newValue;
 	}
 	
 	@Override
@@ -1584,14 +1584,9 @@ public class Object2CharRBTreeMap<T> extends AbstractObject2CharMap<T> implement
 			map.validate(key);
 			if(!inRange(key)) return getDefaultReturnValue();
 			Node<T> entry = map.findNode(key);
-			if(entry == null || entry.value == getDefaultReturnValue()) return getDefaultReturnValue();
-			char newValue = mappingFunction.apply(key, entry.value);
-			if(newValue == getDefaultReturnValue()) {
-				map.removeNode(entry);
-				return newValue;
-			}
-			entry.value = newValue;
-			return newValue;
+			if(entry == null) return getDefaultReturnValue();
+			entry.value = mappingFunction.apply(key, entry.value);
+			return entry.value;
 		}
 		
 		@Override

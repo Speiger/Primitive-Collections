@@ -444,17 +444,31 @@ public class Int2IntConcurrentOpenHashMap extends AbstractInt2IntMap implements 
 	}
 	
 	@Override
-	public int computeIntNonDefault(int key, IntIntUnaryOperator mappingFunction) {
-		Objects.requireNonNull(mappingFunction);
-		int hash = getHashCode(key);
-		return getSegment(hash).computeNonDefault(hash, key, mappingFunction);
-	}
-
-	@Override
 	public int computeIntIfAbsent(int key, IntUnaryOperator mappingFunction) {
 		Objects.requireNonNull(mappingFunction);
 		int hash = getHashCode(key);
 		return getSegment(hash).computeIfAbsent(hash, key, mappingFunction);
+	}
+	
+	@Override
+	public int supplyIntIfAbsent(int key, IntSupplier valueProvider) {
+		Objects.requireNonNull(valueProvider);
+		int hash = getHashCode(key);
+		return getSegment(hash).supplyIfAbsent(hash, key, valueProvider);
+	}
+	
+	@Override
+	public int computeIntIfPresent(int key, IntIntUnaryOperator mappingFunction) {
+		Objects.requireNonNull(mappingFunction);
+		int hash = getHashCode(key);
+		return getSegment(hash).computeIfPresent(hash, key, mappingFunction);
+	}
+	
+	@Override
+	public int computeIntNonDefault(int key, IntIntUnaryOperator mappingFunction) {
+		Objects.requireNonNull(mappingFunction);
+		int hash = getHashCode(key);
+		return getSegment(hash).computeNonDefault(hash, key, mappingFunction);
 	}
 	
 	@Override
@@ -465,24 +479,10 @@ public class Int2IntConcurrentOpenHashMap extends AbstractInt2IntMap implements 
 	}
 
 	@Override
-	public int supplyIntIfAbsent(int key, IntSupplier valueProvider) {
-		Objects.requireNonNull(valueProvider);
-		int hash = getHashCode(key);
-		return getSegment(hash).supplyIfAbsent(hash, key, valueProvider);
-	}
-	
-	@Override
 	public int supplyIntIfAbsentNonDefault(int key, IntSupplier valueProvider) {
 		Objects.requireNonNull(valueProvider);
 		int hash = getHashCode(key);
 		return getSegment(hash).supplyIfAbsentNonDefault(hash, key, valueProvider);
-	}
-	
-	@Override
-	public int computeIntIfPresent(int key, IntIntUnaryOperator mappingFunction) {
-		Objects.requireNonNull(mappingFunction);
-		int hash = getHashCode(key);
-		return getSegment(hash).computeIfPresent(hash, key, mappingFunction);
 	}
 	
 	@Override
@@ -2068,6 +2068,54 @@ public class Int2IntConcurrentOpenHashMap extends AbstractInt2IntMap implements 
 			}
 		}
 		
+		protected int computeIfAbsent(int hash, int key, IntUnaryOperator mappingFunction) {
+			long stamp = writeLock();
+			try {
+				int index = findIndex(hash, key);
+				if(index < 0) {
+					int newValue = mappingFunction.applyAsInt(key);
+					insert(-index-1, key, newValue);
+					return newValue;
+				}
+				int newValue = values[index];
+				return newValue;
+			}
+			finally {
+				unlockWrite(stamp);
+			}
+		}
+				
+		protected int supplyIfAbsent(int hash, int key, IntSupplier valueProvider) {
+			long stamp = writeLock();
+			try {
+				int index = findIndex(hash, key);
+				if(index < 0) {
+					int newValue = valueProvider.getAsInt();
+					insert(-index-1, key, newValue);
+					return newValue;
+				}
+				int newValue = values[index];
+				return newValue;
+			}
+			finally {
+				unlockWrite(stamp);
+			}
+		}
+				
+		protected int computeIfPresent(int hash, int key, IntIntUnaryOperator mappingFunction) {
+			long stamp = writeLock();
+			try {
+				int index = findIndex(hash, key);
+				if(index < 0) return getDefaultReturnValue();
+				int newValue = mappingFunction.applyAsInt(key, values[index]);
+				values[index] = newValue;
+				return newValue;
+			}
+			finally {
+				unlockWrite(stamp);
+			}
+		}
+		
 		protected int computeNonDefault(int hash, int key, IntIntUnaryOperator mappingFunction) {
 			long stamp = writeLock();
 			try {
@@ -2084,23 +2132,6 @@ public class Int2IntConcurrentOpenHashMap extends AbstractInt2IntMap implements 
 					return newValue;
 				}
 				values[index] = newValue;
-				return newValue;
-			}
-			finally {
-				unlockWrite(stamp);
-			}
-		}
-		
-		protected int computeIfAbsent(int hash, int key, IntUnaryOperator mappingFunction) {
-			long stamp = writeLock();
-			try {
-				int index = findIndex(hash, key);
-				if(index < 0) {
-					int newValue = mappingFunction.applyAsInt(key);
-					insert(-index-1, key, newValue);
-					return newValue;
-				}
-				int newValue = values[index];
 				return newValue;
 			}
 			finally {
@@ -2131,23 +2162,6 @@ public class Int2IntConcurrentOpenHashMap extends AbstractInt2IntMap implements 
 			}
 		}
 		
-		protected int supplyIfAbsent(int hash, int key, IntSupplier valueProvider) {
-			long stamp = writeLock();
-			try {
-				int index = findIndex(hash, key);
-				if(index < 0) {
-					int newValue = valueProvider.getAsInt();
-					insert(-index-1, key, newValue);
-					return newValue;
-				}
-				int newValue = values[index];
-				return newValue;
-			}
-			finally {
-				unlockWrite(stamp);
-			}
-		}
-		
 		protected int supplyIfAbsentNonDefault(int hash, int key, IntSupplier valueProvider) {
 			long stamp = writeLock();
 			try {
@@ -2164,20 +2178,6 @@ public class Int2IntConcurrentOpenHashMap extends AbstractInt2IntMap implements 
 					if(newValue == getDefaultReturnValue()) return newValue;
 					values[index] = newValue;
 				}
-				return newValue;
-			}
-			finally {
-				unlockWrite(stamp);
-			}
-		}
-		
-		protected int computeIfPresent(int hash, int key, IntIntUnaryOperator mappingFunction) {
-			long stamp = writeLock();
-			try {
-				int index = findIndex(hash, key);
-				if(index < 0) return getDefaultReturnValue();
-				int newValue = mappingFunction.applyAsInt(key, values[index]);
-				values[index] = newValue;
 				return newValue;
 			}
 			finally {

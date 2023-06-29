@@ -158,6 +158,39 @@ public abstract class AbstractChar2LongMap extends AbstractMap<Character, Long> 
 	}
 	
 	@Override
+	public long computeLongIfAbsent(char key, Char2LongFunction mappingFunction) {
+		Objects.requireNonNull(mappingFunction);
+		if(!containsKey(key)) {
+			long newValue = mappingFunction.applyAsLong(key);
+			put(key, newValue);
+			return newValue;
+		}
+		return get(key);
+	}
+	
+	@Override
+	public long supplyLongIfAbsent(char key, LongSupplier valueProvider) {
+		Objects.requireNonNull(valueProvider);
+		if(!containsKey(key)) {
+			long newValue = valueProvider.getAsLong();
+			put(key, newValue);
+			return newValue;
+		}
+		return get(key);
+	}
+	
+	@Override
+	public long computeLongIfPresent(char key, CharLongUnaryOperator mappingFunction) {
+		Objects.requireNonNull(mappingFunction);
+		if(containsKey(key)) {
+			long newValue = mappingFunction.applyAsLong(key, get(key));
+			put(key, newValue);
+			return newValue;
+		}
+		return getDefaultReturnValue();
+	}
+	
+	@Override
 	public long computeLongNonDefault(char key, CharLongUnaryOperator mappingFunction) {
 		Objects.requireNonNull(mappingFunction);
 		long value = get(key);
@@ -171,17 +204,6 @@ public abstract class AbstractChar2LongMap extends AbstractMap<Character, Long> 
 		}
 		put(key, newValue);
 		return newValue;
-	}
-	
-	@Override
-	public long computeLongIfAbsent(char key, Char2LongFunction mappingFunction) {
-		Objects.requireNonNull(mappingFunction);
-		if(!containsKey(key)) {
-			long newValue = mappingFunction.applyAsLong(key);
-			put(key, newValue);
-			return newValue;
-		}
-		return get(key);
 	}
 	
 	@Override
@@ -199,17 +221,6 @@ public abstract class AbstractChar2LongMap extends AbstractMap<Character, Long> 
 	}
 	
 	@Override
-	public long supplyLongIfAbsent(char key, LongSupplier valueProvider) {
-		Objects.requireNonNull(valueProvider);
-		if(!containsKey(key)) {
-			long newValue = valueProvider.getAsLong();
-			put(key, newValue);
-			return newValue;
-		}
-		return get(key);
-	}
-	
-	@Override
 	public long supplyLongIfAbsentNonDefault(char key, LongSupplier valueProvider) {
 		Objects.requireNonNull(valueProvider);
 		long value;
@@ -221,17 +232,6 @@ public abstract class AbstractChar2LongMap extends AbstractMap<Character, Long> 
 			}
 		}
 		return value;
-	}
-	
-	@Override
-	public long computeLongIfPresent(char key, CharLongUnaryOperator mappingFunction) {
-		Objects.requireNonNull(mappingFunction);
-		if(containsKey(key)) {
-			long newValue = mappingFunction.applyAsLong(key, get(key));
-			put(key, newValue);
-			return newValue;
-		}
-		return getDefaultReturnValue();
 	}
 	
 	@Override

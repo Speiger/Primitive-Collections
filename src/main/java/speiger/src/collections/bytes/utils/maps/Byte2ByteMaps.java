@@ -249,17 +249,17 @@ public class Byte2ByteMaps
 		@Override
 		public byte computeByte(byte key, ByteByteUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
 		@Override
-		public byte computeByteNonDefault(byte key, ByteByteUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
-		@Override
 		public byte computeByteIfAbsent(byte key, ByteUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
-		@Override
-		public byte computeByteIfAbsentNonDefault(byte key, ByteUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
 		@Override
 		public byte computeByteIfPresent(byte key, ByteByteUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
 		@Override
-		public byte computeByteIfPresentNonDefault(byte key, ByteByteUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
-		@Override
 		public byte supplyByteIfAbsent(byte key, ByteSupplier valueProvider) { throw new UnsupportedOperationException(); }
+		@Override
+		public byte computeByteNonDefault(byte key, ByteByteUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
+		@Override
+		public byte computeByteIfAbsentNonDefault(byte key, ByteUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
+		@Override
+		public byte computeByteIfPresentNonDefault(byte key, ByteByteUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
 		@Override
 		public byte supplyByteIfAbsentNonDefault(byte key, ByteSupplier valueProvider) { throw new UnsupportedOperationException(); }
 		@Override
@@ -311,17 +311,17 @@ public class Byte2ByteMaps
 		@Override
 		public byte computeByte(byte key, ByteByteUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
 		@Override
-		public byte computeByteNonDefault(byte key, ByteByteUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
-		@Override
 		public byte computeByteIfAbsent(byte key, ByteUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
-		@Override
-		public byte computeByteIfAbsentNonDefault(byte key, ByteUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
 		@Override
 		public byte computeByteIfPresent(byte key, ByteByteUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
 		@Override
-		public byte computeByteIfPresentNonDefault(byte key, ByteByteUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
-		@Override
 		public byte supplyByteIfAbsent(byte key, ByteSupplier valueProvider) { throw new UnsupportedOperationException(); }
+		@Override
+		public byte computeByteNonDefault(byte key, ByteByteUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
+		@Override
+		public byte computeByteIfAbsentNonDefault(byte key, ByteUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
+		@Override
+		public byte computeByteIfPresentNonDefault(byte key, ByteByteUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
 		@Override
 		public byte supplyByteIfAbsentNonDefault(byte key, ByteSupplier valueProvider) { throw new UnsupportedOperationException(); }
 		@Override
@@ -546,17 +546,17 @@ public class Byte2ByteMaps
 		@Override
 		public byte computeByte(byte key, ByteByteUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
 		@Override
-		public byte computeByteNonDefault(byte key, ByteByteUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
-		@Override
 		public byte computeByteIfAbsent(byte key, ByteUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
-		@Override
-		public byte computeByteIfAbsentNonDefault(byte key, ByteUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
 		@Override
 		public byte computeByteIfPresent(byte key, ByteByteUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
 		@Override
-		public byte computeByteIfPresentNonDefault(byte key, ByteByteUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
-		@Override
 		public byte supplyByteIfAbsent(byte key, ByteSupplier valueProvider) { throw new UnsupportedOperationException(); }
+		@Override
+		public byte computeByteNonDefault(byte key, ByteByteUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
+		@Override
+		public byte computeByteIfAbsentNonDefault(byte key, ByteUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
+		@Override
+		public byte computeByteIfPresentNonDefault(byte key, ByteByteUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
 		@Override
 		public byte supplyByteIfAbsentNonDefault(byte key, ByteSupplier valueProvider) { throw new UnsupportedOperationException(); }
 		@Override
@@ -954,17 +954,17 @@ public class Byte2ByteMaps
 		@Override
 		public byte computeByte(byte key, ByteByteUnaryOperator mappingFunction) { synchronized(mutex) { return map.computeByte(key, mappingFunction); } }
 		@Override
-		public byte computeByteNonDefault(byte key, ByteByteUnaryOperator mappingFunction) { synchronized(mutex) { return map.computeByteNonDefault(key, mappingFunction); } }
-		@Override
 		public byte computeByteIfAbsent(byte key, ByteUnaryOperator mappingFunction) { synchronized(mutex) { return map.computeByteIfAbsent(key, mappingFunction); } }
-		@Override
-		public byte computeByteIfAbsentNonDefault(byte key, ByteUnaryOperator mappingFunction) { synchronized(mutex) { return map.computeByteIfAbsentNonDefault(key, mappingFunction); } }
 		@Override
 		public byte computeByteIfPresent(byte key, ByteByteUnaryOperator mappingFunction) { synchronized(mutex) { return map.computeByteIfPresent(key, mappingFunction); } }
 		@Override
-		public byte computeByteIfPresentNonDefault(byte key, ByteByteUnaryOperator mappingFunction) { synchronized(mutex) { return map.computeByteIfPresentNonDefault(key, mappingFunction); } }
-		@Override
 		public byte supplyByteIfAbsent(byte key, ByteSupplier valueProvider) { synchronized(mutex) { return map.supplyByteIfAbsent(key, valueProvider); } }
+		@Override
+		public byte computeByteNonDefault(byte key, ByteByteUnaryOperator mappingFunction) { synchronized(mutex) { return map.computeByteNonDefault(key, mappingFunction); } }
+		@Override
+		public byte computeByteIfAbsentNonDefault(byte key, ByteUnaryOperator mappingFunction) { synchronized(mutex) { return map.computeByteIfAbsentNonDefault(key, mappingFunction); } }
+		@Override
+		public byte computeByteIfPresentNonDefault(byte key, ByteByteUnaryOperator mappingFunction) { synchronized(mutex) { return map.computeByteIfPresentNonDefault(key, mappingFunction); } }
 		@Override
 		public byte supplyByteIfAbsentNonDefault(byte key, ByteSupplier valueProvider) { synchronized(mutex) { return map.supplyByteIfAbsentNonDefault(key, valueProvider); } }
 		@Override

@@ -402,20 +402,19 @@ public class ImmutableObject2LongOpenHashMap<T> extends AbstractObject2LongMap<T
 	@Override
 	public long computeLong(T key, ObjectLongUnaryOperator<T> mappingFunction) { throw new UnsupportedOperationException(); }
 	@Override
-	public long computeLongNonDefault(T key, ObjectLongUnaryOperator<T> mappingFunction) { throw new UnsupportedOperationException(); }
-	@Override
 	public long computeLongIfAbsent(T key, ToLongFunction<T> mappingFunction) { throw new UnsupportedOperationException(); }
-	@Override
-	public long computeLongIfAbsentNonDefault(T key, ToLongFunction<T> mappingFunction) { throw new UnsupportedOperationException(); }
 	@Override
 	public long supplyLongIfAbsent(T key, LongSupplier valueProvider) { throw new UnsupportedOperationException(); }
 	@Override
-	public long supplyLongIfAbsentNonDefault(T key, LongSupplier valueProvider) { throw new UnsupportedOperationException(); }
-	@Override
 	public long computeLongIfPresent(T key, ObjectLongUnaryOperator<T> mappingFunction) { throw new UnsupportedOperationException(); }
 	@Override
+	public long computeLongNonDefault(T key, ObjectLongUnaryOperator<T> mappingFunction) { throw new UnsupportedOperationException(); }
+	@Override
+	public long computeLongIfAbsentNonDefault(T key, ToLongFunction<T> mappingFunction) { throw new UnsupportedOperationException(); }
+	@Override
+	public long supplyLongIfAbsentNonDefault(T key, LongSupplier valueProvider) { throw new UnsupportedOperationException(); }
+	@Override
 	public long computeLongIfPresentNonDefault(T key, ObjectLongUnaryOperator<T> mappingFunction) { throw new UnsupportedOperationException(); }
-	
 	@Override
 	public long mergeLong(T key, long value, LongLongUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
 	

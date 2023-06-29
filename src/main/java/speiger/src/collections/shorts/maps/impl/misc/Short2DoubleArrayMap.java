@@ -443,6 +443,42 @@ public class Short2DoubleArrayMap extends AbstractShort2DoubleMap implements Sho
 	}
 	
 	@Override
+	public double computeDoubleIfAbsent(short key, Short2DoubleFunction mappingFunction) {
+		Objects.requireNonNull(mappingFunction);
+		int index = findIndex(key);
+		if(index == -1) {
+			double newValue = mappingFunction.applyAsDouble(key);
+			insertIndex(size++, key, newValue);
+			return newValue;
+		}
+		double newValue = values[index];
+		return newValue;
+	}
+		
+	@Override
+	public double supplyDoubleIfAbsent(short key, DoubleSupplier valueProvider) {
+		Objects.requireNonNull(valueProvider);
+		int index = findIndex(key);
+		if(index == -1) {
+			double newValue = valueProvider.getAsDouble();
+			insertIndex(size++, key, newValue);
+			return newValue;
+		}
+		double newValue = values[index];
+		return newValue;
+	}
+		
+	@Override
+	public double computeDoubleIfPresent(short key, ShortDoubleUnaryOperator mappingFunction) {
+		Objects.requireNonNull(mappingFunction);
+		int index = findIndex(key);
+		if(index == -1) return getDefaultReturnValue();
+		double newValue = mappingFunction.applyAsDouble(key, values[index]);
+		values[index] = newValue;
+		return newValue;
+	}
+	
+	@Override
 	public double computeDoubleNonDefault(short key, ShortDoubleUnaryOperator mappingFunction) {
 		Objects.requireNonNull(mappingFunction);
 		int index = findIndex(key);
@@ -458,19 +494,6 @@ public class Short2DoubleArrayMap extends AbstractShort2DoubleMap implements Sho
 			return newValue;
 		}
 		values[index] = newValue;
-		return newValue;
-	}
-	
-	@Override
-	public double computeDoubleIfAbsent(short key, Short2DoubleFunction mappingFunction) {
-		Objects.requireNonNull(mappingFunction);
-		int index = findIndex(key);
-		if(index == -1) {
-			double newValue = mappingFunction.applyAsDouble(key);
-			insertIndex(size++, key, newValue);
-			return newValue;
-		}
-		double newValue = values[index];
 		return newValue;
 	}
 	
@@ -494,19 +517,6 @@ public class Short2DoubleArrayMap extends AbstractShort2DoubleMap implements Sho
 	}
 	
 	@Override
-	public double supplyDoubleIfAbsent(short key, DoubleSupplier valueProvider) {
-		Objects.requireNonNull(valueProvider);
-		int index = findIndex(key);
-		if(index == -1) {
-			double newValue = valueProvider.getAsDouble();
-			insertIndex(size++, key, newValue);
-			return newValue;
-		}
-		double newValue = values[index];
-		return newValue;
-	}
-	
-	@Override
 	public double supplyDoubleIfAbsentNonDefault(short key, DoubleSupplier valueProvider) {
 		Objects.requireNonNull(valueProvider);
 		int index = findIndex(key);
@@ -522,16 +532,6 @@ public class Short2DoubleArrayMap extends AbstractShort2DoubleMap implements Sho
 			if(Double.doubleToLongBits(newValue) == Double.doubleToLongBits(getDefaultReturnValue())) return newValue;
 			values[index] = newValue;
 		}
-		return newValue;
-	}
-	
-	@Override
-	public double computeDoubleIfPresent(short key, ShortDoubleUnaryOperator mappingFunction) {
-		Objects.requireNonNull(mappingFunction);
-		int index = findIndex(key);
-		if(index == -1) return getDefaultReturnValue();
-		double newValue = mappingFunction.applyAsDouble(key, values[index]);
-		values[index] = newValue;
 		return newValue;
 	}
 	

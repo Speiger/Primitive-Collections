@@ -430,6 +430,42 @@ public class Byte2FloatOpenHashMap extends AbstractByte2FloatMap implements ITri
 		values[index] = newValue;
 		return newValue;
 	}
+		
+	@Override
+	public float computeFloatIfAbsent(byte key, Byte2FloatFunction mappingFunction) {
+		Objects.requireNonNull(mappingFunction);
+		int index = findIndex(key);
+		if(index < 0) {
+			float newValue = mappingFunction.applyAsFloat(key);
+			insert(-index-1, key, newValue);
+			return newValue;
+		}
+		float newValue = values[index];
+		return newValue;
+	}
+	
+	@Override
+	public float supplyFloatIfAbsent(byte key, FloatSupplier valueProvider) {
+		Objects.requireNonNull(valueProvider);
+		int index = findIndex(key);
+		if(index < 0) {
+			float newValue = valueProvider.getAsFloat();
+			insert(-index-1, key, newValue);
+			return newValue;
+		}
+		float newValue = values[index];
+		return newValue;
+	}
+		
+	@Override
+	public float computeFloatIfPresent(byte key, ByteFloatUnaryOperator mappingFunction) {
+		Objects.requireNonNull(mappingFunction);
+		int index = findIndex(key);
+		if(index < 0) return getDefaultReturnValue();
+		float newValue = mappingFunction.applyAsFloat(key, values[index]);
+		values[index] = newValue;
+		return newValue;
+	}
 	
 	@Override
 	public float computeFloatNonDefault(byte key, ByteFloatUnaryOperator mappingFunction) {
@@ -447,19 +483,6 @@ public class Byte2FloatOpenHashMap extends AbstractByte2FloatMap implements ITri
 			return newValue;
 		}
 		values[index] = newValue;
-		return newValue;
-	}
-	
-	@Override
-	public float computeFloatIfAbsent(byte key, Byte2FloatFunction mappingFunction) {
-		Objects.requireNonNull(mappingFunction);
-		int index = findIndex(key);
-		if(index < 0) {
-			float newValue = mappingFunction.applyAsFloat(key);
-			insert(-index-1, key, newValue);
-			return newValue;
-		}
-		float newValue = values[index];
 		return newValue;
 	}
 	
@@ -483,44 +506,21 @@ public class Byte2FloatOpenHashMap extends AbstractByte2FloatMap implements ITri
 	}
 	
 	@Override
-	public float supplyFloatIfAbsent(byte key, FloatSupplier valueProvider) {
-		Objects.requireNonNull(valueProvider);
-		int index = findIndex(key);
-		if(index < 0) {
-			float newValue = valueProvider.getAsDouble();
-			insert(-index-1, key, newValue);
-			return newValue;
-		}
-		float newValue = values[index];
-		return newValue;
-	}
-	
-	@Override
 	public float supplyFloatIfAbsentNonDefault(byte key, FloatSupplier valueProvider) {
 		Objects.requireNonNull(valueProvider);
 		int index = findIndex(key);
 		if(index < 0) {
-			float newValue = valueProvider.getAsDouble();
+			float newValue = valueProvider.getAsFloat();
 			if(Float.floatToIntBits(newValue) == Float.floatToIntBits(getDefaultReturnValue())) return newValue;
 			insert(-index-1, key, newValue);
 			return newValue;
 		}
 		float newValue = values[index];
 		if(Float.floatToIntBits(newValue) == Float.floatToIntBits(getDefaultReturnValue())) {
-			newValue = valueProvider.getAsDouble();
+			newValue = valueProvider.getAsFloat();
 			if(Float.floatToIntBits(newValue) == Float.floatToIntBits(getDefaultReturnValue())) return newValue;
 			values[index] = newValue;
 		}
-		return newValue;
-	}
-	
-	@Override
-	public float computeFloatIfPresent(byte key, ByteFloatUnaryOperator mappingFunction) {
-		Objects.requireNonNull(mappingFunction);
-		int index = findIndex(key);
-		if(index < 0) return getDefaultReturnValue();
-		float newValue = mappingFunction.applyAsFloat(key, values[index]);
-		values[index] = newValue;
 		return newValue;
 	}
 	

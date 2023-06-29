@@ -157,6 +157,39 @@ public abstract class AbstractObject2ShortMap<T> extends AbstractMap<T, Short> i
 	}
 	
 	@Override
+	public short computeShortIfAbsent(T key, ToShortFunction<T> mappingFunction) {
+		Objects.requireNonNull(mappingFunction);
+		if(!containsKey(key)) {
+			short newValue = mappingFunction.applyAsShort(key);
+			put(key, newValue);
+			return newValue;
+		}
+		return get(key);
+	}
+	
+	@Override
+	public short supplyShortIfAbsent(T key, ShortSupplier valueProvider) {
+		Objects.requireNonNull(valueProvider);
+		if(!containsKey(key)) {
+			short newValue = valueProvider.getAsShort();
+			put(key, newValue);
+			return newValue;
+		}
+		return get(key);
+	}
+	
+	@Override
+	public short computeShortIfPresent(T key, ObjectShortUnaryOperator<T> mappingFunction) {
+		Objects.requireNonNull(mappingFunction);
+		if(containsKey(key)) {
+			short newValue = mappingFunction.applyAsShort(key, getShort(key));
+			put(key, newValue);
+			return newValue;
+		}
+		return getDefaultReturnValue();
+	}
+	
+	@Override
 	public short computeShortNonDefault(T key, ObjectShortUnaryOperator<T> mappingFunction) {
 		Objects.requireNonNull(mappingFunction);
 		short value = getShort(key);
@@ -170,17 +203,6 @@ public abstract class AbstractObject2ShortMap<T> extends AbstractMap<T, Short> i
 		}
 		put(key, newValue);
 		return newValue;
-	}
-	
-	@Override
-	public short computeShortIfAbsent(T key, ToShortFunction<T> mappingFunction) {
-		Objects.requireNonNull(mappingFunction);
-		if(!containsKey(key)) {
-			short newValue = mappingFunction.applyAsShort(key);
-			put(key, newValue);
-			return newValue;
-		}
-		return get(key);
 	}
 	
 	@Override
@@ -198,39 +220,17 @@ public abstract class AbstractObject2ShortMap<T> extends AbstractMap<T, Short> i
 	}
 	
 	@Override
-	public short supplyShortIfAbsent(T key, ShortSupplier valueProvider) {
-		Objects.requireNonNull(valueProvider);
-		if(!containsKey(key)) {
-			short newValue = valueProvider.getAsInt();
-			put(key, newValue);
-			return newValue;
-		}
-		return get(key);
-	}
-	
-	@Override
 	public short supplyShortIfAbsentNonDefault(T key, ShortSupplier valueProvider) {
 		Objects.requireNonNull(valueProvider);
 		short value;
 		if((value = getShort(key)) == getDefaultReturnValue() || !containsKey(key)) {
-			short newValue = valueProvider.getAsInt();
+			short newValue = valueProvider.getAsShort();
 			if(newValue != getDefaultReturnValue()) {
 				put(key, newValue);
 				return newValue;
 			}
 		}
 		return value;
-	}
-	
-	@Override
-	public short computeShortIfPresent(T key, ObjectShortUnaryOperator<T> mappingFunction) {
-		Objects.requireNonNull(mappingFunction);
-		if(containsKey(key)) {
-			short newValue = mappingFunction.applyAsShort(key, getShort(key));
-			put(key, newValue);
-			return newValue;
-		}
-		return getDefaultReturnValue();
 	}
 	
 	@Override

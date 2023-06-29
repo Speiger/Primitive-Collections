@@ -463,6 +463,42 @@ public class Byte2LongOpenCustomHashMap extends AbstractByte2LongMap implements 
 	}
 	
 	@Override
+	public long computeLongIfAbsent(byte key, Byte2LongFunction mappingFunction) {
+		Objects.requireNonNull(mappingFunction);
+		int index = findIndex(key);
+		if(index < 0) {
+			long newValue = mappingFunction.applyAsLong(key);
+			insert(-index-1, key, newValue);
+			return newValue;
+		}
+		long newValue = values[index];
+		return newValue;
+	}
+		
+	@Override
+	public long supplyLongIfAbsent(byte key, LongSupplier valueProvider) {
+		Objects.requireNonNull(valueProvider);
+		int index = findIndex(key);
+		if(index < 0) {
+			long newValue = valueProvider.getAsLong();
+			insert(-index-1, key, newValue);
+			return newValue;
+		}
+		long newValue = values[index];
+		return newValue;
+	}
+	
+	@Override
+	public long computeLongIfPresent(byte key, ByteLongUnaryOperator mappingFunction) {
+		Objects.requireNonNull(mappingFunction);
+		int index = findIndex(key);
+		if(index < 0) return getDefaultReturnValue();
+		long newValue = mappingFunction.applyAsLong(key, values[index]);
+		values[index] = newValue;
+		return newValue;
+	}
+	
+	@Override
 	public long computeLongNonDefault(byte key, ByteLongUnaryOperator mappingFunction) {
 		Objects.requireNonNull(mappingFunction);
 		int index = findIndex(key);
@@ -478,19 +514,6 @@ public class Byte2LongOpenCustomHashMap extends AbstractByte2LongMap implements 
 			return newValue;
 		}
 		values[index] = newValue;
-		return newValue;
-	}
-	
-	@Override
-	public long computeLongIfAbsent(byte key, Byte2LongFunction mappingFunction) {
-		Objects.requireNonNull(mappingFunction);
-		int index = findIndex(key);
-		if(index < 0) {
-			long newValue = mappingFunction.applyAsLong(key);
-			insert(-index-1, key, newValue);
-			return newValue;
-		}
-		long newValue = values[index];
 		return newValue;
 	}
 	
@@ -514,19 +537,6 @@ public class Byte2LongOpenCustomHashMap extends AbstractByte2LongMap implements 
 	}
 	
 	@Override
-	public long supplyLongIfAbsent(byte key, LongSupplier valueProvider) {
-		Objects.requireNonNull(valueProvider);
-		int index = findIndex(key);
-		if(index < 0) {
-			long newValue = valueProvider.getAsLong();
-			insert(-index-1, key, newValue);
-			return newValue;
-		}
-		long newValue = values[index];
-		return newValue;
-	}
-	
-	@Override
 	public long supplyLongIfAbsentNonDefault(byte key, LongSupplier valueProvider) {
 		Objects.requireNonNull(valueProvider);
 		int index = findIndex(key);
@@ -542,16 +552,6 @@ public class Byte2LongOpenCustomHashMap extends AbstractByte2LongMap implements 
 			if(newValue == getDefaultReturnValue()) return newValue;
 			values[index] = newValue;
 		}
-		return newValue;
-	}
-	
-	@Override
-	public long computeLongIfPresent(byte key, ByteLongUnaryOperator mappingFunction) {
-		Objects.requireNonNull(mappingFunction);
-		int index = findIndex(key);
-		if(index < 0) return getDefaultReturnValue();
-		long newValue = mappingFunction.applyAsLong(key, values[index]);
-		values[index] = newValue;
 		return newValue;
 	}
 	

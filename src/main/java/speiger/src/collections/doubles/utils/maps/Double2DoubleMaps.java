@@ -249,17 +249,17 @@ public class Double2DoubleMaps
 		@Override
 		public double computeDouble(double key, DoubleDoubleUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
 		@Override
-		public double computeDoubleNonDefault(double key, DoubleDoubleUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
-		@Override
 		public double computeDoubleIfAbsent(double key, DoubleUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
-		@Override
-		public double computeDoubleIfAbsentNonDefault(double key, DoubleUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
 		@Override
 		public double computeDoubleIfPresent(double key, DoubleDoubleUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
 		@Override
-		public double computeDoubleIfPresentNonDefault(double key, DoubleDoubleUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
-		@Override
 		public double supplyDoubleIfAbsent(double key, DoubleSupplier valueProvider) { throw new UnsupportedOperationException(); }
+		@Override
+		public double computeDoubleNonDefault(double key, DoubleDoubleUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
+		@Override
+		public double computeDoubleIfAbsentNonDefault(double key, DoubleUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
+		@Override
+		public double computeDoubleIfPresentNonDefault(double key, DoubleDoubleUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
 		@Override
 		public double supplyDoubleIfAbsentNonDefault(double key, DoubleSupplier valueProvider) { throw new UnsupportedOperationException(); }
 		@Override
@@ -311,17 +311,17 @@ public class Double2DoubleMaps
 		@Override
 		public double computeDouble(double key, DoubleDoubleUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
 		@Override
-		public double computeDoubleNonDefault(double key, DoubleDoubleUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
-		@Override
 		public double computeDoubleIfAbsent(double key, DoubleUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
-		@Override
-		public double computeDoubleIfAbsentNonDefault(double key, DoubleUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
 		@Override
 		public double computeDoubleIfPresent(double key, DoubleDoubleUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
 		@Override
-		public double computeDoubleIfPresentNonDefault(double key, DoubleDoubleUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
-		@Override
 		public double supplyDoubleIfAbsent(double key, DoubleSupplier valueProvider) { throw new UnsupportedOperationException(); }
+		@Override
+		public double computeDoubleNonDefault(double key, DoubleDoubleUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
+		@Override
+		public double computeDoubleIfAbsentNonDefault(double key, DoubleUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
+		@Override
+		public double computeDoubleIfPresentNonDefault(double key, DoubleDoubleUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
 		@Override
 		public double supplyDoubleIfAbsentNonDefault(double key, DoubleSupplier valueProvider) { throw new UnsupportedOperationException(); }
 		@Override
@@ -546,17 +546,17 @@ public class Double2DoubleMaps
 		@Override
 		public double computeDouble(double key, DoubleDoubleUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
 		@Override
-		public double computeDoubleNonDefault(double key, DoubleDoubleUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
-		@Override
 		public double computeDoubleIfAbsent(double key, DoubleUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
-		@Override
-		public double computeDoubleIfAbsentNonDefault(double key, DoubleUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
 		@Override
 		public double computeDoubleIfPresent(double key, DoubleDoubleUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
 		@Override
-		public double computeDoubleIfPresentNonDefault(double key, DoubleDoubleUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
-		@Override
 		public double supplyDoubleIfAbsent(double key, DoubleSupplier valueProvider) { throw new UnsupportedOperationException(); }
+		@Override
+		public double computeDoubleNonDefault(double key, DoubleDoubleUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
+		@Override
+		public double computeDoubleIfAbsentNonDefault(double key, DoubleUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
+		@Override
+		public double computeDoubleIfPresentNonDefault(double key, DoubleDoubleUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
 		@Override
 		public double supplyDoubleIfAbsentNonDefault(double key, DoubleSupplier valueProvider) { throw new UnsupportedOperationException(); }
 		@Override
@@ -954,17 +954,17 @@ public class Double2DoubleMaps
 		@Override
 		public double computeDouble(double key, DoubleDoubleUnaryOperator mappingFunction) { synchronized(mutex) { return map.computeDouble(key, mappingFunction); } }
 		@Override
-		public double computeDoubleNonDefault(double key, DoubleDoubleUnaryOperator mappingFunction) { synchronized(mutex) { return map.computeDoubleNonDefault(key, mappingFunction); } }
-		@Override
 		public double computeDoubleIfAbsent(double key, DoubleUnaryOperator mappingFunction) { synchronized(mutex) { return map.computeDoubleIfAbsent(key, mappingFunction); } }
-		@Override
-		public double computeDoubleIfAbsentNonDefault(double key, DoubleUnaryOperator mappingFunction) { synchronized(mutex) { return map.computeDoubleIfAbsentNonDefault(key, mappingFunction); } }
 		@Override
 		public double computeDoubleIfPresent(double key, DoubleDoubleUnaryOperator mappingFunction) { synchronized(mutex) { return map.computeDoubleIfPresent(key, mappingFunction); } }
 		@Override
-		public double computeDoubleIfPresentNonDefault(double key, DoubleDoubleUnaryOperator mappingFunction) { synchronized(mutex) { return map.computeDoubleIfPresentNonDefault(key, mappingFunction); } }
-		@Override
 		public double supplyDoubleIfAbsent(double key, DoubleSupplier valueProvider) { synchronized(mutex) { return map.supplyDoubleIfAbsent(key, valueProvider); } }
+		@Override
+		public double computeDoubleNonDefault(double key, DoubleDoubleUnaryOperator mappingFunction) { synchronized(mutex) { return map.computeDoubleNonDefault(key, mappingFunction); } }
+		@Override
+		public double computeDoubleIfAbsentNonDefault(double key, DoubleUnaryOperator mappingFunction) { synchronized(mutex) { return map.computeDoubleIfAbsentNonDefault(key, mappingFunction); } }
+		@Override
+		public double computeDoubleIfPresentNonDefault(double key, DoubleDoubleUnaryOperator mappingFunction) { synchronized(mutex) { return map.computeDoubleIfPresentNonDefault(key, mappingFunction); } }
 		@Override
 		public double supplyDoubleIfAbsentNonDefault(double key, DoubleSupplier valueProvider) { synchronized(mutex) { return map.supplyDoubleIfAbsentNonDefault(key, valueProvider); } }
 		@Override

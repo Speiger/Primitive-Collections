@@ -454,6 +454,40 @@ public class Double2IntRBTreeMap extends AbstractDouble2IntMap implements Double
 	}
 	
 	@Override
+	public int computeIntIfAbsent(double key, Double2IntFunction mappingFunction) {
+		Objects.requireNonNull(mappingFunction);
+		Node entry = findNode(key);
+		if(entry == null) {
+			int newValue = mappingFunction.applyAsInt(key);
+			put(key, newValue);
+			return newValue;
+		}
+		return entry.value;
+	}
+	
+	@Override
+	public int supplyIntIfAbsent(double key, IntSupplier valueProvider) {
+		Objects.requireNonNull(valueProvider);
+		Node entry = findNode(key);
+		if(entry == null) {
+			int newValue = valueProvider.getAsInt();
+			put(key, newValue);
+			return newValue;
+		}
+		return entry.value;
+	}
+	
+	@Override
+	public int computeIntIfPresent(double key, DoubleIntUnaryOperator mappingFunction) {
+		Objects.requireNonNull(mappingFunction);
+		Node entry = findNode(key);
+		if(entry == null) return getDefaultReturnValue();
+		int newValue = mappingFunction.applyAsInt(key, entry.value);
+		entry.value = newValue;
+		return newValue;
+	}
+	
+	@Override
 	public int computeIntNonDefault(double key, DoubleIntUnaryOperator mappingFunction) {
 		Objects.requireNonNull(mappingFunction);
 		Node entry = findNode(key);
@@ -470,18 +504,6 @@ public class Double2IntRBTreeMap extends AbstractDouble2IntMap implements Double
 		}
 		entry.value = newValue;
 		return newValue;
-	}
-	
-	@Override
-	public int computeIntIfAbsent(double key, Double2IntFunction mappingFunction) {
-		Objects.requireNonNull(mappingFunction);
-		Node entry = findNode(key);
-		if(entry == null) {
-			int newValue = mappingFunction.applyAsInt(key);
-			put(key, newValue);
-			return newValue;
-		}
-		return entry.value;
 	}
 	
 	@Override
@@ -503,18 +525,6 @@ public class Double2IntRBTreeMap extends AbstractDouble2IntMap implements Double
 	}
 	
 	@Override
-	public int supplyIntIfAbsent(double key, IntSupplier valueProvider) {
-		Objects.requireNonNull(valueProvider);
-		Node entry = findNode(key);
-		if(entry == null) {
-			int newValue = valueProvider.getAsInt();
-			put(key, newValue);
-			return newValue;
-		}
-		return entry.value;
-	}
-	
-	@Override
 	public int supplyIntIfAbsentNonDefault(double key, IntSupplier valueProvider) {
 		Objects.requireNonNull(valueProvider);
 		Node entry = findNode(key);
@@ -530,16 +540,6 @@ public class Double2IntRBTreeMap extends AbstractDouble2IntMap implements Double
 			entry.value = newValue;
 		}
 		return entry.value;
-	}
-	
-	@Override
-	public int computeIntIfPresent(double key, DoubleIntUnaryOperator mappingFunction) {
-		Objects.requireNonNull(mappingFunction);
-		Node entry = findNode(key);
-		if(entry == null) return getDefaultReturnValue();
-		int newValue = mappingFunction.applyAsInt(key, entry.value);
-		entry.value = newValue;
-		return newValue;
 	}
 	
 	@Override
@@ -1621,14 +1621,9 @@ public class Double2IntRBTreeMap extends AbstractDouble2IntMap implements Double
 			Objects.requireNonNull(mappingFunction);
 			if(!inRange(key)) return getDefaultReturnValue();
 			Node entry = map.findNode(key);
-			if(entry == null || entry.value == getDefaultReturnValue()) return getDefaultReturnValue();
-			int newValue = mappingFunction.apply(key, entry.value);
-			if(newValue == getDefaultReturnValue()) {
-				map.removeNode(entry);
-				return newValue;
-			}
-			entry.value = newValue;
-			return newValue;
+			if(entry == null) return getDefaultReturnValue();
+			entry.value = mappingFunction.apply(key, entry.value);
+			return entry.value;
 		}
 		
 		@Override

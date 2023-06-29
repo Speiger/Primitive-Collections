@@ -418,20 +418,19 @@ public class ImmutableShort2CharOpenHashMap extends AbstractShort2CharMap implem
 	@Override
 	public char computeChar(short key, ShortCharUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
 	@Override
-	public char computeCharNonDefault(short key, ShortCharUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
-	@Override
 	public char computeCharIfAbsent(short key, Short2CharFunction mappingFunction) { throw new UnsupportedOperationException(); }
-	@Override
-	public char computeCharIfAbsentNonDefault(short key, Short2CharFunction mappingFunction) { throw new UnsupportedOperationException(); }
 	@Override
 	public char supplyCharIfAbsent(short key, CharSupplier valueProvider) { throw new UnsupportedOperationException(); }
 	@Override
-	public char supplyCharIfAbsentNonDefault(short key, CharSupplier valueProvider) { throw new UnsupportedOperationException(); }
-	@Override
 	public char computeCharIfPresent(short key, ShortCharUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
 	@Override
+	public char computeCharNonDefault(short key, ShortCharUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
+	@Override
+	public char computeCharIfAbsentNonDefault(short key, Short2CharFunction mappingFunction) { throw new UnsupportedOperationException(); }
+	@Override
+	public char supplyCharIfAbsentNonDefault(short key, CharSupplier valueProvider) { throw new UnsupportedOperationException(); }
+	@Override
 	public char computeCharIfPresentNonDefault(short key, ShortCharUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
-	
 	@Override
 	public char mergeChar(short key, char value, CharCharUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
 	

@@ -420,6 +420,42 @@ public class Long2BooleanArrayMap extends AbstractLong2BooleanMap implements Lon
 	}
 	
 	@Override
+	public boolean computeBooleanIfAbsent(long key, LongPredicate mappingFunction) {
+		Objects.requireNonNull(mappingFunction);
+		int index = findIndex(key);
+		if(index == -1) {
+			boolean newValue = mappingFunction.test(key);
+			insertIndex(size++, key, newValue);
+			return newValue;
+		}
+		boolean newValue = values[index];
+		return newValue;
+	}
+		
+	@Override
+	public boolean supplyBooleanIfAbsent(long key, BooleanSupplier valueProvider) {
+		Objects.requireNonNull(valueProvider);
+		int index = findIndex(key);
+		if(index == -1) {
+			boolean newValue = valueProvider.getAsBoolean();
+			insertIndex(size++, key, newValue);
+			return newValue;
+		}
+		boolean newValue = values[index];
+		return newValue;
+	}
+		
+	@Override
+	public boolean computeBooleanIfPresent(long key, LongBooleanUnaryOperator mappingFunction) {
+		Objects.requireNonNull(mappingFunction);
+		int index = findIndex(key);
+		if(index == -1) return getDefaultReturnValue();
+		boolean newValue = mappingFunction.applyAsBoolean(key, values[index]);
+		values[index] = newValue;
+		return newValue;
+	}
+	
+	@Override
 	public boolean computeBooleanNonDefault(long key, LongBooleanUnaryOperator mappingFunction) {
 		Objects.requireNonNull(mappingFunction);
 		int index = findIndex(key);
@@ -435,19 +471,6 @@ public class Long2BooleanArrayMap extends AbstractLong2BooleanMap implements Lon
 			return newValue;
 		}
 		values[index] = newValue;
-		return newValue;
-	}
-	
-	@Override
-	public boolean computeBooleanIfAbsent(long key, LongPredicate mappingFunction) {
-		Objects.requireNonNull(mappingFunction);
-		int index = findIndex(key);
-		if(index == -1) {
-			boolean newValue = mappingFunction.test(key);
-			insertIndex(size++, key, newValue);
-			return newValue;
-		}
-		boolean newValue = values[index];
 		return newValue;
 	}
 	
@@ -471,19 +494,6 @@ public class Long2BooleanArrayMap extends AbstractLong2BooleanMap implements Lon
 	}
 	
 	@Override
-	public boolean supplyBooleanIfAbsent(long key, BooleanSupplier valueProvider) {
-		Objects.requireNonNull(valueProvider);
-		int index = findIndex(key);
-		if(index == -1) {
-			boolean newValue = valueProvider.getAsBoolean();
-			insertIndex(size++, key, newValue);
-			return newValue;
-		}
-		boolean newValue = values[index];
-		return newValue;
-	}
-	
-	@Override
 	public boolean supplyBooleanIfAbsentNonDefault(long key, BooleanSupplier valueProvider) {
 		Objects.requireNonNull(valueProvider);
 		int index = findIndex(key);
@@ -499,16 +509,6 @@ public class Long2BooleanArrayMap extends AbstractLong2BooleanMap implements Lon
 			if(newValue == getDefaultReturnValue()) return newValue;
 			values[index] = newValue;
 		}
-		return newValue;
-	}
-	
-	@Override
-	public boolean computeBooleanIfPresent(long key, LongBooleanUnaryOperator mappingFunction) {
-		Objects.requireNonNull(mappingFunction);
-		int index = findIndex(key);
-		if(index == -1) return getDefaultReturnValue();
-		boolean newValue = mappingFunction.applyAsBoolean(key, values[index]);
-		values[index] = newValue;
 		return newValue;
 	}
 	

@@ -452,17 +452,31 @@ public class Byte2ShortConcurrentOpenHashMap extends AbstractByte2ShortMap imple
 	}
 	
 	@Override
-	public short computeShortNonDefault(byte key, ByteShortUnaryOperator mappingFunction) {
-		Objects.requireNonNull(mappingFunction);
-		int hash = getHashCode(key);
-		return getSegment(hash).computeNonDefault(hash, key, mappingFunction);
-	}
-
-	@Override
 	public short computeShortIfAbsent(byte key, Byte2ShortFunction mappingFunction) {
 		Objects.requireNonNull(mappingFunction);
 		int hash = getHashCode(key);
 		return getSegment(hash).computeIfAbsent(hash, key, mappingFunction);
+	}
+	
+	@Override
+	public short supplyShortIfAbsent(byte key, ShortSupplier valueProvider) {
+		Objects.requireNonNull(valueProvider);
+		int hash = getHashCode(key);
+		return getSegment(hash).supplyIfAbsent(hash, key, valueProvider);
+	}
+	
+	@Override
+	public short computeShortIfPresent(byte key, ByteShortUnaryOperator mappingFunction) {
+		Objects.requireNonNull(mappingFunction);
+		int hash = getHashCode(key);
+		return getSegment(hash).computeIfPresent(hash, key, mappingFunction);
+	}
+	
+	@Override
+	public short computeShortNonDefault(byte key, ByteShortUnaryOperator mappingFunction) {
+		Objects.requireNonNull(mappingFunction);
+		int hash = getHashCode(key);
+		return getSegment(hash).computeNonDefault(hash, key, mappingFunction);
 	}
 	
 	@Override
@@ -473,24 +487,10 @@ public class Byte2ShortConcurrentOpenHashMap extends AbstractByte2ShortMap imple
 	}
 
 	@Override
-	public short supplyShortIfAbsent(byte key, ShortSupplier valueProvider) {
-		Objects.requireNonNull(valueProvider);
-		int hash = getHashCode(key);
-		return getSegment(hash).supplyIfAbsent(hash, key, valueProvider);
-	}
-	
-	@Override
 	public short supplyShortIfAbsentNonDefault(byte key, ShortSupplier valueProvider) {
 		Objects.requireNonNull(valueProvider);
 		int hash = getHashCode(key);
 		return getSegment(hash).supplyIfAbsentNonDefault(hash, key, valueProvider);
-	}
-	
-	@Override
-	public short computeShortIfPresent(byte key, ByteShortUnaryOperator mappingFunction) {
-		Objects.requireNonNull(mappingFunction);
-		int hash = getHashCode(key);
-		return getSegment(hash).computeIfPresent(hash, key, mappingFunction);
 	}
 	
 	@Override
@@ -2076,6 +2076,54 @@ public class Byte2ShortConcurrentOpenHashMap extends AbstractByte2ShortMap imple
 			}
 		}
 		
+		protected short computeIfAbsent(int hash, byte key, Byte2ShortFunction mappingFunction) {
+			long stamp = writeLock();
+			try {
+				int index = findIndex(hash, key);
+				if(index < 0) {
+					short newValue = mappingFunction.applyAsShort(key);
+					insert(-index-1, key, newValue);
+					return newValue;
+				}
+				short newValue = values[index];
+				return newValue;
+			}
+			finally {
+				unlockWrite(stamp);
+			}
+		}
+				
+		protected short supplyIfAbsent(int hash, byte key, ShortSupplier valueProvider) {
+			long stamp = writeLock();
+			try {
+				int index = findIndex(hash, key);
+				if(index < 0) {
+					short newValue = valueProvider.getAsShort();
+					insert(-index-1, key, newValue);
+					return newValue;
+				}
+				short newValue = values[index];
+				return newValue;
+			}
+			finally {
+				unlockWrite(stamp);
+			}
+		}
+				
+		protected short computeIfPresent(int hash, byte key, ByteShortUnaryOperator mappingFunction) {
+			long stamp = writeLock();
+			try {
+				int index = findIndex(hash, key);
+				if(index < 0) return getDefaultReturnValue();
+				short newValue = mappingFunction.applyAsShort(key, values[index]);
+				values[index] = newValue;
+				return newValue;
+			}
+			finally {
+				unlockWrite(stamp);
+			}
+		}
+		
 		protected short computeNonDefault(int hash, byte key, ByteShortUnaryOperator mappingFunction) {
 			long stamp = writeLock();
 			try {
@@ -2092,23 +2140,6 @@ public class Byte2ShortConcurrentOpenHashMap extends AbstractByte2ShortMap imple
 					return newValue;
 				}
 				values[index] = newValue;
-				return newValue;
-			}
-			finally {
-				unlockWrite(stamp);
-			}
-		}
-		
-		protected short computeIfAbsent(int hash, byte key, Byte2ShortFunction mappingFunction) {
-			long stamp = writeLock();
-			try {
-				int index = findIndex(hash, key);
-				if(index < 0) {
-					short newValue = mappingFunction.applyAsShort(key);
-					insert(-index-1, key, newValue);
-					return newValue;
-				}
-				short newValue = values[index];
 				return newValue;
 			}
 			finally {
@@ -2139,53 +2170,22 @@ public class Byte2ShortConcurrentOpenHashMap extends AbstractByte2ShortMap imple
 			}
 		}
 		
-		protected short supplyIfAbsent(int hash, byte key, ShortSupplier valueProvider) {
-			long stamp = writeLock();
-			try {
-				int index = findIndex(hash, key);
-				if(index < 0) {
-					short newValue = valueProvider.getAsInt();
-					insert(-index-1, key, newValue);
-					return newValue;
-				}
-				short newValue = values[index];
-				return newValue;
-			}
-			finally {
-				unlockWrite(stamp);
-			}
-		}
-		
 		protected short supplyIfAbsentNonDefault(int hash, byte key, ShortSupplier valueProvider) {
 			long stamp = writeLock();
 			try {
 				int index = findIndex(hash, key);
 				if(index < 0) {
-					short newValue = valueProvider.getAsInt();
+					short newValue = valueProvider.getAsShort();
 					if(newValue == getDefaultReturnValue()) return newValue;
 					insert(-index-1, key, newValue);
 					return newValue;
 				}
 				short newValue = values[index];
 				if(newValue == getDefaultReturnValue()) {
-					newValue = valueProvider.getAsInt();
+					newValue = valueProvider.getAsShort();
 					if(newValue == getDefaultReturnValue()) return newValue;
 					values[index] = newValue;
 				}
-				return newValue;
-			}
-			finally {
-				unlockWrite(stamp);
-			}
-		}
-		
-		protected short computeIfPresent(int hash, byte key, ByteShortUnaryOperator mappingFunction) {
-			long stamp = writeLock();
-			try {
-				int index = findIndex(hash, key);
-				if(index < 0) return getDefaultReturnValue();
-				short newValue = mappingFunction.applyAsShort(key, values[index]);
-				values[index] = newValue;
 				return newValue;
 			}
 			finally {

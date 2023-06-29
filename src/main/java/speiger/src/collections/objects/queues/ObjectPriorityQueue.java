@@ -104,6 +104,13 @@ public interface ObjectPriorityQueue<T> extends ObjectIterable<T>
 	public default T first() { return peek(0); }
 	
 	/**
+	 * Method to find out if a element is part of the queue
+	 * @param e the element that is searched for
+	 * @return true if the element is in the queue
+	 */
+	public boolean contains(T e);
+	
+	/**
 	 * Removes the first found element in the queue
 	 * @param e the element that should be removed
 	 * @return if a searched element was removed

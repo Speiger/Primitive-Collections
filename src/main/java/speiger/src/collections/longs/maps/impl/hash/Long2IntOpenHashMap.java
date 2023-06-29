@@ -430,6 +430,42 @@ public class Long2IntOpenHashMap extends AbstractLong2IntMap implements ITrimmab
 		values[index] = newValue;
 		return newValue;
 	}
+		
+	@Override
+	public int computeIntIfAbsent(long key, Long2IntFunction mappingFunction) {
+		Objects.requireNonNull(mappingFunction);
+		int index = findIndex(key);
+		if(index < 0) {
+			int newValue = mappingFunction.applyAsInt(key);
+			insert(-index-1, key, newValue);
+			return newValue;
+		}
+		int newValue = values[index];
+		return newValue;
+	}
+	
+	@Override
+	public int supplyIntIfAbsent(long key, IntSupplier valueProvider) {
+		Objects.requireNonNull(valueProvider);
+		int index = findIndex(key);
+		if(index < 0) {
+			int newValue = valueProvider.getAsInt();
+			insert(-index-1, key, newValue);
+			return newValue;
+		}
+		int newValue = values[index];
+		return newValue;
+	}
+		
+	@Override
+	public int computeIntIfPresent(long key, LongIntUnaryOperator mappingFunction) {
+		Objects.requireNonNull(mappingFunction);
+		int index = findIndex(key);
+		if(index < 0) return getDefaultReturnValue();
+		int newValue = mappingFunction.applyAsInt(key, values[index]);
+		values[index] = newValue;
+		return newValue;
+	}
 	
 	@Override
 	public int computeIntNonDefault(long key, LongIntUnaryOperator mappingFunction) {
@@ -447,19 +483,6 @@ public class Long2IntOpenHashMap extends AbstractLong2IntMap implements ITrimmab
 			return newValue;
 		}
 		values[index] = newValue;
-		return newValue;
-	}
-	
-	@Override
-	public int computeIntIfAbsent(long key, Long2IntFunction mappingFunction) {
-		Objects.requireNonNull(mappingFunction);
-		int index = findIndex(key);
-		if(index < 0) {
-			int newValue = mappingFunction.applyAsInt(key);
-			insert(-index-1, key, newValue);
-			return newValue;
-		}
-		int newValue = values[index];
 		return newValue;
 	}
 	
@@ -483,19 +506,6 @@ public class Long2IntOpenHashMap extends AbstractLong2IntMap implements ITrimmab
 	}
 	
 	@Override
-	public int supplyIntIfAbsent(long key, IntSupplier valueProvider) {
-		Objects.requireNonNull(valueProvider);
-		int index = findIndex(key);
-		if(index < 0) {
-			int newValue = valueProvider.getAsInt();
-			insert(-index-1, key, newValue);
-			return newValue;
-		}
-		int newValue = values[index];
-		return newValue;
-	}
-	
-	@Override
 	public int supplyIntIfAbsentNonDefault(long key, IntSupplier valueProvider) {
 		Objects.requireNonNull(valueProvider);
 		int index = findIndex(key);
@@ -511,16 +521,6 @@ public class Long2IntOpenHashMap extends AbstractLong2IntMap implements ITrimmab
 			if(newValue == getDefaultReturnValue()) return newValue;
 			values[index] = newValue;
 		}
-		return newValue;
-	}
-	
-	@Override
-	public int computeIntIfPresent(long key, LongIntUnaryOperator mappingFunction) {
-		Objects.requireNonNull(mappingFunction);
-		int index = findIndex(key);
-		if(index < 0) return getDefaultReturnValue();
-		int newValue = mappingFunction.applyAsInt(key, values[index]);
-		values[index] = newValue;
 		return newValue;
 	}
 	

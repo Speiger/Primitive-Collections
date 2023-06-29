@@ -7,13 +7,28 @@ import java.util.function.Consumer;
 import java.util.function.Predicate;
 
 import speiger.src.collections.objects.collections.ObjectIterator;
+import speiger.src.collections.booleans.collections.BooleanIterator;
+import speiger.src.collections.objects.functions.function.ToByteFunction;
+import speiger.src.collections.bytes.collections.ByteIterator;
+import speiger.src.collections.objects.functions.function.ToShortFunction;
+import speiger.src.collections.shorts.collections.ShortIterator;
+import speiger.src.collections.objects.functions.function.ToIntFunction;
+import speiger.src.collections.ints.collections.IntIterator;
+import speiger.src.collections.objects.functions.function.ToLongFunction;
+import speiger.src.collections.longs.collections.LongIterator;
+import speiger.src.collections.objects.functions.function.ToFloatFunction;
+import speiger.src.collections.floats.collections.FloatIterator;
+import speiger.src.collections.objects.functions.function.ToDoubleFunction;
+import speiger.src.collections.doubles.collections.DoubleIterator;
 import speiger.src.collections.objects.functions.function.UnaryOperator;
+import speiger.src.collections.objects.functions.consumer.ObjectObjectConsumer;
 import speiger.src.collections.objects.lists.ObjectList;
 import speiger.src.collections.objects.lists.ObjectArrayList;
 
 import speiger.src.collections.objects.lists.ObjectListIterator;
 import speiger.src.collections.objects.collections.ObjectBidirectionalIterator;
 import speiger.src.collections.objects.collections.ObjectCollection;
+import speiger.src.collections.objects.utils.ObjectCollections.CollectionWrapper;
 
 /**
  * A Helper class for Iterators
@@ -106,6 +121,160 @@ public class ObjectIterators
 	 */
 	public static <T, E> ObjectIterator<E> map(ObjectIterator<T> iterator, UnaryOperator<T, E> mapper) {
 		return new MappedIterator<>(iterator, mapper);
+	}
+	
+	/**
+	 * A Helper function that maps a Java-Iterator into a new Type.
+	 * @param iterator that should be mapped
+	 * @param mapper the function that decides what the result turns into.
+	 * @param <T> the keyType of elements maintained by this Collection
+	 * @return a iterator that is mapped to a new result
+	 */
+	public static <T> BooleanIterator mapToBoolean(Iterator<? extends T> iterator, Predicate<T> mapper) {
+		return new MappedBooleanIterator<>(wrap(iterator), mapper);
+	}
+	
+	/**
+	 * A Helper function that maps a Iterator into a new Type.
+	 * @param iterator that should be mapped
+	 * @param mapper the function that decides what the result turns into.
+	 * @param <T> the keyType of elements maintained by this Collection
+	 * @return a iterator that is mapped to a new result
+	 */
+	public static <T> BooleanIterator mapToBoolean(ObjectIterator<T> iterator, Predicate<T> mapper) {
+		return new MappedBooleanIterator<>(iterator, mapper);
+	}
+	
+	/**
+	 * A Helper function that maps a Java-Iterator into a new Type.
+	 * @param iterator that should be mapped
+	 * @param mapper the function that decides what the result turns into.
+	 * @param <T> the keyType of elements maintained by this Collection
+	 * @return a iterator that is mapped to a new result
+	 */
+	public static <T> ByteIterator mapToByte(Iterator<? extends T> iterator, ToByteFunction<T> mapper) {
+		return new MappedByteIterator<>(wrap(iterator), mapper);
+	}
+	
+	/**
+	 * A Helper function that maps a Iterator into a new Type.
+	 * @param iterator that should be mapped
+	 * @param mapper the function that decides what the result turns into.
+	 * @param <T> the keyType of elements maintained by this Collection
+	 * @return a iterator that is mapped to a new result
+	 */
+	public static <T> ByteIterator mapToByte(ObjectIterator<T> iterator, ToByteFunction<T> mapper) {
+		return new MappedByteIterator<>(iterator, mapper);
+	}
+	
+	/**
+	 * A Helper function that maps a Java-Iterator into a new Type.
+	 * @param iterator that should be mapped
+	 * @param mapper the function that decides what the result turns into.
+	 * @param <T> the keyType of elements maintained by this Collection
+	 * @return a iterator that is mapped to a new result
+	 */
+	public static <T> ShortIterator mapToShort(Iterator<? extends T> iterator, ToShortFunction<T> mapper) {
+		return new MappedShortIterator<>(wrap(iterator), mapper);
+	}
+	
+	/**
+	 * A Helper function that maps a Iterator into a new Type.
+	 * @param iterator that should be mapped
+	 * @param mapper the function that decides what the result turns into.
+	 * @param <T> the keyType of elements maintained by this Collection
+	 * @return a iterator that is mapped to a new result
+	 */
+	public static <T> ShortIterator mapToShort(ObjectIterator<T> iterator, ToShortFunction<T> mapper) {
+		return new MappedShortIterator<>(iterator, mapper);
+	}
+	
+	/**
+	 * A Helper function that maps a Java-Iterator into a new Type.
+	 * @param iterator that should be mapped
+	 * @param mapper the function that decides what the result turns into.
+	 * @param <T> the keyType of elements maintained by this Collection
+	 * @return a iterator that is mapped to a new result
+	 */
+	public static <T> IntIterator mapToInt(Iterator<? extends T> iterator, ToIntFunction<T> mapper) {
+		return new MappedIntIterator<>(wrap(iterator), mapper);
+	}
+	
+	/**
+	 * A Helper function that maps a Iterator into a new Type.
+	 * @param iterator that should be mapped
+	 * @param mapper the function that decides what the result turns into.
+	 * @param <T> the keyType of elements maintained by this Collection
+	 * @return a iterator that is mapped to a new result
+	 */
+	public static <T> IntIterator mapToInt(ObjectIterator<T> iterator, ToIntFunction<T> mapper) {
+		return new MappedIntIterator<>(iterator, mapper);
+	}
+	
+	/**
+	 * A Helper function that maps a Java-Iterator into a new Type.
+	 * @param iterator that should be mapped
+	 * @param mapper the function that decides what the result turns into.
+	 * @param <T> the keyType of elements maintained by this Collection
+	 * @return a iterator that is mapped to a new result
+	 */
+	public static <T> LongIterator mapToLong(Iterator<? extends T> iterator, ToLongFunction<T> mapper) {
+		return new MappedLongIterator<>(wrap(iterator), mapper);
+	}
+	
+	/**
+	 * A Helper function that maps a Iterator into a new Type.
+	 * @param iterator that should be mapped
+	 * @param mapper the function that decides what the result turns into.
+	 * @param <T> the keyType of elements maintained by this Collection
+	 * @return a iterator that is mapped to a new result
+	 */
+	public static <T> LongIterator mapToLong(ObjectIterator<T> iterator, ToLongFunction<T> mapper) {
+		return new MappedLongIterator<>(iterator, mapper);
+	}
+	
+	/**
+	 * A Helper function that maps a Java-Iterator into a new Type.
+	 * @param iterator that should be mapped
+	 * @param mapper the function that decides what the result turns into.
+	 * @param <T> the keyType of elements maintained by this Collection
+	 * @return a iterator that is mapped to a new result
+	 */
+	public static <T> FloatIterator mapToFloat(Iterator<? extends T> iterator, ToFloatFunction<T> mapper) {
+		return new MappedFloatIterator<>(wrap(iterator), mapper);
+	}
+	
+	/**
+	 * A Helper function that maps a Iterator into a new Type.
+	 * @param iterator that should be mapped
+	 * @param mapper the function that decides what the result turns into.
+	 * @param <T> the keyType of elements maintained by this Collection
+	 * @return a iterator that is mapped to a new result
+	 */
+	public static <T> FloatIterator mapToFloat(ObjectIterator<T> iterator, ToFloatFunction<T> mapper) {
+		return new MappedFloatIterator<>(iterator, mapper);
+	}
+	
+	/**
+	 * A Helper function that maps a Java-Iterator into a new Type.
+	 * @param iterator that should be mapped
+	 * @param mapper the function that decides what the result turns into.
+	 * @param <T> the keyType of elements maintained by this Collection
+	 * @return a iterator that is mapped to a new result
+	 */
+	public static <T> DoubleIterator mapToDouble(Iterator<? extends T> iterator, ToDoubleFunction<T> mapper) {
+		return new MappedDoubleIterator<>(wrap(iterator), mapper);
+	}
+	
+	/**
+	 * A Helper function that maps a Iterator into a new Type.
+	 * @param iterator that should be mapped
+	 * @param mapper the function that decides what the result turns into.
+	 * @param <T> the keyType of elements maintained by this Collection
+	 * @return a iterator that is mapped to a new result
+	 */
+	public static <T> DoubleIterator mapToDouble(ObjectIterator<T> iterator, ToDoubleFunction<T> mapper) {
+		return new MappedDoubleIterator<>(iterator, mapper);
 	}
 	
 	/**
@@ -220,6 +389,26 @@ public class ObjectIterators
 	 */
 	public static <T> ObjectIterator<T> repeat(Iterator<? extends T> iterator, int repeats) {
 		return new RepeatingIterator<>(wrap(iterator), repeats);
+	}
+	
+	/**
+	 * A Helper function that creates a infinitely looping iterator
+	 * @param iterator that should be looping infinitely
+	 * @param <T> the keyType of elements maintained by this Collection
+	 * @return a infinitely looping iterator
+	 */
+	public static <T> ObjectIterator<T> infinite(ObjectIterator<T> iterator) {
+		return new InfiniteIterator<>(iterator);
+	}
+	
+	/**
+	 * A Helper function that creates a infinitely looping iterator from a Java Iterator
+	 * @param iterator that should be looping infinitely
+	 * @param <T> the keyType of elements maintained by this Collection
+	 * @return a infinitely looping iterator
+	 */
+	public static <T> ObjectIterator<T> infinite(Iterator<? extends T> iterator) {
+		return new InfiniteIterator<>(wrap(iterator));
 	}
 	
 	/**
@@ -760,6 +949,188 @@ public class ObjectIterators
 		}
 	}
 	
+	private static class MappedBooleanIterator<E> implements BooleanIterator
+	{
+		ObjectIterator<E> iterator;
+		Predicate<E> mapper;
+		
+		MappedBooleanIterator(ObjectIterator<E> iterator, Predicate<E> mapper) {
+			this.iterator = iterator;
+			this.mapper = mapper;
+		}
+		
+		@Override
+		public boolean hasNext() {
+			return iterator.hasNext();
+		}
+		
+		@Override
+		public boolean nextBoolean() {
+			return mapper.test(iterator.next());
+		}
+		
+		@Override
+		public int skip(int amount) {
+			return iterator.skip(amount);
+		}
+	}
+	
+	private static class MappedByteIterator<E> implements ByteIterator
+	{
+		ObjectIterator<E> iterator;
+		ToByteFunction<E> mapper;
+		
+		MappedByteIterator(ObjectIterator<E> iterator, ToByteFunction<E> mapper) {
+			this.iterator = iterator;
+			this.mapper = mapper;
+		}
+		
+		@Override
+		public boolean hasNext() {
+			return iterator.hasNext();
+		}
+		
+		@Override
+		public byte nextByte() {
+			return mapper.applyAsByte(iterator.next());
+		}
+		
+		@Override
+		public int skip(int amount) {
+			return iterator.skip(amount);
+		}
+	}
+	
+	private static class MappedShortIterator<E> implements ShortIterator
+	{
+		ObjectIterator<E> iterator;
+		ToShortFunction<E> mapper;
+		
+		MappedShortIterator(ObjectIterator<E> iterator, ToShortFunction<E> mapper) {
+			this.iterator = iterator;
+			this.mapper = mapper;
+		}
+		
+		@Override
+		public boolean hasNext() {
+			return iterator.hasNext();
+		}
+		
+		@Override
+		public short nextShort() {
+			return mapper.applyAsShort(iterator.next());
+		}
+		
+		@Override
+		public int skip(int amount) {
+			return iterator.skip(amount);
+		}
+	}
+	
+	private static class MappedIntIterator<E> implements IntIterator
+	{
+		ObjectIterator<E> iterator;
+		ToIntFunction<E> mapper;
+		
+		MappedIntIterator(ObjectIterator<E> iterator, ToIntFunction<E> mapper) {
+			this.iterator = iterator;
+			this.mapper = mapper;
+		}
+		
+		@Override
+		public boolean hasNext() {
+			return iterator.hasNext();
+		}
+		
+		@Override
+		public int nextInt() {
+			return mapper.applyAsInt(iterator.next());
+		}
+		
+		@Override
+		public int skip(int amount) {
+			return iterator.skip(amount);
+		}
+	}
+	
+	private static class MappedLongIterator<E> implements LongIterator
+	{
+		ObjectIterator<E> iterator;
+		ToLongFunction<E> mapper;
+		
+		MappedLongIterator(ObjectIterator<E> iterator, ToLongFunction<E> mapper) {
+			this.iterator = iterator;
+			this.mapper = mapper;
+		}
+		
+		@Override
+		public boolean hasNext() {
+			return iterator.hasNext();
+		}
+		
+		@Override
+		public long nextLong() {
+			return mapper.applyAsLong(iterator.next());
+		}
+		
+		@Override
+		public int skip(int amount) {
+			return iterator.skip(amount);
+		}
+	}
+	
+	private static class MappedFloatIterator<E> implements FloatIterator
+	{
+		ObjectIterator<E> iterator;
+		ToFloatFunction<E> mapper;
+		
+		MappedFloatIterator(ObjectIterator<E> iterator, ToFloatFunction<E> mapper) {
+			this.iterator = iterator;
+			this.mapper = mapper;
+		}
+		
+		@Override
+		public boolean hasNext() {
+			return iterator.hasNext();
+		}
+		
+		@Override
+		public float nextFloat() {
+			return mapper.applyAsFloat(iterator.next());
+		}
+		
+		@Override
+		public int skip(int amount) {
+			return iterator.skip(amount);
+		}
+	}
+	
+	private static class MappedDoubleIterator<E> implements DoubleIterator
+	{
+		ObjectIterator<E> iterator;
+		ToDoubleFunction<E> mapper;
+		
+		MappedDoubleIterator(ObjectIterator<E> iterator, ToDoubleFunction<E> mapper) {
+			this.iterator = iterator;
+			this.mapper = mapper;
+		}
+		
+		@Override
+		public boolean hasNext() {
+			return iterator.hasNext();
+		}
+		
+		@Override
+		public double nextDouble() {
+			return mapper.applyAsDouble(iterator.next());
+		}
+		
+		@Override
+		public int skip(int amount) {
+			return iterator.skip(amount);
+		}
+	}
+	
 	private static class FlatMappedIterator<E, T, V extends Iterable<T>> implements ObjectIterator<T>
 	{
 		ObjectIterator<E> iterator;
@@ -830,6 +1201,38 @@ public class ObjectIterators
 			foundNext = false;
 			return result;
 		}
+	}
+	
+	private static class InfiniteIterator<T> implements ObjectIterator<T>
+	{
+		ObjectIterator<T> iter;
+		CollectionWrapper<T> looper = ObjectCollections.wrapper();
+		int index = 0;
+		
+		public InfiniteIterator(ObjectIterator<T> iter) {
+			this.iter = iter;
+		}
+		
+		@Override
+		public boolean hasNext() {
+			return true;
+		}
+
+		@Override
+		public T next() {
+			if(iter != null) {
+				if(iter.hasNext()) {
+					T value = iter.next();
+					looper.add(value);
+					return value;
+				}
+				else iter = null;
+			}
+			return looper.get((index++) % looper.size());
+		}
+		
+		public void forEachRemaining(Consumer<? super T> action) { throw new UnsupportedOperationException("This is a instant deadlock, so unsupported"); }
+		public <E> void forEachRemaining(E input, ObjectObjectConsumer<E, T> action) { throw new UnsupportedOperationException("This is a instant deadlock, so unsupported"); }
 	}
 	
 	private static class RepeatingIterator<T> implements ObjectIterator<T>

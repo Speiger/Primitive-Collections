@@ -160,37 +160,7 @@ public abstract class AbstractDouble2ObjectMap<V> extends AbstractMap<Double, V>
 	}
 	
 	@Override
-	public V computeNonDefault(double key, DoubleObjectUnaryOperator<V> mappingFunction) {
-		Objects.requireNonNull(mappingFunction);
-		V value = get(key);
-		V newValue = mappingFunction.apply(key, value);
-		if(Objects.equals(newValue, getDefaultReturnValue())) {
-			if(!Objects.equals(value, getDefaultReturnValue()) || containsKey(key)) {
-				remove(key);
-				return getDefaultReturnValue();
-			}
-			return getDefaultReturnValue();
-		}
-		put(key, newValue);
-		return newValue;
-	}
-	
-	@Override
 	public V computeIfAbsent(double key, DoubleFunction<V> mappingFunction) {
-		Objects.requireNonNull(mappingFunction);
-		V value;
-		if((value = get(key)) == getDefaultReturnValue() || !containsKey(key)) {
-			V newValue = mappingFunction.apply(key);
-			if(!Objects.equals(newValue, getDefaultReturnValue())) {
-				put(key, newValue);
-				return newValue;
-			}
-		}
-		return value;
-	}
-	
-	@Override
-	public V computeIfAbsentNonDefault(double key, DoubleFunction<V> mappingFunction) {
 		Objects.requireNonNull(mappingFunction);
 		V value;
 		if((value = get(key)) == getDefaultReturnValue() || !containsKey(key)) {
@@ -218,36 +188,7 @@ public abstract class AbstractDouble2ObjectMap<V> extends AbstractMap<Double, V>
 	}
 	
 	@Override
-	public V supplyIfAbsentNonDefault(double key, ObjectSupplier<V> valueProvider) {
-		Objects.requireNonNull(valueProvider);
-		V value;
-		if((value = get(key)) == getDefaultReturnValue() || !containsKey(key)) {
-			V newValue = valueProvider.get();
-			if(!Objects.equals(newValue, getDefaultReturnValue())) {
-				put(key, newValue);
-				return newValue;
-			}
-		}
-		return value;
-	}
-	
-	@Override
 	public V computeIfPresent(double key, DoubleObjectUnaryOperator<V> mappingFunction) {
-		Objects.requireNonNull(mappingFunction);
-		V value;
-		if(!Objects.equals((value = get(key)), getDefaultReturnValue()) || containsKey(key)) {
-			V newValue = mappingFunction.apply(key, value);
-			if(!Objects.equals(newValue, getDefaultReturnValue())) {
-				put(key, newValue);
-				return newValue;
-			}
-			remove(key);
-		}
-		return getDefaultReturnValue();
-	}
-	
-	@Override
-	public V computeIfPresentNonDefault(double key, DoubleObjectUnaryOperator<V> mappingFunction) {
 		Objects.requireNonNull(mappingFunction);
 		V value;
 		if(!Objects.equals((value = get(key)), getDefaultReturnValue()) || containsKey(key)) {

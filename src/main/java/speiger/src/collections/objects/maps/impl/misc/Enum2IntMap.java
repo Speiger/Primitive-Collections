@@ -327,6 +327,41 @@ public class Enum2IntMap<T extends Enum<T>> extends AbstractObject2IntMap<T>
 	}
 	
 	@Override
+	public int computeIntIfAbsent(T key, ToIntFunction<T> mappingFunction) {
+		int index = key.ordinal();
+		if(!isSet(index)) {
+			int newValue = mappingFunction.applyAsInt(key);
+			set(index);
+			values[index] = newValue;			
+			return newValue;
+		}
+		int newValue = values[index];
+		return newValue;
+	}
+		
+	@Override
+	public int supplyIntIfAbsent(T key, IntSupplier valueProvider) {
+		int index = key.ordinal();
+		if(!isSet(index)) {
+			int newValue = valueProvider.getAsInt();
+			set(index);
+			values[index] = newValue;			
+			return newValue;
+		}
+		int newValue = values[index];
+		return newValue;
+	}
+	
+	@Override
+	public int computeIntIfPresent(T key, ObjectIntUnaryOperator<T> mappingFunction) {
+		int index = key.ordinal();
+		if(!isSet(index)) return getDefaultReturnValue();
+		int newValue = mappingFunction.applyAsInt(key, values[index]);
+		values[index] = newValue;
+		return newValue;
+	}
+	
+	@Override
 	public int computeIntNonDefault(T key, ObjectIntUnaryOperator<T> mappingFunction) {
 		int index = key.ordinal();
 		if(!isSet(index)) {
@@ -343,19 +378,6 @@ public class Enum2IntMap<T extends Enum<T>> extends AbstractObject2IntMap<T>
 			return newValue;
 		}
 		values[index] = newValue;
-		return newValue;
-	}
-	
-	@Override
-	public int computeIntIfAbsent(T key, ToIntFunction<T> mappingFunction) {
-		int index = key.ordinal();
-		if(!isSet(index)) {
-			int newValue = mappingFunction.applyAsInt(key);
-			set(index);
-			values[index] = newValue;			
-			return newValue;
-		}
-		int newValue = values[index];
 		return newValue;
 	}
 	
@@ -379,19 +401,6 @@ public class Enum2IntMap<T extends Enum<T>> extends AbstractObject2IntMap<T>
 	}
 	
 	@Override
-	public int supplyIntIfAbsent(T key, IntSupplier valueProvider) {
-		int index = key.ordinal();
-		if(!isSet(index)) {
-			int newValue = valueProvider.getAsInt();
-			set(index);
-			values[index] = newValue;			
-			return newValue;
-		}
-		int newValue = values[index];
-		return newValue;
-	}
-	
-	@Override
 	public int supplyIntIfAbsentNonDefault(T key, IntSupplier valueProvider) {
 		int index = key.ordinal();
 		if(!isSet(index)) {
@@ -407,15 +416,6 @@ public class Enum2IntMap<T extends Enum<T>> extends AbstractObject2IntMap<T>
 			if(newValue == getDefaultReturnValue()) return newValue;
 			values[index] = newValue;
 		}
-		return newValue;
-	}
-	
-	@Override
-	public int computeIntIfPresent(T key, ObjectIntUnaryOperator<T> mappingFunction) {
-		int index = key.ordinal();
-		if(!isSet(index)) return getDefaultReturnValue();
-		int newValue = mappingFunction.applyAsInt(key, values[index]);
-		values[index] = newValue;
 		return newValue;
 	}
 	

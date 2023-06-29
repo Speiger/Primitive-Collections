@@ -417,20 +417,19 @@ public class ImmutableInt2CharOpenHashMap extends AbstractInt2CharMap implements
 	@Override
 	public char computeChar(int key, IntCharUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
 	@Override
-	public char computeCharNonDefault(int key, IntCharUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
-	@Override
 	public char computeCharIfAbsent(int key, Int2CharFunction mappingFunction) { throw new UnsupportedOperationException(); }
-	@Override
-	public char computeCharIfAbsentNonDefault(int key, Int2CharFunction mappingFunction) { throw new UnsupportedOperationException(); }
 	@Override
 	public char supplyCharIfAbsent(int key, CharSupplier valueProvider) { throw new UnsupportedOperationException(); }
 	@Override
-	public char supplyCharIfAbsentNonDefault(int key, CharSupplier valueProvider) { throw new UnsupportedOperationException(); }
-	@Override
 	public char computeCharIfPresent(int key, IntCharUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
 	@Override
+	public char computeCharNonDefault(int key, IntCharUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
+	@Override
+	public char computeCharIfAbsentNonDefault(int key, Int2CharFunction mappingFunction) { throw new UnsupportedOperationException(); }
+	@Override
+	public char supplyCharIfAbsentNonDefault(int key, CharSupplier valueProvider) { throw new UnsupportedOperationException(); }
+	@Override
 	public char computeCharIfPresentNonDefault(int key, IntCharUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
-	
 	@Override
 	public char mergeChar(int key, char value, CharCharUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
 	

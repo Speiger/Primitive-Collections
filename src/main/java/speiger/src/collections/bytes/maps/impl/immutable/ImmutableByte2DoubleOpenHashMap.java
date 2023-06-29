@@ -418,20 +418,19 @@ public class ImmutableByte2DoubleOpenHashMap extends AbstractByte2DoubleMap impl
 	@Override
 	public double computeDouble(byte key, ByteDoubleUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
 	@Override
-	public double computeDoubleNonDefault(byte key, ByteDoubleUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
-	@Override
 	public double computeDoubleIfAbsent(byte key, Byte2DoubleFunction mappingFunction) { throw new UnsupportedOperationException(); }
-	@Override
-	public double computeDoubleIfAbsentNonDefault(byte key, Byte2DoubleFunction mappingFunction) { throw new UnsupportedOperationException(); }
 	@Override
 	public double supplyDoubleIfAbsent(byte key, DoubleSupplier valueProvider) { throw new UnsupportedOperationException(); }
 	@Override
-	public double supplyDoubleIfAbsentNonDefault(byte key, DoubleSupplier valueProvider) { throw new UnsupportedOperationException(); }
-	@Override
 	public double computeDoubleIfPresent(byte key, ByteDoubleUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
 	@Override
+	public double computeDoubleNonDefault(byte key, ByteDoubleUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
+	@Override
+	public double computeDoubleIfAbsentNonDefault(byte key, Byte2DoubleFunction mappingFunction) { throw new UnsupportedOperationException(); }
+	@Override
+	public double supplyDoubleIfAbsentNonDefault(byte key, DoubleSupplier valueProvider) { throw new UnsupportedOperationException(); }
+	@Override
 	public double computeDoubleIfPresentNonDefault(byte key, ByteDoubleUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
-	
 	@Override
 	public double mergeDouble(byte key, double value, DoubleDoubleUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
 	

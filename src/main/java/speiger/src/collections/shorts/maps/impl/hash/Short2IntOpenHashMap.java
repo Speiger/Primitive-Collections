@@ -430,6 +430,42 @@ public class Short2IntOpenHashMap extends AbstractShort2IntMap implements ITrimm
 		values[index] = newValue;
 		return newValue;
 	}
+		
+	@Override
+	public int computeIntIfAbsent(short key, Short2IntFunction mappingFunction) {
+		Objects.requireNonNull(mappingFunction);
+		int index = findIndex(key);
+		if(index < 0) {
+			int newValue = mappingFunction.applyAsInt(key);
+			insert(-index-1, key, newValue);
+			return newValue;
+		}
+		int newValue = values[index];
+		return newValue;
+	}
+	
+	@Override
+	public int supplyIntIfAbsent(short key, IntSupplier valueProvider) {
+		Objects.requireNonNull(valueProvider);
+		int index = findIndex(key);
+		if(index < 0) {
+			int newValue = valueProvider.getAsInt();
+			insert(-index-1, key, newValue);
+			return newValue;
+		}
+		int newValue = values[index];
+		return newValue;
+	}
+		
+	@Override
+	public int computeIntIfPresent(short key, ShortIntUnaryOperator mappingFunction) {
+		Objects.requireNonNull(mappingFunction);
+		int index = findIndex(key);
+		if(index < 0) return getDefaultReturnValue();
+		int newValue = mappingFunction.applyAsInt(key, values[index]);
+		values[index] = newValue;
+		return newValue;
+	}
 	
 	@Override
 	public int computeIntNonDefault(short key, ShortIntUnaryOperator mappingFunction) {
@@ -447,19 +483,6 @@ public class Short2IntOpenHashMap extends AbstractShort2IntMap implements ITrimm
 			return newValue;
 		}
 		values[index] = newValue;
-		return newValue;
-	}
-	
-	@Override
-	public int computeIntIfAbsent(short key, Short2IntFunction mappingFunction) {
-		Objects.requireNonNull(mappingFunction);
-		int index = findIndex(key);
-		if(index < 0) {
-			int newValue = mappingFunction.applyAsInt(key);
-			insert(-index-1, key, newValue);
-			return newValue;
-		}
-		int newValue = values[index];
 		return newValue;
 	}
 	
@@ -483,19 +506,6 @@ public class Short2IntOpenHashMap extends AbstractShort2IntMap implements ITrimm
 	}
 	
 	@Override
-	public int supplyIntIfAbsent(short key, IntSupplier valueProvider) {
-		Objects.requireNonNull(valueProvider);
-		int index = findIndex(key);
-		if(index < 0) {
-			int newValue = valueProvider.getAsInt();
-			insert(-index-1, key, newValue);
-			return newValue;
-		}
-		int newValue = values[index];
-		return newValue;
-	}
-	
-	@Override
 	public int supplyIntIfAbsentNonDefault(short key, IntSupplier valueProvider) {
 		Objects.requireNonNull(valueProvider);
 		int index = findIndex(key);
@@ -511,16 +521,6 @@ public class Short2IntOpenHashMap extends AbstractShort2IntMap implements ITrimm
 			if(newValue == getDefaultReturnValue()) return newValue;
 			values[index] = newValue;
 		}
-		return newValue;
-	}
-	
-	@Override
-	public int computeIntIfPresent(short key, ShortIntUnaryOperator mappingFunction) {
-		Objects.requireNonNull(mappingFunction);
-		int index = findIndex(key);
-		if(index < 0) return getDefaultReturnValue();
-		int newValue = mappingFunction.applyAsInt(key, values[index]);
-		values[index] = newValue;
 		return newValue;
 	}
 	

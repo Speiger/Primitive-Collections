@@ -447,6 +447,43 @@ public class Object2LongAVLTreeMap<T> extends AbstractObject2LongMap<T> implemen
 	}
 	
 	@Override
+	public long computeLongIfAbsent(T key, ToLongFunction<T> mappingFunction) {
+		Objects.requireNonNull(mappingFunction);
+		validate(key);
+		Node<T> entry = findNode(key);
+		if(entry == null) {
+			long newValue = mappingFunction.applyAsLong(key);
+			put(key, newValue);
+			return newValue;
+		}
+		return entry.value;
+	}
+	
+	@Override
+	public long supplyLongIfAbsent(T key, LongSupplier valueProvider) {
+		Objects.requireNonNull(valueProvider);
+		validate(key);
+		Node<T> entry = findNode(key);
+		if(entry == null) {
+			long newValue = valueProvider.getAsLong();
+			put(key, newValue);
+			return newValue;
+		}
+		return entry.value;
+	}
+	
+	@Override
+	public long computeLongIfPresent(T key, ObjectLongUnaryOperator<T> mappingFunction) {
+		Objects.requireNonNull(mappingFunction);
+		validate(key);
+		Node<T> entry = findNode(key);
+		if(entry == null) return getDefaultReturnValue();
+		long newValue = mappingFunction.applyAsLong(key, entry.value);
+		entry.value = newValue;
+		return newValue;
+	}
+	
+	@Override
 	public long computeLongNonDefault(T key, ObjectLongUnaryOperator<T> mappingFunction) {
 		Objects.requireNonNull(mappingFunction);
 		validate(key);
@@ -464,19 +501,6 @@ public class Object2LongAVLTreeMap<T> extends AbstractObject2LongMap<T> implemen
 		}
 		entry.value = newValue;
 		return newValue;
-	}
-	
-	@Override
-	public long computeLongIfAbsent(T key, ToLongFunction<T> mappingFunction) {
-		Objects.requireNonNull(mappingFunction);
-		validate(key);
-		Node<T> entry = findNode(key);
-		if(entry == null) {
-			long newValue = mappingFunction.applyAsLong(key);
-			put(key, newValue);
-			return newValue;
-		}
-		return entry.value;
 	}
 	
 	@Override
@@ -499,19 +523,6 @@ public class Object2LongAVLTreeMap<T> extends AbstractObject2LongMap<T> implemen
 	}
 	
 	@Override
-	public long supplyLongIfAbsent(T key, LongSupplier valueProvider) {
-		Objects.requireNonNull(valueProvider);
-		validate(key);
-		Node<T> entry = findNode(key);
-		if(entry == null) {
-			long newValue = valueProvider.getAsLong();
-			put(key, newValue);
-			return newValue;
-		}
-		return entry.value;
-	}
-	
-	@Override
 	public long supplyLongIfAbsentNonDefault(T key, LongSupplier valueProvider) {
 		Objects.requireNonNull(valueProvider);
 		validate(key);
@@ -528,17 +539,6 @@ public class Object2LongAVLTreeMap<T> extends AbstractObject2LongMap<T> implemen
 			entry.value = newValue;
 		}
 		return entry.value;
-	}
-	
-	@Override
-	public long computeLongIfPresent(T key, ObjectLongUnaryOperator<T> mappingFunction) {
-		Objects.requireNonNull(mappingFunction);
-		validate(key);
-		Node<T> entry = findNode(key);
-		if(entry == null) return getDefaultReturnValue();
-		long newValue = mappingFunction.applyAsLong(key, entry.value);
-		entry.value = newValue;
-		return newValue;
 	}
 	
 	@Override
@@ -1520,14 +1520,9 @@ public class Object2LongAVLTreeMap<T> extends AbstractObject2LongMap<T> implemen
 			map.validate(key);
 			if(!inRange(key)) return getDefaultReturnValue();
 			Node<T> entry = map.findNode(key);
-			if(entry == null || entry.value == getDefaultReturnValue()) return getDefaultReturnValue();
-			long newValue = mappingFunction.apply(key, entry.value);
-			if(newValue == getDefaultReturnValue()) {
-				map.removeNode(entry);
-				return newValue;
-			}
-			entry.value = newValue;
-			return newValue;
+			if(entry == null) return getDefaultReturnValue();
+			entry.value = mappingFunction.apply(key, entry.value);
+			return entry.value;
 		}
 		
 		@Override

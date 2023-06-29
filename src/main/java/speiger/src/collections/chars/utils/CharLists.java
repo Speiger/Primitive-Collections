@@ -12,6 +12,7 @@ import speiger.src.collections.chars.collections.CharCollection;
 import speiger.src.collections.chars.functions.CharConsumer;
 import speiger.src.collections.chars.lists.AbstractCharList;
 import speiger.src.collections.chars.lists.CharList;
+import speiger.src.collections.ints.lists.IntList;
 import speiger.src.collections.chars.lists.CharListIterator;
 import speiger.src.collections.utils.SanityChecks;
 
@@ -318,6 +319,16 @@ public class CharLists
 		}
 		
 		@Override
+		public CharListIterator indexedIterator(int...indecies) {
+			return l.indexedIterator(indecies);
+		}
+		
+		@Override
+		public CharListIterator indexedIterator(IntList indecies) {
+			return l.indexedIterator(indecies);
+		}
+		
+		@Override
 		public CharList subList(int from, int to) {
 			return CharLists.synchronize(l.subList(from, to));
 		}
@@ -427,6 +438,16 @@ public class CharLists
 		}
 		
 		@Override
+		public CharListIterator indexedIterator(int...indecies) {
+			return CharIterators.unmodifiable(l.indexedIterator(indecies));
+		}
+		
+		@Override
+		public CharListIterator indexedIterator(IntList indecies) {
+			return CharIterators.unmodifiable(l.indexedIterator(indecies));
+		}
+		
+		@Override
 		public CharList subList(int from, int to) {
 			return CharLists.unmodifiable(l.subList(from, to));
 		}
@@ -512,6 +533,16 @@ public class CharLists
 			if(index != 0)
 				throw new IndexOutOfBoundsException();
 			return CharIterators.empty();
+		}
+		
+		@Override
+		public CharListIterator indexedIterator(int...indecies) {
+			return CharIterators.empty(); 
+		}
+		
+		@Override
+		public CharListIterator indexedIterator(IntList indecies) {
+			return CharIterators.empty(); 
 		}
 		
 		@Override

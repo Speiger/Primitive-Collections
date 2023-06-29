@@ -417,20 +417,19 @@ public class ImmutableInt2FloatOpenHashMap extends AbstractInt2FloatMap implemen
 	@Override
 	public float computeFloat(int key, IntFloatUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
 	@Override
-	public float computeFloatNonDefault(int key, IntFloatUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
-	@Override
 	public float computeFloatIfAbsent(int key, Int2FloatFunction mappingFunction) { throw new UnsupportedOperationException(); }
-	@Override
-	public float computeFloatIfAbsentNonDefault(int key, Int2FloatFunction mappingFunction) { throw new UnsupportedOperationException(); }
 	@Override
 	public float supplyFloatIfAbsent(int key, FloatSupplier valueProvider) { throw new UnsupportedOperationException(); }
 	@Override
-	public float supplyFloatIfAbsentNonDefault(int key, FloatSupplier valueProvider) { throw new UnsupportedOperationException(); }
-	@Override
 	public float computeFloatIfPresent(int key, IntFloatUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
 	@Override
+	public float computeFloatNonDefault(int key, IntFloatUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
+	@Override
+	public float computeFloatIfAbsentNonDefault(int key, Int2FloatFunction mappingFunction) { throw new UnsupportedOperationException(); }
+	@Override
+	public float supplyFloatIfAbsentNonDefault(int key, FloatSupplier valueProvider) { throw new UnsupportedOperationException(); }
+	@Override
 	public float computeFloatIfPresentNonDefault(int key, IntFloatUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
-	
 	@Override
 	public float mergeFloat(int key, float value, FloatFloatUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
 	

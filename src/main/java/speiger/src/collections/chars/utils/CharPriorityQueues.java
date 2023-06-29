@@ -89,6 +89,8 @@ public class CharPriorityQueues
 		@Override
 		public char peek(int index) { synchronized(mutex) { return queue.peek(index); } }
 		@Override
+		public boolean contains(char e) { synchronized(mutex) { return queue.contains(e); } }
+		@Override
 		public boolean removeFirst(char e) { synchronized(mutex) { return queue.removeFirst(e); } }
 		@Override
 		public boolean removeLast(char e) { synchronized(mutex) { return queue.removeLast(e); } }

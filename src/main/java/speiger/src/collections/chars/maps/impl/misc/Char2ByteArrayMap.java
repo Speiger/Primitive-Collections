@@ -443,6 +443,42 @@ public class Char2ByteArrayMap extends AbstractChar2ByteMap implements Char2Byte
 	}
 	
 	@Override
+	public byte computeByteIfAbsent(char key, Char2ByteFunction mappingFunction) {
+		Objects.requireNonNull(mappingFunction);
+		int index = findIndex(key);
+		if(index == -1) {
+			byte newValue = mappingFunction.applyAsByte(key);
+			insertIndex(size++, key, newValue);
+			return newValue;
+		}
+		byte newValue = values[index];
+		return newValue;
+	}
+		
+	@Override
+	public byte supplyByteIfAbsent(char key, ByteSupplier valueProvider) {
+		Objects.requireNonNull(valueProvider);
+		int index = findIndex(key);
+		if(index == -1) {
+			byte newValue = valueProvider.getAsByte();
+			insertIndex(size++, key, newValue);
+			return newValue;
+		}
+		byte newValue = values[index];
+		return newValue;
+	}
+		
+	@Override
+	public byte computeByteIfPresent(char key, CharByteUnaryOperator mappingFunction) {
+		Objects.requireNonNull(mappingFunction);
+		int index = findIndex(key);
+		if(index == -1) return getDefaultReturnValue();
+		byte newValue = mappingFunction.applyAsByte(key, values[index]);
+		values[index] = newValue;
+		return newValue;
+	}
+	
+	@Override
 	public byte computeByteNonDefault(char key, CharByteUnaryOperator mappingFunction) {
 		Objects.requireNonNull(mappingFunction);
 		int index = findIndex(key);
@@ -458,19 +494,6 @@ public class Char2ByteArrayMap extends AbstractChar2ByteMap implements Char2Byte
 			return newValue;
 		}
 		values[index] = newValue;
-		return newValue;
-	}
-	
-	@Override
-	public byte computeByteIfAbsent(char key, Char2ByteFunction mappingFunction) {
-		Objects.requireNonNull(mappingFunction);
-		int index = findIndex(key);
-		if(index == -1) {
-			byte newValue = mappingFunction.applyAsByte(key);
-			insertIndex(size++, key, newValue);
-			return newValue;
-		}
-		byte newValue = values[index];
 		return newValue;
 	}
 	
@@ -494,44 +517,21 @@ public class Char2ByteArrayMap extends AbstractChar2ByteMap implements Char2Byte
 	}
 	
 	@Override
-	public byte supplyByteIfAbsent(char key, ByteSupplier valueProvider) {
-		Objects.requireNonNull(valueProvider);
-		int index = findIndex(key);
-		if(index == -1) {
-			byte newValue = valueProvider.getAsInt();
-			insertIndex(size++, key, newValue);
-			return newValue;
-		}
-		byte newValue = values[index];
-		return newValue;
-	}
-	
-	@Override
 	public byte supplyByteIfAbsentNonDefault(char key, ByteSupplier valueProvider) {
 		Objects.requireNonNull(valueProvider);
 		int index = findIndex(key);
 		if(index == -1) {
-			byte newValue = valueProvider.getAsInt();
+			byte newValue = valueProvider.getAsByte();
 			if(newValue == getDefaultReturnValue()) return newValue;
 			insertIndex(size++, key, newValue);
 			return newValue;
 		}
 		byte newValue = values[index];
 		if(newValue == getDefaultReturnValue()) {
-			newValue = valueProvider.getAsInt();
+			newValue = valueProvider.getAsByte();
 			if(newValue == getDefaultReturnValue()) return newValue;
 			values[index] = newValue;
 		}
-		return newValue;
-	}
-	
-	@Override
-	public byte computeByteIfPresent(char key, CharByteUnaryOperator mappingFunction) {
-		Objects.requireNonNull(mappingFunction);
-		int index = findIndex(key);
-		if(index == -1) return getDefaultReturnValue();
-		byte newValue = mappingFunction.applyAsByte(key, values[index]);
-		values[index] = newValue;
 		return newValue;
 	}
 	

@@ -2,6 +2,7 @@ package speiger.src.collections.shorts.utils;
 
 import java.util.Iterator;
 import java.util.NoSuchElementException;
+import java.util.function.Consumer;
 
 import speiger.src.collections.shorts.collections.ShortIterator;
 import speiger.src.collections.objects.collections.ObjectIterator;
@@ -9,6 +10,7 @@ import speiger.src.collections.objects.utils.ObjectIterators;
 import speiger.src.collections.shorts.functions.ShortConsumer;
 import speiger.src.collections.shorts.functions.ShortComparator;
 import speiger.src.collections.shorts.functions.function.ShortFunction;
+import speiger.src.collections.objects.functions.consumer.ObjectShortConsumer;
 import speiger.src.collections.shorts.functions.function.ShortPredicate;
 import speiger.src.collections.shorts.lists.ShortList;
 import speiger.src.collections.shorts.lists.ShortArrayList;
@@ -16,6 +18,7 @@ import speiger.src.collections.shorts.lists.ShortArrayList;
 import speiger.src.collections.shorts.lists.ShortListIterator;
 import speiger.src.collections.shorts.collections.ShortBidirectionalIterator;
 import speiger.src.collections.shorts.collections.ShortCollection;
+import speiger.src.collections.shorts.utils.ShortCollections.CollectionWrapper;
 
 /**
  * A Helper class for Iterators
@@ -204,6 +207,24 @@ public class ShortIterators
 	 */
 	public static ShortIterator repeat(Iterator<? extends Short> iterator, int repeats) {
 		return new RepeatingIterator(wrap(iterator), repeats);
+	}
+	
+	/**
+	 * A Helper function that creates a infinitely looping iterator
+	 * @param iterator that should be looping infinitely
+	 * @return a infinitely looping iterator
+	 */
+	public static ShortIterator infinite(ShortIterator iterator) {
+		return new InfiniteIterator(iterator);
+	}
+	
+	/**
+	 * A Helper function that creates a infinitely looping iterator from a Java Iterator
+	 * @param iterator that should be looping infinitely
+	 * @return a infinitely looping iterator
+	 */
+	public static ShortIterator infinite(Iterator<? extends Short> iterator) {
+		return new InfiniteIterator(wrap(iterator));
 	}
 	
 	/**
@@ -839,6 +860,40 @@ public class ShortIterators
 			foundNext = false;
 			return result;
 		}
+	}
+	
+	private static class InfiniteIterator implements ShortIterator
+	{
+		ShortIterator iter;
+		CollectionWrapper looper = ShortCollections.wrapper();
+		int index = 0;
+		
+		public InfiniteIterator(ShortIterator iter) {
+			this.iter = iter;
+		}
+		
+		@Override
+		public boolean hasNext() {
+			return true;
+		}
+
+		@Override
+		public short nextShort() {
+			if(iter != null) {
+				if(iter.hasNext()) {
+					short value = iter.nextShort();
+					looper.add(value);
+					return value;
+				}
+				else iter = null;
+			}
+			return looper.getShort((index++) % looper.size());
+		}
+		
+		@Override
+		public void forEachRemaining(ShortConsumer action) { throw new UnsupportedOperationException("This is a instant deadlock, so unsupported"); }
+		public void forEachRemaining(Consumer<? super Short> action) { throw new UnsupportedOperationException("This is a instant deadlock, so unsupported"); }
+		public <E> void forEachRemaining(E input, ObjectShortConsumer<E> action) { throw new UnsupportedOperationException("This is a instant deadlock, so unsupported"); }
 	}
 	
 	private static class RepeatingIterator implements ShortIterator

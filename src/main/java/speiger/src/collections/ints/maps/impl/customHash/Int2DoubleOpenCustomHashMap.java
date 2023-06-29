@@ -462,6 +462,42 @@ public class Int2DoubleOpenCustomHashMap extends AbstractInt2DoubleMap implement
 	}
 	
 	@Override
+	public double computeDoubleIfAbsent(int key, Int2DoubleFunction mappingFunction) {
+		Objects.requireNonNull(mappingFunction);
+		int index = findIndex(key);
+		if(index < 0) {
+			double newValue = mappingFunction.applyAsDouble(key);
+			insert(-index-1, key, newValue);
+			return newValue;
+		}
+		double newValue = values[index];
+		return newValue;
+	}
+		
+	@Override
+	public double supplyDoubleIfAbsent(int key, DoubleSupplier valueProvider) {
+		Objects.requireNonNull(valueProvider);
+		int index = findIndex(key);
+		if(index < 0) {
+			double newValue = valueProvider.getAsDouble();
+			insert(-index-1, key, newValue);
+			return newValue;
+		}
+		double newValue = values[index];
+		return newValue;
+	}
+	
+	@Override
+	public double computeDoubleIfPresent(int key, IntDoubleUnaryOperator mappingFunction) {
+		Objects.requireNonNull(mappingFunction);
+		int index = findIndex(key);
+		if(index < 0) return getDefaultReturnValue();
+		double newValue = mappingFunction.applyAsDouble(key, values[index]);
+		values[index] = newValue;
+		return newValue;
+	}
+	
+	@Override
 	public double computeDoubleNonDefault(int key, IntDoubleUnaryOperator mappingFunction) {
 		Objects.requireNonNull(mappingFunction);
 		int index = findIndex(key);
@@ -477,19 +513,6 @@ public class Int2DoubleOpenCustomHashMap extends AbstractInt2DoubleMap implement
 			return newValue;
 		}
 		values[index] = newValue;
-		return newValue;
-	}
-	
-	@Override
-	public double computeDoubleIfAbsent(int key, Int2DoubleFunction mappingFunction) {
-		Objects.requireNonNull(mappingFunction);
-		int index = findIndex(key);
-		if(index < 0) {
-			double newValue = mappingFunction.applyAsDouble(key);
-			insert(-index-1, key, newValue);
-			return newValue;
-		}
-		double newValue = values[index];
 		return newValue;
 	}
 	
@@ -513,19 +536,6 @@ public class Int2DoubleOpenCustomHashMap extends AbstractInt2DoubleMap implement
 	}
 	
 	@Override
-	public double supplyDoubleIfAbsent(int key, DoubleSupplier valueProvider) {
-		Objects.requireNonNull(valueProvider);
-		int index = findIndex(key);
-		if(index < 0) {
-			double newValue = valueProvider.getAsDouble();
-			insert(-index-1, key, newValue);
-			return newValue;
-		}
-		double newValue = values[index];
-		return newValue;
-	}
-	
-	@Override
 	public double supplyDoubleIfAbsentNonDefault(int key, DoubleSupplier valueProvider) {
 		Objects.requireNonNull(valueProvider);
 		int index = findIndex(key);
@@ -541,16 +551,6 @@ public class Int2DoubleOpenCustomHashMap extends AbstractInt2DoubleMap implement
 			if(Double.doubleToLongBits(newValue) == Double.doubleToLongBits(getDefaultReturnValue())) return newValue;
 			values[index] = newValue;
 		}
-		return newValue;
-	}
-	
-	@Override
-	public double computeDoubleIfPresent(int key, IntDoubleUnaryOperator mappingFunction) {
-		Objects.requireNonNull(mappingFunction);
-		int index = findIndex(key);
-		if(index < 0) return getDefaultReturnValue();
-		double newValue = mappingFunction.applyAsDouble(key, values[index]);
-		values[index] = newValue;
 		return newValue;
 	}
 	

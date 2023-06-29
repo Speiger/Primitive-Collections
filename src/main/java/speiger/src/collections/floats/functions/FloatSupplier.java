@@ -8,5 +8,5 @@ public interface FloatSupplier
 	/**
 	 * @return the supplied value
 	 */
-	public float getAsDouble();
+	public float getAsFloat();
 }

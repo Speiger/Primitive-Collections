@@ -264,17 +264,17 @@ public class Object2CharMaps
 		@Override
 		public char computeChar(T key, ObjectCharUnaryOperator<T> mappingFunction) { throw new UnsupportedOperationException(); }
 		@Override
-		public char computeCharNonDefault(T key, ObjectCharUnaryOperator<T> mappingFunction) { throw new UnsupportedOperationException(); }
-		@Override
 		public char computeCharIfAbsent(T key, ToCharFunction<T> mappingFunction) { throw new UnsupportedOperationException(); }
-		@Override
-		public char computeCharIfAbsentNonDefault(T key, ToCharFunction<T> mappingFunction) { throw new UnsupportedOperationException(); }
 		@Override
 		public char computeCharIfPresent(T key, ObjectCharUnaryOperator<T> mappingFunction) { throw new UnsupportedOperationException(); }
 		@Override
-		public char computeCharIfPresentNonDefault(T key, ObjectCharUnaryOperator<T> mappingFunction) { throw new UnsupportedOperationException(); }
-		@Override
 		public char supplyCharIfAbsent(T key, CharSupplier valueProvider) { throw new UnsupportedOperationException(); }
+		@Override
+		public char computeCharNonDefault(T key, ObjectCharUnaryOperator<T> mappingFunction) { throw new UnsupportedOperationException(); }
+		@Override
+		public char computeCharIfAbsentNonDefault(T key, ToCharFunction<T> mappingFunction) { throw new UnsupportedOperationException(); }
+		@Override
+		public char computeCharIfPresentNonDefault(T key, ObjectCharUnaryOperator<T> mappingFunction) { throw new UnsupportedOperationException(); }
 		@Override
 		public char supplyCharIfAbsentNonDefault(T key, CharSupplier valueProvider) { throw new UnsupportedOperationException(); }
 		@Override
@@ -327,17 +327,17 @@ public class Object2CharMaps
 		@Override
 		public char computeChar(T key, ObjectCharUnaryOperator<T> mappingFunction) { throw new UnsupportedOperationException(); }
 		@Override
-		public char computeCharNonDefault(T key, ObjectCharUnaryOperator<T> mappingFunction) { throw new UnsupportedOperationException(); }
-		@Override
 		public char computeCharIfAbsent(T key, ToCharFunction<T> mappingFunction) { throw new UnsupportedOperationException(); }
-		@Override
-		public char computeCharIfAbsentNonDefault(T key, ToCharFunction<T> mappingFunction) { throw new UnsupportedOperationException(); }
 		@Override
 		public char computeCharIfPresent(T key, ObjectCharUnaryOperator<T> mappingFunction) { throw new UnsupportedOperationException(); }
 		@Override
-		public char computeCharIfPresentNonDefault(T key, ObjectCharUnaryOperator<T> mappingFunction) { throw new UnsupportedOperationException(); }
-		@Override
 		public char supplyCharIfAbsent(T key, CharSupplier valueProvider) { throw new UnsupportedOperationException(); }
+		@Override
+		public char computeCharNonDefault(T key, ObjectCharUnaryOperator<T> mappingFunction) { throw new UnsupportedOperationException(); }
+		@Override
+		public char computeCharIfAbsentNonDefault(T key, ToCharFunction<T> mappingFunction) { throw new UnsupportedOperationException(); }
+		@Override
+		public char computeCharIfPresentNonDefault(T key, ObjectCharUnaryOperator<T> mappingFunction) { throw new UnsupportedOperationException(); }
 		@Override
 		public char supplyCharIfAbsentNonDefault(T key, CharSupplier valueProvider) { throw new UnsupportedOperationException(); }
 		@Override
@@ -559,17 +559,17 @@ public class Object2CharMaps
 		@Override
 		public char computeChar(T key, ObjectCharUnaryOperator<T> mappingFunction) { throw new UnsupportedOperationException(); }
 		@Override
-		public char computeCharNonDefault(T key, ObjectCharUnaryOperator<T> mappingFunction) { throw new UnsupportedOperationException(); }
-		@Override
 		public char computeCharIfAbsent(T key, ToCharFunction<T> mappingFunction) { throw new UnsupportedOperationException(); }
-		@Override
-		public char computeCharIfAbsentNonDefault(T key, ToCharFunction<T> mappingFunction) { throw new UnsupportedOperationException(); }
 		@Override
 		public char computeCharIfPresent(T key, ObjectCharUnaryOperator<T> mappingFunction) { throw new UnsupportedOperationException(); }
 		@Override
-		public char computeCharIfPresentNonDefault(T key, ObjectCharUnaryOperator<T> mappingFunction) { throw new UnsupportedOperationException(); }
-		@Override
 		public char supplyCharIfAbsent(T key, CharSupplier valueProvider) { throw new UnsupportedOperationException(); }
+		@Override
+		public char computeCharNonDefault(T key, ObjectCharUnaryOperator<T> mappingFunction) { throw new UnsupportedOperationException(); }
+		@Override
+		public char computeCharIfAbsentNonDefault(T key, ToCharFunction<T> mappingFunction) { throw new UnsupportedOperationException(); }
+		@Override
+		public char computeCharIfPresentNonDefault(T key, ObjectCharUnaryOperator<T> mappingFunction) { throw new UnsupportedOperationException(); }
 		@Override
 		public char supplyCharIfAbsentNonDefault(T key, CharSupplier valueProvider) { throw new UnsupportedOperationException(); }
 		@Override
@@ -906,17 +906,17 @@ public class Object2CharMaps
 		@Override
 		public char computeChar(T key, ObjectCharUnaryOperator<T> mappingFunction) { synchronized(mutex) { return map.computeChar(key, mappingFunction); } }
 		@Override
-		public char computeCharNonDefault(T key, ObjectCharUnaryOperator<T> mappingFunction) { synchronized(mutex) { return map.computeCharNonDefault(key, mappingFunction); } }
-		@Override
 		public char computeCharIfAbsent(T key, ToCharFunction<T> mappingFunction) { synchronized(mutex) { return map.computeCharIfAbsent(key, mappingFunction); } }
-		@Override
-		public char computeCharIfAbsentNonDefault(T key, ToCharFunction<T> mappingFunction) { synchronized(mutex) { return map.computeCharIfAbsentNonDefault(key, mappingFunction); } }
 		@Override
 		public char computeCharIfPresent(T key, ObjectCharUnaryOperator<T> mappingFunction) { synchronized(mutex) { return map.computeCharIfPresent(key, mappingFunction); } }
 		@Override
-		public char computeCharIfPresentNonDefault(T key, ObjectCharUnaryOperator<T> mappingFunction) { synchronized(mutex) { return map.computeCharIfPresentNonDefault(key, mappingFunction); } }
-		@Override
 		public char supplyCharIfAbsent(T key, CharSupplier valueProvider) { synchronized(mutex) { return map.supplyCharIfAbsent(key, valueProvider); } }
+		@Override
+		public char computeCharNonDefault(T key, ObjectCharUnaryOperator<T> mappingFunction) { synchronized(mutex) { return map.computeCharNonDefault(key, mappingFunction); } }
+		@Override
+		public char computeCharIfAbsentNonDefault(T key, ToCharFunction<T> mappingFunction) { synchronized(mutex) { return map.computeCharIfAbsentNonDefault(key, mappingFunction); } }
+		@Override
+		public char computeCharIfPresentNonDefault(T key, ObjectCharUnaryOperator<T> mappingFunction) { synchronized(mutex) { return map.computeCharIfPresentNonDefault(key, mappingFunction); } }
 		@Override
 		public char supplyCharIfAbsentNonDefault(T key, CharSupplier valueProvider) { synchronized(mutex) { return map.supplyCharIfAbsentNonDefault(key, valueProvider); } }
 		@Override

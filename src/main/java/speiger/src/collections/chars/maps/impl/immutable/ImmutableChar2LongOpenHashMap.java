@@ -418,20 +418,19 @@ public class ImmutableChar2LongOpenHashMap extends AbstractChar2LongMap implemen
 	@Override
 	public long computeLong(char key, CharLongUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
 	@Override
-	public long computeLongNonDefault(char key, CharLongUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
-	@Override
 	public long computeLongIfAbsent(char key, Char2LongFunction mappingFunction) { throw new UnsupportedOperationException(); }
-	@Override
-	public long computeLongIfAbsentNonDefault(char key, Char2LongFunction mappingFunction) { throw new UnsupportedOperationException(); }
 	@Override
 	public long supplyLongIfAbsent(char key, LongSupplier valueProvider) { throw new UnsupportedOperationException(); }
 	@Override
-	public long supplyLongIfAbsentNonDefault(char key, LongSupplier valueProvider) { throw new UnsupportedOperationException(); }
-	@Override
 	public long computeLongIfPresent(char key, CharLongUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
 	@Override
+	public long computeLongNonDefault(char key, CharLongUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
+	@Override
+	public long computeLongIfAbsentNonDefault(char key, Char2LongFunction mappingFunction) { throw new UnsupportedOperationException(); }
+	@Override
+	public long supplyLongIfAbsentNonDefault(char key, LongSupplier valueProvider) { throw new UnsupportedOperationException(); }
+	@Override
 	public long computeLongIfPresentNonDefault(char key, CharLongUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
-	
 	@Override
 	public long mergeLong(char key, long value, LongLongUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
 	

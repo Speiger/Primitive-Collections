@@ -21,12 +21,10 @@ import speiger.src.collections.chars.lists.CharList;
 import speiger.src.collections.chars.lists.CharArrayList;
 import speiger.src.collections.chars.sets.CharSet;
 import speiger.src.collections.chars.sets.CharLinkedOpenHashSet;
-import speiger.src.collections.booleans.utils.BooleanAsyncBuilder;
-import speiger.src.collections.booleans.utils.BooleanAsyncBuilder.BaseBooleanTask;
+import speiger.src.collections.booleans.utils.BooleanAsyncBuilder;import speiger.src.collections.booleans.utils.BooleanAsyncBuilder.BaseBooleanTask;
 import speiger.src.collections.objects.utils.ObjectAsyncBuilder;
 import speiger.src.collections.objects.utils.ObjectAsyncBuilder.BaseObjectTask;
-import speiger.src.collections.ints.utils.IntAsyncBuilder;
-import speiger.src.collections.ints.utils.IntAsyncBuilder.BaseIntTask;
+import speiger.src.collections.ints.utils.IntAsyncBuilder;import speiger.src.collections.ints.utils.IntAsyncBuilder.BaseIntTask;
 import speiger.src.collections.utils.ISizeProvider;
 import speiger.src.collections.utils.SanityChecks;
 

@@ -395,6 +395,40 @@ public class Float2BooleanRBTreeMap extends AbstractFloat2BooleanMap implements 
 	}
 	
 	@Override
+	public boolean computeBooleanIfAbsent(float key, FloatPredicate mappingFunction) {
+		Objects.requireNonNull(mappingFunction);
+		Node entry = findNode(key);
+		if(entry == null) {
+			boolean newValue = mappingFunction.test(key);
+			put(key, newValue);
+			return newValue;
+		}
+		return entry.value;
+	}
+	
+	@Override
+	public boolean supplyBooleanIfAbsent(float key, BooleanSupplier valueProvider) {
+		Objects.requireNonNull(valueProvider);
+		Node entry = findNode(key);
+		if(entry == null) {
+			boolean newValue = valueProvider.getAsBoolean();
+			put(key, newValue);
+			return newValue;
+		}
+		return entry.value;
+	}
+	
+	@Override
+	public boolean computeBooleanIfPresent(float key, FloatBooleanUnaryOperator mappingFunction) {
+		Objects.requireNonNull(mappingFunction);
+		Node entry = findNode(key);
+		if(entry == null) return getDefaultReturnValue();
+		boolean newValue = mappingFunction.applyAsBoolean(key, entry.value);
+		entry.value = newValue;
+		return newValue;
+	}
+	
+	@Override
 	public boolean computeBooleanNonDefault(float key, FloatBooleanUnaryOperator mappingFunction) {
 		Objects.requireNonNull(mappingFunction);
 		Node entry = findNode(key);
@@ -411,18 +445,6 @@ public class Float2BooleanRBTreeMap extends AbstractFloat2BooleanMap implements 
 		}
 		entry.value = newValue;
 		return newValue;
-	}
-	
-	@Override
-	public boolean computeBooleanIfAbsent(float key, FloatPredicate mappingFunction) {
-		Objects.requireNonNull(mappingFunction);
-		Node entry = findNode(key);
-		if(entry == null) {
-			boolean newValue = mappingFunction.test(key);
-			put(key, newValue);
-			return newValue;
-		}
-		return entry.value;
 	}
 	
 	@Override
@@ -444,18 +466,6 @@ public class Float2BooleanRBTreeMap extends AbstractFloat2BooleanMap implements 
 	}
 	
 	@Override
-	public boolean supplyBooleanIfAbsent(float key, BooleanSupplier valueProvider) {
-		Objects.requireNonNull(valueProvider);
-		Node entry = findNode(key);
-		if(entry == null) {
-			boolean newValue = valueProvider.getAsBoolean();
-			put(key, newValue);
-			return newValue;
-		}
-		return entry.value;
-	}
-	
-	@Override
 	public boolean supplyBooleanIfAbsentNonDefault(float key, BooleanSupplier valueProvider) {
 		Objects.requireNonNull(valueProvider);
 		Node entry = findNode(key);
@@ -471,16 +481,6 @@ public class Float2BooleanRBTreeMap extends AbstractFloat2BooleanMap implements 
 			entry.value = newValue;
 		}
 		return entry.value;
-	}
-	
-	@Override
-	public boolean computeBooleanIfPresent(float key, FloatBooleanUnaryOperator mappingFunction) {
-		Objects.requireNonNull(mappingFunction);
-		Node entry = findNode(key);
-		if(entry == null) return getDefaultReturnValue();
-		boolean newValue = mappingFunction.applyAsBoolean(key, entry.value);
-		entry.value = newValue;
-		return newValue;
 	}
 	
 	@Override
@@ -1550,14 +1550,9 @@ public class Float2BooleanRBTreeMap extends AbstractFloat2BooleanMap implements 
 			Objects.requireNonNull(mappingFunction);
 			if(!inRange(key)) return getDefaultReturnValue();
 			Node entry = map.findNode(key);
-			if(entry == null || entry.value == getDefaultReturnValue()) return getDefaultReturnValue();
-			boolean newValue = mappingFunction.apply(key, entry.value);
-			if(newValue == getDefaultReturnValue()) {
-				map.removeNode(entry);
-				return newValue;
-			}
-			entry.value = newValue;
-			return newValue;
+			if(entry == null) return getDefaultReturnValue();
+			entry.value = mappingFunction.apply(key, entry.value);
+			return entry.value;
 		}
 		
 		@Override

@@ -447,6 +447,42 @@ public class Object2LongOpenCustomHashMap<T> extends AbstractObject2LongMap<T> i
 	}
 	
 	@Override
+	public long computeLongIfAbsent(T key, ToLongFunction<T> mappingFunction) {
+		Objects.requireNonNull(mappingFunction);
+		int index = findIndex(key);
+		if(index < 0) {
+			long newValue = mappingFunction.applyAsLong(key);
+			insert(-index-1, key, newValue);
+			return newValue;
+		}
+		long newValue = values[index];
+		return newValue;
+	}
+		
+	@Override
+	public long supplyLongIfAbsent(T key, LongSupplier valueProvider) {
+		Objects.requireNonNull(valueProvider);
+		int index = findIndex(key);
+		if(index < 0) {
+			long newValue = valueProvider.getAsLong();
+			insert(-index-1, key, newValue);
+			return newValue;
+		}
+		long newValue = values[index];
+		return newValue;
+	}
+	
+	@Override
+	public long computeLongIfPresent(T key, ObjectLongUnaryOperator<T> mappingFunction) {
+		Objects.requireNonNull(mappingFunction);
+		int index = findIndex(key);
+		if(index < 0) return getDefaultReturnValue();
+		long newValue = mappingFunction.applyAsLong(key, values[index]);
+		values[index] = newValue;
+		return newValue;
+	}
+	
+	@Override
 	public long computeLongNonDefault(T key, ObjectLongUnaryOperator<T> mappingFunction) {
 		Objects.requireNonNull(mappingFunction);
 		int index = findIndex(key);
@@ -462,19 +498,6 @@ public class Object2LongOpenCustomHashMap<T> extends AbstractObject2LongMap<T> i
 			return newValue;
 		}
 		values[index] = newValue;
-		return newValue;
-	}
-	
-	@Override
-	public long computeLongIfAbsent(T key, ToLongFunction<T> mappingFunction) {
-		Objects.requireNonNull(mappingFunction);
-		int index = findIndex(key);
-		if(index < 0) {
-			long newValue = mappingFunction.applyAsLong(key);
-			insert(-index-1, key, newValue);
-			return newValue;
-		}
-		long newValue = values[index];
 		return newValue;
 	}
 	
@@ -498,19 +521,6 @@ public class Object2LongOpenCustomHashMap<T> extends AbstractObject2LongMap<T> i
 	}
 	
 	@Override
-	public long supplyLongIfAbsent(T key, LongSupplier valueProvider) {
-		Objects.requireNonNull(valueProvider);
-		int index = findIndex(key);
-		if(index < 0) {
-			long newValue = valueProvider.getAsLong();
-			insert(-index-1, key, newValue);
-			return newValue;
-		}
-		long newValue = values[index];
-		return newValue;
-	}
-	
-	@Override
 	public long supplyLongIfAbsentNonDefault(T key, LongSupplier valueProvider) {
 		Objects.requireNonNull(valueProvider);
 		int index = findIndex(key);
@@ -526,16 +536,6 @@ public class Object2LongOpenCustomHashMap<T> extends AbstractObject2LongMap<T> i
 			if(newValue == getDefaultReturnValue()) return newValue;
 			values[index] = newValue;
 		}
-		return newValue;
-	}
-	
-	@Override
-	public long computeLongIfPresent(T key, ObjectLongUnaryOperator<T> mappingFunction) {
-		Objects.requireNonNull(mappingFunction);
-		int index = findIndex(key);
-		if(index < 0) return getDefaultReturnValue();
-		long newValue = mappingFunction.applyAsLong(key, values[index]);
-		values[index] = newValue;
 		return newValue;
 	}
 	

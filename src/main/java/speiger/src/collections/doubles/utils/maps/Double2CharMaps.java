@@ -250,17 +250,17 @@ public class Double2CharMaps
 		@Override
 		public char computeChar(double key, DoubleCharUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
 		@Override
-		public char computeCharNonDefault(double key, DoubleCharUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
-		@Override
 		public char computeCharIfAbsent(double key, Double2CharFunction mappingFunction) { throw new UnsupportedOperationException(); }
-		@Override
-		public char computeCharIfAbsentNonDefault(double key, Double2CharFunction mappingFunction) { throw new UnsupportedOperationException(); }
 		@Override
 		public char computeCharIfPresent(double key, DoubleCharUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
 		@Override
-		public char computeCharIfPresentNonDefault(double key, DoubleCharUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
-		@Override
 		public char supplyCharIfAbsent(double key, CharSupplier valueProvider) { throw new UnsupportedOperationException(); }
+		@Override
+		public char computeCharNonDefault(double key, DoubleCharUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
+		@Override
+		public char computeCharIfAbsentNonDefault(double key, Double2CharFunction mappingFunction) { throw new UnsupportedOperationException(); }
+		@Override
+		public char computeCharIfPresentNonDefault(double key, DoubleCharUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
 		@Override
 		public char supplyCharIfAbsentNonDefault(double key, CharSupplier valueProvider) { throw new UnsupportedOperationException(); }
 		@Override
@@ -312,17 +312,17 @@ public class Double2CharMaps
 		@Override
 		public char computeChar(double key, DoubleCharUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
 		@Override
-		public char computeCharNonDefault(double key, DoubleCharUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
-		@Override
 		public char computeCharIfAbsent(double key, Double2CharFunction mappingFunction) { throw new UnsupportedOperationException(); }
-		@Override
-		public char computeCharIfAbsentNonDefault(double key, Double2CharFunction mappingFunction) { throw new UnsupportedOperationException(); }
 		@Override
 		public char computeCharIfPresent(double key, DoubleCharUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
 		@Override
-		public char computeCharIfPresentNonDefault(double key, DoubleCharUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
-		@Override
 		public char supplyCharIfAbsent(double key, CharSupplier valueProvider) { throw new UnsupportedOperationException(); }
+		@Override
+		public char computeCharNonDefault(double key, DoubleCharUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
+		@Override
+		public char computeCharIfAbsentNonDefault(double key, Double2CharFunction mappingFunction) { throw new UnsupportedOperationException(); }
+		@Override
+		public char computeCharIfPresentNonDefault(double key, DoubleCharUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
 		@Override
 		public char supplyCharIfAbsentNonDefault(double key, CharSupplier valueProvider) { throw new UnsupportedOperationException(); }
 		@Override
@@ -547,17 +547,17 @@ public class Double2CharMaps
 		@Override
 		public char computeChar(double key, DoubleCharUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
 		@Override
-		public char computeCharNonDefault(double key, DoubleCharUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
-		@Override
 		public char computeCharIfAbsent(double key, Double2CharFunction mappingFunction) { throw new UnsupportedOperationException(); }
-		@Override
-		public char computeCharIfAbsentNonDefault(double key, Double2CharFunction mappingFunction) { throw new UnsupportedOperationException(); }
 		@Override
 		public char computeCharIfPresent(double key, DoubleCharUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
 		@Override
-		public char computeCharIfPresentNonDefault(double key, DoubleCharUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
-		@Override
 		public char supplyCharIfAbsent(double key, CharSupplier valueProvider) { throw new UnsupportedOperationException(); }
+		@Override
+		public char computeCharNonDefault(double key, DoubleCharUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
+		@Override
+		public char computeCharIfAbsentNonDefault(double key, Double2CharFunction mappingFunction) { throw new UnsupportedOperationException(); }
+		@Override
+		public char computeCharIfPresentNonDefault(double key, DoubleCharUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
 		@Override
 		public char supplyCharIfAbsentNonDefault(double key, CharSupplier valueProvider) { throw new UnsupportedOperationException(); }
 		@Override
@@ -955,17 +955,17 @@ public class Double2CharMaps
 		@Override
 		public char computeChar(double key, DoubleCharUnaryOperator mappingFunction) { synchronized(mutex) { return map.computeChar(key, mappingFunction); } }
 		@Override
-		public char computeCharNonDefault(double key, DoubleCharUnaryOperator mappingFunction) { synchronized(mutex) { return map.computeCharNonDefault(key, mappingFunction); } }
-		@Override
 		public char computeCharIfAbsent(double key, Double2CharFunction mappingFunction) { synchronized(mutex) { return map.computeCharIfAbsent(key, mappingFunction); } }
-		@Override
-		public char computeCharIfAbsentNonDefault(double key, Double2CharFunction mappingFunction) { synchronized(mutex) { return map.computeCharIfAbsentNonDefault(key, mappingFunction); } }
 		@Override
 		public char computeCharIfPresent(double key, DoubleCharUnaryOperator mappingFunction) { synchronized(mutex) { return map.computeCharIfPresent(key, mappingFunction); } }
 		@Override
-		public char computeCharIfPresentNonDefault(double key, DoubleCharUnaryOperator mappingFunction) { synchronized(mutex) { return map.computeCharIfPresentNonDefault(key, mappingFunction); } }
-		@Override
 		public char supplyCharIfAbsent(double key, CharSupplier valueProvider) { synchronized(mutex) { return map.supplyCharIfAbsent(key, valueProvider); } }
+		@Override
+		public char computeCharNonDefault(double key, DoubleCharUnaryOperator mappingFunction) { synchronized(mutex) { return map.computeCharNonDefault(key, mappingFunction); } }
+		@Override
+		public char computeCharIfAbsentNonDefault(double key, Double2CharFunction mappingFunction) { synchronized(mutex) { return map.computeCharIfAbsentNonDefault(key, mappingFunction); } }
+		@Override
+		public char computeCharIfPresentNonDefault(double key, DoubleCharUnaryOperator mappingFunction) { synchronized(mutex) { return map.computeCharIfPresentNonDefault(key, mappingFunction); } }
 		@Override
 		public char supplyCharIfAbsentNonDefault(double key, CharSupplier valueProvider) { synchronized(mutex) { return map.supplyCharIfAbsentNonDefault(key, valueProvider); } }
 		@Override

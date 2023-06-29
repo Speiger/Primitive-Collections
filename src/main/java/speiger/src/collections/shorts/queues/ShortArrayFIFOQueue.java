@@ -147,6 +147,15 @@ public class ShortArrayFIFOQueue extends AbstractShortPriorityQueue implements S
 	}
 	
 	@Override
+	public boolean contains(short e) {
+		if(first == last) return false;
+		for(int i = 0,m=size();i<m;i++) {
+			if(e == array[(first + i) % array.length]) return true;
+		}
+		return false;
+	}
+	
+	@Override
 	public boolean removeFirst(short e) {
 		if(first == last) return false;
 		for(int i = 0,m=size();i<m;i++) {

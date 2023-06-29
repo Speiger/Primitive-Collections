@@ -388,6 +388,43 @@ public class Object2BooleanAVLTreeMap<T> extends AbstractObject2BooleanMap<T> im
 	}
 	
 	@Override
+	public boolean computeBooleanIfAbsent(T key, Predicate<T> mappingFunction) {
+		Objects.requireNonNull(mappingFunction);
+		validate(key);
+		Node<T> entry = findNode(key);
+		if(entry == null) {
+			boolean newValue = mappingFunction.test(key);
+			put(key, newValue);
+			return newValue;
+		}
+		return entry.value;
+	}
+	
+	@Override
+	public boolean supplyBooleanIfAbsent(T key, BooleanSupplier valueProvider) {
+		Objects.requireNonNull(valueProvider);
+		validate(key);
+		Node<T> entry = findNode(key);
+		if(entry == null) {
+			boolean newValue = valueProvider.getAsBoolean();
+			put(key, newValue);
+			return newValue;
+		}
+		return entry.value;
+	}
+	
+	@Override
+	public boolean computeBooleanIfPresent(T key, ObjectBooleanUnaryOperator<T> mappingFunction) {
+		Objects.requireNonNull(mappingFunction);
+		validate(key);
+		Node<T> entry = findNode(key);
+		if(entry == null) return getDefaultReturnValue();
+		boolean newValue = mappingFunction.applyAsBoolean(key, entry.value);
+		entry.value = newValue;
+		return newValue;
+	}
+	
+	@Override
 	public boolean computeBooleanNonDefault(T key, ObjectBooleanUnaryOperator<T> mappingFunction) {
 		Objects.requireNonNull(mappingFunction);
 		validate(key);
@@ -405,19 +442,6 @@ public class Object2BooleanAVLTreeMap<T> extends AbstractObject2BooleanMap<T> im
 		}
 		entry.value = newValue;
 		return newValue;
-	}
-	
-	@Override
-	public boolean computeBooleanIfAbsent(T key, Predicate<T> mappingFunction) {
-		Objects.requireNonNull(mappingFunction);
-		validate(key);
-		Node<T> entry = findNode(key);
-		if(entry == null) {
-			boolean newValue = mappingFunction.test(key);
-			put(key, newValue);
-			return newValue;
-		}
-		return entry.value;
 	}
 	
 	@Override
@@ -440,19 +464,6 @@ public class Object2BooleanAVLTreeMap<T> extends AbstractObject2BooleanMap<T> im
 	}
 	
 	@Override
-	public boolean supplyBooleanIfAbsent(T key, BooleanSupplier valueProvider) {
-		Objects.requireNonNull(valueProvider);
-		validate(key);
-		Node<T> entry = findNode(key);
-		if(entry == null) {
-			boolean newValue = valueProvider.getAsBoolean();
-			put(key, newValue);
-			return newValue;
-		}
-		return entry.value;
-	}
-	
-	@Override
 	public boolean supplyBooleanIfAbsentNonDefault(T key, BooleanSupplier valueProvider) {
 		Objects.requireNonNull(valueProvider);
 		validate(key);
@@ -469,17 +480,6 @@ public class Object2BooleanAVLTreeMap<T> extends AbstractObject2BooleanMap<T> im
 			entry.value = newValue;
 		}
 		return entry.value;
-	}
-	
-	@Override
-	public boolean computeBooleanIfPresent(T key, ObjectBooleanUnaryOperator<T> mappingFunction) {
-		Objects.requireNonNull(mappingFunction);
-		validate(key);
-		Node<T> entry = findNode(key);
-		if(entry == null) return getDefaultReturnValue();
-		boolean newValue = mappingFunction.applyAsBoolean(key, entry.value);
-		entry.value = newValue;
-		return newValue;
 	}
 	
 	@Override
@@ -1449,14 +1449,9 @@ public class Object2BooleanAVLTreeMap<T> extends AbstractObject2BooleanMap<T> im
 			map.validate(key);
 			if(!inRange(key)) return getDefaultReturnValue();
 			Node<T> entry = map.findNode(key);
-			if(entry == null || entry.value == getDefaultReturnValue()) return getDefaultReturnValue();
-			boolean newValue = mappingFunction.apply(key, entry.value);
-			if(newValue == getDefaultReturnValue()) {
-				map.removeNode(entry);
-				return newValue;
-			}
-			entry.value = newValue;
-			return newValue;
+			if(entry == null) return getDefaultReturnValue();
+			entry.value = mappingFunction.apply(key, entry.value);
+			return entry.value;
 		}
 		
 		@Override

@@ -418,20 +418,19 @@ public class ImmutableShort2ByteOpenHashMap extends AbstractShort2ByteMap implem
 	@Override
 	public byte computeByte(short key, ShortByteUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
 	@Override
-	public byte computeByteNonDefault(short key, ShortByteUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
-	@Override
 	public byte computeByteIfAbsent(short key, Short2ByteFunction mappingFunction) { throw new UnsupportedOperationException(); }
-	@Override
-	public byte computeByteIfAbsentNonDefault(short key, Short2ByteFunction mappingFunction) { throw new UnsupportedOperationException(); }
 	@Override
 	public byte supplyByteIfAbsent(short key, ByteSupplier valueProvider) { throw new UnsupportedOperationException(); }
 	@Override
-	public byte supplyByteIfAbsentNonDefault(short key, ByteSupplier valueProvider) { throw new UnsupportedOperationException(); }
-	@Override
 	public byte computeByteIfPresent(short key, ShortByteUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
 	@Override
+	public byte computeByteNonDefault(short key, ShortByteUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
+	@Override
+	public byte computeByteIfAbsentNonDefault(short key, Short2ByteFunction mappingFunction) { throw new UnsupportedOperationException(); }
+	@Override
+	public byte supplyByteIfAbsentNonDefault(short key, ByteSupplier valueProvider) { throw new UnsupportedOperationException(); }
+	@Override
 	public byte computeByteIfPresentNonDefault(short key, ShortByteUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
-	
 	@Override
 	public byte mergeByte(short key, byte value, ByteByteUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
 	

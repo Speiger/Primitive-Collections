@@ -209,6 +209,13 @@ public class CharArrayPriorityQueue extends AbstractCharPriorityQueue
 	}
 	
 	@Override
+	public boolean contains(char e) {
+		for(int i = 0;i<size;i++)
+			if(e == array[i]) return true;
+		return false;
+	}
+	
+	@Override
 	public boolean removeFirst(char e) {
 		for(int i = 0;i<size;i++)
 			if(e == array[i]) return removeIndex(i);

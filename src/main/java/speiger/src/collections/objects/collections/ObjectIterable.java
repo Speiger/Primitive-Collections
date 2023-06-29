@@ -8,6 +8,19 @@ import java.util.function.BiFunction;
 import java.util.function.IntFunction;
 import java.util.Comparator;
 
+import speiger.src.collections.booleans.collections.BooleanIterable;
+import speiger.src.collections.objects.functions.function.ToByteFunction;
+import speiger.src.collections.bytes.collections.ByteIterable;
+import speiger.src.collections.objects.functions.function.ToShortFunction;
+import speiger.src.collections.shorts.collections.ShortIterable;
+import speiger.src.collections.objects.functions.function.ToIntFunction;
+import speiger.src.collections.ints.collections.IntIterable;
+import speiger.src.collections.objects.functions.function.ToLongFunction;
+import speiger.src.collections.longs.collections.LongIterable;
+import speiger.src.collections.objects.functions.function.ToFloatFunction;
+import speiger.src.collections.floats.collections.FloatIterable;
+import speiger.src.collections.objects.functions.function.ToDoubleFunction;
+import speiger.src.collections.doubles.collections.DoubleIterable;
 import speiger.src.collections.objects.functions.function.UnaryOperator;
 import speiger.src.collections.ints.functions.consumer.IntObjectConsumer;
 import speiger.src.collections.objects.functions.consumer.ObjectObjectConsumer;
@@ -85,6 +98,69 @@ public interface ObjectIterable<T> extends Iterable<T>
 	 */
 	default <E> ObjectIterable<E> map(UnaryOperator<T, E> mapper) {
 		return ObjectIterables.map(this, mapper);
+	}
+	
+	/**
+	 * A Helper function to reduce the usage of Streams and allows to convert a Iterable to something else.
+	 * @param mapper the mapping function
+	 * @return a new Iterable that returns the desired result
+	 */
+	default BooleanIterable mapToBoolean(Predicate<T> mapper) {
+		return ObjectIterables.mapToBoolean(this, mapper);
+	}
+	
+	/**
+	 * A Helper function to reduce the usage of Streams and allows to convert a Iterable to something else.
+	 * @param mapper the mapping function
+	 * @return a new Iterable that returns the desired result
+	 */
+	default ByteIterable mapToByte(ToByteFunction<T> mapper) {
+		return ObjectIterables.mapToByte(this, mapper);
+	}
+	
+	/**
+	 * A Helper function to reduce the usage of Streams and allows to convert a Iterable to something else.
+	 * @param mapper the mapping function
+	 * @return a new Iterable that returns the desired result
+	 */
+	default ShortIterable mapToShort(ToShortFunction<T> mapper) {
+		return ObjectIterables.mapToShort(this, mapper);
+	}
+	
+	/**
+	 * A Helper function to reduce the usage of Streams and allows to convert a Iterable to something else.
+	 * @param mapper the mapping function
+	 * @return a new Iterable that returns the desired result
+	 */
+	default IntIterable mapToInt(ToIntFunction<T> mapper) {
+		return ObjectIterables.mapToInt(this, mapper);
+	}
+	
+	/**
+	 * A Helper function to reduce the usage of Streams and allows to convert a Iterable to something else.
+	 * @param mapper the mapping function
+	 * @return a new Iterable that returns the desired result
+	 */
+	default LongIterable mapToLong(ToLongFunction<T> mapper) {
+		return ObjectIterables.mapToLong(this, mapper);
+	}
+	
+	/**
+	 * A Helper function to reduce the usage of Streams and allows to convert a Iterable to something else.
+	 * @param mapper the mapping function
+	 * @return a new Iterable that returns the desired result
+	 */
+	default FloatIterable mapToFloat(ToFloatFunction<T> mapper) {
+		return ObjectIterables.mapToFloat(this, mapper);
+	}
+	
+	/**
+	 * A Helper function to reduce the usage of Streams and allows to convert a Iterable to something else.
+	 * @param mapper the mapping function
+	 * @return a new Iterable that returns the desired result
+	 */
+	default DoubleIterable mapToDouble(ToDoubleFunction<T> mapper) {
+		return ObjectIterables.mapToDouble(this, mapper);
 	}
 	
 	/**

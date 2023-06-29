@@ -430,6 +430,42 @@ public class Byte2CharOpenHashMap extends AbstractByte2CharMap implements ITrimm
 		values[index] = newValue;
 		return newValue;
 	}
+		
+	@Override
+	public char computeCharIfAbsent(byte key, Byte2CharFunction mappingFunction) {
+		Objects.requireNonNull(mappingFunction);
+		int index = findIndex(key);
+		if(index < 0) {
+			char newValue = mappingFunction.applyAsChar(key);
+			insert(-index-1, key, newValue);
+			return newValue;
+		}
+		char newValue = values[index];
+		return newValue;
+	}
+	
+	@Override
+	public char supplyCharIfAbsent(byte key, CharSupplier valueProvider) {
+		Objects.requireNonNull(valueProvider);
+		int index = findIndex(key);
+		if(index < 0) {
+			char newValue = valueProvider.getAsChar();
+			insert(-index-1, key, newValue);
+			return newValue;
+		}
+		char newValue = values[index];
+		return newValue;
+	}
+		
+	@Override
+	public char computeCharIfPresent(byte key, ByteCharUnaryOperator mappingFunction) {
+		Objects.requireNonNull(mappingFunction);
+		int index = findIndex(key);
+		if(index < 0) return getDefaultReturnValue();
+		char newValue = mappingFunction.applyAsChar(key, values[index]);
+		values[index] = newValue;
+		return newValue;
+	}
 	
 	@Override
 	public char computeCharNonDefault(byte key, ByteCharUnaryOperator mappingFunction) {
@@ -447,19 +483,6 @@ public class Byte2CharOpenHashMap extends AbstractByte2CharMap implements ITrimm
 			return newValue;
 		}
 		values[index] = newValue;
-		return newValue;
-	}
-	
-	@Override
-	public char computeCharIfAbsent(byte key, Byte2CharFunction mappingFunction) {
-		Objects.requireNonNull(mappingFunction);
-		int index = findIndex(key);
-		if(index < 0) {
-			char newValue = mappingFunction.applyAsChar(key);
-			insert(-index-1, key, newValue);
-			return newValue;
-		}
-		char newValue = values[index];
 		return newValue;
 	}
 	
@@ -483,44 +506,21 @@ public class Byte2CharOpenHashMap extends AbstractByte2CharMap implements ITrimm
 	}
 	
 	@Override
-	public char supplyCharIfAbsent(byte key, CharSupplier valueProvider) {
-		Objects.requireNonNull(valueProvider);
-		int index = findIndex(key);
-		if(index < 0) {
-			char newValue = valueProvider.getAsInt();
-			insert(-index-1, key, newValue);
-			return newValue;
-		}
-		char newValue = values[index];
-		return newValue;
-	}
-	
-	@Override
 	public char supplyCharIfAbsentNonDefault(byte key, CharSupplier valueProvider) {
 		Objects.requireNonNull(valueProvider);
 		int index = findIndex(key);
 		if(index < 0) {
-			char newValue = valueProvider.getAsInt();
+			char newValue = valueProvider.getAsChar();
 			if(newValue == getDefaultReturnValue()) return newValue;
 			insert(-index-1, key, newValue);
 			return newValue;
 		}
 		char newValue = values[index];
 		if(newValue == getDefaultReturnValue()) {
-			newValue = valueProvider.getAsInt();
+			newValue = valueProvider.getAsChar();
 			if(newValue == getDefaultReturnValue()) return newValue;
 			values[index] = newValue;
 		}
-		return newValue;
-	}
-	
-	@Override
-	public char computeCharIfPresent(byte key, ByteCharUnaryOperator mappingFunction) {
-		Objects.requireNonNull(mappingFunction);
-		int index = findIndex(key);
-		if(index < 0) return getDefaultReturnValue();
-		char newValue = mappingFunction.applyAsChar(key, values[index]);
-		values[index] = newValue;
 		return newValue;
 	}
 	

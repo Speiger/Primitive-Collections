@@ -454,6 +454,40 @@ public class Float2DoubleRBTreeMap extends AbstractFloat2DoubleMap implements Fl
 	}
 	
 	@Override
+	public double computeDoubleIfAbsent(float key, Float2DoubleFunction mappingFunction) {
+		Objects.requireNonNull(mappingFunction);
+		Node entry = findNode(key);
+		if(entry == null) {
+			double newValue = mappingFunction.applyAsDouble(key);
+			put(key, newValue);
+			return newValue;
+		}
+		return entry.value;
+	}
+	
+	@Override
+	public double supplyDoubleIfAbsent(float key, DoubleSupplier valueProvider) {
+		Objects.requireNonNull(valueProvider);
+		Node entry = findNode(key);
+		if(entry == null) {
+			double newValue = valueProvider.getAsDouble();
+			put(key, newValue);
+			return newValue;
+		}
+		return entry.value;
+	}
+	
+	@Override
+	public double computeDoubleIfPresent(float key, FloatDoubleUnaryOperator mappingFunction) {
+		Objects.requireNonNull(mappingFunction);
+		Node entry = findNode(key);
+		if(entry == null) return getDefaultReturnValue();
+		double newValue = mappingFunction.applyAsDouble(key, entry.value);
+		entry.value = newValue;
+		return newValue;
+	}
+	
+	@Override
 	public double computeDoubleNonDefault(float key, FloatDoubleUnaryOperator mappingFunction) {
 		Objects.requireNonNull(mappingFunction);
 		Node entry = findNode(key);
@@ -470,18 +504,6 @@ public class Float2DoubleRBTreeMap extends AbstractFloat2DoubleMap implements Fl
 		}
 		entry.value = newValue;
 		return newValue;
-	}
-	
-	@Override
-	public double computeDoubleIfAbsent(float key, Float2DoubleFunction mappingFunction) {
-		Objects.requireNonNull(mappingFunction);
-		Node entry = findNode(key);
-		if(entry == null) {
-			double newValue = mappingFunction.applyAsDouble(key);
-			put(key, newValue);
-			return newValue;
-		}
-		return entry.value;
 	}
 	
 	@Override
@@ -503,18 +525,6 @@ public class Float2DoubleRBTreeMap extends AbstractFloat2DoubleMap implements Fl
 	}
 	
 	@Override
-	public double supplyDoubleIfAbsent(float key, DoubleSupplier valueProvider) {
-		Objects.requireNonNull(valueProvider);
-		Node entry = findNode(key);
-		if(entry == null) {
-			double newValue = valueProvider.getAsDouble();
-			put(key, newValue);
-			return newValue;
-		}
-		return entry.value;
-	}
-	
-	@Override
 	public double supplyDoubleIfAbsentNonDefault(float key, DoubleSupplier valueProvider) {
 		Objects.requireNonNull(valueProvider);
 		Node entry = findNode(key);
@@ -530,16 +540,6 @@ public class Float2DoubleRBTreeMap extends AbstractFloat2DoubleMap implements Fl
 			entry.value = newValue;
 		}
 		return entry.value;
-	}
-	
-	@Override
-	public double computeDoubleIfPresent(float key, FloatDoubleUnaryOperator mappingFunction) {
-		Objects.requireNonNull(mappingFunction);
-		Node entry = findNode(key);
-		if(entry == null) return getDefaultReturnValue();
-		double newValue = mappingFunction.applyAsDouble(key, entry.value);
-		entry.value = newValue;
-		return newValue;
 	}
 	
 	@Override
@@ -1621,14 +1621,9 @@ public class Float2DoubleRBTreeMap extends AbstractFloat2DoubleMap implements Fl
 			Objects.requireNonNull(mappingFunction);
 			if(!inRange(key)) return getDefaultReturnValue();
 			Node entry = map.findNode(key);
-			if(entry == null || Double.doubleToLongBits(entry.value) == Double.doubleToLongBits(getDefaultReturnValue())) return getDefaultReturnValue();
-			double newValue = mappingFunction.apply(key, entry.value);
-			if(Double.doubleToLongBits(newValue) == Double.doubleToLongBits(getDefaultReturnValue())) {
-				map.removeNode(entry);
-				return newValue;
-			}
-			entry.value = newValue;
-			return newValue;
+			if(entry == null) return getDefaultReturnValue();
+			entry.value = mappingFunction.apply(key, entry.value);
+			return entry.value;
 		}
 		
 		@Override

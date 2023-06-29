@@ -327,6 +327,41 @@ public class Enum2LongMap<T extends Enum<T>> extends AbstractObject2LongMap<T>
 	}
 	
 	@Override
+	public long computeLongIfAbsent(T key, ToLongFunction<T> mappingFunction) {
+		int index = key.ordinal();
+		if(!isSet(index)) {
+			long newValue = mappingFunction.applyAsLong(key);
+			set(index);
+			values[index] = newValue;			
+			return newValue;
+		}
+		long newValue = values[index];
+		return newValue;
+	}
+		
+	@Override
+	public long supplyLongIfAbsent(T key, LongSupplier valueProvider) {
+		int index = key.ordinal();
+		if(!isSet(index)) {
+			long newValue = valueProvider.getAsLong();
+			set(index);
+			values[index] = newValue;			
+			return newValue;
+		}
+		long newValue = values[index];
+		return newValue;
+	}
+	
+	@Override
+	public long computeLongIfPresent(T key, ObjectLongUnaryOperator<T> mappingFunction) {
+		int index = key.ordinal();
+		if(!isSet(index)) return getDefaultReturnValue();
+		long newValue = mappingFunction.applyAsLong(key, values[index]);
+		values[index] = newValue;
+		return newValue;
+	}
+	
+	@Override
 	public long computeLongNonDefault(T key, ObjectLongUnaryOperator<T> mappingFunction) {
 		int index = key.ordinal();
 		if(!isSet(index)) {
@@ -343,19 +378,6 @@ public class Enum2LongMap<T extends Enum<T>> extends AbstractObject2LongMap<T>
 			return newValue;
 		}
 		values[index] = newValue;
-		return newValue;
-	}
-	
-	@Override
-	public long computeLongIfAbsent(T key, ToLongFunction<T> mappingFunction) {
-		int index = key.ordinal();
-		if(!isSet(index)) {
-			long newValue = mappingFunction.applyAsLong(key);
-			set(index);
-			values[index] = newValue;			
-			return newValue;
-		}
-		long newValue = values[index];
 		return newValue;
 	}
 	
@@ -379,19 +401,6 @@ public class Enum2LongMap<T extends Enum<T>> extends AbstractObject2LongMap<T>
 	}
 	
 	@Override
-	public long supplyLongIfAbsent(T key, LongSupplier valueProvider) {
-		int index = key.ordinal();
-		if(!isSet(index)) {
-			long newValue = valueProvider.getAsLong();
-			set(index);
-			values[index] = newValue;			
-			return newValue;
-		}
-		long newValue = values[index];
-		return newValue;
-	}
-	
-	@Override
 	public long supplyLongIfAbsentNonDefault(T key, LongSupplier valueProvider) {
 		int index = key.ordinal();
 		if(!isSet(index)) {
@@ -407,15 +416,6 @@ public class Enum2LongMap<T extends Enum<T>> extends AbstractObject2LongMap<T>
 			if(newValue == getDefaultReturnValue()) return newValue;
 			values[index] = newValue;
 		}
-		return newValue;
-	}
-	
-	@Override
-	public long computeLongIfPresent(T key, ObjectLongUnaryOperator<T> mappingFunction) {
-		int index = key.ordinal();
-		if(!isSet(index)) return getDefaultReturnValue();
-		long newValue = mappingFunction.applyAsLong(key, values[index]);
-		values[index] = newValue;
 		return newValue;
 	}
 	

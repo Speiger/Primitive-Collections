@@ -452,17 +452,31 @@ public class Float2CharConcurrentOpenHashMap extends AbstractFloat2CharMap imple
 	}
 	
 	@Override
-	public char computeCharNonDefault(float key, FloatCharUnaryOperator mappingFunction) {
-		Objects.requireNonNull(mappingFunction);
-		int hash = getHashCode(key);
-		return getSegment(hash).computeNonDefault(hash, key, mappingFunction);
-	}
-
-	@Override
 	public char computeCharIfAbsent(float key, Float2CharFunction mappingFunction) {
 		Objects.requireNonNull(mappingFunction);
 		int hash = getHashCode(key);
 		return getSegment(hash).computeIfAbsent(hash, key, mappingFunction);
+	}
+	
+	@Override
+	public char supplyCharIfAbsent(float key, CharSupplier valueProvider) {
+		Objects.requireNonNull(valueProvider);
+		int hash = getHashCode(key);
+		return getSegment(hash).supplyIfAbsent(hash, key, valueProvider);
+	}
+	
+	@Override
+	public char computeCharIfPresent(float key, FloatCharUnaryOperator mappingFunction) {
+		Objects.requireNonNull(mappingFunction);
+		int hash = getHashCode(key);
+		return getSegment(hash).computeIfPresent(hash, key, mappingFunction);
+	}
+	
+	@Override
+	public char computeCharNonDefault(float key, FloatCharUnaryOperator mappingFunction) {
+		Objects.requireNonNull(mappingFunction);
+		int hash = getHashCode(key);
+		return getSegment(hash).computeNonDefault(hash, key, mappingFunction);
 	}
 	
 	@Override
@@ -473,24 +487,10 @@ public class Float2CharConcurrentOpenHashMap extends AbstractFloat2CharMap imple
 	}
 
 	@Override
-	public char supplyCharIfAbsent(float key, CharSupplier valueProvider) {
-		Objects.requireNonNull(valueProvider);
-		int hash = getHashCode(key);
-		return getSegment(hash).supplyIfAbsent(hash, key, valueProvider);
-	}
-	
-	@Override
 	public char supplyCharIfAbsentNonDefault(float key, CharSupplier valueProvider) {
 		Objects.requireNonNull(valueProvider);
 		int hash = getHashCode(key);
 		return getSegment(hash).supplyIfAbsentNonDefault(hash, key, valueProvider);
-	}
-	
-	@Override
-	public char computeCharIfPresent(float key, FloatCharUnaryOperator mappingFunction) {
-		Objects.requireNonNull(mappingFunction);
-		int hash = getHashCode(key);
-		return getSegment(hash).computeIfPresent(hash, key, mappingFunction);
 	}
 	
 	@Override
@@ -2076,6 +2076,54 @@ public class Float2CharConcurrentOpenHashMap extends AbstractFloat2CharMap imple
 			}
 		}
 		
+		protected char computeIfAbsent(int hash, float key, Float2CharFunction mappingFunction) {
+			long stamp = writeLock();
+			try {
+				int index = findIndex(hash, key);
+				if(index < 0) {
+					char newValue = mappingFunction.applyAsChar(key);
+					insert(-index-1, key, newValue);
+					return newValue;
+				}
+				char newValue = values[index];
+				return newValue;
+			}
+			finally {
+				unlockWrite(stamp);
+			}
+		}
+				
+		protected char supplyIfAbsent(int hash, float key, CharSupplier valueProvider) {
+			long stamp = writeLock();
+			try {
+				int index = findIndex(hash, key);
+				if(index < 0) {
+					char newValue = valueProvider.getAsChar();
+					insert(-index-1, key, newValue);
+					return newValue;
+				}
+				char newValue = values[index];
+				return newValue;
+			}
+			finally {
+				unlockWrite(stamp);
+			}
+		}
+				
+		protected char computeIfPresent(int hash, float key, FloatCharUnaryOperator mappingFunction) {
+			long stamp = writeLock();
+			try {
+				int index = findIndex(hash, key);
+				if(index < 0) return getDefaultReturnValue();
+				char newValue = mappingFunction.applyAsChar(key, values[index]);
+				values[index] = newValue;
+				return newValue;
+			}
+			finally {
+				unlockWrite(stamp);
+			}
+		}
+		
 		protected char computeNonDefault(int hash, float key, FloatCharUnaryOperator mappingFunction) {
 			long stamp = writeLock();
 			try {
@@ -2092,23 +2140,6 @@ public class Float2CharConcurrentOpenHashMap extends AbstractFloat2CharMap imple
 					return newValue;
 				}
 				values[index] = newValue;
-				return newValue;
-			}
-			finally {
-				unlockWrite(stamp);
-			}
-		}
-		
-		protected char computeIfAbsent(int hash, float key, Float2CharFunction mappingFunction) {
-			long stamp = writeLock();
-			try {
-				int index = findIndex(hash, key);
-				if(index < 0) {
-					char newValue = mappingFunction.applyAsChar(key);
-					insert(-index-1, key, newValue);
-					return newValue;
-				}
-				char newValue = values[index];
 				return newValue;
 			}
 			finally {
@@ -2139,53 +2170,22 @@ public class Float2CharConcurrentOpenHashMap extends AbstractFloat2CharMap imple
 			}
 		}
 		
-		protected char supplyIfAbsent(int hash, float key, CharSupplier valueProvider) {
-			long stamp = writeLock();
-			try {
-				int index = findIndex(hash, key);
-				if(index < 0) {
-					char newValue = valueProvider.getAsInt();
-					insert(-index-1, key, newValue);
-					return newValue;
-				}
-				char newValue = values[index];
-				return newValue;
-			}
-			finally {
-				unlockWrite(stamp);
-			}
-		}
-		
 		protected char supplyIfAbsentNonDefault(int hash, float key, CharSupplier valueProvider) {
 			long stamp = writeLock();
 			try {
 				int index = findIndex(hash, key);
 				if(index < 0) {
-					char newValue = valueProvider.getAsInt();
+					char newValue = valueProvider.getAsChar();
 					if(newValue == getDefaultReturnValue()) return newValue;
 					insert(-index-1, key, newValue);
 					return newValue;
 				}
 				char newValue = values[index];
 				if(newValue == getDefaultReturnValue()) {
-					newValue = valueProvider.getAsInt();
+					newValue = valueProvider.getAsChar();
 					if(newValue == getDefaultReturnValue()) return newValue;
 					values[index] = newValue;
 				}
-				return newValue;
-			}
-			finally {
-				unlockWrite(stamp);
-			}
-		}
-		
-		protected char computeIfPresent(int hash, float key, FloatCharUnaryOperator mappingFunction) {
-			long stamp = writeLock();
-			try {
-				int index = findIndex(hash, key);
-				if(index < 0) return getDefaultReturnValue();
-				char newValue = mappingFunction.applyAsChar(key, values[index]);
-				values[index] = newValue;
 				return newValue;
 			}
 			finally {

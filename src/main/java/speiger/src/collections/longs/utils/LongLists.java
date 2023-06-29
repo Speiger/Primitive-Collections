@@ -12,6 +12,7 @@ import speiger.src.collections.longs.collections.LongCollection;
 import speiger.src.collections.longs.functions.LongConsumer;
 import speiger.src.collections.longs.lists.AbstractLongList;
 import speiger.src.collections.longs.lists.LongList;
+import speiger.src.collections.ints.lists.IntList;
 import speiger.src.collections.longs.lists.LongListIterator;
 import speiger.src.collections.utils.SanityChecks;
 
@@ -318,6 +319,16 @@ public class LongLists
 		}
 		
 		@Override
+		public LongListIterator indexedIterator(int...indecies) {
+			return l.indexedIterator(indecies);
+		}
+		
+		@Override
+		public LongListIterator indexedIterator(IntList indecies) {
+			return l.indexedIterator(indecies);
+		}
+		
+		@Override
 		public LongList subList(int from, int to) {
 			return LongLists.synchronize(l.subList(from, to));
 		}
@@ -427,6 +438,16 @@ public class LongLists
 		}
 		
 		@Override
+		public LongListIterator indexedIterator(int...indecies) {
+			return LongIterators.unmodifiable(l.indexedIterator(indecies));
+		}
+		
+		@Override
+		public LongListIterator indexedIterator(IntList indecies) {
+			return LongIterators.unmodifiable(l.indexedIterator(indecies));
+		}
+		
+		@Override
 		public LongList subList(int from, int to) {
 			return LongLists.unmodifiable(l.subList(from, to));
 		}
@@ -512,6 +533,16 @@ public class LongLists
 			if(index != 0)
 				throw new IndexOutOfBoundsException();
 			return LongIterators.empty();
+		}
+		
+		@Override
+		public LongListIterator indexedIterator(int...indecies) {
+			return LongIterators.empty(); 
+		}
+		
+		@Override
+		public LongListIterator indexedIterator(IntList indecies) {
+			return LongIterators.empty(); 
 		}
 		
 		@Override

@@ -327,6 +327,41 @@ public class Enum2ByteMap<T extends Enum<T>> extends AbstractObject2ByteMap<T>
 	}
 	
 	@Override
+	public byte computeByteIfAbsent(T key, ToByteFunction<T> mappingFunction) {
+		int index = key.ordinal();
+		if(!isSet(index)) {
+			byte newValue = mappingFunction.applyAsByte(key);
+			set(index);
+			values[index] = newValue;			
+			return newValue;
+		}
+		byte newValue = values[index];
+		return newValue;
+	}
+		
+	@Override
+	public byte supplyByteIfAbsent(T key, ByteSupplier valueProvider) {
+		int index = key.ordinal();
+		if(!isSet(index)) {
+			byte newValue = valueProvider.getAsByte();
+			set(index);
+			values[index] = newValue;			
+			return newValue;
+		}
+		byte newValue = values[index];
+		return newValue;
+	}
+	
+	@Override
+	public byte computeByteIfPresent(T key, ObjectByteUnaryOperator<T> mappingFunction) {
+		int index = key.ordinal();
+		if(!isSet(index)) return getDefaultReturnValue();
+		byte newValue = mappingFunction.applyAsByte(key, values[index]);
+		values[index] = newValue;
+		return newValue;
+	}
+	
+	@Override
 	public byte computeByteNonDefault(T key, ObjectByteUnaryOperator<T> mappingFunction) {
 		int index = key.ordinal();
 		if(!isSet(index)) {
@@ -343,19 +378,6 @@ public class Enum2ByteMap<T extends Enum<T>> extends AbstractObject2ByteMap<T>
 			return newValue;
 		}
 		values[index] = newValue;
-		return newValue;
-	}
-	
-	@Override
-	public byte computeByteIfAbsent(T key, ToByteFunction<T> mappingFunction) {
-		int index = key.ordinal();
-		if(!isSet(index)) {
-			byte newValue = mappingFunction.applyAsByte(key);
-			set(index);
-			values[index] = newValue;			
-			return newValue;
-		}
-		byte newValue = values[index];
 		return newValue;
 	}
 	
@@ -379,23 +401,10 @@ public class Enum2ByteMap<T extends Enum<T>> extends AbstractObject2ByteMap<T>
 	}
 	
 	@Override
-	public byte supplyByteIfAbsent(T key, ByteSupplier valueProvider) {
-		int index = key.ordinal();
-		if(!isSet(index)) {
-			byte newValue = valueProvider.getAsInt();
-			set(index);
-			values[index] = newValue;			
-			return newValue;
-		}
-		byte newValue = values[index];
-		return newValue;
-	}
-	
-	@Override
 	public byte supplyByteIfAbsentNonDefault(T key, ByteSupplier valueProvider) {
 		int index = key.ordinal();
 		if(!isSet(index)) {
-			byte newValue = valueProvider.getAsInt();
+			byte newValue = valueProvider.getAsByte();
 			if(newValue == getDefaultReturnValue()) return newValue;
 			set(index);
 			values[index] = newValue;			
@@ -403,19 +412,10 @@ public class Enum2ByteMap<T extends Enum<T>> extends AbstractObject2ByteMap<T>
 		}
 		byte newValue = values[index];
 		if(newValue == getDefaultReturnValue()) {
-			newValue = valueProvider.getAsInt();
+			newValue = valueProvider.getAsByte();
 			if(newValue == getDefaultReturnValue()) return newValue;
 			values[index] = newValue;
 		}
-		return newValue;
-	}
-	
-	@Override
-	public byte computeByteIfPresent(T key, ObjectByteUnaryOperator<T> mappingFunction) {
-		int index = key.ordinal();
-		if(!isSet(index)) return getDefaultReturnValue();
-		byte newValue = mappingFunction.applyAsByte(key, values[index]);
-		values[index] = newValue;
 		return newValue;
 	}
 	

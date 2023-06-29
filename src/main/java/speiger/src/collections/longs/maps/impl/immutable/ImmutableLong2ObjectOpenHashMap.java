@@ -397,20 +397,11 @@ public class ImmutableLong2ObjectOpenHashMap<V> extends AbstractLong2ObjectMap<V
 	@Override
 	public V compute(long key, LongObjectUnaryOperator<V> mappingFunction) { throw new UnsupportedOperationException(); }
 	@Override
-	public V computeNonDefault(long key, LongObjectUnaryOperator<V> mappingFunction) { throw new UnsupportedOperationException(); }
-	@Override
 	public V computeIfAbsent(long key, LongFunction<V> mappingFunction) { throw new UnsupportedOperationException(); }
-	@Override
-	public V computeIfAbsentNonDefault(long key, LongFunction<V> mappingFunction) { throw new UnsupportedOperationException(); }
 	@Override
 	public V supplyIfAbsent(long key, ObjectSupplier<V> valueProvider) { throw new UnsupportedOperationException(); }
 	@Override
-	public V supplyIfAbsentNonDefault(long key, ObjectSupplier<V> valueProvider) { throw new UnsupportedOperationException(); }
-	@Override
 	public V computeIfPresent(long key, LongObjectUnaryOperator<V> mappingFunction) { throw new UnsupportedOperationException(); }
-	@Override
-	public V computeIfPresentNonDefault(long key, LongObjectUnaryOperator<V> mappingFunction) { throw new UnsupportedOperationException(); }
-	
 	@Override
 	public V merge(long key, V value, ObjectObjectUnaryOperator<V, V> mappingFunction) { throw new UnsupportedOperationException(); }
 	

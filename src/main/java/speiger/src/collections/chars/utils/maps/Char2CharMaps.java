@@ -249,17 +249,17 @@ public class Char2CharMaps
 		@Override
 		public char computeChar(char key, CharCharUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
 		@Override
-		public char computeCharNonDefault(char key, CharCharUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
-		@Override
 		public char computeCharIfAbsent(char key, CharUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
-		@Override
-		public char computeCharIfAbsentNonDefault(char key, CharUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
 		@Override
 		public char computeCharIfPresent(char key, CharCharUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
 		@Override
-		public char computeCharIfPresentNonDefault(char key, CharCharUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
-		@Override
 		public char supplyCharIfAbsent(char key, CharSupplier valueProvider) { throw new UnsupportedOperationException(); }
+		@Override
+		public char computeCharNonDefault(char key, CharCharUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
+		@Override
+		public char computeCharIfAbsentNonDefault(char key, CharUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
+		@Override
+		public char computeCharIfPresentNonDefault(char key, CharCharUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
 		@Override
 		public char supplyCharIfAbsentNonDefault(char key, CharSupplier valueProvider) { throw new UnsupportedOperationException(); }
 		@Override
@@ -311,17 +311,17 @@ public class Char2CharMaps
 		@Override
 		public char computeChar(char key, CharCharUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
 		@Override
-		public char computeCharNonDefault(char key, CharCharUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
-		@Override
 		public char computeCharIfAbsent(char key, CharUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
-		@Override
-		public char computeCharIfAbsentNonDefault(char key, CharUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
 		@Override
 		public char computeCharIfPresent(char key, CharCharUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
 		@Override
-		public char computeCharIfPresentNonDefault(char key, CharCharUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
-		@Override
 		public char supplyCharIfAbsent(char key, CharSupplier valueProvider) { throw new UnsupportedOperationException(); }
+		@Override
+		public char computeCharNonDefault(char key, CharCharUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
+		@Override
+		public char computeCharIfAbsentNonDefault(char key, CharUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
+		@Override
+		public char computeCharIfPresentNonDefault(char key, CharCharUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
 		@Override
 		public char supplyCharIfAbsentNonDefault(char key, CharSupplier valueProvider) { throw new UnsupportedOperationException(); }
 		@Override
@@ -546,17 +546,17 @@ public class Char2CharMaps
 		@Override
 		public char computeChar(char key, CharCharUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
 		@Override
-		public char computeCharNonDefault(char key, CharCharUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
-		@Override
 		public char computeCharIfAbsent(char key, CharUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
-		@Override
-		public char computeCharIfAbsentNonDefault(char key, CharUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
 		@Override
 		public char computeCharIfPresent(char key, CharCharUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
 		@Override
-		public char computeCharIfPresentNonDefault(char key, CharCharUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
-		@Override
 		public char supplyCharIfAbsent(char key, CharSupplier valueProvider) { throw new UnsupportedOperationException(); }
+		@Override
+		public char computeCharNonDefault(char key, CharCharUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
+		@Override
+		public char computeCharIfAbsentNonDefault(char key, CharUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
+		@Override
+		public char computeCharIfPresentNonDefault(char key, CharCharUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
 		@Override
 		public char supplyCharIfAbsentNonDefault(char key, CharSupplier valueProvider) { throw new UnsupportedOperationException(); }
 		@Override
@@ -954,17 +954,17 @@ public class Char2CharMaps
 		@Override
 		public char computeChar(char key, CharCharUnaryOperator mappingFunction) { synchronized(mutex) { return map.computeChar(key, mappingFunction); } }
 		@Override
-		public char computeCharNonDefault(char key, CharCharUnaryOperator mappingFunction) { synchronized(mutex) { return map.computeCharNonDefault(key, mappingFunction); } }
-		@Override
 		public char computeCharIfAbsent(char key, CharUnaryOperator mappingFunction) { synchronized(mutex) { return map.computeCharIfAbsent(key, mappingFunction); } }
-		@Override
-		public char computeCharIfAbsentNonDefault(char key, CharUnaryOperator mappingFunction) { synchronized(mutex) { return map.computeCharIfAbsentNonDefault(key, mappingFunction); } }
 		@Override
 		public char computeCharIfPresent(char key, CharCharUnaryOperator mappingFunction) { synchronized(mutex) { return map.computeCharIfPresent(key, mappingFunction); } }
 		@Override
-		public char computeCharIfPresentNonDefault(char key, CharCharUnaryOperator mappingFunction) { synchronized(mutex) { return map.computeCharIfPresentNonDefault(key, mappingFunction); } }
-		@Override
 		public char supplyCharIfAbsent(char key, CharSupplier valueProvider) { synchronized(mutex) { return map.supplyCharIfAbsent(key, valueProvider); } }
+		@Override
+		public char computeCharNonDefault(char key, CharCharUnaryOperator mappingFunction) { synchronized(mutex) { return map.computeCharNonDefault(key, mappingFunction); } }
+		@Override
+		public char computeCharIfAbsentNonDefault(char key, CharUnaryOperator mappingFunction) { synchronized(mutex) { return map.computeCharIfAbsentNonDefault(key, mappingFunction); } }
+		@Override
+		public char computeCharIfPresentNonDefault(char key, CharCharUnaryOperator mappingFunction) { synchronized(mutex) { return map.computeCharIfPresentNonDefault(key, mappingFunction); } }
 		@Override
 		public char supplyCharIfAbsentNonDefault(char key, CharSupplier valueProvider) { synchronized(mutex) { return map.supplyCharIfAbsentNonDefault(key, valueProvider); } }
 		@Override

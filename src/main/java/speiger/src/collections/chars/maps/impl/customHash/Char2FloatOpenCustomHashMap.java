@@ -463,6 +463,42 @@ public class Char2FloatOpenCustomHashMap extends AbstractChar2FloatMap implement
 	}
 	
 	@Override
+	public float computeFloatIfAbsent(char key, Char2FloatFunction mappingFunction) {
+		Objects.requireNonNull(mappingFunction);
+		int index = findIndex(key);
+		if(index < 0) {
+			float newValue = mappingFunction.applyAsFloat(key);
+			insert(-index-1, key, newValue);
+			return newValue;
+		}
+		float newValue = values[index];
+		return newValue;
+	}
+		
+	@Override
+	public float supplyFloatIfAbsent(char key, FloatSupplier valueProvider) {
+		Objects.requireNonNull(valueProvider);
+		int index = findIndex(key);
+		if(index < 0) {
+			float newValue = valueProvider.getAsFloat();
+			insert(-index-1, key, newValue);
+			return newValue;
+		}
+		float newValue = values[index];
+		return newValue;
+	}
+	
+	@Override
+	public float computeFloatIfPresent(char key, CharFloatUnaryOperator mappingFunction) {
+		Objects.requireNonNull(mappingFunction);
+		int index = findIndex(key);
+		if(index < 0) return getDefaultReturnValue();
+		float newValue = mappingFunction.applyAsFloat(key, values[index]);
+		values[index] = newValue;
+		return newValue;
+	}
+	
+	@Override
 	public float computeFloatNonDefault(char key, CharFloatUnaryOperator mappingFunction) {
 		Objects.requireNonNull(mappingFunction);
 		int index = findIndex(key);
@@ -478,19 +514,6 @@ public class Char2FloatOpenCustomHashMap extends AbstractChar2FloatMap implement
 			return newValue;
 		}
 		values[index] = newValue;
-		return newValue;
-	}
-	
-	@Override
-	public float computeFloatIfAbsent(char key, Char2FloatFunction mappingFunction) {
-		Objects.requireNonNull(mappingFunction);
-		int index = findIndex(key);
-		if(index < 0) {
-			float newValue = mappingFunction.applyAsFloat(key);
-			insert(-index-1, key, newValue);
-			return newValue;
-		}
-		float newValue = values[index];
 		return newValue;
 	}
 	
@@ -514,44 +537,21 @@ public class Char2FloatOpenCustomHashMap extends AbstractChar2FloatMap implement
 	}
 	
 	@Override
-	public float supplyFloatIfAbsent(char key, FloatSupplier valueProvider) {
-		Objects.requireNonNull(valueProvider);
-		int index = findIndex(key);
-		if(index < 0) {
-			float newValue = valueProvider.getAsDouble();
-			insert(-index-1, key, newValue);
-			return newValue;
-		}
-		float newValue = values[index];
-		return newValue;
-	}
-	
-	@Override
 	public float supplyFloatIfAbsentNonDefault(char key, FloatSupplier valueProvider) {
 		Objects.requireNonNull(valueProvider);
 		int index = findIndex(key);
 		if(index < 0) {
-			float newValue = valueProvider.getAsDouble();
+			float newValue = valueProvider.getAsFloat();
 			if(Float.floatToIntBits(newValue) == Float.floatToIntBits(getDefaultReturnValue())) return newValue;
 			insert(-index-1, key, newValue);
 			return newValue;
 		}
 		float newValue = values[index];
 		if(Float.floatToIntBits(newValue) == Float.floatToIntBits(getDefaultReturnValue())) {
-			newValue = valueProvider.getAsDouble();
+			newValue = valueProvider.getAsFloat();
 			if(Float.floatToIntBits(newValue) == Float.floatToIntBits(getDefaultReturnValue())) return newValue;
 			values[index] = newValue;
 		}
-		return newValue;
-	}
-	
-	@Override
-	public float computeFloatIfPresent(char key, CharFloatUnaryOperator mappingFunction) {
-		Objects.requireNonNull(mappingFunction);
-		int index = findIndex(key);
-		if(index < 0) return getDefaultReturnValue();
-		float newValue = mappingFunction.applyAsFloat(key, values[index]);
-		values[index] = newValue;
 		return newValue;
 	}
 	

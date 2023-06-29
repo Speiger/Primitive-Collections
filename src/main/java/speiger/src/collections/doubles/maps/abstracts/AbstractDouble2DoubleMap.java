@@ -156,6 +156,39 @@ public abstract class AbstractDouble2DoubleMap extends AbstractMap<Double, Doubl
 	}
 	
 	@Override
+	public double computeDoubleIfAbsent(double key, DoubleUnaryOperator mappingFunction) {
+		Objects.requireNonNull(mappingFunction);
+		if(!containsKey(key)) {
+			double newValue = mappingFunction.applyAsDouble(key);
+			put(key, newValue);
+			return newValue;
+		}
+		return get(key);
+	}
+	
+	@Override
+	public double supplyDoubleIfAbsent(double key, DoubleSupplier valueProvider) {
+		Objects.requireNonNull(valueProvider);
+		if(!containsKey(key)) {
+			double newValue = valueProvider.getAsDouble();
+			put(key, newValue);
+			return newValue;
+		}
+		return get(key);
+	}
+	
+	@Override
+	public double computeDoubleIfPresent(double key, DoubleDoubleUnaryOperator mappingFunction) {
+		Objects.requireNonNull(mappingFunction);
+		if(containsKey(key)) {
+			double newValue = mappingFunction.applyAsDouble(key, get(key));
+			put(key, newValue);
+			return newValue;
+		}
+		return getDefaultReturnValue();
+	}
+	
+	@Override
 	public double computeDoubleNonDefault(double key, DoubleDoubleUnaryOperator mappingFunction) {
 		Objects.requireNonNull(mappingFunction);
 		double value = get(key);
@@ -169,17 +202,6 @@ public abstract class AbstractDouble2DoubleMap extends AbstractMap<Double, Doubl
 		}
 		put(key, newValue);
 		return newValue;
-	}
-	
-	@Override
-	public double computeDoubleIfAbsent(double key, DoubleUnaryOperator mappingFunction) {
-		Objects.requireNonNull(mappingFunction);
-		if(!containsKey(key)) {
-			double newValue = mappingFunction.applyAsDouble(key);
-			put(key, newValue);
-			return newValue;
-		}
-		return get(key);
 	}
 	
 	@Override
@@ -197,17 +219,6 @@ public abstract class AbstractDouble2DoubleMap extends AbstractMap<Double, Doubl
 	}
 	
 	@Override
-	public double supplyDoubleIfAbsent(double key, DoubleSupplier valueProvider) {
-		Objects.requireNonNull(valueProvider);
-		if(!containsKey(key)) {
-			double newValue = valueProvider.getAsDouble();
-			put(key, newValue);
-			return newValue;
-		}
-		return get(key);
-	}
-	
-	@Override
 	public double supplyDoubleIfAbsentNonDefault(double key, DoubleSupplier valueProvider) {
 		Objects.requireNonNull(valueProvider);
 		double value;
@@ -219,17 +230,6 @@ public abstract class AbstractDouble2DoubleMap extends AbstractMap<Double, Doubl
 			}
 		}
 		return value;
-	}
-	
-	@Override
-	public double computeDoubleIfPresent(double key, DoubleDoubleUnaryOperator mappingFunction) {
-		Objects.requireNonNull(mappingFunction);
-		if(containsKey(key)) {
-			double newValue = mappingFunction.applyAsDouble(key, get(key));
-			put(key, newValue);
-			return newValue;
-		}
-		return getDefaultReturnValue();
 	}
 	
 	@Override

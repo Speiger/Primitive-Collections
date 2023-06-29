@@ -413,20 +413,19 @@ public class ImmutableLong2BooleanOpenHashMap extends AbstractLong2BooleanMap im
 	@Override
 	public boolean computeBoolean(long key, LongBooleanUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
 	@Override
-	public boolean computeBooleanNonDefault(long key, LongBooleanUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
-	@Override
 	public boolean computeBooleanIfAbsent(long key, LongPredicate mappingFunction) { throw new UnsupportedOperationException(); }
-	@Override
-	public boolean computeBooleanIfAbsentNonDefault(long key, LongPredicate mappingFunction) { throw new UnsupportedOperationException(); }
 	@Override
 	public boolean supplyBooleanIfAbsent(long key, BooleanSupplier valueProvider) { throw new UnsupportedOperationException(); }
 	@Override
-	public boolean supplyBooleanIfAbsentNonDefault(long key, BooleanSupplier valueProvider) { throw new UnsupportedOperationException(); }
-	@Override
 	public boolean computeBooleanIfPresent(long key, LongBooleanUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
 	@Override
+	public boolean computeBooleanNonDefault(long key, LongBooleanUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
+	@Override
+	public boolean computeBooleanIfAbsentNonDefault(long key, LongPredicate mappingFunction) { throw new UnsupportedOperationException(); }
+	@Override
+	public boolean supplyBooleanIfAbsentNonDefault(long key, BooleanSupplier valueProvider) { throw new UnsupportedOperationException(); }
+	@Override
 	public boolean computeBooleanIfPresentNonDefault(long key, LongBooleanUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
-	
 	@Override
 	public boolean mergeBoolean(long key, boolean value, BooleanBooleanUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
 	

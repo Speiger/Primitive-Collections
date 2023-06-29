@@ -440,17 +440,31 @@ public class Object2ByteConcurrentOpenHashMap<T> extends AbstractObject2ByteMap<
 	}
 	
 	@Override
-	public byte computeByteNonDefault(T key, ObjectByteUnaryOperator<T> mappingFunction) {
-		Objects.requireNonNull(mappingFunction);
-		int hash = getHashCode(key);
-		return getSegment(hash).computeNonDefault(hash, key, mappingFunction);
-	}
-
-	@Override
 	public byte computeByteIfAbsent(T key, ToByteFunction<T> mappingFunction) {
 		Objects.requireNonNull(mappingFunction);
 		int hash = getHashCode(key);
 		return getSegment(hash).computeIfAbsent(hash, key, mappingFunction);
+	}
+	
+	@Override
+	public byte supplyByteIfAbsent(T key, ByteSupplier valueProvider) {
+		Objects.requireNonNull(valueProvider);
+		int hash = getHashCode(key);
+		return getSegment(hash).supplyIfAbsent(hash, key, valueProvider);
+	}
+	
+	@Override
+	public byte computeByteIfPresent(T key, ObjectByteUnaryOperator<T> mappingFunction) {
+		Objects.requireNonNull(mappingFunction);
+		int hash = getHashCode(key);
+		return getSegment(hash).computeIfPresent(hash, key, mappingFunction);
+	}
+	
+	@Override
+	public byte computeByteNonDefault(T key, ObjectByteUnaryOperator<T> mappingFunction) {
+		Objects.requireNonNull(mappingFunction);
+		int hash = getHashCode(key);
+		return getSegment(hash).computeNonDefault(hash, key, mappingFunction);
 	}
 	
 	@Override
@@ -461,24 +475,10 @@ public class Object2ByteConcurrentOpenHashMap<T> extends AbstractObject2ByteMap<
 	}
 
 	@Override
-	public byte supplyByteIfAbsent(T key, ByteSupplier valueProvider) {
-		Objects.requireNonNull(valueProvider);
-		int hash = getHashCode(key);
-		return getSegment(hash).supplyIfAbsent(hash, key, valueProvider);
-	}
-	
-	@Override
 	public byte supplyByteIfAbsentNonDefault(T key, ByteSupplier valueProvider) {
 		Objects.requireNonNull(valueProvider);
 		int hash = getHashCode(key);
 		return getSegment(hash).supplyIfAbsentNonDefault(hash, key, valueProvider);
-	}
-	
-	@Override
-	public byte computeByteIfPresent(T key, ObjectByteUnaryOperator<T> mappingFunction) {
-		Objects.requireNonNull(mappingFunction);
-		int hash = getHashCode(key);
-		return getSegment(hash).computeIfPresent(hash, key, mappingFunction);
 	}
 	
 	@Override
@@ -2028,6 +2028,54 @@ public class Object2ByteConcurrentOpenHashMap<T> extends AbstractObject2ByteMap<
 			}
 		}
 		
+		protected byte computeIfAbsent(int hash, T key, ToByteFunction<T> mappingFunction) {
+			long stamp = writeLock();
+			try {
+				int index = findIndex(hash, key);
+				if(index < 0) {
+					byte newValue = mappingFunction.applyAsByte(key);
+					insert(-index-1, key, newValue);
+					return newValue;
+				}
+				byte newValue = values[index];
+				return newValue;
+			}
+			finally {
+				unlockWrite(stamp);
+			}
+		}
+				
+		protected byte supplyIfAbsent(int hash, T key, ByteSupplier valueProvider) {
+			long stamp = writeLock();
+			try {
+				int index = findIndex(hash, key);
+				if(index < 0) {
+					byte newValue = valueProvider.getAsByte();
+					insert(-index-1, key, newValue);
+					return newValue;
+				}
+				byte newValue = values[index];
+				return newValue;
+			}
+			finally {
+				unlockWrite(stamp);
+			}
+		}
+				
+		protected byte computeIfPresent(int hash, T key, ObjectByteUnaryOperator<T> mappingFunction) {
+			long stamp = writeLock();
+			try {
+				int index = findIndex(hash, key);
+				if(index < 0) return getDefaultReturnValue();
+				byte newValue = mappingFunction.applyAsByte(key, values[index]);
+				values[index] = newValue;
+				return newValue;
+			}
+			finally {
+				unlockWrite(stamp);
+			}
+		}
+		
 		protected byte computeNonDefault(int hash, T key, ObjectByteUnaryOperator<T> mappingFunction) {
 			long stamp = writeLock();
 			try {
@@ -2044,23 +2092,6 @@ public class Object2ByteConcurrentOpenHashMap<T> extends AbstractObject2ByteMap<
 					return newValue;
 				}
 				values[index] = newValue;
-				return newValue;
-			}
-			finally {
-				unlockWrite(stamp);
-			}
-		}
-		
-		protected byte computeIfAbsent(int hash, T key, ToByteFunction<T> mappingFunction) {
-			long stamp = writeLock();
-			try {
-				int index = findIndex(hash, key);
-				if(index < 0) {
-					byte newValue = mappingFunction.applyAsByte(key);
-					insert(-index-1, key, newValue);
-					return newValue;
-				}
-				byte newValue = values[index];
 				return newValue;
 			}
 			finally {
@@ -2091,53 +2122,22 @@ public class Object2ByteConcurrentOpenHashMap<T> extends AbstractObject2ByteMap<
 			}
 		}
 		
-		protected byte supplyIfAbsent(int hash, T key, ByteSupplier valueProvider) {
-			long stamp = writeLock();
-			try {
-				int index = findIndex(hash, key);
-				if(index < 0) {
-					byte newValue = valueProvider.getAsInt();
-					insert(-index-1, key, newValue);
-					return newValue;
-				}
-				byte newValue = values[index];
-				return newValue;
-			}
-			finally {
-				unlockWrite(stamp);
-			}
-		}
-		
 		protected byte supplyIfAbsentNonDefault(int hash, T key, ByteSupplier valueProvider) {
 			long stamp = writeLock();
 			try {
 				int index = findIndex(hash, key);
 				if(index < 0) {
-					byte newValue = valueProvider.getAsInt();
+					byte newValue = valueProvider.getAsByte();
 					if(newValue == getDefaultReturnValue()) return newValue;
 					insert(-index-1, key, newValue);
 					return newValue;
 				}
 				byte newValue = values[index];
 				if(newValue == getDefaultReturnValue()) {
-					newValue = valueProvider.getAsInt();
+					newValue = valueProvider.getAsByte();
 					if(newValue == getDefaultReturnValue()) return newValue;
 					values[index] = newValue;
 				}
-				return newValue;
-			}
-			finally {
-				unlockWrite(stamp);
-			}
-		}
-		
-		protected byte computeIfPresent(int hash, T key, ObjectByteUnaryOperator<T> mappingFunction) {
-			long stamp = writeLock();
-			try {
-				int index = findIndex(hash, key);
-				if(index < 0) return getDefaultReturnValue();
-				byte newValue = mappingFunction.applyAsByte(key, values[index]);
-				values[index] = newValue;
 				return newValue;
 			}
 			finally {

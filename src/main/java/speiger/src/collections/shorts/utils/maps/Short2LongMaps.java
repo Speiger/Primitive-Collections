@@ -250,17 +250,17 @@ public class Short2LongMaps
 		@Override
 		public long computeLong(short key, ShortLongUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
 		@Override
-		public long computeLongNonDefault(short key, ShortLongUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
-		@Override
 		public long computeLongIfAbsent(short key, Short2LongFunction mappingFunction) { throw new UnsupportedOperationException(); }
-		@Override
-		public long computeLongIfAbsentNonDefault(short key, Short2LongFunction mappingFunction) { throw new UnsupportedOperationException(); }
 		@Override
 		public long computeLongIfPresent(short key, ShortLongUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
 		@Override
-		public long computeLongIfPresentNonDefault(short key, ShortLongUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
-		@Override
 		public long supplyLongIfAbsent(short key, LongSupplier valueProvider) { throw new UnsupportedOperationException(); }
+		@Override
+		public long computeLongNonDefault(short key, ShortLongUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
+		@Override
+		public long computeLongIfAbsentNonDefault(short key, Short2LongFunction mappingFunction) { throw new UnsupportedOperationException(); }
+		@Override
+		public long computeLongIfPresentNonDefault(short key, ShortLongUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
 		@Override
 		public long supplyLongIfAbsentNonDefault(short key, LongSupplier valueProvider) { throw new UnsupportedOperationException(); }
 		@Override
@@ -312,17 +312,17 @@ public class Short2LongMaps
 		@Override
 		public long computeLong(short key, ShortLongUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
 		@Override
-		public long computeLongNonDefault(short key, ShortLongUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
-		@Override
 		public long computeLongIfAbsent(short key, Short2LongFunction mappingFunction) { throw new UnsupportedOperationException(); }
-		@Override
-		public long computeLongIfAbsentNonDefault(short key, Short2LongFunction mappingFunction) { throw new UnsupportedOperationException(); }
 		@Override
 		public long computeLongIfPresent(short key, ShortLongUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
 		@Override
-		public long computeLongIfPresentNonDefault(short key, ShortLongUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
-		@Override
 		public long supplyLongIfAbsent(short key, LongSupplier valueProvider) { throw new UnsupportedOperationException(); }
+		@Override
+		public long computeLongNonDefault(short key, ShortLongUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
+		@Override
+		public long computeLongIfAbsentNonDefault(short key, Short2LongFunction mappingFunction) { throw new UnsupportedOperationException(); }
+		@Override
+		public long computeLongIfPresentNonDefault(short key, ShortLongUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
 		@Override
 		public long supplyLongIfAbsentNonDefault(short key, LongSupplier valueProvider) { throw new UnsupportedOperationException(); }
 		@Override
@@ -547,17 +547,17 @@ public class Short2LongMaps
 		@Override
 		public long computeLong(short key, ShortLongUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
 		@Override
-		public long computeLongNonDefault(short key, ShortLongUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
-		@Override
 		public long computeLongIfAbsent(short key, Short2LongFunction mappingFunction) { throw new UnsupportedOperationException(); }
-		@Override
-		public long computeLongIfAbsentNonDefault(short key, Short2LongFunction mappingFunction) { throw new UnsupportedOperationException(); }
 		@Override
 		public long computeLongIfPresent(short key, ShortLongUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
 		@Override
-		public long computeLongIfPresentNonDefault(short key, ShortLongUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
-		@Override
 		public long supplyLongIfAbsent(short key, LongSupplier valueProvider) { throw new UnsupportedOperationException(); }
+		@Override
+		public long computeLongNonDefault(short key, ShortLongUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
+		@Override
+		public long computeLongIfAbsentNonDefault(short key, Short2LongFunction mappingFunction) { throw new UnsupportedOperationException(); }
+		@Override
+		public long computeLongIfPresentNonDefault(short key, ShortLongUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
 		@Override
 		public long supplyLongIfAbsentNonDefault(short key, LongSupplier valueProvider) { throw new UnsupportedOperationException(); }
 		@Override
@@ -955,17 +955,17 @@ public class Short2LongMaps
 		@Override
 		public long computeLong(short key, ShortLongUnaryOperator mappingFunction) { synchronized(mutex) { return map.computeLong(key, mappingFunction); } }
 		@Override
-		public long computeLongNonDefault(short key, ShortLongUnaryOperator mappingFunction) { synchronized(mutex) { return map.computeLongNonDefault(key, mappingFunction); } }
-		@Override
 		public long computeLongIfAbsent(short key, Short2LongFunction mappingFunction) { synchronized(mutex) { return map.computeLongIfAbsent(key, mappingFunction); } }
-		@Override
-		public long computeLongIfAbsentNonDefault(short key, Short2LongFunction mappingFunction) { synchronized(mutex) { return map.computeLongIfAbsentNonDefault(key, mappingFunction); } }
 		@Override
 		public long computeLongIfPresent(short key, ShortLongUnaryOperator mappingFunction) { synchronized(mutex) { return map.computeLongIfPresent(key, mappingFunction); } }
 		@Override
-		public long computeLongIfPresentNonDefault(short key, ShortLongUnaryOperator mappingFunction) { synchronized(mutex) { return map.computeLongIfPresentNonDefault(key, mappingFunction); } }
-		@Override
 		public long supplyLongIfAbsent(short key, LongSupplier valueProvider) { synchronized(mutex) { return map.supplyLongIfAbsent(key, valueProvider); } }
+		@Override
+		public long computeLongNonDefault(short key, ShortLongUnaryOperator mappingFunction) { synchronized(mutex) { return map.computeLongNonDefault(key, mappingFunction); } }
+		@Override
+		public long computeLongIfAbsentNonDefault(short key, Short2LongFunction mappingFunction) { synchronized(mutex) { return map.computeLongIfAbsentNonDefault(key, mappingFunction); } }
+		@Override
+		public long computeLongIfPresentNonDefault(short key, ShortLongUnaryOperator mappingFunction) { synchronized(mutex) { return map.computeLongIfPresentNonDefault(key, mappingFunction); } }
 		@Override
 		public long supplyLongIfAbsentNonDefault(short key, LongSupplier valueProvider) { synchronized(mutex) { return map.supplyLongIfAbsentNonDefault(key, valueProvider); } }
 		@Override

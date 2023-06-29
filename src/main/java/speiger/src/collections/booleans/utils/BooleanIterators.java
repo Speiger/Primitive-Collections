@@ -2,6 +2,7 @@ package speiger.src.collections.booleans.utils;
 
 import java.util.Iterator;
 import java.util.NoSuchElementException;
+import java.util.function.Consumer;
 
 import speiger.src.collections.booleans.collections.BooleanIterator;
 import speiger.src.collections.objects.collections.ObjectIterator;
@@ -9,6 +10,7 @@ import speiger.src.collections.objects.utils.ObjectIterators;
 import speiger.src.collections.booleans.functions.BooleanConsumer;
 import speiger.src.collections.booleans.functions.BooleanComparator;
 import speiger.src.collections.booleans.functions.function.BooleanFunction;
+import speiger.src.collections.objects.functions.consumer.ObjectBooleanConsumer;
 import speiger.src.collections.booleans.functions.function.BooleanPredicate;
 import speiger.src.collections.booleans.lists.BooleanList;
 import speiger.src.collections.booleans.lists.BooleanArrayList;
@@ -16,6 +18,7 @@ import speiger.src.collections.booleans.lists.BooleanArrayList;
 import speiger.src.collections.booleans.lists.BooleanListIterator;
 import speiger.src.collections.booleans.collections.BooleanBidirectionalIterator;
 import speiger.src.collections.booleans.collections.BooleanCollection;
+import speiger.src.collections.booleans.utils.BooleanCollections.CollectionWrapper;
 
 /**
  * A Helper class for Iterators
@@ -204,6 +207,24 @@ public class BooleanIterators
 	 */
 	public static BooleanIterator repeat(Iterator<? extends Boolean> iterator, int repeats) {
 		return new RepeatingIterator(wrap(iterator), repeats);
+	}
+	
+	/**
+	 * A Helper function that creates a infinitely looping iterator
+	 * @param iterator that should be looping infinitely
+	 * @return a infinitely looping iterator
+	 */
+	public static BooleanIterator infinite(BooleanIterator iterator) {
+		return new InfiniteIterator(iterator);
+	}
+	
+	/**
+	 * A Helper function that creates a infinitely looping iterator from a Java Iterator
+	 * @param iterator that should be looping infinitely
+	 * @return a infinitely looping iterator
+	 */
+	public static BooleanIterator infinite(Iterator<? extends Boolean> iterator) {
+		return new InfiniteIterator(wrap(iterator));
 	}
 	
 	/**
@@ -839,6 +860,40 @@ public class BooleanIterators
 			foundNext = false;
 			return result;
 		}
+	}
+	
+	private static class InfiniteIterator implements BooleanIterator
+	{
+		BooleanIterator iter;
+		CollectionWrapper looper = BooleanCollections.wrapper();
+		int index = 0;
+		
+		public InfiniteIterator(BooleanIterator iter) {
+			this.iter = iter;
+		}
+		
+		@Override
+		public boolean hasNext() {
+			return true;
+		}
+
+		@Override
+		public boolean nextBoolean() {
+			if(iter != null) {
+				if(iter.hasNext()) {
+					boolean value = iter.nextBoolean();
+					looper.add(value);
+					return value;
+				}
+				else iter = null;
+			}
+			return looper.getBoolean((index++) % looper.size());
+		}
+		
+		@Override
+		public void forEachRemaining(BooleanConsumer action) { throw new UnsupportedOperationException("This is a instant deadlock, so unsupported"); }
+		public void forEachRemaining(Consumer<? super Boolean> action) { throw new UnsupportedOperationException("This is a instant deadlock, so unsupported"); }
+		public <E> void forEachRemaining(E input, ObjectBooleanConsumer<E> action) { throw new UnsupportedOperationException("This is a instant deadlock, so unsupported"); }
 	}
 	
 	private static class RepeatingIterator implements BooleanIterator

@@ -413,20 +413,19 @@ public class ImmutableChar2BooleanOpenHashMap extends AbstractChar2BooleanMap im
 	@Override
 	public boolean computeBoolean(char key, CharBooleanUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
 	@Override
-	public boolean computeBooleanNonDefault(char key, CharBooleanUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
-	@Override
 	public boolean computeBooleanIfAbsent(char key, CharPredicate mappingFunction) { throw new UnsupportedOperationException(); }
-	@Override
-	public boolean computeBooleanIfAbsentNonDefault(char key, CharPredicate mappingFunction) { throw new UnsupportedOperationException(); }
 	@Override
 	public boolean supplyBooleanIfAbsent(char key, BooleanSupplier valueProvider) { throw new UnsupportedOperationException(); }
 	@Override
-	public boolean supplyBooleanIfAbsentNonDefault(char key, BooleanSupplier valueProvider) { throw new UnsupportedOperationException(); }
-	@Override
 	public boolean computeBooleanIfPresent(char key, CharBooleanUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
 	@Override
+	public boolean computeBooleanNonDefault(char key, CharBooleanUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
+	@Override
+	public boolean computeBooleanIfAbsentNonDefault(char key, CharPredicate mappingFunction) { throw new UnsupportedOperationException(); }
+	@Override
+	public boolean supplyBooleanIfAbsentNonDefault(char key, BooleanSupplier valueProvider) { throw new UnsupportedOperationException(); }
+	@Override
 	public boolean computeBooleanIfPresentNonDefault(char key, CharBooleanUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
-	
 	@Override
 	public boolean mergeBoolean(char key, boolean value, BooleanBooleanUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
 	

@@ -147,6 +147,15 @@ public class FloatArrayFIFOQueue extends AbstractFloatPriorityQueue implements F
 	}
 	
 	@Override
+	public boolean contains(float e) {
+		if(first == last) return false;
+		for(int i = 0,m=size();i<m;i++) {
+			if(e == array[(first + i) % array.length]) return true;
+		}
+		return false;
+	}
+	
+	@Override
 	public boolean removeFirst(float e) {
 		if(first == last) return false;
 		for(int i = 0,m=size();i<m;i++) {

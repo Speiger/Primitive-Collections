@@ -418,20 +418,19 @@ public class ImmutableShort2IntOpenHashMap extends AbstractShort2IntMap implemen
 	@Override
 	public int computeInt(short key, ShortIntUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
 	@Override
-	public int computeIntNonDefault(short key, ShortIntUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
-	@Override
 	public int computeIntIfAbsent(short key, Short2IntFunction mappingFunction) { throw new UnsupportedOperationException(); }
-	@Override
-	public int computeIntIfAbsentNonDefault(short key, Short2IntFunction mappingFunction) { throw new UnsupportedOperationException(); }
 	@Override
 	public int supplyIntIfAbsent(short key, IntSupplier valueProvider) { throw new UnsupportedOperationException(); }
 	@Override
-	public int supplyIntIfAbsentNonDefault(short key, IntSupplier valueProvider) { throw new UnsupportedOperationException(); }
-	@Override
 	public int computeIntIfPresent(short key, ShortIntUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
 	@Override
+	public int computeIntNonDefault(short key, ShortIntUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
+	@Override
+	public int computeIntIfAbsentNonDefault(short key, Short2IntFunction mappingFunction) { throw new UnsupportedOperationException(); }
+	@Override
+	public int supplyIntIfAbsentNonDefault(short key, IntSupplier valueProvider) { throw new UnsupportedOperationException(); }
+	@Override
 	public int computeIntIfPresentNonDefault(short key, ShortIntUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
-	
 	@Override
 	public int mergeInt(short key, int value, IntIntUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
 	

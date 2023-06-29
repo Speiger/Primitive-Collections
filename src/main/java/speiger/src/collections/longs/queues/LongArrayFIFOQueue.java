@@ -147,6 +147,15 @@ public class LongArrayFIFOQueue extends AbstractLongPriorityQueue implements Lon
 	}
 	
 	@Override
+	public boolean contains(long e) {
+		if(first == last) return false;
+		for(int i = 0,m=size();i<m;i++) {
+			if(e == array[(first + i) % array.length]) return true;
+		}
+		return false;
+	}
+	
+	@Override
 	public boolean removeFirst(long e) {
 		if(first == last) return false;
 		for(int i = 0,m=size();i<m;i++) {

@@ -452,17 +452,31 @@ public class Double2IntConcurrentOpenHashMap extends AbstractDouble2IntMap imple
 	}
 	
 	@Override
-	public int computeIntNonDefault(double key, DoubleIntUnaryOperator mappingFunction) {
-		Objects.requireNonNull(mappingFunction);
-		int hash = getHashCode(key);
-		return getSegment(hash).computeNonDefault(hash, key, mappingFunction);
-	}
-
-	@Override
 	public int computeIntIfAbsent(double key, Double2IntFunction mappingFunction) {
 		Objects.requireNonNull(mappingFunction);
 		int hash = getHashCode(key);
 		return getSegment(hash).computeIfAbsent(hash, key, mappingFunction);
+	}
+	
+	@Override
+	public int supplyIntIfAbsent(double key, IntSupplier valueProvider) {
+		Objects.requireNonNull(valueProvider);
+		int hash = getHashCode(key);
+		return getSegment(hash).supplyIfAbsent(hash, key, valueProvider);
+	}
+	
+	@Override
+	public int computeIntIfPresent(double key, DoubleIntUnaryOperator mappingFunction) {
+		Objects.requireNonNull(mappingFunction);
+		int hash = getHashCode(key);
+		return getSegment(hash).computeIfPresent(hash, key, mappingFunction);
+	}
+	
+	@Override
+	public int computeIntNonDefault(double key, DoubleIntUnaryOperator mappingFunction) {
+		Objects.requireNonNull(mappingFunction);
+		int hash = getHashCode(key);
+		return getSegment(hash).computeNonDefault(hash, key, mappingFunction);
 	}
 	
 	@Override
@@ -473,24 +487,10 @@ public class Double2IntConcurrentOpenHashMap extends AbstractDouble2IntMap imple
 	}
 
 	@Override
-	public int supplyIntIfAbsent(double key, IntSupplier valueProvider) {
-		Objects.requireNonNull(valueProvider);
-		int hash = getHashCode(key);
-		return getSegment(hash).supplyIfAbsent(hash, key, valueProvider);
-	}
-	
-	@Override
 	public int supplyIntIfAbsentNonDefault(double key, IntSupplier valueProvider) {
 		Objects.requireNonNull(valueProvider);
 		int hash = getHashCode(key);
 		return getSegment(hash).supplyIfAbsentNonDefault(hash, key, valueProvider);
-	}
-	
-	@Override
-	public int computeIntIfPresent(double key, DoubleIntUnaryOperator mappingFunction) {
-		Objects.requireNonNull(mappingFunction);
-		int hash = getHashCode(key);
-		return getSegment(hash).computeIfPresent(hash, key, mappingFunction);
 	}
 	
 	@Override
@@ -2076,6 +2076,54 @@ public class Double2IntConcurrentOpenHashMap extends AbstractDouble2IntMap imple
 			}
 		}
 		
+		protected int computeIfAbsent(int hash, double key, Double2IntFunction mappingFunction) {
+			long stamp = writeLock();
+			try {
+				int index = findIndex(hash, key);
+				if(index < 0) {
+					int newValue = mappingFunction.applyAsInt(key);
+					insert(-index-1, key, newValue);
+					return newValue;
+				}
+				int newValue = values[index];
+				return newValue;
+			}
+			finally {
+				unlockWrite(stamp);
+			}
+		}
+				
+		protected int supplyIfAbsent(int hash, double key, IntSupplier valueProvider) {
+			long stamp = writeLock();
+			try {
+				int index = findIndex(hash, key);
+				if(index < 0) {
+					int newValue = valueProvider.getAsInt();
+					insert(-index-1, key, newValue);
+					return newValue;
+				}
+				int newValue = values[index];
+				return newValue;
+			}
+			finally {
+				unlockWrite(stamp);
+			}
+		}
+				
+		protected int computeIfPresent(int hash, double key, DoubleIntUnaryOperator mappingFunction) {
+			long stamp = writeLock();
+			try {
+				int index = findIndex(hash, key);
+				if(index < 0) return getDefaultReturnValue();
+				int newValue = mappingFunction.applyAsInt(key, values[index]);
+				values[index] = newValue;
+				return newValue;
+			}
+			finally {
+				unlockWrite(stamp);
+			}
+		}
+		
 		protected int computeNonDefault(int hash, double key, DoubleIntUnaryOperator mappingFunction) {
 			long stamp = writeLock();
 			try {
@@ -2092,23 +2140,6 @@ public class Double2IntConcurrentOpenHashMap extends AbstractDouble2IntMap imple
 					return newValue;
 				}
 				values[index] = newValue;
-				return newValue;
-			}
-			finally {
-				unlockWrite(stamp);
-			}
-		}
-		
-		protected int computeIfAbsent(int hash, double key, Double2IntFunction mappingFunction) {
-			long stamp = writeLock();
-			try {
-				int index = findIndex(hash, key);
-				if(index < 0) {
-					int newValue = mappingFunction.applyAsInt(key);
-					insert(-index-1, key, newValue);
-					return newValue;
-				}
-				int newValue = values[index];
 				return newValue;
 			}
 			finally {
@@ -2139,23 +2170,6 @@ public class Double2IntConcurrentOpenHashMap extends AbstractDouble2IntMap imple
 			}
 		}
 		
-		protected int supplyIfAbsent(int hash, double key, IntSupplier valueProvider) {
-			long stamp = writeLock();
-			try {
-				int index = findIndex(hash, key);
-				if(index < 0) {
-					int newValue = valueProvider.getAsInt();
-					insert(-index-1, key, newValue);
-					return newValue;
-				}
-				int newValue = values[index];
-				return newValue;
-			}
-			finally {
-				unlockWrite(stamp);
-			}
-		}
-		
 		protected int supplyIfAbsentNonDefault(int hash, double key, IntSupplier valueProvider) {
 			long stamp = writeLock();
 			try {
@@ -2172,20 +2186,6 @@ public class Double2IntConcurrentOpenHashMap extends AbstractDouble2IntMap imple
 					if(newValue == getDefaultReturnValue()) return newValue;
 					values[index] = newValue;
 				}
-				return newValue;
-			}
-			finally {
-				unlockWrite(stamp);
-			}
-		}
-		
-		protected int computeIfPresent(int hash, double key, DoubleIntUnaryOperator mappingFunction) {
-			long stamp = writeLock();
-			try {
-				int index = findIndex(hash, key);
-				if(index < 0) return getDefaultReturnValue();
-				int newValue = mappingFunction.applyAsInt(key, values[index]);
-				values[index] = newValue;
 				return newValue;
 			}
 			finally {

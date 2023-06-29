@@ -452,17 +452,31 @@ public class Float2ByteConcurrentOpenHashMap extends AbstractFloat2ByteMap imple
 	}
 	
 	@Override
-	public byte computeByteNonDefault(float key, FloatByteUnaryOperator mappingFunction) {
-		Objects.requireNonNull(mappingFunction);
-		int hash = getHashCode(key);
-		return getSegment(hash).computeNonDefault(hash, key, mappingFunction);
-	}
-
-	@Override
 	public byte computeByteIfAbsent(float key, Float2ByteFunction mappingFunction) {
 		Objects.requireNonNull(mappingFunction);
 		int hash = getHashCode(key);
 		return getSegment(hash).computeIfAbsent(hash, key, mappingFunction);
+	}
+	
+	@Override
+	public byte supplyByteIfAbsent(float key, ByteSupplier valueProvider) {
+		Objects.requireNonNull(valueProvider);
+		int hash = getHashCode(key);
+		return getSegment(hash).supplyIfAbsent(hash, key, valueProvider);
+	}
+	
+	@Override
+	public byte computeByteIfPresent(float key, FloatByteUnaryOperator mappingFunction) {
+		Objects.requireNonNull(mappingFunction);
+		int hash = getHashCode(key);
+		return getSegment(hash).computeIfPresent(hash, key, mappingFunction);
+	}
+	
+	@Override
+	public byte computeByteNonDefault(float key, FloatByteUnaryOperator mappingFunction) {
+		Objects.requireNonNull(mappingFunction);
+		int hash = getHashCode(key);
+		return getSegment(hash).computeNonDefault(hash, key, mappingFunction);
 	}
 	
 	@Override
@@ -473,24 +487,10 @@ public class Float2ByteConcurrentOpenHashMap extends AbstractFloat2ByteMap imple
 	}
 
 	@Override
-	public byte supplyByteIfAbsent(float key, ByteSupplier valueProvider) {
-		Objects.requireNonNull(valueProvider);
-		int hash = getHashCode(key);
-		return getSegment(hash).supplyIfAbsent(hash, key, valueProvider);
-	}
-	
-	@Override
 	public byte supplyByteIfAbsentNonDefault(float key, ByteSupplier valueProvider) {
 		Objects.requireNonNull(valueProvider);
 		int hash = getHashCode(key);
 		return getSegment(hash).supplyIfAbsentNonDefault(hash, key, valueProvider);
-	}
-	
-	@Override
-	public byte computeByteIfPresent(float key, FloatByteUnaryOperator mappingFunction) {
-		Objects.requireNonNull(mappingFunction);
-		int hash = getHashCode(key);
-		return getSegment(hash).computeIfPresent(hash, key, mappingFunction);
 	}
 	
 	@Override
@@ -2076,6 +2076,54 @@ public class Float2ByteConcurrentOpenHashMap extends AbstractFloat2ByteMap imple
 			}
 		}
 		
+		protected byte computeIfAbsent(int hash, float key, Float2ByteFunction mappingFunction) {
+			long stamp = writeLock();
+			try {
+				int index = findIndex(hash, key);
+				if(index < 0) {
+					byte newValue = mappingFunction.applyAsByte(key);
+					insert(-index-1, key, newValue);
+					return newValue;
+				}
+				byte newValue = values[index];
+				return newValue;
+			}
+			finally {
+				unlockWrite(stamp);
+			}
+		}
+				
+		protected byte supplyIfAbsent(int hash, float key, ByteSupplier valueProvider) {
+			long stamp = writeLock();
+			try {
+				int index = findIndex(hash, key);
+				if(index < 0) {
+					byte newValue = valueProvider.getAsByte();
+					insert(-index-1, key, newValue);
+					return newValue;
+				}
+				byte newValue = values[index];
+				return newValue;
+			}
+			finally {
+				unlockWrite(stamp);
+			}
+		}
+				
+		protected byte computeIfPresent(int hash, float key, FloatByteUnaryOperator mappingFunction) {
+			long stamp = writeLock();
+			try {
+				int index = findIndex(hash, key);
+				if(index < 0) return getDefaultReturnValue();
+				byte newValue = mappingFunction.applyAsByte(key, values[index]);
+				values[index] = newValue;
+				return newValue;
+			}
+			finally {
+				unlockWrite(stamp);
+			}
+		}
+		
 		protected byte computeNonDefault(int hash, float key, FloatByteUnaryOperator mappingFunction) {
 			long stamp = writeLock();
 			try {
@@ -2092,23 +2140,6 @@ public class Float2ByteConcurrentOpenHashMap extends AbstractFloat2ByteMap imple
 					return newValue;
 				}
 				values[index] = newValue;
-				return newValue;
-			}
-			finally {
-				unlockWrite(stamp);
-			}
-		}
-		
-		protected byte computeIfAbsent(int hash, float key, Float2ByteFunction mappingFunction) {
-			long stamp = writeLock();
-			try {
-				int index = findIndex(hash, key);
-				if(index < 0) {
-					byte newValue = mappingFunction.applyAsByte(key);
-					insert(-index-1, key, newValue);
-					return newValue;
-				}
-				byte newValue = values[index];
 				return newValue;
 			}
 			finally {
@@ -2139,53 +2170,22 @@ public class Float2ByteConcurrentOpenHashMap extends AbstractFloat2ByteMap imple
 			}
 		}
 		
-		protected byte supplyIfAbsent(int hash, float key, ByteSupplier valueProvider) {
-			long stamp = writeLock();
-			try {
-				int index = findIndex(hash, key);
-				if(index < 0) {
-					byte newValue = valueProvider.getAsInt();
-					insert(-index-1, key, newValue);
-					return newValue;
-				}
-				byte newValue = values[index];
-				return newValue;
-			}
-			finally {
-				unlockWrite(stamp);
-			}
-		}
-		
 		protected byte supplyIfAbsentNonDefault(int hash, float key, ByteSupplier valueProvider) {
 			long stamp = writeLock();
 			try {
 				int index = findIndex(hash, key);
 				if(index < 0) {
-					byte newValue = valueProvider.getAsInt();
+					byte newValue = valueProvider.getAsByte();
 					if(newValue == getDefaultReturnValue()) return newValue;
 					insert(-index-1, key, newValue);
 					return newValue;
 				}
 				byte newValue = values[index];
 				if(newValue == getDefaultReturnValue()) {
-					newValue = valueProvider.getAsInt();
+					newValue = valueProvider.getAsByte();
 					if(newValue == getDefaultReturnValue()) return newValue;
 					values[index] = newValue;
 				}
-				return newValue;
-			}
-			finally {
-				unlockWrite(stamp);
-			}
-		}
-		
-		protected byte computeIfPresent(int hash, float key, FloatByteUnaryOperator mappingFunction) {
-			long stamp = writeLock();
-			try {
-				int index = findIndex(hash, key);
-				if(index < 0) return getDefaultReturnValue();
-				byte newValue = mappingFunction.applyAsByte(key, values[index]);
-				values[index] = newValue;
 				return newValue;
 			}
 			finally {

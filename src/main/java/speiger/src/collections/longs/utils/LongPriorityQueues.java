@@ -89,6 +89,8 @@ public class LongPriorityQueues
 		@Override
 		public long peek(int index) { synchronized(mutex) { return queue.peek(index); } }
 		@Override
+		public boolean contains(long e) { synchronized(mutex) { return queue.contains(e); } }
+		@Override
 		public boolean removeFirst(long e) { synchronized(mutex) { return queue.removeFirst(e); } }
 		@Override
 		public boolean removeLast(long e) { synchronized(mutex) { return queue.removeLast(e); } }

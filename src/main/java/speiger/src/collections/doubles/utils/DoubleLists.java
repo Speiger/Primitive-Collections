@@ -12,6 +12,7 @@ import speiger.src.collections.doubles.collections.DoubleCollection;
 import speiger.src.collections.doubles.functions.DoubleConsumer;
 import speiger.src.collections.doubles.lists.AbstractDoubleList;
 import speiger.src.collections.doubles.lists.DoubleList;
+import speiger.src.collections.ints.lists.IntList;
 import speiger.src.collections.doubles.lists.DoubleListIterator;
 import speiger.src.collections.utils.SanityChecks;
 
@@ -318,6 +319,16 @@ public class DoubleLists
 		}
 		
 		@Override
+		public DoubleListIterator indexedIterator(int...indecies) {
+			return l.indexedIterator(indecies);
+		}
+		
+		@Override
+		public DoubleListIterator indexedIterator(IntList indecies) {
+			return l.indexedIterator(indecies);
+		}
+		
+		@Override
 		public DoubleList subList(int from, int to) {
 			return DoubleLists.synchronize(l.subList(from, to));
 		}
@@ -427,6 +438,16 @@ public class DoubleLists
 		}
 		
 		@Override
+		public DoubleListIterator indexedIterator(int...indecies) {
+			return DoubleIterators.unmodifiable(l.indexedIterator(indecies));
+		}
+		
+		@Override
+		public DoubleListIterator indexedIterator(IntList indecies) {
+			return DoubleIterators.unmodifiable(l.indexedIterator(indecies));
+		}
+		
+		@Override
 		public DoubleList subList(int from, int to) {
 			return DoubleLists.unmodifiable(l.subList(from, to));
 		}
@@ -512,6 +533,16 @@ public class DoubleLists
 			if(index != 0)
 				throw new IndexOutOfBoundsException();
 			return DoubleIterators.empty();
+		}
+		
+		@Override
+		public DoubleListIterator indexedIterator(int...indecies) {
+			return DoubleIterators.empty(); 
+		}
+		
+		@Override
+		public DoubleListIterator indexedIterator(IntList indecies) {
+			return DoubleIterators.empty(); 
 		}
 		
 		@Override

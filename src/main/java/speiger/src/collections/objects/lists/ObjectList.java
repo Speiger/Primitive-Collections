@@ -11,6 +11,7 @@ import speiger.src.collections.objects.collections.ObjectSplititerator;
 import speiger.src.collections.ints.functions.consumer.IntObjectConsumer;
 import speiger.src.collections.objects.utils.ObjectArrays;
 import speiger.src.collections.objects.utils.ObjectLists;
+import speiger.src.collections.ints.lists.IntList;
 import speiger.src.collections.objects.utils.ObjectSplititerators;
 
 /**
@@ -252,6 +253,24 @@ public interface ObjectList<T> extends ObjectCollection<T>, List<T>
 	 */
 	@Override
 	public ObjectListIterator<T> listIterator(int index);
+	
+	/**
+	 * Creates a Iterator that follows the indecies provided.<br>
+	 * For example if the Lists Contents is:<br> -1, 0 1 <br>and the indecies are: <br>0, 1, 2, 2, 1, 0<br>
+	 * then the iterator will return the following values: <br>-1, 0, 1, 1, 0, -1
+	 * @param indecies that should be used for the iteration.
+	 * @return a custom indexed iterator
+	 */
+	public ObjectListIterator<T> indexedIterator(int...indecies);
+	
+	/**
+	 * Creates a Iterator that follows the indecies provided.<br>
+	 * For example if the Lists Contents is:<br> -1, 0 1 <br>and the indecies are: <br>0, 1, 2, 2, 1, 0<br>
+	 * then the iterator will return the following values: <br>-1, 0, 1, 1, 0, -1
+	 * @param indecies that should be used for the iteration.
+	 * @return a custom indexed iterator
+	 */
+	public ObjectListIterator<T> indexedIterator(IntList indecies);
 	
 	/**
 	 * A Type-Specific List of subList

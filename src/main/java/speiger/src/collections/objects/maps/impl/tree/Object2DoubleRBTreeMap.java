@@ -447,6 +447,43 @@ public class Object2DoubleRBTreeMap<T> extends AbstractObject2DoubleMap<T> imple
 	}
 	
 	@Override
+	public double computeDoubleIfAbsent(T key, ToDoubleFunction<T> mappingFunction) {
+		Objects.requireNonNull(mappingFunction);
+		validate(key);
+		Node<T> entry = findNode(key);
+		if(entry == null) {
+			double newValue = mappingFunction.applyAsDouble(key);
+			put(key, newValue);
+			return newValue;
+		}
+		return entry.value;
+	}
+	
+	@Override
+	public double supplyDoubleIfAbsent(T key, DoubleSupplier valueProvider) {
+		Objects.requireNonNull(valueProvider);
+		validate(key);
+		Node<T> entry = findNode(key);
+		if(entry == null) {
+			double newValue = valueProvider.getAsDouble();
+			put(key, newValue);
+			return newValue;
+		}
+		return entry.value;
+	}
+	
+	@Override
+	public double computeDoubleIfPresent(T key, ObjectDoubleUnaryOperator<T> mappingFunction) {
+		Objects.requireNonNull(mappingFunction);
+		validate(key);
+		Node<T> entry = findNode(key);
+		if(entry == null) return getDefaultReturnValue();
+		double newValue = mappingFunction.applyAsDouble(key, entry.value);
+		entry.value = newValue;
+		return newValue;
+	}
+	
+	@Override
 	public double computeDoubleNonDefault(T key, ObjectDoubleUnaryOperator<T> mappingFunction) {
 		Objects.requireNonNull(mappingFunction);
 		validate(key);
@@ -464,19 +501,6 @@ public class Object2DoubleRBTreeMap<T> extends AbstractObject2DoubleMap<T> imple
 		}
 		entry.value = newValue;
 		return newValue;
-	}
-	
-	@Override
-	public double computeDoubleIfAbsent(T key, ToDoubleFunction<T> mappingFunction) {
-		Objects.requireNonNull(mappingFunction);
-		validate(key);
-		Node<T> entry = findNode(key);
-		if(entry == null) {
-			double newValue = mappingFunction.applyAsDouble(key);
-			put(key, newValue);
-			return newValue;
-		}
-		return entry.value;
 	}
 	
 	@Override
@@ -499,19 +523,6 @@ public class Object2DoubleRBTreeMap<T> extends AbstractObject2DoubleMap<T> imple
 	}
 	
 	@Override
-	public double supplyDoubleIfAbsent(T key, DoubleSupplier valueProvider) {
-		Objects.requireNonNull(valueProvider);
-		validate(key);
-		Node<T> entry = findNode(key);
-		if(entry == null) {
-			double newValue = valueProvider.getAsDouble();
-			put(key, newValue);
-			return newValue;
-		}
-		return entry.value;
-	}
-	
-	@Override
 	public double supplyDoubleIfAbsentNonDefault(T key, DoubleSupplier valueProvider) {
 		Objects.requireNonNull(valueProvider);
 		validate(key);
@@ -528,17 +539,6 @@ public class Object2DoubleRBTreeMap<T> extends AbstractObject2DoubleMap<T> imple
 			entry.value = newValue;
 		}
 		return entry.value;
-	}
-	
-	@Override
-	public double computeDoubleIfPresent(T key, ObjectDoubleUnaryOperator<T> mappingFunction) {
-		Objects.requireNonNull(mappingFunction);
-		validate(key);
-		Node<T> entry = findNode(key);
-		if(entry == null) return getDefaultReturnValue();
-		double newValue = mappingFunction.applyAsDouble(key, entry.value);
-		entry.value = newValue;
-		return newValue;
 	}
 	
 	@Override
@@ -1584,14 +1584,9 @@ public class Object2DoubleRBTreeMap<T> extends AbstractObject2DoubleMap<T> imple
 			map.validate(key);
 			if(!inRange(key)) return getDefaultReturnValue();
 			Node<T> entry = map.findNode(key);
-			if(entry == null || Double.doubleToLongBits(entry.value) == Double.doubleToLongBits(getDefaultReturnValue())) return getDefaultReturnValue();
-			double newValue = mappingFunction.apply(key, entry.value);
-			if(Double.doubleToLongBits(newValue) == Double.doubleToLongBits(getDefaultReturnValue())) {
-				map.removeNode(entry);
-				return newValue;
-			}
-			entry.value = newValue;
-			return newValue;
+			if(entry == null) return getDefaultReturnValue();
+			entry.value = mappingFunction.apply(key, entry.value);
+			return entry.value;
 		}
 		
 		@Override

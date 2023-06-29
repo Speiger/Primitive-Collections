@@ -402,20 +402,19 @@ public class ImmutableObject2ByteOpenHashMap<T> extends AbstractObject2ByteMap<T
 	@Override
 	public byte computeByte(T key, ObjectByteUnaryOperator<T> mappingFunction) { throw new UnsupportedOperationException(); }
 	@Override
-	public byte computeByteNonDefault(T key, ObjectByteUnaryOperator<T> mappingFunction) { throw new UnsupportedOperationException(); }
-	@Override
 	public byte computeByteIfAbsent(T key, ToByteFunction<T> mappingFunction) { throw new UnsupportedOperationException(); }
-	@Override
-	public byte computeByteIfAbsentNonDefault(T key, ToByteFunction<T> mappingFunction) { throw new UnsupportedOperationException(); }
 	@Override
 	public byte supplyByteIfAbsent(T key, ByteSupplier valueProvider) { throw new UnsupportedOperationException(); }
 	@Override
-	public byte supplyByteIfAbsentNonDefault(T key, ByteSupplier valueProvider) { throw new UnsupportedOperationException(); }
-	@Override
 	public byte computeByteIfPresent(T key, ObjectByteUnaryOperator<T> mappingFunction) { throw new UnsupportedOperationException(); }
 	@Override
+	public byte computeByteNonDefault(T key, ObjectByteUnaryOperator<T> mappingFunction) { throw new UnsupportedOperationException(); }
+	@Override
+	public byte computeByteIfAbsentNonDefault(T key, ToByteFunction<T> mappingFunction) { throw new UnsupportedOperationException(); }
+	@Override
+	public byte supplyByteIfAbsentNonDefault(T key, ByteSupplier valueProvider) { throw new UnsupportedOperationException(); }
+	@Override
 	public byte computeByteIfPresentNonDefault(T key, ObjectByteUnaryOperator<T> mappingFunction) { throw new UnsupportedOperationException(); }
-	
 	@Override
 	public byte mergeByte(T key, byte value, ByteByteUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
 	

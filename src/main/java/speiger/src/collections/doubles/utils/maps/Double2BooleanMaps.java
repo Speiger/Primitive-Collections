@@ -246,17 +246,17 @@ public class Double2BooleanMaps
 		@Override
 		public boolean computeBoolean(double key, DoubleBooleanUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
 		@Override
-		public boolean computeBooleanNonDefault(double key, DoubleBooleanUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
-		@Override
 		public boolean computeBooleanIfAbsent(double key, DoublePredicate mappingFunction) { throw new UnsupportedOperationException(); }
-		@Override
-		public boolean computeBooleanIfAbsentNonDefault(double key, DoublePredicate mappingFunction) { throw new UnsupportedOperationException(); }
 		@Override
 		public boolean computeBooleanIfPresent(double key, DoubleBooleanUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
 		@Override
-		public boolean computeBooleanIfPresentNonDefault(double key, DoubleBooleanUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
-		@Override
 		public boolean supplyBooleanIfAbsent(double key, BooleanSupplier valueProvider) { throw new UnsupportedOperationException(); }
+		@Override
+		public boolean computeBooleanNonDefault(double key, DoubleBooleanUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
+		@Override
+		public boolean computeBooleanIfAbsentNonDefault(double key, DoublePredicate mappingFunction) { throw new UnsupportedOperationException(); }
+		@Override
+		public boolean computeBooleanIfPresentNonDefault(double key, DoubleBooleanUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
 		@Override
 		public boolean supplyBooleanIfAbsentNonDefault(double key, BooleanSupplier valueProvider) { throw new UnsupportedOperationException(); }
 		@Override
@@ -304,17 +304,17 @@ public class Double2BooleanMaps
 		@Override
 		public boolean computeBoolean(double key, DoubleBooleanUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
 		@Override
-		public boolean computeBooleanNonDefault(double key, DoubleBooleanUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
-		@Override
 		public boolean computeBooleanIfAbsent(double key, DoublePredicate mappingFunction) { throw new UnsupportedOperationException(); }
-		@Override
-		public boolean computeBooleanIfAbsentNonDefault(double key, DoublePredicate mappingFunction) { throw new UnsupportedOperationException(); }
 		@Override
 		public boolean computeBooleanIfPresent(double key, DoubleBooleanUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
 		@Override
-		public boolean computeBooleanIfPresentNonDefault(double key, DoubleBooleanUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
-		@Override
 		public boolean supplyBooleanIfAbsent(double key, BooleanSupplier valueProvider) { throw new UnsupportedOperationException(); }
+		@Override
+		public boolean computeBooleanNonDefault(double key, DoubleBooleanUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
+		@Override
+		public boolean computeBooleanIfAbsentNonDefault(double key, DoublePredicate mappingFunction) { throw new UnsupportedOperationException(); }
+		@Override
+		public boolean computeBooleanIfPresentNonDefault(double key, DoubleBooleanUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
 		@Override
 		public boolean supplyBooleanIfAbsentNonDefault(double key, BooleanSupplier valueProvider) { throw new UnsupportedOperationException(); }
 		@Override
@@ -535,17 +535,17 @@ public class Double2BooleanMaps
 		@Override
 		public boolean computeBoolean(double key, DoubleBooleanUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
 		@Override
-		public boolean computeBooleanNonDefault(double key, DoubleBooleanUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
-		@Override
 		public boolean computeBooleanIfAbsent(double key, DoublePredicate mappingFunction) { throw new UnsupportedOperationException(); }
-		@Override
-		public boolean computeBooleanIfAbsentNonDefault(double key, DoublePredicate mappingFunction) { throw new UnsupportedOperationException(); }
 		@Override
 		public boolean computeBooleanIfPresent(double key, DoubleBooleanUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
 		@Override
-		public boolean computeBooleanIfPresentNonDefault(double key, DoubleBooleanUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
-		@Override
 		public boolean supplyBooleanIfAbsent(double key, BooleanSupplier valueProvider) { throw new UnsupportedOperationException(); }
+		@Override
+		public boolean computeBooleanNonDefault(double key, DoubleBooleanUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
+		@Override
+		public boolean computeBooleanIfAbsentNonDefault(double key, DoublePredicate mappingFunction) { throw new UnsupportedOperationException(); }
+		@Override
+		public boolean computeBooleanIfPresentNonDefault(double key, DoubleBooleanUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
 		@Override
 		public boolean supplyBooleanIfAbsentNonDefault(double key, BooleanSupplier valueProvider) { throw new UnsupportedOperationException(); }
 		@Override
@@ -938,17 +938,17 @@ public class Double2BooleanMaps
 		@Override
 		public boolean computeBoolean(double key, DoubleBooleanUnaryOperator mappingFunction) { synchronized(mutex) { return map.computeBoolean(key, mappingFunction); } }
 		@Override
-		public boolean computeBooleanNonDefault(double key, DoubleBooleanUnaryOperator mappingFunction) { synchronized(mutex) { return map.computeBooleanNonDefault(key, mappingFunction); } }
-		@Override
 		public boolean computeBooleanIfAbsent(double key, DoublePredicate mappingFunction) { synchronized(mutex) { return map.computeBooleanIfAbsent(key, mappingFunction); } }
-		@Override
-		public boolean computeBooleanIfAbsentNonDefault(double key, DoublePredicate mappingFunction) { synchronized(mutex) { return map.computeBooleanIfAbsentNonDefault(key, mappingFunction); } }
 		@Override
 		public boolean computeBooleanIfPresent(double key, DoubleBooleanUnaryOperator mappingFunction) { synchronized(mutex) { return map.computeBooleanIfPresent(key, mappingFunction); } }
 		@Override
-		public boolean computeBooleanIfPresentNonDefault(double key, DoubleBooleanUnaryOperator mappingFunction) { synchronized(mutex) { return map.computeBooleanIfPresentNonDefault(key, mappingFunction); } }
-		@Override
 		public boolean supplyBooleanIfAbsent(double key, BooleanSupplier valueProvider) { synchronized(mutex) { return map.supplyBooleanIfAbsent(key, valueProvider); } }
+		@Override
+		public boolean computeBooleanNonDefault(double key, DoubleBooleanUnaryOperator mappingFunction) { synchronized(mutex) { return map.computeBooleanNonDefault(key, mappingFunction); } }
+		@Override
+		public boolean computeBooleanIfAbsentNonDefault(double key, DoublePredicate mappingFunction) { synchronized(mutex) { return map.computeBooleanIfAbsentNonDefault(key, mappingFunction); } }
+		@Override
+		public boolean computeBooleanIfPresentNonDefault(double key, DoubleBooleanUnaryOperator mappingFunction) { synchronized(mutex) { return map.computeBooleanIfPresentNonDefault(key, mappingFunction); } }
 		@Override
 		public boolean supplyBooleanIfAbsentNonDefault(double key, BooleanSupplier valueProvider) { synchronized(mutex) { return map.supplyBooleanIfAbsentNonDefault(key, valueProvider); } }
 		@Override

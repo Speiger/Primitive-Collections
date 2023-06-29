@@ -216,6 +216,13 @@ public class ObjectArrayPriorityQueue<T> extends AbstractObjectPriorityQueue<T>
 	}
 	
 	@Override
+	public boolean contains(T e) {
+		for(int i = 0;i<size;i++)
+			if(Objects.equals(e, array[i])) return true;
+		return false;
+	}
+	
+	@Override
 	public boolean removeFirst(T e) {
 		for(int i = 0;i<size;i++)
 			if(Objects.equals(e, array[i])) return removeIndex(i);

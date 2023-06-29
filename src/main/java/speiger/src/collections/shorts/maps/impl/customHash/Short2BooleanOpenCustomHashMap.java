@@ -441,6 +441,42 @@ public class Short2BooleanOpenCustomHashMap extends AbstractShort2BooleanMap imp
 	}
 	
 	@Override
+	public boolean computeBooleanIfAbsent(short key, ShortPredicate mappingFunction) {
+		Objects.requireNonNull(mappingFunction);
+		int index = findIndex(key);
+		if(index < 0) {
+			boolean newValue = mappingFunction.test(key);
+			insert(-index-1, key, newValue);
+			return newValue;
+		}
+		boolean newValue = values[index];
+		return newValue;
+	}
+		
+	@Override
+	public boolean supplyBooleanIfAbsent(short key, BooleanSupplier valueProvider) {
+		Objects.requireNonNull(valueProvider);
+		int index = findIndex(key);
+		if(index < 0) {
+			boolean newValue = valueProvider.getAsBoolean();
+			insert(-index-1, key, newValue);
+			return newValue;
+		}
+		boolean newValue = values[index];
+		return newValue;
+	}
+	
+	@Override
+	public boolean computeBooleanIfPresent(short key, ShortBooleanUnaryOperator mappingFunction) {
+		Objects.requireNonNull(mappingFunction);
+		int index = findIndex(key);
+		if(index < 0) return getDefaultReturnValue();
+		boolean newValue = mappingFunction.applyAsBoolean(key, values[index]);
+		values[index] = newValue;
+		return newValue;
+	}
+	
+	@Override
 	public boolean computeBooleanNonDefault(short key, ShortBooleanUnaryOperator mappingFunction) {
 		Objects.requireNonNull(mappingFunction);
 		int index = findIndex(key);
@@ -456,19 +492,6 @@ public class Short2BooleanOpenCustomHashMap extends AbstractShort2BooleanMap imp
 			return newValue;
 		}
 		values[index] = newValue;
-		return newValue;
-	}
-	
-	@Override
-	public boolean computeBooleanIfAbsent(short key, ShortPredicate mappingFunction) {
-		Objects.requireNonNull(mappingFunction);
-		int index = findIndex(key);
-		if(index < 0) {
-			boolean newValue = mappingFunction.test(key);
-			insert(-index-1, key, newValue);
-			return newValue;
-		}
-		boolean newValue = values[index];
 		return newValue;
 	}
 	
@@ -492,19 +515,6 @@ public class Short2BooleanOpenCustomHashMap extends AbstractShort2BooleanMap imp
 	}
 	
 	@Override
-	public boolean supplyBooleanIfAbsent(short key, BooleanSupplier valueProvider) {
-		Objects.requireNonNull(valueProvider);
-		int index = findIndex(key);
-		if(index < 0) {
-			boolean newValue = valueProvider.getAsBoolean();
-			insert(-index-1, key, newValue);
-			return newValue;
-		}
-		boolean newValue = values[index];
-		return newValue;
-	}
-	
-	@Override
 	public boolean supplyBooleanIfAbsentNonDefault(short key, BooleanSupplier valueProvider) {
 		Objects.requireNonNull(valueProvider);
 		int index = findIndex(key);
@@ -520,16 +530,6 @@ public class Short2BooleanOpenCustomHashMap extends AbstractShort2BooleanMap imp
 			if(newValue == getDefaultReturnValue()) return newValue;
 			values[index] = newValue;
 		}
-		return newValue;
-	}
-	
-	@Override
-	public boolean computeBooleanIfPresent(short key, ShortBooleanUnaryOperator mappingFunction) {
-		Objects.requireNonNull(mappingFunction);
-		int index = findIndex(key);
-		if(index < 0) return getDefaultReturnValue();
-		boolean newValue = mappingFunction.applyAsBoolean(key, values[index]);
-		values[index] = newValue;
 		return newValue;
 	}
 	

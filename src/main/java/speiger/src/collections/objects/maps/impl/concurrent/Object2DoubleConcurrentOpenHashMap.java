@@ -440,17 +440,31 @@ public class Object2DoubleConcurrentOpenHashMap<T> extends AbstractObject2Double
 	}
 	
 	@Override
-	public double computeDoubleNonDefault(T key, ObjectDoubleUnaryOperator<T> mappingFunction) {
-		Objects.requireNonNull(mappingFunction);
-		int hash = getHashCode(key);
-		return getSegment(hash).computeNonDefault(hash, key, mappingFunction);
-	}
-
-	@Override
 	public double computeDoubleIfAbsent(T key, ToDoubleFunction<T> mappingFunction) {
 		Objects.requireNonNull(mappingFunction);
 		int hash = getHashCode(key);
 		return getSegment(hash).computeIfAbsent(hash, key, mappingFunction);
+	}
+	
+	@Override
+	public double supplyDoubleIfAbsent(T key, DoubleSupplier valueProvider) {
+		Objects.requireNonNull(valueProvider);
+		int hash = getHashCode(key);
+		return getSegment(hash).supplyIfAbsent(hash, key, valueProvider);
+	}
+	
+	@Override
+	public double computeDoubleIfPresent(T key, ObjectDoubleUnaryOperator<T> mappingFunction) {
+		Objects.requireNonNull(mappingFunction);
+		int hash = getHashCode(key);
+		return getSegment(hash).computeIfPresent(hash, key, mappingFunction);
+	}
+	
+	@Override
+	public double computeDoubleNonDefault(T key, ObjectDoubleUnaryOperator<T> mappingFunction) {
+		Objects.requireNonNull(mappingFunction);
+		int hash = getHashCode(key);
+		return getSegment(hash).computeNonDefault(hash, key, mappingFunction);
 	}
 	
 	@Override
@@ -461,24 +475,10 @@ public class Object2DoubleConcurrentOpenHashMap<T> extends AbstractObject2Double
 	}
 
 	@Override
-	public double supplyDoubleIfAbsent(T key, DoubleSupplier valueProvider) {
-		Objects.requireNonNull(valueProvider);
-		int hash = getHashCode(key);
-		return getSegment(hash).supplyIfAbsent(hash, key, valueProvider);
-	}
-	
-	@Override
 	public double supplyDoubleIfAbsentNonDefault(T key, DoubleSupplier valueProvider) {
 		Objects.requireNonNull(valueProvider);
 		int hash = getHashCode(key);
 		return getSegment(hash).supplyIfAbsentNonDefault(hash, key, valueProvider);
-	}
-	
-	@Override
-	public double computeDoubleIfPresent(T key, ObjectDoubleUnaryOperator<T> mappingFunction) {
-		Objects.requireNonNull(mappingFunction);
-		int hash = getHashCode(key);
-		return getSegment(hash).computeIfPresent(hash, key, mappingFunction);
 	}
 	
 	@Override
@@ -2028,6 +2028,54 @@ public class Object2DoubleConcurrentOpenHashMap<T> extends AbstractObject2Double
 			}
 		}
 		
+		protected double computeIfAbsent(int hash, T key, ToDoubleFunction<T> mappingFunction) {
+			long stamp = writeLock();
+			try {
+				int index = findIndex(hash, key);
+				if(index < 0) {
+					double newValue = mappingFunction.applyAsDouble(key);
+					insert(-index-1, key, newValue);
+					return newValue;
+				}
+				double newValue = values[index];
+				return newValue;
+			}
+			finally {
+				unlockWrite(stamp);
+			}
+		}
+				
+		protected double supplyIfAbsent(int hash, T key, DoubleSupplier valueProvider) {
+			long stamp = writeLock();
+			try {
+				int index = findIndex(hash, key);
+				if(index < 0) {
+					double newValue = valueProvider.getAsDouble();
+					insert(-index-1, key, newValue);
+					return newValue;
+				}
+				double newValue = values[index];
+				return newValue;
+			}
+			finally {
+				unlockWrite(stamp);
+			}
+		}
+				
+		protected double computeIfPresent(int hash, T key, ObjectDoubleUnaryOperator<T> mappingFunction) {
+			long stamp = writeLock();
+			try {
+				int index = findIndex(hash, key);
+				if(index < 0) return getDefaultReturnValue();
+				double newValue = mappingFunction.applyAsDouble(key, values[index]);
+				values[index] = newValue;
+				return newValue;
+			}
+			finally {
+				unlockWrite(stamp);
+			}
+		}
+		
 		protected double computeNonDefault(int hash, T key, ObjectDoubleUnaryOperator<T> mappingFunction) {
 			long stamp = writeLock();
 			try {
@@ -2044,23 +2092,6 @@ public class Object2DoubleConcurrentOpenHashMap<T> extends AbstractObject2Double
 					return newValue;
 				}
 				values[index] = newValue;
-				return newValue;
-			}
-			finally {
-				unlockWrite(stamp);
-			}
-		}
-		
-		protected double computeIfAbsent(int hash, T key, ToDoubleFunction<T> mappingFunction) {
-			long stamp = writeLock();
-			try {
-				int index = findIndex(hash, key);
-				if(index < 0) {
-					double newValue = mappingFunction.applyAsDouble(key);
-					insert(-index-1, key, newValue);
-					return newValue;
-				}
-				double newValue = values[index];
 				return newValue;
 			}
 			finally {
@@ -2091,23 +2122,6 @@ public class Object2DoubleConcurrentOpenHashMap<T> extends AbstractObject2Double
 			}
 		}
 		
-		protected double supplyIfAbsent(int hash, T key, DoubleSupplier valueProvider) {
-			long stamp = writeLock();
-			try {
-				int index = findIndex(hash, key);
-				if(index < 0) {
-					double newValue = valueProvider.getAsDouble();
-					insert(-index-1, key, newValue);
-					return newValue;
-				}
-				double newValue = values[index];
-				return newValue;
-			}
-			finally {
-				unlockWrite(stamp);
-			}
-		}
-		
 		protected double supplyIfAbsentNonDefault(int hash, T key, DoubleSupplier valueProvider) {
 			long stamp = writeLock();
 			try {
@@ -2124,20 +2138,6 @@ public class Object2DoubleConcurrentOpenHashMap<T> extends AbstractObject2Double
 					if(Double.doubleToLongBits(newValue) == Double.doubleToLongBits(getDefaultReturnValue())) return newValue;
 					values[index] = newValue;
 				}
-				return newValue;
-			}
-			finally {
-				unlockWrite(stamp);
-			}
-		}
-		
-		protected double computeIfPresent(int hash, T key, ObjectDoubleUnaryOperator<T> mappingFunction) {
-			long stamp = writeLock();
-			try {
-				int index = findIndex(hash, key);
-				if(index < 0) return getDefaultReturnValue();
-				double newValue = mappingFunction.applyAsDouble(key, values[index]);
-				values[index] = newValue;
 				return newValue;
 			}
 			finally {

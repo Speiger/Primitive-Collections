@@ -152,6 +152,15 @@ public class ObjectArrayFIFOQueue<T> extends AbstractObjectPriorityQueue<T> impl
 	}
 	
 	@Override
+	public boolean contains(T e) {
+		if(first == last) return false;
+		for(int i = 0,m=size();i<m;i++) {
+			if(e == array[(first + i) % array.length]) return true;
+		}
+		return false;
+	}
+	
+	@Override
 	public boolean removeFirst(T e) {
 		if(first == last) return false;
 		for(int i = 0,m=size();i<m;i++) {

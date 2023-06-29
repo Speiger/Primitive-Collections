@@ -430,6 +430,42 @@ public class Double2LongOpenHashMap extends AbstractDouble2LongMap implements IT
 		values[index] = newValue;
 		return newValue;
 	}
+		
+	@Override
+	public long computeLongIfAbsent(double key, Double2LongFunction mappingFunction) {
+		Objects.requireNonNull(mappingFunction);
+		int index = findIndex(key);
+		if(index < 0) {
+			long newValue = mappingFunction.applyAsLong(key);
+			insert(-index-1, key, newValue);
+			return newValue;
+		}
+		long newValue = values[index];
+		return newValue;
+	}
+	
+	@Override
+	public long supplyLongIfAbsent(double key, LongSupplier valueProvider) {
+		Objects.requireNonNull(valueProvider);
+		int index = findIndex(key);
+		if(index < 0) {
+			long newValue = valueProvider.getAsLong();
+			insert(-index-1, key, newValue);
+			return newValue;
+		}
+		long newValue = values[index];
+		return newValue;
+	}
+		
+	@Override
+	public long computeLongIfPresent(double key, DoubleLongUnaryOperator mappingFunction) {
+		Objects.requireNonNull(mappingFunction);
+		int index = findIndex(key);
+		if(index < 0) return getDefaultReturnValue();
+		long newValue = mappingFunction.applyAsLong(key, values[index]);
+		values[index] = newValue;
+		return newValue;
+	}
 	
 	@Override
 	public long computeLongNonDefault(double key, DoubleLongUnaryOperator mappingFunction) {
@@ -447,19 +483,6 @@ public class Double2LongOpenHashMap extends AbstractDouble2LongMap implements IT
 			return newValue;
 		}
 		values[index] = newValue;
-		return newValue;
-	}
-	
-	@Override
-	public long computeLongIfAbsent(double key, Double2LongFunction mappingFunction) {
-		Objects.requireNonNull(mappingFunction);
-		int index = findIndex(key);
-		if(index < 0) {
-			long newValue = mappingFunction.applyAsLong(key);
-			insert(-index-1, key, newValue);
-			return newValue;
-		}
-		long newValue = values[index];
 		return newValue;
 	}
 	
@@ -483,19 +506,6 @@ public class Double2LongOpenHashMap extends AbstractDouble2LongMap implements IT
 	}
 	
 	@Override
-	public long supplyLongIfAbsent(double key, LongSupplier valueProvider) {
-		Objects.requireNonNull(valueProvider);
-		int index = findIndex(key);
-		if(index < 0) {
-			long newValue = valueProvider.getAsLong();
-			insert(-index-1, key, newValue);
-			return newValue;
-		}
-		long newValue = values[index];
-		return newValue;
-	}
-	
-	@Override
 	public long supplyLongIfAbsentNonDefault(double key, LongSupplier valueProvider) {
 		Objects.requireNonNull(valueProvider);
 		int index = findIndex(key);
@@ -511,16 +521,6 @@ public class Double2LongOpenHashMap extends AbstractDouble2LongMap implements IT
 			if(newValue == getDefaultReturnValue()) return newValue;
 			values[index] = newValue;
 		}
-		return newValue;
-	}
-	
-	@Override
-	public long computeLongIfPresent(double key, DoubleLongUnaryOperator mappingFunction) {
-		Objects.requireNonNull(mappingFunction);
-		int index = findIndex(key);
-		if(index < 0) return getDefaultReturnValue();
-		long newValue = mappingFunction.applyAsLong(key, values[index]);
-		values[index] = newValue;
 		return newValue;
 	}
 	

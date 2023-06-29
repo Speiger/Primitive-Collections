@@ -152,6 +152,39 @@ public abstract class AbstractChar2BooleanMap extends AbstractMap<Character, Boo
 	}
 	
 	@Override
+	public boolean computeBooleanIfAbsent(char key, CharPredicate mappingFunction) {
+		Objects.requireNonNull(mappingFunction);
+		if(!containsKey(key)) {
+			boolean newValue = mappingFunction.test(key);
+			put(key, newValue);
+			return newValue;
+		}
+		return get(key);
+	}
+	
+	@Override
+	public boolean supplyBooleanIfAbsent(char key, BooleanSupplier valueProvider) {
+		Objects.requireNonNull(valueProvider);
+		if(!containsKey(key)) {
+			boolean newValue = valueProvider.getAsBoolean();
+			put(key, newValue);
+			return newValue;
+		}
+		return get(key);
+	}
+	
+	@Override
+	public boolean computeBooleanIfPresent(char key, CharBooleanUnaryOperator mappingFunction) {
+		Objects.requireNonNull(mappingFunction);
+		if(containsKey(key)) {
+			boolean newValue = mappingFunction.applyAsBoolean(key, get(key));
+			put(key, newValue);
+			return newValue;
+		}
+		return getDefaultReturnValue();
+	}
+	
+	@Override
 	public boolean computeBooleanNonDefault(char key, CharBooleanUnaryOperator mappingFunction) {
 		Objects.requireNonNull(mappingFunction);
 		boolean value = get(key);
@@ -165,17 +198,6 @@ public abstract class AbstractChar2BooleanMap extends AbstractMap<Character, Boo
 		}
 		put(key, newValue);
 		return newValue;
-	}
-	
-	@Override
-	public boolean computeBooleanIfAbsent(char key, CharPredicate mappingFunction) {
-		Objects.requireNonNull(mappingFunction);
-		if(!containsKey(key)) {
-			boolean newValue = mappingFunction.test(key);
-			put(key, newValue);
-			return newValue;
-		}
-		return get(key);
 	}
 	
 	@Override
@@ -193,17 +215,6 @@ public abstract class AbstractChar2BooleanMap extends AbstractMap<Character, Boo
 	}
 	
 	@Override
-	public boolean supplyBooleanIfAbsent(char key, BooleanSupplier valueProvider) {
-		Objects.requireNonNull(valueProvider);
-		if(!containsKey(key)) {
-			boolean newValue = valueProvider.getAsBoolean();
-			put(key, newValue);
-			return newValue;
-		}
-		return get(key);
-	}
-	
-	@Override
 	public boolean supplyBooleanIfAbsentNonDefault(char key, BooleanSupplier valueProvider) {
 		Objects.requireNonNull(valueProvider);
 		boolean value;
@@ -215,17 +226,6 @@ public abstract class AbstractChar2BooleanMap extends AbstractMap<Character, Boo
 			}
 		}
 		return value;
-	}
-	
-	@Override
-	public boolean computeBooleanIfPresent(char key, CharBooleanUnaryOperator mappingFunction) {
-		Objects.requireNonNull(mappingFunction);
-		if(containsKey(key)) {
-			boolean newValue = mappingFunction.applyAsBoolean(key, get(key));
-			put(key, newValue);
-			return newValue;
-		}
-		return getDefaultReturnValue();
 	}
 	
 	@Override

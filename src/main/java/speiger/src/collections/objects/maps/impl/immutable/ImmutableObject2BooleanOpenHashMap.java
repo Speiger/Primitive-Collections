@@ -397,20 +397,19 @@ public class ImmutableObject2BooleanOpenHashMap<T> extends AbstractObject2Boolea
 	@Override
 	public boolean computeBoolean(T key, ObjectBooleanUnaryOperator<T> mappingFunction) { throw new UnsupportedOperationException(); }
 	@Override
-	public boolean computeBooleanNonDefault(T key, ObjectBooleanUnaryOperator<T> mappingFunction) { throw new UnsupportedOperationException(); }
-	@Override
 	public boolean computeBooleanIfAbsent(T key, Predicate<T> mappingFunction) { throw new UnsupportedOperationException(); }
-	@Override
-	public boolean computeBooleanIfAbsentNonDefault(T key, Predicate<T> mappingFunction) { throw new UnsupportedOperationException(); }
 	@Override
 	public boolean supplyBooleanIfAbsent(T key, BooleanSupplier valueProvider) { throw new UnsupportedOperationException(); }
 	@Override
-	public boolean supplyBooleanIfAbsentNonDefault(T key, BooleanSupplier valueProvider) { throw new UnsupportedOperationException(); }
-	@Override
 	public boolean computeBooleanIfPresent(T key, ObjectBooleanUnaryOperator<T> mappingFunction) { throw new UnsupportedOperationException(); }
 	@Override
+	public boolean computeBooleanNonDefault(T key, ObjectBooleanUnaryOperator<T> mappingFunction) { throw new UnsupportedOperationException(); }
+	@Override
+	public boolean computeBooleanIfAbsentNonDefault(T key, Predicate<T> mappingFunction) { throw new UnsupportedOperationException(); }
+	@Override
+	public boolean supplyBooleanIfAbsentNonDefault(T key, BooleanSupplier valueProvider) { throw new UnsupportedOperationException(); }
+	@Override
 	public boolean computeBooleanIfPresentNonDefault(T key, ObjectBooleanUnaryOperator<T> mappingFunction) { throw new UnsupportedOperationException(); }
-	
 	@Override
 	public boolean mergeBoolean(T key, boolean value, BooleanBooleanUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
 	

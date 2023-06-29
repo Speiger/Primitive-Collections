@@ -160,37 +160,7 @@ public abstract class AbstractByte2ObjectMap<V> extends AbstractMap<Byte, V> imp
 	}
 	
 	@Override
-	public V computeNonDefault(byte key, ByteObjectUnaryOperator<V> mappingFunction) {
-		Objects.requireNonNull(mappingFunction);
-		V value = get(key);
-		V newValue = mappingFunction.apply(key, value);
-		if(Objects.equals(newValue, getDefaultReturnValue())) {
-			if(!Objects.equals(value, getDefaultReturnValue()) || containsKey(key)) {
-				remove(key);
-				return getDefaultReturnValue();
-			}
-			return getDefaultReturnValue();
-		}
-		put(key, newValue);
-		return newValue;
-	}
-	
-	@Override
 	public V computeIfAbsent(byte key, ByteFunction<V> mappingFunction) {
-		Objects.requireNonNull(mappingFunction);
-		V value;
-		if((value = get(key)) == getDefaultReturnValue() || !containsKey(key)) {
-			V newValue = mappingFunction.apply(key);
-			if(!Objects.equals(newValue, getDefaultReturnValue())) {
-				put(key, newValue);
-				return newValue;
-			}
-		}
-		return value;
-	}
-	
-	@Override
-	public V computeIfAbsentNonDefault(byte key, ByteFunction<V> mappingFunction) {
 		Objects.requireNonNull(mappingFunction);
 		V value;
 		if((value = get(key)) == getDefaultReturnValue() || !containsKey(key)) {
@@ -218,36 +188,7 @@ public abstract class AbstractByte2ObjectMap<V> extends AbstractMap<Byte, V> imp
 	}
 	
 	@Override
-	public V supplyIfAbsentNonDefault(byte key, ObjectSupplier<V> valueProvider) {
-		Objects.requireNonNull(valueProvider);
-		V value;
-		if((value = get(key)) == getDefaultReturnValue() || !containsKey(key)) {
-			V newValue = valueProvider.get();
-			if(!Objects.equals(newValue, getDefaultReturnValue())) {
-				put(key, newValue);
-				return newValue;
-			}
-		}
-		return value;
-	}
-	
-	@Override
 	public V computeIfPresent(byte key, ByteObjectUnaryOperator<V> mappingFunction) {
-		Objects.requireNonNull(mappingFunction);
-		V value;
-		if(!Objects.equals((value = get(key)), getDefaultReturnValue()) || containsKey(key)) {
-			V newValue = mappingFunction.apply(key, value);
-			if(!Objects.equals(newValue, getDefaultReturnValue())) {
-				put(key, newValue);
-				return newValue;
-			}
-			remove(key);
-		}
-		return getDefaultReturnValue();
-	}
-	
-	@Override
-	public V computeIfPresentNonDefault(byte key, ByteObjectUnaryOperator<V> mappingFunction) {
 		Objects.requireNonNull(mappingFunction);
 		V value;
 		if(!Objects.equals((value = get(key)), getDefaultReturnValue()) || containsKey(key)) {

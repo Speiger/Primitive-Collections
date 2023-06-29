@@ -214,6 +214,13 @@ public class LongHeapPriorityQueue extends AbstractLongPriorityQueue
 	}
 	
 	@Override
+	public boolean contains(long e) {
+		for(int i = 0;i<size;i++)
+			if(e == array[i]) return true;
+		return false;
+	}
+	
+	@Override
 	public boolean removeFirst(long e) {
 		for(int i = 0;i<size;i++)
 			if(e == array[i]) return removeIndex(i);

@@ -452,17 +452,31 @@ public class Byte2CharConcurrentOpenHashMap extends AbstractByte2CharMap impleme
 	}
 	
 	@Override
-	public char computeCharNonDefault(byte key, ByteCharUnaryOperator mappingFunction) {
-		Objects.requireNonNull(mappingFunction);
-		int hash = getHashCode(key);
-		return getSegment(hash).computeNonDefault(hash, key, mappingFunction);
-	}
-
-	@Override
 	public char computeCharIfAbsent(byte key, Byte2CharFunction mappingFunction) {
 		Objects.requireNonNull(mappingFunction);
 		int hash = getHashCode(key);
 		return getSegment(hash).computeIfAbsent(hash, key, mappingFunction);
+	}
+	
+	@Override
+	public char supplyCharIfAbsent(byte key, CharSupplier valueProvider) {
+		Objects.requireNonNull(valueProvider);
+		int hash = getHashCode(key);
+		return getSegment(hash).supplyIfAbsent(hash, key, valueProvider);
+	}
+	
+	@Override
+	public char computeCharIfPresent(byte key, ByteCharUnaryOperator mappingFunction) {
+		Objects.requireNonNull(mappingFunction);
+		int hash = getHashCode(key);
+		return getSegment(hash).computeIfPresent(hash, key, mappingFunction);
+	}
+	
+	@Override
+	public char computeCharNonDefault(byte key, ByteCharUnaryOperator mappingFunction) {
+		Objects.requireNonNull(mappingFunction);
+		int hash = getHashCode(key);
+		return getSegment(hash).computeNonDefault(hash, key, mappingFunction);
 	}
 	
 	@Override
@@ -473,24 +487,10 @@ public class Byte2CharConcurrentOpenHashMap extends AbstractByte2CharMap impleme
 	}
 
 	@Override
-	public char supplyCharIfAbsent(byte key, CharSupplier valueProvider) {
-		Objects.requireNonNull(valueProvider);
-		int hash = getHashCode(key);
-		return getSegment(hash).supplyIfAbsent(hash, key, valueProvider);
-	}
-	
-	@Override
 	public char supplyCharIfAbsentNonDefault(byte key, CharSupplier valueProvider) {
 		Objects.requireNonNull(valueProvider);
 		int hash = getHashCode(key);
 		return getSegment(hash).supplyIfAbsentNonDefault(hash, key, valueProvider);
-	}
-	
-	@Override
-	public char computeCharIfPresent(byte key, ByteCharUnaryOperator mappingFunction) {
-		Objects.requireNonNull(mappingFunction);
-		int hash = getHashCode(key);
-		return getSegment(hash).computeIfPresent(hash, key, mappingFunction);
 	}
 	
 	@Override
@@ -2076,6 +2076,54 @@ public class Byte2CharConcurrentOpenHashMap extends AbstractByte2CharMap impleme
 			}
 		}
 		
+		protected char computeIfAbsent(int hash, byte key, Byte2CharFunction mappingFunction) {
+			long stamp = writeLock();
+			try {
+				int index = findIndex(hash, key);
+				if(index < 0) {
+					char newValue = mappingFunction.applyAsChar(key);
+					insert(-index-1, key, newValue);
+					return newValue;
+				}
+				char newValue = values[index];
+				return newValue;
+			}
+			finally {
+				unlockWrite(stamp);
+			}
+		}
+				
+		protected char supplyIfAbsent(int hash, byte key, CharSupplier valueProvider) {
+			long stamp = writeLock();
+			try {
+				int index = findIndex(hash, key);
+				if(index < 0) {
+					char newValue = valueProvider.getAsChar();
+					insert(-index-1, key, newValue);
+					return newValue;
+				}
+				char newValue = values[index];
+				return newValue;
+			}
+			finally {
+				unlockWrite(stamp);
+			}
+		}
+				
+		protected char computeIfPresent(int hash, byte key, ByteCharUnaryOperator mappingFunction) {
+			long stamp = writeLock();
+			try {
+				int index = findIndex(hash, key);
+				if(index < 0) return getDefaultReturnValue();
+				char newValue = mappingFunction.applyAsChar(key, values[index]);
+				values[index] = newValue;
+				return newValue;
+			}
+			finally {
+				unlockWrite(stamp);
+			}
+		}
+		
 		protected char computeNonDefault(int hash, byte key, ByteCharUnaryOperator mappingFunction) {
 			long stamp = writeLock();
 			try {
@@ -2092,23 +2140,6 @@ public class Byte2CharConcurrentOpenHashMap extends AbstractByte2CharMap impleme
 					return newValue;
 				}
 				values[index] = newValue;
-				return newValue;
-			}
-			finally {
-				unlockWrite(stamp);
-			}
-		}
-		
-		protected char computeIfAbsent(int hash, byte key, Byte2CharFunction mappingFunction) {
-			long stamp = writeLock();
-			try {
-				int index = findIndex(hash, key);
-				if(index < 0) {
-					char newValue = mappingFunction.applyAsChar(key);
-					insert(-index-1, key, newValue);
-					return newValue;
-				}
-				char newValue = values[index];
 				return newValue;
 			}
 			finally {
@@ -2139,53 +2170,22 @@ public class Byte2CharConcurrentOpenHashMap extends AbstractByte2CharMap impleme
 			}
 		}
 		
-		protected char supplyIfAbsent(int hash, byte key, CharSupplier valueProvider) {
-			long stamp = writeLock();
-			try {
-				int index = findIndex(hash, key);
-				if(index < 0) {
-					char newValue = valueProvider.getAsInt();
-					insert(-index-1, key, newValue);
-					return newValue;
-				}
-				char newValue = values[index];
-				return newValue;
-			}
-			finally {
-				unlockWrite(stamp);
-			}
-		}
-		
 		protected char supplyIfAbsentNonDefault(int hash, byte key, CharSupplier valueProvider) {
 			long stamp = writeLock();
 			try {
 				int index = findIndex(hash, key);
 				if(index < 0) {
-					char newValue = valueProvider.getAsInt();
+					char newValue = valueProvider.getAsChar();
 					if(newValue == getDefaultReturnValue()) return newValue;
 					insert(-index-1, key, newValue);
 					return newValue;
 				}
 				char newValue = values[index];
 				if(newValue == getDefaultReturnValue()) {
-					newValue = valueProvider.getAsInt();
+					newValue = valueProvider.getAsChar();
 					if(newValue == getDefaultReturnValue()) return newValue;
 					values[index] = newValue;
 				}
-				return newValue;
-			}
-			finally {
-				unlockWrite(stamp);
-			}
-		}
-		
-		protected char computeIfPresent(int hash, byte key, ByteCharUnaryOperator mappingFunction) {
-			long stamp = writeLock();
-			try {
-				int index = findIndex(hash, key);
-				if(index < 0) return getDefaultReturnValue();
-				char newValue = mappingFunction.applyAsChar(key, values[index]);
-				values[index] = newValue;
 				return newValue;
 			}
 			finally {

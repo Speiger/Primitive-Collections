@@ -397,20 +397,11 @@ public class ImmutableShort2ObjectOpenHashMap<V> extends AbstractShort2ObjectMap
 	@Override
 	public V compute(short key, ShortObjectUnaryOperator<V> mappingFunction) { throw new UnsupportedOperationException(); }
 	@Override
-	public V computeNonDefault(short key, ShortObjectUnaryOperator<V> mappingFunction) { throw new UnsupportedOperationException(); }
-	@Override
 	public V computeIfAbsent(short key, ShortFunction<V> mappingFunction) { throw new UnsupportedOperationException(); }
-	@Override
-	public V computeIfAbsentNonDefault(short key, ShortFunction<V> mappingFunction) { throw new UnsupportedOperationException(); }
 	@Override
 	public V supplyIfAbsent(short key, ObjectSupplier<V> valueProvider) { throw new UnsupportedOperationException(); }
 	@Override
-	public V supplyIfAbsentNonDefault(short key, ObjectSupplier<V> valueProvider) { throw new UnsupportedOperationException(); }
-	@Override
 	public V computeIfPresent(short key, ShortObjectUnaryOperator<V> mappingFunction) { throw new UnsupportedOperationException(); }
-	@Override
-	public V computeIfPresentNonDefault(short key, ShortObjectUnaryOperator<V> mappingFunction) { throw new UnsupportedOperationException(); }
-	
 	@Override
 	public V merge(short key, V value, ObjectObjectUnaryOperator<V, V> mappingFunction) { throw new UnsupportedOperationException(); }
 	

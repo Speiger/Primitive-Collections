@@ -417,20 +417,19 @@ public class ImmutableInt2ByteOpenHashMap extends AbstractInt2ByteMap implements
 	@Override
 	public byte computeByte(int key, IntByteUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
 	@Override
-	public byte computeByteNonDefault(int key, IntByteUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
-	@Override
 	public byte computeByteIfAbsent(int key, Int2ByteFunction mappingFunction) { throw new UnsupportedOperationException(); }
-	@Override
-	public byte computeByteIfAbsentNonDefault(int key, Int2ByteFunction mappingFunction) { throw new UnsupportedOperationException(); }
 	@Override
 	public byte supplyByteIfAbsent(int key, ByteSupplier valueProvider) { throw new UnsupportedOperationException(); }
 	@Override
-	public byte supplyByteIfAbsentNonDefault(int key, ByteSupplier valueProvider) { throw new UnsupportedOperationException(); }
-	@Override
 	public byte computeByteIfPresent(int key, IntByteUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
 	@Override
+	public byte computeByteNonDefault(int key, IntByteUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
+	@Override
+	public byte computeByteIfAbsentNonDefault(int key, Int2ByteFunction mappingFunction) { throw new UnsupportedOperationException(); }
+	@Override
+	public byte supplyByteIfAbsentNonDefault(int key, ByteSupplier valueProvider) { throw new UnsupportedOperationException(); }
+	@Override
 	public byte computeByteIfPresentNonDefault(int key, IntByteUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
-	
 	@Override
 	public byte mergeByte(int key, byte value, ByteByteUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
 	

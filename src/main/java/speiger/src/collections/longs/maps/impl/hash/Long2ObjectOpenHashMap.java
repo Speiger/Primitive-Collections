@@ -401,47 +401,9 @@ public class Long2ObjectOpenHashMap<V> extends AbstractLong2ObjectMap<V> impleme
 		values[index] = newValue;
 		return newValue;
 	}
-	
-	@Override
-	public V computeNonDefault(long key, LongObjectUnaryOperator<V> mappingFunction) {
-		Objects.requireNonNull(mappingFunction);
-		int index = findIndex(key);
-		if(index < 0) {
-			V newValue = mappingFunction.apply(key, getDefaultReturnValue());
-			if(Objects.equals(newValue, getDefaultReturnValue())) return newValue;
-			insert(-index-1, key, newValue);
-			return newValue;
-		}
-		V newValue = mappingFunction.apply(key, values[index]);
-		if(Objects.equals(newValue, getDefaultReturnValue())) {
-			removeIndex(index);
-			return newValue;
-		}
-		values[index] = newValue;
-		return newValue;
-	}
-	
+		
 	@Override
 	public V computeIfAbsent(long key, LongFunction<V> mappingFunction) {
-		Objects.requireNonNull(mappingFunction);
-		int index = findIndex(key);
-		if(index < 0) {
-			V newValue = mappingFunction.apply(key);
-			if(Objects.equals(newValue, getDefaultReturnValue())) return newValue;
-			insert(-index-1, key, newValue);
-			return newValue;
-		}
-		V newValue = values[index];
-		if(Objects.equals(newValue, getDefaultReturnValue())) {
-			newValue = mappingFunction.apply(key);
-			if(Objects.equals(newValue, getDefaultReturnValue())) return newValue;
-			values[index] = newValue;
-		}
-		return newValue;
-	}
-	
-	@Override
-	public V computeIfAbsentNonDefault(long key, LongFunction<V> mappingFunction) {
 		Objects.requireNonNull(mappingFunction);
 		int index = findIndex(key);
 		if(index < 0) {
@@ -477,42 +439,9 @@ public class Long2ObjectOpenHashMap<V> extends AbstractLong2ObjectMap<V> impleme
 		}
 		return newValue;
 	}
-	
-	@Override
-	public V supplyIfAbsentNonDefault(long key, ObjectSupplier<V> valueProvider) {
-		Objects.requireNonNull(valueProvider);
-		int index = findIndex(key);
-		if(index < 0) {
-			V newValue = valueProvider.get();
-			if(Objects.equals(newValue, getDefaultReturnValue())) return newValue;
-			insert(-index-1, key, newValue);
-			return newValue;
-		}
-		V newValue = values[index];
-		if(Objects.equals(newValue, getDefaultReturnValue())) {
-			newValue = valueProvider.get();
-			if(Objects.equals(newValue, getDefaultReturnValue())) return newValue;
-			values[index] = newValue;
-		}
-		return newValue;
-	}
-	
+		
 	@Override
 	public V computeIfPresent(long key, LongObjectUnaryOperator<V> mappingFunction) {
-		Objects.requireNonNull(mappingFunction);
-		int index = findIndex(key);
-		if(index < 0 || Objects.equals(values[index], getDefaultReturnValue())) return getDefaultReturnValue();
-		V newValue = mappingFunction.apply(key, values[index]);
-		if(Objects.equals(newValue, getDefaultReturnValue())) {
-			removeIndex(index);
-			return newValue;
-		}
-		values[index] = newValue;
-		return newValue;
-	}
-	
-	@Override
-	public V computeIfPresentNonDefault(long key, LongObjectUnaryOperator<V> mappingFunction) {
 		Objects.requireNonNull(mappingFunction);
 		int index = findIndex(key);
 		if(index < 0 || Objects.equals(values[index], getDefaultReturnValue())) return getDefaultReturnValue();

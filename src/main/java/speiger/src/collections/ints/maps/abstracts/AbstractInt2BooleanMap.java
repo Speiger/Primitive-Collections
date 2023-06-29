@@ -152,6 +152,39 @@ public abstract class AbstractInt2BooleanMap extends AbstractMap<Integer, Boolea
 	}
 	
 	@Override
+	public boolean computeBooleanIfAbsent(int key, IntPredicate mappingFunction) {
+		Objects.requireNonNull(mappingFunction);
+		if(!containsKey(key)) {
+			boolean newValue = mappingFunction.test(key);
+			put(key, newValue);
+			return newValue;
+		}
+		return get(key);
+	}
+	
+	@Override
+	public boolean supplyBooleanIfAbsent(int key, BooleanSupplier valueProvider) {
+		Objects.requireNonNull(valueProvider);
+		if(!containsKey(key)) {
+			boolean newValue = valueProvider.getAsBoolean();
+			put(key, newValue);
+			return newValue;
+		}
+		return get(key);
+	}
+	
+	@Override
+	public boolean computeBooleanIfPresent(int key, IntBooleanUnaryOperator mappingFunction) {
+		Objects.requireNonNull(mappingFunction);
+		if(containsKey(key)) {
+			boolean newValue = mappingFunction.applyAsBoolean(key, get(key));
+			put(key, newValue);
+			return newValue;
+		}
+		return getDefaultReturnValue();
+	}
+	
+	@Override
 	public boolean computeBooleanNonDefault(int key, IntBooleanUnaryOperator mappingFunction) {
 		Objects.requireNonNull(mappingFunction);
 		boolean value = get(key);
@@ -165,17 +198,6 @@ public abstract class AbstractInt2BooleanMap extends AbstractMap<Integer, Boolea
 		}
 		put(key, newValue);
 		return newValue;
-	}
-	
-	@Override
-	public boolean computeBooleanIfAbsent(int key, IntPredicate mappingFunction) {
-		Objects.requireNonNull(mappingFunction);
-		if(!containsKey(key)) {
-			boolean newValue = mappingFunction.test(key);
-			put(key, newValue);
-			return newValue;
-		}
-		return get(key);
 	}
 	
 	@Override
@@ -193,17 +215,6 @@ public abstract class AbstractInt2BooleanMap extends AbstractMap<Integer, Boolea
 	}
 	
 	@Override
-	public boolean supplyBooleanIfAbsent(int key, BooleanSupplier valueProvider) {
-		Objects.requireNonNull(valueProvider);
-		if(!containsKey(key)) {
-			boolean newValue = valueProvider.getAsBoolean();
-			put(key, newValue);
-			return newValue;
-		}
-		return get(key);
-	}
-	
-	@Override
 	public boolean supplyBooleanIfAbsentNonDefault(int key, BooleanSupplier valueProvider) {
 		Objects.requireNonNull(valueProvider);
 		boolean value;
@@ -215,17 +226,6 @@ public abstract class AbstractInt2BooleanMap extends AbstractMap<Integer, Boolea
 			}
 		}
 		return value;
-	}
-	
-	@Override
-	public boolean computeBooleanIfPresent(int key, IntBooleanUnaryOperator mappingFunction) {
-		Objects.requireNonNull(mappingFunction);
-		if(containsKey(key)) {
-			boolean newValue = mappingFunction.applyAsBoolean(key, get(key));
-			put(key, newValue);
-			return newValue;
-		}
-		return getDefaultReturnValue();
 	}
 	
 	@Override

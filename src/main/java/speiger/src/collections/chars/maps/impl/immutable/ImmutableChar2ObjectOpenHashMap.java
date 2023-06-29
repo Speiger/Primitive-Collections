@@ -397,20 +397,11 @@ public class ImmutableChar2ObjectOpenHashMap<V> extends AbstractChar2ObjectMap<V
 	@Override
 	public V compute(char key, CharObjectUnaryOperator<V> mappingFunction) { throw new UnsupportedOperationException(); }
 	@Override
-	public V computeNonDefault(char key, CharObjectUnaryOperator<V> mappingFunction) { throw new UnsupportedOperationException(); }
-	@Override
 	public V computeIfAbsent(char key, CharFunction<V> mappingFunction) { throw new UnsupportedOperationException(); }
-	@Override
-	public V computeIfAbsentNonDefault(char key, CharFunction<V> mappingFunction) { throw new UnsupportedOperationException(); }
 	@Override
 	public V supplyIfAbsent(char key, ObjectSupplier<V> valueProvider) { throw new UnsupportedOperationException(); }
 	@Override
-	public V supplyIfAbsentNonDefault(char key, ObjectSupplier<V> valueProvider) { throw new UnsupportedOperationException(); }
-	@Override
 	public V computeIfPresent(char key, CharObjectUnaryOperator<V> mappingFunction) { throw new UnsupportedOperationException(); }
-	@Override
-	public V computeIfPresentNonDefault(char key, CharObjectUnaryOperator<V> mappingFunction) { throw new UnsupportedOperationException(); }
-	
 	@Override
 	public V merge(char key, V value, ObjectObjectUnaryOperator<V, V> mappingFunction) { throw new UnsupportedOperationException(); }
 	

@@ -447,6 +447,43 @@ public class Object2FloatAVLTreeMap<T> extends AbstractObject2FloatMap<T> implem
 	}
 	
 	@Override
+	public float computeFloatIfAbsent(T key, ToFloatFunction<T> mappingFunction) {
+		Objects.requireNonNull(mappingFunction);
+		validate(key);
+		Node<T> entry = findNode(key);
+		if(entry == null) {
+			float newValue = mappingFunction.applyAsFloat(key);
+			put(key, newValue);
+			return newValue;
+		}
+		return entry.value;
+	}
+	
+	@Override
+	public float supplyFloatIfAbsent(T key, FloatSupplier valueProvider) {
+		Objects.requireNonNull(valueProvider);
+		validate(key);
+		Node<T> entry = findNode(key);
+		if(entry == null) {
+			float newValue = valueProvider.getAsFloat();
+			put(key, newValue);
+			return newValue;
+		}
+		return entry.value;
+	}
+	
+	@Override
+	public float computeFloatIfPresent(T key, ObjectFloatUnaryOperator<T> mappingFunction) {
+		Objects.requireNonNull(mappingFunction);
+		validate(key);
+		Node<T> entry = findNode(key);
+		if(entry == null) return getDefaultReturnValue();
+		float newValue = mappingFunction.applyAsFloat(key, entry.value);
+		entry.value = newValue;
+		return newValue;
+	}
+	
+	@Override
 	public float computeFloatNonDefault(T key, ObjectFloatUnaryOperator<T> mappingFunction) {
 		Objects.requireNonNull(mappingFunction);
 		validate(key);
@@ -464,19 +501,6 @@ public class Object2FloatAVLTreeMap<T> extends AbstractObject2FloatMap<T> implem
 		}
 		entry.value = newValue;
 		return newValue;
-	}
-	
-	@Override
-	public float computeFloatIfAbsent(T key, ToFloatFunction<T> mappingFunction) {
-		Objects.requireNonNull(mappingFunction);
-		validate(key);
-		Node<T> entry = findNode(key);
-		if(entry == null) {
-			float newValue = mappingFunction.applyAsFloat(key);
-			put(key, newValue);
-			return newValue;
-		}
-		return entry.value;
 	}
 	
 	@Override
@@ -499,46 +523,22 @@ public class Object2FloatAVLTreeMap<T> extends AbstractObject2FloatMap<T> implem
 	}
 	
 	@Override
-	public float supplyFloatIfAbsent(T key, FloatSupplier valueProvider) {
-		Objects.requireNonNull(valueProvider);
-		validate(key);
-		Node<T> entry = findNode(key);
-		if(entry == null) {
-			float newValue = valueProvider.getAsDouble();
-			put(key, newValue);
-			return newValue;
-		}
-		return entry.value;
-	}
-	
-	@Override
 	public float supplyFloatIfAbsentNonDefault(T key, FloatSupplier valueProvider) {
 		Objects.requireNonNull(valueProvider);
 		validate(key);
 		Node<T> entry = findNode(key);
 		if(entry == null) {
-			float newValue = valueProvider.getAsDouble();
+			float newValue = valueProvider.getAsFloat();
 			if(Float.floatToIntBits(newValue) == Float.floatToIntBits(getDefaultReturnValue())) return newValue;
 			put(key, newValue);
 			return newValue;
 		}
 		if(Float.floatToIntBits(entry.value) == Float.floatToIntBits(getDefaultReturnValue())) {
-			float newValue = valueProvider.getAsDouble();
+			float newValue = valueProvider.getAsFloat();
 			if(Float.floatToIntBits(newValue) == Float.floatToIntBits(getDefaultReturnValue())) return newValue;
 			entry.value = newValue;
 		}
 		return entry.value;
-	}
-	
-	@Override
-	public float computeFloatIfPresent(T key, ObjectFloatUnaryOperator<T> mappingFunction) {
-		Objects.requireNonNull(mappingFunction);
-		validate(key);
-		Node<T> entry = findNode(key);
-		if(entry == null) return getDefaultReturnValue();
-		float newValue = mappingFunction.applyAsFloat(key, entry.value);
-		entry.value = newValue;
-		return newValue;
 	}
 	
 	@Override
@@ -1520,14 +1520,9 @@ public class Object2FloatAVLTreeMap<T> extends AbstractObject2FloatMap<T> implem
 			map.validate(key);
 			if(!inRange(key)) return getDefaultReturnValue();
 			Node<T> entry = map.findNode(key);
-			if(entry == null || Float.floatToIntBits(entry.value) == Float.floatToIntBits(getDefaultReturnValue())) return getDefaultReturnValue();
-			float newValue = mappingFunction.apply(key, entry.value);
-			if(Float.floatToIntBits(newValue) == Float.floatToIntBits(getDefaultReturnValue())) {
-				map.removeNode(entry);
-				return newValue;
-			}
-			entry.value = newValue;
-			return newValue;
+			if(entry == null) return getDefaultReturnValue();
+			entry.value = mappingFunction.apply(key, entry.value);
+			return entry.value;
 		}
 		
 		@Override

@@ -402,20 +402,19 @@ public class ImmutableObject2IntOpenHashMap<T> extends AbstractObject2IntMap<T> 
 	@Override
 	public int computeInt(T key, ObjectIntUnaryOperator<T> mappingFunction) { throw new UnsupportedOperationException(); }
 	@Override
-	public int computeIntNonDefault(T key, ObjectIntUnaryOperator<T> mappingFunction) { throw new UnsupportedOperationException(); }
-	@Override
 	public int computeIntIfAbsent(T key, ToIntFunction<T> mappingFunction) { throw new UnsupportedOperationException(); }
-	@Override
-	public int computeIntIfAbsentNonDefault(T key, ToIntFunction<T> mappingFunction) { throw new UnsupportedOperationException(); }
 	@Override
 	public int supplyIntIfAbsent(T key, IntSupplier valueProvider) { throw new UnsupportedOperationException(); }
 	@Override
-	public int supplyIntIfAbsentNonDefault(T key, IntSupplier valueProvider) { throw new UnsupportedOperationException(); }
-	@Override
 	public int computeIntIfPresent(T key, ObjectIntUnaryOperator<T> mappingFunction) { throw new UnsupportedOperationException(); }
 	@Override
+	public int computeIntNonDefault(T key, ObjectIntUnaryOperator<T> mappingFunction) { throw new UnsupportedOperationException(); }
+	@Override
+	public int computeIntIfAbsentNonDefault(T key, ToIntFunction<T> mappingFunction) { throw new UnsupportedOperationException(); }
+	@Override
+	public int supplyIntIfAbsentNonDefault(T key, IntSupplier valueProvider) { throw new UnsupportedOperationException(); }
+	@Override
 	public int computeIntIfPresentNonDefault(T key, ObjectIntUnaryOperator<T> mappingFunction) { throw new UnsupportedOperationException(); }
-	
 	@Override
 	public int mergeInt(T key, int value, IntIntUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
 	

@@ -443,6 +443,42 @@ public class Long2CharArrayMap extends AbstractLong2CharMap implements Long2Char
 	}
 	
 	@Override
+	public char computeCharIfAbsent(long key, Long2CharFunction mappingFunction) {
+		Objects.requireNonNull(mappingFunction);
+		int index = findIndex(key);
+		if(index == -1) {
+			char newValue = mappingFunction.applyAsChar(key);
+			insertIndex(size++, key, newValue);
+			return newValue;
+		}
+		char newValue = values[index];
+		return newValue;
+	}
+		
+	@Override
+	public char supplyCharIfAbsent(long key, CharSupplier valueProvider) {
+		Objects.requireNonNull(valueProvider);
+		int index = findIndex(key);
+		if(index == -1) {
+			char newValue = valueProvider.getAsChar();
+			insertIndex(size++, key, newValue);
+			return newValue;
+		}
+		char newValue = values[index];
+		return newValue;
+	}
+		
+	@Override
+	public char computeCharIfPresent(long key, LongCharUnaryOperator mappingFunction) {
+		Objects.requireNonNull(mappingFunction);
+		int index = findIndex(key);
+		if(index == -1) return getDefaultReturnValue();
+		char newValue = mappingFunction.applyAsChar(key, values[index]);
+		values[index] = newValue;
+		return newValue;
+	}
+	
+	@Override
 	public char computeCharNonDefault(long key, LongCharUnaryOperator mappingFunction) {
 		Objects.requireNonNull(mappingFunction);
 		int index = findIndex(key);
@@ -458,19 +494,6 @@ public class Long2CharArrayMap extends AbstractLong2CharMap implements Long2Char
 			return newValue;
 		}
 		values[index] = newValue;
-		return newValue;
-	}
-	
-	@Override
-	public char computeCharIfAbsent(long key, Long2CharFunction mappingFunction) {
-		Objects.requireNonNull(mappingFunction);
-		int index = findIndex(key);
-		if(index == -1) {
-			char newValue = mappingFunction.applyAsChar(key);
-			insertIndex(size++, key, newValue);
-			return newValue;
-		}
-		char newValue = values[index];
 		return newValue;
 	}
 	
@@ -494,44 +517,21 @@ public class Long2CharArrayMap extends AbstractLong2CharMap implements Long2Char
 	}
 	
 	@Override
-	public char supplyCharIfAbsent(long key, CharSupplier valueProvider) {
-		Objects.requireNonNull(valueProvider);
-		int index = findIndex(key);
-		if(index == -1) {
-			char newValue = valueProvider.getAsInt();
-			insertIndex(size++, key, newValue);
-			return newValue;
-		}
-		char newValue = values[index];
-		return newValue;
-	}
-	
-	@Override
 	public char supplyCharIfAbsentNonDefault(long key, CharSupplier valueProvider) {
 		Objects.requireNonNull(valueProvider);
 		int index = findIndex(key);
 		if(index == -1) {
-			char newValue = valueProvider.getAsInt();
+			char newValue = valueProvider.getAsChar();
 			if(newValue == getDefaultReturnValue()) return newValue;
 			insertIndex(size++, key, newValue);
 			return newValue;
 		}
 		char newValue = values[index];
 		if(newValue == getDefaultReturnValue()) {
-			newValue = valueProvider.getAsInt();
+			newValue = valueProvider.getAsChar();
 			if(newValue == getDefaultReturnValue()) return newValue;
 			values[index] = newValue;
 		}
-		return newValue;
-	}
-	
-	@Override
-	public char computeCharIfPresent(long key, LongCharUnaryOperator mappingFunction) {
-		Objects.requireNonNull(mappingFunction);
-		int index = findIndex(key);
-		if(index == -1) return getDefaultReturnValue();
-		char newValue = mappingFunction.applyAsChar(key, values[index]);
-		values[index] = newValue;
 		return newValue;
 	}
 	

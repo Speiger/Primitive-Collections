@@ -145,37 +145,7 @@ public abstract class AbstractObject2ObjectMap<T, V> extends AbstractMap<T, V> i
 	}
 	
 	@Override
-	public V computeNonDefault(T key, ObjectObjectUnaryOperator<T, V> mappingFunction) {
-		Objects.requireNonNull(mappingFunction);
-		V value = getObject(key);
-		V newValue = mappingFunction.apply(key, value);
-		if(Objects.equals(newValue, getDefaultReturnValue())) {
-			if(!Objects.equals(value, getDefaultReturnValue()) || containsKey(key)) {
-				remove(key);
-				return getDefaultReturnValue();
-			}
-			return getDefaultReturnValue();
-		}
-		put(key, newValue);
-		return newValue;
-	}
-	
-	@Override
 	public V computeIfAbsent(T key, UnaryOperator<T, V> mappingFunction) {
-		Objects.requireNonNull(mappingFunction);
-		V value;
-		if((value = getObject(key)) == getDefaultReturnValue() || !containsKey(key)) {
-			V newValue = mappingFunction.apply(key);
-			if(!Objects.equals(newValue, getDefaultReturnValue())) {
-				put(key, newValue);
-				return newValue;
-			}
-		}
-		return value;
-	}
-	
-	@Override
-	public V computeIfAbsentNonDefault(T key, UnaryOperator<T, V> mappingFunction) {
 		Objects.requireNonNull(mappingFunction);
 		V value;
 		if((value = getObject(key)) == getDefaultReturnValue() || !containsKey(key)) {
@@ -203,36 +173,7 @@ public abstract class AbstractObject2ObjectMap<T, V> extends AbstractMap<T, V> i
 	}
 	
 	@Override
-	public V supplyIfAbsentNonDefault(T key, ObjectSupplier<V> valueProvider) {
-		Objects.requireNonNull(valueProvider);
-		V value;
-		if((value = getObject(key)) == getDefaultReturnValue() || !containsKey(key)) {
-			V newValue = valueProvider.get();
-			if(!Objects.equals(newValue, getDefaultReturnValue())) {
-				put(key, newValue);
-				return newValue;
-			}
-		}
-		return value;
-	}
-	
-	@Override
 	public V computeIfPresent(T key, ObjectObjectUnaryOperator<T, V> mappingFunction) {
-		Objects.requireNonNull(mappingFunction);
-		V value;
-		if(!Objects.equals((value = getObject(key)), getDefaultReturnValue()) || containsKey(key)) {
-			V newValue = mappingFunction.apply(key, value);
-			if(!Objects.equals(newValue, getDefaultReturnValue())) {
-				put(key, newValue);
-				return newValue;
-			}
-			remove(key);
-		}
-		return getDefaultReturnValue();
-	}
-	
-	@Override
-	public V computeIfPresentNonDefault(T key, ObjectObjectUnaryOperator<T, V> mappingFunction) {
 		Objects.requireNonNull(mappingFunction);
 		V value;
 		if(!Objects.equals((value = getObject(key)), getDefaultReturnValue()) || containsKey(key)) {

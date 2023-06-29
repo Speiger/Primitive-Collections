@@ -2,6 +2,7 @@ package speiger.src.collections.doubles.utils;
 
 import java.util.Iterator;
 import java.util.NoSuchElementException;
+import java.util.function.Consumer;
 import java.util.function.DoublePredicate;
 
 import speiger.src.collections.doubles.collections.DoubleIterator;
@@ -10,12 +11,14 @@ import speiger.src.collections.objects.utils.ObjectIterators;
 import speiger.src.collections.doubles.functions.DoubleConsumer;
 import speiger.src.collections.doubles.functions.DoubleComparator;
 import speiger.src.collections.doubles.functions.function.DoubleFunction;
+import speiger.src.collections.objects.functions.consumer.ObjectDoubleConsumer;
 import speiger.src.collections.doubles.lists.DoubleList;
 import speiger.src.collections.doubles.lists.DoubleArrayList;
 
 import speiger.src.collections.doubles.lists.DoubleListIterator;
 import speiger.src.collections.doubles.collections.DoubleBidirectionalIterator;
 import speiger.src.collections.doubles.collections.DoubleCollection;
+import speiger.src.collections.doubles.utils.DoubleCollections.CollectionWrapper;
 
 /**
  * A Helper class for Iterators
@@ -204,6 +207,24 @@ public class DoubleIterators
 	 */
 	public static DoubleIterator repeat(Iterator<? extends Double> iterator, int repeats) {
 		return new RepeatingIterator(wrap(iterator), repeats);
+	}
+	
+	/**
+	 * A Helper function that creates a infinitely looping iterator
+	 * @param iterator that should be looping infinitely
+	 * @return a infinitely looping iterator
+	 */
+	public static DoubleIterator infinite(DoubleIterator iterator) {
+		return new InfiniteIterator(iterator);
+	}
+	
+	/**
+	 * A Helper function that creates a infinitely looping iterator from a Java Iterator
+	 * @param iterator that should be looping infinitely
+	 * @return a infinitely looping iterator
+	 */
+	public static DoubleIterator infinite(Iterator<? extends Double> iterator) {
+		return new InfiniteIterator(wrap(iterator));
 	}
 	
 	/**
@@ -839,6 +860,40 @@ public class DoubleIterators
 			foundNext = false;
 			return result;
 		}
+	}
+	
+	private static class InfiniteIterator implements DoubleIterator
+	{
+		DoubleIterator iter;
+		CollectionWrapper looper = DoubleCollections.wrapper();
+		int index = 0;
+		
+		public InfiniteIterator(DoubleIterator iter) {
+			this.iter = iter;
+		}
+		
+		@Override
+		public boolean hasNext() {
+			return true;
+		}
+
+		@Override
+		public double nextDouble() {
+			if(iter != null) {
+				if(iter.hasNext()) {
+					double value = iter.nextDouble();
+					looper.add(value);
+					return value;
+				}
+				else iter = null;
+			}
+			return looper.getDouble((index++) % looper.size());
+		}
+		
+		@Override
+		public void forEachRemaining(DoubleConsumer action) { throw new UnsupportedOperationException("This is a instant deadlock, so unsupported"); }
+		public void forEachRemaining(Consumer<? super Double> action) { throw new UnsupportedOperationException("This is a instant deadlock, so unsupported"); }
+		public <E> void forEachRemaining(E input, ObjectDoubleConsumer<E> action) { throw new UnsupportedOperationException("This is a instant deadlock, so unsupported"); }
 	}
 	
 	private static class RepeatingIterator implements DoubleIterator

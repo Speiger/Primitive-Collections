@@ -418,20 +418,19 @@ public class ImmutableLong2ByteOpenHashMap extends AbstractLong2ByteMap implemen
 	@Override
 	public byte computeByte(long key, LongByteUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
 	@Override
-	public byte computeByteNonDefault(long key, LongByteUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
-	@Override
 	public byte computeByteIfAbsent(long key, Long2ByteFunction mappingFunction) { throw new UnsupportedOperationException(); }
-	@Override
-	public byte computeByteIfAbsentNonDefault(long key, Long2ByteFunction mappingFunction) { throw new UnsupportedOperationException(); }
 	@Override
 	public byte supplyByteIfAbsent(long key, ByteSupplier valueProvider) { throw new UnsupportedOperationException(); }
 	@Override
-	public byte supplyByteIfAbsentNonDefault(long key, ByteSupplier valueProvider) { throw new UnsupportedOperationException(); }
-	@Override
 	public byte computeByteIfPresent(long key, LongByteUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
 	@Override
+	public byte computeByteNonDefault(long key, LongByteUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
+	@Override
+	public byte computeByteIfAbsentNonDefault(long key, Long2ByteFunction mappingFunction) { throw new UnsupportedOperationException(); }
+	@Override
+	public byte supplyByteIfAbsentNonDefault(long key, ByteSupplier valueProvider) { throw new UnsupportedOperationException(); }
+	@Override
 	public byte computeByteIfPresentNonDefault(long key, LongByteUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
-	
 	@Override
 	public byte mergeByte(long key, byte value, ByteByteUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
 	

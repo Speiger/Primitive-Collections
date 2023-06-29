@@ -158,6 +158,39 @@ public abstract class AbstractByte2IntMap extends AbstractMap<Byte, Integer> imp
 	}
 	
 	@Override
+	public int computeIntIfAbsent(byte key, Byte2IntFunction mappingFunction) {
+		Objects.requireNonNull(mappingFunction);
+		if(!containsKey(key)) {
+			int newValue = mappingFunction.applyAsInt(key);
+			put(key, newValue);
+			return newValue;
+		}
+		return get(key);
+	}
+	
+	@Override
+	public int supplyIntIfAbsent(byte key, IntSupplier valueProvider) {
+		Objects.requireNonNull(valueProvider);
+		if(!containsKey(key)) {
+			int newValue = valueProvider.getAsInt();
+			put(key, newValue);
+			return newValue;
+		}
+		return get(key);
+	}
+	
+	@Override
+	public int computeIntIfPresent(byte key, ByteIntUnaryOperator mappingFunction) {
+		Objects.requireNonNull(mappingFunction);
+		if(containsKey(key)) {
+			int newValue = mappingFunction.applyAsInt(key, get(key));
+			put(key, newValue);
+			return newValue;
+		}
+		return getDefaultReturnValue();
+	}
+	
+	@Override
 	public int computeIntNonDefault(byte key, ByteIntUnaryOperator mappingFunction) {
 		Objects.requireNonNull(mappingFunction);
 		int value = get(key);
@@ -171,17 +204,6 @@ public abstract class AbstractByte2IntMap extends AbstractMap<Byte, Integer> imp
 		}
 		put(key, newValue);
 		return newValue;
-	}
-	
-	@Override
-	public int computeIntIfAbsent(byte key, Byte2IntFunction mappingFunction) {
-		Objects.requireNonNull(mappingFunction);
-		if(!containsKey(key)) {
-			int newValue = mappingFunction.applyAsInt(key);
-			put(key, newValue);
-			return newValue;
-		}
-		return get(key);
 	}
 	
 	@Override
@@ -199,17 +221,6 @@ public abstract class AbstractByte2IntMap extends AbstractMap<Byte, Integer> imp
 	}
 	
 	@Override
-	public int supplyIntIfAbsent(byte key, IntSupplier valueProvider) {
-		Objects.requireNonNull(valueProvider);
-		if(!containsKey(key)) {
-			int newValue = valueProvider.getAsInt();
-			put(key, newValue);
-			return newValue;
-		}
-		return get(key);
-	}
-	
-	@Override
 	public int supplyIntIfAbsentNonDefault(byte key, IntSupplier valueProvider) {
 		Objects.requireNonNull(valueProvider);
 		int value;
@@ -221,17 +232,6 @@ public abstract class AbstractByte2IntMap extends AbstractMap<Byte, Integer> imp
 			}
 		}
 		return value;
-	}
-	
-	@Override
-	public int computeIntIfPresent(byte key, ByteIntUnaryOperator mappingFunction) {
-		Objects.requireNonNull(mappingFunction);
-		if(containsKey(key)) {
-			int newValue = mappingFunction.applyAsInt(key, get(key));
-			put(key, newValue);
-			return newValue;
-		}
-		return getDefaultReturnValue();
 	}
 	
 	@Override

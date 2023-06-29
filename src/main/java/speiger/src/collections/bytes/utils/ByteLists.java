@@ -12,6 +12,7 @@ import speiger.src.collections.bytes.collections.ByteCollection;
 import speiger.src.collections.bytes.functions.ByteConsumer;
 import speiger.src.collections.bytes.lists.AbstractByteList;
 import speiger.src.collections.bytes.lists.ByteList;
+import speiger.src.collections.ints.lists.IntList;
 import speiger.src.collections.bytes.lists.ByteListIterator;
 import speiger.src.collections.utils.SanityChecks;
 
@@ -318,6 +319,16 @@ public class ByteLists
 		}
 		
 		@Override
+		public ByteListIterator indexedIterator(int...indecies) {
+			return l.indexedIterator(indecies);
+		}
+		
+		@Override
+		public ByteListIterator indexedIterator(IntList indecies) {
+			return l.indexedIterator(indecies);
+		}
+		
+		@Override
 		public ByteList subList(int from, int to) {
 			return ByteLists.synchronize(l.subList(from, to));
 		}
@@ -427,6 +438,16 @@ public class ByteLists
 		}
 		
 		@Override
+		public ByteListIterator indexedIterator(int...indecies) {
+			return ByteIterators.unmodifiable(l.indexedIterator(indecies));
+		}
+		
+		@Override
+		public ByteListIterator indexedIterator(IntList indecies) {
+			return ByteIterators.unmodifiable(l.indexedIterator(indecies));
+		}
+		
+		@Override
 		public ByteList subList(int from, int to) {
 			return ByteLists.unmodifiable(l.subList(from, to));
 		}
@@ -512,6 +533,16 @@ public class ByteLists
 			if(index != 0)
 				throw new IndexOutOfBoundsException();
 			return ByteIterators.empty();
+		}
+		
+		@Override
+		public ByteListIterator indexedIterator(int...indecies) {
+			return ByteIterators.empty(); 
+		}
+		
+		@Override
+		public ByteListIterator indexedIterator(IntList indecies) {
+			return ByteIterators.empty(); 
 		}
 		
 		@Override

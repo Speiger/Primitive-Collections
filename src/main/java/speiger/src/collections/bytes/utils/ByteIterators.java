@@ -2,6 +2,7 @@ package speiger.src.collections.bytes.utils;
 
 import java.util.Iterator;
 import java.util.NoSuchElementException;
+import java.util.function.Consumer;
 
 import speiger.src.collections.bytes.collections.ByteIterator;
 import speiger.src.collections.objects.collections.ObjectIterator;
@@ -9,6 +10,7 @@ import speiger.src.collections.objects.utils.ObjectIterators;
 import speiger.src.collections.bytes.functions.ByteConsumer;
 import speiger.src.collections.bytes.functions.ByteComparator;
 import speiger.src.collections.bytes.functions.function.ByteFunction;
+import speiger.src.collections.objects.functions.consumer.ObjectByteConsumer;
 import speiger.src.collections.bytes.functions.function.BytePredicate;
 import speiger.src.collections.bytes.lists.ByteList;
 import speiger.src.collections.bytes.lists.ByteArrayList;
@@ -16,6 +18,7 @@ import speiger.src.collections.bytes.lists.ByteArrayList;
 import speiger.src.collections.bytes.lists.ByteListIterator;
 import speiger.src.collections.bytes.collections.ByteBidirectionalIterator;
 import speiger.src.collections.bytes.collections.ByteCollection;
+import speiger.src.collections.bytes.utils.ByteCollections.CollectionWrapper;
 
 /**
  * A Helper class for Iterators
@@ -204,6 +207,24 @@ public class ByteIterators
 	 */
 	public static ByteIterator repeat(Iterator<? extends Byte> iterator, int repeats) {
 		return new RepeatingIterator(wrap(iterator), repeats);
+	}
+	
+	/**
+	 * A Helper function that creates a infinitely looping iterator
+	 * @param iterator that should be looping infinitely
+	 * @return a infinitely looping iterator
+	 */
+	public static ByteIterator infinite(ByteIterator iterator) {
+		return new InfiniteIterator(iterator);
+	}
+	
+	/**
+	 * A Helper function that creates a infinitely looping iterator from a Java Iterator
+	 * @param iterator that should be looping infinitely
+	 * @return a infinitely looping iterator
+	 */
+	public static ByteIterator infinite(Iterator<? extends Byte> iterator) {
+		return new InfiniteIterator(wrap(iterator));
 	}
 	
 	/**
@@ -839,6 +860,40 @@ public class ByteIterators
 			foundNext = false;
 			return result;
 		}
+	}
+	
+	private static class InfiniteIterator implements ByteIterator
+	{
+		ByteIterator iter;
+		CollectionWrapper looper = ByteCollections.wrapper();
+		int index = 0;
+		
+		public InfiniteIterator(ByteIterator iter) {
+			this.iter = iter;
+		}
+		
+		@Override
+		public boolean hasNext() {
+			return true;
+		}
+
+		@Override
+		public byte nextByte() {
+			if(iter != null) {
+				if(iter.hasNext()) {
+					byte value = iter.nextByte();
+					looper.add(value);
+					return value;
+				}
+				else iter = null;
+			}
+			return looper.getByte((index++) % looper.size());
+		}
+		
+		@Override
+		public void forEachRemaining(ByteConsumer action) { throw new UnsupportedOperationException("This is a instant deadlock, so unsupported"); }
+		public void forEachRemaining(Consumer<? super Byte> action) { throw new UnsupportedOperationException("This is a instant deadlock, so unsupported"); }
+		public <E> void forEachRemaining(E input, ObjectByteConsumer<E> action) { throw new UnsupportedOperationException("This is a instant deadlock, so unsupported"); }
 	}
 	
 	private static class RepeatingIterator implements ByteIterator

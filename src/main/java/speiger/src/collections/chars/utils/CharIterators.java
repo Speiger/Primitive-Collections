@@ -2,6 +2,7 @@ package speiger.src.collections.chars.utils;
 
 import java.util.Iterator;
 import java.util.NoSuchElementException;
+import java.util.function.Consumer;
 
 import speiger.src.collections.chars.collections.CharIterator;
 import speiger.src.collections.objects.collections.ObjectIterator;
@@ -9,6 +10,7 @@ import speiger.src.collections.objects.utils.ObjectIterators;
 import speiger.src.collections.chars.functions.CharConsumer;
 import speiger.src.collections.chars.functions.CharComparator;
 import speiger.src.collections.chars.functions.function.CharFunction;
+import speiger.src.collections.objects.functions.consumer.ObjectCharConsumer;
 import speiger.src.collections.chars.functions.function.CharPredicate;
 import speiger.src.collections.chars.lists.CharList;
 import speiger.src.collections.chars.lists.CharArrayList;
@@ -16,6 +18,7 @@ import speiger.src.collections.chars.lists.CharArrayList;
 import speiger.src.collections.chars.lists.CharListIterator;
 import speiger.src.collections.chars.collections.CharBidirectionalIterator;
 import speiger.src.collections.chars.collections.CharCollection;
+import speiger.src.collections.chars.utils.CharCollections.CollectionWrapper;
 
 /**
  * A Helper class for Iterators
@@ -204,6 +207,24 @@ public class CharIterators
 	 */
 	public static CharIterator repeat(Iterator<? extends Character> iterator, int repeats) {
 		return new RepeatingIterator(wrap(iterator), repeats);
+	}
+	
+	/**
+	 * A Helper function that creates a infinitely looping iterator
+	 * @param iterator that should be looping infinitely
+	 * @return a infinitely looping iterator
+	 */
+	public static CharIterator infinite(CharIterator iterator) {
+		return new InfiniteIterator(iterator);
+	}
+	
+	/**
+	 * A Helper function that creates a infinitely looping iterator from a Java Iterator
+	 * @param iterator that should be looping infinitely
+	 * @return a infinitely looping iterator
+	 */
+	public static CharIterator infinite(Iterator<? extends Character> iterator) {
+		return new InfiniteIterator(wrap(iterator));
 	}
 	
 	/**
@@ -839,6 +860,40 @@ public class CharIterators
 			foundNext = false;
 			return result;
 		}
+	}
+	
+	private static class InfiniteIterator implements CharIterator
+	{
+		CharIterator iter;
+		CollectionWrapper looper = CharCollections.wrapper();
+		int index = 0;
+		
+		public InfiniteIterator(CharIterator iter) {
+			this.iter = iter;
+		}
+		
+		@Override
+		public boolean hasNext() {
+			return true;
+		}
+
+		@Override
+		public char nextChar() {
+			if(iter != null) {
+				if(iter.hasNext()) {
+					char value = iter.nextChar();
+					looper.add(value);
+					return value;
+				}
+				else iter = null;
+			}
+			return looper.getChar((index++) % looper.size());
+		}
+		
+		@Override
+		public void forEachRemaining(CharConsumer action) { throw new UnsupportedOperationException("This is a instant deadlock, so unsupported"); }
+		public void forEachRemaining(Consumer<? super Character> action) { throw new UnsupportedOperationException("This is a instant deadlock, so unsupported"); }
+		public <E> void forEachRemaining(E input, ObjectCharConsumer<E> action) { throw new UnsupportedOperationException("This is a instant deadlock, so unsupported"); }
 	}
 	
 	private static class RepeatingIterator implements CharIterator

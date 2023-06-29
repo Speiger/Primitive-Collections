@@ -158,6 +158,39 @@ public abstract class AbstractInt2FloatMap extends AbstractMap<Integer, Float> i
 	}
 	
 	@Override
+	public float computeFloatIfAbsent(int key, Int2FloatFunction mappingFunction) {
+		Objects.requireNonNull(mappingFunction);
+		if(!containsKey(key)) {
+			float newValue = mappingFunction.applyAsFloat(key);
+			put(key, newValue);
+			return newValue;
+		}
+		return get(key);
+	}
+	
+	@Override
+	public float supplyFloatIfAbsent(int key, FloatSupplier valueProvider) {
+		Objects.requireNonNull(valueProvider);
+		if(!containsKey(key)) {
+			float newValue = valueProvider.getAsFloat();
+			put(key, newValue);
+			return newValue;
+		}
+		return get(key);
+	}
+	
+	@Override
+	public float computeFloatIfPresent(int key, IntFloatUnaryOperator mappingFunction) {
+		Objects.requireNonNull(mappingFunction);
+		if(containsKey(key)) {
+			float newValue = mappingFunction.applyAsFloat(key, get(key));
+			put(key, newValue);
+			return newValue;
+		}
+		return getDefaultReturnValue();
+	}
+	
+	@Override
 	public float computeFloatNonDefault(int key, IntFloatUnaryOperator mappingFunction) {
 		Objects.requireNonNull(mappingFunction);
 		float value = get(key);
@@ -171,17 +204,6 @@ public abstract class AbstractInt2FloatMap extends AbstractMap<Integer, Float> i
 		}
 		put(key, newValue);
 		return newValue;
-	}
-	
-	@Override
-	public float computeFloatIfAbsent(int key, Int2FloatFunction mappingFunction) {
-		Objects.requireNonNull(mappingFunction);
-		if(!containsKey(key)) {
-			float newValue = mappingFunction.applyAsFloat(key);
-			put(key, newValue);
-			return newValue;
-		}
-		return get(key);
 	}
 	
 	@Override
@@ -199,39 +221,17 @@ public abstract class AbstractInt2FloatMap extends AbstractMap<Integer, Float> i
 	}
 	
 	@Override
-	public float supplyFloatIfAbsent(int key, FloatSupplier valueProvider) {
-		Objects.requireNonNull(valueProvider);
-		if(!containsKey(key)) {
-			float newValue = valueProvider.getAsDouble();
-			put(key, newValue);
-			return newValue;
-		}
-		return get(key);
-	}
-	
-	@Override
 	public float supplyFloatIfAbsentNonDefault(int key, FloatSupplier valueProvider) {
 		Objects.requireNonNull(valueProvider);
 		float value;
 		if((value = get(key)) == getDefaultReturnValue() || !containsKey(key)) {
-			float newValue = valueProvider.getAsDouble();
+			float newValue = valueProvider.getAsFloat();
 			if(Float.floatToIntBits(newValue) != Float.floatToIntBits(getDefaultReturnValue())) {
 				put(key, newValue);
 				return newValue;
 			}
 		}
 		return value;
-	}
-	
-	@Override
-	public float computeFloatIfPresent(int key, IntFloatUnaryOperator mappingFunction) {
-		Objects.requireNonNull(mappingFunction);
-		if(containsKey(key)) {
-			float newValue = mappingFunction.applyAsFloat(key, get(key));
-			put(key, newValue);
-			return newValue;
-		}
-		return getDefaultReturnValue();
 	}
 	
 	@Override

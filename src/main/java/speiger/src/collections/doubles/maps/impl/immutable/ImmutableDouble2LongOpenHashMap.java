@@ -418,20 +418,19 @@ public class ImmutableDouble2LongOpenHashMap extends AbstractDouble2LongMap impl
 	@Override
 	public long computeLong(double key, DoubleLongUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
 	@Override
-	public long computeLongNonDefault(double key, DoubleLongUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
-	@Override
 	public long computeLongIfAbsent(double key, Double2LongFunction mappingFunction) { throw new UnsupportedOperationException(); }
-	@Override
-	public long computeLongIfAbsentNonDefault(double key, Double2LongFunction mappingFunction) { throw new UnsupportedOperationException(); }
 	@Override
 	public long supplyLongIfAbsent(double key, LongSupplier valueProvider) { throw new UnsupportedOperationException(); }
 	@Override
-	public long supplyLongIfAbsentNonDefault(double key, LongSupplier valueProvider) { throw new UnsupportedOperationException(); }
-	@Override
 	public long computeLongIfPresent(double key, DoubleLongUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
 	@Override
+	public long computeLongNonDefault(double key, DoubleLongUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
+	@Override
+	public long computeLongIfAbsentNonDefault(double key, Double2LongFunction mappingFunction) { throw new UnsupportedOperationException(); }
+	@Override
+	public long supplyLongIfAbsentNonDefault(double key, LongSupplier valueProvider) { throw new UnsupportedOperationException(); }
+	@Override
 	public long computeLongIfPresentNonDefault(double key, DoubleLongUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
-	
 	@Override
 	public long mergeLong(double key, long value, LongLongUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
 	

@@ -14,6 +14,7 @@ import speiger.src.collections.ints.functions.consumer.IntCharConsumer;
 import speiger.src.collections.chars.functions.CharComparator;
 import speiger.src.collections.chars.utils.CharArrays;
 import speiger.src.collections.chars.utils.CharLists;
+import speiger.src.collections.ints.lists.IntList;
 import speiger.src.collections.chars.utils.CharSplititerators;
 import speiger.src.collections.utils.SanityChecks;
 
@@ -341,6 +342,24 @@ public interface CharList extends CharCollection, List<Character>
 	 */
 	@Override
 	public CharListIterator listIterator(int index);
+	
+	/**
+	 * Creates a Iterator that follows the indecies provided.<br>
+	 * For example if the Lists Contents is:<br> -1, 0 1 <br>and the indecies are: <br>0, 1, 2, 2, 1, 0<br>
+	 * then the iterator will return the following values: <br>-1, 0, 1, 1, 0, -1
+	 * @param indecies that should be used for the iteration.
+	 * @return a custom indexed iterator
+	 */
+	public CharListIterator indexedIterator(int...indecies);
+	
+	/**
+	 * Creates a Iterator that follows the indecies provided.<br>
+	 * For example if the Lists Contents is:<br> -1, 0 1 <br>and the indecies are: <br>0, 1, 2, 2, 1, 0<br>
+	 * then the iterator will return the following values: <br>-1, 0, 1, 1, 0, -1
+	 * @param indecies that should be used for the iteration.
+	 * @return a custom indexed iterator
+	 */
+	public CharListIterator indexedIterator(IntList indecies);
 	
 	/**
 	 * A Type-Specific List of subList

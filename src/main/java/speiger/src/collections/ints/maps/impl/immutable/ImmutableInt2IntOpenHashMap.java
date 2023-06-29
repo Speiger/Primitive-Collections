@@ -408,20 +408,19 @@ public class ImmutableInt2IntOpenHashMap extends AbstractInt2IntMap implements I
 	@Override
 	public int computeInt(int key, IntIntUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
 	@Override
-	public int computeIntNonDefault(int key, IntIntUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
-	@Override
 	public int computeIntIfAbsent(int key, IntUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
-	@Override
-	public int computeIntIfAbsentNonDefault(int key, IntUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
 	@Override
 	public int supplyIntIfAbsent(int key, IntSupplier valueProvider) { throw new UnsupportedOperationException(); }
 	@Override
-	public int supplyIntIfAbsentNonDefault(int key, IntSupplier valueProvider) { throw new UnsupportedOperationException(); }
-	@Override
 	public int computeIntIfPresent(int key, IntIntUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
 	@Override
+	public int computeIntNonDefault(int key, IntIntUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
+	@Override
+	public int computeIntIfAbsentNonDefault(int key, IntUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
+	@Override
+	public int supplyIntIfAbsentNonDefault(int key, IntSupplier valueProvider) { throw new UnsupportedOperationException(); }
+	@Override
 	public int computeIntIfPresentNonDefault(int key, IntIntUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
-	
 	@Override
 	public int mergeInt(int key, int value, IntIntUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
 	

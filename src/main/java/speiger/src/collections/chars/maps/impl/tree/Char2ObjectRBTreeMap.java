@@ -395,44 +395,7 @@ public class Char2ObjectRBTreeMap<V> extends AbstractChar2ObjectMap<V> implement
 	}
 	
 	@Override
-	public V computeNonDefault(char key, CharObjectUnaryOperator<V> mappingFunction) {
-		Objects.requireNonNull(mappingFunction);
-		Node<V> entry = findNode(key);
-		if(entry == null) {
-			V newValue = mappingFunction.apply(key, getDefaultReturnValue());
-			if(Objects.equals(newValue, getDefaultReturnValue())) return newValue;
-			put(key, newValue);
-			return newValue;
-		}
-		V newValue = mappingFunction.apply(key, entry.value);
-		if(Objects.equals(newValue, getDefaultReturnValue())) {
-			removeNode(entry);
-			return newValue;
-		}
-		entry.value = newValue;
-		return newValue;
-	}
-	
-	@Override
 	public V computeIfAbsent(char key, CharFunction<V> mappingFunction) {
-		Objects.requireNonNull(mappingFunction);
-		Node<V> entry = findNode(key);
-		if(entry == null) {
-			V newValue = mappingFunction.apply(key);
-			if(Objects.equals(newValue, getDefaultReturnValue())) return newValue;
-			put(key, newValue);
-			return newValue;
-		}
-		if(Objects.equals(entry.value, getDefaultReturnValue())) {
-			V newValue = mappingFunction.apply(key);
-			if(Objects.equals(newValue, getDefaultReturnValue())) return newValue;
-			entry.value = newValue;
-		}
-		return entry.value;
-	}
-	
-	@Override
-	public V computeIfAbsentNonDefault(char key, CharFunction<V> mappingFunction) {
 		Objects.requireNonNull(mappingFunction);
 		Node<V> entry = findNode(key);
 		if(entry == null) {
@@ -468,39 +431,7 @@ public class Char2ObjectRBTreeMap<V> extends AbstractChar2ObjectMap<V> implement
 	}
 	
 	@Override
-	public V supplyIfAbsentNonDefault(char key, ObjectSupplier<V> valueProvider) {
-		Objects.requireNonNull(valueProvider);
-		Node<V> entry = findNode(key);
-		if(entry == null) {
-			V newValue = valueProvider.get();
-			if(Objects.equals(newValue, getDefaultReturnValue())) return newValue;
-			put(key, newValue);
-			return newValue;
-		}
-		if(Objects.equals(entry.value, getDefaultReturnValue())) {
-			V newValue = valueProvider.get();
-			if(Objects.equals(newValue, getDefaultReturnValue())) return newValue;
-			entry.value = newValue;
-		}
-		return entry.value;
-	}
-	
-	@Override
 	public V computeIfPresent(char key, CharObjectUnaryOperator<V> mappingFunction) {
-		Objects.requireNonNull(mappingFunction);
-		Node<V> entry = findNode(key);
-		if(entry == null || Objects.equals(entry.value, getDefaultReturnValue())) return getDefaultReturnValue();
-		V newValue = mappingFunction.apply(key, entry.value);
-		if(Objects.equals(newValue, getDefaultReturnValue())) {
-			removeNode(entry);
-			return newValue;
-		}
-		entry.value = newValue;
-		return newValue;
-	}
-	
-	@Override
-	public V computeIfPresentNonDefault(char key, CharObjectUnaryOperator<V> mappingFunction) {
 		Objects.requireNonNull(mappingFunction);
 		Node<V> entry = findNode(key);
 		if(entry == null || Objects.equals(entry.value, getDefaultReturnValue())) return getDefaultReturnValue();

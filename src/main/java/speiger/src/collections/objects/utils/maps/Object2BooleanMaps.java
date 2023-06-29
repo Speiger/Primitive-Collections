@@ -260,17 +260,17 @@ public class Object2BooleanMaps
 		@Override
 		public boolean computeBoolean(T key, ObjectBooleanUnaryOperator<T> mappingFunction) { throw new UnsupportedOperationException(); }
 		@Override
-		public boolean computeBooleanNonDefault(T key, ObjectBooleanUnaryOperator<T> mappingFunction) { throw new UnsupportedOperationException(); }
-		@Override
 		public boolean computeBooleanIfAbsent(T key, Predicate<T> mappingFunction) { throw new UnsupportedOperationException(); }
-		@Override
-		public boolean computeBooleanIfAbsentNonDefault(T key, Predicate<T> mappingFunction) { throw new UnsupportedOperationException(); }
 		@Override
 		public boolean computeBooleanIfPresent(T key, ObjectBooleanUnaryOperator<T> mappingFunction) { throw new UnsupportedOperationException(); }
 		@Override
-		public boolean computeBooleanIfPresentNonDefault(T key, ObjectBooleanUnaryOperator<T> mappingFunction) { throw new UnsupportedOperationException(); }
-		@Override
 		public boolean supplyBooleanIfAbsent(T key, BooleanSupplier valueProvider) { throw new UnsupportedOperationException(); }
+		@Override
+		public boolean computeBooleanNonDefault(T key, ObjectBooleanUnaryOperator<T> mappingFunction) { throw new UnsupportedOperationException(); }
+		@Override
+		public boolean computeBooleanIfAbsentNonDefault(T key, Predicate<T> mappingFunction) { throw new UnsupportedOperationException(); }
+		@Override
+		public boolean computeBooleanIfPresentNonDefault(T key, ObjectBooleanUnaryOperator<T> mappingFunction) { throw new UnsupportedOperationException(); }
 		@Override
 		public boolean supplyBooleanIfAbsentNonDefault(T key, BooleanSupplier valueProvider) { throw new UnsupportedOperationException(); }
 		@Override
@@ -319,17 +319,17 @@ public class Object2BooleanMaps
 		@Override
 		public boolean computeBoolean(T key, ObjectBooleanUnaryOperator<T> mappingFunction) { throw new UnsupportedOperationException(); }
 		@Override
-		public boolean computeBooleanNonDefault(T key, ObjectBooleanUnaryOperator<T> mappingFunction) { throw new UnsupportedOperationException(); }
-		@Override
 		public boolean computeBooleanIfAbsent(T key, Predicate<T> mappingFunction) { throw new UnsupportedOperationException(); }
-		@Override
-		public boolean computeBooleanIfAbsentNonDefault(T key, Predicate<T> mappingFunction) { throw new UnsupportedOperationException(); }
 		@Override
 		public boolean computeBooleanIfPresent(T key, ObjectBooleanUnaryOperator<T> mappingFunction) { throw new UnsupportedOperationException(); }
 		@Override
-		public boolean computeBooleanIfPresentNonDefault(T key, ObjectBooleanUnaryOperator<T> mappingFunction) { throw new UnsupportedOperationException(); }
-		@Override
 		public boolean supplyBooleanIfAbsent(T key, BooleanSupplier valueProvider) { throw new UnsupportedOperationException(); }
+		@Override
+		public boolean computeBooleanNonDefault(T key, ObjectBooleanUnaryOperator<T> mappingFunction) { throw new UnsupportedOperationException(); }
+		@Override
+		public boolean computeBooleanIfAbsentNonDefault(T key, Predicate<T> mappingFunction) { throw new UnsupportedOperationException(); }
+		@Override
+		public boolean computeBooleanIfPresentNonDefault(T key, ObjectBooleanUnaryOperator<T> mappingFunction) { throw new UnsupportedOperationException(); }
 		@Override
 		public boolean supplyBooleanIfAbsentNonDefault(T key, BooleanSupplier valueProvider) { throw new UnsupportedOperationException(); }
 		@Override
@@ -547,17 +547,17 @@ public class Object2BooleanMaps
 		@Override
 		public boolean computeBoolean(T key, ObjectBooleanUnaryOperator<T> mappingFunction) { throw new UnsupportedOperationException(); }
 		@Override
-		public boolean computeBooleanNonDefault(T key, ObjectBooleanUnaryOperator<T> mappingFunction) { throw new UnsupportedOperationException(); }
-		@Override
 		public boolean computeBooleanIfAbsent(T key, Predicate<T> mappingFunction) { throw new UnsupportedOperationException(); }
-		@Override
-		public boolean computeBooleanIfAbsentNonDefault(T key, Predicate<T> mappingFunction) { throw new UnsupportedOperationException(); }
 		@Override
 		public boolean computeBooleanIfPresent(T key, ObjectBooleanUnaryOperator<T> mappingFunction) { throw new UnsupportedOperationException(); }
 		@Override
-		public boolean computeBooleanIfPresentNonDefault(T key, ObjectBooleanUnaryOperator<T> mappingFunction) { throw new UnsupportedOperationException(); }
-		@Override
 		public boolean supplyBooleanIfAbsent(T key, BooleanSupplier valueProvider) { throw new UnsupportedOperationException(); }
+		@Override
+		public boolean computeBooleanNonDefault(T key, ObjectBooleanUnaryOperator<T> mappingFunction) { throw new UnsupportedOperationException(); }
+		@Override
+		public boolean computeBooleanIfAbsentNonDefault(T key, Predicate<T> mappingFunction) { throw new UnsupportedOperationException(); }
+		@Override
+		public boolean computeBooleanIfPresentNonDefault(T key, ObjectBooleanUnaryOperator<T> mappingFunction) { throw new UnsupportedOperationException(); }
 		@Override
 		public boolean supplyBooleanIfAbsentNonDefault(T key, BooleanSupplier valueProvider) { throw new UnsupportedOperationException(); }
 		@Override
@@ -889,17 +889,17 @@ public class Object2BooleanMaps
 		@Override
 		public boolean computeBoolean(T key, ObjectBooleanUnaryOperator<T> mappingFunction) { synchronized(mutex) { return map.computeBoolean(key, mappingFunction); } }
 		@Override
-		public boolean computeBooleanNonDefault(T key, ObjectBooleanUnaryOperator<T> mappingFunction) { synchronized(mutex) { return map.computeBooleanNonDefault(key, mappingFunction); } }
-		@Override
 		public boolean computeBooleanIfAbsent(T key, Predicate<T> mappingFunction) { synchronized(mutex) { return map.computeBooleanIfAbsent(key, mappingFunction); } }
-		@Override
-		public boolean computeBooleanIfAbsentNonDefault(T key, Predicate<T> mappingFunction) { synchronized(mutex) { return map.computeBooleanIfAbsentNonDefault(key, mappingFunction); } }
 		@Override
 		public boolean computeBooleanIfPresent(T key, ObjectBooleanUnaryOperator<T> mappingFunction) { synchronized(mutex) { return map.computeBooleanIfPresent(key, mappingFunction); } }
 		@Override
-		public boolean computeBooleanIfPresentNonDefault(T key, ObjectBooleanUnaryOperator<T> mappingFunction) { synchronized(mutex) { return map.computeBooleanIfPresentNonDefault(key, mappingFunction); } }
-		@Override
 		public boolean supplyBooleanIfAbsent(T key, BooleanSupplier valueProvider) { synchronized(mutex) { return map.supplyBooleanIfAbsent(key, valueProvider); } }
+		@Override
+		public boolean computeBooleanNonDefault(T key, ObjectBooleanUnaryOperator<T> mappingFunction) { synchronized(mutex) { return map.computeBooleanNonDefault(key, mappingFunction); } }
+		@Override
+		public boolean computeBooleanIfAbsentNonDefault(T key, Predicate<T> mappingFunction) { synchronized(mutex) { return map.computeBooleanIfAbsentNonDefault(key, mappingFunction); } }
+		@Override
+		public boolean computeBooleanIfPresentNonDefault(T key, ObjectBooleanUnaryOperator<T> mappingFunction) { synchronized(mutex) { return map.computeBooleanIfPresentNonDefault(key, mappingFunction); } }
 		@Override
 		public boolean supplyBooleanIfAbsentNonDefault(T key, BooleanSupplier valueProvider) { synchronized(mutex) { return map.supplyBooleanIfAbsentNonDefault(key, valueProvider); } }
 		@Override

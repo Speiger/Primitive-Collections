@@ -158,6 +158,39 @@ public abstract class AbstractFloat2LongMap extends AbstractMap<Float, Long> imp
 	}
 	
 	@Override
+	public long computeLongIfAbsent(float key, Float2LongFunction mappingFunction) {
+		Objects.requireNonNull(mappingFunction);
+		if(!containsKey(key)) {
+			long newValue = mappingFunction.applyAsLong(key);
+			put(key, newValue);
+			return newValue;
+		}
+		return get(key);
+	}
+	
+	@Override
+	public long supplyLongIfAbsent(float key, LongSupplier valueProvider) {
+		Objects.requireNonNull(valueProvider);
+		if(!containsKey(key)) {
+			long newValue = valueProvider.getAsLong();
+			put(key, newValue);
+			return newValue;
+		}
+		return get(key);
+	}
+	
+	@Override
+	public long computeLongIfPresent(float key, FloatLongUnaryOperator mappingFunction) {
+		Objects.requireNonNull(mappingFunction);
+		if(containsKey(key)) {
+			long newValue = mappingFunction.applyAsLong(key, get(key));
+			put(key, newValue);
+			return newValue;
+		}
+		return getDefaultReturnValue();
+	}
+	
+	@Override
 	public long computeLongNonDefault(float key, FloatLongUnaryOperator mappingFunction) {
 		Objects.requireNonNull(mappingFunction);
 		long value = get(key);
@@ -171,17 +204,6 @@ public abstract class AbstractFloat2LongMap extends AbstractMap<Float, Long> imp
 		}
 		put(key, newValue);
 		return newValue;
-	}
-	
-	@Override
-	public long computeLongIfAbsent(float key, Float2LongFunction mappingFunction) {
-		Objects.requireNonNull(mappingFunction);
-		if(!containsKey(key)) {
-			long newValue = mappingFunction.applyAsLong(key);
-			put(key, newValue);
-			return newValue;
-		}
-		return get(key);
 	}
 	
 	@Override
@@ -199,17 +221,6 @@ public abstract class AbstractFloat2LongMap extends AbstractMap<Float, Long> imp
 	}
 	
 	@Override
-	public long supplyLongIfAbsent(float key, LongSupplier valueProvider) {
-		Objects.requireNonNull(valueProvider);
-		if(!containsKey(key)) {
-			long newValue = valueProvider.getAsLong();
-			put(key, newValue);
-			return newValue;
-		}
-		return get(key);
-	}
-	
-	@Override
 	public long supplyLongIfAbsentNonDefault(float key, LongSupplier valueProvider) {
 		Objects.requireNonNull(valueProvider);
 		long value;
@@ -221,17 +232,6 @@ public abstract class AbstractFloat2LongMap extends AbstractMap<Float, Long> imp
 			}
 		}
 		return value;
-	}
-	
-	@Override
-	public long computeLongIfPresent(float key, FloatLongUnaryOperator mappingFunction) {
-		Objects.requireNonNull(mappingFunction);
-		if(containsKey(key)) {
-			long newValue = mappingFunction.applyAsLong(key, get(key));
-			put(key, newValue);
-			return newValue;
-		}
-		return getDefaultReturnValue();
 	}
 	
 	@Override

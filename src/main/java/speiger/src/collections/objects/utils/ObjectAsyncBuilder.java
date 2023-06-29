@@ -11,20 +11,31 @@ import java.util.function.IntFunction;
 import java.util.function.BiFunction;
 import java.util.Comparator;
 
+import speiger.src.collections.objects.functions.function.Predicate;
+import speiger.src.collections.booleans.utils.BooleanAsyncBuilder;
+import speiger.src.collections.objects.functions.function.ToByteFunction;
+import speiger.src.collections.bytes.utils.ByteAsyncBuilder;
+import speiger.src.collections.objects.functions.function.ToShortFunction;
+import speiger.src.collections.shorts.utils.ShortAsyncBuilder;
+import speiger.src.collections.objects.functions.function.ToIntFunction;
+import speiger.src.collections.ints.utils.IntAsyncBuilder;
+import speiger.src.collections.objects.functions.function.ToLongFunction;
+import speiger.src.collections.longs.utils.LongAsyncBuilder;
+import speiger.src.collections.objects.functions.function.ToFloatFunction;
+import speiger.src.collections.floats.utils.FloatAsyncBuilder;
+import speiger.src.collections.objects.functions.function.ToDoubleFunction;
+import speiger.src.collections.doubles.utils.DoubleAsyncBuilder;
 import speiger.src.collections.objects.collections.ObjectIterable;
 import speiger.src.collections.objects.collections.ObjectCollection;
 import speiger.src.collections.objects.collections.ObjectIterator;
 import speiger.src.collections.objects.functions.ObjectTask;
-import speiger.src.collections.objects.functions.function.Predicate;
 import speiger.src.collections.objects.functions.function.UnaryOperator;
 import speiger.src.collections.objects.functions.function.ObjectObjectUnaryOperator;
 import speiger.src.collections.objects.lists.ObjectList;
 import speiger.src.collections.objects.lists.ObjectArrayList;
 import speiger.src.collections.objects.sets.ObjectSet;
 import speiger.src.collections.objects.sets.ObjectLinkedOpenHashSet;
-import speiger.src.collections.booleans.utils.BooleanAsyncBuilder;
 import speiger.src.collections.booleans.utils.BooleanAsyncBuilder.BaseBooleanTask;
-import speiger.src.collections.ints.utils.IntAsyncBuilder;
 import speiger.src.collections.ints.utils.IntAsyncBuilder.BaseIntTask;
 import speiger.src.collections.utils.ISizeProvider;
 import speiger.src.collections.utils.SanityChecks;
@@ -138,6 +149,69 @@ public class ObjectAsyncBuilder<T>
 	 */
 	public <E> ObjectAsyncBuilder<E> arrayflatMap(UnaryOperator<T, E[]> mapper) {
 		return new ObjectAsyncBuilder<>(ObjectIterables.arrayFlatMap(iterable, mapper));
+	}
+	
+	/**
+	 * Maps the elements to something else
+	 * @param mapper the mapping function
+	 * @return a new Builder Object with the mapped Iterable
+	 */
+	public BooleanAsyncBuilder mapToBoolean(Predicate<T> mapper) {
+		return new BooleanAsyncBuilder(ObjectIterables.mapToBoolean(iterable, mapper));
+	}
+	
+	/**
+	 * Maps the elements to something else
+	 * @param mapper the mapping function
+	 * @return a new Builder Object with the mapped Iterable
+	 */
+	public ByteAsyncBuilder mapToByte(ToByteFunction<T> mapper) {
+		return new ByteAsyncBuilder(ObjectIterables.mapToByte(iterable, mapper));
+	}
+	
+	/**
+	 * Maps the elements to something else
+	 * @param mapper the mapping function
+	 * @return a new Builder Object with the mapped Iterable
+	 */
+	public ShortAsyncBuilder mapToShort(ToShortFunction<T> mapper) {
+		return new ShortAsyncBuilder(ObjectIterables.mapToShort(iterable, mapper));
+	}
+	
+	/**
+	 * Maps the elements to something else
+	 * @param mapper the mapping function
+	 * @return a new Builder Object with the mapped Iterable
+	 */
+	public IntAsyncBuilder mapToInt(ToIntFunction<T> mapper) {
+		return new IntAsyncBuilder(ObjectIterables.mapToInt(iterable, mapper));
+	}
+	
+	/**
+	 * Maps the elements to something else
+	 * @param mapper the mapping function
+	 * @return a new Builder Object with the mapped Iterable
+	 */
+	public LongAsyncBuilder mapToLong(ToLongFunction<T> mapper) {
+		return new LongAsyncBuilder(ObjectIterables.mapToLong(iterable, mapper));
+	}
+	
+	/**
+	 * Maps the elements to something else
+	 * @param mapper the mapping function
+	 * @return a new Builder Object with the mapped Iterable
+	 */
+	public FloatAsyncBuilder mapToFloat(ToFloatFunction<T> mapper) {
+		return new FloatAsyncBuilder(ObjectIterables.mapToFloat(iterable, mapper));
+	}
+	
+	/**
+	 * Maps the elements to something else
+	 * @param mapper the mapping function
+	 * @return a new Builder Object with the mapped Iterable
+	 */
+	public DoubleAsyncBuilder mapToDouble(ToDoubleFunction<T> mapper) {
+		return new DoubleAsyncBuilder(ObjectIterables.mapToDouble(iterable, mapper));
 	}
 	
 	/**

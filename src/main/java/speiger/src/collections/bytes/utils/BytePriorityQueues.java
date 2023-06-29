@@ -89,6 +89,8 @@ public class BytePriorityQueues
 		@Override
 		public byte peek(int index) { synchronized(mutex) { return queue.peek(index); } }
 		@Override
+		public boolean contains(byte e) { synchronized(mutex) { return queue.contains(e); } }
+		@Override
 		public boolean removeFirst(byte e) { synchronized(mutex) { return queue.removeFirst(e); } }
 		@Override
 		public boolean removeLast(byte e) { synchronized(mutex) { return queue.removeLast(e); } }

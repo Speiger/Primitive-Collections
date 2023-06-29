@@ -12,6 +12,7 @@ import speiger.src.collections.shorts.collections.AbstractShortCollection;
 import speiger.src.collections.shorts.collections.ShortCollection;
 import speiger.src.collections.shorts.collections.ShortIterator;
 import speiger.src.collections.shorts.collections.ShortSplititerator;
+import speiger.src.collections.ints.lists.IntList;
 import speiger.src.collections.shorts.utils.ShortSplititerators;
 import speiger.src.collections.utils.SanityChecks;
 
@@ -205,11 +206,21 @@ public abstract class AbstractShortList extends AbstractShortCollection implemen
 	public ShortListIterator listIterator() {
 		return listIterator(0);
 	}
-
+		
 	@Override
 	public ShortListIterator listIterator(int index) {
 		if(index < 0 || index > size()) throw new IndexOutOfBoundsException();
 		return new ShortListIter(index);
+	}
+	
+	@Override
+	public ShortListIterator indexedIterator(int...indecies) {
+		return new IndexedIterator(indecies);
+	}
+	
+	@Override
+	public ShortListIterator indexedIterator(IntList indecies) {
+		return new ListIndexedIterator(indecies);
 	}
 	
 	@Override
@@ -566,7 +577,153 @@ public abstract class AbstractShortList extends AbstractShortCollection implemen
 			}
 		}
 	}
+	
+	private class ListIndexedIterator implements ShortListIterator {
+		IntList indecies;
+		int index;
+		int lastReturned = -1;
 		
+		ListIndexedIterator(IntList indecies) {
+			this.indecies = indecies;
+		}
+		
+		@Override
+		public boolean hasNext() {
+			return index < indecies.size();
+		}
+		
+		@Override
+		public short nextShort() {
+			if(!hasNext()) throw new NoSuchElementException();
+			int i = index++;
+			return getShort((lastReturned = indecies.getInt(i)));
+		}
+		
+		@Override
+		public boolean hasPrevious() {
+			return index > 0;
+		}
+		
+		@Override
+		public short previousShort() {
+			if(!hasPrevious()) throw new NoSuchElementException();
+			index--;
+			return getShort((lastReturned = indecies.getInt(index)));
+		}
+		
+		@Override
+		public int nextIndex() {
+			return index;
+		}
+		
+		@Override
+		public int previousIndex() {
+			return index-1;
+		}
+		
+		@Override
+		public void remove() { throw new UnsupportedOperationException(); }
+		@Override
+		public void add(short e) { throw new UnsupportedOperationException(); }
+		
+		@Override
+		public void set(short e) {
+			if(lastReturned == -1) throw new IllegalStateException();
+			AbstractShortList.this.set(lastReturned, e);
+		}
+		
+		@Override
+		public int skip(int amount) {
+			if(amount < 0) throw new IllegalStateException("Negative Numbers are not allowed");
+			int steps = Math.min(amount, indecies.size() - index);
+			index += steps;
+			if(steps > 0) lastReturned = Math.min(index-1, indecies.size()-1);
+			return steps;
+		}
+		
+		@Override
+		public int back(int amount) {
+			if(amount < 0) throw new IllegalStateException("Negative Numbers are not allowed");
+			int steps = Math.min(amount, index);
+			index -= steps;
+			if(steps > 0) lastReturned = Math.max(index, 0);
+			return steps;
+		}
+	}
+	
+	private class IndexedIterator implements ShortListIterator {
+		int[] indecies;
+		int index;
+		int lastReturned = -1;
+		
+		IndexedIterator(int[] indecies) {
+			this.indecies = indecies;
+		}
+		
+		@Override
+		public boolean hasNext() {
+			return index < indecies.length;
+		}
+		
+		@Override
+		public short nextShort() {
+			if(!hasNext()) throw new NoSuchElementException();
+			int i = index++;
+			return getShort((lastReturned = indecies[i]));
+		}
+		
+		@Override
+		public boolean hasPrevious() {
+			return index > 0;
+		}
+		
+		@Override
+		public short previousShort() {
+			if(!hasPrevious()) throw new NoSuchElementException();
+			index--;
+			return getShort((lastReturned = indecies[index]));
+		}
+		
+		@Override
+		public int nextIndex() {
+			return index;
+		}
+		
+		@Override
+		public int previousIndex() {
+			return index-1;
+		}
+		
+		@Override
+		public void remove() { throw new UnsupportedOperationException(); }
+		@Override
+		public void add(short e) { throw new UnsupportedOperationException(); }
+		
+		@Override
+		public void set(short e) {
+			if(lastReturned == -1) throw new IllegalStateException();
+			AbstractShortList.this.set(lastReturned, e);
+		}
+		
+		@Override
+		public int skip(int amount) {
+			if(amount < 0) throw new IllegalStateException("Negative Numbers are not allowed");
+			int steps = Math.min(amount, indecies.length - index);
+			index += steps;
+			if(steps > 0) lastReturned = Math.min(index-1, indecies.length-1);
+			return steps;
+		}
+		
+		@Override
+		public int back(int amount) {
+			if(amount < 0) throw new IllegalStateException("Negative Numbers are not allowed");
+			int steps = Math.min(amount, index);
+			index -= steps;
+			if(steps > 0) lastReturned = Math.max(index, 0);
+			return steps;
+		}
+	}
+	
 	private class ShortListIter implements ShortListIterator {
 		int index;
 		int lastReturned = -1;
@@ -644,7 +801,7 @@ public abstract class AbstractShortList extends AbstractShortCollection implemen
 			if(amount < 0) throw new IllegalStateException("Negative Numbers are not allowed");
 			int steps = Math.min(amount, index);
 			index -= steps;
-			if(steps > 0) lastReturned = Math.min(index, size()-1);
+			if(steps > 0) lastReturned = Math.max(index, 0);
 			return steps;
 		}
 	}

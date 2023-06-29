@@ -302,6 +302,41 @@ public class Enum2BooleanMap<T extends Enum<T>> extends AbstractObject2BooleanMa
 	}
 	
 	@Override
+	public boolean computeBooleanIfAbsent(T key, Predicate<T> mappingFunction) {
+		int index = key.ordinal();
+		if(!isSet(index)) {
+			boolean newValue = mappingFunction.test(key);
+			set(index);
+			values[index] = newValue;			
+			return newValue;
+		}
+		boolean newValue = values[index];
+		return newValue;
+	}
+		
+	@Override
+	public boolean supplyBooleanIfAbsent(T key, BooleanSupplier valueProvider) {
+		int index = key.ordinal();
+		if(!isSet(index)) {
+			boolean newValue = valueProvider.getAsBoolean();
+			set(index);
+			values[index] = newValue;			
+			return newValue;
+		}
+		boolean newValue = values[index];
+		return newValue;
+	}
+	
+	@Override
+	public boolean computeBooleanIfPresent(T key, ObjectBooleanUnaryOperator<T> mappingFunction) {
+		int index = key.ordinal();
+		if(!isSet(index)) return getDefaultReturnValue();
+		boolean newValue = mappingFunction.applyAsBoolean(key, values[index]);
+		values[index] = newValue;
+		return newValue;
+	}
+	
+	@Override
 	public boolean computeBooleanNonDefault(T key, ObjectBooleanUnaryOperator<T> mappingFunction) {
 		int index = key.ordinal();
 		if(!isSet(index)) {
@@ -318,19 +353,6 @@ public class Enum2BooleanMap<T extends Enum<T>> extends AbstractObject2BooleanMa
 			return newValue;
 		}
 		values[index] = newValue;
-		return newValue;
-	}
-	
-	@Override
-	public boolean computeBooleanIfAbsent(T key, Predicate<T> mappingFunction) {
-		int index = key.ordinal();
-		if(!isSet(index)) {
-			boolean newValue = mappingFunction.test(key);
-			set(index);
-			values[index] = newValue;			
-			return newValue;
-		}
-		boolean newValue = values[index];
 		return newValue;
 	}
 	
@@ -354,19 +376,6 @@ public class Enum2BooleanMap<T extends Enum<T>> extends AbstractObject2BooleanMa
 	}
 	
 	@Override
-	public boolean supplyBooleanIfAbsent(T key, BooleanSupplier valueProvider) {
-		int index = key.ordinal();
-		if(!isSet(index)) {
-			boolean newValue = valueProvider.getAsBoolean();
-			set(index);
-			values[index] = newValue;			
-			return newValue;
-		}
-		boolean newValue = values[index];
-		return newValue;
-	}
-	
-	@Override
 	public boolean supplyBooleanIfAbsentNonDefault(T key, BooleanSupplier valueProvider) {
 		int index = key.ordinal();
 		if(!isSet(index)) {
@@ -382,15 +391,6 @@ public class Enum2BooleanMap<T extends Enum<T>> extends AbstractObject2BooleanMa
 			if(newValue == getDefaultReturnValue()) return newValue;
 			values[index] = newValue;
 		}
-		return newValue;
-	}
-	
-	@Override
-	public boolean computeBooleanIfPresent(T key, ObjectBooleanUnaryOperator<T> mappingFunction) {
-		int index = key.ordinal();
-		if(!isSet(index)) return getDefaultReturnValue();
-		boolean newValue = mappingFunction.applyAsBoolean(key, values[index]);
-		values[index] = newValue;
 		return newValue;
 	}
 	

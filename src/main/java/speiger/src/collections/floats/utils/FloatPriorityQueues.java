@@ -89,6 +89,8 @@ public class FloatPriorityQueues
 		@Override
 		public float peek(int index) { synchronized(mutex) { return queue.peek(index); } }
 		@Override
+		public boolean contains(float e) { synchronized(mutex) { return queue.contains(e); } }
+		@Override
 		public boolean removeFirst(float e) { synchronized(mutex) { return queue.removeFirst(e); } }
 		@Override
 		public boolean removeLast(float e) { synchronized(mutex) { return queue.removeLast(e); } }

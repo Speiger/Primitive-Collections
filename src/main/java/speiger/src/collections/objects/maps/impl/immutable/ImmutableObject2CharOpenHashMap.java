@@ -402,20 +402,19 @@ public class ImmutableObject2CharOpenHashMap<T> extends AbstractObject2CharMap<T
 	@Override
 	public char computeChar(T key, ObjectCharUnaryOperator<T> mappingFunction) { throw new UnsupportedOperationException(); }
 	@Override
-	public char computeCharNonDefault(T key, ObjectCharUnaryOperator<T> mappingFunction) { throw new UnsupportedOperationException(); }
-	@Override
 	public char computeCharIfAbsent(T key, ToCharFunction<T> mappingFunction) { throw new UnsupportedOperationException(); }
-	@Override
-	public char computeCharIfAbsentNonDefault(T key, ToCharFunction<T> mappingFunction) { throw new UnsupportedOperationException(); }
 	@Override
 	public char supplyCharIfAbsent(T key, CharSupplier valueProvider) { throw new UnsupportedOperationException(); }
 	@Override
-	public char supplyCharIfAbsentNonDefault(T key, CharSupplier valueProvider) { throw new UnsupportedOperationException(); }
-	@Override
 	public char computeCharIfPresent(T key, ObjectCharUnaryOperator<T> mappingFunction) { throw new UnsupportedOperationException(); }
 	@Override
+	public char computeCharNonDefault(T key, ObjectCharUnaryOperator<T> mappingFunction) { throw new UnsupportedOperationException(); }
+	@Override
+	public char computeCharIfAbsentNonDefault(T key, ToCharFunction<T> mappingFunction) { throw new UnsupportedOperationException(); }
+	@Override
+	public char supplyCharIfAbsentNonDefault(T key, CharSupplier valueProvider) { throw new UnsupportedOperationException(); }
+	@Override
 	public char computeCharIfPresentNonDefault(T key, ObjectCharUnaryOperator<T> mappingFunction) { throw new UnsupportedOperationException(); }
-	
 	@Override
 	public char mergeChar(T key, char value, CharCharUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
 	

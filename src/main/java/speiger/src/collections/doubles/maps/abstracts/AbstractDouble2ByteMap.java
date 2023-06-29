@@ -158,6 +158,39 @@ public abstract class AbstractDouble2ByteMap extends AbstractMap<Double, Byte> i
 	}
 	
 	@Override
+	public byte computeByteIfAbsent(double key, Double2ByteFunction mappingFunction) {
+		Objects.requireNonNull(mappingFunction);
+		if(!containsKey(key)) {
+			byte newValue = mappingFunction.applyAsByte(key);
+			put(key, newValue);
+			return newValue;
+		}
+		return get(key);
+	}
+	
+	@Override
+	public byte supplyByteIfAbsent(double key, ByteSupplier valueProvider) {
+		Objects.requireNonNull(valueProvider);
+		if(!containsKey(key)) {
+			byte newValue = valueProvider.getAsByte();
+			put(key, newValue);
+			return newValue;
+		}
+		return get(key);
+	}
+	
+	@Override
+	public byte computeByteIfPresent(double key, DoubleByteUnaryOperator mappingFunction) {
+		Objects.requireNonNull(mappingFunction);
+		if(containsKey(key)) {
+			byte newValue = mappingFunction.applyAsByte(key, get(key));
+			put(key, newValue);
+			return newValue;
+		}
+		return getDefaultReturnValue();
+	}
+	
+	@Override
 	public byte computeByteNonDefault(double key, DoubleByteUnaryOperator mappingFunction) {
 		Objects.requireNonNull(mappingFunction);
 		byte value = get(key);
@@ -171,17 +204,6 @@ public abstract class AbstractDouble2ByteMap extends AbstractMap<Double, Byte> i
 		}
 		put(key, newValue);
 		return newValue;
-	}
-	
-	@Override
-	public byte computeByteIfAbsent(double key, Double2ByteFunction mappingFunction) {
-		Objects.requireNonNull(mappingFunction);
-		if(!containsKey(key)) {
-			byte newValue = mappingFunction.applyAsByte(key);
-			put(key, newValue);
-			return newValue;
-		}
-		return get(key);
 	}
 	
 	@Override
@@ -199,39 +221,17 @@ public abstract class AbstractDouble2ByteMap extends AbstractMap<Double, Byte> i
 	}
 	
 	@Override
-	public byte supplyByteIfAbsent(double key, ByteSupplier valueProvider) {
-		Objects.requireNonNull(valueProvider);
-		if(!containsKey(key)) {
-			byte newValue = valueProvider.getAsInt();
-			put(key, newValue);
-			return newValue;
-		}
-		return get(key);
-	}
-	
-	@Override
 	public byte supplyByteIfAbsentNonDefault(double key, ByteSupplier valueProvider) {
 		Objects.requireNonNull(valueProvider);
 		byte value;
 		if((value = get(key)) == getDefaultReturnValue() || !containsKey(key)) {
-			byte newValue = valueProvider.getAsInt();
+			byte newValue = valueProvider.getAsByte();
 			if(newValue != getDefaultReturnValue()) {
 				put(key, newValue);
 				return newValue;
 			}
 		}
 		return value;
-	}
-	
-	@Override
-	public byte computeByteIfPresent(double key, DoubleByteUnaryOperator mappingFunction) {
-		Objects.requireNonNull(mappingFunction);
-		if(containsKey(key)) {
-			byte newValue = mappingFunction.applyAsByte(key, get(key));
-			put(key, newValue);
-			return newValue;
-		}
-		return getDefaultReturnValue();
 	}
 	
 	@Override

@@ -12,6 +12,7 @@ import speiger.src.collections.floats.collections.FloatCollection;
 import speiger.src.collections.floats.functions.FloatConsumer;
 import speiger.src.collections.floats.lists.AbstractFloatList;
 import speiger.src.collections.floats.lists.FloatList;
+import speiger.src.collections.ints.lists.IntList;
 import speiger.src.collections.floats.lists.FloatListIterator;
 import speiger.src.collections.utils.SanityChecks;
 
@@ -318,6 +319,16 @@ public class FloatLists
 		}
 		
 		@Override
+		public FloatListIterator indexedIterator(int...indecies) {
+			return l.indexedIterator(indecies);
+		}
+		
+		@Override
+		public FloatListIterator indexedIterator(IntList indecies) {
+			return l.indexedIterator(indecies);
+		}
+		
+		@Override
 		public FloatList subList(int from, int to) {
 			return FloatLists.synchronize(l.subList(from, to));
 		}
@@ -427,6 +438,16 @@ public class FloatLists
 		}
 		
 		@Override
+		public FloatListIterator indexedIterator(int...indecies) {
+			return FloatIterators.unmodifiable(l.indexedIterator(indecies));
+		}
+		
+		@Override
+		public FloatListIterator indexedIterator(IntList indecies) {
+			return FloatIterators.unmodifiable(l.indexedIterator(indecies));
+		}
+		
+		@Override
 		public FloatList subList(int from, int to) {
 			return FloatLists.unmodifiable(l.subList(from, to));
 		}
@@ -512,6 +533,16 @@ public class FloatLists
 			if(index != 0)
 				throw new IndexOutOfBoundsException();
 			return FloatIterators.empty();
+		}
+		
+		@Override
+		public FloatListIterator indexedIterator(int...indecies) {
+			return FloatIterators.empty(); 
+		}
+		
+		@Override
+		public FloatListIterator indexedIterator(IntList indecies) {
+			return FloatIterators.empty(); 
 		}
 		
 		@Override

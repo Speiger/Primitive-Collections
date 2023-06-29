@@ -291,26 +291,6 @@ public class Enum2ObjectMap<T extends Enum<T>, V> extends AbstractObject2ObjectM
 	}
 	
 	@Override
-	public V computeNonDefault(T key, ObjectObjectUnaryOperator<T, V> mappingFunction) {
-		int index = key.ordinal();
-		if(!isSet(index)) {
-			V newValue = mappingFunction.apply(key, getDefaultReturnValue());
-			if(Objects.equals(newValue, getDefaultReturnValue())) return newValue;
-			set(index);
-			values[index] = newValue;
-			return newValue;
-		}
-		V newValue = mappingFunction.apply(key, values[index]);
-		if(Objects.equals(newValue, getDefaultReturnValue())) {
-			clear(index);
-			values[index] = null;
-			return newValue;
-		}
-		values[index] = newValue;
-		return newValue;
-	}
-	
-	@Override
 	public V computeIfAbsent(T key, UnaryOperator<T, V> mappingFunction) {
 		int index = key.ordinal();
 		if(!isSet(index)) {
@@ -328,26 +308,7 @@ public class Enum2ObjectMap<T extends Enum<T>, V> extends AbstractObject2ObjectM
 		}
 		return newValue;
 	}
-	
-	@Override
-	public V computeIfAbsentNonDefault(T key, UnaryOperator<T, V> mappingFunction) {
-		int index = key.ordinal();
-		if(!isSet(index)) {
-			V newValue = mappingFunction.apply(key);
-			if(Objects.equals(newValue, getDefaultReturnValue())) return newValue;
-			set(index);
-			values[index] = newValue;			
-			return newValue;
-		}
-		V newValue = values[index];
-		if(Objects.equals(newValue, getDefaultReturnValue())) {
-			newValue = mappingFunction.apply(key);
-			if(Objects.equals(newValue, getDefaultReturnValue())) return newValue;
-			values[index] = newValue;
-		}
-		return newValue;
-	}
-	
+		
 	@Override
 	public V supplyIfAbsent(T key, ObjectSupplier<V> valueProvider) {
 		int index = key.ordinal();
@@ -368,40 +329,7 @@ public class Enum2ObjectMap<T extends Enum<T>, V> extends AbstractObject2ObjectM
 	}
 	
 	@Override
-	public V supplyIfAbsentNonDefault(T key, ObjectSupplier<V> valueProvider) {
-		int index = key.ordinal();
-		if(!isSet(index)) {
-			V newValue = valueProvider.get();
-			if(Objects.equals(newValue, getDefaultReturnValue())) return newValue;
-			set(index);
-			values[index] = newValue;			
-			return newValue;
-		}
-		V newValue = values[index];
-		if(Objects.equals(newValue, getDefaultReturnValue())) {
-			newValue = valueProvider.get();
-			if(Objects.equals(newValue, getDefaultReturnValue())) return newValue;
-			values[index] = newValue;
-		}
-		return newValue;
-	}
-	
-	@Override
 	public V computeIfPresent(T key, ObjectObjectUnaryOperator<T, V> mappingFunction) {
-		int index = key.ordinal();
-		if(!isSet(index) || Objects.equals(values[index], getDefaultReturnValue())) return getDefaultReturnValue();
-		V newValue = mappingFunction.apply(key, values[index]);
-		if(Objects.equals(newValue, getDefaultReturnValue())) {
-			clear(index);
-			values[index] = null;
-			return newValue;
-		}
-		values[index] = newValue;
-		return newValue;
-	}
-	
-	@Override
-	public V computeIfPresentNonDefault(T key, ObjectObjectUnaryOperator<T, V> mappingFunction) {
 		int index = key.ordinal();
 		if(!isSet(index) || Objects.equals(values[index], getDefaultReturnValue())) return getDefaultReturnValue();
 		V newValue = mappingFunction.apply(key, values[index]);

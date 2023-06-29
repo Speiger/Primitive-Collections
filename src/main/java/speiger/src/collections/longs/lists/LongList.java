@@ -14,6 +14,7 @@ import speiger.src.collections.ints.functions.consumer.IntLongConsumer;
 import speiger.src.collections.longs.functions.LongComparator;
 import speiger.src.collections.longs.utils.LongArrays;
 import speiger.src.collections.longs.utils.LongLists;
+import speiger.src.collections.ints.lists.IntList;
 import speiger.src.collections.longs.utils.LongSplititerators;
 
 /**
@@ -340,6 +341,24 @@ public interface LongList extends LongCollection, List<Long>
 	 */
 	@Override
 	public LongListIterator listIterator(int index);
+	
+	/**
+	 * Creates a Iterator that follows the indecies provided.<br>
+	 * For example if the Lists Contents is:<br> -1, 0 1 <br>and the indecies are: <br>0, 1, 2, 2, 1, 0<br>
+	 * then the iterator will return the following values: <br>-1, 0, 1, 1, 0, -1
+	 * @param indecies that should be used for the iteration.
+	 * @return a custom indexed iterator
+	 */
+	public LongListIterator indexedIterator(int...indecies);
+	
+	/**
+	 * Creates a Iterator that follows the indecies provided.<br>
+	 * For example if the Lists Contents is:<br> -1, 0 1 <br>and the indecies are: <br>0, 1, 2, 2, 1, 0<br>
+	 * then the iterator will return the following values: <br>-1, 0, 1, 1, 0, -1
+	 * @param indecies that should be used for the iteration.
+	 * @return a custom indexed iterator
+	 */
+	public LongListIterator indexedIterator(IntList indecies);
 	
 	/**
 	 * A Type-Specific List of subList

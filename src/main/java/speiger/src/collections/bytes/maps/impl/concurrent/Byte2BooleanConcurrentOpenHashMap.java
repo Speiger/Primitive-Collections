@@ -439,17 +439,31 @@ public class Byte2BooleanConcurrentOpenHashMap extends AbstractByte2BooleanMap i
 	}
 	
 	@Override
-	public boolean computeBooleanNonDefault(byte key, ByteBooleanUnaryOperator mappingFunction) {
-		Objects.requireNonNull(mappingFunction);
-		int hash = getHashCode(key);
-		return getSegment(hash).computeNonDefault(hash, key, mappingFunction);
-	}
-
-	@Override
 	public boolean computeBooleanIfAbsent(byte key, BytePredicate mappingFunction) {
 		Objects.requireNonNull(mappingFunction);
 		int hash = getHashCode(key);
 		return getSegment(hash).computeIfAbsent(hash, key, mappingFunction);
+	}
+	
+	@Override
+	public boolean supplyBooleanIfAbsent(byte key, BooleanSupplier valueProvider) {
+		Objects.requireNonNull(valueProvider);
+		int hash = getHashCode(key);
+		return getSegment(hash).supplyIfAbsent(hash, key, valueProvider);
+	}
+	
+	@Override
+	public boolean computeBooleanIfPresent(byte key, ByteBooleanUnaryOperator mappingFunction) {
+		Objects.requireNonNull(mappingFunction);
+		int hash = getHashCode(key);
+		return getSegment(hash).computeIfPresent(hash, key, mappingFunction);
+	}
+	
+	@Override
+	public boolean computeBooleanNonDefault(byte key, ByteBooleanUnaryOperator mappingFunction) {
+		Objects.requireNonNull(mappingFunction);
+		int hash = getHashCode(key);
+		return getSegment(hash).computeNonDefault(hash, key, mappingFunction);
 	}
 	
 	@Override
@@ -460,24 +474,10 @@ public class Byte2BooleanConcurrentOpenHashMap extends AbstractByte2BooleanMap i
 	}
 
 	@Override
-	public boolean supplyBooleanIfAbsent(byte key, BooleanSupplier valueProvider) {
-		Objects.requireNonNull(valueProvider);
-		int hash = getHashCode(key);
-		return getSegment(hash).supplyIfAbsent(hash, key, valueProvider);
-	}
-	
-	@Override
 	public boolean supplyBooleanIfAbsentNonDefault(byte key, BooleanSupplier valueProvider) {
 		Objects.requireNonNull(valueProvider);
 		int hash = getHashCode(key);
 		return getSegment(hash).supplyIfAbsentNonDefault(hash, key, valueProvider);
-	}
-	
-	@Override
-	public boolean computeBooleanIfPresent(byte key, ByteBooleanUnaryOperator mappingFunction) {
-		Objects.requireNonNull(mappingFunction);
-		int hash = getHashCode(key);
-		return getSegment(hash).computeIfPresent(hash, key, mappingFunction);
 	}
 	
 	@Override
@@ -2032,6 +2032,54 @@ public class Byte2BooleanConcurrentOpenHashMap extends AbstractByte2BooleanMap i
 			}
 		}
 		
+		protected boolean computeIfAbsent(int hash, byte key, BytePredicate mappingFunction) {
+			long stamp = writeLock();
+			try {
+				int index = findIndex(hash, key);
+				if(index < 0) {
+					boolean newValue = mappingFunction.test(key);
+					insert(-index-1, key, newValue);
+					return newValue;
+				}
+				boolean newValue = values[index];
+				return newValue;
+			}
+			finally {
+				unlockWrite(stamp);
+			}
+		}
+				
+		protected boolean supplyIfAbsent(int hash, byte key, BooleanSupplier valueProvider) {
+			long stamp = writeLock();
+			try {
+				int index = findIndex(hash, key);
+				if(index < 0) {
+					boolean newValue = valueProvider.getAsBoolean();
+					insert(-index-1, key, newValue);
+					return newValue;
+				}
+				boolean newValue = values[index];
+				return newValue;
+			}
+			finally {
+				unlockWrite(stamp);
+			}
+		}
+				
+		protected boolean computeIfPresent(int hash, byte key, ByteBooleanUnaryOperator mappingFunction) {
+			long stamp = writeLock();
+			try {
+				int index = findIndex(hash, key);
+				if(index < 0) return getDefaultReturnValue();
+				boolean newValue = mappingFunction.applyAsBoolean(key, values[index]);
+				values[index] = newValue;
+				return newValue;
+			}
+			finally {
+				unlockWrite(stamp);
+			}
+		}
+		
 		protected boolean computeNonDefault(int hash, byte key, ByteBooleanUnaryOperator mappingFunction) {
 			long stamp = writeLock();
 			try {
@@ -2048,23 +2096,6 @@ public class Byte2BooleanConcurrentOpenHashMap extends AbstractByte2BooleanMap i
 					return newValue;
 				}
 				values[index] = newValue;
-				return newValue;
-			}
-			finally {
-				unlockWrite(stamp);
-			}
-		}
-		
-		protected boolean computeIfAbsent(int hash, byte key, BytePredicate mappingFunction) {
-			long stamp = writeLock();
-			try {
-				int index = findIndex(hash, key);
-				if(index < 0) {
-					boolean newValue = mappingFunction.test(key);
-					insert(-index-1, key, newValue);
-					return newValue;
-				}
-				boolean newValue = values[index];
 				return newValue;
 			}
 			finally {
@@ -2095,23 +2126,6 @@ public class Byte2BooleanConcurrentOpenHashMap extends AbstractByte2BooleanMap i
 			}
 		}
 		
-		protected boolean supplyIfAbsent(int hash, byte key, BooleanSupplier valueProvider) {
-			long stamp = writeLock();
-			try {
-				int index = findIndex(hash, key);
-				if(index < 0) {
-					boolean newValue = valueProvider.getAsBoolean();
-					insert(-index-1, key, newValue);
-					return newValue;
-				}
-				boolean newValue = values[index];
-				return newValue;
-			}
-			finally {
-				unlockWrite(stamp);
-			}
-		}
-		
 		protected boolean supplyIfAbsentNonDefault(int hash, byte key, BooleanSupplier valueProvider) {
 			long stamp = writeLock();
 			try {
@@ -2128,20 +2142,6 @@ public class Byte2BooleanConcurrentOpenHashMap extends AbstractByte2BooleanMap i
 					if(newValue == getDefaultReturnValue()) return newValue;
 					values[index] = newValue;
 				}
-				return newValue;
-			}
-			finally {
-				unlockWrite(stamp);
-			}
-		}
-		
-		protected boolean computeIfPresent(int hash, byte key, ByteBooleanUnaryOperator mappingFunction) {
-			long stamp = writeLock();
-			try {
-				int index = findIndex(hash, key);
-				if(index < 0) return getDefaultReturnValue();
-				boolean newValue = mappingFunction.applyAsBoolean(key, values[index]);
-				values[index] = newValue;
 				return newValue;
 			}
 			finally {

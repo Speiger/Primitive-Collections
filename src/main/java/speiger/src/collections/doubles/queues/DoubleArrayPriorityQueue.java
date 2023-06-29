@@ -209,6 +209,13 @@ public class DoubleArrayPriorityQueue extends AbstractDoublePriorityQueue
 	}
 	
 	@Override
+	public boolean contains(double e) {
+		for(int i = 0;i<size;i++)
+			if(Double.doubleToLongBits(e) == Double.doubleToLongBits(array[i])) return true;
+		return false;
+	}
+	
+	@Override
 	public boolean removeFirst(double e) {
 		for(int i = 0;i<size;i++)
 			if(Double.doubleToLongBits(e) == Double.doubleToLongBits(array[i])) return removeIndex(i);

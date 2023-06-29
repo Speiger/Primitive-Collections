@@ -89,6 +89,8 @@ public class ShortPriorityQueues
 		@Override
 		public short peek(int index) { synchronized(mutex) { return queue.peek(index); } }
 		@Override
+		public boolean contains(short e) { synchronized(mutex) { return queue.contains(e); } }
+		@Override
 		public boolean removeFirst(short e) { synchronized(mutex) { return queue.removeFirst(e); } }
 		@Override
 		public boolean removeLast(short e) { synchronized(mutex) { return queue.removeLast(e); } }

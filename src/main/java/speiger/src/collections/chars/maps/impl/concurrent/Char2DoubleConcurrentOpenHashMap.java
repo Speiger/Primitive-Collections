@@ -452,17 +452,31 @@ public class Char2DoubleConcurrentOpenHashMap extends AbstractChar2DoubleMap imp
 	}
 	
 	@Override
-	public double computeDoubleNonDefault(char key, CharDoubleUnaryOperator mappingFunction) {
-		Objects.requireNonNull(mappingFunction);
-		int hash = getHashCode(key);
-		return getSegment(hash).computeNonDefault(hash, key, mappingFunction);
-	}
-
-	@Override
 	public double computeDoubleIfAbsent(char key, Char2DoubleFunction mappingFunction) {
 		Objects.requireNonNull(mappingFunction);
 		int hash = getHashCode(key);
 		return getSegment(hash).computeIfAbsent(hash, key, mappingFunction);
+	}
+	
+	@Override
+	public double supplyDoubleIfAbsent(char key, DoubleSupplier valueProvider) {
+		Objects.requireNonNull(valueProvider);
+		int hash = getHashCode(key);
+		return getSegment(hash).supplyIfAbsent(hash, key, valueProvider);
+	}
+	
+	@Override
+	public double computeDoubleIfPresent(char key, CharDoubleUnaryOperator mappingFunction) {
+		Objects.requireNonNull(mappingFunction);
+		int hash = getHashCode(key);
+		return getSegment(hash).computeIfPresent(hash, key, mappingFunction);
+	}
+	
+	@Override
+	public double computeDoubleNonDefault(char key, CharDoubleUnaryOperator mappingFunction) {
+		Objects.requireNonNull(mappingFunction);
+		int hash = getHashCode(key);
+		return getSegment(hash).computeNonDefault(hash, key, mappingFunction);
 	}
 	
 	@Override
@@ -473,24 +487,10 @@ public class Char2DoubleConcurrentOpenHashMap extends AbstractChar2DoubleMap imp
 	}
 
 	@Override
-	public double supplyDoubleIfAbsent(char key, DoubleSupplier valueProvider) {
-		Objects.requireNonNull(valueProvider);
-		int hash = getHashCode(key);
-		return getSegment(hash).supplyIfAbsent(hash, key, valueProvider);
-	}
-	
-	@Override
 	public double supplyDoubleIfAbsentNonDefault(char key, DoubleSupplier valueProvider) {
 		Objects.requireNonNull(valueProvider);
 		int hash = getHashCode(key);
 		return getSegment(hash).supplyIfAbsentNonDefault(hash, key, valueProvider);
-	}
-	
-	@Override
-	public double computeDoubleIfPresent(char key, CharDoubleUnaryOperator mappingFunction) {
-		Objects.requireNonNull(mappingFunction);
-		int hash = getHashCode(key);
-		return getSegment(hash).computeIfPresent(hash, key, mappingFunction);
 	}
 	
 	@Override
@@ -2076,6 +2076,54 @@ public class Char2DoubleConcurrentOpenHashMap extends AbstractChar2DoubleMap imp
 			}
 		}
 		
+		protected double computeIfAbsent(int hash, char key, Char2DoubleFunction mappingFunction) {
+			long stamp = writeLock();
+			try {
+				int index = findIndex(hash, key);
+				if(index < 0) {
+					double newValue = mappingFunction.applyAsDouble(key);
+					insert(-index-1, key, newValue);
+					return newValue;
+				}
+				double newValue = values[index];
+				return newValue;
+			}
+			finally {
+				unlockWrite(stamp);
+			}
+		}
+				
+		protected double supplyIfAbsent(int hash, char key, DoubleSupplier valueProvider) {
+			long stamp = writeLock();
+			try {
+				int index = findIndex(hash, key);
+				if(index < 0) {
+					double newValue = valueProvider.getAsDouble();
+					insert(-index-1, key, newValue);
+					return newValue;
+				}
+				double newValue = values[index];
+				return newValue;
+			}
+			finally {
+				unlockWrite(stamp);
+			}
+		}
+				
+		protected double computeIfPresent(int hash, char key, CharDoubleUnaryOperator mappingFunction) {
+			long stamp = writeLock();
+			try {
+				int index = findIndex(hash, key);
+				if(index < 0) return getDefaultReturnValue();
+				double newValue = mappingFunction.applyAsDouble(key, values[index]);
+				values[index] = newValue;
+				return newValue;
+			}
+			finally {
+				unlockWrite(stamp);
+			}
+		}
+		
 		protected double computeNonDefault(int hash, char key, CharDoubleUnaryOperator mappingFunction) {
 			long stamp = writeLock();
 			try {
@@ -2092,23 +2140,6 @@ public class Char2DoubleConcurrentOpenHashMap extends AbstractChar2DoubleMap imp
 					return newValue;
 				}
 				values[index] = newValue;
-				return newValue;
-			}
-			finally {
-				unlockWrite(stamp);
-			}
-		}
-		
-		protected double computeIfAbsent(int hash, char key, Char2DoubleFunction mappingFunction) {
-			long stamp = writeLock();
-			try {
-				int index = findIndex(hash, key);
-				if(index < 0) {
-					double newValue = mappingFunction.applyAsDouble(key);
-					insert(-index-1, key, newValue);
-					return newValue;
-				}
-				double newValue = values[index];
 				return newValue;
 			}
 			finally {
@@ -2139,23 +2170,6 @@ public class Char2DoubleConcurrentOpenHashMap extends AbstractChar2DoubleMap imp
 			}
 		}
 		
-		protected double supplyIfAbsent(int hash, char key, DoubleSupplier valueProvider) {
-			long stamp = writeLock();
-			try {
-				int index = findIndex(hash, key);
-				if(index < 0) {
-					double newValue = valueProvider.getAsDouble();
-					insert(-index-1, key, newValue);
-					return newValue;
-				}
-				double newValue = values[index];
-				return newValue;
-			}
-			finally {
-				unlockWrite(stamp);
-			}
-		}
-		
 		protected double supplyIfAbsentNonDefault(int hash, char key, DoubleSupplier valueProvider) {
 			long stamp = writeLock();
 			try {
@@ -2172,20 +2186,6 @@ public class Char2DoubleConcurrentOpenHashMap extends AbstractChar2DoubleMap imp
 					if(Double.doubleToLongBits(newValue) == Double.doubleToLongBits(getDefaultReturnValue())) return newValue;
 					values[index] = newValue;
 				}
-				return newValue;
-			}
-			finally {
-				unlockWrite(stamp);
-			}
-		}
-		
-		protected double computeIfPresent(int hash, char key, CharDoubleUnaryOperator mappingFunction) {
-			long stamp = writeLock();
-			try {
-				int index = findIndex(hash, key);
-				if(index < 0) return getDefaultReturnValue();
-				double newValue = mappingFunction.applyAsDouble(key, values[index]);
-				values[index] = newValue;
 				return newValue;
 			}
 			finally {

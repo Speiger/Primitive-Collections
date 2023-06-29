@@ -318,6 +318,16 @@ public class IntLists
 		}
 		
 		@Override
+		public IntListIterator indexedIterator(int...indecies) {
+			return l.indexedIterator(indecies);
+		}
+		
+		@Override
+		public IntListIterator indexedIterator(IntList indecies) {
+			return l.indexedIterator(indecies);
+		}
+		
+		@Override
 		public IntList subList(int from, int to) {
 			return IntLists.synchronize(l.subList(from, to));
 		}
@@ -427,6 +437,16 @@ public class IntLists
 		}
 		
 		@Override
+		public IntListIterator indexedIterator(int...indecies) {
+			return IntIterators.unmodifiable(l.indexedIterator(indecies));
+		}
+		
+		@Override
+		public IntListIterator indexedIterator(IntList indecies) {
+			return IntIterators.unmodifiable(l.indexedIterator(indecies));
+		}
+		
+		@Override
 		public IntList subList(int from, int to) {
 			return IntLists.unmodifiable(l.subList(from, to));
 		}
@@ -512,6 +532,16 @@ public class IntLists
 			if(index != 0)
 				throw new IndexOutOfBoundsException();
 			return IntIterators.empty();
+		}
+		
+		@Override
+		public IntListIterator indexedIterator(int...indecies) {
+			return IntIterators.empty(); 
+		}
+		
+		@Override
+		public IntListIterator indexedIterator(IntList indecies) {
+			return IntIterators.empty(); 
 		}
 		
 		@Override

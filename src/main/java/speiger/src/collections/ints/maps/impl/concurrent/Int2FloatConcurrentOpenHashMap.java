@@ -451,17 +451,31 @@ public class Int2FloatConcurrentOpenHashMap extends AbstractInt2FloatMap impleme
 	}
 	
 	@Override
-	public float computeFloatNonDefault(int key, IntFloatUnaryOperator mappingFunction) {
-		Objects.requireNonNull(mappingFunction);
-		int hash = getHashCode(key);
-		return getSegment(hash).computeNonDefault(hash, key, mappingFunction);
-	}
-
-	@Override
 	public float computeFloatIfAbsent(int key, Int2FloatFunction mappingFunction) {
 		Objects.requireNonNull(mappingFunction);
 		int hash = getHashCode(key);
 		return getSegment(hash).computeIfAbsent(hash, key, mappingFunction);
+	}
+	
+	@Override
+	public float supplyFloatIfAbsent(int key, FloatSupplier valueProvider) {
+		Objects.requireNonNull(valueProvider);
+		int hash = getHashCode(key);
+		return getSegment(hash).supplyIfAbsent(hash, key, valueProvider);
+	}
+	
+	@Override
+	public float computeFloatIfPresent(int key, IntFloatUnaryOperator mappingFunction) {
+		Objects.requireNonNull(mappingFunction);
+		int hash = getHashCode(key);
+		return getSegment(hash).computeIfPresent(hash, key, mappingFunction);
+	}
+	
+	@Override
+	public float computeFloatNonDefault(int key, IntFloatUnaryOperator mappingFunction) {
+		Objects.requireNonNull(mappingFunction);
+		int hash = getHashCode(key);
+		return getSegment(hash).computeNonDefault(hash, key, mappingFunction);
 	}
 	
 	@Override
@@ -472,24 +486,10 @@ public class Int2FloatConcurrentOpenHashMap extends AbstractInt2FloatMap impleme
 	}
 
 	@Override
-	public float supplyFloatIfAbsent(int key, FloatSupplier valueProvider) {
-		Objects.requireNonNull(valueProvider);
-		int hash = getHashCode(key);
-		return getSegment(hash).supplyIfAbsent(hash, key, valueProvider);
-	}
-	
-	@Override
 	public float supplyFloatIfAbsentNonDefault(int key, FloatSupplier valueProvider) {
 		Objects.requireNonNull(valueProvider);
 		int hash = getHashCode(key);
 		return getSegment(hash).supplyIfAbsentNonDefault(hash, key, valueProvider);
-	}
-	
-	@Override
-	public float computeFloatIfPresent(int key, IntFloatUnaryOperator mappingFunction) {
-		Objects.requireNonNull(mappingFunction);
-		int hash = getHashCode(key);
-		return getSegment(hash).computeIfPresent(hash, key, mappingFunction);
 	}
 	
 	@Override
@@ -2075,6 +2075,54 @@ public class Int2FloatConcurrentOpenHashMap extends AbstractInt2FloatMap impleme
 			}
 		}
 		
+		protected float computeIfAbsent(int hash, int key, Int2FloatFunction mappingFunction) {
+			long stamp = writeLock();
+			try {
+				int index = findIndex(hash, key);
+				if(index < 0) {
+					float newValue = mappingFunction.applyAsFloat(key);
+					insert(-index-1, key, newValue);
+					return newValue;
+				}
+				float newValue = values[index];
+				return newValue;
+			}
+			finally {
+				unlockWrite(stamp);
+			}
+		}
+				
+		protected float supplyIfAbsent(int hash, int key, FloatSupplier valueProvider) {
+			long stamp = writeLock();
+			try {
+				int index = findIndex(hash, key);
+				if(index < 0) {
+					float newValue = valueProvider.getAsFloat();
+					insert(-index-1, key, newValue);
+					return newValue;
+				}
+				float newValue = values[index];
+				return newValue;
+			}
+			finally {
+				unlockWrite(stamp);
+			}
+		}
+				
+		protected float computeIfPresent(int hash, int key, IntFloatUnaryOperator mappingFunction) {
+			long stamp = writeLock();
+			try {
+				int index = findIndex(hash, key);
+				if(index < 0) return getDefaultReturnValue();
+				float newValue = mappingFunction.applyAsFloat(key, values[index]);
+				values[index] = newValue;
+				return newValue;
+			}
+			finally {
+				unlockWrite(stamp);
+			}
+		}
+		
 		protected float computeNonDefault(int hash, int key, IntFloatUnaryOperator mappingFunction) {
 			long stamp = writeLock();
 			try {
@@ -2091,23 +2139,6 @@ public class Int2FloatConcurrentOpenHashMap extends AbstractInt2FloatMap impleme
 					return newValue;
 				}
 				values[index] = newValue;
-				return newValue;
-			}
-			finally {
-				unlockWrite(stamp);
-			}
-		}
-		
-		protected float computeIfAbsent(int hash, int key, Int2FloatFunction mappingFunction) {
-			long stamp = writeLock();
-			try {
-				int index = findIndex(hash, key);
-				if(index < 0) {
-					float newValue = mappingFunction.applyAsFloat(key);
-					insert(-index-1, key, newValue);
-					return newValue;
-				}
-				float newValue = values[index];
 				return newValue;
 			}
 			finally {
@@ -2138,53 +2169,22 @@ public class Int2FloatConcurrentOpenHashMap extends AbstractInt2FloatMap impleme
 			}
 		}
 		
-		protected float supplyIfAbsent(int hash, int key, FloatSupplier valueProvider) {
-			long stamp = writeLock();
-			try {
-				int index = findIndex(hash, key);
-				if(index < 0) {
-					float newValue = valueProvider.getAsDouble();
-					insert(-index-1, key, newValue);
-					return newValue;
-				}
-				float newValue = values[index];
-				return newValue;
-			}
-			finally {
-				unlockWrite(stamp);
-			}
-		}
-		
 		protected float supplyIfAbsentNonDefault(int hash, int key, FloatSupplier valueProvider) {
 			long stamp = writeLock();
 			try {
 				int index = findIndex(hash, key);
 				if(index < 0) {
-					float newValue = valueProvider.getAsDouble();
+					float newValue = valueProvider.getAsFloat();
 					if(Float.floatToIntBits(newValue) == Float.floatToIntBits(getDefaultReturnValue())) return newValue;
 					insert(-index-1, key, newValue);
 					return newValue;
 				}
 				float newValue = values[index];
 				if(Float.floatToIntBits(newValue) == Float.floatToIntBits(getDefaultReturnValue())) {
-					newValue = valueProvider.getAsDouble();
+					newValue = valueProvider.getAsFloat();
 					if(Float.floatToIntBits(newValue) == Float.floatToIntBits(getDefaultReturnValue())) return newValue;
 					values[index] = newValue;
 				}
-				return newValue;
-			}
-			finally {
-				unlockWrite(stamp);
-			}
-		}
-		
-		protected float computeIfPresent(int hash, int key, IntFloatUnaryOperator mappingFunction) {
-			long stamp = writeLock();
-			try {
-				int index = findIndex(hash, key);
-				if(index < 0) return getDefaultReturnValue();
-				float newValue = mappingFunction.applyAsFloat(key, values[index]);
-				values[index] = newValue;
 				return newValue;
 			}
 			finally {

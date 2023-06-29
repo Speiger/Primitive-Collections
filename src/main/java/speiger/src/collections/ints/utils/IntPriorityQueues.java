@@ -89,6 +89,8 @@ public class IntPriorityQueues
 		@Override
 		public int peek(int index) { synchronized(mutex) { return queue.peek(index); } }
 		@Override
+		public boolean contains(int e) { synchronized(mutex) { return queue.contains(e); } }
+		@Override
 		public boolean removeFirst(int e) { synchronized(mutex) { return queue.removeFirst(e); } }
 		@Override
 		public boolean removeLast(int e) { synchronized(mutex) { return queue.removeLast(e); } }

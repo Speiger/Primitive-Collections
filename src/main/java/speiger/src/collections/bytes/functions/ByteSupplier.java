@@ -8,5 +8,5 @@ public interface ByteSupplier
 	/**
 	 * @return the supplied value
 	 */
-	public byte getAsInt();
+	public byte getAsByte();
 }

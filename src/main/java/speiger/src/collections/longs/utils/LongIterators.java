@@ -2,6 +2,7 @@ package speiger.src.collections.longs.utils;
 
 import java.util.Iterator;
 import java.util.NoSuchElementException;
+import java.util.function.Consumer;
 import java.util.function.LongPredicate;
 
 import speiger.src.collections.longs.collections.LongIterator;
@@ -10,12 +11,14 @@ import speiger.src.collections.objects.utils.ObjectIterators;
 import speiger.src.collections.longs.functions.LongConsumer;
 import speiger.src.collections.longs.functions.LongComparator;
 import speiger.src.collections.longs.functions.function.LongFunction;
+import speiger.src.collections.objects.functions.consumer.ObjectLongConsumer;
 import speiger.src.collections.longs.lists.LongList;
 import speiger.src.collections.longs.lists.LongArrayList;
 
 import speiger.src.collections.longs.lists.LongListIterator;
 import speiger.src.collections.longs.collections.LongBidirectionalIterator;
 import speiger.src.collections.longs.collections.LongCollection;
+import speiger.src.collections.longs.utils.LongCollections.CollectionWrapper;
 
 /**
  * A Helper class for Iterators
@@ -204,6 +207,24 @@ public class LongIterators
 	 */
 	public static LongIterator repeat(Iterator<? extends Long> iterator, int repeats) {
 		return new RepeatingIterator(wrap(iterator), repeats);
+	}
+	
+	/**
+	 * A Helper function that creates a infinitely looping iterator
+	 * @param iterator that should be looping infinitely
+	 * @return a infinitely looping iterator
+	 */
+	public static LongIterator infinite(LongIterator iterator) {
+		return new InfiniteIterator(iterator);
+	}
+	
+	/**
+	 * A Helper function that creates a infinitely looping iterator from a Java Iterator
+	 * @param iterator that should be looping infinitely
+	 * @return a infinitely looping iterator
+	 */
+	public static LongIterator infinite(Iterator<? extends Long> iterator) {
+		return new InfiniteIterator(wrap(iterator));
 	}
 	
 	/**
@@ -839,6 +860,40 @@ public class LongIterators
 			foundNext = false;
 			return result;
 		}
+	}
+	
+	private static class InfiniteIterator implements LongIterator
+	{
+		LongIterator iter;
+		CollectionWrapper looper = LongCollections.wrapper();
+		int index = 0;
+		
+		public InfiniteIterator(LongIterator iter) {
+			this.iter = iter;
+		}
+		
+		@Override
+		public boolean hasNext() {
+			return true;
+		}
+
+		@Override
+		public long nextLong() {
+			if(iter != null) {
+				if(iter.hasNext()) {
+					long value = iter.nextLong();
+					looper.add(value);
+					return value;
+				}
+				else iter = null;
+			}
+			return looper.getLong((index++) % looper.size());
+		}
+		
+		@Override
+		public void forEachRemaining(LongConsumer action) { throw new UnsupportedOperationException("This is a instant deadlock, so unsupported"); }
+		public void forEachRemaining(Consumer<? super Long> action) { throw new UnsupportedOperationException("This is a instant deadlock, so unsupported"); }
+		public <E> void forEachRemaining(E input, ObjectLongConsumer<E> action) { throw new UnsupportedOperationException("This is a instant deadlock, so unsupported"); }
 	}
 	
 	private static class RepeatingIterator implements LongIterator
