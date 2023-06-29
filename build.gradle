@@ -19,7 +19,7 @@ repositories {
 }
 
 archivesBaseName = 'Primitive Collections'
-version = '0.8.0';
+version = '0.9.0';
 
 sourceCompatibility = targetCompatibility = compileJava.sourceCompatibility = compileJava.targetCompatibility = JavaVersion.current();
 
@@ -46,7 +46,7 @@ configurations {
 
 dependencies {
 	builderImplementation 'com.google.code.gson:gson:2.10'
-	builderImplementation 'de.speiger:Simple-Code-Generator:1.2.2'
+	builderImplementation 'de.speiger:Simple-Code-Generator:1.3.0'
     testImplementation 'junit:junit:4.12'
     testImplementation 'com.google.guava:guava-testlib:31.0.1-jre'
     

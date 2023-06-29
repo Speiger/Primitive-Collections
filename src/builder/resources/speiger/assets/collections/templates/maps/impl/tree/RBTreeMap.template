@@ -570,28 +570,6 @@ public class RB_TREE_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_VALUE_G
 	}
 	
 	@Override
-	public VALUE_TYPE COMPUTENonDefault(KEY_TYPE key, UNARY_OPERATOR KEY_VALUE_GENERIC_TYPE mappingFunction) {
-		Objects.requireNonNull(mappingFunction);
-#if TYPE_OBJECT
-		validate(key);
-#endif
-		Node KEY_VALUE_GENERIC_TYPE entry = findNode(key);
-		if(entry == null) {
-			VALUE_TYPE newValue = mappingFunction.APPLY_VALUE(key, getDefaultReturnValue());
-			if(VALUE_EQUALS(newValue, getDefaultReturnValue())) return newValue;
-			put(key, newValue);
-			return newValue;
-		}
-		VALUE_TYPE newValue = mappingFunction.APPLY_VALUE(key, entry.value);
-		if(VALUE_EQUALS(newValue, getDefaultReturnValue())) {
-			removeNode(entry);
-			return newValue;
-		}
-		entry.value = newValue;
-		return newValue;
-	}
-	
-	@Override
 	public VALUE_TYPE COMPUTE_IF_ABSENT(KEY_TYPE key, FUNCTION KEY_VALUE_GENERIC_TYPE mappingFunction) {
 		Objects.requireNonNull(mappingFunction);
 #if TYPE_OBJECT
@@ -613,27 +591,6 @@ public class RB_TREE_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_VALUE_G
 			entry.value = newValue;
 		}
 #endif
-		return entry.value;
-	}
-	
-	@Override
-	public VALUE_TYPE COMPUTE_IF_ABSENTNonDefault(KEY_TYPE key, FUNCTION KEY_VALUE_GENERIC_TYPE mappingFunction) {
-		Objects.requireNonNull(mappingFunction);
-#if TYPE_OBJECT
-		validate(key);
-#endif
-		Node KEY_VALUE_GENERIC_TYPE entry = findNode(key);
-		if(entry == null) {
-			VALUE_TYPE newValue = mappingFunction.APPLY(key);
-			if(VALUE_EQUALS(newValue, getDefaultReturnValue())) return newValue;
-			put(key, newValue);
-			return newValue;
-		}
-		if(Objects.equals(entry.value, getDefaultReturnValue())) {
-			VALUE_TYPE newValue = mappingFunction.APPLY(key);
-			if(VALUE_EQUALS(newValue, getDefaultReturnValue())) return newValue;
-			entry.value = newValue;
-		}
 		return entry.value;
 	}
 	
@@ -663,27 +620,6 @@ public class RB_TREE_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_VALUE_G
 	}
 	
 	@Override
-	public VALUE_TYPE SUPPLY_IF_ABSENTNonDefault(KEY_TYPE key, VALUE_SUPPLIER VALUE_GENERIC_TYPE valueProvider) {
-		Objects.requireNonNull(valueProvider);
-#if TYPE_OBJECT
-		validate(key);
-#endif
-		Node KEY_VALUE_GENERIC_TYPE entry = findNode(key);
-		if(entry == null) {
-			VALUE_TYPE newValue = valueProvider.VALUE_SUPPLY_GET();
-			if(VALUE_EQUALS(newValue, getDefaultReturnValue())) return newValue;
-			put(key, newValue);
-			return newValue;
-		}
-		if(VALUE_EQUALS(entry.value, getDefaultReturnValue())) {
-			VALUE_TYPE newValue = valueProvider.VALUE_SUPPLY_GET();
-			if(VALUE_EQUALS(newValue, getDefaultReturnValue())) return newValue;
-			entry.value = newValue;
-		}
-		return entry.value;
-	}
-	
-	@Override
 	public VALUE_TYPE COMPUTE_IF_PRESENT(KEY_TYPE key, UNARY_OPERATOR KEY_VALUE_GENERIC_TYPE mappingFunction) {
 		Objects.requireNonNull(mappingFunction);
 #if TYPE_OBJECT
@@ -705,6 +641,71 @@ public class RB_TREE_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_VALUE_G
 		return newValue;
 	}
 	
+#if !VALUE_OBJECT
+	@Override
+	public VALUE_TYPE COMPUTENonDefault(KEY_TYPE key, UNARY_OPERATOR KEY_VALUE_GENERIC_TYPE mappingFunction) {
+		Objects.requireNonNull(mappingFunction);
+#if TYPE_OBJECT
+		validate(key);
+#endif
+		Node KEY_VALUE_GENERIC_TYPE entry = findNode(key);
+		if(entry == null) {
+			VALUE_TYPE newValue = mappingFunction.APPLY_VALUE(key, getDefaultReturnValue());
+			if(VALUE_EQUALS(newValue, getDefaultReturnValue())) return newValue;
+			put(key, newValue);
+			return newValue;
+		}
+		VALUE_TYPE newValue = mappingFunction.APPLY_VALUE(key, entry.value);
+		if(VALUE_EQUALS(newValue, getDefaultReturnValue())) {
+			removeNode(entry);
+			return newValue;
+		}
+		entry.value = newValue;
+		return newValue;
+	}
+	
+	@Override
+	public VALUE_TYPE COMPUTE_IF_ABSENTNonDefault(KEY_TYPE key, FUNCTION KEY_VALUE_GENERIC_TYPE mappingFunction) {
+		Objects.requireNonNull(mappingFunction);
+#if TYPE_OBJECT
+		validate(key);
+#endif
+		Node KEY_VALUE_GENERIC_TYPE entry = findNode(key);
+		if(entry == null) {
+			VALUE_TYPE newValue = mappingFunction.APPLY(key);
+			if(VALUE_EQUALS(newValue, getDefaultReturnValue())) return newValue;
+			put(key, newValue);
+			return newValue;
+		}
+		if(Objects.equals(entry.value, getDefaultReturnValue())) {
+			VALUE_TYPE newValue = mappingFunction.APPLY(key);
+			if(VALUE_EQUALS(newValue, getDefaultReturnValue())) return newValue;
+			entry.value = newValue;
+		}
+		return entry.value;
+	}
+	
+	@Override
+	public VALUE_TYPE SUPPLY_IF_ABSENTNonDefault(KEY_TYPE key, VALUE_SUPPLIER VALUE_GENERIC_TYPE valueProvider) {
+		Objects.requireNonNull(valueProvider);
+#if TYPE_OBJECT
+		validate(key);
+#endif
+		Node KEY_VALUE_GENERIC_TYPE entry = findNode(key);
+		if(entry == null) {
+			VALUE_TYPE newValue = valueProvider.VALUE_SUPPLY_GET();
+			if(VALUE_EQUALS(newValue, getDefaultReturnValue())) return newValue;
+			put(key, newValue);
+			return newValue;
+		}
+		if(VALUE_EQUALS(entry.value, getDefaultReturnValue())) {
+			VALUE_TYPE newValue = valueProvider.VALUE_SUPPLY_GET();
+			if(VALUE_EQUALS(newValue, getDefaultReturnValue())) return newValue;
+			entry.value = newValue;
+		}
+		return entry.value;
+	}
+	
 	@Override
 	public VALUE_TYPE COMPUTE_IF_PRESENTNonDefault(KEY_TYPE key, UNARY_OPERATOR KEY_VALUE_GENERIC_TYPE mappingFunction) {
 		Objects.requireNonNull(mappingFunction);
@@ -722,6 +723,7 @@ public class RB_TREE_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_VALUE_G
 		return newValue;
 	}
 	
+#endif
 	@Override
 	public VALUE_TYPE MERGE(KEY_TYPE key, VALUE_TYPE value, VALUE_UNARY_OPERATOR VALUE_VALUE_GENERIC_TYPE mappingFunction) {
 		Objects.requireNonNull(mappingFunction);
@@ -1835,6 +1837,7 @@ public class RB_TREE_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_VALUE_G
 #endif
 			if(!inRange(key)) return getDefaultReturnValue();
 			Node KEY_VALUE_GENERIC_TYPE entry = map.findNode(key);
+#if VALUE_OBJECT
 			if(entry == null || VALUE_EQUALS(entry.value, getDefaultReturnValue())) return getDefaultReturnValue();
 			VALUE_TYPE newValue = mappingFunction.apply(key, entry.value);
 			if(VALUE_EQUALS(newValue, getDefaultReturnValue())) {
@@ -1843,6 +1846,11 @@ public class RB_TREE_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_VALUE_G
 			}
 			entry.value = newValue;
 			return newValue;
+#else
+			if(entry == null) return getDefaultReturnValue();
+			entry.value = mappingFunction.apply(key, entry.value);
+			return entry.value;
+#endif
 		}
 		
 		@Override

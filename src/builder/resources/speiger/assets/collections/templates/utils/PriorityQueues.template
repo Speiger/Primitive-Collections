@@ -116,6 +116,8 @@ public class PRIORITY_QUEUES
 		@Override
 		public KEY_TYPE peek(int index) { synchronized(mutex) { return queue.peek(index); } }
 		@Override
+		public boolean contains(KEY_TYPE e) { synchronized(mutex) { return queue.contains(e); } }
+		@Override
 		public boolean removeFirst(KEY_TYPE e) { synchronized(mutex) { return queue.removeFirst(e); } }
 		@Override
 		public boolean removeLast(KEY_TYPE e) { synchronized(mutex) { return queue.removeLast(e); } }

@@ -60,6 +60,18 @@ public abstract class BaseIntPriorityQueueTest extends BaseIntIterableTest
 	}
 	
 	@Test
+	public void testContains() {
+		if(getValidPriorityQueueTests().contains(PriorityQueueTest.CONTAINS)) {
+			IntPriorityQueue queue = create(EMPTY_ARRAY);
+			for(int i = 0;i<100;i++) {
+				queue.enqueue(i);
+			}
+			Assert.assertEquals(true, queue.contains(40));
+			Assert.assertEquals(false, queue.contains(140));
+		}
+	}
+	
+	@Test
 	public void testRemove() {
 		if(getValidPriorityQueueTests().contains(PriorityQueueTest.REMOVE)) {
 			IntPriorityQueue queue = create(EMPTY_ARRAY);

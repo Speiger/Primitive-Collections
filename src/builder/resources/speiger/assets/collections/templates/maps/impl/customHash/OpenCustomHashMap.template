@@ -555,25 +555,6 @@ public class CUSTOM_HASH_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_VAL
 	}
 	
 	@Override
-	public VALUE_TYPE COMPUTENonDefault(KEY_TYPE key, UNARY_OPERATOR KEY_VALUE_GENERIC_TYPE mappingFunction) {
-		Objects.requireNonNull(mappingFunction);
-		int index = findIndex(key);
-		if(index < 0) {
-			VALUE_TYPE newValue = mappingFunction.APPLY_VALUE(key, getDefaultReturnValue());
-			if(VALUE_EQUALS(newValue, getDefaultReturnValue())) return newValue;
-			insert(-index-1, key, newValue);
-			return newValue;
-		}
-		VALUE_TYPE newValue = mappingFunction.APPLY_VALUE(key, values[index]);
-		if(VALUE_EQUALS(newValue, getDefaultReturnValue())) {
-			removeIndex(index);
-			return newValue;
-		}
-		values[index] = newValue;
-		return newValue;
-	}
-	
-	@Override
 	public VALUE_TYPE COMPUTE_IF_ABSENT(KEY_TYPE key, FUNCTION KEY_VALUE_GENERIC_TYPE mappingFunction) {
 		Objects.requireNonNull(mappingFunction);
 		int index = findIndex(key);
@@ -595,26 +576,7 @@ public class CUSTOM_HASH_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_VAL
 #endif
 		return newValue;
 	}
-	
-	@Override
-	public VALUE_TYPE COMPUTE_IF_ABSENTNonDefault(KEY_TYPE key, FUNCTION KEY_VALUE_GENERIC_TYPE mappingFunction) {
-		Objects.requireNonNull(mappingFunction);
-		int index = findIndex(key);
-		if(index < 0) {
-			VALUE_TYPE newValue = mappingFunction.APPLY(key);
-			if(VALUE_EQUALS(newValue, getDefaultReturnValue())) return newValue;
-			insert(-index-1, key, newValue);
-			return newValue;
-		}
-		VALUE_TYPE newValue = values[index];
-		if(VALUE_EQUALS(newValue, getDefaultReturnValue())) {
-			newValue = mappingFunction.APPLY(key);
-			if(VALUE_EQUALS(newValue, getDefaultReturnValue())) return newValue;
-			values[index] = newValue;
-		}
-		return newValue;
-	}
-	
+		
 	@Override
 	public VALUE_TYPE SUPPLY_IF_ABSENT(KEY_TYPE key, VALUE_SUPPLIER VALUE_GENERIC_TYPE valueProvider) {
 		Objects.requireNonNull(valueProvider);
@@ -639,6 +601,64 @@ public class CUSTOM_HASH_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_VAL
 	}
 	
 	@Override
+	public VALUE_TYPE COMPUTE_IF_PRESENT(KEY_TYPE key, UNARY_OPERATOR KEY_VALUE_GENERIC_TYPE mappingFunction) {
+		Objects.requireNonNull(mappingFunction);
+		int index = findIndex(key);
+#if !VALUE_OBJECT
+		if(index < 0) return getDefaultReturnValue();
+		VALUE_TYPE newValue = mappingFunction.APPLY_VALUE(key, values[index]);
+#else
+		if(index < 0 || VALUE_EQUALS(values[index], getDefaultReturnValue())) return getDefaultReturnValue();
+		VALUE_TYPE newValue = mappingFunction.APPLY_VALUE(key, values[index]);
+		if(VALUE_EQUALS(newValue, getDefaultReturnValue())) {
+			removeIndex(index);
+			return newValue;
+		}
+#endif
+		values[index] = newValue;
+		return newValue;
+	}
+	
+#if !VALUE_OBJECT
+	@Override
+	public VALUE_TYPE COMPUTENonDefault(KEY_TYPE key, UNARY_OPERATOR KEY_VALUE_GENERIC_TYPE mappingFunction) {
+		Objects.requireNonNull(mappingFunction);
+		int index = findIndex(key);
+		if(index < 0) {
+			VALUE_TYPE newValue = mappingFunction.APPLY_VALUE(key, getDefaultReturnValue());
+			if(VALUE_EQUALS(newValue, getDefaultReturnValue())) return newValue;
+			insert(-index-1, key, newValue);
+			return newValue;
+		}
+		VALUE_TYPE newValue = mappingFunction.APPLY_VALUE(key, values[index]);
+		if(VALUE_EQUALS(newValue, getDefaultReturnValue())) {
+			removeIndex(index);
+			return newValue;
+		}
+		values[index] = newValue;
+		return newValue;
+	}
+	
+	@Override
+	public VALUE_TYPE COMPUTE_IF_ABSENTNonDefault(KEY_TYPE key, FUNCTION KEY_VALUE_GENERIC_TYPE mappingFunction) {
+		Objects.requireNonNull(mappingFunction);
+		int index = findIndex(key);
+		if(index < 0) {
+			VALUE_TYPE newValue = mappingFunction.APPLY(key);
+			if(VALUE_EQUALS(newValue, getDefaultReturnValue())) return newValue;
+			insert(-index-1, key, newValue);
+			return newValue;
+		}
+		VALUE_TYPE newValue = values[index];
+		if(VALUE_EQUALS(newValue, getDefaultReturnValue())) {
+			newValue = mappingFunction.APPLY(key);
+			if(VALUE_EQUALS(newValue, getDefaultReturnValue())) return newValue;
+			values[index] = newValue;
+		}
+		return newValue;
+	}
+	
+	@Override
 	public VALUE_TYPE SUPPLY_IF_ABSENTNonDefault(KEY_TYPE key, VALUE_SUPPLIER VALUE_GENERIC_TYPE valueProvider) {
 		Objects.requireNonNull(valueProvider);
 		int index = findIndex(key);
@@ -658,25 +678,6 @@ public class CUSTOM_HASH_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_VAL
 	}
 	
 	@Override
-	public VALUE_TYPE COMPUTE_IF_PRESENT(KEY_TYPE key, UNARY_OPERATOR KEY_VALUE_GENERIC_TYPE mappingFunction) {
-		Objects.requireNonNull(mappingFunction);
-		int index = findIndex(key);
-#if !VALUE_OBJECT
-		if(index < 0) return getDefaultReturnValue();
-		VALUE_TYPE newValue = mappingFunction.APPLY_VALUE(key, values[index]);
-#else
-		if(index < 0 || VALUE_EQUALS(values[index], getDefaultReturnValue())) return getDefaultReturnValue();
-		VALUE_TYPE newValue = mappingFunction.APPLY_VALUE(key, values[index]);
-		if(VALUE_EQUALS(newValue, getDefaultReturnValue())) {
-			removeIndex(index);
-			return newValue;
-		}
-#endif
-		values[index] = newValue;
-		return newValue;
-	}
-	
-	@Override
 	public VALUE_TYPE COMPUTE_IF_PRESENTNonDefault(KEY_TYPE key, UNARY_OPERATOR KEY_VALUE_GENERIC_TYPE mappingFunction) {
 		Objects.requireNonNull(mappingFunction);
 		int index = findIndex(key);
@@ -690,6 +691,7 @@ public class CUSTOM_HASH_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_VAL
 		return newValue;
 	}
 	
+#endif
 	@Override
 	public VALUE_TYPE MERGE(KEY_TYPE key, VALUE_TYPE value, VALUE_UNARY_OPERATOR VALUE_VALUE_GENERIC_TYPE mappingFunction) {
 		Objects.requireNonNull(mappingFunction);

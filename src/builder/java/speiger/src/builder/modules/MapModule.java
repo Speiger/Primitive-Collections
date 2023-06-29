@@ -108,6 +108,9 @@ public class MapModule extends BaseModule
 			addBlockedFiles("TestOrderedMapGenerator");
 			addBlockedFilter(T -> T.endsWith("Tester") && (T.startsWith("Map") || T.startsWith("OrderedMap") || T.startsWith("SortedMap") || T.startsWith("NavigableMap")));
 		}
+		if(valueType == ClassType.OBJECT) {
+			addBlockedFiles("MapComputeIfAbsentNonDefaultTester", "MapComputeIfPresentNonDefaultTester", "MapComputeNonDefaultTester", "MapSupplyIfAbsentNonDefaultTester");
+		}
 	}
 	
 	@Override
@@ -158,6 +161,9 @@ public class MapModule extends BaseModule
 		addBiRequirement("MapComputeIfAbsentTester");
 		addBiRequirement("MapComputeIfPresentTester");
 		addBiRequirement("MapComputeTester");
+		addBiRequirement("MapComputeIfAbsentNonDefaultTester");
+		addBiRequirement("MapComputeIfPresentNonDefaultTester");
+		addBiRequirement("MapComputeNonDefaultTester");
 		addBiRequirement("MapCopyTester");
 		addBiRequirement("MapContainsTester");
 		addBiRequirement("MapContainsKeyTester");
@@ -184,6 +190,7 @@ public class MapModule extends BaseModule
 		addBiRequirement("MapReplaceTester");
 		addBiRequirement("MapSizeTester");
 		addBiRequirement("MapSupplyIfAbsentTester");
+		addBiRequirement("MapSupplyIfAbsentNonDefaultTester");
 		addBiRequirement("MapToStringTester");
 		addBiRequirement("NavigableMapNavigationTester");
 		addBiRequirement("SortedMapNavigationTester");

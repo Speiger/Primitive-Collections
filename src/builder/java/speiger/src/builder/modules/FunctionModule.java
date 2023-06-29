@@ -54,8 +54,8 @@ public class FunctionModule extends BaseModule
 	protected void loadFunctions()
 	{
 		addSimpleMapper("APPLY", keyType.getApply(valueType));
-		addSimpleMapper("SUPPLY_GET", keyType.isObject() ? "get" : "getAs"+keyType.getCustomJDKType().getNonFileType());
-		addSimpleMapper("VALUE_SUPPLY_GET", valueType.isObject() ? "get" : "getAs"+valueType.getCustomJDKType().getNonFileType());
+		addSimpleMapper("SUPPLY_GET", keyType.isObject() ? "get" : "getAs"+keyType.getNonFileType());
+		addSimpleMapper("VALUE_SUPPLY_GET", valueType.isObject() ? "get" : "getAs"+valueType.getNonFileType());
 	}
 	
 	@Override

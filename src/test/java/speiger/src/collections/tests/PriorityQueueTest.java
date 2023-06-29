@@ -5,6 +5,7 @@ public enum PriorityQueueTest
 {
 	IN_OUT,
 	PEEK,
+	CONTAINS,
 	REMOVE,
 	TO_ARRAY,
 	COPY;

@@ -16,6 +16,19 @@ import java.util.function.BiFunction;
 import java.util.function.IntFunction;
 import java.util.Comparator;
 
+#if BOOLEAN_COLLECTION_MODULE
+import speiger.src.collections.booleans.collections.BooleanIterable;
+#endif
+#iterate
+#argument OUTPUT_ITERABLE ByteIterable ShortIterable IntIterable LongIterable FloatIterable DoubleIterable
+#argument MAPPER ToByteFunction ToShortFunction ToIntFunction ToLongFunction ToFloatFunction ToDoubleFunction
+#argument PACKAGE bytes shorts ints longs floats doubles
+#argument FILTER_TYPE BYTE_COLLECTION_MODULE SHORT_COLLECTION_MODULE INT_COLLECTION_MODULE LONG_COLLECTION_MODULE FLOAT_COLLECTION_MODULE DOUBLE_COLLECTION_MODULE
+#if FILTER_TYPE
+import speiger.src.collections.objects.functions.function.MAPPER;
+import speiger.src.collections.PACKAGE.collections.OUTPUT_ITERABLE;
+#endif
+#enditerate
 #endif
 import speiger.src.collections.PACKAGE.functions.function.TO_OBJECT_FUNCTION;
 import speiger.src.collections.ints.functions.consumer.BI_FROM_INT_CONSUMER;
@@ -165,6 +178,25 @@ public interface ITERABLE KEY_GENERIC_TYPE extends Iterable<CLASS_TYPE>
 		return ITERABLES.map(this, mapper);
 	}
 	
+#if TYPE_OBJECT
+#iterate
+#argument OUTPUT_ITERABLE BooleanIterable ByteIterable ShortIterable IntIterable LongIterable FloatIterable DoubleIterable
+#argument MAPPER Predicate ToByteFunction ToShortFunction ToIntFunction ToLongFunction ToFloatFunction ToDoubleFunction
+#argument DATA_TYPE Boolean Byte Short Int Long Float Double
+#argument FILTER_TYPE BOOLEAN_COLLECTION_MODULE BYTE_COLLECTION_MODULE SHORT_COLLECTION_MODULE INT_COLLECTION_MODULE LONG_COLLECTION_MODULE FLOAT_COLLECTION_MODULE DOUBLE_COLLECTION_MODULE
+#if FILTER_TYPE
+	/**
+	 * A Helper function to reduce the usage of Streams and allows to convert a Iterable to something else.
+	 * @param mapper the mapping function
+	 * @return a new Iterable that returns the desired result
+	 */
+	default OUTPUT_ITERABLE mapToDATA_TYPE(MAPPER<T> mapper) {
+		return ITERABLES.mapToDATA_TYPE(this, mapper);
+	}
+	
+#endif
+#enditerate
+#endif
 	/**
 	 * A Helper function to reduce the usage of Streams and allows to convert a Iterable to something else.
 	 * @param mapper the flatMapping function

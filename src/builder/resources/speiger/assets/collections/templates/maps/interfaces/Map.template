@@ -390,6 +390,35 @@ public interface MAP KEY_VALUE_GENERIC_TYPE extends Map<CLASS_TYPE, CLASS_VALUE_
 	 */
 	public VALUE_TYPE COMPUTE(KEY_TYPE key, UNARY_OPERATOR KEY_VALUE_GENERIC_TYPE mappingFunction);
 	/**
+	 * A Type Specific computeIfAbsent method to reduce boxing/unboxing
+	 * If the generated value equals the getDefaultReturnValue it will simply not insert it since that is treated as "null".
+	 * A "Null Value" will be treated as "Do not insert/remove" based on how the Java has specified it.
+	 * @param key the key that should be computed
+	 * @param mappingFunction the operator that should generate the value if not present
+	 * @return the result of the computed value or present value
+	 */
+	public VALUE_TYPE COMPUTE_IF_ABSENT(KEY_TYPE key, FUNCTION KEY_VALUE_GENERIC_TYPE mappingFunction);
+	/**
+	 * A Supplier based computeIfAbsent function to fill the most used usecase of this function
+	 * If the generated value equals the getDefaultReturnValue it will simply not insert it since that is treated as "null".
+	 * A "Null Value" will be treated as "Do not insert/remove" based on how the Java has specified it.
+	 * @param key the key that should be computed
+	 * @param valueProvider the value if not present
+	 * @return the result of the computed value or present value
+	 */	
+	public VALUE_TYPE SUPPLY_IF_ABSENT(KEY_TYPE key, VALUE_SUPPLIER VALUE_GENERIC_TYPE valueProvider);
+	/**
+	 * A Type Specific compute method to reduce boxing/unboxing
+	 * If the generated value equals the getDefaultReturnValue it will simply not insert it since that is treated as "null".
+	 * A "Null Value" will be treated as "Do not insert/remove" based on how the Java has specified it.
+	 * @param key the key that should be computed
+	 * @param mappingFunction the operator that should generate the value if present
+	 * @return the result of the default return value or present value
+	 * @note if not present then compute is not executed
+	 */
+	public VALUE_TYPE COMPUTE_IF_PRESENT(KEY_TYPE key, UNARY_OPERATOR KEY_VALUE_GENERIC_TYPE mappingFunction);
+#if !VALUE_OBJECT
+	/**
 	 * A Type Specific compute method to reduce boxing/unboxing
 	 * If the generated value equals the getDefaultReturnValue it will simply not insert it since that is treated as "null".
 	 * A "Null Value" will be treated as "Do not insert/remove" based on how the Java has specified it.
@@ -406,25 +435,7 @@ public interface MAP KEY_VALUE_GENERIC_TYPE extends Map<CLASS_TYPE, CLASS_VALUE_
 	 * @param mappingFunction the operator that should generate the value if not present
 	 * @return the result of the computed value or present value
 	 */
-	public VALUE_TYPE COMPUTE_IF_ABSENT(KEY_TYPE key, FUNCTION KEY_VALUE_GENERIC_TYPE mappingFunction);
-	/**
-	 * A Type Specific computeIfAbsent method to reduce boxing/unboxing
-	 * If the generated value equals the getDefaultReturnValue it will simply not insert it since that is treated as "null".
-	 * A "Null Value" will be treated as "Do not insert/remove" based on how the Java has specified it.
-	 * @param key the key that should be computed
-	 * @param mappingFunction the operator that should generate the value if not present
-	 * @return the result of the computed value or present value
-	 */
 	public VALUE_TYPE COMPUTE_IF_ABSENTNonDefault(KEY_TYPE key, FUNCTION KEY_VALUE_GENERIC_TYPE mappingFunction);
-	/**
-	 * A Supplier based computeIfAbsent function to fill the most used usecase of this function
-	 * If the generated value equals the getDefaultReturnValue it will simply not insert it since that is treated as "null".
-	 * A "Null Value" will be treated as "Do not insert/remove" based on how the Java has specified it.
-	 * @param key the key that should be computed
-	 * @param valueProvider the value if not present
-	 * @return the result of the computed value or present value
-	 */	
-	public VALUE_TYPE SUPPLY_IF_ABSENT(KEY_TYPE key, VALUE_SUPPLIER VALUE_GENERIC_TYPE valueProvider);
 	/**
 	 * A Supplier based computeIfAbsent function to fill the most used usecase of this function
 	 * If the generated value equals the getDefaultReturnValue it will simply not insert it since that is treated as "null".
@@ -443,17 +454,8 @@ public interface MAP KEY_VALUE_GENERIC_TYPE extends Map<CLASS_TYPE, CLASS_VALUE_
 	 * @return the result of the default return value or present value
 	 * @note if not present then compute is not executed
 	 */
-	public VALUE_TYPE COMPUTE_IF_PRESENT(KEY_TYPE key, UNARY_OPERATOR KEY_VALUE_GENERIC_TYPE mappingFunction);
-	/**
-	 * A Type Specific compute method to reduce boxing/unboxing
-	 * If the generated value equals the getDefaultReturnValue it will simply not insert it since that is treated as "null".
-	 * A "Null Value" will be treated as "Do not insert/remove" based on how the Java has specified it.
-	 * @param key the key that should be computed
-	 * @param mappingFunction the operator that should generate the value if present
-	 * @return the result of the default return value or present value
-	 * @note if not present then compute is not executed
-	 */
 	public VALUE_TYPE COMPUTE_IF_PRESENTNonDefault(KEY_TYPE key, UNARY_OPERATOR KEY_VALUE_GENERIC_TYPE mappingFunction);
+#endif
 	/**
 	 * A Type Specific merge method to reduce boxing/unboxing
 	 * If the generated value equals the getDefaultReturnValue it will simply not insert it since that is treated as "null".

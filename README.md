@@ -50,7 +50,7 @@ repositories {
     }
 }
 dependencies {
-	implementation 'com.github.Speiger:Primitive-Collections:0.7.0'
+	implementation 'com.github.Speiger:Primitive-Collections:0.9.0'
 }
 ```
 

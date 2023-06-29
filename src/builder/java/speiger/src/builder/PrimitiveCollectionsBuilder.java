@@ -45,23 +45,19 @@ public class PrimitiveCollectionsBuilder extends TemplateProcessor
 	SettingsManager manager = new SettingsManager();
 	int flags;
 	
-	public PrimitiveCollectionsBuilder()
-	{
+	public PrimitiveCollectionsBuilder() {
 		this(false);
 	}
 	
-	public PrimitiveCollectionsBuilder(boolean silencedSuccess)
-	{
+	public PrimitiveCollectionsBuilder(boolean silencedSuccess) {
 		super(silencedSuccess, Paths.get("src/builder/resources/speiger/assets/collections/templates/"), Paths.get("src/main/java/speiger/src/collections/"), Paths.get("src/builder/resources/speiger/assets/collections/"));
 	}
 	
-	public PrimitiveCollectionsBuilder(Path sourceFolder, Path outputFolder, Path dataFolder)
-	{
+	public PrimitiveCollectionsBuilder(Path sourceFolder, Path outputFolder, Path dataFolder) {
 		this(false, sourceFolder, outputFolder, dataFolder);
 	}
 	
-	public PrimitiveCollectionsBuilder(boolean silencedSuccess, Path sourceFolder, Path outputFolder, Path dataFolder)
-	{
+	public PrimitiveCollectionsBuilder(boolean silencedSuccess, Path sourceFolder, Path outputFolder, Path dataFolder) {
 		super(silencedSuccess, sourceFolder, outputFolder, dataFolder);
 	}
 	
@@ -88,42 +84,24 @@ public class PrimitiveCollectionsBuilder extends TemplateProcessor
 	}
 	
 	@Override
-	protected boolean isFileValid(Path fileName)
-	{
-		return true;
-	}
+	protected boolean isFileValid(Path fileName) { return true; }
+	@Override
+	protected boolean relativePackages() { return true; }
+	@Override
+	protected boolean debugUnusedMappers() { return false; }
 	
 	@Override
-	protected boolean relativePackages()
-	{
-		return true;
-	}
-	
-	@Override
-	protected boolean debugUnusedMappers()
-	{
-		return false;
-	}
-	
-	@Override
-	protected void afterFinish()
-	{
-		if((flags & SPECIAL) == 0 && getVersion() > 8) 
-		{
+	protected void afterFinish() {
+		if((flags & SPECIAL) == 0 && getVersion() > 8)  {
 			Path basePath = Paths.get("src/main/java");
-			try(BufferedWriter writer = Files.newBufferedWriter(basePath.resolve("module-info.java")))
-			{
+			try(BufferedWriter writer = Files.newBufferedWriter(basePath.resolve("module-info.java"))) {
 				writer.write(getModuleInfo(basePath));
 			}
-			catch(Exception e)
-			{
-				e.printStackTrace();
-			}
+			catch(Exception e) { e.printStackTrace(); }
 		}
 	}
 	
-	public List<BaseModule> createModules()
-	{
+	public List<BaseModule> createModules() {
 		List<BaseModule> modules = new ArrayList<>();
 		modules.add(JavaModule.INSTANCE);
 		modules.add(FunctionModule.INSTANCE);
@@ -139,38 +117,31 @@ public class PrimitiveCollectionsBuilder extends TemplateProcessor
 
 	
 	@Override
-	protected void init() 
-	{
+	protected void init()  {
 		prepPackages();
 		//Init Modules here
 		addModules(createModules());
 		finishPackages();
 	}
 	
-	public void addModules(List<BaseModule> modules)
-	{
+	public void addModules(List<BaseModule> modules) {
 		for(int i = 0,m=modules.size();i<m;i++) {
 			modules.get(i).setManager(manager);
 		}
 		for(int i = 0,m=modules.size();i<m;i++) {
 			biPackages.forEach(modules.get(i)::init);
 		}
-		for(int i = 0,m=modules.size();i<m;i++) {
-			modules.get(i).cleanup();
-		}
+		modules.forEach(BaseModule::cleanup);
 	}
 	
-	private void finishPackages() 
-	{
+	private void finishPackages()  {
 		biPackages.forEach(ModulePackage::finish);
 		if((flags & SAVE) != 0) manager.save();
 	}
 	
-	private void prepPackages()
-	{
+	private void prepPackages() {
 		if((flags & LOAD) != 0) manager.load();
-		for(ModulePackage entry : ModulePackage.createPackages(globalFlags))
-		{
+		for(ModulePackage entry : ModulePackage.createPackages(globalFlags)) {
 			entry.setRequirements(requirements::put);
 			biPackages.add(entry);
 			if(entry.isSame()) simplePackages.add(entry);
@@ -179,11 +150,9 @@ public class PrimitiveCollectionsBuilder extends TemplateProcessor
 	}
 	
 	@Override
-	public void createProcesses(String fileName, Consumer<TemplateProcess> process)
-	{
+	public void createProcesses(String fileName, Consumer<TemplateProcess> process) {
 		List<ModulePackage> packages = getPackagesByRequirement(requirements.get(fileName));
-		for(int i = 0,m=packages.size();i<m;i++)
-		{
+		for(int i = 0,m=packages.size();i<m;i++) {
 			packages.get(i).process(fileName, process);
 		}
 	}
@@ -197,8 +166,7 @@ public class PrimitiveCollectionsBuilder extends TemplateProcessor
 	
 	private String getModuleInfo(Path basePath) {
 		StringJoiner joiner = new StringJoiner("\n", "", "\n");
-		try(Stream<Path> stream = Files.walk(getOutputFolder()))
-		{
+		try(Stream<Path> stream = Files.walk(getOutputFolder())) {
 			stream.filter(Files::isDirectory)
 					.filter(this::containsFiles)
 					.map(basePath::relativize)
@@ -206,8 +174,7 @@ public class PrimitiveCollectionsBuilder extends TemplateProcessor
 					.map(this::sanitize)
 					.forEach(T -> joiner.add("\texports "+T+";"));
 		}
-		catch(Exception e)
-		{
+		catch(Exception e) {
 			e.printStackTrace();
 			throw new RuntimeException(e);
 		}
@@ -218,34 +185,26 @@ public class PrimitiveCollectionsBuilder extends TemplateProcessor
 		return builder.toString();
 	}
 	
-	private String sanitize(String input)
-	{
+	private String sanitize(String input) {
 		return input.replace("\\", ".").replace("/", ".");
 	}
 	
-	private boolean containsFiles(Path path) 
-	{
-		try(Stream<Path> stream = Files.walk(path, 1))
-		{
+	private boolean containsFiles(Path path)  {
+		try(Stream<Path> stream = Files.walk(path, 1)) {
 			return stream.filter(Files::isRegularFile).findFirst().isPresent();
 		}
-		catch(Exception e)
-		{
-			e.printStackTrace();
-		}
+		catch(Exception e) { e.printStackTrace(); }
 		return false;
 	}
 	
-	private int getVersion() 
-	{
+	private int getVersion() {
 		String version = System.getProperty("java.version");
 		if(version.startsWith("1.")) return Integer.parseInt(version.substring(2, 3));
 		int dot = version.indexOf(".");
 		return Integer.parseInt(dot != -1 ? version.substring(0, dot) : version);
 	}
 	
-	public static void main(String...args)
-	{
+	public static void main(String...args) {
 		try
 		{
 			Set<String> flags = new HashSet<>(Arrays.asList(args));

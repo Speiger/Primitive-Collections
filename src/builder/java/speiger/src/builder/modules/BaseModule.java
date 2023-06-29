@@ -59,6 +59,9 @@ public abstract class BaseModule
 	public Set<String> getModuleKeys(ClassType keyType, ClassType valueType) { return Collections.emptySet(); }
 	public boolean isModuleValid(ClassType keyType, ClassType valueType) { return true; }
 	
+	public ClassType keyType() { return keyType; }
+	public ClassType valueType() { return valueType; }
+	
 	protected boolean isModuleEnabled() {
 		return manager == null || manager.isModuleEnabled(this, keyType, valueType);
 	}
