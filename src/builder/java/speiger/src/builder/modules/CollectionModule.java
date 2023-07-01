@@ -5,48 +5,57 @@ import java.util.Set;
 import java.util.TreeSet;
 
 import speiger.src.builder.ClassType;
+import speiger.src.builder.dependency.DependencyFunction;
+import speiger.src.builder.dependency.DependencyModule;
+import speiger.src.builder.dependency.DependencyModule.SingleTypeModule;
 
 @SuppressWarnings("javadoc")
 public class CollectionModule extends BaseModule
 {
 	public static final BaseModule INSTANCE = new CollectionModule();
+	public static final DependencyModule MODULE = JavaModule.MODULE.addChild(new SingleTypeModule(INSTANCE));
+	public static final DependencyFunction STREAMS = MODULE.createFunction("Streams");
+	public static final DependencyFunction SPLIT_ITERATORS = MODULE.createFunction("Splititerators");
+	public static final DependencyFunction IARRAY = MODULE.createFunction("IArray");
+	public static final DependencyFunction STRATEGY = MODULE.createFunction("Strategy");
 	
 	@Override
 	public String getModuleName() { return "Collection"; }
 	@Override
 	protected void loadVariables() {}
 	@Override
-	public boolean areDependenciesLoaded(){ return isDependencyLoaded(JavaModule.INSTANCE); }
+	public boolean areDependenciesLoaded() { return isDependencyLoaded(JavaModule.INSTANCE); }
 	
 	@Override
-	public Set<String> getModuleKeys(ClassType keyType, ClassType valueType)
-	{
+	public Set<String> getModuleKeys(ClassType keyType, ClassType valueType) {
 		return new TreeSet<>(Arrays.asList("Streams", "Splititerators", "IArray", "Strategy"));
 	}
 	
 	@Override
 	protected void loadFlags() {
-		if(isModuleEnabled()) addKeyFlag("COLLECTION_MODULE");
-		if(isModuleEnabled("Streams")) addKeyFlag("STREAM_FEATURE");
-		if(isModuleEnabled("Splititerators")) addKeyFlag("SPLIT_ITERATOR_FEATURE");
-		if(isModuleEnabled("IArray")) addKeyFlag("IARRAY_FEATURE");
+		if(MODULE.isEnabled()) addKeyFlag("COLLECTION_MODULE");
+		if(STREAMS.isEnabled()) addKeyFlag("STREAM_FEATURE");
+		if(SPLIT_ITERATORS.isEnabled()) addKeyFlag("SPLIT_ITERATOR_FEATURE");
+		if(IARRAY.isEnabled()) addKeyFlag("IARRAY_FEATURE");
 	}
 	
 	@Override
 	protected void loadBlockades() {
-		if(!isModuleEnabled()) {
+		if(!MODULE.isEnabled()) {
 			addBlockedFiles("Iterable", "Iterables", "Iterator", "Iterators", "BidirectionalIterator", "ListIterator");
 			addBlockedFiles("Arrays", "Collection", "AbstractCollection", "Collections", "Stack");
 		}
-		if(!isModuleEnabled("Splititerators")) addBlockedFiles("Splititerator", "Splititerators");
-		if(!isModuleEnabled("IArray")) addBlockedFiles("IArray");
-		if(!isModuleEnabled("Strategy")) addBlockedFiles("Strategy");
+		if(!SPLIT_ITERATORS.isEnabled()) addBlockedFiles("Splititerator", "Splititerators");
+		if(!IARRAY.isEnabled()) addBlockedFiles("IArray");
+		if(!STRATEGY.isEnabled()) addBlockedFiles("Strategy");
 		
-		if(keyType.isObject()) {
+		if(keyType.isObject())
+		{
 			addBlockedFiles("Stack");
 			addBlockedFiles("CollectionStreamTester");
 		}
-		if(keyType == ClassType.BOOLEAN) {
+		if(keyType == ClassType.BOOLEAN)
+		{
 			addBlockedFiles("CollectionRemoveIfTester", "CollectionStreamTester");
 			addBlockedFilter(T -> T.endsWith("Tester") && T.startsWith("Iterable"));
 		}

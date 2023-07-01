@@ -5,11 +5,36 @@ import java.util.Set;
 import java.util.TreeSet;
 
 import speiger.src.builder.ClassType;
+import speiger.src.builder.dependency.DependencyFunction;
+import speiger.src.builder.dependency.DependencyModule;
+import speiger.src.builder.dependency.DependencyModule.BiTypeModule;
+import speiger.src.builder.dependency.DependencyType;
+import speiger.src.builder.dependency.DependencyValue;
 
 @SuppressWarnings("javadoc")
 public class MapModule extends BaseModule
 {
 	public static final BaseModule INSTANCE = new MapModule();
+	public static final DependencyModule MODULE = make(new BiTypeModule(INSTANCE), T -> {
+		CollectionModule.MODULE.addChild(new DependencyValue(T));
+		CollectionModule.MODULE.addChild(new DependencyType(T, ClassType.OBJECT));
+		SetModule.MODULE.addChild(T);
+	});
+	public static final DependencyFunction WRAPPERS = MODULE.createFunction("Wrappers");
+	public static final DependencyFunction IMPLEMENTATION = MODULE.createFunction("Implementations");
+	public static final DependencyFunction ORDERED_MAP = MODULE.createFunction("Wrappers");
+	public static final DependencyFunction SORTED_MAP = MODULE.createFunction("Wrappers");
+	public static final DependencyFunction ARRAY_MAP = ORDERED_MAP.addChild(IMPLEMENTATION.createSubFunction("ArrayMap"));
+	public static final DependencyFunction IMMUTABLE_MAP = IMPLEMENTATION.createSubFunction("ImmutableMap");
+	public static final DependencyFunction HASH_MAP = IMPLEMENTATION.createSubFunction("HashMap");
+	public static final DependencyFunction LINKED_MAP = HASH_MAP.addChild(ORDERED_MAP.addChild(IMPLEMENTATION.createSubFunction("LinkedHashMap")));
+	public static final DependencyFunction CUSTOM_MAP = IMPLEMENTATION.createSubFunction("CustomHashMap");
+	public static final DependencyFunction LINKED_CUSTOM_MAP = CUSTOM_MAP.addChild(ORDERED_MAP.addChild(IMPLEMENTATION.createSubFunction("LinkedCustomHashMap")));
+	public static final DependencyFunction ENUM_MAP = IMPLEMENTATION.createSubFunction("EnumMap");
+	public static final DependencyFunction LINKED_ENUM_MAP = ENUM_MAP.addChild(ORDERED_MAP.addChild(IMPLEMENTATION.createSubFunction("LinkedEnumMap")));
+	public static final DependencyFunction CONCURRENT_MAP = IMPLEMENTATION.createSubFunction("ConcurrentMap");
+	public static final DependencyFunction AVL_TREE_MAP = SORTED_MAP.addChild(IMPLEMENTATION.createSubFunction("AVLTreeMap"));
+	public static final DependencyFunction RB_TREE_MAP = SORTED_MAP.addChild(IMPLEMENTATION.createSubFunction("RBTreeMap"));
 	
 	@Override
 	public String getModuleName() { return "Map"; }
@@ -38,61 +63,43 @@ public class MapModule extends BaseModule
 	@Override
 	protected void loadFlags()
 	{
-		if(isModuleEnabled()) addFlag("MAP_MODULE");
-		if(isModuleEnabled("Wrappers")) addFlag("MAPS_FEATURE");
-		boolean implementations = isModuleEnabled("Implementations");
-		boolean hashMap = implementations && isModuleEnabled("HashMap");
-		boolean customHashMap = implementations && isModuleEnabled("CustomHashMap");
-		boolean enumMap = implementations && isModuleEnabled("EnumMap");
+		if(MODULE.isEnabled()) addFlag("MAP_MODULE");
+		if(WRAPPERS.isEnabled()) addFlag("MAPS_FEATURE");
+		if(ORDERED_MAP.isEnabled()) addFlag("ORDERED_MAP_FEATURE");
+		if(ARRAY_MAP.isEnabled()) addFlag("ARRAY_MAP_FEATURE");
+		if(LINKED_MAP.isEnabled()) addFlag("LINKED_MAP_FEATURE");
+		if(LINKED_CUSTOM_MAP.isEnabled()) addFlag("LINKED_CUSTOM_MAP_FEATURE");
+		if(LINKED_ENUM_MAP.isEnabled()) addFlag("LINKED_ENUM_MAP_FEATURE");
 		
-		if(isModuleEnabled("OrderedMap")) {
-			addFlag("ORDERED_MAP_FEATURE");
-			if(isModuleEnabled("ArrayMap")) addFlag("ARRAY_MAP_FEATURE");
-			if(hashMap && isModuleEnabled("LinkedHashMap")) addFlag("LINKED_MAP_FEATURE");
-			if(customHashMap && isModuleEnabled("LinkedCustomHashMap")) addFlag("LINKED_CUSTOM_MAP_FEATURE");
-			if(enumMap && isModuleEnabled("LinkedEnumMap")) addFlag("LINKED_ENUM_MAP_FEATURE");
-		}
-		if(isModuleEnabled("SortedMap")) {
-			addFlag("SORTED_MAP_FEATURE");
-			if(implementations && isModuleEnabled("AVLTreeMap")) addFlag("AVL_TREE_MAP_FEATURE");
-			if(implementations && isModuleEnabled("RBTreeMap")) addFlag("RB_TREE_MAP_FEATURE");
-		}
-		if(implementations && isModuleEnabled("ConcurrentMap")) addFlag("CONCURRENT_MAP_FEATURE");
-		if(implementations && isModuleEnabled("ImmutableMap")) addFlag("IMMUTABLE_MAP_FEATURE");
-		if(hashMap) addFlag("MAP_FEATURE");
-		if(customHashMap) addFlag("CUSTOM_MAP_FEATURE");
-		if(enumMap) addFlag("ENUM_MAP_FEATURE");
+		if(SORTED_MAP.isEnabled()) addFlag("SORTED_MAP_FEATURE");
+		if(AVL_TREE_MAP.isEnabled()) addFlag("AVL_TREE_MAP_FEATURE");
+		if(RB_TREE_MAP.isEnabled()) addFlag("RB_TREE_MAP_FEATURE");
+		
+		if(CONCURRENT_MAP.isEnabled()) addFlag("CONCURRENT_MAP_FEATURE");
+		if(IMMUTABLE_MAP.isEnabled()) addFlag("IMMUTABLE_MAP_FEATURE");
+		if(HASH_MAP.isEnabled()) addFlag("MAP_FEATURE");
+		if(CUSTOM_MAP.isEnabled()) addFlag("CUSTOM_MAP_FEATURE");
+		if(ENUM_MAP.isEnabled()) addFlag("ENUM_MAP_FEATURE");
 	}
 	
 	@Override
 	protected void loadBlockades()
 	{
-		if(!isModuleEnabled()) addBlockedFiles("Map", "AbstractMap");
-		if(!isModuleEnabled("Wrappers")) addBlockedFiles("Maps");
-		boolean implementations = !isModuleEnabled("Implementations");
-		if(implementations || !isModuleEnabled("ImmutableMap")) addBlockedFiles("ImmutableOpenHashMap");
-		if(implementations || !isModuleEnabled("ConcurrentMap")) addBlockedFiles("ConcurrentMap", "ConcurrentOpenHashMap");
-		
-		boolean ordered = !isModuleEnabled("OrderedMap");
-		if(ordered) addBlockedFiles("OrderedMap");
-		boolean hashMap = implementations || !isModuleEnabled("HashMap");
-		if(hashMap) addBlockedFiles("OpenHashMap");
-		if(hashMap || ordered || !isModuleEnabled("LinkedHashMap")) addBlockedFiles("LinkedOpenHashMap");
-		
-		boolean customHashMap = implementations || !isModuleEnabled("CustomHashMap");
-		if(customHashMap) addBlockedFiles("OpenCustomHashMap");
-		if(customHashMap || ordered || !isModuleEnabled("LinkedCustomHashMap")) addBlockedFiles("LinkedOpenCustomHashMap");
-		
-		boolean enumMap = implementations || !isModuleEnabled("EnumMap");
-		if(enumMap) addBlockedFiles("EnumMap");
-		if(enumMap || ordered || !isModuleEnabled("LinkedEnumMap")) addBlockedFiles("LinkedEnumMap");
-		
-		if(ordered || !isModuleEnabled("ArrayMap")) addBlockedFiles("ArrayMap");
-		
-		boolean sorted = !isModuleEnabled("SortedMap");
-		if(sorted) addBlockedFiles("SortedMap", "NavigableMap");
-		if(implementations || sorted || !isModuleEnabled("AVLTreeMap")) addBlockedFiles("AVLTreeMap");
-		if(implementations || sorted || !isModuleEnabled("RBTreeMap")) addBlockedFiles("RBTreeMap");
+		if(!MODULE.isEnabled()) addBlockedFiles("Map", "AbstractMap");
+		if(!WRAPPERS.isEnabled()) addBlockedFiles("Maps");
+		if(!IMMUTABLE_MAP.isEnabled()) addBlockedFiles("ImmutableOpenHashMap");
+		if(!CONCURRENT_MAP.isEnabled()) addBlockedFiles("ConcurrentMap", "ConcurrentOpenHashMap");
+		if(!ORDERED_MAP.isEnabled()) addBlockedFiles("OrderedMap");
+		if(!HASH_MAP.isEnabled()) addBlockedFiles("OpenHashMap");
+		if(!LINKED_MAP.isEnabled()) addBlockedFiles("LinkedOpenHashMap");
+		if(CUSTOM_MAP.isEnabled()) addBlockedFiles("OpenCustomHashMap");
+		if(!LINKED_CUSTOM_MAP.isEnabled()) addBlockedFiles("LinkedOpenCustomHashMap");
+		if(!ENUM_MAP.isEnabled()) addBlockedFiles("EnumMap");
+		if(!LINKED_ENUM_MAP.isEnabled()) addBlockedFiles("LinkedEnumMap");
+		if(!ARRAY_MAP.isEnabled()) addBlockedFiles("ArrayMap");
+		if(!SORTED_MAP.isEnabled()) addBlockedFiles("SortedMap", "NavigableMap");
+		if(!AVL_TREE_MAP.isEnabled()) addBlockedFiles("AVLTreeMap");
+		if(!RB_TREE_MAP.isEnabled()) addBlockedFiles("RBTreeMap");
 		
 		if(keyType == ClassType.BOOLEAN)
 		{

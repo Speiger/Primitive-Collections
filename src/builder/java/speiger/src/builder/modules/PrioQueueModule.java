@@ -5,11 +5,21 @@ import java.util.Set;
 import java.util.TreeSet;
 
 import speiger.src.builder.ClassType;
+import speiger.src.builder.dependency.DependencyFunction;
+import speiger.src.builder.dependency.DependencyModule;
+import speiger.src.builder.dependency.DependencyModule.SingleTypeModule;
 
 @SuppressWarnings("javadoc")
 public class PrioQueueModule extends BaseModule
 {
 	public static final BaseModule INSTANCE = new PrioQueueModule();
+	public static final DependencyModule MODULE = CollectionModule.MODULE.addChild(new SingleTypeModule(INSTANCE));
+	public static final DependencyFunction IMPLEMENTATION = MODULE.createFunction("Implementations");
+	public static final DependencyFunction WRAPPERS = MODULE.createFunction("Wrappers");
+	public static final DependencyFunction DEQUEUE = MODULE.createFunction("Dequeue");
+	public static final DependencyFunction FIFO_QUEUE = DEQUEUE.addChild(IMPLEMENTATION.createSubFunction("FiFoQueue"));
+	public static final DependencyFunction HEAP_QUEUE = IMPLEMENTATION.createSubFunction("HeapQueue");
+	public static final DependencyFunction ARRAY_PRIO_QUEUE = IMPLEMENTATION.createSubFunction("ArrayPrioQueue");
 	
 	@Override
 	public String getModuleName() { return "PriorityQueue"; }
@@ -27,27 +37,22 @@ public class PrioQueueModule extends BaseModule
 	
 	@Override
 	protected void loadFlags() {
-		if(isModuleEnabled()) addFlag("QUEUE_MODULE");
-		if(isModuleEnabled("Wrappers")) addKeyFlag("QUEUES_FEATURE");
-		boolean implementations = isModuleEnabled("Implementations");
-		if(isModuleEnabled("Dequeue")) {
-			addKeyFlag("DEQUEUE_FEATURE");
-			if(implementations && isModuleEnabled("FiFoQueue")) addKeyFlag("FIFO_QUEUE_FEATURE");
-		}
-		if(implementations && isModuleEnabled("HeapQueue")) addKeyFlag("HEAP_QUEUE_FEATURE");
-		if(implementations && isModuleEnabled("ArrayPrioQueue")) addKeyFlag("ARRAY_QUEUE_FEATURE");
+		if(MODULE.isEnabled()) addFlag("QUEUE_MODULE");
+		if(WRAPPERS.isEnabled()) addKeyFlag("QUEUES_FEATURE");
+		if(DEQUEUE.isEnabled()) addKeyFlag("DEQUEUE_FEATURE");
+		if(FIFO_QUEUE.isEnabled()) addKeyFlag("FIFO_QUEUE_FEATURE");
+		if(HEAP_QUEUE.isEnabled()) addKeyFlag("HEAP_QUEUE_FEATURE");
+		if(ARRAY_PRIO_QUEUE.isEnabled()) addKeyFlag("ARRAY_QUEUE_FEATURE");
 	}
 	
 	@Override
 	protected void loadBlockades() {
-		if(!isModuleEnabled()) addBlockedFiles("PriorityQueue", "AbstractPriorityQueue");
-		if(!isModuleEnabled("Wrappers")) addBlockedFiles("PriorityQueues");
-		boolean implementations = !isModuleEnabled("Implementations");
-		boolean dequeue = !isModuleEnabled("Dequeue");
-		if(dequeue) addBlockedFiles("PriorityDequeue"); 
-		if(dequeue || implementations || !isModuleEnabled("FiFoQueue")) addBlockedFiles("ArrayFIFOQueue");
-		if(implementations || !isModuleEnabled("HeapQueue")) addBlockedFiles("HeapPriorityQueue");
-		if(implementations || !isModuleEnabled("ArrayPrioQueue")) addBlockedFiles("ArrayPriorityQueue");
+		if(!MODULE.isEnabled()) addBlockedFiles("PriorityQueue", "AbstractPriorityQueue");
+		if(!WRAPPERS.isEnabled()) addBlockedFiles("PriorityQueues");
+		if(!DEQUEUE.isEnabled()) addBlockedFiles("PriorityDequeue");
+		if(!FIFO_QUEUE.isEnabled()) addBlockedFiles("ArrayFIFOQueue");
+		if(!HEAP_QUEUE.isEnabled()) addBlockedFiles("HeapPriorityQueue");
+		if(!ARRAY_PRIO_QUEUE.isEnabled()) addBlockedFiles("ArrayPriorityQueue");
 		
 		if(keyType == ClassType.BOOLEAN) {
 			addBlockedFiles("QueueTests");

@@ -2,11 +2,14 @@ package speiger.src.builder.modules;
 
 import speiger.src.builder.ClassType;
 import speiger.src.builder.RequiredType;
+import speiger.src.builder.dependency.DependencyModule;
+import speiger.src.builder.dependency.DependencyModule.BiTypeModule;
 
 @SuppressWarnings("javadoc")
 public class FunctionModule extends BaseModule
 {
 	public static final BaseModule INSTANCE = new FunctionModule();
+	public static final DependencyModule MODULE = new BiTypeModule(INSTANCE);
 	
 	@Override
 	public String getModuleName() { return "Function"; }

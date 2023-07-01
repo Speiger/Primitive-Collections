@@ -1,9 +1,14 @@
 package speiger.src.builder.modules;
 
+import speiger.src.builder.dependency.DependencyModule;
+import speiger.src.builder.dependency.DependencyModule.SingleTypeModule;
+
 @SuppressWarnings("javadoc")
 public class AsyncModule extends BaseModule
 {
 	public static final BaseModule INSTANCE = new AsyncModule();
+	public static final DependencyModule MODULE = CollectionModule.MODULE.addChild(new SingleTypeModule(INSTANCE));
+	
 	
 	@Override
 	public String getModuleName() { return "Async"; }
@@ -19,13 +24,13 @@ public class AsyncModule extends BaseModule
 	public boolean areDependenciesLoaded() { return isDependencyLoaded(CollectionModule.INSTANCE); }
 	@Override
 	protected void loadBlockades() {
-		if(!isModuleEnabled()) {
+		if(MODULE.isEnabled()) {
 			addBlockedFiles("AsyncBuilder", "Task");
 		}
 	}
 	@Override
 	protected void loadFlags() {
-		if(isModuleEnabled()) {
+		if(MODULE.isEnabled()) {
 			addKeyFlag("ASYNC_MODULE");
 		}
 	}

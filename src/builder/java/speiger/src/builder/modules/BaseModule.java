@@ -2,6 +2,7 @@ package speiger.src.builder.modules;
 
 import java.util.Collections;
 import java.util.Set;
+import java.util.function.Consumer;
 import java.util.function.Predicate;
 
 import speiger.src.builder.ClassType;
@@ -204,5 +205,10 @@ public abstract class BaseModule
 		ArgumentMapper mapper = new ArgumentMapper(pattern, pattern, replacement, splitter);
 		entry.addMapper(mapper);
 		return mapper;
+	}
+	
+	public static <T> T make(T input, Consumer<T> processor) {
+		processor.accept(input);
+		return input;
 	}
 }
