@@ -1,11 +1,14 @@
 package speiger.src.builder.modules;
 
 import speiger.src.builder.ClassType;
+import speiger.src.builder.dependency.DependencyBase;
+import speiger.src.builder.dependency.DependencyModule.SingleTypeModule;
 
 @SuppressWarnings("javadoc")
 public class JavaModule extends BaseModule
 {
 	public static final BaseModule INSTANCE = new JavaModule();
+	public static final DependencyBase MODULE = new SingleTypeModule(INSTANCE);
 	
 	@Override
 	public String getModuleName() { return "Base"; }

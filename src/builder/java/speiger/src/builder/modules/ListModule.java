@@ -5,37 +5,45 @@ import java.util.Set;
 import java.util.TreeSet;
 
 import speiger.src.builder.ClassType;
+import speiger.src.builder.dependency.DependencyFunction;
+import speiger.src.builder.dependency.DependencyModule;
+import speiger.src.builder.dependency.DependencyModule.SingleTypeModule;
 
 @SuppressWarnings("javadoc")
 public class ListModule extends BaseModule
 {
 	public static final BaseModule INSTANCE = new ListModule();
-	
+	public static final DependencyModule MODULE = CollectionModule.MODULE.addChild(new SingleTypeModule(INSTANCE));
+	public static final DependencyFunction IMPLEMENTATION = MODULE.createFunction("Implementations");
+	public static final DependencyFunction WRAPPERS = MODULE.createFunction("Wrappers");
+	public static final DependencyFunction ARRAY_LIST = IMPLEMENTATION.createSubFunction("ArrayList");
+	public static final DependencyFunction LINKED_LIST = IMPLEMENTATION.createSubFunction("LinkedList");
+	public static final DependencyFunction IMMUTABLE_LIST = IMPLEMENTATION.createSubFunction("ImmutableList");
+	public static final DependencyFunction COPY_ON_WRITE_LIST = IMPLEMENTATION.createSubFunction("CopyOnWriteList");
+
 	@Override
 	public String getModuleName() { return "List"; }
 	@Override
 	protected void loadVariables() {}
 	@Override
 	protected void loadFlags() {
-		if(isModuleEnabled()) addKeyFlag("LIST_MODULE");
-		if(isModuleEnabled("Wrappers")) addKeyFlag("LISTS_FEATURE");
-		boolean implementations = isModuleEnabled("Implementations");
-		if(implementations && isModuleEnabled("ArrayList")) addKeyFlag("ARRAY_LIST_FEATURE");
-		if(implementations && isModuleEnabled("LinkedList")) addKeyFlag("LINKED_LIST_FEATURE");
-		if(implementations && isModuleEnabled("ImmutableList")) addKeyFlag("IMMUTABLE_LIST_FEATURE");
-		if(implementations && isModuleEnabled("CopyOnWriteList")) addKeyFlag("COPY_ON_WRITE_LIST_FEATURE");
+		if(MODULE.isEnabled()) addKeyFlag("LIST_MODULE");
+		if(WRAPPERS.isEnabled()) addKeyFlag("LISTS_FEATURE");
+		if(ARRAY_LIST.isEnabled()) addKeyFlag("ARRAY_LIST_FEATURE");
+		if(LINKED_LIST.isEnabled()) addKeyFlag("LINKED_LIST_FEATURE");
+		if(IMMUTABLE_LIST.isEnabled()) addKeyFlag("IMMUTABLE_LIST_FEATURE");
+		if(COPY_ON_WRITE_LIST.isEnabled()) addKeyFlag("COPY_ON_WRITE_LIST_FEATURE");
 	}
 	
 	@Override
 	protected void loadBlockades()
 	{
-		if(!isModuleEnabled("Wrappers")) addBlockedFiles("Lists");
-		boolean implementations = !isModuleEnabled("Implementations");
-		if(implementations || !isModuleEnabled("ArrayList")) addBlockedFiles("ArrayList");
-		if(implementations || !isModuleEnabled("LinkedList")) addBlockedFiles("LinkedList");
-		if(implementations || !isModuleEnabled("ImmutableList")) addBlockedFiles("ImmutableList");
-		if(implementations || !isModuleEnabled("CopyOnWriteList")) addBlockedFiles("CopyOnWriteList");
-		if(!isModuleEnabled()) addBlockedFiles("List", "AbstractList");
+		if(!WRAPPERS.isEnabled()) addBlockedFiles("Lists");
+		if(!ARRAY_LIST.isEnabled()) addBlockedFiles("ArrayList");
+		if(!LINKED_LIST.isEnabled()) addBlockedFiles("LinkedList");
+		if(!IMMUTABLE_LIST.isEnabled()) addBlockedFiles("ImmutableList");
+		if(!COPY_ON_WRITE_LIST.isEnabled()) addBlockedFiles("CopyOnWriteList");
+		if(!MODULE.isEnabled()) addBlockedFiles("List", "AbstractList");
 		
 		if(keyType.isObject()) addBlockedFiles("ListFillBufferTester");
 		if(keyType == ClassType.BOOLEAN) addBlockedFiles("ListFillBufferTester", "ListReplaceAllTester");
