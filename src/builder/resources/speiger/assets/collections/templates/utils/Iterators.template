@@ -925,6 +925,8 @@ public class ITERATORS
 #argument MAPPER Predicate ToByteFunction ToShortFunction ToIntFunction ToLongFunction ToFloatFunction ToDoubleFunction
 #argument APPLY test applyAsByte applyAsShort applyAsInt applyAsLong applyAsFloat applyAsDouble
 #argument DATA_TYPE boolean byte short int long float double
+#argument FILTER_TYPE BOOLEAN_COLLECTION_MODULE BYTE_COLLECTION_MODULE SHORT_COLLECTION_MODULE INT_COLLECTION_MODULE LONG_COLLECTION_MODULE FLOAT_COLLECTION_MODULE DOUBLE_COLLECTION_MODULE
+#if FILTER_TYPE
 	private static class MAPPED_TYPEIterator<E> implements OUTPUT_ITERATOR
 	{
 		ITERATOR<E> iterator;
@@ -951,6 +953,7 @@ public class ITERATORS
 		}
 	}
 	
+#endif
 #enditerate
 #endif
 	private static class FlatMappedIterator KSS_GENERIC_TYPE<E, T,[SPACE]V extends Iterable<T>> implements ObjectIterator<T>
