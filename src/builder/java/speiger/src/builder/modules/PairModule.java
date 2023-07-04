@@ -1,13 +1,13 @@
 package speiger.src.builder.modules;
 
 import java.util.Arrays;
-import java.util.Set;
-import java.util.TreeSet;
+import java.util.List;
 
 import speiger.src.builder.ClassType;
 import speiger.src.builder.dependency.DependencyFunction;
 import speiger.src.builder.dependency.DependencyModule;
 import speiger.src.builder.dependency.DependencyModule.BiTypeModule;
+import speiger.src.builder.dependency.IDependency;
 
 @SuppressWarnings("javadoc")
 public class PairModule extends BaseModule
@@ -28,7 +28,7 @@ public class PairModule extends BaseModule
 	@Override
 	protected void loadTestClasses() {}
 	@Override
-	public Set<String> getModuleKeys(ClassType keyType, ClassType valueType) { return new TreeSet<>(Arrays.asList("Mutable", "Immutable")); }
+	public List<IDependency> getDependencies(ClassType keyType, ClassType valueType) { return Arrays.asList(MODULE, IMMUTABLE, MUTABLE); }
 	
 	@Override
 	protected void loadFlags() {

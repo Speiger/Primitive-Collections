@@ -1,13 +1,13 @@
 package speiger.src.builder.modules;
 
 import java.util.Arrays;
-import java.util.Set;
-import java.util.TreeSet;
+import java.util.List;
 
 import speiger.src.builder.ClassType;
 import speiger.src.builder.dependency.DependencyFunction;
 import speiger.src.builder.dependency.DependencyModule;
 import speiger.src.builder.dependency.DependencyModule.SingleTypeModule;
+import speiger.src.builder.dependency.IDependency;
 
 @SuppressWarnings("javadoc")
 public class PrioQueueModule extends BaseModule
@@ -28,12 +28,7 @@ public class PrioQueueModule extends BaseModule
 	@Override
 	protected void loadFunctions() {}
 	@Override
-	public boolean areDependenciesLoaded() { return isDependencyLoaded(CollectionModule.INSTANCE); }
-	
-	@Override
-	public Set<String> getModuleKeys(ClassType keyType, ClassType valueType) {
-		return new TreeSet<>(Arrays.asList("Wrappers", "Implementations", "Dequeue", "FiFoQueue", "HeapQueue", "ArrayPrioQueue"));
-	}
+	public List<IDependency> getDependencies(ClassType keyType, ClassType valueType) { return Arrays.asList(MODULE, WRAPPERS, IMPLEMENTATION, DEQUEUE, FIFO_QUEUE, HEAP_QUEUE, ARRAY_PRIO_QUEUE); }
 	
 	@Override
 	protected void loadFlags() {

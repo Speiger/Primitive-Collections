@@ -29,8 +29,6 @@ public abstract class DependencyBase implements IDependency {
 		return children;
 	}
 	
-	public abstract boolean resolveDependencies();
-	
 	protected LoadingState getChildState(ClassType keyType, ClassType valueType) {
 		LoadingState state = LoadingState.UNDEFINED;
 		for(IDependency child : children) {

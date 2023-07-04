@@ -45,7 +45,7 @@ public abstract class DependencyFunction extends DependencyBase {
 		public LoadingState getState(ClassType keyType, ClassType valueType) {
 			return state[keyType.ordinal()];
 		}
-
+		
 		@Override
 		public boolean resolveDependencies() {
 			boolean returnType = false;
@@ -59,6 +59,16 @@ public abstract class DependencyFunction extends DependencyBase {
 				}
 			}
 			return returnType;
+		}
+		
+		@Override
+		public String getName() {
+			return functionName;
+		}
+		
+		@Override
+		public void setLoaded() {
+			Arrays.fill(state, LoadingState.LOADED);
 		}
 	}
 	
@@ -104,6 +114,18 @@ public abstract class DependencyFunction extends DependencyBase {
 				}
 			}
 			return returnType;
+		}
+		
+		@Override
+		public String getName() {
+			return functionName;
+		}
+		
+		@Override
+		public void setLoaded() {
+			for(int i = 0;i<state.length;i++) {
+				Arrays.fill(state[i], LoadingState.LOADED);
+			}
 		}
 	}
 }

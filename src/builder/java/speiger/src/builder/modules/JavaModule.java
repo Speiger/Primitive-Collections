@@ -1,7 +1,11 @@
 package speiger.src.builder.modules;
 
+import java.util.Arrays;
+import java.util.List;
+
 import speiger.src.builder.ClassType;
 import speiger.src.builder.dependency.DependencyBase;
+import speiger.src.builder.dependency.IDependency;
 import speiger.src.builder.dependency.DependencyModule.SingleTypeModule;
 
 @SuppressWarnings("javadoc")
@@ -18,6 +22,11 @@ public class JavaModule extends BaseModule
 		createHelperVars(keyType, false, "KEY");
 		createHelperVars(valueType, true, "VALUE");
 		loadBaseVariables();
+	}
+	
+	@Override
+	public List<IDependency> getDependencies(ClassType keyType, ClassType valueType) {
+		return Arrays.asList(MODULE);
 	}
 	
 	@Override

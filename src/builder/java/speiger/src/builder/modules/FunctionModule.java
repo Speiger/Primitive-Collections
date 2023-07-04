@@ -1,8 +1,12 @@
 package speiger.src.builder.modules;
 
+import java.util.Arrays;
+import java.util.List;
+
 import speiger.src.builder.ClassType;
 import speiger.src.builder.RequiredType;
 import speiger.src.builder.dependency.DependencyModule;
+import speiger.src.builder.dependency.IDependency;
 import speiger.src.builder.dependency.DependencyModule.BiTypeModule;
 
 @SuppressWarnings("javadoc")
@@ -21,6 +25,11 @@ public class FunctionModule extends BaseModule
 	protected void loadFlags() {}
 	@Override
 	protected void loadTestClasses() {}
+	
+	@Override
+	public List<IDependency> getDependencies(ClassType keyType, ClassType valueType) {
+		return Arrays.asList(MODULE);
+	}
 	
 	@Override
 	protected void loadBlockades()

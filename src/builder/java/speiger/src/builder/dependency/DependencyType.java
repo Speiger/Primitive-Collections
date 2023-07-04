@@ -19,7 +19,8 @@ public class DependencyType extends DependencyBase {
 	
 	@Override
 	public LoadingState getState(ClassType keyType, ClassType valueType) {
-		return owner.getState(myType, myType);
+		if(keyType != myType || valueType != myType) return LoadingState.UNDEFINED;
+		return owner.getState(keyType, valueType);
 	}
 	
 	@Override
@@ -27,5 +28,15 @@ public class DependencyType extends DependencyBase {
 	@Override
 	public boolean isEnabled() {
 		return owner.getState(myType, myType) == LoadingState.LOADED;
+	}
+	
+	@Override
+	public String getName() {
+		return null;
+	}
+	
+	@Override
+	public void setLoaded() {
+		
 	}
 }

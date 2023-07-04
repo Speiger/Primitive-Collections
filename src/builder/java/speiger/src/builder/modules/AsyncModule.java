@@ -1,7 +1,12 @@
 package speiger.src.builder.modules;
 
+import java.util.Arrays;
+import java.util.List;
+
+import speiger.src.builder.ClassType;
 import speiger.src.builder.dependency.DependencyModule;
 import speiger.src.builder.dependency.DependencyModule.SingleTypeModule;
+import speiger.src.builder.dependency.IDependency;
 
 @SuppressWarnings("javadoc")
 public class AsyncModule extends BaseModule
@@ -21,7 +26,7 @@ public class AsyncModule extends BaseModule
 	@Override
 	protected void loadFunctions() {}
 	@Override
-	public boolean areDependenciesLoaded() { return isDependencyLoaded(CollectionModule.INSTANCE); }
+	public List<IDependency> getDependencies(ClassType keyType, ClassType valueType) { return Arrays.asList(MODULE); }
 	@Override
 	protected void loadBlockades() {
 		if(MODULE.isEnabled()) {

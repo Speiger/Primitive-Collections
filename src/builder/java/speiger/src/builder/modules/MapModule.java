@@ -1,8 +1,7 @@
 package speiger.src.builder.modules;
 
 import java.util.Arrays;
-import java.util.Set;
-import java.util.TreeSet;
+import java.util.List;
 
 import speiger.src.builder.ClassType;
 import speiger.src.builder.dependency.DependencyFunction;
@@ -10,6 +9,7 @@ import speiger.src.builder.dependency.DependencyModule;
 import speiger.src.builder.dependency.DependencyModule.BiTypeModule;
 import speiger.src.builder.dependency.DependencyType;
 import speiger.src.builder.dependency.DependencyValue;
+import speiger.src.builder.dependency.IDependency;
 
 @SuppressWarnings("javadoc")
 public class MapModule extends BaseModule
@@ -22,8 +22,8 @@ public class MapModule extends BaseModule
 	});
 	public static final DependencyFunction WRAPPERS = MODULE.createFunction("Wrappers");
 	public static final DependencyFunction IMPLEMENTATION = MODULE.createFunction("Implementations");
-	public static final DependencyFunction ORDERED_MAP = MODULE.createFunction("Wrappers");
-	public static final DependencyFunction SORTED_MAP = MODULE.createFunction("Wrappers");
+	public static final DependencyFunction ORDERED_MAP = MODULE.createFunction("OrderedMap");
+	public static final DependencyFunction SORTED_MAP = MODULE.createFunction("SortedMap");
 	public static final DependencyFunction ARRAY_MAP = ORDERED_MAP.addChild(IMPLEMENTATION.createSubFunction("ArrayMap"));
 	public static final DependencyFunction IMMUTABLE_MAP = IMPLEMENTATION.createSubFunction("ImmutableMap");
 	public static final DependencyFunction HASH_MAP = IMPLEMENTATION.createSubFunction("HashMap");
@@ -45,20 +45,7 @@ public class MapModule extends BaseModule
 	@Override
 	public boolean isModuleValid(ClassType keyType, ClassType valueType) { return keyType != ClassType.BOOLEAN; }
 	@Override
-	public boolean areDependenciesLoaded() { return isDependencyLoaded(SetModule.INSTANCE) && isDependencyLoaded(CollectionModule.INSTANCE, false); }
-	
-	@Override
-	public Set<String> getModuleKeys(ClassType keyType, ClassType valueType) {
-		Set<String> sets = new TreeSet<>();
-		sets.addAll(Arrays.asList("Wrappers", "Implementations"));
-		sets.addAll(Arrays.asList("OrderedMap", "SortedMap"));
-		sets.addAll(Arrays.asList("ArrayMap", "ConcurrentMap", "ImmutableMap"));
-		sets.addAll(Arrays.asList("HashMap", "LinkedHashMap"));
-		sets.addAll(Arrays.asList("CustomHashMap", "LinkedCustomHashMap"));
-		sets.addAll(Arrays.asList("EnumMap", "LinkedEnumMap"));
-		sets.addAll(Arrays.asList("AVLTreeMap", "RBTreeMap"));
-		return sets;
-	}
+	public List<IDependency> getDependencies(ClassType keyType, ClassType valueType) { return Arrays.asList(MODULE, ORDERED_MAP, SORTED_MAP, IMPLEMENTATION, WRAPPERS, ARRAY_MAP, IMMUTABLE_MAP, HASH_MAP, LINKED_MAP, CUSTOM_MAP, LINKED_CUSTOM_MAP, ENUM_MAP, LINKED_ENUM_MAP, CONCURRENT_MAP, AVL_TREE_MAP, RB_TREE_MAP); }
 	
 	@Override
 	protected void loadFlags()

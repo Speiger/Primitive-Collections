@@ -63,6 +63,16 @@ public abstract class DependencyModule extends DependencyBase {
 			}
 			return returnType;
 		}
+		
+		@Override
+		public String getName() {
+			return "Enabled";
+		}
+		
+		@Override
+		public void setLoaded() {
+			Arrays.fill(state, LoadingState.LOADED);
+		}
 	}
 	
 	public static class BiTypeModule extends DependencyModule {
@@ -106,53 +116,55 @@ public abstract class DependencyModule extends DependencyBase {
 			}
 			return returnType;
 		}
+		
+		@Override
+		public String getName() {
+			return "Enabled";
+		}
+		
+		@Override
+		public void setLoaded() {
+			for(int i = 0;i<state.length;i++) {
+				Arrays.fill(state[i], LoadingState.LOADED);
+			}
+		}
 	}
 	
 	protected LoadingState isModuleEnabled(JsonObject data, ClassType keyType, ClassType valueType) {
 		LoadingState state = isEnabled(data, owner.getModuleName());
-		if(state != LoadingState.UNDEFINED) return state;
 		JsonObject result = getObject(data, keyType.getClassPath(), false);
-		state = isEnabled(result, "Enabled");
-		if(state != LoadingState.UNDEFINED) return state;
+		state = state.replaceIfDefined(isEnabled(result, "Enabled"));
 		if(owner.isBiModule()) {
 			result = getObject(result, valueType.getClassPath(), false);
-			state = isEnabled(result, "Enabled");
-			if (state != LoadingState.UNDEFINED) return state;
+			state = state.replaceIfDefined(isEnabled(result, "Enabled"));
 		}
-		return isEnabled(getObject(result, owner.getModuleName(), false), "Enabled");
+		return state = state.replaceIfDefined(isEnabled(getObject(result, owner.getModuleName(), false), "Enabled"));
 	}
 	
 	protected LoadingState isModuleEnabled(JsonObject data, ClassType keyType, ClassType valueType, String entry) {
 		LoadingState state = isEnabled(data, owner.getModuleName());
-		if(state != LoadingState.UNDEFINED) return state;
 		JsonObject result = getObject(data, keyType.getClassPath(), false);
-		state = isEnabled(result, "Enabled");
-		if(state != LoadingState.UNDEFINED) return state;
+		state = state.replaceIfDefined(isEnabled(result, "Enabled"));
 		if(owner.isBiModule()) {
 			result = getObject(result, valueType.getClassPath(), false);
-			state = isEnabled(result, "Enabled");
-			if(state != LoadingState.UNDEFINED) return state;
+			state = state.replaceIfDefined(isEnabled(result, "Enabled"));
 		}
 		result = getObject(result, owner.getModuleName(), false);
-		state = isEnabled(result, "Enabled");
-		if(state != LoadingState.UNDEFINED) return state;
-		return isEnabled(result, entry);
+		return state.replaceIfDefined(isEnabled(result, "Enabled")).replaceIfDefined(isEnabled(result, entry));
 	}
 
 	private JsonObject getObject(JsonObject data, String name, boolean create) {
 		JsonObject obj = data.getAsJsonObject(name);
-		if (obj == null) {
+		if(obj == null) {
 			obj = new JsonObject();
 			data.add(name, obj);
-			if (create)
-				obj.addProperty("Enabled", true);
+			if(create) obj.addProperty("Enabled", true);
 		}
 		return obj;
 	}
 
 	private LoadingState isEnabled(JsonObject obj, String key) {
-		if (obj.has(key))
-			return LoadingState.of(obj.getAsJsonPrimitive(key).getAsBoolean());
+		if (obj.has(key)) return LoadingState.of(obj.getAsJsonPrimitive(key).getAsBoolean());
 		return LoadingState.UNDEFINED;
 	}
 }
