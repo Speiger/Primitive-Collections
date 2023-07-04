@@ -128,10 +128,12 @@ public class PrimitiveCollectionsBuilder extends TemplateProcessor
 		for(int i = 0,m=modules.size();i<m;i++) {
 			modules.get(i).setManager(manager);
 		}
+		manager.resolve();
 		for(int i = 0,m=modules.size();i<m;i++) {
 			biPackages.forEach(modules.get(i)::init);
 		}
 		modules.forEach(BaseModule::cleanup);
+		manager.printModuleSettings(Arrays.asList(MapModule.INSTANCE));
 	}
 	
 	private void finishPackages()  {
@@ -212,7 +214,7 @@ public class PrimitiveCollectionsBuilder extends TemplateProcessor
 			boolean force = flags.contains("force");
 			boolean tests = flags.contains("tests");
 			boolean forceTests =  flags.contains("force-tests");
-			boolean load = flags.contains("load");
+			boolean load = !flags.contains("load");
 			boolean save = flags.contains("save");
 			int flag = (load ? LOAD : 0) | (save ? SAVE : 0);
             new PrimitiveCollectionsBuilder(silent).setFlags(flag).process(force);

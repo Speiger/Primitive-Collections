@@ -1,13 +1,13 @@
 package speiger.src.builder.modules;
 
 import java.util.Arrays;
-import java.util.Set;
-import java.util.TreeSet;
+import java.util.List;
 
 import speiger.src.builder.ClassType;
 import speiger.src.builder.dependency.DependencyFunction;
 import speiger.src.builder.dependency.DependencyModule;
 import speiger.src.builder.dependency.DependencyModule.SingleTypeModule;
+import speiger.src.builder.dependency.IDependency;
 
 @SuppressWarnings("javadoc")
 public class SetModule extends BaseModule
@@ -16,8 +16,8 @@ public class SetModule extends BaseModule
 	public static final DependencyModule MODULE = CollectionModule.MODULE.addChild(new SingleTypeModule(INSTANCE));
 	public static final DependencyFunction WRAPPERS = MODULE.createFunction("Wrappers");
 	public static final DependencyFunction IMPLEMENTATION = MODULE.createFunction("Implementations");
-	public static final DependencyFunction ORDERED_SET = MODULE.createFunction("Wrappers");
-	public static final DependencyFunction SORTED_SET = MODULE.createFunction("Wrappers");
+	public static final DependencyFunction ORDERED_SET = MODULE.createFunction("OrderedSet");
+	public static final DependencyFunction SORTED_SET = MODULE.createFunction("SortedSet");
 	public static final DependencyFunction ARRAY_SET = ORDERED_SET.addChild(IMPLEMENTATION.createSubFunction("ArraySet"));
 	public static final DependencyFunction IMMUTABLE_SET = IMPLEMENTATION.createSubFunction("ImmutableSet");
 	public static final DependencyFunction HASH_SET = IMPLEMENTATION.createSubFunction("HashSet");
@@ -35,18 +35,7 @@ public class SetModule extends BaseModule
 	@Override
 	public boolean isModuleValid(ClassType keyType, ClassType valueType) { return keyType != ClassType.BOOLEAN; }
 	@Override
-	public boolean areDependenciesLoaded() { return isDependencyLoaded(CollectionModule.INSTANCE); }
-	@Override
-	public Set<String> getModuleKeys(ClassType keyType, ClassType valueType) {
-		Set<String> sets = new TreeSet<>();
-		sets.addAll(Arrays.asList("Wrappers", "Implementations"));
-		sets.addAll(Arrays.asList("OrderedSet", "SortedSet"));
-		sets.addAll(Arrays.asList("ArraySet", "ImmutableSet"));
-		sets.addAll(Arrays.asList("HashSet", "LinkedHashSet"));
-		sets.addAll(Arrays.asList("CustomHashSet", "LinkedCustomHashSet"));
-		sets.addAll(Arrays.asList("AVLTreeSet", "RBTreeSet"));
-		return sets;
-	}
+	public List<IDependency> getDependencies(ClassType keyType, ClassType valueType) { return Arrays.asList(MODULE, WRAPPERS, ORDERED_SET, SORTED_SET, IMPLEMENTATION, ARRAY_SET, IMMUTABLE_SET, HASH_SET, LINKED_SET, CUSTOM_SET, LINKED_CUSTOM_SET, AVL_TREE_SET, RB_TREE_SET); }
 	
 	@Override
 	protected void loadFlags()

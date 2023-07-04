@@ -1,7 +1,7 @@
 package speiger.src.builder.modules;
 
 import java.util.Collections;
-import java.util.Set;
+import java.util.List;
 import java.util.function.Consumer;
 import java.util.function.Predicate;
 
@@ -9,6 +9,7 @@ import speiger.src.builder.ClassType;
 import speiger.src.builder.ModulePackage;
 import speiger.src.builder.RequiredType;
 import speiger.src.builder.SettingsManager;
+import speiger.src.builder.dependency.IDependency;
 import speiger.src.builder.mappers.ArgumentMapper;
 import speiger.src.builder.mappers.InjectMapper;
 import speiger.src.builder.mappers.LineMapper;
@@ -57,31 +58,11 @@ public abstract class BaseModule
 	
 	public abstract String getModuleName();
 	public boolean isBiModule() { return false; }
-	public Set<String> getModuleKeys(ClassType keyType, ClassType valueType) { return Collections.emptySet(); }
+	public List<IDependency> getDependencies(ClassType keyType, ClassType valueType) { return Collections.emptyList(); }
 	public boolean isModuleValid(ClassType keyType, ClassType valueType) { return true; }
 	
 	public ClassType keyType() { return keyType; }
 	public ClassType valueType() { return valueType; }
-	
-	protected boolean isModuleEnabled() {
-		return manager == null || manager.isModuleEnabled(this, keyType, valueType);
-	}
-	
-	protected boolean isModuleEnabled(String name) {
-		return manager == null || manager.isModuleEnabled(this, keyType, valueType, name);
-	}
-	
-	protected boolean isDependencyLoaded(BaseModule module) {
-		return isDependencyLoaded(module, true);
-	}
-	
-	protected boolean isDependencyLoaded(BaseModule module, boolean key) {
-		return manager == null || (module.isBiModule() ? manager.isModuleEnabled(module, keyType, valueType) : (key ? manager.isModuleEnabled(module, keyType, keyType) : manager.isModuleEnabled(module, valueType, valueType))); 
-	}
-	
-	public boolean areDependenciesLoaded() {
-		return true;
-	}
 	
 	protected void addFlag(String name) {
 		entry.addFlag(name);

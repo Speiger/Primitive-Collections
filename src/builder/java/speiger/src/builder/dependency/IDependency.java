@@ -8,7 +8,10 @@ import speiger.src.builder.ClassType;
 public interface IDependency {
 	public void load(JsonObject obj, ClassType keyType, ClassType valueType);
 	public LoadingState getState(ClassType keyType, ClassType valueType);
+	public boolean resolveDependencies();
 	public boolean isEnabled();
+	public void setLoaded();
+	public String getName();
 	
 	public static enum LoadingState {
 		UNDEFINED,
@@ -23,6 +26,10 @@ public interface IDependency {
 			return ordinal() > merge.ordinal() ? this : merge;
 		}
 		
+		public LoadingState replaceIfDefined(LoadingState state) {
+			return state == UNDEFINED ? this : state;
+		}
+		
 		public LoadingState mergeDown(LoadingState merge) {
 			if(merge == UNLOADED || ordinal() > merge.ordinal()) {
 				return this;
@@ -35,6 +42,10 @@ public interface IDependency {
 				return this;
 			}
 			return merge;
+		}
+		
+		public boolean getJsonResult() {
+			return this == LOADED;
 		}
 	}
 }

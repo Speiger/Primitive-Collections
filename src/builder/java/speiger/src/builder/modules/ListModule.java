@@ -1,13 +1,13 @@
 package speiger.src.builder.modules;
 
 import java.util.Arrays;
-import java.util.Set;
-import java.util.TreeSet;
+import java.util.List;
 
 import speiger.src.builder.ClassType;
 import speiger.src.builder.dependency.DependencyFunction;
 import speiger.src.builder.dependency.DependencyModule;
 import speiger.src.builder.dependency.DependencyModule.SingleTypeModule;
+import speiger.src.builder.dependency.IDependency;
 
 @SuppressWarnings("javadoc")
 public class ListModule extends BaseModule
@@ -23,6 +23,8 @@ public class ListModule extends BaseModule
 
 	@Override
 	public String getModuleName() { return "List"; }
+	@Override
+	public List<IDependency> getDependencies(ClassType keyType, ClassType valueType) { return Arrays.asList(MODULE, IMPLEMENTATION, WRAPPERS, ARRAY_LIST, LINKED_LIST, IMMUTABLE_LIST, COPY_ON_WRITE_LIST); }
 	@Override
 	protected void loadVariables() {}
 	@Override
@@ -45,19 +47,12 @@ public class ListModule extends BaseModule
 		if(!COPY_ON_WRITE_LIST.isEnabled()) addBlockedFiles("CopyOnWriteList");
 		if(!MODULE.isEnabled()) addBlockedFiles("List", "AbstractList");
 		
+		
 		if(keyType.isObject()) addBlockedFiles("ListFillBufferTester");
 		if(keyType == ClassType.BOOLEAN) addBlockedFiles("ListFillBufferTester", "ListReplaceAllTester");
 	}
 	
-	@Override
-	public Set<String> getModuleKeys(ClassType keyType, ClassType valueType) {
-		return new TreeSet<>(Arrays.asList("Implementations", "Wrappers", "ArrayList", "LinkedList", "ImmutableList", "CopyOnWriteList"));
-	}
-	
-	@Override
-	public boolean areDependenciesLoaded() {
-		return isDependencyLoaded(CollectionModule.INSTANCE);
-	}
+
 	
 	@Override
 	protected void loadRemappers()

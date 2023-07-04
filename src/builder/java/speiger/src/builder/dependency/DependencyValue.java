@@ -29,4 +29,13 @@ public class DependencyValue extends DependencyBase {
 	public boolean isEnabled() {
 		return owner.isEnabled();
 	}
+	
+	@Override
+	public String getName() {
+		return null;
+	}
+	
+	@Override
+	public void setLoaded() {		
+	}
 }
