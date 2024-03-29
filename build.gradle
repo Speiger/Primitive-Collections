@@ -283,9 +283,10 @@ def isPublishingToMavenCentral() {
 }
 
 signing {
-	required { isPublishingToMavenCentral() }
-	useGpgCmd()
-    sign configurations.archives
+	if(isPublishingToMavenCentral()) {
+		useGpgCmd()
+	    sign configurations.archives
+	}
 }
 
 publishing {
