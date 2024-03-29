@@ -10,6 +10,7 @@ tasks.withType(JavaCompile) {
 apply plugin: 'java'
 apply plugin: 'eclipse'
 apply plugin: 'maven-publish'
+apply plugin: 'signing'
 
 repositories {
     mavenCentral()
@@ -268,11 +269,27 @@ jacocoTestReport {
     }
 }
 
-publishing {
-	Properties props = new Properties()
-	if(file("$buildDir/credentials.properties").exists()) {
-		props.load(new FileInputStream("$buildDir/credentials.properties"))
+task publishToMavenCentral() {
+	dependsOn publish
+	group 'publishing'
+	description 'Publishes to Maven Central'
+	doLast {
+		System.out.println("Published To Maven Central")
 	}
+}
+
+def isPublishingToMavenCentral() {
+	return gradle.startParameter.taskNames.contains('publishToMavenCentral');
+}
+
+signing {
+	required { isPublishingToMavenCentral() }
+	useGpgCmd()
+    sign configurations.archives
+}
+
+publishing {
+	def isMavenCentral = isPublishingToMavenCentral()
 	publications {
 		mavenJava(MavenPublication) {
 			pom {
@@ -281,7 +298,7 @@ publishing {
 				url = 'https://github.com/Speiger/Primitive-Collections'
 				version = project.version
 				artifactId = project.archivesBaseName.replace(" ", "-")
-				groupId = 'de.speiger'
+				groupId = isMavenCentral ? 'io.github.speiger' : 'de.speiger'
 				from components.java
 				artifact tasks.srcJar
 				artifact tasks.javadocJar
@@ -309,10 +326,21 @@ publishing {
 	}
 	repositories {
 		maven {
-			url version.endsWith('SNAPSHOT') ? "https://maven.speiger.com/repository/debug" : "https://maven.speiger.com/repository/main"
-			credentials(PasswordCredentials) {
-				username props.mavenUser
-				password props.mavenPassword
+			if(isMavenCentral) {
+				def auth = System.getenv("Maven_Central_Auth").split(';');
+				url version.endsWith('SNAPSHOT') ? "https://s01.oss.sonatype.org/content/repositories/snapshots/" : "https://s01.oss.sonatype.org/service/local/staging/deploy/maven2/"
+				credentials {
+					username auth[0]
+					password auth[1]
+				}
+			}
+			else {
+				def auth = System.getenv("Speiger_Maven_Auth").split(';');
+				url version.endsWith('SNAPSHOT') ? "https://maven.speiger.com/repository/debug" : "https://maven.speiger.com/repository/main"
+				credentials(PasswordCredentials) {
+					username auth[0]
+					password auth[1]
+				}
 			}
 		}
 	}
