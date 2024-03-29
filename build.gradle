@@ -1,6 +1,7 @@
 plugins {
     id 'java-library'
     id "jacoco"
+    id "com.vanniktech.maven.publish" version "0.28.0"
 }
 
 tasks.withType(JavaCompile) {
@@ -20,11 +21,16 @@ repositories {
 }
 
 archivesBaseName = 'Primitive Collections'
-version = '0.9.0';
+version = RELEASE_VERSION;
 
 sourceCompatibility = targetCompatibility = compileJava.sourceCompatibility = compileJava.targetCompatibility = JavaVersion.current();
 
 System.out.println("Java Version: "+compileJava.sourceCompatibility)
+
+java {
+	withJavadocJar()
+    withSourcesJar()
+}
 
 javadoc {
     options.tags = [ "implSpec", "note" ] 
@@ -100,26 +106,12 @@ task generateLimitSource(type: JavaExec) {
  	args = ['silent', 'load']
 }
 
-task javadocJar(type: Jar) {
-    from javadoc
-    archiveClassifier = 'javadoc'
-}
-
-task srcJar(type: Jar) {
-    from sourceSets.main.allSource
-    archiveClassifier = 'sources'
-}
-
 compileJava.dependsOn generateGithubSource
 
 javadoc.failOnError = false
 javadoc.options.memberLevel = JavadocMemberLevel.PUBLIC
 javadoc.options.quiet()
 
-artifacts {
-    archives javadocJar
-    archives srcJar
-}
 
 task testBooleans(type: Test) {
 	group 'tests'
@@ -269,40 +261,18 @@ jacocoTestReport {
     }
 }
 
-task publishToMavenCentral() {
-	dependsOn publish
-	group 'publishing'
-	description 'Publishes to Maven Central'
-	doLast {
-		System.out.println("Published To Maven Central")
-	}
-}
-
-def isPublishingToMavenCentral() {
-	return gradle.startParameter.taskNames.contains('publishToMavenCentral');
-}
-
-signing {
-	if(isPublishingToMavenCentral()) {
-		useGpgCmd()
-	    sign configurations.archives
-	}
-}
 
 publishing {
-	def isMavenCentral = isPublishingToMavenCentral()
 	publications {
-		mavenJava(MavenPublication) {
+		personal(MavenPublication) {
 			pom {
 				name = 'Primitive Collections'
 				description = 'A Primitive Collection library that reduces memory usage and improves performance'
 				url = 'https://github.com/Speiger/Primitive-Collections'
 				version = project.version
 				artifactId = project.archivesBaseName.replace(" ", "-")
-				groupId = isMavenCentral ? 'io.github.speiger' : 'de.speiger'
+				groupId = 'de.speiger'
 				from components.java
-				artifact tasks.srcJar
-				artifact tasks.javadocJar
 				licenses {
 					license {
 						name = 'The Apache License, Version 2.0'
@@ -327,22 +297,86 @@ publishing {
 	}
 	repositories {
 		maven {
-			if(isMavenCentral) {
-				def auth = System.getenv("Maven_Central_Auth")?.split(';');
-				url version.endsWith('SNAPSHOT') ? "https://s01.oss.sonatype.org/content/repositories/snapshots/" : "https://s01.oss.sonatype.org/service/local/staging/deploy/maven2/"
-				credentials {
-					username auth?[0]
-					password auth?[1]
-				}
-			}
-			else {
-				def auth = System.getenv("Speiger_Maven_Auth")?.split(';');
-				url version.endsWith('SNAPSHOT') ? "https://maven.speiger.com/repository/debug" : "https://maven.speiger.com/repository/main"
-				credentials(PasswordCredentials) {
-					username auth?[0]
-					password auth?[1]
-				}
+			name = "Speiger_Maven"
+			def auth = System.getenv("Speiger_Maven_Auth")?.split(';');
+			url version.endsWith('SNAPSHOT') ? "https://maven.speiger.com/repository/debug" : "https://maven.speiger.com/repository/main"
+			credentials(PasswordCredentials) {
+				username auth?[0]
+				password auth?[1]
 			}
 		}
 	}
+}
+
+tasks.withType(PublishToMavenRepository) {
+    def predicate = provider {
+        (repository == publishing.repositories.mavenCentral && publication == publishing.publications.maven) ||
+        (repository != publishing.repositories.mavenCentral && publication != publishing.publications.maven)
+    }
+    onlyIf("publishing binary to the external repository, or binary and sources to the internal one") {
+        predicate.get()
+    }
+}
+
+tasks.withType(PublishToMavenLocal) {
+    def predicate = provider {
+        publication == publishing.publications.personal
+    }
+    onlyIf("publishing binary and sources") {
+        predicate.get()
+    }
+}
+
+
+//Maven central Start
+import com.vanniktech.maven.publish.SonatypeHost
+signing.useGpgCmd()
+
+import com.vanniktech.maven.publish.JavaLibrary
+import com.vanniktech.maven.publish.JavadocJar
+
+mavenPublishing {
+  // the first parameter configures the -javadoc artifact, possible values:
+  // - `JavadocJar.None()` don't publish this artifact
+  // - `JavadocJar.Empty()` publish an emprt jar
+  // - `JavadocJar.Javadoc()` to publish standard javadocs
+  // the second whether to publish a sources jar
+  configure(new JavaLibrary(new JavadocJar.None(), true))
+}
+
+mavenPublishing {
+    publishToMavenCentral(SonatypeHost.CENTRAL_PORTAL)
+
+    signAllPublications()
+    pom {
+		name = 'Primitive Collections'
+		description = 'A Primitive Collection library that reduces memory usage and improves performance'
+		url = 'https://github.com/Speiger/Primitive-Collections'
+		version = project.version	
+		group = 'io.github.speiger'
+        licenses {
+            license {
+				name = 'The Apache License, Version 2.0'
+				url = 'http://www.apache.org/licenses/LICENSE-2.0.txt'
+            }
+        }
+
+        developers {
+			developer {
+				id = 'speiger'
+				name = 'Speiger'
+			}
+        }
+
+        scm {
+            connection = 'scm:git:git://github.com/Speiger/Primitive-Collections.git'
+            developerConnection = 'scm:git:ssh://github.com/Speiger/Primitive-Collections.git'
+            url = 'https://github.com/Speiger/Primitive-Collections'
+        }
+        
+        issueManagement {
+			system = 'github'
+			url = 'https://github.com/Speiger/Primitive-Collections/issues'
+		}
+    }
 }
