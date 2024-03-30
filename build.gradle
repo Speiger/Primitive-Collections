@@ -1,6 +1,7 @@
 plugins {
     id 'java-library'
     id "jacoco"
+//	id "com.vanniktech.maven.publish" version "0.28.0"
 }
 
 tasks.withType(JavaCompile) {
@@ -329,9 +330,6 @@ tasks.withType(PublishToMavenLocal) {
 //Maven central Start
 //Disabling due to java8 incompat, only needed to manually publishing anyways
 
-//plugins {
-//	id "com.vanniktech.maven.publish" version "0.28.0"
-//}
 //signing.useGpgCmd()
 //
 //import com.vanniktech.maven.publish.SonatypeHost
@@ -368,13 +366,14 @@ tasks.withType(PublishToMavenLocal) {
 //
 //        scm {
 //            connection = 'scm:git:git://github.com/Speiger/Primitive-Collections.git'
-//            developerConnection = 'scm:git:ssh://github.com/Speiger/Primitive-Collections.git'
+//            developerConnection = 'scm:git:ssh://github.com:Speiger/Primitive-Collections.git'
 //            url = 'https://github.com/Speiger/Primitive-Collections'
 //        }
-//        
+//                
 //        issueManagement {
 //			system = 'github'
 //			url = 'https://github.com/Speiger/Primitive-Collections/issues'
 //		}
 //    }
 //}
+//
