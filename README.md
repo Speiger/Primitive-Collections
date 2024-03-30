@@ -1,6 +1,6 @@
 ![build](https://github.com/Speiger/Primitive-Collections/actions/workflows/build_action.yml/badge.svg)
 [![Latest Release](https://jitpack.io/v/Speiger/Primitive-Collections.svg)](https://jitpack.io/#Speiger/Primitive-Collections)
-[![Maven Central Version]](https://img.shields.io/maven-central/v/io.github.speiger/Primitive-Collections)
+![Maven Central Version](https://img.shields.io/maven-central/v/io.github.speiger/Primitive-Collections)
 [![License](https://img.shields.io/badge/License-Apache_2.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
 ![GitHub commit activity](https://img.shields.io/github/commit-activity/m/Speiger/Primitive-Collections)      
 ![Unit Tests](https://github.com/Speiger/Primitive-Collections/actions/workflows/build_tests_action.yml/badge.svg)
