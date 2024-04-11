@@ -44,7 +44,7 @@ To ensure that problems can be dealt with even if it is breaking the current API
 
 # How to install
 Using Jitpack Gradle
-```gradle
+```groovy
 repositories {
     maven {
         url = "https://jitpack.io"
@@ -52,6 +52,13 @@ repositories {
 }
 dependencies {
 	implementation 'com.github.Speiger:Primitive-Collections:0.9.0'
+}
+```
+
+Using Maven Central
+```groovy
+dependencies {
+	implementation 'io.github.speiger:Primitive-Collections:0.9.0'
 }
 ```
 

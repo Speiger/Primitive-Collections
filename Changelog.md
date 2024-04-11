@@ -1,5 +1,21 @@
 # Changelog of versions
 
+### Version 0.9.0
+- Added: getFirst/getLast/removeFirst/removeLast to List.class.
+- Added: Dedicated Set toArray implementations.
+- Added: ToArray/pushTop functions to Stack.class.
+- Added: ComputeNonDefault functions which will contain the current behavior of the Compute function, while the Compute will be changed to be more java compliant!
+- Added: List.reversed, which returns a SubList that has all elements in reversed order and also inserts reversed.
+- Added: Iterators.infinite as an option that will create a Infinite Iterator based on the inputed one.
+- Added: List.indexedIterator which allows you to create a iterator with a customized iteration indecies. Useful if you want to transform lists output.
+- Added: PriorityQueue.contains is now a function
+- Added: Iterators/Async Builders now support MapToPrimitiveType function on the object variant. So more processing can be done. (Will be expanded upon later versions)
+- Fixed: SetValue wasn't working on forEach implementations.
+- Fixed: Compute functions now perform with primitives more java compliant. Meaning that getDefaultReturnValue function no longer is seen as null.
+- Fixed: Supplier was using the wrong dataType in their function name.
+- Updated: SimpleCodeGenerator 1.3.0 is now being used which allows for iterative code support.
+- Breaking Change: Map.compute/IfAbsent/Present and Map.supplyIfAbsent if the value is a primitive it will no longer accept the defaultReturnValue() as "null" if that functionality is desired then use: computeNonDefault which contains the functionality!
+
 ### Version 0.8.1
 - Added: getFirst/getLast/removeFirst/removeLast to List.class.
 - Added: Dedicated Set toArray implementations.
