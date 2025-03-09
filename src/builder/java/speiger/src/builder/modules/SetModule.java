@@ -4,28 +4,27 @@ import java.util.Arrays;
 import java.util.List;
 
 import speiger.src.builder.ClassType;
-import speiger.src.builder.dependency.DependencyFunction;
-import speiger.src.builder.dependency.DependencyModule;
-import speiger.src.builder.dependency.DependencyModule.SingleTypeModule;
-import speiger.src.builder.dependency.IDependency;
+import speiger.src.builder.dependencies.FunctionDependency;
+import speiger.src.builder.dependencies.IDependency;
+import speiger.src.builder.dependencies.ModuleDependency;
 
 @SuppressWarnings("javadoc")
 public class SetModule extends BaseModule
 {
 	public static final BaseModule INSTANCE = new SetModule();
-	public static final DependencyModule MODULE = CollectionModule.MODULE.addChild(new SingleTypeModule(INSTANCE));
-	public static final DependencyFunction WRAPPERS = MODULE.createFunction("Wrappers");
-	public static final DependencyFunction IMPLEMENTATION = MODULE.createFunction("Implementations");
-	public static final DependencyFunction ORDERED_SET = MODULE.createFunction("OrderedSet");
-	public static final DependencyFunction SORTED_SET = MODULE.createFunction("SortedSet");
-	public static final DependencyFunction ARRAY_SET = ORDERED_SET.addChild(IMPLEMENTATION.createSubFunction("ArraySet"));
-	public static final DependencyFunction IMMUTABLE_SET = IMPLEMENTATION.createSubFunction("ImmutableSet");
-	public static final DependencyFunction HASH_SET = IMPLEMENTATION.createSubFunction("HashSet");
-	public static final DependencyFunction LINKED_SET = HASH_SET.addChild(ORDERED_SET.addChild(IMPLEMENTATION.createSubFunction("LinkedHashSet")));
-	public static final DependencyFunction CUSTOM_SET = IMPLEMENTATION.createSubFunction("CustomHashSet");
-	public static final DependencyFunction LINKED_CUSTOM_SET = CUSTOM_SET.addChild(ORDERED_SET.addChild(IMPLEMENTATION.createSubFunction("LinkedCustomHashSet")));
-	public static final DependencyFunction AVL_TREE_SET = SORTED_SET.addChild(IMPLEMENTATION.createSubFunction("AVLTreeSet"));
-	public static final DependencyFunction RB_TREE_SET = SORTED_SET.addChild(IMPLEMENTATION.createSubFunction("RBTreeSet"));
+	public static final ModuleDependency MODULE = new ModuleDependency(INSTANCE, false).addKeyDependency(CollectionModule.MODULE).addKeyDependency(CollectionModule.SPLIT_ITERATORS);
+	public static final FunctionDependency IMPLEMENTATION = MODULE.createDependency("Implementations");
+	public static final FunctionDependency WRAPPERS = MODULE.createDependency("Wrappers");
+	public static final FunctionDependency ORDERED_SET = MODULE.createDependency("OrderedSet");
+	public static final FunctionDependency SORTED_SET = MODULE.createDependency("SortedSet");
+	public static final FunctionDependency ARRAY_SET = MODULE.createDependency("ArraySet").addKeyDependency(ORDERED_SET).addKeyDependency(IMPLEMENTATION);
+	public static final FunctionDependency IMMUTABLE_SET = MODULE.createDependency("ImmutableSet").addKeyDependency(ORDERED_SET).addKeyDependency(IMPLEMENTATION);
+	public static final FunctionDependency HASH_SET = MODULE.createDependency("HashSet").addKeyDependency(IMPLEMENTATION);
+	public static final FunctionDependency LINKED_SET = MODULE.createDependency("LinkedHashSet").addKeyDependency(ORDERED_SET).addKeyDependency(HASH_SET);
+	public static final FunctionDependency CUSTOM_SET = MODULE.createDependency("CustomHashSet").addKeyDependency(IMPLEMENTATION).addKeyDependency(CollectionModule.STRATEGY);
+	public static final FunctionDependency LINKED_CUSTOM_SET = MODULE.createDependency("LinkedCustomHashSet").addKeyDependency(ORDERED_SET).addKeyDependency(CUSTOM_SET);
+	public static final FunctionDependency AVL_TREE_SET = MODULE.createDependency("AVLTreeSet").addKeyDependency(SORTED_SET).addKeyDependency(IMPLEMENTATION);
+	public static final FunctionDependency RB_TREE_SET = MODULE.createDependency("RBTreeSet").addKeyDependency(SORTED_SET).addKeyDependency(IMPLEMENTATION);
 	
 	@Override
 	public String getModuleName() { return "Set"; }

@@ -4,20 +4,23 @@ import java.util.Arrays;
 import java.util.List;
 
 import speiger.src.builder.ClassType;
-import speiger.src.builder.dependency.DependencyFunction;
-import speiger.src.builder.dependency.DependencyModule;
-import speiger.src.builder.dependency.DependencyModule.SingleTypeModule;
-import speiger.src.builder.dependency.IDependency;
+import speiger.src.builder.dependencies.FunctionDependency;
+import speiger.src.builder.dependencies.IDependency;
+import speiger.src.builder.dependencies.ModuleDependency;
 
 @SuppressWarnings("javadoc")
 public class CollectionModule extends BaseModule
 {
 	public static final BaseModule INSTANCE = new CollectionModule();
-	public static final DependencyModule MODULE = JavaModule.MODULE.addChild(new SingleTypeModule(INSTANCE));
-	public static final DependencyFunction STREAMS = MODULE.createFunction("Streams");
-	public static final DependencyFunction SPLIT_ITERATORS = MODULE.createFunction("Splititerators");
-	public static final DependencyFunction IARRAY = MODULE.createFunction("IArray");
-	public static final DependencyFunction STRATEGY = MODULE.createFunction("Strategy");
+	public static final ModuleDependency MODULE = new ModuleDependency(INSTANCE, false)
+			.addKeyDependency(FunctionModule.MODULE)
+			.addOptionalTypeDependency(FunctionModule.MODULE, ClassType.OBJECT, true)
+			.addOptionalTypeDependency(FunctionModule.MODULE, ClassType.INT, true)
+			.addOptionalTypeDependency(ClassType.OBJECT, true);
+	public static final FunctionDependency STREAMS = MODULE.createDependency("Streams");
+	public static final FunctionDependency SPLIT_ITERATORS = MODULE.createDependency("Splititerators").addKeyDependency(STREAMS);
+	public static final FunctionDependency IARRAY = MODULE.createDependency("IArray");
+	public static final FunctionDependency STRATEGY = MODULE.createDependency("Strategy");
 	
 	@Override
 	public String getModuleName() { return "Collection"; }

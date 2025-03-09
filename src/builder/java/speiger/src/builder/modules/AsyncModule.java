@@ -4,16 +4,14 @@ import java.util.Arrays;
 import java.util.List;
 
 import speiger.src.builder.ClassType;
-import speiger.src.builder.dependency.DependencyModule;
-import speiger.src.builder.dependency.DependencyModule.SingleTypeModule;
-import speiger.src.builder.dependency.IDependency;
+import speiger.src.builder.dependencies.IDependency;
+import speiger.src.builder.dependencies.ModuleDependency;
 
 @SuppressWarnings("javadoc")
 public class AsyncModule extends BaseModule
 {
 	public static final BaseModule INSTANCE = new AsyncModule();
-	public static final DependencyModule MODULE = CollectionModule.MODULE.addChild(new SingleTypeModule(INSTANCE));
-	
+	public static final ModuleDependency MODULE = new ModuleDependency(INSTANCE, false).addKeyDependency(JavaModule.MODULE);
 	
 	@Override
 	public String getModuleName() { return "Async"; }
@@ -29,7 +27,7 @@ public class AsyncModule extends BaseModule
 	public List<IDependency> getDependencies(ClassType keyType, ClassType valueType) { return Arrays.asList(MODULE); }
 	@Override
 	protected void loadBlockades() {
-		if(MODULE.isEnabled()) {
+		if(!MODULE.isEnabled()) {
 			addBlockedFiles("AsyncBuilder", "Task");
 		}
 	}

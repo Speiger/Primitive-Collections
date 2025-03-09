@@ -4,22 +4,23 @@ import java.util.Arrays;
 import java.util.List;
 
 import speiger.src.builder.ClassType;
-import speiger.src.builder.dependency.DependencyFunction;
-import speiger.src.builder.dependency.DependencyModule;
-import speiger.src.builder.dependency.DependencyModule.SingleTypeModule;
-import speiger.src.builder.dependency.IDependency;
+import speiger.src.builder.dependencies.FunctionDependency;
+import speiger.src.builder.dependencies.IDependency;
+import speiger.src.builder.dependencies.ModuleDependency;
 
 @SuppressWarnings("javadoc")
 public class PrioQueueModule extends BaseModule
 {
 	public static final BaseModule INSTANCE = new PrioQueueModule();
-	public static final DependencyModule MODULE = CollectionModule.MODULE.addChild(new SingleTypeModule(INSTANCE));
-	public static final DependencyFunction IMPLEMENTATION = MODULE.createFunction("Implementations");
-	public static final DependencyFunction WRAPPERS = MODULE.createFunction("Wrappers");
-	public static final DependencyFunction DEQUEUE = MODULE.createFunction("Dequeue");
-	public static final DependencyFunction FIFO_QUEUE = DEQUEUE.addChild(IMPLEMENTATION.createSubFunction("FiFoQueue"));
-	public static final DependencyFunction HEAP_QUEUE = IMPLEMENTATION.createSubFunction("HeapQueue");
-	public static final DependencyFunction ARRAY_PRIO_QUEUE = IMPLEMENTATION.createSubFunction("ArrayPrioQueue");
+	public static final ModuleDependency MODULE = new ModuleDependency(INSTANCE, false).addKeyDependency(CollectionModule.MODULE);
+	public static final FunctionDependency IMPLEMENTATION = MODULE.createDependency("Implementations");
+	public static final FunctionDependency WRAPPERS = MODULE.createDependency("Wrappers");
+	public static final FunctionDependency DEQUEUE = MODULE.createDependency("Dequeue");
+	
+	public static final FunctionDependency FIFO_QUEUE = MODULE.createDependency("FiFoQueue").addKeyDependency(DEQUEUE).addKeyDependency(IMPLEMENTATION);
+	public static final FunctionDependency HEAP_QUEUE = MODULE.createDependency("HeapQueue").addKeyDependency(IMPLEMENTATION);
+	public static final FunctionDependency ARRAY_PRIO_QUEUE = MODULE.createDependency("ArrayPrioQueue").addKeyDependency(IMPLEMENTATION);
+	
 	
 	@Override
 	public String getModuleName() { return "PriorityQueue"; }

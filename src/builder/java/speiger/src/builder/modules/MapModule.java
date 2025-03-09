@@ -1,40 +1,44 @@
 package speiger.src.builder.modules;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
 import speiger.src.builder.ClassType;
-import speiger.src.builder.dependency.DependencyFunction;
-import speiger.src.builder.dependency.DependencyModule;
-import speiger.src.builder.dependency.DependencyModule.BiTypeModule;
-import speiger.src.builder.dependency.DependencyType;
-import speiger.src.builder.dependency.DependencyValue;
-import speiger.src.builder.dependency.IDependency;
+import speiger.src.builder.dependencies.FunctionDependency;
+import speiger.src.builder.dependencies.IDependency;
+import speiger.src.builder.dependencies.ModuleDependency;
 
 @SuppressWarnings("javadoc")
 public class MapModule extends BaseModule
 {
 	public static final BaseModule INSTANCE = new MapModule();
-	public static final DependencyModule MODULE = make(new BiTypeModule(INSTANCE), T -> {
-		CollectionModule.MODULE.addChild(new DependencyValue(T));
-		CollectionModule.MODULE.addChild(new DependencyType(T, ClassType.OBJECT));
-		SetModule.MODULE.addChild(T);
-	});
-	public static final DependencyFunction WRAPPERS = MODULE.createFunction("Wrappers");
-	public static final DependencyFunction IMPLEMENTATION = MODULE.createFunction("Implementations");
-	public static final DependencyFunction ORDERED_MAP = MODULE.createFunction("OrderedMap");
-	public static final DependencyFunction SORTED_MAP = MODULE.createFunction("SortedMap");
-	public static final DependencyFunction ARRAY_MAP = ORDERED_MAP.addChild(IMPLEMENTATION.createSubFunction("ArrayMap"));
-	public static final DependencyFunction IMMUTABLE_MAP = IMPLEMENTATION.createSubFunction("ImmutableMap");
-	public static final DependencyFunction HASH_MAP = IMPLEMENTATION.createSubFunction("HashMap");
-	public static final DependencyFunction LINKED_MAP = HASH_MAP.addChild(ORDERED_MAP.addChild(IMPLEMENTATION.createSubFunction("LinkedHashMap")));
-	public static final DependencyFunction CUSTOM_MAP = IMPLEMENTATION.createSubFunction("CustomHashMap");
-	public static final DependencyFunction LINKED_CUSTOM_MAP = CUSTOM_MAP.addChild(ORDERED_MAP.addChild(IMPLEMENTATION.createSubFunction("LinkedCustomHashMap")));
-	public static final DependencyFunction ENUM_MAP = IMPLEMENTATION.createSubFunction("EnumMap");
-	public static final DependencyFunction LINKED_ENUM_MAP = ENUM_MAP.addChild(ORDERED_MAP.addChild(IMPLEMENTATION.createSubFunction("LinkedEnumMap")));
-	public static final DependencyFunction CONCURRENT_MAP = IMPLEMENTATION.createSubFunction("ConcurrentMap");
-	public static final DependencyFunction AVL_TREE_MAP = SORTED_MAP.addChild(IMPLEMENTATION.createSubFunction("AVLTreeMap"));
-	public static final DependencyFunction RB_TREE_MAP = SORTED_MAP.addChild(IMPLEMENTATION.createSubFunction("RBTreeMap"));
+	public static final ModuleDependency MODULE = new ModuleDependency(INSTANCE, true)
+			.addKeyDependency(SetModule.MODULE)
+			.addValueDependency(CollectionModule.MODULE)
+			.addEntryDependency(SetModule.MODULE)
+			.addTypeDependency(SetModule.MODULE, ClassType.OBJECT);
+	public static final FunctionDependency IMPLEMENTATION = MODULE.createDependency("Implementations");
+	public static final FunctionDependency WRAPPERS = MODULE.createDependency("Wrappers").addKeyDependency(SetModule.WRAPPERS).addOptionalTypeDependency(SetModule.WRAPPERS, ClassType.OBJECT, true);
+
+	public static final FunctionDependency ORDERED_MAP = MODULE.createDependency("OrderedMap").addKeyDependency(SetModule.ORDERED_SET).addOptionalTypeDependency(SetModule.ORDERED_SET, ClassType.OBJECT, true);
+	public static final FunctionDependency SORTED_MAP = MODULE.createDependency("SortedMap").addKeyDependency(SetModule.SORTED_SET).addOptionalTypeDependency(SetModule.SORTED_SET, ClassType.OBJECT, true);
+
+	public static final FunctionDependency ARRAY_MAP = MODULE.createDependency("ArrayMap").addEntryDependency(ORDERED_MAP).addEntryDependency(IMPLEMENTATION);
+	public static final FunctionDependency IMMUTABLE_MAP = MODULE.createDependency("ImmutableMap").addEntryDependency(IMPLEMENTATION);
+
+	public static final FunctionDependency HASH_MAP = MODULE.createDependency("HashMap").addEntryDependency(IMPLEMENTATION);
+	public static final FunctionDependency LINKED_MAP = MODULE.createDependency("LinkedHashMap").addEntryDependency(HASH_MAP).addEntryDependency(ORDERED_MAP);
+	
+	public static final FunctionDependency CUSTOM_MAP = MODULE.createDependency("CustomHashMap").addEntryDependency(IMPLEMENTATION).addKeyDependency(CollectionModule.STRATEGY);
+	public static final FunctionDependency LINKED_CUSTOM_MAP = MODULE.createDependency("LinkedCustomHashMap").addEntryDependency(CUSTOM_MAP).addEntryDependency(ORDERED_MAP);
+
+	public static final FunctionDependency ENUM_MAP = MODULE.createDependency("EnumMap").addEntryDependency(IMPLEMENTATION);
+	public static final FunctionDependency LINKED_ENUM_MAP = MODULE.createDependency("LinkedEnumMap").addEntryDependency(ENUM_MAP).addEntryDependency(ORDERED_MAP);
+	
+	public static final FunctionDependency CONCURRENT_MAP = MODULE.createDependency("ConcurrentMap").addEntryDependency(IMPLEMENTATION);
+	public static final FunctionDependency AVL_TREE_MAP = MODULE.createDependency("AVLTreeMap").addEntryDependency(SORTED_MAP).addEntryDependency(IMPLEMENTATION);
+	public static final FunctionDependency RB_TREE_MAP = MODULE.createDependency("RBTreeMap").addEntryDependency(SORTED_MAP).addEntryDependency(IMPLEMENTATION);
 	
 	@Override
 	public String getModuleName() { return "Map"; }
@@ -45,7 +49,11 @@ public class MapModule extends BaseModule
 	@Override
 	public boolean isModuleValid(ClassType keyType, ClassType valueType) { return keyType != ClassType.BOOLEAN; }
 	@Override
-	public List<IDependency> getDependencies(ClassType keyType, ClassType valueType) { return Arrays.asList(MODULE, ORDERED_MAP, SORTED_MAP, IMPLEMENTATION, WRAPPERS, ARRAY_MAP, IMMUTABLE_MAP, HASH_MAP, LINKED_MAP, CUSTOM_MAP, LINKED_CUSTOM_MAP, ENUM_MAP, LINKED_ENUM_MAP, CONCURRENT_MAP, AVL_TREE_MAP, RB_TREE_MAP); }
+	public List<IDependency> getDependencies(ClassType keyType, ClassType valueType) {
+		List<IDependency> dependencies = new ArrayList<>(Arrays.asList(MODULE, ORDERED_MAP, SORTED_MAP, IMPLEMENTATION, WRAPPERS, ARRAY_MAP, IMMUTABLE_MAP, HASH_MAP, LINKED_MAP, CUSTOM_MAP, LINKED_CUSTOM_MAP, CONCURRENT_MAP, AVL_TREE_MAP, RB_TREE_MAP));
+		if(keyType == ClassType.OBJECT) dependencies.addAll(Arrays.asList(ENUM_MAP, LINKED_ENUM_MAP));
+		return dependencies;
+	}
 	
 	@Override
 	protected void loadFlags()
@@ -79,7 +87,7 @@ public class MapModule extends BaseModule
 		if(!ORDERED_MAP.isEnabled()) addBlockedFiles("OrderedMap");
 		if(!HASH_MAP.isEnabled()) addBlockedFiles("OpenHashMap");
 		if(!LINKED_MAP.isEnabled()) addBlockedFiles("LinkedOpenHashMap");
-		if(CUSTOM_MAP.isEnabled()) addBlockedFiles("OpenCustomHashMap");
+		if(!CUSTOM_MAP.isEnabled()) addBlockedFiles("OpenCustomHashMap");
 		if(!LINKED_CUSTOM_MAP.isEnabled()) addBlockedFiles("LinkedOpenCustomHashMap");
 		if(!ENUM_MAP.isEnabled()) addBlockedFiles("EnumMap");
 		if(!LINKED_ENUM_MAP.isEnabled()) addBlockedFiles("LinkedEnumMap");

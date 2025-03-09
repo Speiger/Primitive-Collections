@@ -9,7 +9,7 @@ import speiger.src.builder.ClassType;
 import speiger.src.builder.ModulePackage;
 import speiger.src.builder.RequiredType;
 import speiger.src.builder.SettingsManager;
-import speiger.src.builder.dependency.IDependency;
+import speiger.src.builder.dependencies.IDependency;
 import speiger.src.builder.mappers.ArgumentMapper;
 import speiger.src.builder.mappers.InjectMapper;
 import speiger.src.builder.mappers.LineMapper;
@@ -32,6 +32,9 @@ public abstract class BaseModule
 		this.entry = entry;
 		keyType = entry.getKeyType();
 		valueType = entry.getValueType();
+		for(IDependency dependency : getDependencies(keyType, valueType)) {
+			dependency.set(keyType, valueType);
+		}
 		loadVariables();
 		loadClasses();
 		loadTestClasses();

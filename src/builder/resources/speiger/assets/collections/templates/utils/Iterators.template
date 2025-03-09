@@ -25,7 +25,7 @@ import speiger.src.collections.booleans.collections.BooleanIterator;
 #argument PACKAGE bytes shorts ints longs floats doubles
 #argument MAPPER ToByteFunction ToShortFunction ToIntFunction ToLongFunction ToFloatFunction ToDoubleFunction
 #argument FILTER_TYPE BYTE_COLLECTION_MODULE SHORT_COLLECTION_MODULE INT_COLLECTION_MODULE LONG_COLLECTION_MODULE FLOAT_COLLECTION_MODULE DOUBLE_COLLECTION_MODULE
-#if BOOLEAN_COLLECTION_MODULE
+#if FILTER_TYPE
 import speiger.src.collections.objects.functions.function.MAPPER;
 import speiger.src.collections.PACKAGE.collections.ITERATOR;
 #endif

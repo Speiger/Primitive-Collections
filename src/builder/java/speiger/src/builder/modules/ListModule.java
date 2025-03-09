@@ -4,23 +4,22 @@ import java.util.Arrays;
 import java.util.List;
 
 import speiger.src.builder.ClassType;
-import speiger.src.builder.dependency.DependencyFunction;
-import speiger.src.builder.dependency.DependencyModule;
-import speiger.src.builder.dependency.DependencyModule.SingleTypeModule;
-import speiger.src.builder.dependency.IDependency;
+import speiger.src.builder.dependencies.FunctionDependency;
+import speiger.src.builder.dependencies.IDependency;
+import speiger.src.builder.dependencies.ModuleDependency;
 
 @SuppressWarnings("javadoc")
 public class ListModule extends BaseModule
 {
 	public static final BaseModule INSTANCE = new ListModule();
-	public static final DependencyModule MODULE = CollectionModule.MODULE.addChild(new SingleTypeModule(INSTANCE));
-	public static final DependencyFunction IMPLEMENTATION = MODULE.createFunction("Implementations");
-	public static final DependencyFunction WRAPPERS = MODULE.createFunction("Wrappers");
-	public static final DependencyFunction ARRAY_LIST = IMPLEMENTATION.createSubFunction("ArrayList");
-	public static final DependencyFunction LINKED_LIST = IMPLEMENTATION.createSubFunction("LinkedList");
-	public static final DependencyFunction IMMUTABLE_LIST = IMPLEMENTATION.createSubFunction("ImmutableList");
-	public static final DependencyFunction COPY_ON_WRITE_LIST = IMPLEMENTATION.createSubFunction("CopyOnWriteList");
-
+	public static final ModuleDependency MODULE = new ModuleDependency(INSTANCE, false).addKeyDependency(CollectionModule.MODULE).addKeyDependency(CollectionModule.SPLIT_ITERATORS);
+	public static final FunctionDependency IMPLEMENTATION = MODULE.createDependency("Implementations");
+	public static final FunctionDependency WRAPPERS = MODULE.createDependency("Wrappers");
+	public static final FunctionDependency ARRAY_LIST = MODULE.createDependency("ArrayList").addKeyDependency(IMPLEMENTATION);
+	public static final FunctionDependency LINKED_LIST = MODULE.createDependency("LinkedList").addKeyDependency(IMPLEMENTATION);
+	public static final FunctionDependency IMMUTABLE_LIST = MODULE.createDependency("ImmutableList").addKeyDependency(IMPLEMENTATION);
+	public static final FunctionDependency COPY_ON_WRITE_LIST = MODULE.createDependency("CopyOnWriteList").addKeyDependency(IMPLEMENTATION);
+	
 	@Override
 	public String getModuleName() { return "List"; }
 	@Override

@@ -1,11 +1,13 @@
 package speiger.src.collections.PACKAGE.sets;
 
 import speiger.src.collections.PACKAGE.collections.BI_ITERATOR;
+#if SPLIT_ITERATOR_FEATURE
 import speiger.src.collections.PACKAGE.collections.SPLIT_ITERATOR;
+import speiger.src.collections.PACKAGE.utils.SPLIT_ITERATORS;
+#endif
 #if SETS_FEATURE
 import speiger.src.collections.PACKAGE.utils.SETS;
 #endif
-import speiger.src.collections.PACKAGE.utils.SPLIT_ITERATORS;
 
 /**
  * A Special Set Interface giving Access to some really usefull functions
@@ -61,6 +63,7 @@ public interface ORDERED_SET KEY_GENERIC_TYPE extends SET KEY_GENERIC_TYPE
 	 */
 	public BI_ITERATOR KEY_GENERIC_TYPE iterator(KEY_TYPE fromElement);
 	
+#if SPLIT_ITERATOR_FEATURE
 	/**
 	 * A Type Specific Type Splititerator to reduce boxing/unboxing
 	 * @return type specific splititerator
@@ -68,6 +71,7 @@ public interface ORDERED_SET KEY_GENERIC_TYPE extends SET KEY_GENERIC_TYPE
 	@Override
 	default SPLIT_ITERATOR KEY_GENERIC_TYPE spliterator() { return SPLIT_ITERATORS.createSplititerator(this, 0); }
 	
+#endif
 	/**
 	 * A method to get the first element in the set
 	 * @return first element in the set

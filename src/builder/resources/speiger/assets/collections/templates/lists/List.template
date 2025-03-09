@@ -15,7 +15,9 @@ import java.util.function.UnaryOperator;
 #endif
 
 import speiger.src.collections.PACKAGE.collections.COLLECTION;
+#if SPLIT_ITERATOR_FEATURE
 import speiger.src.collections.PACKAGE.collections.SPLIT_ITERATOR;
+#endif
 import speiger.src.collections.ints.functions.consumer.BI_FROM_INT_CONSUMER;
 #if !TYPE_OBJECT
 import speiger.src.collections.PACKAGE.functions.COMPARATOR;
@@ -27,7 +29,9 @@ import speiger.src.collections.PACKAGE.utils.LISTS;
 #if INT_LIST_MODULE && !TYPE_INT
 import speiger.src.collections.ints.lists.IntList;
 #endif
+#if SPLIT_ITERATOR_FEATURE
 import speiger.src.collections.PACKAGE.utils.SPLIT_ITERATORS;
+#endif
 #if TYPE_BYTE || TYPE_SHORT || TYPE_CHAR || TYPE_FLOAT
 import speiger.src.collections.utils.SanityChecks;
 #endif
@@ -594,10 +598,12 @@ public interface LIST KEY_GENERIC_TYPE extends COLLECTION KEY_GENERIC_TYPE, List
 	}
 #endif
 #endif
+#if SPLIT_ITERATOR_FEATURE
 	/**
 	 * A Type Specific Type Splititerator to reduce boxing/unboxing
 	 * @return type specific splititerator
 	 */
 	@Override
 	default SPLIT_ITERATOR KEY_GENERIC_TYPE spliterator() { return SPLIT_ITERATORS.createSplititerator(this, 0); }
+#endif
 }

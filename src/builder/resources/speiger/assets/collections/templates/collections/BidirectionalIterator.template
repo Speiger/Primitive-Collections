@@ -1,19 +1,11 @@
 package speiger.src.collections.PACKAGE.collections;
 
-#if !TYPE_OBJECT
-import speiger.src.collections.objects.collections.ObjectBidirectionalIterator;
-/**
- * A Type-Specific {@link ObjectBidirectionalIterator} to reduce (un)boxing
- */
-public interface BI_ITERATOR KEY_GENERIC_TYPE extends ITERATOR KEY_GENERIC_TYPE, ObjectBidirectionalIterator<CLASS_TYPE>
-#else
 /**
  * This is a basically a {@link java.util.ListIterator} without the index functions.
  * Allowing to have a simple Bidirectional Iterator without having to keep track of the Iteration index.
  * @Type(T)
  */
 public interface BI_ITERATOR KEY_GENERIC_TYPE extends ITERATOR KEY_GENERIC_TYPE
-#endif
 {
 	/**
 	 * Returns true if the Iterator has a Previous element
@@ -29,11 +21,11 @@ public interface BI_ITERATOR KEY_GENERIC_TYPE extends ITERATOR KEY_GENERIC_TYPE
 	public KEY_TYPE PREVIOUS();
 	
 #if !TYPE_OBJECT
-	/** {@inheritDoc}
+	/**
 	 * <p>This default implementation delegates to the corresponding type-specific function.
 	 * @deprecated Please use the corresponding type-specific function instead. 
+	 * @return the Previous element of the iterator.+
 	 */
-	@Override
 	@Deprecated
 	public default CLASS_TYPE previous() {
 		return KEY_TO_OBJ(PREVIOUS());

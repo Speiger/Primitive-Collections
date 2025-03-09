@@ -4,15 +4,14 @@ import java.util.Arrays;
 import java.util.List;
 
 import speiger.src.builder.ClassType;
-import speiger.src.builder.dependency.DependencyBase;
-import speiger.src.builder.dependency.IDependency;
-import speiger.src.builder.dependency.DependencyModule.SingleTypeModule;
+import speiger.src.builder.dependencies.IDependency;
+import speiger.src.builder.dependencies.ModuleDependency;
 
 @SuppressWarnings("javadoc")
 public class JavaModule extends BaseModule
 {
 	public static final BaseModule INSTANCE = new JavaModule();
-	public static final DependencyBase MODULE = new SingleTypeModule(INSTANCE);
+	public static final ModuleDependency MODULE = new ModuleDependency(INSTANCE, false);
 	
 	@Override
 	public String getModuleName() { return "Base"; }

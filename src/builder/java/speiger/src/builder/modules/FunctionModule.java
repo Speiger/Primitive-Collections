@@ -5,15 +5,14 @@ import java.util.List;
 
 import speiger.src.builder.ClassType;
 import speiger.src.builder.RequiredType;
-import speiger.src.builder.dependency.DependencyModule;
-import speiger.src.builder.dependency.IDependency;
-import speiger.src.builder.dependency.DependencyModule.BiTypeModule;
+import speiger.src.builder.dependencies.IDependency;
+import speiger.src.builder.dependencies.ModuleDependency;
 
 @SuppressWarnings("javadoc")
 public class FunctionModule extends BaseModule
 {
 	public static final BaseModule INSTANCE = new FunctionModule();
-	public static final DependencyModule MODULE = new BiTypeModule(INSTANCE);
+	public static final ModuleDependency MODULE = new ModuleDependency(INSTANCE, false).addKeyDependency(JavaModule.MODULE);
 	
 	@Override
 	public String getModuleName() { return "Function"; }
@@ -35,6 +34,7 @@ public class FunctionModule extends BaseModule
 	protected void loadBlockades()
 	{
 		if(keyType.isObject()) addBlockedFiles("Consumer", "Comparator");
+		if(!MODULE.isEnabled()) addBlockedFiles("Consumer", "BiConsumer", "Comparator", "Supplier", "Function", "UnaryOperator");
 	}
 	
 	@Override

@@ -30,10 +30,13 @@ There is 3 layers of control inside of the ModuleSettings.
 
 Allowing for greater control without having to edit hundreds of lines of code.   
 On top of that:   
-Any Setting that isn't "Present" is counted as "Enabled".    
+Any Setting that isn't "Present" can be defined as "Enabled" or "Disabled" using the "Default" argument.     
+If "Default" is missing, then it will just default to "Enabled".    
 So if you want to disable just 1 thing you can keep that 1 thing and delete the rest of the Setting.    
 It will still work as the same.    
 The default settings just come with everything so you can see what is controllable.   
+Note: If a global Module setting is disabled but a dependency needs said Module, it will enable only the required classes.    
+If a Module type (Float-Collection as example) is specifically disabled, the Dependency Resolver will throw errors telling you whats wrong.    
 
 How to compile the Code with the ModuleSettings enabled:
 ```

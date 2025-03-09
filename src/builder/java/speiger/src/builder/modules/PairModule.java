@@ -4,18 +4,22 @@ import java.util.Arrays;
 import java.util.List;
 
 import speiger.src.builder.ClassType;
-import speiger.src.builder.dependency.DependencyFunction;
-import speiger.src.builder.dependency.DependencyModule;
-import speiger.src.builder.dependency.DependencyModule.BiTypeModule;
-import speiger.src.builder.dependency.IDependency;
+import speiger.src.builder.dependencies.FunctionDependency;
+import speiger.src.builder.dependencies.IDependency;
+import speiger.src.builder.dependencies.ModuleDependency;
 
 @SuppressWarnings("javadoc")
 public class PairModule extends BaseModule
 {
 	public static final BaseModule INSTANCE = new PairModule();
-	public static final DependencyModule MODULE = new BiTypeModule(INSTANCE);
-	public static final DependencyFunction IMMUTABLE = MODULE.createFunction("Immutable");
-	public static final DependencyFunction MUTABLE = MODULE.createFunction("Mutable");
+	public static final ModuleDependency MODULE = new ModuleDependency(INSTANCE, true).addKeyDependency(JavaModule.MODULE);
+	public static final FunctionDependency IMMUTABLE = MODULE.createDependency("Immutable");
+	public static final FunctionDependency MUTABLE = MODULE.createDependency("Mutable");
+
+	
+//	public static final DependencyModule MODULE = new BiTypeModule(INSTANCE);
+//	public static final DependencyFunction IMMUTABLE = MODULE.createFunction("Immutable");
+//	public static final DependencyFunction MUTABLE = MODULE.createFunction("Mutable");
 	
 	@Override
 	public String getModuleName() { return "Pair"; }
