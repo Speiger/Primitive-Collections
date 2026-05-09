@@ -196,6 +196,7 @@ public class JavaModule extends BaseModule
 		addComment("@Type", "@param <%s> the keyType of elements maintained by this Collection");
 		addValueComment("@ValueArrayType", "@param <%s> the keyType of array that the operation should be applied");
 		addValueComment("@ValueType", "@param <%s> the keyType of elements maintained by this Collection");
+		addSimpleMapper("@Java21", getVersion() >= 21 ? "@Override" : "");
 		addAnnontion("@PrimitiveOverride", "@Override");
 		addSimpleMapper("@PrimitiveDoc", "");
 		addAnnontion("@Primitive", "@Deprecated");

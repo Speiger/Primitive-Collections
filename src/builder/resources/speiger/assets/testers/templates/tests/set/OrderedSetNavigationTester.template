@@ -68,7 +68,7 @@ public class FILE_KEY_TYPEOrderedSetNavigationTester KEY_GENERIC_TYPE extends AB
 		int polled = 0;
 		int expectedPolls = orderedSet.size();
 		while(polled < expectedPolls) {
-			orderedSet.POLL_FIRST_KEY();
+			orderedSet.REMOVE_FIRST_KEY();
 			polled++;
 		}
 		assertTrue("Map should be empty", orderedSet.isEmpty());
@@ -82,7 +82,7 @@ public class FILE_KEY_TYPEOrderedSetNavigationTester KEY_GENERIC_TYPE extends AB
 		int polled = 0;
 		int expectedPolls = orderedSet.size();
 		while(polled < expectedPolls) {
-			orderedSet.POLL_LAST_KEY();
+			orderedSet.REMOVE_LAST_KEY();
 			polled++;
 		}
 		assertTrue("Map should be empty", orderedSet.isEmpty());
@@ -94,8 +94,8 @@ public class FILE_KEY_TYPEOrderedSetNavigationTester KEY_GENERIC_TYPE extends AB
 #endignore
 	public void testEmptySetPollFirst() {
 		try {
-			orderedSet.POLL_FIRST_KEY();
-			fail("OrderedSet.POLL_FIRST_KEY should throw NoSuchElementException");
+			orderedSet.REMOVE_FIRST_KEY();
+			fail("OrderedSet.REMOVE_FIRST_KEY should throw NoSuchElementException");
 		} catch (NoSuchElementException e) {
 		}
 		expectUnchanged();
@@ -107,8 +107,8 @@ public class FILE_KEY_TYPEOrderedSetNavigationTester KEY_GENERIC_TYPE extends AB
 #endignore
 	public void testEmptySetPollLast() {
 		try {
-			orderedSet.POLL_LAST_KEY();
-			fail("OrderedSet.POLL_LAST_KEY should throw NoSuchElementException");
+			orderedSet.REMOVE_LAST_KEY();
+			fail("OrderedSet.REMOVE_LAST_KEY should throw NoSuchElementException");
 		} catch (NoSuchElementException e) {
 		}
 		expectUnchanged();
@@ -119,8 +119,8 @@ public class FILE_KEY_TYPEOrderedSetNavigationTester KEY_GENERIC_TYPE extends AB
 #endignore
 	public void testUnsupportedSetPollFirst() {
 		try {
-			orderedSet.POLL_FIRST_KEY();
-			fail("OrderedSet.POLL_FIRST_KEY should throw UnsupportedOperationException");
+			orderedSet.REMOVE_FIRST_KEY();
+			fail("OrderedSet.REMOVE_FIRST_KEY should throw UnsupportedOperationException");
 		} catch (UnsupportedOperationException e) {
 		}
 		expectUnchanged();
@@ -131,8 +131,8 @@ public class FILE_KEY_TYPEOrderedSetNavigationTester KEY_GENERIC_TYPE extends AB
 #endignore
 	public void testUnsupportedSetPollLast() {
 		try {
-			orderedSet.POLL_LAST_KEY();
-			fail("OrderedSet.POLL_LAST_KEY should throw UnsupportedOperationException");
+			orderedSet.REMOVE_LAST_KEY();
+			fail("OrderedSet.REMOVE_LAST_KEY should throw UnsupportedOperationException");
 		} catch (UnsupportedOperationException e) {
 		}
 		expectUnchanged();
@@ -143,7 +143,7 @@ public class FILE_KEY_TYPEOrderedSetNavigationTester KEY_GENERIC_TYPE extends AB
 	@CollectionSize.Require(ONE)
 #endignore
 	public void testSingletonSetPollFirst() {
-		assertEquals(a, orderedSet.POLL_FIRST_KEY());
+		assertEquals(a, orderedSet.REMOVE_FIRST_KEY());
 		assertTrue(orderedSet.isEmpty());
 	}
 	
@@ -152,7 +152,7 @@ public class FILE_KEY_TYPEOrderedSetNavigationTester KEY_GENERIC_TYPE extends AB
 	@CollectionSize.Require(ONE)
 #endignore
 	public void testSingletonSetPollLast() {
-		assertEquals(a, orderedSet.POLL_LAST_KEY());
+		assertEquals(a, orderedSet.REMOVE_LAST_KEY());
 		assertTrue(orderedSet.isEmpty());
 	}
 	
@@ -161,7 +161,7 @@ public class FILE_KEY_TYPEOrderedSetNavigationTester KEY_GENERIC_TYPE extends AB
 	@CollectionSize.Require(SEVERAL)
 #endignore
 	public void testPollFirst() {
-		assertEquals(a, orderedSet.POLL_FIRST_KEY());
+		assertEquals(a, orderedSet.REMOVE_FIRST_KEY());
 		assertEquals(values.subList(1, values.size()), HELPERS.copyToList(orderedSet));
 	}
 
@@ -170,7 +170,7 @@ public class FILE_KEY_TYPEOrderedSetNavigationTester KEY_GENERIC_TYPE extends AB
 	@CollectionSize.Require(SEVERAL)
 #endignore
 	public void testPollLast() {
-		assertEquals(c, orderedSet.POLL_LAST_KEY());
+		assertEquals(c, orderedSet.REMOVE_LAST_KEY());
 		assertEquals(values.subList(0, values.size()-1), HELPERS.copyToList(orderedSet));
 	}
 	
@@ -179,7 +179,7 @@ public class FILE_KEY_TYPEOrderedSetNavigationTester KEY_GENERIC_TYPE extends AB
 #endignore
 	public void testPollFirstUnsupported() {
 		try {
-			orderedSet.POLL_FIRST_KEY();
+			orderedSet.REMOVE_FIRST_KEY();
 			fail();
 		} catch (UnsupportedOperationException e) {
 		}
@@ -190,7 +190,7 @@ public class FILE_KEY_TYPEOrderedSetNavigationTester KEY_GENERIC_TYPE extends AB
 #endignore
 	public void testPollLastUnsupported() {
 		try {
-			orderedSet.POLL_LAST_KEY();
+			orderedSet.REMOVE_LAST_KEY();
 			fail();
 		} catch (UnsupportedOperationException e) {
 		}
@@ -201,7 +201,7 @@ public class FILE_KEY_TYPEOrderedSetNavigationTester KEY_GENERIC_TYPE extends AB
 #endignore
 	public void testEmptySetFirst() {
 		try {
-			orderedSet.FIRST_KEY();
+			orderedSet.GET_FIRST_KEY();
 			fail();
 		} catch (NoSuchElementException e) {
 		}
@@ -212,7 +212,7 @@ public class FILE_KEY_TYPEOrderedSetNavigationTester KEY_GENERIC_TYPE extends AB
 #endignore
 	public void testEmptySetLast() {
 		try {
-			orderedSet.LAST_KEY();
+			orderedSet.GET_LAST_KEY();
 			fail();
 		} catch (NoSuchElementException e) {
 		}
@@ -222,27 +222,27 @@ public class FILE_KEY_TYPEOrderedSetNavigationTester KEY_GENERIC_TYPE extends AB
 	@CollectionSize.Require(ONE)
 #endignore
 	public void testSingletonSetFirst() {
-		assertEquals(a, orderedSet.FIRST_KEY());
+		assertEquals(a, orderedSet.GET_FIRST_KEY());
 	}
 
 #ignore
 	@CollectionSize.Require(ONE)
 #endignore
 	public void testSingletonSetLast() {
-		assertEquals(a, orderedSet.LAST_KEY());
+		assertEquals(a, orderedSet.GET_LAST_KEY());
 	}
 
 #ignore
 	@CollectionSize.Require(SEVERAL)
 #endignore
 	public void testFirst() {
-		assertEquals(a, orderedSet.FIRST_KEY());
+		assertEquals(a, orderedSet.GET_FIRST_KEY());
 	}
 
 #ignore
 	@CollectionSize.Require(SEVERAL)
 #endignore
 	public void testLast() {
-		assertEquals(c, orderedSet.LAST_KEY());
+		assertEquals(c, orderedSet.GET_LAST_KEY());
 	}
 }

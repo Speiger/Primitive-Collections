@@ -219,13 +219,13 @@ public class ARRAY_SET KEY_GENERIC_TYPE extends ABSTRACT_SET KEY_GENERIC_TYPE im
 	
 #endif
 	@Override
-	public KEY_TYPE FIRST_KEY() {
+	public KEY_TYPE GET_FIRST_KEY() {
 		if(size == 0) throw new NoSuchElementException();
 		return data[0];
 	}
 	
 	@Override
-	public KEY_TYPE LAST_KEY() {
+	public KEY_TYPE GET_LAST_KEY() {
 		if(size == 0) throw new NoSuchElementException();
 		return data[size - 1];
 	}
@@ -354,7 +354,7 @@ public class ARRAY_SET KEY_GENERIC_TYPE extends ABSTRACT_SET KEY_GENERIC_TYPE im
 	
 #endif
 	@Override
-	public KEY_TYPE POLL_FIRST_KEY() {
+	public KEY_TYPE REMOVE_FIRST_KEY() {
 		if(size == 0) throw new NoSuchElementException();
 		KEY_TYPE result = data[0];
 		System.arraycopy(data, 1, data, 0, --size);
@@ -365,7 +365,7 @@ public class ARRAY_SET KEY_GENERIC_TYPE extends ABSTRACT_SET KEY_GENERIC_TYPE im
 	}
 	
 	@Override
-	public KEY_TYPE POLL_LAST_KEY() {
+	public KEY_TYPE REMOVE_LAST_KEY() {
 		if(size == 0) throw new NoSuchElementException();
 		size--;
 #if TYPE_OBJECT
@@ -512,6 +512,11 @@ public class ARRAY_SET KEY_GENERIC_TYPE extends ABSTRACT_SET KEY_GENERIC_TYPE im
 	@Override
 	public BI_ITERATOR KEY_GENERIC_TYPE iterator() {
 		return new SetIterator(0);
+	}
+	
+	@Override
+	public BI_ITERATOR KEY_GENERIC_TYPE reverseIterator() {
+		return new ReverseBiIteratorBRACES(new SetIterator(size));
 	}
 	
 	@Override

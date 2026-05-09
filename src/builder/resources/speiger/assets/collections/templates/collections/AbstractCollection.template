@@ -1,12 +1,18 @@
 package speiger.src.collections.PACKAGE.collections;
 
 import java.util.Collection;
+#if ORDERED_MAP_FEATURE
+import java.util.function.Supplier;
+#endif
 import java.util.Objects;
 import java.util.AbstractCollection;
 #if TYPE_OBJECT
 import java.util.function.Consumer;
 #endif
 
+#if ORDERED_MAP_FEATURE
+import speiger.src.collections.PACKAGE.lists.LIST_ITERATOR;
+#endif
 #if !TYPE_OBJECT
 import speiger.src.collections.PACKAGE.functions.CONSUMER;
 import speiger.src.collections.PACKAGE.utils.ITERATORS;
@@ -261,6 +267,80 @@ public abstract class ABSTRACT_COLLECTION KEY_GENERIC_TYPE extends AbstractColle
 		ITERATORS.unwrap(a, iterator());
 		if (a.length > size()) a[size()] = EMPTY_KEY_VALUE;
 		return a;
+	}
+
+#endif
+#if ORDERED_MAP_FEATURE
+	public static class REVERSED_ORDERED_COLLECTION KEY_GENERIC_TYPE extends ABSTRACT_COLLECTION KEY_GENERIC_TYPE implements ORDERED_COLLECTION KEY_GENERIC_TYPE {
+		ORDERED_COLLECTION KEY_GENERIC_TYPE collection;
+		Supplier<ITERATOR KEY_GENERIC_TYPE> reverseIterator;
+		
+		public REVERSED_ORDERED_COLLECTION(ORDERED_COLLECTION KEY_GENERIC_TYPE collection, Supplier<ITERATOR KEY_GENERIC_TYPE> reverseIterator) {
+			this.collection = collection;
+			this.reverseIterator = reverseIterator;
+		}
+		
+		@Override
+		public boolean add(KEY_TYPE o) { return collection.add(o); }
+		@Override
+		public ORDERED_COLLECTION KEY_GENERIC_TYPE reversed() { return collection; }
+		@Override
+		public void addFirst(KEY_TYPE e) { collection.addLast(e); }
+		@Override
+		public void addLast(KEY_TYPE e) { collection.addFirst(e); }
+		@Override
+#if !TYPE_OBJECT
+		public boolean contains(KEY_TYPE e) { return collection.contains(e); }
+#else
+		public boolean contains(Object e) { return collection.contains(e); }
+#endif
+		@Override
+#if !TYPE_OBJECT
+		public boolean REMOVE_KEY(KEY_TYPE e) { return collection.REMOVE_KEY(e); }
+#else
+		public boolean remove(Object e) { return collection.remove(e); }
+#endif
+		@Override
+		public void clear() { collection.clear(); }
+		@Override
+		public KEY_TYPE GET_FIRST_KEY() { return collection.GET_LAST_KEY(); }
+		@Override
+		public KEY_TYPE REMOVE_FIRST_KEY() { return collection.REMOVE_LAST_KEY(); }
+		@Override
+		public KEY_TYPE GET_LAST_KEY() { return collection.GET_FIRST_KEY(); }
+		@Override
+		public KEY_TYPE REMOVE_LAST_KEY() { return collection.REMOVE_FIRST_KEY(); }
+		@Override
+		public ITERATOR KEY_GENERIC_TYPE iterator() { return reverseIterator.get(); }
+		@Override
+		public int size() { return collection.size(); }
+	}
+	
+	public static class ReverseBiIterator KEY_GENERIC_TYPE implements LIST_ITERATOR KEY_GENERIC_TYPE {
+		LIST_ITERATOR KEY_GENERIC_TYPE it;
+		
+		public ReverseBiIterator(LIST_ITERATOR KEY_GENERIC_TYPE it) {
+			this.it = it;
+		}
+		
+		@Override
+		public KEY_TYPE NEXT() { return it.PREVIOUS(); }
+		@Override
+		public boolean hasNext() { return it.hasPrevious(); }
+		@Override
+		public boolean hasPrevious() { return it.hasNext(); }
+		@Override
+		public KEY_TYPE PREVIOUS() { return it.NEXT(); }
+		@Override
+		public void remove() { it.remove(); }
+		@Override
+		public int nextIndex() { return it.previousIndex(); }
+		@Override
+		public int previousIndex() { return it.nextIndex(); }
+		@Override
+		public void set(KEY_TYPE e) { it.set(e); }
+		@Override
+		public void add(KEY_TYPE e) { it.add(e); }
 	}
 #endif
 }

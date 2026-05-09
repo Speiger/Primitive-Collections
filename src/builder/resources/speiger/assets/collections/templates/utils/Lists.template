@@ -45,7 +45,7 @@ public class LISTS
 	 * @Type(T)
 	 * @return an empty list
 	 */
-	public static GENERIC_KEY_BRACES EmptyList KEY_GENERIC_TYPE empty() {
+	public static GENERIC_KEY_BRACES LIST KEY_GENERIC_TYPE empty() {
 #if TYPE_OBJECT
 		return (EmptyList<KEY_TYPE>)EMPTY;
 #else

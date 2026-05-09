@@ -45,10 +45,10 @@ public class FILE_KEY_TYPEOrderedSetMoveTester KEY_GENERIC_TYPE extends ABSTRACT
 #endignore
 	public void testaddMoveToFirstMissing()
 	{
-		assertEquals(a, orderedSet.FIRST_KEY());
+		assertEquals(a, orderedSet.GET_FIRST_KEY());
 		assertEquals(true, orderedSet.addAndMoveToFirst(e4()));
-		assertNotEquals(a, orderedSet.FIRST_KEY());
-		assertEquals(e4(), orderedSet.FIRST_KEY());
+		assertNotEquals(a, orderedSet.GET_FIRST_KEY());
+		assertEquals(e4(), orderedSet.GET_FIRST_KEY());
 	}
 	
 #ignore
@@ -57,10 +57,10 @@ public class FILE_KEY_TYPEOrderedSetMoveTester KEY_GENERIC_TYPE extends ABSTRACT
 #endignore
 	public void testaddMoveToFirstPreset()
 	{
-		assertEquals(a, orderedSet.FIRST_KEY());
+		assertEquals(a, orderedSet.GET_FIRST_KEY());
 		assertEquals(false, orderedSet.addAndMoveToFirst(c));
-		assertNotEquals(a, orderedSet.FIRST_KEY());
-		assertEquals(c, orderedSet.FIRST_KEY());
+		assertNotEquals(a, orderedSet.GET_FIRST_KEY());
+		assertEquals(c, orderedSet.GET_FIRST_KEY());
 	}
 	
 #ignore
@@ -69,10 +69,10 @@ public class FILE_KEY_TYPEOrderedSetMoveTester KEY_GENERIC_TYPE extends ABSTRACT
 #endignore
 	public void testaddMoveToLastMissing()
 	{
-		assertEquals(c, orderedSet.LAST_KEY());
+		assertEquals(c, orderedSet.GET_LAST_KEY());
 		assertEquals(true, orderedSet.addAndMoveToLast(e4()));
-		assertNotEquals(c, orderedSet.LAST_KEY());
-		assertEquals(e4(), orderedSet.LAST_KEY());
+		assertNotEquals(c, orderedSet.GET_LAST_KEY());
+		assertEquals(e4(), orderedSet.GET_LAST_KEY());
 	}
 	
 #ignore
@@ -81,10 +81,10 @@ public class FILE_KEY_TYPEOrderedSetMoveTester KEY_GENERIC_TYPE extends ABSTRACT
 #endignore
 	public void testaddMoveToLastPreset()
 	{
-		assertEquals(c, orderedSet.LAST_KEY());
+		assertEquals(c, orderedSet.GET_LAST_KEY());
 		assertEquals(false, orderedSet.addAndMoveToLast(a));
-		assertNotEquals(c, orderedSet.LAST_KEY());
-		assertEquals(a, orderedSet.LAST_KEY());
+		assertNotEquals(c, orderedSet.GET_LAST_KEY());
+		assertEquals(a, orderedSet.GET_LAST_KEY());
 	}
 	
 #ignore
@@ -93,9 +93,9 @@ public class FILE_KEY_TYPEOrderedSetMoveTester KEY_GENERIC_TYPE extends ABSTRACT
 #endignore
 	public void testMoveToFirstMissing()
 	{
-		assertEquals(a, orderedSet.FIRST_KEY());
+		assertEquals(a, orderedSet.GET_FIRST_KEY());
 		assertEquals(false, orderedSet.moveToFirst(e4()));
-		assertEquals(a, orderedSet.FIRST_KEY());
+		assertEquals(a, orderedSet.GET_FIRST_KEY());
 	}
 	
 #ignore
@@ -104,10 +104,10 @@ public class FILE_KEY_TYPEOrderedSetMoveTester KEY_GENERIC_TYPE extends ABSTRACT
 #endignore
 	public void testMoveToFirstPreset()
 	{
-		assertEquals(a, orderedSet.FIRST_KEY());
+		assertEquals(a, orderedSet.GET_FIRST_KEY());
 		assertEquals(true, orderedSet.moveToFirst(c));
-		assertNotEquals(a, orderedSet.FIRST_KEY());
-		assertEquals(c, orderedSet.FIRST_KEY());
+		assertNotEquals(a, orderedSet.GET_FIRST_KEY());
+		assertEquals(c, orderedSet.GET_FIRST_KEY());
 	}
 	
 #ignore
@@ -116,9 +116,9 @@ public class FILE_KEY_TYPEOrderedSetMoveTester KEY_GENERIC_TYPE extends ABSTRACT
 #endignore
 	public void testMoveToLastMissing()
 	{
-		assertEquals(c, orderedSet.LAST_KEY());
+		assertEquals(c, orderedSet.GET_LAST_KEY());
 		assertEquals(false, orderedSet.moveToLast(e4()));
-		assertEquals(c, orderedSet.LAST_KEY());
+		assertEquals(c, orderedSet.GET_LAST_KEY());
 	}
 	
 #ignore
@@ -127,10 +127,10 @@ public class FILE_KEY_TYPEOrderedSetMoveTester KEY_GENERIC_TYPE extends ABSTRACT
 #endignore
 	public void testMoveToLastPreset()
 	{
-		assertEquals(c, orderedSet.LAST_KEY());
+		assertEquals(c, orderedSet.GET_LAST_KEY());
 		assertEquals(true, orderedSet.moveToLast(a));
-		assertNotEquals(c, orderedSet.LAST_KEY());
-		assertEquals(a, orderedSet.LAST_KEY());
+		assertNotEquals(c, orderedSet.GET_LAST_KEY());
+		assertEquals(a, orderedSet.GET_LAST_KEY());
 	}
 	
 #ignore
@@ -139,10 +139,10 @@ public class FILE_KEY_TYPEOrderedSetMoveTester KEY_GENERIC_TYPE extends ABSTRACT
 #endignore
 	public void testMoveCenterToLast()
 	{
-		assertEquals(c, orderedSet.LAST_KEY());
+		assertEquals(c, orderedSet.GET_LAST_KEY());
 		assertTrue(orderedSet.moveToLast(e1()));
-		assertNotEquals(c, orderedSet.LAST_KEY());
-		assertEquals(e1(), orderedSet.LAST_KEY());
+		assertNotEquals(c, orderedSet.GET_LAST_KEY());
+		assertEquals(e1(), orderedSet.GET_LAST_KEY());
 	}
 	
 #ignore
@@ -151,10 +151,10 @@ public class FILE_KEY_TYPEOrderedSetMoveTester KEY_GENERIC_TYPE extends ABSTRACT
 #endignore
 	public void testMoveCenterToFirst()
 	{
-		assertEquals(a, orderedSet.FIRST_KEY());
+		assertEquals(a, orderedSet.GET_FIRST_KEY());
 		assertTrue(orderedSet.moveToFirst(e1()));
-		assertNotEquals(c, orderedSet.FIRST_KEY());
-		assertEquals(e1(), orderedSet.FIRST_KEY());
+		assertNotEquals(c, orderedSet.GET_FIRST_KEY());
+		assertEquals(e1(), orderedSet.GET_FIRST_KEY());
 	}
 	
 #ignore
@@ -163,13 +163,13 @@ public class FILE_KEY_TYPEOrderedSetMoveTester KEY_GENERIC_TYPE extends ABSTRACT
 #endignore
 	public void testMoveForthAndBack()
 	{
-		assertEquals(c, orderedSet.LAST_KEY());
+		assertEquals(c, orderedSet.GET_LAST_KEY());
 		assertTrue(orderedSet.moveToLast(e0()));
-		assertNotEquals(c, orderedSet.LAST_KEY());
-		assertEquals(a, orderedSet.LAST_KEY());
-		assertNotEquals(a, orderedSet.FIRST_KEY());
+		assertNotEquals(c, orderedSet.GET_LAST_KEY());
+		assertEquals(a, orderedSet.GET_LAST_KEY());
+		assertNotEquals(a, orderedSet.GET_FIRST_KEY());
 		assertTrue(orderedSet.moveToFirst(e0()));
-		assertEquals(a, orderedSet.FIRST_KEY());
+		assertEquals(a, orderedSet.GET_FIRST_KEY());
 	}
 	
 #ignore
@@ -178,13 +178,13 @@ public class FILE_KEY_TYPEOrderedSetMoveTester KEY_GENERIC_TYPE extends ABSTRACT
 #endignore
 	public void testMoveBackAndForth()
 	{
-		assertEquals(a, orderedSet.FIRST_KEY());
+		assertEquals(a, orderedSet.GET_FIRST_KEY());
 		assertTrue(orderedSet.moveToFirst(e2()));
-		assertNotEquals(a, orderedSet.FIRST_KEY());
-		assertEquals(c, orderedSet.FIRST_KEY());
-		assertNotEquals(c, orderedSet.LAST_KEY());
+		assertNotEquals(a, orderedSet.GET_FIRST_KEY());
+		assertEquals(c, orderedSet.GET_FIRST_KEY());
+		assertNotEquals(c, orderedSet.GET_LAST_KEY());
 		assertTrue(orderedSet.moveToLast(e2()));
-		assertEquals(c, orderedSet.LAST_KEY());
+		assertEquals(c, orderedSet.GET_LAST_KEY());
 	}
 	
 #ignore
@@ -193,13 +193,13 @@ public class FILE_KEY_TYPEOrderedSetMoveTester KEY_GENERIC_TYPE extends ABSTRACT
 #endignore
 	public void testAddForthAndBack()
 	{
-		assertEquals(c, orderedSet.LAST_KEY());
+		assertEquals(c, orderedSet.GET_LAST_KEY());
 		assertFalse(orderedSet.addAndMoveToLast(e0()));
-		assertNotEquals(c, orderedSet.LAST_KEY());
-		assertEquals(a, orderedSet.LAST_KEY());
-		assertNotEquals(a, orderedSet.FIRST_KEY());
+		assertNotEquals(c, orderedSet.GET_LAST_KEY());
+		assertEquals(a, orderedSet.GET_LAST_KEY());
+		assertNotEquals(a, orderedSet.GET_FIRST_KEY());
 		assertFalse(orderedSet.addAndMoveToFirst(e0()));
-		assertEquals(a, orderedSet.FIRST_KEY());
+		assertEquals(a, orderedSet.GET_FIRST_KEY());
 	}
 	
 #ignore
@@ -208,13 +208,13 @@ public class FILE_KEY_TYPEOrderedSetMoveTester KEY_GENERIC_TYPE extends ABSTRACT
 #endignore
 	public void testAddBackAndForth()
 	{
-		assertEquals(a, orderedSet.FIRST_KEY());
+		assertEquals(a, orderedSet.GET_FIRST_KEY());
 		assertFalse(orderedSet.addAndMoveToFirst(e2()));
-		assertNotEquals(a, orderedSet.FIRST_KEY());
-		assertEquals(c, orderedSet.FIRST_KEY());
-		assertNotEquals(c, orderedSet.LAST_KEY());
+		assertNotEquals(a, orderedSet.GET_FIRST_KEY());
+		assertEquals(c, orderedSet.GET_FIRST_KEY());
+		assertNotEquals(c, orderedSet.GET_LAST_KEY());
 		assertFalse(orderedSet.addAndMoveToLast(e2()));
-		assertEquals(c, orderedSet.LAST_KEY());
+		assertEquals(c, orderedSet.GET_LAST_KEY());
 	}
 	
 #ignore

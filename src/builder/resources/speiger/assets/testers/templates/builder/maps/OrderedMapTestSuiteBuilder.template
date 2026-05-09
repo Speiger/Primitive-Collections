@@ -1,9 +1,14 @@
 package speiger.src.testers.PACKAGE.builder.maps;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import com.google.common.collect.testing.AbstractTester;
+import com.google.common.collect.testing.FeatureSpecificTestSuiteBuilder;
+import com.google.common.collect.testing.OneSizeTestContainerGenerator;
 import com.google.common.collect.testing.features.CollectionFeature;
+import com.google.common.collect.testing.features.Feature;
 
 import junit.framework.TestSuite;
 import speiger.src.collections.PACKAGE.maps.interfaces.MAP;
@@ -12,6 +17,7 @@ import speiger.src.testers.PACKAGE.builder.SET_TEST_BUILDER;
 import speiger.src.testers.PACKAGE.generators.TEST_ORDERED_SET_GENERATOR;
 import speiger.src.testers.PACKAGE.generators.TEST_SET_GENERATOR;
 import speiger.src.testers.PACKAGE.generators.maps.TEST_ORDERED_MAP_GENERATOR;
+import speiger.src.testers.PACKAGE.impl.maps.DERIVED_MAP_GENERATORS;
 import speiger.src.testers.PACKAGE.tests.maps.FILE_KEY_TYPE2FILE_VALUE_TYPEOrderedMapMoveTester;
 import speiger.src.testers.PACKAGE.tests.maps.FILE_KEY_TYPE2FILE_VALUE_TYPEOrderedMapNavigationTester;
 #if !TYPE_OBJECT
@@ -20,6 +26,7 @@ import speiger.src.testers.objects.generators.TestObjectSetGenerator;
 import speiger.src.testers.objects.builder.ObjectOrderedSetTestSuiteBuilder;
 import speiger.src.testers.objects.generators.TestObjectOrderedSetGenerator;
 #endif
+import speiger.src.testers.utils.SpecialFeature;
 
 @SuppressWarnings("javadoc")
 public class ORDERED_MAP_TEST_BUILDER KEY_VALUE_GENERIC_TYPE extends MAP_TEST_BUILDER KEY_VALUE_GENERIC_TYPE
@@ -45,11 +52,33 @@ public class ORDERED_MAP_TEST_BUILDER KEY_VALUE_GENERIC_TYPE extends MAP_TEST_BU
 		return super.createTestSuite();
 	}
 	
+	@Override
+	protected List<TestSuite> createDerivedSuites(FeatureSpecificTestSuiteBuilder<?, ? extends OneSizeTestContainerGenerator<Map<CLASS_TYPE, CLASS_VALUE_TYPE>, Map.Entry<CLASS_TYPE, CLASS_VALUE_TYPE>>> parentBuilder) {
+		List<TestSuite> derivedSuites = super.createDerivedSuites(parentBuilder);
+		if (!parentBuilder.getFeatures().contains(SpecialFeature.DESCENDING)) {
+			derivedSuites.add(createDescendingSuite(parentBuilder));
+		}
+		return derivedSuites;
+	}
+	
 	protected ObjectSetTestSuiteBuilder<MAP.Entry KEY_VALUE_GENERIC_TYPE> createDerivedEntrySetSuite(TestObjectSetGenerator<MAP.Entry KEY_VALUE_GENERIC_TYPE> entrySetGenerator) {
 		return ObjectOrderedSetTestSuiteBuilder.using((TestObjectOrderedSetGenerator<MAP.Entry KEY_VALUE_GENERIC_TYPE>)entrySetGenerator);
 	}
 	
 	protected SET_TEST_BUILDER KEY_GENERIC_TYPE createDerivedKeySetSuite(TEST_SET_GENERATOR KEY_GENERIC_TYPE generator) {
 		return ORDERED_SET_TEST_BUILDER.using((TEST_ORDERED_SET_GENERATOR KEY_GENERIC_TYPE)generator);
+	}
+	
+	private TestSuite createDescendingSuite(FeatureSpecificTestSuiteBuilder<?, ? extends OneSizeTestContainerGenerator<Map<CLASS_TYPE, CLASS_VALUE_TYPE>, Map.Entry<CLASS_TYPE, CLASS_VALUE_TYPE>>> parentBuilder) {
+		TEST_ORDERED_MAP_GENERATOR KEY_VALUE_GENERIC_TYPE delegate = (TEST_ORDERED_MAP_GENERATOR KEY_VALUE_GENERIC_TYPE) parentBuilder.getSubjectGenerator().getInnerGenerator();
+
+		List<Feature<?>> features = new ArrayList<>();
+		features.add(SpecialFeature.DESCENDING);
+		features.addAll(parentBuilder.getFeatures());
+		features.remove(SpecialFeature.COPYING);
+		features.remove(SpecialFeature.CHILDREN_COPY);
+		return ORDERED_MAP_TEST_BUILDER.using(new DERIVED_MAP_GENERATORS.DescendingTestOrderedMapGeneratorKV_BRACES(delegate))
+				.named(parentBuilder.getName() + " reversed").withFeatures(features)
+				.suppressing(parentBuilder.getSuppressedTests()).createTestSuite();
 	}
 }

@@ -40,7 +40,7 @@ import speiger.src.collections.PACKAGE.sets.ABSTRACT_SET;
 import speiger.src.collections.PACKAGE.sets.ORDERED_SET;
 import speiger.src.collections.PACKAGE.utils.STRATEGY;
 import speiger.src.collections.VALUE_PACKAGE.collections.VALUE_ABSTRACT_COLLECTION;
-import speiger.src.collections.VALUE_PACKAGE.collections.VALUE_COLLECTION;
+import speiger.src.collections.VALUE_PACKAGE.collections.VALUE_ORDERED_COLLECTION;
 import speiger.src.collections.VALUE_PACKAGE.collections.VALUE_ITERATOR;
 #if !SAME_TYPE
 import speiger.src.collections.VALUE_PACKAGE.functions.function.VALUE_UNARY_OPERATOR;
@@ -296,6 +296,54 @@ public class LINKED_CUSTOM_HASH_MAP KEY_VALUE_GENERIC_TYPE extends CUSTOM_HASH_M
 	}
 	
 	@Override
+	public VALUE_TYPE putFirst(KEY_TYPE key, VALUE_TYPE value) {
+		if(strategy.equals(key, EMPTY_KEY_VALUE)) {
+			if(containsNull) return values[nullIndex];
+			values[nullIndex] = value;
+			containsNull = true;
+			onNodeAdded(nullIndex);
+			moveToFirstIndex(nullIndex);
+		}
+		else {
+			int pos = HashUtil.mix(strategy.hashCode(key)) & mask;
+			while(!strategy.equals(keys[pos], EMPTY_KEY_VALUE)) {
+				if(strategy.equals(keys[pos], key)) return values[pos];
+				pos = ++pos & mask;
+			}
+			keys[pos] = key;
+			values[pos] = value;
+			onNodeAdded(pos);
+			moveToFirstIndex(pos);
+		}
+		if(size++ >= maxFill) rehash(HashUtil.arraySize(size+1, loadFactor));
+		return getDefaultReturnValue();
+	}
+	
+	@Override
+	public VALUE_TYPE putLast(KEY_TYPE key, VALUE_TYPE value) {
+		if(strategy.equals(key, EMPTY_KEY_VALUE)) {
+			if(containsNull) return values[nullIndex];
+			values[nullIndex] = value;
+			containsNull = true;
+			onNodeAdded(nullIndex);
+			moveToLastIndex(nullIndex);
+		}
+		else {
+			int pos = HashUtil.mix(strategy.hashCode(key)) & mask;
+			while(!strategy.equals(keys[pos], EMPTY_KEY_VALUE)) {
+				if(strategy.equals(keys[pos], key)) return values[pos];
+				pos = ++pos & mask;
+			}
+			keys[pos] = key;
+			values[pos] = value;
+			onNodeAdded(pos);
+			moveToLastIndex(pos);
+		}
+		if(size++ >= maxFill) rehash(HashUtil.arraySize(size+1, loadFactor));
+		return getDefaultReturnValue();
+	}
+	
+	@Override
 	public boolean moveToFirst(KEY_TYPE key) {
 		if(isEmpty() || strategy.equals(FIRST_ENTRY_KEY(), key)) return false;
 		if(strategy.equals(key, EMPTY_KEY_VALUE)) {
@@ -431,6 +479,52 @@ public class LINKED_CUSTOM_HASH_MAP KEY_VALUE_GENERIC_TYPE extends CUSTOM_HASH_M
 	}
 	
 	@Override
+	public MAP.Entry KEY_VALUE_GENERIC_TYPE firstEntry() {
+		if(size == 0) throw new NoSuchElementException();
+		return new BasicEntryKV_BRACES(keys[firstIndex], values[firstIndex]);
+	}
+	
+	@Override
+	public MAP.Entry KEY_VALUE_GENERIC_TYPE lastEntry() {
+		if(size == 0) throw new NoSuchElementException();
+		return new BasicEntryKV_BRACES(keys[lastIndex], values[lastIndex]);
+	}
+	
+	@Override
+	public MAP.Entry KEY_VALUE_GENERIC_TYPE pollFirstEntry() {
+		if(size == 0) throw new NoSuchElementException();
+		int pos = firstIndex;
+		onNodeRemoved(pos);
+		BasicEntry KEY_VALUE_GENERIC_TYPE result = new BasicEntryKV_BRACES(keys[pos], values[pos]);
+		size--;
+		if(strategy.equals(result.ENTRY_KEY(), EMPTY_KEY_VALUE)) {
+			containsNull = false;
+			keys[nullIndex] = EMPTY_KEY_VALUE;
+			values[nullIndex] = EMPTY_VALUE;
+		}
+		else shiftKeys(pos);
+		if(nullIndex > minCapacity && size < maxFill / 4 && nullIndex > HashUtil.DEFAULT_MIN_CAPACITY) rehash(nullIndex / 2);
+		return result;
+	}
+	
+	@Override
+	public MAP.Entry KEY_VALUE_GENERIC_TYPE pollLastEntry() {
+		if(size == 0) throw new NoSuchElementException();
+		int pos = lastIndex;
+		onNodeRemoved(pos);
+		BasicEntry KEY_VALUE_GENERIC_TYPE result = new BasicEntryKV_BRACES(keys[pos], values[pos]);
+		size--;
+		if(strategy.equals(result.ENTRY_KEY(), EMPTY_KEY_VALUE)) {
+			containsNull = false;
+			keys[nullIndex] = EMPTY_KEY_VALUE;
+			values[nullIndex] = EMPTY_VALUE;
+		}
+		else shiftKeys(pos);
+		if(nullIndex > minCapacity && size < maxFill / 4 && nullIndex > HashUtil.DEFAULT_MIN_CAPACITY) rehash(nullIndex / 2);
+		return result;
+	}
+	
+	@Override
 	public ObjectOrderedSet<MAP.Entry KEY_VALUE_GENERIC_TYPE> ENTRY_SET() {
 		if(entrySet == null) entrySet = new MapEntrySet();
 		return (ObjectOrderedSet<MAP.Entry KEY_VALUE_GENERIC_TYPE>)entrySet;
@@ -443,9 +537,9 @@ public class LINKED_CUSTOM_HASH_MAP KEY_VALUE_GENERIC_TYPE extends CUSTOM_HASH_M
 	}
 	
 	@Override
-	public VALUE_COLLECTION VALUE_GENERIC_TYPE values() {
+	public VALUE_ORDERED_COLLECTION VALUE_GENERIC_TYPE values() {
 		if(valuesC == null) valuesC = new Values();
-		return valuesC;
+		return (VALUE_ORDERED_COLLECTION VALUE_GENERIC_TYPE)valuesC;
 	}
 	
 	@Override
@@ -630,24 +724,24 @@ public class LINKED_CUSTOM_HASH_MAP KEY_VALUE_GENERIC_TYPE extends CUSTOM_HASH_M
 		}
 		
 		@Override
-		public MAP.Entry KEY_VALUE_GENERIC_TYPE first() {
+		public MAP.Entry KEY_VALUE_GENERIC_TYPE getFirst() {
 			return new BasicEntryKV_BRACES(FIRST_ENTRY_KEY(), FIRST_ENTRY_VALUE());
 		}
 		
 		@Override
-		public MAP.Entry KEY_VALUE_GENERIC_TYPE last() {
+		public MAP.Entry KEY_VALUE_GENERIC_TYPE getLast() {
 			return new BasicEntryKV_BRACES(LAST_ENTRY_KEY(), LAST_ENTRY_VALUE());
 		}
 		
 		@Override
-		public MAP.Entry KEY_VALUE_GENERIC_TYPE pollFirst() {
+		public MAP.Entry KEY_VALUE_GENERIC_TYPE removeFirst() {
 			BasicEntry KEY_VALUE_GENERIC_TYPE entry = new BasicEntryKV_BRACES(FIRST_ENTRY_KEY(), FIRST_ENTRY_VALUE());
 			POLL_FIRST_ENTRY_KEY();
 			return entry;
 		}
 		
 		@Override
-		public MAP.Entry KEY_VALUE_GENERIC_TYPE pollLast() {
+		public MAP.Entry KEY_VALUE_GENERIC_TYPE removeLast() {
 			BasicEntry KEY_VALUE_GENERIC_TYPE entry = new BasicEntryKV_BRACES(LAST_ENTRY_KEY(), LAST_ENTRY_VALUE());
 			POLL_LAST_ENTRY_KEY();
 			return entry;
@@ -655,7 +749,12 @@ public class LINKED_CUSTOM_HASH_MAP KEY_VALUE_GENERIC_TYPE extends CUSTOM_HASH_M
 		
 		@Override
 		public ObjectBidirectionalIterator<MAP.Entry KEY_VALUE_GENERIC_TYPE> iterator() {
-			return new EntryIterator();
+			return new EntryIterator(true);
+		}
+		
+		@Override
+		public ObjectBidirectionalIterator<MAP.Entry KEY_VALUE_GENERIC_TYPE> reverseIterator() {
+			return new ReverseBiIterator<>(new EntryIterator(false));
 		}
 		
 		@Override
@@ -665,7 +764,7 @@ public class LINKED_CUSTOM_HASH_MAP KEY_VALUE_GENERIC_TYPE extends CUSTOM_HASH_M
 		
 		@Override
 		public ObjectBidirectionalIterator<MAP.Entry KEY_VALUE_GENERIC_TYPE> fastIterator() {
-			return new FastEntryIterator();
+			return new FastEntryIterator(true);
 		}
 		
 		@Override
@@ -919,7 +1018,12 @@ public class LINKED_CUSTOM_HASH_MAP KEY_VALUE_GENERIC_TYPE extends CUSTOM_HASH_M
 		
 		@Override
 		public LIST_ITERATOR KEY_GENERIC_TYPE iterator() {
-			return new KeyIterator();
+			return new KeyIterator(true);
+		}
+		
+		@Override
+		public LIST_ITERATOR KEY_GENERIC_TYPE reverseIterator() {
+			return new ReverseBiIteratorBRACES(new KeyIterator(false));
 		}
 		
 		@Override
@@ -941,22 +1045,22 @@ public class LINKED_CUSTOM_HASH_MAP KEY_VALUE_GENERIC_TYPE extends CUSTOM_HASH_M
 		}
 		
 		@Override
-		public KEY_TYPE FIRST_KEY() {
+		public KEY_TYPE GET_FIRST_KEY() {
 			return FIRST_ENTRY_KEY();
 		}
 		
 		@Override
-		public KEY_TYPE POLL_FIRST_KEY() {
+		public KEY_TYPE REMOVE_FIRST_KEY() {
 			return POLL_FIRST_ENTRY_KEY();
 		}
 
 		@Override
-		public KEY_TYPE LAST_KEY() {
+		public KEY_TYPE GET_LAST_KEY() {
 			return LAST_ENTRY_KEY();
 		}
 
 		@Override
-		public KEY_TYPE POLL_LAST_KEY() {
+		public KEY_TYPE REMOVE_LAST_KEY() {
 			return POLL_LAST_ENTRY_KEY();
 		}
 		
@@ -1100,39 +1204,47 @@ public class LINKED_CUSTOM_HASH_MAP KEY_VALUE_GENERIC_TYPE extends CUSTOM_HASH_M
 		}
 	}
 	
-	private class Values extends VALUE_ABSTRACT_COLLECTION VALUE_GENERIC_TYPE {
+	private class Values extends VALUE_ABSTRACT_COLLECTION VALUE_GENERIC_TYPE implements VALUE_ORDERED_COLLECTION VALUE_GENERIC_TYPE {
 #if VALUE_OBJECT
 		@Override
 		@Deprecated
-		public boolean contains(Object e) {
-			return containsValue(e);
-		}
-		
+		public boolean contains(Object e) { return containsValue(e); }
 #else
 		@Override
-		public boolean contains(VALUE_TYPE e) {
-			return containsValue(e);
-		}
-		
+		public boolean contains(VALUE_TYPE e) { return containsValue(e); }
 #endif
 		@Override
-		public boolean add(VALUE_TYPE o) {
-			throw new UnsupportedOperationException();
-		}
-
+		public boolean add(VALUE_TYPE o) { throw new UnsupportedOperationException(); }
 		@Override
-		public VALUE_ITERATOR VALUE_GENERIC_TYPE iterator() {
-			return new ValueIterator();
-		}
-		
+		public VALUE_ITERATOR VALUE_GENERIC_TYPE iterator() { return new ValueIterator(true); }
 		@Override
-		public int size() {
-			return LINKED_CUSTOM_HASH_MAP.this.size();
-		}
-		
+		public int size() { return LINKED_CUSTOM_HASH_MAP.this.size(); }
 		@Override
-		public void clear() {
-			LINKED_CUSTOM_HASH_MAP.this.clear();
+		public void clear() { LINKED_CUSTOM_HASH_MAP.this.clear(); }
+		@Override
+		public VALUE_ORDERED_COLLECTION VALUE_GENERIC_TYPE reversed() { return new VALUE_ABSTRACT_COLLECTION.VALUE_REVERSED_ORDERED_COLLECTIONVALUE_BRACES(this, this::reverseIterator); }
+		private VALUE_ITERATOR VALUE_GENERIC_TYPE reverseIterator() {
+			return new VALUE_ABSTRACT_COLLECTION.ReverseBiIteratorVALUE_BRACES(new ValueIterator(false));
+		}
+		@Override
+		public void addFirst(VALUE_TYPE e) { throw new UnsupportedOperationException(); }
+		@Override
+		public void addLast(VALUE_TYPE e) { throw new UnsupportedOperationException(); }
+		@Override
+		public VALUE_TYPE VALUE_GET_FIRST_KEY() { return FIRST_ENTRY_VALUE(); }
+		@Override
+		public VALUE_TYPE VALUE_REMOVE_FIRST_KEY() {
+			VALUE_TYPE result = FIRST_ENTRY_VALUE();
+			POLL_FIRST_ENTRY_KEY();
+			return result; 
+		}
+		@Override
+		public VALUE_TYPE VALUE_GET_LAST_KEY() { return LAST_ENTRY_VALUE(); }
+		@Override
+		public VALUE_TYPE VALUE_REMOVE_LAST_KEY() {
+			VALUE_TYPE result = LAST_ENTRY_VALUE();
+			POLL_LAST_ENTRY_KEY();
+			return result; 
 		}
 		
 		@Override
@@ -1278,7 +1390,7 @@ public class LINKED_CUSTOM_HASH_MAP KEY_VALUE_GENERIC_TYPE extends CUSTOM_HASH_M
 	private class FastEntryIterator extends MapIterator implements ObjectListIterator<MAP.Entry KEY_VALUE_GENERIC_TYPE> {
 		MapEntry entry = new MapEntry();
 		
-		public FastEntryIterator() {}
+		public FastEntryIterator(boolean start) { super(start); }
 		public FastEntryIterator(KEY_TYPE from) {
 			super(from);
 		}
@@ -1305,7 +1417,7 @@ public class LINKED_CUSTOM_HASH_MAP KEY_VALUE_GENERIC_TYPE extends CUSTOM_HASH_M
 	private class EntryIterator extends MapIterator implements ObjectListIterator<MAP.Entry KEY_VALUE_GENERIC_TYPE> {
 		MapEntry entry;
 		
-		public EntryIterator() {}
+		public EntryIterator(boolean start) { super(start); }
 		public EntryIterator(KEY_TYPE from) {
 			super(from);
 		}
@@ -1335,7 +1447,7 @@ public class LINKED_CUSTOM_HASH_MAP KEY_VALUE_GENERIC_TYPE extends CUSTOM_HASH_M
 	
 	private class KeyIterator extends MapIterator implements LIST_ITERATOR KEY_GENERIC_TYPE {
 		
-		public KeyIterator() {}
+		public KeyIterator(boolean start) { super(start); }
 		public KeyIterator(KEY_TYPE from) {
 			super(from);
 		}
@@ -1357,7 +1469,7 @@ public class LINKED_CUSTOM_HASH_MAP KEY_VALUE_GENERIC_TYPE extends CUSTOM_HASH_M
 	}
 	
 	private class ValueIterator extends MapIterator implements VALUE_LIST_ITERATOR VALUE_GENERIC_TYPE {
-		public ValueIterator() {}
+		public ValueIterator(boolean start) { super(start); }
 		
 		@Override
 		public VALUE_TYPE VALUE_PREVIOUS() {
@@ -1383,8 +1495,9 @@ public class LINKED_CUSTOM_HASH_MAP KEY_VALUE_GENERIC_TYPE extends CUSTOM_HASH_M
 		int current = -1;
 		int index = 0;
 		
-		MapIterator() {
-			next = firstIndex;
+		MapIterator(boolean start) {
+			if(start) next = firstIndex;
+			else previous = lastIndex;
 		}
 		
 		MapIterator(KEY_TYPE from) {

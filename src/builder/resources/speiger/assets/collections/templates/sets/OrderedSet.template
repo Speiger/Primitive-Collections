@@ -1,10 +1,15 @@
 package speiger.src.collections.PACKAGE.sets;
 
+#if JAVA_VERSION>=21
+import java.util.SequencedSet;
+
+#endif
 import speiger.src.collections.PACKAGE.collections.BI_ITERATOR;
 #if SPLIT_ITERATOR_FEATURE
 import speiger.src.collections.PACKAGE.collections.SPLIT_ITERATOR;
 import speiger.src.collections.PACKAGE.utils.SPLIT_ITERATORS;
 #endif
+import speiger.src.collections.PACKAGE.sets.ABSTRACT_SET.REVERSED_ORDERED_SET;
 #if SETS_FEATURE
 import speiger.src.collections.PACKAGE.utils.SETS;
 #endif
@@ -17,7 +22,11 @@ import speiger.src.collections.PACKAGE.utils.SETS;
  * 
  * @Type(T)
  */
+#if JAVA_VERSION>=21
+public interface ORDERED_SET KEY_GENERIC_TYPE extends SET KEY_GENERIC_TYPE, SequencedSet<CLASS_TYPE>
+#else
 public interface ORDERED_SET KEY_GENERIC_TYPE extends SET KEY_GENERIC_TYPE
+#endif
 {
 	/**
 	 * A customized add method that allows you to insert into the first index.
@@ -54,6 +63,7 @@ public interface ORDERED_SET KEY_GENERIC_TYPE extends SET KEY_GENERIC_TYPE
 	
 	@Override
 	public BI_ITERATOR KEY_GENERIC_TYPE iterator();
+	public BI_ITERATOR KEY_GENERIC_TYPE reverseIterator();
 	
 	/**
 	 * A type Specific Iterator starting from a given key
@@ -76,23 +86,76 @@ public interface ORDERED_SET KEY_GENERIC_TYPE extends SET KEY_GENERIC_TYPE
 	 * A method to get the first element in the set
 	 * @return first element in the set
 	 */
-	public KEY_TYPE FIRST_KEY();
+	public KEY_TYPE GET_FIRST_KEY();
 	/**
 	 * A method to get and remove the first element in the set
 	 * @return first element in the set
 	 */
-	public KEY_TYPE POLL_FIRST_KEY();
+	public KEY_TYPE REMOVE_FIRST_KEY();
 	/**
 	 * A method to get the last element in the set
 	 * @return last element in the set
 	 */
-	public KEY_TYPE LAST_KEY();
+	public KEY_TYPE GET_LAST_KEY();
 	/**
 	 * A method to get and remove the last element in the set
 	 * @return last element in the set
 	 */
-	public KEY_TYPE POLL_LAST_KEY();
+	public KEY_TYPE REMOVE_LAST_KEY();
 	
+#if JAVA_VERSION>=21 && !TYPE_OBJECT
+	/** {@inheritDoc}
+	 * <p>This default implementation delegates to the corresponding type-specific function.
+	 * @deprecated Please use the corresponding type-specific function instead. 
+	 */
+	@Override
+	@Deprecated
+	default void addFirst(CLASS_TYPE e) { addAndMoveToFirst(OBJ_TO_KEY(e)); }
+	
+	/** {@inheritDoc}
+	 * <p>This default implementation delegates to the corresponding type-specific function.
+	 * @deprecated Please use the corresponding type-specific function instead. 
+	 */
+	@Override
+	@Deprecated
+	default void addLast(CLASS_TYPE e) { addAndMoveToLast(OBJ_TO_KEY(e)); }
+	
+	/** {@inheritDoc}
+	 * <p>This default implementation delegates to the corresponding type-specific function.
+	 * @deprecated Please use the corresponding type-specific function instead. 
+	 */
+	@Override
+	@Deprecated
+	default CLASS_TYPE getFirst() { return GET_FIRST_KEY(); }
+	
+	/** {@inheritDoc}
+	 * <p>This default implementation delegates to the corresponding type-specific function.
+	 * @deprecated Please use the corresponding type-specific function instead. 
+	 */
+	@Override
+	@Deprecated
+	default CLASS_TYPE getLast() { return GET_LAST_KEY(); }
+	
+	/** {@inheritDoc}
+	 * <p>This default implementation delegates to the corresponding type-specific function.
+	 * @deprecated Please use the corresponding type-specific function instead. 
+	 */
+	@Override
+	@Deprecated
+	default CLASS_TYPE removeFirst() { return REMOVE_FIRST_KEY(); }
+	
+	/** {@inheritDoc}
+	 * <p>This default implementation delegates to the corresponding type-specific function.
+	 * @deprecated Please use the corresponding type-specific function instead. 
+	 */
+	@Override
+	@Deprecated
+	default CLASS_TYPE removeLast() { return REMOVE_LAST_KEY(); }
+	
+#endif
+	@Java21
+	public default ORDERED_SET KEY_GENERIC_TYPE reversed() { return new REVERSED_ORDERED_SETBRACES(this); }
+
 #if SETS_FEATURE
 	/**
 	 * Creates a Wrapped OrderedSet that is Synchronized

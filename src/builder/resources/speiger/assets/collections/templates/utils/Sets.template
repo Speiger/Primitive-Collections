@@ -371,17 +371,19 @@ public class SETS
 		@Override
 		public BI_ITERATOR KEY_GENERIC_TYPE iterator() { return ITERATORS.unmodifiable(s.iterator()); }
 		@Override
+		public BI_ITERATOR KEY_GENERIC_TYPE reverseIterator() { return ITERATORS.unmodifiable(s.reverseIterator()); }
+		@Override
 		public BI_ITERATOR KEY_GENERIC_TYPE iterator(KEY_TYPE fromElement) { return ITERATORS.unmodifiable(s.iterator(fromElement)); }
 		@Override
 		public ORDERED_SET KEY_GENERIC_TYPE copy() { return s.copy(); }
 		@Override
-		public KEY_TYPE FIRST_KEY() { return s.FIRST_KEY(); }
+		public KEY_TYPE GET_FIRST_KEY() { return s.GET_FIRST_KEY(); }
 		@Override
-		public KEY_TYPE POLL_FIRST_KEY() { throw new UnsupportedOperationException(); }
+		public KEY_TYPE REMOVE_FIRST_KEY() { throw new UnsupportedOperationException(); }
 		@Override
-		public KEY_TYPE LAST_KEY() { return s.LAST_KEY(); }
+		public KEY_TYPE GET_LAST_KEY() { return s.GET_LAST_KEY(); }
 		@Override
-		public KEY_TYPE POLL_LAST_KEY() { throw new UnsupportedOperationException(); }
+		public KEY_TYPE REMOVE_LAST_KEY() { throw new UnsupportedOperationException(); }
 	}
 	
 #endif
@@ -660,17 +662,19 @@ public class SETS
 		@Override
 		public BI_ITERATOR KEY_GENERIC_TYPE iterator() { synchronized(mutex) { return s.iterator(); } }
 		@Override
+		public BI_ITERATOR KEY_GENERIC_TYPE reverseIterator() { synchronized(mutex) { return s.reverseIterator(); } }
+		@Override
 		public BI_ITERATOR KEY_GENERIC_TYPE iterator(KEY_TYPE fromElement) { synchronized(mutex) { return s.iterator(fromElement); } }
 		@Override
 		public ORDERED_SET KEY_GENERIC_TYPE copy() { synchronized(mutex) { return s.copy(); } }
 		@Override
-		public KEY_TYPE FIRST_KEY() { synchronized(mutex) { return s.FIRST_KEY(); } }
+		public KEY_TYPE GET_FIRST_KEY() { synchronized(mutex) { return s.GET_FIRST_KEY(); } }
 		@Override
-		public KEY_TYPE POLL_FIRST_KEY() { synchronized(mutex) { return s.POLL_FIRST_KEY(); } }
+		public KEY_TYPE REMOVE_FIRST_KEY() { synchronized(mutex) { return s.REMOVE_FIRST_KEY(); } }
 		@Override
-		public KEY_TYPE LAST_KEY() { synchronized(mutex) { return s.LAST_KEY(); } }
+		public KEY_TYPE GET_LAST_KEY() { synchronized(mutex) { return s.GET_LAST_KEY(); } }
 		@Override
-		public KEY_TYPE POLL_LAST_KEY() { synchronized(mutex) { return s.POLL_LAST_KEY(); } }
+		public KEY_TYPE REMOVE_LAST_KEY() { synchronized(mutex) { return s.REMOVE_LAST_KEY(); } }
 	}
 	
 #endif

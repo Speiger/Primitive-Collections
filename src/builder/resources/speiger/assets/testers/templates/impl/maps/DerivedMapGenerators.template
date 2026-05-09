@@ -20,6 +20,7 @@ import speiger.src.collections.PACKAGE.maps.abstracts.ABSTRACT_MAP;
 import speiger.src.collections.PACKAGE.maps.interfaces.MAP;
 import speiger.src.collections.PACKAGE.maps.interfaces.MAP.Entry;
 import speiger.src.collections.PACKAGE.maps.interfaces.NAVIGABLE_MAP;
+import speiger.src.collections.PACKAGE.maps.interfaces.ORDERED_MAP;
 import speiger.src.collections.PACKAGE.maps.interfaces.SORTED_MAP;
 #if !TYPE_OBJECT
 import speiger.src.collections.PACKAGE.sets.SET;
@@ -203,6 +204,34 @@ public class DERIVED_MAP_GENERATORS {
 		@Override
 		public Entry KEY_VALUE_GENERIC_TYPE aboveSamplesGreater() {
 			return parent.belowSamplesLesser();
+		}
+	}
+	
+	public static class DescendingTestOrderedMapGenerator KEY_VALUE_GENERIC_TYPE extends MapGenerator KEY_VALUE_GENERIC_TYPE implements TEST_ORDERED_MAP_GENERATOR KEY_VALUE_GENERIC_TYPE {
+		TEST_ORDERED_MAP_GENERATOR KEY_VALUE_GENERIC_TYPE parent;
+		
+		public DescendingTestOrderedMapGenerator(TEST_ORDERED_MAP_GENERATOR KEY_VALUE_GENERIC_TYPE parent) {
+			super(parent);
+			this.parent = parent;
+		}
+		
+		@Override
+		public ORDERED_MAP KEY_VALUE_GENERIC_TYPE create(Entry KEY_VALUE_GENERIC_TYPE... elements) {
+			return ((ORDERED_MAP KEY_VALUE_GENERIC_TYPE)parent.create(elements)).reversed();
+		}
+		
+		@Override
+		public Iterable<Map.Entry<CLASS_TYPE, CLASS_VALUE_TYPE>> order(List<Map.Entry<CLASS_TYPE, CLASS_VALUE_TYPE>> insertionOrder) {
+			ObjectList<Map.Entry<CLASS_TYPE, CLASS_VALUE_TYPE>> values = ObjectIterators.pour(ObjectIterators.wrap(parent.order(insertionOrder).iterator()));
+			ObjectLists.reverse(values);
+			return values;
+		}
+		
+		@Override
+		public ObjectIterable<Entry KEY_VALUE_GENERIC_TYPE> order(ObjectList<Entry KEY_VALUE_GENERIC_TYPE> insertionOrder) {
+			ObjectList<Entry KEY_VALUE_GENERIC_TYPE> values = parent.order(insertionOrder).pourAsList();
+			ObjectLists.reverse(values);
+			return values;
 		}
 	}
 	

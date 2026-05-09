@@ -1,0 +1,83 @@
+package speiger.src.collections.PACKAGE.collections;
+
+#if JAVA_VERSION>=21
+import java.util.SequencedCollection;
+
+public interface ORDERED_COLLECTION KEY_GENERIC_TYPE extends COLLECTION KEY_GENERIC_TYPE, SequencedCollection<CLASS_TYPE> {
+#else
+public interface ORDERED_COLLECTION KEY_GENERIC_TYPE extends COLLECTION KEY_GENERIC_TYPE {
+#endif
+	@Java21
+	ORDERED_COLLECTION KEY_GENERIC_TYPE reversed();
+	
+	/**
+	 * A method to add an element to the start of a collection
+	 * @param e that should be added at the start.
+	 */
+	public void addFirst(KEY_TYPE e);
+	
+	/**
+	 * A method to add an element to the end of a collection
+	 * @param e that should be added at the end.
+	 */
+	public void addLast(KEY_TYPE e);
+	
+	/**
+	 * A method to get the first element in the collection
+	 * @return first element in the collection
+	 */
+	public KEY_TYPE GET_FIRST_KEY();
+	/**
+	 * A method to get and remove the first element in the collection
+	 * @return first element in the collection
+	 */
+	public KEY_TYPE REMOVE_FIRST_KEY();
+	/**
+	 * A method to get the last element in the collection
+	 * @return last element in the collection
+	 */
+	public KEY_TYPE GET_LAST_KEY();
+	/**
+	 * A method to get and remove the last element in the collection
+	 * @return last element in the collection
+	 */
+	public KEY_TYPE REMOVE_LAST_KEY();
+	
+#if JAVA_VERSION>=21 && !TYPE_OBJECT
+	@Override
+	@Deprecated
+	default void addFirst(CLASS_TYPE e) {
+		addFirst(OBJ_TO_KEY(e));
+	}
+	
+	@Override
+	@Deprecated
+	default void addLast(CLASS_TYPE e) {
+		addLast(OBJ_TO_KEY(e));
+	}
+	
+	@Override
+	@Deprecated
+	default CLASS_TYPE getFirst() {
+		return KEY_TO_OBJ(GET_FIRST_KEY());
+	}
+	
+	@Override
+	@Deprecated
+	default CLASS_TYPE getLast() {
+		return KEY_TO_OBJ(GET_LAST_KEY());
+	}
+	
+	@Override
+	@Deprecated
+	default CLASS_TYPE removeFirst() {
+		return KEY_TO_OBJ(REMOVE_FIRST_KEY());
+	}
+
+	@Override
+	@Deprecated
+	default CLASS_TYPE removeLast() {
+		return KEY_TO_OBJ(REMOVE_LAST_KEY());
+	}
+#endif
+}

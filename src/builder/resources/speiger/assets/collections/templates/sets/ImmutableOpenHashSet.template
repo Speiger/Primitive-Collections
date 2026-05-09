@@ -285,22 +285,22 @@ public class IMMUTABLE_HASH_SET KEY_GENERIC_TYPE extends ABSTRACT_SET KEY_GENERI
 	}
 	
 	@Override
-	public KEY_TYPE FIRST_KEY() {
+	public KEY_TYPE GET_FIRST_KEY() {
 		if(size == 0) throw new NoSuchElementException();
 		return keys[firstIndex];
 	}
 	
 	@Override
-	public KEY_TYPE POLL_FIRST_KEY() { throw new UnsupportedOperationException(); }
+	public KEY_TYPE REMOVE_FIRST_KEY() { throw new UnsupportedOperationException(); }
 	
 	@Override
-	public KEY_TYPE LAST_KEY() {
+	public KEY_TYPE GET_LAST_KEY() {
 		if(size == 0) throw new NoSuchElementException();
 		return keys[lastIndex];
 	}
 	
 	@Override
-	public KEY_TYPE POLL_LAST_KEY() { throw new UnsupportedOperationException(); }
+	public KEY_TYPE REMOVE_LAST_KEY() { throw new UnsupportedOperationException(); }
 	@Override
 	public boolean remove(Object o) { throw new UnsupportedOperationException(); }
 
@@ -455,7 +455,12 @@ public class IMMUTABLE_HASH_SET KEY_GENERIC_TYPE extends ABSTRACT_SET KEY_GENERI
 	
 	@Override
 	public LIST_ITERATOR KEY_GENERIC_TYPE iterator() {
-		return new SetIterator();
+		return new SetIterator(true);
+	}
+	
+	@Override
+	public LIST_ITERATOR KEY_GENERIC_TYPE reverseIterator() {
+		return new ReverseBiIteratorBRACES(new SetIterator(false));
 	}
 	
 	@Override
@@ -526,8 +531,9 @@ public class IMMUTABLE_HASH_SET KEY_GENERIC_TYPE extends ABSTRACT_SET KEY_GENERI
 		int current = -1;
 		int index = 0;
 		
-		SetIterator() {
-			next = firstIndex;
+		SetIterator(boolean start) {
+			if(start) next = firstIndex;
+			else previous = lastIndex;
 		}
 		
 		SetIterator(KEY_TYPE from) {

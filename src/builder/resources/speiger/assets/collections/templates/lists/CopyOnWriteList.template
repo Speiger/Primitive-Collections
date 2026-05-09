@@ -535,7 +535,7 @@ public class COPY_ON_WRITE_LIST KEY_GENERIC_TYPE extends ABSTRACT_LIST KEY_GENER
 	 * @return if the element was found.
 	 */
 	@Override
-	@Deprecated
+	@Primitive
 	public boolean contains(Object o) {
 		return indexOf(o) != -1;
 	}
@@ -546,7 +546,7 @@ public class COPY_ON_WRITE_LIST KEY_GENERIC_TYPE extends ABSTRACT_LIST KEY_GENER
 	 * @return the index of the element if found. (if not found then -1)
 	 */
 	@Override
-	@Deprecated
+	@Primitive
 	public int indexOf(Object o) {
 		KEY_TYPE[] data = this.data;
 #if TYPE_OBJECT
@@ -570,7 +570,7 @@ public class COPY_ON_WRITE_LIST KEY_GENERIC_TYPE extends ABSTRACT_LIST KEY_GENER
 	 * @return the last index of the element if found. (if not found then -1)
 	 */
 	@Override
-	@Deprecated
+	@Primitive
 	public int lastIndexOf(Object o) {
 		KEY_TYPE[] data = this.data;
 #if TYPE_OBJECT

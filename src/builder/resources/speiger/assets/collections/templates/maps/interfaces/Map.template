@@ -154,7 +154,7 @@ public interface MAP KEY_VALUE_GENERIC_TYPE extends Map<CLASS_TYPE, CLASS_VALUE_
 	 * @return the last present value or default return	value.
 	 */
 	public default CLASS_VALUE_TYPE put(Map.Entry<CLASS_TYPE, CLASS_VALUE_TYPE> entry) {
-		return put(entry.getKey(), entry.getValue());
+		return put(OBJ_TO_KEY(entry.getKey()), OBJ_TO_VALUE(entry.getValue()));
 	}
 
 #endif

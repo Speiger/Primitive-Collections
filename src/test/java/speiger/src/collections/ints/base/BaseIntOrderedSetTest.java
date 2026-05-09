@@ -40,8 +40,8 @@ public abstract class BaseIntOrderedSetTest extends BaseIntCollectionTest
 	public void peekTest() {
 		if(getValidOrderedSetTests().contains(OrderedSetTest.PEEK)) {
 			IntOrderedSet set = create(TEST_ARRAY);
-			Assert.assertEquals(set.firstInt(), 0);
-			Assert.assertEquals(set.lastInt(), 99);
+			Assert.assertEquals(set.getFirstInt(), 0);
+			Assert.assertEquals(set.getLastInt(), 99);
 		}
 	}
 	
@@ -51,12 +51,12 @@ public abstract class BaseIntOrderedSetTest extends BaseIntCollectionTest
 			IntOrderedSet set = create(TEST_ARRAY);
 			for(int i = 0;i<100;i++)
 			{
-				Assert.assertEquals(i, set.pollFirstInt());
+				Assert.assertEquals(i, set.removeFirstInt());
 			}
 			set = create(TEST_ARRAY);
 			for(int i = 99;i>=0;i--)
 			{
-				Assert.assertEquals(i, set.pollLastInt());
+				Assert.assertEquals(i, set.removeLastInt());
 			}
 		}
 	}

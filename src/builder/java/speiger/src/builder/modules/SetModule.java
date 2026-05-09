@@ -148,6 +148,7 @@ public class SetModule extends BaseModule
 		
 		//Abstract Classes
 		addAbstractMapper("ABSTRACT_SET", "Abstract%sSet");
+		addAbstractMapper("REVERSED_ORDERED_SET", "Reversed%sOrderedSet");
 		
 		//Helper Classes
 		addClassMapper("SETS", "Sets");

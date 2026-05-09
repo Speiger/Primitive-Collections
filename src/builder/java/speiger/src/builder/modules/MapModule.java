@@ -253,6 +253,7 @@ public class MapModule extends BaseModule
 		
 		//Abstract Classes
 		addAbstractBiMapper("ABSTRACT_MAP", "Abstract%sMap", "2");
+		addAbstractBiMapper("REVERSED_ORDERED_MAP", "Reversed%sOrderedMap", "2");
 		
 		//Helper Classes
 		addBiClassMapper("MAPS", "Maps", "2");

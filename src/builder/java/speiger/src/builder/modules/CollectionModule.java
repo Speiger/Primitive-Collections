@@ -41,7 +41,7 @@ public class CollectionModule extends BaseModule
 	protected void loadBlockades() {
 		if(!MODULE.isEnabled()) {
 			addBlockedFiles("Iterable", "Iterables", "Iterator", "Iterators", "BidirectionalIterator", "ListIterator");
-			addBlockedFiles("Arrays", "Collection", "AbstractCollection", "Collections", "Stack");
+			addBlockedFiles("Arrays", "Collection", "OrderedCollection", "AbstractCollection", "Collections", "Stack");
 		}
 		if(!SPLIT_ITERATORS.isEnabled()) addBlockedFiles("Splititerator", "Splititerators");
 		if(!IARRAY.isEnabled()) addBlockedFiles("IArray");
@@ -91,6 +91,7 @@ public class CollectionModule extends BaseModule
 	{
 		//Abstract Classes
 		addAbstractMapper("ABSTRACT_COLLECTION", "Abstract%sCollection");
+		addAbstractMapper("REVERSED_ORDERED_COLLECTION", "Reverse%sOrderedCollection");
 		
 		//Helper Classes
 		addClassMapper("ARRAYS", "Arrays");
@@ -101,6 +102,7 @@ public class CollectionModule extends BaseModule
 		
 		//Interfaces
 		addClassMapper("COLLECTION", "Collection");
+		addClassMapper("ORDERED_COLLECTION", "OrderedCollection");
 		addClassMapper("ITERABLE", "Iterable");
 		addClassMapper("SPLIT_ITERATOR", "Splititerator");
 		addClassMapper("LIST_ITERATOR", "ListIterator");
