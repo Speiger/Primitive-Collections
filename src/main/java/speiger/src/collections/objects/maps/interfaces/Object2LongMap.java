@@ -96,7 +96,7 @@ public interface Object2LongMap<T> extends Map<T, Long>, ToLongFunction<T>
 	 * @return the last present value or default return	value.
 	 */
 	public default Long put(Map.Entry<T, Long> entry) {
-		return put(entry.getKey(), entry.getValue());
+		return put(entry.getKey(), entry.getValue().longValue());
 	}
 
 	/**

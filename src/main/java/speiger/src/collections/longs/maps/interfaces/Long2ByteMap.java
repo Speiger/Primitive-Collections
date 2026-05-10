@@ -94,7 +94,7 @@ public interface Long2ByteMap extends Map<Long, Byte>, Long2ByteFunction
 	 * @return the last present value or default return	value.
 	 */
 	public default Byte put(Map.Entry<Long, Byte> entry) {
-		return put(entry.getKey(), entry.getValue());
+		return put(entry.getKey().longValue(), entry.getValue().byteValue());
 	}
 
 	/**

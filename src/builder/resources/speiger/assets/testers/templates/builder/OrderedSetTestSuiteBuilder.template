@@ -1,16 +1,29 @@
 package speiger.src.testers.PACKAGE.builder;
 
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 import com.google.common.collect.testing.AbstractTester;
+import com.google.common.collect.testing.FeatureSpecificTestSuiteBuilder;
 import com.google.common.collect.testing.Helpers;
+import com.google.common.collect.testing.OneSizeTestContainerGenerator;
+import com.google.common.collect.testing.SampleElements;
 import com.google.common.collect.testing.features.CollectionFeature;
+import com.google.common.collect.testing.features.Feature;
 
 import junit.framework.TestSuite;
+import speiger.src.collections.PACKAGE.collections.ITERABLE;
+import speiger.src.collections.PACKAGE.lists.ARRAY_LIST;
+import speiger.src.collections.PACKAGE.lists.LIST;
+import speiger.src.collections.PACKAGE.sets.ORDERED_SET;
+import speiger.src.collections.PACKAGE.utils.LISTS;
 import speiger.src.testers.PACKAGE.generators.TEST_ORDERED_SET_GENERATOR;
 import speiger.src.testers.PACKAGE.tests.set.FILE_KEY_TYPEOrderedSetMoveTester;
 import speiger.src.testers.PACKAGE.tests.set.FILE_KEY_TYPEOrderedSetIterationTester;
 import speiger.src.testers.PACKAGE.tests.set.FILE_KEY_TYPEOrderedSetNavigationTester;
+import speiger.src.testers.PACKAGE.utils.SAMPLE_ELEMENTS;
+import speiger.src.testers.utils.SpecialFeature;
 
 @SuppressWarnings("javadoc")
 public class ORDERED_SET_TEST_BUILDER KEY_GENERIC_TYPE extends SET_TEST_BUILDER KEY_GENERIC_TYPE {
@@ -34,5 +47,69 @@ public class ORDERED_SET_TEST_BUILDER KEY_GENERIC_TYPE extends SET_TEST_BUILDER 
 		withFeatures(CollectionFeature.KNOWN_ORDER);
 #endignore
 		return super.createTestSuite();
+	}
+	
+	@Override
+	protected List<TestSuite> createDerivedSuites(
+			FeatureSpecificTestSuiteBuilder<?, ? extends OneSizeTestContainerGenerator<Collection<CLASS_TYPE>, CLASS_TYPE>> parentBuilder) {
+		List<TestSuite> derivedSuites = super.createDerivedSuites(parentBuilder);
+
+		if (!parentBuilder.getFeatures().contains(SpecialFeature.REVERSE)) {
+			derivedSuites.add(createReverseSuite(parentBuilder));
+		}
+
+		return derivedSuites;
+	}
+
+	private TestSuite createReverseSuite(FeatureSpecificTestSuiteBuilder<?, ? extends OneSizeTestContainerGenerator<Collection<CLASS_TYPE>, CLASS_TYPE>> parentBuilder) {
+		TEST_ORDERED_SET_GENERATOR KEY_GENERIC_TYPE delegate = (TEST_ORDERED_SET_GENERATOR KEY_GENERIC_TYPE) parentBuilder.getSubjectGenerator().getInnerGenerator();
+
+		List<Feature<?>> features = new ArrayList<>();
+		features.add(SpecialFeature.REVERSE);
+		features.addAll(parentBuilder.getFeatures());
+		features.remove(SpecialFeature.COPYING);
+		features.remove(SpecialFeature.CHILDREN_COPY);
+		
+		return ORDERED_SET_TEST_BUILDER.using(new TEST_ORDERED_SET_GENERATOR KEY_GENERIC_TYPE() {
+			@Override
+			public SampleElements<CLASS_TYPE> samples() {
+				return delegate.samples();
+			}
+			
+			@Override
+			public SAMPLE_ELEMENTS KEY_GENERIC_TYPE getSamples() {
+				return delegate.getSamples();
+			}
+
+			@Override
+			public ITERABLE KEY_GENERIC_TYPE order(LIST KEY_GENERIC_TYPE insertionOrder) {
+				return insertionOrder;
+			}
+
+			@Override
+			public Iterable<CLASS_TYPE> order(List<CLASS_TYPE> insertionOrder) {
+				return insertionOrder;
+			}
+			
+#if !TYPE_OBJECT
+			@Override
+			public ORDERED_SET KEY_GENERIC_TYPE create(KEY_TYPE... elements) {
+				LIST KEY_GENERIC_TYPE list = new ARRAY_LISTBRACES(elements);
+				LISTS.reverse(list);
+				return delegate.create(list.TO_ARRAY()).reversed();
+			}
+			
+#endif
+			@Override
+			public ORDERED_SET KEY_GENERIC_TYPE create(Object... elements) {
+				LIST KEY_GENERIC_TYPE list = new ARRAY_LISTBRACES();
+				for (Object e : elements) {
+					list.add(CLASS_TO_KEY(e));
+				}
+				LISTS.reverse(list);
+				return delegate.create(list.toArray()).reversed();
+			}
+		}).named(parentBuilder.getName() + " reversing").withFeatures(features)
+				.suppressing(parentBuilder.getSuppressedTests()).createTestSuite();
 	}
 }

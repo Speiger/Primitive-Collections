@@ -94,7 +94,7 @@ public interface Byte2CharMap extends Map<Byte, Character>, Byte2CharFunction
 	 * @return the last present value or default return	value.
 	 */
 	public default Character put(Map.Entry<Byte, Character> entry) {
-		return put(entry.getKey(), entry.getValue());
+		return put(entry.getKey().byteValue(), entry.getValue().charValue());
 	}
 
 	/**

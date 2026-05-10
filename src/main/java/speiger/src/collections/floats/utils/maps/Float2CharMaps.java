@@ -29,6 +29,7 @@ import speiger.src.collections.floats.sets.FloatOrderedSet;
 import speiger.src.collections.floats.sets.FloatSet;
 import speiger.src.collections.floats.utils.FloatSets;
 import speiger.src.collections.chars.collections.CharCollection;
+import speiger.src.collections.chars.collections.CharOrderedCollection;
 import speiger.src.collections.chars.functions.function.CharCharUnaryOperator;
 import speiger.src.collections.chars.functions.CharSupplier;
 import speiger.src.collections.chars.utils.CharCollections;
@@ -439,6 +440,10 @@ public class Float2CharMaps
 		@Override
 		public char putAndMoveToLast(float key, char value) { throw new UnsupportedOperationException(); }
 		@Override
+		public char putFirst(float key, char value) { throw new UnsupportedOperationException(); }
+		@Override
+		public char putLast(float key, char value) { throw new UnsupportedOperationException(); }
+		@Override
 		public boolean moveToFirst(float key) { throw new UnsupportedOperationException(); }
 		@Override
 		public boolean moveToLast(float key) { throw new UnsupportedOperationException(); }
@@ -459,13 +464,25 @@ public class Float2CharMaps
 		@Override
 		public char lastCharValue() { return map.lastCharValue(); }
 		@Override
+		public Float2CharMap.Entry firstEntry() { return map.firstEntry(); }
+		@Override
+		public Float2CharMap.Entry lastEntry() { return map.lastEntry(); }
+		@Override
+		public Float2CharMap.Entry pollFirstEntry() { throw new UnsupportedOperationException(); }
+		@Override
+		public Float2CharMap.Entry pollLastEntry() { throw new UnsupportedOperationException(); }
+		@Override
 		public Float2CharOrderedMap copy() { return map.copy(); }
 		@Override
 		public FloatOrderedSet keySet() { 
 			if(keys == null) keys = FloatSets.unmodifiable(map.keySet()); 
 			return (FloatOrderedSet)keys;
 		}
-				
+		@Override
+		public CharOrderedCollection values() {
+			if(values == null) values = CharCollections.unmodifiable(map.values());
+			return (CharOrderedCollection)values;
+		}
 		@Override
 		public ObjectOrderedSet<Float2CharMap.Entry> float2CharEntrySet() {
 			if(entrySet == null) entrySet = new UnmodifyableOrderedEntrySet(map.float2CharEntrySet());
@@ -617,15 +634,17 @@ public class Float2CharMaps
 		@Override
 		public ObjectBidirectionalIterator<Float2CharMap.Entry> iterator() { return ObjectIterators.unmodifiable(set.iterator()); }
 		@Override
+		public ObjectBidirectionalIterator<Float2CharMap.Entry> reverseIterator() { return ObjectIterators.unmodifiable(set.reverseIterator()); }
+		@Override
 		public ObjectBidirectionalIterator<Float2CharMap.Entry> iterator(Float2CharMap.Entry fromElement) { return ObjectIterators.unmodifiable(set.iterator(fromElement)); }
 		@Override
-		public Float2CharMap.Entry first() { return set.first(); }
+		public Float2CharMap.Entry getFirst() { return set.getFirst(); }
 		@Override
-		public Float2CharMap.Entry pollFirst() { throw new UnsupportedOperationException(); }
+		public Float2CharMap.Entry removeFirst() { throw new UnsupportedOperationException(); }
 		@Override
-		public Float2CharMap.Entry last() { return set.last(); }
+		public Float2CharMap.Entry getLast() { return set.getLast(); }
 		@Override
-		public Float2CharMap.Entry pollLast() { throw new UnsupportedOperationException(); }
+		public Float2CharMap.Entry removeLast() { throw new UnsupportedOperationException(); }
 	}
 	
 	/**
@@ -794,6 +813,10 @@ public class Float2CharMaps
 		@Override
 		public char putAndMoveToLast(float key, char value) { synchronized(mutex) { return map.putAndMoveToLast(key, value); } }
 		@Override
+		public char putFirst(float key, char value) { synchronized(mutex) { return map.putFirst(key, value); } }
+		@Override
+		public char putLast(float key, char value) { synchronized(mutex) { return map.putLast(key, value); } }
+		@Override
 		public boolean moveToFirst(float key) { synchronized(mutex) { return map.moveToFirst(key); } }
 		@Override
 		public boolean moveToLast(float key) { synchronized(mutex) { return map.moveToLast(key); } }
@@ -814,13 +837,25 @@ public class Float2CharMaps
 		@Override
 		public char lastCharValue() { synchronized(mutex) { return map.lastCharValue(); } }
 		@Override
+		public Float2CharMap.Entry firstEntry() { synchronized(mutex) { return map.firstEntry(); } }
+		@Override
+		public Float2CharMap.Entry lastEntry() { synchronized(mutex) { return map.lastEntry(); } }
+		@Override
+		public Float2CharMap.Entry pollFirstEntry() { synchronized(mutex) { return map.pollFirstEntry(); } }
+		@Override
+		public Float2CharMap.Entry pollLastEntry() { synchronized(mutex) { return map.pollLastEntry(); } }
+		@Override
 		public Float2CharOrderedMap copy() { synchronized(mutex) { return map.copy(); } }
 		@Override
 		public FloatOrderedSet keySet() {
 			if(keys == null) keys = FloatSets.synchronize(map.keySet(), mutex);
 			return (FloatOrderedSet)keys;
 		}
-		
+		@Override
+		public CharOrderedCollection values() {
+			if(values == null) values = CharCollections.synchronize(map.values(), mutex);
+			return (CharOrderedCollection)values;
+		}
 		@Override
 		public ObjectOrderedSet<Float2CharMap.Entry> float2CharEntrySet() {
 			if(entrySet == null) entrySet = ObjectSets.synchronize(map.float2CharEntrySet(), mutex);

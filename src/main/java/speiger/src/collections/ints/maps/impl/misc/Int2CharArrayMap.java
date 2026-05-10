@@ -25,7 +25,7 @@ import speiger.src.collections.ints.maps.interfaces.Int2CharOrderedMap;
 import speiger.src.collections.ints.sets.AbstractIntSet;
 import speiger.src.collections.ints.sets.IntOrderedSet;
 import speiger.src.collections.chars.collections.AbstractCharCollection;
-import speiger.src.collections.chars.collections.CharCollection;
+import speiger.src.collections.chars.collections.CharOrderedCollection;
 import speiger.src.collections.chars.collections.CharIterator;
 import speiger.src.collections.chars.functions.CharSupplier;
 import speiger.src.collections.chars.functions.function.CharCharUnaryOperator;
@@ -62,7 +62,7 @@ public class Int2CharArrayMap extends AbstractInt2CharMap implements Int2CharOrd
 	/** KeySet cache */
 	protected IntOrderedSet keySet;
 	/** Values cache */
-	protected CharCollection valuesC;
+	protected CharOrderedCollection valuesC;
 	/** EntrySet cache */
 	protected FastOrderedSet entrySet;
 	
@@ -229,6 +229,27 @@ public class Int2CharArrayMap extends AbstractInt2CharMap implements Int2CharOrd
 	}
 	
 	@Override
+	public char putFirst(int key, char value) {
+		int index = findIndex(key);
+		if(index < 0) {
+			insertIndex(0, key, value);
+			size++;
+			return getDefaultReturnValue();
+		}
+		return values[index];
+	}
+	
+	@Override
+	public char putLast(int key, char value) {
+		int index = findIndex(key);
+		if(index < 0) {
+			insertIndex(size++, key, value);
+			return getDefaultReturnValue();
+		}
+		return values[index];
+	}
+	
+	@Override
 	public boolean moveToFirst(int key) {
 		int index = findIndex(key);
 		if(index > 0) {
@@ -343,6 +364,34 @@ public class Int2CharArrayMap extends AbstractInt2CharMap implements Int2CharOrd
 	}
 	
 	@Override
+	public Int2CharMap.Entry firstEntry() {
+		if(size == 0) throw new NoSuchElementException();
+		return new BasicEntry(keys[0], values[0]);
+	}
+	
+	@Override
+	public Int2CharMap.Entry lastEntry() {
+		if(size == 0) throw new NoSuchElementException();
+		return new BasicEntry(keys[size-1], values[size-1]);
+	}
+	
+	@Override
+	public Int2CharMap.Entry pollFirstEntry() {
+		if(size == 0) throw new NoSuchElementException();
+		BasicEntry result = new BasicEntry(keys[0], values[0]);
+		removeIndex(0);
+		return result;
+	}
+	
+	@Override
+	public Int2CharMap.Entry pollLastEntry() {
+		if(size == 0) throw new NoSuchElementException();
+		BasicEntry result = new BasicEntry(keys[size-1], values[size-1]);
+		removeIndex(size-1);
+		return result;
+	}
+	
+	@Override
 	public char remove(int key) {
 		int index = findIndex(key);
 		if(index < 0) return getDefaultReturnValue();
@@ -399,7 +448,7 @@ public class Int2CharArrayMap extends AbstractInt2CharMap implements Int2CharOrd
 	}
 
 	@Override
-	public CharCollection values() {
+	public CharOrderedCollection values() {
 		if(valuesC == null) valuesC = new Values();
 		return valuesC;
 	}
@@ -717,24 +766,24 @@ public class Int2CharArrayMap extends AbstractInt2CharMap implements Int2CharOrd
 		}
 		
 		@Override
-		public Int2CharMap.Entry first() {
+		public Int2CharMap.Entry getFirst() {
 			return new BasicEntry(firstIntKey(), firstCharValue());
 		}
 		
 		@Override
-		public Int2CharMap.Entry last() {
+		public Int2CharMap.Entry getLast() {
 			return new BasicEntry(lastIntKey(), lastCharValue());
 		}
 		
 		@Override
-		public Int2CharMap.Entry pollFirst() {
+		public Int2CharMap.Entry removeFirst() {
 			BasicEntry entry = new BasicEntry(firstIntKey(), firstCharValue());
 			pollFirstIntKey();
 			return entry;
 		}
 		
 		@Override
-		public Int2CharMap.Entry pollLast() {
+		public Int2CharMap.Entry removeLast() {
 			BasicEntry entry = new BasicEntry(lastIntKey(), lastCharValue());
 			pollLastIntKey();
 			return entry;
@@ -742,7 +791,12 @@ public class Int2CharArrayMap extends AbstractInt2CharMap implements Int2CharOrd
 		
 		@Override
 		public ObjectBidirectionalIterator<Int2CharMap.Entry> iterator() {
-			return new EntryIterator();
+			return new EntryIterator(true);
+		}
+		
+		@Override
+		public ObjectBidirectionalIterator<Int2CharMap.Entry> reverseIterator() {
+			return new EntryIterator(false);
 		}
 		
 		@Override
@@ -752,7 +806,7 @@ public class Int2CharArrayMap extends AbstractInt2CharMap implements Int2CharOrd
 		
 		@Override
 		public ObjectBidirectionalIterator<Int2CharMap.Entry> fastIterator() {
-			return new FastEntryIterator();
+			return new FastEntryIterator(true);
 		}
 		
 		@Override
@@ -949,7 +1003,9 @@ public class Int2CharArrayMap extends AbstractInt2CharMap implements Int2CharOrd
 		@Override
 		public boolean moveToLast(int o) { return Int2CharArrayMap.this.moveToLast(o); }
 		@Override
-		public IntListIterator iterator() { return new KeyIterator(); }
+		public IntListIterator iterator() { return new KeyIterator(true); }
+		@Override
+		public IntListIterator reverseIterator() { return new KeyIterator(false); }
 		@Override
 		public IntBidirectionalIterator iterator(int fromElement) { return new KeyIterator(fromElement); } 
 		@Override
@@ -957,13 +1013,13 @@ public class Int2CharArrayMap extends AbstractInt2CharMap implements Int2CharOrd
 		@Override
 		public void clear() { Int2CharArrayMap.this.clear(); }
 		@Override
-		public int firstInt() { return firstIntKey(); }
+		public int getFirstInt() { return firstIntKey(); }
 		@Override
-		public int pollFirstInt() { return pollFirstIntKey(); }
+		public int removeFirstInt() { return pollFirstIntKey(); }
 		@Override
-		public int lastInt() { return lastIntKey(); }
+		public int getLastInt() { return lastIntKey(); }
 		@Override
-		public int pollLastInt() { return pollLastIntKey(); }
+		public int removeLastInt() { return pollLastIntKey(); }
 		
 		@Override
 		public KeySet copy() { throw new UnsupportedOperationException(); }
@@ -1060,32 +1116,43 @@ public class Int2CharArrayMap extends AbstractInt2CharMap implements Int2CharOrd
 		}
 	}
 	
-	private class Values extends AbstractCharCollection {
+	private class Values extends AbstractCharCollection implements CharOrderedCollection {
 		@Override
-		public boolean contains(char e) {
-			return containsValue(e);
-		}
+		public boolean contains(char e) { return containsValue(e); }
 		
 		@Override
-		public boolean add(char o) {
-			throw new UnsupportedOperationException();
-		}
-
+		public boolean add(char o) { throw new UnsupportedOperationException(); }
 		@Override
-		public CharIterator iterator() {
-			return new ValueIterator();
-		}
-		
+		public CharIterator iterator() { return new ValueIterator(true); }
 		@Override
-		public int size() {
-			return Int2CharArrayMap.this.size();
-		}
-		
+		public int size() { return Int2CharArrayMap.this.size(); }
 		@Override
-		public void clear() {
-			Int2CharArrayMap.this.clear();
+		public void clear() { Int2CharArrayMap.this.clear(); }
+		@Override
+		public CharOrderedCollection reversed() { return new AbstractCharCollection.ReverseCharOrderedCollection(this, this::reverseIterator); }
+		private CharIterator reverseIterator() {
+			return new ValueIterator(false);
 		}
-		
+		@Override
+		public void addFirst(char e) { throw new UnsupportedOperationException(); }
+		@Override
+		public void addLast(char e) { throw new UnsupportedOperationException(); }
+		@Override
+		public char getFirstChar() { return firstCharValue(); }
+		@Override
+		public char removeFirstChar() {
+			char result = firstCharValue();
+			pollFirstIntKey();
+			return result; 
+		}
+		@Override
+		public char getLastChar() { return lastCharValue(); }
+		@Override
+		public char removeLastChar() {
+			char result = lastCharValue();
+			pollLastIntKey();
+			return result; 
+		}
 		@Override
 		public void forEach(CharConsumer action) {
 			Objects.requireNonNull(action);
@@ -1174,10 +1241,8 @@ public class Int2CharArrayMap extends AbstractInt2CharMap implements Int2CharOrd
 	private class FastEntryIterator extends MapIterator implements ObjectListIterator<Int2CharMap.Entry> {
 		MapEntry entry = new MapEntry();
 		
-		public FastEntryIterator() {}
-		public FastEntryIterator(int from) {
-			index = findIndex(from);
-		}
+		public FastEntryIterator(boolean start) { super(start); }
+		public FastEntryIterator(int element) { super(element); }
 		
 		@Override
 		public Int2CharMap.Entry next() {
@@ -1200,11 +1265,8 @@ public class Int2CharArrayMap extends AbstractInt2CharMap implements Int2CharOrd
 	private class EntryIterator extends MapIterator implements ObjectListIterator<Int2CharMap.Entry> {
 		MapEntry entry = null;
 		
-		public EntryIterator() {}
-		public EntryIterator(int from) {
-			index = findIndex(from);
-			if(index == -1) throw new NoSuchElementException();
-		}
+		public EntryIterator(boolean start) { super(start); }
+		public EntryIterator(int element) { super(element); }
 		
 		@Override
 		public Int2CharMap.Entry next() {
@@ -1231,11 +1293,8 @@ public class Int2CharArrayMap extends AbstractInt2CharMap implements Int2CharOrd
 	}
 	
 	private class KeyIterator extends MapIterator implements IntListIterator {
-		public KeyIterator() {}
-		public KeyIterator(int element) {
-			index = findIndex(element);
-			if(index == -1) throw new NoSuchElementException();
-		}
+		public KeyIterator(boolean start) { super(start); }
+		public KeyIterator(int element) { super(element); }
 		
 		@Override
 		public int previousInt() {
@@ -1255,6 +1314,9 @@ public class Int2CharArrayMap extends AbstractInt2CharMap implements Int2CharOrd
 	}
 	
 	private class ValueIterator extends MapIterator implements CharListIterator {
+		public ValueIterator(boolean start) { super(start); }
+		public ValueIterator(int element) { super(element); }
+		
 		@Override
 		public char previousChar() {
 			return values[previousEntry()];
@@ -1273,23 +1335,37 @@ public class Int2CharArrayMap extends AbstractInt2CharMap implements Int2CharOrd
 	}
 	
 	private class MapIterator {
+		boolean forward;
 		int index;
 		int lastReturned = -1;
-
+		
+		MapIterator(boolean start) {
+			this.forward = start;
+			this.index = start ? 0 : size;
+		}
+		
+		MapIterator(int element) {
+			this.forward = true;
+			index = findIndex(element);
+			if(index == -1) throw new NoSuchElementException();
+		}
+		
 		public boolean hasNext() {
-			return index < size;
+			return forward ? index < size : index > 0;
 		}
 		
 		public boolean hasPrevious() {
-			return index > 0;
+			return forward ? index > 0 : index < size;
 		}
 		
 		public int nextIndex() {
-			return index;
+			if(forward) return index;
+			return size - index;
 		}
 		
 		public int previousIndex() {
-			return index-1;
+			if(forward) return index-1;
+			return (size - index)-1;
 		}
 		
 		public void remove() {
@@ -1302,26 +1378,42 @@ public class Int2CharArrayMap extends AbstractInt2CharMap implements Int2CharOrd
 		
 		public int previousEntry() {
 			if(!hasPrevious()) throw new NoSuchElementException();
-			index--;
-			return (lastReturned = index);
-		}
-		
-		public int nextEntry() {
-			if(!hasNext()) throw new NoSuchElementException();
+			if(forward) {
+				index--;
+				return (lastReturned = index);
+			}
 			lastReturned = index;
 			return index++;
 		}
 		
+		public int nextEntry() {
+			if(!hasNext()) throw new NoSuchElementException();
+			if(forward) {
+				lastReturned = index;
+				return index++;
+			}
+			index--;
+			return (lastReturned = index);
+		}
+		
 		public int skip(int amount) {
 			if(amount < 0) throw new IllegalStateException("Negative Numbers are not allowed");
+			return forward ? moveForward(amount) : moveBackwards(amount);
+		}
+		
+		public int back(int amount) {
+			if(amount < 0) throw new IllegalStateException("Negative Numbers are not allowed");
+			return forward ? moveBackwards(amount) : moveForward(amount);
+		}
+		
+		private int moveForward(int amount) {
 			int steps = Math.min(amount, size() - index);
 			index += steps;
 			if(steps > 0) lastReturned = Math.min(index-1, size()-1);
 			return steps;
 		}
 		
-		public int back(int amount) {
-			if(amount < 0) throw new IllegalStateException("Negative Numbers are not allowed");
+		private int moveBackwards(int amount) {
 			int steps = Math.min(amount, index);
 			index -= steps;
 			if(steps > 0) lastReturned = Math.min(index, size()-1);

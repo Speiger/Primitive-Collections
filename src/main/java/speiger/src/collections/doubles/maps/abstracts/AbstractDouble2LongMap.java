@@ -9,6 +9,11 @@ import speiger.src.collections.doubles.functions.consumer.DoubleLongConsumer;
 import speiger.src.collections.doubles.functions.function.Double2LongFunction;
 import speiger.src.collections.doubles.functions.function.DoubleLongUnaryOperator;
 import speiger.src.collections.doubles.maps.interfaces.Double2LongMap;
+import speiger.src.collections.doubles.maps.interfaces.Double2LongOrderedMap;
+import speiger.src.collections.doubles.sets.DoubleOrderedSet;
+import speiger.src.collections.longs.collections.LongOrderedCollection;
+import speiger.src.collections.objects.sets.AbstractObjectSet;
+import speiger.src.collections.objects.sets.ObjectOrderedSet;
 import speiger.src.collections.doubles.sets.AbstractDoubleSet;
 import speiger.src.collections.doubles.sets.DoubleSet;
 import speiger.src.collections.doubles.utils.maps.Double2LongMaps;
@@ -27,7 +32,7 @@ import speiger.src.collections.utils.SanityChecks;
  */
 public abstract class AbstractDouble2LongMap extends AbstractMap<Double, Long> implements Double2LongMap
 {
-	protected long defaultReturnValue = 0L;
+	protected long defaultReturnValue = -1L;
 	
 	@Override
 	public long getDefaultReturnValue() {
@@ -91,7 +96,7 @@ public abstract class AbstractDouble2LongMap extends AbstractMap<Double, Long> i
 	public void putAll(Double[] keys, Long[] values, int offset, int size) {
 		SanityChecks.checkArrayCapacity(keys.length, offset, size);
 		SanityChecks.checkArrayCapacity(values.length, offset, size);
-		for(int i = 0;i<size;i++) put(keys[i], values[i]);		
+		for(int i = 0;i<size;i++) put(keys[i].doubleValue(), values[i].longValue());		
 	}
 	
 	@Override
@@ -413,6 +418,116 @@ public abstract class AbstractDouble2LongMap extends AbstractMap<Double, Long> i
 		while(iter.hasNext()) hash += iter.next().hashCode();
 		return hash;
 	}
+	
+	public static class ReversedDouble2LongOrderedMap extends AbstractDouble2LongMap implements Double2LongOrderedMap {
+		Double2LongOrderedMap map;
+		
+		public ReversedDouble2LongOrderedMap(Double2LongOrderedMap map) {
+			this.map = map;
+		}
+		@Override
+		public AbstractDouble2LongMap setDefaultReturnValue(long v) {
+			map.setDefaultReturnValue(v);
+			return this;
+		}
+		@Override
+		public long getDefaultReturnValue() { return map.getDefaultReturnValue(); }
+		@Override
+		public Double2LongOrderedMap copy() { throw new UnsupportedOperationException(); }
+		@Override
+		public long put(double key, long value) { return map.put(key, value); }
+		@Override
+		public long putIfAbsent(double key, long value) { return map.putIfAbsent(key, value); }
+		@Override
+		public long addTo(double key, long value) { return map.addTo(key, value); }
+		@Override
+		public long subFrom(double key, long value) { return map.subFrom(key, value); }
+		@Override
+		public long remove(double key) { return map.remove(key); }
+		@Override
+		public boolean remove(double key, long value) { return map.remove(key, value); }
+		@Override
+		public long removeOrDefault(double key, long defaultValue) { return map.removeOrDefault(key, defaultValue); }
+		@Override
+		public boolean containsKey(double key) { return map.containsKey(key); }
+		@Override
+		public boolean containsValue(long value) { return map.containsValue(value); }
+		@Override
+		public boolean replace(double key, long oldValue, long newValue) { return map.replace(key, oldValue, newValue); }
+		@Override
+		public long replace(double key, long value) { return map.replace(key, value); }
+		@Override
+		public void replaceLongs(Double2LongMap m) { map.replaceLongs(m); }
+		@Override
+		public void replaceLongs(DoubleLongUnaryOperator mappingFunction) { map.replaceLongs(mappingFunction); }
+		@Override
+		public long computeLong(double key, DoubleLongUnaryOperator mappingFunction) { return map.computeLong(key, mappingFunction); }
+		@Override
+		public long computeLongIfAbsent(double key, Double2LongFunction mappingFunction) { return map.computeLongIfAbsent(key, mappingFunction); }
+		@Override
+		public long supplyLongIfAbsent(double key, LongSupplier valueProvider) { return map.supplyLongIfAbsent(key, valueProvider); }
+		@Override
+		public long computeLongIfPresent(double key, DoubleLongUnaryOperator mappingFunction) { return map.computeLongIfPresent(key, mappingFunction); }
+		@Override
+		public long computeLongNonDefault(double key, DoubleLongUnaryOperator mappingFunction) { return map.computeLongNonDefault(key, mappingFunction); }
+		@Override
+		public long computeLongIfAbsentNonDefault(double key, Double2LongFunction mappingFunction) { return map.computeLongIfAbsentNonDefault(key, mappingFunction); }
+		@Override
+		public long supplyLongIfAbsentNonDefault(double key, LongSupplier valueProvider) { return map.supplyLongIfAbsentNonDefault(key, valueProvider); }
+		@Override
+		public long computeLongIfPresentNonDefault(double key, DoubleLongUnaryOperator mappingFunction) { return map.computeLongIfPresentNonDefault(key, mappingFunction); }
+		@Override
+		public long mergeLong(double key, long value, LongLongUnaryOperator mappingFunction) { return map.mergeLong(key, value, mappingFunction); }
+		@Override
+		public long getOrDefault(double key, long defaultValue) { return map.getOrDefault(key, defaultValue); }
+		@Override
+		public long get(double key) { return map.get(key); }
+		@Override
+		public long putAndMoveToFirst(double key, long value) { return map.putAndMoveToLast(key, value); }
+		@Override
+		public long putAndMoveToLast(double key, long value) { return map.putAndMoveToFirst(key, value); }
+		@Override
+		public long putFirst(double key, long value) { return map.putLast(key, value); }
+		@Override
+		public long putLast(double key, long value) { return map.putFirst(key, value); }
+		@Override
+		public boolean moveToFirst(double key) { return map.moveToLast(key); }
+		@Override
+		public boolean moveToLast(double key) { return map.moveToFirst(key); }
+		@Override
+		public long getAndMoveToFirst(double key) { return map.getAndMoveToLast(key); }
+		@Override
+		public long getAndMoveToLast(double key) { return map.getAndMoveToFirst(key); }
+		@Override
+		public double firstDoubleKey() { return map.lastDoubleKey(); }
+		@Override
+		public double pollFirstDoubleKey() { return map.pollLastDoubleKey(); }
+		@Override
+		public double lastDoubleKey() { return map.firstDoubleKey(); }
+		@Override
+		public double pollLastDoubleKey() { return map.pollFirstDoubleKey(); }
+		@Override
+		public long firstLongValue() { return map.lastLongValue(); }
+		@Override
+		public long lastLongValue() { return map.firstLongValue(); }
+		@Override
+		public Double2LongMap.Entry firstEntry() { return map.lastEntry(); }
+		@Override
+		public Double2LongMap.Entry lastEntry() { return map.firstEntry(); }
+		@Override
+		public Double2LongMap.Entry pollFirstEntry() { return map.pollLastEntry(); }
+		@Override
+		public Double2LongMap.Entry pollLastEntry() { return map.pollFirstEntry(); }
+		@Override
+		public ObjectOrderedSet<Double2LongMap.Entry> double2LongEntrySet() { return new AbstractObjectSet.ReversedObjectOrderedSet<>(map.double2LongEntrySet()); }
+		@Override
+		public DoubleOrderedSet keySet() { return new AbstractDoubleSet.ReversedDoubleOrderedSet(map.keySet()); }
+		@Override
+		public LongOrderedCollection values() { return map.values().reversed(); }
+		@Override
+		public Double2LongOrderedMap reversed() { return map; }
+	}
+
 	
 	/**
 	 * A Simple Type Specific Entry class to reduce boxing/unboxing

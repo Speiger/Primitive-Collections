@@ -342,6 +342,8 @@ public class ITERABLES
 #argument MAPPER Predicate ToByteFunction ToShortFunction ToIntFunction ToLongFunction ToFloatFunction ToDoubleFunction
 #argument APPLY test applyAsByte applyAsShort applyAsInt applyAsLong applyAsFloat applyAsDouble
 #argument DATA_TYPE Boolean Byte Short Int Long Float Double
+#argument FILTER_TYPE BOOLEAN_COLLECTION_MODULE BYTE_COLLECTION_MODULE SHORT_COLLECTION_MODULE INT_COLLECTION_MODULE LONG_COLLECTION_MODULE FLOAT_COLLECTION_MODULE DOUBLE_COLLECTION_MODULE
+#if FILTER_TYPE
 	private static class MAPPED_TYPEIterable<E> implements OUTPUT_ITERABLE, ISizeProvider
 	{
 		ITERABLE KEY_SPECIAL_GENERIC_TYPE<E> iterable;
@@ -369,6 +371,7 @@ public class ITERABLES
 		}
 	}
 	
+#endif
 #enditerate
 #endif
 	private static class MappedIterable KSS_GENERIC_TYPE<E, T> implements ObjectIterable<T>, ISizeProvider

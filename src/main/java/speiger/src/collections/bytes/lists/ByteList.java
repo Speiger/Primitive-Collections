@@ -9,6 +9,7 @@ import java.util.Comparator;
 import java.util.function.UnaryOperator;
 
 import speiger.src.collections.bytes.collections.ByteCollection;
+import speiger.src.collections.bytes.collections.ByteOrderedCollection;
 import speiger.src.collections.bytes.collections.ByteSplititerator;
 import speiger.src.collections.ints.functions.consumer.IntByteConsumer;
 import speiger.src.collections.bytes.functions.ByteComparator;
@@ -21,7 +22,7 @@ import speiger.src.collections.utils.SanityChecks;
 /**
  * A Type Specific List interface that reduces boxing/unboxing and adds a couple extra quality of life features
  */
-public interface ByteList extends ByteCollection, List<Byte>
+public interface ByteList extends ByteOrderedCollection, List<Byte>
 {
 	/**
 	 * A Type-Specific add Function to reduce (un)boxing
@@ -83,6 +84,24 @@ public interface ByteList extends ByteCollection, List<Byte>
 	 * @return true if the list was modified
 	 */
 	public boolean addAll(int index, ByteList c);
+	
+	/**
+	 * A method to add an element to the start of a list
+	 * @param e that should be added at the start.
+	 */
+	@Override
+	public default void addFirst(byte e) { 
+		add(0, e);
+	}
+	
+	/**
+	 * A method to add an element to the end of a list
+	 * @param e that should be added at the end.
+	 */
+	@Override
+	public default void addLast(byte e) {
+		add(e);
+	}
 	
 	/**
 	 * Helper method that returns the first element of a List.
@@ -414,9 +433,9 @@ public interface ByteList extends ByteCollection, List<Byte>
 	@Override
 	@Deprecated
 	public default boolean add(Byte e) {
-		return ByteCollection.super.add(e);
+		return ByteOrderedCollection.super.add(e);
 	}
-	
+
 	/** {@inheritDoc}
 	 * <p>This default implementation delegates to the corresponding type-specific function.
 	 * @deprecated Please use the corresponding type-specific function instead. 
@@ -464,7 +483,7 @@ public interface ByteList extends ByteCollection, List<Byte>
 	@Override
 	@Deprecated
 	public default boolean contains(Object o) {
-		return ByteCollection.super.contains(o);
+		return ByteOrderedCollection.super.contains(o);
 	}
 	
 	/** {@inheritDoc}
@@ -474,7 +493,7 @@ public interface ByteList extends ByteCollection, List<Byte>
 	@Override
 	@Deprecated
 	public default boolean remove(Object o) {
-		return ByteCollection.super.remove(o);
+		return ByteOrderedCollection.super.remove(o);
 	}
 	
 	/** {@inheritDoc}

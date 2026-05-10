@@ -22,7 +22,7 @@ import speiger.src.collections.floats.maps.interfaces.Float2ObjectOrderedMap;
 import speiger.src.collections.floats.sets.AbstractFloatSet;
 import speiger.src.collections.floats.sets.FloatOrderedSet;
 import speiger.src.collections.objects.collections.AbstractObjectCollection;
-import speiger.src.collections.objects.collections.ObjectCollection;
+import speiger.src.collections.objects.collections.ObjectOrderedCollection;
 import speiger.src.collections.objects.collections.ObjectIterator;
 import speiger.src.collections.objects.functions.function.ObjectObjectUnaryOperator;
 import speiger.src.collections.objects.functions.consumer.ObjectObjectConsumer;
@@ -231,6 +231,54 @@ public class Float2ObjectLinkedOpenHashMap<V> extends Float2ObjectOpenHashMap<V>
 	}
 	
 	@Override
+	public V putFirst(float key, V value) {
+		if(Float.floatToIntBits(key) == 0) {
+			if(containsNull) return values[nullIndex];
+			values[nullIndex] = value;
+			containsNull = true;
+			onNodeAdded(nullIndex);
+			moveToFirstIndex(nullIndex);
+		}
+		else {
+			int pos = HashUtil.mix(Float.hashCode(key)) & mask;
+			while(Float.floatToIntBits(key) == 0) {
+				if(Float.floatToIntBits(keys[pos]) == Float.floatToIntBits(key)) return values[pos];
+				pos = ++pos & mask;
+			}
+			keys[pos] = key;
+			values[pos] = value;
+			onNodeAdded(pos);
+			moveToFirstIndex(pos);
+		}
+		if(size++ >= maxFill) rehash(HashUtil.arraySize(size+1, loadFactor));
+		return getDefaultReturnValue();
+	}
+	
+	@Override
+	public V putLast(float key, V value) {
+		if(Float.floatToIntBits(key) == 0) {
+			if(containsNull) return values[nullIndex];
+			values[nullIndex] = value;
+			containsNull = true;
+			onNodeAdded(nullIndex);
+			moveToLastIndex(nullIndex);
+		}
+		else {
+			int pos = HashUtil.mix(Float.hashCode(key)) & mask;
+			while(Float.floatToIntBits(key) == 0) {
+				if(Float.floatToIntBits(keys[pos]) == Float.floatToIntBits(key)) return values[pos];
+				pos = ++pos & mask;
+			}
+			keys[pos] = key;
+			values[pos] = value;
+			onNodeAdded(pos);
+			moveToLastIndex(pos);
+		}
+		if(size++ >= maxFill) rehash(HashUtil.arraySize(size+1, loadFactor));
+		return getDefaultReturnValue();
+	}
+	
+	@Override
 	public boolean moveToFirst(float key) {
 		if(isEmpty() || Float.floatToIntBits(firstFloatKey()) == Float.floatToIntBits(key)) return false;
 		if(Float.floatToIntBits(key) == 0) {
@@ -376,6 +424,52 @@ public class Float2ObjectLinkedOpenHashMap<V> extends Float2ObjectOpenHashMap<V>
 	}
 	
 	@Override
+	public Float2ObjectMap.Entry<V> firstEntry() {
+		if(size == 0) throw new NoSuchElementException();
+		return new BasicEntry<>(keys[firstIndex], values[firstIndex]);
+	}
+	
+	@Override
+	public Float2ObjectMap.Entry<V> lastEntry() {
+		if(size == 0) throw new NoSuchElementException();
+		return new BasicEntry<>(keys[lastIndex], values[lastIndex]);
+	}
+	
+	@Override
+	public Float2ObjectMap.Entry<V> pollFirstEntry() {
+		if(size == 0) throw new NoSuchElementException();
+		int pos = firstIndex;
+		onNodeRemoved(pos);
+		BasicEntry<V> result = new BasicEntry<>(keys[pos], values[pos]);
+		size--;
+		if(Float.floatToIntBits(result.getFloatKey()) == 0) {
+			containsNull = false;
+			keys[nullIndex] = 0F;
+			values[nullIndex] = null;
+		}
+		else shiftKeys(pos);
+		if(nullIndex > minCapacity && size < maxFill / 4 && nullIndex > HashUtil.DEFAULT_MIN_CAPACITY) rehash(nullIndex / 2);
+		return result;
+	}
+	
+	@Override
+	public Float2ObjectMap.Entry<V> pollLastEntry() {
+		if(size == 0) throw new NoSuchElementException();
+		int pos = lastIndex;
+		onNodeRemoved(pos);
+		BasicEntry<V> result = new BasicEntry<>(keys[pos], values[pos]);
+		size--;
+		if(Float.floatToIntBits(result.getFloatKey()) == 0) {
+			containsNull = false;
+			keys[nullIndex] = 0F;
+			values[nullIndex] = null;
+		}
+		else shiftKeys(pos);
+		if(nullIndex > minCapacity && size < maxFill / 4 && nullIndex > HashUtil.DEFAULT_MIN_CAPACITY) rehash(nullIndex / 2);
+		return result;
+	}
+	
+	@Override
 	public ObjectOrderedSet<Float2ObjectMap.Entry<V>> float2ObjectEntrySet() {
 		if(entrySet == null) entrySet = new MapEntrySet();
 		return (ObjectOrderedSet<Float2ObjectMap.Entry<V>>)entrySet;
@@ -388,9 +482,9 @@ public class Float2ObjectLinkedOpenHashMap<V> extends Float2ObjectOpenHashMap<V>
 	}
 	
 	@Override
-	public ObjectCollection<V> values() {
+	public ObjectOrderedCollection<V> values() {
 		if(valuesC == null) valuesC = new Values();
-		return valuesC;
+		return (ObjectOrderedCollection<V>)valuesC;
 	}
 	
 	@Override
@@ -575,24 +669,24 @@ public class Float2ObjectLinkedOpenHashMap<V> extends Float2ObjectOpenHashMap<V>
 		}
 		
 		@Override
-		public Float2ObjectMap.Entry<V> first() {
+		public Float2ObjectMap.Entry<V> getFirst() {
 			return new BasicEntry<>(firstFloatKey(), firstValue());
 		}
 		
 		@Override
-		public Float2ObjectMap.Entry<V> last() {
+		public Float2ObjectMap.Entry<V> getLast() {
 			return new BasicEntry<>(lastFloatKey(), lastValue());
 		}
 		
 		@Override
-		public Float2ObjectMap.Entry<V> pollFirst() {
+		public Float2ObjectMap.Entry<V> removeFirst() {
 			BasicEntry<V> entry = new BasicEntry<>(firstFloatKey(), firstValue());
 			pollFirstFloatKey();
 			return entry;
 		}
 		
 		@Override
-		public Float2ObjectMap.Entry<V> pollLast() {
+		public Float2ObjectMap.Entry<V> removeLast() {
 			BasicEntry<V> entry = new BasicEntry<>(lastFloatKey(), lastValue());
 			pollLastFloatKey();
 			return entry;
@@ -600,7 +694,12 @@ public class Float2ObjectLinkedOpenHashMap<V> extends Float2ObjectOpenHashMap<V>
 		
 		@Override
 		public ObjectBidirectionalIterator<Float2ObjectMap.Entry<V>> iterator() {
-			return new EntryIterator();
+			return new EntryIterator(true);
+		}
+		
+		@Override
+		public ObjectBidirectionalIterator<Float2ObjectMap.Entry<V>> reverseIterator() {
+			return new EntryIterator(false);
 		}
 		
 		@Override
@@ -610,7 +709,7 @@ public class Float2ObjectLinkedOpenHashMap<V> extends Float2ObjectOpenHashMap<V>
 		
 		@Override
 		public ObjectBidirectionalIterator<Float2ObjectMap.Entry<V>> fastIterator() {
-			return new FastEntryIterator();
+			return new FastEntryIterator(true);
 		}
 		
 		@Override
@@ -843,7 +942,12 @@ public class Float2ObjectLinkedOpenHashMap<V> extends Float2ObjectOpenHashMap<V>
 		
 		@Override
 		public FloatListIterator iterator() {
-			return new KeyIterator();
+			return new KeyIterator(true);
+		}
+		
+		@Override
+		public FloatListIterator reverseIterator() {
+			return new KeyIterator(false);
 		}
 		
 		@Override
@@ -865,22 +969,22 @@ public class Float2ObjectLinkedOpenHashMap<V> extends Float2ObjectOpenHashMap<V>
 		}
 		
 		@Override
-		public float firstFloat() {
+		public float getFirstFloat() {
 			return firstFloatKey();
 		}
 		
 		@Override
-		public float pollFirstFloat() {
+		public float removeFirstFloat() {
 			return pollFirstFloatKey();
 		}
 
 		@Override
-		public float lastFloat() {
+		public float getLastFloat() {
 			return lastFloatKey();
 		}
 
 		@Override
-		public float pollLastFloat() {
+		public float removeLastFloat() {
 			return pollLastFloatKey();
 		}
 		
@@ -1009,33 +1113,44 @@ public class Float2ObjectLinkedOpenHashMap<V> extends Float2ObjectOpenHashMap<V>
 		}
 	}
 	
-	private class Values extends AbstractObjectCollection<V> {
+	private class Values extends AbstractObjectCollection<V> implements ObjectOrderedCollection<V> {
 		@Override
 		@Deprecated
-		public boolean contains(Object e) {
-			return containsValue(e);
-		}
+		public boolean contains(Object e) { return containsValue(e); }
 		
 		@Override
-		public boolean add(V o) {
-			throw new UnsupportedOperationException();
-		}
-
+		public boolean add(V o) { throw new UnsupportedOperationException(); }
 		@Override
-		public ObjectIterator<V> iterator() {
-			return new ValueIterator();
-		}
-		
+		public ObjectIterator<V> iterator() { return new ValueIterator(true); }
 		@Override
-		public int size() {
-			return Float2ObjectLinkedOpenHashMap.this.size();
-		}
-		
+		public int size() { return Float2ObjectLinkedOpenHashMap.this.size(); }
 		@Override
-		public void clear() {
-			Float2ObjectLinkedOpenHashMap.this.clear();
+		public void clear() { Float2ObjectLinkedOpenHashMap.this.clear(); }
+		@Override
+		public ObjectOrderedCollection<V> reversed() { return new AbstractObjectCollection.ReverseObjectOrderedCollection<>(this, this::reverseIterator); }
+		private ObjectIterator<V> reverseIterator() {
+			return new ValueIterator(false);
 		}
-		
+		@Override
+		public void addFirst(V e) { throw new UnsupportedOperationException(); }
+		@Override
+		public void addLast(V e) { throw new UnsupportedOperationException(); }
+		@Override
+		public V getFirst() { return firstValue(); }
+		@Override
+		public V removeFirst() {
+			V result = firstValue();
+			pollFirstFloatKey();
+			return result; 
+		}
+		@Override
+		public V getLast() { return lastValue(); }
+		@Override
+		public V removeLast() {
+			V result = lastValue();
+			pollLastFloatKey();
+			return result; 
+		}
 		@Override
 		public void forEach(Consumer<? super V> action) {
 			Objects.requireNonNull(action);
@@ -1165,7 +1280,7 @@ public class Float2ObjectLinkedOpenHashMap<V> extends Float2ObjectOpenHashMap<V>
 	private class FastEntryIterator extends MapIterator implements ObjectListIterator<Float2ObjectMap.Entry<V>> {
 		MapEntry entry = new MapEntry();
 		
-		public FastEntryIterator() {}
+		public FastEntryIterator(boolean start) { super(start); }
 		public FastEntryIterator(float from) {
 			super(from);
 		}
@@ -1192,7 +1307,7 @@ public class Float2ObjectLinkedOpenHashMap<V> extends Float2ObjectOpenHashMap<V>
 	private class EntryIterator extends MapIterator implements ObjectListIterator<Float2ObjectMap.Entry<V>> {
 		MapEntry entry;
 		
-		public EntryIterator() {}
+		public EntryIterator(boolean start) { super(start); }
 		public EntryIterator(float from) {
 			super(from);
 		}
@@ -1222,7 +1337,7 @@ public class Float2ObjectLinkedOpenHashMap<V> extends Float2ObjectOpenHashMap<V>
 	
 	private class KeyIterator extends MapIterator implements FloatListIterator {
 		
-		public KeyIterator() {}
+		public KeyIterator(boolean start) { super(start); }
 		public KeyIterator(float from) {
 			super(from);
 		}
@@ -1244,7 +1359,7 @@ public class Float2ObjectLinkedOpenHashMap<V> extends Float2ObjectOpenHashMap<V>
 	}
 	
 	private class ValueIterator extends MapIterator implements ObjectListIterator<V> {
-		public ValueIterator() {}
+		public ValueIterator(boolean start) { super(start); }
 		
 		@Override
 		public V previous() {
@@ -1264,13 +1379,16 @@ public class Float2ObjectLinkedOpenHashMap<V> extends Float2ObjectOpenHashMap<V>
 	}
 	
 	private class MapIterator {
+		boolean forward;
 		int previous = -1;
 		int next = -1;
 		int current = -1;
 		int index = 0;
 		
-		MapIterator() {
-			next = firstIndex;
+		MapIterator(boolean start) {
+			this.forward = start;
+			if(start) next = firstIndex;
+			else previous = lastIndex;
 		}
 		
 		MapIterator(float from) {
@@ -1301,11 +1419,11 @@ public class Float2ObjectLinkedOpenHashMap<V> extends Float2ObjectOpenHashMap<V>
 		}
 		
 		public boolean hasNext() {
-			return next != -1;
+			return (forward ? next : previous) != -1;
 		}
 
 		public boolean hasPrevious() {
-			return previous != -1;
+			return (forward ? previous : next) != -1;
 		}
 		
 		public int nextIndex() {
@@ -1365,20 +1483,30 @@ public class Float2ObjectLinkedOpenHashMap<V> extends Float2ObjectOpenHashMap<V>
 		
 		public int previousEntry() {
 			if(!hasPrevious()) throw new NoSuchElementException();
-			current = previous;
-			previous = (int)(links[current] >> 32);
-			next = current;
+			if(forward) moveBackwards();
+			else moveForwards();
 			if(index >= 0) index--;
 			return current;
 		}
 		
 		public int nextEntry() {
 			if(!hasNext()) throw new NoSuchElementException();
+			if(forward) moveForwards();
+			else moveBackwards();
+			if(index >= 0) index++;
+			return current;
+		}
+		
+		private void moveBackwards() {
+			current = previous;
+			previous = (int)(links[current] >> 32);
+			next = current;
+		}
+		
+		private void moveForwards() {
 			current = next;
 			next = (int)(links[current]);
 			previous = current;
-			if(index >= 0) index++;
-			return current;
 		}
 		
 		private void ensureIndexKnown() {

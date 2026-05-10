@@ -1,6 +1,8 @@
 package speiger.src.collections.ints.maps.interfaces;
 
 import speiger.src.collections.ints.utils.maps.Int2ShortMaps;
+import speiger.src.collections.ints.maps.abstracts.AbstractInt2ShortMap;
+import speiger.src.collections.shorts.collections.ShortOrderedCollection;
 import speiger.src.collections.ints.sets.IntOrderedSet;
 import speiger.src.collections.objects.collections.ObjectBidirectionalIterator;
 import speiger.src.collections.objects.sets.ObjectOrderedSet;
@@ -30,6 +32,26 @@ public interface Int2ShortOrderedMap extends Int2ShortMap
 	 * @see java.util.Map#put(Object, Object)
 	 */
 	public short putAndMoveToLast(int key, short value);
+	
+	/**
+	 * A alternative to putAndMoveToFirst.
+	 * This method simply puts an entry at the first spot of the Map but only if the entry is missing.
+	 * @param key the key that should be inserted
+	 * @param value the value that should be inserted
+	 * @return the previous present or default return value
+	 * @see java.util.Map#put(Object, Object)
+	 */
+	public short putFirst(int key, short value);
+	
+	/**
+	 * A alternative to putAndMoveToLast.
+	 * This method simply puts an entry at the last spot of the Map but only if the entry is missing.
+	 * @param key the key that should be inserted
+	 * @param value the value that should be inserted
+	 * @return the previous present or default return value
+	 * @see java.util.Map#put(Object, Object)
+	 */
+	public short putLast(int key, short value);
 	
 	/**
 	 * A specific move method to move a given key/value to the first index.
@@ -91,12 +113,24 @@ public interface Int2ShortOrderedMap extends Int2ShortMap
 	 */
 	public short lastShortValue();
 	
+	
+	public Int2ShortMap.Entry firstEntry();
+	
+	public Int2ShortMap.Entry lastEntry();
+	
+	public Int2ShortMap.Entry pollFirstEntry();
+	
+	public Int2ShortMap.Entry pollLastEntry();
 	@Override
 	public Int2ShortOrderedMap copy();
 	@Override
 	public IntOrderedSet keySet();
 	@Override
+	public ShortOrderedCollection values();
+	@Override
 	public ObjectOrderedSet<Int2ShortMap.Entry> int2ShortEntrySet();
+	
+	public default Int2ShortOrderedMap reversed() { return new AbstractInt2ShortMap.ReversedInt2ShortOrderedMap(this); }
 	
 	/**
 	 * Creates a Wrapped SortedMap that is Synchronized

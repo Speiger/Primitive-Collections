@@ -1,10 +1,10 @@
 package speiger.src.collections.bytes.collections;
 
-import speiger.src.collections.objects.collections.ObjectBidirectionalIterator;
 /**
- * A Type-Specific {@link ObjectBidirectionalIterator} to reduce (un)boxing
+ * This is a basically a {@link java.util.ListIterator} without the index functions.
+ * Allowing to have a simple Bidirectional Iterator without having to keep track of the Iteration index.
  */
-public interface ByteBidirectionalIterator extends ByteIterator, ObjectBidirectionalIterator<Byte>
+public interface ByteBidirectionalIterator extends ByteIterator
 {
 	/**
 	 * Returns true if the Iterator has a Previous element
@@ -19,11 +19,11 @@ public interface ByteBidirectionalIterator extends ByteIterator, ObjectBidirecti
 	 */
 	public byte previousByte();
 	
-	/** {@inheritDoc}
+	/**
 	 * <p>This default implementation delegates to the corresponding type-specific function.
 	 * @deprecated Please use the corresponding type-specific function instead. 
+	 * @return the Previous element of the iterator.+
 	 */
-	@Override
 	@Deprecated
 	public default Byte previous() {
 		return Byte.valueOf(previousByte());

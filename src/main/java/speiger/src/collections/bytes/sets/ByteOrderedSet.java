@@ -2,8 +2,9 @@ package speiger.src.collections.bytes.sets;
 
 import speiger.src.collections.bytes.collections.ByteBidirectionalIterator;
 import speiger.src.collections.bytes.collections.ByteSplititerator;
-import speiger.src.collections.bytes.utils.ByteSets;
 import speiger.src.collections.bytes.utils.ByteSplititerators;
+import speiger.src.collections.bytes.sets.AbstractByteSet.ReversedByteOrderedSet;
+import speiger.src.collections.bytes.utils.ByteSets;
 
 /**
  * A Special Set Interface giving Access to some really usefull functions
@@ -49,6 +50,7 @@ public interface ByteOrderedSet extends ByteSet
 	
 	@Override
 	public ByteBidirectionalIterator iterator();
+	public ByteBidirectionalIterator reverseIterator();
 	
 	/**
 	 * A type Specific Iterator starting from a given key
@@ -69,23 +71,26 @@ public interface ByteOrderedSet extends ByteSet
 	 * A method to get the first element in the set
 	 * @return first element in the set
 	 */
-	public byte firstByte();
+	public byte getFirstByte();
 	/**
 	 * A method to get and remove the first element in the set
 	 * @return first element in the set
 	 */
-	public byte pollFirstByte();
+	public byte removeFirstByte();
 	/**
 	 * A method to get the last element in the set
 	 * @return last element in the set
 	 */
-	public byte lastByte();
+	public byte getLastByte();
 	/**
 	 * A method to get and remove the last element in the set
 	 * @return last element in the set
 	 */
-	public byte pollLastByte();
+	public byte removeLastByte();
 	
+	
+	public default ByteOrderedSet reversed() { return new ReversedByteOrderedSet(this); }
+
 	/**
 	 * Creates a Wrapped OrderedSet that is Synchronized
 	 * @return a new OrderedSet that is synchronized

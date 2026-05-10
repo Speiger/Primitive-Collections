@@ -1,6 +1,8 @@
 package speiger.src.collections.chars.maps.interfaces;
 
 import speiger.src.collections.chars.utils.maps.Char2BooleanMaps;
+import speiger.src.collections.chars.maps.abstracts.AbstractChar2BooleanMap;
+import speiger.src.collections.booleans.collections.BooleanOrderedCollection;
 import speiger.src.collections.chars.sets.CharOrderedSet;
 import speiger.src.collections.objects.collections.ObjectBidirectionalIterator;
 import speiger.src.collections.objects.sets.ObjectOrderedSet;
@@ -30,6 +32,26 @@ public interface Char2BooleanOrderedMap extends Char2BooleanMap
 	 * @see java.util.Map#put(Object, Object)
 	 */
 	public boolean putAndMoveToLast(char key, boolean value);
+	
+	/**
+	 * A alternative to putAndMoveToFirst.
+	 * This method simply puts an entry at the first spot of the Map but only if the entry is missing.
+	 * @param key the key that should be inserted
+	 * @param value the value that should be inserted
+	 * @return the previous present or default return value
+	 * @see java.util.Map#put(Object, Object)
+	 */
+	public boolean putFirst(char key, boolean value);
+	
+	/**
+	 * A alternative to putAndMoveToLast.
+	 * This method simply puts an entry at the last spot of the Map but only if the entry is missing.
+	 * @param key the key that should be inserted
+	 * @param value the value that should be inserted
+	 * @return the previous present or default return value
+	 * @see java.util.Map#put(Object, Object)
+	 */
+	public boolean putLast(char key, boolean value);
 	
 	/**
 	 * A specific move method to move a given key/value to the first index.
@@ -91,12 +113,24 @@ public interface Char2BooleanOrderedMap extends Char2BooleanMap
 	 */
 	public boolean lastBooleanValue();
 	
+	
+	public Char2BooleanMap.Entry firstEntry();
+	
+	public Char2BooleanMap.Entry lastEntry();
+	
+	public Char2BooleanMap.Entry pollFirstEntry();
+	
+	public Char2BooleanMap.Entry pollLastEntry();
 	@Override
 	public Char2BooleanOrderedMap copy();
 	@Override
 	public CharOrderedSet keySet();
 	@Override
+	public BooleanOrderedCollection values();
+	@Override
 	public ObjectOrderedSet<Char2BooleanMap.Entry> char2BooleanEntrySet();
+	
+	public default Char2BooleanOrderedMap reversed() { return new AbstractChar2BooleanMap.ReversedChar2BooleanOrderedMap(this); }
 	
 	/**
 	 * Creates a Wrapped SortedMap that is Synchronized

@@ -426,7 +426,6 @@ public abstract class AbstractObjectList<T> extends AbstractObjectCollection<T> 
 		public int size() {
 			return size;
 		}
-		
 		@Override
 		public ObjectSplititerator<T> spliterator() { return ObjectSplititerators.createSplititerator(this, 16464); }
 		

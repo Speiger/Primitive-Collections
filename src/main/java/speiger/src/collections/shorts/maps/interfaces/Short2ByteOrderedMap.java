@@ -1,6 +1,8 @@
 package speiger.src.collections.shorts.maps.interfaces;
 
 import speiger.src.collections.shorts.utils.maps.Short2ByteMaps;
+import speiger.src.collections.shorts.maps.abstracts.AbstractShort2ByteMap;
+import speiger.src.collections.bytes.collections.ByteOrderedCollection;
 import speiger.src.collections.shorts.sets.ShortOrderedSet;
 import speiger.src.collections.objects.collections.ObjectBidirectionalIterator;
 import speiger.src.collections.objects.sets.ObjectOrderedSet;
@@ -30,6 +32,26 @@ public interface Short2ByteOrderedMap extends Short2ByteMap
 	 * @see java.util.Map#put(Object, Object)
 	 */
 	public byte putAndMoveToLast(short key, byte value);
+	
+	/**
+	 * A alternative to putAndMoveToFirst.
+	 * This method simply puts an entry at the first spot of the Map but only if the entry is missing.
+	 * @param key the key that should be inserted
+	 * @param value the value that should be inserted
+	 * @return the previous present or default return value
+	 * @see java.util.Map#put(Object, Object)
+	 */
+	public byte putFirst(short key, byte value);
+	
+	/**
+	 * A alternative to putAndMoveToLast.
+	 * This method simply puts an entry at the last spot of the Map but only if the entry is missing.
+	 * @param key the key that should be inserted
+	 * @param value the value that should be inserted
+	 * @return the previous present or default return value
+	 * @see java.util.Map#put(Object, Object)
+	 */
+	public byte putLast(short key, byte value);
 	
 	/**
 	 * A specific move method to move a given key/value to the first index.
@@ -91,12 +113,24 @@ public interface Short2ByteOrderedMap extends Short2ByteMap
 	 */
 	public byte lastByteValue();
 	
+	
+	public Short2ByteMap.Entry firstEntry();
+	
+	public Short2ByteMap.Entry lastEntry();
+	
+	public Short2ByteMap.Entry pollFirstEntry();
+	
+	public Short2ByteMap.Entry pollLastEntry();
 	@Override
 	public Short2ByteOrderedMap copy();
 	@Override
 	public ShortOrderedSet keySet();
 	@Override
+	public ByteOrderedCollection values();
+	@Override
 	public ObjectOrderedSet<Short2ByteMap.Entry> short2ByteEntrySet();
+	
+	public default Short2ByteOrderedMap reversed() { return new AbstractShort2ByteMap.ReversedShort2ByteOrderedMap(this); }
 	
 	/**
 	 * Creates a Wrapped SortedMap that is Synchronized

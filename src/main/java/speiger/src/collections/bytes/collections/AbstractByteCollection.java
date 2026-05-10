@@ -1,9 +1,11 @@
 package speiger.src.collections.bytes.collections;
 
 import java.util.Collection;
+import java.util.function.Supplier;
 import java.util.Objects;
 import java.util.AbstractCollection;
 
+import speiger.src.collections.bytes.lists.ByteListIterator;
 import speiger.src.collections.bytes.functions.ByteConsumer;
 import speiger.src.collections.bytes.utils.ByteIterators;
 import speiger.src.collections.bytes.utils.ByteArrays;
@@ -248,5 +250,69 @@ public abstract class AbstractByteCollection extends AbstractCollection<Byte> im
 		ByteIterators.unwrap(a, iterator());
 		if (a.length > size()) a[size()] = (byte)0;
 		return a;
+	}
+
+	public static class ReverseByteOrderedCollection extends AbstractByteCollection implements ByteOrderedCollection {
+		ByteOrderedCollection collection;
+		Supplier<ByteIterator> reverseIterator;
+		
+		public ReverseByteOrderedCollection(ByteOrderedCollection collection, Supplier<ByteIterator> reverseIterator) {
+			this.collection = collection;
+			this.reverseIterator = reverseIterator;
+		}
+		
+		@Override
+		public boolean add(byte o) { return collection.add(o); }
+		@Override
+		public ByteOrderedCollection reversed() { return collection; }
+		@Override
+		public void addFirst(byte e) { collection.addLast(e); }
+		@Override
+		public void addLast(byte e) { collection.addFirst(e); }
+		@Override
+		public boolean contains(byte e) { return collection.contains(e); }
+		@Override
+		public boolean remByte(byte e) { return collection.remByte(e); }
+		@Override
+		public void clear() { collection.clear(); }
+		@Override
+		public byte getFirstByte() { return collection.getLastByte(); }
+		@Override
+		public byte removeFirstByte() { return collection.removeLastByte(); }
+		@Override
+		public byte getLastByte() { return collection.getFirstByte(); }
+		@Override
+		public byte removeLastByte() { return collection.removeFirstByte(); }
+		@Override
+		public ByteIterator iterator() { return reverseIterator.get(); }
+		@Override
+		public int size() { return collection.size(); }
+	}
+	
+	public static class ReverseBiIterator implements ByteListIterator {
+		ByteListIterator it;
+		
+		public ReverseBiIterator(ByteListIterator it) {
+			this.it = it;
+		}
+		
+		@Override
+		public byte nextByte() { return it.previousByte(); }
+		@Override
+		public boolean hasNext() { return it.hasPrevious(); }
+		@Override
+		public boolean hasPrevious() { return it.hasNext(); }
+		@Override
+		public byte previousByte() { return it.nextByte(); }
+		@Override
+		public void remove() { it.remove(); }
+		@Override
+		public int nextIndex() { return it.previousIndex(); }
+		@Override
+		public int previousIndex() { return it.nextIndex(); }
+		@Override
+		public void set(byte e) { it.set(e); }
+		@Override
+		public void add(byte e) { it.add(e); }
 	}
 }

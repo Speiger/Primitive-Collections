@@ -29,6 +29,7 @@ import speiger.src.collections.shorts.sets.ShortOrderedSet;
 import speiger.src.collections.shorts.sets.ShortSet;
 import speiger.src.collections.shorts.utils.ShortSets;
 import speiger.src.collections.longs.collections.LongCollection;
+import speiger.src.collections.longs.collections.LongOrderedCollection;
 import speiger.src.collections.longs.functions.function.LongLongUnaryOperator;
 import speiger.src.collections.longs.functions.LongSupplier;
 import speiger.src.collections.longs.utils.LongCollections;
@@ -439,6 +440,10 @@ public class Short2LongMaps
 		@Override
 		public long putAndMoveToLast(short key, long value) { throw new UnsupportedOperationException(); }
 		@Override
+		public long putFirst(short key, long value) { throw new UnsupportedOperationException(); }
+		@Override
+		public long putLast(short key, long value) { throw new UnsupportedOperationException(); }
+		@Override
 		public boolean moveToFirst(short key) { throw new UnsupportedOperationException(); }
 		@Override
 		public boolean moveToLast(short key) { throw new UnsupportedOperationException(); }
@@ -459,13 +464,25 @@ public class Short2LongMaps
 		@Override
 		public long lastLongValue() { return map.lastLongValue(); }
 		@Override
+		public Short2LongMap.Entry firstEntry() { return map.firstEntry(); }
+		@Override
+		public Short2LongMap.Entry lastEntry() { return map.lastEntry(); }
+		@Override
+		public Short2LongMap.Entry pollFirstEntry() { throw new UnsupportedOperationException(); }
+		@Override
+		public Short2LongMap.Entry pollLastEntry() { throw new UnsupportedOperationException(); }
+		@Override
 		public Short2LongOrderedMap copy() { return map.copy(); }
 		@Override
 		public ShortOrderedSet keySet() { 
 			if(keys == null) keys = ShortSets.unmodifiable(map.keySet()); 
 			return (ShortOrderedSet)keys;
 		}
-				
+		@Override
+		public LongOrderedCollection values() {
+			if(values == null) values = LongCollections.unmodifiable(map.values());
+			return (LongOrderedCollection)values;
+		}
 		@Override
 		public ObjectOrderedSet<Short2LongMap.Entry> short2LongEntrySet() {
 			if(entrySet == null) entrySet = new UnmodifyableOrderedEntrySet(map.short2LongEntrySet());
@@ -617,15 +634,17 @@ public class Short2LongMaps
 		@Override
 		public ObjectBidirectionalIterator<Short2LongMap.Entry> iterator() { return ObjectIterators.unmodifiable(set.iterator()); }
 		@Override
+		public ObjectBidirectionalIterator<Short2LongMap.Entry> reverseIterator() { return ObjectIterators.unmodifiable(set.reverseIterator()); }
+		@Override
 		public ObjectBidirectionalIterator<Short2LongMap.Entry> iterator(Short2LongMap.Entry fromElement) { return ObjectIterators.unmodifiable(set.iterator(fromElement)); }
 		@Override
-		public Short2LongMap.Entry first() { return set.first(); }
+		public Short2LongMap.Entry getFirst() { return set.getFirst(); }
 		@Override
-		public Short2LongMap.Entry pollFirst() { throw new UnsupportedOperationException(); }
+		public Short2LongMap.Entry removeFirst() { throw new UnsupportedOperationException(); }
 		@Override
-		public Short2LongMap.Entry last() { return set.last(); }
+		public Short2LongMap.Entry getLast() { return set.getLast(); }
 		@Override
-		public Short2LongMap.Entry pollLast() { throw new UnsupportedOperationException(); }
+		public Short2LongMap.Entry removeLast() { throw new UnsupportedOperationException(); }
 	}
 	
 	/**
@@ -794,6 +813,10 @@ public class Short2LongMaps
 		@Override
 		public long putAndMoveToLast(short key, long value) { synchronized(mutex) { return map.putAndMoveToLast(key, value); } }
 		@Override
+		public long putFirst(short key, long value) { synchronized(mutex) { return map.putFirst(key, value); } }
+		@Override
+		public long putLast(short key, long value) { synchronized(mutex) { return map.putLast(key, value); } }
+		@Override
 		public boolean moveToFirst(short key) { synchronized(mutex) { return map.moveToFirst(key); } }
 		@Override
 		public boolean moveToLast(short key) { synchronized(mutex) { return map.moveToLast(key); } }
@@ -814,13 +837,25 @@ public class Short2LongMaps
 		@Override
 		public long lastLongValue() { synchronized(mutex) { return map.lastLongValue(); } }
 		@Override
+		public Short2LongMap.Entry firstEntry() { synchronized(mutex) { return map.firstEntry(); } }
+		@Override
+		public Short2LongMap.Entry lastEntry() { synchronized(mutex) { return map.lastEntry(); } }
+		@Override
+		public Short2LongMap.Entry pollFirstEntry() { synchronized(mutex) { return map.pollFirstEntry(); } }
+		@Override
+		public Short2LongMap.Entry pollLastEntry() { synchronized(mutex) { return map.pollLastEntry(); } }
+		@Override
 		public Short2LongOrderedMap copy() { synchronized(mutex) { return map.copy(); } }
 		@Override
 		public ShortOrderedSet keySet() {
 			if(keys == null) keys = ShortSets.synchronize(map.keySet(), mutex);
 			return (ShortOrderedSet)keys;
 		}
-		
+		@Override
+		public LongOrderedCollection values() {
+			if(values == null) values = LongCollections.synchronize(map.values(), mutex);
+			return (LongOrderedCollection)values;
+		}
 		@Override
 		public ObjectOrderedSet<Short2LongMap.Entry> short2LongEntrySet() {
 			if(entrySet == null) entrySet = ObjectSets.synchronize(map.short2LongEntrySet(), mutex);

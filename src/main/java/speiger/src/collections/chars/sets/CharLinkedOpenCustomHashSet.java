@@ -270,7 +270,7 @@ public class CharLinkedOpenCustomHashSet extends CharOpenCustomHashSet implement
 	
 	@Override
 	public boolean moveToFirst(char o) {
-		if(isEmpty() || strategy.equals(firstChar(), o)) return false;
+		if(isEmpty() || strategy.equals(getFirstChar(), o)) return false;
 		if(strategy.equals(o, (char)0)) {
 			if(containsNull) {
 				moveToFirstIndex(nullIndex);
@@ -292,7 +292,7 @@ public class CharLinkedOpenCustomHashSet extends CharOpenCustomHashSet implement
 	
 	@Override
 	public boolean moveToLast(char o) {
-		if(isEmpty() || strategy.equals(lastChar(), o)) return false;
+		if(isEmpty() || strategy.equals(getLastChar(), o)) return false;
 		if(strategy.equals(o, (char)0)) {
 			if(containsNull) {
 				moveToLastIndex(nullIndex);
@@ -349,13 +349,13 @@ public class CharLinkedOpenCustomHashSet extends CharOpenCustomHashSet implement
 	}
 	
 	@Override
-	public char firstChar() {
+	public char getFirstChar() {
 		if(size == 0) throw new NoSuchElementException();
 		return keys[firstIndex];
 	}
 	
 	@Override
-	public char pollFirstChar() {
+	public char removeFirstChar() {
 		if(size == 0) throw new NoSuchElementException();
 		int pos = firstIndex;
 		onNodeRemoved(pos);
@@ -371,13 +371,13 @@ public class CharLinkedOpenCustomHashSet extends CharOpenCustomHashSet implement
 	}
 	
 	@Override
-	public char lastChar() {
+	public char getLastChar() {
 		if(size == 0) throw new NoSuchElementException();
 		return keys[lastIndex];
 	}
 	
 	@Override
-	public char pollLastChar() {
+	public char removeLastChar() {
 		if(size == 0) throw new NoSuchElementException();
 		int pos = lastIndex;
 		onNodeRemoved(pos);
@@ -659,7 +659,12 @@ public class CharLinkedOpenCustomHashSet extends CharOpenCustomHashSet implement
 	
 	@Override
 	public CharListIterator iterator() {
-		return new SetIterator();
+		return new SetIterator(true);
+	}
+	
+	@Override
+	public CharListIterator reverseIterator() {
+		return new SetIterator(false);
 	}
 	
 	@Override
@@ -684,16 +689,20 @@ public class CharLinkedOpenCustomHashSet extends CharOpenCustomHashSet implement
 	}
 	
 	private class SetIterator implements CharListIterator {
+		boolean forward;
 		int previous = -1;
 		int next = -1;
 		int current = -1;
-		int index = 0;
+		int index = -1;
 		
-		SetIterator() {
-			next = firstIndex;
+		SetIterator(boolean start) {
+			this.forward = start;
+			if(start) next = firstIndex;
+			else previous = lastIndex;
 		}
 		
 		SetIterator(char from) {
+			this.forward = true;
 			if(strategy.equals(from, (char)0)) {
 				if(containsNull) {
 					next = (int) links[nullIndex];
@@ -722,48 +731,60 @@ public class CharLinkedOpenCustomHashSet extends CharOpenCustomHashSet implement
 		
 		@Override
 		public boolean hasNext() {
-			return next != -1;
+			return (forward ? next : previous) != -1;
 		}
 
 		@Override
 		public boolean hasPrevious() {
-			return previous != -1;
+			return (forward ? previous : next) != -1;
 		}
 		
 		@Override
 		public int skip(int amount) {
-			int result = 0;
-			while(next != -1 && result != amount) {
-				current = previous = next;
-				next = (int)(links[current]);
-				result++;
-			}
+			int result = forward ? moveForward(amount) : moveBackwards(amount);
 			if(index >= 0) index+=result;
 			return result;
 		}
 		
 		@Override
 		public int back(int amount) {
+			int result = forward ? moveBackwards(amount) : moveForward(amount);
+			if(index >= 0) index-=result;
+			return result;
+		}
+		
+		private int moveForward(int amount) {
+			int result = 0;
+			while(next != -1 && result != amount) {
+				current = previous = next;
+				next = (int)(links[current]);
+				result++;
+			}
+			return result;
+		}
+		
+		private int moveBackwards(int amount) {
 			int result = 0;
 			while(previous != -1 && result != amount) {
 				current = next = previous;
 				previous = (int)(links[current] >> 32);
 				result++;
 			}
-			if(index >= 0) index-=result;
 			return result;
 		}
 		
 		@Override
 		public int nextIndex() {
 			ensureIndexKnown();
-			return index;
+			if(forward) return index;
+			return size - index;
 		}
 		
 		@Override
 		public int previousIndex() {
 			ensureIndexKnown();
-			return index - 1;
+			if(forward) return index-1;
+			return (size - index)-1;
 		}
 		
 		@Override
@@ -812,8 +833,8 @@ public class CharLinkedOpenCustomHashSet extends CharOpenCustomHashSet implement
 		@Override
 		public char previousChar() {
 			if(!hasPrevious()) throw new NoSuchElementException();
-			current = next = previous;
-			previous = (int)(links[current] >> 32);
+			if(forward) moveBackwards();
+			else moveForwards();
 			if(index >= 0) index--;
 			return keys[current];
 		}
@@ -821,10 +842,20 @@ public class CharLinkedOpenCustomHashSet extends CharOpenCustomHashSet implement
 		@Override
 		public char nextChar() {
 			if(!hasNext()) throw new NoSuchElementException();
-			current = previous = next;
-			next = (int)(links[current]);
+			if(forward) moveForwards();
+			else moveBackwards();
 			if(index >= 0) index++;
 			return keys[current];
+		}
+		
+		private void moveBackwards() {
+			current = next = previous;
+			previous = (int)(links[current] >> 32);
+		}
+		
+		private void moveForwards() {
+			current = previous = next;
+			next = (int)(links[current]);
 		}
 		
 		private void ensureIndexKnown() {

@@ -4,6 +4,7 @@ import java.util.Objects;
 import java.util.Set;
 
 import speiger.src.collections.objects.collections.AbstractObjectCollection;
+import speiger.src.collections.objects.collections.ObjectBidirectionalIterator;
 import speiger.src.collections.objects.collections.ObjectIterator;
 
 /**
@@ -41,6 +42,91 @@ public abstract class AbstractObjectSet<T> extends AbstractObjectCollection<T> i
 			return containsAll(l);
 		} catch (ClassCastException | NullPointerException unused) {
 			return false;
+		}
+	}
+	
+	public static class ReversedObjectOrderedSet<T> extends AbstractObjectSet<T> implements ObjectOrderedSet<T> {
+		protected ObjectOrderedSet<T> set;
+		
+		public ReversedObjectOrderedSet(ObjectOrderedSet<T> set) {
+			this.set = set;
+		}
+		
+		@Override
+		public ReversedObjectOrderedSet<T> copy() { throw new UnsupportedOperationException(); }
+		@Override
+		public ObjectBidirectionalIterator<T> iterator(T fromElement) {
+			return set.iterator(fromElement);
+		}
+		
+		@Override
+		public ObjectBidirectionalIterator<T> iterator() {
+			return set.reverseIterator();
+		}
+		
+		@Override
+		public ObjectBidirectionalIterator<T> reverseIterator() {
+			return set.iterator();
+		}
+
+		@Override
+		public boolean remove(Object o) {
+			return set.remove(o);
+		}
+		
+		@Override
+		public boolean add(T o) {
+			return set.add(o);
+		}
+		
+		@Override
+		public boolean addAndMoveToFirst(T o) {
+			return set.addAndMoveToLast(o);
+		}
+		
+		@Override
+		public boolean addAndMoveToLast(T o) {
+			return set.addAndMoveToFirst(o);
+		}
+		
+		@Override
+		public boolean moveToFirst(T o) {
+			return set.moveToLast(o);
+		}
+		
+		@Override
+		public boolean moveToLast(T o) {
+			return set.moveToFirst(o);
+		}
+		
+		@Override
+		public T getFirst() {
+			return set.getLast();
+		}
+		
+		@Override
+		public T removeFirst() {
+			return set.removeLast();
+		}
+		
+		@Override
+		public T getLast() {
+			return set.getFirst();
+		}
+		
+		@Override
+		public T removeLast() {
+			return set.removeFirst();
+		}
+		
+		@Override
+		public ObjectOrderedSet<T> reversed() {
+			return set;
+		}
+		
+		@Override
+		public int size() {
+			return set.size();
 		}
 	}
 }

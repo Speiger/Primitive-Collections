@@ -9,6 +9,11 @@ import speiger.src.collections.doubles.functions.consumer.DoubleObjectConsumer;
 import speiger.src.collections.doubles.functions.function.DoubleFunction;
 import speiger.src.collections.doubles.functions.function.DoubleObjectUnaryOperator;
 import speiger.src.collections.doubles.maps.interfaces.Double2ObjectMap;
+import speiger.src.collections.doubles.maps.interfaces.Double2ObjectOrderedMap;
+import speiger.src.collections.doubles.sets.DoubleOrderedSet;
+import speiger.src.collections.objects.collections.ObjectOrderedCollection;
+import speiger.src.collections.objects.sets.AbstractObjectSet;
+import speiger.src.collections.objects.sets.ObjectOrderedSet;
 import speiger.src.collections.doubles.sets.AbstractDoubleSet;
 import speiger.src.collections.doubles.sets.DoubleSet;
 import speiger.src.collections.doubles.utils.maps.Double2ObjectMaps;
@@ -85,7 +90,7 @@ public abstract class AbstractDouble2ObjectMap<V> extends AbstractMap<Double, V>
 	public void putAll(Double[] keys, V[] values, int offset, int size) {
 		SanityChecks.checkArrayCapacity(keys.length, offset, size);
 		SanityChecks.checkArrayCapacity(values.length, offset, size);
-		for(int i = 0;i<size;i++) put(keys[i], values[i]);		
+		for(int i = 0;i<size;i++) put(keys[i].doubleValue(), values[i]);		
 	}
 	
 	@Override
@@ -366,6 +371,104 @@ public abstract class AbstractDouble2ObjectMap<V> extends AbstractMap<Double, V>
 		while(iter.hasNext()) hash += iter.next().hashCode();
 		return hash;
 	}
+	
+	public static class ReversedDouble2ObjectOrderedMap<V> extends AbstractDouble2ObjectMap<V> implements Double2ObjectOrderedMap<V> {
+		Double2ObjectOrderedMap<V> map;
+		
+		public ReversedDouble2ObjectOrderedMap(Double2ObjectOrderedMap<V> map) {
+			this.map = map;
+		}
+		@Override
+		public AbstractDouble2ObjectMap<V> setDefaultReturnValue(V v) {
+			map.setDefaultReturnValue(v);
+			return this;
+		}
+		@Override
+		public V getDefaultReturnValue() { return map.getDefaultReturnValue(); }
+		@Override
+		public Double2ObjectOrderedMap<V> copy() { throw new UnsupportedOperationException(); }
+		@Override
+		public V put(double key, V value) { return map.put(key, value); }
+		@Override
+		public V putIfAbsent(double key, V value) { return map.putIfAbsent(key, value); }
+		@Override
+		public V remove(double key) { return map.remove(key); }
+		@Override
+		public boolean remove(double key, V value) { return map.remove(key, value); }
+		@Override
+		public V removeOrDefault(double key, V defaultValue) { return map.removeOrDefault(key, defaultValue); }
+		@Override
+		public boolean containsKey(double key) { return map.containsKey(key); }
+		@Override
+		public boolean containsValue(Object value) { return map.containsValue(value); }
+		@Override
+		public boolean replace(double key, V oldValue, V newValue) { return map.replace(key, oldValue, newValue); }
+		@Override
+		public V replace(double key, V value) { return map.replace(key, value); }
+		@Override
+		public void replaceObjects(Double2ObjectMap<V> m) { map.replaceObjects(m); }
+		@Override
+		public void replaceObjects(DoubleObjectUnaryOperator<V> mappingFunction) { map.replaceObjects(mappingFunction); }
+		@Override
+		public V compute(double key, DoubleObjectUnaryOperator<V> mappingFunction) { return map.compute(key, mappingFunction); }
+		@Override
+		public V computeIfAbsent(double key, DoubleFunction<V> mappingFunction) { return map.computeIfAbsent(key, mappingFunction); }
+		@Override
+		public V supplyIfAbsent(double key, ObjectSupplier<V> valueProvider) { return map.supplyIfAbsent(key, valueProvider); }
+		@Override
+		public V computeIfPresent(double key, DoubleObjectUnaryOperator<V> mappingFunction) { return map.computeIfPresent(key, mappingFunction); }
+		@Override
+		public V merge(double key, V value, ObjectObjectUnaryOperator<V, V> mappingFunction) { return map.merge(key, value, mappingFunction); }
+		@Override
+		public V getOrDefault(double key, V defaultValue) { return map.getOrDefault(key, defaultValue); }
+		@Override
+		public V get(double key) { return map.get(key); }
+		@Override
+		public V putAndMoveToFirst(double key, V value) { return map.putAndMoveToLast(key, value); }
+		@Override
+		public V putAndMoveToLast(double key, V value) { return map.putAndMoveToFirst(key, value); }
+		@Override
+		public V putFirst(double key, V value) { return map.putLast(key, value); }
+		@Override
+		public V putLast(double key, V value) { return map.putFirst(key, value); }
+		@Override
+		public boolean moveToFirst(double key) { return map.moveToLast(key); }
+		@Override
+		public boolean moveToLast(double key) { return map.moveToFirst(key); }
+		@Override
+		public V getAndMoveToFirst(double key) { return map.getAndMoveToLast(key); }
+		@Override
+		public V getAndMoveToLast(double key) { return map.getAndMoveToFirst(key); }
+		@Override
+		public double firstDoubleKey() { return map.lastDoubleKey(); }
+		@Override
+		public double pollFirstDoubleKey() { return map.pollLastDoubleKey(); }
+		@Override
+		public double lastDoubleKey() { return map.firstDoubleKey(); }
+		@Override
+		public double pollLastDoubleKey() { return map.pollFirstDoubleKey(); }
+		@Override
+		public V firstValue() { return map.lastValue(); }
+		@Override
+		public V lastValue() { return map.firstValue(); }
+		@Override
+		public Double2ObjectMap.Entry<V> firstEntry() { return map.lastEntry(); }
+		@Override
+		public Double2ObjectMap.Entry<V> lastEntry() { return map.firstEntry(); }
+		@Override
+		public Double2ObjectMap.Entry<V> pollFirstEntry() { return map.pollLastEntry(); }
+		@Override
+		public Double2ObjectMap.Entry<V> pollLastEntry() { return map.pollFirstEntry(); }
+		@Override
+		public ObjectOrderedSet<Double2ObjectMap.Entry<V>> double2ObjectEntrySet() { return new AbstractObjectSet.ReversedObjectOrderedSet<>(map.double2ObjectEntrySet()); }
+		@Override
+		public DoubleOrderedSet keySet() { return new AbstractDoubleSet.ReversedDoubleOrderedSet(map.keySet()); }
+		@Override
+		public ObjectOrderedCollection<V> values() { return map.values().reversed(); }
+		@Override
+		public Double2ObjectOrderedMap<V> reversed() { return map; }
+	}
+
 	
 	/**
 	 * A Simple Type Specific Entry class to reduce boxing/unboxing

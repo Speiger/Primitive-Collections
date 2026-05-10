@@ -29,6 +29,7 @@ import speiger.src.collections.ints.sets.IntOrderedSet;
 import speiger.src.collections.ints.sets.IntSet;
 import speiger.src.collections.ints.utils.IntSets;
 import speiger.src.collections.booleans.collections.BooleanCollection;
+import speiger.src.collections.booleans.collections.BooleanOrderedCollection;
 import speiger.src.collections.booleans.functions.function.BooleanBooleanUnaryOperator;
 import speiger.src.collections.booleans.functions.BooleanSupplier;
 import speiger.src.collections.booleans.utils.BooleanCollections;
@@ -431,6 +432,10 @@ public class Int2BooleanMaps
 		@Override
 		public boolean putAndMoveToLast(int key, boolean value) { throw new UnsupportedOperationException(); }
 		@Override
+		public boolean putFirst(int key, boolean value) { throw new UnsupportedOperationException(); }
+		@Override
+		public boolean putLast(int key, boolean value) { throw new UnsupportedOperationException(); }
+		@Override
 		public boolean moveToFirst(int key) { throw new UnsupportedOperationException(); }
 		@Override
 		public boolean moveToLast(int key) { throw new UnsupportedOperationException(); }
@@ -451,13 +456,25 @@ public class Int2BooleanMaps
 		@Override
 		public boolean lastBooleanValue() { return map.lastBooleanValue(); }
 		@Override
+		public Int2BooleanMap.Entry firstEntry() { return map.firstEntry(); }
+		@Override
+		public Int2BooleanMap.Entry lastEntry() { return map.lastEntry(); }
+		@Override
+		public Int2BooleanMap.Entry pollFirstEntry() { throw new UnsupportedOperationException(); }
+		@Override
+		public Int2BooleanMap.Entry pollLastEntry() { throw new UnsupportedOperationException(); }
+		@Override
 		public Int2BooleanOrderedMap copy() { return map.copy(); }
 		@Override
 		public IntOrderedSet keySet() { 
 			if(keys == null) keys = IntSets.unmodifiable(map.keySet()); 
 			return (IntOrderedSet)keys;
 		}
-				
+		@Override
+		public BooleanOrderedCollection values() {
+			if(values == null) values = BooleanCollections.unmodifiable(map.values());
+			return (BooleanOrderedCollection)values;
+		}
 		@Override
 		public ObjectOrderedSet<Int2BooleanMap.Entry> int2BooleanEntrySet() {
 			if(entrySet == null) entrySet = new UnmodifyableOrderedEntrySet(map.int2BooleanEntrySet());
@@ -605,15 +622,17 @@ public class Int2BooleanMaps
 		@Override
 		public ObjectBidirectionalIterator<Int2BooleanMap.Entry> iterator() { return ObjectIterators.unmodifiable(set.iterator()); }
 		@Override
+		public ObjectBidirectionalIterator<Int2BooleanMap.Entry> reverseIterator() { return ObjectIterators.unmodifiable(set.reverseIterator()); }
+		@Override
 		public ObjectBidirectionalIterator<Int2BooleanMap.Entry> iterator(Int2BooleanMap.Entry fromElement) { return ObjectIterators.unmodifiable(set.iterator(fromElement)); }
 		@Override
-		public Int2BooleanMap.Entry first() { return set.first(); }
+		public Int2BooleanMap.Entry getFirst() { return set.getFirst(); }
 		@Override
-		public Int2BooleanMap.Entry pollFirst() { throw new UnsupportedOperationException(); }
+		public Int2BooleanMap.Entry removeFirst() { throw new UnsupportedOperationException(); }
 		@Override
-		public Int2BooleanMap.Entry last() { return set.last(); }
+		public Int2BooleanMap.Entry getLast() { return set.getLast(); }
 		@Override
-		public Int2BooleanMap.Entry pollLast() { throw new UnsupportedOperationException(); }
+		public Int2BooleanMap.Entry removeLast() { throw new UnsupportedOperationException(); }
 	}
 	
 	/**
@@ -782,6 +801,10 @@ public class Int2BooleanMaps
 		@Override
 		public boolean putAndMoveToLast(int key, boolean value) { synchronized(mutex) { return map.putAndMoveToLast(key, value); } }
 		@Override
+		public boolean putFirst(int key, boolean value) { synchronized(mutex) { return map.putFirst(key, value); } }
+		@Override
+		public boolean putLast(int key, boolean value) { synchronized(mutex) { return map.putLast(key, value); } }
+		@Override
 		public boolean moveToFirst(int key) { synchronized(mutex) { return map.moveToFirst(key); } }
 		@Override
 		public boolean moveToLast(int key) { synchronized(mutex) { return map.moveToLast(key); } }
@@ -802,13 +825,25 @@ public class Int2BooleanMaps
 		@Override
 		public boolean lastBooleanValue() { synchronized(mutex) { return map.lastBooleanValue(); } }
 		@Override
+		public Int2BooleanMap.Entry firstEntry() { synchronized(mutex) { return map.firstEntry(); } }
+		@Override
+		public Int2BooleanMap.Entry lastEntry() { synchronized(mutex) { return map.lastEntry(); } }
+		@Override
+		public Int2BooleanMap.Entry pollFirstEntry() { synchronized(mutex) { return map.pollFirstEntry(); } }
+		@Override
+		public Int2BooleanMap.Entry pollLastEntry() { synchronized(mutex) { return map.pollLastEntry(); } }
+		@Override
 		public Int2BooleanOrderedMap copy() { synchronized(mutex) { return map.copy(); } }
 		@Override
 		public IntOrderedSet keySet() {
 			if(keys == null) keys = IntSets.synchronize(map.keySet(), mutex);
 			return (IntOrderedSet)keys;
 		}
-		
+		@Override
+		public BooleanOrderedCollection values() {
+			if(values == null) values = BooleanCollections.synchronize(map.values(), mutex);
+			return (BooleanOrderedCollection)values;
+		}
 		@Override
 		public ObjectOrderedSet<Int2BooleanMap.Entry> int2BooleanEntrySet() {
 			if(entrySet == null) entrySet = ObjectSets.synchronize(map.int2BooleanEntrySet(), mutex);

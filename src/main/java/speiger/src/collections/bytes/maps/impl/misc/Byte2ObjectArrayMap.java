@@ -25,7 +25,7 @@ import speiger.src.collections.bytes.maps.interfaces.Byte2ObjectOrderedMap;
 import speiger.src.collections.bytes.sets.AbstractByteSet;
 import speiger.src.collections.bytes.sets.ByteOrderedSet;
 import speiger.src.collections.objects.collections.AbstractObjectCollection;
-import speiger.src.collections.objects.collections.ObjectCollection;
+import speiger.src.collections.objects.collections.ObjectOrderedCollection;
 import speiger.src.collections.objects.collections.ObjectIterator;
 import speiger.src.collections.objects.functions.ObjectSupplier;
 import speiger.src.collections.objects.functions.function.ObjectObjectUnaryOperator;
@@ -58,7 +58,7 @@ public class Byte2ObjectArrayMap<V> extends AbstractByte2ObjectMap<V> implements
 	/** KeySet cache */
 	protected ByteOrderedSet keySet;
 	/** Values cache */
-	protected ObjectCollection<V> valuesC;
+	protected ObjectOrderedCollection<V> valuesC;
 	/** EntrySet cache */
 	protected FastOrderedSet<V> entrySet;
 	
@@ -203,6 +203,27 @@ public class Byte2ObjectArrayMap<V> extends AbstractByte2ObjectMap<V> implements
 	}
 	
 	@Override
+	public V putFirst(byte key, V value) {
+		int index = findIndex(key);
+		if(index < 0) {
+			insertIndex(0, key, value);
+			size++;
+			return getDefaultReturnValue();
+		}
+		return values[index];
+	}
+	
+	@Override
+	public V putLast(byte key, V value) {
+		int index = findIndex(key);
+		if(index < 0) {
+			insertIndex(size++, key, value);
+			return getDefaultReturnValue();
+		}
+		return values[index];
+	}
+	
+	@Override
 	public boolean moveToFirst(byte key) {
 		int index = findIndex(key);
 		if(index > 0) {
@@ -312,6 +333,34 @@ public class Byte2ObjectArrayMap<V> extends AbstractByte2ObjectMap<V> implements
 	}
 	
 	@Override
+	public Byte2ObjectMap.Entry<V> firstEntry() {
+		if(size == 0) throw new NoSuchElementException();
+		return new BasicEntry<>(keys[0], values[0]);
+	}
+	
+	@Override
+	public Byte2ObjectMap.Entry<V> lastEntry() {
+		if(size == 0) throw new NoSuchElementException();
+		return new BasicEntry<>(keys[size-1], values[size-1]);
+	}
+	
+	@Override
+	public Byte2ObjectMap.Entry<V> pollFirstEntry() {
+		if(size == 0) throw new NoSuchElementException();
+		BasicEntry<V> result = new BasicEntry<>(keys[0], values[0]);
+		removeIndex(0);
+		return result;
+	}
+	
+	@Override
+	public Byte2ObjectMap.Entry<V> pollLastEntry() {
+		if(size == 0) throw new NoSuchElementException();
+		BasicEntry<V> result = new BasicEntry<>(keys[size-1], values[size-1]);
+		removeIndex(size-1);
+		return result;
+	}
+	
+	@Override
 	public V remove(byte key) {
 		int index = findIndex(key);
 		if(index < 0) return getDefaultReturnValue();
@@ -368,7 +417,7 @@ public class Byte2ObjectArrayMap<V> extends AbstractByte2ObjectMap<V> implements
 	}
 
 	@Override
-	public ObjectCollection<V> values() {
+	public ObjectOrderedCollection<V> values() {
 		if(valuesC == null) valuesC = new Values();
 		return valuesC;
 	}
@@ -631,24 +680,24 @@ public class Byte2ObjectArrayMap<V> extends AbstractByte2ObjectMap<V> implements
 		}
 		
 		@Override
-		public Byte2ObjectMap.Entry<V> first() {
+		public Byte2ObjectMap.Entry<V> getFirst() {
 			return new BasicEntry<>(firstByteKey(), firstValue());
 		}
 		
 		@Override
-		public Byte2ObjectMap.Entry<V> last() {
+		public Byte2ObjectMap.Entry<V> getLast() {
 			return new BasicEntry<>(lastByteKey(), lastValue());
 		}
 		
 		@Override
-		public Byte2ObjectMap.Entry<V> pollFirst() {
+		public Byte2ObjectMap.Entry<V> removeFirst() {
 			BasicEntry<V> entry = new BasicEntry<>(firstByteKey(), firstValue());
 			pollFirstByteKey();
 			return entry;
 		}
 		
 		@Override
-		public Byte2ObjectMap.Entry<V> pollLast() {
+		public Byte2ObjectMap.Entry<V> removeLast() {
 			BasicEntry<V> entry = new BasicEntry<>(lastByteKey(), lastValue());
 			pollLastByteKey();
 			return entry;
@@ -656,7 +705,12 @@ public class Byte2ObjectArrayMap<V> extends AbstractByte2ObjectMap<V> implements
 		
 		@Override
 		public ObjectBidirectionalIterator<Byte2ObjectMap.Entry<V>> iterator() {
-			return new EntryIterator();
+			return new EntryIterator(true);
+		}
+		
+		@Override
+		public ObjectBidirectionalIterator<Byte2ObjectMap.Entry<V>> reverseIterator() {
+			return new EntryIterator(false);
 		}
 		
 		@Override
@@ -666,7 +720,7 @@ public class Byte2ObjectArrayMap<V> extends AbstractByte2ObjectMap<V> implements
 		
 		@Override
 		public ObjectBidirectionalIterator<Byte2ObjectMap.Entry<V>> fastIterator() {
-			return new FastEntryIterator();
+			return new FastEntryIterator(true);
 		}
 		
 		@Override
@@ -863,7 +917,9 @@ public class Byte2ObjectArrayMap<V> extends AbstractByte2ObjectMap<V> implements
 		@Override
 		public boolean moveToLast(byte o) { return Byte2ObjectArrayMap.this.moveToLast(o); }
 		@Override
-		public ByteListIterator iterator() { return new KeyIterator(); }
+		public ByteListIterator iterator() { return new KeyIterator(true); }
+		@Override
+		public ByteListIterator reverseIterator() { return new KeyIterator(false); }
 		@Override
 		public ByteBidirectionalIterator iterator(byte fromElement) { return new KeyIterator(fromElement); } 
 		@Override
@@ -871,13 +927,13 @@ public class Byte2ObjectArrayMap<V> extends AbstractByte2ObjectMap<V> implements
 		@Override
 		public void clear() { Byte2ObjectArrayMap.this.clear(); }
 		@Override
-		public byte firstByte() { return firstByteKey(); }
+		public byte getFirstByte() { return firstByteKey(); }
 		@Override
-		public byte pollFirstByte() { return pollFirstByteKey(); }
+		public byte removeFirstByte() { return pollFirstByteKey(); }
 		@Override
-		public byte lastByte() { return lastByteKey(); }
+		public byte getLastByte() { return lastByteKey(); }
 		@Override
-		public byte pollLastByte() { return pollLastByteKey(); }
+		public byte removeLastByte() { return pollLastByteKey(); }
 		
 		@Override
 		public KeySet copy() { throw new UnsupportedOperationException(); }
@@ -974,32 +1030,43 @@ public class Byte2ObjectArrayMap<V> extends AbstractByte2ObjectMap<V> implements
 		}
 	}
 	
-	private class Values extends AbstractObjectCollection<V> {
+	private class Values extends AbstractObjectCollection<V> implements ObjectOrderedCollection<V> {
 		@Override
-		public boolean contains(Object e) {
-			return containsValue(e);
-		}
+		public boolean contains(Object e) { return containsValue(e); }
 		
 		@Override
-		public boolean add(V o) {
-			throw new UnsupportedOperationException();
-		}
-
+		public boolean add(V o) { throw new UnsupportedOperationException(); }
 		@Override
-		public ObjectIterator<V> iterator() {
-			return new ValueIterator();
-		}
-		
+		public ObjectIterator<V> iterator() { return new ValueIterator(true); }
 		@Override
-		public int size() {
-			return Byte2ObjectArrayMap.this.size();
-		}
-		
+		public int size() { return Byte2ObjectArrayMap.this.size(); }
 		@Override
-		public void clear() {
-			Byte2ObjectArrayMap.this.clear();
+		public void clear() { Byte2ObjectArrayMap.this.clear(); }
+		@Override
+		public ObjectOrderedCollection<V> reversed() { return new AbstractObjectCollection.ReverseObjectOrderedCollection<>(this, this::reverseIterator); }
+		private ObjectIterator<V> reverseIterator() {
+			return new ValueIterator(false);
 		}
-		
+		@Override
+		public void addFirst(V e) { throw new UnsupportedOperationException(); }
+		@Override
+		public void addLast(V e) { throw new UnsupportedOperationException(); }
+		@Override
+		public V getFirst() { return firstValue(); }
+		@Override
+		public V removeFirst() {
+			V result = firstValue();
+			pollFirstByteKey();
+			return result; 
+		}
+		@Override
+		public V getLast() { return lastValue(); }
+		@Override
+		public V removeLast() {
+			V result = lastValue();
+			pollLastByteKey();
+			return result; 
+		}
 		@Override
 		public void forEach(Consumer<? super V> action) {
 			Objects.requireNonNull(action);
@@ -1088,10 +1155,8 @@ public class Byte2ObjectArrayMap<V> extends AbstractByte2ObjectMap<V> implements
 	private class FastEntryIterator extends MapIterator implements ObjectListIterator<Byte2ObjectMap.Entry<V>> {
 		MapEntry entry = new MapEntry();
 		
-		public FastEntryIterator() {}
-		public FastEntryIterator(byte from) {
-			index = findIndex(from);
-		}
+		public FastEntryIterator(boolean start) { super(start); }
+		public FastEntryIterator(byte element) { super(element); }
 		
 		@Override
 		public Byte2ObjectMap.Entry<V> next() {
@@ -1114,11 +1179,8 @@ public class Byte2ObjectArrayMap<V> extends AbstractByte2ObjectMap<V> implements
 	private class EntryIterator extends MapIterator implements ObjectListIterator<Byte2ObjectMap.Entry<V>> {
 		MapEntry entry = null;
 		
-		public EntryIterator() {}
-		public EntryIterator(byte from) {
-			index = findIndex(from);
-			if(index == -1) throw new NoSuchElementException();
-		}
+		public EntryIterator(boolean start) { super(start); }
+		public EntryIterator(byte element) { super(element); }
 		
 		@Override
 		public Byte2ObjectMap.Entry<V> next() {
@@ -1145,11 +1207,8 @@ public class Byte2ObjectArrayMap<V> extends AbstractByte2ObjectMap<V> implements
 	}
 	
 	private class KeyIterator extends MapIterator implements ByteListIterator {
-		public KeyIterator() {}
-		public KeyIterator(byte element) {
-			index = findIndex(element);
-			if(index == -1) throw new NoSuchElementException();
-		}
+		public KeyIterator(boolean start) { super(start); }
+		public KeyIterator(byte element) { super(element); }
 		
 		@Override
 		public byte previousByte() {
@@ -1169,6 +1228,9 @@ public class Byte2ObjectArrayMap<V> extends AbstractByte2ObjectMap<V> implements
 	}
 	
 	private class ValueIterator extends MapIterator implements ObjectListIterator<V> {
+		public ValueIterator(boolean start) { super(start); }
+		public ValueIterator(byte element) { super(element); }
+		
 		@Override
 		public V previous() {
 			return values[previousEntry()];
@@ -1187,23 +1249,37 @@ public class Byte2ObjectArrayMap<V> extends AbstractByte2ObjectMap<V> implements
 	}
 	
 	private class MapIterator {
+		boolean forward;
 		int index;
 		int lastReturned = -1;
-
+		
+		MapIterator(boolean start) {
+			this.forward = start;
+			this.index = start ? 0 : size;
+		}
+		
+		MapIterator(byte element) {
+			this.forward = true;
+			index = findIndex(element);
+			if(index == -1) throw new NoSuchElementException();
+		}
+		
 		public boolean hasNext() {
-			return index < size;
+			return forward ? index < size : index > 0;
 		}
 		
 		public boolean hasPrevious() {
-			return index > 0;
+			return forward ? index > 0 : index < size;
 		}
 		
 		public int nextIndex() {
-			return index;
+			if(forward) return index;
+			return size - index;
 		}
 		
 		public int previousIndex() {
-			return index-1;
+			if(forward) return index-1;
+			return (size - index)-1;
 		}
 		
 		public void remove() {
@@ -1216,26 +1292,42 @@ public class Byte2ObjectArrayMap<V> extends AbstractByte2ObjectMap<V> implements
 		
 		public int previousEntry() {
 			if(!hasPrevious()) throw new NoSuchElementException();
-			index--;
-			return (lastReturned = index);
-		}
-		
-		public int nextEntry() {
-			if(!hasNext()) throw new NoSuchElementException();
+			if(forward) {
+				index--;
+				return (lastReturned = index);
+			}
 			lastReturned = index;
 			return index++;
 		}
 		
+		public int nextEntry() {
+			if(!hasNext()) throw new NoSuchElementException();
+			if(forward) {
+				lastReturned = index;
+				return index++;
+			}
+			index--;
+			return (lastReturned = index);
+		}
+		
 		public int skip(int amount) {
 			if(amount < 0) throw new IllegalStateException("Negative Numbers are not allowed");
+			return forward ? moveForward(amount) : moveBackwards(amount);
+		}
+		
+		public int back(int amount) {
+			if(amount < 0) throw new IllegalStateException("Negative Numbers are not allowed");
+			return forward ? moveBackwards(amount) : moveForward(amount);
+		}
+		
+		private int moveForward(int amount) {
 			int steps = Math.min(amount, size() - index);
 			index += steps;
 			if(steps > 0) lastReturned = Math.min(index-1, size()-1);
 			return steps;
 		}
 		
-		public int back(int amount) {
-			if(amount < 0) throw new IllegalStateException("Negative Numbers are not allowed");
+		private int moveBackwards(int amount) {
 			int steps = Math.min(amount, index);
 			index -= steps;
 			if(steps > 0) lastReturned = Math.min(index, size()-1);

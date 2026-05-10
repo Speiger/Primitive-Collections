@@ -4,11 +4,13 @@ import java.util.Set;
 
 import speiger.src.collections.PACKAGE.collections.COLLECTION;
 import speiger.src.collections.PACKAGE.collections.ITERATOR;
+#if SPLIT_ITERATOR_FEATURE
 import speiger.src.collections.PACKAGE.collections.SPLIT_ITERATOR;
+import speiger.src.collections.PACKAGE.utils.SPLIT_ITERATORS;
+#endif
 #if SETS_FEATURE
 import speiger.src.collections.PACKAGE.utils.SETS;
 #endif
-import speiger.src.collections.PACKAGE.utils.SPLIT_ITERATORS;
 
 
 /**
@@ -88,10 +90,12 @@ public interface SET KEY_GENERIC_TYPE extends Set<CLASS_TYPE>, COLLECTION KEY_GE
 	public default SET KEY_GENERIC_TYPE unmodifiable() { return SETS.unmodifiable(this); }
 	
 #endif
+#if SPLIT_ITERATOR_FEATURE
 	/**
 	 * A Type Specific Type Splititerator to reduce boxing/unboxing
 	 * @return type specific splititerator
 	 */
 	@Override
 	default SPLIT_ITERATOR KEY_GENERIC_TYPE spliterator() { return SPLIT_ITERATORS.createSplititerator(this, 0); }
+#endif
 }

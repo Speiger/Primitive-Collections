@@ -30,7 +30,7 @@ public class CharLists
 	 * Returns a Immutable EmptyList instance that is automatically casted.
 	 * @return an empty list
 	 */
-	public static EmptyList empty() {
+	public static CharList empty() {
 		return EMPTY;
 	}
 	

@@ -312,17 +312,19 @@ public class ShortSets
 		@Override
 		public ShortBidirectionalIterator iterator() { return ShortIterators.unmodifiable(s.iterator()); }
 		@Override
+		public ShortBidirectionalIterator reverseIterator() { return ShortIterators.unmodifiable(s.reverseIterator()); }
+		@Override
 		public ShortBidirectionalIterator iterator(short fromElement) { return ShortIterators.unmodifiable(s.iterator(fromElement)); }
 		@Override
 		public ShortOrderedSet copy() { return s.copy(); }
 		@Override
-		public short firstShort() { return s.firstShort(); }
+		public short getFirstShort() { return s.getFirstShort(); }
 		@Override
-		public short pollFirstShort() { throw new UnsupportedOperationException(); }
+		public short removeFirstShort() { throw new UnsupportedOperationException(); }
 		@Override
-		public short lastShort() { return s.lastShort(); }
+		public short getLastShort() { return s.getLastShort(); }
 		@Override
-		public short pollLastShort() { throw new UnsupportedOperationException(); }
+		public short removeLastShort() { throw new UnsupportedOperationException(); }
 	}
 	
 	private static class UnmodifiableSortedSet extends UnmodifiableSet implements ShortSortedSet
@@ -583,17 +585,19 @@ public class ShortSets
 		@Override
 		public ShortBidirectionalIterator iterator() { synchronized(mutex) { return s.iterator(); } }
 		@Override
+		public ShortBidirectionalIterator reverseIterator() { synchronized(mutex) { return s.reverseIterator(); } }
+		@Override
 		public ShortBidirectionalIterator iterator(short fromElement) { synchronized(mutex) { return s.iterator(fromElement); } }
 		@Override
 		public ShortOrderedSet copy() { synchronized(mutex) { return s.copy(); } }
 		@Override
-		public short firstShort() { synchronized(mutex) { return s.firstShort(); } }
+		public short getFirstShort() { synchronized(mutex) { return s.getFirstShort(); } }
 		@Override
-		public short pollFirstShort() { synchronized(mutex) { return s.pollFirstShort(); } }
+		public short removeFirstShort() { synchronized(mutex) { return s.removeFirstShort(); } }
 		@Override
-		public short lastShort() { synchronized(mutex) { return s.lastShort(); } }
+		public short getLastShort() { synchronized(mutex) { return s.getLastShort(); } }
 		@Override
-		public short pollLastShort() { synchronized(mutex) { return s.pollLastShort(); } }
+		public short removeLastShort() { synchronized(mutex) { return s.removeLastShort(); } }
 	}
 	
 	private static class SynchronizedTrimSet extends SynchronizedSet implements ITrimmable

@@ -24,8 +24,7 @@ import speiger.src.collections.bytes.functions.ByteConsumer;
 import speiger.src.collections.bytes.utils.ByteArrays;
 import speiger.src.collections.objects.utils.ObjectArrays;
 import java.util.stream.IntStream;
-import java.util.stream.StreamSupport;
-import speiger.src.collections.bytes.collections.ByteSplititerator;
+import java.util.stream.StreamSupport;import speiger.src.collections.bytes.collections.ByteSplititerator;
 import speiger.src.collections.bytes.utils.ByteSplititerators;
 import speiger.src.collections.utils.SanityChecks;
 
@@ -361,7 +360,7 @@ public class ByteLinkedList extends AbstractByteList implements BytePriorityDequ
 		if(index == 0) return new ListIter(first, index);
 		return new ListIter(getNode(index), index);
 	}
-	
+
 	/**
 	 * Returns a Java-Type-Specific Stream to reduce boxing/unboxing.
 	 * @return a Stream of the closest java type
@@ -372,8 +371,7 @@ public class ByteLinkedList extends AbstractByteList implements BytePriorityDequ
 	 * Returns a Java-Type-Specific Parallel Stream to reduce boxing/unboxing.
 	 * @return a Stream of the closest java type
 	 */
-	public IntStream parallelPrimitiveStream() { return StreamSupport.intStream(new SplitIterator(this, first, 0), true); }
-	/**
+	public IntStream parallelPrimitiveStream() { return StreamSupport.intStream(new SplitIterator(this, first, 0), true); }	/**
 	 * A Type Specific Type Splititerator to reduce boxing/unboxing
 	 * @return type specific splititerator
 	 */

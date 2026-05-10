@@ -239,7 +239,7 @@ public class LongLinkedOpenHashSet extends LongOpenHashSet implements LongOrdere
 	
 	@Override
 	public boolean moveToFirst(long o) {
-		if(isEmpty() || firstLong() == o) return false;
+		if(isEmpty() || getFirstLong() == o) return false;
 		if(o == 0) {
 			if(containsNull) {
 				moveToFirstIndex(nullIndex);
@@ -261,7 +261,7 @@ public class LongLinkedOpenHashSet extends LongOpenHashSet implements LongOrdere
 	
 	@Override
 	public boolean moveToLast(long o) {
-		if(isEmpty() || lastLong() == o) return false;
+		if(isEmpty() || getLastLong() == o) return false;
 		if(o == 0) {
 			if(containsNull) {
 				moveToLastIndex(nullIndex);
@@ -318,13 +318,13 @@ public class LongLinkedOpenHashSet extends LongOpenHashSet implements LongOrdere
 	}
 	
 	@Override
-	public long firstLong() {
+	public long getFirstLong() {
 		if(size == 0) throw new NoSuchElementException();
 		return keys[firstIndex];
 	}
 	
 	@Override
-	public long pollFirstLong() {
+	public long removeFirstLong() {
 		if(size == 0) throw new NoSuchElementException();
 		int pos = firstIndex;
 		onNodeRemoved(pos);
@@ -340,13 +340,13 @@ public class LongLinkedOpenHashSet extends LongOpenHashSet implements LongOrdere
 	}
 	
 	@Override
-	public long lastLong() {
+	public long getLastLong() {
 		if(size == 0) throw new NoSuchElementException();
 		return keys[lastIndex];
 	}
 	
 	@Override
-	public long pollLastLong() {
+	public long removeLastLong() {
 		if(size == 0) throw new NoSuchElementException();
 		int pos = lastIndex;
 		onNodeRemoved(pos);
@@ -628,7 +628,12 @@ public class LongLinkedOpenHashSet extends LongOpenHashSet implements LongOrdere
 	
 	@Override
 	public LongListIterator iterator() {
-		return new SetIterator();
+		return new SetIterator(true);
+	}
+	
+	@Override
+	public LongListIterator reverseIterator() {
+		return new SetIterator(false);
 	}
 	
 	@Override
@@ -653,16 +658,20 @@ public class LongLinkedOpenHashSet extends LongOpenHashSet implements LongOrdere
 	}
 	
 	private class SetIterator implements LongListIterator {
+		boolean forward;
 		int previous = -1;
 		int next = -1;
 		int current = -1;
-		int index = 0;
+		int index = -1;
 		
-		SetIterator() {
-			next = firstIndex;
+		SetIterator(boolean start) {
+			this.forward = start;
+			if(start) next = firstIndex;
+			else previous = lastIndex;
 		}
 		
 		SetIterator(long from) {
+			this.forward = true;
 			if(from == 0) {
 				if(containsNull) {
 					next = (int) links[nullIndex];
@@ -691,48 +700,60 @@ public class LongLinkedOpenHashSet extends LongOpenHashSet implements LongOrdere
 		
 		@Override
 		public int skip(int amount) {
-			int result = 0;
-			while(next != -1 && result != amount) {
-				current = previous = next;
-				next = (int)(links[current]);
-				result++;
-			}
+			int result = forward ? moveForward(amount) : moveBackwards(amount);
 			if(index >= 0) index+=result;
 			return result;
 		}
 		
 		@Override
 		public int back(int amount) {
+			int result = forward ? moveBackwards(amount) : moveForward(amount);
+			if(index >= 0) index-=result;
+			return result;
+		}
+		
+		private int moveForward(int amount) {
+			int result = 0;
+			while(next != -1 && result != amount) {
+				current = previous = next;
+				next = (int)(links[current]);
+				result++;
+			}
+			return result;
+		}
+		
+		private int moveBackwards(int amount) {
 			int result = 0;
 			while(previous != -1 && result != amount) {
 				current = next = previous;
 				previous = (int)(links[current] >> 32);
 				result++;
 			}
-			if(index >= 0) index-=result;
 			return result;
 		}
 		
 		@Override
 		public boolean hasNext() {
-			return next != -1;
+			return (forward ? next : previous) != -1;
 		}
 
 		@Override
 		public boolean hasPrevious() {
-			return previous != -1;
+			return (forward ? previous : next) != -1;
 		}
 		
 		@Override
 		public int nextIndex() {
 			ensureIndexKnown();
-			return index;
+			if(forward) return index;
+			return size - index;
 		}
 		
 		@Override
 		public int previousIndex() {
 			ensureIndexKnown();
-			return index - 1;
+			if(forward) return index-1;
+			return (size - index)-1;
 		}
 		
 		@Override
@@ -781,8 +802,8 @@ public class LongLinkedOpenHashSet extends LongOpenHashSet implements LongOrdere
 		@Override
 		public long previousLong() {
 			if(!hasPrevious()) throw new NoSuchElementException();
-			current = next = previous;
-			previous = (int)(links[current] >> 32);
+			if(forward) moveBackwards();
+			else moveForwards();
 			if(index >= 0) index--;
 			return keys[current];
 		}
@@ -790,10 +811,20 @@ public class LongLinkedOpenHashSet extends LongOpenHashSet implements LongOrdere
 		@Override
 		public long nextLong() {
 			if(!hasNext()) throw new NoSuchElementException();
-			current = previous = next;
-			next = (int)(links[current]);
+			if(forward) moveForwards();
+			else moveBackwards();
 			if(index >= 0) index++;
 			return keys[current];
+		}
+		
+		private void moveBackwards() {
+			current = next = previous;
+			previous = (int)(links[current] >> 32);
+		}
+		
+		private void moveForwards() {
+			current = previous = next;
+			next = (int)(links[current]);
 		}
 		
 		private void ensureIndexKnown() {

@@ -312,17 +312,19 @@ public class ByteSets
 		@Override
 		public ByteBidirectionalIterator iterator() { return ByteIterators.unmodifiable(s.iterator()); }
 		@Override
+		public ByteBidirectionalIterator reverseIterator() { return ByteIterators.unmodifiable(s.reverseIterator()); }
+		@Override
 		public ByteBidirectionalIterator iterator(byte fromElement) { return ByteIterators.unmodifiable(s.iterator(fromElement)); }
 		@Override
 		public ByteOrderedSet copy() { return s.copy(); }
 		@Override
-		public byte firstByte() { return s.firstByte(); }
+		public byte getFirstByte() { return s.getFirstByte(); }
 		@Override
-		public byte pollFirstByte() { throw new UnsupportedOperationException(); }
+		public byte removeFirstByte() { throw new UnsupportedOperationException(); }
 		@Override
-		public byte lastByte() { return s.lastByte(); }
+		public byte getLastByte() { return s.getLastByte(); }
 		@Override
-		public byte pollLastByte() { throw new UnsupportedOperationException(); }
+		public byte removeLastByte() { throw new UnsupportedOperationException(); }
 	}
 	
 	private static class UnmodifiableSortedSet extends UnmodifiableSet implements ByteSortedSet
@@ -583,17 +585,19 @@ public class ByteSets
 		@Override
 		public ByteBidirectionalIterator iterator() { synchronized(mutex) { return s.iterator(); } }
 		@Override
+		public ByteBidirectionalIterator reverseIterator() { synchronized(mutex) { return s.reverseIterator(); } }
+		@Override
 		public ByteBidirectionalIterator iterator(byte fromElement) { synchronized(mutex) { return s.iterator(fromElement); } }
 		@Override
 		public ByteOrderedSet copy() { synchronized(mutex) { return s.copy(); } }
 		@Override
-		public byte firstByte() { synchronized(mutex) { return s.firstByte(); } }
+		public byte getFirstByte() { synchronized(mutex) { return s.getFirstByte(); } }
 		@Override
-		public byte pollFirstByte() { synchronized(mutex) { return s.pollFirstByte(); } }
+		public byte removeFirstByte() { synchronized(mutex) { return s.removeFirstByte(); } }
 		@Override
-		public byte lastByte() { synchronized(mutex) { return s.lastByte(); } }
+		public byte getLastByte() { synchronized(mutex) { return s.getLastByte(); } }
 		@Override
-		public byte pollLastByte() { synchronized(mutex) { return s.pollLastByte(); } }
+		public byte removeLastByte() { synchronized(mutex) { return s.removeLastByte(); } }
 	}
 	
 	private static class SynchronizedTrimSet extends SynchronizedSet implements ITrimmable

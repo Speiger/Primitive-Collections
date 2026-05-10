@@ -1,6 +1,8 @@
 package speiger.src.collections.ints.maps.interfaces;
 
 import speiger.src.collections.ints.utils.maps.Int2IntMaps;
+import speiger.src.collections.ints.maps.abstracts.AbstractInt2IntMap;
+import speiger.src.collections.ints.collections.IntOrderedCollection;
 import speiger.src.collections.ints.sets.IntOrderedSet;
 import speiger.src.collections.objects.collections.ObjectBidirectionalIterator;
 import speiger.src.collections.objects.sets.ObjectOrderedSet;
@@ -30,6 +32,26 @@ public interface Int2IntOrderedMap extends Int2IntMap
 	 * @see java.util.Map#put(Object, Object)
 	 */
 	public int putAndMoveToLast(int key, int value);
+	
+	/**
+	 * A alternative to putAndMoveToFirst.
+	 * This method simply puts an entry at the first spot of the Map but only if the entry is missing.
+	 * @param key the key that should be inserted
+	 * @param value the value that should be inserted
+	 * @return the previous present or default return value
+	 * @see java.util.Map#put(Object, Object)
+	 */
+	public int putFirst(int key, int value);
+	
+	/**
+	 * A alternative to putAndMoveToLast.
+	 * This method simply puts an entry at the last spot of the Map but only if the entry is missing.
+	 * @param key the key that should be inserted
+	 * @param value the value that should be inserted
+	 * @return the previous present or default return value
+	 * @see java.util.Map#put(Object, Object)
+	 */
+	public int putLast(int key, int value);
 	
 	/**
 	 * A specific move method to move a given key/value to the first index.
@@ -91,12 +113,24 @@ public interface Int2IntOrderedMap extends Int2IntMap
 	 */
 	public int lastIntValue();
 	
+	
+	public Int2IntMap.Entry firstEntry();
+	
+	public Int2IntMap.Entry lastEntry();
+	
+	public Int2IntMap.Entry pollFirstEntry();
+	
+	public Int2IntMap.Entry pollLastEntry();
 	@Override
 	public Int2IntOrderedMap copy();
 	@Override
 	public IntOrderedSet keySet();
 	@Override
+	public IntOrderedCollection values();
+	@Override
 	public ObjectOrderedSet<Int2IntMap.Entry> int2IntEntrySet();
+	
+	public default Int2IntOrderedMap reversed() { return new AbstractInt2IntMap.ReversedInt2IntOrderedMap(this); }
 	
 	/**
 	 * Creates a Wrapped SortedMap that is Synchronized

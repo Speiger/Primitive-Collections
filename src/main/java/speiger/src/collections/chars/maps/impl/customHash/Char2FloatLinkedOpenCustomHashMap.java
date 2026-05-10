@@ -24,7 +24,7 @@ import speiger.src.collections.chars.sets.AbstractCharSet;
 import speiger.src.collections.chars.sets.CharOrderedSet;
 import speiger.src.collections.chars.utils.CharStrategy;
 import speiger.src.collections.floats.collections.AbstractFloatCollection;
-import speiger.src.collections.floats.collections.FloatCollection;
+import speiger.src.collections.floats.collections.FloatOrderedCollection;
 import speiger.src.collections.floats.collections.FloatIterator;
 import speiger.src.collections.floats.functions.function.FloatFloatUnaryOperator;
 import speiger.src.collections.floats.functions.FloatConsumer;
@@ -259,6 +259,54 @@ public class Char2FloatLinkedOpenCustomHashMap extends Char2FloatOpenCustomHashM
 	}
 	
 	@Override
+	public float putFirst(char key, float value) {
+		if(strategy.equals(key, (char)0)) {
+			if(containsNull) return values[nullIndex];
+			values[nullIndex] = value;
+			containsNull = true;
+			onNodeAdded(nullIndex);
+			moveToFirstIndex(nullIndex);
+		}
+		else {
+			int pos = HashUtil.mix(strategy.hashCode(key)) & mask;
+			while(!strategy.equals(keys[pos], (char)0)) {
+				if(strategy.equals(keys[pos], key)) return values[pos];
+				pos = ++pos & mask;
+			}
+			keys[pos] = key;
+			values[pos] = value;
+			onNodeAdded(pos);
+			moveToFirstIndex(pos);
+		}
+		if(size++ >= maxFill) rehash(HashUtil.arraySize(size+1, loadFactor));
+		return getDefaultReturnValue();
+	}
+	
+	@Override
+	public float putLast(char key, float value) {
+		if(strategy.equals(key, (char)0)) {
+			if(containsNull) return values[nullIndex];
+			values[nullIndex] = value;
+			containsNull = true;
+			onNodeAdded(nullIndex);
+			moveToLastIndex(nullIndex);
+		}
+		else {
+			int pos = HashUtil.mix(strategy.hashCode(key)) & mask;
+			while(!strategy.equals(keys[pos], (char)0)) {
+				if(strategy.equals(keys[pos], key)) return values[pos];
+				pos = ++pos & mask;
+			}
+			keys[pos] = key;
+			values[pos] = value;
+			onNodeAdded(pos);
+			moveToLastIndex(pos);
+		}
+		if(size++ >= maxFill) rehash(HashUtil.arraySize(size+1, loadFactor));
+		return getDefaultReturnValue();
+	}
+	
+	@Override
 	public boolean moveToFirst(char key) {
 		if(isEmpty() || strategy.equals(firstCharKey(), key)) return false;
 		if(strategy.equals(key, (char)0)) {
@@ -394,6 +442,52 @@ public class Char2FloatLinkedOpenCustomHashMap extends Char2FloatOpenCustomHashM
 	}
 	
 	@Override
+	public Char2FloatMap.Entry firstEntry() {
+		if(size == 0) throw new NoSuchElementException();
+		return new BasicEntry(keys[firstIndex], values[firstIndex]);
+	}
+	
+	@Override
+	public Char2FloatMap.Entry lastEntry() {
+		if(size == 0) throw new NoSuchElementException();
+		return new BasicEntry(keys[lastIndex], values[lastIndex]);
+	}
+	
+	@Override
+	public Char2FloatMap.Entry pollFirstEntry() {
+		if(size == 0) throw new NoSuchElementException();
+		int pos = firstIndex;
+		onNodeRemoved(pos);
+		BasicEntry result = new BasicEntry(keys[pos], values[pos]);
+		size--;
+		if(strategy.equals(result.getCharKey(), (char)0)) {
+			containsNull = false;
+			keys[nullIndex] = (char)0;
+			values[nullIndex] = 0F;
+		}
+		else shiftKeys(pos);
+		if(nullIndex > minCapacity && size < maxFill / 4 && nullIndex > HashUtil.DEFAULT_MIN_CAPACITY) rehash(nullIndex / 2);
+		return result;
+	}
+	
+	@Override
+	public Char2FloatMap.Entry pollLastEntry() {
+		if(size == 0) throw new NoSuchElementException();
+		int pos = lastIndex;
+		onNodeRemoved(pos);
+		BasicEntry result = new BasicEntry(keys[pos], values[pos]);
+		size--;
+		if(strategy.equals(result.getCharKey(), (char)0)) {
+			containsNull = false;
+			keys[nullIndex] = (char)0;
+			values[nullIndex] = 0F;
+		}
+		else shiftKeys(pos);
+		if(nullIndex > minCapacity && size < maxFill / 4 && nullIndex > HashUtil.DEFAULT_MIN_CAPACITY) rehash(nullIndex / 2);
+		return result;
+	}
+	
+	@Override
 	public ObjectOrderedSet<Char2FloatMap.Entry> char2FloatEntrySet() {
 		if(entrySet == null) entrySet = new MapEntrySet();
 		return (ObjectOrderedSet<Char2FloatMap.Entry>)entrySet;
@@ -406,9 +500,9 @@ public class Char2FloatLinkedOpenCustomHashMap extends Char2FloatOpenCustomHashM
 	}
 	
 	@Override
-	public FloatCollection values() {
+	public FloatOrderedCollection values() {
 		if(valuesC == null) valuesC = new Values();
-		return valuesC;
+		return (FloatOrderedCollection)valuesC;
 	}
 	
 	@Override
@@ -593,24 +687,24 @@ public class Char2FloatLinkedOpenCustomHashMap extends Char2FloatOpenCustomHashM
 		}
 		
 		@Override
-		public Char2FloatMap.Entry first() {
+		public Char2FloatMap.Entry getFirst() {
 			return new BasicEntry(firstCharKey(), firstFloatValue());
 		}
 		
 		@Override
-		public Char2FloatMap.Entry last() {
+		public Char2FloatMap.Entry getLast() {
 			return new BasicEntry(lastCharKey(), lastFloatValue());
 		}
 		
 		@Override
-		public Char2FloatMap.Entry pollFirst() {
+		public Char2FloatMap.Entry removeFirst() {
 			BasicEntry entry = new BasicEntry(firstCharKey(), firstFloatValue());
 			pollFirstCharKey();
 			return entry;
 		}
 		
 		@Override
-		public Char2FloatMap.Entry pollLast() {
+		public Char2FloatMap.Entry removeLast() {
 			BasicEntry entry = new BasicEntry(lastCharKey(), lastFloatValue());
 			pollLastCharKey();
 			return entry;
@@ -618,7 +712,12 @@ public class Char2FloatLinkedOpenCustomHashMap extends Char2FloatOpenCustomHashM
 		
 		@Override
 		public ObjectBidirectionalIterator<Char2FloatMap.Entry> iterator() {
-			return new EntryIterator();
+			return new EntryIterator(true);
+		}
+		
+		@Override
+		public ObjectBidirectionalIterator<Char2FloatMap.Entry> reverseIterator() {
+			return new EntryIterator(false);
 		}
 		
 		@Override
@@ -628,7 +727,7 @@ public class Char2FloatLinkedOpenCustomHashMap extends Char2FloatOpenCustomHashM
 		
 		@Override
 		public ObjectBidirectionalIterator<Char2FloatMap.Entry> fastIterator() {
-			return new FastEntryIterator();
+			return new FastEntryIterator(true);
 		}
 		
 		@Override
@@ -864,7 +963,12 @@ public class Char2FloatLinkedOpenCustomHashMap extends Char2FloatOpenCustomHashM
 		
 		@Override
 		public CharListIterator iterator() {
-			return new KeyIterator();
+			return new KeyIterator(true);
+		}
+		
+		@Override
+		public CharListIterator reverseIterator() {
+			return new KeyIterator(false);
 		}
 		
 		@Override
@@ -886,22 +990,22 @@ public class Char2FloatLinkedOpenCustomHashMap extends Char2FloatOpenCustomHashM
 		}
 		
 		@Override
-		public char firstChar() {
+		public char getFirstChar() {
 			return firstCharKey();
 		}
 		
 		@Override
-		public char pollFirstChar() {
+		public char removeFirstChar() {
 			return pollFirstCharKey();
 		}
 
 		@Override
-		public char lastChar() {
+		public char getLastChar() {
 			return lastCharKey();
 		}
 
 		@Override
-		public char pollLastChar() {
+		public char removeLastChar() {
 			return pollLastCharKey();
 		}
 		
@@ -1030,30 +1134,41 @@ public class Char2FloatLinkedOpenCustomHashMap extends Char2FloatOpenCustomHashM
 		}
 	}
 	
-	private class Values extends AbstractFloatCollection {
+	private class Values extends AbstractFloatCollection implements FloatOrderedCollection {
 		@Override
-		public boolean contains(float e) {
-			return containsValue(e);
+		public boolean contains(float e) { return containsValue(e); }
+		@Override
+		public boolean add(float o) { throw new UnsupportedOperationException(); }
+		@Override
+		public FloatIterator iterator() { return new ValueIterator(true); }
+		@Override
+		public int size() { return Char2FloatLinkedOpenCustomHashMap.this.size(); }
+		@Override
+		public void clear() { Char2FloatLinkedOpenCustomHashMap.this.clear(); }
+		@Override
+		public FloatOrderedCollection reversed() { return new AbstractFloatCollection.ReverseFloatOrderedCollection(this, this::reverseIterator); }
+		private FloatIterator reverseIterator() {
+			return new ValueIterator(false);
 		}
-		
 		@Override
-		public boolean add(float o) {
-			throw new UnsupportedOperationException();
+		public void addFirst(float e) { throw new UnsupportedOperationException(); }
+		@Override
+		public void addLast(float e) { throw new UnsupportedOperationException(); }
+		@Override
+		public float getFirstFloat() { return firstFloatValue(); }
+		@Override
+		public float removeFirstFloat() {
+			float result = firstFloatValue();
+			pollFirstCharKey();
+			return result; 
 		}
-
 		@Override
-		public FloatIterator iterator() {
-			return new ValueIterator();
-		}
-		
+		public float getLastFloat() { return lastFloatValue(); }
 		@Override
-		public int size() {
-			return Char2FloatLinkedOpenCustomHashMap.this.size();
-		}
-		
-		@Override
-		public void clear() {
-			Char2FloatLinkedOpenCustomHashMap.this.clear();
+		public float removeLastFloat() {
+			float result = lastFloatValue();
+			pollLastCharKey();
+			return result; 
 		}
 		
 		@Override
@@ -1184,7 +1299,7 @@ public class Char2FloatLinkedOpenCustomHashMap extends Char2FloatOpenCustomHashM
 	private class FastEntryIterator extends MapIterator implements ObjectListIterator<Char2FloatMap.Entry> {
 		MapEntry entry = new MapEntry();
 		
-		public FastEntryIterator() {}
+		public FastEntryIterator(boolean start) { super(start); }
 		public FastEntryIterator(char from) {
 			super(from);
 		}
@@ -1211,7 +1326,7 @@ public class Char2FloatLinkedOpenCustomHashMap extends Char2FloatOpenCustomHashM
 	private class EntryIterator extends MapIterator implements ObjectListIterator<Char2FloatMap.Entry> {
 		MapEntry entry;
 		
-		public EntryIterator() {}
+		public EntryIterator(boolean start) { super(start); }
 		public EntryIterator(char from) {
 			super(from);
 		}
@@ -1241,7 +1356,7 @@ public class Char2FloatLinkedOpenCustomHashMap extends Char2FloatOpenCustomHashM
 	
 	private class KeyIterator extends MapIterator implements CharListIterator {
 		
-		public KeyIterator() {}
+		public KeyIterator(boolean start) { super(start); }
 		public KeyIterator(char from) {
 			super(from);
 		}
@@ -1263,7 +1378,7 @@ public class Char2FloatLinkedOpenCustomHashMap extends Char2FloatOpenCustomHashM
 	}
 	
 	private class ValueIterator extends MapIterator implements FloatListIterator {
-		public ValueIterator() {}
+		public ValueIterator(boolean start) { super(start); }
 		
 		@Override
 		public float previousFloat() {
@@ -1284,16 +1399,20 @@ public class Char2FloatLinkedOpenCustomHashMap extends Char2FloatOpenCustomHashM
 	}
 	
 	private class MapIterator {
+		boolean forward;
 		int previous = -1;
 		int next = -1;
 		int current = -1;
 		int index = 0;
 		
-		MapIterator() {
-			next = firstIndex;
+		MapIterator(boolean start) {
+			this.forward = start;
+			if(start) next = firstIndex;
+			else previous = lastIndex;
 		}
 		
 		MapIterator(char from) {
+			this.forward = true;
 			if(strategy.equals(from, (char)0)) {
 				if(containsNull) {
 					next = (int) links[nullIndex];
@@ -1321,11 +1440,11 @@ public class Char2FloatLinkedOpenCustomHashMap extends Char2FloatOpenCustomHashM
 		}
 		
 		public boolean hasNext() {
-			return next != -1;
+			return (forward ? next : previous) != -1;
 		}
 
 		public boolean hasPrevious() {
-			return previous != -1;
+			return (forward ? previous : next) != -1;
 		}
 		
 		public int nextIndex() {
@@ -1385,20 +1504,30 @@ public class Char2FloatLinkedOpenCustomHashMap extends Char2FloatOpenCustomHashM
 		
 		public int previousEntry() {
 			if(!hasPrevious()) throw new NoSuchElementException();
-			current = previous;
-			previous = (int)(links[current] >> 32);
-			next = current;
+			if(forward) moveBackwards();
+			else moveForwards();
 			if(index >= 0) index--;
 			return current;
 		}
 		
 		public int nextEntry() {
 			if(!hasNext()) throw new NoSuchElementException();
+			if(forward) moveForwards();
+			else moveBackwards();
+			if(index >= 0) index++;
+			return current;
+		}
+		
+		private void moveBackwards() {
+			current = previous;
+			previous = (int)(links[current] >> 32);
+			next = current;
+		}
+		
+		private void moveForwards() {
 			current = next;
 			next = (int)(links[current]);
 			previous = current;
-			if(index >= 0) index++;
-			return current;
 		}
 		
 		private void ensureIndexKnown() {

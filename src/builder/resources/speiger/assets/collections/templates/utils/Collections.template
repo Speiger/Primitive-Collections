@@ -23,6 +23,9 @@ import java.util.function.Consumer;
 
 import speiger.src.collections.PACKAGE.collections.ABSTRACT_COLLECTION;
 import speiger.src.collections.PACKAGE.collections.COLLECTION;
+#if ORDERED_MAP_FEATURE
+import speiger.src.collections.PACKAGE.collections.ORDERED_COLLECTION;
+#endif
 import speiger.src.collections.PACKAGE.collections.ITERATOR;
 #if !TYPE_OBJECT
 import speiger.src.collections.PACKAGE.functions.COMPARATOR;
@@ -74,6 +77,37 @@ public class COLLECTIONS
 	 */
 	public static GENERIC_KEY_BRACES COLLECTION KEY_GENERIC_TYPE unmodifiable(COLLECTION KEY_GENERIC_TYPE c) {
 		return c instanceof UnmodifiableCollection ? c : new UnmodifiableCollectionBRACES(c);
+	}
+	
+	/**
+	 * Returns a Immutable Ordered Collection instance based on the instance given.
+	 * @param c that should be made immutable/unmodifiable
+	 * @Type(T)
+	 * @return a unmodifiable Ordered collection wrapper. If the Collection already a unmodifiable wrapper then it just returns itself.
+	 */
+	public static GENERIC_KEY_BRACES ORDERED_COLLECTION KEY_GENERIC_TYPE unmodifiable(ORDERED_COLLECTION KEY_GENERIC_TYPE c) {
+		return c instanceof UnmodifiableOrderedCollection ? c : new UnmodifiableOrderedCollectionBRACES(c);
+	}
+	
+	/**
+	 * Returns a synchronized ordered Collection instance based on the instance given.
+	 * @param c that should be synchronized
+	 * @Type(T)
+	 * @return a synchronized ordered collection wrapper. If the Collection already a synchronized wrapper then it just returns itself.
+	 */
+	public static GENERIC_KEY_BRACES ORDERED_COLLECTION KEY_GENERIC_TYPE synchronize(ORDERED_COLLECTION KEY_GENERIC_TYPE c) {
+		return c instanceof SynchronizedOrderedCollection ? c : new SynchronizedOrderedCollectionBRACES(c);
+	}
+	
+	/**
+	 * Returns a synchronized ordered Collection instance based on the instance given.
+	 * @param c that should be synchronized
+	 * @param mutex is the controller of the synchronization block.
+	 * @Type(T)
+	 * @return a synchronized ordered collection wrapper. If the Collection already a synchronized wrapper then it just returns itself.
+	 */
+	public static GENERIC_KEY_BRACES ORDERED_COLLECTION KEY_GENERIC_TYPE synchronize(ORDERED_COLLECTION KEY_GENERIC_TYPE c, Object mutex) {
+		return c instanceof SynchronizedOrderedCollection ? c : new SynchronizedOrderedCollectionBRACES(c, mutex);
 	}
 	
 	/**
@@ -668,6 +702,38 @@ public class COLLECTIONS
 		@Override
 		public SingletonCollection KEY_GENERIC_TYPE copy() { return new SingletonCollectionBRACES(element); }
 	}
+	/**
+	 * Synchronized Ordered Collection Wrapper for the synchronizedCollection function
+	 * @Type(T)
+	 */
+	public static class SynchronizedOrderedCollection KEY_GENERIC_TYPE extends SynchronizedCollection KEY_GENERIC_TYPE implements ORDERED_COLLECTION KEY_GENERIC_TYPE {
+		ORDERED_COLLECTION KEY_GENERIC_TYPE c;
+		
+		SynchronizedOrderedCollection(ORDERED_COLLECTION KEY_GENERIC_TYPE c, Object mutex) {
+			super(c, mutex);
+			this.c = c;
+		}
+		
+		SynchronizedOrderedCollection(ORDERED_COLLECTION KEY_GENERIC_TYPE c) {
+			super(c);
+			this.c = c;
+		}
+		
+		@Override
+		public ORDERED_COLLECTION KEY_GENERIC_TYPE reversed() { return COLLECTIONS.synchronize(c.reversed(), mutex); }
+		@Override
+		public void addFirst(KEY_TYPE e) { synchronized(mutex) { this.c.addFirst(e); } }
+		@Override
+		public void addLast(KEY_TYPE e) { synchronized(mutex) { this.c.addLast(e); } }
+		@Override
+		public KEY_TYPE GET_FIRST_KEY() { synchronized(mutex) { return this.c.GET_FIRST_KEY(); } }
+		@Override
+		public KEY_TYPE REMOVE_FIRST_KEY() { synchronized(mutex) { return this.c.REMOVE_FIRST_KEY(); } }
+		@Override
+		public KEY_TYPE GET_LAST_KEY() { synchronized(mutex) { return this.c.GET_LAST_KEY(); } }
+		@Override
+		public KEY_TYPE REMOVE_LAST_KEY() { synchronized(mutex) { return this.c.REMOVE_LAST_KEY(); } }
+	}	
 	
 	/**
 	 * Synchronized Collection Wrapper for the synchronizedCollection function
@@ -808,6 +874,34 @@ public class COLLECTIONS
 		public KEY_TYPE findFirst(PREDICATE KEY_GENERIC_TYPE filter) { synchronized(mutex) { return c.findFirst(filter); } }
 		@Override
 		public int count(PREDICATE KEY_GENERIC_TYPE filter) { synchronized(mutex) { return c.count(filter); } }
+	}
+	
+	/**
+	 * Unmodifyable Ordered Collection Wrapper for the unmodifyableCollection method
+	 * @Type(T)
+	 */
+	public static class UnmodifiableOrderedCollection KEY_GENERIC_TYPE extends UnmodifiableCollection KEY_GENERIC_TYPE implements ORDERED_COLLECTION KEY_GENERIC_TYPE {
+		ORDERED_COLLECTION KEY_GENERIC_TYPE c;
+		
+		UnmodifiableOrderedCollection(ORDERED_COLLECTION KEY_GENERIC_TYPE c) {
+			super(c);
+			this.c = c;
+		}
+		
+		@Override
+		public ORDERED_COLLECTION KEY_GENERIC_TYPE reversed() { return COLLECTIONS.unmodifiable(c.reversed()); }
+		@Override
+		public void addFirst(KEY_TYPE e) { throw new UnsupportedOperationException(); }
+		@Override
+		public void addLast(KEY_TYPE e) { throw new UnsupportedOperationException(); }
+		@Override
+		public KEY_TYPE GET_FIRST_KEY() { return c.GET_FIRST_KEY(); }
+		@Override
+		public KEY_TYPE REMOVE_FIRST_KEY() { throw new UnsupportedOperationException(); }
+		@Override
+		public KEY_TYPE GET_LAST_KEY() { return c.GET_LAST_KEY(); }
+		@Override
+		public KEY_TYPE REMOVE_LAST_KEY() { throw new UnsupportedOperationException(); }
 	}
 	
 	/**

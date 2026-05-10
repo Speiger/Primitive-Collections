@@ -23,6 +23,7 @@ import speiger.src.collections.objects.sets.ObjectNavigableSet;
 import speiger.src.collections.objects.sets.ObjectSortedSet;
 import speiger.src.collections.objects.sets.ObjectOrderedSet;
 import speiger.src.collections.objects.collections.ObjectCollection;
+import speiger.src.collections.objects.collections.ObjectOrderedCollection;
 import speiger.src.collections.objects.functions.ObjectSupplier;
 import speiger.src.collections.objects.utils.ObjectCollections;
 
@@ -440,6 +441,10 @@ public class Object2ObjectMaps
 		@Override
 		public V putAndMoveToLast(T key, V value) { throw new UnsupportedOperationException(); }
 		@Override
+		public V putFirst(T key, V value) { throw new UnsupportedOperationException(); }
+		@Override
+		public V putLast(T key, V value) { throw new UnsupportedOperationException(); }
+		@Override
 		public boolean moveToFirst(T key) { throw new UnsupportedOperationException(); }
 		@Override
 		public boolean moveToLast(T key) { throw new UnsupportedOperationException(); }
@@ -460,13 +465,25 @@ public class Object2ObjectMaps
 		@Override
 		public V lastValue() { return map.lastValue(); }
 		@Override
+		public Object2ObjectMap.Entry<T, V> firstEntry() { return map.firstEntry(); }
+		@Override
+		public Object2ObjectMap.Entry<T, V> lastEntry() { return map.lastEntry(); }
+		@Override
+		public Object2ObjectMap.Entry<T, V> pollFirstEntry() { throw new UnsupportedOperationException(); }
+		@Override
+		public Object2ObjectMap.Entry<T, V> pollLastEntry() { throw new UnsupportedOperationException(); }
+		@Override
 		public Object2ObjectOrderedMap<T, V> copy() { return map.copy(); }
 		@Override
 		public ObjectOrderedSet<T> keySet() { 
 			if(keys == null) keys = ObjectSets.unmodifiable(map.keySet()); 
 			return (ObjectOrderedSet<T>)keys;
 		}
-				
+		@Override
+		public ObjectOrderedCollection<V> values() {
+			if(values == null) values = ObjectCollections.unmodifiable(map.values());
+			return (ObjectOrderedCollection<V>)values;
+		}
 		@Override
 		public ObjectOrderedSet<Object2ObjectMap.Entry<T, V>> object2ObjectEntrySet() {
 			if(entrySet == null) entrySet = new UnmodifyableOrderedEntrySet<>(map.object2ObjectEntrySet());
@@ -608,15 +625,17 @@ public class Object2ObjectMaps
 		@Override
 		public ObjectBidirectionalIterator<Object2ObjectMap.Entry<T, V>> iterator() { return ObjectIterators.unmodifiable(set.iterator()); }
 		@Override
+		public ObjectBidirectionalIterator<Object2ObjectMap.Entry<T, V>> reverseIterator() { return ObjectIterators.unmodifiable(set.reverseIterator()); }
+		@Override
 		public ObjectBidirectionalIterator<Object2ObjectMap.Entry<T, V>> iterator(Object2ObjectMap.Entry<T, V> fromElement) { return ObjectIterators.unmodifiable(set.iterator(fromElement)); }
 		@Override
-		public Object2ObjectMap.Entry<T, V> first() { return set.first(); }
+		public Object2ObjectMap.Entry<T, V> getFirst() { return set.getFirst(); }
 		@Override
-		public Object2ObjectMap.Entry<T, V> pollFirst() { throw new UnsupportedOperationException(); }
+		public Object2ObjectMap.Entry<T, V> removeFirst() { throw new UnsupportedOperationException(); }
 		@Override
-		public Object2ObjectMap.Entry<T, V> last() { return set.last(); }
+		public Object2ObjectMap.Entry<T, V> getLast() { return set.getLast(); }
 		@Override
-		public Object2ObjectMap.Entry<T, V> pollLast() { throw new UnsupportedOperationException(); }
+		public Object2ObjectMap.Entry<T, V> removeLast() { throw new UnsupportedOperationException(); }
 	}
 	
 	/**
@@ -741,6 +760,10 @@ public class Object2ObjectMaps
 		@Override
 		public V putAndMoveToLast(T key, V value) { synchronized(mutex) { return map.putAndMoveToLast(key, value); } }
 		@Override
+		public V putFirst(T key, V value) { synchronized(mutex) { return map.putFirst(key, value); } }
+		@Override
+		public V putLast(T key, V value) { synchronized(mutex) { return map.putLast(key, value); } }
+		@Override
 		public boolean moveToFirst(T key) { synchronized(mutex) { return map.moveToFirst(key); } }
 		@Override
 		public boolean moveToLast(T key) { synchronized(mutex) { return map.moveToLast(key); } }
@@ -761,13 +784,25 @@ public class Object2ObjectMaps
 		@Override
 		public V lastValue() { synchronized(mutex) { return map.lastValue(); } }
 		@Override
+		public Object2ObjectMap.Entry<T, V> firstEntry() { synchronized(mutex) { return map.firstEntry(); } }
+		@Override
+		public Object2ObjectMap.Entry<T, V> lastEntry() { synchronized(mutex) { return map.lastEntry(); } }
+		@Override
+		public Object2ObjectMap.Entry<T, V> pollFirstEntry() { synchronized(mutex) { return map.pollFirstEntry(); } }
+		@Override
+		public Object2ObjectMap.Entry<T, V> pollLastEntry() { synchronized(mutex) { return map.pollLastEntry(); } }
+		@Override
 		public Object2ObjectOrderedMap<T, V> copy() { synchronized(mutex) { return map.copy(); } }
 		@Override
 		public ObjectOrderedSet<T> keySet() {
 			if(keys == null) keys = ObjectSets.synchronize(map.keySet(), mutex);
 			return (ObjectOrderedSet<T>)keys;
 		}
-		
+		@Override
+		public ObjectOrderedCollection<V> values() {
+			if(values == null) values = ObjectCollections.synchronize(map.values(), mutex);
+			return (ObjectOrderedCollection<V>)values;
+		}
 		@Override
 		public ObjectOrderedSet<Object2ObjectMap.Entry<T, V>> object2ObjectEntrySet() {
 			if(entrySet == null) entrySet = ObjectSets.synchronize(map.object2ObjectEntrySet(), mutex);

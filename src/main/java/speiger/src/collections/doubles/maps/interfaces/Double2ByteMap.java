@@ -94,7 +94,7 @@ public interface Double2ByteMap extends Map<Double, Byte>, Double2ByteFunction
 	 * @return the last present value or default return	value.
 	 */
 	public default Byte put(Map.Entry<Double, Byte> entry) {
-		return put(entry.getKey(), entry.getValue());
+		return put(entry.getKey().doubleValue(), entry.getValue().byteValue());
 	}
 
 	/**

@@ -25,7 +25,7 @@ import speiger.src.collections.longs.maps.interfaces.Long2BooleanOrderedMap;
 import speiger.src.collections.longs.sets.AbstractLongSet;
 import speiger.src.collections.longs.sets.LongOrderedSet;
 import speiger.src.collections.booleans.collections.AbstractBooleanCollection;
-import speiger.src.collections.booleans.collections.BooleanCollection;
+import speiger.src.collections.booleans.collections.BooleanOrderedCollection;
 import speiger.src.collections.booleans.collections.BooleanIterator;
 import speiger.src.collections.booleans.functions.BooleanSupplier;
 import speiger.src.collections.booleans.functions.function.BooleanBooleanUnaryOperator;
@@ -62,7 +62,7 @@ public class Long2BooleanArrayMap extends AbstractLong2BooleanMap implements Lon
 	/** KeySet cache */
 	protected LongOrderedSet keySet;
 	/** Values cache */
-	protected BooleanCollection valuesC;
+	protected BooleanOrderedCollection valuesC;
 	/** EntrySet cache */
 	protected FastOrderedSet entrySet;
 	
@@ -207,6 +207,27 @@ public class Long2BooleanArrayMap extends AbstractLong2BooleanMap implements Lon
 	}
 	
 	@Override
+	public boolean putFirst(long key, boolean value) {
+		int index = findIndex(key);
+		if(index < 0) {
+			insertIndex(0, key, value);
+			size++;
+			return getDefaultReturnValue();
+		}
+		return values[index];
+	}
+	
+	@Override
+	public boolean putLast(long key, boolean value) {
+		int index = findIndex(key);
+		if(index < 0) {
+			insertIndex(size++, key, value);
+			return getDefaultReturnValue();
+		}
+		return values[index];
+	}
+	
+	@Override
 	public boolean moveToFirst(long key) {
 		int index = findIndex(key);
 		if(index > 0) {
@@ -321,6 +342,34 @@ public class Long2BooleanArrayMap extends AbstractLong2BooleanMap implements Lon
 	}
 	
 	@Override
+	public Long2BooleanMap.Entry firstEntry() {
+		if(size == 0) throw new NoSuchElementException();
+		return new BasicEntry(keys[0], values[0]);
+	}
+	
+	@Override
+	public Long2BooleanMap.Entry lastEntry() {
+		if(size == 0) throw new NoSuchElementException();
+		return new BasicEntry(keys[size-1], values[size-1]);
+	}
+	
+	@Override
+	public Long2BooleanMap.Entry pollFirstEntry() {
+		if(size == 0) throw new NoSuchElementException();
+		BasicEntry result = new BasicEntry(keys[0], values[0]);
+		removeIndex(0);
+		return result;
+	}
+	
+	@Override
+	public Long2BooleanMap.Entry pollLastEntry() {
+		if(size == 0) throw new NoSuchElementException();
+		BasicEntry result = new BasicEntry(keys[size-1], values[size-1]);
+		removeIndex(size-1);
+		return result;
+	}
+	
+	@Override
 	public boolean remove(long key) {
 		int index = findIndex(key);
 		if(index < 0) return getDefaultReturnValue();
@@ -377,7 +426,7 @@ public class Long2BooleanArrayMap extends AbstractLong2BooleanMap implements Lon
 	}
 
 	@Override
-	public BooleanCollection values() {
+	public BooleanOrderedCollection values() {
 		if(valuesC == null) valuesC = new Values();
 		return valuesC;
 	}
@@ -695,24 +744,24 @@ public class Long2BooleanArrayMap extends AbstractLong2BooleanMap implements Lon
 		}
 		
 		@Override
-		public Long2BooleanMap.Entry first() {
+		public Long2BooleanMap.Entry getFirst() {
 			return new BasicEntry(firstLongKey(), firstBooleanValue());
 		}
 		
 		@Override
-		public Long2BooleanMap.Entry last() {
+		public Long2BooleanMap.Entry getLast() {
 			return new BasicEntry(lastLongKey(), lastBooleanValue());
 		}
 		
 		@Override
-		public Long2BooleanMap.Entry pollFirst() {
+		public Long2BooleanMap.Entry removeFirst() {
 			BasicEntry entry = new BasicEntry(firstLongKey(), firstBooleanValue());
 			pollFirstLongKey();
 			return entry;
 		}
 		
 		@Override
-		public Long2BooleanMap.Entry pollLast() {
+		public Long2BooleanMap.Entry removeLast() {
 			BasicEntry entry = new BasicEntry(lastLongKey(), lastBooleanValue());
 			pollLastLongKey();
 			return entry;
@@ -720,7 +769,12 @@ public class Long2BooleanArrayMap extends AbstractLong2BooleanMap implements Lon
 		
 		@Override
 		public ObjectBidirectionalIterator<Long2BooleanMap.Entry> iterator() {
-			return new EntryIterator();
+			return new EntryIterator(true);
+		}
+		
+		@Override
+		public ObjectBidirectionalIterator<Long2BooleanMap.Entry> reverseIterator() {
+			return new EntryIterator(false);
 		}
 		
 		@Override
@@ -730,7 +784,7 @@ public class Long2BooleanArrayMap extends AbstractLong2BooleanMap implements Lon
 		
 		@Override
 		public ObjectBidirectionalIterator<Long2BooleanMap.Entry> fastIterator() {
-			return new FastEntryIterator();
+			return new FastEntryIterator(true);
 		}
 		
 		@Override
@@ -927,7 +981,9 @@ public class Long2BooleanArrayMap extends AbstractLong2BooleanMap implements Lon
 		@Override
 		public boolean moveToLast(long o) { return Long2BooleanArrayMap.this.moveToLast(o); }
 		@Override
-		public LongListIterator iterator() { return new KeyIterator(); }
+		public LongListIterator iterator() { return new KeyIterator(true); }
+		@Override
+		public LongListIterator reverseIterator() { return new KeyIterator(false); }
 		@Override
 		public LongBidirectionalIterator iterator(long fromElement) { return new KeyIterator(fromElement); } 
 		@Override
@@ -935,13 +991,13 @@ public class Long2BooleanArrayMap extends AbstractLong2BooleanMap implements Lon
 		@Override
 		public void clear() { Long2BooleanArrayMap.this.clear(); }
 		@Override
-		public long firstLong() { return firstLongKey(); }
+		public long getFirstLong() { return firstLongKey(); }
 		@Override
-		public long pollFirstLong() { return pollFirstLongKey(); }
+		public long removeFirstLong() { return pollFirstLongKey(); }
 		@Override
-		public long lastLong() { return lastLongKey(); }
+		public long getLastLong() { return lastLongKey(); }
 		@Override
-		public long pollLastLong() { return pollLastLongKey(); }
+		public long removeLastLong() { return pollLastLongKey(); }
 		
 		@Override
 		public KeySet copy() { throw new UnsupportedOperationException(); }
@@ -1038,32 +1094,43 @@ public class Long2BooleanArrayMap extends AbstractLong2BooleanMap implements Lon
 		}
 	}
 	
-	private class Values extends AbstractBooleanCollection {
+	private class Values extends AbstractBooleanCollection implements BooleanOrderedCollection {
 		@Override
-		public boolean contains(boolean e) {
-			return containsValue(e);
-		}
+		public boolean contains(boolean e) { return containsValue(e); }
 		
 		@Override
-		public boolean add(boolean o) {
-			throw new UnsupportedOperationException();
-		}
-
+		public boolean add(boolean o) { throw new UnsupportedOperationException(); }
 		@Override
-		public BooleanIterator iterator() {
-			return new ValueIterator();
-		}
-		
+		public BooleanIterator iterator() { return new ValueIterator(true); }
 		@Override
-		public int size() {
-			return Long2BooleanArrayMap.this.size();
-		}
-		
+		public int size() { return Long2BooleanArrayMap.this.size(); }
 		@Override
-		public void clear() {
-			Long2BooleanArrayMap.this.clear();
+		public void clear() { Long2BooleanArrayMap.this.clear(); }
+		@Override
+		public BooleanOrderedCollection reversed() { return new AbstractBooleanCollection.ReverseBooleanOrderedCollection(this, this::reverseIterator); }
+		private BooleanIterator reverseIterator() {
+			return new ValueIterator(false);
 		}
-		
+		@Override
+		public void addFirst(boolean e) { throw new UnsupportedOperationException(); }
+		@Override
+		public void addLast(boolean e) { throw new UnsupportedOperationException(); }
+		@Override
+		public boolean getFirstBoolean() { return firstBooleanValue(); }
+		@Override
+		public boolean removeFirstBoolean() {
+			boolean result = firstBooleanValue();
+			pollFirstLongKey();
+			return result; 
+		}
+		@Override
+		public boolean getLastBoolean() { return lastBooleanValue(); }
+		@Override
+		public boolean removeLastBoolean() {
+			boolean result = lastBooleanValue();
+			pollLastLongKey();
+			return result; 
+		}
 		@Override
 		public void forEach(BooleanConsumer action) {
 			Objects.requireNonNull(action);
@@ -1152,10 +1219,8 @@ public class Long2BooleanArrayMap extends AbstractLong2BooleanMap implements Lon
 	private class FastEntryIterator extends MapIterator implements ObjectListIterator<Long2BooleanMap.Entry> {
 		MapEntry entry = new MapEntry();
 		
-		public FastEntryIterator() {}
-		public FastEntryIterator(long from) {
-			index = findIndex(from);
-		}
+		public FastEntryIterator(boolean start) { super(start); }
+		public FastEntryIterator(long element) { super(element); }
 		
 		@Override
 		public Long2BooleanMap.Entry next() {
@@ -1178,11 +1243,8 @@ public class Long2BooleanArrayMap extends AbstractLong2BooleanMap implements Lon
 	private class EntryIterator extends MapIterator implements ObjectListIterator<Long2BooleanMap.Entry> {
 		MapEntry entry = null;
 		
-		public EntryIterator() {}
-		public EntryIterator(long from) {
-			index = findIndex(from);
-			if(index == -1) throw new NoSuchElementException();
-		}
+		public EntryIterator(boolean start) { super(start); }
+		public EntryIterator(long element) { super(element); }
 		
 		@Override
 		public Long2BooleanMap.Entry next() {
@@ -1209,11 +1271,8 @@ public class Long2BooleanArrayMap extends AbstractLong2BooleanMap implements Lon
 	}
 	
 	private class KeyIterator extends MapIterator implements LongListIterator {
-		public KeyIterator() {}
-		public KeyIterator(long element) {
-			index = findIndex(element);
-			if(index == -1) throw new NoSuchElementException();
-		}
+		public KeyIterator(boolean start) { super(start); }
+		public KeyIterator(long element) { super(element); }
 		
 		@Override
 		public long previousLong() {
@@ -1233,6 +1292,9 @@ public class Long2BooleanArrayMap extends AbstractLong2BooleanMap implements Lon
 	}
 	
 	private class ValueIterator extends MapIterator implements BooleanListIterator {
+		public ValueIterator(boolean start) { super(start); }
+		public ValueIterator(long element) { super(element); }
+		
 		@Override
 		public boolean previousBoolean() {
 			return values[previousEntry()];
@@ -1251,23 +1313,37 @@ public class Long2BooleanArrayMap extends AbstractLong2BooleanMap implements Lon
 	}
 	
 	private class MapIterator {
+		boolean forward;
 		int index;
 		int lastReturned = -1;
-
+		
+		MapIterator(boolean start) {
+			this.forward = start;
+			this.index = start ? 0 : size;
+		}
+		
+		MapIterator(long element) {
+			this.forward = true;
+			index = findIndex(element);
+			if(index == -1) throw new NoSuchElementException();
+		}
+		
 		public boolean hasNext() {
-			return index < size;
+			return forward ? index < size : index > 0;
 		}
 		
 		public boolean hasPrevious() {
-			return index > 0;
+			return forward ? index > 0 : index < size;
 		}
 		
 		public int nextIndex() {
-			return index;
+			if(forward) return index;
+			return size - index;
 		}
 		
 		public int previousIndex() {
-			return index-1;
+			if(forward) return index-1;
+			return (size - index)-1;
 		}
 		
 		public void remove() {
@@ -1280,26 +1356,42 @@ public class Long2BooleanArrayMap extends AbstractLong2BooleanMap implements Lon
 		
 		public int previousEntry() {
 			if(!hasPrevious()) throw new NoSuchElementException();
-			index--;
-			return (lastReturned = index);
-		}
-		
-		public int nextEntry() {
-			if(!hasNext()) throw new NoSuchElementException();
+			if(forward) {
+				index--;
+				return (lastReturned = index);
+			}
 			lastReturned = index;
 			return index++;
 		}
 		
+		public int nextEntry() {
+			if(!hasNext()) throw new NoSuchElementException();
+			if(forward) {
+				lastReturned = index;
+				return index++;
+			}
+			index--;
+			return (lastReturned = index);
+		}
+		
 		public int skip(int amount) {
 			if(amount < 0) throw new IllegalStateException("Negative Numbers are not allowed");
+			return forward ? moveForward(amount) : moveBackwards(amount);
+		}
+		
+		public int back(int amount) {
+			if(amount < 0) throw new IllegalStateException("Negative Numbers are not allowed");
+			return forward ? moveBackwards(amount) : moveForward(amount);
+		}
+		
+		private int moveForward(int amount) {
 			int steps = Math.min(amount, size() - index);
 			index += steps;
 			if(steps > 0) lastReturned = Math.min(index-1, size()-1);
 			return steps;
 		}
 		
-		public int back(int amount) {
-			if(amount < 0) throw new IllegalStateException("Negative Numbers are not allowed");
+		private int moveBackwards(int amount) {
 			int steps = Math.min(amount, index);
 			index -= steps;
 			if(steps > 0) lastReturned = Math.min(index, size()-1);

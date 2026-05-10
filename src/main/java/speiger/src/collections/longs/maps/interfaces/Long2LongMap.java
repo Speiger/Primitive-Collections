@@ -93,7 +93,7 @@ public interface Long2LongMap extends Map<Long, Long>, LongUnaryOperator
 	 * @return the last present value or default return	value.
 	 */
 	public default Long put(Map.Entry<Long, Long> entry) {
-		return put(entry.getKey(), entry.getValue());
+		return put(entry.getKey().longValue(), entry.getValue().longValue());
 	}
 
 	/**

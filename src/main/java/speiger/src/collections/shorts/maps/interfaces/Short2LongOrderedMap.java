@@ -1,6 +1,8 @@
 package speiger.src.collections.shorts.maps.interfaces;
 
 import speiger.src.collections.shorts.utils.maps.Short2LongMaps;
+import speiger.src.collections.shorts.maps.abstracts.AbstractShort2LongMap;
+import speiger.src.collections.longs.collections.LongOrderedCollection;
 import speiger.src.collections.shorts.sets.ShortOrderedSet;
 import speiger.src.collections.objects.collections.ObjectBidirectionalIterator;
 import speiger.src.collections.objects.sets.ObjectOrderedSet;
@@ -30,6 +32,26 @@ public interface Short2LongOrderedMap extends Short2LongMap
 	 * @see java.util.Map#put(Object, Object)
 	 */
 	public long putAndMoveToLast(short key, long value);
+	
+	/**
+	 * A alternative to putAndMoveToFirst.
+	 * This method simply puts an entry at the first spot of the Map but only if the entry is missing.
+	 * @param key the key that should be inserted
+	 * @param value the value that should be inserted
+	 * @return the previous present or default return value
+	 * @see java.util.Map#put(Object, Object)
+	 */
+	public long putFirst(short key, long value);
+	
+	/**
+	 * A alternative to putAndMoveToLast.
+	 * This method simply puts an entry at the last spot of the Map but only if the entry is missing.
+	 * @param key the key that should be inserted
+	 * @param value the value that should be inserted
+	 * @return the previous present or default return value
+	 * @see java.util.Map#put(Object, Object)
+	 */
+	public long putLast(short key, long value);
 	
 	/**
 	 * A specific move method to move a given key/value to the first index.
@@ -91,12 +113,24 @@ public interface Short2LongOrderedMap extends Short2LongMap
 	 */
 	public long lastLongValue();
 	
+	
+	public Short2LongMap.Entry firstEntry();
+	
+	public Short2LongMap.Entry lastEntry();
+	
+	public Short2LongMap.Entry pollFirstEntry();
+	
+	public Short2LongMap.Entry pollLastEntry();
 	@Override
 	public Short2LongOrderedMap copy();
 	@Override
 	public ShortOrderedSet keySet();
 	@Override
+	public LongOrderedCollection values();
+	@Override
 	public ObjectOrderedSet<Short2LongMap.Entry> short2LongEntrySet();
+	
+	public default Short2LongOrderedMap reversed() { return new AbstractShort2LongMap.ReversedShort2LongOrderedMap(this); }
 	
 	/**
 	 * Creates a Wrapped SortedMap that is Synchronized

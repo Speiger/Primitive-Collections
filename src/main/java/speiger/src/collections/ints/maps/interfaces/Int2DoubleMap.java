@@ -94,7 +94,7 @@ public interface Int2DoubleMap extends Map<Integer, Double>, Int2DoubleFunction
 	 * @return the last present value or default return	value.
 	 */
 	public default Double put(Map.Entry<Integer, Double> entry) {
-		return put(entry.getKey(), entry.getValue());
+		return put(entry.getKey().intValue(), entry.getValue().doubleValue());
 	}
 
 	/**

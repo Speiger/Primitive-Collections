@@ -26,7 +26,7 @@ import speiger.src.collections.ints.maps.interfaces.Int2LongOrderedMap;
 import speiger.src.collections.ints.sets.AbstractIntSet;
 import speiger.src.collections.ints.sets.IntOrderedSet;
 import speiger.src.collections.longs.collections.AbstractLongCollection;
-import speiger.src.collections.longs.collections.LongCollection;
+import speiger.src.collections.longs.collections.LongOrderedCollection;
 import speiger.src.collections.longs.collections.LongIterator;
 import speiger.src.collections.longs.functions.LongSupplier;
 import speiger.src.collections.longs.functions.function.LongLongUnaryOperator;
@@ -62,7 +62,7 @@ public class Int2LongArrayMap extends AbstractInt2LongMap implements Int2LongOrd
 	/** KeySet cache */
 	protected IntOrderedSet keySet;
 	/** Values cache */
-	protected LongCollection valuesC;
+	protected LongOrderedCollection valuesC;
 	/** EntrySet cache */
 	protected FastOrderedSet entrySet;
 	
@@ -229,6 +229,27 @@ public class Int2LongArrayMap extends AbstractInt2LongMap implements Int2LongOrd
 	}
 	
 	@Override
+	public long putFirst(int key, long value) {
+		int index = findIndex(key);
+		if(index < 0) {
+			insertIndex(0, key, value);
+			size++;
+			return getDefaultReturnValue();
+		}
+		return values[index];
+	}
+	
+	@Override
+	public long putLast(int key, long value) {
+		int index = findIndex(key);
+		if(index < 0) {
+			insertIndex(size++, key, value);
+			return getDefaultReturnValue();
+		}
+		return values[index];
+	}
+	
+	@Override
 	public boolean moveToFirst(int key) {
 		int index = findIndex(key);
 		if(index > 0) {
@@ -343,6 +364,34 @@ public class Int2LongArrayMap extends AbstractInt2LongMap implements Int2LongOrd
 	}
 	
 	@Override
+	public Int2LongMap.Entry firstEntry() {
+		if(size == 0) throw new NoSuchElementException();
+		return new BasicEntry(keys[0], values[0]);
+	}
+	
+	@Override
+	public Int2LongMap.Entry lastEntry() {
+		if(size == 0) throw new NoSuchElementException();
+		return new BasicEntry(keys[size-1], values[size-1]);
+	}
+	
+	@Override
+	public Int2LongMap.Entry pollFirstEntry() {
+		if(size == 0) throw new NoSuchElementException();
+		BasicEntry result = new BasicEntry(keys[0], values[0]);
+		removeIndex(0);
+		return result;
+	}
+	
+	@Override
+	public Int2LongMap.Entry pollLastEntry() {
+		if(size == 0) throw new NoSuchElementException();
+		BasicEntry result = new BasicEntry(keys[size-1], values[size-1]);
+		removeIndex(size-1);
+		return result;
+	}
+	
+	@Override
 	public long remove(int key) {
 		int index = findIndex(key);
 		if(index < 0) return getDefaultReturnValue();
@@ -399,7 +448,7 @@ public class Int2LongArrayMap extends AbstractInt2LongMap implements Int2LongOrd
 	}
 
 	@Override
-	public LongCollection values() {
+	public LongOrderedCollection values() {
 		if(valuesC == null) valuesC = new Values();
 		return valuesC;
 	}
@@ -717,24 +766,24 @@ public class Int2LongArrayMap extends AbstractInt2LongMap implements Int2LongOrd
 		}
 		
 		@Override
-		public Int2LongMap.Entry first() {
+		public Int2LongMap.Entry getFirst() {
 			return new BasicEntry(firstIntKey(), firstLongValue());
 		}
 		
 		@Override
-		public Int2LongMap.Entry last() {
+		public Int2LongMap.Entry getLast() {
 			return new BasicEntry(lastIntKey(), lastLongValue());
 		}
 		
 		@Override
-		public Int2LongMap.Entry pollFirst() {
+		public Int2LongMap.Entry removeFirst() {
 			BasicEntry entry = new BasicEntry(firstIntKey(), firstLongValue());
 			pollFirstIntKey();
 			return entry;
 		}
 		
 		@Override
-		public Int2LongMap.Entry pollLast() {
+		public Int2LongMap.Entry removeLast() {
 			BasicEntry entry = new BasicEntry(lastIntKey(), lastLongValue());
 			pollLastIntKey();
 			return entry;
@@ -742,7 +791,12 @@ public class Int2LongArrayMap extends AbstractInt2LongMap implements Int2LongOrd
 		
 		@Override
 		public ObjectBidirectionalIterator<Int2LongMap.Entry> iterator() {
-			return new EntryIterator();
+			return new EntryIterator(true);
+		}
+		
+		@Override
+		public ObjectBidirectionalIterator<Int2LongMap.Entry> reverseIterator() {
+			return new EntryIterator(false);
 		}
 		
 		@Override
@@ -752,7 +806,7 @@ public class Int2LongArrayMap extends AbstractInt2LongMap implements Int2LongOrd
 		
 		@Override
 		public ObjectBidirectionalIterator<Int2LongMap.Entry> fastIterator() {
-			return new FastEntryIterator();
+			return new FastEntryIterator(true);
 		}
 		
 		@Override
@@ -949,7 +1003,9 @@ public class Int2LongArrayMap extends AbstractInt2LongMap implements Int2LongOrd
 		@Override
 		public boolean moveToLast(int o) { return Int2LongArrayMap.this.moveToLast(o); }
 		@Override
-		public IntListIterator iterator() { return new KeyIterator(); }
+		public IntListIterator iterator() { return new KeyIterator(true); }
+		@Override
+		public IntListIterator reverseIterator() { return new KeyIterator(false); }
 		@Override
 		public IntBidirectionalIterator iterator(int fromElement) { return new KeyIterator(fromElement); } 
 		@Override
@@ -957,13 +1013,13 @@ public class Int2LongArrayMap extends AbstractInt2LongMap implements Int2LongOrd
 		@Override
 		public void clear() { Int2LongArrayMap.this.clear(); }
 		@Override
-		public int firstInt() { return firstIntKey(); }
+		public int getFirstInt() { return firstIntKey(); }
 		@Override
-		public int pollFirstInt() { return pollFirstIntKey(); }
+		public int removeFirstInt() { return pollFirstIntKey(); }
 		@Override
-		public int lastInt() { return lastIntKey(); }
+		public int getLastInt() { return lastIntKey(); }
 		@Override
-		public int pollLastInt() { return pollLastIntKey(); }
+		public int removeLastInt() { return pollLastIntKey(); }
 		
 		@Override
 		public KeySet copy() { throw new UnsupportedOperationException(); }
@@ -1060,32 +1116,43 @@ public class Int2LongArrayMap extends AbstractInt2LongMap implements Int2LongOrd
 		}
 	}
 	
-	private class Values extends AbstractLongCollection {
+	private class Values extends AbstractLongCollection implements LongOrderedCollection {
 		@Override
-		public boolean contains(long e) {
-			return containsValue(e);
-		}
+		public boolean contains(long e) { return containsValue(e); }
 		
 		@Override
-		public boolean add(long o) {
-			throw new UnsupportedOperationException();
-		}
-
+		public boolean add(long o) { throw new UnsupportedOperationException(); }
 		@Override
-		public LongIterator iterator() {
-			return new ValueIterator();
-		}
-		
+		public LongIterator iterator() { return new ValueIterator(true); }
 		@Override
-		public int size() {
-			return Int2LongArrayMap.this.size();
-		}
-		
+		public int size() { return Int2LongArrayMap.this.size(); }
 		@Override
-		public void clear() {
-			Int2LongArrayMap.this.clear();
+		public void clear() { Int2LongArrayMap.this.clear(); }
+		@Override
+		public LongOrderedCollection reversed() { return new AbstractLongCollection.ReverseLongOrderedCollection(this, this::reverseIterator); }
+		private LongIterator reverseIterator() {
+			return new ValueIterator(false);
 		}
-		
+		@Override
+		public void addFirst(long e) { throw new UnsupportedOperationException(); }
+		@Override
+		public void addLast(long e) { throw new UnsupportedOperationException(); }
+		@Override
+		public long getFirstLong() { return firstLongValue(); }
+		@Override
+		public long removeFirstLong() {
+			long result = firstLongValue();
+			pollFirstIntKey();
+			return result; 
+		}
+		@Override
+		public long getLastLong() { return lastLongValue(); }
+		@Override
+		public long removeLastLong() {
+			long result = lastLongValue();
+			pollLastIntKey();
+			return result; 
+		}
 		@Override
 		public void forEach(LongConsumer action) {
 			Objects.requireNonNull(action);
@@ -1174,10 +1241,8 @@ public class Int2LongArrayMap extends AbstractInt2LongMap implements Int2LongOrd
 	private class FastEntryIterator extends MapIterator implements ObjectListIterator<Int2LongMap.Entry> {
 		MapEntry entry = new MapEntry();
 		
-		public FastEntryIterator() {}
-		public FastEntryIterator(int from) {
-			index = findIndex(from);
-		}
+		public FastEntryIterator(boolean start) { super(start); }
+		public FastEntryIterator(int element) { super(element); }
 		
 		@Override
 		public Int2LongMap.Entry next() {
@@ -1200,11 +1265,8 @@ public class Int2LongArrayMap extends AbstractInt2LongMap implements Int2LongOrd
 	private class EntryIterator extends MapIterator implements ObjectListIterator<Int2LongMap.Entry> {
 		MapEntry entry = null;
 		
-		public EntryIterator() {}
-		public EntryIterator(int from) {
-			index = findIndex(from);
-			if(index == -1) throw new NoSuchElementException();
-		}
+		public EntryIterator(boolean start) { super(start); }
+		public EntryIterator(int element) { super(element); }
 		
 		@Override
 		public Int2LongMap.Entry next() {
@@ -1231,11 +1293,8 @@ public class Int2LongArrayMap extends AbstractInt2LongMap implements Int2LongOrd
 	}
 	
 	private class KeyIterator extends MapIterator implements IntListIterator {
-		public KeyIterator() {}
-		public KeyIterator(int element) {
-			index = findIndex(element);
-			if(index == -1) throw new NoSuchElementException();
-		}
+		public KeyIterator(boolean start) { super(start); }
+		public KeyIterator(int element) { super(element); }
 		
 		@Override
 		public int previousInt() {
@@ -1255,6 +1314,9 @@ public class Int2LongArrayMap extends AbstractInt2LongMap implements Int2LongOrd
 	}
 	
 	private class ValueIterator extends MapIterator implements LongListIterator {
+		public ValueIterator(boolean start) { super(start); }
+		public ValueIterator(int element) { super(element); }
+		
 		@Override
 		public long previousLong() {
 			return values[previousEntry()];
@@ -1273,23 +1335,37 @@ public class Int2LongArrayMap extends AbstractInt2LongMap implements Int2LongOrd
 	}
 	
 	private class MapIterator {
+		boolean forward;
 		int index;
 		int lastReturned = -1;
-
+		
+		MapIterator(boolean start) {
+			this.forward = start;
+			this.index = start ? 0 : size;
+		}
+		
+		MapIterator(int element) {
+			this.forward = true;
+			index = findIndex(element);
+			if(index == -1) throw new NoSuchElementException();
+		}
+		
 		public boolean hasNext() {
-			return index < size;
+			return forward ? index < size : index > 0;
 		}
 		
 		public boolean hasPrevious() {
-			return index > 0;
+			return forward ? index > 0 : index < size;
 		}
 		
 		public int nextIndex() {
-			return index;
+			if(forward) return index;
+			return size - index;
 		}
 		
 		public int previousIndex() {
-			return index-1;
+			if(forward) return index-1;
+			return (size - index)-1;
 		}
 		
 		public void remove() {
@@ -1302,26 +1378,42 @@ public class Int2LongArrayMap extends AbstractInt2LongMap implements Int2LongOrd
 		
 		public int previousEntry() {
 			if(!hasPrevious()) throw new NoSuchElementException();
-			index--;
-			return (lastReturned = index);
-		}
-		
-		public int nextEntry() {
-			if(!hasNext()) throw new NoSuchElementException();
+			if(forward) {
+				index--;
+				return (lastReturned = index);
+			}
 			lastReturned = index;
 			return index++;
 		}
 		
+		public int nextEntry() {
+			if(!hasNext()) throw new NoSuchElementException();
+			if(forward) {
+				lastReturned = index;
+				return index++;
+			}
+			index--;
+			return (lastReturned = index);
+		}
+		
 		public int skip(int amount) {
 			if(amount < 0) throw new IllegalStateException("Negative Numbers are not allowed");
+			return forward ? moveForward(amount) : moveBackwards(amount);
+		}
+		
+		public int back(int amount) {
+			if(amount < 0) throw new IllegalStateException("Negative Numbers are not allowed");
+			return forward ? moveBackwards(amount) : moveForward(amount);
+		}
+		
+		private int moveForward(int amount) {
 			int steps = Math.min(amount, size() - index);
 			index += steps;
 			if(steps > 0) lastReturned = Math.min(index-1, size()-1);
 			return steps;
 		}
 		
-		public int back(int amount) {
-			if(amount < 0) throw new IllegalStateException("Negative Numbers are not allowed");
+		private int moveBackwards(int amount) {
 			int steps = Math.min(amount, index);
 			index -= steps;
 			if(steps > 0) lastReturned = Math.min(index, size()-1);

@@ -2,8 +2,9 @@ package speiger.src.collections.floats.sets;
 
 import speiger.src.collections.floats.collections.FloatBidirectionalIterator;
 import speiger.src.collections.floats.collections.FloatSplititerator;
-import speiger.src.collections.floats.utils.FloatSets;
 import speiger.src.collections.floats.utils.FloatSplititerators;
+import speiger.src.collections.floats.sets.AbstractFloatSet.ReversedFloatOrderedSet;
+import speiger.src.collections.floats.utils.FloatSets;
 
 /**
  * A Special Set Interface giving Access to some really usefull functions
@@ -49,6 +50,7 @@ public interface FloatOrderedSet extends FloatSet
 	
 	@Override
 	public FloatBidirectionalIterator iterator();
+	public FloatBidirectionalIterator reverseIterator();
 	
 	/**
 	 * A type Specific Iterator starting from a given key
@@ -69,23 +71,26 @@ public interface FloatOrderedSet extends FloatSet
 	 * A method to get the first element in the set
 	 * @return first element in the set
 	 */
-	public float firstFloat();
+	public float getFirstFloat();
 	/**
 	 * A method to get and remove the first element in the set
 	 * @return first element in the set
 	 */
-	public float pollFirstFloat();
+	public float removeFirstFloat();
 	/**
 	 * A method to get the last element in the set
 	 * @return last element in the set
 	 */
-	public float lastFloat();
+	public float getLastFloat();
 	/**
 	 * A method to get and remove the last element in the set
 	 * @return last element in the set
 	 */
-	public float pollLastFloat();
+	public float removeLastFloat();
 	
+	
+	public default FloatOrderedSet reversed() { return new ReversedFloatOrderedSet(this); }
+
 	/**
 	 * Creates a Wrapped OrderedSet that is Synchronized
 	 * @return a new OrderedSet that is synchronized

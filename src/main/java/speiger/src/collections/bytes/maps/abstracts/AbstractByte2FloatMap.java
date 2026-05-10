@@ -9,6 +9,11 @@ import speiger.src.collections.bytes.functions.consumer.ByteFloatConsumer;
 import speiger.src.collections.bytes.functions.function.Byte2FloatFunction;
 import speiger.src.collections.bytes.functions.function.ByteFloatUnaryOperator;
 import speiger.src.collections.bytes.maps.interfaces.Byte2FloatMap;
+import speiger.src.collections.bytes.maps.interfaces.Byte2FloatOrderedMap;
+import speiger.src.collections.bytes.sets.ByteOrderedSet;
+import speiger.src.collections.floats.collections.FloatOrderedCollection;
+import speiger.src.collections.objects.sets.AbstractObjectSet;
+import speiger.src.collections.objects.sets.ObjectOrderedSet;
 import speiger.src.collections.bytes.sets.AbstractByteSet;
 import speiger.src.collections.bytes.sets.ByteSet;
 import speiger.src.collections.bytes.utils.maps.Byte2FloatMaps;
@@ -27,7 +32,7 @@ import speiger.src.collections.utils.SanityChecks;
  */
 public abstract class AbstractByte2FloatMap extends AbstractMap<Byte, Float> implements Byte2FloatMap
 {
-	protected float defaultReturnValue = 0F;
+	protected float defaultReturnValue = -1F;
 	
 	@Override
 	public float getDefaultReturnValue() {
@@ -91,7 +96,7 @@ public abstract class AbstractByte2FloatMap extends AbstractMap<Byte, Float> imp
 	public void putAll(Byte[] keys, Float[] values, int offset, int size) {
 		SanityChecks.checkArrayCapacity(keys.length, offset, size);
 		SanityChecks.checkArrayCapacity(values.length, offset, size);
-		for(int i = 0;i<size;i++) put(keys[i], values[i]);		
+		for(int i = 0;i<size;i++) put(keys[i].byteValue(), values[i].floatValue());		
 	}
 	
 	@Override
@@ -413,6 +418,116 @@ public abstract class AbstractByte2FloatMap extends AbstractMap<Byte, Float> imp
 		while(iter.hasNext()) hash += iter.next().hashCode();
 		return hash;
 	}
+	
+	public static class ReversedByte2FloatOrderedMap extends AbstractByte2FloatMap implements Byte2FloatOrderedMap {
+		Byte2FloatOrderedMap map;
+		
+		public ReversedByte2FloatOrderedMap(Byte2FloatOrderedMap map) {
+			this.map = map;
+		}
+		@Override
+		public AbstractByte2FloatMap setDefaultReturnValue(float v) {
+			map.setDefaultReturnValue(v);
+			return this;
+		}
+		@Override
+		public float getDefaultReturnValue() { return map.getDefaultReturnValue(); }
+		@Override
+		public Byte2FloatOrderedMap copy() { throw new UnsupportedOperationException(); }
+		@Override
+		public float put(byte key, float value) { return map.put(key, value); }
+		@Override
+		public float putIfAbsent(byte key, float value) { return map.putIfAbsent(key, value); }
+		@Override
+		public float addTo(byte key, float value) { return map.addTo(key, value); }
+		@Override
+		public float subFrom(byte key, float value) { return map.subFrom(key, value); }
+		@Override
+		public float remove(byte key) { return map.remove(key); }
+		@Override
+		public boolean remove(byte key, float value) { return map.remove(key, value); }
+		@Override
+		public float removeOrDefault(byte key, float defaultValue) { return map.removeOrDefault(key, defaultValue); }
+		@Override
+		public boolean containsKey(byte key) { return map.containsKey(key); }
+		@Override
+		public boolean containsValue(float value) { return map.containsValue(value); }
+		@Override
+		public boolean replace(byte key, float oldValue, float newValue) { return map.replace(key, oldValue, newValue); }
+		@Override
+		public float replace(byte key, float value) { return map.replace(key, value); }
+		@Override
+		public void replaceFloats(Byte2FloatMap m) { map.replaceFloats(m); }
+		@Override
+		public void replaceFloats(ByteFloatUnaryOperator mappingFunction) { map.replaceFloats(mappingFunction); }
+		@Override
+		public float computeFloat(byte key, ByteFloatUnaryOperator mappingFunction) { return map.computeFloat(key, mappingFunction); }
+		@Override
+		public float computeFloatIfAbsent(byte key, Byte2FloatFunction mappingFunction) { return map.computeFloatIfAbsent(key, mappingFunction); }
+		@Override
+		public float supplyFloatIfAbsent(byte key, FloatSupplier valueProvider) { return map.supplyFloatIfAbsent(key, valueProvider); }
+		@Override
+		public float computeFloatIfPresent(byte key, ByteFloatUnaryOperator mappingFunction) { return map.computeFloatIfPresent(key, mappingFunction); }
+		@Override
+		public float computeFloatNonDefault(byte key, ByteFloatUnaryOperator mappingFunction) { return map.computeFloatNonDefault(key, mappingFunction); }
+		@Override
+		public float computeFloatIfAbsentNonDefault(byte key, Byte2FloatFunction mappingFunction) { return map.computeFloatIfAbsentNonDefault(key, mappingFunction); }
+		@Override
+		public float supplyFloatIfAbsentNonDefault(byte key, FloatSupplier valueProvider) { return map.supplyFloatIfAbsentNonDefault(key, valueProvider); }
+		@Override
+		public float computeFloatIfPresentNonDefault(byte key, ByteFloatUnaryOperator mappingFunction) { return map.computeFloatIfPresentNonDefault(key, mappingFunction); }
+		@Override
+		public float mergeFloat(byte key, float value, FloatFloatUnaryOperator mappingFunction) { return map.mergeFloat(key, value, mappingFunction); }
+		@Override
+		public float getOrDefault(byte key, float defaultValue) { return map.getOrDefault(key, defaultValue); }
+		@Override
+		public float get(byte key) { return map.get(key); }
+		@Override
+		public float putAndMoveToFirst(byte key, float value) { return map.putAndMoveToLast(key, value); }
+		@Override
+		public float putAndMoveToLast(byte key, float value) { return map.putAndMoveToFirst(key, value); }
+		@Override
+		public float putFirst(byte key, float value) { return map.putLast(key, value); }
+		@Override
+		public float putLast(byte key, float value) { return map.putFirst(key, value); }
+		@Override
+		public boolean moveToFirst(byte key) { return map.moveToLast(key); }
+		@Override
+		public boolean moveToLast(byte key) { return map.moveToFirst(key); }
+		@Override
+		public float getAndMoveToFirst(byte key) { return map.getAndMoveToLast(key); }
+		@Override
+		public float getAndMoveToLast(byte key) { return map.getAndMoveToFirst(key); }
+		@Override
+		public byte firstByteKey() { return map.lastByteKey(); }
+		@Override
+		public byte pollFirstByteKey() { return map.pollLastByteKey(); }
+		@Override
+		public byte lastByteKey() { return map.firstByteKey(); }
+		@Override
+		public byte pollLastByteKey() { return map.pollFirstByteKey(); }
+		@Override
+		public float firstFloatValue() { return map.lastFloatValue(); }
+		@Override
+		public float lastFloatValue() { return map.firstFloatValue(); }
+		@Override
+		public Byte2FloatMap.Entry firstEntry() { return map.lastEntry(); }
+		@Override
+		public Byte2FloatMap.Entry lastEntry() { return map.firstEntry(); }
+		@Override
+		public Byte2FloatMap.Entry pollFirstEntry() { return map.pollLastEntry(); }
+		@Override
+		public Byte2FloatMap.Entry pollLastEntry() { return map.pollFirstEntry(); }
+		@Override
+		public ObjectOrderedSet<Byte2FloatMap.Entry> byte2FloatEntrySet() { return new AbstractObjectSet.ReversedObjectOrderedSet<>(map.byte2FloatEntrySet()); }
+		@Override
+		public ByteOrderedSet keySet() { return new AbstractByteSet.ReversedByteOrderedSet(map.keySet()); }
+		@Override
+		public FloatOrderedCollection values() { return map.values().reversed(); }
+		@Override
+		public Byte2FloatOrderedMap reversed() { return map; }
+	}
+
 	
 	/**
 	 * A Simple Type Specific Entry class to reduce boxing/unboxing

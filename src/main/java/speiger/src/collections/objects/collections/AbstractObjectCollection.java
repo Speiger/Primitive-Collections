@@ -1,10 +1,12 @@
 package speiger.src.collections.objects.collections;
 
 import java.util.Collection;
+import java.util.function.Supplier;
 import java.util.Objects;
 import java.util.AbstractCollection;
 import java.util.function.Consumer;
 
+import speiger.src.collections.objects.lists.ObjectListIterator;
 
 /**
  * Abstract Type Specific Collection that reduces boxing/unboxing
@@ -163,4 +165,67 @@ public abstract class AbstractObjectCollection<T> extends AbstractCollection<T> 
 		return modified;
 	}
 	
+	public static class ReverseObjectOrderedCollection<T> extends AbstractObjectCollection<T> implements ObjectOrderedCollection<T> {
+		ObjectOrderedCollection<T> collection;
+		Supplier<ObjectIterator<T>> reverseIterator;
+		
+		public ReverseObjectOrderedCollection(ObjectOrderedCollection<T> collection, Supplier<ObjectIterator<T>> reverseIterator) {
+			this.collection = collection;
+			this.reverseIterator = reverseIterator;
+		}
+		
+		@Override
+		public boolean add(T o) { return collection.add(o); }
+		@Override
+		public ObjectOrderedCollection<T> reversed() { return collection; }
+		@Override
+		public void addFirst(T e) { collection.addLast(e); }
+		@Override
+		public void addLast(T e) { collection.addFirst(e); }
+		@Override
+		public boolean contains(Object e) { return collection.contains(e); }
+		@Override
+		public boolean remove(Object e) { return collection.remove(e); }
+		@Override
+		public void clear() { collection.clear(); }
+		@Override
+		public T getFirst() { return collection.getLast(); }
+		@Override
+		public T removeFirst() { return collection.removeLast(); }
+		@Override
+		public T getLast() { return collection.getFirst(); }
+		@Override
+		public T removeLast() { return collection.removeFirst(); }
+		@Override
+		public ObjectIterator<T> iterator() { return reverseIterator.get(); }
+		@Override
+		public int size() { return collection.size(); }
+	}
+	
+	public static class ReverseBiIterator<T> implements ObjectListIterator<T> {
+		ObjectListIterator<T> it;
+		
+		public ReverseBiIterator(ObjectListIterator<T> it) {
+			this.it = it;
+		}
+		
+		@Override
+		public T next() { return it.previous(); }
+		@Override
+		public boolean hasNext() { return it.hasPrevious(); }
+		@Override
+		public boolean hasPrevious() { return it.hasNext(); }
+		@Override
+		public T previous() { return it.next(); }
+		@Override
+		public void remove() { it.remove(); }
+		@Override
+		public int nextIndex() { return it.previousIndex(); }
+		@Override
+		public int previousIndex() { return it.nextIndex(); }
+		@Override
+		public void set(T e) { it.set(e); }
+		@Override
+		public void add(T e) { it.add(e); }
+	}
 }

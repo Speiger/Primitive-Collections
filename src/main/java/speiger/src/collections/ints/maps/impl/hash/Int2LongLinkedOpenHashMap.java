@@ -23,7 +23,7 @@ import speiger.src.collections.ints.maps.interfaces.Int2LongOrderedMap;
 import speiger.src.collections.ints.sets.AbstractIntSet;
 import speiger.src.collections.ints.sets.IntOrderedSet;
 import speiger.src.collections.longs.collections.AbstractLongCollection;
-import speiger.src.collections.longs.collections.LongCollection;
+import speiger.src.collections.longs.collections.LongOrderedCollection;
 import speiger.src.collections.longs.collections.LongIterator;
 import speiger.src.collections.longs.functions.function.LongLongUnaryOperator;
 import speiger.src.collections.longs.functions.LongConsumer;
@@ -235,6 +235,54 @@ public class Int2LongLinkedOpenHashMap extends Int2LongOpenHashMap implements In
 	}
 	
 	@Override
+	public long putFirst(int key, long value) {
+		if(key == 0) {
+			if(containsNull) return values[nullIndex];
+			values[nullIndex] = value;
+			containsNull = true;
+			onNodeAdded(nullIndex);
+			moveToFirstIndex(nullIndex);
+		}
+		else {
+			int pos = HashUtil.mix(Integer.hashCode(key)) & mask;
+			while(key == 0) {
+				if(keys[pos] == key) return values[pos];
+				pos = ++pos & mask;
+			}
+			keys[pos] = key;
+			values[pos] = value;
+			onNodeAdded(pos);
+			moveToFirstIndex(pos);
+		}
+		if(size++ >= maxFill) rehash(HashUtil.arraySize(size+1, loadFactor));
+		return getDefaultReturnValue();
+	}
+	
+	@Override
+	public long putLast(int key, long value) {
+		if(key == 0) {
+			if(containsNull) return values[nullIndex];
+			values[nullIndex] = value;
+			containsNull = true;
+			onNodeAdded(nullIndex);
+			moveToLastIndex(nullIndex);
+		}
+		else {
+			int pos = HashUtil.mix(Integer.hashCode(key)) & mask;
+			while(key == 0) {
+				if(keys[pos] == key) return values[pos];
+				pos = ++pos & mask;
+			}
+			keys[pos] = key;
+			values[pos] = value;
+			onNodeAdded(pos);
+			moveToLastIndex(pos);
+		}
+		if(size++ >= maxFill) rehash(HashUtil.arraySize(size+1, loadFactor));
+		return getDefaultReturnValue();
+	}
+	
+	@Override
 	public boolean moveToFirst(int key) {
 		if(isEmpty() || firstIntKey() == key) return false;
 		if(key == 0) {
@@ -391,6 +439,52 @@ public class Int2LongLinkedOpenHashMap extends Int2LongOpenHashMap implements In
 	}
 	
 	@Override
+	public Int2LongMap.Entry firstEntry() {
+		if(size == 0) throw new NoSuchElementException();
+		return new BasicEntry(keys[firstIndex], values[firstIndex]);
+	}
+	
+	@Override
+	public Int2LongMap.Entry lastEntry() {
+		if(size == 0) throw new NoSuchElementException();
+		return new BasicEntry(keys[lastIndex], values[lastIndex]);
+	}
+	
+	@Override
+	public Int2LongMap.Entry pollFirstEntry() {
+		if(size == 0) throw new NoSuchElementException();
+		int pos = firstIndex;
+		onNodeRemoved(pos);
+		BasicEntry result = new BasicEntry(keys[pos], values[pos]);
+		size--;
+		if(result.getIntKey() == 0) {
+			containsNull = false;
+			keys[nullIndex] = 0;
+			values[nullIndex] = 0L;
+		}
+		else shiftKeys(pos);
+		if(nullIndex > minCapacity && size < maxFill / 4 && nullIndex > HashUtil.DEFAULT_MIN_CAPACITY) rehash(nullIndex / 2);
+		return result;
+	}
+	
+	@Override
+	public Int2LongMap.Entry pollLastEntry() {
+		if(size == 0) throw new NoSuchElementException();
+		int pos = lastIndex;
+		onNodeRemoved(pos);
+		BasicEntry result = new BasicEntry(keys[pos], values[pos]);
+		size--;
+		if(result.getIntKey() == 0) {
+			containsNull = false;
+			keys[nullIndex] = 0;
+			values[nullIndex] = 0L;
+		}
+		else shiftKeys(pos);
+		if(nullIndex > minCapacity && size < maxFill / 4 && nullIndex > HashUtil.DEFAULT_MIN_CAPACITY) rehash(nullIndex / 2);
+		return result;
+	}
+	
+	@Override
 	public ObjectOrderedSet<Int2LongMap.Entry> int2LongEntrySet() {
 		if(entrySet == null) entrySet = new MapEntrySet();
 		return (ObjectOrderedSet<Int2LongMap.Entry>)entrySet;
@@ -403,9 +497,9 @@ public class Int2LongLinkedOpenHashMap extends Int2LongOpenHashMap implements In
 	}
 	
 	@Override
-	public LongCollection values() {
+	public LongOrderedCollection values() {
 		if(valuesC == null) valuesC = new Values();
-		return valuesC;
+		return (LongOrderedCollection)valuesC;
 	}
 	
 	@Override
@@ -590,24 +684,24 @@ public class Int2LongLinkedOpenHashMap extends Int2LongOpenHashMap implements In
 		}
 		
 		@Override
-		public Int2LongMap.Entry first() {
+		public Int2LongMap.Entry getFirst() {
 			return new BasicEntry(firstIntKey(), firstLongValue());
 		}
 		
 		@Override
-		public Int2LongMap.Entry last() {
+		public Int2LongMap.Entry getLast() {
 			return new BasicEntry(lastIntKey(), lastLongValue());
 		}
 		
 		@Override
-		public Int2LongMap.Entry pollFirst() {
+		public Int2LongMap.Entry removeFirst() {
 			BasicEntry entry = new BasicEntry(firstIntKey(), firstLongValue());
 			pollFirstIntKey();
 			return entry;
 		}
 		
 		@Override
-		public Int2LongMap.Entry pollLast() {
+		public Int2LongMap.Entry removeLast() {
 			BasicEntry entry = new BasicEntry(lastIntKey(), lastLongValue());
 			pollLastIntKey();
 			return entry;
@@ -615,7 +709,12 @@ public class Int2LongLinkedOpenHashMap extends Int2LongOpenHashMap implements In
 		
 		@Override
 		public ObjectBidirectionalIterator<Int2LongMap.Entry> iterator() {
-			return new EntryIterator();
+			return new EntryIterator(true);
+		}
+		
+		@Override
+		public ObjectBidirectionalIterator<Int2LongMap.Entry> reverseIterator() {
+			return new EntryIterator(false);
 		}
 		
 		@Override
@@ -625,7 +724,7 @@ public class Int2LongLinkedOpenHashMap extends Int2LongOpenHashMap implements In
 		
 		@Override
 		public ObjectBidirectionalIterator<Int2LongMap.Entry> fastIterator() {
-			return new FastEntryIterator();
+			return new FastEntryIterator(true);
 		}
 		
 		@Override
@@ -858,7 +957,12 @@ public class Int2LongLinkedOpenHashMap extends Int2LongOpenHashMap implements In
 		
 		@Override
 		public IntListIterator iterator() {
-			return new KeyIterator();
+			return new KeyIterator(true);
+		}
+		
+		@Override
+		public IntListIterator reverseIterator() {
+			return new KeyIterator(false);
 		}
 		
 		@Override
@@ -880,22 +984,22 @@ public class Int2LongLinkedOpenHashMap extends Int2LongOpenHashMap implements In
 		}
 		
 		@Override
-		public int firstInt() {
+		public int getFirstInt() {
 			return firstIntKey();
 		}
 		
 		@Override
-		public int pollFirstInt() {
+		public int removeFirstInt() {
 			return pollFirstIntKey();
 		}
 
 		@Override
-		public int lastInt() {
+		public int getLastInt() {
 			return lastIntKey();
 		}
 
 		@Override
-		public int pollLastInt() {
+		public int removeLastInt() {
 			return pollLastIntKey();
 		}
 		
@@ -1024,32 +1128,43 @@ public class Int2LongLinkedOpenHashMap extends Int2LongOpenHashMap implements In
 		}
 	}
 	
-	private class Values extends AbstractLongCollection {
+	private class Values extends AbstractLongCollection implements LongOrderedCollection {
 		@Override
-		public boolean contains(long e) {
-			return containsValue(e);
-		}
+		public boolean contains(long e) { return containsValue(e); }
 		
 		@Override
-		public boolean add(long o) {
-			throw new UnsupportedOperationException();
-		}
-
+		public boolean add(long o) { throw new UnsupportedOperationException(); }
 		@Override
-		public LongIterator iterator() {
-			return new ValueIterator();
-		}
-		
+		public LongIterator iterator() { return new ValueIterator(true); }
 		@Override
-		public int size() {
-			return Int2LongLinkedOpenHashMap.this.size();
-		}
-		
+		public int size() { return Int2LongLinkedOpenHashMap.this.size(); }
 		@Override
-		public void clear() {
-			Int2LongLinkedOpenHashMap.this.clear();
+		public void clear() { Int2LongLinkedOpenHashMap.this.clear(); }
+		@Override
+		public LongOrderedCollection reversed() { return new AbstractLongCollection.ReverseLongOrderedCollection(this, this::reverseIterator); }
+		private LongIterator reverseIterator() {
+			return new ValueIterator(false);
 		}
-		
+		@Override
+		public void addFirst(long e) { throw new UnsupportedOperationException(); }
+		@Override
+		public void addLast(long e) { throw new UnsupportedOperationException(); }
+		@Override
+		public long getFirstLong() { return firstLongValue(); }
+		@Override
+		public long removeFirstLong() {
+			long result = firstLongValue();
+			pollFirstIntKey();
+			return result; 
+		}
+		@Override
+		public long getLastLong() { return lastLongValue(); }
+		@Override
+		public long removeLastLong() {
+			long result = lastLongValue();
+			pollLastIntKey();
+			return result; 
+		}
 		@Override
 		public void forEach(LongConsumer action) {
 			Objects.requireNonNull(action);
@@ -1179,7 +1294,7 @@ public class Int2LongLinkedOpenHashMap extends Int2LongOpenHashMap implements In
 	private class FastEntryIterator extends MapIterator implements ObjectListIterator<Int2LongMap.Entry> {
 		MapEntry entry = new MapEntry();
 		
-		public FastEntryIterator() {}
+		public FastEntryIterator(boolean start) { super(start); }
 		public FastEntryIterator(int from) {
 			super(from);
 		}
@@ -1206,7 +1321,7 @@ public class Int2LongLinkedOpenHashMap extends Int2LongOpenHashMap implements In
 	private class EntryIterator extends MapIterator implements ObjectListIterator<Int2LongMap.Entry> {
 		MapEntry entry;
 		
-		public EntryIterator() {}
+		public EntryIterator(boolean start) { super(start); }
 		public EntryIterator(int from) {
 			super(from);
 		}
@@ -1236,7 +1351,7 @@ public class Int2LongLinkedOpenHashMap extends Int2LongOpenHashMap implements In
 	
 	private class KeyIterator extends MapIterator implements IntListIterator {
 		
-		public KeyIterator() {}
+		public KeyIterator(boolean start) { super(start); }
 		public KeyIterator(int from) {
 			super(from);
 		}
@@ -1258,7 +1373,7 @@ public class Int2LongLinkedOpenHashMap extends Int2LongOpenHashMap implements In
 	}
 	
 	private class ValueIterator extends MapIterator implements LongListIterator {
-		public ValueIterator() {}
+		public ValueIterator(boolean start) { super(start); }
 		
 		@Override
 		public long previousLong() {
@@ -1278,13 +1393,16 @@ public class Int2LongLinkedOpenHashMap extends Int2LongOpenHashMap implements In
 	}
 	
 	private class MapIterator {
+		boolean forward;
 		int previous = -1;
 		int next = -1;
 		int current = -1;
 		int index = 0;
 		
-		MapIterator() {
-			next = firstIndex;
+		MapIterator(boolean start) {
+			this.forward = start;
+			if(start) next = firstIndex;
+			else previous = lastIndex;
 		}
 		
 		MapIterator(int from) {
@@ -1315,11 +1433,11 @@ public class Int2LongLinkedOpenHashMap extends Int2LongOpenHashMap implements In
 		}
 		
 		public boolean hasNext() {
-			return next != -1;
+			return (forward ? next : previous) != -1;
 		}
 
 		public boolean hasPrevious() {
-			return previous != -1;
+			return (forward ? previous : next) != -1;
 		}
 		
 		public int nextIndex() {
@@ -1379,20 +1497,30 @@ public class Int2LongLinkedOpenHashMap extends Int2LongOpenHashMap implements In
 		
 		public int previousEntry() {
 			if(!hasPrevious()) throw new NoSuchElementException();
-			current = previous;
-			previous = (int)(links[current] >> 32);
-			next = current;
+			if(forward) moveBackwards();
+			else moveForwards();
 			if(index >= 0) index--;
 			return current;
 		}
 		
 		public int nextEntry() {
 			if(!hasNext()) throw new NoSuchElementException();
+			if(forward) moveForwards();
+			else moveBackwards();
+			if(index >= 0) index++;
+			return current;
+		}
+		
+		private void moveBackwards() {
+			current = previous;
+			previous = (int)(links[current] >> 32);
+			next = current;
+		}
+		
+		private void moveForwards() {
 			current = next;
 			next = (int)(links[current]);
 			previous = current;
-			if(index >= 0) index++;
-			return current;
 		}
 		
 		private void ensureIndexKnown() {

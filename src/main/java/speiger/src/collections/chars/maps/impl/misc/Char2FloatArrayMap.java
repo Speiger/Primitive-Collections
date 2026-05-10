@@ -26,7 +26,7 @@ import speiger.src.collections.chars.maps.interfaces.Char2FloatOrderedMap;
 import speiger.src.collections.chars.sets.AbstractCharSet;
 import speiger.src.collections.chars.sets.CharOrderedSet;
 import speiger.src.collections.floats.collections.AbstractFloatCollection;
-import speiger.src.collections.floats.collections.FloatCollection;
+import speiger.src.collections.floats.collections.FloatOrderedCollection;
 import speiger.src.collections.floats.collections.FloatIterator;
 import speiger.src.collections.floats.functions.FloatSupplier;
 import speiger.src.collections.floats.functions.function.FloatFloatUnaryOperator;
@@ -63,7 +63,7 @@ public class Char2FloatArrayMap extends AbstractChar2FloatMap implements Char2Fl
 	/** KeySet cache */
 	protected CharOrderedSet keySet;
 	/** Values cache */
-	protected FloatCollection valuesC;
+	protected FloatOrderedCollection valuesC;
 	/** EntrySet cache */
 	protected FastOrderedSet entrySet;
 	
@@ -230,6 +230,27 @@ public class Char2FloatArrayMap extends AbstractChar2FloatMap implements Char2Fl
 	}
 	
 	@Override
+	public float putFirst(char key, float value) {
+		int index = findIndex(key);
+		if(index < 0) {
+			insertIndex(0, key, value);
+			size++;
+			return getDefaultReturnValue();
+		}
+		return values[index];
+	}
+	
+	@Override
+	public float putLast(char key, float value) {
+		int index = findIndex(key);
+		if(index < 0) {
+			insertIndex(size++, key, value);
+			return getDefaultReturnValue();
+		}
+		return values[index];
+	}
+	
+	@Override
 	public boolean moveToFirst(char key) {
 		int index = findIndex(key);
 		if(index > 0) {
@@ -344,6 +365,34 @@ public class Char2FloatArrayMap extends AbstractChar2FloatMap implements Char2Fl
 	}
 	
 	@Override
+	public Char2FloatMap.Entry firstEntry() {
+		if(size == 0) throw new NoSuchElementException();
+		return new BasicEntry(keys[0], values[0]);
+	}
+	
+	@Override
+	public Char2FloatMap.Entry lastEntry() {
+		if(size == 0) throw new NoSuchElementException();
+		return new BasicEntry(keys[size-1], values[size-1]);
+	}
+	
+	@Override
+	public Char2FloatMap.Entry pollFirstEntry() {
+		if(size == 0) throw new NoSuchElementException();
+		BasicEntry result = new BasicEntry(keys[0], values[0]);
+		removeIndex(0);
+		return result;
+	}
+	
+	@Override
+	public Char2FloatMap.Entry pollLastEntry() {
+		if(size == 0) throw new NoSuchElementException();
+		BasicEntry result = new BasicEntry(keys[size-1], values[size-1]);
+		removeIndex(size-1);
+		return result;
+	}
+	
+	@Override
 	public float remove(char key) {
 		int index = findIndex(key);
 		if(index < 0) return getDefaultReturnValue();
@@ -400,7 +449,7 @@ public class Char2FloatArrayMap extends AbstractChar2FloatMap implements Char2Fl
 	}
 
 	@Override
-	public FloatCollection values() {
+	public FloatOrderedCollection values() {
 		if(valuesC == null) valuesC = new Values();
 		return valuesC;
 	}
@@ -718,24 +767,24 @@ public class Char2FloatArrayMap extends AbstractChar2FloatMap implements Char2Fl
 		}
 		
 		@Override
-		public Char2FloatMap.Entry first() {
+		public Char2FloatMap.Entry getFirst() {
 			return new BasicEntry(firstCharKey(), firstFloatValue());
 		}
 		
 		@Override
-		public Char2FloatMap.Entry last() {
+		public Char2FloatMap.Entry getLast() {
 			return new BasicEntry(lastCharKey(), lastFloatValue());
 		}
 		
 		@Override
-		public Char2FloatMap.Entry pollFirst() {
+		public Char2FloatMap.Entry removeFirst() {
 			BasicEntry entry = new BasicEntry(firstCharKey(), firstFloatValue());
 			pollFirstCharKey();
 			return entry;
 		}
 		
 		@Override
-		public Char2FloatMap.Entry pollLast() {
+		public Char2FloatMap.Entry removeLast() {
 			BasicEntry entry = new BasicEntry(lastCharKey(), lastFloatValue());
 			pollLastCharKey();
 			return entry;
@@ -743,7 +792,12 @@ public class Char2FloatArrayMap extends AbstractChar2FloatMap implements Char2Fl
 		
 		@Override
 		public ObjectBidirectionalIterator<Char2FloatMap.Entry> iterator() {
-			return new EntryIterator();
+			return new EntryIterator(true);
+		}
+		
+		@Override
+		public ObjectBidirectionalIterator<Char2FloatMap.Entry> reverseIterator() {
+			return new EntryIterator(false);
 		}
 		
 		@Override
@@ -753,7 +807,7 @@ public class Char2FloatArrayMap extends AbstractChar2FloatMap implements Char2Fl
 		
 		@Override
 		public ObjectBidirectionalIterator<Char2FloatMap.Entry> fastIterator() {
-			return new FastEntryIterator();
+			return new FastEntryIterator(true);
 		}
 		
 		@Override
@@ -950,7 +1004,9 @@ public class Char2FloatArrayMap extends AbstractChar2FloatMap implements Char2Fl
 		@Override
 		public boolean moveToLast(char o) { return Char2FloatArrayMap.this.moveToLast(o); }
 		@Override
-		public CharListIterator iterator() { return new KeyIterator(); }
+		public CharListIterator iterator() { return new KeyIterator(true); }
+		@Override
+		public CharListIterator reverseIterator() { return new KeyIterator(false); }
 		@Override
 		public CharBidirectionalIterator iterator(char fromElement) { return new KeyIterator(fromElement); } 
 		@Override
@@ -958,13 +1014,13 @@ public class Char2FloatArrayMap extends AbstractChar2FloatMap implements Char2Fl
 		@Override
 		public void clear() { Char2FloatArrayMap.this.clear(); }
 		@Override
-		public char firstChar() { return firstCharKey(); }
+		public char getFirstChar() { return firstCharKey(); }
 		@Override
-		public char pollFirstChar() { return pollFirstCharKey(); }
+		public char removeFirstChar() { return pollFirstCharKey(); }
 		@Override
-		public char lastChar() { return lastCharKey(); }
+		public char getLastChar() { return lastCharKey(); }
 		@Override
-		public char pollLastChar() { return pollLastCharKey(); }
+		public char removeLastChar() { return pollLastCharKey(); }
 		
 		@Override
 		public KeySet copy() { throw new UnsupportedOperationException(); }
@@ -1061,32 +1117,43 @@ public class Char2FloatArrayMap extends AbstractChar2FloatMap implements Char2Fl
 		}
 	}
 	
-	private class Values extends AbstractFloatCollection {
+	private class Values extends AbstractFloatCollection implements FloatOrderedCollection {
 		@Override
-		public boolean contains(float e) {
-			return containsValue(e);
-		}
+		public boolean contains(float e) { return containsValue(e); }
 		
 		@Override
-		public boolean add(float o) {
-			throw new UnsupportedOperationException();
-		}
-
+		public boolean add(float o) { throw new UnsupportedOperationException(); }
 		@Override
-		public FloatIterator iterator() {
-			return new ValueIterator();
-		}
-		
+		public FloatIterator iterator() { return new ValueIterator(true); }
 		@Override
-		public int size() {
-			return Char2FloatArrayMap.this.size();
-		}
-		
+		public int size() { return Char2FloatArrayMap.this.size(); }
 		@Override
-		public void clear() {
-			Char2FloatArrayMap.this.clear();
+		public void clear() { Char2FloatArrayMap.this.clear(); }
+		@Override
+		public FloatOrderedCollection reversed() { return new AbstractFloatCollection.ReverseFloatOrderedCollection(this, this::reverseIterator); }
+		private FloatIterator reverseIterator() {
+			return new ValueIterator(false);
 		}
-		
+		@Override
+		public void addFirst(float e) { throw new UnsupportedOperationException(); }
+		@Override
+		public void addLast(float e) { throw new UnsupportedOperationException(); }
+		@Override
+		public float getFirstFloat() { return firstFloatValue(); }
+		@Override
+		public float removeFirstFloat() {
+			float result = firstFloatValue();
+			pollFirstCharKey();
+			return result; 
+		}
+		@Override
+		public float getLastFloat() { return lastFloatValue(); }
+		@Override
+		public float removeLastFloat() {
+			float result = lastFloatValue();
+			pollLastCharKey();
+			return result; 
+		}
 		@Override
 		public void forEach(FloatConsumer action) {
 			Objects.requireNonNull(action);
@@ -1175,10 +1242,8 @@ public class Char2FloatArrayMap extends AbstractChar2FloatMap implements Char2Fl
 	private class FastEntryIterator extends MapIterator implements ObjectListIterator<Char2FloatMap.Entry> {
 		MapEntry entry = new MapEntry();
 		
-		public FastEntryIterator() {}
-		public FastEntryIterator(char from) {
-			index = findIndex(from);
-		}
+		public FastEntryIterator(boolean start) { super(start); }
+		public FastEntryIterator(char element) { super(element); }
 		
 		@Override
 		public Char2FloatMap.Entry next() {
@@ -1201,11 +1266,8 @@ public class Char2FloatArrayMap extends AbstractChar2FloatMap implements Char2Fl
 	private class EntryIterator extends MapIterator implements ObjectListIterator<Char2FloatMap.Entry> {
 		MapEntry entry = null;
 		
-		public EntryIterator() {}
-		public EntryIterator(char from) {
-			index = findIndex(from);
-			if(index == -1) throw new NoSuchElementException();
-		}
+		public EntryIterator(boolean start) { super(start); }
+		public EntryIterator(char element) { super(element); }
 		
 		@Override
 		public Char2FloatMap.Entry next() {
@@ -1232,11 +1294,8 @@ public class Char2FloatArrayMap extends AbstractChar2FloatMap implements Char2Fl
 	}
 	
 	private class KeyIterator extends MapIterator implements CharListIterator {
-		public KeyIterator() {}
-		public KeyIterator(char element) {
-			index = findIndex(element);
-			if(index == -1) throw new NoSuchElementException();
-		}
+		public KeyIterator(boolean start) { super(start); }
+		public KeyIterator(char element) { super(element); }
 		
 		@Override
 		public char previousChar() {
@@ -1256,6 +1315,9 @@ public class Char2FloatArrayMap extends AbstractChar2FloatMap implements Char2Fl
 	}
 	
 	private class ValueIterator extends MapIterator implements FloatListIterator {
+		public ValueIterator(boolean start) { super(start); }
+		public ValueIterator(char element) { super(element); }
+		
 		@Override
 		public float previousFloat() {
 			return values[previousEntry()];
@@ -1274,23 +1336,37 @@ public class Char2FloatArrayMap extends AbstractChar2FloatMap implements Char2Fl
 	}
 	
 	private class MapIterator {
+		boolean forward;
 		int index;
 		int lastReturned = -1;
-
+		
+		MapIterator(boolean start) {
+			this.forward = start;
+			this.index = start ? 0 : size;
+		}
+		
+		MapIterator(char element) {
+			this.forward = true;
+			index = findIndex(element);
+			if(index == -1) throw new NoSuchElementException();
+		}
+		
 		public boolean hasNext() {
-			return index < size;
+			return forward ? index < size : index > 0;
 		}
 		
 		public boolean hasPrevious() {
-			return index > 0;
+			return forward ? index > 0 : index < size;
 		}
 		
 		public int nextIndex() {
-			return index;
+			if(forward) return index;
+			return size - index;
 		}
 		
 		public int previousIndex() {
-			return index-1;
+			if(forward) return index-1;
+			return (size - index)-1;
 		}
 		
 		public void remove() {
@@ -1303,26 +1379,42 @@ public class Char2FloatArrayMap extends AbstractChar2FloatMap implements Char2Fl
 		
 		public int previousEntry() {
 			if(!hasPrevious()) throw new NoSuchElementException();
-			index--;
-			return (lastReturned = index);
-		}
-		
-		public int nextEntry() {
-			if(!hasNext()) throw new NoSuchElementException();
+			if(forward) {
+				index--;
+				return (lastReturned = index);
+			}
 			lastReturned = index;
 			return index++;
 		}
 		
+		public int nextEntry() {
+			if(!hasNext()) throw new NoSuchElementException();
+			if(forward) {
+				lastReturned = index;
+				return index++;
+			}
+			index--;
+			return (lastReturned = index);
+		}
+		
 		public int skip(int amount) {
 			if(amount < 0) throw new IllegalStateException("Negative Numbers are not allowed");
+			return forward ? moveForward(amount) : moveBackwards(amount);
+		}
+		
+		public int back(int amount) {
+			if(amount < 0) throw new IllegalStateException("Negative Numbers are not allowed");
+			return forward ? moveBackwards(amount) : moveForward(amount);
+		}
+		
+		private int moveForward(int amount) {
 			int steps = Math.min(amount, size() - index);
 			index += steps;
 			if(steps > 0) lastReturned = Math.min(index-1, size()-1);
 			return steps;
 		}
 		
-		public int back(int amount) {
-			if(amount < 0) throw new IllegalStateException("Negative Numbers are not allowed");
+		private int moveBackwards(int amount) {
 			int steps = Math.min(amount, index);
 			index -= steps;
 			if(steps > 0) lastReturned = Math.min(index, size()-1);

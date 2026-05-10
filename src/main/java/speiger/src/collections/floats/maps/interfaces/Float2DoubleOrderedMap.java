@@ -1,6 +1,8 @@
 package speiger.src.collections.floats.maps.interfaces;
 
 import speiger.src.collections.floats.utils.maps.Float2DoubleMaps;
+import speiger.src.collections.floats.maps.abstracts.AbstractFloat2DoubleMap;
+import speiger.src.collections.doubles.collections.DoubleOrderedCollection;
 import speiger.src.collections.floats.sets.FloatOrderedSet;
 import speiger.src.collections.objects.collections.ObjectBidirectionalIterator;
 import speiger.src.collections.objects.sets.ObjectOrderedSet;
@@ -30,6 +32,26 @@ public interface Float2DoubleOrderedMap extends Float2DoubleMap
 	 * @see java.util.Map#put(Object, Object)
 	 */
 	public double putAndMoveToLast(float key, double value);
+	
+	/**
+	 * A alternative to putAndMoveToFirst.
+	 * This method simply puts an entry at the first spot of the Map but only if the entry is missing.
+	 * @param key the key that should be inserted
+	 * @param value the value that should be inserted
+	 * @return the previous present or default return value
+	 * @see java.util.Map#put(Object, Object)
+	 */
+	public double putFirst(float key, double value);
+	
+	/**
+	 * A alternative to putAndMoveToLast.
+	 * This method simply puts an entry at the last spot of the Map but only if the entry is missing.
+	 * @param key the key that should be inserted
+	 * @param value the value that should be inserted
+	 * @return the previous present or default return value
+	 * @see java.util.Map#put(Object, Object)
+	 */
+	public double putLast(float key, double value);
 	
 	/**
 	 * A specific move method to move a given key/value to the first index.
@@ -91,12 +113,24 @@ public interface Float2DoubleOrderedMap extends Float2DoubleMap
 	 */
 	public double lastDoubleValue();
 	
+	
+	public Float2DoubleMap.Entry firstEntry();
+	
+	public Float2DoubleMap.Entry lastEntry();
+	
+	public Float2DoubleMap.Entry pollFirstEntry();
+	
+	public Float2DoubleMap.Entry pollLastEntry();
 	@Override
 	public Float2DoubleOrderedMap copy();
 	@Override
 	public FloatOrderedSet keySet();
 	@Override
+	public DoubleOrderedCollection values();
+	@Override
 	public ObjectOrderedSet<Float2DoubleMap.Entry> float2DoubleEntrySet();
+	
+	public default Float2DoubleOrderedMap reversed() { return new AbstractFloat2DoubleMap.ReversedFloat2DoubleOrderedMap(this); }
 	
 	/**
 	 * Creates a Wrapped SortedMap that is Synchronized

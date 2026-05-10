@@ -29,6 +29,7 @@ import speiger.src.collections.doubles.sets.DoubleOrderedSet;
 import speiger.src.collections.doubles.sets.DoubleSet;
 import speiger.src.collections.doubles.utils.DoubleSets;
 import speiger.src.collections.longs.collections.LongCollection;
+import speiger.src.collections.longs.collections.LongOrderedCollection;
 import speiger.src.collections.longs.functions.function.LongLongUnaryOperator;
 import speiger.src.collections.longs.functions.LongSupplier;
 import speiger.src.collections.longs.utils.LongCollections;
@@ -439,6 +440,10 @@ public class Double2LongMaps
 		@Override
 		public long putAndMoveToLast(double key, long value) { throw new UnsupportedOperationException(); }
 		@Override
+		public long putFirst(double key, long value) { throw new UnsupportedOperationException(); }
+		@Override
+		public long putLast(double key, long value) { throw new UnsupportedOperationException(); }
+		@Override
 		public boolean moveToFirst(double key) { throw new UnsupportedOperationException(); }
 		@Override
 		public boolean moveToLast(double key) { throw new UnsupportedOperationException(); }
@@ -459,13 +464,25 @@ public class Double2LongMaps
 		@Override
 		public long lastLongValue() { return map.lastLongValue(); }
 		@Override
+		public Double2LongMap.Entry firstEntry() { return map.firstEntry(); }
+		@Override
+		public Double2LongMap.Entry lastEntry() { return map.lastEntry(); }
+		@Override
+		public Double2LongMap.Entry pollFirstEntry() { throw new UnsupportedOperationException(); }
+		@Override
+		public Double2LongMap.Entry pollLastEntry() { throw new UnsupportedOperationException(); }
+		@Override
 		public Double2LongOrderedMap copy() { return map.copy(); }
 		@Override
 		public DoubleOrderedSet keySet() { 
 			if(keys == null) keys = DoubleSets.unmodifiable(map.keySet()); 
 			return (DoubleOrderedSet)keys;
 		}
-				
+		@Override
+		public LongOrderedCollection values() {
+			if(values == null) values = LongCollections.unmodifiable(map.values());
+			return (LongOrderedCollection)values;
+		}
 		@Override
 		public ObjectOrderedSet<Double2LongMap.Entry> double2LongEntrySet() {
 			if(entrySet == null) entrySet = new UnmodifyableOrderedEntrySet(map.double2LongEntrySet());
@@ -617,15 +634,17 @@ public class Double2LongMaps
 		@Override
 		public ObjectBidirectionalIterator<Double2LongMap.Entry> iterator() { return ObjectIterators.unmodifiable(set.iterator()); }
 		@Override
+		public ObjectBidirectionalIterator<Double2LongMap.Entry> reverseIterator() { return ObjectIterators.unmodifiable(set.reverseIterator()); }
+		@Override
 		public ObjectBidirectionalIterator<Double2LongMap.Entry> iterator(Double2LongMap.Entry fromElement) { return ObjectIterators.unmodifiable(set.iterator(fromElement)); }
 		@Override
-		public Double2LongMap.Entry first() { return set.first(); }
+		public Double2LongMap.Entry getFirst() { return set.getFirst(); }
 		@Override
-		public Double2LongMap.Entry pollFirst() { throw new UnsupportedOperationException(); }
+		public Double2LongMap.Entry removeFirst() { throw new UnsupportedOperationException(); }
 		@Override
-		public Double2LongMap.Entry last() { return set.last(); }
+		public Double2LongMap.Entry getLast() { return set.getLast(); }
 		@Override
-		public Double2LongMap.Entry pollLast() { throw new UnsupportedOperationException(); }
+		public Double2LongMap.Entry removeLast() { throw new UnsupportedOperationException(); }
 	}
 	
 	/**
@@ -794,6 +813,10 @@ public class Double2LongMaps
 		@Override
 		public long putAndMoveToLast(double key, long value) { synchronized(mutex) { return map.putAndMoveToLast(key, value); } }
 		@Override
+		public long putFirst(double key, long value) { synchronized(mutex) { return map.putFirst(key, value); } }
+		@Override
+		public long putLast(double key, long value) { synchronized(mutex) { return map.putLast(key, value); } }
+		@Override
 		public boolean moveToFirst(double key) { synchronized(mutex) { return map.moveToFirst(key); } }
 		@Override
 		public boolean moveToLast(double key) { synchronized(mutex) { return map.moveToLast(key); } }
@@ -814,13 +837,25 @@ public class Double2LongMaps
 		@Override
 		public long lastLongValue() { synchronized(mutex) { return map.lastLongValue(); } }
 		@Override
+		public Double2LongMap.Entry firstEntry() { synchronized(mutex) { return map.firstEntry(); } }
+		@Override
+		public Double2LongMap.Entry lastEntry() { synchronized(mutex) { return map.lastEntry(); } }
+		@Override
+		public Double2LongMap.Entry pollFirstEntry() { synchronized(mutex) { return map.pollFirstEntry(); } }
+		@Override
+		public Double2LongMap.Entry pollLastEntry() { synchronized(mutex) { return map.pollLastEntry(); } }
+		@Override
 		public Double2LongOrderedMap copy() { synchronized(mutex) { return map.copy(); } }
 		@Override
 		public DoubleOrderedSet keySet() {
 			if(keys == null) keys = DoubleSets.synchronize(map.keySet(), mutex);
 			return (DoubleOrderedSet)keys;
 		}
-		
+		@Override
+		public LongOrderedCollection values() {
+			if(values == null) values = LongCollections.synchronize(map.values(), mutex);
+			return (LongOrderedCollection)values;
+		}
 		@Override
 		public ObjectOrderedSet<Double2LongMap.Entry> double2LongEntrySet() {
 			if(entrySet == null) entrySet = ObjectSets.synchronize(map.double2LongEntrySet(), mutex);

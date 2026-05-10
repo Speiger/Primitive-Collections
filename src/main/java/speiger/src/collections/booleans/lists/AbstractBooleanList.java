@@ -466,7 +466,6 @@ public abstract class AbstractBooleanList extends AbstractBooleanCollection impl
 		public int size() {
 			return size;
 		}
-		
 		@Override
 		public BooleanSplititerator spliterator() { return BooleanSplititerators.createSplititerator(this, 16464); }
 		

@@ -9,6 +9,7 @@ import java.util.Comparator;
 import java.util.function.UnaryOperator;
 
 import speiger.src.collections.shorts.collections.ShortCollection;
+import speiger.src.collections.shorts.collections.ShortOrderedCollection;
 import speiger.src.collections.shorts.collections.ShortSplititerator;
 import speiger.src.collections.ints.functions.consumer.IntShortConsumer;
 import speiger.src.collections.shorts.functions.ShortComparator;
@@ -21,7 +22,7 @@ import speiger.src.collections.utils.SanityChecks;
 /**
  * A Type Specific List interface that reduces boxing/unboxing and adds a couple extra quality of life features
  */
-public interface ShortList extends ShortCollection, List<Short>
+public interface ShortList extends ShortOrderedCollection, List<Short>
 {
 	/**
 	 * A Type-Specific add Function to reduce (un)boxing
@@ -83,6 +84,24 @@ public interface ShortList extends ShortCollection, List<Short>
 	 * @return true if the list was modified
 	 */
 	public boolean addAll(int index, ShortList c);
+	
+	/**
+	 * A method to add an element to the start of a list
+	 * @param e that should be added at the start.
+	 */
+	@Override
+	public default void addFirst(short e) { 
+		add(0, e);
+	}
+	
+	/**
+	 * A method to add an element to the end of a list
+	 * @param e that should be added at the end.
+	 */
+	@Override
+	public default void addLast(short e) {
+		add(e);
+	}
 	
 	/**
 	 * Helper method that returns the first element of a List.
@@ -414,9 +433,9 @@ public interface ShortList extends ShortCollection, List<Short>
 	@Override
 	@Deprecated
 	public default boolean add(Short e) {
-		return ShortCollection.super.add(e);
+		return ShortOrderedCollection.super.add(e);
 	}
-	
+
 	/** {@inheritDoc}
 	 * <p>This default implementation delegates to the corresponding type-specific function.
 	 * @deprecated Please use the corresponding type-specific function instead. 
@@ -464,7 +483,7 @@ public interface ShortList extends ShortCollection, List<Short>
 	@Override
 	@Deprecated
 	public default boolean contains(Object o) {
-		return ShortCollection.super.contains(o);
+		return ShortOrderedCollection.super.contains(o);
 	}
 	
 	/** {@inheritDoc}
@@ -474,7 +493,7 @@ public interface ShortList extends ShortCollection, List<Short>
 	@Override
 	@Deprecated
 	public default boolean remove(Object o) {
-		return ShortCollection.super.remove(o);
+		return ShortOrderedCollection.super.remove(o);
 	}
 	
 	/** {@inheritDoc}

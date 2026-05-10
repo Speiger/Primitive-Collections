@@ -27,7 +27,7 @@ import speiger.src.collections.floats.maps.interfaces.Float2DoubleOrderedMap;
 import speiger.src.collections.floats.sets.AbstractFloatSet;
 import speiger.src.collections.floats.sets.FloatOrderedSet;
 import speiger.src.collections.doubles.collections.AbstractDoubleCollection;
-import speiger.src.collections.doubles.collections.DoubleCollection;
+import speiger.src.collections.doubles.collections.DoubleOrderedCollection;
 import speiger.src.collections.doubles.collections.DoubleIterator;
 import speiger.src.collections.doubles.functions.DoubleSupplier;
 import speiger.src.collections.doubles.functions.function.DoubleDoubleUnaryOperator;
@@ -63,7 +63,7 @@ public class Float2DoubleArrayMap extends AbstractFloat2DoubleMap implements Flo
 	/** KeySet cache */
 	protected FloatOrderedSet keySet;
 	/** Values cache */
-	protected DoubleCollection valuesC;
+	protected DoubleOrderedCollection valuesC;
 	/** EntrySet cache */
 	protected FastOrderedSet entrySet;
 	
@@ -230,6 +230,27 @@ public class Float2DoubleArrayMap extends AbstractFloat2DoubleMap implements Flo
 	}
 	
 	@Override
+	public double putFirst(float key, double value) {
+		int index = findIndex(key);
+		if(index < 0) {
+			insertIndex(0, key, value);
+			size++;
+			return getDefaultReturnValue();
+		}
+		return values[index];
+	}
+	
+	@Override
+	public double putLast(float key, double value) {
+		int index = findIndex(key);
+		if(index < 0) {
+			insertIndex(size++, key, value);
+			return getDefaultReturnValue();
+		}
+		return values[index];
+	}
+	
+	@Override
 	public boolean moveToFirst(float key) {
 		int index = findIndex(key);
 		if(index > 0) {
@@ -344,6 +365,34 @@ public class Float2DoubleArrayMap extends AbstractFloat2DoubleMap implements Flo
 	}
 	
 	@Override
+	public Float2DoubleMap.Entry firstEntry() {
+		if(size == 0) throw new NoSuchElementException();
+		return new BasicEntry(keys[0], values[0]);
+	}
+	
+	@Override
+	public Float2DoubleMap.Entry lastEntry() {
+		if(size == 0) throw new NoSuchElementException();
+		return new BasicEntry(keys[size-1], values[size-1]);
+	}
+	
+	@Override
+	public Float2DoubleMap.Entry pollFirstEntry() {
+		if(size == 0) throw new NoSuchElementException();
+		BasicEntry result = new BasicEntry(keys[0], values[0]);
+		removeIndex(0);
+		return result;
+	}
+	
+	@Override
+	public Float2DoubleMap.Entry pollLastEntry() {
+		if(size == 0) throw new NoSuchElementException();
+		BasicEntry result = new BasicEntry(keys[size-1], values[size-1]);
+		removeIndex(size-1);
+		return result;
+	}
+	
+	@Override
 	public double remove(float key) {
 		int index = findIndex(key);
 		if(index < 0) return getDefaultReturnValue();
@@ -400,7 +449,7 @@ public class Float2DoubleArrayMap extends AbstractFloat2DoubleMap implements Flo
 	}
 
 	@Override
-	public DoubleCollection values() {
+	public DoubleOrderedCollection values() {
 		if(valuesC == null) valuesC = new Values();
 		return valuesC;
 	}
@@ -718,24 +767,24 @@ public class Float2DoubleArrayMap extends AbstractFloat2DoubleMap implements Flo
 		}
 		
 		@Override
-		public Float2DoubleMap.Entry first() {
+		public Float2DoubleMap.Entry getFirst() {
 			return new BasicEntry(firstFloatKey(), firstDoubleValue());
 		}
 		
 		@Override
-		public Float2DoubleMap.Entry last() {
+		public Float2DoubleMap.Entry getLast() {
 			return new BasicEntry(lastFloatKey(), lastDoubleValue());
 		}
 		
 		@Override
-		public Float2DoubleMap.Entry pollFirst() {
+		public Float2DoubleMap.Entry removeFirst() {
 			BasicEntry entry = new BasicEntry(firstFloatKey(), firstDoubleValue());
 			pollFirstFloatKey();
 			return entry;
 		}
 		
 		@Override
-		public Float2DoubleMap.Entry pollLast() {
+		public Float2DoubleMap.Entry removeLast() {
 			BasicEntry entry = new BasicEntry(lastFloatKey(), lastDoubleValue());
 			pollLastFloatKey();
 			return entry;
@@ -743,7 +792,12 @@ public class Float2DoubleArrayMap extends AbstractFloat2DoubleMap implements Flo
 		
 		@Override
 		public ObjectBidirectionalIterator<Float2DoubleMap.Entry> iterator() {
-			return new EntryIterator();
+			return new EntryIterator(true);
+		}
+		
+		@Override
+		public ObjectBidirectionalIterator<Float2DoubleMap.Entry> reverseIterator() {
+			return new EntryIterator(false);
 		}
 		
 		@Override
@@ -753,7 +807,7 @@ public class Float2DoubleArrayMap extends AbstractFloat2DoubleMap implements Flo
 		
 		@Override
 		public ObjectBidirectionalIterator<Float2DoubleMap.Entry> fastIterator() {
-			return new FastEntryIterator();
+			return new FastEntryIterator(true);
 		}
 		
 		@Override
@@ -950,7 +1004,9 @@ public class Float2DoubleArrayMap extends AbstractFloat2DoubleMap implements Flo
 		@Override
 		public boolean moveToLast(float o) { return Float2DoubleArrayMap.this.moveToLast(o); }
 		@Override
-		public FloatListIterator iterator() { return new KeyIterator(); }
+		public FloatListIterator iterator() { return new KeyIterator(true); }
+		@Override
+		public FloatListIterator reverseIterator() { return new KeyIterator(false); }
 		@Override
 		public FloatBidirectionalIterator iterator(float fromElement) { return new KeyIterator(fromElement); } 
 		@Override
@@ -958,13 +1014,13 @@ public class Float2DoubleArrayMap extends AbstractFloat2DoubleMap implements Flo
 		@Override
 		public void clear() { Float2DoubleArrayMap.this.clear(); }
 		@Override
-		public float firstFloat() { return firstFloatKey(); }
+		public float getFirstFloat() { return firstFloatKey(); }
 		@Override
-		public float pollFirstFloat() { return pollFirstFloatKey(); }
+		public float removeFirstFloat() { return pollFirstFloatKey(); }
 		@Override
-		public float lastFloat() { return lastFloatKey(); }
+		public float getLastFloat() { return lastFloatKey(); }
 		@Override
-		public float pollLastFloat() { return pollLastFloatKey(); }
+		public float removeLastFloat() { return pollLastFloatKey(); }
 		
 		@Override
 		public KeySet copy() { throw new UnsupportedOperationException(); }
@@ -1061,32 +1117,43 @@ public class Float2DoubleArrayMap extends AbstractFloat2DoubleMap implements Flo
 		}
 	}
 	
-	private class Values extends AbstractDoubleCollection {
+	private class Values extends AbstractDoubleCollection implements DoubleOrderedCollection {
 		@Override
-		public boolean contains(double e) {
-			return containsValue(e);
-		}
+		public boolean contains(double e) { return containsValue(e); }
 		
 		@Override
-		public boolean add(double o) {
-			throw new UnsupportedOperationException();
-		}
-
+		public boolean add(double o) { throw new UnsupportedOperationException(); }
 		@Override
-		public DoubleIterator iterator() {
-			return new ValueIterator();
-		}
-		
+		public DoubleIterator iterator() { return new ValueIterator(true); }
 		@Override
-		public int size() {
-			return Float2DoubleArrayMap.this.size();
-		}
-		
+		public int size() { return Float2DoubleArrayMap.this.size(); }
 		@Override
-		public void clear() {
-			Float2DoubleArrayMap.this.clear();
+		public void clear() { Float2DoubleArrayMap.this.clear(); }
+		@Override
+		public DoubleOrderedCollection reversed() { return new AbstractDoubleCollection.ReverseDoubleOrderedCollection(this, this::reverseIterator); }
+		private DoubleIterator reverseIterator() {
+			return new ValueIterator(false);
 		}
-		
+		@Override
+		public void addFirst(double e) { throw new UnsupportedOperationException(); }
+		@Override
+		public void addLast(double e) { throw new UnsupportedOperationException(); }
+		@Override
+		public double getFirstDouble() { return firstDoubleValue(); }
+		@Override
+		public double removeFirstDouble() {
+			double result = firstDoubleValue();
+			pollFirstFloatKey();
+			return result; 
+		}
+		@Override
+		public double getLastDouble() { return lastDoubleValue(); }
+		@Override
+		public double removeLastDouble() {
+			double result = lastDoubleValue();
+			pollLastFloatKey();
+			return result; 
+		}
 		@Override
 		public void forEach(DoubleConsumer action) {
 			Objects.requireNonNull(action);
@@ -1175,10 +1242,8 @@ public class Float2DoubleArrayMap extends AbstractFloat2DoubleMap implements Flo
 	private class FastEntryIterator extends MapIterator implements ObjectListIterator<Float2DoubleMap.Entry> {
 		MapEntry entry = new MapEntry();
 		
-		public FastEntryIterator() {}
-		public FastEntryIterator(float from) {
-			index = findIndex(from);
-		}
+		public FastEntryIterator(boolean start) { super(start); }
+		public FastEntryIterator(float element) { super(element); }
 		
 		@Override
 		public Float2DoubleMap.Entry next() {
@@ -1201,11 +1266,8 @@ public class Float2DoubleArrayMap extends AbstractFloat2DoubleMap implements Flo
 	private class EntryIterator extends MapIterator implements ObjectListIterator<Float2DoubleMap.Entry> {
 		MapEntry entry = null;
 		
-		public EntryIterator() {}
-		public EntryIterator(float from) {
-			index = findIndex(from);
-			if(index == -1) throw new NoSuchElementException();
-		}
+		public EntryIterator(boolean start) { super(start); }
+		public EntryIterator(float element) { super(element); }
 		
 		@Override
 		public Float2DoubleMap.Entry next() {
@@ -1232,11 +1294,8 @@ public class Float2DoubleArrayMap extends AbstractFloat2DoubleMap implements Flo
 	}
 	
 	private class KeyIterator extends MapIterator implements FloatListIterator {
-		public KeyIterator() {}
-		public KeyIterator(float element) {
-			index = findIndex(element);
-			if(index == -1) throw new NoSuchElementException();
-		}
+		public KeyIterator(boolean start) { super(start); }
+		public KeyIterator(float element) { super(element); }
 		
 		@Override
 		public float previousFloat() {
@@ -1256,6 +1315,9 @@ public class Float2DoubleArrayMap extends AbstractFloat2DoubleMap implements Flo
 	}
 	
 	private class ValueIterator extends MapIterator implements DoubleListIterator {
+		public ValueIterator(boolean start) { super(start); }
+		public ValueIterator(float element) { super(element); }
+		
 		@Override
 		public double previousDouble() {
 			return values[previousEntry()];
@@ -1274,23 +1336,37 @@ public class Float2DoubleArrayMap extends AbstractFloat2DoubleMap implements Flo
 	}
 	
 	private class MapIterator {
+		boolean forward;
 		int index;
 		int lastReturned = -1;
-
+		
+		MapIterator(boolean start) {
+			this.forward = start;
+			this.index = start ? 0 : size;
+		}
+		
+		MapIterator(float element) {
+			this.forward = true;
+			index = findIndex(element);
+			if(index == -1) throw new NoSuchElementException();
+		}
+		
 		public boolean hasNext() {
-			return index < size;
+			return forward ? index < size : index > 0;
 		}
 		
 		public boolean hasPrevious() {
-			return index > 0;
+			return forward ? index > 0 : index < size;
 		}
 		
 		public int nextIndex() {
-			return index;
+			if(forward) return index;
+			return size - index;
 		}
 		
 		public int previousIndex() {
-			return index-1;
+			if(forward) return index-1;
+			return (size - index)-1;
 		}
 		
 		public void remove() {
@@ -1303,26 +1379,42 @@ public class Float2DoubleArrayMap extends AbstractFloat2DoubleMap implements Flo
 		
 		public int previousEntry() {
 			if(!hasPrevious()) throw new NoSuchElementException();
-			index--;
-			return (lastReturned = index);
-		}
-		
-		public int nextEntry() {
-			if(!hasNext()) throw new NoSuchElementException();
+			if(forward) {
+				index--;
+				return (lastReturned = index);
+			}
 			lastReturned = index;
 			return index++;
 		}
 		
+		public int nextEntry() {
+			if(!hasNext()) throw new NoSuchElementException();
+			if(forward) {
+				lastReturned = index;
+				return index++;
+			}
+			index--;
+			return (lastReturned = index);
+		}
+		
 		public int skip(int amount) {
 			if(amount < 0) throw new IllegalStateException("Negative Numbers are not allowed");
+			return forward ? moveForward(amount) : moveBackwards(amount);
+		}
+		
+		public int back(int amount) {
+			if(amount < 0) throw new IllegalStateException("Negative Numbers are not allowed");
+			return forward ? moveBackwards(amount) : moveForward(amount);
+		}
+		
+		private int moveForward(int amount) {
 			int steps = Math.min(amount, size() - index);
 			index += steps;
 			if(steps > 0) lastReturned = Math.min(index-1, size()-1);
 			return steps;
 		}
 		
-		public int back(int amount) {
-			if(amount < 0) throw new IllegalStateException("Negative Numbers are not allowed");
+		private int moveBackwards(int amount) {
 			int steps = Math.min(amount, index);
 			index -= steps;
 			if(steps > 0) lastReturned = Math.min(index, size()-1);

@@ -13,11 +13,13 @@ import java.util.Collection;
 import java.util.Iterator;
 import java.util.Objects;
 import java.util.NoSuchElementException;
+#if SPLIT_ITERATOR_FEATURE
 import java.util.Spliterator;
 #if PRIMITIVES
 import java.util.Spliterator.JAVA_SPLIT_ITERATOR;
 #endif
 import java.util.function.Consumer;
+#endif
 import java.util.function.Predicate;
 #if TYPE_OBJECT
 import java.util.function.IntFunction;
@@ -60,12 +62,14 @@ import speiger.src.collections.objects.utils.ObjectArrays;
 #if TYPE_OBJECT
 import speiger.src.collections.utils.Stack;
 #endif
+#if SPLIT_ITERATOR_FEATURE
 #if PRIMITIVES
 import java.util.stream.JAVA_STREAM;
 import java.util.stream.StreamSupport;
 #endif
 import speiger.src.collections.PACKAGE.collections.SPLIT_ITERATOR;
 import speiger.src.collections.PACKAGE.utils.SPLIT_ITERATORS;
+#endif
 import speiger.src.collections.utils.SanityChecks;
 
 /**
@@ -415,7 +419,8 @@ public class LINKED_LIST KEY_GENERIC_TYPE extends ABSTRACT_LIST KEY_GENERIC_TYPE
 		if(index == 0) return new ListIter(first, index);
 		return new ListIter(getNode(index), index);
 	}
-	
+
+#if SPLIT_ITERATOR_FEATURE
 #if PRIMITIVES
 	/**
 	 * Returns a Java-Type-Specific Stream to reduce boxing/unboxing.
@@ -436,6 +441,7 @@ public class LINKED_LIST KEY_GENERIC_TYPE extends ABSTRACT_LIST KEY_GENERIC_TYPE
 	@Override
 	public SPLIT_ITERATOR KEY_GENERIC_TYPE spliterator() { return new TypeSplitIteratorBRACES(this, first, 0); }
 	
+#endif
 	@Override
 	public void forEach(CONSUMER KEY_SUPER_GENERIC_TYPE action) {
 		Objects.requireNonNull(action);
@@ -1253,6 +1259,7 @@ public class LINKED_LIST KEY_GENERIC_TYPE extends ABSTRACT_LIST KEY_GENERIC_TYPE
 		}
 	}
 	
+#if SPLIT_ITERATOR_FEATURE
 	private static class TypeSplitIterator KEY_GENERIC_TYPE implements SPLIT_ITERATOR KEY_GENERIC_TYPE 
 	{
 		static final int BATCH_UNIT = 1 << 10;
@@ -1396,5 +1403,6 @@ public class LINKED_LIST KEY_GENERIC_TYPE extends ABSTRACT_LIST KEY_GENERIC_TYPE
 			return entry != null;
 		}
 	}
+#endif
 #endif
 }

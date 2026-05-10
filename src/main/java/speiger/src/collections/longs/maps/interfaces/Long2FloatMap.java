@@ -94,7 +94,7 @@ public interface Long2FloatMap extends Map<Long, Float>, Long2FloatFunction
 	 * @return the last present value or default return	value.
 	 */
 	public default Float put(Map.Entry<Long, Float> entry) {
-		return put(entry.getKey(), entry.getValue());
+		return put(entry.getKey().longValue(), entry.getValue().floatValue());
 	}
 
 	/**

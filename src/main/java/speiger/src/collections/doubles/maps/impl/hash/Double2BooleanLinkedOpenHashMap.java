@@ -23,7 +23,7 @@ import speiger.src.collections.doubles.maps.interfaces.Double2BooleanOrderedMap;
 import speiger.src.collections.doubles.sets.AbstractDoubleSet;
 import speiger.src.collections.doubles.sets.DoubleOrderedSet;
 import speiger.src.collections.booleans.collections.AbstractBooleanCollection;
-import speiger.src.collections.booleans.collections.BooleanCollection;
+import speiger.src.collections.booleans.collections.BooleanOrderedCollection;
 import speiger.src.collections.booleans.collections.BooleanIterator;
 import speiger.src.collections.booleans.functions.function.BooleanBooleanUnaryOperator;
 import speiger.src.collections.booleans.functions.BooleanConsumer;
@@ -236,6 +236,54 @@ public class Double2BooleanLinkedOpenHashMap extends Double2BooleanOpenHashMap i
 	}
 	
 	@Override
+	public boolean putFirst(double key, boolean value) {
+		if(Double.doubleToLongBits(key) == 0) {
+			if(containsNull) return values[nullIndex];
+			values[nullIndex] = value;
+			containsNull = true;
+			onNodeAdded(nullIndex);
+			moveToFirstIndex(nullIndex);
+		}
+		else {
+			int pos = HashUtil.mix(Double.hashCode(key)) & mask;
+			while(Double.doubleToLongBits(key) == 0) {
+				if(Double.doubleToLongBits(keys[pos]) == Double.doubleToLongBits(key)) return values[pos];
+				pos = ++pos & mask;
+			}
+			keys[pos] = key;
+			values[pos] = value;
+			onNodeAdded(pos);
+			moveToFirstIndex(pos);
+		}
+		if(size++ >= maxFill) rehash(HashUtil.arraySize(size+1, loadFactor));
+		return getDefaultReturnValue();
+	}
+	
+	@Override
+	public boolean putLast(double key, boolean value) {
+		if(Double.doubleToLongBits(key) == 0) {
+			if(containsNull) return values[nullIndex];
+			values[nullIndex] = value;
+			containsNull = true;
+			onNodeAdded(nullIndex);
+			moveToLastIndex(nullIndex);
+		}
+		else {
+			int pos = HashUtil.mix(Double.hashCode(key)) & mask;
+			while(Double.doubleToLongBits(key) == 0) {
+				if(Double.doubleToLongBits(keys[pos]) == Double.doubleToLongBits(key)) return values[pos];
+				pos = ++pos & mask;
+			}
+			keys[pos] = key;
+			values[pos] = value;
+			onNodeAdded(pos);
+			moveToLastIndex(pos);
+		}
+		if(size++ >= maxFill) rehash(HashUtil.arraySize(size+1, loadFactor));
+		return getDefaultReturnValue();
+	}
+	
+	@Override
 	public boolean moveToFirst(double key) {
 		if(isEmpty() || Double.doubleToLongBits(firstDoubleKey()) == Double.doubleToLongBits(key)) return false;
 		if(Double.doubleToLongBits(key) == 0) {
@@ -392,6 +440,52 @@ public class Double2BooleanLinkedOpenHashMap extends Double2BooleanOpenHashMap i
 	}
 	
 	@Override
+	public Double2BooleanMap.Entry firstEntry() {
+		if(size == 0) throw new NoSuchElementException();
+		return new BasicEntry(keys[firstIndex], values[firstIndex]);
+	}
+	
+	@Override
+	public Double2BooleanMap.Entry lastEntry() {
+		if(size == 0) throw new NoSuchElementException();
+		return new BasicEntry(keys[lastIndex], values[lastIndex]);
+	}
+	
+	@Override
+	public Double2BooleanMap.Entry pollFirstEntry() {
+		if(size == 0) throw new NoSuchElementException();
+		int pos = firstIndex;
+		onNodeRemoved(pos);
+		BasicEntry result = new BasicEntry(keys[pos], values[pos]);
+		size--;
+		if(Double.doubleToLongBits(result.getDoubleKey()) == 0) {
+			containsNull = false;
+			keys[nullIndex] = 0D;
+			values[nullIndex] = false;
+		}
+		else shiftKeys(pos);
+		if(nullIndex > minCapacity && size < maxFill / 4 && nullIndex > HashUtil.DEFAULT_MIN_CAPACITY) rehash(nullIndex / 2);
+		return result;
+	}
+	
+	@Override
+	public Double2BooleanMap.Entry pollLastEntry() {
+		if(size == 0) throw new NoSuchElementException();
+		int pos = lastIndex;
+		onNodeRemoved(pos);
+		BasicEntry result = new BasicEntry(keys[pos], values[pos]);
+		size--;
+		if(Double.doubleToLongBits(result.getDoubleKey()) == 0) {
+			containsNull = false;
+			keys[nullIndex] = 0D;
+			values[nullIndex] = false;
+		}
+		else shiftKeys(pos);
+		if(nullIndex > minCapacity && size < maxFill / 4 && nullIndex > HashUtil.DEFAULT_MIN_CAPACITY) rehash(nullIndex / 2);
+		return result;
+	}
+	
+	@Override
 	public ObjectOrderedSet<Double2BooleanMap.Entry> double2BooleanEntrySet() {
 		if(entrySet == null) entrySet = new MapEntrySet();
 		return (ObjectOrderedSet<Double2BooleanMap.Entry>)entrySet;
@@ -404,9 +498,9 @@ public class Double2BooleanLinkedOpenHashMap extends Double2BooleanOpenHashMap i
 	}
 	
 	@Override
-	public BooleanCollection values() {
+	public BooleanOrderedCollection values() {
 		if(valuesC == null) valuesC = new Values();
-		return valuesC;
+		return (BooleanOrderedCollection)valuesC;
 	}
 	
 	@Override
@@ -591,24 +685,24 @@ public class Double2BooleanLinkedOpenHashMap extends Double2BooleanOpenHashMap i
 		}
 		
 		@Override
-		public Double2BooleanMap.Entry first() {
+		public Double2BooleanMap.Entry getFirst() {
 			return new BasicEntry(firstDoubleKey(), firstBooleanValue());
 		}
 		
 		@Override
-		public Double2BooleanMap.Entry last() {
+		public Double2BooleanMap.Entry getLast() {
 			return new BasicEntry(lastDoubleKey(), lastBooleanValue());
 		}
 		
 		@Override
-		public Double2BooleanMap.Entry pollFirst() {
+		public Double2BooleanMap.Entry removeFirst() {
 			BasicEntry entry = new BasicEntry(firstDoubleKey(), firstBooleanValue());
 			pollFirstDoubleKey();
 			return entry;
 		}
 		
 		@Override
-		public Double2BooleanMap.Entry pollLast() {
+		public Double2BooleanMap.Entry removeLast() {
 			BasicEntry entry = new BasicEntry(lastDoubleKey(), lastBooleanValue());
 			pollLastDoubleKey();
 			return entry;
@@ -616,7 +710,12 @@ public class Double2BooleanLinkedOpenHashMap extends Double2BooleanOpenHashMap i
 		
 		@Override
 		public ObjectBidirectionalIterator<Double2BooleanMap.Entry> iterator() {
-			return new EntryIterator();
+			return new EntryIterator(true);
+		}
+		
+		@Override
+		public ObjectBidirectionalIterator<Double2BooleanMap.Entry> reverseIterator() {
+			return new EntryIterator(false);
 		}
 		
 		@Override
@@ -626,7 +725,7 @@ public class Double2BooleanLinkedOpenHashMap extends Double2BooleanOpenHashMap i
 		
 		@Override
 		public ObjectBidirectionalIterator<Double2BooleanMap.Entry> fastIterator() {
-			return new FastEntryIterator();
+			return new FastEntryIterator(true);
 		}
 		
 		@Override
@@ -859,7 +958,12 @@ public class Double2BooleanLinkedOpenHashMap extends Double2BooleanOpenHashMap i
 		
 		@Override
 		public DoubleListIterator iterator() {
-			return new KeyIterator();
+			return new KeyIterator(true);
+		}
+		
+		@Override
+		public DoubleListIterator reverseIterator() {
+			return new KeyIterator(false);
 		}
 		
 		@Override
@@ -881,22 +985,22 @@ public class Double2BooleanLinkedOpenHashMap extends Double2BooleanOpenHashMap i
 		}
 		
 		@Override
-		public double firstDouble() {
+		public double getFirstDouble() {
 			return firstDoubleKey();
 		}
 		
 		@Override
-		public double pollFirstDouble() {
+		public double removeFirstDouble() {
 			return pollFirstDoubleKey();
 		}
 
 		@Override
-		public double lastDouble() {
+		public double getLastDouble() {
 			return lastDoubleKey();
 		}
 
 		@Override
-		public double pollLastDouble() {
+		public double removeLastDouble() {
 			return pollLastDoubleKey();
 		}
 		
@@ -1025,32 +1129,43 @@ public class Double2BooleanLinkedOpenHashMap extends Double2BooleanOpenHashMap i
 		}
 	}
 	
-	private class Values extends AbstractBooleanCollection {
+	private class Values extends AbstractBooleanCollection implements BooleanOrderedCollection {
 		@Override
-		public boolean contains(boolean e) {
-			return containsValue(e);
-		}
+		public boolean contains(boolean e) { return containsValue(e); }
 		
 		@Override
-		public boolean add(boolean o) {
-			throw new UnsupportedOperationException();
-		}
-
+		public boolean add(boolean o) { throw new UnsupportedOperationException(); }
 		@Override
-		public BooleanIterator iterator() {
-			return new ValueIterator();
-		}
-		
+		public BooleanIterator iterator() { return new ValueIterator(true); }
 		@Override
-		public int size() {
-			return Double2BooleanLinkedOpenHashMap.this.size();
-		}
-		
+		public int size() { return Double2BooleanLinkedOpenHashMap.this.size(); }
 		@Override
-		public void clear() {
-			Double2BooleanLinkedOpenHashMap.this.clear();
+		public void clear() { Double2BooleanLinkedOpenHashMap.this.clear(); }
+		@Override
+		public BooleanOrderedCollection reversed() { return new AbstractBooleanCollection.ReverseBooleanOrderedCollection(this, this::reverseIterator); }
+		private BooleanIterator reverseIterator() {
+			return new ValueIterator(false);
 		}
-		
+		@Override
+		public void addFirst(boolean e) { throw new UnsupportedOperationException(); }
+		@Override
+		public void addLast(boolean e) { throw new UnsupportedOperationException(); }
+		@Override
+		public boolean getFirstBoolean() { return firstBooleanValue(); }
+		@Override
+		public boolean removeFirstBoolean() {
+			boolean result = firstBooleanValue();
+			pollFirstDoubleKey();
+			return result; 
+		}
+		@Override
+		public boolean getLastBoolean() { return lastBooleanValue(); }
+		@Override
+		public boolean removeLastBoolean() {
+			boolean result = lastBooleanValue();
+			pollLastDoubleKey();
+			return result; 
+		}
 		@Override
 		public void forEach(BooleanConsumer action) {
 			Objects.requireNonNull(action);
@@ -1180,7 +1295,7 @@ public class Double2BooleanLinkedOpenHashMap extends Double2BooleanOpenHashMap i
 	private class FastEntryIterator extends MapIterator implements ObjectListIterator<Double2BooleanMap.Entry> {
 		MapEntry entry = new MapEntry();
 		
-		public FastEntryIterator() {}
+		public FastEntryIterator(boolean start) { super(start); }
 		public FastEntryIterator(double from) {
 			super(from);
 		}
@@ -1207,7 +1322,7 @@ public class Double2BooleanLinkedOpenHashMap extends Double2BooleanOpenHashMap i
 	private class EntryIterator extends MapIterator implements ObjectListIterator<Double2BooleanMap.Entry> {
 		MapEntry entry;
 		
-		public EntryIterator() {}
+		public EntryIterator(boolean start) { super(start); }
 		public EntryIterator(double from) {
 			super(from);
 		}
@@ -1237,7 +1352,7 @@ public class Double2BooleanLinkedOpenHashMap extends Double2BooleanOpenHashMap i
 	
 	private class KeyIterator extends MapIterator implements DoubleListIterator {
 		
-		public KeyIterator() {}
+		public KeyIterator(boolean start) { super(start); }
 		public KeyIterator(double from) {
 			super(from);
 		}
@@ -1259,7 +1374,7 @@ public class Double2BooleanLinkedOpenHashMap extends Double2BooleanOpenHashMap i
 	}
 	
 	private class ValueIterator extends MapIterator implements BooleanListIterator {
-		public ValueIterator() {}
+		public ValueIterator(boolean start) { super(start); }
 		
 		@Override
 		public boolean previousBoolean() {
@@ -1279,13 +1394,16 @@ public class Double2BooleanLinkedOpenHashMap extends Double2BooleanOpenHashMap i
 	}
 	
 	private class MapIterator {
+		boolean forward;
 		int previous = -1;
 		int next = -1;
 		int current = -1;
 		int index = 0;
 		
-		MapIterator() {
-			next = firstIndex;
+		MapIterator(boolean start) {
+			this.forward = start;
+			if(start) next = firstIndex;
+			else previous = lastIndex;
 		}
 		
 		MapIterator(double from) {
@@ -1316,11 +1434,11 @@ public class Double2BooleanLinkedOpenHashMap extends Double2BooleanOpenHashMap i
 		}
 		
 		public boolean hasNext() {
-			return next != -1;
+			return (forward ? next : previous) != -1;
 		}
 
 		public boolean hasPrevious() {
-			return previous != -1;
+			return (forward ? previous : next) != -1;
 		}
 		
 		public int nextIndex() {
@@ -1380,20 +1498,30 @@ public class Double2BooleanLinkedOpenHashMap extends Double2BooleanOpenHashMap i
 		
 		public int previousEntry() {
 			if(!hasPrevious()) throw new NoSuchElementException();
-			current = previous;
-			previous = (int)(links[current] >> 32);
-			next = current;
+			if(forward) moveBackwards();
+			else moveForwards();
 			if(index >= 0) index--;
 			return current;
 		}
 		
 		public int nextEntry() {
 			if(!hasNext()) throw new NoSuchElementException();
+			if(forward) moveForwards();
+			else moveBackwards();
+			if(index >= 0) index++;
+			return current;
+		}
+		
+		private void moveBackwards() {
+			current = previous;
+			previous = (int)(links[current] >> 32);
+			next = current;
+		}
+		
+		private void moveForwards() {
 			current = next;
 			next = (int)(links[current]);
 			previous = current;
-			if(index >= 0) index++;
-			return current;
 		}
 		
 		private void ensureIndexKnown() {

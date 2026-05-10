@@ -20,6 +20,7 @@ import speiger.src.collections.PACKAGE.maps.abstracts.ABSTRACT_MAP;
 import speiger.src.collections.PACKAGE.maps.interfaces.MAP;
 import speiger.src.collections.PACKAGE.maps.interfaces.MAP.Entry;
 import speiger.src.collections.PACKAGE.maps.interfaces.NAVIGABLE_MAP;
+import speiger.src.collections.PACKAGE.maps.interfaces.ORDERED_MAP;
 import speiger.src.collections.PACKAGE.maps.interfaces.SORTED_MAP;
 #if !TYPE_OBJECT
 import speiger.src.collections.PACKAGE.sets.SET;
@@ -203,6 +204,22 @@ public class DERIVED_MAP_GENERATORS {
 		@Override
 		public Entry KEY_VALUE_GENERIC_TYPE aboveSamplesGreater() {
 			return parent.belowSamplesLesser();
+		}
+	}
+	
+	public static class ReverseTestOrderedMapGenerator KEY_VALUE_GENERIC_TYPE extends MapGenerator KEY_VALUE_GENERIC_TYPE implements TEST_ORDERED_MAP_GENERATOR KEY_VALUE_GENERIC_TYPE {
+		TEST_ORDERED_MAP_GENERATOR KEY_VALUE_GENERIC_TYPE parent;
+		
+		public ReverseTestOrderedMapGenerator(TEST_ORDERED_MAP_GENERATOR KEY_VALUE_GENERIC_TYPE parent) {
+			super(parent);
+			this.parent = parent;
+		}
+		
+		@Override
+		public ORDERED_MAP KEY_VALUE_GENERIC_TYPE create(Entry KEY_VALUE_GENERIC_TYPE... elements) {
+			ObjectList<Entry KEY_VALUE_GENERIC_TYPE> entries = new ObjectArrayList<Entry KEY_VALUE_GENERIC_TYPE>(elements);
+			ObjectLists.reverse(entries);
+			return ((ORDERED_MAP KEY_VALUE_GENERIC_TYPE)parent.create(entries.toArray(Entry[]::new))).reversed();
 		}
 	}
 	

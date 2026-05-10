@@ -23,6 +23,7 @@ import speiger.src.collections.objects.sets.ObjectNavigableSet;
 import speiger.src.collections.objects.sets.ObjectSortedSet;
 import speiger.src.collections.objects.sets.ObjectOrderedSet;
 import speiger.src.collections.doubles.collections.DoubleCollection;
+import speiger.src.collections.doubles.collections.DoubleOrderedCollection;
 import speiger.src.collections.doubles.functions.function.DoubleDoubleUnaryOperator;
 import speiger.src.collections.doubles.functions.DoubleSupplier;
 import speiger.src.collections.doubles.utils.DoubleCollections;
@@ -449,6 +450,10 @@ public class Object2DoubleMaps
 		@Override
 		public double putAndMoveToLast(T key, double value) { throw new UnsupportedOperationException(); }
 		@Override
+		public double putFirst(T key, double value) { throw new UnsupportedOperationException(); }
+		@Override
+		public double putLast(T key, double value) { throw new UnsupportedOperationException(); }
+		@Override
 		public boolean moveToFirst(T key) { throw new UnsupportedOperationException(); }
 		@Override
 		public boolean moveToLast(T key) { throw new UnsupportedOperationException(); }
@@ -469,13 +474,25 @@ public class Object2DoubleMaps
 		@Override
 		public double lastDoubleValue() { return map.lastDoubleValue(); }
 		@Override
+		public Object2DoubleMap.Entry<T> firstEntry() { return map.firstEntry(); }
+		@Override
+		public Object2DoubleMap.Entry<T> lastEntry() { return map.lastEntry(); }
+		@Override
+		public Object2DoubleMap.Entry<T> pollFirstEntry() { throw new UnsupportedOperationException(); }
+		@Override
+		public Object2DoubleMap.Entry<T> pollLastEntry() { throw new UnsupportedOperationException(); }
+		@Override
 		public Object2DoubleOrderedMap<T> copy() { return map.copy(); }
 		@Override
 		public ObjectOrderedSet<T> keySet() { 
 			if(keys == null) keys = ObjectSets.unmodifiable(map.keySet()); 
 			return (ObjectOrderedSet<T>)keys;
 		}
-				
+		@Override
+		public DoubleOrderedCollection values() {
+			if(values == null) values = DoubleCollections.unmodifiable(map.values());
+			return (DoubleOrderedCollection)values;
+		}
 		@Override
 		public ObjectOrderedSet<Object2DoubleMap.Entry<T>> object2DoubleEntrySet() {
 			if(entrySet == null) entrySet = new UnmodifyableOrderedEntrySet<>(map.object2DoubleEntrySet());
@@ -630,15 +647,17 @@ public class Object2DoubleMaps
 		@Override
 		public ObjectBidirectionalIterator<Object2DoubleMap.Entry<T>> iterator() { return ObjectIterators.unmodifiable(set.iterator()); }
 		@Override
+		public ObjectBidirectionalIterator<Object2DoubleMap.Entry<T>> reverseIterator() { return ObjectIterators.unmodifiable(set.reverseIterator()); }
+		@Override
 		public ObjectBidirectionalIterator<Object2DoubleMap.Entry<T>> iterator(Object2DoubleMap.Entry<T> fromElement) { return ObjectIterators.unmodifiable(set.iterator(fromElement)); }
 		@Override
-		public Object2DoubleMap.Entry<T> first() { return set.first(); }
+		public Object2DoubleMap.Entry<T> getFirst() { return set.getFirst(); }
 		@Override
-		public Object2DoubleMap.Entry<T> pollFirst() { throw new UnsupportedOperationException(); }
+		public Object2DoubleMap.Entry<T> removeFirst() { throw new UnsupportedOperationException(); }
 		@Override
-		public Object2DoubleMap.Entry<T> last() { return set.last(); }
+		public Object2DoubleMap.Entry<T> getLast() { return set.getLast(); }
 		@Override
-		public Object2DoubleMap.Entry<T> pollLast() { throw new UnsupportedOperationException(); }
+		public Object2DoubleMap.Entry<T> removeLast() { throw new UnsupportedOperationException(); }
 	}
 	
 	/**
@@ -760,6 +779,10 @@ public class Object2DoubleMaps
 		@Override
 		public double putAndMoveToLast(T key, double value) { synchronized(mutex) { return map.putAndMoveToLast(key, value); } }
 		@Override
+		public double putFirst(T key, double value) { synchronized(mutex) { return map.putFirst(key, value); } }
+		@Override
+		public double putLast(T key, double value) { synchronized(mutex) { return map.putLast(key, value); } }
+		@Override
 		public boolean moveToFirst(T key) { synchronized(mutex) { return map.moveToFirst(key); } }
 		@Override
 		public boolean moveToLast(T key) { synchronized(mutex) { return map.moveToLast(key); } }
@@ -780,13 +803,25 @@ public class Object2DoubleMaps
 		@Override
 		public double lastDoubleValue() { synchronized(mutex) { return map.lastDoubleValue(); } }
 		@Override
+		public Object2DoubleMap.Entry<T> firstEntry() { synchronized(mutex) { return map.firstEntry(); } }
+		@Override
+		public Object2DoubleMap.Entry<T> lastEntry() { synchronized(mutex) { return map.lastEntry(); } }
+		@Override
+		public Object2DoubleMap.Entry<T> pollFirstEntry() { synchronized(mutex) { return map.pollFirstEntry(); } }
+		@Override
+		public Object2DoubleMap.Entry<T> pollLastEntry() { synchronized(mutex) { return map.pollLastEntry(); } }
+		@Override
 		public Object2DoubleOrderedMap<T> copy() { synchronized(mutex) { return map.copy(); } }
 		@Override
 		public ObjectOrderedSet<T> keySet() {
 			if(keys == null) keys = ObjectSets.synchronize(map.keySet(), mutex);
 			return (ObjectOrderedSet<T>)keys;
 		}
-		
+		@Override
+		public DoubleOrderedCollection values() {
+			if(values == null) values = DoubleCollections.synchronize(map.values(), mutex);
+			return (DoubleOrderedCollection)values;
+		}
 		@Override
 		public ObjectOrderedSet<Object2DoubleMap.Entry<T>> object2DoubleEntrySet() {
 			if(entrySet == null) entrySet = ObjectSets.synchronize(map.object2DoubleEntrySet(), mutex);

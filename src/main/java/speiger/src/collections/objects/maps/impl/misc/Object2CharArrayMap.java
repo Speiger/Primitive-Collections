@@ -22,7 +22,7 @@ import speiger.src.collections.objects.maps.interfaces.Object2CharOrderedMap;
 import speiger.src.collections.objects.sets.AbstractObjectSet;
 import speiger.src.collections.objects.sets.ObjectOrderedSet;
 import speiger.src.collections.chars.collections.AbstractCharCollection;
-import speiger.src.collections.chars.collections.CharCollection;
+import speiger.src.collections.chars.collections.CharOrderedCollection;
 import speiger.src.collections.chars.collections.CharIterator;
 import speiger.src.collections.chars.functions.CharSupplier;
 import speiger.src.collections.chars.functions.function.CharCharUnaryOperator;
@@ -55,7 +55,7 @@ public class Object2CharArrayMap<T> extends AbstractObject2CharMap<T> implements
 	/** KeySet cache */
 	protected ObjectOrderedSet<T> keySet;
 	/** Values cache */
-	protected CharCollection valuesC;
+	protected CharOrderedCollection valuesC;
 	/** EntrySet cache */
 	protected FastOrderedSet<T> entrySet;
 	
@@ -222,6 +222,27 @@ public class Object2CharArrayMap<T> extends AbstractObject2CharMap<T> implements
 	}
 	
 	@Override
+	public char putFirst(T key, char value) {
+		int index = findIndex(key);
+		if(index < 0) {
+			insertIndex(0, key, value);
+			size++;
+			return getDefaultReturnValue();
+		}
+		return values[index];
+	}
+	
+	@Override
+	public char putLast(T key, char value) {
+		int index = findIndex(key);
+		if(index < 0) {
+			insertIndex(size++, key, value);
+			return getDefaultReturnValue();
+		}
+		return values[index];
+	}
+	
+	@Override
 	public boolean moveToFirst(T key) {
 		int index = findIndex(key);
 		if(index > 0) {
@@ -331,6 +352,34 @@ public class Object2CharArrayMap<T> extends AbstractObject2CharMap<T> implements
 	}
 	
 	@Override
+	public Object2CharMap.Entry<T> firstEntry() {
+		if(size == 0) throw new NoSuchElementException();
+		return new BasicEntry<>(keys[0], values[0]);
+	}
+	
+	@Override
+	public Object2CharMap.Entry<T> lastEntry() {
+		if(size == 0) throw new NoSuchElementException();
+		return new BasicEntry<>(keys[size-1], values[size-1]);
+	}
+	
+	@Override
+	public Object2CharMap.Entry<T> pollFirstEntry() {
+		if(size == 0) throw new NoSuchElementException();
+		BasicEntry<T> result = new BasicEntry<>(keys[0], values[0]);
+		removeIndex(0);
+		return result;
+	}
+	
+	@Override
+	public Object2CharMap.Entry<T> pollLastEntry() {
+		if(size == 0) throw new NoSuchElementException();
+		BasicEntry<T> result = new BasicEntry<>(keys[size-1], values[size-1]);
+		removeIndex(size-1);
+		return result;
+	}
+	
+	@Override
 	public char rem(T key) {
 		int index = findIndex(key);
 		if(index < 0) return getDefaultReturnValue();
@@ -387,7 +436,7 @@ public class Object2CharArrayMap<T> extends AbstractObject2CharMap<T> implements
 	}
 
 	@Override
-	public CharCollection values() {
+	public CharOrderedCollection values() {
 		if(valuesC == null) valuesC = new Values();
 		return valuesC;
 	}
@@ -699,24 +748,24 @@ public class Object2CharArrayMap<T> extends AbstractObject2CharMap<T> implements
 		}
 		
 		@Override
-		public Object2CharMap.Entry<T> first() {
+		public Object2CharMap.Entry<T> getFirst() {
 			return new BasicEntry<>(firstKey(), firstCharValue());
 		}
 		
 		@Override
-		public Object2CharMap.Entry<T> last() {
+		public Object2CharMap.Entry<T> getLast() {
 			return new BasicEntry<>(lastKey(), lastCharValue());
 		}
 		
 		@Override
-		public Object2CharMap.Entry<T> pollFirst() {
+		public Object2CharMap.Entry<T> removeFirst() {
 			BasicEntry<T> entry = new BasicEntry<>(firstKey(), firstCharValue());
 			pollFirstKey();
 			return entry;
 		}
 		
 		@Override
-		public Object2CharMap.Entry<T> pollLast() {
+		public Object2CharMap.Entry<T> removeLast() {
 			BasicEntry<T> entry = new BasicEntry<>(lastKey(), lastCharValue());
 			pollLastKey();
 			return entry;
@@ -724,7 +773,12 @@ public class Object2CharArrayMap<T> extends AbstractObject2CharMap<T> implements
 		
 		@Override
 		public ObjectBidirectionalIterator<Object2CharMap.Entry<T>> iterator() {
-			return new EntryIterator();
+			return new EntryIterator(true);
+		}
+		
+		@Override
+		public ObjectBidirectionalIterator<Object2CharMap.Entry<T>> reverseIterator() {
+			return new EntryIterator(false);
 		}
 		
 		@Override
@@ -734,7 +788,7 @@ public class Object2CharArrayMap<T> extends AbstractObject2CharMap<T> implements
 		
 		@Override
 		public ObjectBidirectionalIterator<Object2CharMap.Entry<T>> fastIterator() {
-			return new FastEntryIterator();
+			return new FastEntryIterator(true);
 		}
 		
 		@Override
@@ -931,7 +985,9 @@ public class Object2CharArrayMap<T> extends AbstractObject2CharMap<T> implements
 		@Override
 		public boolean moveToLast(T o) { return Object2CharArrayMap.this.moveToLast(o); }
 		@Override
-		public ObjectListIterator<T> iterator() { return new KeyIterator(); }
+		public ObjectListIterator<T> iterator() { return new KeyIterator(true); }
+		@Override
+		public ObjectListIterator<T> reverseIterator() { return new KeyIterator(false); }
 		@Override
 		public ObjectBidirectionalIterator<T> iterator(T fromElement) { return new KeyIterator(fromElement); } 
 		@Override
@@ -939,13 +995,13 @@ public class Object2CharArrayMap<T> extends AbstractObject2CharMap<T> implements
 		@Override
 		public void clear() { Object2CharArrayMap.this.clear(); }
 		@Override
-		public T first() { return firstKey(); }
+		public T getFirst() { return firstKey(); }
 		@Override
-		public T pollFirst() { return pollFirstKey(); }
+		public T removeFirst() { return pollFirstKey(); }
 		@Override
-		public T last() { return lastKey(); }
+		public T getLast() { return lastKey(); }
 		@Override
-		public T pollLast() { return pollLastKey(); }
+		public T removeLast() { return pollLastKey(); }
 		
 		@Override
 		public KeySet copy() { throw new UnsupportedOperationException(); }
@@ -1042,32 +1098,43 @@ public class Object2CharArrayMap<T> extends AbstractObject2CharMap<T> implements
 		}
 	}
 	
-	private class Values extends AbstractCharCollection {
+	private class Values extends AbstractCharCollection implements CharOrderedCollection {
 		@Override
-		public boolean contains(char e) {
-			return containsValue(e);
-		}
+		public boolean contains(char e) { return containsValue(e); }
 		
 		@Override
-		public boolean add(char o) {
-			throw new UnsupportedOperationException();
-		}
-
+		public boolean add(char o) { throw new UnsupportedOperationException(); }
 		@Override
-		public CharIterator iterator() {
-			return new ValueIterator();
-		}
-		
+		public CharIterator iterator() { return new ValueIterator(true); }
 		@Override
-		public int size() {
-			return Object2CharArrayMap.this.size();
-		}
-		
+		public int size() { return Object2CharArrayMap.this.size(); }
 		@Override
-		public void clear() {
-			Object2CharArrayMap.this.clear();
+		public void clear() { Object2CharArrayMap.this.clear(); }
+		@Override
+		public CharOrderedCollection reversed() { return new AbstractCharCollection.ReverseCharOrderedCollection(this, this::reverseIterator); }
+		private CharIterator reverseIterator() {
+			return new ValueIterator(false);
 		}
-		
+		@Override
+		public void addFirst(char e) { throw new UnsupportedOperationException(); }
+		@Override
+		public void addLast(char e) { throw new UnsupportedOperationException(); }
+		@Override
+		public char getFirstChar() { return firstCharValue(); }
+		@Override
+		public char removeFirstChar() {
+			char result = firstCharValue();
+			pollFirstKey();
+			return result; 
+		}
+		@Override
+		public char getLastChar() { return lastCharValue(); }
+		@Override
+		public char removeLastChar() {
+			char result = lastCharValue();
+			pollLastKey();
+			return result; 
+		}
 		@Override
 		public void forEach(CharConsumer action) {
 			Objects.requireNonNull(action);
@@ -1156,10 +1223,8 @@ public class Object2CharArrayMap<T> extends AbstractObject2CharMap<T> implements
 	private class FastEntryIterator extends MapIterator implements ObjectListIterator<Object2CharMap.Entry<T>> {
 		MapEntry entry = new MapEntry();
 		
-		public FastEntryIterator() {}
-		public FastEntryIterator(T from) {
-			index = findIndex(from);
-		}
+		public FastEntryIterator(boolean start) { super(start); }
+		public FastEntryIterator(T element) { super(element); }
 		
 		@Override
 		public Object2CharMap.Entry<T> next() {
@@ -1182,11 +1247,8 @@ public class Object2CharArrayMap<T> extends AbstractObject2CharMap<T> implements
 	private class EntryIterator extends MapIterator implements ObjectListIterator<Object2CharMap.Entry<T>> {
 		MapEntry entry = null;
 		
-		public EntryIterator() {}
-		public EntryIterator(T from) {
-			index = findIndex(from);
-			if(index == -1) throw new NoSuchElementException();
-		}
+		public EntryIterator(boolean start) { super(start); }
+		public EntryIterator(T element) { super(element); }
 		
 		@Override
 		public Object2CharMap.Entry<T> next() {
@@ -1213,11 +1275,8 @@ public class Object2CharArrayMap<T> extends AbstractObject2CharMap<T> implements
 	}
 	
 	private class KeyIterator extends MapIterator implements ObjectListIterator<T> {
-		public KeyIterator() {}
-		public KeyIterator(T element) {
-			index = findIndex(element);
-			if(index == -1) throw new NoSuchElementException();
-		}
+		public KeyIterator(boolean start) { super(start); }
+		public KeyIterator(T element) { super(element); }
 		
 		@Override
 		public T previous() {
@@ -1237,6 +1296,9 @@ public class Object2CharArrayMap<T> extends AbstractObject2CharMap<T> implements
 	}
 	
 	private class ValueIterator extends MapIterator implements CharListIterator {
+		public ValueIterator(boolean start) { super(start); }
+		public ValueIterator(T element) { super(element); }
+		
 		@Override
 		public char previousChar() {
 			return values[previousEntry()];
@@ -1255,23 +1317,37 @@ public class Object2CharArrayMap<T> extends AbstractObject2CharMap<T> implements
 	}
 	
 	private class MapIterator {
+		boolean forward;
 		int index;
 		int lastReturned = -1;
-
+		
+		MapIterator(boolean start) {
+			this.forward = start;
+			this.index = start ? 0 : size;
+		}
+		
+		MapIterator(T element) {
+			this.forward = true;
+			index = findIndex(element);
+			if(index == -1) throw new NoSuchElementException();
+		}
+		
 		public boolean hasNext() {
-			return index < size;
+			return forward ? index < size : index > 0;
 		}
 		
 		public boolean hasPrevious() {
-			return index > 0;
+			return forward ? index > 0 : index < size;
 		}
 		
 		public int nextIndex() {
-			return index;
+			if(forward) return index;
+			return size - index;
 		}
 		
 		public int previousIndex() {
-			return index-1;
+			if(forward) return index-1;
+			return (size - index)-1;
 		}
 		
 		public void remove() {
@@ -1284,26 +1360,42 @@ public class Object2CharArrayMap<T> extends AbstractObject2CharMap<T> implements
 		
 		public int previousEntry() {
 			if(!hasPrevious()) throw new NoSuchElementException();
-			index--;
-			return (lastReturned = index);
-		}
-		
-		public int nextEntry() {
-			if(!hasNext()) throw new NoSuchElementException();
+			if(forward) {
+				index--;
+				return (lastReturned = index);
+			}
 			lastReturned = index;
 			return index++;
 		}
 		
+		public int nextEntry() {
+			if(!hasNext()) throw new NoSuchElementException();
+			if(forward) {
+				lastReturned = index;
+				return index++;
+			}
+			index--;
+			return (lastReturned = index);
+		}
+		
 		public int skip(int amount) {
 			if(amount < 0) throw new IllegalStateException("Negative Numbers are not allowed");
+			return forward ? moveForward(amount) : moveBackwards(amount);
+		}
+		
+		public int back(int amount) {
+			if(amount < 0) throw new IllegalStateException("Negative Numbers are not allowed");
+			return forward ? moveBackwards(amount) : moveForward(amount);
+		}
+		
+		private int moveForward(int amount) {
 			int steps = Math.min(amount, size() - index);
 			index += steps;
 			if(steps > 0) lastReturned = Math.min(index-1, size()-1);
 			return steps;
 		}
 		
-		public int back(int amount) {
-			if(amount < 0) throw new IllegalStateException("Negative Numbers are not allowed");
+		private int moveBackwards(int amount) {
 			int steps = Math.min(amount, index);
 			index -= steps;
 			if(steps > 0) lastReturned = Math.min(index, size()-1);

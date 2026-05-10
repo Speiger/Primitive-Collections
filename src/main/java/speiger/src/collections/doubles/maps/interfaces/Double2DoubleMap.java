@@ -93,7 +93,7 @@ public interface Double2DoubleMap extends Map<Double, Double>, DoubleUnaryOperat
 	 * @return the last present value or default return	value.
 	 */
 	public default Double put(Map.Entry<Double, Double> entry) {
-		return put(entry.getKey(), entry.getValue());
+		return put(entry.getKey().doubleValue(), entry.getValue().doubleValue());
 	}
 
 	/**

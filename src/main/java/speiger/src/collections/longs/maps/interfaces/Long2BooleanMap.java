@@ -94,7 +94,7 @@ public interface Long2BooleanMap extends Map<Long, Boolean>, LongPredicate
 	 * @return the last present value or default return	value.
 	 */
 	public default Boolean put(Map.Entry<Long, Boolean> entry) {
-		return put(entry.getKey(), entry.getValue());
+		return put(entry.getKey().longValue(), entry.getValue().booleanValue());
 	}
 
 	/**

@@ -29,6 +29,7 @@ import speiger.src.collections.floats.sets.FloatOrderedSet;
 import speiger.src.collections.floats.sets.FloatSet;
 import speiger.src.collections.floats.utils.FloatSets;
 import speiger.src.collections.longs.collections.LongCollection;
+import speiger.src.collections.longs.collections.LongOrderedCollection;
 import speiger.src.collections.longs.functions.function.LongLongUnaryOperator;
 import speiger.src.collections.longs.functions.LongSupplier;
 import speiger.src.collections.longs.utils.LongCollections;
@@ -439,6 +440,10 @@ public class Float2LongMaps
 		@Override
 		public long putAndMoveToLast(float key, long value) { throw new UnsupportedOperationException(); }
 		@Override
+		public long putFirst(float key, long value) { throw new UnsupportedOperationException(); }
+		@Override
+		public long putLast(float key, long value) { throw new UnsupportedOperationException(); }
+		@Override
 		public boolean moveToFirst(float key) { throw new UnsupportedOperationException(); }
 		@Override
 		public boolean moveToLast(float key) { throw new UnsupportedOperationException(); }
@@ -459,13 +464,25 @@ public class Float2LongMaps
 		@Override
 		public long lastLongValue() { return map.lastLongValue(); }
 		@Override
+		public Float2LongMap.Entry firstEntry() { return map.firstEntry(); }
+		@Override
+		public Float2LongMap.Entry lastEntry() { return map.lastEntry(); }
+		@Override
+		public Float2LongMap.Entry pollFirstEntry() { throw new UnsupportedOperationException(); }
+		@Override
+		public Float2LongMap.Entry pollLastEntry() { throw new UnsupportedOperationException(); }
+		@Override
 		public Float2LongOrderedMap copy() { return map.copy(); }
 		@Override
 		public FloatOrderedSet keySet() { 
 			if(keys == null) keys = FloatSets.unmodifiable(map.keySet()); 
 			return (FloatOrderedSet)keys;
 		}
-				
+		@Override
+		public LongOrderedCollection values() {
+			if(values == null) values = LongCollections.unmodifiable(map.values());
+			return (LongOrderedCollection)values;
+		}
 		@Override
 		public ObjectOrderedSet<Float2LongMap.Entry> float2LongEntrySet() {
 			if(entrySet == null) entrySet = new UnmodifyableOrderedEntrySet(map.float2LongEntrySet());
@@ -617,15 +634,17 @@ public class Float2LongMaps
 		@Override
 		public ObjectBidirectionalIterator<Float2LongMap.Entry> iterator() { return ObjectIterators.unmodifiable(set.iterator()); }
 		@Override
+		public ObjectBidirectionalIterator<Float2LongMap.Entry> reverseIterator() { return ObjectIterators.unmodifiable(set.reverseIterator()); }
+		@Override
 		public ObjectBidirectionalIterator<Float2LongMap.Entry> iterator(Float2LongMap.Entry fromElement) { return ObjectIterators.unmodifiable(set.iterator(fromElement)); }
 		@Override
-		public Float2LongMap.Entry first() { return set.first(); }
+		public Float2LongMap.Entry getFirst() { return set.getFirst(); }
 		@Override
-		public Float2LongMap.Entry pollFirst() { throw new UnsupportedOperationException(); }
+		public Float2LongMap.Entry removeFirst() { throw new UnsupportedOperationException(); }
 		@Override
-		public Float2LongMap.Entry last() { return set.last(); }
+		public Float2LongMap.Entry getLast() { return set.getLast(); }
 		@Override
-		public Float2LongMap.Entry pollLast() { throw new UnsupportedOperationException(); }
+		public Float2LongMap.Entry removeLast() { throw new UnsupportedOperationException(); }
 	}
 	
 	/**
@@ -794,6 +813,10 @@ public class Float2LongMaps
 		@Override
 		public long putAndMoveToLast(float key, long value) { synchronized(mutex) { return map.putAndMoveToLast(key, value); } }
 		@Override
+		public long putFirst(float key, long value) { synchronized(mutex) { return map.putFirst(key, value); } }
+		@Override
+		public long putLast(float key, long value) { synchronized(mutex) { return map.putLast(key, value); } }
+		@Override
 		public boolean moveToFirst(float key) { synchronized(mutex) { return map.moveToFirst(key); } }
 		@Override
 		public boolean moveToLast(float key) { synchronized(mutex) { return map.moveToLast(key); } }
@@ -814,13 +837,25 @@ public class Float2LongMaps
 		@Override
 		public long lastLongValue() { synchronized(mutex) { return map.lastLongValue(); } }
 		@Override
+		public Float2LongMap.Entry firstEntry() { synchronized(mutex) { return map.firstEntry(); } }
+		@Override
+		public Float2LongMap.Entry lastEntry() { synchronized(mutex) { return map.lastEntry(); } }
+		@Override
+		public Float2LongMap.Entry pollFirstEntry() { synchronized(mutex) { return map.pollFirstEntry(); } }
+		@Override
+		public Float2LongMap.Entry pollLastEntry() { synchronized(mutex) { return map.pollLastEntry(); } }
+		@Override
 		public Float2LongOrderedMap copy() { synchronized(mutex) { return map.copy(); } }
 		@Override
 		public FloatOrderedSet keySet() {
 			if(keys == null) keys = FloatSets.synchronize(map.keySet(), mutex);
 			return (FloatOrderedSet)keys;
 		}
-		
+		@Override
+		public LongOrderedCollection values() {
+			if(values == null) values = LongCollections.synchronize(map.values(), mutex);
+			return (LongOrderedCollection)values;
+		}
 		@Override
 		public ObjectOrderedSet<Float2LongMap.Entry> float2LongEntrySet() {
 			if(entrySet == null) entrySet = ObjectSets.synchronize(map.float2LongEntrySet(), mutex);

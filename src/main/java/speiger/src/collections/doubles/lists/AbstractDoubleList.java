@@ -466,7 +466,6 @@ public abstract class AbstractDoubleList extends AbstractDoubleCollection implem
 		public int size() {
 			return size;
 		}
-		
 		@Override
 		public DoubleSplititerator spliterator() { return DoubleSplititerators.createSplititerator(this, 16464); }
 		

@@ -95,7 +95,7 @@ public interface Int2ObjectMap<V> extends Map<Integer, V>, IntFunction<V>
 	 * @return the last present value or default return	value.
 	 */
 	public default V put(Map.Entry<Integer, V> entry) {
-		return put(entry.getKey(), entry.getValue());
+		return put(entry.getKey().intValue(), entry.getValue());
 	}
 
 	/**

@@ -466,7 +466,6 @@ public abstract class AbstractLongList extends AbstractLongCollection implements
 		public int size() {
 			return size;
 		}
-		
 		@Override
 		public LongSplititerator spliterator() { return LongSplititerators.createSplititerator(this, 16464); }
 		

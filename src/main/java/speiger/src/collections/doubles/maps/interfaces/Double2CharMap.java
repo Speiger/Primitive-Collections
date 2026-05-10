@@ -94,7 +94,7 @@ public interface Double2CharMap extends Map<Double, Character>, Double2CharFunct
 	 * @return the last present value or default return	value.
 	 */
 	public default Character put(Map.Entry<Double, Character> entry) {
-		return put(entry.getKey(), entry.getValue());
+		return put(entry.getKey().doubleValue(), entry.getValue().charValue());
 	}
 
 	/**

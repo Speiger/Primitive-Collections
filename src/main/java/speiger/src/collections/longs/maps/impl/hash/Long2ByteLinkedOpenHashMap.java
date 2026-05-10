@@ -23,7 +23,7 @@ import speiger.src.collections.longs.maps.interfaces.Long2ByteOrderedMap;
 import speiger.src.collections.longs.sets.AbstractLongSet;
 import speiger.src.collections.longs.sets.LongOrderedSet;
 import speiger.src.collections.bytes.collections.AbstractByteCollection;
-import speiger.src.collections.bytes.collections.ByteCollection;
+import speiger.src.collections.bytes.collections.ByteOrderedCollection;
 import speiger.src.collections.bytes.collections.ByteIterator;
 import speiger.src.collections.bytes.functions.function.ByteByteUnaryOperator;
 import speiger.src.collections.bytes.functions.ByteConsumer;
@@ -236,6 +236,54 @@ public class Long2ByteLinkedOpenHashMap extends Long2ByteOpenHashMap implements 
 	}
 	
 	@Override
+	public byte putFirst(long key, byte value) {
+		if(key == 0) {
+			if(containsNull) return values[nullIndex];
+			values[nullIndex] = value;
+			containsNull = true;
+			onNodeAdded(nullIndex);
+			moveToFirstIndex(nullIndex);
+		}
+		else {
+			int pos = HashUtil.mix(Long.hashCode(key)) & mask;
+			while(key == 0) {
+				if(keys[pos] == key) return values[pos];
+				pos = ++pos & mask;
+			}
+			keys[pos] = key;
+			values[pos] = value;
+			onNodeAdded(pos);
+			moveToFirstIndex(pos);
+		}
+		if(size++ >= maxFill) rehash(HashUtil.arraySize(size+1, loadFactor));
+		return getDefaultReturnValue();
+	}
+	
+	@Override
+	public byte putLast(long key, byte value) {
+		if(key == 0) {
+			if(containsNull) return values[nullIndex];
+			values[nullIndex] = value;
+			containsNull = true;
+			onNodeAdded(nullIndex);
+			moveToLastIndex(nullIndex);
+		}
+		else {
+			int pos = HashUtil.mix(Long.hashCode(key)) & mask;
+			while(key == 0) {
+				if(keys[pos] == key) return values[pos];
+				pos = ++pos & mask;
+			}
+			keys[pos] = key;
+			values[pos] = value;
+			onNodeAdded(pos);
+			moveToLastIndex(pos);
+		}
+		if(size++ >= maxFill) rehash(HashUtil.arraySize(size+1, loadFactor));
+		return getDefaultReturnValue();
+	}
+	
+	@Override
 	public boolean moveToFirst(long key) {
 		if(isEmpty() || firstLongKey() == key) return false;
 		if(key == 0) {
@@ -392,6 +440,52 @@ public class Long2ByteLinkedOpenHashMap extends Long2ByteOpenHashMap implements 
 	}
 	
 	@Override
+	public Long2ByteMap.Entry firstEntry() {
+		if(size == 0) throw new NoSuchElementException();
+		return new BasicEntry(keys[firstIndex], values[firstIndex]);
+	}
+	
+	@Override
+	public Long2ByteMap.Entry lastEntry() {
+		if(size == 0) throw new NoSuchElementException();
+		return new BasicEntry(keys[lastIndex], values[lastIndex]);
+	}
+	
+	@Override
+	public Long2ByteMap.Entry pollFirstEntry() {
+		if(size == 0) throw new NoSuchElementException();
+		int pos = firstIndex;
+		onNodeRemoved(pos);
+		BasicEntry result = new BasicEntry(keys[pos], values[pos]);
+		size--;
+		if(result.getLongKey() == 0) {
+			containsNull = false;
+			keys[nullIndex] = 0L;
+			values[nullIndex] = (byte)0;
+		}
+		else shiftKeys(pos);
+		if(nullIndex > minCapacity && size < maxFill / 4 && nullIndex > HashUtil.DEFAULT_MIN_CAPACITY) rehash(nullIndex / 2);
+		return result;
+	}
+	
+	@Override
+	public Long2ByteMap.Entry pollLastEntry() {
+		if(size == 0) throw new NoSuchElementException();
+		int pos = lastIndex;
+		onNodeRemoved(pos);
+		BasicEntry result = new BasicEntry(keys[pos], values[pos]);
+		size--;
+		if(result.getLongKey() == 0) {
+			containsNull = false;
+			keys[nullIndex] = 0L;
+			values[nullIndex] = (byte)0;
+		}
+		else shiftKeys(pos);
+		if(nullIndex > minCapacity && size < maxFill / 4 && nullIndex > HashUtil.DEFAULT_MIN_CAPACITY) rehash(nullIndex / 2);
+		return result;
+	}
+	
+	@Override
 	public ObjectOrderedSet<Long2ByteMap.Entry> long2ByteEntrySet() {
 		if(entrySet == null) entrySet = new MapEntrySet();
 		return (ObjectOrderedSet<Long2ByteMap.Entry>)entrySet;
@@ -404,9 +498,9 @@ public class Long2ByteLinkedOpenHashMap extends Long2ByteOpenHashMap implements 
 	}
 	
 	@Override
-	public ByteCollection values() {
+	public ByteOrderedCollection values() {
 		if(valuesC == null) valuesC = new Values();
-		return valuesC;
+		return (ByteOrderedCollection)valuesC;
 	}
 	
 	@Override
@@ -591,24 +685,24 @@ public class Long2ByteLinkedOpenHashMap extends Long2ByteOpenHashMap implements 
 		}
 		
 		@Override
-		public Long2ByteMap.Entry first() {
+		public Long2ByteMap.Entry getFirst() {
 			return new BasicEntry(firstLongKey(), firstByteValue());
 		}
 		
 		@Override
-		public Long2ByteMap.Entry last() {
+		public Long2ByteMap.Entry getLast() {
 			return new BasicEntry(lastLongKey(), lastByteValue());
 		}
 		
 		@Override
-		public Long2ByteMap.Entry pollFirst() {
+		public Long2ByteMap.Entry removeFirst() {
 			BasicEntry entry = new BasicEntry(firstLongKey(), firstByteValue());
 			pollFirstLongKey();
 			return entry;
 		}
 		
 		@Override
-		public Long2ByteMap.Entry pollLast() {
+		public Long2ByteMap.Entry removeLast() {
 			BasicEntry entry = new BasicEntry(lastLongKey(), lastByteValue());
 			pollLastLongKey();
 			return entry;
@@ -616,7 +710,12 @@ public class Long2ByteLinkedOpenHashMap extends Long2ByteOpenHashMap implements 
 		
 		@Override
 		public ObjectBidirectionalIterator<Long2ByteMap.Entry> iterator() {
-			return new EntryIterator();
+			return new EntryIterator(true);
+		}
+		
+		@Override
+		public ObjectBidirectionalIterator<Long2ByteMap.Entry> reverseIterator() {
+			return new EntryIterator(false);
 		}
 		
 		@Override
@@ -626,7 +725,7 @@ public class Long2ByteLinkedOpenHashMap extends Long2ByteOpenHashMap implements 
 		
 		@Override
 		public ObjectBidirectionalIterator<Long2ByteMap.Entry> fastIterator() {
-			return new FastEntryIterator();
+			return new FastEntryIterator(true);
 		}
 		
 		@Override
@@ -859,7 +958,12 @@ public class Long2ByteLinkedOpenHashMap extends Long2ByteOpenHashMap implements 
 		
 		@Override
 		public LongListIterator iterator() {
-			return new KeyIterator();
+			return new KeyIterator(true);
+		}
+		
+		@Override
+		public LongListIterator reverseIterator() {
+			return new KeyIterator(false);
 		}
 		
 		@Override
@@ -881,22 +985,22 @@ public class Long2ByteLinkedOpenHashMap extends Long2ByteOpenHashMap implements 
 		}
 		
 		@Override
-		public long firstLong() {
+		public long getFirstLong() {
 			return firstLongKey();
 		}
 		
 		@Override
-		public long pollFirstLong() {
+		public long removeFirstLong() {
 			return pollFirstLongKey();
 		}
 
 		@Override
-		public long lastLong() {
+		public long getLastLong() {
 			return lastLongKey();
 		}
 
 		@Override
-		public long pollLastLong() {
+		public long removeLastLong() {
 			return pollLastLongKey();
 		}
 		
@@ -1025,32 +1129,43 @@ public class Long2ByteLinkedOpenHashMap extends Long2ByteOpenHashMap implements 
 		}
 	}
 	
-	private class Values extends AbstractByteCollection {
+	private class Values extends AbstractByteCollection implements ByteOrderedCollection {
 		@Override
-		public boolean contains(byte e) {
-			return containsValue(e);
-		}
+		public boolean contains(byte e) { return containsValue(e); }
 		
 		@Override
-		public boolean add(byte o) {
-			throw new UnsupportedOperationException();
-		}
-
+		public boolean add(byte o) { throw new UnsupportedOperationException(); }
 		@Override
-		public ByteIterator iterator() {
-			return new ValueIterator();
-		}
-		
+		public ByteIterator iterator() { return new ValueIterator(true); }
 		@Override
-		public int size() {
-			return Long2ByteLinkedOpenHashMap.this.size();
-		}
-		
+		public int size() { return Long2ByteLinkedOpenHashMap.this.size(); }
 		@Override
-		public void clear() {
-			Long2ByteLinkedOpenHashMap.this.clear();
+		public void clear() { Long2ByteLinkedOpenHashMap.this.clear(); }
+		@Override
+		public ByteOrderedCollection reversed() { return new AbstractByteCollection.ReverseByteOrderedCollection(this, this::reverseIterator); }
+		private ByteIterator reverseIterator() {
+			return new ValueIterator(false);
 		}
-		
+		@Override
+		public void addFirst(byte e) { throw new UnsupportedOperationException(); }
+		@Override
+		public void addLast(byte e) { throw new UnsupportedOperationException(); }
+		@Override
+		public byte getFirstByte() { return firstByteValue(); }
+		@Override
+		public byte removeFirstByte() {
+			byte result = firstByteValue();
+			pollFirstLongKey();
+			return result; 
+		}
+		@Override
+		public byte getLastByte() { return lastByteValue(); }
+		@Override
+		public byte removeLastByte() {
+			byte result = lastByteValue();
+			pollLastLongKey();
+			return result; 
+		}
 		@Override
 		public void forEach(ByteConsumer action) {
 			Objects.requireNonNull(action);
@@ -1180,7 +1295,7 @@ public class Long2ByteLinkedOpenHashMap extends Long2ByteOpenHashMap implements 
 	private class FastEntryIterator extends MapIterator implements ObjectListIterator<Long2ByteMap.Entry> {
 		MapEntry entry = new MapEntry();
 		
-		public FastEntryIterator() {}
+		public FastEntryIterator(boolean start) { super(start); }
 		public FastEntryIterator(long from) {
 			super(from);
 		}
@@ -1207,7 +1322,7 @@ public class Long2ByteLinkedOpenHashMap extends Long2ByteOpenHashMap implements 
 	private class EntryIterator extends MapIterator implements ObjectListIterator<Long2ByteMap.Entry> {
 		MapEntry entry;
 		
-		public EntryIterator() {}
+		public EntryIterator(boolean start) { super(start); }
 		public EntryIterator(long from) {
 			super(from);
 		}
@@ -1237,7 +1352,7 @@ public class Long2ByteLinkedOpenHashMap extends Long2ByteOpenHashMap implements 
 	
 	private class KeyIterator extends MapIterator implements LongListIterator {
 		
-		public KeyIterator() {}
+		public KeyIterator(boolean start) { super(start); }
 		public KeyIterator(long from) {
 			super(from);
 		}
@@ -1259,7 +1374,7 @@ public class Long2ByteLinkedOpenHashMap extends Long2ByteOpenHashMap implements 
 	}
 	
 	private class ValueIterator extends MapIterator implements ByteListIterator {
-		public ValueIterator() {}
+		public ValueIterator(boolean start) { super(start); }
 		
 		@Override
 		public byte previousByte() {
@@ -1279,13 +1394,16 @@ public class Long2ByteLinkedOpenHashMap extends Long2ByteOpenHashMap implements 
 	}
 	
 	private class MapIterator {
+		boolean forward;
 		int previous = -1;
 		int next = -1;
 		int current = -1;
 		int index = 0;
 		
-		MapIterator() {
-			next = firstIndex;
+		MapIterator(boolean start) {
+			this.forward = start;
+			if(start) next = firstIndex;
+			else previous = lastIndex;
 		}
 		
 		MapIterator(long from) {
@@ -1316,11 +1434,11 @@ public class Long2ByteLinkedOpenHashMap extends Long2ByteOpenHashMap implements 
 		}
 		
 		public boolean hasNext() {
-			return next != -1;
+			return (forward ? next : previous) != -1;
 		}
 
 		public boolean hasPrevious() {
-			return previous != -1;
+			return (forward ? previous : next) != -1;
 		}
 		
 		public int nextIndex() {
@@ -1380,20 +1498,30 @@ public class Long2ByteLinkedOpenHashMap extends Long2ByteOpenHashMap implements 
 		
 		public int previousEntry() {
 			if(!hasPrevious()) throw new NoSuchElementException();
-			current = previous;
-			previous = (int)(links[current] >> 32);
-			next = current;
+			if(forward) moveBackwards();
+			else moveForwards();
 			if(index >= 0) index--;
 			return current;
 		}
 		
 		public int nextEntry() {
 			if(!hasNext()) throw new NoSuchElementException();
+			if(forward) moveForwards();
+			else moveBackwards();
+			if(index >= 0) index++;
+			return current;
+		}
+		
+		private void moveBackwards() {
+			current = previous;
+			previous = (int)(links[current] >> 32);
+			next = current;
+		}
+		
+		private void moveForwards() {
 			current = next;
 			next = (int)(links[current]);
 			previous = current;
-			if(index >= 0) index++;
-			return current;
 		}
 		
 		private void ensureIndexKnown() {

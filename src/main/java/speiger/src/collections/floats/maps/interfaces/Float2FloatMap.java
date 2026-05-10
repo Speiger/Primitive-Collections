@@ -93,7 +93,7 @@ public interface Float2FloatMap extends Map<Float, Float>, FloatUnaryOperator
 	 * @return the last present value or default return	value.
 	 */
 	public default Float put(Map.Entry<Float, Float> entry) {
-		return put(entry.getKey(), entry.getValue());
+		return put(entry.getKey().floatValue(), entry.getValue().floatValue());
 	}
 
 	/**

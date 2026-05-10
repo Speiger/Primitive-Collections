@@ -312,17 +312,19 @@ public class CharSets
 		@Override
 		public CharBidirectionalIterator iterator() { return CharIterators.unmodifiable(s.iterator()); }
 		@Override
+		public CharBidirectionalIterator reverseIterator() { return CharIterators.unmodifiable(s.reverseIterator()); }
+		@Override
 		public CharBidirectionalIterator iterator(char fromElement) { return CharIterators.unmodifiable(s.iterator(fromElement)); }
 		@Override
 		public CharOrderedSet copy() { return s.copy(); }
 		@Override
-		public char firstChar() { return s.firstChar(); }
+		public char getFirstChar() { return s.getFirstChar(); }
 		@Override
-		public char pollFirstChar() { throw new UnsupportedOperationException(); }
+		public char removeFirstChar() { throw new UnsupportedOperationException(); }
 		@Override
-		public char lastChar() { return s.lastChar(); }
+		public char getLastChar() { return s.getLastChar(); }
 		@Override
-		public char pollLastChar() { throw new UnsupportedOperationException(); }
+		public char removeLastChar() { throw new UnsupportedOperationException(); }
 	}
 	
 	private static class UnmodifiableSortedSet extends UnmodifiableSet implements CharSortedSet
@@ -583,17 +585,19 @@ public class CharSets
 		@Override
 		public CharBidirectionalIterator iterator() { synchronized(mutex) { return s.iterator(); } }
 		@Override
+		public CharBidirectionalIterator reverseIterator() { synchronized(mutex) { return s.reverseIterator(); } }
+		@Override
 		public CharBidirectionalIterator iterator(char fromElement) { synchronized(mutex) { return s.iterator(fromElement); } }
 		@Override
 		public CharOrderedSet copy() { synchronized(mutex) { return s.copy(); } }
 		@Override
-		public char firstChar() { synchronized(mutex) { return s.firstChar(); } }
+		public char getFirstChar() { synchronized(mutex) { return s.getFirstChar(); } }
 		@Override
-		public char pollFirstChar() { synchronized(mutex) { return s.pollFirstChar(); } }
+		public char removeFirstChar() { synchronized(mutex) { return s.removeFirstChar(); } }
 		@Override
-		public char lastChar() { synchronized(mutex) { return s.lastChar(); } }
+		public char getLastChar() { synchronized(mutex) { return s.getLastChar(); } }
 		@Override
-		public char pollLastChar() { synchronized(mutex) { return s.pollLastChar(); } }
+		public char removeLastChar() { synchronized(mutex) { return s.removeLastChar(); } }
 	}
 	
 	private static class SynchronizedTrimSet extends SynchronizedSet implements ITrimmable

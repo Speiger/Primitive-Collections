@@ -4,8 +4,8 @@ import java.util.NavigableSet;
 
 import speiger.src.collections.doubles.collections.DoubleBidirectionalIterator;
 import speiger.src.collections.doubles.collections.DoubleSplititerator;
-import speiger.src.collections.doubles.utils.DoubleSets;
 import speiger.src.collections.doubles.utils.DoubleSplititerators;
+import speiger.src.collections.doubles.utils.DoubleSets;
 
 /**
  * A Type Specific Navigable Set interface with a couple helper methods

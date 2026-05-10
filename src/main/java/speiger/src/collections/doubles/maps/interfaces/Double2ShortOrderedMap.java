@@ -1,6 +1,8 @@
 package speiger.src.collections.doubles.maps.interfaces;
 
 import speiger.src.collections.doubles.utils.maps.Double2ShortMaps;
+import speiger.src.collections.doubles.maps.abstracts.AbstractDouble2ShortMap;
+import speiger.src.collections.shorts.collections.ShortOrderedCollection;
 import speiger.src.collections.doubles.sets.DoubleOrderedSet;
 import speiger.src.collections.objects.collections.ObjectBidirectionalIterator;
 import speiger.src.collections.objects.sets.ObjectOrderedSet;
@@ -30,6 +32,26 @@ public interface Double2ShortOrderedMap extends Double2ShortMap
 	 * @see java.util.Map#put(Object, Object)
 	 */
 	public short putAndMoveToLast(double key, short value);
+	
+	/**
+	 * A alternative to putAndMoveToFirst.
+	 * This method simply puts an entry at the first spot of the Map but only if the entry is missing.
+	 * @param key the key that should be inserted
+	 * @param value the value that should be inserted
+	 * @return the previous present or default return value
+	 * @see java.util.Map#put(Object, Object)
+	 */
+	public short putFirst(double key, short value);
+	
+	/**
+	 * A alternative to putAndMoveToLast.
+	 * This method simply puts an entry at the last spot of the Map but only if the entry is missing.
+	 * @param key the key that should be inserted
+	 * @param value the value that should be inserted
+	 * @return the previous present or default return value
+	 * @see java.util.Map#put(Object, Object)
+	 */
+	public short putLast(double key, short value);
 	
 	/**
 	 * A specific move method to move a given key/value to the first index.
@@ -91,12 +113,24 @@ public interface Double2ShortOrderedMap extends Double2ShortMap
 	 */
 	public short lastShortValue();
 	
+	
+	public Double2ShortMap.Entry firstEntry();
+	
+	public Double2ShortMap.Entry lastEntry();
+	
+	public Double2ShortMap.Entry pollFirstEntry();
+	
+	public Double2ShortMap.Entry pollLastEntry();
 	@Override
 	public Double2ShortOrderedMap copy();
 	@Override
 	public DoubleOrderedSet keySet();
 	@Override
+	public ShortOrderedCollection values();
+	@Override
 	public ObjectOrderedSet<Double2ShortMap.Entry> double2ShortEntrySet();
+	
+	public default Double2ShortOrderedMap reversed() { return new AbstractDouble2ShortMap.ReversedDouble2ShortOrderedMap(this); }
 	
 	/**
 	 * Creates a Wrapped SortedMap that is Synchronized

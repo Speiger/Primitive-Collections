@@ -5,8 +5,8 @@ import java.util.Set;
 import speiger.src.collections.bytes.collections.ByteCollection;
 import speiger.src.collections.bytes.collections.ByteIterator;
 import speiger.src.collections.bytes.collections.ByteSplititerator;
-import speiger.src.collections.bytes.utils.ByteSets;
 import speiger.src.collections.bytes.utils.ByteSplititerators;
+import speiger.src.collections.bytes.utils.ByteSets;
 
 
 /**

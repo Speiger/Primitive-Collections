@@ -1,6 +1,8 @@
 package speiger.src.collections.doubles.maps.interfaces;
 
 import speiger.src.collections.doubles.utils.maps.Double2LongMaps;
+import speiger.src.collections.doubles.maps.abstracts.AbstractDouble2LongMap;
+import speiger.src.collections.longs.collections.LongOrderedCollection;
 import speiger.src.collections.doubles.sets.DoubleOrderedSet;
 import speiger.src.collections.objects.collections.ObjectBidirectionalIterator;
 import speiger.src.collections.objects.sets.ObjectOrderedSet;
@@ -30,6 +32,26 @@ public interface Double2LongOrderedMap extends Double2LongMap
 	 * @see java.util.Map#put(Object, Object)
 	 */
 	public long putAndMoveToLast(double key, long value);
+	
+	/**
+	 * A alternative to putAndMoveToFirst.
+	 * This method simply puts an entry at the first spot of the Map but only if the entry is missing.
+	 * @param key the key that should be inserted
+	 * @param value the value that should be inserted
+	 * @return the previous present or default return value
+	 * @see java.util.Map#put(Object, Object)
+	 */
+	public long putFirst(double key, long value);
+	
+	/**
+	 * A alternative to putAndMoveToLast.
+	 * This method simply puts an entry at the last spot of the Map but only if the entry is missing.
+	 * @param key the key that should be inserted
+	 * @param value the value that should be inserted
+	 * @return the previous present or default return value
+	 * @see java.util.Map#put(Object, Object)
+	 */
+	public long putLast(double key, long value);
 	
 	/**
 	 * A specific move method to move a given key/value to the first index.
@@ -91,12 +113,24 @@ public interface Double2LongOrderedMap extends Double2LongMap
 	 */
 	public long lastLongValue();
 	
+	
+	public Double2LongMap.Entry firstEntry();
+	
+	public Double2LongMap.Entry lastEntry();
+	
+	public Double2LongMap.Entry pollFirstEntry();
+	
+	public Double2LongMap.Entry pollLastEntry();
 	@Override
 	public Double2LongOrderedMap copy();
 	@Override
 	public DoubleOrderedSet keySet();
 	@Override
+	public LongOrderedCollection values();
+	@Override
 	public ObjectOrderedSet<Double2LongMap.Entry> double2LongEntrySet();
+	
+	public default Double2LongOrderedMap reversed() { return new AbstractDouble2LongMap.ReversedDouble2LongOrderedMap(this); }
 	
 	/**
 	 * Creates a Wrapped SortedMap that is Synchronized

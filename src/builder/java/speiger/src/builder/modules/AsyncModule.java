@@ -1,9 +1,17 @@
 package speiger.src.builder.modules;
 
+import java.util.Arrays;
+import java.util.List;
+
+import speiger.src.builder.ClassType;
+import speiger.src.builder.dependencies.IDependency;
+import speiger.src.builder.dependencies.ModuleDependency;
+
 @SuppressWarnings("javadoc")
 public class AsyncModule extends BaseModule
 {
 	public static final BaseModule INSTANCE = new AsyncModule();
+	public static final ModuleDependency MODULE = new ModuleDependency(INSTANCE, false).addKeyDependency(JavaModule.MODULE);
 	
 	@Override
 	public String getModuleName() { return "Async"; }
@@ -16,16 +24,16 @@ public class AsyncModule extends BaseModule
 	@Override
 	protected void loadFunctions() {}
 	@Override
-	public boolean areDependenciesLoaded() { return isDependencyLoaded(CollectionModule.INSTANCE); }
+	public List<IDependency> getDependencies(ClassType keyType, ClassType valueType) { return Arrays.asList(MODULE); }
 	@Override
 	protected void loadBlockades() {
-		if(!isModuleEnabled()) {
+		if(!MODULE.isEnabled()) {
 			addBlockedFiles("AsyncBuilder", "Task");
 		}
 	}
 	@Override
 	protected void loadFlags() {
-		if(isModuleEnabled()) {
+		if(MODULE.isEnabled()) {
 			addKeyFlag("ASYNC_MODULE");
 		}
 	}

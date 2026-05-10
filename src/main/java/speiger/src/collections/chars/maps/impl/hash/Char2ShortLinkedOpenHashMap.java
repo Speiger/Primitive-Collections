@@ -23,7 +23,7 @@ import speiger.src.collections.chars.maps.interfaces.Char2ShortOrderedMap;
 import speiger.src.collections.chars.sets.AbstractCharSet;
 import speiger.src.collections.chars.sets.CharOrderedSet;
 import speiger.src.collections.shorts.collections.AbstractShortCollection;
-import speiger.src.collections.shorts.collections.ShortCollection;
+import speiger.src.collections.shorts.collections.ShortOrderedCollection;
 import speiger.src.collections.shorts.collections.ShortIterator;
 import speiger.src.collections.shorts.functions.function.ShortShortUnaryOperator;
 import speiger.src.collections.shorts.functions.ShortConsumer;
@@ -236,6 +236,54 @@ public class Char2ShortLinkedOpenHashMap extends Char2ShortOpenHashMap implement
 	}
 	
 	@Override
+	public short putFirst(char key, short value) {
+		if(key == (char)0) {
+			if(containsNull) return values[nullIndex];
+			values[nullIndex] = value;
+			containsNull = true;
+			onNodeAdded(nullIndex);
+			moveToFirstIndex(nullIndex);
+		}
+		else {
+			int pos = HashUtil.mix(Character.hashCode(key)) & mask;
+			while(key == (char)0) {
+				if(keys[pos] == key) return values[pos];
+				pos = ++pos & mask;
+			}
+			keys[pos] = key;
+			values[pos] = value;
+			onNodeAdded(pos);
+			moveToFirstIndex(pos);
+		}
+		if(size++ >= maxFill) rehash(HashUtil.arraySize(size+1, loadFactor));
+		return getDefaultReturnValue();
+	}
+	
+	@Override
+	public short putLast(char key, short value) {
+		if(key == (char)0) {
+			if(containsNull) return values[nullIndex];
+			values[nullIndex] = value;
+			containsNull = true;
+			onNodeAdded(nullIndex);
+			moveToLastIndex(nullIndex);
+		}
+		else {
+			int pos = HashUtil.mix(Character.hashCode(key)) & mask;
+			while(key == (char)0) {
+				if(keys[pos] == key) return values[pos];
+				pos = ++pos & mask;
+			}
+			keys[pos] = key;
+			values[pos] = value;
+			onNodeAdded(pos);
+			moveToLastIndex(pos);
+		}
+		if(size++ >= maxFill) rehash(HashUtil.arraySize(size+1, loadFactor));
+		return getDefaultReturnValue();
+	}
+	
+	@Override
 	public boolean moveToFirst(char key) {
 		if(isEmpty() || firstCharKey() == key) return false;
 		if(key == (char)0) {
@@ -392,6 +440,52 @@ public class Char2ShortLinkedOpenHashMap extends Char2ShortOpenHashMap implement
 	}
 	
 	@Override
+	public Char2ShortMap.Entry firstEntry() {
+		if(size == 0) throw new NoSuchElementException();
+		return new BasicEntry(keys[firstIndex], values[firstIndex]);
+	}
+	
+	@Override
+	public Char2ShortMap.Entry lastEntry() {
+		if(size == 0) throw new NoSuchElementException();
+		return new BasicEntry(keys[lastIndex], values[lastIndex]);
+	}
+	
+	@Override
+	public Char2ShortMap.Entry pollFirstEntry() {
+		if(size == 0) throw new NoSuchElementException();
+		int pos = firstIndex;
+		onNodeRemoved(pos);
+		BasicEntry result = new BasicEntry(keys[pos], values[pos]);
+		size--;
+		if(result.getCharKey() == (char)0) {
+			containsNull = false;
+			keys[nullIndex] = (char)0;
+			values[nullIndex] = (short)0;
+		}
+		else shiftKeys(pos);
+		if(nullIndex > minCapacity && size < maxFill / 4 && nullIndex > HashUtil.DEFAULT_MIN_CAPACITY) rehash(nullIndex / 2);
+		return result;
+	}
+	
+	@Override
+	public Char2ShortMap.Entry pollLastEntry() {
+		if(size == 0) throw new NoSuchElementException();
+		int pos = lastIndex;
+		onNodeRemoved(pos);
+		BasicEntry result = new BasicEntry(keys[pos], values[pos]);
+		size--;
+		if(result.getCharKey() == (char)0) {
+			containsNull = false;
+			keys[nullIndex] = (char)0;
+			values[nullIndex] = (short)0;
+		}
+		else shiftKeys(pos);
+		if(nullIndex > minCapacity && size < maxFill / 4 && nullIndex > HashUtil.DEFAULT_MIN_CAPACITY) rehash(nullIndex / 2);
+		return result;
+	}
+	
+	@Override
 	public ObjectOrderedSet<Char2ShortMap.Entry> char2ShortEntrySet() {
 		if(entrySet == null) entrySet = new MapEntrySet();
 		return (ObjectOrderedSet<Char2ShortMap.Entry>)entrySet;
@@ -404,9 +498,9 @@ public class Char2ShortLinkedOpenHashMap extends Char2ShortOpenHashMap implement
 	}
 	
 	@Override
-	public ShortCollection values() {
+	public ShortOrderedCollection values() {
 		if(valuesC == null) valuesC = new Values();
-		return valuesC;
+		return (ShortOrderedCollection)valuesC;
 	}
 	
 	@Override
@@ -591,24 +685,24 @@ public class Char2ShortLinkedOpenHashMap extends Char2ShortOpenHashMap implement
 		}
 		
 		@Override
-		public Char2ShortMap.Entry first() {
+		public Char2ShortMap.Entry getFirst() {
 			return new BasicEntry(firstCharKey(), firstShortValue());
 		}
 		
 		@Override
-		public Char2ShortMap.Entry last() {
+		public Char2ShortMap.Entry getLast() {
 			return new BasicEntry(lastCharKey(), lastShortValue());
 		}
 		
 		@Override
-		public Char2ShortMap.Entry pollFirst() {
+		public Char2ShortMap.Entry removeFirst() {
 			BasicEntry entry = new BasicEntry(firstCharKey(), firstShortValue());
 			pollFirstCharKey();
 			return entry;
 		}
 		
 		@Override
-		public Char2ShortMap.Entry pollLast() {
+		public Char2ShortMap.Entry removeLast() {
 			BasicEntry entry = new BasicEntry(lastCharKey(), lastShortValue());
 			pollLastCharKey();
 			return entry;
@@ -616,7 +710,12 @@ public class Char2ShortLinkedOpenHashMap extends Char2ShortOpenHashMap implement
 		
 		@Override
 		public ObjectBidirectionalIterator<Char2ShortMap.Entry> iterator() {
-			return new EntryIterator();
+			return new EntryIterator(true);
+		}
+		
+		@Override
+		public ObjectBidirectionalIterator<Char2ShortMap.Entry> reverseIterator() {
+			return new EntryIterator(false);
 		}
 		
 		@Override
@@ -626,7 +725,7 @@ public class Char2ShortLinkedOpenHashMap extends Char2ShortOpenHashMap implement
 		
 		@Override
 		public ObjectBidirectionalIterator<Char2ShortMap.Entry> fastIterator() {
-			return new FastEntryIterator();
+			return new FastEntryIterator(true);
 		}
 		
 		@Override
@@ -859,7 +958,12 @@ public class Char2ShortLinkedOpenHashMap extends Char2ShortOpenHashMap implement
 		
 		@Override
 		public CharListIterator iterator() {
-			return new KeyIterator();
+			return new KeyIterator(true);
+		}
+		
+		@Override
+		public CharListIterator reverseIterator() {
+			return new KeyIterator(false);
 		}
 		
 		@Override
@@ -881,22 +985,22 @@ public class Char2ShortLinkedOpenHashMap extends Char2ShortOpenHashMap implement
 		}
 		
 		@Override
-		public char firstChar() {
+		public char getFirstChar() {
 			return firstCharKey();
 		}
 		
 		@Override
-		public char pollFirstChar() {
+		public char removeFirstChar() {
 			return pollFirstCharKey();
 		}
 
 		@Override
-		public char lastChar() {
+		public char getLastChar() {
 			return lastCharKey();
 		}
 
 		@Override
-		public char pollLastChar() {
+		public char removeLastChar() {
 			return pollLastCharKey();
 		}
 		
@@ -1025,32 +1129,43 @@ public class Char2ShortLinkedOpenHashMap extends Char2ShortOpenHashMap implement
 		}
 	}
 	
-	private class Values extends AbstractShortCollection {
+	private class Values extends AbstractShortCollection implements ShortOrderedCollection {
 		@Override
-		public boolean contains(short e) {
-			return containsValue(e);
-		}
+		public boolean contains(short e) { return containsValue(e); }
 		
 		@Override
-		public boolean add(short o) {
-			throw new UnsupportedOperationException();
-		}
-
+		public boolean add(short o) { throw new UnsupportedOperationException(); }
 		@Override
-		public ShortIterator iterator() {
-			return new ValueIterator();
-		}
-		
+		public ShortIterator iterator() { return new ValueIterator(true); }
 		@Override
-		public int size() {
-			return Char2ShortLinkedOpenHashMap.this.size();
-		}
-		
+		public int size() { return Char2ShortLinkedOpenHashMap.this.size(); }
 		@Override
-		public void clear() {
-			Char2ShortLinkedOpenHashMap.this.clear();
+		public void clear() { Char2ShortLinkedOpenHashMap.this.clear(); }
+		@Override
+		public ShortOrderedCollection reversed() { return new AbstractShortCollection.ReverseShortOrderedCollection(this, this::reverseIterator); }
+		private ShortIterator reverseIterator() {
+			return new ValueIterator(false);
 		}
-		
+		@Override
+		public void addFirst(short e) { throw new UnsupportedOperationException(); }
+		@Override
+		public void addLast(short e) { throw new UnsupportedOperationException(); }
+		@Override
+		public short getFirstShort() { return firstShortValue(); }
+		@Override
+		public short removeFirstShort() {
+			short result = firstShortValue();
+			pollFirstCharKey();
+			return result; 
+		}
+		@Override
+		public short getLastShort() { return lastShortValue(); }
+		@Override
+		public short removeLastShort() {
+			short result = lastShortValue();
+			pollLastCharKey();
+			return result; 
+		}
 		@Override
 		public void forEach(ShortConsumer action) {
 			Objects.requireNonNull(action);
@@ -1180,7 +1295,7 @@ public class Char2ShortLinkedOpenHashMap extends Char2ShortOpenHashMap implement
 	private class FastEntryIterator extends MapIterator implements ObjectListIterator<Char2ShortMap.Entry> {
 		MapEntry entry = new MapEntry();
 		
-		public FastEntryIterator() {}
+		public FastEntryIterator(boolean start) { super(start); }
 		public FastEntryIterator(char from) {
 			super(from);
 		}
@@ -1207,7 +1322,7 @@ public class Char2ShortLinkedOpenHashMap extends Char2ShortOpenHashMap implement
 	private class EntryIterator extends MapIterator implements ObjectListIterator<Char2ShortMap.Entry> {
 		MapEntry entry;
 		
-		public EntryIterator() {}
+		public EntryIterator(boolean start) { super(start); }
 		public EntryIterator(char from) {
 			super(from);
 		}
@@ -1237,7 +1352,7 @@ public class Char2ShortLinkedOpenHashMap extends Char2ShortOpenHashMap implement
 	
 	private class KeyIterator extends MapIterator implements CharListIterator {
 		
-		public KeyIterator() {}
+		public KeyIterator(boolean start) { super(start); }
 		public KeyIterator(char from) {
 			super(from);
 		}
@@ -1259,7 +1374,7 @@ public class Char2ShortLinkedOpenHashMap extends Char2ShortOpenHashMap implement
 	}
 	
 	private class ValueIterator extends MapIterator implements ShortListIterator {
-		public ValueIterator() {}
+		public ValueIterator(boolean start) { super(start); }
 		
 		@Override
 		public short previousShort() {
@@ -1279,13 +1394,16 @@ public class Char2ShortLinkedOpenHashMap extends Char2ShortOpenHashMap implement
 	}
 	
 	private class MapIterator {
+		boolean forward;
 		int previous = -1;
 		int next = -1;
 		int current = -1;
 		int index = 0;
 		
-		MapIterator() {
-			next = firstIndex;
+		MapIterator(boolean start) {
+			this.forward = start;
+			if(start) next = firstIndex;
+			else previous = lastIndex;
 		}
 		
 		MapIterator(char from) {
@@ -1316,11 +1434,11 @@ public class Char2ShortLinkedOpenHashMap extends Char2ShortOpenHashMap implement
 		}
 		
 		public boolean hasNext() {
-			return next != -1;
+			return (forward ? next : previous) != -1;
 		}
 
 		public boolean hasPrevious() {
-			return previous != -1;
+			return (forward ? previous : next) != -1;
 		}
 		
 		public int nextIndex() {
@@ -1380,20 +1498,30 @@ public class Char2ShortLinkedOpenHashMap extends Char2ShortOpenHashMap implement
 		
 		public int previousEntry() {
 			if(!hasPrevious()) throw new NoSuchElementException();
-			current = previous;
-			previous = (int)(links[current] >> 32);
-			next = current;
+			if(forward) moveBackwards();
+			else moveForwards();
 			if(index >= 0) index--;
 			return current;
 		}
 		
 		public int nextEntry() {
 			if(!hasNext()) throw new NoSuchElementException();
+			if(forward) moveForwards();
+			else moveBackwards();
+			if(index >= 0) index++;
+			return current;
+		}
+		
+		private void moveBackwards() {
+			current = previous;
+			previous = (int)(links[current] >> 32);
+			next = current;
+		}
+		
+		private void moveForwards() {
 			current = next;
 			next = (int)(links[current]);
 			previous = current;
-			if(index >= 0) index++;
-			return current;
 		}
 		
 		private void ensureIndexKnown() {

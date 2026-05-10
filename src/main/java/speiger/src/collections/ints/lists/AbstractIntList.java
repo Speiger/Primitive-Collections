@@ -465,7 +465,6 @@ public abstract class AbstractIntList extends AbstractIntCollection implements I
 		public int size() {
 			return size;
 		}
-		
 		@Override
 		public IntSplititerator spliterator() { return IntSplititerators.createSplititerator(this, 16464); }
 		

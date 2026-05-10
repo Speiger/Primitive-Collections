@@ -30,7 +30,7 @@ import speiger.src.collections.objects.functions.consumer.ObjectBooleanConsumer;
 import speiger.src.collections.booleans.functions.function.BooleanPredicate;
 import speiger.src.collections.floats.sets.AbstractFloatSet;
 import speiger.src.collections.booleans.collections.AbstractBooleanCollection;
-import speiger.src.collections.booleans.collections.BooleanCollection;
+import speiger.src.collections.booleans.collections.BooleanOrderedCollection;
 import speiger.src.collections.booleans.collections.BooleanIterator;
 import speiger.src.collections.booleans.functions.BooleanSupplier;
 import speiger.src.collections.booleans.functions.function.BooleanBooleanUnaryOperator;
@@ -73,7 +73,7 @@ public class ImmutableFloat2BooleanOpenHashMap extends AbstractFloat2BooleanMap 
 	/** KeySet cache */
 	protected transient FloatOrderedSet keySet;
 	/** Values cache */
-	protected transient BooleanCollection valuesC;
+	protected transient BooleanOrderedCollection valuesC;
 	
 	/** Amount of Elements stored in the HashMap */
 	protected int size;
@@ -258,6 +258,10 @@ public class ImmutableFloat2BooleanOpenHashMap extends AbstractFloat2BooleanMap 
 	@Override
 	public boolean putAndMoveToLast(float key, boolean value) { throw new UnsupportedOperationException(); }
 	@Override
+	public boolean putFirst(float key, boolean value) { throw new UnsupportedOperationException(); }
+	@Override
+	public boolean putLast(float key, boolean value) { throw new UnsupportedOperationException(); }
+	@Override
 	public boolean moveToFirst(float key) { throw new UnsupportedOperationException(); }
 	@Override
 	public boolean moveToLast(float key) { throw new UnsupportedOperationException(); }
@@ -360,7 +364,24 @@ public class ImmutableFloat2BooleanOpenHashMap extends AbstractFloat2BooleanMap 
 	public boolean lastBooleanValue() {
 		if(size == 0) throw new NoSuchElementException();
 		return values[lastIndex];
-	}	
+	}
+	
+	@Override
+	public Float2BooleanMap.Entry firstEntry() {
+		if(size == 0) throw new NoSuchElementException();
+		return new BasicEntry(keys[firstIndex], values[firstIndex]);
+	}
+	
+	@Override
+	public Float2BooleanMap.Entry lastEntry() {
+		if(size == 0) throw new NoSuchElementException();
+		return new BasicEntry(keys[lastIndex], values[lastIndex]);
+	}
+	
+	@Override
+	public Float2BooleanMap.Entry pollFirstEntry() { throw new UnsupportedOperationException(); }
+	@Override
+	public Float2BooleanMap.Entry pollLastEntry() { throw new UnsupportedOperationException(); }
 
 	@Override
 	public ObjectOrderedSet<Float2BooleanMap.Entry> float2BooleanEntrySet() {
@@ -375,7 +396,7 @@ public class ImmutableFloat2BooleanOpenHashMap extends AbstractFloat2BooleanMap 
 	}
 	
 	@Override
-	public BooleanCollection values() {
+	public BooleanOrderedCollection values() {
 		if(valuesC == null) valuesC = new Values();
 		return valuesC;
 	}
@@ -524,24 +545,29 @@ public class ImmutableFloat2BooleanOpenHashMap extends AbstractFloat2BooleanMap 
 		public boolean moveToLast(Float2BooleanMap.Entry o) { throw new UnsupportedOperationException(); }
 		
 		@Override
-		public Float2BooleanMap.Entry first() {
+		public Float2BooleanMap.Entry getFirst() {
 			return new BasicEntry(firstFloatKey(), firstBooleanValue());
 		}
 		
 		@Override
-		public Float2BooleanMap.Entry last() {
+		public Float2BooleanMap.Entry getLast() {
 			return new BasicEntry(lastFloatKey(), lastBooleanValue());
 		}
 		
 		@Override
-		public Float2BooleanMap.Entry pollFirst() { throw new UnsupportedOperationException(); }
+		public Float2BooleanMap.Entry removeFirst() { throw new UnsupportedOperationException(); }
 		
 		@Override
-		public Float2BooleanMap.Entry pollLast() { throw new UnsupportedOperationException(); }
+		public Float2BooleanMap.Entry removeLast() { throw new UnsupportedOperationException(); }
 		
 		@Override
 		public ObjectBidirectionalIterator<Float2BooleanMap.Entry> iterator() {
-			return new EntryIterator();
+			return new EntryIterator(true);
+		}
+		
+		@Override
+		public ObjectBidirectionalIterator<Float2BooleanMap.Entry> reverseIterator() {
+			return new EntryIterator(false);
 		}
 		
 		@Override
@@ -551,7 +577,7 @@ public class ImmutableFloat2BooleanOpenHashMap extends AbstractFloat2BooleanMap 
 		
 		@Override
 		public ObjectBidirectionalIterator<Float2BooleanMap.Entry> fastIterator() {
-			return new FastEntryIterator();
+			return new FastEntryIterator(true);
 		}
 		
 		@Override
@@ -766,7 +792,12 @@ public class ImmutableFloat2BooleanOpenHashMap extends AbstractFloat2BooleanMap 
 		
 		@Override
 		public FloatListIterator iterator() {
-			return new KeyIterator();
+			return new KeyIterator(true);
+		}
+		
+		@Override
+		public FloatListIterator reverseIterator() {
+			return new KeyIterator(false);
 		}
 		
 		@Override
@@ -786,20 +817,20 @@ public class ImmutableFloat2BooleanOpenHashMap extends AbstractFloat2BooleanMap 
 		public void clear() { throw new UnsupportedOperationException(); }
 		
 		@Override
-		public float firstFloat() {
+		public float getFirstFloat() {
 			return firstFloatKey();
 		}
 		
 		@Override
-		public float pollFirstFloat() { throw new UnsupportedOperationException(); }
+		public float removeFirstFloat() { throw new UnsupportedOperationException(); }
 
 		@Override
-		public float lastFloat() {
+		public float getLastFloat() {
 			return lastFloatKey();
 		}
 
 		@Override
-		public float pollLastFloat() { throw new UnsupportedOperationException(); }
+		public float removeLastFloat() { throw new UnsupportedOperationException(); }
 		
 		@Override
 		public void forEach(FloatConsumer action) {
@@ -926,30 +957,35 @@ public class ImmutableFloat2BooleanOpenHashMap extends AbstractFloat2BooleanMap 
 		}
 	}
 	
-	private class Values extends AbstractBooleanCollection {
+	private class Values extends AbstractBooleanCollection implements BooleanOrderedCollection {
 		@Override
-		public boolean contains(boolean e) {
-			return containsValue(e);
-		}
+		public boolean contains(boolean e) { return containsValue(e); }
 		
 		@Override
-		public boolean add(boolean o) {
-			throw new UnsupportedOperationException();
-		}
-
+		public boolean add(boolean o) { throw new UnsupportedOperationException(); }
 		@Override
-		public BooleanIterator iterator() {
-			return new ValueIterator();
-		}
-		
+		public BooleanIterator iterator() { return new ValueIterator(true); }
 		@Override
-		public int size() {
-			return ImmutableFloat2BooleanOpenHashMap.this.size();
-		}
-		
+		public int size() { return ImmutableFloat2BooleanOpenHashMap.this.size(); }
 		@Override
 		public void clear() { throw new UnsupportedOperationException(); }
-		
+		@Override
+		public BooleanOrderedCollection reversed() { return new AbstractBooleanCollection.ReverseBooleanOrderedCollection(this, this::reverseIterator); }
+		private BooleanIterator reverseIterator() {
+			return new ValueIterator(false);
+		}
+		@Override
+		public void addFirst(boolean e) { throw new UnsupportedOperationException(); }
+		@Override
+		public void addLast(boolean e) { throw new UnsupportedOperationException(); }
+		@Override
+		public boolean getFirstBoolean() { return firstBooleanValue(); }
+		@Override
+		public boolean removeFirstBoolean() { throw new UnsupportedOperationException(); }
+		@Override
+		public boolean getLastBoolean() { return lastBooleanValue(); }
+		@Override
+		public boolean removeLastBoolean() { throw new UnsupportedOperationException(); }
 		@Override
 		public void forEach(BooleanConsumer action) {
 			int index = firstIndex;
@@ -1078,7 +1114,7 @@ public class ImmutableFloat2BooleanOpenHashMap extends AbstractFloat2BooleanMap 
 	private class FastEntryIterator extends MapIterator implements ObjectListIterator<Float2BooleanMap.Entry> {
 		MapEntry entry = new MapEntry();
 		
-		public FastEntryIterator() {}
+		public FastEntryIterator(boolean start) { super(start); }
 		public FastEntryIterator(float from) {
 			super(from);
 		}
@@ -1104,7 +1140,7 @@ public class ImmutableFloat2BooleanOpenHashMap extends AbstractFloat2BooleanMap 
 	
 	private class EntryIterator extends MapIterator implements ObjectListIterator<Float2BooleanMap.Entry> {
 		
-		public EntryIterator() {}
+		public EntryIterator(boolean start) { super(start); }
 		public EntryIterator(float from) {
 			super(from);
 		}
@@ -1131,7 +1167,7 @@ public class ImmutableFloat2BooleanOpenHashMap extends AbstractFloat2BooleanMap 
 	
 	private class KeyIterator extends MapIterator implements FloatListIterator {
 		
-		public KeyIterator() {}
+		public KeyIterator(boolean start) { super(start); }
 		public KeyIterator(float from) {
 			super(from);
 		}
@@ -1153,7 +1189,7 @@ public class ImmutableFloat2BooleanOpenHashMap extends AbstractFloat2BooleanMap 
 	}
 	
 	private class ValueIterator extends MapIterator implements BooleanListIterator {
-		public ValueIterator() {}
+		public ValueIterator(boolean start) { super(start); }
 		
 		@Override
 		public boolean previousBoolean() {
@@ -1174,13 +1210,16 @@ public class ImmutableFloat2BooleanOpenHashMap extends AbstractFloat2BooleanMap 
 	}
 	
 	private class MapIterator {
+		boolean forward;
 		int previous = -1;
 		int next = -1;
 		int current = -1;
 		int index = 0;
 		
-		MapIterator() {
-			next = firstIndex;
+		MapIterator(boolean start) {
+			this.forward = start;
+			if(start) next = firstIndex;
+			else previous = lastIndex;
 		}
 		
 		MapIterator(float from) {
@@ -1211,11 +1250,11 @@ public class ImmutableFloat2BooleanOpenHashMap extends AbstractFloat2BooleanMap 
 		}
 		
 		public boolean hasNext() {
-			return next != -1;
+			return (forward ? next : previous) != -1;
 		}
 
 		public boolean hasPrevious() {
-			return previous != -1;
+			return (forward ? previous : next) != -1;
 		}
 		
 		public int nextIndex() {
@@ -1232,20 +1271,30 @@ public class ImmutableFloat2BooleanOpenHashMap extends AbstractFloat2BooleanMap 
 		
 		public int previousEntry() {
 			if(!hasPrevious()) throw new NoSuchElementException();
-			current = previous;
-			previous = (int)(links[current] >> 32);
-			next = current;
+			if(forward) moveBackwards();
+			else moveForwards();
 			if(index >= 0) index--;
 			return current;
 		}
 		
 		public int nextEntry() {
 			if(!hasNext()) throw new NoSuchElementException();
+			if(forward) moveForwards();
+			else moveBackwards();
+			if(index >= 0) index++;
+			return current;
+		}
+		
+		private void moveBackwards() {
+			current = previous;
+			previous = (int)(links[current] >> 32);
+			next = current;
+		}
+		
+		private void moveForwards() {
 			current = next;
 			next = (int)(links[current]);
 			previous = current;
-			if(index >= 0) index++;
-			return current;
 		}
 		
 		private void ensureIndexKnown() {

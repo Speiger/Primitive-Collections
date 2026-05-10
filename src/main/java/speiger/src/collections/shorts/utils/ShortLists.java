@@ -30,7 +30,7 @@ public class ShortLists
 	 * Returns a Immutable EmptyList instance that is automatically casted.
 	 * @return an empty list
 	 */
-	public static EmptyList empty() {
+	public static ShortList empty() {
 		return EMPTY;
 	}
 	

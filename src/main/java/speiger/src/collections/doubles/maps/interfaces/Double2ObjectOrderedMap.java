@@ -1,6 +1,8 @@
 package speiger.src.collections.doubles.maps.interfaces;
 
 import speiger.src.collections.doubles.utils.maps.Double2ObjectMaps;
+import speiger.src.collections.doubles.maps.abstracts.AbstractDouble2ObjectMap;
+import speiger.src.collections.objects.collections.ObjectOrderedCollection;
 import speiger.src.collections.doubles.sets.DoubleOrderedSet;
 import speiger.src.collections.objects.collections.ObjectBidirectionalIterator;
 import speiger.src.collections.objects.sets.ObjectOrderedSet;
@@ -31,6 +33,26 @@ public interface Double2ObjectOrderedMap<V> extends Double2ObjectMap<V>
 	 * @see java.util.Map#put(Object, Object)
 	 */
 	public V putAndMoveToLast(double key, V value);
+	
+	/**
+	 * A alternative to putAndMoveToFirst.
+	 * This method simply puts an entry at the first spot of the Map but only if the entry is missing.
+	 * @param key the key that should be inserted
+	 * @param value the value that should be inserted
+	 * @return the previous present or default return value
+	 * @see java.util.Map#put(Object, Object)
+	 */
+	public V putFirst(double key, V value);
+	
+	/**
+	 * A alternative to putAndMoveToLast.
+	 * This method simply puts an entry at the last spot of the Map but only if the entry is missing.
+	 * @param key the key that should be inserted
+	 * @param value the value that should be inserted
+	 * @return the previous present or default return value
+	 * @see java.util.Map#put(Object, Object)
+	 */
+	public V putLast(double key, V value);
 	
 	/**
 	 * A specific move method to move a given key/value to the first index.
@@ -92,12 +114,24 @@ public interface Double2ObjectOrderedMap<V> extends Double2ObjectMap<V>
 	 */
 	public V lastValue();
 	
+	
+	public Double2ObjectMap.Entry<V> firstEntry();
+	
+	public Double2ObjectMap.Entry<V> lastEntry();
+	
+	public Double2ObjectMap.Entry<V> pollFirstEntry();
+	
+	public Double2ObjectMap.Entry<V> pollLastEntry();
 	@Override
 	public Double2ObjectOrderedMap<V> copy();
 	@Override
 	public DoubleOrderedSet keySet();
 	@Override
+	public ObjectOrderedCollection<V> values();
+	@Override
 	public ObjectOrderedSet<Double2ObjectMap.Entry<V>> double2ObjectEntrySet();
+	
+	public default Double2ObjectOrderedMap<V> reversed() { return new AbstractDouble2ObjectMap.ReversedDouble2ObjectOrderedMap<>(this); }
 	
 	/**
 	 * Creates a Wrapped SortedMap that is Synchronized

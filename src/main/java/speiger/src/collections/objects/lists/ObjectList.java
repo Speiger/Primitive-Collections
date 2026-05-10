@@ -7,6 +7,7 @@ import java.util.Comparator;
 import java.util.function.UnaryOperator;
 
 import speiger.src.collections.objects.collections.ObjectCollection;
+import speiger.src.collections.objects.collections.ObjectOrderedCollection;
 import speiger.src.collections.objects.collections.ObjectSplititerator;
 import speiger.src.collections.ints.functions.consumer.IntObjectConsumer;
 import speiger.src.collections.objects.utils.ObjectArrays;
@@ -18,7 +19,7 @@ import speiger.src.collections.objects.utils.ObjectSplititerators;
  * A Type Specific List interface that reduces boxing/unboxing and adds a couple extra quality of life features
  * @param <T> the keyType of elements maintained by this Collection
  */
-public interface ObjectList<T> extends ObjectCollection<T>, List<T>
+public interface ObjectList<T> extends ObjectOrderedCollection<T>, List<T>
 {
 	/**
 	 * A Helper function that will only add elements if it is not present.
@@ -63,6 +64,24 @@ public interface ObjectList<T> extends ObjectCollection<T>, List<T>
 	 * @return true if the list was modified
 	 */
 	public boolean addAll(int index, ObjectList<T> c);
+	
+	/**
+	 * A method to add an element to the start of a list
+	 * @param e that should be added at the start.
+	 */
+	@Override
+	public default void addFirst(T e) { 
+		add(0, e);
+	}
+	
+	/**
+	 * A method to add an element to the end of a list
+	 * @param e that should be added at the end.
+	 */
+	@Override
+	public default void addLast(T e) {
+		add(e);
+	}
 	
 	/**
 	 * Helper method that returns the first element of a List.

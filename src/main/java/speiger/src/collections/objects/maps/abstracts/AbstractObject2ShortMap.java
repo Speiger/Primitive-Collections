@@ -9,6 +9,9 @@ import speiger.src.collections.objects.functions.consumer.ObjectShortConsumer;
 import speiger.src.collections.objects.functions.function.ToShortFunction;
 import speiger.src.collections.objects.functions.function.ObjectShortUnaryOperator;
 import speiger.src.collections.objects.maps.interfaces.Object2ShortMap;
+import speiger.src.collections.objects.maps.interfaces.Object2ShortOrderedMap;
+import speiger.src.collections.objects.sets.ObjectOrderedSet;
+import speiger.src.collections.shorts.collections.ShortOrderedCollection;
 import speiger.src.collections.objects.sets.AbstractObjectSet;
 import speiger.src.collections.objects.sets.ObjectSet;
 import speiger.src.collections.objects.utils.maps.Object2ShortMaps;
@@ -26,7 +29,7 @@ import speiger.src.collections.utils.SanityChecks;
  */
 public abstract class AbstractObject2ShortMap<T> extends AbstractMap<T, Short> implements Object2ShortMap<T>
 {
-	protected short defaultReturnValue = (short)0;
+	protected short defaultReturnValue = (short)-1;
 	
 	@Override
 	public short getDefaultReturnValue() {
@@ -90,7 +93,7 @@ public abstract class AbstractObject2ShortMap<T> extends AbstractMap<T, Short> i
 	public void putAll(T[] keys, Short[] values, int offset, int size) {
 		SanityChecks.checkArrayCapacity(keys.length, offset, size);
 		SanityChecks.checkArrayCapacity(values.length, offset, size);
-		for(int i = 0;i<size;i++) put(keys[i], values[i]);		
+		for(int i = 0;i<size;i++) put(keys[i], values[i].shortValue());		
 	}
 	
 	@Override
@@ -411,6 +414,116 @@ public abstract class AbstractObject2ShortMap<T> extends AbstractMap<T, Short> i
 		while(iter.hasNext()) hash += iter.next().hashCode();
 		return hash;
 	}
+	
+	public static class ReversedObject2ShortOrderedMap<T> extends AbstractObject2ShortMap<T> implements Object2ShortOrderedMap<T> {
+		Object2ShortOrderedMap<T> map;
+		
+		public ReversedObject2ShortOrderedMap(Object2ShortOrderedMap<T> map) {
+			this.map = map;
+		}
+		@Override
+		public AbstractObject2ShortMap<T> setDefaultReturnValue(short v) {
+			map.setDefaultReturnValue(v);
+			return this;
+		}
+		@Override
+		public short getDefaultReturnValue() { return map.getDefaultReturnValue(); }
+		@Override
+		public Object2ShortOrderedMap<T> copy() { throw new UnsupportedOperationException(); }
+		@Override
+		public short put(T key, short value) { return map.put(key, value); }
+		@Override
+		public short putIfAbsent(T key, short value) { return map.putIfAbsent(key, value); }
+		@Override
+		public short addTo(T key, short value) { return map.addTo(key, value); }
+		@Override
+		public short subFrom(T key, short value) { return map.subFrom(key, value); }
+		@Override
+		public short rem(T key) { return map.rem(key); }
+		@Override
+		public boolean remove(T key, short value) { return map.remove(key, value); }
+		@Override
+		public short remOrDefault(T key, short defaultValue) { return map.remOrDefault(key, defaultValue); }
+		@Override
+		public boolean containsKey(Object key) { return map.containsKey(key); }
+		@Override
+		public boolean containsValue(short value) { return map.containsValue(value); }
+		@Override
+		public boolean replace(T key, short oldValue, short newValue) { return map.replace(key, oldValue, newValue); }
+		@Override
+		public short replace(T key, short value) { return map.replace(key, value); }
+		@Override
+		public void replaceShorts(Object2ShortMap<T> m) { map.replaceShorts(m); }
+		@Override
+		public void replaceShorts(ObjectShortUnaryOperator<T> mappingFunction) { map.replaceShorts(mappingFunction); }
+		@Override
+		public short computeShort(T key, ObjectShortUnaryOperator<T> mappingFunction) { return map.computeShort(key, mappingFunction); }
+		@Override
+		public short computeShortIfAbsent(T key, ToShortFunction<T> mappingFunction) { return map.computeShortIfAbsent(key, mappingFunction); }
+		@Override
+		public short supplyShortIfAbsent(T key, ShortSupplier valueProvider) { return map.supplyShortIfAbsent(key, valueProvider); }
+		@Override
+		public short computeShortIfPresent(T key, ObjectShortUnaryOperator<T> mappingFunction) { return map.computeShortIfPresent(key, mappingFunction); }
+		@Override
+		public short computeShortNonDefault(T key, ObjectShortUnaryOperator<T> mappingFunction) { return map.computeShortNonDefault(key, mappingFunction); }
+		@Override
+		public short computeShortIfAbsentNonDefault(T key, ToShortFunction<T> mappingFunction) { return map.computeShortIfAbsentNonDefault(key, mappingFunction); }
+		@Override
+		public short supplyShortIfAbsentNonDefault(T key, ShortSupplier valueProvider) { return map.supplyShortIfAbsentNonDefault(key, valueProvider); }
+		@Override
+		public short computeShortIfPresentNonDefault(T key, ObjectShortUnaryOperator<T> mappingFunction) { return map.computeShortIfPresentNonDefault(key, mappingFunction); }
+		@Override
+		public short mergeShort(T key, short value, ShortShortUnaryOperator mappingFunction) { return map.mergeShort(key, value, mappingFunction); }
+		@Override
+		public short getOrDefault(T key, short defaultValue) { return map.getOrDefault(key, defaultValue); }
+		@Override
+		public short getShort(T key) { return map.getShort(key); }
+		@Override
+		public short putAndMoveToFirst(T key, short value) { return map.putAndMoveToLast(key, value); }
+		@Override
+		public short putAndMoveToLast(T key, short value) { return map.putAndMoveToFirst(key, value); }
+		@Override
+		public short putFirst(T key, short value) { return map.putLast(key, value); }
+		@Override
+		public short putLast(T key, short value) { return map.putFirst(key, value); }
+		@Override
+		public boolean moveToFirst(T key) { return map.moveToLast(key); }
+		@Override
+		public boolean moveToLast(T key) { return map.moveToFirst(key); }
+		@Override
+		public short getAndMoveToFirst(T key) { return map.getAndMoveToLast(key); }
+		@Override
+		public short getAndMoveToLast(T key) { return map.getAndMoveToFirst(key); }
+		@Override
+		public T firstKey() { return map.lastKey(); }
+		@Override
+		public T pollFirstKey() { return map.pollLastKey(); }
+		@Override
+		public T lastKey() { return map.firstKey(); }
+		@Override
+		public T pollLastKey() { return map.pollFirstKey(); }
+		@Override
+		public short firstShortValue() { return map.lastShortValue(); }
+		@Override
+		public short lastShortValue() { return map.firstShortValue(); }
+		@Override
+		public Object2ShortMap.Entry<T> firstEntry() { return map.lastEntry(); }
+		@Override
+		public Object2ShortMap.Entry<T> lastEntry() { return map.firstEntry(); }
+		@Override
+		public Object2ShortMap.Entry<T> pollFirstEntry() { return map.pollLastEntry(); }
+		@Override
+		public Object2ShortMap.Entry<T> pollLastEntry() { return map.pollFirstEntry(); }
+		@Override
+		public ObjectOrderedSet<Object2ShortMap.Entry<T>> object2ShortEntrySet() { return new AbstractObjectSet.ReversedObjectOrderedSet<>(map.object2ShortEntrySet()); }
+		@Override
+		public ObjectOrderedSet<T> keySet() { return new AbstractObjectSet.ReversedObjectOrderedSet<>(map.keySet()); }
+		@Override
+		public ShortOrderedCollection values() { return map.values().reversed(); }
+		@Override
+		public Object2ShortOrderedMap<T> reversed() { return map; }
+	}
+
 	
 	/**
 	 * A Simple Type Specific Entry class to reduce boxing/unboxing

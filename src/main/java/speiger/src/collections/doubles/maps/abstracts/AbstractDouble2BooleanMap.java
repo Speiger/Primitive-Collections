@@ -9,6 +9,11 @@ import speiger.src.collections.doubles.collections.DoubleIterator;
 import speiger.src.collections.doubles.functions.consumer.DoubleBooleanConsumer;
 import speiger.src.collections.doubles.functions.function.DoubleBooleanUnaryOperator;
 import speiger.src.collections.doubles.maps.interfaces.Double2BooleanMap;
+import speiger.src.collections.doubles.maps.interfaces.Double2BooleanOrderedMap;
+import speiger.src.collections.doubles.sets.DoubleOrderedSet;
+import speiger.src.collections.booleans.collections.BooleanOrderedCollection;
+import speiger.src.collections.objects.sets.AbstractObjectSet;
+import speiger.src.collections.objects.sets.ObjectOrderedSet;
 import speiger.src.collections.doubles.sets.AbstractDoubleSet;
 import speiger.src.collections.doubles.sets.DoubleSet;
 import speiger.src.collections.doubles.utils.maps.Double2BooleanMaps;
@@ -85,7 +90,7 @@ public abstract class AbstractDouble2BooleanMap extends AbstractMap<Double, Bool
 	public void putAll(Double[] keys, Boolean[] values, int offset, int size) {
 		SanityChecks.checkArrayCapacity(keys.length, offset, size);
 		SanityChecks.checkArrayCapacity(values.length, offset, size);
-		for(int i = 0;i<size;i++) put(keys[i], values[i]);		
+		for(int i = 0;i<size;i++) put(keys[i].doubleValue(), values[i].booleanValue());		
 	}
 	
 	@Override
@@ -407,6 +412,112 @@ public abstract class AbstractDouble2BooleanMap extends AbstractMap<Double, Bool
 		while(iter.hasNext()) hash += iter.next().hashCode();
 		return hash;
 	}
+	
+	public static class ReversedDouble2BooleanOrderedMap extends AbstractDouble2BooleanMap implements Double2BooleanOrderedMap {
+		Double2BooleanOrderedMap map;
+		
+		public ReversedDouble2BooleanOrderedMap(Double2BooleanOrderedMap map) {
+			this.map = map;
+		}
+		@Override
+		public AbstractDouble2BooleanMap setDefaultReturnValue(boolean v) {
+			map.setDefaultReturnValue(v);
+			return this;
+		}
+		@Override
+		public boolean getDefaultReturnValue() { return map.getDefaultReturnValue(); }
+		@Override
+		public Double2BooleanOrderedMap copy() { throw new UnsupportedOperationException(); }
+		@Override
+		public boolean put(double key, boolean value) { return map.put(key, value); }
+		@Override
+		public boolean putIfAbsent(double key, boolean value) { return map.putIfAbsent(key, value); }
+		@Override
+		public boolean remove(double key) { return map.remove(key); }
+		@Override
+		public boolean remove(double key, boolean value) { return map.remove(key, value); }
+		@Override
+		public boolean removeOrDefault(double key, boolean defaultValue) { return map.removeOrDefault(key, defaultValue); }
+		@Override
+		public boolean containsKey(double key) { return map.containsKey(key); }
+		@Override
+		public boolean containsValue(boolean value) { return map.containsValue(value); }
+		@Override
+		public boolean replace(double key, boolean oldValue, boolean newValue) { return map.replace(key, oldValue, newValue); }
+		@Override
+		public boolean replace(double key, boolean value) { return map.replace(key, value); }
+		@Override
+		public void replaceBooleans(Double2BooleanMap m) { map.replaceBooleans(m); }
+		@Override
+		public void replaceBooleans(DoubleBooleanUnaryOperator mappingFunction) { map.replaceBooleans(mappingFunction); }
+		@Override
+		public boolean computeBoolean(double key, DoubleBooleanUnaryOperator mappingFunction) { return map.computeBoolean(key, mappingFunction); }
+		@Override
+		public boolean computeBooleanIfAbsent(double key, DoublePredicate mappingFunction) { return map.computeBooleanIfAbsent(key, mappingFunction); }
+		@Override
+		public boolean supplyBooleanIfAbsent(double key, BooleanSupplier valueProvider) { return map.supplyBooleanIfAbsent(key, valueProvider); }
+		@Override
+		public boolean computeBooleanIfPresent(double key, DoubleBooleanUnaryOperator mappingFunction) { return map.computeBooleanIfPresent(key, mappingFunction); }
+		@Override
+		public boolean computeBooleanNonDefault(double key, DoubleBooleanUnaryOperator mappingFunction) { return map.computeBooleanNonDefault(key, mappingFunction); }
+		@Override
+		public boolean computeBooleanIfAbsentNonDefault(double key, DoublePredicate mappingFunction) { return map.computeBooleanIfAbsentNonDefault(key, mappingFunction); }
+		@Override
+		public boolean supplyBooleanIfAbsentNonDefault(double key, BooleanSupplier valueProvider) { return map.supplyBooleanIfAbsentNonDefault(key, valueProvider); }
+		@Override
+		public boolean computeBooleanIfPresentNonDefault(double key, DoubleBooleanUnaryOperator mappingFunction) { return map.computeBooleanIfPresentNonDefault(key, mappingFunction); }
+		@Override
+		public boolean mergeBoolean(double key, boolean value, BooleanBooleanUnaryOperator mappingFunction) { return map.mergeBoolean(key, value, mappingFunction); }
+		@Override
+		public boolean getOrDefault(double key, boolean defaultValue) { return map.getOrDefault(key, defaultValue); }
+		@Override
+		public boolean get(double key) { return map.get(key); }
+		@Override
+		public boolean putAndMoveToFirst(double key, boolean value) { return map.putAndMoveToLast(key, value); }
+		@Override
+		public boolean putAndMoveToLast(double key, boolean value) { return map.putAndMoveToFirst(key, value); }
+		@Override
+		public boolean putFirst(double key, boolean value) { return map.putLast(key, value); }
+		@Override
+		public boolean putLast(double key, boolean value) { return map.putFirst(key, value); }
+		@Override
+		public boolean moveToFirst(double key) { return map.moveToLast(key); }
+		@Override
+		public boolean moveToLast(double key) { return map.moveToFirst(key); }
+		@Override
+		public boolean getAndMoveToFirst(double key) { return map.getAndMoveToLast(key); }
+		@Override
+		public boolean getAndMoveToLast(double key) { return map.getAndMoveToFirst(key); }
+		@Override
+		public double firstDoubleKey() { return map.lastDoubleKey(); }
+		@Override
+		public double pollFirstDoubleKey() { return map.pollLastDoubleKey(); }
+		@Override
+		public double lastDoubleKey() { return map.firstDoubleKey(); }
+		@Override
+		public double pollLastDoubleKey() { return map.pollFirstDoubleKey(); }
+		@Override
+		public boolean firstBooleanValue() { return map.lastBooleanValue(); }
+		@Override
+		public boolean lastBooleanValue() { return map.firstBooleanValue(); }
+		@Override
+		public Double2BooleanMap.Entry firstEntry() { return map.lastEntry(); }
+		@Override
+		public Double2BooleanMap.Entry lastEntry() { return map.firstEntry(); }
+		@Override
+		public Double2BooleanMap.Entry pollFirstEntry() { return map.pollLastEntry(); }
+		@Override
+		public Double2BooleanMap.Entry pollLastEntry() { return map.pollFirstEntry(); }
+		@Override
+		public ObjectOrderedSet<Double2BooleanMap.Entry> double2BooleanEntrySet() { return new AbstractObjectSet.ReversedObjectOrderedSet<>(map.double2BooleanEntrySet()); }
+		@Override
+		public DoubleOrderedSet keySet() { return new AbstractDoubleSet.ReversedDoubleOrderedSet(map.keySet()); }
+		@Override
+		public BooleanOrderedCollection values() { return map.values().reversed(); }
+		@Override
+		public Double2BooleanOrderedMap reversed() { return map; }
+	}
+
 	
 	/**
 	 * A Simple Type Specific Entry class to reduce boxing/unboxing

@@ -1,6 +1,8 @@
 package speiger.src.collections.doubles.maps.interfaces;
 
 import speiger.src.collections.doubles.utils.maps.Double2ByteMaps;
+import speiger.src.collections.doubles.maps.abstracts.AbstractDouble2ByteMap;
+import speiger.src.collections.bytes.collections.ByteOrderedCollection;
 import speiger.src.collections.doubles.sets.DoubleOrderedSet;
 import speiger.src.collections.objects.collections.ObjectBidirectionalIterator;
 import speiger.src.collections.objects.sets.ObjectOrderedSet;
@@ -30,6 +32,26 @@ public interface Double2ByteOrderedMap extends Double2ByteMap
 	 * @see java.util.Map#put(Object, Object)
 	 */
 	public byte putAndMoveToLast(double key, byte value);
+	
+	/**
+	 * A alternative to putAndMoveToFirst.
+	 * This method simply puts an entry at the first spot of the Map but only if the entry is missing.
+	 * @param key the key that should be inserted
+	 * @param value the value that should be inserted
+	 * @return the previous present or default return value
+	 * @see java.util.Map#put(Object, Object)
+	 */
+	public byte putFirst(double key, byte value);
+	
+	/**
+	 * A alternative to putAndMoveToLast.
+	 * This method simply puts an entry at the last spot of the Map but only if the entry is missing.
+	 * @param key the key that should be inserted
+	 * @param value the value that should be inserted
+	 * @return the previous present or default return value
+	 * @see java.util.Map#put(Object, Object)
+	 */
+	public byte putLast(double key, byte value);
 	
 	/**
 	 * A specific move method to move a given key/value to the first index.
@@ -91,12 +113,24 @@ public interface Double2ByteOrderedMap extends Double2ByteMap
 	 */
 	public byte lastByteValue();
 	
+	
+	public Double2ByteMap.Entry firstEntry();
+	
+	public Double2ByteMap.Entry lastEntry();
+	
+	public Double2ByteMap.Entry pollFirstEntry();
+	
+	public Double2ByteMap.Entry pollLastEntry();
 	@Override
 	public Double2ByteOrderedMap copy();
 	@Override
 	public DoubleOrderedSet keySet();
 	@Override
+	public ByteOrderedCollection values();
+	@Override
 	public ObjectOrderedSet<Double2ByteMap.Entry> double2ByteEntrySet();
+	
+	public default Double2ByteOrderedMap reversed() { return new AbstractDouble2ByteMap.ReversedDouble2ByteOrderedMap(this); }
 	
 	/**
 	 * Creates a Wrapped SortedMap that is Synchronized

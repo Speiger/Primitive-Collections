@@ -10,6 +10,7 @@ import java.util.function.Consumer;
 
 import speiger.src.collections.booleans.collections.AbstractBooleanCollection;
 import speiger.src.collections.booleans.collections.BooleanCollection;
+import speiger.src.collections.booleans.collections.BooleanOrderedCollection;
 import speiger.src.collections.booleans.collections.BooleanIterator;
 import speiger.src.collections.booleans.functions.BooleanComparator;
 import speiger.src.collections.objects.utils.ObjectArrays;
@@ -46,6 +47,34 @@ public class BooleanCollections
 	 */
 	public static BooleanCollection unmodifiable(BooleanCollection c) {
 		return c instanceof UnmodifiableCollection ? c : new UnmodifiableCollection(c);
+	}
+	
+	/**
+	 * Returns a Immutable Ordered Collection instance based on the instance given.
+	 * @param c that should be made immutable/unmodifiable
+	 * @return a unmodifiable Ordered collection wrapper. If the Collection already a unmodifiable wrapper then it just returns itself.
+	 */
+	public static BooleanOrderedCollection unmodifiable(BooleanOrderedCollection c) {
+		return c instanceof UnmodifiableOrderedCollection ? c : new UnmodifiableOrderedCollection(c);
+	}
+	
+	/**
+	 * Returns a synchronized ordered Collection instance based on the instance given.
+	 * @param c that should be synchronized
+	 * @return a synchronized ordered collection wrapper. If the Collection already a synchronized wrapper then it just returns itself.
+	 */
+	public static BooleanOrderedCollection synchronize(BooleanOrderedCollection c) {
+		return c instanceof SynchronizedOrderedCollection ? c : new SynchronizedOrderedCollection(c);
+	}
+	
+	/**
+	 * Returns a synchronized ordered Collection instance based on the instance given.
+	 * @param c that should be synchronized
+	 * @param mutex is the controller of the synchronization block.
+	 * @return a synchronized ordered collection wrapper. If the Collection already a synchronized wrapper then it just returns itself.
+	 */
+	public static BooleanOrderedCollection synchronize(BooleanOrderedCollection c, Object mutex) {
+		return c instanceof SynchronizedOrderedCollection ? c : new SynchronizedOrderedCollection(c, mutex);
 	}
 	
 	/**
@@ -288,6 +317,37 @@ public class BooleanCollections
 		@Override
 		public SingletonCollection copy() { return new SingletonCollection(element); }
 	}
+	/**
+	 * Synchronized Ordered Collection Wrapper for the synchronizedCollection function
+	 */
+	public static class SynchronizedOrderedCollection extends SynchronizedCollection implements BooleanOrderedCollection {
+		BooleanOrderedCollection c;
+		
+		SynchronizedOrderedCollection(BooleanOrderedCollection c, Object mutex) {
+			super(c, mutex);
+			this.c = c;
+		}
+		
+		SynchronizedOrderedCollection(BooleanOrderedCollection c) {
+			super(c);
+			this.c = c;
+		}
+		
+		@Override
+		public BooleanOrderedCollection reversed() { return BooleanCollections.synchronize(c.reversed(), mutex); }
+		@Override
+		public void addFirst(boolean e) { synchronized(mutex) { this.c.addFirst(e); } }
+		@Override
+		public void addLast(boolean e) { synchronized(mutex) { this.c.addLast(e); } }
+		@Override
+		public boolean getFirstBoolean() { synchronized(mutex) { return this.c.getFirstBoolean(); } }
+		@Override
+		public boolean removeFirstBoolean() { synchronized(mutex) { return this.c.removeFirstBoolean(); } }
+		@Override
+		public boolean getLastBoolean() { synchronized(mutex) { return this.c.getLastBoolean(); } }
+		@Override
+		public boolean removeLastBoolean() { synchronized(mutex) { return this.c.removeLastBoolean(); } }
+	}	
 	
 	/**
 	 * Synchronized Collection Wrapper for the synchronizedCollection function
@@ -405,6 +465,33 @@ public class BooleanCollections
 		public boolean findFirst(BooleanPredicate filter) { synchronized(mutex) { return c.findFirst(filter); } }
 		@Override
 		public int count(BooleanPredicate filter) { synchronized(mutex) { return c.count(filter); } }
+	}
+	
+	/**
+	 * Unmodifyable Ordered Collection Wrapper for the unmodifyableCollection method
+	 */
+	public static class UnmodifiableOrderedCollection extends UnmodifiableCollection implements BooleanOrderedCollection {
+		BooleanOrderedCollection c;
+		
+		UnmodifiableOrderedCollection(BooleanOrderedCollection c) {
+			super(c);
+			this.c = c;
+		}
+		
+		@Override
+		public BooleanOrderedCollection reversed() { return BooleanCollections.unmodifiable(c.reversed()); }
+		@Override
+		public void addFirst(boolean e) { throw new UnsupportedOperationException(); }
+		@Override
+		public void addLast(boolean e) { throw new UnsupportedOperationException(); }
+		@Override
+		public boolean getFirstBoolean() { return c.getFirstBoolean(); }
+		@Override
+		public boolean removeFirstBoolean() { throw new UnsupportedOperationException(); }
+		@Override
+		public boolean getLastBoolean() { return c.getLastBoolean(); }
+		@Override
+		public boolean removeLastBoolean() { throw new UnsupportedOperationException(); }
 	}
 	
 	/**

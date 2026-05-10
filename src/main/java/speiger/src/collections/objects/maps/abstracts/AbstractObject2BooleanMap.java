@@ -9,6 +9,9 @@ import speiger.src.collections.objects.collections.ObjectIterator;
 import speiger.src.collections.objects.functions.consumer.ObjectBooleanConsumer;
 import speiger.src.collections.objects.functions.function.ObjectBooleanUnaryOperator;
 import speiger.src.collections.objects.maps.interfaces.Object2BooleanMap;
+import speiger.src.collections.objects.maps.interfaces.Object2BooleanOrderedMap;
+import speiger.src.collections.objects.sets.ObjectOrderedSet;
+import speiger.src.collections.booleans.collections.BooleanOrderedCollection;
 import speiger.src.collections.objects.sets.AbstractObjectSet;
 import speiger.src.collections.objects.sets.ObjectSet;
 import speiger.src.collections.objects.utils.maps.Object2BooleanMaps;
@@ -84,7 +87,7 @@ public abstract class AbstractObject2BooleanMap<T> extends AbstractMap<T, Boolea
 	public void putAll(T[] keys, Boolean[] values, int offset, int size) {
 		SanityChecks.checkArrayCapacity(keys.length, offset, size);
 		SanityChecks.checkArrayCapacity(values.length, offset, size);
-		for(int i = 0;i<size;i++) put(keys[i], values[i]);		
+		for(int i = 0;i<size;i++) put(keys[i], values[i].booleanValue());		
 	}
 	
 	@Override
@@ -405,6 +408,112 @@ public abstract class AbstractObject2BooleanMap<T> extends AbstractMap<T, Boolea
 		while(iter.hasNext()) hash += iter.next().hashCode();
 		return hash;
 	}
+	
+	public static class ReversedObject2BooleanOrderedMap<T> extends AbstractObject2BooleanMap<T> implements Object2BooleanOrderedMap<T> {
+		Object2BooleanOrderedMap<T> map;
+		
+		public ReversedObject2BooleanOrderedMap(Object2BooleanOrderedMap<T> map) {
+			this.map = map;
+		}
+		@Override
+		public AbstractObject2BooleanMap<T> setDefaultReturnValue(boolean v) {
+			map.setDefaultReturnValue(v);
+			return this;
+		}
+		@Override
+		public boolean getDefaultReturnValue() { return map.getDefaultReturnValue(); }
+		@Override
+		public Object2BooleanOrderedMap<T> copy() { throw new UnsupportedOperationException(); }
+		@Override
+		public boolean put(T key, boolean value) { return map.put(key, value); }
+		@Override
+		public boolean putIfAbsent(T key, boolean value) { return map.putIfAbsent(key, value); }
+		@Override
+		public boolean rem(T key) { return map.rem(key); }
+		@Override
+		public boolean remove(T key, boolean value) { return map.remove(key, value); }
+		@Override
+		public boolean remOrDefault(T key, boolean defaultValue) { return map.remOrDefault(key, defaultValue); }
+		@Override
+		public boolean containsKey(Object key) { return map.containsKey(key); }
+		@Override
+		public boolean containsValue(boolean value) { return map.containsValue(value); }
+		@Override
+		public boolean replace(T key, boolean oldValue, boolean newValue) { return map.replace(key, oldValue, newValue); }
+		@Override
+		public boolean replace(T key, boolean value) { return map.replace(key, value); }
+		@Override
+		public void replaceBooleans(Object2BooleanMap<T> m) { map.replaceBooleans(m); }
+		@Override
+		public void replaceBooleans(ObjectBooleanUnaryOperator<T> mappingFunction) { map.replaceBooleans(mappingFunction); }
+		@Override
+		public boolean computeBoolean(T key, ObjectBooleanUnaryOperator<T> mappingFunction) { return map.computeBoolean(key, mappingFunction); }
+		@Override
+		public boolean computeBooleanIfAbsent(T key, Predicate<T> mappingFunction) { return map.computeBooleanIfAbsent(key, mappingFunction); }
+		@Override
+		public boolean supplyBooleanIfAbsent(T key, BooleanSupplier valueProvider) { return map.supplyBooleanIfAbsent(key, valueProvider); }
+		@Override
+		public boolean computeBooleanIfPresent(T key, ObjectBooleanUnaryOperator<T> mappingFunction) { return map.computeBooleanIfPresent(key, mappingFunction); }
+		@Override
+		public boolean computeBooleanNonDefault(T key, ObjectBooleanUnaryOperator<T> mappingFunction) { return map.computeBooleanNonDefault(key, mappingFunction); }
+		@Override
+		public boolean computeBooleanIfAbsentNonDefault(T key, Predicate<T> mappingFunction) { return map.computeBooleanIfAbsentNonDefault(key, mappingFunction); }
+		@Override
+		public boolean supplyBooleanIfAbsentNonDefault(T key, BooleanSupplier valueProvider) { return map.supplyBooleanIfAbsentNonDefault(key, valueProvider); }
+		@Override
+		public boolean computeBooleanIfPresentNonDefault(T key, ObjectBooleanUnaryOperator<T> mappingFunction) { return map.computeBooleanIfPresentNonDefault(key, mappingFunction); }
+		@Override
+		public boolean mergeBoolean(T key, boolean value, BooleanBooleanUnaryOperator mappingFunction) { return map.mergeBoolean(key, value, mappingFunction); }
+		@Override
+		public boolean getOrDefault(T key, boolean defaultValue) { return map.getOrDefault(key, defaultValue); }
+		@Override
+		public boolean getBoolean(T key) { return map.getBoolean(key); }
+		@Override
+		public boolean putAndMoveToFirst(T key, boolean value) { return map.putAndMoveToLast(key, value); }
+		@Override
+		public boolean putAndMoveToLast(T key, boolean value) { return map.putAndMoveToFirst(key, value); }
+		@Override
+		public boolean putFirst(T key, boolean value) { return map.putLast(key, value); }
+		@Override
+		public boolean putLast(T key, boolean value) { return map.putFirst(key, value); }
+		@Override
+		public boolean moveToFirst(T key) { return map.moveToLast(key); }
+		@Override
+		public boolean moveToLast(T key) { return map.moveToFirst(key); }
+		@Override
+		public boolean getAndMoveToFirst(T key) { return map.getAndMoveToLast(key); }
+		@Override
+		public boolean getAndMoveToLast(T key) { return map.getAndMoveToFirst(key); }
+		@Override
+		public T firstKey() { return map.lastKey(); }
+		@Override
+		public T pollFirstKey() { return map.pollLastKey(); }
+		@Override
+		public T lastKey() { return map.firstKey(); }
+		@Override
+		public T pollLastKey() { return map.pollFirstKey(); }
+		@Override
+		public boolean firstBooleanValue() { return map.lastBooleanValue(); }
+		@Override
+		public boolean lastBooleanValue() { return map.firstBooleanValue(); }
+		@Override
+		public Object2BooleanMap.Entry<T> firstEntry() { return map.lastEntry(); }
+		@Override
+		public Object2BooleanMap.Entry<T> lastEntry() { return map.firstEntry(); }
+		@Override
+		public Object2BooleanMap.Entry<T> pollFirstEntry() { return map.pollLastEntry(); }
+		@Override
+		public Object2BooleanMap.Entry<T> pollLastEntry() { return map.pollFirstEntry(); }
+		@Override
+		public ObjectOrderedSet<Object2BooleanMap.Entry<T>> object2BooleanEntrySet() { return new AbstractObjectSet.ReversedObjectOrderedSet<>(map.object2BooleanEntrySet()); }
+		@Override
+		public ObjectOrderedSet<T> keySet() { return new AbstractObjectSet.ReversedObjectOrderedSet<>(map.keySet()); }
+		@Override
+		public BooleanOrderedCollection values() { return map.values().reversed(); }
+		@Override
+		public Object2BooleanOrderedMap<T> reversed() { return map; }
+	}
+
 	
 	/**
 	 * A Simple Type Specific Entry class to reduce boxing/unboxing

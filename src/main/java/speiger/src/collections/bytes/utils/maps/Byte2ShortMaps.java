@@ -29,6 +29,7 @@ import speiger.src.collections.bytes.sets.ByteOrderedSet;
 import speiger.src.collections.bytes.sets.ByteSet;
 import speiger.src.collections.bytes.utils.ByteSets;
 import speiger.src.collections.shorts.collections.ShortCollection;
+import speiger.src.collections.shorts.collections.ShortOrderedCollection;
 import speiger.src.collections.shorts.functions.function.ShortShortUnaryOperator;
 import speiger.src.collections.shorts.functions.ShortSupplier;
 import speiger.src.collections.shorts.utils.ShortCollections;
@@ -439,6 +440,10 @@ public class Byte2ShortMaps
 		@Override
 		public short putAndMoveToLast(byte key, short value) { throw new UnsupportedOperationException(); }
 		@Override
+		public short putFirst(byte key, short value) { throw new UnsupportedOperationException(); }
+		@Override
+		public short putLast(byte key, short value) { throw new UnsupportedOperationException(); }
+		@Override
 		public boolean moveToFirst(byte key) { throw new UnsupportedOperationException(); }
 		@Override
 		public boolean moveToLast(byte key) { throw new UnsupportedOperationException(); }
@@ -459,13 +464,25 @@ public class Byte2ShortMaps
 		@Override
 		public short lastShortValue() { return map.lastShortValue(); }
 		@Override
+		public Byte2ShortMap.Entry firstEntry() { return map.firstEntry(); }
+		@Override
+		public Byte2ShortMap.Entry lastEntry() { return map.lastEntry(); }
+		@Override
+		public Byte2ShortMap.Entry pollFirstEntry() { throw new UnsupportedOperationException(); }
+		@Override
+		public Byte2ShortMap.Entry pollLastEntry() { throw new UnsupportedOperationException(); }
+		@Override
 		public Byte2ShortOrderedMap copy() { return map.copy(); }
 		@Override
 		public ByteOrderedSet keySet() { 
 			if(keys == null) keys = ByteSets.unmodifiable(map.keySet()); 
 			return (ByteOrderedSet)keys;
 		}
-				
+		@Override
+		public ShortOrderedCollection values() {
+			if(values == null) values = ShortCollections.unmodifiable(map.values());
+			return (ShortOrderedCollection)values;
+		}
 		@Override
 		public ObjectOrderedSet<Byte2ShortMap.Entry> byte2ShortEntrySet() {
 			if(entrySet == null) entrySet = new UnmodifyableOrderedEntrySet(map.byte2ShortEntrySet());
@@ -617,15 +634,17 @@ public class Byte2ShortMaps
 		@Override
 		public ObjectBidirectionalIterator<Byte2ShortMap.Entry> iterator() { return ObjectIterators.unmodifiable(set.iterator()); }
 		@Override
+		public ObjectBidirectionalIterator<Byte2ShortMap.Entry> reverseIterator() { return ObjectIterators.unmodifiable(set.reverseIterator()); }
+		@Override
 		public ObjectBidirectionalIterator<Byte2ShortMap.Entry> iterator(Byte2ShortMap.Entry fromElement) { return ObjectIterators.unmodifiable(set.iterator(fromElement)); }
 		@Override
-		public Byte2ShortMap.Entry first() { return set.first(); }
+		public Byte2ShortMap.Entry getFirst() { return set.getFirst(); }
 		@Override
-		public Byte2ShortMap.Entry pollFirst() { throw new UnsupportedOperationException(); }
+		public Byte2ShortMap.Entry removeFirst() { throw new UnsupportedOperationException(); }
 		@Override
-		public Byte2ShortMap.Entry last() { return set.last(); }
+		public Byte2ShortMap.Entry getLast() { return set.getLast(); }
 		@Override
-		public Byte2ShortMap.Entry pollLast() { throw new UnsupportedOperationException(); }
+		public Byte2ShortMap.Entry removeLast() { throw new UnsupportedOperationException(); }
 	}
 	
 	/**
@@ -794,6 +813,10 @@ public class Byte2ShortMaps
 		@Override
 		public short putAndMoveToLast(byte key, short value) { synchronized(mutex) { return map.putAndMoveToLast(key, value); } }
 		@Override
+		public short putFirst(byte key, short value) { synchronized(mutex) { return map.putFirst(key, value); } }
+		@Override
+		public short putLast(byte key, short value) { synchronized(mutex) { return map.putLast(key, value); } }
+		@Override
 		public boolean moveToFirst(byte key) { synchronized(mutex) { return map.moveToFirst(key); } }
 		@Override
 		public boolean moveToLast(byte key) { synchronized(mutex) { return map.moveToLast(key); } }
@@ -814,13 +837,25 @@ public class Byte2ShortMaps
 		@Override
 		public short lastShortValue() { synchronized(mutex) { return map.lastShortValue(); } }
 		@Override
+		public Byte2ShortMap.Entry firstEntry() { synchronized(mutex) { return map.firstEntry(); } }
+		@Override
+		public Byte2ShortMap.Entry lastEntry() { synchronized(mutex) { return map.lastEntry(); } }
+		@Override
+		public Byte2ShortMap.Entry pollFirstEntry() { synchronized(mutex) { return map.pollFirstEntry(); } }
+		@Override
+		public Byte2ShortMap.Entry pollLastEntry() { synchronized(mutex) { return map.pollLastEntry(); } }
+		@Override
 		public Byte2ShortOrderedMap copy() { synchronized(mutex) { return map.copy(); } }
 		@Override
 		public ByteOrderedSet keySet() {
 			if(keys == null) keys = ByteSets.synchronize(map.keySet(), mutex);
 			return (ByteOrderedSet)keys;
 		}
-		
+		@Override
+		public ShortOrderedCollection values() {
+			if(values == null) values = ShortCollections.synchronize(map.values(), mutex);
+			return (ShortOrderedCollection)values;
+		}
 		@Override
 		public ObjectOrderedSet<Byte2ShortMap.Entry> byte2ShortEntrySet() {
 			if(entrySet == null) entrySet = ObjectSets.synchronize(map.byte2ShortEntrySet(), mutex);

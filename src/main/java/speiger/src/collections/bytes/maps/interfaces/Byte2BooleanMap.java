@@ -94,7 +94,7 @@ public interface Byte2BooleanMap extends Map<Byte, Boolean>, BytePredicate
 	 * @return the last present value or default return	value.
 	 */
 	public default Boolean put(Map.Entry<Byte, Boolean> entry) {
-		return put(entry.getKey(), entry.getValue());
+		return put(entry.getKey().byteValue(), entry.getValue().booleanValue());
 	}
 
 	/**

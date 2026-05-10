@@ -2,8 +2,9 @@ package speiger.src.collections.doubles.sets;
 
 import speiger.src.collections.doubles.collections.DoubleBidirectionalIterator;
 import speiger.src.collections.doubles.collections.DoubleSplititerator;
-import speiger.src.collections.doubles.utils.DoubleSets;
 import speiger.src.collections.doubles.utils.DoubleSplititerators;
+import speiger.src.collections.doubles.sets.AbstractDoubleSet.ReversedDoubleOrderedSet;
+import speiger.src.collections.doubles.utils.DoubleSets;
 
 /**
  * A Special Set Interface giving Access to some really usefull functions
@@ -49,6 +50,7 @@ public interface DoubleOrderedSet extends DoubleSet
 	
 	@Override
 	public DoubleBidirectionalIterator iterator();
+	public DoubleBidirectionalIterator reverseIterator();
 	
 	/**
 	 * A type Specific Iterator starting from a given key
@@ -69,23 +71,26 @@ public interface DoubleOrderedSet extends DoubleSet
 	 * A method to get the first element in the set
 	 * @return first element in the set
 	 */
-	public double firstDouble();
+	public double getFirstDouble();
 	/**
 	 * A method to get and remove the first element in the set
 	 * @return first element in the set
 	 */
-	public double pollFirstDouble();
+	public double removeFirstDouble();
 	/**
 	 * A method to get the last element in the set
 	 * @return last element in the set
 	 */
-	public double lastDouble();
+	public double getLastDouble();
 	/**
 	 * A method to get and remove the last element in the set
 	 * @return last element in the set
 	 */
-	public double pollLastDouble();
+	public double removeLastDouble();
 	
+	
+	public default DoubleOrderedSet reversed() { return new ReversedDoubleOrderedSet(this); }
+
 	/**
 	 * Creates a Wrapped OrderedSet that is Synchronized
 	 * @return a new OrderedSet that is synchronized

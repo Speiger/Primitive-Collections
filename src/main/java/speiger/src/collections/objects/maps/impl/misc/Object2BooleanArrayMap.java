@@ -21,7 +21,7 @@ import speiger.src.collections.objects.maps.interfaces.Object2BooleanOrderedMap;
 import speiger.src.collections.objects.sets.AbstractObjectSet;
 import speiger.src.collections.objects.sets.ObjectOrderedSet;
 import speiger.src.collections.booleans.collections.AbstractBooleanCollection;
-import speiger.src.collections.booleans.collections.BooleanCollection;
+import speiger.src.collections.booleans.collections.BooleanOrderedCollection;
 import speiger.src.collections.booleans.collections.BooleanIterator;
 import speiger.src.collections.booleans.functions.BooleanSupplier;
 import speiger.src.collections.booleans.functions.function.BooleanBooleanUnaryOperator;
@@ -54,7 +54,7 @@ public class Object2BooleanArrayMap<T> extends AbstractObject2BooleanMap<T> impl
 	/** KeySet cache */
 	protected ObjectOrderedSet<T> keySet;
 	/** Values cache */
-	protected BooleanCollection valuesC;
+	protected BooleanOrderedCollection valuesC;
 	/** EntrySet cache */
 	protected FastOrderedSet<T> entrySet;
 	
@@ -199,6 +199,27 @@ public class Object2BooleanArrayMap<T> extends AbstractObject2BooleanMap<T> impl
 	}
 	
 	@Override
+	public boolean putFirst(T key, boolean value) {
+		int index = findIndex(key);
+		if(index < 0) {
+			insertIndex(0, key, value);
+			size++;
+			return getDefaultReturnValue();
+		}
+		return values[index];
+	}
+	
+	@Override
+	public boolean putLast(T key, boolean value) {
+		int index = findIndex(key);
+		if(index < 0) {
+			insertIndex(size++, key, value);
+			return getDefaultReturnValue();
+		}
+		return values[index];
+	}
+	
+	@Override
 	public boolean moveToFirst(T key) {
 		int index = findIndex(key);
 		if(index > 0) {
@@ -308,6 +329,34 @@ public class Object2BooleanArrayMap<T> extends AbstractObject2BooleanMap<T> impl
 	}
 	
 	@Override
+	public Object2BooleanMap.Entry<T> firstEntry() {
+		if(size == 0) throw new NoSuchElementException();
+		return new BasicEntry<>(keys[0], values[0]);
+	}
+	
+	@Override
+	public Object2BooleanMap.Entry<T> lastEntry() {
+		if(size == 0) throw new NoSuchElementException();
+		return new BasicEntry<>(keys[size-1], values[size-1]);
+	}
+	
+	@Override
+	public Object2BooleanMap.Entry<T> pollFirstEntry() {
+		if(size == 0) throw new NoSuchElementException();
+		BasicEntry<T> result = new BasicEntry<>(keys[0], values[0]);
+		removeIndex(0);
+		return result;
+	}
+	
+	@Override
+	public Object2BooleanMap.Entry<T> pollLastEntry() {
+		if(size == 0) throw new NoSuchElementException();
+		BasicEntry<T> result = new BasicEntry<>(keys[size-1], values[size-1]);
+		removeIndex(size-1);
+		return result;
+	}
+	
+	@Override
 	public boolean rem(T key) {
 		int index = findIndex(key);
 		if(index < 0) return getDefaultReturnValue();
@@ -364,7 +413,7 @@ public class Object2BooleanArrayMap<T> extends AbstractObject2BooleanMap<T> impl
 	}
 
 	@Override
-	public BooleanCollection values() {
+	public BooleanOrderedCollection values() {
 		if(valuesC == null) valuesC = new Values();
 		return valuesC;
 	}
@@ -676,24 +725,24 @@ public class Object2BooleanArrayMap<T> extends AbstractObject2BooleanMap<T> impl
 		}
 		
 		@Override
-		public Object2BooleanMap.Entry<T> first() {
+		public Object2BooleanMap.Entry<T> getFirst() {
 			return new BasicEntry<>(firstKey(), firstBooleanValue());
 		}
 		
 		@Override
-		public Object2BooleanMap.Entry<T> last() {
+		public Object2BooleanMap.Entry<T> getLast() {
 			return new BasicEntry<>(lastKey(), lastBooleanValue());
 		}
 		
 		@Override
-		public Object2BooleanMap.Entry<T> pollFirst() {
+		public Object2BooleanMap.Entry<T> removeFirst() {
 			BasicEntry<T> entry = new BasicEntry<>(firstKey(), firstBooleanValue());
 			pollFirstKey();
 			return entry;
 		}
 		
 		@Override
-		public Object2BooleanMap.Entry<T> pollLast() {
+		public Object2BooleanMap.Entry<T> removeLast() {
 			BasicEntry<T> entry = new BasicEntry<>(lastKey(), lastBooleanValue());
 			pollLastKey();
 			return entry;
@@ -701,7 +750,12 @@ public class Object2BooleanArrayMap<T> extends AbstractObject2BooleanMap<T> impl
 		
 		@Override
 		public ObjectBidirectionalIterator<Object2BooleanMap.Entry<T>> iterator() {
-			return new EntryIterator();
+			return new EntryIterator(true);
+		}
+		
+		@Override
+		public ObjectBidirectionalIterator<Object2BooleanMap.Entry<T>> reverseIterator() {
+			return new EntryIterator(false);
 		}
 		
 		@Override
@@ -711,7 +765,7 @@ public class Object2BooleanArrayMap<T> extends AbstractObject2BooleanMap<T> impl
 		
 		@Override
 		public ObjectBidirectionalIterator<Object2BooleanMap.Entry<T>> fastIterator() {
-			return new FastEntryIterator();
+			return new FastEntryIterator(true);
 		}
 		
 		@Override
@@ -908,7 +962,9 @@ public class Object2BooleanArrayMap<T> extends AbstractObject2BooleanMap<T> impl
 		@Override
 		public boolean moveToLast(T o) { return Object2BooleanArrayMap.this.moveToLast(o); }
 		@Override
-		public ObjectListIterator<T> iterator() { return new KeyIterator(); }
+		public ObjectListIterator<T> iterator() { return new KeyIterator(true); }
+		@Override
+		public ObjectListIterator<T> reverseIterator() { return new KeyIterator(false); }
 		@Override
 		public ObjectBidirectionalIterator<T> iterator(T fromElement) { return new KeyIterator(fromElement); } 
 		@Override
@@ -916,13 +972,13 @@ public class Object2BooleanArrayMap<T> extends AbstractObject2BooleanMap<T> impl
 		@Override
 		public void clear() { Object2BooleanArrayMap.this.clear(); }
 		@Override
-		public T first() { return firstKey(); }
+		public T getFirst() { return firstKey(); }
 		@Override
-		public T pollFirst() { return pollFirstKey(); }
+		public T removeFirst() { return pollFirstKey(); }
 		@Override
-		public T last() { return lastKey(); }
+		public T getLast() { return lastKey(); }
 		@Override
-		public T pollLast() { return pollLastKey(); }
+		public T removeLast() { return pollLastKey(); }
 		
 		@Override
 		public KeySet copy() { throw new UnsupportedOperationException(); }
@@ -1019,32 +1075,43 @@ public class Object2BooleanArrayMap<T> extends AbstractObject2BooleanMap<T> impl
 		}
 	}
 	
-	private class Values extends AbstractBooleanCollection {
+	private class Values extends AbstractBooleanCollection implements BooleanOrderedCollection {
 		@Override
-		public boolean contains(boolean e) {
-			return containsValue(e);
-		}
+		public boolean contains(boolean e) { return containsValue(e); }
 		
 		@Override
-		public boolean add(boolean o) {
-			throw new UnsupportedOperationException();
-		}
-
+		public boolean add(boolean o) { throw new UnsupportedOperationException(); }
 		@Override
-		public BooleanIterator iterator() {
-			return new ValueIterator();
-		}
-		
+		public BooleanIterator iterator() { return new ValueIterator(true); }
 		@Override
-		public int size() {
-			return Object2BooleanArrayMap.this.size();
-		}
-		
+		public int size() { return Object2BooleanArrayMap.this.size(); }
 		@Override
-		public void clear() {
-			Object2BooleanArrayMap.this.clear();
+		public void clear() { Object2BooleanArrayMap.this.clear(); }
+		@Override
+		public BooleanOrderedCollection reversed() { return new AbstractBooleanCollection.ReverseBooleanOrderedCollection(this, this::reverseIterator); }
+		private BooleanIterator reverseIterator() {
+			return new ValueIterator(false);
 		}
-		
+		@Override
+		public void addFirst(boolean e) { throw new UnsupportedOperationException(); }
+		@Override
+		public void addLast(boolean e) { throw new UnsupportedOperationException(); }
+		@Override
+		public boolean getFirstBoolean() { return firstBooleanValue(); }
+		@Override
+		public boolean removeFirstBoolean() {
+			boolean result = firstBooleanValue();
+			pollFirstKey();
+			return result; 
+		}
+		@Override
+		public boolean getLastBoolean() { return lastBooleanValue(); }
+		@Override
+		public boolean removeLastBoolean() {
+			boolean result = lastBooleanValue();
+			pollLastKey();
+			return result; 
+		}
 		@Override
 		public void forEach(BooleanConsumer action) {
 			Objects.requireNonNull(action);
@@ -1133,10 +1200,8 @@ public class Object2BooleanArrayMap<T> extends AbstractObject2BooleanMap<T> impl
 	private class FastEntryIterator extends MapIterator implements ObjectListIterator<Object2BooleanMap.Entry<T>> {
 		MapEntry entry = new MapEntry();
 		
-		public FastEntryIterator() {}
-		public FastEntryIterator(T from) {
-			index = findIndex(from);
-		}
+		public FastEntryIterator(boolean start) { super(start); }
+		public FastEntryIterator(T element) { super(element); }
 		
 		@Override
 		public Object2BooleanMap.Entry<T> next() {
@@ -1159,11 +1224,8 @@ public class Object2BooleanArrayMap<T> extends AbstractObject2BooleanMap<T> impl
 	private class EntryIterator extends MapIterator implements ObjectListIterator<Object2BooleanMap.Entry<T>> {
 		MapEntry entry = null;
 		
-		public EntryIterator() {}
-		public EntryIterator(T from) {
-			index = findIndex(from);
-			if(index == -1) throw new NoSuchElementException();
-		}
+		public EntryIterator(boolean start) { super(start); }
+		public EntryIterator(T element) { super(element); }
 		
 		@Override
 		public Object2BooleanMap.Entry<T> next() {
@@ -1190,11 +1252,8 @@ public class Object2BooleanArrayMap<T> extends AbstractObject2BooleanMap<T> impl
 	}
 	
 	private class KeyIterator extends MapIterator implements ObjectListIterator<T> {
-		public KeyIterator() {}
-		public KeyIterator(T element) {
-			index = findIndex(element);
-			if(index == -1) throw new NoSuchElementException();
-		}
+		public KeyIterator(boolean start) { super(start); }
+		public KeyIterator(T element) { super(element); }
 		
 		@Override
 		public T previous() {
@@ -1214,6 +1273,9 @@ public class Object2BooleanArrayMap<T> extends AbstractObject2BooleanMap<T> impl
 	}
 	
 	private class ValueIterator extends MapIterator implements BooleanListIterator {
+		public ValueIterator(boolean start) { super(start); }
+		public ValueIterator(T element) { super(element); }
+		
 		@Override
 		public boolean previousBoolean() {
 			return values[previousEntry()];
@@ -1232,23 +1294,37 @@ public class Object2BooleanArrayMap<T> extends AbstractObject2BooleanMap<T> impl
 	}
 	
 	private class MapIterator {
+		boolean forward;
 		int index;
 		int lastReturned = -1;
-
+		
+		MapIterator(boolean start) {
+			this.forward = start;
+			this.index = start ? 0 : size;
+		}
+		
+		MapIterator(T element) {
+			this.forward = true;
+			index = findIndex(element);
+			if(index == -1) throw new NoSuchElementException();
+		}
+		
 		public boolean hasNext() {
-			return index < size;
+			return forward ? index < size : index > 0;
 		}
 		
 		public boolean hasPrevious() {
-			return index > 0;
+			return forward ? index > 0 : index < size;
 		}
 		
 		public int nextIndex() {
-			return index;
+			if(forward) return index;
+			return size - index;
 		}
 		
 		public int previousIndex() {
-			return index-1;
+			if(forward) return index-1;
+			return (size - index)-1;
 		}
 		
 		public void remove() {
@@ -1261,26 +1337,42 @@ public class Object2BooleanArrayMap<T> extends AbstractObject2BooleanMap<T> impl
 		
 		public int previousEntry() {
 			if(!hasPrevious()) throw new NoSuchElementException();
-			index--;
-			return (lastReturned = index);
-		}
-		
-		public int nextEntry() {
-			if(!hasNext()) throw new NoSuchElementException();
+			if(forward) {
+				index--;
+				return (lastReturned = index);
+			}
 			lastReturned = index;
 			return index++;
 		}
 		
+		public int nextEntry() {
+			if(!hasNext()) throw new NoSuchElementException();
+			if(forward) {
+				lastReturned = index;
+				return index++;
+			}
+			index--;
+			return (lastReturned = index);
+		}
+		
 		public int skip(int amount) {
 			if(amount < 0) throw new IllegalStateException("Negative Numbers are not allowed");
+			return forward ? moveForward(amount) : moveBackwards(amount);
+		}
+		
+		public int back(int amount) {
+			if(amount < 0) throw new IllegalStateException("Negative Numbers are not allowed");
+			return forward ? moveBackwards(amount) : moveForward(amount);
+		}
+		
+		private int moveForward(int amount) {
 			int steps = Math.min(amount, size() - index);
 			index += steps;
 			if(steps > 0) lastReturned = Math.min(index-1, size()-1);
 			return steps;
 		}
 		
-		public int back(int amount) {
-			if(amount < 0) throw new IllegalStateException("Negative Numbers are not allowed");
+		private int moveBackwards(int amount) {
 			int steps = Math.min(amount, index);
 			index -= steps;
 			if(steps > 0) lastReturned = Math.min(index, size()-1);

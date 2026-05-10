@@ -2,8 +2,9 @@ package speiger.src.collections.chars.sets;
 
 import speiger.src.collections.chars.collections.CharBidirectionalIterator;
 import speiger.src.collections.chars.collections.CharSplititerator;
-import speiger.src.collections.chars.utils.CharSets;
 import speiger.src.collections.chars.utils.CharSplititerators;
+import speiger.src.collections.chars.sets.AbstractCharSet.ReversedCharOrderedSet;
+import speiger.src.collections.chars.utils.CharSets;
 
 /**
  * A Special Set Interface giving Access to some really usefull functions
@@ -49,6 +50,7 @@ public interface CharOrderedSet extends CharSet
 	
 	@Override
 	public CharBidirectionalIterator iterator();
+	public CharBidirectionalIterator reverseIterator();
 	
 	/**
 	 * A type Specific Iterator starting from a given key
@@ -69,23 +71,26 @@ public interface CharOrderedSet extends CharSet
 	 * A method to get the first element in the set
 	 * @return first element in the set
 	 */
-	public char firstChar();
+	public char getFirstChar();
 	/**
 	 * A method to get and remove the first element in the set
 	 * @return first element in the set
 	 */
-	public char pollFirstChar();
+	public char removeFirstChar();
 	/**
 	 * A method to get the last element in the set
 	 * @return last element in the set
 	 */
-	public char lastChar();
+	public char getLastChar();
 	/**
 	 * A method to get and remove the last element in the set
 	 * @return last element in the set
 	 */
-	public char pollLastChar();
+	public char removeLastChar();
 	
+	
+	public default CharOrderedSet reversed() { return new ReversedCharOrderedSet(this); }
+
 	/**
 	 * Creates a Wrapped OrderedSet that is Synchronized
 	 * @return a new OrderedSet that is synchronized

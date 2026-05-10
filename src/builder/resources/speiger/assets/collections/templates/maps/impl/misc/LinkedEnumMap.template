@@ -18,7 +18,7 @@ import speiger.src.collections.PACKAGE.maps.interfaces.ORDERED_MAP;
 import speiger.src.collections.PACKAGE.sets.ABSTRACT_SET;
 import speiger.src.collections.PACKAGE.sets.ORDERED_SET;
 import speiger.src.collections.VALUE_PACKAGE.collections.VALUE_ABSTRACT_COLLECTION;
-import speiger.src.collections.VALUE_PACKAGE.collections.VALUE_COLLECTION;
+import speiger.src.collections.VALUE_PACKAGE.collections.VALUE_ORDERED_COLLECTION;
 import speiger.src.collections.VALUE_PACKAGE.collections.VALUE_ITERATOR;
 #if !VALUE_OBJECT && !SAME_TYPE
 import speiger.src.collections.VALUE_PACKAGE.functions.VALUE_CONSUMER;
@@ -217,6 +217,28 @@ public class LINKED_ENUM_MAP KEY_ENUM_VALUE_GENERIC_TYPE extends ENUM_MAP KEY_VA
 	}
 	
 	@Override
+	public VALUE_TYPE putFirst(T key, VALUE_TYPE value) {
+		int index = key.ordinal();
+		if(isSet(index)) return values[index];
+		set(index);
+		values[index] = value;
+		onNodeAdded(index);
+		moveToFirstIndex(index);
+		return getDefaultReturnValue();
+	}
+	
+	@Override
+	public VALUE_TYPE putLast(T key, VALUE_TYPE value) {
+		int index = key.ordinal();
+		if(isSet(index)) return values[index];
+		set(index);
+		values[index] = value;
+		onNodeAdded(index);
+		moveToLastIndex(index);
+		return getDefaultReturnValue();
+	}
+	
+	@Override
 	public boolean moveToFirst(T key) {
 		int index = key.ordinal();
 		if(isSet(index)) {
@@ -313,6 +335,42 @@ public class LINKED_ENUM_MAP KEY_ENUM_VALUE_GENERIC_TYPE extends ENUM_MAP KEY_VA
 	}
 	
 	@Override
+	public MAP.Entry KEY_VALUE_GENERIC_TYPE firstEntry() {
+		if(size == 0) throw new NoSuchElementException();
+		return new BasicEntryKV_BRACES(keys[firstIndex], values[firstIndex]);
+	}
+	
+	@Override
+	public MAP.Entry KEY_VALUE_GENERIC_TYPE lastEntry() {
+		if(size == 0) throw new NoSuchElementException();
+		return new BasicEntryKV_BRACES(keys[lastIndex], values[lastIndex]);
+	}
+	
+	@Override
+	public MAP.Entry KEY_VALUE_GENERIC_TYPE pollFirstEntry() {
+		if(size == 0) throw new NoSuchElementException();
+		int pos = firstIndex;
+		firstIndex = (int)links[pos];
+		if(0 <= firstIndex) links[firstIndex] |= 0xFFFFFFFF00000000L;
+		BasicEntry KEY_VALUE_GENERIC_TYPE result = new BasicEntryKV_BRACES(keys[pos], values[pos]);
+		size--;
+		values[result.ENTRY_KEY().ordinal()] = EMPTY_VALUE;
+		return result;
+	}
+	
+	@Override
+	public MAP.Entry KEY_VALUE_GENERIC_TYPE pollLastEntry() {
+		if(size == 0) throw new NoSuchElementException();
+		int pos = lastIndex;
+		firstIndex = (int)links[pos];
+		if(0 <= firstIndex) links[firstIndex] |= 0xFFFFFFFF00000000L;
+		BasicEntry KEY_VALUE_GENERIC_TYPE result = new BasicEntryKV_BRACES(keys[pos], values[pos]);
+		size--;
+		values[result.ENTRY_KEY().ordinal()] = EMPTY_VALUE;
+		return result;
+	}
+	
+	@Override
 	public ObjectOrderedSet<MAP.Entry KEY_VALUE_GENERIC_TYPE> ENTRY_SET() {
 		if(entrySet == null) entrySet = new MapEntrySet();
 		return (ObjectOrderedSet<MAP.Entry KEY_VALUE_GENERIC_TYPE>)entrySet;
@@ -325,9 +383,9 @@ public class LINKED_ENUM_MAP KEY_ENUM_VALUE_GENERIC_TYPE extends ENUM_MAP KEY_VA
 	}
 	
 	@Override
-	public VALUE_COLLECTION VALUE_GENERIC_TYPE values() {
+	public VALUE_ORDERED_COLLECTION VALUE_GENERIC_TYPE values() {
 		if(valuesC == null) valuesC = new Values();
-		return valuesC;
+		return (VALUE_ORDERED_COLLECTION VALUE_GENERIC_TYPE)valuesC;
 	}
 	
 	@Override
@@ -431,24 +489,24 @@ public class LINKED_ENUM_MAP KEY_ENUM_VALUE_GENERIC_TYPE extends ENUM_MAP KEY_VA
 		}
 		
 		@Override
-		public MAP.Entry KEY_VALUE_GENERIC_TYPE first() {
+		public MAP.Entry KEY_VALUE_GENERIC_TYPE getFirst() {
 			return new BasicEntryKV_BRACES(FIRST_ENTRY_KEY(), FIRST_ENTRY_VALUE());
 		}
 		
 		@Override
-		public MAP.Entry KEY_VALUE_GENERIC_TYPE last() {
+		public MAP.Entry KEY_VALUE_GENERIC_TYPE getLast() {
 			return new BasicEntryKV_BRACES(LAST_ENTRY_KEY(), LAST_ENTRY_VALUE());
 		}
 		
 		@Override
-		public MAP.Entry KEY_VALUE_GENERIC_TYPE pollFirst() {
+		public MAP.Entry KEY_VALUE_GENERIC_TYPE removeFirst() {
 			BasicEntry KEY_VALUE_GENERIC_TYPE entry = new BasicEntryKV_BRACES(FIRST_ENTRY_KEY(), FIRST_ENTRY_VALUE());
 			POLL_FIRST_ENTRY_KEY();
 			return entry;
 		}
 		
 		@Override
-		public MAP.Entry KEY_VALUE_GENERIC_TYPE pollLast() {
+		public MAP.Entry KEY_VALUE_GENERIC_TYPE removeLast() {
 			BasicEntry KEY_VALUE_GENERIC_TYPE entry = new BasicEntryKV_BRACES(LAST_ENTRY_KEY(), LAST_ENTRY_VALUE());
 			POLL_LAST_ENTRY_KEY();
 			return entry;
@@ -456,7 +514,12 @@ public class LINKED_ENUM_MAP KEY_ENUM_VALUE_GENERIC_TYPE extends ENUM_MAP KEY_VA
 		
 		@Override
 		public ObjectBidirectionalIterator<MAP.Entry KEY_VALUE_GENERIC_TYPE> iterator() {
-			return new EntryIterator();
+			return new EntryIterator(true);
+		}
+		
+		@Override
+		public ObjectBidirectionalIterator<MAP.Entry KEY_VALUE_GENERIC_TYPE> reverseIterator() {
+			return new EntryIterator(false);
 		}
 		
 		@Override
@@ -466,7 +529,7 @@ public class LINKED_ENUM_MAP KEY_ENUM_VALUE_GENERIC_TYPE extends ENUM_MAP KEY_VA
 		
 		@Override
 		public ObjectBidirectionalIterator<MAP.Entry KEY_VALUE_GENERIC_TYPE> fastIterator() {
-			return new FastEntryIterator();
+			return new FastEntryIterator(true);
 		}
 		
 		@Override
@@ -593,7 +656,12 @@ public class LINKED_ENUM_MAP KEY_ENUM_VALUE_GENERIC_TYPE extends ENUM_MAP KEY_VA
 		
 		@Override
 		public LIST_ITERATOR KEY_GENERIC_TYPE iterator() {
-			return new KeyIterator();
+			return new KeyIterator(true);
+		}
+		
+		@Override
+		public LIST_ITERATOR KEY_GENERIC_TYPE reverseIterator() {
+			return new KeyIterator(false);
 		}
 		
 		@Override
@@ -614,22 +682,22 @@ public class LINKED_ENUM_MAP KEY_ENUM_VALUE_GENERIC_TYPE extends ENUM_MAP KEY_VA
 		}
 		
 		@Override
-		public T FIRST_KEY() {
+		public T GET_FIRST_KEY() {
 			return FIRST_ENTRY_KEY();
 		}
 		
 		@Override
-		public T POLL_FIRST_KEY() {
+		public T REMOVE_FIRST_KEY() {
 			return POLL_FIRST_ENTRY_KEY();
 		}
 
 		@Override
-		public T LAST_KEY() {
+		public T GET_LAST_KEY() {
 			return LAST_ENTRY_KEY();
 		}
 
 		@Override
-		public T POLL_LAST_KEY() {
+		public T REMOVE_LAST_KEY() {
 			return POLL_LAST_ENTRY_KEY();
 		}
 		
@@ -656,41 +724,50 @@ public class LINKED_ENUM_MAP KEY_ENUM_VALUE_GENERIC_TYPE extends ENUM_MAP KEY_VA
 #endif
 	}
 	
-	private class Values extends VALUE_ABSTRACT_COLLECTION VALUE_GENERIC_TYPE {
+	private class Values extends VALUE_ABSTRACT_COLLECTION VALUE_GENERIC_TYPE implements VALUE_ORDERED_COLLECTION VALUE_GENERIC_TYPE {
 #if VALUE_OBJECT
 		@Override
 		@Deprecated
-		public boolean contains(Object e) {
-			return containsValue(e);
-		}
+		public boolean contains(Object e) { return containsValue(e); }
 		
 #else
 		@Override
-		public boolean contains(VALUE_TYPE e) {
-			return containsValue(e);
-		}
+		public boolean contains(VALUE_TYPE e) { return containsValue(e); }
 		
 #endif
 		@Override
-		public boolean add(VALUE_TYPE o) {
-			throw new UnsupportedOperationException();
-		}
-
+		public boolean add(VALUE_TYPE o) { throw new UnsupportedOperationException(); }
 		@Override
-		public VALUE_ITERATOR VALUE_GENERIC_TYPE iterator() {
-			return new ValueIterator();
-		}
-		
+		public VALUE_ITERATOR VALUE_GENERIC_TYPE iterator() { return new ValueIterator(true); }
 		@Override
-		public int size() {
-			return LINKED_ENUM_MAP.this.size();
-		}
-		
+		public int size() { return LINKED_ENUM_MAP.this.size(); }
 		@Override
-		public void clear() {
-			LINKED_ENUM_MAP.this.clear();
+		public void clear() { LINKED_ENUM_MAP.this.clear(); }
+		@Override
+		public VALUE_ORDERED_COLLECTION VALUE_GENERIC_TYPE reversed() { return new VALUE_ABSTRACT_COLLECTION.VALUE_REVERSED_ORDERED_COLLECTIONVALUE_BRACES(this, this::reverseIterator); }
+		private VALUE_ITERATOR VALUE_GENERIC_TYPE reverseIterator() {
+			return new ValueIterator(false);
 		}
-		
+		@Override
+		public void addFirst(VALUE_TYPE e) { throw new UnsupportedOperationException(); }
+		@Override
+		public void addLast(VALUE_TYPE e) { throw new UnsupportedOperationException(); }
+		@Override
+		public VALUE_TYPE VALUE_GET_FIRST_KEY() { return FIRST_ENTRY_VALUE(); }
+		@Override
+		public VALUE_TYPE VALUE_REMOVE_FIRST_KEY() {
+			VALUE_TYPE result = FIRST_ENTRY_VALUE();
+			POLL_FIRST_ENTRY_KEY();
+			return result; 
+		}
+		@Override
+		public VALUE_TYPE VALUE_GET_LAST_KEY() { return LAST_ENTRY_VALUE(); }
+		@Override
+		public VALUE_TYPE VALUE_REMOVE_LAST_KEY() {
+			VALUE_TYPE result = LAST_ENTRY_VALUE();
+			POLL_LAST_ENTRY_KEY();
+			return result; 
+		}
 #if VALUE_OBJECT
 		@Override
 		public void forEach(Consumer VALUE_SUPER_GENERIC_TYPE action) {
@@ -715,7 +792,7 @@ public class LINKED_ENUM_MAP KEY_ENUM_VALUE_GENERIC_TYPE extends ENUM_MAP KEY_VA
 	private class FastEntryIterator extends MapIterator implements ObjectListIterator<MAP.Entry KEY_VALUE_GENERIC_TYPE> {
 		MapEntry entry = new MapEntry();
 		
-		public FastEntryIterator() {}
+		public FastEntryIterator(boolean start) { super(start); }
 		public FastEntryIterator(T from) {
 			super(from);
 		}
@@ -742,7 +819,7 @@ public class LINKED_ENUM_MAP KEY_ENUM_VALUE_GENERIC_TYPE extends ENUM_MAP KEY_VA
 	private class EntryIterator extends MapIterator implements ObjectListIterator<MAP.Entry KEY_VALUE_GENERIC_TYPE> {
 		MapEntry entry;
 		
-		public EntryIterator() {}
+		public EntryIterator(boolean start) { super(start); }
 		public EntryIterator(T from) {
 			super(from);
 		}
@@ -772,7 +849,7 @@ public class LINKED_ENUM_MAP KEY_ENUM_VALUE_GENERIC_TYPE extends ENUM_MAP KEY_VA
 	
 	private class KeyIterator extends MapIterator implements LIST_ITERATOR KEY_GENERIC_TYPE {
 		
-		public KeyIterator() {}
+		public KeyIterator(boolean start) { super(start); }
 		public KeyIterator(T from) {
 			super(from);
 		}
@@ -794,7 +871,7 @@ public class LINKED_ENUM_MAP KEY_ENUM_VALUE_GENERIC_TYPE extends ENUM_MAP KEY_VA
 	}
 	
 	private class ValueIterator extends MapIterator implements VALUE_LIST_ITERATOR VALUE_GENERIC_TYPE {
-		public ValueIterator() {}
+		public ValueIterator(boolean start) { super(start); }
 		
 		@Override
 		public VALUE_TYPE VALUE_PREVIOUS() {
@@ -815,16 +892,20 @@ public class LINKED_ENUM_MAP KEY_ENUM_VALUE_GENERIC_TYPE extends ENUM_MAP KEY_VA
 	}
 	
 	private class MapIterator {
+		boolean forward;
 		int previous = -1;
 		int next = -1;
 		int current = -1;
 		int index = 0;
 		
-		MapIterator() {
-			next = firstIndex;
+		MapIterator(boolean start) {
+			this.forward = start;
+			if(start) next = firstIndex;
+			else previous = lastIndex;
 		}
 		
 		MapIterator(T from) {
+			this.forward = true;
 			previous = from.ordinal() - 1;
 			index = from.ordinal();
 			next = from.ordinal();
@@ -832,11 +913,11 @@ public class LINKED_ENUM_MAP KEY_ENUM_VALUE_GENERIC_TYPE extends ENUM_MAP KEY_VA
 		}
 		
 		public boolean hasNext() {
-			return next != -1;
+			return (forward ? next : previous) != -1;
 		}
 
 		public boolean hasPrevious() {
-			return previous != -1;
+			return (forward ? previous : next) != -1;
 		}
 		
 		public int nextIndex() {
@@ -871,20 +952,30 @@ public class LINKED_ENUM_MAP KEY_ENUM_VALUE_GENERIC_TYPE extends ENUM_MAP KEY_VA
 		
 		public int previousEntry() {
 			if(!hasPrevious()) throw new NoSuchElementException();
-			current = previous;
-			previous = (int)(links[current] >> 32);
-			next = current;
+			if(forward) moveBackwards();
+			else moveForwards();
 			if(index >= 0) index--;
 			return current;
 		}
 		
 		public int nextEntry() {
 			if(!hasNext()) throw new NoSuchElementException();
+			if(forward) moveForwards();
+			else moveBackwards();
+			if(index >= 0) index++;
+			return current;
+		}
+		
+		private void moveBackwards() {
+			current = previous;
+			previous = (int)(links[current] >> 32);
+			next = current;
+		}
+		
+		private void moveForwards() {
 			current = next;
 			next = (int)(links[current]);
 			previous = current;
-			if(index >= 0) index++;
-			return current;
 		}
 		
 		private void ensureIndexKnown() {

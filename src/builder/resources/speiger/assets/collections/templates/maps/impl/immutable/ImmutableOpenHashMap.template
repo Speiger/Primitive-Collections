@@ -65,7 +65,7 @@ import speiger.src.collections.VALUE_PACKAGE.functions.function.VALUE_PREDICATE;
 import speiger.src.collections.PACKAGE.sets.ABSTRACT_SET;
 #endif
 import speiger.src.collections.VALUE_PACKAGE.collections.VALUE_ABSTRACT_COLLECTION;
-import speiger.src.collections.VALUE_PACKAGE.collections.VALUE_COLLECTION;
+import speiger.src.collections.VALUE_PACKAGE.collections.VALUE_ORDERED_COLLECTION;
 import speiger.src.collections.VALUE_PACKAGE.collections.VALUE_ITERATOR;
 import speiger.src.collections.VALUE_PACKAGE.functions.VALUE_SUPPLIER;
 #if !SAME_TYPE
@@ -119,7 +119,7 @@ public class IMMUTABLE_HASH_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_
 	/** KeySet cache */
 	protected transient ORDERED_SET KEY_GENERIC_TYPE keySet;
 	/** Values cache */
-	protected transient VALUE_COLLECTION VALUE_GENERIC_TYPE valuesC;
+	protected transient VALUE_ORDERED_COLLECTION VALUE_GENERIC_TYPE valuesC;
 	
 	/** Amount of Elements stored in the HashMap */
 	protected int size;
@@ -320,6 +320,10 @@ public class IMMUTABLE_HASH_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_
 	@Override
 	public VALUE_TYPE putAndMoveToLast(KEY_TYPE key, VALUE_TYPE value) { throw new UnsupportedOperationException(); }
 	@Override
+	public VALUE_TYPE putFirst(KEY_TYPE key, VALUE_TYPE value) { throw new UnsupportedOperationException(); }
+	@Override
+	public VALUE_TYPE putLast(KEY_TYPE key, VALUE_TYPE value) { throw new UnsupportedOperationException(); }
+	@Override
 	public boolean moveToFirst(KEY_TYPE key) { throw new UnsupportedOperationException(); }
 	@Override
 	public boolean moveToLast(KEY_TYPE key) { throw new UnsupportedOperationException(); }
@@ -441,7 +445,24 @@ public class IMMUTABLE_HASH_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_
 	public VALUE_TYPE LAST_ENTRY_VALUE() {
 		if(size == 0) throw new NoSuchElementException();
 		return values[lastIndex];
-	}	
+	}
+	
+	@Override
+	public MAP.Entry KEY_VALUE_GENERIC_TYPE firstEntry() {
+		if(size == 0) throw new NoSuchElementException();
+		return new BasicEntryKV_BRACES(keys[firstIndex], values[firstIndex]);
+	}
+	
+	@Override
+	public MAP.Entry KEY_VALUE_GENERIC_TYPE lastEntry() {
+		if(size == 0) throw new NoSuchElementException();
+		return new BasicEntryKV_BRACES(keys[lastIndex], values[lastIndex]);
+	}
+	
+	@Override
+	public MAP.Entry KEY_VALUE_GENERIC_TYPE pollFirstEntry() { throw new UnsupportedOperationException(); }
+	@Override
+	public MAP.Entry KEY_VALUE_GENERIC_TYPE pollLastEntry() { throw new UnsupportedOperationException(); }
 
 	@Override
 	public ObjectOrderedSet<MAP.Entry KEY_VALUE_GENERIC_TYPE> ENTRY_SET() {
@@ -456,7 +477,7 @@ public class IMMUTABLE_HASH_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_
 	}
 	
 	@Override
-	public VALUE_COLLECTION VALUE_GENERIC_TYPE values() {
+	public VALUE_ORDERED_COLLECTION VALUE_GENERIC_TYPE values() {
 		if(valuesC == null) valuesC = new Values();
 		return valuesC;
 	}
@@ -621,24 +642,29 @@ public class IMMUTABLE_HASH_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_
 		public boolean moveToLast(MAP.Entry KEY_VALUE_GENERIC_TYPE o) { throw new UnsupportedOperationException(); }
 		
 		@Override
-		public MAP.Entry KEY_VALUE_GENERIC_TYPE first() {
+		public MAP.Entry KEY_VALUE_GENERIC_TYPE getFirst() {
 			return new BasicEntryKV_BRACES(FIRST_ENTRY_KEY(), FIRST_ENTRY_VALUE());
 		}
 		
 		@Override
-		public MAP.Entry KEY_VALUE_GENERIC_TYPE last() {
+		public MAP.Entry KEY_VALUE_GENERIC_TYPE getLast() {
 			return new BasicEntryKV_BRACES(LAST_ENTRY_KEY(), LAST_ENTRY_VALUE());
 		}
 		
 		@Override
-		public MAP.Entry KEY_VALUE_GENERIC_TYPE pollFirst() { throw new UnsupportedOperationException(); }
+		public MAP.Entry KEY_VALUE_GENERIC_TYPE removeFirst() { throw new UnsupportedOperationException(); }
 		
 		@Override
-		public MAP.Entry KEY_VALUE_GENERIC_TYPE pollLast() { throw new UnsupportedOperationException(); }
+		public MAP.Entry KEY_VALUE_GENERIC_TYPE removeLast() { throw new UnsupportedOperationException(); }
 		
 		@Override
 		public ObjectBidirectionalIterator<MAP.Entry KEY_VALUE_GENERIC_TYPE> iterator() {
-			return new EntryIterator();
+			return new EntryIterator(true);
+		}
+		
+		@Override
+		public ObjectBidirectionalIterator<MAP.Entry KEY_VALUE_GENERIC_TYPE> reverseIterator() {
+			return new EntryIterator(false);
 		}
 		
 		@Override
@@ -648,7 +674,7 @@ public class IMMUTABLE_HASH_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_
 		
 		@Override
 		public ObjectBidirectionalIterator<MAP.Entry KEY_VALUE_GENERIC_TYPE> fastIterator() {
-			return new FastEntryIterator();
+			return new FastEntryIterator(true);
 		}
 		
 		@Override
@@ -875,7 +901,12 @@ public class IMMUTABLE_HASH_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_
 		
 		@Override
 		public LIST_ITERATOR KEY_GENERIC_TYPE iterator() {
-			return new KeyIterator();
+			return new KeyIterator(true);
+		}
+		
+		@Override
+		public LIST_ITERATOR KEY_GENERIC_TYPE reverseIterator() {
+			return new KeyIterator(false);
 		}
 		
 		@Override
@@ -895,20 +926,20 @@ public class IMMUTABLE_HASH_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_
 		public void clear() { throw new UnsupportedOperationException(); }
 		
 		@Override
-		public KEY_TYPE FIRST_KEY() {
+		public KEY_TYPE GET_FIRST_KEY() {
 			return FIRST_ENTRY_KEY();
 		}
 		
 		@Override
-		public KEY_TYPE POLL_FIRST_KEY() { throw new UnsupportedOperationException(); }
+		public KEY_TYPE REMOVE_FIRST_KEY() { throw new UnsupportedOperationException(); }
 
 		@Override
-		public KEY_TYPE LAST_KEY() {
+		public KEY_TYPE GET_LAST_KEY() {
 			return LAST_ENTRY_KEY();
 		}
 
 		@Override
-		public KEY_TYPE POLL_LAST_KEY() { throw new UnsupportedOperationException(); }
+		public KEY_TYPE REMOVE_LAST_KEY() { throw new UnsupportedOperationException(); }
 		
 		@Override
 		public void forEach(CONSUMER KEY_SUPER_GENERIC_TYPE action) {
@@ -1050,39 +1081,42 @@ public class IMMUTABLE_HASH_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_
 		}
 	}
 	
-	private class Values extends VALUE_ABSTRACT_COLLECTION VALUE_GENERIC_TYPE {
+	private class Values extends VALUE_ABSTRACT_COLLECTION VALUE_GENERIC_TYPE implements VALUE_ORDERED_COLLECTION VALUE_GENERIC_TYPE {
 #if VALUE_OBJECT
 		@Override
 		@Deprecated
-		public boolean contains(Object e) {
-			return containsValue(e);
-		}
+		public boolean contains(Object e) { return containsValue(e); }
 		
 #else
 		@Override
-		public boolean contains(VALUE_TYPE e) {
-			return containsValue(e);
-		}
+		public boolean contains(VALUE_TYPE e) { return containsValue(e); }
 		
 #endif
 		@Override
-		public boolean add(VALUE_TYPE o) {
-			throw new UnsupportedOperationException();
-		}
-
+		public boolean add(VALUE_TYPE o) { throw new UnsupportedOperationException(); }
 		@Override
-		public VALUE_ITERATOR VALUE_GENERIC_TYPE iterator() {
-			return new ValueIterator();
-		}
-		
+		public VALUE_ITERATOR VALUE_GENERIC_TYPE iterator() { return new ValueIterator(true); }
 		@Override
-		public int size() {
-			return IMMUTABLE_HASH_MAP.this.size();
-		}
-		
+		public int size() { return IMMUTABLE_HASH_MAP.this.size(); }
 		@Override
 		public void clear() { throw new UnsupportedOperationException(); }
-		
+		@Override
+		public VALUE_ORDERED_COLLECTION VALUE_GENERIC_TYPE reversed() { return new VALUE_ABSTRACT_COLLECTION.VALUE_REVERSED_ORDERED_COLLECTIONVALUE_BRACES(this, this::reverseIterator); }
+		private VALUE_ITERATOR VALUE_GENERIC_TYPE reverseIterator() {
+			return new ValueIterator(false);
+		}
+		@Override
+		public void addFirst(VALUE_TYPE e) { throw new UnsupportedOperationException(); }
+		@Override
+		public void addLast(VALUE_TYPE e) { throw new UnsupportedOperationException(); }
+		@Override
+		public VALUE_TYPE VALUE_GET_FIRST_KEY() { return FIRST_ENTRY_VALUE(); }
+		@Override
+		public VALUE_TYPE VALUE_REMOVE_FIRST_KEY() { throw new UnsupportedOperationException(); }
+		@Override
+		public VALUE_TYPE VALUE_GET_LAST_KEY() { return LAST_ENTRY_VALUE(); }
+		@Override
+		public VALUE_TYPE VALUE_REMOVE_LAST_KEY() { throw new UnsupportedOperationException(); }
 		@Override
 		public void forEach(VALUE_CONSUMER VALUE_SUPER_GENERIC_TYPE action) {
 			int index = firstIndex;
@@ -1226,7 +1260,7 @@ public class IMMUTABLE_HASH_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_
 	private class FastEntryIterator extends MapIterator implements ObjectListIterator<MAP.Entry KEY_VALUE_GENERIC_TYPE> {
 		MapEntry entry = new MapEntry();
 		
-		public FastEntryIterator() {}
+		public FastEntryIterator(boolean start) { super(start); }
 		public FastEntryIterator(KEY_TYPE from) {
 			super(from);
 		}
@@ -1252,7 +1286,7 @@ public class IMMUTABLE_HASH_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_
 	
 	private class EntryIterator extends MapIterator implements ObjectListIterator<MAP.Entry KEY_VALUE_GENERIC_TYPE> {
 		
-		public EntryIterator() {}
+		public EntryIterator(boolean start) { super(start); }
 		public EntryIterator(KEY_TYPE from) {
 			super(from);
 		}
@@ -1279,7 +1313,7 @@ public class IMMUTABLE_HASH_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_
 	
 	private class KeyIterator extends MapIterator implements LIST_ITERATOR KEY_GENERIC_TYPE {
 		
-		public KeyIterator() {}
+		public KeyIterator(boolean start) { super(start); }
 		public KeyIterator(KEY_TYPE from) {
 			super(from);
 		}
@@ -1301,7 +1335,7 @@ public class IMMUTABLE_HASH_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_
 	}
 	
 	private class ValueIterator extends MapIterator implements VALUE_LIST_ITERATOR VALUE_GENERIC_TYPE {
-		public ValueIterator() {}
+		public ValueIterator(boolean start) { super(start); }
 		
 		@Override
 		public VALUE_TYPE VALUE_PREVIOUS() {
@@ -1322,13 +1356,16 @@ public class IMMUTABLE_HASH_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_
 	}
 	
 	private class MapIterator {
+		boolean forward;
 		int previous = -1;
 		int next = -1;
 		int current = -1;
 		int index = 0;
 		
-		MapIterator() {
-			next = firstIndex;
+		MapIterator(boolean start) {
+			this.forward = start;
+			if(start) next = firstIndex;
+			else previous = lastIndex;
 		}
 		
 		MapIterator(KEY_TYPE from) {
@@ -1359,11 +1396,11 @@ public class IMMUTABLE_HASH_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_
 		}
 		
 		public boolean hasNext() {
-			return next != -1;
+			return (forward ? next : previous) != -1;
 		}
 
 		public boolean hasPrevious() {
-			return previous != -1;
+			return (forward ? previous : next) != -1;
 		}
 		
 		public int nextIndex() {
@@ -1380,20 +1417,30 @@ public class IMMUTABLE_HASH_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_
 		
 		public int previousEntry() {
 			if(!hasPrevious()) throw new NoSuchElementException();
-			current = previous;
-			previous = (int)(links[current] >> 32);
-			next = current;
+			if(forward) moveBackwards();
+			else moveForwards();
 			if(index >= 0) index--;
 			return current;
 		}
 		
 		public int nextEntry() {
 			if(!hasNext()) throw new NoSuchElementException();
+			if(forward) moveForwards();
+			else moveBackwards();
+			if(index >= 0) index++;
+			return current;
+		}
+		
+		private void moveBackwards() {
+			current = previous;
+			previous = (int)(links[current] >> 32);
+			next = current;
+		}
+		
+		private void moveForwards() {
 			current = next;
 			next = (int)(links[current]);
 			previous = current;
-			if(index >= 0) index++;
-			return current;
 		}
 		
 		private void ensureIndexKnown() {

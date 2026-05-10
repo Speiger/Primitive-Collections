@@ -6,6 +6,7 @@ import java.util.Objects;
 import java.util.Comparator;
 
 import speiger.src.collections.booleans.collections.BooleanCollection;
+import speiger.src.collections.booleans.collections.BooleanOrderedCollection;
 import speiger.src.collections.booleans.collections.BooleanSplititerator;
 import speiger.src.collections.ints.functions.consumer.IntBooleanConsumer;
 import speiger.src.collections.booleans.functions.BooleanComparator;
@@ -17,7 +18,7 @@ import speiger.src.collections.booleans.utils.BooleanSplititerators;
 /**
  * A Type Specific List interface that reduces boxing/unboxing and adds a couple extra quality of life features
  */
-public interface BooleanList extends BooleanCollection, List<Boolean>
+public interface BooleanList extends BooleanOrderedCollection, List<Boolean>
 {
 	/**
 	 * A Type-Specific add Function to reduce (un)boxing
@@ -79,6 +80,24 @@ public interface BooleanList extends BooleanCollection, List<Boolean>
 	 * @return true if the list was modified
 	 */
 	public boolean addAll(int index, BooleanList c);
+	
+	/**
+	 * A method to add an element to the start of a list
+	 * @param e that should be added at the start.
+	 */
+	@Override
+	public default void addFirst(boolean e) { 
+		add(0, e);
+	}
+	
+	/**
+	 * A method to add an element to the end of a list
+	 * @param e that should be added at the end.
+	 */
+	@Override
+	public default void addLast(boolean e) {
+		add(e);
+	}
 	
 	/**
 	 * Helper method that returns the first element of a List.
@@ -392,9 +411,9 @@ public interface BooleanList extends BooleanCollection, List<Boolean>
 	@Override
 	@Deprecated
 	public default boolean add(Boolean e) {
-		return BooleanCollection.super.add(e);
+		return BooleanOrderedCollection.super.add(e);
 	}
-	
+
 	/** {@inheritDoc}
 	 * <p>This default implementation delegates to the corresponding type-specific function.
 	 * @deprecated Please use the corresponding type-specific function instead. 
@@ -442,7 +461,7 @@ public interface BooleanList extends BooleanCollection, List<Boolean>
 	@Override
 	@Deprecated
 	public default boolean contains(Object o) {
-		return BooleanCollection.super.contains(o);
+		return BooleanOrderedCollection.super.contains(o);
 	}
 	
 	/** {@inheritDoc}
@@ -452,7 +471,7 @@ public interface BooleanList extends BooleanCollection, List<Boolean>
 	@Override
 	@Deprecated
 	public default boolean remove(Object o) {
-		return BooleanCollection.super.remove(o);
+		return BooleanOrderedCollection.super.remove(o);
 	}
 	
 	/** {@inheritDoc}

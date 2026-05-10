@@ -96,7 +96,7 @@ public interface Object2IntMap<T> extends Map<T, Integer>, ToIntFunction<T>
 	 * @return the last present value or default return	value.
 	 */
 	public default Integer put(Map.Entry<T, Integer> entry) {
-		return put(entry.getKey(), entry.getValue());
+		return put(entry.getKey(), entry.getValue().intValue());
 	}
 
 	/**

@@ -30,7 +30,7 @@ public class DoubleLists
 	 * Returns a Immutable EmptyList instance that is automatically casted.
 	 * @return an empty list
 	 */
-	public static EmptyList empty() {
+	public static DoubleList empty() {
 		return EMPTY;
 	}
 	

@@ -1,9 +1,11 @@
 package speiger.src.collections.doubles.collections;
 
 import java.util.Collection;
+import java.util.function.Supplier;
 import java.util.Objects;
 import java.util.AbstractCollection;
 
+import speiger.src.collections.doubles.lists.DoubleListIterator;
 import speiger.src.collections.doubles.functions.DoubleConsumer;
 import speiger.src.collections.doubles.utils.DoubleIterators;
 import speiger.src.collections.doubles.utils.DoubleArrays;
@@ -248,5 +250,69 @@ public abstract class AbstractDoubleCollection extends AbstractCollection<Double
 		DoubleIterators.unwrap(a, iterator());
 		if (a.length > size()) a[size()] = 0D;
 		return a;
+	}
+
+	public static class ReverseDoubleOrderedCollection extends AbstractDoubleCollection implements DoubleOrderedCollection {
+		DoubleOrderedCollection collection;
+		Supplier<DoubleIterator> reverseIterator;
+		
+		public ReverseDoubleOrderedCollection(DoubleOrderedCollection collection, Supplier<DoubleIterator> reverseIterator) {
+			this.collection = collection;
+			this.reverseIterator = reverseIterator;
+		}
+		
+		@Override
+		public boolean add(double o) { return collection.add(o); }
+		@Override
+		public DoubleOrderedCollection reversed() { return collection; }
+		@Override
+		public void addFirst(double e) { collection.addLast(e); }
+		@Override
+		public void addLast(double e) { collection.addFirst(e); }
+		@Override
+		public boolean contains(double e) { return collection.contains(e); }
+		@Override
+		public boolean remDouble(double e) { return collection.remDouble(e); }
+		@Override
+		public void clear() { collection.clear(); }
+		@Override
+		public double getFirstDouble() { return collection.getLastDouble(); }
+		@Override
+		public double removeFirstDouble() { return collection.removeLastDouble(); }
+		@Override
+		public double getLastDouble() { return collection.getFirstDouble(); }
+		@Override
+		public double removeLastDouble() { return collection.removeFirstDouble(); }
+		@Override
+		public DoubleIterator iterator() { return reverseIterator.get(); }
+		@Override
+		public int size() { return collection.size(); }
+	}
+	
+	public static class ReverseBiIterator implements DoubleListIterator {
+		DoubleListIterator it;
+		
+		public ReverseBiIterator(DoubleListIterator it) {
+			this.it = it;
+		}
+		
+		@Override
+		public double nextDouble() { return it.previousDouble(); }
+		@Override
+		public boolean hasNext() { return it.hasPrevious(); }
+		@Override
+		public boolean hasPrevious() { return it.hasNext(); }
+		@Override
+		public double previousDouble() { return it.nextDouble(); }
+		@Override
+		public void remove() { it.remove(); }
+		@Override
+		public int nextIndex() { return it.previousIndex(); }
+		@Override
+		public int previousIndex() { return it.nextIndex(); }
+		@Override
+		public void set(double e) { it.set(e); }
+		@Override
+		public void add(double e) { it.add(e); }
 	}
 }

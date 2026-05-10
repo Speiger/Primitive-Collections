@@ -9,6 +9,11 @@ import speiger.src.collections.floats.functions.consumer.FloatObjectConsumer;
 import speiger.src.collections.floats.functions.function.FloatFunction;
 import speiger.src.collections.floats.functions.function.FloatObjectUnaryOperator;
 import speiger.src.collections.floats.maps.interfaces.Float2ObjectMap;
+import speiger.src.collections.floats.maps.interfaces.Float2ObjectOrderedMap;
+import speiger.src.collections.floats.sets.FloatOrderedSet;
+import speiger.src.collections.objects.collections.ObjectOrderedCollection;
+import speiger.src.collections.objects.sets.AbstractObjectSet;
+import speiger.src.collections.objects.sets.ObjectOrderedSet;
 import speiger.src.collections.floats.sets.AbstractFloatSet;
 import speiger.src.collections.floats.sets.FloatSet;
 import speiger.src.collections.floats.utils.maps.Float2ObjectMaps;
@@ -85,7 +90,7 @@ public abstract class AbstractFloat2ObjectMap<V> extends AbstractMap<Float, V> i
 	public void putAll(Float[] keys, V[] values, int offset, int size) {
 		SanityChecks.checkArrayCapacity(keys.length, offset, size);
 		SanityChecks.checkArrayCapacity(values.length, offset, size);
-		for(int i = 0;i<size;i++) put(keys[i], values[i]);		
+		for(int i = 0;i<size;i++) put(keys[i].floatValue(), values[i]);		
 	}
 	
 	@Override
@@ -366,6 +371,104 @@ public abstract class AbstractFloat2ObjectMap<V> extends AbstractMap<Float, V> i
 		while(iter.hasNext()) hash += iter.next().hashCode();
 		return hash;
 	}
+	
+	public static class ReversedFloat2ObjectOrderedMap<V> extends AbstractFloat2ObjectMap<V> implements Float2ObjectOrderedMap<V> {
+		Float2ObjectOrderedMap<V> map;
+		
+		public ReversedFloat2ObjectOrderedMap(Float2ObjectOrderedMap<V> map) {
+			this.map = map;
+		}
+		@Override
+		public AbstractFloat2ObjectMap<V> setDefaultReturnValue(V v) {
+			map.setDefaultReturnValue(v);
+			return this;
+		}
+		@Override
+		public V getDefaultReturnValue() { return map.getDefaultReturnValue(); }
+		@Override
+		public Float2ObjectOrderedMap<V> copy() { throw new UnsupportedOperationException(); }
+		@Override
+		public V put(float key, V value) { return map.put(key, value); }
+		@Override
+		public V putIfAbsent(float key, V value) { return map.putIfAbsent(key, value); }
+		@Override
+		public V remove(float key) { return map.remove(key); }
+		@Override
+		public boolean remove(float key, V value) { return map.remove(key, value); }
+		@Override
+		public V removeOrDefault(float key, V defaultValue) { return map.removeOrDefault(key, defaultValue); }
+		@Override
+		public boolean containsKey(float key) { return map.containsKey(key); }
+		@Override
+		public boolean containsValue(Object value) { return map.containsValue(value); }
+		@Override
+		public boolean replace(float key, V oldValue, V newValue) { return map.replace(key, oldValue, newValue); }
+		@Override
+		public V replace(float key, V value) { return map.replace(key, value); }
+		@Override
+		public void replaceObjects(Float2ObjectMap<V> m) { map.replaceObjects(m); }
+		@Override
+		public void replaceObjects(FloatObjectUnaryOperator<V> mappingFunction) { map.replaceObjects(mappingFunction); }
+		@Override
+		public V compute(float key, FloatObjectUnaryOperator<V> mappingFunction) { return map.compute(key, mappingFunction); }
+		@Override
+		public V computeIfAbsent(float key, FloatFunction<V> mappingFunction) { return map.computeIfAbsent(key, mappingFunction); }
+		@Override
+		public V supplyIfAbsent(float key, ObjectSupplier<V> valueProvider) { return map.supplyIfAbsent(key, valueProvider); }
+		@Override
+		public V computeIfPresent(float key, FloatObjectUnaryOperator<V> mappingFunction) { return map.computeIfPresent(key, mappingFunction); }
+		@Override
+		public V merge(float key, V value, ObjectObjectUnaryOperator<V, V> mappingFunction) { return map.merge(key, value, mappingFunction); }
+		@Override
+		public V getOrDefault(float key, V defaultValue) { return map.getOrDefault(key, defaultValue); }
+		@Override
+		public V get(float key) { return map.get(key); }
+		@Override
+		public V putAndMoveToFirst(float key, V value) { return map.putAndMoveToLast(key, value); }
+		@Override
+		public V putAndMoveToLast(float key, V value) { return map.putAndMoveToFirst(key, value); }
+		@Override
+		public V putFirst(float key, V value) { return map.putLast(key, value); }
+		@Override
+		public V putLast(float key, V value) { return map.putFirst(key, value); }
+		@Override
+		public boolean moveToFirst(float key) { return map.moveToLast(key); }
+		@Override
+		public boolean moveToLast(float key) { return map.moveToFirst(key); }
+		@Override
+		public V getAndMoveToFirst(float key) { return map.getAndMoveToLast(key); }
+		@Override
+		public V getAndMoveToLast(float key) { return map.getAndMoveToFirst(key); }
+		@Override
+		public float firstFloatKey() { return map.lastFloatKey(); }
+		@Override
+		public float pollFirstFloatKey() { return map.pollLastFloatKey(); }
+		@Override
+		public float lastFloatKey() { return map.firstFloatKey(); }
+		@Override
+		public float pollLastFloatKey() { return map.pollFirstFloatKey(); }
+		@Override
+		public V firstValue() { return map.lastValue(); }
+		@Override
+		public V lastValue() { return map.firstValue(); }
+		@Override
+		public Float2ObjectMap.Entry<V> firstEntry() { return map.lastEntry(); }
+		@Override
+		public Float2ObjectMap.Entry<V> lastEntry() { return map.firstEntry(); }
+		@Override
+		public Float2ObjectMap.Entry<V> pollFirstEntry() { return map.pollLastEntry(); }
+		@Override
+		public Float2ObjectMap.Entry<V> pollLastEntry() { return map.pollFirstEntry(); }
+		@Override
+		public ObjectOrderedSet<Float2ObjectMap.Entry<V>> float2ObjectEntrySet() { return new AbstractObjectSet.ReversedObjectOrderedSet<>(map.float2ObjectEntrySet()); }
+		@Override
+		public FloatOrderedSet keySet() { return new AbstractFloatSet.ReversedFloatOrderedSet(map.keySet()); }
+		@Override
+		public ObjectOrderedCollection<V> values() { return map.values().reversed(); }
+		@Override
+		public Float2ObjectOrderedMap<V> reversed() { return map; }
+	}
+
 	
 	/**
 	 * A Simple Type Specific Entry class to reduce boxing/unboxing

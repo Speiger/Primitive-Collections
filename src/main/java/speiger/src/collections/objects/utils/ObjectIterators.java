@@ -45,7 +45,7 @@ public class ObjectIterators
 	 * @param <T> the keyType of elements maintained by this Collection
 	 * @return an empty iterator
 	 */
-	public static <T> EmptyIterator<T> empty() {
+	public static <T> ObjectListIterator<T> empty() {
 		return (EmptyIterator<T>)EMPTY;
 	}
 	
@@ -495,7 +495,7 @@ public class ObjectIterators
 	 * @param <T> the keyType of array that the operation should be applied
 	 * @return a Iterator that is wrapping a array.
 	 */
-	public static <T> ArrayIterator<T> wrap(T... a) {
+	public static <T> ObjectIterator<T> wrap(T... a) {
 		return wrap(a, 0, a.length);
 	}
 	
@@ -507,7 +507,7 @@ public class ObjectIterators
 	 * @param <T> the keyType of array that the operation should be applied
 	 * @return a Iterator that is wrapping a array.
 	 */
-	public static <T> ArrayIterator<T> wrap(T[] a, int start, int end) {
+	public static <T> ObjectIterator<T> wrap(T[] a, int start, int end) {
 		return new ArrayIterator<>(a, start, end);
 	}
 	

@@ -29,6 +29,7 @@ import speiger.src.collections.ints.sets.IntOrderedSet;
 import speiger.src.collections.ints.sets.IntSet;
 import speiger.src.collections.ints.utils.IntSets;
 import speiger.src.collections.chars.collections.CharCollection;
+import speiger.src.collections.chars.collections.CharOrderedCollection;
 import speiger.src.collections.chars.functions.function.CharCharUnaryOperator;
 import speiger.src.collections.chars.functions.CharSupplier;
 import speiger.src.collections.chars.utils.CharCollections;
@@ -439,6 +440,10 @@ public class Int2CharMaps
 		@Override
 		public char putAndMoveToLast(int key, char value) { throw new UnsupportedOperationException(); }
 		@Override
+		public char putFirst(int key, char value) { throw new UnsupportedOperationException(); }
+		@Override
+		public char putLast(int key, char value) { throw new UnsupportedOperationException(); }
+		@Override
 		public boolean moveToFirst(int key) { throw new UnsupportedOperationException(); }
 		@Override
 		public boolean moveToLast(int key) { throw new UnsupportedOperationException(); }
@@ -459,13 +464,25 @@ public class Int2CharMaps
 		@Override
 		public char lastCharValue() { return map.lastCharValue(); }
 		@Override
+		public Int2CharMap.Entry firstEntry() { return map.firstEntry(); }
+		@Override
+		public Int2CharMap.Entry lastEntry() { return map.lastEntry(); }
+		@Override
+		public Int2CharMap.Entry pollFirstEntry() { throw new UnsupportedOperationException(); }
+		@Override
+		public Int2CharMap.Entry pollLastEntry() { throw new UnsupportedOperationException(); }
+		@Override
 		public Int2CharOrderedMap copy() { return map.copy(); }
 		@Override
 		public IntOrderedSet keySet() { 
 			if(keys == null) keys = IntSets.unmodifiable(map.keySet()); 
 			return (IntOrderedSet)keys;
 		}
-				
+		@Override
+		public CharOrderedCollection values() {
+			if(values == null) values = CharCollections.unmodifiable(map.values());
+			return (CharOrderedCollection)values;
+		}
 		@Override
 		public ObjectOrderedSet<Int2CharMap.Entry> int2CharEntrySet() {
 			if(entrySet == null) entrySet = new UnmodifyableOrderedEntrySet(map.int2CharEntrySet());
@@ -617,15 +634,17 @@ public class Int2CharMaps
 		@Override
 		public ObjectBidirectionalIterator<Int2CharMap.Entry> iterator() { return ObjectIterators.unmodifiable(set.iterator()); }
 		@Override
+		public ObjectBidirectionalIterator<Int2CharMap.Entry> reverseIterator() { return ObjectIterators.unmodifiable(set.reverseIterator()); }
+		@Override
 		public ObjectBidirectionalIterator<Int2CharMap.Entry> iterator(Int2CharMap.Entry fromElement) { return ObjectIterators.unmodifiable(set.iterator(fromElement)); }
 		@Override
-		public Int2CharMap.Entry first() { return set.first(); }
+		public Int2CharMap.Entry getFirst() { return set.getFirst(); }
 		@Override
-		public Int2CharMap.Entry pollFirst() { throw new UnsupportedOperationException(); }
+		public Int2CharMap.Entry removeFirst() { throw new UnsupportedOperationException(); }
 		@Override
-		public Int2CharMap.Entry last() { return set.last(); }
+		public Int2CharMap.Entry getLast() { return set.getLast(); }
 		@Override
-		public Int2CharMap.Entry pollLast() { throw new UnsupportedOperationException(); }
+		public Int2CharMap.Entry removeLast() { throw new UnsupportedOperationException(); }
 	}
 	
 	/**
@@ -794,6 +813,10 @@ public class Int2CharMaps
 		@Override
 		public char putAndMoveToLast(int key, char value) { synchronized(mutex) { return map.putAndMoveToLast(key, value); } }
 		@Override
+		public char putFirst(int key, char value) { synchronized(mutex) { return map.putFirst(key, value); } }
+		@Override
+		public char putLast(int key, char value) { synchronized(mutex) { return map.putLast(key, value); } }
+		@Override
 		public boolean moveToFirst(int key) { synchronized(mutex) { return map.moveToFirst(key); } }
 		@Override
 		public boolean moveToLast(int key) { synchronized(mutex) { return map.moveToLast(key); } }
@@ -814,13 +837,25 @@ public class Int2CharMaps
 		@Override
 		public char lastCharValue() { synchronized(mutex) { return map.lastCharValue(); } }
 		@Override
+		public Int2CharMap.Entry firstEntry() { synchronized(mutex) { return map.firstEntry(); } }
+		@Override
+		public Int2CharMap.Entry lastEntry() { synchronized(mutex) { return map.lastEntry(); } }
+		@Override
+		public Int2CharMap.Entry pollFirstEntry() { synchronized(mutex) { return map.pollFirstEntry(); } }
+		@Override
+		public Int2CharMap.Entry pollLastEntry() { synchronized(mutex) { return map.pollLastEntry(); } }
+		@Override
 		public Int2CharOrderedMap copy() { synchronized(mutex) { return map.copy(); } }
 		@Override
 		public IntOrderedSet keySet() {
 			if(keys == null) keys = IntSets.synchronize(map.keySet(), mutex);
 			return (IntOrderedSet)keys;
 		}
-		
+		@Override
+		public CharOrderedCollection values() {
+			if(values == null) values = CharCollections.synchronize(map.values(), mutex);
+			return (CharOrderedCollection)values;
+		}
 		@Override
 		public ObjectOrderedSet<Int2CharMap.Entry> int2CharEntrySet() {
 			if(entrySet == null) entrySet = ObjectSets.synchronize(map.int2CharEntrySet(), mutex);

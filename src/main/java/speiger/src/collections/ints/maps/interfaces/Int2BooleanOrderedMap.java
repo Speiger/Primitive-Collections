@@ -1,6 +1,8 @@
 package speiger.src.collections.ints.maps.interfaces;
 
 import speiger.src.collections.ints.utils.maps.Int2BooleanMaps;
+import speiger.src.collections.ints.maps.abstracts.AbstractInt2BooleanMap;
+import speiger.src.collections.booleans.collections.BooleanOrderedCollection;
 import speiger.src.collections.ints.sets.IntOrderedSet;
 import speiger.src.collections.objects.collections.ObjectBidirectionalIterator;
 import speiger.src.collections.objects.sets.ObjectOrderedSet;
@@ -30,6 +32,26 @@ public interface Int2BooleanOrderedMap extends Int2BooleanMap
 	 * @see java.util.Map#put(Object, Object)
 	 */
 	public boolean putAndMoveToLast(int key, boolean value);
+	
+	/**
+	 * A alternative to putAndMoveToFirst.
+	 * This method simply puts an entry at the first spot of the Map but only if the entry is missing.
+	 * @param key the key that should be inserted
+	 * @param value the value that should be inserted
+	 * @return the previous present or default return value
+	 * @see java.util.Map#put(Object, Object)
+	 */
+	public boolean putFirst(int key, boolean value);
+	
+	/**
+	 * A alternative to putAndMoveToLast.
+	 * This method simply puts an entry at the last spot of the Map but only if the entry is missing.
+	 * @param key the key that should be inserted
+	 * @param value the value that should be inserted
+	 * @return the previous present or default return value
+	 * @see java.util.Map#put(Object, Object)
+	 */
+	public boolean putLast(int key, boolean value);
 	
 	/**
 	 * A specific move method to move a given key/value to the first index.
@@ -91,12 +113,24 @@ public interface Int2BooleanOrderedMap extends Int2BooleanMap
 	 */
 	public boolean lastBooleanValue();
 	
+	
+	public Int2BooleanMap.Entry firstEntry();
+	
+	public Int2BooleanMap.Entry lastEntry();
+	
+	public Int2BooleanMap.Entry pollFirstEntry();
+	
+	public Int2BooleanMap.Entry pollLastEntry();
 	@Override
 	public Int2BooleanOrderedMap copy();
 	@Override
 	public IntOrderedSet keySet();
 	@Override
+	public BooleanOrderedCollection values();
+	@Override
 	public ObjectOrderedSet<Int2BooleanMap.Entry> int2BooleanEntrySet();
+	
+	public default Int2BooleanOrderedMap reversed() { return new AbstractInt2BooleanMap.ReversedInt2BooleanOrderedMap(this); }
 	
 	/**
 	 * Creates a Wrapped SortedMap that is Synchronized

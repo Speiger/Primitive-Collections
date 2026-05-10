@@ -9,6 +9,7 @@ import java.util.Comparator;
 import java.util.function.UnaryOperator;
 
 import speiger.src.collections.chars.collections.CharCollection;
+import speiger.src.collections.chars.collections.CharOrderedCollection;
 import speiger.src.collections.chars.collections.CharSplititerator;
 import speiger.src.collections.ints.functions.consumer.IntCharConsumer;
 import speiger.src.collections.chars.functions.CharComparator;
@@ -21,7 +22,7 @@ import speiger.src.collections.utils.SanityChecks;
 /**
  * A Type Specific List interface that reduces boxing/unboxing and adds a couple extra quality of life features
  */
-public interface CharList extends CharCollection, List<Character>
+public interface CharList extends CharOrderedCollection, List<Character>
 {
 	/**
 	 * A Type-Specific add Function to reduce (un)boxing
@@ -83,6 +84,24 @@ public interface CharList extends CharCollection, List<Character>
 	 * @return true if the list was modified
 	 */
 	public boolean addAll(int index, CharList c);
+	
+	/**
+	 * A method to add an element to the start of a list
+	 * @param e that should be added at the start.
+	 */
+	@Override
+	public default void addFirst(char e) { 
+		add(0, e);
+	}
+	
+	/**
+	 * A method to add an element to the end of a list
+	 * @param e that should be added at the end.
+	 */
+	@Override
+	public default void addLast(char e) {
+		add(e);
+	}
 	
 	/**
 	 * Helper method that returns the first element of a List.
@@ -414,9 +433,9 @@ public interface CharList extends CharCollection, List<Character>
 	@Override
 	@Deprecated
 	public default boolean add(Character e) {
-		return CharCollection.super.add(e);
+		return CharOrderedCollection.super.add(e);
 	}
-	
+
 	/** {@inheritDoc}
 	 * <p>This default implementation delegates to the corresponding type-specific function.
 	 * @deprecated Please use the corresponding type-specific function instead. 
@@ -464,7 +483,7 @@ public interface CharList extends CharCollection, List<Character>
 	@Override
 	@Deprecated
 	public default boolean contains(Object o) {
-		return CharCollection.super.contains(o);
+		return CharOrderedCollection.super.contains(o);
 	}
 	
 	/** {@inheritDoc}
@@ -474,7 +493,7 @@ public interface CharList extends CharCollection, List<Character>
 	@Override
 	@Deprecated
 	public default boolean remove(Object o) {
-		return CharCollection.super.remove(o);
+		return CharOrderedCollection.super.remove(o);
 	}
 	
 	/** {@inheritDoc}

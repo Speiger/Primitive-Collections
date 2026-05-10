@@ -94,7 +94,7 @@ public interface Short2BooleanMap extends Map<Short, Boolean>, ShortPredicate
 	 * @return the last present value or default return	value.
 	 */
 	public default Boolean put(Map.Entry<Short, Boolean> entry) {
-		return put(entry.getKey(), entry.getValue());
+		return put(entry.getKey().shortValue(), entry.getValue().booleanValue());
 	}
 
 	/**

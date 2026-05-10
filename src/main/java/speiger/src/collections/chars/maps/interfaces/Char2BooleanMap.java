@@ -94,7 +94,7 @@ public interface Char2BooleanMap extends Map<Character, Boolean>, CharPredicate
 	 * @return the last present value or default return	value.
 	 */
 	public default Boolean put(Map.Entry<Character, Boolean> entry) {
-		return put(entry.getKey(), entry.getValue());
+		return put(entry.getKey().charValue(), entry.getValue().booleanValue());
 	}
 
 	/**

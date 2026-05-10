@@ -1,6 +1,8 @@
 package speiger.src.collections.bytes.maps.interfaces;
 
 import speiger.src.collections.bytes.utils.maps.Byte2BooleanMaps;
+import speiger.src.collections.bytes.maps.abstracts.AbstractByte2BooleanMap;
+import speiger.src.collections.booleans.collections.BooleanOrderedCollection;
 import speiger.src.collections.bytes.sets.ByteOrderedSet;
 import speiger.src.collections.objects.collections.ObjectBidirectionalIterator;
 import speiger.src.collections.objects.sets.ObjectOrderedSet;
@@ -30,6 +32,26 @@ public interface Byte2BooleanOrderedMap extends Byte2BooleanMap
 	 * @see java.util.Map#put(Object, Object)
 	 */
 	public boolean putAndMoveToLast(byte key, boolean value);
+	
+	/**
+	 * A alternative to putAndMoveToFirst.
+	 * This method simply puts an entry at the first spot of the Map but only if the entry is missing.
+	 * @param key the key that should be inserted
+	 * @param value the value that should be inserted
+	 * @return the previous present or default return value
+	 * @see java.util.Map#put(Object, Object)
+	 */
+	public boolean putFirst(byte key, boolean value);
+	
+	/**
+	 * A alternative to putAndMoveToLast.
+	 * This method simply puts an entry at the last spot of the Map but only if the entry is missing.
+	 * @param key the key that should be inserted
+	 * @param value the value that should be inserted
+	 * @return the previous present or default return value
+	 * @see java.util.Map#put(Object, Object)
+	 */
+	public boolean putLast(byte key, boolean value);
 	
 	/**
 	 * A specific move method to move a given key/value to the first index.
@@ -91,12 +113,24 @@ public interface Byte2BooleanOrderedMap extends Byte2BooleanMap
 	 */
 	public boolean lastBooleanValue();
 	
+	
+	public Byte2BooleanMap.Entry firstEntry();
+	
+	public Byte2BooleanMap.Entry lastEntry();
+	
+	public Byte2BooleanMap.Entry pollFirstEntry();
+	
+	public Byte2BooleanMap.Entry pollLastEntry();
 	@Override
 	public Byte2BooleanOrderedMap copy();
 	@Override
 	public ByteOrderedSet keySet();
 	@Override
+	public BooleanOrderedCollection values();
+	@Override
 	public ObjectOrderedSet<Byte2BooleanMap.Entry> byte2BooleanEntrySet();
+	
+	public default Byte2BooleanOrderedMap reversed() { return new AbstractByte2BooleanMap.ReversedByte2BooleanOrderedMap(this); }
 	
 	/**
 	 * Creates a Wrapped SortedMap that is Synchronized

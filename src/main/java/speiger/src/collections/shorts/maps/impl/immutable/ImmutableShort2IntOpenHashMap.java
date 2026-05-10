@@ -31,7 +31,7 @@ import speiger.src.collections.objects.functions.consumer.ObjectIntConsumer;
 
 import speiger.src.collections.shorts.sets.AbstractShortSet;
 import speiger.src.collections.ints.collections.AbstractIntCollection;
-import speiger.src.collections.ints.collections.IntCollection;
+import speiger.src.collections.ints.collections.IntOrderedCollection;
 import speiger.src.collections.ints.collections.IntIterator;
 import speiger.src.collections.ints.functions.IntSupplier;
 import speiger.src.collections.ints.functions.function.IntIntUnaryOperator;
@@ -74,7 +74,7 @@ public class ImmutableShort2IntOpenHashMap extends AbstractShort2IntMap implemen
 	/** KeySet cache */
 	protected transient ShortOrderedSet keySet;
 	/** Values cache */
-	protected transient IntCollection valuesC;
+	protected transient IntOrderedCollection valuesC;
 	
 	/** Amount of Elements stored in the HashMap */
 	protected int size;
@@ -263,6 +263,10 @@ public class ImmutableShort2IntOpenHashMap extends AbstractShort2IntMap implemen
 	@Override
 	public int putAndMoveToLast(short key, int value) { throw new UnsupportedOperationException(); }
 	@Override
+	public int putFirst(short key, int value) { throw new UnsupportedOperationException(); }
+	@Override
+	public int putLast(short key, int value) { throw new UnsupportedOperationException(); }
+	@Override
 	public boolean moveToFirst(short key) { throw new UnsupportedOperationException(); }
 	@Override
 	public boolean moveToLast(short key) { throw new UnsupportedOperationException(); }
@@ -365,7 +369,24 @@ public class ImmutableShort2IntOpenHashMap extends AbstractShort2IntMap implemen
 	public int lastIntValue() {
 		if(size == 0) throw new NoSuchElementException();
 		return values[lastIndex];
-	}	
+	}
+	
+	@Override
+	public Short2IntMap.Entry firstEntry() {
+		if(size == 0) throw new NoSuchElementException();
+		return new BasicEntry(keys[firstIndex], values[firstIndex]);
+	}
+	
+	@Override
+	public Short2IntMap.Entry lastEntry() {
+		if(size == 0) throw new NoSuchElementException();
+		return new BasicEntry(keys[lastIndex], values[lastIndex]);
+	}
+	
+	@Override
+	public Short2IntMap.Entry pollFirstEntry() { throw new UnsupportedOperationException(); }
+	@Override
+	public Short2IntMap.Entry pollLastEntry() { throw new UnsupportedOperationException(); }
 
 	@Override
 	public ObjectOrderedSet<Short2IntMap.Entry> short2IntEntrySet() {
@@ -380,7 +401,7 @@ public class ImmutableShort2IntOpenHashMap extends AbstractShort2IntMap implemen
 	}
 	
 	@Override
-	public IntCollection values() {
+	public IntOrderedCollection values() {
 		if(valuesC == null) valuesC = new Values();
 		return valuesC;
 	}
@@ -529,24 +550,29 @@ public class ImmutableShort2IntOpenHashMap extends AbstractShort2IntMap implemen
 		public boolean moveToLast(Short2IntMap.Entry o) { throw new UnsupportedOperationException(); }
 		
 		@Override
-		public Short2IntMap.Entry first() {
+		public Short2IntMap.Entry getFirst() {
 			return new BasicEntry(firstShortKey(), firstIntValue());
 		}
 		
 		@Override
-		public Short2IntMap.Entry last() {
+		public Short2IntMap.Entry getLast() {
 			return new BasicEntry(lastShortKey(), lastIntValue());
 		}
 		
 		@Override
-		public Short2IntMap.Entry pollFirst() { throw new UnsupportedOperationException(); }
+		public Short2IntMap.Entry removeFirst() { throw new UnsupportedOperationException(); }
 		
 		@Override
-		public Short2IntMap.Entry pollLast() { throw new UnsupportedOperationException(); }
+		public Short2IntMap.Entry removeLast() { throw new UnsupportedOperationException(); }
 		
 		@Override
 		public ObjectBidirectionalIterator<Short2IntMap.Entry> iterator() {
-			return new EntryIterator();
+			return new EntryIterator(true);
+		}
+		
+		@Override
+		public ObjectBidirectionalIterator<Short2IntMap.Entry> reverseIterator() {
+			return new EntryIterator(false);
 		}
 		
 		@Override
@@ -556,7 +582,7 @@ public class ImmutableShort2IntOpenHashMap extends AbstractShort2IntMap implemen
 		
 		@Override
 		public ObjectBidirectionalIterator<Short2IntMap.Entry> fastIterator() {
-			return new FastEntryIterator();
+			return new FastEntryIterator(true);
 		}
 		
 		@Override
@@ -771,7 +797,12 @@ public class ImmutableShort2IntOpenHashMap extends AbstractShort2IntMap implemen
 		
 		@Override
 		public ShortListIterator iterator() {
-			return new KeyIterator();
+			return new KeyIterator(true);
+		}
+		
+		@Override
+		public ShortListIterator reverseIterator() {
+			return new KeyIterator(false);
 		}
 		
 		@Override
@@ -791,20 +822,20 @@ public class ImmutableShort2IntOpenHashMap extends AbstractShort2IntMap implemen
 		public void clear() { throw new UnsupportedOperationException(); }
 		
 		@Override
-		public short firstShort() {
+		public short getFirstShort() {
 			return firstShortKey();
 		}
 		
 		@Override
-		public short pollFirstShort() { throw new UnsupportedOperationException(); }
+		public short removeFirstShort() { throw new UnsupportedOperationException(); }
 
 		@Override
-		public short lastShort() {
+		public short getLastShort() {
 			return lastShortKey();
 		}
 
 		@Override
-		public short pollLastShort() { throw new UnsupportedOperationException(); }
+		public short removeLastShort() { throw new UnsupportedOperationException(); }
 		
 		@Override
 		public void forEach(ShortConsumer action) {
@@ -931,30 +962,35 @@ public class ImmutableShort2IntOpenHashMap extends AbstractShort2IntMap implemen
 		}
 	}
 	
-	private class Values extends AbstractIntCollection {
+	private class Values extends AbstractIntCollection implements IntOrderedCollection {
 		@Override
-		public boolean contains(int e) {
-			return containsValue(e);
-		}
+		public boolean contains(int e) { return containsValue(e); }
 		
 		@Override
-		public boolean add(int o) {
-			throw new UnsupportedOperationException();
-		}
-
+		public boolean add(int o) { throw new UnsupportedOperationException(); }
 		@Override
-		public IntIterator iterator() {
-			return new ValueIterator();
-		}
-		
+		public IntIterator iterator() { return new ValueIterator(true); }
 		@Override
-		public int size() {
-			return ImmutableShort2IntOpenHashMap.this.size();
-		}
-		
+		public int size() { return ImmutableShort2IntOpenHashMap.this.size(); }
 		@Override
 		public void clear() { throw new UnsupportedOperationException(); }
-		
+		@Override
+		public IntOrderedCollection reversed() { return new AbstractIntCollection.ReverseIntOrderedCollection(this, this::reverseIterator); }
+		private IntIterator reverseIterator() {
+			return new ValueIterator(false);
+		}
+		@Override
+		public void addFirst(int e) { throw new UnsupportedOperationException(); }
+		@Override
+		public void addLast(int e) { throw new UnsupportedOperationException(); }
+		@Override
+		public int getFirstInt() { return firstIntValue(); }
+		@Override
+		public int removeFirstInt() { throw new UnsupportedOperationException(); }
+		@Override
+		public int getLastInt() { return lastIntValue(); }
+		@Override
+		public int removeLastInt() { throw new UnsupportedOperationException(); }
 		@Override
 		public void forEach(IntConsumer action) {
 			int index = firstIndex;
@@ -1083,7 +1119,7 @@ public class ImmutableShort2IntOpenHashMap extends AbstractShort2IntMap implemen
 	private class FastEntryIterator extends MapIterator implements ObjectListIterator<Short2IntMap.Entry> {
 		MapEntry entry = new MapEntry();
 		
-		public FastEntryIterator() {}
+		public FastEntryIterator(boolean start) { super(start); }
 		public FastEntryIterator(short from) {
 			super(from);
 		}
@@ -1109,7 +1145,7 @@ public class ImmutableShort2IntOpenHashMap extends AbstractShort2IntMap implemen
 	
 	private class EntryIterator extends MapIterator implements ObjectListIterator<Short2IntMap.Entry> {
 		
-		public EntryIterator() {}
+		public EntryIterator(boolean start) { super(start); }
 		public EntryIterator(short from) {
 			super(from);
 		}
@@ -1136,7 +1172,7 @@ public class ImmutableShort2IntOpenHashMap extends AbstractShort2IntMap implemen
 	
 	private class KeyIterator extends MapIterator implements ShortListIterator {
 		
-		public KeyIterator() {}
+		public KeyIterator(boolean start) { super(start); }
 		public KeyIterator(short from) {
 			super(from);
 		}
@@ -1158,7 +1194,7 @@ public class ImmutableShort2IntOpenHashMap extends AbstractShort2IntMap implemen
 	}
 	
 	private class ValueIterator extends MapIterator implements IntListIterator {
-		public ValueIterator() {}
+		public ValueIterator(boolean start) { super(start); }
 		
 		@Override
 		public int previousInt() {
@@ -1179,13 +1215,16 @@ public class ImmutableShort2IntOpenHashMap extends AbstractShort2IntMap implemen
 	}
 	
 	private class MapIterator {
+		boolean forward;
 		int previous = -1;
 		int next = -1;
 		int current = -1;
 		int index = 0;
 		
-		MapIterator() {
-			next = firstIndex;
+		MapIterator(boolean start) {
+			this.forward = start;
+			if(start) next = firstIndex;
+			else previous = lastIndex;
 		}
 		
 		MapIterator(short from) {
@@ -1216,11 +1255,11 @@ public class ImmutableShort2IntOpenHashMap extends AbstractShort2IntMap implemen
 		}
 		
 		public boolean hasNext() {
-			return next != -1;
+			return (forward ? next : previous) != -1;
 		}
 
 		public boolean hasPrevious() {
-			return previous != -1;
+			return (forward ? previous : next) != -1;
 		}
 		
 		public int nextIndex() {
@@ -1237,20 +1276,30 @@ public class ImmutableShort2IntOpenHashMap extends AbstractShort2IntMap implemen
 		
 		public int previousEntry() {
 			if(!hasPrevious()) throw new NoSuchElementException();
-			current = previous;
-			previous = (int)(links[current] >> 32);
-			next = current;
+			if(forward) moveBackwards();
+			else moveForwards();
 			if(index >= 0) index--;
 			return current;
 		}
 		
 		public int nextEntry() {
 			if(!hasNext()) throw new NoSuchElementException();
+			if(forward) moveForwards();
+			else moveBackwards();
+			if(index >= 0) index++;
+			return current;
+		}
+		
+		private void moveBackwards() {
+			current = previous;
+			previous = (int)(links[current] >> 32);
+			next = current;
+		}
+		
+		private void moveForwards() {
 			current = next;
 			next = (int)(links[current]);
 			previous = current;
-			if(index >= 0) index++;
-			return current;
 		}
 		
 		private void ensureIndexKnown() {

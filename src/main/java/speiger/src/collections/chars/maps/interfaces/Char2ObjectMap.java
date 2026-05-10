@@ -95,7 +95,7 @@ public interface Char2ObjectMap<V> extends Map<Character, V>, CharFunction<V>
 	 * @return the last present value or default return	value.
 	 */
 	public default V put(Map.Entry<Character, V> entry) {
-		return put(entry.getKey(), entry.getValue());
+		return put(entry.getKey().charValue(), entry.getValue());
 	}
 
 	/**

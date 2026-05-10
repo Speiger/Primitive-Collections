@@ -94,7 +94,7 @@ public interface Int2CharMap extends Map<Integer, Character>, Int2CharFunction
 	 * @return the last present value or default return	value.
 	 */
 	public default Character put(Map.Entry<Integer, Character> entry) {
-		return put(entry.getKey(), entry.getValue());
+		return put(entry.getKey().intValue(), entry.getValue().charValue());
 	}
 
 	/**

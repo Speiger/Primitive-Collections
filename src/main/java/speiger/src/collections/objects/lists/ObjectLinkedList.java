@@ -329,7 +329,7 @@ public class ObjectLinkedList<T> extends AbstractObjectList<T> implements Object
 		if(index == 0) return new ListIter(first, index);
 		return new ListIter(getNode(index), index);
 	}
-	
+
 	/**
 	 * A Type Specific Type Splititerator to reduce boxing/unboxing
 	 * @return type specific splititerator

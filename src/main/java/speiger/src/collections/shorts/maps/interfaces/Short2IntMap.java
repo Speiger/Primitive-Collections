@@ -94,7 +94,7 @@ public interface Short2IntMap extends Map<Short, Integer>, Short2IntFunction
 	 * @return the last present value or default return	value.
 	 */
 	public default Integer put(Map.Entry<Short, Integer> entry) {
-		return put(entry.getKey(), entry.getValue());
+		return put(entry.getKey().shortValue(), entry.getValue().intValue());
 	}
 
 	/**

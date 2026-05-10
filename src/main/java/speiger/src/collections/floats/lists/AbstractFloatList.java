@@ -466,7 +466,6 @@ public abstract class AbstractFloatList extends AbstractFloatCollection implemen
 		public int size() {
 			return size;
 		}
-		
 		@Override
 		public FloatSplititerator spliterator() { return FloatSplititerators.createSplititerator(this, 16464); }
 		

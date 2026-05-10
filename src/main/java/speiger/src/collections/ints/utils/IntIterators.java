@@ -34,7 +34,7 @@ public class IntIterators
 	 * Returns a Immutable EmptyIterator instance that is automatically casted.
 	 * @return an empty iterator
 	 */
-	public static EmptyIterator empty() {
+	public static IntListIterator empty() {
 		return EMPTY;
 	}
 	
@@ -303,7 +303,7 @@ public class IntIterators
 	 * @param a the array that should be wrapped
 	 * @return a Iterator that is wrapping a array.
 	 */
-	public static ArrayIterator wrap(int... a) {
+	public static IntIterator wrap(int... a) {
 		return wrap(a, 0, a.length);
 	}
 	
@@ -314,7 +314,7 @@ public class IntIterators
 	 * @param end the index that should be ended.
 	 * @return a Iterator that is wrapping a array.
 	 */
-	public static ArrayIterator wrap(int[] a, int start, int end) {
+	public static IntIterator wrap(int[] a, int start, int end) {
 		return new ArrayIterator(a, start, end);
 	}
 	

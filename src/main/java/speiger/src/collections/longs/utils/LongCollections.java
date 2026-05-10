@@ -12,6 +12,7 @@ import java.util.function.Consumer;
 
 import speiger.src.collections.longs.collections.AbstractLongCollection;
 import speiger.src.collections.longs.collections.LongCollection;
+import speiger.src.collections.longs.collections.LongOrderedCollection;
 import speiger.src.collections.longs.collections.LongIterator;
 import speiger.src.collections.longs.functions.LongComparator;
 import speiger.src.collections.objects.utils.ObjectArrays;
@@ -48,6 +49,34 @@ public class LongCollections
 	 */
 	public static LongCollection unmodifiable(LongCollection c) {
 		return c instanceof UnmodifiableCollection ? c : new UnmodifiableCollection(c);
+	}
+	
+	/**
+	 * Returns a Immutable Ordered Collection instance based on the instance given.
+	 * @param c that should be made immutable/unmodifiable
+	 * @return a unmodifiable Ordered collection wrapper. If the Collection already a unmodifiable wrapper then it just returns itself.
+	 */
+	public static LongOrderedCollection unmodifiable(LongOrderedCollection c) {
+		return c instanceof UnmodifiableOrderedCollection ? c : new UnmodifiableOrderedCollection(c);
+	}
+	
+	/**
+	 * Returns a synchronized ordered Collection instance based on the instance given.
+	 * @param c that should be synchronized
+	 * @return a synchronized ordered collection wrapper. If the Collection already a synchronized wrapper then it just returns itself.
+	 */
+	public static LongOrderedCollection synchronize(LongOrderedCollection c) {
+		return c instanceof SynchronizedOrderedCollection ? c : new SynchronizedOrderedCollection(c);
+	}
+	
+	/**
+	 * Returns a synchronized ordered Collection instance based on the instance given.
+	 * @param c that should be synchronized
+	 * @param mutex is the controller of the synchronization block.
+	 * @return a synchronized ordered collection wrapper. If the Collection already a synchronized wrapper then it just returns itself.
+	 */
+	public static LongOrderedCollection synchronize(LongOrderedCollection c, Object mutex) {
+		return c instanceof SynchronizedOrderedCollection ? c : new SynchronizedOrderedCollection(c, mutex);
 	}
 	
 	/**
@@ -583,6 +612,37 @@ public class LongCollections
 		@Override
 		public SingletonCollection copy() { return new SingletonCollection(element); }
 	}
+	/**
+	 * Synchronized Ordered Collection Wrapper for the synchronizedCollection function
+	 */
+	public static class SynchronizedOrderedCollection extends SynchronizedCollection implements LongOrderedCollection {
+		LongOrderedCollection c;
+		
+		SynchronizedOrderedCollection(LongOrderedCollection c, Object mutex) {
+			super(c, mutex);
+			this.c = c;
+		}
+		
+		SynchronizedOrderedCollection(LongOrderedCollection c) {
+			super(c);
+			this.c = c;
+		}
+		
+		@Override
+		public LongOrderedCollection reversed() { return LongCollections.synchronize(c.reversed(), mutex); }
+		@Override
+		public void addFirst(long e) { synchronized(mutex) { this.c.addFirst(e); } }
+		@Override
+		public void addLast(long e) { synchronized(mutex) { this.c.addLast(e); } }
+		@Override
+		public long getFirstLong() { synchronized(mutex) { return this.c.getFirstLong(); } }
+		@Override
+		public long removeFirstLong() { synchronized(mutex) { return this.c.removeFirstLong(); } }
+		@Override
+		public long getLastLong() { synchronized(mutex) { return this.c.getLastLong(); } }
+		@Override
+		public long removeLastLong() { synchronized(mutex) { return this.c.removeLastLong(); } }
+	}	
 	
 	/**
 	 * Synchronized Collection Wrapper for the synchronizedCollection function
@@ -702,6 +762,33 @@ public class LongCollections
 		public long findFirst(LongPredicate filter) { synchronized(mutex) { return c.findFirst(filter); } }
 		@Override
 		public int count(LongPredicate filter) { synchronized(mutex) { return c.count(filter); } }
+	}
+	
+	/**
+	 * Unmodifyable Ordered Collection Wrapper for the unmodifyableCollection method
+	 */
+	public static class UnmodifiableOrderedCollection extends UnmodifiableCollection implements LongOrderedCollection {
+		LongOrderedCollection c;
+		
+		UnmodifiableOrderedCollection(LongOrderedCollection c) {
+			super(c);
+			this.c = c;
+		}
+		
+		@Override
+		public LongOrderedCollection reversed() { return LongCollections.unmodifiable(c.reversed()); }
+		@Override
+		public void addFirst(long e) { throw new UnsupportedOperationException(); }
+		@Override
+		public void addLast(long e) { throw new UnsupportedOperationException(); }
+		@Override
+		public long getFirstLong() { return c.getFirstLong(); }
+		@Override
+		public long removeFirstLong() { throw new UnsupportedOperationException(); }
+		@Override
+		public long getLastLong() { return c.getLastLong(); }
+		@Override
+		public long removeLastLong() { throw new UnsupportedOperationException(); }
 	}
 	
 	/**

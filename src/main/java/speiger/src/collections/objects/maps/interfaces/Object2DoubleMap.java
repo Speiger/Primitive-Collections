@@ -96,7 +96,7 @@ public interface Object2DoubleMap<T> extends Map<T, Double>, ToDoubleFunction<T>
 	 * @return the last present value or default return	value.
 	 */
 	public default Double put(Map.Entry<T, Double> entry) {
-		return put(entry.getKey(), entry.getValue());
+		return put(entry.getKey(), entry.getValue().doubleValue());
 	}
 
 	/**

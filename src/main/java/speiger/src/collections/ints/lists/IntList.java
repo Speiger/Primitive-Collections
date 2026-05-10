@@ -9,6 +9,7 @@ import java.util.Comparator;
 import java.util.function.UnaryOperator;
 
 import speiger.src.collections.ints.collections.IntCollection;
+import speiger.src.collections.ints.collections.IntOrderedCollection;
 import speiger.src.collections.ints.collections.IntSplititerator;
 import speiger.src.collections.ints.functions.consumer.IntIntConsumer;
 import speiger.src.collections.ints.functions.IntComparator;
@@ -19,7 +20,7 @@ import speiger.src.collections.ints.utils.IntSplititerators;
 /**
  * A Type Specific List interface that reduces boxing/unboxing and adds a couple extra quality of life features
  */
-public interface IntList extends IntCollection, List<Integer>
+public interface IntList extends IntOrderedCollection, List<Integer>
 {
 	/**
 	 * A Type-Specific add Function to reduce (un)boxing
@@ -81,6 +82,24 @@ public interface IntList extends IntCollection, List<Integer>
 	 * @return true if the list was modified
 	 */
 	public boolean addAll(int index, IntList c);
+	
+	/**
+	 * A method to add an element to the start of a list
+	 * @param e that should be added at the start.
+	 */
+	@Override
+	public default void addFirst(int e) { 
+		add(0, e);
+	}
+	
+	/**
+	 * A method to add an element to the end of a list
+	 * @param e that should be added at the end.
+	 */
+	@Override
+	public default void addLast(int e) {
+		add(e);
+	}
 	
 	/**
 	 * Helper method that returns the first element of a List.
@@ -412,9 +431,9 @@ public interface IntList extends IntCollection, List<Integer>
 	@Override
 	@Deprecated
 	public default boolean add(Integer e) {
-		return IntCollection.super.add(e);
+		return IntOrderedCollection.super.add(e);
 	}
-	
+
 	/** {@inheritDoc}
 	 * <p>This default implementation delegates to the corresponding type-specific function.
 	 * @deprecated Please use the corresponding type-specific function instead. 
@@ -462,7 +481,7 @@ public interface IntList extends IntCollection, List<Integer>
 	@Override
 	@Deprecated
 	public default boolean contains(Object o) {
-		return IntCollection.super.contains(o);
+		return IntOrderedCollection.super.contains(o);
 	}
 	
 	/** {@inheritDoc}
@@ -472,7 +491,7 @@ public interface IntList extends IntCollection, List<Integer>
 	@Override
 	@Deprecated
 	public default boolean remove(Object o) {
-		return IntCollection.super.remove(o);
+		return IntOrderedCollection.super.remove(o);
 	}
 	
 	/** {@inheritDoc}

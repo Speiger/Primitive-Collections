@@ -29,7 +29,7 @@ public class ObjectLists
 	 * @param <T> the keyType of elements maintained by this Collection
 	 * @return an empty list
 	 */
-	public static <T> EmptyList<T> empty() {
+	public static <T> ObjectList<T> empty() {
 		return (EmptyList<T>)EMPTY;
 	}
 	

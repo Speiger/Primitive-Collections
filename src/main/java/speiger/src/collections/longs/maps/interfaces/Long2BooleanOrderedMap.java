@@ -1,6 +1,8 @@
 package speiger.src.collections.longs.maps.interfaces;
 
 import speiger.src.collections.longs.utils.maps.Long2BooleanMaps;
+import speiger.src.collections.longs.maps.abstracts.AbstractLong2BooleanMap;
+import speiger.src.collections.booleans.collections.BooleanOrderedCollection;
 import speiger.src.collections.longs.sets.LongOrderedSet;
 import speiger.src.collections.objects.collections.ObjectBidirectionalIterator;
 import speiger.src.collections.objects.sets.ObjectOrderedSet;
@@ -30,6 +32,26 @@ public interface Long2BooleanOrderedMap extends Long2BooleanMap
 	 * @see java.util.Map#put(Object, Object)
 	 */
 	public boolean putAndMoveToLast(long key, boolean value);
+	
+	/**
+	 * A alternative to putAndMoveToFirst.
+	 * This method simply puts an entry at the first spot of the Map but only if the entry is missing.
+	 * @param key the key that should be inserted
+	 * @param value the value that should be inserted
+	 * @return the previous present or default return value
+	 * @see java.util.Map#put(Object, Object)
+	 */
+	public boolean putFirst(long key, boolean value);
+	
+	/**
+	 * A alternative to putAndMoveToLast.
+	 * This method simply puts an entry at the last spot of the Map but only if the entry is missing.
+	 * @param key the key that should be inserted
+	 * @param value the value that should be inserted
+	 * @return the previous present or default return value
+	 * @see java.util.Map#put(Object, Object)
+	 */
+	public boolean putLast(long key, boolean value);
 	
 	/**
 	 * A specific move method to move a given key/value to the first index.
@@ -91,12 +113,24 @@ public interface Long2BooleanOrderedMap extends Long2BooleanMap
 	 */
 	public boolean lastBooleanValue();
 	
+	
+	public Long2BooleanMap.Entry firstEntry();
+	
+	public Long2BooleanMap.Entry lastEntry();
+	
+	public Long2BooleanMap.Entry pollFirstEntry();
+	
+	public Long2BooleanMap.Entry pollLastEntry();
 	@Override
 	public Long2BooleanOrderedMap copy();
 	@Override
 	public LongOrderedSet keySet();
 	@Override
+	public BooleanOrderedCollection values();
+	@Override
 	public ObjectOrderedSet<Long2BooleanMap.Entry> long2BooleanEntrySet();
+	
+	public default Long2BooleanOrderedMap reversed() { return new AbstractLong2BooleanMap.ReversedLong2BooleanOrderedMap(this); }
 	
 	/**
 	 * Creates a Wrapped SortedMap that is Synchronized

@@ -9,6 +9,11 @@ import speiger.src.collections.ints.collections.IntIterator;
 import speiger.src.collections.ints.functions.consumer.IntBooleanConsumer;
 import speiger.src.collections.ints.functions.function.IntBooleanUnaryOperator;
 import speiger.src.collections.ints.maps.interfaces.Int2BooleanMap;
+import speiger.src.collections.ints.maps.interfaces.Int2BooleanOrderedMap;
+import speiger.src.collections.ints.sets.IntOrderedSet;
+import speiger.src.collections.booleans.collections.BooleanOrderedCollection;
+import speiger.src.collections.objects.sets.AbstractObjectSet;
+import speiger.src.collections.objects.sets.ObjectOrderedSet;
 import speiger.src.collections.ints.sets.AbstractIntSet;
 import speiger.src.collections.ints.sets.IntSet;
 import speiger.src.collections.ints.utils.maps.Int2BooleanMaps;
@@ -85,7 +90,7 @@ public abstract class AbstractInt2BooleanMap extends AbstractMap<Integer, Boolea
 	public void putAll(Integer[] keys, Boolean[] values, int offset, int size) {
 		SanityChecks.checkArrayCapacity(keys.length, offset, size);
 		SanityChecks.checkArrayCapacity(values.length, offset, size);
-		for(int i = 0;i<size;i++) put(keys[i], values[i]);		
+		for(int i = 0;i<size;i++) put(keys[i].intValue(), values[i].booleanValue());		
 	}
 	
 	@Override
@@ -407,6 +412,112 @@ public abstract class AbstractInt2BooleanMap extends AbstractMap<Integer, Boolea
 		while(iter.hasNext()) hash += iter.next().hashCode();
 		return hash;
 	}
+	
+	public static class ReversedInt2BooleanOrderedMap extends AbstractInt2BooleanMap implements Int2BooleanOrderedMap {
+		Int2BooleanOrderedMap map;
+		
+		public ReversedInt2BooleanOrderedMap(Int2BooleanOrderedMap map) {
+			this.map = map;
+		}
+		@Override
+		public AbstractInt2BooleanMap setDefaultReturnValue(boolean v) {
+			map.setDefaultReturnValue(v);
+			return this;
+		}
+		@Override
+		public boolean getDefaultReturnValue() { return map.getDefaultReturnValue(); }
+		@Override
+		public Int2BooleanOrderedMap copy() { throw new UnsupportedOperationException(); }
+		@Override
+		public boolean put(int key, boolean value) { return map.put(key, value); }
+		@Override
+		public boolean putIfAbsent(int key, boolean value) { return map.putIfAbsent(key, value); }
+		@Override
+		public boolean remove(int key) { return map.remove(key); }
+		@Override
+		public boolean remove(int key, boolean value) { return map.remove(key, value); }
+		@Override
+		public boolean removeOrDefault(int key, boolean defaultValue) { return map.removeOrDefault(key, defaultValue); }
+		@Override
+		public boolean containsKey(int key) { return map.containsKey(key); }
+		@Override
+		public boolean containsValue(boolean value) { return map.containsValue(value); }
+		@Override
+		public boolean replace(int key, boolean oldValue, boolean newValue) { return map.replace(key, oldValue, newValue); }
+		@Override
+		public boolean replace(int key, boolean value) { return map.replace(key, value); }
+		@Override
+		public void replaceBooleans(Int2BooleanMap m) { map.replaceBooleans(m); }
+		@Override
+		public void replaceBooleans(IntBooleanUnaryOperator mappingFunction) { map.replaceBooleans(mappingFunction); }
+		@Override
+		public boolean computeBoolean(int key, IntBooleanUnaryOperator mappingFunction) { return map.computeBoolean(key, mappingFunction); }
+		@Override
+		public boolean computeBooleanIfAbsent(int key, IntPredicate mappingFunction) { return map.computeBooleanIfAbsent(key, mappingFunction); }
+		@Override
+		public boolean supplyBooleanIfAbsent(int key, BooleanSupplier valueProvider) { return map.supplyBooleanIfAbsent(key, valueProvider); }
+		@Override
+		public boolean computeBooleanIfPresent(int key, IntBooleanUnaryOperator mappingFunction) { return map.computeBooleanIfPresent(key, mappingFunction); }
+		@Override
+		public boolean computeBooleanNonDefault(int key, IntBooleanUnaryOperator mappingFunction) { return map.computeBooleanNonDefault(key, mappingFunction); }
+		@Override
+		public boolean computeBooleanIfAbsentNonDefault(int key, IntPredicate mappingFunction) { return map.computeBooleanIfAbsentNonDefault(key, mappingFunction); }
+		@Override
+		public boolean supplyBooleanIfAbsentNonDefault(int key, BooleanSupplier valueProvider) { return map.supplyBooleanIfAbsentNonDefault(key, valueProvider); }
+		@Override
+		public boolean computeBooleanIfPresentNonDefault(int key, IntBooleanUnaryOperator mappingFunction) { return map.computeBooleanIfPresentNonDefault(key, mappingFunction); }
+		@Override
+		public boolean mergeBoolean(int key, boolean value, BooleanBooleanUnaryOperator mappingFunction) { return map.mergeBoolean(key, value, mappingFunction); }
+		@Override
+		public boolean getOrDefault(int key, boolean defaultValue) { return map.getOrDefault(key, defaultValue); }
+		@Override
+		public boolean get(int key) { return map.get(key); }
+		@Override
+		public boolean putAndMoveToFirst(int key, boolean value) { return map.putAndMoveToLast(key, value); }
+		@Override
+		public boolean putAndMoveToLast(int key, boolean value) { return map.putAndMoveToFirst(key, value); }
+		@Override
+		public boolean putFirst(int key, boolean value) { return map.putLast(key, value); }
+		@Override
+		public boolean putLast(int key, boolean value) { return map.putFirst(key, value); }
+		@Override
+		public boolean moveToFirst(int key) { return map.moveToLast(key); }
+		@Override
+		public boolean moveToLast(int key) { return map.moveToFirst(key); }
+		@Override
+		public boolean getAndMoveToFirst(int key) { return map.getAndMoveToLast(key); }
+		@Override
+		public boolean getAndMoveToLast(int key) { return map.getAndMoveToFirst(key); }
+		@Override
+		public int firstIntKey() { return map.lastIntKey(); }
+		@Override
+		public int pollFirstIntKey() { return map.pollLastIntKey(); }
+		@Override
+		public int lastIntKey() { return map.firstIntKey(); }
+		@Override
+		public int pollLastIntKey() { return map.pollFirstIntKey(); }
+		@Override
+		public boolean firstBooleanValue() { return map.lastBooleanValue(); }
+		@Override
+		public boolean lastBooleanValue() { return map.firstBooleanValue(); }
+		@Override
+		public Int2BooleanMap.Entry firstEntry() { return map.lastEntry(); }
+		@Override
+		public Int2BooleanMap.Entry lastEntry() { return map.firstEntry(); }
+		@Override
+		public Int2BooleanMap.Entry pollFirstEntry() { return map.pollLastEntry(); }
+		@Override
+		public Int2BooleanMap.Entry pollLastEntry() { return map.pollFirstEntry(); }
+		@Override
+		public ObjectOrderedSet<Int2BooleanMap.Entry> int2BooleanEntrySet() { return new AbstractObjectSet.ReversedObjectOrderedSet<>(map.int2BooleanEntrySet()); }
+		@Override
+		public IntOrderedSet keySet() { return new AbstractIntSet.ReversedIntOrderedSet(map.keySet()); }
+		@Override
+		public BooleanOrderedCollection values() { return map.values().reversed(); }
+		@Override
+		public Int2BooleanOrderedMap reversed() { return map; }
+	}
+
 	
 	/**
 	 * A Simple Type Specific Entry class to reduce boxing/unboxing

@@ -11,11 +11,15 @@ import java.util.RandomAccess;
 import speiger.src.collections.PACKAGE.collections.ABSTRACT_COLLECTION;
 import speiger.src.collections.PACKAGE.collections.COLLECTION;
 import speiger.src.collections.PACKAGE.collections.ITERATOR;
+#if SPLIT_ITERATOR_FEATURE
 import speiger.src.collections.PACKAGE.collections.SPLIT_ITERATOR;
+#endif
 #if INT_LIST_MODULE && !TYPE_INT
 import speiger.src.collections.ints.lists.IntList;
 #endif
+#if SPLIT_ITERATOR_FEATURE
 import speiger.src.collections.PACKAGE.utils.SPLIT_ITERATORS;
+#endif
 import speiger.src.collections.utils.SanityChecks;
 
 /**
@@ -532,9 +536,10 @@ public abstract class ABSTRACT_LIST KEY_GENERIC_TYPE extends ABSTRACT_COLLECTION
 		public int size() {
 			return size;
 		}
-		
+#if SPLIT_ITERATOR_FEATURE
 		@Override
 		public SPLIT_ITERATOR KEY_GENERIC_TYPE spliterator() { return SPLIT_ITERATORS.createSplititerator(this, 16464); }
+#endif
 		
 		@Override
 		public LIST_ITERATOR KEY_GENERIC_TYPE listIterator(int index) {

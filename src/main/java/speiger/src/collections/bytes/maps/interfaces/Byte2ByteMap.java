@@ -93,7 +93,7 @@ public interface Byte2ByteMap extends Map<Byte, Byte>, ByteUnaryOperator
 	 * @return the last present value or default return	value.
 	 */
 	public default Byte put(Map.Entry<Byte, Byte> entry) {
-		return put(entry.getKey(), entry.getValue());
+		return put(entry.getKey().byteValue(), entry.getValue().byteValue());
 	}
 
 	/**

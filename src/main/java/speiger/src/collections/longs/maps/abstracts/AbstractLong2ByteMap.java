@@ -9,6 +9,11 @@ import speiger.src.collections.longs.functions.consumer.LongByteConsumer;
 import speiger.src.collections.longs.functions.function.Long2ByteFunction;
 import speiger.src.collections.longs.functions.function.LongByteUnaryOperator;
 import speiger.src.collections.longs.maps.interfaces.Long2ByteMap;
+import speiger.src.collections.longs.maps.interfaces.Long2ByteOrderedMap;
+import speiger.src.collections.longs.sets.LongOrderedSet;
+import speiger.src.collections.bytes.collections.ByteOrderedCollection;
+import speiger.src.collections.objects.sets.AbstractObjectSet;
+import speiger.src.collections.objects.sets.ObjectOrderedSet;
 import speiger.src.collections.longs.sets.AbstractLongSet;
 import speiger.src.collections.longs.sets.LongSet;
 import speiger.src.collections.longs.utils.maps.Long2ByteMaps;
@@ -27,7 +32,7 @@ import speiger.src.collections.utils.SanityChecks;
  */
 public abstract class AbstractLong2ByteMap extends AbstractMap<Long, Byte> implements Long2ByteMap
 {
-	protected byte defaultReturnValue = (byte)0;
+	protected byte defaultReturnValue = (byte)-1;
 	
 	@Override
 	public byte getDefaultReturnValue() {
@@ -91,7 +96,7 @@ public abstract class AbstractLong2ByteMap extends AbstractMap<Long, Byte> imple
 	public void putAll(Long[] keys, Byte[] values, int offset, int size) {
 		SanityChecks.checkArrayCapacity(keys.length, offset, size);
 		SanityChecks.checkArrayCapacity(values.length, offset, size);
-		for(int i = 0;i<size;i++) put(keys[i], values[i]);		
+		for(int i = 0;i<size;i++) put(keys[i].longValue(), values[i].byteValue());		
 	}
 	
 	@Override
@@ -413,6 +418,116 @@ public abstract class AbstractLong2ByteMap extends AbstractMap<Long, Byte> imple
 		while(iter.hasNext()) hash += iter.next().hashCode();
 		return hash;
 	}
+	
+	public static class ReversedLong2ByteOrderedMap extends AbstractLong2ByteMap implements Long2ByteOrderedMap {
+		Long2ByteOrderedMap map;
+		
+		public ReversedLong2ByteOrderedMap(Long2ByteOrderedMap map) {
+			this.map = map;
+		}
+		@Override
+		public AbstractLong2ByteMap setDefaultReturnValue(byte v) {
+			map.setDefaultReturnValue(v);
+			return this;
+		}
+		@Override
+		public byte getDefaultReturnValue() { return map.getDefaultReturnValue(); }
+		@Override
+		public Long2ByteOrderedMap copy() { throw new UnsupportedOperationException(); }
+		@Override
+		public byte put(long key, byte value) { return map.put(key, value); }
+		@Override
+		public byte putIfAbsent(long key, byte value) { return map.putIfAbsent(key, value); }
+		@Override
+		public byte addTo(long key, byte value) { return map.addTo(key, value); }
+		@Override
+		public byte subFrom(long key, byte value) { return map.subFrom(key, value); }
+		@Override
+		public byte remove(long key) { return map.remove(key); }
+		@Override
+		public boolean remove(long key, byte value) { return map.remove(key, value); }
+		@Override
+		public byte removeOrDefault(long key, byte defaultValue) { return map.removeOrDefault(key, defaultValue); }
+		@Override
+		public boolean containsKey(long key) { return map.containsKey(key); }
+		@Override
+		public boolean containsValue(byte value) { return map.containsValue(value); }
+		@Override
+		public boolean replace(long key, byte oldValue, byte newValue) { return map.replace(key, oldValue, newValue); }
+		@Override
+		public byte replace(long key, byte value) { return map.replace(key, value); }
+		@Override
+		public void replaceBytes(Long2ByteMap m) { map.replaceBytes(m); }
+		@Override
+		public void replaceBytes(LongByteUnaryOperator mappingFunction) { map.replaceBytes(mappingFunction); }
+		@Override
+		public byte computeByte(long key, LongByteUnaryOperator mappingFunction) { return map.computeByte(key, mappingFunction); }
+		@Override
+		public byte computeByteIfAbsent(long key, Long2ByteFunction mappingFunction) { return map.computeByteIfAbsent(key, mappingFunction); }
+		@Override
+		public byte supplyByteIfAbsent(long key, ByteSupplier valueProvider) { return map.supplyByteIfAbsent(key, valueProvider); }
+		@Override
+		public byte computeByteIfPresent(long key, LongByteUnaryOperator mappingFunction) { return map.computeByteIfPresent(key, mappingFunction); }
+		@Override
+		public byte computeByteNonDefault(long key, LongByteUnaryOperator mappingFunction) { return map.computeByteNonDefault(key, mappingFunction); }
+		@Override
+		public byte computeByteIfAbsentNonDefault(long key, Long2ByteFunction mappingFunction) { return map.computeByteIfAbsentNonDefault(key, mappingFunction); }
+		@Override
+		public byte supplyByteIfAbsentNonDefault(long key, ByteSupplier valueProvider) { return map.supplyByteIfAbsentNonDefault(key, valueProvider); }
+		@Override
+		public byte computeByteIfPresentNonDefault(long key, LongByteUnaryOperator mappingFunction) { return map.computeByteIfPresentNonDefault(key, mappingFunction); }
+		@Override
+		public byte mergeByte(long key, byte value, ByteByteUnaryOperator mappingFunction) { return map.mergeByte(key, value, mappingFunction); }
+		@Override
+		public byte getOrDefault(long key, byte defaultValue) { return map.getOrDefault(key, defaultValue); }
+		@Override
+		public byte get(long key) { return map.get(key); }
+		@Override
+		public byte putAndMoveToFirst(long key, byte value) { return map.putAndMoveToLast(key, value); }
+		@Override
+		public byte putAndMoveToLast(long key, byte value) { return map.putAndMoveToFirst(key, value); }
+		@Override
+		public byte putFirst(long key, byte value) { return map.putLast(key, value); }
+		@Override
+		public byte putLast(long key, byte value) { return map.putFirst(key, value); }
+		@Override
+		public boolean moveToFirst(long key) { return map.moveToLast(key); }
+		@Override
+		public boolean moveToLast(long key) { return map.moveToFirst(key); }
+		@Override
+		public byte getAndMoveToFirst(long key) { return map.getAndMoveToLast(key); }
+		@Override
+		public byte getAndMoveToLast(long key) { return map.getAndMoveToFirst(key); }
+		@Override
+		public long firstLongKey() { return map.lastLongKey(); }
+		@Override
+		public long pollFirstLongKey() { return map.pollLastLongKey(); }
+		@Override
+		public long lastLongKey() { return map.firstLongKey(); }
+		@Override
+		public long pollLastLongKey() { return map.pollFirstLongKey(); }
+		@Override
+		public byte firstByteValue() { return map.lastByteValue(); }
+		@Override
+		public byte lastByteValue() { return map.firstByteValue(); }
+		@Override
+		public Long2ByteMap.Entry firstEntry() { return map.lastEntry(); }
+		@Override
+		public Long2ByteMap.Entry lastEntry() { return map.firstEntry(); }
+		@Override
+		public Long2ByteMap.Entry pollFirstEntry() { return map.pollLastEntry(); }
+		@Override
+		public Long2ByteMap.Entry pollLastEntry() { return map.pollFirstEntry(); }
+		@Override
+		public ObjectOrderedSet<Long2ByteMap.Entry> long2ByteEntrySet() { return new AbstractObjectSet.ReversedObjectOrderedSet<>(map.long2ByteEntrySet()); }
+		@Override
+		public LongOrderedSet keySet() { return new AbstractLongSet.ReversedLongOrderedSet(map.keySet()); }
+		@Override
+		public ByteOrderedCollection values() { return map.values().reversed(); }
+		@Override
+		public Long2ByteOrderedMap reversed() { return map; }
+	}
+
 	
 	/**
 	 * A Simple Type Specific Entry class to reduce boxing/unboxing

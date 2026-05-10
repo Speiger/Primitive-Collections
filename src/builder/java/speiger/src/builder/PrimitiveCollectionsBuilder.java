@@ -128,6 +128,7 @@ public class PrimitiveCollectionsBuilder extends TemplateProcessor
 		for(int i = 0,m=modules.size();i<m;i++) {
 			modules.get(i).setManager(manager);
 		}
+		manager.resolve();
 		for(int i = 0,m=modules.size();i<m;i++) {
 			biPackages.forEach(modules.get(i)::init);
 		}

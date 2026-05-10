@@ -95,7 +95,7 @@ public interface Short2ObjectMap<V> extends Map<Short, V>, ShortFunction<V>
 	 * @return the last present value or default return	value.
 	 */
 	public default V put(Map.Entry<Short, V> entry) {
-		return put(entry.getKey(), entry.getValue());
+		return put(entry.getKey().shortValue(), entry.getValue());
 	}
 
 	/**

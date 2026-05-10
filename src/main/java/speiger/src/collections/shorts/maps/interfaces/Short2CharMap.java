@@ -94,7 +94,7 @@ public interface Short2CharMap extends Map<Short, Character>, Short2CharFunction
 	 * @return the last present value or default return	value.
 	 */
 	public default Character put(Map.Entry<Short, Character> entry) {
-		return put(entry.getKey(), entry.getValue());
+		return put(entry.getKey().shortValue(), entry.getValue().charValue());
 	}
 
 	/**

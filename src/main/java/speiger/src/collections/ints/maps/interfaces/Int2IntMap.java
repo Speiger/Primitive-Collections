@@ -93,7 +93,7 @@ public interface Int2IntMap extends Map<Integer, Integer>, IntUnaryOperator
 	 * @return the last present value or default return	value.
 	 */
 	public default Integer put(Map.Entry<Integer, Integer> entry) {
-		return put(entry.getKey(), entry.getValue());
+		return put(entry.getKey().intValue(), entry.getValue().intValue());
 	}
 
 	/**

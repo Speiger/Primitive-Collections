@@ -1,52 +1,59 @@
 package speiger.src.builder.modules;
 
 import java.util.Arrays;
-import java.util.Set;
-import java.util.TreeSet;
+import java.util.List;
 
 import speiger.src.builder.ClassType;
+import speiger.src.builder.dependencies.FunctionDependency;
+import speiger.src.builder.dependencies.IDependency;
+import speiger.src.builder.dependencies.ModuleDependency;
 
 @SuppressWarnings("javadoc")
 public class CollectionModule extends BaseModule
 {
 	public static final BaseModule INSTANCE = new CollectionModule();
+	public static final ModuleDependency MODULE = new ModuleDependency(INSTANCE, false)
+			.addKeyDependency(FunctionModule.MODULE)
+			.addOptionalTypeDependency(FunctionModule.MODULE, ClassType.OBJECT, true)
+			.addOptionalTypeDependency(FunctionModule.MODULE, ClassType.INT, true)
+			.addOptionalTypeDependency(ClassType.OBJECT, true);
+	public static final FunctionDependency STREAMS = MODULE.createDependency("Streams");
+	public static final FunctionDependency SPLIT_ITERATORS = MODULE.createDependency("Splititerators").addKeyDependency(STREAMS);
+	public static final FunctionDependency IARRAY = MODULE.createDependency("IArray");
+	public static final FunctionDependency STRATEGY = MODULE.createDependency("Strategy");
 	
 	@Override
 	public String getModuleName() { return "Collection"; }
 	@Override
 	protected void loadVariables() {}
 	@Override
-	public boolean areDependenciesLoaded(){ return isDependencyLoaded(JavaModule.INSTANCE); }
-	
-	@Override
-	public Set<String> getModuleKeys(ClassType keyType, ClassType valueType)
-	{
-		return new TreeSet<>(Arrays.asList("Streams", "Splititerators", "IArray", "Strategy"));
-	}
+	public List<IDependency> getDependencies(ClassType keyType, ClassType valueType) { return Arrays.asList(MODULE, STREAMS, SPLIT_ITERATORS, IARRAY, STRATEGY); }
 	
 	@Override
 	protected void loadFlags() {
-		if(isModuleEnabled()) addKeyFlag("COLLECTION_MODULE");
-		if(isModuleEnabled("Streams")) addKeyFlag("STREAM_FEATURE");
-		if(isModuleEnabled("Splititerators")) addKeyFlag("SPLIT_ITERATOR_FEATURE");
-		if(isModuleEnabled("IArray")) addKeyFlag("IARRAY_FEATURE");
+		if(MODULE.isEnabled()) addKeyFlag("COLLECTION_MODULE");
+		if(STREAMS.isEnabled()) addKeyFlag("STREAM_FEATURE");
+		if(SPLIT_ITERATORS.isEnabled()) addKeyFlag("SPLIT_ITERATOR_FEATURE");
+		if(IARRAY.isEnabled()) addKeyFlag("IARRAY_FEATURE");
 	}
 	
 	@Override
 	protected void loadBlockades() {
-		if(!isModuleEnabled()) {
+		if(!MODULE.isEnabled()) {
 			addBlockedFiles("Iterable", "Iterables", "Iterator", "Iterators", "BidirectionalIterator", "ListIterator");
-			addBlockedFiles("Arrays", "Collection", "AbstractCollection", "Collections", "Stack");
+			addBlockedFiles("Arrays", "Collection", "OrderedCollection", "AbstractCollection", "Collections", "Stack");
 		}
-		if(!isModuleEnabled("Splititerators")) addBlockedFiles("Splititerator", "Splititerators");
-		if(!isModuleEnabled("IArray")) addBlockedFiles("IArray");
-		if(!isModuleEnabled("Strategy")) addBlockedFiles("Strategy");
+		if(!SPLIT_ITERATORS.isEnabled()) addBlockedFiles("Splititerator", "Splititerators");
+		if(!IARRAY.isEnabled()) addBlockedFiles("IArray");
+		if(!STRATEGY.isEnabled()) addBlockedFiles("Strategy");
 		
-		if(keyType.isObject()) {
+		if(keyType.isObject())
+		{
 			addBlockedFiles("Stack");
 			addBlockedFiles("CollectionStreamTester");
 		}
-		if(keyType == ClassType.BOOLEAN) {
+		if(keyType == ClassType.BOOLEAN)
+		{
 			addBlockedFiles("CollectionRemoveIfTester", "CollectionStreamTester");
 			addBlockedFilter(T -> T.endsWith("Tester") && T.startsWith("Iterable"));
 		}
@@ -84,6 +91,7 @@ public class CollectionModule extends BaseModule
 	{
 		//Abstract Classes
 		addAbstractMapper("ABSTRACT_COLLECTION", "Abstract%sCollection");
+		addAbstractMapper("REVERSED_ORDERED_COLLECTION", "Reverse%sOrderedCollection");
 		
 		//Helper Classes
 		addClassMapper("ARRAYS", "Arrays");
@@ -94,6 +102,7 @@ public class CollectionModule extends BaseModule
 		
 		//Interfaces
 		addClassMapper("COLLECTION", "Collection");
+		addClassMapper("ORDERED_COLLECTION", "OrderedCollection");
 		addClassMapper("ITERABLE", "Iterable");
 		addClassMapper("SPLIT_ITERATOR", "Splititerator");
 		addClassMapper("LIST_ITERATOR", "ListIterator");

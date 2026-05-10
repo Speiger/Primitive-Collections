@@ -1,6 +1,8 @@
 package speiger.src.collections.ints.maps.interfaces;
 
 import speiger.src.collections.ints.utils.maps.Int2ByteMaps;
+import speiger.src.collections.ints.maps.abstracts.AbstractInt2ByteMap;
+import speiger.src.collections.bytes.collections.ByteOrderedCollection;
 import speiger.src.collections.ints.sets.IntOrderedSet;
 import speiger.src.collections.objects.collections.ObjectBidirectionalIterator;
 import speiger.src.collections.objects.sets.ObjectOrderedSet;
@@ -30,6 +32,26 @@ public interface Int2ByteOrderedMap extends Int2ByteMap
 	 * @see java.util.Map#put(Object, Object)
 	 */
 	public byte putAndMoveToLast(int key, byte value);
+	
+	/**
+	 * A alternative to putAndMoveToFirst.
+	 * This method simply puts an entry at the first spot of the Map but only if the entry is missing.
+	 * @param key the key that should be inserted
+	 * @param value the value that should be inserted
+	 * @return the previous present or default return value
+	 * @see java.util.Map#put(Object, Object)
+	 */
+	public byte putFirst(int key, byte value);
+	
+	/**
+	 * A alternative to putAndMoveToLast.
+	 * This method simply puts an entry at the last spot of the Map but only if the entry is missing.
+	 * @param key the key that should be inserted
+	 * @param value the value that should be inserted
+	 * @return the previous present or default return value
+	 * @see java.util.Map#put(Object, Object)
+	 */
+	public byte putLast(int key, byte value);
 	
 	/**
 	 * A specific move method to move a given key/value to the first index.
@@ -91,12 +113,24 @@ public interface Int2ByteOrderedMap extends Int2ByteMap
 	 */
 	public byte lastByteValue();
 	
+	
+	public Int2ByteMap.Entry firstEntry();
+	
+	public Int2ByteMap.Entry lastEntry();
+	
+	public Int2ByteMap.Entry pollFirstEntry();
+	
+	public Int2ByteMap.Entry pollLastEntry();
 	@Override
 	public Int2ByteOrderedMap copy();
 	@Override
 	public IntOrderedSet keySet();
 	@Override
+	public ByteOrderedCollection values();
+	@Override
 	public ObjectOrderedSet<Int2ByteMap.Entry> int2ByteEntrySet();
+	
+	public default Int2ByteOrderedMap reversed() { return new AbstractInt2ByteMap.ReversedInt2ByteOrderedMap(this); }
 	
 	/**
 	 * Creates a Wrapped SortedMap that is Synchronized

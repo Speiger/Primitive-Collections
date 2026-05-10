@@ -466,7 +466,6 @@ public abstract class AbstractCharList extends AbstractCharCollection implements
 		public int size() {
 			return size;
 		}
-		
 		@Override
 		public CharSplititerator spliterator() { return CharSplititerators.createSplititerator(this, 16464); }
 		

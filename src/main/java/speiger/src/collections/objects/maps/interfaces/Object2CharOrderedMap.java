@@ -1,6 +1,8 @@
 package speiger.src.collections.objects.maps.interfaces;
 
 import speiger.src.collections.objects.utils.maps.Object2CharMaps;
+import speiger.src.collections.objects.maps.abstracts.AbstractObject2CharMap;
+import speiger.src.collections.chars.collections.CharOrderedCollection;
 import speiger.src.collections.objects.collections.ObjectBidirectionalIterator;
 import speiger.src.collections.objects.sets.ObjectOrderedSet;
 /**
@@ -30,6 +32,26 @@ public interface Object2CharOrderedMap<T> extends Object2CharMap<T>
 	 * @see java.util.Map#put(Object, Object)
 	 */
 	public char putAndMoveToLast(T key, char value);
+	
+	/**
+	 * A alternative to putAndMoveToFirst.
+	 * This method simply puts an entry at the first spot of the Map but only if the entry is missing.
+	 * @param key the key that should be inserted
+	 * @param value the value that should be inserted
+	 * @return the previous present or default return value
+	 * @see java.util.Map#put(Object, Object)
+	 */
+	public char putFirst(T key, char value);
+	
+	/**
+	 * A alternative to putAndMoveToLast.
+	 * This method simply puts an entry at the last spot of the Map but only if the entry is missing.
+	 * @param key the key that should be inserted
+	 * @param value the value that should be inserted
+	 * @return the previous present or default return value
+	 * @see java.util.Map#put(Object, Object)
+	 */
+	public char putLast(T key, char value);
 	
 	/**
 	 * A specific move method to move a given key/value to the first index.
@@ -91,12 +113,24 @@ public interface Object2CharOrderedMap<T> extends Object2CharMap<T>
 	 */
 	public char lastCharValue();
 	
+	
+	public Object2CharMap.Entry<T> firstEntry();
+	
+	public Object2CharMap.Entry<T> lastEntry();
+	
+	public Object2CharMap.Entry<T> pollFirstEntry();
+	
+	public Object2CharMap.Entry<T> pollLastEntry();
 	@Override
 	public Object2CharOrderedMap<T> copy();
 	@Override
 	public ObjectOrderedSet<T> keySet();
 	@Override
+	public CharOrderedCollection values();
+	@Override
 	public ObjectOrderedSet<Object2CharMap.Entry<T>> object2CharEntrySet();
+	
+	public default Object2CharOrderedMap<T> reversed() { return new AbstractObject2CharMap.ReversedObject2CharOrderedMap<>(this); }
 	
 	/**
 	 * Creates a Wrapped SortedMap that is Synchronized

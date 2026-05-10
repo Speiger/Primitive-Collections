@@ -2,8 +2,9 @@ package speiger.src.collections.longs.sets;
 
 import speiger.src.collections.longs.collections.LongBidirectionalIterator;
 import speiger.src.collections.longs.collections.LongSplititerator;
-import speiger.src.collections.longs.utils.LongSets;
 import speiger.src.collections.longs.utils.LongSplititerators;
+import speiger.src.collections.longs.sets.AbstractLongSet.ReversedLongOrderedSet;
+import speiger.src.collections.longs.utils.LongSets;
 
 /**
  * A Special Set Interface giving Access to some really usefull functions
@@ -49,6 +50,7 @@ public interface LongOrderedSet extends LongSet
 	
 	@Override
 	public LongBidirectionalIterator iterator();
+	public LongBidirectionalIterator reverseIterator();
 	
 	/**
 	 * A type Specific Iterator starting from a given key
@@ -69,23 +71,26 @@ public interface LongOrderedSet extends LongSet
 	 * A method to get the first element in the set
 	 * @return first element in the set
 	 */
-	public long firstLong();
+	public long getFirstLong();
 	/**
 	 * A method to get and remove the first element in the set
 	 * @return first element in the set
 	 */
-	public long pollFirstLong();
+	public long removeFirstLong();
 	/**
 	 * A method to get the last element in the set
 	 * @return last element in the set
 	 */
-	public long lastLong();
+	public long getLastLong();
 	/**
 	 * A method to get and remove the last element in the set
 	 * @return last element in the set
 	 */
-	public long pollLastLong();
+	public long removeLastLong();
 	
+	
+	public default LongOrderedSet reversed() { return new ReversedLongOrderedSet(this); }
+
 	/**
 	 * Creates a Wrapped OrderedSet that is Synchronized
 	 * @return a new OrderedSet that is synchronized

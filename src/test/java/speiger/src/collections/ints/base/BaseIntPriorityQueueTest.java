@@ -113,7 +113,6 @@ public abstract class BaseIntPriorityQueueTest extends BaseIntIterableTest
 	}
 	
 	@Test
-	@SuppressWarnings("deprecation")
 	public void testToArray() {
 		if(getValidPriorityQueueTests().contains(PriorityQueueTest.TO_ARRAY)) {
 			IntPriorityQueue queue = create(EMPTY_ARRAY);

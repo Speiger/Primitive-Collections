@@ -96,7 +96,7 @@ public interface Object2ByteMap<T> extends Map<T, Byte>, ToByteFunction<T>
 	 * @return the last present value or default return	value.
 	 */
 	public default Byte put(Map.Entry<T, Byte> entry) {
-		return put(entry.getKey(), entry.getValue());
+		return put(entry.getKey(), entry.getValue().byteValue());
 	}
 
 	/**

@@ -442,7 +442,6 @@ public class CopyOnWriteObjectArrayList<T> extends AbstractObjectList<T> impleme
 	 * @return if the element was found.
 	 */
 	@Override
-	@Deprecated
 	public boolean contains(Object o) {
 		return indexOf(o) != -1;
 	}
@@ -453,7 +452,6 @@ public class CopyOnWriteObjectArrayList<T> extends AbstractObjectList<T> impleme
 	 * @return the index of the element if found. (if not found then -1)
 	 */
 	@Override
-	@Deprecated
 	public int indexOf(Object o) {
 		T[] data = this.data;
 		if(o == null) {
@@ -473,7 +471,6 @@ public class CopyOnWriteObjectArrayList<T> extends AbstractObjectList<T> impleme
 	 * @return the last index of the element if found. (if not found then -1)
 	 */
 	@Override
-	@Deprecated
 	public int lastIndexOf(Object o) {
 		T[] data = this.data;
 		if(o == null) {

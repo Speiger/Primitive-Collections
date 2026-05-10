@@ -2,8 +2,9 @@ package speiger.src.collections.shorts.sets;
 
 import speiger.src.collections.shorts.collections.ShortBidirectionalIterator;
 import speiger.src.collections.shorts.collections.ShortSplititerator;
-import speiger.src.collections.shorts.utils.ShortSets;
 import speiger.src.collections.shorts.utils.ShortSplititerators;
+import speiger.src.collections.shorts.sets.AbstractShortSet.ReversedShortOrderedSet;
+import speiger.src.collections.shorts.utils.ShortSets;
 
 /**
  * A Special Set Interface giving Access to some really usefull functions
@@ -49,6 +50,7 @@ public interface ShortOrderedSet extends ShortSet
 	
 	@Override
 	public ShortBidirectionalIterator iterator();
+	public ShortBidirectionalIterator reverseIterator();
 	
 	/**
 	 * A type Specific Iterator starting from a given key
@@ -69,23 +71,26 @@ public interface ShortOrderedSet extends ShortSet
 	 * A method to get the first element in the set
 	 * @return first element in the set
 	 */
-	public short firstShort();
+	public short getFirstShort();
 	/**
 	 * A method to get and remove the first element in the set
 	 * @return first element in the set
 	 */
-	public short pollFirstShort();
+	public short removeFirstShort();
 	/**
 	 * A method to get the last element in the set
 	 * @return last element in the set
 	 */
-	public short lastShort();
+	public short getLastShort();
 	/**
 	 * A method to get and remove the last element in the set
 	 * @return last element in the set
 	 */
-	public short pollLastShort();
+	public short removeLastShort();
 	
+	
+	public default ShortOrderedSet reversed() { return new ReversedShortOrderedSet(this); }
+
 	/**
 	 * Creates a Wrapped OrderedSet that is Synchronized
 	 * @return a new OrderedSet that is synchronized

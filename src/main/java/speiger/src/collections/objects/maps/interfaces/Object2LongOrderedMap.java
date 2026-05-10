@@ -1,6 +1,8 @@
 package speiger.src.collections.objects.maps.interfaces;
 
 import speiger.src.collections.objects.utils.maps.Object2LongMaps;
+import speiger.src.collections.objects.maps.abstracts.AbstractObject2LongMap;
+import speiger.src.collections.longs.collections.LongOrderedCollection;
 import speiger.src.collections.objects.collections.ObjectBidirectionalIterator;
 import speiger.src.collections.objects.sets.ObjectOrderedSet;
 /**
@@ -30,6 +32,26 @@ public interface Object2LongOrderedMap<T> extends Object2LongMap<T>
 	 * @see java.util.Map#put(Object, Object)
 	 */
 	public long putAndMoveToLast(T key, long value);
+	
+	/**
+	 * A alternative to putAndMoveToFirst.
+	 * This method simply puts an entry at the first spot of the Map but only if the entry is missing.
+	 * @param key the key that should be inserted
+	 * @param value the value that should be inserted
+	 * @return the previous present or default return value
+	 * @see java.util.Map#put(Object, Object)
+	 */
+	public long putFirst(T key, long value);
+	
+	/**
+	 * A alternative to putAndMoveToLast.
+	 * This method simply puts an entry at the last spot of the Map but only if the entry is missing.
+	 * @param key the key that should be inserted
+	 * @param value the value that should be inserted
+	 * @return the previous present or default return value
+	 * @see java.util.Map#put(Object, Object)
+	 */
+	public long putLast(T key, long value);
 	
 	/**
 	 * A specific move method to move a given key/value to the first index.
@@ -91,12 +113,24 @@ public interface Object2LongOrderedMap<T> extends Object2LongMap<T>
 	 */
 	public long lastLongValue();
 	
+	
+	public Object2LongMap.Entry<T> firstEntry();
+	
+	public Object2LongMap.Entry<T> lastEntry();
+	
+	public Object2LongMap.Entry<T> pollFirstEntry();
+	
+	public Object2LongMap.Entry<T> pollLastEntry();
 	@Override
 	public Object2LongOrderedMap<T> copy();
 	@Override
 	public ObjectOrderedSet<T> keySet();
 	@Override
+	public LongOrderedCollection values();
+	@Override
 	public ObjectOrderedSet<Object2LongMap.Entry<T>> object2LongEntrySet();
+	
+	public default Object2LongOrderedMap<T> reversed() { return new AbstractObject2LongMap.ReversedObject2LongOrderedMap<>(this); }
 	
 	/**
 	 * Creates a Wrapped SortedMap that is Synchronized

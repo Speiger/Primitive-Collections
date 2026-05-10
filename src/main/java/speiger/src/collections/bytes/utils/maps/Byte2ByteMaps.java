@@ -29,6 +29,7 @@ import speiger.src.collections.bytes.sets.ByteOrderedSet;
 import speiger.src.collections.bytes.sets.ByteSet;
 import speiger.src.collections.bytes.utils.ByteSets;
 import speiger.src.collections.bytes.collections.ByteCollection;
+import speiger.src.collections.bytes.collections.ByteOrderedCollection;
 import speiger.src.collections.bytes.functions.ByteSupplier;
 import speiger.src.collections.bytes.utils.ByteCollections;
 
@@ -438,6 +439,10 @@ public class Byte2ByteMaps
 		@Override
 		public byte putAndMoveToLast(byte key, byte value) { throw new UnsupportedOperationException(); }
 		@Override
+		public byte putFirst(byte key, byte value) { throw new UnsupportedOperationException(); }
+		@Override
+		public byte putLast(byte key, byte value) { throw new UnsupportedOperationException(); }
+		@Override
 		public boolean moveToFirst(byte key) { throw new UnsupportedOperationException(); }
 		@Override
 		public boolean moveToLast(byte key) { throw new UnsupportedOperationException(); }
@@ -458,13 +463,25 @@ public class Byte2ByteMaps
 		@Override
 		public byte lastByteValue() { return map.lastByteValue(); }
 		@Override
+		public Byte2ByteMap.Entry firstEntry() { return map.firstEntry(); }
+		@Override
+		public Byte2ByteMap.Entry lastEntry() { return map.lastEntry(); }
+		@Override
+		public Byte2ByteMap.Entry pollFirstEntry() { throw new UnsupportedOperationException(); }
+		@Override
+		public Byte2ByteMap.Entry pollLastEntry() { throw new UnsupportedOperationException(); }
+		@Override
 		public Byte2ByteOrderedMap copy() { return map.copy(); }
 		@Override
 		public ByteOrderedSet keySet() { 
 			if(keys == null) keys = ByteSets.unmodifiable(map.keySet()); 
 			return (ByteOrderedSet)keys;
 		}
-				
+		@Override
+		public ByteOrderedCollection values() {
+			if(values == null) values = ByteCollections.unmodifiable(map.values());
+			return (ByteOrderedCollection)values;
+		}
 		@Override
 		public ObjectOrderedSet<Byte2ByteMap.Entry> byte2ByteEntrySet() {
 			if(entrySet == null) entrySet = new UnmodifyableOrderedEntrySet(map.byte2ByteEntrySet());
@@ -616,15 +633,17 @@ public class Byte2ByteMaps
 		@Override
 		public ObjectBidirectionalIterator<Byte2ByteMap.Entry> iterator() { return ObjectIterators.unmodifiable(set.iterator()); }
 		@Override
+		public ObjectBidirectionalIterator<Byte2ByteMap.Entry> reverseIterator() { return ObjectIterators.unmodifiable(set.reverseIterator()); }
+		@Override
 		public ObjectBidirectionalIterator<Byte2ByteMap.Entry> iterator(Byte2ByteMap.Entry fromElement) { return ObjectIterators.unmodifiable(set.iterator(fromElement)); }
 		@Override
-		public Byte2ByteMap.Entry first() { return set.first(); }
+		public Byte2ByteMap.Entry getFirst() { return set.getFirst(); }
 		@Override
-		public Byte2ByteMap.Entry pollFirst() { throw new UnsupportedOperationException(); }
+		public Byte2ByteMap.Entry removeFirst() { throw new UnsupportedOperationException(); }
 		@Override
-		public Byte2ByteMap.Entry last() { return set.last(); }
+		public Byte2ByteMap.Entry getLast() { return set.getLast(); }
 		@Override
-		public Byte2ByteMap.Entry pollLast() { throw new UnsupportedOperationException(); }
+		public Byte2ByteMap.Entry removeLast() { throw new UnsupportedOperationException(); }
 	}
 	
 	/**
@@ -793,6 +812,10 @@ public class Byte2ByteMaps
 		@Override
 		public byte putAndMoveToLast(byte key, byte value) { synchronized(mutex) { return map.putAndMoveToLast(key, value); } }
 		@Override
+		public byte putFirst(byte key, byte value) { synchronized(mutex) { return map.putFirst(key, value); } }
+		@Override
+		public byte putLast(byte key, byte value) { synchronized(mutex) { return map.putLast(key, value); } }
+		@Override
 		public boolean moveToFirst(byte key) { synchronized(mutex) { return map.moveToFirst(key); } }
 		@Override
 		public boolean moveToLast(byte key) { synchronized(mutex) { return map.moveToLast(key); } }
@@ -813,13 +836,25 @@ public class Byte2ByteMaps
 		@Override
 		public byte lastByteValue() { synchronized(mutex) { return map.lastByteValue(); } }
 		@Override
+		public Byte2ByteMap.Entry firstEntry() { synchronized(mutex) { return map.firstEntry(); } }
+		@Override
+		public Byte2ByteMap.Entry lastEntry() { synchronized(mutex) { return map.lastEntry(); } }
+		@Override
+		public Byte2ByteMap.Entry pollFirstEntry() { synchronized(mutex) { return map.pollFirstEntry(); } }
+		@Override
+		public Byte2ByteMap.Entry pollLastEntry() { synchronized(mutex) { return map.pollLastEntry(); } }
+		@Override
 		public Byte2ByteOrderedMap copy() { synchronized(mutex) { return map.copy(); } }
 		@Override
 		public ByteOrderedSet keySet() {
 			if(keys == null) keys = ByteSets.synchronize(map.keySet(), mutex);
 			return (ByteOrderedSet)keys;
 		}
-		
+		@Override
+		public ByteOrderedCollection values() {
+			if(values == null) values = ByteCollections.synchronize(map.values(), mutex);
+			return (ByteOrderedCollection)values;
+		}
 		@Override
 		public ObjectOrderedSet<Byte2ByteMap.Entry> byte2ByteEntrySet() {
 			if(entrySet == null) entrySet = ObjectSets.synchronize(map.byte2ByteEntrySet(), mutex);

@@ -94,7 +94,7 @@ public interface Float2CharMap extends Map<Float, Character>, Float2CharFunction
 	 * @return the last present value or default return	value.
 	 */
 	public default Character put(Map.Entry<Float, Character> entry) {
-		return put(entry.getKey(), entry.getValue());
+		return put(entry.getKey().floatValue(), entry.getValue().charValue());
 	}
 
 	/**

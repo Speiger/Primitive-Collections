@@ -34,7 +34,7 @@ public class ByteIterators
 	 * Returns a Immutable EmptyIterator instance that is automatically casted.
 	 * @return an empty iterator
 	 */
-	public static EmptyIterator empty() {
+	public static ByteListIterator empty() {
 		return EMPTY;
 	}
 	
@@ -303,7 +303,7 @@ public class ByteIterators
 	 * @param a the array that should be wrapped
 	 * @return a Iterator that is wrapping a array.
 	 */
-	public static ArrayIterator wrap(byte... a) {
+	public static ByteIterator wrap(byte... a) {
 		return wrap(a, 0, a.length);
 	}
 	
@@ -314,7 +314,7 @@ public class ByteIterators
 	 * @param end the index that should be ended.
 	 * @return a Iterator that is wrapping a array.
 	 */
-	public static ArrayIterator wrap(byte[] a, int start, int end) {
+	public static ByteIterator wrap(byte[] a, int start, int end) {
 		return new ArrayIterator(a, start, end);
 	}
 	

@@ -1,6 +1,8 @@
 package speiger.src.collections.ints.maps.interfaces;
 
 import speiger.src.collections.ints.utils.maps.Int2DoubleMaps;
+import speiger.src.collections.ints.maps.abstracts.AbstractInt2DoubleMap;
+import speiger.src.collections.doubles.collections.DoubleOrderedCollection;
 import speiger.src.collections.ints.sets.IntOrderedSet;
 import speiger.src.collections.objects.collections.ObjectBidirectionalIterator;
 import speiger.src.collections.objects.sets.ObjectOrderedSet;
@@ -30,6 +32,26 @@ public interface Int2DoubleOrderedMap extends Int2DoubleMap
 	 * @see java.util.Map#put(Object, Object)
 	 */
 	public double putAndMoveToLast(int key, double value);
+	
+	/**
+	 * A alternative to putAndMoveToFirst.
+	 * This method simply puts an entry at the first spot of the Map but only if the entry is missing.
+	 * @param key the key that should be inserted
+	 * @param value the value that should be inserted
+	 * @return the previous present or default return value
+	 * @see java.util.Map#put(Object, Object)
+	 */
+	public double putFirst(int key, double value);
+	
+	/**
+	 * A alternative to putAndMoveToLast.
+	 * This method simply puts an entry at the last spot of the Map but only if the entry is missing.
+	 * @param key the key that should be inserted
+	 * @param value the value that should be inserted
+	 * @return the previous present or default return value
+	 * @see java.util.Map#put(Object, Object)
+	 */
+	public double putLast(int key, double value);
 	
 	/**
 	 * A specific move method to move a given key/value to the first index.
@@ -91,12 +113,24 @@ public interface Int2DoubleOrderedMap extends Int2DoubleMap
 	 */
 	public double lastDoubleValue();
 	
+	
+	public Int2DoubleMap.Entry firstEntry();
+	
+	public Int2DoubleMap.Entry lastEntry();
+	
+	public Int2DoubleMap.Entry pollFirstEntry();
+	
+	public Int2DoubleMap.Entry pollLastEntry();
 	@Override
 	public Int2DoubleOrderedMap copy();
 	@Override
 	public IntOrderedSet keySet();
 	@Override
+	public DoubleOrderedCollection values();
+	@Override
 	public ObjectOrderedSet<Int2DoubleMap.Entry> int2DoubleEntrySet();
+	
+	public default Int2DoubleOrderedMap reversed() { return new AbstractInt2DoubleMap.ReversedInt2DoubleOrderedMap(this); }
 	
 	/**
 	 * Creates a Wrapped SortedMap that is Synchronized

@@ -29,6 +29,7 @@ import speiger.src.collections.chars.sets.CharOrderedSet;
 import speiger.src.collections.chars.sets.CharSet;
 import speiger.src.collections.chars.utils.CharSets;
 import speiger.src.collections.doubles.collections.DoubleCollection;
+import speiger.src.collections.doubles.collections.DoubleOrderedCollection;
 import speiger.src.collections.doubles.functions.function.DoubleDoubleUnaryOperator;
 import speiger.src.collections.doubles.functions.DoubleSupplier;
 import speiger.src.collections.doubles.utils.DoubleCollections;
@@ -439,6 +440,10 @@ public class Char2DoubleMaps
 		@Override
 		public double putAndMoveToLast(char key, double value) { throw new UnsupportedOperationException(); }
 		@Override
+		public double putFirst(char key, double value) { throw new UnsupportedOperationException(); }
+		@Override
+		public double putLast(char key, double value) { throw new UnsupportedOperationException(); }
+		@Override
 		public boolean moveToFirst(char key) { throw new UnsupportedOperationException(); }
 		@Override
 		public boolean moveToLast(char key) { throw new UnsupportedOperationException(); }
@@ -459,13 +464,25 @@ public class Char2DoubleMaps
 		@Override
 		public double lastDoubleValue() { return map.lastDoubleValue(); }
 		@Override
+		public Char2DoubleMap.Entry firstEntry() { return map.firstEntry(); }
+		@Override
+		public Char2DoubleMap.Entry lastEntry() { return map.lastEntry(); }
+		@Override
+		public Char2DoubleMap.Entry pollFirstEntry() { throw new UnsupportedOperationException(); }
+		@Override
+		public Char2DoubleMap.Entry pollLastEntry() { throw new UnsupportedOperationException(); }
+		@Override
 		public Char2DoubleOrderedMap copy() { return map.copy(); }
 		@Override
 		public CharOrderedSet keySet() { 
 			if(keys == null) keys = CharSets.unmodifiable(map.keySet()); 
 			return (CharOrderedSet)keys;
 		}
-				
+		@Override
+		public DoubleOrderedCollection values() {
+			if(values == null) values = DoubleCollections.unmodifiable(map.values());
+			return (DoubleOrderedCollection)values;
+		}
 		@Override
 		public ObjectOrderedSet<Char2DoubleMap.Entry> char2DoubleEntrySet() {
 			if(entrySet == null) entrySet = new UnmodifyableOrderedEntrySet(map.char2DoubleEntrySet());
@@ -617,15 +634,17 @@ public class Char2DoubleMaps
 		@Override
 		public ObjectBidirectionalIterator<Char2DoubleMap.Entry> iterator() { return ObjectIterators.unmodifiable(set.iterator()); }
 		@Override
+		public ObjectBidirectionalIterator<Char2DoubleMap.Entry> reverseIterator() { return ObjectIterators.unmodifiable(set.reverseIterator()); }
+		@Override
 		public ObjectBidirectionalIterator<Char2DoubleMap.Entry> iterator(Char2DoubleMap.Entry fromElement) { return ObjectIterators.unmodifiable(set.iterator(fromElement)); }
 		@Override
-		public Char2DoubleMap.Entry first() { return set.first(); }
+		public Char2DoubleMap.Entry getFirst() { return set.getFirst(); }
 		@Override
-		public Char2DoubleMap.Entry pollFirst() { throw new UnsupportedOperationException(); }
+		public Char2DoubleMap.Entry removeFirst() { throw new UnsupportedOperationException(); }
 		@Override
-		public Char2DoubleMap.Entry last() { return set.last(); }
+		public Char2DoubleMap.Entry getLast() { return set.getLast(); }
 		@Override
-		public Char2DoubleMap.Entry pollLast() { throw new UnsupportedOperationException(); }
+		public Char2DoubleMap.Entry removeLast() { throw new UnsupportedOperationException(); }
 	}
 	
 	/**
@@ -794,6 +813,10 @@ public class Char2DoubleMaps
 		@Override
 		public double putAndMoveToLast(char key, double value) { synchronized(mutex) { return map.putAndMoveToLast(key, value); } }
 		@Override
+		public double putFirst(char key, double value) { synchronized(mutex) { return map.putFirst(key, value); } }
+		@Override
+		public double putLast(char key, double value) { synchronized(mutex) { return map.putLast(key, value); } }
+		@Override
 		public boolean moveToFirst(char key) { synchronized(mutex) { return map.moveToFirst(key); } }
 		@Override
 		public boolean moveToLast(char key) { synchronized(mutex) { return map.moveToLast(key); } }
@@ -814,13 +837,25 @@ public class Char2DoubleMaps
 		@Override
 		public double lastDoubleValue() { synchronized(mutex) { return map.lastDoubleValue(); } }
 		@Override
+		public Char2DoubleMap.Entry firstEntry() { synchronized(mutex) { return map.firstEntry(); } }
+		@Override
+		public Char2DoubleMap.Entry lastEntry() { synchronized(mutex) { return map.lastEntry(); } }
+		@Override
+		public Char2DoubleMap.Entry pollFirstEntry() { synchronized(mutex) { return map.pollFirstEntry(); } }
+		@Override
+		public Char2DoubleMap.Entry pollLastEntry() { synchronized(mutex) { return map.pollLastEntry(); } }
+		@Override
 		public Char2DoubleOrderedMap copy() { synchronized(mutex) { return map.copy(); } }
 		@Override
 		public CharOrderedSet keySet() {
 			if(keys == null) keys = CharSets.synchronize(map.keySet(), mutex);
 			return (CharOrderedSet)keys;
 		}
-		
+		@Override
+		public DoubleOrderedCollection values() {
+			if(values == null) values = DoubleCollections.synchronize(map.values(), mutex);
+			return (DoubleOrderedCollection)values;
+		}
 		@Override
 		public ObjectOrderedSet<Char2DoubleMap.Entry> char2DoubleEntrySet() {
 			if(entrySet == null) entrySet = ObjectSets.synchronize(map.char2DoubleEntrySet(), mutex);

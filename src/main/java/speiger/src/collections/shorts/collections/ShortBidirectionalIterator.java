@@ -1,10 +1,10 @@
 package speiger.src.collections.shorts.collections;
 
-import speiger.src.collections.objects.collections.ObjectBidirectionalIterator;
 /**
- * A Type-Specific {@link ObjectBidirectionalIterator} to reduce (un)boxing
+ * This is a basically a {@link java.util.ListIterator} without the index functions.
+ * Allowing to have a simple Bidirectional Iterator without having to keep track of the Iteration index.
  */
-public interface ShortBidirectionalIterator extends ShortIterator, ObjectBidirectionalIterator<Short>
+public interface ShortBidirectionalIterator extends ShortIterator
 {
 	/**
 	 * Returns true if the Iterator has a Previous element
@@ -19,11 +19,11 @@ public interface ShortBidirectionalIterator extends ShortIterator, ObjectBidirec
 	 */
 	public short previousShort();
 	
-	/** {@inheritDoc}
+	/**
 	 * <p>This default implementation delegates to the corresponding type-specific function.
 	 * @deprecated Please use the corresponding type-specific function instead. 
+	 * @return the Previous element of the iterator.+
 	 */
-	@Override
 	@Deprecated
 	public default Short previous() {
 		return Short.valueOf(previousShort());

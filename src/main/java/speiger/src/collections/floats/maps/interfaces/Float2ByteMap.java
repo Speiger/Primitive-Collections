@@ -94,7 +94,7 @@ public interface Float2ByteMap extends Map<Float, Byte>, Float2ByteFunction
 	 * @return the last present value or default return	value.
 	 */
 	public default Byte put(Map.Entry<Float, Byte> entry) {
-		return put(entry.getKey(), entry.getValue());
+		return put(entry.getKey().floatValue(), entry.getValue().byteValue());
 	}
 
 	/**

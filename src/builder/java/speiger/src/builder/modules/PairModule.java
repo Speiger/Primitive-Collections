@@ -1,15 +1,26 @@
 package speiger.src.builder.modules;
 
 import java.util.Arrays;
-import java.util.Set;
-import java.util.TreeSet;
+import java.util.List;
 
 import speiger.src.builder.ClassType;
+import speiger.src.builder.dependencies.FunctionDependency;
+import speiger.src.builder.dependencies.IDependency;
+import speiger.src.builder.dependencies.ModuleDependency;
 
 @SuppressWarnings("javadoc")
 public class PairModule extends BaseModule
 {
 	public static final BaseModule INSTANCE = new PairModule();
+	public static final ModuleDependency MODULE = new ModuleDependency(INSTANCE, true).addKeyDependency(JavaModule.MODULE);
+	public static final FunctionDependency IMMUTABLE = MODULE.createDependency("Immutable");
+	public static final FunctionDependency MUTABLE = MODULE.createDependency("Mutable");
+
+	
+//	public static final DependencyModule MODULE = new BiTypeModule(INSTANCE);
+//	public static final DependencyFunction IMMUTABLE = MODULE.createFunction("Immutable");
+//	public static final DependencyFunction MUTABLE = MODULE.createFunction("Mutable");
+	
 	@Override
 	public String getModuleName() { return "Pair"; }
 	@Override
@@ -21,20 +32,20 @@ public class PairModule extends BaseModule
 	@Override
 	protected void loadTestClasses() {}
 	@Override
-	public Set<String> getModuleKeys(ClassType keyType, ClassType valueType) { return new TreeSet<>(Arrays.asList("Mutable", "Immutable")); }
+	public List<IDependency> getDependencies(ClassType keyType, ClassType valueType) { return Arrays.asList(MODULE, IMMUTABLE, MUTABLE); }
 	
 	@Override
 	protected void loadFlags() {
-		if(isModuleEnabled()) addFlag("PAIR_MODULE");
-		if(isModuleEnabled("Mutable")) addFlag("MUTABLE_PAIR");
-		if(isModuleEnabled("Immutable")) addFlag("IMMUTABLE_PAIR");
+		if(MODULE.isEnabled()) addFlag("PAIR_MODULE");
+		if(MUTABLE.isEnabled()) addFlag("MUTABLE_PAIR");
+		if(IMMUTABLE.isEnabled()) addFlag("IMMUTABLE_PAIR");
 	}
 	
 	@Override
 	protected void loadBlockades() {
-		if(!isModuleEnabled()) addBlockedFiles("Pair");
-		if(!isModuleEnabled("Mutable")) addBlockedFiles("MutablePair");
-		if(!isModuleEnabled("Immutable")) addBlockedFiles("ImmutablePair");
+		if(!MODULE.isEnabled()) addBlockedFiles("Pair");
+		if(!MUTABLE.isEnabled()) addBlockedFiles("MutablePair");
+		if(!IMMUTABLE.isEnabled()) addBlockedFiles("ImmutablePair");
 	}
 	
 	@Override

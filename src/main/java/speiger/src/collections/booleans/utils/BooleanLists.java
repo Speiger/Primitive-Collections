@@ -29,7 +29,7 @@ public class BooleanLists
 	 * Returns a Immutable EmptyList instance that is automatically casted.
 	 * @return an empty list
 	 */
-	public static EmptyList empty() {
+	public static BooleanList empty() {
 		return EMPTY;
 	}
 	

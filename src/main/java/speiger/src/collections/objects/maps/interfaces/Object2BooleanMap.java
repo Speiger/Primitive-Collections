@@ -96,7 +96,7 @@ public interface Object2BooleanMap<T> extends Map<T, Boolean>, Predicate<T>
 	 * @return the last present value or default return	value.
 	 */
 	public default Boolean put(Map.Entry<T, Boolean> entry) {
-		return put(entry.getKey(), entry.getValue());
+		return put(entry.getKey(), entry.getValue().booleanValue());
 	}
 
 	/**

@@ -31,7 +31,7 @@ import speiger.src.collections.objects.functions.consumer.ObjectDoubleConsumer;
 
 import speiger.src.collections.longs.sets.AbstractLongSet;
 import speiger.src.collections.doubles.collections.AbstractDoubleCollection;
-import speiger.src.collections.doubles.collections.DoubleCollection;
+import speiger.src.collections.doubles.collections.DoubleOrderedCollection;
 import speiger.src.collections.doubles.collections.DoubleIterator;
 import speiger.src.collections.doubles.functions.DoubleSupplier;
 import speiger.src.collections.doubles.functions.function.DoubleDoubleUnaryOperator;
@@ -74,7 +74,7 @@ public class ImmutableLong2DoubleOpenHashMap extends AbstractLong2DoubleMap impl
 	/** KeySet cache */
 	protected transient LongOrderedSet keySet;
 	/** Values cache */
-	protected transient DoubleCollection valuesC;
+	protected transient DoubleOrderedCollection valuesC;
 	
 	/** Amount of Elements stored in the HashMap */
 	protected int size;
@@ -263,6 +263,10 @@ public class ImmutableLong2DoubleOpenHashMap extends AbstractLong2DoubleMap impl
 	@Override
 	public double putAndMoveToLast(long key, double value) { throw new UnsupportedOperationException(); }
 	@Override
+	public double putFirst(long key, double value) { throw new UnsupportedOperationException(); }
+	@Override
+	public double putLast(long key, double value) { throw new UnsupportedOperationException(); }
+	@Override
 	public boolean moveToFirst(long key) { throw new UnsupportedOperationException(); }
 	@Override
 	public boolean moveToLast(long key) { throw new UnsupportedOperationException(); }
@@ -365,7 +369,24 @@ public class ImmutableLong2DoubleOpenHashMap extends AbstractLong2DoubleMap impl
 	public double lastDoubleValue() {
 		if(size == 0) throw new NoSuchElementException();
 		return values[lastIndex];
-	}	
+	}
+	
+	@Override
+	public Long2DoubleMap.Entry firstEntry() {
+		if(size == 0) throw new NoSuchElementException();
+		return new BasicEntry(keys[firstIndex], values[firstIndex]);
+	}
+	
+	@Override
+	public Long2DoubleMap.Entry lastEntry() {
+		if(size == 0) throw new NoSuchElementException();
+		return new BasicEntry(keys[lastIndex], values[lastIndex]);
+	}
+	
+	@Override
+	public Long2DoubleMap.Entry pollFirstEntry() { throw new UnsupportedOperationException(); }
+	@Override
+	public Long2DoubleMap.Entry pollLastEntry() { throw new UnsupportedOperationException(); }
 
 	@Override
 	public ObjectOrderedSet<Long2DoubleMap.Entry> long2DoubleEntrySet() {
@@ -380,7 +401,7 @@ public class ImmutableLong2DoubleOpenHashMap extends AbstractLong2DoubleMap impl
 	}
 	
 	@Override
-	public DoubleCollection values() {
+	public DoubleOrderedCollection values() {
 		if(valuesC == null) valuesC = new Values();
 		return valuesC;
 	}
@@ -529,24 +550,29 @@ public class ImmutableLong2DoubleOpenHashMap extends AbstractLong2DoubleMap impl
 		public boolean moveToLast(Long2DoubleMap.Entry o) { throw new UnsupportedOperationException(); }
 		
 		@Override
-		public Long2DoubleMap.Entry first() {
+		public Long2DoubleMap.Entry getFirst() {
 			return new BasicEntry(firstLongKey(), firstDoubleValue());
 		}
 		
 		@Override
-		public Long2DoubleMap.Entry last() {
+		public Long2DoubleMap.Entry getLast() {
 			return new BasicEntry(lastLongKey(), lastDoubleValue());
 		}
 		
 		@Override
-		public Long2DoubleMap.Entry pollFirst() { throw new UnsupportedOperationException(); }
+		public Long2DoubleMap.Entry removeFirst() { throw new UnsupportedOperationException(); }
 		
 		@Override
-		public Long2DoubleMap.Entry pollLast() { throw new UnsupportedOperationException(); }
+		public Long2DoubleMap.Entry removeLast() { throw new UnsupportedOperationException(); }
 		
 		@Override
 		public ObjectBidirectionalIterator<Long2DoubleMap.Entry> iterator() {
-			return new EntryIterator();
+			return new EntryIterator(true);
+		}
+		
+		@Override
+		public ObjectBidirectionalIterator<Long2DoubleMap.Entry> reverseIterator() {
+			return new EntryIterator(false);
 		}
 		
 		@Override
@@ -556,7 +582,7 @@ public class ImmutableLong2DoubleOpenHashMap extends AbstractLong2DoubleMap impl
 		
 		@Override
 		public ObjectBidirectionalIterator<Long2DoubleMap.Entry> fastIterator() {
-			return new FastEntryIterator();
+			return new FastEntryIterator(true);
 		}
 		
 		@Override
@@ -771,7 +797,12 @@ public class ImmutableLong2DoubleOpenHashMap extends AbstractLong2DoubleMap impl
 		
 		@Override
 		public LongListIterator iterator() {
-			return new KeyIterator();
+			return new KeyIterator(true);
+		}
+		
+		@Override
+		public LongListIterator reverseIterator() {
+			return new KeyIterator(false);
 		}
 		
 		@Override
@@ -791,20 +822,20 @@ public class ImmutableLong2DoubleOpenHashMap extends AbstractLong2DoubleMap impl
 		public void clear() { throw new UnsupportedOperationException(); }
 		
 		@Override
-		public long firstLong() {
+		public long getFirstLong() {
 			return firstLongKey();
 		}
 		
 		@Override
-		public long pollFirstLong() { throw new UnsupportedOperationException(); }
+		public long removeFirstLong() { throw new UnsupportedOperationException(); }
 
 		@Override
-		public long lastLong() {
+		public long getLastLong() {
 			return lastLongKey();
 		}
 
 		@Override
-		public long pollLastLong() { throw new UnsupportedOperationException(); }
+		public long removeLastLong() { throw new UnsupportedOperationException(); }
 		
 		@Override
 		public void forEach(LongConsumer action) {
@@ -931,30 +962,35 @@ public class ImmutableLong2DoubleOpenHashMap extends AbstractLong2DoubleMap impl
 		}
 	}
 	
-	private class Values extends AbstractDoubleCollection {
+	private class Values extends AbstractDoubleCollection implements DoubleOrderedCollection {
 		@Override
-		public boolean contains(double e) {
-			return containsValue(e);
-		}
+		public boolean contains(double e) { return containsValue(e); }
 		
 		@Override
-		public boolean add(double o) {
-			throw new UnsupportedOperationException();
-		}
-
+		public boolean add(double o) { throw new UnsupportedOperationException(); }
 		@Override
-		public DoubleIterator iterator() {
-			return new ValueIterator();
-		}
-		
+		public DoubleIterator iterator() { return new ValueIterator(true); }
 		@Override
-		public int size() {
-			return ImmutableLong2DoubleOpenHashMap.this.size();
-		}
-		
+		public int size() { return ImmutableLong2DoubleOpenHashMap.this.size(); }
 		@Override
 		public void clear() { throw new UnsupportedOperationException(); }
-		
+		@Override
+		public DoubleOrderedCollection reversed() { return new AbstractDoubleCollection.ReverseDoubleOrderedCollection(this, this::reverseIterator); }
+		private DoubleIterator reverseIterator() {
+			return new ValueIterator(false);
+		}
+		@Override
+		public void addFirst(double e) { throw new UnsupportedOperationException(); }
+		@Override
+		public void addLast(double e) { throw new UnsupportedOperationException(); }
+		@Override
+		public double getFirstDouble() { return firstDoubleValue(); }
+		@Override
+		public double removeFirstDouble() { throw new UnsupportedOperationException(); }
+		@Override
+		public double getLastDouble() { return lastDoubleValue(); }
+		@Override
+		public double removeLastDouble() { throw new UnsupportedOperationException(); }
 		@Override
 		public void forEach(DoubleConsumer action) {
 			int index = firstIndex;
@@ -1083,7 +1119,7 @@ public class ImmutableLong2DoubleOpenHashMap extends AbstractLong2DoubleMap impl
 	private class FastEntryIterator extends MapIterator implements ObjectListIterator<Long2DoubleMap.Entry> {
 		MapEntry entry = new MapEntry();
 		
-		public FastEntryIterator() {}
+		public FastEntryIterator(boolean start) { super(start); }
 		public FastEntryIterator(long from) {
 			super(from);
 		}
@@ -1109,7 +1145,7 @@ public class ImmutableLong2DoubleOpenHashMap extends AbstractLong2DoubleMap impl
 	
 	private class EntryIterator extends MapIterator implements ObjectListIterator<Long2DoubleMap.Entry> {
 		
-		public EntryIterator() {}
+		public EntryIterator(boolean start) { super(start); }
 		public EntryIterator(long from) {
 			super(from);
 		}
@@ -1136,7 +1172,7 @@ public class ImmutableLong2DoubleOpenHashMap extends AbstractLong2DoubleMap impl
 	
 	private class KeyIterator extends MapIterator implements LongListIterator {
 		
-		public KeyIterator() {}
+		public KeyIterator(boolean start) { super(start); }
 		public KeyIterator(long from) {
 			super(from);
 		}
@@ -1158,7 +1194,7 @@ public class ImmutableLong2DoubleOpenHashMap extends AbstractLong2DoubleMap impl
 	}
 	
 	private class ValueIterator extends MapIterator implements DoubleListIterator {
-		public ValueIterator() {}
+		public ValueIterator(boolean start) { super(start); }
 		
 		@Override
 		public double previousDouble() {
@@ -1179,13 +1215,16 @@ public class ImmutableLong2DoubleOpenHashMap extends AbstractLong2DoubleMap impl
 	}
 	
 	private class MapIterator {
+		boolean forward;
 		int previous = -1;
 		int next = -1;
 		int current = -1;
 		int index = 0;
 		
-		MapIterator() {
-			next = firstIndex;
+		MapIterator(boolean start) {
+			this.forward = start;
+			if(start) next = firstIndex;
+			else previous = lastIndex;
 		}
 		
 		MapIterator(long from) {
@@ -1216,11 +1255,11 @@ public class ImmutableLong2DoubleOpenHashMap extends AbstractLong2DoubleMap impl
 		}
 		
 		public boolean hasNext() {
-			return next != -1;
+			return (forward ? next : previous) != -1;
 		}
 
 		public boolean hasPrevious() {
-			return previous != -1;
+			return (forward ? previous : next) != -1;
 		}
 		
 		public int nextIndex() {
@@ -1237,20 +1276,30 @@ public class ImmutableLong2DoubleOpenHashMap extends AbstractLong2DoubleMap impl
 		
 		public int previousEntry() {
 			if(!hasPrevious()) throw new NoSuchElementException();
-			current = previous;
-			previous = (int)(links[current] >> 32);
-			next = current;
+			if(forward) moveBackwards();
+			else moveForwards();
 			if(index >= 0) index--;
 			return current;
 		}
 		
 		public int nextEntry() {
 			if(!hasNext()) throw new NoSuchElementException();
+			if(forward) moveForwards();
+			else moveBackwards();
+			if(index >= 0) index++;
+			return current;
+		}
+		
+		private void moveBackwards() {
+			current = previous;
+			previous = (int)(links[current] >> 32);
+			next = current;
+		}
+		
+		private void moveForwards() {
 			current = next;
 			next = (int)(links[current]);
 			previous = current;
-			if(index >= 0) index++;
-			return current;
 		}
 		
 		private void ensureIndexKnown() {

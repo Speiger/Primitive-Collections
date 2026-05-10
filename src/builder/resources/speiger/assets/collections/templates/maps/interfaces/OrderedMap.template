@@ -1,8 +1,15 @@
 package speiger.src.collections.PACKAGE.maps.interfaces;
 
+#if JAVA_VERSION>=21
+import java.util.Map;
+import java.util.SequencedMap;
+
+#endif
 #if MAPS_FEATURE
 import speiger.src.collections.PACKAGE.utils.maps.MAPS;
 #endif
+import speiger.src.collections.PACKAGE.maps.abstracts.ABSTRACT_MAP;
+import speiger.src.collections.VALUE_PACKAGE.collections.VALUE_ORDERED_COLLECTION;
 #if !TYPE_OBJECT
 import speiger.src.collections.PACKAGE.sets.ORDERED_SET;
 #endif
@@ -17,7 +24,11 @@ import speiger.src.collections.objects.sets.ObjectOrderedSet;
  * @Type(T)
  * @ValueType(V)
  */
+#if JAVA_VERSION>=21
+public interface ORDERED_MAP KEY_VALUE_GENERIC_TYPE extends MAP KEY_VALUE_GENERIC_TYPE, SequencedMap<CLASS_TYPE, CLASS_VALUE_TYPE>
+#else
 public interface ORDERED_MAP KEY_VALUE_GENERIC_TYPE extends MAP KEY_VALUE_GENERIC_TYPE
+#endif
 {
 	/**
 	 * A customized put method that allows you to insert into the first index.
@@ -36,6 +47,26 @@ public interface ORDERED_MAP KEY_VALUE_GENERIC_TYPE extends MAP KEY_VALUE_GENERI
 	 * @see java.util.Map#put(Object, Object)
 	 */
 	public VALUE_TYPE putAndMoveToLast(KEY_TYPE key, VALUE_TYPE value);
+	
+	/**
+	 * A alternative to putAndMoveToFirst.
+	 * This method simply puts an entry at the first spot of the Map but only if the entry is missing.
+	 * @param key the key that should be inserted
+	 * @param value the value that should be inserted
+	 * @return the previous present or default return value
+	 * @see java.util.Map#put(Object, Object)
+	 */
+	public VALUE_TYPE putFirst(KEY_TYPE key, VALUE_TYPE value);
+	
+	/**
+	 * A alternative to putAndMoveToLast.
+	 * This method simply puts an entry at the last spot of the Map but only if the entry is missing.
+	 * @param key the key that should be inserted
+	 * @param value the value that should be inserted
+	 * @return the previous present or default return value
+	 * @see java.util.Map#put(Object, Object)
+	 */
+	public VALUE_TYPE putLast(KEY_TYPE key, VALUE_TYPE value);
 	
 	/**
 	 * A specific move method to move a given key/value to the first index.
@@ -97,13 +128,34 @@ public interface ORDERED_MAP KEY_VALUE_GENERIC_TYPE extends MAP KEY_VALUE_GENERI
 	 */
 	public VALUE_TYPE LAST_ENTRY_VALUE();
 	
+	@Java21
+	public MAP.Entry KEY_VALUE_GENERIC_TYPE firstEntry();
+	@Java21
+	public MAP.Entry KEY_VALUE_GENERIC_TYPE lastEntry();
+	@Java21
+	public MAP.Entry KEY_VALUE_GENERIC_TYPE pollFirstEntry();
+	@Java21
+	public MAP.Entry KEY_VALUE_GENERIC_TYPE pollLastEntry();
 	@Override
 	public ORDERED_MAP KEY_VALUE_GENERIC_TYPE copy();
 	@Override
 	public ORDERED_SET KEY_GENERIC_TYPE keySet();
 	@Override
+	public VALUE_ORDERED_COLLECTION VALUE_GENERIC_TYPE values();
+	@Override
 	public ObjectOrderedSet<MAP.Entry KEY_VALUE_GENERIC_TYPE> ENTRY_SET();
+	@Java21
+	public default ORDERED_MAP KEY_VALUE_GENERIC_TYPE reversed() { return new ABSTRACT_MAP.REVERSED_ORDERED_MAPKV_BRACES(this); }
 	
+#if JAVA_VERSION>=21
+	@Override
+	default ORDERED_SET KEY_GENERIC_TYPE sequencedKeySet() { return keySet(); }
+	@Override
+	default VALUE_ORDERED_COLLECTION VALUE_GENERIC_TYPE sequencedValues() { return values(); }
+	@Override
+	default ObjectOrderedSet<Map.Entry<CLASS_TYPE, CLASS_VALUE_TYPE>> sequencedEntrySet() { return (ObjectOrderedSet<Map.Entry<CLASS_TYPE, CLASS_VALUE_TYPE>>)(Object)ENTRY_SET(); }
+	
+#endif
 #if MAPS_FEATURE
 	/**
 	 * Creates a Wrapped SortedMap that is Synchronized
@@ -130,6 +182,22 @@ public interface ORDERED_MAP KEY_VALUE_GENERIC_TYPE extends MAP KEY_VALUE_GENERI
 	@Override
 	public default ORDERED_MAP KEY_VALUE_GENERIC_TYPE unmodifiable() { return MAPS.unmodifiable(this); }
 	
+#endif
+#if JAVA_VERSION>=21
+#if !SAME_TYPE || !TYPE_OBJECT
+	@Override
+	@Deprecated
+	public default CLASS_VALUE_TYPE putFirst(CLASS_TYPE k, CLASS_VALUE_TYPE v) {
+		return putFirst(OBJ_TO_KEY(k), OBJ_TO_VALUE(v));
+	}
+	
+	@Override
+	@Deprecated
+	public default CLASS_VALUE_TYPE putLast(CLASS_TYPE k, CLASS_VALUE_TYPE v) {
+		return putLast(OBJ_TO_KEY(k), OBJ_TO_VALUE(v));
+	}
+	
+#endif
 #endif
 	/**
 	 * Fast Ordered Entry Set that allows for a faster Entry Iterator by recycling the Entry Object and just exchanging 1 internal value

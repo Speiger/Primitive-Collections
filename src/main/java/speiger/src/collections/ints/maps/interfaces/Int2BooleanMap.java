@@ -94,7 +94,7 @@ public interface Int2BooleanMap extends Map<Integer, Boolean>, IntPredicate
 	 * @return the last present value or default return	value.
 	 */
 	public default Boolean put(Map.Entry<Integer, Boolean> entry) {
-		return put(entry.getKey(), entry.getValue());
+		return put(entry.getKey().intValue(), entry.getValue().booleanValue());
 	}
 
 	/**

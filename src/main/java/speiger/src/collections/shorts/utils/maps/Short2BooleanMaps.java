@@ -29,6 +29,7 @@ import speiger.src.collections.shorts.sets.ShortOrderedSet;
 import speiger.src.collections.shorts.sets.ShortSet;
 import speiger.src.collections.shorts.utils.ShortSets;
 import speiger.src.collections.booleans.collections.BooleanCollection;
+import speiger.src.collections.booleans.collections.BooleanOrderedCollection;
 import speiger.src.collections.booleans.functions.function.BooleanBooleanUnaryOperator;
 import speiger.src.collections.booleans.functions.BooleanSupplier;
 import speiger.src.collections.booleans.utils.BooleanCollections;
@@ -431,6 +432,10 @@ public class Short2BooleanMaps
 		@Override
 		public boolean putAndMoveToLast(short key, boolean value) { throw new UnsupportedOperationException(); }
 		@Override
+		public boolean putFirst(short key, boolean value) { throw new UnsupportedOperationException(); }
+		@Override
+		public boolean putLast(short key, boolean value) { throw new UnsupportedOperationException(); }
+		@Override
 		public boolean moveToFirst(short key) { throw new UnsupportedOperationException(); }
 		@Override
 		public boolean moveToLast(short key) { throw new UnsupportedOperationException(); }
@@ -451,13 +456,25 @@ public class Short2BooleanMaps
 		@Override
 		public boolean lastBooleanValue() { return map.lastBooleanValue(); }
 		@Override
+		public Short2BooleanMap.Entry firstEntry() { return map.firstEntry(); }
+		@Override
+		public Short2BooleanMap.Entry lastEntry() { return map.lastEntry(); }
+		@Override
+		public Short2BooleanMap.Entry pollFirstEntry() { throw new UnsupportedOperationException(); }
+		@Override
+		public Short2BooleanMap.Entry pollLastEntry() { throw new UnsupportedOperationException(); }
+		@Override
 		public Short2BooleanOrderedMap copy() { return map.copy(); }
 		@Override
 		public ShortOrderedSet keySet() { 
 			if(keys == null) keys = ShortSets.unmodifiable(map.keySet()); 
 			return (ShortOrderedSet)keys;
 		}
-				
+		@Override
+		public BooleanOrderedCollection values() {
+			if(values == null) values = BooleanCollections.unmodifiable(map.values());
+			return (BooleanOrderedCollection)values;
+		}
 		@Override
 		public ObjectOrderedSet<Short2BooleanMap.Entry> short2BooleanEntrySet() {
 			if(entrySet == null) entrySet = new UnmodifyableOrderedEntrySet(map.short2BooleanEntrySet());
@@ -605,15 +622,17 @@ public class Short2BooleanMaps
 		@Override
 		public ObjectBidirectionalIterator<Short2BooleanMap.Entry> iterator() { return ObjectIterators.unmodifiable(set.iterator()); }
 		@Override
+		public ObjectBidirectionalIterator<Short2BooleanMap.Entry> reverseIterator() { return ObjectIterators.unmodifiable(set.reverseIterator()); }
+		@Override
 		public ObjectBidirectionalIterator<Short2BooleanMap.Entry> iterator(Short2BooleanMap.Entry fromElement) { return ObjectIterators.unmodifiable(set.iterator(fromElement)); }
 		@Override
-		public Short2BooleanMap.Entry first() { return set.first(); }
+		public Short2BooleanMap.Entry getFirst() { return set.getFirst(); }
 		@Override
-		public Short2BooleanMap.Entry pollFirst() { throw new UnsupportedOperationException(); }
+		public Short2BooleanMap.Entry removeFirst() { throw new UnsupportedOperationException(); }
 		@Override
-		public Short2BooleanMap.Entry last() { return set.last(); }
+		public Short2BooleanMap.Entry getLast() { return set.getLast(); }
 		@Override
-		public Short2BooleanMap.Entry pollLast() { throw new UnsupportedOperationException(); }
+		public Short2BooleanMap.Entry removeLast() { throw new UnsupportedOperationException(); }
 	}
 	
 	/**
@@ -782,6 +801,10 @@ public class Short2BooleanMaps
 		@Override
 		public boolean putAndMoveToLast(short key, boolean value) { synchronized(mutex) { return map.putAndMoveToLast(key, value); } }
 		@Override
+		public boolean putFirst(short key, boolean value) { synchronized(mutex) { return map.putFirst(key, value); } }
+		@Override
+		public boolean putLast(short key, boolean value) { synchronized(mutex) { return map.putLast(key, value); } }
+		@Override
 		public boolean moveToFirst(short key) { synchronized(mutex) { return map.moveToFirst(key); } }
 		@Override
 		public boolean moveToLast(short key) { synchronized(mutex) { return map.moveToLast(key); } }
@@ -802,13 +825,25 @@ public class Short2BooleanMaps
 		@Override
 		public boolean lastBooleanValue() { synchronized(mutex) { return map.lastBooleanValue(); } }
 		@Override
+		public Short2BooleanMap.Entry firstEntry() { synchronized(mutex) { return map.firstEntry(); } }
+		@Override
+		public Short2BooleanMap.Entry lastEntry() { synchronized(mutex) { return map.lastEntry(); } }
+		@Override
+		public Short2BooleanMap.Entry pollFirstEntry() { synchronized(mutex) { return map.pollFirstEntry(); } }
+		@Override
+		public Short2BooleanMap.Entry pollLastEntry() { synchronized(mutex) { return map.pollLastEntry(); } }
+		@Override
 		public Short2BooleanOrderedMap copy() { synchronized(mutex) { return map.copy(); } }
 		@Override
 		public ShortOrderedSet keySet() {
 			if(keys == null) keys = ShortSets.synchronize(map.keySet(), mutex);
 			return (ShortOrderedSet)keys;
 		}
-		
+		@Override
+		public BooleanOrderedCollection values() {
+			if(values == null) values = BooleanCollections.synchronize(map.values(), mutex);
+			return (BooleanOrderedCollection)values;
+		}
 		@Override
 		public ObjectOrderedSet<Short2BooleanMap.Entry> short2BooleanEntrySet() {
 			if(entrySet == null) entrySet = ObjectSets.synchronize(map.short2BooleanEntrySet(), mutex);

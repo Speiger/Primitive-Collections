@@ -12,6 +12,7 @@ import java.util.function.Consumer;
 
 import speiger.src.collections.chars.collections.AbstractCharCollection;
 import speiger.src.collections.chars.collections.CharCollection;
+import speiger.src.collections.chars.collections.CharOrderedCollection;
 import speiger.src.collections.chars.collections.CharIterator;
 import speiger.src.collections.chars.functions.CharComparator;
 import speiger.src.collections.objects.utils.ObjectArrays;
@@ -49,6 +50,34 @@ public class CharCollections
 	 */
 	public static CharCollection unmodifiable(CharCollection c) {
 		return c instanceof UnmodifiableCollection ? c : new UnmodifiableCollection(c);
+	}
+	
+	/**
+	 * Returns a Immutable Ordered Collection instance based on the instance given.
+	 * @param c that should be made immutable/unmodifiable
+	 * @return a unmodifiable Ordered collection wrapper. If the Collection already a unmodifiable wrapper then it just returns itself.
+	 */
+	public static CharOrderedCollection unmodifiable(CharOrderedCollection c) {
+		return c instanceof UnmodifiableOrderedCollection ? c : new UnmodifiableOrderedCollection(c);
+	}
+	
+	/**
+	 * Returns a synchronized ordered Collection instance based on the instance given.
+	 * @param c that should be synchronized
+	 * @return a synchronized ordered collection wrapper. If the Collection already a synchronized wrapper then it just returns itself.
+	 */
+	public static CharOrderedCollection synchronize(CharOrderedCollection c) {
+		return c instanceof SynchronizedOrderedCollection ? c : new SynchronizedOrderedCollection(c);
+	}
+	
+	/**
+	 * Returns a synchronized ordered Collection instance based on the instance given.
+	 * @param c that should be synchronized
+	 * @param mutex is the controller of the synchronization block.
+	 * @return a synchronized ordered collection wrapper. If the Collection already a synchronized wrapper then it just returns itself.
+	 */
+	public static CharOrderedCollection synchronize(CharOrderedCollection c, Object mutex) {
+		return c instanceof SynchronizedOrderedCollection ? c : new SynchronizedOrderedCollection(c, mutex);
 	}
 	
 	/**
@@ -584,6 +613,37 @@ public class CharCollections
 		@Override
 		public SingletonCollection copy() { return new SingletonCollection(element); }
 	}
+	/**
+	 * Synchronized Ordered Collection Wrapper for the synchronizedCollection function
+	 */
+	public static class SynchronizedOrderedCollection extends SynchronizedCollection implements CharOrderedCollection {
+		CharOrderedCollection c;
+		
+		SynchronizedOrderedCollection(CharOrderedCollection c, Object mutex) {
+			super(c, mutex);
+			this.c = c;
+		}
+		
+		SynchronizedOrderedCollection(CharOrderedCollection c) {
+			super(c);
+			this.c = c;
+		}
+		
+		@Override
+		public CharOrderedCollection reversed() { return CharCollections.synchronize(c.reversed(), mutex); }
+		@Override
+		public void addFirst(char e) { synchronized(mutex) { this.c.addFirst(e); } }
+		@Override
+		public void addLast(char e) { synchronized(mutex) { this.c.addLast(e); } }
+		@Override
+		public char getFirstChar() { synchronized(mutex) { return this.c.getFirstChar(); } }
+		@Override
+		public char removeFirstChar() { synchronized(mutex) { return this.c.removeFirstChar(); } }
+		@Override
+		public char getLastChar() { synchronized(mutex) { return this.c.getLastChar(); } }
+		@Override
+		public char removeLastChar() { synchronized(mutex) { return this.c.removeLastChar(); } }
+	}	
 	
 	/**
 	 * Synchronized Collection Wrapper for the synchronizedCollection function
@@ -703,6 +763,33 @@ public class CharCollections
 		public char findFirst(CharPredicate filter) { synchronized(mutex) { return c.findFirst(filter); } }
 		@Override
 		public int count(CharPredicate filter) { synchronized(mutex) { return c.count(filter); } }
+	}
+	
+	/**
+	 * Unmodifyable Ordered Collection Wrapper for the unmodifyableCollection method
+	 */
+	public static class UnmodifiableOrderedCollection extends UnmodifiableCollection implements CharOrderedCollection {
+		CharOrderedCollection c;
+		
+		UnmodifiableOrderedCollection(CharOrderedCollection c) {
+			super(c);
+			this.c = c;
+		}
+		
+		@Override
+		public CharOrderedCollection reversed() { return CharCollections.unmodifiable(c.reversed()); }
+		@Override
+		public void addFirst(char e) { throw new UnsupportedOperationException(); }
+		@Override
+		public void addLast(char e) { throw new UnsupportedOperationException(); }
+		@Override
+		public char getFirstChar() { return c.getFirstChar(); }
+		@Override
+		public char removeFirstChar() { throw new UnsupportedOperationException(); }
+		@Override
+		public char getLastChar() { return c.getLastChar(); }
+		@Override
+		public char removeLastChar() { throw new UnsupportedOperationException(); }
 	}
 	
 	/**

@@ -238,21 +238,17 @@ public class MAP_TEST_BUILDER KEY_VALUE_GENERIC_TYPE extends MapTestSuiteBuilder
 	private static Set<Feature<?>> computeEntrySetFeatures(Set<Feature<?>> mapFeatures) {
 		Set<Feature<?>> entrySetFeatures = MapTestSuiteBuilder.computeCommonDerivedCollectionFeatures(mapFeatures);
 #ignore
-		if (mapFeatures.contains(MapFeature.ALLOWS_NULL_ENTRY_QUERIES)) {
-			entrySetFeatures.add(CollectionFeature.ALLOWS_NULL_QUERIES);
-		}
-		if(mapFeatures.contains(SpecialFeature.CHILDREN_COPY)) {
-			entrySetFeatures.add(SpecialFeature.COPYING);
-		}
-		else {
-			entrySetFeatures.remove(SpecialFeature.COPYING);
-		}
-		if(mapFeatures.contains(SpecialFeature.MODIFIABLE)) {
-			entrySetFeatures.add(SpecialFeature.MODIFIABLE);
-		}
-		else {
-			entrySetFeatures.remove(SpecialFeature.MODIFIABLE);
-		}
+		if (mapFeatures.contains(MapFeature.ALLOWS_NULL_ENTRY_QUERIES)) entrySetFeatures.add(CollectionFeature.ALLOWS_NULL_QUERIES);
+
+		if(mapFeatures.contains(SpecialFeature.CHILDREN_COPY)) entrySetFeatures.add(SpecialFeature.COPYING);
+		else entrySetFeatures.remove(SpecialFeature.COPYING);
+		
+		if(mapFeatures.contains(SpecialFeature.MODIFIABLE)) entrySetFeatures.add(SpecialFeature.MODIFIABLE);
+		else entrySetFeatures.remove(SpecialFeature.MODIFIABLE);
+		
+		if(mapFeatures.contains(SpecialFeature.REVERSE)) entrySetFeatures.add(SpecialFeature.REVERSE);
+		else entrySetFeatures.remove(SpecialFeature.REVERSE);
+		
 		entrySetFeatures.add(SpecialFeature.MAP_ENTRY);
 #endignore
 		return entrySetFeatures;
@@ -262,23 +258,17 @@ public class MAP_TEST_BUILDER KEY_VALUE_GENERIC_TYPE extends MapTestSuiteBuilder
 		Set<Feature<?>> keySetFeatures = MapTestSuiteBuilder.computeCommonDerivedCollectionFeatures(mapFeatures);
 #ignore
 		keySetFeatures.add(CollectionFeature.SUBSET_VIEW);
-		if (mapFeatures.contains(MapFeature.ALLOWS_NULL_KEYS)) {
-			keySetFeatures.add(CollectionFeature.ALLOWS_NULL_VALUES);
-		} else if (mapFeatures.contains(MapFeature.ALLOWS_NULL_KEY_QUERIES)) {
-			keySetFeatures.add(CollectionFeature.ALLOWS_NULL_QUERIES);
-		}
-		if(mapFeatures.contains(SpecialFeature.CHILDREN_COPY)) {
-			keySetFeatures.add(SpecialFeature.COPYING);
-		}
-		else {
-			keySetFeatures.remove(SpecialFeature.COPYING);
-		}
-		if(mapFeatures.contains(SpecialFeature.MODIFIABLE)) {
-			keySetFeatures.add(SpecialFeature.MODIFIABLE);
-		}
-		else {
-			keySetFeatures.remove(SpecialFeature.MODIFIABLE);
-		}
+		if (mapFeatures.contains(MapFeature.ALLOWS_NULL_KEYS)) keySetFeatures.add(CollectionFeature.ALLOWS_NULL_VALUES);
+		else if (mapFeatures.contains(MapFeature.ALLOWS_NULL_KEY_QUERIES)) keySetFeatures.add(CollectionFeature.ALLOWS_NULL_QUERIES);
+		
+		if(mapFeatures.contains(SpecialFeature.CHILDREN_COPY)) keySetFeatures.add(SpecialFeature.COPYING);
+		else keySetFeatures.remove(SpecialFeature.COPYING);
+		
+		if(mapFeatures.contains(SpecialFeature.MODIFIABLE)) keySetFeatures.add(SpecialFeature.MODIFIABLE);
+		else keySetFeatures.remove(SpecialFeature.MODIFIABLE);
+		
+		if(mapFeatures.contains(SpecialFeature.REVERSE)) keySetFeatures.add(SpecialFeature.REVERSE);
+		else keySetFeatures.remove(SpecialFeature.REVERSE);
 #endignore
 		return keySetFeatures;
 	}
@@ -287,18 +277,15 @@ public class MAP_TEST_BUILDER KEY_VALUE_GENERIC_TYPE extends MapTestSuiteBuilder
 	private static Set<Feature<?>> computeValuesCollectionFeatures(Set<Feature<?>> mapFeatures) {
 		Set<Feature<?>> valuesCollectionFeatures = MapTestSuiteBuilder.computeCommonDerivedCollectionFeatures(mapFeatures);
 #ignore
-		if (mapFeatures.contains(MapFeature.ALLOWS_NULL_VALUE_QUERIES)) {
-			valuesCollectionFeatures.add(CollectionFeature.ALLOWS_NULL_QUERIES);
-		}
-		if (mapFeatures.contains(MapFeature.ALLOWS_NULL_VALUES)) {
-			valuesCollectionFeatures.add(CollectionFeature.ALLOWS_NULL_VALUES);
-		}
-		if(mapFeatures.contains(SpecialFeature.CHILDREN_COPY)) {
-			valuesCollectionFeatures.add(SpecialFeature.COPYING);
-		}
-		else {
-			valuesCollectionFeatures.remove(SpecialFeature.COPYING);
-		}
+		if (mapFeatures.contains(MapFeature.ALLOWS_NULL_VALUE_QUERIES)) valuesCollectionFeatures.add(CollectionFeature.ALLOWS_NULL_QUERIES);
+		
+		if (mapFeatures.contains(MapFeature.ALLOWS_NULL_VALUES)) valuesCollectionFeatures.add(CollectionFeature.ALLOWS_NULL_VALUES);
+		
+		if(mapFeatures.contains(SpecialFeature.CHILDREN_COPY)) valuesCollectionFeatures.add(SpecialFeature.COPYING); 
+		else valuesCollectionFeatures.remove(SpecialFeature.COPYING);
+		
+		if(mapFeatures.contains(SpecialFeature.REVERSE)) valuesCollectionFeatures.add(SpecialFeature.REVERSE);
+		else valuesCollectionFeatures.remove(SpecialFeature.REVERSE);
 #endignore
 		return valuesCollectionFeatures;
 	}

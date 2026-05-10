@@ -1,6 +1,8 @@
 package speiger.src.collections.chars.maps.interfaces;
 
 import speiger.src.collections.chars.utils.maps.Char2IntMaps;
+import speiger.src.collections.chars.maps.abstracts.AbstractChar2IntMap;
+import speiger.src.collections.ints.collections.IntOrderedCollection;
 import speiger.src.collections.chars.sets.CharOrderedSet;
 import speiger.src.collections.objects.collections.ObjectBidirectionalIterator;
 import speiger.src.collections.objects.sets.ObjectOrderedSet;
@@ -30,6 +32,26 @@ public interface Char2IntOrderedMap extends Char2IntMap
 	 * @see java.util.Map#put(Object, Object)
 	 */
 	public int putAndMoveToLast(char key, int value);
+	
+	/**
+	 * A alternative to putAndMoveToFirst.
+	 * This method simply puts an entry at the first spot of the Map but only if the entry is missing.
+	 * @param key the key that should be inserted
+	 * @param value the value that should be inserted
+	 * @return the previous present or default return value
+	 * @see java.util.Map#put(Object, Object)
+	 */
+	public int putFirst(char key, int value);
+	
+	/**
+	 * A alternative to putAndMoveToLast.
+	 * This method simply puts an entry at the last spot of the Map but only if the entry is missing.
+	 * @param key the key that should be inserted
+	 * @param value the value that should be inserted
+	 * @return the previous present or default return value
+	 * @see java.util.Map#put(Object, Object)
+	 */
+	public int putLast(char key, int value);
 	
 	/**
 	 * A specific move method to move a given key/value to the first index.
@@ -91,12 +113,24 @@ public interface Char2IntOrderedMap extends Char2IntMap
 	 */
 	public int lastIntValue();
 	
+	
+	public Char2IntMap.Entry firstEntry();
+	
+	public Char2IntMap.Entry lastEntry();
+	
+	public Char2IntMap.Entry pollFirstEntry();
+	
+	public Char2IntMap.Entry pollLastEntry();
 	@Override
 	public Char2IntOrderedMap copy();
 	@Override
 	public CharOrderedSet keySet();
 	@Override
+	public IntOrderedCollection values();
+	@Override
 	public ObjectOrderedSet<Char2IntMap.Entry> char2IntEntrySet();
+	
+	public default Char2IntOrderedMap reversed() { return new AbstractChar2IntMap.ReversedChar2IntOrderedMap(this); }
 	
 	/**
 	 * Creates a Wrapped SortedMap that is Synchronized

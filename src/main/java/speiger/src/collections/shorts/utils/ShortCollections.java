@@ -12,6 +12,7 @@ import java.util.function.Consumer;
 
 import speiger.src.collections.shorts.collections.AbstractShortCollection;
 import speiger.src.collections.shorts.collections.ShortCollection;
+import speiger.src.collections.shorts.collections.ShortOrderedCollection;
 import speiger.src.collections.shorts.collections.ShortIterator;
 import speiger.src.collections.shorts.functions.ShortComparator;
 import speiger.src.collections.objects.utils.ObjectArrays;
@@ -49,6 +50,34 @@ public class ShortCollections
 	 */
 	public static ShortCollection unmodifiable(ShortCollection c) {
 		return c instanceof UnmodifiableCollection ? c : new UnmodifiableCollection(c);
+	}
+	
+	/**
+	 * Returns a Immutable Ordered Collection instance based on the instance given.
+	 * @param c that should be made immutable/unmodifiable
+	 * @return a unmodifiable Ordered collection wrapper. If the Collection already a unmodifiable wrapper then it just returns itself.
+	 */
+	public static ShortOrderedCollection unmodifiable(ShortOrderedCollection c) {
+		return c instanceof UnmodifiableOrderedCollection ? c : new UnmodifiableOrderedCollection(c);
+	}
+	
+	/**
+	 * Returns a synchronized ordered Collection instance based on the instance given.
+	 * @param c that should be synchronized
+	 * @return a synchronized ordered collection wrapper. If the Collection already a synchronized wrapper then it just returns itself.
+	 */
+	public static ShortOrderedCollection synchronize(ShortOrderedCollection c) {
+		return c instanceof SynchronizedOrderedCollection ? c : new SynchronizedOrderedCollection(c);
+	}
+	
+	/**
+	 * Returns a synchronized ordered Collection instance based on the instance given.
+	 * @param c that should be synchronized
+	 * @param mutex is the controller of the synchronization block.
+	 * @return a synchronized ordered collection wrapper. If the Collection already a synchronized wrapper then it just returns itself.
+	 */
+	public static ShortOrderedCollection synchronize(ShortOrderedCollection c, Object mutex) {
+		return c instanceof SynchronizedOrderedCollection ? c : new SynchronizedOrderedCollection(c, mutex);
 	}
 	
 	/**
@@ -584,6 +613,37 @@ public class ShortCollections
 		@Override
 		public SingletonCollection copy() { return new SingletonCollection(element); }
 	}
+	/**
+	 * Synchronized Ordered Collection Wrapper for the synchronizedCollection function
+	 */
+	public static class SynchronizedOrderedCollection extends SynchronizedCollection implements ShortOrderedCollection {
+		ShortOrderedCollection c;
+		
+		SynchronizedOrderedCollection(ShortOrderedCollection c, Object mutex) {
+			super(c, mutex);
+			this.c = c;
+		}
+		
+		SynchronizedOrderedCollection(ShortOrderedCollection c) {
+			super(c);
+			this.c = c;
+		}
+		
+		@Override
+		public ShortOrderedCollection reversed() { return ShortCollections.synchronize(c.reversed(), mutex); }
+		@Override
+		public void addFirst(short e) { synchronized(mutex) { this.c.addFirst(e); } }
+		@Override
+		public void addLast(short e) { synchronized(mutex) { this.c.addLast(e); } }
+		@Override
+		public short getFirstShort() { synchronized(mutex) { return this.c.getFirstShort(); } }
+		@Override
+		public short removeFirstShort() { synchronized(mutex) { return this.c.removeFirstShort(); } }
+		@Override
+		public short getLastShort() { synchronized(mutex) { return this.c.getLastShort(); } }
+		@Override
+		public short removeLastShort() { synchronized(mutex) { return this.c.removeLastShort(); } }
+	}	
 	
 	/**
 	 * Synchronized Collection Wrapper for the synchronizedCollection function
@@ -703,6 +763,33 @@ public class ShortCollections
 		public short findFirst(ShortPredicate filter) { synchronized(mutex) { return c.findFirst(filter); } }
 		@Override
 		public int count(ShortPredicate filter) { synchronized(mutex) { return c.count(filter); } }
+	}
+	
+	/**
+	 * Unmodifyable Ordered Collection Wrapper for the unmodifyableCollection method
+	 */
+	public static class UnmodifiableOrderedCollection extends UnmodifiableCollection implements ShortOrderedCollection {
+		ShortOrderedCollection c;
+		
+		UnmodifiableOrderedCollection(ShortOrderedCollection c) {
+			super(c);
+			this.c = c;
+		}
+		
+		@Override
+		public ShortOrderedCollection reversed() { return ShortCollections.unmodifiable(c.reversed()); }
+		@Override
+		public void addFirst(short e) { throw new UnsupportedOperationException(); }
+		@Override
+		public void addLast(short e) { throw new UnsupportedOperationException(); }
+		@Override
+		public short getFirstShort() { return c.getFirstShort(); }
+		@Override
+		public short removeFirstShort() { throw new UnsupportedOperationException(); }
+		@Override
+		public short getLastShort() { return c.getLastShort(); }
+		@Override
+		public short removeLastShort() { throw new UnsupportedOperationException(); }
 	}
 	
 	/**

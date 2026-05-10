@@ -23,6 +23,7 @@ import speiger.src.collections.objects.sets.ObjectNavigableSet;
 import speiger.src.collections.objects.sets.ObjectSortedSet;
 import speiger.src.collections.objects.sets.ObjectOrderedSet;
 import speiger.src.collections.floats.collections.FloatCollection;
+import speiger.src.collections.floats.collections.FloatOrderedCollection;
 import speiger.src.collections.floats.functions.function.FloatFloatUnaryOperator;
 import speiger.src.collections.floats.functions.FloatSupplier;
 import speiger.src.collections.floats.utils.FloatCollections;
@@ -449,6 +450,10 @@ public class Object2FloatMaps
 		@Override
 		public float putAndMoveToLast(T key, float value) { throw new UnsupportedOperationException(); }
 		@Override
+		public float putFirst(T key, float value) { throw new UnsupportedOperationException(); }
+		@Override
+		public float putLast(T key, float value) { throw new UnsupportedOperationException(); }
+		@Override
 		public boolean moveToFirst(T key) { throw new UnsupportedOperationException(); }
 		@Override
 		public boolean moveToLast(T key) { throw new UnsupportedOperationException(); }
@@ -469,13 +474,25 @@ public class Object2FloatMaps
 		@Override
 		public float lastFloatValue() { return map.lastFloatValue(); }
 		@Override
+		public Object2FloatMap.Entry<T> firstEntry() { return map.firstEntry(); }
+		@Override
+		public Object2FloatMap.Entry<T> lastEntry() { return map.lastEntry(); }
+		@Override
+		public Object2FloatMap.Entry<T> pollFirstEntry() { throw new UnsupportedOperationException(); }
+		@Override
+		public Object2FloatMap.Entry<T> pollLastEntry() { throw new UnsupportedOperationException(); }
+		@Override
 		public Object2FloatOrderedMap<T> copy() { return map.copy(); }
 		@Override
 		public ObjectOrderedSet<T> keySet() { 
 			if(keys == null) keys = ObjectSets.unmodifiable(map.keySet()); 
 			return (ObjectOrderedSet<T>)keys;
 		}
-				
+		@Override
+		public FloatOrderedCollection values() {
+			if(values == null) values = FloatCollections.unmodifiable(map.values());
+			return (FloatOrderedCollection)values;
+		}
 		@Override
 		public ObjectOrderedSet<Object2FloatMap.Entry<T>> object2FloatEntrySet() {
 			if(entrySet == null) entrySet = new UnmodifyableOrderedEntrySet<>(map.object2FloatEntrySet());
@@ -630,15 +647,17 @@ public class Object2FloatMaps
 		@Override
 		public ObjectBidirectionalIterator<Object2FloatMap.Entry<T>> iterator() { return ObjectIterators.unmodifiable(set.iterator()); }
 		@Override
+		public ObjectBidirectionalIterator<Object2FloatMap.Entry<T>> reverseIterator() { return ObjectIterators.unmodifiable(set.reverseIterator()); }
+		@Override
 		public ObjectBidirectionalIterator<Object2FloatMap.Entry<T>> iterator(Object2FloatMap.Entry<T> fromElement) { return ObjectIterators.unmodifiable(set.iterator(fromElement)); }
 		@Override
-		public Object2FloatMap.Entry<T> first() { return set.first(); }
+		public Object2FloatMap.Entry<T> getFirst() { return set.getFirst(); }
 		@Override
-		public Object2FloatMap.Entry<T> pollFirst() { throw new UnsupportedOperationException(); }
+		public Object2FloatMap.Entry<T> removeFirst() { throw new UnsupportedOperationException(); }
 		@Override
-		public Object2FloatMap.Entry<T> last() { return set.last(); }
+		public Object2FloatMap.Entry<T> getLast() { return set.getLast(); }
 		@Override
-		public Object2FloatMap.Entry<T> pollLast() { throw new UnsupportedOperationException(); }
+		public Object2FloatMap.Entry<T> removeLast() { throw new UnsupportedOperationException(); }
 	}
 	
 	/**
@@ -760,6 +779,10 @@ public class Object2FloatMaps
 		@Override
 		public float putAndMoveToLast(T key, float value) { synchronized(mutex) { return map.putAndMoveToLast(key, value); } }
 		@Override
+		public float putFirst(T key, float value) { synchronized(mutex) { return map.putFirst(key, value); } }
+		@Override
+		public float putLast(T key, float value) { synchronized(mutex) { return map.putLast(key, value); } }
+		@Override
 		public boolean moveToFirst(T key) { synchronized(mutex) { return map.moveToFirst(key); } }
 		@Override
 		public boolean moveToLast(T key) { synchronized(mutex) { return map.moveToLast(key); } }
@@ -780,13 +803,25 @@ public class Object2FloatMaps
 		@Override
 		public float lastFloatValue() { synchronized(mutex) { return map.lastFloatValue(); } }
 		@Override
+		public Object2FloatMap.Entry<T> firstEntry() { synchronized(mutex) { return map.firstEntry(); } }
+		@Override
+		public Object2FloatMap.Entry<T> lastEntry() { synchronized(mutex) { return map.lastEntry(); } }
+		@Override
+		public Object2FloatMap.Entry<T> pollFirstEntry() { synchronized(mutex) { return map.pollFirstEntry(); } }
+		@Override
+		public Object2FloatMap.Entry<T> pollLastEntry() { synchronized(mutex) { return map.pollLastEntry(); } }
+		@Override
 		public Object2FloatOrderedMap<T> copy() { synchronized(mutex) { return map.copy(); } }
 		@Override
 		public ObjectOrderedSet<T> keySet() {
 			if(keys == null) keys = ObjectSets.synchronize(map.keySet(), mutex);
 			return (ObjectOrderedSet<T>)keys;
 		}
-		
+		@Override
+		public FloatOrderedCollection values() {
+			if(values == null) values = FloatCollections.synchronize(map.values(), mutex);
+			return (FloatOrderedCollection)values;
+		}
 		@Override
 		public ObjectOrderedSet<Object2FloatMap.Entry<T>> object2FloatEntrySet() {
 			if(entrySet == null) entrySet = ObjectSets.synchronize(map.object2FloatEntrySet(), mutex);

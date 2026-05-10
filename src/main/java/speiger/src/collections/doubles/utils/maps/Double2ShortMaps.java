@@ -29,6 +29,7 @@ import speiger.src.collections.doubles.sets.DoubleOrderedSet;
 import speiger.src.collections.doubles.sets.DoubleSet;
 import speiger.src.collections.doubles.utils.DoubleSets;
 import speiger.src.collections.shorts.collections.ShortCollection;
+import speiger.src.collections.shorts.collections.ShortOrderedCollection;
 import speiger.src.collections.shorts.functions.function.ShortShortUnaryOperator;
 import speiger.src.collections.shorts.functions.ShortSupplier;
 import speiger.src.collections.shorts.utils.ShortCollections;
@@ -439,6 +440,10 @@ public class Double2ShortMaps
 		@Override
 		public short putAndMoveToLast(double key, short value) { throw new UnsupportedOperationException(); }
 		@Override
+		public short putFirst(double key, short value) { throw new UnsupportedOperationException(); }
+		@Override
+		public short putLast(double key, short value) { throw new UnsupportedOperationException(); }
+		@Override
 		public boolean moveToFirst(double key) { throw new UnsupportedOperationException(); }
 		@Override
 		public boolean moveToLast(double key) { throw new UnsupportedOperationException(); }
@@ -459,13 +464,25 @@ public class Double2ShortMaps
 		@Override
 		public short lastShortValue() { return map.lastShortValue(); }
 		@Override
+		public Double2ShortMap.Entry firstEntry() { return map.firstEntry(); }
+		@Override
+		public Double2ShortMap.Entry lastEntry() { return map.lastEntry(); }
+		@Override
+		public Double2ShortMap.Entry pollFirstEntry() { throw new UnsupportedOperationException(); }
+		@Override
+		public Double2ShortMap.Entry pollLastEntry() { throw new UnsupportedOperationException(); }
+		@Override
 		public Double2ShortOrderedMap copy() { return map.copy(); }
 		@Override
 		public DoubleOrderedSet keySet() { 
 			if(keys == null) keys = DoubleSets.unmodifiable(map.keySet()); 
 			return (DoubleOrderedSet)keys;
 		}
-				
+		@Override
+		public ShortOrderedCollection values() {
+			if(values == null) values = ShortCollections.unmodifiable(map.values());
+			return (ShortOrderedCollection)values;
+		}
 		@Override
 		public ObjectOrderedSet<Double2ShortMap.Entry> double2ShortEntrySet() {
 			if(entrySet == null) entrySet = new UnmodifyableOrderedEntrySet(map.double2ShortEntrySet());
@@ -617,15 +634,17 @@ public class Double2ShortMaps
 		@Override
 		public ObjectBidirectionalIterator<Double2ShortMap.Entry> iterator() { return ObjectIterators.unmodifiable(set.iterator()); }
 		@Override
+		public ObjectBidirectionalIterator<Double2ShortMap.Entry> reverseIterator() { return ObjectIterators.unmodifiable(set.reverseIterator()); }
+		@Override
 		public ObjectBidirectionalIterator<Double2ShortMap.Entry> iterator(Double2ShortMap.Entry fromElement) { return ObjectIterators.unmodifiable(set.iterator(fromElement)); }
 		@Override
-		public Double2ShortMap.Entry first() { return set.first(); }
+		public Double2ShortMap.Entry getFirst() { return set.getFirst(); }
 		@Override
-		public Double2ShortMap.Entry pollFirst() { throw new UnsupportedOperationException(); }
+		public Double2ShortMap.Entry removeFirst() { throw new UnsupportedOperationException(); }
 		@Override
-		public Double2ShortMap.Entry last() { return set.last(); }
+		public Double2ShortMap.Entry getLast() { return set.getLast(); }
 		@Override
-		public Double2ShortMap.Entry pollLast() { throw new UnsupportedOperationException(); }
+		public Double2ShortMap.Entry removeLast() { throw new UnsupportedOperationException(); }
 	}
 	
 	/**
@@ -794,6 +813,10 @@ public class Double2ShortMaps
 		@Override
 		public short putAndMoveToLast(double key, short value) { synchronized(mutex) { return map.putAndMoveToLast(key, value); } }
 		@Override
+		public short putFirst(double key, short value) { synchronized(mutex) { return map.putFirst(key, value); } }
+		@Override
+		public short putLast(double key, short value) { synchronized(mutex) { return map.putLast(key, value); } }
+		@Override
 		public boolean moveToFirst(double key) { synchronized(mutex) { return map.moveToFirst(key); } }
 		@Override
 		public boolean moveToLast(double key) { synchronized(mutex) { return map.moveToLast(key); } }
@@ -814,13 +837,25 @@ public class Double2ShortMaps
 		@Override
 		public short lastShortValue() { synchronized(mutex) { return map.lastShortValue(); } }
 		@Override
+		public Double2ShortMap.Entry firstEntry() { synchronized(mutex) { return map.firstEntry(); } }
+		@Override
+		public Double2ShortMap.Entry lastEntry() { synchronized(mutex) { return map.lastEntry(); } }
+		@Override
+		public Double2ShortMap.Entry pollFirstEntry() { synchronized(mutex) { return map.pollFirstEntry(); } }
+		@Override
+		public Double2ShortMap.Entry pollLastEntry() { synchronized(mutex) { return map.pollLastEntry(); } }
+		@Override
 		public Double2ShortOrderedMap copy() { synchronized(mutex) { return map.copy(); } }
 		@Override
 		public DoubleOrderedSet keySet() {
 			if(keys == null) keys = DoubleSets.synchronize(map.keySet(), mutex);
 			return (DoubleOrderedSet)keys;
 		}
-		
+		@Override
+		public ShortOrderedCollection values() {
+			if(values == null) values = ShortCollections.synchronize(map.values(), mutex);
+			return (ShortOrderedCollection)values;
+		}
 		@Override
 		public ObjectOrderedSet<Double2ShortMap.Entry> double2ShortEntrySet() {
 			if(entrySet == null) entrySet = ObjectSets.synchronize(map.double2ShortEntrySet(), mutex);

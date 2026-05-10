@@ -1,10 +1,10 @@
 package speiger.src.collections.floats.collections;
 
-import speiger.src.collections.objects.collections.ObjectBidirectionalIterator;
 /**
- * A Type-Specific {@link ObjectBidirectionalIterator} to reduce (un)boxing
+ * This is a basically a {@link java.util.ListIterator} without the index functions.
+ * Allowing to have a simple Bidirectional Iterator without having to keep track of the Iteration index.
  */
-public interface FloatBidirectionalIterator extends FloatIterator, ObjectBidirectionalIterator<Float>
+public interface FloatBidirectionalIterator extends FloatIterator
 {
 	/**
 	 * Returns true if the Iterator has a Previous element
@@ -19,11 +19,11 @@ public interface FloatBidirectionalIterator extends FloatIterator, ObjectBidirec
 	 */
 	public float previousFloat();
 	
-	/** {@inheritDoc}
+	/**
 	 * <p>This default implementation delegates to the corresponding type-specific function.
 	 * @deprecated Please use the corresponding type-specific function instead. 
+	 * @return the Previous element of the iterator.+
 	 */
-	@Override
 	@Deprecated
 	public default Float previous() {
 		return Float.valueOf(previousFloat());

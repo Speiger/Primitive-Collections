@@ -26,7 +26,7 @@ import speiger.src.collections.longs.maps.interfaces.Long2ShortOrderedMap;
 import speiger.src.collections.longs.sets.AbstractLongSet;
 import speiger.src.collections.longs.sets.LongOrderedSet;
 import speiger.src.collections.shorts.collections.AbstractShortCollection;
-import speiger.src.collections.shorts.collections.ShortCollection;
+import speiger.src.collections.shorts.collections.ShortOrderedCollection;
 import speiger.src.collections.shorts.collections.ShortIterator;
 import speiger.src.collections.shorts.functions.ShortSupplier;
 import speiger.src.collections.shorts.functions.function.ShortShortUnaryOperator;
@@ -63,7 +63,7 @@ public class Long2ShortArrayMap extends AbstractLong2ShortMap implements Long2Sh
 	/** KeySet cache */
 	protected LongOrderedSet keySet;
 	/** Values cache */
-	protected ShortCollection valuesC;
+	protected ShortOrderedCollection valuesC;
 	/** EntrySet cache */
 	protected FastOrderedSet entrySet;
 	
@@ -230,6 +230,27 @@ public class Long2ShortArrayMap extends AbstractLong2ShortMap implements Long2Sh
 	}
 	
 	@Override
+	public short putFirst(long key, short value) {
+		int index = findIndex(key);
+		if(index < 0) {
+			insertIndex(0, key, value);
+			size++;
+			return getDefaultReturnValue();
+		}
+		return values[index];
+	}
+	
+	@Override
+	public short putLast(long key, short value) {
+		int index = findIndex(key);
+		if(index < 0) {
+			insertIndex(size++, key, value);
+			return getDefaultReturnValue();
+		}
+		return values[index];
+	}
+	
+	@Override
 	public boolean moveToFirst(long key) {
 		int index = findIndex(key);
 		if(index > 0) {
@@ -344,6 +365,34 @@ public class Long2ShortArrayMap extends AbstractLong2ShortMap implements Long2Sh
 	}
 	
 	@Override
+	public Long2ShortMap.Entry firstEntry() {
+		if(size == 0) throw new NoSuchElementException();
+		return new BasicEntry(keys[0], values[0]);
+	}
+	
+	@Override
+	public Long2ShortMap.Entry lastEntry() {
+		if(size == 0) throw new NoSuchElementException();
+		return new BasicEntry(keys[size-1], values[size-1]);
+	}
+	
+	@Override
+	public Long2ShortMap.Entry pollFirstEntry() {
+		if(size == 0) throw new NoSuchElementException();
+		BasicEntry result = new BasicEntry(keys[0], values[0]);
+		removeIndex(0);
+		return result;
+	}
+	
+	@Override
+	public Long2ShortMap.Entry pollLastEntry() {
+		if(size == 0) throw new NoSuchElementException();
+		BasicEntry result = new BasicEntry(keys[size-1], values[size-1]);
+		removeIndex(size-1);
+		return result;
+	}
+	
+	@Override
 	public short remove(long key) {
 		int index = findIndex(key);
 		if(index < 0) return getDefaultReturnValue();
@@ -400,7 +449,7 @@ public class Long2ShortArrayMap extends AbstractLong2ShortMap implements Long2Sh
 	}
 
 	@Override
-	public ShortCollection values() {
+	public ShortOrderedCollection values() {
 		if(valuesC == null) valuesC = new Values();
 		return valuesC;
 	}
@@ -718,24 +767,24 @@ public class Long2ShortArrayMap extends AbstractLong2ShortMap implements Long2Sh
 		}
 		
 		@Override
-		public Long2ShortMap.Entry first() {
+		public Long2ShortMap.Entry getFirst() {
 			return new BasicEntry(firstLongKey(), firstShortValue());
 		}
 		
 		@Override
-		public Long2ShortMap.Entry last() {
+		public Long2ShortMap.Entry getLast() {
 			return new BasicEntry(lastLongKey(), lastShortValue());
 		}
 		
 		@Override
-		public Long2ShortMap.Entry pollFirst() {
+		public Long2ShortMap.Entry removeFirst() {
 			BasicEntry entry = new BasicEntry(firstLongKey(), firstShortValue());
 			pollFirstLongKey();
 			return entry;
 		}
 		
 		@Override
-		public Long2ShortMap.Entry pollLast() {
+		public Long2ShortMap.Entry removeLast() {
 			BasicEntry entry = new BasicEntry(lastLongKey(), lastShortValue());
 			pollLastLongKey();
 			return entry;
@@ -743,7 +792,12 @@ public class Long2ShortArrayMap extends AbstractLong2ShortMap implements Long2Sh
 		
 		@Override
 		public ObjectBidirectionalIterator<Long2ShortMap.Entry> iterator() {
-			return new EntryIterator();
+			return new EntryIterator(true);
+		}
+		
+		@Override
+		public ObjectBidirectionalIterator<Long2ShortMap.Entry> reverseIterator() {
+			return new EntryIterator(false);
 		}
 		
 		@Override
@@ -753,7 +807,7 @@ public class Long2ShortArrayMap extends AbstractLong2ShortMap implements Long2Sh
 		
 		@Override
 		public ObjectBidirectionalIterator<Long2ShortMap.Entry> fastIterator() {
-			return new FastEntryIterator();
+			return new FastEntryIterator(true);
 		}
 		
 		@Override
@@ -950,7 +1004,9 @@ public class Long2ShortArrayMap extends AbstractLong2ShortMap implements Long2Sh
 		@Override
 		public boolean moveToLast(long o) { return Long2ShortArrayMap.this.moveToLast(o); }
 		@Override
-		public LongListIterator iterator() { return new KeyIterator(); }
+		public LongListIterator iterator() { return new KeyIterator(true); }
+		@Override
+		public LongListIterator reverseIterator() { return new KeyIterator(false); }
 		@Override
 		public LongBidirectionalIterator iterator(long fromElement) { return new KeyIterator(fromElement); } 
 		@Override
@@ -958,13 +1014,13 @@ public class Long2ShortArrayMap extends AbstractLong2ShortMap implements Long2Sh
 		@Override
 		public void clear() { Long2ShortArrayMap.this.clear(); }
 		@Override
-		public long firstLong() { return firstLongKey(); }
+		public long getFirstLong() { return firstLongKey(); }
 		@Override
-		public long pollFirstLong() { return pollFirstLongKey(); }
+		public long removeFirstLong() { return pollFirstLongKey(); }
 		@Override
-		public long lastLong() { return lastLongKey(); }
+		public long getLastLong() { return lastLongKey(); }
 		@Override
-		public long pollLastLong() { return pollLastLongKey(); }
+		public long removeLastLong() { return pollLastLongKey(); }
 		
 		@Override
 		public KeySet copy() { throw new UnsupportedOperationException(); }
@@ -1061,32 +1117,43 @@ public class Long2ShortArrayMap extends AbstractLong2ShortMap implements Long2Sh
 		}
 	}
 	
-	private class Values extends AbstractShortCollection {
+	private class Values extends AbstractShortCollection implements ShortOrderedCollection {
 		@Override
-		public boolean contains(short e) {
-			return containsValue(e);
-		}
+		public boolean contains(short e) { return containsValue(e); }
 		
 		@Override
-		public boolean add(short o) {
-			throw new UnsupportedOperationException();
-		}
-
+		public boolean add(short o) { throw new UnsupportedOperationException(); }
 		@Override
-		public ShortIterator iterator() {
-			return new ValueIterator();
-		}
-		
+		public ShortIterator iterator() { return new ValueIterator(true); }
 		@Override
-		public int size() {
-			return Long2ShortArrayMap.this.size();
-		}
-		
+		public int size() { return Long2ShortArrayMap.this.size(); }
 		@Override
-		public void clear() {
-			Long2ShortArrayMap.this.clear();
+		public void clear() { Long2ShortArrayMap.this.clear(); }
+		@Override
+		public ShortOrderedCollection reversed() { return new AbstractShortCollection.ReverseShortOrderedCollection(this, this::reverseIterator); }
+		private ShortIterator reverseIterator() {
+			return new ValueIterator(false);
 		}
-		
+		@Override
+		public void addFirst(short e) { throw new UnsupportedOperationException(); }
+		@Override
+		public void addLast(short e) { throw new UnsupportedOperationException(); }
+		@Override
+		public short getFirstShort() { return firstShortValue(); }
+		@Override
+		public short removeFirstShort() {
+			short result = firstShortValue();
+			pollFirstLongKey();
+			return result; 
+		}
+		@Override
+		public short getLastShort() { return lastShortValue(); }
+		@Override
+		public short removeLastShort() {
+			short result = lastShortValue();
+			pollLastLongKey();
+			return result; 
+		}
 		@Override
 		public void forEach(ShortConsumer action) {
 			Objects.requireNonNull(action);
@@ -1175,10 +1242,8 @@ public class Long2ShortArrayMap extends AbstractLong2ShortMap implements Long2Sh
 	private class FastEntryIterator extends MapIterator implements ObjectListIterator<Long2ShortMap.Entry> {
 		MapEntry entry = new MapEntry();
 		
-		public FastEntryIterator() {}
-		public FastEntryIterator(long from) {
-			index = findIndex(from);
-		}
+		public FastEntryIterator(boolean start) { super(start); }
+		public FastEntryIterator(long element) { super(element); }
 		
 		@Override
 		public Long2ShortMap.Entry next() {
@@ -1201,11 +1266,8 @@ public class Long2ShortArrayMap extends AbstractLong2ShortMap implements Long2Sh
 	private class EntryIterator extends MapIterator implements ObjectListIterator<Long2ShortMap.Entry> {
 		MapEntry entry = null;
 		
-		public EntryIterator() {}
-		public EntryIterator(long from) {
-			index = findIndex(from);
-			if(index == -1) throw new NoSuchElementException();
-		}
+		public EntryIterator(boolean start) { super(start); }
+		public EntryIterator(long element) { super(element); }
 		
 		@Override
 		public Long2ShortMap.Entry next() {
@@ -1232,11 +1294,8 @@ public class Long2ShortArrayMap extends AbstractLong2ShortMap implements Long2Sh
 	}
 	
 	private class KeyIterator extends MapIterator implements LongListIterator {
-		public KeyIterator() {}
-		public KeyIterator(long element) {
-			index = findIndex(element);
-			if(index == -1) throw new NoSuchElementException();
-		}
+		public KeyIterator(boolean start) { super(start); }
+		public KeyIterator(long element) { super(element); }
 		
 		@Override
 		public long previousLong() {
@@ -1256,6 +1315,9 @@ public class Long2ShortArrayMap extends AbstractLong2ShortMap implements Long2Sh
 	}
 	
 	private class ValueIterator extends MapIterator implements ShortListIterator {
+		public ValueIterator(boolean start) { super(start); }
+		public ValueIterator(long element) { super(element); }
+		
 		@Override
 		public short previousShort() {
 			return values[previousEntry()];
@@ -1274,23 +1336,37 @@ public class Long2ShortArrayMap extends AbstractLong2ShortMap implements Long2Sh
 	}
 	
 	private class MapIterator {
+		boolean forward;
 		int index;
 		int lastReturned = -1;
-
+		
+		MapIterator(boolean start) {
+			this.forward = start;
+			this.index = start ? 0 : size;
+		}
+		
+		MapIterator(long element) {
+			this.forward = true;
+			index = findIndex(element);
+			if(index == -1) throw new NoSuchElementException();
+		}
+		
 		public boolean hasNext() {
-			return index < size;
+			return forward ? index < size : index > 0;
 		}
 		
 		public boolean hasPrevious() {
-			return index > 0;
+			return forward ? index > 0 : index < size;
 		}
 		
 		public int nextIndex() {
-			return index;
+			if(forward) return index;
+			return size - index;
 		}
 		
 		public int previousIndex() {
-			return index-1;
+			if(forward) return index-1;
+			return (size - index)-1;
 		}
 		
 		public void remove() {
@@ -1303,26 +1379,42 @@ public class Long2ShortArrayMap extends AbstractLong2ShortMap implements Long2Sh
 		
 		public int previousEntry() {
 			if(!hasPrevious()) throw new NoSuchElementException();
-			index--;
-			return (lastReturned = index);
-		}
-		
-		public int nextEntry() {
-			if(!hasNext()) throw new NoSuchElementException();
+			if(forward) {
+				index--;
+				return (lastReturned = index);
+			}
 			lastReturned = index;
 			return index++;
 		}
 		
+		public int nextEntry() {
+			if(!hasNext()) throw new NoSuchElementException();
+			if(forward) {
+				lastReturned = index;
+				return index++;
+			}
+			index--;
+			return (lastReturned = index);
+		}
+		
 		public int skip(int amount) {
 			if(amount < 0) throw new IllegalStateException("Negative Numbers are not allowed");
+			return forward ? moveForward(amount) : moveBackwards(amount);
+		}
+		
+		public int back(int amount) {
+			if(amount < 0) throw new IllegalStateException("Negative Numbers are not allowed");
+			return forward ? moveBackwards(amount) : moveForward(amount);
+		}
+		
+		private int moveForward(int amount) {
 			int steps = Math.min(amount, size() - index);
 			index += steps;
 			if(steps > 0) lastReturned = Math.min(index-1, size()-1);
 			return steps;
 		}
 		
-		public int back(int amount) {
-			if(amount < 0) throw new IllegalStateException("Negative Numbers are not allowed");
+		private int moveBackwards(int amount) {
 			int steps = Math.min(amount, index);
 			index -= steps;
 			if(steps > 0) lastReturned = Math.min(index, size()-1);

@@ -1,9 +1,11 @@
 package speiger.src.collections.longs.collections;
 
 import java.util.Collection;
+import java.util.function.Supplier;
 import java.util.Objects;
 import java.util.AbstractCollection;
 
+import speiger.src.collections.longs.lists.LongListIterator;
 import speiger.src.collections.longs.functions.LongConsumer;
 import speiger.src.collections.longs.utils.LongIterators;
 import speiger.src.collections.longs.utils.LongArrays;
@@ -248,5 +250,69 @@ public abstract class AbstractLongCollection extends AbstractCollection<Long> im
 		LongIterators.unwrap(a, iterator());
 		if (a.length > size()) a[size()] = 0L;
 		return a;
+	}
+
+	public static class ReverseLongOrderedCollection extends AbstractLongCollection implements LongOrderedCollection {
+		LongOrderedCollection collection;
+		Supplier<LongIterator> reverseIterator;
+		
+		public ReverseLongOrderedCollection(LongOrderedCollection collection, Supplier<LongIterator> reverseIterator) {
+			this.collection = collection;
+			this.reverseIterator = reverseIterator;
+		}
+		
+		@Override
+		public boolean add(long o) { return collection.add(o); }
+		@Override
+		public LongOrderedCollection reversed() { return collection; }
+		@Override
+		public void addFirst(long e) { collection.addLast(e); }
+		@Override
+		public void addLast(long e) { collection.addFirst(e); }
+		@Override
+		public boolean contains(long e) { return collection.contains(e); }
+		@Override
+		public boolean remLong(long e) { return collection.remLong(e); }
+		@Override
+		public void clear() { collection.clear(); }
+		@Override
+		public long getFirstLong() { return collection.getLastLong(); }
+		@Override
+		public long removeFirstLong() { return collection.removeLastLong(); }
+		@Override
+		public long getLastLong() { return collection.getFirstLong(); }
+		@Override
+		public long removeLastLong() { return collection.removeFirstLong(); }
+		@Override
+		public LongIterator iterator() { return reverseIterator.get(); }
+		@Override
+		public int size() { return collection.size(); }
+	}
+	
+	public static class ReverseBiIterator implements LongListIterator {
+		LongListIterator it;
+		
+		public ReverseBiIterator(LongListIterator it) {
+			this.it = it;
+		}
+		
+		@Override
+		public long nextLong() { return it.previousLong(); }
+		@Override
+		public boolean hasNext() { return it.hasPrevious(); }
+		@Override
+		public boolean hasPrevious() { return it.hasNext(); }
+		@Override
+		public long previousLong() { return it.nextLong(); }
+		@Override
+		public void remove() { it.remove(); }
+		@Override
+		public int nextIndex() { return it.previousIndex(); }
+		@Override
+		public int previousIndex() { return it.nextIndex(); }
+		@Override
+		public void set(long e) { it.set(e); }
+		@Override
+		public void add(long e) { it.add(e); }
 	}
 }

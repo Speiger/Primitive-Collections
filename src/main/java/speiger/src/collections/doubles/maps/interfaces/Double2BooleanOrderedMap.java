@@ -1,6 +1,8 @@
 package speiger.src.collections.doubles.maps.interfaces;
 
 import speiger.src.collections.doubles.utils.maps.Double2BooleanMaps;
+import speiger.src.collections.doubles.maps.abstracts.AbstractDouble2BooleanMap;
+import speiger.src.collections.booleans.collections.BooleanOrderedCollection;
 import speiger.src.collections.doubles.sets.DoubleOrderedSet;
 import speiger.src.collections.objects.collections.ObjectBidirectionalIterator;
 import speiger.src.collections.objects.sets.ObjectOrderedSet;
@@ -30,6 +32,26 @@ public interface Double2BooleanOrderedMap extends Double2BooleanMap
 	 * @see java.util.Map#put(Object, Object)
 	 */
 	public boolean putAndMoveToLast(double key, boolean value);
+	
+	/**
+	 * A alternative to putAndMoveToFirst.
+	 * This method simply puts an entry at the first spot of the Map but only if the entry is missing.
+	 * @param key the key that should be inserted
+	 * @param value the value that should be inserted
+	 * @return the previous present or default return value
+	 * @see java.util.Map#put(Object, Object)
+	 */
+	public boolean putFirst(double key, boolean value);
+	
+	/**
+	 * A alternative to putAndMoveToLast.
+	 * This method simply puts an entry at the last spot of the Map but only if the entry is missing.
+	 * @param key the key that should be inserted
+	 * @param value the value that should be inserted
+	 * @return the previous present or default return value
+	 * @see java.util.Map#put(Object, Object)
+	 */
+	public boolean putLast(double key, boolean value);
 	
 	/**
 	 * A specific move method to move a given key/value to the first index.
@@ -91,12 +113,24 @@ public interface Double2BooleanOrderedMap extends Double2BooleanMap
 	 */
 	public boolean lastBooleanValue();
 	
+	
+	public Double2BooleanMap.Entry firstEntry();
+	
+	public Double2BooleanMap.Entry lastEntry();
+	
+	public Double2BooleanMap.Entry pollFirstEntry();
+	
+	public Double2BooleanMap.Entry pollLastEntry();
 	@Override
 	public Double2BooleanOrderedMap copy();
 	@Override
 	public DoubleOrderedSet keySet();
 	@Override
+	public BooleanOrderedCollection values();
+	@Override
 	public ObjectOrderedSet<Double2BooleanMap.Entry> double2BooleanEntrySet();
+	
+	public default Double2BooleanOrderedMap reversed() { return new AbstractDouble2BooleanMap.ReversedDouble2BooleanOrderedMap(this); }
 	
 	/**
 	 * Creates a Wrapped SortedMap that is Synchronized

@@ -26,7 +26,7 @@ import speiger.src.collections.longs.maps.interfaces.Long2CharOrderedMap;
 import speiger.src.collections.longs.sets.AbstractLongSet;
 import speiger.src.collections.longs.sets.LongOrderedSet;
 import speiger.src.collections.chars.collections.AbstractCharCollection;
-import speiger.src.collections.chars.collections.CharCollection;
+import speiger.src.collections.chars.collections.CharOrderedCollection;
 import speiger.src.collections.chars.collections.CharIterator;
 import speiger.src.collections.chars.functions.CharSupplier;
 import speiger.src.collections.chars.functions.function.CharCharUnaryOperator;
@@ -63,7 +63,7 @@ public class Long2CharArrayMap extends AbstractLong2CharMap implements Long2Char
 	/** KeySet cache */
 	protected LongOrderedSet keySet;
 	/** Values cache */
-	protected CharCollection valuesC;
+	protected CharOrderedCollection valuesC;
 	/** EntrySet cache */
 	protected FastOrderedSet entrySet;
 	
@@ -230,6 +230,27 @@ public class Long2CharArrayMap extends AbstractLong2CharMap implements Long2Char
 	}
 	
 	@Override
+	public char putFirst(long key, char value) {
+		int index = findIndex(key);
+		if(index < 0) {
+			insertIndex(0, key, value);
+			size++;
+			return getDefaultReturnValue();
+		}
+		return values[index];
+	}
+	
+	@Override
+	public char putLast(long key, char value) {
+		int index = findIndex(key);
+		if(index < 0) {
+			insertIndex(size++, key, value);
+			return getDefaultReturnValue();
+		}
+		return values[index];
+	}
+	
+	@Override
 	public boolean moveToFirst(long key) {
 		int index = findIndex(key);
 		if(index > 0) {
@@ -344,6 +365,34 @@ public class Long2CharArrayMap extends AbstractLong2CharMap implements Long2Char
 	}
 	
 	@Override
+	public Long2CharMap.Entry firstEntry() {
+		if(size == 0) throw new NoSuchElementException();
+		return new BasicEntry(keys[0], values[0]);
+	}
+	
+	@Override
+	public Long2CharMap.Entry lastEntry() {
+		if(size == 0) throw new NoSuchElementException();
+		return new BasicEntry(keys[size-1], values[size-1]);
+	}
+	
+	@Override
+	public Long2CharMap.Entry pollFirstEntry() {
+		if(size == 0) throw new NoSuchElementException();
+		BasicEntry result = new BasicEntry(keys[0], values[0]);
+		removeIndex(0);
+		return result;
+	}
+	
+	@Override
+	public Long2CharMap.Entry pollLastEntry() {
+		if(size == 0) throw new NoSuchElementException();
+		BasicEntry result = new BasicEntry(keys[size-1], values[size-1]);
+		removeIndex(size-1);
+		return result;
+	}
+	
+	@Override
 	public char remove(long key) {
 		int index = findIndex(key);
 		if(index < 0) return getDefaultReturnValue();
@@ -400,7 +449,7 @@ public class Long2CharArrayMap extends AbstractLong2CharMap implements Long2Char
 	}
 
 	@Override
-	public CharCollection values() {
+	public CharOrderedCollection values() {
 		if(valuesC == null) valuesC = new Values();
 		return valuesC;
 	}
@@ -718,24 +767,24 @@ public class Long2CharArrayMap extends AbstractLong2CharMap implements Long2Char
 		}
 		
 		@Override
-		public Long2CharMap.Entry first() {
+		public Long2CharMap.Entry getFirst() {
 			return new BasicEntry(firstLongKey(), firstCharValue());
 		}
 		
 		@Override
-		public Long2CharMap.Entry last() {
+		public Long2CharMap.Entry getLast() {
 			return new BasicEntry(lastLongKey(), lastCharValue());
 		}
 		
 		@Override
-		public Long2CharMap.Entry pollFirst() {
+		public Long2CharMap.Entry removeFirst() {
 			BasicEntry entry = new BasicEntry(firstLongKey(), firstCharValue());
 			pollFirstLongKey();
 			return entry;
 		}
 		
 		@Override
-		public Long2CharMap.Entry pollLast() {
+		public Long2CharMap.Entry removeLast() {
 			BasicEntry entry = new BasicEntry(lastLongKey(), lastCharValue());
 			pollLastLongKey();
 			return entry;
@@ -743,7 +792,12 @@ public class Long2CharArrayMap extends AbstractLong2CharMap implements Long2Char
 		
 		@Override
 		public ObjectBidirectionalIterator<Long2CharMap.Entry> iterator() {
-			return new EntryIterator();
+			return new EntryIterator(true);
+		}
+		
+		@Override
+		public ObjectBidirectionalIterator<Long2CharMap.Entry> reverseIterator() {
+			return new EntryIterator(false);
 		}
 		
 		@Override
@@ -753,7 +807,7 @@ public class Long2CharArrayMap extends AbstractLong2CharMap implements Long2Char
 		
 		@Override
 		public ObjectBidirectionalIterator<Long2CharMap.Entry> fastIterator() {
-			return new FastEntryIterator();
+			return new FastEntryIterator(true);
 		}
 		
 		@Override
@@ -950,7 +1004,9 @@ public class Long2CharArrayMap extends AbstractLong2CharMap implements Long2Char
 		@Override
 		public boolean moveToLast(long o) { return Long2CharArrayMap.this.moveToLast(o); }
 		@Override
-		public LongListIterator iterator() { return new KeyIterator(); }
+		public LongListIterator iterator() { return new KeyIterator(true); }
+		@Override
+		public LongListIterator reverseIterator() { return new KeyIterator(false); }
 		@Override
 		public LongBidirectionalIterator iterator(long fromElement) { return new KeyIterator(fromElement); } 
 		@Override
@@ -958,13 +1014,13 @@ public class Long2CharArrayMap extends AbstractLong2CharMap implements Long2Char
 		@Override
 		public void clear() { Long2CharArrayMap.this.clear(); }
 		@Override
-		public long firstLong() { return firstLongKey(); }
+		public long getFirstLong() { return firstLongKey(); }
 		@Override
-		public long pollFirstLong() { return pollFirstLongKey(); }
+		public long removeFirstLong() { return pollFirstLongKey(); }
 		@Override
-		public long lastLong() { return lastLongKey(); }
+		public long getLastLong() { return lastLongKey(); }
 		@Override
-		public long pollLastLong() { return pollLastLongKey(); }
+		public long removeLastLong() { return pollLastLongKey(); }
 		
 		@Override
 		public KeySet copy() { throw new UnsupportedOperationException(); }
@@ -1061,32 +1117,43 @@ public class Long2CharArrayMap extends AbstractLong2CharMap implements Long2Char
 		}
 	}
 	
-	private class Values extends AbstractCharCollection {
+	private class Values extends AbstractCharCollection implements CharOrderedCollection {
 		@Override
-		public boolean contains(char e) {
-			return containsValue(e);
-		}
+		public boolean contains(char e) { return containsValue(e); }
 		
 		@Override
-		public boolean add(char o) {
-			throw new UnsupportedOperationException();
-		}
-
+		public boolean add(char o) { throw new UnsupportedOperationException(); }
 		@Override
-		public CharIterator iterator() {
-			return new ValueIterator();
-		}
-		
+		public CharIterator iterator() { return new ValueIterator(true); }
 		@Override
-		public int size() {
-			return Long2CharArrayMap.this.size();
-		}
-		
+		public int size() { return Long2CharArrayMap.this.size(); }
 		@Override
-		public void clear() {
-			Long2CharArrayMap.this.clear();
+		public void clear() { Long2CharArrayMap.this.clear(); }
+		@Override
+		public CharOrderedCollection reversed() { return new AbstractCharCollection.ReverseCharOrderedCollection(this, this::reverseIterator); }
+		private CharIterator reverseIterator() {
+			return new ValueIterator(false);
 		}
-		
+		@Override
+		public void addFirst(char e) { throw new UnsupportedOperationException(); }
+		@Override
+		public void addLast(char e) { throw new UnsupportedOperationException(); }
+		@Override
+		public char getFirstChar() { return firstCharValue(); }
+		@Override
+		public char removeFirstChar() {
+			char result = firstCharValue();
+			pollFirstLongKey();
+			return result; 
+		}
+		@Override
+		public char getLastChar() { return lastCharValue(); }
+		@Override
+		public char removeLastChar() {
+			char result = lastCharValue();
+			pollLastLongKey();
+			return result; 
+		}
 		@Override
 		public void forEach(CharConsumer action) {
 			Objects.requireNonNull(action);
@@ -1175,10 +1242,8 @@ public class Long2CharArrayMap extends AbstractLong2CharMap implements Long2Char
 	private class FastEntryIterator extends MapIterator implements ObjectListIterator<Long2CharMap.Entry> {
 		MapEntry entry = new MapEntry();
 		
-		public FastEntryIterator() {}
-		public FastEntryIterator(long from) {
-			index = findIndex(from);
-		}
+		public FastEntryIterator(boolean start) { super(start); }
+		public FastEntryIterator(long element) { super(element); }
 		
 		@Override
 		public Long2CharMap.Entry next() {
@@ -1201,11 +1266,8 @@ public class Long2CharArrayMap extends AbstractLong2CharMap implements Long2Char
 	private class EntryIterator extends MapIterator implements ObjectListIterator<Long2CharMap.Entry> {
 		MapEntry entry = null;
 		
-		public EntryIterator() {}
-		public EntryIterator(long from) {
-			index = findIndex(from);
-			if(index == -1) throw new NoSuchElementException();
-		}
+		public EntryIterator(boolean start) { super(start); }
+		public EntryIterator(long element) { super(element); }
 		
 		@Override
 		public Long2CharMap.Entry next() {
@@ -1232,11 +1294,8 @@ public class Long2CharArrayMap extends AbstractLong2CharMap implements Long2Char
 	}
 	
 	private class KeyIterator extends MapIterator implements LongListIterator {
-		public KeyIterator() {}
-		public KeyIterator(long element) {
-			index = findIndex(element);
-			if(index == -1) throw new NoSuchElementException();
-		}
+		public KeyIterator(boolean start) { super(start); }
+		public KeyIterator(long element) { super(element); }
 		
 		@Override
 		public long previousLong() {
@@ -1256,6 +1315,9 @@ public class Long2CharArrayMap extends AbstractLong2CharMap implements Long2Char
 	}
 	
 	private class ValueIterator extends MapIterator implements CharListIterator {
+		public ValueIterator(boolean start) { super(start); }
+		public ValueIterator(long element) { super(element); }
+		
 		@Override
 		public char previousChar() {
 			return values[previousEntry()];
@@ -1274,23 +1336,37 @@ public class Long2CharArrayMap extends AbstractLong2CharMap implements Long2Char
 	}
 	
 	private class MapIterator {
+		boolean forward;
 		int index;
 		int lastReturned = -1;
-
+		
+		MapIterator(boolean start) {
+			this.forward = start;
+			this.index = start ? 0 : size;
+		}
+		
+		MapIterator(long element) {
+			this.forward = true;
+			index = findIndex(element);
+			if(index == -1) throw new NoSuchElementException();
+		}
+		
 		public boolean hasNext() {
-			return index < size;
+			return forward ? index < size : index > 0;
 		}
 		
 		public boolean hasPrevious() {
-			return index > 0;
+			return forward ? index > 0 : index < size;
 		}
 		
 		public int nextIndex() {
-			return index;
+			if(forward) return index;
+			return size - index;
 		}
 		
 		public int previousIndex() {
-			return index-1;
+			if(forward) return index-1;
+			return (size - index)-1;
 		}
 		
 		public void remove() {
@@ -1303,26 +1379,42 @@ public class Long2CharArrayMap extends AbstractLong2CharMap implements Long2Char
 		
 		public int previousEntry() {
 			if(!hasPrevious()) throw new NoSuchElementException();
-			index--;
-			return (lastReturned = index);
-		}
-		
-		public int nextEntry() {
-			if(!hasNext()) throw new NoSuchElementException();
+			if(forward) {
+				index--;
+				return (lastReturned = index);
+			}
 			lastReturned = index;
 			return index++;
 		}
 		
+		public int nextEntry() {
+			if(!hasNext()) throw new NoSuchElementException();
+			if(forward) {
+				lastReturned = index;
+				return index++;
+			}
+			index--;
+			return (lastReturned = index);
+		}
+		
 		public int skip(int amount) {
 			if(amount < 0) throw new IllegalStateException("Negative Numbers are not allowed");
+			return forward ? moveForward(amount) : moveBackwards(amount);
+		}
+		
+		public int back(int amount) {
+			if(amount < 0) throw new IllegalStateException("Negative Numbers are not allowed");
+			return forward ? moveBackwards(amount) : moveForward(amount);
+		}
+		
+		private int moveForward(int amount) {
 			int steps = Math.min(amount, size() - index);
 			index += steps;
 			if(steps > 0) lastReturned = Math.min(index-1, size()-1);
 			return steps;
 		}
 		
-		public int back(int amount) {
-			if(amount < 0) throw new IllegalStateException("Negative Numbers are not allowed");
+		private int moveBackwards(int amount) {
 			int steps = Math.min(amount, index);
 			index -= steps;
 			if(steps > 0) lastReturned = Math.min(index, size()-1);

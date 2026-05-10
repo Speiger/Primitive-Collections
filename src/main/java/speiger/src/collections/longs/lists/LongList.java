@@ -9,6 +9,7 @@ import java.util.Comparator;
 import java.util.function.UnaryOperator;
 
 import speiger.src.collections.longs.collections.LongCollection;
+import speiger.src.collections.longs.collections.LongOrderedCollection;
 import speiger.src.collections.longs.collections.LongSplititerator;
 import speiger.src.collections.ints.functions.consumer.IntLongConsumer;
 import speiger.src.collections.longs.functions.LongComparator;
@@ -20,7 +21,7 @@ import speiger.src.collections.longs.utils.LongSplititerators;
 /**
  * A Type Specific List interface that reduces boxing/unboxing and adds a couple extra quality of life features
  */
-public interface LongList extends LongCollection, List<Long>
+public interface LongList extends LongOrderedCollection, List<Long>
 {
 	/**
 	 * A Type-Specific add Function to reduce (un)boxing
@@ -82,6 +83,24 @@ public interface LongList extends LongCollection, List<Long>
 	 * @return true if the list was modified
 	 */
 	public boolean addAll(int index, LongList c);
+	
+	/**
+	 * A method to add an element to the start of a list
+	 * @param e that should be added at the start.
+	 */
+	@Override
+	public default void addFirst(long e) { 
+		add(0, e);
+	}
+	
+	/**
+	 * A method to add an element to the end of a list
+	 * @param e that should be added at the end.
+	 */
+	@Override
+	public default void addLast(long e) {
+		add(e);
+	}
 	
 	/**
 	 * Helper method that returns the first element of a List.
@@ -413,9 +432,9 @@ public interface LongList extends LongCollection, List<Long>
 	@Override
 	@Deprecated
 	public default boolean add(Long e) {
-		return LongCollection.super.add(e);
+		return LongOrderedCollection.super.add(e);
 	}
-	
+
 	/** {@inheritDoc}
 	 * <p>This default implementation delegates to the corresponding type-specific function.
 	 * @deprecated Please use the corresponding type-specific function instead. 
@@ -463,7 +482,7 @@ public interface LongList extends LongCollection, List<Long>
 	@Override
 	@Deprecated
 	public default boolean contains(Object o) {
-		return LongCollection.super.contains(o);
+		return LongOrderedCollection.super.contains(o);
 	}
 	
 	/** {@inheritDoc}
@@ -473,7 +492,7 @@ public interface LongList extends LongCollection, List<Long>
 	@Override
 	@Deprecated
 	public default boolean remove(Object o) {
-		return LongCollection.super.remove(o);
+		return LongOrderedCollection.super.remove(o);
 	}
 	
 	/** {@inheritDoc}

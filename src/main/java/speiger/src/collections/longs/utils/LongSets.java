@@ -312,17 +312,19 @@ public class LongSets
 		@Override
 		public LongBidirectionalIterator iterator() { return LongIterators.unmodifiable(s.iterator()); }
 		@Override
+		public LongBidirectionalIterator reverseIterator() { return LongIterators.unmodifiable(s.reverseIterator()); }
+		@Override
 		public LongBidirectionalIterator iterator(long fromElement) { return LongIterators.unmodifiable(s.iterator(fromElement)); }
 		@Override
 		public LongOrderedSet copy() { return s.copy(); }
 		@Override
-		public long firstLong() { return s.firstLong(); }
+		public long getFirstLong() { return s.getFirstLong(); }
 		@Override
-		public long pollFirstLong() { throw new UnsupportedOperationException(); }
+		public long removeFirstLong() { throw new UnsupportedOperationException(); }
 		@Override
-		public long lastLong() { return s.lastLong(); }
+		public long getLastLong() { return s.getLastLong(); }
 		@Override
-		public long pollLastLong() { throw new UnsupportedOperationException(); }
+		public long removeLastLong() { throw new UnsupportedOperationException(); }
 	}
 	
 	private static class UnmodifiableSortedSet extends UnmodifiableSet implements LongSortedSet
@@ -583,17 +585,19 @@ public class LongSets
 		@Override
 		public LongBidirectionalIterator iterator() { synchronized(mutex) { return s.iterator(); } }
 		@Override
+		public LongBidirectionalIterator reverseIterator() { synchronized(mutex) { return s.reverseIterator(); } }
+		@Override
 		public LongBidirectionalIterator iterator(long fromElement) { synchronized(mutex) { return s.iterator(fromElement); } }
 		@Override
 		public LongOrderedSet copy() { synchronized(mutex) { return s.copy(); } }
 		@Override
-		public long firstLong() { synchronized(mutex) { return s.firstLong(); } }
+		public long getFirstLong() { synchronized(mutex) { return s.getFirstLong(); } }
 		@Override
-		public long pollFirstLong() { synchronized(mutex) { return s.pollFirstLong(); } }
+		public long removeFirstLong() { synchronized(mutex) { return s.removeFirstLong(); } }
 		@Override
-		public long lastLong() { synchronized(mutex) { return s.lastLong(); } }
+		public long getLastLong() { synchronized(mutex) { return s.getLastLong(); } }
 		@Override
-		public long pollLastLong() { synchronized(mutex) { return s.pollLastLong(); } }
+		public long removeLastLong() { synchronized(mutex) { return s.removeLastLong(); } }
 	}
 	
 	private static class SynchronizedTrimSet extends SynchronizedSet implements ITrimmable

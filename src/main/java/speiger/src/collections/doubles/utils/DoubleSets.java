@@ -312,17 +312,19 @@ public class DoubleSets
 		@Override
 		public DoubleBidirectionalIterator iterator() { return DoubleIterators.unmodifiable(s.iterator()); }
 		@Override
+		public DoubleBidirectionalIterator reverseIterator() { return DoubleIterators.unmodifiable(s.reverseIterator()); }
+		@Override
 		public DoubleBidirectionalIterator iterator(double fromElement) { return DoubleIterators.unmodifiable(s.iterator(fromElement)); }
 		@Override
 		public DoubleOrderedSet copy() { return s.copy(); }
 		@Override
-		public double firstDouble() { return s.firstDouble(); }
+		public double getFirstDouble() { return s.getFirstDouble(); }
 		@Override
-		public double pollFirstDouble() { throw new UnsupportedOperationException(); }
+		public double removeFirstDouble() { throw new UnsupportedOperationException(); }
 		@Override
-		public double lastDouble() { return s.lastDouble(); }
+		public double getLastDouble() { return s.getLastDouble(); }
 		@Override
-		public double pollLastDouble() { throw new UnsupportedOperationException(); }
+		public double removeLastDouble() { throw new UnsupportedOperationException(); }
 	}
 	
 	private static class UnmodifiableSortedSet extends UnmodifiableSet implements DoubleSortedSet
@@ -583,17 +585,19 @@ public class DoubleSets
 		@Override
 		public DoubleBidirectionalIterator iterator() { synchronized(mutex) { return s.iterator(); } }
 		@Override
+		public DoubleBidirectionalIterator reverseIterator() { synchronized(mutex) { return s.reverseIterator(); } }
+		@Override
 		public DoubleBidirectionalIterator iterator(double fromElement) { synchronized(mutex) { return s.iterator(fromElement); } }
 		@Override
 		public DoubleOrderedSet copy() { synchronized(mutex) { return s.copy(); } }
 		@Override
-		public double firstDouble() { synchronized(mutex) { return s.firstDouble(); } }
+		public double getFirstDouble() { synchronized(mutex) { return s.getFirstDouble(); } }
 		@Override
-		public double pollFirstDouble() { synchronized(mutex) { return s.pollFirstDouble(); } }
+		public double removeFirstDouble() { synchronized(mutex) { return s.removeFirstDouble(); } }
 		@Override
-		public double lastDouble() { synchronized(mutex) { return s.lastDouble(); } }
+		public double getLastDouble() { synchronized(mutex) { return s.getLastDouble(); } }
 		@Override
-		public double pollLastDouble() { synchronized(mutex) { return s.pollLastDouble(); } }
+		public double removeLastDouble() { synchronized(mutex) { return s.removeLastDouble(); } }
 	}
 	
 	private static class SynchronizedTrimSet extends SynchronizedSet implements ITrimmable

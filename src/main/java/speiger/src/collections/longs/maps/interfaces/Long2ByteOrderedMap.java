@@ -1,6 +1,8 @@
 package speiger.src.collections.longs.maps.interfaces;
 
 import speiger.src.collections.longs.utils.maps.Long2ByteMaps;
+import speiger.src.collections.longs.maps.abstracts.AbstractLong2ByteMap;
+import speiger.src.collections.bytes.collections.ByteOrderedCollection;
 import speiger.src.collections.longs.sets.LongOrderedSet;
 import speiger.src.collections.objects.collections.ObjectBidirectionalIterator;
 import speiger.src.collections.objects.sets.ObjectOrderedSet;
@@ -30,6 +32,26 @@ public interface Long2ByteOrderedMap extends Long2ByteMap
 	 * @see java.util.Map#put(Object, Object)
 	 */
 	public byte putAndMoveToLast(long key, byte value);
+	
+	/**
+	 * A alternative to putAndMoveToFirst.
+	 * This method simply puts an entry at the first spot of the Map but only if the entry is missing.
+	 * @param key the key that should be inserted
+	 * @param value the value that should be inserted
+	 * @return the previous present or default return value
+	 * @see java.util.Map#put(Object, Object)
+	 */
+	public byte putFirst(long key, byte value);
+	
+	/**
+	 * A alternative to putAndMoveToLast.
+	 * This method simply puts an entry at the last spot of the Map but only if the entry is missing.
+	 * @param key the key that should be inserted
+	 * @param value the value that should be inserted
+	 * @return the previous present or default return value
+	 * @see java.util.Map#put(Object, Object)
+	 */
+	public byte putLast(long key, byte value);
 	
 	/**
 	 * A specific move method to move a given key/value to the first index.
@@ -91,12 +113,24 @@ public interface Long2ByteOrderedMap extends Long2ByteMap
 	 */
 	public byte lastByteValue();
 	
+	
+	public Long2ByteMap.Entry firstEntry();
+	
+	public Long2ByteMap.Entry lastEntry();
+	
+	public Long2ByteMap.Entry pollFirstEntry();
+	
+	public Long2ByteMap.Entry pollLastEntry();
 	@Override
 	public Long2ByteOrderedMap copy();
 	@Override
 	public LongOrderedSet keySet();
 	@Override
+	public ByteOrderedCollection values();
+	@Override
 	public ObjectOrderedSet<Long2ByteMap.Entry> long2ByteEntrySet();
+	
+	public default Long2ByteOrderedMap reversed() { return new AbstractLong2ByteMap.ReversedLong2ByteOrderedMap(this); }
 	
 	/**
 	 * Creates a Wrapped SortedMap that is Synchronized

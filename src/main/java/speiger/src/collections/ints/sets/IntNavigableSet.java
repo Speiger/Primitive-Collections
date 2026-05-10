@@ -4,8 +4,8 @@ import java.util.NavigableSet;
 
 import speiger.src.collections.ints.collections.IntBidirectionalIterator;
 import speiger.src.collections.ints.collections.IntSplititerator;
-import speiger.src.collections.ints.utils.IntSets;
 import speiger.src.collections.ints.utils.IntSplititerators;
+import speiger.src.collections.ints.utils.IntSets;
 
 /**
  * A Type Specific Navigable Set interface with a couple helper methods

@@ -312,17 +312,19 @@ public class IntSets
 		@Override
 		public IntBidirectionalIterator iterator() { return IntIterators.unmodifiable(s.iterator()); }
 		@Override
+		public IntBidirectionalIterator reverseIterator() { return IntIterators.unmodifiable(s.reverseIterator()); }
+		@Override
 		public IntBidirectionalIterator iterator(int fromElement) { return IntIterators.unmodifiable(s.iterator(fromElement)); }
 		@Override
 		public IntOrderedSet copy() { return s.copy(); }
 		@Override
-		public int firstInt() { return s.firstInt(); }
+		public int getFirstInt() { return s.getFirstInt(); }
 		@Override
-		public int pollFirstInt() { throw new UnsupportedOperationException(); }
+		public int removeFirstInt() { throw new UnsupportedOperationException(); }
 		@Override
-		public int lastInt() { return s.lastInt(); }
+		public int getLastInt() { return s.getLastInt(); }
 		@Override
-		public int pollLastInt() { throw new UnsupportedOperationException(); }
+		public int removeLastInt() { throw new UnsupportedOperationException(); }
 	}
 	
 	private static class UnmodifiableSortedSet extends UnmodifiableSet implements IntSortedSet
@@ -583,17 +585,19 @@ public class IntSets
 		@Override
 		public IntBidirectionalIterator iterator() { synchronized(mutex) { return s.iterator(); } }
 		@Override
+		public IntBidirectionalIterator reverseIterator() { synchronized(mutex) { return s.reverseIterator(); } }
+		@Override
 		public IntBidirectionalIterator iterator(int fromElement) { synchronized(mutex) { return s.iterator(fromElement); } }
 		@Override
 		public IntOrderedSet copy() { synchronized(mutex) { return s.copy(); } }
 		@Override
-		public int firstInt() { synchronized(mutex) { return s.firstInt(); } }
+		public int getFirstInt() { synchronized(mutex) { return s.getFirstInt(); } }
 		@Override
-		public int pollFirstInt() { synchronized(mutex) { return s.pollFirstInt(); } }
+		public int removeFirstInt() { synchronized(mutex) { return s.removeFirstInt(); } }
 		@Override
-		public int lastInt() { synchronized(mutex) { return s.lastInt(); } }
+		public int getLastInt() { synchronized(mutex) { return s.getLastInt(); } }
 		@Override
-		public int pollLastInt() { synchronized(mutex) { return s.pollLastInt(); } }
+		public int removeLastInt() { synchronized(mutex) { return s.removeLastInt(); } }
 	}
 	
 	private static class SynchronizedTrimSet extends SynchronizedSet implements ITrimmable

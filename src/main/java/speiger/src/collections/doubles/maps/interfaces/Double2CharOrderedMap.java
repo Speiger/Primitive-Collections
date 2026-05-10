@@ -1,6 +1,8 @@
 package speiger.src.collections.doubles.maps.interfaces;
 
 import speiger.src.collections.doubles.utils.maps.Double2CharMaps;
+import speiger.src.collections.doubles.maps.abstracts.AbstractDouble2CharMap;
+import speiger.src.collections.chars.collections.CharOrderedCollection;
 import speiger.src.collections.doubles.sets.DoubleOrderedSet;
 import speiger.src.collections.objects.collections.ObjectBidirectionalIterator;
 import speiger.src.collections.objects.sets.ObjectOrderedSet;
@@ -30,6 +32,26 @@ public interface Double2CharOrderedMap extends Double2CharMap
 	 * @see java.util.Map#put(Object, Object)
 	 */
 	public char putAndMoveToLast(double key, char value);
+	
+	/**
+	 * A alternative to putAndMoveToFirst.
+	 * This method simply puts an entry at the first spot of the Map but only if the entry is missing.
+	 * @param key the key that should be inserted
+	 * @param value the value that should be inserted
+	 * @return the previous present or default return value
+	 * @see java.util.Map#put(Object, Object)
+	 */
+	public char putFirst(double key, char value);
+	
+	/**
+	 * A alternative to putAndMoveToLast.
+	 * This method simply puts an entry at the last spot of the Map but only if the entry is missing.
+	 * @param key the key that should be inserted
+	 * @param value the value that should be inserted
+	 * @return the previous present or default return value
+	 * @see java.util.Map#put(Object, Object)
+	 */
+	public char putLast(double key, char value);
 	
 	/**
 	 * A specific move method to move a given key/value to the first index.
@@ -91,12 +113,24 @@ public interface Double2CharOrderedMap extends Double2CharMap
 	 */
 	public char lastCharValue();
 	
+	
+	public Double2CharMap.Entry firstEntry();
+	
+	public Double2CharMap.Entry lastEntry();
+	
+	public Double2CharMap.Entry pollFirstEntry();
+	
+	public Double2CharMap.Entry pollLastEntry();
 	@Override
 	public Double2CharOrderedMap copy();
 	@Override
 	public DoubleOrderedSet keySet();
 	@Override
+	public CharOrderedCollection values();
+	@Override
 	public ObjectOrderedSet<Double2CharMap.Entry> double2CharEntrySet();
+	
+	public default Double2CharOrderedMap reversed() { return new AbstractDouble2CharMap.ReversedDouble2CharOrderedMap(this); }
 	
 	/**
 	 * Creates a Wrapped SortedMap that is Synchronized

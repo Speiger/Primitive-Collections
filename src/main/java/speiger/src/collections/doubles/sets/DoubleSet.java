@@ -5,8 +5,8 @@ import java.util.Set;
 import speiger.src.collections.doubles.collections.DoubleCollection;
 import speiger.src.collections.doubles.collections.DoubleIterator;
 import speiger.src.collections.doubles.collections.DoubleSplititerator;
-import speiger.src.collections.doubles.utils.DoubleSets;
 import speiger.src.collections.doubles.utils.DoubleSplititerators;
+import speiger.src.collections.doubles.utils.DoubleSets;
 
 
 /**

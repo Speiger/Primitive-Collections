@@ -1,6 +1,8 @@
 package speiger.src.collections.chars.maps.interfaces;
 
 import speiger.src.collections.chars.utils.maps.Char2ShortMaps;
+import speiger.src.collections.chars.maps.abstracts.AbstractChar2ShortMap;
+import speiger.src.collections.shorts.collections.ShortOrderedCollection;
 import speiger.src.collections.chars.sets.CharOrderedSet;
 import speiger.src.collections.objects.collections.ObjectBidirectionalIterator;
 import speiger.src.collections.objects.sets.ObjectOrderedSet;
@@ -30,6 +32,26 @@ public interface Char2ShortOrderedMap extends Char2ShortMap
 	 * @see java.util.Map#put(Object, Object)
 	 */
 	public short putAndMoveToLast(char key, short value);
+	
+	/**
+	 * A alternative to putAndMoveToFirst.
+	 * This method simply puts an entry at the first spot of the Map but only if the entry is missing.
+	 * @param key the key that should be inserted
+	 * @param value the value that should be inserted
+	 * @return the previous present or default return value
+	 * @see java.util.Map#put(Object, Object)
+	 */
+	public short putFirst(char key, short value);
+	
+	/**
+	 * A alternative to putAndMoveToLast.
+	 * This method simply puts an entry at the last spot of the Map but only if the entry is missing.
+	 * @param key the key that should be inserted
+	 * @param value the value that should be inserted
+	 * @return the previous present or default return value
+	 * @see java.util.Map#put(Object, Object)
+	 */
+	public short putLast(char key, short value);
 	
 	/**
 	 * A specific move method to move a given key/value to the first index.
@@ -91,12 +113,24 @@ public interface Char2ShortOrderedMap extends Char2ShortMap
 	 */
 	public short lastShortValue();
 	
+	
+	public Char2ShortMap.Entry firstEntry();
+	
+	public Char2ShortMap.Entry lastEntry();
+	
+	public Char2ShortMap.Entry pollFirstEntry();
+	
+	public Char2ShortMap.Entry pollLastEntry();
 	@Override
 	public Char2ShortOrderedMap copy();
 	@Override
 	public CharOrderedSet keySet();
 	@Override
+	public ShortOrderedCollection values();
+	@Override
 	public ObjectOrderedSet<Char2ShortMap.Entry> char2ShortEntrySet();
+	
+	public default Char2ShortOrderedMap reversed() { return new AbstractChar2ShortMap.ReversedChar2ShortOrderedMap(this); }
 	
 	/**
 	 * Creates a Wrapped SortedMap that is Synchronized

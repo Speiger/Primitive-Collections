@@ -9,6 +9,7 @@ import java.util.Comparator;
 import java.util.function.UnaryOperator;
 
 import speiger.src.collections.doubles.collections.DoubleCollection;
+import speiger.src.collections.doubles.collections.DoubleOrderedCollection;
 import speiger.src.collections.doubles.collections.DoubleSplititerator;
 import speiger.src.collections.ints.functions.consumer.IntDoubleConsumer;
 import speiger.src.collections.doubles.functions.DoubleComparator;
@@ -20,7 +21,7 @@ import speiger.src.collections.doubles.utils.DoubleSplititerators;
 /**
  * A Type Specific List interface that reduces boxing/unboxing and adds a couple extra quality of life features
  */
-public interface DoubleList extends DoubleCollection, List<Double>
+public interface DoubleList extends DoubleOrderedCollection, List<Double>
 {
 	/**
 	 * A Type-Specific add Function to reduce (un)boxing
@@ -82,6 +83,24 @@ public interface DoubleList extends DoubleCollection, List<Double>
 	 * @return true if the list was modified
 	 */
 	public boolean addAll(int index, DoubleList c);
+	
+	/**
+	 * A method to add an element to the start of a list
+	 * @param e that should be added at the start.
+	 */
+	@Override
+	public default void addFirst(double e) { 
+		add(0, e);
+	}
+	
+	/**
+	 * A method to add an element to the end of a list
+	 * @param e that should be added at the end.
+	 */
+	@Override
+	public default void addLast(double e) {
+		add(e);
+	}
 	
 	/**
 	 * Helper method that returns the first element of a List.
@@ -413,9 +432,9 @@ public interface DoubleList extends DoubleCollection, List<Double>
 	@Override
 	@Deprecated
 	public default boolean add(Double e) {
-		return DoubleCollection.super.add(e);
+		return DoubleOrderedCollection.super.add(e);
 	}
-	
+
 	/** {@inheritDoc}
 	 * <p>This default implementation delegates to the corresponding type-specific function.
 	 * @deprecated Please use the corresponding type-specific function instead. 
@@ -463,7 +482,7 @@ public interface DoubleList extends DoubleCollection, List<Double>
 	@Override
 	@Deprecated
 	public default boolean contains(Object o) {
-		return DoubleCollection.super.contains(o);
+		return DoubleOrderedCollection.super.contains(o);
 	}
 	
 	/** {@inheritDoc}
@@ -473,7 +492,7 @@ public interface DoubleList extends DoubleCollection, List<Double>
 	@Override
 	@Deprecated
 	public default boolean remove(Object o) {
-		return DoubleCollection.super.remove(o);
+		return DoubleOrderedCollection.super.remove(o);
 	}
 	
 	/** {@inheritDoc}

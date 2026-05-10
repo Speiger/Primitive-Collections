@@ -294,17 +294,19 @@ public class ObjectSets
 		@Override
 		public ObjectBidirectionalIterator<T> iterator() { return ObjectIterators.unmodifiable(s.iterator()); }
 		@Override
+		public ObjectBidirectionalIterator<T> reverseIterator() { return ObjectIterators.unmodifiable(s.reverseIterator()); }
+		@Override
 		public ObjectBidirectionalIterator<T> iterator(T fromElement) { return ObjectIterators.unmodifiable(s.iterator(fromElement)); }
 		@Override
 		public ObjectOrderedSet<T> copy() { return s.copy(); }
 		@Override
-		public T first() { return s.first(); }
+		public T getFirst() { return s.getFirst(); }
 		@Override
-		public T pollFirst() { throw new UnsupportedOperationException(); }
+		public T removeFirst() { throw new UnsupportedOperationException(); }
 		@Override
-		public T last() { return s.last(); }
+		public T getLast() { return s.getLast(); }
 		@Override
-		public T pollLast() { throw new UnsupportedOperationException(); }
+		public T removeLast() { throw new UnsupportedOperationException(); }
 	}
 	
 	private static class UnmodifiableSortedSet<T> extends UnmodifiableSet<T> implements ObjectSortedSet<T>
@@ -543,17 +545,19 @@ public class ObjectSets
 		@Override
 		public ObjectBidirectionalIterator<T> iterator() { synchronized(mutex) { return s.iterator(); } }
 		@Override
+		public ObjectBidirectionalIterator<T> reverseIterator() { synchronized(mutex) { return s.reverseIterator(); } }
+		@Override
 		public ObjectBidirectionalIterator<T> iterator(T fromElement) { synchronized(mutex) { return s.iterator(fromElement); } }
 		@Override
 		public ObjectOrderedSet<T> copy() { synchronized(mutex) { return s.copy(); } }
 		@Override
-		public T first() { synchronized(mutex) { return s.first(); } }
+		public T getFirst() { synchronized(mutex) { return s.getFirst(); } }
 		@Override
-		public T pollFirst() { synchronized(mutex) { return s.pollFirst(); } }
+		public T removeFirst() { synchronized(mutex) { return s.removeFirst(); } }
 		@Override
-		public T last() { synchronized(mutex) { return s.last(); } }
+		public T getLast() { synchronized(mutex) { return s.getLast(); } }
 		@Override
-		public T pollLast() { synchronized(mutex) { return s.pollLast(); } }
+		public T removeLast() { synchronized(mutex) { return s.removeLast(); } }
 	}
 	
 	private static class SynchronizedTrimSet<T> extends SynchronizedSet<T> implements ITrimmable

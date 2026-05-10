@@ -186,13 +186,13 @@ public class ShortArraySet extends AbstractShortSet implements ShortOrderedSet
 	}
 	
 	@Override
-	public short firstShort() {
+	public short getFirstShort() {
 		if(size == 0) throw new NoSuchElementException();
 		return data[0];
 	}
 	
 	@Override
-	public short lastShort() {
+	public short getLastShort() {
 		if(size == 0) throw new NoSuchElementException();
 		return data[size - 1];
 	}
@@ -283,7 +283,7 @@ public class ShortArraySet extends AbstractShortSet implements ShortOrderedSet
 	}
 	
 	@Override
-	public short pollFirstShort() {
+	public short removeFirstShort() {
 		if(size == 0) throw new NoSuchElementException();
 		short result = data[0];
 		System.arraycopy(data, 1, data, 0, --size);
@@ -291,7 +291,7 @@ public class ShortArraySet extends AbstractShortSet implements ShortOrderedSet
 	}
 	
 	@Override
-	public short pollLastShort() {
+	public short removeLastShort() {
 		if(size == 0) throw new NoSuchElementException();
 		size--;
 		return data[size];
@@ -414,13 +414,18 @@ public class ShortArraySet extends AbstractShortSet implements ShortOrderedSet
 	
 	@Override
 	public ShortBidirectionalIterator iterator() {
-		return new SetIterator(0);
+		return new SetIterator(true, 0);
+	}
+	
+	@Override
+	public ShortBidirectionalIterator reverseIterator() {
+		return new SetIterator(false, size);
 	}
 	
 	@Override
 	public ShortBidirectionalIterator iterator(short fromElement) {
 		int index = findIndex(fromElement);
-		if(index != -1) return new SetIterator(index);
+		if(index != -1) return new SetIterator(true, index);
 		throw new NoSuchElementException();
 	}
 	
@@ -471,45 +476,57 @@ public class ShortArraySet extends AbstractShortSet implements ShortOrderedSet
 	}
 		
 	private class SetIterator implements ShortListIterator {
+		boolean forward;
 		int index;
 		int lastReturned = -1;
 		
-		public SetIterator(int index) {
+		public SetIterator(boolean forward, int index) {
+			this.forward = forward;
 			this.index = index;
 		}
 		
 		@Override
 		public boolean hasNext() {
-			return index < size();
+			return forward ? index < size() : index > 0;
 		}
 		
 		@Override
 		public short nextShort() {
 			if(!hasNext()) throw new NoSuchElementException();
-			lastReturned = index;
-			return data[index++];
+			if(forward) {
+				lastReturned = index;
+				return data[index++];				
+			}
+			index--;
+			return data[(lastReturned = index)];
 		}
 		
 		@Override
 		public boolean hasPrevious() {
-			return index > 0;
+			return forward ? index > 0 : index < size();
 		}
 		
 		@Override
 		public short previousShort() {
 			if(!hasPrevious()) throw new NoSuchElementException();
-			--index;
-			return data[(lastReturned = index)];
+			if(forward) {
+				index--;
+				return data[(lastReturned = index)];
+			}
+			lastReturned = index;
+			return data[index++];
 		}
 		
 		@Override
 		public int nextIndex() {
-			return index;
+			if(forward) return index;
+			return size - index;
 		}
 		
 		@Override
 		public int previousIndex() {
-			return index-1;
+			if(forward) return index-1;
+			return (size - index)-1;
 		}
 		
 		@Override
@@ -529,15 +546,23 @@ public class ShortArraySet extends AbstractShortSet implements ShortOrderedSet
 		@Override
 		public int skip(int amount) {
 			if(amount < 0) throw new IllegalStateException("Negative Numbers are not allowed");
+			return forward ? moveForward(amount) : moveBackwards(amount);
+		}
+		
+		@Override
+		public int back(int amount) {
+			if(amount < 0) throw new IllegalStateException("Negative Numbers are not allowed");
+			return forward ? moveBackwards(amount) : moveForward(amount);
+		}
+		
+		private int moveForward(int amount) {
 			int steps = Math.min(amount, size() - index);
 			index += steps;
 			if(steps > 0) lastReturned = Math.min(index-1, size()-1);
 			return steps;
 		}
 		
-		@Override
-		public int back(int amount) {
-			if(amount < 0) throw new IllegalStateException("Negative Numbers are not allowed");
+		private int moveBackwards(int amount) {
 			int steps = Math.min(amount, index);
 			index -= steps;
 			if(steps > 0) lastReturned = Math.min(index, size()-1);

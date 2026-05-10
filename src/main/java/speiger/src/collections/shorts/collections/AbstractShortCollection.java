@@ -1,9 +1,11 @@
 package speiger.src.collections.shorts.collections;
 
 import java.util.Collection;
+import java.util.function.Supplier;
 import java.util.Objects;
 import java.util.AbstractCollection;
 
+import speiger.src.collections.shorts.lists.ShortListIterator;
 import speiger.src.collections.shorts.functions.ShortConsumer;
 import speiger.src.collections.shorts.utils.ShortIterators;
 import speiger.src.collections.shorts.utils.ShortArrays;
@@ -248,5 +250,69 @@ public abstract class AbstractShortCollection extends AbstractCollection<Short> 
 		ShortIterators.unwrap(a, iterator());
 		if (a.length > size()) a[size()] = (short)0;
 		return a;
+	}
+
+	public static class ReverseShortOrderedCollection extends AbstractShortCollection implements ShortOrderedCollection {
+		ShortOrderedCollection collection;
+		Supplier<ShortIterator> reverseIterator;
+		
+		public ReverseShortOrderedCollection(ShortOrderedCollection collection, Supplier<ShortIterator> reverseIterator) {
+			this.collection = collection;
+			this.reverseIterator = reverseIterator;
+		}
+		
+		@Override
+		public boolean add(short o) { return collection.add(o); }
+		@Override
+		public ShortOrderedCollection reversed() { return collection; }
+		@Override
+		public void addFirst(short e) { collection.addLast(e); }
+		@Override
+		public void addLast(short e) { collection.addFirst(e); }
+		@Override
+		public boolean contains(short e) { return collection.contains(e); }
+		@Override
+		public boolean remShort(short e) { return collection.remShort(e); }
+		@Override
+		public void clear() { collection.clear(); }
+		@Override
+		public short getFirstShort() { return collection.getLastShort(); }
+		@Override
+		public short removeFirstShort() { return collection.removeLastShort(); }
+		@Override
+		public short getLastShort() { return collection.getFirstShort(); }
+		@Override
+		public short removeLastShort() { return collection.removeFirstShort(); }
+		@Override
+		public ShortIterator iterator() { return reverseIterator.get(); }
+		@Override
+		public int size() { return collection.size(); }
+	}
+	
+	public static class ReverseBiIterator implements ShortListIterator {
+		ShortListIterator it;
+		
+		public ReverseBiIterator(ShortListIterator it) {
+			this.it = it;
+		}
+		
+		@Override
+		public short nextShort() { return it.previousShort(); }
+		@Override
+		public boolean hasNext() { return it.hasPrevious(); }
+		@Override
+		public boolean hasPrevious() { return it.hasNext(); }
+		@Override
+		public short previousShort() { return it.nextShort(); }
+		@Override
+		public void remove() { it.remove(); }
+		@Override
+		public int nextIndex() { return it.previousIndex(); }
+		@Override
+		public int previousIndex() { return it.nextIndex(); }
+		@Override
+		public void set(short e) { it.set(e); }
+		@Override
+		public void add(short e) { it.add(e); }
 	}
 }

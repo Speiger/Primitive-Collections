@@ -9,6 +9,11 @@ import speiger.src.collections.shorts.functions.consumer.ShortObjectConsumer;
 import speiger.src.collections.shorts.functions.function.ShortFunction;
 import speiger.src.collections.shorts.functions.function.ShortObjectUnaryOperator;
 import speiger.src.collections.shorts.maps.interfaces.Short2ObjectMap;
+import speiger.src.collections.shorts.maps.interfaces.Short2ObjectOrderedMap;
+import speiger.src.collections.shorts.sets.ShortOrderedSet;
+import speiger.src.collections.objects.collections.ObjectOrderedCollection;
+import speiger.src.collections.objects.sets.AbstractObjectSet;
+import speiger.src.collections.objects.sets.ObjectOrderedSet;
 import speiger.src.collections.shorts.sets.AbstractShortSet;
 import speiger.src.collections.shorts.sets.ShortSet;
 import speiger.src.collections.shorts.utils.maps.Short2ObjectMaps;
@@ -85,7 +90,7 @@ public abstract class AbstractShort2ObjectMap<V> extends AbstractMap<Short, V> i
 	public void putAll(Short[] keys, V[] values, int offset, int size) {
 		SanityChecks.checkArrayCapacity(keys.length, offset, size);
 		SanityChecks.checkArrayCapacity(values.length, offset, size);
-		for(int i = 0;i<size;i++) put(keys[i], values[i]);		
+		for(int i = 0;i<size;i++) put(keys[i].shortValue(), values[i]);		
 	}
 	
 	@Override
@@ -366,6 +371,104 @@ public abstract class AbstractShort2ObjectMap<V> extends AbstractMap<Short, V> i
 		while(iter.hasNext()) hash += iter.next().hashCode();
 		return hash;
 	}
+	
+	public static class ReversedShort2ObjectOrderedMap<V> extends AbstractShort2ObjectMap<V> implements Short2ObjectOrderedMap<V> {
+		Short2ObjectOrderedMap<V> map;
+		
+		public ReversedShort2ObjectOrderedMap(Short2ObjectOrderedMap<V> map) {
+			this.map = map;
+		}
+		@Override
+		public AbstractShort2ObjectMap<V> setDefaultReturnValue(V v) {
+			map.setDefaultReturnValue(v);
+			return this;
+		}
+		@Override
+		public V getDefaultReturnValue() { return map.getDefaultReturnValue(); }
+		@Override
+		public Short2ObjectOrderedMap<V> copy() { throw new UnsupportedOperationException(); }
+		@Override
+		public V put(short key, V value) { return map.put(key, value); }
+		@Override
+		public V putIfAbsent(short key, V value) { return map.putIfAbsent(key, value); }
+		@Override
+		public V remove(short key) { return map.remove(key); }
+		@Override
+		public boolean remove(short key, V value) { return map.remove(key, value); }
+		@Override
+		public V removeOrDefault(short key, V defaultValue) { return map.removeOrDefault(key, defaultValue); }
+		@Override
+		public boolean containsKey(short key) { return map.containsKey(key); }
+		@Override
+		public boolean containsValue(Object value) { return map.containsValue(value); }
+		@Override
+		public boolean replace(short key, V oldValue, V newValue) { return map.replace(key, oldValue, newValue); }
+		@Override
+		public V replace(short key, V value) { return map.replace(key, value); }
+		@Override
+		public void replaceObjects(Short2ObjectMap<V> m) { map.replaceObjects(m); }
+		@Override
+		public void replaceObjects(ShortObjectUnaryOperator<V> mappingFunction) { map.replaceObjects(mappingFunction); }
+		@Override
+		public V compute(short key, ShortObjectUnaryOperator<V> mappingFunction) { return map.compute(key, mappingFunction); }
+		@Override
+		public V computeIfAbsent(short key, ShortFunction<V> mappingFunction) { return map.computeIfAbsent(key, mappingFunction); }
+		@Override
+		public V supplyIfAbsent(short key, ObjectSupplier<V> valueProvider) { return map.supplyIfAbsent(key, valueProvider); }
+		@Override
+		public V computeIfPresent(short key, ShortObjectUnaryOperator<V> mappingFunction) { return map.computeIfPresent(key, mappingFunction); }
+		@Override
+		public V merge(short key, V value, ObjectObjectUnaryOperator<V, V> mappingFunction) { return map.merge(key, value, mappingFunction); }
+		@Override
+		public V getOrDefault(short key, V defaultValue) { return map.getOrDefault(key, defaultValue); }
+		@Override
+		public V get(short key) { return map.get(key); }
+		@Override
+		public V putAndMoveToFirst(short key, V value) { return map.putAndMoveToLast(key, value); }
+		@Override
+		public V putAndMoveToLast(short key, V value) { return map.putAndMoveToFirst(key, value); }
+		@Override
+		public V putFirst(short key, V value) { return map.putLast(key, value); }
+		@Override
+		public V putLast(short key, V value) { return map.putFirst(key, value); }
+		@Override
+		public boolean moveToFirst(short key) { return map.moveToLast(key); }
+		@Override
+		public boolean moveToLast(short key) { return map.moveToFirst(key); }
+		@Override
+		public V getAndMoveToFirst(short key) { return map.getAndMoveToLast(key); }
+		@Override
+		public V getAndMoveToLast(short key) { return map.getAndMoveToFirst(key); }
+		@Override
+		public short firstShortKey() { return map.lastShortKey(); }
+		@Override
+		public short pollFirstShortKey() { return map.pollLastShortKey(); }
+		@Override
+		public short lastShortKey() { return map.firstShortKey(); }
+		@Override
+		public short pollLastShortKey() { return map.pollFirstShortKey(); }
+		@Override
+		public V firstValue() { return map.lastValue(); }
+		@Override
+		public V lastValue() { return map.firstValue(); }
+		@Override
+		public Short2ObjectMap.Entry<V> firstEntry() { return map.lastEntry(); }
+		@Override
+		public Short2ObjectMap.Entry<V> lastEntry() { return map.firstEntry(); }
+		@Override
+		public Short2ObjectMap.Entry<V> pollFirstEntry() { return map.pollLastEntry(); }
+		@Override
+		public Short2ObjectMap.Entry<V> pollLastEntry() { return map.pollFirstEntry(); }
+		@Override
+		public ObjectOrderedSet<Short2ObjectMap.Entry<V>> short2ObjectEntrySet() { return new AbstractObjectSet.ReversedObjectOrderedSet<>(map.short2ObjectEntrySet()); }
+		@Override
+		public ShortOrderedSet keySet() { return new AbstractShortSet.ReversedShortOrderedSet(map.keySet()); }
+		@Override
+		public ObjectOrderedCollection<V> values() { return map.values().reversed(); }
+		@Override
+		public Short2ObjectOrderedMap<V> reversed() { return map; }
+	}
+
 	
 	/**
 	 * A Simple Type Specific Entry class to reduce boxing/unboxing

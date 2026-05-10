@@ -31,7 +31,7 @@ import speiger.src.collections.objects.functions.consumer.ObjectFloatConsumer;
 import speiger.src.collections.floats.functions.function.FloatPredicate;
 import speiger.src.collections.bytes.sets.AbstractByteSet;
 import speiger.src.collections.floats.collections.AbstractFloatCollection;
-import speiger.src.collections.floats.collections.FloatCollection;
+import speiger.src.collections.floats.collections.FloatOrderedCollection;
 import speiger.src.collections.floats.collections.FloatIterator;
 import speiger.src.collections.floats.functions.FloatSupplier;
 import speiger.src.collections.floats.functions.function.FloatFloatUnaryOperator;
@@ -74,7 +74,7 @@ public class ImmutableByte2FloatOpenHashMap extends AbstractByte2FloatMap implem
 	/** KeySet cache */
 	protected transient ByteOrderedSet keySet;
 	/** Values cache */
-	protected transient FloatCollection valuesC;
+	protected transient FloatOrderedCollection valuesC;
 	
 	/** Amount of Elements stored in the HashMap */
 	protected int size;
@@ -263,6 +263,10 @@ public class ImmutableByte2FloatOpenHashMap extends AbstractByte2FloatMap implem
 	@Override
 	public float putAndMoveToLast(byte key, float value) { throw new UnsupportedOperationException(); }
 	@Override
+	public float putFirst(byte key, float value) { throw new UnsupportedOperationException(); }
+	@Override
+	public float putLast(byte key, float value) { throw new UnsupportedOperationException(); }
+	@Override
 	public boolean moveToFirst(byte key) { throw new UnsupportedOperationException(); }
 	@Override
 	public boolean moveToLast(byte key) { throw new UnsupportedOperationException(); }
@@ -365,7 +369,24 @@ public class ImmutableByte2FloatOpenHashMap extends AbstractByte2FloatMap implem
 	public float lastFloatValue() {
 		if(size == 0) throw new NoSuchElementException();
 		return values[lastIndex];
-	}	
+	}
+	
+	@Override
+	public Byte2FloatMap.Entry firstEntry() {
+		if(size == 0) throw new NoSuchElementException();
+		return new BasicEntry(keys[firstIndex], values[firstIndex]);
+	}
+	
+	@Override
+	public Byte2FloatMap.Entry lastEntry() {
+		if(size == 0) throw new NoSuchElementException();
+		return new BasicEntry(keys[lastIndex], values[lastIndex]);
+	}
+	
+	@Override
+	public Byte2FloatMap.Entry pollFirstEntry() { throw new UnsupportedOperationException(); }
+	@Override
+	public Byte2FloatMap.Entry pollLastEntry() { throw new UnsupportedOperationException(); }
 
 	@Override
 	public ObjectOrderedSet<Byte2FloatMap.Entry> byte2FloatEntrySet() {
@@ -380,7 +401,7 @@ public class ImmutableByte2FloatOpenHashMap extends AbstractByte2FloatMap implem
 	}
 	
 	@Override
-	public FloatCollection values() {
+	public FloatOrderedCollection values() {
 		if(valuesC == null) valuesC = new Values();
 		return valuesC;
 	}
@@ -529,24 +550,29 @@ public class ImmutableByte2FloatOpenHashMap extends AbstractByte2FloatMap implem
 		public boolean moveToLast(Byte2FloatMap.Entry o) { throw new UnsupportedOperationException(); }
 		
 		@Override
-		public Byte2FloatMap.Entry first() {
+		public Byte2FloatMap.Entry getFirst() {
 			return new BasicEntry(firstByteKey(), firstFloatValue());
 		}
 		
 		@Override
-		public Byte2FloatMap.Entry last() {
+		public Byte2FloatMap.Entry getLast() {
 			return new BasicEntry(lastByteKey(), lastFloatValue());
 		}
 		
 		@Override
-		public Byte2FloatMap.Entry pollFirst() { throw new UnsupportedOperationException(); }
+		public Byte2FloatMap.Entry removeFirst() { throw new UnsupportedOperationException(); }
 		
 		@Override
-		public Byte2FloatMap.Entry pollLast() { throw new UnsupportedOperationException(); }
+		public Byte2FloatMap.Entry removeLast() { throw new UnsupportedOperationException(); }
 		
 		@Override
 		public ObjectBidirectionalIterator<Byte2FloatMap.Entry> iterator() {
-			return new EntryIterator();
+			return new EntryIterator(true);
+		}
+		
+		@Override
+		public ObjectBidirectionalIterator<Byte2FloatMap.Entry> reverseIterator() {
+			return new EntryIterator(false);
 		}
 		
 		@Override
@@ -556,7 +582,7 @@ public class ImmutableByte2FloatOpenHashMap extends AbstractByte2FloatMap implem
 		
 		@Override
 		public ObjectBidirectionalIterator<Byte2FloatMap.Entry> fastIterator() {
-			return new FastEntryIterator();
+			return new FastEntryIterator(true);
 		}
 		
 		@Override
@@ -771,7 +797,12 @@ public class ImmutableByte2FloatOpenHashMap extends AbstractByte2FloatMap implem
 		
 		@Override
 		public ByteListIterator iterator() {
-			return new KeyIterator();
+			return new KeyIterator(true);
+		}
+		
+		@Override
+		public ByteListIterator reverseIterator() {
+			return new KeyIterator(false);
 		}
 		
 		@Override
@@ -791,20 +822,20 @@ public class ImmutableByte2FloatOpenHashMap extends AbstractByte2FloatMap implem
 		public void clear() { throw new UnsupportedOperationException(); }
 		
 		@Override
-		public byte firstByte() {
+		public byte getFirstByte() {
 			return firstByteKey();
 		}
 		
 		@Override
-		public byte pollFirstByte() { throw new UnsupportedOperationException(); }
+		public byte removeFirstByte() { throw new UnsupportedOperationException(); }
 
 		@Override
-		public byte lastByte() {
+		public byte getLastByte() {
 			return lastByteKey();
 		}
 
 		@Override
-		public byte pollLastByte() { throw new UnsupportedOperationException(); }
+		public byte removeLastByte() { throw new UnsupportedOperationException(); }
 		
 		@Override
 		public void forEach(ByteConsumer action) {
@@ -931,30 +962,35 @@ public class ImmutableByte2FloatOpenHashMap extends AbstractByte2FloatMap implem
 		}
 	}
 	
-	private class Values extends AbstractFloatCollection {
+	private class Values extends AbstractFloatCollection implements FloatOrderedCollection {
 		@Override
-		public boolean contains(float e) {
-			return containsValue(e);
-		}
+		public boolean contains(float e) { return containsValue(e); }
 		
 		@Override
-		public boolean add(float o) {
-			throw new UnsupportedOperationException();
-		}
-
+		public boolean add(float o) { throw new UnsupportedOperationException(); }
 		@Override
-		public FloatIterator iterator() {
-			return new ValueIterator();
-		}
-		
+		public FloatIterator iterator() { return new ValueIterator(true); }
 		@Override
-		public int size() {
-			return ImmutableByte2FloatOpenHashMap.this.size();
-		}
-		
+		public int size() { return ImmutableByte2FloatOpenHashMap.this.size(); }
 		@Override
 		public void clear() { throw new UnsupportedOperationException(); }
-		
+		@Override
+		public FloatOrderedCollection reversed() { return new AbstractFloatCollection.ReverseFloatOrderedCollection(this, this::reverseIterator); }
+		private FloatIterator reverseIterator() {
+			return new ValueIterator(false);
+		}
+		@Override
+		public void addFirst(float e) { throw new UnsupportedOperationException(); }
+		@Override
+		public void addLast(float e) { throw new UnsupportedOperationException(); }
+		@Override
+		public float getFirstFloat() { return firstFloatValue(); }
+		@Override
+		public float removeFirstFloat() { throw new UnsupportedOperationException(); }
+		@Override
+		public float getLastFloat() { return lastFloatValue(); }
+		@Override
+		public float removeLastFloat() { throw new UnsupportedOperationException(); }
 		@Override
 		public void forEach(FloatConsumer action) {
 			int index = firstIndex;
@@ -1083,7 +1119,7 @@ public class ImmutableByte2FloatOpenHashMap extends AbstractByte2FloatMap implem
 	private class FastEntryIterator extends MapIterator implements ObjectListIterator<Byte2FloatMap.Entry> {
 		MapEntry entry = new MapEntry();
 		
-		public FastEntryIterator() {}
+		public FastEntryIterator(boolean start) { super(start); }
 		public FastEntryIterator(byte from) {
 			super(from);
 		}
@@ -1109,7 +1145,7 @@ public class ImmutableByte2FloatOpenHashMap extends AbstractByte2FloatMap implem
 	
 	private class EntryIterator extends MapIterator implements ObjectListIterator<Byte2FloatMap.Entry> {
 		
-		public EntryIterator() {}
+		public EntryIterator(boolean start) { super(start); }
 		public EntryIterator(byte from) {
 			super(from);
 		}
@@ -1136,7 +1172,7 @@ public class ImmutableByte2FloatOpenHashMap extends AbstractByte2FloatMap implem
 	
 	private class KeyIterator extends MapIterator implements ByteListIterator {
 		
-		public KeyIterator() {}
+		public KeyIterator(boolean start) { super(start); }
 		public KeyIterator(byte from) {
 			super(from);
 		}
@@ -1158,7 +1194,7 @@ public class ImmutableByte2FloatOpenHashMap extends AbstractByte2FloatMap implem
 	}
 	
 	private class ValueIterator extends MapIterator implements FloatListIterator {
-		public ValueIterator() {}
+		public ValueIterator(boolean start) { super(start); }
 		
 		@Override
 		public float previousFloat() {
@@ -1179,13 +1215,16 @@ public class ImmutableByte2FloatOpenHashMap extends AbstractByte2FloatMap implem
 	}
 	
 	private class MapIterator {
+		boolean forward;
 		int previous = -1;
 		int next = -1;
 		int current = -1;
 		int index = 0;
 		
-		MapIterator() {
-			next = firstIndex;
+		MapIterator(boolean start) {
+			this.forward = start;
+			if(start) next = firstIndex;
+			else previous = lastIndex;
 		}
 		
 		MapIterator(byte from) {
@@ -1216,11 +1255,11 @@ public class ImmutableByte2FloatOpenHashMap extends AbstractByte2FloatMap implem
 		}
 		
 		public boolean hasNext() {
-			return next != -1;
+			return (forward ? next : previous) != -1;
 		}
 
 		public boolean hasPrevious() {
-			return previous != -1;
+			return (forward ? previous : next) != -1;
 		}
 		
 		public int nextIndex() {
@@ -1237,20 +1276,30 @@ public class ImmutableByte2FloatOpenHashMap extends AbstractByte2FloatMap implem
 		
 		public int previousEntry() {
 			if(!hasPrevious()) throw new NoSuchElementException();
-			current = previous;
-			previous = (int)(links[current] >> 32);
-			next = current;
+			if(forward) moveBackwards();
+			else moveForwards();
 			if(index >= 0) index--;
 			return current;
 		}
 		
 		public int nextEntry() {
 			if(!hasNext()) throw new NoSuchElementException();
+			if(forward) moveForwards();
+			else moveBackwards();
+			if(index >= 0) index++;
+			return current;
+		}
+		
+		private void moveBackwards() {
+			current = previous;
+			previous = (int)(links[current] >> 32);
+			next = current;
+		}
+		
+		private void moveForwards() {
 			current = next;
 			next = (int)(links[current]);
 			previous = current;
-			if(index >= 0) index++;
-			return current;
 		}
 		
 		private void ensureIndexKnown() {

@@ -94,7 +94,7 @@ public interface Int2LongMap extends Map<Integer, Long>, Int2LongFunction
 	 * @return the last present value or default return	value.
 	 */
 	public default Long put(Map.Entry<Integer, Long> entry) {
-		return put(entry.getKey(), entry.getValue());
+		return put(entry.getKey().intValue(), entry.getValue().longValue());
 	}
 
 	/**

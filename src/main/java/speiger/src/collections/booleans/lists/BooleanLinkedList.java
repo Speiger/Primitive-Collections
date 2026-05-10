@@ -356,7 +356,7 @@ public class BooleanLinkedList extends AbstractBooleanList implements BooleanPri
 		if(index == 0) return new ListIter(first, index);
 		return new ListIter(getNode(index), index);
 	}
-	
+
 	/**
 	 * A Type Specific Type Splititerator to reduce boxing/unboxing
 	 * @return type specific splititerator

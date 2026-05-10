@@ -6,6 +6,7 @@ import java.util.Objects;
 import java.util.Set;
 
 import speiger.src.collections.PACKAGE.collections.ABSTRACT_COLLECTION;
+import speiger.src.collections.PACKAGE.collections.BI_ITERATOR;
 import speiger.src.collections.PACKAGE.collections.ITERATOR;
 
 /**
@@ -47,4 +48,95 @@ public abstract class ABSTRACT_SET KEY_GENERIC_TYPE extends ABSTRACT_COLLECTION 
 			return false;
 		}
 	}
+	
+#if ORDERED_SET_FEATURE
+	public static class REVERSED_ORDERED_SET KEY_GENERIC_TYPE extends ABSTRACT_SET KEY_GENERIC_TYPE implements ORDERED_SET KEY_GENERIC_TYPE {
+		protected ORDERED_SET KEY_GENERIC_TYPE set;
+		
+		public REVERSED_ORDERED_SET(ORDERED_SET KEY_GENERIC_TYPE set) {
+			this.set = set;
+		}
+		
+		@Override
+		public REVERSED_ORDERED_SET KEY_GENERIC_TYPE copy() { throw new UnsupportedOperationException(); }
+		@Override
+		public BI_ITERATOR KEY_GENERIC_TYPE iterator(KEY_TYPE fromElement) {
+			return set.iterator(fromElement);
+		}
+		
+		@Override
+		public BI_ITERATOR KEY_GENERIC_TYPE iterator() {
+			return set.reverseIterator();
+		}
+		
+		@Override
+		public BI_ITERATOR KEY_GENERIC_TYPE reverseIterator() {
+			return set.iterator();
+		}
+
+		@Override
+#if !TYPE_OBJECT
+		public boolean remove(KEY_TYPE o) {
+#else
+		public boolean remove(Object o) {
+#endif
+			return set.remove(o);
+		}
+		
+		@Override
+		public boolean add(KEY_TYPE o) {
+			return set.add(o);
+		}
+		
+		@Override
+		public boolean addAndMoveToFirst(KEY_TYPE o) {
+			return set.addAndMoveToLast(o);
+		}
+		
+		@Override
+		public boolean addAndMoveToLast(KEY_TYPE o) {
+			return set.addAndMoveToFirst(o);
+		}
+		
+		@Override
+		public boolean moveToFirst(KEY_TYPE o) {
+			return set.moveToLast(o);
+		}
+		
+		@Override
+		public boolean moveToLast(KEY_TYPE o) {
+			return set.moveToFirst(o);
+		}
+		
+		@Override
+		public KEY_TYPE GET_FIRST_KEY() {
+			return set.GET_LAST_KEY();
+		}
+		
+		@Override
+		public KEY_TYPE REMOVE_FIRST_KEY() {
+			return set.REMOVE_LAST_KEY();
+		}
+		
+		@Override
+		public KEY_TYPE GET_LAST_KEY() {
+			return set.GET_FIRST_KEY();
+		}
+		
+		@Override
+		public KEY_TYPE REMOVE_LAST_KEY() {
+			return set.REMOVE_FIRST_KEY();
+		}
+		
+		@Override
+		public ORDERED_SET KEY_GENERIC_TYPE reversed() {
+			return set;
+		}
+		
+		@Override
+		public int size() {
+			return set.size();
+		}
+	}
+#endif
 }

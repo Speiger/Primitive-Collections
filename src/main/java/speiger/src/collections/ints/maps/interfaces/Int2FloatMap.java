@@ -94,7 +94,7 @@ public interface Int2FloatMap extends Map<Integer, Float>, Int2FloatFunction
 	 * @return the last present value or default return	value.
 	 */
 	public default Float put(Map.Entry<Integer, Float> entry) {
-		return put(entry.getKey(), entry.getValue());
+		return put(entry.getKey().intValue(), entry.getValue().floatValue());
 	}
 
 	/**

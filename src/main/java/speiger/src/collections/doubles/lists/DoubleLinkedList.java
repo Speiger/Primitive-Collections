@@ -24,8 +24,7 @@ import speiger.src.collections.doubles.functions.DoubleConsumer;
 import speiger.src.collections.doubles.utils.DoubleArrays;
 import speiger.src.collections.objects.utils.ObjectArrays;
 import java.util.stream.DoubleStream;
-import java.util.stream.StreamSupport;
-import speiger.src.collections.doubles.collections.DoubleSplititerator;
+import java.util.stream.StreamSupport;import speiger.src.collections.doubles.collections.DoubleSplititerator;
 import speiger.src.collections.doubles.utils.DoubleSplititerators;
 import speiger.src.collections.utils.SanityChecks;
 
@@ -361,7 +360,7 @@ public class DoubleLinkedList extends AbstractDoubleList implements DoublePriori
 		if(index == 0) return new ListIter(first, index);
 		return new ListIter(getNode(index), index);
 	}
-	
+
 	/**
 	 * Returns a Java-Type-Specific Stream to reduce boxing/unboxing.
 	 * @return a Stream of the closest java type
@@ -372,8 +371,7 @@ public class DoubleLinkedList extends AbstractDoubleList implements DoublePriori
 	 * Returns a Java-Type-Specific Parallel Stream to reduce boxing/unboxing.
 	 * @return a Stream of the closest java type
 	 */
-	public DoubleStream parallelPrimitiveStream() { return StreamSupport.doubleStream(new SplitIterator(this, first, 0), true); }
-	/**
+	public DoubleStream parallelPrimitiveStream() { return StreamSupport.doubleStream(new SplitIterator(this, first, 0), true); }	/**
 	 * A Type Specific Type Splititerator to reduce boxing/unboxing
 	 * @return type specific splititerator
 	 */

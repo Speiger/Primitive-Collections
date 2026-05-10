@@ -5,8 +5,8 @@ import java.util.Set;
 import speiger.src.collections.chars.collections.CharCollection;
 import speiger.src.collections.chars.collections.CharIterator;
 import speiger.src.collections.chars.collections.CharSplititerator;
-import speiger.src.collections.chars.utils.CharSets;
 import speiger.src.collections.chars.utils.CharSplititerators;
+import speiger.src.collections.chars.utils.CharSets;
 
 
 /**

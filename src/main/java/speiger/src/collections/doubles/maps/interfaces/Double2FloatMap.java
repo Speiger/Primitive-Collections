@@ -94,7 +94,7 @@ public interface Double2FloatMap extends Map<Double, Float>, Double2FloatFunctio
 	 * @return the last present value or default return	value.
 	 */
 	public default Float put(Map.Entry<Double, Float> entry) {
-		return put(entry.getKey(), entry.getValue());
+		return put(entry.getKey().doubleValue(), entry.getValue().floatValue());
 	}
 
 	/**

@@ -1,11 +1,17 @@
 package speiger.src.builder.modules;
 
+import java.util.Arrays;
+import java.util.List;
+
 import speiger.src.builder.ClassType;
+import speiger.src.builder.dependencies.IDependency;
+import speiger.src.builder.dependencies.ModuleDependency;
 
 @SuppressWarnings("javadoc")
 public class JavaModule extends BaseModule
 {
 	public static final BaseModule INSTANCE = new JavaModule();
+	public static final ModuleDependency MODULE = new ModuleDependency(INSTANCE, false);
 	
 	@Override
 	public String getModuleName() { return "Base"; }
@@ -15,6 +21,11 @@ public class JavaModule extends BaseModule
 		createHelperVars(keyType, false, "KEY");
 		createHelperVars(valueType, true, "VALUE");
 		loadBaseVariables();
+	}
+	
+	@Override
+	public List<IDependency> getDependencies(ClassType keyType, ClassType valueType) {
+		return Arrays.asList(MODULE);
 	}
 	
 	@Override
@@ -185,6 +196,7 @@ public class JavaModule extends BaseModule
 		addComment("@Type", "@param <%s> the keyType of elements maintained by this Collection");
 		addValueComment("@ValueArrayType", "@param <%s> the keyType of array that the operation should be applied");
 		addValueComment("@ValueType", "@param <%s> the keyType of elements maintained by this Collection");
+		addSimpleMapper("@Java21", getVersion() >= 21 ? "@Override" : "");
 		addAnnontion("@PrimitiveOverride", "@Override");
 		addSimpleMapper("@PrimitiveDoc", "");
 		addAnnontion("@Primitive", "@Deprecated");

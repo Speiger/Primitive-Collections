@@ -29,6 +29,7 @@ import speiger.src.collections.doubles.sets.DoubleOrderedSet;
 import speiger.src.collections.doubles.sets.DoubleSet;
 import speiger.src.collections.doubles.utils.DoubleSets;
 import speiger.src.collections.booleans.collections.BooleanCollection;
+import speiger.src.collections.booleans.collections.BooleanOrderedCollection;
 import speiger.src.collections.booleans.functions.function.BooleanBooleanUnaryOperator;
 import speiger.src.collections.booleans.functions.BooleanSupplier;
 import speiger.src.collections.booleans.utils.BooleanCollections;
@@ -431,6 +432,10 @@ public class Double2BooleanMaps
 		@Override
 		public boolean putAndMoveToLast(double key, boolean value) { throw new UnsupportedOperationException(); }
 		@Override
+		public boolean putFirst(double key, boolean value) { throw new UnsupportedOperationException(); }
+		@Override
+		public boolean putLast(double key, boolean value) { throw new UnsupportedOperationException(); }
+		@Override
 		public boolean moveToFirst(double key) { throw new UnsupportedOperationException(); }
 		@Override
 		public boolean moveToLast(double key) { throw new UnsupportedOperationException(); }
@@ -451,13 +456,25 @@ public class Double2BooleanMaps
 		@Override
 		public boolean lastBooleanValue() { return map.lastBooleanValue(); }
 		@Override
+		public Double2BooleanMap.Entry firstEntry() { return map.firstEntry(); }
+		@Override
+		public Double2BooleanMap.Entry lastEntry() { return map.lastEntry(); }
+		@Override
+		public Double2BooleanMap.Entry pollFirstEntry() { throw new UnsupportedOperationException(); }
+		@Override
+		public Double2BooleanMap.Entry pollLastEntry() { throw new UnsupportedOperationException(); }
+		@Override
 		public Double2BooleanOrderedMap copy() { return map.copy(); }
 		@Override
 		public DoubleOrderedSet keySet() { 
 			if(keys == null) keys = DoubleSets.unmodifiable(map.keySet()); 
 			return (DoubleOrderedSet)keys;
 		}
-				
+		@Override
+		public BooleanOrderedCollection values() {
+			if(values == null) values = BooleanCollections.unmodifiable(map.values());
+			return (BooleanOrderedCollection)values;
+		}
 		@Override
 		public ObjectOrderedSet<Double2BooleanMap.Entry> double2BooleanEntrySet() {
 			if(entrySet == null) entrySet = new UnmodifyableOrderedEntrySet(map.double2BooleanEntrySet());
@@ -605,15 +622,17 @@ public class Double2BooleanMaps
 		@Override
 		public ObjectBidirectionalIterator<Double2BooleanMap.Entry> iterator() { return ObjectIterators.unmodifiable(set.iterator()); }
 		@Override
+		public ObjectBidirectionalIterator<Double2BooleanMap.Entry> reverseIterator() { return ObjectIterators.unmodifiable(set.reverseIterator()); }
+		@Override
 		public ObjectBidirectionalIterator<Double2BooleanMap.Entry> iterator(Double2BooleanMap.Entry fromElement) { return ObjectIterators.unmodifiable(set.iterator(fromElement)); }
 		@Override
-		public Double2BooleanMap.Entry first() { return set.first(); }
+		public Double2BooleanMap.Entry getFirst() { return set.getFirst(); }
 		@Override
-		public Double2BooleanMap.Entry pollFirst() { throw new UnsupportedOperationException(); }
+		public Double2BooleanMap.Entry removeFirst() { throw new UnsupportedOperationException(); }
 		@Override
-		public Double2BooleanMap.Entry last() { return set.last(); }
+		public Double2BooleanMap.Entry getLast() { return set.getLast(); }
 		@Override
-		public Double2BooleanMap.Entry pollLast() { throw new UnsupportedOperationException(); }
+		public Double2BooleanMap.Entry removeLast() { throw new UnsupportedOperationException(); }
 	}
 	
 	/**
@@ -782,6 +801,10 @@ public class Double2BooleanMaps
 		@Override
 		public boolean putAndMoveToLast(double key, boolean value) { synchronized(mutex) { return map.putAndMoveToLast(key, value); } }
 		@Override
+		public boolean putFirst(double key, boolean value) { synchronized(mutex) { return map.putFirst(key, value); } }
+		@Override
+		public boolean putLast(double key, boolean value) { synchronized(mutex) { return map.putLast(key, value); } }
+		@Override
 		public boolean moveToFirst(double key) { synchronized(mutex) { return map.moveToFirst(key); } }
 		@Override
 		public boolean moveToLast(double key) { synchronized(mutex) { return map.moveToLast(key); } }
@@ -802,13 +825,25 @@ public class Double2BooleanMaps
 		@Override
 		public boolean lastBooleanValue() { synchronized(mutex) { return map.lastBooleanValue(); } }
 		@Override
+		public Double2BooleanMap.Entry firstEntry() { synchronized(mutex) { return map.firstEntry(); } }
+		@Override
+		public Double2BooleanMap.Entry lastEntry() { synchronized(mutex) { return map.lastEntry(); } }
+		@Override
+		public Double2BooleanMap.Entry pollFirstEntry() { synchronized(mutex) { return map.pollFirstEntry(); } }
+		@Override
+		public Double2BooleanMap.Entry pollLastEntry() { synchronized(mutex) { return map.pollLastEntry(); } }
+		@Override
 		public Double2BooleanOrderedMap copy() { synchronized(mutex) { return map.copy(); } }
 		@Override
 		public DoubleOrderedSet keySet() {
 			if(keys == null) keys = DoubleSets.synchronize(map.keySet(), mutex);
 			return (DoubleOrderedSet)keys;
 		}
-		
+		@Override
+		public BooleanOrderedCollection values() {
+			if(values == null) values = BooleanCollections.synchronize(map.values(), mutex);
+			return (BooleanOrderedCollection)values;
+		}
 		@Override
 		public ObjectOrderedSet<Double2BooleanMap.Entry> double2BooleanEntrySet() {
 			if(entrySet == null) entrySet = ObjectSets.synchronize(map.double2BooleanEntrySet(), mutex);

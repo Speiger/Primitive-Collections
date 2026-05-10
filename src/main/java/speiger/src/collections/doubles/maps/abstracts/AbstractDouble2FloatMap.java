@@ -9,6 +9,11 @@ import speiger.src.collections.doubles.functions.consumer.DoubleFloatConsumer;
 import speiger.src.collections.doubles.functions.function.Double2FloatFunction;
 import speiger.src.collections.doubles.functions.function.DoubleFloatUnaryOperator;
 import speiger.src.collections.doubles.maps.interfaces.Double2FloatMap;
+import speiger.src.collections.doubles.maps.interfaces.Double2FloatOrderedMap;
+import speiger.src.collections.doubles.sets.DoubleOrderedSet;
+import speiger.src.collections.floats.collections.FloatOrderedCollection;
+import speiger.src.collections.objects.sets.AbstractObjectSet;
+import speiger.src.collections.objects.sets.ObjectOrderedSet;
 import speiger.src.collections.doubles.sets.AbstractDoubleSet;
 import speiger.src.collections.doubles.sets.DoubleSet;
 import speiger.src.collections.doubles.utils.maps.Double2FloatMaps;
@@ -27,7 +32,7 @@ import speiger.src.collections.utils.SanityChecks;
  */
 public abstract class AbstractDouble2FloatMap extends AbstractMap<Double, Float> implements Double2FloatMap
 {
-	protected float defaultReturnValue = 0F;
+	protected float defaultReturnValue = -1F;
 	
 	@Override
 	public float getDefaultReturnValue() {
@@ -91,7 +96,7 @@ public abstract class AbstractDouble2FloatMap extends AbstractMap<Double, Float>
 	public void putAll(Double[] keys, Float[] values, int offset, int size) {
 		SanityChecks.checkArrayCapacity(keys.length, offset, size);
 		SanityChecks.checkArrayCapacity(values.length, offset, size);
-		for(int i = 0;i<size;i++) put(keys[i], values[i]);		
+		for(int i = 0;i<size;i++) put(keys[i].doubleValue(), values[i].floatValue());		
 	}
 	
 	@Override
@@ -413,6 +418,116 @@ public abstract class AbstractDouble2FloatMap extends AbstractMap<Double, Float>
 		while(iter.hasNext()) hash += iter.next().hashCode();
 		return hash;
 	}
+	
+	public static class ReversedDouble2FloatOrderedMap extends AbstractDouble2FloatMap implements Double2FloatOrderedMap {
+		Double2FloatOrderedMap map;
+		
+		public ReversedDouble2FloatOrderedMap(Double2FloatOrderedMap map) {
+			this.map = map;
+		}
+		@Override
+		public AbstractDouble2FloatMap setDefaultReturnValue(float v) {
+			map.setDefaultReturnValue(v);
+			return this;
+		}
+		@Override
+		public float getDefaultReturnValue() { return map.getDefaultReturnValue(); }
+		@Override
+		public Double2FloatOrderedMap copy() { throw new UnsupportedOperationException(); }
+		@Override
+		public float put(double key, float value) { return map.put(key, value); }
+		@Override
+		public float putIfAbsent(double key, float value) { return map.putIfAbsent(key, value); }
+		@Override
+		public float addTo(double key, float value) { return map.addTo(key, value); }
+		@Override
+		public float subFrom(double key, float value) { return map.subFrom(key, value); }
+		@Override
+		public float remove(double key) { return map.remove(key); }
+		@Override
+		public boolean remove(double key, float value) { return map.remove(key, value); }
+		@Override
+		public float removeOrDefault(double key, float defaultValue) { return map.removeOrDefault(key, defaultValue); }
+		@Override
+		public boolean containsKey(double key) { return map.containsKey(key); }
+		@Override
+		public boolean containsValue(float value) { return map.containsValue(value); }
+		@Override
+		public boolean replace(double key, float oldValue, float newValue) { return map.replace(key, oldValue, newValue); }
+		@Override
+		public float replace(double key, float value) { return map.replace(key, value); }
+		@Override
+		public void replaceFloats(Double2FloatMap m) { map.replaceFloats(m); }
+		@Override
+		public void replaceFloats(DoubleFloatUnaryOperator mappingFunction) { map.replaceFloats(mappingFunction); }
+		@Override
+		public float computeFloat(double key, DoubleFloatUnaryOperator mappingFunction) { return map.computeFloat(key, mappingFunction); }
+		@Override
+		public float computeFloatIfAbsent(double key, Double2FloatFunction mappingFunction) { return map.computeFloatIfAbsent(key, mappingFunction); }
+		@Override
+		public float supplyFloatIfAbsent(double key, FloatSupplier valueProvider) { return map.supplyFloatIfAbsent(key, valueProvider); }
+		@Override
+		public float computeFloatIfPresent(double key, DoubleFloatUnaryOperator mappingFunction) { return map.computeFloatIfPresent(key, mappingFunction); }
+		@Override
+		public float computeFloatNonDefault(double key, DoubleFloatUnaryOperator mappingFunction) { return map.computeFloatNonDefault(key, mappingFunction); }
+		@Override
+		public float computeFloatIfAbsentNonDefault(double key, Double2FloatFunction mappingFunction) { return map.computeFloatIfAbsentNonDefault(key, mappingFunction); }
+		@Override
+		public float supplyFloatIfAbsentNonDefault(double key, FloatSupplier valueProvider) { return map.supplyFloatIfAbsentNonDefault(key, valueProvider); }
+		@Override
+		public float computeFloatIfPresentNonDefault(double key, DoubleFloatUnaryOperator mappingFunction) { return map.computeFloatIfPresentNonDefault(key, mappingFunction); }
+		@Override
+		public float mergeFloat(double key, float value, FloatFloatUnaryOperator mappingFunction) { return map.mergeFloat(key, value, mappingFunction); }
+		@Override
+		public float getOrDefault(double key, float defaultValue) { return map.getOrDefault(key, defaultValue); }
+		@Override
+		public float get(double key) { return map.get(key); }
+		@Override
+		public float putAndMoveToFirst(double key, float value) { return map.putAndMoveToLast(key, value); }
+		@Override
+		public float putAndMoveToLast(double key, float value) { return map.putAndMoveToFirst(key, value); }
+		@Override
+		public float putFirst(double key, float value) { return map.putLast(key, value); }
+		@Override
+		public float putLast(double key, float value) { return map.putFirst(key, value); }
+		@Override
+		public boolean moveToFirst(double key) { return map.moveToLast(key); }
+		@Override
+		public boolean moveToLast(double key) { return map.moveToFirst(key); }
+		@Override
+		public float getAndMoveToFirst(double key) { return map.getAndMoveToLast(key); }
+		@Override
+		public float getAndMoveToLast(double key) { return map.getAndMoveToFirst(key); }
+		@Override
+		public double firstDoubleKey() { return map.lastDoubleKey(); }
+		@Override
+		public double pollFirstDoubleKey() { return map.pollLastDoubleKey(); }
+		@Override
+		public double lastDoubleKey() { return map.firstDoubleKey(); }
+		@Override
+		public double pollLastDoubleKey() { return map.pollFirstDoubleKey(); }
+		@Override
+		public float firstFloatValue() { return map.lastFloatValue(); }
+		@Override
+		public float lastFloatValue() { return map.firstFloatValue(); }
+		@Override
+		public Double2FloatMap.Entry firstEntry() { return map.lastEntry(); }
+		@Override
+		public Double2FloatMap.Entry lastEntry() { return map.firstEntry(); }
+		@Override
+		public Double2FloatMap.Entry pollFirstEntry() { return map.pollLastEntry(); }
+		@Override
+		public Double2FloatMap.Entry pollLastEntry() { return map.pollFirstEntry(); }
+		@Override
+		public ObjectOrderedSet<Double2FloatMap.Entry> double2FloatEntrySet() { return new AbstractObjectSet.ReversedObjectOrderedSet<>(map.double2FloatEntrySet()); }
+		@Override
+		public DoubleOrderedSet keySet() { return new AbstractDoubleSet.ReversedDoubleOrderedSet(map.keySet()); }
+		@Override
+		public FloatOrderedCollection values() { return map.values().reversed(); }
+		@Override
+		public Double2FloatOrderedMap reversed() { return map; }
+	}
+
 	
 	/**
 	 * A Simple Type Specific Entry class to reduce boxing/unboxing

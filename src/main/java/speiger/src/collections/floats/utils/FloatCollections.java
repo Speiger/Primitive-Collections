@@ -12,6 +12,7 @@ import java.util.function.Consumer;
 
 import speiger.src.collections.floats.collections.AbstractFloatCollection;
 import speiger.src.collections.floats.collections.FloatCollection;
+import speiger.src.collections.floats.collections.FloatOrderedCollection;
 import speiger.src.collections.floats.collections.FloatIterator;
 import speiger.src.collections.floats.functions.FloatComparator;
 import speiger.src.collections.objects.utils.ObjectArrays;
@@ -49,6 +50,34 @@ public class FloatCollections
 	 */
 	public static FloatCollection unmodifiable(FloatCollection c) {
 		return c instanceof UnmodifiableCollection ? c : new UnmodifiableCollection(c);
+	}
+	
+	/**
+	 * Returns a Immutable Ordered Collection instance based on the instance given.
+	 * @param c that should be made immutable/unmodifiable
+	 * @return a unmodifiable Ordered collection wrapper. If the Collection already a unmodifiable wrapper then it just returns itself.
+	 */
+	public static FloatOrderedCollection unmodifiable(FloatOrderedCollection c) {
+		return c instanceof UnmodifiableOrderedCollection ? c : new UnmodifiableOrderedCollection(c);
+	}
+	
+	/**
+	 * Returns a synchronized ordered Collection instance based on the instance given.
+	 * @param c that should be synchronized
+	 * @return a synchronized ordered collection wrapper. If the Collection already a synchronized wrapper then it just returns itself.
+	 */
+	public static FloatOrderedCollection synchronize(FloatOrderedCollection c) {
+		return c instanceof SynchronizedOrderedCollection ? c : new SynchronizedOrderedCollection(c);
+	}
+	
+	/**
+	 * Returns a synchronized ordered Collection instance based on the instance given.
+	 * @param c that should be synchronized
+	 * @param mutex is the controller of the synchronization block.
+	 * @return a synchronized ordered collection wrapper. If the Collection already a synchronized wrapper then it just returns itself.
+	 */
+	public static FloatOrderedCollection synchronize(FloatOrderedCollection c, Object mutex) {
+		return c instanceof SynchronizedOrderedCollection ? c : new SynchronizedOrderedCollection(c, mutex);
 	}
 	
 	/**
@@ -584,6 +613,37 @@ public class FloatCollections
 		@Override
 		public SingletonCollection copy() { return new SingletonCollection(element); }
 	}
+	/**
+	 * Synchronized Ordered Collection Wrapper for the synchronizedCollection function
+	 */
+	public static class SynchronizedOrderedCollection extends SynchronizedCollection implements FloatOrderedCollection {
+		FloatOrderedCollection c;
+		
+		SynchronizedOrderedCollection(FloatOrderedCollection c, Object mutex) {
+			super(c, mutex);
+			this.c = c;
+		}
+		
+		SynchronizedOrderedCollection(FloatOrderedCollection c) {
+			super(c);
+			this.c = c;
+		}
+		
+		@Override
+		public FloatOrderedCollection reversed() { return FloatCollections.synchronize(c.reversed(), mutex); }
+		@Override
+		public void addFirst(float e) { synchronized(mutex) { this.c.addFirst(e); } }
+		@Override
+		public void addLast(float e) { synchronized(mutex) { this.c.addLast(e); } }
+		@Override
+		public float getFirstFloat() { synchronized(mutex) { return this.c.getFirstFloat(); } }
+		@Override
+		public float removeFirstFloat() { synchronized(mutex) { return this.c.removeFirstFloat(); } }
+		@Override
+		public float getLastFloat() { synchronized(mutex) { return this.c.getLastFloat(); } }
+		@Override
+		public float removeLastFloat() { synchronized(mutex) { return this.c.removeLastFloat(); } }
+	}	
 	
 	/**
 	 * Synchronized Collection Wrapper for the synchronizedCollection function
@@ -703,6 +763,33 @@ public class FloatCollections
 		public float findFirst(FloatPredicate filter) { synchronized(mutex) { return c.findFirst(filter); } }
 		@Override
 		public int count(FloatPredicate filter) { synchronized(mutex) { return c.count(filter); } }
+	}
+	
+	/**
+	 * Unmodifyable Ordered Collection Wrapper for the unmodifyableCollection method
+	 */
+	public static class UnmodifiableOrderedCollection extends UnmodifiableCollection implements FloatOrderedCollection {
+		FloatOrderedCollection c;
+		
+		UnmodifiableOrderedCollection(FloatOrderedCollection c) {
+			super(c);
+			this.c = c;
+		}
+		
+		@Override
+		public FloatOrderedCollection reversed() { return FloatCollections.unmodifiable(c.reversed()); }
+		@Override
+		public void addFirst(float e) { throw new UnsupportedOperationException(); }
+		@Override
+		public void addLast(float e) { throw new UnsupportedOperationException(); }
+		@Override
+		public float getFirstFloat() { return c.getFirstFloat(); }
+		@Override
+		public float removeFirstFloat() { throw new UnsupportedOperationException(); }
+		@Override
+		public float getLastFloat() { return c.getLastFloat(); }
+		@Override
+		public float removeLastFloat() { throw new UnsupportedOperationException(); }
 	}
 	
 	/**

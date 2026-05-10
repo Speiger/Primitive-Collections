@@ -2,8 +2,9 @@ package speiger.src.collections.objects.sets;
 
 import speiger.src.collections.objects.collections.ObjectBidirectionalIterator;
 import speiger.src.collections.objects.collections.ObjectSplititerator;
-import speiger.src.collections.objects.utils.ObjectSets;
 import speiger.src.collections.objects.utils.ObjectSplititerators;
+import speiger.src.collections.objects.sets.AbstractObjectSet.ReversedObjectOrderedSet;
+import speiger.src.collections.objects.utils.ObjectSets;
 
 /**
  * A Special Set Interface giving Access to some really usefull functions
@@ -50,6 +51,7 @@ public interface ObjectOrderedSet<T> extends ObjectSet<T>
 	
 	@Override
 	public ObjectBidirectionalIterator<T> iterator();
+	public ObjectBidirectionalIterator<T> reverseIterator();
 	
 	/**
 	 * A type Specific Iterator starting from a given key
@@ -70,23 +72,26 @@ public interface ObjectOrderedSet<T> extends ObjectSet<T>
 	 * A method to get the first element in the set
 	 * @return first element in the set
 	 */
-	public T first();
+	public T getFirst();
 	/**
 	 * A method to get and remove the first element in the set
 	 * @return first element in the set
 	 */
-	public T pollFirst();
+	public T removeFirst();
 	/**
 	 * A method to get the last element in the set
 	 * @return last element in the set
 	 */
-	public T last();
+	public T getLast();
 	/**
 	 * A method to get and remove the last element in the set
 	 * @return last element in the set
 	 */
-	public T pollLast();
+	public T removeLast();
 	
+	
+	public default ObjectOrderedSet<T> reversed() { return new ReversedObjectOrderedSet<>(this); }
+
 	/**
 	 * Creates a Wrapped OrderedSet that is Synchronized
 	 * @return a new OrderedSet that is synchronized

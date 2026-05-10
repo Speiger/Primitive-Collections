@@ -5,8 +5,8 @@ import java.util.Set;
 import speiger.src.collections.floats.collections.FloatCollection;
 import speiger.src.collections.floats.collections.FloatIterator;
 import speiger.src.collections.floats.collections.FloatSplititerator;
-import speiger.src.collections.floats.utils.FloatSets;
 import speiger.src.collections.floats.utils.FloatSplititerators;
+import speiger.src.collections.floats.utils.FloatSets;
 
 
 /**

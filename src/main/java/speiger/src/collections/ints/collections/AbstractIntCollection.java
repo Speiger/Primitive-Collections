@@ -1,9 +1,11 @@
 package speiger.src.collections.ints.collections;
 
 import java.util.Collection;
+import java.util.function.Supplier;
 import java.util.Objects;
 import java.util.AbstractCollection;
 
+import speiger.src.collections.ints.lists.IntListIterator;
 import speiger.src.collections.ints.functions.IntConsumer;
 import speiger.src.collections.ints.utils.IntIterators;
 import speiger.src.collections.ints.utils.IntArrays;
@@ -248,5 +250,69 @@ public abstract class AbstractIntCollection extends AbstractCollection<Integer> 
 		IntIterators.unwrap(a, iterator());
 		if (a.length > size()) a[size()] = 0;
 		return a;
+	}
+
+	public static class ReverseIntOrderedCollection extends AbstractIntCollection implements IntOrderedCollection {
+		IntOrderedCollection collection;
+		Supplier<IntIterator> reverseIterator;
+		
+		public ReverseIntOrderedCollection(IntOrderedCollection collection, Supplier<IntIterator> reverseIterator) {
+			this.collection = collection;
+			this.reverseIterator = reverseIterator;
+		}
+		
+		@Override
+		public boolean add(int o) { return collection.add(o); }
+		@Override
+		public IntOrderedCollection reversed() { return collection; }
+		@Override
+		public void addFirst(int e) { collection.addLast(e); }
+		@Override
+		public void addLast(int e) { collection.addFirst(e); }
+		@Override
+		public boolean contains(int e) { return collection.contains(e); }
+		@Override
+		public boolean remInt(int e) { return collection.remInt(e); }
+		@Override
+		public void clear() { collection.clear(); }
+		@Override
+		public int getFirstInt() { return collection.getLastInt(); }
+		@Override
+		public int removeFirstInt() { return collection.removeLastInt(); }
+		@Override
+		public int getLastInt() { return collection.getFirstInt(); }
+		@Override
+		public int removeLastInt() { return collection.removeFirstInt(); }
+		@Override
+		public IntIterator iterator() { return reverseIterator.get(); }
+		@Override
+		public int size() { return collection.size(); }
+	}
+	
+	public static class ReverseBiIterator implements IntListIterator {
+		IntListIterator it;
+		
+		public ReverseBiIterator(IntListIterator it) {
+			this.it = it;
+		}
+		
+		@Override
+		public int nextInt() { return it.previousInt(); }
+		@Override
+		public boolean hasNext() { return it.hasPrevious(); }
+		@Override
+		public boolean hasPrevious() { return it.hasNext(); }
+		@Override
+		public int previousInt() { return it.nextInt(); }
+		@Override
+		public void remove() { it.remove(); }
+		@Override
+		public int nextIndex() { return it.previousIndex(); }
+		@Override
+		public int previousIndex() { return it.nextIndex(); }
+		@Override
+		public void set(int e) { it.set(e); }
+		@Override
+		public void add(int e) { it.add(e); }
 	}
 }

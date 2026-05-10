@@ -29,6 +29,7 @@ import speiger.src.collections.chars.sets.CharOrderedSet;
 import speiger.src.collections.chars.sets.CharSet;
 import speiger.src.collections.chars.utils.CharSets;
 import speiger.src.collections.shorts.collections.ShortCollection;
+import speiger.src.collections.shorts.collections.ShortOrderedCollection;
 import speiger.src.collections.shorts.functions.function.ShortShortUnaryOperator;
 import speiger.src.collections.shorts.functions.ShortSupplier;
 import speiger.src.collections.shorts.utils.ShortCollections;
@@ -439,6 +440,10 @@ public class Char2ShortMaps
 		@Override
 		public short putAndMoveToLast(char key, short value) { throw new UnsupportedOperationException(); }
 		@Override
+		public short putFirst(char key, short value) { throw new UnsupportedOperationException(); }
+		@Override
+		public short putLast(char key, short value) { throw new UnsupportedOperationException(); }
+		@Override
 		public boolean moveToFirst(char key) { throw new UnsupportedOperationException(); }
 		@Override
 		public boolean moveToLast(char key) { throw new UnsupportedOperationException(); }
@@ -459,13 +464,25 @@ public class Char2ShortMaps
 		@Override
 		public short lastShortValue() { return map.lastShortValue(); }
 		@Override
+		public Char2ShortMap.Entry firstEntry() { return map.firstEntry(); }
+		@Override
+		public Char2ShortMap.Entry lastEntry() { return map.lastEntry(); }
+		@Override
+		public Char2ShortMap.Entry pollFirstEntry() { throw new UnsupportedOperationException(); }
+		@Override
+		public Char2ShortMap.Entry pollLastEntry() { throw new UnsupportedOperationException(); }
+		@Override
 		public Char2ShortOrderedMap copy() { return map.copy(); }
 		@Override
 		public CharOrderedSet keySet() { 
 			if(keys == null) keys = CharSets.unmodifiable(map.keySet()); 
 			return (CharOrderedSet)keys;
 		}
-				
+		@Override
+		public ShortOrderedCollection values() {
+			if(values == null) values = ShortCollections.unmodifiable(map.values());
+			return (ShortOrderedCollection)values;
+		}
 		@Override
 		public ObjectOrderedSet<Char2ShortMap.Entry> char2ShortEntrySet() {
 			if(entrySet == null) entrySet = new UnmodifyableOrderedEntrySet(map.char2ShortEntrySet());
@@ -617,15 +634,17 @@ public class Char2ShortMaps
 		@Override
 		public ObjectBidirectionalIterator<Char2ShortMap.Entry> iterator() { return ObjectIterators.unmodifiable(set.iterator()); }
 		@Override
+		public ObjectBidirectionalIterator<Char2ShortMap.Entry> reverseIterator() { return ObjectIterators.unmodifiable(set.reverseIterator()); }
+		@Override
 		public ObjectBidirectionalIterator<Char2ShortMap.Entry> iterator(Char2ShortMap.Entry fromElement) { return ObjectIterators.unmodifiable(set.iterator(fromElement)); }
 		@Override
-		public Char2ShortMap.Entry first() { return set.first(); }
+		public Char2ShortMap.Entry getFirst() { return set.getFirst(); }
 		@Override
-		public Char2ShortMap.Entry pollFirst() { throw new UnsupportedOperationException(); }
+		public Char2ShortMap.Entry removeFirst() { throw new UnsupportedOperationException(); }
 		@Override
-		public Char2ShortMap.Entry last() { return set.last(); }
+		public Char2ShortMap.Entry getLast() { return set.getLast(); }
 		@Override
-		public Char2ShortMap.Entry pollLast() { throw new UnsupportedOperationException(); }
+		public Char2ShortMap.Entry removeLast() { throw new UnsupportedOperationException(); }
 	}
 	
 	/**
@@ -794,6 +813,10 @@ public class Char2ShortMaps
 		@Override
 		public short putAndMoveToLast(char key, short value) { synchronized(mutex) { return map.putAndMoveToLast(key, value); } }
 		@Override
+		public short putFirst(char key, short value) { synchronized(mutex) { return map.putFirst(key, value); } }
+		@Override
+		public short putLast(char key, short value) { synchronized(mutex) { return map.putLast(key, value); } }
+		@Override
 		public boolean moveToFirst(char key) { synchronized(mutex) { return map.moveToFirst(key); } }
 		@Override
 		public boolean moveToLast(char key) { synchronized(mutex) { return map.moveToLast(key); } }
@@ -814,13 +837,25 @@ public class Char2ShortMaps
 		@Override
 		public short lastShortValue() { synchronized(mutex) { return map.lastShortValue(); } }
 		@Override
+		public Char2ShortMap.Entry firstEntry() { synchronized(mutex) { return map.firstEntry(); } }
+		@Override
+		public Char2ShortMap.Entry lastEntry() { synchronized(mutex) { return map.lastEntry(); } }
+		@Override
+		public Char2ShortMap.Entry pollFirstEntry() { synchronized(mutex) { return map.pollFirstEntry(); } }
+		@Override
+		public Char2ShortMap.Entry pollLastEntry() { synchronized(mutex) { return map.pollLastEntry(); } }
+		@Override
 		public Char2ShortOrderedMap copy() { synchronized(mutex) { return map.copy(); } }
 		@Override
 		public CharOrderedSet keySet() {
 			if(keys == null) keys = CharSets.synchronize(map.keySet(), mutex);
 			return (CharOrderedSet)keys;
 		}
-		
+		@Override
+		public ShortOrderedCollection values() {
+			if(values == null) values = ShortCollections.synchronize(map.values(), mutex);
+			return (ShortOrderedCollection)values;
+		}
 		@Override
 		public ObjectOrderedSet<Char2ShortMap.Entry> char2ShortEntrySet() {
 			if(entrySet == null) entrySet = ObjectSets.synchronize(map.char2ShortEntrySet(), mutex);

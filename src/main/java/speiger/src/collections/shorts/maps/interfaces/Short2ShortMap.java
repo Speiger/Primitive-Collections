@@ -93,7 +93,7 @@ public interface Short2ShortMap extends Map<Short, Short>, ShortUnaryOperator
 	 * @return the last present value or default return	value.
 	 */
 	public default Short put(Map.Entry<Short, Short> entry) {
-		return put(entry.getKey(), entry.getValue());
+		return put(entry.getKey().shortValue(), entry.getValue().shortValue());
 	}
 
 	/**

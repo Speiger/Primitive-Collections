@@ -466,7 +466,6 @@ public abstract class AbstractByteList extends AbstractByteCollection implements
 		public int size() {
 			return size;
 		}
-		
 		@Override
 		public ByteSplititerator spliterator() { return ByteSplititerators.createSplititerator(this, 16464); }
 		

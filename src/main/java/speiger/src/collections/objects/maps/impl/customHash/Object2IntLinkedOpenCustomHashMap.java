@@ -21,7 +21,7 @@ import speiger.src.collections.objects.sets.AbstractObjectSet;
 import speiger.src.collections.objects.sets.ObjectOrderedSet;
 import speiger.src.collections.objects.utils.ObjectStrategy;
 import speiger.src.collections.ints.collections.AbstractIntCollection;
-import speiger.src.collections.ints.collections.IntCollection;
+import speiger.src.collections.ints.collections.IntOrderedCollection;
 import speiger.src.collections.ints.collections.IntIterator;
 import speiger.src.collections.ints.functions.function.IntIntUnaryOperator;
 import speiger.src.collections.ints.functions.IntConsumer;
@@ -250,6 +250,54 @@ public class Object2IntLinkedOpenCustomHashMap<T> extends Object2IntOpenCustomHa
 	}
 	
 	@Override
+	public int putFirst(T key, int value) {
+		if(strategy.equals(key, null)) {
+			if(containsNull) return values[nullIndex];
+			values[nullIndex] = value;
+			containsNull = true;
+			onNodeAdded(nullIndex);
+			moveToFirstIndex(nullIndex);
+		}
+		else {
+			int pos = HashUtil.mix(strategy.hashCode(key)) & mask;
+			while(!strategy.equals(keys[pos], null)) {
+				if(strategy.equals(keys[pos], key)) return values[pos];
+				pos = ++pos & mask;
+			}
+			keys[pos] = key;
+			values[pos] = value;
+			onNodeAdded(pos);
+			moveToFirstIndex(pos);
+		}
+		if(size++ >= maxFill) rehash(HashUtil.arraySize(size+1, loadFactor));
+		return getDefaultReturnValue();
+	}
+	
+	@Override
+	public int putLast(T key, int value) {
+		if(strategy.equals(key, null)) {
+			if(containsNull) return values[nullIndex];
+			values[nullIndex] = value;
+			containsNull = true;
+			onNodeAdded(nullIndex);
+			moveToLastIndex(nullIndex);
+		}
+		else {
+			int pos = HashUtil.mix(strategy.hashCode(key)) & mask;
+			while(!strategy.equals(keys[pos], null)) {
+				if(strategy.equals(keys[pos], key)) return values[pos];
+				pos = ++pos & mask;
+			}
+			keys[pos] = key;
+			values[pos] = value;
+			onNodeAdded(pos);
+			moveToLastIndex(pos);
+		}
+		if(size++ >= maxFill) rehash(HashUtil.arraySize(size+1, loadFactor));
+		return getDefaultReturnValue();
+	}
+	
+	@Override
 	public boolean moveToFirst(T key) {
 		if(isEmpty() || strategy.equals(firstKey(), key)) return false;
 		if(strategy.equals(key, null)) {
@@ -385,6 +433,52 @@ public class Object2IntLinkedOpenCustomHashMap<T> extends Object2IntOpenCustomHa
 	}
 	
 	@Override
+	public Object2IntMap.Entry<T> firstEntry() {
+		if(size == 0) throw new NoSuchElementException();
+		return new BasicEntry<>(keys[firstIndex], values[firstIndex]);
+	}
+	
+	@Override
+	public Object2IntMap.Entry<T> lastEntry() {
+		if(size == 0) throw new NoSuchElementException();
+		return new BasicEntry<>(keys[lastIndex], values[lastIndex]);
+	}
+	
+	@Override
+	public Object2IntMap.Entry<T> pollFirstEntry() {
+		if(size == 0) throw new NoSuchElementException();
+		int pos = firstIndex;
+		onNodeRemoved(pos);
+		BasicEntry<T> result = new BasicEntry<>(keys[pos], values[pos]);
+		size--;
+		if(strategy.equals(result.getKey(), null)) {
+			containsNull = false;
+			keys[nullIndex] = null;
+			values[nullIndex] = 0;
+		}
+		else shiftKeys(pos);
+		if(nullIndex > minCapacity && size < maxFill / 4 && nullIndex > HashUtil.DEFAULT_MIN_CAPACITY) rehash(nullIndex / 2);
+		return result;
+	}
+	
+	@Override
+	public Object2IntMap.Entry<T> pollLastEntry() {
+		if(size == 0) throw new NoSuchElementException();
+		int pos = lastIndex;
+		onNodeRemoved(pos);
+		BasicEntry<T> result = new BasicEntry<>(keys[pos], values[pos]);
+		size--;
+		if(strategy.equals(result.getKey(), null)) {
+			containsNull = false;
+			keys[nullIndex] = null;
+			values[nullIndex] = 0;
+		}
+		else shiftKeys(pos);
+		if(nullIndex > minCapacity && size < maxFill / 4 && nullIndex > HashUtil.DEFAULT_MIN_CAPACITY) rehash(nullIndex / 2);
+		return result;
+	}
+	
+	@Override
 	public ObjectOrderedSet<Object2IntMap.Entry<T>> object2IntEntrySet() {
 		if(entrySet == null) entrySet = new MapEntrySet();
 		return (ObjectOrderedSet<Object2IntMap.Entry<T>>)entrySet;
@@ -397,9 +491,9 @@ public class Object2IntLinkedOpenCustomHashMap<T> extends Object2IntOpenCustomHa
 	}
 	
 	@Override
-	public IntCollection values() {
+	public IntOrderedCollection values() {
 		if(valuesC == null) valuesC = new Values();
-		return valuesC;
+		return (IntOrderedCollection)valuesC;
 	}
 	
 	@Override
@@ -584,24 +678,24 @@ public class Object2IntLinkedOpenCustomHashMap<T> extends Object2IntOpenCustomHa
 		}
 		
 		@Override
-		public Object2IntMap.Entry<T> first() {
+		public Object2IntMap.Entry<T> getFirst() {
 			return new BasicEntry<>(firstKey(), firstIntValue());
 		}
 		
 		@Override
-		public Object2IntMap.Entry<T> last() {
+		public Object2IntMap.Entry<T> getLast() {
 			return new BasicEntry<>(lastKey(), lastIntValue());
 		}
 		
 		@Override
-		public Object2IntMap.Entry<T> pollFirst() {
+		public Object2IntMap.Entry<T> removeFirst() {
 			BasicEntry<T> entry = new BasicEntry<>(firstKey(), firstIntValue());
 			pollFirstKey();
 			return entry;
 		}
 		
 		@Override
-		public Object2IntMap.Entry<T> pollLast() {
+		public Object2IntMap.Entry<T> removeLast() {
 			BasicEntry<T> entry = new BasicEntry<>(lastKey(), lastIntValue());
 			pollLastKey();
 			return entry;
@@ -609,7 +703,12 @@ public class Object2IntLinkedOpenCustomHashMap<T> extends Object2IntOpenCustomHa
 		
 		@Override
 		public ObjectBidirectionalIterator<Object2IntMap.Entry<T>> iterator() {
-			return new EntryIterator();
+			return new EntryIterator(true);
+		}
+		
+		@Override
+		public ObjectBidirectionalIterator<Object2IntMap.Entry<T>> reverseIterator() {
+			return new EntryIterator(false);
 		}
 		
 		@Override
@@ -619,7 +718,7 @@ public class Object2IntLinkedOpenCustomHashMap<T> extends Object2IntOpenCustomHa
 		
 		@Override
 		public ObjectBidirectionalIterator<Object2IntMap.Entry<T>> fastIterator() {
-			return new FastEntryIterator();
+			return new FastEntryIterator(true);
 		}
 		
 		@Override
@@ -855,7 +954,12 @@ public class Object2IntLinkedOpenCustomHashMap<T> extends Object2IntOpenCustomHa
 		
 		@Override
 		public ObjectListIterator<T> iterator() {
-			return new KeyIterator();
+			return new KeyIterator(true);
+		}
+		
+		@Override
+		public ObjectListIterator<T> reverseIterator() {
+			return new KeyIterator(false);
 		}
 		
 		@Override
@@ -877,22 +981,22 @@ public class Object2IntLinkedOpenCustomHashMap<T> extends Object2IntOpenCustomHa
 		}
 		
 		@Override
-		public T first() {
+		public T getFirst() {
 			return firstKey();
 		}
 		
 		@Override
-		public T pollFirst() {
+		public T removeFirst() {
 			return pollFirstKey();
 		}
 
 		@Override
-		public T last() {
+		public T getLast() {
 			return lastKey();
 		}
 
 		@Override
-		public T pollLast() {
+		public T removeLast() {
 			return pollLastKey();
 		}
 		
@@ -1021,30 +1125,41 @@ public class Object2IntLinkedOpenCustomHashMap<T> extends Object2IntOpenCustomHa
 		}
 	}
 	
-	private class Values extends AbstractIntCollection {
+	private class Values extends AbstractIntCollection implements IntOrderedCollection {
 		@Override
-		public boolean contains(int e) {
-			return containsValue(e);
+		public boolean contains(int e) { return containsValue(e); }
+		@Override
+		public boolean add(int o) { throw new UnsupportedOperationException(); }
+		@Override
+		public IntIterator iterator() { return new ValueIterator(true); }
+		@Override
+		public int size() { return Object2IntLinkedOpenCustomHashMap.this.size(); }
+		@Override
+		public void clear() { Object2IntLinkedOpenCustomHashMap.this.clear(); }
+		@Override
+		public IntOrderedCollection reversed() { return new AbstractIntCollection.ReverseIntOrderedCollection(this, this::reverseIterator); }
+		private IntIterator reverseIterator() {
+			return new ValueIterator(false);
 		}
-		
 		@Override
-		public boolean add(int o) {
-			throw new UnsupportedOperationException();
+		public void addFirst(int e) { throw new UnsupportedOperationException(); }
+		@Override
+		public void addLast(int e) { throw new UnsupportedOperationException(); }
+		@Override
+		public int getFirstInt() { return firstIntValue(); }
+		@Override
+		public int removeFirstInt() {
+			int result = firstIntValue();
+			pollFirstKey();
+			return result; 
 		}
-
 		@Override
-		public IntIterator iterator() {
-			return new ValueIterator();
-		}
-		
+		public int getLastInt() { return lastIntValue(); }
 		@Override
-		public int size() {
-			return Object2IntLinkedOpenCustomHashMap.this.size();
-		}
-		
-		@Override
-		public void clear() {
-			Object2IntLinkedOpenCustomHashMap.this.clear();
+		public int removeLastInt() {
+			int result = lastIntValue();
+			pollLastKey();
+			return result; 
 		}
 		
 		@Override
@@ -1175,7 +1290,7 @@ public class Object2IntLinkedOpenCustomHashMap<T> extends Object2IntOpenCustomHa
 	private class FastEntryIterator extends MapIterator implements ObjectListIterator<Object2IntMap.Entry<T>> {
 		MapEntry entry = new MapEntry();
 		
-		public FastEntryIterator() {}
+		public FastEntryIterator(boolean start) { super(start); }
 		public FastEntryIterator(T from) {
 			super(from);
 		}
@@ -1202,7 +1317,7 @@ public class Object2IntLinkedOpenCustomHashMap<T> extends Object2IntOpenCustomHa
 	private class EntryIterator extends MapIterator implements ObjectListIterator<Object2IntMap.Entry<T>> {
 		MapEntry entry;
 		
-		public EntryIterator() {}
+		public EntryIterator(boolean start) { super(start); }
 		public EntryIterator(T from) {
 			super(from);
 		}
@@ -1232,7 +1347,7 @@ public class Object2IntLinkedOpenCustomHashMap<T> extends Object2IntOpenCustomHa
 	
 	private class KeyIterator extends MapIterator implements ObjectListIterator<T> {
 		
-		public KeyIterator() {}
+		public KeyIterator(boolean start) { super(start); }
 		public KeyIterator(T from) {
 			super(from);
 		}
@@ -1254,7 +1369,7 @@ public class Object2IntLinkedOpenCustomHashMap<T> extends Object2IntOpenCustomHa
 	}
 	
 	private class ValueIterator extends MapIterator implements IntListIterator {
-		public ValueIterator() {}
+		public ValueIterator(boolean start) { super(start); }
 		
 		@Override
 		public int previousInt() {
@@ -1275,16 +1390,20 @@ public class Object2IntLinkedOpenCustomHashMap<T> extends Object2IntOpenCustomHa
 	}
 	
 	private class MapIterator {
+		boolean forward;
 		int previous = -1;
 		int next = -1;
 		int current = -1;
 		int index = 0;
 		
-		MapIterator() {
-			next = firstIndex;
+		MapIterator(boolean start) {
+			this.forward = start;
+			if(start) next = firstIndex;
+			else previous = lastIndex;
 		}
 		
 		MapIterator(T from) {
+			this.forward = true;
 			if(strategy.equals(from, null)) {
 				if(containsNull) {
 					next = (int) links[nullIndex];
@@ -1312,11 +1431,11 @@ public class Object2IntLinkedOpenCustomHashMap<T> extends Object2IntOpenCustomHa
 		}
 		
 		public boolean hasNext() {
-			return next != -1;
+			return (forward ? next : previous) != -1;
 		}
 
 		public boolean hasPrevious() {
-			return previous != -1;
+			return (forward ? previous : next) != -1;
 		}
 		
 		public int nextIndex() {
@@ -1376,20 +1495,30 @@ public class Object2IntLinkedOpenCustomHashMap<T> extends Object2IntOpenCustomHa
 		
 		public int previousEntry() {
 			if(!hasPrevious()) throw new NoSuchElementException();
-			current = previous;
-			previous = (int)(links[current] >> 32);
-			next = current;
+			if(forward) moveBackwards();
+			else moveForwards();
 			if(index >= 0) index--;
 			return current;
 		}
 		
 		public int nextEntry() {
 			if(!hasNext()) throw new NoSuchElementException();
+			if(forward) moveForwards();
+			else moveBackwards();
+			if(index >= 0) index++;
+			return current;
+		}
+		
+		private void moveBackwards() {
+			current = previous;
+			previous = (int)(links[current] >> 32);
+			next = current;
+		}
+		
+		private void moveForwards() {
 			current = next;
 			next = (int)(links[current]);
 			previous = current;
-			if(index >= 0) index++;
-			return current;
 		}
 		
 		private void ensureIndexKnown() {

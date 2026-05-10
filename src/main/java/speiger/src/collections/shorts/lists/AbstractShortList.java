@@ -466,7 +466,6 @@ public abstract class AbstractShortList extends AbstractShortCollection implemen
 		public int size() {
 			return size;
 		}
-		
 		@Override
 		public ShortSplititerator spliterator() { return ShortSplititerators.createSplititerator(this, 16464); }
 		

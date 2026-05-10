@@ -1,10 +1,10 @@
 package speiger.src.collections.ints.collections;
 
-import speiger.src.collections.objects.collections.ObjectBidirectionalIterator;
 /**
- * A Type-Specific {@link ObjectBidirectionalIterator} to reduce (un)boxing
+ * This is a basically a {@link java.util.ListIterator} without the index functions.
+ * Allowing to have a simple Bidirectional Iterator without having to keep track of the Iteration index.
  */
-public interface IntBidirectionalIterator extends IntIterator, ObjectBidirectionalIterator<Integer>
+public interface IntBidirectionalIterator extends IntIterator
 {
 	/**
 	 * Returns true if the Iterator has a Previous element
@@ -19,11 +19,11 @@ public interface IntBidirectionalIterator extends IntIterator, ObjectBidirection
 	 */
 	public int previousInt();
 	
-	/** {@inheritDoc}
+	/**
 	 * <p>This default implementation delegates to the corresponding type-specific function.
 	 * @deprecated Please use the corresponding type-specific function instead. 
+	 * @return the Previous element of the iterator.+
 	 */
-	@Override
 	@Deprecated
 	public default Integer previous() {
 		return Integer.valueOf(previousInt());

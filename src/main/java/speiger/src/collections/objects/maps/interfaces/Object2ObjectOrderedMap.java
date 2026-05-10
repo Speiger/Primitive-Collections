@@ -1,6 +1,8 @@
 package speiger.src.collections.objects.maps.interfaces;
 
 import speiger.src.collections.objects.utils.maps.Object2ObjectMaps;
+import speiger.src.collections.objects.maps.abstracts.AbstractObject2ObjectMap;
+import speiger.src.collections.objects.collections.ObjectOrderedCollection;
 import speiger.src.collections.objects.collections.ObjectBidirectionalIterator;
 import speiger.src.collections.objects.sets.ObjectOrderedSet;
 /**
@@ -31,6 +33,26 @@ public interface Object2ObjectOrderedMap<T, V> extends Object2ObjectMap<T, V>
 	 * @see java.util.Map#put(Object, Object)
 	 */
 	public V putAndMoveToLast(T key, V value);
+	
+	/**
+	 * A alternative to putAndMoveToFirst.
+	 * This method simply puts an entry at the first spot of the Map but only if the entry is missing.
+	 * @param key the key that should be inserted
+	 * @param value the value that should be inserted
+	 * @return the previous present or default return value
+	 * @see java.util.Map#put(Object, Object)
+	 */
+	public V putFirst(T key, V value);
+	
+	/**
+	 * A alternative to putAndMoveToLast.
+	 * This method simply puts an entry at the last spot of the Map but only if the entry is missing.
+	 * @param key the key that should be inserted
+	 * @param value the value that should be inserted
+	 * @return the previous present or default return value
+	 * @see java.util.Map#put(Object, Object)
+	 */
+	public V putLast(T key, V value);
 	
 	/**
 	 * A specific move method to move a given key/value to the first index.
@@ -92,12 +114,24 @@ public interface Object2ObjectOrderedMap<T, V> extends Object2ObjectMap<T, V>
 	 */
 	public V lastValue();
 	
+	
+	public Object2ObjectMap.Entry<T, V> firstEntry();
+	
+	public Object2ObjectMap.Entry<T, V> lastEntry();
+	
+	public Object2ObjectMap.Entry<T, V> pollFirstEntry();
+	
+	public Object2ObjectMap.Entry<T, V> pollLastEntry();
 	@Override
 	public Object2ObjectOrderedMap<T, V> copy();
 	@Override
 	public ObjectOrderedSet<T> keySet();
 	@Override
+	public ObjectOrderedCollection<V> values();
+	@Override
 	public ObjectOrderedSet<Object2ObjectMap.Entry<T, V>> object2ObjectEntrySet();
+	
+	public default Object2ObjectOrderedMap<T, V> reversed() { return new AbstractObject2ObjectMap.ReversedObject2ObjectOrderedMap<>(this); }
 	
 	/**
 	 * Creates a Wrapped SortedMap that is Synchronized

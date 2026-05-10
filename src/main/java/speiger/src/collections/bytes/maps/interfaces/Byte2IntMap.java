@@ -94,7 +94,7 @@ public interface Byte2IntMap extends Map<Byte, Integer>, Byte2IntFunction
 	 * @return the last present value or default return	value.
 	 */
 	public default Integer put(Map.Entry<Byte, Integer> entry) {
-		return put(entry.getKey(), entry.getValue());
+		return put(entry.getKey().byteValue(), entry.getValue().intValue());
 	}
 
 	/**

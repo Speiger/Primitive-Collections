@@ -30,7 +30,7 @@ import speiger.src.collections.objects.functions.consumer.ObjectBooleanConsumer;
 import speiger.src.collections.booleans.functions.function.BooleanPredicate;
 import speiger.src.collections.longs.sets.AbstractLongSet;
 import speiger.src.collections.booleans.collections.AbstractBooleanCollection;
-import speiger.src.collections.booleans.collections.BooleanCollection;
+import speiger.src.collections.booleans.collections.BooleanOrderedCollection;
 import speiger.src.collections.booleans.collections.BooleanIterator;
 import speiger.src.collections.booleans.functions.BooleanSupplier;
 import speiger.src.collections.booleans.functions.function.BooleanBooleanUnaryOperator;
@@ -73,7 +73,7 @@ public class ImmutableLong2BooleanOpenHashMap extends AbstractLong2BooleanMap im
 	/** KeySet cache */
 	protected transient LongOrderedSet keySet;
 	/** Values cache */
-	protected transient BooleanCollection valuesC;
+	protected transient BooleanOrderedCollection valuesC;
 	
 	/** Amount of Elements stored in the HashMap */
 	protected int size;
@@ -258,6 +258,10 @@ public class ImmutableLong2BooleanOpenHashMap extends AbstractLong2BooleanMap im
 	@Override
 	public boolean putAndMoveToLast(long key, boolean value) { throw new UnsupportedOperationException(); }
 	@Override
+	public boolean putFirst(long key, boolean value) { throw new UnsupportedOperationException(); }
+	@Override
+	public boolean putLast(long key, boolean value) { throw new UnsupportedOperationException(); }
+	@Override
 	public boolean moveToFirst(long key) { throw new UnsupportedOperationException(); }
 	@Override
 	public boolean moveToLast(long key) { throw new UnsupportedOperationException(); }
@@ -360,7 +364,24 @@ public class ImmutableLong2BooleanOpenHashMap extends AbstractLong2BooleanMap im
 	public boolean lastBooleanValue() {
 		if(size == 0) throw new NoSuchElementException();
 		return values[lastIndex];
-	}	
+	}
+	
+	@Override
+	public Long2BooleanMap.Entry firstEntry() {
+		if(size == 0) throw new NoSuchElementException();
+		return new BasicEntry(keys[firstIndex], values[firstIndex]);
+	}
+	
+	@Override
+	public Long2BooleanMap.Entry lastEntry() {
+		if(size == 0) throw new NoSuchElementException();
+		return new BasicEntry(keys[lastIndex], values[lastIndex]);
+	}
+	
+	@Override
+	public Long2BooleanMap.Entry pollFirstEntry() { throw new UnsupportedOperationException(); }
+	@Override
+	public Long2BooleanMap.Entry pollLastEntry() { throw new UnsupportedOperationException(); }
 
 	@Override
 	public ObjectOrderedSet<Long2BooleanMap.Entry> long2BooleanEntrySet() {
@@ -375,7 +396,7 @@ public class ImmutableLong2BooleanOpenHashMap extends AbstractLong2BooleanMap im
 	}
 	
 	@Override
-	public BooleanCollection values() {
+	public BooleanOrderedCollection values() {
 		if(valuesC == null) valuesC = new Values();
 		return valuesC;
 	}
@@ -524,24 +545,29 @@ public class ImmutableLong2BooleanOpenHashMap extends AbstractLong2BooleanMap im
 		public boolean moveToLast(Long2BooleanMap.Entry o) { throw new UnsupportedOperationException(); }
 		
 		@Override
-		public Long2BooleanMap.Entry first() {
+		public Long2BooleanMap.Entry getFirst() {
 			return new BasicEntry(firstLongKey(), firstBooleanValue());
 		}
 		
 		@Override
-		public Long2BooleanMap.Entry last() {
+		public Long2BooleanMap.Entry getLast() {
 			return new BasicEntry(lastLongKey(), lastBooleanValue());
 		}
 		
 		@Override
-		public Long2BooleanMap.Entry pollFirst() { throw new UnsupportedOperationException(); }
+		public Long2BooleanMap.Entry removeFirst() { throw new UnsupportedOperationException(); }
 		
 		@Override
-		public Long2BooleanMap.Entry pollLast() { throw new UnsupportedOperationException(); }
+		public Long2BooleanMap.Entry removeLast() { throw new UnsupportedOperationException(); }
 		
 		@Override
 		public ObjectBidirectionalIterator<Long2BooleanMap.Entry> iterator() {
-			return new EntryIterator();
+			return new EntryIterator(true);
+		}
+		
+		@Override
+		public ObjectBidirectionalIterator<Long2BooleanMap.Entry> reverseIterator() {
+			return new EntryIterator(false);
 		}
 		
 		@Override
@@ -551,7 +577,7 @@ public class ImmutableLong2BooleanOpenHashMap extends AbstractLong2BooleanMap im
 		
 		@Override
 		public ObjectBidirectionalIterator<Long2BooleanMap.Entry> fastIterator() {
-			return new FastEntryIterator();
+			return new FastEntryIterator(true);
 		}
 		
 		@Override
@@ -766,7 +792,12 @@ public class ImmutableLong2BooleanOpenHashMap extends AbstractLong2BooleanMap im
 		
 		@Override
 		public LongListIterator iterator() {
-			return new KeyIterator();
+			return new KeyIterator(true);
+		}
+		
+		@Override
+		public LongListIterator reverseIterator() {
+			return new KeyIterator(false);
 		}
 		
 		@Override
@@ -786,20 +817,20 @@ public class ImmutableLong2BooleanOpenHashMap extends AbstractLong2BooleanMap im
 		public void clear() { throw new UnsupportedOperationException(); }
 		
 		@Override
-		public long firstLong() {
+		public long getFirstLong() {
 			return firstLongKey();
 		}
 		
 		@Override
-		public long pollFirstLong() { throw new UnsupportedOperationException(); }
+		public long removeFirstLong() { throw new UnsupportedOperationException(); }
 
 		@Override
-		public long lastLong() {
+		public long getLastLong() {
 			return lastLongKey();
 		}
 
 		@Override
-		public long pollLastLong() { throw new UnsupportedOperationException(); }
+		public long removeLastLong() { throw new UnsupportedOperationException(); }
 		
 		@Override
 		public void forEach(LongConsumer action) {
@@ -926,30 +957,35 @@ public class ImmutableLong2BooleanOpenHashMap extends AbstractLong2BooleanMap im
 		}
 	}
 	
-	private class Values extends AbstractBooleanCollection {
+	private class Values extends AbstractBooleanCollection implements BooleanOrderedCollection {
 		@Override
-		public boolean contains(boolean e) {
-			return containsValue(e);
-		}
+		public boolean contains(boolean e) { return containsValue(e); }
 		
 		@Override
-		public boolean add(boolean o) {
-			throw new UnsupportedOperationException();
-		}
-
+		public boolean add(boolean o) { throw new UnsupportedOperationException(); }
 		@Override
-		public BooleanIterator iterator() {
-			return new ValueIterator();
-		}
-		
+		public BooleanIterator iterator() { return new ValueIterator(true); }
 		@Override
-		public int size() {
-			return ImmutableLong2BooleanOpenHashMap.this.size();
-		}
-		
+		public int size() { return ImmutableLong2BooleanOpenHashMap.this.size(); }
 		@Override
 		public void clear() { throw new UnsupportedOperationException(); }
-		
+		@Override
+		public BooleanOrderedCollection reversed() { return new AbstractBooleanCollection.ReverseBooleanOrderedCollection(this, this::reverseIterator); }
+		private BooleanIterator reverseIterator() {
+			return new ValueIterator(false);
+		}
+		@Override
+		public void addFirst(boolean e) { throw new UnsupportedOperationException(); }
+		@Override
+		public void addLast(boolean e) { throw new UnsupportedOperationException(); }
+		@Override
+		public boolean getFirstBoolean() { return firstBooleanValue(); }
+		@Override
+		public boolean removeFirstBoolean() { throw new UnsupportedOperationException(); }
+		@Override
+		public boolean getLastBoolean() { return lastBooleanValue(); }
+		@Override
+		public boolean removeLastBoolean() { throw new UnsupportedOperationException(); }
 		@Override
 		public void forEach(BooleanConsumer action) {
 			int index = firstIndex;
@@ -1078,7 +1114,7 @@ public class ImmutableLong2BooleanOpenHashMap extends AbstractLong2BooleanMap im
 	private class FastEntryIterator extends MapIterator implements ObjectListIterator<Long2BooleanMap.Entry> {
 		MapEntry entry = new MapEntry();
 		
-		public FastEntryIterator() {}
+		public FastEntryIterator(boolean start) { super(start); }
 		public FastEntryIterator(long from) {
 			super(from);
 		}
@@ -1104,7 +1140,7 @@ public class ImmutableLong2BooleanOpenHashMap extends AbstractLong2BooleanMap im
 	
 	private class EntryIterator extends MapIterator implements ObjectListIterator<Long2BooleanMap.Entry> {
 		
-		public EntryIterator() {}
+		public EntryIterator(boolean start) { super(start); }
 		public EntryIterator(long from) {
 			super(from);
 		}
@@ -1131,7 +1167,7 @@ public class ImmutableLong2BooleanOpenHashMap extends AbstractLong2BooleanMap im
 	
 	private class KeyIterator extends MapIterator implements LongListIterator {
 		
-		public KeyIterator() {}
+		public KeyIterator(boolean start) { super(start); }
 		public KeyIterator(long from) {
 			super(from);
 		}
@@ -1153,7 +1189,7 @@ public class ImmutableLong2BooleanOpenHashMap extends AbstractLong2BooleanMap im
 	}
 	
 	private class ValueIterator extends MapIterator implements BooleanListIterator {
-		public ValueIterator() {}
+		public ValueIterator(boolean start) { super(start); }
 		
 		@Override
 		public boolean previousBoolean() {
@@ -1174,13 +1210,16 @@ public class ImmutableLong2BooleanOpenHashMap extends AbstractLong2BooleanMap im
 	}
 	
 	private class MapIterator {
+		boolean forward;
 		int previous = -1;
 		int next = -1;
 		int current = -1;
 		int index = 0;
 		
-		MapIterator() {
-			next = firstIndex;
+		MapIterator(boolean start) {
+			this.forward = start;
+			if(start) next = firstIndex;
+			else previous = lastIndex;
 		}
 		
 		MapIterator(long from) {
@@ -1211,11 +1250,11 @@ public class ImmutableLong2BooleanOpenHashMap extends AbstractLong2BooleanMap im
 		}
 		
 		public boolean hasNext() {
-			return next != -1;
+			return (forward ? next : previous) != -1;
 		}
 
 		public boolean hasPrevious() {
-			return previous != -1;
+			return (forward ? previous : next) != -1;
 		}
 		
 		public int nextIndex() {
@@ -1232,20 +1271,30 @@ public class ImmutableLong2BooleanOpenHashMap extends AbstractLong2BooleanMap im
 		
 		public int previousEntry() {
 			if(!hasPrevious()) throw new NoSuchElementException();
-			current = previous;
-			previous = (int)(links[current] >> 32);
-			next = current;
+			if(forward) moveBackwards();
+			else moveForwards();
 			if(index >= 0) index--;
 			return current;
 		}
 		
 		public int nextEntry() {
 			if(!hasNext()) throw new NoSuchElementException();
+			if(forward) moveForwards();
+			else moveBackwards();
+			if(index >= 0) index++;
+			return current;
+		}
+		
+		private void moveBackwards() {
+			current = previous;
+			previous = (int)(links[current] >> 32);
+			next = current;
+		}
+		
+		private void moveForwards() {
 			current = next;
 			next = (int)(links[current]);
 			previous = current;
-			if(index >= 0) index++;
-			return current;
 		}
 		
 		private void ensureIndexKnown() {

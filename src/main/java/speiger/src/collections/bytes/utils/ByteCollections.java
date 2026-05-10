@@ -12,6 +12,7 @@ import java.util.function.Consumer;
 
 import speiger.src.collections.bytes.collections.AbstractByteCollection;
 import speiger.src.collections.bytes.collections.ByteCollection;
+import speiger.src.collections.bytes.collections.ByteOrderedCollection;
 import speiger.src.collections.bytes.collections.ByteIterator;
 import speiger.src.collections.bytes.functions.ByteComparator;
 import speiger.src.collections.objects.utils.ObjectArrays;
@@ -49,6 +50,34 @@ public class ByteCollections
 	 */
 	public static ByteCollection unmodifiable(ByteCollection c) {
 		return c instanceof UnmodifiableCollection ? c : new UnmodifiableCollection(c);
+	}
+	
+	/**
+	 * Returns a Immutable Ordered Collection instance based on the instance given.
+	 * @param c that should be made immutable/unmodifiable
+	 * @return a unmodifiable Ordered collection wrapper. If the Collection already a unmodifiable wrapper then it just returns itself.
+	 */
+	public static ByteOrderedCollection unmodifiable(ByteOrderedCollection c) {
+		return c instanceof UnmodifiableOrderedCollection ? c : new UnmodifiableOrderedCollection(c);
+	}
+	
+	/**
+	 * Returns a synchronized ordered Collection instance based on the instance given.
+	 * @param c that should be synchronized
+	 * @return a synchronized ordered collection wrapper. If the Collection already a synchronized wrapper then it just returns itself.
+	 */
+	public static ByteOrderedCollection synchronize(ByteOrderedCollection c) {
+		return c instanceof SynchronizedOrderedCollection ? c : new SynchronizedOrderedCollection(c);
+	}
+	
+	/**
+	 * Returns a synchronized ordered Collection instance based on the instance given.
+	 * @param c that should be synchronized
+	 * @param mutex is the controller of the synchronization block.
+	 * @return a synchronized ordered collection wrapper. If the Collection already a synchronized wrapper then it just returns itself.
+	 */
+	public static ByteOrderedCollection synchronize(ByteOrderedCollection c, Object mutex) {
+		return c instanceof SynchronizedOrderedCollection ? c : new SynchronizedOrderedCollection(c, mutex);
 	}
 	
 	/**
@@ -584,6 +613,37 @@ public class ByteCollections
 		@Override
 		public SingletonCollection copy() { return new SingletonCollection(element); }
 	}
+	/**
+	 * Synchronized Ordered Collection Wrapper for the synchronizedCollection function
+	 */
+	public static class SynchronizedOrderedCollection extends SynchronizedCollection implements ByteOrderedCollection {
+		ByteOrderedCollection c;
+		
+		SynchronizedOrderedCollection(ByteOrderedCollection c, Object mutex) {
+			super(c, mutex);
+			this.c = c;
+		}
+		
+		SynchronizedOrderedCollection(ByteOrderedCollection c) {
+			super(c);
+			this.c = c;
+		}
+		
+		@Override
+		public ByteOrderedCollection reversed() { return ByteCollections.synchronize(c.reversed(), mutex); }
+		@Override
+		public void addFirst(byte e) { synchronized(mutex) { this.c.addFirst(e); } }
+		@Override
+		public void addLast(byte e) { synchronized(mutex) { this.c.addLast(e); } }
+		@Override
+		public byte getFirstByte() { synchronized(mutex) { return this.c.getFirstByte(); } }
+		@Override
+		public byte removeFirstByte() { synchronized(mutex) { return this.c.removeFirstByte(); } }
+		@Override
+		public byte getLastByte() { synchronized(mutex) { return this.c.getLastByte(); } }
+		@Override
+		public byte removeLastByte() { synchronized(mutex) { return this.c.removeLastByte(); } }
+	}	
 	
 	/**
 	 * Synchronized Collection Wrapper for the synchronizedCollection function
@@ -703,6 +763,33 @@ public class ByteCollections
 		public byte findFirst(BytePredicate filter) { synchronized(mutex) { return c.findFirst(filter); } }
 		@Override
 		public int count(BytePredicate filter) { synchronized(mutex) { return c.count(filter); } }
+	}
+	
+	/**
+	 * Unmodifyable Ordered Collection Wrapper for the unmodifyableCollection method
+	 */
+	public static class UnmodifiableOrderedCollection extends UnmodifiableCollection implements ByteOrderedCollection {
+		ByteOrderedCollection c;
+		
+		UnmodifiableOrderedCollection(ByteOrderedCollection c) {
+			super(c);
+			this.c = c;
+		}
+		
+		@Override
+		public ByteOrderedCollection reversed() { return ByteCollections.unmodifiable(c.reversed()); }
+		@Override
+		public void addFirst(byte e) { throw new UnsupportedOperationException(); }
+		@Override
+		public void addLast(byte e) { throw new UnsupportedOperationException(); }
+		@Override
+		public byte getFirstByte() { return c.getFirstByte(); }
+		@Override
+		public byte removeFirstByte() { throw new UnsupportedOperationException(); }
+		@Override
+		public byte getLastByte() { return c.getLastByte(); }
+		@Override
+		public byte removeLastByte() { throw new UnsupportedOperationException(); }
 	}
 	
 	/**

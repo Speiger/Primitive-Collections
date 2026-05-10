@@ -1,6 +1,8 @@
 package speiger.src.collections.objects.maps.interfaces;
 
 import speiger.src.collections.objects.utils.maps.Object2ShortMaps;
+import speiger.src.collections.objects.maps.abstracts.AbstractObject2ShortMap;
+import speiger.src.collections.shorts.collections.ShortOrderedCollection;
 import speiger.src.collections.objects.collections.ObjectBidirectionalIterator;
 import speiger.src.collections.objects.sets.ObjectOrderedSet;
 /**
@@ -30,6 +32,26 @@ public interface Object2ShortOrderedMap<T> extends Object2ShortMap<T>
 	 * @see java.util.Map#put(Object, Object)
 	 */
 	public short putAndMoveToLast(T key, short value);
+	
+	/**
+	 * A alternative to putAndMoveToFirst.
+	 * This method simply puts an entry at the first spot of the Map but only if the entry is missing.
+	 * @param key the key that should be inserted
+	 * @param value the value that should be inserted
+	 * @return the previous present or default return value
+	 * @see java.util.Map#put(Object, Object)
+	 */
+	public short putFirst(T key, short value);
+	
+	/**
+	 * A alternative to putAndMoveToLast.
+	 * This method simply puts an entry at the last spot of the Map but only if the entry is missing.
+	 * @param key the key that should be inserted
+	 * @param value the value that should be inserted
+	 * @return the previous present or default return value
+	 * @see java.util.Map#put(Object, Object)
+	 */
+	public short putLast(T key, short value);
 	
 	/**
 	 * A specific move method to move a given key/value to the first index.
@@ -91,12 +113,24 @@ public interface Object2ShortOrderedMap<T> extends Object2ShortMap<T>
 	 */
 	public short lastShortValue();
 	
+	
+	public Object2ShortMap.Entry<T> firstEntry();
+	
+	public Object2ShortMap.Entry<T> lastEntry();
+	
+	public Object2ShortMap.Entry<T> pollFirstEntry();
+	
+	public Object2ShortMap.Entry<T> pollLastEntry();
 	@Override
 	public Object2ShortOrderedMap<T> copy();
 	@Override
 	public ObjectOrderedSet<T> keySet();
 	@Override
+	public ShortOrderedCollection values();
+	@Override
 	public ObjectOrderedSet<Object2ShortMap.Entry<T>> object2ShortEntrySet();
+	
+	public default Object2ShortOrderedMap<T> reversed() { return new AbstractObject2ShortMap.ReversedObject2ShortOrderedMap<>(this); }
 	
 	/**
 	 * Creates a Wrapped SortedMap that is Synchronized

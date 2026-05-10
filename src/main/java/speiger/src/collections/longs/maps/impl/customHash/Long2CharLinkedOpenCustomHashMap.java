@@ -24,7 +24,7 @@ import speiger.src.collections.longs.sets.AbstractLongSet;
 import speiger.src.collections.longs.sets.LongOrderedSet;
 import speiger.src.collections.longs.utils.LongStrategy;
 import speiger.src.collections.chars.collections.AbstractCharCollection;
-import speiger.src.collections.chars.collections.CharCollection;
+import speiger.src.collections.chars.collections.CharOrderedCollection;
 import speiger.src.collections.chars.collections.CharIterator;
 import speiger.src.collections.chars.functions.function.CharCharUnaryOperator;
 import speiger.src.collections.chars.functions.CharConsumer;
@@ -259,6 +259,54 @@ public class Long2CharLinkedOpenCustomHashMap extends Long2CharOpenCustomHashMap
 	}
 	
 	@Override
+	public char putFirst(long key, char value) {
+		if(strategy.equals(key, 0L)) {
+			if(containsNull) return values[nullIndex];
+			values[nullIndex] = value;
+			containsNull = true;
+			onNodeAdded(nullIndex);
+			moveToFirstIndex(nullIndex);
+		}
+		else {
+			int pos = HashUtil.mix(strategy.hashCode(key)) & mask;
+			while(!strategy.equals(keys[pos], 0L)) {
+				if(strategy.equals(keys[pos], key)) return values[pos];
+				pos = ++pos & mask;
+			}
+			keys[pos] = key;
+			values[pos] = value;
+			onNodeAdded(pos);
+			moveToFirstIndex(pos);
+		}
+		if(size++ >= maxFill) rehash(HashUtil.arraySize(size+1, loadFactor));
+		return getDefaultReturnValue();
+	}
+	
+	@Override
+	public char putLast(long key, char value) {
+		if(strategy.equals(key, 0L)) {
+			if(containsNull) return values[nullIndex];
+			values[nullIndex] = value;
+			containsNull = true;
+			onNodeAdded(nullIndex);
+			moveToLastIndex(nullIndex);
+		}
+		else {
+			int pos = HashUtil.mix(strategy.hashCode(key)) & mask;
+			while(!strategy.equals(keys[pos], 0L)) {
+				if(strategy.equals(keys[pos], key)) return values[pos];
+				pos = ++pos & mask;
+			}
+			keys[pos] = key;
+			values[pos] = value;
+			onNodeAdded(pos);
+			moveToLastIndex(pos);
+		}
+		if(size++ >= maxFill) rehash(HashUtil.arraySize(size+1, loadFactor));
+		return getDefaultReturnValue();
+	}
+	
+	@Override
 	public boolean moveToFirst(long key) {
 		if(isEmpty() || strategy.equals(firstLongKey(), key)) return false;
 		if(strategy.equals(key, 0L)) {
@@ -394,6 +442,52 @@ public class Long2CharLinkedOpenCustomHashMap extends Long2CharOpenCustomHashMap
 	}
 	
 	@Override
+	public Long2CharMap.Entry firstEntry() {
+		if(size == 0) throw new NoSuchElementException();
+		return new BasicEntry(keys[firstIndex], values[firstIndex]);
+	}
+	
+	@Override
+	public Long2CharMap.Entry lastEntry() {
+		if(size == 0) throw new NoSuchElementException();
+		return new BasicEntry(keys[lastIndex], values[lastIndex]);
+	}
+	
+	@Override
+	public Long2CharMap.Entry pollFirstEntry() {
+		if(size == 0) throw new NoSuchElementException();
+		int pos = firstIndex;
+		onNodeRemoved(pos);
+		BasicEntry result = new BasicEntry(keys[pos], values[pos]);
+		size--;
+		if(strategy.equals(result.getLongKey(), 0L)) {
+			containsNull = false;
+			keys[nullIndex] = 0L;
+			values[nullIndex] = (char)0;
+		}
+		else shiftKeys(pos);
+		if(nullIndex > minCapacity && size < maxFill / 4 && nullIndex > HashUtil.DEFAULT_MIN_CAPACITY) rehash(nullIndex / 2);
+		return result;
+	}
+	
+	@Override
+	public Long2CharMap.Entry pollLastEntry() {
+		if(size == 0) throw new NoSuchElementException();
+		int pos = lastIndex;
+		onNodeRemoved(pos);
+		BasicEntry result = new BasicEntry(keys[pos], values[pos]);
+		size--;
+		if(strategy.equals(result.getLongKey(), 0L)) {
+			containsNull = false;
+			keys[nullIndex] = 0L;
+			values[nullIndex] = (char)0;
+		}
+		else shiftKeys(pos);
+		if(nullIndex > minCapacity && size < maxFill / 4 && nullIndex > HashUtil.DEFAULT_MIN_CAPACITY) rehash(nullIndex / 2);
+		return result;
+	}
+	
+	@Override
 	public ObjectOrderedSet<Long2CharMap.Entry> long2CharEntrySet() {
 		if(entrySet == null) entrySet = new MapEntrySet();
 		return (ObjectOrderedSet<Long2CharMap.Entry>)entrySet;
@@ -406,9 +500,9 @@ public class Long2CharLinkedOpenCustomHashMap extends Long2CharOpenCustomHashMap
 	}
 	
 	@Override
-	public CharCollection values() {
+	public CharOrderedCollection values() {
 		if(valuesC == null) valuesC = new Values();
-		return valuesC;
+		return (CharOrderedCollection)valuesC;
 	}
 	
 	@Override
@@ -593,24 +687,24 @@ public class Long2CharLinkedOpenCustomHashMap extends Long2CharOpenCustomHashMap
 		}
 		
 		@Override
-		public Long2CharMap.Entry first() {
+		public Long2CharMap.Entry getFirst() {
 			return new BasicEntry(firstLongKey(), firstCharValue());
 		}
 		
 		@Override
-		public Long2CharMap.Entry last() {
+		public Long2CharMap.Entry getLast() {
 			return new BasicEntry(lastLongKey(), lastCharValue());
 		}
 		
 		@Override
-		public Long2CharMap.Entry pollFirst() {
+		public Long2CharMap.Entry removeFirst() {
 			BasicEntry entry = new BasicEntry(firstLongKey(), firstCharValue());
 			pollFirstLongKey();
 			return entry;
 		}
 		
 		@Override
-		public Long2CharMap.Entry pollLast() {
+		public Long2CharMap.Entry removeLast() {
 			BasicEntry entry = new BasicEntry(lastLongKey(), lastCharValue());
 			pollLastLongKey();
 			return entry;
@@ -618,7 +712,12 @@ public class Long2CharLinkedOpenCustomHashMap extends Long2CharOpenCustomHashMap
 		
 		@Override
 		public ObjectBidirectionalIterator<Long2CharMap.Entry> iterator() {
-			return new EntryIterator();
+			return new EntryIterator(true);
+		}
+		
+		@Override
+		public ObjectBidirectionalIterator<Long2CharMap.Entry> reverseIterator() {
+			return new EntryIterator(false);
 		}
 		
 		@Override
@@ -628,7 +727,7 @@ public class Long2CharLinkedOpenCustomHashMap extends Long2CharOpenCustomHashMap
 		
 		@Override
 		public ObjectBidirectionalIterator<Long2CharMap.Entry> fastIterator() {
-			return new FastEntryIterator();
+			return new FastEntryIterator(true);
 		}
 		
 		@Override
@@ -864,7 +963,12 @@ public class Long2CharLinkedOpenCustomHashMap extends Long2CharOpenCustomHashMap
 		
 		@Override
 		public LongListIterator iterator() {
-			return new KeyIterator();
+			return new KeyIterator(true);
+		}
+		
+		@Override
+		public LongListIterator reverseIterator() {
+			return new KeyIterator(false);
 		}
 		
 		@Override
@@ -886,22 +990,22 @@ public class Long2CharLinkedOpenCustomHashMap extends Long2CharOpenCustomHashMap
 		}
 		
 		@Override
-		public long firstLong() {
+		public long getFirstLong() {
 			return firstLongKey();
 		}
 		
 		@Override
-		public long pollFirstLong() {
+		public long removeFirstLong() {
 			return pollFirstLongKey();
 		}
 
 		@Override
-		public long lastLong() {
+		public long getLastLong() {
 			return lastLongKey();
 		}
 
 		@Override
-		public long pollLastLong() {
+		public long removeLastLong() {
 			return pollLastLongKey();
 		}
 		
@@ -1030,30 +1134,41 @@ public class Long2CharLinkedOpenCustomHashMap extends Long2CharOpenCustomHashMap
 		}
 	}
 	
-	private class Values extends AbstractCharCollection {
+	private class Values extends AbstractCharCollection implements CharOrderedCollection {
 		@Override
-		public boolean contains(char e) {
-			return containsValue(e);
+		public boolean contains(char e) { return containsValue(e); }
+		@Override
+		public boolean add(char o) { throw new UnsupportedOperationException(); }
+		@Override
+		public CharIterator iterator() { return new ValueIterator(true); }
+		@Override
+		public int size() { return Long2CharLinkedOpenCustomHashMap.this.size(); }
+		@Override
+		public void clear() { Long2CharLinkedOpenCustomHashMap.this.clear(); }
+		@Override
+		public CharOrderedCollection reversed() { return new AbstractCharCollection.ReverseCharOrderedCollection(this, this::reverseIterator); }
+		private CharIterator reverseIterator() {
+			return new ValueIterator(false);
 		}
-		
 		@Override
-		public boolean add(char o) {
-			throw new UnsupportedOperationException();
+		public void addFirst(char e) { throw new UnsupportedOperationException(); }
+		@Override
+		public void addLast(char e) { throw new UnsupportedOperationException(); }
+		@Override
+		public char getFirstChar() { return firstCharValue(); }
+		@Override
+		public char removeFirstChar() {
+			char result = firstCharValue();
+			pollFirstLongKey();
+			return result; 
 		}
-
 		@Override
-		public CharIterator iterator() {
-			return new ValueIterator();
-		}
-		
+		public char getLastChar() { return lastCharValue(); }
 		@Override
-		public int size() {
-			return Long2CharLinkedOpenCustomHashMap.this.size();
-		}
-		
-		@Override
-		public void clear() {
-			Long2CharLinkedOpenCustomHashMap.this.clear();
+		public char removeLastChar() {
+			char result = lastCharValue();
+			pollLastLongKey();
+			return result; 
 		}
 		
 		@Override
@@ -1184,7 +1299,7 @@ public class Long2CharLinkedOpenCustomHashMap extends Long2CharOpenCustomHashMap
 	private class FastEntryIterator extends MapIterator implements ObjectListIterator<Long2CharMap.Entry> {
 		MapEntry entry = new MapEntry();
 		
-		public FastEntryIterator() {}
+		public FastEntryIterator(boolean start) { super(start); }
 		public FastEntryIterator(long from) {
 			super(from);
 		}
@@ -1211,7 +1326,7 @@ public class Long2CharLinkedOpenCustomHashMap extends Long2CharOpenCustomHashMap
 	private class EntryIterator extends MapIterator implements ObjectListIterator<Long2CharMap.Entry> {
 		MapEntry entry;
 		
-		public EntryIterator() {}
+		public EntryIterator(boolean start) { super(start); }
 		public EntryIterator(long from) {
 			super(from);
 		}
@@ -1241,7 +1356,7 @@ public class Long2CharLinkedOpenCustomHashMap extends Long2CharOpenCustomHashMap
 	
 	private class KeyIterator extends MapIterator implements LongListIterator {
 		
-		public KeyIterator() {}
+		public KeyIterator(boolean start) { super(start); }
 		public KeyIterator(long from) {
 			super(from);
 		}
@@ -1263,7 +1378,7 @@ public class Long2CharLinkedOpenCustomHashMap extends Long2CharOpenCustomHashMap
 	}
 	
 	private class ValueIterator extends MapIterator implements CharListIterator {
-		public ValueIterator() {}
+		public ValueIterator(boolean start) { super(start); }
 		
 		@Override
 		public char previousChar() {
@@ -1284,16 +1399,20 @@ public class Long2CharLinkedOpenCustomHashMap extends Long2CharOpenCustomHashMap
 	}
 	
 	private class MapIterator {
+		boolean forward;
 		int previous = -1;
 		int next = -1;
 		int current = -1;
 		int index = 0;
 		
-		MapIterator() {
-			next = firstIndex;
+		MapIterator(boolean start) {
+			this.forward = start;
+			if(start) next = firstIndex;
+			else previous = lastIndex;
 		}
 		
 		MapIterator(long from) {
+			this.forward = true;
 			if(strategy.equals(from, 0L)) {
 				if(containsNull) {
 					next = (int) links[nullIndex];
@@ -1321,11 +1440,11 @@ public class Long2CharLinkedOpenCustomHashMap extends Long2CharOpenCustomHashMap
 		}
 		
 		public boolean hasNext() {
-			return next != -1;
+			return (forward ? next : previous) != -1;
 		}
 
 		public boolean hasPrevious() {
-			return previous != -1;
+			return (forward ? previous : next) != -1;
 		}
 		
 		public int nextIndex() {
@@ -1385,20 +1504,30 @@ public class Long2CharLinkedOpenCustomHashMap extends Long2CharOpenCustomHashMap
 		
 		public int previousEntry() {
 			if(!hasPrevious()) throw new NoSuchElementException();
-			current = previous;
-			previous = (int)(links[current] >> 32);
-			next = current;
+			if(forward) moveBackwards();
+			else moveForwards();
 			if(index >= 0) index--;
 			return current;
 		}
 		
 		public int nextEntry() {
 			if(!hasNext()) throw new NoSuchElementException();
+			if(forward) moveForwards();
+			else moveBackwards();
+			if(index >= 0) index++;
+			return current;
+		}
+		
+		private void moveBackwards() {
+			current = previous;
+			previous = (int)(links[current] >> 32);
+			next = current;
+		}
+		
+		private void moveForwards() {
 			current = next;
 			next = (int)(links[current]);
 			previous = current;
-			if(index >= 0) index++;
-			return current;
 		}
 		
 		private void ensureIndexKnown() {

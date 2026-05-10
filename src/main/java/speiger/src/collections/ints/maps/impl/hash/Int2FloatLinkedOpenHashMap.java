@@ -22,7 +22,7 @@ import speiger.src.collections.ints.maps.interfaces.Int2FloatOrderedMap;
 import speiger.src.collections.ints.sets.AbstractIntSet;
 import speiger.src.collections.ints.sets.IntOrderedSet;
 import speiger.src.collections.floats.collections.AbstractFloatCollection;
-import speiger.src.collections.floats.collections.FloatCollection;
+import speiger.src.collections.floats.collections.FloatOrderedCollection;
 import speiger.src.collections.floats.collections.FloatIterator;
 import speiger.src.collections.floats.functions.function.FloatFloatUnaryOperator;
 import speiger.src.collections.floats.functions.FloatConsumer;
@@ -235,6 +235,54 @@ public class Int2FloatLinkedOpenHashMap extends Int2FloatOpenHashMap implements 
 	}
 	
 	@Override
+	public float putFirst(int key, float value) {
+		if(key == 0) {
+			if(containsNull) return values[nullIndex];
+			values[nullIndex] = value;
+			containsNull = true;
+			onNodeAdded(nullIndex);
+			moveToFirstIndex(nullIndex);
+		}
+		else {
+			int pos = HashUtil.mix(Integer.hashCode(key)) & mask;
+			while(key == 0) {
+				if(keys[pos] == key) return values[pos];
+				pos = ++pos & mask;
+			}
+			keys[pos] = key;
+			values[pos] = value;
+			onNodeAdded(pos);
+			moveToFirstIndex(pos);
+		}
+		if(size++ >= maxFill) rehash(HashUtil.arraySize(size+1, loadFactor));
+		return getDefaultReturnValue();
+	}
+	
+	@Override
+	public float putLast(int key, float value) {
+		if(key == 0) {
+			if(containsNull) return values[nullIndex];
+			values[nullIndex] = value;
+			containsNull = true;
+			onNodeAdded(nullIndex);
+			moveToLastIndex(nullIndex);
+		}
+		else {
+			int pos = HashUtil.mix(Integer.hashCode(key)) & mask;
+			while(key == 0) {
+				if(keys[pos] == key) return values[pos];
+				pos = ++pos & mask;
+			}
+			keys[pos] = key;
+			values[pos] = value;
+			onNodeAdded(pos);
+			moveToLastIndex(pos);
+		}
+		if(size++ >= maxFill) rehash(HashUtil.arraySize(size+1, loadFactor));
+		return getDefaultReturnValue();
+	}
+	
+	@Override
 	public boolean moveToFirst(int key) {
 		if(isEmpty() || firstIntKey() == key) return false;
 		if(key == 0) {
@@ -391,6 +439,52 @@ public class Int2FloatLinkedOpenHashMap extends Int2FloatOpenHashMap implements 
 	}
 	
 	@Override
+	public Int2FloatMap.Entry firstEntry() {
+		if(size == 0) throw new NoSuchElementException();
+		return new BasicEntry(keys[firstIndex], values[firstIndex]);
+	}
+	
+	@Override
+	public Int2FloatMap.Entry lastEntry() {
+		if(size == 0) throw new NoSuchElementException();
+		return new BasicEntry(keys[lastIndex], values[lastIndex]);
+	}
+	
+	@Override
+	public Int2FloatMap.Entry pollFirstEntry() {
+		if(size == 0) throw new NoSuchElementException();
+		int pos = firstIndex;
+		onNodeRemoved(pos);
+		BasicEntry result = new BasicEntry(keys[pos], values[pos]);
+		size--;
+		if(result.getIntKey() == 0) {
+			containsNull = false;
+			keys[nullIndex] = 0;
+			values[nullIndex] = 0F;
+		}
+		else shiftKeys(pos);
+		if(nullIndex > minCapacity && size < maxFill / 4 && nullIndex > HashUtil.DEFAULT_MIN_CAPACITY) rehash(nullIndex / 2);
+		return result;
+	}
+	
+	@Override
+	public Int2FloatMap.Entry pollLastEntry() {
+		if(size == 0) throw new NoSuchElementException();
+		int pos = lastIndex;
+		onNodeRemoved(pos);
+		BasicEntry result = new BasicEntry(keys[pos], values[pos]);
+		size--;
+		if(result.getIntKey() == 0) {
+			containsNull = false;
+			keys[nullIndex] = 0;
+			values[nullIndex] = 0F;
+		}
+		else shiftKeys(pos);
+		if(nullIndex > minCapacity && size < maxFill / 4 && nullIndex > HashUtil.DEFAULT_MIN_CAPACITY) rehash(nullIndex / 2);
+		return result;
+	}
+	
+	@Override
 	public ObjectOrderedSet<Int2FloatMap.Entry> int2FloatEntrySet() {
 		if(entrySet == null) entrySet = new MapEntrySet();
 		return (ObjectOrderedSet<Int2FloatMap.Entry>)entrySet;
@@ -403,9 +497,9 @@ public class Int2FloatLinkedOpenHashMap extends Int2FloatOpenHashMap implements 
 	}
 	
 	@Override
-	public FloatCollection values() {
+	public FloatOrderedCollection values() {
 		if(valuesC == null) valuesC = new Values();
-		return valuesC;
+		return (FloatOrderedCollection)valuesC;
 	}
 	
 	@Override
@@ -590,24 +684,24 @@ public class Int2FloatLinkedOpenHashMap extends Int2FloatOpenHashMap implements 
 		}
 		
 		@Override
-		public Int2FloatMap.Entry first() {
+		public Int2FloatMap.Entry getFirst() {
 			return new BasicEntry(firstIntKey(), firstFloatValue());
 		}
 		
 		@Override
-		public Int2FloatMap.Entry last() {
+		public Int2FloatMap.Entry getLast() {
 			return new BasicEntry(lastIntKey(), lastFloatValue());
 		}
 		
 		@Override
-		public Int2FloatMap.Entry pollFirst() {
+		public Int2FloatMap.Entry removeFirst() {
 			BasicEntry entry = new BasicEntry(firstIntKey(), firstFloatValue());
 			pollFirstIntKey();
 			return entry;
 		}
 		
 		@Override
-		public Int2FloatMap.Entry pollLast() {
+		public Int2FloatMap.Entry removeLast() {
 			BasicEntry entry = new BasicEntry(lastIntKey(), lastFloatValue());
 			pollLastIntKey();
 			return entry;
@@ -615,7 +709,12 @@ public class Int2FloatLinkedOpenHashMap extends Int2FloatOpenHashMap implements 
 		
 		@Override
 		public ObjectBidirectionalIterator<Int2FloatMap.Entry> iterator() {
-			return new EntryIterator();
+			return new EntryIterator(true);
+		}
+		
+		@Override
+		public ObjectBidirectionalIterator<Int2FloatMap.Entry> reverseIterator() {
+			return new EntryIterator(false);
 		}
 		
 		@Override
@@ -625,7 +724,7 @@ public class Int2FloatLinkedOpenHashMap extends Int2FloatOpenHashMap implements 
 		
 		@Override
 		public ObjectBidirectionalIterator<Int2FloatMap.Entry> fastIterator() {
-			return new FastEntryIterator();
+			return new FastEntryIterator(true);
 		}
 		
 		@Override
@@ -858,7 +957,12 @@ public class Int2FloatLinkedOpenHashMap extends Int2FloatOpenHashMap implements 
 		
 		@Override
 		public IntListIterator iterator() {
-			return new KeyIterator();
+			return new KeyIterator(true);
+		}
+		
+		@Override
+		public IntListIterator reverseIterator() {
+			return new KeyIterator(false);
 		}
 		
 		@Override
@@ -880,22 +984,22 @@ public class Int2FloatLinkedOpenHashMap extends Int2FloatOpenHashMap implements 
 		}
 		
 		@Override
-		public int firstInt() {
+		public int getFirstInt() {
 			return firstIntKey();
 		}
 		
 		@Override
-		public int pollFirstInt() {
+		public int removeFirstInt() {
 			return pollFirstIntKey();
 		}
 
 		@Override
-		public int lastInt() {
+		public int getLastInt() {
 			return lastIntKey();
 		}
 
 		@Override
-		public int pollLastInt() {
+		public int removeLastInt() {
 			return pollLastIntKey();
 		}
 		
@@ -1024,32 +1128,43 @@ public class Int2FloatLinkedOpenHashMap extends Int2FloatOpenHashMap implements 
 		}
 	}
 	
-	private class Values extends AbstractFloatCollection {
+	private class Values extends AbstractFloatCollection implements FloatOrderedCollection {
 		@Override
-		public boolean contains(float e) {
-			return containsValue(e);
-		}
+		public boolean contains(float e) { return containsValue(e); }
 		
 		@Override
-		public boolean add(float o) {
-			throw new UnsupportedOperationException();
-		}
-
+		public boolean add(float o) { throw new UnsupportedOperationException(); }
 		@Override
-		public FloatIterator iterator() {
-			return new ValueIterator();
-		}
-		
+		public FloatIterator iterator() { return new ValueIterator(true); }
 		@Override
-		public int size() {
-			return Int2FloatLinkedOpenHashMap.this.size();
-		}
-		
+		public int size() { return Int2FloatLinkedOpenHashMap.this.size(); }
 		@Override
-		public void clear() {
-			Int2FloatLinkedOpenHashMap.this.clear();
+		public void clear() { Int2FloatLinkedOpenHashMap.this.clear(); }
+		@Override
+		public FloatOrderedCollection reversed() { return new AbstractFloatCollection.ReverseFloatOrderedCollection(this, this::reverseIterator); }
+		private FloatIterator reverseIterator() {
+			return new ValueIterator(false);
 		}
-		
+		@Override
+		public void addFirst(float e) { throw new UnsupportedOperationException(); }
+		@Override
+		public void addLast(float e) { throw new UnsupportedOperationException(); }
+		@Override
+		public float getFirstFloat() { return firstFloatValue(); }
+		@Override
+		public float removeFirstFloat() {
+			float result = firstFloatValue();
+			pollFirstIntKey();
+			return result; 
+		}
+		@Override
+		public float getLastFloat() { return lastFloatValue(); }
+		@Override
+		public float removeLastFloat() {
+			float result = lastFloatValue();
+			pollLastIntKey();
+			return result; 
+		}
 		@Override
 		public void forEach(FloatConsumer action) {
 			Objects.requireNonNull(action);
@@ -1179,7 +1294,7 @@ public class Int2FloatLinkedOpenHashMap extends Int2FloatOpenHashMap implements 
 	private class FastEntryIterator extends MapIterator implements ObjectListIterator<Int2FloatMap.Entry> {
 		MapEntry entry = new MapEntry();
 		
-		public FastEntryIterator() {}
+		public FastEntryIterator(boolean start) { super(start); }
 		public FastEntryIterator(int from) {
 			super(from);
 		}
@@ -1206,7 +1321,7 @@ public class Int2FloatLinkedOpenHashMap extends Int2FloatOpenHashMap implements 
 	private class EntryIterator extends MapIterator implements ObjectListIterator<Int2FloatMap.Entry> {
 		MapEntry entry;
 		
-		public EntryIterator() {}
+		public EntryIterator(boolean start) { super(start); }
 		public EntryIterator(int from) {
 			super(from);
 		}
@@ -1236,7 +1351,7 @@ public class Int2FloatLinkedOpenHashMap extends Int2FloatOpenHashMap implements 
 	
 	private class KeyIterator extends MapIterator implements IntListIterator {
 		
-		public KeyIterator() {}
+		public KeyIterator(boolean start) { super(start); }
 		public KeyIterator(int from) {
 			super(from);
 		}
@@ -1258,7 +1373,7 @@ public class Int2FloatLinkedOpenHashMap extends Int2FloatOpenHashMap implements 
 	}
 	
 	private class ValueIterator extends MapIterator implements FloatListIterator {
-		public ValueIterator() {}
+		public ValueIterator(boolean start) { super(start); }
 		
 		@Override
 		public float previousFloat() {
@@ -1278,13 +1393,16 @@ public class Int2FloatLinkedOpenHashMap extends Int2FloatOpenHashMap implements 
 	}
 	
 	private class MapIterator {
+		boolean forward;
 		int previous = -1;
 		int next = -1;
 		int current = -1;
 		int index = 0;
 		
-		MapIterator() {
-			next = firstIndex;
+		MapIterator(boolean start) {
+			this.forward = start;
+			if(start) next = firstIndex;
+			else previous = lastIndex;
 		}
 		
 		MapIterator(int from) {
@@ -1315,11 +1433,11 @@ public class Int2FloatLinkedOpenHashMap extends Int2FloatOpenHashMap implements 
 		}
 		
 		public boolean hasNext() {
-			return next != -1;
+			return (forward ? next : previous) != -1;
 		}
 
 		public boolean hasPrevious() {
-			return previous != -1;
+			return (forward ? previous : next) != -1;
 		}
 		
 		public int nextIndex() {
@@ -1379,20 +1497,30 @@ public class Int2FloatLinkedOpenHashMap extends Int2FloatOpenHashMap implements 
 		
 		public int previousEntry() {
 			if(!hasPrevious()) throw new NoSuchElementException();
-			current = previous;
-			previous = (int)(links[current] >> 32);
-			next = current;
+			if(forward) moveBackwards();
+			else moveForwards();
 			if(index >= 0) index--;
 			return current;
 		}
 		
 		public int nextEntry() {
 			if(!hasNext()) throw new NoSuchElementException();
+			if(forward) moveForwards();
+			else moveBackwards();
+			if(index >= 0) index++;
+			return current;
+		}
+		
+		private void moveBackwards() {
+			current = previous;
+			previous = (int)(links[current] >> 32);
+			next = current;
+		}
+		
+		private void moveForwards() {
 			current = next;
 			next = (int)(links[current]);
 			previous = current;
-			if(index >= 0) index++;
-			return current;
 		}
 		
 		private void ensureIndexKnown() {

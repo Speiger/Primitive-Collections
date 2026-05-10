@@ -94,7 +94,7 @@ public interface Double2LongMap extends Map<Double, Long>, Double2LongFunction
 	 * @return the last present value or default return	value.
 	 */
 	public default Long put(Map.Entry<Double, Long> entry) {
-		return put(entry.getKey(), entry.getValue());
+		return put(entry.getKey().doubleValue(), entry.getValue().longValue());
 	}
 
 	/**

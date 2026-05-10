@@ -13,6 +13,7 @@ import java.util.function.Consumer;
 
 import speiger.src.collections.objects.collections.AbstractObjectCollection;
 import speiger.src.collections.objects.collections.ObjectCollection;
+import speiger.src.collections.objects.collections.ObjectOrderedCollection;
 import speiger.src.collections.objects.collections.ObjectIterator;
 import speiger.src.collections.objects.functions.function.ObjectObjectUnaryOperator;
 import speiger.src.collections.ints.functions.consumer.IntObjectConsumer;
@@ -48,6 +49,37 @@ public class ObjectCollections
 	 */
 	public static <T> ObjectCollection<T> unmodifiable(ObjectCollection<T> c) {
 		return c instanceof UnmodifiableCollection ? c : new UnmodifiableCollection<>(c);
+	}
+	
+	/**
+	 * Returns a Immutable Ordered Collection instance based on the instance given.
+	 * @param c that should be made immutable/unmodifiable
+	 * @param <T> the keyType of elements maintained by this Collection
+	 * @return a unmodifiable Ordered collection wrapper. If the Collection already a unmodifiable wrapper then it just returns itself.
+	 */
+	public static <T> ObjectOrderedCollection<T> unmodifiable(ObjectOrderedCollection<T> c) {
+		return c instanceof UnmodifiableOrderedCollection ? c : new UnmodifiableOrderedCollection<>(c);
+	}
+	
+	/**
+	 * Returns a synchronized ordered Collection instance based on the instance given.
+	 * @param c that should be synchronized
+	 * @param <T> the keyType of elements maintained by this Collection
+	 * @return a synchronized ordered collection wrapper. If the Collection already a synchronized wrapper then it just returns itself.
+	 */
+	public static <T> ObjectOrderedCollection<T> synchronize(ObjectOrderedCollection<T> c) {
+		return c instanceof SynchronizedOrderedCollection ? c : new SynchronizedOrderedCollection<>(c);
+	}
+	
+	/**
+	 * Returns a synchronized ordered Collection instance based on the instance given.
+	 * @param c that should be synchronized
+	 * @param mutex is the controller of the synchronization block.
+	 * @param <T> the keyType of elements maintained by this Collection
+	 * @return a synchronized ordered collection wrapper. If the Collection already a synchronized wrapper then it just returns itself.
+	 */
+	public static <T> ObjectOrderedCollection<T> synchronize(ObjectOrderedCollection<T> c, Object mutex) {
+		return c instanceof SynchronizedOrderedCollection ? c : new SynchronizedOrderedCollection<>(c, mutex);
 	}
 	
 	/**
@@ -547,6 +579,38 @@ public class ObjectCollections
 		@Override
 		public SingletonCollection<T> copy() { return new SingletonCollection<>(element); }
 	}
+	/**
+	 * Synchronized Ordered Collection Wrapper for the synchronizedCollection function
+	 * @param <T> the keyType of elements maintained by this Collection
+	 */
+	public static class SynchronizedOrderedCollection<T> extends SynchronizedCollection<T> implements ObjectOrderedCollection<T> {
+		ObjectOrderedCollection<T> c;
+		
+		SynchronizedOrderedCollection(ObjectOrderedCollection<T> c, Object mutex) {
+			super(c, mutex);
+			this.c = c;
+		}
+		
+		SynchronizedOrderedCollection(ObjectOrderedCollection<T> c) {
+			super(c);
+			this.c = c;
+		}
+		
+		@Override
+		public ObjectOrderedCollection<T> reversed() { return ObjectCollections.synchronize(c.reversed(), mutex); }
+		@Override
+		public void addFirst(T e) { synchronized(mutex) { this.c.addFirst(e); } }
+		@Override
+		public void addLast(T e) { synchronized(mutex) { this.c.addLast(e); } }
+		@Override
+		public T getFirst() { synchronized(mutex) { return this.c.getFirst(); } }
+		@Override
+		public T removeFirst() { synchronized(mutex) { return this.c.removeFirst(); } }
+		@Override
+		public T getLast() { synchronized(mutex) { return this.c.getLast(); } }
+		@Override
+		public T removeLast() { synchronized(mutex) { return this.c.removeLast(); } }
+	}	
 	
 	/**
 	 * Synchronized Collection Wrapper for the synchronizedCollection function
@@ -650,6 +714,34 @@ public class ObjectCollections
 		public T findFirst(Predicate<T> filter) { synchronized(mutex) { return c.findFirst(filter); } }
 		@Override
 		public int count(Predicate<T> filter) { synchronized(mutex) { return c.count(filter); } }
+	}
+	
+	/**
+	 * Unmodifyable Ordered Collection Wrapper for the unmodifyableCollection method
+	 * @param <T> the keyType of elements maintained by this Collection
+	 */
+	public static class UnmodifiableOrderedCollection<T> extends UnmodifiableCollection<T> implements ObjectOrderedCollection<T> {
+		ObjectOrderedCollection<T> c;
+		
+		UnmodifiableOrderedCollection(ObjectOrderedCollection<T> c) {
+			super(c);
+			this.c = c;
+		}
+		
+		@Override
+		public ObjectOrderedCollection<T> reversed() { return ObjectCollections.unmodifiable(c.reversed()); }
+		@Override
+		public void addFirst(T e) { throw new UnsupportedOperationException(); }
+		@Override
+		public void addLast(T e) { throw new UnsupportedOperationException(); }
+		@Override
+		public T getFirst() { return c.getFirst(); }
+		@Override
+		public T removeFirst() { throw new UnsupportedOperationException(); }
+		@Override
+		public T getLast() { return c.getLast(); }
+		@Override
+		public T removeLast() { throw new UnsupportedOperationException(); }
 	}
 	
 	/**

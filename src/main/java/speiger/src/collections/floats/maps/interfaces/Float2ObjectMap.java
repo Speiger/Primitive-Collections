@@ -95,7 +95,7 @@ public interface Float2ObjectMap<V> extends Map<Float, V>, FloatFunction<V>
 	 * @return the last present value or default return	value.
 	 */
 	public default V put(Map.Entry<Float, V> entry) {
-		return put(entry.getKey(), entry.getValue());
+		return put(entry.getKey().floatValue(), entry.getValue());
 	}
 
 	/**

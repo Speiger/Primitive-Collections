@@ -9,6 +9,9 @@ import speiger.src.collections.objects.functions.consumer.ObjectObjectConsumer;
 import speiger.src.collections.objects.functions.function.UnaryOperator;
 import speiger.src.collections.objects.functions.function.ObjectObjectUnaryOperator;
 import speiger.src.collections.objects.maps.interfaces.Object2ObjectMap;
+import speiger.src.collections.objects.maps.interfaces.Object2ObjectOrderedMap;
+import speiger.src.collections.objects.sets.ObjectOrderedSet;
+import speiger.src.collections.objects.collections.ObjectOrderedCollection;
 import speiger.src.collections.objects.sets.AbstractObjectSet;
 import speiger.src.collections.objects.sets.ObjectSet;
 import speiger.src.collections.objects.utils.maps.Object2ObjectMaps;
@@ -350,6 +353,100 @@ public abstract class AbstractObject2ObjectMap<T, V> extends AbstractMap<T, V> i
 		while(iter.hasNext()) hash += iter.next().hashCode();
 		return hash;
 	}
+	
+	public static class ReversedObject2ObjectOrderedMap<T, V> extends AbstractObject2ObjectMap<T, V> implements Object2ObjectOrderedMap<T, V> {
+		Object2ObjectOrderedMap<T, V> map;
+		
+		public ReversedObject2ObjectOrderedMap(Object2ObjectOrderedMap<T, V> map) {
+			this.map = map;
+		}
+		@Override
+		public AbstractObject2ObjectMap<T, V> setDefaultReturnValue(V v) {
+			map.setDefaultReturnValue(v);
+			return this;
+		}
+		@Override
+		public V getDefaultReturnValue() { return map.getDefaultReturnValue(); }
+		@Override
+		public Object2ObjectOrderedMap<T, V> copy() { throw new UnsupportedOperationException(); }
+		@Override
+		public V put(T key, V value) { return map.put(key, value); }
+		@Override
+		public V putIfAbsent(T key, V value) { return map.putIfAbsent(key, value); }
+		@Override
+		public V rem(T key) { return map.rem(key); }
+		@Override
+		public V remOrDefault(T key, V defaultValue) { return map.remOrDefault(key, defaultValue); }
+		@Override
+		public boolean containsKey(Object key) { return map.containsKey(key); }
+		@Override
+		public boolean containsValue(Object value) { return map.containsValue(value); }
+		@Override
+		public boolean replace(T key, V oldValue, V newValue) { return map.replace(key, oldValue, newValue); }
+		@Override
+		public V replace(T key, V value) { return map.replace(key, value); }
+		@Override
+		public void replaceObjects(Object2ObjectMap<T, V> m) { map.replaceObjects(m); }
+		@Override
+		public void replaceObjects(ObjectObjectUnaryOperator<T, V> mappingFunction) { map.replaceObjects(mappingFunction); }
+		@Override
+		public V compute(T key, ObjectObjectUnaryOperator<T, V> mappingFunction) { return map.compute(key, mappingFunction); }
+		@Override
+		public V computeIfAbsent(T key, UnaryOperator<T, V> mappingFunction) { return map.computeIfAbsent(key, mappingFunction); }
+		@Override
+		public V supplyIfAbsent(T key, ObjectSupplier<V> valueProvider) { return map.supplyIfAbsent(key, valueProvider); }
+		@Override
+		public V computeIfPresent(T key, ObjectObjectUnaryOperator<T, V> mappingFunction) { return map.computeIfPresent(key, mappingFunction); }
+		@Override
+		public V merge(T key, V value, ObjectObjectUnaryOperator<V, V> mappingFunction) { return map.merge(key, value, mappingFunction); }
+		@Override
+		public V getObject(T key) { return map.getObject(key); }
+		@Override
+		public V putAndMoveToFirst(T key, V value) { return map.putAndMoveToLast(key, value); }
+		@Override
+		public V putAndMoveToLast(T key, V value) { return map.putAndMoveToFirst(key, value); }
+		@Override
+		public V putFirst(T key, V value) { return map.putLast(key, value); }
+		@Override
+		public V putLast(T key, V value) { return map.putFirst(key, value); }
+		@Override
+		public boolean moveToFirst(T key) { return map.moveToLast(key); }
+		@Override
+		public boolean moveToLast(T key) { return map.moveToFirst(key); }
+		@Override
+		public V getAndMoveToFirst(T key) { return map.getAndMoveToLast(key); }
+		@Override
+		public V getAndMoveToLast(T key) { return map.getAndMoveToFirst(key); }
+		@Override
+		public T firstKey() { return map.lastKey(); }
+		@Override
+		public T pollFirstKey() { return map.pollLastKey(); }
+		@Override
+		public T lastKey() { return map.firstKey(); }
+		@Override
+		public T pollLastKey() { return map.pollFirstKey(); }
+		@Override
+		public V firstValue() { return map.lastValue(); }
+		@Override
+		public V lastValue() { return map.firstValue(); }
+		@Override
+		public Object2ObjectMap.Entry<T, V> firstEntry() { return map.lastEntry(); }
+		@Override
+		public Object2ObjectMap.Entry<T, V> lastEntry() { return map.firstEntry(); }
+		@Override
+		public Object2ObjectMap.Entry<T, V> pollFirstEntry() { return map.pollLastEntry(); }
+		@Override
+		public Object2ObjectMap.Entry<T, V> pollLastEntry() { return map.pollFirstEntry(); }
+		@Override
+		public ObjectOrderedSet<Object2ObjectMap.Entry<T, V>> object2ObjectEntrySet() { return new AbstractObjectSet.ReversedObjectOrderedSet<>(map.object2ObjectEntrySet()); }
+		@Override
+		public ObjectOrderedSet<T> keySet() { return new AbstractObjectSet.ReversedObjectOrderedSet<>(map.keySet()); }
+		@Override
+		public ObjectOrderedCollection<V> values() { return map.values().reversed(); }
+		@Override
+		public Object2ObjectOrderedMap<T, V> reversed() { return map; }
+	}
+
 	
 	/**
 	 * A Simple Type Specific Entry class to reduce boxing/unboxing

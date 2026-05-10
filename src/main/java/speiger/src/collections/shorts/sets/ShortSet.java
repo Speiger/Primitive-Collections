@@ -5,8 +5,8 @@ import java.util.Set;
 import speiger.src.collections.shorts.collections.ShortCollection;
 import speiger.src.collections.shorts.collections.ShortIterator;
 import speiger.src.collections.shorts.collections.ShortSplititerator;
-import speiger.src.collections.shorts.utils.ShortSets;
 import speiger.src.collections.shorts.utils.ShortSplititerators;
+import speiger.src.collections.shorts.utils.ShortSets;
 
 
 /**

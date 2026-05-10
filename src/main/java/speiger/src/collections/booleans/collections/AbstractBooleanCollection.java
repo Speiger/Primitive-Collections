@@ -1,9 +1,11 @@
 package speiger.src.collections.booleans.collections;
 
 import java.util.Collection;
+import java.util.function.Supplier;
 import java.util.Objects;
 import java.util.AbstractCollection;
 
+import speiger.src.collections.booleans.lists.BooleanListIterator;
 import speiger.src.collections.booleans.functions.BooleanConsumer;
 import speiger.src.collections.booleans.utils.BooleanIterators;
 import speiger.src.collections.booleans.utils.BooleanArrays;
@@ -248,5 +250,69 @@ public abstract class AbstractBooleanCollection extends AbstractCollection<Boole
 		BooleanIterators.unwrap(a, iterator());
 		if (a.length > size()) a[size()] = false;
 		return a;
+	}
+
+	public static class ReverseBooleanOrderedCollection extends AbstractBooleanCollection implements BooleanOrderedCollection {
+		BooleanOrderedCollection collection;
+		Supplier<BooleanIterator> reverseIterator;
+		
+		public ReverseBooleanOrderedCollection(BooleanOrderedCollection collection, Supplier<BooleanIterator> reverseIterator) {
+			this.collection = collection;
+			this.reverseIterator = reverseIterator;
+		}
+		
+		@Override
+		public boolean add(boolean o) { return collection.add(o); }
+		@Override
+		public BooleanOrderedCollection reversed() { return collection; }
+		@Override
+		public void addFirst(boolean e) { collection.addLast(e); }
+		@Override
+		public void addLast(boolean e) { collection.addFirst(e); }
+		@Override
+		public boolean contains(boolean e) { return collection.contains(e); }
+		@Override
+		public boolean remBoolean(boolean e) { return collection.remBoolean(e); }
+		@Override
+		public void clear() { collection.clear(); }
+		@Override
+		public boolean getFirstBoolean() { return collection.getLastBoolean(); }
+		@Override
+		public boolean removeFirstBoolean() { return collection.removeLastBoolean(); }
+		@Override
+		public boolean getLastBoolean() { return collection.getFirstBoolean(); }
+		@Override
+		public boolean removeLastBoolean() { return collection.removeFirstBoolean(); }
+		@Override
+		public BooleanIterator iterator() { return reverseIterator.get(); }
+		@Override
+		public int size() { return collection.size(); }
+	}
+	
+	public static class ReverseBiIterator implements BooleanListIterator {
+		BooleanListIterator it;
+		
+		public ReverseBiIterator(BooleanListIterator it) {
+			this.it = it;
+		}
+		
+		@Override
+		public boolean nextBoolean() { return it.previousBoolean(); }
+		@Override
+		public boolean hasNext() { return it.hasPrevious(); }
+		@Override
+		public boolean hasPrevious() { return it.hasNext(); }
+		@Override
+		public boolean previousBoolean() { return it.nextBoolean(); }
+		@Override
+		public void remove() { it.remove(); }
+		@Override
+		public int nextIndex() { return it.previousIndex(); }
+		@Override
+		public int previousIndex() { return it.nextIndex(); }
+		@Override
+		public void set(boolean e) { it.set(e); }
+		@Override
+		public void add(boolean e) { it.add(e); }
 	}
 }

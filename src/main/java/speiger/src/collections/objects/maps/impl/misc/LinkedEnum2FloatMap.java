@@ -13,7 +13,7 @@ import speiger.src.collections.objects.maps.interfaces.Object2FloatOrderedMap;
 import speiger.src.collections.objects.sets.AbstractObjectSet;
 import speiger.src.collections.objects.sets.ObjectOrderedSet;
 import speiger.src.collections.floats.collections.AbstractFloatCollection;
-import speiger.src.collections.floats.collections.FloatCollection;
+import speiger.src.collections.floats.collections.FloatOrderedCollection;
 import speiger.src.collections.floats.collections.FloatIterator;
 import speiger.src.collections.floats.functions.FloatConsumer;
 import speiger.src.collections.floats.lists.FloatListIterator;
@@ -202,6 +202,28 @@ public class LinkedEnum2FloatMap<T extends Enum<T>> extends Enum2FloatMap<T> imp
 	}
 	
 	@Override
+	public float putFirst(T key, float value) {
+		int index = key.ordinal();
+		if(isSet(index)) return values[index];
+		set(index);
+		values[index] = value;
+		onNodeAdded(index);
+		moveToFirstIndex(index);
+		return getDefaultReturnValue();
+	}
+	
+	@Override
+	public float putLast(T key, float value) {
+		int index = key.ordinal();
+		if(isSet(index)) return values[index];
+		set(index);
+		values[index] = value;
+		onNodeAdded(index);
+		moveToLastIndex(index);
+		return getDefaultReturnValue();
+	}
+	
+	@Override
 	public boolean moveToFirst(T key) {
 		int index = key.ordinal();
 		if(isSet(index)) {
@@ -298,6 +320,42 @@ public class LinkedEnum2FloatMap<T extends Enum<T>> extends Enum2FloatMap<T> imp
 	}
 	
 	@Override
+	public Object2FloatMap.Entry<T> firstEntry() {
+		if(size == 0) throw new NoSuchElementException();
+		return new BasicEntry<>(keys[firstIndex], values[firstIndex]);
+	}
+	
+	@Override
+	public Object2FloatMap.Entry<T> lastEntry() {
+		if(size == 0) throw new NoSuchElementException();
+		return new BasicEntry<>(keys[lastIndex], values[lastIndex]);
+	}
+	
+	@Override
+	public Object2FloatMap.Entry<T> pollFirstEntry() {
+		if(size == 0) throw new NoSuchElementException();
+		int pos = firstIndex;
+		firstIndex = (int)links[pos];
+		if(0 <= firstIndex) links[firstIndex] |= 0xFFFFFFFF00000000L;
+		BasicEntry<T> result = new BasicEntry<>(keys[pos], values[pos]);
+		size--;
+		values[result.getKey().ordinal()] = 0F;
+		return result;
+	}
+	
+	@Override
+	public Object2FloatMap.Entry<T> pollLastEntry() {
+		if(size == 0) throw new NoSuchElementException();
+		int pos = lastIndex;
+		firstIndex = (int)links[pos];
+		if(0 <= firstIndex) links[firstIndex] |= 0xFFFFFFFF00000000L;
+		BasicEntry<T> result = new BasicEntry<>(keys[pos], values[pos]);
+		size--;
+		values[result.getKey().ordinal()] = 0F;
+		return result;
+	}
+	
+	@Override
 	public ObjectOrderedSet<Object2FloatMap.Entry<T>> object2FloatEntrySet() {
 		if(entrySet == null) entrySet = new MapEntrySet();
 		return (ObjectOrderedSet<Object2FloatMap.Entry<T>>)entrySet;
@@ -310,9 +368,9 @@ public class LinkedEnum2FloatMap<T extends Enum<T>> extends Enum2FloatMap<T> imp
 	}
 	
 	@Override
-	public FloatCollection values() {
+	public FloatOrderedCollection values() {
 		if(valuesC == null) valuesC = new Values();
-		return valuesC;
+		return (FloatOrderedCollection)valuesC;
 	}
 	
 	@Override
@@ -416,24 +474,24 @@ public class LinkedEnum2FloatMap<T extends Enum<T>> extends Enum2FloatMap<T> imp
 		}
 		
 		@Override
-		public Object2FloatMap.Entry<T> first() {
+		public Object2FloatMap.Entry<T> getFirst() {
 			return new BasicEntry<>(firstKey(), firstFloatValue());
 		}
 		
 		@Override
-		public Object2FloatMap.Entry<T> last() {
+		public Object2FloatMap.Entry<T> getLast() {
 			return new BasicEntry<>(lastKey(), lastFloatValue());
 		}
 		
 		@Override
-		public Object2FloatMap.Entry<T> pollFirst() {
+		public Object2FloatMap.Entry<T> removeFirst() {
 			BasicEntry<T> entry = new BasicEntry<>(firstKey(), firstFloatValue());
 			pollFirstKey();
 			return entry;
 		}
 		
 		@Override
-		public Object2FloatMap.Entry<T> pollLast() {
+		public Object2FloatMap.Entry<T> removeLast() {
 			BasicEntry<T> entry = new BasicEntry<>(lastKey(), lastFloatValue());
 			pollLastKey();
 			return entry;
@@ -441,7 +499,12 @@ public class LinkedEnum2FloatMap<T extends Enum<T>> extends Enum2FloatMap<T> imp
 		
 		@Override
 		public ObjectBidirectionalIterator<Object2FloatMap.Entry<T>> iterator() {
-			return new EntryIterator();
+			return new EntryIterator(true);
+		}
+		
+		@Override
+		public ObjectBidirectionalIterator<Object2FloatMap.Entry<T>> reverseIterator() {
+			return new EntryIterator(false);
 		}
 		
 		@Override
@@ -451,7 +514,7 @@ public class LinkedEnum2FloatMap<T extends Enum<T>> extends Enum2FloatMap<T> imp
 		
 		@Override
 		public ObjectBidirectionalIterator<Object2FloatMap.Entry<T>> fastIterator() {
-			return new FastEntryIterator();
+			return new FastEntryIterator(true);
 		}
 		
 		@Override
@@ -563,7 +626,12 @@ public class LinkedEnum2FloatMap<T extends Enum<T>> extends Enum2FloatMap<T> imp
 		
 		@Override
 		public ObjectListIterator<T> iterator() {
-			return new KeyIterator();
+			return new KeyIterator(true);
+		}
+		
+		@Override
+		public ObjectListIterator<T> reverseIterator() {
+			return new KeyIterator(false);
 		}
 		
 		@Override
@@ -584,22 +652,22 @@ public class LinkedEnum2FloatMap<T extends Enum<T>> extends Enum2FloatMap<T> imp
 		}
 		
 		@Override
-		public T first() {
+		public T getFirst() {
 			return firstKey();
 		}
 		
 		@Override
-		public T pollFirst() {
+		public T removeFirst() {
 			return pollFirstKey();
 		}
 
 		@Override
-		public T last() {
+		public T getLast() {
 			return lastKey();
 		}
 
 		@Override
-		public T pollLast() {
+		public T removeLast() {
 			return pollLastKey();
 		}
 		
@@ -614,32 +682,43 @@ public class LinkedEnum2FloatMap<T extends Enum<T>> extends Enum2FloatMap<T> imp
 		
 	}
 	
-	private class Values extends AbstractFloatCollection {
+	private class Values extends AbstractFloatCollection implements FloatOrderedCollection {
 		@Override
-		public boolean contains(float e) {
-			return containsValue(e);
-		}
+		public boolean contains(float e) { return containsValue(e); }
 		
 		@Override
-		public boolean add(float o) {
-			throw new UnsupportedOperationException();
-		}
-
+		public boolean add(float o) { throw new UnsupportedOperationException(); }
 		@Override
-		public FloatIterator iterator() {
-			return new ValueIterator();
-		}
-		
+		public FloatIterator iterator() { return new ValueIterator(true); }
 		@Override
-		public int size() {
-			return LinkedEnum2FloatMap.this.size();
-		}
-		
+		public int size() { return LinkedEnum2FloatMap.this.size(); }
 		@Override
-		public void clear() {
-			LinkedEnum2FloatMap.this.clear();
+		public void clear() { LinkedEnum2FloatMap.this.clear(); }
+		@Override
+		public FloatOrderedCollection reversed() { return new AbstractFloatCollection.ReverseFloatOrderedCollection(this, this::reverseIterator); }
+		private FloatIterator reverseIterator() {
+			return new ValueIterator(false);
 		}
-		
+		@Override
+		public void addFirst(float e) { throw new UnsupportedOperationException(); }
+		@Override
+		public void addLast(float e) { throw new UnsupportedOperationException(); }
+		@Override
+		public float getFirstFloat() { return firstFloatValue(); }
+		@Override
+		public float removeFirstFloat() {
+			float result = firstFloatValue();
+			pollFirstKey();
+			return result; 
+		}
+		@Override
+		public float getLastFloat() { return lastFloatValue(); }
+		@Override
+		public float removeLastFloat() {
+			float result = lastFloatValue();
+			pollLastKey();
+			return result; 
+		}
 		@Override
 		public void forEach(FloatConsumer action) {
 			int index = firstIndex;
@@ -653,7 +732,7 @@ public class LinkedEnum2FloatMap<T extends Enum<T>> extends Enum2FloatMap<T> imp
 	private class FastEntryIterator extends MapIterator implements ObjectListIterator<Object2FloatMap.Entry<T>> {
 		MapEntry entry = new MapEntry();
 		
-		public FastEntryIterator() {}
+		public FastEntryIterator(boolean start) { super(start); }
 		public FastEntryIterator(T from) {
 			super(from);
 		}
@@ -680,7 +759,7 @@ public class LinkedEnum2FloatMap<T extends Enum<T>> extends Enum2FloatMap<T> imp
 	private class EntryIterator extends MapIterator implements ObjectListIterator<Object2FloatMap.Entry<T>> {
 		MapEntry entry;
 		
-		public EntryIterator() {}
+		public EntryIterator(boolean start) { super(start); }
 		public EntryIterator(T from) {
 			super(from);
 		}
@@ -710,7 +789,7 @@ public class LinkedEnum2FloatMap<T extends Enum<T>> extends Enum2FloatMap<T> imp
 	
 	private class KeyIterator extends MapIterator implements ObjectListIterator<T> {
 		
-		public KeyIterator() {}
+		public KeyIterator(boolean start) { super(start); }
 		public KeyIterator(T from) {
 			super(from);
 		}
@@ -732,7 +811,7 @@ public class LinkedEnum2FloatMap<T extends Enum<T>> extends Enum2FloatMap<T> imp
 	}
 	
 	private class ValueIterator extends MapIterator implements FloatListIterator {
-		public ValueIterator() {}
+		public ValueIterator(boolean start) { super(start); }
 		
 		@Override
 		public float previousFloat() {
@@ -753,16 +832,20 @@ public class LinkedEnum2FloatMap<T extends Enum<T>> extends Enum2FloatMap<T> imp
 	}
 	
 	private class MapIterator {
+		boolean forward;
 		int previous = -1;
 		int next = -1;
 		int current = -1;
 		int index = 0;
 		
-		MapIterator() {
-			next = firstIndex;
+		MapIterator(boolean start) {
+			this.forward = start;
+			if(start) next = firstIndex;
+			else previous = lastIndex;
 		}
 		
 		MapIterator(T from) {
+			this.forward = true;
 			previous = from.ordinal() - 1;
 			index = from.ordinal();
 			next = from.ordinal();
@@ -770,11 +853,11 @@ public class LinkedEnum2FloatMap<T extends Enum<T>> extends Enum2FloatMap<T> imp
 		}
 		
 		public boolean hasNext() {
-			return next != -1;
+			return (forward ? next : previous) != -1;
 		}
 
 		public boolean hasPrevious() {
-			return previous != -1;
+			return (forward ? previous : next) != -1;
 		}
 		
 		public int nextIndex() {
@@ -809,20 +892,30 @@ public class LinkedEnum2FloatMap<T extends Enum<T>> extends Enum2FloatMap<T> imp
 		
 		public int previousEntry() {
 			if(!hasPrevious()) throw new NoSuchElementException();
-			current = previous;
-			previous = (int)(links[current] >> 32);
-			next = current;
+			if(forward) moveBackwards();
+			else moveForwards();
 			if(index >= 0) index--;
 			return current;
 		}
 		
 		public int nextEntry() {
 			if(!hasNext()) throw new NoSuchElementException();
+			if(forward) moveForwards();
+			else moveBackwards();
+			if(index >= 0) index++;
+			return current;
+		}
+		
+		private void moveBackwards() {
+			current = previous;
+			previous = (int)(links[current] >> 32);
+			next = current;
+		}
+		
+		private void moveForwards() {
 			current = next;
 			next = (int)(links[current]);
 			previous = current;
-			if(index >= 0) index++;
-			return current;
 		}
 		
 		private void ensureIndexKnown() {

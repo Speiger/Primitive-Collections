@@ -2,8 +2,9 @@ package speiger.src.collections.ints.sets;
 
 import speiger.src.collections.ints.collections.IntBidirectionalIterator;
 import speiger.src.collections.ints.collections.IntSplititerator;
-import speiger.src.collections.ints.utils.IntSets;
 import speiger.src.collections.ints.utils.IntSplititerators;
+import speiger.src.collections.ints.sets.AbstractIntSet.ReversedIntOrderedSet;
+import speiger.src.collections.ints.utils.IntSets;
 
 /**
  * A Special Set Interface giving Access to some really usefull functions
@@ -49,6 +50,7 @@ public interface IntOrderedSet extends IntSet
 	
 	@Override
 	public IntBidirectionalIterator iterator();
+	public IntBidirectionalIterator reverseIterator();
 	
 	/**
 	 * A type Specific Iterator starting from a given key
@@ -69,23 +71,26 @@ public interface IntOrderedSet extends IntSet
 	 * A method to get the first element in the set
 	 * @return first element in the set
 	 */
-	public int firstInt();
+	public int getFirstInt();
 	/**
 	 * A method to get and remove the first element in the set
 	 * @return first element in the set
 	 */
-	public int pollFirstInt();
+	public int removeFirstInt();
 	/**
 	 * A method to get the last element in the set
 	 * @return last element in the set
 	 */
-	public int lastInt();
+	public int getLastInt();
 	/**
 	 * A method to get and remove the last element in the set
 	 * @return last element in the set
 	 */
-	public int pollLastInt();
+	public int removeLastInt();
 	
+	
+	public default IntOrderedSet reversed() { return new ReversedIntOrderedSet(this); }
+
 	/**
 	 * Creates a Wrapped OrderedSet that is Synchronized
 	 * @return a new OrderedSet that is synchronized

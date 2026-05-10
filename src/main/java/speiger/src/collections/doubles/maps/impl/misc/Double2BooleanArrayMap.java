@@ -25,7 +25,7 @@ import speiger.src.collections.doubles.maps.interfaces.Double2BooleanOrderedMap;
 import speiger.src.collections.doubles.sets.AbstractDoubleSet;
 import speiger.src.collections.doubles.sets.DoubleOrderedSet;
 import speiger.src.collections.booleans.collections.AbstractBooleanCollection;
-import speiger.src.collections.booleans.collections.BooleanCollection;
+import speiger.src.collections.booleans.collections.BooleanOrderedCollection;
 import speiger.src.collections.booleans.collections.BooleanIterator;
 import speiger.src.collections.booleans.functions.BooleanSupplier;
 import speiger.src.collections.booleans.functions.function.BooleanBooleanUnaryOperator;
@@ -62,7 +62,7 @@ public class Double2BooleanArrayMap extends AbstractDouble2BooleanMap implements
 	/** KeySet cache */
 	protected DoubleOrderedSet keySet;
 	/** Values cache */
-	protected BooleanCollection valuesC;
+	protected BooleanOrderedCollection valuesC;
 	/** EntrySet cache */
 	protected FastOrderedSet entrySet;
 	
@@ -207,6 +207,27 @@ public class Double2BooleanArrayMap extends AbstractDouble2BooleanMap implements
 	}
 	
 	@Override
+	public boolean putFirst(double key, boolean value) {
+		int index = findIndex(key);
+		if(index < 0) {
+			insertIndex(0, key, value);
+			size++;
+			return getDefaultReturnValue();
+		}
+		return values[index];
+	}
+	
+	@Override
+	public boolean putLast(double key, boolean value) {
+		int index = findIndex(key);
+		if(index < 0) {
+			insertIndex(size++, key, value);
+			return getDefaultReturnValue();
+		}
+		return values[index];
+	}
+	
+	@Override
 	public boolean moveToFirst(double key) {
 		int index = findIndex(key);
 		if(index > 0) {
@@ -321,6 +342,34 @@ public class Double2BooleanArrayMap extends AbstractDouble2BooleanMap implements
 	}
 	
 	@Override
+	public Double2BooleanMap.Entry firstEntry() {
+		if(size == 0) throw new NoSuchElementException();
+		return new BasicEntry(keys[0], values[0]);
+	}
+	
+	@Override
+	public Double2BooleanMap.Entry lastEntry() {
+		if(size == 0) throw new NoSuchElementException();
+		return new BasicEntry(keys[size-1], values[size-1]);
+	}
+	
+	@Override
+	public Double2BooleanMap.Entry pollFirstEntry() {
+		if(size == 0) throw new NoSuchElementException();
+		BasicEntry result = new BasicEntry(keys[0], values[0]);
+		removeIndex(0);
+		return result;
+	}
+	
+	@Override
+	public Double2BooleanMap.Entry pollLastEntry() {
+		if(size == 0) throw new NoSuchElementException();
+		BasicEntry result = new BasicEntry(keys[size-1], values[size-1]);
+		removeIndex(size-1);
+		return result;
+	}
+	
+	@Override
 	public boolean remove(double key) {
 		int index = findIndex(key);
 		if(index < 0) return getDefaultReturnValue();
@@ -377,7 +426,7 @@ public class Double2BooleanArrayMap extends AbstractDouble2BooleanMap implements
 	}
 
 	@Override
-	public BooleanCollection values() {
+	public BooleanOrderedCollection values() {
 		if(valuesC == null) valuesC = new Values();
 		return valuesC;
 	}
@@ -695,24 +744,24 @@ public class Double2BooleanArrayMap extends AbstractDouble2BooleanMap implements
 		}
 		
 		@Override
-		public Double2BooleanMap.Entry first() {
+		public Double2BooleanMap.Entry getFirst() {
 			return new BasicEntry(firstDoubleKey(), firstBooleanValue());
 		}
 		
 		@Override
-		public Double2BooleanMap.Entry last() {
+		public Double2BooleanMap.Entry getLast() {
 			return new BasicEntry(lastDoubleKey(), lastBooleanValue());
 		}
 		
 		@Override
-		public Double2BooleanMap.Entry pollFirst() {
+		public Double2BooleanMap.Entry removeFirst() {
 			BasicEntry entry = new BasicEntry(firstDoubleKey(), firstBooleanValue());
 			pollFirstDoubleKey();
 			return entry;
 		}
 		
 		@Override
-		public Double2BooleanMap.Entry pollLast() {
+		public Double2BooleanMap.Entry removeLast() {
 			BasicEntry entry = new BasicEntry(lastDoubleKey(), lastBooleanValue());
 			pollLastDoubleKey();
 			return entry;
@@ -720,7 +769,12 @@ public class Double2BooleanArrayMap extends AbstractDouble2BooleanMap implements
 		
 		@Override
 		public ObjectBidirectionalIterator<Double2BooleanMap.Entry> iterator() {
-			return new EntryIterator();
+			return new EntryIterator(true);
+		}
+		
+		@Override
+		public ObjectBidirectionalIterator<Double2BooleanMap.Entry> reverseIterator() {
+			return new EntryIterator(false);
 		}
 		
 		@Override
@@ -730,7 +784,7 @@ public class Double2BooleanArrayMap extends AbstractDouble2BooleanMap implements
 		
 		@Override
 		public ObjectBidirectionalIterator<Double2BooleanMap.Entry> fastIterator() {
-			return new FastEntryIterator();
+			return new FastEntryIterator(true);
 		}
 		
 		@Override
@@ -927,7 +981,9 @@ public class Double2BooleanArrayMap extends AbstractDouble2BooleanMap implements
 		@Override
 		public boolean moveToLast(double o) { return Double2BooleanArrayMap.this.moveToLast(o); }
 		@Override
-		public DoubleListIterator iterator() { return new KeyIterator(); }
+		public DoubleListIterator iterator() { return new KeyIterator(true); }
+		@Override
+		public DoubleListIterator reverseIterator() { return new KeyIterator(false); }
 		@Override
 		public DoubleBidirectionalIterator iterator(double fromElement) { return new KeyIterator(fromElement); } 
 		@Override
@@ -935,13 +991,13 @@ public class Double2BooleanArrayMap extends AbstractDouble2BooleanMap implements
 		@Override
 		public void clear() { Double2BooleanArrayMap.this.clear(); }
 		@Override
-		public double firstDouble() { return firstDoubleKey(); }
+		public double getFirstDouble() { return firstDoubleKey(); }
 		@Override
-		public double pollFirstDouble() { return pollFirstDoubleKey(); }
+		public double removeFirstDouble() { return pollFirstDoubleKey(); }
 		@Override
-		public double lastDouble() { return lastDoubleKey(); }
+		public double getLastDouble() { return lastDoubleKey(); }
 		@Override
-		public double pollLastDouble() { return pollLastDoubleKey(); }
+		public double removeLastDouble() { return pollLastDoubleKey(); }
 		
 		@Override
 		public KeySet copy() { throw new UnsupportedOperationException(); }
@@ -1038,32 +1094,43 @@ public class Double2BooleanArrayMap extends AbstractDouble2BooleanMap implements
 		}
 	}
 	
-	private class Values extends AbstractBooleanCollection {
+	private class Values extends AbstractBooleanCollection implements BooleanOrderedCollection {
 		@Override
-		public boolean contains(boolean e) {
-			return containsValue(e);
-		}
+		public boolean contains(boolean e) { return containsValue(e); }
 		
 		@Override
-		public boolean add(boolean o) {
-			throw new UnsupportedOperationException();
-		}
-
+		public boolean add(boolean o) { throw new UnsupportedOperationException(); }
 		@Override
-		public BooleanIterator iterator() {
-			return new ValueIterator();
-		}
-		
+		public BooleanIterator iterator() { return new ValueIterator(true); }
 		@Override
-		public int size() {
-			return Double2BooleanArrayMap.this.size();
-		}
-		
+		public int size() { return Double2BooleanArrayMap.this.size(); }
 		@Override
-		public void clear() {
-			Double2BooleanArrayMap.this.clear();
+		public void clear() { Double2BooleanArrayMap.this.clear(); }
+		@Override
+		public BooleanOrderedCollection reversed() { return new AbstractBooleanCollection.ReverseBooleanOrderedCollection(this, this::reverseIterator); }
+		private BooleanIterator reverseIterator() {
+			return new ValueIterator(false);
 		}
-		
+		@Override
+		public void addFirst(boolean e) { throw new UnsupportedOperationException(); }
+		@Override
+		public void addLast(boolean e) { throw new UnsupportedOperationException(); }
+		@Override
+		public boolean getFirstBoolean() { return firstBooleanValue(); }
+		@Override
+		public boolean removeFirstBoolean() {
+			boolean result = firstBooleanValue();
+			pollFirstDoubleKey();
+			return result; 
+		}
+		@Override
+		public boolean getLastBoolean() { return lastBooleanValue(); }
+		@Override
+		public boolean removeLastBoolean() {
+			boolean result = lastBooleanValue();
+			pollLastDoubleKey();
+			return result; 
+		}
 		@Override
 		public void forEach(BooleanConsumer action) {
 			Objects.requireNonNull(action);
@@ -1152,10 +1219,8 @@ public class Double2BooleanArrayMap extends AbstractDouble2BooleanMap implements
 	private class FastEntryIterator extends MapIterator implements ObjectListIterator<Double2BooleanMap.Entry> {
 		MapEntry entry = new MapEntry();
 		
-		public FastEntryIterator() {}
-		public FastEntryIterator(double from) {
-			index = findIndex(from);
-		}
+		public FastEntryIterator(boolean start) { super(start); }
+		public FastEntryIterator(double element) { super(element); }
 		
 		@Override
 		public Double2BooleanMap.Entry next() {
@@ -1178,11 +1243,8 @@ public class Double2BooleanArrayMap extends AbstractDouble2BooleanMap implements
 	private class EntryIterator extends MapIterator implements ObjectListIterator<Double2BooleanMap.Entry> {
 		MapEntry entry = null;
 		
-		public EntryIterator() {}
-		public EntryIterator(double from) {
-			index = findIndex(from);
-			if(index == -1) throw new NoSuchElementException();
-		}
+		public EntryIterator(boolean start) { super(start); }
+		public EntryIterator(double element) { super(element); }
 		
 		@Override
 		public Double2BooleanMap.Entry next() {
@@ -1209,11 +1271,8 @@ public class Double2BooleanArrayMap extends AbstractDouble2BooleanMap implements
 	}
 	
 	private class KeyIterator extends MapIterator implements DoubleListIterator {
-		public KeyIterator() {}
-		public KeyIterator(double element) {
-			index = findIndex(element);
-			if(index == -1) throw new NoSuchElementException();
-		}
+		public KeyIterator(boolean start) { super(start); }
+		public KeyIterator(double element) { super(element); }
 		
 		@Override
 		public double previousDouble() {
@@ -1233,6 +1292,9 @@ public class Double2BooleanArrayMap extends AbstractDouble2BooleanMap implements
 	}
 	
 	private class ValueIterator extends MapIterator implements BooleanListIterator {
+		public ValueIterator(boolean start) { super(start); }
+		public ValueIterator(double element) { super(element); }
+		
 		@Override
 		public boolean previousBoolean() {
 			return values[previousEntry()];
@@ -1251,23 +1313,37 @@ public class Double2BooleanArrayMap extends AbstractDouble2BooleanMap implements
 	}
 	
 	private class MapIterator {
+		boolean forward;
 		int index;
 		int lastReturned = -1;
-
+		
+		MapIterator(boolean start) {
+			this.forward = start;
+			this.index = start ? 0 : size;
+		}
+		
+		MapIterator(double element) {
+			this.forward = true;
+			index = findIndex(element);
+			if(index == -1) throw new NoSuchElementException();
+		}
+		
 		public boolean hasNext() {
-			return index < size;
+			return forward ? index < size : index > 0;
 		}
 		
 		public boolean hasPrevious() {
-			return index > 0;
+			return forward ? index > 0 : index < size;
 		}
 		
 		public int nextIndex() {
-			return index;
+			if(forward) return index;
+			return size - index;
 		}
 		
 		public int previousIndex() {
-			return index-1;
+			if(forward) return index-1;
+			return (size - index)-1;
 		}
 		
 		public void remove() {
@@ -1280,26 +1356,42 @@ public class Double2BooleanArrayMap extends AbstractDouble2BooleanMap implements
 		
 		public int previousEntry() {
 			if(!hasPrevious()) throw new NoSuchElementException();
-			index--;
-			return (lastReturned = index);
-		}
-		
-		public int nextEntry() {
-			if(!hasNext()) throw new NoSuchElementException();
+			if(forward) {
+				index--;
+				return (lastReturned = index);
+			}
 			lastReturned = index;
 			return index++;
 		}
 		
+		public int nextEntry() {
+			if(!hasNext()) throw new NoSuchElementException();
+			if(forward) {
+				lastReturned = index;
+				return index++;
+			}
+			index--;
+			return (lastReturned = index);
+		}
+		
 		public int skip(int amount) {
 			if(amount < 0) throw new IllegalStateException("Negative Numbers are not allowed");
+			return forward ? moveForward(amount) : moveBackwards(amount);
+		}
+		
+		public int back(int amount) {
+			if(amount < 0) throw new IllegalStateException("Negative Numbers are not allowed");
+			return forward ? moveBackwards(amount) : moveForward(amount);
+		}
+		
+		private int moveForward(int amount) {
 			int steps = Math.min(amount, size() - index);
 			index += steps;
 			if(steps > 0) lastReturned = Math.min(index-1, size()-1);
 			return steps;
 		}
 		
-		public int back(int amount) {
-			if(amount < 0) throw new IllegalStateException("Negative Numbers are not allowed");
+		private int moveBackwards(int amount) {
 			int steps = Math.min(amount, index);
 			index -= steps;
 			if(steps > 0) lastReturned = Math.min(index, size()-1);

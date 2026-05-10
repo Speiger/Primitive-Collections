@@ -1,6 +1,8 @@
 package speiger.src.collections.ints.maps.interfaces;
 
 import speiger.src.collections.ints.utils.maps.Int2LongMaps;
+import speiger.src.collections.ints.maps.abstracts.AbstractInt2LongMap;
+import speiger.src.collections.longs.collections.LongOrderedCollection;
 import speiger.src.collections.ints.sets.IntOrderedSet;
 import speiger.src.collections.objects.collections.ObjectBidirectionalIterator;
 import speiger.src.collections.objects.sets.ObjectOrderedSet;
@@ -30,6 +32,26 @@ public interface Int2LongOrderedMap extends Int2LongMap
 	 * @see java.util.Map#put(Object, Object)
 	 */
 	public long putAndMoveToLast(int key, long value);
+	
+	/**
+	 * A alternative to putAndMoveToFirst.
+	 * This method simply puts an entry at the first spot of the Map but only if the entry is missing.
+	 * @param key the key that should be inserted
+	 * @param value the value that should be inserted
+	 * @return the previous present or default return value
+	 * @see java.util.Map#put(Object, Object)
+	 */
+	public long putFirst(int key, long value);
+	
+	/**
+	 * A alternative to putAndMoveToLast.
+	 * This method simply puts an entry at the last spot of the Map but only if the entry is missing.
+	 * @param key the key that should be inserted
+	 * @param value the value that should be inserted
+	 * @return the previous present or default return value
+	 * @see java.util.Map#put(Object, Object)
+	 */
+	public long putLast(int key, long value);
 	
 	/**
 	 * A specific move method to move a given key/value to the first index.
@@ -91,12 +113,24 @@ public interface Int2LongOrderedMap extends Int2LongMap
 	 */
 	public long lastLongValue();
 	
+	
+	public Int2LongMap.Entry firstEntry();
+	
+	public Int2LongMap.Entry lastEntry();
+	
+	public Int2LongMap.Entry pollFirstEntry();
+	
+	public Int2LongMap.Entry pollLastEntry();
 	@Override
 	public Int2LongOrderedMap copy();
 	@Override
 	public IntOrderedSet keySet();
 	@Override
+	public LongOrderedCollection values();
+	@Override
 	public ObjectOrderedSet<Int2LongMap.Entry> int2LongEntrySet();
+	
+	public default Int2LongOrderedMap reversed() { return new AbstractInt2LongMap.ReversedInt2LongOrderedMap(this); }
 	
 	/**
 	 * Creates a Wrapped SortedMap that is Synchronized

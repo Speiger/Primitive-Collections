@@ -1,15 +1,30 @@
 package speiger.src.builder.modules;
 
 import java.util.Arrays;
-import java.util.Set;
-import java.util.TreeSet;
+import java.util.List;
 
 import speiger.src.builder.ClassType;
+import speiger.src.builder.dependencies.FunctionDependency;
+import speiger.src.builder.dependencies.IDependency;
+import speiger.src.builder.dependencies.ModuleDependency;
 
 @SuppressWarnings("javadoc")
 public class SetModule extends BaseModule
 {
 	public static final BaseModule INSTANCE = new SetModule();
+	public static final ModuleDependency MODULE = new ModuleDependency(INSTANCE, false).addKeyDependency(CollectionModule.MODULE).addKeyDependency(CollectionModule.SPLIT_ITERATORS);
+	public static final FunctionDependency IMPLEMENTATION = MODULE.createDependency("Implementations");
+	public static final FunctionDependency WRAPPERS = MODULE.createDependency("Wrappers");
+	public static final FunctionDependency ORDERED_SET = MODULE.createDependency("OrderedSet");
+	public static final FunctionDependency SORTED_SET = MODULE.createDependency("SortedSet");
+	public static final FunctionDependency ARRAY_SET = MODULE.createDependency("ArraySet").addKeyDependency(ORDERED_SET).addKeyDependency(IMPLEMENTATION);
+	public static final FunctionDependency IMMUTABLE_SET = MODULE.createDependency("ImmutableSet").addKeyDependency(ORDERED_SET).addKeyDependency(IMPLEMENTATION);
+	public static final FunctionDependency HASH_SET = MODULE.createDependency("HashSet").addKeyDependency(IMPLEMENTATION);
+	public static final FunctionDependency LINKED_SET = MODULE.createDependency("LinkedHashSet").addKeyDependency(ORDERED_SET).addKeyDependency(HASH_SET);
+	public static final FunctionDependency CUSTOM_SET = MODULE.createDependency("CustomHashSet").addKeyDependency(IMPLEMENTATION).addKeyDependency(CollectionModule.STRATEGY);
+	public static final FunctionDependency LINKED_CUSTOM_SET = MODULE.createDependency("LinkedCustomHashSet").addKeyDependency(ORDERED_SET).addKeyDependency(CUSTOM_SET);
+	public static final FunctionDependency AVL_TREE_SET = MODULE.createDependency("AVLTreeSet").addKeyDependency(SORTED_SET).addKeyDependency(IMPLEMENTATION);
+	public static final FunctionDependency RB_TREE_SET = MODULE.createDependency("RBTreeSet").addKeyDependency(SORTED_SET).addKeyDependency(IMPLEMENTATION);
 	
 	@Override
 	public String getModuleName() { return "Set"; }
@@ -19,68 +34,40 @@ public class SetModule extends BaseModule
 	@Override
 	public boolean isModuleValid(ClassType keyType, ClassType valueType) { return keyType != ClassType.BOOLEAN; }
 	@Override
-	public boolean areDependenciesLoaded() { return isDependencyLoaded(CollectionModule.INSTANCE); }
-	@Override
-	public Set<String> getModuleKeys(ClassType keyType, ClassType valueType) {
-		Set<String> sets = new TreeSet<>();
-		sets.addAll(Arrays.asList("Wrappers", "Implementations"));
-		sets.addAll(Arrays.asList("OrderedSet", "SortedSet"));
-		sets.addAll(Arrays.asList("ArraySet", "ImmutableSet"));
-		sets.addAll(Arrays.asList("HashSet", "LinkedHashSet"));
-		sets.addAll(Arrays.asList("CustomHashSet", "LinkedCustomHashSet"));
-		sets.addAll(Arrays.asList("AVLTreeSet", "RBTreeSet"));
-		return sets;
-	}
+	public List<IDependency> getDependencies(ClassType keyType, ClassType valueType) { return Arrays.asList(MODULE, WRAPPERS, ORDERED_SET, SORTED_SET, IMPLEMENTATION, ARRAY_SET, IMMUTABLE_SET, HASH_SET, LINKED_SET, CUSTOM_SET, LINKED_CUSTOM_SET, AVL_TREE_SET, RB_TREE_SET); }
 	
 	@Override
 	protected void loadFlags()
 	{
-		if(isModuleEnabled()) addFlag("SET_MODULE");
-		if(isModuleEnabled("Wrappers")) addFlag("SETS_FEATURE");
-		boolean implementations = isModuleEnabled("Implementations");
-		boolean hashSet = implementations && isModuleEnabled("HashSet");
-		boolean customHashSet = implementations && isModuleEnabled("CustomHashSet");
-		
-		if(isModuleEnabled("OrderedSet")) {
-			addFlag("ORDERED_SET_FEATURE");
-			if(implementations && isModuleEnabled("ArraySet")) addFlag("ARRAY_SET_FEATURE");
-			if(hashSet && isModuleEnabled("LinkedHashSet")) addFlag("LINKED_SET_FEATURE");
-			if(customHashSet && isModuleEnabled("LinkedCustomHashSet")) addFlag("LINKED_CUSTOM_SET_FEATURE");
-		}
-		if(isModuleEnabled("SortedSet")) {
-			addFlag("SORTED_SET_FEATURE");
-			if(implementations && isModuleEnabled("AVLTreeSet")) addFlag("AVL_TREE_SET_FEATURE");
-			if(implementations && isModuleEnabled("RBTreeSet")) addFlag("RB_TREE_SET_FEATURE");
-		}
-		if(implementations && isModuleEnabled("ImmutableSet")) addFlag("IMMUTABLE_SET_FEATURE");
-		if(hashSet) addFlag("HASH_SET_FEATURE");
-		if(customHashSet) addFlag("CUSTOM_HASH_SET_FEATURE");
+		if(MODULE.isEnabled()) addFlag("SET_MODULE");
+		if(WRAPPERS.isEnabled()) addFlag("SETS_FEATURE");
+		if(ORDERED_SET.isEnabled()) addFlag("ORDERED_SET_FEATURE");
+		if(SORTED_SET.isEnabled()) addFlag("SORTED_SET_FEATURE");
+		if(IMMUTABLE_SET.isEnabled()) addFlag("IMMUTABLE_SET_FEATURE");
+		if(ARRAY_SET.isEnabled()) addFlag("ARRAY_SET_FEATURE");
+		if(HASH_SET.isEnabled()) addFlag("HASH_SET_FEATURE");
+		if(LINKED_SET.isEnabled()) addFlag("LINKED_SET_FEATURE");
+		if(CUSTOM_SET.isEnabled()) addFlag("CUSTOM_HASH_SET_FEATURE");
+		if(LINKED_CUSTOM_SET.isEnabled()) addFlag("LINKED_CUSTOM_SET_FEATURE");
+		if(AVL_TREE_SET.isEnabled()) addFlag("AVL_TREE_SET_FEATURE");
+		if(RB_TREE_SET.isEnabled()) addFlag("RB_TREE_SET_FEATURE");
 	}
 	
 	@Override
 	protected void loadBlockades()
 	{
-		if(!isModuleEnabled()) addBlockedFiles("Set", "AbstractSet");
-		if(!isModuleEnabled("Wrappers")) addBlockedFiles("Sets");
-		boolean implementations = !isModuleEnabled("Implementations");
-		if(implementations || !isModuleEnabled("ImmutableSet")) addBlockedFiles("ImmutableOpenHashSet");
-		
-		boolean ordered = !isModuleEnabled("OrderedSet");
-		if(ordered) addBlockedFiles("OrderedSet");
-		boolean hashSet = implementations || !isModuleEnabled("HashSet");
-		if(hashSet) addBlockedFiles("OpenHashSet");
-		if(hashSet || ordered || !isModuleEnabled("LinkedHashSet")) addBlockedFiles("LinkedOpenHashSet");
-		
-		boolean customHashSet = implementations || !isModuleEnabled("CustomHashSet");
-		if(customHashSet) addBlockedFiles("OpenCustomHashSet");
-		if(customHashSet || ordered || !isModuleEnabled("LinkedCustomHashSet")) addBlockedFiles("LinkedOpenCustomHashSet");
-		
-		if(implementations || ordered || !isModuleEnabled("ArraySet")) addBlockedFiles("ArraySet");
-		
-		boolean sorted = !isModuleEnabled("SortedSet");
-		if(sorted) addBlockedFiles("SortedSet", "NavigableSet");
-		if(implementations || sorted || !isModuleEnabled("AVLTreeSet")) addBlockedFiles("AVLTreeSet");
-		if(implementations || sorted || !isModuleEnabled("RBTreeSet")) addBlockedFiles("RBTreeSet");
+		if(!MODULE.isEnabled()) addBlockedFiles("Set", "AbstractSet");
+		if(!WRAPPERS.isEnabled()) addBlockedFiles("Sets");
+		if(!IMMUTABLE_SET.isEnabled()) addBlockedFiles("ImmutableOpenHashSet");
+		if(!ORDERED_SET.isEnabled()) addBlockedFiles("OrderedSet");
+		if(!HASH_SET.isEnabled()) addBlockedFiles("OpenHashSet");
+		if(!LINKED_SET.isEnabled()) addBlockedFiles("LinkedOpenHashSet");
+		if(!CUSTOM_SET.isEnabled()) addBlockedFiles("OpenCustomHashSet");
+		if(!LINKED_CUSTOM_SET.isEnabled()) addBlockedFiles("LinkedOpenCustomHashSet");
+		if(!ARRAY_SET.isEnabled()) addBlockedFiles("ArraySet");
+		if(!SORTED_SET.isEnabled()) addBlockedFiles("SortedSet", "NavigableSet");
+		if(!AVL_TREE_SET.isEnabled()) addBlockedFiles("AVLTreeSet");
+		if(!RB_TREE_SET.isEnabled()) addBlockedFiles("RBTreeSet");
 		
 		if(keyType == ClassType.BOOLEAN)
 		{
@@ -161,6 +148,7 @@ public class SetModule extends BaseModule
 		
 		//Abstract Classes
 		addAbstractMapper("ABSTRACT_SET", "Abstract%sSet");
+		addAbstractMapper("REVERSED_ORDERED_SET", "Reversed%sOrderedSet");
 		
 		//Helper Classes
 		addClassMapper("SETS", "Sets");

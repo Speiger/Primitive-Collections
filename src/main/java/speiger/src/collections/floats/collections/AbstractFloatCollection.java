@@ -1,9 +1,11 @@
 package speiger.src.collections.floats.collections;
 
 import java.util.Collection;
+import java.util.function.Supplier;
 import java.util.Objects;
 import java.util.AbstractCollection;
 
+import speiger.src.collections.floats.lists.FloatListIterator;
 import speiger.src.collections.floats.functions.FloatConsumer;
 import speiger.src.collections.floats.utils.FloatIterators;
 import speiger.src.collections.floats.utils.FloatArrays;
@@ -248,5 +250,69 @@ public abstract class AbstractFloatCollection extends AbstractCollection<Float> 
 		FloatIterators.unwrap(a, iterator());
 		if (a.length > size()) a[size()] = 0F;
 		return a;
+	}
+
+	public static class ReverseFloatOrderedCollection extends AbstractFloatCollection implements FloatOrderedCollection {
+		FloatOrderedCollection collection;
+		Supplier<FloatIterator> reverseIterator;
+		
+		public ReverseFloatOrderedCollection(FloatOrderedCollection collection, Supplier<FloatIterator> reverseIterator) {
+			this.collection = collection;
+			this.reverseIterator = reverseIterator;
+		}
+		
+		@Override
+		public boolean add(float o) { return collection.add(o); }
+		@Override
+		public FloatOrderedCollection reversed() { return collection; }
+		@Override
+		public void addFirst(float e) { collection.addLast(e); }
+		@Override
+		public void addLast(float e) { collection.addFirst(e); }
+		@Override
+		public boolean contains(float e) { return collection.contains(e); }
+		@Override
+		public boolean remFloat(float e) { return collection.remFloat(e); }
+		@Override
+		public void clear() { collection.clear(); }
+		@Override
+		public float getFirstFloat() { return collection.getLastFloat(); }
+		@Override
+		public float removeFirstFloat() { return collection.removeLastFloat(); }
+		@Override
+		public float getLastFloat() { return collection.getFirstFloat(); }
+		@Override
+		public float removeLastFloat() { return collection.removeFirstFloat(); }
+		@Override
+		public FloatIterator iterator() { return reverseIterator.get(); }
+		@Override
+		public int size() { return collection.size(); }
+	}
+	
+	public static class ReverseBiIterator implements FloatListIterator {
+		FloatListIterator it;
+		
+		public ReverseBiIterator(FloatListIterator it) {
+			this.it = it;
+		}
+		
+		@Override
+		public float nextFloat() { return it.previousFloat(); }
+		@Override
+		public boolean hasNext() { return it.hasPrevious(); }
+		@Override
+		public boolean hasPrevious() { return it.hasNext(); }
+		@Override
+		public float previousFloat() { return it.nextFloat(); }
+		@Override
+		public void remove() { it.remove(); }
+		@Override
+		public int nextIndex() { return it.previousIndex(); }
+		@Override
+		public int previousIndex() { return it.nextIndex(); }
+		@Override
+		public void set(float e) { it.set(e); }
+		@Override
+		public void add(float e) { it.add(e); }
 	}
 }

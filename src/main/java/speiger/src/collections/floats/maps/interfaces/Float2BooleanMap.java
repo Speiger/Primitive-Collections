@@ -94,7 +94,7 @@ public interface Float2BooleanMap extends Map<Float, Boolean>, FloatPredicate
 	 * @return the last present value or default return	value.
 	 */
 	public default Boolean put(Map.Entry<Float, Boolean> entry) {
-		return put(entry.getKey(), entry.getValue());
+		return put(entry.getKey().floatValue(), entry.getValue().booleanValue());
 	}
 
 	/**

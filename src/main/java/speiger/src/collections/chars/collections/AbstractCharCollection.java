@@ -1,9 +1,11 @@
 package speiger.src.collections.chars.collections;
 
 import java.util.Collection;
+import java.util.function.Supplier;
 import java.util.Objects;
 import java.util.AbstractCollection;
 
+import speiger.src.collections.chars.lists.CharListIterator;
 import speiger.src.collections.chars.functions.CharConsumer;
 import speiger.src.collections.chars.utils.CharIterators;
 import speiger.src.collections.chars.utils.CharArrays;
@@ -248,5 +250,69 @@ public abstract class AbstractCharCollection extends AbstractCollection<Characte
 		CharIterators.unwrap(a, iterator());
 		if (a.length > size()) a[size()] = (char)0;
 		return a;
+	}
+
+	public static class ReverseCharOrderedCollection extends AbstractCharCollection implements CharOrderedCollection {
+		CharOrderedCollection collection;
+		Supplier<CharIterator> reverseIterator;
+		
+		public ReverseCharOrderedCollection(CharOrderedCollection collection, Supplier<CharIterator> reverseIterator) {
+			this.collection = collection;
+			this.reverseIterator = reverseIterator;
+		}
+		
+		@Override
+		public boolean add(char o) { return collection.add(o); }
+		@Override
+		public CharOrderedCollection reversed() { return collection; }
+		@Override
+		public void addFirst(char e) { collection.addLast(e); }
+		@Override
+		public void addLast(char e) { collection.addFirst(e); }
+		@Override
+		public boolean contains(char e) { return collection.contains(e); }
+		@Override
+		public boolean remChar(char e) { return collection.remChar(e); }
+		@Override
+		public void clear() { collection.clear(); }
+		@Override
+		public char getFirstChar() { return collection.getLastChar(); }
+		@Override
+		public char removeFirstChar() { return collection.removeLastChar(); }
+		@Override
+		public char getLastChar() { return collection.getFirstChar(); }
+		@Override
+		public char removeLastChar() { return collection.removeFirstChar(); }
+		@Override
+		public CharIterator iterator() { return reverseIterator.get(); }
+		@Override
+		public int size() { return collection.size(); }
+	}
+	
+	public static class ReverseBiIterator implements CharListIterator {
+		CharListIterator it;
+		
+		public ReverseBiIterator(CharListIterator it) {
+			this.it = it;
+		}
+		
+		@Override
+		public char nextChar() { return it.previousChar(); }
+		@Override
+		public boolean hasNext() { return it.hasPrevious(); }
+		@Override
+		public boolean hasPrevious() { return it.hasNext(); }
+		@Override
+		public char previousChar() { return it.nextChar(); }
+		@Override
+		public void remove() { it.remove(); }
+		@Override
+		public int nextIndex() { return it.previousIndex(); }
+		@Override
+		public int previousIndex() { return it.nextIndex(); }
+		@Override
+		public void set(char e) { it.set(e); }
+		@Override
+		public void add(char e) { it.add(e); }
 	}
 }

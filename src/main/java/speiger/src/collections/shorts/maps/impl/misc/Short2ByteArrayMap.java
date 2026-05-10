@@ -26,7 +26,7 @@ import speiger.src.collections.shorts.maps.interfaces.Short2ByteOrderedMap;
 import speiger.src.collections.shorts.sets.AbstractShortSet;
 import speiger.src.collections.shorts.sets.ShortOrderedSet;
 import speiger.src.collections.bytes.collections.AbstractByteCollection;
-import speiger.src.collections.bytes.collections.ByteCollection;
+import speiger.src.collections.bytes.collections.ByteOrderedCollection;
 import speiger.src.collections.bytes.collections.ByteIterator;
 import speiger.src.collections.bytes.functions.ByteSupplier;
 import speiger.src.collections.bytes.functions.function.ByteByteUnaryOperator;
@@ -63,7 +63,7 @@ public class Short2ByteArrayMap extends AbstractShort2ByteMap implements Short2B
 	/** KeySet cache */
 	protected ShortOrderedSet keySet;
 	/** Values cache */
-	protected ByteCollection valuesC;
+	protected ByteOrderedCollection valuesC;
 	/** EntrySet cache */
 	protected FastOrderedSet entrySet;
 	
@@ -230,6 +230,27 @@ public class Short2ByteArrayMap extends AbstractShort2ByteMap implements Short2B
 	}
 	
 	@Override
+	public byte putFirst(short key, byte value) {
+		int index = findIndex(key);
+		if(index < 0) {
+			insertIndex(0, key, value);
+			size++;
+			return getDefaultReturnValue();
+		}
+		return values[index];
+	}
+	
+	@Override
+	public byte putLast(short key, byte value) {
+		int index = findIndex(key);
+		if(index < 0) {
+			insertIndex(size++, key, value);
+			return getDefaultReturnValue();
+		}
+		return values[index];
+	}
+	
+	@Override
 	public boolean moveToFirst(short key) {
 		int index = findIndex(key);
 		if(index > 0) {
@@ -344,6 +365,34 @@ public class Short2ByteArrayMap extends AbstractShort2ByteMap implements Short2B
 	}
 	
 	@Override
+	public Short2ByteMap.Entry firstEntry() {
+		if(size == 0) throw new NoSuchElementException();
+		return new BasicEntry(keys[0], values[0]);
+	}
+	
+	@Override
+	public Short2ByteMap.Entry lastEntry() {
+		if(size == 0) throw new NoSuchElementException();
+		return new BasicEntry(keys[size-1], values[size-1]);
+	}
+	
+	@Override
+	public Short2ByteMap.Entry pollFirstEntry() {
+		if(size == 0) throw new NoSuchElementException();
+		BasicEntry result = new BasicEntry(keys[0], values[0]);
+		removeIndex(0);
+		return result;
+	}
+	
+	@Override
+	public Short2ByteMap.Entry pollLastEntry() {
+		if(size == 0) throw new NoSuchElementException();
+		BasicEntry result = new BasicEntry(keys[size-1], values[size-1]);
+		removeIndex(size-1);
+		return result;
+	}
+	
+	@Override
 	public byte remove(short key) {
 		int index = findIndex(key);
 		if(index < 0) return getDefaultReturnValue();
@@ -400,7 +449,7 @@ public class Short2ByteArrayMap extends AbstractShort2ByteMap implements Short2B
 	}
 
 	@Override
-	public ByteCollection values() {
+	public ByteOrderedCollection values() {
 		if(valuesC == null) valuesC = new Values();
 		return valuesC;
 	}
@@ -718,24 +767,24 @@ public class Short2ByteArrayMap extends AbstractShort2ByteMap implements Short2B
 		}
 		
 		@Override
-		public Short2ByteMap.Entry first() {
+		public Short2ByteMap.Entry getFirst() {
 			return new BasicEntry(firstShortKey(), firstByteValue());
 		}
 		
 		@Override
-		public Short2ByteMap.Entry last() {
+		public Short2ByteMap.Entry getLast() {
 			return new BasicEntry(lastShortKey(), lastByteValue());
 		}
 		
 		@Override
-		public Short2ByteMap.Entry pollFirst() {
+		public Short2ByteMap.Entry removeFirst() {
 			BasicEntry entry = new BasicEntry(firstShortKey(), firstByteValue());
 			pollFirstShortKey();
 			return entry;
 		}
 		
 		@Override
-		public Short2ByteMap.Entry pollLast() {
+		public Short2ByteMap.Entry removeLast() {
 			BasicEntry entry = new BasicEntry(lastShortKey(), lastByteValue());
 			pollLastShortKey();
 			return entry;
@@ -743,7 +792,12 @@ public class Short2ByteArrayMap extends AbstractShort2ByteMap implements Short2B
 		
 		@Override
 		public ObjectBidirectionalIterator<Short2ByteMap.Entry> iterator() {
-			return new EntryIterator();
+			return new EntryIterator(true);
+		}
+		
+		@Override
+		public ObjectBidirectionalIterator<Short2ByteMap.Entry> reverseIterator() {
+			return new EntryIterator(false);
 		}
 		
 		@Override
@@ -753,7 +807,7 @@ public class Short2ByteArrayMap extends AbstractShort2ByteMap implements Short2B
 		
 		@Override
 		public ObjectBidirectionalIterator<Short2ByteMap.Entry> fastIterator() {
-			return new FastEntryIterator();
+			return new FastEntryIterator(true);
 		}
 		
 		@Override
@@ -950,7 +1004,9 @@ public class Short2ByteArrayMap extends AbstractShort2ByteMap implements Short2B
 		@Override
 		public boolean moveToLast(short o) { return Short2ByteArrayMap.this.moveToLast(o); }
 		@Override
-		public ShortListIterator iterator() { return new KeyIterator(); }
+		public ShortListIterator iterator() { return new KeyIterator(true); }
+		@Override
+		public ShortListIterator reverseIterator() { return new KeyIterator(false); }
 		@Override
 		public ShortBidirectionalIterator iterator(short fromElement) { return new KeyIterator(fromElement); } 
 		@Override
@@ -958,13 +1014,13 @@ public class Short2ByteArrayMap extends AbstractShort2ByteMap implements Short2B
 		@Override
 		public void clear() { Short2ByteArrayMap.this.clear(); }
 		@Override
-		public short firstShort() { return firstShortKey(); }
+		public short getFirstShort() { return firstShortKey(); }
 		@Override
-		public short pollFirstShort() { return pollFirstShortKey(); }
+		public short removeFirstShort() { return pollFirstShortKey(); }
 		@Override
-		public short lastShort() { return lastShortKey(); }
+		public short getLastShort() { return lastShortKey(); }
 		@Override
-		public short pollLastShort() { return pollLastShortKey(); }
+		public short removeLastShort() { return pollLastShortKey(); }
 		
 		@Override
 		public KeySet copy() { throw new UnsupportedOperationException(); }
@@ -1061,32 +1117,43 @@ public class Short2ByteArrayMap extends AbstractShort2ByteMap implements Short2B
 		}
 	}
 	
-	private class Values extends AbstractByteCollection {
+	private class Values extends AbstractByteCollection implements ByteOrderedCollection {
 		@Override
-		public boolean contains(byte e) {
-			return containsValue(e);
-		}
+		public boolean contains(byte e) { return containsValue(e); }
 		
 		@Override
-		public boolean add(byte o) {
-			throw new UnsupportedOperationException();
-		}
-
+		public boolean add(byte o) { throw new UnsupportedOperationException(); }
 		@Override
-		public ByteIterator iterator() {
-			return new ValueIterator();
-		}
-		
+		public ByteIterator iterator() { return new ValueIterator(true); }
 		@Override
-		public int size() {
-			return Short2ByteArrayMap.this.size();
-		}
-		
+		public int size() { return Short2ByteArrayMap.this.size(); }
 		@Override
-		public void clear() {
-			Short2ByteArrayMap.this.clear();
+		public void clear() { Short2ByteArrayMap.this.clear(); }
+		@Override
+		public ByteOrderedCollection reversed() { return new AbstractByteCollection.ReverseByteOrderedCollection(this, this::reverseIterator); }
+		private ByteIterator reverseIterator() {
+			return new ValueIterator(false);
 		}
-		
+		@Override
+		public void addFirst(byte e) { throw new UnsupportedOperationException(); }
+		@Override
+		public void addLast(byte e) { throw new UnsupportedOperationException(); }
+		@Override
+		public byte getFirstByte() { return firstByteValue(); }
+		@Override
+		public byte removeFirstByte() {
+			byte result = firstByteValue();
+			pollFirstShortKey();
+			return result; 
+		}
+		@Override
+		public byte getLastByte() { return lastByteValue(); }
+		@Override
+		public byte removeLastByte() {
+			byte result = lastByteValue();
+			pollLastShortKey();
+			return result; 
+		}
 		@Override
 		public void forEach(ByteConsumer action) {
 			Objects.requireNonNull(action);
@@ -1175,10 +1242,8 @@ public class Short2ByteArrayMap extends AbstractShort2ByteMap implements Short2B
 	private class FastEntryIterator extends MapIterator implements ObjectListIterator<Short2ByteMap.Entry> {
 		MapEntry entry = new MapEntry();
 		
-		public FastEntryIterator() {}
-		public FastEntryIterator(short from) {
-			index = findIndex(from);
-		}
+		public FastEntryIterator(boolean start) { super(start); }
+		public FastEntryIterator(short element) { super(element); }
 		
 		@Override
 		public Short2ByteMap.Entry next() {
@@ -1201,11 +1266,8 @@ public class Short2ByteArrayMap extends AbstractShort2ByteMap implements Short2B
 	private class EntryIterator extends MapIterator implements ObjectListIterator<Short2ByteMap.Entry> {
 		MapEntry entry = null;
 		
-		public EntryIterator() {}
-		public EntryIterator(short from) {
-			index = findIndex(from);
-			if(index == -1) throw new NoSuchElementException();
-		}
+		public EntryIterator(boolean start) { super(start); }
+		public EntryIterator(short element) { super(element); }
 		
 		@Override
 		public Short2ByteMap.Entry next() {
@@ -1232,11 +1294,8 @@ public class Short2ByteArrayMap extends AbstractShort2ByteMap implements Short2B
 	}
 	
 	private class KeyIterator extends MapIterator implements ShortListIterator {
-		public KeyIterator() {}
-		public KeyIterator(short element) {
-			index = findIndex(element);
-			if(index == -1) throw new NoSuchElementException();
-		}
+		public KeyIterator(boolean start) { super(start); }
+		public KeyIterator(short element) { super(element); }
 		
 		@Override
 		public short previousShort() {
@@ -1256,6 +1315,9 @@ public class Short2ByteArrayMap extends AbstractShort2ByteMap implements Short2B
 	}
 	
 	private class ValueIterator extends MapIterator implements ByteListIterator {
+		public ValueIterator(boolean start) { super(start); }
+		public ValueIterator(short element) { super(element); }
+		
 		@Override
 		public byte previousByte() {
 			return values[previousEntry()];
@@ -1274,23 +1336,37 @@ public class Short2ByteArrayMap extends AbstractShort2ByteMap implements Short2B
 	}
 	
 	private class MapIterator {
+		boolean forward;
 		int index;
 		int lastReturned = -1;
-
+		
+		MapIterator(boolean start) {
+			this.forward = start;
+			this.index = start ? 0 : size;
+		}
+		
+		MapIterator(short element) {
+			this.forward = true;
+			index = findIndex(element);
+			if(index == -1) throw new NoSuchElementException();
+		}
+		
 		public boolean hasNext() {
-			return index < size;
+			return forward ? index < size : index > 0;
 		}
 		
 		public boolean hasPrevious() {
-			return index > 0;
+			return forward ? index > 0 : index < size;
 		}
 		
 		public int nextIndex() {
-			return index;
+			if(forward) return index;
+			return size - index;
 		}
 		
 		public int previousIndex() {
-			return index-1;
+			if(forward) return index-1;
+			return (size - index)-1;
 		}
 		
 		public void remove() {
@@ -1303,26 +1379,42 @@ public class Short2ByteArrayMap extends AbstractShort2ByteMap implements Short2B
 		
 		public int previousEntry() {
 			if(!hasPrevious()) throw new NoSuchElementException();
-			index--;
-			return (lastReturned = index);
-		}
-		
-		public int nextEntry() {
-			if(!hasNext()) throw new NoSuchElementException();
+			if(forward) {
+				index--;
+				return (lastReturned = index);
+			}
 			lastReturned = index;
 			return index++;
 		}
 		
+		public int nextEntry() {
+			if(!hasNext()) throw new NoSuchElementException();
+			if(forward) {
+				lastReturned = index;
+				return index++;
+			}
+			index--;
+			return (lastReturned = index);
+		}
+		
 		public int skip(int amount) {
 			if(amount < 0) throw new IllegalStateException("Negative Numbers are not allowed");
+			return forward ? moveForward(amount) : moveBackwards(amount);
+		}
+		
+		public int back(int amount) {
+			if(amount < 0) throw new IllegalStateException("Negative Numbers are not allowed");
+			return forward ? moveBackwards(amount) : moveForward(amount);
+		}
+		
+		private int moveForward(int amount) {
 			int steps = Math.min(amount, size() - index);
 			index += steps;
 			if(steps > 0) lastReturned = Math.min(index-1, size()-1);
 			return steps;
 		}
 		
-		public int back(int amount) {
-			if(amount < 0) throw new IllegalStateException("Negative Numbers are not allowed");
+		private int moveBackwards(int amount) {
 			int steps = Math.min(amount, index);
 			index -= steps;
 			if(steps > 0) lastReturned = Math.min(index, size()-1);

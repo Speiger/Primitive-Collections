@@ -20,7 +20,7 @@ import speiger.src.collections.objects.sets.AbstractObjectSet;
 import speiger.src.collections.objects.sets.ObjectOrderedSet;
 import speiger.src.collections.objects.utils.ObjectStrategy;
 import speiger.src.collections.shorts.collections.AbstractShortCollection;
-import speiger.src.collections.shorts.collections.ShortCollection;
+import speiger.src.collections.shorts.collections.ShortOrderedCollection;
 import speiger.src.collections.shorts.collections.ShortIterator;
 import speiger.src.collections.shorts.functions.function.ShortShortUnaryOperator;
 import speiger.src.collections.shorts.functions.ShortConsumer;
@@ -250,6 +250,54 @@ public class Object2ShortLinkedOpenCustomHashMap<T> extends Object2ShortOpenCust
 	}
 	
 	@Override
+	public short putFirst(T key, short value) {
+		if(strategy.equals(key, null)) {
+			if(containsNull) return values[nullIndex];
+			values[nullIndex] = value;
+			containsNull = true;
+			onNodeAdded(nullIndex);
+			moveToFirstIndex(nullIndex);
+		}
+		else {
+			int pos = HashUtil.mix(strategy.hashCode(key)) & mask;
+			while(!strategy.equals(keys[pos], null)) {
+				if(strategy.equals(keys[pos], key)) return values[pos];
+				pos = ++pos & mask;
+			}
+			keys[pos] = key;
+			values[pos] = value;
+			onNodeAdded(pos);
+			moveToFirstIndex(pos);
+		}
+		if(size++ >= maxFill) rehash(HashUtil.arraySize(size+1, loadFactor));
+		return getDefaultReturnValue();
+	}
+	
+	@Override
+	public short putLast(T key, short value) {
+		if(strategy.equals(key, null)) {
+			if(containsNull) return values[nullIndex];
+			values[nullIndex] = value;
+			containsNull = true;
+			onNodeAdded(nullIndex);
+			moveToLastIndex(nullIndex);
+		}
+		else {
+			int pos = HashUtil.mix(strategy.hashCode(key)) & mask;
+			while(!strategy.equals(keys[pos], null)) {
+				if(strategy.equals(keys[pos], key)) return values[pos];
+				pos = ++pos & mask;
+			}
+			keys[pos] = key;
+			values[pos] = value;
+			onNodeAdded(pos);
+			moveToLastIndex(pos);
+		}
+		if(size++ >= maxFill) rehash(HashUtil.arraySize(size+1, loadFactor));
+		return getDefaultReturnValue();
+	}
+	
+	@Override
 	public boolean moveToFirst(T key) {
 		if(isEmpty() || strategy.equals(firstKey(), key)) return false;
 		if(strategy.equals(key, null)) {
@@ -385,6 +433,52 @@ public class Object2ShortLinkedOpenCustomHashMap<T> extends Object2ShortOpenCust
 	}
 	
 	@Override
+	public Object2ShortMap.Entry<T> firstEntry() {
+		if(size == 0) throw new NoSuchElementException();
+		return new BasicEntry<>(keys[firstIndex], values[firstIndex]);
+	}
+	
+	@Override
+	public Object2ShortMap.Entry<T> lastEntry() {
+		if(size == 0) throw new NoSuchElementException();
+		return new BasicEntry<>(keys[lastIndex], values[lastIndex]);
+	}
+	
+	@Override
+	public Object2ShortMap.Entry<T> pollFirstEntry() {
+		if(size == 0) throw new NoSuchElementException();
+		int pos = firstIndex;
+		onNodeRemoved(pos);
+		BasicEntry<T> result = new BasicEntry<>(keys[pos], values[pos]);
+		size--;
+		if(strategy.equals(result.getKey(), null)) {
+			containsNull = false;
+			keys[nullIndex] = null;
+			values[nullIndex] = (short)0;
+		}
+		else shiftKeys(pos);
+		if(nullIndex > minCapacity && size < maxFill / 4 && nullIndex > HashUtil.DEFAULT_MIN_CAPACITY) rehash(nullIndex / 2);
+		return result;
+	}
+	
+	@Override
+	public Object2ShortMap.Entry<T> pollLastEntry() {
+		if(size == 0) throw new NoSuchElementException();
+		int pos = lastIndex;
+		onNodeRemoved(pos);
+		BasicEntry<T> result = new BasicEntry<>(keys[pos], values[pos]);
+		size--;
+		if(strategy.equals(result.getKey(), null)) {
+			containsNull = false;
+			keys[nullIndex] = null;
+			values[nullIndex] = (short)0;
+		}
+		else shiftKeys(pos);
+		if(nullIndex > minCapacity && size < maxFill / 4 && nullIndex > HashUtil.DEFAULT_MIN_CAPACITY) rehash(nullIndex / 2);
+		return result;
+	}
+	
+	@Override
 	public ObjectOrderedSet<Object2ShortMap.Entry<T>> object2ShortEntrySet() {
 		if(entrySet == null) entrySet = new MapEntrySet();
 		return (ObjectOrderedSet<Object2ShortMap.Entry<T>>)entrySet;
@@ -397,9 +491,9 @@ public class Object2ShortLinkedOpenCustomHashMap<T> extends Object2ShortOpenCust
 	}
 	
 	@Override
-	public ShortCollection values() {
+	public ShortOrderedCollection values() {
 		if(valuesC == null) valuesC = new Values();
-		return valuesC;
+		return (ShortOrderedCollection)valuesC;
 	}
 	
 	@Override
@@ -584,24 +678,24 @@ public class Object2ShortLinkedOpenCustomHashMap<T> extends Object2ShortOpenCust
 		}
 		
 		@Override
-		public Object2ShortMap.Entry<T> first() {
+		public Object2ShortMap.Entry<T> getFirst() {
 			return new BasicEntry<>(firstKey(), firstShortValue());
 		}
 		
 		@Override
-		public Object2ShortMap.Entry<T> last() {
+		public Object2ShortMap.Entry<T> getLast() {
 			return new BasicEntry<>(lastKey(), lastShortValue());
 		}
 		
 		@Override
-		public Object2ShortMap.Entry<T> pollFirst() {
+		public Object2ShortMap.Entry<T> removeFirst() {
 			BasicEntry<T> entry = new BasicEntry<>(firstKey(), firstShortValue());
 			pollFirstKey();
 			return entry;
 		}
 		
 		@Override
-		public Object2ShortMap.Entry<T> pollLast() {
+		public Object2ShortMap.Entry<T> removeLast() {
 			BasicEntry<T> entry = new BasicEntry<>(lastKey(), lastShortValue());
 			pollLastKey();
 			return entry;
@@ -609,7 +703,12 @@ public class Object2ShortLinkedOpenCustomHashMap<T> extends Object2ShortOpenCust
 		
 		@Override
 		public ObjectBidirectionalIterator<Object2ShortMap.Entry<T>> iterator() {
-			return new EntryIterator();
+			return new EntryIterator(true);
+		}
+		
+		@Override
+		public ObjectBidirectionalIterator<Object2ShortMap.Entry<T>> reverseIterator() {
+			return new EntryIterator(false);
 		}
 		
 		@Override
@@ -619,7 +718,7 @@ public class Object2ShortLinkedOpenCustomHashMap<T> extends Object2ShortOpenCust
 		
 		@Override
 		public ObjectBidirectionalIterator<Object2ShortMap.Entry<T>> fastIterator() {
-			return new FastEntryIterator();
+			return new FastEntryIterator(true);
 		}
 		
 		@Override
@@ -855,7 +954,12 @@ public class Object2ShortLinkedOpenCustomHashMap<T> extends Object2ShortOpenCust
 		
 		@Override
 		public ObjectListIterator<T> iterator() {
-			return new KeyIterator();
+			return new KeyIterator(true);
+		}
+		
+		@Override
+		public ObjectListIterator<T> reverseIterator() {
+			return new KeyIterator(false);
 		}
 		
 		@Override
@@ -877,22 +981,22 @@ public class Object2ShortLinkedOpenCustomHashMap<T> extends Object2ShortOpenCust
 		}
 		
 		@Override
-		public T first() {
+		public T getFirst() {
 			return firstKey();
 		}
 		
 		@Override
-		public T pollFirst() {
+		public T removeFirst() {
 			return pollFirstKey();
 		}
 
 		@Override
-		public T last() {
+		public T getLast() {
 			return lastKey();
 		}
 
 		@Override
-		public T pollLast() {
+		public T removeLast() {
 			return pollLastKey();
 		}
 		
@@ -1021,30 +1125,41 @@ public class Object2ShortLinkedOpenCustomHashMap<T> extends Object2ShortOpenCust
 		}
 	}
 	
-	private class Values extends AbstractShortCollection {
+	private class Values extends AbstractShortCollection implements ShortOrderedCollection {
 		@Override
-		public boolean contains(short e) {
-			return containsValue(e);
+		public boolean contains(short e) { return containsValue(e); }
+		@Override
+		public boolean add(short o) { throw new UnsupportedOperationException(); }
+		@Override
+		public ShortIterator iterator() { return new ValueIterator(true); }
+		@Override
+		public int size() { return Object2ShortLinkedOpenCustomHashMap.this.size(); }
+		@Override
+		public void clear() { Object2ShortLinkedOpenCustomHashMap.this.clear(); }
+		@Override
+		public ShortOrderedCollection reversed() { return new AbstractShortCollection.ReverseShortOrderedCollection(this, this::reverseIterator); }
+		private ShortIterator reverseIterator() {
+			return new ValueIterator(false);
 		}
-		
 		@Override
-		public boolean add(short o) {
-			throw new UnsupportedOperationException();
+		public void addFirst(short e) { throw new UnsupportedOperationException(); }
+		@Override
+		public void addLast(short e) { throw new UnsupportedOperationException(); }
+		@Override
+		public short getFirstShort() { return firstShortValue(); }
+		@Override
+		public short removeFirstShort() {
+			short result = firstShortValue();
+			pollFirstKey();
+			return result; 
 		}
-
 		@Override
-		public ShortIterator iterator() {
-			return new ValueIterator();
-		}
-		
+		public short getLastShort() { return lastShortValue(); }
 		@Override
-		public int size() {
-			return Object2ShortLinkedOpenCustomHashMap.this.size();
-		}
-		
-		@Override
-		public void clear() {
-			Object2ShortLinkedOpenCustomHashMap.this.clear();
+		public short removeLastShort() {
+			short result = lastShortValue();
+			pollLastKey();
+			return result; 
 		}
 		
 		@Override
@@ -1175,7 +1290,7 @@ public class Object2ShortLinkedOpenCustomHashMap<T> extends Object2ShortOpenCust
 	private class FastEntryIterator extends MapIterator implements ObjectListIterator<Object2ShortMap.Entry<T>> {
 		MapEntry entry = new MapEntry();
 		
-		public FastEntryIterator() {}
+		public FastEntryIterator(boolean start) { super(start); }
 		public FastEntryIterator(T from) {
 			super(from);
 		}
@@ -1202,7 +1317,7 @@ public class Object2ShortLinkedOpenCustomHashMap<T> extends Object2ShortOpenCust
 	private class EntryIterator extends MapIterator implements ObjectListIterator<Object2ShortMap.Entry<T>> {
 		MapEntry entry;
 		
-		public EntryIterator() {}
+		public EntryIterator(boolean start) { super(start); }
 		public EntryIterator(T from) {
 			super(from);
 		}
@@ -1232,7 +1347,7 @@ public class Object2ShortLinkedOpenCustomHashMap<T> extends Object2ShortOpenCust
 	
 	private class KeyIterator extends MapIterator implements ObjectListIterator<T> {
 		
-		public KeyIterator() {}
+		public KeyIterator(boolean start) { super(start); }
 		public KeyIterator(T from) {
 			super(from);
 		}
@@ -1254,7 +1369,7 @@ public class Object2ShortLinkedOpenCustomHashMap<T> extends Object2ShortOpenCust
 	}
 	
 	private class ValueIterator extends MapIterator implements ShortListIterator {
-		public ValueIterator() {}
+		public ValueIterator(boolean start) { super(start); }
 		
 		@Override
 		public short previousShort() {
@@ -1275,16 +1390,20 @@ public class Object2ShortLinkedOpenCustomHashMap<T> extends Object2ShortOpenCust
 	}
 	
 	private class MapIterator {
+		boolean forward;
 		int previous = -1;
 		int next = -1;
 		int current = -1;
 		int index = 0;
 		
-		MapIterator() {
-			next = firstIndex;
+		MapIterator(boolean start) {
+			this.forward = start;
+			if(start) next = firstIndex;
+			else previous = lastIndex;
 		}
 		
 		MapIterator(T from) {
+			this.forward = true;
 			if(strategy.equals(from, null)) {
 				if(containsNull) {
 					next = (int) links[nullIndex];
@@ -1312,11 +1431,11 @@ public class Object2ShortLinkedOpenCustomHashMap<T> extends Object2ShortOpenCust
 		}
 		
 		public boolean hasNext() {
-			return next != -1;
+			return (forward ? next : previous) != -1;
 		}
 
 		public boolean hasPrevious() {
-			return previous != -1;
+			return (forward ? previous : next) != -1;
 		}
 		
 		public int nextIndex() {
@@ -1376,20 +1495,30 @@ public class Object2ShortLinkedOpenCustomHashMap<T> extends Object2ShortOpenCust
 		
 		public int previousEntry() {
 			if(!hasPrevious()) throw new NoSuchElementException();
-			current = previous;
-			previous = (int)(links[current] >> 32);
-			next = current;
+			if(forward) moveBackwards();
+			else moveForwards();
 			if(index >= 0) index--;
 			return current;
 		}
 		
 		public int nextEntry() {
 			if(!hasNext()) throw new NoSuchElementException();
+			if(forward) moveForwards();
+			else moveBackwards();
+			if(index >= 0) index++;
+			return current;
+		}
+		
+		private void moveBackwards() {
+			current = previous;
+			previous = (int)(links[current] >> 32);
+			next = current;
+		}
+		
+		private void moveForwards() {
 			current = next;
 			next = (int)(links[current]);
 			previous = current;
-			if(index >= 0) index++;
-			return current;
 		}
 		
 		private void ensureIndexKnown() {

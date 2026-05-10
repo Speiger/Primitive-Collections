@@ -1,6 +1,8 @@
 package speiger.src.collections.longs.maps.interfaces;
 
 import speiger.src.collections.longs.utils.maps.Long2FloatMaps;
+import speiger.src.collections.longs.maps.abstracts.AbstractLong2FloatMap;
+import speiger.src.collections.floats.collections.FloatOrderedCollection;
 import speiger.src.collections.longs.sets.LongOrderedSet;
 import speiger.src.collections.objects.collections.ObjectBidirectionalIterator;
 import speiger.src.collections.objects.sets.ObjectOrderedSet;
@@ -30,6 +32,26 @@ public interface Long2FloatOrderedMap extends Long2FloatMap
 	 * @see java.util.Map#put(Object, Object)
 	 */
 	public float putAndMoveToLast(long key, float value);
+	
+	/**
+	 * A alternative to putAndMoveToFirst.
+	 * This method simply puts an entry at the first spot of the Map but only if the entry is missing.
+	 * @param key the key that should be inserted
+	 * @param value the value that should be inserted
+	 * @return the previous present or default return value
+	 * @see java.util.Map#put(Object, Object)
+	 */
+	public float putFirst(long key, float value);
+	
+	/**
+	 * A alternative to putAndMoveToLast.
+	 * This method simply puts an entry at the last spot of the Map but only if the entry is missing.
+	 * @param key the key that should be inserted
+	 * @param value the value that should be inserted
+	 * @return the previous present or default return value
+	 * @see java.util.Map#put(Object, Object)
+	 */
+	public float putLast(long key, float value);
 	
 	/**
 	 * A specific move method to move a given key/value to the first index.
@@ -91,12 +113,24 @@ public interface Long2FloatOrderedMap extends Long2FloatMap
 	 */
 	public float lastFloatValue();
 	
+	
+	public Long2FloatMap.Entry firstEntry();
+	
+	public Long2FloatMap.Entry lastEntry();
+	
+	public Long2FloatMap.Entry pollFirstEntry();
+	
+	public Long2FloatMap.Entry pollLastEntry();
 	@Override
 	public Long2FloatOrderedMap copy();
 	@Override
 	public LongOrderedSet keySet();
 	@Override
+	public FloatOrderedCollection values();
+	@Override
 	public ObjectOrderedSet<Long2FloatMap.Entry> long2FloatEntrySet();
+	
+	public default Long2FloatOrderedMap reversed() { return new AbstractLong2FloatMap.ReversedLong2FloatOrderedMap(this); }
 	
 	/**
 	 * Creates a Wrapped SortedMap that is Synchronized

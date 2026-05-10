@@ -30,7 +30,7 @@ import speiger.src.collections.objects.functions.consumer.ObjectByteConsumer;
 import speiger.src.collections.bytes.functions.function.BytePredicate;
 import speiger.src.collections.ints.sets.AbstractIntSet;
 import speiger.src.collections.bytes.collections.AbstractByteCollection;
-import speiger.src.collections.bytes.collections.ByteCollection;
+import speiger.src.collections.bytes.collections.ByteOrderedCollection;
 import speiger.src.collections.bytes.collections.ByteIterator;
 import speiger.src.collections.bytes.functions.ByteSupplier;
 import speiger.src.collections.bytes.functions.function.ByteByteUnaryOperator;
@@ -73,7 +73,7 @@ public class ImmutableInt2ByteOpenHashMap extends AbstractInt2ByteMap implements
 	/** KeySet cache */
 	protected transient IntOrderedSet keySet;
 	/** Values cache */
-	protected transient ByteCollection valuesC;
+	protected transient ByteOrderedCollection valuesC;
 	
 	/** Amount of Elements stored in the HashMap */
 	protected int size;
@@ -262,6 +262,10 @@ public class ImmutableInt2ByteOpenHashMap extends AbstractInt2ByteMap implements
 	@Override
 	public byte putAndMoveToLast(int key, byte value) { throw new UnsupportedOperationException(); }
 	@Override
+	public byte putFirst(int key, byte value) { throw new UnsupportedOperationException(); }
+	@Override
+	public byte putLast(int key, byte value) { throw new UnsupportedOperationException(); }
+	@Override
 	public boolean moveToFirst(int key) { throw new UnsupportedOperationException(); }
 	@Override
 	public boolean moveToLast(int key) { throw new UnsupportedOperationException(); }
@@ -364,7 +368,24 @@ public class ImmutableInt2ByteOpenHashMap extends AbstractInt2ByteMap implements
 	public byte lastByteValue() {
 		if(size == 0) throw new NoSuchElementException();
 		return values[lastIndex];
-	}	
+	}
+	
+	@Override
+	public Int2ByteMap.Entry firstEntry() {
+		if(size == 0) throw new NoSuchElementException();
+		return new BasicEntry(keys[firstIndex], values[firstIndex]);
+	}
+	
+	@Override
+	public Int2ByteMap.Entry lastEntry() {
+		if(size == 0) throw new NoSuchElementException();
+		return new BasicEntry(keys[lastIndex], values[lastIndex]);
+	}
+	
+	@Override
+	public Int2ByteMap.Entry pollFirstEntry() { throw new UnsupportedOperationException(); }
+	@Override
+	public Int2ByteMap.Entry pollLastEntry() { throw new UnsupportedOperationException(); }
 
 	@Override
 	public ObjectOrderedSet<Int2ByteMap.Entry> int2ByteEntrySet() {
@@ -379,7 +400,7 @@ public class ImmutableInt2ByteOpenHashMap extends AbstractInt2ByteMap implements
 	}
 	
 	@Override
-	public ByteCollection values() {
+	public ByteOrderedCollection values() {
 		if(valuesC == null) valuesC = new Values();
 		return valuesC;
 	}
@@ -528,24 +549,29 @@ public class ImmutableInt2ByteOpenHashMap extends AbstractInt2ByteMap implements
 		public boolean moveToLast(Int2ByteMap.Entry o) { throw new UnsupportedOperationException(); }
 		
 		@Override
-		public Int2ByteMap.Entry first() {
+		public Int2ByteMap.Entry getFirst() {
 			return new BasicEntry(firstIntKey(), firstByteValue());
 		}
 		
 		@Override
-		public Int2ByteMap.Entry last() {
+		public Int2ByteMap.Entry getLast() {
 			return new BasicEntry(lastIntKey(), lastByteValue());
 		}
 		
 		@Override
-		public Int2ByteMap.Entry pollFirst() { throw new UnsupportedOperationException(); }
+		public Int2ByteMap.Entry removeFirst() { throw new UnsupportedOperationException(); }
 		
 		@Override
-		public Int2ByteMap.Entry pollLast() { throw new UnsupportedOperationException(); }
+		public Int2ByteMap.Entry removeLast() { throw new UnsupportedOperationException(); }
 		
 		@Override
 		public ObjectBidirectionalIterator<Int2ByteMap.Entry> iterator() {
-			return new EntryIterator();
+			return new EntryIterator(true);
+		}
+		
+		@Override
+		public ObjectBidirectionalIterator<Int2ByteMap.Entry> reverseIterator() {
+			return new EntryIterator(false);
 		}
 		
 		@Override
@@ -555,7 +581,7 @@ public class ImmutableInt2ByteOpenHashMap extends AbstractInt2ByteMap implements
 		
 		@Override
 		public ObjectBidirectionalIterator<Int2ByteMap.Entry> fastIterator() {
-			return new FastEntryIterator();
+			return new FastEntryIterator(true);
 		}
 		
 		@Override
@@ -770,7 +796,12 @@ public class ImmutableInt2ByteOpenHashMap extends AbstractInt2ByteMap implements
 		
 		@Override
 		public IntListIterator iterator() {
-			return new KeyIterator();
+			return new KeyIterator(true);
+		}
+		
+		@Override
+		public IntListIterator reverseIterator() {
+			return new KeyIterator(false);
 		}
 		
 		@Override
@@ -790,20 +821,20 @@ public class ImmutableInt2ByteOpenHashMap extends AbstractInt2ByteMap implements
 		public void clear() { throw new UnsupportedOperationException(); }
 		
 		@Override
-		public int firstInt() {
+		public int getFirstInt() {
 			return firstIntKey();
 		}
 		
 		@Override
-		public int pollFirstInt() { throw new UnsupportedOperationException(); }
+		public int removeFirstInt() { throw new UnsupportedOperationException(); }
 
 		@Override
-		public int lastInt() {
+		public int getLastInt() {
 			return lastIntKey();
 		}
 
 		@Override
-		public int pollLastInt() { throw new UnsupportedOperationException(); }
+		public int removeLastInt() { throw new UnsupportedOperationException(); }
 		
 		@Override
 		public void forEach(IntConsumer action) {
@@ -930,30 +961,35 @@ public class ImmutableInt2ByteOpenHashMap extends AbstractInt2ByteMap implements
 		}
 	}
 	
-	private class Values extends AbstractByteCollection {
+	private class Values extends AbstractByteCollection implements ByteOrderedCollection {
 		@Override
-		public boolean contains(byte e) {
-			return containsValue(e);
-		}
+		public boolean contains(byte e) { return containsValue(e); }
 		
 		@Override
-		public boolean add(byte o) {
-			throw new UnsupportedOperationException();
-		}
-
+		public boolean add(byte o) { throw new UnsupportedOperationException(); }
 		@Override
-		public ByteIterator iterator() {
-			return new ValueIterator();
-		}
-		
+		public ByteIterator iterator() { return new ValueIterator(true); }
 		@Override
-		public int size() {
-			return ImmutableInt2ByteOpenHashMap.this.size();
-		}
-		
+		public int size() { return ImmutableInt2ByteOpenHashMap.this.size(); }
 		@Override
 		public void clear() { throw new UnsupportedOperationException(); }
-		
+		@Override
+		public ByteOrderedCollection reversed() { return new AbstractByteCollection.ReverseByteOrderedCollection(this, this::reverseIterator); }
+		private ByteIterator reverseIterator() {
+			return new ValueIterator(false);
+		}
+		@Override
+		public void addFirst(byte e) { throw new UnsupportedOperationException(); }
+		@Override
+		public void addLast(byte e) { throw new UnsupportedOperationException(); }
+		@Override
+		public byte getFirstByte() { return firstByteValue(); }
+		@Override
+		public byte removeFirstByte() { throw new UnsupportedOperationException(); }
+		@Override
+		public byte getLastByte() { return lastByteValue(); }
+		@Override
+		public byte removeLastByte() { throw new UnsupportedOperationException(); }
 		@Override
 		public void forEach(ByteConsumer action) {
 			int index = firstIndex;
@@ -1082,7 +1118,7 @@ public class ImmutableInt2ByteOpenHashMap extends AbstractInt2ByteMap implements
 	private class FastEntryIterator extends MapIterator implements ObjectListIterator<Int2ByteMap.Entry> {
 		MapEntry entry = new MapEntry();
 		
-		public FastEntryIterator() {}
+		public FastEntryIterator(boolean start) { super(start); }
 		public FastEntryIterator(int from) {
 			super(from);
 		}
@@ -1108,7 +1144,7 @@ public class ImmutableInt2ByteOpenHashMap extends AbstractInt2ByteMap implements
 	
 	private class EntryIterator extends MapIterator implements ObjectListIterator<Int2ByteMap.Entry> {
 		
-		public EntryIterator() {}
+		public EntryIterator(boolean start) { super(start); }
 		public EntryIterator(int from) {
 			super(from);
 		}
@@ -1135,7 +1171,7 @@ public class ImmutableInt2ByteOpenHashMap extends AbstractInt2ByteMap implements
 	
 	private class KeyIterator extends MapIterator implements IntListIterator {
 		
-		public KeyIterator() {}
+		public KeyIterator(boolean start) { super(start); }
 		public KeyIterator(int from) {
 			super(from);
 		}
@@ -1157,7 +1193,7 @@ public class ImmutableInt2ByteOpenHashMap extends AbstractInt2ByteMap implements
 	}
 	
 	private class ValueIterator extends MapIterator implements ByteListIterator {
-		public ValueIterator() {}
+		public ValueIterator(boolean start) { super(start); }
 		
 		@Override
 		public byte previousByte() {
@@ -1178,13 +1214,16 @@ public class ImmutableInt2ByteOpenHashMap extends AbstractInt2ByteMap implements
 	}
 	
 	private class MapIterator {
+		boolean forward;
 		int previous = -1;
 		int next = -1;
 		int current = -1;
 		int index = 0;
 		
-		MapIterator() {
-			next = firstIndex;
+		MapIterator(boolean start) {
+			this.forward = start;
+			if(start) next = firstIndex;
+			else previous = lastIndex;
 		}
 		
 		MapIterator(int from) {
@@ -1215,11 +1254,11 @@ public class ImmutableInt2ByteOpenHashMap extends AbstractInt2ByteMap implements
 		}
 		
 		public boolean hasNext() {
-			return next != -1;
+			return (forward ? next : previous) != -1;
 		}
 
 		public boolean hasPrevious() {
-			return previous != -1;
+			return (forward ? previous : next) != -1;
 		}
 		
 		public int nextIndex() {
@@ -1236,20 +1275,30 @@ public class ImmutableInt2ByteOpenHashMap extends AbstractInt2ByteMap implements
 		
 		public int previousEntry() {
 			if(!hasPrevious()) throw new NoSuchElementException();
-			current = previous;
-			previous = (int)(links[current] >> 32);
-			next = current;
+			if(forward) moveBackwards();
+			else moveForwards();
 			if(index >= 0) index--;
 			return current;
 		}
 		
 		public int nextEntry() {
 			if(!hasNext()) throw new NoSuchElementException();
+			if(forward) moveForwards();
+			else moveBackwards();
+			if(index >= 0) index++;
+			return current;
+		}
+		
+		private void moveBackwards() {
+			current = previous;
+			previous = (int)(links[current] >> 32);
+			next = current;
+		}
+		
+		private void moveForwards() {
 			current = next;
 			next = (int)(links[current]);
 			previous = current;
-			if(index >= 0) index++;
-			return current;
 		}
 		
 		private void ensureIndexKnown() {

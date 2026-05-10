@@ -94,7 +94,7 @@ public interface Short2ByteMap extends Map<Short, Byte>, Short2ByteFunction
 	 * @return the last present value or default return	value.
 	 */
 	public default Byte put(Map.Entry<Short, Byte> entry) {
-		return put(entry.getKey(), entry.getValue());
+		return put(entry.getKey().shortValue(), entry.getValue().byteValue());
 	}
 
 	/**

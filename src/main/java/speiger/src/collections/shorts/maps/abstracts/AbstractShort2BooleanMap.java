@@ -9,6 +9,11 @@ import speiger.src.collections.shorts.functions.consumer.ShortBooleanConsumer;
 import speiger.src.collections.shorts.functions.function.ShortPredicate;
 import speiger.src.collections.shorts.functions.function.ShortBooleanUnaryOperator;
 import speiger.src.collections.shorts.maps.interfaces.Short2BooleanMap;
+import speiger.src.collections.shorts.maps.interfaces.Short2BooleanOrderedMap;
+import speiger.src.collections.shorts.sets.ShortOrderedSet;
+import speiger.src.collections.booleans.collections.BooleanOrderedCollection;
+import speiger.src.collections.objects.sets.AbstractObjectSet;
+import speiger.src.collections.objects.sets.ObjectOrderedSet;
 import speiger.src.collections.shorts.sets.AbstractShortSet;
 import speiger.src.collections.shorts.sets.ShortSet;
 import speiger.src.collections.shorts.utils.maps.Short2BooleanMaps;
@@ -85,7 +90,7 @@ public abstract class AbstractShort2BooleanMap extends AbstractMap<Short, Boolea
 	public void putAll(Short[] keys, Boolean[] values, int offset, int size) {
 		SanityChecks.checkArrayCapacity(keys.length, offset, size);
 		SanityChecks.checkArrayCapacity(values.length, offset, size);
-		for(int i = 0;i<size;i++) put(keys[i], values[i]);		
+		for(int i = 0;i<size;i++) put(keys[i].shortValue(), values[i].booleanValue());		
 	}
 	
 	@Override
@@ -407,6 +412,112 @@ public abstract class AbstractShort2BooleanMap extends AbstractMap<Short, Boolea
 		while(iter.hasNext()) hash += iter.next().hashCode();
 		return hash;
 	}
+	
+	public static class ReversedShort2BooleanOrderedMap extends AbstractShort2BooleanMap implements Short2BooleanOrderedMap {
+		Short2BooleanOrderedMap map;
+		
+		public ReversedShort2BooleanOrderedMap(Short2BooleanOrderedMap map) {
+			this.map = map;
+		}
+		@Override
+		public AbstractShort2BooleanMap setDefaultReturnValue(boolean v) {
+			map.setDefaultReturnValue(v);
+			return this;
+		}
+		@Override
+		public boolean getDefaultReturnValue() { return map.getDefaultReturnValue(); }
+		@Override
+		public Short2BooleanOrderedMap copy() { throw new UnsupportedOperationException(); }
+		@Override
+		public boolean put(short key, boolean value) { return map.put(key, value); }
+		@Override
+		public boolean putIfAbsent(short key, boolean value) { return map.putIfAbsent(key, value); }
+		@Override
+		public boolean remove(short key) { return map.remove(key); }
+		@Override
+		public boolean remove(short key, boolean value) { return map.remove(key, value); }
+		@Override
+		public boolean removeOrDefault(short key, boolean defaultValue) { return map.removeOrDefault(key, defaultValue); }
+		@Override
+		public boolean containsKey(short key) { return map.containsKey(key); }
+		@Override
+		public boolean containsValue(boolean value) { return map.containsValue(value); }
+		@Override
+		public boolean replace(short key, boolean oldValue, boolean newValue) { return map.replace(key, oldValue, newValue); }
+		@Override
+		public boolean replace(short key, boolean value) { return map.replace(key, value); }
+		@Override
+		public void replaceBooleans(Short2BooleanMap m) { map.replaceBooleans(m); }
+		@Override
+		public void replaceBooleans(ShortBooleanUnaryOperator mappingFunction) { map.replaceBooleans(mappingFunction); }
+		@Override
+		public boolean computeBoolean(short key, ShortBooleanUnaryOperator mappingFunction) { return map.computeBoolean(key, mappingFunction); }
+		@Override
+		public boolean computeBooleanIfAbsent(short key, ShortPredicate mappingFunction) { return map.computeBooleanIfAbsent(key, mappingFunction); }
+		@Override
+		public boolean supplyBooleanIfAbsent(short key, BooleanSupplier valueProvider) { return map.supplyBooleanIfAbsent(key, valueProvider); }
+		@Override
+		public boolean computeBooleanIfPresent(short key, ShortBooleanUnaryOperator mappingFunction) { return map.computeBooleanIfPresent(key, mappingFunction); }
+		@Override
+		public boolean computeBooleanNonDefault(short key, ShortBooleanUnaryOperator mappingFunction) { return map.computeBooleanNonDefault(key, mappingFunction); }
+		@Override
+		public boolean computeBooleanIfAbsentNonDefault(short key, ShortPredicate mappingFunction) { return map.computeBooleanIfAbsentNonDefault(key, mappingFunction); }
+		@Override
+		public boolean supplyBooleanIfAbsentNonDefault(short key, BooleanSupplier valueProvider) { return map.supplyBooleanIfAbsentNonDefault(key, valueProvider); }
+		@Override
+		public boolean computeBooleanIfPresentNonDefault(short key, ShortBooleanUnaryOperator mappingFunction) { return map.computeBooleanIfPresentNonDefault(key, mappingFunction); }
+		@Override
+		public boolean mergeBoolean(short key, boolean value, BooleanBooleanUnaryOperator mappingFunction) { return map.mergeBoolean(key, value, mappingFunction); }
+		@Override
+		public boolean getOrDefault(short key, boolean defaultValue) { return map.getOrDefault(key, defaultValue); }
+		@Override
+		public boolean get(short key) { return map.get(key); }
+		@Override
+		public boolean putAndMoveToFirst(short key, boolean value) { return map.putAndMoveToLast(key, value); }
+		@Override
+		public boolean putAndMoveToLast(short key, boolean value) { return map.putAndMoveToFirst(key, value); }
+		@Override
+		public boolean putFirst(short key, boolean value) { return map.putLast(key, value); }
+		@Override
+		public boolean putLast(short key, boolean value) { return map.putFirst(key, value); }
+		@Override
+		public boolean moveToFirst(short key) { return map.moveToLast(key); }
+		@Override
+		public boolean moveToLast(short key) { return map.moveToFirst(key); }
+		@Override
+		public boolean getAndMoveToFirst(short key) { return map.getAndMoveToLast(key); }
+		@Override
+		public boolean getAndMoveToLast(short key) { return map.getAndMoveToFirst(key); }
+		@Override
+		public short firstShortKey() { return map.lastShortKey(); }
+		@Override
+		public short pollFirstShortKey() { return map.pollLastShortKey(); }
+		@Override
+		public short lastShortKey() { return map.firstShortKey(); }
+		@Override
+		public short pollLastShortKey() { return map.pollFirstShortKey(); }
+		@Override
+		public boolean firstBooleanValue() { return map.lastBooleanValue(); }
+		@Override
+		public boolean lastBooleanValue() { return map.firstBooleanValue(); }
+		@Override
+		public Short2BooleanMap.Entry firstEntry() { return map.lastEntry(); }
+		@Override
+		public Short2BooleanMap.Entry lastEntry() { return map.firstEntry(); }
+		@Override
+		public Short2BooleanMap.Entry pollFirstEntry() { return map.pollLastEntry(); }
+		@Override
+		public Short2BooleanMap.Entry pollLastEntry() { return map.pollFirstEntry(); }
+		@Override
+		public ObjectOrderedSet<Short2BooleanMap.Entry> short2BooleanEntrySet() { return new AbstractObjectSet.ReversedObjectOrderedSet<>(map.short2BooleanEntrySet()); }
+		@Override
+		public ShortOrderedSet keySet() { return new AbstractShortSet.ReversedShortOrderedSet(map.keySet()); }
+		@Override
+		public BooleanOrderedCollection values() { return map.values().reversed(); }
+		@Override
+		public Short2BooleanOrderedMap reversed() { return map; }
+	}
+
 	
 	/**
 	 * A Simple Type Specific Entry class to reduce boxing/unboxing

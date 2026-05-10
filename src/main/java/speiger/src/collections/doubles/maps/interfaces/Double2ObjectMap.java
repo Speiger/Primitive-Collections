@@ -95,7 +95,7 @@ public interface Double2ObjectMap<V> extends Map<Double, V>, DoubleFunction<V>
 	 * @return the last present value or default return	value.
 	 */
 	public default V put(Map.Entry<Double, V> entry) {
-		return put(entry.getKey(), entry.getValue());
+		return put(entry.getKey().doubleValue(), entry.getValue());
 	}
 
 	/**

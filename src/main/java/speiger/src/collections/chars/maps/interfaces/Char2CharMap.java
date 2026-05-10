@@ -93,7 +93,7 @@ public interface Char2CharMap extends Map<Character, Character>, CharUnaryOperat
 	 * @return the last present value or default return	value.
 	 */
 	public default Character put(Map.Entry<Character, Character> entry) {
-		return put(entry.getKey(), entry.getValue());
+		return put(entry.getKey().charValue(), entry.getValue().charValue());
 	}
 
 	/**

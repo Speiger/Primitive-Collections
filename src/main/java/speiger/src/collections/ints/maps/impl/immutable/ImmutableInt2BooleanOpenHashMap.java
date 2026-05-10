@@ -29,7 +29,7 @@ import speiger.src.collections.objects.functions.consumer.ObjectBooleanConsumer;
 import speiger.src.collections.booleans.functions.function.BooleanPredicate;
 import speiger.src.collections.ints.sets.AbstractIntSet;
 import speiger.src.collections.booleans.collections.AbstractBooleanCollection;
-import speiger.src.collections.booleans.collections.BooleanCollection;
+import speiger.src.collections.booleans.collections.BooleanOrderedCollection;
 import speiger.src.collections.booleans.collections.BooleanIterator;
 import speiger.src.collections.booleans.functions.BooleanSupplier;
 import speiger.src.collections.booleans.functions.function.BooleanBooleanUnaryOperator;
@@ -72,7 +72,7 @@ public class ImmutableInt2BooleanOpenHashMap extends AbstractInt2BooleanMap impl
 	/** KeySet cache */
 	protected transient IntOrderedSet keySet;
 	/** Values cache */
-	protected transient BooleanCollection valuesC;
+	protected transient BooleanOrderedCollection valuesC;
 	
 	/** Amount of Elements stored in the HashMap */
 	protected int size;
@@ -257,6 +257,10 @@ public class ImmutableInt2BooleanOpenHashMap extends AbstractInt2BooleanMap impl
 	@Override
 	public boolean putAndMoveToLast(int key, boolean value) { throw new UnsupportedOperationException(); }
 	@Override
+	public boolean putFirst(int key, boolean value) { throw new UnsupportedOperationException(); }
+	@Override
+	public boolean putLast(int key, boolean value) { throw new UnsupportedOperationException(); }
+	@Override
 	public boolean moveToFirst(int key) { throw new UnsupportedOperationException(); }
 	@Override
 	public boolean moveToLast(int key) { throw new UnsupportedOperationException(); }
@@ -359,7 +363,24 @@ public class ImmutableInt2BooleanOpenHashMap extends AbstractInt2BooleanMap impl
 	public boolean lastBooleanValue() {
 		if(size == 0) throw new NoSuchElementException();
 		return values[lastIndex];
-	}	
+	}
+	
+	@Override
+	public Int2BooleanMap.Entry firstEntry() {
+		if(size == 0) throw new NoSuchElementException();
+		return new BasicEntry(keys[firstIndex], values[firstIndex]);
+	}
+	
+	@Override
+	public Int2BooleanMap.Entry lastEntry() {
+		if(size == 0) throw new NoSuchElementException();
+		return new BasicEntry(keys[lastIndex], values[lastIndex]);
+	}
+	
+	@Override
+	public Int2BooleanMap.Entry pollFirstEntry() { throw new UnsupportedOperationException(); }
+	@Override
+	public Int2BooleanMap.Entry pollLastEntry() { throw new UnsupportedOperationException(); }
 
 	@Override
 	public ObjectOrderedSet<Int2BooleanMap.Entry> int2BooleanEntrySet() {
@@ -374,7 +395,7 @@ public class ImmutableInt2BooleanOpenHashMap extends AbstractInt2BooleanMap impl
 	}
 	
 	@Override
-	public BooleanCollection values() {
+	public BooleanOrderedCollection values() {
 		if(valuesC == null) valuesC = new Values();
 		return valuesC;
 	}
@@ -523,24 +544,29 @@ public class ImmutableInt2BooleanOpenHashMap extends AbstractInt2BooleanMap impl
 		public boolean moveToLast(Int2BooleanMap.Entry o) { throw new UnsupportedOperationException(); }
 		
 		@Override
-		public Int2BooleanMap.Entry first() {
+		public Int2BooleanMap.Entry getFirst() {
 			return new BasicEntry(firstIntKey(), firstBooleanValue());
 		}
 		
 		@Override
-		public Int2BooleanMap.Entry last() {
+		public Int2BooleanMap.Entry getLast() {
 			return new BasicEntry(lastIntKey(), lastBooleanValue());
 		}
 		
 		@Override
-		public Int2BooleanMap.Entry pollFirst() { throw new UnsupportedOperationException(); }
+		public Int2BooleanMap.Entry removeFirst() { throw new UnsupportedOperationException(); }
 		
 		@Override
-		public Int2BooleanMap.Entry pollLast() { throw new UnsupportedOperationException(); }
+		public Int2BooleanMap.Entry removeLast() { throw new UnsupportedOperationException(); }
 		
 		@Override
 		public ObjectBidirectionalIterator<Int2BooleanMap.Entry> iterator() {
-			return new EntryIterator();
+			return new EntryIterator(true);
+		}
+		
+		@Override
+		public ObjectBidirectionalIterator<Int2BooleanMap.Entry> reverseIterator() {
+			return new EntryIterator(false);
 		}
 		
 		@Override
@@ -550,7 +576,7 @@ public class ImmutableInt2BooleanOpenHashMap extends AbstractInt2BooleanMap impl
 		
 		@Override
 		public ObjectBidirectionalIterator<Int2BooleanMap.Entry> fastIterator() {
-			return new FastEntryIterator();
+			return new FastEntryIterator(true);
 		}
 		
 		@Override
@@ -765,7 +791,12 @@ public class ImmutableInt2BooleanOpenHashMap extends AbstractInt2BooleanMap impl
 		
 		@Override
 		public IntListIterator iterator() {
-			return new KeyIterator();
+			return new KeyIterator(true);
+		}
+		
+		@Override
+		public IntListIterator reverseIterator() {
+			return new KeyIterator(false);
 		}
 		
 		@Override
@@ -785,20 +816,20 @@ public class ImmutableInt2BooleanOpenHashMap extends AbstractInt2BooleanMap impl
 		public void clear() { throw new UnsupportedOperationException(); }
 		
 		@Override
-		public int firstInt() {
+		public int getFirstInt() {
 			return firstIntKey();
 		}
 		
 		@Override
-		public int pollFirstInt() { throw new UnsupportedOperationException(); }
+		public int removeFirstInt() { throw new UnsupportedOperationException(); }
 
 		@Override
-		public int lastInt() {
+		public int getLastInt() {
 			return lastIntKey();
 		}
 
 		@Override
-		public int pollLastInt() { throw new UnsupportedOperationException(); }
+		public int removeLastInt() { throw new UnsupportedOperationException(); }
 		
 		@Override
 		public void forEach(IntConsumer action) {
@@ -925,30 +956,35 @@ public class ImmutableInt2BooleanOpenHashMap extends AbstractInt2BooleanMap impl
 		}
 	}
 	
-	private class Values extends AbstractBooleanCollection {
+	private class Values extends AbstractBooleanCollection implements BooleanOrderedCollection {
 		@Override
-		public boolean contains(boolean e) {
-			return containsValue(e);
-		}
+		public boolean contains(boolean e) { return containsValue(e); }
 		
 		@Override
-		public boolean add(boolean o) {
-			throw new UnsupportedOperationException();
-		}
-
+		public boolean add(boolean o) { throw new UnsupportedOperationException(); }
 		@Override
-		public BooleanIterator iterator() {
-			return new ValueIterator();
-		}
-		
+		public BooleanIterator iterator() { return new ValueIterator(true); }
 		@Override
-		public int size() {
-			return ImmutableInt2BooleanOpenHashMap.this.size();
-		}
-		
+		public int size() { return ImmutableInt2BooleanOpenHashMap.this.size(); }
 		@Override
 		public void clear() { throw new UnsupportedOperationException(); }
-		
+		@Override
+		public BooleanOrderedCollection reversed() { return new AbstractBooleanCollection.ReverseBooleanOrderedCollection(this, this::reverseIterator); }
+		private BooleanIterator reverseIterator() {
+			return new ValueIterator(false);
+		}
+		@Override
+		public void addFirst(boolean e) { throw new UnsupportedOperationException(); }
+		@Override
+		public void addLast(boolean e) { throw new UnsupportedOperationException(); }
+		@Override
+		public boolean getFirstBoolean() { return firstBooleanValue(); }
+		@Override
+		public boolean removeFirstBoolean() { throw new UnsupportedOperationException(); }
+		@Override
+		public boolean getLastBoolean() { return lastBooleanValue(); }
+		@Override
+		public boolean removeLastBoolean() { throw new UnsupportedOperationException(); }
 		@Override
 		public void forEach(BooleanConsumer action) {
 			int index = firstIndex;
@@ -1077,7 +1113,7 @@ public class ImmutableInt2BooleanOpenHashMap extends AbstractInt2BooleanMap impl
 	private class FastEntryIterator extends MapIterator implements ObjectListIterator<Int2BooleanMap.Entry> {
 		MapEntry entry = new MapEntry();
 		
-		public FastEntryIterator() {}
+		public FastEntryIterator(boolean start) { super(start); }
 		public FastEntryIterator(int from) {
 			super(from);
 		}
@@ -1103,7 +1139,7 @@ public class ImmutableInt2BooleanOpenHashMap extends AbstractInt2BooleanMap impl
 	
 	private class EntryIterator extends MapIterator implements ObjectListIterator<Int2BooleanMap.Entry> {
 		
-		public EntryIterator() {}
+		public EntryIterator(boolean start) { super(start); }
 		public EntryIterator(int from) {
 			super(from);
 		}
@@ -1130,7 +1166,7 @@ public class ImmutableInt2BooleanOpenHashMap extends AbstractInt2BooleanMap impl
 	
 	private class KeyIterator extends MapIterator implements IntListIterator {
 		
-		public KeyIterator() {}
+		public KeyIterator(boolean start) { super(start); }
 		public KeyIterator(int from) {
 			super(from);
 		}
@@ -1152,7 +1188,7 @@ public class ImmutableInt2BooleanOpenHashMap extends AbstractInt2BooleanMap impl
 	}
 	
 	private class ValueIterator extends MapIterator implements BooleanListIterator {
-		public ValueIterator() {}
+		public ValueIterator(boolean start) { super(start); }
 		
 		@Override
 		public boolean previousBoolean() {
@@ -1173,13 +1209,16 @@ public class ImmutableInt2BooleanOpenHashMap extends AbstractInt2BooleanMap impl
 	}
 	
 	private class MapIterator {
+		boolean forward;
 		int previous = -1;
 		int next = -1;
 		int current = -1;
 		int index = 0;
 		
-		MapIterator() {
-			next = firstIndex;
+		MapIterator(boolean start) {
+			this.forward = start;
+			if(start) next = firstIndex;
+			else previous = lastIndex;
 		}
 		
 		MapIterator(int from) {
@@ -1210,11 +1249,11 @@ public class ImmutableInt2BooleanOpenHashMap extends AbstractInt2BooleanMap impl
 		}
 		
 		public boolean hasNext() {
-			return next != -1;
+			return (forward ? next : previous) != -1;
 		}
 
 		public boolean hasPrevious() {
-			return previous != -1;
+			return (forward ? previous : next) != -1;
 		}
 		
 		public int nextIndex() {
@@ -1231,20 +1270,30 @@ public class ImmutableInt2BooleanOpenHashMap extends AbstractInt2BooleanMap impl
 		
 		public int previousEntry() {
 			if(!hasPrevious()) throw new NoSuchElementException();
-			current = previous;
-			previous = (int)(links[current] >> 32);
-			next = current;
+			if(forward) moveBackwards();
+			else moveForwards();
 			if(index >= 0) index--;
 			return current;
 		}
 		
 		public int nextEntry() {
 			if(!hasNext()) throw new NoSuchElementException();
+			if(forward) moveForwards();
+			else moveBackwards();
+			if(index >= 0) index++;
+			return current;
+		}
+		
+		private void moveBackwards() {
+			current = previous;
+			previous = (int)(links[current] >> 32);
+			next = current;
+		}
+		
+		private void moveForwards() {
 			current = next;
 			next = (int)(links[current]);
 			previous = current;
-			if(index >= 0) index++;
-			return current;
 		}
 		
 		private void ensureIndexKnown() {

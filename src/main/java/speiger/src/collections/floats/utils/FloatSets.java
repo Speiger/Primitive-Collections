@@ -312,17 +312,19 @@ public class FloatSets
 		@Override
 		public FloatBidirectionalIterator iterator() { return FloatIterators.unmodifiable(s.iterator()); }
 		@Override
+		public FloatBidirectionalIterator reverseIterator() { return FloatIterators.unmodifiable(s.reverseIterator()); }
+		@Override
 		public FloatBidirectionalIterator iterator(float fromElement) { return FloatIterators.unmodifiable(s.iterator(fromElement)); }
 		@Override
 		public FloatOrderedSet copy() { return s.copy(); }
 		@Override
-		public float firstFloat() { return s.firstFloat(); }
+		public float getFirstFloat() { return s.getFirstFloat(); }
 		@Override
-		public float pollFirstFloat() { throw new UnsupportedOperationException(); }
+		public float removeFirstFloat() { throw new UnsupportedOperationException(); }
 		@Override
-		public float lastFloat() { return s.lastFloat(); }
+		public float getLastFloat() { return s.getLastFloat(); }
 		@Override
-		public float pollLastFloat() { throw new UnsupportedOperationException(); }
+		public float removeLastFloat() { throw new UnsupportedOperationException(); }
 	}
 	
 	private static class UnmodifiableSortedSet extends UnmodifiableSet implements FloatSortedSet
@@ -583,17 +585,19 @@ public class FloatSets
 		@Override
 		public FloatBidirectionalIterator iterator() { synchronized(mutex) { return s.iterator(); } }
 		@Override
+		public FloatBidirectionalIterator reverseIterator() { synchronized(mutex) { return s.reverseIterator(); } }
+		@Override
 		public FloatBidirectionalIterator iterator(float fromElement) { synchronized(mutex) { return s.iterator(fromElement); } }
 		@Override
 		public FloatOrderedSet copy() { synchronized(mutex) { return s.copy(); } }
 		@Override
-		public float firstFloat() { synchronized(mutex) { return s.firstFloat(); } }
+		public float getFirstFloat() { synchronized(mutex) { return s.getFirstFloat(); } }
 		@Override
-		public float pollFirstFloat() { synchronized(mutex) { return s.pollFirstFloat(); } }
+		public float removeFirstFloat() { synchronized(mutex) { return s.removeFirstFloat(); } }
 		@Override
-		public float lastFloat() { synchronized(mutex) { return s.lastFloat(); } }
+		public float getLastFloat() { synchronized(mutex) { return s.getLastFloat(); } }
 		@Override
-		public float pollLastFloat() { synchronized(mutex) { return s.pollLastFloat(); } }
+		public float removeLastFloat() { synchronized(mutex) { return s.removeLastFloat(); } }
 	}
 	
 	private static class SynchronizedTrimSet extends SynchronizedSet implements ITrimmable

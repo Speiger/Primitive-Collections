@@ -29,7 +29,7 @@ public class IntLists
 	 * Returns a Immutable EmptyList instance that is automatically casted.
 	 * @return an empty list
 	 */
-	public static EmptyList empty() {
+	public static IntList empty() {
 		return EMPTY;
 	}
 	

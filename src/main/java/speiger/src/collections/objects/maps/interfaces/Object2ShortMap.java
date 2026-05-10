@@ -96,7 +96,7 @@ public interface Object2ShortMap<T> extends Map<T, Short>, ToShortFunction<T>
 	 * @return the last present value or default return	value.
 	 */
 	public default Short put(Map.Entry<T, Short> entry) {
-		return put(entry.getKey(), entry.getValue());
+		return put(entry.getKey(), entry.getValue().shortValue());
 	}
 
 	/**

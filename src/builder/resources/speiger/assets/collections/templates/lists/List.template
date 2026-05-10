@@ -15,7 +15,10 @@ import java.util.function.UnaryOperator;
 #endif
 
 import speiger.src.collections.PACKAGE.collections.COLLECTION;
+import speiger.src.collections.PACKAGE.collections.ORDERED_COLLECTION;
+#if SPLIT_ITERATOR_FEATURE
 import speiger.src.collections.PACKAGE.collections.SPLIT_ITERATOR;
+#endif
 import speiger.src.collections.ints.functions.consumer.BI_FROM_INT_CONSUMER;
 #if !TYPE_OBJECT
 import speiger.src.collections.PACKAGE.functions.COMPARATOR;
@@ -27,7 +30,9 @@ import speiger.src.collections.PACKAGE.utils.LISTS;
 #if INT_LIST_MODULE && !TYPE_INT
 import speiger.src.collections.ints.lists.IntList;
 #endif
+#if SPLIT_ITERATOR_FEATURE
 import speiger.src.collections.PACKAGE.utils.SPLIT_ITERATORS;
+#endif
 #if TYPE_BYTE || TYPE_SHORT || TYPE_CHAR || TYPE_FLOAT
 import speiger.src.collections.utils.SanityChecks;
 #endif
@@ -36,7 +41,7 @@ import speiger.src.collections.utils.SanityChecks;
  * A Type Specific List interface that reduces boxing/unboxing and adds a couple extra quality of life features
  * @Type(T)
  */
-public interface LIST KEY_GENERIC_TYPE extends COLLECTION KEY_GENERIC_TYPE, List<CLASS_TYPE>
+public interface LIST KEY_GENERIC_TYPE extends ORDERED_COLLECTION KEY_GENERIC_TYPE, List<CLASS_TYPE>
 {
 #if !TYPE_OBJECT
 	/**
@@ -100,6 +105,24 @@ public interface LIST KEY_GENERIC_TYPE extends COLLECTION KEY_GENERIC_TYPE, List
 	 * @return true if the list was modified
 	 */
 	public boolean addAll(int index, LIST KEY_GENERIC_TYPE c);
+	
+	/**
+	 * A method to add an element to the start of a list
+	 * @param e that should be added at the start.
+	 */
+	@Override
+	public default void addFirst(KEY_TYPE e) { 
+		add(0, e);
+	}
+	
+	/**
+	 * A method to add an element to the end of a list
+	 * @param e that should be added at the end.
+	 */
+	@Override
+	public default void addLast(KEY_TYPE e) {
+		add(e);
+	}
 	
 	/**
 	 * Helper method that returns the first element of a List.
@@ -504,9 +527,56 @@ public interface LIST KEY_GENERIC_TYPE extends COLLECTION KEY_GENERIC_TYPE, List
 	@Override
 	@Deprecated
 	public default boolean add(CLASS_TYPE e) {
-		return COLLECTION.super.add(e);
+		return ORDERED_COLLECTION.super.add(e);
+	}
+
+#if JAVA_VERSION>=21
+#if !TYPE_OBJECT
+	/** {@inheritDoc}
+	 * <p>This default implementation delegates to the corresponding type-specific function.
+	 * @deprecated Please use the corresponding type-specific function instead. 
+	 */
+	@Override
+	@Deprecated
+	default void addFirst(CLASS_TYPE e) {
+		addFirst(OBJ_TO_KEY(e));
+	}
+	/** {@inheritDoc}
+	 * <p>This default implementation delegates to the corresponding type-specific function.
+	 * @deprecated Please use the corresponding type-specific function instead. 
+	 */
+	@Override
+	@Deprecated
+	default void addLast(CLASS_TYPE e) {
+		addLast(OBJ_TO_KEY(e));
 	}
 	
+#endif
+	@Override
+	@Deprecated
+	default CLASS_TYPE getFirst() {
+		return KEY_TO_OBJ(GET_FIRST_KEY());
+	}
+	
+	@Override
+	@Deprecated
+	default CLASS_TYPE getLast() {
+		return KEY_TO_OBJ(GET_LAST_KEY());
+	}
+	
+	@Override
+	@Deprecated
+	default CLASS_TYPE removeFirst() {
+		return KEY_TO_OBJ(REMOVE_FIRST_KEY());
+	}
+	
+	@Override
+	@Deprecated
+	default CLASS_TYPE removeLast() {
+		return KEY_TO_OBJ(REMOVE_LAST_KEY());
+	}
+	
+#endif
 	/** {@inheritDoc}
 	 * <p>This default implementation delegates to the corresponding type-specific function.
 	 * @deprecated Please use the corresponding type-specific function instead. 
@@ -554,7 +624,7 @@ public interface LIST KEY_GENERIC_TYPE extends COLLECTION KEY_GENERIC_TYPE, List
 	@Override
 	@Deprecated
 	public default boolean contains(Object o) {
-		return COLLECTION.super.contains(o);
+		return ORDERED_COLLECTION.super.contains(o);
 	}
 	
 	/** {@inheritDoc}
@@ -564,7 +634,7 @@ public interface LIST KEY_GENERIC_TYPE extends COLLECTION KEY_GENERIC_TYPE, List
 	@Override
 	@Deprecated
 	public default boolean remove(Object o) {
-		return COLLECTION.super.remove(o);
+		return ORDERED_COLLECTION.super.remove(o);
 	}
 	
 	/** {@inheritDoc}
@@ -594,10 +664,12 @@ public interface LIST KEY_GENERIC_TYPE extends COLLECTION KEY_GENERIC_TYPE, List
 	}
 #endif
 #endif
+#if SPLIT_ITERATOR_FEATURE
 	/**
 	 * A Type Specific Type Splititerator to reduce boxing/unboxing
 	 * @return type specific splititerator
 	 */
 	@Override
 	default SPLIT_ITERATOR KEY_GENERIC_TYPE spliterator() { return SPLIT_ITERATORS.createSplititerator(this, 0); }
+#endif
 }

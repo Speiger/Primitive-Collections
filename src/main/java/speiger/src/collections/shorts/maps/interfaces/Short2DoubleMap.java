@@ -94,7 +94,7 @@ public interface Short2DoubleMap extends Map<Short, Double>, Short2DoubleFunctio
 	 * @return the last present value or default return	value.
 	 */
 	public default Double put(Map.Entry<Short, Double> entry) {
-		return put(entry.getKey(), entry.getValue());
+		return put(entry.getKey().shortValue(), entry.getValue().doubleValue());
 	}
 
 	/**

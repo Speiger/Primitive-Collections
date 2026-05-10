@@ -1,15 +1,26 @@
 package speiger.src.builder.modules;
 
 import java.util.Arrays;
-import java.util.Set;
-import java.util.TreeSet;
+import java.util.List;
 
 import speiger.src.builder.ClassType;
+import speiger.src.builder.dependencies.FunctionDependency;
+import speiger.src.builder.dependencies.IDependency;
+import speiger.src.builder.dependencies.ModuleDependency;
 
 @SuppressWarnings("javadoc")
 public class PrioQueueModule extends BaseModule
 {
 	public static final BaseModule INSTANCE = new PrioQueueModule();
+	public static final ModuleDependency MODULE = new ModuleDependency(INSTANCE, false).addKeyDependency(CollectionModule.MODULE);
+	public static final FunctionDependency IMPLEMENTATION = MODULE.createDependency("Implementations");
+	public static final FunctionDependency WRAPPERS = MODULE.createDependency("Wrappers");
+	public static final FunctionDependency DEQUEUE = MODULE.createDependency("Dequeue");
+	
+	public static final FunctionDependency FIFO_QUEUE = MODULE.createDependency("FiFoQueue").addKeyDependency(DEQUEUE).addKeyDependency(IMPLEMENTATION);
+	public static final FunctionDependency HEAP_QUEUE = MODULE.createDependency("HeapQueue").addKeyDependency(IMPLEMENTATION);
+	public static final FunctionDependency ARRAY_PRIO_QUEUE = MODULE.createDependency("ArrayPrioQueue").addKeyDependency(IMPLEMENTATION);
+	
 	
 	@Override
 	public String getModuleName() { return "PriorityQueue"; }
@@ -18,36 +29,26 @@ public class PrioQueueModule extends BaseModule
 	@Override
 	protected void loadFunctions() {}
 	@Override
-	public boolean areDependenciesLoaded() { return isDependencyLoaded(CollectionModule.INSTANCE); }
-	
-	@Override
-	public Set<String> getModuleKeys(ClassType keyType, ClassType valueType) {
-		return new TreeSet<>(Arrays.asList("Wrappers", "Implementations", "Dequeue", "FiFoQueue", "HeapQueue", "ArrayPrioQueue"));
-	}
+	public List<IDependency> getDependencies(ClassType keyType, ClassType valueType) { return Arrays.asList(MODULE, WRAPPERS, IMPLEMENTATION, DEQUEUE, FIFO_QUEUE, HEAP_QUEUE, ARRAY_PRIO_QUEUE); }
 	
 	@Override
 	protected void loadFlags() {
-		if(isModuleEnabled()) addFlag("QUEUE_MODULE");
-		if(isModuleEnabled("Wrappers")) addKeyFlag("QUEUES_FEATURE");
-		boolean implementations = isModuleEnabled("Implementations");
-		if(isModuleEnabled("Dequeue")) {
-			addKeyFlag("DEQUEUE_FEATURE");
-			if(implementations && isModuleEnabled("FiFoQueue")) addKeyFlag("FIFO_QUEUE_FEATURE");
-		}
-		if(implementations && isModuleEnabled("HeapQueue")) addKeyFlag("HEAP_QUEUE_FEATURE");
-		if(implementations && isModuleEnabled("ArrayPrioQueue")) addKeyFlag("ARRAY_QUEUE_FEATURE");
+		if(MODULE.isEnabled()) addFlag("QUEUE_MODULE");
+		if(WRAPPERS.isEnabled()) addKeyFlag("QUEUES_FEATURE");
+		if(DEQUEUE.isEnabled()) addKeyFlag("DEQUEUE_FEATURE");
+		if(FIFO_QUEUE.isEnabled()) addKeyFlag("FIFO_QUEUE_FEATURE");
+		if(HEAP_QUEUE.isEnabled()) addKeyFlag("HEAP_QUEUE_FEATURE");
+		if(ARRAY_PRIO_QUEUE.isEnabled()) addKeyFlag("ARRAY_QUEUE_FEATURE");
 	}
 	
 	@Override
 	protected void loadBlockades() {
-		if(!isModuleEnabled()) addBlockedFiles("PriorityQueue", "AbstractPriorityQueue");
-		if(!isModuleEnabled("Wrappers")) addBlockedFiles("PriorityQueues");
-		boolean implementations = !isModuleEnabled("Implementations");
-		boolean dequeue = !isModuleEnabled("Dequeue");
-		if(dequeue) addBlockedFiles("PriorityDequeue"); 
-		if(dequeue || implementations || !isModuleEnabled("FiFoQueue")) addBlockedFiles("ArrayFIFOQueue");
-		if(implementations || !isModuleEnabled("HeapQueue")) addBlockedFiles("HeapPriorityQueue");
-		if(implementations || !isModuleEnabled("ArrayPrioQueue")) addBlockedFiles("ArrayPriorityQueue");
+		if(!MODULE.isEnabled()) addBlockedFiles("PriorityQueue", "AbstractPriorityQueue");
+		if(!WRAPPERS.isEnabled()) addBlockedFiles("PriorityQueues");
+		if(!DEQUEUE.isEnabled()) addBlockedFiles("PriorityDequeue");
+		if(!FIFO_QUEUE.isEnabled()) addBlockedFiles("ArrayFIFOQueue");
+		if(!HEAP_QUEUE.isEnabled()) addBlockedFiles("HeapPriorityQueue");
+		if(!ARRAY_PRIO_QUEUE.isEnabled()) addBlockedFiles("ArrayPriorityQueue");
 		
 		if(keyType == ClassType.BOOLEAN) {
 			addBlockedFiles("QueueTests");

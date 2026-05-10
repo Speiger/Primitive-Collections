@@ -94,7 +94,7 @@ public interface Double2BooleanMap extends Map<Double, Boolean>, DoublePredicate
 	 * @return the last present value or default return	value.
 	 */
 	public default Boolean put(Map.Entry<Double, Boolean> entry) {
-		return put(entry.getKey(), entry.getValue());
+		return put(entry.getKey().doubleValue(), entry.getValue().booleanValue());
 	}
 
 	/**

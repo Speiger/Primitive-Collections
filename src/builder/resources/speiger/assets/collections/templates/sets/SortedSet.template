@@ -3,7 +3,9 @@ package speiger.src.collections.PACKAGE.sets;
 import java.util.SortedSet;
 
 import speiger.src.collections.PACKAGE.collections.BI_ITERATOR;
+#if SPLIT_ITERATOR_FEATURE
 import speiger.src.collections.PACKAGE.collections.SPLIT_ITERATOR;
+#endif
 #if TYPE_OBJECT
 import java.util.Comparator;
 #else
@@ -12,7 +14,9 @@ import speiger.src.collections.PACKAGE.functions.COMPARATOR;
 #if SETS_FEATURE
 import speiger.src.collections.PACKAGE.utils.SETS;
 #endif
+#if SPLIT_ITERATOR_FEATURE
 import speiger.src.collections.PACKAGE.utils.SPLIT_ITERATORS;
+#endif
 
 /**
  * A Type Specific SortedSet implementation to reduce boxing/unboxing
@@ -67,6 +71,7 @@ public interface SORTED_SET KEY_GENERIC_TYPE extends SET KEY_GENERIC_TYPE, Sorte
 	public default SORTED_SET KEY_GENERIC_TYPE unmodifiable() { return SETS.unmodifiable(this); }
 	
 #endif
+#if SPLIT_ITERATOR_FEATURE
 	/**
 	 * A Type Specific Type Splititerator to reduce boxing/unboxing
 	 * @return type specific splititerator
@@ -74,6 +79,7 @@ public interface SORTED_SET KEY_GENERIC_TYPE extends SET KEY_GENERIC_TYPE, Sorte
 	@Override
 	default SPLIT_ITERATOR KEY_GENERIC_TYPE spliterator() { return SPLIT_ITERATORS.createSplititerator(this, 0); }
 	
+#endif
 #if !TYPE_OBJECT
 	/**
 	 * A Type Specific SubSet method to reduce boxing/unboxing

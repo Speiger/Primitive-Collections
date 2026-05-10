@@ -1,6 +1,8 @@
 package speiger.src.collections.floats.maps.interfaces;
 
 import speiger.src.collections.floats.utils.maps.Float2FloatMaps;
+import speiger.src.collections.floats.maps.abstracts.AbstractFloat2FloatMap;
+import speiger.src.collections.floats.collections.FloatOrderedCollection;
 import speiger.src.collections.floats.sets.FloatOrderedSet;
 import speiger.src.collections.objects.collections.ObjectBidirectionalIterator;
 import speiger.src.collections.objects.sets.ObjectOrderedSet;
@@ -30,6 +32,26 @@ public interface Float2FloatOrderedMap extends Float2FloatMap
 	 * @see java.util.Map#put(Object, Object)
 	 */
 	public float putAndMoveToLast(float key, float value);
+	
+	/**
+	 * A alternative to putAndMoveToFirst.
+	 * This method simply puts an entry at the first spot of the Map but only if the entry is missing.
+	 * @param key the key that should be inserted
+	 * @param value the value that should be inserted
+	 * @return the previous present or default return value
+	 * @see java.util.Map#put(Object, Object)
+	 */
+	public float putFirst(float key, float value);
+	
+	/**
+	 * A alternative to putAndMoveToLast.
+	 * This method simply puts an entry at the last spot of the Map but only if the entry is missing.
+	 * @param key the key that should be inserted
+	 * @param value the value that should be inserted
+	 * @return the previous present or default return value
+	 * @see java.util.Map#put(Object, Object)
+	 */
+	public float putLast(float key, float value);
 	
 	/**
 	 * A specific move method to move a given key/value to the first index.
@@ -91,12 +113,24 @@ public interface Float2FloatOrderedMap extends Float2FloatMap
 	 */
 	public float lastFloatValue();
 	
+	
+	public Float2FloatMap.Entry firstEntry();
+	
+	public Float2FloatMap.Entry lastEntry();
+	
+	public Float2FloatMap.Entry pollFirstEntry();
+	
+	public Float2FloatMap.Entry pollLastEntry();
 	@Override
 	public Float2FloatOrderedMap copy();
 	@Override
 	public FloatOrderedSet keySet();
 	@Override
+	public FloatOrderedCollection values();
+	@Override
 	public ObjectOrderedSet<Float2FloatMap.Entry> float2FloatEntrySet();
+	
+	public default Float2FloatOrderedMap reversed() { return new AbstractFloat2FloatMap.ReversedFloat2FloatOrderedMap(this); }
 	
 	/**
 	 * Creates a Wrapped SortedMap that is Synchronized

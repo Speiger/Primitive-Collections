@@ -1,6 +1,8 @@
 package speiger.src.collections.floats.maps.interfaces;
 
 import speiger.src.collections.floats.utils.maps.Float2CharMaps;
+import speiger.src.collections.floats.maps.abstracts.AbstractFloat2CharMap;
+import speiger.src.collections.chars.collections.CharOrderedCollection;
 import speiger.src.collections.floats.sets.FloatOrderedSet;
 import speiger.src.collections.objects.collections.ObjectBidirectionalIterator;
 import speiger.src.collections.objects.sets.ObjectOrderedSet;
@@ -30,6 +32,26 @@ public interface Float2CharOrderedMap extends Float2CharMap
 	 * @see java.util.Map#put(Object, Object)
 	 */
 	public char putAndMoveToLast(float key, char value);
+	
+	/**
+	 * A alternative to putAndMoveToFirst.
+	 * This method simply puts an entry at the first spot of the Map but only if the entry is missing.
+	 * @param key the key that should be inserted
+	 * @param value the value that should be inserted
+	 * @return the previous present or default return value
+	 * @see java.util.Map#put(Object, Object)
+	 */
+	public char putFirst(float key, char value);
+	
+	/**
+	 * A alternative to putAndMoveToLast.
+	 * This method simply puts an entry at the last spot of the Map but only if the entry is missing.
+	 * @param key the key that should be inserted
+	 * @param value the value that should be inserted
+	 * @return the previous present or default return value
+	 * @see java.util.Map#put(Object, Object)
+	 */
+	public char putLast(float key, char value);
 	
 	/**
 	 * A specific move method to move a given key/value to the first index.
@@ -91,12 +113,24 @@ public interface Float2CharOrderedMap extends Float2CharMap
 	 */
 	public char lastCharValue();
 	
+	
+	public Float2CharMap.Entry firstEntry();
+	
+	public Float2CharMap.Entry lastEntry();
+	
+	public Float2CharMap.Entry pollFirstEntry();
+	
+	public Float2CharMap.Entry pollLastEntry();
 	@Override
 	public Float2CharOrderedMap copy();
 	@Override
 	public FloatOrderedSet keySet();
 	@Override
+	public CharOrderedCollection values();
+	@Override
 	public ObjectOrderedSet<Float2CharMap.Entry> float2CharEntrySet();
+	
+	public default Float2CharOrderedMap reversed() { return new AbstractFloat2CharMap.ReversedFloat2CharOrderedMap(this); }
 	
 	/**
 	 * Creates a Wrapped SortedMap that is Synchronized

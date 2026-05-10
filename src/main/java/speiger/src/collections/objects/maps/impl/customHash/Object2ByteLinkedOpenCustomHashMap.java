@@ -20,7 +20,7 @@ import speiger.src.collections.objects.sets.AbstractObjectSet;
 import speiger.src.collections.objects.sets.ObjectOrderedSet;
 import speiger.src.collections.objects.utils.ObjectStrategy;
 import speiger.src.collections.bytes.collections.AbstractByteCollection;
-import speiger.src.collections.bytes.collections.ByteCollection;
+import speiger.src.collections.bytes.collections.ByteOrderedCollection;
 import speiger.src.collections.bytes.collections.ByteIterator;
 import speiger.src.collections.bytes.functions.function.ByteByteUnaryOperator;
 import speiger.src.collections.bytes.functions.ByteConsumer;
@@ -250,6 +250,54 @@ public class Object2ByteLinkedOpenCustomHashMap<T> extends Object2ByteOpenCustom
 	}
 	
 	@Override
+	public byte putFirst(T key, byte value) {
+		if(strategy.equals(key, null)) {
+			if(containsNull) return values[nullIndex];
+			values[nullIndex] = value;
+			containsNull = true;
+			onNodeAdded(nullIndex);
+			moveToFirstIndex(nullIndex);
+		}
+		else {
+			int pos = HashUtil.mix(strategy.hashCode(key)) & mask;
+			while(!strategy.equals(keys[pos], null)) {
+				if(strategy.equals(keys[pos], key)) return values[pos];
+				pos = ++pos & mask;
+			}
+			keys[pos] = key;
+			values[pos] = value;
+			onNodeAdded(pos);
+			moveToFirstIndex(pos);
+		}
+		if(size++ >= maxFill) rehash(HashUtil.arraySize(size+1, loadFactor));
+		return getDefaultReturnValue();
+	}
+	
+	@Override
+	public byte putLast(T key, byte value) {
+		if(strategy.equals(key, null)) {
+			if(containsNull) return values[nullIndex];
+			values[nullIndex] = value;
+			containsNull = true;
+			onNodeAdded(nullIndex);
+			moveToLastIndex(nullIndex);
+		}
+		else {
+			int pos = HashUtil.mix(strategy.hashCode(key)) & mask;
+			while(!strategy.equals(keys[pos], null)) {
+				if(strategy.equals(keys[pos], key)) return values[pos];
+				pos = ++pos & mask;
+			}
+			keys[pos] = key;
+			values[pos] = value;
+			onNodeAdded(pos);
+			moveToLastIndex(pos);
+		}
+		if(size++ >= maxFill) rehash(HashUtil.arraySize(size+1, loadFactor));
+		return getDefaultReturnValue();
+	}
+	
+	@Override
 	public boolean moveToFirst(T key) {
 		if(isEmpty() || strategy.equals(firstKey(), key)) return false;
 		if(strategy.equals(key, null)) {
@@ -385,6 +433,52 @@ public class Object2ByteLinkedOpenCustomHashMap<T> extends Object2ByteOpenCustom
 	}
 	
 	@Override
+	public Object2ByteMap.Entry<T> firstEntry() {
+		if(size == 0) throw new NoSuchElementException();
+		return new BasicEntry<>(keys[firstIndex], values[firstIndex]);
+	}
+	
+	@Override
+	public Object2ByteMap.Entry<T> lastEntry() {
+		if(size == 0) throw new NoSuchElementException();
+		return new BasicEntry<>(keys[lastIndex], values[lastIndex]);
+	}
+	
+	@Override
+	public Object2ByteMap.Entry<T> pollFirstEntry() {
+		if(size == 0) throw new NoSuchElementException();
+		int pos = firstIndex;
+		onNodeRemoved(pos);
+		BasicEntry<T> result = new BasicEntry<>(keys[pos], values[pos]);
+		size--;
+		if(strategy.equals(result.getKey(), null)) {
+			containsNull = false;
+			keys[nullIndex] = null;
+			values[nullIndex] = (byte)0;
+		}
+		else shiftKeys(pos);
+		if(nullIndex > minCapacity && size < maxFill / 4 && nullIndex > HashUtil.DEFAULT_MIN_CAPACITY) rehash(nullIndex / 2);
+		return result;
+	}
+	
+	@Override
+	public Object2ByteMap.Entry<T> pollLastEntry() {
+		if(size == 0) throw new NoSuchElementException();
+		int pos = lastIndex;
+		onNodeRemoved(pos);
+		BasicEntry<T> result = new BasicEntry<>(keys[pos], values[pos]);
+		size--;
+		if(strategy.equals(result.getKey(), null)) {
+			containsNull = false;
+			keys[nullIndex] = null;
+			values[nullIndex] = (byte)0;
+		}
+		else shiftKeys(pos);
+		if(nullIndex > minCapacity && size < maxFill / 4 && nullIndex > HashUtil.DEFAULT_MIN_CAPACITY) rehash(nullIndex / 2);
+		return result;
+	}
+	
+	@Override
 	public ObjectOrderedSet<Object2ByteMap.Entry<T>> object2ByteEntrySet() {
 		if(entrySet == null) entrySet = new MapEntrySet();
 		return (ObjectOrderedSet<Object2ByteMap.Entry<T>>)entrySet;
@@ -397,9 +491,9 @@ public class Object2ByteLinkedOpenCustomHashMap<T> extends Object2ByteOpenCustom
 	}
 	
 	@Override
-	public ByteCollection values() {
+	public ByteOrderedCollection values() {
 		if(valuesC == null) valuesC = new Values();
-		return valuesC;
+		return (ByteOrderedCollection)valuesC;
 	}
 	
 	@Override
@@ -584,24 +678,24 @@ public class Object2ByteLinkedOpenCustomHashMap<T> extends Object2ByteOpenCustom
 		}
 		
 		@Override
-		public Object2ByteMap.Entry<T> first() {
+		public Object2ByteMap.Entry<T> getFirst() {
 			return new BasicEntry<>(firstKey(), firstByteValue());
 		}
 		
 		@Override
-		public Object2ByteMap.Entry<T> last() {
+		public Object2ByteMap.Entry<T> getLast() {
 			return new BasicEntry<>(lastKey(), lastByteValue());
 		}
 		
 		@Override
-		public Object2ByteMap.Entry<T> pollFirst() {
+		public Object2ByteMap.Entry<T> removeFirst() {
 			BasicEntry<T> entry = new BasicEntry<>(firstKey(), firstByteValue());
 			pollFirstKey();
 			return entry;
 		}
 		
 		@Override
-		public Object2ByteMap.Entry<T> pollLast() {
+		public Object2ByteMap.Entry<T> removeLast() {
 			BasicEntry<T> entry = new BasicEntry<>(lastKey(), lastByteValue());
 			pollLastKey();
 			return entry;
@@ -609,7 +703,12 @@ public class Object2ByteLinkedOpenCustomHashMap<T> extends Object2ByteOpenCustom
 		
 		@Override
 		public ObjectBidirectionalIterator<Object2ByteMap.Entry<T>> iterator() {
-			return new EntryIterator();
+			return new EntryIterator(true);
+		}
+		
+		@Override
+		public ObjectBidirectionalIterator<Object2ByteMap.Entry<T>> reverseIterator() {
+			return new EntryIterator(false);
 		}
 		
 		@Override
@@ -619,7 +718,7 @@ public class Object2ByteLinkedOpenCustomHashMap<T> extends Object2ByteOpenCustom
 		
 		@Override
 		public ObjectBidirectionalIterator<Object2ByteMap.Entry<T>> fastIterator() {
-			return new FastEntryIterator();
+			return new FastEntryIterator(true);
 		}
 		
 		@Override
@@ -855,7 +954,12 @@ public class Object2ByteLinkedOpenCustomHashMap<T> extends Object2ByteOpenCustom
 		
 		@Override
 		public ObjectListIterator<T> iterator() {
-			return new KeyIterator();
+			return new KeyIterator(true);
+		}
+		
+		@Override
+		public ObjectListIterator<T> reverseIterator() {
+			return new KeyIterator(false);
 		}
 		
 		@Override
@@ -877,22 +981,22 @@ public class Object2ByteLinkedOpenCustomHashMap<T> extends Object2ByteOpenCustom
 		}
 		
 		@Override
-		public T first() {
+		public T getFirst() {
 			return firstKey();
 		}
 		
 		@Override
-		public T pollFirst() {
+		public T removeFirst() {
 			return pollFirstKey();
 		}
 
 		@Override
-		public T last() {
+		public T getLast() {
 			return lastKey();
 		}
 
 		@Override
-		public T pollLast() {
+		public T removeLast() {
 			return pollLastKey();
 		}
 		
@@ -1021,30 +1125,41 @@ public class Object2ByteLinkedOpenCustomHashMap<T> extends Object2ByteOpenCustom
 		}
 	}
 	
-	private class Values extends AbstractByteCollection {
+	private class Values extends AbstractByteCollection implements ByteOrderedCollection {
 		@Override
-		public boolean contains(byte e) {
-			return containsValue(e);
+		public boolean contains(byte e) { return containsValue(e); }
+		@Override
+		public boolean add(byte o) { throw new UnsupportedOperationException(); }
+		@Override
+		public ByteIterator iterator() { return new ValueIterator(true); }
+		@Override
+		public int size() { return Object2ByteLinkedOpenCustomHashMap.this.size(); }
+		@Override
+		public void clear() { Object2ByteLinkedOpenCustomHashMap.this.clear(); }
+		@Override
+		public ByteOrderedCollection reversed() { return new AbstractByteCollection.ReverseByteOrderedCollection(this, this::reverseIterator); }
+		private ByteIterator reverseIterator() {
+			return new ValueIterator(false);
 		}
-		
 		@Override
-		public boolean add(byte o) {
-			throw new UnsupportedOperationException();
+		public void addFirst(byte e) { throw new UnsupportedOperationException(); }
+		@Override
+		public void addLast(byte e) { throw new UnsupportedOperationException(); }
+		@Override
+		public byte getFirstByte() { return firstByteValue(); }
+		@Override
+		public byte removeFirstByte() {
+			byte result = firstByteValue();
+			pollFirstKey();
+			return result; 
 		}
-
 		@Override
-		public ByteIterator iterator() {
-			return new ValueIterator();
-		}
-		
+		public byte getLastByte() { return lastByteValue(); }
 		@Override
-		public int size() {
-			return Object2ByteLinkedOpenCustomHashMap.this.size();
-		}
-		
-		@Override
-		public void clear() {
-			Object2ByteLinkedOpenCustomHashMap.this.clear();
+		public byte removeLastByte() {
+			byte result = lastByteValue();
+			pollLastKey();
+			return result; 
 		}
 		
 		@Override
@@ -1175,7 +1290,7 @@ public class Object2ByteLinkedOpenCustomHashMap<T> extends Object2ByteOpenCustom
 	private class FastEntryIterator extends MapIterator implements ObjectListIterator<Object2ByteMap.Entry<T>> {
 		MapEntry entry = new MapEntry();
 		
-		public FastEntryIterator() {}
+		public FastEntryIterator(boolean start) { super(start); }
 		public FastEntryIterator(T from) {
 			super(from);
 		}
@@ -1202,7 +1317,7 @@ public class Object2ByteLinkedOpenCustomHashMap<T> extends Object2ByteOpenCustom
 	private class EntryIterator extends MapIterator implements ObjectListIterator<Object2ByteMap.Entry<T>> {
 		MapEntry entry;
 		
-		public EntryIterator() {}
+		public EntryIterator(boolean start) { super(start); }
 		public EntryIterator(T from) {
 			super(from);
 		}
@@ -1232,7 +1347,7 @@ public class Object2ByteLinkedOpenCustomHashMap<T> extends Object2ByteOpenCustom
 	
 	private class KeyIterator extends MapIterator implements ObjectListIterator<T> {
 		
-		public KeyIterator() {}
+		public KeyIterator(boolean start) { super(start); }
 		public KeyIterator(T from) {
 			super(from);
 		}
@@ -1254,7 +1369,7 @@ public class Object2ByteLinkedOpenCustomHashMap<T> extends Object2ByteOpenCustom
 	}
 	
 	private class ValueIterator extends MapIterator implements ByteListIterator {
-		public ValueIterator() {}
+		public ValueIterator(boolean start) { super(start); }
 		
 		@Override
 		public byte previousByte() {
@@ -1275,16 +1390,20 @@ public class Object2ByteLinkedOpenCustomHashMap<T> extends Object2ByteOpenCustom
 	}
 	
 	private class MapIterator {
+		boolean forward;
 		int previous = -1;
 		int next = -1;
 		int current = -1;
 		int index = 0;
 		
-		MapIterator() {
-			next = firstIndex;
+		MapIterator(boolean start) {
+			this.forward = start;
+			if(start) next = firstIndex;
+			else previous = lastIndex;
 		}
 		
 		MapIterator(T from) {
+			this.forward = true;
 			if(strategy.equals(from, null)) {
 				if(containsNull) {
 					next = (int) links[nullIndex];
@@ -1312,11 +1431,11 @@ public class Object2ByteLinkedOpenCustomHashMap<T> extends Object2ByteOpenCustom
 		}
 		
 		public boolean hasNext() {
-			return next != -1;
+			return (forward ? next : previous) != -1;
 		}
 
 		public boolean hasPrevious() {
-			return previous != -1;
+			return (forward ? previous : next) != -1;
 		}
 		
 		public int nextIndex() {
@@ -1376,20 +1495,30 @@ public class Object2ByteLinkedOpenCustomHashMap<T> extends Object2ByteOpenCustom
 		
 		public int previousEntry() {
 			if(!hasPrevious()) throw new NoSuchElementException();
-			current = previous;
-			previous = (int)(links[current] >> 32);
-			next = current;
+			if(forward) moveBackwards();
+			else moveForwards();
 			if(index >= 0) index--;
 			return current;
 		}
 		
 		public int nextEntry() {
 			if(!hasNext()) throw new NoSuchElementException();
+			if(forward) moveForwards();
+			else moveBackwards();
+			if(index >= 0) index++;
+			return current;
+		}
+		
+		private void moveBackwards() {
+			current = previous;
+			previous = (int)(links[current] >> 32);
+			next = current;
+		}
+		
+		private void moveForwards() {
 			current = next;
 			next = (int)(links[current]);
 			previous = current;
-			if(index >= 0) index++;
-			return current;
 		}
 		
 		private void ensureIndexKnown() {

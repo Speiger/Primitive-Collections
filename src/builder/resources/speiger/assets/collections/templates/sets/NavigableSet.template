@@ -3,11 +3,13 @@ package speiger.src.collections.PACKAGE.sets;
 import java.util.NavigableSet;
 
 import speiger.src.collections.PACKAGE.collections.BI_ITERATOR;
+#if SPLIT_ITERATOR_FEATURE
 import speiger.src.collections.PACKAGE.collections.SPLIT_ITERATOR;
+import speiger.src.collections.PACKAGE.utils.SPLIT_ITERATORS;
+#endif
 #if SETS_FEATURE
 import speiger.src.collections.PACKAGE.utils.SETS;
 #endif
-import speiger.src.collections.PACKAGE.utils.SPLIT_ITERATORS;
 
 /**
  * A Type Specific Navigable Set interface with a couple helper methods
@@ -145,6 +147,7 @@ public interface NAVIGABLE_SET KEY_GENERIC_TYPE extends NavigableSet<CLASS_TYPE>
 	public default NAVIGABLE_SET KEY_GENERIC_TYPE unmodifiable() { return SETS.unmodifiable(this); }
 	
 #endif
+#if SPLIT_ITERATOR_FEATURE
 	/**
 	 * A Type Specific Type Splititerator to reduce boxing/unboxing
 	 * @return type specific splititerator
@@ -152,6 +155,7 @@ public interface NAVIGABLE_SET KEY_GENERIC_TYPE extends NavigableSet<CLASS_TYPE>
 	@Override
 	default SPLIT_ITERATOR KEY_GENERIC_TYPE spliterator() { return SPLIT_ITERATORS.createSplititerator(this, 0); }
 	
+#endif
 #if !TYPE_OBJECT
 	@Override
 	@Deprecated

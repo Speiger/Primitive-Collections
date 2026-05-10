@@ -1,6 +1,8 @@
 package speiger.src.collections.chars.maps.interfaces;
 
 import speiger.src.collections.chars.utils.maps.Char2LongMaps;
+import speiger.src.collections.chars.maps.abstracts.AbstractChar2LongMap;
+import speiger.src.collections.longs.collections.LongOrderedCollection;
 import speiger.src.collections.chars.sets.CharOrderedSet;
 import speiger.src.collections.objects.collections.ObjectBidirectionalIterator;
 import speiger.src.collections.objects.sets.ObjectOrderedSet;
@@ -30,6 +32,26 @@ public interface Char2LongOrderedMap extends Char2LongMap
 	 * @see java.util.Map#put(Object, Object)
 	 */
 	public long putAndMoveToLast(char key, long value);
+	
+	/**
+	 * A alternative to putAndMoveToFirst.
+	 * This method simply puts an entry at the first spot of the Map but only if the entry is missing.
+	 * @param key the key that should be inserted
+	 * @param value the value that should be inserted
+	 * @return the previous present or default return value
+	 * @see java.util.Map#put(Object, Object)
+	 */
+	public long putFirst(char key, long value);
+	
+	/**
+	 * A alternative to putAndMoveToLast.
+	 * This method simply puts an entry at the last spot of the Map but only if the entry is missing.
+	 * @param key the key that should be inserted
+	 * @param value the value that should be inserted
+	 * @return the previous present or default return value
+	 * @see java.util.Map#put(Object, Object)
+	 */
+	public long putLast(char key, long value);
 	
 	/**
 	 * A specific move method to move a given key/value to the first index.
@@ -91,12 +113,24 @@ public interface Char2LongOrderedMap extends Char2LongMap
 	 */
 	public long lastLongValue();
 	
+	
+	public Char2LongMap.Entry firstEntry();
+	
+	public Char2LongMap.Entry lastEntry();
+	
+	public Char2LongMap.Entry pollFirstEntry();
+	
+	public Char2LongMap.Entry pollLastEntry();
 	@Override
 	public Char2LongOrderedMap copy();
 	@Override
 	public CharOrderedSet keySet();
 	@Override
+	public LongOrderedCollection values();
+	@Override
 	public ObjectOrderedSet<Char2LongMap.Entry> char2LongEntrySet();
+	
+	public default Char2LongOrderedMap reversed() { return new AbstractChar2LongMap.ReversedChar2LongOrderedMap(this); }
 	
 	/**
 	 * Creates a Wrapped SortedMap that is Synchronized

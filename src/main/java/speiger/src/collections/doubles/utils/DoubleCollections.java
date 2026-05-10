@@ -12,6 +12,7 @@ import java.util.function.Consumer;
 
 import speiger.src.collections.doubles.collections.AbstractDoubleCollection;
 import speiger.src.collections.doubles.collections.DoubleCollection;
+import speiger.src.collections.doubles.collections.DoubleOrderedCollection;
 import speiger.src.collections.doubles.collections.DoubleIterator;
 import speiger.src.collections.doubles.functions.DoubleComparator;
 import speiger.src.collections.objects.utils.ObjectArrays;
@@ -48,6 +49,34 @@ public class DoubleCollections
 	 */
 	public static DoubleCollection unmodifiable(DoubleCollection c) {
 		return c instanceof UnmodifiableCollection ? c : new UnmodifiableCollection(c);
+	}
+	
+	/**
+	 * Returns a Immutable Ordered Collection instance based on the instance given.
+	 * @param c that should be made immutable/unmodifiable
+	 * @return a unmodifiable Ordered collection wrapper. If the Collection already a unmodifiable wrapper then it just returns itself.
+	 */
+	public static DoubleOrderedCollection unmodifiable(DoubleOrderedCollection c) {
+		return c instanceof UnmodifiableOrderedCollection ? c : new UnmodifiableOrderedCollection(c);
+	}
+	
+	/**
+	 * Returns a synchronized ordered Collection instance based on the instance given.
+	 * @param c that should be synchronized
+	 * @return a synchronized ordered collection wrapper. If the Collection already a synchronized wrapper then it just returns itself.
+	 */
+	public static DoubleOrderedCollection synchronize(DoubleOrderedCollection c) {
+		return c instanceof SynchronizedOrderedCollection ? c : new SynchronizedOrderedCollection(c);
+	}
+	
+	/**
+	 * Returns a synchronized ordered Collection instance based on the instance given.
+	 * @param c that should be synchronized
+	 * @param mutex is the controller of the synchronization block.
+	 * @return a synchronized ordered collection wrapper. If the Collection already a synchronized wrapper then it just returns itself.
+	 */
+	public static DoubleOrderedCollection synchronize(DoubleOrderedCollection c, Object mutex) {
+		return c instanceof SynchronizedOrderedCollection ? c : new SynchronizedOrderedCollection(c, mutex);
 	}
 	
 	/**
@@ -583,6 +612,37 @@ public class DoubleCollections
 		@Override
 		public SingletonCollection copy() { return new SingletonCollection(element); }
 	}
+	/**
+	 * Synchronized Ordered Collection Wrapper for the synchronizedCollection function
+	 */
+	public static class SynchronizedOrderedCollection extends SynchronizedCollection implements DoubleOrderedCollection {
+		DoubleOrderedCollection c;
+		
+		SynchronizedOrderedCollection(DoubleOrderedCollection c, Object mutex) {
+			super(c, mutex);
+			this.c = c;
+		}
+		
+		SynchronizedOrderedCollection(DoubleOrderedCollection c) {
+			super(c);
+			this.c = c;
+		}
+		
+		@Override
+		public DoubleOrderedCollection reversed() { return DoubleCollections.synchronize(c.reversed(), mutex); }
+		@Override
+		public void addFirst(double e) { synchronized(mutex) { this.c.addFirst(e); } }
+		@Override
+		public void addLast(double e) { synchronized(mutex) { this.c.addLast(e); } }
+		@Override
+		public double getFirstDouble() { synchronized(mutex) { return this.c.getFirstDouble(); } }
+		@Override
+		public double removeFirstDouble() { synchronized(mutex) { return this.c.removeFirstDouble(); } }
+		@Override
+		public double getLastDouble() { synchronized(mutex) { return this.c.getLastDouble(); } }
+		@Override
+		public double removeLastDouble() { synchronized(mutex) { return this.c.removeLastDouble(); } }
+	}	
 	
 	/**
 	 * Synchronized Collection Wrapper for the synchronizedCollection function
@@ -702,6 +762,33 @@ public class DoubleCollections
 		public double findFirst(DoublePredicate filter) { synchronized(mutex) { return c.findFirst(filter); } }
 		@Override
 		public int count(DoublePredicate filter) { synchronized(mutex) { return c.count(filter); } }
+	}
+	
+	/**
+	 * Unmodifyable Ordered Collection Wrapper for the unmodifyableCollection method
+	 */
+	public static class UnmodifiableOrderedCollection extends UnmodifiableCollection implements DoubleOrderedCollection {
+		DoubleOrderedCollection c;
+		
+		UnmodifiableOrderedCollection(DoubleOrderedCollection c) {
+			super(c);
+			this.c = c;
+		}
+		
+		@Override
+		public DoubleOrderedCollection reversed() { return DoubleCollections.unmodifiable(c.reversed()); }
+		@Override
+		public void addFirst(double e) { throw new UnsupportedOperationException(); }
+		@Override
+		public void addLast(double e) { throw new UnsupportedOperationException(); }
+		@Override
+		public double getFirstDouble() { return c.getFirstDouble(); }
+		@Override
+		public double removeFirstDouble() { throw new UnsupportedOperationException(); }
+		@Override
+		public double getLastDouble() { return c.getLastDouble(); }
+		@Override
+		public double removeLastDouble() { throw new UnsupportedOperationException(); }
 	}
 	
 	/**

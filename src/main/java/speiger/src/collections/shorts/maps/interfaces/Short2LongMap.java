@@ -94,7 +94,7 @@ public interface Short2LongMap extends Map<Short, Long>, Short2LongFunction
 	 * @return the last present value or default return	value.
 	 */
 	public default Long put(Map.Entry<Short, Long> entry) {
-		return put(entry.getKey(), entry.getValue());
+		return put(entry.getKey().shortValue(), entry.getValue().longValue());
 	}
 
 	/**

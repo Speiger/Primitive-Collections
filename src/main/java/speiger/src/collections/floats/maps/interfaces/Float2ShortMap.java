@@ -94,7 +94,7 @@ public interface Float2ShortMap extends Map<Float, Short>, Float2ShortFunction
 	 * @return the last present value or default return	value.
 	 */
 	public default Short put(Map.Entry<Float, Short> entry) {
-		return put(entry.getKey(), entry.getValue());
+		return put(entry.getKey().floatValue(), entry.getValue().shortValue());
 	}
 
 	/**

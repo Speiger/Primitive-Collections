@@ -24,8 +24,7 @@ import speiger.src.collections.longs.functions.LongConsumer;
 import speiger.src.collections.longs.utils.LongArrays;
 import speiger.src.collections.objects.utils.ObjectArrays;
 import java.util.stream.LongStream;
-import java.util.stream.StreamSupport;
-import speiger.src.collections.longs.collections.LongSplititerator;
+import java.util.stream.StreamSupport;import speiger.src.collections.longs.collections.LongSplititerator;
 import speiger.src.collections.longs.utils.LongSplititerators;
 import speiger.src.collections.utils.SanityChecks;
 
@@ -361,7 +360,7 @@ public class LongLinkedList extends AbstractLongList implements LongPriorityDequ
 		if(index == 0) return new ListIter(first, index);
 		return new ListIter(getNode(index), index);
 	}
-	
+
 	/**
 	 * Returns a Java-Type-Specific Stream to reduce boxing/unboxing.
 	 * @return a Stream of the closest java type
@@ -372,8 +371,7 @@ public class LongLinkedList extends AbstractLongList implements LongPriorityDequ
 	 * Returns a Java-Type-Specific Parallel Stream to reduce boxing/unboxing.
 	 * @return a Stream of the closest java type
 	 */
-	public LongStream parallelPrimitiveStream() { return StreamSupport.longStream(new SplitIterator(this, first, 0), true); }
-	/**
+	public LongStream parallelPrimitiveStream() { return StreamSupport.longStream(new SplitIterator(this, first, 0), true); }	/**
 	 * A Type Specific Type Splititerator to reduce boxing/unboxing
 	 * @return type specific splititerator
 	 */
