@@ -754,7 +754,7 @@ public class LINKED_CUSTOM_HASH_MAP KEY_VALUE_GENERIC_TYPE extends CUSTOM_HASH_M
 		
 		@Override
 		public ObjectBidirectionalIterator<MAP.Entry KEY_VALUE_GENERIC_TYPE> reverseIterator() {
-			return new ReverseBiIterator<>(new EntryIterator(false));
+			return new EntryIterator(false);
 		}
 		
 		@Override
@@ -1023,7 +1023,7 @@ public class LINKED_CUSTOM_HASH_MAP KEY_VALUE_GENERIC_TYPE extends CUSTOM_HASH_M
 		
 		@Override
 		public LIST_ITERATOR KEY_GENERIC_TYPE reverseIterator() {
-			return new ReverseBiIteratorBRACES(new KeyIterator(false));
+			return new KeyIterator(false);
 		}
 		
 		@Override
@@ -1224,7 +1224,7 @@ public class LINKED_CUSTOM_HASH_MAP KEY_VALUE_GENERIC_TYPE extends CUSTOM_HASH_M
 		@Override
 		public VALUE_ORDERED_COLLECTION VALUE_GENERIC_TYPE reversed() { return new VALUE_ABSTRACT_COLLECTION.VALUE_REVERSED_ORDERED_COLLECTIONVALUE_BRACES(this, this::reverseIterator); }
 		private VALUE_ITERATOR VALUE_GENERIC_TYPE reverseIterator() {
-			return new VALUE_ABSTRACT_COLLECTION.ReverseBiIteratorVALUE_BRACES(new ValueIterator(false));
+			return new ValueIterator(false);
 		}
 		@Override
 		public void addFirst(VALUE_TYPE e) { throw new UnsupportedOperationException(); }
@@ -1490,17 +1490,20 @@ public class LINKED_CUSTOM_HASH_MAP KEY_VALUE_GENERIC_TYPE extends CUSTOM_HASH_M
 	}
 	
 	private class MapIterator {
+		boolean forward;
 		int previous = -1;
 		int next = -1;
 		int current = -1;
 		int index = 0;
 		
 		MapIterator(boolean start) {
+			this.forward = start;
 			if(start) next = firstIndex;
 			else previous = lastIndex;
 		}
 		
 		MapIterator(KEY_TYPE from) {
+			this.forward = true;
 			if(strategy.equals(from, EMPTY_KEY_VALUE)) {
 				if(containsNull) {
 					next = (int) links[nullIndex];
@@ -1528,11 +1531,11 @@ public class LINKED_CUSTOM_HASH_MAP KEY_VALUE_GENERIC_TYPE extends CUSTOM_HASH_M
 		}
 		
 		public boolean hasNext() {
-			return next != -1;
+			return (forward ? next : previous) != -1;
 		}
 
 		public boolean hasPrevious() {
-			return previous != -1;
+			return (forward ? previous : next) != -1;
 		}
 		
 		public int nextIndex() {
@@ -1592,20 +1595,30 @@ public class LINKED_CUSTOM_HASH_MAP KEY_VALUE_GENERIC_TYPE extends CUSTOM_HASH_M
 		
 		public int previousEntry() {
 			if(!hasPrevious()) throw new NoSuchElementException();
-			current = previous;
-			previous = (int)(links[current] >> 32);
-			next = current;
+			if(forward) moveBackwards();
+			else moveForwards();
 			if(index >= 0) index--;
 			return current;
 		}
 		
 		public int nextEntry() {
 			if(!hasNext()) throw new NoSuchElementException();
+			if(forward) moveForwards();
+			else moveBackwards();
+			if(index >= 0) index++;
+			return current;
+		}
+		
+		private void moveBackwards() {
+			current = previous;
+			previous = (int)(links[current] >> 32);
+			next = current;
+		}
+		
+		private void moveForwards() {
 			current = next;
 			next = (int)(links[current]);
 			previous = current;
-			if(index >= 0) index++;
-			return current;
 		}
 		
 		private void ensureIndexKnown() {

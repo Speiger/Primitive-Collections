@@ -18,6 +18,7 @@ public enum SpecialFeature implements Feature<Collection> {
 	ITERATOR_MODIFIABLE,
 	MAP_ENTRY,
 	DESCENDING,
+	REVERSE,
 	SUBMAP;
 
 	private final Set<Feature<? super Collection>> implied;

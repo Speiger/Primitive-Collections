@@ -907,7 +907,7 @@ public class ARRAY_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_VALUE_GEN
 		
 		@Override
 		public ObjectBidirectionalIterator<MAP.Entry KEY_VALUE_GENERIC_TYPE> reverseIterator() {
-			return new ReverseBiIterator<>(new EntryIterator(false));
+			return new EntryIterator(false);
 		}
 		
 		@Override
@@ -1129,7 +1129,7 @@ public class ARRAY_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_VALUE_GEN
 		@Override
 		public LIST_ITERATOR KEY_GENERIC_TYPE iterator() { return new KeyIterator(true); }
 		@Override
-		public LIST_ITERATOR KEY_GENERIC_TYPE reverseIterator() { return new ReverseBiIteratorBRACES(new KeyIterator(false)); }
+		public LIST_ITERATOR KEY_GENERIC_TYPE reverseIterator() { return new KeyIterator(false); }
 		@Override
 		public BI_ITERATOR KEY_GENERIC_TYPE iterator(KEY_TYPE fromElement) { return new KeyIterator(fromElement); } 
 		@Override
@@ -1274,7 +1274,7 @@ public class ARRAY_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_VALUE_GEN
 		@Override
 		public VALUE_ORDERED_COLLECTION VALUE_GENERIC_TYPE reversed() { return new VALUE_ABSTRACT_COLLECTION.VALUE_REVERSED_ORDERED_COLLECTIONVALUE_BRACES(this, this::reverseIterator); }
 		private VALUE_ITERATOR VALUE_GENERIC_TYPE reverseIterator() {
-			return new VALUE_ABSTRACT_COLLECTION.ReverseBiIteratorVALUE_BRACES(new ValueIterator(false));
+			return new ValueIterator(false);
 		}
 		@Override
 		public void addFirst(VALUE_TYPE e) { throw new UnsupportedOperationException(); }
@@ -1491,32 +1491,37 @@ public class ARRAY_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_VALUE_GEN
 	}
 	
 	private class MapIterator {
+		boolean forward;
 		int index;
 		int lastReturned = -1;
 		
 		MapIterator(boolean start) {
+			this.forward = start;
 			this.index = start ? 0 : size;
 		}
 		
 		MapIterator(KEY_TYPE element) {
+			this.forward = true;
 			index = findIndex(element);
 			if(index == -1) throw new NoSuchElementException();
 		}
 		
 		public boolean hasNext() {
-			return index < size;
+			return forward ? index < size : index > 0;
 		}
 		
 		public boolean hasPrevious() {
-			return index > 0;
+			return forward ? index > 0 : index < size;
 		}
 		
 		public int nextIndex() {
-			return index;
+			if(forward) return index;
+			return size - index;
 		}
 		
 		public int previousIndex() {
-			return index-1;
+			if(forward) return index-1;
+			return (size - index)-1;
 		}
 		
 		public void remove() {
@@ -1529,26 +1534,42 @@ public class ARRAY_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_VALUE_GEN
 		
 		public int previousEntry() {
 			if(!hasPrevious()) throw new NoSuchElementException();
-			index--;
-			return (lastReturned = index);
-		}
-		
-		public int nextEntry() {
-			if(!hasNext()) throw new NoSuchElementException();
+			if(forward) {
+				index--;
+				return (lastReturned = index);
+			}
 			lastReturned = index;
 			return index++;
 		}
 		
+		public int nextEntry() {
+			if(!hasNext()) throw new NoSuchElementException();
+			if(forward) {
+				lastReturned = index;
+				return index++;
+			}
+			index--;
+			return (lastReturned = index);
+		}
+		
 		public int skip(int amount) {
 			if(amount < 0) throw new IllegalStateException("Negative Numbers are not allowed");
+			return forward ? moveForward(amount) : moveBackwards(amount);
+		}
+		
+		public int back(int amount) {
+			if(amount < 0) throw new IllegalStateException("Negative Numbers are not allowed");
+			return forward ? moveBackwards(amount) : moveForward(amount);
+		}
+		
+		private int moveForward(int amount) {
 			int steps = Math.min(amount, size() - index);
 			index += steps;
 			if(steps > 0) lastReturned = Math.min(index-1, size()-1);
 			return steps;
 		}
 		
-		public int back(int amount) {
-			if(amount < 0) throw new IllegalStateException("Negative Numbers are not allowed");
+		private int moveBackwards(int amount) {
 			int steps = Math.min(amount, index);
 			index -= steps;
 			if(steps > 0) lastReturned = Math.min(index, size()-1);

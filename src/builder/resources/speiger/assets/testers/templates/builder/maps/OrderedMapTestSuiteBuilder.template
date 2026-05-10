@@ -55,8 +55,8 @@ public class ORDERED_MAP_TEST_BUILDER KEY_VALUE_GENERIC_TYPE extends MAP_TEST_BU
 	@Override
 	protected List<TestSuite> createDerivedSuites(FeatureSpecificTestSuiteBuilder<?, ? extends OneSizeTestContainerGenerator<Map<CLASS_TYPE, CLASS_VALUE_TYPE>, Map.Entry<CLASS_TYPE, CLASS_VALUE_TYPE>>> parentBuilder) {
 		List<TestSuite> derivedSuites = super.createDerivedSuites(parentBuilder);
-		if (!parentBuilder.getFeatures().contains(SpecialFeature.DESCENDING)) {
-			derivedSuites.add(createDescendingSuite(parentBuilder));
+		if (!parentBuilder.getFeatures().contains(SpecialFeature.REVERSE)) {
+			derivedSuites.add(createReverseSuite(parentBuilder));
 		}
 		return derivedSuites;
 	}
@@ -69,15 +69,15 @@ public class ORDERED_MAP_TEST_BUILDER KEY_VALUE_GENERIC_TYPE extends MAP_TEST_BU
 		return ORDERED_SET_TEST_BUILDER.using((TEST_ORDERED_SET_GENERATOR KEY_GENERIC_TYPE)generator);
 	}
 	
-	private TestSuite createDescendingSuite(FeatureSpecificTestSuiteBuilder<?, ? extends OneSizeTestContainerGenerator<Map<CLASS_TYPE, CLASS_VALUE_TYPE>, Map.Entry<CLASS_TYPE, CLASS_VALUE_TYPE>>> parentBuilder) {
+	private TestSuite createReverseSuite(FeatureSpecificTestSuiteBuilder<?, ? extends OneSizeTestContainerGenerator<Map<CLASS_TYPE, CLASS_VALUE_TYPE>, Map.Entry<CLASS_TYPE, CLASS_VALUE_TYPE>>> parentBuilder) {
 		TEST_ORDERED_MAP_GENERATOR KEY_VALUE_GENERIC_TYPE delegate = (TEST_ORDERED_MAP_GENERATOR KEY_VALUE_GENERIC_TYPE) parentBuilder.getSubjectGenerator().getInnerGenerator();
 
 		List<Feature<?>> features = new ArrayList<>();
-		features.add(SpecialFeature.DESCENDING);
+		features.add(SpecialFeature.REVERSE);
 		features.addAll(parentBuilder.getFeatures());
 		features.remove(SpecialFeature.COPYING);
 		features.remove(SpecialFeature.CHILDREN_COPY);
-		return ORDERED_MAP_TEST_BUILDER.using(new DERIVED_MAP_GENERATORS.DescendingTestOrderedMapGeneratorKV_BRACES(delegate))
+		return ORDERED_MAP_TEST_BUILDER.using(new DERIVED_MAP_GENERATORS.ReverseTestOrderedMapGenerator(delegate))
 				.named(parentBuilder.getName() + " reversed").withFeatures(features)
 				.suppressing(parentBuilder.getSuppressedTests()).createTestSuite();
 	}

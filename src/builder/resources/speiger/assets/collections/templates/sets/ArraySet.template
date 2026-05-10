@@ -511,18 +511,18 @@ public class ARRAY_SET KEY_GENERIC_TYPE extends ABSTRACT_SET KEY_GENERIC_TYPE im
 	
 	@Override
 	public BI_ITERATOR KEY_GENERIC_TYPE iterator() {
-		return new SetIterator(0);
+		return new SetIterator(true, 0);
 	}
 	
 	@Override
 	public BI_ITERATOR KEY_GENERIC_TYPE reverseIterator() {
-		return new ReverseBiIteratorBRACES(new SetIterator(size));
+		return new SetIterator(false, size);
 	}
 	
 	@Override
 	public BI_ITERATOR KEY_GENERIC_TYPE iterator(KEY_TYPE fromElement) {
 		int index = findIndex(fromElement);
-		if(index != -1) return new SetIterator(index);
+		if(index != -1) return new SetIterator(true, index);
 		throw new NoSuchElementException();
 	}
 	
@@ -575,45 +575,57 @@ public class ARRAY_SET KEY_GENERIC_TYPE extends ABSTRACT_SET KEY_GENERIC_TYPE im
 	}
 		
 	private class SetIterator implements LIST_ITERATOR KEY_GENERIC_TYPE {
+		boolean forward;
 		int index;
 		int lastReturned = -1;
 		
-		public SetIterator(int index) {
+		public SetIterator(boolean forward, int index) {
+			this.forward = forward;
 			this.index = index;
 		}
 		
 		@Override
 		public boolean hasNext() {
-			return index < size();
+			return forward ? index < size() : index > 0;
 		}
 		
 		@Override
 		public KEY_TYPE NEXT() {
 			if(!hasNext()) throw new NoSuchElementException();
-			lastReturned = index;
-			return data[index++];
+			if(forward) {
+				lastReturned = index;
+				return data[index++];				
+			}
+			index--;
+			return data[(lastReturned = index)];
 		}
 		
 		@Override
 		public boolean hasPrevious() {
-			return index > 0;
+			return forward ? index > 0 : index < size();
 		}
 		
 		@Override
 		public KEY_TYPE PREVIOUS() {
 			if(!hasPrevious()) throw new NoSuchElementException();
-			--index;
-			return data[(lastReturned = index)];
+			if(forward) {
+				index--;
+				return data[(lastReturned = index)];
+			}
+			lastReturned = index;
+			return data[index++];
 		}
 		
 		@Override
 		public int nextIndex() {
-			return index;
+			if(forward) return index;
+			return size - index;
 		}
 		
 		@Override
 		public int previousIndex() {
-			return index-1;
+			if(forward) return index-1;
+			return (size - index)-1;
 		}
 		
 		@Override
@@ -642,15 +654,23 @@ public class ARRAY_SET KEY_GENERIC_TYPE extends ABSTRACT_SET KEY_GENERIC_TYPE im
 		@Override
 		public int skip(int amount) {
 			if(amount < 0) throw new IllegalStateException("Negative Numbers are not allowed");
+			return forward ? moveForward(amount) : moveBackwards(amount);
+		}
+		
+		@Override
+		public int back(int amount) {
+			if(amount < 0) throw new IllegalStateException("Negative Numbers are not allowed");
+			return forward ? moveBackwards(amount) : moveForward(amount);
+		}
+		
+		private int moveForward(int amount) {
 			int steps = Math.min(amount, size() - index);
 			index += steps;
 			if(steps > 0) lastReturned = Math.min(index-1, size()-1);
 			return steps;
 		}
 		
-		@Override
-		public int back(int amount) {
-			if(amount < 0) throw new IllegalStateException("Negative Numbers are not allowed");
+		private int moveBackwards(int amount) {
 			int steps = Math.min(amount, index);
 			index -= steps;
 			if(steps > 0) lastReturned = Math.min(index, size()-1);
