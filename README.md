@@ -4,9 +4,9 @@
 [![License](https://img.shields.io/badge/License-Apache_2.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
 ![GitHub commit activity](https://img.shields.io/github/commit-activity/m/Speiger/Primitive-Collections)      
 ![Unit Tests](https://github.com/Speiger/Primitive-Collections/actions/workflows/build_tests_action.yml/badge.svg)
-![Coverage](https://gist.githubusercontent.com/Speiger/280257cd19cbe1dda3789bebd4ff65cf/raw/405abd1d2f6c19ac70f20b8b1772176f42d5c5d3/jacoco.svg)
+![Coverage](https://gist.githubusercontent.com/Speiger/280257cd19cbe1dda3789bebd4ff65cf/raw/jacoco.svg)
 [![codecov](https://codecov.io/gh/Speiger/Primitive-Collections/branch/debug/graph/badge.svg?token=WSTSNJM0EN)](https://codecov.io/gh/Speiger/Primitive-Collections)
-![Tests Done](https://gist.githubusercontent.com/Speiger/280257cd19cbe1dda3789bebd4ff65cf/raw/405abd1d2f6c19ac70f20b8b1772176f42d5c5d3/tests.svg)
+![Tests Done](https://gist.githubusercontent.com/Speiger/280257cd19cbe1dda3789bebd4ff65cf/raw/tests.svg)
 # Primitive-Collections
 This is a Simple Primitive Collections Library aimed to outperform Java's Collection Library and FastUtil.  
 Both in Performance and Quality of Life Features.  
