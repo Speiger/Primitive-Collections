@@ -96,7 +96,7 @@ public abstract class BaseIntIterableTest
 	public void testStreamFindFirst() {
 		if(getValidIterableTests().contains(IterableTest.STREAM_FIND_FIRST)) {
 			int expected = IntStream.of(TEST_ARRAY).filter(T -> T / 50 > 0).findFirst().getAsInt();
-			int actual = create(TEST_ARRAY).findFirst(T -> T / 50 > 0);
+			int actual = create(TEST_ARRAY).findFirst(T -> T / 50 > 0).getAsInt();
 			Assert.assertEquals(expected, actual);
 		}
 	}

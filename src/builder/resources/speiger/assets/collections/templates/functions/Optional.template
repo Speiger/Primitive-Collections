@@ -1,0 +1,89 @@
+package speiger.src.collections.PACKAGE.functions;
+
+import java.util.NoSuchElementException;
+import java.util.function.Supplier;
+
+public final class OPTIONAL KEY_GENERIC_TYPE {
+	private static final OPTIONAL NO_GENERIC_TYPE EMPTY = new OPTIONALBRACES();
+	
+	private final boolean isPresent;
+	private final KEY_TYPE value;
+	
+	private OPTIONAL() {
+		this.isPresent = false;
+		this.value = EMPTY_VALUE;
+	}
+	
+	private OPTIONAL(KEY_TYPE value) {
+		this.isPresent = true;
+		this.value = value;
+	}
+	
+	public static OPTIONAL KEY_GENERIC_TYPE empty() {
+		return EMPTY;
+	}
+	
+	public static OPTIONAL KEY_GENERIC_TYPE of(KEY_TYPE value) {
+		return new OPTIONALBRACES(value);
+	}
+	
+	public KEY_TYPE SUPPLY_GET() {
+		if(!isPresent) throw new NoSuchElementException("No value present");
+		return value;
+	}
+	
+	public boolean isPresent() {
+		return isPresent;
+	}
+	
+	public boolean isEmpty() {
+		return !isPresent;
+	}
+	
+	public void ifPresent(CONSUMER KEY_GENERIC_TYPE consumer) {
+		if(isPresent) consumer.accept(value);
+	}
+	
+    public void ifPresentOrElse(CONSUMER KEY_GENERIC_TYPE action, Runnable emptyAction) {
+        if (isPresent) action.accept(value);
+        else emptyAction.run();
+    }
+	
+	public KEY_TYPE orElse(KEY_TYPE other) {
+		return isPresent ? value : other;
+	}
+	
+	public KEY_TYPE orElseGet(SUPPLIER KEY_GENERIC_TYPE other) {
+		return isPresent ? value : other.SUPPLY_GET();
+	}
+	
+	public KEY_TYPE orElseThrow() {
+        if (!isPresent) throw new NoSuchElementException("No value present");
+		return value;
+	}
+	
+    public <X extends Throwable> KEY_TYPE orElseThrow(Supplier<? extends X> exceptionSupplier) throws X {
+    	if(isPresent) return value;
+    	else throw exceptionSupplier.get();
+    }
+    
+    @Override
+    public boolean equals(Object obj) {
+    	if(obj == this) return true;
+    	if(obj instanceof OPTIONAL) {
+    		OPTIONAL KEY_GENERIC_TYPE other = (OPTIONAL KEY_GENERIC_TYPE)obj;
+    		return (isPresent && other.isPresent ? KEY_EQUALS(value, other.value) : isPresent == other.isPresent);
+    	}
+    	return false;
+    }
+    
+    @Override
+    public int hashCode() {
+    	return isPresent ? KEY_TO_HASH(value) : 0;
+    }
+    
+    @Override
+    public String toString() {
+    	return isPresent ? "OPTIONAL["+value+"]" : "OPTIONAL.empty";
+    }
+}

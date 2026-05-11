@@ -4,14 +4,17 @@ import java.util.Arrays;
 import java.util.Map;
 import java.util.NoSuchElementException;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.function.Consumer;
 import java.util.function.BiFunction;
 import java.util.function.Predicate;
 #if !TYPE_OBJECT && JDK_TYPE
 import java.util.function.PREDICATE;
+import java.util.OPTIONAL;
 #endif
 #if !SAME_TYPE && JDK_VALUE && !VALUE_OBJECT
 import java.util.function.VALUE_PREDICATE;
+import java.util.VALUE_OPTIONAL;
 #endif
 
 import speiger.src.collections.PACKAGE.collections.BI_ITERATOR;
@@ -26,8 +29,11 @@ import speiger.src.collections.ints.functions.consumer.IntObjectConsumer;
 #if !SAME_TYPE && !TYPE_INT
 import speiger.src.collections.ints.functions.consumer.VALUE_BI_FROM_INT_CONSUMER;
 #endif
-#if !TYPE_OBJECT && !VALUE_BOOLEAN && !JDK_TYPE
+#if !TYPE_OBJECT && !JDK_TYPE
+import speiger.src.collections.PACKAGE.functions.OPTIONAL;
+#if!VALUE_BOOLEAN
 import speiger.src.collections.PACKAGE.functions.function.PREDICATE;
+#endif
 #endif
 #if !TYPE_INT || !SAME_TYPE
 import speiger.src.collections.PACKAGE.functions.consumer.BI_CONSUMER;
@@ -66,6 +72,7 @@ import speiger.src.collections.objects.functions.consumer.VALUE_BI_FROM_OBJECT_C
 #endif
 #if !JDK_VALUE
 import speiger.src.collections.VALUE_PACKAGE.functions.function.VALUE_PREDICATE;
+import speiger.src.collections.VALUE_PACKAGE.functions.VALUE_OPTIONAL;
 #endif
 #endif
 #if !VALUE_OBJECT
@@ -1009,7 +1016,7 @@ public class ARRAY_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_VALUE_GEN
 		}
 		
 		@Override
-		public MAP.Entry KEY_VALUE_GENERIC_TYPE reduce(ObjectObjectUnaryOperator<MAP.Entry KEY_VALUE_GENERIC_TYPE, MAP.Entry KEY_VALUE_GENERIC_TYPE> operator) {
+		public Optional<MAP.Entry KEY_VALUE_GENERIC_TYPE> reduce(ObjectObjectUnaryOperator<MAP.Entry KEY_VALUE_GENERIC_TYPE, MAP.Entry KEY_VALUE_GENERIC_TYPE> operator) {
 			Objects.requireNonNull(operator);
 			MAP.Entry KEY_VALUE_GENERIC_TYPE state = null;
 			boolean empty = true;
@@ -1021,19 +1028,19 @@ public class ARRAY_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_VALUE_GEN
 				}
 				state = operator.apply(state, new ValueMapEntry(i));
 			}
-			return state;
+			return empty ? Optional.empty() : Optional.ofNullable(state);
 		}
 		
 		@Override
-		public MAP.Entry KEY_VALUE_GENERIC_TYPE findFirst(Predicate<MAP.Entry KEY_VALUE_GENERIC_TYPE> filter) {
+		public Optional<MAP.Entry KEY_VALUE_GENERIC_TYPE> findFirst(Predicate<MAP.Entry KEY_VALUE_GENERIC_TYPE> filter) {
 			Objects.requireNonNull(filter);
-			if(size() <= 0) return null;
+			if(size() <= 0) return Optional.empty();
 			MapEntry entry = new MapEntry();
 			for(int i = 0;i<size;i++) {
 				entry.set(i);
-				if(filter.test(entry)) return entry;
+				if(filter.test(entry)) return Optional.ofNullable(entry);
 			}
-			return null;
+			return Optional.empty();
 		}
 		
 		@Override
@@ -1218,7 +1225,7 @@ public class ARRAY_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_VALUE_GEN
 		
 #endif
 		@Override
-		public KEY_TYPE reduce(SINGLE_UNARY_OPERATOR KEY_KEY_GENERIC_TYPE operator) {
+		public OPTIONAL KEY_GENERIC_TYPE reduce(SINGLE_UNARY_OPERATOR KEY_KEY_GENERIC_TYPE operator) {
 			Objects.requireNonNull(operator);
 			KEY_TYPE state = EMPTY_KEY_VALUE;
 			boolean empty = true;
@@ -1230,16 +1237,16 @@ public class ARRAY_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_VALUE_GEN
 				}
 				state = operator.APPLY_KEY_VALUE(state, keys[i]);
 			}
-			return state;
+			return empty ? OPTIONAL.empty() : OPTIONAL.GET_OPTIONAL(state);
 		}
 		
 		@Override
-		public KEY_TYPE findFirst(PREDICATE KEY_GENERIC_TYPE filter) {
+		public OPTIONAL KEY_GENERIC_TYPE findFirst(PREDICATE KEY_GENERIC_TYPE filter) {
 			Objects.requireNonNull(filter);
 			for(int i = 0;i<size;i++) {
-				if(filter.test(keys[i])) return keys[i];
+				if(filter.test(keys[i])) return OPTIONAL.GET_OPTIONAL(keys[i]);
 			}
-			return EMPTY_KEY_VALUE;
+			return OPTIONAL.empty();
 		}
 		
 		@Override
@@ -1359,7 +1366,7 @@ public class ARRAY_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_VALUE_GEN
 		
 #endif
 		@Override
-		public VALUE_TYPE reduce(VALUE_SINGLE_UNARY_OPERATOR VALUE_VALUE_GENERIC_TYPE operator) {
+		public VALUE_OPTIONAL VALUE_GENERIC_TYPE reduce(VALUE_SINGLE_UNARY_OPERATOR VALUE_VALUE_GENERIC_TYPE operator) {
 			Objects.requireNonNull(operator);
 			VALUE_TYPE state = EMPTY_VALUE;
 			boolean empty = true;
@@ -1371,16 +1378,16 @@ public class ARRAY_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_VALUE_GEN
 				}
 				state = operator.APPLY_VALUE(state, values[i]);
 			}
-			return state;
+			return empty ? VALUE_OPTIONAL.empty() : VALUE_OPTIONAL.GET_OPTIONAL_VALUE(state);
 		}
 		
 		@Override
-		public VALUE_TYPE findFirst(VALUE_PREDICATE VALUE_GENERIC_TYPE filter) {
+		public VALUE_OPTIONAL VALUE_GENERIC_TYPE findFirst(VALUE_PREDICATE VALUE_GENERIC_TYPE filter) {
 			Objects.requireNonNull(filter);
 			for(int i = 0;i<size;i++) {
-				if(filter.test(values[i])) return values[i];
+				if(filter.test(values[i])) return VALUE_OPTIONAL.GET_OPTIONAL_VALUE(values[i]);
 			}
-			return EMPTY_VALUE;
+			return VALUE_OPTIONAL.empty();
 		}
 		
 		@Override

@@ -4,6 +4,12 @@ package speiger.src.testers.PACKAGE.tests.iterable;
 import java.util.Objects;
 
 #endif
+#if JDK_TYPE
+import java.util.OPTIONAL;
+#else
+import speiger.src.collections.PACKAGE.functions.OPTIONAL;
+#endif
+
 import org.junit.Ignore;
 
 import com.google.common.collect.testing.features.CollectionSize;
@@ -27,17 +33,17 @@ public class FILE_KEY_TYPEIterableFindFirstTester KEY_GENERIC_TYPE extends ABSTR
 	@CollectionSize.Require(absent = CollectionSize.ZERO)
 #endignore
 	public void testIterableFindFirst_FindFirstElements() {
-		assertEquals("First Element should be found", e0(), container.findFirst(T -> KEY_EQUALS(T, e0())));
+		assertEquals("First Element should be found", e0(), container.findFirst(T -> KEY_EQUALS(T, e0())).SUPPLY_GET());
 	}
 	
 	public void testIterableFindFirst_FindNothing() {
-		assertEquals("No element should be found", EMPTY_KEY_VALUE, container.findFirst(T -> KEY_EQUALS(T, e4())));
+		assertEquals("No element should be found", OPTIONAL.empty(), container.findFirst(T -> KEY_EQUALS(T, e4())));
 	}
 	
 #ignore
 	@CollectionSize.Require(CollectionSize.SEVERAL)
 #endignore
 	public void testIterableFindFirst_FindLastElement() {
-		assertEquals("Last Element should be found", e2(), container.findFirst(T -> KEY_EQUALS(T, e2())));
+		assertEquals("Last Element should be found", e2(), container.findFirst(T -> KEY_EQUALS(T, e2())).SUPPLY_GET());
 	}
 }

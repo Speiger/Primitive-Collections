@@ -4,7 +4,14 @@ package speiger.src.testers.PACKAGE.tests.iterable;
 import java.util.Objects;
 
 #endif
+#if JDK_TYPE
+import java.util.OPTIONAL;
+#else
+import speiger.src.collections.PACKAGE.functions.OPTIONAL;
+#endif
 import org.junit.Ignore;
+
+import com.google.common.collect.testing.features.CollectionSize;
 
 import speiger.src.testers.PACKAGE.tests.base.ABSTRACT_COLLECTION_TESTER;
 
@@ -29,7 +36,7 @@ public class FILE_KEY_TYPEIterableReduceTester KEY_GENERIC_TYPE extends ABSTRACT
 	}
 	
 	public void testIterableReduce() {
-		assertEquals("The sum of the collection should match", getSum(), collection.reduce(this::sum));
+		assertEquals("The sum of the collection should match", size == CollectionSize.ZERO ? OPTIONAL.empty() : OPTIONAL.GET_OPTIONAL(getSum()), collection.reduce(this::sum));
 	}
 	
 	public void testIterableExtraReduce() {
