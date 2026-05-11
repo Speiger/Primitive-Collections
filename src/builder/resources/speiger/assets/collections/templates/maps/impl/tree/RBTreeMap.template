@@ -6,15 +6,18 @@ import java.util.Map;
 import java.util.Comparator;
 #endif
 import java.util.Objects;
+import java.util.Optional;
 import java.util.NoSuchElementException;
 import java.util.function.Consumer;
 import java.util.function.BiFunction;
 import java.util.function.Predicate;
 #if !TYPE_OBJECT && JDK_TYPE
 import java.util.function.PREDICATE;
+import java.util.OPTIONAL;
 #endif
 #if !SAME_TYPE && JDK_VALUE && !VALUE_OBJECT
 import java.util.function.VALUE_PREDICATE;
+import java.util.VALUE_OPTIONAL;
 #endif
 
 import speiger.src.collections.PACKAGE.collections.BI_ITERATOR;
@@ -36,8 +39,11 @@ import speiger.src.collections.PACKAGE.functions.function.FUNCTION;
 #if !TYPE_INT || !SAME_TYPE
 import speiger.src.collections.PACKAGE.functions.consumer.BI_CONSUMER;
 #endif
-#if !TYPE_OBJECT && !VALUE_BOOLEAN && !JDK_TYPE
+#if !TYPE_OBJECT && !JDK_TYPE
+import speiger.src.collections.PACKAGE.functions.OPTIONAL;
+#if!VALUE_BOOLEAN
 import speiger.src.collections.PACKAGE.functions.function.PREDICATE;
+#endif
 #endif
 import speiger.src.collections.PACKAGE.functions.function.UNARY_OPERATOR;
 #if !SAME_TYPE
@@ -72,6 +78,7 @@ import speiger.src.collections.objects.functions.consumer.VALUE_BI_FROM_OBJECT_C
 #endif
 #if !JDK_VALUE
 import speiger.src.collections.VALUE_PACKAGE.functions.function.VALUE_PREDICATE;
+import speiger.src.collections.VALUE_PACKAGE.functions.VALUE_OPTIONAL;
 #endif
 #endif
 #if !TYPE_OBJECT && !VALUE_OBJECT
@@ -1379,7 +1386,7 @@ public class RB_TREE_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_VALUE_G
 		
 #endif
 		@Override
-		public KEY_TYPE reduce(SINGLE_UNARY_OPERATOR KEY_KEY_GENERIC_TYPE operator) {
+		public OPTIONAL KEY_GENERIC_TYPE reduce(SINGLE_UNARY_OPERATOR KEY_KEY_GENERIC_TYPE operator) {
 			Objects.requireNonNull(operator);
 			KEY_TYPE state = EMPTY_KEY_VALUE;
 			boolean empty = true;
@@ -1391,15 +1398,15 @@ public class RB_TREE_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_VALUE_G
 				}
 				state = operator.APPLY_KEY_VALUE(state, entry.key);
 			}
-			return state;
+			return empty ? OPTIONAL.empty() : OPTIONAL.GET_OPTIONAL(state);
 		}
 		
 		@Override
-		public KEY_TYPE findFirst(PREDICATE KEY_GENERIC_TYPE filter) {
+		public OPTIONAL KEY_GENERIC_TYPE findFirst(PREDICATE KEY_GENERIC_TYPE filter) {
 			Objects.requireNonNull(filter);
 			for(Node KEY_VALUE_GENERIC_TYPE entry = start(), end = end();entry != null && (end == null || (end != previous(entry)));entry = next(entry))
-				if(filter.test(entry.key)) return entry.key;
-			return EMPTY_KEY_VALUE;
+				if(filter.test(entry.key)) return OPTIONAL.GET_OPTIONAL(entry.key);
+			return OPTIONAL.empty();
 		}
 		
 		@Override
@@ -2092,7 +2099,7 @@ public class RB_TREE_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_VALUE_G
 			}
 			
 			@Override
-			public MAP.Entry KEY_VALUE_GENERIC_TYPE reduce(ObjectObjectUnaryOperator<MAP.Entry KEY_VALUE_GENERIC_TYPE, MAP.Entry KEY_VALUE_GENERIC_TYPE> operator) {
+			public Optional<MAP.Entry KEY_VALUE_GENERIC_TYPE> reduce(ObjectObjectUnaryOperator<MAP.Entry KEY_VALUE_GENERIC_TYPE, MAP.Entry KEY_VALUE_GENERIC_TYPE> operator) {
 				Objects.requireNonNull(operator);
 				MAP.Entry KEY_VALUE_GENERIC_TYPE state = null;
 				boolean empty = true;
@@ -2104,19 +2111,19 @@ public class RB_TREE_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_VALUE_G
 					}
 					state = operator.apply(state, new BasicEntryKV_BRACES(entry.key, entry.value));
 				}
-				return state;
+				return empty ? Optional.empty() : Optional.ofNullable(state);
 			}
 			
 			@Override
-			public MAP.Entry KEY_VALUE_GENERIC_TYPE findFirst(Predicate<MAP.Entry KEY_VALUE_GENERIC_TYPE> filter) {
+			public Optional<MAP.Entry KEY_VALUE_GENERIC_TYPE> findFirst(Predicate<MAP.Entry KEY_VALUE_GENERIC_TYPE> filter) {
 				Objects.requireNonNull(filter);
-				if(size() <= 0) return null;
+				if(size() <= 0) return Optional.empty();
 				BasicEntry KEY_VALUE_GENERIC_TYPE subEntry = new BasicEntryKV_BRACES();
 				for(Node KEY_VALUE_GENERIC_TYPE entry = subLowest(), last = subHighest();entry != null && (last == null || last != previous(entry));entry = next(entry)) {
 					subEntry.set(entry.key, entry.value);
-					if(filter.test(subEntry)) return subEntry;
+					if(filter.test(subEntry)) return Optional.ofNullable(subEntry);
 				}
-				return null;
+				return Optional.empty();
 			}
 			
 			@Override
@@ -2231,7 +2238,7 @@ public class RB_TREE_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_VALUE_G
 			
 #endif
 			@Override
-			public VALUE_TYPE reduce(VALUE_SINGLE_UNARY_OPERATOR VALUE_VALUE_GENERIC_TYPE operator) {
+			public VALUE_OPTIONAL VALUE_GENERIC_TYPE reduce(VALUE_SINGLE_UNARY_OPERATOR VALUE_VALUE_GENERIC_TYPE operator) {
 				Objects.requireNonNull(operator);
 				VALUE_TYPE state = EMPTY_VALUE;
 				boolean empty = true;
@@ -2243,15 +2250,15 @@ public class RB_TREE_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_VALUE_G
 					}
 					state = operator.APPLY_VALUE(state, entry.value);
 				}
-				return state;
+				return empty ? VALUE_OPTIONAL.empty() : VALUE_OPTIONAL.GET_OPTIONAL_VALUE(state);
 			}
 			
 			@Override
-			public VALUE_TYPE findFirst(VALUE_PREDICATE VALUE_GENERIC_TYPE filter) {
+			public VALUE_OPTIONAL VALUE_GENERIC_TYPE findFirst(VALUE_PREDICATE VALUE_GENERIC_TYPE filter) {
 				Objects.requireNonNull(filter);
 				for(Node KEY_VALUE_GENERIC_TYPE entry = subLowest(), last = subHighest();entry != null && (last == null || last != previous(entry));entry = next(entry))
-					if(filter.test(entry.value)) return entry.value;
-				return EMPTY_VALUE;
+					if(filter.test(entry.value)) return VALUE_OPTIONAL.GET_OPTIONAL_VALUE(entry.value);
+				return VALUE_OPTIONAL.empty();
 			}
 			
 			@Override
@@ -2587,7 +2594,7 @@ public class RB_TREE_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_VALUE_G
 		
 		#endif
 		@Override
-		public VALUE_TYPE reduce(VALUE_SINGLE_UNARY_OPERATOR VALUE_VALUE_GENERIC_TYPE operator) {
+		public VALUE_OPTIONAL VALUE_GENERIC_TYPE reduce(VALUE_SINGLE_UNARY_OPERATOR VALUE_VALUE_GENERIC_TYPE operator) {
 			Objects.requireNonNull(operator);
 			VALUE_TYPE state = EMPTY_VALUE;
 			boolean empty = true;
@@ -2599,15 +2606,15 @@ public class RB_TREE_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_VALUE_G
 				}
 				state = operator.APPLY_VALUE(state, entry.value);
 			}
-			return state;
+			return empty ? VALUE_OPTIONAL.empty() : VALUE_OPTIONAL.GET_OPTIONAL_VALUE(state);
 		}
 		
 		@Override
-		public VALUE_TYPE findFirst(VALUE_PREDICATE VALUE_GENERIC_TYPE filter) {
+		public VALUE_OPTIONAL VALUE_GENERIC_TYPE findFirst(VALUE_PREDICATE VALUE_GENERIC_TYPE filter) {
 			Objects.requireNonNull(filter);
 			for(Node KEY_VALUE_GENERIC_TYPE entry = first;entry != null;entry = entry.next())
-				if(filter.test(entry.value)) return entry.value;
-			return EMPTY_VALUE;
+				if(filter.test(entry.value)) return VALUE_OPTIONAL.GET_OPTIONAL_VALUE(entry.value);
+			return VALUE_OPTIONAL.empty();
 		}
 		
 		@Override
@@ -2753,7 +2760,7 @@ public class RB_TREE_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_VALUE_G
 		}
 		
 		@Override
-		public MAP.Entry KEY_VALUE_GENERIC_TYPE reduce(ObjectObjectUnaryOperator<MAP.Entry KEY_VALUE_GENERIC_TYPE, MAP.Entry KEY_VALUE_GENERIC_TYPE> operator) {
+		public Optional<MAP.Entry KEY_VALUE_GENERIC_TYPE> reduce(ObjectObjectUnaryOperator<MAP.Entry KEY_VALUE_GENERIC_TYPE, MAP.Entry KEY_VALUE_GENERIC_TYPE> operator) {
 			Objects.requireNonNull(operator);
 			MAP.Entry KEY_VALUE_GENERIC_TYPE state = null;
 			boolean empty = true;
@@ -2765,19 +2772,19 @@ public class RB_TREE_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_VALUE_G
 				}
 				state = operator.apply(state, new BasicEntryKV_BRACES(entry.key, entry.value));
 			}
-			return state;
+			return empty ? Optional.empty() : Optional.ofNullable(state);
 		}
 		
 		@Override
-		public MAP.Entry KEY_VALUE_GENERIC_TYPE findFirst(Predicate<MAP.Entry KEY_VALUE_GENERIC_TYPE> filter) {
+		public Optional<MAP.Entry KEY_VALUE_GENERIC_TYPE> findFirst(Predicate<MAP.Entry KEY_VALUE_GENERIC_TYPE> filter) {
 			Objects.requireNonNull(filter);
-			if(size() <= 0) return null;
+			if(size() <= 0) return Optional.empty();
 			BasicEntry KEY_VALUE_GENERIC_TYPE subEntry = new BasicEntryKV_BRACES();
 			for(Node KEY_VALUE_GENERIC_TYPE entry = first;entry != null;entry = entry.next()) {
 				subEntry.set(entry.key, entry.value);
-				if(filter.test(subEntry)) return subEntry;
+				if(filter.test(subEntry)) return Optional.ofNullable(subEntry);
 			}
-			return null;
+			return Optional.empty();
 		}
 		
 		@Override

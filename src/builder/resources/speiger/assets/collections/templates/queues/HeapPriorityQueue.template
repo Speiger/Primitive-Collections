@@ -8,12 +8,18 @@ import java.util.function.Consumer;
 import java.util.function.BiFunction;
 #endif
 import java.util.Objects;
+#if JDK_TYPE
+import java.util.OPTIONAL;
+#endif
 #if JDK_FUNCTION
 import java.util.function.PREDICATE;
 #endif
 
 import speiger.src.collections.PACKAGE.collections.COLLECTION;
 import speiger.src.collections.PACKAGE.collections.ITERATOR;
+#if !JDK_TYPE 
+import speiger.src.collections.PACKAGE.functions.OPTIONAL;
+#endif
 #if !TYPE_OBJECT
 import speiger.src.collections.PACKAGE.functions.COMPARATOR;
 import speiger.src.collections.PACKAGE.functions.CONSUMER;
@@ -326,7 +332,7 @@ public class HEAP_PRIORITY_QUEUE KEY_GENERIC_TYPE extends ABSTRACT_PRIORITY_QUEU
 	
 #endif
 	@Override
-	public KEY_TYPE reduce(UNARY_OPERATOR KEY_KEY_GENERIC_TYPE operator) {
+	public OPTIONAL KEY_GENERIC_TYPE reduce(UNARY_OPERATOR KEY_KEY_GENERIC_TYPE operator) {
 		Objects.requireNonNull(operator);
 		KEY_TYPE state = EMPTY_VALUE;
 		boolean empty = true;
@@ -338,20 +344,20 @@ public class HEAP_PRIORITY_QUEUE KEY_GENERIC_TYPE extends ABSTRACT_PRIORITY_QUEU
 			}
 			state = operator.APPLY_VALUE(state, array[i]);
 		}
-		return state;
+		return empty ? OPTIONAL.empty() : OPTIONAL.GET_OPTIONAL(state);
 	}
 	
 	@Override
-	public KEY_TYPE findFirst(PREDICATE KEY_GENERIC_TYPE filter) {
+	public OPTIONAL KEY_GENERIC_TYPE findFirst(PREDICATE KEY_GENERIC_TYPE filter) {
 		Objects.requireNonNull(filter);
 		for(int i = 0;i<size;i++) {
 			if(filter.test(array[i])) {
 				KEY_TYPE data = array[i];
 				removeIndex(i);
-				return data;
+				return OPTIONAL.GET_OPTIONAL(data);
 			}
 		}
-		return EMPTY_VALUE;
+		return OPTIONAL.empty();
 	}
 	
 	@Override

@@ -4,15 +4,18 @@ import java.util.Arrays;
 import java.util.Map;
 import java.util.NoSuchElementException;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.concurrent.locks.StampedLock;
 import java.util.function.Consumer;
 import java.util.function.Predicate;
 import java.util.function.BiFunction;
 #if !TYPE_OBJECT && JDK_TYPE
 import java.util.function.PREDICATE;
+import java.util.OPTIONAL;
 #endif
 #if !SAME_TYPE && JDK_VALUE && !VALUE_OBJECT
 import java.util.function.VALUE_PREDICATE;
+import java.util.VALUE_OPTIONAL;
 #endif
 
 #if !TYPE_OBJECT
@@ -40,8 +43,11 @@ import speiger.src.collections.PACKAGE.functions.function.UNARY_OPERATOR;
 #if !SAME_TYPE
 import speiger.src.collections.PACKAGE.functions.function.SINGLE_UNARY_OPERATOR;
 #endif
-#if !TYPE_OBJECT && !VALUE_BOOLEAN && !JDK_TYPE
+#if !TYPE_OBJECT && !JDK_TYPE
+import speiger.src.collections.PACKAGE.functions.OPTIONAL;
+#if!VALUE_BOOLEAN
 import speiger.src.collections.PACKAGE.functions.function.PREDICATE;
+#endif
 #endif
 import speiger.src.collections.PACKAGE.maps.abstracts.ABSTRACT_MAP;
 import speiger.src.collections.PACKAGE.maps.interfaces.MAP;
@@ -78,6 +84,7 @@ import speiger.src.collections.objects.functions.consumer.VALUE_BI_FROM_OBJECT_C
 #endif
 #if !JDK_VALUE
 import speiger.src.collections.VALUE_PACKAGE.functions.function.VALUE_PREDICATE;
+import speiger.src.collections.VALUE_PACKAGE.functions.VALUE_OPTIONAL;
 #endif
 #endif
 #if VALUE_OBJECT
@@ -839,7 +846,7 @@ public class CONCURRENT_HASH_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY
 		}
 		
 		@Override
-		public MAP.Entry KEY_VALUE_GENERIC_TYPE reduce(ObjectObjectUnaryOperator<MAP.Entry KEY_VALUE_GENERIC_TYPE, MAP.Entry KEY_VALUE_GENERIC_TYPE> operator) {
+		public Optional<MAP.Entry KEY_VALUE_GENERIC_TYPE> reduce(ObjectObjectUnaryOperator<MAP.Entry KEY_VALUE_GENERIC_TYPE, MAP.Entry KEY_VALUE_GENERIC_TYPE> operator) {
 			Objects.requireNonNull(operator);
 			MAP.Entry KEY_VALUE_GENERIC_TYPE state = null;
 			boolean empty = true;
@@ -863,11 +870,11 @@ public class CONCURRENT_HASH_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY
 					seg.unlockRead(stamp);
 				}
 			}
-			return state;
+			return empty ? Optional.empty() : Optional.ofNullable(state);
 		}
 		
 		@Override
-		public MAP.Entry KEY_VALUE_GENERIC_TYPE findFirst(Predicate<MAP.Entry KEY_VALUE_GENERIC_TYPE> filter) {
+		public Optional<MAP.Entry KEY_VALUE_GENERIC_TYPE> findFirst(Predicate<MAP.Entry KEY_VALUE_GENERIC_TYPE> filter) {
 			Objects.requireNonNull(filter);
 			MapEntry entry = new MapEntry();
 			for(int i = 0,m=segments.length;i<m;i++) {
@@ -877,7 +884,7 @@ public class CONCURRENT_HASH_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY
 				try {
 					while(index != -1) {
 						entry.set(index, i);
-						if(filter.test(entry)) return entry;
+						if(filter.test(entry)) return Optional.ofNullable(entry);
 						index = (int)seg.links[index];
 					}
 				}
@@ -885,7 +892,7 @@ public class CONCURRENT_HASH_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY
 					seg.unlockRead(stamp);
 				}
 			}
-			return null;
+			return Optional.empty();
 		}
 		
 		@Override
@@ -1186,7 +1193,7 @@ public class CONCURRENT_HASH_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY
 		
 #endif
 		@Override
-		public KEY_TYPE reduce(SINGLE_UNARY_OPERATOR KEY_KEY_GENERIC_TYPE operator) {
+		public OPTIONAL KEY_GENERIC_TYPE reduce(SINGLE_UNARY_OPERATOR KEY_KEY_GENERIC_TYPE operator) {
 			Objects.requireNonNull(operator);
 			KEY_TYPE state = EMPTY_KEY_VALUE;
 			boolean empty = true;
@@ -1210,11 +1217,11 @@ public class CONCURRENT_HASH_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY
 					seg.unlockRead(stamp);
 				}
 			}
-			return state;
+			return empty ? OPTIONAL.empty() : OPTIONAL.GET_OPTIONAL(state);
 		}
 		
 		@Override
-		public KEY_TYPE findFirst(PREDICATE KEY_GENERIC_TYPE filter) {
+		public OPTIONAL KEY_GENERIC_TYPE findFirst(PREDICATE KEY_GENERIC_TYPE filter) {
 			Objects.requireNonNull(filter);
 			for(int i = 0,m=segments.length;i<m;i++) {
 				Segment KEY_VALUE_GENERIC_TYPE seg = segments[i];
@@ -1222,7 +1229,7 @@ public class CONCURRENT_HASH_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY
 				try {
 					int index = seg.firstIndex;
 					while(index != -1){
-						if(filter.test(seg.keys[index])) return seg.keys[index];
+						if(filter.test(seg.keys[index])) return OPTIONAL.GET_OPTIONAL(seg.keys[index]);
 						index = (int)seg.links[index];
 					}
 				}
@@ -1230,7 +1237,7 @@ public class CONCURRENT_HASH_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY
 					seg.unlockRead(stamp);
 				}
 			}
-			return EMPTY_KEY_VALUE;
+			return OPTIONAL.empty();
 		}
 		
 		@Override
@@ -1454,7 +1461,7 @@ public class CONCURRENT_HASH_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY
 		
 #endif
 		@Override
-		public VALUE_TYPE reduce(VALUE_SINGLE_UNARY_OPERATOR VALUE_VALUE_GENERIC_TYPE operator) {
+		public VALUE_OPTIONAL VALUE_GENERIC_TYPE reduce(VALUE_SINGLE_UNARY_OPERATOR VALUE_VALUE_GENERIC_TYPE operator) {
 			Objects.requireNonNull(operator);
 			VALUE_TYPE state = EMPTY_VALUE;
 			boolean empty = true;
@@ -1478,20 +1485,20 @@ public class CONCURRENT_HASH_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY
 					seg.unlockRead(stamp);
 				}
 			}
-			return state;
+			return empty ? VALUE_OPTIONAL.empty() : VALUE_OPTIONAL.GET_OPTIONAL_VALUE(state);
 		}
 		
 		@Override
-		public VALUE_TYPE findFirst(VALUE_PREDICATE VALUE_GENERIC_TYPE filter) {
+		public VALUE_OPTIONAL VALUE_GENERIC_TYPE findFirst(VALUE_PREDICATE VALUE_GENERIC_TYPE filter) {
 			Objects.requireNonNull(filter);
-			if(size() <= 0) return EMPTY_VALUE;
+			if(size() <= 0) return VALUE_OPTIONAL.empty();
 			for(int i = 0,m=segments.length;i<m;i++) {
 				Segment KEY_VALUE_GENERIC_TYPE seg = segments[i];
 				long stamp = seg.readLock();
 				try {
 					int index = seg.firstIndex;
 					while(index != -1){
-						if(filter.test(seg.values[index])) return seg.values[index];
+						if(filter.test(seg.values[index])) return VALUE_OPTIONAL.GET_OPTIONAL_VALUE(seg.values[index]);
 						index = (int)seg.links[index];
 					}
 				}
@@ -1499,7 +1506,7 @@ public class CONCURRENT_HASH_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY
 					seg.unlockRead(stamp);
 				}
 			}
-			return EMPTY_VALUE;
+			return VALUE_OPTIONAL.empty();
 		}
 		
 		@Override

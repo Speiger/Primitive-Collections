@@ -34,7 +34,8 @@ public class FunctionModule extends BaseModule
 	protected void loadBlockades()
 	{
 		if(keyType.isObject()) addBlockedFiles("Consumer", "Comparator");
-		if(!MODULE.isEnabled()) addBlockedFiles("Consumer", "BiConsumer", "Comparator", "Supplier", "Function", "UnaryOperator");
+		if(!MODULE.isEnabled()) addBlockedFiles("Consumer", "BiConsumer", "Comparator", "Supplier", "Optional", "Function", "UnaryOperator");
+		if(!keyType.needsCustomJDKType()) addBlockedFiles("Optional");
 	}
 	
 	@Override
@@ -60,6 +61,7 @@ public class FunctionModule extends BaseModule
 		}
 		else addBiRequirement("Function");
 		addRemapper("BiConsumer", "%sConsumer");
+		addRemapper("Optional", "Optional%s");
 	}
 	
 	@Override
@@ -94,6 +96,8 @@ public class FunctionModule extends BaseModule
 		
 		addFunctionMappers("PREDICATE", "%sPredicate");
 		addClassMapper("SUPPLIER", "Supplier");
+		addSimpleMapper("OPTIONAL", keyType.isObject() ? "Optional" : String.format("Optional%s", keyType.getFileType()));
+		addSimpleMapper("VALUE_OPTIONAL", valueType.isObject() ? "Optional" : String.format("Optional%s", valueType.getFileType()));
 		addAbstractMapper("SINGLE_UNARY_OPERATOR", "%1$s%1$sUnaryOperator");
 		addBiClassMapper("UNARY_OPERATOR", "UnaryOperator", "");
 		if(keyType.isObject())

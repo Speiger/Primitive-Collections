@@ -5,14 +5,17 @@ import java.util.ConcurrentModificationException;
 import java.util.Map;
 import java.util.NoSuchElementException;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.function.Consumer;
 import java.util.function.BiFunction;
 import java.util.function.Predicate;
 #if !TYPE_OBJECT && JDK_TYPE
 import java.util.function.PREDICATE;
+import java.util.OPTIONAL;
 #endif
 #if !SAME_TYPE && JDK_VALUE && !VALUE_OBJECT
 import java.util.function.VALUE_PREDICATE;
+import java.util.VALUE_OPTIONAL;
 #endif
 
 #if !TYPE_OBJECT
@@ -37,8 +40,11 @@ import speiger.src.collections.PACKAGE.functions.function.UNARY_OPERATOR;
 #if !SAME_TYPE
 import speiger.src.collections.PACKAGE.functions.function.SINGLE_UNARY_OPERATOR;
 #endif
-#if !TYPE_OBJECT && !VALUE_BOOLEAN && !JDK_TYPE
+#if !TYPE_OBJECT && !JDK_TYPE
+import speiger.src.collections.PACKAGE.functions.OPTIONAL;
+#if !VALUE_BOOLEAN
 import speiger.src.collections.PACKAGE.functions.function.PREDICATE;
+#endif
 #endif
 import speiger.src.collections.PACKAGE.maps.abstracts.ABSTRACT_MAP;
 import speiger.src.collections.PACKAGE.maps.interfaces.MAP;
@@ -75,6 +81,7 @@ import speiger.src.collections.objects.functions.consumer.VALUE_BI_FROM_OBJECT_C
 #endif
 #if !JDK_VALUE
 import speiger.src.collections.VALUE_PACKAGE.functions.function.VALUE_PREDICATE;
+import speiger.src.collections.VALUE_PACKAGE.functions.VALUE_OPTIONAL;
 #endif
 #endif
 import speiger.src.collections.objects.collections.ObjectIterator;
@@ -1090,7 +1097,7 @@ public class CUSTOM_HASH_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_VAL
 		}
 		
 		@Override
-		public MAP.Entry KEY_VALUE_GENERIC_TYPE reduce(ObjectObjectUnaryOperator<MAP.Entry KEY_VALUE_GENERIC_TYPE, MAP.Entry KEY_VALUE_GENERIC_TYPE> operator) {
+		public Optional<MAP.Entry KEY_VALUE_GENERIC_TYPE> reduce(ObjectObjectUnaryOperator<MAP.Entry KEY_VALUE_GENERIC_TYPE, MAP.Entry KEY_VALUE_GENERIC_TYPE> operator) {
 			Objects.requireNonNull(operator);
 			MAP.Entry KEY_VALUE_GENERIC_TYPE state = null;
 			boolean empty = true;
@@ -1107,25 +1114,25 @@ public class CUSTOM_HASH_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_VAL
 				}
 				state = operator.apply(state, new ValueMapEntry(i));
 			}
-			return state;
+			return empty ? Optional.empty() : Optional.ofNullable(state);
 		}
 		
 		@Override
-		public MAP.Entry KEY_VALUE_GENERIC_TYPE findFirst(Predicate<MAP.Entry KEY_VALUE_GENERIC_TYPE> filter) {
+		public Optional<MAP.Entry KEY_VALUE_GENERIC_TYPE> findFirst(Predicate<MAP.Entry KEY_VALUE_GENERIC_TYPE> filter) {
 			Objects.requireNonNull(filter);
-			if(size() <= 0) return null;
+			if(size() <= 0) return Optional.empty();
 			MapEntry entry = new MapEntry();
 			if(containsNull) {
 				entry.set(nullIndex);
-				if(filter.test(entry)) return entry;
+				if(filter.test(entry)) return Optional.ofNullable(entry);
 			}
 			for(int i = nullIndex-1;i>=0;i--) {
 				if(!strategy.equals(keys[i], EMPTY_KEY_VALUE)) {
 					entry.set(i);
-					if(filter.test(entry)) return entry;
+					if(filter.test(entry)) return Optional.ofNullable(entry);
 				}
 			}
-			return null;
+			return Optional.empty();
 		}
 		
 		@Override
@@ -1331,7 +1338,7 @@ public class CUSTOM_HASH_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_VAL
 		
 #endif
 		@Override
-		public KEY_TYPE reduce(SINGLE_UNARY_OPERATOR KEY_KEY_GENERIC_TYPE operator) {
+		public OPTIONAL KEY_GENERIC_TYPE reduce(SINGLE_UNARY_OPERATOR KEY_KEY_GENERIC_TYPE operator) {
 			Objects.requireNonNull(operator);
 			KEY_TYPE state = EMPTY_KEY_VALUE;
 			boolean empty = true;
@@ -1348,18 +1355,18 @@ public class CUSTOM_HASH_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_VAL
 				}
 				state = operator.APPLY_KEY_VALUE(state, keys[i]);
 			}
-			return state;
+			return empty ? OPTIONAL.empty() : OPTIONAL.GET_OPTIONAL(state);
 		}
 		
 		@Override
-		public KEY_TYPE findFirst(PREDICATE KEY_GENERIC_TYPE filter) {
+		public OPTIONAL KEY_GENERIC_TYPE findFirst(PREDICATE KEY_GENERIC_TYPE filter) {
 			Objects.requireNonNull(filter);
-			if(size() <= 0) return EMPTY_KEY_VALUE;
-			if(containsNull && filter.test(keys[nullIndex])) return keys[nullIndex];
+			if(size() <= 0) return OPTIONAL.empty();
+			if(containsNull && filter.test(keys[nullIndex])) return OPTIONAL.GET_OPTIONAL(keys[nullIndex]);
 			for(int i = nullIndex-1;i>=0;i--) {
-				if(!strategy.equals(keys[i], EMPTY_KEY_VALUE) && filter.test(keys[i])) return keys[i];
+				if(!strategy.equals(keys[i], EMPTY_KEY_VALUE) && filter.test(keys[i])) return OPTIONAL.GET_OPTIONAL(keys[i]);
 			}
-			return EMPTY_KEY_VALUE;
+			return OPTIONAL.empty();
 		}
 		
 		@Override
@@ -1497,7 +1504,7 @@ public class CUSTOM_HASH_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_VAL
 		
 #endif
 		@Override
-		public VALUE_TYPE reduce(VALUE_SINGLE_UNARY_OPERATOR VALUE_VALUE_GENERIC_TYPE operator) {
+		public VALUE_OPTIONAL VALUE_GENERIC_TYPE reduce(VALUE_SINGLE_UNARY_OPERATOR VALUE_VALUE_GENERIC_TYPE operator) {
 			Objects.requireNonNull(operator);
 			VALUE_TYPE state = EMPTY_VALUE;
 			boolean empty = true;
@@ -1514,18 +1521,18 @@ public class CUSTOM_HASH_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_VAL
 				}
 				state = operator.APPLY_VALUE(state, values[i]);
 			}
-			return state;
+			return empty ? VALUE_OPTIONAL.empty() : VALUE_OPTIONAL.GET_OPTIONAL_VALUE(state);
 		}
 		
 		@Override
-		public VALUE_TYPE findFirst(VALUE_PREDICATE VALUE_GENERIC_TYPE filter) {
+		public VALUE_OPTIONAL VALUE_GENERIC_TYPE findFirst(VALUE_PREDICATE VALUE_GENERIC_TYPE filter) {
 			Objects.requireNonNull(filter);
-			if(size() <= 0) return EMPTY_VALUE;
-			if(containsNull && filter.test(values[nullIndex])) return values[nullIndex];
+			if(size() <= 0) return VALUE_OPTIONAL.empty();
+			if(containsNull && filter.test(values[nullIndex])) return VALUE_OPTIONAL.GET_OPTIONAL_VALUE(values[nullIndex]);
 			for(int i = nullIndex-1;i>=0;i--) {
-				if(!strategy.equals(keys[i], EMPTY_KEY_VALUE) && filter.test(values[i])) return values[i];
+				if(!strategy.equals(keys[i], EMPTY_KEY_VALUE) && filter.test(values[i])) return VALUE_OPTIONAL.GET_OPTIONAL_VALUE(values[i]);
 			}
-			return EMPTY_VALUE;
+			return VALUE_OPTIONAL.empty();
 		}
 		
 		@Override
