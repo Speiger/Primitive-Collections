@@ -1,6 +1,7 @@
 package speiger.src.collections.floats.sets;
 
 import speiger.src.collections.floats.collections.FloatBidirectionalIterator;
+import speiger.src.collections.floats.collections.FloatOrderedCollection;
 import speiger.src.collections.floats.collections.FloatSplititerator;
 import speiger.src.collections.floats.utils.FloatSplititerators;
 import speiger.src.collections.floats.sets.AbstractFloatSet.ReversedFloatOrderedSet;
@@ -13,7 +14,7 @@ import speiger.src.collections.floats.utils.FloatSets;
  * This interface provides basic access to such functions while also providing some Sorted/NaivgableSet implementations that still fit into here.
  * 
  */
-public interface FloatOrderedSet extends FloatSet
+public interface FloatOrderedSet extends FloatSet, FloatOrderedCollection
 {
 	/**
 	 * A customized add method that allows you to insert into the first index.

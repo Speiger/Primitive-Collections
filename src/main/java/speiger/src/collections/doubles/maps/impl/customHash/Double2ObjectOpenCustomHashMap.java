@@ -5,10 +5,12 @@ import java.util.ConcurrentModificationException;
 import java.util.Map;
 import java.util.NoSuchElementException;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.function.Consumer;
 import java.util.function.BiFunction;
 import java.util.function.Predicate;
 import java.util.function.DoublePredicate;
+import java.util.OptionalDouble;
 
 import speiger.src.collections.doubles.collections.DoubleIterator;
 import speiger.src.collections.doubles.functions.DoubleConsumer;
@@ -868,7 +870,7 @@ public class Double2ObjectOpenCustomHashMap<V> extends AbstractDouble2ObjectMap<
 		}
 		
 		@Override
-		public Double2ObjectMap.Entry<V> reduce(ObjectObjectUnaryOperator<Double2ObjectMap.Entry<V>, Double2ObjectMap.Entry<V>> operator) {
+		public Optional<Double2ObjectMap.Entry<V>> reduce(ObjectObjectUnaryOperator<Double2ObjectMap.Entry<V>, Double2ObjectMap.Entry<V>> operator) {
 			Objects.requireNonNull(operator);
 			Double2ObjectMap.Entry<V> state = null;
 			boolean empty = true;
@@ -885,25 +887,25 @@ public class Double2ObjectOpenCustomHashMap<V> extends AbstractDouble2ObjectMap<
 				}
 				state = operator.apply(state, new ValueMapEntry(i));
 			}
-			return state;
+			return empty ? Optional.empty() : Optional.ofNullable(state);
 		}
 		
 		@Override
-		public Double2ObjectMap.Entry<V> findFirst(Predicate<Double2ObjectMap.Entry<V>> filter) {
+		public Optional<Double2ObjectMap.Entry<V>> findFirst(Predicate<Double2ObjectMap.Entry<V>> filter) {
 			Objects.requireNonNull(filter);
-			if(size() <= 0) return null;
+			if(size() <= 0) return Optional.empty();
 			MapEntry entry = new MapEntry();
 			if(containsNull) {
 				entry.set(nullIndex);
-				if(filter.test(entry)) return entry;
+				if(filter.test(entry)) return Optional.ofNullable(entry);
 			}
 			for(int i = nullIndex-1;i>=0;i--) {
 				if(!strategy.equals(keys[i], 0D)) {
 					entry.set(i);
-					if(filter.test(entry)) return entry;
+					if(filter.test(entry)) return Optional.ofNullable(entry);
 				}
 			}
-			return null;
+			return Optional.empty();
 		}
 		
 		@Override
@@ -1077,7 +1079,7 @@ public class Double2ObjectOpenCustomHashMap<V> extends AbstractDouble2ObjectMap<
 		}
 		
 		@Override
-		public double reduce(DoubleDoubleUnaryOperator operator) {
+		public OptionalDouble reduce(DoubleDoubleUnaryOperator operator) {
 			Objects.requireNonNull(operator);
 			double state = 0D;
 			boolean empty = true;
@@ -1094,18 +1096,18 @@ public class Double2ObjectOpenCustomHashMap<V> extends AbstractDouble2ObjectMap<
 				}
 				state = operator.applyAsDouble(state, keys[i]);
 			}
-			return state;
+			return empty ? OptionalDouble.empty() : OptionalDouble.of(state);
 		}
 		
 		@Override
-		public double findFirst(DoublePredicate filter) {
+		public OptionalDouble findFirst(DoublePredicate filter) {
 			Objects.requireNonNull(filter);
-			if(size() <= 0) return 0D;
-			if(containsNull && filter.test(keys[nullIndex])) return keys[nullIndex];
+			if(size() <= 0) return OptionalDouble.empty();
+			if(containsNull && filter.test(keys[nullIndex])) return OptionalDouble.of(keys[nullIndex]);
 			for(int i = nullIndex-1;i>=0;i--) {
-				if(!strategy.equals(keys[i], 0D) && filter.test(keys[i])) return keys[i];
+				if(!strategy.equals(keys[i], 0D) && filter.test(keys[i])) return OptionalDouble.of(keys[i]);
 			}
-			return 0D;
+			return OptionalDouble.empty();
 		}
 		
 		@Override
@@ -1220,7 +1222,7 @@ public class Double2ObjectOpenCustomHashMap<V> extends AbstractDouble2ObjectMap<
 		}
 		
 		@Override
-		public V reduce(ObjectObjectUnaryOperator<V, V> operator) {
+		public Optional<V> reduce(ObjectObjectUnaryOperator<V, V> operator) {
 			Objects.requireNonNull(operator);
 			V state = null;
 			boolean empty = true;
@@ -1237,18 +1239,18 @@ public class Double2ObjectOpenCustomHashMap<V> extends AbstractDouble2ObjectMap<
 				}
 				state = operator.apply(state, values[i]);
 			}
-			return state;
+			return empty ? Optional.empty() : Optional.ofNullable(state);
 		}
 		
 		@Override
-		public V findFirst(Predicate<V> filter) {
+		public Optional<V> findFirst(Predicate<V> filter) {
 			Objects.requireNonNull(filter);
-			if(size() <= 0) return null;
-			if(containsNull && filter.test(values[nullIndex])) return values[nullIndex];
+			if(size() <= 0) return Optional.empty();
+			if(containsNull && filter.test(values[nullIndex])) return Optional.ofNullable(values[nullIndex]);
 			for(int i = nullIndex-1;i>=0;i--) {
-				if(!strategy.equals(keys[i], 0D) && filter.test(values[i])) return values[i];
+				if(!strategy.equals(keys[i], 0D) && filter.test(values[i])) return Optional.ofNullable(values[i]);
 			}
-			return null;
+			return Optional.empty();
 		}
 		
 		@Override

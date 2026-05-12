@@ -4,6 +4,7 @@ import java.util.Arrays;
 import java.util.Map;
 import java.util.NoSuchElementException;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.concurrent.locks.StampedLock;
 import java.util.function.Consumer;
 import java.util.function.Predicate;
@@ -19,6 +20,7 @@ import speiger.src.collections.shorts.functions.consumer.ShortBooleanConsumer;
 import speiger.src.collections.shorts.functions.function.ShortPredicate;
 import speiger.src.collections.shorts.functions.function.ShortBooleanUnaryOperator;
 import speiger.src.collections.shorts.functions.function.ShortShortUnaryOperator;
+import speiger.src.collections.shorts.functions.OptionalShort;
 import speiger.src.collections.shorts.maps.abstracts.AbstractShort2BooleanMap;
 import speiger.src.collections.shorts.maps.interfaces.Short2BooleanMap;
 import speiger.src.collections.shorts.maps.interfaces.Short2BooleanConcurrentMap;
@@ -36,6 +38,7 @@ import speiger.src.collections.booleans.functions.BooleanConsumer;
 import speiger.src.collections.objects.functions.consumer.ObjectObjectConsumer;
 import speiger.src.collections.objects.functions.consumer.ObjectBooleanConsumer;
 import speiger.src.collections.booleans.functions.function.BooleanPredicate;
+import speiger.src.collections.booleans.functions.OptionalBoolean;
 import speiger.src.collections.objects.collections.ObjectBidirectionalIterator;
 import speiger.src.collections.objects.sets.AbstractObjectSet;
 import speiger.src.collections.objects.sets.ObjectSet;
@@ -755,7 +758,7 @@ public class Short2BooleanConcurrentOpenHashMap extends AbstractShort2BooleanMap
 		}
 		
 		@Override
-		public Short2BooleanMap.Entry reduce(ObjectObjectUnaryOperator<Short2BooleanMap.Entry, Short2BooleanMap.Entry> operator) {
+		public Optional<Short2BooleanMap.Entry> reduce(ObjectObjectUnaryOperator<Short2BooleanMap.Entry, Short2BooleanMap.Entry> operator) {
 			Objects.requireNonNull(operator);
 			Short2BooleanMap.Entry state = null;
 			boolean empty = true;
@@ -779,11 +782,11 @@ public class Short2BooleanConcurrentOpenHashMap extends AbstractShort2BooleanMap
 					seg.unlockRead(stamp);
 				}
 			}
-			return state;
+			return empty ? Optional.empty() : Optional.ofNullable(state);
 		}
 		
 		@Override
-		public Short2BooleanMap.Entry findFirst(Predicate<Short2BooleanMap.Entry> filter) {
+		public Optional<Short2BooleanMap.Entry> findFirst(Predicate<Short2BooleanMap.Entry> filter) {
 			Objects.requireNonNull(filter);
 			MapEntry entry = new MapEntry();
 			for(int i = 0,m=segments.length;i<m;i++) {
@@ -793,7 +796,7 @@ public class Short2BooleanConcurrentOpenHashMap extends AbstractShort2BooleanMap
 				try {
 					while(index != -1) {
 						entry.set(index, i);
-						if(filter.test(entry)) return entry;
+						if(filter.test(entry)) return Optional.ofNullable(entry);
 						index = (int)seg.links[index];
 					}
 				}
@@ -801,7 +804,7 @@ public class Short2BooleanConcurrentOpenHashMap extends AbstractShort2BooleanMap
 					seg.unlockRead(stamp);
 				}
 			}
-			return null;
+			return Optional.empty();
 		}
 		
 		@Override
@@ -1062,7 +1065,7 @@ public class Short2BooleanConcurrentOpenHashMap extends AbstractShort2BooleanMap
 		}
 		
 		@Override
-		public short reduce(ShortShortUnaryOperator operator) {
+		public OptionalShort reduce(ShortShortUnaryOperator operator) {
 			Objects.requireNonNull(operator);
 			short state = (short)0;
 			boolean empty = true;
@@ -1086,11 +1089,11 @@ public class Short2BooleanConcurrentOpenHashMap extends AbstractShort2BooleanMap
 					seg.unlockRead(stamp);
 				}
 			}
-			return state;
+			return empty ? OptionalShort.empty() : OptionalShort.of(state);
 		}
 		
 		@Override
-		public short findFirst(ShortPredicate filter) {
+		public OptionalShort findFirst(ShortPredicate filter) {
 			Objects.requireNonNull(filter);
 			for(int i = 0,m=segments.length;i<m;i++) {
 				Segment seg = segments[i];
@@ -1098,7 +1101,7 @@ public class Short2BooleanConcurrentOpenHashMap extends AbstractShort2BooleanMap
 				try {
 					int index = seg.firstIndex;
 					while(index != -1){
-						if(filter.test(seg.keys[index])) return seg.keys[index];
+						if(filter.test(seg.keys[index])) return OptionalShort.of(seg.keys[index]);
 						index = (int)seg.links[index];
 					}
 				}
@@ -1106,7 +1109,7 @@ public class Short2BooleanConcurrentOpenHashMap extends AbstractShort2BooleanMap
 					seg.unlockRead(stamp);
 				}
 			}
-			return (short)0;
+			return OptionalShort.empty();
 		}
 		
 		@Override
@@ -1297,7 +1300,7 @@ public class Short2BooleanConcurrentOpenHashMap extends AbstractShort2BooleanMap
 		}
 		
 		@Override
-		public boolean reduce(BooleanBooleanUnaryOperator operator) {
+		public OptionalBoolean reduce(BooleanBooleanUnaryOperator operator) {
 			Objects.requireNonNull(operator);
 			boolean state = false;
 			boolean empty = true;
@@ -1321,20 +1324,20 @@ public class Short2BooleanConcurrentOpenHashMap extends AbstractShort2BooleanMap
 					seg.unlockRead(stamp);
 				}
 			}
-			return state;
+			return empty ? OptionalBoolean.empty() : OptionalBoolean.of(state);
 		}
 		
 		@Override
-		public boolean findFirst(BooleanPredicate filter) {
+		public OptionalBoolean findFirst(BooleanPredicate filter) {
 			Objects.requireNonNull(filter);
-			if(size() <= 0) return false;
+			if(size() <= 0) return OptionalBoolean.empty();
 			for(int i = 0,m=segments.length;i<m;i++) {
 				Segment seg = segments[i];
 				long stamp = seg.readLock();
 				try {
 					int index = seg.firstIndex;
 					while(index != -1){
-						if(filter.test(seg.values[index])) return seg.values[index];
+						if(filter.test(seg.values[index])) return OptionalBoolean.of(seg.values[index]);
 						index = (int)seg.links[index];
 					}
 				}
@@ -1342,7 +1345,7 @@ public class Short2BooleanConcurrentOpenHashMap extends AbstractShort2BooleanMap
 					seg.unlockRead(stamp);
 				}
 			}
-			return false;
+			return OptionalBoolean.empty();
 		}
 		
 		@Override

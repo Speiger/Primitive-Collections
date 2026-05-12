@@ -5,10 +5,12 @@ import java.util.ConcurrentModificationException;
 import java.util.Map;
 import java.util.NoSuchElementException;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.function.Consumer;
 import java.util.function.BiFunction;
 import java.util.function.Predicate;
 import java.util.function.IntPredicate;
+import java.util.OptionalInt;
 
 import speiger.src.collections.ints.collections.IntIterator;
 import speiger.src.collections.ints.functions.IntConsumer;
@@ -836,7 +838,7 @@ public class Int2ObjectOpenHashMap<V> extends AbstractInt2ObjectMap<V> implement
 		}
 		
 		@Override
-		public Int2ObjectMap.Entry<V> reduce(ObjectObjectUnaryOperator<Int2ObjectMap.Entry<V>, Int2ObjectMap.Entry<V>> operator) {
+		public Optional<Int2ObjectMap.Entry<V>> reduce(ObjectObjectUnaryOperator<Int2ObjectMap.Entry<V>, Int2ObjectMap.Entry<V>> operator) {
 			Objects.requireNonNull(operator);
 			Int2ObjectMap.Entry<V> state = null;
 			boolean empty = true;
@@ -853,25 +855,25 @@ public class Int2ObjectOpenHashMap<V> extends AbstractInt2ObjectMap<V> implement
 				}
 				state = operator.apply(state, new ValueMapEntry(i));
 			}
-			return state;
+			return empty ? Optional.empty() : Optional.ofNullable(state);
 		}
 		
 		@Override
-		public Int2ObjectMap.Entry<V> findFirst(Predicate<Int2ObjectMap.Entry<V>> filter) {
+		public Optional<Int2ObjectMap.Entry<V>> findFirst(Predicate<Int2ObjectMap.Entry<V>> filter) {
 			Objects.requireNonNull(filter);
-			if(size() <= 0) return null;
+			if(size() <= 0) return Optional.empty();
 			MapEntry entry = new MapEntry();
 			if(containsNull) {
 				entry.set(nullIndex);
-				if(filter.test(entry)) return entry;
+				if(filter.test(entry)) return Optional.ofNullable(entry);
 			}
 			for(int i = nullIndex-1;i>=0;i--) {
 				if(keys[i] != 0) {
 					entry.set(i);
-					if(filter.test(entry)) return entry;
+					if(filter.test(entry)) return Optional.ofNullable(entry);
 				}
 			}
-			return null;
+			return Optional.empty();
 		}
 		
 		@Override
@@ -1043,7 +1045,7 @@ public class Int2ObjectOpenHashMap<V> extends AbstractInt2ObjectMap<V> implement
 		}
 		
 		@Override
-		public int reduce(IntIntUnaryOperator operator) {
+		public OptionalInt reduce(IntIntUnaryOperator operator) {
 			Objects.requireNonNull(operator);
 			int state = 0;
 			boolean empty = true;
@@ -1060,18 +1062,18 @@ public class Int2ObjectOpenHashMap<V> extends AbstractInt2ObjectMap<V> implement
 				}
 				state = operator.applyAsInt(state, keys[i]);
 			}
-			return state;
+			return empty ? OptionalInt.empty() : OptionalInt.of(state);
 		}
 		
 		@Override
-		public int findFirst(IntPredicate filter) {
+		public OptionalInt findFirst(IntPredicate filter) {
 			Objects.requireNonNull(filter);
-			if(size() <= 0) return 0;
-			if(containsNull && filter.test(keys[nullIndex])) return keys[nullIndex];
+			if(size() <= 0) return OptionalInt.empty();
+			if(containsNull && filter.test(keys[nullIndex])) return OptionalInt.of(keys[nullIndex]);
 			for(int i = nullIndex-1;i>=0;i--) {
-				if(keys[i] != 0 && filter.test(keys[i])) return keys[i];
+				if(keys[i] != 0 && filter.test(keys[i])) return OptionalInt.of(keys[i]);
 			}
-			return 0;
+			return OptionalInt.empty();
 		}
 		
 		@Override
@@ -1186,7 +1188,7 @@ public class Int2ObjectOpenHashMap<V> extends AbstractInt2ObjectMap<V> implement
 		}
 		
 		@Override
-		public V reduce(ObjectObjectUnaryOperator<V, V> operator) {
+		public Optional<V> reduce(ObjectObjectUnaryOperator<V, V> operator) {
 			Objects.requireNonNull(operator);
 			V state = null;
 			boolean empty = true;
@@ -1203,18 +1205,18 @@ public class Int2ObjectOpenHashMap<V> extends AbstractInt2ObjectMap<V> implement
 				}
 				state = operator.apply(state, values[i]);
 			}
-			return state;
+			return empty ? Optional.empty() : Optional.ofNullable(state);
 		}
 		
 		@Override
-		public V findFirst(Predicate<V> filter) {
+		public Optional<V> findFirst(Predicate<V> filter) {
 			Objects.requireNonNull(filter);
-			if(size() <= 0) return null;
-			if(containsNull && filter.test(values[nullIndex])) return values[nullIndex];
+			if(size() <= 0) return Optional.empty();
+			if(containsNull && filter.test(values[nullIndex])) return Optional.ofNullable(values[nullIndex]);
 			for(int i = nullIndex-1;i>=0;i--) {
-				if(keys[i] != 0 && filter.test(values[i])) return values[i];
+				if(keys[i] != 0 && filter.test(values[i])) return Optional.ofNullable(values[i]);
 			}
-			return null;
+			return Optional.empty();
 		}
 		
 		@Override

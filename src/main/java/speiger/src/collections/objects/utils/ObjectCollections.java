@@ -6,6 +6,7 @@ import java.util.ConcurrentModificationException;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.Comparator;
 import java.util.function.BiFunction;
 import java.util.function.Predicate;
@@ -709,9 +710,9 @@ public class ObjectCollections
 		public boolean matchesAll(Predicate<T> filter) { synchronized(mutex) { return c.matchesAll(filter); } }
 		public <E> E reduce(E identity, BiFunction<E, T, E> operator) { synchronized(mutex) { return c.reduce(identity, operator); } }
 		@Override
-		public T reduce(ObjectObjectUnaryOperator<T, T> operator) { synchronized(mutex) { return c.reduce(operator); } }
+		public Optional<T> reduce(ObjectObjectUnaryOperator<T, T> operator) { synchronized(mutex) { return c.reduce(operator); } }
 		@Override
-		public T findFirst(Predicate<T> filter) { synchronized(mutex) { return c.findFirst(filter); } }
+		public Optional<T> findFirst(Predicate<T> filter) { synchronized(mutex) { return c.findFirst(filter); } }
 		@Override
 		public int count(Predicate<T> filter) { synchronized(mutex) { return c.count(filter); } }
 	}
@@ -824,9 +825,9 @@ public class ObjectCollections
 		public boolean matchesAll(Predicate<T> filter) { return c.matchesAll(filter); }
 		public <E> E reduce(E identity, BiFunction<E, T, E> operator) { return c.reduce(identity, operator); }
 		@Override
-		public T reduce(ObjectObjectUnaryOperator<T, T> operator) { return c.reduce(operator); }
+		public Optional<T> reduce(ObjectObjectUnaryOperator<T, T> operator) { return c.reduce(operator); }
 		@Override
-		public T findFirst(Predicate<T> filter) { return c.findFirst(filter); }
+		public Optional<T> findFirst(Predicate<T> filter) { return c.findFirst(filter); }
 		@Override
 		public int count(Predicate<T> filter) { return c.count(filter); }
 	}

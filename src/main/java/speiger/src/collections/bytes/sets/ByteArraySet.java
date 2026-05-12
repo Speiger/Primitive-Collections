@@ -9,7 +9,7 @@ import java.util.function.IntPredicate;
 import speiger.src.collections.bytes.collections.ByteBidirectionalIterator;
 import speiger.src.collections.bytes.collections.ByteCollection;
 import speiger.src.collections.bytes.collections.ByteIterator;
-
+import speiger.src.collections.bytes.functions.OptionalByte;
 import speiger.src.collections.ints.functions.consumer.IntByteConsumer;
 import speiger.src.collections.objects.functions.consumer.ObjectByteConsumer;
 import speiger.src.collections.bytes.functions.function.BytePredicate;
@@ -121,6 +121,25 @@ public class ByteArraySet extends AbstractByteSet implements ByteOrderedSet
 			return true;
 		}
 		return false;
+	}
+	
+	@Override
+	public void addFirst(byte o) {
+		int index = findIndex(o);
+		if(index == -1) {
+			if(data.length == size) data = Arrays.copyOf(data, size == 0 ? 2 : size * 2);
+			System.arraycopy(data, 0, data, 1, size++);
+			data[0] = o;
+		}
+	}
+	
+	@Override
+	public void addLast(byte o) {
+		int index = findIndex(o);
+		if(index == -1) {
+			if(data.length == size) data = Arrays.copyOf(data, size == 0 ? 2 : size * 2);
+			data[size++] = o;
+		}
 	}
 	
 	@Override
@@ -356,12 +375,12 @@ public class ByteArraySet extends AbstractByteSet implements ByteOrderedSet
 	}
 	
 	@Override
-	public byte findFirst(BytePredicate filter) {
+	public OptionalByte findFirst(BytePredicate filter) {
 		Objects.requireNonNull(filter);
 		for(int i = 0;i<size;i++) {
-			if(filter.test(data[i])) return data[i];
+			if(filter.test(data[i])) return OptionalByte.of(data[i]);
 		}
-		return (byte)0;
+		return OptionalByte.empty();
 	}
 	
 	@Override
@@ -375,7 +394,7 @@ public class ByteArraySet extends AbstractByteSet implements ByteOrderedSet
 	}
 	
 	@Override
-	public byte reduce(ByteByteUnaryOperator operator) {
+	public OptionalByte reduce(ByteByteUnaryOperator operator) {
 		Objects.requireNonNull(operator);
 		byte state = (byte)0;
 		boolean empty = true;
@@ -387,7 +406,7 @@ public class ByteArraySet extends AbstractByteSet implements ByteOrderedSet
 			}
 			state = operator.applyAsByte(state, data[i]);
 		}
-		return state;
+		return empty ? OptionalByte.empty() : OptionalByte.of(state);
 	}
 	
 	@Override

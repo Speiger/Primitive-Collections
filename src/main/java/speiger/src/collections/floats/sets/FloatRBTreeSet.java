@@ -9,6 +9,7 @@ import java.util.Objects;
 import speiger.src.collections.floats.collections.FloatBidirectionalIterator;
 import speiger.src.collections.floats.functions.FloatComparator;
 import speiger.src.collections.floats.functions.FloatConsumer;
+import speiger.src.collections.floats.functions.OptionalFloat;
 import speiger.src.collections.ints.functions.consumer.IntFloatConsumer;
 import speiger.src.collections.objects.functions.consumer.ObjectFloatConsumer;
 import speiger.src.collections.floats.functions.function.FloatPredicate;
@@ -334,7 +335,7 @@ public class FloatRBTreeSet extends AbstractFloatSet implements FloatNavigableSe
 	}
 	
 	@Override
-	public float reduce(FloatFloatUnaryOperator operator) {
+	public OptionalFloat reduce(FloatFloatUnaryOperator operator) {
 		Objects.requireNonNull(operator);
 		float state = 0F;
 		boolean empty = true;
@@ -346,16 +347,16 @@ public class FloatRBTreeSet extends AbstractFloatSet implements FloatNavigableSe
 			}
 			state = operator.applyAsFloat(state, entry.key);
 		}
-		return state;
+		return empty ? OptionalFloat.empty() : OptionalFloat.of(state);
 	}
 	
 	@Override
-	public float findFirst(FloatPredicate filter) {
+	public OptionalFloat findFirst(FloatPredicate filter) {
 		Objects.requireNonNull(filter);
 		for(Entry entry = first;entry != null;entry = entry.next()) {
-			if(filter.test(entry.key)) return entry.key;
+			if(filter.test(entry.key)) return OptionalFloat.of(entry.key);
 		}
-		return 0F;
+		return OptionalFloat.empty();
 	}
 	
 	@Override
@@ -1241,7 +1242,7 @@ public class FloatRBTreeSet extends AbstractFloatSet implements FloatNavigableSe
 		}
 		
 		@Override
-		public float reduce(FloatFloatUnaryOperator operator) {
+		public OptionalFloat reduce(FloatFloatUnaryOperator operator) {
 			Objects.requireNonNull(operator);
 			float state = 0F;
 			boolean empty = true;
@@ -1253,16 +1254,16 @@ public class FloatRBTreeSet extends AbstractFloatSet implements FloatNavigableSe
 				}
 				state = operator.applyAsFloat(state, entry.key);
 			}
-			return state;
+			return empty ? OptionalFloat.empty() : OptionalFloat.of(state);
 		}
 		
 		@Override
-		public float findFirst(FloatPredicate filter) {
+		public OptionalFloat findFirst(FloatPredicate filter) {
 			Objects.requireNonNull(filter);
 			for(Entry entry = start();entry != null && inRange(entry.key);entry = next(entry)) {
-				if(filter.test(entry.key)) return entry.key;
+				if(filter.test(entry.key)) return OptionalFloat.of(entry.key);
 			}
-			return 0F;
+			return OptionalFloat.empty();
 		}
 		
 		@Override

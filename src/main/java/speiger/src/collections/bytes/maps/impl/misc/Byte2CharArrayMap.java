@@ -4,6 +4,7 @@ import java.util.Arrays;
 import java.util.Map;
 import java.util.NoSuchElementException;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.function.Consumer;
 import java.util.function.BiFunction;
 import java.util.function.Predicate;
@@ -14,6 +15,7 @@ import speiger.src.collections.objects.functions.consumer.ObjectByteConsumer;
 import speiger.src.collections.ints.functions.consumer.IntByteConsumer;
 import speiger.src.collections.ints.functions.consumer.IntObjectConsumer;
 import speiger.src.collections.ints.functions.consumer.IntCharConsumer;
+import speiger.src.collections.bytes.functions.OptionalByte;
 import speiger.src.collections.bytes.functions.function.BytePredicate;
 import speiger.src.collections.bytes.functions.consumer.ByteCharConsumer;
 import speiger.src.collections.bytes.functions.function.Byte2CharFunction;
@@ -35,6 +37,7 @@ import speiger.src.collections.chars.lists.CharListIterator;
 import speiger.src.collections.objects.functions.consumer.ObjectObjectConsumer;
 
 import speiger.src.collections.chars.functions.function.CharPredicate;
+import speiger.src.collections.chars.functions.OptionalChar;
 import speiger.src.collections.objects.collections.ObjectIterator;
 import speiger.src.collections.objects.functions.function.ObjectObjectUnaryOperator;
 import speiger.src.collections.objects.collections.ObjectBidirectionalIterator;
@@ -752,6 +755,10 @@ public class Byte2CharArrayMap extends AbstractByte2CharMap implements Byte2Char
 	
 	private class MapEntrySet extends AbstractObjectSet<Byte2CharMap.Entry> implements Byte2CharOrderedMap.FastOrderedSet {
 		@Override
+		public void addFirst(Byte2CharMap.Entry o) { throw new UnsupportedOperationException(); }
+		@Override
+		public void addLast(Byte2CharMap.Entry o) { throw new UnsupportedOperationException(); }
+		@Override
 		public boolean addAndMoveToFirst(Byte2CharMap.Entry o) { throw new UnsupportedOperationException(); }
 		@Override
 		public boolean addAndMoveToLast(Byte2CharMap.Entry o) { throw new UnsupportedOperationException(); }
@@ -899,7 +906,7 @@ public class Byte2CharArrayMap extends AbstractByte2CharMap implements Byte2Char
 		}
 		
 		@Override
-		public Byte2CharMap.Entry reduce(ObjectObjectUnaryOperator<Byte2CharMap.Entry, Byte2CharMap.Entry> operator) {
+		public Optional<Byte2CharMap.Entry> reduce(ObjectObjectUnaryOperator<Byte2CharMap.Entry, Byte2CharMap.Entry> operator) {
 			Objects.requireNonNull(operator);
 			Byte2CharMap.Entry state = null;
 			boolean empty = true;
@@ -911,19 +918,19 @@ public class Byte2CharArrayMap extends AbstractByte2CharMap implements Byte2Char
 				}
 				state = operator.apply(state, new ValueMapEntry(i));
 			}
-			return state;
+			return empty ? Optional.empty() : Optional.ofNullable(state);
 		}
 		
 		@Override
-		public Byte2CharMap.Entry findFirst(Predicate<Byte2CharMap.Entry> filter) {
+		public Optional<Byte2CharMap.Entry> findFirst(Predicate<Byte2CharMap.Entry> filter) {
 			Objects.requireNonNull(filter);
-			if(size() <= 0) return null;
+			if(size() <= 0) return Optional.empty();
 			MapEntry entry = new MapEntry();
 			for(int i = 0;i<size;i++) {
 				entry.set(i);
-				if(filter.test(entry)) return entry;
+				if(filter.test(entry)) return Optional.ofNullable(entry);
 			}
-			return null;
+			return Optional.empty();
 		}
 		
 		@Override
@@ -995,6 +1002,10 @@ public class Byte2CharArrayMap extends AbstractByte2CharMap implements Byte2Char
 		
 		@Override
 		public boolean add(byte o) { throw new UnsupportedOperationException(); }
+		@Override
+		public void addFirst(byte o) { throw new UnsupportedOperationException(); }
+		@Override
+		public void addLast(byte o) { throw new UnsupportedOperationException(); }
 		@Override
 		public boolean addAndMoveToFirst(byte o) { throw new UnsupportedOperationException(); }
 		@Override
@@ -1082,7 +1093,7 @@ public class Byte2CharArrayMap extends AbstractByte2CharMap implements Byte2Char
 		}
 		
 		@Override
-		public byte reduce(ByteByteUnaryOperator operator) {
+		public OptionalByte reduce(ByteByteUnaryOperator operator) {
 			Objects.requireNonNull(operator);
 			byte state = (byte)0;
 			boolean empty = true;
@@ -1094,16 +1105,16 @@ public class Byte2CharArrayMap extends AbstractByte2CharMap implements Byte2Char
 				}
 				state = operator.applyAsByte(state, keys[i]);
 			}
-			return state;
+			return empty ? OptionalByte.empty() : OptionalByte.of(state);
 		}
 		
 		@Override
-		public byte findFirst(BytePredicate filter) {
+		public OptionalByte findFirst(BytePredicate filter) {
 			Objects.requireNonNull(filter);
 			for(int i = 0;i<size;i++) {
-				if(filter.test(keys[i])) return keys[i];
+				if(filter.test(keys[i])) return OptionalByte.of(keys[i]);
 			}
-			return (byte)0;
+			return OptionalByte.empty();
 		}
 		
 		@Override
@@ -1204,7 +1215,7 @@ public class Byte2CharArrayMap extends AbstractByte2CharMap implements Byte2Char
 		}
 		
 		@Override
-		public char reduce(CharCharUnaryOperator operator) {
+		public OptionalChar reduce(CharCharUnaryOperator operator) {
 			Objects.requireNonNull(operator);
 			char state = (char)0;
 			boolean empty = true;
@@ -1216,16 +1227,16 @@ public class Byte2CharArrayMap extends AbstractByte2CharMap implements Byte2Char
 				}
 				state = operator.applyAsChar(state, values[i]);
 			}
-			return state;
+			return empty ? OptionalChar.empty() : OptionalChar.of(state);
 		}
 		
 		@Override
-		public char findFirst(CharPredicate filter) {
+		public OptionalChar findFirst(CharPredicate filter) {
 			Objects.requireNonNull(filter);
 			for(int i = 0;i<size;i++) {
-				if(filter.test(values[i])) return values[i];
+				if(filter.test(values[i])) return OptionalChar.of(values[i]);
 			}
-			return (char)0;
+			return OptionalChar.empty();
 		}
 		
 		@Override

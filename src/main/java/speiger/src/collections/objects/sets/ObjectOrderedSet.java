@@ -1,6 +1,7 @@
 package speiger.src.collections.objects.sets;
 
 import speiger.src.collections.objects.collections.ObjectBidirectionalIterator;
+import speiger.src.collections.objects.collections.ObjectOrderedCollection;
 import speiger.src.collections.objects.collections.ObjectSplititerator;
 import speiger.src.collections.objects.utils.ObjectSplititerators;
 import speiger.src.collections.objects.sets.AbstractObjectSet.ReversedObjectOrderedSet;
@@ -14,7 +15,7 @@ import speiger.src.collections.objects.utils.ObjectSets;
  * 
  * @param <T> the keyType of elements maintained by this Collection
  */
-public interface ObjectOrderedSet<T> extends ObjectSet<T>
+public interface ObjectOrderedSet<T> extends ObjectSet<T>, ObjectOrderedCollection<T>
 {
 	/**
 	 * A customized add method that allows you to insert into the first index.

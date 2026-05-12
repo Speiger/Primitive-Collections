@@ -9,6 +9,7 @@ import java.util.Objects;
 import speiger.src.collections.chars.collections.CharBidirectionalIterator;
 import speiger.src.collections.chars.functions.CharComparator;
 import speiger.src.collections.chars.functions.CharConsumer;
+import speiger.src.collections.chars.functions.OptionalChar;
 import speiger.src.collections.ints.functions.consumer.IntCharConsumer;
 import speiger.src.collections.objects.functions.consumer.ObjectCharConsumer;
 import speiger.src.collections.chars.functions.function.CharPredicate;
@@ -334,7 +335,7 @@ public class CharRBTreeSet extends AbstractCharSet implements CharNavigableSet
 	}
 	
 	@Override
-	public char reduce(CharCharUnaryOperator operator) {
+	public OptionalChar reduce(CharCharUnaryOperator operator) {
 		Objects.requireNonNull(operator);
 		char state = (char)0;
 		boolean empty = true;
@@ -346,16 +347,16 @@ public class CharRBTreeSet extends AbstractCharSet implements CharNavigableSet
 			}
 			state = operator.applyAsChar(state, entry.key);
 		}
-		return state;
+		return empty ? OptionalChar.empty() : OptionalChar.of(state);
 	}
 	
 	@Override
-	public char findFirst(CharPredicate filter) {
+	public OptionalChar findFirst(CharPredicate filter) {
 		Objects.requireNonNull(filter);
 		for(Entry entry = first;entry != null;entry = entry.next()) {
-			if(filter.test(entry.key)) return entry.key;
+			if(filter.test(entry.key)) return OptionalChar.of(entry.key);
 		}
-		return (char)0;
+		return OptionalChar.empty();
 	}
 	
 	@Override
@@ -1241,7 +1242,7 @@ public class CharRBTreeSet extends AbstractCharSet implements CharNavigableSet
 		}
 		
 		@Override
-		public char reduce(CharCharUnaryOperator operator) {
+		public OptionalChar reduce(CharCharUnaryOperator operator) {
 			Objects.requireNonNull(operator);
 			char state = (char)0;
 			boolean empty = true;
@@ -1253,16 +1254,16 @@ public class CharRBTreeSet extends AbstractCharSet implements CharNavigableSet
 				}
 				state = operator.applyAsChar(state, entry.key);
 			}
-			return state;
+			return empty ? OptionalChar.empty() : OptionalChar.of(state);
 		}
 		
 		@Override
-		public char findFirst(CharPredicate filter) {
+		public OptionalChar findFirst(CharPredicate filter) {
 			Objects.requireNonNull(filter);
 			for(Entry entry = start();entry != null && inRange(entry.key);entry = next(entry)) {
-				if(filter.test(entry.key)) return entry.key;
+				if(filter.test(entry.key)) return OptionalChar.of(entry.key);
 			}
-			return (char)0;
+			return OptionalChar.empty();
 		}
 		
 		@Override

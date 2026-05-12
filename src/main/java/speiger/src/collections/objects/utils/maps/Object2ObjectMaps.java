@@ -611,7 +611,11 @@ public class Object2ObjectMaps
 			super(c);
 			set = c;
 		}
-
+		
+		@Override
+		public void addFirst(Object2ObjectMap.Entry<T, V> o) { throw new UnsupportedOperationException(); }
+		@Override
+		public void addLast(Object2ObjectMap.Entry<T, V> o) { throw new UnsupportedOperationException(); }
 		@Override
 		public boolean addAndMoveToFirst(Object2ObjectMap.Entry<T, V> o) { throw new UnsupportedOperationException(); }
 		@Override

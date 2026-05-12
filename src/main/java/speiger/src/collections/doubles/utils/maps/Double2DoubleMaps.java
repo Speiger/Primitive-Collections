@@ -619,7 +619,11 @@ public class Double2DoubleMaps
 			super(c);
 			set = c;
 		}
-
+		
+		@Override
+		public void addFirst(Double2DoubleMap.Entry o) { throw new UnsupportedOperationException(); }
+		@Override
+		public void addLast(Double2DoubleMap.Entry o) { throw new UnsupportedOperationException(); }
 		@Override
 		public boolean addAndMoveToFirst(Double2DoubleMap.Entry o) { throw new UnsupportedOperationException(); }
 		@Override

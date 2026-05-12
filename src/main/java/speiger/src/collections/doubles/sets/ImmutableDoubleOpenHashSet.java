@@ -5,6 +5,7 @@ import java.util.Collection;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 import java.util.Objects;
+import java.util.OptionalDouble;
 import java.util.function.DoublePredicate;
 
 import speiger.src.collections.doubles.collections.DoubleBidirectionalIterator;
@@ -236,6 +237,10 @@ public class ImmutableDoubleOpenHashSet extends AbstractDoubleSet implements Dou
 	@Override
 	public boolean addAll(DoubleCollection c) { throw new UnsupportedOperationException(); }
 	@Override
+	public void addFirst(double o) { throw new UnsupportedOperationException(); }
+	@Override
+	public void addLast(double o) { throw new UnsupportedOperationException(); }
+	@Override
 	public boolean addAndMoveToFirst(double o) { throw new UnsupportedOperationException(); }
 	@Override
 	public boolean addAndMoveToLast(double o) { throw new UnsupportedOperationException(); }
@@ -371,7 +376,7 @@ public class ImmutableDoubleOpenHashSet extends AbstractDoubleSet implements Dou
 	}
 	
 	@Override
-	public double reduce(DoubleDoubleUnaryOperator operator) {
+	public OptionalDouble reduce(DoubleDoubleUnaryOperator operator) {
 		Objects.requireNonNull(operator);
 		double state = 0D;
 		boolean empty = true;
@@ -384,18 +389,18 @@ public class ImmutableDoubleOpenHashSet extends AbstractDoubleSet implements Dou
 			else state = operator.applyAsDouble(state, keys[index]);
 			index = (int)links[index];
 		}
-		return state;
+		return empty ? OptionalDouble.empty() : OptionalDouble.of(state);
 	}
 	
 	@Override
-	public double findFirst(DoublePredicate filter) {
+	public OptionalDouble findFirst(DoublePredicate filter) {
 		Objects.requireNonNull(filter);
 		int index = firstIndex;
 		while(index != -1) {
-			if(filter.test(keys[index])) return keys[index];
+			if(filter.test(keys[index])) return OptionalDouble.of(keys[index]);
 			index = (int)links[index];
 		}
-		return 0D;
+		return OptionalDouble.empty();
 	}
 	
 	@Override

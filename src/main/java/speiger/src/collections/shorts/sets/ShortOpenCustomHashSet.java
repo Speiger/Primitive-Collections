@@ -9,6 +9,7 @@ import java.util.Objects;
 
 import speiger.src.collections.shorts.collections.ShortCollection;
 import speiger.src.collections.shorts.collections.ShortIterator;
+import speiger.src.collections.shorts.functions.OptionalShort;
 import speiger.src.collections.shorts.utils.ShortIterators;
 import speiger.src.collections.shorts.functions.ShortConsumer;
 import speiger.src.collections.ints.functions.consumer.IntShortConsumer;
@@ -546,7 +547,7 @@ public class ShortOpenCustomHashSet extends AbstractShortSet implements ITrimmab
 	}
 	
 	@Override
-	public short reduce(ShortShortUnaryOperator operator) {
+	public OptionalShort reduce(ShortShortUnaryOperator operator) {
 		Objects.requireNonNull(operator);
 		short state = (short)0;
 		boolean empty = true;
@@ -563,18 +564,18 @@ public class ShortOpenCustomHashSet extends AbstractShortSet implements ITrimmab
 			}
 			state = operator.applyAsShort(state, keys[i]);
 		}
-		return state;
+		return empty ? OptionalShort.empty() : OptionalShort.of(state);
 	}
 	
 	@Override
-	public short findFirst(ShortPredicate filter) {
+	public OptionalShort findFirst(ShortPredicate filter) {
 		Objects.requireNonNull(filter);
-		if(size() <= 0) return (short)0;
-		if(containsNull && filter.test(keys[nullIndex])) return keys[nullIndex];
+		if(size() <= 0) return OptionalShort.empty();
+		if(containsNull && filter.test(keys[nullIndex])) return OptionalShort.of(keys[nullIndex]);
 		for(int i = nullIndex-1;i>=0;i--) {
-			if(!strategy.equals(keys[i], (short)0) && filter.test(keys[i])) return keys[i];
+			if(!strategy.equals(keys[i], (short)0) && filter.test(keys[i])) return OptionalShort.of(keys[i]);
 		}
-		return (short)0;
+		return OptionalShort.empty();
 	}
 	
 	@Override

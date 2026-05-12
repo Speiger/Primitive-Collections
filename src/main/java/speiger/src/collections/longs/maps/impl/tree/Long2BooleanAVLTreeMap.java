@@ -3,11 +3,13 @@ package speiger.src.collections.longs.maps.impl.tree;
 import java.util.Collections;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.NoSuchElementException;
 import java.util.function.Consumer;
 import java.util.function.BiFunction;
 import java.util.function.Predicate;
 import java.util.function.LongPredicate;
+import java.util.OptionalLong;
 
 
 import speiger.src.collections.longs.collections.LongBidirectionalIterator;
@@ -36,6 +38,7 @@ import speiger.src.collections.objects.functions.consumer.ObjectObjectConsumer;
 import speiger.src.collections.objects.functions.consumer.ObjectBooleanConsumer;
 
 import speiger.src.collections.booleans.functions.function.BooleanPredicate;
+import speiger.src.collections.booleans.functions.OptionalBoolean;
 import speiger.src.collections.objects.collections.ObjectBidirectionalIterator;
 import speiger.src.collections.objects.collections.ObjectIterator;
 import speiger.src.collections.objects.functions.function.ObjectObjectUnaryOperator;
@@ -1070,7 +1073,7 @@ public class Long2BooleanAVLTreeMap extends AbstractLong2BooleanMap implements L
 		}
 		
 		@Override
-		public long reduce(LongLongUnaryOperator operator) {
+		public OptionalLong reduce(LongLongUnaryOperator operator) {
 			Objects.requireNonNull(operator);
 			long state = 0L;
 			boolean empty = true;
@@ -1082,15 +1085,15 @@ public class Long2BooleanAVLTreeMap extends AbstractLong2BooleanMap implements L
 				}
 				state = operator.applyAsLong(state, entry.key);
 			}
-			return state;
+			return empty ? OptionalLong.empty() : OptionalLong.of(state);
 		}
 		
 		@Override
-		public long findFirst(LongPredicate filter) {
+		public OptionalLong findFirst(LongPredicate filter) {
 			Objects.requireNonNull(filter);
 			for(Node entry = start(), end = end();entry != null && (end == null || (end != previous(entry)));entry = next(entry))
-				if(filter.test(entry.key)) return entry.key;
-			return 0L;
+				if(filter.test(entry.key)) return OptionalLong.of(entry.key);
+			return OptionalLong.empty();
 		}
 		
 		@Override
@@ -1712,7 +1715,7 @@ public class Long2BooleanAVLTreeMap extends AbstractLong2BooleanMap implements L
 			}
 			
 			@Override
-			public Long2BooleanMap.Entry reduce(ObjectObjectUnaryOperator<Long2BooleanMap.Entry, Long2BooleanMap.Entry> operator) {
+			public Optional<Long2BooleanMap.Entry> reduce(ObjectObjectUnaryOperator<Long2BooleanMap.Entry, Long2BooleanMap.Entry> operator) {
 				Objects.requireNonNull(operator);
 				Long2BooleanMap.Entry state = null;
 				boolean empty = true;
@@ -1724,19 +1727,19 @@ public class Long2BooleanAVLTreeMap extends AbstractLong2BooleanMap implements L
 					}
 					state = operator.apply(state, new BasicEntry(entry.key, entry.value));
 				}
-				return state;
+				return empty ? Optional.empty() : Optional.ofNullable(state);
 			}
 			
 			@Override
-			public Long2BooleanMap.Entry findFirst(Predicate<Long2BooleanMap.Entry> filter) {
+			public Optional<Long2BooleanMap.Entry> findFirst(Predicate<Long2BooleanMap.Entry> filter) {
 				Objects.requireNonNull(filter);
-				if(size() <= 0) return null;
+				if(size() <= 0) return Optional.empty();
 				BasicEntry subEntry = new BasicEntry();
 				for(Node entry = subLowest(), last = subHighest();entry != null && (last == null || last != previous(entry));entry = next(entry)) {
 					subEntry.set(entry.key, entry.value);
-					if(filter.test(subEntry)) return subEntry;
+					if(filter.test(subEntry)) return Optional.ofNullable(subEntry);
 				}
-				return null;
+				return Optional.empty();
 			}
 			
 			@Override
@@ -1831,7 +1834,7 @@ public class Long2BooleanAVLTreeMap extends AbstractLong2BooleanMap implements L
 			}
 			
 			@Override
-			public boolean reduce(BooleanBooleanUnaryOperator operator) {
+			public OptionalBoolean reduce(BooleanBooleanUnaryOperator operator) {
 				Objects.requireNonNull(operator);
 				boolean state = false;
 				boolean empty = true;
@@ -1843,15 +1846,15 @@ public class Long2BooleanAVLTreeMap extends AbstractLong2BooleanMap implements L
 					}
 					state = operator.applyAsBoolean(state, entry.value);
 				}
-				return state;
+				return empty ? OptionalBoolean.empty() : OptionalBoolean.of(state);
 			}
 			
 			@Override
-			public boolean findFirst(BooleanPredicate filter) {
+			public OptionalBoolean findFirst(BooleanPredicate filter) {
 				Objects.requireNonNull(filter);
 				for(Node entry = subLowest(), last = subHighest();entry != null && (last == null || last != previous(entry));entry = next(entry))
-					if(filter.test(entry.value)) return entry.value;
-				return false;
+					if(filter.test(entry.value)) return OptionalBoolean.of(entry.value);
+				return OptionalBoolean.empty();
 			}
 			
 			@Override
@@ -2167,7 +2170,7 @@ public class Long2BooleanAVLTreeMap extends AbstractLong2BooleanMap implements L
 		}
 		
 		@Override
-		public boolean reduce(BooleanBooleanUnaryOperator operator) {
+		public OptionalBoolean reduce(BooleanBooleanUnaryOperator operator) {
 			Objects.requireNonNull(operator);
 			boolean state = false;
 			boolean empty = true;
@@ -2179,15 +2182,15 @@ public class Long2BooleanAVLTreeMap extends AbstractLong2BooleanMap implements L
 				}
 				state = operator.applyAsBoolean(state, entry.value);
 			}
-			return state;
+			return empty ? OptionalBoolean.empty() : OptionalBoolean.of(state);
 		}
 		
 		@Override
-		public boolean findFirst(BooleanPredicate filter) {
+		public OptionalBoolean findFirst(BooleanPredicate filter) {
 			Objects.requireNonNull(filter);
 			for(Node entry = first;entry != null;entry = entry.next())
-				if(filter.test(entry.value)) return entry.value;
-			return false;
+				if(filter.test(entry.value)) return OptionalBoolean.of(entry.value);
+			return OptionalBoolean.empty();
 		}
 		
 		@Override
@@ -2328,7 +2331,7 @@ public class Long2BooleanAVLTreeMap extends AbstractLong2BooleanMap implements L
 		}
 		
 		@Override
-		public Long2BooleanMap.Entry reduce(ObjectObjectUnaryOperator<Long2BooleanMap.Entry, Long2BooleanMap.Entry> operator) {
+		public Optional<Long2BooleanMap.Entry> reduce(ObjectObjectUnaryOperator<Long2BooleanMap.Entry, Long2BooleanMap.Entry> operator) {
 			Objects.requireNonNull(operator);
 			Long2BooleanMap.Entry state = null;
 			boolean empty = true;
@@ -2340,19 +2343,19 @@ public class Long2BooleanAVLTreeMap extends AbstractLong2BooleanMap implements L
 				}
 				state = operator.apply(state, new BasicEntry(entry.key, entry.value));
 			}
-			return state;
+			return empty ? Optional.empty() : Optional.ofNullable(state);
 		}
 		
 		@Override
-		public Long2BooleanMap.Entry findFirst(Predicate<Long2BooleanMap.Entry> filter) {
+		public Optional<Long2BooleanMap.Entry> findFirst(Predicate<Long2BooleanMap.Entry> filter) {
 			Objects.requireNonNull(filter);
-			if(size() <= 0) return null;
+			if(size() <= 0) return Optional.empty();
 			BasicEntry subEntry = new BasicEntry();
 			for(Node entry = first;entry != null;entry = entry.next()) {
 				subEntry.set(entry.key, entry.value);
-				if(filter.test(subEntry)) return subEntry;
+				if(filter.test(subEntry)) return Optional.ofNullable(subEntry);
 			}
-			return null;
+			return Optional.empty();
 		}
 		
 		@Override

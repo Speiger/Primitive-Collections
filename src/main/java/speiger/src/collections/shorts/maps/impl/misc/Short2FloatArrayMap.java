@@ -4,6 +4,7 @@ import java.util.Arrays;
 import java.util.Map;
 import java.util.NoSuchElementException;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.function.Consumer;
 import java.util.function.BiFunction;
 import java.util.function.Predicate;
@@ -14,6 +15,7 @@ import speiger.src.collections.objects.functions.consumer.ObjectShortConsumer;
 import speiger.src.collections.ints.functions.consumer.IntShortConsumer;
 import speiger.src.collections.ints.functions.consumer.IntObjectConsumer;
 import speiger.src.collections.ints.functions.consumer.IntFloatConsumer;
+import speiger.src.collections.shorts.functions.OptionalShort;
 import speiger.src.collections.shorts.functions.function.ShortPredicate;
 import speiger.src.collections.shorts.functions.consumer.ShortFloatConsumer;
 import speiger.src.collections.shorts.functions.function.Short2FloatFunction;
@@ -35,6 +37,7 @@ import speiger.src.collections.floats.lists.FloatListIterator;
 import speiger.src.collections.objects.functions.consumer.ObjectObjectConsumer;
 
 import speiger.src.collections.floats.functions.function.FloatPredicate;
+import speiger.src.collections.floats.functions.OptionalFloat;
 import speiger.src.collections.objects.collections.ObjectIterator;
 import speiger.src.collections.objects.functions.function.ObjectObjectUnaryOperator;
 import speiger.src.collections.objects.collections.ObjectBidirectionalIterator;
@@ -752,6 +755,10 @@ public class Short2FloatArrayMap extends AbstractShort2FloatMap implements Short
 	
 	private class MapEntrySet extends AbstractObjectSet<Short2FloatMap.Entry> implements Short2FloatOrderedMap.FastOrderedSet {
 		@Override
+		public void addFirst(Short2FloatMap.Entry o) { throw new UnsupportedOperationException(); }
+		@Override
+		public void addLast(Short2FloatMap.Entry o) { throw new UnsupportedOperationException(); }
+		@Override
 		public boolean addAndMoveToFirst(Short2FloatMap.Entry o) { throw new UnsupportedOperationException(); }
 		@Override
 		public boolean addAndMoveToLast(Short2FloatMap.Entry o) { throw new UnsupportedOperationException(); }
@@ -899,7 +906,7 @@ public class Short2FloatArrayMap extends AbstractShort2FloatMap implements Short
 		}
 		
 		@Override
-		public Short2FloatMap.Entry reduce(ObjectObjectUnaryOperator<Short2FloatMap.Entry, Short2FloatMap.Entry> operator) {
+		public Optional<Short2FloatMap.Entry> reduce(ObjectObjectUnaryOperator<Short2FloatMap.Entry, Short2FloatMap.Entry> operator) {
 			Objects.requireNonNull(operator);
 			Short2FloatMap.Entry state = null;
 			boolean empty = true;
@@ -911,19 +918,19 @@ public class Short2FloatArrayMap extends AbstractShort2FloatMap implements Short
 				}
 				state = operator.apply(state, new ValueMapEntry(i));
 			}
-			return state;
+			return empty ? Optional.empty() : Optional.ofNullable(state);
 		}
 		
 		@Override
-		public Short2FloatMap.Entry findFirst(Predicate<Short2FloatMap.Entry> filter) {
+		public Optional<Short2FloatMap.Entry> findFirst(Predicate<Short2FloatMap.Entry> filter) {
 			Objects.requireNonNull(filter);
-			if(size() <= 0) return null;
+			if(size() <= 0) return Optional.empty();
 			MapEntry entry = new MapEntry();
 			for(int i = 0;i<size;i++) {
 				entry.set(i);
-				if(filter.test(entry)) return entry;
+				if(filter.test(entry)) return Optional.ofNullable(entry);
 			}
-			return null;
+			return Optional.empty();
 		}
 		
 		@Override
@@ -995,6 +1002,10 @@ public class Short2FloatArrayMap extends AbstractShort2FloatMap implements Short
 		
 		@Override
 		public boolean add(short o) { throw new UnsupportedOperationException(); }
+		@Override
+		public void addFirst(short o) { throw new UnsupportedOperationException(); }
+		@Override
+		public void addLast(short o) { throw new UnsupportedOperationException(); }
 		@Override
 		public boolean addAndMoveToFirst(short o) { throw new UnsupportedOperationException(); }
 		@Override
@@ -1082,7 +1093,7 @@ public class Short2FloatArrayMap extends AbstractShort2FloatMap implements Short
 		}
 		
 		@Override
-		public short reduce(ShortShortUnaryOperator operator) {
+		public OptionalShort reduce(ShortShortUnaryOperator operator) {
 			Objects.requireNonNull(operator);
 			short state = (short)0;
 			boolean empty = true;
@@ -1094,16 +1105,16 @@ public class Short2FloatArrayMap extends AbstractShort2FloatMap implements Short
 				}
 				state = operator.applyAsShort(state, keys[i]);
 			}
-			return state;
+			return empty ? OptionalShort.empty() : OptionalShort.of(state);
 		}
 		
 		@Override
-		public short findFirst(ShortPredicate filter) {
+		public OptionalShort findFirst(ShortPredicate filter) {
 			Objects.requireNonNull(filter);
 			for(int i = 0;i<size;i++) {
-				if(filter.test(keys[i])) return keys[i];
+				if(filter.test(keys[i])) return OptionalShort.of(keys[i]);
 			}
-			return (short)0;
+			return OptionalShort.empty();
 		}
 		
 		@Override
@@ -1204,7 +1215,7 @@ public class Short2FloatArrayMap extends AbstractShort2FloatMap implements Short
 		}
 		
 		@Override
-		public float reduce(FloatFloatUnaryOperator operator) {
+		public OptionalFloat reduce(FloatFloatUnaryOperator operator) {
 			Objects.requireNonNull(operator);
 			float state = 0F;
 			boolean empty = true;
@@ -1216,16 +1227,16 @@ public class Short2FloatArrayMap extends AbstractShort2FloatMap implements Short
 				}
 				state = operator.applyAsFloat(state, values[i]);
 			}
-			return state;
+			return empty ? OptionalFloat.empty() : OptionalFloat.of(state);
 		}
 		
 		@Override
-		public float findFirst(FloatPredicate filter) {
+		public OptionalFloat findFirst(FloatPredicate filter) {
 			Objects.requireNonNull(filter);
 			for(int i = 0;i<size;i++) {
-				if(filter.test(values[i])) return values[i];
+				if(filter.test(values[i])) return OptionalFloat.of(values[i]);
 			}
-			return 0F;
+			return OptionalFloat.empty();
 		}
 		
 		@Override

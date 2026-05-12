@@ -459,6 +459,10 @@ public class LinkedEnum2CharMap<T extends Enum<T>> extends Enum2CharMap<T> imple
 	
 	private class MapEntrySet extends AbstractObjectSet<Object2CharMap.Entry<T>> implements Object2CharOrderedMap.FastOrderedSet<T> {
 		@Override
+		public void addFirst(Object2CharMap.Entry<T> o) { throw new UnsupportedOperationException(); }
+		@Override
+		public void addLast(Object2CharMap.Entry<T> o) { throw new UnsupportedOperationException(); }
+		@Override
 		public boolean addAndMoveToFirst(Object2CharMap.Entry<T> o) { throw new UnsupportedOperationException(); }
 		@Override
 		public boolean addAndMoveToLast(Object2CharMap.Entry<T> o) { throw new UnsupportedOperationException(); }
@@ -607,7 +611,10 @@ public class LinkedEnum2CharMap<T extends Enum<T>> extends Enum2CharMap<T> imple
 		public boolean add(T o) {
 			throw new UnsupportedOperationException();
 		}
-		
+		@Override
+		public void addFirst(T o) { throw new UnsupportedOperationException(); }
+		@Override
+		public void addLast(T o) { throw new UnsupportedOperationException(); }
 		@Override
 		public boolean addAndMoveToFirst(T o) { throw new UnsupportedOperationException(); }
 

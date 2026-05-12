@@ -3,6 +3,7 @@ package speiger.src.collections.objects.collections;
 import java.util.Objects;
 import java.util.function.Consumer;
 import java.util.function.Predicate;
+import java.util.Optional;
 
 import java.util.function.BiFunction;
 import java.util.function.IntFunction;
@@ -330,13 +331,13 @@ public interface ObjectIterable<T> extends Iterable<T>
 	 * @param filter that should be applied
 	 * @return the found value or the null equivalent variant.
 	 */
-	default T findFirst(Predicate<T> filter) {
+	default Optional<T> findFirst(Predicate<T> filter) {
 		Objects.requireNonNull(filter);
 		for(ObjectIterator<T> iter = iterator();iter.hasNext();) {
 			T entry = iter.next();
-			if(filter.test(entry)) return entry;
+			if(filter.test(entry)) return Optional.ofNullable(entry);
 		}
-		return null;
+		return Optional.empty();
 	}
 	
 	/**
@@ -362,7 +363,7 @@ public interface ObjectIterable<T> extends Iterable<T>
 	 * @param operator the operation that should be applied
 	 * @return the reduction result, returns null value if nothing was found
 	 */
-	default T reduce(ObjectObjectUnaryOperator<T, T> operator) {
+	default Optional<T> reduce(ObjectObjectUnaryOperator<T, T> operator) {
 		Objects.requireNonNull(operator);
 		T state = null;
 		boolean empty = true;
@@ -374,7 +375,7 @@ public interface ObjectIterable<T> extends Iterable<T>
 			}
 			state = operator.apply(state, iter.next());
 		}
-		return state;
+		return empty ? Optional.empty() : Optional.ofNullable(state);
 	}	
 	
 	/**

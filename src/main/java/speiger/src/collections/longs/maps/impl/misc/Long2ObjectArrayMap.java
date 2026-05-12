@@ -4,10 +4,12 @@ import java.util.Arrays;
 import java.util.Map;
 import java.util.NoSuchElementException;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.function.Consumer;
 import java.util.function.BiFunction;
 import java.util.function.Predicate;
 import java.util.function.LongPredicate;
+import java.util.OptionalLong;
 
 import speiger.src.collections.longs.collections.LongBidirectionalIterator;
 import speiger.src.collections.longs.functions.LongConsumer;
@@ -665,6 +667,10 @@ public class Long2ObjectArrayMap<V> extends AbstractLong2ObjectMap<V> implements
 	
 	private class MapEntrySet extends AbstractObjectSet<Long2ObjectMap.Entry<V>> implements Long2ObjectOrderedMap.FastOrderedSet<V> {
 		@Override
+		public void addFirst(Long2ObjectMap.Entry<V> o) { throw new UnsupportedOperationException(); }
+		@Override
+		public void addLast(Long2ObjectMap.Entry<V> o) { throw new UnsupportedOperationException(); }
+		@Override
 		public boolean addAndMoveToFirst(Long2ObjectMap.Entry<V> o) { throw new UnsupportedOperationException(); }
 		@Override
 		public boolean addAndMoveToLast(Long2ObjectMap.Entry<V> o) { throw new UnsupportedOperationException(); }
@@ -812,7 +818,7 @@ public class Long2ObjectArrayMap<V> extends AbstractLong2ObjectMap<V> implements
 		}
 		
 		@Override
-		public Long2ObjectMap.Entry<V> reduce(ObjectObjectUnaryOperator<Long2ObjectMap.Entry<V>, Long2ObjectMap.Entry<V>> operator) {
+		public Optional<Long2ObjectMap.Entry<V>> reduce(ObjectObjectUnaryOperator<Long2ObjectMap.Entry<V>, Long2ObjectMap.Entry<V>> operator) {
 			Objects.requireNonNull(operator);
 			Long2ObjectMap.Entry<V> state = null;
 			boolean empty = true;
@@ -824,19 +830,19 @@ public class Long2ObjectArrayMap<V> extends AbstractLong2ObjectMap<V> implements
 				}
 				state = operator.apply(state, new ValueMapEntry(i));
 			}
-			return state;
+			return empty ? Optional.empty() : Optional.ofNullable(state);
 		}
 		
 		@Override
-		public Long2ObjectMap.Entry<V> findFirst(Predicate<Long2ObjectMap.Entry<V>> filter) {
+		public Optional<Long2ObjectMap.Entry<V>> findFirst(Predicate<Long2ObjectMap.Entry<V>> filter) {
 			Objects.requireNonNull(filter);
-			if(size() <= 0) return null;
+			if(size() <= 0) return Optional.empty();
 			MapEntry entry = new MapEntry();
 			for(int i = 0;i<size;i++) {
 				entry.set(i);
-				if(filter.test(entry)) return entry;
+				if(filter.test(entry)) return Optional.ofNullable(entry);
 			}
-			return null;
+			return Optional.empty();
 		}
 		
 		@Override
@@ -908,6 +914,10 @@ public class Long2ObjectArrayMap<V> extends AbstractLong2ObjectMap<V> implements
 		
 		@Override
 		public boolean add(long o) { throw new UnsupportedOperationException(); }
+		@Override
+		public void addFirst(long o) { throw new UnsupportedOperationException(); }
+		@Override
+		public void addLast(long o) { throw new UnsupportedOperationException(); }
 		@Override
 		public boolean addAndMoveToFirst(long o) { throw new UnsupportedOperationException(); }
 		@Override
@@ -995,7 +1005,7 @@ public class Long2ObjectArrayMap<V> extends AbstractLong2ObjectMap<V> implements
 		}
 		
 		@Override
-		public long reduce(LongLongUnaryOperator operator) {
+		public OptionalLong reduce(LongLongUnaryOperator operator) {
 			Objects.requireNonNull(operator);
 			long state = 0L;
 			boolean empty = true;
@@ -1007,16 +1017,16 @@ public class Long2ObjectArrayMap<V> extends AbstractLong2ObjectMap<V> implements
 				}
 				state = operator.applyAsLong(state, keys[i]);
 			}
-			return state;
+			return empty ? OptionalLong.empty() : OptionalLong.of(state);
 		}
 		
 		@Override
-		public long findFirst(LongPredicate filter) {
+		public OptionalLong findFirst(LongPredicate filter) {
 			Objects.requireNonNull(filter);
 			for(int i = 0;i<size;i++) {
-				if(filter.test(keys[i])) return keys[i];
+				if(filter.test(keys[i])) return OptionalLong.of(keys[i]);
 			}
-			return 0L;
+			return OptionalLong.empty();
 		}
 		
 		@Override
@@ -1117,7 +1127,7 @@ public class Long2ObjectArrayMap<V> extends AbstractLong2ObjectMap<V> implements
 		}
 		
 		@Override
-		public V reduce(ObjectObjectUnaryOperator<V, V> operator) {
+		public Optional<V> reduce(ObjectObjectUnaryOperator<V, V> operator) {
 			Objects.requireNonNull(operator);
 			V state = null;
 			boolean empty = true;
@@ -1129,16 +1139,16 @@ public class Long2ObjectArrayMap<V> extends AbstractLong2ObjectMap<V> implements
 				}
 				state = operator.apply(state, values[i]);
 			}
-			return state;
+			return empty ? Optional.empty() : Optional.ofNullable(state);
 		}
 		
 		@Override
-		public V findFirst(Predicate<V> filter) {
+		public Optional<V> findFirst(Predicate<V> filter) {
 			Objects.requireNonNull(filter);
 			for(int i = 0;i<size;i++) {
-				if(filter.test(values[i])) return values[i];
+				if(filter.test(values[i])) return Optional.ofNullable(values[i]);
 			}
-			return null;
+			return Optional.empty();
 		}
 		
 		@Override

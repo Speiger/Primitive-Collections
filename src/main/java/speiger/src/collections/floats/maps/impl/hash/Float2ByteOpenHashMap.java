@@ -5,6 +5,7 @@ import java.util.ConcurrentModificationException;
 import java.util.Map;
 import java.util.NoSuchElementException;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.function.Consumer;
 import java.util.function.BiFunction;
 import java.util.function.Predicate;
@@ -19,6 +20,7 @@ import speiger.src.collections.floats.functions.consumer.FloatByteConsumer;
 import speiger.src.collections.floats.functions.function.Float2ByteFunction;
 import speiger.src.collections.floats.functions.function.FloatByteUnaryOperator;
 import speiger.src.collections.floats.functions.function.FloatFloatUnaryOperator;
+import speiger.src.collections.floats.functions.OptionalFloat;
 import speiger.src.collections.floats.functions.function.FloatPredicate;
 import speiger.src.collections.floats.maps.abstracts.AbstractFloat2ByteMap;
 import speiger.src.collections.floats.maps.interfaces.Float2ByteMap;
@@ -34,6 +36,7 @@ import speiger.src.collections.bytes.functions.ByteConsumer;
 import speiger.src.collections.objects.functions.consumer.ObjectObjectConsumer;
 import speiger.src.collections.objects.functions.consumer.ObjectByteConsumer;
 import speiger.src.collections.bytes.functions.function.BytePredicate;
+import speiger.src.collections.bytes.functions.OptionalByte;
 import speiger.src.collections.objects.collections.ObjectIterator;
 import speiger.src.collections.objects.sets.AbstractObjectSet;
 import speiger.src.collections.objects.sets.ObjectSet;
@@ -920,7 +923,7 @@ public class Float2ByteOpenHashMap extends AbstractFloat2ByteMap implements ITri
 		}
 		
 		@Override
-		public Float2ByteMap.Entry reduce(ObjectObjectUnaryOperator<Float2ByteMap.Entry, Float2ByteMap.Entry> operator) {
+		public Optional<Float2ByteMap.Entry> reduce(ObjectObjectUnaryOperator<Float2ByteMap.Entry, Float2ByteMap.Entry> operator) {
 			Objects.requireNonNull(operator);
 			Float2ByteMap.Entry state = null;
 			boolean empty = true;
@@ -937,25 +940,25 @@ public class Float2ByteOpenHashMap extends AbstractFloat2ByteMap implements ITri
 				}
 				state = operator.apply(state, new ValueMapEntry(i));
 			}
-			return state;
+			return empty ? Optional.empty() : Optional.ofNullable(state);
 		}
 		
 		@Override
-		public Float2ByteMap.Entry findFirst(Predicate<Float2ByteMap.Entry> filter) {
+		public Optional<Float2ByteMap.Entry> findFirst(Predicate<Float2ByteMap.Entry> filter) {
 			Objects.requireNonNull(filter);
-			if(size() <= 0) return null;
+			if(size() <= 0) return Optional.empty();
 			MapEntry entry = new MapEntry();
 			if(containsNull) {
 				entry.set(nullIndex);
-				if(filter.test(entry)) return entry;
+				if(filter.test(entry)) return Optional.ofNullable(entry);
 			}
 			for(int i = nullIndex-1;i>=0;i--) {
 				if(Float.floatToIntBits(keys[i]) != 0) {
 					entry.set(i);
-					if(filter.test(entry)) return entry;
+					if(filter.test(entry)) return Optional.ofNullable(entry);
 				}
 			}
-			return null;
+			return Optional.empty();
 		}
 		
 		@Override
@@ -1127,7 +1130,7 @@ public class Float2ByteOpenHashMap extends AbstractFloat2ByteMap implements ITri
 		}
 		
 		@Override
-		public float reduce(FloatFloatUnaryOperator operator) {
+		public OptionalFloat reduce(FloatFloatUnaryOperator operator) {
 			Objects.requireNonNull(operator);
 			float state = 0F;
 			boolean empty = true;
@@ -1144,18 +1147,18 @@ public class Float2ByteOpenHashMap extends AbstractFloat2ByteMap implements ITri
 				}
 				state = operator.applyAsFloat(state, keys[i]);
 			}
-			return state;
+			return empty ? OptionalFloat.empty() : OptionalFloat.of(state);
 		}
 		
 		@Override
-		public float findFirst(FloatPredicate filter) {
+		public OptionalFloat findFirst(FloatPredicate filter) {
 			Objects.requireNonNull(filter);
-			if(size() <= 0) return 0F;
-			if(containsNull && filter.test(keys[nullIndex])) return keys[nullIndex];
+			if(size() <= 0) return OptionalFloat.empty();
+			if(containsNull && filter.test(keys[nullIndex])) return OptionalFloat.of(keys[nullIndex]);
 			for(int i = nullIndex-1;i>=0;i--) {
-				if(Float.floatToIntBits(keys[i]) != 0 && filter.test(keys[i])) return keys[i];
+				if(Float.floatToIntBits(keys[i]) != 0 && filter.test(keys[i])) return OptionalFloat.of(keys[i]);
 			}
-			return 0F;
+			return OptionalFloat.empty();
 		}
 		
 		@Override
@@ -1270,7 +1273,7 @@ public class Float2ByteOpenHashMap extends AbstractFloat2ByteMap implements ITri
 		}
 		
 		@Override
-		public byte reduce(ByteByteUnaryOperator operator) {
+		public OptionalByte reduce(ByteByteUnaryOperator operator) {
 			Objects.requireNonNull(operator);
 			byte state = (byte)0;
 			boolean empty = true;
@@ -1287,18 +1290,18 @@ public class Float2ByteOpenHashMap extends AbstractFloat2ByteMap implements ITri
 				}
 				state = operator.applyAsByte(state, values[i]);
 			}
-			return state;
+			return empty ? OptionalByte.empty() : OptionalByte.of(state);
 		}
 		
 		@Override
-		public byte findFirst(BytePredicate filter) {
+		public OptionalByte findFirst(BytePredicate filter) {
 			Objects.requireNonNull(filter);
-			if(size() <= 0) return (byte)0;
-			if(containsNull && filter.test(values[nullIndex])) return values[nullIndex];
+			if(size() <= 0) return OptionalByte.empty();
+			if(containsNull && filter.test(values[nullIndex])) return OptionalByte.of(values[nullIndex]);
 			for(int i = nullIndex-1;i>=0;i--) {
-				if(Float.floatToIntBits(keys[i]) != 0 && filter.test(values[i])) return values[i];
+				if(Float.floatToIntBits(keys[i]) != 0 && filter.test(values[i])) return OptionalByte.of(values[i]);
 			}
-			return (byte)0;
+			return OptionalByte.empty();
 		}
 		
 		@Override

@@ -3,12 +3,14 @@ package speiger.src.collections.objects.utils;
 import java.util.Collection;
 import java.util.Comparator;
 import java.util.function.Consumer;
+import java.util.function.BiFunction;
 import java.util.function.Predicate;
-
+import java.util.Optional;
 import speiger.src.collections.objects.collections.ObjectIterator;
 import speiger.src.collections.objects.collections.ObjectCollection;
 import speiger.src.collections.objects.queues.ObjectPriorityDequeue;
 import speiger.src.collections.objects.queues.ObjectPriorityQueue;
+import speiger.src.collections.objects.functions.function.ObjectObjectUnaryOperator;
 import speiger.src.collections.objects.functions.consumer.ObjectObjectConsumer;
 
 /**
@@ -121,7 +123,10 @@ public class ObjectPriorityQueues
 		@Override
 		public boolean matchesAll(Predicate<T> filter) { synchronized(mutex) { return queue.matchesAll(filter); } }
 		@Override
-		public T findFirst(Predicate<T> filter) { synchronized(mutex) { return queue.findFirst(filter); } }
+		public Optional<T> findFirst(Predicate<T> filter) { synchronized(mutex) { return queue.findFirst(filter); } }
+		public <E> E reduce(E identity, BiFunction<E, T, E> operator) { synchronized(mutex) { return queue.reduce(identity, operator); } }
+		@Override
+		public Optional<T> reduce(ObjectObjectUnaryOperator<T, T> operator) { synchronized(mutex) { return queue.reduce(operator); } }
 		@Override
 		public int count(Predicate<T> filter) { synchronized(mutex) { return queue.count(filter); } }
 	}

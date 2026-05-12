@@ -4,6 +4,7 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.NoSuchElementException;
 import java.util.Objects;
+import java.util.OptionalLong;
 import java.util.function.Predicate;
 import java.util.function.UnaryOperator;
 import java.util.function.LongPredicate;
@@ -273,12 +274,12 @@ public class ImmutableLongList extends AbstractLongList
 	}
 	
 	@Override
-	public long findFirst(LongPredicate filter) {
+	public OptionalLong findFirst(LongPredicate filter) {
 		Objects.requireNonNull(filter);
 		for(int i = 0,m=data.length;i<m;i++) {
-			if(filter.test(data[i])) return data[i];
+			if(filter.test(data[i])) return OptionalLong.of(data[i]);
 		}
-		return 0L;
+		return OptionalLong.empty();
 	}
 	
 	@Override
@@ -292,7 +293,7 @@ public class ImmutableLongList extends AbstractLongList
 	}
 	
 	@Override
-	public long reduce(LongLongUnaryOperator operator) {
+	public OptionalLong reduce(LongLongUnaryOperator operator) {
 		Objects.requireNonNull(operator);
 		long state = 0L;
 		boolean empty = true;
@@ -304,7 +305,7 @@ public class ImmutableLongList extends AbstractLongList
 			}
 			state = operator.applyAsLong(state, data[i]);
 		}
-		return state;
+		return empty ? OptionalLong.empty() : OptionalLong.of(state);
 	}
 	
 	@Override

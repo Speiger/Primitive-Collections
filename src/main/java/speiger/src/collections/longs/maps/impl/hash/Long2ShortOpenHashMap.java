@@ -5,10 +5,12 @@ import java.util.ConcurrentModificationException;
 import java.util.Map;
 import java.util.NoSuchElementException;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.function.Consumer;
 import java.util.function.BiFunction;
 import java.util.function.Predicate;
 import java.util.function.LongPredicate;
+import java.util.OptionalLong;
 
 import speiger.src.collections.longs.collections.LongIterator;
 import speiger.src.collections.longs.functions.LongConsumer;
@@ -34,6 +36,7 @@ import speiger.src.collections.shorts.functions.ShortConsumer;
 import speiger.src.collections.objects.functions.consumer.ObjectObjectConsumer;
 import speiger.src.collections.objects.functions.consumer.ObjectShortConsumer;
 import speiger.src.collections.shorts.functions.function.ShortPredicate;
+import speiger.src.collections.shorts.functions.OptionalShort;
 import speiger.src.collections.objects.collections.ObjectIterator;
 import speiger.src.collections.objects.sets.AbstractObjectSet;
 import speiger.src.collections.objects.sets.ObjectSet;
@@ -920,7 +923,7 @@ public class Long2ShortOpenHashMap extends AbstractLong2ShortMap implements ITri
 		}
 		
 		@Override
-		public Long2ShortMap.Entry reduce(ObjectObjectUnaryOperator<Long2ShortMap.Entry, Long2ShortMap.Entry> operator) {
+		public Optional<Long2ShortMap.Entry> reduce(ObjectObjectUnaryOperator<Long2ShortMap.Entry, Long2ShortMap.Entry> operator) {
 			Objects.requireNonNull(operator);
 			Long2ShortMap.Entry state = null;
 			boolean empty = true;
@@ -937,25 +940,25 @@ public class Long2ShortOpenHashMap extends AbstractLong2ShortMap implements ITri
 				}
 				state = operator.apply(state, new ValueMapEntry(i));
 			}
-			return state;
+			return empty ? Optional.empty() : Optional.ofNullable(state);
 		}
 		
 		@Override
-		public Long2ShortMap.Entry findFirst(Predicate<Long2ShortMap.Entry> filter) {
+		public Optional<Long2ShortMap.Entry> findFirst(Predicate<Long2ShortMap.Entry> filter) {
 			Objects.requireNonNull(filter);
-			if(size() <= 0) return null;
+			if(size() <= 0) return Optional.empty();
 			MapEntry entry = new MapEntry();
 			if(containsNull) {
 				entry.set(nullIndex);
-				if(filter.test(entry)) return entry;
+				if(filter.test(entry)) return Optional.ofNullable(entry);
 			}
 			for(int i = nullIndex-1;i>=0;i--) {
 				if(keys[i] != 0) {
 					entry.set(i);
-					if(filter.test(entry)) return entry;
+					if(filter.test(entry)) return Optional.ofNullable(entry);
 				}
 			}
-			return null;
+			return Optional.empty();
 		}
 		
 		@Override
@@ -1127,7 +1130,7 @@ public class Long2ShortOpenHashMap extends AbstractLong2ShortMap implements ITri
 		}
 		
 		@Override
-		public long reduce(LongLongUnaryOperator operator) {
+		public OptionalLong reduce(LongLongUnaryOperator operator) {
 			Objects.requireNonNull(operator);
 			long state = 0L;
 			boolean empty = true;
@@ -1144,18 +1147,18 @@ public class Long2ShortOpenHashMap extends AbstractLong2ShortMap implements ITri
 				}
 				state = operator.applyAsLong(state, keys[i]);
 			}
-			return state;
+			return empty ? OptionalLong.empty() : OptionalLong.of(state);
 		}
 		
 		@Override
-		public long findFirst(LongPredicate filter) {
+		public OptionalLong findFirst(LongPredicate filter) {
 			Objects.requireNonNull(filter);
-			if(size() <= 0) return 0L;
-			if(containsNull && filter.test(keys[nullIndex])) return keys[nullIndex];
+			if(size() <= 0) return OptionalLong.empty();
+			if(containsNull && filter.test(keys[nullIndex])) return OptionalLong.of(keys[nullIndex]);
 			for(int i = nullIndex-1;i>=0;i--) {
-				if(keys[i] != 0 && filter.test(keys[i])) return keys[i];
+				if(keys[i] != 0 && filter.test(keys[i])) return OptionalLong.of(keys[i]);
 			}
-			return 0L;
+			return OptionalLong.empty();
 		}
 		
 		@Override
@@ -1270,7 +1273,7 @@ public class Long2ShortOpenHashMap extends AbstractLong2ShortMap implements ITri
 		}
 		
 		@Override
-		public short reduce(ShortShortUnaryOperator operator) {
+		public OptionalShort reduce(ShortShortUnaryOperator operator) {
 			Objects.requireNonNull(operator);
 			short state = (short)0;
 			boolean empty = true;
@@ -1287,18 +1290,18 @@ public class Long2ShortOpenHashMap extends AbstractLong2ShortMap implements ITri
 				}
 				state = operator.applyAsShort(state, values[i]);
 			}
-			return state;
+			return empty ? OptionalShort.empty() : OptionalShort.of(state);
 		}
 		
 		@Override
-		public short findFirst(ShortPredicate filter) {
+		public OptionalShort findFirst(ShortPredicate filter) {
 			Objects.requireNonNull(filter);
-			if(size() <= 0) return (short)0;
-			if(containsNull && filter.test(values[nullIndex])) return values[nullIndex];
+			if(size() <= 0) return OptionalShort.empty();
+			if(containsNull && filter.test(values[nullIndex])) return OptionalShort.of(values[nullIndex]);
 			for(int i = nullIndex-1;i>=0;i--) {
-				if(keys[i] != 0 && filter.test(values[i])) return values[i];
+				if(keys[i] != 0 && filter.test(values[i])) return OptionalShort.of(values[i]);
 			}
-			return (short)0;
+			return OptionalShort.empty();
 		}
 		
 		@Override

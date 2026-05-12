@@ -611,7 +611,11 @@ public class Double2ObjectMaps
 			super(c);
 			set = c;
 		}
-
+		
+		@Override
+		public void addFirst(Double2ObjectMap.Entry<V> o) { throw new UnsupportedOperationException(); }
+		@Override
+		public void addLast(Double2ObjectMap.Entry<V> o) { throw new UnsupportedOperationException(); }
 		@Override
 		public boolean addAndMoveToFirst(Double2ObjectMap.Entry<V> o) { throw new UnsupportedOperationException(); }
 		@Override

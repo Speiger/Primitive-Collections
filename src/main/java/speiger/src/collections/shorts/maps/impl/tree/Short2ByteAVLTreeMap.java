@@ -3,6 +3,7 @@ package speiger.src.collections.shorts.maps.impl.tree;
 import java.util.Collections;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.NoSuchElementException;
 import java.util.function.Consumer;
 import java.util.function.BiFunction;
@@ -18,6 +19,7 @@ import speiger.src.collections.ints.functions.consumer.IntObjectConsumer;
 import speiger.src.collections.ints.functions.consumer.IntByteConsumer;
 import speiger.src.collections.shorts.functions.function.Short2ByteFunction;
 import speiger.src.collections.shorts.functions.consumer.ShortByteConsumer;
+import speiger.src.collections.shorts.functions.OptionalShort;
 import speiger.src.collections.shorts.functions.function.ShortPredicate;
 import speiger.src.collections.shorts.functions.function.ShortByteUnaryOperator;
 import speiger.src.collections.shorts.functions.function.ShortShortUnaryOperator;
@@ -37,6 +39,7 @@ import speiger.src.collections.objects.functions.consumer.ObjectObjectConsumer;
 import speiger.src.collections.objects.functions.consumer.ObjectByteConsumer;
 
 import speiger.src.collections.bytes.functions.function.BytePredicate;
+import speiger.src.collections.bytes.functions.OptionalByte;
 import speiger.src.collections.objects.collections.ObjectBidirectionalIterator;
 import speiger.src.collections.objects.collections.ObjectIterator;
 import speiger.src.collections.objects.functions.function.ObjectObjectUnaryOperator;
@@ -1129,7 +1132,7 @@ public class Short2ByteAVLTreeMap extends AbstractShort2ByteMap implements Short
 		}
 		
 		@Override
-		public short reduce(ShortShortUnaryOperator operator) {
+		public OptionalShort reduce(ShortShortUnaryOperator operator) {
 			Objects.requireNonNull(operator);
 			short state = (short)0;
 			boolean empty = true;
@@ -1141,15 +1144,15 @@ public class Short2ByteAVLTreeMap extends AbstractShort2ByteMap implements Short
 				}
 				state = operator.applyAsShort(state, entry.key);
 			}
-			return state;
+			return empty ? OptionalShort.empty() : OptionalShort.of(state);
 		}
 		
 		@Override
-		public short findFirst(ShortPredicate filter) {
+		public OptionalShort findFirst(ShortPredicate filter) {
 			Objects.requireNonNull(filter);
 			for(Node entry = start(), end = end();entry != null && (end == null || (end != previous(entry)));entry = next(entry))
-				if(filter.test(entry.key)) return entry.key;
-			return (short)0;
+				if(filter.test(entry.key)) return OptionalShort.of(entry.key);
+			return OptionalShort.empty();
 		}
 		
 		@Override
@@ -1783,7 +1786,7 @@ public class Short2ByteAVLTreeMap extends AbstractShort2ByteMap implements Short
 			}
 			
 			@Override
-			public Short2ByteMap.Entry reduce(ObjectObjectUnaryOperator<Short2ByteMap.Entry, Short2ByteMap.Entry> operator) {
+			public Optional<Short2ByteMap.Entry> reduce(ObjectObjectUnaryOperator<Short2ByteMap.Entry, Short2ByteMap.Entry> operator) {
 				Objects.requireNonNull(operator);
 				Short2ByteMap.Entry state = null;
 				boolean empty = true;
@@ -1795,19 +1798,19 @@ public class Short2ByteAVLTreeMap extends AbstractShort2ByteMap implements Short
 					}
 					state = operator.apply(state, new BasicEntry(entry.key, entry.value));
 				}
-				return state;
+				return empty ? Optional.empty() : Optional.ofNullable(state);
 			}
 			
 			@Override
-			public Short2ByteMap.Entry findFirst(Predicate<Short2ByteMap.Entry> filter) {
+			public Optional<Short2ByteMap.Entry> findFirst(Predicate<Short2ByteMap.Entry> filter) {
 				Objects.requireNonNull(filter);
-				if(size() <= 0) return null;
+				if(size() <= 0) return Optional.empty();
 				BasicEntry subEntry = new BasicEntry();
 				for(Node entry = subLowest(), last = subHighest();entry != null && (last == null || last != previous(entry));entry = next(entry)) {
 					subEntry.set(entry.key, entry.value);
-					if(filter.test(subEntry)) return subEntry;
+					if(filter.test(subEntry)) return Optional.ofNullable(subEntry);
 				}
-				return null;
+				return Optional.empty();
 			}
 			
 			@Override
@@ -1902,7 +1905,7 @@ public class Short2ByteAVLTreeMap extends AbstractShort2ByteMap implements Short
 			}
 			
 			@Override
-			public byte reduce(ByteByteUnaryOperator operator) {
+			public OptionalByte reduce(ByteByteUnaryOperator operator) {
 				Objects.requireNonNull(operator);
 				byte state = (byte)0;
 				boolean empty = true;
@@ -1914,15 +1917,15 @@ public class Short2ByteAVLTreeMap extends AbstractShort2ByteMap implements Short
 					}
 					state = operator.applyAsByte(state, entry.value);
 				}
-				return state;
+				return empty ? OptionalByte.empty() : OptionalByte.of(state);
 			}
 			
 			@Override
-			public byte findFirst(BytePredicate filter) {
+			public OptionalByte findFirst(BytePredicate filter) {
 				Objects.requireNonNull(filter);
 				for(Node entry = subLowest(), last = subHighest();entry != null && (last == null || last != previous(entry));entry = next(entry))
-					if(filter.test(entry.value)) return entry.value;
-				return (byte)0;
+					if(filter.test(entry.value)) return OptionalByte.of(entry.value);
+				return OptionalByte.empty();
 			}
 			
 			@Override
@@ -2238,7 +2241,7 @@ public class Short2ByteAVLTreeMap extends AbstractShort2ByteMap implements Short
 		}
 		
 		@Override
-		public byte reduce(ByteByteUnaryOperator operator) {
+		public OptionalByte reduce(ByteByteUnaryOperator operator) {
 			Objects.requireNonNull(operator);
 			byte state = (byte)0;
 			boolean empty = true;
@@ -2250,15 +2253,15 @@ public class Short2ByteAVLTreeMap extends AbstractShort2ByteMap implements Short
 				}
 				state = operator.applyAsByte(state, entry.value);
 			}
-			return state;
+			return empty ? OptionalByte.empty() : OptionalByte.of(state);
 		}
 		
 		@Override
-		public byte findFirst(BytePredicate filter) {
+		public OptionalByte findFirst(BytePredicate filter) {
 			Objects.requireNonNull(filter);
 			for(Node entry = first;entry != null;entry = entry.next())
-				if(filter.test(entry.value)) return entry.value;
-			return (byte)0;
+				if(filter.test(entry.value)) return OptionalByte.of(entry.value);
+			return OptionalByte.empty();
 		}
 		
 		@Override
@@ -2399,7 +2402,7 @@ public class Short2ByteAVLTreeMap extends AbstractShort2ByteMap implements Short
 		}
 		
 		@Override
-		public Short2ByteMap.Entry reduce(ObjectObjectUnaryOperator<Short2ByteMap.Entry, Short2ByteMap.Entry> operator) {
+		public Optional<Short2ByteMap.Entry> reduce(ObjectObjectUnaryOperator<Short2ByteMap.Entry, Short2ByteMap.Entry> operator) {
 			Objects.requireNonNull(operator);
 			Short2ByteMap.Entry state = null;
 			boolean empty = true;
@@ -2411,19 +2414,19 @@ public class Short2ByteAVLTreeMap extends AbstractShort2ByteMap implements Short
 				}
 				state = operator.apply(state, new BasicEntry(entry.key, entry.value));
 			}
-			return state;
+			return empty ? Optional.empty() : Optional.ofNullable(state);
 		}
 		
 		@Override
-		public Short2ByteMap.Entry findFirst(Predicate<Short2ByteMap.Entry> filter) {
+		public Optional<Short2ByteMap.Entry> findFirst(Predicate<Short2ByteMap.Entry> filter) {
 			Objects.requireNonNull(filter);
-			if(size() <= 0) return null;
+			if(size() <= 0) return Optional.empty();
 			BasicEntry subEntry = new BasicEntry();
 			for(Node entry = first;entry != null;entry = entry.next()) {
 				subEntry.set(entry.key, entry.value);
-				if(filter.test(subEntry)) return subEntry;
+				if(filter.test(subEntry)) return Optional.ofNullable(subEntry);
 			}
-			return null;
+			return Optional.empty();
 		}
 		
 		@Override

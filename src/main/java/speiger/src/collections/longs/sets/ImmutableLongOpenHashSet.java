@@ -5,6 +5,7 @@ import java.util.Collection;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 import java.util.Objects;
+import java.util.OptionalLong;
 import java.util.function.LongPredicate;
 
 import speiger.src.collections.longs.collections.LongBidirectionalIterator;
@@ -236,6 +237,10 @@ public class ImmutableLongOpenHashSet extends AbstractLongSet implements LongOrd
 	@Override
 	public boolean addAll(LongCollection c) { throw new UnsupportedOperationException(); }
 	@Override
+	public void addFirst(long o) { throw new UnsupportedOperationException(); }
+	@Override
+	public void addLast(long o) { throw new UnsupportedOperationException(); }
+	@Override
 	public boolean addAndMoveToFirst(long o) { throw new UnsupportedOperationException(); }
 	@Override
 	public boolean addAndMoveToLast(long o) { throw new UnsupportedOperationException(); }
@@ -371,7 +376,7 @@ public class ImmutableLongOpenHashSet extends AbstractLongSet implements LongOrd
 	}
 	
 	@Override
-	public long reduce(LongLongUnaryOperator operator) {
+	public OptionalLong reduce(LongLongUnaryOperator operator) {
 		Objects.requireNonNull(operator);
 		long state = 0L;
 		boolean empty = true;
@@ -384,18 +389,18 @@ public class ImmutableLongOpenHashSet extends AbstractLongSet implements LongOrd
 			else state = operator.applyAsLong(state, keys[index]);
 			index = (int)links[index];
 		}
-		return state;
+		return empty ? OptionalLong.empty() : OptionalLong.of(state);
 	}
 	
 	@Override
-	public long findFirst(LongPredicate filter) {
+	public OptionalLong findFirst(LongPredicate filter) {
 		Objects.requireNonNull(filter);
 		int index = firstIndex;
 		while(index != -1) {
-			if(filter.test(keys[index])) return keys[index];
+			if(filter.test(keys[index])) return OptionalLong.of(keys[index]);
 			index = (int)links[index];
 		}
-		return 0L;
+		return OptionalLong.empty();
 	}
 	
 	@Override

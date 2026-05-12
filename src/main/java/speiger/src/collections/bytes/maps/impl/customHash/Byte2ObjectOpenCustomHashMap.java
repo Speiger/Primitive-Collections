@@ -5,6 +5,7 @@ import java.util.ConcurrentModificationException;
 import java.util.Map;
 import java.util.NoSuchElementException;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.function.Consumer;
 import java.util.function.BiFunction;
 import java.util.function.Predicate;
@@ -18,6 +19,7 @@ import speiger.src.collections.bytes.functions.consumer.ByteObjectConsumer;
 import speiger.src.collections.bytes.functions.function.ByteFunction;
 import speiger.src.collections.bytes.functions.function.ByteObjectUnaryOperator;
 import speiger.src.collections.bytes.functions.function.ByteByteUnaryOperator;
+import speiger.src.collections.bytes.functions.OptionalByte;
 import speiger.src.collections.bytes.functions.function.BytePredicate;
 import speiger.src.collections.bytes.maps.abstracts.AbstractByte2ObjectMap;
 import speiger.src.collections.bytes.maps.interfaces.Byte2ObjectMap;
@@ -868,7 +870,7 @@ public class Byte2ObjectOpenCustomHashMap<V> extends AbstractByte2ObjectMap<V> i
 		}
 		
 		@Override
-		public Byte2ObjectMap.Entry<V> reduce(ObjectObjectUnaryOperator<Byte2ObjectMap.Entry<V>, Byte2ObjectMap.Entry<V>> operator) {
+		public Optional<Byte2ObjectMap.Entry<V>> reduce(ObjectObjectUnaryOperator<Byte2ObjectMap.Entry<V>, Byte2ObjectMap.Entry<V>> operator) {
 			Objects.requireNonNull(operator);
 			Byte2ObjectMap.Entry<V> state = null;
 			boolean empty = true;
@@ -885,25 +887,25 @@ public class Byte2ObjectOpenCustomHashMap<V> extends AbstractByte2ObjectMap<V> i
 				}
 				state = operator.apply(state, new ValueMapEntry(i));
 			}
-			return state;
+			return empty ? Optional.empty() : Optional.ofNullable(state);
 		}
 		
 		@Override
-		public Byte2ObjectMap.Entry<V> findFirst(Predicate<Byte2ObjectMap.Entry<V>> filter) {
+		public Optional<Byte2ObjectMap.Entry<V>> findFirst(Predicate<Byte2ObjectMap.Entry<V>> filter) {
 			Objects.requireNonNull(filter);
-			if(size() <= 0) return null;
+			if(size() <= 0) return Optional.empty();
 			MapEntry entry = new MapEntry();
 			if(containsNull) {
 				entry.set(nullIndex);
-				if(filter.test(entry)) return entry;
+				if(filter.test(entry)) return Optional.ofNullable(entry);
 			}
 			for(int i = nullIndex-1;i>=0;i--) {
 				if(!strategy.equals(keys[i], (byte)0)) {
 					entry.set(i);
-					if(filter.test(entry)) return entry;
+					if(filter.test(entry)) return Optional.ofNullable(entry);
 				}
 			}
-			return null;
+			return Optional.empty();
 		}
 		
 		@Override
@@ -1077,7 +1079,7 @@ public class Byte2ObjectOpenCustomHashMap<V> extends AbstractByte2ObjectMap<V> i
 		}
 		
 		@Override
-		public byte reduce(ByteByteUnaryOperator operator) {
+		public OptionalByte reduce(ByteByteUnaryOperator operator) {
 			Objects.requireNonNull(operator);
 			byte state = (byte)0;
 			boolean empty = true;
@@ -1094,18 +1096,18 @@ public class Byte2ObjectOpenCustomHashMap<V> extends AbstractByte2ObjectMap<V> i
 				}
 				state = operator.applyAsByte(state, keys[i]);
 			}
-			return state;
+			return empty ? OptionalByte.empty() : OptionalByte.of(state);
 		}
 		
 		@Override
-		public byte findFirst(BytePredicate filter) {
+		public OptionalByte findFirst(BytePredicate filter) {
 			Objects.requireNonNull(filter);
-			if(size() <= 0) return (byte)0;
-			if(containsNull && filter.test(keys[nullIndex])) return keys[nullIndex];
+			if(size() <= 0) return OptionalByte.empty();
+			if(containsNull && filter.test(keys[nullIndex])) return OptionalByte.of(keys[nullIndex]);
 			for(int i = nullIndex-1;i>=0;i--) {
-				if(!strategy.equals(keys[i], (byte)0) && filter.test(keys[i])) return keys[i];
+				if(!strategy.equals(keys[i], (byte)0) && filter.test(keys[i])) return OptionalByte.of(keys[i]);
 			}
-			return (byte)0;
+			return OptionalByte.empty();
 		}
 		
 		@Override
@@ -1220,7 +1222,7 @@ public class Byte2ObjectOpenCustomHashMap<V> extends AbstractByte2ObjectMap<V> i
 		}
 		
 		@Override
-		public V reduce(ObjectObjectUnaryOperator<V, V> operator) {
+		public Optional<V> reduce(ObjectObjectUnaryOperator<V, V> operator) {
 			Objects.requireNonNull(operator);
 			V state = null;
 			boolean empty = true;
@@ -1237,18 +1239,18 @@ public class Byte2ObjectOpenCustomHashMap<V> extends AbstractByte2ObjectMap<V> i
 				}
 				state = operator.apply(state, values[i]);
 			}
-			return state;
+			return empty ? Optional.empty() : Optional.ofNullable(state);
 		}
 		
 		@Override
-		public V findFirst(Predicate<V> filter) {
+		public Optional<V> findFirst(Predicate<V> filter) {
 			Objects.requireNonNull(filter);
-			if(size() <= 0) return null;
-			if(containsNull && filter.test(values[nullIndex])) return values[nullIndex];
+			if(size() <= 0) return Optional.empty();
+			if(containsNull && filter.test(values[nullIndex])) return Optional.ofNullable(values[nullIndex]);
 			for(int i = nullIndex-1;i>=0;i--) {
-				if(!strategy.equals(keys[i], (byte)0) && filter.test(values[i])) return values[i];
+				if(!strategy.equals(keys[i], (byte)0) && filter.test(values[i])) return Optional.ofNullable(values[i]);
 			}
-			return null;
+			return Optional.empty();
 		}
 		
 		@Override

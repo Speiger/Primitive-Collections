@@ -10,6 +10,7 @@ import speiger.src.collections.floats.collections.FloatCollection;
 import speiger.src.collections.floats.collections.FloatIterator;
 import speiger.src.collections.floats.collections.FloatBidirectionalIterator;
 import speiger.src.collections.floats.functions.FloatConsumer;
+import speiger.src.collections.floats.functions.OptionalFloat;
 import speiger.src.collections.ints.functions.consumer.IntFloatConsumer;
 import speiger.src.collections.objects.functions.consumer.ObjectFloatConsumer;
 import speiger.src.collections.floats.functions.function.FloatPredicate;
@@ -181,6 +182,46 @@ public class FloatLinkedOpenHashSet extends FloatOpenHashSet implements FloatOrd
 	public FloatLinkedOpenHashSet(FloatIterator iterator, float loadFactor) {
 		this(HashUtil.DEFAULT_MIN_CAPACITY, loadFactor);
 		while(iterator.hasNext()) add(iterator.nextFloat());
+	}
+	
+	@Override
+	public void addFirst(float o) {
+		if(Float.floatToIntBits(o) == 0) {
+			if(containsNull) return;
+			containsNull = true;
+			onNodeAdded(nullIndex);
+			moveToFirstIndex(nullIndex);
+		}
+		else {
+			int pos = HashUtil.mix(Float.hashCode(o)) & mask;
+			while(Float.floatToIntBits(keys[pos]) != 0) {
+				if(Float.floatToIntBits(keys[pos]) == Float.floatToIntBits(o)) return;
+				pos = ++pos & mask;
+			}
+			keys[pos] = o;
+			onNodeAdded(pos);
+			moveToFirstIndex(pos);
+		}
+		if(size++ >= maxFill) rehash(HashUtil.arraySize(size+1, loadFactor));
+	}
+	
+	@Override
+	public void addLast(float o) {
+		if(Float.floatToIntBits(o) == 0) {
+			if(containsNull) return;
+			containsNull = true;
+			onNodeAdded(nullIndex);
+		}
+		else {
+			int pos = HashUtil.mix(Float.hashCode(o)) & mask;
+			while(Float.floatToIntBits(keys[pos]) != 0) {
+				if(Float.floatToIntBits(keys[pos]) == Float.floatToIntBits(o)) return;
+				pos = ++pos & mask;
+			}
+			keys[pos] = o;
+			onNodeAdded(pos);
+		}
+		if(size++ >= maxFill) rehash(HashUtil.arraySize(size+1, loadFactor));
 	}
 	
 	@Override
@@ -471,7 +512,7 @@ public class FloatLinkedOpenHashSet extends FloatOpenHashSet implements FloatOrd
 	}
 	
 	@Override
-	public float reduce(FloatFloatUnaryOperator operator) {
+	public OptionalFloat reduce(FloatFloatUnaryOperator operator) {
 		Objects.requireNonNull(operator);
 		float state = 0F;
 		boolean empty = true;
@@ -484,18 +525,18 @@ public class FloatLinkedOpenHashSet extends FloatOpenHashSet implements FloatOrd
 			else state = operator.applyAsFloat(state, keys[index]);
 			index = (int)links[index];
 		}
-		return state;
+		return empty ? OptionalFloat.empty() : OptionalFloat.of(state);
 	}
 	
 	@Override
-	public float findFirst(FloatPredicate filter) {
+	public OptionalFloat findFirst(FloatPredicate filter) {
 		Objects.requireNonNull(filter);
 		int index = firstIndex;
 		while(index != -1) {
-			if(filter.test(keys[index])) return keys[index];
+			if(filter.test(keys[index])) return OptionalFloat.of(keys[index]);
 			index = (int)links[index];
 		}
-		return 0F;
+		return OptionalFloat.empty();
 	}
 	
 	@Override

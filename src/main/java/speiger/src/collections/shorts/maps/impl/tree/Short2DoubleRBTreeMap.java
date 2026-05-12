@@ -3,11 +3,13 @@ package speiger.src.collections.shorts.maps.impl.tree;
 import java.util.Collections;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.NoSuchElementException;
 import java.util.function.Consumer;
 import java.util.function.BiFunction;
 import java.util.function.Predicate;
 import java.util.function.DoublePredicate;
+import java.util.OptionalDouble;
 
 import speiger.src.collections.shorts.collections.ShortBidirectionalIterator;
 import speiger.src.collections.shorts.functions.ShortComparator;
@@ -18,6 +20,7 @@ import speiger.src.collections.ints.functions.consumer.IntObjectConsumer;
 import speiger.src.collections.ints.functions.consumer.IntDoubleConsumer;
 import speiger.src.collections.shorts.functions.function.Short2DoubleFunction;
 import speiger.src.collections.shorts.functions.consumer.ShortDoubleConsumer;
+import speiger.src.collections.shorts.functions.OptionalShort;
 import speiger.src.collections.shorts.functions.function.ShortPredicate;
 import speiger.src.collections.shorts.functions.function.ShortDoubleUnaryOperator;
 import speiger.src.collections.shorts.functions.function.ShortShortUnaryOperator;
@@ -1182,7 +1185,7 @@ public class Short2DoubleRBTreeMap extends AbstractShort2DoubleMap implements Sh
 		}
 		
 		@Override
-		public short reduce(ShortShortUnaryOperator operator) {
+		public OptionalShort reduce(ShortShortUnaryOperator operator) {
 			Objects.requireNonNull(operator);
 			short state = (short)0;
 			boolean empty = true;
@@ -1194,15 +1197,15 @@ public class Short2DoubleRBTreeMap extends AbstractShort2DoubleMap implements Sh
 				}
 				state = operator.applyAsShort(state, entry.key);
 			}
-			return state;
+			return empty ? OptionalShort.empty() : OptionalShort.of(state);
 		}
 		
 		@Override
-		public short findFirst(ShortPredicate filter) {
+		public OptionalShort findFirst(ShortPredicate filter) {
 			Objects.requireNonNull(filter);
 			for(Node entry = start(), end = end();entry != null && (end == null || (end != previous(entry)));entry = next(entry))
-				if(filter.test(entry.key)) return entry.key;
-			return (short)0;
+				if(filter.test(entry.key)) return OptionalShort.of(entry.key);
+			return OptionalShort.empty();
 		}
 		
 		@Override
@@ -1846,7 +1849,7 @@ public class Short2DoubleRBTreeMap extends AbstractShort2DoubleMap implements Sh
 			}
 			
 			@Override
-			public Short2DoubleMap.Entry reduce(ObjectObjectUnaryOperator<Short2DoubleMap.Entry, Short2DoubleMap.Entry> operator) {
+			public Optional<Short2DoubleMap.Entry> reduce(ObjectObjectUnaryOperator<Short2DoubleMap.Entry, Short2DoubleMap.Entry> operator) {
 				Objects.requireNonNull(operator);
 				Short2DoubleMap.Entry state = null;
 				boolean empty = true;
@@ -1858,19 +1861,19 @@ public class Short2DoubleRBTreeMap extends AbstractShort2DoubleMap implements Sh
 					}
 					state = operator.apply(state, new BasicEntry(entry.key, entry.value));
 				}
-				return state;
+				return empty ? Optional.empty() : Optional.ofNullable(state);
 			}
 			
 			@Override
-			public Short2DoubleMap.Entry findFirst(Predicate<Short2DoubleMap.Entry> filter) {
+			public Optional<Short2DoubleMap.Entry> findFirst(Predicate<Short2DoubleMap.Entry> filter) {
 				Objects.requireNonNull(filter);
-				if(size() <= 0) return null;
+				if(size() <= 0) return Optional.empty();
 				BasicEntry subEntry = new BasicEntry();
 				for(Node entry = subLowest(), last = subHighest();entry != null && (last == null || last != previous(entry));entry = next(entry)) {
 					subEntry.set(entry.key, entry.value);
-					if(filter.test(subEntry)) return subEntry;
+					if(filter.test(subEntry)) return Optional.ofNullable(subEntry);
 				}
-				return null;
+				return Optional.empty();
 			}
 			
 			@Override
@@ -1965,7 +1968,7 @@ public class Short2DoubleRBTreeMap extends AbstractShort2DoubleMap implements Sh
 			}
 			
 			@Override
-			public double reduce(DoubleDoubleUnaryOperator operator) {
+			public OptionalDouble reduce(DoubleDoubleUnaryOperator operator) {
 				Objects.requireNonNull(operator);
 				double state = 0D;
 				boolean empty = true;
@@ -1977,15 +1980,15 @@ public class Short2DoubleRBTreeMap extends AbstractShort2DoubleMap implements Sh
 					}
 					state = operator.applyAsDouble(state, entry.value);
 				}
-				return state;
+				return empty ? OptionalDouble.empty() : OptionalDouble.of(state);
 			}
 			
 			@Override
-			public double findFirst(DoublePredicate filter) {
+			public OptionalDouble findFirst(DoublePredicate filter) {
 				Objects.requireNonNull(filter);
 				for(Node entry = subLowest(), last = subHighest();entry != null && (last == null || last != previous(entry));entry = next(entry))
-					if(filter.test(entry.value)) return entry.value;
-				return 0D;
+					if(filter.test(entry.value)) return OptionalDouble.of(entry.value);
+				return OptionalDouble.empty();
 			}
 			
 			@Override
@@ -2301,7 +2304,7 @@ public class Short2DoubleRBTreeMap extends AbstractShort2DoubleMap implements Sh
 		}
 		
 		@Override
-		public double reduce(DoubleDoubleUnaryOperator operator) {
+		public OptionalDouble reduce(DoubleDoubleUnaryOperator operator) {
 			Objects.requireNonNull(operator);
 			double state = 0D;
 			boolean empty = true;
@@ -2313,15 +2316,15 @@ public class Short2DoubleRBTreeMap extends AbstractShort2DoubleMap implements Sh
 				}
 				state = operator.applyAsDouble(state, entry.value);
 			}
-			return state;
+			return empty ? OptionalDouble.empty() : OptionalDouble.of(state);
 		}
 		
 		@Override
-		public double findFirst(DoublePredicate filter) {
+		public OptionalDouble findFirst(DoublePredicate filter) {
 			Objects.requireNonNull(filter);
 			for(Node entry = first;entry != null;entry = entry.next())
-				if(filter.test(entry.value)) return entry.value;
-			return 0D;
+				if(filter.test(entry.value)) return OptionalDouble.of(entry.value);
+			return OptionalDouble.empty();
 		}
 		
 		@Override
@@ -2462,7 +2465,7 @@ public class Short2DoubleRBTreeMap extends AbstractShort2DoubleMap implements Sh
 		}
 		
 		@Override
-		public Short2DoubleMap.Entry reduce(ObjectObjectUnaryOperator<Short2DoubleMap.Entry, Short2DoubleMap.Entry> operator) {
+		public Optional<Short2DoubleMap.Entry> reduce(ObjectObjectUnaryOperator<Short2DoubleMap.Entry, Short2DoubleMap.Entry> operator) {
 			Objects.requireNonNull(operator);
 			Short2DoubleMap.Entry state = null;
 			boolean empty = true;
@@ -2474,19 +2477,19 @@ public class Short2DoubleRBTreeMap extends AbstractShort2DoubleMap implements Sh
 				}
 				state = operator.apply(state, new BasicEntry(entry.key, entry.value));
 			}
-			return state;
+			return empty ? Optional.empty() : Optional.ofNullable(state);
 		}
 		
 		@Override
-		public Short2DoubleMap.Entry findFirst(Predicate<Short2DoubleMap.Entry> filter) {
+		public Optional<Short2DoubleMap.Entry> findFirst(Predicate<Short2DoubleMap.Entry> filter) {
 			Objects.requireNonNull(filter);
-			if(size() <= 0) return null;
+			if(size() <= 0) return Optional.empty();
 			BasicEntry subEntry = new BasicEntry();
 			for(Node entry = first;entry != null;entry = entry.next()) {
 				subEntry.set(entry.key, entry.value);
-				if(filter.test(subEntry)) return subEntry;
+				if(filter.test(subEntry)) return Optional.ofNullable(subEntry);
 			}
-			return null;
+			return Optional.empty();
 		}
 		
 		@Override

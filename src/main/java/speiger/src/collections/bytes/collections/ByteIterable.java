@@ -7,6 +7,7 @@ import java.util.function.Consumer;
 import speiger.src.collections.bytes.functions.ByteConsumer;
 import speiger.src.collections.bytes.functions.ByteComparator;
 import speiger.src.collections.objects.collections.ObjectIterable;
+import speiger.src.collections.bytes.functions.OptionalByte;
 import speiger.src.collections.bytes.functions.function.ByteFunction;
 import speiger.src.collections.ints.functions.consumer.IntByteConsumer;
 import speiger.src.collections.objects.functions.consumer.ObjectByteConsumer;
@@ -281,13 +282,13 @@ public interface ByteIterable extends Iterable<Byte>
 	 * @param filter that should be applied
 	 * @return the found value or the null equivalent variant.
 	 */
-	default byte findFirst(BytePredicate filter) {
+	default OptionalByte findFirst(BytePredicate filter) {
 		Objects.requireNonNull(filter);
 		for(ByteIterator iter = iterator();iter.hasNext();) {
 			byte entry = iter.nextByte();
-			if(filter.test(entry)) return entry;
+			if(filter.test(entry)) return OptionalByte.of(entry);
 		}
-		return (byte)0;
+		return OptionalByte.empty();
 	}
 	
 	/**
@@ -312,7 +313,7 @@ public interface ByteIterable extends Iterable<Byte>
 	 * @param operator the operation that should be applied
 	 * @return the reduction result, returns null value if nothing was found
 	 */
-	default byte reduce(ByteByteUnaryOperator operator) {
+	default OptionalByte reduce(ByteByteUnaryOperator operator) {
 		Objects.requireNonNull(operator);
 		byte state = (byte)0;
 		boolean empty = true;
@@ -324,7 +325,7 @@ public interface ByteIterable extends Iterable<Byte>
 			}
 			state = operator.applyAsByte(state, iter.nextByte());
 		}
-		return state;
+		return empty ? OptionalByte.empty() : OptionalByte.of(state);
 	}	
 	
 	/**

@@ -11,6 +11,7 @@ import java.util.function.Consumer;
 import java.util.function.Predicate;
 import java.util.function.UnaryOperator;
 import java.util.function.IntPredicate;import java.util.function.IntUnaryOperator;
+import speiger.src.collections.chars.functions.OptionalChar;
 import speiger.src.collections.ints.functions.consumer.IntCharConsumer;
 import speiger.src.collections.objects.functions.consumer.ObjectCharConsumer;
 import speiger.src.collections.chars.functions.function.CharPredicate;
@@ -429,12 +430,12 @@ public class CharLinkedList extends AbstractCharList implements CharPriorityDequ
 	}
 	
 	@Override
-	public char findFirst(CharPredicate filter) {
+	public OptionalChar findFirst(CharPredicate filter) {
 		Objects.requireNonNull(filter);
 		for(Entry entry = first;entry != null;entry = entry.next) {
-			if(filter.test(entry.value)) return entry.value;
+			if(filter.test(entry.value)) return OptionalChar.of(entry.value);
 		}
-		return (char)0;
+		return OptionalChar.empty();
 	}
 	
 	@Override
@@ -448,7 +449,7 @@ public class CharLinkedList extends AbstractCharList implements CharPriorityDequ
 	}
 	
 	@Override
-	public char reduce(CharCharUnaryOperator operator) {
+	public OptionalChar reduce(CharCharUnaryOperator operator) {
 		Objects.requireNonNull(operator);
 		char state = (char)0;
 		boolean empty = true;
@@ -460,7 +461,7 @@ public class CharLinkedList extends AbstractCharList implements CharPriorityDequ
 			}
 			state = operator.applyAsChar(state, entry.value);
 		}
-		return state;
+		return empty ? OptionalChar.empty() : OptionalChar.of(state);
 	}
 	
 	@Override

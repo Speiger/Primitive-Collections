@@ -4,10 +4,12 @@ import java.util.Arrays;
 import java.util.Map;
 import java.util.NoSuchElementException;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.function.Consumer;
 import java.util.function.BiFunction;
 import java.util.function.Predicate;
 import java.util.function.LongPredicate;
+import java.util.OptionalLong;
 
 import speiger.src.collections.longs.collections.LongBidirectionalIterator;
 import speiger.src.collections.longs.functions.LongConsumer;
@@ -32,6 +34,7 @@ import speiger.src.collections.objects.functions.consumer.ObjectObjectConsumer;
 import speiger.src.collections.objects.functions.consumer.ObjectCharConsumer;
 
 import speiger.src.collections.chars.functions.function.CharPredicate;
+import speiger.src.collections.chars.functions.OptionalChar;
 import speiger.src.collections.objects.functions.function.ObjectObjectUnaryOperator;
 import speiger.src.collections.objects.collections.ObjectBidirectionalIterator;
 import speiger.src.collections.objects.lists.ObjectListIterator;
@@ -670,6 +673,10 @@ public class Long2CharLinkedOpenHashMap extends Long2CharOpenHashMap implements 
 	
 	private class MapEntrySet extends AbstractObjectSet<Long2CharMap.Entry> implements Long2CharOrderedMap.FastOrderedSet {
 		@Override
+		public void addFirst(Long2CharMap.Entry o) { throw new UnsupportedOperationException(); }
+		@Override
+		public void addLast(Long2CharMap.Entry o) { throw new UnsupportedOperationException(); }
+		@Override
 		public boolean addAndMoveToFirst(Long2CharMap.Entry o) { throw new UnsupportedOperationException(); }
 		@Override
 		public boolean addAndMoveToLast(Long2CharMap.Entry o) { throw new UnsupportedOperationException(); }
@@ -834,7 +841,7 @@ public class Long2CharLinkedOpenHashMap extends Long2CharOpenHashMap implements 
 		}
 		
 		@Override
-		public Long2CharMap.Entry reduce(ObjectObjectUnaryOperator<Long2CharMap.Entry, Long2CharMap.Entry> operator) {
+		public Optional<Long2CharMap.Entry> reduce(ObjectObjectUnaryOperator<Long2CharMap.Entry, Long2CharMap.Entry> operator) {
 			Objects.requireNonNull(operator);
 			Long2CharMap.Entry state = null;
 			boolean empty = true;
@@ -849,21 +856,21 @@ public class Long2CharLinkedOpenHashMap extends Long2CharOpenHashMap implements 
 				state = operator.apply(state, new ValueMapEntry(index));
 				index = (int)links[index];
 			}
-			return state;
+			return empty ? Optional.empty() : Optional.ofNullable(state);
 		}
 		
 		@Override
-		public Long2CharMap.Entry findFirst(Predicate<Long2CharMap.Entry> filter) {
+		public Optional<Long2CharMap.Entry> findFirst(Predicate<Long2CharMap.Entry> filter) {
 			Objects.requireNonNull(filter);
-			if(size() <= 0) return null;
+			if(size() <= 0) return Optional.empty();
 			MapEntry entry = new MapEntry();
 			int index = firstIndex;
 			while(index != -1) {
 				entry.set(index);
-				if(filter.test(entry)) return entry;
+				if(filter.test(entry)) return Optional.ofNullable(entry);
 				index = (int)links[index];
 			}
-			return null;
+			return Optional.empty();
 		}
 		
 		@Override
@@ -939,6 +946,12 @@ public class Long2CharLinkedOpenHashMap extends Long2CharOpenHashMap implements 
 		
 		@Override
 		public boolean add(long o) { throw new UnsupportedOperationException(); }
+
+		@Override
+		public void addFirst(long o) { throw new UnsupportedOperationException(); }
+		
+		@Override
+		public void addLast(long o) { throw new UnsupportedOperationException(); }
 		
 		@Override
 		public boolean addAndMoveToFirst(long o) { throw new UnsupportedOperationException(); }
@@ -1085,7 +1098,7 @@ public class Long2CharLinkedOpenHashMap extends Long2CharOpenHashMap implements 
 		}
 		
 		@Override
-		public long reduce(LongLongUnaryOperator operator) {
+		public OptionalLong reduce(LongLongUnaryOperator operator) {
 			Objects.requireNonNull(operator);
 			long state = 0L;
 			boolean empty = true;
@@ -1100,19 +1113,19 @@ public class Long2CharLinkedOpenHashMap extends Long2CharOpenHashMap implements 
 				state = operator.applyAsLong(state, keys[index]);
 				index = (int)links[index];
 			}
-			return state;
+			return empty ? OptionalLong.empty() : OptionalLong.of(state);
 		}
 		
 		@Override
-		public long findFirst(LongPredicate filter) {
+		public OptionalLong findFirst(LongPredicate filter) {
 			Objects.requireNonNull(filter);
-			if(size() <= 0) return 0L;
+			if(size() <= 0) return OptionalLong.empty();
 			int index = firstIndex;
 			while(index != -1){
-				if(filter.test(keys[index])) return keys[index];
+				if(filter.test(keys[index])) return OptionalLong.of(keys[index]);
 				index = (int)links[index];
 			}
-			return 0L;
+			return OptionalLong.empty();
 		}
 		
 		@Override
@@ -1248,7 +1261,7 @@ public class Long2CharLinkedOpenHashMap extends Long2CharOpenHashMap implements 
 		}
 		
 		@Override
-		public char reduce(CharCharUnaryOperator operator) {
+		public OptionalChar reduce(CharCharUnaryOperator operator) {
 			Objects.requireNonNull(operator);
 			char state = (char)0;
 			boolean empty = true;
@@ -1263,19 +1276,19 @@ public class Long2CharLinkedOpenHashMap extends Long2CharOpenHashMap implements 
 				state = operator.applyAsChar(state, values[index]);
 				index = (int)links[index];
 			}
-			return state;
+			return empty ? OptionalChar.empty() : OptionalChar.of(state);
 		}
 		
 		@Override
-		public char findFirst(CharPredicate filter) {
+		public OptionalChar findFirst(CharPredicate filter) {
 			Objects.requireNonNull(filter);
-			if(size() <= 0) return (char)0;
+			if(size() <= 0) return OptionalChar.empty();
 			int index = firstIndex;
 			while(index != -1){
-				if(filter.test(values[index])) return values[index];
+				if(filter.test(values[index])) return OptionalChar.of(values[index]);
 				index = (int)links[index];
 			}
-			return (char)0;
+			return OptionalChar.empty();
 		}
 		
 		@Override

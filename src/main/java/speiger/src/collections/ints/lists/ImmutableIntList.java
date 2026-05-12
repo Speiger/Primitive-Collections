@@ -4,6 +4,7 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.NoSuchElementException;
 import java.util.Objects;
+import java.util.OptionalInt;
 import java.util.function.Predicate;
 import java.util.function.UnaryOperator;
 import java.util.function.IntPredicate;
@@ -273,12 +274,12 @@ public class ImmutableIntList extends AbstractIntList
 	}
 	
 	@Override
-	public int findFirst(IntPredicate filter) {
+	public OptionalInt findFirst(IntPredicate filter) {
 		Objects.requireNonNull(filter);
 		for(int i = 0,m=data.length;i<m;i++) {
-			if(filter.test(data[i])) return data[i];
+			if(filter.test(data[i])) return OptionalInt.of(data[i]);
 		}
-		return 0;
+		return OptionalInt.empty();
 	}
 	
 	@Override
@@ -292,7 +293,7 @@ public class ImmutableIntList extends AbstractIntList
 	}
 	
 	@Override
-	public int reduce(IntIntUnaryOperator operator) {
+	public OptionalInt reduce(IntIntUnaryOperator operator) {
 		Objects.requireNonNull(operator);
 		int state = 0;
 		boolean empty = true;
@@ -304,7 +305,7 @@ public class ImmutableIntList extends AbstractIntList
 			}
 			state = operator.applyAsInt(state, data[i]);
 		}
-		return state;
+		return empty ? OptionalInt.empty() : OptionalInt.of(state);
 	}
 	
 	@Override

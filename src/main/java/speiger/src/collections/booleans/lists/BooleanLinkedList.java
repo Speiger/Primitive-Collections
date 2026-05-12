@@ -8,6 +8,7 @@ import java.util.Spliterator;
 import java.util.function.Consumer;
 import java.util.function.Predicate;
 import java.util.function.UnaryOperator;
+import speiger.src.collections.booleans.functions.OptionalBoolean;
 import speiger.src.collections.ints.functions.consumer.IntBooleanConsumer;
 import speiger.src.collections.objects.functions.consumer.ObjectBooleanConsumer;
 import speiger.src.collections.booleans.functions.function.BooleanPredicate;
@@ -415,12 +416,12 @@ public class BooleanLinkedList extends AbstractBooleanList implements BooleanPri
 	}
 	
 	@Override
-	public boolean findFirst(BooleanPredicate filter) {
+	public OptionalBoolean findFirst(BooleanPredicate filter) {
 		Objects.requireNonNull(filter);
 		for(Entry entry = first;entry != null;entry = entry.next) {
-			if(filter.test(entry.value)) return entry.value;
+			if(filter.test(entry.value)) return OptionalBoolean.of(entry.value);
 		}
-		return false;
+		return OptionalBoolean.empty();
 	}
 	
 	@Override
@@ -434,7 +435,7 @@ public class BooleanLinkedList extends AbstractBooleanList implements BooleanPri
 	}
 	
 	@Override
-	public boolean reduce(BooleanBooleanUnaryOperator operator) {
+	public OptionalBoolean reduce(BooleanBooleanUnaryOperator operator) {
 		Objects.requireNonNull(operator);
 		boolean state = false;
 		boolean empty = true;
@@ -446,7 +447,7 @@ public class BooleanLinkedList extends AbstractBooleanList implements BooleanPri
 			}
 			state = operator.applyAsBoolean(state, entry.value);
 		}
-		return state;
+		return empty ? OptionalBoolean.empty() : OptionalBoolean.of(state);
 	}
 	
 	@Override

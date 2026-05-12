@@ -5,6 +5,7 @@ import java.util.Comparator;
 import java.util.function.Consumer;
 import java.util.function.BiFunction;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.NoSuchElementException;
 import java.util.function.Predicate;
 
@@ -289,17 +290,17 @@ public class ObjectArrayFIFOQueue<T> extends AbstractObjectPriorityQueue<T> impl
 	}
 	
 	@Override
-	public T findFirst(Predicate<T> filter) {
+	public Optional<T> findFirst(Predicate<T> filter) {
 		Objects.requireNonNull(filter);
 		for(int i = 0,m=size();i<m;i++) {
 			int index = (first + i) % array.length;
 			if(filter.test(array[index])) {
 				T data = array[index];
 				removeIndex(index);
-				return data;
+				return Optional.ofNullable(data);
 			}
 		}
-		return null;
+		return Optional.empty();
 	}
 	
 	@Override
@@ -313,7 +314,7 @@ public class ObjectArrayFIFOQueue<T> extends AbstractObjectPriorityQueue<T> impl
 	}
 	
 	@Override
-	public T reduce(ObjectObjectUnaryOperator<T, T> operator) {
+	public Optional<T> reduce(ObjectObjectUnaryOperator<T, T> operator) {
 		Objects.requireNonNull(operator);
 		T state = null;
 		boolean empty = true;
@@ -325,7 +326,7 @@ public class ObjectArrayFIFOQueue<T> extends AbstractObjectPriorityQueue<T> impl
 			}
 			state = operator.apply(state, array[(first + i) % array.length]);
 		}
-		return state;
+		return empty ? Optional.empty() : Optional.ofNullable(state);
 	}
 	
 	@Override

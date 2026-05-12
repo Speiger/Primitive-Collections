@@ -620,7 +620,11 @@ public class Char2IntMaps
 			super(c);
 			set = c;
 		}
-
+		
+		@Override
+		public void addFirst(Char2IntMap.Entry o) { throw new UnsupportedOperationException(); }
+		@Override
+		public void addLast(Char2IntMap.Entry o) { throw new UnsupportedOperationException(); }
 		@Override
 		public boolean addAndMoveToFirst(Char2IntMap.Entry o) { throw new UnsupportedOperationException(); }
 		@Override

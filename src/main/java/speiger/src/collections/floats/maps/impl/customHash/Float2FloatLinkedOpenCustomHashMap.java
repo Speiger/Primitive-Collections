@@ -4,6 +4,7 @@ import java.util.Arrays;
 import java.util.Map;
 import java.util.NoSuchElementException;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.function.Consumer;
 import java.util.function.BiFunction;
 import java.util.function.Predicate;
@@ -13,6 +14,7 @@ import speiger.src.collections.floats.functions.FloatConsumer;
 import speiger.src.collections.objects.functions.consumer.ObjectFloatConsumer;
 import speiger.src.collections.ints.functions.consumer.IntFloatConsumer;
 import speiger.src.collections.ints.functions.consumer.IntObjectConsumer;
+import speiger.src.collections.floats.functions.OptionalFloat;
 import speiger.src.collections.floats.functions.function.FloatPredicate;
 import speiger.src.collections.floats.functions.consumer.FloatFloatConsumer;
 import speiger.src.collections.floats.functions.function.FloatFloatUnaryOperator;
@@ -665,6 +667,10 @@ public class Float2FloatLinkedOpenCustomHashMap extends Float2FloatOpenCustomHas
 	
 	private class MapEntrySet extends AbstractObjectSet<Float2FloatMap.Entry> implements Float2FloatOrderedMap.FastOrderedSet {
 		@Override
+		public void addFirst(Float2FloatMap.Entry o) { throw new UnsupportedOperationException(); }
+		@Override
+		public void addLast(Float2FloatMap.Entry o) { throw new UnsupportedOperationException(); }
+		@Override
 		public boolean addAndMoveToFirst(Float2FloatMap.Entry o) { throw new UnsupportedOperationException(); }
 		@Override
 		public boolean addAndMoveToLast(Float2FloatMap.Entry o) { throw new UnsupportedOperationException(); }
@@ -829,7 +835,7 @@ public class Float2FloatLinkedOpenCustomHashMap extends Float2FloatOpenCustomHas
 		}
 		
 		@Override
-		public Float2FloatMap.Entry reduce(ObjectObjectUnaryOperator<Float2FloatMap.Entry, Float2FloatMap.Entry> operator) {
+		public Optional<Float2FloatMap.Entry> reduce(ObjectObjectUnaryOperator<Float2FloatMap.Entry, Float2FloatMap.Entry> operator) {
 			Objects.requireNonNull(operator);
 			Float2FloatMap.Entry state = null;
 			boolean empty = true;
@@ -844,21 +850,21 @@ public class Float2FloatLinkedOpenCustomHashMap extends Float2FloatOpenCustomHas
 				state = operator.apply(state, new ValueMapEntry(index));
 				index = (int)links[index];
 			}
-			return state;
+			return empty ? Optional.empty() : Optional.ofNullable(state);
 		}
 		
 		@Override
-		public Float2FloatMap.Entry findFirst(Predicate<Float2FloatMap.Entry> filter) {
+		public Optional<Float2FloatMap.Entry> findFirst(Predicate<Float2FloatMap.Entry> filter) {
 			Objects.requireNonNull(filter);
-			if(size() <= 0) return null;
+			if(size() <= 0) return Optional.empty();
 			MapEntry entry = new MapEntry();
 			int index = firstIndex;
 			while(index != -1) {
 				entry.set(index);
-				if(filter.test(entry)) return entry;
+				if(filter.test(entry)) return Optional.ofNullable(entry);
 				index = (int)links[index];
 			}
-			return null;
+			return Optional.empty();
 		}
 		
 		@Override
@@ -937,10 +943,13 @@ public class Float2FloatLinkedOpenCustomHashMap extends Float2FloatOpenCustomHas
 		public boolean add(float o) {
 			throw new UnsupportedOperationException();
 		}
-		
+
+		@Override
+		public void addFirst(float o) { throw new UnsupportedOperationException(); }
+		@Override
+		public void addLast(float o) { throw new UnsupportedOperationException(); }		
 		@Override
 		public boolean addAndMoveToFirst(float o) { throw new UnsupportedOperationException(); }
-
 		@Override
 		public boolean addAndMoveToLast(float o) { throw new UnsupportedOperationException(); }
 
@@ -1083,7 +1092,7 @@ public class Float2FloatLinkedOpenCustomHashMap extends Float2FloatOpenCustomHas
 		}
 		
 		@Override
-		public float reduce(FloatFloatUnaryOperator operator) {
+		public OptionalFloat reduce(FloatFloatUnaryOperator operator) {
 			Objects.requireNonNull(operator);
 			float state = 0F;
 			boolean empty = true;
@@ -1098,19 +1107,19 @@ public class Float2FloatLinkedOpenCustomHashMap extends Float2FloatOpenCustomHas
 				state = operator.applyAsFloat(state, keys[index]);
 				index = (int)links[index];
 			}
-			return state;
+			return empty ? OptionalFloat.empty() : OptionalFloat.of(state);
 		}
 		
 		@Override
-		public float findFirst(FloatPredicate filter) {
+		public OptionalFloat findFirst(FloatPredicate filter) {
 			Objects.requireNonNull(filter);
-			if(size() <= 0) return 0F;
+			if(size() <= 0) return OptionalFloat.empty();
 			int index = firstIndex;
 			while(index != -1){
-				if(filter.test(keys[index])) return keys[index];
+				if(filter.test(keys[index])) return OptionalFloat.of(keys[index]);
 				index = (int)links[index];
 			}
-			return 0F;
+			return OptionalFloat.empty();
 		}
 		
 		@Override
@@ -1245,7 +1254,7 @@ public class Float2FloatLinkedOpenCustomHashMap extends Float2FloatOpenCustomHas
 		}
 		
 		@Override
-		public float reduce(FloatFloatUnaryOperator operator) {
+		public OptionalFloat reduce(FloatFloatUnaryOperator operator) {
 			Objects.requireNonNull(operator);
 			float state = 0F;
 			boolean empty = true;
@@ -1260,19 +1269,19 @@ public class Float2FloatLinkedOpenCustomHashMap extends Float2FloatOpenCustomHas
 				state = operator.applyAsFloat(state, values[index]);
 				index = (int)links[index];
 			}
-			return state;
+			return empty ? OptionalFloat.empty() : OptionalFloat.of(state);
 		}
 		
 		@Override
-		public float findFirst(FloatPredicate filter) {
+		public OptionalFloat findFirst(FloatPredicate filter) {
 			Objects.requireNonNull(filter);
-			if(size() <= 0) return 0F;
+			if(size() <= 0) return OptionalFloat.empty();
 			int index = firstIndex;
 			while(index != -1){
-				if(filter.test(values[index])) return values[index];
+				if(filter.test(values[index])) return OptionalFloat.of(values[index]);
 				index = (int)links[index];
 			}
-			return 0F;
+			return OptionalFloat.empty();
 		}
 		
 		@Override

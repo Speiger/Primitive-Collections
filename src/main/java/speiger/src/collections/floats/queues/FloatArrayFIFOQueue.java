@@ -5,6 +5,7 @@ import java.util.Objects;
 import java.util.NoSuchElementException;
 
 import speiger.src.collections.floats.collections.FloatIterator;
+import speiger.src.collections.floats.functions.OptionalFloat;
 import speiger.src.collections.floats.functions.FloatComparator;
 import speiger.src.collections.floats.functions.FloatConsumer;
 import speiger.src.collections.ints.functions.consumer.IntFloatConsumer;
@@ -278,17 +279,17 @@ public class FloatArrayFIFOQueue extends AbstractFloatPriorityQueue implements F
 	}
 	
 	@Override
-	public float findFirst(FloatPredicate filter) {
+	public OptionalFloat findFirst(FloatPredicate filter) {
 		Objects.requireNonNull(filter);
 		for(int i = 0,m=size();i<m;i++) {
 			int index = (first + i) % array.length;
 			if(filter.test(array[index])) {
 				float data = array[index];
 				removeIndex(index);
-				return data;
+				return OptionalFloat.of(data);
 			}
 		}
-		return 0F;
+		return OptionalFloat.empty();
 	}
 	
 	@Override
@@ -302,7 +303,7 @@ public class FloatArrayFIFOQueue extends AbstractFloatPriorityQueue implements F
 	}
 	
 	@Override
-	public float reduce(FloatFloatUnaryOperator operator) {
+	public OptionalFloat reduce(FloatFloatUnaryOperator operator) {
 		Objects.requireNonNull(operator);
 		float state = 0F;
 		boolean empty = true;
@@ -314,7 +315,7 @@ public class FloatArrayFIFOQueue extends AbstractFloatPriorityQueue implements F
 			}
 			state = operator.applyAsFloat(state, array[(first + i) % array.length]);
 		}
-		return state;
+		return empty ? OptionalFloat.empty() : OptionalFloat.of(state);
 	}
 	
 	@Override

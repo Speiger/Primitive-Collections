@@ -4,10 +4,12 @@ import java.util.Arrays;
 import java.util.Map;
 import java.util.NoSuchElementException;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.function.Consumer;
 import java.util.function.BiFunction;
 import java.util.function.Predicate;
 import java.util.function.DoublePredicate;
+import java.util.OptionalDouble;
 
 import speiger.src.collections.shorts.collections.ShortBidirectionalIterator;
 import speiger.src.collections.shorts.functions.ShortConsumer;
@@ -15,6 +17,7 @@ import speiger.src.collections.objects.functions.consumer.ObjectShortConsumer;
 import speiger.src.collections.ints.functions.consumer.IntShortConsumer;
 import speiger.src.collections.ints.functions.consumer.IntObjectConsumer;
 import speiger.src.collections.ints.functions.consumer.IntDoubleConsumer;
+import speiger.src.collections.shorts.functions.OptionalShort;
 import speiger.src.collections.shorts.functions.function.ShortPredicate;
 import speiger.src.collections.shorts.functions.consumer.ShortDoubleConsumer;
 import speiger.src.collections.shorts.functions.function.ShortShortUnaryOperator;
@@ -672,6 +675,10 @@ public class Short2DoubleLinkedOpenCustomHashMap extends Short2DoubleOpenCustomH
 	
 	private class MapEntrySet extends AbstractObjectSet<Short2DoubleMap.Entry> implements Short2DoubleOrderedMap.FastOrderedSet {
 		@Override
+		public void addFirst(Short2DoubleMap.Entry o) { throw new UnsupportedOperationException(); }
+		@Override
+		public void addLast(Short2DoubleMap.Entry o) { throw new UnsupportedOperationException(); }
+		@Override
 		public boolean addAndMoveToFirst(Short2DoubleMap.Entry o) { throw new UnsupportedOperationException(); }
 		@Override
 		public boolean addAndMoveToLast(Short2DoubleMap.Entry o) { throw new UnsupportedOperationException(); }
@@ -836,7 +843,7 @@ public class Short2DoubleLinkedOpenCustomHashMap extends Short2DoubleOpenCustomH
 		}
 		
 		@Override
-		public Short2DoubleMap.Entry reduce(ObjectObjectUnaryOperator<Short2DoubleMap.Entry, Short2DoubleMap.Entry> operator) {
+		public Optional<Short2DoubleMap.Entry> reduce(ObjectObjectUnaryOperator<Short2DoubleMap.Entry, Short2DoubleMap.Entry> operator) {
 			Objects.requireNonNull(operator);
 			Short2DoubleMap.Entry state = null;
 			boolean empty = true;
@@ -851,21 +858,21 @@ public class Short2DoubleLinkedOpenCustomHashMap extends Short2DoubleOpenCustomH
 				state = operator.apply(state, new ValueMapEntry(index));
 				index = (int)links[index];
 			}
-			return state;
+			return empty ? Optional.empty() : Optional.ofNullable(state);
 		}
 		
 		@Override
-		public Short2DoubleMap.Entry findFirst(Predicate<Short2DoubleMap.Entry> filter) {
+		public Optional<Short2DoubleMap.Entry> findFirst(Predicate<Short2DoubleMap.Entry> filter) {
 			Objects.requireNonNull(filter);
-			if(size() <= 0) return null;
+			if(size() <= 0) return Optional.empty();
 			MapEntry entry = new MapEntry();
 			int index = firstIndex;
 			while(index != -1) {
 				entry.set(index);
-				if(filter.test(entry)) return entry;
+				if(filter.test(entry)) return Optional.ofNullable(entry);
 				index = (int)links[index];
 			}
-			return null;
+			return Optional.empty();
 		}
 		
 		@Override
@@ -944,10 +951,13 @@ public class Short2DoubleLinkedOpenCustomHashMap extends Short2DoubleOpenCustomH
 		public boolean add(short o) {
 			throw new UnsupportedOperationException();
 		}
-		
+
+		@Override
+		public void addFirst(short o) { throw new UnsupportedOperationException(); }
+		@Override
+		public void addLast(short o) { throw new UnsupportedOperationException(); }		
 		@Override
 		public boolean addAndMoveToFirst(short o) { throw new UnsupportedOperationException(); }
-
 		@Override
 		public boolean addAndMoveToLast(short o) { throw new UnsupportedOperationException(); }
 
@@ -1090,7 +1100,7 @@ public class Short2DoubleLinkedOpenCustomHashMap extends Short2DoubleOpenCustomH
 		}
 		
 		@Override
-		public short reduce(ShortShortUnaryOperator operator) {
+		public OptionalShort reduce(ShortShortUnaryOperator operator) {
 			Objects.requireNonNull(operator);
 			short state = (short)0;
 			boolean empty = true;
@@ -1105,19 +1115,19 @@ public class Short2DoubleLinkedOpenCustomHashMap extends Short2DoubleOpenCustomH
 				state = operator.applyAsShort(state, keys[index]);
 				index = (int)links[index];
 			}
-			return state;
+			return empty ? OptionalShort.empty() : OptionalShort.of(state);
 		}
 		
 		@Override
-		public short findFirst(ShortPredicate filter) {
+		public OptionalShort findFirst(ShortPredicate filter) {
 			Objects.requireNonNull(filter);
-			if(size() <= 0) return (short)0;
+			if(size() <= 0) return OptionalShort.empty();
 			int index = firstIndex;
 			while(index != -1){
-				if(filter.test(keys[index])) return keys[index];
+				if(filter.test(keys[index])) return OptionalShort.of(keys[index]);
 				index = (int)links[index];
 			}
-			return (short)0;
+			return OptionalShort.empty();
 		}
 		
 		@Override
@@ -1252,7 +1262,7 @@ public class Short2DoubleLinkedOpenCustomHashMap extends Short2DoubleOpenCustomH
 		}
 		
 		@Override
-		public double reduce(DoubleDoubleUnaryOperator operator) {
+		public OptionalDouble reduce(DoubleDoubleUnaryOperator operator) {
 			Objects.requireNonNull(operator);
 			double state = 0D;
 			boolean empty = true;
@@ -1267,19 +1277,19 @@ public class Short2DoubleLinkedOpenCustomHashMap extends Short2DoubleOpenCustomH
 				state = operator.applyAsDouble(state, values[index]);
 				index = (int)links[index];
 			}
-			return state;
+			return empty ? OptionalDouble.empty() : OptionalDouble.of(state);
 		}
 		
 		@Override
-		public double findFirst(DoublePredicate filter) {
+		public OptionalDouble findFirst(DoublePredicate filter) {
 			Objects.requireNonNull(filter);
-			if(size() <= 0) return 0D;
+			if(size() <= 0) return OptionalDouble.empty();
 			int index = firstIndex;
 			while(index != -1){
-				if(filter.test(values[index])) return values[index];
+				if(filter.test(values[index])) return OptionalDouble.of(values[index]);
 				index = (int)links[index];
 			}
-			return 0D;
+			return OptionalDouble.empty();
 		}
 		
 		@Override

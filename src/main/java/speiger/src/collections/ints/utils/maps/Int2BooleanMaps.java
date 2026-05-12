@@ -608,7 +608,11 @@ public class Int2BooleanMaps
 			super(c);
 			set = c;
 		}
-
+		
+		@Override
+		public void addFirst(Int2BooleanMap.Entry o) { throw new UnsupportedOperationException(); }
+		@Override
+		public void addLast(Int2BooleanMap.Entry o) { throw new UnsupportedOperationException(); }
 		@Override
 		public boolean addAndMoveToFirst(Int2BooleanMap.Entry o) { throw new UnsupportedOperationException(); }
 		@Override

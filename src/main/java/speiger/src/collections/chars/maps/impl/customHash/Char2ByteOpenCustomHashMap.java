@@ -5,6 +5,7 @@ import java.util.ConcurrentModificationException;
 import java.util.Map;
 import java.util.NoSuchElementException;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.function.Consumer;
 import java.util.function.BiFunction;
 import java.util.function.Predicate;
@@ -19,6 +20,7 @@ import speiger.src.collections.chars.functions.consumer.CharByteConsumer;
 import speiger.src.collections.chars.functions.function.Char2ByteFunction;
 import speiger.src.collections.chars.functions.function.CharByteUnaryOperator;
 import speiger.src.collections.chars.functions.function.CharCharUnaryOperator;
+import speiger.src.collections.chars.functions.OptionalChar;
 import speiger.src.collections.chars.functions.function.CharPredicate;
 import speiger.src.collections.chars.maps.abstracts.AbstractChar2ByteMap;
 import speiger.src.collections.chars.maps.interfaces.Char2ByteMap;
@@ -37,6 +39,7 @@ import speiger.src.collections.objects.functions.consumer.ObjectObjectConsumer;
 import speiger.src.collections.objects.functions.consumer.ObjectByteConsumer;
 
 import speiger.src.collections.bytes.functions.function.BytePredicate;
+import speiger.src.collections.bytes.functions.OptionalByte;
 import speiger.src.collections.objects.collections.ObjectIterator;
 import speiger.src.collections.objects.sets.AbstractObjectSet;
 import speiger.src.collections.objects.sets.ObjectSet;
@@ -952,7 +955,7 @@ public class Char2ByteOpenCustomHashMap extends AbstractChar2ByteMap implements 
 		}
 		
 		@Override
-		public Char2ByteMap.Entry reduce(ObjectObjectUnaryOperator<Char2ByteMap.Entry, Char2ByteMap.Entry> operator) {
+		public Optional<Char2ByteMap.Entry> reduce(ObjectObjectUnaryOperator<Char2ByteMap.Entry, Char2ByteMap.Entry> operator) {
 			Objects.requireNonNull(operator);
 			Char2ByteMap.Entry state = null;
 			boolean empty = true;
@@ -969,25 +972,25 @@ public class Char2ByteOpenCustomHashMap extends AbstractChar2ByteMap implements 
 				}
 				state = operator.apply(state, new ValueMapEntry(i));
 			}
-			return state;
+			return empty ? Optional.empty() : Optional.ofNullable(state);
 		}
 		
 		@Override
-		public Char2ByteMap.Entry findFirst(Predicate<Char2ByteMap.Entry> filter) {
+		public Optional<Char2ByteMap.Entry> findFirst(Predicate<Char2ByteMap.Entry> filter) {
 			Objects.requireNonNull(filter);
-			if(size() <= 0) return null;
+			if(size() <= 0) return Optional.empty();
 			MapEntry entry = new MapEntry();
 			if(containsNull) {
 				entry.set(nullIndex);
-				if(filter.test(entry)) return entry;
+				if(filter.test(entry)) return Optional.ofNullable(entry);
 			}
 			for(int i = nullIndex-1;i>=0;i--) {
 				if(!strategy.equals(keys[i], (char)0)) {
 					entry.set(i);
-					if(filter.test(entry)) return entry;
+					if(filter.test(entry)) return Optional.ofNullable(entry);
 				}
 			}
-			return null;
+			return Optional.empty();
 		}
 		
 		@Override
@@ -1161,7 +1164,7 @@ public class Char2ByteOpenCustomHashMap extends AbstractChar2ByteMap implements 
 		}
 		
 		@Override
-		public char reduce(CharCharUnaryOperator operator) {
+		public OptionalChar reduce(CharCharUnaryOperator operator) {
 			Objects.requireNonNull(operator);
 			char state = (char)0;
 			boolean empty = true;
@@ -1178,18 +1181,18 @@ public class Char2ByteOpenCustomHashMap extends AbstractChar2ByteMap implements 
 				}
 				state = operator.applyAsChar(state, keys[i]);
 			}
-			return state;
+			return empty ? OptionalChar.empty() : OptionalChar.of(state);
 		}
 		
 		@Override
-		public char findFirst(CharPredicate filter) {
+		public OptionalChar findFirst(CharPredicate filter) {
 			Objects.requireNonNull(filter);
-			if(size() <= 0) return (char)0;
-			if(containsNull && filter.test(keys[nullIndex])) return keys[nullIndex];
+			if(size() <= 0) return OptionalChar.empty();
+			if(containsNull && filter.test(keys[nullIndex])) return OptionalChar.of(keys[nullIndex]);
 			for(int i = nullIndex-1;i>=0;i--) {
-				if(!strategy.equals(keys[i], (char)0) && filter.test(keys[i])) return keys[i];
+				if(!strategy.equals(keys[i], (char)0) && filter.test(keys[i])) return OptionalChar.of(keys[i]);
 			}
-			return (char)0;
+			return OptionalChar.empty();
 		}
 		
 		@Override
@@ -1304,7 +1307,7 @@ public class Char2ByteOpenCustomHashMap extends AbstractChar2ByteMap implements 
 		}
 		
 		@Override
-		public byte reduce(ByteByteUnaryOperator operator) {
+		public OptionalByte reduce(ByteByteUnaryOperator operator) {
 			Objects.requireNonNull(operator);
 			byte state = (byte)0;
 			boolean empty = true;
@@ -1321,18 +1324,18 @@ public class Char2ByteOpenCustomHashMap extends AbstractChar2ByteMap implements 
 				}
 				state = operator.applyAsByte(state, values[i]);
 			}
-			return state;
+			return empty ? OptionalByte.empty() : OptionalByte.of(state);
 		}
 		
 		@Override
-		public byte findFirst(BytePredicate filter) {
+		public OptionalByte findFirst(BytePredicate filter) {
 			Objects.requireNonNull(filter);
-			if(size() <= 0) return (byte)0;
-			if(containsNull && filter.test(values[nullIndex])) return values[nullIndex];
+			if(size() <= 0) return OptionalByte.empty();
+			if(containsNull && filter.test(values[nullIndex])) return OptionalByte.of(values[nullIndex]);
 			for(int i = nullIndex-1;i>=0;i--) {
-				if(!strategy.equals(keys[i], (char)0) && filter.test(values[i])) return values[i];
+				if(!strategy.equals(keys[i], (char)0) && filter.test(values[i])) return OptionalByte.of(values[i]);
 			}
-			return (byte)0;
+			return OptionalByte.empty();
 		}
 		
 		@Override

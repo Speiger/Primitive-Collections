@@ -15,6 +15,7 @@ import speiger.src.collections.floats.collections.FloatCollection;
 import speiger.src.collections.floats.collections.FloatOrderedCollection;
 import speiger.src.collections.floats.collections.FloatIterator;
 import speiger.src.collections.floats.functions.FloatComparator;
+import speiger.src.collections.floats.functions.OptionalFloat;
 import speiger.src.collections.objects.utils.ObjectArrays;
 import speiger.src.collections.floats.functions.FloatConsumer;
 import speiger.src.collections.floats.functions.function.FloatPredicate;
@@ -758,9 +759,9 @@ public class FloatCollections
 		@Override
 		public float reduce(float identity, FloatFloatUnaryOperator operator) { synchronized(mutex) { return c.reduce(identity, operator); } }
 		@Override
-		public float reduce(FloatFloatUnaryOperator operator) { synchronized(mutex) { return c.reduce(operator); } }
+		public OptionalFloat reduce(FloatFloatUnaryOperator operator) { synchronized(mutex) { return c.reduce(operator); } }
 		@Override
-		public float findFirst(FloatPredicate filter) { synchronized(mutex) { return c.findFirst(filter); } }
+		public OptionalFloat findFirst(FloatPredicate filter) { synchronized(mutex) { return c.findFirst(filter); } }
 		@Override
 		public int count(FloatPredicate filter) { synchronized(mutex) { return c.count(filter); } }
 	}
@@ -888,9 +889,9 @@ public class FloatCollections
 		@Override
 		public float reduce(float identity, FloatFloatUnaryOperator operator) { return c.reduce(identity, operator); }
 		@Override
-		public float reduce(FloatFloatUnaryOperator operator) { return c.reduce(operator); }
+		public OptionalFloat reduce(FloatFloatUnaryOperator operator) { return c.reduce(operator); }
 		@Override
-		public float findFirst(FloatPredicate filter) { return c.findFirst(filter); }
+		public OptionalFloat findFirst(FloatPredicate filter) { return c.findFirst(filter); }
 		@Override
 		public int count(FloatPredicate filter) { return c.count(filter); }
 	}

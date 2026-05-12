@@ -12,6 +12,7 @@ import java.nio.FloatBuffer;
 import speiger.src.collections.floats.collections.FloatCollection;
 import speiger.src.collections.floats.collections.FloatStack;
 import speiger.src.collections.floats.collections.FloatIterator;
+import speiger.src.collections.floats.functions.OptionalFloat;
 import speiger.src.collections.floats.functions.FloatComparator;
 import speiger.src.collections.floats.functions.FloatConsumer;
 import speiger.src.collections.objects.functions.consumer.ObjectFloatConsumer;
@@ -519,12 +520,12 @@ public class FloatArrayList extends AbstractFloatList implements IFloatArray, Fl
 	}
 	
 	@Override
-	public float findFirst(FloatPredicate filter) {
+	public OptionalFloat findFirst(FloatPredicate filter) {
 		Objects.requireNonNull(filter);
 		for(int i = 0;i<size;i++) {
-			if(filter.test(data[i])) return data[i];
+			if(filter.test(data[i])) return OptionalFloat.of(data[i]);
 		}
-		return 0F;
+		return OptionalFloat.empty();
 	}
 	
 	@Override
@@ -538,7 +539,7 @@ public class FloatArrayList extends AbstractFloatList implements IFloatArray, Fl
 	}
 	
 	@Override
-	public float reduce(FloatFloatUnaryOperator operator) {
+	public OptionalFloat reduce(FloatFloatUnaryOperator operator) {
 		Objects.requireNonNull(operator);
 		float state = 0F;
 		boolean empty = true;
@@ -550,7 +551,7 @@ public class FloatArrayList extends AbstractFloatList implements IFloatArray, Fl
 			}
 			state = operator.applyAsFloat(state, data[i]);
 		}
-		return state;
+		return empty ? OptionalFloat.empty() : OptionalFloat.of(state);
 	}
 	
 	@Override

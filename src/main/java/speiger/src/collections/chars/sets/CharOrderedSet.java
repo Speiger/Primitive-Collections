@@ -1,6 +1,7 @@
 package speiger.src.collections.chars.sets;
 
 import speiger.src.collections.chars.collections.CharBidirectionalIterator;
+import speiger.src.collections.chars.collections.CharOrderedCollection;
 import speiger.src.collections.chars.collections.CharSplititerator;
 import speiger.src.collections.chars.utils.CharSplititerators;
 import speiger.src.collections.chars.sets.AbstractCharSet.ReversedCharOrderedSet;
@@ -13,7 +14,7 @@ import speiger.src.collections.chars.utils.CharSets;
  * This interface provides basic access to such functions while also providing some Sorted/NaivgableSet implementations that still fit into here.
  * 
  */
-public interface CharOrderedSet extends CharSet
+public interface CharOrderedSet extends CharSet, CharOrderedCollection
 {
 	/**
 	 * A customized add method that allows you to insert into the first index.

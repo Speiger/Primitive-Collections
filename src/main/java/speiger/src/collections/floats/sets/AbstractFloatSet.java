@@ -63,7 +63,17 @@ public abstract class AbstractFloatSet extends AbstractFloatCollection implement
 		public FloatBidirectionalIterator reverseIterator() {
 			return set.iterator();
 		}
-
+		
+		@Override
+		public void addFirst(float o) {
+			set.addLast(o);
+		}
+		
+		@Override
+		public void addLast(float o) {
+			set.addFirst(o);
+		}
+		
 		@Override
 		public boolean remove(float o) {
 			return set.remove(o);

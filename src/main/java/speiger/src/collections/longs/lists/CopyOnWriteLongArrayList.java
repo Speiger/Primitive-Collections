@@ -5,6 +5,7 @@ import java.util.Collection;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 import java.util.Objects;
+import java.util.OptionalLong;
 import java.util.concurrent.locks.ReentrantLock;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
@@ -654,13 +655,13 @@ public class CopyOnWriteLongArrayList extends AbstractLongList implements ITrimm
 	}
 	
 	@Override
-	public long findFirst(LongPredicate filter) {
+	public OptionalLong findFirst(LongPredicate filter) {
 		Objects.requireNonNull(filter);
 		long[] data = this.data;
 		for(int i = 0,m=data.length;i<m;i++) {
-			if(filter.test(data[i])) return data[i];
+			if(filter.test(data[i])) return OptionalLong.of(data[i]);
 		}
-		return 0L;
+		return OptionalLong.empty();
 	}
 	
 	@Override
@@ -675,7 +676,7 @@ public class CopyOnWriteLongArrayList extends AbstractLongList implements ITrimm
 	}
 	
 	@Override
-	public long reduce(LongLongUnaryOperator operator) {
+	public OptionalLong reduce(LongLongUnaryOperator operator) {
 		Objects.requireNonNull(operator);
 		long[] data = this.data;
 		long state = 0L;
@@ -688,7 +689,7 @@ public class CopyOnWriteLongArrayList extends AbstractLongList implements ITrimm
 			}
 			state = operator.applyAsLong(state, data[i]);
 		}
-		return state;
+		return empty ? OptionalLong.empty() : OptionalLong.of(state);
 	}
 	
 	@Override

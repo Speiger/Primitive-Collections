@@ -4,10 +4,12 @@ import java.util.Arrays;
 import java.util.Map;
 import java.util.NoSuchElementException;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.function.Consumer;
 import java.util.function.BiFunction;
 import java.util.function.Predicate;
 import java.util.function.LongPredicate;
+import java.util.OptionalLong;
 
 import speiger.src.collections.objects.collections.ObjectBidirectionalIterator;
 import speiger.src.collections.ints.functions.consumer.IntObjectConsumer;
@@ -663,6 +665,10 @@ public class Object2LongLinkedOpenCustomHashMap<T> extends Object2LongOpenCustom
 	
 	private class MapEntrySet extends AbstractObjectSet<Object2LongMap.Entry<T>> implements Object2LongOrderedMap.FastOrderedSet<T> {
 		@Override
+		public void addFirst(Object2LongMap.Entry<T> o) { throw new UnsupportedOperationException(); }
+		@Override
+		public void addLast(Object2LongMap.Entry<T> o) { throw new UnsupportedOperationException(); }
+		@Override
 		public boolean addAndMoveToFirst(Object2LongMap.Entry<T> o) { throw new UnsupportedOperationException(); }
 		@Override
 		public boolean addAndMoveToLast(Object2LongMap.Entry<T> o) { throw new UnsupportedOperationException(); }
@@ -827,7 +833,7 @@ public class Object2LongLinkedOpenCustomHashMap<T> extends Object2LongOpenCustom
 		}
 		
 		@Override
-		public Object2LongMap.Entry<T> reduce(ObjectObjectUnaryOperator<Object2LongMap.Entry<T>, Object2LongMap.Entry<T>> operator) {
+		public Optional<Object2LongMap.Entry<T>> reduce(ObjectObjectUnaryOperator<Object2LongMap.Entry<T>, Object2LongMap.Entry<T>> operator) {
 			Objects.requireNonNull(operator);
 			Object2LongMap.Entry<T> state = null;
 			boolean empty = true;
@@ -842,21 +848,21 @@ public class Object2LongLinkedOpenCustomHashMap<T> extends Object2LongOpenCustom
 				state = operator.apply(state, new ValueMapEntry(index));
 				index = (int)links[index];
 			}
-			return state;
+			return empty ? Optional.empty() : Optional.ofNullable(state);
 		}
 		
 		@Override
-		public Object2LongMap.Entry<T> findFirst(Predicate<Object2LongMap.Entry<T>> filter) {
+		public Optional<Object2LongMap.Entry<T>> findFirst(Predicate<Object2LongMap.Entry<T>> filter) {
 			Objects.requireNonNull(filter);
-			if(size() <= 0) return null;
+			if(size() <= 0) return Optional.empty();
 			MapEntry entry = new MapEntry();
 			int index = firstIndex;
 			while(index != -1) {
 				entry.set(index);
-				if(filter.test(entry)) return entry;
+				if(filter.test(entry)) return Optional.ofNullable(entry);
 				index = (int)links[index];
 			}
-			return null;
+			return Optional.empty();
 		}
 		
 		@Override
@@ -935,10 +941,13 @@ public class Object2LongLinkedOpenCustomHashMap<T> extends Object2LongOpenCustom
 		public boolean add(T o) {
 			throw new UnsupportedOperationException();
 		}
-		
+
+		@Override
+		public void addFirst(T o) { throw new UnsupportedOperationException(); }
+		@Override
+		public void addLast(T o) { throw new UnsupportedOperationException(); }		
 		@Override
 		public boolean addAndMoveToFirst(T o) { throw new UnsupportedOperationException(); }
-
 		@Override
 		public boolean addAndMoveToLast(T o) { throw new UnsupportedOperationException(); }
 
@@ -1081,7 +1090,7 @@ public class Object2LongLinkedOpenCustomHashMap<T> extends Object2LongOpenCustom
 		}
 		
 		@Override
-		public T reduce(ObjectObjectUnaryOperator<T, T> operator) {
+		public Optional<T> reduce(ObjectObjectUnaryOperator<T, T> operator) {
 			Objects.requireNonNull(operator);
 			T state = null;
 			boolean empty = true;
@@ -1096,19 +1105,19 @@ public class Object2LongLinkedOpenCustomHashMap<T> extends Object2LongOpenCustom
 				state = operator.apply(state, keys[index]);
 				index = (int)links[index];
 			}
-			return state;
+			return empty ? Optional.empty() : Optional.ofNullable(state);
 		}
 		
 		@Override
-		public T findFirst(Predicate<T> filter) {
+		public Optional<T> findFirst(Predicate<T> filter) {
 			Objects.requireNonNull(filter);
-			if(size() <= 0) return null;
+			if(size() <= 0) return Optional.empty();
 			int index = firstIndex;
 			while(index != -1){
-				if(filter.test(keys[index])) return keys[index];
+				if(filter.test(keys[index])) return Optional.ofNullable(keys[index]);
 				index = (int)links[index];
 			}
-			return null;
+			return Optional.empty();
 		}
 		
 		@Override
@@ -1243,7 +1252,7 @@ public class Object2LongLinkedOpenCustomHashMap<T> extends Object2LongOpenCustom
 		}
 		
 		@Override
-		public long reduce(LongLongUnaryOperator operator) {
+		public OptionalLong reduce(LongLongUnaryOperator operator) {
 			Objects.requireNonNull(operator);
 			long state = 0L;
 			boolean empty = true;
@@ -1258,19 +1267,19 @@ public class Object2LongLinkedOpenCustomHashMap<T> extends Object2LongOpenCustom
 				state = operator.applyAsLong(state, values[index]);
 				index = (int)links[index];
 			}
-			return state;
+			return empty ? OptionalLong.empty() : OptionalLong.of(state);
 		}
 		
 		@Override
-		public long findFirst(LongPredicate filter) {
+		public OptionalLong findFirst(LongPredicate filter) {
 			Objects.requireNonNull(filter);
-			if(size() <= 0) return 0L;
+			if(size() <= 0) return OptionalLong.empty();
 			int index = firstIndex;
 			while(index != -1){
-				if(filter.test(values[index])) return values[index];
+				if(filter.test(values[index])) return OptionalLong.of(values[index]);
 				index = (int)links[index];
 			}
-			return 0L;
+			return OptionalLong.empty();
 		}
 		
 		@Override

@@ -5,11 +5,14 @@ import java.util.ConcurrentModificationException;
 import java.util.Map;
 import java.util.NoSuchElementException;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.function.Consumer;
 import java.util.function.BiFunction;
 import java.util.function.Predicate;
 import java.util.function.DoublePredicate;
+import java.util.OptionalDouble;
 import java.util.function.LongPredicate;
+import java.util.OptionalLong;
 
 import speiger.src.collections.doubles.collections.DoubleIterator;
 import speiger.src.collections.doubles.functions.DoubleConsumer;
@@ -952,7 +955,7 @@ public class Double2LongOpenCustomHashMap extends AbstractDouble2LongMap impleme
 		}
 		
 		@Override
-		public Double2LongMap.Entry reduce(ObjectObjectUnaryOperator<Double2LongMap.Entry, Double2LongMap.Entry> operator) {
+		public Optional<Double2LongMap.Entry> reduce(ObjectObjectUnaryOperator<Double2LongMap.Entry, Double2LongMap.Entry> operator) {
 			Objects.requireNonNull(operator);
 			Double2LongMap.Entry state = null;
 			boolean empty = true;
@@ -969,25 +972,25 @@ public class Double2LongOpenCustomHashMap extends AbstractDouble2LongMap impleme
 				}
 				state = operator.apply(state, new ValueMapEntry(i));
 			}
-			return state;
+			return empty ? Optional.empty() : Optional.ofNullable(state);
 		}
 		
 		@Override
-		public Double2LongMap.Entry findFirst(Predicate<Double2LongMap.Entry> filter) {
+		public Optional<Double2LongMap.Entry> findFirst(Predicate<Double2LongMap.Entry> filter) {
 			Objects.requireNonNull(filter);
-			if(size() <= 0) return null;
+			if(size() <= 0) return Optional.empty();
 			MapEntry entry = new MapEntry();
 			if(containsNull) {
 				entry.set(nullIndex);
-				if(filter.test(entry)) return entry;
+				if(filter.test(entry)) return Optional.ofNullable(entry);
 			}
 			for(int i = nullIndex-1;i>=0;i--) {
 				if(!strategy.equals(keys[i], 0D)) {
 					entry.set(i);
-					if(filter.test(entry)) return entry;
+					if(filter.test(entry)) return Optional.ofNullable(entry);
 				}
 			}
-			return null;
+			return Optional.empty();
 		}
 		
 		@Override
@@ -1161,7 +1164,7 @@ public class Double2LongOpenCustomHashMap extends AbstractDouble2LongMap impleme
 		}
 		
 		@Override
-		public double reduce(DoubleDoubleUnaryOperator operator) {
+		public OptionalDouble reduce(DoubleDoubleUnaryOperator operator) {
 			Objects.requireNonNull(operator);
 			double state = 0D;
 			boolean empty = true;
@@ -1178,18 +1181,18 @@ public class Double2LongOpenCustomHashMap extends AbstractDouble2LongMap impleme
 				}
 				state = operator.applyAsDouble(state, keys[i]);
 			}
-			return state;
+			return empty ? OptionalDouble.empty() : OptionalDouble.of(state);
 		}
 		
 		@Override
-		public double findFirst(DoublePredicate filter) {
+		public OptionalDouble findFirst(DoublePredicate filter) {
 			Objects.requireNonNull(filter);
-			if(size() <= 0) return 0D;
-			if(containsNull && filter.test(keys[nullIndex])) return keys[nullIndex];
+			if(size() <= 0) return OptionalDouble.empty();
+			if(containsNull && filter.test(keys[nullIndex])) return OptionalDouble.of(keys[nullIndex]);
 			for(int i = nullIndex-1;i>=0;i--) {
-				if(!strategy.equals(keys[i], 0D) && filter.test(keys[i])) return keys[i];
+				if(!strategy.equals(keys[i], 0D) && filter.test(keys[i])) return OptionalDouble.of(keys[i]);
 			}
-			return 0D;
+			return OptionalDouble.empty();
 		}
 		
 		@Override
@@ -1304,7 +1307,7 @@ public class Double2LongOpenCustomHashMap extends AbstractDouble2LongMap impleme
 		}
 		
 		@Override
-		public long reduce(LongLongUnaryOperator operator) {
+		public OptionalLong reduce(LongLongUnaryOperator operator) {
 			Objects.requireNonNull(operator);
 			long state = 0L;
 			boolean empty = true;
@@ -1321,18 +1324,18 @@ public class Double2LongOpenCustomHashMap extends AbstractDouble2LongMap impleme
 				}
 				state = operator.applyAsLong(state, values[i]);
 			}
-			return state;
+			return empty ? OptionalLong.empty() : OptionalLong.of(state);
 		}
 		
 		@Override
-		public long findFirst(LongPredicate filter) {
+		public OptionalLong findFirst(LongPredicate filter) {
 			Objects.requireNonNull(filter);
-			if(size() <= 0) return 0L;
-			if(containsNull && filter.test(values[nullIndex])) return values[nullIndex];
+			if(size() <= 0) return OptionalLong.empty();
+			if(containsNull && filter.test(values[nullIndex])) return OptionalLong.of(values[nullIndex]);
 			for(int i = nullIndex-1;i>=0;i--) {
-				if(!strategy.equals(keys[i], 0D) && filter.test(values[i])) return values[i];
+				if(!strategy.equals(keys[i], 0D) && filter.test(values[i])) return OptionalLong.of(values[i]);
 			}
-			return 0L;
+			return OptionalLong.empty();
 		}
 		
 		@Override

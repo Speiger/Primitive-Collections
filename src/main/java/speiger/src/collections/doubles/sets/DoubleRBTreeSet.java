@@ -2,6 +2,7 @@ package speiger.src.collections.doubles.sets;
 
 import java.util.Collection;
 import java.util.Collections;
+import java.util.OptionalDouble;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 import java.util.Objects;
@@ -334,7 +335,7 @@ public class DoubleRBTreeSet extends AbstractDoubleSet implements DoubleNavigabl
 	}
 	
 	@Override
-	public double reduce(DoubleDoubleUnaryOperator operator) {
+	public OptionalDouble reduce(DoubleDoubleUnaryOperator operator) {
 		Objects.requireNonNull(operator);
 		double state = 0D;
 		boolean empty = true;
@@ -346,16 +347,16 @@ public class DoubleRBTreeSet extends AbstractDoubleSet implements DoubleNavigabl
 			}
 			state = operator.applyAsDouble(state, entry.key);
 		}
-		return state;
+		return empty ? OptionalDouble.empty() : OptionalDouble.of(state);
 	}
 	
 	@Override
-	public double findFirst(DoublePredicate filter) {
+	public OptionalDouble findFirst(DoublePredicate filter) {
 		Objects.requireNonNull(filter);
 		for(Entry entry = first;entry != null;entry = entry.next()) {
-			if(filter.test(entry.key)) return entry.key;
+			if(filter.test(entry.key)) return OptionalDouble.of(entry.key);
 		}
-		return 0D;
+		return OptionalDouble.empty();
 	}
 	
 	@Override
@@ -1241,7 +1242,7 @@ public class DoubleRBTreeSet extends AbstractDoubleSet implements DoubleNavigabl
 		}
 		
 		@Override
-		public double reduce(DoubleDoubleUnaryOperator operator) {
+		public OptionalDouble reduce(DoubleDoubleUnaryOperator operator) {
 			Objects.requireNonNull(operator);
 			double state = 0D;
 			boolean empty = true;
@@ -1253,16 +1254,16 @@ public class DoubleRBTreeSet extends AbstractDoubleSet implements DoubleNavigabl
 				}
 				state = operator.applyAsDouble(state, entry.key);
 			}
-			return state;
+			return empty ? OptionalDouble.empty() : OptionalDouble.of(state);
 		}
 		
 		@Override
-		public double findFirst(DoublePredicate filter) {
+		public OptionalDouble findFirst(DoublePredicate filter) {
 			Objects.requireNonNull(filter);
 			for(Entry entry = start();entry != null && inRange(entry.key);entry = next(entry)) {
-				if(filter.test(entry.key)) return entry.key;
+				if(filter.test(entry.key)) return OptionalDouble.of(entry.key);
 			}
-			return 0D;
+			return OptionalDouble.empty();
 		}
 		
 		@Override

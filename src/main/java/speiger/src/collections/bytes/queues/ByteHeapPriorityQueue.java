@@ -6,6 +6,7 @@ import java.util.Objects;
 
 import speiger.src.collections.bytes.collections.ByteCollection;
 import speiger.src.collections.bytes.collections.ByteIterator;
+import speiger.src.collections.bytes.functions.OptionalByte;
 import speiger.src.collections.bytes.functions.ByteComparator;
 import speiger.src.collections.bytes.functions.ByteConsumer;
 import speiger.src.collections.ints.functions.consumer.IntByteConsumer;
@@ -290,7 +291,7 @@ public class ByteHeapPriorityQueue extends AbstractBytePriorityQueue
 	}
 	
 	@Override
-	public byte reduce(ByteByteUnaryOperator operator) {
+	public OptionalByte reduce(ByteByteUnaryOperator operator) {
 		Objects.requireNonNull(operator);
 		byte state = (byte)0;
 		boolean empty = true;
@@ -302,20 +303,20 @@ public class ByteHeapPriorityQueue extends AbstractBytePriorityQueue
 			}
 			state = operator.applyAsByte(state, array[i]);
 		}
-		return state;
+		return empty ? OptionalByte.empty() : OptionalByte.of(state);
 	}
 	
 	@Override
-	public byte findFirst(BytePredicate filter) {
+	public OptionalByte findFirst(BytePredicate filter) {
 		Objects.requireNonNull(filter);
 		for(int i = 0;i<size;i++) {
 			if(filter.test(array[i])) {
 				byte data = array[i];
 				removeIndex(i);
-				return data;
+				return OptionalByte.of(data);
 			}
 		}
-		return (byte)0;
+		return OptionalByte.empty();
 	}
 	
 	@Override

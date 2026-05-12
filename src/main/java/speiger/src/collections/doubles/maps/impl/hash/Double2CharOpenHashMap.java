@@ -5,10 +5,12 @@ import java.util.ConcurrentModificationException;
 import java.util.Map;
 import java.util.NoSuchElementException;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.function.Consumer;
 import java.util.function.BiFunction;
 import java.util.function.Predicate;
 import java.util.function.DoublePredicate;
+import java.util.OptionalDouble;
 
 import speiger.src.collections.doubles.collections.DoubleIterator;
 import speiger.src.collections.doubles.functions.DoubleConsumer;
@@ -34,6 +36,7 @@ import speiger.src.collections.chars.functions.CharConsumer;
 import speiger.src.collections.objects.functions.consumer.ObjectObjectConsumer;
 import speiger.src.collections.objects.functions.consumer.ObjectCharConsumer;
 import speiger.src.collections.chars.functions.function.CharPredicate;
+import speiger.src.collections.chars.functions.OptionalChar;
 import speiger.src.collections.objects.collections.ObjectIterator;
 import speiger.src.collections.objects.sets.AbstractObjectSet;
 import speiger.src.collections.objects.sets.ObjectSet;
@@ -920,7 +923,7 @@ public class Double2CharOpenHashMap extends AbstractDouble2CharMap implements IT
 		}
 		
 		@Override
-		public Double2CharMap.Entry reduce(ObjectObjectUnaryOperator<Double2CharMap.Entry, Double2CharMap.Entry> operator) {
+		public Optional<Double2CharMap.Entry> reduce(ObjectObjectUnaryOperator<Double2CharMap.Entry, Double2CharMap.Entry> operator) {
 			Objects.requireNonNull(operator);
 			Double2CharMap.Entry state = null;
 			boolean empty = true;
@@ -937,25 +940,25 @@ public class Double2CharOpenHashMap extends AbstractDouble2CharMap implements IT
 				}
 				state = operator.apply(state, new ValueMapEntry(i));
 			}
-			return state;
+			return empty ? Optional.empty() : Optional.ofNullable(state);
 		}
 		
 		@Override
-		public Double2CharMap.Entry findFirst(Predicate<Double2CharMap.Entry> filter) {
+		public Optional<Double2CharMap.Entry> findFirst(Predicate<Double2CharMap.Entry> filter) {
 			Objects.requireNonNull(filter);
-			if(size() <= 0) return null;
+			if(size() <= 0) return Optional.empty();
 			MapEntry entry = new MapEntry();
 			if(containsNull) {
 				entry.set(nullIndex);
-				if(filter.test(entry)) return entry;
+				if(filter.test(entry)) return Optional.ofNullable(entry);
 			}
 			for(int i = nullIndex-1;i>=0;i--) {
 				if(Double.doubleToLongBits(keys[i]) != 0) {
 					entry.set(i);
-					if(filter.test(entry)) return entry;
+					if(filter.test(entry)) return Optional.ofNullable(entry);
 				}
 			}
-			return null;
+			return Optional.empty();
 		}
 		
 		@Override
@@ -1127,7 +1130,7 @@ public class Double2CharOpenHashMap extends AbstractDouble2CharMap implements IT
 		}
 		
 		@Override
-		public double reduce(DoubleDoubleUnaryOperator operator) {
+		public OptionalDouble reduce(DoubleDoubleUnaryOperator operator) {
 			Objects.requireNonNull(operator);
 			double state = 0D;
 			boolean empty = true;
@@ -1144,18 +1147,18 @@ public class Double2CharOpenHashMap extends AbstractDouble2CharMap implements IT
 				}
 				state = operator.applyAsDouble(state, keys[i]);
 			}
-			return state;
+			return empty ? OptionalDouble.empty() : OptionalDouble.of(state);
 		}
 		
 		@Override
-		public double findFirst(DoublePredicate filter) {
+		public OptionalDouble findFirst(DoublePredicate filter) {
 			Objects.requireNonNull(filter);
-			if(size() <= 0) return 0D;
-			if(containsNull && filter.test(keys[nullIndex])) return keys[nullIndex];
+			if(size() <= 0) return OptionalDouble.empty();
+			if(containsNull && filter.test(keys[nullIndex])) return OptionalDouble.of(keys[nullIndex]);
 			for(int i = nullIndex-1;i>=0;i--) {
-				if(Double.doubleToLongBits(keys[i]) != 0 && filter.test(keys[i])) return keys[i];
+				if(Double.doubleToLongBits(keys[i]) != 0 && filter.test(keys[i])) return OptionalDouble.of(keys[i]);
 			}
-			return 0D;
+			return OptionalDouble.empty();
 		}
 		
 		@Override
@@ -1270,7 +1273,7 @@ public class Double2CharOpenHashMap extends AbstractDouble2CharMap implements IT
 		}
 		
 		@Override
-		public char reduce(CharCharUnaryOperator operator) {
+		public OptionalChar reduce(CharCharUnaryOperator operator) {
 			Objects.requireNonNull(operator);
 			char state = (char)0;
 			boolean empty = true;
@@ -1287,18 +1290,18 @@ public class Double2CharOpenHashMap extends AbstractDouble2CharMap implements IT
 				}
 				state = operator.applyAsChar(state, values[i]);
 			}
-			return state;
+			return empty ? OptionalChar.empty() : OptionalChar.of(state);
 		}
 		
 		@Override
-		public char findFirst(CharPredicate filter) {
+		public OptionalChar findFirst(CharPredicate filter) {
 			Objects.requireNonNull(filter);
-			if(size() <= 0) return (char)0;
-			if(containsNull && filter.test(values[nullIndex])) return values[nullIndex];
+			if(size() <= 0) return OptionalChar.empty();
+			if(containsNull && filter.test(values[nullIndex])) return OptionalChar.of(values[nullIndex]);
 			for(int i = nullIndex-1;i>=0;i--) {
-				if(Double.doubleToLongBits(keys[i]) != 0 && filter.test(values[i])) return values[i];
+				if(Double.doubleToLongBits(keys[i]) != 0 && filter.test(values[i])) return OptionalChar.of(values[i]);
 			}
-			return (char)0;
+			return OptionalChar.empty();
 		}
 		
 		@Override

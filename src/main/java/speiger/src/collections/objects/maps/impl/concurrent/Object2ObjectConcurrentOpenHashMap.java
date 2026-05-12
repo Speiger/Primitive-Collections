@@ -4,6 +4,7 @@ import java.util.Arrays;
 import java.util.Map;
 import java.util.NoSuchElementException;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.concurrent.locks.StampedLock;
 import java.util.function.Consumer;
 import java.util.function.Predicate;
@@ -639,7 +640,7 @@ public class Object2ObjectConcurrentOpenHashMap<T, V> extends AbstractObject2Obj
 		}
 		
 		@Override
-		public Object2ObjectMap.Entry<T, V> reduce(ObjectObjectUnaryOperator<Object2ObjectMap.Entry<T, V>, Object2ObjectMap.Entry<T, V>> operator) {
+		public Optional<Object2ObjectMap.Entry<T, V>> reduce(ObjectObjectUnaryOperator<Object2ObjectMap.Entry<T, V>, Object2ObjectMap.Entry<T, V>> operator) {
 			Objects.requireNonNull(operator);
 			Object2ObjectMap.Entry<T, V> state = null;
 			boolean empty = true;
@@ -663,11 +664,11 @@ public class Object2ObjectConcurrentOpenHashMap<T, V> extends AbstractObject2Obj
 					seg.unlockRead(stamp);
 				}
 			}
-			return state;
+			return empty ? Optional.empty() : Optional.ofNullable(state);
 		}
 		
 		@Override
-		public Object2ObjectMap.Entry<T, V> findFirst(Predicate<Object2ObjectMap.Entry<T, V>> filter) {
+		public Optional<Object2ObjectMap.Entry<T, V>> findFirst(Predicate<Object2ObjectMap.Entry<T, V>> filter) {
 			Objects.requireNonNull(filter);
 			MapEntry entry = new MapEntry();
 			for(int i = 0,m=segments.length;i<m;i++) {
@@ -677,7 +678,7 @@ public class Object2ObjectConcurrentOpenHashMap<T, V> extends AbstractObject2Obj
 				try {
 					while(index != -1) {
 						entry.set(index, i);
-						if(filter.test(entry)) return entry;
+						if(filter.test(entry)) return Optional.ofNullable(entry);
 						index = (int)seg.links[index];
 					}
 				}
@@ -685,7 +686,7 @@ public class Object2ObjectConcurrentOpenHashMap<T, V> extends AbstractObject2Obj
 					seg.unlockRead(stamp);
 				}
 			}
-			return null;
+			return Optional.empty();
 		}
 		
 		@Override
@@ -947,7 +948,7 @@ public class Object2ObjectConcurrentOpenHashMap<T, V> extends AbstractObject2Obj
 		}
 		
 		@Override
-		public T reduce(ObjectObjectUnaryOperator<T, T> operator) {
+		public Optional<T> reduce(ObjectObjectUnaryOperator<T, T> operator) {
 			Objects.requireNonNull(operator);
 			T state = null;
 			boolean empty = true;
@@ -971,11 +972,11 @@ public class Object2ObjectConcurrentOpenHashMap<T, V> extends AbstractObject2Obj
 					seg.unlockRead(stamp);
 				}
 			}
-			return state;
+			return empty ? Optional.empty() : Optional.ofNullable(state);
 		}
 		
 		@Override
-		public T findFirst(Predicate<T> filter) {
+		public Optional<T> findFirst(Predicate<T> filter) {
 			Objects.requireNonNull(filter);
 			for(int i = 0,m=segments.length;i<m;i++) {
 				Segment<T, V> seg = segments[i];
@@ -983,7 +984,7 @@ public class Object2ObjectConcurrentOpenHashMap<T, V> extends AbstractObject2Obj
 				try {
 					int index = seg.firstIndex;
 					while(index != -1){
-						if(filter.test(seg.keys[index])) return seg.keys[index];
+						if(filter.test(seg.keys[index])) return Optional.ofNullable(seg.keys[index]);
 						index = (int)seg.links[index];
 					}
 				}
@@ -991,7 +992,7 @@ public class Object2ObjectConcurrentOpenHashMap<T, V> extends AbstractObject2Obj
 					seg.unlockRead(stamp);
 				}
 			}
-			return null;
+			return Optional.empty();
 		}
 		
 		@Override
@@ -1183,7 +1184,7 @@ public class Object2ObjectConcurrentOpenHashMap<T, V> extends AbstractObject2Obj
 		}
 		
 		@Override
-		public V reduce(ObjectObjectUnaryOperator<V, V> operator) {
+		public Optional<V> reduce(ObjectObjectUnaryOperator<V, V> operator) {
 			Objects.requireNonNull(operator);
 			V state = null;
 			boolean empty = true;
@@ -1207,20 +1208,20 @@ public class Object2ObjectConcurrentOpenHashMap<T, V> extends AbstractObject2Obj
 					seg.unlockRead(stamp);
 				}
 			}
-			return state;
+			return empty ? Optional.empty() : Optional.ofNullable(state);
 		}
 		
 		@Override
-		public V findFirst(Predicate<V> filter) {
+		public Optional<V> findFirst(Predicate<V> filter) {
 			Objects.requireNonNull(filter);
-			if(size() <= 0) return null;
+			if(size() <= 0) return Optional.empty();
 			for(int i = 0,m=segments.length;i<m;i++) {
 				Segment<T, V> seg = segments[i];
 				long stamp = seg.readLock();
 				try {
 					int index = seg.firstIndex;
 					while(index != -1){
-						if(filter.test(seg.values[index])) return seg.values[index];
+						if(filter.test(seg.values[index])) return Optional.ofNullable(seg.values[index]);
 						index = (int)seg.links[index];
 					}
 				}
@@ -1228,7 +1229,7 @@ public class Object2ObjectConcurrentOpenHashMap<T, V> extends AbstractObject2Obj
 					seg.unlockRead(stamp);
 				}
 			}
-			return null;
+			return Optional.empty();
 		}
 		
 		@Override

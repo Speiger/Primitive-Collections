@@ -63,7 +63,17 @@ public abstract class AbstractLongSet extends AbstractLongCollection implements 
 		public LongBidirectionalIterator reverseIterator() {
 			return set.iterator();
 		}
-
+		
+		@Override
+		public void addFirst(long o) {
+			set.addLast(o);
+		}
+		
+		@Override
+		public void addLast(long o) {
+			set.addFirst(o);
+		}
+		
 		@Override
 		public boolean remove(long o) {
 			return set.remove(o);

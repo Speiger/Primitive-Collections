@@ -611,7 +611,11 @@ public class Short2ObjectMaps
 			super(c);
 			set = c;
 		}
-
+		
+		@Override
+		public void addFirst(Short2ObjectMap.Entry<V> o) { throw new UnsupportedOperationException(); }
+		@Override
+		public void addLast(Short2ObjectMap.Entry<V> o) { throw new UnsupportedOperationException(); }
 		@Override
 		public boolean addAndMoveToFirst(Short2ObjectMap.Entry<V> o) { throw new UnsupportedOperationException(); }
 		@Override

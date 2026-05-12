@@ -633,7 +633,11 @@ public class Object2CharMaps
 			super(c);
 			set = c;
 		}
-
+		
+		@Override
+		public void addFirst(Object2CharMap.Entry<T> o) { throw new UnsupportedOperationException(); }
+		@Override
+		public void addLast(Object2CharMap.Entry<T> o) { throw new UnsupportedOperationException(); }
 		@Override
 		public boolean addAndMoveToFirst(Object2CharMap.Entry<T> o) { throw new UnsupportedOperationException(); }
 		@Override

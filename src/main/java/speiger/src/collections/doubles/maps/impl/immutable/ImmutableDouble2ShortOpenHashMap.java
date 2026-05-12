@@ -4,10 +4,12 @@ import java.util.Arrays;
 import java.util.Map;
 import java.util.NoSuchElementException;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.function.Consumer;
 import java.util.function.BiFunction;
 import java.util.function.Predicate;
 import java.util.function.DoublePredicate;
+import java.util.OptionalDouble;
 
 import speiger.src.collections.doubles.collections.DoubleBidirectionalIterator;
 import speiger.src.collections.doubles.functions.DoubleConsumer;
@@ -29,6 +31,7 @@ import speiger.src.collections.objects.functions.consumer.ObjectObjectConsumer;
 import speiger.src.collections.objects.functions.consumer.ObjectShortConsumer;
 
 import speiger.src.collections.shorts.functions.function.ShortPredicate;
+import speiger.src.collections.shorts.functions.OptionalShort;
 import speiger.src.collections.doubles.sets.AbstractDoubleSet;
 import speiger.src.collections.shorts.collections.AbstractShortCollection;
 import speiger.src.collections.shorts.collections.ShortOrderedCollection;
@@ -539,6 +542,10 @@ public class ImmutableDouble2ShortOpenHashMap extends AbstractDouble2ShortMap im
 	
 	private class MapEntrySet extends AbstractObjectSet<Double2ShortMap.Entry> implements Double2ShortOrderedMap.FastOrderedSet {
 		@Override
+		public void addFirst(Double2ShortMap.Entry o) { throw new UnsupportedOperationException(); }
+		@Override
+		public void addLast(Double2ShortMap.Entry o) { throw new UnsupportedOperationException(); }
+		@Override
 		public boolean addAndMoveToFirst(Double2ShortMap.Entry o) { throw new UnsupportedOperationException(); }
 		@Override
 		public boolean addAndMoveToLast(Double2ShortMap.Entry o) { throw new UnsupportedOperationException(); }
@@ -691,7 +698,7 @@ public class ImmutableDouble2ShortOpenHashMap extends AbstractDouble2ShortMap im
 		}
 		
 		@Override
-		public Double2ShortMap.Entry reduce(ObjectObjectUnaryOperator<Double2ShortMap.Entry, Double2ShortMap.Entry> operator) {
+		public Optional<Double2ShortMap.Entry> reduce(ObjectObjectUnaryOperator<Double2ShortMap.Entry, Double2ShortMap.Entry> operator) {
 			Objects.requireNonNull(operator);
 			Double2ShortMap.Entry state = null;
 			boolean empty = true;
@@ -706,21 +713,21 @@ public class ImmutableDouble2ShortOpenHashMap extends AbstractDouble2ShortMap im
 				state = operator.apply(state, new BasicEntry(keys[index], values[index]));
 				index = (int)links[index];
 			}
-			return state;
+			return empty ? Optional.empty() : Optional.ofNullable(state);
 		}
 		
 		@Override
-		public Double2ShortMap.Entry findFirst(Predicate<Double2ShortMap.Entry> filter) {
+		public Optional<Double2ShortMap.Entry> findFirst(Predicate<Double2ShortMap.Entry> filter) {
 			Objects.requireNonNull(filter);
-			if(size() <= 0) return null;
+			if(size() <= 0) return Optional.empty();
 			BasicEntry entry = new BasicEntry();
 			int index = firstIndex;
 			while(index != -1) {
 				entry.set(keys[index], values[index]);
-				if(filter.test(entry)) return entry;
+				if(filter.test(entry)) return Optional.ofNullable(entry);
 				index = (int)links[index];
 			}
-			return null;
+			return Optional.empty();
 		}
 		
 		@Override
@@ -782,6 +789,12 @@ public class ImmutableDouble2ShortOpenHashMap extends AbstractDouble2ShortMap im
 		public boolean add(double o) {
 			throw new UnsupportedOperationException();
 		}
+		
+		@Override
+		public void addFirst(double o) { throw new UnsupportedOperationException(); }
+		
+		@Override
+		public void addLast(double o) { throw new UnsupportedOperationException(); }
 		
 		@Override
 		public boolean addAndMoveToFirst(double o) { throw new UnsupportedOperationException(); }
@@ -918,7 +931,7 @@ public class ImmutableDouble2ShortOpenHashMap extends AbstractDouble2ShortMap im
 		}
 		
 		@Override
-		public double reduce(DoubleDoubleUnaryOperator operator) {
+		public OptionalDouble reduce(DoubleDoubleUnaryOperator operator) {
 			Objects.requireNonNull(operator);
 			double state = 0D;
 			boolean empty = true;
@@ -933,19 +946,19 @@ public class ImmutableDouble2ShortOpenHashMap extends AbstractDouble2ShortMap im
 				state = operator.applyAsDouble(state, keys[index]);
 				index = (int)links[index];
 			}
-			return state;
+			return empty ? OptionalDouble.empty() : OptionalDouble.of(state);
 		}
 		
 		@Override
-		public double findFirst(DoublePredicate filter) {
+		public OptionalDouble findFirst(DoublePredicate filter) {
 			Objects.requireNonNull(filter);
-			if(size() <= 0) return 0D;
+			if(size() <= 0) return OptionalDouble.empty();
 			int index = firstIndex;
 			while(index != -1){
-				if(filter.test(keys[index])) return keys[index];
+				if(filter.test(keys[index])) return OptionalDouble.of(keys[index]);
 				index = (int)links[index];
 			}
-			return 0D;
+			return OptionalDouble.empty();
 		}
 		
 		@Override
@@ -1072,7 +1085,7 @@ public class ImmutableDouble2ShortOpenHashMap extends AbstractDouble2ShortMap im
 		}
 		
 		@Override
-		public short reduce(ShortShortUnaryOperator operator) {
+		public OptionalShort reduce(ShortShortUnaryOperator operator) {
 			Objects.requireNonNull(operator);
 			short state = (short)0;
 			boolean empty = true;
@@ -1087,19 +1100,19 @@ public class ImmutableDouble2ShortOpenHashMap extends AbstractDouble2ShortMap im
 				state = operator.applyAsShort(state, values[index]);
 				index = (int)links[index];
 			}
-			return state;
+			return empty ? OptionalShort.empty() : OptionalShort.of(state);
 		}
 		
 		@Override
-		public short findFirst(ShortPredicate filter) {
+		public OptionalShort findFirst(ShortPredicate filter) {
 			Objects.requireNonNull(filter);
-			if(size() <= 0) return (short)0;
+			if(size() <= 0) return OptionalShort.empty();
 			int index = firstIndex;
 			while(index != -1){
-				if(filter.test(values[index])) return values[index];
+				if(filter.test(values[index])) return OptionalShort.of(values[index]);
 				index = (int)links[index];
 			}
-			return (short)0;
+			return OptionalShort.empty();
 		}
 		
 		@Override

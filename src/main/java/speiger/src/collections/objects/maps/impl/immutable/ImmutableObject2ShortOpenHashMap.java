@@ -4,6 +4,7 @@ import java.util.Arrays;
 import java.util.Map;
 import java.util.NoSuchElementException;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.function.Consumer;
 import java.util.function.BiFunction;
 import java.util.function.Predicate;
@@ -21,6 +22,7 @@ import speiger.src.collections.objects.maps.interfaces.Object2ShortMap;
 import speiger.src.collections.objects.functions.consumer.ObjectObjectConsumer;
 
 import speiger.src.collections.shorts.functions.function.ShortPredicate;
+import speiger.src.collections.shorts.functions.OptionalShort;
 import speiger.src.collections.shorts.collections.AbstractShortCollection;
 import speiger.src.collections.shorts.collections.ShortOrderedCollection;
 import speiger.src.collections.shorts.collections.ShortIterator;
@@ -509,6 +511,10 @@ public class ImmutableObject2ShortOpenHashMap<T> extends AbstractObject2ShortMap
 	
 	private class MapEntrySet extends AbstractObjectSet<Object2ShortMap.Entry<T>> implements Object2ShortOrderedMap.FastOrderedSet<T> {
 		@Override
+		public void addFirst(Object2ShortMap.Entry<T> o) { throw new UnsupportedOperationException(); }
+		@Override
+		public void addLast(Object2ShortMap.Entry<T> o) { throw new UnsupportedOperationException(); }
+		@Override
 		public boolean addAndMoveToFirst(Object2ShortMap.Entry<T> o) { throw new UnsupportedOperationException(); }
 		@Override
 		public boolean addAndMoveToLast(Object2ShortMap.Entry<T> o) { throw new UnsupportedOperationException(); }
@@ -661,7 +667,7 @@ public class ImmutableObject2ShortOpenHashMap<T> extends AbstractObject2ShortMap
 		}
 		
 		@Override
-		public Object2ShortMap.Entry<T> reduce(ObjectObjectUnaryOperator<Object2ShortMap.Entry<T>, Object2ShortMap.Entry<T>> operator) {
+		public Optional<Object2ShortMap.Entry<T>> reduce(ObjectObjectUnaryOperator<Object2ShortMap.Entry<T>, Object2ShortMap.Entry<T>> operator) {
 			Objects.requireNonNull(operator);
 			Object2ShortMap.Entry<T> state = null;
 			boolean empty = true;
@@ -676,21 +682,21 @@ public class ImmutableObject2ShortOpenHashMap<T> extends AbstractObject2ShortMap
 				state = operator.apply(state, new BasicEntry<>(keys[index], values[index]));
 				index = (int)links[index];
 			}
-			return state;
+			return empty ? Optional.empty() : Optional.ofNullable(state);
 		}
 		
 		@Override
-		public Object2ShortMap.Entry<T> findFirst(Predicate<Object2ShortMap.Entry<T>> filter) {
+		public Optional<Object2ShortMap.Entry<T>> findFirst(Predicate<Object2ShortMap.Entry<T>> filter) {
 			Objects.requireNonNull(filter);
-			if(size() <= 0) return null;
+			if(size() <= 0) return Optional.empty();
 			BasicEntry<T> entry = new BasicEntry<>();
 			int index = firstIndex;
 			while(index != -1) {
 				entry.set(keys[index], values[index]);
-				if(filter.test(entry)) return entry;
+				if(filter.test(entry)) return Optional.ofNullable(entry);
 				index = (int)links[index];
 			}
-			return null;
+			return Optional.empty();
 		}
 		
 		@Override
@@ -753,6 +759,12 @@ public class ImmutableObject2ShortOpenHashMap<T> extends AbstractObject2ShortMap
 		public boolean add(T o) {
 			throw new UnsupportedOperationException();
 		}
+		
+		@Override
+		public void addFirst(T o) { throw new UnsupportedOperationException(); }
+		
+		@Override
+		public void addLast(T o) { throw new UnsupportedOperationException(); }
 		
 		@Override
 		public boolean addAndMoveToFirst(T o) { throw new UnsupportedOperationException(); }
@@ -889,7 +901,7 @@ public class ImmutableObject2ShortOpenHashMap<T> extends AbstractObject2ShortMap
 		}
 		
 		@Override
-		public T reduce(ObjectObjectUnaryOperator<T, T> operator) {
+		public Optional<T> reduce(ObjectObjectUnaryOperator<T, T> operator) {
 			Objects.requireNonNull(operator);
 			T state = null;
 			boolean empty = true;
@@ -904,19 +916,19 @@ public class ImmutableObject2ShortOpenHashMap<T> extends AbstractObject2ShortMap
 				state = operator.apply(state, keys[index]);
 				index = (int)links[index];
 			}
-			return state;
+			return empty ? Optional.empty() : Optional.ofNullable(state);
 		}
 		
 		@Override
-		public T findFirst(Predicate<T> filter) {
+		public Optional<T> findFirst(Predicate<T> filter) {
 			Objects.requireNonNull(filter);
-			if(size() <= 0) return null;
+			if(size() <= 0) return Optional.empty();
 			int index = firstIndex;
 			while(index != -1){
-				if(filter.test(keys[index])) return keys[index];
+				if(filter.test(keys[index])) return Optional.ofNullable(keys[index]);
 				index = (int)links[index];
 			}
-			return null;
+			return Optional.empty();
 		}
 		
 		@Override
@@ -1043,7 +1055,7 @@ public class ImmutableObject2ShortOpenHashMap<T> extends AbstractObject2ShortMap
 		}
 		
 		@Override
-		public short reduce(ShortShortUnaryOperator operator) {
+		public OptionalShort reduce(ShortShortUnaryOperator operator) {
 			Objects.requireNonNull(operator);
 			short state = (short)0;
 			boolean empty = true;
@@ -1058,19 +1070,19 @@ public class ImmutableObject2ShortOpenHashMap<T> extends AbstractObject2ShortMap
 				state = operator.applyAsShort(state, values[index]);
 				index = (int)links[index];
 			}
-			return state;
+			return empty ? OptionalShort.empty() : OptionalShort.of(state);
 		}
 		
 		@Override
-		public short findFirst(ShortPredicate filter) {
+		public OptionalShort findFirst(ShortPredicate filter) {
 			Objects.requireNonNull(filter);
-			if(size() <= 0) return (short)0;
+			if(size() <= 0) return OptionalShort.empty();
 			int index = firstIndex;
 			while(index != -1){
-				if(filter.test(values[index])) return values[index];
+				if(filter.test(values[index])) return OptionalShort.of(values[index]);
 				index = (int)links[index];
 			}
-			return (short)0;
+			return OptionalShort.empty();
 		}
 		
 		@Override

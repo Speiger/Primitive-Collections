@@ -4,10 +4,12 @@ import java.util.Arrays;
 import java.util.Map;
 import java.util.NoSuchElementException;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.function.Consumer;
 import java.util.function.BiFunction;
 import java.util.function.Predicate;
 import java.util.function.LongPredicate;
+import java.util.OptionalLong;
 
 import speiger.src.collections.longs.collections.LongBidirectionalIterator;
 import speiger.src.collections.longs.functions.LongConsumer;
@@ -34,6 +36,7 @@ import speiger.src.collections.booleans.lists.BooleanListIterator;
 import speiger.src.collections.objects.functions.consumer.ObjectObjectConsumer;
 
 import speiger.src.collections.booleans.functions.function.BooleanPredicate;
+import speiger.src.collections.booleans.functions.OptionalBoolean;
 import speiger.src.collections.objects.collections.ObjectIterator;
 import speiger.src.collections.objects.functions.function.ObjectObjectUnaryOperator;
 import speiger.src.collections.objects.collections.ObjectBidirectionalIterator;
@@ -729,6 +732,10 @@ public class Long2BooleanArrayMap extends AbstractLong2BooleanMap implements Lon
 	
 	private class MapEntrySet extends AbstractObjectSet<Long2BooleanMap.Entry> implements Long2BooleanOrderedMap.FastOrderedSet {
 		@Override
+		public void addFirst(Long2BooleanMap.Entry o) { throw new UnsupportedOperationException(); }
+		@Override
+		public void addLast(Long2BooleanMap.Entry o) { throw new UnsupportedOperationException(); }
+		@Override
 		public boolean addAndMoveToFirst(Long2BooleanMap.Entry o) { throw new UnsupportedOperationException(); }
 		@Override
 		public boolean addAndMoveToLast(Long2BooleanMap.Entry o) { throw new UnsupportedOperationException(); }
@@ -876,7 +883,7 @@ public class Long2BooleanArrayMap extends AbstractLong2BooleanMap implements Lon
 		}
 		
 		@Override
-		public Long2BooleanMap.Entry reduce(ObjectObjectUnaryOperator<Long2BooleanMap.Entry, Long2BooleanMap.Entry> operator) {
+		public Optional<Long2BooleanMap.Entry> reduce(ObjectObjectUnaryOperator<Long2BooleanMap.Entry, Long2BooleanMap.Entry> operator) {
 			Objects.requireNonNull(operator);
 			Long2BooleanMap.Entry state = null;
 			boolean empty = true;
@@ -888,19 +895,19 @@ public class Long2BooleanArrayMap extends AbstractLong2BooleanMap implements Lon
 				}
 				state = operator.apply(state, new ValueMapEntry(i));
 			}
-			return state;
+			return empty ? Optional.empty() : Optional.ofNullable(state);
 		}
 		
 		@Override
-		public Long2BooleanMap.Entry findFirst(Predicate<Long2BooleanMap.Entry> filter) {
+		public Optional<Long2BooleanMap.Entry> findFirst(Predicate<Long2BooleanMap.Entry> filter) {
 			Objects.requireNonNull(filter);
-			if(size() <= 0) return null;
+			if(size() <= 0) return Optional.empty();
 			MapEntry entry = new MapEntry();
 			for(int i = 0;i<size;i++) {
 				entry.set(i);
-				if(filter.test(entry)) return entry;
+				if(filter.test(entry)) return Optional.ofNullable(entry);
 			}
-			return null;
+			return Optional.empty();
 		}
 		
 		@Override
@@ -972,6 +979,10 @@ public class Long2BooleanArrayMap extends AbstractLong2BooleanMap implements Lon
 		
 		@Override
 		public boolean add(long o) { throw new UnsupportedOperationException(); }
+		@Override
+		public void addFirst(long o) { throw new UnsupportedOperationException(); }
+		@Override
+		public void addLast(long o) { throw new UnsupportedOperationException(); }
 		@Override
 		public boolean addAndMoveToFirst(long o) { throw new UnsupportedOperationException(); }
 		@Override
@@ -1059,7 +1070,7 @@ public class Long2BooleanArrayMap extends AbstractLong2BooleanMap implements Lon
 		}
 		
 		@Override
-		public long reduce(LongLongUnaryOperator operator) {
+		public OptionalLong reduce(LongLongUnaryOperator operator) {
 			Objects.requireNonNull(operator);
 			long state = 0L;
 			boolean empty = true;
@@ -1071,16 +1082,16 @@ public class Long2BooleanArrayMap extends AbstractLong2BooleanMap implements Lon
 				}
 				state = operator.applyAsLong(state, keys[i]);
 			}
-			return state;
+			return empty ? OptionalLong.empty() : OptionalLong.of(state);
 		}
 		
 		@Override
-		public long findFirst(LongPredicate filter) {
+		public OptionalLong findFirst(LongPredicate filter) {
 			Objects.requireNonNull(filter);
 			for(int i = 0;i<size;i++) {
-				if(filter.test(keys[i])) return keys[i];
+				if(filter.test(keys[i])) return OptionalLong.of(keys[i]);
 			}
-			return 0L;
+			return OptionalLong.empty();
 		}
 		
 		@Override
@@ -1181,7 +1192,7 @@ public class Long2BooleanArrayMap extends AbstractLong2BooleanMap implements Lon
 		}
 		
 		@Override
-		public boolean reduce(BooleanBooleanUnaryOperator operator) {
+		public OptionalBoolean reduce(BooleanBooleanUnaryOperator operator) {
 			Objects.requireNonNull(operator);
 			boolean state = false;
 			boolean empty = true;
@@ -1193,16 +1204,16 @@ public class Long2BooleanArrayMap extends AbstractLong2BooleanMap implements Lon
 				}
 				state = operator.applyAsBoolean(state, values[i]);
 			}
-			return state;
+			return empty ? OptionalBoolean.empty() : OptionalBoolean.of(state);
 		}
 		
 		@Override
-		public boolean findFirst(BooleanPredicate filter) {
+		public OptionalBoolean findFirst(BooleanPredicate filter) {
 			Objects.requireNonNull(filter);
 			for(int i = 0;i<size;i++) {
-				if(filter.test(values[i])) return values[i];
+				if(filter.test(values[i])) return OptionalBoolean.of(values[i]);
 			}
-			return false;
+			return OptionalBoolean.empty();
 		}
 		
 		@Override

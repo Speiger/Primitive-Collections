@@ -6,6 +6,7 @@ import java.util.Objects;
 
 import speiger.src.collections.booleans.collections.BooleanCollection;
 import speiger.src.collections.booleans.collections.BooleanIterator;
+import speiger.src.collections.booleans.functions.OptionalBoolean;
 import speiger.src.collections.booleans.functions.BooleanComparator;
 import speiger.src.collections.booleans.functions.BooleanConsumer;
 import speiger.src.collections.ints.functions.consumer.IntBooleanConsumer;
@@ -290,7 +291,7 @@ public class BooleanHeapPriorityQueue extends AbstractBooleanPriorityQueue
 	}
 	
 	@Override
-	public boolean reduce(BooleanBooleanUnaryOperator operator) {
+	public OptionalBoolean reduce(BooleanBooleanUnaryOperator operator) {
 		Objects.requireNonNull(operator);
 		boolean state = false;
 		boolean empty = true;
@@ -302,20 +303,20 @@ public class BooleanHeapPriorityQueue extends AbstractBooleanPriorityQueue
 			}
 			state = operator.applyAsBoolean(state, array[i]);
 		}
-		return state;
+		return empty ? OptionalBoolean.empty() : OptionalBoolean.of(state);
 	}
 	
 	@Override
-	public boolean findFirst(BooleanPredicate filter) {
+	public OptionalBoolean findFirst(BooleanPredicate filter) {
 		Objects.requireNonNull(filter);
 		for(int i = 0;i<size;i++) {
 			if(filter.test(array[i])) {
 				boolean data = array[i];
 				removeIndex(i);
-				return data;
+				return OptionalBoolean.of(data);
 			}
 		}
-		return false;
+		return OptionalBoolean.empty();
 	}
 	
 	@Override

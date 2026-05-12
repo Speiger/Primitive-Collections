@@ -608,7 +608,11 @@ public class Byte2BooleanMaps
 			super(c);
 			set = c;
 		}
-
+		
+		@Override
+		public void addFirst(Byte2BooleanMap.Entry o) { throw new UnsupportedOperationException(); }
+		@Override
+		public void addLast(Byte2BooleanMap.Entry o) { throw new UnsupportedOperationException(); }
 		@Override
 		public boolean addAndMoveToFirst(Byte2BooleanMap.Entry o) { throw new UnsupportedOperationException(); }
 		@Override

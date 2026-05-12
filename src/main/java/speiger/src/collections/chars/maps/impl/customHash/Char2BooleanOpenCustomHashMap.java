@@ -5,6 +5,7 @@ import java.util.ConcurrentModificationException;
 import java.util.Map;
 import java.util.NoSuchElementException;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.function.Consumer;
 import java.util.function.BiFunction;
 import java.util.function.Predicate;
@@ -19,6 +20,7 @@ import speiger.src.collections.chars.functions.consumer.CharBooleanConsumer;
 import speiger.src.collections.chars.functions.function.CharPredicate;
 import speiger.src.collections.chars.functions.function.CharBooleanUnaryOperator;
 import speiger.src.collections.chars.functions.function.CharCharUnaryOperator;
+import speiger.src.collections.chars.functions.OptionalChar;
 import speiger.src.collections.chars.maps.abstracts.AbstractChar2BooleanMap;
 import speiger.src.collections.chars.maps.interfaces.Char2BooleanMap;
 import speiger.src.collections.chars.sets.AbstractCharSet;
@@ -36,6 +38,7 @@ import speiger.src.collections.objects.functions.consumer.ObjectObjectConsumer;
 import speiger.src.collections.objects.functions.consumer.ObjectBooleanConsumer;
 
 import speiger.src.collections.booleans.functions.function.BooleanPredicate;
+import speiger.src.collections.booleans.functions.OptionalBoolean;
 import speiger.src.collections.objects.collections.ObjectIterator;
 import speiger.src.collections.objects.sets.AbstractObjectSet;
 import speiger.src.collections.objects.sets.ObjectSet;
@@ -930,7 +933,7 @@ public class Char2BooleanOpenCustomHashMap extends AbstractChar2BooleanMap imple
 		}
 		
 		@Override
-		public Char2BooleanMap.Entry reduce(ObjectObjectUnaryOperator<Char2BooleanMap.Entry, Char2BooleanMap.Entry> operator) {
+		public Optional<Char2BooleanMap.Entry> reduce(ObjectObjectUnaryOperator<Char2BooleanMap.Entry, Char2BooleanMap.Entry> operator) {
 			Objects.requireNonNull(operator);
 			Char2BooleanMap.Entry state = null;
 			boolean empty = true;
@@ -947,25 +950,25 @@ public class Char2BooleanOpenCustomHashMap extends AbstractChar2BooleanMap imple
 				}
 				state = operator.apply(state, new ValueMapEntry(i));
 			}
-			return state;
+			return empty ? Optional.empty() : Optional.ofNullable(state);
 		}
 		
 		@Override
-		public Char2BooleanMap.Entry findFirst(Predicate<Char2BooleanMap.Entry> filter) {
+		public Optional<Char2BooleanMap.Entry> findFirst(Predicate<Char2BooleanMap.Entry> filter) {
 			Objects.requireNonNull(filter);
-			if(size() <= 0) return null;
+			if(size() <= 0) return Optional.empty();
 			MapEntry entry = new MapEntry();
 			if(containsNull) {
 				entry.set(nullIndex);
-				if(filter.test(entry)) return entry;
+				if(filter.test(entry)) return Optional.ofNullable(entry);
 			}
 			for(int i = nullIndex-1;i>=0;i--) {
 				if(!strategy.equals(keys[i], (char)0)) {
 					entry.set(i);
-					if(filter.test(entry)) return entry;
+					if(filter.test(entry)) return Optional.ofNullable(entry);
 				}
 			}
-			return null;
+			return Optional.empty();
 		}
 		
 		@Override
@@ -1139,7 +1142,7 @@ public class Char2BooleanOpenCustomHashMap extends AbstractChar2BooleanMap imple
 		}
 		
 		@Override
-		public char reduce(CharCharUnaryOperator operator) {
+		public OptionalChar reduce(CharCharUnaryOperator operator) {
 			Objects.requireNonNull(operator);
 			char state = (char)0;
 			boolean empty = true;
@@ -1156,18 +1159,18 @@ public class Char2BooleanOpenCustomHashMap extends AbstractChar2BooleanMap imple
 				}
 				state = operator.applyAsChar(state, keys[i]);
 			}
-			return state;
+			return empty ? OptionalChar.empty() : OptionalChar.of(state);
 		}
 		
 		@Override
-		public char findFirst(CharPredicate filter) {
+		public OptionalChar findFirst(CharPredicate filter) {
 			Objects.requireNonNull(filter);
-			if(size() <= 0) return (char)0;
-			if(containsNull && filter.test(keys[nullIndex])) return keys[nullIndex];
+			if(size() <= 0) return OptionalChar.empty();
+			if(containsNull && filter.test(keys[nullIndex])) return OptionalChar.of(keys[nullIndex]);
 			for(int i = nullIndex-1;i>=0;i--) {
-				if(!strategy.equals(keys[i], (char)0) && filter.test(keys[i])) return keys[i];
+				if(!strategy.equals(keys[i], (char)0) && filter.test(keys[i])) return OptionalChar.of(keys[i]);
 			}
-			return (char)0;
+			return OptionalChar.empty();
 		}
 		
 		@Override
@@ -1282,7 +1285,7 @@ public class Char2BooleanOpenCustomHashMap extends AbstractChar2BooleanMap imple
 		}
 		
 		@Override
-		public boolean reduce(BooleanBooleanUnaryOperator operator) {
+		public OptionalBoolean reduce(BooleanBooleanUnaryOperator operator) {
 			Objects.requireNonNull(operator);
 			boolean state = false;
 			boolean empty = true;
@@ -1299,18 +1302,18 @@ public class Char2BooleanOpenCustomHashMap extends AbstractChar2BooleanMap imple
 				}
 				state = operator.applyAsBoolean(state, values[i]);
 			}
-			return state;
+			return empty ? OptionalBoolean.empty() : OptionalBoolean.of(state);
 		}
 		
 		@Override
-		public boolean findFirst(BooleanPredicate filter) {
+		public OptionalBoolean findFirst(BooleanPredicate filter) {
 			Objects.requireNonNull(filter);
-			if(size() <= 0) return false;
-			if(containsNull && filter.test(values[nullIndex])) return values[nullIndex];
+			if(size() <= 0) return OptionalBoolean.empty();
+			if(containsNull && filter.test(values[nullIndex])) return OptionalBoolean.of(values[nullIndex]);
 			for(int i = nullIndex-1;i>=0;i--) {
-				if(!strategy.equals(keys[i], (char)0) && filter.test(values[i])) return values[i];
+				if(!strategy.equals(keys[i], (char)0) && filter.test(values[i])) return OptionalBoolean.of(values[i]);
 			}
-			return false;
+			return OptionalBoolean.empty();
 		}
 		
 		@Override

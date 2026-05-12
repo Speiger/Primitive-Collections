@@ -15,6 +15,7 @@ import speiger.src.collections.bytes.collections.ByteCollection;
 import speiger.src.collections.bytes.collections.ByteOrderedCollection;
 import speiger.src.collections.bytes.collections.ByteIterator;
 import speiger.src.collections.bytes.functions.ByteComparator;
+import speiger.src.collections.bytes.functions.OptionalByte;
 import speiger.src.collections.objects.utils.ObjectArrays;
 import speiger.src.collections.bytes.functions.ByteConsumer;
 import speiger.src.collections.bytes.functions.function.BytePredicate;
@@ -758,9 +759,9 @@ public class ByteCollections
 		@Override
 		public byte reduce(byte identity, ByteByteUnaryOperator operator) { synchronized(mutex) { return c.reduce(identity, operator); } }
 		@Override
-		public byte reduce(ByteByteUnaryOperator operator) { synchronized(mutex) { return c.reduce(operator); } }
+		public OptionalByte reduce(ByteByteUnaryOperator operator) { synchronized(mutex) { return c.reduce(operator); } }
 		@Override
-		public byte findFirst(BytePredicate filter) { synchronized(mutex) { return c.findFirst(filter); } }
+		public OptionalByte findFirst(BytePredicate filter) { synchronized(mutex) { return c.findFirst(filter); } }
 		@Override
 		public int count(BytePredicate filter) { synchronized(mutex) { return c.count(filter); } }
 	}
@@ -888,9 +889,9 @@ public class ByteCollections
 		@Override
 		public byte reduce(byte identity, ByteByteUnaryOperator operator) { return c.reduce(identity, operator); }
 		@Override
-		public byte reduce(ByteByteUnaryOperator operator) { return c.reduce(operator); }
+		public OptionalByte reduce(ByteByteUnaryOperator operator) { return c.reduce(operator); }
 		@Override
-		public byte findFirst(BytePredicate filter) { return c.findFirst(filter); }
+		public OptionalByte findFirst(BytePredicate filter) { return c.findFirst(filter); }
 		@Override
 		public int count(BytePredicate filter) { return c.count(filter); }
 	}

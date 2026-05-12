@@ -6,6 +6,7 @@ import java.util.ConcurrentModificationException;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 import java.util.Objects;
+import java.util.OptionalLong;
 import java.util.function.Predicate;
 import java.util.function.LongPredicate;
 import java.util.function.Consumer;
@@ -757,9 +758,9 @@ public class LongCollections
 		@Override
 		public long reduce(long identity, LongLongUnaryOperator operator) { synchronized(mutex) { return c.reduce(identity, operator); } }
 		@Override
-		public long reduce(LongLongUnaryOperator operator) { synchronized(mutex) { return c.reduce(operator); } }
+		public OptionalLong reduce(LongLongUnaryOperator operator) { synchronized(mutex) { return c.reduce(operator); } }
 		@Override
-		public long findFirst(LongPredicate filter) { synchronized(mutex) { return c.findFirst(filter); } }
+		public OptionalLong findFirst(LongPredicate filter) { synchronized(mutex) { return c.findFirst(filter); } }
 		@Override
 		public int count(LongPredicate filter) { synchronized(mutex) { return c.count(filter); } }
 	}
@@ -887,9 +888,9 @@ public class LongCollections
 		@Override
 		public long reduce(long identity, LongLongUnaryOperator operator) { return c.reduce(identity, operator); }
 		@Override
-		public long reduce(LongLongUnaryOperator operator) { return c.reduce(operator); }
+		public OptionalLong reduce(LongLongUnaryOperator operator) { return c.reduce(operator); }
 		@Override
-		public long findFirst(LongPredicate filter) { return c.findFirst(filter); }
+		public OptionalLong findFirst(LongPredicate filter) { return c.findFirst(filter); }
 		@Override
 		public int count(LongPredicate filter) { return c.count(filter); }
 	}

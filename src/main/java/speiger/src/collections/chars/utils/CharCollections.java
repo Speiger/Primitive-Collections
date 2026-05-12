@@ -15,6 +15,7 @@ import speiger.src.collections.chars.collections.CharCollection;
 import speiger.src.collections.chars.collections.CharOrderedCollection;
 import speiger.src.collections.chars.collections.CharIterator;
 import speiger.src.collections.chars.functions.CharComparator;
+import speiger.src.collections.chars.functions.OptionalChar;
 import speiger.src.collections.objects.utils.ObjectArrays;
 import speiger.src.collections.chars.functions.CharConsumer;
 import speiger.src.collections.chars.functions.function.CharPredicate;
@@ -758,9 +759,9 @@ public class CharCollections
 		@Override
 		public char reduce(char identity, CharCharUnaryOperator operator) { synchronized(mutex) { return c.reduce(identity, operator); } }
 		@Override
-		public char reduce(CharCharUnaryOperator operator) { synchronized(mutex) { return c.reduce(operator); } }
+		public OptionalChar reduce(CharCharUnaryOperator operator) { synchronized(mutex) { return c.reduce(operator); } }
 		@Override
-		public char findFirst(CharPredicate filter) { synchronized(mutex) { return c.findFirst(filter); } }
+		public OptionalChar findFirst(CharPredicate filter) { synchronized(mutex) { return c.findFirst(filter); } }
 		@Override
 		public int count(CharPredicate filter) { synchronized(mutex) { return c.count(filter); } }
 	}
@@ -888,9 +889,9 @@ public class CharCollections
 		@Override
 		public char reduce(char identity, CharCharUnaryOperator operator) { return c.reduce(identity, operator); }
 		@Override
-		public char reduce(CharCharUnaryOperator operator) { return c.reduce(operator); }
+		public OptionalChar reduce(CharCharUnaryOperator operator) { return c.reduce(operator); }
 		@Override
-		public char findFirst(CharPredicate filter) { return c.findFirst(filter); }
+		public OptionalChar findFirst(CharPredicate filter) { return c.findFirst(filter); }
 		@Override
 		public int count(CharPredicate filter) { return c.count(filter); }
 	}

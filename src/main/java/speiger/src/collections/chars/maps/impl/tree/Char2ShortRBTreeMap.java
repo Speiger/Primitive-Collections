@@ -3,6 +3,7 @@ package speiger.src.collections.chars.maps.impl.tree;
 import java.util.Collections;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.NoSuchElementException;
 import java.util.function.Consumer;
 import java.util.function.BiFunction;
@@ -17,6 +18,7 @@ import speiger.src.collections.ints.functions.consumer.IntObjectConsumer;
 import speiger.src.collections.ints.functions.consumer.IntShortConsumer;
 import speiger.src.collections.chars.functions.function.Char2ShortFunction;
 import speiger.src.collections.chars.functions.consumer.CharShortConsumer;
+import speiger.src.collections.chars.functions.OptionalChar;
 import speiger.src.collections.chars.functions.function.CharPredicate;
 import speiger.src.collections.chars.functions.function.CharShortUnaryOperator;
 import speiger.src.collections.chars.functions.function.CharCharUnaryOperator;
@@ -36,6 +38,7 @@ import speiger.src.collections.objects.functions.consumer.ObjectObjectConsumer;
 import speiger.src.collections.objects.functions.consumer.ObjectShortConsumer;
 
 import speiger.src.collections.shorts.functions.function.ShortPredicate;
+import speiger.src.collections.shorts.functions.OptionalShort;
 import speiger.src.collections.objects.collections.ObjectBidirectionalIterator;
 import speiger.src.collections.objects.collections.ObjectIterator;
 import speiger.src.collections.objects.functions.function.ObjectObjectUnaryOperator;
@@ -1182,7 +1185,7 @@ public class Char2ShortRBTreeMap extends AbstractChar2ShortMap implements Char2S
 		}
 		
 		@Override
-		public char reduce(CharCharUnaryOperator operator) {
+		public OptionalChar reduce(CharCharUnaryOperator operator) {
 			Objects.requireNonNull(operator);
 			char state = (char)0;
 			boolean empty = true;
@@ -1194,15 +1197,15 @@ public class Char2ShortRBTreeMap extends AbstractChar2ShortMap implements Char2S
 				}
 				state = operator.applyAsChar(state, entry.key);
 			}
-			return state;
+			return empty ? OptionalChar.empty() : OptionalChar.of(state);
 		}
 		
 		@Override
-		public char findFirst(CharPredicate filter) {
+		public OptionalChar findFirst(CharPredicate filter) {
 			Objects.requireNonNull(filter);
 			for(Node entry = start(), end = end();entry != null && (end == null || (end != previous(entry)));entry = next(entry))
-				if(filter.test(entry.key)) return entry.key;
-			return (char)0;
+				if(filter.test(entry.key)) return OptionalChar.of(entry.key);
+			return OptionalChar.empty();
 		}
 		
 		@Override
@@ -1846,7 +1849,7 @@ public class Char2ShortRBTreeMap extends AbstractChar2ShortMap implements Char2S
 			}
 			
 			@Override
-			public Char2ShortMap.Entry reduce(ObjectObjectUnaryOperator<Char2ShortMap.Entry, Char2ShortMap.Entry> operator) {
+			public Optional<Char2ShortMap.Entry> reduce(ObjectObjectUnaryOperator<Char2ShortMap.Entry, Char2ShortMap.Entry> operator) {
 				Objects.requireNonNull(operator);
 				Char2ShortMap.Entry state = null;
 				boolean empty = true;
@@ -1858,19 +1861,19 @@ public class Char2ShortRBTreeMap extends AbstractChar2ShortMap implements Char2S
 					}
 					state = operator.apply(state, new BasicEntry(entry.key, entry.value));
 				}
-				return state;
+				return empty ? Optional.empty() : Optional.ofNullable(state);
 			}
 			
 			@Override
-			public Char2ShortMap.Entry findFirst(Predicate<Char2ShortMap.Entry> filter) {
+			public Optional<Char2ShortMap.Entry> findFirst(Predicate<Char2ShortMap.Entry> filter) {
 				Objects.requireNonNull(filter);
-				if(size() <= 0) return null;
+				if(size() <= 0) return Optional.empty();
 				BasicEntry subEntry = new BasicEntry();
 				for(Node entry = subLowest(), last = subHighest();entry != null && (last == null || last != previous(entry));entry = next(entry)) {
 					subEntry.set(entry.key, entry.value);
-					if(filter.test(subEntry)) return subEntry;
+					if(filter.test(subEntry)) return Optional.ofNullable(subEntry);
 				}
-				return null;
+				return Optional.empty();
 			}
 			
 			@Override
@@ -1965,7 +1968,7 @@ public class Char2ShortRBTreeMap extends AbstractChar2ShortMap implements Char2S
 			}
 			
 			@Override
-			public short reduce(ShortShortUnaryOperator operator) {
+			public OptionalShort reduce(ShortShortUnaryOperator operator) {
 				Objects.requireNonNull(operator);
 				short state = (short)0;
 				boolean empty = true;
@@ -1977,15 +1980,15 @@ public class Char2ShortRBTreeMap extends AbstractChar2ShortMap implements Char2S
 					}
 					state = operator.applyAsShort(state, entry.value);
 				}
-				return state;
+				return empty ? OptionalShort.empty() : OptionalShort.of(state);
 			}
 			
 			@Override
-			public short findFirst(ShortPredicate filter) {
+			public OptionalShort findFirst(ShortPredicate filter) {
 				Objects.requireNonNull(filter);
 				for(Node entry = subLowest(), last = subHighest();entry != null && (last == null || last != previous(entry));entry = next(entry))
-					if(filter.test(entry.value)) return entry.value;
-				return (short)0;
+					if(filter.test(entry.value)) return OptionalShort.of(entry.value);
+				return OptionalShort.empty();
 			}
 			
 			@Override
@@ -2301,7 +2304,7 @@ public class Char2ShortRBTreeMap extends AbstractChar2ShortMap implements Char2S
 		}
 		
 		@Override
-		public short reduce(ShortShortUnaryOperator operator) {
+		public OptionalShort reduce(ShortShortUnaryOperator operator) {
 			Objects.requireNonNull(operator);
 			short state = (short)0;
 			boolean empty = true;
@@ -2313,15 +2316,15 @@ public class Char2ShortRBTreeMap extends AbstractChar2ShortMap implements Char2S
 				}
 				state = operator.applyAsShort(state, entry.value);
 			}
-			return state;
+			return empty ? OptionalShort.empty() : OptionalShort.of(state);
 		}
 		
 		@Override
-		public short findFirst(ShortPredicate filter) {
+		public OptionalShort findFirst(ShortPredicate filter) {
 			Objects.requireNonNull(filter);
 			for(Node entry = first;entry != null;entry = entry.next())
-				if(filter.test(entry.value)) return entry.value;
-			return (short)0;
+				if(filter.test(entry.value)) return OptionalShort.of(entry.value);
+			return OptionalShort.empty();
 		}
 		
 		@Override
@@ -2462,7 +2465,7 @@ public class Char2ShortRBTreeMap extends AbstractChar2ShortMap implements Char2S
 		}
 		
 		@Override
-		public Char2ShortMap.Entry reduce(ObjectObjectUnaryOperator<Char2ShortMap.Entry, Char2ShortMap.Entry> operator) {
+		public Optional<Char2ShortMap.Entry> reduce(ObjectObjectUnaryOperator<Char2ShortMap.Entry, Char2ShortMap.Entry> operator) {
 			Objects.requireNonNull(operator);
 			Char2ShortMap.Entry state = null;
 			boolean empty = true;
@@ -2474,19 +2477,19 @@ public class Char2ShortRBTreeMap extends AbstractChar2ShortMap implements Char2S
 				}
 				state = operator.apply(state, new BasicEntry(entry.key, entry.value));
 			}
-			return state;
+			return empty ? Optional.empty() : Optional.ofNullable(state);
 		}
 		
 		@Override
-		public Char2ShortMap.Entry findFirst(Predicate<Char2ShortMap.Entry> filter) {
+		public Optional<Char2ShortMap.Entry> findFirst(Predicate<Char2ShortMap.Entry> filter) {
 			Objects.requireNonNull(filter);
-			if(size() <= 0) return null;
+			if(size() <= 0) return Optional.empty();
 			BasicEntry subEntry = new BasicEntry();
 			for(Node entry = first;entry != null;entry = entry.next()) {
 				subEntry.set(entry.key, entry.value);
-				if(filter.test(subEntry)) return subEntry;
+				if(filter.test(subEntry)) return Optional.ofNullable(subEntry);
 			}
-			return null;
+			return Optional.empty();
 		}
 		
 		@Override

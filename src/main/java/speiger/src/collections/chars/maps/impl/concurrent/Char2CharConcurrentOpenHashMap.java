@@ -4,6 +4,7 @@ import java.util.Arrays;
 import java.util.Map;
 import java.util.NoSuchElementException;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.concurrent.locks.StampedLock;
 import java.util.function.Consumer;
 import java.util.function.Predicate;
@@ -18,6 +19,7 @@ import speiger.src.collections.ints.functions.consumer.IntObjectConsumer;
 import speiger.src.collections.chars.functions.consumer.CharCharConsumer;
 import speiger.src.collections.chars.functions.function.CharUnaryOperator;
 import speiger.src.collections.chars.functions.function.CharCharUnaryOperator;
+import speiger.src.collections.chars.functions.OptionalChar;
 import speiger.src.collections.chars.functions.function.CharPredicate;
 import speiger.src.collections.chars.maps.abstracts.AbstractChar2CharMap;
 import speiger.src.collections.chars.maps.interfaces.Char2CharMap;
@@ -761,7 +763,7 @@ public class Char2CharConcurrentOpenHashMap extends AbstractChar2CharMap impleme
 		}
 		
 		@Override
-		public Char2CharMap.Entry reduce(ObjectObjectUnaryOperator<Char2CharMap.Entry, Char2CharMap.Entry> operator) {
+		public Optional<Char2CharMap.Entry> reduce(ObjectObjectUnaryOperator<Char2CharMap.Entry, Char2CharMap.Entry> operator) {
 			Objects.requireNonNull(operator);
 			Char2CharMap.Entry state = null;
 			boolean empty = true;
@@ -785,11 +787,11 @@ public class Char2CharConcurrentOpenHashMap extends AbstractChar2CharMap impleme
 					seg.unlockRead(stamp);
 				}
 			}
-			return state;
+			return empty ? Optional.empty() : Optional.ofNullable(state);
 		}
 		
 		@Override
-		public Char2CharMap.Entry findFirst(Predicate<Char2CharMap.Entry> filter) {
+		public Optional<Char2CharMap.Entry> findFirst(Predicate<Char2CharMap.Entry> filter) {
 			Objects.requireNonNull(filter);
 			MapEntry entry = new MapEntry();
 			for(int i = 0,m=segments.length;i<m;i++) {
@@ -799,7 +801,7 @@ public class Char2CharConcurrentOpenHashMap extends AbstractChar2CharMap impleme
 				try {
 					while(index != -1) {
 						entry.set(index, i);
-						if(filter.test(entry)) return entry;
+						if(filter.test(entry)) return Optional.ofNullable(entry);
 						index = (int)seg.links[index];
 					}
 				}
@@ -807,7 +809,7 @@ public class Char2CharConcurrentOpenHashMap extends AbstractChar2CharMap impleme
 					seg.unlockRead(stamp);
 				}
 			}
-			return null;
+			return Optional.empty();
 		}
 		
 		@Override
@@ -1068,7 +1070,7 @@ public class Char2CharConcurrentOpenHashMap extends AbstractChar2CharMap impleme
 		}
 		
 		@Override
-		public char reduce(CharCharUnaryOperator operator) {
+		public OptionalChar reduce(CharCharUnaryOperator operator) {
 			Objects.requireNonNull(operator);
 			char state = (char)0;
 			boolean empty = true;
@@ -1092,11 +1094,11 @@ public class Char2CharConcurrentOpenHashMap extends AbstractChar2CharMap impleme
 					seg.unlockRead(stamp);
 				}
 			}
-			return state;
+			return empty ? OptionalChar.empty() : OptionalChar.of(state);
 		}
 		
 		@Override
-		public char findFirst(CharPredicate filter) {
+		public OptionalChar findFirst(CharPredicate filter) {
 			Objects.requireNonNull(filter);
 			for(int i = 0,m=segments.length;i<m;i++) {
 				Segment seg = segments[i];
@@ -1104,7 +1106,7 @@ public class Char2CharConcurrentOpenHashMap extends AbstractChar2CharMap impleme
 				try {
 					int index = seg.firstIndex;
 					while(index != -1){
-						if(filter.test(seg.keys[index])) return seg.keys[index];
+						if(filter.test(seg.keys[index])) return OptionalChar.of(seg.keys[index]);
 						index = (int)seg.links[index];
 					}
 				}
@@ -1112,7 +1114,7 @@ public class Char2CharConcurrentOpenHashMap extends AbstractChar2CharMap impleme
 					seg.unlockRead(stamp);
 				}
 			}
-			return (char)0;
+			return OptionalChar.empty();
 		}
 		
 		@Override
@@ -1303,7 +1305,7 @@ public class Char2CharConcurrentOpenHashMap extends AbstractChar2CharMap impleme
 		}
 		
 		@Override
-		public char reduce(CharCharUnaryOperator operator) {
+		public OptionalChar reduce(CharCharUnaryOperator operator) {
 			Objects.requireNonNull(operator);
 			char state = (char)0;
 			boolean empty = true;
@@ -1327,20 +1329,20 @@ public class Char2CharConcurrentOpenHashMap extends AbstractChar2CharMap impleme
 					seg.unlockRead(stamp);
 				}
 			}
-			return state;
+			return empty ? OptionalChar.empty() : OptionalChar.of(state);
 		}
 		
 		@Override
-		public char findFirst(CharPredicate filter) {
+		public OptionalChar findFirst(CharPredicate filter) {
 			Objects.requireNonNull(filter);
-			if(size() <= 0) return (char)0;
+			if(size() <= 0) return OptionalChar.empty();
 			for(int i = 0,m=segments.length;i<m;i++) {
 				Segment seg = segments[i];
 				long stamp = seg.readLock();
 				try {
 					int index = seg.firstIndex;
 					while(index != -1){
-						if(filter.test(seg.values[index])) return seg.values[index];
+						if(filter.test(seg.values[index])) return OptionalChar.of(seg.values[index]);
 						index = (int)seg.links[index];
 					}
 				}
@@ -1348,7 +1350,7 @@ public class Char2CharConcurrentOpenHashMap extends AbstractChar2CharMap impleme
 					seg.unlockRead(stamp);
 				}
 			}
-			return (char)0;
+			return OptionalChar.empty();
 		}
 		
 		@Override

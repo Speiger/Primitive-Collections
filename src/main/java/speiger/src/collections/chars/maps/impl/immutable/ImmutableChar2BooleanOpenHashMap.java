@@ -4,6 +4,7 @@ import java.util.Arrays;
 import java.util.Map;
 import java.util.NoSuchElementException;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.function.Consumer;
 import java.util.function.BiFunction;
 import java.util.function.Predicate;
@@ -14,6 +15,7 @@ import speiger.src.collections.objects.functions.consumer.ObjectCharConsumer;
 import speiger.src.collections.ints.functions.consumer.IntCharConsumer;
 import speiger.src.collections.ints.functions.consumer.IntObjectConsumer;
 import speiger.src.collections.ints.functions.consumer.IntBooleanConsumer;
+import speiger.src.collections.chars.functions.OptionalChar;
 import speiger.src.collections.chars.functions.consumer.CharBooleanConsumer;
 import speiger.src.collections.chars.functions.function.CharPredicate;
 import speiger.src.collections.chars.functions.function.CharBooleanUnaryOperator;
@@ -28,6 +30,7 @@ import speiger.src.collections.objects.functions.consumer.ObjectObjectConsumer;
 import speiger.src.collections.objects.functions.consumer.ObjectBooleanConsumer;
 
 import speiger.src.collections.booleans.functions.function.BooleanPredicate;
+import speiger.src.collections.booleans.functions.OptionalBoolean;
 import speiger.src.collections.chars.sets.AbstractCharSet;
 import speiger.src.collections.booleans.collections.AbstractBooleanCollection;
 import speiger.src.collections.booleans.collections.BooleanOrderedCollection;
@@ -534,6 +537,10 @@ public class ImmutableChar2BooleanOpenHashMap extends AbstractChar2BooleanMap im
 	
 	private class MapEntrySet extends AbstractObjectSet<Char2BooleanMap.Entry> implements Char2BooleanOrderedMap.FastOrderedSet {
 		@Override
+		public void addFirst(Char2BooleanMap.Entry o) { throw new UnsupportedOperationException(); }
+		@Override
+		public void addLast(Char2BooleanMap.Entry o) { throw new UnsupportedOperationException(); }
+		@Override
 		public boolean addAndMoveToFirst(Char2BooleanMap.Entry o) { throw new UnsupportedOperationException(); }
 		@Override
 		public boolean addAndMoveToLast(Char2BooleanMap.Entry o) { throw new UnsupportedOperationException(); }
@@ -686,7 +693,7 @@ public class ImmutableChar2BooleanOpenHashMap extends AbstractChar2BooleanMap im
 		}
 		
 		@Override
-		public Char2BooleanMap.Entry reduce(ObjectObjectUnaryOperator<Char2BooleanMap.Entry, Char2BooleanMap.Entry> operator) {
+		public Optional<Char2BooleanMap.Entry> reduce(ObjectObjectUnaryOperator<Char2BooleanMap.Entry, Char2BooleanMap.Entry> operator) {
 			Objects.requireNonNull(operator);
 			Char2BooleanMap.Entry state = null;
 			boolean empty = true;
@@ -701,21 +708,21 @@ public class ImmutableChar2BooleanOpenHashMap extends AbstractChar2BooleanMap im
 				state = operator.apply(state, new BasicEntry(keys[index], values[index]));
 				index = (int)links[index];
 			}
-			return state;
+			return empty ? Optional.empty() : Optional.ofNullable(state);
 		}
 		
 		@Override
-		public Char2BooleanMap.Entry findFirst(Predicate<Char2BooleanMap.Entry> filter) {
+		public Optional<Char2BooleanMap.Entry> findFirst(Predicate<Char2BooleanMap.Entry> filter) {
 			Objects.requireNonNull(filter);
-			if(size() <= 0) return null;
+			if(size() <= 0) return Optional.empty();
 			BasicEntry entry = new BasicEntry();
 			int index = firstIndex;
 			while(index != -1) {
 				entry.set(keys[index], values[index]);
-				if(filter.test(entry)) return entry;
+				if(filter.test(entry)) return Optional.ofNullable(entry);
 				index = (int)links[index];
 			}
-			return null;
+			return Optional.empty();
 		}
 		
 		@Override
@@ -777,6 +784,12 @@ public class ImmutableChar2BooleanOpenHashMap extends AbstractChar2BooleanMap im
 		public boolean add(char o) {
 			throw new UnsupportedOperationException();
 		}
+		
+		@Override
+		public void addFirst(char o) { throw new UnsupportedOperationException(); }
+		
+		@Override
+		public void addLast(char o) { throw new UnsupportedOperationException(); }
 		
 		@Override
 		public boolean addAndMoveToFirst(char o) { throw new UnsupportedOperationException(); }
@@ -913,7 +926,7 @@ public class ImmutableChar2BooleanOpenHashMap extends AbstractChar2BooleanMap im
 		}
 		
 		@Override
-		public char reduce(CharCharUnaryOperator operator) {
+		public OptionalChar reduce(CharCharUnaryOperator operator) {
 			Objects.requireNonNull(operator);
 			char state = (char)0;
 			boolean empty = true;
@@ -928,19 +941,19 @@ public class ImmutableChar2BooleanOpenHashMap extends AbstractChar2BooleanMap im
 				state = operator.applyAsChar(state, keys[index]);
 				index = (int)links[index];
 			}
-			return state;
+			return empty ? OptionalChar.empty() : OptionalChar.of(state);
 		}
 		
 		@Override
-		public char findFirst(CharPredicate filter) {
+		public OptionalChar findFirst(CharPredicate filter) {
 			Objects.requireNonNull(filter);
-			if(size() <= 0) return (char)0;
+			if(size() <= 0) return OptionalChar.empty();
 			int index = firstIndex;
 			while(index != -1){
-				if(filter.test(keys[index])) return keys[index];
+				if(filter.test(keys[index])) return OptionalChar.of(keys[index]);
 				index = (int)links[index];
 			}
-			return (char)0;
+			return OptionalChar.empty();
 		}
 		
 		@Override
@@ -1067,7 +1080,7 @@ public class ImmutableChar2BooleanOpenHashMap extends AbstractChar2BooleanMap im
 		}
 		
 		@Override
-		public boolean reduce(BooleanBooleanUnaryOperator operator) {
+		public OptionalBoolean reduce(BooleanBooleanUnaryOperator operator) {
 			Objects.requireNonNull(operator);
 			boolean state = false;
 			boolean empty = true;
@@ -1082,19 +1095,19 @@ public class ImmutableChar2BooleanOpenHashMap extends AbstractChar2BooleanMap im
 				state = operator.applyAsBoolean(state, values[index]);
 				index = (int)links[index];
 			}
-			return state;
+			return empty ? OptionalBoolean.empty() : OptionalBoolean.of(state);
 		}
 		
 		@Override
-		public boolean findFirst(BooleanPredicate filter) {
+		public OptionalBoolean findFirst(BooleanPredicate filter) {
 			Objects.requireNonNull(filter);
-			if(size() <= 0) return false;
+			if(size() <= 0) return OptionalBoolean.empty();
 			int index = firstIndex;
 			while(index != -1){
-				if(filter.test(values[index])) return values[index];
+				if(filter.test(values[index])) return OptionalBoolean.of(values[index]);
 				index = (int)links[index];
 			}
-			return false;
+			return OptionalBoolean.empty();
 		}
 		
 		@Override

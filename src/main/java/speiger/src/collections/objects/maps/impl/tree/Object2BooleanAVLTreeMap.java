@@ -4,6 +4,7 @@ import java.util.Collections;
 import java.util.Map;
 import java.util.Comparator;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.NoSuchElementException;
 import java.util.function.Consumer;
 import java.util.function.BiFunction;
@@ -32,6 +33,7 @@ import speiger.src.collections.booleans.functions.BooleanConsumer;
 import speiger.src.collections.objects.functions.consumer.ObjectObjectConsumer;
 
 import speiger.src.collections.booleans.functions.function.BooleanPredicate;
+import speiger.src.collections.booleans.functions.OptionalBoolean;
 import speiger.src.collections.objects.collections.ObjectIterator;
 
 /**
@@ -1038,7 +1040,7 @@ public class Object2BooleanAVLTreeMap<T> extends AbstractObject2BooleanMap<T> im
 		}
 		
 		@Override
-		public T reduce(ObjectObjectUnaryOperator<T, T> operator) {
+		public Optional<T> reduce(ObjectObjectUnaryOperator<T, T> operator) {
 			Objects.requireNonNull(operator);
 			T state = null;
 			boolean empty = true;
@@ -1050,15 +1052,15 @@ public class Object2BooleanAVLTreeMap<T> extends AbstractObject2BooleanMap<T> im
 				}
 				state = operator.apply(state, entry.key);
 			}
-			return state;
+			return empty ? Optional.empty() : Optional.ofNullable(state);
 		}
 		
 		@Override
-		public T findFirst(Predicate<T> filter) {
+		public Optional<T> findFirst(Predicate<T> filter) {
 			Objects.requireNonNull(filter);
 			for(Node<T> entry = start(), end = end();entry != null && (end == null || (end != previous(entry)));entry = next(entry))
-				if(filter.test(entry.key)) return entry.key;
-			return null;
+				if(filter.test(entry.key)) return Optional.ofNullable(entry.key);
+			return Optional.empty();
 		}
 		
 		@Override
@@ -1675,7 +1677,7 @@ public class Object2BooleanAVLTreeMap<T> extends AbstractObject2BooleanMap<T> im
 			}
 			
 			@Override
-			public Object2BooleanMap.Entry<T> reduce(ObjectObjectUnaryOperator<Object2BooleanMap.Entry<T>, Object2BooleanMap.Entry<T>> operator) {
+			public Optional<Object2BooleanMap.Entry<T>> reduce(ObjectObjectUnaryOperator<Object2BooleanMap.Entry<T>, Object2BooleanMap.Entry<T>> operator) {
 				Objects.requireNonNull(operator);
 				Object2BooleanMap.Entry<T> state = null;
 				boolean empty = true;
@@ -1687,19 +1689,19 @@ public class Object2BooleanAVLTreeMap<T> extends AbstractObject2BooleanMap<T> im
 					}
 					state = operator.apply(state, new BasicEntry<>(entry.key, entry.value));
 				}
-				return state;
+				return empty ? Optional.empty() : Optional.ofNullable(state);
 			}
 			
 			@Override
-			public Object2BooleanMap.Entry<T> findFirst(Predicate<Object2BooleanMap.Entry<T>> filter) {
+			public Optional<Object2BooleanMap.Entry<T>> findFirst(Predicate<Object2BooleanMap.Entry<T>> filter) {
 				Objects.requireNonNull(filter);
-				if(size() <= 0) return null;
+				if(size() <= 0) return Optional.empty();
 				BasicEntry<T> subEntry = new BasicEntry<>();
 				for(Node<T> entry = subLowest(), last = subHighest();entry != null && (last == null || last != previous(entry));entry = next(entry)) {
 					subEntry.set(entry.key, entry.value);
-					if(filter.test(subEntry)) return subEntry;
+					if(filter.test(subEntry)) return Optional.ofNullable(subEntry);
 				}
-				return null;
+				return Optional.empty();
 			}
 			
 			@Override
@@ -1794,7 +1796,7 @@ public class Object2BooleanAVLTreeMap<T> extends AbstractObject2BooleanMap<T> im
 			}
 			
 			@Override
-			public boolean reduce(BooleanBooleanUnaryOperator operator) {
+			public OptionalBoolean reduce(BooleanBooleanUnaryOperator operator) {
 				Objects.requireNonNull(operator);
 				boolean state = false;
 				boolean empty = true;
@@ -1806,15 +1808,15 @@ public class Object2BooleanAVLTreeMap<T> extends AbstractObject2BooleanMap<T> im
 					}
 					state = operator.applyAsBoolean(state, entry.value);
 				}
-				return state;
+				return empty ? OptionalBoolean.empty() : OptionalBoolean.of(state);
 			}
 			
 			@Override
-			public boolean findFirst(BooleanPredicate filter) {
+			public OptionalBoolean findFirst(BooleanPredicate filter) {
 				Objects.requireNonNull(filter);
 				for(Node<T> entry = subLowest(), last = subHighest();entry != null && (last == null || last != previous(entry));entry = next(entry))
-					if(filter.test(entry.value)) return entry.value;
-				return false;
+					if(filter.test(entry.value)) return OptionalBoolean.of(entry.value);
+				return OptionalBoolean.empty();
 			}
 			
 			@Override
@@ -2130,7 +2132,7 @@ public class Object2BooleanAVLTreeMap<T> extends AbstractObject2BooleanMap<T> im
 		}
 		
 		@Override
-		public boolean reduce(BooleanBooleanUnaryOperator operator) {
+		public OptionalBoolean reduce(BooleanBooleanUnaryOperator operator) {
 			Objects.requireNonNull(operator);
 			boolean state = false;
 			boolean empty = true;
@@ -2142,15 +2144,15 @@ public class Object2BooleanAVLTreeMap<T> extends AbstractObject2BooleanMap<T> im
 				}
 				state = operator.applyAsBoolean(state, entry.value);
 			}
-			return state;
+			return empty ? OptionalBoolean.empty() : OptionalBoolean.of(state);
 		}
 		
 		@Override
-		public boolean findFirst(BooleanPredicate filter) {
+		public OptionalBoolean findFirst(BooleanPredicate filter) {
 			Objects.requireNonNull(filter);
 			for(Node<T> entry = first;entry != null;entry = entry.next())
-				if(filter.test(entry.value)) return entry.value;
-			return false;
+				if(filter.test(entry.value)) return OptionalBoolean.of(entry.value);
+			return OptionalBoolean.empty();
 		}
 		
 		@Override
@@ -2291,7 +2293,7 @@ public class Object2BooleanAVLTreeMap<T> extends AbstractObject2BooleanMap<T> im
 		}
 		
 		@Override
-		public Object2BooleanMap.Entry<T> reduce(ObjectObjectUnaryOperator<Object2BooleanMap.Entry<T>, Object2BooleanMap.Entry<T>> operator) {
+		public Optional<Object2BooleanMap.Entry<T>> reduce(ObjectObjectUnaryOperator<Object2BooleanMap.Entry<T>, Object2BooleanMap.Entry<T>> operator) {
 			Objects.requireNonNull(operator);
 			Object2BooleanMap.Entry<T> state = null;
 			boolean empty = true;
@@ -2303,19 +2305,19 @@ public class Object2BooleanAVLTreeMap<T> extends AbstractObject2BooleanMap<T> im
 				}
 				state = operator.apply(state, new BasicEntry<>(entry.key, entry.value));
 			}
-			return state;
+			return empty ? Optional.empty() : Optional.ofNullable(state);
 		}
 		
 		@Override
-		public Object2BooleanMap.Entry<T> findFirst(Predicate<Object2BooleanMap.Entry<T>> filter) {
+		public Optional<Object2BooleanMap.Entry<T>> findFirst(Predicate<Object2BooleanMap.Entry<T>> filter) {
 			Objects.requireNonNull(filter);
-			if(size() <= 0) return null;
+			if(size() <= 0) return Optional.empty();
 			BasicEntry<T> subEntry = new BasicEntry<>();
 			for(Node<T> entry = first;entry != null;entry = entry.next()) {
 				subEntry.set(entry.key, entry.value);
-				if(filter.test(subEntry)) return subEntry;
+				if(filter.test(subEntry)) return Optional.ofNullable(subEntry);
 			}
-			return null;
+			return Optional.empty();
 		}
 		
 		@Override

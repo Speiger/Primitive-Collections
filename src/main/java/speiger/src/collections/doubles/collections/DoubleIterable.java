@@ -3,6 +3,7 @@ package speiger.src.collections.doubles.collections;
 import java.util.Objects;
 import java.util.function.Consumer;
 import java.util.function.DoublePredicate;
+import java.util.OptionalDouble;
 
 
 import speiger.src.collections.doubles.functions.DoubleConsumer;
@@ -281,13 +282,13 @@ public interface DoubleIterable extends Iterable<Double>
 	 * @param filter that should be applied
 	 * @return the found value or the null equivalent variant.
 	 */
-	default double findFirst(DoublePredicate filter) {
+	default OptionalDouble findFirst(DoublePredicate filter) {
 		Objects.requireNonNull(filter);
 		for(DoubleIterator iter = iterator();iter.hasNext();) {
 			double entry = iter.nextDouble();
-			if(filter.test(entry)) return entry;
+			if(filter.test(entry)) return OptionalDouble.of(entry);
 		}
-		return 0D;
+		return OptionalDouble.empty();
 	}
 	
 	/**
@@ -312,7 +313,7 @@ public interface DoubleIterable extends Iterable<Double>
 	 * @param operator the operation that should be applied
 	 * @return the reduction result, returns null value if nothing was found
 	 */
-	default double reduce(DoubleDoubleUnaryOperator operator) {
+	default OptionalDouble reduce(DoubleDoubleUnaryOperator operator) {
 		Objects.requireNonNull(operator);
 		double state = 0D;
 		boolean empty = true;
@@ -324,7 +325,7 @@ public interface DoubleIterable extends Iterable<Double>
 			}
 			state = operator.applyAsDouble(state, iter.nextDouble());
 		}
-		return state;
+		return empty ? OptionalDouble.empty() : OptionalDouble.of(state);
 	}	
 	
 	/**

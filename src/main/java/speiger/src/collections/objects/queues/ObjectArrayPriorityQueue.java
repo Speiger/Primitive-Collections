@@ -6,6 +6,7 @@ import java.util.Comparator;
 import java.util.function.Consumer;
 import java.util.function.BiFunction;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.function.Predicate;
 
 import speiger.src.collections.objects.collections.ObjectCollection;
@@ -316,7 +317,7 @@ public class ObjectArrayPriorityQueue<T> extends AbstractObjectPriorityQueue<T>
 	}
 	
 	@Override
-	public T reduce(ObjectObjectUnaryOperator<T, T> operator) {
+	public Optional<T> reduce(ObjectObjectUnaryOperator<T, T> operator) {
 		Objects.requireNonNull(operator);
 		T state = null;
 		boolean empty = true;
@@ -328,20 +329,20 @@ public class ObjectArrayPriorityQueue<T> extends AbstractObjectPriorityQueue<T>
 			}
 			state = operator.apply(state, array[i]);
 		}
-		return state;
+		return empty ? Optional.empty() : Optional.ofNullable(state);
 	}
 	
 	@Override
-	public T findFirst(Predicate<T> filter) {
+	public Optional<T> findFirst(Predicate<T> filter) {
 		Objects.requireNonNull(filter);
 		for(int i = 0;i<size;i++) {
 			if(filter.test(array[i])) {
 				T data = array[i];
 				removeIndex(i);
-				return data;
+				return Optional.ofNullable(data);
 			}
 		}
-		return null;
+		return Optional.empty();
 	}
 	
 	@Override

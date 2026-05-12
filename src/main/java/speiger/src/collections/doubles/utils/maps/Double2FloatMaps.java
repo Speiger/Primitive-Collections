@@ -620,7 +620,11 @@ public class Double2FloatMaps
 			super(c);
 			set = c;
 		}
-
+		
+		@Override
+		public void addFirst(Double2FloatMap.Entry o) { throw new UnsupportedOperationException(); }
+		@Override
+		public void addLast(Double2FloatMap.Entry o) { throw new UnsupportedOperationException(); }
 		@Override
 		public boolean addAndMoveToFirst(Double2FloatMap.Entry o) { throw new UnsupportedOperationException(); }
 		@Override

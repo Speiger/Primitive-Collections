@@ -620,7 +620,11 @@ public class Float2ShortMaps
 			super(c);
 			set = c;
 		}
-
+		
+		@Override
+		public void addFirst(Float2ShortMap.Entry o) { throw new UnsupportedOperationException(); }
+		@Override
+		public void addLast(Float2ShortMap.Entry o) { throw new UnsupportedOperationException(); }
 		@Override
 		public boolean addAndMoveToFirst(Float2ShortMap.Entry o) { throw new UnsupportedOperationException(); }
 		@Override

@@ -1,13 +1,14 @@
 package speiger.src.collections.ints.utils;
 
 import java.util.function.IntPredicate;
-
+import java.util.OptionalInt;
 import speiger.src.collections.ints.collections.IntIterator;
 import speiger.src.collections.ints.collections.IntCollection;
 import speiger.src.collections.ints.functions.IntComparator;
 import speiger.src.collections.ints.queues.IntPriorityDequeue;
 import speiger.src.collections.ints.queues.IntPriorityQueue;
 import speiger.src.collections.ints.functions.IntConsumer;
+import speiger.src.collections.ints.functions.function.IntIntUnaryOperator;
 import speiger.src.collections.objects.functions.consumer.ObjectIntConsumer;
 
 /**
@@ -113,7 +114,11 @@ public class IntPriorityQueues
 		@Override
 		public boolean matchesAll(IntPredicate filter) { synchronized(mutex) { return queue.matchesAll(filter); } }
 		@Override
-		public int findFirst(IntPredicate filter) { synchronized(mutex) { return queue.findFirst(filter); } }
+		public OptionalInt findFirst(IntPredicate filter) { synchronized(mutex) { return queue.findFirst(filter); } }
+		@Override
+		public int reduce(int identity, IntIntUnaryOperator operator) { synchronized(mutex) { return queue.reduce(identity, operator); } }
+		@Override
+		public OptionalInt reduce(IntIntUnaryOperator operator) { synchronized(mutex) { return queue.reduce(operator); } }
 		@Override
 		public int count(IntPredicate filter) { synchronized(mutex) { return queue.count(filter); } }
 	}

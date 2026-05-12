@@ -302,6 +302,10 @@ public class ShortSets
 		}
 		
 		@Override
+		public void addFirst(short o) { throw new UnsupportedOperationException(); }
+		@Override
+		public void addLast(short o) { throw new UnsupportedOperationException(); }
+		@Override
 		public boolean addAndMoveToFirst(short o) { throw new UnsupportedOperationException(); }
 		@Override
 		public boolean addAndMoveToLast(short o) { throw new UnsupportedOperationException(); }
@@ -573,7 +577,11 @@ public class ShortSets
 			super(c, mutex);
 			s = c;
 		}
-
+		
+		@Override
+		public void addFirst(short o) { synchronized(mutex) { s.addFirst(o); } }
+		@Override
+		public void addLast(short o) { synchronized(mutex) { s.addLast(o); } }
 		@Override
 		public boolean addAndMoveToFirst(short o) { synchronized(mutex) { return s.addAndMoveToFirst(o); } }
 		@Override

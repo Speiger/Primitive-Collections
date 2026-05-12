@@ -3,11 +3,13 @@ package speiger.src.collections.chars.maps.impl.tree;
 import java.util.Collections;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.NoSuchElementException;
 import java.util.function.Consumer;
 import java.util.function.BiFunction;
 import java.util.function.Predicate;
 import java.util.function.IntPredicate;
+import java.util.OptionalInt;
 
 
 import speiger.src.collections.chars.collections.CharBidirectionalIterator;
@@ -19,6 +21,7 @@ import speiger.src.collections.ints.functions.consumer.IntObjectConsumer;
 import speiger.src.collections.ints.functions.consumer.IntIntConsumer;
 import speiger.src.collections.chars.functions.function.Char2IntFunction;
 import speiger.src.collections.chars.functions.consumer.CharIntConsumer;
+import speiger.src.collections.chars.functions.OptionalChar;
 import speiger.src.collections.chars.functions.function.CharPredicate;
 import speiger.src.collections.chars.functions.function.CharIntUnaryOperator;
 import speiger.src.collections.chars.functions.function.CharCharUnaryOperator;
@@ -1129,7 +1132,7 @@ public class Char2IntAVLTreeMap extends AbstractChar2IntMap implements Char2IntN
 		}
 		
 		@Override
-		public char reduce(CharCharUnaryOperator operator) {
+		public OptionalChar reduce(CharCharUnaryOperator operator) {
 			Objects.requireNonNull(operator);
 			char state = (char)0;
 			boolean empty = true;
@@ -1141,15 +1144,15 @@ public class Char2IntAVLTreeMap extends AbstractChar2IntMap implements Char2IntN
 				}
 				state = operator.applyAsChar(state, entry.key);
 			}
-			return state;
+			return empty ? OptionalChar.empty() : OptionalChar.of(state);
 		}
 		
 		@Override
-		public char findFirst(CharPredicate filter) {
+		public OptionalChar findFirst(CharPredicate filter) {
 			Objects.requireNonNull(filter);
 			for(Node entry = start(), end = end();entry != null && (end == null || (end != previous(entry)));entry = next(entry))
-				if(filter.test(entry.key)) return entry.key;
-			return (char)0;
+				if(filter.test(entry.key)) return OptionalChar.of(entry.key);
+			return OptionalChar.empty();
 		}
 		
 		@Override
@@ -1783,7 +1786,7 @@ public class Char2IntAVLTreeMap extends AbstractChar2IntMap implements Char2IntN
 			}
 			
 			@Override
-			public Char2IntMap.Entry reduce(ObjectObjectUnaryOperator<Char2IntMap.Entry, Char2IntMap.Entry> operator) {
+			public Optional<Char2IntMap.Entry> reduce(ObjectObjectUnaryOperator<Char2IntMap.Entry, Char2IntMap.Entry> operator) {
 				Objects.requireNonNull(operator);
 				Char2IntMap.Entry state = null;
 				boolean empty = true;
@@ -1795,19 +1798,19 @@ public class Char2IntAVLTreeMap extends AbstractChar2IntMap implements Char2IntN
 					}
 					state = operator.apply(state, new BasicEntry(entry.key, entry.value));
 				}
-				return state;
+				return empty ? Optional.empty() : Optional.ofNullable(state);
 			}
 			
 			@Override
-			public Char2IntMap.Entry findFirst(Predicate<Char2IntMap.Entry> filter) {
+			public Optional<Char2IntMap.Entry> findFirst(Predicate<Char2IntMap.Entry> filter) {
 				Objects.requireNonNull(filter);
-				if(size() <= 0) return null;
+				if(size() <= 0) return Optional.empty();
 				BasicEntry subEntry = new BasicEntry();
 				for(Node entry = subLowest(), last = subHighest();entry != null && (last == null || last != previous(entry));entry = next(entry)) {
 					subEntry.set(entry.key, entry.value);
-					if(filter.test(subEntry)) return subEntry;
+					if(filter.test(subEntry)) return Optional.ofNullable(subEntry);
 				}
-				return null;
+				return Optional.empty();
 			}
 			
 			@Override
@@ -1902,7 +1905,7 @@ public class Char2IntAVLTreeMap extends AbstractChar2IntMap implements Char2IntN
 			}
 			
 			@Override
-			public int reduce(IntIntUnaryOperator operator) {
+			public OptionalInt reduce(IntIntUnaryOperator operator) {
 				Objects.requireNonNull(operator);
 				int state = 0;
 				boolean empty = true;
@@ -1914,15 +1917,15 @@ public class Char2IntAVLTreeMap extends AbstractChar2IntMap implements Char2IntN
 					}
 					state = operator.applyAsInt(state, entry.value);
 				}
-				return state;
+				return empty ? OptionalInt.empty() : OptionalInt.of(state);
 			}
 			
 			@Override
-			public int findFirst(IntPredicate filter) {
+			public OptionalInt findFirst(IntPredicate filter) {
 				Objects.requireNonNull(filter);
 				for(Node entry = subLowest(), last = subHighest();entry != null && (last == null || last != previous(entry));entry = next(entry))
-					if(filter.test(entry.value)) return entry.value;
-				return 0;
+					if(filter.test(entry.value)) return OptionalInt.of(entry.value);
+				return OptionalInt.empty();
 			}
 			
 			@Override
@@ -2238,7 +2241,7 @@ public class Char2IntAVLTreeMap extends AbstractChar2IntMap implements Char2IntN
 		}
 		
 		@Override
-		public int reduce(IntIntUnaryOperator operator) {
+		public OptionalInt reduce(IntIntUnaryOperator operator) {
 			Objects.requireNonNull(operator);
 			int state = 0;
 			boolean empty = true;
@@ -2250,15 +2253,15 @@ public class Char2IntAVLTreeMap extends AbstractChar2IntMap implements Char2IntN
 				}
 				state = operator.applyAsInt(state, entry.value);
 			}
-			return state;
+			return empty ? OptionalInt.empty() : OptionalInt.of(state);
 		}
 		
 		@Override
-		public int findFirst(IntPredicate filter) {
+		public OptionalInt findFirst(IntPredicate filter) {
 			Objects.requireNonNull(filter);
 			for(Node entry = first;entry != null;entry = entry.next())
-				if(filter.test(entry.value)) return entry.value;
-			return 0;
+				if(filter.test(entry.value)) return OptionalInt.of(entry.value);
+			return OptionalInt.empty();
 		}
 		
 		@Override
@@ -2399,7 +2402,7 @@ public class Char2IntAVLTreeMap extends AbstractChar2IntMap implements Char2IntN
 		}
 		
 		@Override
-		public Char2IntMap.Entry reduce(ObjectObjectUnaryOperator<Char2IntMap.Entry, Char2IntMap.Entry> operator) {
+		public Optional<Char2IntMap.Entry> reduce(ObjectObjectUnaryOperator<Char2IntMap.Entry, Char2IntMap.Entry> operator) {
 			Objects.requireNonNull(operator);
 			Char2IntMap.Entry state = null;
 			boolean empty = true;
@@ -2411,19 +2414,19 @@ public class Char2IntAVLTreeMap extends AbstractChar2IntMap implements Char2IntN
 				}
 				state = operator.apply(state, new BasicEntry(entry.key, entry.value));
 			}
-			return state;
+			return empty ? Optional.empty() : Optional.ofNullable(state);
 		}
 		
 		@Override
-		public Char2IntMap.Entry findFirst(Predicate<Char2IntMap.Entry> filter) {
+		public Optional<Char2IntMap.Entry> findFirst(Predicate<Char2IntMap.Entry> filter) {
 			Objects.requireNonNull(filter);
-			if(size() <= 0) return null;
+			if(size() <= 0) return Optional.empty();
 			BasicEntry subEntry = new BasicEntry();
 			for(Node entry = first;entry != null;entry = entry.next()) {
 				subEntry.set(entry.key, entry.value);
-				if(filter.test(subEntry)) return subEntry;
+				if(filter.test(subEntry)) return Optional.ofNullable(subEntry);
 			}
-			return null;
+			return Optional.empty();
 		}
 		
 		@Override

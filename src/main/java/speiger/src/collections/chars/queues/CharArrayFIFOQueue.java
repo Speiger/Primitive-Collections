@@ -5,6 +5,7 @@ import java.util.Objects;
 import java.util.NoSuchElementException;
 
 import speiger.src.collections.chars.collections.CharIterator;
+import speiger.src.collections.chars.functions.OptionalChar;
 import speiger.src.collections.chars.functions.CharComparator;
 import speiger.src.collections.chars.functions.CharConsumer;
 import speiger.src.collections.ints.functions.consumer.IntCharConsumer;
@@ -278,17 +279,17 @@ public class CharArrayFIFOQueue extends AbstractCharPriorityQueue implements Cha
 	}
 	
 	@Override
-	public char findFirst(CharPredicate filter) {
+	public OptionalChar findFirst(CharPredicate filter) {
 		Objects.requireNonNull(filter);
 		for(int i = 0,m=size();i<m;i++) {
 			int index = (first + i) % array.length;
 			if(filter.test(array[index])) {
 				char data = array[index];
 				removeIndex(index);
-				return data;
+				return OptionalChar.of(data);
 			}
 		}
-		return (char)0;
+		return OptionalChar.empty();
 	}
 	
 	@Override
@@ -302,7 +303,7 @@ public class CharArrayFIFOQueue extends AbstractCharPriorityQueue implements Cha
 	}
 	
 	@Override
-	public char reduce(CharCharUnaryOperator operator) {
+	public OptionalChar reduce(CharCharUnaryOperator operator) {
 		Objects.requireNonNull(operator);
 		char state = (char)0;
 		boolean empty = true;
@@ -314,7 +315,7 @@ public class CharArrayFIFOQueue extends AbstractCharPriorityQueue implements Cha
 			}
 			state = operator.applyAsChar(state, array[(first + i) % array.length]);
 		}
-		return state;
+		return empty ? OptionalChar.empty() : OptionalChar.of(state);
 	}
 	
 	@Override

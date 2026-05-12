@@ -5,6 +5,7 @@ import java.util.ConcurrentModificationException;
 import java.util.Map;
 import java.util.NoSuchElementException;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.function.Consumer;
 import java.util.function.BiFunction;
 import java.util.function.Predicate;
@@ -28,6 +29,7 @@ import speiger.src.collections.booleans.functions.BooleanConsumer;
 import speiger.src.collections.objects.functions.consumer.ObjectObjectConsumer;
 
 import speiger.src.collections.booleans.functions.function.BooleanPredicate;
+import speiger.src.collections.booleans.functions.OptionalBoolean;
 import speiger.src.collections.objects.collections.ObjectIterator;
 import speiger.src.collections.objects.sets.AbstractObjectSet;
 import speiger.src.collections.objects.sets.ObjectSet;
@@ -901,7 +903,7 @@ public class Object2BooleanOpenCustomHashMap<T> extends AbstractObject2BooleanMa
 		}
 		
 		@Override
-		public Object2BooleanMap.Entry<T> reduce(ObjectObjectUnaryOperator<Object2BooleanMap.Entry<T>, Object2BooleanMap.Entry<T>> operator) {
+		public Optional<Object2BooleanMap.Entry<T>> reduce(ObjectObjectUnaryOperator<Object2BooleanMap.Entry<T>, Object2BooleanMap.Entry<T>> operator) {
 			Objects.requireNonNull(operator);
 			Object2BooleanMap.Entry<T> state = null;
 			boolean empty = true;
@@ -918,25 +920,25 @@ public class Object2BooleanOpenCustomHashMap<T> extends AbstractObject2BooleanMa
 				}
 				state = operator.apply(state, new ValueMapEntry(i));
 			}
-			return state;
+			return empty ? Optional.empty() : Optional.ofNullable(state);
 		}
 		
 		@Override
-		public Object2BooleanMap.Entry<T> findFirst(Predicate<Object2BooleanMap.Entry<T>> filter) {
+		public Optional<Object2BooleanMap.Entry<T>> findFirst(Predicate<Object2BooleanMap.Entry<T>> filter) {
 			Objects.requireNonNull(filter);
-			if(size() <= 0) return null;
+			if(size() <= 0) return Optional.empty();
 			MapEntry entry = new MapEntry();
 			if(containsNull) {
 				entry.set(nullIndex);
-				if(filter.test(entry)) return entry;
+				if(filter.test(entry)) return Optional.ofNullable(entry);
 			}
 			for(int i = nullIndex-1;i>=0;i--) {
 				if(!strategy.equals(keys[i], null)) {
 					entry.set(i);
-					if(filter.test(entry)) return entry;
+					if(filter.test(entry)) return Optional.ofNullable(entry);
 				}
 			}
-			return null;
+			return Optional.empty();
 		}
 		
 		@Override
@@ -1109,7 +1111,7 @@ public class Object2BooleanOpenCustomHashMap<T> extends AbstractObject2BooleanMa
 		}
 		
 		@Override
-		public T reduce(ObjectObjectUnaryOperator<T, T> operator) {
+		public Optional<T> reduce(ObjectObjectUnaryOperator<T, T> operator) {
 			Objects.requireNonNull(operator);
 			T state = null;
 			boolean empty = true;
@@ -1126,18 +1128,18 @@ public class Object2BooleanOpenCustomHashMap<T> extends AbstractObject2BooleanMa
 				}
 				state = operator.apply(state, keys[i]);
 			}
-			return state;
+			return empty ? Optional.empty() : Optional.ofNullable(state);
 		}
 		
 		@Override
-		public T findFirst(Predicate<T> filter) {
+		public Optional<T> findFirst(Predicate<T> filter) {
 			Objects.requireNonNull(filter);
-			if(size() <= 0) return null;
-			if(containsNull && filter.test(keys[nullIndex])) return keys[nullIndex];
+			if(size() <= 0) return Optional.empty();
+			if(containsNull && filter.test(keys[nullIndex])) return Optional.ofNullable(keys[nullIndex]);
 			for(int i = nullIndex-1;i>=0;i--) {
-				if(!strategy.equals(keys[i], null) && filter.test(keys[i])) return keys[i];
+				if(!strategy.equals(keys[i], null) && filter.test(keys[i])) return Optional.ofNullable(keys[i]);
 			}
-			return null;
+			return Optional.empty();
 		}
 		
 		@Override
@@ -1252,7 +1254,7 @@ public class Object2BooleanOpenCustomHashMap<T> extends AbstractObject2BooleanMa
 		}
 		
 		@Override
-		public boolean reduce(BooleanBooleanUnaryOperator operator) {
+		public OptionalBoolean reduce(BooleanBooleanUnaryOperator operator) {
 			Objects.requireNonNull(operator);
 			boolean state = false;
 			boolean empty = true;
@@ -1269,18 +1271,18 @@ public class Object2BooleanOpenCustomHashMap<T> extends AbstractObject2BooleanMa
 				}
 				state = operator.applyAsBoolean(state, values[i]);
 			}
-			return state;
+			return empty ? OptionalBoolean.empty() : OptionalBoolean.of(state);
 		}
 		
 		@Override
-		public boolean findFirst(BooleanPredicate filter) {
+		public OptionalBoolean findFirst(BooleanPredicate filter) {
 			Objects.requireNonNull(filter);
-			if(size() <= 0) return false;
-			if(containsNull && filter.test(values[nullIndex])) return values[nullIndex];
+			if(size() <= 0) return OptionalBoolean.empty();
+			if(containsNull && filter.test(values[nullIndex])) return OptionalBoolean.of(values[nullIndex]);
 			for(int i = nullIndex-1;i>=0;i--) {
-				if(!strategy.equals(keys[i], null) && filter.test(values[i])) return values[i];
+				if(!strategy.equals(keys[i], null) && filter.test(values[i])) return OptionalBoolean.of(values[i]);
 			}
-			return false;
+			return OptionalBoolean.empty();
 		}
 		
 		@Override

@@ -4,6 +4,7 @@ import java.nio.DoubleBuffer;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.Objects;
+import java.util.OptionalDouble;
 import java.util.NoSuchElementException;
 import java.util.Spliterator;
 import java.util.Spliterator.OfDouble;
@@ -429,12 +430,12 @@ public class DoubleLinkedList extends AbstractDoubleList implements DoublePriori
 	}
 	
 	@Override
-	public double findFirst(DoublePredicate filter) {
+	public OptionalDouble findFirst(DoublePredicate filter) {
 		Objects.requireNonNull(filter);
 		for(Entry entry = first;entry != null;entry = entry.next) {
-			if(filter.test(entry.value)) return entry.value;
+			if(filter.test(entry.value)) return OptionalDouble.of(entry.value);
 		}
-		return 0D;
+		return OptionalDouble.empty();
 	}
 	
 	@Override
@@ -448,7 +449,7 @@ public class DoubleLinkedList extends AbstractDoubleList implements DoublePriori
 	}
 	
 	@Override
-	public double reduce(DoubleDoubleUnaryOperator operator) {
+	public OptionalDouble reduce(DoubleDoubleUnaryOperator operator) {
 		Objects.requireNonNull(operator);
 		double state = 0D;
 		boolean empty = true;
@@ -460,7 +461,7 @@ public class DoubleLinkedList extends AbstractDoubleList implements DoublePriori
 			}
 			state = operator.applyAsDouble(state, entry.value);
 		}
-		return state;
+		return empty ? OptionalDouble.empty() : OptionalDouble.of(state);
 	}
 	
 	@Override

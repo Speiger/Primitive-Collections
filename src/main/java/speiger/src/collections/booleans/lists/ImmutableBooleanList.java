@@ -10,6 +10,7 @@ import java.util.function.UnaryOperator;
 import speiger.src.collections.booleans.collections.BooleanCollection;
 import speiger.src.collections.booleans.functions.BooleanComparator;
 import speiger.src.collections.booleans.functions.BooleanConsumer;
+import speiger.src.collections.booleans.functions.OptionalBoolean;
 import speiger.src.collections.booleans.utils.BooleanArrays;
 import speiger.src.collections.objects.functions.consumer.ObjectBooleanConsumer;
 import speiger.src.collections.booleans.functions.function.BooleanPredicate;
@@ -270,12 +271,12 @@ public class ImmutableBooleanList extends AbstractBooleanList
 	}
 	
 	@Override
-	public boolean findFirst(BooleanPredicate filter) {
+	public OptionalBoolean findFirst(BooleanPredicate filter) {
 		Objects.requireNonNull(filter);
 		for(int i = 0,m=data.length;i<m;i++) {
-			if(filter.test(data[i])) return data[i];
+			if(filter.test(data[i])) return OptionalBoolean.of(data[i]);
 		}
-		return false;
+		return OptionalBoolean.empty();
 	}
 	
 	@Override
@@ -289,7 +290,7 @@ public class ImmutableBooleanList extends AbstractBooleanList
 	}
 	
 	@Override
-	public boolean reduce(BooleanBooleanUnaryOperator operator) {
+	public OptionalBoolean reduce(BooleanBooleanUnaryOperator operator) {
 		Objects.requireNonNull(operator);
 		boolean state = false;
 		boolean empty = true;
@@ -301,7 +302,7 @@ public class ImmutableBooleanList extends AbstractBooleanList
 			}
 			state = operator.applyAsBoolean(state, data[i]);
 		}
-		return state;
+		return empty ? OptionalBoolean.empty() : OptionalBoolean.of(state);
 	}
 	
 	@Override

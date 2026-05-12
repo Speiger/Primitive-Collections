@@ -361,6 +361,10 @@ public class SETS
 		}
 		
 		@Override
+		public void addFirst(KEY_TYPE o) { throw new UnsupportedOperationException(); }
+		@Override
+		public void addLast(KEY_TYPE o) { throw new UnsupportedOperationException(); }
+		@Override
 		public boolean addAndMoveToFirst(KEY_TYPE o) { throw new UnsupportedOperationException(); }
 		@Override
 		public boolean addAndMoveToLast(KEY_TYPE o) { throw new UnsupportedOperationException(); }
@@ -650,7 +654,11 @@ public class SETS
 			super(c, mutex);
 			s = c;
 		}
-
+		
+		@Override
+		public void addFirst(KEY_TYPE o) { synchronized(mutex) { s.addFirst(o); } }
+		@Override
+		public void addLast(KEY_TYPE o) { synchronized(mutex) { s.addLast(o); } }
 		@Override
 		public boolean addAndMoveToFirst(KEY_TYPE o) { synchronized(mutex) { return s.addAndMoveToFirst(o); } }
 		@Override

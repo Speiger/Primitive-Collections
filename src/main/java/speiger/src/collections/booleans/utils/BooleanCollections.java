@@ -13,6 +13,7 @@ import speiger.src.collections.booleans.collections.BooleanCollection;
 import speiger.src.collections.booleans.collections.BooleanOrderedCollection;
 import speiger.src.collections.booleans.collections.BooleanIterator;
 import speiger.src.collections.booleans.functions.BooleanComparator;
+import speiger.src.collections.booleans.functions.OptionalBoolean;
 import speiger.src.collections.objects.utils.ObjectArrays;
 import speiger.src.collections.booleans.functions.BooleanConsumer;
 import speiger.src.collections.booleans.functions.function.BooleanPredicate;
@@ -460,9 +461,9 @@ public class BooleanCollections
 		@Override
 		public boolean reduce(boolean identity, BooleanBooleanUnaryOperator operator) { synchronized(mutex) { return c.reduce(identity, operator); } }
 		@Override
-		public boolean reduce(BooleanBooleanUnaryOperator operator) { synchronized(mutex) { return c.reduce(operator); } }
+		public OptionalBoolean reduce(BooleanBooleanUnaryOperator operator) { synchronized(mutex) { return c.reduce(operator); } }
 		@Override
-		public boolean findFirst(BooleanPredicate filter) { synchronized(mutex) { return c.findFirst(filter); } }
+		public OptionalBoolean findFirst(BooleanPredicate filter) { synchronized(mutex) { return c.findFirst(filter); } }
 		@Override
 		public int count(BooleanPredicate filter) { synchronized(mutex) { return c.count(filter); } }
 	}
@@ -588,9 +589,9 @@ public class BooleanCollections
 		@Override
 		public boolean reduce(boolean identity, BooleanBooleanUnaryOperator operator) { return c.reduce(identity, operator); }
 		@Override
-		public boolean reduce(BooleanBooleanUnaryOperator operator) { return c.reduce(operator); }
+		public OptionalBoolean reduce(BooleanBooleanUnaryOperator operator) { return c.reduce(operator); }
 		@Override
-		public boolean findFirst(BooleanPredicate filter) { return c.findFirst(filter); }
+		public OptionalBoolean findFirst(BooleanPredicate filter) { return c.findFirst(filter); }
 		@Override
 		public int count(BooleanPredicate filter) { return c.count(filter); }
 	}

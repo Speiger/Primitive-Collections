@@ -5,6 +5,7 @@ import java.util.Collection;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 import java.util.Objects;
+import java.util.OptionalInt;
 import java.util.function.IntPredicate;
 
 import speiger.src.collections.ints.collections.IntBidirectionalIterator;
@@ -236,6 +237,10 @@ public class ImmutableIntOpenHashSet extends AbstractIntSet implements IntOrdere
 	@Override
 	public boolean addAll(IntCollection c) { throw new UnsupportedOperationException(); }
 	@Override
+	public void addFirst(int o) { throw new UnsupportedOperationException(); }
+	@Override
+	public void addLast(int o) { throw new UnsupportedOperationException(); }
+	@Override
 	public boolean addAndMoveToFirst(int o) { throw new UnsupportedOperationException(); }
 	@Override
 	public boolean addAndMoveToLast(int o) { throw new UnsupportedOperationException(); }
@@ -371,7 +376,7 @@ public class ImmutableIntOpenHashSet extends AbstractIntSet implements IntOrdere
 	}
 	
 	@Override
-	public int reduce(IntIntUnaryOperator operator) {
+	public OptionalInt reduce(IntIntUnaryOperator operator) {
 		Objects.requireNonNull(operator);
 		int state = 0;
 		boolean empty = true;
@@ -384,18 +389,18 @@ public class ImmutableIntOpenHashSet extends AbstractIntSet implements IntOrdere
 			else state = operator.applyAsInt(state, keys[index]);
 			index = (int)links[index];
 		}
-		return state;
+		return empty ? OptionalInt.empty() : OptionalInt.of(state);
 	}
 	
 	@Override
-	public int findFirst(IntPredicate filter) {
+	public OptionalInt findFirst(IntPredicate filter) {
 		Objects.requireNonNull(filter);
 		int index = firstIndex;
 		while(index != -1) {
-			if(filter.test(keys[index])) return keys[index];
+			if(filter.test(keys[index])) return OptionalInt.of(keys[index]);
 			index = (int)links[index];
 		}
-		return 0;
+		return OptionalInt.empty();
 	}
 	
 	@Override

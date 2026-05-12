@@ -5,6 +5,7 @@ import java.util.Collection;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 import java.util.Objects;
+import java.util.OptionalInt;
 import java.util.concurrent.locks.ReentrantLock;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
@@ -654,13 +655,13 @@ public class CopyOnWriteIntArrayList extends AbstractIntList implements ITrimmab
 	}
 	
 	@Override
-	public int findFirst(IntPredicate filter) {
+	public OptionalInt findFirst(IntPredicate filter) {
 		Objects.requireNonNull(filter);
 		int[] data = this.data;
 		for(int i = 0,m=data.length;i<m;i++) {
-			if(filter.test(data[i])) return data[i];
+			if(filter.test(data[i])) return OptionalInt.of(data[i]);
 		}
-		return 0;
+		return OptionalInt.empty();
 	}
 	
 	@Override
@@ -675,7 +676,7 @@ public class CopyOnWriteIntArrayList extends AbstractIntList implements ITrimmab
 	}
 	
 	@Override
-	public int reduce(IntIntUnaryOperator operator) {
+	public OptionalInt reduce(IntIntUnaryOperator operator) {
 		Objects.requireNonNull(operator);
 		int[] data = this.data;
 		int state = 0;
@@ -688,7 +689,7 @@ public class CopyOnWriteIntArrayList extends AbstractIntList implements ITrimmab
 			}
 			state = operator.applyAsInt(state, data[i]);
 		}
-		return state;
+		return empty ? OptionalInt.empty() : OptionalInt.of(state);
 	}
 	
 	@Override

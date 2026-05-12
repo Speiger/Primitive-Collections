@@ -9,7 +9,7 @@ import java.util.function.DoublePredicate;
 import speiger.src.collections.floats.collections.FloatBidirectionalIterator;
 import speiger.src.collections.floats.collections.FloatCollection;
 import speiger.src.collections.floats.collections.FloatIterator;
-
+import speiger.src.collections.floats.functions.OptionalFloat;
 import speiger.src.collections.ints.functions.consumer.IntFloatConsumer;
 import speiger.src.collections.objects.functions.consumer.ObjectFloatConsumer;
 import speiger.src.collections.floats.functions.function.FloatPredicate;
@@ -121,6 +121,25 @@ public class FloatArraySet extends AbstractFloatSet implements FloatOrderedSet
 			return true;
 		}
 		return false;
+	}
+	
+	@Override
+	public void addFirst(float o) {
+		int index = findIndex(o);
+		if(index == -1) {
+			if(data.length == size) data = Arrays.copyOf(data, size == 0 ? 2 : size * 2);
+			System.arraycopy(data, 0, data, 1, size++);
+			data[0] = o;
+		}
+	}
+	
+	@Override
+	public void addLast(float o) {
+		int index = findIndex(o);
+		if(index == -1) {
+			if(data.length == size) data = Arrays.copyOf(data, size == 0 ? 2 : size * 2);
+			data[size++] = o;
+		}
 	}
 	
 	@Override
@@ -356,12 +375,12 @@ public class FloatArraySet extends AbstractFloatSet implements FloatOrderedSet
 	}
 	
 	@Override
-	public float findFirst(FloatPredicate filter) {
+	public OptionalFloat findFirst(FloatPredicate filter) {
 		Objects.requireNonNull(filter);
 		for(int i = 0;i<size;i++) {
-			if(filter.test(data[i])) return data[i];
+			if(filter.test(data[i])) return OptionalFloat.of(data[i]);
 		}
-		return 0F;
+		return OptionalFloat.empty();
 	}
 	
 	@Override
@@ -375,7 +394,7 @@ public class FloatArraySet extends AbstractFloatSet implements FloatOrderedSet
 	}
 	
 	@Override
-	public float reduce(FloatFloatUnaryOperator operator) {
+	public OptionalFloat reduce(FloatFloatUnaryOperator operator) {
 		Objects.requireNonNull(operator);
 		float state = 0F;
 		boolean empty = true;
@@ -387,7 +406,7 @@ public class FloatArraySet extends AbstractFloatSet implements FloatOrderedSet
 			}
 			state = operator.applyAsFloat(state, data[i]);
 		}
-		return state;
+		return empty ? OptionalFloat.empty() : OptionalFloat.of(state);
 	}
 	
 	@Override

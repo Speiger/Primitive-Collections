@@ -4,6 +4,7 @@ import java.util.Arrays;
 import java.util.Map;
 import java.util.NoSuchElementException;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.function.Consumer;
 import java.util.function.BiFunction;
 import java.util.function.Predicate;
@@ -21,6 +22,7 @@ import speiger.src.collections.objects.maps.interfaces.Object2FloatMap;
 import speiger.src.collections.objects.functions.consumer.ObjectObjectConsumer;
 
 import speiger.src.collections.floats.functions.function.FloatPredicate;
+import speiger.src.collections.floats.functions.OptionalFloat;
 import speiger.src.collections.floats.collections.AbstractFloatCollection;
 import speiger.src.collections.floats.collections.FloatOrderedCollection;
 import speiger.src.collections.floats.collections.FloatIterator;
@@ -509,6 +511,10 @@ public class ImmutableObject2FloatOpenHashMap<T> extends AbstractObject2FloatMap
 	
 	private class MapEntrySet extends AbstractObjectSet<Object2FloatMap.Entry<T>> implements Object2FloatOrderedMap.FastOrderedSet<T> {
 		@Override
+		public void addFirst(Object2FloatMap.Entry<T> o) { throw new UnsupportedOperationException(); }
+		@Override
+		public void addLast(Object2FloatMap.Entry<T> o) { throw new UnsupportedOperationException(); }
+		@Override
 		public boolean addAndMoveToFirst(Object2FloatMap.Entry<T> o) { throw new UnsupportedOperationException(); }
 		@Override
 		public boolean addAndMoveToLast(Object2FloatMap.Entry<T> o) { throw new UnsupportedOperationException(); }
@@ -661,7 +667,7 @@ public class ImmutableObject2FloatOpenHashMap<T> extends AbstractObject2FloatMap
 		}
 		
 		@Override
-		public Object2FloatMap.Entry<T> reduce(ObjectObjectUnaryOperator<Object2FloatMap.Entry<T>, Object2FloatMap.Entry<T>> operator) {
+		public Optional<Object2FloatMap.Entry<T>> reduce(ObjectObjectUnaryOperator<Object2FloatMap.Entry<T>, Object2FloatMap.Entry<T>> operator) {
 			Objects.requireNonNull(operator);
 			Object2FloatMap.Entry<T> state = null;
 			boolean empty = true;
@@ -676,21 +682,21 @@ public class ImmutableObject2FloatOpenHashMap<T> extends AbstractObject2FloatMap
 				state = operator.apply(state, new BasicEntry<>(keys[index], values[index]));
 				index = (int)links[index];
 			}
-			return state;
+			return empty ? Optional.empty() : Optional.ofNullable(state);
 		}
 		
 		@Override
-		public Object2FloatMap.Entry<T> findFirst(Predicate<Object2FloatMap.Entry<T>> filter) {
+		public Optional<Object2FloatMap.Entry<T>> findFirst(Predicate<Object2FloatMap.Entry<T>> filter) {
 			Objects.requireNonNull(filter);
-			if(size() <= 0) return null;
+			if(size() <= 0) return Optional.empty();
 			BasicEntry<T> entry = new BasicEntry<>();
 			int index = firstIndex;
 			while(index != -1) {
 				entry.set(keys[index], values[index]);
-				if(filter.test(entry)) return entry;
+				if(filter.test(entry)) return Optional.ofNullable(entry);
 				index = (int)links[index];
 			}
-			return null;
+			return Optional.empty();
 		}
 		
 		@Override
@@ -753,6 +759,12 @@ public class ImmutableObject2FloatOpenHashMap<T> extends AbstractObject2FloatMap
 		public boolean add(T o) {
 			throw new UnsupportedOperationException();
 		}
+		
+		@Override
+		public void addFirst(T o) { throw new UnsupportedOperationException(); }
+		
+		@Override
+		public void addLast(T o) { throw new UnsupportedOperationException(); }
 		
 		@Override
 		public boolean addAndMoveToFirst(T o) { throw new UnsupportedOperationException(); }
@@ -889,7 +901,7 @@ public class ImmutableObject2FloatOpenHashMap<T> extends AbstractObject2FloatMap
 		}
 		
 		@Override
-		public T reduce(ObjectObjectUnaryOperator<T, T> operator) {
+		public Optional<T> reduce(ObjectObjectUnaryOperator<T, T> operator) {
 			Objects.requireNonNull(operator);
 			T state = null;
 			boolean empty = true;
@@ -904,19 +916,19 @@ public class ImmutableObject2FloatOpenHashMap<T> extends AbstractObject2FloatMap
 				state = operator.apply(state, keys[index]);
 				index = (int)links[index];
 			}
-			return state;
+			return empty ? Optional.empty() : Optional.ofNullable(state);
 		}
 		
 		@Override
-		public T findFirst(Predicate<T> filter) {
+		public Optional<T> findFirst(Predicate<T> filter) {
 			Objects.requireNonNull(filter);
-			if(size() <= 0) return null;
+			if(size() <= 0) return Optional.empty();
 			int index = firstIndex;
 			while(index != -1){
-				if(filter.test(keys[index])) return keys[index];
+				if(filter.test(keys[index])) return Optional.ofNullable(keys[index]);
 				index = (int)links[index];
 			}
-			return null;
+			return Optional.empty();
 		}
 		
 		@Override
@@ -1043,7 +1055,7 @@ public class ImmutableObject2FloatOpenHashMap<T> extends AbstractObject2FloatMap
 		}
 		
 		@Override
-		public float reduce(FloatFloatUnaryOperator operator) {
+		public OptionalFloat reduce(FloatFloatUnaryOperator operator) {
 			Objects.requireNonNull(operator);
 			float state = 0F;
 			boolean empty = true;
@@ -1058,19 +1070,19 @@ public class ImmutableObject2FloatOpenHashMap<T> extends AbstractObject2FloatMap
 				state = operator.applyAsFloat(state, values[index]);
 				index = (int)links[index];
 			}
-			return state;
+			return empty ? OptionalFloat.empty() : OptionalFloat.of(state);
 		}
 		
 		@Override
-		public float findFirst(FloatPredicate filter) {
+		public OptionalFloat findFirst(FloatPredicate filter) {
 			Objects.requireNonNull(filter);
-			if(size() <= 0) return 0F;
+			if(size() <= 0) return OptionalFloat.empty();
 			int index = firstIndex;
 			while(index != -1){
-				if(filter.test(values[index])) return values[index];
+				if(filter.test(values[index])) return OptionalFloat.of(values[index]);
 				index = (int)links[index];
 			}
-			return 0F;
+			return OptionalFloat.empty();
 		}
 		
 		@Override

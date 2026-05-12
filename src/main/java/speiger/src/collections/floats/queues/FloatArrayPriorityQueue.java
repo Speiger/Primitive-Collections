@@ -6,6 +6,7 @@ import java.util.Objects;
 
 import speiger.src.collections.floats.collections.FloatCollection;
 import speiger.src.collections.floats.collections.FloatIterator;
+import speiger.src.collections.floats.functions.OptionalFloat;
 import speiger.src.collections.floats.functions.FloatComparator;
 import speiger.src.collections.floats.functions.FloatConsumer;
 import speiger.src.collections.ints.functions.consumer.IntFloatConsumer;
@@ -307,7 +308,7 @@ public class FloatArrayPriorityQueue extends AbstractFloatPriorityQueue
 	}
 	
 	@Override
-	public float reduce(FloatFloatUnaryOperator operator) {
+	public OptionalFloat reduce(FloatFloatUnaryOperator operator) {
 		Objects.requireNonNull(operator);
 		float state = 0F;
 		boolean empty = true;
@@ -319,20 +320,20 @@ public class FloatArrayPriorityQueue extends AbstractFloatPriorityQueue
 			}
 			state = operator.applyAsFloat(state, array[i]);
 		}
-		return state;
+		return empty ? OptionalFloat.empty() : OptionalFloat.of(state);
 	}
 	
 	@Override
-	public float findFirst(FloatPredicate filter) {
+	public OptionalFloat findFirst(FloatPredicate filter) {
 		Objects.requireNonNull(filter);
 		for(int i = 0;i<size;i++) {
 			if(filter.test(array[i])) {
 				float data = array[i];
 				removeIndex(i);
-				return data;
+				return OptionalFloat.of(data);
 			}
 		}
-		return 0F;
+		return OptionalFloat.empty();
 	}
 	
 	@Override

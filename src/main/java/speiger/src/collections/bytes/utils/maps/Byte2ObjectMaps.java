@@ -611,7 +611,11 @@ public class Byte2ObjectMaps
 			super(c);
 			set = c;
 		}
-
+		
+		@Override
+		public void addFirst(Byte2ObjectMap.Entry<V> o) { throw new UnsupportedOperationException(); }
+		@Override
+		public void addLast(Byte2ObjectMap.Entry<V> o) { throw new UnsupportedOperationException(); }
 		@Override
 		public boolean addAndMoveToFirst(Byte2ObjectMap.Entry<V> o) { throw new UnsupportedOperationException(); }
 		@Override

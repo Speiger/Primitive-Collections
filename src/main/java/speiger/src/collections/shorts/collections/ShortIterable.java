@@ -7,6 +7,7 @@ import java.util.function.Consumer;
 import speiger.src.collections.shorts.functions.ShortConsumer;
 import speiger.src.collections.shorts.functions.ShortComparator;
 import speiger.src.collections.objects.collections.ObjectIterable;
+import speiger.src.collections.shorts.functions.OptionalShort;
 import speiger.src.collections.shorts.functions.function.ShortFunction;
 import speiger.src.collections.ints.functions.consumer.IntShortConsumer;
 import speiger.src.collections.objects.functions.consumer.ObjectShortConsumer;
@@ -281,13 +282,13 @@ public interface ShortIterable extends Iterable<Short>
 	 * @param filter that should be applied
 	 * @return the found value or the null equivalent variant.
 	 */
-	default short findFirst(ShortPredicate filter) {
+	default OptionalShort findFirst(ShortPredicate filter) {
 		Objects.requireNonNull(filter);
 		for(ShortIterator iter = iterator();iter.hasNext();) {
 			short entry = iter.nextShort();
-			if(filter.test(entry)) return entry;
+			if(filter.test(entry)) return OptionalShort.of(entry);
 		}
-		return (short)0;
+		return OptionalShort.empty();
 	}
 	
 	/**
@@ -312,7 +313,7 @@ public interface ShortIterable extends Iterable<Short>
 	 * @param operator the operation that should be applied
 	 * @return the reduction result, returns null value if nothing was found
 	 */
-	default short reduce(ShortShortUnaryOperator operator) {
+	default OptionalShort reduce(ShortShortUnaryOperator operator) {
 		Objects.requireNonNull(operator);
 		short state = (short)0;
 		boolean empty = true;
@@ -324,7 +325,7 @@ public interface ShortIterable extends Iterable<Short>
 			}
 			state = operator.applyAsShort(state, iter.nextShort());
 		}
-		return state;
+		return empty ? OptionalShort.empty() : OptionalShort.of(state);
 	}	
 	
 	/**

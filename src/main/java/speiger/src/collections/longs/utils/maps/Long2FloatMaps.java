@@ -620,7 +620,11 @@ public class Long2FloatMaps
 			super(c);
 			set = c;
 		}
-
+		
+		@Override
+		public void addFirst(Long2FloatMap.Entry o) { throw new UnsupportedOperationException(); }
+		@Override
+		public void addLast(Long2FloatMap.Entry o) { throw new UnsupportedOperationException(); }
 		@Override
 		public boolean addAndMoveToFirst(Long2FloatMap.Entry o) { throw new UnsupportedOperationException(); }
 		@Override

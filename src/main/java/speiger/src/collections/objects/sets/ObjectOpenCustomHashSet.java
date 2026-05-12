@@ -6,6 +6,7 @@ import java.util.ConcurrentModificationException;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.function.Consumer;
 import java.util.function.BiFunction;
 import java.util.function.Predicate;
@@ -532,7 +533,7 @@ public class ObjectOpenCustomHashSet<T> extends AbstractObjectSet<T> implements 
 	}
 	
 	@Override
-	public T reduce(ObjectObjectUnaryOperator<T, T> operator) {
+	public Optional<T> reduce(ObjectObjectUnaryOperator<T, T> operator) {
 		Objects.requireNonNull(operator);
 		T state = null;
 		boolean empty = true;
@@ -549,18 +550,18 @@ public class ObjectOpenCustomHashSet<T> extends AbstractObjectSet<T> implements 
 			}
 			state = operator.apply(state, keys[i]);
 		}
-		return state;
+		return empty ? Optional.empty() : Optional.ofNullable(state);
 	}
 	
 	@Override
-	public T findFirst(Predicate<T> filter) {
+	public Optional<T> findFirst(Predicate<T> filter) {
 		Objects.requireNonNull(filter);
-		if(size() <= 0) return null;
-		if(containsNull && filter.test(keys[nullIndex])) return keys[nullIndex];
+		if(size() <= 0) return Optional.empty();
+		if(containsNull && filter.test(keys[nullIndex])) return Optional.ofNullable(keys[nullIndex]);
 		for(int i = nullIndex-1;i>=0;i--) {
-			if(!strategy.equals(keys[i], null) && filter.test(keys[i])) return keys[i];
+			if(!strategy.equals(keys[i], null) && filter.test(keys[i])) return Optional.ofNullable(keys[i]);
 		}
-		return null;
+		return Optional.empty();
 	}
 	
 	@Override

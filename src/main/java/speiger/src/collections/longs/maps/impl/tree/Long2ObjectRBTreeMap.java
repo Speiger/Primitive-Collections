@@ -3,11 +3,13 @@ package speiger.src.collections.longs.maps.impl.tree;
 import java.util.Collections;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.NoSuchElementException;
 import java.util.function.Consumer;
 import java.util.function.BiFunction;
 import java.util.function.Predicate;
 import java.util.function.LongPredicate;
+import java.util.OptionalLong;
 
 import speiger.src.collections.longs.collections.LongBidirectionalIterator;
 import speiger.src.collections.longs.functions.LongComparator;
@@ -1070,7 +1072,7 @@ public class Long2ObjectRBTreeMap<V> extends AbstractLong2ObjectMap<V> implement
 		}
 		
 		@Override
-		public long reduce(LongLongUnaryOperator operator) {
+		public OptionalLong reduce(LongLongUnaryOperator operator) {
 			Objects.requireNonNull(operator);
 			long state = 0L;
 			boolean empty = true;
@@ -1082,15 +1084,15 @@ public class Long2ObjectRBTreeMap<V> extends AbstractLong2ObjectMap<V> implement
 				}
 				state = operator.applyAsLong(state, entry.key);
 			}
-			return state;
+			return empty ? OptionalLong.empty() : OptionalLong.of(state);
 		}
 		
 		@Override
-		public long findFirst(LongPredicate filter) {
+		public OptionalLong findFirst(LongPredicate filter) {
 			Objects.requireNonNull(filter);
 			for(Node<V> entry = start(), end = end();entry != null && (end == null || (end != previous(entry)));entry = next(entry))
-				if(filter.test(entry.key)) return entry.key;
-			return 0L;
+				if(filter.test(entry.key)) return OptionalLong.of(entry.key);
+			return OptionalLong.empty();
 		}
 		
 		@Override
@@ -1727,7 +1729,7 @@ public class Long2ObjectRBTreeMap<V> extends AbstractLong2ObjectMap<V> implement
 			}
 			
 			@Override
-			public Long2ObjectMap.Entry<V> reduce(ObjectObjectUnaryOperator<Long2ObjectMap.Entry<V>, Long2ObjectMap.Entry<V>> operator) {
+			public Optional<Long2ObjectMap.Entry<V>> reduce(ObjectObjectUnaryOperator<Long2ObjectMap.Entry<V>, Long2ObjectMap.Entry<V>> operator) {
 				Objects.requireNonNull(operator);
 				Long2ObjectMap.Entry<V> state = null;
 				boolean empty = true;
@@ -1739,19 +1741,19 @@ public class Long2ObjectRBTreeMap<V> extends AbstractLong2ObjectMap<V> implement
 					}
 					state = operator.apply(state, new BasicEntry<>(entry.key, entry.value));
 				}
-				return state;
+				return empty ? Optional.empty() : Optional.ofNullable(state);
 			}
 			
 			@Override
-			public Long2ObjectMap.Entry<V> findFirst(Predicate<Long2ObjectMap.Entry<V>> filter) {
+			public Optional<Long2ObjectMap.Entry<V>> findFirst(Predicate<Long2ObjectMap.Entry<V>> filter) {
 				Objects.requireNonNull(filter);
-				if(size() <= 0) return null;
+				if(size() <= 0) return Optional.empty();
 				BasicEntry<V> subEntry = new BasicEntry<>();
 				for(Node<V> entry = subLowest(), last = subHighest();entry != null && (last == null || last != previous(entry));entry = next(entry)) {
 					subEntry.set(entry.key, entry.value);
-					if(filter.test(subEntry)) return subEntry;
+					if(filter.test(subEntry)) return Optional.ofNullable(subEntry);
 				}
-				return null;
+				return Optional.empty();
 			}
 			
 			@Override
@@ -1846,7 +1848,7 @@ public class Long2ObjectRBTreeMap<V> extends AbstractLong2ObjectMap<V> implement
 			}
 			
 			@Override
-			public V reduce(ObjectObjectUnaryOperator<V, V> operator) {
+			public Optional<V> reduce(ObjectObjectUnaryOperator<V, V> operator) {
 				Objects.requireNonNull(operator);
 				V state = null;
 				boolean empty = true;
@@ -1858,15 +1860,15 @@ public class Long2ObjectRBTreeMap<V> extends AbstractLong2ObjectMap<V> implement
 					}
 					state = operator.apply(state, entry.value);
 				}
-				return state;
+				return empty ? Optional.empty() : Optional.ofNullable(state);
 			}
 			
 			@Override
-			public V findFirst(Predicate<V> filter) {
+			public Optional<V> findFirst(Predicate<V> filter) {
 				Objects.requireNonNull(filter);
 				for(Node<V> entry = subLowest(), last = subHighest();entry != null && (last == null || last != previous(entry));entry = next(entry))
-					if(filter.test(entry.value)) return entry.value;
-				return null;
+					if(filter.test(entry.value)) return Optional.ofNullable(entry.value);
+				return Optional.empty();
 			}
 			
 			@Override
@@ -2182,7 +2184,7 @@ public class Long2ObjectRBTreeMap<V> extends AbstractLong2ObjectMap<V> implement
 		}
 		
 		@Override
-		public V reduce(ObjectObjectUnaryOperator<V, V> operator) {
+		public Optional<V> reduce(ObjectObjectUnaryOperator<V, V> operator) {
 			Objects.requireNonNull(operator);
 			V state = null;
 			boolean empty = true;
@@ -2194,15 +2196,15 @@ public class Long2ObjectRBTreeMap<V> extends AbstractLong2ObjectMap<V> implement
 				}
 				state = operator.apply(state, entry.value);
 			}
-			return state;
+			return empty ? Optional.empty() : Optional.ofNullable(state);
 		}
 		
 		@Override
-		public V findFirst(Predicate<V> filter) {
+		public Optional<V> findFirst(Predicate<V> filter) {
 			Objects.requireNonNull(filter);
 			for(Node<V> entry = first;entry != null;entry = entry.next())
-				if(filter.test(entry.value)) return entry.value;
-			return null;
+				if(filter.test(entry.value)) return Optional.ofNullable(entry.value);
+			return Optional.empty();
 		}
 		
 		@Override
@@ -2343,7 +2345,7 @@ public class Long2ObjectRBTreeMap<V> extends AbstractLong2ObjectMap<V> implement
 		}
 		
 		@Override
-		public Long2ObjectMap.Entry<V> reduce(ObjectObjectUnaryOperator<Long2ObjectMap.Entry<V>, Long2ObjectMap.Entry<V>> operator) {
+		public Optional<Long2ObjectMap.Entry<V>> reduce(ObjectObjectUnaryOperator<Long2ObjectMap.Entry<V>, Long2ObjectMap.Entry<V>> operator) {
 			Objects.requireNonNull(operator);
 			Long2ObjectMap.Entry<V> state = null;
 			boolean empty = true;
@@ -2355,19 +2357,19 @@ public class Long2ObjectRBTreeMap<V> extends AbstractLong2ObjectMap<V> implement
 				}
 				state = operator.apply(state, new BasicEntry<>(entry.key, entry.value));
 			}
-			return state;
+			return empty ? Optional.empty() : Optional.ofNullable(state);
 		}
 		
 		@Override
-		public Long2ObjectMap.Entry<V> findFirst(Predicate<Long2ObjectMap.Entry<V>> filter) {
+		public Optional<Long2ObjectMap.Entry<V>> findFirst(Predicate<Long2ObjectMap.Entry<V>> filter) {
 			Objects.requireNonNull(filter);
-			if(size() <= 0) return null;
+			if(size() <= 0) return Optional.empty();
 			BasicEntry<V> subEntry = new BasicEntry<>();
 			for(Node<V> entry = first;entry != null;entry = entry.next()) {
 				subEntry.set(entry.key, entry.value);
-				if(filter.test(subEntry)) return subEntry;
+				if(filter.test(subEntry)) return Optional.ofNullable(subEntry);
 			}
-			return null;
+			return Optional.empty();
 		}
 		
 		@Override

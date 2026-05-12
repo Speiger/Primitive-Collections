@@ -620,7 +620,11 @@ public class Int2ShortMaps
 			super(c);
 			set = c;
 		}
-
+		
+		@Override
+		public void addFirst(Int2ShortMap.Entry o) { throw new UnsupportedOperationException(); }
+		@Override
+		public void addLast(Int2ShortMap.Entry o) { throw new UnsupportedOperationException(); }
 		@Override
 		public boolean addAndMoveToFirst(Int2ShortMap.Entry o) { throw new UnsupportedOperationException(); }
 		@Override

@@ -3,11 +3,13 @@ package speiger.src.collections.ints.maps.impl.tree;
 import java.util.Collections;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.NoSuchElementException;
 import java.util.function.Consumer;
 import java.util.function.BiFunction;
 import java.util.function.Predicate;
 import java.util.function.IntPredicate;
+import java.util.OptionalInt;
 
 
 import speiger.src.collections.ints.collections.IntBidirectionalIterator;
@@ -35,6 +37,7 @@ import speiger.src.collections.objects.functions.consumer.ObjectObjectConsumer;
 import speiger.src.collections.objects.functions.consumer.ObjectBooleanConsumer;
 
 import speiger.src.collections.booleans.functions.function.BooleanPredicate;
+import speiger.src.collections.booleans.functions.OptionalBoolean;
 import speiger.src.collections.objects.collections.ObjectBidirectionalIterator;
 import speiger.src.collections.objects.collections.ObjectIterator;
 import speiger.src.collections.objects.functions.function.ObjectObjectUnaryOperator;
@@ -1069,7 +1072,7 @@ public class Int2BooleanAVLTreeMap extends AbstractInt2BooleanMap implements Int
 		}
 		
 		@Override
-		public int reduce(IntIntUnaryOperator operator) {
+		public OptionalInt reduce(IntIntUnaryOperator operator) {
 			Objects.requireNonNull(operator);
 			int state = 0;
 			boolean empty = true;
@@ -1081,15 +1084,15 @@ public class Int2BooleanAVLTreeMap extends AbstractInt2BooleanMap implements Int
 				}
 				state = operator.applyAsInt(state, entry.key);
 			}
-			return state;
+			return empty ? OptionalInt.empty() : OptionalInt.of(state);
 		}
 		
 		@Override
-		public int findFirst(IntPredicate filter) {
+		public OptionalInt findFirst(IntPredicate filter) {
 			Objects.requireNonNull(filter);
 			for(Node entry = start(), end = end();entry != null && (end == null || (end != previous(entry)));entry = next(entry))
-				if(filter.test(entry.key)) return entry.key;
-			return 0;
+				if(filter.test(entry.key)) return OptionalInt.of(entry.key);
+			return OptionalInt.empty();
 		}
 		
 		@Override
@@ -1711,7 +1714,7 @@ public class Int2BooleanAVLTreeMap extends AbstractInt2BooleanMap implements Int
 			}
 			
 			@Override
-			public Int2BooleanMap.Entry reduce(ObjectObjectUnaryOperator<Int2BooleanMap.Entry, Int2BooleanMap.Entry> operator) {
+			public Optional<Int2BooleanMap.Entry> reduce(ObjectObjectUnaryOperator<Int2BooleanMap.Entry, Int2BooleanMap.Entry> operator) {
 				Objects.requireNonNull(operator);
 				Int2BooleanMap.Entry state = null;
 				boolean empty = true;
@@ -1723,19 +1726,19 @@ public class Int2BooleanAVLTreeMap extends AbstractInt2BooleanMap implements Int
 					}
 					state = operator.apply(state, new BasicEntry(entry.key, entry.value));
 				}
-				return state;
+				return empty ? Optional.empty() : Optional.ofNullable(state);
 			}
 			
 			@Override
-			public Int2BooleanMap.Entry findFirst(Predicate<Int2BooleanMap.Entry> filter) {
+			public Optional<Int2BooleanMap.Entry> findFirst(Predicate<Int2BooleanMap.Entry> filter) {
 				Objects.requireNonNull(filter);
-				if(size() <= 0) return null;
+				if(size() <= 0) return Optional.empty();
 				BasicEntry subEntry = new BasicEntry();
 				for(Node entry = subLowest(), last = subHighest();entry != null && (last == null || last != previous(entry));entry = next(entry)) {
 					subEntry.set(entry.key, entry.value);
-					if(filter.test(subEntry)) return subEntry;
+					if(filter.test(subEntry)) return Optional.ofNullable(subEntry);
 				}
-				return null;
+				return Optional.empty();
 			}
 			
 			@Override
@@ -1830,7 +1833,7 @@ public class Int2BooleanAVLTreeMap extends AbstractInt2BooleanMap implements Int
 			}
 			
 			@Override
-			public boolean reduce(BooleanBooleanUnaryOperator operator) {
+			public OptionalBoolean reduce(BooleanBooleanUnaryOperator operator) {
 				Objects.requireNonNull(operator);
 				boolean state = false;
 				boolean empty = true;
@@ -1842,15 +1845,15 @@ public class Int2BooleanAVLTreeMap extends AbstractInt2BooleanMap implements Int
 					}
 					state = operator.applyAsBoolean(state, entry.value);
 				}
-				return state;
+				return empty ? OptionalBoolean.empty() : OptionalBoolean.of(state);
 			}
 			
 			@Override
-			public boolean findFirst(BooleanPredicate filter) {
+			public OptionalBoolean findFirst(BooleanPredicate filter) {
 				Objects.requireNonNull(filter);
 				for(Node entry = subLowest(), last = subHighest();entry != null && (last == null || last != previous(entry));entry = next(entry))
-					if(filter.test(entry.value)) return entry.value;
-				return false;
+					if(filter.test(entry.value)) return OptionalBoolean.of(entry.value);
+				return OptionalBoolean.empty();
 			}
 			
 			@Override
@@ -2166,7 +2169,7 @@ public class Int2BooleanAVLTreeMap extends AbstractInt2BooleanMap implements Int
 		}
 		
 		@Override
-		public boolean reduce(BooleanBooleanUnaryOperator operator) {
+		public OptionalBoolean reduce(BooleanBooleanUnaryOperator operator) {
 			Objects.requireNonNull(operator);
 			boolean state = false;
 			boolean empty = true;
@@ -2178,15 +2181,15 @@ public class Int2BooleanAVLTreeMap extends AbstractInt2BooleanMap implements Int
 				}
 				state = operator.applyAsBoolean(state, entry.value);
 			}
-			return state;
+			return empty ? OptionalBoolean.empty() : OptionalBoolean.of(state);
 		}
 		
 		@Override
-		public boolean findFirst(BooleanPredicate filter) {
+		public OptionalBoolean findFirst(BooleanPredicate filter) {
 			Objects.requireNonNull(filter);
 			for(Node entry = first;entry != null;entry = entry.next())
-				if(filter.test(entry.value)) return entry.value;
-			return false;
+				if(filter.test(entry.value)) return OptionalBoolean.of(entry.value);
+			return OptionalBoolean.empty();
 		}
 		
 		@Override
@@ -2327,7 +2330,7 @@ public class Int2BooleanAVLTreeMap extends AbstractInt2BooleanMap implements Int
 		}
 		
 		@Override
-		public Int2BooleanMap.Entry reduce(ObjectObjectUnaryOperator<Int2BooleanMap.Entry, Int2BooleanMap.Entry> operator) {
+		public Optional<Int2BooleanMap.Entry> reduce(ObjectObjectUnaryOperator<Int2BooleanMap.Entry, Int2BooleanMap.Entry> operator) {
 			Objects.requireNonNull(operator);
 			Int2BooleanMap.Entry state = null;
 			boolean empty = true;
@@ -2339,19 +2342,19 @@ public class Int2BooleanAVLTreeMap extends AbstractInt2BooleanMap implements Int
 				}
 				state = operator.apply(state, new BasicEntry(entry.key, entry.value));
 			}
-			return state;
+			return empty ? Optional.empty() : Optional.ofNullable(state);
 		}
 		
 		@Override
-		public Int2BooleanMap.Entry findFirst(Predicate<Int2BooleanMap.Entry> filter) {
+		public Optional<Int2BooleanMap.Entry> findFirst(Predicate<Int2BooleanMap.Entry> filter) {
 			Objects.requireNonNull(filter);
-			if(size() <= 0) return null;
+			if(size() <= 0) return Optional.empty();
 			BasicEntry subEntry = new BasicEntry();
 			for(Node entry = first;entry != null;entry = entry.next()) {
 				subEntry.set(entry.key, entry.value);
-				if(filter.test(subEntry)) return subEntry;
+				if(filter.test(subEntry)) return Optional.ofNullable(subEntry);
 			}
-			return null;
+			return Optional.empty();
 		}
 		
 		@Override

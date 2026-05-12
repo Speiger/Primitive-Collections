@@ -5,6 +5,7 @@ import java.util.Objects;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
+import java.util.OptionalDouble;
 import java.util.function.DoublePredicate;
 
 import speiger.src.collections.doubles.collections.DoubleCollection;
@@ -212,6 +213,46 @@ public class DoubleLinkedOpenCustomHashSet extends DoubleOpenCustomHashSet imple
 	public DoubleLinkedOpenCustomHashSet(DoubleIterator iterator, float loadFactor, DoubleStrategy strategy) {
 		this(HashUtil.DEFAULT_MIN_CAPACITY, loadFactor, strategy);
 		while(iterator.hasNext()) add(iterator.nextDouble());
+	}
+	
+	@Override
+	public void addFirst(double o) {
+		if(strategy.equals(o, 0D)) {
+			if(containsNull) return;
+			containsNull = true;
+			onNodeAdded(nullIndex);
+			moveToFirstIndex(nullIndex);
+		}
+		else {
+			int pos = HashUtil.mix(strategy.hashCode(o)) & mask;
+			while(!strategy.equals(keys[pos], 0D)) {
+				if(strategy.equals(keys[pos], o)) return;
+				pos = ++pos & mask;
+			}
+			keys[pos] = o;
+			onNodeAdded(pos);
+			moveToFirstIndex(pos);
+		}
+		if(size++ >= maxFill) rehash(HashUtil.arraySize(size+1, loadFactor));
+	}
+	
+	@Override
+	public void addLast(double o) {
+		if(strategy.equals(o, 0D)) {
+			if(containsNull) return;
+			containsNull = true;
+			onNodeAdded(nullIndex);
+		}
+		else {
+			int pos = HashUtil.mix(strategy.hashCode(o)) & mask;
+			while(!strategy.equals(keys[pos], 0D)) {
+				if(strategy.equals(keys[pos], o)) return;
+				pos = ++pos & mask;
+			}
+			keys[pos] = o;
+			onNodeAdded(pos);
+		}
+		if(size++ >= maxFill) rehash(HashUtil.arraySize(size+1, loadFactor));
 	}
 	
 	@Override
@@ -618,7 +659,7 @@ public class DoubleLinkedOpenCustomHashSet extends DoubleOpenCustomHashSet imple
 	}
 	
 	@Override
-	public double reduce(DoubleDoubleUnaryOperator operator) {
+	public OptionalDouble reduce(DoubleDoubleUnaryOperator operator) {
 		Objects.requireNonNull(operator);
 		double state = 0D;
 		boolean empty = true;
@@ -631,18 +672,18 @@ public class DoubleLinkedOpenCustomHashSet extends DoubleOpenCustomHashSet imple
 			else state = operator.applyAsDouble(state, keys[index]);
 			index = (int)links[index];
 		}
-		return state;
+		return empty ? OptionalDouble.empty() : OptionalDouble.of(state);
 	}
 	
 	@Override
-	public double findFirst(DoublePredicate filter) {
+	public OptionalDouble findFirst(DoublePredicate filter) {
 		Objects.requireNonNull(filter);
 		int index = firstIndex;
 		while(index != -1) {
-			if(filter.test(keys[index])) return keys[index];
+			if(filter.test(keys[index])) return OptionalDouble.of(keys[index]);
 			index = (int)links[index];
 		}
-		return 0D;
+		return OptionalDouble.empty();
 	}
 	
 	@Override

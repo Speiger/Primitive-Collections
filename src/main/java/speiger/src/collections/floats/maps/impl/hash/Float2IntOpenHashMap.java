@@ -5,10 +5,12 @@ import java.util.ConcurrentModificationException;
 import java.util.Map;
 import java.util.NoSuchElementException;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.function.Consumer;
 import java.util.function.BiFunction;
 import java.util.function.Predicate;
 import java.util.function.IntPredicate;
+import java.util.OptionalInt;
 
 import speiger.src.collections.floats.collections.FloatIterator;
 import speiger.src.collections.floats.functions.FloatConsumer;
@@ -20,6 +22,7 @@ import speiger.src.collections.floats.functions.consumer.FloatIntConsumer;
 import speiger.src.collections.floats.functions.function.Float2IntFunction;
 import speiger.src.collections.floats.functions.function.FloatIntUnaryOperator;
 import speiger.src.collections.floats.functions.function.FloatFloatUnaryOperator;
+import speiger.src.collections.floats.functions.OptionalFloat;
 import speiger.src.collections.floats.functions.function.FloatPredicate;
 import speiger.src.collections.floats.maps.abstracts.AbstractFloat2IntMap;
 import speiger.src.collections.floats.maps.interfaces.Float2IntMap;
@@ -920,7 +923,7 @@ public class Float2IntOpenHashMap extends AbstractFloat2IntMap implements ITrimm
 		}
 		
 		@Override
-		public Float2IntMap.Entry reduce(ObjectObjectUnaryOperator<Float2IntMap.Entry, Float2IntMap.Entry> operator) {
+		public Optional<Float2IntMap.Entry> reduce(ObjectObjectUnaryOperator<Float2IntMap.Entry, Float2IntMap.Entry> operator) {
 			Objects.requireNonNull(operator);
 			Float2IntMap.Entry state = null;
 			boolean empty = true;
@@ -937,25 +940,25 @@ public class Float2IntOpenHashMap extends AbstractFloat2IntMap implements ITrimm
 				}
 				state = operator.apply(state, new ValueMapEntry(i));
 			}
-			return state;
+			return empty ? Optional.empty() : Optional.ofNullable(state);
 		}
 		
 		@Override
-		public Float2IntMap.Entry findFirst(Predicate<Float2IntMap.Entry> filter) {
+		public Optional<Float2IntMap.Entry> findFirst(Predicate<Float2IntMap.Entry> filter) {
 			Objects.requireNonNull(filter);
-			if(size() <= 0) return null;
+			if(size() <= 0) return Optional.empty();
 			MapEntry entry = new MapEntry();
 			if(containsNull) {
 				entry.set(nullIndex);
-				if(filter.test(entry)) return entry;
+				if(filter.test(entry)) return Optional.ofNullable(entry);
 			}
 			for(int i = nullIndex-1;i>=0;i--) {
 				if(Float.floatToIntBits(keys[i]) != 0) {
 					entry.set(i);
-					if(filter.test(entry)) return entry;
+					if(filter.test(entry)) return Optional.ofNullable(entry);
 				}
 			}
-			return null;
+			return Optional.empty();
 		}
 		
 		@Override
@@ -1127,7 +1130,7 @@ public class Float2IntOpenHashMap extends AbstractFloat2IntMap implements ITrimm
 		}
 		
 		@Override
-		public float reduce(FloatFloatUnaryOperator operator) {
+		public OptionalFloat reduce(FloatFloatUnaryOperator operator) {
 			Objects.requireNonNull(operator);
 			float state = 0F;
 			boolean empty = true;
@@ -1144,18 +1147,18 @@ public class Float2IntOpenHashMap extends AbstractFloat2IntMap implements ITrimm
 				}
 				state = operator.applyAsFloat(state, keys[i]);
 			}
-			return state;
+			return empty ? OptionalFloat.empty() : OptionalFloat.of(state);
 		}
 		
 		@Override
-		public float findFirst(FloatPredicate filter) {
+		public OptionalFloat findFirst(FloatPredicate filter) {
 			Objects.requireNonNull(filter);
-			if(size() <= 0) return 0F;
-			if(containsNull && filter.test(keys[nullIndex])) return keys[nullIndex];
+			if(size() <= 0) return OptionalFloat.empty();
+			if(containsNull && filter.test(keys[nullIndex])) return OptionalFloat.of(keys[nullIndex]);
 			for(int i = nullIndex-1;i>=0;i--) {
-				if(Float.floatToIntBits(keys[i]) != 0 && filter.test(keys[i])) return keys[i];
+				if(Float.floatToIntBits(keys[i]) != 0 && filter.test(keys[i])) return OptionalFloat.of(keys[i]);
 			}
-			return 0F;
+			return OptionalFloat.empty();
 		}
 		
 		@Override
@@ -1270,7 +1273,7 @@ public class Float2IntOpenHashMap extends AbstractFloat2IntMap implements ITrimm
 		}
 		
 		@Override
-		public int reduce(IntIntUnaryOperator operator) {
+		public OptionalInt reduce(IntIntUnaryOperator operator) {
 			Objects.requireNonNull(operator);
 			int state = 0;
 			boolean empty = true;
@@ -1287,18 +1290,18 @@ public class Float2IntOpenHashMap extends AbstractFloat2IntMap implements ITrimm
 				}
 				state = operator.applyAsInt(state, values[i]);
 			}
-			return state;
+			return empty ? OptionalInt.empty() : OptionalInt.of(state);
 		}
 		
 		@Override
-		public int findFirst(IntPredicate filter) {
+		public OptionalInt findFirst(IntPredicate filter) {
 			Objects.requireNonNull(filter);
-			if(size() <= 0) return 0;
-			if(containsNull && filter.test(values[nullIndex])) return values[nullIndex];
+			if(size() <= 0) return OptionalInt.empty();
+			if(containsNull && filter.test(values[nullIndex])) return OptionalInt.of(values[nullIndex]);
 			for(int i = nullIndex-1;i>=0;i--) {
-				if(Float.floatToIntBits(keys[i]) != 0 && filter.test(values[i])) return values[i];
+				if(Float.floatToIntBits(keys[i]) != 0 && filter.test(values[i])) return OptionalInt.of(values[i]);
 			}
-			return 0;
+			return OptionalInt.empty();
 		}
 		
 		@Override

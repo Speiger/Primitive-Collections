@@ -633,7 +633,11 @@ public class Object2FloatMaps
 			super(c);
 			set = c;
 		}
-
+		
+		@Override
+		public void addFirst(Object2FloatMap.Entry<T> o) { throw new UnsupportedOperationException(); }
+		@Override
+		public void addLast(Object2FloatMap.Entry<T> o) { throw new UnsupportedOperationException(); }
 		@Override
 		public boolean addAndMoveToFirst(Object2FloatMap.Entry<T> o) { throw new UnsupportedOperationException(); }
 		@Override

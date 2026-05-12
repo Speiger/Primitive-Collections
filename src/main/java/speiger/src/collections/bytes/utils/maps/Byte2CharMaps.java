@@ -620,7 +620,11 @@ public class Byte2CharMaps
 			super(c);
 			set = c;
 		}
-
+		
+		@Override
+		public void addFirst(Byte2CharMap.Entry o) { throw new UnsupportedOperationException(); }
+		@Override
+		public void addLast(Byte2CharMap.Entry o) { throw new UnsupportedOperationException(); }
 		@Override
 		public boolean addAndMoveToFirst(Byte2CharMap.Entry o) { throw new UnsupportedOperationException(); }
 		@Override

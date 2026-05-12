@@ -4,6 +4,7 @@ import java.util.Arrays;
 import java.util.Map;
 import java.util.NoSuchElementException;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.function.Consumer;
 import java.util.function.BiFunction;
 import java.util.function.Predicate;
@@ -13,6 +14,7 @@ import speiger.src.collections.bytes.functions.ByteConsumer;
 import speiger.src.collections.objects.functions.consumer.ObjectByteConsumer;
 import speiger.src.collections.ints.functions.consumer.IntByteConsumer;
 import speiger.src.collections.ints.functions.consumer.IntObjectConsumer;
+import speiger.src.collections.bytes.functions.OptionalByte;
 import speiger.src.collections.bytes.functions.function.BytePredicate;
 import speiger.src.collections.bytes.functions.consumer.ByteByteConsumer;
 import speiger.src.collections.bytes.functions.function.ByteUnaryOperator;
@@ -530,6 +532,10 @@ public class ImmutableByte2ByteOpenHashMap extends AbstractByte2ByteMap implemen
 	
 	private class MapEntrySet extends AbstractObjectSet<Byte2ByteMap.Entry> implements Byte2ByteOrderedMap.FastOrderedSet {
 		@Override
+		public void addFirst(Byte2ByteMap.Entry o) { throw new UnsupportedOperationException(); }
+		@Override
+		public void addLast(Byte2ByteMap.Entry o) { throw new UnsupportedOperationException(); }
+		@Override
 		public boolean addAndMoveToFirst(Byte2ByteMap.Entry o) { throw new UnsupportedOperationException(); }
 		@Override
 		public boolean addAndMoveToLast(Byte2ByteMap.Entry o) { throw new UnsupportedOperationException(); }
@@ -682,7 +688,7 @@ public class ImmutableByte2ByteOpenHashMap extends AbstractByte2ByteMap implemen
 		}
 		
 		@Override
-		public Byte2ByteMap.Entry reduce(ObjectObjectUnaryOperator<Byte2ByteMap.Entry, Byte2ByteMap.Entry> operator) {
+		public Optional<Byte2ByteMap.Entry> reduce(ObjectObjectUnaryOperator<Byte2ByteMap.Entry, Byte2ByteMap.Entry> operator) {
 			Objects.requireNonNull(operator);
 			Byte2ByteMap.Entry state = null;
 			boolean empty = true;
@@ -697,21 +703,21 @@ public class ImmutableByte2ByteOpenHashMap extends AbstractByte2ByteMap implemen
 				state = operator.apply(state, new BasicEntry(keys[index], values[index]));
 				index = (int)links[index];
 			}
-			return state;
+			return empty ? Optional.empty() : Optional.ofNullable(state);
 		}
 		
 		@Override
-		public Byte2ByteMap.Entry findFirst(Predicate<Byte2ByteMap.Entry> filter) {
+		public Optional<Byte2ByteMap.Entry> findFirst(Predicate<Byte2ByteMap.Entry> filter) {
 			Objects.requireNonNull(filter);
-			if(size() <= 0) return null;
+			if(size() <= 0) return Optional.empty();
 			BasicEntry entry = new BasicEntry();
 			int index = firstIndex;
 			while(index != -1) {
 				entry.set(keys[index], values[index]);
-				if(filter.test(entry)) return entry;
+				if(filter.test(entry)) return Optional.ofNullable(entry);
 				index = (int)links[index];
 			}
-			return null;
+			return Optional.empty();
 		}
 		
 		@Override
@@ -773,6 +779,12 @@ public class ImmutableByte2ByteOpenHashMap extends AbstractByte2ByteMap implemen
 		public boolean add(byte o) {
 			throw new UnsupportedOperationException();
 		}
+		
+		@Override
+		public void addFirst(byte o) { throw new UnsupportedOperationException(); }
+		
+		@Override
+		public void addLast(byte o) { throw new UnsupportedOperationException(); }
 		
 		@Override
 		public boolean addAndMoveToFirst(byte o) { throw new UnsupportedOperationException(); }
@@ -909,7 +921,7 @@ public class ImmutableByte2ByteOpenHashMap extends AbstractByte2ByteMap implemen
 		}
 		
 		@Override
-		public byte reduce(ByteByteUnaryOperator operator) {
+		public OptionalByte reduce(ByteByteUnaryOperator operator) {
 			Objects.requireNonNull(operator);
 			byte state = (byte)0;
 			boolean empty = true;
@@ -924,19 +936,19 @@ public class ImmutableByte2ByteOpenHashMap extends AbstractByte2ByteMap implemen
 				state = operator.applyAsByte(state, keys[index]);
 				index = (int)links[index];
 			}
-			return state;
+			return empty ? OptionalByte.empty() : OptionalByte.of(state);
 		}
 		
 		@Override
-		public byte findFirst(BytePredicate filter) {
+		public OptionalByte findFirst(BytePredicate filter) {
 			Objects.requireNonNull(filter);
-			if(size() <= 0) return (byte)0;
+			if(size() <= 0) return OptionalByte.empty();
 			int index = firstIndex;
 			while(index != -1){
-				if(filter.test(keys[index])) return keys[index];
+				if(filter.test(keys[index])) return OptionalByte.of(keys[index]);
 				index = (int)links[index];
 			}
-			return (byte)0;
+			return OptionalByte.empty();
 		}
 		
 		@Override
@@ -1063,7 +1075,7 @@ public class ImmutableByte2ByteOpenHashMap extends AbstractByte2ByteMap implemen
 		}
 		
 		@Override
-		public byte reduce(ByteByteUnaryOperator operator) {
+		public OptionalByte reduce(ByteByteUnaryOperator operator) {
 			Objects.requireNonNull(operator);
 			byte state = (byte)0;
 			boolean empty = true;
@@ -1078,19 +1090,19 @@ public class ImmutableByte2ByteOpenHashMap extends AbstractByte2ByteMap implemen
 				state = operator.applyAsByte(state, values[index]);
 				index = (int)links[index];
 			}
-			return state;
+			return empty ? OptionalByte.empty() : OptionalByte.of(state);
 		}
 		
 		@Override
-		public byte findFirst(BytePredicate filter) {
+		public OptionalByte findFirst(BytePredicate filter) {
 			Objects.requireNonNull(filter);
-			if(size() <= 0) return (byte)0;
+			if(size() <= 0) return OptionalByte.empty();
 			int index = firstIndex;
 			while(index != -1){
-				if(filter.test(values[index])) return values[index];
+				if(filter.test(values[index])) return OptionalByte.of(values[index]);
 				index = (int)links[index];
 			}
-			return (byte)0;
+			return OptionalByte.empty();
 		}
 		
 		@Override

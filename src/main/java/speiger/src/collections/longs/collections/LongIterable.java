@@ -3,6 +3,7 @@ package speiger.src.collections.longs.collections;
 import java.util.Objects;
 import java.util.function.Consumer;
 import java.util.function.LongPredicate;
+import java.util.OptionalLong;
 
 
 import speiger.src.collections.longs.functions.LongConsumer;
@@ -281,13 +282,13 @@ public interface LongIterable extends Iterable<Long>
 	 * @param filter that should be applied
 	 * @return the found value or the null equivalent variant.
 	 */
-	default long findFirst(LongPredicate filter) {
+	default OptionalLong findFirst(LongPredicate filter) {
 		Objects.requireNonNull(filter);
 		for(LongIterator iter = iterator();iter.hasNext();) {
 			long entry = iter.nextLong();
-			if(filter.test(entry)) return entry;
+			if(filter.test(entry)) return OptionalLong.of(entry);
 		}
-		return 0L;
+		return OptionalLong.empty();
 	}
 	
 	/**
@@ -312,7 +313,7 @@ public interface LongIterable extends Iterable<Long>
 	 * @param operator the operation that should be applied
 	 * @return the reduction result, returns null value if nothing was found
 	 */
-	default long reduce(LongLongUnaryOperator operator) {
+	default OptionalLong reduce(LongLongUnaryOperator operator) {
 		Objects.requireNonNull(operator);
 		long state = 0L;
 		boolean empty = true;
@@ -324,7 +325,7 @@ public interface LongIterable extends Iterable<Long>
 			}
 			state = operator.applyAsLong(state, iter.nextLong());
 		}
-		return state;
+		return empty ? OptionalLong.empty() : OptionalLong.of(state);
 	}	
 	
 	/**

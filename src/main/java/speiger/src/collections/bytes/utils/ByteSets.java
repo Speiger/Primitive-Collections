@@ -302,6 +302,10 @@ public class ByteSets
 		}
 		
 		@Override
+		public void addFirst(byte o) { throw new UnsupportedOperationException(); }
+		@Override
+		public void addLast(byte o) { throw new UnsupportedOperationException(); }
+		@Override
 		public boolean addAndMoveToFirst(byte o) { throw new UnsupportedOperationException(); }
 		@Override
 		public boolean addAndMoveToLast(byte o) { throw new UnsupportedOperationException(); }
@@ -573,7 +577,11 @@ public class ByteSets
 			super(c, mutex);
 			s = c;
 		}
-
+		
+		@Override
+		public void addFirst(byte o) { synchronized(mutex) { s.addFirst(o); } }
+		@Override
+		public void addLast(byte o) { synchronized(mutex) { s.addLast(o); } }
 		@Override
 		public boolean addAndMoveToFirst(byte o) { synchronized(mutex) { return s.addAndMoveToFirst(o); } }
 		@Override

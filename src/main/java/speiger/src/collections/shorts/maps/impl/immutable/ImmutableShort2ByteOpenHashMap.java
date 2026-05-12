@@ -4,6 +4,7 @@ import java.util.Arrays;
 import java.util.Map;
 import java.util.NoSuchElementException;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.function.Consumer;
 import java.util.function.BiFunction;
 import java.util.function.Predicate;
@@ -14,6 +15,7 @@ import speiger.src.collections.objects.functions.consumer.ObjectShortConsumer;
 import speiger.src.collections.ints.functions.consumer.IntShortConsumer;
 import speiger.src.collections.ints.functions.consumer.IntObjectConsumer;
 import speiger.src.collections.ints.functions.consumer.IntByteConsumer;
+import speiger.src.collections.shorts.functions.OptionalShort;
 import speiger.src.collections.shorts.functions.function.ShortPredicate;
 import speiger.src.collections.shorts.functions.consumer.ShortByteConsumer;
 import speiger.src.collections.shorts.functions.function.Short2ByteFunction;
@@ -29,6 +31,7 @@ import speiger.src.collections.objects.functions.consumer.ObjectObjectConsumer;
 import speiger.src.collections.objects.functions.consumer.ObjectByteConsumer;
 
 import speiger.src.collections.bytes.functions.function.BytePredicate;
+import speiger.src.collections.bytes.functions.OptionalByte;
 import speiger.src.collections.shorts.sets.AbstractShortSet;
 import speiger.src.collections.bytes.collections.AbstractByteCollection;
 import speiger.src.collections.bytes.collections.ByteOrderedCollection;
@@ -539,6 +542,10 @@ public class ImmutableShort2ByteOpenHashMap extends AbstractShort2ByteMap implem
 	
 	private class MapEntrySet extends AbstractObjectSet<Short2ByteMap.Entry> implements Short2ByteOrderedMap.FastOrderedSet {
 		@Override
+		public void addFirst(Short2ByteMap.Entry o) { throw new UnsupportedOperationException(); }
+		@Override
+		public void addLast(Short2ByteMap.Entry o) { throw new UnsupportedOperationException(); }
+		@Override
 		public boolean addAndMoveToFirst(Short2ByteMap.Entry o) { throw new UnsupportedOperationException(); }
 		@Override
 		public boolean addAndMoveToLast(Short2ByteMap.Entry o) { throw new UnsupportedOperationException(); }
@@ -691,7 +698,7 @@ public class ImmutableShort2ByteOpenHashMap extends AbstractShort2ByteMap implem
 		}
 		
 		@Override
-		public Short2ByteMap.Entry reduce(ObjectObjectUnaryOperator<Short2ByteMap.Entry, Short2ByteMap.Entry> operator) {
+		public Optional<Short2ByteMap.Entry> reduce(ObjectObjectUnaryOperator<Short2ByteMap.Entry, Short2ByteMap.Entry> operator) {
 			Objects.requireNonNull(operator);
 			Short2ByteMap.Entry state = null;
 			boolean empty = true;
@@ -706,21 +713,21 @@ public class ImmutableShort2ByteOpenHashMap extends AbstractShort2ByteMap implem
 				state = operator.apply(state, new BasicEntry(keys[index], values[index]));
 				index = (int)links[index];
 			}
-			return state;
+			return empty ? Optional.empty() : Optional.ofNullable(state);
 		}
 		
 		@Override
-		public Short2ByteMap.Entry findFirst(Predicate<Short2ByteMap.Entry> filter) {
+		public Optional<Short2ByteMap.Entry> findFirst(Predicate<Short2ByteMap.Entry> filter) {
 			Objects.requireNonNull(filter);
-			if(size() <= 0) return null;
+			if(size() <= 0) return Optional.empty();
 			BasicEntry entry = new BasicEntry();
 			int index = firstIndex;
 			while(index != -1) {
 				entry.set(keys[index], values[index]);
-				if(filter.test(entry)) return entry;
+				if(filter.test(entry)) return Optional.ofNullable(entry);
 				index = (int)links[index];
 			}
-			return null;
+			return Optional.empty();
 		}
 		
 		@Override
@@ -782,6 +789,12 @@ public class ImmutableShort2ByteOpenHashMap extends AbstractShort2ByteMap implem
 		public boolean add(short o) {
 			throw new UnsupportedOperationException();
 		}
+		
+		@Override
+		public void addFirst(short o) { throw new UnsupportedOperationException(); }
+		
+		@Override
+		public void addLast(short o) { throw new UnsupportedOperationException(); }
 		
 		@Override
 		public boolean addAndMoveToFirst(short o) { throw new UnsupportedOperationException(); }
@@ -918,7 +931,7 @@ public class ImmutableShort2ByteOpenHashMap extends AbstractShort2ByteMap implem
 		}
 		
 		@Override
-		public short reduce(ShortShortUnaryOperator operator) {
+		public OptionalShort reduce(ShortShortUnaryOperator operator) {
 			Objects.requireNonNull(operator);
 			short state = (short)0;
 			boolean empty = true;
@@ -933,19 +946,19 @@ public class ImmutableShort2ByteOpenHashMap extends AbstractShort2ByteMap implem
 				state = operator.applyAsShort(state, keys[index]);
 				index = (int)links[index];
 			}
-			return state;
+			return empty ? OptionalShort.empty() : OptionalShort.of(state);
 		}
 		
 		@Override
-		public short findFirst(ShortPredicate filter) {
+		public OptionalShort findFirst(ShortPredicate filter) {
 			Objects.requireNonNull(filter);
-			if(size() <= 0) return (short)0;
+			if(size() <= 0) return OptionalShort.empty();
 			int index = firstIndex;
 			while(index != -1){
-				if(filter.test(keys[index])) return keys[index];
+				if(filter.test(keys[index])) return OptionalShort.of(keys[index]);
 				index = (int)links[index];
 			}
-			return (short)0;
+			return OptionalShort.empty();
 		}
 		
 		@Override
@@ -1072,7 +1085,7 @@ public class ImmutableShort2ByteOpenHashMap extends AbstractShort2ByteMap implem
 		}
 		
 		@Override
-		public byte reduce(ByteByteUnaryOperator operator) {
+		public OptionalByte reduce(ByteByteUnaryOperator operator) {
 			Objects.requireNonNull(operator);
 			byte state = (byte)0;
 			boolean empty = true;
@@ -1087,19 +1100,19 @@ public class ImmutableShort2ByteOpenHashMap extends AbstractShort2ByteMap implem
 				state = operator.applyAsByte(state, values[index]);
 				index = (int)links[index];
 			}
-			return state;
+			return empty ? OptionalByte.empty() : OptionalByte.of(state);
 		}
 		
 		@Override
-		public byte findFirst(BytePredicate filter) {
+		public OptionalByte findFirst(BytePredicate filter) {
 			Objects.requireNonNull(filter);
-			if(size() <= 0) return (byte)0;
+			if(size() <= 0) return OptionalByte.empty();
 			int index = firstIndex;
 			while(index != -1){
-				if(filter.test(values[index])) return values[index];
+				if(filter.test(values[index])) return OptionalByte.of(values[index]);
 				index = (int)links[index];
 			}
-			return (byte)0;
+			return OptionalByte.empty();
 		}
 		
 		@Override

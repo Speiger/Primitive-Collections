@@ -4,6 +4,7 @@ import java.util.Collections;
 import java.util.Map;
 import java.util.Comparator;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.NoSuchElementException;
 import java.util.function.Consumer;
 import java.util.function.BiFunction;
@@ -956,7 +957,7 @@ public class Object2ObjectAVLTreeMap<T, V> extends AbstractObject2ObjectMap<T, V
 		}
 		
 		@Override
-		public T reduce(ObjectObjectUnaryOperator<T, T> operator) {
+		public Optional<T> reduce(ObjectObjectUnaryOperator<T, T> operator) {
 			Objects.requireNonNull(operator);
 			T state = null;
 			boolean empty = true;
@@ -968,15 +969,15 @@ public class Object2ObjectAVLTreeMap<T, V> extends AbstractObject2ObjectMap<T, V
 				}
 				state = operator.apply(state, entry.key);
 			}
-			return state;
+			return empty ? Optional.empty() : Optional.ofNullable(state);
 		}
 		
 		@Override
-		public T findFirst(Predicate<T> filter) {
+		public Optional<T> findFirst(Predicate<T> filter) {
 			Objects.requireNonNull(filter);
 			for(Node<T, V> entry = start(), end = end();entry != null && (end == null || (end != previous(entry)));entry = next(entry))
-				if(filter.test(entry.key)) return entry.key;
-			return null;
+				if(filter.test(entry.key)) return Optional.ofNullable(entry.key);
+			return Optional.empty();
 		}
 		
 		@Override
@@ -1598,7 +1599,7 @@ public class Object2ObjectAVLTreeMap<T, V> extends AbstractObject2ObjectMap<T, V
 			}
 			
 			@Override
-			public Object2ObjectMap.Entry<T, V> reduce(ObjectObjectUnaryOperator<Object2ObjectMap.Entry<T, V>, Object2ObjectMap.Entry<T, V>> operator) {
+			public Optional<Object2ObjectMap.Entry<T, V>> reduce(ObjectObjectUnaryOperator<Object2ObjectMap.Entry<T, V>, Object2ObjectMap.Entry<T, V>> operator) {
 				Objects.requireNonNull(operator);
 				Object2ObjectMap.Entry<T, V> state = null;
 				boolean empty = true;
@@ -1610,19 +1611,19 @@ public class Object2ObjectAVLTreeMap<T, V> extends AbstractObject2ObjectMap<T, V
 					}
 					state = operator.apply(state, new BasicEntry<>(entry.key, entry.value));
 				}
-				return state;
+				return empty ? Optional.empty() : Optional.ofNullable(state);
 			}
 			
 			@Override
-			public Object2ObjectMap.Entry<T, V> findFirst(Predicate<Object2ObjectMap.Entry<T, V>> filter) {
+			public Optional<Object2ObjectMap.Entry<T, V>> findFirst(Predicate<Object2ObjectMap.Entry<T, V>> filter) {
 				Objects.requireNonNull(filter);
-				if(size() <= 0) return null;
+				if(size() <= 0) return Optional.empty();
 				BasicEntry<T, V> subEntry = new BasicEntry<>();
 				for(Node<T, V> entry = subLowest(), last = subHighest();entry != null && (last == null || last != previous(entry));entry = next(entry)) {
 					subEntry.set(entry.key, entry.value);
-					if(filter.test(subEntry)) return subEntry;
+					if(filter.test(subEntry)) return Optional.ofNullable(subEntry);
 				}
-				return null;
+				return Optional.empty();
 			}
 			
 			@Override
@@ -1717,7 +1718,7 @@ public class Object2ObjectAVLTreeMap<T, V> extends AbstractObject2ObjectMap<T, V
 			}
 			
 			@Override
-			public V reduce(ObjectObjectUnaryOperator<V, V> operator) {
+			public Optional<V> reduce(ObjectObjectUnaryOperator<V, V> operator) {
 				Objects.requireNonNull(operator);
 				V state = null;
 				boolean empty = true;
@@ -1729,15 +1730,15 @@ public class Object2ObjectAVLTreeMap<T, V> extends AbstractObject2ObjectMap<T, V
 					}
 					state = operator.apply(state, entry.value);
 				}
-				return state;
+				return empty ? Optional.empty() : Optional.ofNullable(state);
 			}
 			
 			@Override
-			public V findFirst(Predicate<V> filter) {
+			public Optional<V> findFirst(Predicate<V> filter) {
 				Objects.requireNonNull(filter);
 				for(Node<T, V> entry = subLowest(), last = subHighest();entry != null && (last == null || last != previous(entry));entry = next(entry))
-					if(filter.test(entry.value)) return entry.value;
-				return null;
+					if(filter.test(entry.value)) return Optional.ofNullable(entry.value);
+				return Optional.empty();
 			}
 			
 			@Override
@@ -2053,7 +2054,7 @@ public class Object2ObjectAVLTreeMap<T, V> extends AbstractObject2ObjectMap<T, V
 		}
 		
 		@Override
-		public V reduce(ObjectObjectUnaryOperator<V, V> operator) {
+		public Optional<V> reduce(ObjectObjectUnaryOperator<V, V> operator) {
 			Objects.requireNonNull(operator);
 			V state = null;
 			boolean empty = true;
@@ -2065,15 +2066,15 @@ public class Object2ObjectAVLTreeMap<T, V> extends AbstractObject2ObjectMap<T, V
 				}
 				state = operator.apply(state, entry.value);
 			}
-			return state;
+			return empty ? Optional.empty() : Optional.ofNullable(state);
 		}
 		
 		@Override
-		public V findFirst(Predicate<V> filter) {
+		public Optional<V> findFirst(Predicate<V> filter) {
 			Objects.requireNonNull(filter);
 			for(Node<T, V> entry = first;entry != null;entry = entry.next())
-				if(filter.test(entry.value)) return entry.value;
-			return null;
+				if(filter.test(entry.value)) return Optional.ofNullable(entry.value);
+			return Optional.empty();
 		}
 		
 		@Override
@@ -2214,7 +2215,7 @@ public class Object2ObjectAVLTreeMap<T, V> extends AbstractObject2ObjectMap<T, V
 		}
 		
 		@Override
-		public Object2ObjectMap.Entry<T, V> reduce(ObjectObjectUnaryOperator<Object2ObjectMap.Entry<T, V>, Object2ObjectMap.Entry<T, V>> operator) {
+		public Optional<Object2ObjectMap.Entry<T, V>> reduce(ObjectObjectUnaryOperator<Object2ObjectMap.Entry<T, V>, Object2ObjectMap.Entry<T, V>> operator) {
 			Objects.requireNonNull(operator);
 			Object2ObjectMap.Entry<T, V> state = null;
 			boolean empty = true;
@@ -2226,19 +2227,19 @@ public class Object2ObjectAVLTreeMap<T, V> extends AbstractObject2ObjectMap<T, V
 				}
 				state = operator.apply(state, new BasicEntry<>(entry.key, entry.value));
 			}
-			return state;
+			return empty ? Optional.empty() : Optional.ofNullable(state);
 		}
 		
 		@Override
-		public Object2ObjectMap.Entry<T, V> findFirst(Predicate<Object2ObjectMap.Entry<T, V>> filter) {
+		public Optional<Object2ObjectMap.Entry<T, V>> findFirst(Predicate<Object2ObjectMap.Entry<T, V>> filter) {
 			Objects.requireNonNull(filter);
-			if(size() <= 0) return null;
+			if(size() <= 0) return Optional.empty();
 			BasicEntry<T, V> subEntry = new BasicEntry<>();
 			for(Node<T, V> entry = first;entry != null;entry = entry.next()) {
 				subEntry.set(entry.key, entry.value);
-				if(filter.test(subEntry)) return subEntry;
+				if(filter.test(subEntry)) return Optional.ofNullable(subEntry);
 			}
-			return null;
+			return Optional.empty();
 		}
 		
 		@Override

@@ -4,6 +4,7 @@ import java.util.Arrays;
 import java.util.Map;
 import java.util.NoSuchElementException;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.concurrent.locks.StampedLock;
 import java.util.function.Consumer;
 import java.util.function.Predicate;
@@ -19,6 +20,7 @@ import speiger.src.collections.shorts.functions.consumer.ShortFloatConsumer;
 import speiger.src.collections.shorts.functions.function.Short2FloatFunction;
 import speiger.src.collections.shorts.functions.function.ShortFloatUnaryOperator;
 import speiger.src.collections.shorts.functions.function.ShortShortUnaryOperator;
+import speiger.src.collections.shorts.functions.OptionalShort;
 import speiger.src.collections.shorts.functions.function.ShortPredicate;
 import speiger.src.collections.shorts.maps.abstracts.AbstractShort2FloatMap;
 import speiger.src.collections.shorts.maps.interfaces.Short2FloatMap;
@@ -37,6 +39,7 @@ import speiger.src.collections.floats.functions.FloatConsumer;
 import speiger.src.collections.objects.functions.consumer.ObjectObjectConsumer;
 import speiger.src.collections.objects.functions.consumer.ObjectFloatConsumer;
 import speiger.src.collections.floats.functions.function.FloatPredicate;
+import speiger.src.collections.floats.functions.OptionalFloat;
 import speiger.src.collections.objects.collections.ObjectBidirectionalIterator;
 import speiger.src.collections.objects.sets.AbstractObjectSet;
 import speiger.src.collections.objects.sets.ObjectSet;
@@ -768,7 +771,7 @@ public class Short2FloatConcurrentOpenHashMap extends AbstractShort2FloatMap imp
 		}
 		
 		@Override
-		public Short2FloatMap.Entry reduce(ObjectObjectUnaryOperator<Short2FloatMap.Entry, Short2FloatMap.Entry> operator) {
+		public Optional<Short2FloatMap.Entry> reduce(ObjectObjectUnaryOperator<Short2FloatMap.Entry, Short2FloatMap.Entry> operator) {
 			Objects.requireNonNull(operator);
 			Short2FloatMap.Entry state = null;
 			boolean empty = true;
@@ -792,11 +795,11 @@ public class Short2FloatConcurrentOpenHashMap extends AbstractShort2FloatMap imp
 					seg.unlockRead(stamp);
 				}
 			}
-			return state;
+			return empty ? Optional.empty() : Optional.ofNullable(state);
 		}
 		
 		@Override
-		public Short2FloatMap.Entry findFirst(Predicate<Short2FloatMap.Entry> filter) {
+		public Optional<Short2FloatMap.Entry> findFirst(Predicate<Short2FloatMap.Entry> filter) {
 			Objects.requireNonNull(filter);
 			MapEntry entry = new MapEntry();
 			for(int i = 0,m=segments.length;i<m;i++) {
@@ -806,7 +809,7 @@ public class Short2FloatConcurrentOpenHashMap extends AbstractShort2FloatMap imp
 				try {
 					while(index != -1) {
 						entry.set(index, i);
-						if(filter.test(entry)) return entry;
+						if(filter.test(entry)) return Optional.ofNullable(entry);
 						index = (int)seg.links[index];
 					}
 				}
@@ -814,7 +817,7 @@ public class Short2FloatConcurrentOpenHashMap extends AbstractShort2FloatMap imp
 					seg.unlockRead(stamp);
 				}
 			}
-			return null;
+			return Optional.empty();
 		}
 		
 		@Override
@@ -1075,7 +1078,7 @@ public class Short2FloatConcurrentOpenHashMap extends AbstractShort2FloatMap imp
 		}
 		
 		@Override
-		public short reduce(ShortShortUnaryOperator operator) {
+		public OptionalShort reduce(ShortShortUnaryOperator operator) {
 			Objects.requireNonNull(operator);
 			short state = (short)0;
 			boolean empty = true;
@@ -1099,11 +1102,11 @@ public class Short2FloatConcurrentOpenHashMap extends AbstractShort2FloatMap imp
 					seg.unlockRead(stamp);
 				}
 			}
-			return state;
+			return empty ? OptionalShort.empty() : OptionalShort.of(state);
 		}
 		
 		@Override
-		public short findFirst(ShortPredicate filter) {
+		public OptionalShort findFirst(ShortPredicate filter) {
 			Objects.requireNonNull(filter);
 			for(int i = 0,m=segments.length;i<m;i++) {
 				Segment seg = segments[i];
@@ -1111,7 +1114,7 @@ public class Short2FloatConcurrentOpenHashMap extends AbstractShort2FloatMap imp
 				try {
 					int index = seg.firstIndex;
 					while(index != -1){
-						if(filter.test(seg.keys[index])) return seg.keys[index];
+						if(filter.test(seg.keys[index])) return OptionalShort.of(seg.keys[index]);
 						index = (int)seg.links[index];
 					}
 				}
@@ -1119,7 +1122,7 @@ public class Short2FloatConcurrentOpenHashMap extends AbstractShort2FloatMap imp
 					seg.unlockRead(stamp);
 				}
 			}
-			return (short)0;
+			return OptionalShort.empty();
 		}
 		
 		@Override
@@ -1310,7 +1313,7 @@ public class Short2FloatConcurrentOpenHashMap extends AbstractShort2FloatMap imp
 		}
 		
 		@Override
-		public float reduce(FloatFloatUnaryOperator operator) {
+		public OptionalFloat reduce(FloatFloatUnaryOperator operator) {
 			Objects.requireNonNull(operator);
 			float state = 0F;
 			boolean empty = true;
@@ -1334,20 +1337,20 @@ public class Short2FloatConcurrentOpenHashMap extends AbstractShort2FloatMap imp
 					seg.unlockRead(stamp);
 				}
 			}
-			return state;
+			return empty ? OptionalFloat.empty() : OptionalFloat.of(state);
 		}
 		
 		@Override
-		public float findFirst(FloatPredicate filter) {
+		public OptionalFloat findFirst(FloatPredicate filter) {
 			Objects.requireNonNull(filter);
-			if(size() <= 0) return 0F;
+			if(size() <= 0) return OptionalFloat.empty();
 			for(int i = 0,m=segments.length;i<m;i++) {
 				Segment seg = segments[i];
 				long stamp = seg.readLock();
 				try {
 					int index = seg.firstIndex;
 					while(index != -1){
-						if(filter.test(seg.values[index])) return seg.values[index];
+						if(filter.test(seg.values[index])) return OptionalFloat.of(seg.values[index]);
 						index = (int)seg.links[index];
 					}
 				}
@@ -1355,7 +1358,7 @@ public class Short2FloatConcurrentOpenHashMap extends AbstractShort2FloatMap imp
 					seg.unlockRead(stamp);
 				}
 			}
-			return 0F;
+			return OptionalFloat.empty();
 		}
 		
 		@Override

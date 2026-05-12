@@ -5,6 +5,7 @@ import java.util.Objects;
 import java.util.NoSuchElementException;
 
 import speiger.src.collections.shorts.collections.ShortIterator;
+import speiger.src.collections.shorts.functions.OptionalShort;
 import speiger.src.collections.shorts.functions.ShortComparator;
 import speiger.src.collections.shorts.functions.ShortConsumer;
 import speiger.src.collections.ints.functions.consumer.IntShortConsumer;
@@ -278,17 +279,17 @@ public class ShortArrayFIFOQueue extends AbstractShortPriorityQueue implements S
 	}
 	
 	@Override
-	public short findFirst(ShortPredicate filter) {
+	public OptionalShort findFirst(ShortPredicate filter) {
 		Objects.requireNonNull(filter);
 		for(int i = 0,m=size();i<m;i++) {
 			int index = (first + i) % array.length;
 			if(filter.test(array[index])) {
 				short data = array[index];
 				removeIndex(index);
-				return data;
+				return OptionalShort.of(data);
 			}
 		}
-		return (short)0;
+		return OptionalShort.empty();
 	}
 	
 	@Override
@@ -302,7 +303,7 @@ public class ShortArrayFIFOQueue extends AbstractShortPriorityQueue implements S
 	}
 	
 	@Override
-	public short reduce(ShortShortUnaryOperator operator) {
+	public OptionalShort reduce(ShortShortUnaryOperator operator) {
 		Objects.requireNonNull(operator);
 		short state = (short)0;
 		boolean empty = true;
@@ -314,7 +315,7 @@ public class ShortArrayFIFOQueue extends AbstractShortPriorityQueue implements S
 			}
 			state = operator.applyAsShort(state, array[(first + i) % array.length]);
 		}
-		return state;
+		return empty ? OptionalShort.empty() : OptionalShort.of(state);
 	}
 	
 	@Override

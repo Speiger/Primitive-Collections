@@ -264,6 +264,10 @@ public class IMMUTABLE_HASH_SET KEY_GENERIC_TYPE extends ABSTRACT_SET KEY_GENERI
 	@Override
 	public boolean addAll(COLLECTION KEY_GENERIC_TYPE c) { throw new UnsupportedOperationException(); }
 	@Override
+	public void addFirst(KEY_TYPE o) { throw new UnsupportedOperationException(); }
+	@Override
+	public void addLast(KEY_TYPE o) { throw new UnsupportedOperationException(); }
+	@Override
 	public boolean addAndMoveToFirst(KEY_TYPE o) { throw new UnsupportedOperationException(); }
 	@Override
 	public boolean addAndMoveToLast(KEY_TYPE o) { throw new UnsupportedOperationException(); }

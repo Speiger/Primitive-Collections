@@ -63,7 +63,17 @@ public abstract class AbstractIntSet extends AbstractIntCollection implements In
 		public IntBidirectionalIterator reverseIterator() {
 			return set.iterator();
 		}
-
+		
+		@Override
+		public void addFirst(int o) {
+			set.addLast(o);
+		}
+		
+		@Override
+		public void addLast(int o) {
+			set.addFirst(o);
+		}
+		
 		@Override
 		public boolean remove(int o) {
 			return set.remove(o);

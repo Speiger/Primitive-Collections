@@ -9,6 +9,7 @@ import java.util.NoSuchElementException;
 import speiger.src.collections.bytes.collections.ByteCollection;
 import speiger.src.collections.bytes.collections.ByteIterator;
 import speiger.src.collections.bytes.collections.ByteBidirectionalIterator;
+import speiger.src.collections.bytes.functions.OptionalByte;
 import speiger.src.collections.bytes.lists.ByteListIterator;
 import speiger.src.collections.bytes.utils.ByteIterators;
 import speiger.src.collections.bytes.functions.ByteConsumer;
@@ -212,6 +213,46 @@ public class ByteLinkedOpenCustomHashSet extends ByteOpenCustomHashSet implement
 	public ByteLinkedOpenCustomHashSet(ByteIterator iterator, float loadFactor, ByteStrategy strategy) {
 		this(HashUtil.DEFAULT_MIN_CAPACITY, loadFactor, strategy);
 		while(iterator.hasNext()) add(iterator.nextByte());
+	}
+	
+	@Override
+	public void addFirst(byte o) {
+		if(strategy.equals(o, (byte)0)) {
+			if(containsNull) return;
+			containsNull = true;
+			onNodeAdded(nullIndex);
+			moveToFirstIndex(nullIndex);
+		}
+		else {
+			int pos = HashUtil.mix(strategy.hashCode(o)) & mask;
+			while(!strategy.equals(keys[pos], (byte)0)) {
+				if(strategy.equals(keys[pos], o)) return;
+				pos = ++pos & mask;
+			}
+			keys[pos] = o;
+			onNodeAdded(pos);
+			moveToFirstIndex(pos);
+		}
+		if(size++ >= maxFill) rehash(HashUtil.arraySize(size+1, loadFactor));
+	}
+	
+	@Override
+	public void addLast(byte o) {
+		if(strategy.equals(o, (byte)0)) {
+			if(containsNull) return;
+			containsNull = true;
+			onNodeAdded(nullIndex);
+		}
+		else {
+			int pos = HashUtil.mix(strategy.hashCode(o)) & mask;
+			while(!strategy.equals(keys[pos], (byte)0)) {
+				if(strategy.equals(keys[pos], o)) return;
+				pos = ++pos & mask;
+			}
+			keys[pos] = o;
+			onNodeAdded(pos);
+		}
+		if(size++ >= maxFill) rehash(HashUtil.arraySize(size+1, loadFactor));
 	}
 	
 	@Override
@@ -618,7 +659,7 @@ public class ByteLinkedOpenCustomHashSet extends ByteOpenCustomHashSet implement
 	}
 	
 	@Override
-	public byte reduce(ByteByteUnaryOperator operator) {
+	public OptionalByte reduce(ByteByteUnaryOperator operator) {
 		Objects.requireNonNull(operator);
 		byte state = (byte)0;
 		boolean empty = true;
@@ -631,18 +672,18 @@ public class ByteLinkedOpenCustomHashSet extends ByteOpenCustomHashSet implement
 			else state = operator.applyAsByte(state, keys[index]);
 			index = (int)links[index];
 		}
-		return state;
+		return empty ? OptionalByte.empty() : OptionalByte.of(state);
 	}
 	
 	@Override
-	public byte findFirst(BytePredicate filter) {
+	public OptionalByte findFirst(BytePredicate filter) {
 		Objects.requireNonNull(filter);
 		int index = firstIndex;
 		while(index != -1) {
-			if(filter.test(keys[index])) return keys[index];
+			if(filter.test(keys[index])) return OptionalByte.of(keys[index]);
 			index = (int)links[index];
 		}
-		return (byte)0;
+		return OptionalByte.empty();
 	}
 	
 	@Override

@@ -4,6 +4,7 @@ import java.nio.IntBuffer;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.Objects;
+import java.util.OptionalInt;
 import java.util.NoSuchElementException;
 import java.util.Spliterator;
 import java.util.Spliterator.OfInt;
@@ -429,12 +430,12 @@ public class IntLinkedList extends AbstractIntList implements IntPriorityDequeue
 	}
 	
 	@Override
-	public int findFirst(IntPredicate filter) {
+	public OptionalInt findFirst(IntPredicate filter) {
 		Objects.requireNonNull(filter);
 		for(Entry entry = first;entry != null;entry = entry.next) {
-			if(filter.test(entry.value)) return entry.value;
+			if(filter.test(entry.value)) return OptionalInt.of(entry.value);
 		}
-		return 0;
+		return OptionalInt.empty();
 	}
 	
 	@Override
@@ -448,7 +449,7 @@ public class IntLinkedList extends AbstractIntList implements IntPriorityDequeue
 	}
 	
 	@Override
-	public int reduce(IntIntUnaryOperator operator) {
+	public OptionalInt reduce(IntIntUnaryOperator operator) {
 		Objects.requireNonNull(operator);
 		int state = 0;
 		boolean empty = true;
@@ -460,7 +461,7 @@ public class IntLinkedList extends AbstractIntList implements IntPriorityDequeue
 			}
 			state = operator.applyAsInt(state, entry.value);
 		}
-		return state;
+		return empty ? OptionalInt.empty() : OptionalInt.of(state);
 	}
 	
 	@Override

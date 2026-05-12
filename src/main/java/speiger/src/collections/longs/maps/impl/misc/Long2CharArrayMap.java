@@ -4,10 +4,12 @@ import java.util.Arrays;
 import java.util.Map;
 import java.util.NoSuchElementException;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.function.Consumer;
 import java.util.function.BiFunction;
 import java.util.function.Predicate;
 import java.util.function.LongPredicate;
+import java.util.OptionalLong;
 
 import speiger.src.collections.longs.collections.LongBidirectionalIterator;
 import speiger.src.collections.longs.functions.LongConsumer;
@@ -35,6 +37,7 @@ import speiger.src.collections.chars.lists.CharListIterator;
 import speiger.src.collections.objects.functions.consumer.ObjectObjectConsumer;
 
 import speiger.src.collections.chars.functions.function.CharPredicate;
+import speiger.src.collections.chars.functions.OptionalChar;
 import speiger.src.collections.objects.collections.ObjectIterator;
 import speiger.src.collections.objects.functions.function.ObjectObjectUnaryOperator;
 import speiger.src.collections.objects.collections.ObjectBidirectionalIterator;
@@ -752,6 +755,10 @@ public class Long2CharArrayMap extends AbstractLong2CharMap implements Long2Char
 	
 	private class MapEntrySet extends AbstractObjectSet<Long2CharMap.Entry> implements Long2CharOrderedMap.FastOrderedSet {
 		@Override
+		public void addFirst(Long2CharMap.Entry o) { throw new UnsupportedOperationException(); }
+		@Override
+		public void addLast(Long2CharMap.Entry o) { throw new UnsupportedOperationException(); }
+		@Override
 		public boolean addAndMoveToFirst(Long2CharMap.Entry o) { throw new UnsupportedOperationException(); }
 		@Override
 		public boolean addAndMoveToLast(Long2CharMap.Entry o) { throw new UnsupportedOperationException(); }
@@ -899,7 +906,7 @@ public class Long2CharArrayMap extends AbstractLong2CharMap implements Long2Char
 		}
 		
 		@Override
-		public Long2CharMap.Entry reduce(ObjectObjectUnaryOperator<Long2CharMap.Entry, Long2CharMap.Entry> operator) {
+		public Optional<Long2CharMap.Entry> reduce(ObjectObjectUnaryOperator<Long2CharMap.Entry, Long2CharMap.Entry> operator) {
 			Objects.requireNonNull(operator);
 			Long2CharMap.Entry state = null;
 			boolean empty = true;
@@ -911,19 +918,19 @@ public class Long2CharArrayMap extends AbstractLong2CharMap implements Long2Char
 				}
 				state = operator.apply(state, new ValueMapEntry(i));
 			}
-			return state;
+			return empty ? Optional.empty() : Optional.ofNullable(state);
 		}
 		
 		@Override
-		public Long2CharMap.Entry findFirst(Predicate<Long2CharMap.Entry> filter) {
+		public Optional<Long2CharMap.Entry> findFirst(Predicate<Long2CharMap.Entry> filter) {
 			Objects.requireNonNull(filter);
-			if(size() <= 0) return null;
+			if(size() <= 0) return Optional.empty();
 			MapEntry entry = new MapEntry();
 			for(int i = 0;i<size;i++) {
 				entry.set(i);
-				if(filter.test(entry)) return entry;
+				if(filter.test(entry)) return Optional.ofNullable(entry);
 			}
-			return null;
+			return Optional.empty();
 		}
 		
 		@Override
@@ -995,6 +1002,10 @@ public class Long2CharArrayMap extends AbstractLong2CharMap implements Long2Char
 		
 		@Override
 		public boolean add(long o) { throw new UnsupportedOperationException(); }
+		@Override
+		public void addFirst(long o) { throw new UnsupportedOperationException(); }
+		@Override
+		public void addLast(long o) { throw new UnsupportedOperationException(); }
 		@Override
 		public boolean addAndMoveToFirst(long o) { throw new UnsupportedOperationException(); }
 		@Override
@@ -1082,7 +1093,7 @@ public class Long2CharArrayMap extends AbstractLong2CharMap implements Long2Char
 		}
 		
 		@Override
-		public long reduce(LongLongUnaryOperator operator) {
+		public OptionalLong reduce(LongLongUnaryOperator operator) {
 			Objects.requireNonNull(operator);
 			long state = 0L;
 			boolean empty = true;
@@ -1094,16 +1105,16 @@ public class Long2CharArrayMap extends AbstractLong2CharMap implements Long2Char
 				}
 				state = operator.applyAsLong(state, keys[i]);
 			}
-			return state;
+			return empty ? OptionalLong.empty() : OptionalLong.of(state);
 		}
 		
 		@Override
-		public long findFirst(LongPredicate filter) {
+		public OptionalLong findFirst(LongPredicate filter) {
 			Objects.requireNonNull(filter);
 			for(int i = 0;i<size;i++) {
-				if(filter.test(keys[i])) return keys[i];
+				if(filter.test(keys[i])) return OptionalLong.of(keys[i]);
 			}
-			return 0L;
+			return OptionalLong.empty();
 		}
 		
 		@Override
@@ -1204,7 +1215,7 @@ public class Long2CharArrayMap extends AbstractLong2CharMap implements Long2Char
 		}
 		
 		@Override
-		public char reduce(CharCharUnaryOperator operator) {
+		public OptionalChar reduce(CharCharUnaryOperator operator) {
 			Objects.requireNonNull(operator);
 			char state = (char)0;
 			boolean empty = true;
@@ -1216,16 +1227,16 @@ public class Long2CharArrayMap extends AbstractLong2CharMap implements Long2Char
 				}
 				state = operator.applyAsChar(state, values[i]);
 			}
-			return state;
+			return empty ? OptionalChar.empty() : OptionalChar.of(state);
 		}
 		
 		@Override
-		public char findFirst(CharPredicate filter) {
+		public OptionalChar findFirst(CharPredicate filter) {
 			Objects.requireNonNull(filter);
 			for(int i = 0;i<size;i++) {
-				if(filter.test(values[i])) return values[i];
+				if(filter.test(values[i])) return OptionalChar.of(values[i]);
 			}
-			return (char)0;
+			return OptionalChar.empty();
 		}
 		
 		@Override

@@ -4,10 +4,12 @@ import java.util.Arrays;
 import java.util.Map;
 import java.util.NoSuchElementException;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.function.Consumer;
 import java.util.function.BiFunction;
 import java.util.function.Predicate;
 import java.util.function.DoublePredicate;
+import java.util.OptionalDouble;
 
 import speiger.src.collections.objects.collections.ObjectBidirectionalIterator;
 import speiger.src.collections.ints.functions.consumer.IntObjectConsumer;
@@ -733,6 +735,10 @@ public class Object2DoubleArrayMap<T> extends AbstractObject2DoubleMap<T> implem
 	
 	private class MapEntrySet extends AbstractObjectSet<Object2DoubleMap.Entry<T>> implements Object2DoubleOrderedMap.FastOrderedSet<T> {
 		@Override
+		public void addFirst(Object2DoubleMap.Entry<T> o) { throw new UnsupportedOperationException(); }
+		@Override
+		public void addLast(Object2DoubleMap.Entry<T> o) { throw new UnsupportedOperationException(); }
+		@Override
 		public boolean addAndMoveToFirst(Object2DoubleMap.Entry<T> o) { throw new UnsupportedOperationException(); }
 		@Override
 		public boolean addAndMoveToLast(Object2DoubleMap.Entry<T> o) { throw new UnsupportedOperationException(); }
@@ -880,7 +886,7 @@ public class Object2DoubleArrayMap<T> extends AbstractObject2DoubleMap<T> implem
 		}
 		
 		@Override
-		public Object2DoubleMap.Entry<T> reduce(ObjectObjectUnaryOperator<Object2DoubleMap.Entry<T>, Object2DoubleMap.Entry<T>> operator) {
+		public Optional<Object2DoubleMap.Entry<T>> reduce(ObjectObjectUnaryOperator<Object2DoubleMap.Entry<T>, Object2DoubleMap.Entry<T>> operator) {
 			Objects.requireNonNull(operator);
 			Object2DoubleMap.Entry<T> state = null;
 			boolean empty = true;
@@ -892,19 +898,19 @@ public class Object2DoubleArrayMap<T> extends AbstractObject2DoubleMap<T> implem
 				}
 				state = operator.apply(state, new ValueMapEntry(i));
 			}
-			return state;
+			return empty ? Optional.empty() : Optional.ofNullable(state);
 		}
 		
 		@Override
-		public Object2DoubleMap.Entry<T> findFirst(Predicate<Object2DoubleMap.Entry<T>> filter) {
+		public Optional<Object2DoubleMap.Entry<T>> findFirst(Predicate<Object2DoubleMap.Entry<T>> filter) {
 			Objects.requireNonNull(filter);
-			if(size() <= 0) return null;
+			if(size() <= 0) return Optional.empty();
 			MapEntry entry = new MapEntry();
 			for(int i = 0;i<size;i++) {
 				entry.set(i);
-				if(filter.test(entry)) return entry;
+				if(filter.test(entry)) return Optional.ofNullable(entry);
 			}
-			return null;
+			return Optional.empty();
 		}
 		
 		@Override
@@ -976,6 +982,10 @@ public class Object2DoubleArrayMap<T> extends AbstractObject2DoubleMap<T> implem
 		
 		@Override
 		public boolean add(T o) { throw new UnsupportedOperationException(); }
+		@Override
+		public void addFirst(T o) { throw new UnsupportedOperationException(); }
+		@Override
+		public void addLast(T o) { throw new UnsupportedOperationException(); }
 		@Override
 		public boolean addAndMoveToFirst(T o) { throw new UnsupportedOperationException(); }
 		@Override
@@ -1063,7 +1073,7 @@ public class Object2DoubleArrayMap<T> extends AbstractObject2DoubleMap<T> implem
 		}
 		
 		@Override
-		public T reduce(ObjectObjectUnaryOperator<T, T> operator) {
+		public Optional<T> reduce(ObjectObjectUnaryOperator<T, T> operator) {
 			Objects.requireNonNull(operator);
 			T state = null;
 			boolean empty = true;
@@ -1075,16 +1085,16 @@ public class Object2DoubleArrayMap<T> extends AbstractObject2DoubleMap<T> implem
 				}
 				state = operator.apply(state, keys[i]);
 			}
-			return state;
+			return empty ? Optional.empty() : Optional.ofNullable(state);
 		}
 		
 		@Override
-		public T findFirst(Predicate<T> filter) {
+		public Optional<T> findFirst(Predicate<T> filter) {
 			Objects.requireNonNull(filter);
 			for(int i = 0;i<size;i++) {
-				if(filter.test(keys[i])) return keys[i];
+				if(filter.test(keys[i])) return Optional.ofNullable(keys[i]);
 			}
-			return null;
+			return Optional.empty();
 		}
 		
 		@Override
@@ -1185,7 +1195,7 @@ public class Object2DoubleArrayMap<T> extends AbstractObject2DoubleMap<T> implem
 		}
 		
 		@Override
-		public double reduce(DoubleDoubleUnaryOperator operator) {
+		public OptionalDouble reduce(DoubleDoubleUnaryOperator operator) {
 			Objects.requireNonNull(operator);
 			double state = 0D;
 			boolean empty = true;
@@ -1197,16 +1207,16 @@ public class Object2DoubleArrayMap<T> extends AbstractObject2DoubleMap<T> implem
 				}
 				state = operator.applyAsDouble(state, values[i]);
 			}
-			return state;
+			return empty ? OptionalDouble.empty() : OptionalDouble.of(state);
 		}
 		
 		@Override
-		public double findFirst(DoublePredicate filter) {
+		public OptionalDouble findFirst(DoublePredicate filter) {
 			Objects.requireNonNull(filter);
 			for(int i = 0;i<size;i++) {
-				if(filter.test(values[i])) return values[i];
+				if(filter.test(values[i])) return OptionalDouble.of(values[i]);
 			}
-			return 0D;
+			return OptionalDouble.empty();
 		}
 		
 		@Override

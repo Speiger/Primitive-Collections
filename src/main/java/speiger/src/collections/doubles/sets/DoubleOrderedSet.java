@@ -1,6 +1,7 @@
 package speiger.src.collections.doubles.sets;
 
 import speiger.src.collections.doubles.collections.DoubleBidirectionalIterator;
+import speiger.src.collections.doubles.collections.DoubleOrderedCollection;
 import speiger.src.collections.doubles.collections.DoubleSplititerator;
 import speiger.src.collections.doubles.utils.DoubleSplititerators;
 import speiger.src.collections.doubles.sets.AbstractDoubleSet.ReversedDoubleOrderedSet;
@@ -13,7 +14,7 @@ import speiger.src.collections.doubles.utils.DoubleSets;
  * This interface provides basic access to such functions while also providing some Sorted/NaivgableSet implementations that still fit into here.
  * 
  */
-public interface DoubleOrderedSet extends DoubleSet
+public interface DoubleOrderedSet extends DoubleSet, DoubleOrderedCollection
 {
 	/**
 	 * A customized add method that allows you to insert into the first index.

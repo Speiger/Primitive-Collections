@@ -1,13 +1,14 @@
 package speiger.src.collections.doubles.utils;
 
 import java.util.function.DoublePredicate;
-
+import java.util.OptionalDouble;
 import speiger.src.collections.doubles.collections.DoubleIterator;
 import speiger.src.collections.doubles.collections.DoubleCollection;
 import speiger.src.collections.doubles.functions.DoubleComparator;
 import speiger.src.collections.doubles.queues.DoublePriorityDequeue;
 import speiger.src.collections.doubles.queues.DoublePriorityQueue;
 import speiger.src.collections.doubles.functions.DoubleConsumer;
+import speiger.src.collections.doubles.functions.function.DoubleDoubleUnaryOperator;
 import speiger.src.collections.objects.functions.consumer.ObjectDoubleConsumer;
 
 /**
@@ -113,7 +114,11 @@ public class DoublePriorityQueues
 		@Override
 		public boolean matchesAll(DoublePredicate filter) { synchronized(mutex) { return queue.matchesAll(filter); } }
 		@Override
-		public double findFirst(DoublePredicate filter) { synchronized(mutex) { return queue.findFirst(filter); } }
+		public OptionalDouble findFirst(DoublePredicate filter) { synchronized(mutex) { return queue.findFirst(filter); } }
+		@Override
+		public double reduce(double identity, DoubleDoubleUnaryOperator operator) { synchronized(mutex) { return queue.reduce(identity, operator); } }
+		@Override
+		public OptionalDouble reduce(DoubleDoubleUnaryOperator operator) { synchronized(mutex) { return queue.reduce(operator); } }
 		@Override
 		public int count(DoublePredicate filter) { synchronized(mutex) { return queue.count(filter); } }
 	}

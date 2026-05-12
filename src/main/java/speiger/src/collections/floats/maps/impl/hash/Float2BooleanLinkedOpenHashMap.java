@@ -4,6 +4,7 @@ import java.util.Arrays;
 import java.util.Map;
 import java.util.NoSuchElementException;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.function.Consumer;
 import java.util.function.BiFunction;
 import java.util.function.Predicate;
@@ -14,6 +15,7 @@ import speiger.src.collections.objects.functions.consumer.ObjectFloatConsumer;
 import speiger.src.collections.ints.functions.consumer.IntFloatConsumer;
 import speiger.src.collections.ints.functions.consumer.IntObjectConsumer;
 import speiger.src.collections.ints.functions.consumer.IntBooleanConsumer;
+import speiger.src.collections.floats.functions.OptionalFloat;
 import speiger.src.collections.floats.functions.function.FloatPredicate;
 import speiger.src.collections.floats.functions.consumer.FloatBooleanConsumer;
 import speiger.src.collections.floats.functions.function.FloatFloatUnaryOperator;
@@ -32,6 +34,7 @@ import speiger.src.collections.objects.functions.consumer.ObjectObjectConsumer;
 import speiger.src.collections.objects.functions.consumer.ObjectBooleanConsumer;
 
 import speiger.src.collections.booleans.functions.function.BooleanPredicate;
+import speiger.src.collections.booleans.functions.OptionalBoolean;
 import speiger.src.collections.objects.functions.function.ObjectObjectUnaryOperator;
 import speiger.src.collections.objects.collections.ObjectBidirectionalIterator;
 import speiger.src.collections.objects.lists.ObjectListIterator;
@@ -670,6 +673,10 @@ public class Float2BooleanLinkedOpenHashMap extends Float2BooleanOpenHashMap imp
 	
 	private class MapEntrySet extends AbstractObjectSet<Float2BooleanMap.Entry> implements Float2BooleanOrderedMap.FastOrderedSet {
 		@Override
+		public void addFirst(Float2BooleanMap.Entry o) { throw new UnsupportedOperationException(); }
+		@Override
+		public void addLast(Float2BooleanMap.Entry o) { throw new UnsupportedOperationException(); }
+		@Override
 		public boolean addAndMoveToFirst(Float2BooleanMap.Entry o) { throw new UnsupportedOperationException(); }
 		@Override
 		public boolean addAndMoveToLast(Float2BooleanMap.Entry o) { throw new UnsupportedOperationException(); }
@@ -834,7 +841,7 @@ public class Float2BooleanLinkedOpenHashMap extends Float2BooleanOpenHashMap imp
 		}
 		
 		@Override
-		public Float2BooleanMap.Entry reduce(ObjectObjectUnaryOperator<Float2BooleanMap.Entry, Float2BooleanMap.Entry> operator) {
+		public Optional<Float2BooleanMap.Entry> reduce(ObjectObjectUnaryOperator<Float2BooleanMap.Entry, Float2BooleanMap.Entry> operator) {
 			Objects.requireNonNull(operator);
 			Float2BooleanMap.Entry state = null;
 			boolean empty = true;
@@ -849,21 +856,21 @@ public class Float2BooleanLinkedOpenHashMap extends Float2BooleanOpenHashMap imp
 				state = operator.apply(state, new ValueMapEntry(index));
 				index = (int)links[index];
 			}
-			return state;
+			return empty ? Optional.empty() : Optional.ofNullable(state);
 		}
 		
 		@Override
-		public Float2BooleanMap.Entry findFirst(Predicate<Float2BooleanMap.Entry> filter) {
+		public Optional<Float2BooleanMap.Entry> findFirst(Predicate<Float2BooleanMap.Entry> filter) {
 			Objects.requireNonNull(filter);
-			if(size() <= 0) return null;
+			if(size() <= 0) return Optional.empty();
 			MapEntry entry = new MapEntry();
 			int index = firstIndex;
 			while(index != -1) {
 				entry.set(index);
-				if(filter.test(entry)) return entry;
+				if(filter.test(entry)) return Optional.ofNullable(entry);
 				index = (int)links[index];
 			}
-			return null;
+			return Optional.empty();
 		}
 		
 		@Override
@@ -939,6 +946,12 @@ public class Float2BooleanLinkedOpenHashMap extends Float2BooleanOpenHashMap imp
 		
 		@Override
 		public boolean add(float o) { throw new UnsupportedOperationException(); }
+
+		@Override
+		public void addFirst(float o) { throw new UnsupportedOperationException(); }
+		
+		@Override
+		public void addLast(float o) { throw new UnsupportedOperationException(); }
 		
 		@Override
 		public boolean addAndMoveToFirst(float o) { throw new UnsupportedOperationException(); }
@@ -1085,7 +1098,7 @@ public class Float2BooleanLinkedOpenHashMap extends Float2BooleanOpenHashMap imp
 		}
 		
 		@Override
-		public float reduce(FloatFloatUnaryOperator operator) {
+		public OptionalFloat reduce(FloatFloatUnaryOperator operator) {
 			Objects.requireNonNull(operator);
 			float state = 0F;
 			boolean empty = true;
@@ -1100,19 +1113,19 @@ public class Float2BooleanLinkedOpenHashMap extends Float2BooleanOpenHashMap imp
 				state = operator.applyAsFloat(state, keys[index]);
 				index = (int)links[index];
 			}
-			return state;
+			return empty ? OptionalFloat.empty() : OptionalFloat.of(state);
 		}
 		
 		@Override
-		public float findFirst(FloatPredicate filter) {
+		public OptionalFloat findFirst(FloatPredicate filter) {
 			Objects.requireNonNull(filter);
-			if(size() <= 0) return 0F;
+			if(size() <= 0) return OptionalFloat.empty();
 			int index = firstIndex;
 			while(index != -1){
-				if(filter.test(keys[index])) return keys[index];
+				if(filter.test(keys[index])) return OptionalFloat.of(keys[index]);
 				index = (int)links[index];
 			}
-			return 0F;
+			return OptionalFloat.empty();
 		}
 		
 		@Override
@@ -1248,7 +1261,7 @@ public class Float2BooleanLinkedOpenHashMap extends Float2BooleanOpenHashMap imp
 		}
 		
 		@Override
-		public boolean reduce(BooleanBooleanUnaryOperator operator) {
+		public OptionalBoolean reduce(BooleanBooleanUnaryOperator operator) {
 			Objects.requireNonNull(operator);
 			boolean state = false;
 			boolean empty = true;
@@ -1263,19 +1276,19 @@ public class Float2BooleanLinkedOpenHashMap extends Float2BooleanOpenHashMap imp
 				state = operator.applyAsBoolean(state, values[index]);
 				index = (int)links[index];
 			}
-			return state;
+			return empty ? OptionalBoolean.empty() : OptionalBoolean.of(state);
 		}
 		
 		@Override
-		public boolean findFirst(BooleanPredicate filter) {
+		public OptionalBoolean findFirst(BooleanPredicate filter) {
 			Objects.requireNonNull(filter);
-			if(size() <= 0) return false;
+			if(size() <= 0) return OptionalBoolean.empty();
 			int index = firstIndex;
 			while(index != -1){
-				if(filter.test(values[index])) return values[index];
+				if(filter.test(values[index])) return OptionalBoolean.of(values[index]);
 				index = (int)links[index];
 			}
-			return false;
+			return OptionalBoolean.empty();
 		}
 		
 		@Override

@@ -1,13 +1,14 @@
 package speiger.src.collections.chars.utils;
 
-
 import speiger.src.collections.chars.collections.CharIterator;
 import speiger.src.collections.chars.collections.CharCollection;
 import speiger.src.collections.chars.functions.CharComparator;
+import speiger.src.collections.chars.functions.OptionalChar;
 import speiger.src.collections.chars.queues.CharPriorityDequeue;
 import speiger.src.collections.chars.queues.CharPriorityQueue;
 import speiger.src.collections.chars.functions.CharConsumer;
 import speiger.src.collections.chars.functions.function.CharPredicate;
+import speiger.src.collections.chars.functions.function.CharCharUnaryOperator;
 import speiger.src.collections.objects.functions.consumer.ObjectCharConsumer;
 
 /**
@@ -113,7 +114,11 @@ public class CharPriorityQueues
 		@Override
 		public boolean matchesAll(CharPredicate filter) { synchronized(mutex) { return queue.matchesAll(filter); } }
 		@Override
-		public char findFirst(CharPredicate filter) { synchronized(mutex) { return queue.findFirst(filter); } }
+		public OptionalChar findFirst(CharPredicate filter) { synchronized(mutex) { return queue.findFirst(filter); } }
+		@Override
+		public char reduce(char identity, CharCharUnaryOperator operator) { synchronized(mutex) { return queue.reduce(identity, operator); } }
+		@Override
+		public OptionalChar reduce(CharCharUnaryOperator operator) { synchronized(mutex) { return queue.reduce(operator); } }
 		@Override
 		public int count(CharPredicate filter) { synchronized(mutex) { return queue.count(filter); } }
 	}

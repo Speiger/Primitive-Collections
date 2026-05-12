@@ -3,6 +3,7 @@ package speiger.src.collections.chars.maps.impl.tree;
 import java.util.Collections;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.NoSuchElementException;
 import java.util.function.Consumer;
 import java.util.function.BiFunction;
@@ -17,6 +18,7 @@ import speiger.src.collections.ints.functions.consumer.IntCharConsumer;
 import speiger.src.collections.ints.functions.consumer.IntObjectConsumer;
 import speiger.src.collections.chars.functions.function.CharFunction;
 import speiger.src.collections.chars.functions.consumer.CharObjectConsumer;
+import speiger.src.collections.chars.functions.OptionalChar;
 import speiger.src.collections.chars.functions.function.CharPredicate;
 import speiger.src.collections.chars.functions.function.CharObjectUnaryOperator;
 import speiger.src.collections.chars.functions.function.CharCharUnaryOperator;
@@ -1017,7 +1019,7 @@ public class Char2ObjectAVLTreeMap<V> extends AbstractChar2ObjectMap<V> implemen
 		}
 		
 		@Override
-		public char reduce(CharCharUnaryOperator operator) {
+		public OptionalChar reduce(CharCharUnaryOperator operator) {
 			Objects.requireNonNull(operator);
 			char state = (char)0;
 			boolean empty = true;
@@ -1029,15 +1031,15 @@ public class Char2ObjectAVLTreeMap<V> extends AbstractChar2ObjectMap<V> implemen
 				}
 				state = operator.applyAsChar(state, entry.key);
 			}
-			return state;
+			return empty ? OptionalChar.empty() : OptionalChar.of(state);
 		}
 		
 		@Override
-		public char findFirst(CharPredicate filter) {
+		public OptionalChar findFirst(CharPredicate filter) {
 			Objects.requireNonNull(filter);
 			for(Node<V> entry = start(), end = end();entry != null && (end == null || (end != previous(entry)));entry = next(entry))
-				if(filter.test(entry.key)) return entry.key;
-			return (char)0;
+				if(filter.test(entry.key)) return OptionalChar.of(entry.key);
+			return OptionalChar.empty();
 		}
 		
 		@Override
@@ -1664,7 +1666,7 @@ public class Char2ObjectAVLTreeMap<V> extends AbstractChar2ObjectMap<V> implemen
 			}
 			
 			@Override
-			public Char2ObjectMap.Entry<V> reduce(ObjectObjectUnaryOperator<Char2ObjectMap.Entry<V>, Char2ObjectMap.Entry<V>> operator) {
+			public Optional<Char2ObjectMap.Entry<V>> reduce(ObjectObjectUnaryOperator<Char2ObjectMap.Entry<V>, Char2ObjectMap.Entry<V>> operator) {
 				Objects.requireNonNull(operator);
 				Char2ObjectMap.Entry<V> state = null;
 				boolean empty = true;
@@ -1676,19 +1678,19 @@ public class Char2ObjectAVLTreeMap<V> extends AbstractChar2ObjectMap<V> implemen
 					}
 					state = operator.apply(state, new BasicEntry<>(entry.key, entry.value));
 				}
-				return state;
+				return empty ? Optional.empty() : Optional.ofNullable(state);
 			}
 			
 			@Override
-			public Char2ObjectMap.Entry<V> findFirst(Predicate<Char2ObjectMap.Entry<V>> filter) {
+			public Optional<Char2ObjectMap.Entry<V>> findFirst(Predicate<Char2ObjectMap.Entry<V>> filter) {
 				Objects.requireNonNull(filter);
-				if(size() <= 0) return null;
+				if(size() <= 0) return Optional.empty();
 				BasicEntry<V> subEntry = new BasicEntry<>();
 				for(Node<V> entry = subLowest(), last = subHighest();entry != null && (last == null || last != previous(entry));entry = next(entry)) {
 					subEntry.set(entry.key, entry.value);
-					if(filter.test(subEntry)) return subEntry;
+					if(filter.test(subEntry)) return Optional.ofNullable(subEntry);
 				}
-				return null;
+				return Optional.empty();
 			}
 			
 			@Override
@@ -1783,7 +1785,7 @@ public class Char2ObjectAVLTreeMap<V> extends AbstractChar2ObjectMap<V> implemen
 			}
 			
 			@Override
-			public V reduce(ObjectObjectUnaryOperator<V, V> operator) {
+			public Optional<V> reduce(ObjectObjectUnaryOperator<V, V> operator) {
 				Objects.requireNonNull(operator);
 				V state = null;
 				boolean empty = true;
@@ -1795,15 +1797,15 @@ public class Char2ObjectAVLTreeMap<V> extends AbstractChar2ObjectMap<V> implemen
 					}
 					state = operator.apply(state, entry.value);
 				}
-				return state;
+				return empty ? Optional.empty() : Optional.ofNullable(state);
 			}
 			
 			@Override
-			public V findFirst(Predicate<V> filter) {
+			public Optional<V> findFirst(Predicate<V> filter) {
 				Objects.requireNonNull(filter);
 				for(Node<V> entry = subLowest(), last = subHighest();entry != null && (last == null || last != previous(entry));entry = next(entry))
-					if(filter.test(entry.value)) return entry.value;
-				return null;
+					if(filter.test(entry.value)) return Optional.ofNullable(entry.value);
+				return Optional.empty();
 			}
 			
 			@Override
@@ -2119,7 +2121,7 @@ public class Char2ObjectAVLTreeMap<V> extends AbstractChar2ObjectMap<V> implemen
 		}
 		
 		@Override
-		public V reduce(ObjectObjectUnaryOperator<V, V> operator) {
+		public Optional<V> reduce(ObjectObjectUnaryOperator<V, V> operator) {
 			Objects.requireNonNull(operator);
 			V state = null;
 			boolean empty = true;
@@ -2131,15 +2133,15 @@ public class Char2ObjectAVLTreeMap<V> extends AbstractChar2ObjectMap<V> implemen
 				}
 				state = operator.apply(state, entry.value);
 			}
-			return state;
+			return empty ? Optional.empty() : Optional.ofNullable(state);
 		}
 		
 		@Override
-		public V findFirst(Predicate<V> filter) {
+		public Optional<V> findFirst(Predicate<V> filter) {
 			Objects.requireNonNull(filter);
 			for(Node<V> entry = first;entry != null;entry = entry.next())
-				if(filter.test(entry.value)) return entry.value;
-			return null;
+				if(filter.test(entry.value)) return Optional.ofNullable(entry.value);
+			return Optional.empty();
 		}
 		
 		@Override
@@ -2280,7 +2282,7 @@ public class Char2ObjectAVLTreeMap<V> extends AbstractChar2ObjectMap<V> implemen
 		}
 		
 		@Override
-		public Char2ObjectMap.Entry<V> reduce(ObjectObjectUnaryOperator<Char2ObjectMap.Entry<V>, Char2ObjectMap.Entry<V>> operator) {
+		public Optional<Char2ObjectMap.Entry<V>> reduce(ObjectObjectUnaryOperator<Char2ObjectMap.Entry<V>, Char2ObjectMap.Entry<V>> operator) {
 			Objects.requireNonNull(operator);
 			Char2ObjectMap.Entry<V> state = null;
 			boolean empty = true;
@@ -2292,19 +2294,19 @@ public class Char2ObjectAVLTreeMap<V> extends AbstractChar2ObjectMap<V> implemen
 				}
 				state = operator.apply(state, new BasicEntry<>(entry.key, entry.value));
 			}
-			return state;
+			return empty ? Optional.empty() : Optional.ofNullable(state);
 		}
 		
 		@Override
-		public Char2ObjectMap.Entry<V> findFirst(Predicate<Char2ObjectMap.Entry<V>> filter) {
+		public Optional<Char2ObjectMap.Entry<V>> findFirst(Predicate<Char2ObjectMap.Entry<V>> filter) {
 			Objects.requireNonNull(filter);
-			if(size() <= 0) return null;
+			if(size() <= 0) return Optional.empty();
 			BasicEntry<V> subEntry = new BasicEntry<>();
 			for(Node<V> entry = first;entry != null;entry = entry.next()) {
 				subEntry.set(entry.key, entry.value);
-				if(filter.test(subEntry)) return subEntry;
+				if(filter.test(subEntry)) return Optional.ofNullable(subEntry);
 			}
-			return null;
+			return Optional.empty();
 		}
 		
 		@Override

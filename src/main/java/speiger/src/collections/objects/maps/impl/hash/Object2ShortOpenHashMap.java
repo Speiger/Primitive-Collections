@@ -5,6 +5,7 @@ import java.util.ConcurrentModificationException;
 import java.util.Map;
 import java.util.NoSuchElementException;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.function.Consumer;
 import java.util.function.BiFunction;
 import java.util.function.Predicate;
@@ -27,6 +28,7 @@ import speiger.src.collections.shorts.functions.ShortConsumer;
 import speiger.src.collections.objects.functions.consumer.ObjectObjectConsumer;
 
 import speiger.src.collections.shorts.functions.function.ShortPredicate;
+import speiger.src.collections.shorts.functions.OptionalShort;
 import speiger.src.collections.objects.collections.ObjectIterator;
 import speiger.src.collections.objects.sets.AbstractObjectSet;
 import speiger.src.collections.objects.sets.ObjectSet;
@@ -895,7 +897,7 @@ public class Object2ShortOpenHashMap<T> extends AbstractObject2ShortMap<T> imple
 		}
 		
 		@Override
-		public Object2ShortMap.Entry<T> reduce(ObjectObjectUnaryOperator<Object2ShortMap.Entry<T>, Object2ShortMap.Entry<T>> operator) {
+		public Optional<Object2ShortMap.Entry<T>> reduce(ObjectObjectUnaryOperator<Object2ShortMap.Entry<T>, Object2ShortMap.Entry<T>> operator) {
 			Objects.requireNonNull(operator);
 			Object2ShortMap.Entry<T> state = null;
 			boolean empty = true;
@@ -912,25 +914,25 @@ public class Object2ShortOpenHashMap<T> extends AbstractObject2ShortMap<T> imple
 				}
 				state = operator.apply(state, new ValueMapEntry(i));
 			}
-			return state;
+			return empty ? Optional.empty() : Optional.ofNullable(state);
 		}
 		
 		@Override
-		public Object2ShortMap.Entry<T> findFirst(Predicate<Object2ShortMap.Entry<T>> filter) {
+		public Optional<Object2ShortMap.Entry<T>> findFirst(Predicate<Object2ShortMap.Entry<T>> filter) {
 			Objects.requireNonNull(filter);
-			if(size() <= 0) return null;
+			if(size() <= 0) return Optional.empty();
 			MapEntry entry = new MapEntry();
 			if(containsNull) {
 				entry.set(nullIndex);
-				if(filter.test(entry)) return entry;
+				if(filter.test(entry)) return Optional.ofNullable(entry);
 			}
 			for(int i = nullIndex-1;i>=0;i--) {
 				if(keys[i] != null) {
 					entry.set(i);
-					if(filter.test(entry)) return entry;
+					if(filter.test(entry)) return Optional.ofNullable(entry);
 				}
 			}
-			return null;
+			return Optional.empty();
 		}
 		
 		@Override
@@ -1102,7 +1104,7 @@ public class Object2ShortOpenHashMap<T> extends AbstractObject2ShortMap<T> imple
 		}
 		
 		@Override
-		public T reduce(ObjectObjectUnaryOperator<T, T> operator) {
+		public Optional<T> reduce(ObjectObjectUnaryOperator<T, T> operator) {
 			Objects.requireNonNull(operator);
 			T state = null;
 			boolean empty = true;
@@ -1119,18 +1121,18 @@ public class Object2ShortOpenHashMap<T> extends AbstractObject2ShortMap<T> imple
 				}
 				state = operator.apply(state, keys[i]);
 			}
-			return state;
+			return empty ? Optional.empty() : Optional.ofNullable(state);
 		}
 		
 		@Override
-		public T findFirst(Predicate<T> filter) {
+		public Optional<T> findFirst(Predicate<T> filter) {
 			Objects.requireNonNull(filter);
-			if(size() <= 0) return null;
-			if(containsNull && filter.test(keys[nullIndex])) return keys[nullIndex];
+			if(size() <= 0) return Optional.empty();
+			if(containsNull && filter.test(keys[nullIndex])) return Optional.ofNullable(keys[nullIndex]);
 			for(int i = nullIndex-1;i>=0;i--) {
-				if(keys[i] != null && filter.test(keys[i])) return keys[i];
+				if(keys[i] != null && filter.test(keys[i])) return Optional.ofNullable(keys[i]);
 			}
-			return null;
+			return Optional.empty();
 		}
 		
 		@Override
@@ -1245,7 +1247,7 @@ public class Object2ShortOpenHashMap<T> extends AbstractObject2ShortMap<T> imple
 		}
 		
 		@Override
-		public short reduce(ShortShortUnaryOperator operator) {
+		public OptionalShort reduce(ShortShortUnaryOperator operator) {
 			Objects.requireNonNull(operator);
 			short state = (short)0;
 			boolean empty = true;
@@ -1262,18 +1264,18 @@ public class Object2ShortOpenHashMap<T> extends AbstractObject2ShortMap<T> imple
 				}
 				state = operator.applyAsShort(state, values[i]);
 			}
-			return state;
+			return empty ? OptionalShort.empty() : OptionalShort.of(state);
 		}
 		
 		@Override
-		public short findFirst(ShortPredicate filter) {
+		public OptionalShort findFirst(ShortPredicate filter) {
 			Objects.requireNonNull(filter);
-			if(size() <= 0) return (short)0;
-			if(containsNull && filter.test(values[nullIndex])) return values[nullIndex];
+			if(size() <= 0) return OptionalShort.empty();
+			if(containsNull && filter.test(values[nullIndex])) return OptionalShort.of(values[nullIndex]);
 			for(int i = nullIndex-1;i>=0;i--) {
-				if(keys[i] != null && filter.test(values[i])) return values[i];
+				if(keys[i] != null && filter.test(values[i])) return OptionalShort.of(values[i]);
 			}
-			return (short)0;
+			return OptionalShort.empty();
 		}
 		
 		@Override

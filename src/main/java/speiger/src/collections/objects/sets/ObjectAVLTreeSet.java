@@ -8,6 +8,7 @@ import java.util.function.BiFunction;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.function.Predicate;
 
 import speiger.src.collections.objects.collections.ObjectBidirectionalIterator;
@@ -333,12 +334,12 @@ public class ObjectAVLTreeSet<T> extends AbstractObjectSet<T> implements ObjectN
 	}
 	
 	@Override
-	public T findFirst(Predicate<T> filter) {
+	public Optional<T> findFirst(Predicate<T> filter) {
 		Objects.requireNonNull(filter);
 		for(Entry<T> entry = first;entry != null;entry = entry.next()) {
-			if(filter.test(entry.key)) return entry.key;
+			if(filter.test(entry.key)) return Optional.ofNullable(entry.key);
 		}
-		return null;
+		return Optional.empty();
 	}
 	
 	@Override
@@ -352,7 +353,7 @@ public class ObjectAVLTreeSet<T> extends AbstractObjectSet<T> implements ObjectN
 	}
 	
 	@Override
-	public T reduce(ObjectObjectUnaryOperator<T, T> operator) {
+	public Optional<T> reduce(ObjectObjectUnaryOperator<T, T> operator) {
 		Objects.requireNonNull(operator);
 		T state = null;
 		boolean empty = true;
@@ -364,7 +365,7 @@ public class ObjectAVLTreeSet<T> extends AbstractObjectSet<T> implements ObjectN
 			}
 			state = operator.apply(state, entry.key);
 		}
-		return state;
+		return empty ? Optional.empty() : Optional.ofNullable(state);
 	}
 	
 	@Override
@@ -1117,7 +1118,7 @@ public class ObjectAVLTreeSet<T> extends AbstractObjectSet<T> implements ObjectN
 		}
 		
 		@Override
-		public T reduce(ObjectObjectUnaryOperator<T, T> operator) {
+		public Optional<T> reduce(ObjectObjectUnaryOperator<T, T> operator) {
 			Objects.requireNonNull(operator);
 			T state = null;
 			boolean empty = true;
@@ -1129,16 +1130,16 @@ public class ObjectAVLTreeSet<T> extends AbstractObjectSet<T> implements ObjectN
 				}
 				state = operator.apply(state, entry.key);
 			}
-			return state;
+			return empty ? Optional.empty() : Optional.ofNullable(state);
 		}
 		
 		@Override
-		public T findFirst(Predicate<T> filter) {
+		public Optional<T> findFirst(Predicate<T> filter) {
 			Objects.requireNonNull(filter);
 			for(Entry<T> entry = start();entry != null && inRange(entry.key);entry = next(entry)) {
-				if(filter.test(entry.key)) return entry.key;
+				if(filter.test(entry.key)) return Optional.ofNullable(entry.key);
 			}
-			return null;
+			return Optional.empty();
 		}
 		
 		@Override

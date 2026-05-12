@@ -15,6 +15,7 @@ import speiger.src.collections.shorts.collections.ShortCollection;
 import speiger.src.collections.shorts.collections.ShortOrderedCollection;
 import speiger.src.collections.shorts.collections.ShortIterator;
 import speiger.src.collections.shorts.functions.ShortComparator;
+import speiger.src.collections.shorts.functions.OptionalShort;
 import speiger.src.collections.objects.utils.ObjectArrays;
 import speiger.src.collections.shorts.functions.ShortConsumer;
 import speiger.src.collections.shorts.functions.function.ShortPredicate;
@@ -758,9 +759,9 @@ public class ShortCollections
 		@Override
 		public short reduce(short identity, ShortShortUnaryOperator operator) { synchronized(mutex) { return c.reduce(identity, operator); } }
 		@Override
-		public short reduce(ShortShortUnaryOperator operator) { synchronized(mutex) { return c.reduce(operator); } }
+		public OptionalShort reduce(ShortShortUnaryOperator operator) { synchronized(mutex) { return c.reduce(operator); } }
 		@Override
-		public short findFirst(ShortPredicate filter) { synchronized(mutex) { return c.findFirst(filter); } }
+		public OptionalShort findFirst(ShortPredicate filter) { synchronized(mutex) { return c.findFirst(filter); } }
 		@Override
 		public int count(ShortPredicate filter) { synchronized(mutex) { return c.count(filter); } }
 	}
@@ -888,9 +889,9 @@ public class ShortCollections
 		@Override
 		public short reduce(short identity, ShortShortUnaryOperator operator) { return c.reduce(identity, operator); }
 		@Override
-		public short reduce(ShortShortUnaryOperator operator) { return c.reduce(operator); }
+		public OptionalShort reduce(ShortShortUnaryOperator operator) { return c.reduce(operator); }
 		@Override
-		public short findFirst(ShortPredicate filter) { return c.findFirst(filter); }
+		public OptionalShort findFirst(ShortPredicate filter) { return c.findFirst(filter); }
 		@Override
 		public int count(ShortPredicate filter) { return c.count(filter); }
 	}

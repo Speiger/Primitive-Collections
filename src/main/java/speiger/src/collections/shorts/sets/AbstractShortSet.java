@@ -63,7 +63,17 @@ public abstract class AbstractShortSet extends AbstractShortCollection implement
 		public ShortBidirectionalIterator reverseIterator() {
 			return set.iterator();
 		}
-
+		
+		@Override
+		public void addFirst(short o) {
+			set.addLast(o);
+		}
+		
+		@Override
+		public void addLast(short o) {
+			set.addFirst(o);
+		}
+		
 		@Override
 		public boolean remove(short o) {
 			return set.remove(o);

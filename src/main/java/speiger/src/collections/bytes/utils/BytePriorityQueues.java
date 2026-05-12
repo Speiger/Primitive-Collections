@@ -1,13 +1,14 @@
 package speiger.src.collections.bytes.utils;
 
-
 import speiger.src.collections.bytes.collections.ByteIterator;
 import speiger.src.collections.bytes.collections.ByteCollection;
 import speiger.src.collections.bytes.functions.ByteComparator;
+import speiger.src.collections.bytes.functions.OptionalByte;
 import speiger.src.collections.bytes.queues.BytePriorityDequeue;
 import speiger.src.collections.bytes.queues.BytePriorityQueue;
 import speiger.src.collections.bytes.functions.ByteConsumer;
 import speiger.src.collections.bytes.functions.function.BytePredicate;
+import speiger.src.collections.bytes.functions.function.ByteByteUnaryOperator;
 import speiger.src.collections.objects.functions.consumer.ObjectByteConsumer;
 
 /**
@@ -113,7 +114,11 @@ public class BytePriorityQueues
 		@Override
 		public boolean matchesAll(BytePredicate filter) { synchronized(mutex) { return queue.matchesAll(filter); } }
 		@Override
-		public byte findFirst(BytePredicate filter) { synchronized(mutex) { return queue.findFirst(filter); } }
+		public OptionalByte findFirst(BytePredicate filter) { synchronized(mutex) { return queue.findFirst(filter); } }
+		@Override
+		public byte reduce(byte identity, ByteByteUnaryOperator operator) { synchronized(mutex) { return queue.reduce(identity, operator); } }
+		@Override
+		public OptionalByte reduce(ByteByteUnaryOperator operator) { synchronized(mutex) { return queue.reduce(operator); } }
 		@Override
 		public int count(BytePredicate filter) { synchronized(mutex) { return queue.count(filter); } }
 	}

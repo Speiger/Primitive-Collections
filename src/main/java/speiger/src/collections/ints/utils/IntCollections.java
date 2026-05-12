@@ -6,6 +6,7 @@ import java.util.ConcurrentModificationException;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 import java.util.Objects;
+import java.util.OptionalInt;
 import java.util.function.Predicate;
 import java.util.function.IntPredicate;
 import java.util.function.Consumer;
@@ -757,9 +758,9 @@ public class IntCollections
 		@Override
 		public int reduce(int identity, IntIntUnaryOperator operator) { synchronized(mutex) { return c.reduce(identity, operator); } }
 		@Override
-		public int reduce(IntIntUnaryOperator operator) { synchronized(mutex) { return c.reduce(operator); } }
+		public OptionalInt reduce(IntIntUnaryOperator operator) { synchronized(mutex) { return c.reduce(operator); } }
 		@Override
-		public int findFirst(IntPredicate filter) { synchronized(mutex) { return c.findFirst(filter); } }
+		public OptionalInt findFirst(IntPredicate filter) { synchronized(mutex) { return c.findFirst(filter); } }
 		@Override
 		public int count(IntPredicate filter) { synchronized(mutex) { return c.count(filter); } }
 	}
@@ -887,9 +888,9 @@ public class IntCollections
 		@Override
 		public int reduce(int identity, IntIntUnaryOperator operator) { return c.reduce(identity, operator); }
 		@Override
-		public int reduce(IntIntUnaryOperator operator) { return c.reduce(operator); }
+		public OptionalInt reduce(IntIntUnaryOperator operator) { return c.reduce(operator); }
 		@Override
-		public int findFirst(IntPredicate filter) { return c.findFirst(filter); }
+		public OptionalInt findFirst(IntPredicate filter) { return c.findFirst(filter); }
 		@Override
 		public int count(IntPredicate filter) { return c.count(filter); }
 	}

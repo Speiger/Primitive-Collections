@@ -4,10 +4,12 @@ import java.util.Arrays;
 import java.util.Map;
 import java.util.NoSuchElementException;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.function.Consumer;
 import java.util.function.BiFunction;
 import java.util.function.Predicate;
 import java.util.function.LongPredicate;
+import java.util.OptionalLong;
 
 import speiger.src.collections.longs.collections.LongBidirectionalIterator;
 import speiger.src.collections.longs.functions.LongConsumer;
@@ -32,6 +34,7 @@ import speiger.src.collections.objects.functions.consumer.ObjectObjectConsumer;
 import speiger.src.collections.objects.functions.consumer.ObjectByteConsumer;
 
 import speiger.src.collections.bytes.functions.function.BytePredicate;
+import speiger.src.collections.bytes.functions.OptionalByte;
 import speiger.src.collections.objects.functions.function.ObjectObjectUnaryOperator;
 import speiger.src.collections.objects.collections.ObjectBidirectionalIterator;
 import speiger.src.collections.objects.lists.ObjectListIterator;
@@ -670,6 +673,10 @@ public class Long2ByteLinkedOpenHashMap extends Long2ByteOpenHashMap implements 
 	
 	private class MapEntrySet extends AbstractObjectSet<Long2ByteMap.Entry> implements Long2ByteOrderedMap.FastOrderedSet {
 		@Override
+		public void addFirst(Long2ByteMap.Entry o) { throw new UnsupportedOperationException(); }
+		@Override
+		public void addLast(Long2ByteMap.Entry o) { throw new UnsupportedOperationException(); }
+		@Override
 		public boolean addAndMoveToFirst(Long2ByteMap.Entry o) { throw new UnsupportedOperationException(); }
 		@Override
 		public boolean addAndMoveToLast(Long2ByteMap.Entry o) { throw new UnsupportedOperationException(); }
@@ -834,7 +841,7 @@ public class Long2ByteLinkedOpenHashMap extends Long2ByteOpenHashMap implements 
 		}
 		
 		@Override
-		public Long2ByteMap.Entry reduce(ObjectObjectUnaryOperator<Long2ByteMap.Entry, Long2ByteMap.Entry> operator) {
+		public Optional<Long2ByteMap.Entry> reduce(ObjectObjectUnaryOperator<Long2ByteMap.Entry, Long2ByteMap.Entry> operator) {
 			Objects.requireNonNull(operator);
 			Long2ByteMap.Entry state = null;
 			boolean empty = true;
@@ -849,21 +856,21 @@ public class Long2ByteLinkedOpenHashMap extends Long2ByteOpenHashMap implements 
 				state = operator.apply(state, new ValueMapEntry(index));
 				index = (int)links[index];
 			}
-			return state;
+			return empty ? Optional.empty() : Optional.ofNullable(state);
 		}
 		
 		@Override
-		public Long2ByteMap.Entry findFirst(Predicate<Long2ByteMap.Entry> filter) {
+		public Optional<Long2ByteMap.Entry> findFirst(Predicate<Long2ByteMap.Entry> filter) {
 			Objects.requireNonNull(filter);
-			if(size() <= 0) return null;
+			if(size() <= 0) return Optional.empty();
 			MapEntry entry = new MapEntry();
 			int index = firstIndex;
 			while(index != -1) {
 				entry.set(index);
-				if(filter.test(entry)) return entry;
+				if(filter.test(entry)) return Optional.ofNullable(entry);
 				index = (int)links[index];
 			}
-			return null;
+			return Optional.empty();
 		}
 		
 		@Override
@@ -939,6 +946,12 @@ public class Long2ByteLinkedOpenHashMap extends Long2ByteOpenHashMap implements 
 		
 		@Override
 		public boolean add(long o) { throw new UnsupportedOperationException(); }
+
+		@Override
+		public void addFirst(long o) { throw new UnsupportedOperationException(); }
+		
+		@Override
+		public void addLast(long o) { throw new UnsupportedOperationException(); }
 		
 		@Override
 		public boolean addAndMoveToFirst(long o) { throw new UnsupportedOperationException(); }
@@ -1085,7 +1098,7 @@ public class Long2ByteLinkedOpenHashMap extends Long2ByteOpenHashMap implements 
 		}
 		
 		@Override
-		public long reduce(LongLongUnaryOperator operator) {
+		public OptionalLong reduce(LongLongUnaryOperator operator) {
 			Objects.requireNonNull(operator);
 			long state = 0L;
 			boolean empty = true;
@@ -1100,19 +1113,19 @@ public class Long2ByteLinkedOpenHashMap extends Long2ByteOpenHashMap implements 
 				state = operator.applyAsLong(state, keys[index]);
 				index = (int)links[index];
 			}
-			return state;
+			return empty ? OptionalLong.empty() : OptionalLong.of(state);
 		}
 		
 		@Override
-		public long findFirst(LongPredicate filter) {
+		public OptionalLong findFirst(LongPredicate filter) {
 			Objects.requireNonNull(filter);
-			if(size() <= 0) return 0L;
+			if(size() <= 0) return OptionalLong.empty();
 			int index = firstIndex;
 			while(index != -1){
-				if(filter.test(keys[index])) return keys[index];
+				if(filter.test(keys[index])) return OptionalLong.of(keys[index]);
 				index = (int)links[index];
 			}
-			return 0L;
+			return OptionalLong.empty();
 		}
 		
 		@Override
@@ -1248,7 +1261,7 @@ public class Long2ByteLinkedOpenHashMap extends Long2ByteOpenHashMap implements 
 		}
 		
 		@Override
-		public byte reduce(ByteByteUnaryOperator operator) {
+		public OptionalByte reduce(ByteByteUnaryOperator operator) {
 			Objects.requireNonNull(operator);
 			byte state = (byte)0;
 			boolean empty = true;
@@ -1263,19 +1276,19 @@ public class Long2ByteLinkedOpenHashMap extends Long2ByteOpenHashMap implements 
 				state = operator.applyAsByte(state, values[index]);
 				index = (int)links[index];
 			}
-			return state;
+			return empty ? OptionalByte.empty() : OptionalByte.of(state);
 		}
 		
 		@Override
-		public byte findFirst(BytePredicate filter) {
+		public OptionalByte findFirst(BytePredicate filter) {
 			Objects.requireNonNull(filter);
-			if(size() <= 0) return (byte)0;
+			if(size() <= 0) return OptionalByte.empty();
 			int index = firstIndex;
 			while(index != -1){
-				if(filter.test(values[index])) return values[index];
+				if(filter.test(values[index])) return OptionalByte.of(values[index]);
 				index = (int)links[index];
 			}
-			return (byte)0;
+			return OptionalByte.empty();
 		}
 		
 		@Override

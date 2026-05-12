@@ -4,6 +4,7 @@ import java.util.Arrays;
 import java.util.Map;
 import java.util.NoSuchElementException;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.concurrent.locks.StampedLock;
 import java.util.function.Consumer;
 import java.util.function.Predicate;
@@ -18,6 +19,7 @@ import speiger.src.collections.shorts.functions.consumer.ShortObjectConsumer;
 import speiger.src.collections.shorts.functions.function.ShortFunction;
 import speiger.src.collections.shorts.functions.function.ShortObjectUnaryOperator;
 import speiger.src.collections.shorts.functions.function.ShortShortUnaryOperator;
+import speiger.src.collections.shorts.functions.OptionalShort;
 import speiger.src.collections.shorts.functions.function.ShortPredicate;
 import speiger.src.collections.shorts.maps.abstracts.AbstractShort2ObjectMap;
 import speiger.src.collections.shorts.maps.interfaces.Short2ObjectMap;
@@ -715,7 +717,7 @@ public class Short2ObjectConcurrentOpenHashMap<V> extends AbstractShort2ObjectMa
 		}
 		
 		@Override
-		public Short2ObjectMap.Entry<V> reduce(ObjectObjectUnaryOperator<Short2ObjectMap.Entry<V>, Short2ObjectMap.Entry<V>> operator) {
+		public Optional<Short2ObjectMap.Entry<V>> reduce(ObjectObjectUnaryOperator<Short2ObjectMap.Entry<V>, Short2ObjectMap.Entry<V>> operator) {
 			Objects.requireNonNull(operator);
 			Short2ObjectMap.Entry<V> state = null;
 			boolean empty = true;
@@ -739,11 +741,11 @@ public class Short2ObjectConcurrentOpenHashMap<V> extends AbstractShort2ObjectMa
 					seg.unlockRead(stamp);
 				}
 			}
-			return state;
+			return empty ? Optional.empty() : Optional.ofNullable(state);
 		}
 		
 		@Override
-		public Short2ObjectMap.Entry<V> findFirst(Predicate<Short2ObjectMap.Entry<V>> filter) {
+		public Optional<Short2ObjectMap.Entry<V>> findFirst(Predicate<Short2ObjectMap.Entry<V>> filter) {
 			Objects.requireNonNull(filter);
 			MapEntry entry = new MapEntry();
 			for(int i = 0,m=segments.length;i<m;i++) {
@@ -753,7 +755,7 @@ public class Short2ObjectConcurrentOpenHashMap<V> extends AbstractShort2ObjectMa
 				try {
 					while(index != -1) {
 						entry.set(index, i);
-						if(filter.test(entry)) return entry;
+						if(filter.test(entry)) return Optional.ofNullable(entry);
 						index = (int)seg.links[index];
 					}
 				}
@@ -761,7 +763,7 @@ public class Short2ObjectConcurrentOpenHashMap<V> extends AbstractShort2ObjectMa
 					seg.unlockRead(stamp);
 				}
 			}
-			return null;
+			return Optional.empty();
 		}
 		
 		@Override
@@ -1022,7 +1024,7 @@ public class Short2ObjectConcurrentOpenHashMap<V> extends AbstractShort2ObjectMa
 		}
 		
 		@Override
-		public short reduce(ShortShortUnaryOperator operator) {
+		public OptionalShort reduce(ShortShortUnaryOperator operator) {
 			Objects.requireNonNull(operator);
 			short state = (short)0;
 			boolean empty = true;
@@ -1046,11 +1048,11 @@ public class Short2ObjectConcurrentOpenHashMap<V> extends AbstractShort2ObjectMa
 					seg.unlockRead(stamp);
 				}
 			}
-			return state;
+			return empty ? OptionalShort.empty() : OptionalShort.of(state);
 		}
 		
 		@Override
-		public short findFirst(ShortPredicate filter) {
+		public OptionalShort findFirst(ShortPredicate filter) {
 			Objects.requireNonNull(filter);
 			for(int i = 0,m=segments.length;i<m;i++) {
 				Segment<V> seg = segments[i];
@@ -1058,7 +1060,7 @@ public class Short2ObjectConcurrentOpenHashMap<V> extends AbstractShort2ObjectMa
 				try {
 					int index = seg.firstIndex;
 					while(index != -1){
-						if(filter.test(seg.keys[index])) return seg.keys[index];
+						if(filter.test(seg.keys[index])) return OptionalShort.of(seg.keys[index]);
 						index = (int)seg.links[index];
 					}
 				}
@@ -1066,7 +1068,7 @@ public class Short2ObjectConcurrentOpenHashMap<V> extends AbstractShort2ObjectMa
 					seg.unlockRead(stamp);
 				}
 			}
-			return (short)0;
+			return OptionalShort.empty();
 		}
 		
 		@Override
@@ -1258,7 +1260,7 @@ public class Short2ObjectConcurrentOpenHashMap<V> extends AbstractShort2ObjectMa
 		}
 		
 		@Override
-		public V reduce(ObjectObjectUnaryOperator<V, V> operator) {
+		public Optional<V> reduce(ObjectObjectUnaryOperator<V, V> operator) {
 			Objects.requireNonNull(operator);
 			V state = null;
 			boolean empty = true;
@@ -1282,20 +1284,20 @@ public class Short2ObjectConcurrentOpenHashMap<V> extends AbstractShort2ObjectMa
 					seg.unlockRead(stamp);
 				}
 			}
-			return state;
+			return empty ? Optional.empty() : Optional.ofNullable(state);
 		}
 		
 		@Override
-		public V findFirst(Predicate<V> filter) {
+		public Optional<V> findFirst(Predicate<V> filter) {
 			Objects.requireNonNull(filter);
-			if(size() <= 0) return null;
+			if(size() <= 0) return Optional.empty();
 			for(int i = 0,m=segments.length;i<m;i++) {
 				Segment<V> seg = segments[i];
 				long stamp = seg.readLock();
 				try {
 					int index = seg.firstIndex;
 					while(index != -1){
-						if(filter.test(seg.values[index])) return seg.values[index];
+						if(filter.test(seg.values[index])) return Optional.ofNullable(seg.values[index]);
 						index = (int)seg.links[index];
 					}
 				}
@@ -1303,7 +1305,7 @@ public class Short2ObjectConcurrentOpenHashMap<V> extends AbstractShort2ObjectMa
 					seg.unlockRead(stamp);
 				}
 			}
-			return null;
+			return Optional.empty();
 		}
 		
 		@Override

@@ -4,10 +4,12 @@ import java.util.Arrays;
 import java.util.Map;
 import java.util.NoSuchElementException;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.function.Consumer;
 import java.util.function.BiFunction;
 import java.util.function.Predicate;
 import java.util.function.IntPredicate;
+import java.util.OptionalInt;
 
 import speiger.src.collections.chars.collections.CharBidirectionalIterator;
 import speiger.src.collections.chars.functions.CharConsumer;
@@ -15,6 +17,7 @@ import speiger.src.collections.objects.functions.consumer.ObjectCharConsumer;
 import speiger.src.collections.ints.functions.consumer.IntCharConsumer;
 import speiger.src.collections.ints.functions.consumer.IntObjectConsumer;
 import speiger.src.collections.ints.functions.consumer.IntIntConsumer;
+import speiger.src.collections.chars.functions.OptionalChar;
 import speiger.src.collections.chars.functions.function.CharPredicate;
 import speiger.src.collections.chars.functions.consumer.CharIntConsumer;
 import speiger.src.collections.chars.functions.function.Char2IntFunction;
@@ -539,6 +542,10 @@ public class ImmutableChar2IntOpenHashMap extends AbstractChar2IntMap implements
 	
 	private class MapEntrySet extends AbstractObjectSet<Char2IntMap.Entry> implements Char2IntOrderedMap.FastOrderedSet {
 		@Override
+		public void addFirst(Char2IntMap.Entry o) { throw new UnsupportedOperationException(); }
+		@Override
+		public void addLast(Char2IntMap.Entry o) { throw new UnsupportedOperationException(); }
+		@Override
 		public boolean addAndMoveToFirst(Char2IntMap.Entry o) { throw new UnsupportedOperationException(); }
 		@Override
 		public boolean addAndMoveToLast(Char2IntMap.Entry o) { throw new UnsupportedOperationException(); }
@@ -691,7 +698,7 @@ public class ImmutableChar2IntOpenHashMap extends AbstractChar2IntMap implements
 		}
 		
 		@Override
-		public Char2IntMap.Entry reduce(ObjectObjectUnaryOperator<Char2IntMap.Entry, Char2IntMap.Entry> operator) {
+		public Optional<Char2IntMap.Entry> reduce(ObjectObjectUnaryOperator<Char2IntMap.Entry, Char2IntMap.Entry> operator) {
 			Objects.requireNonNull(operator);
 			Char2IntMap.Entry state = null;
 			boolean empty = true;
@@ -706,21 +713,21 @@ public class ImmutableChar2IntOpenHashMap extends AbstractChar2IntMap implements
 				state = operator.apply(state, new BasicEntry(keys[index], values[index]));
 				index = (int)links[index];
 			}
-			return state;
+			return empty ? Optional.empty() : Optional.ofNullable(state);
 		}
 		
 		@Override
-		public Char2IntMap.Entry findFirst(Predicate<Char2IntMap.Entry> filter) {
+		public Optional<Char2IntMap.Entry> findFirst(Predicate<Char2IntMap.Entry> filter) {
 			Objects.requireNonNull(filter);
-			if(size() <= 0) return null;
+			if(size() <= 0) return Optional.empty();
 			BasicEntry entry = new BasicEntry();
 			int index = firstIndex;
 			while(index != -1) {
 				entry.set(keys[index], values[index]);
-				if(filter.test(entry)) return entry;
+				if(filter.test(entry)) return Optional.ofNullable(entry);
 				index = (int)links[index];
 			}
-			return null;
+			return Optional.empty();
 		}
 		
 		@Override
@@ -782,6 +789,12 @@ public class ImmutableChar2IntOpenHashMap extends AbstractChar2IntMap implements
 		public boolean add(char o) {
 			throw new UnsupportedOperationException();
 		}
+		
+		@Override
+		public void addFirst(char o) { throw new UnsupportedOperationException(); }
+		
+		@Override
+		public void addLast(char o) { throw new UnsupportedOperationException(); }
 		
 		@Override
 		public boolean addAndMoveToFirst(char o) { throw new UnsupportedOperationException(); }
@@ -918,7 +931,7 @@ public class ImmutableChar2IntOpenHashMap extends AbstractChar2IntMap implements
 		}
 		
 		@Override
-		public char reduce(CharCharUnaryOperator operator) {
+		public OptionalChar reduce(CharCharUnaryOperator operator) {
 			Objects.requireNonNull(operator);
 			char state = (char)0;
 			boolean empty = true;
@@ -933,19 +946,19 @@ public class ImmutableChar2IntOpenHashMap extends AbstractChar2IntMap implements
 				state = operator.applyAsChar(state, keys[index]);
 				index = (int)links[index];
 			}
-			return state;
+			return empty ? OptionalChar.empty() : OptionalChar.of(state);
 		}
 		
 		@Override
-		public char findFirst(CharPredicate filter) {
+		public OptionalChar findFirst(CharPredicate filter) {
 			Objects.requireNonNull(filter);
-			if(size() <= 0) return (char)0;
+			if(size() <= 0) return OptionalChar.empty();
 			int index = firstIndex;
 			while(index != -1){
-				if(filter.test(keys[index])) return keys[index];
+				if(filter.test(keys[index])) return OptionalChar.of(keys[index]);
 				index = (int)links[index];
 			}
-			return (char)0;
+			return OptionalChar.empty();
 		}
 		
 		@Override
@@ -1072,7 +1085,7 @@ public class ImmutableChar2IntOpenHashMap extends AbstractChar2IntMap implements
 		}
 		
 		@Override
-		public int reduce(IntIntUnaryOperator operator) {
+		public OptionalInt reduce(IntIntUnaryOperator operator) {
 			Objects.requireNonNull(operator);
 			int state = 0;
 			boolean empty = true;
@@ -1087,19 +1100,19 @@ public class ImmutableChar2IntOpenHashMap extends AbstractChar2IntMap implements
 				state = operator.applyAsInt(state, values[index]);
 				index = (int)links[index];
 			}
-			return state;
+			return empty ? OptionalInt.empty() : OptionalInt.of(state);
 		}
 		
 		@Override
-		public int findFirst(IntPredicate filter) {
+		public OptionalInt findFirst(IntPredicate filter) {
 			Objects.requireNonNull(filter);
-			if(size() <= 0) return 0;
+			if(size() <= 0) return OptionalInt.empty();
 			int index = firstIndex;
 			while(index != -1){
-				if(filter.test(values[index])) return values[index];
+				if(filter.test(values[index])) return OptionalInt.of(values[index]);
 				index = (int)links[index];
 			}
-			return 0;
+			return OptionalInt.empty();
 		}
 		
 		@Override

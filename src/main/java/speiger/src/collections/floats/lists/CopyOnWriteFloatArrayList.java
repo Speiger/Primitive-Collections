@@ -16,6 +16,7 @@ import java.nio.FloatBuffer;
 import speiger.src.collections.floats.collections.FloatCollection;
 import speiger.src.collections.floats.collections.FloatStack;
 import speiger.src.collections.floats.collections.FloatIterator;
+import speiger.src.collections.floats.functions.OptionalFloat;
 import speiger.src.collections.floats.functions.FloatComparator;
 import speiger.src.collections.floats.functions.FloatConsumer;
 import speiger.src.collections.objects.functions.consumer.ObjectFloatConsumer;
@@ -654,13 +655,13 @@ public class CopyOnWriteFloatArrayList extends AbstractFloatList implements ITri
 	}
 	
 	@Override
-	public float findFirst(FloatPredicate filter) {
+	public OptionalFloat findFirst(FloatPredicate filter) {
 		Objects.requireNonNull(filter);
 		float[] data = this.data;
 		for(int i = 0,m=data.length;i<m;i++) {
-			if(filter.test(data[i])) return data[i];
+			if(filter.test(data[i])) return OptionalFloat.of(data[i]);
 		}
-		return 0F;
+		return OptionalFloat.empty();
 	}
 	
 	@Override
@@ -675,7 +676,7 @@ public class CopyOnWriteFloatArrayList extends AbstractFloatList implements ITri
 	}
 	
 	@Override
-	public float reduce(FloatFloatUnaryOperator operator) {
+	public OptionalFloat reduce(FloatFloatUnaryOperator operator) {
 		Objects.requireNonNull(operator);
 		float[] data = this.data;
 		float state = 0F;
@@ -688,7 +689,7 @@ public class CopyOnWriteFloatArrayList extends AbstractFloatList implements ITri
 			}
 			state = operator.applyAsFloat(state, data[i]);
 		}
-		return state;
+		return empty ? OptionalFloat.empty() : OptionalFloat.of(state);
 	}
 	
 	@Override

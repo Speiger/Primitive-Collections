@@ -7,6 +7,7 @@ import java.util.function.Consumer;
 import speiger.src.collections.floats.functions.FloatConsumer;
 import speiger.src.collections.floats.functions.FloatComparator;
 import speiger.src.collections.objects.collections.ObjectIterable;
+import speiger.src.collections.floats.functions.OptionalFloat;
 import speiger.src.collections.floats.functions.function.FloatFunction;
 import speiger.src.collections.ints.functions.consumer.IntFloatConsumer;
 import speiger.src.collections.objects.functions.consumer.ObjectFloatConsumer;
@@ -281,13 +282,13 @@ public interface FloatIterable extends Iterable<Float>
 	 * @param filter that should be applied
 	 * @return the found value or the null equivalent variant.
 	 */
-	default float findFirst(FloatPredicate filter) {
+	default OptionalFloat findFirst(FloatPredicate filter) {
 		Objects.requireNonNull(filter);
 		for(FloatIterator iter = iterator();iter.hasNext();) {
 			float entry = iter.nextFloat();
-			if(filter.test(entry)) return entry;
+			if(filter.test(entry)) return OptionalFloat.of(entry);
 		}
-		return 0F;
+		return OptionalFloat.empty();
 	}
 	
 	/**
@@ -312,7 +313,7 @@ public interface FloatIterable extends Iterable<Float>
 	 * @param operator the operation that should be applied
 	 * @return the reduction result, returns null value if nothing was found
 	 */
-	default float reduce(FloatFloatUnaryOperator operator) {
+	default OptionalFloat reduce(FloatFloatUnaryOperator operator) {
 		Objects.requireNonNull(operator);
 		float state = 0F;
 		boolean empty = true;
@@ -324,7 +325,7 @@ public interface FloatIterable extends Iterable<Float>
 			}
 			state = operator.applyAsFloat(state, iter.nextFloat());
 		}
-		return state;
+		return empty ? OptionalFloat.empty() : OptionalFloat.of(state);
 	}	
 	
 	/**

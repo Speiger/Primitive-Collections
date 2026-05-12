@@ -9,6 +9,7 @@ import java.util.Objects;
 
 import speiger.src.collections.floats.collections.FloatCollection;
 import speiger.src.collections.floats.collections.FloatIterator;
+import speiger.src.collections.floats.functions.OptionalFloat;
 import speiger.src.collections.floats.utils.FloatIterators;
 import speiger.src.collections.floats.functions.FloatConsumer;
 import speiger.src.collections.ints.functions.consumer.IntFloatConsumer;
@@ -546,7 +547,7 @@ public class FloatOpenCustomHashSet extends AbstractFloatSet implements ITrimmab
 	}
 	
 	@Override
-	public float reduce(FloatFloatUnaryOperator operator) {
+	public OptionalFloat reduce(FloatFloatUnaryOperator operator) {
 		Objects.requireNonNull(operator);
 		float state = 0F;
 		boolean empty = true;
@@ -563,18 +564,18 @@ public class FloatOpenCustomHashSet extends AbstractFloatSet implements ITrimmab
 			}
 			state = operator.applyAsFloat(state, keys[i]);
 		}
-		return state;
+		return empty ? OptionalFloat.empty() : OptionalFloat.of(state);
 	}
 	
 	@Override
-	public float findFirst(FloatPredicate filter) {
+	public OptionalFloat findFirst(FloatPredicate filter) {
 		Objects.requireNonNull(filter);
-		if(size() <= 0) return 0F;
-		if(containsNull && filter.test(keys[nullIndex])) return keys[nullIndex];
+		if(size() <= 0) return OptionalFloat.empty();
+		if(containsNull && filter.test(keys[nullIndex])) return OptionalFloat.of(keys[nullIndex]);
 		for(int i = nullIndex-1;i>=0;i--) {
-			if(!strategy.equals(keys[i], 0F) && filter.test(keys[i])) return keys[i];
+			if(!strategy.equals(keys[i], 0F) && filter.test(keys[i])) return OptionalFloat.of(keys[i]);
 		}
-		return 0F;
+		return OptionalFloat.empty();
 	}
 	
 	@Override

@@ -6,12 +6,12 @@ import java.util.function.Consumer;
 import java.util.function.BiFunction;
 import java.util.NoSuchElementException;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.Set;
 import java.util.function.Predicate;
 import speiger.src.collections.objects.collections.ObjectBidirectionalIterator;
 import speiger.src.collections.objects.collections.ObjectCollection;
 import speiger.src.collections.objects.collections.ObjectIterator;
-
 import speiger.src.collections.ints.functions.consumer.IntObjectConsumer;
 import speiger.src.collections.objects.functions.consumer.ObjectObjectConsumer;
 import speiger.src.collections.objects.functions.function.ObjectObjectUnaryOperator;
@@ -128,6 +128,25 @@ public class ObjectArraySet<T> extends AbstractObjectSet<T> implements ObjectOrd
 		if(data.length == size) data = Arrays.copyOf(data, size == 0 ? 2 : size * 2);
 		data[size++] = o;
 		return o;
+	}
+	
+	@Override
+	public void addFirst(T o) {
+		int index = findIndex(o);
+		if(index == -1) {
+			if(data.length == size) data = Arrays.copyOf(data, size == 0 ? 2 : size * 2);
+			System.arraycopy(data, 0, data, 1, size++);
+			data[0] = o;
+		}
+	}
+	
+	@Override
+	public void addLast(T o) {
+		int index = findIndex(o);
+		if(index == -1) {
+			if(data.length == size) data = Arrays.copyOf(data, size == 0 ? 2 : size * 2);
+			data[size++] = o;
+		}
 	}
 	
 	@Override
@@ -358,12 +377,12 @@ public class ObjectArraySet<T> extends AbstractObjectSet<T> implements ObjectOrd
 	}
 	
 	@Override
-	public T findFirst(Predicate<T> filter) {
+	public Optional<T> findFirst(Predicate<T> filter) {
 		Objects.requireNonNull(filter);
 		for(int i = 0;i<size;i++) {
-			if(filter.test(data[i])) return data[i];
+			if(filter.test(data[i])) return Optional.ofNullable(data[i]);
 		}
-		return null;
+		return Optional.empty();
 	}
 	
 	@Override
@@ -377,7 +396,7 @@ public class ObjectArraySet<T> extends AbstractObjectSet<T> implements ObjectOrd
 	}
 	
 	@Override
-	public T reduce(ObjectObjectUnaryOperator<T, T> operator) {
+	public Optional<T> reduce(ObjectObjectUnaryOperator<T, T> operator) {
 		Objects.requireNonNull(operator);
 		T state = null;
 		boolean empty = true;
@@ -389,7 +408,7 @@ public class ObjectArraySet<T> extends AbstractObjectSet<T> implements ObjectOrd
 			}
 			state = operator.apply(state, data[i]);
 		}
-		return state;
+		return empty ? Optional.empty() : Optional.ofNullable(state);
 	}
 	
 	@Override

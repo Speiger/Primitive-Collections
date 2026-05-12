@@ -11,6 +11,7 @@ import java.util.function.DoublePredicate;import java.util.function.DoubleUnaryO
 import speiger.src.collections.floats.collections.FloatCollection;
 import speiger.src.collections.floats.functions.FloatComparator;
 import speiger.src.collections.floats.functions.FloatConsumer;
+import speiger.src.collections.floats.functions.OptionalFloat;
 import speiger.src.collections.floats.utils.FloatArrays;
 import speiger.src.collections.objects.functions.consumer.ObjectFloatConsumer;
 import speiger.src.collections.floats.functions.function.FloatPredicate;
@@ -273,12 +274,12 @@ public class ImmutableFloatList extends AbstractFloatList
 	}
 	
 	@Override
-	public float findFirst(FloatPredicate filter) {
+	public OptionalFloat findFirst(FloatPredicate filter) {
 		Objects.requireNonNull(filter);
 		for(int i = 0,m=data.length;i<m;i++) {
-			if(filter.test(data[i])) return data[i];
+			if(filter.test(data[i])) return OptionalFloat.of(data[i]);
 		}
-		return 0F;
+		return OptionalFloat.empty();
 	}
 	
 	@Override
@@ -292,7 +293,7 @@ public class ImmutableFloatList extends AbstractFloatList
 	}
 	
 	@Override
-	public float reduce(FloatFloatUnaryOperator operator) {
+	public OptionalFloat reduce(FloatFloatUnaryOperator operator) {
 		Objects.requireNonNull(operator);
 		float state = 0F;
 		boolean empty = true;
@@ -304,7 +305,7 @@ public class ImmutableFloatList extends AbstractFloatList
 			}
 			state = operator.applyAsFloat(state, data[i]);
 		}
-		return state;
+		return empty ? OptionalFloat.empty() : OptionalFloat.of(state);
 	}
 	
 	@Override

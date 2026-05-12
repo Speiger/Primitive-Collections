@@ -4,12 +4,12 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.NoSuchElementException;
 import java.util.Objects;
+import java.util.OptionalDouble;
 import java.util.Set;
 import java.util.function.DoublePredicate;
 import speiger.src.collections.doubles.collections.DoubleBidirectionalIterator;
 import speiger.src.collections.doubles.collections.DoubleCollection;
 import speiger.src.collections.doubles.collections.DoubleIterator;
-
 import speiger.src.collections.ints.functions.consumer.IntDoubleConsumer;
 import speiger.src.collections.objects.functions.consumer.ObjectDoubleConsumer;
 import speiger.src.collections.doubles.functions.function.DoubleDoubleUnaryOperator;
@@ -120,6 +120,25 @@ public class DoubleArraySet extends AbstractDoubleSet implements DoubleOrderedSe
 			return true;
 		}
 		return false;
+	}
+	
+	@Override
+	public void addFirst(double o) {
+		int index = findIndex(o);
+		if(index == -1) {
+			if(data.length == size) data = Arrays.copyOf(data, size == 0 ? 2 : size * 2);
+			System.arraycopy(data, 0, data, 1, size++);
+			data[0] = o;
+		}
+	}
+	
+	@Override
+	public void addLast(double o) {
+		int index = findIndex(o);
+		if(index == -1) {
+			if(data.length == size) data = Arrays.copyOf(data, size == 0 ? 2 : size * 2);
+			data[size++] = o;
+		}
 	}
 	
 	@Override
@@ -355,12 +374,12 @@ public class DoubleArraySet extends AbstractDoubleSet implements DoubleOrderedSe
 	}
 	
 	@Override
-	public double findFirst(DoublePredicate filter) {
+	public OptionalDouble findFirst(DoublePredicate filter) {
 		Objects.requireNonNull(filter);
 		for(int i = 0;i<size;i++) {
-			if(filter.test(data[i])) return data[i];
+			if(filter.test(data[i])) return OptionalDouble.of(data[i]);
 		}
-		return 0D;
+		return OptionalDouble.empty();
 	}
 	
 	@Override
@@ -374,7 +393,7 @@ public class DoubleArraySet extends AbstractDoubleSet implements DoubleOrderedSe
 	}
 	
 	@Override
-	public double reduce(DoubleDoubleUnaryOperator operator) {
+	public OptionalDouble reduce(DoubleDoubleUnaryOperator operator) {
 		Objects.requireNonNull(operator);
 		double state = 0D;
 		boolean empty = true;
@@ -386,7 +405,7 @@ public class DoubleArraySet extends AbstractDoubleSet implements DoubleOrderedSe
 			}
 			state = operator.applyAsDouble(state, data[i]);
 		}
-		return state;
+		return empty ? OptionalDouble.empty() : OptionalDouble.of(state);
 	}
 	
 	@Override

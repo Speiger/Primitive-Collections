@@ -4,6 +4,7 @@ import java.util.Arrays;
 import java.util.Map;
 import java.util.NoSuchElementException;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.function.Consumer;
 import java.util.function.BiFunction;
 import java.util.function.Predicate;
@@ -13,6 +14,7 @@ import speiger.src.collections.shorts.functions.ShortConsumer;
 import speiger.src.collections.objects.functions.consumer.ObjectShortConsumer;
 import speiger.src.collections.ints.functions.consumer.IntShortConsumer;
 import speiger.src.collections.ints.functions.consumer.IntObjectConsumer;
+import speiger.src.collections.shorts.functions.OptionalShort;
 import speiger.src.collections.shorts.functions.function.ShortPredicate;
 import speiger.src.collections.shorts.functions.consumer.ShortObjectConsumer;
 import speiger.src.collections.shorts.functions.function.ShortFunction;
@@ -665,6 +667,10 @@ public class Short2ObjectArrayMap<V> extends AbstractShort2ObjectMap<V> implemen
 	
 	private class MapEntrySet extends AbstractObjectSet<Short2ObjectMap.Entry<V>> implements Short2ObjectOrderedMap.FastOrderedSet<V> {
 		@Override
+		public void addFirst(Short2ObjectMap.Entry<V> o) { throw new UnsupportedOperationException(); }
+		@Override
+		public void addLast(Short2ObjectMap.Entry<V> o) { throw new UnsupportedOperationException(); }
+		@Override
 		public boolean addAndMoveToFirst(Short2ObjectMap.Entry<V> o) { throw new UnsupportedOperationException(); }
 		@Override
 		public boolean addAndMoveToLast(Short2ObjectMap.Entry<V> o) { throw new UnsupportedOperationException(); }
@@ -812,7 +818,7 @@ public class Short2ObjectArrayMap<V> extends AbstractShort2ObjectMap<V> implemen
 		}
 		
 		@Override
-		public Short2ObjectMap.Entry<V> reduce(ObjectObjectUnaryOperator<Short2ObjectMap.Entry<V>, Short2ObjectMap.Entry<V>> operator) {
+		public Optional<Short2ObjectMap.Entry<V>> reduce(ObjectObjectUnaryOperator<Short2ObjectMap.Entry<V>, Short2ObjectMap.Entry<V>> operator) {
 			Objects.requireNonNull(operator);
 			Short2ObjectMap.Entry<V> state = null;
 			boolean empty = true;
@@ -824,19 +830,19 @@ public class Short2ObjectArrayMap<V> extends AbstractShort2ObjectMap<V> implemen
 				}
 				state = operator.apply(state, new ValueMapEntry(i));
 			}
-			return state;
+			return empty ? Optional.empty() : Optional.ofNullable(state);
 		}
 		
 		@Override
-		public Short2ObjectMap.Entry<V> findFirst(Predicate<Short2ObjectMap.Entry<V>> filter) {
+		public Optional<Short2ObjectMap.Entry<V>> findFirst(Predicate<Short2ObjectMap.Entry<V>> filter) {
 			Objects.requireNonNull(filter);
-			if(size() <= 0) return null;
+			if(size() <= 0) return Optional.empty();
 			MapEntry entry = new MapEntry();
 			for(int i = 0;i<size;i++) {
 				entry.set(i);
-				if(filter.test(entry)) return entry;
+				if(filter.test(entry)) return Optional.ofNullable(entry);
 			}
-			return null;
+			return Optional.empty();
 		}
 		
 		@Override
@@ -908,6 +914,10 @@ public class Short2ObjectArrayMap<V> extends AbstractShort2ObjectMap<V> implemen
 		
 		@Override
 		public boolean add(short o) { throw new UnsupportedOperationException(); }
+		@Override
+		public void addFirst(short o) { throw new UnsupportedOperationException(); }
+		@Override
+		public void addLast(short o) { throw new UnsupportedOperationException(); }
 		@Override
 		public boolean addAndMoveToFirst(short o) { throw new UnsupportedOperationException(); }
 		@Override
@@ -995,7 +1005,7 @@ public class Short2ObjectArrayMap<V> extends AbstractShort2ObjectMap<V> implemen
 		}
 		
 		@Override
-		public short reduce(ShortShortUnaryOperator operator) {
+		public OptionalShort reduce(ShortShortUnaryOperator operator) {
 			Objects.requireNonNull(operator);
 			short state = (short)0;
 			boolean empty = true;
@@ -1007,16 +1017,16 @@ public class Short2ObjectArrayMap<V> extends AbstractShort2ObjectMap<V> implemen
 				}
 				state = operator.applyAsShort(state, keys[i]);
 			}
-			return state;
+			return empty ? OptionalShort.empty() : OptionalShort.of(state);
 		}
 		
 		@Override
-		public short findFirst(ShortPredicate filter) {
+		public OptionalShort findFirst(ShortPredicate filter) {
 			Objects.requireNonNull(filter);
 			for(int i = 0;i<size;i++) {
-				if(filter.test(keys[i])) return keys[i];
+				if(filter.test(keys[i])) return OptionalShort.of(keys[i]);
 			}
-			return (short)0;
+			return OptionalShort.empty();
 		}
 		
 		@Override
@@ -1117,7 +1127,7 @@ public class Short2ObjectArrayMap<V> extends AbstractShort2ObjectMap<V> implemen
 		}
 		
 		@Override
-		public V reduce(ObjectObjectUnaryOperator<V, V> operator) {
+		public Optional<V> reduce(ObjectObjectUnaryOperator<V, V> operator) {
 			Objects.requireNonNull(operator);
 			V state = null;
 			boolean empty = true;
@@ -1129,16 +1139,16 @@ public class Short2ObjectArrayMap<V> extends AbstractShort2ObjectMap<V> implemen
 				}
 				state = operator.apply(state, values[i]);
 			}
-			return state;
+			return empty ? Optional.empty() : Optional.ofNullable(state);
 		}
 		
 		@Override
-		public V findFirst(Predicate<V> filter) {
+		public Optional<V> findFirst(Predicate<V> filter) {
 			Objects.requireNonNull(filter);
 			for(int i = 0;i<size;i++) {
-				if(filter.test(values[i])) return values[i];
+				if(filter.test(values[i])) return Optional.ofNullable(values[i]);
 			}
-			return null;
+			return Optional.empty();
 		}
 		
 		@Override

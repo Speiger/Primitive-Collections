@@ -4,10 +4,12 @@ import java.util.Arrays;
 import java.util.Map;
 import java.util.NoSuchElementException;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.function.Consumer;
 import java.util.function.BiFunction;
 import java.util.function.Predicate;
 import java.util.function.DoublePredicate;
+import java.util.OptionalDouble;
 
 import speiger.src.collections.doubles.collections.DoubleBidirectionalIterator;
 import speiger.src.collections.doubles.functions.DoubleConsumer;
@@ -33,6 +35,7 @@ import speiger.src.collections.objects.functions.consumer.ObjectObjectConsumer;
 import speiger.src.collections.objects.functions.consumer.ObjectBooleanConsumer;
 
 import speiger.src.collections.booleans.functions.function.BooleanPredicate;
+import speiger.src.collections.booleans.functions.OptionalBoolean;
 import speiger.src.collections.objects.functions.function.ObjectObjectUnaryOperator;
 import speiger.src.collections.objects.collections.ObjectBidirectionalIterator;
 import speiger.src.collections.objects.lists.ObjectListIterator;
@@ -672,6 +675,10 @@ public class Double2BooleanLinkedOpenCustomHashMap extends Double2BooleanOpenCus
 	
 	private class MapEntrySet extends AbstractObjectSet<Double2BooleanMap.Entry> implements Double2BooleanOrderedMap.FastOrderedSet {
 		@Override
+		public void addFirst(Double2BooleanMap.Entry o) { throw new UnsupportedOperationException(); }
+		@Override
+		public void addLast(Double2BooleanMap.Entry o) { throw new UnsupportedOperationException(); }
+		@Override
 		public boolean addAndMoveToFirst(Double2BooleanMap.Entry o) { throw new UnsupportedOperationException(); }
 		@Override
 		public boolean addAndMoveToLast(Double2BooleanMap.Entry o) { throw new UnsupportedOperationException(); }
@@ -836,7 +843,7 @@ public class Double2BooleanLinkedOpenCustomHashMap extends Double2BooleanOpenCus
 		}
 		
 		@Override
-		public Double2BooleanMap.Entry reduce(ObjectObjectUnaryOperator<Double2BooleanMap.Entry, Double2BooleanMap.Entry> operator) {
+		public Optional<Double2BooleanMap.Entry> reduce(ObjectObjectUnaryOperator<Double2BooleanMap.Entry, Double2BooleanMap.Entry> operator) {
 			Objects.requireNonNull(operator);
 			Double2BooleanMap.Entry state = null;
 			boolean empty = true;
@@ -851,21 +858,21 @@ public class Double2BooleanLinkedOpenCustomHashMap extends Double2BooleanOpenCus
 				state = operator.apply(state, new ValueMapEntry(index));
 				index = (int)links[index];
 			}
-			return state;
+			return empty ? Optional.empty() : Optional.ofNullable(state);
 		}
 		
 		@Override
-		public Double2BooleanMap.Entry findFirst(Predicate<Double2BooleanMap.Entry> filter) {
+		public Optional<Double2BooleanMap.Entry> findFirst(Predicate<Double2BooleanMap.Entry> filter) {
 			Objects.requireNonNull(filter);
-			if(size() <= 0) return null;
+			if(size() <= 0) return Optional.empty();
 			MapEntry entry = new MapEntry();
 			int index = firstIndex;
 			while(index != -1) {
 				entry.set(index);
-				if(filter.test(entry)) return entry;
+				if(filter.test(entry)) return Optional.ofNullable(entry);
 				index = (int)links[index];
 			}
-			return null;
+			return Optional.empty();
 		}
 		
 		@Override
@@ -944,10 +951,13 @@ public class Double2BooleanLinkedOpenCustomHashMap extends Double2BooleanOpenCus
 		public boolean add(double o) {
 			throw new UnsupportedOperationException();
 		}
-		
+
+		@Override
+		public void addFirst(double o) { throw new UnsupportedOperationException(); }
+		@Override
+		public void addLast(double o) { throw new UnsupportedOperationException(); }		
 		@Override
 		public boolean addAndMoveToFirst(double o) { throw new UnsupportedOperationException(); }
-
 		@Override
 		public boolean addAndMoveToLast(double o) { throw new UnsupportedOperationException(); }
 
@@ -1090,7 +1100,7 @@ public class Double2BooleanLinkedOpenCustomHashMap extends Double2BooleanOpenCus
 		}
 		
 		@Override
-		public double reduce(DoubleDoubleUnaryOperator operator) {
+		public OptionalDouble reduce(DoubleDoubleUnaryOperator operator) {
 			Objects.requireNonNull(operator);
 			double state = 0D;
 			boolean empty = true;
@@ -1105,19 +1115,19 @@ public class Double2BooleanLinkedOpenCustomHashMap extends Double2BooleanOpenCus
 				state = operator.applyAsDouble(state, keys[index]);
 				index = (int)links[index];
 			}
-			return state;
+			return empty ? OptionalDouble.empty() : OptionalDouble.of(state);
 		}
 		
 		@Override
-		public double findFirst(DoublePredicate filter) {
+		public OptionalDouble findFirst(DoublePredicate filter) {
 			Objects.requireNonNull(filter);
-			if(size() <= 0) return 0D;
+			if(size() <= 0) return OptionalDouble.empty();
 			int index = firstIndex;
 			while(index != -1){
-				if(filter.test(keys[index])) return keys[index];
+				if(filter.test(keys[index])) return OptionalDouble.of(keys[index]);
 				index = (int)links[index];
 			}
-			return 0D;
+			return OptionalDouble.empty();
 		}
 		
 		@Override
@@ -1252,7 +1262,7 @@ public class Double2BooleanLinkedOpenCustomHashMap extends Double2BooleanOpenCus
 		}
 		
 		@Override
-		public boolean reduce(BooleanBooleanUnaryOperator operator) {
+		public OptionalBoolean reduce(BooleanBooleanUnaryOperator operator) {
 			Objects.requireNonNull(operator);
 			boolean state = false;
 			boolean empty = true;
@@ -1267,19 +1277,19 @@ public class Double2BooleanLinkedOpenCustomHashMap extends Double2BooleanOpenCus
 				state = operator.applyAsBoolean(state, values[index]);
 				index = (int)links[index];
 			}
-			return state;
+			return empty ? OptionalBoolean.empty() : OptionalBoolean.of(state);
 		}
 		
 		@Override
-		public boolean findFirst(BooleanPredicate filter) {
+		public OptionalBoolean findFirst(BooleanPredicate filter) {
 			Objects.requireNonNull(filter);
-			if(size() <= 0) return false;
+			if(size() <= 0) return OptionalBoolean.empty();
 			int index = firstIndex;
 			while(index != -1){
-				if(filter.test(values[index])) return values[index];
+				if(filter.test(values[index])) return OptionalBoolean.of(values[index]);
 				index = (int)links[index];
 			}
-			return false;
+			return OptionalBoolean.empty();
 		}
 		
 		@Override

@@ -5,6 +5,7 @@ import java.util.Collection;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 import java.util.Objects;
+import java.util.OptionalLong;
 import java.util.function.LongPredicate;
 
 import speiger.src.collections.longs.collections.LongCollection;
@@ -181,6 +182,46 @@ public class LongLinkedOpenHashSet extends LongOpenHashSet implements LongOrdere
 	public LongLinkedOpenHashSet(LongIterator iterator, float loadFactor) {
 		this(HashUtil.DEFAULT_MIN_CAPACITY, loadFactor);
 		while(iterator.hasNext()) add(iterator.nextLong());
+	}
+	
+	@Override
+	public void addFirst(long o) {
+		if(o == 0) {
+			if(containsNull) return;
+			containsNull = true;
+			onNodeAdded(nullIndex);
+			moveToFirstIndex(nullIndex);
+		}
+		else {
+			int pos = HashUtil.mix(Long.hashCode(o)) & mask;
+			while(keys[pos] != 0) {
+				if(keys[pos] == o) return;
+				pos = ++pos & mask;
+			}
+			keys[pos] = o;
+			onNodeAdded(pos);
+			moveToFirstIndex(pos);
+		}
+		if(size++ >= maxFill) rehash(HashUtil.arraySize(size+1, loadFactor));
+	}
+	
+	@Override
+	public void addLast(long o) {
+		if(o == 0) {
+			if(containsNull) return;
+			containsNull = true;
+			onNodeAdded(nullIndex);
+		}
+		else {
+			int pos = HashUtil.mix(Long.hashCode(o)) & mask;
+			while(keys[pos] != 0) {
+				if(keys[pos] == o) return;
+				pos = ++pos & mask;
+			}
+			keys[pos] = o;
+			onNodeAdded(pos);
+		}
+		if(size++ >= maxFill) rehash(HashUtil.arraySize(size+1, loadFactor));
 	}
 	
 	@Override
@@ -471,7 +512,7 @@ public class LongLinkedOpenHashSet extends LongOpenHashSet implements LongOrdere
 	}
 	
 	@Override
-	public long reduce(LongLongUnaryOperator operator) {
+	public OptionalLong reduce(LongLongUnaryOperator operator) {
 		Objects.requireNonNull(operator);
 		long state = 0L;
 		boolean empty = true;
@@ -484,18 +525,18 @@ public class LongLinkedOpenHashSet extends LongOpenHashSet implements LongOrdere
 			else state = operator.applyAsLong(state, keys[index]);
 			index = (int)links[index];
 		}
-		return state;
+		return empty ? OptionalLong.empty() : OptionalLong.of(state);
 	}
 	
 	@Override
-	public long findFirst(LongPredicate filter) {
+	public OptionalLong findFirst(LongPredicate filter) {
 		Objects.requireNonNull(filter);
 		int index = firstIndex;
 		while(index != -1) {
-			if(filter.test(keys[index])) return keys[index];
+			if(filter.test(keys[index])) return OptionalLong.of(keys[index]);
 			index = (int)links[index];
 		}
-		return 0L;
+		return OptionalLong.empty();
 	}
 	
 	@Override

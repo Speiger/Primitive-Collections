@@ -5,6 +5,7 @@ import java.util.ConcurrentModificationException;
 import java.util.Map;
 import java.util.NoSuchElementException;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.function.Consumer;
 import java.util.function.BiFunction;
 import java.util.function.Predicate;
@@ -29,6 +30,7 @@ import speiger.src.collections.floats.functions.FloatConsumer;
 import speiger.src.collections.objects.functions.consumer.ObjectObjectConsumer;
 
 import speiger.src.collections.floats.functions.function.FloatPredicate;
+import speiger.src.collections.floats.functions.OptionalFloat;
 import speiger.src.collections.objects.collections.ObjectIterator;
 import speiger.src.collections.objects.sets.AbstractObjectSet;
 import speiger.src.collections.objects.sets.ObjectSet;
@@ -923,7 +925,7 @@ public class Object2FloatOpenCustomHashMap<T> extends AbstractObject2FloatMap<T>
 		}
 		
 		@Override
-		public Object2FloatMap.Entry<T> reduce(ObjectObjectUnaryOperator<Object2FloatMap.Entry<T>, Object2FloatMap.Entry<T>> operator) {
+		public Optional<Object2FloatMap.Entry<T>> reduce(ObjectObjectUnaryOperator<Object2FloatMap.Entry<T>, Object2FloatMap.Entry<T>> operator) {
 			Objects.requireNonNull(operator);
 			Object2FloatMap.Entry<T> state = null;
 			boolean empty = true;
@@ -940,25 +942,25 @@ public class Object2FloatOpenCustomHashMap<T> extends AbstractObject2FloatMap<T>
 				}
 				state = operator.apply(state, new ValueMapEntry(i));
 			}
-			return state;
+			return empty ? Optional.empty() : Optional.ofNullable(state);
 		}
 		
 		@Override
-		public Object2FloatMap.Entry<T> findFirst(Predicate<Object2FloatMap.Entry<T>> filter) {
+		public Optional<Object2FloatMap.Entry<T>> findFirst(Predicate<Object2FloatMap.Entry<T>> filter) {
 			Objects.requireNonNull(filter);
-			if(size() <= 0) return null;
+			if(size() <= 0) return Optional.empty();
 			MapEntry entry = new MapEntry();
 			if(containsNull) {
 				entry.set(nullIndex);
-				if(filter.test(entry)) return entry;
+				if(filter.test(entry)) return Optional.ofNullable(entry);
 			}
 			for(int i = nullIndex-1;i>=0;i--) {
 				if(!strategy.equals(keys[i], null)) {
 					entry.set(i);
-					if(filter.test(entry)) return entry;
+					if(filter.test(entry)) return Optional.ofNullable(entry);
 				}
 			}
-			return null;
+			return Optional.empty();
 		}
 		
 		@Override
@@ -1131,7 +1133,7 @@ public class Object2FloatOpenCustomHashMap<T> extends AbstractObject2FloatMap<T>
 		}
 		
 		@Override
-		public T reduce(ObjectObjectUnaryOperator<T, T> operator) {
+		public Optional<T> reduce(ObjectObjectUnaryOperator<T, T> operator) {
 			Objects.requireNonNull(operator);
 			T state = null;
 			boolean empty = true;
@@ -1148,18 +1150,18 @@ public class Object2FloatOpenCustomHashMap<T> extends AbstractObject2FloatMap<T>
 				}
 				state = operator.apply(state, keys[i]);
 			}
-			return state;
+			return empty ? Optional.empty() : Optional.ofNullable(state);
 		}
 		
 		@Override
-		public T findFirst(Predicate<T> filter) {
+		public Optional<T> findFirst(Predicate<T> filter) {
 			Objects.requireNonNull(filter);
-			if(size() <= 0) return null;
-			if(containsNull && filter.test(keys[nullIndex])) return keys[nullIndex];
+			if(size() <= 0) return Optional.empty();
+			if(containsNull && filter.test(keys[nullIndex])) return Optional.ofNullable(keys[nullIndex]);
 			for(int i = nullIndex-1;i>=0;i--) {
-				if(!strategy.equals(keys[i], null) && filter.test(keys[i])) return keys[i];
+				if(!strategy.equals(keys[i], null) && filter.test(keys[i])) return Optional.ofNullable(keys[i]);
 			}
-			return null;
+			return Optional.empty();
 		}
 		
 		@Override
@@ -1274,7 +1276,7 @@ public class Object2FloatOpenCustomHashMap<T> extends AbstractObject2FloatMap<T>
 		}
 		
 		@Override
-		public float reduce(FloatFloatUnaryOperator operator) {
+		public OptionalFloat reduce(FloatFloatUnaryOperator operator) {
 			Objects.requireNonNull(operator);
 			float state = 0F;
 			boolean empty = true;
@@ -1291,18 +1293,18 @@ public class Object2FloatOpenCustomHashMap<T> extends AbstractObject2FloatMap<T>
 				}
 				state = operator.applyAsFloat(state, values[i]);
 			}
-			return state;
+			return empty ? OptionalFloat.empty() : OptionalFloat.of(state);
 		}
 		
 		@Override
-		public float findFirst(FloatPredicate filter) {
+		public OptionalFloat findFirst(FloatPredicate filter) {
 			Objects.requireNonNull(filter);
-			if(size() <= 0) return 0F;
-			if(containsNull && filter.test(values[nullIndex])) return values[nullIndex];
+			if(size() <= 0) return OptionalFloat.empty();
+			if(containsNull && filter.test(values[nullIndex])) return OptionalFloat.of(values[nullIndex]);
 			for(int i = nullIndex-1;i>=0;i--) {
-				if(!strategy.equals(keys[i], null) && filter.test(values[i])) return values[i];
+				if(!strategy.equals(keys[i], null) && filter.test(values[i])) return OptionalFloat.of(values[i]);
 			}
-			return 0F;
+			return OptionalFloat.empty();
 		}
 		
 		@Override

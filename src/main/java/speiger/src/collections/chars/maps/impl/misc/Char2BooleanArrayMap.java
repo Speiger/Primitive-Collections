@@ -4,6 +4,7 @@ import java.util.Arrays;
 import java.util.Map;
 import java.util.NoSuchElementException;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.function.Consumer;
 import java.util.function.BiFunction;
 import java.util.function.Predicate;
@@ -14,6 +15,7 @@ import speiger.src.collections.objects.functions.consumer.ObjectCharConsumer;
 import speiger.src.collections.ints.functions.consumer.IntCharConsumer;
 import speiger.src.collections.ints.functions.consumer.IntObjectConsumer;
 import speiger.src.collections.ints.functions.consumer.IntBooleanConsumer;
+import speiger.src.collections.chars.functions.OptionalChar;
 import speiger.src.collections.chars.functions.consumer.CharBooleanConsumer;
 import speiger.src.collections.chars.functions.function.CharPredicate;
 import speiger.src.collections.chars.functions.function.CharBooleanUnaryOperator;
@@ -34,6 +36,7 @@ import speiger.src.collections.booleans.lists.BooleanListIterator;
 import speiger.src.collections.objects.functions.consumer.ObjectObjectConsumer;
 
 import speiger.src.collections.booleans.functions.function.BooleanPredicate;
+import speiger.src.collections.booleans.functions.OptionalBoolean;
 import speiger.src.collections.objects.collections.ObjectIterator;
 import speiger.src.collections.objects.functions.function.ObjectObjectUnaryOperator;
 import speiger.src.collections.objects.collections.ObjectBidirectionalIterator;
@@ -729,6 +732,10 @@ public class Char2BooleanArrayMap extends AbstractChar2BooleanMap implements Cha
 	
 	private class MapEntrySet extends AbstractObjectSet<Char2BooleanMap.Entry> implements Char2BooleanOrderedMap.FastOrderedSet {
 		@Override
+		public void addFirst(Char2BooleanMap.Entry o) { throw new UnsupportedOperationException(); }
+		@Override
+		public void addLast(Char2BooleanMap.Entry o) { throw new UnsupportedOperationException(); }
+		@Override
 		public boolean addAndMoveToFirst(Char2BooleanMap.Entry o) { throw new UnsupportedOperationException(); }
 		@Override
 		public boolean addAndMoveToLast(Char2BooleanMap.Entry o) { throw new UnsupportedOperationException(); }
@@ -876,7 +883,7 @@ public class Char2BooleanArrayMap extends AbstractChar2BooleanMap implements Cha
 		}
 		
 		@Override
-		public Char2BooleanMap.Entry reduce(ObjectObjectUnaryOperator<Char2BooleanMap.Entry, Char2BooleanMap.Entry> operator) {
+		public Optional<Char2BooleanMap.Entry> reduce(ObjectObjectUnaryOperator<Char2BooleanMap.Entry, Char2BooleanMap.Entry> operator) {
 			Objects.requireNonNull(operator);
 			Char2BooleanMap.Entry state = null;
 			boolean empty = true;
@@ -888,19 +895,19 @@ public class Char2BooleanArrayMap extends AbstractChar2BooleanMap implements Cha
 				}
 				state = operator.apply(state, new ValueMapEntry(i));
 			}
-			return state;
+			return empty ? Optional.empty() : Optional.ofNullable(state);
 		}
 		
 		@Override
-		public Char2BooleanMap.Entry findFirst(Predicate<Char2BooleanMap.Entry> filter) {
+		public Optional<Char2BooleanMap.Entry> findFirst(Predicate<Char2BooleanMap.Entry> filter) {
 			Objects.requireNonNull(filter);
-			if(size() <= 0) return null;
+			if(size() <= 0) return Optional.empty();
 			MapEntry entry = new MapEntry();
 			for(int i = 0;i<size;i++) {
 				entry.set(i);
-				if(filter.test(entry)) return entry;
+				if(filter.test(entry)) return Optional.ofNullable(entry);
 			}
-			return null;
+			return Optional.empty();
 		}
 		
 		@Override
@@ -972,6 +979,10 @@ public class Char2BooleanArrayMap extends AbstractChar2BooleanMap implements Cha
 		
 		@Override
 		public boolean add(char o) { throw new UnsupportedOperationException(); }
+		@Override
+		public void addFirst(char o) { throw new UnsupportedOperationException(); }
+		@Override
+		public void addLast(char o) { throw new UnsupportedOperationException(); }
 		@Override
 		public boolean addAndMoveToFirst(char o) { throw new UnsupportedOperationException(); }
 		@Override
@@ -1059,7 +1070,7 @@ public class Char2BooleanArrayMap extends AbstractChar2BooleanMap implements Cha
 		}
 		
 		@Override
-		public char reduce(CharCharUnaryOperator operator) {
+		public OptionalChar reduce(CharCharUnaryOperator operator) {
 			Objects.requireNonNull(operator);
 			char state = (char)0;
 			boolean empty = true;
@@ -1071,16 +1082,16 @@ public class Char2BooleanArrayMap extends AbstractChar2BooleanMap implements Cha
 				}
 				state = operator.applyAsChar(state, keys[i]);
 			}
-			return state;
+			return empty ? OptionalChar.empty() : OptionalChar.of(state);
 		}
 		
 		@Override
-		public char findFirst(CharPredicate filter) {
+		public OptionalChar findFirst(CharPredicate filter) {
 			Objects.requireNonNull(filter);
 			for(int i = 0;i<size;i++) {
-				if(filter.test(keys[i])) return keys[i];
+				if(filter.test(keys[i])) return OptionalChar.of(keys[i]);
 			}
-			return (char)0;
+			return OptionalChar.empty();
 		}
 		
 		@Override
@@ -1181,7 +1192,7 @@ public class Char2BooleanArrayMap extends AbstractChar2BooleanMap implements Cha
 		}
 		
 		@Override
-		public boolean reduce(BooleanBooleanUnaryOperator operator) {
+		public OptionalBoolean reduce(BooleanBooleanUnaryOperator operator) {
 			Objects.requireNonNull(operator);
 			boolean state = false;
 			boolean empty = true;
@@ -1193,16 +1204,16 @@ public class Char2BooleanArrayMap extends AbstractChar2BooleanMap implements Cha
 				}
 				state = operator.applyAsBoolean(state, values[i]);
 			}
-			return state;
+			return empty ? OptionalBoolean.empty() : OptionalBoolean.of(state);
 		}
 		
 		@Override
-		public boolean findFirst(BooleanPredicate filter) {
+		public OptionalBoolean findFirst(BooleanPredicate filter) {
 			Objects.requireNonNull(filter);
 			for(int i = 0;i<size;i++) {
-				if(filter.test(values[i])) return values[i];
+				if(filter.test(values[i])) return OptionalBoolean.of(values[i]);
 			}
-			return false;
+			return OptionalBoolean.empty();
 		}
 		
 		@Override

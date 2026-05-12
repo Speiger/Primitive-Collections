@@ -10,6 +10,7 @@ import speiger.src.collections.bytes.collections.ByteBidirectionalIterator;
 import speiger.src.collections.bytes.collections.ByteCollection;
 import speiger.src.collections.bytes.collections.ByteIterator;
 import speiger.src.collections.bytes.functions.ByteConsumer;
+import speiger.src.collections.bytes.functions.OptionalByte;
 import speiger.src.collections.ints.functions.consumer.IntByteConsumer;
 import speiger.src.collections.objects.functions.consumer.ObjectByteConsumer;
 import speiger.src.collections.bytes.functions.function.BytePredicate;
@@ -236,6 +237,10 @@ public class ImmutableByteOpenHashSet extends AbstractByteSet implements ByteOrd
 	@Override
 	public boolean addAll(ByteCollection c) { throw new UnsupportedOperationException(); }
 	@Override
+	public void addFirst(byte o) { throw new UnsupportedOperationException(); }
+	@Override
+	public void addLast(byte o) { throw new UnsupportedOperationException(); }
+	@Override
 	public boolean addAndMoveToFirst(byte o) { throw new UnsupportedOperationException(); }
 	@Override
 	public boolean addAndMoveToLast(byte o) { throw new UnsupportedOperationException(); }
@@ -371,7 +376,7 @@ public class ImmutableByteOpenHashSet extends AbstractByteSet implements ByteOrd
 	}
 	
 	@Override
-	public byte reduce(ByteByteUnaryOperator operator) {
+	public OptionalByte reduce(ByteByteUnaryOperator operator) {
 		Objects.requireNonNull(operator);
 		byte state = (byte)0;
 		boolean empty = true;
@@ -384,18 +389,18 @@ public class ImmutableByteOpenHashSet extends AbstractByteSet implements ByteOrd
 			else state = operator.applyAsByte(state, keys[index]);
 			index = (int)links[index];
 		}
-		return state;
+		return empty ? OptionalByte.empty() : OptionalByte.of(state);
 	}
 	
 	@Override
-	public byte findFirst(BytePredicate filter) {
+	public OptionalByte findFirst(BytePredicate filter) {
 		Objects.requireNonNull(filter);
 		int index = firstIndex;
 		while(index != -1) {
-			if(filter.test(keys[index])) return keys[index];
+			if(filter.test(keys[index])) return OptionalByte.of(keys[index]);
 			index = (int)links[index];
 		}
-		return (byte)0;
+		return OptionalByte.empty();
 	}
 	
 	@Override

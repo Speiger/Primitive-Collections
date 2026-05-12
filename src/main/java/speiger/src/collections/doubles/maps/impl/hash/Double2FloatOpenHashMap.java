@@ -5,10 +5,12 @@ import java.util.ConcurrentModificationException;
 import java.util.Map;
 import java.util.NoSuchElementException;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.function.Consumer;
 import java.util.function.BiFunction;
 import java.util.function.Predicate;
 import java.util.function.DoublePredicate;
+import java.util.OptionalDouble;
 
 import speiger.src.collections.doubles.collections.DoubleIterator;
 import speiger.src.collections.doubles.functions.DoubleConsumer;
@@ -34,6 +36,7 @@ import speiger.src.collections.floats.functions.FloatConsumer;
 import speiger.src.collections.objects.functions.consumer.ObjectObjectConsumer;
 import speiger.src.collections.objects.functions.consumer.ObjectFloatConsumer;
 import speiger.src.collections.floats.functions.function.FloatPredicate;
+import speiger.src.collections.floats.functions.OptionalFloat;
 import speiger.src.collections.objects.collections.ObjectIterator;
 import speiger.src.collections.objects.sets.AbstractObjectSet;
 import speiger.src.collections.objects.sets.ObjectSet;
@@ -920,7 +923,7 @@ public class Double2FloatOpenHashMap extends AbstractDouble2FloatMap implements 
 		}
 		
 		@Override
-		public Double2FloatMap.Entry reduce(ObjectObjectUnaryOperator<Double2FloatMap.Entry, Double2FloatMap.Entry> operator) {
+		public Optional<Double2FloatMap.Entry> reduce(ObjectObjectUnaryOperator<Double2FloatMap.Entry, Double2FloatMap.Entry> operator) {
 			Objects.requireNonNull(operator);
 			Double2FloatMap.Entry state = null;
 			boolean empty = true;
@@ -937,25 +940,25 @@ public class Double2FloatOpenHashMap extends AbstractDouble2FloatMap implements 
 				}
 				state = operator.apply(state, new ValueMapEntry(i));
 			}
-			return state;
+			return empty ? Optional.empty() : Optional.ofNullable(state);
 		}
 		
 		@Override
-		public Double2FloatMap.Entry findFirst(Predicate<Double2FloatMap.Entry> filter) {
+		public Optional<Double2FloatMap.Entry> findFirst(Predicate<Double2FloatMap.Entry> filter) {
 			Objects.requireNonNull(filter);
-			if(size() <= 0) return null;
+			if(size() <= 0) return Optional.empty();
 			MapEntry entry = new MapEntry();
 			if(containsNull) {
 				entry.set(nullIndex);
-				if(filter.test(entry)) return entry;
+				if(filter.test(entry)) return Optional.ofNullable(entry);
 			}
 			for(int i = nullIndex-1;i>=0;i--) {
 				if(Double.doubleToLongBits(keys[i]) != 0) {
 					entry.set(i);
-					if(filter.test(entry)) return entry;
+					if(filter.test(entry)) return Optional.ofNullable(entry);
 				}
 			}
-			return null;
+			return Optional.empty();
 		}
 		
 		@Override
@@ -1127,7 +1130,7 @@ public class Double2FloatOpenHashMap extends AbstractDouble2FloatMap implements 
 		}
 		
 		@Override
-		public double reduce(DoubleDoubleUnaryOperator operator) {
+		public OptionalDouble reduce(DoubleDoubleUnaryOperator operator) {
 			Objects.requireNonNull(operator);
 			double state = 0D;
 			boolean empty = true;
@@ -1144,18 +1147,18 @@ public class Double2FloatOpenHashMap extends AbstractDouble2FloatMap implements 
 				}
 				state = operator.applyAsDouble(state, keys[i]);
 			}
-			return state;
+			return empty ? OptionalDouble.empty() : OptionalDouble.of(state);
 		}
 		
 		@Override
-		public double findFirst(DoublePredicate filter) {
+		public OptionalDouble findFirst(DoublePredicate filter) {
 			Objects.requireNonNull(filter);
-			if(size() <= 0) return 0D;
-			if(containsNull && filter.test(keys[nullIndex])) return keys[nullIndex];
+			if(size() <= 0) return OptionalDouble.empty();
+			if(containsNull && filter.test(keys[nullIndex])) return OptionalDouble.of(keys[nullIndex]);
 			for(int i = nullIndex-1;i>=0;i--) {
-				if(Double.doubleToLongBits(keys[i]) != 0 && filter.test(keys[i])) return keys[i];
+				if(Double.doubleToLongBits(keys[i]) != 0 && filter.test(keys[i])) return OptionalDouble.of(keys[i]);
 			}
-			return 0D;
+			return OptionalDouble.empty();
 		}
 		
 		@Override
@@ -1270,7 +1273,7 @@ public class Double2FloatOpenHashMap extends AbstractDouble2FloatMap implements 
 		}
 		
 		@Override
-		public float reduce(FloatFloatUnaryOperator operator) {
+		public OptionalFloat reduce(FloatFloatUnaryOperator operator) {
 			Objects.requireNonNull(operator);
 			float state = 0F;
 			boolean empty = true;
@@ -1287,18 +1290,18 @@ public class Double2FloatOpenHashMap extends AbstractDouble2FloatMap implements 
 				}
 				state = operator.applyAsFloat(state, values[i]);
 			}
-			return state;
+			return empty ? OptionalFloat.empty() : OptionalFloat.of(state);
 		}
 		
 		@Override
-		public float findFirst(FloatPredicate filter) {
+		public OptionalFloat findFirst(FloatPredicate filter) {
 			Objects.requireNonNull(filter);
-			if(size() <= 0) return 0F;
-			if(containsNull && filter.test(values[nullIndex])) return values[nullIndex];
+			if(size() <= 0) return OptionalFloat.empty();
+			if(containsNull && filter.test(values[nullIndex])) return OptionalFloat.of(values[nullIndex]);
 			for(int i = nullIndex-1;i>=0;i--) {
-				if(Double.doubleToLongBits(keys[i]) != 0 && filter.test(values[i])) return values[i];
+				if(Double.doubleToLongBits(keys[i]) != 0 && filter.test(values[i])) return OptionalFloat.of(values[i]);
 			}
-			return 0F;
+			return OptionalFloat.empty();
 		}
 		
 		@Override

@@ -5,6 +5,7 @@ import java.util.ConcurrentModificationException;
 import java.util.Map;
 import java.util.NoSuchElementException;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.function.Consumer;
 import java.util.function.BiFunction;
 import java.util.function.Predicate;
@@ -19,6 +20,7 @@ import speiger.src.collections.floats.functions.consumer.FloatBooleanConsumer;
 import speiger.src.collections.floats.functions.function.FloatPredicate;
 import speiger.src.collections.floats.functions.function.FloatBooleanUnaryOperator;
 import speiger.src.collections.floats.functions.function.FloatFloatUnaryOperator;
+import speiger.src.collections.floats.functions.OptionalFloat;
 import speiger.src.collections.floats.maps.abstracts.AbstractFloat2BooleanMap;
 import speiger.src.collections.floats.maps.interfaces.Float2BooleanMap;
 import speiger.src.collections.floats.sets.AbstractFloatSet;
@@ -36,6 +38,7 @@ import speiger.src.collections.objects.functions.consumer.ObjectObjectConsumer;
 import speiger.src.collections.objects.functions.consumer.ObjectBooleanConsumer;
 
 import speiger.src.collections.booleans.functions.function.BooleanPredicate;
+import speiger.src.collections.booleans.functions.OptionalBoolean;
 import speiger.src.collections.objects.collections.ObjectIterator;
 import speiger.src.collections.objects.sets.AbstractObjectSet;
 import speiger.src.collections.objects.sets.ObjectSet;
@@ -930,7 +933,7 @@ public class Float2BooleanOpenCustomHashMap extends AbstractFloat2BooleanMap imp
 		}
 		
 		@Override
-		public Float2BooleanMap.Entry reduce(ObjectObjectUnaryOperator<Float2BooleanMap.Entry, Float2BooleanMap.Entry> operator) {
+		public Optional<Float2BooleanMap.Entry> reduce(ObjectObjectUnaryOperator<Float2BooleanMap.Entry, Float2BooleanMap.Entry> operator) {
 			Objects.requireNonNull(operator);
 			Float2BooleanMap.Entry state = null;
 			boolean empty = true;
@@ -947,25 +950,25 @@ public class Float2BooleanOpenCustomHashMap extends AbstractFloat2BooleanMap imp
 				}
 				state = operator.apply(state, new ValueMapEntry(i));
 			}
-			return state;
+			return empty ? Optional.empty() : Optional.ofNullable(state);
 		}
 		
 		@Override
-		public Float2BooleanMap.Entry findFirst(Predicate<Float2BooleanMap.Entry> filter) {
+		public Optional<Float2BooleanMap.Entry> findFirst(Predicate<Float2BooleanMap.Entry> filter) {
 			Objects.requireNonNull(filter);
-			if(size() <= 0) return null;
+			if(size() <= 0) return Optional.empty();
 			MapEntry entry = new MapEntry();
 			if(containsNull) {
 				entry.set(nullIndex);
-				if(filter.test(entry)) return entry;
+				if(filter.test(entry)) return Optional.ofNullable(entry);
 			}
 			for(int i = nullIndex-1;i>=0;i--) {
 				if(!strategy.equals(keys[i], 0F)) {
 					entry.set(i);
-					if(filter.test(entry)) return entry;
+					if(filter.test(entry)) return Optional.ofNullable(entry);
 				}
 			}
-			return null;
+			return Optional.empty();
 		}
 		
 		@Override
@@ -1139,7 +1142,7 @@ public class Float2BooleanOpenCustomHashMap extends AbstractFloat2BooleanMap imp
 		}
 		
 		@Override
-		public float reduce(FloatFloatUnaryOperator operator) {
+		public OptionalFloat reduce(FloatFloatUnaryOperator operator) {
 			Objects.requireNonNull(operator);
 			float state = 0F;
 			boolean empty = true;
@@ -1156,18 +1159,18 @@ public class Float2BooleanOpenCustomHashMap extends AbstractFloat2BooleanMap imp
 				}
 				state = operator.applyAsFloat(state, keys[i]);
 			}
-			return state;
+			return empty ? OptionalFloat.empty() : OptionalFloat.of(state);
 		}
 		
 		@Override
-		public float findFirst(FloatPredicate filter) {
+		public OptionalFloat findFirst(FloatPredicate filter) {
 			Objects.requireNonNull(filter);
-			if(size() <= 0) return 0F;
-			if(containsNull && filter.test(keys[nullIndex])) return keys[nullIndex];
+			if(size() <= 0) return OptionalFloat.empty();
+			if(containsNull && filter.test(keys[nullIndex])) return OptionalFloat.of(keys[nullIndex]);
 			for(int i = nullIndex-1;i>=0;i--) {
-				if(!strategy.equals(keys[i], 0F) && filter.test(keys[i])) return keys[i];
+				if(!strategy.equals(keys[i], 0F) && filter.test(keys[i])) return OptionalFloat.of(keys[i]);
 			}
-			return 0F;
+			return OptionalFloat.empty();
 		}
 		
 		@Override
@@ -1282,7 +1285,7 @@ public class Float2BooleanOpenCustomHashMap extends AbstractFloat2BooleanMap imp
 		}
 		
 		@Override
-		public boolean reduce(BooleanBooleanUnaryOperator operator) {
+		public OptionalBoolean reduce(BooleanBooleanUnaryOperator operator) {
 			Objects.requireNonNull(operator);
 			boolean state = false;
 			boolean empty = true;
@@ -1299,18 +1302,18 @@ public class Float2BooleanOpenCustomHashMap extends AbstractFloat2BooleanMap imp
 				}
 				state = operator.applyAsBoolean(state, values[i]);
 			}
-			return state;
+			return empty ? OptionalBoolean.empty() : OptionalBoolean.of(state);
 		}
 		
 		@Override
-		public boolean findFirst(BooleanPredicate filter) {
+		public OptionalBoolean findFirst(BooleanPredicate filter) {
 			Objects.requireNonNull(filter);
-			if(size() <= 0) return false;
-			if(containsNull && filter.test(values[nullIndex])) return values[nullIndex];
+			if(size() <= 0) return OptionalBoolean.empty();
+			if(containsNull && filter.test(values[nullIndex])) return OptionalBoolean.of(values[nullIndex]);
 			for(int i = nullIndex-1;i>=0;i--) {
-				if(!strategy.equals(keys[i], 0F) && filter.test(values[i])) return values[i];
+				if(!strategy.equals(keys[i], 0F) && filter.test(values[i])) return OptionalBoolean.of(values[i]);
 			}
-			return false;
+			return OptionalBoolean.empty();
 		}
 		
 		@Override

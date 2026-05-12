@@ -11,6 +11,7 @@ import java.util.function.IntPredicate;import java.util.function.IntUnaryOperato
 import speiger.src.collections.bytes.collections.ByteCollection;
 import speiger.src.collections.bytes.functions.ByteComparator;
 import speiger.src.collections.bytes.functions.ByteConsumer;
+import speiger.src.collections.bytes.functions.OptionalByte;
 import speiger.src.collections.bytes.utils.ByteArrays;
 import speiger.src.collections.objects.functions.consumer.ObjectByteConsumer;
 import speiger.src.collections.bytes.functions.function.BytePredicate;
@@ -273,12 +274,12 @@ public class ImmutableByteList extends AbstractByteList
 	}
 	
 	@Override
-	public byte findFirst(BytePredicate filter) {
+	public OptionalByte findFirst(BytePredicate filter) {
 		Objects.requireNonNull(filter);
 		for(int i = 0,m=data.length;i<m;i++) {
-			if(filter.test(data[i])) return data[i];
+			if(filter.test(data[i])) return OptionalByte.of(data[i]);
 		}
-		return (byte)0;
+		return OptionalByte.empty();
 	}
 	
 	@Override
@@ -292,7 +293,7 @@ public class ImmutableByteList extends AbstractByteList
 	}
 	
 	@Override
-	public byte reduce(ByteByteUnaryOperator operator) {
+	public OptionalByte reduce(ByteByteUnaryOperator operator) {
 		Objects.requireNonNull(operator);
 		byte state = (byte)0;
 		boolean empty = true;
@@ -304,7 +305,7 @@ public class ImmutableByteList extends AbstractByteList
 			}
 			state = operator.applyAsByte(state, data[i]);
 		}
-		return state;
+		return empty ? OptionalByte.empty() : OptionalByte.of(state);
 	}
 	
 	@Override

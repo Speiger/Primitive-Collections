@@ -3,6 +3,7 @@ package speiger.src.collections.shorts.maps.impl.tree;
 import java.util.Collections;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.NoSuchElementException;
 import java.util.function.Consumer;
 import java.util.function.BiFunction;
@@ -17,6 +18,7 @@ import speiger.src.collections.ints.functions.consumer.IntObjectConsumer;
 import speiger.src.collections.ints.functions.consumer.IntBooleanConsumer;
 import speiger.src.collections.shorts.functions.function.ShortPredicate;
 import speiger.src.collections.shorts.functions.consumer.ShortBooleanConsumer;
+import speiger.src.collections.shorts.functions.OptionalShort;
 import speiger.src.collections.shorts.functions.function.ShortBooleanUnaryOperator;
 import speiger.src.collections.shorts.functions.function.ShortShortUnaryOperator;
 import speiger.src.collections.shorts.maps.abstracts.AbstractShort2BooleanMap;
@@ -35,6 +37,7 @@ import speiger.src.collections.objects.functions.consumer.ObjectObjectConsumer;
 import speiger.src.collections.objects.functions.consumer.ObjectBooleanConsumer;
 
 import speiger.src.collections.booleans.functions.function.BooleanPredicate;
+import speiger.src.collections.booleans.functions.OptionalBoolean;
 import speiger.src.collections.objects.collections.ObjectBidirectionalIterator;
 import speiger.src.collections.objects.collections.ObjectIterator;
 import speiger.src.collections.objects.functions.function.ObjectObjectUnaryOperator;
@@ -1123,7 +1126,7 @@ public class Short2BooleanRBTreeMap extends AbstractShort2BooleanMap implements 
 		}
 		
 		@Override
-		public short reduce(ShortShortUnaryOperator operator) {
+		public OptionalShort reduce(ShortShortUnaryOperator operator) {
 			Objects.requireNonNull(operator);
 			short state = (short)0;
 			boolean empty = true;
@@ -1135,15 +1138,15 @@ public class Short2BooleanRBTreeMap extends AbstractShort2BooleanMap implements 
 				}
 				state = operator.applyAsShort(state, entry.key);
 			}
-			return state;
+			return empty ? OptionalShort.empty() : OptionalShort.of(state);
 		}
 		
 		@Override
-		public short findFirst(ShortPredicate filter) {
+		public OptionalShort findFirst(ShortPredicate filter) {
 			Objects.requireNonNull(filter);
 			for(Node entry = start(), end = end();entry != null && (end == null || (end != previous(entry)));entry = next(entry))
-				if(filter.test(entry.key)) return entry.key;
-			return (short)0;
+				if(filter.test(entry.key)) return OptionalShort.of(entry.key);
+			return OptionalShort.empty();
 		}
 		
 		@Override
@@ -1775,7 +1778,7 @@ public class Short2BooleanRBTreeMap extends AbstractShort2BooleanMap implements 
 			}
 			
 			@Override
-			public Short2BooleanMap.Entry reduce(ObjectObjectUnaryOperator<Short2BooleanMap.Entry, Short2BooleanMap.Entry> operator) {
+			public Optional<Short2BooleanMap.Entry> reduce(ObjectObjectUnaryOperator<Short2BooleanMap.Entry, Short2BooleanMap.Entry> operator) {
 				Objects.requireNonNull(operator);
 				Short2BooleanMap.Entry state = null;
 				boolean empty = true;
@@ -1787,19 +1790,19 @@ public class Short2BooleanRBTreeMap extends AbstractShort2BooleanMap implements 
 					}
 					state = operator.apply(state, new BasicEntry(entry.key, entry.value));
 				}
-				return state;
+				return empty ? Optional.empty() : Optional.ofNullable(state);
 			}
 			
 			@Override
-			public Short2BooleanMap.Entry findFirst(Predicate<Short2BooleanMap.Entry> filter) {
+			public Optional<Short2BooleanMap.Entry> findFirst(Predicate<Short2BooleanMap.Entry> filter) {
 				Objects.requireNonNull(filter);
-				if(size() <= 0) return null;
+				if(size() <= 0) return Optional.empty();
 				BasicEntry subEntry = new BasicEntry();
 				for(Node entry = subLowest(), last = subHighest();entry != null && (last == null || last != previous(entry));entry = next(entry)) {
 					subEntry.set(entry.key, entry.value);
-					if(filter.test(subEntry)) return subEntry;
+					if(filter.test(subEntry)) return Optional.ofNullable(subEntry);
 				}
-				return null;
+				return Optional.empty();
 			}
 			
 			@Override
@@ -1894,7 +1897,7 @@ public class Short2BooleanRBTreeMap extends AbstractShort2BooleanMap implements 
 			}
 			
 			@Override
-			public boolean reduce(BooleanBooleanUnaryOperator operator) {
+			public OptionalBoolean reduce(BooleanBooleanUnaryOperator operator) {
 				Objects.requireNonNull(operator);
 				boolean state = false;
 				boolean empty = true;
@@ -1906,15 +1909,15 @@ public class Short2BooleanRBTreeMap extends AbstractShort2BooleanMap implements 
 					}
 					state = operator.applyAsBoolean(state, entry.value);
 				}
-				return state;
+				return empty ? OptionalBoolean.empty() : OptionalBoolean.of(state);
 			}
 			
 			@Override
-			public boolean findFirst(BooleanPredicate filter) {
+			public OptionalBoolean findFirst(BooleanPredicate filter) {
 				Objects.requireNonNull(filter);
 				for(Node entry = subLowest(), last = subHighest();entry != null && (last == null || last != previous(entry));entry = next(entry))
-					if(filter.test(entry.value)) return entry.value;
-				return false;
+					if(filter.test(entry.value)) return OptionalBoolean.of(entry.value);
+				return OptionalBoolean.empty();
 			}
 			
 			@Override
@@ -2230,7 +2233,7 @@ public class Short2BooleanRBTreeMap extends AbstractShort2BooleanMap implements 
 		}
 		
 		@Override
-		public boolean reduce(BooleanBooleanUnaryOperator operator) {
+		public OptionalBoolean reduce(BooleanBooleanUnaryOperator operator) {
 			Objects.requireNonNull(operator);
 			boolean state = false;
 			boolean empty = true;
@@ -2242,15 +2245,15 @@ public class Short2BooleanRBTreeMap extends AbstractShort2BooleanMap implements 
 				}
 				state = operator.applyAsBoolean(state, entry.value);
 			}
-			return state;
+			return empty ? OptionalBoolean.empty() : OptionalBoolean.of(state);
 		}
 		
 		@Override
-		public boolean findFirst(BooleanPredicate filter) {
+		public OptionalBoolean findFirst(BooleanPredicate filter) {
 			Objects.requireNonNull(filter);
 			for(Node entry = first;entry != null;entry = entry.next())
-				if(filter.test(entry.value)) return entry.value;
-			return false;
+				if(filter.test(entry.value)) return OptionalBoolean.of(entry.value);
+			return OptionalBoolean.empty();
 		}
 		
 		@Override
@@ -2391,7 +2394,7 @@ public class Short2BooleanRBTreeMap extends AbstractShort2BooleanMap implements 
 		}
 		
 		@Override
-		public Short2BooleanMap.Entry reduce(ObjectObjectUnaryOperator<Short2BooleanMap.Entry, Short2BooleanMap.Entry> operator) {
+		public Optional<Short2BooleanMap.Entry> reduce(ObjectObjectUnaryOperator<Short2BooleanMap.Entry, Short2BooleanMap.Entry> operator) {
 			Objects.requireNonNull(operator);
 			Short2BooleanMap.Entry state = null;
 			boolean empty = true;
@@ -2403,19 +2406,19 @@ public class Short2BooleanRBTreeMap extends AbstractShort2BooleanMap implements 
 				}
 				state = operator.apply(state, new BasicEntry(entry.key, entry.value));
 			}
-			return state;
+			return empty ? Optional.empty() : Optional.ofNullable(state);
 		}
 		
 		@Override
-		public Short2BooleanMap.Entry findFirst(Predicate<Short2BooleanMap.Entry> filter) {
+		public Optional<Short2BooleanMap.Entry> findFirst(Predicate<Short2BooleanMap.Entry> filter) {
 			Objects.requireNonNull(filter);
-			if(size() <= 0) return null;
+			if(size() <= 0) return Optional.empty();
 			BasicEntry subEntry = new BasicEntry();
 			for(Node entry = first;entry != null;entry = entry.next()) {
 				subEntry.set(entry.key, entry.value);
-				if(filter.test(subEntry)) return subEntry;
+				if(filter.test(subEntry)) return Optional.ofNullable(subEntry);
 			}
-			return null;
+			return Optional.empty();
 		}
 		
 		@Override

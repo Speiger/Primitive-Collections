@@ -7,6 +7,7 @@ import java.util.Objects;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
+import java.util.Optional;
 import java.util.function.Predicate;
 
 import speiger.src.collections.objects.collections.ObjectCollection;
@@ -188,6 +189,46 @@ public class ObjectLinkedOpenCustomHashSet<T> extends ObjectOpenCustomHashSet<T>
 	public ObjectLinkedOpenCustomHashSet(Iterator<T> iterator, float loadFactor, ObjectStrategy<? super T> strategy) {
 		this(HashUtil.DEFAULT_MIN_CAPACITY, loadFactor, strategy);
 		while(iterator.hasNext()) add(iterator.next());
+	}
+	
+	@Override
+	public void addFirst(T o) {
+		if(strategy.equals(o, null)) {
+			if(containsNull) return;
+			containsNull = true;
+			onNodeAdded(nullIndex);
+			moveToFirstIndex(nullIndex);
+		}
+		else {
+			int pos = HashUtil.mix(strategy.hashCode(o)) & mask;
+			while(!strategy.equals(keys[pos], null)) {
+				if(strategy.equals(keys[pos], o)) return;
+				pos = ++pos & mask;
+			}
+			keys[pos] = o;
+			onNodeAdded(pos);
+			moveToFirstIndex(pos);
+		}
+		if(size++ >= maxFill) rehash(HashUtil.arraySize(size+1, loadFactor));
+	}
+	
+	@Override
+	public void addLast(T o) {
+		if(strategy.equals(o, null)) {
+			if(containsNull) return;
+			containsNull = true;
+			onNodeAdded(nullIndex);
+		}
+		else {
+			int pos = HashUtil.mix(strategy.hashCode(o)) & mask;
+			while(!strategy.equals(keys[pos], null)) {
+				if(strategy.equals(keys[pos], o)) return;
+				pos = ++pos & mask;
+			}
+			keys[pos] = o;
+			onNodeAdded(pos);
+		}
+		if(size++ >= maxFill) rehash(HashUtil.arraySize(size+1, loadFactor));
 	}
 	
 	@Override
@@ -583,7 +624,7 @@ public class ObjectLinkedOpenCustomHashSet<T> extends ObjectOpenCustomHashSet<T>
 	}
 	
 	@Override
-	public T reduce(ObjectObjectUnaryOperator<T, T> operator) {
+	public Optional<T> reduce(ObjectObjectUnaryOperator<T, T> operator) {
 		Objects.requireNonNull(operator);
 		T state = null;
 		boolean empty = true;
@@ -596,18 +637,18 @@ public class ObjectLinkedOpenCustomHashSet<T> extends ObjectOpenCustomHashSet<T>
 			else state = operator.apply(state, keys[index]);
 			index = (int)links[index];
 		}
-		return state;
+		return empty ? Optional.empty() : Optional.ofNullable(state);
 	}
 	
 	@Override
-	public T findFirst(Predicate<T> filter) {
+	public Optional<T> findFirst(Predicate<T> filter) {
 		Objects.requireNonNull(filter);
 		int index = firstIndex;
 		while(index != -1) {
-			if(filter.test(keys[index])) return keys[index];
+			if(filter.test(keys[index])) return Optional.ofNullable(keys[index]);
 			index = (int)links[index];
 		}
-		return null;
+		return Optional.empty();
 	}
 	
 	@Override

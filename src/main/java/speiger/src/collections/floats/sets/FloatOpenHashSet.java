@@ -11,6 +11,7 @@ import speiger.src.collections.floats.collections.FloatCollection;
 import speiger.src.collections.floats.collections.FloatIterator;
 import speiger.src.collections.floats.utils.FloatIterators;
 import speiger.src.collections.floats.functions.FloatConsumer;
+import speiger.src.collections.floats.functions.OptionalFloat;
 import speiger.src.collections.ints.functions.consumer.IntFloatConsumer;
 import speiger.src.collections.objects.functions.consumer.ObjectFloatConsumer;
 import speiger.src.collections.floats.functions.function.FloatPredicate;
@@ -428,7 +429,7 @@ public class FloatOpenHashSet extends AbstractFloatSet implements ITrimmable
 	}
 	
 	@Override
-	public float reduce(FloatFloatUnaryOperator operator) {
+	public OptionalFloat reduce(FloatFloatUnaryOperator operator) {
 		Objects.requireNonNull(operator);
 		float state = 0F;
 		boolean empty = true;
@@ -445,18 +446,18 @@ public class FloatOpenHashSet extends AbstractFloatSet implements ITrimmable
 			}
 			state = operator.applyAsFloat(state, keys[i]);
 		}
-		return state;
+		return empty ? OptionalFloat.empty() : OptionalFloat.of(state);
 	}
 	
 	@Override
-	public float findFirst(FloatPredicate filter) {
+	public OptionalFloat findFirst(FloatPredicate filter) {
 		Objects.requireNonNull(filter);
-		if(size() <= 0) return 0F;
-		if(containsNull && filter.test(keys[nullIndex])) return keys[nullIndex];
+		if(size() <= 0) return OptionalFloat.empty();
+		if(containsNull && filter.test(keys[nullIndex])) return OptionalFloat.of(keys[nullIndex]);
 		for(int i = nullIndex-1;i>=0;i--) {
-			if(Float.floatToIntBits(keys[i]) != 0 && filter.test(keys[i])) return keys[i];
+			if(Float.floatToIntBits(keys[i]) != 0 && filter.test(keys[i])) return OptionalFloat.of(keys[i]);
 		}
-		return 0F;
+		return OptionalFloat.empty();
 	}
 	
 	@Override

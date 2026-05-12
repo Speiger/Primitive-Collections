@@ -63,7 +63,17 @@ public abstract class AbstractDoubleSet extends AbstractDoubleCollection impleme
 		public DoubleBidirectionalIterator reverseIterator() {
 			return set.iterator();
 		}
-
+		
+		@Override
+		public void addFirst(double o) {
+			set.addLast(o);
+		}
+		
+		@Override
+		public void addLast(double o) {
+			set.addFirst(o);
+		}
+		
 		@Override
 		public boolean remove(double o) {
 			return set.remove(o);

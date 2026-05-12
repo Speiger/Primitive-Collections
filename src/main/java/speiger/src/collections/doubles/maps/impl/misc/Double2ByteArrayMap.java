@@ -4,10 +4,12 @@ import java.util.Arrays;
 import java.util.Map;
 import java.util.NoSuchElementException;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.function.Consumer;
 import java.util.function.BiFunction;
 import java.util.function.Predicate;
 import java.util.function.DoublePredicate;
+import java.util.OptionalDouble;
 
 import speiger.src.collections.doubles.collections.DoubleBidirectionalIterator;
 import speiger.src.collections.doubles.functions.DoubleConsumer;
@@ -35,6 +37,7 @@ import speiger.src.collections.bytes.lists.ByteListIterator;
 import speiger.src.collections.objects.functions.consumer.ObjectObjectConsumer;
 
 import speiger.src.collections.bytes.functions.function.BytePredicate;
+import speiger.src.collections.bytes.functions.OptionalByte;
 import speiger.src.collections.objects.collections.ObjectIterator;
 import speiger.src.collections.objects.functions.function.ObjectObjectUnaryOperator;
 import speiger.src.collections.objects.collections.ObjectBidirectionalIterator;
@@ -752,6 +755,10 @@ public class Double2ByteArrayMap extends AbstractDouble2ByteMap implements Doubl
 	
 	private class MapEntrySet extends AbstractObjectSet<Double2ByteMap.Entry> implements Double2ByteOrderedMap.FastOrderedSet {
 		@Override
+		public void addFirst(Double2ByteMap.Entry o) { throw new UnsupportedOperationException(); }
+		@Override
+		public void addLast(Double2ByteMap.Entry o) { throw new UnsupportedOperationException(); }
+		@Override
 		public boolean addAndMoveToFirst(Double2ByteMap.Entry o) { throw new UnsupportedOperationException(); }
 		@Override
 		public boolean addAndMoveToLast(Double2ByteMap.Entry o) { throw new UnsupportedOperationException(); }
@@ -899,7 +906,7 @@ public class Double2ByteArrayMap extends AbstractDouble2ByteMap implements Doubl
 		}
 		
 		@Override
-		public Double2ByteMap.Entry reduce(ObjectObjectUnaryOperator<Double2ByteMap.Entry, Double2ByteMap.Entry> operator) {
+		public Optional<Double2ByteMap.Entry> reduce(ObjectObjectUnaryOperator<Double2ByteMap.Entry, Double2ByteMap.Entry> operator) {
 			Objects.requireNonNull(operator);
 			Double2ByteMap.Entry state = null;
 			boolean empty = true;
@@ -911,19 +918,19 @@ public class Double2ByteArrayMap extends AbstractDouble2ByteMap implements Doubl
 				}
 				state = operator.apply(state, new ValueMapEntry(i));
 			}
-			return state;
+			return empty ? Optional.empty() : Optional.ofNullable(state);
 		}
 		
 		@Override
-		public Double2ByteMap.Entry findFirst(Predicate<Double2ByteMap.Entry> filter) {
+		public Optional<Double2ByteMap.Entry> findFirst(Predicate<Double2ByteMap.Entry> filter) {
 			Objects.requireNonNull(filter);
-			if(size() <= 0) return null;
+			if(size() <= 0) return Optional.empty();
 			MapEntry entry = new MapEntry();
 			for(int i = 0;i<size;i++) {
 				entry.set(i);
-				if(filter.test(entry)) return entry;
+				if(filter.test(entry)) return Optional.ofNullable(entry);
 			}
-			return null;
+			return Optional.empty();
 		}
 		
 		@Override
@@ -995,6 +1002,10 @@ public class Double2ByteArrayMap extends AbstractDouble2ByteMap implements Doubl
 		
 		@Override
 		public boolean add(double o) { throw new UnsupportedOperationException(); }
+		@Override
+		public void addFirst(double o) { throw new UnsupportedOperationException(); }
+		@Override
+		public void addLast(double o) { throw new UnsupportedOperationException(); }
 		@Override
 		public boolean addAndMoveToFirst(double o) { throw new UnsupportedOperationException(); }
 		@Override
@@ -1082,7 +1093,7 @@ public class Double2ByteArrayMap extends AbstractDouble2ByteMap implements Doubl
 		}
 		
 		@Override
-		public double reduce(DoubleDoubleUnaryOperator operator) {
+		public OptionalDouble reduce(DoubleDoubleUnaryOperator operator) {
 			Objects.requireNonNull(operator);
 			double state = 0D;
 			boolean empty = true;
@@ -1094,16 +1105,16 @@ public class Double2ByteArrayMap extends AbstractDouble2ByteMap implements Doubl
 				}
 				state = operator.applyAsDouble(state, keys[i]);
 			}
-			return state;
+			return empty ? OptionalDouble.empty() : OptionalDouble.of(state);
 		}
 		
 		@Override
-		public double findFirst(DoublePredicate filter) {
+		public OptionalDouble findFirst(DoublePredicate filter) {
 			Objects.requireNonNull(filter);
 			for(int i = 0;i<size;i++) {
-				if(filter.test(keys[i])) return keys[i];
+				if(filter.test(keys[i])) return OptionalDouble.of(keys[i]);
 			}
-			return 0D;
+			return OptionalDouble.empty();
 		}
 		
 		@Override
@@ -1204,7 +1215,7 @@ public class Double2ByteArrayMap extends AbstractDouble2ByteMap implements Doubl
 		}
 		
 		@Override
-		public byte reduce(ByteByteUnaryOperator operator) {
+		public OptionalByte reduce(ByteByteUnaryOperator operator) {
 			Objects.requireNonNull(operator);
 			byte state = (byte)0;
 			boolean empty = true;
@@ -1216,16 +1227,16 @@ public class Double2ByteArrayMap extends AbstractDouble2ByteMap implements Doubl
 				}
 				state = operator.applyAsByte(state, values[i]);
 			}
-			return state;
+			return empty ? OptionalByte.empty() : OptionalByte.of(state);
 		}
 		
 		@Override
-		public byte findFirst(BytePredicate filter) {
+		public OptionalByte findFirst(BytePredicate filter) {
 			Objects.requireNonNull(filter);
 			for(int i = 0;i<size;i++) {
-				if(filter.test(values[i])) return values[i];
+				if(filter.test(values[i])) return OptionalByte.of(values[i]);
 			}
-			return (byte)0;
+			return OptionalByte.empty();
 		}
 		
 		@Override

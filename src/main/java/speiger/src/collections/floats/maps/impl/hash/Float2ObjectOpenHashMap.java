@@ -5,6 +5,7 @@ import java.util.ConcurrentModificationException;
 import java.util.Map;
 import java.util.NoSuchElementException;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.function.Consumer;
 import java.util.function.BiFunction;
 import java.util.function.Predicate;
@@ -18,6 +19,7 @@ import speiger.src.collections.floats.functions.consumer.FloatObjectConsumer;
 import speiger.src.collections.floats.functions.function.FloatFunction;
 import speiger.src.collections.floats.functions.function.FloatObjectUnaryOperator;
 import speiger.src.collections.floats.functions.function.FloatFloatUnaryOperator;
+import speiger.src.collections.floats.functions.OptionalFloat;
 import speiger.src.collections.floats.functions.function.FloatPredicate;
 import speiger.src.collections.floats.maps.abstracts.AbstractFloat2ObjectMap;
 import speiger.src.collections.floats.maps.interfaces.Float2ObjectMap;
@@ -837,7 +839,7 @@ public class Float2ObjectOpenHashMap<V> extends AbstractFloat2ObjectMap<V> imple
 		}
 		
 		@Override
-		public Float2ObjectMap.Entry<V> reduce(ObjectObjectUnaryOperator<Float2ObjectMap.Entry<V>, Float2ObjectMap.Entry<V>> operator) {
+		public Optional<Float2ObjectMap.Entry<V>> reduce(ObjectObjectUnaryOperator<Float2ObjectMap.Entry<V>, Float2ObjectMap.Entry<V>> operator) {
 			Objects.requireNonNull(operator);
 			Float2ObjectMap.Entry<V> state = null;
 			boolean empty = true;
@@ -854,25 +856,25 @@ public class Float2ObjectOpenHashMap<V> extends AbstractFloat2ObjectMap<V> imple
 				}
 				state = operator.apply(state, new ValueMapEntry(i));
 			}
-			return state;
+			return empty ? Optional.empty() : Optional.ofNullable(state);
 		}
 		
 		@Override
-		public Float2ObjectMap.Entry<V> findFirst(Predicate<Float2ObjectMap.Entry<V>> filter) {
+		public Optional<Float2ObjectMap.Entry<V>> findFirst(Predicate<Float2ObjectMap.Entry<V>> filter) {
 			Objects.requireNonNull(filter);
-			if(size() <= 0) return null;
+			if(size() <= 0) return Optional.empty();
 			MapEntry entry = new MapEntry();
 			if(containsNull) {
 				entry.set(nullIndex);
-				if(filter.test(entry)) return entry;
+				if(filter.test(entry)) return Optional.ofNullable(entry);
 			}
 			for(int i = nullIndex-1;i>=0;i--) {
 				if(Float.floatToIntBits(keys[i]) != 0) {
 					entry.set(i);
-					if(filter.test(entry)) return entry;
+					if(filter.test(entry)) return Optional.ofNullable(entry);
 				}
 			}
-			return null;
+			return Optional.empty();
 		}
 		
 		@Override
@@ -1044,7 +1046,7 @@ public class Float2ObjectOpenHashMap<V> extends AbstractFloat2ObjectMap<V> imple
 		}
 		
 		@Override
-		public float reduce(FloatFloatUnaryOperator operator) {
+		public OptionalFloat reduce(FloatFloatUnaryOperator operator) {
 			Objects.requireNonNull(operator);
 			float state = 0F;
 			boolean empty = true;
@@ -1061,18 +1063,18 @@ public class Float2ObjectOpenHashMap<V> extends AbstractFloat2ObjectMap<V> imple
 				}
 				state = operator.applyAsFloat(state, keys[i]);
 			}
-			return state;
+			return empty ? OptionalFloat.empty() : OptionalFloat.of(state);
 		}
 		
 		@Override
-		public float findFirst(FloatPredicate filter) {
+		public OptionalFloat findFirst(FloatPredicate filter) {
 			Objects.requireNonNull(filter);
-			if(size() <= 0) return 0F;
-			if(containsNull && filter.test(keys[nullIndex])) return keys[nullIndex];
+			if(size() <= 0) return OptionalFloat.empty();
+			if(containsNull && filter.test(keys[nullIndex])) return OptionalFloat.of(keys[nullIndex]);
 			for(int i = nullIndex-1;i>=0;i--) {
-				if(Float.floatToIntBits(keys[i]) != 0 && filter.test(keys[i])) return keys[i];
+				if(Float.floatToIntBits(keys[i]) != 0 && filter.test(keys[i])) return OptionalFloat.of(keys[i]);
 			}
-			return 0F;
+			return OptionalFloat.empty();
 		}
 		
 		@Override
@@ -1187,7 +1189,7 @@ public class Float2ObjectOpenHashMap<V> extends AbstractFloat2ObjectMap<V> imple
 		}
 		
 		@Override
-		public V reduce(ObjectObjectUnaryOperator<V, V> operator) {
+		public Optional<V> reduce(ObjectObjectUnaryOperator<V, V> operator) {
 			Objects.requireNonNull(operator);
 			V state = null;
 			boolean empty = true;
@@ -1204,18 +1206,18 @@ public class Float2ObjectOpenHashMap<V> extends AbstractFloat2ObjectMap<V> imple
 				}
 				state = operator.apply(state, values[i]);
 			}
-			return state;
+			return empty ? Optional.empty() : Optional.ofNullable(state);
 		}
 		
 		@Override
-		public V findFirst(Predicate<V> filter) {
+		public Optional<V> findFirst(Predicate<V> filter) {
 			Objects.requireNonNull(filter);
-			if(size() <= 0) return null;
-			if(containsNull && filter.test(values[nullIndex])) return values[nullIndex];
+			if(size() <= 0) return Optional.empty();
+			if(containsNull && filter.test(values[nullIndex])) return Optional.ofNullable(values[nullIndex]);
 			for(int i = nullIndex-1;i>=0;i--) {
-				if(Float.floatToIntBits(keys[i]) != 0 && filter.test(values[i])) return values[i];
+				if(Float.floatToIntBits(keys[i]) != 0 && filter.test(values[i])) return Optional.ofNullable(values[i]);
 			}
-			return null;
+			return Optional.empty();
 		}
 		
 		@Override

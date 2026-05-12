@@ -3,6 +3,7 @@ package speiger.src.collections.floats.maps.impl.tree;
 import java.util.Collections;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.NoSuchElementException;
 import java.util.function.Consumer;
 import java.util.function.BiFunction;
@@ -17,6 +18,7 @@ import speiger.src.collections.ints.functions.consumer.IntFloatConsumer;
 import speiger.src.collections.ints.functions.consumer.IntObjectConsumer;
 import speiger.src.collections.floats.functions.function.FloatUnaryOperator;
 import speiger.src.collections.floats.functions.consumer.FloatFloatConsumer;
+import speiger.src.collections.floats.functions.OptionalFloat;
 import speiger.src.collections.floats.functions.function.FloatPredicate;
 import speiger.src.collections.floats.functions.function.FloatFloatUnaryOperator;
 import speiger.src.collections.floats.maps.abstracts.AbstractFloat2FloatMap;
@@ -1121,7 +1123,7 @@ public class Float2FloatAVLTreeMap extends AbstractFloat2FloatMap implements Flo
 		}
 		
 		@Override
-		public float reduce(FloatFloatUnaryOperator operator) {
+		public OptionalFloat reduce(FloatFloatUnaryOperator operator) {
 			Objects.requireNonNull(operator);
 			float state = 0F;
 			boolean empty = true;
@@ -1133,15 +1135,15 @@ public class Float2FloatAVLTreeMap extends AbstractFloat2FloatMap implements Flo
 				}
 				state = operator.applyAsFloat(state, entry.key);
 			}
-			return state;
+			return empty ? OptionalFloat.empty() : OptionalFloat.of(state);
 		}
 		
 		@Override
-		public float findFirst(FloatPredicate filter) {
+		public OptionalFloat findFirst(FloatPredicate filter) {
 			Objects.requireNonNull(filter);
 			for(Node entry = start(), end = end();entry != null && (end == null || (end != previous(entry)));entry = next(entry))
-				if(filter.test(entry.key)) return entry.key;
-			return 0F;
+				if(filter.test(entry.key)) return OptionalFloat.of(entry.key);
+			return OptionalFloat.empty();
 		}
 		
 		@Override
@@ -1775,7 +1777,7 @@ public class Float2FloatAVLTreeMap extends AbstractFloat2FloatMap implements Flo
 			}
 			
 			@Override
-			public Float2FloatMap.Entry reduce(ObjectObjectUnaryOperator<Float2FloatMap.Entry, Float2FloatMap.Entry> operator) {
+			public Optional<Float2FloatMap.Entry> reduce(ObjectObjectUnaryOperator<Float2FloatMap.Entry, Float2FloatMap.Entry> operator) {
 				Objects.requireNonNull(operator);
 				Float2FloatMap.Entry state = null;
 				boolean empty = true;
@@ -1787,19 +1789,19 @@ public class Float2FloatAVLTreeMap extends AbstractFloat2FloatMap implements Flo
 					}
 					state = operator.apply(state, new BasicEntry(entry.key, entry.value));
 				}
-				return state;
+				return empty ? Optional.empty() : Optional.ofNullable(state);
 			}
 			
 			@Override
-			public Float2FloatMap.Entry findFirst(Predicate<Float2FloatMap.Entry> filter) {
+			public Optional<Float2FloatMap.Entry> findFirst(Predicate<Float2FloatMap.Entry> filter) {
 				Objects.requireNonNull(filter);
-				if(size() <= 0) return null;
+				if(size() <= 0) return Optional.empty();
 				BasicEntry subEntry = new BasicEntry();
 				for(Node entry = subLowest(), last = subHighest();entry != null && (last == null || last != previous(entry));entry = next(entry)) {
 					subEntry.set(entry.key, entry.value);
-					if(filter.test(subEntry)) return subEntry;
+					if(filter.test(subEntry)) return Optional.ofNullable(subEntry);
 				}
-				return null;
+				return Optional.empty();
 			}
 			
 			@Override
@@ -1894,7 +1896,7 @@ public class Float2FloatAVLTreeMap extends AbstractFloat2FloatMap implements Flo
 			}
 			
 			@Override
-			public float reduce(FloatFloatUnaryOperator operator) {
+			public OptionalFloat reduce(FloatFloatUnaryOperator operator) {
 				Objects.requireNonNull(operator);
 				float state = 0F;
 				boolean empty = true;
@@ -1906,15 +1908,15 @@ public class Float2FloatAVLTreeMap extends AbstractFloat2FloatMap implements Flo
 					}
 					state = operator.applyAsFloat(state, entry.value);
 				}
-				return state;
+				return empty ? OptionalFloat.empty() : OptionalFloat.of(state);
 			}
 			
 			@Override
-			public float findFirst(FloatPredicate filter) {
+			public OptionalFloat findFirst(FloatPredicate filter) {
 				Objects.requireNonNull(filter);
 				for(Node entry = subLowest(), last = subHighest();entry != null && (last == null || last != previous(entry));entry = next(entry))
-					if(filter.test(entry.value)) return entry.value;
-				return 0F;
+					if(filter.test(entry.value)) return OptionalFloat.of(entry.value);
+				return OptionalFloat.empty();
 			}
 			
 			@Override
@@ -2230,7 +2232,7 @@ public class Float2FloatAVLTreeMap extends AbstractFloat2FloatMap implements Flo
 		}
 		
 		@Override
-		public float reduce(FloatFloatUnaryOperator operator) {
+		public OptionalFloat reduce(FloatFloatUnaryOperator operator) {
 			Objects.requireNonNull(operator);
 			float state = 0F;
 			boolean empty = true;
@@ -2242,15 +2244,15 @@ public class Float2FloatAVLTreeMap extends AbstractFloat2FloatMap implements Flo
 				}
 				state = operator.applyAsFloat(state, entry.value);
 			}
-			return state;
+			return empty ? OptionalFloat.empty() : OptionalFloat.of(state);
 		}
 		
 		@Override
-		public float findFirst(FloatPredicate filter) {
+		public OptionalFloat findFirst(FloatPredicate filter) {
 			Objects.requireNonNull(filter);
 			for(Node entry = first;entry != null;entry = entry.next())
-				if(filter.test(entry.value)) return entry.value;
-			return 0F;
+				if(filter.test(entry.value)) return OptionalFloat.of(entry.value);
+			return OptionalFloat.empty();
 		}
 		
 		@Override
@@ -2391,7 +2393,7 @@ public class Float2FloatAVLTreeMap extends AbstractFloat2FloatMap implements Flo
 		}
 		
 		@Override
-		public Float2FloatMap.Entry reduce(ObjectObjectUnaryOperator<Float2FloatMap.Entry, Float2FloatMap.Entry> operator) {
+		public Optional<Float2FloatMap.Entry> reduce(ObjectObjectUnaryOperator<Float2FloatMap.Entry, Float2FloatMap.Entry> operator) {
 			Objects.requireNonNull(operator);
 			Float2FloatMap.Entry state = null;
 			boolean empty = true;
@@ -2403,19 +2405,19 @@ public class Float2FloatAVLTreeMap extends AbstractFloat2FloatMap implements Flo
 				}
 				state = operator.apply(state, new BasicEntry(entry.key, entry.value));
 			}
-			return state;
+			return empty ? Optional.empty() : Optional.ofNullable(state);
 		}
 		
 		@Override
-		public Float2FloatMap.Entry findFirst(Predicate<Float2FloatMap.Entry> filter) {
+		public Optional<Float2FloatMap.Entry> findFirst(Predicate<Float2FloatMap.Entry> filter) {
 			Objects.requireNonNull(filter);
-			if(size() <= 0) return null;
+			if(size() <= 0) return Optional.empty();
 			BasicEntry subEntry = new BasicEntry();
 			for(Node entry = first;entry != null;entry = entry.next()) {
 				subEntry.set(entry.key, entry.value);
-				if(filter.test(subEntry)) return subEntry;
+				if(filter.test(subEntry)) return Optional.ofNullable(subEntry);
 			}
-			return null;
+			return Optional.empty();
 		}
 		
 		@Override

@@ -620,7 +620,11 @@ public class Int2DoubleMaps
 			super(c);
 			set = c;
 		}
-
+		
+		@Override
+		public void addFirst(Int2DoubleMap.Entry o) { throw new UnsupportedOperationException(); }
+		@Override
+		public void addLast(Int2DoubleMap.Entry o) { throw new UnsupportedOperationException(); }
 		@Override
 		public boolean addAndMoveToFirst(Int2DoubleMap.Entry o) { throw new UnsupportedOperationException(); }
 		@Override

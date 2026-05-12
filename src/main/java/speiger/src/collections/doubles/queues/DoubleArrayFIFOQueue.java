@@ -2,6 +2,7 @@ package speiger.src.collections.doubles.queues;
 
 import java.util.Arrays;
 import java.util.Objects;
+import java.util.OptionalDouble;
 import java.util.NoSuchElementException;
 import java.util.function.DoublePredicate;
 
@@ -278,17 +279,17 @@ public class DoubleArrayFIFOQueue extends AbstractDoublePriorityQueue implements
 	}
 	
 	@Override
-	public double findFirst(DoublePredicate filter) {
+	public OptionalDouble findFirst(DoublePredicate filter) {
 		Objects.requireNonNull(filter);
 		for(int i = 0,m=size();i<m;i++) {
 			int index = (first + i) % array.length;
 			if(filter.test(array[index])) {
 				double data = array[index];
 				removeIndex(index);
-				return data;
+				return OptionalDouble.of(data);
 			}
 		}
-		return 0D;
+		return OptionalDouble.empty();
 	}
 	
 	@Override
@@ -302,7 +303,7 @@ public class DoubleArrayFIFOQueue extends AbstractDoublePriorityQueue implements
 	}
 	
 	@Override
-	public double reduce(DoubleDoubleUnaryOperator operator) {
+	public OptionalDouble reduce(DoubleDoubleUnaryOperator operator) {
 		Objects.requireNonNull(operator);
 		double state = 0D;
 		boolean empty = true;
@@ -314,7 +315,7 @@ public class DoubleArrayFIFOQueue extends AbstractDoublePriorityQueue implements
 			}
 			state = operator.applyAsDouble(state, array[(first + i) % array.length]);
 		}
-		return state;
+		return empty ? OptionalDouble.empty() : OptionalDouble.of(state);
 	}
 	
 	@Override

@@ -12,6 +12,7 @@ import java.nio.ShortBuffer;
 import speiger.src.collections.shorts.collections.ShortCollection;
 import speiger.src.collections.shorts.collections.ShortStack;
 import speiger.src.collections.shorts.collections.ShortIterator;
+import speiger.src.collections.shorts.functions.OptionalShort;
 import speiger.src.collections.shorts.functions.ShortComparator;
 import speiger.src.collections.shorts.functions.ShortConsumer;
 import speiger.src.collections.objects.functions.consumer.ObjectShortConsumer;
@@ -519,12 +520,12 @@ public class ShortArrayList extends AbstractShortList implements IShortArray, Sh
 	}
 	
 	@Override
-	public short findFirst(ShortPredicate filter) {
+	public OptionalShort findFirst(ShortPredicate filter) {
 		Objects.requireNonNull(filter);
 		for(int i = 0;i<size;i++) {
-			if(filter.test(data[i])) return data[i];
+			if(filter.test(data[i])) return OptionalShort.of(data[i]);
 		}
-		return (short)0;
+		return OptionalShort.empty();
 	}
 	
 	@Override
@@ -538,7 +539,7 @@ public class ShortArrayList extends AbstractShortList implements IShortArray, Sh
 	}
 	
 	@Override
-	public short reduce(ShortShortUnaryOperator operator) {
+	public OptionalShort reduce(ShortShortUnaryOperator operator) {
 		Objects.requireNonNull(operator);
 		short state = (short)0;
 		boolean empty = true;
@@ -550,7 +551,7 @@ public class ShortArrayList extends AbstractShortList implements IShortArray, Sh
 			}
 			state = operator.applyAsShort(state, data[i]);
 		}
-		return state;
+		return empty ? OptionalShort.empty() : OptionalShort.of(state);
 	}
 	
 	@Override

@@ -5,6 +5,7 @@ import java.util.Collections;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 import java.util.Objects;
+import java.util.OptionalLong;
 import java.util.function.LongPredicate;
 
 import speiger.src.collections.longs.collections.LongBidirectionalIterator;
@@ -325,12 +326,12 @@ public class LongAVLTreeSet extends AbstractLongSet implements LongNavigableSet
 	}
 	
 	@Override
-	public long findFirst(LongPredicate filter) {
+	public OptionalLong findFirst(LongPredicate filter) {
 		Objects.requireNonNull(filter);
 		for(Entry entry = first;entry != null;entry = entry.next()) {
-			if(filter.test(entry.key)) return entry.key;
+			if(filter.test(entry.key)) return OptionalLong.of(entry.key);
 		}
-		return 0L;
+		return OptionalLong.empty();
 	}
 	
 	@Override
@@ -344,7 +345,7 @@ public class LongAVLTreeSet extends AbstractLongSet implements LongNavigableSet
 	}
 	
 	@Override
-	public long reduce(LongLongUnaryOperator operator) {
+	public OptionalLong reduce(LongLongUnaryOperator operator) {
 		Objects.requireNonNull(operator);
 		long state = 0L;
 		boolean empty = true;
@@ -356,7 +357,7 @@ public class LongAVLTreeSet extends AbstractLongSet implements LongNavigableSet
 			}
 			state = operator.applyAsLong(state, entry.key);
 		}
-		return state;
+		return empty ? OptionalLong.empty() : OptionalLong.of(state);
 	}
 	
 	@Override
@@ -1181,7 +1182,7 @@ public class LongAVLTreeSet extends AbstractLongSet implements LongNavigableSet
 		}
 		
 		@Override
-		public long reduce(LongLongUnaryOperator operator) {
+		public OptionalLong reduce(LongLongUnaryOperator operator) {
 			Objects.requireNonNull(operator);
 			long state = 0L;
 			boolean empty = true;
@@ -1193,16 +1194,16 @@ public class LongAVLTreeSet extends AbstractLongSet implements LongNavigableSet
 				}
 				state = operator.applyAsLong(state, entry.key);
 			}
-			return state;
+			return empty ? OptionalLong.empty() : OptionalLong.of(state);
 		}
 		
 		@Override
-		public long findFirst(LongPredicate filter) {
+		public OptionalLong findFirst(LongPredicate filter) {
 			Objects.requireNonNull(filter);
 			for(Entry entry = start();entry != null && inRange(entry.key);entry = next(entry)) {
-				if(filter.test(entry.key)) return entry.key;
+				if(filter.test(entry.key)) return OptionalLong.of(entry.key);
 			}
-			return 0L;
+			return OptionalLong.empty();
 		}
 		
 		@Override

@@ -4,11 +4,14 @@ import java.util.Arrays;
 import java.util.Map;
 import java.util.NoSuchElementException;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.function.Consumer;
 import java.util.function.BiFunction;
 import java.util.function.Predicate;
 import java.util.function.LongPredicate;
+import java.util.OptionalLong;
 import java.util.function.DoublePredicate;
+import java.util.OptionalDouble;
 
 import speiger.src.collections.longs.collections.LongBidirectionalIterator;
 import speiger.src.collections.longs.functions.LongConsumer;
@@ -752,6 +755,10 @@ public class Long2DoubleArrayMap extends AbstractLong2DoubleMap implements Long2
 	
 	private class MapEntrySet extends AbstractObjectSet<Long2DoubleMap.Entry> implements Long2DoubleOrderedMap.FastOrderedSet {
 		@Override
+		public void addFirst(Long2DoubleMap.Entry o) { throw new UnsupportedOperationException(); }
+		@Override
+		public void addLast(Long2DoubleMap.Entry o) { throw new UnsupportedOperationException(); }
+		@Override
 		public boolean addAndMoveToFirst(Long2DoubleMap.Entry o) { throw new UnsupportedOperationException(); }
 		@Override
 		public boolean addAndMoveToLast(Long2DoubleMap.Entry o) { throw new UnsupportedOperationException(); }
@@ -899,7 +906,7 @@ public class Long2DoubleArrayMap extends AbstractLong2DoubleMap implements Long2
 		}
 		
 		@Override
-		public Long2DoubleMap.Entry reduce(ObjectObjectUnaryOperator<Long2DoubleMap.Entry, Long2DoubleMap.Entry> operator) {
+		public Optional<Long2DoubleMap.Entry> reduce(ObjectObjectUnaryOperator<Long2DoubleMap.Entry, Long2DoubleMap.Entry> operator) {
 			Objects.requireNonNull(operator);
 			Long2DoubleMap.Entry state = null;
 			boolean empty = true;
@@ -911,19 +918,19 @@ public class Long2DoubleArrayMap extends AbstractLong2DoubleMap implements Long2
 				}
 				state = operator.apply(state, new ValueMapEntry(i));
 			}
-			return state;
+			return empty ? Optional.empty() : Optional.ofNullable(state);
 		}
 		
 		@Override
-		public Long2DoubleMap.Entry findFirst(Predicate<Long2DoubleMap.Entry> filter) {
+		public Optional<Long2DoubleMap.Entry> findFirst(Predicate<Long2DoubleMap.Entry> filter) {
 			Objects.requireNonNull(filter);
-			if(size() <= 0) return null;
+			if(size() <= 0) return Optional.empty();
 			MapEntry entry = new MapEntry();
 			for(int i = 0;i<size;i++) {
 				entry.set(i);
-				if(filter.test(entry)) return entry;
+				if(filter.test(entry)) return Optional.ofNullable(entry);
 			}
-			return null;
+			return Optional.empty();
 		}
 		
 		@Override
@@ -995,6 +1002,10 @@ public class Long2DoubleArrayMap extends AbstractLong2DoubleMap implements Long2
 		
 		@Override
 		public boolean add(long o) { throw new UnsupportedOperationException(); }
+		@Override
+		public void addFirst(long o) { throw new UnsupportedOperationException(); }
+		@Override
+		public void addLast(long o) { throw new UnsupportedOperationException(); }
 		@Override
 		public boolean addAndMoveToFirst(long o) { throw new UnsupportedOperationException(); }
 		@Override
@@ -1082,7 +1093,7 @@ public class Long2DoubleArrayMap extends AbstractLong2DoubleMap implements Long2
 		}
 		
 		@Override
-		public long reduce(LongLongUnaryOperator operator) {
+		public OptionalLong reduce(LongLongUnaryOperator operator) {
 			Objects.requireNonNull(operator);
 			long state = 0L;
 			boolean empty = true;
@@ -1094,16 +1105,16 @@ public class Long2DoubleArrayMap extends AbstractLong2DoubleMap implements Long2
 				}
 				state = operator.applyAsLong(state, keys[i]);
 			}
-			return state;
+			return empty ? OptionalLong.empty() : OptionalLong.of(state);
 		}
 		
 		@Override
-		public long findFirst(LongPredicate filter) {
+		public OptionalLong findFirst(LongPredicate filter) {
 			Objects.requireNonNull(filter);
 			for(int i = 0;i<size;i++) {
-				if(filter.test(keys[i])) return keys[i];
+				if(filter.test(keys[i])) return OptionalLong.of(keys[i]);
 			}
-			return 0L;
+			return OptionalLong.empty();
 		}
 		
 		@Override
@@ -1204,7 +1215,7 @@ public class Long2DoubleArrayMap extends AbstractLong2DoubleMap implements Long2
 		}
 		
 		@Override
-		public double reduce(DoubleDoubleUnaryOperator operator) {
+		public OptionalDouble reduce(DoubleDoubleUnaryOperator operator) {
 			Objects.requireNonNull(operator);
 			double state = 0D;
 			boolean empty = true;
@@ -1216,16 +1227,16 @@ public class Long2DoubleArrayMap extends AbstractLong2DoubleMap implements Long2
 				}
 				state = operator.applyAsDouble(state, values[i]);
 			}
-			return state;
+			return empty ? OptionalDouble.empty() : OptionalDouble.of(state);
 		}
 		
 		@Override
-		public double findFirst(DoublePredicate filter) {
+		public OptionalDouble findFirst(DoublePredicate filter) {
 			Objects.requireNonNull(filter);
 			for(int i = 0;i<size;i++) {
-				if(filter.test(values[i])) return values[i];
+				if(filter.test(values[i])) return OptionalDouble.of(values[i]);
 			}
-			return 0D;
+			return OptionalDouble.empty();
 		}
 		
 		@Override

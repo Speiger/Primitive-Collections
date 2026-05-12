@@ -459,6 +459,10 @@ public class LinkedEnum2BooleanMap<T extends Enum<T>> extends Enum2BooleanMap<T>
 	
 	private class MapEntrySet extends AbstractObjectSet<Object2BooleanMap.Entry<T>> implements Object2BooleanOrderedMap.FastOrderedSet<T> {
 		@Override
+		public void addFirst(Object2BooleanMap.Entry<T> o) { throw new UnsupportedOperationException(); }
+		@Override
+		public void addLast(Object2BooleanMap.Entry<T> o) { throw new UnsupportedOperationException(); }
+		@Override
 		public boolean addAndMoveToFirst(Object2BooleanMap.Entry<T> o) { throw new UnsupportedOperationException(); }
 		@Override
 		public boolean addAndMoveToLast(Object2BooleanMap.Entry<T> o) { throw new UnsupportedOperationException(); }
@@ -607,7 +611,10 @@ public class LinkedEnum2BooleanMap<T extends Enum<T>> extends Enum2BooleanMap<T>
 		public boolean add(T o) {
 			throw new UnsupportedOperationException();
 		}
-		
+		@Override
+		public void addFirst(T o) { throw new UnsupportedOperationException(); }
+		@Override
+		public void addLast(T o) { throw new UnsupportedOperationException(); }
 		@Override
 		public boolean addAndMoveToFirst(T o) { throw new UnsupportedOperationException(); }
 

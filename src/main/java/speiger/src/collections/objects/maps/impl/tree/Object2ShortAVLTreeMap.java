@@ -4,6 +4,7 @@ import java.util.Collections;
 import java.util.Map;
 import java.util.Comparator;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.NoSuchElementException;
 import java.util.function.Consumer;
 import java.util.function.BiFunction;
@@ -33,6 +34,7 @@ import speiger.src.collections.shorts.functions.ShortConsumer;
 import speiger.src.collections.objects.functions.consumer.ObjectObjectConsumer;
 
 import speiger.src.collections.shorts.functions.function.ShortPredicate;
+import speiger.src.collections.shorts.functions.OptionalShort;
 import speiger.src.collections.objects.collections.ObjectIterator;
 
 /**
@@ -1097,7 +1099,7 @@ public class Object2ShortAVLTreeMap<T> extends AbstractObject2ShortMap<T> implem
 		}
 		
 		@Override
-		public T reduce(ObjectObjectUnaryOperator<T, T> operator) {
+		public Optional<T> reduce(ObjectObjectUnaryOperator<T, T> operator) {
 			Objects.requireNonNull(operator);
 			T state = null;
 			boolean empty = true;
@@ -1109,15 +1111,15 @@ public class Object2ShortAVLTreeMap<T> extends AbstractObject2ShortMap<T> implem
 				}
 				state = operator.apply(state, entry.key);
 			}
-			return state;
+			return empty ? Optional.empty() : Optional.ofNullable(state);
 		}
 		
 		@Override
-		public T findFirst(Predicate<T> filter) {
+		public Optional<T> findFirst(Predicate<T> filter) {
 			Objects.requireNonNull(filter);
 			for(Node<T> entry = start(), end = end();entry != null && (end == null || (end != previous(entry)));entry = next(entry))
-				if(filter.test(entry.key)) return entry.key;
-			return null;
+				if(filter.test(entry.key)) return Optional.ofNullable(entry.key);
+			return Optional.empty();
 		}
 		
 		@Override
@@ -1746,7 +1748,7 @@ public class Object2ShortAVLTreeMap<T> extends AbstractObject2ShortMap<T> implem
 			}
 			
 			@Override
-			public Object2ShortMap.Entry<T> reduce(ObjectObjectUnaryOperator<Object2ShortMap.Entry<T>, Object2ShortMap.Entry<T>> operator) {
+			public Optional<Object2ShortMap.Entry<T>> reduce(ObjectObjectUnaryOperator<Object2ShortMap.Entry<T>, Object2ShortMap.Entry<T>> operator) {
 				Objects.requireNonNull(operator);
 				Object2ShortMap.Entry<T> state = null;
 				boolean empty = true;
@@ -1758,19 +1760,19 @@ public class Object2ShortAVLTreeMap<T> extends AbstractObject2ShortMap<T> implem
 					}
 					state = operator.apply(state, new BasicEntry<>(entry.key, entry.value));
 				}
-				return state;
+				return empty ? Optional.empty() : Optional.ofNullable(state);
 			}
 			
 			@Override
-			public Object2ShortMap.Entry<T> findFirst(Predicate<Object2ShortMap.Entry<T>> filter) {
+			public Optional<Object2ShortMap.Entry<T>> findFirst(Predicate<Object2ShortMap.Entry<T>> filter) {
 				Objects.requireNonNull(filter);
-				if(size() <= 0) return null;
+				if(size() <= 0) return Optional.empty();
 				BasicEntry<T> subEntry = new BasicEntry<>();
 				for(Node<T> entry = subLowest(), last = subHighest();entry != null && (last == null || last != previous(entry));entry = next(entry)) {
 					subEntry.set(entry.key, entry.value);
-					if(filter.test(subEntry)) return subEntry;
+					if(filter.test(subEntry)) return Optional.ofNullable(subEntry);
 				}
-				return null;
+				return Optional.empty();
 			}
 			
 			@Override
@@ -1865,7 +1867,7 @@ public class Object2ShortAVLTreeMap<T> extends AbstractObject2ShortMap<T> implem
 			}
 			
 			@Override
-			public short reduce(ShortShortUnaryOperator operator) {
+			public OptionalShort reduce(ShortShortUnaryOperator operator) {
 				Objects.requireNonNull(operator);
 				short state = (short)0;
 				boolean empty = true;
@@ -1877,15 +1879,15 @@ public class Object2ShortAVLTreeMap<T> extends AbstractObject2ShortMap<T> implem
 					}
 					state = operator.applyAsShort(state, entry.value);
 				}
-				return state;
+				return empty ? OptionalShort.empty() : OptionalShort.of(state);
 			}
 			
 			@Override
-			public short findFirst(ShortPredicate filter) {
+			public OptionalShort findFirst(ShortPredicate filter) {
 				Objects.requireNonNull(filter);
 				for(Node<T> entry = subLowest(), last = subHighest();entry != null && (last == null || last != previous(entry));entry = next(entry))
-					if(filter.test(entry.value)) return entry.value;
-				return (short)0;
+					if(filter.test(entry.value)) return OptionalShort.of(entry.value);
+				return OptionalShort.empty();
 			}
 			
 			@Override
@@ -2201,7 +2203,7 @@ public class Object2ShortAVLTreeMap<T> extends AbstractObject2ShortMap<T> implem
 		}
 		
 		@Override
-		public short reduce(ShortShortUnaryOperator operator) {
+		public OptionalShort reduce(ShortShortUnaryOperator operator) {
 			Objects.requireNonNull(operator);
 			short state = (short)0;
 			boolean empty = true;
@@ -2213,15 +2215,15 @@ public class Object2ShortAVLTreeMap<T> extends AbstractObject2ShortMap<T> implem
 				}
 				state = operator.applyAsShort(state, entry.value);
 			}
-			return state;
+			return empty ? OptionalShort.empty() : OptionalShort.of(state);
 		}
 		
 		@Override
-		public short findFirst(ShortPredicate filter) {
+		public OptionalShort findFirst(ShortPredicate filter) {
 			Objects.requireNonNull(filter);
 			for(Node<T> entry = first;entry != null;entry = entry.next())
-				if(filter.test(entry.value)) return entry.value;
-			return (short)0;
+				if(filter.test(entry.value)) return OptionalShort.of(entry.value);
+			return OptionalShort.empty();
 		}
 		
 		@Override
@@ -2362,7 +2364,7 @@ public class Object2ShortAVLTreeMap<T> extends AbstractObject2ShortMap<T> implem
 		}
 		
 		@Override
-		public Object2ShortMap.Entry<T> reduce(ObjectObjectUnaryOperator<Object2ShortMap.Entry<T>, Object2ShortMap.Entry<T>> operator) {
+		public Optional<Object2ShortMap.Entry<T>> reduce(ObjectObjectUnaryOperator<Object2ShortMap.Entry<T>, Object2ShortMap.Entry<T>> operator) {
 			Objects.requireNonNull(operator);
 			Object2ShortMap.Entry<T> state = null;
 			boolean empty = true;
@@ -2374,19 +2376,19 @@ public class Object2ShortAVLTreeMap<T> extends AbstractObject2ShortMap<T> implem
 				}
 				state = operator.apply(state, new BasicEntry<>(entry.key, entry.value));
 			}
-			return state;
+			return empty ? Optional.empty() : Optional.ofNullable(state);
 		}
 		
 		@Override
-		public Object2ShortMap.Entry<T> findFirst(Predicate<Object2ShortMap.Entry<T>> filter) {
+		public Optional<Object2ShortMap.Entry<T>> findFirst(Predicate<Object2ShortMap.Entry<T>> filter) {
 			Objects.requireNonNull(filter);
-			if(size() <= 0) return null;
+			if(size() <= 0) return Optional.empty();
 			BasicEntry<T> subEntry = new BasicEntry<>();
 			for(Node<T> entry = first;entry != null;entry = entry.next()) {
 				subEntry.set(entry.key, entry.value);
-				if(filter.test(subEntry)) return subEntry;
+				if(filter.test(subEntry)) return Optional.ofNullable(subEntry);
 			}
-			return null;
+			return Optional.empty();
 		}
 		
 		@Override

@@ -4,10 +4,12 @@ import java.util.Arrays;
 import java.util.Map;
 import java.util.NoSuchElementException;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.function.Consumer;
 import java.util.function.BiFunction;
 import java.util.function.Predicate;
 import java.util.function.IntPredicate;
+import java.util.OptionalInt;
 
 import speiger.src.collections.ints.collections.IntBidirectionalIterator;
 import speiger.src.collections.ints.functions.IntConsumer;
@@ -664,6 +666,10 @@ public class Int2IntLinkedOpenCustomHashMap extends Int2IntOpenCustomHashMap imp
 	
 	private class MapEntrySet extends AbstractObjectSet<Int2IntMap.Entry> implements Int2IntOrderedMap.FastOrderedSet {
 		@Override
+		public void addFirst(Int2IntMap.Entry o) { throw new UnsupportedOperationException(); }
+		@Override
+		public void addLast(Int2IntMap.Entry o) { throw new UnsupportedOperationException(); }
+		@Override
 		public boolean addAndMoveToFirst(Int2IntMap.Entry o) { throw new UnsupportedOperationException(); }
 		@Override
 		public boolean addAndMoveToLast(Int2IntMap.Entry o) { throw new UnsupportedOperationException(); }
@@ -828,7 +834,7 @@ public class Int2IntLinkedOpenCustomHashMap extends Int2IntOpenCustomHashMap imp
 		}
 		
 		@Override
-		public Int2IntMap.Entry reduce(ObjectObjectUnaryOperator<Int2IntMap.Entry, Int2IntMap.Entry> operator) {
+		public Optional<Int2IntMap.Entry> reduce(ObjectObjectUnaryOperator<Int2IntMap.Entry, Int2IntMap.Entry> operator) {
 			Objects.requireNonNull(operator);
 			Int2IntMap.Entry state = null;
 			boolean empty = true;
@@ -843,21 +849,21 @@ public class Int2IntLinkedOpenCustomHashMap extends Int2IntOpenCustomHashMap imp
 				state = operator.apply(state, new ValueMapEntry(index));
 				index = (int)links[index];
 			}
-			return state;
+			return empty ? Optional.empty() : Optional.ofNullable(state);
 		}
 		
 		@Override
-		public Int2IntMap.Entry findFirst(Predicate<Int2IntMap.Entry> filter) {
+		public Optional<Int2IntMap.Entry> findFirst(Predicate<Int2IntMap.Entry> filter) {
 			Objects.requireNonNull(filter);
-			if(size() <= 0) return null;
+			if(size() <= 0) return Optional.empty();
 			MapEntry entry = new MapEntry();
 			int index = firstIndex;
 			while(index != -1) {
 				entry.set(index);
-				if(filter.test(entry)) return entry;
+				if(filter.test(entry)) return Optional.ofNullable(entry);
 				index = (int)links[index];
 			}
-			return null;
+			return Optional.empty();
 		}
 		
 		@Override
@@ -936,10 +942,13 @@ public class Int2IntLinkedOpenCustomHashMap extends Int2IntOpenCustomHashMap imp
 		public boolean add(int o) {
 			throw new UnsupportedOperationException();
 		}
-		
+
+		@Override
+		public void addFirst(int o) { throw new UnsupportedOperationException(); }
+		@Override
+		public void addLast(int o) { throw new UnsupportedOperationException(); }		
 		@Override
 		public boolean addAndMoveToFirst(int o) { throw new UnsupportedOperationException(); }
-
 		@Override
 		public boolean addAndMoveToLast(int o) { throw new UnsupportedOperationException(); }
 
@@ -1082,7 +1091,7 @@ public class Int2IntLinkedOpenCustomHashMap extends Int2IntOpenCustomHashMap imp
 		}
 		
 		@Override
-		public int reduce(IntIntUnaryOperator operator) {
+		public OptionalInt reduce(IntIntUnaryOperator operator) {
 			Objects.requireNonNull(operator);
 			int state = 0;
 			boolean empty = true;
@@ -1097,19 +1106,19 @@ public class Int2IntLinkedOpenCustomHashMap extends Int2IntOpenCustomHashMap imp
 				state = operator.applyAsInt(state, keys[index]);
 				index = (int)links[index];
 			}
-			return state;
+			return empty ? OptionalInt.empty() : OptionalInt.of(state);
 		}
 		
 		@Override
-		public int findFirst(IntPredicate filter) {
+		public OptionalInt findFirst(IntPredicate filter) {
 			Objects.requireNonNull(filter);
-			if(size() <= 0) return 0;
+			if(size() <= 0) return OptionalInt.empty();
 			int index = firstIndex;
 			while(index != -1){
-				if(filter.test(keys[index])) return keys[index];
+				if(filter.test(keys[index])) return OptionalInt.of(keys[index]);
 				index = (int)links[index];
 			}
-			return 0;
+			return OptionalInt.empty();
 		}
 		
 		@Override
@@ -1244,7 +1253,7 @@ public class Int2IntLinkedOpenCustomHashMap extends Int2IntOpenCustomHashMap imp
 		}
 		
 		@Override
-		public int reduce(IntIntUnaryOperator operator) {
+		public OptionalInt reduce(IntIntUnaryOperator operator) {
 			Objects.requireNonNull(operator);
 			int state = 0;
 			boolean empty = true;
@@ -1259,19 +1268,19 @@ public class Int2IntLinkedOpenCustomHashMap extends Int2IntOpenCustomHashMap imp
 				state = operator.applyAsInt(state, values[index]);
 				index = (int)links[index];
 			}
-			return state;
+			return empty ? OptionalInt.empty() : OptionalInt.of(state);
 		}
 		
 		@Override
-		public int findFirst(IntPredicate filter) {
+		public OptionalInt findFirst(IntPredicate filter) {
 			Objects.requireNonNull(filter);
-			if(size() <= 0) return 0;
+			if(size() <= 0) return OptionalInt.empty();
 			int index = firstIndex;
 			while(index != -1){
-				if(filter.test(values[index])) return values[index];
+				if(filter.test(values[index])) return OptionalInt.of(values[index]);
 				index = (int)links[index];
 			}
-			return 0;
+			return OptionalInt.empty();
 		}
 		
 		@Override

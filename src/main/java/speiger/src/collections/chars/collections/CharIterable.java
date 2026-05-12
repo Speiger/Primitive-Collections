@@ -7,6 +7,7 @@ import java.util.function.Consumer;
 import speiger.src.collections.chars.functions.CharConsumer;
 import speiger.src.collections.chars.functions.CharComparator;
 import speiger.src.collections.objects.collections.ObjectIterable;
+import speiger.src.collections.chars.functions.OptionalChar;
 import speiger.src.collections.chars.functions.function.CharFunction;
 import speiger.src.collections.ints.functions.consumer.IntCharConsumer;
 import speiger.src.collections.objects.functions.consumer.ObjectCharConsumer;
@@ -281,13 +282,13 @@ public interface CharIterable extends Iterable<Character>
 	 * @param filter that should be applied
 	 * @return the found value or the null equivalent variant.
 	 */
-	default char findFirst(CharPredicate filter) {
+	default OptionalChar findFirst(CharPredicate filter) {
 		Objects.requireNonNull(filter);
 		for(CharIterator iter = iterator();iter.hasNext();) {
 			char entry = iter.nextChar();
-			if(filter.test(entry)) return entry;
+			if(filter.test(entry)) return OptionalChar.of(entry);
 		}
-		return (char)0;
+		return OptionalChar.empty();
 	}
 	
 	/**
@@ -312,7 +313,7 @@ public interface CharIterable extends Iterable<Character>
 	 * @param operator the operation that should be applied
 	 * @return the reduction result, returns null value if nothing was found
 	 */
-	default char reduce(CharCharUnaryOperator operator) {
+	default OptionalChar reduce(CharCharUnaryOperator operator) {
 		Objects.requireNonNull(operator);
 		char state = (char)0;
 		boolean empty = true;
@@ -324,7 +325,7 @@ public interface CharIterable extends Iterable<Character>
 			}
 			state = operator.applyAsChar(state, iter.nextChar());
 		}
-		return state;
+		return empty ? OptionalChar.empty() : OptionalChar.of(state);
 	}	
 	
 	/**

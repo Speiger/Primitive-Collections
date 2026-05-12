@@ -9,7 +9,7 @@ import java.util.function.IntPredicate;
 import speiger.src.collections.shorts.collections.ShortBidirectionalIterator;
 import speiger.src.collections.shorts.collections.ShortCollection;
 import speiger.src.collections.shorts.collections.ShortIterator;
-
+import speiger.src.collections.shorts.functions.OptionalShort;
 import speiger.src.collections.ints.functions.consumer.IntShortConsumer;
 import speiger.src.collections.objects.functions.consumer.ObjectShortConsumer;
 import speiger.src.collections.shorts.functions.function.ShortPredicate;
@@ -121,6 +121,25 @@ public class ShortArraySet extends AbstractShortSet implements ShortOrderedSet
 			return true;
 		}
 		return false;
+	}
+	
+	@Override
+	public void addFirst(short o) {
+		int index = findIndex(o);
+		if(index == -1) {
+			if(data.length == size) data = Arrays.copyOf(data, size == 0 ? 2 : size * 2);
+			System.arraycopy(data, 0, data, 1, size++);
+			data[0] = o;
+		}
+	}
+	
+	@Override
+	public void addLast(short o) {
+		int index = findIndex(o);
+		if(index == -1) {
+			if(data.length == size) data = Arrays.copyOf(data, size == 0 ? 2 : size * 2);
+			data[size++] = o;
+		}
 	}
 	
 	@Override
@@ -356,12 +375,12 @@ public class ShortArraySet extends AbstractShortSet implements ShortOrderedSet
 	}
 	
 	@Override
-	public short findFirst(ShortPredicate filter) {
+	public OptionalShort findFirst(ShortPredicate filter) {
 		Objects.requireNonNull(filter);
 		for(int i = 0;i<size;i++) {
-			if(filter.test(data[i])) return data[i];
+			if(filter.test(data[i])) return OptionalShort.of(data[i]);
 		}
-		return (short)0;
+		return OptionalShort.empty();
 	}
 	
 	@Override
@@ -375,7 +394,7 @@ public class ShortArraySet extends AbstractShortSet implements ShortOrderedSet
 	}
 	
 	@Override
-	public short reduce(ShortShortUnaryOperator operator) {
+	public OptionalShort reduce(ShortShortUnaryOperator operator) {
 		Objects.requireNonNull(operator);
 		short state = (short)0;
 		boolean empty = true;
@@ -387,7 +406,7 @@ public class ShortArraySet extends AbstractShortSet implements ShortOrderedSet
 			}
 			state = operator.applyAsShort(state, data[i]);
 		}
-		return state;
+		return empty ? OptionalShort.empty() : OptionalShort.of(state);
 	}
 	
 	@Override

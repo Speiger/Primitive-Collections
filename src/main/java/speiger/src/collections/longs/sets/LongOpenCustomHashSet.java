@@ -6,6 +6,7 @@ import java.util.ConcurrentModificationException;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 import java.util.Objects;
+import java.util.OptionalLong;
 import java.util.function.LongPredicate;
 
 import speiger.src.collections.longs.collections.LongCollection;
@@ -546,7 +547,7 @@ public class LongOpenCustomHashSet extends AbstractLongSet implements ITrimmable
 	}
 	
 	@Override
-	public long reduce(LongLongUnaryOperator operator) {
+	public OptionalLong reduce(LongLongUnaryOperator operator) {
 		Objects.requireNonNull(operator);
 		long state = 0L;
 		boolean empty = true;
@@ -563,18 +564,18 @@ public class LongOpenCustomHashSet extends AbstractLongSet implements ITrimmable
 			}
 			state = operator.applyAsLong(state, keys[i]);
 		}
-		return state;
+		return empty ? OptionalLong.empty() : OptionalLong.of(state);
 	}
 	
 	@Override
-	public long findFirst(LongPredicate filter) {
+	public OptionalLong findFirst(LongPredicate filter) {
 		Objects.requireNonNull(filter);
-		if(size() <= 0) return 0L;
-		if(containsNull && filter.test(keys[nullIndex])) return keys[nullIndex];
+		if(size() <= 0) return OptionalLong.empty();
+		if(containsNull && filter.test(keys[nullIndex])) return OptionalLong.of(keys[nullIndex]);
 		for(int i = nullIndex-1;i>=0;i--) {
-			if(!strategy.equals(keys[i], 0L) && filter.test(keys[i])) return keys[i];
+			if(!strategy.equals(keys[i], 0L) && filter.test(keys[i])) return OptionalLong.of(keys[i]);
 		}
-		return 0L;
+		return OptionalLong.empty();
 	}
 	
 	@Override

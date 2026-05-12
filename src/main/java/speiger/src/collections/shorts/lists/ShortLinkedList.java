@@ -11,6 +11,7 @@ import java.util.function.Consumer;
 import java.util.function.Predicate;
 import java.util.function.UnaryOperator;
 import java.util.function.IntPredicate;import java.util.function.IntUnaryOperator;
+import speiger.src.collections.shorts.functions.OptionalShort;
 import speiger.src.collections.ints.functions.consumer.IntShortConsumer;
 import speiger.src.collections.objects.functions.consumer.ObjectShortConsumer;
 import speiger.src.collections.shorts.functions.function.ShortPredicate;
@@ -429,12 +430,12 @@ public class ShortLinkedList extends AbstractShortList implements ShortPriorityD
 	}
 	
 	@Override
-	public short findFirst(ShortPredicate filter) {
+	public OptionalShort findFirst(ShortPredicate filter) {
 		Objects.requireNonNull(filter);
 		for(Entry entry = first;entry != null;entry = entry.next) {
-			if(filter.test(entry.value)) return entry.value;
+			if(filter.test(entry.value)) return OptionalShort.of(entry.value);
 		}
-		return (short)0;
+		return OptionalShort.empty();
 	}
 	
 	@Override
@@ -448,7 +449,7 @@ public class ShortLinkedList extends AbstractShortList implements ShortPriorityD
 	}
 	
 	@Override
-	public short reduce(ShortShortUnaryOperator operator) {
+	public OptionalShort reduce(ShortShortUnaryOperator operator) {
 		Objects.requireNonNull(operator);
 		short state = (short)0;
 		boolean empty = true;
@@ -460,7 +461,7 @@ public class ShortLinkedList extends AbstractShortList implements ShortPriorityD
 			}
 			state = operator.applyAsShort(state, entry.value);
 		}
-		return state;
+		return empty ? OptionalShort.empty() : OptionalShort.of(state);
 	}
 	
 	@Override

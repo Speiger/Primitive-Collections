@@ -6,6 +6,7 @@ import java.util.ConcurrentModificationException;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 import java.util.Objects;
+import java.util.OptionalDouble;
 import java.util.function.Predicate;
 import java.util.function.DoublePredicate;
 import java.util.function.Consumer;
@@ -757,9 +758,9 @@ public class DoubleCollections
 		@Override
 		public double reduce(double identity, DoubleDoubleUnaryOperator operator) { synchronized(mutex) { return c.reduce(identity, operator); } }
 		@Override
-		public double reduce(DoubleDoubleUnaryOperator operator) { synchronized(mutex) { return c.reduce(operator); } }
+		public OptionalDouble reduce(DoubleDoubleUnaryOperator operator) { synchronized(mutex) { return c.reduce(operator); } }
 		@Override
-		public double findFirst(DoublePredicate filter) { synchronized(mutex) { return c.findFirst(filter); } }
+		public OptionalDouble findFirst(DoublePredicate filter) { synchronized(mutex) { return c.findFirst(filter); } }
 		@Override
 		public int count(DoublePredicate filter) { synchronized(mutex) { return c.count(filter); } }
 	}
@@ -887,9 +888,9 @@ public class DoubleCollections
 		@Override
 		public double reduce(double identity, DoubleDoubleUnaryOperator operator) { return c.reduce(identity, operator); }
 		@Override
-		public double reduce(DoubleDoubleUnaryOperator operator) { return c.reduce(operator); }
+		public OptionalDouble reduce(DoubleDoubleUnaryOperator operator) { return c.reduce(operator); }
 		@Override
-		public double findFirst(DoublePredicate filter) { return c.findFirst(filter); }
+		public OptionalDouble findFirst(DoublePredicate filter) { return c.findFirst(filter); }
 		@Override
 		public int count(DoublePredicate filter) { return c.count(filter); }
 	}

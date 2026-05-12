@@ -608,7 +608,11 @@ public class Char2BooleanMaps
 			super(c);
 			set = c;
 		}
-
+		
+		@Override
+		public void addFirst(Char2BooleanMap.Entry o) { throw new UnsupportedOperationException(); }
+		@Override
+		public void addLast(Char2BooleanMap.Entry o) { throw new UnsupportedOperationException(); }
 		@Override
 		public boolean addAndMoveToFirst(Char2BooleanMap.Entry o) { throw new UnsupportedOperationException(); }
 		@Override

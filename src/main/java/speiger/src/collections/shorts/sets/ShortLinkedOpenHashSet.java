@@ -10,6 +10,7 @@ import speiger.src.collections.shorts.collections.ShortCollection;
 import speiger.src.collections.shorts.collections.ShortIterator;
 import speiger.src.collections.shorts.collections.ShortBidirectionalIterator;
 import speiger.src.collections.shorts.functions.ShortConsumer;
+import speiger.src.collections.shorts.functions.OptionalShort;
 import speiger.src.collections.ints.functions.consumer.IntShortConsumer;
 import speiger.src.collections.objects.functions.consumer.ObjectShortConsumer;
 import speiger.src.collections.shorts.functions.function.ShortPredicate;
@@ -181,6 +182,46 @@ public class ShortLinkedOpenHashSet extends ShortOpenHashSet implements ShortOrd
 	public ShortLinkedOpenHashSet(ShortIterator iterator, float loadFactor) {
 		this(HashUtil.DEFAULT_MIN_CAPACITY, loadFactor);
 		while(iterator.hasNext()) add(iterator.nextShort());
+	}
+	
+	@Override
+	public void addFirst(short o) {
+		if(o == (short)0) {
+			if(containsNull) return;
+			containsNull = true;
+			onNodeAdded(nullIndex);
+			moveToFirstIndex(nullIndex);
+		}
+		else {
+			int pos = HashUtil.mix(Short.hashCode(o)) & mask;
+			while(keys[pos] != (short)0) {
+				if(keys[pos] == o) return;
+				pos = ++pos & mask;
+			}
+			keys[pos] = o;
+			onNodeAdded(pos);
+			moveToFirstIndex(pos);
+		}
+		if(size++ >= maxFill) rehash(HashUtil.arraySize(size+1, loadFactor));
+	}
+	
+	@Override
+	public void addLast(short o) {
+		if(o == (short)0) {
+			if(containsNull) return;
+			containsNull = true;
+			onNodeAdded(nullIndex);
+		}
+		else {
+			int pos = HashUtil.mix(Short.hashCode(o)) & mask;
+			while(keys[pos] != (short)0) {
+				if(keys[pos] == o) return;
+				pos = ++pos & mask;
+			}
+			keys[pos] = o;
+			onNodeAdded(pos);
+		}
+		if(size++ >= maxFill) rehash(HashUtil.arraySize(size+1, loadFactor));
 	}
 	
 	@Override
@@ -471,7 +512,7 @@ public class ShortLinkedOpenHashSet extends ShortOpenHashSet implements ShortOrd
 	}
 	
 	@Override
-	public short reduce(ShortShortUnaryOperator operator) {
+	public OptionalShort reduce(ShortShortUnaryOperator operator) {
 		Objects.requireNonNull(operator);
 		short state = (short)0;
 		boolean empty = true;
@@ -484,18 +525,18 @@ public class ShortLinkedOpenHashSet extends ShortOpenHashSet implements ShortOrd
 			else state = operator.applyAsShort(state, keys[index]);
 			index = (int)links[index];
 		}
-		return state;
+		return empty ? OptionalShort.empty() : OptionalShort.of(state);
 	}
 	
 	@Override
-	public short findFirst(ShortPredicate filter) {
+	public OptionalShort findFirst(ShortPredicate filter) {
 		Objects.requireNonNull(filter);
 		int index = firstIndex;
 		while(index != -1) {
-			if(filter.test(keys[index])) return keys[index];
+			if(filter.test(keys[index])) return OptionalShort.of(keys[index]);
 			index = (int)links[index];
 		}
-		return (short)0;
+		return OptionalShort.empty();
 	}
 	
 	@Override

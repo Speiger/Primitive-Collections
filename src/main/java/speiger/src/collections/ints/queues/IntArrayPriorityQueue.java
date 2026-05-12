@@ -3,6 +3,7 @@ package speiger.src.collections.ints.queues;
 import java.util.Arrays;
 import java.util.NoSuchElementException;
 import java.util.Objects;
+import java.util.OptionalInt;
 import java.util.function.IntPredicate;
 
 import speiger.src.collections.ints.collections.IntCollection;
@@ -307,7 +308,7 @@ public class IntArrayPriorityQueue extends AbstractIntPriorityQueue
 	}
 	
 	@Override
-	public int reduce(IntIntUnaryOperator operator) {
+	public OptionalInt reduce(IntIntUnaryOperator operator) {
 		Objects.requireNonNull(operator);
 		int state = 0;
 		boolean empty = true;
@@ -319,20 +320,20 @@ public class IntArrayPriorityQueue extends AbstractIntPriorityQueue
 			}
 			state = operator.applyAsInt(state, array[i]);
 		}
-		return state;
+		return empty ? OptionalInt.empty() : OptionalInt.of(state);
 	}
 	
 	@Override
-	public int findFirst(IntPredicate filter) {
+	public OptionalInt findFirst(IntPredicate filter) {
 		Objects.requireNonNull(filter);
 		for(int i = 0;i<size;i++) {
 			if(filter.test(array[i])) {
 				int data = array[i];
 				removeIndex(i);
-				return data;
+				return OptionalInt.of(data);
 			}
 		}
-		return 0;
+		return OptionalInt.empty();
 	}
 	
 	@Override

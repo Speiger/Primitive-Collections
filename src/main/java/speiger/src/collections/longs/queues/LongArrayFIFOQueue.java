@@ -2,6 +2,7 @@ package speiger.src.collections.longs.queues;
 
 import java.util.Arrays;
 import java.util.Objects;
+import java.util.OptionalLong;
 import java.util.NoSuchElementException;
 import java.util.function.LongPredicate;
 
@@ -278,17 +279,17 @@ public class LongArrayFIFOQueue extends AbstractLongPriorityQueue implements Lon
 	}
 	
 	@Override
-	public long findFirst(LongPredicate filter) {
+	public OptionalLong findFirst(LongPredicate filter) {
 		Objects.requireNonNull(filter);
 		for(int i = 0,m=size();i<m;i++) {
 			int index = (first + i) % array.length;
 			if(filter.test(array[index])) {
 				long data = array[index];
 				removeIndex(index);
-				return data;
+				return OptionalLong.of(data);
 			}
 		}
-		return 0L;
+		return OptionalLong.empty();
 	}
 	
 	@Override
@@ -302,7 +303,7 @@ public class LongArrayFIFOQueue extends AbstractLongPriorityQueue implements Lon
 	}
 	
 	@Override
-	public long reduce(LongLongUnaryOperator operator) {
+	public OptionalLong reduce(LongLongUnaryOperator operator) {
 		Objects.requireNonNull(operator);
 		long state = 0L;
 		boolean empty = true;
@@ -314,7 +315,7 @@ public class LongArrayFIFOQueue extends AbstractLongPriorityQueue implements Lon
 			}
 			state = operator.applyAsLong(state, array[(first + i) % array.length]);
 		}
-		return state;
+		return empty ? OptionalLong.empty() : OptionalLong.of(state);
 	}
 	
 	@Override

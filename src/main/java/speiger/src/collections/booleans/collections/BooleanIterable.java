@@ -7,6 +7,7 @@ import java.util.function.Consumer;
 import speiger.src.collections.booleans.functions.BooleanConsumer;
 import speiger.src.collections.booleans.functions.BooleanComparator;
 import speiger.src.collections.objects.collections.ObjectIterable;
+import speiger.src.collections.booleans.functions.OptionalBoolean;
 import speiger.src.collections.booleans.functions.function.BooleanFunction;
 import speiger.src.collections.ints.functions.consumer.IntBooleanConsumer;
 import speiger.src.collections.objects.functions.consumer.ObjectBooleanConsumer;
@@ -271,13 +272,13 @@ public interface BooleanIterable extends Iterable<Boolean>
 	 * @param filter that should be applied
 	 * @return the found value or the null equivalent variant.
 	 */
-	default boolean findFirst(BooleanPredicate filter) {
+	default OptionalBoolean findFirst(BooleanPredicate filter) {
 		Objects.requireNonNull(filter);
 		for(BooleanIterator iter = iterator();iter.hasNext();) {
 			boolean entry = iter.nextBoolean();
-			if(filter.test(entry)) return entry;
+			if(filter.test(entry)) return OptionalBoolean.of(entry);
 		}
-		return false;
+		return OptionalBoolean.empty();
 	}
 	
 	/**
@@ -302,7 +303,7 @@ public interface BooleanIterable extends Iterable<Boolean>
 	 * @param operator the operation that should be applied
 	 * @return the reduction result, returns null value if nothing was found
 	 */
-	default boolean reduce(BooleanBooleanUnaryOperator operator) {
+	default OptionalBoolean reduce(BooleanBooleanUnaryOperator operator) {
 		Objects.requireNonNull(operator);
 		boolean state = false;
 		boolean empty = true;
@@ -314,7 +315,7 @@ public interface BooleanIterable extends Iterable<Boolean>
 			}
 			state = operator.applyAsBoolean(state, iter.nextBoolean());
 		}
-		return state;
+		return empty ? OptionalBoolean.empty() : OptionalBoolean.of(state);
 	}	
 	
 	/**

@@ -608,7 +608,11 @@ public class Long2BooleanMaps
 			super(c);
 			set = c;
 		}
-
+		
+		@Override
+		public void addFirst(Long2BooleanMap.Entry o) { throw new UnsupportedOperationException(); }
+		@Override
+		public void addLast(Long2BooleanMap.Entry o) { throw new UnsupportedOperationException(); }
 		@Override
 		public boolean addAndMoveToFirst(Long2BooleanMap.Entry o) { throw new UnsupportedOperationException(); }
 		@Override

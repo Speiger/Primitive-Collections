@@ -4,6 +4,7 @@ import java.util.Arrays;
 import java.util.Map;
 import java.util.NoSuchElementException;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.function.Consumer;
 import java.util.function.BiFunction;
 import java.util.function.Predicate;
@@ -14,6 +15,7 @@ import speiger.src.collections.objects.functions.consumer.ObjectFloatConsumer;
 import speiger.src.collections.ints.functions.consumer.IntFloatConsumer;
 import speiger.src.collections.ints.functions.consumer.IntObjectConsumer;
 import speiger.src.collections.ints.functions.consumer.IntCharConsumer;
+import speiger.src.collections.floats.functions.OptionalFloat;
 import speiger.src.collections.floats.functions.function.FloatPredicate;
 import speiger.src.collections.floats.functions.consumer.FloatCharConsumer;
 import speiger.src.collections.floats.functions.function.Float2CharFunction;
@@ -29,6 +31,7 @@ import speiger.src.collections.objects.functions.consumer.ObjectObjectConsumer;
 import speiger.src.collections.objects.functions.consumer.ObjectCharConsumer;
 
 import speiger.src.collections.chars.functions.function.CharPredicate;
+import speiger.src.collections.chars.functions.OptionalChar;
 import speiger.src.collections.floats.sets.AbstractFloatSet;
 import speiger.src.collections.chars.collections.AbstractCharCollection;
 import speiger.src.collections.chars.collections.CharOrderedCollection;
@@ -539,6 +542,10 @@ public class ImmutableFloat2CharOpenHashMap extends AbstractFloat2CharMap implem
 	
 	private class MapEntrySet extends AbstractObjectSet<Float2CharMap.Entry> implements Float2CharOrderedMap.FastOrderedSet {
 		@Override
+		public void addFirst(Float2CharMap.Entry o) { throw new UnsupportedOperationException(); }
+		@Override
+		public void addLast(Float2CharMap.Entry o) { throw new UnsupportedOperationException(); }
+		@Override
 		public boolean addAndMoveToFirst(Float2CharMap.Entry o) { throw new UnsupportedOperationException(); }
 		@Override
 		public boolean addAndMoveToLast(Float2CharMap.Entry o) { throw new UnsupportedOperationException(); }
@@ -691,7 +698,7 @@ public class ImmutableFloat2CharOpenHashMap extends AbstractFloat2CharMap implem
 		}
 		
 		@Override
-		public Float2CharMap.Entry reduce(ObjectObjectUnaryOperator<Float2CharMap.Entry, Float2CharMap.Entry> operator) {
+		public Optional<Float2CharMap.Entry> reduce(ObjectObjectUnaryOperator<Float2CharMap.Entry, Float2CharMap.Entry> operator) {
 			Objects.requireNonNull(operator);
 			Float2CharMap.Entry state = null;
 			boolean empty = true;
@@ -706,21 +713,21 @@ public class ImmutableFloat2CharOpenHashMap extends AbstractFloat2CharMap implem
 				state = operator.apply(state, new BasicEntry(keys[index], values[index]));
 				index = (int)links[index];
 			}
-			return state;
+			return empty ? Optional.empty() : Optional.ofNullable(state);
 		}
 		
 		@Override
-		public Float2CharMap.Entry findFirst(Predicate<Float2CharMap.Entry> filter) {
+		public Optional<Float2CharMap.Entry> findFirst(Predicate<Float2CharMap.Entry> filter) {
 			Objects.requireNonNull(filter);
-			if(size() <= 0) return null;
+			if(size() <= 0) return Optional.empty();
 			BasicEntry entry = new BasicEntry();
 			int index = firstIndex;
 			while(index != -1) {
 				entry.set(keys[index], values[index]);
-				if(filter.test(entry)) return entry;
+				if(filter.test(entry)) return Optional.ofNullable(entry);
 				index = (int)links[index];
 			}
-			return null;
+			return Optional.empty();
 		}
 		
 		@Override
@@ -782,6 +789,12 @@ public class ImmutableFloat2CharOpenHashMap extends AbstractFloat2CharMap implem
 		public boolean add(float o) {
 			throw new UnsupportedOperationException();
 		}
+		
+		@Override
+		public void addFirst(float o) { throw new UnsupportedOperationException(); }
+		
+		@Override
+		public void addLast(float o) { throw new UnsupportedOperationException(); }
 		
 		@Override
 		public boolean addAndMoveToFirst(float o) { throw new UnsupportedOperationException(); }
@@ -918,7 +931,7 @@ public class ImmutableFloat2CharOpenHashMap extends AbstractFloat2CharMap implem
 		}
 		
 		@Override
-		public float reduce(FloatFloatUnaryOperator operator) {
+		public OptionalFloat reduce(FloatFloatUnaryOperator operator) {
 			Objects.requireNonNull(operator);
 			float state = 0F;
 			boolean empty = true;
@@ -933,19 +946,19 @@ public class ImmutableFloat2CharOpenHashMap extends AbstractFloat2CharMap implem
 				state = operator.applyAsFloat(state, keys[index]);
 				index = (int)links[index];
 			}
-			return state;
+			return empty ? OptionalFloat.empty() : OptionalFloat.of(state);
 		}
 		
 		@Override
-		public float findFirst(FloatPredicate filter) {
+		public OptionalFloat findFirst(FloatPredicate filter) {
 			Objects.requireNonNull(filter);
-			if(size() <= 0) return 0F;
+			if(size() <= 0) return OptionalFloat.empty();
 			int index = firstIndex;
 			while(index != -1){
-				if(filter.test(keys[index])) return keys[index];
+				if(filter.test(keys[index])) return OptionalFloat.of(keys[index]);
 				index = (int)links[index];
 			}
-			return 0F;
+			return OptionalFloat.empty();
 		}
 		
 		@Override
@@ -1072,7 +1085,7 @@ public class ImmutableFloat2CharOpenHashMap extends AbstractFloat2CharMap implem
 		}
 		
 		@Override
-		public char reduce(CharCharUnaryOperator operator) {
+		public OptionalChar reduce(CharCharUnaryOperator operator) {
 			Objects.requireNonNull(operator);
 			char state = (char)0;
 			boolean empty = true;
@@ -1087,19 +1100,19 @@ public class ImmutableFloat2CharOpenHashMap extends AbstractFloat2CharMap implem
 				state = operator.applyAsChar(state, values[index]);
 				index = (int)links[index];
 			}
-			return state;
+			return empty ? OptionalChar.empty() : OptionalChar.of(state);
 		}
 		
 		@Override
-		public char findFirst(CharPredicate filter) {
+		public OptionalChar findFirst(CharPredicate filter) {
 			Objects.requireNonNull(filter);
-			if(size() <= 0) return (char)0;
+			if(size() <= 0) return OptionalChar.empty();
 			int index = firstIndex;
 			while(index != -1){
-				if(filter.test(values[index])) return values[index];
+				if(filter.test(values[index])) return OptionalChar.of(values[index]);
 				index = (int)links[index];
 			}
-			return (char)0;
+			return OptionalChar.empty();
 		}
 		
 		@Override

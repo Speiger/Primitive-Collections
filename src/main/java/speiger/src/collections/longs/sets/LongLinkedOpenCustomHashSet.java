@@ -5,6 +5,7 @@ import java.util.Objects;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
+import java.util.OptionalLong;
 import java.util.function.LongPredicate;
 
 import speiger.src.collections.longs.collections.LongCollection;
@@ -212,6 +213,46 @@ public class LongLinkedOpenCustomHashSet extends LongOpenCustomHashSet implement
 	public LongLinkedOpenCustomHashSet(LongIterator iterator, float loadFactor, LongStrategy strategy) {
 		this(HashUtil.DEFAULT_MIN_CAPACITY, loadFactor, strategy);
 		while(iterator.hasNext()) add(iterator.nextLong());
+	}
+	
+	@Override
+	public void addFirst(long o) {
+		if(strategy.equals(o, 0L)) {
+			if(containsNull) return;
+			containsNull = true;
+			onNodeAdded(nullIndex);
+			moveToFirstIndex(nullIndex);
+		}
+		else {
+			int pos = HashUtil.mix(strategy.hashCode(o)) & mask;
+			while(!strategy.equals(keys[pos], 0L)) {
+				if(strategy.equals(keys[pos], o)) return;
+				pos = ++pos & mask;
+			}
+			keys[pos] = o;
+			onNodeAdded(pos);
+			moveToFirstIndex(pos);
+		}
+		if(size++ >= maxFill) rehash(HashUtil.arraySize(size+1, loadFactor));
+	}
+	
+	@Override
+	public void addLast(long o) {
+		if(strategy.equals(o, 0L)) {
+			if(containsNull) return;
+			containsNull = true;
+			onNodeAdded(nullIndex);
+		}
+		else {
+			int pos = HashUtil.mix(strategy.hashCode(o)) & mask;
+			while(!strategy.equals(keys[pos], 0L)) {
+				if(strategy.equals(keys[pos], o)) return;
+				pos = ++pos & mask;
+			}
+			keys[pos] = o;
+			onNodeAdded(pos);
+		}
+		if(size++ >= maxFill) rehash(HashUtil.arraySize(size+1, loadFactor));
 	}
 	
 	@Override
@@ -618,7 +659,7 @@ public class LongLinkedOpenCustomHashSet extends LongOpenCustomHashSet implement
 	}
 	
 	@Override
-	public long reduce(LongLongUnaryOperator operator) {
+	public OptionalLong reduce(LongLongUnaryOperator operator) {
 		Objects.requireNonNull(operator);
 		long state = 0L;
 		boolean empty = true;
@@ -631,18 +672,18 @@ public class LongLinkedOpenCustomHashSet extends LongOpenCustomHashSet implement
 			else state = operator.applyAsLong(state, keys[index]);
 			index = (int)links[index];
 		}
-		return state;
+		return empty ? OptionalLong.empty() : OptionalLong.of(state);
 	}
 	
 	@Override
-	public long findFirst(LongPredicate filter) {
+	public OptionalLong findFirst(LongPredicate filter) {
 		Objects.requireNonNull(filter);
 		int index = firstIndex;
 		while(index != -1) {
-			if(filter.test(keys[index])) return keys[index];
+			if(filter.test(keys[index])) return OptionalLong.of(keys[index]);
 			index = (int)links[index];
 		}
-		return 0L;
+		return OptionalLong.empty();
 	}
 	
 	@Override

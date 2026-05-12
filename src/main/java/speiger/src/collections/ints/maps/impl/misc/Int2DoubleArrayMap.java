@@ -4,11 +4,14 @@ import java.util.Arrays;
 import java.util.Map;
 import java.util.NoSuchElementException;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.function.Consumer;
 import java.util.function.BiFunction;
 import java.util.function.Predicate;
 import java.util.function.IntPredicate;
+import java.util.OptionalInt;
 import java.util.function.DoublePredicate;
+import java.util.OptionalDouble;
 
 import speiger.src.collections.ints.collections.IntBidirectionalIterator;
 import speiger.src.collections.ints.functions.IntConsumer;
@@ -751,6 +754,10 @@ public class Int2DoubleArrayMap extends AbstractInt2DoubleMap implements Int2Dou
 	
 	private class MapEntrySet extends AbstractObjectSet<Int2DoubleMap.Entry> implements Int2DoubleOrderedMap.FastOrderedSet {
 		@Override
+		public void addFirst(Int2DoubleMap.Entry o) { throw new UnsupportedOperationException(); }
+		@Override
+		public void addLast(Int2DoubleMap.Entry o) { throw new UnsupportedOperationException(); }
+		@Override
 		public boolean addAndMoveToFirst(Int2DoubleMap.Entry o) { throw new UnsupportedOperationException(); }
 		@Override
 		public boolean addAndMoveToLast(Int2DoubleMap.Entry o) { throw new UnsupportedOperationException(); }
@@ -898,7 +905,7 @@ public class Int2DoubleArrayMap extends AbstractInt2DoubleMap implements Int2Dou
 		}
 		
 		@Override
-		public Int2DoubleMap.Entry reduce(ObjectObjectUnaryOperator<Int2DoubleMap.Entry, Int2DoubleMap.Entry> operator) {
+		public Optional<Int2DoubleMap.Entry> reduce(ObjectObjectUnaryOperator<Int2DoubleMap.Entry, Int2DoubleMap.Entry> operator) {
 			Objects.requireNonNull(operator);
 			Int2DoubleMap.Entry state = null;
 			boolean empty = true;
@@ -910,19 +917,19 @@ public class Int2DoubleArrayMap extends AbstractInt2DoubleMap implements Int2Dou
 				}
 				state = operator.apply(state, new ValueMapEntry(i));
 			}
-			return state;
+			return empty ? Optional.empty() : Optional.ofNullable(state);
 		}
 		
 		@Override
-		public Int2DoubleMap.Entry findFirst(Predicate<Int2DoubleMap.Entry> filter) {
+		public Optional<Int2DoubleMap.Entry> findFirst(Predicate<Int2DoubleMap.Entry> filter) {
 			Objects.requireNonNull(filter);
-			if(size() <= 0) return null;
+			if(size() <= 0) return Optional.empty();
 			MapEntry entry = new MapEntry();
 			for(int i = 0;i<size;i++) {
 				entry.set(i);
-				if(filter.test(entry)) return entry;
+				if(filter.test(entry)) return Optional.ofNullable(entry);
 			}
-			return null;
+			return Optional.empty();
 		}
 		
 		@Override
@@ -994,6 +1001,10 @@ public class Int2DoubleArrayMap extends AbstractInt2DoubleMap implements Int2Dou
 		
 		@Override
 		public boolean add(int o) { throw new UnsupportedOperationException(); }
+		@Override
+		public void addFirst(int o) { throw new UnsupportedOperationException(); }
+		@Override
+		public void addLast(int o) { throw new UnsupportedOperationException(); }
 		@Override
 		public boolean addAndMoveToFirst(int o) { throw new UnsupportedOperationException(); }
 		@Override
@@ -1081,7 +1092,7 @@ public class Int2DoubleArrayMap extends AbstractInt2DoubleMap implements Int2Dou
 		}
 		
 		@Override
-		public int reduce(IntIntUnaryOperator operator) {
+		public OptionalInt reduce(IntIntUnaryOperator operator) {
 			Objects.requireNonNull(operator);
 			int state = 0;
 			boolean empty = true;
@@ -1093,16 +1104,16 @@ public class Int2DoubleArrayMap extends AbstractInt2DoubleMap implements Int2Dou
 				}
 				state = operator.applyAsInt(state, keys[i]);
 			}
-			return state;
+			return empty ? OptionalInt.empty() : OptionalInt.of(state);
 		}
 		
 		@Override
-		public int findFirst(IntPredicate filter) {
+		public OptionalInt findFirst(IntPredicate filter) {
 			Objects.requireNonNull(filter);
 			for(int i = 0;i<size;i++) {
-				if(filter.test(keys[i])) return keys[i];
+				if(filter.test(keys[i])) return OptionalInt.of(keys[i]);
 			}
-			return 0;
+			return OptionalInt.empty();
 		}
 		
 		@Override
@@ -1203,7 +1214,7 @@ public class Int2DoubleArrayMap extends AbstractInt2DoubleMap implements Int2Dou
 		}
 		
 		@Override
-		public double reduce(DoubleDoubleUnaryOperator operator) {
+		public OptionalDouble reduce(DoubleDoubleUnaryOperator operator) {
 			Objects.requireNonNull(operator);
 			double state = 0D;
 			boolean empty = true;
@@ -1215,16 +1226,16 @@ public class Int2DoubleArrayMap extends AbstractInt2DoubleMap implements Int2Dou
 				}
 				state = operator.applyAsDouble(state, values[i]);
 			}
-			return state;
+			return empty ? OptionalDouble.empty() : OptionalDouble.of(state);
 		}
 		
 		@Override
-		public double findFirst(DoublePredicate filter) {
+		public OptionalDouble findFirst(DoublePredicate filter) {
 			Objects.requireNonNull(filter);
 			for(int i = 0;i<size;i++) {
-				if(filter.test(values[i])) return values[i];
+				if(filter.test(values[i])) return OptionalDouble.of(values[i]);
 			}
-			return 0D;
+			return OptionalDouble.empty();
 		}
 		
 		@Override

@@ -6,6 +6,7 @@ import java.util.Objects;
 
 import speiger.src.collections.chars.collections.CharCollection;
 import speiger.src.collections.chars.collections.CharIterator;
+import speiger.src.collections.chars.functions.OptionalChar;
 import speiger.src.collections.chars.functions.CharComparator;
 import speiger.src.collections.chars.functions.CharConsumer;
 import speiger.src.collections.ints.functions.consumer.IntCharConsumer;
@@ -307,7 +308,7 @@ public class CharArrayPriorityQueue extends AbstractCharPriorityQueue
 	}
 	
 	@Override
-	public char reduce(CharCharUnaryOperator operator) {
+	public OptionalChar reduce(CharCharUnaryOperator operator) {
 		Objects.requireNonNull(operator);
 		char state = (char)0;
 		boolean empty = true;
@@ -319,20 +320,20 @@ public class CharArrayPriorityQueue extends AbstractCharPriorityQueue
 			}
 			state = operator.applyAsChar(state, array[i]);
 		}
-		return state;
+		return empty ? OptionalChar.empty() : OptionalChar.of(state);
 	}
 	
 	@Override
-	public char findFirst(CharPredicate filter) {
+	public OptionalChar findFirst(CharPredicate filter) {
 		Objects.requireNonNull(filter);
 		for(int i = 0;i<size;i++) {
 			if(filter.test(array[i])) {
 				char data = array[i];
 				removeIndex(i);
-				return data;
+				return OptionalChar.of(data);
 			}
 		}
-		return (char)0;
+		return OptionalChar.empty();
 	}
 	
 	@Override

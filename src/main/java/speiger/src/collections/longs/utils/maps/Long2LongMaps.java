@@ -619,7 +619,11 @@ public class Long2LongMaps
 			super(c);
 			set = c;
 		}
-
+		
+		@Override
+		public void addFirst(Long2LongMap.Entry o) { throw new UnsupportedOperationException(); }
+		@Override
+		public void addLast(Long2LongMap.Entry o) { throw new UnsupportedOperationException(); }
 		@Override
 		public boolean addAndMoveToFirst(Long2LongMap.Entry o) { throw new UnsupportedOperationException(); }
 		@Override

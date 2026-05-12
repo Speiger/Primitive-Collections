@@ -3,6 +3,7 @@ package speiger.src.collections.longs.queues;
 import java.util.Arrays;
 import java.util.NoSuchElementException;
 import java.util.Objects;
+import java.util.OptionalLong;
 import java.util.function.LongPredicate;
 
 import speiger.src.collections.longs.collections.LongCollection;
@@ -307,7 +308,7 @@ public class LongArrayPriorityQueue extends AbstractLongPriorityQueue
 	}
 	
 	@Override
-	public long reduce(LongLongUnaryOperator operator) {
+	public OptionalLong reduce(LongLongUnaryOperator operator) {
 		Objects.requireNonNull(operator);
 		long state = 0L;
 		boolean empty = true;
@@ -319,20 +320,20 @@ public class LongArrayPriorityQueue extends AbstractLongPriorityQueue
 			}
 			state = operator.applyAsLong(state, array[i]);
 		}
-		return state;
+		return empty ? OptionalLong.empty() : OptionalLong.of(state);
 	}
 	
 	@Override
-	public long findFirst(LongPredicate filter) {
+	public OptionalLong findFirst(LongPredicate filter) {
 		Objects.requireNonNull(filter);
 		for(int i = 0;i<size;i++) {
 			if(filter.test(array[i])) {
 				long data = array[i];
 				removeIndex(i);
-				return data;
+				return OptionalLong.of(data);
 			}
 		}
-		return 0L;
+		return OptionalLong.empty();
 	}
 	
 	@Override

@@ -6,6 +6,7 @@ import java.util.Collection;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.concurrent.locks.ReentrantLock;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
@@ -623,13 +624,13 @@ public class CopyOnWriteObjectArrayList<T> extends AbstractObjectList<T> impleme
 	}
 	
 	@Override
-	public T findFirst(Predicate<T> filter) {
+	public Optional<T> findFirst(Predicate<T> filter) {
 		Objects.requireNonNull(filter);
 		T[] data = this.data;
 		for(int i = 0,m=data.length;i<m;i++) {
-			if(filter.test(data[i])) return data[i];
+			if(filter.test(data[i])) return Optional.ofNullable(data[i]);
 		}
-		return null;
+		return Optional.empty();
 	}
 	
 	@Override
@@ -644,7 +645,7 @@ public class CopyOnWriteObjectArrayList<T> extends AbstractObjectList<T> impleme
 	}
 	
 	@Override
-	public T reduce(ObjectObjectUnaryOperator<T, T> operator) {
+	public Optional<T> reduce(ObjectObjectUnaryOperator<T, T> operator) {
 		Objects.requireNonNull(operator);
 		T[] data = this.data;
 		T state = null;
@@ -657,7 +658,7 @@ public class CopyOnWriteObjectArrayList<T> extends AbstractObjectList<T> impleme
 			}
 			state = operator.apply(state, data[i]);
 		}
-		return state;
+		return empty ? Optional.empty() : Optional.ofNullable(state);
 	}
 	
 	@Override

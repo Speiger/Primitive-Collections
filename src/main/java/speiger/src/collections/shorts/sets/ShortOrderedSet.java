@@ -1,6 +1,7 @@
 package speiger.src.collections.shorts.sets;
 
 import speiger.src.collections.shorts.collections.ShortBidirectionalIterator;
+import speiger.src.collections.shorts.collections.ShortOrderedCollection;
 import speiger.src.collections.shorts.collections.ShortSplititerator;
 import speiger.src.collections.shorts.utils.ShortSplititerators;
 import speiger.src.collections.shorts.sets.AbstractShortSet.ReversedShortOrderedSet;
@@ -13,7 +14,7 @@ import speiger.src.collections.shorts.utils.ShortSets;
  * This interface provides basic access to such functions while also providing some Sorted/NaivgableSet implementations that still fit into here.
  * 
  */
-public interface ShortOrderedSet extends ShortSet
+public interface ShortOrderedSet extends ShortSet, ShortOrderedCollection
 {
 	/**
 	 * A customized add method that allows you to insert into the first index.

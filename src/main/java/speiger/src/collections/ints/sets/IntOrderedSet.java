@@ -1,6 +1,7 @@
 package speiger.src.collections.ints.sets;
 
 import speiger.src.collections.ints.collections.IntBidirectionalIterator;
+import speiger.src.collections.ints.collections.IntOrderedCollection;
 import speiger.src.collections.ints.collections.IntSplititerator;
 import speiger.src.collections.ints.utils.IntSplititerators;
 import speiger.src.collections.ints.sets.AbstractIntSet.ReversedIntOrderedSet;
@@ -13,7 +14,7 @@ import speiger.src.collections.ints.utils.IntSets;
  * This interface provides basic access to such functions while also providing some Sorted/NaivgableSet implementations that still fit into here.
  * 
  */
-public interface IntOrderedSet extends IntSet
+public interface IntOrderedSet extends IntSet, IntOrderedCollection
 {
 	/**
 	 * A customized add method that allows you to insert into the first index.

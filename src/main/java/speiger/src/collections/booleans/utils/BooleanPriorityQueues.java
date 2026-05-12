@@ -1,13 +1,14 @@
 package speiger.src.collections.booleans.utils;
 
-
 import speiger.src.collections.booleans.collections.BooleanIterator;
 import speiger.src.collections.booleans.collections.BooleanCollection;
 import speiger.src.collections.booleans.functions.BooleanComparator;
+import speiger.src.collections.booleans.functions.OptionalBoolean;
 import speiger.src.collections.booleans.queues.BooleanPriorityDequeue;
 import speiger.src.collections.booleans.queues.BooleanPriorityQueue;
 import speiger.src.collections.booleans.functions.BooleanConsumer;
 import speiger.src.collections.booleans.functions.function.BooleanPredicate;
+import speiger.src.collections.booleans.functions.function.BooleanBooleanUnaryOperator;
 import speiger.src.collections.objects.functions.consumer.ObjectBooleanConsumer;
 
 /**
@@ -113,7 +114,11 @@ public class BooleanPriorityQueues
 		@Override
 		public boolean matchesAll(BooleanPredicate filter) { synchronized(mutex) { return queue.matchesAll(filter); } }
 		@Override
-		public boolean findFirst(BooleanPredicate filter) { synchronized(mutex) { return queue.findFirst(filter); } }
+		public OptionalBoolean findFirst(BooleanPredicate filter) { synchronized(mutex) { return queue.findFirst(filter); } }
+		@Override
+		public boolean reduce(boolean identity, BooleanBooleanUnaryOperator operator) { synchronized(mutex) { return queue.reduce(identity, operator); } }
+		@Override
+		public OptionalBoolean reduce(BooleanBooleanUnaryOperator operator) { synchronized(mutex) { return queue.reduce(operator); } }
 		@Override
 		public int count(BooleanPredicate filter) { synchronized(mutex) { return queue.count(filter); } }
 	}

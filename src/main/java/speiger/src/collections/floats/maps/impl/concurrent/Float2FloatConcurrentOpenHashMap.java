@@ -4,6 +4,7 @@ import java.util.Arrays;
 import java.util.Map;
 import java.util.NoSuchElementException;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.concurrent.locks.StampedLock;
 import java.util.function.Consumer;
 import java.util.function.Predicate;
@@ -18,6 +19,7 @@ import speiger.src.collections.ints.functions.consumer.IntObjectConsumer;
 import speiger.src.collections.floats.functions.consumer.FloatFloatConsumer;
 import speiger.src.collections.floats.functions.function.FloatUnaryOperator;
 import speiger.src.collections.floats.functions.function.FloatFloatUnaryOperator;
+import speiger.src.collections.floats.functions.OptionalFloat;
 import speiger.src.collections.floats.functions.function.FloatPredicate;
 import speiger.src.collections.floats.maps.abstracts.AbstractFloat2FloatMap;
 import speiger.src.collections.floats.maps.interfaces.Float2FloatMap;
@@ -761,7 +763,7 @@ public class Float2FloatConcurrentOpenHashMap extends AbstractFloat2FloatMap imp
 		}
 		
 		@Override
-		public Float2FloatMap.Entry reduce(ObjectObjectUnaryOperator<Float2FloatMap.Entry, Float2FloatMap.Entry> operator) {
+		public Optional<Float2FloatMap.Entry> reduce(ObjectObjectUnaryOperator<Float2FloatMap.Entry, Float2FloatMap.Entry> operator) {
 			Objects.requireNonNull(operator);
 			Float2FloatMap.Entry state = null;
 			boolean empty = true;
@@ -785,11 +787,11 @@ public class Float2FloatConcurrentOpenHashMap extends AbstractFloat2FloatMap imp
 					seg.unlockRead(stamp);
 				}
 			}
-			return state;
+			return empty ? Optional.empty() : Optional.ofNullable(state);
 		}
 		
 		@Override
-		public Float2FloatMap.Entry findFirst(Predicate<Float2FloatMap.Entry> filter) {
+		public Optional<Float2FloatMap.Entry> findFirst(Predicate<Float2FloatMap.Entry> filter) {
 			Objects.requireNonNull(filter);
 			MapEntry entry = new MapEntry();
 			for(int i = 0,m=segments.length;i<m;i++) {
@@ -799,7 +801,7 @@ public class Float2FloatConcurrentOpenHashMap extends AbstractFloat2FloatMap imp
 				try {
 					while(index != -1) {
 						entry.set(index, i);
-						if(filter.test(entry)) return entry;
+						if(filter.test(entry)) return Optional.ofNullable(entry);
 						index = (int)seg.links[index];
 					}
 				}
@@ -807,7 +809,7 @@ public class Float2FloatConcurrentOpenHashMap extends AbstractFloat2FloatMap imp
 					seg.unlockRead(stamp);
 				}
 			}
-			return null;
+			return Optional.empty();
 		}
 		
 		@Override
@@ -1068,7 +1070,7 @@ public class Float2FloatConcurrentOpenHashMap extends AbstractFloat2FloatMap imp
 		}
 		
 		@Override
-		public float reduce(FloatFloatUnaryOperator operator) {
+		public OptionalFloat reduce(FloatFloatUnaryOperator operator) {
 			Objects.requireNonNull(operator);
 			float state = 0F;
 			boolean empty = true;
@@ -1092,11 +1094,11 @@ public class Float2FloatConcurrentOpenHashMap extends AbstractFloat2FloatMap imp
 					seg.unlockRead(stamp);
 				}
 			}
-			return state;
+			return empty ? OptionalFloat.empty() : OptionalFloat.of(state);
 		}
 		
 		@Override
-		public float findFirst(FloatPredicate filter) {
+		public OptionalFloat findFirst(FloatPredicate filter) {
 			Objects.requireNonNull(filter);
 			for(int i = 0,m=segments.length;i<m;i++) {
 				Segment seg = segments[i];
@@ -1104,7 +1106,7 @@ public class Float2FloatConcurrentOpenHashMap extends AbstractFloat2FloatMap imp
 				try {
 					int index = seg.firstIndex;
 					while(index != -1){
-						if(filter.test(seg.keys[index])) return seg.keys[index];
+						if(filter.test(seg.keys[index])) return OptionalFloat.of(seg.keys[index]);
 						index = (int)seg.links[index];
 					}
 				}
@@ -1112,7 +1114,7 @@ public class Float2FloatConcurrentOpenHashMap extends AbstractFloat2FloatMap imp
 					seg.unlockRead(stamp);
 				}
 			}
-			return 0F;
+			return OptionalFloat.empty();
 		}
 		
 		@Override
@@ -1303,7 +1305,7 @@ public class Float2FloatConcurrentOpenHashMap extends AbstractFloat2FloatMap imp
 		}
 		
 		@Override
-		public float reduce(FloatFloatUnaryOperator operator) {
+		public OptionalFloat reduce(FloatFloatUnaryOperator operator) {
 			Objects.requireNonNull(operator);
 			float state = 0F;
 			boolean empty = true;
@@ -1327,20 +1329,20 @@ public class Float2FloatConcurrentOpenHashMap extends AbstractFloat2FloatMap imp
 					seg.unlockRead(stamp);
 				}
 			}
-			return state;
+			return empty ? OptionalFloat.empty() : OptionalFloat.of(state);
 		}
 		
 		@Override
-		public float findFirst(FloatPredicate filter) {
+		public OptionalFloat findFirst(FloatPredicate filter) {
 			Objects.requireNonNull(filter);
-			if(size() <= 0) return 0F;
+			if(size() <= 0) return OptionalFloat.empty();
 			for(int i = 0,m=segments.length;i<m;i++) {
 				Segment seg = segments[i];
 				long stamp = seg.readLock();
 				try {
 					int index = seg.firstIndex;
 					while(index != -1){
-						if(filter.test(seg.values[index])) return seg.values[index];
+						if(filter.test(seg.values[index])) return OptionalFloat.of(seg.values[index]);
 						index = (int)seg.links[index];
 					}
 				}
@@ -1348,7 +1350,7 @@ public class Float2FloatConcurrentOpenHashMap extends AbstractFloat2FloatMap imp
 					seg.unlockRead(stamp);
 				}
 			}
-			return 0F;
+			return OptionalFloat.empty();
 		}
 		
 		@Override

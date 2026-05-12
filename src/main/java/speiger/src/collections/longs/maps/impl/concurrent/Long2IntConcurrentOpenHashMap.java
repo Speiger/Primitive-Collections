@@ -4,12 +4,15 @@ import java.util.Arrays;
 import java.util.Map;
 import java.util.NoSuchElementException;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.concurrent.locks.StampedLock;
 import java.util.function.Consumer;
 import java.util.function.Predicate;
 import java.util.function.BiFunction;
 import java.util.function.LongPredicate;
+import java.util.OptionalLong;
 import java.util.function.IntPredicate;
+import java.util.OptionalInt;
 
 import speiger.src.collections.longs.collections.LongBidirectionalIterator;
 import speiger.src.collections.longs.functions.LongConsumer;
@@ -768,7 +771,7 @@ public class Long2IntConcurrentOpenHashMap extends AbstractLong2IntMap implement
 		}
 		
 		@Override
-		public Long2IntMap.Entry reduce(ObjectObjectUnaryOperator<Long2IntMap.Entry, Long2IntMap.Entry> operator) {
+		public Optional<Long2IntMap.Entry> reduce(ObjectObjectUnaryOperator<Long2IntMap.Entry, Long2IntMap.Entry> operator) {
 			Objects.requireNonNull(operator);
 			Long2IntMap.Entry state = null;
 			boolean empty = true;
@@ -792,11 +795,11 @@ public class Long2IntConcurrentOpenHashMap extends AbstractLong2IntMap implement
 					seg.unlockRead(stamp);
 				}
 			}
-			return state;
+			return empty ? Optional.empty() : Optional.ofNullable(state);
 		}
 		
 		@Override
-		public Long2IntMap.Entry findFirst(Predicate<Long2IntMap.Entry> filter) {
+		public Optional<Long2IntMap.Entry> findFirst(Predicate<Long2IntMap.Entry> filter) {
 			Objects.requireNonNull(filter);
 			MapEntry entry = new MapEntry();
 			for(int i = 0,m=segments.length;i<m;i++) {
@@ -806,7 +809,7 @@ public class Long2IntConcurrentOpenHashMap extends AbstractLong2IntMap implement
 				try {
 					while(index != -1) {
 						entry.set(index, i);
-						if(filter.test(entry)) return entry;
+						if(filter.test(entry)) return Optional.ofNullable(entry);
 						index = (int)seg.links[index];
 					}
 				}
@@ -814,7 +817,7 @@ public class Long2IntConcurrentOpenHashMap extends AbstractLong2IntMap implement
 					seg.unlockRead(stamp);
 				}
 			}
-			return null;
+			return Optional.empty();
 		}
 		
 		@Override
@@ -1075,7 +1078,7 @@ public class Long2IntConcurrentOpenHashMap extends AbstractLong2IntMap implement
 		}
 		
 		@Override
-		public long reduce(LongLongUnaryOperator operator) {
+		public OptionalLong reduce(LongLongUnaryOperator operator) {
 			Objects.requireNonNull(operator);
 			long state = 0L;
 			boolean empty = true;
@@ -1099,11 +1102,11 @@ public class Long2IntConcurrentOpenHashMap extends AbstractLong2IntMap implement
 					seg.unlockRead(stamp);
 				}
 			}
-			return state;
+			return empty ? OptionalLong.empty() : OptionalLong.of(state);
 		}
 		
 		@Override
-		public long findFirst(LongPredicate filter) {
+		public OptionalLong findFirst(LongPredicate filter) {
 			Objects.requireNonNull(filter);
 			for(int i = 0,m=segments.length;i<m;i++) {
 				Segment seg = segments[i];
@@ -1111,7 +1114,7 @@ public class Long2IntConcurrentOpenHashMap extends AbstractLong2IntMap implement
 				try {
 					int index = seg.firstIndex;
 					while(index != -1){
-						if(filter.test(seg.keys[index])) return seg.keys[index];
+						if(filter.test(seg.keys[index])) return OptionalLong.of(seg.keys[index]);
 						index = (int)seg.links[index];
 					}
 				}
@@ -1119,7 +1122,7 @@ public class Long2IntConcurrentOpenHashMap extends AbstractLong2IntMap implement
 					seg.unlockRead(stamp);
 				}
 			}
-			return 0L;
+			return OptionalLong.empty();
 		}
 		
 		@Override
@@ -1310,7 +1313,7 @@ public class Long2IntConcurrentOpenHashMap extends AbstractLong2IntMap implement
 		}
 		
 		@Override
-		public int reduce(IntIntUnaryOperator operator) {
+		public OptionalInt reduce(IntIntUnaryOperator operator) {
 			Objects.requireNonNull(operator);
 			int state = 0;
 			boolean empty = true;
@@ -1334,20 +1337,20 @@ public class Long2IntConcurrentOpenHashMap extends AbstractLong2IntMap implement
 					seg.unlockRead(stamp);
 				}
 			}
-			return state;
+			return empty ? OptionalInt.empty() : OptionalInt.of(state);
 		}
 		
 		@Override
-		public int findFirst(IntPredicate filter) {
+		public OptionalInt findFirst(IntPredicate filter) {
 			Objects.requireNonNull(filter);
-			if(size() <= 0) return 0;
+			if(size() <= 0) return OptionalInt.empty();
 			for(int i = 0,m=segments.length;i<m;i++) {
 				Segment seg = segments[i];
 				long stamp = seg.readLock();
 				try {
 					int index = seg.firstIndex;
 					while(index != -1){
-						if(filter.test(seg.values[index])) return seg.values[index];
+						if(filter.test(seg.values[index])) return OptionalInt.of(seg.values[index]);
 						index = (int)seg.links[index];
 					}
 				}
@@ -1355,7 +1358,7 @@ public class Long2IntConcurrentOpenHashMap extends AbstractLong2IntMap implement
 					seg.unlockRead(stamp);
 				}
 			}
-			return 0;
+			return OptionalInt.empty();
 		}
 		
 		@Override

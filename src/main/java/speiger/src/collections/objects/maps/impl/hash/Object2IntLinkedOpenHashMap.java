@@ -4,10 +4,12 @@ import java.util.Arrays;
 import java.util.Map;
 import java.util.NoSuchElementException;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.function.Consumer;
 import java.util.function.BiFunction;
 import java.util.function.Predicate;
 import java.util.function.IntPredicate;
+import java.util.OptionalInt;
 
 import speiger.src.collections.objects.collections.ObjectBidirectionalIterator;
 import speiger.src.collections.ints.functions.consumer.IntObjectConsumer;
@@ -661,6 +663,10 @@ public class Object2IntLinkedOpenHashMap<T> extends Object2IntOpenHashMap<T> imp
 	
 	private class MapEntrySet extends AbstractObjectSet<Object2IntMap.Entry<T>> implements Object2IntOrderedMap.FastOrderedSet<T> {
 		@Override
+		public void addFirst(Object2IntMap.Entry<T> o) { throw new UnsupportedOperationException(); }
+		@Override
+		public void addLast(Object2IntMap.Entry<T> o) { throw new UnsupportedOperationException(); }
+		@Override
 		public boolean addAndMoveToFirst(Object2IntMap.Entry<T> o) { throw new UnsupportedOperationException(); }
 		@Override
 		public boolean addAndMoveToLast(Object2IntMap.Entry<T> o) { throw new UnsupportedOperationException(); }
@@ -825,7 +831,7 @@ public class Object2IntLinkedOpenHashMap<T> extends Object2IntOpenHashMap<T> imp
 		}
 		
 		@Override
-		public Object2IntMap.Entry<T> reduce(ObjectObjectUnaryOperator<Object2IntMap.Entry<T>, Object2IntMap.Entry<T>> operator) {
+		public Optional<Object2IntMap.Entry<T>> reduce(ObjectObjectUnaryOperator<Object2IntMap.Entry<T>, Object2IntMap.Entry<T>> operator) {
 			Objects.requireNonNull(operator);
 			Object2IntMap.Entry<T> state = null;
 			boolean empty = true;
@@ -840,21 +846,21 @@ public class Object2IntLinkedOpenHashMap<T> extends Object2IntOpenHashMap<T> imp
 				state = operator.apply(state, new ValueMapEntry(index));
 				index = (int)links[index];
 			}
-			return state;
+			return empty ? Optional.empty() : Optional.ofNullable(state);
 		}
 		
 		@Override
-		public Object2IntMap.Entry<T> findFirst(Predicate<Object2IntMap.Entry<T>> filter) {
+		public Optional<Object2IntMap.Entry<T>> findFirst(Predicate<Object2IntMap.Entry<T>> filter) {
 			Objects.requireNonNull(filter);
-			if(size() <= 0) return null;
+			if(size() <= 0) return Optional.empty();
 			MapEntry entry = new MapEntry();
 			int index = firstIndex;
 			while(index != -1) {
 				entry.set(index);
-				if(filter.test(entry)) return entry;
+				if(filter.test(entry)) return Optional.ofNullable(entry);
 				index = (int)links[index];
 			}
-			return null;
+			return Optional.empty();
 		}
 		
 		@Override
@@ -931,6 +937,12 @@ public class Object2IntLinkedOpenHashMap<T> extends Object2IntOpenHashMap<T> imp
 		
 		@Override
 		public boolean add(T o) { throw new UnsupportedOperationException(); }
+
+		@Override
+		public void addFirst(T o) { throw new UnsupportedOperationException(); }
+		
+		@Override
+		public void addLast(T o) { throw new UnsupportedOperationException(); }
 		
 		@Override
 		public boolean addAndMoveToFirst(T o) { throw new UnsupportedOperationException(); }
@@ -1077,7 +1089,7 @@ public class Object2IntLinkedOpenHashMap<T> extends Object2IntOpenHashMap<T> imp
 		}
 		
 		@Override
-		public T reduce(ObjectObjectUnaryOperator<T, T> operator) {
+		public Optional<T> reduce(ObjectObjectUnaryOperator<T, T> operator) {
 			Objects.requireNonNull(operator);
 			T state = null;
 			boolean empty = true;
@@ -1092,19 +1104,19 @@ public class Object2IntLinkedOpenHashMap<T> extends Object2IntOpenHashMap<T> imp
 				state = operator.apply(state, keys[index]);
 				index = (int)links[index];
 			}
-			return state;
+			return empty ? Optional.empty() : Optional.ofNullable(state);
 		}
 		
 		@Override
-		public T findFirst(Predicate<T> filter) {
+		public Optional<T> findFirst(Predicate<T> filter) {
 			Objects.requireNonNull(filter);
-			if(size() <= 0) return null;
+			if(size() <= 0) return Optional.empty();
 			int index = firstIndex;
 			while(index != -1){
-				if(filter.test(keys[index])) return keys[index];
+				if(filter.test(keys[index])) return Optional.ofNullable(keys[index]);
 				index = (int)links[index];
 			}
-			return null;
+			return Optional.empty();
 		}
 		
 		@Override
@@ -1240,7 +1252,7 @@ public class Object2IntLinkedOpenHashMap<T> extends Object2IntOpenHashMap<T> imp
 		}
 		
 		@Override
-		public int reduce(IntIntUnaryOperator operator) {
+		public OptionalInt reduce(IntIntUnaryOperator operator) {
 			Objects.requireNonNull(operator);
 			int state = 0;
 			boolean empty = true;
@@ -1255,19 +1267,19 @@ public class Object2IntLinkedOpenHashMap<T> extends Object2IntOpenHashMap<T> imp
 				state = operator.applyAsInt(state, values[index]);
 				index = (int)links[index];
 			}
-			return state;
+			return empty ? OptionalInt.empty() : OptionalInt.of(state);
 		}
 		
 		@Override
-		public int findFirst(IntPredicate filter) {
+		public OptionalInt findFirst(IntPredicate filter) {
 			Objects.requireNonNull(filter);
-			if(size() <= 0) return 0;
+			if(size() <= 0) return OptionalInt.empty();
 			int index = firstIndex;
 			while(index != -1){
-				if(filter.test(values[index])) return values[index];
+				if(filter.test(values[index])) return OptionalInt.of(values[index]);
 				index = (int)links[index];
 			}
-			return 0;
+			return OptionalInt.empty();
 		}
 		
 		@Override

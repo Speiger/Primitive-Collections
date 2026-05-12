@@ -5,6 +5,7 @@ import java.util.ConcurrentModificationException;
 import java.util.Map;
 import java.util.NoSuchElementException;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.function.Consumer;
 import java.util.function.BiFunction;
 import java.util.function.Predicate;
@@ -18,6 +19,7 @@ import speiger.src.collections.shorts.functions.consumer.ShortObjectConsumer;
 import speiger.src.collections.shorts.functions.function.ShortFunction;
 import speiger.src.collections.shorts.functions.function.ShortObjectUnaryOperator;
 import speiger.src.collections.shorts.functions.function.ShortShortUnaryOperator;
+import speiger.src.collections.shorts.functions.OptionalShort;
 import speiger.src.collections.shorts.functions.function.ShortPredicate;
 import speiger.src.collections.shorts.maps.abstracts.AbstractShort2ObjectMap;
 import speiger.src.collections.shorts.maps.interfaces.Short2ObjectMap;
@@ -868,7 +870,7 @@ public class Short2ObjectOpenCustomHashMap<V> extends AbstractShort2ObjectMap<V>
 		}
 		
 		@Override
-		public Short2ObjectMap.Entry<V> reduce(ObjectObjectUnaryOperator<Short2ObjectMap.Entry<V>, Short2ObjectMap.Entry<V>> operator) {
+		public Optional<Short2ObjectMap.Entry<V>> reduce(ObjectObjectUnaryOperator<Short2ObjectMap.Entry<V>, Short2ObjectMap.Entry<V>> operator) {
 			Objects.requireNonNull(operator);
 			Short2ObjectMap.Entry<V> state = null;
 			boolean empty = true;
@@ -885,25 +887,25 @@ public class Short2ObjectOpenCustomHashMap<V> extends AbstractShort2ObjectMap<V>
 				}
 				state = operator.apply(state, new ValueMapEntry(i));
 			}
-			return state;
+			return empty ? Optional.empty() : Optional.ofNullable(state);
 		}
 		
 		@Override
-		public Short2ObjectMap.Entry<V> findFirst(Predicate<Short2ObjectMap.Entry<V>> filter) {
+		public Optional<Short2ObjectMap.Entry<V>> findFirst(Predicate<Short2ObjectMap.Entry<V>> filter) {
 			Objects.requireNonNull(filter);
-			if(size() <= 0) return null;
+			if(size() <= 0) return Optional.empty();
 			MapEntry entry = new MapEntry();
 			if(containsNull) {
 				entry.set(nullIndex);
-				if(filter.test(entry)) return entry;
+				if(filter.test(entry)) return Optional.ofNullable(entry);
 			}
 			for(int i = nullIndex-1;i>=0;i--) {
 				if(!strategy.equals(keys[i], (short)0)) {
 					entry.set(i);
-					if(filter.test(entry)) return entry;
+					if(filter.test(entry)) return Optional.ofNullable(entry);
 				}
 			}
-			return null;
+			return Optional.empty();
 		}
 		
 		@Override
@@ -1077,7 +1079,7 @@ public class Short2ObjectOpenCustomHashMap<V> extends AbstractShort2ObjectMap<V>
 		}
 		
 		@Override
-		public short reduce(ShortShortUnaryOperator operator) {
+		public OptionalShort reduce(ShortShortUnaryOperator operator) {
 			Objects.requireNonNull(operator);
 			short state = (short)0;
 			boolean empty = true;
@@ -1094,18 +1096,18 @@ public class Short2ObjectOpenCustomHashMap<V> extends AbstractShort2ObjectMap<V>
 				}
 				state = operator.applyAsShort(state, keys[i]);
 			}
-			return state;
+			return empty ? OptionalShort.empty() : OptionalShort.of(state);
 		}
 		
 		@Override
-		public short findFirst(ShortPredicate filter) {
+		public OptionalShort findFirst(ShortPredicate filter) {
 			Objects.requireNonNull(filter);
-			if(size() <= 0) return (short)0;
-			if(containsNull && filter.test(keys[nullIndex])) return keys[nullIndex];
+			if(size() <= 0) return OptionalShort.empty();
+			if(containsNull && filter.test(keys[nullIndex])) return OptionalShort.of(keys[nullIndex]);
 			for(int i = nullIndex-1;i>=0;i--) {
-				if(!strategy.equals(keys[i], (short)0) && filter.test(keys[i])) return keys[i];
+				if(!strategy.equals(keys[i], (short)0) && filter.test(keys[i])) return OptionalShort.of(keys[i]);
 			}
-			return (short)0;
+			return OptionalShort.empty();
 		}
 		
 		@Override
@@ -1220,7 +1222,7 @@ public class Short2ObjectOpenCustomHashMap<V> extends AbstractShort2ObjectMap<V>
 		}
 		
 		@Override
-		public V reduce(ObjectObjectUnaryOperator<V, V> operator) {
+		public Optional<V> reduce(ObjectObjectUnaryOperator<V, V> operator) {
 			Objects.requireNonNull(operator);
 			V state = null;
 			boolean empty = true;
@@ -1237,18 +1239,18 @@ public class Short2ObjectOpenCustomHashMap<V> extends AbstractShort2ObjectMap<V>
 				}
 				state = operator.apply(state, values[i]);
 			}
-			return state;
+			return empty ? Optional.empty() : Optional.ofNullable(state);
 		}
 		
 		@Override
-		public V findFirst(Predicate<V> filter) {
+		public Optional<V> findFirst(Predicate<V> filter) {
 			Objects.requireNonNull(filter);
-			if(size() <= 0) return null;
-			if(containsNull && filter.test(values[nullIndex])) return values[nullIndex];
+			if(size() <= 0) return Optional.empty();
+			if(containsNull && filter.test(values[nullIndex])) return Optional.ofNullable(values[nullIndex]);
 			for(int i = nullIndex-1;i>=0;i--) {
-				if(!strategy.equals(keys[i], (short)0) && filter.test(values[i])) return values[i];
+				if(!strategy.equals(keys[i], (short)0) && filter.test(values[i])) return Optional.ofNullable(values[i]);
 			}
-			return null;
+			return Optional.empty();
 		}
 		
 		@Override

@@ -620,7 +620,11 @@ public class Short2CharMaps
 			super(c);
 			set = c;
 		}
-
+		
+		@Override
+		public void addFirst(Short2CharMap.Entry o) { throw new UnsupportedOperationException(); }
+		@Override
+		public void addLast(Short2CharMap.Entry o) { throw new UnsupportedOperationException(); }
 		@Override
 		public boolean addAndMoveToFirst(Short2CharMap.Entry o) { throw new UnsupportedOperationException(); }
 		@Override

@@ -10,6 +10,7 @@ import speiger.src.collections.floats.collections.FloatBidirectionalIterator;
 import speiger.src.collections.floats.collections.FloatCollection;
 import speiger.src.collections.floats.collections.FloatIterator;
 import speiger.src.collections.floats.functions.FloatConsumer;
+import speiger.src.collections.floats.functions.OptionalFloat;
 import speiger.src.collections.ints.functions.consumer.IntFloatConsumer;
 import speiger.src.collections.objects.functions.consumer.ObjectFloatConsumer;
 import speiger.src.collections.floats.functions.function.FloatPredicate;
@@ -236,6 +237,10 @@ public class ImmutableFloatOpenHashSet extends AbstractFloatSet implements Float
 	@Override
 	public boolean addAll(FloatCollection c) { throw new UnsupportedOperationException(); }
 	@Override
+	public void addFirst(float o) { throw new UnsupportedOperationException(); }
+	@Override
+	public void addLast(float o) { throw new UnsupportedOperationException(); }
+	@Override
 	public boolean addAndMoveToFirst(float o) { throw new UnsupportedOperationException(); }
 	@Override
 	public boolean addAndMoveToLast(float o) { throw new UnsupportedOperationException(); }
@@ -371,7 +376,7 @@ public class ImmutableFloatOpenHashSet extends AbstractFloatSet implements Float
 	}
 	
 	@Override
-	public float reduce(FloatFloatUnaryOperator operator) {
+	public OptionalFloat reduce(FloatFloatUnaryOperator operator) {
 		Objects.requireNonNull(operator);
 		float state = 0F;
 		boolean empty = true;
@@ -384,18 +389,18 @@ public class ImmutableFloatOpenHashSet extends AbstractFloatSet implements Float
 			else state = operator.applyAsFloat(state, keys[index]);
 			index = (int)links[index];
 		}
-		return state;
+		return empty ? OptionalFloat.empty() : OptionalFloat.of(state);
 	}
 	
 	@Override
-	public float findFirst(FloatPredicate filter) {
+	public OptionalFloat findFirst(FloatPredicate filter) {
 		Objects.requireNonNull(filter);
 		int index = firstIndex;
 		while(index != -1) {
-			if(filter.test(keys[index])) return keys[index];
+			if(filter.test(keys[index])) return OptionalFloat.of(keys[index]);
 			index = (int)links[index];
 		}
-		return 0F;
+		return OptionalFloat.empty();
 	}
 	
 	@Override

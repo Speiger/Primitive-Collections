@@ -2,6 +2,11 @@ package speiger.src.testers.PACKAGE.tests.queue.iterators;
 
 #if TYPE_OBJECT
 import java.util.Objects;
+#endif
+#if JDK_TYPE
+import java.util.OPTIONAL;
+#else
+import speiger.src.collections.PACKAGE.functions.OPTIONAL;
 
 #endif
 import org.junit.Ignore;
@@ -27,17 +32,17 @@ public class FILE_KEY_TYPEQueueFindFirstTester KEY_GENERIC_TYPE extends ABSTRACT
 	@CollectionSize.Require(absent = CollectionSize.ZERO)
 #endignore
 	public void testQueueFindFirst_FindFirstElements() {
-		assertEquals("First Element should be found", e0(), queue.findFirst(T -> KEY_EQUALS(T, e0())));
+		assertEquals("First Element should be found", e0(), queue.findFirst(T -> KEY_EQUALS(T, e0())).SUPPLY_GET());
 	}
 	
 	public void testQueueFindFirst_FindNothing() {
-		assertEquals("No element should be found", EMPTY_KEY_VALUE, queue.findFirst(T -> KEY_EQUALS(T, e4())));
+		assertEquals("No element should be found", OPTIONAL.empty(), queue.findFirst(T -> KEY_EQUALS(T, e4())));
 	}
 	
 #ignore
 	@CollectionSize.Require(CollectionSize.SEVERAL)
 #endignore
 	public void testQueueFindFirst_FindLastElement() {
-		assertEquals("Last Element should be found", e2(), queue.findFirst(T -> KEY_EQUALS(T, e2())));
+		assertEquals("Last Element should be found", e2(), queue.findFirst(T -> KEY_EQUALS(T, e2())).SUPPLY_GET());
 	}
 }

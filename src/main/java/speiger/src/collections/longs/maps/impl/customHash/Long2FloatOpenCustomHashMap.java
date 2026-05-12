@@ -5,10 +5,12 @@ import java.util.ConcurrentModificationException;
 import java.util.Map;
 import java.util.NoSuchElementException;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.function.Consumer;
 import java.util.function.BiFunction;
 import java.util.function.Predicate;
 import java.util.function.LongPredicate;
+import java.util.OptionalLong;
 
 import speiger.src.collections.longs.collections.LongIterator;
 import speiger.src.collections.longs.functions.LongConsumer;
@@ -37,6 +39,7 @@ import speiger.src.collections.objects.functions.consumer.ObjectObjectConsumer;
 import speiger.src.collections.objects.functions.consumer.ObjectFloatConsumer;
 
 import speiger.src.collections.floats.functions.function.FloatPredicate;
+import speiger.src.collections.floats.functions.OptionalFloat;
 import speiger.src.collections.objects.collections.ObjectIterator;
 import speiger.src.collections.objects.sets.AbstractObjectSet;
 import speiger.src.collections.objects.sets.ObjectSet;
@@ -952,7 +955,7 @@ public class Long2FloatOpenCustomHashMap extends AbstractLong2FloatMap implement
 		}
 		
 		@Override
-		public Long2FloatMap.Entry reduce(ObjectObjectUnaryOperator<Long2FloatMap.Entry, Long2FloatMap.Entry> operator) {
+		public Optional<Long2FloatMap.Entry> reduce(ObjectObjectUnaryOperator<Long2FloatMap.Entry, Long2FloatMap.Entry> operator) {
 			Objects.requireNonNull(operator);
 			Long2FloatMap.Entry state = null;
 			boolean empty = true;
@@ -969,25 +972,25 @@ public class Long2FloatOpenCustomHashMap extends AbstractLong2FloatMap implement
 				}
 				state = operator.apply(state, new ValueMapEntry(i));
 			}
-			return state;
+			return empty ? Optional.empty() : Optional.ofNullable(state);
 		}
 		
 		@Override
-		public Long2FloatMap.Entry findFirst(Predicate<Long2FloatMap.Entry> filter) {
+		public Optional<Long2FloatMap.Entry> findFirst(Predicate<Long2FloatMap.Entry> filter) {
 			Objects.requireNonNull(filter);
-			if(size() <= 0) return null;
+			if(size() <= 0) return Optional.empty();
 			MapEntry entry = new MapEntry();
 			if(containsNull) {
 				entry.set(nullIndex);
-				if(filter.test(entry)) return entry;
+				if(filter.test(entry)) return Optional.ofNullable(entry);
 			}
 			for(int i = nullIndex-1;i>=0;i--) {
 				if(!strategy.equals(keys[i], 0L)) {
 					entry.set(i);
-					if(filter.test(entry)) return entry;
+					if(filter.test(entry)) return Optional.ofNullable(entry);
 				}
 			}
-			return null;
+			return Optional.empty();
 		}
 		
 		@Override
@@ -1161,7 +1164,7 @@ public class Long2FloatOpenCustomHashMap extends AbstractLong2FloatMap implement
 		}
 		
 		@Override
-		public long reduce(LongLongUnaryOperator operator) {
+		public OptionalLong reduce(LongLongUnaryOperator operator) {
 			Objects.requireNonNull(operator);
 			long state = 0L;
 			boolean empty = true;
@@ -1178,18 +1181,18 @@ public class Long2FloatOpenCustomHashMap extends AbstractLong2FloatMap implement
 				}
 				state = operator.applyAsLong(state, keys[i]);
 			}
-			return state;
+			return empty ? OptionalLong.empty() : OptionalLong.of(state);
 		}
 		
 		@Override
-		public long findFirst(LongPredicate filter) {
+		public OptionalLong findFirst(LongPredicate filter) {
 			Objects.requireNonNull(filter);
-			if(size() <= 0) return 0L;
-			if(containsNull && filter.test(keys[nullIndex])) return keys[nullIndex];
+			if(size() <= 0) return OptionalLong.empty();
+			if(containsNull && filter.test(keys[nullIndex])) return OptionalLong.of(keys[nullIndex]);
 			for(int i = nullIndex-1;i>=0;i--) {
-				if(!strategy.equals(keys[i], 0L) && filter.test(keys[i])) return keys[i];
+				if(!strategy.equals(keys[i], 0L) && filter.test(keys[i])) return OptionalLong.of(keys[i]);
 			}
-			return 0L;
+			return OptionalLong.empty();
 		}
 		
 		@Override
@@ -1304,7 +1307,7 @@ public class Long2FloatOpenCustomHashMap extends AbstractLong2FloatMap implement
 		}
 		
 		@Override
-		public float reduce(FloatFloatUnaryOperator operator) {
+		public OptionalFloat reduce(FloatFloatUnaryOperator operator) {
 			Objects.requireNonNull(operator);
 			float state = 0F;
 			boolean empty = true;
@@ -1321,18 +1324,18 @@ public class Long2FloatOpenCustomHashMap extends AbstractLong2FloatMap implement
 				}
 				state = operator.applyAsFloat(state, values[i]);
 			}
-			return state;
+			return empty ? OptionalFloat.empty() : OptionalFloat.of(state);
 		}
 		
 		@Override
-		public float findFirst(FloatPredicate filter) {
+		public OptionalFloat findFirst(FloatPredicate filter) {
 			Objects.requireNonNull(filter);
-			if(size() <= 0) return 0F;
-			if(containsNull && filter.test(values[nullIndex])) return values[nullIndex];
+			if(size() <= 0) return OptionalFloat.empty();
+			if(containsNull && filter.test(values[nullIndex])) return OptionalFloat.of(values[nullIndex]);
 			for(int i = nullIndex-1;i>=0;i--) {
-				if(!strategy.equals(keys[i], 0L) && filter.test(values[i])) return values[i];
+				if(!strategy.equals(keys[i], 0L) && filter.test(values[i])) return OptionalFloat.of(values[i]);
 			}
-			return 0F;
+			return OptionalFloat.empty();
 		}
 		
 		@Override

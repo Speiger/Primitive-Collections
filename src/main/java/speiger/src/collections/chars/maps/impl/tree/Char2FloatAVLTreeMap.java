@@ -3,6 +3,7 @@ package speiger.src.collections.chars.maps.impl.tree;
 import java.util.Collections;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.NoSuchElementException;
 import java.util.function.Consumer;
 import java.util.function.BiFunction;
@@ -18,6 +19,7 @@ import speiger.src.collections.ints.functions.consumer.IntObjectConsumer;
 import speiger.src.collections.ints.functions.consumer.IntFloatConsumer;
 import speiger.src.collections.chars.functions.function.Char2FloatFunction;
 import speiger.src.collections.chars.functions.consumer.CharFloatConsumer;
+import speiger.src.collections.chars.functions.OptionalChar;
 import speiger.src.collections.chars.functions.function.CharPredicate;
 import speiger.src.collections.chars.functions.function.CharFloatUnaryOperator;
 import speiger.src.collections.chars.functions.function.CharCharUnaryOperator;
@@ -37,6 +39,7 @@ import speiger.src.collections.objects.functions.consumer.ObjectObjectConsumer;
 import speiger.src.collections.objects.functions.consumer.ObjectFloatConsumer;
 
 import speiger.src.collections.floats.functions.function.FloatPredicate;
+import speiger.src.collections.floats.functions.OptionalFloat;
 import speiger.src.collections.objects.collections.ObjectBidirectionalIterator;
 import speiger.src.collections.objects.collections.ObjectIterator;
 import speiger.src.collections.objects.functions.function.ObjectObjectUnaryOperator;
@@ -1129,7 +1132,7 @@ public class Char2FloatAVLTreeMap extends AbstractChar2FloatMap implements Char2
 		}
 		
 		@Override
-		public char reduce(CharCharUnaryOperator operator) {
+		public OptionalChar reduce(CharCharUnaryOperator operator) {
 			Objects.requireNonNull(operator);
 			char state = (char)0;
 			boolean empty = true;
@@ -1141,15 +1144,15 @@ public class Char2FloatAVLTreeMap extends AbstractChar2FloatMap implements Char2
 				}
 				state = operator.applyAsChar(state, entry.key);
 			}
-			return state;
+			return empty ? OptionalChar.empty() : OptionalChar.of(state);
 		}
 		
 		@Override
-		public char findFirst(CharPredicate filter) {
+		public OptionalChar findFirst(CharPredicate filter) {
 			Objects.requireNonNull(filter);
 			for(Node entry = start(), end = end();entry != null && (end == null || (end != previous(entry)));entry = next(entry))
-				if(filter.test(entry.key)) return entry.key;
-			return (char)0;
+				if(filter.test(entry.key)) return OptionalChar.of(entry.key);
+			return OptionalChar.empty();
 		}
 		
 		@Override
@@ -1783,7 +1786,7 @@ public class Char2FloatAVLTreeMap extends AbstractChar2FloatMap implements Char2
 			}
 			
 			@Override
-			public Char2FloatMap.Entry reduce(ObjectObjectUnaryOperator<Char2FloatMap.Entry, Char2FloatMap.Entry> operator) {
+			public Optional<Char2FloatMap.Entry> reduce(ObjectObjectUnaryOperator<Char2FloatMap.Entry, Char2FloatMap.Entry> operator) {
 				Objects.requireNonNull(operator);
 				Char2FloatMap.Entry state = null;
 				boolean empty = true;
@@ -1795,19 +1798,19 @@ public class Char2FloatAVLTreeMap extends AbstractChar2FloatMap implements Char2
 					}
 					state = operator.apply(state, new BasicEntry(entry.key, entry.value));
 				}
-				return state;
+				return empty ? Optional.empty() : Optional.ofNullable(state);
 			}
 			
 			@Override
-			public Char2FloatMap.Entry findFirst(Predicate<Char2FloatMap.Entry> filter) {
+			public Optional<Char2FloatMap.Entry> findFirst(Predicate<Char2FloatMap.Entry> filter) {
 				Objects.requireNonNull(filter);
-				if(size() <= 0) return null;
+				if(size() <= 0) return Optional.empty();
 				BasicEntry subEntry = new BasicEntry();
 				for(Node entry = subLowest(), last = subHighest();entry != null && (last == null || last != previous(entry));entry = next(entry)) {
 					subEntry.set(entry.key, entry.value);
-					if(filter.test(subEntry)) return subEntry;
+					if(filter.test(subEntry)) return Optional.ofNullable(subEntry);
 				}
-				return null;
+				return Optional.empty();
 			}
 			
 			@Override
@@ -1902,7 +1905,7 @@ public class Char2FloatAVLTreeMap extends AbstractChar2FloatMap implements Char2
 			}
 			
 			@Override
-			public float reduce(FloatFloatUnaryOperator operator) {
+			public OptionalFloat reduce(FloatFloatUnaryOperator operator) {
 				Objects.requireNonNull(operator);
 				float state = 0F;
 				boolean empty = true;
@@ -1914,15 +1917,15 @@ public class Char2FloatAVLTreeMap extends AbstractChar2FloatMap implements Char2
 					}
 					state = operator.applyAsFloat(state, entry.value);
 				}
-				return state;
+				return empty ? OptionalFloat.empty() : OptionalFloat.of(state);
 			}
 			
 			@Override
-			public float findFirst(FloatPredicate filter) {
+			public OptionalFloat findFirst(FloatPredicate filter) {
 				Objects.requireNonNull(filter);
 				for(Node entry = subLowest(), last = subHighest();entry != null && (last == null || last != previous(entry));entry = next(entry))
-					if(filter.test(entry.value)) return entry.value;
-				return 0F;
+					if(filter.test(entry.value)) return OptionalFloat.of(entry.value);
+				return OptionalFloat.empty();
 			}
 			
 			@Override
@@ -2238,7 +2241,7 @@ public class Char2FloatAVLTreeMap extends AbstractChar2FloatMap implements Char2
 		}
 		
 		@Override
-		public float reduce(FloatFloatUnaryOperator operator) {
+		public OptionalFloat reduce(FloatFloatUnaryOperator operator) {
 			Objects.requireNonNull(operator);
 			float state = 0F;
 			boolean empty = true;
@@ -2250,15 +2253,15 @@ public class Char2FloatAVLTreeMap extends AbstractChar2FloatMap implements Char2
 				}
 				state = operator.applyAsFloat(state, entry.value);
 			}
-			return state;
+			return empty ? OptionalFloat.empty() : OptionalFloat.of(state);
 		}
 		
 		@Override
-		public float findFirst(FloatPredicate filter) {
+		public OptionalFloat findFirst(FloatPredicate filter) {
 			Objects.requireNonNull(filter);
 			for(Node entry = first;entry != null;entry = entry.next())
-				if(filter.test(entry.value)) return entry.value;
-			return 0F;
+				if(filter.test(entry.value)) return OptionalFloat.of(entry.value);
+			return OptionalFloat.empty();
 		}
 		
 		@Override
@@ -2399,7 +2402,7 @@ public class Char2FloatAVLTreeMap extends AbstractChar2FloatMap implements Char2
 		}
 		
 		@Override
-		public Char2FloatMap.Entry reduce(ObjectObjectUnaryOperator<Char2FloatMap.Entry, Char2FloatMap.Entry> operator) {
+		public Optional<Char2FloatMap.Entry> reduce(ObjectObjectUnaryOperator<Char2FloatMap.Entry, Char2FloatMap.Entry> operator) {
 			Objects.requireNonNull(operator);
 			Char2FloatMap.Entry state = null;
 			boolean empty = true;
@@ -2411,19 +2414,19 @@ public class Char2FloatAVLTreeMap extends AbstractChar2FloatMap implements Char2
 				}
 				state = operator.apply(state, new BasicEntry(entry.key, entry.value));
 			}
-			return state;
+			return empty ? Optional.empty() : Optional.ofNullable(state);
 		}
 		
 		@Override
-		public Char2FloatMap.Entry findFirst(Predicate<Char2FloatMap.Entry> filter) {
+		public Optional<Char2FloatMap.Entry> findFirst(Predicate<Char2FloatMap.Entry> filter) {
 			Objects.requireNonNull(filter);
-			if(size() <= 0) return null;
+			if(size() <= 0) return Optional.empty();
 			BasicEntry subEntry = new BasicEntry();
 			for(Node entry = first;entry != null;entry = entry.next()) {
 				subEntry.set(entry.key, entry.value);
-				if(filter.test(subEntry)) return subEntry;
+				if(filter.test(subEntry)) return Optional.ofNullable(subEntry);
 			}
-			return null;
+			return Optional.empty();
 		}
 		
 		@Override

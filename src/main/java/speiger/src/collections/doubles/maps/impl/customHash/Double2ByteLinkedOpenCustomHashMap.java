@@ -4,10 +4,12 @@ import java.util.Arrays;
 import java.util.Map;
 import java.util.NoSuchElementException;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.function.Consumer;
 import java.util.function.BiFunction;
 import java.util.function.Predicate;
 import java.util.function.DoublePredicate;
+import java.util.OptionalDouble;
 
 import speiger.src.collections.doubles.collections.DoubleBidirectionalIterator;
 import speiger.src.collections.doubles.functions.DoubleConsumer;
@@ -33,6 +35,7 @@ import speiger.src.collections.objects.functions.consumer.ObjectObjectConsumer;
 import speiger.src.collections.objects.functions.consumer.ObjectByteConsumer;
 
 import speiger.src.collections.bytes.functions.function.BytePredicate;
+import speiger.src.collections.bytes.functions.OptionalByte;
 import speiger.src.collections.objects.functions.function.ObjectObjectUnaryOperator;
 import speiger.src.collections.objects.collections.ObjectBidirectionalIterator;
 import speiger.src.collections.objects.lists.ObjectListIterator;
@@ -672,6 +675,10 @@ public class Double2ByteLinkedOpenCustomHashMap extends Double2ByteOpenCustomHas
 	
 	private class MapEntrySet extends AbstractObjectSet<Double2ByteMap.Entry> implements Double2ByteOrderedMap.FastOrderedSet {
 		@Override
+		public void addFirst(Double2ByteMap.Entry o) { throw new UnsupportedOperationException(); }
+		@Override
+		public void addLast(Double2ByteMap.Entry o) { throw new UnsupportedOperationException(); }
+		@Override
 		public boolean addAndMoveToFirst(Double2ByteMap.Entry o) { throw new UnsupportedOperationException(); }
 		@Override
 		public boolean addAndMoveToLast(Double2ByteMap.Entry o) { throw new UnsupportedOperationException(); }
@@ -836,7 +843,7 @@ public class Double2ByteLinkedOpenCustomHashMap extends Double2ByteOpenCustomHas
 		}
 		
 		@Override
-		public Double2ByteMap.Entry reduce(ObjectObjectUnaryOperator<Double2ByteMap.Entry, Double2ByteMap.Entry> operator) {
+		public Optional<Double2ByteMap.Entry> reduce(ObjectObjectUnaryOperator<Double2ByteMap.Entry, Double2ByteMap.Entry> operator) {
 			Objects.requireNonNull(operator);
 			Double2ByteMap.Entry state = null;
 			boolean empty = true;
@@ -851,21 +858,21 @@ public class Double2ByteLinkedOpenCustomHashMap extends Double2ByteOpenCustomHas
 				state = operator.apply(state, new ValueMapEntry(index));
 				index = (int)links[index];
 			}
-			return state;
+			return empty ? Optional.empty() : Optional.ofNullable(state);
 		}
 		
 		@Override
-		public Double2ByteMap.Entry findFirst(Predicate<Double2ByteMap.Entry> filter) {
+		public Optional<Double2ByteMap.Entry> findFirst(Predicate<Double2ByteMap.Entry> filter) {
 			Objects.requireNonNull(filter);
-			if(size() <= 0) return null;
+			if(size() <= 0) return Optional.empty();
 			MapEntry entry = new MapEntry();
 			int index = firstIndex;
 			while(index != -1) {
 				entry.set(index);
-				if(filter.test(entry)) return entry;
+				if(filter.test(entry)) return Optional.ofNullable(entry);
 				index = (int)links[index];
 			}
-			return null;
+			return Optional.empty();
 		}
 		
 		@Override
@@ -944,10 +951,13 @@ public class Double2ByteLinkedOpenCustomHashMap extends Double2ByteOpenCustomHas
 		public boolean add(double o) {
 			throw new UnsupportedOperationException();
 		}
-		
+
+		@Override
+		public void addFirst(double o) { throw new UnsupportedOperationException(); }
+		@Override
+		public void addLast(double o) { throw new UnsupportedOperationException(); }		
 		@Override
 		public boolean addAndMoveToFirst(double o) { throw new UnsupportedOperationException(); }
-
 		@Override
 		public boolean addAndMoveToLast(double o) { throw new UnsupportedOperationException(); }
 
@@ -1090,7 +1100,7 @@ public class Double2ByteLinkedOpenCustomHashMap extends Double2ByteOpenCustomHas
 		}
 		
 		@Override
-		public double reduce(DoubleDoubleUnaryOperator operator) {
+		public OptionalDouble reduce(DoubleDoubleUnaryOperator operator) {
 			Objects.requireNonNull(operator);
 			double state = 0D;
 			boolean empty = true;
@@ -1105,19 +1115,19 @@ public class Double2ByteLinkedOpenCustomHashMap extends Double2ByteOpenCustomHas
 				state = operator.applyAsDouble(state, keys[index]);
 				index = (int)links[index];
 			}
-			return state;
+			return empty ? OptionalDouble.empty() : OptionalDouble.of(state);
 		}
 		
 		@Override
-		public double findFirst(DoublePredicate filter) {
+		public OptionalDouble findFirst(DoublePredicate filter) {
 			Objects.requireNonNull(filter);
-			if(size() <= 0) return 0D;
+			if(size() <= 0) return OptionalDouble.empty();
 			int index = firstIndex;
 			while(index != -1){
-				if(filter.test(keys[index])) return keys[index];
+				if(filter.test(keys[index])) return OptionalDouble.of(keys[index]);
 				index = (int)links[index];
 			}
-			return 0D;
+			return OptionalDouble.empty();
 		}
 		
 		@Override
@@ -1252,7 +1262,7 @@ public class Double2ByteLinkedOpenCustomHashMap extends Double2ByteOpenCustomHas
 		}
 		
 		@Override
-		public byte reduce(ByteByteUnaryOperator operator) {
+		public OptionalByte reduce(ByteByteUnaryOperator operator) {
 			Objects.requireNonNull(operator);
 			byte state = (byte)0;
 			boolean empty = true;
@@ -1267,19 +1277,19 @@ public class Double2ByteLinkedOpenCustomHashMap extends Double2ByteOpenCustomHas
 				state = operator.applyAsByte(state, values[index]);
 				index = (int)links[index];
 			}
-			return state;
+			return empty ? OptionalByte.empty() : OptionalByte.of(state);
 		}
 		
 		@Override
-		public byte findFirst(BytePredicate filter) {
+		public OptionalByte findFirst(BytePredicate filter) {
 			Objects.requireNonNull(filter);
-			if(size() <= 0) return (byte)0;
+			if(size() <= 0) return OptionalByte.empty();
 			int index = firstIndex;
 			while(index != -1){
-				if(filter.test(values[index])) return values[index];
+				if(filter.test(values[index])) return OptionalByte.of(values[index]);
 				index = (int)links[index];
 			}
-			return (byte)0;
+			return OptionalByte.empty();
 		}
 		
 		@Override

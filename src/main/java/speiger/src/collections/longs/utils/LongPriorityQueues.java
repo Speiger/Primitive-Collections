@@ -1,13 +1,14 @@
 package speiger.src.collections.longs.utils;
 
 import java.util.function.LongPredicate;
-
+import java.util.OptionalLong;
 import speiger.src.collections.longs.collections.LongIterator;
 import speiger.src.collections.longs.collections.LongCollection;
 import speiger.src.collections.longs.functions.LongComparator;
 import speiger.src.collections.longs.queues.LongPriorityDequeue;
 import speiger.src.collections.longs.queues.LongPriorityQueue;
 import speiger.src.collections.longs.functions.LongConsumer;
+import speiger.src.collections.longs.functions.function.LongLongUnaryOperator;
 import speiger.src.collections.objects.functions.consumer.ObjectLongConsumer;
 
 /**
@@ -113,7 +114,11 @@ public class LongPriorityQueues
 		@Override
 		public boolean matchesAll(LongPredicate filter) { synchronized(mutex) { return queue.matchesAll(filter); } }
 		@Override
-		public long findFirst(LongPredicate filter) { synchronized(mutex) { return queue.findFirst(filter); } }
+		public OptionalLong findFirst(LongPredicate filter) { synchronized(mutex) { return queue.findFirst(filter); } }
+		@Override
+		public long reduce(long identity, LongLongUnaryOperator operator) { synchronized(mutex) { return queue.reduce(identity, operator); } }
+		@Override
+		public OptionalLong reduce(LongLongUnaryOperator operator) { synchronized(mutex) { return queue.reduce(operator); } }
 		@Override
 		public int count(LongPredicate filter) { synchronized(mutex) { return queue.count(filter); } }
 	}

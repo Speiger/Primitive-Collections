@@ -10,6 +10,7 @@ import speiger.src.collections.bytes.collections.ByteCollection;
 import speiger.src.collections.bytes.collections.ByteIterator;
 import speiger.src.collections.bytes.collections.ByteBidirectionalIterator;
 import speiger.src.collections.bytes.functions.ByteConsumer;
+import speiger.src.collections.bytes.functions.OptionalByte;
 import speiger.src.collections.ints.functions.consumer.IntByteConsumer;
 import speiger.src.collections.objects.functions.consumer.ObjectByteConsumer;
 import speiger.src.collections.bytes.functions.function.BytePredicate;
@@ -181,6 +182,46 @@ public class ByteLinkedOpenHashSet extends ByteOpenHashSet implements ByteOrdere
 	public ByteLinkedOpenHashSet(ByteIterator iterator, float loadFactor) {
 		this(HashUtil.DEFAULT_MIN_CAPACITY, loadFactor);
 		while(iterator.hasNext()) add(iterator.nextByte());
+	}
+	
+	@Override
+	public void addFirst(byte o) {
+		if(o == (byte)0) {
+			if(containsNull) return;
+			containsNull = true;
+			onNodeAdded(nullIndex);
+			moveToFirstIndex(nullIndex);
+		}
+		else {
+			int pos = HashUtil.mix(Byte.hashCode(o)) & mask;
+			while(keys[pos] != (byte)0) {
+				if(keys[pos] == o) return;
+				pos = ++pos & mask;
+			}
+			keys[pos] = o;
+			onNodeAdded(pos);
+			moveToFirstIndex(pos);
+		}
+		if(size++ >= maxFill) rehash(HashUtil.arraySize(size+1, loadFactor));
+	}
+	
+	@Override
+	public void addLast(byte o) {
+		if(o == (byte)0) {
+			if(containsNull) return;
+			containsNull = true;
+			onNodeAdded(nullIndex);
+		}
+		else {
+			int pos = HashUtil.mix(Byte.hashCode(o)) & mask;
+			while(keys[pos] != (byte)0) {
+				if(keys[pos] == o) return;
+				pos = ++pos & mask;
+			}
+			keys[pos] = o;
+			onNodeAdded(pos);
+		}
+		if(size++ >= maxFill) rehash(HashUtil.arraySize(size+1, loadFactor));
 	}
 	
 	@Override
@@ -471,7 +512,7 @@ public class ByteLinkedOpenHashSet extends ByteOpenHashSet implements ByteOrdere
 	}
 	
 	@Override
-	public byte reduce(ByteByteUnaryOperator operator) {
+	public OptionalByte reduce(ByteByteUnaryOperator operator) {
 		Objects.requireNonNull(operator);
 		byte state = (byte)0;
 		boolean empty = true;
@@ -484,18 +525,18 @@ public class ByteLinkedOpenHashSet extends ByteOpenHashSet implements ByteOrdere
 			else state = operator.applyAsByte(state, keys[index]);
 			index = (int)links[index];
 		}
-		return state;
+		return empty ? OptionalByte.empty() : OptionalByte.of(state);
 	}
 	
 	@Override
-	public byte findFirst(BytePredicate filter) {
+	public OptionalByte findFirst(BytePredicate filter) {
 		Objects.requireNonNull(filter);
 		int index = firstIndex;
 		while(index != -1) {
-			if(filter.test(keys[index])) return keys[index];
+			if(filter.test(keys[index])) return OptionalByte.of(keys[index]);
 			index = (int)links[index];
 		}
-		return (byte)0;
+		return OptionalByte.empty();
 	}
 	
 	@Override

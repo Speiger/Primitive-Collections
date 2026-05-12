@@ -302,6 +302,10 @@ public class CharSets
 		}
 		
 		@Override
+		public void addFirst(char o) { throw new UnsupportedOperationException(); }
+		@Override
+		public void addLast(char o) { throw new UnsupportedOperationException(); }
+		@Override
 		public boolean addAndMoveToFirst(char o) { throw new UnsupportedOperationException(); }
 		@Override
 		public boolean addAndMoveToLast(char o) { throw new UnsupportedOperationException(); }
@@ -573,7 +577,11 @@ public class CharSets
 			super(c, mutex);
 			s = c;
 		}
-
+		
+		@Override
+		public void addFirst(char o) { synchronized(mutex) { s.addFirst(o); } }
+		@Override
+		public void addLast(char o) { synchronized(mutex) { s.addLast(o); } }
 		@Override
 		public boolean addAndMoveToFirst(char o) { synchronized(mutex) { return s.addAndMoveToFirst(o); } }
 		@Override

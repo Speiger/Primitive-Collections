@@ -4,6 +4,7 @@ import java.util.Arrays;
 import java.util.Map;
 import java.util.NoSuchElementException;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.function.Consumer;
 import java.util.function.BiFunction;
 import java.util.function.Predicate;
@@ -13,6 +14,7 @@ import speiger.src.collections.bytes.functions.ByteConsumer;
 import speiger.src.collections.objects.functions.consumer.ObjectByteConsumer;
 import speiger.src.collections.ints.functions.consumer.IntByteConsumer;
 import speiger.src.collections.ints.functions.consumer.IntObjectConsumer;
+import speiger.src.collections.bytes.functions.OptionalByte;
 import speiger.src.collections.bytes.functions.function.BytePredicate;
 import speiger.src.collections.bytes.functions.consumer.ByteObjectConsumer;
 import speiger.src.collections.bytes.functions.function.ByteByteUnaryOperator;
@@ -667,6 +669,10 @@ public class Byte2ObjectLinkedOpenCustomHashMap<V> extends Byte2ObjectOpenCustom
 	
 	private class MapEntrySet extends AbstractObjectSet<Byte2ObjectMap.Entry<V>> implements Byte2ObjectOrderedMap.FastOrderedSet<V> {
 		@Override
+		public void addFirst(Byte2ObjectMap.Entry<V> o) { throw new UnsupportedOperationException(); }
+		@Override
+		public void addLast(Byte2ObjectMap.Entry<V> o) { throw new UnsupportedOperationException(); }
+		@Override
 		public boolean addAndMoveToFirst(Byte2ObjectMap.Entry<V> o) { throw new UnsupportedOperationException(); }
 		@Override
 		public boolean addAndMoveToLast(Byte2ObjectMap.Entry<V> o) { throw new UnsupportedOperationException(); }
@@ -831,7 +837,7 @@ public class Byte2ObjectLinkedOpenCustomHashMap<V> extends Byte2ObjectOpenCustom
 		}
 		
 		@Override
-		public Byte2ObjectMap.Entry<V> reduce(ObjectObjectUnaryOperator<Byte2ObjectMap.Entry<V>, Byte2ObjectMap.Entry<V>> operator) {
+		public Optional<Byte2ObjectMap.Entry<V>> reduce(ObjectObjectUnaryOperator<Byte2ObjectMap.Entry<V>, Byte2ObjectMap.Entry<V>> operator) {
 			Objects.requireNonNull(operator);
 			Byte2ObjectMap.Entry<V> state = null;
 			boolean empty = true;
@@ -846,21 +852,21 @@ public class Byte2ObjectLinkedOpenCustomHashMap<V> extends Byte2ObjectOpenCustom
 				state = operator.apply(state, new ValueMapEntry(index));
 				index = (int)links[index];
 			}
-			return state;
+			return empty ? Optional.empty() : Optional.ofNullable(state);
 		}
 		
 		@Override
-		public Byte2ObjectMap.Entry<V> findFirst(Predicate<Byte2ObjectMap.Entry<V>> filter) {
+		public Optional<Byte2ObjectMap.Entry<V>> findFirst(Predicate<Byte2ObjectMap.Entry<V>> filter) {
 			Objects.requireNonNull(filter);
-			if(size() <= 0) return null;
+			if(size() <= 0) return Optional.empty();
 			MapEntry entry = new MapEntry();
 			int index = firstIndex;
 			while(index != -1) {
 				entry.set(index);
-				if(filter.test(entry)) return entry;
+				if(filter.test(entry)) return Optional.ofNullable(entry);
 				index = (int)links[index];
 			}
-			return null;
+			return Optional.empty();
 		}
 		
 		@Override
@@ -939,10 +945,13 @@ public class Byte2ObjectLinkedOpenCustomHashMap<V> extends Byte2ObjectOpenCustom
 		public boolean add(byte o) {
 			throw new UnsupportedOperationException();
 		}
-		
+
+		@Override
+		public void addFirst(byte o) { throw new UnsupportedOperationException(); }
+		@Override
+		public void addLast(byte o) { throw new UnsupportedOperationException(); }		
 		@Override
 		public boolean addAndMoveToFirst(byte o) { throw new UnsupportedOperationException(); }
-
 		@Override
 		public boolean addAndMoveToLast(byte o) { throw new UnsupportedOperationException(); }
 
@@ -1085,7 +1094,7 @@ public class Byte2ObjectLinkedOpenCustomHashMap<V> extends Byte2ObjectOpenCustom
 		}
 		
 		@Override
-		public byte reduce(ByteByteUnaryOperator operator) {
+		public OptionalByte reduce(ByteByteUnaryOperator operator) {
 			Objects.requireNonNull(operator);
 			byte state = (byte)0;
 			boolean empty = true;
@@ -1100,19 +1109,19 @@ public class Byte2ObjectLinkedOpenCustomHashMap<V> extends Byte2ObjectOpenCustom
 				state = operator.applyAsByte(state, keys[index]);
 				index = (int)links[index];
 			}
-			return state;
+			return empty ? OptionalByte.empty() : OptionalByte.of(state);
 		}
 		
 		@Override
-		public byte findFirst(BytePredicate filter) {
+		public OptionalByte findFirst(BytePredicate filter) {
 			Objects.requireNonNull(filter);
-			if(size() <= 0) return (byte)0;
+			if(size() <= 0) return OptionalByte.empty();
 			int index = firstIndex;
 			while(index != -1){
-				if(filter.test(keys[index])) return keys[index];
+				if(filter.test(keys[index])) return OptionalByte.of(keys[index]);
 				index = (int)links[index];
 			}
-			return (byte)0;
+			return OptionalByte.empty();
 		}
 		
 		@Override
@@ -1248,7 +1257,7 @@ public class Byte2ObjectLinkedOpenCustomHashMap<V> extends Byte2ObjectOpenCustom
 		}
 		
 		@Override
-		public V reduce(ObjectObjectUnaryOperator<V, V> operator) {
+		public Optional<V> reduce(ObjectObjectUnaryOperator<V, V> operator) {
 			Objects.requireNonNull(operator);
 			V state = null;
 			boolean empty = true;
@@ -1263,19 +1272,19 @@ public class Byte2ObjectLinkedOpenCustomHashMap<V> extends Byte2ObjectOpenCustom
 				state = operator.apply(state, values[index]);
 				index = (int)links[index];
 			}
-			return state;
+			return empty ? Optional.empty() : Optional.ofNullable(state);
 		}
 		
 		@Override
-		public V findFirst(Predicate<V> filter) {
+		public Optional<V> findFirst(Predicate<V> filter) {
 			Objects.requireNonNull(filter);
-			if(size() <= 0) return null;
+			if(size() <= 0) return Optional.empty();
 			int index = firstIndex;
 			while(index != -1){
-				if(filter.test(values[index])) return values[index];
+				if(filter.test(values[index])) return Optional.ofNullable(values[index]);
 				index = (int)links[index];
 			}
-			return null;
+			return Optional.empty();
 		}
 		
 		@Override

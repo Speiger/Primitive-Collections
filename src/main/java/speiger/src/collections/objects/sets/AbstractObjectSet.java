@@ -68,7 +68,17 @@ public abstract class AbstractObjectSet<T> extends AbstractObjectCollection<T> i
 		public ObjectBidirectionalIterator<T> reverseIterator() {
 			return set.iterator();
 		}
-
+		
+		@Override
+		public void addFirst(T o) {
+			set.addLast(o);
+		}
+		
+		@Override
+		public void addLast(T o) {
+			set.addFirst(o);
+		}
+		
 		@Override
 		public boolean remove(Object o) {
 			return set.remove(o);

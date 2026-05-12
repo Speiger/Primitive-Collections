@@ -9,6 +9,7 @@ import java.util.NoSuchElementException;
 import speiger.src.collections.floats.collections.FloatCollection;
 import speiger.src.collections.floats.collections.FloatIterator;
 import speiger.src.collections.floats.collections.FloatBidirectionalIterator;
+import speiger.src.collections.floats.functions.OptionalFloat;
 import speiger.src.collections.floats.lists.FloatListIterator;
 import speiger.src.collections.floats.utils.FloatIterators;
 import speiger.src.collections.floats.functions.FloatConsumer;
@@ -212,6 +213,46 @@ public class FloatLinkedOpenCustomHashSet extends FloatOpenCustomHashSet impleme
 	public FloatLinkedOpenCustomHashSet(FloatIterator iterator, float loadFactor, FloatStrategy strategy) {
 		this(HashUtil.DEFAULT_MIN_CAPACITY, loadFactor, strategy);
 		while(iterator.hasNext()) add(iterator.nextFloat());
+	}
+	
+	@Override
+	public void addFirst(float o) {
+		if(strategy.equals(o, 0F)) {
+			if(containsNull) return;
+			containsNull = true;
+			onNodeAdded(nullIndex);
+			moveToFirstIndex(nullIndex);
+		}
+		else {
+			int pos = HashUtil.mix(strategy.hashCode(o)) & mask;
+			while(!strategy.equals(keys[pos], 0F)) {
+				if(strategy.equals(keys[pos], o)) return;
+				pos = ++pos & mask;
+			}
+			keys[pos] = o;
+			onNodeAdded(pos);
+			moveToFirstIndex(pos);
+		}
+		if(size++ >= maxFill) rehash(HashUtil.arraySize(size+1, loadFactor));
+	}
+	
+	@Override
+	public void addLast(float o) {
+		if(strategy.equals(o, 0F)) {
+			if(containsNull) return;
+			containsNull = true;
+			onNodeAdded(nullIndex);
+		}
+		else {
+			int pos = HashUtil.mix(strategy.hashCode(o)) & mask;
+			while(!strategy.equals(keys[pos], 0F)) {
+				if(strategy.equals(keys[pos], o)) return;
+				pos = ++pos & mask;
+			}
+			keys[pos] = o;
+			onNodeAdded(pos);
+		}
+		if(size++ >= maxFill) rehash(HashUtil.arraySize(size+1, loadFactor));
 	}
 	
 	@Override
@@ -618,7 +659,7 @@ public class FloatLinkedOpenCustomHashSet extends FloatOpenCustomHashSet impleme
 	}
 	
 	@Override
-	public float reduce(FloatFloatUnaryOperator operator) {
+	public OptionalFloat reduce(FloatFloatUnaryOperator operator) {
 		Objects.requireNonNull(operator);
 		float state = 0F;
 		boolean empty = true;
@@ -631,18 +672,18 @@ public class FloatLinkedOpenCustomHashSet extends FloatOpenCustomHashSet impleme
 			else state = operator.applyAsFloat(state, keys[index]);
 			index = (int)links[index];
 		}
-		return state;
+		return empty ? OptionalFloat.empty() : OptionalFloat.of(state);
 	}
 	
 	@Override
-	public float findFirst(FloatPredicate filter) {
+	public OptionalFloat findFirst(FloatPredicate filter) {
 		Objects.requireNonNull(filter);
 		int index = firstIndex;
 		while(index != -1) {
-			if(filter.test(keys[index])) return keys[index];
+			if(filter.test(keys[index])) return OptionalFloat.of(keys[index]);
 			index = (int)links[index];
 		}
-		return 0F;
+		return OptionalFloat.empty();
 	}
 	
 	@Override

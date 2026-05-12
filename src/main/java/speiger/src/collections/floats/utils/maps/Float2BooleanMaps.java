@@ -608,7 +608,11 @@ public class Float2BooleanMaps
 			super(c);
 			set = c;
 		}
-
+		
+		@Override
+		public void addFirst(Float2BooleanMap.Entry o) { throw new UnsupportedOperationException(); }
+		@Override
+		public void addLast(Float2BooleanMap.Entry o) { throw new UnsupportedOperationException(); }
 		@Override
 		public boolean addAndMoveToFirst(Float2BooleanMap.Entry o) { throw new UnsupportedOperationException(); }
 		@Override

@@ -63,7 +63,17 @@ public abstract class AbstractByteSet extends AbstractByteCollection implements 
 		public ByteBidirectionalIterator reverseIterator() {
 			return set.iterator();
 		}
-
+		
+		@Override
+		public void addFirst(byte o) {
+			set.addLast(o);
+		}
+		
+		@Override
+		public void addLast(byte o) {
+			set.addFirst(o);
+		}
+		
 		@Override
 		public boolean remove(byte o) {
 			return set.remove(o);

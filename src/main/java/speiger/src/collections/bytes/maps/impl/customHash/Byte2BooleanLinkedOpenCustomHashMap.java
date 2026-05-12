@@ -4,6 +4,7 @@ import java.util.Arrays;
 import java.util.Map;
 import java.util.NoSuchElementException;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.function.Consumer;
 import java.util.function.BiFunction;
 import java.util.function.Predicate;
@@ -14,6 +15,7 @@ import speiger.src.collections.objects.functions.consumer.ObjectByteConsumer;
 import speiger.src.collections.ints.functions.consumer.IntByteConsumer;
 import speiger.src.collections.ints.functions.consumer.IntObjectConsumer;
 import speiger.src.collections.ints.functions.consumer.IntBooleanConsumer;
+import speiger.src.collections.bytes.functions.OptionalByte;
 import speiger.src.collections.bytes.functions.function.BytePredicate;
 import speiger.src.collections.bytes.functions.consumer.ByteBooleanConsumer;
 import speiger.src.collections.bytes.functions.function.ByteByteUnaryOperator;
@@ -33,6 +35,7 @@ import speiger.src.collections.objects.functions.consumer.ObjectObjectConsumer;
 import speiger.src.collections.objects.functions.consumer.ObjectBooleanConsumer;
 
 import speiger.src.collections.booleans.functions.function.BooleanPredicate;
+import speiger.src.collections.booleans.functions.OptionalBoolean;
 import speiger.src.collections.objects.functions.function.ObjectObjectUnaryOperator;
 import speiger.src.collections.objects.collections.ObjectBidirectionalIterator;
 import speiger.src.collections.objects.lists.ObjectListIterator;
@@ -672,6 +675,10 @@ public class Byte2BooleanLinkedOpenCustomHashMap extends Byte2BooleanOpenCustomH
 	
 	private class MapEntrySet extends AbstractObjectSet<Byte2BooleanMap.Entry> implements Byte2BooleanOrderedMap.FastOrderedSet {
 		@Override
+		public void addFirst(Byte2BooleanMap.Entry o) { throw new UnsupportedOperationException(); }
+		@Override
+		public void addLast(Byte2BooleanMap.Entry o) { throw new UnsupportedOperationException(); }
+		@Override
 		public boolean addAndMoveToFirst(Byte2BooleanMap.Entry o) { throw new UnsupportedOperationException(); }
 		@Override
 		public boolean addAndMoveToLast(Byte2BooleanMap.Entry o) { throw new UnsupportedOperationException(); }
@@ -836,7 +843,7 @@ public class Byte2BooleanLinkedOpenCustomHashMap extends Byte2BooleanOpenCustomH
 		}
 		
 		@Override
-		public Byte2BooleanMap.Entry reduce(ObjectObjectUnaryOperator<Byte2BooleanMap.Entry, Byte2BooleanMap.Entry> operator) {
+		public Optional<Byte2BooleanMap.Entry> reduce(ObjectObjectUnaryOperator<Byte2BooleanMap.Entry, Byte2BooleanMap.Entry> operator) {
 			Objects.requireNonNull(operator);
 			Byte2BooleanMap.Entry state = null;
 			boolean empty = true;
@@ -851,21 +858,21 @@ public class Byte2BooleanLinkedOpenCustomHashMap extends Byte2BooleanOpenCustomH
 				state = operator.apply(state, new ValueMapEntry(index));
 				index = (int)links[index];
 			}
-			return state;
+			return empty ? Optional.empty() : Optional.ofNullable(state);
 		}
 		
 		@Override
-		public Byte2BooleanMap.Entry findFirst(Predicate<Byte2BooleanMap.Entry> filter) {
+		public Optional<Byte2BooleanMap.Entry> findFirst(Predicate<Byte2BooleanMap.Entry> filter) {
 			Objects.requireNonNull(filter);
-			if(size() <= 0) return null;
+			if(size() <= 0) return Optional.empty();
 			MapEntry entry = new MapEntry();
 			int index = firstIndex;
 			while(index != -1) {
 				entry.set(index);
-				if(filter.test(entry)) return entry;
+				if(filter.test(entry)) return Optional.ofNullable(entry);
 				index = (int)links[index];
 			}
-			return null;
+			return Optional.empty();
 		}
 		
 		@Override
@@ -944,10 +951,13 @@ public class Byte2BooleanLinkedOpenCustomHashMap extends Byte2BooleanOpenCustomH
 		public boolean add(byte o) {
 			throw new UnsupportedOperationException();
 		}
-		
+
+		@Override
+		public void addFirst(byte o) { throw new UnsupportedOperationException(); }
+		@Override
+		public void addLast(byte o) { throw new UnsupportedOperationException(); }		
 		@Override
 		public boolean addAndMoveToFirst(byte o) { throw new UnsupportedOperationException(); }
-
 		@Override
 		public boolean addAndMoveToLast(byte o) { throw new UnsupportedOperationException(); }
 
@@ -1090,7 +1100,7 @@ public class Byte2BooleanLinkedOpenCustomHashMap extends Byte2BooleanOpenCustomH
 		}
 		
 		@Override
-		public byte reduce(ByteByteUnaryOperator operator) {
+		public OptionalByte reduce(ByteByteUnaryOperator operator) {
 			Objects.requireNonNull(operator);
 			byte state = (byte)0;
 			boolean empty = true;
@@ -1105,19 +1115,19 @@ public class Byte2BooleanLinkedOpenCustomHashMap extends Byte2BooleanOpenCustomH
 				state = operator.applyAsByte(state, keys[index]);
 				index = (int)links[index];
 			}
-			return state;
+			return empty ? OptionalByte.empty() : OptionalByte.of(state);
 		}
 		
 		@Override
-		public byte findFirst(BytePredicate filter) {
+		public OptionalByte findFirst(BytePredicate filter) {
 			Objects.requireNonNull(filter);
-			if(size() <= 0) return (byte)0;
+			if(size() <= 0) return OptionalByte.empty();
 			int index = firstIndex;
 			while(index != -1){
-				if(filter.test(keys[index])) return keys[index];
+				if(filter.test(keys[index])) return OptionalByte.of(keys[index]);
 				index = (int)links[index];
 			}
-			return (byte)0;
+			return OptionalByte.empty();
 		}
 		
 		@Override
@@ -1252,7 +1262,7 @@ public class Byte2BooleanLinkedOpenCustomHashMap extends Byte2BooleanOpenCustomH
 		}
 		
 		@Override
-		public boolean reduce(BooleanBooleanUnaryOperator operator) {
+		public OptionalBoolean reduce(BooleanBooleanUnaryOperator operator) {
 			Objects.requireNonNull(operator);
 			boolean state = false;
 			boolean empty = true;
@@ -1267,19 +1277,19 @@ public class Byte2BooleanLinkedOpenCustomHashMap extends Byte2BooleanOpenCustomH
 				state = operator.applyAsBoolean(state, values[index]);
 				index = (int)links[index];
 			}
-			return state;
+			return empty ? OptionalBoolean.empty() : OptionalBoolean.of(state);
 		}
 		
 		@Override
-		public boolean findFirst(BooleanPredicate filter) {
+		public OptionalBoolean findFirst(BooleanPredicate filter) {
 			Objects.requireNonNull(filter);
-			if(size() <= 0) return false;
+			if(size() <= 0) return OptionalBoolean.empty();
 			int index = firstIndex;
 			while(index != -1){
-				if(filter.test(values[index])) return values[index];
+				if(filter.test(values[index])) return OptionalBoolean.of(values[index]);
 				index = (int)links[index];
 			}
-			return false;
+			return OptionalBoolean.empty();
 		}
 		
 		@Override

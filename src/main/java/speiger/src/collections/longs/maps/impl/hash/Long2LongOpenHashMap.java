@@ -5,10 +5,12 @@ import java.util.ConcurrentModificationException;
 import java.util.Map;
 import java.util.NoSuchElementException;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.function.Consumer;
 import java.util.function.BiFunction;
 import java.util.function.Predicate;
 import java.util.function.LongPredicate;
+import java.util.OptionalLong;
 
 import speiger.src.collections.longs.collections.LongIterator;
 import speiger.src.collections.longs.functions.LongConsumer;
@@ -914,7 +916,7 @@ public class Long2LongOpenHashMap extends AbstractLong2LongMap implements ITrimm
 		}
 		
 		@Override
-		public Long2LongMap.Entry reduce(ObjectObjectUnaryOperator<Long2LongMap.Entry, Long2LongMap.Entry> operator) {
+		public Optional<Long2LongMap.Entry> reduce(ObjectObjectUnaryOperator<Long2LongMap.Entry, Long2LongMap.Entry> operator) {
 			Objects.requireNonNull(operator);
 			Long2LongMap.Entry state = null;
 			boolean empty = true;
@@ -931,25 +933,25 @@ public class Long2LongOpenHashMap extends AbstractLong2LongMap implements ITrimm
 				}
 				state = operator.apply(state, new ValueMapEntry(i));
 			}
-			return state;
+			return empty ? Optional.empty() : Optional.ofNullable(state);
 		}
 		
 		@Override
-		public Long2LongMap.Entry findFirst(Predicate<Long2LongMap.Entry> filter) {
+		public Optional<Long2LongMap.Entry> findFirst(Predicate<Long2LongMap.Entry> filter) {
 			Objects.requireNonNull(filter);
-			if(size() <= 0) return null;
+			if(size() <= 0) return Optional.empty();
 			MapEntry entry = new MapEntry();
 			if(containsNull) {
 				entry.set(nullIndex);
-				if(filter.test(entry)) return entry;
+				if(filter.test(entry)) return Optional.ofNullable(entry);
 			}
 			for(int i = nullIndex-1;i>=0;i--) {
 				if(keys[i] != 0) {
 					entry.set(i);
-					if(filter.test(entry)) return entry;
+					if(filter.test(entry)) return Optional.ofNullable(entry);
 				}
 			}
-			return null;
+			return Optional.empty();
 		}
 		
 		@Override
@@ -1121,7 +1123,7 @@ public class Long2LongOpenHashMap extends AbstractLong2LongMap implements ITrimm
 		}
 		
 		@Override
-		public long reduce(LongLongUnaryOperator operator) {
+		public OptionalLong reduce(LongLongUnaryOperator operator) {
 			Objects.requireNonNull(operator);
 			long state = 0L;
 			boolean empty = true;
@@ -1138,18 +1140,18 @@ public class Long2LongOpenHashMap extends AbstractLong2LongMap implements ITrimm
 				}
 				state = operator.applyAsLong(state, keys[i]);
 			}
-			return state;
+			return empty ? OptionalLong.empty() : OptionalLong.of(state);
 		}
 		
 		@Override
-		public long findFirst(LongPredicate filter) {
+		public OptionalLong findFirst(LongPredicate filter) {
 			Objects.requireNonNull(filter);
-			if(size() <= 0) return 0L;
-			if(containsNull && filter.test(keys[nullIndex])) return keys[nullIndex];
+			if(size() <= 0) return OptionalLong.empty();
+			if(containsNull && filter.test(keys[nullIndex])) return OptionalLong.of(keys[nullIndex]);
 			for(int i = nullIndex-1;i>=0;i--) {
-				if(keys[i] != 0 && filter.test(keys[i])) return keys[i];
+				if(keys[i] != 0 && filter.test(keys[i])) return OptionalLong.of(keys[i]);
 			}
-			return 0L;
+			return OptionalLong.empty();
 		}
 		
 		@Override
@@ -1264,7 +1266,7 @@ public class Long2LongOpenHashMap extends AbstractLong2LongMap implements ITrimm
 		}
 		
 		@Override
-		public long reduce(LongLongUnaryOperator operator) {
+		public OptionalLong reduce(LongLongUnaryOperator operator) {
 			Objects.requireNonNull(operator);
 			long state = 0L;
 			boolean empty = true;
@@ -1281,18 +1283,18 @@ public class Long2LongOpenHashMap extends AbstractLong2LongMap implements ITrimm
 				}
 				state = operator.applyAsLong(state, values[i]);
 			}
-			return state;
+			return empty ? OptionalLong.empty() : OptionalLong.of(state);
 		}
 		
 		@Override
-		public long findFirst(LongPredicate filter) {
+		public OptionalLong findFirst(LongPredicate filter) {
 			Objects.requireNonNull(filter);
-			if(size() <= 0) return 0L;
-			if(containsNull && filter.test(values[nullIndex])) return values[nullIndex];
+			if(size() <= 0) return OptionalLong.empty();
+			if(containsNull && filter.test(values[nullIndex])) return OptionalLong.of(values[nullIndex]);
 			for(int i = nullIndex-1;i>=0;i--) {
-				if(keys[i] != 0 && filter.test(values[i])) return values[i];
+				if(keys[i] != 0 && filter.test(values[i])) return OptionalLong.of(values[i]);
 			}
-			return 0L;
+			return OptionalLong.empty();
 		}
 		
 		@Override

@@ -4,10 +4,12 @@ import java.util.Arrays;
 import java.util.Map;
 import java.util.NoSuchElementException;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.function.Consumer;
 import java.util.function.BiFunction;
 import java.util.function.Predicate;
 import java.util.function.IntPredicate;
+import java.util.OptionalInt;
 
 import speiger.src.collections.shorts.collections.ShortBidirectionalIterator;
 import speiger.src.collections.shorts.functions.ShortConsumer;
@@ -15,6 +17,7 @@ import speiger.src.collections.objects.functions.consumer.ObjectShortConsumer;
 import speiger.src.collections.ints.functions.consumer.IntShortConsumer;
 import speiger.src.collections.ints.functions.consumer.IntObjectConsumer;
 import speiger.src.collections.ints.functions.consumer.IntIntConsumer;
+import speiger.src.collections.shorts.functions.OptionalShort;
 import speiger.src.collections.shorts.functions.function.ShortPredicate;
 import speiger.src.collections.shorts.functions.consumer.ShortIntConsumer;
 import speiger.src.collections.shorts.functions.function.ShortShortUnaryOperator;
@@ -672,6 +675,10 @@ public class Short2IntLinkedOpenCustomHashMap extends Short2IntOpenCustomHashMap
 	
 	private class MapEntrySet extends AbstractObjectSet<Short2IntMap.Entry> implements Short2IntOrderedMap.FastOrderedSet {
 		@Override
+		public void addFirst(Short2IntMap.Entry o) { throw new UnsupportedOperationException(); }
+		@Override
+		public void addLast(Short2IntMap.Entry o) { throw new UnsupportedOperationException(); }
+		@Override
 		public boolean addAndMoveToFirst(Short2IntMap.Entry o) { throw new UnsupportedOperationException(); }
 		@Override
 		public boolean addAndMoveToLast(Short2IntMap.Entry o) { throw new UnsupportedOperationException(); }
@@ -836,7 +843,7 @@ public class Short2IntLinkedOpenCustomHashMap extends Short2IntOpenCustomHashMap
 		}
 		
 		@Override
-		public Short2IntMap.Entry reduce(ObjectObjectUnaryOperator<Short2IntMap.Entry, Short2IntMap.Entry> operator) {
+		public Optional<Short2IntMap.Entry> reduce(ObjectObjectUnaryOperator<Short2IntMap.Entry, Short2IntMap.Entry> operator) {
 			Objects.requireNonNull(operator);
 			Short2IntMap.Entry state = null;
 			boolean empty = true;
@@ -851,21 +858,21 @@ public class Short2IntLinkedOpenCustomHashMap extends Short2IntOpenCustomHashMap
 				state = operator.apply(state, new ValueMapEntry(index));
 				index = (int)links[index];
 			}
-			return state;
+			return empty ? Optional.empty() : Optional.ofNullable(state);
 		}
 		
 		@Override
-		public Short2IntMap.Entry findFirst(Predicate<Short2IntMap.Entry> filter) {
+		public Optional<Short2IntMap.Entry> findFirst(Predicate<Short2IntMap.Entry> filter) {
 			Objects.requireNonNull(filter);
-			if(size() <= 0) return null;
+			if(size() <= 0) return Optional.empty();
 			MapEntry entry = new MapEntry();
 			int index = firstIndex;
 			while(index != -1) {
 				entry.set(index);
-				if(filter.test(entry)) return entry;
+				if(filter.test(entry)) return Optional.ofNullable(entry);
 				index = (int)links[index];
 			}
-			return null;
+			return Optional.empty();
 		}
 		
 		@Override
@@ -944,10 +951,13 @@ public class Short2IntLinkedOpenCustomHashMap extends Short2IntOpenCustomHashMap
 		public boolean add(short o) {
 			throw new UnsupportedOperationException();
 		}
-		
+
+		@Override
+		public void addFirst(short o) { throw new UnsupportedOperationException(); }
+		@Override
+		public void addLast(short o) { throw new UnsupportedOperationException(); }		
 		@Override
 		public boolean addAndMoveToFirst(short o) { throw new UnsupportedOperationException(); }
-
 		@Override
 		public boolean addAndMoveToLast(short o) { throw new UnsupportedOperationException(); }
 
@@ -1090,7 +1100,7 @@ public class Short2IntLinkedOpenCustomHashMap extends Short2IntOpenCustomHashMap
 		}
 		
 		@Override
-		public short reduce(ShortShortUnaryOperator operator) {
+		public OptionalShort reduce(ShortShortUnaryOperator operator) {
 			Objects.requireNonNull(operator);
 			short state = (short)0;
 			boolean empty = true;
@@ -1105,19 +1115,19 @@ public class Short2IntLinkedOpenCustomHashMap extends Short2IntOpenCustomHashMap
 				state = operator.applyAsShort(state, keys[index]);
 				index = (int)links[index];
 			}
-			return state;
+			return empty ? OptionalShort.empty() : OptionalShort.of(state);
 		}
 		
 		@Override
-		public short findFirst(ShortPredicate filter) {
+		public OptionalShort findFirst(ShortPredicate filter) {
 			Objects.requireNonNull(filter);
-			if(size() <= 0) return (short)0;
+			if(size() <= 0) return OptionalShort.empty();
 			int index = firstIndex;
 			while(index != -1){
-				if(filter.test(keys[index])) return keys[index];
+				if(filter.test(keys[index])) return OptionalShort.of(keys[index]);
 				index = (int)links[index];
 			}
-			return (short)0;
+			return OptionalShort.empty();
 		}
 		
 		@Override
@@ -1252,7 +1262,7 @@ public class Short2IntLinkedOpenCustomHashMap extends Short2IntOpenCustomHashMap
 		}
 		
 		@Override
-		public int reduce(IntIntUnaryOperator operator) {
+		public OptionalInt reduce(IntIntUnaryOperator operator) {
 			Objects.requireNonNull(operator);
 			int state = 0;
 			boolean empty = true;
@@ -1267,19 +1277,19 @@ public class Short2IntLinkedOpenCustomHashMap extends Short2IntOpenCustomHashMap
 				state = operator.applyAsInt(state, values[index]);
 				index = (int)links[index];
 			}
-			return state;
+			return empty ? OptionalInt.empty() : OptionalInt.of(state);
 		}
 		
 		@Override
-		public int findFirst(IntPredicate filter) {
+		public OptionalInt findFirst(IntPredicate filter) {
 			Objects.requireNonNull(filter);
-			if(size() <= 0) return 0;
+			if(size() <= 0) return OptionalInt.empty();
 			int index = firstIndex;
 			while(index != -1){
-				if(filter.test(values[index])) return values[index];
+				if(filter.test(values[index])) return OptionalInt.of(values[index]);
 				index = (int)links[index];
 			}
-			return 0;
+			return OptionalInt.empty();
 		}
 		
 		@Override

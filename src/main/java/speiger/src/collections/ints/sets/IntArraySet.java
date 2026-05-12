@@ -4,12 +4,12 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.NoSuchElementException;
 import java.util.Objects;
+import java.util.OptionalInt;
 import java.util.Set;
 import java.util.function.IntPredicate;
 import speiger.src.collections.ints.collections.IntBidirectionalIterator;
 import speiger.src.collections.ints.collections.IntCollection;
 import speiger.src.collections.ints.collections.IntIterator;
-
 import speiger.src.collections.ints.functions.consumer.IntIntConsumer;
 import speiger.src.collections.objects.functions.consumer.ObjectIntConsumer;
 import speiger.src.collections.ints.functions.function.IntIntUnaryOperator;
@@ -120,6 +120,25 @@ public class IntArraySet extends AbstractIntSet implements IntOrderedSet
 			return true;
 		}
 		return false;
+	}
+	
+	@Override
+	public void addFirst(int o) {
+		int index = findIndex(o);
+		if(index == -1) {
+			if(data.length == size) data = Arrays.copyOf(data, size == 0 ? 2 : size * 2);
+			System.arraycopy(data, 0, data, 1, size++);
+			data[0] = o;
+		}
+	}
+	
+	@Override
+	public void addLast(int o) {
+		int index = findIndex(o);
+		if(index == -1) {
+			if(data.length == size) data = Arrays.copyOf(data, size == 0 ? 2 : size * 2);
+			data[size++] = o;
+		}
 	}
 	
 	@Override
@@ -355,12 +374,12 @@ public class IntArraySet extends AbstractIntSet implements IntOrderedSet
 	}
 	
 	@Override
-	public int findFirst(IntPredicate filter) {
+	public OptionalInt findFirst(IntPredicate filter) {
 		Objects.requireNonNull(filter);
 		for(int i = 0;i<size;i++) {
-			if(filter.test(data[i])) return data[i];
+			if(filter.test(data[i])) return OptionalInt.of(data[i]);
 		}
-		return 0;
+		return OptionalInt.empty();
 	}
 	
 	@Override
@@ -374,7 +393,7 @@ public class IntArraySet extends AbstractIntSet implements IntOrderedSet
 	}
 	
 	@Override
-	public int reduce(IntIntUnaryOperator operator) {
+	public OptionalInt reduce(IntIntUnaryOperator operator) {
 		Objects.requireNonNull(operator);
 		int state = 0;
 		boolean empty = true;
@@ -386,7 +405,7 @@ public class IntArraySet extends AbstractIntSet implements IntOrderedSet
 			}
 			state = operator.applyAsInt(state, data[i]);
 		}
-		return state;
+		return empty ? OptionalInt.empty() : OptionalInt.of(state);
 	}
 	
 	@Override

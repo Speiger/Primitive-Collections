@@ -302,6 +302,10 @@ public class LongSets
 		}
 		
 		@Override
+		public void addFirst(long o) { throw new UnsupportedOperationException(); }
+		@Override
+		public void addLast(long o) { throw new UnsupportedOperationException(); }
+		@Override
 		public boolean addAndMoveToFirst(long o) { throw new UnsupportedOperationException(); }
 		@Override
 		public boolean addAndMoveToLast(long o) { throw new UnsupportedOperationException(); }
@@ -573,7 +577,11 @@ public class LongSets
 			super(c, mutex);
 			s = c;
 		}
-
+		
+		@Override
+		public void addFirst(long o) { synchronized(mutex) { s.addFirst(o); } }
+		@Override
+		public void addLast(long o) { synchronized(mutex) { s.addLast(o); } }
 		@Override
 		public boolean addAndMoveToFirst(long o) { synchronized(mutex) { return s.addAndMoveToFirst(o); } }
 		@Override

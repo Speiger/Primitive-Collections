@@ -1,10 +1,10 @@
 package speiger.src.collections.objects.lists;
 
-import java.util.Comparator;
-import java.util.function.BiFunction;
+import java.util.Comparator;import java.util.function.BiFunction;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.NoSuchElementException;
 import java.util.Spliterator;
 import java.util.function.Consumer;
@@ -388,12 +388,12 @@ public class ObjectLinkedList<T> extends AbstractObjectList<T> implements Object
 	}
 	
 	@Override
-	public T findFirst(Predicate<T> filter) {
+	public Optional<T> findFirst(Predicate<T> filter) {
 		Objects.requireNonNull(filter);
 		for(Entry<T> entry = first;entry != null;entry = entry.next) {
-			if(filter.test(entry.value)) return entry.value;
+			if(filter.test(entry.value)) return Optional.ofNullable(entry.value);
 		}
-		return null;
+		return Optional.empty();
 	}
 	
 	@Override
@@ -407,7 +407,7 @@ public class ObjectLinkedList<T> extends AbstractObjectList<T> implements Object
 	}
 	
 	@Override
-	public T reduce(ObjectObjectUnaryOperator<T, T> operator) {
+	public Optional<T> reduce(ObjectObjectUnaryOperator<T, T> operator) {
 		Objects.requireNonNull(operator);
 		T state = null;
 		boolean empty = true;
@@ -419,7 +419,7 @@ public class ObjectLinkedList<T> extends AbstractObjectList<T> implements Object
 			}
 			state = operator.apply(state, entry.value);
 		}
-		return state;
+		return empty ? Optional.empty() : Optional.ofNullable(state);
 	}
 	
 	@Override

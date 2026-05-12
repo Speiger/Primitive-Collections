@@ -11,6 +11,7 @@ import java.util.function.IntPredicate;import java.util.function.IntUnaryOperato
 import speiger.src.collections.shorts.collections.ShortCollection;
 import speiger.src.collections.shorts.functions.ShortComparator;
 import speiger.src.collections.shorts.functions.ShortConsumer;
+import speiger.src.collections.shorts.functions.OptionalShort;
 import speiger.src.collections.shorts.utils.ShortArrays;
 import speiger.src.collections.objects.functions.consumer.ObjectShortConsumer;
 import speiger.src.collections.shorts.functions.function.ShortPredicate;
@@ -273,12 +274,12 @@ public class ImmutableShortList extends AbstractShortList
 	}
 	
 	@Override
-	public short findFirst(ShortPredicate filter) {
+	public OptionalShort findFirst(ShortPredicate filter) {
 		Objects.requireNonNull(filter);
 		for(int i = 0,m=data.length;i<m;i++) {
-			if(filter.test(data[i])) return data[i];
+			if(filter.test(data[i])) return OptionalShort.of(data[i]);
 		}
-		return (short)0;
+		return OptionalShort.empty();
 	}
 	
 	@Override
@@ -292,7 +293,7 @@ public class ImmutableShortList extends AbstractShortList
 	}
 	
 	@Override
-	public short reduce(ShortShortUnaryOperator operator) {
+	public OptionalShort reduce(ShortShortUnaryOperator operator) {
 		Objects.requireNonNull(operator);
 		short state = (short)0;
 		boolean empty = true;
@@ -304,7 +305,7 @@ public class ImmutableShortList extends AbstractShortList
 			}
 			state = operator.applyAsShort(state, data[i]);
 		}
-		return state;
+		return empty ? OptionalShort.empty() : OptionalShort.of(state);
 	}
 	
 	@Override

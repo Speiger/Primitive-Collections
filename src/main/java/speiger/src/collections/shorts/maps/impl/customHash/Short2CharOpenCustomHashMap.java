@@ -5,6 +5,7 @@ import java.util.ConcurrentModificationException;
 import java.util.Map;
 import java.util.NoSuchElementException;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.function.Consumer;
 import java.util.function.BiFunction;
 import java.util.function.Predicate;
@@ -19,6 +20,7 @@ import speiger.src.collections.shorts.functions.consumer.ShortCharConsumer;
 import speiger.src.collections.shorts.functions.function.Short2CharFunction;
 import speiger.src.collections.shorts.functions.function.ShortCharUnaryOperator;
 import speiger.src.collections.shorts.functions.function.ShortShortUnaryOperator;
+import speiger.src.collections.shorts.functions.OptionalShort;
 import speiger.src.collections.shorts.functions.function.ShortPredicate;
 import speiger.src.collections.shorts.maps.abstracts.AbstractShort2CharMap;
 import speiger.src.collections.shorts.maps.interfaces.Short2CharMap;
@@ -37,6 +39,7 @@ import speiger.src.collections.objects.functions.consumer.ObjectObjectConsumer;
 import speiger.src.collections.objects.functions.consumer.ObjectCharConsumer;
 
 import speiger.src.collections.chars.functions.function.CharPredicate;
+import speiger.src.collections.chars.functions.OptionalChar;
 import speiger.src.collections.objects.collections.ObjectIterator;
 import speiger.src.collections.objects.sets.AbstractObjectSet;
 import speiger.src.collections.objects.sets.ObjectSet;
@@ -952,7 +955,7 @@ public class Short2CharOpenCustomHashMap extends AbstractShort2CharMap implement
 		}
 		
 		@Override
-		public Short2CharMap.Entry reduce(ObjectObjectUnaryOperator<Short2CharMap.Entry, Short2CharMap.Entry> operator) {
+		public Optional<Short2CharMap.Entry> reduce(ObjectObjectUnaryOperator<Short2CharMap.Entry, Short2CharMap.Entry> operator) {
 			Objects.requireNonNull(operator);
 			Short2CharMap.Entry state = null;
 			boolean empty = true;
@@ -969,25 +972,25 @@ public class Short2CharOpenCustomHashMap extends AbstractShort2CharMap implement
 				}
 				state = operator.apply(state, new ValueMapEntry(i));
 			}
-			return state;
+			return empty ? Optional.empty() : Optional.ofNullable(state);
 		}
 		
 		@Override
-		public Short2CharMap.Entry findFirst(Predicate<Short2CharMap.Entry> filter) {
+		public Optional<Short2CharMap.Entry> findFirst(Predicate<Short2CharMap.Entry> filter) {
 			Objects.requireNonNull(filter);
-			if(size() <= 0) return null;
+			if(size() <= 0) return Optional.empty();
 			MapEntry entry = new MapEntry();
 			if(containsNull) {
 				entry.set(nullIndex);
-				if(filter.test(entry)) return entry;
+				if(filter.test(entry)) return Optional.ofNullable(entry);
 			}
 			for(int i = nullIndex-1;i>=0;i--) {
 				if(!strategy.equals(keys[i], (short)0)) {
 					entry.set(i);
-					if(filter.test(entry)) return entry;
+					if(filter.test(entry)) return Optional.ofNullable(entry);
 				}
 			}
-			return null;
+			return Optional.empty();
 		}
 		
 		@Override
@@ -1161,7 +1164,7 @@ public class Short2CharOpenCustomHashMap extends AbstractShort2CharMap implement
 		}
 		
 		@Override
-		public short reduce(ShortShortUnaryOperator operator) {
+		public OptionalShort reduce(ShortShortUnaryOperator operator) {
 			Objects.requireNonNull(operator);
 			short state = (short)0;
 			boolean empty = true;
@@ -1178,18 +1181,18 @@ public class Short2CharOpenCustomHashMap extends AbstractShort2CharMap implement
 				}
 				state = operator.applyAsShort(state, keys[i]);
 			}
-			return state;
+			return empty ? OptionalShort.empty() : OptionalShort.of(state);
 		}
 		
 		@Override
-		public short findFirst(ShortPredicate filter) {
+		public OptionalShort findFirst(ShortPredicate filter) {
 			Objects.requireNonNull(filter);
-			if(size() <= 0) return (short)0;
-			if(containsNull && filter.test(keys[nullIndex])) return keys[nullIndex];
+			if(size() <= 0) return OptionalShort.empty();
+			if(containsNull && filter.test(keys[nullIndex])) return OptionalShort.of(keys[nullIndex]);
 			for(int i = nullIndex-1;i>=0;i--) {
-				if(!strategy.equals(keys[i], (short)0) && filter.test(keys[i])) return keys[i];
+				if(!strategy.equals(keys[i], (short)0) && filter.test(keys[i])) return OptionalShort.of(keys[i]);
 			}
-			return (short)0;
+			return OptionalShort.empty();
 		}
 		
 		@Override
@@ -1304,7 +1307,7 @@ public class Short2CharOpenCustomHashMap extends AbstractShort2CharMap implement
 		}
 		
 		@Override
-		public char reduce(CharCharUnaryOperator operator) {
+		public OptionalChar reduce(CharCharUnaryOperator operator) {
 			Objects.requireNonNull(operator);
 			char state = (char)0;
 			boolean empty = true;
@@ -1321,18 +1324,18 @@ public class Short2CharOpenCustomHashMap extends AbstractShort2CharMap implement
 				}
 				state = operator.applyAsChar(state, values[i]);
 			}
-			return state;
+			return empty ? OptionalChar.empty() : OptionalChar.of(state);
 		}
 		
 		@Override
-		public char findFirst(CharPredicate filter) {
+		public OptionalChar findFirst(CharPredicate filter) {
 			Objects.requireNonNull(filter);
-			if(size() <= 0) return (char)0;
-			if(containsNull && filter.test(values[nullIndex])) return values[nullIndex];
+			if(size() <= 0) return OptionalChar.empty();
+			if(containsNull && filter.test(values[nullIndex])) return OptionalChar.of(values[nullIndex]);
 			for(int i = nullIndex-1;i>=0;i--) {
-				if(!strategy.equals(keys[i], (short)0) && filter.test(values[i])) return values[i];
+				if(!strategy.equals(keys[i], (short)0) && filter.test(values[i])) return OptionalChar.of(values[i]);
 			}
-			return (char)0;
+			return OptionalChar.empty();
 		}
 		
 		@Override

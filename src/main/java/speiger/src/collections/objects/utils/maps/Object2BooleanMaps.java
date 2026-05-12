@@ -621,7 +621,11 @@ public class Object2BooleanMaps
 			super(c);
 			set = c;
 		}
-
+		
+		@Override
+		public void addFirst(Object2BooleanMap.Entry<T> o) { throw new UnsupportedOperationException(); }
+		@Override
+		public void addLast(Object2BooleanMap.Entry<T> o) { throw new UnsupportedOperationException(); }
 		@Override
 		public boolean addAndMoveToFirst(Object2BooleanMap.Entry<T> o) { throw new UnsupportedOperationException(); }
 		@Override

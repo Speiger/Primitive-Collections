@@ -3,11 +3,13 @@ package speiger.src.collections.longs.maps.impl.tree;
 import java.util.Collections;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.NoSuchElementException;
 import java.util.function.Consumer;
 import java.util.function.BiFunction;
 import java.util.function.Predicate;
 import java.util.function.LongPredicate;
+import java.util.OptionalLong;
 
 import speiger.src.collections.longs.collections.LongBidirectionalIterator;
 import speiger.src.collections.longs.functions.LongComparator;
@@ -36,6 +38,7 @@ import speiger.src.collections.objects.functions.consumer.ObjectObjectConsumer;
 import speiger.src.collections.objects.functions.consumer.ObjectCharConsumer;
 
 import speiger.src.collections.chars.functions.function.CharPredicate;
+import speiger.src.collections.chars.functions.OptionalChar;
 import speiger.src.collections.objects.collections.ObjectBidirectionalIterator;
 import speiger.src.collections.objects.collections.ObjectIterator;
 import speiger.src.collections.objects.functions.function.ObjectObjectUnaryOperator;
@@ -1182,7 +1185,7 @@ public class Long2CharRBTreeMap extends AbstractLong2CharMap implements Long2Cha
 		}
 		
 		@Override
-		public long reduce(LongLongUnaryOperator operator) {
+		public OptionalLong reduce(LongLongUnaryOperator operator) {
 			Objects.requireNonNull(operator);
 			long state = 0L;
 			boolean empty = true;
@@ -1194,15 +1197,15 @@ public class Long2CharRBTreeMap extends AbstractLong2CharMap implements Long2Cha
 				}
 				state = operator.applyAsLong(state, entry.key);
 			}
-			return state;
+			return empty ? OptionalLong.empty() : OptionalLong.of(state);
 		}
 		
 		@Override
-		public long findFirst(LongPredicate filter) {
+		public OptionalLong findFirst(LongPredicate filter) {
 			Objects.requireNonNull(filter);
 			for(Node entry = start(), end = end();entry != null && (end == null || (end != previous(entry)));entry = next(entry))
-				if(filter.test(entry.key)) return entry.key;
-			return 0L;
+				if(filter.test(entry.key)) return OptionalLong.of(entry.key);
+			return OptionalLong.empty();
 		}
 		
 		@Override
@@ -1846,7 +1849,7 @@ public class Long2CharRBTreeMap extends AbstractLong2CharMap implements Long2Cha
 			}
 			
 			@Override
-			public Long2CharMap.Entry reduce(ObjectObjectUnaryOperator<Long2CharMap.Entry, Long2CharMap.Entry> operator) {
+			public Optional<Long2CharMap.Entry> reduce(ObjectObjectUnaryOperator<Long2CharMap.Entry, Long2CharMap.Entry> operator) {
 				Objects.requireNonNull(operator);
 				Long2CharMap.Entry state = null;
 				boolean empty = true;
@@ -1858,19 +1861,19 @@ public class Long2CharRBTreeMap extends AbstractLong2CharMap implements Long2Cha
 					}
 					state = operator.apply(state, new BasicEntry(entry.key, entry.value));
 				}
-				return state;
+				return empty ? Optional.empty() : Optional.ofNullable(state);
 			}
 			
 			@Override
-			public Long2CharMap.Entry findFirst(Predicate<Long2CharMap.Entry> filter) {
+			public Optional<Long2CharMap.Entry> findFirst(Predicate<Long2CharMap.Entry> filter) {
 				Objects.requireNonNull(filter);
-				if(size() <= 0) return null;
+				if(size() <= 0) return Optional.empty();
 				BasicEntry subEntry = new BasicEntry();
 				for(Node entry = subLowest(), last = subHighest();entry != null && (last == null || last != previous(entry));entry = next(entry)) {
 					subEntry.set(entry.key, entry.value);
-					if(filter.test(subEntry)) return subEntry;
+					if(filter.test(subEntry)) return Optional.ofNullable(subEntry);
 				}
-				return null;
+				return Optional.empty();
 			}
 			
 			@Override
@@ -1965,7 +1968,7 @@ public class Long2CharRBTreeMap extends AbstractLong2CharMap implements Long2Cha
 			}
 			
 			@Override
-			public char reduce(CharCharUnaryOperator operator) {
+			public OptionalChar reduce(CharCharUnaryOperator operator) {
 				Objects.requireNonNull(operator);
 				char state = (char)0;
 				boolean empty = true;
@@ -1977,15 +1980,15 @@ public class Long2CharRBTreeMap extends AbstractLong2CharMap implements Long2Cha
 					}
 					state = operator.applyAsChar(state, entry.value);
 				}
-				return state;
+				return empty ? OptionalChar.empty() : OptionalChar.of(state);
 			}
 			
 			@Override
-			public char findFirst(CharPredicate filter) {
+			public OptionalChar findFirst(CharPredicate filter) {
 				Objects.requireNonNull(filter);
 				for(Node entry = subLowest(), last = subHighest();entry != null && (last == null || last != previous(entry));entry = next(entry))
-					if(filter.test(entry.value)) return entry.value;
-				return (char)0;
+					if(filter.test(entry.value)) return OptionalChar.of(entry.value);
+				return OptionalChar.empty();
 			}
 			
 			@Override
@@ -2301,7 +2304,7 @@ public class Long2CharRBTreeMap extends AbstractLong2CharMap implements Long2Cha
 		}
 		
 		@Override
-		public char reduce(CharCharUnaryOperator operator) {
+		public OptionalChar reduce(CharCharUnaryOperator operator) {
 			Objects.requireNonNull(operator);
 			char state = (char)0;
 			boolean empty = true;
@@ -2313,15 +2316,15 @@ public class Long2CharRBTreeMap extends AbstractLong2CharMap implements Long2Cha
 				}
 				state = operator.applyAsChar(state, entry.value);
 			}
-			return state;
+			return empty ? OptionalChar.empty() : OptionalChar.of(state);
 		}
 		
 		@Override
-		public char findFirst(CharPredicate filter) {
+		public OptionalChar findFirst(CharPredicate filter) {
 			Objects.requireNonNull(filter);
 			for(Node entry = first;entry != null;entry = entry.next())
-				if(filter.test(entry.value)) return entry.value;
-			return (char)0;
+				if(filter.test(entry.value)) return OptionalChar.of(entry.value);
+			return OptionalChar.empty();
 		}
 		
 		@Override
@@ -2462,7 +2465,7 @@ public class Long2CharRBTreeMap extends AbstractLong2CharMap implements Long2Cha
 		}
 		
 		@Override
-		public Long2CharMap.Entry reduce(ObjectObjectUnaryOperator<Long2CharMap.Entry, Long2CharMap.Entry> operator) {
+		public Optional<Long2CharMap.Entry> reduce(ObjectObjectUnaryOperator<Long2CharMap.Entry, Long2CharMap.Entry> operator) {
 			Objects.requireNonNull(operator);
 			Long2CharMap.Entry state = null;
 			boolean empty = true;
@@ -2474,19 +2477,19 @@ public class Long2CharRBTreeMap extends AbstractLong2CharMap implements Long2Cha
 				}
 				state = operator.apply(state, new BasicEntry(entry.key, entry.value));
 			}
-			return state;
+			return empty ? Optional.empty() : Optional.ofNullable(state);
 		}
 		
 		@Override
-		public Long2CharMap.Entry findFirst(Predicate<Long2CharMap.Entry> filter) {
+		public Optional<Long2CharMap.Entry> findFirst(Predicate<Long2CharMap.Entry> filter) {
 			Objects.requireNonNull(filter);
-			if(size() <= 0) return null;
+			if(size() <= 0) return Optional.empty();
 			BasicEntry subEntry = new BasicEntry();
 			for(Node entry = first;entry != null;entry = entry.next()) {
 				subEntry.set(entry.key, entry.value);
-				if(filter.test(subEntry)) return subEntry;
+				if(filter.test(subEntry)) return Optional.ofNullable(subEntry);
 			}
-			return null;
+			return Optional.empty();
 		}
 		
 		@Override

@@ -620,7 +620,11 @@ public class Float2CharMaps
 			super(c);
 			set = c;
 		}
-
+		
+		@Override
+		public void addFirst(Float2CharMap.Entry o) { throw new UnsupportedOperationException(); }
+		@Override
+		public void addLast(Float2CharMap.Entry o) { throw new UnsupportedOperationException(); }
 		@Override
 		public boolean addAndMoveToFirst(Float2CharMap.Entry o) { throw new UnsupportedOperationException(); }
 		@Override

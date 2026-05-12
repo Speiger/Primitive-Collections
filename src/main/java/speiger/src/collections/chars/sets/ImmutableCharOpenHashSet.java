@@ -10,6 +10,7 @@ import speiger.src.collections.chars.collections.CharBidirectionalIterator;
 import speiger.src.collections.chars.collections.CharCollection;
 import speiger.src.collections.chars.collections.CharIterator;
 import speiger.src.collections.chars.functions.CharConsumer;
+import speiger.src.collections.chars.functions.OptionalChar;
 import speiger.src.collections.ints.functions.consumer.IntCharConsumer;
 import speiger.src.collections.objects.functions.consumer.ObjectCharConsumer;
 import speiger.src.collections.chars.functions.function.CharPredicate;
@@ -236,6 +237,10 @@ public class ImmutableCharOpenHashSet extends AbstractCharSet implements CharOrd
 	@Override
 	public boolean addAll(CharCollection c) { throw new UnsupportedOperationException(); }
 	@Override
+	public void addFirst(char o) { throw new UnsupportedOperationException(); }
+	@Override
+	public void addLast(char o) { throw new UnsupportedOperationException(); }
+	@Override
 	public boolean addAndMoveToFirst(char o) { throw new UnsupportedOperationException(); }
 	@Override
 	public boolean addAndMoveToLast(char o) { throw new UnsupportedOperationException(); }
@@ -371,7 +376,7 @@ public class ImmutableCharOpenHashSet extends AbstractCharSet implements CharOrd
 	}
 	
 	@Override
-	public char reduce(CharCharUnaryOperator operator) {
+	public OptionalChar reduce(CharCharUnaryOperator operator) {
 		Objects.requireNonNull(operator);
 		char state = (char)0;
 		boolean empty = true;
@@ -384,18 +389,18 @@ public class ImmutableCharOpenHashSet extends AbstractCharSet implements CharOrd
 			else state = operator.applyAsChar(state, keys[index]);
 			index = (int)links[index];
 		}
-		return state;
+		return empty ? OptionalChar.empty() : OptionalChar.of(state);
 	}
 	
 	@Override
-	public char findFirst(CharPredicate filter) {
+	public OptionalChar findFirst(CharPredicate filter) {
 		Objects.requireNonNull(filter);
 		int index = firstIndex;
 		while(index != -1) {
-			if(filter.test(keys[index])) return keys[index];
+			if(filter.test(keys[index])) return OptionalChar.of(keys[index]);
 			index = (int)links[index];
 		}
-		return (char)0;
+		return OptionalChar.empty();
 	}
 	
 	@Override

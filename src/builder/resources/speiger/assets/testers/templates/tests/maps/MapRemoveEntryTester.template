@@ -136,6 +136,7 @@ public class FILE_KEY_TYPE2FILE_VALUE_TYPEMapRemoveEntryTester KEY_VALUE_GENERIC
 #ignore
 	@CollectionSize.Require(ONE)
 	@MapFeature.Require(SUPPORTS_REMOVE)
+	@SuppressWarnings("unlikely-arg-type")
 #endignore
 	public void testRemove_supportedObjectEntryPresent() {
 		assertTrue(getMap().ENTRY_SET().remove(new AbstractMap.SimpleEntry<>(e0())));
@@ -154,6 +155,7 @@ public class FILE_KEY_TYPE2FILE_VALUE_TYPEMapRemoveEntryTester KEY_VALUE_GENERIC
 #ignore
 	@CollectionSize.Require(ONE)
 	@MapFeature.Require(SUPPORTS_REMOVE)
+	@SuppressWarnings("unlikely-arg-type")
 #endignore
 	public void testRemove_supportedObjectEntryMissing() {
 		assertFalse(getMap().ENTRY_SET().remove(new AbstractMap.SimpleEntry<>(e3())));

@@ -459,6 +459,10 @@ public class LinkedEnum2IntMap<T extends Enum<T>> extends Enum2IntMap<T> impleme
 	
 	private class MapEntrySet extends AbstractObjectSet<Object2IntMap.Entry<T>> implements Object2IntOrderedMap.FastOrderedSet<T> {
 		@Override
+		public void addFirst(Object2IntMap.Entry<T> o) { throw new UnsupportedOperationException(); }
+		@Override
+		public void addLast(Object2IntMap.Entry<T> o) { throw new UnsupportedOperationException(); }
+		@Override
 		public boolean addAndMoveToFirst(Object2IntMap.Entry<T> o) { throw new UnsupportedOperationException(); }
 		@Override
 		public boolean addAndMoveToLast(Object2IntMap.Entry<T> o) { throw new UnsupportedOperationException(); }
@@ -607,7 +611,10 @@ public class LinkedEnum2IntMap<T extends Enum<T>> extends Enum2IntMap<T> impleme
 		public boolean add(T o) {
 			throw new UnsupportedOperationException();
 		}
-		
+		@Override
+		public void addFirst(T o) { throw new UnsupportedOperationException(); }
+		@Override
+		public void addLast(T o) { throw new UnsupportedOperationException(); }
 		@Override
 		public boolean addAndMoveToFirst(T o) { throw new UnsupportedOperationException(); }
 

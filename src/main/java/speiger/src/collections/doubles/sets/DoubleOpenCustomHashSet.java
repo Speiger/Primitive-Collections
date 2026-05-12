@@ -6,6 +6,7 @@ import java.util.ConcurrentModificationException;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 import java.util.Objects;
+import java.util.OptionalDouble;
 import java.util.function.DoublePredicate;
 
 import speiger.src.collections.doubles.collections.DoubleCollection;
@@ -546,7 +547,7 @@ public class DoubleOpenCustomHashSet extends AbstractDoubleSet implements ITrimm
 	}
 	
 	@Override
-	public double reduce(DoubleDoubleUnaryOperator operator) {
+	public OptionalDouble reduce(DoubleDoubleUnaryOperator operator) {
 		Objects.requireNonNull(operator);
 		double state = 0D;
 		boolean empty = true;
@@ -563,18 +564,18 @@ public class DoubleOpenCustomHashSet extends AbstractDoubleSet implements ITrimm
 			}
 			state = operator.applyAsDouble(state, keys[i]);
 		}
-		return state;
+		return empty ? OptionalDouble.empty() : OptionalDouble.of(state);
 	}
 	
 	@Override
-	public double findFirst(DoublePredicate filter) {
+	public OptionalDouble findFirst(DoublePredicate filter) {
 		Objects.requireNonNull(filter);
-		if(size() <= 0) return 0D;
-		if(containsNull && filter.test(keys[nullIndex])) return keys[nullIndex];
+		if(size() <= 0) return OptionalDouble.empty();
+		if(containsNull && filter.test(keys[nullIndex])) return OptionalDouble.of(keys[nullIndex]);
 		for(int i = nullIndex-1;i>=0;i--) {
-			if(!strategy.equals(keys[i], 0D) && filter.test(keys[i])) return keys[i];
+			if(!strategy.equals(keys[i], 0D) && filter.test(keys[i])) return OptionalDouble.of(keys[i]);
 		}
-		return 0D;
+		return OptionalDouble.empty();
 	}
 	
 	@Override

@@ -4,9 +4,15 @@ package speiger.src.testers.PACKAGE.tests.queue.iterators;
 import java.util.Objects;
 
 #endif
+#if JDK_TYPE
+import java.util.OPTIONAL;
+#else
+import speiger.src.collections.PACKAGE.functions.OPTIONAL;
+#endif
 import org.junit.Ignore;
 
 import speiger.src.testers.PACKAGE.tests.base.ABSTRACT_QUEUE_TESTER;
+import com.google.common.collect.testing.features.CollectionSize;
 
 @Ignore
 @SuppressWarnings("javadoc")
@@ -29,7 +35,7 @@ public class FILE_KEY_TYPEQueueReduceTester KEY_GENERIC_TYPE extends ABSTRACT_QU
 	}
 	
 	public void testQueueReduce() {
-		assertEquals("The sum of the queue should match", getSum(), queue.reduce(this::sum));
+		assertEquals("The sum of the queue should match", size == CollectionSize.ZERO ? OPTIONAL.empty() : OPTIONAL.GET_OPTIONAL(getSum()), queue.reduce(this::sum));
 	}
 	
 	public void testQueueExtraReduce() {

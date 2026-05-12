@@ -5,6 +5,7 @@ import java.util.SequencedSet;
 
 #endif
 import speiger.src.collections.PACKAGE.collections.BI_ITERATOR;
+import speiger.src.collections.PACKAGE.collections.ORDERED_COLLECTION;
 #if SPLIT_ITERATOR_FEATURE
 import speiger.src.collections.PACKAGE.collections.SPLIT_ITERATOR;
 import speiger.src.collections.PACKAGE.utils.SPLIT_ITERATORS;
@@ -23,9 +24,9 @@ import speiger.src.collections.PACKAGE.utils.SETS;
  * @Type(T)
  */
 #if JAVA_VERSION>=21
-public interface ORDERED_SET KEY_GENERIC_TYPE extends SET KEY_GENERIC_TYPE, SequencedSet<CLASS_TYPE>
+public interface ORDERED_SET KEY_GENERIC_TYPE extends SET KEY_GENERIC_TYPE, ORDERED_COLLECTION KEY_GENERIC_TYPE, SequencedSet<CLASS_TYPE>
 #else
-public interface ORDERED_SET KEY_GENERIC_TYPE extends SET KEY_GENERIC_TYPE
+public interface ORDERED_SET KEY_GENERIC_TYPE extends SET KEY_GENERIC_TYPE, ORDERED_COLLECTION KEY_GENERIC_TYPE
 #endif
 {
 	/**

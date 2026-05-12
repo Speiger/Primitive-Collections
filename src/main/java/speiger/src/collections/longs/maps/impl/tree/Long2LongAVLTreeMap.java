@@ -3,11 +3,13 @@ package speiger.src.collections.longs.maps.impl.tree;
 import java.util.Collections;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.NoSuchElementException;
 import java.util.function.Consumer;
 import java.util.function.BiFunction;
 import java.util.function.Predicate;
 import java.util.function.LongPredicate;
+import java.util.OptionalLong;
 
 
 import speiger.src.collections.longs.collections.LongBidirectionalIterator;
@@ -1121,7 +1123,7 @@ public class Long2LongAVLTreeMap extends AbstractLong2LongMap implements Long2Lo
 		}
 		
 		@Override
-		public long reduce(LongLongUnaryOperator operator) {
+		public OptionalLong reduce(LongLongUnaryOperator operator) {
 			Objects.requireNonNull(operator);
 			long state = 0L;
 			boolean empty = true;
@@ -1133,15 +1135,15 @@ public class Long2LongAVLTreeMap extends AbstractLong2LongMap implements Long2Lo
 				}
 				state = operator.applyAsLong(state, entry.key);
 			}
-			return state;
+			return empty ? OptionalLong.empty() : OptionalLong.of(state);
 		}
 		
 		@Override
-		public long findFirst(LongPredicate filter) {
+		public OptionalLong findFirst(LongPredicate filter) {
 			Objects.requireNonNull(filter);
 			for(Node entry = start(), end = end();entry != null && (end == null || (end != previous(entry)));entry = next(entry))
-				if(filter.test(entry.key)) return entry.key;
-			return 0L;
+				if(filter.test(entry.key)) return OptionalLong.of(entry.key);
+			return OptionalLong.empty();
 		}
 		
 		@Override
@@ -1775,7 +1777,7 @@ public class Long2LongAVLTreeMap extends AbstractLong2LongMap implements Long2Lo
 			}
 			
 			@Override
-			public Long2LongMap.Entry reduce(ObjectObjectUnaryOperator<Long2LongMap.Entry, Long2LongMap.Entry> operator) {
+			public Optional<Long2LongMap.Entry> reduce(ObjectObjectUnaryOperator<Long2LongMap.Entry, Long2LongMap.Entry> operator) {
 				Objects.requireNonNull(operator);
 				Long2LongMap.Entry state = null;
 				boolean empty = true;
@@ -1787,19 +1789,19 @@ public class Long2LongAVLTreeMap extends AbstractLong2LongMap implements Long2Lo
 					}
 					state = operator.apply(state, new BasicEntry(entry.key, entry.value));
 				}
-				return state;
+				return empty ? Optional.empty() : Optional.ofNullable(state);
 			}
 			
 			@Override
-			public Long2LongMap.Entry findFirst(Predicate<Long2LongMap.Entry> filter) {
+			public Optional<Long2LongMap.Entry> findFirst(Predicate<Long2LongMap.Entry> filter) {
 				Objects.requireNonNull(filter);
-				if(size() <= 0) return null;
+				if(size() <= 0) return Optional.empty();
 				BasicEntry subEntry = new BasicEntry();
 				for(Node entry = subLowest(), last = subHighest();entry != null && (last == null || last != previous(entry));entry = next(entry)) {
 					subEntry.set(entry.key, entry.value);
-					if(filter.test(subEntry)) return subEntry;
+					if(filter.test(subEntry)) return Optional.ofNullable(subEntry);
 				}
-				return null;
+				return Optional.empty();
 			}
 			
 			@Override
@@ -1894,7 +1896,7 @@ public class Long2LongAVLTreeMap extends AbstractLong2LongMap implements Long2Lo
 			}
 			
 			@Override
-			public long reduce(LongLongUnaryOperator operator) {
+			public OptionalLong reduce(LongLongUnaryOperator operator) {
 				Objects.requireNonNull(operator);
 				long state = 0L;
 				boolean empty = true;
@@ -1906,15 +1908,15 @@ public class Long2LongAVLTreeMap extends AbstractLong2LongMap implements Long2Lo
 					}
 					state = operator.applyAsLong(state, entry.value);
 				}
-				return state;
+				return empty ? OptionalLong.empty() : OptionalLong.of(state);
 			}
 			
 			@Override
-			public long findFirst(LongPredicate filter) {
+			public OptionalLong findFirst(LongPredicate filter) {
 				Objects.requireNonNull(filter);
 				for(Node entry = subLowest(), last = subHighest();entry != null && (last == null || last != previous(entry));entry = next(entry))
-					if(filter.test(entry.value)) return entry.value;
-				return 0L;
+					if(filter.test(entry.value)) return OptionalLong.of(entry.value);
+				return OptionalLong.empty();
 			}
 			
 			@Override
@@ -2230,7 +2232,7 @@ public class Long2LongAVLTreeMap extends AbstractLong2LongMap implements Long2Lo
 		}
 		
 		@Override
-		public long reduce(LongLongUnaryOperator operator) {
+		public OptionalLong reduce(LongLongUnaryOperator operator) {
 			Objects.requireNonNull(operator);
 			long state = 0L;
 			boolean empty = true;
@@ -2242,15 +2244,15 @@ public class Long2LongAVLTreeMap extends AbstractLong2LongMap implements Long2Lo
 				}
 				state = operator.applyAsLong(state, entry.value);
 			}
-			return state;
+			return empty ? OptionalLong.empty() : OptionalLong.of(state);
 		}
 		
 		@Override
-		public long findFirst(LongPredicate filter) {
+		public OptionalLong findFirst(LongPredicate filter) {
 			Objects.requireNonNull(filter);
 			for(Node entry = first;entry != null;entry = entry.next())
-				if(filter.test(entry.value)) return entry.value;
-			return 0L;
+				if(filter.test(entry.value)) return OptionalLong.of(entry.value);
+			return OptionalLong.empty();
 		}
 		
 		@Override
@@ -2391,7 +2393,7 @@ public class Long2LongAVLTreeMap extends AbstractLong2LongMap implements Long2Lo
 		}
 		
 		@Override
-		public Long2LongMap.Entry reduce(ObjectObjectUnaryOperator<Long2LongMap.Entry, Long2LongMap.Entry> operator) {
+		public Optional<Long2LongMap.Entry> reduce(ObjectObjectUnaryOperator<Long2LongMap.Entry, Long2LongMap.Entry> operator) {
 			Objects.requireNonNull(operator);
 			Long2LongMap.Entry state = null;
 			boolean empty = true;
@@ -2403,19 +2405,19 @@ public class Long2LongAVLTreeMap extends AbstractLong2LongMap implements Long2Lo
 				}
 				state = operator.apply(state, new BasicEntry(entry.key, entry.value));
 			}
-			return state;
+			return empty ? Optional.empty() : Optional.ofNullable(state);
 		}
 		
 		@Override
-		public Long2LongMap.Entry findFirst(Predicate<Long2LongMap.Entry> filter) {
+		public Optional<Long2LongMap.Entry> findFirst(Predicate<Long2LongMap.Entry> filter) {
 			Objects.requireNonNull(filter);
-			if(size() <= 0) return null;
+			if(size() <= 0) return Optional.empty();
 			BasicEntry subEntry = new BasicEntry();
 			for(Node entry = first;entry != null;entry = entry.next()) {
 				subEntry.set(entry.key, entry.value);
-				if(filter.test(subEntry)) return subEntry;
+				if(filter.test(subEntry)) return Optional.ofNullable(subEntry);
 			}
-			return null;
+			return Optional.empty();
 		}
 		
 		@Override

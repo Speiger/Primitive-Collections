@@ -4,6 +4,7 @@ import java.util.Arrays;
 import java.util.Map;
 import java.util.NoSuchElementException;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.function.Consumer;
 import java.util.function.BiFunction;
 import java.util.function.Predicate;
@@ -14,6 +15,7 @@ import speiger.src.collections.objects.functions.consumer.ObjectShortConsumer;
 import speiger.src.collections.ints.functions.consumer.IntShortConsumer;
 import speiger.src.collections.ints.functions.consumer.IntObjectConsumer;
 import speiger.src.collections.ints.functions.consumer.IntCharConsumer;
+import speiger.src.collections.shorts.functions.OptionalShort;
 import speiger.src.collections.shorts.functions.function.ShortPredicate;
 import speiger.src.collections.shorts.functions.consumer.ShortCharConsumer;
 import speiger.src.collections.shorts.functions.function.ShortShortUnaryOperator;
@@ -32,6 +34,7 @@ import speiger.src.collections.objects.functions.consumer.ObjectObjectConsumer;
 import speiger.src.collections.objects.functions.consumer.ObjectCharConsumer;
 
 import speiger.src.collections.chars.functions.function.CharPredicate;
+import speiger.src.collections.chars.functions.OptionalChar;
 import speiger.src.collections.objects.functions.function.ObjectObjectUnaryOperator;
 import speiger.src.collections.objects.collections.ObjectBidirectionalIterator;
 import speiger.src.collections.objects.lists.ObjectListIterator;
@@ -670,6 +673,10 @@ public class Short2CharLinkedOpenHashMap extends Short2CharOpenHashMap implement
 	
 	private class MapEntrySet extends AbstractObjectSet<Short2CharMap.Entry> implements Short2CharOrderedMap.FastOrderedSet {
 		@Override
+		public void addFirst(Short2CharMap.Entry o) { throw new UnsupportedOperationException(); }
+		@Override
+		public void addLast(Short2CharMap.Entry o) { throw new UnsupportedOperationException(); }
+		@Override
 		public boolean addAndMoveToFirst(Short2CharMap.Entry o) { throw new UnsupportedOperationException(); }
 		@Override
 		public boolean addAndMoveToLast(Short2CharMap.Entry o) { throw new UnsupportedOperationException(); }
@@ -834,7 +841,7 @@ public class Short2CharLinkedOpenHashMap extends Short2CharOpenHashMap implement
 		}
 		
 		@Override
-		public Short2CharMap.Entry reduce(ObjectObjectUnaryOperator<Short2CharMap.Entry, Short2CharMap.Entry> operator) {
+		public Optional<Short2CharMap.Entry> reduce(ObjectObjectUnaryOperator<Short2CharMap.Entry, Short2CharMap.Entry> operator) {
 			Objects.requireNonNull(operator);
 			Short2CharMap.Entry state = null;
 			boolean empty = true;
@@ -849,21 +856,21 @@ public class Short2CharLinkedOpenHashMap extends Short2CharOpenHashMap implement
 				state = operator.apply(state, new ValueMapEntry(index));
 				index = (int)links[index];
 			}
-			return state;
+			return empty ? Optional.empty() : Optional.ofNullable(state);
 		}
 		
 		@Override
-		public Short2CharMap.Entry findFirst(Predicate<Short2CharMap.Entry> filter) {
+		public Optional<Short2CharMap.Entry> findFirst(Predicate<Short2CharMap.Entry> filter) {
 			Objects.requireNonNull(filter);
-			if(size() <= 0) return null;
+			if(size() <= 0) return Optional.empty();
 			MapEntry entry = new MapEntry();
 			int index = firstIndex;
 			while(index != -1) {
 				entry.set(index);
-				if(filter.test(entry)) return entry;
+				if(filter.test(entry)) return Optional.ofNullable(entry);
 				index = (int)links[index];
 			}
-			return null;
+			return Optional.empty();
 		}
 		
 		@Override
@@ -939,6 +946,12 @@ public class Short2CharLinkedOpenHashMap extends Short2CharOpenHashMap implement
 		
 		@Override
 		public boolean add(short o) { throw new UnsupportedOperationException(); }
+
+		@Override
+		public void addFirst(short o) { throw new UnsupportedOperationException(); }
+		
+		@Override
+		public void addLast(short o) { throw new UnsupportedOperationException(); }
 		
 		@Override
 		public boolean addAndMoveToFirst(short o) { throw new UnsupportedOperationException(); }
@@ -1085,7 +1098,7 @@ public class Short2CharLinkedOpenHashMap extends Short2CharOpenHashMap implement
 		}
 		
 		@Override
-		public short reduce(ShortShortUnaryOperator operator) {
+		public OptionalShort reduce(ShortShortUnaryOperator operator) {
 			Objects.requireNonNull(operator);
 			short state = (short)0;
 			boolean empty = true;
@@ -1100,19 +1113,19 @@ public class Short2CharLinkedOpenHashMap extends Short2CharOpenHashMap implement
 				state = operator.applyAsShort(state, keys[index]);
 				index = (int)links[index];
 			}
-			return state;
+			return empty ? OptionalShort.empty() : OptionalShort.of(state);
 		}
 		
 		@Override
-		public short findFirst(ShortPredicate filter) {
+		public OptionalShort findFirst(ShortPredicate filter) {
 			Objects.requireNonNull(filter);
-			if(size() <= 0) return (short)0;
+			if(size() <= 0) return OptionalShort.empty();
 			int index = firstIndex;
 			while(index != -1){
-				if(filter.test(keys[index])) return keys[index];
+				if(filter.test(keys[index])) return OptionalShort.of(keys[index]);
 				index = (int)links[index];
 			}
-			return (short)0;
+			return OptionalShort.empty();
 		}
 		
 		@Override
@@ -1248,7 +1261,7 @@ public class Short2CharLinkedOpenHashMap extends Short2CharOpenHashMap implement
 		}
 		
 		@Override
-		public char reduce(CharCharUnaryOperator operator) {
+		public OptionalChar reduce(CharCharUnaryOperator operator) {
 			Objects.requireNonNull(operator);
 			char state = (char)0;
 			boolean empty = true;
@@ -1263,19 +1276,19 @@ public class Short2CharLinkedOpenHashMap extends Short2CharOpenHashMap implement
 				state = operator.applyAsChar(state, values[index]);
 				index = (int)links[index];
 			}
-			return state;
+			return empty ? OptionalChar.empty() : OptionalChar.of(state);
 		}
 		
 		@Override
-		public char findFirst(CharPredicate filter) {
+		public OptionalChar findFirst(CharPredicate filter) {
 			Objects.requireNonNull(filter);
-			if(size() <= 0) return (char)0;
+			if(size() <= 0) return OptionalChar.empty();
 			int index = firstIndex;
 			while(index != -1){
-				if(filter.test(values[index])) return values[index];
+				if(filter.test(values[index])) return OptionalChar.of(values[index]);
 				index = (int)links[index];
 			}
-			return (char)0;
+			return OptionalChar.empty();
 		}
 		
 		@Override

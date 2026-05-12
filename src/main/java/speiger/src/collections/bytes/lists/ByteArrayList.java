@@ -12,6 +12,7 @@ import java.nio.ByteBuffer;
 import speiger.src.collections.bytes.collections.ByteCollection;
 import speiger.src.collections.bytes.collections.ByteStack;
 import speiger.src.collections.bytes.collections.ByteIterator;
+import speiger.src.collections.bytes.functions.OptionalByte;
 import speiger.src.collections.bytes.functions.ByteComparator;
 import speiger.src.collections.bytes.functions.ByteConsumer;
 import speiger.src.collections.objects.functions.consumer.ObjectByteConsumer;
@@ -519,12 +520,12 @@ public class ByteArrayList extends AbstractByteList implements IByteArray, ByteS
 	}
 	
 	@Override
-	public byte findFirst(BytePredicate filter) {
+	public OptionalByte findFirst(BytePredicate filter) {
 		Objects.requireNonNull(filter);
 		for(int i = 0;i<size;i++) {
-			if(filter.test(data[i])) return data[i];
+			if(filter.test(data[i])) return OptionalByte.of(data[i]);
 		}
-		return (byte)0;
+		return OptionalByte.empty();
 	}
 	
 	@Override
@@ -538,7 +539,7 @@ public class ByteArrayList extends AbstractByteList implements IByteArray, ByteS
 	}
 	
 	@Override
-	public byte reduce(ByteByteUnaryOperator operator) {
+	public OptionalByte reduce(ByteByteUnaryOperator operator) {
 		Objects.requireNonNull(operator);
 		byte state = (byte)0;
 		boolean empty = true;
@@ -550,7 +551,7 @@ public class ByteArrayList extends AbstractByteList implements IByteArray, ByteS
 			}
 			state = operator.applyAsByte(state, data[i]);
 		}
-		return state;
+		return empty ? OptionalByte.empty() : OptionalByte.of(state);
 	}
 	
 	@Override

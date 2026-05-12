@@ -4,6 +4,7 @@ import java.util.Arrays;
 import java.util.Map;
 import java.util.NoSuchElementException;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.function.Consumer;
 import java.util.function.BiFunction;
 import java.util.function.Predicate;
@@ -14,6 +15,7 @@ import speiger.src.collections.objects.functions.consumer.ObjectCharConsumer;
 import speiger.src.collections.ints.functions.consumer.IntCharConsumer;
 import speiger.src.collections.ints.functions.consumer.IntObjectConsumer;
 import speiger.src.collections.ints.functions.consumer.IntShortConsumer;
+import speiger.src.collections.chars.functions.OptionalChar;
 import speiger.src.collections.chars.functions.function.CharPredicate;
 import speiger.src.collections.chars.functions.consumer.CharShortConsumer;
 import speiger.src.collections.chars.functions.function.Char2ShortFunction;
@@ -35,6 +37,7 @@ import speiger.src.collections.shorts.lists.ShortListIterator;
 import speiger.src.collections.objects.functions.consumer.ObjectObjectConsumer;
 
 import speiger.src.collections.shorts.functions.function.ShortPredicate;
+import speiger.src.collections.shorts.functions.OptionalShort;
 import speiger.src.collections.objects.collections.ObjectIterator;
 import speiger.src.collections.objects.functions.function.ObjectObjectUnaryOperator;
 import speiger.src.collections.objects.collections.ObjectBidirectionalIterator;
@@ -752,6 +755,10 @@ public class Char2ShortArrayMap extends AbstractChar2ShortMap implements Char2Sh
 	
 	private class MapEntrySet extends AbstractObjectSet<Char2ShortMap.Entry> implements Char2ShortOrderedMap.FastOrderedSet {
 		@Override
+		public void addFirst(Char2ShortMap.Entry o) { throw new UnsupportedOperationException(); }
+		@Override
+		public void addLast(Char2ShortMap.Entry o) { throw new UnsupportedOperationException(); }
+		@Override
 		public boolean addAndMoveToFirst(Char2ShortMap.Entry o) { throw new UnsupportedOperationException(); }
 		@Override
 		public boolean addAndMoveToLast(Char2ShortMap.Entry o) { throw new UnsupportedOperationException(); }
@@ -899,7 +906,7 @@ public class Char2ShortArrayMap extends AbstractChar2ShortMap implements Char2Sh
 		}
 		
 		@Override
-		public Char2ShortMap.Entry reduce(ObjectObjectUnaryOperator<Char2ShortMap.Entry, Char2ShortMap.Entry> operator) {
+		public Optional<Char2ShortMap.Entry> reduce(ObjectObjectUnaryOperator<Char2ShortMap.Entry, Char2ShortMap.Entry> operator) {
 			Objects.requireNonNull(operator);
 			Char2ShortMap.Entry state = null;
 			boolean empty = true;
@@ -911,19 +918,19 @@ public class Char2ShortArrayMap extends AbstractChar2ShortMap implements Char2Sh
 				}
 				state = operator.apply(state, new ValueMapEntry(i));
 			}
-			return state;
+			return empty ? Optional.empty() : Optional.ofNullable(state);
 		}
 		
 		@Override
-		public Char2ShortMap.Entry findFirst(Predicate<Char2ShortMap.Entry> filter) {
+		public Optional<Char2ShortMap.Entry> findFirst(Predicate<Char2ShortMap.Entry> filter) {
 			Objects.requireNonNull(filter);
-			if(size() <= 0) return null;
+			if(size() <= 0) return Optional.empty();
 			MapEntry entry = new MapEntry();
 			for(int i = 0;i<size;i++) {
 				entry.set(i);
-				if(filter.test(entry)) return entry;
+				if(filter.test(entry)) return Optional.ofNullable(entry);
 			}
-			return null;
+			return Optional.empty();
 		}
 		
 		@Override
@@ -995,6 +1002,10 @@ public class Char2ShortArrayMap extends AbstractChar2ShortMap implements Char2Sh
 		
 		@Override
 		public boolean add(char o) { throw new UnsupportedOperationException(); }
+		@Override
+		public void addFirst(char o) { throw new UnsupportedOperationException(); }
+		@Override
+		public void addLast(char o) { throw new UnsupportedOperationException(); }
 		@Override
 		public boolean addAndMoveToFirst(char o) { throw new UnsupportedOperationException(); }
 		@Override
@@ -1082,7 +1093,7 @@ public class Char2ShortArrayMap extends AbstractChar2ShortMap implements Char2Sh
 		}
 		
 		@Override
-		public char reduce(CharCharUnaryOperator operator) {
+		public OptionalChar reduce(CharCharUnaryOperator operator) {
 			Objects.requireNonNull(operator);
 			char state = (char)0;
 			boolean empty = true;
@@ -1094,16 +1105,16 @@ public class Char2ShortArrayMap extends AbstractChar2ShortMap implements Char2Sh
 				}
 				state = operator.applyAsChar(state, keys[i]);
 			}
-			return state;
+			return empty ? OptionalChar.empty() : OptionalChar.of(state);
 		}
 		
 		@Override
-		public char findFirst(CharPredicate filter) {
+		public OptionalChar findFirst(CharPredicate filter) {
 			Objects.requireNonNull(filter);
 			for(int i = 0;i<size;i++) {
-				if(filter.test(keys[i])) return keys[i];
+				if(filter.test(keys[i])) return OptionalChar.of(keys[i]);
 			}
-			return (char)0;
+			return OptionalChar.empty();
 		}
 		
 		@Override
@@ -1204,7 +1215,7 @@ public class Char2ShortArrayMap extends AbstractChar2ShortMap implements Char2Sh
 		}
 		
 		@Override
-		public short reduce(ShortShortUnaryOperator operator) {
+		public OptionalShort reduce(ShortShortUnaryOperator operator) {
 			Objects.requireNonNull(operator);
 			short state = (short)0;
 			boolean empty = true;
@@ -1216,16 +1227,16 @@ public class Char2ShortArrayMap extends AbstractChar2ShortMap implements Char2Sh
 				}
 				state = operator.applyAsShort(state, values[i]);
 			}
-			return state;
+			return empty ? OptionalShort.empty() : OptionalShort.of(state);
 		}
 		
 		@Override
-		public short findFirst(ShortPredicate filter) {
+		public OptionalShort findFirst(ShortPredicate filter) {
 			Objects.requireNonNull(filter);
 			for(int i = 0;i<size;i++) {
-				if(filter.test(values[i])) return values[i];
+				if(filter.test(values[i])) return OptionalShort.of(values[i]);
 			}
-			return (short)0;
+			return OptionalShort.empty();
 		}
 		
 		@Override

@@ -9,6 +9,7 @@ import java.util.NoSuchElementException;
 import speiger.src.collections.chars.collections.CharCollection;
 import speiger.src.collections.chars.collections.CharIterator;
 import speiger.src.collections.chars.collections.CharBidirectionalIterator;
+import speiger.src.collections.chars.functions.OptionalChar;
 import speiger.src.collections.chars.lists.CharListIterator;
 import speiger.src.collections.chars.utils.CharIterators;
 import speiger.src.collections.chars.functions.CharConsumer;
@@ -212,6 +213,46 @@ public class CharLinkedOpenCustomHashSet extends CharOpenCustomHashSet implement
 	public CharLinkedOpenCustomHashSet(CharIterator iterator, float loadFactor, CharStrategy strategy) {
 		this(HashUtil.DEFAULT_MIN_CAPACITY, loadFactor, strategy);
 		while(iterator.hasNext()) add(iterator.nextChar());
+	}
+	
+	@Override
+	public void addFirst(char o) {
+		if(strategy.equals(o, (char)0)) {
+			if(containsNull) return;
+			containsNull = true;
+			onNodeAdded(nullIndex);
+			moveToFirstIndex(nullIndex);
+		}
+		else {
+			int pos = HashUtil.mix(strategy.hashCode(o)) & mask;
+			while(!strategy.equals(keys[pos], (char)0)) {
+				if(strategy.equals(keys[pos], o)) return;
+				pos = ++pos & mask;
+			}
+			keys[pos] = o;
+			onNodeAdded(pos);
+			moveToFirstIndex(pos);
+		}
+		if(size++ >= maxFill) rehash(HashUtil.arraySize(size+1, loadFactor));
+	}
+	
+	@Override
+	public void addLast(char o) {
+		if(strategy.equals(o, (char)0)) {
+			if(containsNull) return;
+			containsNull = true;
+			onNodeAdded(nullIndex);
+		}
+		else {
+			int pos = HashUtil.mix(strategy.hashCode(o)) & mask;
+			while(!strategy.equals(keys[pos], (char)0)) {
+				if(strategy.equals(keys[pos], o)) return;
+				pos = ++pos & mask;
+			}
+			keys[pos] = o;
+			onNodeAdded(pos);
+		}
+		if(size++ >= maxFill) rehash(HashUtil.arraySize(size+1, loadFactor));
 	}
 	
 	@Override
@@ -618,7 +659,7 @@ public class CharLinkedOpenCustomHashSet extends CharOpenCustomHashSet implement
 	}
 	
 	@Override
-	public char reduce(CharCharUnaryOperator operator) {
+	public OptionalChar reduce(CharCharUnaryOperator operator) {
 		Objects.requireNonNull(operator);
 		char state = (char)0;
 		boolean empty = true;
@@ -631,18 +672,18 @@ public class CharLinkedOpenCustomHashSet extends CharOpenCustomHashSet implement
 			else state = operator.applyAsChar(state, keys[index]);
 			index = (int)links[index];
 		}
-		return state;
+		return empty ? OptionalChar.empty() : OptionalChar.of(state);
 	}
 	
 	@Override
-	public char findFirst(CharPredicate filter) {
+	public OptionalChar findFirst(CharPredicate filter) {
 		Objects.requireNonNull(filter);
 		int index = firstIndex;
 		while(index != -1) {
-			if(filter.test(keys[index])) return keys[index];
+			if(filter.test(keys[index])) return OptionalChar.of(keys[index]);
 			index = (int)links[index];
 		}
-		return (char)0;
+		return OptionalChar.empty();
 	}
 	
 	@Override

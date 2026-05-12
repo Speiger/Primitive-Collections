@@ -5,6 +5,7 @@ import java.util.Collections;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 import java.util.Objects;
+import java.util.OptionalInt;
 import java.util.function.IntPredicate;
 
 import speiger.src.collections.ints.collections.IntBidirectionalIterator;
@@ -325,12 +326,12 @@ public class IntAVLTreeSet extends AbstractIntSet implements IntNavigableSet
 	}
 	
 	@Override
-	public int findFirst(IntPredicate filter) {
+	public OptionalInt findFirst(IntPredicate filter) {
 		Objects.requireNonNull(filter);
 		for(Entry entry = first;entry != null;entry = entry.next()) {
-			if(filter.test(entry.key)) return entry.key;
+			if(filter.test(entry.key)) return OptionalInt.of(entry.key);
 		}
-		return 0;
+		return OptionalInt.empty();
 	}
 	
 	@Override
@@ -344,7 +345,7 @@ public class IntAVLTreeSet extends AbstractIntSet implements IntNavigableSet
 	}
 	
 	@Override
-	public int reduce(IntIntUnaryOperator operator) {
+	public OptionalInt reduce(IntIntUnaryOperator operator) {
 		Objects.requireNonNull(operator);
 		int state = 0;
 		boolean empty = true;
@@ -356,7 +357,7 @@ public class IntAVLTreeSet extends AbstractIntSet implements IntNavigableSet
 			}
 			state = operator.applyAsInt(state, entry.key);
 		}
-		return state;
+		return empty ? OptionalInt.empty() : OptionalInt.of(state);
 	}
 	
 	@Override
@@ -1181,7 +1182,7 @@ public class IntAVLTreeSet extends AbstractIntSet implements IntNavigableSet
 		}
 		
 		@Override
-		public int reduce(IntIntUnaryOperator operator) {
+		public OptionalInt reduce(IntIntUnaryOperator operator) {
 			Objects.requireNonNull(operator);
 			int state = 0;
 			boolean empty = true;
@@ -1193,16 +1194,16 @@ public class IntAVLTreeSet extends AbstractIntSet implements IntNavigableSet
 				}
 				state = operator.applyAsInt(state, entry.key);
 			}
-			return state;
+			return empty ? OptionalInt.empty() : OptionalInt.of(state);
 		}
 		
 		@Override
-		public int findFirst(IntPredicate filter) {
+		public OptionalInt findFirst(IntPredicate filter) {
 			Objects.requireNonNull(filter);
 			for(Entry entry = start();entry != null && inRange(entry.key);entry = next(entry)) {
-				if(filter.test(entry.key)) return entry.key;
+				if(filter.test(entry.key)) return OptionalInt.of(entry.key);
 			}
-			return 0;
+			return OptionalInt.empty();
 		}
 		
 		@Override

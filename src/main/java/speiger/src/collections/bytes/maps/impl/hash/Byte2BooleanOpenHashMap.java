@@ -5,6 +5,7 @@ import java.util.ConcurrentModificationException;
 import java.util.Map;
 import java.util.NoSuchElementException;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.function.Consumer;
 import java.util.function.BiFunction;
 import java.util.function.Predicate;
@@ -19,6 +20,7 @@ import speiger.src.collections.bytes.functions.consumer.ByteBooleanConsumer;
 import speiger.src.collections.bytes.functions.function.BytePredicate;
 import speiger.src.collections.bytes.functions.function.ByteBooleanUnaryOperator;
 import speiger.src.collections.bytes.functions.function.ByteByteUnaryOperator;
+import speiger.src.collections.bytes.functions.OptionalByte;
 import speiger.src.collections.bytes.maps.abstracts.AbstractByte2BooleanMap;
 import speiger.src.collections.bytes.maps.interfaces.Byte2BooleanMap;
 import speiger.src.collections.bytes.sets.AbstractByteSet;
@@ -33,6 +35,7 @@ import speiger.src.collections.booleans.functions.BooleanConsumer;
 import speiger.src.collections.objects.functions.consumer.ObjectObjectConsumer;
 import speiger.src.collections.objects.functions.consumer.ObjectBooleanConsumer;
 import speiger.src.collections.booleans.functions.function.BooleanPredicate;
+import speiger.src.collections.booleans.functions.OptionalBoolean;
 import speiger.src.collections.objects.collections.ObjectIterator;
 import speiger.src.collections.objects.sets.AbstractObjectSet;
 import speiger.src.collections.objects.sets.ObjectSet;
@@ -898,7 +901,7 @@ public class Byte2BooleanOpenHashMap extends AbstractByte2BooleanMap implements 
 		}
 		
 		@Override
-		public Byte2BooleanMap.Entry reduce(ObjectObjectUnaryOperator<Byte2BooleanMap.Entry, Byte2BooleanMap.Entry> operator) {
+		public Optional<Byte2BooleanMap.Entry> reduce(ObjectObjectUnaryOperator<Byte2BooleanMap.Entry, Byte2BooleanMap.Entry> operator) {
 			Objects.requireNonNull(operator);
 			Byte2BooleanMap.Entry state = null;
 			boolean empty = true;
@@ -915,25 +918,25 @@ public class Byte2BooleanOpenHashMap extends AbstractByte2BooleanMap implements 
 				}
 				state = operator.apply(state, new ValueMapEntry(i));
 			}
-			return state;
+			return empty ? Optional.empty() : Optional.ofNullable(state);
 		}
 		
 		@Override
-		public Byte2BooleanMap.Entry findFirst(Predicate<Byte2BooleanMap.Entry> filter) {
+		public Optional<Byte2BooleanMap.Entry> findFirst(Predicate<Byte2BooleanMap.Entry> filter) {
 			Objects.requireNonNull(filter);
-			if(size() <= 0) return null;
+			if(size() <= 0) return Optional.empty();
 			MapEntry entry = new MapEntry();
 			if(containsNull) {
 				entry.set(nullIndex);
-				if(filter.test(entry)) return entry;
+				if(filter.test(entry)) return Optional.ofNullable(entry);
 			}
 			for(int i = nullIndex-1;i>=0;i--) {
 				if(keys[i] != (byte)0) {
 					entry.set(i);
-					if(filter.test(entry)) return entry;
+					if(filter.test(entry)) return Optional.ofNullable(entry);
 				}
 			}
-			return null;
+			return Optional.empty();
 		}
 		
 		@Override
@@ -1105,7 +1108,7 @@ public class Byte2BooleanOpenHashMap extends AbstractByte2BooleanMap implements 
 		}
 		
 		@Override
-		public byte reduce(ByteByteUnaryOperator operator) {
+		public OptionalByte reduce(ByteByteUnaryOperator operator) {
 			Objects.requireNonNull(operator);
 			byte state = (byte)0;
 			boolean empty = true;
@@ -1122,18 +1125,18 @@ public class Byte2BooleanOpenHashMap extends AbstractByte2BooleanMap implements 
 				}
 				state = operator.applyAsByte(state, keys[i]);
 			}
-			return state;
+			return empty ? OptionalByte.empty() : OptionalByte.of(state);
 		}
 		
 		@Override
-		public byte findFirst(BytePredicate filter) {
+		public OptionalByte findFirst(BytePredicate filter) {
 			Objects.requireNonNull(filter);
-			if(size() <= 0) return (byte)0;
-			if(containsNull && filter.test(keys[nullIndex])) return keys[nullIndex];
+			if(size() <= 0) return OptionalByte.empty();
+			if(containsNull && filter.test(keys[nullIndex])) return OptionalByte.of(keys[nullIndex]);
 			for(int i = nullIndex-1;i>=0;i--) {
-				if(keys[i] != (byte)0 && filter.test(keys[i])) return keys[i];
+				if(keys[i] != (byte)0 && filter.test(keys[i])) return OptionalByte.of(keys[i]);
 			}
-			return (byte)0;
+			return OptionalByte.empty();
 		}
 		
 		@Override
@@ -1248,7 +1251,7 @@ public class Byte2BooleanOpenHashMap extends AbstractByte2BooleanMap implements 
 		}
 		
 		@Override
-		public boolean reduce(BooleanBooleanUnaryOperator operator) {
+		public OptionalBoolean reduce(BooleanBooleanUnaryOperator operator) {
 			Objects.requireNonNull(operator);
 			boolean state = false;
 			boolean empty = true;
@@ -1265,18 +1268,18 @@ public class Byte2BooleanOpenHashMap extends AbstractByte2BooleanMap implements 
 				}
 				state = operator.applyAsBoolean(state, values[i]);
 			}
-			return state;
+			return empty ? OptionalBoolean.empty() : OptionalBoolean.of(state);
 		}
 		
 		@Override
-		public boolean findFirst(BooleanPredicate filter) {
+		public OptionalBoolean findFirst(BooleanPredicate filter) {
 			Objects.requireNonNull(filter);
-			if(size() <= 0) return false;
-			if(containsNull && filter.test(values[nullIndex])) return values[nullIndex];
+			if(size() <= 0) return OptionalBoolean.empty();
+			if(containsNull && filter.test(values[nullIndex])) return OptionalBoolean.of(values[nullIndex]);
 			for(int i = nullIndex-1;i>=0;i--) {
-				if(keys[i] != (byte)0 && filter.test(values[i])) return values[i];
+				if(keys[i] != (byte)0 && filter.test(values[i])) return OptionalBoolean.of(values[i]);
 			}
-			return false;
+			return OptionalBoolean.empty();
 		}
 		
 		@Override

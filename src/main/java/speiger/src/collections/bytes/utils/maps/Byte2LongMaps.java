@@ -620,7 +620,11 @@ public class Byte2LongMaps
 			super(c);
 			set = c;
 		}
-
+		
+		@Override
+		public void addFirst(Byte2LongMap.Entry o) { throw new UnsupportedOperationException(); }
+		@Override
+		public void addLast(Byte2LongMap.Entry o) { throw new UnsupportedOperationException(); }
 		@Override
 		public boolean addAndMoveToFirst(Byte2LongMap.Entry o) { throw new UnsupportedOperationException(); }
 		@Override

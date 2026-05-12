@@ -4,6 +4,7 @@ import java.util.Arrays;
 import java.util.Map;
 import java.util.NoSuchElementException;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.function.Consumer;
 import java.util.function.BiFunction;
 import java.util.function.Predicate;
@@ -14,6 +15,7 @@ import speiger.src.collections.objects.functions.consumer.ObjectByteConsumer;
 import speiger.src.collections.ints.functions.consumer.IntByteConsumer;
 import speiger.src.collections.ints.functions.consumer.IntObjectConsumer;
 import speiger.src.collections.ints.functions.consumer.IntFloatConsumer;
+import speiger.src.collections.bytes.functions.OptionalByte;
 import speiger.src.collections.bytes.functions.function.BytePredicate;
 import speiger.src.collections.bytes.functions.consumer.ByteFloatConsumer;
 import speiger.src.collections.bytes.functions.function.Byte2FloatFunction;
@@ -35,6 +37,7 @@ import speiger.src.collections.floats.lists.FloatListIterator;
 import speiger.src.collections.objects.functions.consumer.ObjectObjectConsumer;
 
 import speiger.src.collections.floats.functions.function.FloatPredicate;
+import speiger.src.collections.floats.functions.OptionalFloat;
 import speiger.src.collections.objects.collections.ObjectIterator;
 import speiger.src.collections.objects.functions.function.ObjectObjectUnaryOperator;
 import speiger.src.collections.objects.collections.ObjectBidirectionalIterator;
@@ -752,6 +755,10 @@ public class Byte2FloatArrayMap extends AbstractByte2FloatMap implements Byte2Fl
 	
 	private class MapEntrySet extends AbstractObjectSet<Byte2FloatMap.Entry> implements Byte2FloatOrderedMap.FastOrderedSet {
 		@Override
+		public void addFirst(Byte2FloatMap.Entry o) { throw new UnsupportedOperationException(); }
+		@Override
+		public void addLast(Byte2FloatMap.Entry o) { throw new UnsupportedOperationException(); }
+		@Override
 		public boolean addAndMoveToFirst(Byte2FloatMap.Entry o) { throw new UnsupportedOperationException(); }
 		@Override
 		public boolean addAndMoveToLast(Byte2FloatMap.Entry o) { throw new UnsupportedOperationException(); }
@@ -899,7 +906,7 @@ public class Byte2FloatArrayMap extends AbstractByte2FloatMap implements Byte2Fl
 		}
 		
 		@Override
-		public Byte2FloatMap.Entry reduce(ObjectObjectUnaryOperator<Byte2FloatMap.Entry, Byte2FloatMap.Entry> operator) {
+		public Optional<Byte2FloatMap.Entry> reduce(ObjectObjectUnaryOperator<Byte2FloatMap.Entry, Byte2FloatMap.Entry> operator) {
 			Objects.requireNonNull(operator);
 			Byte2FloatMap.Entry state = null;
 			boolean empty = true;
@@ -911,19 +918,19 @@ public class Byte2FloatArrayMap extends AbstractByte2FloatMap implements Byte2Fl
 				}
 				state = operator.apply(state, new ValueMapEntry(i));
 			}
-			return state;
+			return empty ? Optional.empty() : Optional.ofNullable(state);
 		}
 		
 		@Override
-		public Byte2FloatMap.Entry findFirst(Predicate<Byte2FloatMap.Entry> filter) {
+		public Optional<Byte2FloatMap.Entry> findFirst(Predicate<Byte2FloatMap.Entry> filter) {
 			Objects.requireNonNull(filter);
-			if(size() <= 0) return null;
+			if(size() <= 0) return Optional.empty();
 			MapEntry entry = new MapEntry();
 			for(int i = 0;i<size;i++) {
 				entry.set(i);
-				if(filter.test(entry)) return entry;
+				if(filter.test(entry)) return Optional.ofNullable(entry);
 			}
-			return null;
+			return Optional.empty();
 		}
 		
 		@Override
@@ -995,6 +1002,10 @@ public class Byte2FloatArrayMap extends AbstractByte2FloatMap implements Byte2Fl
 		
 		@Override
 		public boolean add(byte o) { throw new UnsupportedOperationException(); }
+		@Override
+		public void addFirst(byte o) { throw new UnsupportedOperationException(); }
+		@Override
+		public void addLast(byte o) { throw new UnsupportedOperationException(); }
 		@Override
 		public boolean addAndMoveToFirst(byte o) { throw new UnsupportedOperationException(); }
 		@Override
@@ -1082,7 +1093,7 @@ public class Byte2FloatArrayMap extends AbstractByte2FloatMap implements Byte2Fl
 		}
 		
 		@Override
-		public byte reduce(ByteByteUnaryOperator operator) {
+		public OptionalByte reduce(ByteByteUnaryOperator operator) {
 			Objects.requireNonNull(operator);
 			byte state = (byte)0;
 			boolean empty = true;
@@ -1094,16 +1105,16 @@ public class Byte2FloatArrayMap extends AbstractByte2FloatMap implements Byte2Fl
 				}
 				state = operator.applyAsByte(state, keys[i]);
 			}
-			return state;
+			return empty ? OptionalByte.empty() : OptionalByte.of(state);
 		}
 		
 		@Override
-		public byte findFirst(BytePredicate filter) {
+		public OptionalByte findFirst(BytePredicate filter) {
 			Objects.requireNonNull(filter);
 			for(int i = 0;i<size;i++) {
-				if(filter.test(keys[i])) return keys[i];
+				if(filter.test(keys[i])) return OptionalByte.of(keys[i]);
 			}
-			return (byte)0;
+			return OptionalByte.empty();
 		}
 		
 		@Override
@@ -1204,7 +1215,7 @@ public class Byte2FloatArrayMap extends AbstractByte2FloatMap implements Byte2Fl
 		}
 		
 		@Override
-		public float reduce(FloatFloatUnaryOperator operator) {
+		public OptionalFloat reduce(FloatFloatUnaryOperator operator) {
 			Objects.requireNonNull(operator);
 			float state = 0F;
 			boolean empty = true;
@@ -1216,16 +1227,16 @@ public class Byte2FloatArrayMap extends AbstractByte2FloatMap implements Byte2Fl
 				}
 				state = operator.applyAsFloat(state, values[i]);
 			}
-			return state;
+			return empty ? OptionalFloat.empty() : OptionalFloat.of(state);
 		}
 		
 		@Override
-		public float findFirst(FloatPredicate filter) {
+		public OptionalFloat findFirst(FloatPredicate filter) {
 			Objects.requireNonNull(filter);
 			for(int i = 0;i<size;i++) {
-				if(filter.test(values[i])) return values[i];
+				if(filter.test(values[i])) return OptionalFloat.of(values[i]);
 			}
-			return 0F;
+			return OptionalFloat.empty();
 		}
 		
 		@Override

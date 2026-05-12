@@ -3,6 +3,7 @@ package speiger.src.collections.ints.collections;
 import java.util.Objects;
 import java.util.function.Consumer;
 import java.util.function.IntPredicate;
+import java.util.OptionalInt;
 
 
 import speiger.src.collections.ints.functions.IntConsumer;
@@ -281,13 +282,13 @@ public interface IntIterable extends Iterable<Integer>
 	 * @param filter that should be applied
 	 * @return the found value or the null equivalent variant.
 	 */
-	default int findFirst(IntPredicate filter) {
+	default OptionalInt findFirst(IntPredicate filter) {
 		Objects.requireNonNull(filter);
 		for(IntIterator iter = iterator();iter.hasNext();) {
 			int entry = iter.nextInt();
-			if(filter.test(entry)) return entry;
+			if(filter.test(entry)) return OptionalInt.of(entry);
 		}
-		return 0;
+		return OptionalInt.empty();
 	}
 	
 	/**
@@ -312,7 +313,7 @@ public interface IntIterable extends Iterable<Integer>
 	 * @param operator the operation that should be applied
 	 * @return the reduction result, returns null value if nothing was found
 	 */
-	default int reduce(IntIntUnaryOperator operator) {
+	default OptionalInt reduce(IntIntUnaryOperator operator) {
 		Objects.requireNonNull(operator);
 		int state = 0;
 		boolean empty = true;
@@ -324,7 +325,7 @@ public interface IntIterable extends Iterable<Integer>
 			}
 			state = operator.applyAsInt(state, iter.nextInt());
 		}
-		return state;
+		return empty ? OptionalInt.empty() : OptionalInt.of(state);
 	}	
 	
 	/**

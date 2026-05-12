@@ -3,11 +3,13 @@ package speiger.src.collections.chars.maps.impl.tree;
 import java.util.Collections;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.NoSuchElementException;
 import java.util.function.Consumer;
 import java.util.function.BiFunction;
 import java.util.function.Predicate;
 import java.util.function.LongPredicate;
+import java.util.OptionalLong;
 
 
 import speiger.src.collections.chars.collections.CharBidirectionalIterator;
@@ -19,6 +21,7 @@ import speiger.src.collections.ints.functions.consumer.IntObjectConsumer;
 import speiger.src.collections.ints.functions.consumer.IntLongConsumer;
 import speiger.src.collections.chars.functions.function.Char2LongFunction;
 import speiger.src.collections.chars.functions.consumer.CharLongConsumer;
+import speiger.src.collections.chars.functions.OptionalChar;
 import speiger.src.collections.chars.functions.function.CharPredicate;
 import speiger.src.collections.chars.functions.function.CharLongUnaryOperator;
 import speiger.src.collections.chars.functions.function.CharCharUnaryOperator;
@@ -1129,7 +1132,7 @@ public class Char2LongAVLTreeMap extends AbstractChar2LongMap implements Char2Lo
 		}
 		
 		@Override
-		public char reduce(CharCharUnaryOperator operator) {
+		public OptionalChar reduce(CharCharUnaryOperator operator) {
 			Objects.requireNonNull(operator);
 			char state = (char)0;
 			boolean empty = true;
@@ -1141,15 +1144,15 @@ public class Char2LongAVLTreeMap extends AbstractChar2LongMap implements Char2Lo
 				}
 				state = operator.applyAsChar(state, entry.key);
 			}
-			return state;
+			return empty ? OptionalChar.empty() : OptionalChar.of(state);
 		}
 		
 		@Override
-		public char findFirst(CharPredicate filter) {
+		public OptionalChar findFirst(CharPredicate filter) {
 			Objects.requireNonNull(filter);
 			for(Node entry = start(), end = end();entry != null && (end == null || (end != previous(entry)));entry = next(entry))
-				if(filter.test(entry.key)) return entry.key;
-			return (char)0;
+				if(filter.test(entry.key)) return OptionalChar.of(entry.key);
+			return OptionalChar.empty();
 		}
 		
 		@Override
@@ -1783,7 +1786,7 @@ public class Char2LongAVLTreeMap extends AbstractChar2LongMap implements Char2Lo
 			}
 			
 			@Override
-			public Char2LongMap.Entry reduce(ObjectObjectUnaryOperator<Char2LongMap.Entry, Char2LongMap.Entry> operator) {
+			public Optional<Char2LongMap.Entry> reduce(ObjectObjectUnaryOperator<Char2LongMap.Entry, Char2LongMap.Entry> operator) {
 				Objects.requireNonNull(operator);
 				Char2LongMap.Entry state = null;
 				boolean empty = true;
@@ -1795,19 +1798,19 @@ public class Char2LongAVLTreeMap extends AbstractChar2LongMap implements Char2Lo
 					}
 					state = operator.apply(state, new BasicEntry(entry.key, entry.value));
 				}
-				return state;
+				return empty ? Optional.empty() : Optional.ofNullable(state);
 			}
 			
 			@Override
-			public Char2LongMap.Entry findFirst(Predicate<Char2LongMap.Entry> filter) {
+			public Optional<Char2LongMap.Entry> findFirst(Predicate<Char2LongMap.Entry> filter) {
 				Objects.requireNonNull(filter);
-				if(size() <= 0) return null;
+				if(size() <= 0) return Optional.empty();
 				BasicEntry subEntry = new BasicEntry();
 				for(Node entry = subLowest(), last = subHighest();entry != null && (last == null || last != previous(entry));entry = next(entry)) {
 					subEntry.set(entry.key, entry.value);
-					if(filter.test(subEntry)) return subEntry;
+					if(filter.test(subEntry)) return Optional.ofNullable(subEntry);
 				}
-				return null;
+				return Optional.empty();
 			}
 			
 			@Override
@@ -1902,7 +1905,7 @@ public class Char2LongAVLTreeMap extends AbstractChar2LongMap implements Char2Lo
 			}
 			
 			@Override
-			public long reduce(LongLongUnaryOperator operator) {
+			public OptionalLong reduce(LongLongUnaryOperator operator) {
 				Objects.requireNonNull(operator);
 				long state = 0L;
 				boolean empty = true;
@@ -1914,15 +1917,15 @@ public class Char2LongAVLTreeMap extends AbstractChar2LongMap implements Char2Lo
 					}
 					state = operator.applyAsLong(state, entry.value);
 				}
-				return state;
+				return empty ? OptionalLong.empty() : OptionalLong.of(state);
 			}
 			
 			@Override
-			public long findFirst(LongPredicate filter) {
+			public OptionalLong findFirst(LongPredicate filter) {
 				Objects.requireNonNull(filter);
 				for(Node entry = subLowest(), last = subHighest();entry != null && (last == null || last != previous(entry));entry = next(entry))
-					if(filter.test(entry.value)) return entry.value;
-				return 0L;
+					if(filter.test(entry.value)) return OptionalLong.of(entry.value);
+				return OptionalLong.empty();
 			}
 			
 			@Override
@@ -2238,7 +2241,7 @@ public class Char2LongAVLTreeMap extends AbstractChar2LongMap implements Char2Lo
 		}
 		
 		@Override
-		public long reduce(LongLongUnaryOperator operator) {
+		public OptionalLong reduce(LongLongUnaryOperator operator) {
 			Objects.requireNonNull(operator);
 			long state = 0L;
 			boolean empty = true;
@@ -2250,15 +2253,15 @@ public class Char2LongAVLTreeMap extends AbstractChar2LongMap implements Char2Lo
 				}
 				state = operator.applyAsLong(state, entry.value);
 			}
-			return state;
+			return empty ? OptionalLong.empty() : OptionalLong.of(state);
 		}
 		
 		@Override
-		public long findFirst(LongPredicate filter) {
+		public OptionalLong findFirst(LongPredicate filter) {
 			Objects.requireNonNull(filter);
 			for(Node entry = first;entry != null;entry = entry.next())
-				if(filter.test(entry.value)) return entry.value;
-			return 0L;
+				if(filter.test(entry.value)) return OptionalLong.of(entry.value);
+			return OptionalLong.empty();
 		}
 		
 		@Override
@@ -2399,7 +2402,7 @@ public class Char2LongAVLTreeMap extends AbstractChar2LongMap implements Char2Lo
 		}
 		
 		@Override
-		public Char2LongMap.Entry reduce(ObjectObjectUnaryOperator<Char2LongMap.Entry, Char2LongMap.Entry> operator) {
+		public Optional<Char2LongMap.Entry> reduce(ObjectObjectUnaryOperator<Char2LongMap.Entry, Char2LongMap.Entry> operator) {
 			Objects.requireNonNull(operator);
 			Char2LongMap.Entry state = null;
 			boolean empty = true;
@@ -2411,19 +2414,19 @@ public class Char2LongAVLTreeMap extends AbstractChar2LongMap implements Char2Lo
 				}
 				state = operator.apply(state, new BasicEntry(entry.key, entry.value));
 			}
-			return state;
+			return empty ? Optional.empty() : Optional.ofNullable(state);
 		}
 		
 		@Override
-		public Char2LongMap.Entry findFirst(Predicate<Char2LongMap.Entry> filter) {
+		public Optional<Char2LongMap.Entry> findFirst(Predicate<Char2LongMap.Entry> filter) {
 			Objects.requireNonNull(filter);
-			if(size() <= 0) return null;
+			if(size() <= 0) return Optional.empty();
 			BasicEntry subEntry = new BasicEntry();
 			for(Node entry = first;entry != null;entry = entry.next()) {
 				subEntry.set(entry.key, entry.value);
-				if(filter.test(subEntry)) return subEntry;
+				if(filter.test(subEntry)) return Optional.ofNullable(subEntry);
 			}
-			return null;
+			return Optional.empty();
 		}
 		
 		@Override

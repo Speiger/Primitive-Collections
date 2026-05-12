@@ -2,6 +2,7 @@ package speiger.src.collections.objects.sets;
 
 import java.util.Collection;
 import java.util.Collections;
+import java.util.Optional;
 import java.util.Comparator;
 import java.util.function.Consumer;
 import java.util.function.BiFunction;
@@ -342,7 +343,7 @@ public class ObjectRBTreeSet<T> extends AbstractObjectSet<T> implements ObjectNa
 	}
 	
 	@Override
-	public T reduce(ObjectObjectUnaryOperator<T, T> operator) {
+	public Optional<T> reduce(ObjectObjectUnaryOperator<T, T> operator) {
 		Objects.requireNonNull(operator);
 		T state = null;
 		boolean empty = true;
@@ -354,16 +355,16 @@ public class ObjectRBTreeSet<T> extends AbstractObjectSet<T> implements ObjectNa
 			}
 			state = operator.apply(state, entry.key);
 		}
-		return state;
+		return empty ? Optional.empty() : Optional.ofNullable(state);
 	}
 	
 	@Override
-	public T findFirst(Predicate<T> filter) {
+	public Optional<T> findFirst(Predicate<T> filter) {
 		Objects.requireNonNull(filter);
 		for(Entry<T> entry = first;entry != null;entry = entry.next()) {
-			if(filter.test(entry.key)) return entry.key;
+			if(filter.test(entry.key)) return Optional.ofNullable(entry.key);
 		}
-		return null;
+		return Optional.empty();
 	}
 	
 	@Override
@@ -1177,7 +1178,7 @@ public class ObjectRBTreeSet<T> extends AbstractObjectSet<T> implements ObjectNa
 		}
 		
 		@Override
-		public T reduce(ObjectObjectUnaryOperator<T, T> operator) {
+		public Optional<T> reduce(ObjectObjectUnaryOperator<T, T> operator) {
 			Objects.requireNonNull(operator);
 			T state = null;
 			boolean empty = true;
@@ -1189,16 +1190,16 @@ public class ObjectRBTreeSet<T> extends AbstractObjectSet<T> implements ObjectNa
 				}
 				state = operator.apply(state, entry.key);
 			}
-			return state;
+			return empty ? Optional.empty() : Optional.ofNullable(state);
 		}
 		
 		@Override
-		public T findFirst(Predicate<T> filter) {
+		public Optional<T> findFirst(Predicate<T> filter) {
 			Objects.requireNonNull(filter);
 			for(Entry<T> entry = start();entry != null && inRange(entry.key);entry = next(entry)) {
-				if(filter.test(entry.key)) return entry.key;
+				if(filter.test(entry.key)) return Optional.ofNullable(entry.key);
 			}
-			return null;
+			return Optional.empty();
 		}
 		
 		@Override

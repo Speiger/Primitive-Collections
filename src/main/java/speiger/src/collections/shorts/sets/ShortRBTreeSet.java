@@ -9,6 +9,7 @@ import java.util.Objects;
 import speiger.src.collections.shorts.collections.ShortBidirectionalIterator;
 import speiger.src.collections.shorts.functions.ShortComparator;
 import speiger.src.collections.shorts.functions.ShortConsumer;
+import speiger.src.collections.shorts.functions.OptionalShort;
 import speiger.src.collections.ints.functions.consumer.IntShortConsumer;
 import speiger.src.collections.objects.functions.consumer.ObjectShortConsumer;
 import speiger.src.collections.shorts.functions.function.ShortPredicate;
@@ -334,7 +335,7 @@ public class ShortRBTreeSet extends AbstractShortSet implements ShortNavigableSe
 	}
 	
 	@Override
-	public short reduce(ShortShortUnaryOperator operator) {
+	public OptionalShort reduce(ShortShortUnaryOperator operator) {
 		Objects.requireNonNull(operator);
 		short state = (short)0;
 		boolean empty = true;
@@ -346,16 +347,16 @@ public class ShortRBTreeSet extends AbstractShortSet implements ShortNavigableSe
 			}
 			state = operator.applyAsShort(state, entry.key);
 		}
-		return state;
+		return empty ? OptionalShort.empty() : OptionalShort.of(state);
 	}
 	
 	@Override
-	public short findFirst(ShortPredicate filter) {
+	public OptionalShort findFirst(ShortPredicate filter) {
 		Objects.requireNonNull(filter);
 		for(Entry entry = first;entry != null;entry = entry.next()) {
-			if(filter.test(entry.key)) return entry.key;
+			if(filter.test(entry.key)) return OptionalShort.of(entry.key);
 		}
-		return (short)0;
+		return OptionalShort.empty();
 	}
 	
 	@Override
@@ -1241,7 +1242,7 @@ public class ShortRBTreeSet extends AbstractShortSet implements ShortNavigableSe
 		}
 		
 		@Override
-		public short reduce(ShortShortUnaryOperator operator) {
+		public OptionalShort reduce(ShortShortUnaryOperator operator) {
 			Objects.requireNonNull(operator);
 			short state = (short)0;
 			boolean empty = true;
@@ -1253,16 +1254,16 @@ public class ShortRBTreeSet extends AbstractShortSet implements ShortNavigableSe
 				}
 				state = operator.applyAsShort(state, entry.key);
 			}
-			return state;
+			return empty ? OptionalShort.empty() : OptionalShort.of(state);
 		}
 		
 		@Override
-		public short findFirst(ShortPredicate filter) {
+		public OptionalShort findFirst(ShortPredicate filter) {
 			Objects.requireNonNull(filter);
 			for(Entry entry = start();entry != null && inRange(entry.key);entry = next(entry)) {
-				if(filter.test(entry.key)) return entry.key;
+				if(filter.test(entry.key)) return OptionalShort.of(entry.key);
 			}
-			return (short)0;
+			return OptionalShort.empty();
 		}
 		
 		@Override

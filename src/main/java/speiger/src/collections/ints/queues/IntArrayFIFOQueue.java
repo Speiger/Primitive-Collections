@@ -2,6 +2,7 @@ package speiger.src.collections.ints.queues;
 
 import java.util.Arrays;
 import java.util.Objects;
+import java.util.OptionalInt;
 import java.util.NoSuchElementException;
 import java.util.function.IntPredicate;
 
@@ -278,17 +279,17 @@ public class IntArrayFIFOQueue extends AbstractIntPriorityQueue implements IntPr
 	}
 	
 	@Override
-	public int findFirst(IntPredicate filter) {
+	public OptionalInt findFirst(IntPredicate filter) {
 		Objects.requireNonNull(filter);
 		for(int i = 0,m=size();i<m;i++) {
 			int index = (first + i) % array.length;
 			if(filter.test(array[index])) {
 				int data = array[index];
 				removeIndex(index);
-				return data;
+				return OptionalInt.of(data);
 			}
 		}
-		return 0;
+		return OptionalInt.empty();
 	}
 	
 	@Override
@@ -302,7 +303,7 @@ public class IntArrayFIFOQueue extends AbstractIntPriorityQueue implements IntPr
 	}
 	
 	@Override
-	public int reduce(IntIntUnaryOperator operator) {
+	public OptionalInt reduce(IntIntUnaryOperator operator) {
 		Objects.requireNonNull(operator);
 		int state = 0;
 		boolean empty = true;
@@ -314,7 +315,7 @@ public class IntArrayFIFOQueue extends AbstractIntPriorityQueue implements IntPr
 			}
 			state = operator.applyAsInt(state, array[(first + i) % array.length]);
 		}
-		return state;
+		return empty ? OptionalInt.empty() : OptionalInt.of(state);
 	}
 	
 	@Override

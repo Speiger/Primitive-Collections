@@ -3,11 +3,13 @@ package speiger.src.collections.bytes.maps.impl.tree;
 import java.util.Collections;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.NoSuchElementException;
 import java.util.function.Consumer;
 import java.util.function.BiFunction;
 import java.util.function.Predicate;
 import java.util.function.DoublePredicate;
+import java.util.OptionalDouble;
 
 import speiger.src.collections.bytes.collections.ByteBidirectionalIterator;
 import speiger.src.collections.bytes.functions.ByteComparator;
@@ -18,6 +20,7 @@ import speiger.src.collections.ints.functions.consumer.IntObjectConsumer;
 import speiger.src.collections.ints.functions.consumer.IntDoubleConsumer;
 import speiger.src.collections.bytes.functions.function.Byte2DoubleFunction;
 import speiger.src.collections.bytes.functions.consumer.ByteDoubleConsumer;
+import speiger.src.collections.bytes.functions.OptionalByte;
 import speiger.src.collections.bytes.functions.function.BytePredicate;
 import speiger.src.collections.bytes.functions.function.ByteDoubleUnaryOperator;
 import speiger.src.collections.bytes.functions.function.ByteByteUnaryOperator;
@@ -1182,7 +1185,7 @@ public class Byte2DoubleRBTreeMap extends AbstractByte2DoubleMap implements Byte
 		}
 		
 		@Override
-		public byte reduce(ByteByteUnaryOperator operator) {
+		public OptionalByte reduce(ByteByteUnaryOperator operator) {
 			Objects.requireNonNull(operator);
 			byte state = (byte)0;
 			boolean empty = true;
@@ -1194,15 +1197,15 @@ public class Byte2DoubleRBTreeMap extends AbstractByte2DoubleMap implements Byte
 				}
 				state = operator.applyAsByte(state, entry.key);
 			}
-			return state;
+			return empty ? OptionalByte.empty() : OptionalByte.of(state);
 		}
 		
 		@Override
-		public byte findFirst(BytePredicate filter) {
+		public OptionalByte findFirst(BytePredicate filter) {
 			Objects.requireNonNull(filter);
 			for(Node entry = start(), end = end();entry != null && (end == null || (end != previous(entry)));entry = next(entry))
-				if(filter.test(entry.key)) return entry.key;
-			return (byte)0;
+				if(filter.test(entry.key)) return OptionalByte.of(entry.key);
+			return OptionalByte.empty();
 		}
 		
 		@Override
@@ -1846,7 +1849,7 @@ public class Byte2DoubleRBTreeMap extends AbstractByte2DoubleMap implements Byte
 			}
 			
 			@Override
-			public Byte2DoubleMap.Entry reduce(ObjectObjectUnaryOperator<Byte2DoubleMap.Entry, Byte2DoubleMap.Entry> operator) {
+			public Optional<Byte2DoubleMap.Entry> reduce(ObjectObjectUnaryOperator<Byte2DoubleMap.Entry, Byte2DoubleMap.Entry> operator) {
 				Objects.requireNonNull(operator);
 				Byte2DoubleMap.Entry state = null;
 				boolean empty = true;
@@ -1858,19 +1861,19 @@ public class Byte2DoubleRBTreeMap extends AbstractByte2DoubleMap implements Byte
 					}
 					state = operator.apply(state, new BasicEntry(entry.key, entry.value));
 				}
-				return state;
+				return empty ? Optional.empty() : Optional.ofNullable(state);
 			}
 			
 			@Override
-			public Byte2DoubleMap.Entry findFirst(Predicate<Byte2DoubleMap.Entry> filter) {
+			public Optional<Byte2DoubleMap.Entry> findFirst(Predicate<Byte2DoubleMap.Entry> filter) {
 				Objects.requireNonNull(filter);
-				if(size() <= 0) return null;
+				if(size() <= 0) return Optional.empty();
 				BasicEntry subEntry = new BasicEntry();
 				for(Node entry = subLowest(), last = subHighest();entry != null && (last == null || last != previous(entry));entry = next(entry)) {
 					subEntry.set(entry.key, entry.value);
-					if(filter.test(subEntry)) return subEntry;
+					if(filter.test(subEntry)) return Optional.ofNullable(subEntry);
 				}
-				return null;
+				return Optional.empty();
 			}
 			
 			@Override
@@ -1965,7 +1968,7 @@ public class Byte2DoubleRBTreeMap extends AbstractByte2DoubleMap implements Byte
 			}
 			
 			@Override
-			public double reduce(DoubleDoubleUnaryOperator operator) {
+			public OptionalDouble reduce(DoubleDoubleUnaryOperator operator) {
 				Objects.requireNonNull(operator);
 				double state = 0D;
 				boolean empty = true;
@@ -1977,15 +1980,15 @@ public class Byte2DoubleRBTreeMap extends AbstractByte2DoubleMap implements Byte
 					}
 					state = operator.applyAsDouble(state, entry.value);
 				}
-				return state;
+				return empty ? OptionalDouble.empty() : OptionalDouble.of(state);
 			}
 			
 			@Override
-			public double findFirst(DoublePredicate filter) {
+			public OptionalDouble findFirst(DoublePredicate filter) {
 				Objects.requireNonNull(filter);
 				for(Node entry = subLowest(), last = subHighest();entry != null && (last == null || last != previous(entry));entry = next(entry))
-					if(filter.test(entry.value)) return entry.value;
-				return 0D;
+					if(filter.test(entry.value)) return OptionalDouble.of(entry.value);
+				return OptionalDouble.empty();
 			}
 			
 			@Override
@@ -2301,7 +2304,7 @@ public class Byte2DoubleRBTreeMap extends AbstractByte2DoubleMap implements Byte
 		}
 		
 		@Override
-		public double reduce(DoubleDoubleUnaryOperator operator) {
+		public OptionalDouble reduce(DoubleDoubleUnaryOperator operator) {
 			Objects.requireNonNull(operator);
 			double state = 0D;
 			boolean empty = true;
@@ -2313,15 +2316,15 @@ public class Byte2DoubleRBTreeMap extends AbstractByte2DoubleMap implements Byte
 				}
 				state = operator.applyAsDouble(state, entry.value);
 			}
-			return state;
+			return empty ? OptionalDouble.empty() : OptionalDouble.of(state);
 		}
 		
 		@Override
-		public double findFirst(DoublePredicate filter) {
+		public OptionalDouble findFirst(DoublePredicate filter) {
 			Objects.requireNonNull(filter);
 			for(Node entry = first;entry != null;entry = entry.next())
-				if(filter.test(entry.value)) return entry.value;
-			return 0D;
+				if(filter.test(entry.value)) return OptionalDouble.of(entry.value);
+			return OptionalDouble.empty();
 		}
 		
 		@Override
@@ -2462,7 +2465,7 @@ public class Byte2DoubleRBTreeMap extends AbstractByte2DoubleMap implements Byte
 		}
 		
 		@Override
-		public Byte2DoubleMap.Entry reduce(ObjectObjectUnaryOperator<Byte2DoubleMap.Entry, Byte2DoubleMap.Entry> operator) {
+		public Optional<Byte2DoubleMap.Entry> reduce(ObjectObjectUnaryOperator<Byte2DoubleMap.Entry, Byte2DoubleMap.Entry> operator) {
 			Objects.requireNonNull(operator);
 			Byte2DoubleMap.Entry state = null;
 			boolean empty = true;
@@ -2474,19 +2477,19 @@ public class Byte2DoubleRBTreeMap extends AbstractByte2DoubleMap implements Byte
 				}
 				state = operator.apply(state, new BasicEntry(entry.key, entry.value));
 			}
-			return state;
+			return empty ? Optional.empty() : Optional.ofNullable(state);
 		}
 		
 		@Override
-		public Byte2DoubleMap.Entry findFirst(Predicate<Byte2DoubleMap.Entry> filter) {
+		public Optional<Byte2DoubleMap.Entry> findFirst(Predicate<Byte2DoubleMap.Entry> filter) {
 			Objects.requireNonNull(filter);
-			if(size() <= 0) return null;
+			if(size() <= 0) return Optional.empty();
 			BasicEntry subEntry = new BasicEntry();
 			for(Node entry = first;entry != null;entry = entry.next()) {
 				subEntry.set(entry.key, entry.value);
-				if(filter.test(subEntry)) return subEntry;
+				if(filter.test(subEntry)) return Optional.ofNullable(subEntry);
 			}
-			return null;
+			return Optional.empty();
 		}
 		
 		@Override

@@ -9,6 +9,7 @@ import java.util.Objects;
 
 import speiger.src.collections.bytes.collections.ByteCollection;
 import speiger.src.collections.bytes.collections.ByteIterator;
+import speiger.src.collections.bytes.functions.OptionalByte;
 import speiger.src.collections.bytes.utils.ByteIterators;
 import speiger.src.collections.bytes.functions.ByteConsumer;
 import speiger.src.collections.ints.functions.consumer.IntByteConsumer;
@@ -546,7 +547,7 @@ public class ByteOpenCustomHashSet extends AbstractByteSet implements ITrimmable
 	}
 	
 	@Override
-	public byte reduce(ByteByteUnaryOperator operator) {
+	public OptionalByte reduce(ByteByteUnaryOperator operator) {
 		Objects.requireNonNull(operator);
 		byte state = (byte)0;
 		boolean empty = true;
@@ -563,18 +564,18 @@ public class ByteOpenCustomHashSet extends AbstractByteSet implements ITrimmable
 			}
 			state = operator.applyAsByte(state, keys[i]);
 		}
-		return state;
+		return empty ? OptionalByte.empty() : OptionalByte.of(state);
 	}
 	
 	@Override
-	public byte findFirst(BytePredicate filter) {
+	public OptionalByte findFirst(BytePredicate filter) {
 		Objects.requireNonNull(filter);
-		if(size() <= 0) return (byte)0;
-		if(containsNull && filter.test(keys[nullIndex])) return keys[nullIndex];
+		if(size() <= 0) return OptionalByte.empty();
+		if(containsNull && filter.test(keys[nullIndex])) return OptionalByte.of(keys[nullIndex]);
 		for(int i = nullIndex-1;i>=0;i--) {
-			if(!strategy.equals(keys[i], (byte)0) && filter.test(keys[i])) return keys[i];
+			if(!strategy.equals(keys[i], (byte)0) && filter.test(keys[i])) return OptionalByte.of(keys[i]);
 		}
-		return (byte)0;
+		return OptionalByte.empty();
 	}
 	
 	@Override

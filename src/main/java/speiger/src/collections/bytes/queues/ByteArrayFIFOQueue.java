@@ -5,6 +5,7 @@ import java.util.Objects;
 import java.util.NoSuchElementException;
 
 import speiger.src.collections.bytes.collections.ByteIterator;
+import speiger.src.collections.bytes.functions.OptionalByte;
 import speiger.src.collections.bytes.functions.ByteComparator;
 import speiger.src.collections.bytes.functions.ByteConsumer;
 import speiger.src.collections.ints.functions.consumer.IntByteConsumer;
@@ -278,17 +279,17 @@ public class ByteArrayFIFOQueue extends AbstractBytePriorityQueue implements Byt
 	}
 	
 	@Override
-	public byte findFirst(BytePredicate filter) {
+	public OptionalByte findFirst(BytePredicate filter) {
 		Objects.requireNonNull(filter);
 		for(int i = 0,m=size();i<m;i++) {
 			int index = (first + i) % array.length;
 			if(filter.test(array[index])) {
 				byte data = array[index];
 				removeIndex(index);
-				return data;
+				return OptionalByte.of(data);
 			}
 		}
-		return (byte)0;
+		return OptionalByte.empty();
 	}
 	
 	@Override
@@ -302,7 +303,7 @@ public class ByteArrayFIFOQueue extends AbstractBytePriorityQueue implements Byt
 	}
 	
 	@Override
-	public byte reduce(ByteByteUnaryOperator operator) {
+	public OptionalByte reduce(ByteByteUnaryOperator operator) {
 		Objects.requireNonNull(operator);
 		byte state = (byte)0;
 		boolean empty = true;
@@ -314,7 +315,7 @@ public class ByteArrayFIFOQueue extends AbstractBytePriorityQueue implements Byt
 			}
 			state = operator.applyAsByte(state, array[(first + i) % array.length]);
 		}
-		return state;
+		return empty ? OptionalByte.empty() : OptionalByte.of(state);
 	}
 	
 	@Override

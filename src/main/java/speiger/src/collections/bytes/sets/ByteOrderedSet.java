@@ -1,6 +1,7 @@
 package speiger.src.collections.bytes.sets;
 
 import speiger.src.collections.bytes.collections.ByteBidirectionalIterator;
+import speiger.src.collections.bytes.collections.ByteOrderedCollection;
 import speiger.src.collections.bytes.collections.ByteSplititerator;
 import speiger.src.collections.bytes.utils.ByteSplititerators;
 import speiger.src.collections.bytes.sets.AbstractByteSet.ReversedByteOrderedSet;
@@ -13,7 +14,7 @@ import speiger.src.collections.bytes.utils.ByteSets;
  * This interface provides basic access to such functions while also providing some Sorted/NaivgableSet implementations that still fit into here.
  * 
  */
-public interface ByteOrderedSet extends ByteSet
+public interface ByteOrderedSet extends ByteSet, ByteOrderedCollection
 {
 	/**
 	 * A customized add method that allows you to insert into the first index.

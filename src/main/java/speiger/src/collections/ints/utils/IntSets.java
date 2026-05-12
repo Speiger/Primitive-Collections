@@ -302,6 +302,10 @@ public class IntSets
 		}
 		
 		@Override
+		public void addFirst(int o) { throw new UnsupportedOperationException(); }
+		@Override
+		public void addLast(int o) { throw new UnsupportedOperationException(); }
+		@Override
 		public boolean addAndMoveToFirst(int o) { throw new UnsupportedOperationException(); }
 		@Override
 		public boolean addAndMoveToLast(int o) { throw new UnsupportedOperationException(); }
@@ -573,7 +577,11 @@ public class IntSets
 			super(c, mutex);
 			s = c;
 		}
-
+		
+		@Override
+		public void addFirst(int o) { synchronized(mutex) { s.addFirst(o); } }
+		@Override
+		public void addLast(int o) { synchronized(mutex) { s.addLast(o); } }
 		@Override
 		public boolean addAndMoveToFirst(int o) { synchronized(mutex) { return s.addAndMoveToFirst(o); } }
 		@Override

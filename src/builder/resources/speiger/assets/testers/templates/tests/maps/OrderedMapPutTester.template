@@ -1,0 +1,122 @@
+package speiger.src.testers.PACKAGE.tests.maps;
+
+#ignore
+import static com.google.common.collect.testing.features.CollectionSize.ZERO;
+import static com.google.common.collect.testing.features.MapFeature.SUPPORTS_PUT;
+import static com.google.common.collect.testing.features.MapFeature.SUPPORTS_REMOVE;
+import static org.junit.Assert.assertNotEquals;
+#endignore
+
+import com.google.common.collect.testing.features.CollectionSize;
+import com.google.common.collect.testing.features.MapFeature;
+
+import speiger.src.collections.PACKAGE.maps.interfaces.MAP;
+import speiger.src.collections.PACKAGE.maps.interfaces.ORDERED_MAP;
+import speiger.src.collections.objects.lists.ObjectList;
+import speiger.src.testers.PACKAGE.tests.base.maps.ABSTRACT_MAP_TESTER;
+import speiger.src.testers.objects.utils.ObjectHelpers;
+
+@SuppressWarnings("javadoc")
+public class FILE_KEY_TYPE2FILE_VALUE_TYPEOrderedMapPutTester KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP_TESTER KEY_VALUE_GENERIC_TYPE
+{
+	private ORDERED_MAP KEY_VALUE_GENERIC_TYPE orderedMap;
+	private ObjectList<MAP.Entry KEY_VALUE_GENERIC_TYPE> values;
+	private KEY_TYPE a;
+	private VALUE_TYPE aValue;
+	private VALUE_TYPE cValue;
+	
+	@Override
+	public void setUp() throws Exception {
+		super.setUp();
+		orderedMap = (ORDERED_MAP KEY_VALUE_GENERIC_TYPE)getMap();
+		values = ObjectHelpers.copyToList(getSampleElements(getSubjectGenerator().getCollectionSize().getNumElements()));
+		if (values.size() >= 1) {
+			a = values.get(0).ENTRY_KEY();
+			aValue = values.get(0).ENTRY_VALUE();
+			if (values.size() >= 3) {
+				cValue = values.get(2).ENTRY_VALUE();
+			}
+		}
+	}
+	
+#ignore
+	@MapFeature.Require(SUPPORTS_PUT)
+	@CollectionSize.Require(absent = ZERO)
+#endignore
+	public void testPutFirst() {
+		assertEquals(aValue, orderedMap.putFirst(a, cValue));
+		assertNotEquals(cValue, orderedMap.FIRST_ENTRY_VALUE());
+		assertEquals(orderedMap.getDefaultReturnValue(), orderedMap.putFirst(k4(), v4()));
+		assertNotEquals(v4(), orderedMap.FIRST_ENTRY_VALUE());
+		assertEquals(e4(), orderedMap.firstEntry());
+	}
+	
+
+#ignore
+	@MapFeature.Require(SUPPORTS_PUT)
+	@CollectionSize.Require(absent = ZERO)
+#endignore
+	public void testPutLast() {
+		assertEquals(aValue, orderedMap.putLast(a, cValue));
+		assertNotEquals(cValue, orderedMap.LAST_ENTRY_VALUE());
+		assertEquals(orderedMap.getDefaultReturnValue(), orderedMap.putLast(k4(), v4()));
+		assertNotEquals(v4(), orderedMap.LAST_ENTRY_VALUE());
+		assertEquals(e4(), orderedMap.lastEntry());
+	}
+	
+#ignore
+	@MapFeature.Require(SUPPORTS_REMOVE)
+	@CollectionSize.Require(CollectionSize.ONE)
+#endignore
+	public void testPollFirst() {
+		assertFalse(orderedMap.isEmpty());
+		assertEquals(e0(), orderedMap.pollFirstEntry());
+		assertTrue(orderedMap.isEmpty());
+	}
+	
+#ignore
+	@MapFeature.Require(SUPPORTS_REMOVE)
+	@CollectionSize.Require(CollectionSize.ONE)
+#endignore
+	public void testPollLast() {
+		assertFalse(orderedMap.isEmpty());
+		assertEquals(e0(), orderedMap.pollLastEntry());
+		assertTrue(orderedMap.isEmpty());
+	}
+	
+#ignore
+	@MapFeature.Require(absent = SUPPORTS_PUT)
+#endignore
+	public void testUnsupportedPutFirst() {
+		try { orderedMap.putFirst(a, aValue); }
+		catch (UnsupportedOperationException tolerated) {}
+		expectUnchanged();
+	}
+	
+#ignore
+	@MapFeature.Require(absent = SUPPORTS_PUT)
+#endignore
+	public void testUnsupportedPutLast() {
+		try { orderedMap.putLast(a, aValue); }
+		catch (UnsupportedOperationException tolerated) {}
+		expectUnchanged();
+	}
+	
+#ignore
+	@MapFeature.Require(absent = SUPPORTS_REMOVE)
+#endignore
+	public void testUnsupportedPollFirst() {
+		try { orderedMap.pollFirstEntry(); }
+		catch (UnsupportedOperationException tolerated) {}
+		expectUnchanged();
+	}
+	
+#ignore
+	@MapFeature.Require(absent = SUPPORTS_REMOVE)
+#endignore
+	public void testUnsupportedPollLast() {
+		try { orderedMap.pollFirstEntry(); }
+		catch (UnsupportedOperationException tolerated) {}
+		expectUnchanged();
+	}
+}

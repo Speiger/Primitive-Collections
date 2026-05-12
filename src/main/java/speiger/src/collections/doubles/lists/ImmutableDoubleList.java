@@ -4,6 +4,7 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.NoSuchElementException;
 import java.util.Objects;
+import java.util.OptionalDouble;
 import java.util.function.Predicate;
 import java.util.function.UnaryOperator;
 import java.util.function.DoublePredicate;
@@ -273,12 +274,12 @@ public class ImmutableDoubleList extends AbstractDoubleList
 	}
 	
 	@Override
-	public double findFirst(DoublePredicate filter) {
+	public OptionalDouble findFirst(DoublePredicate filter) {
 		Objects.requireNonNull(filter);
 		for(int i = 0,m=data.length;i<m;i++) {
-			if(filter.test(data[i])) return data[i];
+			if(filter.test(data[i])) return OptionalDouble.of(data[i]);
 		}
-		return 0D;
+		return OptionalDouble.empty();
 	}
 	
 	@Override
@@ -292,7 +293,7 @@ public class ImmutableDoubleList extends AbstractDoubleList
 	}
 	
 	@Override
-	public double reduce(DoubleDoubleUnaryOperator operator) {
+	public OptionalDouble reduce(DoubleDoubleUnaryOperator operator) {
 		Objects.requireNonNull(operator);
 		double state = 0D;
 		boolean empty = true;
@@ -304,7 +305,7 @@ public class ImmutableDoubleList extends AbstractDoubleList
 			}
 			state = operator.applyAsDouble(state, data[i]);
 		}
-		return state;
+		return empty ? OptionalDouble.empty() : OptionalDouble.of(state);
 	}
 	
 	@Override

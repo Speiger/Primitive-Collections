@@ -5,6 +5,7 @@ import java.util.Collection;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 import java.util.Objects;
+import java.util.OptionalDouble;
 import java.util.function.DoublePredicate;
 
 import speiger.src.collections.doubles.collections.DoubleCollection;
@@ -181,6 +182,46 @@ public class DoubleLinkedOpenHashSet extends DoubleOpenHashSet implements Double
 	public DoubleLinkedOpenHashSet(DoubleIterator iterator, float loadFactor) {
 		this(HashUtil.DEFAULT_MIN_CAPACITY, loadFactor);
 		while(iterator.hasNext()) add(iterator.nextDouble());
+	}
+	
+	@Override
+	public void addFirst(double o) {
+		if(Double.doubleToLongBits(o) == 0) {
+			if(containsNull) return;
+			containsNull = true;
+			onNodeAdded(nullIndex);
+			moveToFirstIndex(nullIndex);
+		}
+		else {
+			int pos = HashUtil.mix(Double.hashCode(o)) & mask;
+			while(Double.doubleToLongBits(keys[pos]) != 0) {
+				if(Double.doubleToLongBits(keys[pos]) == Double.doubleToLongBits(o)) return;
+				pos = ++pos & mask;
+			}
+			keys[pos] = o;
+			onNodeAdded(pos);
+			moveToFirstIndex(pos);
+		}
+		if(size++ >= maxFill) rehash(HashUtil.arraySize(size+1, loadFactor));
+	}
+	
+	@Override
+	public void addLast(double o) {
+		if(Double.doubleToLongBits(o) == 0) {
+			if(containsNull) return;
+			containsNull = true;
+			onNodeAdded(nullIndex);
+		}
+		else {
+			int pos = HashUtil.mix(Double.hashCode(o)) & mask;
+			while(Double.doubleToLongBits(keys[pos]) != 0) {
+				if(Double.doubleToLongBits(keys[pos]) == Double.doubleToLongBits(o)) return;
+				pos = ++pos & mask;
+			}
+			keys[pos] = o;
+			onNodeAdded(pos);
+		}
+		if(size++ >= maxFill) rehash(HashUtil.arraySize(size+1, loadFactor));
 	}
 	
 	@Override
@@ -471,7 +512,7 @@ public class DoubleLinkedOpenHashSet extends DoubleOpenHashSet implements Double
 	}
 	
 	@Override
-	public double reduce(DoubleDoubleUnaryOperator operator) {
+	public OptionalDouble reduce(DoubleDoubleUnaryOperator operator) {
 		Objects.requireNonNull(operator);
 		double state = 0D;
 		boolean empty = true;
@@ -484,18 +525,18 @@ public class DoubleLinkedOpenHashSet extends DoubleOpenHashSet implements Double
 			else state = operator.applyAsDouble(state, keys[index]);
 			index = (int)links[index];
 		}
-		return state;
+		return empty ? OptionalDouble.empty() : OptionalDouble.of(state);
 	}
 	
 	@Override
-	public double findFirst(DoublePredicate filter) {
+	public OptionalDouble findFirst(DoublePredicate filter) {
 		Objects.requireNonNull(filter);
 		int index = firstIndex;
 		while(index != -1) {
-			if(filter.test(keys[index])) return keys[index];
+			if(filter.test(keys[index])) return OptionalDouble.of(keys[index]);
 			index = (int)links[index];
 		}
-		return 0D;
+		return OptionalDouble.empty();
 	}
 	
 	@Override

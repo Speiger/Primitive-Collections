@@ -1,13 +1,14 @@
 package speiger.src.collections.shorts.utils;
 
-
 import speiger.src.collections.shorts.collections.ShortIterator;
 import speiger.src.collections.shorts.collections.ShortCollection;
 import speiger.src.collections.shorts.functions.ShortComparator;
+import speiger.src.collections.shorts.functions.OptionalShort;
 import speiger.src.collections.shorts.queues.ShortPriorityDequeue;
 import speiger.src.collections.shorts.queues.ShortPriorityQueue;
 import speiger.src.collections.shorts.functions.ShortConsumer;
 import speiger.src.collections.shorts.functions.function.ShortPredicate;
+import speiger.src.collections.shorts.functions.function.ShortShortUnaryOperator;
 import speiger.src.collections.objects.functions.consumer.ObjectShortConsumer;
 
 /**
@@ -113,7 +114,11 @@ public class ShortPriorityQueues
 		@Override
 		public boolean matchesAll(ShortPredicate filter) { synchronized(mutex) { return queue.matchesAll(filter); } }
 		@Override
-		public short findFirst(ShortPredicate filter) { synchronized(mutex) { return queue.findFirst(filter); } }
+		public OptionalShort findFirst(ShortPredicate filter) { synchronized(mutex) { return queue.findFirst(filter); } }
+		@Override
+		public short reduce(short identity, ShortShortUnaryOperator operator) { synchronized(mutex) { return queue.reduce(identity, operator); } }
+		@Override
+		public OptionalShort reduce(ShortShortUnaryOperator operator) { synchronized(mutex) { return queue.reduce(operator); } }
 		@Override
 		public int count(ShortPredicate filter) { synchronized(mutex) { return queue.count(filter); } }
 	}

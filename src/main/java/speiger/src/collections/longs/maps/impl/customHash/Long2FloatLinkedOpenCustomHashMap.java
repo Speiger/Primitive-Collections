@@ -4,10 +4,12 @@ import java.util.Arrays;
 import java.util.Map;
 import java.util.NoSuchElementException;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.function.Consumer;
 import java.util.function.BiFunction;
 import java.util.function.Predicate;
 import java.util.function.LongPredicate;
+import java.util.OptionalLong;
 
 import speiger.src.collections.longs.collections.LongBidirectionalIterator;
 import speiger.src.collections.longs.functions.LongConsumer;
@@ -33,6 +35,7 @@ import speiger.src.collections.objects.functions.consumer.ObjectObjectConsumer;
 import speiger.src.collections.objects.functions.consumer.ObjectFloatConsumer;
 
 import speiger.src.collections.floats.functions.function.FloatPredicate;
+import speiger.src.collections.floats.functions.OptionalFloat;
 import speiger.src.collections.objects.functions.function.ObjectObjectUnaryOperator;
 import speiger.src.collections.objects.collections.ObjectBidirectionalIterator;
 import speiger.src.collections.objects.lists.ObjectListIterator;
@@ -672,6 +675,10 @@ public class Long2FloatLinkedOpenCustomHashMap extends Long2FloatOpenCustomHashM
 	
 	private class MapEntrySet extends AbstractObjectSet<Long2FloatMap.Entry> implements Long2FloatOrderedMap.FastOrderedSet {
 		@Override
+		public void addFirst(Long2FloatMap.Entry o) { throw new UnsupportedOperationException(); }
+		@Override
+		public void addLast(Long2FloatMap.Entry o) { throw new UnsupportedOperationException(); }
+		@Override
 		public boolean addAndMoveToFirst(Long2FloatMap.Entry o) { throw new UnsupportedOperationException(); }
 		@Override
 		public boolean addAndMoveToLast(Long2FloatMap.Entry o) { throw new UnsupportedOperationException(); }
@@ -836,7 +843,7 @@ public class Long2FloatLinkedOpenCustomHashMap extends Long2FloatOpenCustomHashM
 		}
 		
 		@Override
-		public Long2FloatMap.Entry reduce(ObjectObjectUnaryOperator<Long2FloatMap.Entry, Long2FloatMap.Entry> operator) {
+		public Optional<Long2FloatMap.Entry> reduce(ObjectObjectUnaryOperator<Long2FloatMap.Entry, Long2FloatMap.Entry> operator) {
 			Objects.requireNonNull(operator);
 			Long2FloatMap.Entry state = null;
 			boolean empty = true;
@@ -851,21 +858,21 @@ public class Long2FloatLinkedOpenCustomHashMap extends Long2FloatOpenCustomHashM
 				state = operator.apply(state, new ValueMapEntry(index));
 				index = (int)links[index];
 			}
-			return state;
+			return empty ? Optional.empty() : Optional.ofNullable(state);
 		}
 		
 		@Override
-		public Long2FloatMap.Entry findFirst(Predicate<Long2FloatMap.Entry> filter) {
+		public Optional<Long2FloatMap.Entry> findFirst(Predicate<Long2FloatMap.Entry> filter) {
 			Objects.requireNonNull(filter);
-			if(size() <= 0) return null;
+			if(size() <= 0) return Optional.empty();
 			MapEntry entry = new MapEntry();
 			int index = firstIndex;
 			while(index != -1) {
 				entry.set(index);
-				if(filter.test(entry)) return entry;
+				if(filter.test(entry)) return Optional.ofNullable(entry);
 				index = (int)links[index];
 			}
-			return null;
+			return Optional.empty();
 		}
 		
 		@Override
@@ -944,10 +951,13 @@ public class Long2FloatLinkedOpenCustomHashMap extends Long2FloatOpenCustomHashM
 		public boolean add(long o) {
 			throw new UnsupportedOperationException();
 		}
-		
+
+		@Override
+		public void addFirst(long o) { throw new UnsupportedOperationException(); }
+		@Override
+		public void addLast(long o) { throw new UnsupportedOperationException(); }		
 		@Override
 		public boolean addAndMoveToFirst(long o) { throw new UnsupportedOperationException(); }
-
 		@Override
 		public boolean addAndMoveToLast(long o) { throw new UnsupportedOperationException(); }
 
@@ -1090,7 +1100,7 @@ public class Long2FloatLinkedOpenCustomHashMap extends Long2FloatOpenCustomHashM
 		}
 		
 		@Override
-		public long reduce(LongLongUnaryOperator operator) {
+		public OptionalLong reduce(LongLongUnaryOperator operator) {
 			Objects.requireNonNull(operator);
 			long state = 0L;
 			boolean empty = true;
@@ -1105,19 +1115,19 @@ public class Long2FloatLinkedOpenCustomHashMap extends Long2FloatOpenCustomHashM
 				state = operator.applyAsLong(state, keys[index]);
 				index = (int)links[index];
 			}
-			return state;
+			return empty ? OptionalLong.empty() : OptionalLong.of(state);
 		}
 		
 		@Override
-		public long findFirst(LongPredicate filter) {
+		public OptionalLong findFirst(LongPredicate filter) {
 			Objects.requireNonNull(filter);
-			if(size() <= 0) return 0L;
+			if(size() <= 0) return OptionalLong.empty();
 			int index = firstIndex;
 			while(index != -1){
-				if(filter.test(keys[index])) return keys[index];
+				if(filter.test(keys[index])) return OptionalLong.of(keys[index]);
 				index = (int)links[index];
 			}
-			return 0L;
+			return OptionalLong.empty();
 		}
 		
 		@Override
@@ -1252,7 +1262,7 @@ public class Long2FloatLinkedOpenCustomHashMap extends Long2FloatOpenCustomHashM
 		}
 		
 		@Override
-		public float reduce(FloatFloatUnaryOperator operator) {
+		public OptionalFloat reduce(FloatFloatUnaryOperator operator) {
 			Objects.requireNonNull(operator);
 			float state = 0F;
 			boolean empty = true;
@@ -1267,19 +1277,19 @@ public class Long2FloatLinkedOpenCustomHashMap extends Long2FloatOpenCustomHashM
 				state = operator.applyAsFloat(state, values[index]);
 				index = (int)links[index];
 			}
-			return state;
+			return empty ? OptionalFloat.empty() : OptionalFloat.of(state);
 		}
 		
 		@Override
-		public float findFirst(FloatPredicate filter) {
+		public OptionalFloat findFirst(FloatPredicate filter) {
 			Objects.requireNonNull(filter);
-			if(size() <= 0) return 0F;
+			if(size() <= 0) return OptionalFloat.empty();
 			int index = firstIndex;
 			while(index != -1){
-				if(filter.test(values[index])) return values[index];
+				if(filter.test(values[index])) return OptionalFloat.of(values[index]);
 				index = (int)links[index];
 			}
-			return 0F;
+			return OptionalFloat.empty();
 		}
 		
 		@Override

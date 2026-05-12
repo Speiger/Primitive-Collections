@@ -1,13 +1,14 @@
 package speiger.src.collections.floats.utils;
 
-
 import speiger.src.collections.floats.collections.FloatIterator;
 import speiger.src.collections.floats.collections.FloatCollection;
 import speiger.src.collections.floats.functions.FloatComparator;
+import speiger.src.collections.floats.functions.OptionalFloat;
 import speiger.src.collections.floats.queues.FloatPriorityDequeue;
 import speiger.src.collections.floats.queues.FloatPriorityQueue;
 import speiger.src.collections.floats.functions.FloatConsumer;
 import speiger.src.collections.floats.functions.function.FloatPredicate;
+import speiger.src.collections.floats.functions.function.FloatFloatUnaryOperator;
 import speiger.src.collections.objects.functions.consumer.ObjectFloatConsumer;
 
 /**
@@ -113,7 +114,11 @@ public class FloatPriorityQueues
 		@Override
 		public boolean matchesAll(FloatPredicate filter) { synchronized(mutex) { return queue.matchesAll(filter); } }
 		@Override
-		public float findFirst(FloatPredicate filter) { synchronized(mutex) { return queue.findFirst(filter); } }
+		public OptionalFloat findFirst(FloatPredicate filter) { synchronized(mutex) { return queue.findFirst(filter); } }
+		@Override
+		public float reduce(float identity, FloatFloatUnaryOperator operator) { synchronized(mutex) { return queue.reduce(identity, operator); } }
+		@Override
+		public OptionalFloat reduce(FloatFloatUnaryOperator operator) { synchronized(mutex) { return queue.reduce(operator); } }
 		@Override
 		public int count(FloatPredicate filter) { synchronized(mutex) { return queue.count(filter); } }
 	}

@@ -10,6 +10,7 @@ import speiger.src.collections.shorts.collections.ShortBidirectionalIterator;
 import speiger.src.collections.shorts.collections.ShortCollection;
 import speiger.src.collections.shorts.collections.ShortIterator;
 import speiger.src.collections.shorts.functions.ShortConsumer;
+import speiger.src.collections.shorts.functions.OptionalShort;
 import speiger.src.collections.ints.functions.consumer.IntShortConsumer;
 import speiger.src.collections.objects.functions.consumer.ObjectShortConsumer;
 import speiger.src.collections.shorts.functions.function.ShortPredicate;
@@ -236,6 +237,10 @@ public class ImmutableShortOpenHashSet extends AbstractShortSet implements Short
 	@Override
 	public boolean addAll(ShortCollection c) { throw new UnsupportedOperationException(); }
 	@Override
+	public void addFirst(short o) { throw new UnsupportedOperationException(); }
+	@Override
+	public void addLast(short o) { throw new UnsupportedOperationException(); }
+	@Override
 	public boolean addAndMoveToFirst(short o) { throw new UnsupportedOperationException(); }
 	@Override
 	public boolean addAndMoveToLast(short o) { throw new UnsupportedOperationException(); }
@@ -371,7 +376,7 @@ public class ImmutableShortOpenHashSet extends AbstractShortSet implements Short
 	}
 	
 	@Override
-	public short reduce(ShortShortUnaryOperator operator) {
+	public OptionalShort reduce(ShortShortUnaryOperator operator) {
 		Objects.requireNonNull(operator);
 		short state = (short)0;
 		boolean empty = true;
@@ -384,18 +389,18 @@ public class ImmutableShortOpenHashSet extends AbstractShortSet implements Short
 			else state = operator.applyAsShort(state, keys[index]);
 			index = (int)links[index];
 		}
-		return state;
+		return empty ? OptionalShort.empty() : OptionalShort.of(state);
 	}
 	
 	@Override
-	public short findFirst(ShortPredicate filter) {
+	public OptionalShort findFirst(ShortPredicate filter) {
 		Objects.requireNonNull(filter);
 		int index = firstIndex;
 		while(index != -1) {
-			if(filter.test(keys[index])) return keys[index];
+			if(filter.test(keys[index])) return OptionalShort.of(keys[index]);
 			index = (int)links[index];
 		}
-		return (short)0;
+		return OptionalShort.empty();
 	}
 	
 	@Override

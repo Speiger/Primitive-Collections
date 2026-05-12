@@ -4,12 +4,12 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.NoSuchElementException;
 import java.util.Objects;
+import java.util.OptionalLong;
 import java.util.Set;
 import java.util.function.LongPredicate;
 import speiger.src.collections.longs.collections.LongBidirectionalIterator;
 import speiger.src.collections.longs.collections.LongCollection;
 import speiger.src.collections.longs.collections.LongIterator;
-
 import speiger.src.collections.ints.functions.consumer.IntLongConsumer;
 import speiger.src.collections.objects.functions.consumer.ObjectLongConsumer;
 import speiger.src.collections.longs.functions.function.LongLongUnaryOperator;
@@ -120,6 +120,25 @@ public class LongArraySet extends AbstractLongSet implements LongOrderedSet
 			return true;
 		}
 		return false;
+	}
+	
+	@Override
+	public void addFirst(long o) {
+		int index = findIndex(o);
+		if(index == -1) {
+			if(data.length == size) data = Arrays.copyOf(data, size == 0 ? 2 : size * 2);
+			System.arraycopy(data, 0, data, 1, size++);
+			data[0] = o;
+		}
+	}
+	
+	@Override
+	public void addLast(long o) {
+		int index = findIndex(o);
+		if(index == -1) {
+			if(data.length == size) data = Arrays.copyOf(data, size == 0 ? 2 : size * 2);
+			data[size++] = o;
+		}
 	}
 	
 	@Override
@@ -355,12 +374,12 @@ public class LongArraySet extends AbstractLongSet implements LongOrderedSet
 	}
 	
 	@Override
-	public long findFirst(LongPredicate filter) {
+	public OptionalLong findFirst(LongPredicate filter) {
 		Objects.requireNonNull(filter);
 		for(int i = 0;i<size;i++) {
-			if(filter.test(data[i])) return data[i];
+			if(filter.test(data[i])) return OptionalLong.of(data[i]);
 		}
-		return 0L;
+		return OptionalLong.empty();
 	}
 	
 	@Override
@@ -374,7 +393,7 @@ public class LongArraySet extends AbstractLongSet implements LongOrderedSet
 	}
 	
 	@Override
-	public long reduce(LongLongUnaryOperator operator) {
+	public OptionalLong reduce(LongLongUnaryOperator operator) {
 		Objects.requireNonNull(operator);
 		long state = 0L;
 		boolean empty = true;
@@ -386,7 +405,7 @@ public class LongArraySet extends AbstractLongSet implements LongOrderedSet
 			}
 			state = operator.applyAsLong(state, data[i]);
 		}
-		return state;
+		return empty ? OptionalLong.empty() : OptionalLong.of(state);
 	}
 	
 	@Override

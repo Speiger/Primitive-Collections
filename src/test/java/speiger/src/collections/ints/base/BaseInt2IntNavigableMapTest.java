@@ -9,8 +9,7 @@ import speiger.src.collections.ints.maps.interfaces.Int2IntNavigableMap;
 import speiger.src.collections.tests.NavigableSetTest;
 
 @SuppressWarnings("javadoc")
-public abstract class BaseInt2IntNavigableMapTest extends BaseInt2IntSortedMapTest
-{
+public abstract class BaseInt2IntNavigableMapTest extends BaseInt2IntSortedMapTest {
 	@Override
 	public abstract Int2IntNavigableMap createMap(int[] keys, int[] values);
 	@Override
@@ -29,30 +28,22 @@ public abstract class BaseInt2IntNavigableMapTest extends BaseInt2IntSortedMapTe
 	
 	@Test
 	public void lowerTest() {
-		if(getValidNavigableMapTests().contains(NavigableSetTest.LOWER)) {
-			Assert.assertTrue(createMap(TEST_ARRAY, TEST_ARRAY).lowerKey(50) < 50);
-		}
+		if(getValidNavigableMapTests().contains(NavigableSetTest.LOWER)) { Assert.assertTrue(createMap(TEST_ARRAY, TEST_ARRAY).lowerKey(50) < 50); }
 	}
 	
 	@Test
 	public void higherTest() {
-		if(getValidNavigableMapTests().contains(NavigableSetTest.HIGHER)) {
-			Assert.assertTrue(createMap(TEST_ARRAY, TEST_ARRAY).higherKey(50) > 50);
-		}
+		if(getValidNavigableMapTests().contains(NavigableSetTest.HIGHER)) { Assert.assertTrue(createMap(TEST_ARRAY, TEST_ARRAY).higherKey(50) > 50); }
 	}
 	
 	@Test
 	public void ceilTest() {
-		if(getValidNavigableMapTests().contains(NavigableSetTest.CEILING)) {
-			Assert.assertTrue(createMap(TEST_ARRAY, TEST_ARRAY).ceilingKey(50) >= 50);
-		}
+		if(getValidNavigableMapTests().contains(NavigableSetTest.CEILING)) { Assert.assertTrue(createMap(TEST_ARRAY, TEST_ARRAY).ceilingKey(50) >= 50); }
 	}
 	
 	@Test
 	public void floorTest() {
-		if(getValidNavigableMapTests().contains(NavigableSetTest.FLOOR)) {
-			Assert.assertTrue(createMap(TEST_ARRAY, TEST_ARRAY).floorKey(50) <= 50);
-		}
+		if(getValidNavigableMapTests().contains(NavigableSetTest.FLOOR)) { Assert.assertTrue(createMap(TEST_ARRAY, TEST_ARRAY).floorKey(50) <= 50); }
 	}
 	
 	@Test
@@ -75,7 +66,7 @@ public abstract class BaseInt2IntNavigableMapTest extends BaseInt2IntSortedMapTe
 			Assert.assertTrue(subSet.lowerKey(50) < 50);
 			Assert.assertTrue(subSet.higherKey(50) > 50);
 			Assert.assertTrue(subSet.ceilingKey(50) >= 50);
-			Assert.assertTrue(subSet.floorKey(50) <= 50);			
+			Assert.assertTrue(subSet.floorKey(50) <= 50);
 		}
 	}
 	

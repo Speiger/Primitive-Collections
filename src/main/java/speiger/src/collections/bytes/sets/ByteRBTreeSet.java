@@ -9,6 +9,7 @@ import java.util.Objects;
 import speiger.src.collections.bytes.collections.ByteBidirectionalIterator;
 import speiger.src.collections.bytes.functions.ByteComparator;
 import speiger.src.collections.bytes.functions.ByteConsumer;
+import speiger.src.collections.bytes.functions.OptionalByte;
 import speiger.src.collections.ints.functions.consumer.IntByteConsumer;
 import speiger.src.collections.objects.functions.consumer.ObjectByteConsumer;
 import speiger.src.collections.bytes.functions.function.BytePredicate;
@@ -334,7 +335,7 @@ public class ByteRBTreeSet extends AbstractByteSet implements ByteNavigableSet
 	}
 	
 	@Override
-	public byte reduce(ByteByteUnaryOperator operator) {
+	public OptionalByte reduce(ByteByteUnaryOperator operator) {
 		Objects.requireNonNull(operator);
 		byte state = (byte)0;
 		boolean empty = true;
@@ -346,16 +347,16 @@ public class ByteRBTreeSet extends AbstractByteSet implements ByteNavigableSet
 			}
 			state = operator.applyAsByte(state, entry.key);
 		}
-		return state;
+		return empty ? OptionalByte.empty() : OptionalByte.of(state);
 	}
 	
 	@Override
-	public byte findFirst(BytePredicate filter) {
+	public OptionalByte findFirst(BytePredicate filter) {
 		Objects.requireNonNull(filter);
 		for(Entry entry = first;entry != null;entry = entry.next()) {
-			if(filter.test(entry.key)) return entry.key;
+			if(filter.test(entry.key)) return OptionalByte.of(entry.key);
 		}
-		return (byte)0;
+		return OptionalByte.empty();
 	}
 	
 	@Override
@@ -1241,7 +1242,7 @@ public class ByteRBTreeSet extends AbstractByteSet implements ByteNavigableSet
 		}
 		
 		@Override
-		public byte reduce(ByteByteUnaryOperator operator) {
+		public OptionalByte reduce(ByteByteUnaryOperator operator) {
 			Objects.requireNonNull(operator);
 			byte state = (byte)0;
 			boolean empty = true;
@@ -1253,16 +1254,16 @@ public class ByteRBTreeSet extends AbstractByteSet implements ByteNavigableSet
 				}
 				state = operator.applyAsByte(state, entry.key);
 			}
-			return state;
+			return empty ? OptionalByte.empty() : OptionalByte.of(state);
 		}
 		
 		@Override
-		public byte findFirst(BytePredicate filter) {
+		public OptionalByte findFirst(BytePredicate filter) {
 			Objects.requireNonNull(filter);
 			for(Entry entry = start();entry != null && inRange(entry.key);entry = next(entry)) {
-				if(filter.test(entry.key)) return entry.key;
+				if(filter.test(entry.key)) return OptionalByte.of(entry.key);
 			}
-			return (byte)0;
+			return OptionalByte.empty();
 		}
 		
 		@Override

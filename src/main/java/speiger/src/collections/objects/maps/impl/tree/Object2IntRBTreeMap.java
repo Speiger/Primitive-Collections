@@ -4,11 +4,13 @@ import java.util.Collections;
 import java.util.Map;
 import java.util.Comparator;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.NoSuchElementException;
 import java.util.function.Consumer;
 import java.util.function.BiFunction;
 import java.util.function.Predicate;
 import java.util.function.IntPredicate;
+import java.util.OptionalInt;
 
 import speiger.src.collections.objects.collections.ObjectBidirectionalIterator;
 import speiger.src.collections.ints.functions.consumer.IntObjectConsumer;
@@ -1151,7 +1153,7 @@ public class Object2IntRBTreeMap<T> extends AbstractObject2IntMap<T> implements 
 		}
 		
 		@Override
-		public T reduce(ObjectObjectUnaryOperator<T, T> operator) {
+		public Optional<T> reduce(ObjectObjectUnaryOperator<T, T> operator) {
 			Objects.requireNonNull(operator);
 			T state = null;
 			boolean empty = true;
@@ -1163,15 +1165,15 @@ public class Object2IntRBTreeMap<T> extends AbstractObject2IntMap<T> implements 
 				}
 				state = operator.apply(state, entry.key);
 			}
-			return state;
+			return empty ? Optional.empty() : Optional.ofNullable(state);
 		}
 		
 		@Override
-		public T findFirst(Predicate<T> filter) {
+		public Optional<T> findFirst(Predicate<T> filter) {
 			Objects.requireNonNull(filter);
 			for(Node<T> entry = start(), end = end();entry != null && (end == null || (end != previous(entry)));entry = next(entry))
-				if(filter.test(entry.key)) return entry.key;
-			return null;
+				if(filter.test(entry.key)) return Optional.ofNullable(entry.key);
+			return Optional.empty();
 		}
 		
 		@Override
@@ -1810,7 +1812,7 @@ public class Object2IntRBTreeMap<T> extends AbstractObject2IntMap<T> implements 
 			}
 			
 			@Override
-			public Object2IntMap.Entry<T> reduce(ObjectObjectUnaryOperator<Object2IntMap.Entry<T>, Object2IntMap.Entry<T>> operator) {
+			public Optional<Object2IntMap.Entry<T>> reduce(ObjectObjectUnaryOperator<Object2IntMap.Entry<T>, Object2IntMap.Entry<T>> operator) {
 				Objects.requireNonNull(operator);
 				Object2IntMap.Entry<T> state = null;
 				boolean empty = true;
@@ -1822,19 +1824,19 @@ public class Object2IntRBTreeMap<T> extends AbstractObject2IntMap<T> implements 
 					}
 					state = operator.apply(state, new BasicEntry<>(entry.key, entry.value));
 				}
-				return state;
+				return empty ? Optional.empty() : Optional.ofNullable(state);
 			}
 			
 			@Override
-			public Object2IntMap.Entry<T> findFirst(Predicate<Object2IntMap.Entry<T>> filter) {
+			public Optional<Object2IntMap.Entry<T>> findFirst(Predicate<Object2IntMap.Entry<T>> filter) {
 				Objects.requireNonNull(filter);
-				if(size() <= 0) return null;
+				if(size() <= 0) return Optional.empty();
 				BasicEntry<T> subEntry = new BasicEntry<>();
 				for(Node<T> entry = subLowest(), last = subHighest();entry != null && (last == null || last != previous(entry));entry = next(entry)) {
 					subEntry.set(entry.key, entry.value);
-					if(filter.test(subEntry)) return subEntry;
+					if(filter.test(subEntry)) return Optional.ofNullable(subEntry);
 				}
-				return null;
+				return Optional.empty();
 			}
 			
 			@Override
@@ -1929,7 +1931,7 @@ public class Object2IntRBTreeMap<T> extends AbstractObject2IntMap<T> implements 
 			}
 			
 			@Override
-			public int reduce(IntIntUnaryOperator operator) {
+			public OptionalInt reduce(IntIntUnaryOperator operator) {
 				Objects.requireNonNull(operator);
 				int state = 0;
 				boolean empty = true;
@@ -1941,15 +1943,15 @@ public class Object2IntRBTreeMap<T> extends AbstractObject2IntMap<T> implements 
 					}
 					state = operator.applyAsInt(state, entry.value);
 				}
-				return state;
+				return empty ? OptionalInt.empty() : OptionalInt.of(state);
 			}
 			
 			@Override
-			public int findFirst(IntPredicate filter) {
+			public OptionalInt findFirst(IntPredicate filter) {
 				Objects.requireNonNull(filter);
 				for(Node<T> entry = subLowest(), last = subHighest();entry != null && (last == null || last != previous(entry));entry = next(entry))
-					if(filter.test(entry.value)) return entry.value;
-				return 0;
+					if(filter.test(entry.value)) return OptionalInt.of(entry.value);
+				return OptionalInt.empty();
 			}
 			
 			@Override
@@ -2265,7 +2267,7 @@ public class Object2IntRBTreeMap<T> extends AbstractObject2IntMap<T> implements 
 		}
 		
 		@Override
-		public int reduce(IntIntUnaryOperator operator) {
+		public OptionalInt reduce(IntIntUnaryOperator operator) {
 			Objects.requireNonNull(operator);
 			int state = 0;
 			boolean empty = true;
@@ -2277,15 +2279,15 @@ public class Object2IntRBTreeMap<T> extends AbstractObject2IntMap<T> implements 
 				}
 				state = operator.applyAsInt(state, entry.value);
 			}
-			return state;
+			return empty ? OptionalInt.empty() : OptionalInt.of(state);
 		}
 		
 		@Override
-		public int findFirst(IntPredicate filter) {
+		public OptionalInt findFirst(IntPredicate filter) {
 			Objects.requireNonNull(filter);
 			for(Node<T> entry = first;entry != null;entry = entry.next())
-				if(filter.test(entry.value)) return entry.value;
-			return 0;
+				if(filter.test(entry.value)) return OptionalInt.of(entry.value);
+			return OptionalInt.empty();
 		}
 		
 		@Override
@@ -2426,7 +2428,7 @@ public class Object2IntRBTreeMap<T> extends AbstractObject2IntMap<T> implements 
 		}
 		
 		@Override
-		public Object2IntMap.Entry<T> reduce(ObjectObjectUnaryOperator<Object2IntMap.Entry<T>, Object2IntMap.Entry<T>> operator) {
+		public Optional<Object2IntMap.Entry<T>> reduce(ObjectObjectUnaryOperator<Object2IntMap.Entry<T>, Object2IntMap.Entry<T>> operator) {
 			Objects.requireNonNull(operator);
 			Object2IntMap.Entry<T> state = null;
 			boolean empty = true;
@@ -2438,19 +2440,19 @@ public class Object2IntRBTreeMap<T> extends AbstractObject2IntMap<T> implements 
 				}
 				state = operator.apply(state, new BasicEntry<>(entry.key, entry.value));
 			}
-			return state;
+			return empty ? Optional.empty() : Optional.ofNullable(state);
 		}
 		
 		@Override
-		public Object2IntMap.Entry<T> findFirst(Predicate<Object2IntMap.Entry<T>> filter) {
+		public Optional<Object2IntMap.Entry<T>> findFirst(Predicate<Object2IntMap.Entry<T>> filter) {
 			Objects.requireNonNull(filter);
-			if(size() <= 0) return null;
+			if(size() <= 0) return Optional.empty();
 			BasicEntry<T> subEntry = new BasicEntry<>();
 			for(Node<T> entry = first;entry != null;entry = entry.next()) {
 				subEntry.set(entry.key, entry.value);
-				if(filter.test(subEntry)) return subEntry;
+				if(filter.test(subEntry)) return Optional.ofNullable(subEntry);
 			}
-			return null;
+			return Optional.empty();
 		}
 		
 		@Override

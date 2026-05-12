@@ -5,10 +5,12 @@ import java.util.ConcurrentModificationException;
 import java.util.Map;
 import java.util.NoSuchElementException;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.function.Consumer;
 import java.util.function.BiFunction;
 import java.util.function.Predicate;
 import java.util.function.DoublePredicate;
+import java.util.OptionalDouble;
 
 import speiger.src.collections.bytes.collections.ByteIterator;
 import speiger.src.collections.bytes.functions.ByteConsumer;
@@ -20,6 +22,7 @@ import speiger.src.collections.bytes.functions.consumer.ByteDoubleConsumer;
 import speiger.src.collections.bytes.functions.function.Byte2DoubleFunction;
 import speiger.src.collections.bytes.functions.function.ByteDoubleUnaryOperator;
 import speiger.src.collections.bytes.functions.function.ByteByteUnaryOperator;
+import speiger.src.collections.bytes.functions.OptionalByte;
 import speiger.src.collections.bytes.functions.function.BytePredicate;
 import speiger.src.collections.bytes.maps.abstracts.AbstractByte2DoubleMap;
 import speiger.src.collections.bytes.maps.interfaces.Byte2DoubleMap;
@@ -920,7 +923,7 @@ public class Byte2DoubleOpenHashMap extends AbstractByte2DoubleMap implements IT
 		}
 		
 		@Override
-		public Byte2DoubleMap.Entry reduce(ObjectObjectUnaryOperator<Byte2DoubleMap.Entry, Byte2DoubleMap.Entry> operator) {
+		public Optional<Byte2DoubleMap.Entry> reduce(ObjectObjectUnaryOperator<Byte2DoubleMap.Entry, Byte2DoubleMap.Entry> operator) {
 			Objects.requireNonNull(operator);
 			Byte2DoubleMap.Entry state = null;
 			boolean empty = true;
@@ -937,25 +940,25 @@ public class Byte2DoubleOpenHashMap extends AbstractByte2DoubleMap implements IT
 				}
 				state = operator.apply(state, new ValueMapEntry(i));
 			}
-			return state;
+			return empty ? Optional.empty() : Optional.ofNullable(state);
 		}
 		
 		@Override
-		public Byte2DoubleMap.Entry findFirst(Predicate<Byte2DoubleMap.Entry> filter) {
+		public Optional<Byte2DoubleMap.Entry> findFirst(Predicate<Byte2DoubleMap.Entry> filter) {
 			Objects.requireNonNull(filter);
-			if(size() <= 0) return null;
+			if(size() <= 0) return Optional.empty();
 			MapEntry entry = new MapEntry();
 			if(containsNull) {
 				entry.set(nullIndex);
-				if(filter.test(entry)) return entry;
+				if(filter.test(entry)) return Optional.ofNullable(entry);
 			}
 			for(int i = nullIndex-1;i>=0;i--) {
 				if(keys[i] != (byte)0) {
 					entry.set(i);
-					if(filter.test(entry)) return entry;
+					if(filter.test(entry)) return Optional.ofNullable(entry);
 				}
 			}
-			return null;
+			return Optional.empty();
 		}
 		
 		@Override
@@ -1127,7 +1130,7 @@ public class Byte2DoubleOpenHashMap extends AbstractByte2DoubleMap implements IT
 		}
 		
 		@Override
-		public byte reduce(ByteByteUnaryOperator operator) {
+		public OptionalByte reduce(ByteByteUnaryOperator operator) {
 			Objects.requireNonNull(operator);
 			byte state = (byte)0;
 			boolean empty = true;
@@ -1144,18 +1147,18 @@ public class Byte2DoubleOpenHashMap extends AbstractByte2DoubleMap implements IT
 				}
 				state = operator.applyAsByte(state, keys[i]);
 			}
-			return state;
+			return empty ? OptionalByte.empty() : OptionalByte.of(state);
 		}
 		
 		@Override
-		public byte findFirst(BytePredicate filter) {
+		public OptionalByte findFirst(BytePredicate filter) {
 			Objects.requireNonNull(filter);
-			if(size() <= 0) return (byte)0;
-			if(containsNull && filter.test(keys[nullIndex])) return keys[nullIndex];
+			if(size() <= 0) return OptionalByte.empty();
+			if(containsNull && filter.test(keys[nullIndex])) return OptionalByte.of(keys[nullIndex]);
 			for(int i = nullIndex-1;i>=0;i--) {
-				if(keys[i] != (byte)0 && filter.test(keys[i])) return keys[i];
+				if(keys[i] != (byte)0 && filter.test(keys[i])) return OptionalByte.of(keys[i]);
 			}
-			return (byte)0;
+			return OptionalByte.empty();
 		}
 		
 		@Override
@@ -1270,7 +1273,7 @@ public class Byte2DoubleOpenHashMap extends AbstractByte2DoubleMap implements IT
 		}
 		
 		@Override
-		public double reduce(DoubleDoubleUnaryOperator operator) {
+		public OptionalDouble reduce(DoubleDoubleUnaryOperator operator) {
 			Objects.requireNonNull(operator);
 			double state = 0D;
 			boolean empty = true;
@@ -1287,18 +1290,18 @@ public class Byte2DoubleOpenHashMap extends AbstractByte2DoubleMap implements IT
 				}
 				state = operator.applyAsDouble(state, values[i]);
 			}
-			return state;
+			return empty ? OptionalDouble.empty() : OptionalDouble.of(state);
 		}
 		
 		@Override
-		public double findFirst(DoublePredicate filter) {
+		public OptionalDouble findFirst(DoublePredicate filter) {
 			Objects.requireNonNull(filter);
-			if(size() <= 0) return 0D;
-			if(containsNull && filter.test(values[nullIndex])) return values[nullIndex];
+			if(size() <= 0) return OptionalDouble.empty();
+			if(containsNull && filter.test(values[nullIndex])) return OptionalDouble.of(values[nullIndex]);
 			for(int i = nullIndex-1;i>=0;i--) {
-				if(keys[i] != (byte)0 && filter.test(values[i])) return values[i];
+				if(keys[i] != (byte)0 && filter.test(values[i])) return OptionalDouble.of(values[i]);
 			}
-			return 0D;
+			return OptionalDouble.empty();
 		}
 		
 		@Override

@@ -3,11 +3,13 @@ package speiger.src.collections.ints.maps.impl.tree;
 import java.util.Collections;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.NoSuchElementException;
 import java.util.function.Consumer;
 import java.util.function.BiFunction;
 import java.util.function.Predicate;
 import java.util.function.IntPredicate;
+import java.util.OptionalInt;
 
 
 import speiger.src.collections.ints.collections.IntBidirectionalIterator;
@@ -36,6 +38,7 @@ import speiger.src.collections.objects.functions.consumer.ObjectObjectConsumer;
 import speiger.src.collections.objects.functions.consumer.ObjectShortConsumer;
 
 import speiger.src.collections.shorts.functions.function.ShortPredicate;
+import speiger.src.collections.shorts.functions.OptionalShort;
 import speiger.src.collections.objects.collections.ObjectBidirectionalIterator;
 import speiger.src.collections.objects.collections.ObjectIterator;
 import speiger.src.collections.objects.functions.function.ObjectObjectUnaryOperator;
@@ -1128,7 +1131,7 @@ public class Int2ShortAVLTreeMap extends AbstractInt2ShortMap implements Int2Sho
 		}
 		
 		@Override
-		public int reduce(IntIntUnaryOperator operator) {
+		public OptionalInt reduce(IntIntUnaryOperator operator) {
 			Objects.requireNonNull(operator);
 			int state = 0;
 			boolean empty = true;
@@ -1140,15 +1143,15 @@ public class Int2ShortAVLTreeMap extends AbstractInt2ShortMap implements Int2Sho
 				}
 				state = operator.applyAsInt(state, entry.key);
 			}
-			return state;
+			return empty ? OptionalInt.empty() : OptionalInt.of(state);
 		}
 		
 		@Override
-		public int findFirst(IntPredicate filter) {
+		public OptionalInt findFirst(IntPredicate filter) {
 			Objects.requireNonNull(filter);
 			for(Node entry = start(), end = end();entry != null && (end == null || (end != previous(entry)));entry = next(entry))
-				if(filter.test(entry.key)) return entry.key;
-			return 0;
+				if(filter.test(entry.key)) return OptionalInt.of(entry.key);
+			return OptionalInt.empty();
 		}
 		
 		@Override
@@ -1782,7 +1785,7 @@ public class Int2ShortAVLTreeMap extends AbstractInt2ShortMap implements Int2Sho
 			}
 			
 			@Override
-			public Int2ShortMap.Entry reduce(ObjectObjectUnaryOperator<Int2ShortMap.Entry, Int2ShortMap.Entry> operator) {
+			public Optional<Int2ShortMap.Entry> reduce(ObjectObjectUnaryOperator<Int2ShortMap.Entry, Int2ShortMap.Entry> operator) {
 				Objects.requireNonNull(operator);
 				Int2ShortMap.Entry state = null;
 				boolean empty = true;
@@ -1794,19 +1797,19 @@ public class Int2ShortAVLTreeMap extends AbstractInt2ShortMap implements Int2Sho
 					}
 					state = operator.apply(state, new BasicEntry(entry.key, entry.value));
 				}
-				return state;
+				return empty ? Optional.empty() : Optional.ofNullable(state);
 			}
 			
 			@Override
-			public Int2ShortMap.Entry findFirst(Predicate<Int2ShortMap.Entry> filter) {
+			public Optional<Int2ShortMap.Entry> findFirst(Predicate<Int2ShortMap.Entry> filter) {
 				Objects.requireNonNull(filter);
-				if(size() <= 0) return null;
+				if(size() <= 0) return Optional.empty();
 				BasicEntry subEntry = new BasicEntry();
 				for(Node entry = subLowest(), last = subHighest();entry != null && (last == null || last != previous(entry));entry = next(entry)) {
 					subEntry.set(entry.key, entry.value);
-					if(filter.test(subEntry)) return subEntry;
+					if(filter.test(subEntry)) return Optional.ofNullable(subEntry);
 				}
-				return null;
+				return Optional.empty();
 			}
 			
 			@Override
@@ -1901,7 +1904,7 @@ public class Int2ShortAVLTreeMap extends AbstractInt2ShortMap implements Int2Sho
 			}
 			
 			@Override
-			public short reduce(ShortShortUnaryOperator operator) {
+			public OptionalShort reduce(ShortShortUnaryOperator operator) {
 				Objects.requireNonNull(operator);
 				short state = (short)0;
 				boolean empty = true;
@@ -1913,15 +1916,15 @@ public class Int2ShortAVLTreeMap extends AbstractInt2ShortMap implements Int2Sho
 					}
 					state = operator.applyAsShort(state, entry.value);
 				}
-				return state;
+				return empty ? OptionalShort.empty() : OptionalShort.of(state);
 			}
 			
 			@Override
-			public short findFirst(ShortPredicate filter) {
+			public OptionalShort findFirst(ShortPredicate filter) {
 				Objects.requireNonNull(filter);
 				for(Node entry = subLowest(), last = subHighest();entry != null && (last == null || last != previous(entry));entry = next(entry))
-					if(filter.test(entry.value)) return entry.value;
-				return (short)0;
+					if(filter.test(entry.value)) return OptionalShort.of(entry.value);
+				return OptionalShort.empty();
 			}
 			
 			@Override
@@ -2237,7 +2240,7 @@ public class Int2ShortAVLTreeMap extends AbstractInt2ShortMap implements Int2Sho
 		}
 		
 		@Override
-		public short reduce(ShortShortUnaryOperator operator) {
+		public OptionalShort reduce(ShortShortUnaryOperator operator) {
 			Objects.requireNonNull(operator);
 			short state = (short)0;
 			boolean empty = true;
@@ -2249,15 +2252,15 @@ public class Int2ShortAVLTreeMap extends AbstractInt2ShortMap implements Int2Sho
 				}
 				state = operator.applyAsShort(state, entry.value);
 			}
-			return state;
+			return empty ? OptionalShort.empty() : OptionalShort.of(state);
 		}
 		
 		@Override
-		public short findFirst(ShortPredicate filter) {
+		public OptionalShort findFirst(ShortPredicate filter) {
 			Objects.requireNonNull(filter);
 			for(Node entry = first;entry != null;entry = entry.next())
-				if(filter.test(entry.value)) return entry.value;
-			return (short)0;
+				if(filter.test(entry.value)) return OptionalShort.of(entry.value);
+			return OptionalShort.empty();
 		}
 		
 		@Override
@@ -2398,7 +2401,7 @@ public class Int2ShortAVLTreeMap extends AbstractInt2ShortMap implements Int2Sho
 		}
 		
 		@Override
-		public Int2ShortMap.Entry reduce(ObjectObjectUnaryOperator<Int2ShortMap.Entry, Int2ShortMap.Entry> operator) {
+		public Optional<Int2ShortMap.Entry> reduce(ObjectObjectUnaryOperator<Int2ShortMap.Entry, Int2ShortMap.Entry> operator) {
 			Objects.requireNonNull(operator);
 			Int2ShortMap.Entry state = null;
 			boolean empty = true;
@@ -2410,19 +2413,19 @@ public class Int2ShortAVLTreeMap extends AbstractInt2ShortMap implements Int2Sho
 				}
 				state = operator.apply(state, new BasicEntry(entry.key, entry.value));
 			}
-			return state;
+			return empty ? Optional.empty() : Optional.ofNullable(state);
 		}
 		
 		@Override
-		public Int2ShortMap.Entry findFirst(Predicate<Int2ShortMap.Entry> filter) {
+		public Optional<Int2ShortMap.Entry> findFirst(Predicate<Int2ShortMap.Entry> filter) {
 			Objects.requireNonNull(filter);
-			if(size() <= 0) return null;
+			if(size() <= 0) return Optional.empty();
 			BasicEntry subEntry = new BasicEntry();
 			for(Node entry = first;entry != null;entry = entry.next()) {
 				subEntry.set(entry.key, entry.value);
-				if(filter.test(subEntry)) return subEntry;
+				if(filter.test(subEntry)) return Optional.ofNullable(subEntry);
 			}
-			return null;
+			return Optional.empty();
 		}
 		
 		@Override

@@ -302,6 +302,10 @@ public class FloatSets
 		}
 		
 		@Override
+		public void addFirst(float o) { throw new UnsupportedOperationException(); }
+		@Override
+		public void addLast(float o) { throw new UnsupportedOperationException(); }
+		@Override
 		public boolean addAndMoveToFirst(float o) { throw new UnsupportedOperationException(); }
 		@Override
 		public boolean addAndMoveToLast(float o) { throw new UnsupportedOperationException(); }
@@ -573,7 +577,11 @@ public class FloatSets
 			super(c, mutex);
 			s = c;
 		}
-
+		
+		@Override
+		public void addFirst(float o) { synchronized(mutex) { s.addFirst(o); } }
+		@Override
+		public void addLast(float o) { synchronized(mutex) { s.addLast(o); } }
 		@Override
 		public boolean addAndMoveToFirst(float o) { synchronized(mutex) { return s.addAndMoveToFirst(o); } }
 		@Override

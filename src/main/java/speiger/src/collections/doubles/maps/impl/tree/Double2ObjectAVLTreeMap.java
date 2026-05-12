@@ -3,11 +3,13 @@ package speiger.src.collections.doubles.maps.impl.tree;
 import java.util.Collections;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.NoSuchElementException;
 import java.util.function.Consumer;
 import java.util.function.BiFunction;
 import java.util.function.Predicate;
 import java.util.function.DoublePredicate;
+import java.util.OptionalDouble;
 
 
 import speiger.src.collections.doubles.collections.DoubleBidirectionalIterator;
@@ -1017,7 +1019,7 @@ public class Double2ObjectAVLTreeMap<V> extends AbstractDouble2ObjectMap<V> impl
 		}
 		
 		@Override
-		public double reduce(DoubleDoubleUnaryOperator operator) {
+		public OptionalDouble reduce(DoubleDoubleUnaryOperator operator) {
 			Objects.requireNonNull(operator);
 			double state = 0D;
 			boolean empty = true;
@@ -1029,15 +1031,15 @@ public class Double2ObjectAVLTreeMap<V> extends AbstractDouble2ObjectMap<V> impl
 				}
 				state = operator.applyAsDouble(state, entry.key);
 			}
-			return state;
+			return empty ? OptionalDouble.empty() : OptionalDouble.of(state);
 		}
 		
 		@Override
-		public double findFirst(DoublePredicate filter) {
+		public OptionalDouble findFirst(DoublePredicate filter) {
 			Objects.requireNonNull(filter);
 			for(Node<V> entry = start(), end = end();entry != null && (end == null || (end != previous(entry)));entry = next(entry))
-				if(filter.test(entry.key)) return entry.key;
-			return 0D;
+				if(filter.test(entry.key)) return OptionalDouble.of(entry.key);
+			return OptionalDouble.empty();
 		}
 		
 		@Override
@@ -1664,7 +1666,7 @@ public class Double2ObjectAVLTreeMap<V> extends AbstractDouble2ObjectMap<V> impl
 			}
 			
 			@Override
-			public Double2ObjectMap.Entry<V> reduce(ObjectObjectUnaryOperator<Double2ObjectMap.Entry<V>, Double2ObjectMap.Entry<V>> operator) {
+			public Optional<Double2ObjectMap.Entry<V>> reduce(ObjectObjectUnaryOperator<Double2ObjectMap.Entry<V>, Double2ObjectMap.Entry<V>> operator) {
 				Objects.requireNonNull(operator);
 				Double2ObjectMap.Entry<V> state = null;
 				boolean empty = true;
@@ -1676,19 +1678,19 @@ public class Double2ObjectAVLTreeMap<V> extends AbstractDouble2ObjectMap<V> impl
 					}
 					state = operator.apply(state, new BasicEntry<>(entry.key, entry.value));
 				}
-				return state;
+				return empty ? Optional.empty() : Optional.ofNullable(state);
 			}
 			
 			@Override
-			public Double2ObjectMap.Entry<V> findFirst(Predicate<Double2ObjectMap.Entry<V>> filter) {
+			public Optional<Double2ObjectMap.Entry<V>> findFirst(Predicate<Double2ObjectMap.Entry<V>> filter) {
 				Objects.requireNonNull(filter);
-				if(size() <= 0) return null;
+				if(size() <= 0) return Optional.empty();
 				BasicEntry<V> subEntry = new BasicEntry<>();
 				for(Node<V> entry = subLowest(), last = subHighest();entry != null && (last == null || last != previous(entry));entry = next(entry)) {
 					subEntry.set(entry.key, entry.value);
-					if(filter.test(subEntry)) return subEntry;
+					if(filter.test(subEntry)) return Optional.ofNullable(subEntry);
 				}
-				return null;
+				return Optional.empty();
 			}
 			
 			@Override
@@ -1783,7 +1785,7 @@ public class Double2ObjectAVLTreeMap<V> extends AbstractDouble2ObjectMap<V> impl
 			}
 			
 			@Override
-			public V reduce(ObjectObjectUnaryOperator<V, V> operator) {
+			public Optional<V> reduce(ObjectObjectUnaryOperator<V, V> operator) {
 				Objects.requireNonNull(operator);
 				V state = null;
 				boolean empty = true;
@@ -1795,15 +1797,15 @@ public class Double2ObjectAVLTreeMap<V> extends AbstractDouble2ObjectMap<V> impl
 					}
 					state = operator.apply(state, entry.value);
 				}
-				return state;
+				return empty ? Optional.empty() : Optional.ofNullable(state);
 			}
 			
 			@Override
-			public V findFirst(Predicate<V> filter) {
+			public Optional<V> findFirst(Predicate<V> filter) {
 				Objects.requireNonNull(filter);
 				for(Node<V> entry = subLowest(), last = subHighest();entry != null && (last == null || last != previous(entry));entry = next(entry))
-					if(filter.test(entry.value)) return entry.value;
-				return null;
+					if(filter.test(entry.value)) return Optional.ofNullable(entry.value);
+				return Optional.empty();
 			}
 			
 			@Override
@@ -2119,7 +2121,7 @@ public class Double2ObjectAVLTreeMap<V> extends AbstractDouble2ObjectMap<V> impl
 		}
 		
 		@Override
-		public V reduce(ObjectObjectUnaryOperator<V, V> operator) {
+		public Optional<V> reduce(ObjectObjectUnaryOperator<V, V> operator) {
 			Objects.requireNonNull(operator);
 			V state = null;
 			boolean empty = true;
@@ -2131,15 +2133,15 @@ public class Double2ObjectAVLTreeMap<V> extends AbstractDouble2ObjectMap<V> impl
 				}
 				state = operator.apply(state, entry.value);
 			}
-			return state;
+			return empty ? Optional.empty() : Optional.ofNullable(state);
 		}
 		
 		@Override
-		public V findFirst(Predicate<V> filter) {
+		public Optional<V> findFirst(Predicate<V> filter) {
 			Objects.requireNonNull(filter);
 			for(Node<V> entry = first;entry != null;entry = entry.next())
-				if(filter.test(entry.value)) return entry.value;
-			return null;
+				if(filter.test(entry.value)) return Optional.ofNullable(entry.value);
+			return Optional.empty();
 		}
 		
 		@Override
@@ -2280,7 +2282,7 @@ public class Double2ObjectAVLTreeMap<V> extends AbstractDouble2ObjectMap<V> impl
 		}
 		
 		@Override
-		public Double2ObjectMap.Entry<V> reduce(ObjectObjectUnaryOperator<Double2ObjectMap.Entry<V>, Double2ObjectMap.Entry<V>> operator) {
+		public Optional<Double2ObjectMap.Entry<V>> reduce(ObjectObjectUnaryOperator<Double2ObjectMap.Entry<V>, Double2ObjectMap.Entry<V>> operator) {
 			Objects.requireNonNull(operator);
 			Double2ObjectMap.Entry<V> state = null;
 			boolean empty = true;
@@ -2292,19 +2294,19 @@ public class Double2ObjectAVLTreeMap<V> extends AbstractDouble2ObjectMap<V> impl
 				}
 				state = operator.apply(state, new BasicEntry<>(entry.key, entry.value));
 			}
-			return state;
+			return empty ? Optional.empty() : Optional.ofNullable(state);
 		}
 		
 		@Override
-		public Double2ObjectMap.Entry<V> findFirst(Predicate<Double2ObjectMap.Entry<V>> filter) {
+		public Optional<Double2ObjectMap.Entry<V>> findFirst(Predicate<Double2ObjectMap.Entry<V>> filter) {
 			Objects.requireNonNull(filter);
-			if(size() <= 0) return null;
+			if(size() <= 0) return Optional.empty();
 			BasicEntry<V> subEntry = new BasicEntry<>();
 			for(Node<V> entry = first;entry != null;entry = entry.next()) {
 				subEntry.set(entry.key, entry.value);
-				if(filter.test(subEntry)) return subEntry;
+				if(filter.test(subEntry)) return Optional.ofNullable(subEntry);
 			}
-			return null;
+			return Optional.empty();
 		}
 		
 		@Override

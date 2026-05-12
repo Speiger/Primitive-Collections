@@ -5,6 +5,7 @@ import java.util.Objects;
 import java.util.NoSuchElementException;
 
 import speiger.src.collections.booleans.collections.BooleanIterator;
+import speiger.src.collections.booleans.functions.OptionalBoolean;
 import speiger.src.collections.booleans.functions.BooleanComparator;
 import speiger.src.collections.booleans.functions.BooleanConsumer;
 import speiger.src.collections.ints.functions.consumer.IntBooleanConsumer;
@@ -278,17 +279,17 @@ public class BooleanArrayFIFOQueue extends AbstractBooleanPriorityQueue implemen
 	}
 	
 	@Override
-	public boolean findFirst(BooleanPredicate filter) {
+	public OptionalBoolean findFirst(BooleanPredicate filter) {
 		Objects.requireNonNull(filter);
 		for(int i = 0,m=size();i<m;i++) {
 			int index = (first + i) % array.length;
 			if(filter.test(array[index])) {
 				boolean data = array[index];
 				removeIndex(index);
-				return data;
+				return OptionalBoolean.of(data);
 			}
 		}
-		return false;
+		return OptionalBoolean.empty();
 	}
 	
 	@Override
@@ -302,7 +303,7 @@ public class BooleanArrayFIFOQueue extends AbstractBooleanPriorityQueue implemen
 	}
 	
 	@Override
-	public boolean reduce(BooleanBooleanUnaryOperator operator) {
+	public OptionalBoolean reduce(BooleanBooleanUnaryOperator operator) {
 		Objects.requireNonNull(operator);
 		boolean state = false;
 		boolean empty = true;
@@ -314,7 +315,7 @@ public class BooleanArrayFIFOQueue extends AbstractBooleanPriorityQueue implemen
 			}
 			state = operator.applyAsBoolean(state, array[(first + i) % array.length]);
 		}
-		return state;
+		return empty ? OptionalBoolean.empty() : OptionalBoolean.of(state);
 	}
 	
 	@Override

@@ -16,6 +16,7 @@ import java.nio.CharBuffer;
 import speiger.src.collections.chars.collections.CharCollection;
 import speiger.src.collections.chars.collections.CharStack;
 import speiger.src.collections.chars.collections.CharIterator;
+import speiger.src.collections.chars.functions.OptionalChar;
 import speiger.src.collections.chars.functions.CharComparator;
 import speiger.src.collections.chars.functions.CharConsumer;
 import speiger.src.collections.objects.functions.consumer.ObjectCharConsumer;
@@ -654,13 +655,13 @@ public class CopyOnWriteCharArrayList extends AbstractCharList implements ITrimm
 	}
 	
 	@Override
-	public char findFirst(CharPredicate filter) {
+	public OptionalChar findFirst(CharPredicate filter) {
 		Objects.requireNonNull(filter);
 		char[] data = this.data;
 		for(int i = 0,m=data.length;i<m;i++) {
-			if(filter.test(data[i])) return data[i];
+			if(filter.test(data[i])) return OptionalChar.of(data[i]);
 		}
-		return (char)0;
+		return OptionalChar.empty();
 	}
 	
 	@Override
@@ -675,7 +676,7 @@ public class CopyOnWriteCharArrayList extends AbstractCharList implements ITrimm
 	}
 	
 	@Override
-	public char reduce(CharCharUnaryOperator operator) {
+	public OptionalChar reduce(CharCharUnaryOperator operator) {
 		Objects.requireNonNull(operator);
 		char[] data = this.data;
 		char state = (char)0;
@@ -688,7 +689,7 @@ public class CopyOnWriteCharArrayList extends AbstractCharList implements ITrimm
 			}
 			state = operator.applyAsChar(state, data[i]);
 		}
-		return state;
+		return empty ? OptionalChar.empty() : OptionalChar.of(state);
 	}
 	
 	@Override

@@ -5,6 +5,7 @@ import java.util.Collection;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 import java.util.Objects;
+import java.util.OptionalInt;
 import java.util.function.IntPredicate;
 
 import speiger.src.collections.ints.collections.IntCollection;
@@ -181,6 +182,46 @@ public class IntLinkedOpenHashSet extends IntOpenHashSet implements IntOrderedSe
 	public IntLinkedOpenHashSet(IntIterator iterator, float loadFactor) {
 		this(HashUtil.DEFAULT_MIN_CAPACITY, loadFactor);
 		while(iterator.hasNext()) add(iterator.nextInt());
+	}
+	
+	@Override
+	public void addFirst(int o) {
+		if(o == 0) {
+			if(containsNull) return;
+			containsNull = true;
+			onNodeAdded(nullIndex);
+			moveToFirstIndex(nullIndex);
+		}
+		else {
+			int pos = HashUtil.mix(Integer.hashCode(o)) & mask;
+			while(keys[pos] != 0) {
+				if(keys[pos] == o) return;
+				pos = ++pos & mask;
+			}
+			keys[pos] = o;
+			onNodeAdded(pos);
+			moveToFirstIndex(pos);
+		}
+		if(size++ >= maxFill) rehash(HashUtil.arraySize(size+1, loadFactor));
+	}
+	
+	@Override
+	public void addLast(int o) {
+		if(o == 0) {
+			if(containsNull) return;
+			containsNull = true;
+			onNodeAdded(nullIndex);
+		}
+		else {
+			int pos = HashUtil.mix(Integer.hashCode(o)) & mask;
+			while(keys[pos] != 0) {
+				if(keys[pos] == o) return;
+				pos = ++pos & mask;
+			}
+			keys[pos] = o;
+			onNodeAdded(pos);
+		}
+		if(size++ >= maxFill) rehash(HashUtil.arraySize(size+1, loadFactor));
 	}
 	
 	@Override
@@ -471,7 +512,7 @@ public class IntLinkedOpenHashSet extends IntOpenHashSet implements IntOrderedSe
 	}
 	
 	@Override
-	public int reduce(IntIntUnaryOperator operator) {
+	public OptionalInt reduce(IntIntUnaryOperator operator) {
 		Objects.requireNonNull(operator);
 		int state = 0;
 		boolean empty = true;
@@ -484,18 +525,18 @@ public class IntLinkedOpenHashSet extends IntOpenHashSet implements IntOrderedSe
 			else state = operator.applyAsInt(state, keys[index]);
 			index = (int)links[index];
 		}
-		return state;
+		return empty ? OptionalInt.empty() : OptionalInt.of(state);
 	}
 	
 	@Override
-	public int findFirst(IntPredicate filter) {
+	public OptionalInt findFirst(IntPredicate filter) {
 		Objects.requireNonNull(filter);
 		int index = firstIndex;
 		while(index != -1) {
-			if(filter.test(keys[index])) return keys[index];
+			if(filter.test(keys[index])) return OptionalInt.of(keys[index]);
 			index = (int)links[index];
 		}
-		return 0;
+		return OptionalInt.empty();
 	}
 	
 	@Override

@@ -4,6 +4,7 @@ import java.util.Arrays;
 import java.util.Map;
 import java.util.NoSuchElementException;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.function.Consumer;
 import java.util.function.BiFunction;
 import java.util.function.Predicate;
@@ -20,6 +21,7 @@ import speiger.src.collections.objects.maps.interfaces.Object2BooleanMap;
 import speiger.src.collections.objects.functions.consumer.ObjectObjectConsumer;
 
 import speiger.src.collections.booleans.functions.function.BooleanPredicate;
+import speiger.src.collections.booleans.functions.OptionalBoolean;
 import speiger.src.collections.booleans.collections.AbstractBooleanCollection;
 import speiger.src.collections.booleans.collections.BooleanOrderedCollection;
 import speiger.src.collections.booleans.collections.BooleanIterator;
@@ -504,6 +506,10 @@ public class ImmutableObject2BooleanOpenHashMap<T> extends AbstractObject2Boolea
 	
 	private class MapEntrySet extends AbstractObjectSet<Object2BooleanMap.Entry<T>> implements Object2BooleanOrderedMap.FastOrderedSet<T> {
 		@Override
+		public void addFirst(Object2BooleanMap.Entry<T> o) { throw new UnsupportedOperationException(); }
+		@Override
+		public void addLast(Object2BooleanMap.Entry<T> o) { throw new UnsupportedOperationException(); }
+		@Override
 		public boolean addAndMoveToFirst(Object2BooleanMap.Entry<T> o) { throw new UnsupportedOperationException(); }
 		@Override
 		public boolean addAndMoveToLast(Object2BooleanMap.Entry<T> o) { throw new UnsupportedOperationException(); }
@@ -656,7 +662,7 @@ public class ImmutableObject2BooleanOpenHashMap<T> extends AbstractObject2Boolea
 		}
 		
 		@Override
-		public Object2BooleanMap.Entry<T> reduce(ObjectObjectUnaryOperator<Object2BooleanMap.Entry<T>, Object2BooleanMap.Entry<T>> operator) {
+		public Optional<Object2BooleanMap.Entry<T>> reduce(ObjectObjectUnaryOperator<Object2BooleanMap.Entry<T>, Object2BooleanMap.Entry<T>> operator) {
 			Objects.requireNonNull(operator);
 			Object2BooleanMap.Entry<T> state = null;
 			boolean empty = true;
@@ -671,21 +677,21 @@ public class ImmutableObject2BooleanOpenHashMap<T> extends AbstractObject2Boolea
 				state = operator.apply(state, new BasicEntry<>(keys[index], values[index]));
 				index = (int)links[index];
 			}
-			return state;
+			return empty ? Optional.empty() : Optional.ofNullable(state);
 		}
 		
 		@Override
-		public Object2BooleanMap.Entry<T> findFirst(Predicate<Object2BooleanMap.Entry<T>> filter) {
+		public Optional<Object2BooleanMap.Entry<T>> findFirst(Predicate<Object2BooleanMap.Entry<T>> filter) {
 			Objects.requireNonNull(filter);
-			if(size() <= 0) return null;
+			if(size() <= 0) return Optional.empty();
 			BasicEntry<T> entry = new BasicEntry<>();
 			int index = firstIndex;
 			while(index != -1) {
 				entry.set(keys[index], values[index]);
-				if(filter.test(entry)) return entry;
+				if(filter.test(entry)) return Optional.ofNullable(entry);
 				index = (int)links[index];
 			}
-			return null;
+			return Optional.empty();
 		}
 		
 		@Override
@@ -748,6 +754,12 @@ public class ImmutableObject2BooleanOpenHashMap<T> extends AbstractObject2Boolea
 		public boolean add(T o) {
 			throw new UnsupportedOperationException();
 		}
+		
+		@Override
+		public void addFirst(T o) { throw new UnsupportedOperationException(); }
+		
+		@Override
+		public void addLast(T o) { throw new UnsupportedOperationException(); }
 		
 		@Override
 		public boolean addAndMoveToFirst(T o) { throw new UnsupportedOperationException(); }
@@ -884,7 +896,7 @@ public class ImmutableObject2BooleanOpenHashMap<T> extends AbstractObject2Boolea
 		}
 		
 		@Override
-		public T reduce(ObjectObjectUnaryOperator<T, T> operator) {
+		public Optional<T> reduce(ObjectObjectUnaryOperator<T, T> operator) {
 			Objects.requireNonNull(operator);
 			T state = null;
 			boolean empty = true;
@@ -899,19 +911,19 @@ public class ImmutableObject2BooleanOpenHashMap<T> extends AbstractObject2Boolea
 				state = operator.apply(state, keys[index]);
 				index = (int)links[index];
 			}
-			return state;
+			return empty ? Optional.empty() : Optional.ofNullable(state);
 		}
 		
 		@Override
-		public T findFirst(Predicate<T> filter) {
+		public Optional<T> findFirst(Predicate<T> filter) {
 			Objects.requireNonNull(filter);
-			if(size() <= 0) return null;
+			if(size() <= 0) return Optional.empty();
 			int index = firstIndex;
 			while(index != -1){
-				if(filter.test(keys[index])) return keys[index];
+				if(filter.test(keys[index])) return Optional.ofNullable(keys[index]);
 				index = (int)links[index];
 			}
-			return null;
+			return Optional.empty();
 		}
 		
 		@Override
@@ -1038,7 +1050,7 @@ public class ImmutableObject2BooleanOpenHashMap<T> extends AbstractObject2Boolea
 		}
 		
 		@Override
-		public boolean reduce(BooleanBooleanUnaryOperator operator) {
+		public OptionalBoolean reduce(BooleanBooleanUnaryOperator operator) {
 			Objects.requireNonNull(operator);
 			boolean state = false;
 			boolean empty = true;
@@ -1053,19 +1065,19 @@ public class ImmutableObject2BooleanOpenHashMap<T> extends AbstractObject2Boolea
 				state = operator.applyAsBoolean(state, values[index]);
 				index = (int)links[index];
 			}
-			return state;
+			return empty ? OptionalBoolean.empty() : OptionalBoolean.of(state);
 		}
 		
 		@Override
-		public boolean findFirst(BooleanPredicate filter) {
+		public OptionalBoolean findFirst(BooleanPredicate filter) {
 			Objects.requireNonNull(filter);
-			if(size() <= 0) return false;
+			if(size() <= 0) return OptionalBoolean.empty();
 			int index = firstIndex;
 			while(index != -1){
-				if(filter.test(values[index])) return values[index];
+				if(filter.test(values[index])) return OptionalBoolean.of(values[index]);
 				index = (int)links[index];
 			}
-			return false;
+			return OptionalBoolean.empty();
 		}
 		
 		@Override

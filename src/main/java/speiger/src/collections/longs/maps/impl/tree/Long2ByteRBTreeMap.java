@@ -3,11 +3,13 @@ package speiger.src.collections.longs.maps.impl.tree;
 import java.util.Collections;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.NoSuchElementException;
 import java.util.function.Consumer;
 import java.util.function.BiFunction;
 import java.util.function.Predicate;
 import java.util.function.LongPredicate;
+import java.util.OptionalLong;
 
 import speiger.src.collections.longs.collections.LongBidirectionalIterator;
 import speiger.src.collections.longs.functions.LongComparator;
@@ -36,6 +38,7 @@ import speiger.src.collections.objects.functions.consumer.ObjectObjectConsumer;
 import speiger.src.collections.objects.functions.consumer.ObjectByteConsumer;
 
 import speiger.src.collections.bytes.functions.function.BytePredicate;
+import speiger.src.collections.bytes.functions.OptionalByte;
 import speiger.src.collections.objects.collections.ObjectBidirectionalIterator;
 import speiger.src.collections.objects.collections.ObjectIterator;
 import speiger.src.collections.objects.functions.function.ObjectObjectUnaryOperator;
@@ -1182,7 +1185,7 @@ public class Long2ByteRBTreeMap extends AbstractLong2ByteMap implements Long2Byt
 		}
 		
 		@Override
-		public long reduce(LongLongUnaryOperator operator) {
+		public OptionalLong reduce(LongLongUnaryOperator operator) {
 			Objects.requireNonNull(operator);
 			long state = 0L;
 			boolean empty = true;
@@ -1194,15 +1197,15 @@ public class Long2ByteRBTreeMap extends AbstractLong2ByteMap implements Long2Byt
 				}
 				state = operator.applyAsLong(state, entry.key);
 			}
-			return state;
+			return empty ? OptionalLong.empty() : OptionalLong.of(state);
 		}
 		
 		@Override
-		public long findFirst(LongPredicate filter) {
+		public OptionalLong findFirst(LongPredicate filter) {
 			Objects.requireNonNull(filter);
 			for(Node entry = start(), end = end();entry != null && (end == null || (end != previous(entry)));entry = next(entry))
-				if(filter.test(entry.key)) return entry.key;
-			return 0L;
+				if(filter.test(entry.key)) return OptionalLong.of(entry.key);
+			return OptionalLong.empty();
 		}
 		
 		@Override
@@ -1846,7 +1849,7 @@ public class Long2ByteRBTreeMap extends AbstractLong2ByteMap implements Long2Byt
 			}
 			
 			@Override
-			public Long2ByteMap.Entry reduce(ObjectObjectUnaryOperator<Long2ByteMap.Entry, Long2ByteMap.Entry> operator) {
+			public Optional<Long2ByteMap.Entry> reduce(ObjectObjectUnaryOperator<Long2ByteMap.Entry, Long2ByteMap.Entry> operator) {
 				Objects.requireNonNull(operator);
 				Long2ByteMap.Entry state = null;
 				boolean empty = true;
@@ -1858,19 +1861,19 @@ public class Long2ByteRBTreeMap extends AbstractLong2ByteMap implements Long2Byt
 					}
 					state = operator.apply(state, new BasicEntry(entry.key, entry.value));
 				}
-				return state;
+				return empty ? Optional.empty() : Optional.ofNullable(state);
 			}
 			
 			@Override
-			public Long2ByteMap.Entry findFirst(Predicate<Long2ByteMap.Entry> filter) {
+			public Optional<Long2ByteMap.Entry> findFirst(Predicate<Long2ByteMap.Entry> filter) {
 				Objects.requireNonNull(filter);
-				if(size() <= 0) return null;
+				if(size() <= 0) return Optional.empty();
 				BasicEntry subEntry = new BasicEntry();
 				for(Node entry = subLowest(), last = subHighest();entry != null && (last == null || last != previous(entry));entry = next(entry)) {
 					subEntry.set(entry.key, entry.value);
-					if(filter.test(subEntry)) return subEntry;
+					if(filter.test(subEntry)) return Optional.ofNullable(subEntry);
 				}
-				return null;
+				return Optional.empty();
 			}
 			
 			@Override
@@ -1965,7 +1968,7 @@ public class Long2ByteRBTreeMap extends AbstractLong2ByteMap implements Long2Byt
 			}
 			
 			@Override
-			public byte reduce(ByteByteUnaryOperator operator) {
+			public OptionalByte reduce(ByteByteUnaryOperator operator) {
 				Objects.requireNonNull(operator);
 				byte state = (byte)0;
 				boolean empty = true;
@@ -1977,15 +1980,15 @@ public class Long2ByteRBTreeMap extends AbstractLong2ByteMap implements Long2Byt
 					}
 					state = operator.applyAsByte(state, entry.value);
 				}
-				return state;
+				return empty ? OptionalByte.empty() : OptionalByte.of(state);
 			}
 			
 			@Override
-			public byte findFirst(BytePredicate filter) {
+			public OptionalByte findFirst(BytePredicate filter) {
 				Objects.requireNonNull(filter);
 				for(Node entry = subLowest(), last = subHighest();entry != null && (last == null || last != previous(entry));entry = next(entry))
-					if(filter.test(entry.value)) return entry.value;
-				return (byte)0;
+					if(filter.test(entry.value)) return OptionalByte.of(entry.value);
+				return OptionalByte.empty();
 			}
 			
 			@Override
@@ -2301,7 +2304,7 @@ public class Long2ByteRBTreeMap extends AbstractLong2ByteMap implements Long2Byt
 		}
 		
 		@Override
-		public byte reduce(ByteByteUnaryOperator operator) {
+		public OptionalByte reduce(ByteByteUnaryOperator operator) {
 			Objects.requireNonNull(operator);
 			byte state = (byte)0;
 			boolean empty = true;
@@ -2313,15 +2316,15 @@ public class Long2ByteRBTreeMap extends AbstractLong2ByteMap implements Long2Byt
 				}
 				state = operator.applyAsByte(state, entry.value);
 			}
-			return state;
+			return empty ? OptionalByte.empty() : OptionalByte.of(state);
 		}
 		
 		@Override
-		public byte findFirst(BytePredicate filter) {
+		public OptionalByte findFirst(BytePredicate filter) {
 			Objects.requireNonNull(filter);
 			for(Node entry = first;entry != null;entry = entry.next())
-				if(filter.test(entry.value)) return entry.value;
-			return (byte)0;
+				if(filter.test(entry.value)) return OptionalByte.of(entry.value);
+			return OptionalByte.empty();
 		}
 		
 		@Override
@@ -2462,7 +2465,7 @@ public class Long2ByteRBTreeMap extends AbstractLong2ByteMap implements Long2Byt
 		}
 		
 		@Override
-		public Long2ByteMap.Entry reduce(ObjectObjectUnaryOperator<Long2ByteMap.Entry, Long2ByteMap.Entry> operator) {
+		public Optional<Long2ByteMap.Entry> reduce(ObjectObjectUnaryOperator<Long2ByteMap.Entry, Long2ByteMap.Entry> operator) {
 			Objects.requireNonNull(operator);
 			Long2ByteMap.Entry state = null;
 			boolean empty = true;
@@ -2474,19 +2477,19 @@ public class Long2ByteRBTreeMap extends AbstractLong2ByteMap implements Long2Byt
 				}
 				state = operator.apply(state, new BasicEntry(entry.key, entry.value));
 			}
-			return state;
+			return empty ? Optional.empty() : Optional.ofNullable(state);
 		}
 		
 		@Override
-		public Long2ByteMap.Entry findFirst(Predicate<Long2ByteMap.Entry> filter) {
+		public Optional<Long2ByteMap.Entry> findFirst(Predicate<Long2ByteMap.Entry> filter) {
 			Objects.requireNonNull(filter);
-			if(size() <= 0) return null;
+			if(size() <= 0) return Optional.empty();
 			BasicEntry subEntry = new BasicEntry();
 			for(Node entry = first;entry != null;entry = entry.next()) {
 				subEntry.set(entry.key, entry.value);
-				if(filter.test(subEntry)) return subEntry;
+				if(filter.test(subEntry)) return Optional.ofNullable(subEntry);
 			}
-			return null;
+			return Optional.empty();
 		}
 		
 		@Override

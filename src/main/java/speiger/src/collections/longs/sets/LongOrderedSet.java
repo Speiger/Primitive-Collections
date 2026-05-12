@@ -1,6 +1,7 @@
 package speiger.src.collections.longs.sets;
 
 import speiger.src.collections.longs.collections.LongBidirectionalIterator;
+import speiger.src.collections.longs.collections.LongOrderedCollection;
 import speiger.src.collections.longs.collections.LongSplititerator;
 import speiger.src.collections.longs.utils.LongSplititerators;
 import speiger.src.collections.longs.sets.AbstractLongSet.ReversedLongOrderedSet;
@@ -13,7 +14,7 @@ import speiger.src.collections.longs.utils.LongSets;
  * This interface provides basic access to such functions while also providing some Sorted/NaivgableSet implementations that still fit into here.
  * 
  */
-public interface LongOrderedSet extends LongSet
+public interface LongOrderedSet extends LongSet, LongOrderedCollection
 {
 	/**
 	 * A customized add method that allows you to insert into the first index.

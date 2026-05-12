@@ -63,7 +63,17 @@ public abstract class AbstractCharSet extends AbstractCharCollection implements 
 		public CharBidirectionalIterator reverseIterator() {
 			return set.iterator();
 		}
-
+		
+		@Override
+		public void addFirst(char o) {
+			set.addLast(o);
+		}
+		
+		@Override
+		public void addLast(char o) {
+			set.addFirst(o);
+		}
+		
 		@Override
 		public boolean remove(char o) {
 			return set.remove(o);

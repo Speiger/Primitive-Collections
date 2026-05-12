@@ -3,6 +3,7 @@ package speiger.src.collections.doubles.queues;
 import java.util.Arrays;
 import java.util.NoSuchElementException;
 import java.util.Objects;
+import java.util.OptionalDouble;
 import java.util.function.DoublePredicate;
 
 import speiger.src.collections.doubles.collections.DoubleCollection;
@@ -290,7 +291,7 @@ public class DoubleHeapPriorityQueue extends AbstractDoublePriorityQueue
 	}
 	
 	@Override
-	public double reduce(DoubleDoubleUnaryOperator operator) {
+	public OptionalDouble reduce(DoubleDoubleUnaryOperator operator) {
 		Objects.requireNonNull(operator);
 		double state = 0D;
 		boolean empty = true;
@@ -302,20 +303,20 @@ public class DoubleHeapPriorityQueue extends AbstractDoublePriorityQueue
 			}
 			state = operator.applyAsDouble(state, array[i]);
 		}
-		return state;
+		return empty ? OptionalDouble.empty() : OptionalDouble.of(state);
 	}
 	
 	@Override
-	public double findFirst(DoublePredicate filter) {
+	public OptionalDouble findFirst(DoublePredicate filter) {
 		Objects.requireNonNull(filter);
 		for(int i = 0;i<size;i++) {
 			if(filter.test(array[i])) {
 				double data = array[i];
 				removeIndex(i);
-				return data;
+				return OptionalDouble.of(data);
 			}
 		}
-		return 0D;
+		return OptionalDouble.empty();
 	}
 	
 	@Override

@@ -620,7 +620,11 @@ public class Byte2IntMaps
 			super(c);
 			set = c;
 		}
-
+		
+		@Override
+		public void addFirst(Byte2IntMap.Entry o) { throw new UnsupportedOperationException(); }
+		@Override
+		public void addLast(Byte2IntMap.Entry o) { throw new UnsupportedOperationException(); }
 		@Override
 		public boolean addAndMoveToFirst(Byte2IntMap.Entry o) { throw new UnsupportedOperationException(); }
 		@Override

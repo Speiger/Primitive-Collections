@@ -6,6 +6,7 @@ import java.util.ConcurrentModificationException;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 import java.util.Objects;
+import java.util.OptionalInt;
 import java.util.function.IntPredicate;
 
 import speiger.src.collections.ints.collections.IntCollection;
@@ -546,7 +547,7 @@ public class IntOpenCustomHashSet extends AbstractIntSet implements ITrimmable
 	}
 	
 	@Override
-	public int reduce(IntIntUnaryOperator operator) {
+	public OptionalInt reduce(IntIntUnaryOperator operator) {
 		Objects.requireNonNull(operator);
 		int state = 0;
 		boolean empty = true;
@@ -563,18 +564,18 @@ public class IntOpenCustomHashSet extends AbstractIntSet implements ITrimmable
 			}
 			state = operator.applyAsInt(state, keys[i]);
 		}
-		return state;
+		return empty ? OptionalInt.empty() : OptionalInt.of(state);
 	}
 	
 	@Override
-	public int findFirst(IntPredicate filter) {
+	public OptionalInt findFirst(IntPredicate filter) {
 		Objects.requireNonNull(filter);
-		if(size() <= 0) return 0;
-		if(containsNull && filter.test(keys[nullIndex])) return keys[nullIndex];
+		if(size() <= 0) return OptionalInt.empty();
+		if(containsNull && filter.test(keys[nullIndex])) return OptionalInt.of(keys[nullIndex]);
 		for(int i = nullIndex-1;i>=0;i--) {
-			if(!strategy.equals(keys[i], 0) && filter.test(keys[i])) return keys[i];
+			if(!strategy.equals(keys[i], 0) && filter.test(keys[i])) return OptionalInt.of(keys[i]);
 		}
-		return 0;
+		return OptionalInt.empty();
 	}
 	
 	@Override
