@@ -27,6 +27,7 @@ public class FILE_KEY_TYPE2FILE_VALUE_TYPEMapContainsTester KEY_VALUE_GENERIC_TY
 
 #ignore
 	@CollectionSize.Require(absent = ZERO)
+	@SuppressWarnings("unlikely-arg-type")
 #endignore
 	public void testContainsObject_yes() {
 		assertTrue("contains(present) should return true", getMap().ENTRY_SET().contains(new AbstractMap.SimpleEntry<>(e0())));
@@ -36,6 +37,7 @@ public class FILE_KEY_TYPE2FILE_VALUE_TYPEMapContainsTester KEY_VALUE_GENERIC_TY
 		assertFalse("contains(notPresent) should return false", getMap().ENTRY_SET().contains(e3()));
 	}
 	
+	@SuppressWarnings("unlikely-arg-type")
 	public void testContainsObject_no() {
 		assertFalse("contains(notPresent) should return false", getMap().ENTRY_SET().contains(new AbstractMap.SimpleEntry<>(e3())));
 	}

@@ -718,6 +718,10 @@ public class LINKED_HASH_MAP KEY_VALUE_GENERIC_TYPE extends HASH_MAP KEY_VALUE_G
 	
 	private class MapEntrySet extends AbstractObjectSet<MAP.Entry KEY_VALUE_GENERIC_TYPE> implements ORDERED_MAP.FastOrderedSet KEY_VALUE_GENERIC_TYPE {
 		@Override
+		public void addFirst(MAP.Entry KEY_VALUE_GENERIC_TYPE o) { throw new UnsupportedOperationException(); }
+		@Override
+		public void addLast(MAP.Entry KEY_VALUE_GENERIC_TYPE o) { throw new UnsupportedOperationException(); }
+		@Override
 		public boolean addAndMoveToFirst(MAP.Entry KEY_VALUE_GENERIC_TYPE o) { throw new UnsupportedOperationException(); }
 		@Override
 		public boolean addAndMoveToLast(MAP.Entry KEY_VALUE_GENERIC_TYPE o) { throw new UnsupportedOperationException(); }
@@ -1003,6 +1007,12 @@ public class LINKED_HASH_MAP KEY_VALUE_GENERIC_TYPE extends HASH_MAP KEY_VALUE_G
 #endif
 		@Override
 		public boolean add(KEY_TYPE o) { throw new UnsupportedOperationException(); }
+
+		@Override
+		public void addFirst(KEY_TYPE o) { throw new UnsupportedOperationException(); }
+		
+		@Override
+		public void addLast(KEY_TYPE o) { throw new UnsupportedOperationException(); }
 		
 		@Override
 		public boolean addAndMoveToFirst(KEY_TYPE o) { throw new UnsupportedOperationException(); }

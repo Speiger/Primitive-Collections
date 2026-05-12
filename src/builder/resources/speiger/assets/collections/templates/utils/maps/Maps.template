@@ -754,7 +754,11 @@ public class MAPS
 			super(c);
 			set = c;
 		}
-
+		
+		@Override
+		public void addFirst(MAP.Entry KEY_VALUE_GENERIC_TYPE o) { throw new UnsupportedOperationException(); }
+		@Override
+		public void addLast(MAP.Entry KEY_VALUE_GENERIC_TYPE o) { throw new UnsupportedOperationException(); }
 		@Override
 		public boolean addAndMoveToFirst(MAP.Entry KEY_VALUE_GENERIC_TYPE o) { throw new UnsupportedOperationException(); }
 		@Override

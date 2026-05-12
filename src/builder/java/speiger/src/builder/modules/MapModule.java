@@ -198,6 +198,7 @@ public class MapModule extends BaseModule
 		addBiRequirement("SortedMapNavigationTester");
 		addBiRequirement("OrderedMapNavigationTester");
 		addBiRequirement("OrderedMapMoveTester");
+		addBiRequirement("OrderedMapPutTester");
 		addBiRequirement("MapConstructorTester");
 		
 		addRemapper("TestMapGenerator", "Test%sMapGenerator");

@@ -154,6 +154,25 @@ public class ARRAY_SET KEY_GENERIC_TYPE extends ABSTRACT_SET KEY_GENERIC_TYPE im
 	
 #endif
 	@Override
+	public void addFirst(KEY_TYPE o) {
+		int index = findIndex(o);
+		if(index == -1) {
+			if(data.length == size) data = Arrays.copyOf(data, size == 0 ? 2 : size * 2);
+			System.arraycopy(data, 0, data, 1, size++);
+			data[0] = o;
+		}
+	}
+	
+	@Override
+	public void addLast(KEY_TYPE o) {
+		int index = findIndex(o);
+		if(index == -1) {
+			if(data.length == size) data = Arrays.copyOf(data, size == 0 ? 2 : size * 2);
+			data[size++] = o;
+		}
+	}
+	
+	@Override
 	public boolean addAndMoveToFirst(KEY_TYPE o) {
 		int index = findIndex(o);
 		if(index == -1) {

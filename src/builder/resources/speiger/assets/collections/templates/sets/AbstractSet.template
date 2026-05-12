@@ -73,7 +73,17 @@ public abstract class ABSTRACT_SET KEY_GENERIC_TYPE extends ABSTRACT_COLLECTION 
 		public BI_ITERATOR KEY_GENERIC_TYPE reverseIterator() {
 			return set.iterator();
 		}
-
+		
+		@Override
+		public void addFirst(KEY_TYPE o) {
+			set.addLast(o);
+		}
+		
+		@Override
+		public void addLast(KEY_TYPE o) {
+			set.addFirst(o);
+		}
+		
 		@Override
 #if !TYPE_OBJECT
 		public boolean remove(KEY_TYPE o) {
