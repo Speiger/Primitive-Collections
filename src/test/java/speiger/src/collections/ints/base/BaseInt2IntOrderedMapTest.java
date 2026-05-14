@@ -23,10 +23,10 @@ public abstract class BaseInt2IntOrderedMapTest extends BaseInt2IntMapTest
 	{
 		if(!getValidOrderedMapTests().contains(OrderedMapTests.PUT_MOVE)) return;
 		Int2IntOrderedMap map = createMap(TEST_ARRAY, TEST_ARRAY);
-		Assert.assertEquals(0, map.putAndMoveToFirst(120, -1));
+		Assert.assertEquals(-1, map.putAndMoveToFirst(120, -1));
 		Assert.assertEquals(120, map.firstIntKey());
 		Assert.assertEquals(-1, map.firstIntValue());
-		Assert.assertEquals(0, map.putAndMoveToLast(121, -2));
+		Assert.assertEquals(-1, map.putAndMoveToLast(121, -2));
 		Assert.assertEquals(121, map.lastIntKey());
 		Assert.assertEquals(-2, map.lastIntValue());
 	}
