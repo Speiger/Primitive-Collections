@@ -3,12 +3,25 @@ package speiger.src.collections.PACKAGE.lists;
 import java.util.Arrays;
 #if TYPE_OBJECT
 import java.util.Comparator;
+#else if !TYPE_BOOLEAN
+import java.util.stream.JAVA_STREAM;
+import java.util.stream.StreamSupport;
 #endif
 import java.util.Collection;
 import java.util.NoSuchElementException;
 import java.util.Objects;
 #if JDK_TYPE
 import java.util.OPTIONAL;
+#if SPLIT_ITERATOR_FEATURE && STREAM_FEATURE
+#if PRIMITIVES
+import java.util.function.Supplier;
+#else
+import java.util.stream.Stream;
+import java.util.stream.Collector;
+#endif
+
+import speiger.src.collections.PACKAGE.utils.COLLECTIONS;
+#endif
 #endif
 #if TYPE_OBJECT
 import java.util.function.BiFunction;
@@ -23,6 +36,7 @@ import java.util.function.PREDICATE;
 #if !JDK_FUNCTION
 import java.util.function.JAVA_PREDICATE;
 #endif
+
 import java.util.function.JAVA_UNARY_OPERATOR;
 #endif
 
@@ -42,10 +56,6 @@ import speiger.src.collections.PACKAGE.functions.function.PREDICATE;
 import speiger.src.collections.PACKAGE.functions.function.UNARY_OPERATOR;
 import speiger.src.collections.objects.utils.ObjectArrays;
 import speiger.src.collections.PACKAGE.utils.ITERATORS;
-#if PRIMITIVES && SPLIT_ITERATOR_FEATURE && STREAM_FEATURE
-import java.util.stream.JAVA_STREAM;
-import java.util.stream.StreamSupport;
-#endif
 #if SPLIT_ITERATOR_FEATURE
 import speiger.src.collections.PACKAGE.collections.SPLIT_ITERATOR;
 import speiger.src.collections.PACKAGE.utils.SPLIT_ITERATORS;
@@ -126,6 +136,42 @@ public class IMMUTABLE_LIST KEY_GENERIC_TYPE extends ABSTRACT_LIST KEY_GENERIC_T
 		data = Arrays.copyOfRange(a, offset, offset+length);
 	}
 	
+#if JDK_TYPE && SPLIT_ITERATOR_FEATURE && STREAM_FEATURE
+#if TYPE_OBJECT
+	/**
+	 * Creates a Collector for a ImmutableList
+	 * @Type(T)
+	 * @return a collector
+	 */
+	public static <T> Collector<T, COLLECTION<T>, ImmutableObjectList<T>> toList() {
+		return Collector.of(COLLECTIONS::wrapper, COLLECTION::add, ImmutableObjectList::merge, E -> new IMMUTABLE_LIST<>(E.toArray((T[])new Object[E.size()])));
+	}
+
+	/**
+	 * Collects a Stream to a ImmutableList
+	 * @Type(T)
+	 * @return a list with the contents of the Stream
+	 */
+	public static <T> ImmutableObjectList KEY_GENERIC_TYPE toList(Stream<T> stream) {
+		return stream.collect(toList());
+	}
+	
+	private static <T> COLLECTION<T> merge(COLLECTION<T> a, COLLECTION<T> b) {
+		a.addAll(b);
+		return a;
+	}
+	
+#else
+	/**
+	 * Collects a Stream to a ImmutableList
+	 * @return a list with the contents of the Stream
+	 */
+	public static IMMUTABLE_LIST toList(JAVA_STREAM stream) {
+		return new IMMUTABLE_LIST(stream.collect((Supplier<COLLECTION>)COLLECTIONS::wrapper, COLLECTION::add, COLLECTION::addAll).TO_ARRAY());
+	}
+	
+#endif
+#endif
 	@Override
 	public boolean add(KEY_TYPE e) { throw new UnsupportedOperationException(); }
 	@Override

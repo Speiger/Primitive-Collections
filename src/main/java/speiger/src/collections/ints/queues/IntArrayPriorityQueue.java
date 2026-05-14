@@ -4,6 +4,7 @@ import java.util.Arrays;
 import java.util.NoSuchElementException;
 import java.util.Objects;
 import java.util.OptionalInt;
+import java.util.stream.IntStream;
 import java.util.function.IntPredicate;
 
 import speiger.src.collections.ints.collections.IntCollection;
@@ -173,6 +174,19 @@ public class IntArrayPriorityQueue extends AbstractIntPriorityQueue
 		queue.array = array;
 		queue.size = size;
 		return queue;
+	}
+
+	/**
+	 * Collects a Stream to a ArrayPriorityQueue
+	 * @return a queue with the contents of the Stream
+	 */
+	public static IntArrayPriorityQueue toQueue(IntStream stream) {
+		return stream.collect(IntArrayPriorityQueue::new, IntArrayPriorityQueue::enqueue, IntArrayPriorityQueue::merge);
+	}
+	
+	private IntArrayPriorityQueue merge(IntArrayPriorityQueue a) {
+		enqueueAll(a.toIntArray());
+		return this;
 	}
 	
 	@Override

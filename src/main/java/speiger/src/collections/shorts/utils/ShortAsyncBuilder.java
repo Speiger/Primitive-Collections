@@ -7,6 +7,7 @@ import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 import java.util.concurrent.locks.LockSupport;
 import java.util.function.Consumer;
+import speiger.src.collections.shorts.functions.OptionalShort;
 
 import speiger.src.collections.shorts.functions.ShortConsumer;
 import speiger.src.collections.shorts.functions.ShortComparator;
@@ -210,9 +211,8 @@ public class ShortAsyncBuilder
 	 * @param operator that reduces the elements.
 	 * @return self with the reduce action applied
 	 */
-	public ShortAsyncBuilder reduce(ShortShortUnaryOperator operator) {
-		task = new SimpleReduceTask(iterable.iterator(), operator);
-		return this;
+	public ObjectAsyncBuilder<OptionalShort> reduce(ShortShortUnaryOperator operator) {
+		return new ObjectAsyncBuilder<>(new SimpleReduceTask(iterable.iterator(), operator));
 	}
 	
 	/**
@@ -292,9 +292,8 @@ public class ShortAsyncBuilder
 	 * @param filter that decides the desired elements
 	 * @return self with the findFirst function applied
 	 */
-	public ShortAsyncBuilder findFirst(ShortPredicate filter) {
-		task = new FindFirstTask(iterable.iterator(), filter);
-		return this;
+	public ObjectAsyncBuilder<OptionalShort> findFirst(ShortPredicate filter) {
+		return new ObjectAsyncBuilder<>(new FindFirstTask(iterable.iterator(), filter));
 	}
 	
 	/**
@@ -404,7 +403,7 @@ public class ShortAsyncBuilder
 		}
 	}
 	
-	private static class SimpleReduceTask extends BaseShortTask
+	private static class SimpleReduceTask extends BaseObjectTask<OptionalShort>
 	{
 		ShortIterator iter;
 		ShortShortUnaryOperator operator;
@@ -414,6 +413,7 @@ public class ShortAsyncBuilder
 		public SimpleReduceTask(ShortIterator iter, ShortShortUnaryOperator operator) {
 			this.iter = iter;
 			this.operator = operator;
+			this.setResult(OptionalShort.empty());
 		}
 		
 		@Override
@@ -428,7 +428,7 @@ public class ShortAsyncBuilder
 				}
 			}
 			if(!iter.hasNext()) {
-				setResult(value);
+				setResult(OptionalShort.of(value));
 				return true;
 			}
 			return false;
@@ -498,7 +498,7 @@ public class ShortAsyncBuilder
 		}
 	}
 	
-	private static class FindFirstTask extends BaseShortTask
+	private static class FindFirstTask extends BaseObjectTask<OptionalShort>
 	{
 		ShortIterator iter;
 		ShortPredicate filter;
@@ -506,6 +506,7 @@ public class ShortAsyncBuilder
 		public FindFirstTask(ShortIterator iter, ShortPredicate filter) {
 			this.iter = iter;
 			this.filter = filter;
+			this.setResult(OptionalShort.empty());
 		}
 
 		@Override
@@ -513,7 +514,7 @@ public class ShortAsyncBuilder
 			while(shouldRun() && iter.hasNext()) {
 				short entry = iter.nextShort();
 				if(filter.test(iter.nextShort())) {
-					setResult(entry);
+					setResult(OptionalShort.of(entry));
 					return true;
 				}
 			}

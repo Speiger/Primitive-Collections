@@ -7,6 +7,9 @@ import java.util.function.Consumer;
 import java.util.function.BiFunction;
 import java.util.Objects;
 import java.util.Optional;
+
+import java.util.stream.Stream;
+import java.util.stream.Collector;
 import java.util.function.Predicate;
 
 import speiger.src.collections.objects.collections.ObjectCollection;
@@ -179,6 +182,28 @@ public class ObjectArrayPriorityQueue<T> extends AbstractObjectPriorityQueue<T>
 		queue.array = array;
 		queue.size = size;
 		return queue;
+	}
+	/**
+	 * Creates a Collector for a ArrayPriorityQueue
+	 * @param <T> the keyType of elements maintained by this Collection
+	 * @return a collector
+	 */
+	public static <T> Collector<T, ObjectArrayPriorityQueue<T>, ObjectArrayPriorityQueue<T>> toQueue() {
+		return Collector.of(ObjectArrayPriorityQueue::new, ObjectArrayPriorityQueue::enqueue, ObjectArrayPriorityQueue::merge);
+	}
+	
+	/**
+	 * Collects a Stream to a ArrayPriorityQueue
+	 * @param <T> the keyType of elements maintained by this Collection
+	 * @return a queue with the contents of the Stream
+	 */
+	public static <T> ObjectArrayPriorityQueue<T> toQueue(Stream<T> stream) {
+		return stream.collect(ObjectArrayPriorityQueue::new, ObjectArrayPriorityQueue::enqueue, ObjectArrayPriorityQueue::merge);
+	}
+	
+	private ObjectArrayPriorityQueue<T> merge(ObjectArrayPriorityQueue<T> a) {
+		enqueueAll(a.toArray((T[])new Object[a.size()]));
+		return this;
 	}
 	
 	@Override

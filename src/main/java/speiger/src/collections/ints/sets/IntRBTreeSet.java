@@ -3,6 +3,7 @@ package speiger.src.collections.ints.sets;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.OptionalInt;
+import java.util.stream.IntStream;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 import java.util.Objects;
@@ -181,6 +182,15 @@ public class IntRBTreeSet extends AbstractIntSet implements IntNavigableSet
 	public IntRBTreeSet(IntIterator iterator, IntComparator comp) {
 		comparator = comp;
 		while(iterator.hasNext()) add(iterator.nextInt());
+	}
+	
+
+	/**
+	 * Collects a Stream to a RBTreeSet
+	 * @return a set with the contents of the Stream
+	 */
+	public static IntRBTreeSet toSet(IntStream stream) {
+		return stream.collect(IntRBTreeSet::new, IntRBTreeSet::add, IntRBTreeSet::addAll);
 	}
 	
 	@Override

@@ -9,6 +9,14 @@ import java.util.function.BiFunction;
 import java.util.Objects;
 #if JDK_TYPE
 import java.util.OPTIONAL;
+#if SPLIT_ITERATOR_FEATURE && STREAM_FEATURE
+#if !TYPE_OBJECT
+import java.util.stream.JAVA_STREAM;
+#else
+import java.util.stream.Stream;
+import java.util.stream.Collector;
+#endif
+#endif
 #endif
 import java.util.NoSuchElementException;
 #if JDK_FUNCTION
@@ -105,6 +113,47 @@ public class ARRAY_FIFO_QUEUE KEY_GENERIC_TYPE extends ABSTRACT_PRIORITY_QUEUE K
 		this(MIN_CAPACITY);
 	}
 	
+#if JDK_TYPE && SPLIT_ITERATOR_FEATURE && STREAM_FEATURE
+#if TYPE_OBJECT
+	/**
+	 * Creates a Collector for a ArrayFIFOQueue
+	 * @Type(T)
+	 * @return a collector
+	 */
+	public static <T> Collector<T, ARRAY_FIFO_QUEUE<T>, ARRAY_FIFO_QUEUE<T>> toQueue() {
+		return Collector.of(ARRAY_FIFO_QUEUE::new, ARRAY_FIFO_QUEUE::enqueue, ARRAY_FIFO_QUEUE::merge);
+	}
+	
+	/**
+	 * Collects a Stream to a ArrayFIFOQueue
+	 * @Type(T)
+	 * @return a queue with the contents of the Stream
+	 */
+	public static <T> ARRAY_FIFO_QUEUE KEY_GENERIC_TYPE toQueue(Stream<T> stream) {
+		return stream.collect(ARRAY_FIFO_QUEUE::new, ARRAY_FIFO_QUEUE::enqueue, ARRAY_FIFO_QUEUE::merge);
+	}
+	
+	private ARRAY_FIFO_QUEUE<T> merge(ARRAY_FIFO_QUEUE<T> a) {
+		enqueueAll(a.toArray((T[])new Object[a.size()]));
+		return this;
+	}
+	
+#else
+	/**
+	 * Collects a Stream to a ArrayFIFOQueue
+	 * @return a queue with the contents of the Stream
+	 */
+	public static ARRAY_FIFO_QUEUE toQueue(JAVA_STREAM stream) {
+		return stream.collect(ARRAY_FIFO_QUEUE::new, ARRAY_FIFO_QUEUE::enqueue, ARRAY_FIFO_QUEUE::merge);
+	}
+	
+	private ARRAY_FIFO_QUEUE merge(ARRAY_FIFO_QUEUE a) {
+		enqueueAll(a.TO_ARRAY());
+		return this;
+	}
+	
+#endif
+#endif
 	@Override
 	public ITERATOR KEY_GENERIC_TYPE iterator() {
 		return new Iter();

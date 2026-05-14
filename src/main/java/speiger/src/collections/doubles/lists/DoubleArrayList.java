@@ -5,6 +5,8 @@ import java.util.Collection;
 import java.util.Iterator;
 import java.util.Objects;
 import java.util.OptionalDouble;
+
+
 import java.util.function.DoublePredicate;
 import java.util.function.Predicate;
 import java.util.function.UnaryOperator;
@@ -142,6 +144,15 @@ public class DoubleArrayList extends AbstractDoubleList implements IDoubleArray,
 		list.data = a;
 		list.size = length;
 		return list;
+	}
+	
+
+	/**
+	 * Collects a Stream to a ArrayList
+	 * @return a list with the contents of the Stream
+	 */
+	public static DoubleArrayList toList(DoubleStream stream) {
+		return stream.collect(DoubleArrayList::new, DoubleArrayList::add, DoubleArrayList::addAll);
 	}
 	
 	/**

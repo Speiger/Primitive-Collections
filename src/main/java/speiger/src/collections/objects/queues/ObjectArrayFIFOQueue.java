@@ -6,6 +6,9 @@ import java.util.function.Consumer;
 import java.util.function.BiFunction;
 import java.util.Objects;
 import java.util.Optional;
+
+import java.util.stream.Stream;
+import java.util.stream.Collector;
 import java.util.NoSuchElementException;
 import java.util.function.Predicate;
 
@@ -87,6 +90,29 @@ public class ObjectArrayFIFOQueue<T> extends AbstractObjectPriorityQueue<T> impl
 	 */
 	public ObjectArrayFIFOQueue() {
 		this(MIN_CAPACITY);
+	}
+	
+	/**
+	 * Creates a Collector for a ArrayFIFOQueue
+	 * @param <T> the keyType of elements maintained by this Collection
+	 * @return a collector
+	 */
+	public static <T> Collector<T, ObjectArrayFIFOQueue<T>, ObjectArrayFIFOQueue<T>> toQueue() {
+		return Collector.of(ObjectArrayFIFOQueue::new, ObjectArrayFIFOQueue::enqueue, ObjectArrayFIFOQueue::merge);
+	}
+	
+	/**
+	 * Collects a Stream to a ArrayFIFOQueue
+	 * @param <T> the keyType of elements maintained by this Collection
+	 * @return a queue with the contents of the Stream
+	 */
+	public static <T> ObjectArrayFIFOQueue<T> toQueue(Stream<T> stream) {
+		return stream.collect(ObjectArrayFIFOQueue::new, ObjectArrayFIFOQueue::enqueue, ObjectArrayFIFOQueue::merge);
+	}
+	
+	private ObjectArrayFIFOQueue<T> merge(ObjectArrayFIFOQueue<T> a) {
+		enqueueAll(a.toArray((T[])new Object[a.size()]));
+		return this;
 	}
 	
 	@Override

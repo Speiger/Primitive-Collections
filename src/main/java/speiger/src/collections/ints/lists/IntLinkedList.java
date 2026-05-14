@@ -5,6 +5,7 @@ import java.util.Collection;
 import java.util.Iterator;
 import java.util.Objects;
 import java.util.OptionalInt;
+
 import java.util.NoSuchElementException;
 import java.util.Spliterator;
 import java.util.Spliterator.OfInt;
@@ -101,6 +102,15 @@ public class IntLinkedList extends AbstractIntList implements IntPriorityDequeue
 	public IntLinkedList(int[] a, int offset, int length) {
 		SanityChecks.checkArrayCapacity(a.length, offset, length);
 		for(int i = offset,m=offset+length;i<m;add(a[i++]));
+	}
+	
+
+	/**
+	 * Collects a Stream to a LinkedList
+	 * @return a list with the contents of the Stream
+	 */
+	public static IntLinkedList toList(IntStream stream) {
+		return stream.collect(IntLinkedList::new, IntLinkedList::add, IntLinkedList::addAll);
 	}
 	
 	@Override

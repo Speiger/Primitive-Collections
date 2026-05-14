@@ -1,13 +1,18 @@
 package speiger.src.collections.doubles.lists;
 
 import java.util.Arrays;
+import java.util.stream.DoubleStream;
+import java.util.stream.StreamSupport;
 import java.util.Collection;
 import java.util.NoSuchElementException;
 import java.util.Objects;
 import java.util.OptionalDouble;
+import java.util.function.Supplier;
+import speiger.src.collections.doubles.utils.DoubleCollections;
 import java.util.function.Predicate;
 import java.util.function.UnaryOperator;
 import java.util.function.DoublePredicate;
+
 import java.util.function.DoubleUnaryOperator;
 
 import speiger.src.collections.doubles.collections.DoubleCollection;
@@ -18,8 +23,6 @@ import speiger.src.collections.objects.functions.consumer.ObjectDoubleConsumer;
 import speiger.src.collections.doubles.functions.function.DoubleDoubleUnaryOperator;
 import speiger.src.collections.objects.utils.ObjectArrays;
 import speiger.src.collections.doubles.utils.DoubleIterators;
-import java.util.stream.DoubleStream;
-import java.util.stream.StreamSupport;
 import speiger.src.collections.doubles.collections.DoubleSplititerator;
 import speiger.src.collections.doubles.utils.DoubleSplititerators;
 import speiger.src.collections.utils.SanityChecks;
@@ -87,6 +90,15 @@ public class ImmutableDoubleList extends AbstractDoubleList
 	public ImmutableDoubleList(double[] a, int offset, int length) {
 		SanityChecks.checkArrayCapacity(a.length, offset, length);
 		data = Arrays.copyOfRange(a, offset, offset+length);
+	}
+	
+
+	/**
+	 * Collects a Stream to a ImmutableList
+	 * @return a list with the contents of the Stream
+	 */
+	public static ImmutableDoubleList toList(DoubleStream stream) {
+		return new ImmutableDoubleList(stream.collect((Supplier<DoubleCollection>)DoubleCollections::wrapper, DoubleCollection::add, DoubleCollection::addAll).toDoubleArray());
 	}
 	
 	@Override

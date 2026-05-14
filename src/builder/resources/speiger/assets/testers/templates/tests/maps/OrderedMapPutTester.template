@@ -23,7 +23,6 @@ public class FILE_KEY_TYPE2FILE_VALUE_TYPEOrderedMapPutTester KEY_VALUE_GENERIC_
 	private ObjectList<MAP.Entry KEY_VALUE_GENERIC_TYPE> values;
 	private KEY_TYPE a;
 	private VALUE_TYPE aValue;
-	private VALUE_TYPE cValue;
 	
 	@Override
 	public void setUp() throws Exception {
@@ -33,9 +32,6 @@ public class FILE_KEY_TYPE2FILE_VALUE_TYPEOrderedMapPutTester KEY_VALUE_GENERIC_
 		if (values.size() >= 1) {
 			a = values.get(0).ENTRY_KEY();
 			aValue = values.get(0).ENTRY_VALUE();
-			if (values.size() >= 3) {
-				cValue = values.get(2).ENTRY_VALUE();
-			}
 		}
 	}
 	
@@ -44,10 +40,10 @@ public class FILE_KEY_TYPE2FILE_VALUE_TYPEOrderedMapPutTester KEY_VALUE_GENERIC_
 	@CollectionSize.Require(absent = ZERO)
 #endignore
 	public void testPutFirst() {
-		assertEquals(aValue, orderedMap.putFirst(a, cValue));
-		assertNotEquals(cValue, orderedMap.FIRST_ENTRY_VALUE());
+		assertEquals(aValue, orderedMap.putFirst(a, v3()));
+		assertNotEquals(v3(), orderedMap.FIRST_ENTRY_VALUE());
 		assertEquals(orderedMap.getDefaultReturnValue(), orderedMap.putFirst(k4(), v4()));
-		assertNotEquals(v4(), orderedMap.FIRST_ENTRY_VALUE());
+		assertEquals(v4(), orderedMap.FIRST_ENTRY_VALUE());
 		assertEquals(e4(), orderedMap.firstEntry());
 	}
 	
@@ -57,10 +53,10 @@ public class FILE_KEY_TYPE2FILE_VALUE_TYPEOrderedMapPutTester KEY_VALUE_GENERIC_
 	@CollectionSize.Require(absent = ZERO)
 #endignore
 	public void testPutLast() {
-		assertEquals(aValue, orderedMap.putLast(a, cValue));
-		assertNotEquals(cValue, orderedMap.LAST_ENTRY_VALUE());
+		assertEquals(aValue, orderedMap.putLast(a, v3()));
+		assertNotEquals(v3(), orderedMap.LAST_ENTRY_VALUE());
 		assertEquals(orderedMap.getDefaultReturnValue(), orderedMap.putLast(k4(), v4()));
-		assertNotEquals(v4(), orderedMap.LAST_ENTRY_VALUE());
+		assertEquals(v4(), orderedMap.LAST_ENTRY_VALUE());
 		assertEquals(e4(), orderedMap.lastEntry());
 	}
 	

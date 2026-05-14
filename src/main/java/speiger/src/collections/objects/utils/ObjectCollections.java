@@ -114,7 +114,10 @@ public class ObjectCollections
 		return new SingletonCollection<>(element);
 	}
 	
-	protected static <T> CollectionWrapper<T> wrapper() {
+	/**
+	 * Internal Use mainly. Its a collection wrapper with 0 dependencies for those actions where a collector is needed.
+	 */
+	public static <T> CollectionWrapper<T> wrapper() {
 		return new CollectionWrapper<>();
 	}
 	

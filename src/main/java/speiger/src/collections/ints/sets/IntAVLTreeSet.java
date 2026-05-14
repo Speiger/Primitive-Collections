@@ -6,6 +6,7 @@ import java.util.Iterator;
 import java.util.NoSuchElementException;
 import java.util.Objects;
 import java.util.OptionalInt;
+import java.util.stream.IntStream;
 import java.util.function.IntPredicate;
 
 import speiger.src.collections.ints.collections.IntBidirectionalIterator;
@@ -181,6 +182,15 @@ public class IntAVLTreeSet extends AbstractIntSet implements IntNavigableSet
 	public IntAVLTreeSet(IntIterator iterator, IntComparator comp) {
 		comparator = comp;
 		while(iterator.hasNext()) add(iterator.nextInt());
+	}
+	
+
+	/**
+	 * Collects a Stream to a AVLTreeSet
+	 * @return a set with the contents of the Stream
+	 */
+	public static IntAVLTreeSet toSet(IntStream stream) {
+		return stream.collect(IntAVLTreeSet::new, IntAVLTreeSet::add, IntAVLTreeSet::addAll);
 	}
 	
 	@Override

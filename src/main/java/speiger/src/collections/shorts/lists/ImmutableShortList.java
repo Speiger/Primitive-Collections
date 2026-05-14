@@ -1,12 +1,15 @@
 package speiger.src.collections.shorts.lists;
 
 import java.util.Arrays;
+import java.util.stream.IntStream;
+import java.util.stream.StreamSupport;
 import java.util.Collection;
 import java.util.NoSuchElementException;
 import java.util.Objects;
 import java.util.function.Predicate;
 import java.util.function.UnaryOperator;
-import java.util.function.IntPredicate;import java.util.function.IntUnaryOperator;
+import java.util.function.IntPredicate;
+import java.util.function.IntUnaryOperator;
 
 import speiger.src.collections.shorts.collections.ShortCollection;
 import speiger.src.collections.shorts.functions.ShortComparator;
@@ -18,8 +21,6 @@ import speiger.src.collections.shorts.functions.function.ShortPredicate;
 import speiger.src.collections.shorts.functions.function.ShortShortUnaryOperator;
 import speiger.src.collections.objects.utils.ObjectArrays;
 import speiger.src.collections.shorts.utils.ShortIterators;
-import java.util.stream.IntStream;
-import java.util.stream.StreamSupport;
 import speiger.src.collections.shorts.collections.ShortSplititerator;
 import speiger.src.collections.shorts.utils.ShortSplititerators;
 import speiger.src.collections.utils.SanityChecks;

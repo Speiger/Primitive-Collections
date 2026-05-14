@@ -6,6 +6,7 @@ import java.util.Collection;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 import java.util.OptionalInt;
+import java.util.stream.IntStream;
 import java.util.function.IntPredicate;
 
 import speiger.src.collections.ints.collections.IntCollection;
@@ -213,6 +214,15 @@ public class IntLinkedOpenCustomHashSet extends IntOpenCustomHashSet implements 
 	public IntLinkedOpenCustomHashSet(IntIterator iterator, float loadFactor, IntStrategy strategy) {
 		this(HashUtil.DEFAULT_MIN_CAPACITY, loadFactor, strategy);
 		while(iterator.hasNext()) add(iterator.nextInt());
+	}
+	
+
+	/**
+	 * Collects a Stream to a LinkedCustomHashSet
+	 * @return a set with the contents of the Stream
+	 */
+	public static IntLinkedOpenCustomHashSet toList(IntStream stream, IntStrategy strategy) {
+		return stream.collect(() -> new IntLinkedOpenCustomHashSet(strategy), IntLinkedOpenCustomHashSet::add, IntLinkedOpenCustomHashSet::addAll);
 	}
 	
 	@Override

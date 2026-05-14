@@ -6,6 +6,7 @@ import java.util.Iterator;
 import java.util.NoSuchElementException;
 import java.util.Objects;
 import java.util.OptionalDouble;
+import java.util.stream.DoubleStream;
 import java.util.function.DoublePredicate;
 
 import speiger.src.collections.doubles.collections.DoubleCollection;
@@ -182,6 +183,15 @@ public class DoubleLinkedOpenHashSet extends DoubleOpenHashSet implements Double
 	public DoubleLinkedOpenHashSet(DoubleIterator iterator, float loadFactor) {
 		this(HashUtil.DEFAULT_MIN_CAPACITY, loadFactor);
 		while(iterator.hasNext()) add(iterator.nextDouble());
+	}
+	
+
+	/**
+	 * Collects a Stream to a LinkedHashSet
+	 * @return a set with the contents of the Stream
+	 */
+	public static DoubleLinkedOpenHashSet toLinkedSet(DoubleStream stream) {
+		return stream.collect(DoubleLinkedOpenHashSet::new, DoubleLinkedOpenHashSet::add, DoubleLinkedOpenHashSet::addAll);
 	}
 	
 	@Override

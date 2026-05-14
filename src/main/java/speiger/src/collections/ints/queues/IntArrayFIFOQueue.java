@@ -3,6 +3,7 @@ package speiger.src.collections.ints.queues;
 import java.util.Arrays;
 import java.util.Objects;
 import java.util.OptionalInt;
+import java.util.stream.IntStream;
 import java.util.NoSuchElementException;
 import java.util.function.IntPredicate;
 
@@ -85,6 +86,20 @@ public class IntArrayFIFOQueue extends AbstractIntPriorityQueue implements IntPr
 	 */
 	public IntArrayFIFOQueue() {
 		this(MIN_CAPACITY);
+	}
+	
+
+	/**
+	 * Collects a Stream to a ArrayFIFOQueue
+	 * @return a queue with the contents of the Stream
+	 */
+	public static IntArrayFIFOQueue toQueue(IntStream stream) {
+		return stream.collect(IntArrayFIFOQueue::new, IntArrayFIFOQueue::enqueue, IntArrayFIFOQueue::merge);
+	}
+	
+	private IntArrayFIFOQueue merge(IntArrayFIFOQueue a) {
+		enqueueAll(a.toIntArray());
+		return this;
 	}
 	
 	@Override

@@ -7,6 +7,8 @@ import java.util.Iterator;
 import java.util.NoSuchElementException;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.stream.Stream;
+import java.util.stream.Collector;
 import java.util.function.Consumer;
 import java.util.function.BiFunction;
 import java.util.function.Predicate;
@@ -209,6 +211,29 @@ public class ObjectOpenCustomHashSet<T> extends AbstractObjectSet<T> implements 
 	public ObjectOpenCustomHashSet(Iterator<T> iterator, float loadFactor, ObjectStrategy<? super T> strategy) {
 		this(HashUtil.DEFAULT_MIN_CAPACITY, loadFactor, strategy);
 		while(iterator.hasNext()) add(iterator.next());
+	}
+	
+	/**
+	 * Creates a Collector for a CustomHashSet
+	 * @param <T> the keyType of elements maintained by this Collection
+	 * @return a collector
+	 */
+	public static <T> Collector<T, ObjectOpenCustomHashSet<T>, ObjectOpenCustomHashSet<T>> toSet(ObjectStrategy<? super T> strategy) {
+		return Collector.of(() -> new ObjectOpenCustomHashSet<>(strategy), ObjectOpenCustomHashSet::add, ObjectOpenCustomHashSet::merge);
+	}
+	
+	/**
+	 * Collects a Stream to a CustomHashSet
+	 * @param <T> the keyType of elements maintained by this Collection
+	 * @return a set with the contents of the Stream
+	 */
+	public static <T> ObjectOpenCustomHashSet<T> toSet(Stream<T> stream, ObjectStrategy<? super T> strategy) {
+		return stream.collect(() -> new ObjectOpenCustomHashSet<>(strategy), ObjectOpenCustomHashSet::add, ObjectOpenCustomHashSet::merge);
+	}
+	
+	private ObjectOpenCustomHashSet<T> merge(ObjectOpenCustomHashSet<T> a) {
+		addAll(a);
+		return this;
 	}
 	
 	/**

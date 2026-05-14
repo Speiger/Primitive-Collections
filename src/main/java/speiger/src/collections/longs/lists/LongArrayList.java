@@ -5,6 +5,8 @@ import java.util.Collection;
 import java.util.Iterator;
 import java.util.Objects;
 import java.util.OptionalLong;
+
+
 import java.util.function.LongPredicate;
 import java.util.function.Predicate;
 import java.util.function.UnaryOperator;
@@ -142,6 +144,15 @@ public class LongArrayList extends AbstractLongList implements ILongArray, LongS
 		list.data = a;
 		list.size = length;
 		return list;
+	}
+	
+
+	/**
+	 * Collects a Stream to a ArrayList
+	 * @return a list with the contents of the Stream
+	 */
+	public static LongArrayList toList(LongStream stream) {
+		return stream.collect(LongArrayList::new, LongArrayList::add, LongArrayList::addAll);
 	}
 	
 	/**

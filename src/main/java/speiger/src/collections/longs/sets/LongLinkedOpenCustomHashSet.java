@@ -6,6 +6,7 @@ import java.util.Collection;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 import java.util.OptionalLong;
+import java.util.stream.LongStream;
 import java.util.function.LongPredicate;
 
 import speiger.src.collections.longs.collections.LongCollection;
@@ -213,6 +214,15 @@ public class LongLinkedOpenCustomHashSet extends LongOpenCustomHashSet implement
 	public LongLinkedOpenCustomHashSet(LongIterator iterator, float loadFactor, LongStrategy strategy) {
 		this(HashUtil.DEFAULT_MIN_CAPACITY, loadFactor, strategy);
 		while(iterator.hasNext()) add(iterator.nextLong());
+	}
+	
+
+	/**
+	 * Collects a Stream to a LinkedCustomHashSet
+	 * @return a set with the contents of the Stream
+	 */
+	public static LongLinkedOpenCustomHashSet toList(LongStream stream, LongStrategy strategy) {
+		return stream.collect(() -> new LongLinkedOpenCustomHashSet(strategy), LongLinkedOpenCustomHashSet::add, LongLinkedOpenCustomHashSet::addAll);
 	}
 	
 	@Override

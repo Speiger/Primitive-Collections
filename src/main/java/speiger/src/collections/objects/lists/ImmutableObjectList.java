@@ -6,6 +6,10 @@ import java.util.Collection;
 import java.util.NoSuchElementException;
 import java.util.Objects;
 import java.util.Optional;
+
+import java.util.stream.Stream;
+import java.util.stream.Collector;
+import speiger.src.collections.objects.utils.ObjectCollections;
 import java.util.function.BiFunction;
 import java.util.function.Consumer;
 import java.util.function.Predicate;
@@ -84,6 +88,29 @@ public class ImmutableObjectList<T> extends AbstractObjectList<T>
 	public ImmutableObjectList(T[] a, int offset, int length) {
 		SanityChecks.checkArrayCapacity(a.length, offset, length);
 		data = Arrays.copyOfRange(a, offset, offset+length);
+	}
+	
+	/**
+	 * Creates a Collector for a ImmutableList
+	 * @param <T> the keyType of elements maintained by this Collection
+	 * @return a collector
+	 */
+	public static <T> Collector<T, ObjectCollection<T>, ImmutableObjectList<T>> toList() {
+		return Collector.of(ObjectCollections::wrapper, ObjectCollection::add, ImmutableObjectList::merge, E -> new ImmutableObjectList<>(E.toArray((T[])new Object[E.size()])));
+	}
+
+	/**
+	 * Collects a Stream to a ImmutableList
+	 * @param <T> the keyType of elements maintained by this Collection
+	 * @return a list with the contents of the Stream
+	 */
+	public static <T> ImmutableObjectList<T> toList(Stream<T> stream) {
+		return stream.collect(toList());
+	}
+	
+	private static <T> ObjectCollection<T> merge(ObjectCollection<T> a, ObjectCollection<T> b) {
+		a.addAll(b);
+		return a;
 	}
 	
 	@Override

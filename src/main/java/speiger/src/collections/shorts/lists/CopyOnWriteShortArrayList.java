@@ -111,7 +111,6 @@ public class CopyOnWriteShortArrayList extends AbstractShortList implements ITri
 		System.arraycopy(a, offset, data, 0, length);
 	}
 	
-	
 	private void setArray(short[] data) {
 		this.data = data;
 	}

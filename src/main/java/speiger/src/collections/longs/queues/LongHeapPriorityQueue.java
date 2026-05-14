@@ -4,6 +4,7 @@ import java.util.Arrays;
 import java.util.NoSuchElementException;
 import java.util.Objects;
 import java.util.OptionalLong;
+import java.util.stream.LongStream;
 import java.util.function.LongPredicate;
 
 import speiger.src.collections.longs.collections.LongCollection;
@@ -175,6 +176,20 @@ public class LongHeapPriorityQueue extends AbstractLongPriorityQueue
 		queue.size = size;
 		LongArrays.heapify(array, size, comp);
 		return queue;
+	}
+	
+
+	/**
+	 * Collects a Stream to a ArrayFIFOQueue
+	 * @return a queue with the contents of the Stream
+	 */
+	public static LongHeapPriorityQueue toQueue(LongStream stream) {
+		return stream.collect(LongHeapPriorityQueue::new, LongHeapPriorityQueue::enqueue, LongHeapPriorityQueue::merge);
+	}
+	
+	private LongHeapPriorityQueue merge(LongHeapPriorityQueue a) {
+		enqueueAll(a.toLongArray());
+		return this;
 	}
 	
 	@Override

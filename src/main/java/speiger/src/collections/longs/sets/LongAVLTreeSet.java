@@ -6,6 +6,7 @@ import java.util.Iterator;
 import java.util.NoSuchElementException;
 import java.util.Objects;
 import java.util.OptionalLong;
+import java.util.stream.LongStream;
 import java.util.function.LongPredicate;
 
 import speiger.src.collections.longs.collections.LongBidirectionalIterator;
@@ -181,6 +182,15 @@ public class LongAVLTreeSet extends AbstractLongSet implements LongNavigableSet
 	public LongAVLTreeSet(LongIterator iterator, LongComparator comp) {
 		comparator = comp;
 		while(iterator.hasNext()) add(iterator.nextLong());
+	}
+	
+
+	/**
+	 * Collects a Stream to a AVLTreeSet
+	 * @return a set with the contents of the Stream
+	 */
+	public static LongAVLTreeSet toSet(LongStream stream) {
+		return stream.collect(LongAVLTreeSet::new, LongAVLTreeSet::add, LongAVLTreeSet::addAll);
 	}
 	
 	@Override

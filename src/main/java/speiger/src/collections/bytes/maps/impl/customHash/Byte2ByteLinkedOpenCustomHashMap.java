@@ -191,13 +191,13 @@ public class Byte2ByteLinkedOpenCustomHashMap extends Byte2ByteOpenCustomHashMap
 			if(containsNull) {
 				byte lastValue = values[nullIndex];
 				values[nullIndex] = value;
-				moveToFirstIndex(nullIndex);
+				moveToFirstIndex(nullIndex, false);
 				return lastValue;
 			}
 			values[nullIndex] = value;
 			containsNull = true;
 			onNodeAdded(nullIndex);
-			moveToFirstIndex(nullIndex);
+			moveToFirstIndex(nullIndex, true);
 		}
 		else {
 			int pos = HashUtil.mix(strategy.hashCode(key)) & mask;
@@ -205,7 +205,7 @@ public class Byte2ByteLinkedOpenCustomHashMap extends Byte2ByteOpenCustomHashMap
 				if(strategy.equals(keys[pos], key)) {
 					byte lastValue = values[pos];
 					values[pos] = value;
-					moveToFirstIndex(pos);
+					moveToFirstIndex(pos, false);
 					return lastValue;
 				}
 				pos = ++pos & mask;
@@ -213,7 +213,7 @@ public class Byte2ByteLinkedOpenCustomHashMap extends Byte2ByteOpenCustomHashMap
 			keys[pos] = key;
 			values[pos] = value;
 			onNodeAdded(pos);
-			moveToFirstIndex(pos);
+			moveToFirstIndex(pos, true);
 		}
 		if(size++ >= maxFill) rehash(HashUtil.arraySize(size+1, loadFactor));
 		return getDefaultReturnValue();
@@ -225,13 +225,13 @@ public class Byte2ByteLinkedOpenCustomHashMap extends Byte2ByteOpenCustomHashMap
 			if(containsNull) {
 				byte lastValue = values[nullIndex];
 				values[nullIndex] = value;
-				moveToLastIndex(nullIndex);
+				moveToLastIndex(nullIndex, false);
 				return lastValue;
 			}
 			values[nullIndex] = value;
 			containsNull = true;
 			onNodeAdded(nullIndex);
-			moveToLastIndex(nullIndex);
+			moveToLastIndex(nullIndex, true);
 		}
 		else {
 			int pos = HashUtil.mix(strategy.hashCode(key)) & mask;
@@ -239,7 +239,7 @@ public class Byte2ByteLinkedOpenCustomHashMap extends Byte2ByteOpenCustomHashMap
 				if(strategy.equals(keys[pos], key)) {
 					byte lastValue = values[pos];
 					values[pos] = value;
-					moveToLastIndex(pos);
+					moveToLastIndex(pos, false);
 					return lastValue;
 				}
 				pos = ++pos & mask;
@@ -247,7 +247,7 @@ public class Byte2ByteLinkedOpenCustomHashMap extends Byte2ByteOpenCustomHashMap
 			keys[pos] = key;
 			values[pos] = value;
 			onNodeAdded(pos);
-			moveToLastIndex(pos);
+			moveToLastIndex(pos, true);
 		}
 		if(size++ >= maxFill) rehash(HashUtil.arraySize(size+1, loadFactor));
 		return getDefaultReturnValue();
@@ -260,7 +260,7 @@ public class Byte2ByteLinkedOpenCustomHashMap extends Byte2ByteOpenCustomHashMap
 			values[nullIndex] = value;
 			containsNull = true;
 			onNodeAdded(nullIndex);
-			moveToFirstIndex(nullIndex);
+			moveToFirstIndex(nullIndex, true);
 		}
 		else {
 			int pos = HashUtil.mix(strategy.hashCode(key)) & mask;
@@ -271,7 +271,7 @@ public class Byte2ByteLinkedOpenCustomHashMap extends Byte2ByteOpenCustomHashMap
 			keys[pos] = key;
 			values[pos] = value;
 			onNodeAdded(pos);
-			moveToFirstIndex(pos);
+			moveToFirstIndex(pos, true);
 		}
 		if(size++ >= maxFill) rehash(HashUtil.arraySize(size+1, loadFactor));
 		return getDefaultReturnValue();
@@ -284,7 +284,7 @@ public class Byte2ByteLinkedOpenCustomHashMap extends Byte2ByteOpenCustomHashMap
 			values[nullIndex] = value;
 			containsNull = true;
 			onNodeAdded(nullIndex);
-			moveToLastIndex(nullIndex);
+			moveToLastIndex(nullIndex, true);
 		}
 		else {
 			int pos = HashUtil.mix(strategy.hashCode(key)) & mask;
@@ -295,7 +295,7 @@ public class Byte2ByteLinkedOpenCustomHashMap extends Byte2ByteOpenCustomHashMap
 			keys[pos] = key;
 			values[pos] = value;
 			onNodeAdded(pos);
-			moveToLastIndex(pos);
+			moveToLastIndex(pos, true);
 		}
 		if(size++ >= maxFill) rehash(HashUtil.arraySize(size+1, loadFactor));
 		return getDefaultReturnValue();
@@ -306,7 +306,7 @@ public class Byte2ByteLinkedOpenCustomHashMap extends Byte2ByteOpenCustomHashMap
 		if(isEmpty() || strategy.equals(firstByteKey(), key)) return false;
 		if(strategy.equals(key, (byte)0)) {
 			if(containsNull) {
-				moveToFirstIndex(nullIndex);
+				moveToFirstIndex(nullIndex, false);
 				return true;
 			}
 		}
@@ -314,7 +314,7 @@ public class Byte2ByteLinkedOpenCustomHashMap extends Byte2ByteOpenCustomHashMap
 			int pos = HashUtil.mix(strategy.hashCode(key)) & mask;
 			while(!strategy.equals(keys[pos], (byte)0)) {
 				if(strategy.equals(keys[pos], key)) {
-					moveToFirstIndex(pos);
+					moveToFirstIndex(pos, false);
 					return true;
 				}
 				pos = ++pos & mask;
@@ -328,7 +328,7 @@ public class Byte2ByteLinkedOpenCustomHashMap extends Byte2ByteOpenCustomHashMap
 		if(isEmpty() || strategy.equals(lastByteKey(), key)) return false;
 		if(strategy.equals(key, (byte)0)) {
 			if(containsNull) {
-				moveToLastIndex(nullIndex);
+				moveToLastIndex(nullIndex, false);
 				return true;
 			}
 		}
@@ -336,7 +336,7 @@ public class Byte2ByteLinkedOpenCustomHashMap extends Byte2ByteOpenCustomHashMap
 			int pos = HashUtil.mix(strategy.hashCode(key)) & mask;
 			while(!strategy.equals(keys[pos], (byte)0)) {
 				if(strategy.equals(keys[pos], key)) {
-					moveToLastIndex(pos);
+					moveToLastIndex(pos, false);
 					return true;
 				}
 				pos = ++pos & mask;
@@ -349,7 +349,7 @@ public class Byte2ByteLinkedOpenCustomHashMap extends Byte2ByteOpenCustomHashMap
 	public byte getAndMoveToFirst(byte key) {
 		int index = findIndex(key);
 		if(index < 0) return getDefaultReturnValue();
-		moveToFirstIndex(index);
+		moveToFirstIndex(index, false);
 		return values[index];
 	}
 	
@@ -357,7 +357,7 @@ public class Byte2ByteLinkedOpenCustomHashMap extends Byte2ByteOpenCustomHashMap
 	public byte getAndMoveToLast(byte key) {
 		int index = findIndex(key);
 		if(index < 0) return getDefaultReturnValue();
-		moveToLastIndex(index);
+		moveToLastIndex(index, false);
 		return values[index];
 	}
 	
@@ -533,8 +533,8 @@ public class Byte2ByteLinkedOpenCustomHashMap extends Byte2ByteOpenCustomHashMap
 		containsNull = false;
 	}
 	
-	protected void moveToFirstIndex(int startPos) {
-		if(size == 1 || firstIndex == startPos) return;
+	protected void moveToFirstIndex(int startPos, boolean adding) {
+		if(size == (adding ? 0 : 1) || firstIndex == startPos) return;
 		if(lastIndex == startPos) {
 			lastIndex = (int)(links[startPos] >>> 32);
 			links[lastIndex] |= 0xFFFFFFFFL;
@@ -551,8 +551,8 @@ public class Byte2ByteLinkedOpenCustomHashMap extends Byte2ByteOpenCustomHashMap
 		firstIndex = startPos;
 	}
 	
-	protected void moveToLastIndex(int startPos) {
-		if(size == 1 || lastIndex == startPos) return;
+	protected void moveToLastIndex(int startPos, boolean adding) {
+		if(size == (adding ? 0 : 1) || lastIndex == startPos) return;
 		if(firstIndex == startPos) {
 			firstIndex = (int)links[startPos];
 			links[lastIndex] |= 0xFFFFFFFF00000000L;

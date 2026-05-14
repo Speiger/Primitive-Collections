@@ -4,6 +4,7 @@ import java.util.Arrays;
 import java.util.NoSuchElementException;
 import java.util.Objects;
 import java.util.OptionalLong;
+import java.util.stream.LongStream;
 import java.util.function.LongPredicate;
 
 import speiger.src.collections.longs.collections.LongCollection;
@@ -173,6 +174,19 @@ public class LongArrayPriorityQueue extends AbstractLongPriorityQueue
 		queue.array = array;
 		queue.size = size;
 		return queue;
+	}
+
+	/**
+	 * Collects a Stream to a ArrayPriorityQueue
+	 * @return a queue with the contents of the Stream
+	 */
+	public static LongArrayPriorityQueue toQueue(LongStream stream) {
+		return stream.collect(LongArrayPriorityQueue::new, LongArrayPriorityQueue::enqueue, LongArrayPriorityQueue::merge);
+	}
+	
+	private LongArrayPriorityQueue merge(LongArrayPriorityQueue a) {
+		enqueueAll(a.toLongArray());
+		return this;
 	}
 	
 	@Override

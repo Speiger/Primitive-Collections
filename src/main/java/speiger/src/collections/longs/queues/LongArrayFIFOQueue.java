@@ -3,6 +3,7 @@ package speiger.src.collections.longs.queues;
 import java.util.Arrays;
 import java.util.Objects;
 import java.util.OptionalLong;
+import java.util.stream.LongStream;
 import java.util.NoSuchElementException;
 import java.util.function.LongPredicate;
 
@@ -85,6 +86,20 @@ public class LongArrayFIFOQueue extends AbstractLongPriorityQueue implements Lon
 	 */
 	public LongArrayFIFOQueue() {
 		this(MIN_CAPACITY);
+	}
+	
+
+	/**
+	 * Collects a Stream to a ArrayFIFOQueue
+	 * @return a queue with the contents of the Stream
+	 */
+	public static LongArrayFIFOQueue toQueue(LongStream stream) {
+		return stream.collect(LongArrayFIFOQueue::new, LongArrayFIFOQueue::enqueue, LongArrayFIFOQueue::merge);
+	}
+	
+	private LongArrayFIFOQueue merge(LongArrayFIFOQueue a) {
+		enqueueAll(a.toLongArray());
+		return this;
 	}
 	
 	@Override

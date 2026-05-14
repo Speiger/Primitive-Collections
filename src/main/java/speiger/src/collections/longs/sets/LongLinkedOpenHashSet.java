@@ -6,6 +6,7 @@ import java.util.Iterator;
 import java.util.NoSuchElementException;
 import java.util.Objects;
 import java.util.OptionalLong;
+import java.util.stream.LongStream;
 import java.util.function.LongPredicate;
 
 import speiger.src.collections.longs.collections.LongCollection;
@@ -182,6 +183,15 @@ public class LongLinkedOpenHashSet extends LongOpenHashSet implements LongOrdere
 	public LongLinkedOpenHashSet(LongIterator iterator, float loadFactor) {
 		this(HashUtil.DEFAULT_MIN_CAPACITY, loadFactor);
 		while(iterator.hasNext()) add(iterator.nextLong());
+	}
+	
+
+	/**
+	 * Collects a Stream to a LinkedHashSet
+	 * @return a set with the contents of the Stream
+	 */
+	public static LongLinkedOpenHashSet toLinkedSet(LongStream stream) {
+		return stream.collect(LongLinkedOpenHashSet::new, LongLinkedOpenHashSet::add, LongLinkedOpenHashSet::addAll);
 	}
 	
 	@Override

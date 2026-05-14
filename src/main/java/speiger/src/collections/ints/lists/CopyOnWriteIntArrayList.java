@@ -6,6 +6,7 @@ import java.util.Iterator;
 import java.util.NoSuchElementException;
 import java.util.Objects;
 import java.util.OptionalInt;
+
 import java.util.concurrent.locks.ReentrantLock;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
@@ -111,6 +112,14 @@ public class CopyOnWriteIntArrayList extends AbstractIntList implements ITrimmab
 		System.arraycopy(a, offset, data, 0, length);
 	}
 	
+
+	/**
+	 * Collects a Stream to a CopyOnWriteArrayList
+	 * @return a list with the contents of the Stream
+	 */
+	public static CopyOnWriteIntArrayList toList(IntStream stream) {
+		return stream.collect(CopyOnWriteIntArrayList::new, CopyOnWriteIntArrayList::add, CopyOnWriteIntArrayList::addAll);
+	}
 	
 	private void setArray(int[] data) {
 		this.data = data;

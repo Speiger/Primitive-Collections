@@ -7,6 +7,7 @@ import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 import java.util.concurrent.locks.LockSupport;
 import java.util.function.Consumer;
+import java.util.Optional;
 import java.util.function.IntFunction;
 import java.util.function.BiFunction;
 import java.util.Comparator;
@@ -288,9 +289,8 @@ public class ObjectAsyncBuilder<T>
 	 * @param operator that reduces the elements.
 	 * @return self with the reduce action applied
 	 */
-	public ObjectAsyncBuilder<T> reduce(ObjectObjectUnaryOperator<T, T> operator) {
-		task = new SimpleReduceTask<>(iterable.iterator(), operator);
-		return this;
+	public ObjectAsyncBuilder<Optional<T>> reduce(ObjectObjectUnaryOperator<T, T> operator) {
+		return new ObjectAsyncBuilder<>(new SimpleReduceTask<>(iterable.iterator(), operator));
 	}
 	
 	/**
@@ -371,9 +371,8 @@ public class ObjectAsyncBuilder<T>
 	 * @param filter that decides the desired elements
 	 * @return self with the findFirst function applied
 	 */
-	public ObjectAsyncBuilder<T> findFirst(Predicate<T> filter) {
-		task = new FindFirstTask<>(iterable.iterator(), filter);
-		return this;
+	public ObjectAsyncBuilder<Optional<T>> findFirst(Predicate<T> filter) {
+		return new ObjectAsyncBuilder<>(new FindFirstTask<>(iterable.iterator(), filter));
 	}
 	
 	/**
@@ -484,7 +483,7 @@ public class ObjectAsyncBuilder<T>
 		}
 	}
 	
-	private static class SimpleReduceTask<T> extends BaseObjectTask<T>
+	private static class SimpleReduceTask<T> extends BaseObjectTask<Optional<T>>
 	{
 		ObjectIterator<T> iter;
 		ObjectObjectUnaryOperator<T, T> operator;
@@ -494,6 +493,7 @@ public class ObjectAsyncBuilder<T>
 		public SimpleReduceTask(ObjectIterator<T> iter, ObjectObjectUnaryOperator<T, T> operator) {
 			this.iter = iter;
 			this.operator = operator;
+			this.setResult(Optional.empty());
 		}
 		
 		@Override
@@ -508,7 +508,7 @@ public class ObjectAsyncBuilder<T>
 				}
 			}
 			if(!iter.hasNext()) {
-				setResult(value);
+				setResult(Optional.ofNullable(value));
 				return true;
 			}
 			return false;
@@ -579,7 +579,7 @@ public class ObjectAsyncBuilder<T>
 		}
 	}
 	
-	private static class FindFirstTask<T> extends BaseObjectTask<T>
+	private static class FindFirstTask<T> extends BaseObjectTask<Optional<T>>
 	{
 		ObjectIterator<T> iter;
 		Predicate<T> filter;
@@ -587,6 +587,7 @@ public class ObjectAsyncBuilder<T>
 		public FindFirstTask(ObjectIterator<T> iter, Predicate<T> filter) {
 			this.iter = iter;
 			this.filter = filter;
+			this.setResult(Optional.empty());
 		}
 
 		@Override
@@ -594,7 +595,7 @@ public class ObjectAsyncBuilder<T>
 			while(shouldRun() && iter.hasNext()) {
 				T entry = iter.next();
 				if(filter.test(iter.next())) {
-					setResult(entry);
+					setResult(Optional.ofNullable(entry));
 					return true;
 				}
 			}

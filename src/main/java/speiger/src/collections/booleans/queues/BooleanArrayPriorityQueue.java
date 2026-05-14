@@ -174,7 +174,6 @@ public class BooleanArrayPriorityQueue extends AbstractBooleanPriorityQueue
 		queue.size = size;
 		return queue;
 	}
-	
 	@Override
 	public void enqueue(boolean e) {
 		if(size == array.length) array = Arrays.copyOf(array, (int)Math.max(Math.min((long)array.length + (long)(array.length >> 1), (long)SanityChecks.MAX_ARRAY_SIZE), size+1));

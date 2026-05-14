@@ -3,6 +3,7 @@ package speiger.src.collections.doubles.sets;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.OptionalDouble;
+import java.util.stream.DoubleStream;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 import java.util.Objects;
@@ -181,6 +182,15 @@ public class DoubleRBTreeSet extends AbstractDoubleSet implements DoubleNavigabl
 	public DoubleRBTreeSet(DoubleIterator iterator, DoubleComparator comp) {
 		comparator = comp;
 		while(iterator.hasNext()) add(iterator.nextDouble());
+	}
+	
+
+	/**
+	 * Collects a Stream to a RBTreeSet
+	 * @return a set with the contents of the Stream
+	 */
+	public static DoubleRBTreeSet toSet(DoubleStream stream) {
+		return stream.collect(DoubleRBTreeSet::new, DoubleRBTreeSet::add, DoubleRBTreeSet::addAll);
 	}
 	
 	@Override

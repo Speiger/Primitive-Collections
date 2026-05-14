@@ -7,6 +7,8 @@ import java.util.function.BiFunction;
 import java.util.NoSuchElementException;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.stream.Stream;
+import java.util.stream.Collector;
 import java.util.Set;
 import java.util.function.Predicate;
 import speiger.src.collections.objects.collections.ObjectBidirectionalIterator;
@@ -55,7 +57,7 @@ public class ObjectArraySet<T> extends AbstractObjectSet<T> implements ObjectOrd
 	 * @param array the array that should be used for set.
 	 */
 	public ObjectArraySet(T[] array) {
-		this(array, array.length);
+		this(array, 0, array.length);
 	}
 	
 	/**
@@ -67,6 +69,18 @@ public class ObjectArraySet<T> extends AbstractObjectSet<T> implements ObjectOrd
 	public ObjectArraySet(T[] array, int length) {
 		this(length);
 		addAll(array, length);
+	}
+	
+	/**
+	 * Constructur using initial Array
+	 * @param array the array that should be used for set.
+	 * @param offset the starting offset of where the array should be copied from
+	 * @param length the amount of elements present within the array
+	 * @throws NegativeArraySizeException if the length is negative
+	 */
+	public ObjectArraySet(T[] array, int offset, int length) {
+		this(length);
+		addAll(array, offset, length);
 	}
 	
 	/**
@@ -108,6 +122,29 @@ public class ObjectArraySet<T> extends AbstractObjectSet<T> implements ObjectOrd
 	public ObjectArraySet(ObjectSet<T> s) {
 		this(s.size());
 		for(ObjectIterator<T> iter = s.iterator();iter.hasNext();data[size++] = iter.next());
+	}
+	
+	/**
+	 * Creates a Collector for a ArraySet
+	 * @param <T> the keyType of elements maintained by this Collection
+	 * @return a collector
+	 */
+	public static <T> Collector<T, ObjectArraySet<T>, ObjectArraySet<T>> toList() {
+		return Collector.of(ObjectArraySet::new, ObjectArraySet::add, ObjectArraySet::merge);
+	}
+	
+	/**
+	 * Collects a Stream to a ArraySet
+	 * @param <T> the keyType of elements maintained by this Collection
+	 * @return a set with the contents of the Stream
+	 */
+	public static <T> ObjectArraySet<T> toList(Stream<T> stream) {
+		return stream.collect(ObjectArraySet::new, ObjectArraySet::add, ObjectArraySet::merge);
+	}
+	
+	private ObjectArraySet<T> merge(ObjectArraySet<T> a) {
+		addAll(a);
+		return this;
 	}
 	
 	@Override

@@ -5,6 +5,7 @@ import java.util.Collection;
 import java.util.Iterator;
 import java.util.Objects;
 import java.util.OptionalLong;
+
 import java.util.NoSuchElementException;
 import java.util.Spliterator;
 import java.util.Spliterator.OfLong;
@@ -101,6 +102,15 @@ public class LongLinkedList extends AbstractLongList implements LongPriorityDequ
 	public LongLinkedList(long[] a, int offset, int length) {
 		SanityChecks.checkArrayCapacity(a.length, offset, length);
 		for(int i = offset,m=offset+length;i<m;add(a[i++]));
+	}
+	
+
+	/**
+	 * Collects a Stream to a LinkedList
+	 * @return a list with the contents of the Stream
+	 */
+	public static LongLinkedList toList(LongStream stream) {
+		return stream.collect(LongLinkedList::new, LongLinkedList::add, LongLinkedList::addAll);
 	}
 	
 	@Override

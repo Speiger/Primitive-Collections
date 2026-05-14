@@ -55,7 +55,7 @@ public class FloatArraySet extends AbstractFloatSet implements FloatOrderedSet
 	 * @param array the array that should be used for set.
 	 */
 	public FloatArraySet(float[] array) {
-		this(array, array.length);
+		this(array, 0, array.length);
 	}
 	
 	/**
@@ -67,6 +67,18 @@ public class FloatArraySet extends AbstractFloatSet implements FloatOrderedSet
 	public FloatArraySet(float[] array, int length) {
 		this(length);
 		addAll(array, length);
+	}
+	
+	/**
+	 * Constructur using initial Array
+	 * @param array the array that should be used for set.
+	 * @param offset the starting offset of where the array should be copied from
+	 * @param length the amount of elements present within the array
+	 * @throws NegativeArraySizeException if the length is negative
+	 */
+	public FloatArraySet(float[] array, int offset, int length) {
+		this(length);
+		addAll(array, offset, length);
 	}
 	
 	/**

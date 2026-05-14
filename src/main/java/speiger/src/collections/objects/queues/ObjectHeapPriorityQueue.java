@@ -7,6 +7,9 @@ import java.util.function.Consumer;
 import java.util.function.BiFunction;
 import java.util.Objects;
 import java.util.Optional;
+
+import java.util.stream.Stream;
+import java.util.stream.Collector;
 import java.util.function.Predicate;
 
 import speiger.src.collections.objects.collections.ObjectCollection;
@@ -181,6 +184,29 @@ public class ObjectHeapPriorityQueue<T> extends AbstractObjectPriorityQueue<T>
 		queue.size = size;
 		ObjectArrays.heapify(array, size, comp);
 		return queue;
+	}
+	
+	/**
+	 * Creates a Collector for a ArrayFIFOQueue
+	 * @param <T> the keyType of elements maintained by this Collection
+	 * @return a collector
+	 */
+	public static <T> Collector<T, ObjectHeapPriorityQueue<T>, ObjectHeapPriorityQueue<T>> toQueue() {
+		return Collector.of(ObjectHeapPriorityQueue::new, ObjectHeapPriorityQueue::enqueue, ObjectHeapPriorityQueue::merge);
+	}
+	
+	/**
+	 * Collects a Stream to a ArrayFIFOQueue
+	 * @param <T> the keyType of elements maintained by this Collection
+	 * @return a queue with the contents of the Stream
+	 */
+	public static <T> ObjectHeapPriorityQueue<T> toQueue(Stream<T> stream) {
+		return stream.collect(ObjectHeapPriorityQueue::new, ObjectHeapPriorityQueue::enqueue, ObjectHeapPriorityQueue::merge);
+	}
+	
+	private ObjectHeapPriorityQueue<T> merge(ObjectHeapPriorityQueue<T> a) {
+		enqueueAll(a.toArray((T[])new Object[a.size()]));
+		return this;
 	}
 	
 	@Override

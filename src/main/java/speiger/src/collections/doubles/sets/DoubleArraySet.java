@@ -5,6 +5,7 @@ import java.util.Collection;
 import java.util.NoSuchElementException;
 import java.util.Objects;
 import java.util.OptionalDouble;
+import java.util.stream.DoubleStream;
 import java.util.Set;
 import java.util.function.DoublePredicate;
 import speiger.src.collections.doubles.collections.DoubleBidirectionalIterator;
@@ -54,7 +55,7 @@ public class DoubleArraySet extends AbstractDoubleSet implements DoubleOrderedSe
 	 * @param array the array that should be used for set.
 	 */
 	public DoubleArraySet(double[] array) {
-		this(array, array.length);
+		this(array, 0, array.length);
 	}
 	
 	/**
@@ -66,6 +67,18 @@ public class DoubleArraySet extends AbstractDoubleSet implements DoubleOrderedSe
 	public DoubleArraySet(double[] array, int length) {
 		this(length);
 		addAll(array, length);
+	}
+	
+	/**
+	 * Constructur using initial Array
+	 * @param array the array that should be used for set.
+	 * @param offset the starting offset of where the array should be copied from
+	 * @param length the amount of elements present within the array
+	 * @throws NegativeArraySizeException if the length is negative
+	 */
+	public DoubleArraySet(double[] array, int offset, int length) {
+		this(length);
+		addAll(array, offset, length);
 	}
 	
 	/**
@@ -109,6 +122,15 @@ public class DoubleArraySet extends AbstractDoubleSet implements DoubleOrderedSe
 	public DoubleArraySet(DoubleSet s) {
 		this(s.size());
 		for(DoubleIterator iter = s.iterator();iter.hasNext();data[size++] = iter.nextDouble());
+	}
+	
+
+	/**
+	 * Collects a Stream to a ArraySet
+	 * @return a set with the contents of the Stream
+	 */
+	public static DoubleArraySet toList(DoubleStream stream) {
+		return stream.collect(DoubleArraySet::new, DoubleArraySet::add, DoubleArraySet::addAll);
 	}
 	
 	@Override

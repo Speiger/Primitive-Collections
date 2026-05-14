@@ -106,7 +106,10 @@ public class BooleanCollections
 		return new SingletonCollection(element);
 	}
 	
-	protected static CollectionWrapper wrapper() {
+	/**
+	 * Internal Use mainly. Its a collection wrapper with 0 dependencies for those actions where a collector is needed.
+	 */
+	public static CollectionWrapper wrapper() {
 		return new CollectionWrapper();
 	}
 	

@@ -4,6 +4,7 @@ import java.util.Arrays;
 import java.util.NoSuchElementException;
 import java.util.Objects;
 import java.util.OptionalDouble;
+import java.util.stream.DoubleStream;
 import java.util.function.DoublePredicate;
 
 import speiger.src.collections.doubles.collections.DoubleCollection;
@@ -175,6 +176,20 @@ public class DoubleHeapPriorityQueue extends AbstractDoublePriorityQueue
 		queue.size = size;
 		DoubleArrays.heapify(array, size, comp);
 		return queue;
+	}
+	
+
+	/**
+	 * Collects a Stream to a ArrayFIFOQueue
+	 * @return a queue with the contents of the Stream
+	 */
+	public static DoubleHeapPriorityQueue toQueue(DoubleStream stream) {
+		return stream.collect(DoubleHeapPriorityQueue::new, DoubleHeapPriorityQueue::enqueue, DoubleHeapPriorityQueue::merge);
+	}
+	
+	private DoubleHeapPriorityQueue merge(DoubleHeapPriorityQueue a) {
+		enqueueAll(a.toDoubleArray());
+		return this;
 	}
 	
 	@Override

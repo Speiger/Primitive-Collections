@@ -7,6 +7,7 @@ import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 import java.util.concurrent.locks.LockSupport;
 import java.util.function.Consumer;
+import java.util.OptionalLong;
 
 import speiger.src.collections.longs.functions.LongConsumer;
 import speiger.src.collections.longs.functions.LongComparator;
@@ -210,9 +211,8 @@ public class LongAsyncBuilder
 	 * @param operator that reduces the elements.
 	 * @return self with the reduce action applied
 	 */
-	public LongAsyncBuilder reduce(LongLongUnaryOperator operator) {
-		task = new SimpleReduceTask(iterable.iterator(), operator);
-		return this;
+	public ObjectAsyncBuilder<OptionalLong> reduce(LongLongUnaryOperator operator) {
+		return new ObjectAsyncBuilder<>(new SimpleReduceTask(iterable.iterator(), operator));
 	}
 	
 	/**
@@ -292,9 +292,8 @@ public class LongAsyncBuilder
 	 * @param filter that decides the desired elements
 	 * @return self with the findFirst function applied
 	 */
-	public LongAsyncBuilder findFirst(LongPredicate filter) {
-		task = new FindFirstTask(iterable.iterator(), filter);
-		return this;
+	public ObjectAsyncBuilder<OptionalLong> findFirst(LongPredicate filter) {
+		return new ObjectAsyncBuilder<>(new FindFirstTask(iterable.iterator(), filter));
 	}
 	
 	/**
@@ -404,7 +403,7 @@ public class LongAsyncBuilder
 		}
 	}
 	
-	private static class SimpleReduceTask extends BaseLongTask
+	private static class SimpleReduceTask extends BaseObjectTask<OptionalLong>
 	{
 		LongIterator iter;
 		LongLongUnaryOperator operator;
@@ -414,6 +413,7 @@ public class LongAsyncBuilder
 		public SimpleReduceTask(LongIterator iter, LongLongUnaryOperator operator) {
 			this.iter = iter;
 			this.operator = operator;
+			this.setResult(OptionalLong.empty());
 		}
 		
 		@Override
@@ -428,7 +428,7 @@ public class LongAsyncBuilder
 				}
 			}
 			if(!iter.hasNext()) {
-				setResult(value);
+				setResult(OptionalLong.of(value));
 				return true;
 			}
 			return false;
@@ -498,7 +498,7 @@ public class LongAsyncBuilder
 		}
 	}
 	
-	private static class FindFirstTask extends BaseLongTask
+	private static class FindFirstTask extends BaseObjectTask<OptionalLong>
 	{
 		LongIterator iter;
 		LongPredicate filter;
@@ -506,6 +506,7 @@ public class LongAsyncBuilder
 		public FindFirstTask(LongIterator iter, LongPredicate filter) {
 			this.iter = iter;
 			this.filter = filter;
+			this.setResult(OptionalLong.empty());
 		}
 
 		@Override
@@ -513,7 +514,7 @@ public class LongAsyncBuilder
 			while(shouldRun() && iter.hasNext()) {
 				long entry = iter.nextLong();
 				if(filter.test(iter.nextLong())) {
-					setResult(entry);
+					setResult(OptionalLong.of(entry));
 					return true;
 				}
 			}

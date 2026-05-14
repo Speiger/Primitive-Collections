@@ -7,6 +7,7 @@ import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 import java.util.concurrent.locks.LockSupport;
 import java.util.function.Consumer;
+import speiger.src.collections.chars.functions.OptionalChar;
 
 import speiger.src.collections.chars.functions.CharConsumer;
 import speiger.src.collections.chars.functions.CharComparator;
@@ -210,9 +211,8 @@ public class CharAsyncBuilder
 	 * @param operator that reduces the elements.
 	 * @return self with the reduce action applied
 	 */
-	public CharAsyncBuilder reduce(CharCharUnaryOperator operator) {
-		task = new SimpleReduceTask(iterable.iterator(), operator);
-		return this;
+	public ObjectAsyncBuilder<OptionalChar> reduce(CharCharUnaryOperator operator) {
+		return new ObjectAsyncBuilder<>(new SimpleReduceTask(iterable.iterator(), operator));
 	}
 	
 	/**
@@ -292,9 +292,8 @@ public class CharAsyncBuilder
 	 * @param filter that decides the desired elements
 	 * @return self with the findFirst function applied
 	 */
-	public CharAsyncBuilder findFirst(CharPredicate filter) {
-		task = new FindFirstTask(iterable.iterator(), filter);
-		return this;
+	public ObjectAsyncBuilder<OptionalChar> findFirst(CharPredicate filter) {
+		return new ObjectAsyncBuilder<>(new FindFirstTask(iterable.iterator(), filter));
 	}
 	
 	/**
@@ -404,7 +403,7 @@ public class CharAsyncBuilder
 		}
 	}
 	
-	private static class SimpleReduceTask extends BaseCharTask
+	private static class SimpleReduceTask extends BaseObjectTask<OptionalChar>
 	{
 		CharIterator iter;
 		CharCharUnaryOperator operator;
@@ -414,6 +413,7 @@ public class CharAsyncBuilder
 		public SimpleReduceTask(CharIterator iter, CharCharUnaryOperator operator) {
 			this.iter = iter;
 			this.operator = operator;
+			this.setResult(OptionalChar.empty());
 		}
 		
 		@Override
@@ -428,7 +428,7 @@ public class CharAsyncBuilder
 				}
 			}
 			if(!iter.hasNext()) {
-				setResult(value);
+				setResult(OptionalChar.of(value));
 				return true;
 			}
 			return false;
@@ -498,7 +498,7 @@ public class CharAsyncBuilder
 		}
 	}
 	
-	private static class FindFirstTask extends BaseCharTask
+	private static class FindFirstTask extends BaseObjectTask<OptionalChar>
 	{
 		CharIterator iter;
 		CharPredicate filter;
@@ -506,6 +506,7 @@ public class CharAsyncBuilder
 		public FindFirstTask(CharIterator iter, CharPredicate filter) {
 			this.iter = iter;
 			this.filter = filter;
+			this.setResult(OptionalChar.empty());
 		}
 
 		@Override
@@ -513,7 +514,7 @@ public class CharAsyncBuilder
 			while(shouldRun() && iter.hasNext()) {
 				char entry = iter.nextChar();
 				if(filter.test(iter.nextChar())) {
-					setResult(entry);
+					setResult(OptionalChar.of(entry));
 					return true;
 				}
 			}

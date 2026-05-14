@@ -107,7 +107,6 @@ public class CopyOnWriteBooleanArrayList extends AbstractBooleanList implements 
 		System.arraycopy(a, offset, data, 0, length);
 	}
 	
-	
 	private void setArray(boolean[] data) {
 		this.data = data;
 	}

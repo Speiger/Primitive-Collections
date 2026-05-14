@@ -5,6 +5,8 @@ import java.util.Collection;
 import java.util.Iterator;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.stream.Stream;
+import java.util.stream.Collector;
 import java.util.NoSuchElementException;
 import java.util.Spliterator;
 import java.util.function.Consumer;
@@ -96,6 +98,29 @@ public class ObjectLinkedList<T> extends AbstractObjectList<T> implements Object
 	public ObjectLinkedList(T[] a, int offset, int length) {
 		SanityChecks.checkArrayCapacity(a.length, offset, length);
 		for(int i = offset,m=offset+length;i<m;add(a[i++]));
+	}
+	
+	/**
+	 * Creates a Collector for a LinkedList
+	 * @param <T> the keyType of elements maintained by this Collection
+	 * @return a collector
+	 */
+	public static <T> Collector<T, ObjectLinkedList<T>, ObjectLinkedList<T>> toList() {
+		return Collector.of(ObjectLinkedList::new, ObjectLinkedList::add, ObjectLinkedList::merge);
+	}
+	
+	/**
+	 * Collects a Stream to a LinkedList
+	 * @param <T> the keyType of elements maintained by this Collection
+	 * @return a list with the contents of the Stream
+	 */
+	public static <T> ObjectLinkedList<T> toList(Stream<T> stream) {
+		return stream.collect(ObjectLinkedList::new, ObjectLinkedList::add, ObjectLinkedList::merge);
+	}
+	
+	private ObjectLinkedList<T> merge(ObjectLinkedList<T> a) {
+		addAll(a);
+		return this;
 	}
 	
 	@Override

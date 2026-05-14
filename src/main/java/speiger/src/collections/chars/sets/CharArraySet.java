@@ -55,7 +55,7 @@ public class CharArraySet extends AbstractCharSet implements CharOrderedSet
 	 * @param array the array that should be used for set.
 	 */
 	public CharArraySet(char[] array) {
-		this(array, array.length);
+		this(array, 0, array.length);
 	}
 	
 	/**
@@ -67,6 +67,18 @@ public class CharArraySet extends AbstractCharSet implements CharOrderedSet
 	public CharArraySet(char[] array, int length) {
 		this(length);
 		addAll(array, length);
+	}
+	
+	/**
+	 * Constructur using initial Array
+	 * @param array the array that should be used for set.
+	 * @param offset the starting offset of where the array should be copied from
+	 * @param length the amount of elements present within the array
+	 * @throws NegativeArraySizeException if the length is negative
+	 */
+	public CharArraySet(char[] array, int offset, int length) {
+		this(length);
+		addAll(array, offset, length);
 	}
 	
 	/**

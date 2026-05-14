@@ -9,6 +9,8 @@ import java.util.Iterator;
 import java.util.NoSuchElementException;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.stream.Stream;
+import java.util.stream.Collector;
 import java.util.function.Predicate;
 
 import speiger.src.collections.objects.collections.ObjectBidirectionalIterator;
@@ -177,6 +179,29 @@ public class ObjectAVLTreeSet<T> extends AbstractObjectSet<T> implements ObjectN
 	public ObjectAVLTreeSet(ObjectIterator<T> iterator, Comparator<T> comp) {
 		comparator = comp;
 		while(iterator.hasNext()) add(iterator.next());
+	}
+	
+	/**
+	 * Creates a Collector for a AVLTreeSet
+	 * @param <T> the keyType of elements maintained by this Collection
+	 * @return a collector
+	 */
+	public static <T> Collector<T, ObjectAVLTreeSet<T>, ObjectAVLTreeSet<T>> toSet() {
+		return Collector.of(ObjectAVLTreeSet::new, ObjectAVLTreeSet::add, ObjectAVLTreeSet::merge);
+	}
+	
+	/**
+	 * Collects a Stream to a AVLTreeSet
+	 * @param <T> the keyType of elements maintained by this Collection
+	 * @return a set with the contents of the Stream
+	 */
+	public static <T> ObjectAVLTreeSet<T> toSet(Stream<T> stream) {
+		return stream.collect(ObjectAVLTreeSet::new, ObjectAVLTreeSet::add, ObjectAVLTreeSet::merge);
+	}
+	
+	private ObjectAVLTreeSet<T> merge(ObjectAVLTreeSet<T> a) {
+		addAll(a);
+		return this;
 	}
 	
 	/** only used for primitives 

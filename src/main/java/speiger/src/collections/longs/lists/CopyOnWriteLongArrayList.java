@@ -6,6 +6,7 @@ import java.util.Iterator;
 import java.util.NoSuchElementException;
 import java.util.Objects;
 import java.util.OptionalLong;
+
 import java.util.concurrent.locks.ReentrantLock;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
@@ -111,6 +112,14 @@ public class CopyOnWriteLongArrayList extends AbstractLongList implements ITrimm
 		System.arraycopy(a, offset, data, 0, length);
 	}
 	
+
+	/**
+	 * Collects a Stream to a CopyOnWriteArrayList
+	 * @return a list with the contents of the Stream
+	 */
+	public static CopyOnWriteLongArrayList toList(LongStream stream) {
+		return stream.collect(CopyOnWriteLongArrayList::new, CopyOnWriteLongArrayList::add, CopyOnWriteLongArrayList::addAll);
+	}
 	
 	private void setArray(long[] data) {
 		this.data = data;

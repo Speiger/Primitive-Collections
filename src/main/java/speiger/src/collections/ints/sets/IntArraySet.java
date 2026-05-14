@@ -5,6 +5,7 @@ import java.util.Collection;
 import java.util.NoSuchElementException;
 import java.util.Objects;
 import java.util.OptionalInt;
+import java.util.stream.IntStream;
 import java.util.Set;
 import java.util.function.IntPredicate;
 import speiger.src.collections.ints.collections.IntBidirectionalIterator;
@@ -54,7 +55,7 @@ public class IntArraySet extends AbstractIntSet implements IntOrderedSet
 	 * @param array the array that should be used for set.
 	 */
 	public IntArraySet(int[] array) {
-		this(array, array.length);
+		this(array, 0, array.length);
 	}
 	
 	/**
@@ -66,6 +67,18 @@ public class IntArraySet extends AbstractIntSet implements IntOrderedSet
 	public IntArraySet(int[] array, int length) {
 		this(length);
 		addAll(array, length);
+	}
+	
+	/**
+	 * Constructur using initial Array
+	 * @param array the array that should be used for set.
+	 * @param offset the starting offset of where the array should be copied from
+	 * @param length the amount of elements present within the array
+	 * @throws NegativeArraySizeException if the length is negative
+	 */
+	public IntArraySet(int[] array, int offset, int length) {
+		this(length);
+		addAll(array, offset, length);
 	}
 	
 	/**
@@ -109,6 +122,15 @@ public class IntArraySet extends AbstractIntSet implements IntOrderedSet
 	public IntArraySet(IntSet s) {
 		this(s.size());
 		for(IntIterator iter = s.iterator();iter.hasNext();data[size++] = iter.nextInt());
+	}
+	
+
+	/**
+	 * Collects a Stream to a ArraySet
+	 * @return a set with the contents of the Stream
+	 */
+	public static IntArraySet toList(IntStream stream) {
+		return stream.collect(IntArraySet::new, IntArraySet::add, IntArraySet::addAll);
 	}
 	
 	@Override

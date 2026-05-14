@@ -3,6 +3,7 @@ package speiger.src.collections.doubles.queues;
 import java.util.Arrays;
 import java.util.Objects;
 import java.util.OptionalDouble;
+import java.util.stream.DoubleStream;
 import java.util.NoSuchElementException;
 import java.util.function.DoublePredicate;
 
@@ -85,6 +86,20 @@ public class DoubleArrayFIFOQueue extends AbstractDoublePriorityQueue implements
 	 */
 	public DoubleArrayFIFOQueue() {
 		this(MIN_CAPACITY);
+	}
+	
+
+	/**
+	 * Collects a Stream to a ArrayFIFOQueue
+	 * @return a queue with the contents of the Stream
+	 */
+	public static DoubleArrayFIFOQueue toQueue(DoubleStream stream) {
+		return stream.collect(DoubleArrayFIFOQueue::new, DoubleArrayFIFOQueue::enqueue, DoubleArrayFIFOQueue::merge);
+	}
+	
+	private DoubleArrayFIFOQueue merge(DoubleArrayFIFOQueue a) {
+		enqueueAll(a.toDoubleArray());
+		return this;
 	}
 	
 	@Override

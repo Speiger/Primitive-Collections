@@ -8,6 +8,8 @@ import java.util.Collection;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 import java.util.Optional;
+import java.util.stream.Stream;
+import java.util.stream.Collector;
 import java.util.function.Predicate;
 
 import speiger.src.collections.objects.collections.ObjectCollection;
@@ -189,6 +191,29 @@ public class ObjectLinkedOpenCustomHashSet<T> extends ObjectOpenCustomHashSet<T>
 	public ObjectLinkedOpenCustomHashSet(Iterator<T> iterator, float loadFactor, ObjectStrategy<? super T> strategy) {
 		this(HashUtil.DEFAULT_MIN_CAPACITY, loadFactor, strategy);
 		while(iterator.hasNext()) add(iterator.next());
+	}
+	
+	/**
+	 * Creates a Collector for a LinkedCustomHashSet
+	 * @param <T> the keyType of elements maintained by this Collection
+	 * @return a collector
+	 */
+	public static <T> Collector<T, ObjectLinkedOpenCustomHashSet<T>, ObjectLinkedOpenCustomHashSet<T>> toLinkedSet(ObjectStrategy<? super T> strategy) {
+		return Collector.of(() -> new ObjectLinkedOpenCustomHashSet<>(strategy), ObjectLinkedOpenCustomHashSet::add, ObjectLinkedOpenCustomHashSet::merge);
+	}
+	
+	/**
+	 * Collects a Stream to a LinkedCustomHashSet
+	 * @param <T> the keyType of elements maintained by this Collection
+	 * @return a set with the contents of the Stream
+	 */
+	public static <T> ObjectLinkedOpenCustomHashSet<T> toLinkedSet(Stream<T> stream, ObjectStrategy<? super T> strategy) {
+		return stream.collect(() -> new ObjectLinkedOpenCustomHashSet<>(strategy), ObjectLinkedOpenCustomHashSet::add, ObjectLinkedOpenCustomHashSet::merge);
+	}
+	
+	private ObjectLinkedOpenCustomHashSet<T> merge(ObjectLinkedOpenCustomHashSet<T> a) {
+		addAll(a);
+		return this;
 	}
 	
 	@Override

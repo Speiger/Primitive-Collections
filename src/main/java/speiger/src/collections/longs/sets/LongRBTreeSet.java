@@ -3,6 +3,7 @@ package speiger.src.collections.longs.sets;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.OptionalLong;
+import java.util.stream.LongStream;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 import java.util.Objects;
@@ -181,6 +182,15 @@ public class LongRBTreeSet extends AbstractLongSet implements LongNavigableSet
 	public LongRBTreeSet(LongIterator iterator, LongComparator comp) {
 		comparator = comp;
 		while(iterator.hasNext()) add(iterator.nextLong());
+	}
+	
+
+	/**
+	 * Collects a Stream to a RBTreeSet
+	 * @return a set with the contents of the Stream
+	 */
+	public static LongRBTreeSet toSet(LongStream stream) {
+		return stream.collect(LongRBTreeSet::new, LongRBTreeSet::add, LongRBTreeSet::addAll);
 	}
 	
 	@Override

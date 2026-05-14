@@ -10,6 +10,14 @@ import java.util.function.BiFunction;
 import java.util.Objects;
 #if JDK_TYPE
 import java.util.OPTIONAL;
+#if SPLIT_ITERATOR_FEATURE && STREAM_FEATURE
+#if !TYPE_OBJECT
+import java.util.stream.JAVA_STREAM;
+#else
+import java.util.stream.Stream;
+import java.util.stream.Collector;
+#endif
+#endif
 #endif
 #if JDK_FUNCTION
 import java.util.function.PREDICATE;
@@ -199,6 +207,47 @@ public class HEAP_PRIORITY_QUEUE KEY_GENERIC_TYPE extends ABSTRACT_PRIORITY_QUEU
 		return queue;
 	}
 	
+#if JDK_TYPE && SPLIT_ITERATOR_FEATURE && STREAM_FEATURE
+#if TYPE_OBJECT
+	/**
+	 * Creates a Collector for a ArrayFIFOQueue
+	 * @Type(T)
+	 * @return a collector
+	 */
+	public static <T> Collector<T, HEAP_PRIORITY_QUEUE<T>, HEAP_PRIORITY_QUEUE<T>> toQueue() {
+		return Collector.of(HEAP_PRIORITY_QUEUE::new, HEAP_PRIORITY_QUEUE::enqueue, HEAP_PRIORITY_QUEUE::merge);
+	}
+	
+	/**
+	 * Collects a Stream to a ArrayFIFOQueue
+	 * @Type(T)
+	 * @return a queue with the contents of the Stream
+	 */
+	public static <T> HEAP_PRIORITY_QUEUE KEY_GENERIC_TYPE toQueue(Stream<T> stream) {
+		return stream.collect(HEAP_PRIORITY_QUEUE::new, HEAP_PRIORITY_QUEUE::enqueue, HEAP_PRIORITY_QUEUE::merge);
+	}
+	
+	private HEAP_PRIORITY_QUEUE<T> merge(HEAP_PRIORITY_QUEUE<T> a) {
+		enqueueAll(a.toArray((T[])new Object[a.size()]));
+		return this;
+	}
+	
+#else
+	/**
+	 * Collects a Stream to a ArrayFIFOQueue
+	 * @return a queue with the contents of the Stream
+	 */
+	public static HEAP_PRIORITY_QUEUE toQueue(JAVA_STREAM stream) {
+		return stream.collect(HEAP_PRIORITY_QUEUE::new, HEAP_PRIORITY_QUEUE::enqueue, HEAP_PRIORITY_QUEUE::merge);
+	}
+	
+	private HEAP_PRIORITY_QUEUE merge(HEAP_PRIORITY_QUEUE a) {
+		enqueueAll(a.TO_ARRAY());
+		return this;
+	}
+	
+#endif
+#endif
 	@Override
 	public int size() {
 		return size;

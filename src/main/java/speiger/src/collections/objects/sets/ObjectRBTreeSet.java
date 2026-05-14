@@ -3,6 +3,8 @@ package speiger.src.collections.objects.sets;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Optional;
+import java.util.stream.Stream;
+import java.util.stream.Collector;
 import java.util.Comparator;
 import java.util.function.Consumer;
 import java.util.function.BiFunction;
@@ -177,6 +179,29 @@ public class ObjectRBTreeSet<T> extends AbstractObjectSet<T> implements ObjectNa
 	public ObjectRBTreeSet(ObjectIterator<T> iterator, Comparator<T> comp) {
 		comparator = comp;
 		while(iterator.hasNext()) add(iterator.next());
+	}
+	
+	/**
+	 * Creates a Collector for a RBTreeSet
+	 * @param <T> the keyType of elements maintained by this Collection
+	 * @return a collector
+	 */
+	public static <T> Collector<T, ObjectRBTreeSet<T>, ObjectRBTreeSet<T>> toSet() {
+		return Collector.of(ObjectRBTreeSet::new, ObjectRBTreeSet::add, ObjectRBTreeSet::merge);
+	}
+	
+	/**
+	 * Collects a Stream to a RBTreeSet
+	 * @param <T> the keyType of elements maintained by this Collection
+	 * @return a set with the contents of the Stream
+	 */
+	public static <T> ObjectRBTreeSet<T> toSet(Stream<T> stream) {
+		return stream.collect(ObjectRBTreeSet::new, ObjectRBTreeSet::add, ObjectRBTreeSet::merge);
+	}
+	
+	private ObjectRBTreeSet<T> merge(ObjectRBTreeSet<T> a) {
+		addAll(a);
+		return this;
 	}
 	
 	/** only used for primitives 

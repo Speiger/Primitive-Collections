@@ -1,13 +1,18 @@
 package speiger.src.collections.ints.lists;
 
 import java.util.Arrays;
+import java.util.stream.IntStream;
+import java.util.stream.StreamSupport;
 import java.util.Collection;
 import java.util.NoSuchElementException;
 import java.util.Objects;
 import java.util.OptionalInt;
+import java.util.function.Supplier;
+import speiger.src.collections.ints.utils.IntCollections;
 import java.util.function.Predicate;
 import java.util.function.UnaryOperator;
 import java.util.function.IntPredicate;
+
 import java.util.function.IntUnaryOperator;
 
 import speiger.src.collections.ints.collections.IntCollection;
@@ -18,8 +23,6 @@ import speiger.src.collections.objects.functions.consumer.ObjectIntConsumer;
 import speiger.src.collections.ints.functions.function.IntIntUnaryOperator;
 import speiger.src.collections.objects.utils.ObjectArrays;
 import speiger.src.collections.ints.utils.IntIterators;
-import java.util.stream.IntStream;
-import java.util.stream.StreamSupport;
 import speiger.src.collections.ints.collections.IntSplititerator;
 import speiger.src.collections.ints.utils.IntSplititerators;
 import speiger.src.collections.utils.SanityChecks;
@@ -87,6 +90,15 @@ public class ImmutableIntList extends AbstractIntList
 	public ImmutableIntList(int[] a, int offset, int length) {
 		SanityChecks.checkArrayCapacity(a.length, offset, length);
 		data = Arrays.copyOfRange(a, offset, offset+length);
+	}
+	
+
+	/**
+	 * Collects a Stream to a ImmutableList
+	 * @return a list with the contents of the Stream
+	 */
+	public static ImmutableIntList toList(IntStream stream) {
+		return new ImmutableIntList(stream.collect((Supplier<IntCollection>)IntCollections::wrapper, IntCollection::add, IntCollection::addAll).toIntArray());
 	}
 	
 	@Override

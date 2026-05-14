@@ -7,6 +7,7 @@ import java.util.Iterator;
 import java.util.NoSuchElementException;
 import java.util.Objects;
 import java.util.OptionalDouble;
+import java.util.stream.DoubleStream;
 import java.util.function.DoublePredicate;
 
 import speiger.src.collections.doubles.collections.DoubleCollection;
@@ -232,6 +233,15 @@ public class DoubleOpenCustomHashSet extends AbstractDoubleSet implements ITrimm
 	public DoubleOpenCustomHashSet(DoubleIterator iterator, float loadFactor, DoubleStrategy strategy) {
 		this(HashUtil.DEFAULT_MIN_CAPACITY, loadFactor, strategy);
 		while(iterator.hasNext()) add(iterator.nextDouble());
+	}
+	
+
+	/**
+	 * Collects a Stream to a CustomHashSet
+	 * @return a set with the contents of the Stream
+	 */
+	public static DoubleOpenCustomHashSet toSet(DoubleStream stream, DoubleStrategy strategy) {
+		return stream.collect(() -> new DoubleOpenCustomHashSet(strategy), DoubleOpenCustomHashSet::add, DoubleOpenCustomHashSet::addAll);
 	}
 	
 	/**

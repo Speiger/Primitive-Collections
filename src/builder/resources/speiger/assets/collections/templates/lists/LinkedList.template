@@ -13,6 +13,12 @@ import java.util.Iterator;
 import java.util.Objects;
 #if JDK_TYPE
 import java.util.OPTIONAL;
+#if SPLIT_ITERATOR_FEATURE && STREAM_FEATURE
+#if TYPE_OBJECT
+import java.util.stream.Stream;
+import java.util.stream.Collector;
+#endif
+#endif
 #endif
 import java.util.NoSuchElementException;
 #if SPLIT_ITERATOR_FEATURE
@@ -160,6 +166,42 @@ public class LINKED_LIST KEY_GENERIC_TYPE extends ABSTRACT_LIST KEY_GENERIC_TYPE
 		for(int i = offset,m=offset+length;i<m;add(a[i++]));
 	}
 	
+#if JDK_TYPE && SPLIT_ITERATOR_FEATURE && STREAM_FEATURE
+#if TYPE_OBJECT
+	/**
+	 * Creates a Collector for a LinkedList
+	 * @Type(T)
+	 * @return a collector
+	 */
+	public static <T> Collector<T, ObjectLinkedList<T>, ObjectLinkedList<T>> toList() {
+		return Collector.of(ObjectLinkedList::new, ObjectLinkedList::add, ObjectLinkedList::merge);
+	}
+	
+	/**
+	 * Collects a Stream to a LinkedList
+	 * @Type(T)
+	 * @return a list with the contents of the Stream
+	 */
+	public static <T> ObjectLinkedList KEY_GENERIC_TYPE toList(Stream<T> stream) {
+		return stream.collect(ObjectLinkedList::new, ObjectLinkedList::add, ObjectLinkedList::merge);
+	}
+	
+	private ObjectLinkedList<T> merge(ObjectLinkedList<T> a) {
+		addAll(a);
+		return this;
+	}
+	
+#else
+	/**
+	 * Collects a Stream to a LinkedList
+	 * @return a list with the contents of the Stream
+	 */
+	public static LINKED_LIST toList(JAVA_STREAM stream) {
+		return stream.collect(LINKED_LIST::new, LINKED_LIST::add, LINKED_LIST::addAll);
+	}
+	
+#endif
+#endif
 	@Override
 	public boolean add(KEY_TYPE e) {
 		add(size(), e);

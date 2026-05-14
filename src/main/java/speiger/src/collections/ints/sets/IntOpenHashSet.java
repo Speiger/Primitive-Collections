@@ -7,6 +7,7 @@ import java.util.Iterator;
 import java.util.NoSuchElementException;
 import java.util.Objects;
 import java.util.OptionalInt;
+import java.util.stream.IntStream;
 import java.util.function.IntPredicate;
 
 import speiger.src.collections.ints.collections.IntCollection;
@@ -199,6 +200,15 @@ public class IntOpenHashSet extends AbstractIntSet implements ITrimmable
 	public IntOpenHashSet(IntIterator iterator, float loadFactor) {
 		this(HashUtil.DEFAULT_MIN_CAPACITY, loadFactor);
 		while(iterator.hasNext()) add(iterator.nextInt());
+	}
+	
+
+	/**
+	 * Collects a Stream to a HashSet
+	 * @return a set with the contents of the Stream
+	 */
+	public static IntOpenHashSet toSet(IntStream stream) {
+		return stream.collect(IntOpenHashSet::new, IntOpenHashSet::add, IntOpenHashSet::addAll);
 	}
 	
 	@Override

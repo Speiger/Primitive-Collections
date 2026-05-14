@@ -7,6 +7,7 @@ import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 import java.util.concurrent.locks.LockSupport;
 import java.util.function.Consumer;
+import java.util.OptionalDouble;
 
 import speiger.src.collections.doubles.functions.DoubleConsumer;
 import speiger.src.collections.doubles.functions.DoubleComparator;
@@ -210,9 +211,8 @@ public class DoubleAsyncBuilder
 	 * @param operator that reduces the elements.
 	 * @return self with the reduce action applied
 	 */
-	public DoubleAsyncBuilder reduce(DoubleDoubleUnaryOperator operator) {
-		task = new SimpleReduceTask(iterable.iterator(), operator);
-		return this;
+	public ObjectAsyncBuilder<OptionalDouble> reduce(DoubleDoubleUnaryOperator operator) {
+		return new ObjectAsyncBuilder<>(new SimpleReduceTask(iterable.iterator(), operator));
 	}
 	
 	/**
@@ -292,9 +292,8 @@ public class DoubleAsyncBuilder
 	 * @param filter that decides the desired elements
 	 * @return self with the findFirst function applied
 	 */
-	public DoubleAsyncBuilder findFirst(DoublePredicate filter) {
-		task = new FindFirstTask(iterable.iterator(), filter);
-		return this;
+	public ObjectAsyncBuilder<OptionalDouble> findFirst(DoublePredicate filter) {
+		return new ObjectAsyncBuilder<>(new FindFirstTask(iterable.iterator(), filter));
 	}
 	
 	/**
@@ -404,7 +403,7 @@ public class DoubleAsyncBuilder
 		}
 	}
 	
-	private static class SimpleReduceTask extends BaseDoubleTask
+	private static class SimpleReduceTask extends BaseObjectTask<OptionalDouble>
 	{
 		DoubleIterator iter;
 		DoubleDoubleUnaryOperator operator;
@@ -414,6 +413,7 @@ public class DoubleAsyncBuilder
 		public SimpleReduceTask(DoubleIterator iter, DoubleDoubleUnaryOperator operator) {
 			this.iter = iter;
 			this.operator = operator;
+			this.setResult(OptionalDouble.empty());
 		}
 		
 		@Override
@@ -428,7 +428,7 @@ public class DoubleAsyncBuilder
 				}
 			}
 			if(!iter.hasNext()) {
-				setResult(value);
+				setResult(OptionalDouble.of(value));
 				return true;
 			}
 			return false;
@@ -498,7 +498,7 @@ public class DoubleAsyncBuilder
 		}
 	}
 	
-	private static class FindFirstTask extends BaseDoubleTask
+	private static class FindFirstTask extends BaseObjectTask<OptionalDouble>
 	{
 		DoubleIterator iter;
 		DoublePredicate filter;
@@ -506,6 +506,7 @@ public class DoubleAsyncBuilder
 		public FindFirstTask(DoubleIterator iter, DoublePredicate filter) {
 			this.iter = iter;
 			this.filter = filter;
+			this.setResult(OptionalDouble.empty());
 		}
 
 		@Override
@@ -513,7 +514,7 @@ public class DoubleAsyncBuilder
 			while(shouldRun() && iter.hasNext()) {
 				double entry = iter.nextDouble();
 				if(filter.test(iter.nextDouble())) {
-					setResult(entry);
+					setResult(OptionalDouble.of(entry));
 					return true;
 				}
 			}

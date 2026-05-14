@@ -7,6 +7,7 @@ import java.util.Iterator;
 import java.util.NoSuchElementException;
 import java.util.Objects;
 import java.util.OptionalLong;
+import java.util.stream.LongStream;
 import java.util.function.LongPredicate;
 
 import speiger.src.collections.longs.collections.LongCollection;
@@ -232,6 +233,15 @@ public class LongOpenCustomHashSet extends AbstractLongSet implements ITrimmable
 	public LongOpenCustomHashSet(LongIterator iterator, float loadFactor, LongStrategy strategy) {
 		this(HashUtil.DEFAULT_MIN_CAPACITY, loadFactor, strategy);
 		while(iterator.hasNext()) add(iterator.nextLong());
+	}
+	
+
+	/**
+	 * Collects a Stream to a CustomHashSet
+	 * @return a set with the contents of the Stream
+	 */
+	public static LongOpenCustomHashSet toSet(LongStream stream, LongStrategy strategy) {
+		return stream.collect(() -> new LongOpenCustomHashSet(strategy), LongOpenCustomHashSet::add, LongOpenCustomHashSet::addAll);
 	}
 	
 	/**

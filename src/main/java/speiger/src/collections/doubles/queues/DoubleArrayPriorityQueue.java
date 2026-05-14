@@ -4,6 +4,7 @@ import java.util.Arrays;
 import java.util.NoSuchElementException;
 import java.util.Objects;
 import java.util.OptionalDouble;
+import java.util.stream.DoubleStream;
 import java.util.function.DoublePredicate;
 
 import speiger.src.collections.doubles.collections.DoubleCollection;
@@ -173,6 +174,19 @@ public class DoubleArrayPriorityQueue extends AbstractDoublePriorityQueue
 		queue.array = array;
 		queue.size = size;
 		return queue;
+	}
+
+	/**
+	 * Collects a Stream to a ArrayPriorityQueue
+	 * @return a queue with the contents of the Stream
+	 */
+	public static DoubleArrayPriorityQueue toQueue(DoubleStream stream) {
+		return stream.collect(DoubleArrayPriorityQueue::new, DoubleArrayPriorityQueue::enqueue, DoubleArrayPriorityQueue::merge);
+	}
+	
+	private DoubleArrayPriorityQueue merge(DoubleArrayPriorityQueue a) {
+		enqueueAll(a.toDoubleArray());
+		return this;
 	}
 	
 	@Override

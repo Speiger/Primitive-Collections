@@ -5,6 +5,7 @@ import java.util.Collection;
 import java.util.NoSuchElementException;
 import java.util.Objects;
 import java.util.OptionalLong;
+import java.util.stream.LongStream;
 import java.util.Set;
 import java.util.function.LongPredicate;
 import speiger.src.collections.longs.collections.LongBidirectionalIterator;
@@ -54,7 +55,7 @@ public class LongArraySet extends AbstractLongSet implements LongOrderedSet
 	 * @param array the array that should be used for set.
 	 */
 	public LongArraySet(long[] array) {
-		this(array, array.length);
+		this(array, 0, array.length);
 	}
 	
 	/**
@@ -66,6 +67,18 @@ public class LongArraySet extends AbstractLongSet implements LongOrderedSet
 	public LongArraySet(long[] array, int length) {
 		this(length);
 		addAll(array, length);
+	}
+	
+	/**
+	 * Constructur using initial Array
+	 * @param array the array that should be used for set.
+	 * @param offset the starting offset of where the array should be copied from
+	 * @param length the amount of elements present within the array
+	 * @throws NegativeArraySizeException if the length is negative
+	 */
+	public LongArraySet(long[] array, int offset, int length) {
+		this(length);
+		addAll(array, offset, length);
 	}
 	
 	/**
@@ -109,6 +122,15 @@ public class LongArraySet extends AbstractLongSet implements LongOrderedSet
 	public LongArraySet(LongSet s) {
 		this(s.size());
 		for(LongIterator iter = s.iterator();iter.hasNext();data[size++] = iter.nextLong());
+	}
+	
+
+	/**
+	 * Collects a Stream to a ArraySet
+	 * @return a set with the contents of the Stream
+	 */
+	public static LongArraySet toList(LongStream stream) {
+		return stream.collect(LongArraySet::new, LongArraySet::add, LongArraySet::addAll);
 	}
 	
 	@Override

@@ -1,12 +1,15 @@
 package speiger.src.collections.floats.lists;
 
 import java.util.Arrays;
+import java.util.stream.DoubleStream;
+import java.util.stream.StreamSupport;
 import java.util.Collection;
 import java.util.NoSuchElementException;
 import java.util.Objects;
 import java.util.function.Predicate;
 import java.util.function.UnaryOperator;
-import java.util.function.DoublePredicate;import java.util.function.DoubleUnaryOperator;
+import java.util.function.DoublePredicate;
+import java.util.function.DoubleUnaryOperator;
 
 import speiger.src.collections.floats.collections.FloatCollection;
 import speiger.src.collections.floats.functions.FloatComparator;
@@ -18,8 +21,6 @@ import speiger.src.collections.floats.functions.function.FloatPredicate;
 import speiger.src.collections.floats.functions.function.FloatFloatUnaryOperator;
 import speiger.src.collections.objects.utils.ObjectArrays;
 import speiger.src.collections.floats.utils.FloatIterators;
-import java.util.stream.DoubleStream;
-import java.util.stream.StreamSupport;
 import speiger.src.collections.floats.collections.FloatSplititerator;
 import speiger.src.collections.floats.utils.FloatSplititerators;
 import speiger.src.collections.utils.SanityChecks;

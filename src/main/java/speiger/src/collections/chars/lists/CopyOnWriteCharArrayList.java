@@ -111,7 +111,6 @@ public class CopyOnWriteCharArrayList extends AbstractCharList implements ITrimm
 		System.arraycopy(a, offset, data, 0, length);
 	}
 	
-	
 	private void setArray(char[] data) {
 		this.data = data;
 	}

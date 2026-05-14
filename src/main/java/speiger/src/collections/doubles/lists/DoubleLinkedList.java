@@ -5,6 +5,7 @@ import java.util.Collection;
 import java.util.Iterator;
 import java.util.Objects;
 import java.util.OptionalDouble;
+
 import java.util.NoSuchElementException;
 import java.util.Spliterator;
 import java.util.Spliterator.OfDouble;
@@ -101,6 +102,15 @@ public class DoubleLinkedList extends AbstractDoubleList implements DoublePriori
 	public DoubleLinkedList(double[] a, int offset, int length) {
 		SanityChecks.checkArrayCapacity(a.length, offset, length);
 		for(int i = offset,m=offset+length;i<m;add(a[i++]));
+	}
+	
+
+	/**
+	 * Collects a Stream to a LinkedList
+	 * @return a list with the contents of the Stream
+	 */
+	public static DoubleLinkedList toList(DoubleStream stream) {
+		return stream.collect(DoubleLinkedList::new, DoubleLinkedList::add, DoubleLinkedList::addAll);
 	}
 	
 	@Override

@@ -10,6 +10,12 @@ import java.util.NoSuchElementException;
 import java.util.Objects;
 #if JDK_TYPE
 import java.util.OPTIONAL;
+#if !TYPE_OBJECT
+import java.util.stream.JAVA_STREAM;
+#else
+import java.util.stream.Stream;
+import java.util.stream.Collector;
+#endif
 #endif
 import java.util.Set;
 #if JDK_FUNCTION
@@ -74,7 +80,7 @@ public class ARRAY_SET KEY_GENERIC_TYPE extends ABSTRACT_SET KEY_GENERIC_TYPE im
 	 * @param array the array that should be used for set.
 	 */
 	public ARRAY_SET(KEY_TYPE[] array) {
-		this(array, array.length);
+		this(array, 0, array.length);
 	}
 	
 	/**
@@ -86,6 +92,18 @@ public class ARRAY_SET KEY_GENERIC_TYPE extends ABSTRACT_SET KEY_GENERIC_TYPE im
 	public ARRAY_SET(KEY_TYPE[] array, int length) {
 		this(length);
 		addAll(array, length);
+	}
+	
+	/**
+	 * Constructur using initial Array
+	 * @param array the array that should be used for set.
+	 * @param offset the starting offset of where the array should be copied from
+	 * @param length the amount of elements present within the array
+	 * @throws NegativeArraySizeException if the length is negative
+	 */
+	public ARRAY_SET(KEY_TYPE[] array, int offset, int length) {
+		this(length);
+		addAll(array, offset, length);
 	}
 	
 	/**
@@ -131,6 +149,42 @@ public class ARRAY_SET KEY_GENERIC_TYPE extends ABSTRACT_SET KEY_GENERIC_TYPE im
 		for(ITERATOR KEY_GENERIC_TYPE iter = s.iterator();iter.hasNext();data[size++] = iter.NEXT());
 	}
 	
+#if JDK_TYPE && SPLIT_ITERATOR_FEATURE && STREAM_FEATURE
+#if TYPE_OBJECT
+	/**
+	 * Creates a Collector for a ArraySet
+	 * @Type(T)
+	 * @return a collector
+	 */
+	public static <T> Collector<T, ARRAY_SET<T>, ARRAY_SET<T>> toList() {
+		return Collector.of(ARRAY_SET::new, ARRAY_SET::add, ARRAY_SET::merge);
+	}
+	
+	/**
+	 * Collects a Stream to a ArraySet
+	 * @Type(T)
+	 * @return a set with the contents of the Stream
+	 */
+	public static <T> ARRAY_SET KEY_GENERIC_TYPE toList(Stream<T> stream) {
+		return stream.collect(ARRAY_SET::new, ARRAY_SET::add, ARRAY_SET::merge);
+	}
+	
+	private ARRAY_SET<T> merge(ARRAY_SET<T> a) {
+		addAll(a);
+		return this;
+	}
+	
+#else
+	/**
+	 * Collects a Stream to a ArraySet
+	 * @return a set with the contents of the Stream
+	 */
+	public static ARRAY_SET toList(JAVA_STREAM stream) {
+		return stream.collect(ARRAY_SET::new, ARRAY_SET::add, ARRAY_SET::addAll);
+	}
+	
+#endif
+#endif
 	@Override
 	public boolean add(KEY_TYPE o) {
 		int index = findIndex(o);

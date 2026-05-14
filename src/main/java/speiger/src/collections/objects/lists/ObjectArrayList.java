@@ -6,6 +6,9 @@ import java.util.Collection;
 import java.util.Iterator;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.stream.Stream;
+import java.util.stream.Collector;
+
 import java.util.function.Consumer;
 import java.util.function.BiFunction;
 import java.util.function.IntFunction;
@@ -165,6 +168,29 @@ public class ObjectArrayList<T> extends AbstractObjectList<T> implements IObject
 		ObjectArrayList<T> list = new ObjectArrayList<>();
 		list.data = (T[])ObjectArrays.newArray(c, size);
 		return list;
+	}
+	
+	/**
+	 * Creates a Collector for a ArrayList
+	 * @param <T> the keyType of elements maintained by this Collection
+	 * @return a collector
+	 */
+	public static <T> Collector<T, ObjectArrayList<T>, ObjectArrayList<T>> toList() {
+		return Collector.of(ObjectArrayList::new, ObjectArrayList::add, ObjectArrayList::merge);
+	}
+	
+	/**
+	 * Collects a Stream to a ArrayList
+	 * @param <T> the keyType of elements maintained by this Collection
+	 * @return a list with the contents of the Stream
+	 */
+	public static <T> ObjectArrayList<T> toList(Stream<T> stream) {
+		return stream.collect(ObjectArrayList::new, ObjectArrayList::add, ObjectArrayList::merge);
+	}
+	
+	private ObjectArrayList<T> merge(ObjectArrayList<T> a) {
+		addAll(a);
+		return this;
 	}
 	
 	/**

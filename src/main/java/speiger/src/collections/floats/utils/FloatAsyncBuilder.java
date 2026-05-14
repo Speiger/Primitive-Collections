@@ -7,6 +7,7 @@ import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 import java.util.concurrent.locks.LockSupport;
 import java.util.function.Consumer;
+import speiger.src.collections.floats.functions.OptionalFloat;
 
 import speiger.src.collections.floats.functions.FloatConsumer;
 import speiger.src.collections.floats.functions.FloatComparator;
@@ -210,9 +211,8 @@ public class FloatAsyncBuilder
 	 * @param operator that reduces the elements.
 	 * @return self with the reduce action applied
 	 */
-	public FloatAsyncBuilder reduce(FloatFloatUnaryOperator operator) {
-		task = new SimpleReduceTask(iterable.iterator(), operator);
-		return this;
+	public ObjectAsyncBuilder<OptionalFloat> reduce(FloatFloatUnaryOperator operator) {
+		return new ObjectAsyncBuilder<>(new SimpleReduceTask(iterable.iterator(), operator));
 	}
 	
 	/**
@@ -292,9 +292,8 @@ public class FloatAsyncBuilder
 	 * @param filter that decides the desired elements
 	 * @return self with the findFirst function applied
 	 */
-	public FloatAsyncBuilder findFirst(FloatPredicate filter) {
-		task = new FindFirstTask(iterable.iterator(), filter);
-		return this;
+	public ObjectAsyncBuilder<OptionalFloat> findFirst(FloatPredicate filter) {
+		return new ObjectAsyncBuilder<>(new FindFirstTask(iterable.iterator(), filter));
 	}
 	
 	/**
@@ -404,7 +403,7 @@ public class FloatAsyncBuilder
 		}
 	}
 	
-	private static class SimpleReduceTask extends BaseFloatTask
+	private static class SimpleReduceTask extends BaseObjectTask<OptionalFloat>
 	{
 		FloatIterator iter;
 		FloatFloatUnaryOperator operator;
@@ -414,6 +413,7 @@ public class FloatAsyncBuilder
 		public SimpleReduceTask(FloatIterator iter, FloatFloatUnaryOperator operator) {
 			this.iter = iter;
 			this.operator = operator;
+			this.setResult(OptionalFloat.empty());
 		}
 		
 		@Override
@@ -428,7 +428,7 @@ public class FloatAsyncBuilder
 				}
 			}
 			if(!iter.hasNext()) {
-				setResult(value);
+				setResult(OptionalFloat.of(value));
 				return true;
 			}
 			return false;
@@ -498,7 +498,7 @@ public class FloatAsyncBuilder
 		}
 	}
 	
-	private static class FindFirstTask extends BaseFloatTask
+	private static class FindFirstTask extends BaseObjectTask<OptionalFloat>
 	{
 		FloatIterator iter;
 		FloatPredicate filter;
@@ -506,6 +506,7 @@ public class FloatAsyncBuilder
 		public FindFirstTask(FloatIterator iter, FloatPredicate filter) {
 			this.iter = iter;
 			this.filter = filter;
+			this.setResult(OptionalFloat.empty());
 		}
 
 		@Override
@@ -513,7 +514,7 @@ public class FloatAsyncBuilder
 			while(shouldRun() && iter.hasNext()) {
 				float entry = iter.nextFloat();
 				if(filter.test(iter.nextFloat())) {
-					setResult(entry);
+					setResult(OptionalFloat.of(entry));
 					return true;
 				}
 			}

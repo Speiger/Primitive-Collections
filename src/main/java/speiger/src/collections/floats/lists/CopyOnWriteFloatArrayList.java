@@ -111,7 +111,6 @@ public class CopyOnWriteFloatArrayList extends AbstractFloatList implements ITri
 		System.arraycopy(a, offset, data, 0, length);
 	}
 	
-	
 	private void setArray(float[] data) {
 		this.data = data;
 	}

@@ -8,6 +8,12 @@ import java.util.NoSuchElementException;
 import java.util.Objects;
 #if JDK_TYPE
 import java.util.OPTIONAL;
+#if !TYPE_OBJECT
+import java.util.stream.JAVA_STREAM;
+#else
+import java.util.stream.Stream;
+import java.util.stream.Collector;
+#endif
 #endif
 #if TYPE_OBJECT
 import java.util.function.Consumer;
@@ -257,6 +263,42 @@ public class CUSTOM_HASH_SET KEY_GENERIC_TYPE extends ABSTRACT_SET KEY_GENERIC_T
 		while(iterator.hasNext()) add(iterator.NEXT());
 	}
 	
+#endif
+#if JDK_TYPE && SPLIT_ITERATOR_FEATURE && STREAM_FEATURE
+#if TYPE_OBJECT
+	/**
+	 * Creates a Collector for a CustomHashSet
+	 * @Type(T)
+	 * @return a collector
+	 */
+	public static <T> Collector<T, CUSTOM_HASH_SET<T>, CUSTOM_HASH_SET<T>> toSet(STRATEGY KEY_SUPER_GENERIC_TYPE strategy) {
+		return Collector.of(() -> new CUSTOM_HASH_SET<>(strategy), CUSTOM_HASH_SET::add, CUSTOM_HASH_SET::merge);
+	}
+	
+	/**
+	 * Collects a Stream to a CustomHashSet
+	 * @Type(T)
+	 * @return a set with the contents of the Stream
+	 */
+	public static <T> CUSTOM_HASH_SET KEY_GENERIC_TYPE toSet(Stream<T> stream, STRATEGY KEY_SUPER_GENERIC_TYPE strategy) {
+		return stream.collect(() -> new CUSTOM_HASH_SET<>(strategy), CUSTOM_HASH_SET::add, CUSTOM_HASH_SET::merge);
+	}
+	
+	private CUSTOM_HASH_SET<T> merge(CUSTOM_HASH_SET<T> a) {
+		addAll(a);
+		return this;
+	}
+	
+#else
+	/**
+	 * Collects a Stream to a CustomHashSet
+	 * @return a set with the contents of the Stream
+	 */
+	public static CUSTOM_HASH_SET toSet(JAVA_STREAM stream, STRATEGY KEY_SUPER_GENERIC_TYPE strategy) {
+		return stream.collect(() -> new CUSTOM_HASH_SET(strategy), CUSTOM_HASH_SET::add, CUSTOM_HASH_SET::addAll);
+	}
+	
+#endif
 #endif
 	/**
 	 * Helper getter function to get the current strategy

@@ -7,6 +7,8 @@ import java.util.Iterator;
 import java.util.NoSuchElementException;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.stream.Stream;
+import java.util.stream.Collector;
 import java.util.function.Consumer;
 import java.util.function.BiFunction;
 import java.util.function.Predicate;
@@ -180,6 +182,29 @@ public class ObjectOpenHashSet<T> extends AbstractObjectSet<T> implements ITrimm
 	public ObjectOpenHashSet(Iterator<T> iterator, float loadFactor) {
 		this(HashUtil.DEFAULT_MIN_CAPACITY, loadFactor);
 		while(iterator.hasNext()) add(iterator.next());
+	}
+	
+	/**
+	 * Creates a Collector for a HashSet
+	 * @param <T> the keyType of elements maintained by this Collection
+	 * @return a collector
+	 */
+	public static <T> Collector<T, ObjectOpenHashSet<T>, ObjectOpenHashSet<T>> toSet() {
+		return Collector.of(ObjectOpenHashSet::new, ObjectOpenHashSet::add, ObjectOpenHashSet::merge);
+	}
+	
+	/**
+	 * Collects a Stream to a HashSet
+	 * @param <T> the keyType of elements maintained by this Collection
+	 * @return a set with the contents of the Stream
+	 */
+	public static <T> ObjectOpenHashSet<T> toSet(Stream<T> stream) {
+		return stream.collect(ObjectOpenHashSet::new, ObjectOpenHashSet::add, ObjectOpenHashSet::merge);
+	}
+	
+	private ObjectOpenHashSet<T> merge(ObjectOpenHashSet<T> a) {
+		addAll(a);
+		return this;
 	}
 	
 	@Override

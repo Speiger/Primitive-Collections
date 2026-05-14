@@ -7,6 +7,8 @@ import java.util.Iterator;
 import java.util.NoSuchElementException;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.stream.Stream;
+import java.util.stream.Collector;
 import java.util.concurrent.locks.ReentrantLock;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
@@ -120,6 +122,28 @@ public class CopyOnWriteObjectArrayList<T> extends AbstractObjectList<T> impleme
 		return list;
 	}
 	
+	/**
+	 * Creates a Collector for a CopyOnWriteArrayList
+	 * @param <T> the keyType of elements maintained by this Collection
+	 * @return a collector
+	 */
+	public static <T> Collector<T, CopyOnWriteObjectArrayList<T>, CopyOnWriteObjectArrayList<T>> toList() {
+		return Collector.of(CopyOnWriteObjectArrayList::new, CopyOnWriteObjectArrayList::add, CopyOnWriteObjectArrayList::merge);
+	}
+	
+	/**
+	 * Collects a Stream to a CopyOnWriteArrayList
+	 * @param <T> the keyType of elements maintained by this Collection
+	 * @return a list with the contents of the Stream
+	 */
+	public static <T> CopyOnWriteObjectArrayList<T> toList(Stream<T> stream) {
+		return stream.collect(CopyOnWriteObjectArrayList::new, CopyOnWriteObjectArrayList::add, CopyOnWriteObjectArrayList::merge);
+	}
+	
+	private CopyOnWriteObjectArrayList<T> merge(CopyOnWriteObjectArrayList<T> a) {
+		addAll(a);
+		return this;
+	}
 	
 	private void setArray(T[] data) {
 		this.data = data;

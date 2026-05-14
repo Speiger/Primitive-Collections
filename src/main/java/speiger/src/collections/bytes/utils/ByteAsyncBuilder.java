@@ -7,6 +7,7 @@ import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 import java.util.concurrent.locks.LockSupport;
 import java.util.function.Consumer;
+import speiger.src.collections.bytes.functions.OptionalByte;
 
 import speiger.src.collections.bytes.functions.ByteConsumer;
 import speiger.src.collections.bytes.functions.ByteComparator;
@@ -210,9 +211,8 @@ public class ByteAsyncBuilder
 	 * @param operator that reduces the elements.
 	 * @return self with the reduce action applied
 	 */
-	public ByteAsyncBuilder reduce(ByteByteUnaryOperator operator) {
-		task = new SimpleReduceTask(iterable.iterator(), operator);
-		return this;
+	public ObjectAsyncBuilder<OptionalByte> reduce(ByteByteUnaryOperator operator) {
+		return new ObjectAsyncBuilder<>(new SimpleReduceTask(iterable.iterator(), operator));
 	}
 	
 	/**
@@ -292,9 +292,8 @@ public class ByteAsyncBuilder
 	 * @param filter that decides the desired elements
 	 * @return self with the findFirst function applied
 	 */
-	public ByteAsyncBuilder findFirst(BytePredicate filter) {
-		task = new FindFirstTask(iterable.iterator(), filter);
-		return this;
+	public ObjectAsyncBuilder<OptionalByte> findFirst(BytePredicate filter) {
+		return new ObjectAsyncBuilder<>(new FindFirstTask(iterable.iterator(), filter));
 	}
 	
 	/**
@@ -404,7 +403,7 @@ public class ByteAsyncBuilder
 		}
 	}
 	
-	private static class SimpleReduceTask extends BaseByteTask
+	private static class SimpleReduceTask extends BaseObjectTask<OptionalByte>
 	{
 		ByteIterator iter;
 		ByteByteUnaryOperator operator;
@@ -414,6 +413,7 @@ public class ByteAsyncBuilder
 		public SimpleReduceTask(ByteIterator iter, ByteByteUnaryOperator operator) {
 			this.iter = iter;
 			this.operator = operator;
+			this.setResult(OptionalByte.empty());
 		}
 		
 		@Override
@@ -428,7 +428,7 @@ public class ByteAsyncBuilder
 				}
 			}
 			if(!iter.hasNext()) {
-				setResult(value);
+				setResult(OptionalByte.of(value));
 				return true;
 			}
 			return false;
@@ -498,7 +498,7 @@ public class ByteAsyncBuilder
 		}
 	}
 	
-	private static class FindFirstTask extends BaseByteTask
+	private static class FindFirstTask extends BaseObjectTask<OptionalByte>
 	{
 		ByteIterator iter;
 		BytePredicate filter;
@@ -506,6 +506,7 @@ public class ByteAsyncBuilder
 		public FindFirstTask(ByteIterator iter, BytePredicate filter) {
 			this.iter = iter;
 			this.filter = filter;
+			this.setResult(OptionalByte.empty());
 		}
 
 		@Override
@@ -513,7 +514,7 @@ public class ByteAsyncBuilder
 			while(shouldRun() && iter.hasNext()) {
 				byte entry = iter.nextByte();
 				if(filter.test(iter.nextByte())) {
-					setResult(entry);
+					setResult(OptionalByte.of(entry));
 					return true;
 				}
 			}

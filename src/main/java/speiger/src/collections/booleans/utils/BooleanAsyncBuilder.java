@@ -7,6 +7,7 @@ import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 import java.util.concurrent.locks.LockSupport;
 import java.util.function.Consumer;
+import speiger.src.collections.booleans.functions.OptionalBoolean;
 
 import speiger.src.collections.booleans.functions.BooleanConsumer;
 import speiger.src.collections.booleans.functions.BooleanComparator;
@@ -207,9 +208,8 @@ public class BooleanAsyncBuilder
 	 * @param operator that reduces the elements.
 	 * @return self with the reduce action applied
 	 */
-	public BooleanAsyncBuilder reduce(BooleanBooleanUnaryOperator operator) {
-		task = new SimpleReduceTask(iterable.iterator(), operator);
-		return this;
+	public ObjectAsyncBuilder<OptionalBoolean> reduce(BooleanBooleanUnaryOperator operator) {
+		return new ObjectAsyncBuilder<>(new SimpleReduceTask(iterable.iterator(), operator));
 	}
 	
 	/**
@@ -281,9 +281,8 @@ public class BooleanAsyncBuilder
 	 * @param filter that decides the desired elements
 	 * @return self with the findFirst function applied
 	 */
-	public BooleanAsyncBuilder findFirst(BooleanPredicate filter) {
-		task = new FindFirstTask(iterable.iterator(), filter);
-		return this;
+	public ObjectAsyncBuilder<OptionalBoolean> findFirst(BooleanPredicate filter) {
+		return new ObjectAsyncBuilder<>(new FindFirstTask(iterable.iterator(), filter));
 	}
 	
 	/**
@@ -393,7 +392,7 @@ public class BooleanAsyncBuilder
 		}
 	}
 	
-	private static class SimpleReduceTask extends BaseBooleanTask
+	private static class SimpleReduceTask extends BaseObjectTask<OptionalBoolean>
 	{
 		BooleanIterator iter;
 		BooleanBooleanUnaryOperator operator;
@@ -403,6 +402,7 @@ public class BooleanAsyncBuilder
 		public SimpleReduceTask(BooleanIterator iter, BooleanBooleanUnaryOperator operator) {
 			this.iter = iter;
 			this.operator = operator;
+			this.setResult(OptionalBoolean.empty());
 		}
 		
 		@Override
@@ -417,7 +417,7 @@ public class BooleanAsyncBuilder
 				}
 			}
 			if(!iter.hasNext()) {
-				setResult(value);
+				setResult(OptionalBoolean.of(value));
 				return true;
 			}
 			return false;
@@ -487,7 +487,7 @@ public class BooleanAsyncBuilder
 		}
 	}
 	
-	private static class FindFirstTask extends BaseBooleanTask
+	private static class FindFirstTask extends BaseObjectTask<OptionalBoolean>
 	{
 		BooleanIterator iter;
 		BooleanPredicate filter;
@@ -495,6 +495,7 @@ public class BooleanAsyncBuilder
 		public FindFirstTask(BooleanIterator iter, BooleanPredicate filter) {
 			this.iter = iter;
 			this.filter = filter;
+			this.setResult(OptionalBoolean.empty());
 		}
 
 		@Override
@@ -502,7 +503,7 @@ public class BooleanAsyncBuilder
 			while(shouldRun() && iter.hasNext()) {
 				boolean entry = iter.nextBoolean();
 				if(filter.test(iter.nextBoolean())) {
-					setResult(entry);
+					setResult(OptionalBoolean.of(entry));
 					return true;
 				}
 			}

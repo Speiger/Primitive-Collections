@@ -7,6 +7,7 @@ import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 import java.util.concurrent.locks.LockSupport;
 import java.util.function.Consumer;
+import java.util.OptionalInt;
 
 import speiger.src.collections.ints.functions.IntConsumer;
 import speiger.src.collections.ints.functions.IntComparator;
@@ -209,9 +210,8 @@ public class IntAsyncBuilder
 	 * @param operator that reduces the elements.
 	 * @return self with the reduce action applied
 	 */
-	public IntAsyncBuilder reduce(IntIntUnaryOperator operator) {
-		task = new SimpleReduceTask(iterable.iterator(), operator);
-		return this;
+	public ObjectAsyncBuilder<OptionalInt> reduce(IntIntUnaryOperator operator) {
+		return new ObjectAsyncBuilder<>(new SimpleReduceTask(iterable.iterator(), operator));
 	}
 	
 	/**
@@ -291,9 +291,8 @@ public class IntAsyncBuilder
 	 * @param filter that decides the desired elements
 	 * @return self with the findFirst function applied
 	 */
-	public IntAsyncBuilder findFirst(IntPredicate filter) {
-		task = new FindFirstTask(iterable.iterator(), filter);
-		return this;
+	public ObjectAsyncBuilder<OptionalInt> findFirst(IntPredicate filter) {
+		return new ObjectAsyncBuilder<>(new FindFirstTask(iterable.iterator(), filter));
 	}
 	
 	/**
@@ -403,7 +402,7 @@ public class IntAsyncBuilder
 		}
 	}
 	
-	private static class SimpleReduceTask extends BaseIntTask
+	private static class SimpleReduceTask extends BaseObjectTask<OptionalInt>
 	{
 		IntIterator iter;
 		IntIntUnaryOperator operator;
@@ -413,6 +412,7 @@ public class IntAsyncBuilder
 		public SimpleReduceTask(IntIterator iter, IntIntUnaryOperator operator) {
 			this.iter = iter;
 			this.operator = operator;
+			this.setResult(OptionalInt.empty());
 		}
 		
 		@Override
@@ -427,7 +427,7 @@ public class IntAsyncBuilder
 				}
 			}
 			if(!iter.hasNext()) {
-				setResult(value);
+				setResult(OptionalInt.of(value));
 				return true;
 			}
 			return false;
@@ -497,7 +497,7 @@ public class IntAsyncBuilder
 		}
 	}
 	
-	private static class FindFirstTask extends BaseIntTask
+	private static class FindFirstTask extends BaseObjectTask<OptionalInt>
 	{
 		IntIterator iter;
 		IntPredicate filter;
@@ -505,6 +505,7 @@ public class IntAsyncBuilder
 		public FindFirstTask(IntIterator iter, IntPredicate filter) {
 			this.iter = iter;
 			this.filter = filter;
+			this.setResult(OptionalInt.empty());
 		}
 
 		@Override
@@ -512,7 +513,7 @@ public class IntAsyncBuilder
 			while(shouldRun() && iter.hasNext()) {
 				int entry = iter.nextInt();
 				if(filter.test(iter.nextInt())) {
-					setResult(entry);
+					setResult(OptionalInt.of(entry));
 					return true;
 				}
 			}

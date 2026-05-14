@@ -111,7 +111,6 @@ public class CopyOnWriteByteArrayList extends AbstractByteList implements ITrimm
 		System.arraycopy(a, offset, data, 0, length);
 	}
 	
-	
 	private void setArray(byte[] data) {
 		this.data = data;
 	}

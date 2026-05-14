@@ -6,6 +6,7 @@ import java.util.Iterator;
 import java.util.NoSuchElementException;
 import java.util.Objects;
 import java.util.OptionalDouble;
+import java.util.stream.DoubleStream;
 import java.util.function.DoublePredicate;
 
 import speiger.src.collections.doubles.collections.DoubleBidirectionalIterator;
@@ -181,6 +182,15 @@ public class DoubleAVLTreeSet extends AbstractDoubleSet implements DoubleNavigab
 	public DoubleAVLTreeSet(DoubleIterator iterator, DoubleComparator comp) {
 		comparator = comp;
 		while(iterator.hasNext()) add(iterator.nextDouble());
+	}
+	
+
+	/**
+	 * Collects a Stream to a AVLTreeSet
+	 * @return a set with the contents of the Stream
+	 */
+	public static DoubleAVLTreeSet toSet(DoubleStream stream) {
+		return stream.collect(DoubleAVLTreeSet::new, DoubleAVLTreeSet::add, DoubleAVLTreeSet::addAll);
 	}
 	
 	@Override

@@ -12,6 +12,12 @@ import java.util.NoSuchElementException;
 import java.util.Objects;
 #if JDK_TYPE
 import java.util.OPTIONAL;
+#if !TYPE_OBJECT
+import java.util.stream.JAVA_STREAM;
+#else
+import java.util.stream.Stream;
+import java.util.stream.Collector;
+#endif
 #endif
 #if JDK_FUNCTION
 import java.util.function.PREDICATE;
@@ -214,6 +220,42 @@ public class AVL_TREE_SET KEY_GENERIC_TYPE extends ABSTRACT_SET KEY_GENERIC_TYPE
 		while(iterator.hasNext()) add(iterator.NEXT());
 	}
 	
+#if JDK_TYPE && SPLIT_ITERATOR_FEATURE && STREAM_FEATURE
+#if TYPE_OBJECT
+	/**
+	 * Creates a Collector for a AVLTreeSet
+	 * @Type(T)
+	 * @return a collector
+	 */
+	public static <T> Collector<T, AVL_TREE_SET<T>, AVL_TREE_SET<T>> toSet() {
+		return Collector.of(AVL_TREE_SET::new, AVL_TREE_SET::add, AVL_TREE_SET::merge);
+	}
+	
+	/**
+	 * Collects a Stream to a AVLTreeSet
+	 * @Type(T)
+	 * @return a set with the contents of the Stream
+	 */
+	public static <T> AVL_TREE_SET KEY_GENERIC_TYPE toSet(Stream<T> stream) {
+		return stream.collect(AVL_TREE_SET::new, AVL_TREE_SET::add, AVL_TREE_SET::merge);
+	}
+	
+	private AVL_TREE_SET<T> merge(AVL_TREE_SET<T> a) {
+		addAll(a);
+		return this;
+	}
+	
+#else
+	/**
+	 * Collects a Stream to a AVLTreeSet
+	 * @return a set with the contents of the Stream
+	 */
+	public static AVL_TREE_SET toSet(JAVA_STREAM stream) {
+		return stream.collect(AVL_TREE_SET::new, AVL_TREE_SET::add, AVL_TREE_SET::addAll);
+	}
+	
+#endif
+#endif
 #if !TYPE_OBJECT
 	@Override
 	public void setDefaultMaxValue(KEY_TYPE value) { defaultMaxNotFound = value; }

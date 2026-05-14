@@ -189,13 +189,13 @@ public class Object2IntLinkedOpenCustomHashMap<T> extends Object2IntOpenCustomHa
 			if(containsNull) {
 				int lastValue = values[nullIndex];
 				values[nullIndex] = value;
-				moveToFirstIndex(nullIndex);
+				moveToFirstIndex(nullIndex, false);
 				return lastValue;
 			}
 			values[nullIndex] = value;
 			containsNull = true;
 			onNodeAdded(nullIndex);
-			moveToFirstIndex(nullIndex);
+			moveToFirstIndex(nullIndex, true);
 		}
 		else {
 			int pos = HashUtil.mix(strategy.hashCode(key)) & mask;
@@ -203,7 +203,7 @@ public class Object2IntLinkedOpenCustomHashMap<T> extends Object2IntOpenCustomHa
 				if(strategy.equals(keys[pos], key)) {
 					int lastValue = values[pos];
 					values[pos] = value;
-					moveToFirstIndex(pos);
+					moveToFirstIndex(pos, false);
 					return lastValue;
 				}
 				pos = ++pos & mask;
@@ -211,7 +211,7 @@ public class Object2IntLinkedOpenCustomHashMap<T> extends Object2IntOpenCustomHa
 			keys[pos] = key;
 			values[pos] = value;
 			onNodeAdded(pos);
-			moveToFirstIndex(pos);
+			moveToFirstIndex(pos, true);
 		}
 		if(size++ >= maxFill) rehash(HashUtil.arraySize(size+1, loadFactor));
 		return getDefaultReturnValue();
@@ -223,13 +223,13 @@ public class Object2IntLinkedOpenCustomHashMap<T> extends Object2IntOpenCustomHa
 			if(containsNull) {
 				int lastValue = values[nullIndex];
 				values[nullIndex] = value;
-				moveToLastIndex(nullIndex);
+				moveToLastIndex(nullIndex, false);
 				return lastValue;
 			}
 			values[nullIndex] = value;
 			containsNull = true;
 			onNodeAdded(nullIndex);
-			moveToLastIndex(nullIndex);
+			moveToLastIndex(nullIndex, true);
 		}
 		else {
 			int pos = HashUtil.mix(strategy.hashCode(key)) & mask;
@@ -237,7 +237,7 @@ public class Object2IntLinkedOpenCustomHashMap<T> extends Object2IntOpenCustomHa
 				if(strategy.equals(keys[pos], key)) {
 					int lastValue = values[pos];
 					values[pos] = value;
-					moveToLastIndex(pos);
+					moveToLastIndex(pos, false);
 					return lastValue;
 				}
 				pos = ++pos & mask;
@@ -245,7 +245,7 @@ public class Object2IntLinkedOpenCustomHashMap<T> extends Object2IntOpenCustomHa
 			keys[pos] = key;
 			values[pos] = value;
 			onNodeAdded(pos);
-			moveToLastIndex(pos);
+			moveToLastIndex(pos, true);
 		}
 		if(size++ >= maxFill) rehash(HashUtil.arraySize(size+1, loadFactor));
 		return getDefaultReturnValue();
@@ -258,7 +258,7 @@ public class Object2IntLinkedOpenCustomHashMap<T> extends Object2IntOpenCustomHa
 			values[nullIndex] = value;
 			containsNull = true;
 			onNodeAdded(nullIndex);
-			moveToFirstIndex(nullIndex);
+			moveToFirstIndex(nullIndex, true);
 		}
 		else {
 			int pos = HashUtil.mix(strategy.hashCode(key)) & mask;
@@ -269,7 +269,7 @@ public class Object2IntLinkedOpenCustomHashMap<T> extends Object2IntOpenCustomHa
 			keys[pos] = key;
 			values[pos] = value;
 			onNodeAdded(pos);
-			moveToFirstIndex(pos);
+			moveToFirstIndex(pos, true);
 		}
 		if(size++ >= maxFill) rehash(HashUtil.arraySize(size+1, loadFactor));
 		return getDefaultReturnValue();
@@ -282,7 +282,7 @@ public class Object2IntLinkedOpenCustomHashMap<T> extends Object2IntOpenCustomHa
 			values[nullIndex] = value;
 			containsNull = true;
 			onNodeAdded(nullIndex);
-			moveToLastIndex(nullIndex);
+			moveToLastIndex(nullIndex, true);
 		}
 		else {
 			int pos = HashUtil.mix(strategy.hashCode(key)) & mask;
@@ -293,7 +293,7 @@ public class Object2IntLinkedOpenCustomHashMap<T> extends Object2IntOpenCustomHa
 			keys[pos] = key;
 			values[pos] = value;
 			onNodeAdded(pos);
-			moveToLastIndex(pos);
+			moveToLastIndex(pos, true);
 		}
 		if(size++ >= maxFill) rehash(HashUtil.arraySize(size+1, loadFactor));
 		return getDefaultReturnValue();
@@ -304,7 +304,7 @@ public class Object2IntLinkedOpenCustomHashMap<T> extends Object2IntOpenCustomHa
 		if(isEmpty() || strategy.equals(firstKey(), key)) return false;
 		if(strategy.equals(key, null)) {
 			if(containsNull) {
-				moveToFirstIndex(nullIndex);
+				moveToFirstIndex(nullIndex, false);
 				return true;
 			}
 		}
@@ -312,7 +312,7 @@ public class Object2IntLinkedOpenCustomHashMap<T> extends Object2IntOpenCustomHa
 			int pos = HashUtil.mix(strategy.hashCode(key)) & mask;
 			while(!strategy.equals(keys[pos], null)) {
 				if(strategy.equals(keys[pos], key)) {
-					moveToFirstIndex(pos);
+					moveToFirstIndex(pos, false);
 					return true;
 				}
 				pos = ++pos & mask;
@@ -326,7 +326,7 @@ public class Object2IntLinkedOpenCustomHashMap<T> extends Object2IntOpenCustomHa
 		if(isEmpty() || strategy.equals(lastKey(), key)) return false;
 		if(strategy.equals(key, null)) {
 			if(containsNull) {
-				moveToLastIndex(nullIndex);
+				moveToLastIndex(nullIndex, false);
 				return true;
 			}
 		}
@@ -334,7 +334,7 @@ public class Object2IntLinkedOpenCustomHashMap<T> extends Object2IntOpenCustomHa
 			int pos = HashUtil.mix(strategy.hashCode(key)) & mask;
 			while(!strategy.equals(keys[pos], null)) {
 				if(strategy.equals(keys[pos], key)) {
-					moveToLastIndex(pos);
+					moveToLastIndex(pos, false);
 					return true;
 				}
 				pos = ++pos & mask;
@@ -347,7 +347,7 @@ public class Object2IntLinkedOpenCustomHashMap<T> extends Object2IntOpenCustomHa
 	public int getAndMoveToFirst(T key) {
 		int index = findIndex(key);
 		if(index < 0) return getDefaultReturnValue();
-		moveToFirstIndex(index);
+		moveToFirstIndex(index, false);
 		return values[index];
 	}
 	
@@ -355,7 +355,7 @@ public class Object2IntLinkedOpenCustomHashMap<T> extends Object2IntOpenCustomHa
 	public int getAndMoveToLast(T key) {
 		int index = findIndex(key);
 		if(index < 0) return getDefaultReturnValue();
-		moveToLastIndex(index);
+		moveToLastIndex(index, false);
 		return values[index];
 	}
 	
@@ -531,8 +531,8 @@ public class Object2IntLinkedOpenCustomHashMap<T> extends Object2IntOpenCustomHa
 		containsNull = false;
 	}
 	
-	protected void moveToFirstIndex(int startPos) {
-		if(size == 1 || firstIndex == startPos) return;
+	protected void moveToFirstIndex(int startPos, boolean adding) {
+		if(size == (adding ? 0 : 1) || firstIndex == startPos) return;
 		if(lastIndex == startPos) {
 			lastIndex = (int)(links[startPos] >>> 32);
 			links[lastIndex] |= 0xFFFFFFFFL;
@@ -549,8 +549,8 @@ public class Object2IntLinkedOpenCustomHashMap<T> extends Object2IntOpenCustomHa
 		firstIndex = startPos;
 	}
 	
-	protected void moveToLastIndex(int startPos) {
-		if(size == 1 || lastIndex == startPos) return;
+	protected void moveToLastIndex(int startPos, boolean adding) {
+		if(size == (adding ? 0 : 1) || lastIndex == startPos) return;
 		if(firstIndex == startPos) {
 			firstIndex = (int)links[startPos];
 			links[lastIndex] |= 0xFFFFFFFF00000000L;

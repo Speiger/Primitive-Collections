@@ -1,13 +1,18 @@
 package speiger.src.collections.longs.lists;
 
 import java.util.Arrays;
+import java.util.stream.LongStream;
+import java.util.stream.StreamSupport;
 import java.util.Collection;
 import java.util.NoSuchElementException;
 import java.util.Objects;
 import java.util.OptionalLong;
+import java.util.function.Supplier;
+import speiger.src.collections.longs.utils.LongCollections;
 import java.util.function.Predicate;
 import java.util.function.UnaryOperator;
 import java.util.function.LongPredicate;
+
 import java.util.function.LongUnaryOperator;
 
 import speiger.src.collections.longs.collections.LongCollection;
@@ -18,8 +23,6 @@ import speiger.src.collections.objects.functions.consumer.ObjectLongConsumer;
 import speiger.src.collections.longs.functions.function.LongLongUnaryOperator;
 import speiger.src.collections.objects.utils.ObjectArrays;
 import speiger.src.collections.longs.utils.LongIterators;
-import java.util.stream.LongStream;
-import java.util.stream.StreamSupport;
 import speiger.src.collections.longs.collections.LongSplititerator;
 import speiger.src.collections.longs.utils.LongSplititerators;
 import speiger.src.collections.utils.SanityChecks;
@@ -87,6 +90,15 @@ public class ImmutableLongList extends AbstractLongList
 	public ImmutableLongList(long[] a, int offset, int length) {
 		SanityChecks.checkArrayCapacity(a.length, offset, length);
 		data = Arrays.copyOfRange(a, offset, offset+length);
+	}
+	
+
+	/**
+	 * Collects a Stream to a ImmutableList
+	 * @return a list with the contents of the Stream
+	 */
+	public static ImmutableLongList toList(LongStream stream) {
+		return new ImmutableLongList(stream.collect((Supplier<LongCollection>)LongCollections::wrapper, LongCollection::add, LongCollection::addAll).toLongArray());
 	}
 	
 	@Override

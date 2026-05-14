@@ -6,6 +6,7 @@ import java.util.Iterator;
 import java.util.NoSuchElementException;
 import java.util.Objects;
 import java.util.OptionalDouble;
+
 import java.util.concurrent.locks.ReentrantLock;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
@@ -111,6 +112,14 @@ public class CopyOnWriteDoubleArrayList extends AbstractDoubleList implements IT
 		System.arraycopy(a, offset, data, 0, length);
 	}
 	
+
+	/**
+	 * Collects a Stream to a CopyOnWriteArrayList
+	 * @return a list with the contents of the Stream
+	 */
+	public static CopyOnWriteDoubleArrayList toList(DoubleStream stream) {
+		return stream.collect(CopyOnWriteDoubleArrayList::new, CopyOnWriteDoubleArrayList::add, CopyOnWriteDoubleArrayList::addAll);
+	}
 	
 	private void setArray(double[] data) {
 		this.data = data;

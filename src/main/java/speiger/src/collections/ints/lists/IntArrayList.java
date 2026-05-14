@@ -5,6 +5,8 @@ import java.util.Collection;
 import java.util.Iterator;
 import java.util.Objects;
 import java.util.OptionalInt;
+
+
 import java.util.function.IntPredicate;
 import java.util.function.Predicate;
 import java.util.function.UnaryOperator;
@@ -142,6 +144,15 @@ public class IntArrayList extends AbstractIntList implements IIntArray, IntStack
 		list.data = a;
 		list.size = length;
 		return list;
+	}
+	
+
+	/**
+	 * Collects a Stream to a ArrayList
+	 * @return a list with the contents of the Stream
+	 */
+	public static IntArrayList toList(IntStream stream) {
+		return stream.collect(IntArrayList::new, IntArrayList::add, IntArrayList::addAll);
 	}
 	
 	/**
