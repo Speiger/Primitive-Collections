@@ -10,6 +10,12 @@ import java.util.NoSuchElementException;
 import java.util.Objects;
 #if JDK_TYPE
 import java.util.OPTIONAL;
+#if SPLIT_ITERATOR_FEATURE && STREAM_FEATURE
+#if TYPE_OBJECT
+import java.util.stream.Stream;
+import java.util.stream.Collector;
+#endif
+#endif
 #endif
 import java.util.concurrent.locks.ReentrantLock;
 import java.util.function.Consumer;
@@ -172,7 +178,42 @@ public class COPY_ON_WRITE_LIST KEY_GENERIC_TYPE extends ABSTRACT_LIST KEY_GENER
 	}
 	
 #endif
+#if JDK_TYPE && SPLIT_ITERATOR_FEATURE && STREAM_FEATURE
+#if TYPE_OBJECT
+	/**
+	 * Creates a Collector for a CopyOnWriteArrayList
+	 * @Type(T)
+	 * @return a collector
+	 */
+	public static <T> Collector<T, CopyOnWriteObjectArrayList<T>, CopyOnWriteObjectArrayList<T>> toList() {
+		return Collector.of(CopyOnWriteObjectArrayList::new, CopyOnWriteObjectArrayList::add, CopyOnWriteObjectArrayList::merge);
+	}
 	
+	/**
+	 * Collects a Stream to a CopyOnWriteArrayList
+	 * @Type(T)
+	 * @return a list with the contents of the Stream
+	 */
+	public static <T> CopyOnWriteObjectArrayList KEY_GENERIC_TYPE toList(Stream<T> stream) {
+		return stream.collect(CopyOnWriteObjectArrayList::new, CopyOnWriteObjectArrayList::add, CopyOnWriteObjectArrayList::merge);
+	}
+	
+	private CopyOnWriteObjectArrayList<T> merge(CopyOnWriteObjectArrayList<T> a) {
+		addAll(a);
+		return this;
+	}
+	
+#else
+	/**
+	 * Collects a Stream to a CopyOnWriteArrayList
+	 * @return a list with the contents of the Stream
+	 */
+	public static COPY_ON_WRITE_LIST toList(JAVA_STREAM stream) {
+		return stream.collect(COPY_ON_WRITE_LIST::new, COPY_ON_WRITE_LIST::add, COPY_ON_WRITE_LIST::addAll);
+	}
+	
+#endif
+#endif
 	private void setArray(KEY_TYPE[] data) {
 		this.data = data;
 	}

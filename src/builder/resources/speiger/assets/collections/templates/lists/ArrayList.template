@@ -9,6 +9,13 @@ import java.util.Iterator;
 import java.util.Objects;
 #if JDK_TYPE
 import java.util.OPTIONAL;
+#if SPLIT_ITERATOR_FEATURE && STREAM_FEATURE
+#if TYPE_OBJECT
+import java.util.stream.Stream;
+import java.util.stream.Collector;
+#endif
+#endif
+
 #endif
 #if TYPE_OBJECT
 #if IARRAY_FEATURE || TYPE_OBJECT
@@ -225,6 +232,42 @@ public class ARRAY_LIST KEY_GENERIC_TYPE extends ABSTRACT_LIST KEY_GENERIC_TYPE 
 		return list;
 	}
 	
+#endif
+#if JDK_TYPE && SPLIT_ITERATOR_FEATURE && STREAM_FEATURE
+#if TYPE_OBJECT
+	/**
+	 * Creates a Collector for a ArrayList
+	 * @Type(T)
+	 * @return a collector
+	 */
+	public static <T> Collector<T, ObjectArrayList<T>, ObjectArrayList<T>> toList() {
+		return Collector.of(ObjectArrayList::new, ObjectArrayList::add, ObjectArrayList::merge);
+	}
+	
+	/**
+	 * Collects a Stream to a ArrayList
+	 * @Type(T)
+	 * @return a list with the contents of the Stream
+	 */
+	public static <T> ARRAY_LIST KEY_GENERIC_TYPE toList(Stream<T> stream) {
+		return stream.collect(ObjectArrayList::new, ObjectArrayList::add, ObjectArrayList::merge);
+	}
+	
+	private ObjectArrayList<T> merge(ObjectArrayList<T> a) {
+		addAll(a);
+		return this;
+	}
+	
+#else
+	/**
+	 * Collects a Stream to a ArrayList
+	 * @return a list with the contents of the Stream
+	 */
+	public static ARRAY_LIST toList(JAVA_STREAM stream) {
+		return stream.collect(ARRAY_LIST::new, ARRAY_LIST::add, ARRAY_LIST::addAll);
+	}
+	
+#endif
 #endif
 	/**
 	 * Appends the specified element to the end of this list.

@@ -8,6 +8,12 @@ import java.util.NoSuchElementException;
 import java.util.Objects;
 #if JDK_TYPE
 import java.util.OPTIONAL;
+#if !TYPE_OBJECT
+import java.util.stream.JAVA_STREAM;
+#else
+import java.util.stream.Stream;
+import java.util.stream.Collector;
+#endif
 #endif
 #if TYPE_OBJECT
 import java.util.function.Consumer;
@@ -224,6 +230,42 @@ public class HASH_SET KEY_GENERIC_TYPE extends ABSTRACT_SET KEY_GENERIC_TYPE imp
 		while(iterator.hasNext()) add(iterator.NEXT());
 	}
 	
+#endif
+#if JDK_TYPE && SPLIT_ITERATOR_FEATURE && STREAM_FEATURE
+#if TYPE_OBJECT
+	/**
+	 * Creates a Collector for a HashSet
+	 * @Type(T)
+	 * @return a collector
+	 */
+	public static <T> Collector<T, HASH_SET<T>, HASH_SET<T>> toSet() {
+		return Collector.of(HASH_SET::new, HASH_SET::add, HASH_SET::merge);
+	}
+	
+	/**
+	 * Collects a Stream to a HashSet
+	 * @Type(T)
+	 * @return a set with the contents of the Stream
+	 */
+	public static <T> HASH_SET KEY_GENERIC_TYPE toSet(Stream<T> stream) {
+		return stream.collect(HASH_SET::new, HASH_SET::add, HASH_SET::merge);
+	}
+	
+	private HASH_SET<T> merge(HASH_SET<T> a) {
+		addAll(a);
+		return this;
+	}
+	
+#else
+	/**
+	 * Collects a Stream to a HashSet
+	 * @return a set with the contents of the Stream
+	 */
+	public static HASH_SET toSet(JAVA_STREAM stream) {
+		return stream.collect(HASH_SET::new, HASH_SET::add, HASH_SET::addAll);
+	}
+	
+#endif
 #endif
 	@Override
 	public boolean add(KEY_TYPE o) {

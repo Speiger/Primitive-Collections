@@ -11,6 +11,12 @@ import java.util.Iterator;
 import java.util.NoSuchElementException;
 #if JDK_TYPE
 import java.util.OPTIONAL;
+#if !TYPE_OBJECT
+import java.util.stream.JAVA_STREAM;
+#else
+import java.util.stream.Stream;
+import java.util.stream.Collector;
+#endif
 #endif
 #if JDK_FUNCTION
 import java.util.function.PREDICATE;
@@ -240,6 +246,42 @@ public class LINKED_CUSTOM_HASH_SET KEY_GENERIC_TYPE extends CUSTOM_HASH_SET KEY
 		while(iterator.hasNext()) add(iterator.NEXT());
 	}
 	
+#endif
+#if JDK_TYPE && SPLIT_ITERATOR_FEATURE && STREAM_FEATURE
+#if TYPE_OBJECT
+	/**
+	 * Creates a Collector for a LinkedCustomHashSet
+	 * @Type(T)
+	 * @return a collector
+	 */
+	public static <T> Collector<T, LINKED_CUSTOM_HASH_SET<T>, LINKED_CUSTOM_HASH_SET<T>> toLinkedSet(STRATEGY KEY_SUPER_GENERIC_TYPE strategy) {
+		return Collector.of(() -> new LINKED_CUSTOM_HASH_SET<>(strategy), LINKED_CUSTOM_HASH_SET::add, LINKED_CUSTOM_HASH_SET::merge);
+	}
+	
+	/**
+	 * Collects a Stream to a LinkedCustomHashSet
+	 * @Type(T)
+	 * @return a set with the contents of the Stream
+	 */
+	public static <T> LINKED_CUSTOM_HASH_SET KEY_GENERIC_TYPE toLinkedSet(Stream<T> stream, STRATEGY KEY_SUPER_GENERIC_TYPE strategy) {
+		return stream.collect(() -> new LINKED_CUSTOM_HASH_SET<>(strategy), LINKED_CUSTOM_HASH_SET::add, LINKED_CUSTOM_HASH_SET::merge);
+	}
+	
+	private LINKED_CUSTOM_HASH_SET<T> merge(LINKED_CUSTOM_HASH_SET<T> a) {
+		addAll(a);
+		return this;
+	}
+	
+#else
+	/**
+	 * Collects a Stream to a LinkedCustomHashSet
+	 * @return a set with the contents of the Stream
+	 */
+	public static LINKED_CUSTOM_HASH_SET toList(JAVA_STREAM stream, STRATEGY KEY_SUPER_GENERIC_TYPE strategy) {
+		return stream.collect(() -> new LINKED_CUSTOM_HASH_SET(strategy), LINKED_CUSTOM_HASH_SET::add, LINKED_CUSTOM_HASH_SET::addAll);
+	}
+	
+#endif
 #endif
 	@Override
 	public void addFirst(KEY_TYPE o) {

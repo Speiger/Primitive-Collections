@@ -79,7 +79,7 @@ public class ORDERED_MAP_TEST_BUILDER KEY_VALUE_GENERIC_TYPE extends MAP_TEST_BU
 		features.addAll(parentBuilder.getFeatures());
 		features.remove(SpecialFeature.COPYING);
 		features.remove(SpecialFeature.CHILDREN_COPY);
-		return ORDERED_MAP_TEST_BUILDER.using(new DERIVED_MAP_GENERATORS.ReverseTestOrderedMapGenerator(delegate))
+		return ORDERED_MAP_TEST_BUILDER.using(new DERIVED_MAP_GENERATORS.ReverseTestOrderedMapGeneratorKV_BRACES(delegate))
 				.named(parentBuilder.getName() + " reversed").withFeatures(features)
 				.suppressing(parentBuilder.getSuppressedTests()).createTestSuite();
 	}

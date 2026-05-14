@@ -7,6 +7,11 @@ import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 import java.util.concurrent.locks.LockSupport;
 import java.util.function.Consumer;
+#if JDK_TYPE
+import java.util.OPTIONAL;
+#else
+import speiger.src.collections.PACKAGE.functions.OPTIONAL;
+#endif
 #if !TYPE_OBJECT
 
 import speiger.src.collections.PACKAGE.functions.CONSUMER;
@@ -299,9 +304,8 @@ public class ASYNC_BUILDER KEY_GENERIC_TYPE
 	 * @param operator that reduces the elements.
 	 * @return self with the reduce action applied
 	 */
-	public ASYNC_BUILDER KEY_GENERIC_TYPE reduce(UNARY_OPERATOR KEY_KEY_GENERIC_TYPE operator) {
-		task = new SimpleReduceTaskBRACES(iterable.iterator(), operator);
-		return this;
+	public ObjectAsyncBuilder<OPTIONAL KEY_GENERIC_TYPE> reduce(UNARY_OPERATOR KEY_KEY_GENERIC_TYPE operator) {
+		return new ObjectAsyncBuilder<>(new SimpleReduceTaskBRACES(iterable.iterator(), operator));
 	}
 	
 #if TYPE_OBJECT
@@ -435,9 +439,8 @@ public class ASYNC_BUILDER KEY_GENERIC_TYPE
 	 * @param filter that decides the desired elements
 	 * @return self with the findFirst function applied
 	 */
-	public ASYNC_BUILDER KEY_GENERIC_TYPE findFirst(PREDICATE KEY_GENERIC_TYPE filter) {
-		task = new FindFirstTaskBRACES(iterable.iterator(), filter);
-		return this;
+	public ObjectAsyncBuilder<OPTIONAL KEY_GENERIC_TYPE> findFirst(PREDICATE KEY_GENERIC_TYPE filter) {
+		return new ObjectAsyncBuilder<>(new FindFirstTaskBRACES(iterable.iterator(), filter));
 	}
 	
 #if INT_ASYNC_MODULE
@@ -590,7 +593,7 @@ public class ASYNC_BUILDER KEY_GENERIC_TYPE
 	}
 	
 #endif
-	private static class SimpleReduceTask KEY_GENERIC_TYPE extends BASE_TASK KEY_GENERIC_TYPE
+	private static class SimpleReduceTask KEY_GENERIC_TYPE extends BaseObjectTask<OPTIONAL KEY_GENERIC_TYPE>
 	{
 		ITERATOR KEY_GENERIC_TYPE iter;
 		UNARY_OPERATOR KEY_KEY_GENERIC_TYPE operator;
@@ -600,6 +603,7 @@ public class ASYNC_BUILDER KEY_GENERIC_TYPE
 		public SimpleReduceTask(ITERATOR KEY_GENERIC_TYPE iter, UNARY_OPERATOR KEY_KEY_GENERIC_TYPE operator) {
 			this.iter = iter;
 			this.operator = operator;
+			this.setResult(OPTIONAL.empty());
 		}
 		
 		@Override
@@ -614,7 +618,7 @@ public class ASYNC_BUILDER KEY_GENERIC_TYPE
 				}
 			}
 			if(!iter.hasNext()) {
-				setResult(value);
+				setResult(OPTIONAL.GET_OPTIONAL(value));
 				return true;
 			}
 			return false;
@@ -689,7 +693,7 @@ public class ASYNC_BUILDER KEY_GENERIC_TYPE
 	}
 	
 #endif
-	private static class FindFirstTask KEY_GENERIC_TYPE extends BASE_TASK KEY_GENERIC_TYPE
+	private static class FindFirstTask KEY_GENERIC_TYPE extends BaseObjectTask<OPTIONAL KEY_GENERIC_TYPE>
 	{
 		ITERATOR KEY_GENERIC_TYPE iter;
 		PREDICATE KEY_GENERIC_TYPE filter;
@@ -697,6 +701,7 @@ public class ASYNC_BUILDER KEY_GENERIC_TYPE
 		public FindFirstTask(ITERATOR KEY_GENERIC_TYPE iter, PREDICATE KEY_GENERIC_TYPE filter) {
 			this.iter = iter;
 			this.filter = filter;
+			this.setResult(OPTIONAL.empty());
 		}
 
 		@Override
@@ -704,7 +709,7 @@ public class ASYNC_BUILDER KEY_GENERIC_TYPE
 			while(shouldRun() && iter.hasNext()) {
 				KEY_TYPE entry = iter.NEXT();
 				if(filter.test(iter.NEXT())) {
-					setResult(entry);
+					setResult(OPTIONAL.GET_OPTIONAL(entry));
 					return true;
 				}
 			}
