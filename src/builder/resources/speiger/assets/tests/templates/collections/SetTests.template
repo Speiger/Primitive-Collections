@@ -12,6 +12,9 @@ import com.google.common.collect.testing.features.CollectionSize;
 import com.google.common.collect.testing.features.SetFeature;
 import com.google.common.collect.testing.features.Feature;
 #if TYPE_OBJECT
+import com.google.common.collect.testing.testers.CollectionAddTester;
+import com.google.common.collect.testing.testers.CollectionAddAllTester;
+import com.google.common.collect.testing.testers.CollectionCreationTester;
 import com.google.common.collect.testing.features.CollectionFeature;
 #endif
 import junit.framework.Test;
@@ -122,6 +125,9 @@ public class SET_TESTS extends TestCase
 #ignore
 			.withFeatures(getSizes(size)).withFeatures(features);
 		if(nullValues) builder.withFeatures(CollectionFeature.ALLOWS_NULL_VALUES);
+		builder.suppressing(CollectionAddTester.getAddNullUnsupportedMethod(), CollectionAddTester.getAddNullSupportedMethod());
+		builder.suppressing(CollectionAddAllTester.getAddAllNullUnsupportedMethod());
+		builder.suppressing(CollectionCreationTester.getCreateWithNullUnsupportedMethod());
 #endignore
 		return builder.createTestSuite();
 	}
