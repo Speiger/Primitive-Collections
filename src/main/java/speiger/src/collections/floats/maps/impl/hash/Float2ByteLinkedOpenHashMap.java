@@ -249,7 +249,7 @@ public class Float2ByteLinkedOpenHashMap extends Float2ByteOpenHashMap implement
 		}
 		else {
 			int pos = HashUtil.mix(Float.hashCode(key)) & mask;
-			while(Float.floatToIntBits(key) == 0) {
+			while(Float.floatToIntBits(keys[pos]) != 0) {
 				if(Float.floatToIntBits(keys[pos]) == Float.floatToIntBits(key)) return values[pos];
 				pos = ++pos & mask;
 			}
@@ -273,7 +273,7 @@ public class Float2ByteLinkedOpenHashMap extends Float2ByteOpenHashMap implement
 		}
 		else {
 			int pos = HashUtil.mix(Float.hashCode(key)) & mask;
-			while(Float.floatToIntBits(key) == 0) {
+			while(Float.floatToIntBits(keys[pos]) != 0) {
 				if(Float.floatToIntBits(keys[pos]) == Float.floatToIntBits(key)) return values[pos];
 				pos = ++pos & mask;
 			}

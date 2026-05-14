@@ -249,7 +249,7 @@ public class Short2FloatLinkedOpenHashMap extends Short2FloatOpenHashMap impleme
 		}
 		else {
 			int pos = HashUtil.mix(Short.hashCode(key)) & mask;
-			while(key == (short)0) {
+			while(keys[pos] != (short)0) {
 				if(keys[pos] == key) return values[pos];
 				pos = ++pos & mask;
 			}
@@ -273,7 +273,7 @@ public class Short2FloatLinkedOpenHashMap extends Short2FloatOpenHashMap impleme
 		}
 		else {
 			int pos = HashUtil.mix(Short.hashCode(key)) & mask;
-			while(key == (short)0) {
+			while(keys[pos] != (short)0) {
 				if(keys[pos] == key) return values[pos];
 				pos = ++pos & mask;
 			}

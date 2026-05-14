@@ -243,7 +243,7 @@ public class Char2ObjectLinkedOpenHashMap<V> extends Char2ObjectOpenHashMap<V> i
 		}
 		else {
 			int pos = HashUtil.mix(Character.hashCode(key)) & mask;
-			while(key == (char)0) {
+			while(keys[pos] != (char)0) {
 				if(keys[pos] == key) return values[pos];
 				pos = ++pos & mask;
 			}
@@ -267,7 +267,7 @@ public class Char2ObjectLinkedOpenHashMap<V> extends Char2ObjectOpenHashMap<V> i
 		}
 		else {
 			int pos = HashUtil.mix(Character.hashCode(key)) & mask;
-			while(key == (char)0) {
+			while(keys[pos] != (char)0) {
 				if(keys[pos] == key) return values[pos];
 				pos = ++pos & mask;
 			}

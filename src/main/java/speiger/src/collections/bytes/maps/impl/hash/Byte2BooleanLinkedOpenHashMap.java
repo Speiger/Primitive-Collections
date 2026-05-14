@@ -249,7 +249,7 @@ public class Byte2BooleanLinkedOpenHashMap extends Byte2BooleanOpenHashMap imple
 		}
 		else {
 			int pos = HashUtil.mix(Byte.hashCode(key)) & mask;
-			while(key == (byte)0) {
+			while(keys[pos] != (byte)0) {
 				if(keys[pos] == key) return values[pos];
 				pos = ++pos & mask;
 			}
@@ -273,7 +273,7 @@ public class Byte2BooleanLinkedOpenHashMap extends Byte2BooleanOpenHashMap imple
 		}
 		else {
 			int pos = HashUtil.mix(Byte.hashCode(key)) & mask;
-			while(key == (byte)0) {
+			while(keys[pos] != (byte)0) {
 				if(keys[pos] == key) return values[pos];
 				pos = ++pos & mask;
 			}

@@ -36,6 +36,10 @@ public class MapModule extends BaseModule
 	public static final FunctionDependency ENUM_MAP = MODULE.createDependency("EnumMap").addEntryDependency(IMPLEMENTATION);
 	public static final FunctionDependency LINKED_ENUM_MAP = MODULE.createDependency("LinkedEnumMap").addEntryDependency(ENUM_MAP).addEntryDependency(ORDERED_MAP);
 	
+	public static final FunctionDependency REF_MAP = MODULE.createDependency("ReferenceHashMap").addEntryDependency(IMPLEMENTATION);
+	public static final FunctionDependency LINKED_REF_MAP = MODULE.createDependency("LinkedReferenceMap").addEntryDependency(REF_MAP).addEntryDependency(ORDERED_MAP);
+
+	
 	public static final FunctionDependency CONCURRENT_MAP = MODULE.createDependency("ConcurrentMap").addEntryDependency(IMPLEMENTATION);
 	public static final FunctionDependency AVL_TREE_MAP = MODULE.createDependency("AVLTreeMap").addEntryDependency(SORTED_MAP).addEntryDependency(IMPLEMENTATION);
 	public static final FunctionDependency RB_TREE_MAP = MODULE.createDependency("RBTreeMap").addEntryDependency(SORTED_MAP).addEntryDependency(IMPLEMENTATION);
@@ -51,7 +55,7 @@ public class MapModule extends BaseModule
 	@Override
 	public List<IDependency> getDependencies(ClassType keyType, ClassType valueType) {
 		List<IDependency> dependencies = new ArrayList<>(Arrays.asList(MODULE, ORDERED_MAP, SORTED_MAP, IMPLEMENTATION, WRAPPERS, ARRAY_MAP, IMMUTABLE_MAP, HASH_MAP, LINKED_MAP, CUSTOM_MAP, LINKED_CUSTOM_MAP, CONCURRENT_MAP, AVL_TREE_MAP, RB_TREE_MAP));
-		if(keyType == ClassType.OBJECT) dependencies.addAll(Arrays.asList(ENUM_MAP, LINKED_ENUM_MAP));
+		if(keyType == ClassType.OBJECT) dependencies.addAll(Arrays.asList(ENUM_MAP, LINKED_ENUM_MAP, REF_MAP, LINKED_REF_MAP));
 		return dependencies;
 	}
 	
@@ -70,6 +74,10 @@ public class MapModule extends BaseModule
 		if(AVL_TREE_MAP.isEnabled()) addFlag("AVL_TREE_MAP_FEATURE");
 		if(RB_TREE_MAP.isEnabled()) addFlag("RB_TREE_MAP_FEATURE");
 		
+		if(REF_MAP.isEnabled()) addFlag("REF_MAP_FEATURE");
+		if(LINKED_REF_MAP.isEnabled()) addFlag("LINKED_REF_MAP_FEATURE");
+		
+		
 		if(CONCURRENT_MAP.isEnabled()) addFlag("CONCURRENT_MAP_FEATURE");
 		if(IMMUTABLE_MAP.isEnabled()) addFlag("IMMUTABLE_MAP_FEATURE");
 		if(HASH_MAP.isEnabled()) addFlag("MAP_FEATURE");
@@ -85,6 +93,8 @@ public class MapModule extends BaseModule
 		if(!IMMUTABLE_MAP.isEnabled()) addBlockedFiles("ImmutableOpenHashMap");
 		if(!CONCURRENT_MAP.isEnabled()) addBlockedFiles("ConcurrentMap", "ConcurrentOpenHashMap");
 		if(!ORDERED_MAP.isEnabled()) addBlockedFiles("OrderedMap");
+		if(!REF_MAP.isEnabled()) addBlockedFiles("ReferenceHashMap");
+		if(!LINKED_REF_MAP.isEnabled()) addBlockedFiles("LinkedReferenceHashMap");
 		if(!HASH_MAP.isEnabled()) addBlockedFiles("OpenHashMap");
 		if(!LINKED_MAP.isEnabled()) addBlockedFiles("LinkedOpenHashMap");
 		if(!CUSTOM_MAP.isEnabled()) addBlockedFiles("OpenCustomHashMap");
@@ -127,6 +137,8 @@ public class MapModule extends BaseModule
 		addBiRequirement("AbstractMap");
 		addEnumRequirement("EnumMap");
 		addEnumRequirement("LinkedEnumMap");
+		addEnumRequirement("ReferenceHashMap");
+		addEnumRequirement("LinkedReferenceHashMap");
 		addBiRequirement("ConcurrentOpenHashMap");
 		addBiRequirement("ImmutableOpenHashMap");
 		addBiRequirement("OpenHashMap");
@@ -141,6 +153,8 @@ public class MapModule extends BaseModule
 		addRemapper("AbstractMap", "Abstract%sMap");
 		addRemapper("EnumMap", "Enum2%sMap");
 		addRemapper("LinkedEnumMap", "LinkedEnum2%sMap");
+		addRemapper("ReferenceHashMap", "Reference2%sHashMap");
+		addRemapper("LinkedReferenceHashMap", "Reference2%sLinkedHashMap");
 		addRemapper("ImmutableOpenHashMap", "Immutable%sOpenHashMap");
 		
 		//Test Classes
@@ -249,6 +263,8 @@ public class MapModule extends BaseModule
 		addBiClassMapper("RB_TREE_MAP", "RBTreeMap", "2");
 		addFunctionValueMappers("LINKED_ENUM_MAP", valueType.isObject() ? "LinkedEnum2ObjectMap" : "LinkedEnum2%sMap");
 		addFunctionValueMappers("ENUM_MAP", valueType.isObject() ? "Enum2ObjectMap" : "Enum2%sMap");
+		addFunctionValueMappers("REF_MAP", valueType.isObject() ? "Reference2ObjectHashMap" : "Reference2%sHashMap");
+		addFunctionValueMappers("LINKED_REF_MAP", valueType.isObject() ? "Reference2ObjectLinkedHashMap" : "Reference2%sLinkedHashMap");
 		addBiClassMapper("HASH_MAP", "OpenHashMap", "2");
 		addBiClassMapper("ARRAY_MAP", "ArrayMap", "2");
 		

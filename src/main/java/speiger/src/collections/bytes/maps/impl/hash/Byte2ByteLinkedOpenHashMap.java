@@ -241,7 +241,7 @@ public class Byte2ByteLinkedOpenHashMap extends Byte2ByteOpenHashMap implements 
 		}
 		else {
 			int pos = HashUtil.mix(Byte.hashCode(key)) & mask;
-			while(key == (byte)0) {
+			while(keys[pos] != (byte)0) {
 				if(keys[pos] == key) return values[pos];
 				pos = ++pos & mask;
 			}
@@ -265,7 +265,7 @@ public class Byte2ByteLinkedOpenHashMap extends Byte2ByteOpenHashMap implements 
 		}
 		else {
 			int pos = HashUtil.mix(Byte.hashCode(key)) & mask;
-			while(key == (byte)0) {
+			while(keys[pos] != (byte)0) {
 				if(keys[pos] == key) return values[pos];
 				pos = ++pos & mask;
 			}

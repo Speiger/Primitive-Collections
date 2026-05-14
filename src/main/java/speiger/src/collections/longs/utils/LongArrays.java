@@ -7,6 +7,7 @@ import java.util.concurrent.RecursiveAction;
 import speiger.src.collections.longs.functions.LongComparator;
 import speiger.src.collections.longs.collections.LongIterator;
 import speiger.src.collections.utils.SanityChecks;
+import speiger.src.collections.utils.Swapper;
 
 /**
  * A Helper class for Arrays
@@ -270,6 +271,65 @@ public class LongArrays
 	}
 	
 	/**
+	 * Simple Shuffle method for Arrays.
+	 * With a Callback for indirect shuffling
+	 * @param array the elements that should be shuffled
+	 * @param swapper the callback on the swaps
+	 * @note This uses the SanityChecks#getRandom
+	 * @return the provided sorted array
+	 */
+	public static long[] indirectShuffle(long[] array, Swapper swapper) {
+		return indirectShuffle(array, SanityChecks.getRandom(), swapper);
+	}
+	
+	/**
+	 * Simple Shuffle method for Arrays.
+	 * With a Callback for indirect shuffling
+	 * @param array the elements that should be shuffled
+	 * @param random the Random Number Generator that should be used for the shuffling
+	 * @param swapper the callback on the swaps
+	 * @return the provided sorted array
+	 */
+	public static long[] indirectShuffle(long[] array, Random random, Swapper swapper) {
+		return indirectShuffle(array, 0, array.length, random, swapper);
+	}
+	
+	/**
+	 * Simple Shuffle method for Arrays.
+	 * With a Callback for indirect shuffling
+	 * @param array the elements that should be shuffled
+	 * @param length the length of the array
+	 * @param random the Random Number Generator that should be used for the shuffling
+	 * @param swapper the callback on the swaps
+	 * @return the provided sorted array
+	 */
+	public static long[] indirectShuffle(long[] array, int length, Random random, Swapper swapper) {
+		return indirectShuffle(array, 0, length, random, swapper);
+	}
+	
+	/**
+	 * Simple Shuffle method for Arrays.
+	 * With a Callback for indirect shuffling
+	 * @param array the elements that should be shuffled
+	 * @param offset the start array
+	 * @param length the length of the array
+	 * @param random the Random Number Generator that should be used for the shuffling
+	 * @param swapper the callback on the swaps
+	 * @return the provided sorted array
+	 */
+	public static long[] indirectShuffle(long[] array, int offset, int length, Random random, Swapper swapper) {
+		for(int i = length-1; i>=0;i--) {
+			int j = offset + i;
+			int p = offset + random.nextInt(i + 1);
+			swapper.swap(j, p);
+			long t = array[j];
+			array[j] = array[p];
+			array[p] = t;
+		}
+		return array;
+	}
+	
+	/**
 	 * Simple Array Reversal method
 	 * @param array the Array that should flip
 	 * @return the provided array
@@ -490,6 +550,52 @@ public class LongArrays
 	}
 	
 	/**
+	 * Sorts the specified range of elements according to the order induced by the specified comparator using Insertion Sort,
+	 * On top of that allows to sort other things along with it.
+	 * @param array the array that needs to be sorted
+	 * @param comp the Comparator that decides the sorting order
+	 * @param swapper the callback which elements were swapped
+	 * @return input array
+	 */
+	public static long[] indirectInsertionSort(long[] array, LongComparator comp, Swapper swapper) {
+		indirectInsertionSort(array, 0, array.length, comp, swapper);
+		return array;
+	}
+	
+	/**
+	 * Sorts the specified range of elements according to the order induced by the specified comparator using Insertion Sort,
+	 * On top of that allows to sort other things along with it.
+	 * @param array the array that needs to be sorted
+	 * @param length the maxmium size of the array to be sorted
+	 * @param comp the Comparator that decides the sorting order
+	 * @param swapper the callback which elements were swapped
+	 */
+	public static void indirectInsertionSort(long[] array, int length, LongComparator comp, Swapper swapper) {
+		indirectInsertionSort(array, 0, length, comp, swapper);
+	}
+	
+	/**
+	 * Sorts the specified range of elements according to the order induced by the specified comparator using Insertion Sort,
+	 * On top of that allows to sort other things along with it.
+	 * @param array the array that needs to be sorted
+	 * @param from where the array should be sorted from
+	 * @param to where the array should be sorted to
+	 * @param comp the Comparator that decides the sorting order
+	 * @param swapper the callback which elements were swapped
+	 */
+	public static void indirectInsertionSort(long[] array, int from, int to, LongComparator comp, Swapper swapper) {
+		for (int i = from+1;i<to; i++) {
+			long current = array[i];
+			int j = i - 1;
+			while(j >= from && comp.compare(current, array[j]) < 0) {
+				swapper.swap(j+1, j);
+				array[j+1] = array[j--];
+			}
+			array[j+1] = current;
+		}
+	}
+	
+	/**
 	 * Sorts an array according to the natural ascending order using InsertionSort, 
 	 * @param array the array that needs to be sorted
 	 * @return input array
@@ -563,6 +669,57 @@ public class LongArrays
 					minId = j;
 				}
 			}
+			long temp = array[i];
+			array[i] = min;
+			array[minId] = temp;
+		}
+	}
+	
+	/**
+	 * Sorts the specified range of elements according to the order induced by the specified comparator using Selection Sort,
+	 * On top of that allows to sort other things along with it.
+	 * @param array the array that needs to be sorted
+	 * @param comp the Comparator that decides the sorting order
+	 * @param swapper the callback which elements were swapped
+	 * @return input array
+	 */
+	public static long[] indirectSelectionSort(long[] array, LongComparator comp, Swapper swapper) {
+		indirectSelectionSort(array, 0, array.length, comp, swapper);
+		return array;
+	}
+	
+	/**
+	 * Sorts the specified range of elements according to the order induced by the specified comparator using Selection Sort,
+	 * On top of that allows to sort other things along with it.
+	 * @param array the array that needs to be sorted
+	 * @param length the maxmium size of the array to be sorted
+	 * @param comp the Comparator that decides the sorting order
+	 * @param swapper the callback which elements were swapped
+	 */
+	public static void indirectSelectionSort(long[] array, int length, LongComparator comp, Swapper swapper) {
+		indirectSelectionSort(array, 0, length, comp, swapper);
+	}
+	
+	/**
+	 * Sorts the specified range of elements according to the order induced by the specified comparator using Selection Sort,
+	 * On top of that allows to sort other things along with it.
+	 * @param array the array that needs to be sorted
+	 * @param from where the array should be sorted from
+	 * @param to where the array should be sorted to
+	 * @param comp the Comparator that decides the sorting order
+	 * @param swapper the callback which elements were swapped
+	 */
+	public static void indirectSelectionSort(long[] array, int from, int to, LongComparator comp, Swapper swapper) {
+		for (int i = from; i < to; i++) {
+			long min = array[i];
+			int minId = i;
+			for(int j = i+1; j < to; j++) {
+				if(comp.compare(array[j], min) < 0) {
+					min = array[j];
+					minId = j;
+				}
+			}
+			swapper.swap(i, minId);
 			long temp = array[i];
 			array[i] = min;
 			array[minId] = temp;
@@ -663,6 +820,69 @@ public class LongArrays
 	}
 	
 	/**
+	 * Sorts the specified range of elements according to the order induced by the specified comparator using Merge Sort,
+	 * On top of that allows to sort other things along with it.
+	 * This implementation was copied from <a href="https://github.com/vigna/fastutil">FastUtil</a> with a couple custom optimizations
+	 * @param array the array that needs to be sorted
+	 * @param comp the Comparator that decides the sorting order
+	 * @param swapper the callback which elements were swapped
+	 * @return input array
+	 */
+	public static long[] indirectMergeSort(long[] array, LongComparator comp, Swapper swapper) {
+		indirectMergeSort(array, null, 0, array.length, comp, swapper);
+		return array;
+	}
+	
+	/**
+	 * Sorts the specified range of elements according to the order induced by the specified comparator using Merge Sort,
+	 * On top of that allows to sort other things along with it.
+	 * This implementation was copied from <a href="https://github.com/vigna/fastutil">FastUtil</a> with a couple custom optimizations
+	 * @param array the array that needs to be sorted
+	 * @param length the maxmium size of the array to be sorted
+	 * @param comp the Comparator that decides the sorting order
+	 * @param swapper the callback which elements were swapped
+	 */
+	public static void indirectMergeSort(long[] array, int length, LongComparator comp, Swapper swapper) {
+		indirectMergeSort(array, null, 0, length, comp, swapper);
+	}
+	
+	/**
+	 * Sorts the specified range of elements according to the order induced by the specified comparator using Merge Sort,
+	 * On top of that allows to sort other things along with it.
+	 * This implementation was copied from <a href="https://github.com/vigna/fastutil">FastUtil</a> with a couple custom optimizations
+	 * @param array the array that needs to be sorted
+	 * @param supp the auxillary array that is used to simplify the sorting
+	 * @param from where the array should be sorted from
+	 * @param to where the array should be sorted to
+	 * @param comp the Comparator that decides the sorting order
+	 * @param swapper the callback which elements were swapped
+	 */
+	public static void indirectMergeSort(long[] array, long[] supp, int from, int to, LongComparator comp, Swapper swapper) {
+		if(to - from < BASE_THRESHOLD) {
+			indirectInsertionSort(array, from, to, comp, swapper);
+			return;
+		}
+		if(supp == null) supp = Arrays.copyOf(array, to);
+		int mid = (from + to) >>> 1;
+		indirectMergeSort(supp, array, from, mid, comp, swapper);
+		indirectMergeSort(supp, array, mid, to, comp, swapper);
+		if(comp.compare(supp[mid - 1], supp[mid]) <= 0)
+		{
+			System.arraycopy(supp, from, array, from, to - from);
+			return;
+		}
+		for(int p = from, q = mid;from < to;from++) {
+			if(q >= to || p < mid && comp.compare(supp[p], supp[q]) < 0) {
+				swapper.swap(from, p);
+				array[from] = supp[p++];
+				continue;
+			}
+			swapper.swap(from, q);
+			array[from] = supp[q++];
+		}
+	}
+	
+	/**
 	 * Sorts an array according to the natural ascending order using Merge Sort, 
 	 * This implementation was copied from <a href="https://github.com/vigna/fastutil">FastUtil</a> with a couple custom optimizations
 	 * @param array the array that needs to be sorted
@@ -750,6 +970,53 @@ public class LongArrays
 			return;
 		}
 		mergeSort(array, supp, from, to, comp);
+	}
+	
+	/**
+	 * Sorts the specified range of elements according to the order induced by the specified comparator using a Parallel Merge Sort,
+	 * On top of that allows to sort other things along with it.
+	 * This implementation was copied from <a href="https://github.com/vigna/fastutil">FastUtil</a> with a couple custom optimizations
+	 * @param array the array that needs to be sorted
+	 * @param comp the Comparator that decides the sorting order
+	 * @param swapper the callback which elements were swapped
+	 * @note This parallelization is invoked through {@link SanityChecks#invokeTask} which the threadpool can be changed as needed
+	 */
+	public static void indirectParallelMergeSort(long[] array, LongComparator comp, Swapper swapper) {
+		indirectParallelMergeSort(array, null, 0, array.length, comp, swapper);
+	}
+	
+	/**
+	 * Sorts the specified range of elements according to the order induced by the specified comparator using Parallel Merge Sort,
+	 * On top of that allows to sort other things along with it.
+	 * This implementation was copied from <a href="https://github.com/vigna/fastutil">FastUtil</a> with a couple custom optimizations
+	 * @param array the array that needs to be sorted
+	 * @param length the maxmium size of the array to be sorted
+	 * @param swapper the callback which elements were swapped
+	 * @param comp the Comparator that decides the sorting order
+	 * @note This parallelization is invoked through {@link SanityChecks#invokeTask} which the threadpool can be changed as needed
+	 */
+	public static void indirectParallelMergeSort(long[] array, int length, LongComparator comp, Swapper swapper) {
+		indirectParallelMergeSort(array, null, 0, length, comp, swapper);
+	}
+	
+	/**
+	 * Sorts the specified range of elements according to the order induced by the specified comparator using Parallel Merge Sort,
+	 * On top of that allows to sort other things along with it.
+	 * This implementation was copied from <a href="https://github.com/vigna/fastutil">FastUtil</a> with a couple custom optimizations
+	 * @param array the array that needs to be sorted
+	 * @param supp the auxillary array that is used to simplify the sorting
+	 * @param from where the array should be sorted from
+	 * @param to where the array should be sorted to
+	 * @param comp the Comparator that decides the sorting order
+	 * @param swapper the callback which elements were swapped
+	 * @note This parallelization is invoked through {@link SanityChecks#invokeTask} which the threadpool can be changed as needed
+	 */
+	public static void indirectParallelMergeSort(long[] array, long[] supp, int from, int to, LongComparator comp, Swapper swapper) {
+		if(SanityChecks.canParallelTask() && to - from >= PARALLEL_THRESHOLD) {
+			SanityChecks.invokeTask(new MergeSortActionCompSwap(array, supp, from, to, comp, swapper));
+			return;
+		}
+		indirectMergeSort(array, supp, from, to, comp, swapper);
 	}
 	
 	/**
@@ -1088,6 +1355,70 @@ public class LongArrays
 	}
 	
 	/**
+	 * Sorts the specified range of elements according to the order induced by the specified comparator using Quick Sort,
+	 * On top of that allows to sort other things along with it.
+	 * This implementation is a custom of <a href="https://github.com/vigna/fastutil">FastUtil</a> quicksort but with a different code structure,
+	 * and that sorting Algorithm is based on the tuned quicksort adapted from Jon L. Bentley and M. DouglasMcIlroy, "Engineering a Sort Function", Software: Practice and Experience, 23(11), pages1249−1265, 1993. 
+	 * @param array the array that needs to be sorted
+	 * @param comp the Comparator that decides the sorting order
+	 * @param swapper the callback which elements were swapped
+	 * @return input array
+	 */
+	public static long[] indirectQuickSort(long[] array, LongComparator comp, Swapper swapper) {
+		indirectQuickSort(array, 0, array.length, comp, swapper);
+		return array;
+	}
+	
+	/**
+	 * Sorts the specified range of elements according to the order induced by the specified comparator using Quick Sort,
+	 * On top of that allows to sort other things along with it.
+	 * This implementation is a custom of <a href="https://github.com/vigna/fastutil">FastUtil</a> quicksort but with a different code structure,
+	 * and that sorting Algorithm is based on the tuned quicksort adapted from Jon L. Bentley and M. DouglasMcIlroy, "Engineering a Sort Function", Software: Practice and Experience, 23(11), pages1249−1265, 1993. 
+	 * @param array the array that needs to be sorted
+	 * @param length the maxmium size of the array to be sorted
+	 * @param comp the Comparator that decides the sorting order
+	 * @param swapper the callback which elements were swapped
+	 */
+	public static void indirectQuickSort(long[] array, int length, LongComparator comp, Swapper swapper) {
+		indirectQuickSort(array, 0, length, comp, swapper);
+	}
+	
+	/**
+	 * Sorts the specified range of elements according to the order induced by the specified comparator using Quick Sort,
+	 * On top of that allows to sort other things along with it.
+	 * This implementation is a custom of <a href="https://github.com/vigna/fastutil">FastUtil</a> quicksort but with a different code structure,
+	 * and that sorting Algorithm is based on the tuned quicksort adapted from Jon L. Bentley and M. DouglasMcIlroy, "Engineering a Sort Function", Software: Practice and Experience, 23(11), pages1249−1265, 1993. 
+	 * @param array the array that needs to be sorted
+	 * @param from where the array should be sorted from
+	 * @param to where the array should be sorted to
+	 * @param comp the Comparator that decides the sorting order
+	 * @param swapper the callback which elements were swapped
+	 */
+	public static void indirectQuickSort(long[] array, int from, int to, LongComparator comp, Swapper swapper) {
+		int length = to - from;
+		if(length <= 0) return;
+		if(length < BASE_THRESHOLD) {
+			indirectSelectionSort(array, from, to, comp, swapper);
+			return;			
+		}
+		long pivot = array[length > 128 ? subMedium(array, from, from + (length / 2), to - 1, length / 8, comp) : medium(array, from, from + (length / 2), to - 1, comp)];
+		int a = from, b = a, c = to - 1, d = c;
+		for(int compare;;swap(array, b++, c--, swapper)) {
+			for(;b<=c && (compare = comp.compare(array[b], pivot)) <= 0;b++) {
+				if(compare == 0) swap(array, a++, b, swapper);
+			}
+			for(;c>=b && (compare = comp.compare(array[c], pivot)) >= 0;c--) {
+				if(compare == 0) swap(array, c, d--, swapper);
+			}
+			if(b>c) break;
+		}
+		swap(array, from, b, Math.min(a - from, b - a), swapper); 
+		swap(array, b, to, Math.min(d - c, to - d - 1), swapper);
+		if((length = b - a) > 1) indirectQuickSort(array, from, from + length, comp, swapper);
+		if((length = d - c) > 1) indirectQuickSort(array, to - length, to, comp, swapper);
+	}
+	
+	/**
 	 * Sorts an array according to the natural ascending order using Quick Sort, 
 	 * This implementation is a custom of <a href="https://github.com/vigna/fastutil">FastUtil</a> quicksort but with a different code structure,
 	 * and that sorting Algorithm is based on the tuned quicksort adapted from Jon L. Bentley and M. DouglasMcIlroy, "Engineering a Sort Function", Software: Practice and Experience, 23(11), pages1249−1265, 1993. 
@@ -1186,6 +1517,55 @@ public class LongArrays
 	}
 	
 	/**
+	 * Sorts the specified range of elements according to the order induced by the specified comparator using Parallel Quick Sort,
+	 * On top of that allows to sort other things along with it.
+	 * This implementation is a custom of <a href="https://github.com/vigna/fastutil">FastUtil</a> quicksort but with a different code structure,
+	 * and that sorting Algorithm is based on the tuned quicksort adapted from Jon L. Bentley and M. DouglasMcIlroy, "Engineering a Sort Function", Software: Practice and Experience, 23(11), pages1249−1265, 1993. 
+	 * @param array the array that needs to be sorted
+	 * @param comp the Comparator that decides the sorting order
+	 * @param swapper the callback which elements were swapped
+	 * @note This parallelization is invoked through {@link SanityChecks#invokeTask} which the threadpool can be changed as needed
+	 */
+	public static void indirectParallelQuickSort(long[] array, LongComparator comp, Swapper swapper) {
+		indirectParallelQuickSort(array, 0, array.length, comp, swapper);
+	}
+	
+	/**
+	 * Sorts the specified range of elements according to the order induced by the specified comparator using Parallel Quick Sort,
+	 * On top of that allows to sort other things along with it.
+	 * This implementation is a custom of <a href="https://github.com/vigna/fastutil">FastUtil</a> quicksort but with a different code structure,
+	 * and that sorting Algorithm is based on the tuned quicksort adapted from Jon L. Bentley and M. DouglasMcIlroy, "Engineering a Sort Function", Software: Practice and Experience, 23(11), pages1249−1265, 1993. 
+	 * @param array the array that needs to be sorted
+	 * @param length the maxmium size of the array to be sorted
+	 * @param comp the Comparator that decides the sorting order
+	 * @param swapper the callback which elements were swapped
+	 * @note This parallelization is invoked through {@link SanityChecks#invokeTask} which the threadpool can be changed as needed
+	 */
+	public static void indirectParallelQuickSort(long[] array, int length, LongComparator comp, Swapper swapper) {
+		indirectParallelQuickSort(array, 0, length, comp, swapper);
+	}
+	
+	/**
+	 * Sorts the specified range of elements according to the order induced by the specified comparator using Parallel Quick Sort,
+	 * On top of that allows to sort other things along with it.
+	 * This implementation is a custom of <a href="https://github.com/vigna/fastutil">FastUtil</a> quicksort but with a different code structure,
+	 * and that sorting Algorithm is based on the tuned quicksort adapted from Jon L. Bentley and M. DouglasMcIlroy, "Engineering a Sort Function", Software: Practice and Experience, 23(11), pages1249−1265, 1993. 
+	 * @param array the array that needs to be sorted
+	 * @param from where the array should be sorted from
+	 * @param to where the array should be sorted to
+	 * @param comp the Comparator that decides the sorting order
+	 * @param swapper the callback which elements were swapped
+	 * @note This parallelization is invoked through {@link SanityChecks#invokeTask} which the threadpool can be changed as needed
+	 */
+	public static void indirectParallelQuickSort(long[] array, int from, int to, LongComparator comp, Swapper swapper) {
+		if(SanityChecks.canParallelTask() && to - from >= PARALLEL_THRESHOLD) {
+			SanityChecks.invokeTask(new QuickSortActionCompSwap(array, from, to, comp, swapper));
+			return;
+		}
+		indirectQuickSort(array, from, to, comp, swapper);
+	}
+	
+	/**
 	 * Sorts an array according to the natural ascending order using Parallel Quick Sort, 
 	 * This implementation is a custom of <a href="https://github.com/vigna/fastutil">FastUtil</a> quicksort but with a different code structure,
 	 * and that sorting Algorithm is based on the tuned quicksort adapted from Jon L. Bentley and M. DouglasMcIlroy, "Engineering a Sort Function", Software: Practice and Experience, 23(11), pages1249−1265, 1993. 
@@ -1236,6 +1616,18 @@ public class LongArrays
 		for(int i = 0;i<length;i++,swap(a, from++, to++));
 	}
 	
+	static void swap(long[] a, int from, int to, Swapper swapper) {
+		swapper.swap(from, to);
+		long t = a[from];
+		a[from] = a[to];
+		a[to] = t;
+	}
+	
+	static void swap(long[] a, int from, int to, int length, Swapper swapper) {
+		to -= length;
+		for(int i = 0;i<length;i++,swap(a, from++, to++, swapper));
+	}
+	
 	static int subMedium(long[] data, int a, int b, int c, int length, LongComparator comp) {
 		return medium(data, medium(data, a, a + length, a + (length * 2), comp), medium(data, b - length, b, b + length, comp), medium(data, c - (length * 2), c - length, c, comp), comp);
 	}
@@ -1258,16 +1650,14 @@ public class LongArrays
 		int from;
 		int to;
 		
-		QuickSortAction(long[] array, int from, int to)
-		{
+		QuickSortAction(long[] array, int from, int to) {
 			this.array = array;
 			this.from = from;
 			this.to = to;
 		}
 		
 		@Override
-		protected void compute()
-		{
+		protected void compute() {
 			int length = to - from;
 			if(length <= 0) return;
 			if(length < BASE_THRESHOLD) {
@@ -1300,8 +1690,7 @@ public class LongArrays
 		int to;
 		LongComparator comp;
 		
-		QuickSortActionComp(long[] array, int from, int to, LongComparator comp)
-		{
+		QuickSortActionComp(long[] array, int from, int to, LongComparator comp) {
 			this.array = array;
 			this.from = from;
 			this.to = to;
@@ -1309,8 +1698,7 @@ public class LongArrays
 		}
 		
 		@Override
-		protected void compute()
-		{
+		protected void compute() {
 			int length = to - from;
 			if(length <= 0) return;
 			if(length < BASE_THRESHOLD) {
@@ -1336,6 +1724,49 @@ public class LongArrays
 		}
 	}
 	
+	static class QuickSortActionCompSwap extends RecursiveAction {
+		private static final long serialVersionUID = 0L;
+		long[] array;
+		int from;
+		int to;
+		LongComparator comp;
+		Swapper swapper;
+		
+		QuickSortActionCompSwap(long[] array, int from, int to, LongComparator comp, Swapper swapper) {
+			this.array = array;
+			this.from = from;
+			this.to = to;
+			this.comp = comp;
+			this.swapper = swapper;
+		}
+		
+		@Override
+		protected void compute() {
+			int length = to - from;
+			if(length <= 0) return;
+			if(length < BASE_THRESHOLD) {
+				indirectSelectionSort(array, from, to, comp, swapper);
+				return;			
+			}
+			long pivot = array[length > 128 ? subMedium(array, from, from + (length / 2), to - 1, length / 8, comp) : medium(array, from, from + (length / 2), to - 1, comp)];
+			int a = from, b = a, c = to - 1, d = c;
+			for(int compare;;swap(array, b++, c--, swapper)) {
+				for(;b<=c && (compare = comp.compare(array[b], pivot)) <= 0;b++) {
+					if(compare == 0) swap(array, a++, b, swapper);
+				}
+				for(;c>=b && (compare = comp.compare(array[c], pivot)) >= 0;c--) {
+					if(compare == 0) swap(array, c, d--, swapper);
+				}
+				if(b>c) break;
+			}
+			swap(array, from, b, Math.min(a - from, b - a), swapper); 
+			swap(array, b, to, Math.min(d - c, to - d - 1), swapper);
+			if(b - a > 1 && d - c > 1) invokeAll(new QuickSortActionCompSwap(array, from, from + (b - a), comp, swapper), new QuickSortActionCompSwap(array, to - (d - c), to, comp, swapper));
+			else if(b - a > 1) new QuickSortActionCompSwap(array, from, from + (b - a), comp, swapper).invoke();
+			else if(d - c > 1) new QuickSortActionCompSwap(array, to - (d - c), to, comp, swapper).invoke();
+		}
+	}
+	
 	static class MergeSortAction extends RecursiveAction {
 		private static final long serialVersionUID = 0L;
 		long[] array;
@@ -1343,8 +1774,7 @@ public class LongArrays
 		int from;
 		int to;
 		
-		MergeSortAction(long[] array, long[] supp, int from, int to)
-		{
+		MergeSortAction(long[] array, long[] supp, int from, int to) {
 			this.array = array;
 			this.supp = supp;
 			this.from = from;
@@ -1352,8 +1782,7 @@ public class LongArrays
 		}
 		
 		@Override
-		protected void compute()
-		{
+		protected void compute() {
 			if(to - from < BASE_THRESHOLD) {
 				insertionSort(array, from, to);
 				return;
@@ -1381,8 +1810,7 @@ public class LongArrays
 		int to;
 		LongComparator comp;
 		
-		MergeSortActionComp(long[] array, long[] supp, int from, int to, LongComparator comp)
-		{
+		MergeSortActionComp(long[] array, long[] supp, int from, int to, LongComparator comp) {
 			this.array = array;
 			this.supp = supp;
 			this.from = from;
@@ -1391,8 +1819,7 @@ public class LongArrays
 		}
 		
 		@Override
-		protected void compute()
-		{
+		protected void compute() {
 			if(to - from < BASE_THRESHOLD) {
 				insertionSort(array, from, to, comp);
 				return;
@@ -1412,22 +1839,64 @@ public class LongArrays
 		}
 	}
 	
+	static class MergeSortActionCompSwap extends RecursiveAction {
+		private static final long serialVersionUID = 0L;
+		long[] array;
+		long[] supp;
+		int from;
+		int to;
+		LongComparator comp;
+		Swapper swapper;
+		
+		MergeSortActionCompSwap(long[] array, long[] supp, int from, int to, LongComparator comp, Swapper swapper) {
+			this.array = array;
+			this.supp = supp;
+			this.from = from;
+			this.to = to;
+			this.comp = comp;
+			this.swapper = swapper;
+		}
+		
+		@Override
+		protected void compute() {
+			if(to - from < BASE_THRESHOLD) {
+				indirectInsertionSort(array, from, to, comp, swapper);
+				return;
+			}
+			if(supp == null) supp = Arrays.copyOf(array, to);
+			int mid = (from + to) >>> 1;
+			invokeAll(new MergeSortActionCompSwap(supp, array, from, mid, comp, swapper), new MergeSortActionCompSwap(supp, array, mid, to, comp, swapper));
+			if(comp.compare(supp[mid - 1], supp[mid]) <= 0)
+			{
+				System.arraycopy(supp, from, array, from, to - from);
+				return;
+			}
+			for(int p = from, q = mid;from < to;from++) {
+				if(q >= to || p < mid && comp.compare(supp[p], supp[q]) < 0) {
+					swapper.swap(from, p);
+					array[from] = supp[p++];
+					continue;
+				}
+				swapper.swap(from, q);
+				array[from] = supp[q++];
+			}
+		}
+	}
+	
 	static class MemFreeMergeSortAction extends RecursiveAction {
 		private static final long serialVersionUID = 0L;
 		long[] array;
 		int from;
 		int to;
 		
-		MemFreeMergeSortAction(long[] array, int from, int to)
-		{
+		MemFreeMergeSortAction(long[] array, int from, int to) {
 			this.array = array;
 			this.from = from;
 			this.to = to;
 		}
 		
 		@Override
-		protected void compute()
-		{
+		protected void compute() {
 			if(to - from < BASE_THRESHOLD) {
 				insertionSort(array, from, to);
 				return;
@@ -1473,8 +1942,7 @@ public class LongArrays
 		int to;
 		LongComparator comp;
 		
-		MemFreeMergeSortActionComp(long[] array, int from, int to, LongComparator comp)
-		{
+		MemFreeMergeSortActionComp(long[] array, int from, int to, LongComparator comp) {
 			this.array = array;
 			this.from = from;
 			this.to = to;
@@ -1482,8 +1950,7 @@ public class LongArrays
 		}
 		
 		@Override
-		protected void compute()
-		{
+		protected void compute() {
 			if(to - from < BASE_THRESHOLD) {
 				insertionSort(array, from, to, comp);
 				return;

@@ -1,0 +1,1474 @@
+package speiger.src.collections.objects.maps.impl.reference;
+
+import java.util.Arrays;
+import java.util.Map;
+import java.util.NoSuchElementException;
+import java.util.Objects;
+import java.util.Optional;
+import java.util.function.Consumer;
+import java.util.function.BiFunction;
+import java.util.function.Predicate;
+import java.util.function.IntPredicate;
+import java.util.OptionalInt;
+
+import speiger.src.collections.objects.collections.ObjectBidirectionalIterator;
+import speiger.src.collections.ints.functions.consumer.IntObjectConsumer;
+import speiger.src.collections.ints.functions.consumer.IntIntConsumer;
+import speiger.src.collections.objects.functions.consumer.ObjectIntConsumer;
+import speiger.src.collections.objects.functions.function.ObjectObjectUnaryOperator;
+import speiger.src.collections.objects.lists.ObjectListIterator;
+import speiger.src.collections.objects.maps.interfaces.Object2IntMap;
+import speiger.src.collections.objects.maps.interfaces.Object2IntOrderedMap;
+import speiger.src.collections.objects.sets.AbstractObjectSet;
+import speiger.src.collections.objects.sets.ObjectOrderedSet;
+import speiger.src.collections.ints.collections.AbstractIntCollection;
+import speiger.src.collections.ints.collections.IntOrderedCollection;
+import speiger.src.collections.ints.collections.IntIterator;
+import speiger.src.collections.ints.functions.function.IntIntUnaryOperator;
+import speiger.src.collections.ints.functions.IntConsumer;
+import speiger.src.collections.ints.lists.IntListIterator;
+import speiger.src.collections.objects.functions.consumer.ObjectObjectConsumer;
+
+import speiger.src.collections.utils.HashUtil;
+
+/**
+ * A Type Specific LinkedHashMap implementation that uses specific arrays to create links between nodes to remove the wrapping of elements
+ * to greatly reduce memory usage. In Addition adding some helper methods to move around elements.
+ * This implementation of SortedMap does not support SubMaps of any kind. It implements the interface due to sortability and first/last access
+ * @param <T> the keyType of elements maintained by this Collection
+ */
+public class Reference2IntLinkedHashMap<T> extends Reference2IntHashMap<T> implements Object2IntOrderedMap<T>
+{
+	/** The Backing array for links between nodes. Left 32 Bits => Previous Entry, Right 32 Bits => Next Entry */
+	protected transient long[] links;
+	/** The First Index in the Map */
+	protected int firstIndex = -1;
+	/** The Last Index in the Map */
+	protected int lastIndex = -1;
+	
+	/**
+	 * Default Constructor
+	 */
+	public Reference2IntLinkedHashMap() {
+		this(HashUtil.DEFAULT_MIN_CAPACITY, HashUtil.DEFAULT_LOAD_FACTOR);
+	}
+	
+	/**
+	 * Constructor that defines the minimum capacity
+	 * @param minCapacity the minimum capacity the HashMap is allowed to be.
+	 * @throws IllegalStateException if the minimum capacity is negative
+	 */
+	public Reference2IntLinkedHashMap(int minCapacity) {
+		this(minCapacity, HashUtil.DEFAULT_LOAD_FACTOR);
+	}
+	
+	/**
+	 * Constructor that defines the minimum capacity and load factor
+	 * @param minCapacity the minimum capacity the HashMap is allowed to be.
+	 * @param loadFactor the percentage of how full the backing array can be before they resize
+	 * @throws IllegalStateException if the minimum capacity is negative
+	 * @throws IllegalStateException if the loadfactor is either below/equal to 0 or above/equal to 1
+	 */
+	public Reference2IntLinkedHashMap(int minCapacity, float loadFactor) {
+		super(minCapacity, loadFactor);
+		links = new long[capacity + 1];
+	}
+	
+	/**
+	 * Helper constructor that allow to create a map from boxed values (it will unbox them)
+	 * @param keys the keys that should be put into the map
+	 * @param values the values that should be put into the map.
+	 * @throws IllegalStateException if the keys and values do not match in lenght
+	 */
+	public Reference2IntLinkedHashMap(T[] keys, Integer[] values) {
+		this(keys, values, HashUtil.DEFAULT_LOAD_FACTOR);
+	}
+	
+	/**
+	 * Helper constructor that allow to create a map from boxed values (it will unbox them)
+	 * @param keys the keys that should be put into the map
+	 * @param values the values that should be put into the map.
+	 * @param loadFactor the percentage of how full the backing array can be before they resize
+	 * @throws IllegalStateException if the keys and values do not match in lenght
+	 * @throws IllegalStateException if the loadfactor is either below/equal to 0 or above/equal to 1
+	 */
+	public Reference2IntLinkedHashMap(T[] keys, Integer[] values, float loadFactor) {
+		this(keys.length, loadFactor);
+		if(keys.length != values.length) throw new IllegalStateException("Input Arrays are not equal size");
+		for(int i = 0,m=keys.length;i<m;i++) put(keys[i], values[i].intValue());
+	}
+	
+	/**
+	 * Helper constructor that allow to create a map from unboxed values
+	 * @param keys the keys that should be put into the map
+	 * @param values the values that should be put into the map.
+	 * @throws IllegalStateException if the keys and values do not match in lenght
+	 */
+	public Reference2IntLinkedHashMap(T[] keys, int[] values) {
+		this(keys, values, HashUtil.DEFAULT_LOAD_FACTOR);
+	}
+	
+	/**
+	 * Helper constructor that allow to create a map from unboxed values
+	 * @param keys the keys that should be put into the map
+	 * @param values the values that should be put into the map.
+	 * @param loadFactor the percentage of how full the backing array can be before they resize
+	 * @throws IllegalStateException if the keys and values do not match in lenght
+	 * @throws IllegalStateException if the loadfactor is either below/equal to 0 or above/equal to 1
+	 */
+	public Reference2IntLinkedHashMap(T[] keys, int[] values, float loadFactor) {
+		this(keys.length, loadFactor);
+		if(keys.length != values.length) throw new IllegalStateException("Input Arrays are not equal size");
+		for(int i = 0,m=keys.length;i<m;i++) put(keys[i], values[i]);
+	}
+	
+	/**
+	 * A Helper constructor that allows to create a Map with exactly the same values as the provided map.
+	 * @param map the values that should be present in the map
+	 */
+	public Reference2IntLinkedHashMap(Map<? extends T, ? extends Integer> map) {
+		this(map, HashUtil.DEFAULT_LOAD_FACTOR);
+	}
+	
+	/**
+	 * A Helper constructor that allows to create a Map with exactly the same values as the provided map.
+	 * @param map the values that should be present in the map
+	 * @param loadFactor the percentage of how full the backing array can be before they resize
+	 * @throws IllegalStateException if the loadfactor is either below/equal to 0 or above/equal to 1
+	 */
+	public Reference2IntLinkedHashMap(Map<? extends T, ? extends Integer> map, float loadFactor) {
+		this(map.size(), loadFactor);
+		putAll(map);
+	}
+	
+	/**
+	 * A Type Specific Helper function that allows to create a new Map with exactly the same values as the provided map.
+	 * @param map the values that should be present in the map
+ 	 */
+	public Reference2IntLinkedHashMap(Object2IntMap<T> map) {
+		this(map, HashUtil.DEFAULT_LOAD_FACTOR);
+	}
+	
+	/**
+	 * A Type Specific Helper function that allows to create a new Map with exactly the same values as the provided map.
+	 * @param map the values that should be present in the map
+	 * @param loadFactor the percentage of how full the backing array can be before they resize
+	 * @throws IllegalStateException if the loadfactor is either below/equal to 0 or above/equal to 1
+ 	 */
+	public Reference2IntLinkedHashMap(Object2IntMap<T> map, float loadFactor) {
+		this(map.size(), loadFactor);
+		putAll(map);
+	}
+	
+	@Override
+	public int putAndMoveToFirst(T key, int value) {
+		Objects.requireNonNull(key);
+		int pos = HashUtil.mix(Objects.hashCode(key)) & mask;
+		while(keys[pos] != null) {
+			if(Objects.equals(keys[pos].get(), key)) {
+				int lastValue = values[pos];
+				values[pos] = value;
+				moveToFirstIndex(pos, false);
+				return lastValue;
+			}
+			pos = ++pos & mask;
+		}
+		keys[pos] = new WeakKey<>(key, queue).index(pos);
+		values[pos] = value;
+		onNodeAdded(pos);
+		moveToFirstIndex(pos, true);
+		if(size++ >= maxFill) rehash(HashUtil.arraySize(size+1, loadFactor));
+		return getDefaultReturnValue();
+	}
+	
+	@Override
+	public int putAndMoveToLast(T key, int value) {
+		Objects.requireNonNull(key);
+		int pos = HashUtil.mix(Objects.hashCode(key)) & mask;
+		while(keys[pos] != null) {
+			if(Objects.equals(keys[pos].get(), key)) {
+				int lastValue = values[pos];
+				values[pos] = value;
+				moveToLastIndex(pos, false);
+				return lastValue;
+			}
+			pos = ++pos & mask;
+		}
+		keys[pos] = new WeakKey<>(key, queue).index(pos);
+		values[pos] = value;
+		onNodeAdded(pos);
+		moveToLastIndex(pos, true);
+		
+		if(size++ >= maxFill) rehash(HashUtil.arraySize(size+1, loadFactor));
+		return getDefaultReturnValue();
+	}
+	
+	@Override
+	public int putFirst(T key, int value) {
+		Objects.requireNonNull(key);
+		int pos = HashUtil.mix(Objects.hashCode(key)) & mask;
+		while(keys[pos] != null) {
+			if(Objects.equals(keys[pos].get(), key)) return values[pos];
+			pos = ++pos & mask;
+		}
+		keys[pos] = new WeakKey<>(key, queue).index(pos);
+		values[pos] = value;
+		onNodeAdded(pos);
+		moveToFirstIndex(pos, true);
+		
+		if(size++ >= maxFill) rehash(HashUtil.arraySize(size+1, loadFactor));
+		return getDefaultReturnValue();
+	}
+	
+	@Override
+	public int putLast(T key, int value) {
+		Objects.requireNonNull(key);
+		int pos = HashUtil.mix(Objects.hashCode(key)) & mask;
+		while(keys[pos] != null) {
+			if(Objects.equals(keys[pos].get(), key)) return values[pos];
+			pos = ++pos & mask;
+		}
+		keys[pos] = new WeakKey<>(key, queue).index(pos);
+		values[pos] = value;
+		onNodeAdded(pos);
+		moveToLastIndex(pos, true);
+		
+		if(size++ >= maxFill) rehash(HashUtil.arraySize(size+1, loadFactor));
+		return getDefaultReturnValue();
+	}
+	
+	@Override
+	public boolean moveToFirst(T key) {
+		Objects.requireNonNull(key);
+		if(isEmpty() || Objects.equals(firstKey(), key)) return false;
+		int pos = HashUtil.mix(Objects.hashCode(key)) & mask;
+		while(keys[pos] != null) {
+			if(Objects.equals(keys[pos].get(), key)) {
+				moveToFirstIndex(pos, false);
+				return true;
+			}
+			pos = ++pos & mask;
+		}
+		return false;
+	}
+	
+	@Override
+	public boolean moveToLast(T key) {
+		Objects.requireNonNull(key);
+		if(isEmpty() || Objects.equals(lastKey(), key)) return false;
+		int pos = HashUtil.mix(Objects.hashCode(key)) & mask;
+		while(keys[pos] != null) {
+			if(Objects.equals(keys[pos].get(), key)) {
+				moveToLastIndex(pos, false);
+				return true;
+			}
+			pos = ++pos & mask;
+		}
+		return false;
+	}
+	
+	@Override
+	public int getAndMoveToFirst(T key) {
+		int index = findIndex(key);
+		if(index < 0) return getDefaultReturnValue();
+		moveToFirstIndex(index, false);
+		return values[index];
+	}
+	
+	@Override
+	public int getAndMoveToLast(T key) {
+		int index = findIndex(key);
+		if(index < 0) return getDefaultReturnValue();
+		moveToLastIndex(index, false);
+		return values[index];
+	}
+	
+	@Override
+	public boolean containsValue(int value) {
+		int index = firstIndex;
+		while(index != -1) {
+			if(values[index] == value) return true;
+			index = (int)links[index];
+		}
+		return false;
+	}
+	
+	@Override
+	@Deprecated
+	public boolean containsValue(Object value) {
+		int index = firstIndex;
+		while(index != -1) {
+			if((value == null && values[index] == getDefaultReturnValue()) || Objects.equals(value, Integer.valueOf(values[index]))) return true;
+			index = (int)links[index];
+		}
+		return false;
+	}
+	
+	@Override
+	public Reference2IntLinkedHashMap<T> copy() {
+		Reference2IntLinkedHashMap<T> map = new Reference2IntLinkedHashMap<>(0, loadFactor);
+		map.minCapacity = minCapacity;
+		map.mask = mask;
+		map.maxFill = maxFill;
+		map.capacity = capacity;
+		map.size = size;
+		map.keys = new WeakKey[keys.length];
+		for(int i = 0,m=keys.length;i<m;i++) {
+			if(keys[i] != null) {
+				map.keys[i] = new WeakKey<>(keys[i].get(), map.queue).index(i);
+			}
+		}
+		map.values = Arrays.copyOf(values, values.length);
+		map.links = Arrays.copyOf(links, links.length);
+		map.firstIndex = firstIndex;
+		map.lastIndex = lastIndex;
+		return map;
+	}
+	
+	@Override
+	public T firstKey() {
+		if(size == 0) throw new NoSuchElementException();
+		return keys[firstIndex].get();
+	}
+	
+	@Override
+	public T pollFirstKey() {
+		if(size == 0) throw new NoSuchElementException();
+		int pos = firstIndex;
+		onNodeRemoved(pos);
+		WeakKey<T> result = keys[pos];
+		size--;
+		shiftKeys(pos);
+		if(capacity > minCapacity && size < maxFill / 4 && capacity > HashUtil.DEFAULT_MIN_CAPACITY) rehash(capacity / 2);
+		return result.get();
+	}
+	
+	@Override
+	public T lastKey() {
+		if(size == 0) throw new NoSuchElementException();
+		return keys[lastIndex].get();
+	}
+	
+	@Override
+	public T pollLastKey() {
+		if(size == 0) throw new NoSuchElementException();
+		int pos = lastIndex;
+		onNodeRemoved(pos);
+		WeakKey<T> result = keys[pos];
+		size--;
+		shiftKeys(pos);
+		if(capacity > minCapacity && size < maxFill / 4 && capacity > HashUtil.DEFAULT_MIN_CAPACITY) rehash(capacity / 2);
+		return result.get();
+	}
+	
+	@Override
+	public int firstIntValue() {
+		if(size == 0) throw new NoSuchElementException();
+		return values[firstIndex];
+	}
+	
+	@Override
+	public int lastIntValue() {
+		if(size == 0) throw new NoSuchElementException();
+		return values[lastIndex];
+	}
+	
+	@Override
+	public Object2IntMap.Entry<T> firstEntry() {
+		if(size == 0) throw new NoSuchElementException();
+		return new BasicEntry<>(keys[firstIndex].get(), values[firstIndex]);
+	}
+	
+	@Override
+	public Object2IntMap.Entry<T> lastEntry() {
+		if(size == 0) throw new NoSuchElementException();
+		return new BasicEntry<>(keys[lastIndex].get(), values[lastIndex]);
+	}
+	
+	@Override
+	public Object2IntMap.Entry<T> pollFirstEntry() {
+		if(size == 0) throw new NoSuchElementException();
+		int pos = firstIndex;
+		onNodeRemoved(pos);
+		BasicEntry<T> result = new BasicEntry<>(keys[pos].get(), values[pos]);
+		size--;
+		shiftKeys(pos);
+		if(capacity > minCapacity && size < maxFill / 4 && capacity > HashUtil.DEFAULT_MIN_CAPACITY) rehash(capacity / 2);
+		return result;
+	}
+	
+	@Override
+	public Object2IntMap.Entry<T> pollLastEntry() {
+		if(size == 0) throw new NoSuchElementException();
+		int pos = lastIndex;
+		onNodeRemoved(pos);
+		BasicEntry<T> result = new BasicEntry<>(keys[pos].get(), values[pos]);
+		size--;
+		shiftKeys(pos);
+		if(capacity > minCapacity && size < maxFill / 4 && capacity > HashUtil.DEFAULT_MIN_CAPACITY) rehash(capacity / 2);
+		return result;
+	}
+	
+	@Override
+	public ObjectOrderedSet<Object2IntMap.Entry<T>> object2IntEntrySet() {
+		if(entrySet == null) entrySet = new MapEntrySet();
+		return (ObjectOrderedSet<Object2IntMap.Entry<T>>)entrySet;
+	}
+	
+	@Override
+	public ObjectOrderedSet<T> keySet() {
+		if(keySet == null) keySet = new KeySet();
+		return (ObjectOrderedSet<T>)keySet;
+	}
+	
+	@Override
+	public IntOrderedCollection values() {
+		if(valuesC == null) valuesC = new Values();
+		return (IntOrderedCollection)valuesC;
+	}
+	
+	@Override
+	public void forEach(ObjectIntConsumer<T> action) {
+		int index = firstIndex;
+		while(index != -1){
+			action.accept(keys[index].get(), values[index]);
+			index = (int)links[index];
+		}
+	}
+	
+	@Override
+	public void clear() {
+		super.clear();
+		firstIndex = lastIndex = -1;
+	}
+	
+	@Override
+	public void clearAndTrim(int size) {
+		int request = Math.max(minCapacity, HashUtil.nextPowerOfTwo((int)Math.ceil(size / loadFactor)));
+		if(request >= capacity) {
+			clear();
+			return;
+		}
+		capacity = request;
+		mask = request-1;
+		maxFill = Math.min((int)Math.ceil(capacity * loadFactor), capacity - 1);
+		for(int i = 0,m=keys.length;i<m;i++) {
+			if(keys[i] != null) keys[i].index(-1);
+		}
+		keys = new WeakKey[request + 1];
+		values = new int[request + 1];
+		links = new long[request + 1];
+		firstIndex = lastIndex = -1;
+		this.size = 0;
+	}
+	
+	protected void moveToFirstIndex(int startPos, boolean adding) {
+		if(size == (adding ? 0 : 1) || firstIndex == startPos) return;
+		if(lastIndex == startPos) {
+			lastIndex = (int)(links[startPos] >>> 32);
+			links[lastIndex] |= 0xFFFFFFFFL;
+		}
+		else {
+			long link = links[startPos];
+			int prev = (int)(link >>> 32);
+			int next = (int)link;
+			links[prev] ^= ((links[prev] ^ (link & 0xFFFFFFFFL)) & 0xFFFFFFFFL);
+			links[next] ^= ((links[next] ^ (link & 0xFFFFFFFF00000000L)) & 0xFFFFFFFF00000000L);
+		}
+		links[firstIndex] ^= ((links[firstIndex] ^ ((startPos & 0xFFFFFFFFL) << 32)) & 0xFFFFFFFF00000000L);
+		links[startPos] = 0xFFFFFFFF00000000L | (firstIndex & 0xFFFFFFFFL);
+		firstIndex = startPos;
+	}
+	
+	protected void moveToLastIndex(int startPos, boolean adding) {
+		if(size == (adding ? 0 : 1) || lastIndex == startPos) return;
+		if(firstIndex == startPos) {
+			firstIndex = (int)links[startPos];
+			links[lastIndex] |= 0xFFFFFFFF00000000L;
+		}
+		else {
+			long link = links[startPos];
+			int prev = (int)(link >>> 32);
+			int next = (int)link;
+			links[prev] ^= ((links[prev] ^ (link & 0xFFFFFFFFL)) & 0xFFFFFFFFL);
+			links[next] ^= ((links[next] ^ (link & 0xFFFFFFFF00000000L)) & 0xFFFFFFFF00000000L);
+		}
+		links[lastIndex] ^= ((links[lastIndex] ^ (startPos & 0xFFFFFFFFL)) & 0xFFFFFFFFL);
+		links[startPos] = ((lastIndex & 0xFFFFFFFFL) << 32) | 0xFFFFFFFFL;
+		lastIndex = startPos;
+	}
+	
+	@Override
+	protected void onNodeAdded(int pos) {
+		if(size == 0) {
+			firstIndex = lastIndex = pos;
+			links[pos] = -1L;
+		}
+		else {
+			links[lastIndex] ^= ((links[lastIndex] ^ (pos & 0xFFFFFFFFL)) & 0xFFFFFFFFL);
+			links[pos] = ((lastIndex & 0xFFFFFFFFL) << 32) | 0xFFFFFFFFL;
+			lastIndex = pos;
+		}
+	}
+	
+	@Override
+	protected void onNodeRemoved(int pos) {
+		if(size == 0) firstIndex = lastIndex = -1;
+		else if(firstIndex == pos) {
+			firstIndex = (int)links[pos];
+			if(0 <= firstIndex) links[firstIndex] |= 0xFFFFFFFF00000000L;
+		}
+		else if(lastIndex == pos) {
+			lastIndex = (int)(links[pos] >>> 32);
+			if(0 <= lastIndex) links[lastIndex] |= 0xFFFFFFFFL;
+		}
+		else {
+			long link = links[pos];
+			int prev = (int)(link >>> 32);
+			int next = (int)link;
+			links[prev] ^= ((links[prev] ^ (link & 0xFFFFFFFFL)) & 0xFFFFFFFFL);
+			links[next] ^= ((links[next] ^ (link & 0xFFFFFFFF00000000L)) & 0xFFFFFFFF00000000L);
+		}
+	}
+	
+	@Override
+	protected void onNodeMoved(int from, int to) {
+		if(size == 1) {
+			firstIndex = lastIndex = to;
+			links[to] = -1L;
+		}
+		else if(firstIndex == from) {
+			firstIndex = to;
+			links[(int)links[from]] ^= ((links[(int)links[from]] ^ ((to & 0xFFFFFFFFL) << 32)) & 0xFFFFFFFF00000000L);
+			links[to] = links[from];
+		}
+		else if(lastIndex == from) {
+			lastIndex = to;
+			links[(int)(links[from] >>> 32)] ^= ((links[(int)(links[from] >>> 32)] ^ (to & 0xFFFFFFFFL)) & 0xFFFFFFFFL);
+			links[to] = links[from];
+		}
+		else {
+			long link = links[from];
+			int prev = (int)(link >>> 32);
+			int next = (int)link;
+			links[prev] ^= ((links[prev] ^ (to & 0xFFFFFFFFL)) & 0xFFFFFFFFL);
+			links[next] ^= ((links[next] ^ ((to & 0xFFFFFFFFL) << 32)) & 0xFFFFFFFF00000000L);
+			links[to] = link;
+		}
+	}
+	
+	@Override
+	protected void rehash(int newSize) {
+		int newMask = newSize - 1;
+		WeakKey<T>[] newKeys = new WeakKey[newSize + 1];
+		int[] newValues = new int[newSize + 1];
+		long[] newLinks = new long[newSize + 1];
+		int i = firstIndex, prev = -1, newPrev = -1, pos;
+		firstIndex = -1;
+		for(int j = size; j-- != 0;) {
+			if(keys[i] == null) pos = newSize;
+			else {
+				pos = HashUtil.mix(keys[i].hash()) & newMask;
+				while(newKeys[pos] != null) pos = ++pos & newMask;
+			}
+			newKeys[pos] = keys[i].index(pos);
+			newValues[pos] = values[i];
+			if(prev != -1) {
+				newLinks[newPrev] ^= ((newLinks[newPrev] ^ (pos & 0xFFFFFFFFL)) & 0xFFFFFFFFL);
+				newLinks[pos] ^= ((newLinks[pos] ^ ((newPrev & 0xFFFFFFFFL) << 32)) & 0xFFFFFFFF00000000L);
+				newPrev = pos;
+			}
+			else {
+				newPrev = firstIndex = pos;
+				newLinks[pos] = -1L;
+			}
+			i = (int)links[prev = i];
+		}
+		links = newLinks;
+		lastIndex = newPrev;
+		if(newPrev != -1) newLinks[newPrev] |= 0xFFFFFFFFL;
+		capacity = newSize;
+		mask = newMask;
+		maxFill = Math.min((int)Math.ceil(capacity * loadFactor), capacity - 1);
+		keys = newKeys;
+		values = newValues;
+	}
+	
+	private class MapEntrySet extends AbstractObjectSet<Object2IntMap.Entry<T>> implements Object2IntOrderedMap.FastOrderedSet<T> {
+		@Override
+		public void addFirst(Object2IntMap.Entry<T> o) { throw new UnsupportedOperationException(); }
+		@Override
+		public void addLast(Object2IntMap.Entry<T> o) { throw new UnsupportedOperationException(); }
+		@Override
+		public boolean addAndMoveToFirst(Object2IntMap.Entry<T> o) { throw new UnsupportedOperationException(); }
+		@Override
+		public boolean addAndMoveToLast(Object2IntMap.Entry<T> o) { throw new UnsupportedOperationException(); }
+		
+		@Override
+		public boolean moveToFirst(Object2IntMap.Entry<T> o) {
+			return Reference2IntLinkedHashMap.this.moveToFirst(o.getKey());
+		}
+		
+		@Override
+		public boolean moveToLast(Object2IntMap.Entry<T> o) {
+			return Reference2IntLinkedHashMap.this.moveToLast(o.getKey());
+		}
+		
+		@Override
+		public Object2IntMap.Entry<T> getFirst() {
+			return new BasicEntry<>(firstKey(), firstIntValue());
+		}
+		
+		@Override
+		public Object2IntMap.Entry<T> getLast() {
+			return new BasicEntry<>(lastKey(), lastIntValue());
+		}
+		
+		@Override
+		public Object2IntMap.Entry<T> removeFirst() {
+			BasicEntry<T> entry = new BasicEntry<>(firstKey(), firstIntValue());
+			pollFirstKey();
+			return entry;
+		}
+		
+		@Override
+		public Object2IntMap.Entry<T> removeLast() {
+			BasicEntry<T> entry = new BasicEntry<>(lastKey(), lastIntValue());
+			pollLastKey();
+			return entry;
+		}
+		
+		@Override
+		public ObjectBidirectionalIterator<Object2IntMap.Entry<T>> iterator() {
+			return new EntryIterator(true);
+		}
+		
+		@Override
+		public ObjectBidirectionalIterator<Object2IntMap.Entry<T>> reverseIterator() {
+			return new EntryIterator(false);
+		}
+		
+		@Override
+		public ObjectBidirectionalIterator<Object2IntMap.Entry<T>> iterator(Object2IntMap.Entry<T> fromElement) {
+			return new EntryIterator(fromElement.getKey());
+		}
+		
+		@Override
+		public ObjectBidirectionalIterator<Object2IntMap.Entry<T>> fastIterator() {
+			return new FastEntryIterator(true);
+		}
+		
+		@Override
+		public ObjectBidirectionalIterator<Object2IntMap.Entry<T>> fastIterator(T fromElement) {
+			return new FastEntryIterator(fromElement);
+		}
+		
+		@Override
+		public MapEntrySet copy() { throw new UnsupportedOperationException(); }
+		
+		@Override
+		public void forEach(Consumer<? super Object2IntMap.Entry<T>> action) {
+			int index = firstIndex;
+			while(index != -1){
+				action.accept(new ValueMapEntry(index));
+				index = (int)links[index];
+			}
+		}
+		
+		@Override
+		public void fastForEach(Consumer<? super Object2IntMap.Entry<T>> action) {
+			MapEntry entry = new MapEntry();
+			int index = firstIndex;
+			while(index != -1){
+				entry.set(index);
+				action.accept(entry);
+				index = (int)links[index];
+			}
+		}
+		
+		@Override
+		public void forEachIndexed(IntObjectConsumer<Object2IntMap.Entry<T>> action) {
+			Objects.requireNonNull(action);
+			if(size() <= 0) return;
+			int count = 0;
+			int index = firstIndex;
+			while(index != -1) {
+				action.accept(count++, new ValueMapEntry(index));
+				index = (int)links[index];
+			}
+		}
+		
+		@Override
+		public <E> void forEach(E input, ObjectObjectConsumer<E, Object2IntMap.Entry<T>> action) {
+			Objects.requireNonNull(action);
+			if(size() <= 0) return;
+			int index = firstIndex;
+			while(index != -1) {
+				action.accept(input, new ValueMapEntry(index));
+				index = (int)links[index];
+			}
+		}
+		
+		@Override
+		public boolean matchesAny(Predicate<Object2IntMap.Entry<T>> filter) {
+			Objects.requireNonNull(filter);
+			if(size() <= 0) return false;
+			MapEntry entry = new MapEntry();
+			int index = firstIndex;
+			while(index != -1) {
+				entry.set(index);
+				if(filter.test(entry)) return true;
+				index = (int)links[index];
+			}
+			return false;
+		}
+		
+		@Override
+		public boolean matchesNone(Predicate<Object2IntMap.Entry<T>> filter) {
+			Objects.requireNonNull(filter);
+			if(size() <= 0) return true;
+			MapEntry entry = new MapEntry();
+			int index = firstIndex;
+			while(index != -1) {
+				entry.set(index);
+				if(filter.test(entry)) return false;
+				index = (int)links[index];
+			}
+			return true;
+		}
+		
+		@Override
+		public boolean matchesAll(Predicate<Object2IntMap.Entry<T>> filter) {
+			Objects.requireNonNull(filter);
+			if(size() <= 0) return true;
+			MapEntry entry = new MapEntry();
+			int index = firstIndex;
+			while(index != -1) {
+				entry.set(index);
+				if(!filter.test(entry)) return false;
+				index = (int)links[index];
+			}
+			return true;
+		}
+		
+		@Override
+		public <E> E reduce(E identity, BiFunction<E, Object2IntMap.Entry<T>, E> operator) {
+			Objects.requireNonNull(operator);
+			E state = identity;
+			int index = firstIndex;
+			while(index != -1) {
+				state = operator.apply(state, new ValueMapEntry(index));
+				index = (int)links[index];
+			}
+			return state;
+		}
+		
+		@Override
+		public Optional<Object2IntMap.Entry<T>> reduce(ObjectObjectUnaryOperator<Object2IntMap.Entry<T>, Object2IntMap.Entry<T>> operator) {
+			Objects.requireNonNull(operator);
+			Object2IntMap.Entry<T> state = null;
+			boolean empty = true;
+			int index = firstIndex;
+			while(index != -1) {
+				if(empty) {
+					empty = false;
+					state = new ValueMapEntry(index);
+					index = (int)links[index];
+					continue;
+				}
+				state = operator.apply(state, new ValueMapEntry(index));
+				index = (int)links[index];
+			}
+			return empty ? Optional.empty() : Optional.ofNullable(state);
+		}
+		
+		@Override
+		public Optional<Object2IntMap.Entry<T>> findFirst(Predicate<Object2IntMap.Entry<T>> filter) {
+			Objects.requireNonNull(filter);
+			if(size() <= 0) return Optional.empty();
+			MapEntry entry = new MapEntry();
+			int index = firstIndex;
+			while(index != -1) {
+				entry.set(index);
+				if(filter.test(entry)) return Optional.ofNullable(entry);
+				index = (int)links[index];
+			}
+			return Optional.empty();
+		}
+		
+		@Override
+		public int count(Predicate<Object2IntMap.Entry<T>> filter) {
+			Objects.requireNonNull(filter);
+			if(size() <= 0) return 0;
+			int result = 0;
+			MapEntry entry = new MapEntry();
+			int index = firstIndex;
+			while(index != -1) {
+				entry.set(index);
+				if(filter.test(entry)) result++;
+				index = (int)links[index];
+			}
+			return result;
+		}
+		
+		@Override
+		@Deprecated
+		public boolean contains(Object o) {
+			if(o instanceof Map.Entry) {
+				if(o instanceof Object2IntMap.Entry) {
+					Object2IntMap.Entry<T> entry = (Object2IntMap.Entry<T>)o;
+					int index = Reference2IntLinkedHashMap.this.findIndex(entry.getKey());
+					if(index >= 0) return entry.getIntValue() == Reference2IntLinkedHashMap.this.values[index];
+				}
+				else {
+					Map.Entry<?, ?> entry = (Map.Entry<?, ?>)o;
+					int index = Reference2IntLinkedHashMap.this.findIndex(entry.getKey());
+					if(index >= 0) return Objects.equals(entry.getValue(), Integer.valueOf(Reference2IntLinkedHashMap.this.values[index]));
+				}
+			}
+			return false;
+		}
+		
+		@Override
+		@Deprecated
+		public boolean remove(Object o) {
+			if(o instanceof Map.Entry) {
+				if(o instanceof Object2IntMap.Entry) {
+					Object2IntMap.Entry<T> entry = (Object2IntMap.Entry<T>)o;
+					return Reference2IntLinkedHashMap.this.remove(entry.getKey(), entry.getIntValue());
+				}
+				Map.Entry<?, ?> entry = (Map.Entry<?, ?>)o;
+				return Reference2IntLinkedHashMap.this.remove(entry.getKey(), entry.getValue());
+			}
+			return false;
+		}
+		
+		@Override
+		public int size() {
+			return Reference2IntLinkedHashMap.this.size();
+		}
+		
+		@Override
+		public void clear() {
+			Reference2IntLinkedHashMap.this.clear();
+		}
+	}
+	
+	private final class KeySet extends AbstractObjectSet<T> implements ObjectOrderedSet<T> {
+		@Override
+		@Deprecated
+		public boolean contains(Object e) {
+			return containsKey(e);
+		}
+		
+		@Override
+		public boolean remove(Object o) {
+			int oldSize = size;
+			Reference2IntLinkedHashMap.this.remove(o);
+			return size != oldSize;
+		}
+		
+		@Override
+		public boolean add(T o) { throw new UnsupportedOperationException(); }
+
+		@Override
+		public void addFirst(T o) { throw new UnsupportedOperationException(); }
+		
+		@Override
+		public void addLast(T o) { throw new UnsupportedOperationException(); }
+		
+		@Override
+		public boolean addAndMoveToFirst(T o) { throw new UnsupportedOperationException(); }
+
+		@Override
+		public boolean addAndMoveToLast(T o) { throw new UnsupportedOperationException(); }
+
+		@Override
+		public boolean moveToFirst(T o) {
+			return Reference2IntLinkedHashMap.this.moveToFirst(o);
+		}
+
+		@Override
+		public boolean moveToLast(T o) {
+			return Reference2IntLinkedHashMap.this.moveToLast(o);
+		}
+		
+		@Override
+		public ObjectListIterator<T> iterator() {
+			return new KeyIterator(true);
+		}
+		
+		@Override
+		public ObjectListIterator<T> reverseIterator() {
+			return new KeyIterator(false);
+		}
+		
+		@Override
+		public ObjectBidirectionalIterator<T> iterator(T fromElement) {
+			return new KeyIterator(fromElement);
+		}
+		
+		@Override
+		public KeySet copy() { throw new UnsupportedOperationException(); }
+		
+		@Override
+		public int size() {
+			return Reference2IntLinkedHashMap.this.size();
+		}
+		
+		@Override
+		public void clear() {
+			Reference2IntLinkedHashMap.this.clear();
+		}
+		
+		@Override
+		public T getFirst() {
+			return firstKey();
+		}
+		
+		@Override
+		public T removeFirst() {
+			return pollFirstKey();
+		}
+
+		@Override
+		public T getLast() {
+			return lastKey();
+		}
+
+		@Override
+		public T removeLast() {
+			return pollLastKey();
+		}
+		
+		@Override
+		public void forEach(Consumer<? super T> action) {
+			int index = firstIndex;
+			while(index != -1){
+				action.accept(keys[index].get());
+				index = (int)links[index];
+			}
+		}
+		
+		@Override
+		public void forEachIndexed(IntObjectConsumer<T> action) {
+			Objects.requireNonNull(action);
+			if(size() <= 0) return;
+			int count = 0;
+			int index = firstIndex;
+			while(index != -1){
+				action.accept(count++, keys[index].get());
+				index = (int)links[index];
+			}
+		}
+		
+		@Override
+		public <E> void forEach(E input, ObjectObjectConsumer<E, T> action) {
+			Objects.requireNonNull(action);
+			if(size() <= 0) return;
+			int index = firstIndex;
+			while(index != -1) {
+				action.accept(input, keys[index].get());
+				index = (int)links[index];
+			}
+		}
+		
+		@Override
+		public boolean matchesAny(Predicate<T> filter) {
+			Objects.requireNonNull(filter);
+			if(size() <= 0) return false;
+			int index = firstIndex;
+			while(index != -1) {
+				if(filter.test(keys[index].get())) return true;
+				index = (int)links[index];
+			}
+			return false;
+		}
+		
+		@Override
+		public boolean matchesNone(Predicate<T> filter) {
+			Objects.requireNonNull(filter);
+			if(size() <= 0) return true;
+			int index = firstIndex;
+			while(index != -1) {
+				if(filter.test(keys[index].get())) return false;
+				index = (int)links[index];
+			}
+			return true;
+		}
+		
+		@Override
+		public boolean matchesAll(Predicate<T> filter) {
+			Objects.requireNonNull(filter);
+			if(size() <= 0) return true;
+			int index = firstIndex;
+			while(index != -1) {
+				if(!filter.test(keys[index].get())) return false;
+				index = (int)links[index];
+			}
+			return true;
+		}
+		
+		@Override
+		public <E> E reduce(E identity, BiFunction<E, T, E> operator) {
+			Objects.requireNonNull(operator);
+			E state = identity;
+			int index = firstIndex;
+			while(index != -1) {
+				state = operator.apply(state, keys[index].get());
+				index = (int)links[index];
+			}
+			return state;
+		}
+		
+		@Override
+		public Optional<T> reduce(ObjectObjectUnaryOperator<T, T> operator) {
+			Objects.requireNonNull(operator);
+			T state = null;
+			boolean empty = true;
+			int index = firstIndex;
+			while(index != -1) {
+				if(empty) {
+					empty = false;
+					state = keys[index].get();
+					index = (int)links[index];
+					continue;
+				}
+				state = operator.apply(state, keys[index].get());
+				index = (int)links[index];
+			}
+			return empty ? Optional.empty() : Optional.ofNullable(state);
+		}
+		
+		@Override
+		public Optional<T> findFirst(Predicate<T> filter) {
+			Objects.requireNonNull(filter);
+			if(size() <= 0) return Optional.empty();
+			int index = firstIndex;
+			while(index != -1){
+				if(filter.test(keys[index].get())) return Optional.ofNullable(keys[index].get());
+				index = (int)links[index];
+			}
+			return Optional.empty();
+		}
+		
+		@Override
+		public int count(Predicate<T> filter) {
+			Objects.requireNonNull(filter);
+			if(size() <= 0) return 0;
+			int result = 0;
+			int index = firstIndex;
+			while(index != -1){
+				if(filter.test(keys[index].get())) result++;
+				index = (int)links[index];
+			}
+			return result;
+		}
+	}
+	
+	private class Values extends AbstractIntCollection implements IntOrderedCollection {
+		@Override
+		public boolean contains(int e) { return containsValue(e); }
+		
+		@Override
+		public boolean add(int o) { throw new UnsupportedOperationException(); }
+		@Override
+		public IntIterator iterator() { return new ValueIterator(true); }
+		@Override
+		public int size() { return Reference2IntLinkedHashMap.this.size(); }
+		@Override
+		public void clear() { Reference2IntLinkedHashMap.this.clear(); }
+		@Override
+		public IntOrderedCollection reversed() { return new AbstractIntCollection.ReverseIntOrderedCollection(this, this::reverseIterator); }
+		private IntIterator reverseIterator() {
+			return new ValueIterator(false);
+		}
+		@Override
+		public void addFirst(int e) { throw new UnsupportedOperationException(); }
+		@Override
+		public void addLast(int e) { throw new UnsupportedOperationException(); }
+		@Override
+		public int getFirstInt() { return firstIntValue(); }
+		@Override
+		public int removeFirstInt() {
+			int result = firstIntValue();
+			pollFirstKey();
+			return result; 
+		}
+		@Override
+		public int getLastInt() { return lastIntValue(); }
+		@Override
+		public int removeLastInt() {
+			int result = lastIntValue();
+			pollLastKey();
+			return result; 
+		}
+		@Override
+		public void forEach(IntConsumer action) {
+			Objects.requireNonNull(action);
+			int index = firstIndex;
+			while(index != -1){
+				action.accept(values[index]);
+				index = (int)links[index];
+			}
+		}
+		
+		@Override
+		public void forEachIndexed(IntIntConsumer action) {
+			Objects.requireNonNull(action);
+			if(size() <= 0) return;
+			int count = 0;
+			int index = firstIndex;
+			while(index != -1){
+				action.accept(count++, values[index]);
+				index = (int)links[index];
+			}
+		}
+		
+		@Override
+		public <E> void forEach(E input, ObjectIntConsumer<E> action) {
+			Objects.requireNonNull(action);
+			if(size() <= 0) return;
+			int index = firstIndex;
+			while(index != -1){
+				action.accept(input, values[index]);
+				index = (int)links[index];
+			}
+		}
+		
+		@Override
+		public boolean matchesAny(IntPredicate filter) {
+			Objects.requireNonNull(filter);
+			if(size() <= 0) return false;
+			int index = firstIndex;
+			while(index != -1){
+				if(filter.test(values[index])) return true;
+				index = (int)links[index];
+			}
+			return false;
+		}
+		
+		@Override
+		public boolean matchesNone(IntPredicate filter) {
+			Objects.requireNonNull(filter);
+			if(size() <= 0) return true;
+			int index = firstIndex;
+			while(index != -1) {
+				if(filter.test(values[index])) return false;
+				index = (int)links[index];
+			}
+			return true;
+		}
+		
+		@Override
+		public boolean matchesAll(IntPredicate filter) {
+			Objects.requireNonNull(filter);
+			if(size() <= 0) return true;
+			int index = firstIndex;
+			while(index != -1) {
+				if(!filter.test(values[index])) return false;
+				index = (int)links[index];
+			}
+			return true;
+		}
+		
+		@Override
+		public int reduce(int identity, IntIntUnaryOperator operator) {
+			Objects.requireNonNull(operator);
+			int state = identity;
+			int index = firstIndex;
+			while(index != -1) {
+				state = operator.applyAsInt(state, values[index]);
+				index = (int)links[index];
+			}
+			return state;
+		}
+		
+		@Override
+		public OptionalInt reduce(IntIntUnaryOperator operator) {
+			Objects.requireNonNull(operator);
+			int state = 0;
+			boolean empty = true;
+			int index = firstIndex;
+			while(index != -1) {
+				if(empty) {
+					empty = false;
+					state = values[index];
+					index = (int)links[index];
+					continue;
+				}
+				state = operator.applyAsInt(state, values[index]);
+				index = (int)links[index];
+			}
+			return empty ? OptionalInt.empty() : OptionalInt.of(state);
+		}
+		
+		@Override
+		public OptionalInt findFirst(IntPredicate filter) {
+			Objects.requireNonNull(filter);
+			if(size() <= 0) return OptionalInt.empty();
+			int index = firstIndex;
+			while(index != -1){
+				if(filter.test(values[index])) return OptionalInt.of(values[index]);
+				index = (int)links[index];
+			}
+			return OptionalInt.empty();
+		}
+		
+		@Override
+		public int count(IntPredicate filter) {
+			Objects.requireNonNull(filter);
+			if(size() <= 0) return 0;
+			int result = 0;
+			int index = firstIndex;
+			while(index != -1){
+				if(filter.test(values[index])) result++;
+				index = (int)links[index];
+			}
+			return result;
+		}
+	}
+	
+	private class FastEntryIterator extends MapIterator implements ObjectListIterator<Object2IntMap.Entry<T>> {
+		MapEntry entry = new MapEntry();
+		
+		public FastEntryIterator(boolean start) { super(start); }
+		public FastEntryIterator(T from) {
+			super(from);
+		}
+		
+		@Override
+		public Object2IntMap.Entry<T> next() {
+			entry.index = nextEntry();
+			return entry;
+		}
+		
+		@Override
+		public Object2IntMap.Entry<T> previous() {
+			entry.index = previousEntry();
+			return entry;
+		}
+		
+		@Override
+		public void set(Object2IntMap.Entry<T> entry) { throw new UnsupportedOperationException(); }
+
+		@Override
+		public void add(Object2IntMap.Entry<T> entry) { throw new UnsupportedOperationException(); }
+	}
+	
+	private class EntryIterator extends MapIterator implements ObjectListIterator<Object2IntMap.Entry<T>> {
+		MapEntry entry;
+		
+		public EntryIterator(boolean start) { super(start); }
+		public EntryIterator(T from) {
+			super(from);
+		}
+		
+		@Override
+		public Object2IntMap.Entry<T> next() {
+			return entry = new ValueMapEntry(nextEntry());
+		}
+		
+		@Override
+		public Object2IntMap.Entry<T> previous() {
+			return entry = new ValueMapEntry(previousEntry());
+		}
+		
+		@Override
+		public void remove() {
+			super.remove();
+			entry.index = -1;
+		}
+
+		@Override
+		public void set(Object2IntMap.Entry<T> entry) { throw new UnsupportedOperationException(); }
+
+		@Override
+		public void add(Object2IntMap.Entry<T> entry) { throw new UnsupportedOperationException(); }
+	}
+	
+	private class KeyIterator extends MapIterator implements ObjectListIterator<T> {
+		
+		public KeyIterator(boolean start) { super(start); }
+		public KeyIterator(T from) {
+			super(from);
+		}
+		
+		@Override
+		public T previous() {
+			return keys[previousEntry()].get();
+		}
+
+		@Override
+		public T next() {
+			return keys[nextEntry()].get();
+		}
+		
+		@Override
+		public void set(T e) { throw new UnsupportedOperationException(); }
+		@Override
+		public void add(T e) { throw new UnsupportedOperationException(); }
+	}
+	
+	private class ValueIterator extends MapIterator implements IntListIterator {
+		public ValueIterator(boolean start) { super(start); }
+		
+		@Override
+		public int previousInt() {
+			return values[previousEntry()];
+		}
+
+		@Override
+		public int nextInt() {
+			return values[nextEntry()];
+		}
+
+		@Override
+		public void set(int e) { throw new UnsupportedOperationException(); }
+
+		@Override
+		public void add(int e) { throw new UnsupportedOperationException(); }
+	}
+	
+	private class MapIterator {
+		boolean forward;
+		int previous = -1;
+		int next = -1;
+		int current = -1;
+		int index = 0;
+		
+		MapIterator(boolean start) {
+			this.forward = start;
+			if(start) next = firstIndex;
+			else previous = lastIndex;
+		}
+		
+		MapIterator(T from) {
+			Objects.requireNonNull(from);
+			if(keys[lastIndex] == from) {
+				previous = lastIndex;
+				index = size;
+			}
+			else {
+				int pos = HashUtil.mix(Objects.hashCode(from)) & mask;
+				WeakKey<T> refKey = null;
+				while((refKey = keys[pos]) != null) {
+					if(Objects.equals(refKey.get(), from)) {
+						next = (int)links[pos];
+						previous = pos;
+						break;
+					}
+					pos = ++pos & mask;
+				}
+				if(previous == -1 && next == -1)
+					throw new NoSuchElementException("The element was not found");
+			}
+		}
+		
+		public boolean hasNext() {
+			return (forward ? next : previous) != -1;
+		}
+
+		public boolean hasPrevious() {
+			return (forward ? previous : next) != -1;
+		}
+		
+		public int nextIndex() {
+			ensureIndexKnown();
+			return index;
+		}
+		
+		public int previousIndex() {
+			ensureIndexKnown();
+			return index - 1;
+		}
+		
+		public void remove() {
+			if(current == -1) throw new IllegalStateException();
+			ensureIndexKnown();
+			if(current == previous) {
+				index--;
+				previous = (int)(links[current] >>> 32);
+			}
+			else next = (int)links[current];
+			size--;
+			if(previous == -1) firstIndex = next;
+			else links[previous] ^= ((links[previous] ^ (next & 0xFFFFFFFFL)) & 0xFFFFFFFFL);
+			
+			if(next == -1) lastIndex = previous;
+			else links[next] ^= ((links[next] ^ ((previous & 0xFFFFFFFFL) << 32)) & 0xFFFFFFFF00000000L);
+			if(current == capacity) {
+				current = -1;
+				keys[capacity] = null;
+				values[capacity] = 0;
+			}
+			else {
+				int slot, last, startPos = current;
+				current = -1;
+				WeakKey<T> current;
+				while(true) {
+					startPos = ((last = startPos) + 1) & mask;
+					while(true){
+						if((current = keys[startPos]) == null) {
+							keys[last] = null;
+							values[last] = 0;
+							return;
+						}
+						slot = HashUtil.mix(current.hash()) & mask;
+						if(last <= startPos ? (last >= slot || slot > startPos) : (last >= slot && slot > startPos)) break;
+						startPos = ++startPos & mask;
+					}
+					keys[last] = current.index(last);
+					values[last] = values[startPos];
+					if(next == startPos) next = last;
+					if(previous == startPos) previous = last;
+					onNodeMoved(startPos, last);
+				}
+			}
+		}
+		
+		public int previousEntry() {
+			if(!hasPrevious()) throw new NoSuchElementException();
+			if(forward) moveBackwards();
+			else moveForwards();
+			if(index >= 0) index--;
+			return current;
+		}
+		
+		public int nextEntry() {
+			if(!hasNext()) throw new NoSuchElementException();
+			if(forward) moveForwards();
+			else moveBackwards();
+			if(index >= 0) index++;
+			return current;
+		}
+		
+		private void moveBackwards() {
+			current = previous;
+			previous = (int)(links[current] >> 32);
+			next = current;
+		}
+		
+		private void moveForwards() {
+			current = next;
+			next = (int)(links[current]);
+			previous = current;
+		}
+		
+		private void ensureIndexKnown() {
+			if(index == -1) {
+				if(previous == -1) {
+					index = 0;
+				}
+				else if(next == -1) {
+					index = size;
+				}
+				else {
+					index = 1;
+					for(int pos = firstIndex;pos != previous;pos = (int)links[pos], index++);
+				}
+			}
+		}
+
+	}
+}

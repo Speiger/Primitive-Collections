@@ -41,6 +41,8 @@ import speiger.src.collections.PACKAGE.maps.impl.misc.ARRAY_MAP;
 #if TYPE_OBJECT
 import speiger.src.collections.PACKAGE.maps.impl.misc.ENUM_MAP;
 import speiger.src.collections.PACKAGE.maps.impl.misc.LINKED_ENUM_MAP;
+import speiger.src.collections.PACKAGE.maps.impl.reference.REF_MAP;
+import speiger.src.collections.PACKAGE.maps.impl.reference.LINKED_REF_MAP;
 #endif
 import speiger.src.collections.PACKAGE.maps.impl.tree.AVL_TREE_MAP;
 import speiger.src.collections.PACKAGE.maps.impl.tree.RB_TREE_MAP;
@@ -104,6 +106,7 @@ public class MAP_TESTS extends TestCase
 #if TYPE_OBJECT
 		constructors.addTest(new TestSuite(MAP_CONSTRUCTOR_TESTS.EnumMap.class));
 		constructors.addTest(new TestSuite(MAP_CONSTRUCTOR_TESTS.LinkedEnumMap.class));
+		constructors.addTest(new TestSuite(MAP_CONSTRUCTOR_TESTS.RefMap.class));
 #endif
 		constructors.addTest(new TestSuite(MAP_CONSTRUCTOR_TESTS.CustomHashMap.class));
 		constructors.addTest(new TestSuite(MAP_CONSTRUCTOR_TESTS.LinkedCustomHashMap.class));
@@ -130,27 +133,29 @@ public class MAP_TESTS extends TestCase
 	}
 	
 	public static void suite(TestSuite suite) {
-		suite.addTest(mapSuite("HASH_MAP", HASH_MAP::new, getFeatures(), -1, true));
-		suite.addTest(orderedMapSuite("LINKED_HASH_MAP", LINKED_HASH_MAP::new, getFeatures(), -1));
-		suite.addTest(orderedMapSuite("IMMUTABLE_HASH_MAP", IMMUTABLE_HASH_MAP::new, getImmutableFeatures(), -1));
+		suite.addTest(mapSuite("HASH_MAP", HASH_MAP::new, getFeatures(), -1, true, true));
+		suite.addTest(orderedMapSuite("LINKED_HASH_MAP", LINKED_HASH_MAP::new, getFeatures(), -1, true));
+		suite.addTest(orderedMapSuite("IMMUTABLE_HASH_MAP", IMMUTABLE_HASH_MAP::new, getImmutableFeatures(), -1, true));
 #if TYPE_OBJECT
 		suite.addTest(enumMapSuite("ENUM_MAP", ENUM_MAP::new, getFeatures(), 5));
 		suite.addTest(enumOrderedMapSuite("LINKED_ENUM_MAP", (K, V) -> K.length <= 0 ? new LINKED_ENUM_MAP<>(AnEnum.class) : new LINKED_ENUM_MAP<>(K, V), getFeatures(), 5));
+		suite.addTest(mapSuite("REF_MAP", REF_MAP::new, getFeatures(), - 1, true, false));
+		suite.addTest(orderedMapSuite("LINKED_REF_MAP", LINKED_REF_MAP::new, getFeatures(), - 1, false));
 #endif
-		suite.addTest(mapSuite("CUSTOM_HASH_MAP", (K, V) -> new CUSTOM_HASH_MAPKV_BRACES(K, V, HashStrategy.INSTANCE), getFeatures(), -1, true));
-		suite.addTest(orderedMapSuite("LINKED_CUSTOM_HASH_MAP", (K, V) -> new LINKED_CUSTOM_HASH_MAPKV_BRACES(K, V, HashStrategy.INSTANCE), getFeatures(), -1));
-		suite.addTest(orderedMapSuite("ARRAY_MAP", ARRAY_MAP::new, getFeatures(), -1));
+		suite.addTest(mapSuite("CUSTOM_HASH_MAP", (K, V) -> new CUSTOM_HASH_MAPKV_BRACES(K, V, HashStrategy.INSTANCE), getFeatures(), -1, true, true));
+		suite.addTest(orderedMapSuite("LINKED_CUSTOM_HASH_MAP", (K, V) -> new LINKED_CUSTOM_HASH_MAPKV_BRACES(K, V, HashStrategy.INSTANCE), getFeatures(), -1, true));
+		suite.addTest(orderedMapSuite("ARRAY_MAP", ARRAY_MAP::new, getFeatures(), -1, true));
 		suite.addTest(concurrentMapSuite("CONCURRENT_HASH_MAP", CONCURRENT_HASH_MAP::new, getFeatures(), 2));
 		suite.addTest(concurrentMapSuite("CONCURRENT_HASH_MAP", CONCURRENT_HASH_MAP::new, getFeatures(), 3));
 		suite.addTest(navigableMapSuite("RB_TREE_MAP", RB_TREE_MAP::new, getFeatures(), -1));
 		suite.addTest(navigableMapSuite("AVL_TREE_MAP", AVL_TREE_MAP::new, getFeatures(), -1));
 		suite.addTest(navigableMapSuite("SynchronizedRB_TREE_MAP", (K, V) -> new RB_TREE_MAPKV_BRACES(K, V).synchronize(), getLimitedFeatures(), -1));
 		suite.addTest(navigableMapSuite("UnmodifiableRB_TREE_MAP", (K, V) -> new RB_TREE_MAPKV_BRACES(K, V).unmodifiable(), getLimitedImmutableFeatures(), -1));
-		suite.addTest(orderedMapSuite("SynchronizedORDERED_MAP", (K, V) -> new LINKED_HASH_MAPKV_BRACES(K, V).synchronize(), getFeatures(), -1));
-		suite.addTest(orderedMapSuite("UnmodifiableORDERED_MAP", (K, V) -> new LINKED_HASH_MAPKV_BRACES(K, V).unmodifiable(), getImmutableFeatures(), -1));
-		suite.addTest(mapSuite("EmptyMAP", (K, V) -> MAPS.empty(), getEmptyFeatures(), 0, false));
-		suite.addTest(mapSuite("SingletonMAP", (K, V) -> MAPS.singleton(K[0], V[0]), getEmptyFeatures(), 1, false));
-		suite.addTest(mapSuite("AbstractMap", SIMPLE_TEST_MAP::new, getTestFeatures(), -1, false));
+		suite.addTest(orderedMapSuite("SynchronizedORDERED_MAP", (K, V) -> new LINKED_HASH_MAPKV_BRACES(K, V).synchronize(), getFeatures(), -1, true));
+		suite.addTest(orderedMapSuite("UnmodifiableORDERED_MAP", (K, V) -> new LINKED_HASH_MAPKV_BRACES(K, V).unmodifiable(), getImmutableFeatures(), -1, true));
+		suite.addTest(mapSuite("EmptyMAP", (K, V) -> MAPS.empty(), getEmptyFeatures(), 0, false, true));
+		suite.addTest(mapSuite("SingletonMAP", (K, V) -> MAPS.singleton(K[0], V[0]), getEmptyFeatures(), 1, false, true));
+		suite.addTest(mapSuite("AbstractMap", SIMPLE_TEST_MAP::new, getTestFeatures(), -1, false, true));
 	}
 	
 #if TYPE_OBJECT
@@ -209,14 +214,14 @@ public class MAP_TESTS extends TestCase
 	
 #endif
 	
-	private static Test mapSuite(String name, BiFunction<KEY_STRING_TYPE[], VALUE_STRING_TYPE[], MAP KEY_VALUE_STRING_GENERIC_TYPE> factory, Collection<Feature<?>> features, int size, boolean sorted) {
+	private static Test mapSuite(String name, BiFunction<KEY_STRING_TYPE[], VALUE_STRING_TYPE[], MAP KEY_VALUE_STRING_GENERIC_TYPE> factory, Collection<Feature<?>> features, int size, boolean sorted, boolean allowNullKeys) {
 		SIMPLE_MAP_TEST_GENERATOR.Maps KEY_VALUE_STRING_GENERIC_TYPE generator = new SIMPLE_MAP_TEST_GENERATOR.Maps KEY_VALUE_STRING_GENERIC_TYPE(factory);
 		MAP_TEST_BUILDER KEY_VALUE_STRING_GENERIC_TYPE builder = MAP_TEST_BUILDER.using(generator);
 		builder.shouldBlockKeys(sorted);
 #if TYPE_OBJECT
 		generator.setKeys(createKeys());
 #ignore
-		builder.withFeatures(MapFeature.ALLOWS_NULL_KEYS);
+		if(allowNullKeys) builder.withFeatures(MapFeature.ALLOWS_NULL_KEYS);
 #endignore
 #endif
 #if VALUE_OBJECT
@@ -265,13 +270,13 @@ public class MAP_TESTS extends TestCase
 		return builder.named(name).createTestSuite();
 	}
 	
-	private static Test orderedMapSuite(String name, BiFunction<KEY_STRING_TYPE[], VALUE_STRING_TYPE[], ORDERED_MAP KEY_VALUE_STRING_GENERIC_TYPE> factory, Collection<Feature<?>> features, int size) {
+	private static Test orderedMapSuite(String name, BiFunction<KEY_STRING_TYPE[], VALUE_STRING_TYPE[], ORDERED_MAP KEY_VALUE_STRING_GENERIC_TYPE> factory, Collection<Feature<?>> features, int size, boolean allowNullKeys) {
 		SIMPLE_MAP_TEST_GENERATOR.OrderedMaps KEY_VALUE_STRING_GENERIC_TYPE generator = new SIMPLE_MAP_TEST_GENERATOR.OrderedMaps KEY_VALUE_STRING_GENERIC_TYPE(factory);
 		ORDERED_MAP_TEST_BUILDER KEY_VALUE_STRING_GENERIC_TYPE builder = ORDERED_MAP_TEST_BUILDER.using(generator);
 #if TYPE_OBJECT
 		generator.setKeys(createKeys());
 #ignore
-		builder.withFeatures(MapFeature.ALLOWS_NULL_KEYS);
+		if(allowNullKeys) builder.withFeatures(MapFeature.ALLOWS_NULL_KEYS);
 #endignore
 #endif
 #if VALUE_OBJECT

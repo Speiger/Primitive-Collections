@@ -249,7 +249,7 @@ public class Long2DoubleLinkedOpenHashMap extends Long2DoubleOpenHashMap impleme
 		}
 		else {
 			int pos = HashUtil.mix(Long.hashCode(key)) & mask;
-			while(key == 0) {
+			while(keys[pos] != 0) {
 				if(keys[pos] == key) return values[pos];
 				pos = ++pos & mask;
 			}
@@ -273,7 +273,7 @@ public class Long2DoubleLinkedOpenHashMap extends Long2DoubleOpenHashMap impleme
 		}
 		else {
 			int pos = HashUtil.mix(Long.hashCode(key)) & mask;
-			while(key == 0) {
+			while(keys[pos] != 0) {
 				if(keys[pos] == key) return values[pos];
 				pos = ++pos & mask;
 			}

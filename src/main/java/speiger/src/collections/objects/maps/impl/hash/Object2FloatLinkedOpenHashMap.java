@@ -239,7 +239,7 @@ public class Object2FloatLinkedOpenHashMap<T> extends Object2FloatOpenHashMap<T>
 		}
 		else {
 			int pos = HashUtil.mix(Objects.hashCode(key)) & mask;
-			while(key == null) {
+			while(keys[pos] != null) {
 				if(Objects.equals(keys[pos], key)) return values[pos];
 				pos = ++pos & mask;
 			}
@@ -263,7 +263,7 @@ public class Object2FloatLinkedOpenHashMap<T> extends Object2FloatOpenHashMap<T>
 		}
 		else {
 			int pos = HashUtil.mix(Objects.hashCode(key)) & mask;
-			while(key == null) {
+			while(keys[pos] != null) {
 				if(Objects.equals(keys[pos], key)) return values[pos];
 				pos = ++pos & mask;
 			}

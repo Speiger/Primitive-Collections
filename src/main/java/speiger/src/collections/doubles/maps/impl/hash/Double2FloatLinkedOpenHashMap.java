@@ -249,7 +249,7 @@ public class Double2FloatLinkedOpenHashMap extends Double2FloatOpenHashMap imple
 		}
 		else {
 			int pos = HashUtil.mix(Double.hashCode(key)) & mask;
-			while(Double.doubleToLongBits(key) == 0) {
+			while(Double.doubleToLongBits(keys[pos]) != 0) {
 				if(Double.doubleToLongBits(keys[pos]) == Double.doubleToLongBits(key)) return values[pos];
 				pos = ++pos & mask;
 			}
@@ -273,7 +273,7 @@ public class Double2FloatLinkedOpenHashMap extends Double2FloatOpenHashMap imple
 		}
 		else {
 			int pos = HashUtil.mix(Double.hashCode(key)) & mask;
-			while(Double.doubleToLongBits(key) == 0) {
+			while(Double.doubleToLongBits(keys[pos]) != 0) {
 				if(Double.doubleToLongBits(keys[pos]) == Double.doubleToLongBits(key)) return values[pos];
 				pos = ++pos & mask;
 			}

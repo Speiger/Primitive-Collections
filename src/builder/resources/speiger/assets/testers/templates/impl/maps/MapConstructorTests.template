@@ -27,6 +27,8 @@ import speiger.src.collections.PACKAGE.maps.impl.concurrent.CONCURRENT_HASH_MAP;
 #if TYPE_OBJECT
 import speiger.src.collections.PACKAGE.maps.impl.misc.ENUM_MAP;
 import speiger.src.collections.PACKAGE.maps.impl.misc.LINKED_ENUM_MAP;
+import speiger.src.collections.PACKAGE.maps.impl.reference.REF_MAP;
+import speiger.src.collections.PACKAGE.maps.impl.reference.LINKED_REF_MAP;
 #endif
 
 import speiger.src.collections.PACKAGE.maps.impl.tree.RB_TREE_MAP;
@@ -134,6 +136,97 @@ public class MAP_CONSTRUCTOR_TESTS
 	}
 	
 #if TYPE_OBJECT
+	public static class RefMap extends FILE_KEY_TYPE2FILE_VALUE_TYPEMapConstructorTester KEY_VALUE_STRING_GENERIC_TYPE
+	{
+		public RefMap() {
+			setSimpleConstructor(REF_MAP::new);
+			setSizeConstructor(REF_MAP::new);
+			setPArrayConstructor(REF_MAP::new);
+#if !TYPE_OBJECT || !VALUE_OBJECT
+			setArrayConstructor(REF_MAP::new);
+#endif
+			setPMapConstructor(REF_MAP::new);
+			setMapConstructor(REF_MAP::new);
+		}
+	
+		@Test
+		public void testWrongLoadFactorSize() {
+			setSizeConstructor(T -> new REF_MAP KEY_VALUE_STRING_GENERIC_TYPE(T, 0F));
+			try {
+				testSizeConstructor_smallSize();
+				fail("A Constructor using a 0 LoadFactor should error");
+			} catch(IllegalStateException e) {}
+		
+			setSizeConstructor(T -> new REF_MAP KEY_VALUE_STRING_GENERIC_TYPE(T, 1F));
+			try {
+				testSizeConstructor_smallSize();
+				fail("A Constructor using a 1 LoadFactor should error");
+			} catch(IllegalStateException e) {}
+		}
+	
+#if TYPE_OBJECT
+		@Override
+		protected String[] createKeyElements() {
+			return Arrays.copyOfRange(StringSortTest.NAMES, 0, 100);
+		}
+		
+#endif
+#if VALUE_OBJECT
+		@Override
+		protected String[] createValueElements() {
+			return Arrays.copyOfRange(StringSortTest.NAMES, 100, 200);
+		}
+		
+#endif
+	}
+	
+	public static class LinkedRefMap extends FILE_KEY_TYPE2FILE_VALUE_TYPEMapConstructorTester KEY_VALUE_STRING_GENERIC_TYPE
+	{
+		public LinkedRefMap() {
+			setSimpleConstructor(LINKED_REF_MAP::new);
+			setSizeConstructor(LINKED_REF_MAP::new);
+			setPArrayConstructor(LINKED_REF_MAP::new);
+#if !TYPE_OBJECT || !VALUE_OBJECT
+			setArrayConstructor(LINKED_REF_MAP::new);
+#endif
+			setPMapConstructor(LINKED_REF_MAP::new);
+			setMapConstructor(LINKED_REF_MAP::new);
+		}
+		
+		@Test
+		public void testWrongLoadFactorSize() {
+			setSizeConstructor(T -> new LINKED_REF_MAP KEY_VALUE_STRING_GENERIC_TYPE(T, 0F));
+			try {
+				testSizeConstructor_smallSize();
+				fail("A Constructor using a 0 LoadFactor should error");
+			} catch(IllegalStateException e) {
+			}
+			
+			setSizeConstructor(T -> new LINKED_REF_MAP KEY_VALUE_STRING_GENERIC_TYPE(T, 1F));
+			try {
+				testSizeConstructor_smallSize();
+				fail("A Constructor using a 1 LoadFactor should error");
+			} catch(IllegalStateException e) {
+			}
+		}
+		
+#if TYPE_OBJECT
+		@Override
+		protected String[] createKeyElements() {
+			return Arrays.copyOfRange(StringSortTest.NAMES, 0, 100);
+		}
+		
+#endif
+#if VALUE_OBJECT
+		@Override
+		protected String[] createValueElements() {
+			return Arrays.copyOfRange(StringSortTest.NAMES, 100, 200);
+		}
+		
+#endif
+	}
+	
+	
 #if VALUE_OBJECT
 	public static class EnumMap extends FILE_KEY_TYPE2FILE_VALUE_TYPEMapConstructorTester<AnEnum, String>
 #else
