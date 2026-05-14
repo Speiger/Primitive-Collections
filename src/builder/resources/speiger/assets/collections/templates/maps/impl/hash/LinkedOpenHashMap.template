@@ -288,7 +288,7 @@ public class LINKED_HASH_MAP KEY_VALUE_GENERIC_TYPE extends HASH_MAP KEY_VALUE_G
 		}
 		else {
 			int pos = HashUtil.mix(KEY_TO_HASH(key)) & mask;
-			while(KEY_EQUALS_NULL(key)) {
+			while(KEY_EQUALS_NOT_NULL(keys[pos])) {
 				if(KEY_EQUALS(keys[pos], key)) return values[pos];
 				pos = ++pos & mask;
 			}
@@ -312,7 +312,7 @@ public class LINKED_HASH_MAP KEY_VALUE_GENERIC_TYPE extends HASH_MAP KEY_VALUE_G
 		}
 		else {
 			int pos = HashUtil.mix(KEY_TO_HASH(key)) & mask;
-			while(KEY_EQUALS_NULL(key)) {
+			while(KEY_EQUALS_NOT_NULL(keys[pos])) {
 				if(KEY_EQUALS(keys[pos], key)) return values[pos];
 				pos = ++pos & mask;
 			}
