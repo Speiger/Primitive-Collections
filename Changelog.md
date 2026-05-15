@@ -1,5 +1,18 @@
 # Changelog of versions
 
+### Version 1.0.0
+-Added: Sequenced Collections support.
+-Added: ReferenceMaps
+-Added: IndirectSorting
+-Added: Missing Optionals
+-Added: Collectors for Lists and Sets
+-Added: ReverseCollections for Sequenced/OrderedCollections
+-Breaking Change: FindFirst & reduce without identity use now Optionals instead of defaultValues
+-Breaking Change: Lists and OrderedSets no longer use Poll prefix they use now the java Remove
+-Fixed: #33
+-Fixed: Add/PutAndMoveToFirst wouldn't work if the collection was only with 1 entry present.
+-Fixed: Various new bugs found with the expansion of the unit tests.
+
 ### Version 0.9.0
 - Added: getFirst/getLast/removeFirst/removeLast to List.class.
 - Added: Dedicated Set toArray implementations.

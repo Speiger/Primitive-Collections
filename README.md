@@ -27,6 +27,7 @@ Such as pruning classes that are not needed in your code.
 - HashSets/Maps (Linked & HashControl)
 - TreeSets/Maps (RB & AVL)
 - EnumMaps
+- ReferenceMaps (Weak Keys)
 - Immutable Maps/Lists/Sets
 - ConcurrentHashMaps
 - Priority Queues
@@ -51,14 +52,14 @@ repositories {
     }
 }
 dependencies {
-	implementation 'com.github.Speiger:Primitive-Collections:0.9.0'
+	implementation 'com.github.Speiger:Primitive-Collections:1.0.0'
 }
 ```
 
 Using Maven Central
 ```groovy
 dependencies {
-	implementation 'io.github.speiger:Primitive-Collections:0.9.0'
+	implementation 'io.github.speiger:Primitive-Collections:1.0.0'
 }
 ```
 
