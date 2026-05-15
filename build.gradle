@@ -1,7 +1,7 @@
 plugins {
     id 'java-library'
     id "jacoco"
-	id "com.vanniktech.maven.publish" version "0.28.0"
+//	id "com.vanniktech.maven.publish" version "0.28.0"
 }
 
 tasks.withType(JavaCompile) {
@@ -332,49 +332,49 @@ tasks.withType(PublishToMavenLocal) {
 //Maven central Start
 //Disabling due to java8 incompat, only needed to manually publishing anyways
 
-signing.useGpgCmd()
-
-import com.vanniktech.maven.publish.SonatypeHost
-import com.vanniktech.maven.publish.JavaLibrary
-import com.vanniktech.maven.publish.JavadocJar
-
-mavenPublishing {
-  configure(new JavaLibrary(new JavadocJar.None(), true))
-}
-
-mavenPublishing {
-    publishToMavenCentral(SonatypeHost.CENTRAL_PORTAL)
-
-    signAllPublications()
-    pom {
-		name = 'Primitive Collections'
-		description = 'A Primitive Collection library that reduces memory usage and improves performance'
-		url = 'https://github.com/Speiger/Primitive-Collections'
-		version = project.version	
-		group = 'io.github.speiger'
-        licenses {
-            license {
-				name = 'The Apache License, Version 2.0'
-				url = 'http://www.apache.org/licenses/LICENSE-2.0.txt'
-            }
-        }
-
-        developers {
-			developer {
-				id = 'speiger'
-				name = 'Speiger'
-			}
-        }
-
-        scm {
-            connection = 'scm:git:git://github.com/Speiger/Primitive-Collections.git'
-            developerConnection = 'scm:git:ssh://github.com:Speiger/Primitive-Collections.git'
-            url = 'https://github.com/Speiger/Primitive-Collections'
-        }
-                
-        issueManagement {
-			system = 'github'
-			url = 'https://github.com/Speiger/Primitive-Collections/issues'
-		}
-    }
-}
+//signing.useGpgCmd()
+//
+//import com.vanniktech.maven.publish.SonatypeHost
+//import com.vanniktech.maven.publish.JavaLibrary
+//import com.vanniktech.maven.publish.JavadocJar
+//
+//mavenPublishing {
+//  configure(new JavaLibrary(new JavadocJar.None(), true))
+//}
+//
+//mavenPublishing {
+//    publishToMavenCentral(SonatypeHost.CENTRAL_PORTAL)
+//
+//    signAllPublications()
+//    pom {
+//		name = 'Primitive Collections'
+//		description = 'A Primitive Collection library that reduces memory usage and improves performance'
+//		url = 'https://github.com/Speiger/Primitive-Collections'
+//		version = project.version	
+//		group = 'io.github.speiger'
+//        licenses {
+//            license {
+//				name = 'The Apache License, Version 2.0'
+//				url = 'http://www.apache.org/licenses/LICENSE-2.0.txt'
+//            }
+//        }
+//
+//        developers {
+//			developer {
+//				id = 'speiger'
+//				name = 'Speiger'
+//			}
+//        }
+//
+//        scm {
+//            connection = 'scm:git:git://github.com/Speiger/Primitive-Collections.git'
+//            developerConnection = 'scm:git:ssh://github.com:Speiger/Primitive-Collections.git'
+//            url = 'https://github.com/Speiger/Primitive-Collections'
+//        }
+//                
+//        issueManagement {
+//			system = 'github'
+//			url = 'https://github.com/Speiger/Primitive-Collections/issues'
+//		}
+//    }
+//}
