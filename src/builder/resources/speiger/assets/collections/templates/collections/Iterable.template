@@ -39,6 +39,9 @@ import speiger.src.collections.PACKAGE.functions.OPTIONAL;
 import speiger.src.collections.PACKAGE.functions.function.TO_OBJECT_FUNCTION;
 import speiger.src.collections.ints.functions.consumer.BI_FROM_INT_CONSUMER;
 import speiger.src.collections.objects.functions.consumer.BI_FROM_OBJECT_CONSUMER;
+#if !TYPE_OBJECT
+import speiger.src.collections.PACKAGE.functions.consumer.BI_TO_OBJECT_CONSUMER;
+#endif
 #if !JDK_FUNCTION
 import speiger.src.collections.PACKAGE.functions.function.PREDICATE;
 #endif
@@ -151,6 +154,18 @@ public interface ITERABLE KEY_GENERIC_TYPE extends Iterable<CLASS_TYPE>
 	default <E> void forEach(E input, BI_FROM_OBJECT_CONSUMER KSK_GENERIC_TYPE<E> action) {
 		Objects.requireNonNull(action);
 		iterator().forEachRemaining(input, action);
+	}
+	
+	/**
+	 * Helper function to reduce Lambda usage and allow for more method references, since these are faster/cleaner.
+	 * @param action The action to be performed for each element
+	 * @param input the object that should be included
+	 * @param <E> the generic type of the Object
+	 * @throws java.lang.NullPointerException if the specified action is null
+	 */
+	default <E> void forEach(BI_TO_OBJECT_CONSUMER KKS_GENERIC_TYPE<E> action, E input) {
+		Objects.requireNonNull(action);
+		iterator().forEachRemaining(action, input);
 	}
 	
 #if SPLIT_ITERATOR_FEATURE

@@ -25,9 +25,14 @@ import speiger.src.collections.PACKAGE.collections.BI_ITERATOR;
 import speiger.src.collections.PACKAGE.functions.COMPARATOR;
 import speiger.src.collections.PACKAGE.functions.CONSUMER;
 import speiger.src.collections.objects.functions.consumer.BI_FROM_OBJECT_CONSUMER;
+#if !VALUE_OBJECT
+import speiger.src.collections.PACKAGE.functions.consumer.BI_TO_OBJECT_CONSUMER;
 #endif
+#endif
+#if !TYPE_INT || !SAME_TYPE
 import speiger.src.collections.ints.functions.consumer.BI_FROM_INT_CONSUMER;
-#if !TYPE_OBJECT && !VALUE_OBJECT
+#endif
+#if !TYPE_OBJECT && !VALUE_OBJECT && !TYPE_INT
 import speiger.src.collections.ints.functions.consumer.IntObjectConsumer;
 #endif
 #if !SAME_TYPE && !TYPE_INT
@@ -36,7 +41,7 @@ import speiger.src.collections.ints.functions.consumer.VALUE_BI_FROM_INT_CONSUME
 #if !VALUE_BOOLEAN || !JDK_TYPE
 import speiger.src.collections.PACKAGE.functions.function.FUNCTION;
 #endif
-#if !TYPE_INT || !SAME_TYPE
+#if !TYPE_INT || !SAME_TYPE || !VALUE_OBJECT
 import speiger.src.collections.PACKAGE.functions.consumer.BI_CONSUMER;
 #endif
 #if !TYPE_OBJECT && !JDK_TYPE
@@ -74,7 +79,9 @@ import speiger.src.collections.objects.functions.consumer.ObjectObjectConsumer;
 #if !SAME_TYPE
 #if !TYPE_OBJECT
 import speiger.src.collections.objects.functions.consumer.VALUE_BI_FROM_OBJECT_CONSUMER;
-
+#endif
+#if !VALUE_OBJECT && !VALUE_INT
+import speiger.src.collections.VALUE_PACKAGE.functions.consumer.VALUE_BI_TO_OBJECT_CONSUMER;
 #endif
 #if !JDK_VALUE
 import speiger.src.collections.VALUE_PACKAGE.functions.function.VALUE_PREDICATE;
@@ -1341,6 +1348,13 @@ public class RB_TREE_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_VALUE_G
 		}
 		
 		@Override
+		public <E> void forEach(BI_TO_OBJECT_CONSUMER KKS_GENERIC_TYPE<E> action, E input) {
+			Objects.requireNonNull(action);
+			for(Node KEY_VALUE_GENERIC_TYPE entry = start(), end = end();entry != null && (end == null || (end != previous(entry)));entry = next(entry))
+				action.accept(entry.key, input);
+		}
+		
+		@Override
 		public boolean matchesAny(PREDICATE KEY_GENERIC_TYPE filter) {
 			Objects.requireNonNull(filter);
 			for(Node KEY_VALUE_GENERIC_TYPE entry = start(), end = end();entry != null && (end == null || (end != previous(entry)));entry = next(entry))
@@ -2053,6 +2067,13 @@ public class RB_TREE_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_VALUE_G
 			}
 			
 			@Override
+			public <E> void forEach(ObjectObjectConsumer<MAP.Entry KEY_VALUE_GENERIC_TYPE, E> action, E input) {
+				Objects.requireNonNull(action);
+				for(Node KEY_VALUE_GENERIC_TYPE entry = subLowest(), last = subHighest();entry != null && (last == null || last != previous(entry));entry = next(entry))
+					action.accept(new BasicEntryKV_BRACES(entry.key, entry.value), input);
+			}
+			
+			@Override
 			public boolean matchesAny(Predicate<MAP.Entry KEY_VALUE_GENERIC_TYPE> filter) {
 				Objects.requireNonNull(filter);
 				if(size() <= 0) return false;
@@ -2190,6 +2211,13 @@ public class RB_TREE_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_VALUE_G
 				Objects.requireNonNull(action);
 				for(Node KEY_VALUE_GENERIC_TYPE entry = subLowest(), last = subHighest();entry != null && (last == null || last != previous(entry));entry = next(entry))
 					action.accept(input, entry.value);
+			}
+			
+			@Override
+			public <E> void forEach(VALUE_BI_TO_OBJECT_CONSUMER VVS_GENERIC_TYPE<E> action, E input) {
+				Objects.requireNonNull(action);
+				for(Node KEY_VALUE_GENERIC_TYPE entry = subLowest(), last = subHighest();entry != null && (last == null || last != previous(entry));entry = next(entry))
+					action.accept(entry.value, input);
 			}
 			
 			@Override
@@ -2549,6 +2577,13 @@ public class RB_TREE_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_VALUE_G
 		}
 		
 		@Override
+		public <E> void forEach(VALUE_BI_TO_OBJECT_CONSUMER VVS_GENERIC_TYPE<E> action, E input) {
+			Objects.requireNonNull(action);
+			for(Node KEY_VALUE_GENERIC_TYPE entry = first;entry != null;entry = entry.next())
+				action.accept(entry.value, input);
+		}
+		
+		@Override
 		public boolean matchesAny(VALUE_PREDICATE VALUE_GENERIC_TYPE filter) {
 			Objects.requireNonNull(filter);
 			for(Node KEY_VALUE_GENERIC_TYPE entry = first;entry != null;entry = entry.next())
@@ -2711,6 +2746,13 @@ public class RB_TREE_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_VALUE_G
 			Objects.requireNonNull(action);
 			for(Node KEY_VALUE_GENERIC_TYPE entry = first;entry != null;entry = entry.next())
 				action.accept(input, new BasicEntryKV_BRACES(entry.key, entry.value));
+		}
+		
+		@Override
+		public <E> void forEach(ObjectObjectConsumer<MAP.Entry KEY_VALUE_GENERIC_TYPE, E> action, E input) {
+			Objects.requireNonNull(action);
+			for(Node KEY_VALUE_GENERIC_TYPE entry = first;entry != null;entry = entry.next())
+				action.accept(new BasicEntryKV_BRACES(entry.key, entry.value), input);
 		}
 		
 		@Override

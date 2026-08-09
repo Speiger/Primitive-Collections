@@ -25,15 +25,20 @@ import speiger.src.collections.PACKAGE.collections.ITERATOR;
 #endif
 import speiger.src.collections.PACKAGE.functions.CONSUMER;
 import speiger.src.collections.objects.functions.consumer.BI_FROM_OBJECT_CONSUMER;
+#if !VALUE_OBJECT
+import speiger.src.collections.PACKAGE.functions.consumer.BI_TO_OBJECT_CONSUMER;
 #endif
+#endif
+#if !TYPE_INT || !SAME_TYPE
 import speiger.src.collections.ints.functions.consumer.BI_FROM_INT_CONSUMER;
-#if !TYPE_OBJECT && !VALUE_OBJECT
+#endif
+#if !TYPE_OBJECT && !VALUE_OBJECT && !TYPE_INT
 import speiger.src.collections.ints.functions.consumer.IntObjectConsumer;
 #endif
 #if !SAME_TYPE && !TYPE_INT
 import speiger.src.collections.ints.functions.consumer.VALUE_BI_FROM_INT_CONSUMER;
 #endif
-#if !TYPE_INT || !SAME_TYPE
+#if !TYPE_INT || !SAME_TYPE || !VALUE_OBJECT
 import speiger.src.collections.PACKAGE.functions.consumer.BI_CONSUMER;
 #endif
 #if !VALUE_BOOLEAN || !JDK_TYPE
@@ -81,6 +86,9 @@ import speiger.src.collections.objects.functions.consumer.ObjectObjectConsumer;
 #if !SAME_TYPE
 #if !TYPE_OBJECT
 import speiger.src.collections.objects.functions.consumer.VALUE_BI_FROM_OBJECT_CONSUMER;
+#endif
+#if !VALUE_OBJECT && !VALUE_INT
+import speiger.src.collections.VALUE_PACKAGE.functions.consumer.VALUE_BI_TO_OBJECT_CONSUMER;
 #endif
 #if !JDK_VALUE
 import speiger.src.collections.VALUE_PACKAGE.functions.function.VALUE_PREDICATE;
@@ -759,6 +767,25 @@ public class CONCURRENT_HASH_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY
 		}
 		
 		@Override
+		public <E> void forEach(ObjectObjectConsumer<MAP.Entry KEY_VALUE_GENERIC_TYPE, E> action, E input) {
+			Objects.requireNonNull(action);
+			for(int i = 0,m=segments.length;i<m;i++) {
+				Segment KEY_VALUE_GENERIC_TYPE seg = segments[i];
+				long stamp = seg.readLock();
+				try {
+					int index = seg.firstIndex;
+					while(index != -1) {
+						action.accept(new ValueMapEntry(index, i), input);
+						index = (int)seg.links[index];
+					}					
+				}
+				finally {
+					seg.unlockRead(stamp);
+				}
+			}
+		}
+		
+		@Override
 		public boolean matchesAny(Predicate<MAP.Entry KEY_VALUE_GENERIC_TYPE> filter) {
 			Objects.requireNonNull(filter);
 			MapEntry entry = new MapEntry();
@@ -1088,6 +1115,25 @@ public class CONCURRENT_HASH_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY
 		}
 		
 		@Override
+		public <E> void forEach(BI_TO_OBJECT_CONSUMER KKS_GENERIC_TYPE<E> action, E input) {
+			Objects.requireNonNull(action);
+			for(int i = 0,m=segments.length;i<m;i++) {
+				Segment KEY_VALUE_GENERIC_TYPE seg = segments[i];
+				long stamp = seg.readLock();
+				try {
+					int index = seg.firstIndex;
+					while(index != -1){
+						action.accept(seg.keys[index], input);
+						index = (int)seg.links[index];
+					}
+				}
+				finally {
+					seg.unlockRead(stamp);
+				}
+			}
+		}
+		
+		@Override
 		public boolean matchesAny(PREDICATE KEY_GENERIC_TYPE filter) {
 			Objects.requireNonNull(filter);
 			for(int i = 0,m=segments.length;i<m;i++) {
@@ -1346,6 +1392,25 @@ public class CONCURRENT_HASH_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY
 					int index = seg.firstIndex;
 					while(index != -1){
 						action.accept(input, seg.values[index]);
+						index = (int)seg.links[index];
+					}
+				}
+				finally {
+					seg.unlockRead(stamp);
+				}
+			}
+		}
+		
+		@Override
+		public <E> void forEach(VALUE_BI_TO_OBJECT_CONSUMER VVS_GENERIC_TYPE<E> action, E input) {
+			Objects.requireNonNull(action);
+			for(int i = 0,m=segments.length;i<m;i++) {
+				Segment KEY_VALUE_GENERIC_TYPE seg = segments[i];
+				long stamp = seg.readLock();
+				try {
+					int index = seg.firstIndex;
+					while(index != -1){
+						action.accept(seg.values[index], input);
 						index = (int)seg.links[index];
 					}
 				}

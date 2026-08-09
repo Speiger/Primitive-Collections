@@ -46,6 +46,9 @@ import speiger.src.collections.PACKAGE.functions.function.PREDICATE;
 import speiger.src.collections.PACKAGE.functions.function.UNARY_OPERATOR;
 import speiger.src.collections.ints.functions.consumer.BI_FROM_INT_CONSUMER;
 import speiger.src.collections.objects.functions.consumer.BI_FROM_OBJECT_CONSUMER;
+#if !TYPE_OBJECT
+import speiger.src.collections.PACKAGE.functions.consumer.BI_TO_OBJECT_CONSUMER;
+#endif
 #if !TYPE_BOOLEAN
 import speiger.src.collections.utils.HashUtil;
 #endif
@@ -150,6 +153,9 @@ public class COLLECTIONS
 	/**
 	 * Internal Use mainly. Its a collection wrapper with 0 dependencies for those actions where a collector is needed.
 	 */
+#if !TYPE_OBJECT
+	@SuppressWarnings("exports")
+#endif
 	public static GENERIC_KEY_BRACES CollectionWrapper KEY_GENERIC_TYPE wrapper() {
 		return new CollectionWrapperBRACES();
 	}
@@ -295,10 +301,24 @@ public class COLLECTIONS
 		}
 		
 		@Override
+		public void forEachIndexed(BI_FROM_INT_CONSUMER KEY_GENERIC_TYPE action) {
+			Objects.requireNonNull(action);
+			for(int i = 0;i<size;i++)
+				action.accept(i, elements[i]);
+		}
+		
+		@Override
 		public <E> void forEach(E input, BI_FROM_OBJECT_CONSUMER KSK_GENERIC_TYPE<E> action) {
 			Objects.requireNonNull(action);
 			for(int i = 0;i<size;i++)
 				action.accept(input, elements[i]);		
+		}
+		
+		@Override
+		public <E> void forEach(BI_TO_OBJECT_CONSUMER KKS_GENERIC_TYPE<E> action, E input) {
+			Objects.requireNonNull(action);
+			for(int i = 0;i<size;i++)
+				action.accept(elements[i], input);
 		}
 		
 		@Override
@@ -855,6 +875,10 @@ public class COLLECTIONS
 		@Override
 		public void forEachIndexed(BI_FROM_INT_CONSUMER KEY_GENERIC_TYPE action) { synchronized(mutex) { c.forEachIndexed(action); } }
 		@Override
+		public <E> void forEach(E input, BI_FROM_OBJECT_CONSUMER KSK_GENERIC_TYPE<E> action) { synchronized(mutex) { c.forEach(input, action); } }
+		@Override
+		public <E> void forEach(BI_TO_OBJECT_CONSUMER KKS_GENERIC_TYPE<E> action, E input) { synchronized(mutex) { c.forEach(action, input); } }
+		@Override
 		public int hashCode() { synchronized(mutex) { return c.hashCode(); } }
 		@Override
 		public boolean equals(Object obj) {
@@ -863,8 +887,6 @@ public class COLLECTIONS
 		}
 		@Override
 		public String toString() { synchronized(mutex) { return c.toString(); } }
-		@Override
-		public <E> void forEach(E input, BI_FROM_OBJECT_CONSUMER KSK_GENERIC_TYPE<E> action) { synchronized(mutex) { c.forEach(input, action); } }
 		@Override
 		public boolean matchesAny(PREDICATE KEY_GENERIC_TYPE filter) { synchronized(mutex) { return c.matchesAny(filter); } }
 		@Override
@@ -1010,13 +1032,15 @@ public class COLLECTIONS
 		@Override
 		public void forEachIndexed(BI_FROM_INT_CONSUMER KEY_GENERIC_TYPE action) { c.forEachIndexed(action); }
 		@Override
+		public <E> void forEach(E input, BI_FROM_OBJECT_CONSUMER KSK_GENERIC_TYPE<E> action) { c.forEach(input, action); }
+		@Override
+		public <E> void forEach(BI_TO_OBJECT_CONSUMER KKS_GENERIC_TYPE<E> action, E input) { c.forEach(action, input); }
+		@Override
 		public int hashCode() { return c.hashCode(); }
 		@Override
 		public boolean equals(Object obj) { return obj == this || c.equals(obj); }
 		@Override
 		public String toString() { return c.toString(); }
-		@Override
-		public <E> void forEach(E input, BI_FROM_OBJECT_CONSUMER KSK_GENERIC_TYPE<E> action) { c.forEach(input, action); }
 		@Override
 		public boolean matchesAny(PREDICATE KEY_GENERIC_TYPE filter) { return c.matchesAny(filter); }
 		@Override

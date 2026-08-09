@@ -45,6 +45,15 @@ public class FILE_KEY_TYPECollectionForEachTester KEY_GENERIC_TYPE extends ABSTR
 	}
 	
 #ignore
+	@CollectionFeature.Require(absent = KNOWN_ORDER)
+	public void testForEachExtraUnknownOrder() {
+#endignore
+		LIST KEY_GENERIC_TYPE elements = new ARRAY_LISTBRACES();
+		collection.forEach(elements, (K, V) -> V.add(K));
+		HELPERS.assertContentsAnyOrder(elements, createSamplesArray());
+	}
+	
+#ignore
 	@CollectionFeature.Require(KNOWN_ORDER)
 	public void testForEachKnownOrder() {
 #endignore
@@ -68,6 +77,15 @@ public class FILE_KEY_TYPECollectionForEachTester KEY_GENERIC_TYPE extends ABSTR
 #endignore
 		LIST KEY_GENERIC_TYPE elements = new ARRAY_LISTBRACES();
 		collection.forEach(elements, LIST::add);
+		assertEquals("Different ordered iteration", HELPERS.copyToList(getOrderedElements()), elements);
+	}
+
+#ignore
+	@CollectionFeature.Require(KNOWN_ORDER)
+	public void testForEachExtraKnownOrderReverse() {
+#endignore
+		LIST KEY_GENERIC_TYPE elements = new ARRAY_LISTBRACES();
+		collection.forEach((K, V) -> V.add(K), elements);
 		assertEquals("Different ordered iteration", HELPERS.copyToList(getOrderedElements()), elements);
 	}
 }

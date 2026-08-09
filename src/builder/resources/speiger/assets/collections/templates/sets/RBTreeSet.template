@@ -33,6 +33,9 @@ import speiger.src.collections.PACKAGE.functions.OPTIONAL;
 #endif
 import speiger.src.collections.ints.functions.consumer.BI_FROM_INT_CONSUMER;
 import speiger.src.collections.objects.functions.consumer.BI_FROM_OBJECT_CONSUMER;
+#if !TYPE_OBJECT
+import speiger.src.collections.PACKAGE.functions.consumer.BI_TO_OBJECT_CONSUMER;
+#endif
 #if !JDK_FUNCTION
 import speiger.src.collections.PACKAGE.functions.function.PREDICATE;
 #endif
@@ -422,6 +425,13 @@ public class RB_TREE_SET KEY_GENERIC_TYPE extends ABSTRACT_SET KEY_GENERIC_TYPE 
 		Objects.requireNonNull(action);
 		for(Entry KEY_GENERIC_TYPE entry = first;entry != null;entry = entry.next())
 			action.accept(input, entry.key);		
+	}
+	
+	@Override
+	public <E> void forEach(BI_TO_OBJECT_CONSUMER KKS_GENERIC_TYPE<E> action, E input) {
+		Objects.requireNonNull(action);
+		for(Entry KEY_GENERIC_TYPE entry = first;entry != null;entry = entry.next())
+			action.accept(entry.key, input);		
 	}
 	
 	@Override
@@ -1369,6 +1379,13 @@ public class RB_TREE_SET KEY_GENERIC_TYPE extends ABSTRACT_SET KEY_GENERIC_TYPE 
 			Objects.requireNonNull(action);
 			for(Entry KEY_GENERIC_TYPE entry = start();entry != null && inRange(entry.key);entry = next(entry))
 				action.accept(input, entry.key);		
+		}
+		
+		@Override
+		public <E> void forEach(BI_TO_OBJECT_CONSUMER KKS_GENERIC_TYPE<E> action, E input) {
+			Objects.requireNonNull(action);
+			for(Entry KEY_GENERIC_TYPE entry = start();entry != null && inRange(entry.key);entry = next(entry))
+				action.accept(entry.key, input);		
 		}
 		
 		@Override

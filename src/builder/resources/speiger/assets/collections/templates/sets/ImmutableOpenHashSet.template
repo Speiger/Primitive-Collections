@@ -27,6 +27,9 @@ import speiger.src.collections.PACKAGE.functions.OPTIONAL;
 #endif
 import speiger.src.collections.ints.functions.consumer.BI_FROM_INT_CONSUMER;
 import speiger.src.collections.objects.functions.consumer.BI_FROM_OBJECT_CONSUMER;
+#if !TYPE_OBJECT
+import speiger.src.collections.PACKAGE.functions.consumer.BI_TO_OBJECT_CONSUMER;
+#endif
 #if !JDK_FUNCTION
 import speiger.src.collections.PACKAGE.functions.function.PREDICATE;
 #endif
@@ -359,6 +362,16 @@ public class IMMUTABLE_HASH_SET KEY_GENERIC_TYPE extends ABSTRACT_SET KEY_GENERI
 		int index = firstIndex;
 		while(index != -1) {
 			action.accept(input, keys[index]);
+			index = (int)links[index];
+		}
+	}
+	
+	@Override
+	public <E> void forEach(BI_TO_OBJECT_CONSUMER KKS_GENERIC_TYPE<E> action, E input) {
+		Objects.requireNonNull(action);
+		int index = firstIndex;
+		while(index != -1) {
+			action.accept(keys[index], input);
 			index = (int)links[index];
 		}
 	}
