@@ -1,5 +1,10 @@
 # Changelog of versions
 
+### Version 1.0.1
+-Added: AsyncBuilder now supports CompletableFuture
+-Added: forEach(BiConsumer, Input)
+
+
 ### Version 1.0.0
 -Added: Sequenced Collections support.
 -Added: ReferenceMaps
