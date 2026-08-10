@@ -153,9 +153,6 @@ public class COLLECTIONS
 	/**
 	 * Internal Use mainly. Its a collection wrapper with 0 dependencies for those actions where a collector is needed.
 	 */
-#if !TYPE_OBJECT
-	@SuppressWarnings("exports")
-#endif
 	public static GENERIC_KEY_BRACES CollectionWrapper KEY_GENERIC_TYPE wrapper() {
 		return new CollectionWrapperBRACES();
 	}

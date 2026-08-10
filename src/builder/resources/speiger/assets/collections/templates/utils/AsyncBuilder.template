@@ -1,6 +1,7 @@
 package speiger.src.collections.PACKAGE.utils;
 
 import java.util.concurrent.CancellationException;
+import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Executor;
 import java.util.concurrent.TimeUnit;
@@ -520,6 +521,16 @@ public class ASYNC_BUILDER KEY_GENERIC_TYPE
 		return toRun.GET_KEY(timeout, unit);
 	}
 	
+	/**
+	 * Starts the execution of the task and returns a future so it can be used with a future.
+	 * @return the task as a future
+	 */
+	public CompletableFuture<CLASS_TYPE> toFuture() {
+		BASE_TASK KEY_GENERIC_TYPE toRun = task;
+		task = null;
+		return toRun.toFuture();
+	}
+	
 #if !TYPE_OBJECT
 	private static class ReduceTask extends BASE_TASK
 	{
@@ -881,6 +892,7 @@ public class ASYNC_BUILDER KEY_GENERIC_TYPE
 		private static final int CANCELLED = 7;
 		private volatile WaitNode waiter;
 		private volatile int state = CREATED;
+		private volatile boolean locked = false;
 		Consumer<TASK KEY_GENERIC_TYPE> callback;
 		Executor executor = SanityChecks::invokeAsyncTask;
 		KEY_TYPE result;
@@ -949,6 +961,17 @@ public class ASYNC_BUILDER KEY_GENERIC_TYPE
 	    	state = nextState;
 	    	onCompletion();
 	    }
+	    
+		CompletableFuture<CLASS_TYPE> toFuture() {
+			locked = true;
+			Executor exe = this.executor;
+			this.executor = Runnable::run;
+			return CompletableFuture.supplyAsync(() -> {
+				begin();
+				try { return GET_KEY(); }
+				catch(Exception e) { throw new RuntimeException(e); }
+			}, exe);
+		}
 		
 		@Override
 		public boolean cancel(boolean cancelIfRunnning) {
@@ -1044,12 +1067,14 @@ public class ASYNC_BUILDER KEY_GENERIC_TYPE
 		
 		@Override
 		public void pause() {
+			if(locked) throw new IllegalStateException("Completable Future Wrap doesn't support pause");
 			if(state == PAUSED || state == PAUSING || state >= FINISHING) return;
 			state = PAUSING;
 		}
 		
 		@Override
 		public void awaitPausing() {
+			if(locked) throw new IllegalStateException("Completable Future Wrap doesn't support pause");
 			if(state == PAUSED) return;
 			pause();
 			if(state == PAUSING) {
@@ -1061,6 +1086,7 @@ public class ASYNC_BUILDER KEY_GENERIC_TYPE
 		
 		@Override
 		public void resume() {
+			if(locked) throw new IllegalStateException("Completable Future Wrap doesn't support pause");
 			if(state != PAUSED && state != PAUSING) return;
 			if(state == PAUSING) {
 				while(state == PAUSING) {

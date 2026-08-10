@@ -29,7 +29,7 @@ public abstract class BaseInt2IntMapTest
 		if(!getValidMapTests().contains(MapTests.PUT)) return;
 		Int2IntMap putMap = createMap(PUT_ARRAY, PUT_VALUE_ARRAY);
 		Assert.assertEquals(PUT_ARRAY.length, putMap.size());
-		Assert.assertEquals(0, putMap.put(0, 512));
+		Assert.assertEquals(putMap.getDefaultReturnValue(), putMap.put(0, 512));
 		Assert.assertEquals(1, putMap.put(513, 2));
 		Assert.assertEquals(PUT_ARRAY.length + 1, putMap.size());
 		Assert.assertEquals(512, putMap.addTo(0, 1));
