@@ -46,10 +46,10 @@ public class FILE_KEY_TYPECollectionForEachTester KEY_GENERIC_TYPE extends ABSTR
 	
 #ignore
 	@CollectionFeature.Require(absent = KNOWN_ORDER)
-	public void testForEachExtraUnknownOrder() {
+	public void testForEachExtraUnknownOrderReverse() {
 #endignore
 		LIST KEY_GENERIC_TYPE elements = new ARRAY_LISTBRACES();
-		collection.forEach(elements, (K, V) -> V.add(K));
+		collection.forEach((K, V) -> V.add(K), elements);
 		HELPERS.assertContentsAnyOrder(elements, createSamplesArray());
 	}
 	
